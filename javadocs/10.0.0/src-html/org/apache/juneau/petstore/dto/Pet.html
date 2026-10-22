@@ -192,7 +192,55 @@
 <span class="source-line-no">179</span><span id="line-179">      photo = value;</span>
 <span class="source-line-no">180</span><span id="line-180">      return this;</span>
 <span class="source-line-no">181</span><span id="line-181">   }</span>
-<span class="source-line-no">182</span><span id="line-182">}</span>
+<span class="source-line-no">182</span><span id="line-182"></span>
+<span class="source-line-no">183</span><span id="line-183">   /**</span>
+<span class="source-line-no">184</span><span id="line-184">    * Sets the species only if it is currently &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">185</span><span id="line-185">    *</span>
+<span class="source-line-no">186</span><span id="line-186">    * @param value The fallback value.</span>
+<span class="source-line-no">187</span><span id="line-187">    * @return This object.</span>
+<span class="source-line-no">188</span><span id="line-188">    */</span>
+<span class="source-line-no">189</span><span id="line-189">   public Pet defaultSpecies(Species value) {</span>
+<span class="source-line-no">190</span><span id="line-190">      if (species == null)</span>
+<span class="source-line-no">191</span><span id="line-191">         species = value;</span>
+<span class="source-line-no">192</span><span id="line-192">      return this;</span>
+<span class="source-line-no">193</span><span id="line-193">   }</span>
+<span class="source-line-no">194</span><span id="line-194"></span>
+<span class="source-line-no">195</span><span id="line-195">   /**</span>
+<span class="source-line-no">196</span><span id="line-196">    * Sets the tags only if they are currently &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">197</span><span id="line-197">    *</span>
+<span class="source-line-no">198</span><span id="line-198">    * @param value The fallback value.</span>
+<span class="source-line-no">199</span><span id="line-199">    * @return This object.</span>
+<span class="source-line-no">200</span><span id="line-200">    */</span>
+<span class="source-line-no">201</span><span id="line-201">   public Pet defaultTags(List&lt;String&gt; value) {</span>
+<span class="source-line-no">202</span><span id="line-202">      if (tags == null)</span>
+<span class="source-line-no">203</span><span id="line-203">         tags = cp(value);</span>
+<span class="source-line-no">204</span><span id="line-204">      return this;</span>
+<span class="source-line-no">205</span><span id="line-205">   }</span>
+<span class="source-line-no">206</span><span id="line-206"></span>
+<span class="source-line-no">207</span><span id="line-207">   /**</span>
+<span class="source-line-no">208</span><span id="line-208">    * Sets the lifecycle status only if it is currently &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">209</span><span id="line-209">    *</span>
+<span class="source-line-no">210</span><span id="line-210">    * @param value The fallback value.</span>
+<span class="source-line-no">211</span><span id="line-211">    * @return This object.</span>
+<span class="source-line-no">212</span><span id="line-212">    */</span>
+<span class="source-line-no">213</span><span id="line-213">   public Pet defaultStatus(PetStatus value) {</span>
+<span class="source-line-no">214</span><span id="line-214">      if (status == null)</span>
+<span class="source-line-no">215</span><span id="line-215">         status = value;</span>
+<span class="source-line-no">216</span><span id="line-216">      return this;</span>
+<span class="source-line-no">217</span><span id="line-217">   }</span>
+<span class="source-line-no">218</span><span id="line-218"></span>
+<span class="source-line-no">219</span><span id="line-219">   /**</span>
+<span class="source-line-no">220</span><span id="line-220">    * Sets the photo URI only if it is currently &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">221</span><span id="line-221">    *</span>
+<span class="source-line-no">222</span><span id="line-222">    * @param value The fallback value.</span>
+<span class="source-line-no">223</span><span id="line-223">    * @return This object.</span>
+<span class="source-line-no">224</span><span id="line-224">    */</span>
+<span class="source-line-no">225</span><span id="line-225">   public Pet defaultPhoto(String value) {</span>
+<span class="source-line-no">226</span><span id="line-226">      if (photo == null)</span>
+<span class="source-line-no">227</span><span id="line-227">         photo = value;</span>
+<span class="source-line-no">228</span><span id="line-228">      return this;</span>
+<span class="source-line-no">229</span><span id="line-229">   }</span>
+<span class="source-line-no">230</span><span id="line-230">}</span>
 
 
 

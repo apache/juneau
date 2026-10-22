@@ -257,96 +257,98 @@
 <a class="jxr_linenumber" name="L249" href="#L249">249</a> 		rdfxml_iriRules = <span class="jxr_string">"strict"</span>,
 <a class="jxr_linenumber" name="L250" href="#L250">250</a> 		rdfxml_errorMode = <span class="jxr_string">"STRICT"</span>,
 <a class="jxr_linenumber" name="L251" href="#L251">251</a> 		rdfxml_embedding = <span class="jxr_string">"true"</span>,
-<a class="jxr_linenumber" name="L252" href="#L252">252</a> 		rdfxml_longId = <span class="jxr_string">"true"</span>,
-<a class="jxr_linenumber" name="L253" href="#L253">253</a> 		rdfxml_allowBadUris = <span class="jxr_string">"true"</span>,
-<a class="jxr_linenumber" name="L254" href="#L254">254</a> 		rdfxml_relativeUris = <span class="jxr_string">"same-document"</span>,
-<a class="jxr_linenumber" name="L255" href="#L255">255</a> 		rdfxml_showXmlDeclaration = <span class="jxr_string">"true"</span>,
-<a class="jxr_linenumber" name="L256" href="#L256">256</a> 		rdfxml_disableShowDoctypeDeclaration = <span class="jxr_string">"true"</span>,
-<a class="jxr_linenumber" name="L257" href="#L257">257</a> 		rdfxml_tab = <span class="jxr_string">"4"</span>,
-<a class="jxr_linenumber" name="L258" href="#L258">258</a> 		rdfxml_attributeQuoteChar = <span class="jxr_string">"'"</span>,
-<a class="jxr_linenumber" name="L259" href="#L259">259</a> 		rdfxml_blockRules = <span class="jxr_string">"idAttr"</span>
-<a class="jxr_linenumber" name="L260" href="#L260">260</a> 	)
-<a class="jxr_linenumber" name="L261" href="#L261">261</a> 	<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> O {}
-<a class="jxr_linenumber" name="L262" href="#L262">262</a> 	<strong class="jxr_keyword">static</strong> ClassInfo o = ClassInfo.of(O.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L263" href="#L263">263</a> 
-<a class="jxr_linenumber" name="L264" href="#L264">264</a> 	@Test <strong class="jxr_keyword">void</strong> a18_rdfxmlSettings_serializer() {
-<a class="jxr_linenumber" name="L265" href="#L265">265</a> 		<strong class="jxr_keyword">var</strong> al = AnnotationWorkList.of(sr, rstream(o.getAnnotations()));
-<a class="jxr_linenumber" name="L266" href="#L266">266</a> 		assertDoesNotThrow(() -&gt; RdfSerializer.create().apply(al).build());
-<a class="jxr_linenumber" name="L267" href="#L267">267</a> 	}
-<a class="jxr_linenumber" name="L268" href="#L268">268</a> 
-<a class="jxr_linenumber" name="L269" href="#L269">269</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L270" href="#L270">270</a> 	<em class="jxr_comment">// rdfxml settings (parser)</em>
-<a class="jxr_linenumber" name="L271" href="#L271">271</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L272" href="#L272">272</a> 
-<a class="jxr_linenumber" name="L273" href="#L273">273</a> 	@RdfConfig(
-<a class="jxr_linenumber" name="L274" href="#L274">274</a> 		rdfxml_iriRules = <span class="jxr_string">"strict"</span>,
-<a class="jxr_linenumber" name="L275" href="#L275">275</a> 		rdfxml_errorMode = <span class="jxr_string">"STRICT"</span>,
-<a class="jxr_linenumber" name="L276" href="#L276">276</a> 		rdfxml_embedding = <span class="jxr_string">"true"</span>,
-<a class="jxr_linenumber" name="L277" href="#L277">277</a> 		rdfxml_longId = <span class="jxr_string">"true"</span>,
-<a class="jxr_linenumber" name="L278" href="#L278">278</a> 		rdfxml_allowBadUris = <span class="jxr_string">"true"</span>,
-<a class="jxr_linenumber" name="L279" href="#L279">279</a> 		rdfxml_relativeUris = <span class="jxr_string">"same-document"</span>,
-<a class="jxr_linenumber" name="L280" href="#L280">280</a> 		rdfxml_showXmlDeclaration = <span class="jxr_string">"true"</span>,
-<a class="jxr_linenumber" name="L281" href="#L281">281</a> 		rdfxml_disableShowDoctypeDeclaration = <span class="jxr_string">"true"</span>,
-<a class="jxr_linenumber" name="L282" href="#L282">282</a> 		rdfxml_tab = <span class="jxr_string">"4"</span>,
-<a class="jxr_linenumber" name="L283" href="#L283">283</a> 		rdfxml_attributeQuoteChar = <span class="jxr_string">"'"</span>,
-<a class="jxr_linenumber" name="L284" href="#L284">284</a> 		rdfxml_blockRules = <span class="jxr_string">"idAttr"</span>
-<a class="jxr_linenumber" name="L285" href="#L285">285</a> 	)
-<a class="jxr_linenumber" name="L286" href="#L286">286</a> 	<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> P {}
-<a class="jxr_linenumber" name="L287" href="#L287">287</a> 	<strong class="jxr_keyword">static</strong> ClassInfo p = ClassInfo.of(P.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L288" href="#L288">288</a> 
-<a class="jxr_linenumber" name="L289" href="#L289">289</a> 	@Test <strong class="jxr_keyword">void</strong> a19_rdfxmlSettings_parser() {
-<a class="jxr_linenumber" name="L290" href="#L290">290</a> 		<strong class="jxr_keyword">var</strong> al = AnnotationWorkList.of(sr, rstream(p.getAnnotations()));
-<a class="jxr_linenumber" name="L291" href="#L291">291</a> 		assertDoesNotThrow(() -&gt; RdfParser.create().apply(al).build());
-<a class="jxr_linenumber" name="L292" href="#L292">292</a> 	}
-<a class="jxr_linenumber" name="L293" href="#L293">293</a> 
-<a class="jxr_linenumber" name="L294" href="#L294">294</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L295" href="#L295">295</a> 	<em class="jxr_comment">// n3 settings (serializer)</em>
+<a class="jxr_linenumber" name="L252" href="#L252">252</a> 		rdfxml_xmlBase = <span class="jxr_string">"http://example.org/base/"</span>,
+<a class="jxr_linenumber" name="L253" href="#L253">253</a> 		rdfxml_longId = <span class="jxr_string">"true"</span>,
+<a class="jxr_linenumber" name="L254" href="#L254">254</a> 		rdfxml_allowBadUris = <span class="jxr_string">"true"</span>,
+<a class="jxr_linenumber" name="L255" href="#L255">255</a> 		rdfxml_relativeUris = <span class="jxr_string">"same-document"</span>,
+<a class="jxr_linenumber" name="L256" href="#L256">256</a> 		rdfxml_showXmlDeclaration = <span class="jxr_string">"true"</span>,
+<a class="jxr_linenumber" name="L257" href="#L257">257</a> 		rdfxml_disableShowDoctypeDeclaration = <span class="jxr_string">"true"</span>,
+<a class="jxr_linenumber" name="L258" href="#L258">258</a> 		rdfxml_tab = <span class="jxr_string">"4"</span>,
+<a class="jxr_linenumber" name="L259" href="#L259">259</a> 		rdfxml_attributeQuoteChar = <span class="jxr_string">"'"</span>,
+<a class="jxr_linenumber" name="L260" href="#L260">260</a> 		rdfxml_blockRules = <span class="jxr_string">"idAttr"</span>
+<a class="jxr_linenumber" name="L261" href="#L261">261</a> 	)
+<a class="jxr_linenumber" name="L262" href="#L262">262</a> 	<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> O {}
+<a class="jxr_linenumber" name="L263" href="#L263">263</a> 	<strong class="jxr_keyword">static</strong> ClassInfo o = ClassInfo.of(O.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L264" href="#L264">264</a> 
+<a class="jxr_linenumber" name="L265" href="#L265">265</a> 	@Test <strong class="jxr_keyword">void</strong> a18_rdfxmlSettings_serializer() {
+<a class="jxr_linenumber" name="L266" href="#L266">266</a> 		<strong class="jxr_keyword">var</strong> al = AnnotationWorkList.of(sr, rstream(o.getAnnotations()));
+<a class="jxr_linenumber" name="L267" href="#L267">267</a> 		assertDoesNotThrow(() -&gt; RdfSerializer.create().apply(al).build());
+<a class="jxr_linenumber" name="L268" href="#L268">268</a> 	}
+<a class="jxr_linenumber" name="L269" href="#L269">269</a> 
+<a class="jxr_linenumber" name="L270" href="#L270">270</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L271" href="#L271">271</a> 	<em class="jxr_comment">// rdfxml settings (parser)</em>
+<a class="jxr_linenumber" name="L272" href="#L272">272</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L273" href="#L273">273</a> 
+<a class="jxr_linenumber" name="L274" href="#L274">274</a> 	@RdfConfig(
+<a class="jxr_linenumber" name="L275" href="#L275">275</a> 		rdfxml_iriRules = <span class="jxr_string">"strict"</span>,
+<a class="jxr_linenumber" name="L276" href="#L276">276</a> 		rdfxml_errorMode = <span class="jxr_string">"STRICT"</span>,
+<a class="jxr_linenumber" name="L277" href="#L277">277</a> 		rdfxml_embedding = <span class="jxr_string">"true"</span>,
+<a class="jxr_linenumber" name="L278" href="#L278">278</a> 		rdfxml_xmlBase = <span class="jxr_string">"http://example.org/base/"</span>,
+<a class="jxr_linenumber" name="L279" href="#L279">279</a> 		rdfxml_longId = <span class="jxr_string">"true"</span>,
+<a class="jxr_linenumber" name="L280" href="#L280">280</a> 		rdfxml_allowBadUris = <span class="jxr_string">"true"</span>,
+<a class="jxr_linenumber" name="L281" href="#L281">281</a> 		rdfxml_relativeUris = <span class="jxr_string">"same-document"</span>,
+<a class="jxr_linenumber" name="L282" href="#L282">282</a> 		rdfxml_showXmlDeclaration = <span class="jxr_string">"true"</span>,
+<a class="jxr_linenumber" name="L283" href="#L283">283</a> 		rdfxml_disableShowDoctypeDeclaration = <span class="jxr_string">"true"</span>,
+<a class="jxr_linenumber" name="L284" href="#L284">284</a> 		rdfxml_tab = <span class="jxr_string">"4"</span>,
+<a class="jxr_linenumber" name="L285" href="#L285">285</a> 		rdfxml_attributeQuoteChar = <span class="jxr_string">"'"</span>,
+<a class="jxr_linenumber" name="L286" href="#L286">286</a> 		rdfxml_blockRules = <span class="jxr_string">"idAttr"</span>
+<a class="jxr_linenumber" name="L287" href="#L287">287</a> 	)
+<a class="jxr_linenumber" name="L288" href="#L288">288</a> 	<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> P {}
+<a class="jxr_linenumber" name="L289" href="#L289">289</a> 	<strong class="jxr_keyword">static</strong> ClassInfo p = ClassInfo.of(P.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L290" href="#L290">290</a> 
+<a class="jxr_linenumber" name="L291" href="#L291">291</a> 	@Test <strong class="jxr_keyword">void</strong> a19_rdfxmlSettings_parser() {
+<a class="jxr_linenumber" name="L292" href="#L292">292</a> 		<strong class="jxr_keyword">var</strong> al = AnnotationWorkList.of(sr, rstream(p.getAnnotations()));
+<a class="jxr_linenumber" name="L293" href="#L293">293</a> 		assertDoesNotThrow(() -&gt; RdfParser.create().apply(al).build());
+<a class="jxr_linenumber" name="L294" href="#L294">294</a> 	}
+<a class="jxr_linenumber" name="L295" href="#L295">295</a> 
 <a class="jxr_linenumber" name="L296" href="#L296">296</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L297" href="#L297">297</a> 
-<a class="jxr_linenumber" name="L298" href="#L298">298</a> 	@RdfConfig(
-<a class="jxr_linenumber" name="L299" href="#L299">299</a> 		n3_minGap = <span class="jxr_string">"2"</span>,
-<a class="jxr_linenumber" name="L300" href="#L300">300</a> 		n3_disableObjectLists = <span class="jxr_string">"true"</span>,
-<a class="jxr_linenumber" name="L301" href="#L301">301</a> 		n3_subjectColumn = <span class="jxr_string">"10"</span>,
-<a class="jxr_linenumber" name="L302" href="#L302">302</a> 		n3_propertyColumn = <span class="jxr_string">"10"</span>,
-<a class="jxr_linenumber" name="L303" href="#L303">303</a> 		n3_indentProperty = <span class="jxr_string">"5"</span>,
-<a class="jxr_linenumber" name="L304" href="#L304">304</a> 		n3_widePropertyLen = <span class="jxr_string">"20"</span>,
-<a class="jxr_linenumber" name="L305" href="#L305">305</a> 		n3_disableAbbrevBaseUri = <span class="jxr_string">"true"</span>,
-<a class="jxr_linenumber" name="L306" href="#L306">306</a> 		n3_disableUsePropertySymbols = <span class="jxr_string">"true"</span>,
-<a class="jxr_linenumber" name="L307" href="#L307">307</a> 		n3_disableUseTripleQuotedStrings = <span class="jxr_string">"true"</span>,
-<a class="jxr_linenumber" name="L308" href="#L308">308</a> 		n3_disableUseDoubles = <span class="jxr_string">"true"</span>
-<a class="jxr_linenumber" name="L309" href="#L309">309</a> 	)
-<a class="jxr_linenumber" name="L310" href="#L310">310</a> 	<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> Q {}
-<a class="jxr_linenumber" name="L311" href="#L311">311</a> 	<strong class="jxr_keyword">static</strong> ClassInfo q = ClassInfo.of(Q.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L312" href="#L312">312</a> 
-<a class="jxr_linenumber" name="L313" href="#L313">313</a> 	@Test <strong class="jxr_keyword">void</strong> a20_n3Settings_serializer() {
-<a class="jxr_linenumber" name="L314" href="#L314">314</a> 		<strong class="jxr_keyword">var</strong> al = AnnotationWorkList.of(sr, rstream(q.getAnnotations()));
-<a class="jxr_linenumber" name="L315" href="#L315">315</a> 		assertDoesNotThrow(() -&gt; RdfSerializer.create().apply(al).build());
-<a class="jxr_linenumber" name="L316" href="#L316">316</a> 	}
-<a class="jxr_linenumber" name="L317" href="#L317">317</a> 
-<a class="jxr_linenumber" name="L318" href="#L318">318</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L319" href="#L319">319</a> 	<em class="jxr_comment">// n3 settings (parser)</em>
+<a class="jxr_linenumber" name="L297" href="#L297">297</a> 	<em class="jxr_comment">// n3 settings (serializer)</em>
+<a class="jxr_linenumber" name="L298" href="#L298">298</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L299" href="#L299">299</a> 
+<a class="jxr_linenumber" name="L300" href="#L300">300</a> 	@RdfConfig(
+<a class="jxr_linenumber" name="L301" href="#L301">301</a> 		n3_minGap = <span class="jxr_string">"2"</span>,
+<a class="jxr_linenumber" name="L302" href="#L302">302</a> 		n3_disableObjectLists = <span class="jxr_string">"true"</span>,
+<a class="jxr_linenumber" name="L303" href="#L303">303</a> 		n3_subjectColumn = <span class="jxr_string">"10"</span>,
+<a class="jxr_linenumber" name="L304" href="#L304">304</a> 		n3_propertyColumn = <span class="jxr_string">"10"</span>,
+<a class="jxr_linenumber" name="L305" href="#L305">305</a> 		n3_indentProperty = <span class="jxr_string">"5"</span>,
+<a class="jxr_linenumber" name="L306" href="#L306">306</a> 		n3_widePropertyLen = <span class="jxr_string">"20"</span>,
+<a class="jxr_linenumber" name="L307" href="#L307">307</a> 		n3_disableAbbrevBaseUri = <span class="jxr_string">"true"</span>,
+<a class="jxr_linenumber" name="L308" href="#L308">308</a> 		n3_disableUsePropertySymbols = <span class="jxr_string">"true"</span>,
+<a class="jxr_linenumber" name="L309" href="#L309">309</a> 		n3_disableUseTripleQuotedStrings = <span class="jxr_string">"true"</span>,
+<a class="jxr_linenumber" name="L310" href="#L310">310</a> 		n3_disableUseDoubles = <span class="jxr_string">"true"</span>
+<a class="jxr_linenumber" name="L311" href="#L311">311</a> 	)
+<a class="jxr_linenumber" name="L312" href="#L312">312</a> 	<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> Q {}
+<a class="jxr_linenumber" name="L313" href="#L313">313</a> 	<strong class="jxr_keyword">static</strong> ClassInfo q = ClassInfo.of(Q.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L314" href="#L314">314</a> 
+<a class="jxr_linenumber" name="L315" href="#L315">315</a> 	@Test <strong class="jxr_keyword">void</strong> a20_n3Settings_serializer() {
+<a class="jxr_linenumber" name="L316" href="#L316">316</a> 		<strong class="jxr_keyword">var</strong> al = AnnotationWorkList.of(sr, rstream(q.getAnnotations()));
+<a class="jxr_linenumber" name="L317" href="#L317">317</a> 		assertDoesNotThrow(() -&gt; RdfSerializer.create().apply(al).build());
+<a class="jxr_linenumber" name="L318" href="#L318">318</a> 	}
+<a class="jxr_linenumber" name="L319" href="#L319">319</a> 
 <a class="jxr_linenumber" name="L320" href="#L320">320</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L321" href="#L321">321</a> 
-<a class="jxr_linenumber" name="L322" href="#L322">322</a> 	@RdfConfig(
-<a class="jxr_linenumber" name="L323" href="#L323">323</a> 		n3_minGap = <span class="jxr_string">"2"</span>,
-<a class="jxr_linenumber" name="L324" href="#L324">324</a> 		n3_disableObjectLists = <span class="jxr_string">"true"</span>,
-<a class="jxr_linenumber" name="L325" href="#L325">325</a> 		n3_subjectColumn = <span class="jxr_string">"10"</span>,
-<a class="jxr_linenumber" name="L326" href="#L326">326</a> 		n3_propertyColumn = <span class="jxr_string">"10"</span>,
-<a class="jxr_linenumber" name="L327" href="#L327">327</a> 		n3_indentProperty = <span class="jxr_string">"5"</span>,
-<a class="jxr_linenumber" name="L328" href="#L328">328</a> 		n3_widePropertyLen = <span class="jxr_string">"20"</span>,
-<a class="jxr_linenumber" name="L329" href="#L329">329</a> 		n3_disableAbbrevBaseUri = <span class="jxr_string">"true"</span>,
-<a class="jxr_linenumber" name="L330" href="#L330">330</a> 		n3_disableUsePropertySymbols = <span class="jxr_string">"true"</span>,
-<a class="jxr_linenumber" name="L331" href="#L331">331</a> 		n3_disableUseTripleQuotedStrings = <span class="jxr_string">"true"</span>,
-<a class="jxr_linenumber" name="L332" href="#L332">332</a> 		n3_disableUseDoubles = <span class="jxr_string">"true"</span>
-<a class="jxr_linenumber" name="L333" href="#L333">333</a> 	)
-<a class="jxr_linenumber" name="L334" href="#L334">334</a> 	<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> R {}
-<a class="jxr_linenumber" name="L335" href="#L335">335</a> 	<strong class="jxr_keyword">static</strong> ClassInfo r = ClassInfo.of(R.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L336" href="#L336">336</a> 
-<a class="jxr_linenumber" name="L337" href="#L337">337</a> 	@Test <strong class="jxr_keyword">void</strong> a21_n3Settings_parser() {
-<a class="jxr_linenumber" name="L338" href="#L338">338</a> 		<strong class="jxr_keyword">var</strong> al = AnnotationWorkList.of(sr, rstream(r.getAnnotations()));
-<a class="jxr_linenumber" name="L339" href="#L339">339</a> 		assertDoesNotThrow(() -&gt; RdfParser.create().apply(al).build());
-<a class="jxr_linenumber" name="L340" href="#L340">340</a> 	}
-<a class="jxr_linenumber" name="L341" href="#L341">341</a> }
+<a class="jxr_linenumber" name="L321" href="#L321">321</a> 	<em class="jxr_comment">// n3 settings (parser)</em>
+<a class="jxr_linenumber" name="L322" href="#L322">322</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L323" href="#L323">323</a> 
+<a class="jxr_linenumber" name="L324" href="#L324">324</a> 	@RdfConfig(
+<a class="jxr_linenumber" name="L325" href="#L325">325</a> 		n3_minGap = <span class="jxr_string">"2"</span>,
+<a class="jxr_linenumber" name="L326" href="#L326">326</a> 		n3_disableObjectLists = <span class="jxr_string">"true"</span>,
+<a class="jxr_linenumber" name="L327" href="#L327">327</a> 		n3_subjectColumn = <span class="jxr_string">"10"</span>,
+<a class="jxr_linenumber" name="L328" href="#L328">328</a> 		n3_propertyColumn = <span class="jxr_string">"10"</span>,
+<a class="jxr_linenumber" name="L329" href="#L329">329</a> 		n3_indentProperty = <span class="jxr_string">"5"</span>,
+<a class="jxr_linenumber" name="L330" href="#L330">330</a> 		n3_widePropertyLen = <span class="jxr_string">"20"</span>,
+<a class="jxr_linenumber" name="L331" href="#L331">331</a> 		n3_disableAbbrevBaseUri = <span class="jxr_string">"true"</span>,
+<a class="jxr_linenumber" name="L332" href="#L332">332</a> 		n3_disableUsePropertySymbols = <span class="jxr_string">"true"</span>,
+<a class="jxr_linenumber" name="L333" href="#L333">333</a> 		n3_disableUseTripleQuotedStrings = <span class="jxr_string">"true"</span>,
+<a class="jxr_linenumber" name="L334" href="#L334">334</a> 		n3_disableUseDoubles = <span class="jxr_string">"true"</span>
+<a class="jxr_linenumber" name="L335" href="#L335">335</a> 	)
+<a class="jxr_linenumber" name="L336" href="#L336">336</a> 	<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> R {}
+<a class="jxr_linenumber" name="L337" href="#L337">337</a> 	<strong class="jxr_keyword">static</strong> ClassInfo r = ClassInfo.of(R.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L338" href="#L338">338</a> 
+<a class="jxr_linenumber" name="L339" href="#L339">339</a> 	@Test <strong class="jxr_keyword">void</strong> a21_n3Settings_parser() {
+<a class="jxr_linenumber" name="L340" href="#L340">340</a> 		<strong class="jxr_keyword">var</strong> al = AnnotationWorkList.of(sr, rstream(r.getAnnotations()));
+<a class="jxr_linenumber" name="L341" href="#L341">341</a> 		assertDoesNotThrow(() -&gt; RdfParser.create().apply(al).build());
+<a class="jxr_linenumber" name="L342" href="#L342">342</a> 	}
+<a class="jxr_linenumber" name="L343" href="#L343">343</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

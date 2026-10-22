@@ -47,7 +47,7 @@
 <a class="jxr_linenumber" name="L39" href="#L39">39</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">long</strong> serialVersionUID = 1L;
 <a class="jxr_linenumber" name="L40" href="#L40">40</a>  
 <a class="jxr_linenumber" name="L41" href="#L41">41</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String getMessage(Class&lt;?&gt; c, Method m, String msg) {
-<a class="jxr_linenumber" name="L42" href="#L42">42</a>  		<strong class="jxr_keyword">var</strong> sb = <strong class="jxr_keyword">new</strong> StringBuilder(<span class="jxr_string">"Invalid remote definition found on class "</span>).append(c.getName());
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>  		<strong class="jxr_keyword">var</strong> sb = <strong class="jxr_keyword">new</strong> StringBuilder(<span class="jxr_string">"Invalid remote definition found on class "</span>).append(c == <strong class="jxr_keyword">null</strong> ? <strong class="jxr_keyword">null</strong> : c.getName());
 <a class="jxr_linenumber" name="L43" href="#L43">43</a>  		<strong class="jxr_keyword">if</strong> (nn(m))
 <a class="jxr_linenumber" name="L44" href="#L44">44</a>  			sb.append(<span class="jxr_string">" on method "</span>).append(m.getName());
 <a class="jxr_linenumber" name="L45" href="#L45">45</a>  		sb.append(<span class="jxr_string">". "</span>).append(msg);
@@ -73,7 +73,7 @@
 <a class="jxr_linenumber" name="L65" href="#L65">65</a>  <em class="jxr_javadoccomment">	 * @param args Optional {@link String#format(String, Object...) String.format}-style arguments.</em>
 <a class="jxr_linenumber" name="L66" href="#L66">66</a>  <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L67" href="#L67">67</a>  	<strong class="jxr_keyword">public</strong> RemoteMetadataException(Method m, String message, Object...args) {
-<a class="jxr_linenumber" name="L68" href="#L68">68</a>  		<strong class="jxr_keyword">this</strong>((Throwable)<strong class="jxr_keyword">null</strong>, getMessage(m.getDeclaringClass(), m, message), args);
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>  		<strong class="jxr_keyword">this</strong>((Throwable)<strong class="jxr_keyword">null</strong>, getMessage(m == <strong class="jxr_keyword">null</strong> ? <strong class="jxr_keyword">null</strong> : m.getDeclaringClass(), m, message), args);
 <a class="jxr_linenumber" name="L69" href="#L69">69</a>  	}
 <a class="jxr_linenumber" name="L70" href="#L70">70</a>  
 <a class="jxr_linenumber" name="L71" href="#L71">71</a>  	<em class="jxr_javadoccomment">/**</em>

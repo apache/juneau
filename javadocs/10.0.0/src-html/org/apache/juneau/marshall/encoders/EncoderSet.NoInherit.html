@@ -169,12 +169,12 @@
 <span class="source-line-no">156</span><span id="line-156">      public Builder add(Class&lt;?&gt;...values) {</span>
 <span class="source-line-no">157</span><span id="line-157">         List&lt;Object&gt; l = list();</span>
 <span class="source-line-no">158</span><span id="line-158">         for (var v : values)</span>
-<span class="source-line-no">159</span><span id="line-159">            if (cns(v).equals("NoInherit"))</span>
+<span class="source-line-no">159</span><span id="line-159">            if (eq(cns(v), "NoInherit"))</span>
 <span class="source-line-no">160</span><span id="line-160">               clear();</span>
 <span class="source-line-no">161</span><span id="line-161">         for (var v : values) {</span>
 <span class="source-line-no">162</span><span id="line-162">            if (Encoder.class.isAssignableFrom(v)) {</span>
 <span class="source-line-no">163</span><span id="line-163">               l.add(v);</span>
-<span class="source-line-no">164</span><span id="line-164">            } else if (! cns(v).equals("NoInherit")) {</span>
+<span class="source-line-no">164</span><span id="line-164">            } else if (neq(cns(v), "NoInherit")) {</span>
 <span class="source-line-no">165</span><span id="line-165">               throw iaex("Invalid type passed to EncoderSet.Builder.add(): %s", cn(v));</span>
 <span class="source-line-no">166</span><span id="line-166">            }</span>
 <span class="source-line-no">167</span><span id="line-167">         }</span>
@@ -266,7 +266,7 @@
 <span class="source-line-no">253</span><span id="line-253">      public Builder set(Class&lt;?&gt;...values) {</span>
 <span class="source-line-no">254</span><span id="line-254">         List&lt;Object&gt; l = list();</span>
 <span class="source-line-no">255</span><span id="line-255">         for (var v : values) {</span>
-<span class="source-line-no">256</span><span id="line-256">            if (cns(v).equals("Inherit")) {</span>
+<span class="source-line-no">256</span><span id="line-256">            if (eq(cns(v), "Inherit")) {</span>
 <span class="source-line-no">257</span><span id="line-257">               l.addAll(entries);</span>
 <span class="source-line-no">258</span><span id="line-258">            } else if (Encoder.class.isAssignableFrom(v)) {</span>
 <span class="source-line-no">259</span><span id="line-259">               l.add(v);</span>

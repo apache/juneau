@@ -111,7 +111,7 @@
 <a class="jxr_linenumber" name="L103" href="#L103">103</a> 		@Override <em class="jxr_comment">/* Overridden from Exp */</em>
 <a class="jxr_linenumber" name="L104" href="#L104">104</a> 		<strong class="jxr_keyword">boolean</strong> matches(Set&lt;String&gt; roles) {
 <a class="jxr_linenumber" name="L105" href="#L105">105</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> role : roles)
-<a class="jxr_linenumber" name="L106" href="#L106">106</a> 				<strong class="jxr_keyword">if</strong> (operand.equals(role))
+<a class="jxr_linenumber" name="L106" href="#L106">106</a> 				<strong class="jxr_keyword">if</strong> (eq(operand, role))
 <a class="jxr_linenumber" name="L107" href="#L107">107</a> 					<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
 <a class="jxr_linenumber" name="L108" href="#L108">108</a> 			<strong class="jxr_keyword">return</strong> false;
 <a class="jxr_linenumber" name="L109" href="#L109">109</a> 		}
@@ -252,10 +252,10 @@
 <a class="jxr_linenumber" name="L244" href="#L244">244</a> 	}
 <a class="jxr_linenumber" name="L245" href="#L245">245</a> 
 <a class="jxr_linenumber" name="L246" href="#L246">246</a> 	@SuppressWarnings({
-<a class="jxr_linenumber" name="L247" href="#L247">247</a> 		<span class="jxr_string">"java:S125"</span>,    <em class="jxr_comment">// Inline /*...*/ documents implicit else condition</em>
-<a class="jxr_linenumber" name="L248" href="#L248">248</a> 		<span class="jxr_string">"java:S135"</span>,    <em class="jxr_comment">// Multiple break statements necessary for state machine error handling</em>
-<a class="jxr_linenumber" name="L249" href="#L249">249</a> 		<span class="jxr_string">"java:S3776"</span>,   <em class="jxr_comment">// Cognitive complexity acceptable for parser state machine</em>
-<a class="jxr_linenumber" name="L250" href="#L250">250</a> 		<span class="jxr_string">"java:S6541"</span>    <em class="jxr_comment">// Thread-safe singleton pattern acceptable</em>
+<a class="jxr_linenumber" name="L247" href="#L247">247</a> 		<span class="jxr_string">"java:S125"</span>, <em class="jxr_comment">// Inline /*...*/ documents implicit else condition</em>
+<a class="jxr_linenumber" name="L248" href="#L248">248</a> 		<span class="jxr_string">"java:S135"</span>, <em class="jxr_comment">// Multiple break statements necessary for state machine error handling</em>
+<a class="jxr_linenumber" name="L249" href="#L249">249</a> 		<span class="jxr_string">"java:S3776"</span>, <em class="jxr_comment">// Cognitive complexity acceptable for parser state machine</em>
+<a class="jxr_linenumber" name="L250" href="#L250">250</a> 		<span class="jxr_string">"java:S6541"</span> <em class="jxr_comment">// Thread-safe singleton pattern acceptable</em>
 <a class="jxr_linenumber" name="L251" href="#L251">251</a> 	})
 <a class="jxr_linenumber" name="L252" href="#L252">252</a> 	<strong class="jxr_keyword">private</strong> Exp parse(String expression) <strong class="jxr_keyword">throws</strong> ParseException {
 <a class="jxr_linenumber" name="L253" href="#L253">253</a> 		<strong class="jxr_keyword">if</strong> (StringUtils.isBlank(expression))

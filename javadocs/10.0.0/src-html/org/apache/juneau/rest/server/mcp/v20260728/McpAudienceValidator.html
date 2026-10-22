@@ -29,12 +29,12 @@
 <span class="source-line-no">016</span><span id="line-16"> */</span>
 <span class="source-line-no">017</span><span id="line-17">package org.apache.juneau.rest.server.mcp.v20260728;</span>
 <span class="source-line-no">018</span><span id="line-18"></span>
-<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.AssertionUtils.*;</span>
-<span class="source-line-no">020</span><span id="line-20"></span>
-<span class="source-line-no">021</span><span id="line-21">import java.security.*;</span>
-<span class="source-line-no">022</span><span id="line-22">import java.util.*;</span>
-<span class="source-line-no">023</span><span id="line-23"></span>
-<span class="source-line-no">024</span><span id="line-24">import org.apache.juneau.rest.server.auth.ClaimsPrincipal;</span>
+<span class="source-line-no">019</span><span id="line-19"></span>
+<span class="source-line-no">020</span><span id="line-20">import java.security.*;</span>
+<span class="source-line-no">021</span><span id="line-21">import java.util.*;</span>
+<span class="source-line-no">022</span><span id="line-22"></span>
+<span class="source-line-no">023</span><span id="line-23">import org.apache.juneau.rest.server.auth.ClaimsPrincipal;</span>
+<span class="source-line-no">024</span><span id="line-24">import static org.apache.juneau.commons.utils.Shorts.*;</span>
 <span class="source-line-no">025</span><span id="line-25"></span>
 <span class="source-line-no">026</span><span id="line-26">/**</span>
 <span class="source-line-no">027</span><span id="line-27"> * &lt;a class="doclink" href="https://datatracker.ietf.org/doc/html/rfc8707"&gt;RFC 8707&lt;/a&gt; audience enforcement &amp;mdash; the</span>
@@ -45,7 +45,7 @@
 <span class="source-line-no">032</span><span id="line-32"> * {@code aud} or {@code resource} claim contains this server's resource identifier, rejecting a token whose audience</span>
 <span class="source-line-no">033</span><span id="line-33"> * targets a different resource.</span>
 <span class="source-line-no">034</span><span id="line-34"> *</span>
-<span class="source-line-no">035</span><span id="line-35"> * &lt;h5 class='section'&gt;Claims requirement (READY-312f F2, H2):&lt;/h5&gt;</span>
+<span class="source-line-no">035</span><span id="line-35"> * &lt;h5 class='section'&gt;Claims requirement:&lt;/h5&gt;</span>
 <span class="source-line-no">036</span><span id="line-36"> * &lt;p&gt;</span>
 <span class="source-line-no">037</span><span id="line-37"> * Gate-level enforcement applies to a {@link ClaimsPrincipal} (as produced by {@code JwtTokenValidator} and OAuth</span>
 <span class="source-line-no">038</span><span id="line-38"> * introspection).  A validator returning a bare {@link Principal} that exposes no claims cannot be checked at the gate;</span>
@@ -78,7 +78,7 @@
 <span class="source-line-no">065</span><span id="line-65">    *    the expected audience.</span>
 <span class="source-line-no">066</span><span id="line-66">    */</span>
 <span class="source-line-no">067</span><span id="line-67">   public static boolean matches(Principal principal, String expectedAudience, boolean requireAudienceClaim) {</span>
-<span class="source-line-no">068</span><span id="line-68">      assertArgNotNullOrBlank("expectedAudience", expectedAudience);</span>
+<span class="source-line-no">068</span><span id="line-68">      reqnb("expectedAudience", expectedAudience);</span>
 <span class="source-line-no">069</span><span id="line-69">      if (principal == null)</span>
 <span class="source-line-no">070</span><span id="line-70">         return false;</span>
 <span class="source-line-no">071</span><span id="line-71">      if (!(principal instanceof ClaimsPrincipal cp))</span>

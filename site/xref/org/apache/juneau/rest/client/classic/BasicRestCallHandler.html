@@ -55,11 +55,16 @@
 <a class="jxr_linenumber" name="L47" href="#L47">47</a>  		<strong class="jxr_keyword">this</strong>.client = client;
 <a class="jxr_linenumber" name="L48" href="#L48">48</a>  	}
 <a class="jxr_linenumber" name="L49" href="#L49">49</a>  
-<a class="jxr_linenumber" name="L50" href="#L50">50</a>  	@Override <em class="jxr_comment">/* Overridden from RestCallHandler */</em>
-<a class="jxr_linenumber" name="L51" href="#L51">51</a>  	<strong class="jxr_keyword">public</strong> HttpResponse run(HttpHost target, HttpRequest request, HttpContext context) <strong class="jxr_keyword">throws</strong> IOException {
-<a class="jxr_linenumber" name="L52" href="#L52">52</a>  		<strong class="jxr_keyword">return</strong> target == <strong class="jxr_keyword">null</strong> ? client.execute((HttpUriRequest)request, context) : client.execute(target, request, context);
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>  	<em class="jxr_comment">// The client this handler sends requests through.</em>
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>  	RestClient client() {
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>  		<strong class="jxr_keyword">return</strong> client;
 <a class="jxr_linenumber" name="L53" href="#L53">53</a>  	}
-<a class="jxr_linenumber" name="L54" href="#L54">54</a>  }
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>  
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>  	@Override <em class="jxr_comment">/* Overridden from RestCallHandler */</em>
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>  	<strong class="jxr_keyword">public</strong> HttpResponse run(HttpHost target, HttpRequest request, HttpContext context) <strong class="jxr_keyword">throws</strong> IOException {
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>  		<strong class="jxr_keyword">return</strong> target == <strong class="jxr_keyword">null</strong> ? client.execute((HttpUriRequest)request, context) : client.execute(target, request, context);
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>  	}
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>  }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

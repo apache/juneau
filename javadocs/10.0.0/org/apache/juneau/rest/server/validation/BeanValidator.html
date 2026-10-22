@@ -78,7 +78,7 @@ loadScripts(document, 'script');</script>
 </div>
 <section class="class-description" id="class-description">
 <hr>
-<div class="type-signature"><span class="modifiers">public final class </span><span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/validation/BeanValidator.html#line-70">BeanValidator</a></span>
+<div class="type-signature"><span class="modifiers">public final class </span><span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/validation/BeanValidator.html#line-71">BeanValidator</a></span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
 <div class="block">Static dispatcher for the optional Jakarta Bean Validation 3.x integration.
 
@@ -181,7 +181,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="isValidationRequested(org.apache.juneau.commons.reflect.ParameterInfo)">
 <h3>isValidationRequested</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/validation/BeanValidator.html#line-111">isValidationRequested</a></span><wbr><span class="parameters">(<a href="../../../commons/reflect/ParameterInfo.html" title="class in org.apache.juneau.commons.reflect">ParameterInfo</a>&nbsp;paramInfo)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/validation/BeanValidator.html#line-112">isValidationRequested</a></span><wbr><span class="parameters">(<a href="../../../commons/reflect/ParameterInfo.html" title="class in org.apache.juneau.commons.reflect">ParameterInfo</a>&nbsp;paramInfo)</span></div>
 <div class="block">Returns <jk>true</jk> if the supplied parameter carries any of the recognized validation opt-in
  markers (currently <code>jakarta.validation.Valid</code>, <code>javax.validation.Valid</code>, or Spring's
  <code>@Validated</code>).
@@ -206,7 +206,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="validate(T,org.apache.juneau.commons.inject.BeanStore)">
 <h3 id="validate(java.lang.Object,org.apache.juneau.commons.inject.BeanStore)">validate</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/validation/BeanValidator.html#line-138">validate</a></span><wbr><span class="parameters">(T&nbsp;bean,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/validation/BeanValidator.html#line-139">validate</a></span><wbr><span class="parameters">(T&nbsp;bean,
  <a href="../../../commons/inject/BeanStore.html" title="interface in org.apache.juneau.commons.inject">BeanStore</a>&nbsp;beanStore)</span></div>
 <div class="block">Runs Jakarta Bean Validation against the supplied bean and throws a <a href="ValidationException.html" title="class in org.apache.juneau.rest.server.validation"><code>ValidationException</code></a> if any
  constraints are violated.
@@ -239,7 +239,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="resetCachedDefaultForTesting()">
 <h3>resetCachedDefaultForTesting</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/validation/BeanValidator.html#line-157">resetCachedDefaultForTesting</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/validation/BeanValidator.html#line-158">resetCachedDefaultForTesting</a></span>()</div>
 <div class="block">Test/diagnostic hook &mdash; resets the JVM-wide default-validator cache so the next call to
  <a href="#validate(T,org.apache.juneau.commons.inject.BeanStore)"><code>validate(Object, BeanStore)</code></a> re-resolves the provider. Not part of the public contract;
  intended for unit tests that simulate provider-missing scenarios.</div>
@@ -248,7 +248,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="simulateProviderMissingForTesting()">
 <h3>simulateProviderMissingForTesting</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/validation/BeanValidator.html#line-174">simulateProviderMissingForTesting</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/validation/BeanValidator.html#line-175">simulateProviderMissingForTesting</a></span>()</div>
 <div class="block">Test/diagnostic hook &mdash; forces the &quot;no provider on classpath&quot; code path. Not part of
  the public contract; intended for unit tests that need to assert the graceful-degradation behavior
  without actually removing the Hibernate Validator JAR from the test classpath.

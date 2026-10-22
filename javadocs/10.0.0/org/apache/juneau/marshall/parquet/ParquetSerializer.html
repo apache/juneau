@@ -92,7 +92,7 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Function.html" title="class or interface in java.util.function" class="external-link">Function</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>,<wbr>byte[]&gt;</code>, <code><a href="../../commons/function/ThrowingFunction.html" title="interface in org.apache.juneau.commons.function">ThrowingFunction</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>,<wbr>byte[]&gt;</code>, <code><a href="ParquetMetaProvider.html" title="interface in org.apache.juneau.marshall.parquet">ParquetMetaProvider</a></code>, <code><a href="../stream/ArrayRecordWritable.html" title="interface in org.apache.juneau.marshall.stream">ArrayRecordWritable</a></code>, <code><a href="../stream/RecordWritable.html" title="interface in org.apache.juneau.marshall.stream">RecordWritable</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parquet/ParquetSerializer.html#line-44">ParquetSerializer</a></span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parquet/ParquetSerializer.html#line-43">ParquetSerializer</a></span>
 <span class="extends-implements">extends <a href="../serializer/OutputStreamSerializer.html" title="class in org.apache.juneau.marshall.serializer">OutputStreamSerializer</a>
 implements <a href="ParquetMetaProvider.html" title="interface in org.apache.juneau.marshall.parquet">ParquetMetaProvider</a>, <a href="../stream/RecordWritable.html" title="interface in org.apache.juneau.marshall.stream">RecordWritable</a>, <a href="../stream/ArrayRecordWritable.html" title="interface in org.apache.juneau.marshall.stream">ArrayRecordWritable</a></span></div>
 <div class="block">Serializes bean collections to Apache Parquet binary format.
@@ -273,7 +273,7 @@ implements <a href="ParquetMetaProvider.html" title="interface in org.apache.jun
 <li>
 <section class="detail" id="DEFAULT">
 <h3>DEFAULT</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="ParquetSerializer.html" title="class in org.apache.juneau.marshall.parquet">ParquetSerializer</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parquet/ParquetSerializer.html#line-54">DEFAULT</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="ParquetSerializer.html" title="class in org.apache.juneau.marshall.parquet">ParquetSerializer</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parquet/ParquetSerializer.html#line-52">DEFAULT</a></span></div>
 <div class="block">Default serializer.</div>
 </section>
 </li>
@@ -288,7 +288,7 @@ implements <a href="ParquetMetaProvider.html" title="interface in org.apache.jun
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.marshall.parquet.ParquetSerializer.Builder)">
 <h3>ParquetSerializer</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parquet/ParquetSerializer.html#line-313">ParquetSerializer</a></span><wbr><span class="parameters">(<a href="ParquetSerializer.Builder.html" title="class in org.apache.juneau.marshall.parquet">ParquetSerializer.Builder</a>&nbsp;builder)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parquet/ParquetSerializer.html#line-314">ParquetSerializer</a></span><wbr><span class="parameters">(<a href="ParquetSerializer.Builder.html" title="class in org.apache.juneau.marshall.parquet">ParquetSerializer.Builder</a>&nbsp;builder)</span></div>
 <div class="block">Constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -307,7 +307,7 @@ implements <a href="ParquetMetaProvider.html" title="interface in org.apache.jun
 <li>
 <section class="detail" id="create()">
 <h3>create</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="ParquetSerializer.Builder.html" title="class in org.apache.juneau.marshall.parquet">ParquetSerializer.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parquet/ParquetSerializer.html#line-290">create</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="ParquetSerializer.Builder.html" title="class in org.apache.juneau.marshall.parquet">ParquetSerializer.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parquet/ParquetSerializer.html#line-291">create</a></span>()</div>
 <div class="block">Creates a new builder.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -318,7 +318,7 @@ implements <a href="ParquetMetaProvider.html" title="interface in org.apache.jun
 <li>
 <section class="detail" id="copy()">
 <h3>copy</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ParquetSerializer.Builder.html" title="class in org.apache.juneau.marshall.parquet">ParquetSerializer.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parquet/ParquetSerializer.html#line-327">copy</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ParquetSerializer.Builder.html" title="class in org.apache.juneau.marshall.parquet">ParquetSerializer.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parquet/ParquetSerializer.html#line-328">copy</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../Context.html#copy()">Context</a></code></span></div>
 <div class="block">Creates a builder from this context object.
 
@@ -335,7 +335,7 @@ implements <a href="ParquetMetaProvider.html" title="interface in org.apache.jun
 <li>
 <section class="detail" id="createSession()">
 <h3>createSession</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ParquetSerializerSession.Builder.html" title="class in org.apache.juneau.marshall.parquet">ParquetSerializerSession.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parquet/ParquetSerializer.html#line-332">createSession</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ParquetSerializerSession.Builder.html" title="class in org.apache.juneau.marshall.parquet">ParquetSerializerSession.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parquet/ParquetSerializer.html#line-333">createSession</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../Context.html#createSession()">Context</a></code></span></div>
 <div class="block">Create a session builder based on the properties defined on this context.
 
@@ -353,7 +353,7 @@ implements <a href="ParquetMetaProvider.html" title="interface in org.apache.jun
 <li>
 <section class="detail" id="getParquetBeanPropertyMeta(org.apache.juneau.commons.bean.BeanPropertyMeta)">
 <h3>getParquetBeanPropertyMeta</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ParquetBeanPropertyMeta.html" title="class in org.apache.juneau.marshall.parquet">ParquetBeanPropertyMeta</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parquet/ParquetSerializer.html#line-337">getParquetBeanPropertyMeta</a></span><wbr><span class="parameters">(<a href="../../commons/bean/BeanPropertyMeta.html" title="class in org.apache.juneau.commons.bean">BeanPropertyMeta</a>&nbsp;bpm)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ParquetBeanPropertyMeta.html" title="class in org.apache.juneau.marshall.parquet">ParquetBeanPropertyMeta</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parquet/ParquetSerializer.html#line-338">getParquetBeanPropertyMeta</a></span><wbr><span class="parameters">(<a href="../../commons/bean/BeanPropertyMeta.html" title="class in org.apache.juneau.commons.bean">BeanPropertyMeta</a>&nbsp;bpm)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="ParquetMetaProvider.html#getParquetBeanPropertyMeta(org.apache.juneau.commons.bean.BeanPropertyMeta)">ParquetMetaProvider</a></code></span></div>
 <div class="block">Returns the Parquet-specific metadata on the specified bean property.</div>
 <dl class="notes">
@@ -369,7 +369,7 @@ implements <a href="ParquetMetaProvider.html" title="interface in org.apache.jun
 <li>
 <section class="detail" id="getParquetClassMeta(org.apache.juneau.marshall.ClassMeta)">
 <h3>getParquetClassMeta</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ParquetClassMeta.html" title="class in org.apache.juneau.marshall.parquet">ParquetClassMeta</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parquet/ParquetSerializer.html#line-343">getParquetClassMeta</a></span><wbr><span class="parameters">(<a href="../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;?&gt;&nbsp;cm)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ParquetClassMeta.html" title="class in org.apache.juneau.marshall.parquet">ParquetClassMeta</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parquet/ParquetSerializer.html#line-344">getParquetClassMeta</a></span><wbr><span class="parameters">(<a href="../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;?&gt;&nbsp;cm)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="ParquetMetaProvider.html#getParquetClassMeta(org.apache.juneau.marshall.ClassMeta)">ParquetMetaProvider</a></code></span></div>
 <div class="block">Returns the Parquet-specific metadata on the specified class.</div>
 <dl class="notes">
@@ -385,7 +385,7 @@ implements <a href="ParquetMetaProvider.html" title="interface in org.apache.jun
 <li>
 <section class="detail" id="writeRecords(java.lang.Object)">
 <h3>writeRecords</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../stream/RecordWriter.html" title="interface in org.apache.juneau.marshall.stream">RecordWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parquet/ParquetSerializer.html#line-357">writeRecords</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;output)</span>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../stream/RecordWriter.html" title="interface in org.apache.juneau.marshall.stream">RecordWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parquet/ParquetSerializer.html#line-358">writeRecords</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;output)</span>
                           throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">Convenience delegator for the whole-value <a href="../stream/RecordWriter.html" title="interface in org.apache.juneau.marshall.stream"><code>RecordWriter</code></a> using <b>default session
  arguments</b>.  The real implementation lives on
@@ -405,7 +405,7 @@ implements <a href="ParquetMetaProvider.html" title="interface in org.apache.jun
 <li>
 <section class="detail" id="writeArrayRecords(java.lang.Object)">
 <h3>writeArrayRecords</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../stream/RecordWriter.html" title="interface in org.apache.juneau.marshall.stream">RecordWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parquet/ParquetSerializer.html#line-371">writeArrayRecords</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;output)</span>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../stream/RecordWriter.html" title="interface in org.apache.juneau.marshall.stream">RecordWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parquet/ParquetSerializer.html#line-372">writeArrayRecords</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;output)</span>
                                throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">Convenience delegator for the buffered array-element <a href="../stream/RecordWriter.html" title="interface in org.apache.juneau.marshall.stream"><code>RecordWriter</code></a> using <b>default
  session arguments</b>.  The real implementation lives on
@@ -425,7 +425,7 @@ implements <a href="ParquetMetaProvider.html" title="interface in org.apache.jun
 <li>
 <section class="detail" id="isRecordStreaming()">
 <h3>isRecordStreaming</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parquet/ParquetSerializer.html#line-381">isRecordStreaming</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parquet/ParquetSerializer.html#line-382">isRecordStreaming</a></span>()</div>
 <div class="block">The Parquet record writer is buffered/<a href="../stream/RecordAdapter.html" title="class in org.apache.juneau.marshall.stream"><code>RecordAdapter</code></a>-backed, not O(1) streaming.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
@@ -438,7 +438,7 @@ implements <a href="ParquetMetaProvider.html" title="interface in org.apache.jun
 <li>
 <section class="detail" id="isArrayRecordStreaming()">
 <h3>isArrayRecordStreaming</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parquet/ParquetSerializer.html#line-389">isArrayRecordStreaming</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parquet/ParquetSerializer.html#line-390">isArrayRecordStreaming</a></span>()</div>
 <div class="block">The Parquet array-record writer is buffered/<a href="../stream/RecordAdapter.html" title="class in org.apache.juneau.marshall.stream"><code>RecordAdapter</code></a>-backed, not O(1) streaming.</div>
 <dl class="notes">
 <dt>Specified by:</dt>

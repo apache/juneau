@@ -24,11 +24,11 @@
 <a class="jxr_linenumber" name="L16" href="#L16">16</a>  <em class="jxr_comment"> */</em>
 <a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.client.mcp.auth;
 <a class="jxr_linenumber" name="L18" href="#L18">18</a>  
-<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.commons.utils.AssertionUtils.*;
-<a class="jxr_linenumber" name="L20" href="#L20">20</a>  
-<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> java.net.*;
-<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> java.util.*;
-<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> java.util.concurrent.*;
+<a class="jxr_linenumber" name="L19" href="#L19">19</a>  
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> java.net.*;
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> java.util.*;
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> java.util.concurrent.*;
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.commons.utils.Shorts.*;
 <a class="jxr_linenumber" name="L24" href="#L24">24</a>  
 <a class="jxr_linenumber" name="L25" href="#L25">25</a>  <em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L26" href="#L26">26</a>  <em class="jxr_javadoccomment"> * Computes and tracks the SEP-2350 step-up scope union &amp;mdash; the set of scopes a client re-authorizes with after a</em>
@@ -55,114 +55,110 @@
 <a class="jxr_linenumber" name="L47" href="#L47">47</a>  <em class="jxr_javadoccomment"> * @since 10.0.0</em>
 <a class="jxr_linenumber" name="L48" href="#L48">48</a>  <em class="jxr_javadoccomment"> */</em>
 <a class="jxr_linenumber" name="L49" href="#L49">49</a>  @SuppressWarnings({
-<a class="jxr_linenumber" name="L50" href="#L50">50</a>  	<span class="jxr_string">"java:S115"</span> <em class="jxr_comment">// Constants use UPPER_snakeCase convention (e.g., ARG_resource)</em>
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>  	<span class="jxr_string">"java:S1192"</span> <em class="jxr_comment">// Duplicated literals (argument/property names) read more clearly inline than as constants</em>
 <a class="jxr_linenumber" name="L51" href="#L51">51</a>  })
 <a class="jxr_linenumber" name="L52" href="#L52">52</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> McpScopeAccumulator {
 <a class="jxr_linenumber" name="L53" href="#L53">53</a>  
-<a class="jxr_linenumber" name="L54" href="#L54">54</a>  	<em class="jxr_comment">// Argument name constants for assertArgNotNull</em>
-<a class="jxr_linenumber" name="L55" href="#L55">55</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String ARG_resource = <span class="jxr_string">"resource"</span>;
-<a class="jxr_linenumber" name="L56" href="#L56">56</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String ARG_issuer = <span class="jxr_string">"issuer"</span>;
-<a class="jxr_linenumber" name="L57" href="#L57">57</a>  
-<a class="jxr_linenumber" name="L58" href="#L58">58</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> ConcurrentMap&lt;String,Set&lt;String&gt;&gt; byKey = <strong class="jxr_keyword">new</strong> ConcurrentHashMap&lt;&gt;();
-<a class="jxr_linenumber" name="L59" href="#L59">59</a>  
-<a class="jxr_linenumber" name="L60" href="#L60">60</a>  	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L61" href="#L61">61</a>  <em class="jxr_javadoccomment">	 * Computes the mandated-minimum step-up union: {@code previouslyRequested ∪ challengeScopes}, order-preserving with</em>
-<a class="jxr_linenumber" name="L62" href="#L62">62</a>  <em class="jxr_javadoccomment">	 * exact-string dedup.</em>
-<a class="jxr_linenumber" name="L63" href="#L63">63</a>  <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L64" href="#L64">64</a>  <em class="jxr_javadoccomment">	 * @param previouslyRequested The scope set the client previously requested (may be {@code null} / empty).</em>
-<a class="jxr_linenumber" name="L65" href="#L65">65</a>  <em class="jxr_javadoccomment">	 * @param challengeScopes The scopes from the server's {@code insufficient_scope} challenge (may be {@code null} /</em>
-<a class="jxr_linenumber" name="L66" href="#L66">66</a>  <em class="jxr_javadoccomment">	 * 	empty).</em>
-<a class="jxr_linenumber" name="L67" href="#L67">67</a>  <em class="jxr_javadoccomment">	 * @return A new order-preserving union set.  Never {@code null}.</em>
-<a class="jxr_linenumber" name="L68" href="#L68">68</a>  <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L69" href="#L69">69</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> Set&lt;String&gt; union(Collection&lt;String&gt; previouslyRequested, Collection&lt;String&gt; challengeScopes) {
-<a class="jxr_linenumber" name="L70" href="#L70">70</a>  		<strong class="jxr_keyword">return</strong> union(previouslyRequested, challengeScopes, <strong class="jxr_keyword">null</strong>, <strong class="jxr_keyword">null</strong>, <strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L71" href="#L71">71</a>  	}
-<a class="jxr_linenumber" name="L72" href="#L72">72</a>  
-<a class="jxr_linenumber" name="L73" href="#L73">73</a>  	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L74" href="#L74">74</a>  <em class="jxr_javadoccomment">	 * Computes the broadened step-up union, folding in the opt-in contributors the SEP-2350 Scope Selection Strategy</em>
-<a class="jxr_linenumber" name="L75" href="#L75">75</a>  <em class="jxr_javadoccomment">	 * permits a client to consult.  Order-preserving; exact-string dedup.  Any {@code null} contributor is treated as</em>
-<a class="jxr_linenumber" name="L76" href="#L76">76</a>  <em class="jxr_javadoccomment">	 * empty.</em>
-<a class="jxr_linenumber" name="L77" href="#L77">77</a>  <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L78" href="#L78">78</a>  <em class="jxr_javadoccomment">	 * @param previouslyRequested The scope set the client previously requested.</em>
-<a class="jxr_linenumber" name="L79" href="#L79">79</a>  <em class="jxr_javadoccomment">	 * @param challengeScopes The scopes from the server's {@code insufficient_scope} challenge.</em>
-<a class="jxr_linenumber" name="L80" href="#L80">80</a>  <em class="jxr_javadoccomment">	 * @param grantedTokenScopes The scopes on the currently-held token (opt-in).</em>
-<a class="jxr_linenumber" name="L81" href="#L81">81</a>  <em class="jxr_javadoccomment">	 * @param prmScopesSupported The cached PRM {@code scopes_supported} (opt-in).</em>
-<a class="jxr_linenumber" name="L82" href="#L82">82</a>  <em class="jxr_javadoccomment">	 * @param clientMetadataScope The scope declared in client metadata (opt-in).</em>
-<a class="jxr_linenumber" name="L83" href="#L83">83</a>  <em class="jxr_javadoccomment">	 * @return A new order-preserving union set.  Never {@code null}.</em>
-<a class="jxr_linenumber" name="L84" href="#L84">84</a>  <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L85" href="#L85">85</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> Set&lt;String&gt; union(Collection&lt;String&gt; previouslyRequested, Collection&lt;String&gt; challengeScopes,
-<a class="jxr_linenumber" name="L86" href="#L86">86</a>  			Collection&lt;String&gt; grantedTokenScopes, Collection&lt;String&gt; prmScopesSupported, Collection&lt;String&gt; clientMetadataScope) {
-<a class="jxr_linenumber" name="L87" href="#L87">87</a>  		<strong class="jxr_keyword">var</strong> out = <strong class="jxr_keyword">new</strong> LinkedHashSet&lt;String&gt;();
-<a class="jxr_linenumber" name="L88" href="#L88">88</a>  		addAll(out, previouslyRequested);
-<a class="jxr_linenumber" name="L89" href="#L89">89</a>  		addAll(out, challengeScopes);
-<a class="jxr_linenumber" name="L90" href="#L90">90</a>  		addAll(out, grantedTokenScopes);
-<a class="jxr_linenumber" name="L91" href="#L91">91</a>  		addAll(out, prmScopesSupported);
-<a class="jxr_linenumber" name="L92" href="#L92">92</a>  		addAll(out, clientMetadataScope);
-<a class="jxr_linenumber" name="L93" href="#L93">93</a>  		<strong class="jxr_keyword">return</strong> out;
-<a class="jxr_linenumber" name="L94" href="#L94">94</a>  	}
-<a class="jxr_linenumber" name="L95" href="#L95">95</a>  
-<a class="jxr_linenumber" name="L96" href="#L96">96</a>  	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L97" href="#L97">97</a>  <em class="jxr_javadoccomment">	 * Seeds the accumulated state for a {@code (resource, issuer)} key with the client's previously-requested scopes,</em>
-<a class="jxr_linenumber" name="L98" href="#L98">98</a>  <em class="jxr_javadoccomment">	 * &lt;b&gt;unioning&lt;/b&gt; into any existing entry for that key rather than replacing it.</em>
-<a class="jxr_linenumber" name="L99" href="#L99">99</a>  <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L100" href="#L100">100</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L101" href="#L101">101</a> <em class="jxr_javadoccomment">	 * Unioning (not overwriting) matters when a shared accumulator is seeded more than once for the same key &amp;mdash;</em>
-<a class="jxr_linenumber" name="L102" href="#L102">102</a> <em class="jxr_javadoccomment">	 * e.g. two {@link McpStepUpAuthorizer.Builder#build() builds} against one shared accumulator, or a re-seed after some</em>
-<a class="jxr_linenumber" name="L103" href="#L103">103</a> <em class="jxr_javadoccomment">	 * challenge scopes were already {@link #accumulate accumulated} &amp;mdash; so no previously-tracked scope is ever lost.</em>
-<a class="jxr_linenumber" name="L104" href="#L104">104</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L105" href="#L105">105</a> <em class="jxr_javadoccomment">	 * @param resource The RFC 8707 resource indicator.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</em>
-<a class="jxr_linenumber" name="L106" href="#L106">106</a> <em class="jxr_javadoccomment">	 * @param issuer The authorization server issuer.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</em>
-<a class="jxr_linenumber" name="L107" href="#L107">107</a> <em class="jxr_javadoccomment">	 * @param previouslyRequested The previously-requested scopes.  May be {@code null} / empty.</em>
-<a class="jxr_linenumber" name="L108" href="#L108">108</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
-<a class="jxr_linenumber" name="L109" href="#L109">109</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L110" href="#L110">110</a> 	<strong class="jxr_keyword">public</strong> McpScopeAccumulator seed(URI resource, URI issuer, Collection&lt;String&gt; previouslyRequested) {
-<a class="jxr_linenumber" name="L111" href="#L111">111</a> 		assertArgNotNull(ARG_resource, resource);
-<a class="jxr_linenumber" name="L112" href="#L112">112</a> 		assertArgNotNull(ARG_issuer, issuer);
-<a class="jxr_linenumber" name="L113" href="#L113">113</a> 		byKey.merge(key(resource, issuer), union(previouslyRequested, <strong class="jxr_keyword">null</strong>), McpScopeAccumulator::union);
-<a class="jxr_linenumber" name="L114" href="#L114">114</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
-<a class="jxr_linenumber" name="L115" href="#L115">115</a> 	}
-<a class="jxr_linenumber" name="L116" href="#L116">116</a> 
-<a class="jxr_linenumber" name="L117" href="#L117">117</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L118" href="#L118">118</a> <em class="jxr_javadoccomment">	 * Unions the given challenge scopes into the accumulated state for the {@code (resource, issuer)} key and returns</em>
-<a class="jxr_linenumber" name="L119" href="#L119">119</a> <em class="jxr_javadoccomment">	 * the updated union.</em>
-<a class="jxr_linenumber" name="L120" href="#L120">120</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L121" href="#L121">121</a> <em class="jxr_javadoccomment">	 * @param resource The RFC 8707 resource indicator.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</em>
-<a class="jxr_linenumber" name="L122" href="#L122">122</a> <em class="jxr_javadoccomment">	 * @param issuer The authorization server issuer.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</em>
-<a class="jxr_linenumber" name="L123" href="#L123">123</a> <em class="jxr_javadoccomment">	 * @param challengeScopes The scopes from the latest {@code insufficient_scope} challenge.  May be {@code null} /</em>
-<a class="jxr_linenumber" name="L124" href="#L124">124</a> <em class="jxr_javadoccomment">	 * 	empty.</em>
-<a class="jxr_linenumber" name="L125" href="#L125">125</a> <em class="jxr_javadoccomment">	 * @return A copy of the updated accumulated union for the key.  Never {@code null}.</em>
-<a class="jxr_linenumber" name="L126" href="#L126">126</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L127" href="#L127">127</a> 	<strong class="jxr_keyword">public</strong> Set&lt;String&gt; accumulate(URI resource, URI issuer, Collection&lt;String&gt; challengeScopes) {
-<a class="jxr_linenumber" name="L128" href="#L128">128</a> 		assertArgNotNull(ARG_resource, resource);
-<a class="jxr_linenumber" name="L129" href="#L129">129</a> 		assertArgNotNull(ARG_issuer, issuer);
-<a class="jxr_linenumber" name="L130" href="#L130">130</a> 		<strong class="jxr_keyword">var</strong> updated = byKey.compute(key(resource, issuer), (k, existing) -&gt; union(existing, challengeScopes));
-<a class="jxr_linenumber" name="L131" href="#L131">131</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> LinkedHashSet&lt;&gt;(updated);
-<a class="jxr_linenumber" name="L132" href="#L132">132</a> 	}
-<a class="jxr_linenumber" name="L133" href="#L133">133</a> 
-<a class="jxr_linenumber" name="L134" href="#L134">134</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L135" href="#L135">135</a> <em class="jxr_javadoccomment">	 * Returns a copy of the currently-accumulated union for the {@code (resource, issuer)} key.</em>
-<a class="jxr_linenumber" name="L136" href="#L136">136</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L137" href="#L137">137</a> <em class="jxr_javadoccomment">	 * @param resource The RFC 8707 resource indicator.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</em>
-<a class="jxr_linenumber" name="L138" href="#L138">138</a> <em class="jxr_javadoccomment">	 * @param issuer The authorization server issuer.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</em>
-<a class="jxr_linenumber" name="L139" href="#L139">139</a> <em class="jxr_javadoccomment">	 * @return A copy of the current accumulated union (empty if the key was never seeded/accumulated).</em>
-<a class="jxr_linenumber" name="L140" href="#L140">140</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L141" href="#L141">141</a> 	<strong class="jxr_keyword">public</strong> Set&lt;String&gt; current(URI resource, URI issuer) {
-<a class="jxr_linenumber" name="L142" href="#L142">142</a> 		assertArgNotNull(ARG_resource, resource);
-<a class="jxr_linenumber" name="L143" href="#L143">143</a> 		assertArgNotNull(ARG_issuer, issuer);
-<a class="jxr_linenumber" name="L144" href="#L144">144</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> LinkedHashSet&lt;&gt;(byKey.getOrDefault(key(resource, issuer), Set.of()));
-<a class="jxr_linenumber" name="L145" href="#L145">145</a> 	}
-<a class="jxr_linenumber" name="L146" href="#L146">146</a> 
-<a class="jxr_linenumber" name="L147" href="#L147">147</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> addAll(Set&lt;String&gt; out, Collection&lt;String&gt; in) {
-<a class="jxr_linenumber" name="L148" href="#L148">148</a> 		<strong class="jxr_keyword">if</strong> (in != <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L149" href="#L149">149</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> s : in)
-<a class="jxr_linenumber" name="L150" href="#L150">150</a> 				<strong class="jxr_keyword">if</strong> (s != <strong class="jxr_keyword">null</strong> &amp;&amp; ! s.isBlank())
-<a class="jxr_linenumber" name="L151" href="#L151">151</a> 					out.add(s);
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> ConcurrentMap&lt;String,Set&lt;String&gt;&gt; byKey = <strong class="jxr_keyword">new</strong> ConcurrentHashMap&lt;&gt;();
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>  
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>  	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>  <em class="jxr_javadoccomment">	 * Computes the mandated-minimum step-up union: {@code previouslyRequested ∪ challengeScopes}, order-preserving with</em>
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>  <em class="jxr_javadoccomment">	 * exact-string dedup.</em>
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>  <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>  <em class="jxr_javadoccomment">	 * @param previouslyRequested The scope set the client previously requested (may be {@code null} / empty).</em>
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>  <em class="jxr_javadoccomment">	 * @param challengeScopes The scopes from the server's {@code insufficient_scope} challenge (may be {@code null} /</em>
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>  <em class="jxr_javadoccomment">	 * 	empty).</em>
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>  <em class="jxr_javadoccomment">	 * @return A new order-preserving union set.  Never {@code null}.</em>
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>  <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> Set&lt;String&gt; union(Collection&lt;String&gt; previouslyRequested, Collection&lt;String&gt; challengeScopes) {
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>  		<strong class="jxr_keyword">return</strong> union(previouslyRequested, challengeScopes, <strong class="jxr_keyword">null</strong>, <strong class="jxr_keyword">null</strong>, <strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>  	}
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>  
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>  	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>  <em class="jxr_javadoccomment">	 * Computes the broadened step-up union, folding in the opt-in contributors the SEP-2350 Scope Selection Strategy</em>
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>  <em class="jxr_javadoccomment">	 * permits a client to consult.  Order-preserving; exact-string dedup.  Any {@code null} contributor is treated as</em>
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>  <em class="jxr_javadoccomment">	 * empty.</em>
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>  <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>  <em class="jxr_javadoccomment">	 * @param previouslyRequested The scope set the client previously requested.</em>
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>  <em class="jxr_javadoccomment">	 * @param challengeScopes The scopes from the server's {@code insufficient_scope} challenge.</em>
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>  <em class="jxr_javadoccomment">	 * @param grantedTokenScopes The scopes on the currently-held token (opt-in).</em>
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>  <em class="jxr_javadoccomment">	 * @param prmScopesSupported The cached PRM {@code scopes_supported} (opt-in).</em>
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>  <em class="jxr_javadoccomment">	 * @param clientMetadataScope The scope declared in client metadata (opt-in).</em>
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>  <em class="jxr_javadoccomment">	 * @return A new order-preserving union set.  Never {@code null}.</em>
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>  <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> Set&lt;String&gt; union(Collection&lt;String&gt; previouslyRequested, Collection&lt;String&gt; challengeScopes,
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>  			Collection&lt;String&gt; grantedTokenScopes, Collection&lt;String&gt; prmScopesSupported, Collection&lt;String&gt; clientMetadataScope) {
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>  		<strong class="jxr_keyword">var</strong> out = <strong class="jxr_keyword">new</strong> LinkedHashSet&lt;String&gt;();
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>  		addAll(out, previouslyRequested);
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>  		addAll(out, challengeScopes);
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>  		addAll(out, grantedTokenScopes);
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>  		addAll(out, prmScopesSupported);
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>  		addAll(out, clientMetadataScope);
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>  		<strong class="jxr_keyword">return</strong> out;
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>  	}
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>  
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>  	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>  <em class="jxr_javadoccomment">	 * Seeds the accumulated state for a {@code (resource, issuer)} key with the client's previously-requested scopes,</em>
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>  <em class="jxr_javadoccomment">	 * &lt;b&gt;unioning&lt;/b&gt; into any existing entry for that key rather than replacing it.</em>
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>  <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>  <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>  <em class="jxr_javadoccomment">	 * Unioning (not overwriting) matters when a shared accumulator is seeded more than once for the same key &amp;mdash;</em>
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>  <em class="jxr_javadoccomment">	 * e.g. two {@link McpStepUpAuthorizer.Builder#build() builds} against one shared accumulator, or a re-seed after some</em>
+<a class="jxr_linenumber" name="L99" href="#L99">99</a>  <em class="jxr_javadoccomment">	 * challenge scopes were already {@link #accumulate accumulated} &amp;mdash; so no previously-tracked scope is ever lost.</em>
+<a class="jxr_linenumber" name="L100" href="#L100">100</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L101" href="#L101">101</a> <em class="jxr_javadoccomment">	 * @param resource The RFC 8707 resource indicator.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L102" href="#L102">102</a> <em class="jxr_javadoccomment">	 * @param issuer The authorization server issuer.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L103" href="#L103">103</a> <em class="jxr_javadoccomment">	 * @param previouslyRequested The previously-requested scopes.  May be {@code null} / empty.</em>
+<a class="jxr_linenumber" name="L104" href="#L104">104</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
+<a class="jxr_linenumber" name="L105" href="#L105">105</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L106" href="#L106">106</a> 	<strong class="jxr_keyword">public</strong> McpScopeAccumulator seed(URI resource, URI issuer, Collection&lt;String&gt; previouslyRequested) {
+<a class="jxr_linenumber" name="L107" href="#L107">107</a> 		reqnn(<span class="jxr_string">"resource"</span>, resource);
+<a class="jxr_linenumber" name="L108" href="#L108">108</a> 		reqnn(<span class="jxr_string">"issuer"</span>, issuer);
+<a class="jxr_linenumber" name="L109" href="#L109">109</a> 		byKey.merge(key(resource, issuer), union(previouslyRequested, <strong class="jxr_keyword">null</strong>), McpScopeAccumulator::union);
+<a class="jxr_linenumber" name="L110" href="#L110">110</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L111" href="#L111">111</a> 	}
+<a class="jxr_linenumber" name="L112" href="#L112">112</a> 
+<a class="jxr_linenumber" name="L113" href="#L113">113</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L114" href="#L114">114</a> <em class="jxr_javadoccomment">	 * Unions the given challenge scopes into the accumulated state for the {@code (resource, issuer)} key and returns</em>
+<a class="jxr_linenumber" name="L115" href="#L115">115</a> <em class="jxr_javadoccomment">	 * the updated union.</em>
+<a class="jxr_linenumber" name="L116" href="#L116">116</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L117" href="#L117">117</a> <em class="jxr_javadoccomment">	 * @param resource The RFC 8707 resource indicator.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L118" href="#L118">118</a> <em class="jxr_javadoccomment">	 * @param issuer The authorization server issuer.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L119" href="#L119">119</a> <em class="jxr_javadoccomment">	 * @param challengeScopes The scopes from the latest {@code insufficient_scope} challenge.  May be {@code null} /</em>
+<a class="jxr_linenumber" name="L120" href="#L120">120</a> <em class="jxr_javadoccomment">	 * 	empty.</em>
+<a class="jxr_linenumber" name="L121" href="#L121">121</a> <em class="jxr_javadoccomment">	 * @return A copy of the updated accumulated union for the key.  Never {@code null}.</em>
+<a class="jxr_linenumber" name="L122" href="#L122">122</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L123" href="#L123">123</a> 	<strong class="jxr_keyword">public</strong> Set&lt;String&gt; accumulate(URI resource, URI issuer, Collection&lt;String&gt; challengeScopes) {
+<a class="jxr_linenumber" name="L124" href="#L124">124</a> 		reqnn(<span class="jxr_string">"resource"</span>, resource);
+<a class="jxr_linenumber" name="L125" href="#L125">125</a> 		reqnn(<span class="jxr_string">"issuer"</span>, issuer);
+<a class="jxr_linenumber" name="L126" href="#L126">126</a> 		<strong class="jxr_keyword">var</strong> updated = byKey.compute(key(resource, issuer), (k, existing) -&gt; union(existing, challengeScopes));
+<a class="jxr_linenumber" name="L127" href="#L127">127</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> LinkedHashSet&lt;&gt;(updated);
+<a class="jxr_linenumber" name="L128" href="#L128">128</a> 	}
+<a class="jxr_linenumber" name="L129" href="#L129">129</a> 
+<a class="jxr_linenumber" name="L130" href="#L130">130</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L131" href="#L131">131</a> <em class="jxr_javadoccomment">	 * Returns a copy of the currently-accumulated union for the {@code (resource, issuer)} key.</em>
+<a class="jxr_linenumber" name="L132" href="#L132">132</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L133" href="#L133">133</a> <em class="jxr_javadoccomment">	 * @param resource The RFC 8707 resource indicator.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L134" href="#L134">134</a> <em class="jxr_javadoccomment">	 * @param issuer The authorization server issuer.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L135" href="#L135">135</a> <em class="jxr_javadoccomment">	 * @return A copy of the current accumulated union (empty if the key was never seeded/accumulated).</em>
+<a class="jxr_linenumber" name="L136" href="#L136">136</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L137" href="#L137">137</a> 	<strong class="jxr_keyword">public</strong> Set&lt;String&gt; current(URI resource, URI issuer) {
+<a class="jxr_linenumber" name="L138" href="#L138">138</a> 		reqnn(<span class="jxr_string">"resource"</span>, resource);
+<a class="jxr_linenumber" name="L139" href="#L139">139</a> 		reqnn(<span class="jxr_string">"issuer"</span>, issuer);
+<a class="jxr_linenumber" name="L140" href="#L140">140</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> LinkedHashSet&lt;&gt;(byKey.getOrDefault(key(resource, issuer), Set.of()));
+<a class="jxr_linenumber" name="L141" href="#L141">141</a> 	}
+<a class="jxr_linenumber" name="L142" href="#L142">142</a> 
+<a class="jxr_linenumber" name="L143" href="#L143">143</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> addAll(Set&lt;String&gt; out, Collection&lt;String&gt; in) {
+<a class="jxr_linenumber" name="L144" href="#L144">144</a> 		<strong class="jxr_keyword">if</strong> (in != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L145" href="#L145">145</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> s : in)
+<a class="jxr_linenumber" name="L146" href="#L146">146</a> 				<strong class="jxr_keyword">if</strong> (s != <strong class="jxr_keyword">null</strong> &amp;&amp; ! s.isBlank())
+<a class="jxr_linenumber" name="L147" href="#L147">147</a> 					out.add(s);
+<a class="jxr_linenumber" name="L148" href="#L148">148</a> 	}
+<a class="jxr_linenumber" name="L149" href="#L149">149</a> 
+<a class="jxr_linenumber" name="L150" href="#L150">150</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String key(URI resource, URI issuer) {
+<a class="jxr_linenumber" name="L151" href="#L151">151</a> 		<strong class="jxr_keyword">return</strong> resource.toString() + '\n' + issuer.toString();
 <a class="jxr_linenumber" name="L152" href="#L152">152</a> 	}
-<a class="jxr_linenumber" name="L153" href="#L153">153</a> 
-<a class="jxr_linenumber" name="L154" href="#L154">154</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String key(URI resource, URI issuer) {
-<a class="jxr_linenumber" name="L155" href="#L155">155</a> 		<strong class="jxr_keyword">return</strong> resource.toString() + '\n' + issuer.toString();
-<a class="jxr_linenumber" name="L156" href="#L156">156</a> 	}
-<a class="jxr_linenumber" name="L157" href="#L157">157</a> }
+<a class="jxr_linenumber" name="L153" href="#L153">153</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

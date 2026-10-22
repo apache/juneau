@@ -75,7 +75,7 @@ loadScripts(document, 'script');</script>
 <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/annotation/Inherited.html" title="class or interface in java.lang.annotation" class="external-link">@Inherited</a>
 <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/annotation/Repeatable.html" title="class or interface in java.lang.annotation" class="external-link">@Repeatable</a>(<a href="SwapAnnotation.Array.html" title="annotation interface in org.apache.juneau.marshall">Array.class</a>)
 </span><span class="modifiers">public @interface </span><span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/Swap.html#line-42">Swap</a></span></div>
-<div class="block">Associates <a href="swap/ObjectSwap.html" title="class in org.apache.juneau.marshall.swap"><code>ObjectSwap</code></a> and <a href="swap/Surrogate.html" title="interface in org.apache.juneau.marshall.swap"><code>Surrogate</code></a> classes with POJOs and bean properties.
+<div class="block">Associates <a href="swap/spi/ObjectSwap.html" title="class in org.apache.juneau.marshall.swap.spi"><code>ObjectSwap</code></a> and <a href="swap/spi/Surrogate.html" title="interface in org.apache.juneau.marshall.swap.spi"><code>Surrogate</code></a> classes with POJOs and bean properties.
 
  <p>
  Can be used in the following locations:
@@ -109,7 +109,7 @@ loadScripts(document, 'script');</script>
 <div class="col-first odd-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;</code></div>
 <div class="col-second odd-row-color"><code><a href="#impl()" class="member-name-link">impl</a></code></div>
 <div class="col-last odd-row-color">
-<div class="block">The <a href="swap/ObjectSwap.html" title="class in org.apache.juneau.marshall.swap"><code>ObjectSwap</code></a> and <a href="swap/Surrogate.html" title="interface in org.apache.juneau.marshall.swap"><code>Surrogate</code></a> class.</div>
+<div class="block">The <a href="swap/spi/ObjectSwap.html" title="class in org.apache.juneau.marshall.swap.spi"><code>ObjectSwap</code></a> and <a href="swap/spi/Surrogate.html" title="interface in org.apache.juneau.marshall.swap.spi"><code>Surrogate</code></a> class.</div>
 </div>
 <div class="col-first even-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>[]</code></div>
 <div class="col-second even-row-color"><code><a href="#mediaTypes()" class="member-name-link">mediaTypes</a></code></div>
@@ -124,7 +124,7 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;</code></div>
 <div class="col-second even-row-color"><code><a href="#value()" class="member-name-link">value</a></code></div>
 <div class="col-last even-row-color">
-<div class="block">The <a href="swap/ObjectSwap.html" title="class in org.apache.juneau.marshall.swap"><code>ObjectSwap</code></a> and <a href="swap/Surrogate.html" title="interface in org.apache.juneau.marshall.swap"><code>Surrogate</code></a> class.</div>
+<div class="block">The <a href="swap/spi/ObjectSwap.html" title="class in org.apache.juneau.marshall.swap.spi"><code>ObjectSwap</code></a> and <a href="swap/spi/Surrogate.html" title="interface in org.apache.juneau.marshall.swap.spi"><code>Surrogate</code></a> class.</div>
 </div>
 </div>
 </section>
@@ -159,7 +159,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="impl()">
 <h3>impl</h3>
 <div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/Swap.html#line-65">impl</a></span></div>
-<div class="block">The <a href="swap/ObjectSwap.html" title="class in org.apache.juneau.marshall.swap"><code>ObjectSwap</code></a> and <a href="swap/Surrogate.html" title="interface in org.apache.juneau.marshall.swap"><code>Surrogate</code></a> class.
+<div class="block">The <a href="swap/spi/ObjectSwap.html" title="class in org.apache.juneau.marshall.swap.spi"><code>ObjectSwap</code></a> and <a href="swap/spi/Surrogate.html" title="interface in org.apache.juneau.marshall.swap.spi"><code>Surrogate</code></a> class.
 
  <p>
  A synonym for <a href="#value()"><code>value()</code></a>.</div>
@@ -256,7 +256,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="value()">
 <h3>value</h3>
 <div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/Swap.html#line-138">value</a></span></div>
-<div class="block">The <a href="swap/ObjectSwap.html" title="class in org.apache.juneau.marshall.swap"><code>ObjectSwap</code></a> and <a href="swap/Surrogate.html" title="interface in org.apache.juneau.marshall.swap"><code>Surrogate</code></a> class.
+<div class="block">The <a href="swap/spi/ObjectSwap.html" title="class in org.apache.juneau.marshall.swap.spi"><code>ObjectSwap</code></a> and <a href="swap/spi/Surrogate.html" title="interface in org.apache.juneau.marshall.swap.spi"><code>Surrogate</code></a> class.
 
  <p>
  A synonym for <a href="#impl()"><code>impl()</code></a>.</div>

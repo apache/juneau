@@ -29,12 +29,12 @@
 <span class="source-line-no">016</span><span id="line-16"> */</span>
 <span class="source-line-no">017</span><span id="line-17">package org.apache.juneau.rest.server.mcp.v20260728;</span>
 <span class="source-line-no">018</span><span id="line-18"></span>
-<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.AssertionUtils.*;</span>
-<span class="source-line-no">020</span><span id="line-20"></span>
-<span class="source-line-no">021</span><span id="line-21">import java.util.*;</span>
-<span class="source-line-no">022</span><span id="line-22"></span>
-<span class="source-line-no">023</span><span id="line-23">import org.apache.juneau.bean.mcp.v20260728.*;</span>
-<span class="source-line-no">024</span><span id="line-24">import org.apache.juneau.marshall.marshaller.*;</span>
+<span class="source-line-no">019</span><span id="line-19"></span>
+<span class="source-line-no">020</span><span id="line-20">import java.util.*;</span>
+<span class="source-line-no">021</span><span id="line-21"></span>
+<span class="source-line-no">022</span><span id="line-22">import org.apache.juneau.bean.mcp.v20260728.*;</span>
+<span class="source-line-no">023</span><span id="line-23">import org.apache.juneau.marshall.marshaller.*;</span>
+<span class="source-line-no">024</span><span id="line-24">import static org.apache.juneau.commons.utils.Shorts.*;</span>
 <span class="source-line-no">025</span><span id="line-25"></span>
 <span class="source-line-no">026</span><span id="line-26">/**</span>
 <span class="source-line-no">027</span><span id="line-27"> * Static helper that parses typed {@link ElicitResult}s out of an {@link McpMrtrResumeContext} (MCP</span>
@@ -62,8 +62,8 @@
 <span class="source-line-no">049</span><span id="line-49">    * @throws RuntimeException If the answer's decoded shape cannot be converted to {@link ElicitResult}.</span>
 <span class="source-line-no">050</span><span id="line-50">    */</span>
 <span class="source-line-no">051</span><span id="line-51">   public static ElicitResult get(McpMrtrResumeContext ctx, String id) {</span>
-<span class="source-line-no">052</span><span id="line-52">      assertArgNotNull("ctx", ctx);</span>
-<span class="source-line-no">053</span><span id="line-53">      assertArgNotNull("id", id);</span>
+<span class="source-line-no">052</span><span id="line-52">      reqnn("ctx", ctx);</span>
+<span class="source-line-no">053</span><span id="line-53">      reqnn("id", id);</span>
 <span class="source-line-no">054</span><span id="line-54">      var value = ctx.inputResponses().get(id);</span>
 <span class="source-line-no">055</span><span id="line-55">      if (value == null)</span>
 <span class="source-line-no">056</span><span id="line-56">         return null;</span>
@@ -80,7 +80,7 @@
 <span class="source-line-no">067</span><span id="line-67">    * @throws RuntimeException If any answer's decoded shape cannot be converted to {@link ElicitResult}.</span>
 <span class="source-line-no">068</span><span id="line-68">    */</span>
 <span class="source-line-no">069</span><span id="line-69">   public static Map&lt;String,ElicitResult&gt; all(McpMrtrResumeContext ctx) {</span>
-<span class="source-line-no">070</span><span id="line-70">      assertArgNotNull("ctx", ctx);</span>
+<span class="source-line-no">070</span><span id="line-70">      reqnn("ctx", ctx);</span>
 <span class="source-line-no">071</span><span id="line-71">      Map&lt;String,ElicitResult&gt; out = new LinkedHashMap&lt;&gt;();</span>
 <span class="source-line-no">072</span><span id="line-72">      ctx.inputResponses().keySet().forEach(id -&gt; out.put(id, get(ctx, id)));</span>
 <span class="source-line-no">073</span><span id="line-73">      return out;</span>
@@ -104,9 +104,9 @@
 <span class="source-line-no">091</span><span id="line-91">    * @throws RuntimeException If the answer's decoded shape cannot be converted to {@link ElicitResult}.</span>
 <span class="source-line-no">092</span><span id="line-92">    */</span>
 <span class="source-line-no">093</span><span id="line-93">   public static boolean getBoolean(McpMrtrResumeContext ctx, String id, String field) {</span>
-<span class="source-line-no">094</span><span id="line-94">      assertArgNotNull("ctx", ctx);</span>
-<span class="source-line-no">095</span><span id="line-95">      assertArgNotNull("id", id);</span>
-<span class="source-line-no">096</span><span id="line-96">      assertArgNotNull("field", field);</span>
+<span class="source-line-no">094</span><span id="line-94">      reqnn("ctx", ctx);</span>
+<span class="source-line-no">095</span><span id="line-95">      reqnn("id", id);</span>
+<span class="source-line-no">096</span><span id="line-96">      reqnn("field", field);</span>
 <span class="source-line-no">097</span><span id="line-97">      var answer = get(ctx, id);</span>
 <span class="source-line-no">098</span><span id="line-98">      if (answer == null || answer.getAction() != ElicitAction.ACCEPT)</span>
 <span class="source-line-no">099</span><span id="line-99">         return false;</span>
@@ -130,9 +130,9 @@
 <span class="source-line-no">117</span><span id="line-117">    * @throws RuntimeException If the answer's decoded shape cannot be converted to {@link ElicitResult}.</span>
 <span class="source-line-no">118</span><span id="line-118">    */</span>
 <span class="source-line-no">119</span><span id="line-119">   public static String getString(McpMrtrResumeContext ctx, String id, String field) {</span>
-<span class="source-line-no">120</span><span id="line-120">      assertArgNotNull("ctx", ctx);</span>
-<span class="source-line-no">121</span><span id="line-121">      assertArgNotNull("id", id);</span>
-<span class="source-line-no">122</span><span id="line-122">      assertArgNotNull("field", field);</span>
+<span class="source-line-no">120</span><span id="line-120">      reqnn("ctx", ctx);</span>
+<span class="source-line-no">121</span><span id="line-121">      reqnn("id", id);</span>
+<span class="source-line-no">122</span><span id="line-122">      reqnn("field", field);</span>
 <span class="source-line-no">123</span><span id="line-123">      var answer = get(ctx, id);</span>
 <span class="source-line-no">124</span><span id="line-124">      if (answer == null || answer.getAction() != ElicitAction.ACCEPT)</span>
 <span class="source-line-no">125</span><span id="line-125">         return null;</span>

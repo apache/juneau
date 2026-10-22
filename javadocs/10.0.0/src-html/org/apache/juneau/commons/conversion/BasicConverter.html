@@ -163,11 +163,11 @@
 <span class="source-line-no">150</span><span id="line-150"> * This class is thread-safe. The singleton instance can be safely shared across multiple threads.</span>
 <span class="source-line-no">151</span><span id="line-151"> */</span>
 <span class="source-line-no">152</span><span id="line-152">@SuppressWarnings({</span>
-<span class="source-line-no">153</span><span id="line-153">   "rawtypes", // Raw types necessary for generic conversion dispatch</span>
-<span class="source-line-no">154</span><span id="line-154">   "unchecked", // Type erasure requires unchecked casts throughout conversion logic</span>
+<span class="source-line-no">153</span><span id="line-153">   "java:S1067", // Complex boolean expressions in conversion checks reflect the natural type hierarchy</span>
+<span class="source-line-no">154</span><span id="line-154">   "java:S1192", // "parse" literal is used in multiple independent Sets/arrays; extracting it would reduce clarity</span>
 <span class="source-line-no">155</span><span id="line-155">   "java:S3776", // Cognitive complexity of conversion dispatch methods is inherent to the number of supported type pairs</span>
-<span class="source-line-no">156</span><span id="line-156">   "java:S1067", // Complex boolean expressions in conversion checks reflect the natural type hierarchy</span>
-<span class="source-line-no">157</span><span id="line-157">   "java:S1192" // "parse" literal is used in multiple independent Sets/arrays; extracting it would reduce clarity</span>
+<span class="source-line-no">156</span><span id="line-156">   "rawtypes", // Raw types necessary for generic conversion dispatch</span>
+<span class="source-line-no">157</span><span id="line-157">   "unchecked" // Type erasure requires unchecked casts throughout conversion logic</span>
 <span class="source-line-no">158</span><span id="line-158">})</span>
 <span class="source-line-no">159</span><span id="line-159">public class BasicConverter extends CachingConverter {</span>
 <span class="source-line-no">160</span><span id="line-160"></span>
@@ -288,7 +288,7 @@
 <span class="source-line-no">275</span><span id="line-275">   private &lt;O&gt; Conversion&lt;CharSequence,O&gt; findNumberFromString(Class&lt;O&gt; outType) {</span>
 <span class="source-line-no">276</span><span id="line-276">      return (in, memberOf, session, args) -&gt; {</span>
 <span class="source-line-no">277</span><span id="line-277">         var s = in.toString();</span>
-<span class="source-line-no">278</span><span id="line-278">         if (s.isEmpty() || "null".equals(s))</span>
+<span class="source-line-no">278</span><span id="line-278">         if (s.isEmpty() || eq(s, "null"))</span>
 <span class="source-line-no">279</span><span id="line-279">            return null;</span>
 <span class="source-line-no">280</span><span id="line-280">         return (O) parseNumber(s, (Class&lt;? extends Number&gt;) outType);</span>
 <span class="source-line-no">281</span><span id="line-281">      };</span>
@@ -546,7 +546,7 @@
 <span class="source-line-no">533</span><span id="line-533">      if (CharSequence.class.isAssignableFrom(inType) &amp;&amp; outType == Boolean.class)</span>
 <span class="source-line-no">534</span><span id="line-534">         return (in, memberOf, session, args) -&gt; {</span>
 <span class="source-line-no">535</span><span id="line-535">            var s = in.toString();</span>
-<span class="source-line-no">536</span><span id="line-536">            if (s.isEmpty() || "null".equals(s))</span>
+<span class="source-line-no">536</span><span id="line-536">            if (s.isEmpty() || eq(s, "null"))</span>
 <span class="source-line-no">537</span><span id="line-537">               return null;</span>
 <span class="source-line-no">538</span><span id="line-538">            return (O) Boolean.valueOf(s);</span>
 <span class="source-line-no">539</span><span id="line-539">         };</span>
@@ -663,7 +663,7 @@
 <span class="source-line-no">650</span><span id="line-650">         m.isNotStatic()</span>
 <span class="source-line-no">651</span><span id="line-651">         &amp;&amp; m.isNotDeprecated()</span>
 <span class="source-line-no">652</span><span id="line-652">         &amp;&amp; m.getParameterCount() == 0</span>
-<span class="source-line-no">653</span><span id="line-653">         &amp;&amp; m.getNameSimple().equalsIgnoreCase(methodName)</span>
+<span class="source-line-no">653</span><span id="line-653">         &amp;&amp; eqic(m.getNameSimple(), methodName)</span>
 <span class="source-line-no">654</span><span id="line-654">         &amp;&amp; m.hasReturnTypeParent(outType)</span>
 <span class="source-line-no">655</span><span id="line-655">      );</span>
 <span class="source-line-no">656</span><span id="line-656">      if (opt.isPresent()) {</span>

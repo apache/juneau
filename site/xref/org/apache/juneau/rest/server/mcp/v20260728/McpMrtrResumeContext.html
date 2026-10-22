@@ -24,11 +24,11 @@
 <a class="jxr_linenumber" name="L16" href="#L16">16</a>  <em class="jxr_comment"> */</em>
 <a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.server.mcp.v20260728;
 <a class="jxr_linenumber" name="L18" href="#L18">18</a>  
-<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.commons.utils.AssertionUtils.*;
-<a class="jxr_linenumber" name="L20" href="#L20">20</a>  
-<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> java.util.*;
-<a class="jxr_linenumber" name="L22" href="#L22">22</a>  
-<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.marshall.marshaller.*;
+<a class="jxr_linenumber" name="L19" href="#L19">19</a>  
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> java.util.*;
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.marshall.marshaller.*;
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.commons.utils.Shorts.*;
 <a class="jxr_linenumber" name="L24" href="#L24">24</a>  
 <a class="jxr_linenumber" name="L25" href="#L25">25</a>  <em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L26" href="#L26">26</a>  <em class="jxr_javadoccomment"> * Bean stashed into the {@link org.apache.juneau.commons.inject.BeanStore} passed to a handler on a RESUME call,</em>
@@ -93,7 +93,7 @@
 <a class="jxr_linenumber" name="L85" href="#L85">85</a>  <em class="jxr_javadoccomment">	 * @throws RuntimeException If the continuation's decoded shape cannot be converted to {@code type}.</em>
 <a class="jxr_linenumber" name="L86" href="#L86">86</a>  <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L87" href="#L87">87</a>  	<strong class="jxr_keyword">public</strong> &lt;T&gt; T continuationAs(Class&lt;T&gt; type) {
-<a class="jxr_linenumber" name="L88" href="#L88">88</a>  		assertArgNotNull(<span class="jxr_string">"type"</span>, type);
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>  		reqnn(<span class="jxr_string">"type"</span>, type);
 <a class="jxr_linenumber" name="L89" href="#L89">89</a>  		<strong class="jxr_keyword">if</strong> (continuation == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L90" href="#L90">90</a>  			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L91" href="#L91">91</a>  		<strong class="jxr_keyword">return</strong> Json.to(Json.of(continuation), type);

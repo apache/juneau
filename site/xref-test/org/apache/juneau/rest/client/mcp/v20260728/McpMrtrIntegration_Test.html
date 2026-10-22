@@ -24,19 +24,19 @@
 <a class="jxr_linenumber" name="L16" href="#L16">16</a>  <em class="jxr_comment"> */</em>
 <a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.client.mcp.v20260728;
 <a class="jxr_linenumber" name="L18" href="#L18">18</a>  
-<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.junit.jupiter.api.Assertions.*;
-<a class="jxr_linenumber" name="L20" href="#L20">20</a>  
-<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> java.security.SecureRandom;
-<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> java.util.*;
-<a class="jxr_linenumber" name="L23" href="#L23">23</a>  
-<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.*;
-<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.bean.jsonrpc.*;
-<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.bean.mcp.v20260728.*;
-<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.commons.inject.*;
-<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.marshall.json.*;
-<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.marshall.marshaller.Json;
-<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.microservice.*;
-<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.client.RestCallInterceptor;
+<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.commons.utils.Shorts.*;
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.junit.jupiter.api.Assertions.*;
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> java.security.SecureRandom;
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> java.util.*;
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.*;
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.bean.jsonrpc.*;
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.bean.mcp.v20260728.*;
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.commons.inject.*;
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.marshall.json.*;
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.marshall.marshaller.Json;
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.microservice.*;
 <a class="jxr_linenumber" name="L32" href="#L32">32</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.server.*;
 <a class="jxr_linenumber" name="L33" href="#L33">33</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.server.mcp.*;
 <a class="jxr_linenumber" name="L34" href="#L34">34</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.server.mcp.v20260728.*;
@@ -113,7 +113,7 @@
 <a class="jxr_linenumber" name="L105" href="#L105">105</a> 				<strong class="jxr_keyword">var</strong> resume = ctx.getBean(McpMrtrResumeContext.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L106" href="#L106">106</a> 				<strong class="jxr_keyword">if</strong> (resume.isEmpty())
 <a class="jxr_linenumber" name="L107" href="#L107">107</a> 					<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> McpInputRequiredSignal(Map.of(<span class="jxr_string">"q1"</span>, Map.of(<span class="jxr_string">"type"</span>, <span class="jxr_string">"elicitation"</span>)), <span class="jxr_string">"cont-1"</span>);
-<a class="jxr_linenumber" name="L108" href="#L108">108</a> 				<strong class="jxr_keyword">if</strong> (<span class="jxr_string">"cont-1"</span>.equals(resume.get().continuation()))
+<a class="jxr_linenumber" name="L108" href="#L108">108</a> 				<strong class="jxr_keyword">if</strong> (eq(resume.get().continuation(), <span class="jxr_string">"cont-1"</span>))
 <a class="jxr_linenumber" name="L109" href="#L109">109</a> 					<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> McpInputRequiredSignal(Map.of(<span class="jxr_string">"q2"</span>, Map.of(<span class="jxr_string">"type"</span>, <span class="jxr_string">"elicitation"</span>)), <span class="jxr_string">"cont-2"</span>);
 <a class="jxr_linenumber" name="L110" href="#L110">110</a> 				<strong class="jxr_keyword">return</strong> McpToolOutcome.text(<span class="jxr_string">"resumed2:"</span> + resume.get().inputResponses().get(<span class="jxr_string">"q2"</span>));
 <a class="jxr_linenumber" name="L111" href="#L111">111</a> 			}
@@ -191,131 +191,119 @@
 <a class="jxr_linenumber" name="L183" href="#L183">183</a> 	<strong class="jxr_keyword">static</strong> MicroserviceTestFixture fixture = MicroserviceTestFixture.create()
 <a class="jxr_linenumber" name="L184" href="#L184">184</a> 		.configurations(FixtureConfig.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L185" href="#L185">185</a> 
-<a class="jxr_linenumber" name="L186" href="#L186">186</a> 	<em class="jxr_comment">// Forces a fresh TCP connection per request instead of reusing a pooled keep-alive one: a client that</em>
-<a class="jxr_linenumber" name="L187" href="#L187">187</a> 	<em class="jxr_comment">// issues two or more requests (every test below does) can otherwise race the embedded Jetty fixture</em>
-<a class="jxr_linenumber" name="L188" href="#L188">188</a> 	<em class="jxr_comment">// tearing down/resetting an idle pooled connection between calls, surfacing as a spurious</em>
-<a class="jxr_linenumber" name="L189" href="#L189">189</a> 	<em class="jxr_comment">// NoHttpResponseException instead of the response the test actually expects.</em>
-<a class="jxr_linenumber" name="L190" href="#L190">190</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> RestCallInterceptor CLOSE_CONNECTION_PER_REQUEST = <strong class="jxr_keyword">new</strong> RestCallInterceptor() {
-<a class="jxr_linenumber" name="L191" href="#L191">191</a> 		@Override <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> onInit(org.apache.juneau.<strong class="jxr_keyword">rest</strong>.client.RestRequest req) {
-<a class="jxr_linenumber" name="L192" href="#L192">192</a> 			req.header(<span class="jxr_string">"Connection"</span>, <span class="jxr_string">"close"</span>);
-<a class="jxr_linenumber" name="L193" href="#L193">193</a> 		}
-<a class="jxr_linenumber" name="L194" href="#L194">194</a> 	};
-<a class="jxr_linenumber" name="L195" href="#L195">195</a> 
-<a class="jxr_linenumber" name="L196" href="#L196">196</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> McpClient.Builder clientBuilder(<strong class="jxr_keyword">boolean</strong> withElicitation) {
-<a class="jxr_linenumber" name="L197" href="#L197">197</a> 		<strong class="jxr_keyword">var</strong> caps = <strong class="jxr_keyword">new</strong> ClientCapabilities();
-<a class="jxr_linenumber" name="L198" href="#L198">198</a> 		<strong class="jxr_keyword">if</strong> (withElicitation)
-<a class="jxr_linenumber" name="L199" href="#L199">199</a> 			caps.setElicitation(<strong class="jxr_keyword">new</strong> ElicitationCapability());
-<a class="jxr_linenumber" name="L200" href="#L200">200</a> 		<strong class="jxr_keyword">return</strong> McpClient.builder()
-<a class="jxr_linenumber" name="L201" href="#L201">201</a> 			.endpoint(fixture.getRootUrl() + <span class="jxr_string">"/"</span>)
-<a class="jxr_linenumber" name="L202" href="#L202">202</a> 			.clientCapabilities(caps)
-<a class="jxr_linenumber" name="L203" href="#L203">203</a> 			.interceptor(CLOSE_CONNECTION_PER_REQUEST);
-<a class="jxr_linenumber" name="L204" href="#L204">204</a> 	}
-<a class="jxr_linenumber" name="L205" href="#L205">205</a> 
-<a class="jxr_linenumber" name="L206" href="#L206">206</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> McpClient.Builder clientBuilderAt(String path, <strong class="jxr_keyword">boolean</strong> withElicitation) {
-<a class="jxr_linenumber" name="L207" href="#L207">207</a> 		<strong class="jxr_keyword">var</strong> caps = <strong class="jxr_keyword">new</strong> ClientCapabilities();
-<a class="jxr_linenumber" name="L208" href="#L208">208</a> 		<strong class="jxr_keyword">if</strong> (withElicitation)
-<a class="jxr_linenumber" name="L209" href="#L209">209</a> 			caps.setElicitation(<strong class="jxr_keyword">new</strong> ElicitationCapability());
-<a class="jxr_linenumber" name="L210" href="#L210">210</a> 		<strong class="jxr_keyword">return</strong> McpClient.builder()
-<a class="jxr_linenumber" name="L211" href="#L211">211</a> 			.endpoint(fixture.getRootUrl() + path)
-<a class="jxr_linenumber" name="L212" href="#L212">212</a> 			.clientCapabilities(caps)
-<a class="jxr_linenumber" name="L213" href="#L213">213</a> 			.interceptor(CLOSE_CONNECTION_PER_REQUEST);
-<a class="jxr_linenumber" name="L214" href="#L214">214</a> 	}
-<a class="jxr_linenumber" name="L215" href="#L215">215</a> 
-<a class="jxr_linenumber" name="L216" href="#L216">216</a> 	<em class="jxr_comment">// =================================================================================================================</em>
-<a class="jxr_linenumber" name="L217" href="#L217">217</a> 	<em class="jxr_comment">// A: full PAUSE -&gt; RESUME -&gt; complete loop across the real wire.</em>
-<a class="jxr_linenumber" name="L218" href="#L218">218</a> 	<em class="jxr_comment">// =================================================================================================================</em>
-<a class="jxr_linenumber" name="L219" href="#L219">219</a> 
-<a class="jxr_linenumber" name="L220" href="#L220">220</a> 	@Test <strong class="jxr_keyword">void</strong> a01_pauseResumeComplete_fullLoop() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L221" href="#L221">221</a> 		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> client = clientBuilder(<strong class="jxr_keyword">true</strong>).build()) {
-<a class="jxr_linenumber" name="L222" href="#L222">222</a> 			<em class="jxr_comment">// First call pauses: expect an input_required result carrying a requestState and one input request.</em>
-<a class="jxr_linenumber" name="L223" href="#L223">223</a> 			<strong class="jxr_keyword">var</strong> paused = client.callRaw(McpMethods.TOOLS_CALL, <strong class="jxr_keyword">new</strong> CallToolRequest().setName(<span class="jxr_string">"ask"</span>).setArguments(Map.of()));
-<a class="jxr_linenumber" name="L224" href="#L224">224</a> 			assertEquals(<span class="jxr_string">"input_required"</span>, paused.get(<span class="jxr_string">"resultType"</span>));
-<a class="jxr_linenumber" name="L225" href="#L225">225</a> 			<strong class="jxr_keyword">var</strong> token = (String) paused.get(<span class="jxr_string">"requestState"</span>);
-<a class="jxr_linenumber" name="L226" href="#L226">226</a> 			assertNotNull(token);
-<a class="jxr_linenumber" name="L227" href="#L227">227</a> 			assertTrue(((Map&lt;?,?&gt;) paused.get(<span class="jxr_string">"inputRequests"</span>)).containsKey(<span class="jxr_string">"q1"</span>));
-<a class="jxr_linenumber" name="L228" href="#L228">228</a> 
-<a class="jxr_linenumber" name="L229" href="#L229">229</a> 			<em class="jxr_comment">// Resume with the echoed requestState + the client's answers: expect completion echoing the answer.</em>
-<a class="jxr_linenumber" name="L230" href="#L230">230</a> 			<strong class="jxr_keyword">var</strong> completed = client.callRaw(McpMethods.TOOLS_CALL,
-<a class="jxr_linenumber" name="L231" href="#L231">231</a> 				<strong class="jxr_keyword">new</strong> CallToolRequest().setName(<span class="jxr_string">"ask"</span>).setRequestState(token).setInputResponses(Map.of(<span class="jxr_string">"q1"</span>, <span class="jxr_string">"answer"</span>)));
-<a class="jxr_linenumber" name="L232" href="#L232">232</a> 			assertEquals(<span class="jxr_string">"complete"</span>, completed.get(<span class="jxr_string">"resultType"</span>));
-<a class="jxr_linenumber" name="L233" href="#L233">233</a> 			<strong class="jxr_keyword">var</strong> result = Json.to(Json.of(completed), CallToolResult.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L234" href="#L234">234</a> 			assertEquals(<span class="jxr_string">"resumed:answer"</span>, ((TextContent) result.getContent().get(0)).getText());
-<a class="jxr_linenumber" name="L235" href="#L235">235</a> 		}
-<a class="jxr_linenumber" name="L236" href="#L236">236</a> 	}
+<a class="jxr_linenumber" name="L186" href="#L186">186</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> McpClient.Builder clientBuilder(<strong class="jxr_keyword">boolean</strong> withElicitation) {
+<a class="jxr_linenumber" name="L187" href="#L187">187</a> 		<strong class="jxr_keyword">var</strong> caps = <strong class="jxr_keyword">new</strong> ClientCapabilities();
+<a class="jxr_linenumber" name="L188" href="#L188">188</a> 		<strong class="jxr_keyword">if</strong> (withElicitation)
+<a class="jxr_linenumber" name="L189" href="#L189">189</a> 			caps.setElicitation(<strong class="jxr_keyword">new</strong> ElicitationCapability());
+<a class="jxr_linenumber" name="L190" href="#L190">190</a> 		<strong class="jxr_keyword">return</strong> McpClient.builder()
+<a class="jxr_linenumber" name="L191" href="#L191">191</a> 			.endpoint(fixture.getRootUrl() + <span class="jxr_string">"/"</span>)
+<a class="jxr_linenumber" name="L192" href="#L192">192</a> 			.clientCapabilities(caps);
+<a class="jxr_linenumber" name="L193" href="#L193">193</a> 	}
+<a class="jxr_linenumber" name="L194" href="#L194">194</a> 
+<a class="jxr_linenumber" name="L195" href="#L195">195</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> McpClient.Builder clientBuilderAt(String path, <strong class="jxr_keyword">boolean</strong> withElicitation) {
+<a class="jxr_linenumber" name="L196" href="#L196">196</a> 		<strong class="jxr_keyword">var</strong> caps = <strong class="jxr_keyword">new</strong> ClientCapabilities();
+<a class="jxr_linenumber" name="L197" href="#L197">197</a> 		<strong class="jxr_keyword">if</strong> (withElicitation)
+<a class="jxr_linenumber" name="L198" href="#L198">198</a> 			caps.setElicitation(<strong class="jxr_keyword">new</strong> ElicitationCapability());
+<a class="jxr_linenumber" name="L199" href="#L199">199</a> 		<strong class="jxr_keyword">return</strong> McpClient.builder()
+<a class="jxr_linenumber" name="L200" href="#L200">200</a> 			.endpoint(fixture.getRootUrl() + path)
+<a class="jxr_linenumber" name="L201" href="#L201">201</a> 			.clientCapabilities(caps);
+<a class="jxr_linenumber" name="L202" href="#L202">202</a> 	}
+<a class="jxr_linenumber" name="L203" href="#L203">203</a> 
+<a class="jxr_linenumber" name="L204" href="#L204">204</a> 	<em class="jxr_comment">// =================================================================================================================</em>
+<a class="jxr_linenumber" name="L205" href="#L205">205</a> 	<em class="jxr_comment">// A: full PAUSE -&gt; RESUME -&gt; complete loop across the real wire.</em>
+<a class="jxr_linenumber" name="L206" href="#L206">206</a> 	<em class="jxr_comment">// =================================================================================================================</em>
+<a class="jxr_linenumber" name="L207" href="#L207">207</a> 
+<a class="jxr_linenumber" name="L208" href="#L208">208</a> 	@Test <strong class="jxr_keyword">void</strong> a01_pauseResumeComplete_fullLoop() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L209" href="#L209">209</a> 		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> client = clientBuilder(<strong class="jxr_keyword">true</strong>).build()) {
+<a class="jxr_linenumber" name="L210" href="#L210">210</a> 			<em class="jxr_comment">// First call pauses: expect an input_required result carrying a requestState and one input request.</em>
+<a class="jxr_linenumber" name="L211" href="#L211">211</a> 			<strong class="jxr_keyword">var</strong> paused = client.callRaw(McpMethods.TOOLS_CALL, <strong class="jxr_keyword">new</strong> CallToolRequest().setName(<span class="jxr_string">"ask"</span>).setArguments(Map.of()));
+<a class="jxr_linenumber" name="L212" href="#L212">212</a> 			assertEquals(<span class="jxr_string">"input_required"</span>, paused.get(<span class="jxr_string">"resultType"</span>));
+<a class="jxr_linenumber" name="L213" href="#L213">213</a> 			<strong class="jxr_keyword">var</strong> token = (String) paused.get(<span class="jxr_string">"requestState"</span>);
+<a class="jxr_linenumber" name="L214" href="#L214">214</a> 			assertNotNull(token);
+<a class="jxr_linenumber" name="L215" href="#L215">215</a> 			assertTrue(((Map&lt;?,?&gt;) paused.get(<span class="jxr_string">"inputRequests"</span>)).containsKey(<span class="jxr_string">"q1"</span>));
+<a class="jxr_linenumber" name="L216" href="#L216">216</a> 
+<a class="jxr_linenumber" name="L217" href="#L217">217</a> 			<em class="jxr_comment">// Resume with the echoed requestState + the client's answers: expect completion echoing the answer.</em>
+<a class="jxr_linenumber" name="L218" href="#L218">218</a> 			<strong class="jxr_keyword">var</strong> completed = client.callRaw(McpMethods.TOOLS_CALL,
+<a class="jxr_linenumber" name="L219" href="#L219">219</a> 				<strong class="jxr_keyword">new</strong> CallToolRequest().setName(<span class="jxr_string">"ask"</span>).setRequestState(token).setInputResponses(Map.of(<span class="jxr_string">"q1"</span>, <span class="jxr_string">"answer"</span>)));
+<a class="jxr_linenumber" name="L220" href="#L220">220</a> 			assertEquals(<span class="jxr_string">"complete"</span>, completed.get(<span class="jxr_string">"resultType"</span>));
+<a class="jxr_linenumber" name="L221" href="#L221">221</a> 			<strong class="jxr_keyword">var</strong> result = Json.to(Json.of(completed), CallToolResult.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L222" href="#L222">222</a> 			assertEquals(<span class="jxr_string">"resumed:answer"</span>, ((TextContent) result.getContent().get(0)).getText());
+<a class="jxr_linenumber" name="L223" href="#L223">223</a> 		}
+<a class="jxr_linenumber" name="L224" href="#L224">224</a> 	}
+<a class="jxr_linenumber" name="L225" href="#L225">225</a> 
+<a class="jxr_linenumber" name="L226" href="#L226">226</a> 	@Test <strong class="jxr_keyword">void</strong> a02_pauseResumeToPauseAgain_secondRoundIncrementsCount() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L227" href="#L227">227</a> 		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> client = clientBuilder(<strong class="jxr_keyword">true</strong>).build()) {
+<a class="jxr_linenumber" name="L228" href="#L228">228</a> 			<strong class="jxr_keyword">var</strong> paused1 = client.callRaw(McpMethods.TOOLS_CALL, <strong class="jxr_keyword">new</strong> CallToolRequest().setName(<span class="jxr_string">"askTwice"</span>).setArguments(Map.of()));
+<a class="jxr_linenumber" name="L229" href="#L229">229</a> 			assertEquals(<span class="jxr_string">"input_required"</span>, paused1.get(<span class="jxr_string">"resultType"</span>));
+<a class="jxr_linenumber" name="L230" href="#L230">230</a> 			<strong class="jxr_keyword">var</strong> token1 = (String) paused1.get(<span class="jxr_string">"requestState"</span>);
+<a class="jxr_linenumber" name="L231" href="#L231">231</a> 
+<a class="jxr_linenumber" name="L232" href="#L232">232</a> 			<em class="jxr_comment">// Resume once; the handler pauses again -&gt; a second input_required with an incremented round counter.</em>
+<a class="jxr_linenumber" name="L233" href="#L233">233</a> 			<strong class="jxr_keyword">var</strong> paused2 = client.callRaw(McpMethods.TOOLS_CALL,
+<a class="jxr_linenumber" name="L234" href="#L234">234</a> 				<strong class="jxr_keyword">new</strong> CallToolRequest().setName(<span class="jxr_string">"askTwice"</span>).setRequestState(token1).setInputResponses(Map.of(<span class="jxr_string">"q1"</span>, <span class="jxr_string">"a1"</span>)));
+<a class="jxr_linenumber" name="L235" href="#L235">235</a> 			assertEquals(<span class="jxr_string">"input_required"</span>, paused2.get(<span class="jxr_string">"resultType"</span>));
+<a class="jxr_linenumber" name="L236" href="#L236">236</a> 			<strong class="jxr_keyword">var</strong> token2 = (String) paused2.get(<span class="jxr_string">"requestState"</span>);
 <a class="jxr_linenumber" name="L237" href="#L237">237</a> 
-<a class="jxr_linenumber" name="L238" href="#L238">238</a> 	@Test <strong class="jxr_keyword">void</strong> a02_pauseResumeToPauseAgain_secondRoundIncrementsCount() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L239" href="#L239">239</a> 		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> client = clientBuilder(<strong class="jxr_keyword">true</strong>).build()) {
-<a class="jxr_linenumber" name="L240" href="#L240">240</a> 			<strong class="jxr_keyword">var</strong> paused1 = client.callRaw(McpMethods.TOOLS_CALL, <strong class="jxr_keyword">new</strong> CallToolRequest().setName(<span class="jxr_string">"askTwice"</span>).setArguments(Map.of()));
-<a class="jxr_linenumber" name="L241" href="#L241">241</a> 			assertEquals(<span class="jxr_string">"input_required"</span>, paused1.get(<span class="jxr_string">"resultType"</span>));
-<a class="jxr_linenumber" name="L242" href="#L242">242</a> 			<strong class="jxr_keyword">var</strong> token1 = (String) paused1.get(<span class="jxr_string">"requestState"</span>);
-<a class="jxr_linenumber" name="L243" href="#L243">243</a> 
-<a class="jxr_linenumber" name="L244" href="#L244">244</a> 			<em class="jxr_comment">// Resume once; the handler pauses again -&gt; a second input_required with an incremented round counter.</em>
-<a class="jxr_linenumber" name="L245" href="#L245">245</a> 			<strong class="jxr_keyword">var</strong> paused2 = client.callRaw(McpMethods.TOOLS_CALL,
-<a class="jxr_linenumber" name="L246" href="#L246">246</a> 				<strong class="jxr_keyword">new</strong> CallToolRequest().setName(<span class="jxr_string">"askTwice"</span>).setRequestState(token1).setInputResponses(Map.of(<span class="jxr_string">"q1"</span>, <span class="jxr_string">"a1"</span>)));
-<a class="jxr_linenumber" name="L247" href="#L247">247</a> 			assertEquals(<span class="jxr_string">"input_required"</span>, paused2.get(<span class="jxr_string">"resultType"</span>));
-<a class="jxr_linenumber" name="L248" href="#L248">248</a> 			<strong class="jxr_keyword">var</strong> token2 = (String) paused2.get(<span class="jxr_string">"requestState"</span>);
-<a class="jxr_linenumber" name="L249" href="#L249">249</a> 
-<a class="jxr_linenumber" name="L250" href="#L250">250</a> 			<em class="jxr_comment">// Unseal via the same codec instance the server used (round counter lives inside the sealed token).</em>
-<a class="jxr_linenumber" name="L251" href="#L251">251</a> 			<strong class="jxr_keyword">var</strong> state = CODEC.unseal(token2, aad(McpMethods.TOOLS_CALL, <span class="jxr_string">"askTwice"</span>)).orElseThrow();
-<a class="jxr_linenumber" name="L252" href="#L252">252</a> 			assertEquals(2, state.round());
-<a class="jxr_linenumber" name="L253" href="#L253">253</a> 			assertEquals(<span class="jxr_string">"cont-2"</span>, state.continuation());
+<a class="jxr_linenumber" name="L238" href="#L238">238</a> 			<em class="jxr_comment">// Unseal via the same codec instance the server used (round counter lives inside the sealed token).</em>
+<a class="jxr_linenumber" name="L239" href="#L239">239</a> 			<strong class="jxr_keyword">var</strong> state = CODEC.unseal(token2, aad(McpMethods.TOOLS_CALL, <span class="jxr_string">"askTwice"</span>)).orElseThrow();
+<a class="jxr_linenumber" name="L240" href="#L240">240</a> 			assertEquals(2, state.round());
+<a class="jxr_linenumber" name="L241" href="#L241">241</a> 			assertEquals(<span class="jxr_string">"cont-2"</span>, state.continuation());
+<a class="jxr_linenumber" name="L242" href="#L242">242</a> 		}
+<a class="jxr_linenumber" name="L243" href="#L243">243</a> 	}
+<a class="jxr_linenumber" name="L244" href="#L244">244</a> 
+<a class="jxr_linenumber" name="L245" href="#L245">245</a> 	<em class="jxr_comment">// =================================================================================================================</em>
+<a class="jxr_linenumber" name="L246" href="#L246">246</a> 	<em class="jxr_comment">// B: capability gate + negative path, enforced at the real HTTP boundary.</em>
+<a class="jxr_linenumber" name="L247" href="#L247">247</a> 	<em class="jxr_comment">// =================================================================================================================</em>
+<a class="jxr_linenumber" name="L248" href="#L248">248</a> 
+<a class="jxr_linenumber" name="L249" href="#L249">249</a> 	@Test <strong class="jxr_keyword">void</strong> b01_unsupportedCapability_rejectedOverTheWire() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L250" href="#L250">250</a> 		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> client = clientBuilder(false).build()) {
+<a class="jxr_linenumber" name="L251" href="#L251">251</a> 			<strong class="jxr_keyword">var</strong> request = <strong class="jxr_keyword">new</strong> CallToolRequest().setName(<span class="jxr_string">"ask"</span>).setArguments(Map.of());
+<a class="jxr_linenumber" name="L252" href="#L252">252</a> 			<strong class="jxr_keyword">var</strong> e = assertThrows(McpException.<strong class="jxr_keyword">class</strong>, () -&gt; client.callRaw(McpMethods.TOOLS_CALL, request));
+<a class="jxr_linenumber" name="L253" href="#L253">253</a> 			assertEquals(org.apache.juneau.<strong class="jxr_keyword">rest</strong>.server.mcp.v20260728.McpRevision.CODE_MISSING_REQUIRED_CLIENT_CAPABILITY, e.getCode());
 <a class="jxr_linenumber" name="L254" href="#L254">254</a> 		}
 <a class="jxr_linenumber" name="L255" href="#L255">255</a> 	}
 <a class="jxr_linenumber" name="L256" href="#L256">256</a> 
-<a class="jxr_linenumber" name="L257" href="#L257">257</a> 	<em class="jxr_comment">// =================================================================================================================</em>
-<a class="jxr_linenumber" name="L258" href="#L258">258</a> 	<em class="jxr_comment">// B: capability gate + negative path, enforced at the real HTTP boundary.</em>
-<a class="jxr_linenumber" name="L259" href="#L259">259</a> 	<em class="jxr_comment">// =================================================================================================================</em>
-<a class="jxr_linenumber" name="L260" href="#L260">260</a> 
-<a class="jxr_linenumber" name="L261" href="#L261">261</a> 	@Test <strong class="jxr_keyword">void</strong> b01_unsupportedCapability_rejectedOverTheWire() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L262" href="#L262">262</a> 		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> client = clientBuilder(false).build()) {
-<a class="jxr_linenumber" name="L263" href="#L263">263</a> 			<strong class="jxr_keyword">var</strong> request = <strong class="jxr_keyword">new</strong> CallToolRequest().setName(<span class="jxr_string">"ask"</span>).setArguments(Map.of());
-<a class="jxr_linenumber" name="L264" href="#L264">264</a> 			<strong class="jxr_keyword">var</strong> e = assertThrows(McpException.<strong class="jxr_keyword">class</strong>, () -&gt; client.callRaw(McpMethods.TOOLS_CALL, request));
-<a class="jxr_linenumber" name="L265" href="#L265">265</a> 			assertEquals(org.apache.juneau.<strong class="jxr_keyword">rest</strong>.server.mcp.v20260728.McpRevision.CODE_MISSING_REQUIRED_CLIENT_CAPABILITY, e.getCode());
-<a class="jxr_linenumber" name="L266" href="#L266">266</a> 		}
-<a class="jxr_linenumber" name="L267" href="#L267">267</a> 	}
-<a class="jxr_linenumber" name="L268" href="#L268">268</a> 
-<a class="jxr_linenumber" name="L269" href="#L269">269</a> 	@Test <strong class="jxr_keyword">void</strong> b02_tamperedRequestState_rejectedOverTheWire() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L270" href="#L270">270</a> 		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> client = clientBuilder(<strong class="jxr_keyword">true</strong>).build()) {
-<a class="jxr_linenumber" name="L271" href="#L271">271</a> 			<strong class="jxr_keyword">var</strong> paused = client.callRaw(McpMethods.TOOLS_CALL, <strong class="jxr_keyword">new</strong> CallToolRequest().setName(<span class="jxr_string">"ask"</span>).setArguments(Map.of()));
-<a class="jxr_linenumber" name="L272" href="#L272">272</a> 			<strong class="jxr_keyword">var</strong> token = (String) paused.get(<span class="jxr_string">"requestState"</span>);
-<a class="jxr_linenumber" name="L273" href="#L273">273</a> 			<em class="jxr_comment">// Flip one ciphertext byte to corrupt the AEAD tag; a final-character flip can land on an unpadded</em>
-<a class="jxr_linenumber" name="L274" href="#L274">274</a> 			<em class="jxr_comment">// base64url "don't-care" low bit and decode to identical bytes, leaving the tag (and test) flaky.</em>
-<a class="jxr_linenumber" name="L275" href="#L275">275</a> 			<strong class="jxr_keyword">var</strong> parts = token.split(<span class="jxr_string">"&#92;&#92;."</span>, 4);
-<a class="jxr_linenumber" name="L276" href="#L276">276</a> 			<strong class="jxr_keyword">var</strong> ciphertext = Base64.getUrlDecoder().decode(parts[3]);
-<a class="jxr_linenumber" name="L277" href="#L277">277</a> 			ciphertext[0] ^= 1;
-<a class="jxr_linenumber" name="L278" href="#L278">278</a> 			<strong class="jxr_keyword">var</strong> tampered = parts[0] + <span class="jxr_string">"."</span> + parts[1] + <span class="jxr_string">"."</span> + parts[2] + <span class="jxr_string">"."</span>
-<a class="jxr_linenumber" name="L279" href="#L279">279</a> 				+ Base64.getUrlEncoder().withoutPadding().encodeToString(ciphertext);
-<a class="jxr_linenumber" name="L280" href="#L280">280</a> 			<strong class="jxr_keyword">var</strong> tamperedRequest = <strong class="jxr_keyword">new</strong> CallToolRequest().setName(<span class="jxr_string">"ask"</span>).setRequestState(tampered).setInputResponses(Map.of(<span class="jxr_string">"q1"</span>, <span class="jxr_string">"answer"</span>));
-<a class="jxr_linenumber" name="L281" href="#L281">281</a> 			<strong class="jxr_keyword">var</strong> e = assertThrows(McpException.<strong class="jxr_keyword">class</strong>, () -&gt; client.callRaw(McpMethods.TOOLS_CALL, tamperedRequest));
-<a class="jxr_linenumber" name="L282" href="#L282">282</a> 			assertEquals(org.apache.juneau.<strong class="jxr_keyword">rest</strong>.server.mcp.v20260728.McpRevision.CODE_INVALID_PARAMS, e.getCode());
-<a class="jxr_linenumber" name="L283" href="#L283">283</a> 		}
-<a class="jxr_linenumber" name="L284" href="#L284">284</a> 	}
-<a class="jxr_linenumber" name="L285" href="#L285">285</a> 
-<a class="jxr_linenumber" name="L286" href="#L286">286</a> 	<em class="jxr_comment">// =================================================================================================================</em>
-<a class="jxr_linenumber" name="L287" href="#L287">287</a> 	<em class="jxr_comment">// C: shared KeyProvider -- resume succeeds across two independently-constructed server bindings.</em>
-<a class="jxr_linenumber" name="L288" href="#L288">288</a> 	<em class="jxr_comment">// =================================================================================================================</em>
-<a class="jxr_linenumber" name="L289" href="#L289">289</a> 
-<a class="jxr_linenumber" name="L290" href="#L290">290</a> 	@Test <strong class="jxr_keyword">void</strong> c01_sharedKeyProviderResume_succeedsAcrossIndependentBindings() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L291" href="#L291">291</a> 		String token;
-<a class="jxr_linenumber" name="L292" href="#L292">292</a> 		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> clientA = clientBuilderAt(<span class="jxr_string">"/kp-a/"</span>, <strong class="jxr_keyword">true</strong>).build()) {
-<a class="jxr_linenumber" name="L293" href="#L293">293</a> 			<strong class="jxr_keyword">var</strong> paused = clientA.callRaw(McpMethods.TOOLS_CALL, <strong class="jxr_keyword">new</strong> CallToolRequest().setName(<span class="jxr_string">"askShared"</span>).setArguments(Map.of()));
-<a class="jxr_linenumber" name="L294" href="#L294">294</a> 			assertEquals(<span class="jxr_string">"input_required"</span>, paused.get(<span class="jxr_string">"resultType"</span>));
-<a class="jxr_linenumber" name="L295" href="#L295">295</a> 			token = (String) paused.get(<span class="jxr_string">"requestState"</span>);
-<a class="jxr_linenumber" name="L296" href="#L296">296</a> 			assertNotNull(token);
-<a class="jxr_linenumber" name="L297" href="#L297">297</a> 		}
-<a class="jxr_linenumber" name="L298" href="#L298">298</a> 
-<a class="jxr_linenumber" name="L299" href="#L299">299</a> 		<em class="jxr_comment">// Resume against a DIFFERENT binding (/kp-b), backed by an independently-constructed</em>
-<a class="jxr_linenumber" name="L300" href="#L300">300</a> 		<em class="jxr_comment">// AeadRequestStateCodec that shares only SHARED_KEY_PROVIDER with /kp-a's codec, never the codec object</em>
-<a class="jxr_linenumber" name="L301" href="#L301">301</a> 		<em class="jxr_comment">// itself -- the live-wire analog of McpMrtrDispatch_Test#d04.</em>
-<a class="jxr_linenumber" name="L302" href="#L302">302</a> 		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> clientB = clientBuilderAt(<span class="jxr_string">"/kp-b/"</span>, <strong class="jxr_keyword">true</strong>).build()) {
-<a class="jxr_linenumber" name="L303" href="#L303">303</a> 			<strong class="jxr_keyword">var</strong> completed = clientB.callRaw(McpMethods.TOOLS_CALL,
-<a class="jxr_linenumber" name="L304" href="#L304">304</a> 				<strong class="jxr_keyword">new</strong> CallToolRequest().setName(<span class="jxr_string">"askShared"</span>).setRequestState(token).setInputResponses(Map.of(<span class="jxr_string">"q1"</span>, <span class="jxr_string">"answer"</span>)));
-<a class="jxr_linenumber" name="L305" href="#L305">305</a> 			assertEquals(<span class="jxr_string">"complete"</span>, completed.get(<span class="jxr_string">"resultType"</span>));
-<a class="jxr_linenumber" name="L306" href="#L306">306</a> 			<strong class="jxr_keyword">var</strong> result = Json.to(Json.of(completed), CallToolResult.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L307" href="#L307">307</a> 			assertEquals(<span class="jxr_string">"resumed-shared:answer"</span>, ((TextContent) result.getContent().get(0)).getText());
-<a class="jxr_linenumber" name="L308" href="#L308">308</a> 		}
-<a class="jxr_linenumber" name="L309" href="#L309">309</a> 	}
-<a class="jxr_linenumber" name="L310" href="#L310">310</a> }
+<a class="jxr_linenumber" name="L257" href="#L257">257</a> 	@Test <strong class="jxr_keyword">void</strong> b02_tamperedRequestState_rejectedOverTheWire() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L258" href="#L258">258</a> 		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> client = clientBuilder(<strong class="jxr_keyword">true</strong>).build()) {
+<a class="jxr_linenumber" name="L259" href="#L259">259</a> 			<strong class="jxr_keyword">var</strong> paused = client.callRaw(McpMethods.TOOLS_CALL, <strong class="jxr_keyword">new</strong> CallToolRequest().setName(<span class="jxr_string">"ask"</span>).setArguments(Map.of()));
+<a class="jxr_linenumber" name="L260" href="#L260">260</a> 			<strong class="jxr_keyword">var</strong> token = (String) paused.get(<span class="jxr_string">"requestState"</span>);
+<a class="jxr_linenumber" name="L261" href="#L261">261</a> 			<em class="jxr_comment">// Flip one ciphertext byte to corrupt the AEAD tag; a final-character flip can land on an unpadded</em>
+<a class="jxr_linenumber" name="L262" href="#L262">262</a> 			<em class="jxr_comment">// base64url "don't-care" low bit and decode to identical bytes, leaving the tag (and test) flaky.</em>
+<a class="jxr_linenumber" name="L263" href="#L263">263</a> 			<strong class="jxr_keyword">var</strong> parts = token.split(<span class="jxr_string">"&#92;&#92;."</span>, 4);
+<a class="jxr_linenumber" name="L264" href="#L264">264</a> 			<strong class="jxr_keyword">var</strong> ciphertext = Base64.getUrlDecoder().decode(parts[3]);
+<a class="jxr_linenumber" name="L265" href="#L265">265</a> 			ciphertext[0] ^= 1;
+<a class="jxr_linenumber" name="L266" href="#L266">266</a> 			<strong class="jxr_keyword">var</strong> tampered = parts[0] + <span class="jxr_string">"."</span> + parts[1] + <span class="jxr_string">"."</span> + parts[2] + <span class="jxr_string">"."</span>
+<a class="jxr_linenumber" name="L267" href="#L267">267</a> 				+ Base64.getUrlEncoder().withoutPadding().encodeToString(ciphertext);
+<a class="jxr_linenumber" name="L268" href="#L268">268</a> 			<strong class="jxr_keyword">var</strong> tamperedRequest = <strong class="jxr_keyword">new</strong> CallToolRequest().setName(<span class="jxr_string">"ask"</span>).setRequestState(tampered).setInputResponses(Map.of(<span class="jxr_string">"q1"</span>, <span class="jxr_string">"answer"</span>));
+<a class="jxr_linenumber" name="L269" href="#L269">269</a> 			<strong class="jxr_keyword">var</strong> e = assertThrows(McpException.<strong class="jxr_keyword">class</strong>, () -&gt; client.callRaw(McpMethods.TOOLS_CALL, tamperedRequest));
+<a class="jxr_linenumber" name="L270" href="#L270">270</a> 			assertEquals(org.apache.juneau.<strong class="jxr_keyword">rest</strong>.server.mcp.v20260728.McpRevision.CODE_INVALID_PARAMS, e.getCode());
+<a class="jxr_linenumber" name="L271" href="#L271">271</a> 		}
+<a class="jxr_linenumber" name="L272" href="#L272">272</a> 	}
+<a class="jxr_linenumber" name="L273" href="#L273">273</a> 
+<a class="jxr_linenumber" name="L274" href="#L274">274</a> 	<em class="jxr_comment">// =================================================================================================================</em>
+<a class="jxr_linenumber" name="L275" href="#L275">275</a> 	<em class="jxr_comment">// C: shared KeyProvider -- resume succeeds across two independently-constructed server bindings.</em>
+<a class="jxr_linenumber" name="L276" href="#L276">276</a> 	<em class="jxr_comment">// =================================================================================================================</em>
+<a class="jxr_linenumber" name="L277" href="#L277">277</a> 
+<a class="jxr_linenumber" name="L278" href="#L278">278</a> 	@Test <strong class="jxr_keyword">void</strong> c01_sharedKeyProviderResume_succeedsAcrossIndependentBindings() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L279" href="#L279">279</a> 		String token;
+<a class="jxr_linenumber" name="L280" href="#L280">280</a> 		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> clientA = clientBuilderAt(<span class="jxr_string">"/kp-a/"</span>, <strong class="jxr_keyword">true</strong>).build()) {
+<a class="jxr_linenumber" name="L281" href="#L281">281</a> 			<strong class="jxr_keyword">var</strong> paused = clientA.callRaw(McpMethods.TOOLS_CALL, <strong class="jxr_keyword">new</strong> CallToolRequest().setName(<span class="jxr_string">"askShared"</span>).setArguments(Map.of()));
+<a class="jxr_linenumber" name="L282" href="#L282">282</a> 			assertEquals(<span class="jxr_string">"input_required"</span>, paused.get(<span class="jxr_string">"resultType"</span>));
+<a class="jxr_linenumber" name="L283" href="#L283">283</a> 			token = (String) paused.get(<span class="jxr_string">"requestState"</span>);
+<a class="jxr_linenumber" name="L284" href="#L284">284</a> 			assertNotNull(token);
+<a class="jxr_linenumber" name="L285" href="#L285">285</a> 		}
+<a class="jxr_linenumber" name="L286" href="#L286">286</a> 
+<a class="jxr_linenumber" name="L287" href="#L287">287</a> 		<em class="jxr_comment">// Resume against a DIFFERENT binding (/kp-b), backed by an independently-constructed</em>
+<a class="jxr_linenumber" name="L288" href="#L288">288</a> 		<em class="jxr_comment">// AeadRequestStateCodec that shares only SHARED_KEY_PROVIDER with /kp-a's codec, never the codec object</em>
+<a class="jxr_linenumber" name="L289" href="#L289">289</a> 		<em class="jxr_comment">// itself -- the live-wire analog of McpMrtrDispatch_Test#d04.</em>
+<a class="jxr_linenumber" name="L290" href="#L290">290</a> 		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> clientB = clientBuilderAt(<span class="jxr_string">"/kp-b/"</span>, <strong class="jxr_keyword">true</strong>).build()) {
+<a class="jxr_linenumber" name="L291" href="#L291">291</a> 			<strong class="jxr_keyword">var</strong> completed = clientB.callRaw(McpMethods.TOOLS_CALL,
+<a class="jxr_linenumber" name="L292" href="#L292">292</a> 				<strong class="jxr_keyword">new</strong> CallToolRequest().setName(<span class="jxr_string">"askShared"</span>).setRequestState(token).setInputResponses(Map.of(<span class="jxr_string">"q1"</span>, <span class="jxr_string">"answer"</span>)));
+<a class="jxr_linenumber" name="L293" href="#L293">293</a> 			assertEquals(<span class="jxr_string">"complete"</span>, completed.get(<span class="jxr_string">"resultType"</span>));
+<a class="jxr_linenumber" name="L294" href="#L294">294</a> 			<strong class="jxr_keyword">var</strong> result = Json.to(Json.of(completed), CallToolResult.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L295" href="#L295">295</a> 			assertEquals(<span class="jxr_string">"resumed-shared:answer"</span>, ((TextContent) result.getContent().get(0)).getText());
+<a class="jxr_linenumber" name="L296" href="#L296">296</a> 		}
+<a class="jxr_linenumber" name="L297" href="#L297">297</a> 	}
+<a class="jxr_linenumber" name="L298" href="#L298">298</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

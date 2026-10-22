@@ -133,16 +133,14 @@
 <span class="source-line-no">120</span><span id="line-120">   }</span>
 <span class="source-line-no">121</span><span id="line-121"></span>
 <span class="source-line-no">122</span><span id="line-122">   private static String toUrlMapping(String rawPath) {</span>
-<span class="source-line-no">123</span><span id="line-123">      var p = rawPath == null ? "" : rawPath;</span>
+<span class="source-line-no">123</span><span id="line-123">      var p = rawPath;</span>
 <span class="source-line-no">124</span><span id="line-124">      while (p.endsWith("/") &amp;&amp; p.length() &gt; 1)</span>
 <span class="source-line-no">125</span><span id="line-125">         p = p.substring(0, p.length() - 1);</span>
-<span class="source-line-no">126</span><span id="line-126">      if (p.isEmpty())</span>
-<span class="source-line-no">127</span><span id="line-127">         return "/";</span>
-<span class="source-line-no">128</span><span id="line-128">      if (! p.startsWith("/"))</span>
-<span class="source-line-no">129</span><span id="line-129">         p = "/" + p;</span>
-<span class="source-line-no">130</span><span id="line-130">      return p;</span>
-<span class="source-line-no">131</span><span id="line-131">   }</span>
-<span class="source-line-no">132</span><span id="line-132">}</span>
+<span class="source-line-no">126</span><span id="line-126">      if (! p.startsWith("/"))</span>
+<span class="source-line-no">127</span><span id="line-127">         p = "/" + p;</span>
+<span class="source-line-no">128</span><span id="line-128">      return p;</span>
+<span class="source-line-no">129</span><span id="line-129">   }</span>
+<span class="source-line-no">130</span><span id="line-130">}</span>
 
 
 

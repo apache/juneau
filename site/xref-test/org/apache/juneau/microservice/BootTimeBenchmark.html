@@ -64,9 +64,9 @@
 <a class="jxr_linenumber" name="L56" href="#L56">56</a>  <em class="jxr_javadoccomment"> * {@code BOOTBENCH:} so it can be greped out of surefire console output.</em>
 <a class="jxr_linenumber" name="L57" href="#L57">57</a>  <em class="jxr_javadoccomment"> */</em>
 <a class="jxr_linenumber" name="L58" href="#L58">58</a>  @SuppressWarnings({
-<a class="jxr_linenumber" name="L59" href="#L59">59</a>  	<span class="jxr_string">"java:S5976"</span>, <em class="jxr_comment">// Manual benchmark harness, not a real JUnit test — public visibility is intentional.</em>
-<a class="jxr_linenumber" name="L60" href="#L60">60</a>  	<span class="jxr_string">"java:S2699"</span>, <em class="jxr_comment">// Manual benchmark harness — it measures boot timings and has no assertions by design.</em>
-<a class="jxr_linenumber" name="L61" href="#L61">61</a>  	<span class="jxr_string">"java:S3577"</span>  <em class="jxr_comment">// Manual benchmark harness — name intentionally excluded from the surefire *Test include pattern.</em>
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>  	<span class="jxr_string">"java:S2699"</span>, <em class="jxr_comment">// Manual benchmark harness — it measures boot timings and has no assertions by design.</em>
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>  	<span class="jxr_string">"java:S3577"</span>, <em class="jxr_comment">// Manual benchmark harness — name intentionally excluded from the surefire *Test include pattern.</em>
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>  	<span class="jxr_string">"java:S5976"</span> <em class="jxr_comment">// Manual benchmark harness, not a real JUnit test — public visibility is intentional.</em>
 <a class="jxr_linenumber" name="L62" href="#L62">62</a>  })
 <a class="jxr_linenumber" name="L63" href="#L63">63</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> BootTimeBenchmark {
 <a class="jxr_linenumber" name="L64" href="#L64">64</a>  

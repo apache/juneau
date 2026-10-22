@@ -160,42 +160,44 @@
 <span class="source-line-no">147</span><span id="line-147">               target, NO_ENGINE_DIAGNOSTIC);</span>
 <span class="source-line-no">148</span><span id="line-148">         rd.forward(req.getHttpServletRequest(), res.getHttpServletResponse());</span>
 <span class="source-line-no">149</span><span id="line-149">         return FINISHED;</span>
-<span class="source-line-no">150</span><span id="line-150">      } catch (NoClassDefFoundError ex) {</span>
-<span class="source-line-no">151</span><span id="line-151">         throw new InternalServerError(ex, NO_ENGINE_DIAGNOSTIC);</span>
-<span class="source-line-no">152</span><span id="line-152">      } catch (IOException ex) {</span>
+<span class="source-line-no">150</span><span id="line-150">      } catch (InternalServerError | IOException ex) {</span>
+<span class="source-line-no">151</span><span id="line-151">         // Re-throw as-is so the specific diagnostic constructed above, or a framework-level IOException,</span>
+<span class="source-line-no">152</span><span id="line-152">         // isn't discarded by the generic fallback below.</span>
 <span class="source-line-no">153</span><span id="line-153">         throw ex;</span>
-<span class="source-line-no">154</span><span id="line-154">      } catch (Exception ex) {</span>
-<span class="source-line-no">155</span><span id="line-155">         throw new InternalServerError(ex, "JSP render failed for '%s'", target);</span>
-<span class="source-line-no">156</span><span id="line-156">      }</span>
-<span class="source-line-no">157</span><span id="line-157">   }</span>
-<span class="source-line-no">158</span><span id="line-158"></span>
-<span class="source-line-no">159</span><span id="line-159">   /**</span>
-<span class="source-line-no">160</span><span id="line-160">    * Joins a base path and a template name with a single {@code "/"} separator, rejecting any</span>
-<span class="source-line-no">161</span><span id="line-161">    * resolved target that escapes {@code basePath} via {@code ..} segments.</span>
-<span class="source-line-no">162</span><span id="line-162">    *</span>
-<span class="source-line-no">163</span><span id="line-163">    * &lt;p&gt;</span>
-<span class="source-line-no">164</span><span id="line-164">    * Delegates to {@link FileUtils#resolveVirtualPathSafely(String, String)} — the canonical</span>
-<span class="source-line-no">165</span><span id="line-165">    * shared implementation reused by {@code JspMixin.render(...)} for the</span>
-<span class="source-line-no">166</span><span id="line-166">    * raw-{@code .jsp} dispatch path. Handles every {@code (basePath, template)} combination of</span>
-<span class="source-line-no">167</span><span id="line-167">    * trailing/leading slashes uniformly so callers can pass {@code basePath("/WEB-INF/views")} or</span>
-<span class="source-line-no">168</span><span id="line-168">    * {@code basePath("/WEB-INF/views/")} and {@code "hello.jsp"} or {@code "/hello.jsp"} without</span>
-<span class="source-line-no">169</span><span id="line-169">    * worrying about double-slash artifacts.</span>
-<span class="source-line-no">170</span><span id="line-170">    *</span>
-<span class="source-line-no">171</span><span id="line-171">    * &lt;p&gt;</span>
-<span class="source-line-no">172</span><span id="line-172">    * A {@code null} or empty {@code basePath} is normalized to {@code "/"} (the</span>
-<span class="source-line-no">173</span><span id="line-173">    * {@link JspMixin#DEFAULT_BASE_PATH default}) before the boundary check runs.</span>
-<span class="source-line-no">174</span><span id="line-174">    *</span>
-<span class="source-line-no">175</span><span id="line-175">    * @param basePath The base path (e.g. {@code "/WEB-INF/views/"}).</span>
-<span class="source-line-no">176</span><span id="line-176">    * @param template The template name (e.g. {@code "hello.jsp"}).</span>
-<span class="source-line-no">177</span><span id="line-177">    * @return The joined path (e.g. {@code "/WEB-INF/views/hello.jsp"}).</span>
-<span class="source-line-no">178</span><span id="line-178">    * @throws IllegalArgumentException If {@code template} escapes {@code basePath} via</span>
-<span class="source-line-no">179</span><span id="line-179">    *    {@code ..} segments.</span>
-<span class="source-line-no">180</span><span id="line-180">    */</span>
-<span class="source-line-no">181</span><span id="line-181">   static String joinPath(String basePath, String template) {</span>
-<span class="source-line-no">182</span><span id="line-182">      var bp = isEmpty(basePath) ? "/" : basePath;</span>
-<span class="source-line-no">183</span><span id="line-183">      return FileUtils.resolveVirtualPathSafely(bp, template);</span>
-<span class="source-line-no">184</span><span id="line-184">   }</span>
-<span class="source-line-no">185</span><span id="line-185">}</span>
+<span class="source-line-no">154</span><span id="line-154">      } catch (NoClassDefFoundError ex) {</span>
+<span class="source-line-no">155</span><span id="line-155">         throw new InternalServerError(ex, NO_ENGINE_DIAGNOSTIC);</span>
+<span class="source-line-no">156</span><span id="line-156">      } catch (Exception ex) {</span>
+<span class="source-line-no">157</span><span id="line-157">         throw new InternalServerError(ex, "JSP render failed for '%s'", target);</span>
+<span class="source-line-no">158</span><span id="line-158">      }</span>
+<span class="source-line-no">159</span><span id="line-159">   }</span>
+<span class="source-line-no">160</span><span id="line-160"></span>
+<span class="source-line-no">161</span><span id="line-161">   /**</span>
+<span class="source-line-no">162</span><span id="line-162">    * Joins a base path and a template name with a single {@code "/"} separator, rejecting any</span>
+<span class="source-line-no">163</span><span id="line-163">    * resolved target that escapes {@code basePath} via {@code ..} segments.</span>
+<span class="source-line-no">164</span><span id="line-164">    *</span>
+<span class="source-line-no">165</span><span id="line-165">    * &lt;p&gt;</span>
+<span class="source-line-no">166</span><span id="line-166">    * Delegates to {@link FileUtils#resolveVirtualPathSafely(String, String)} — the canonical</span>
+<span class="source-line-no">167</span><span id="line-167">    * shared implementation reused by {@code JspMixin.render(...)} for the</span>
+<span class="source-line-no">168</span><span id="line-168">    * raw-{@code .jsp} dispatch path. Handles every {@code (basePath, template)} combination of</span>
+<span class="source-line-no">169</span><span id="line-169">    * trailing/leading slashes uniformly so callers can pass {@code basePath("/WEB-INF/views")} or</span>
+<span class="source-line-no">170</span><span id="line-170">    * {@code basePath("/WEB-INF/views/")} and {@code "hello.jsp"} or {@code "/hello.jsp"} without</span>
+<span class="source-line-no">171</span><span id="line-171">    * worrying about double-slash artifacts.</span>
+<span class="source-line-no">172</span><span id="line-172">    *</span>
+<span class="source-line-no">173</span><span id="line-173">    * &lt;p&gt;</span>
+<span class="source-line-no">174</span><span id="line-174">    * A {@code null} or empty {@code basePath} is normalized to {@code "/"} (the</span>
+<span class="source-line-no">175</span><span id="line-175">    * {@link JspMixin#DEFAULT_BASE_PATH default}) before the boundary check runs.</span>
+<span class="source-line-no">176</span><span id="line-176">    *</span>
+<span class="source-line-no">177</span><span id="line-177">    * @param basePath The base path (e.g. {@code "/WEB-INF/views/"}).</span>
+<span class="source-line-no">178</span><span id="line-178">    * @param template The template name (e.g. {@code "hello.jsp"}).</span>
+<span class="source-line-no">179</span><span id="line-179">    * @return The joined path (e.g. {@code "/WEB-INF/views/hello.jsp"}).</span>
+<span class="source-line-no">180</span><span id="line-180">    * @throws IllegalArgumentException If {@code template} escapes {@code basePath} via</span>
+<span class="source-line-no">181</span><span id="line-181">    *    {@code ..} segments.</span>
+<span class="source-line-no">182</span><span id="line-182">    */</span>
+<span class="source-line-no">183</span><span id="line-183">   static String joinPath(String basePath, String template) {</span>
+<span class="source-line-no">184</span><span id="line-184">      var bp = isEmpty(basePath) ? "/" : basePath;</span>
+<span class="source-line-no">185</span><span id="line-185">      return FileUtils.resolveVirtualPathSafely(bp, template);</span>
+<span class="source-line-no">186</span><span id="line-186">   }</span>
+<span class="source-line-no">187</span><span id="line-187">}</span>
 
 
 

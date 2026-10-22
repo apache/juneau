@@ -88,6 +88,15 @@ loadScripts(document, 'script');</script>
 <div class="col-last odd-row-color">
 <div class="block">Method exec stats utilities</div>
 </div>
+<div class="col-first even-row-color"><a href="#org.apache.juneau.rest.server.views">org.apache.juneau.rest.server.views</a></div>
+<div class="col-last even-row-color">
+<div class="block">A typed, declarative "rich DataTables view" toolkit that serializes to the frozen <code>VIEW_META</code> JSON wire
+ contract consumed by the first-party client runtime.</div>
+</div>
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.rest.server.widgets">org.apache.juneau.rest.server.widgets</a></div>
+<div class="col-last odd-row-color">
+<div class="block">Reusable widget primitives for the Juneau REST server toolkit.</div>
+</div>
 </div>
 <section class="class-uses">
 <ul class="block-list">
@@ -267,6 +276,160 @@ loadScripts(document, 'script');</script>
 <div class="col-second even-row-color"><code><a href="../../../rest/server/stats/RestContextStats.html" class="type-name-link" title="class in org.apache.juneau.rest.server.stats">RestContextStats</a></code></div>
 <div class="col-last even-row-color">
 <div class="block">A snapshot of execution statistics for REST resource classes.</div>
+</div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="org.apache.juneau.rest.server.views">
+<h2>Uses of <a href="../BeanType.html" title="annotation interface in org.apache.juneau.commons.bean">BeanType</a> in <a href="../../../rest/server/views/package-summary.html">org.apache.juneau.rest.server.views</a></h2>
+<div class="caption"><span>Classes in <a href="../../../rest/server/views/package-summary.html">org.apache.juneau.rest.server.views</a> with annotations of type <a href="../BeanType.html" title="annotation interface in org.apache.juneau.commons.bean">BeanType</a></span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier and Type</div>
+<div class="table-header col-second">Class</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code>class&nbsp;</code></div>
+<div class="col-second even-row-color"><code><a href="../../../rest/server/views/ActionResult.html" class="type-name-link" title="class in org.apache.juneau.rest.server.views">ActionResult</a></code></div>
+<div class="col-last even-row-color">
+<div class="block">The typed result a row action's submit returns &mdash; the load-bearing half of the write path.</div>
+</div>
+<div class="col-first odd-row-color"><code>class&nbsp;</code></div>
+<div class="col-second odd-row-color"><code><a href="../../../rest/server/views/AsyncJobRef.html" class="type-name-link" title="class in org.apache.juneau.rest.server.views">AsyncJobRef</a></code></div>
+<div class="col-last odd-row-color">
+<div class="block">The "job accepted" envelope a row action's submit returns <b>instead of</b> a terminal <a href="../../../rest/server/views/ActionResult.html" title="class in org.apache.juneau.rest.server.views"><code>ActionResult</code></a> when
+ the write is asynchronous.</div>
+</div>
+<div class="col-first even-row-color"><code>final class&nbsp;</code></div>
+<div class="col-second even-row-color"><code><a href="../../../rest/server/views/BulkMutateDef.html" class="type-name-link" title="class in org.apache.juneau.rest.server.views">BulkMutateDef</a></code></div>
+<div class="col-last even-row-color">
+<div class="block">The bulk-mutate opt-in for a <a href="../../../rest/server/views/ViewTable.html" title="class in org.apache.juneau.rest.server.views"><code>ViewTable</code></a> &mdash; the second, INDEPENDENT half of the row-selection /
+ bulk-mutate separability guarantee.</div>
+</div>
+<div class="col-first odd-row-color"><code>final class&nbsp;</code></div>
+<div class="col-second odd-row-color"><code><a href="../../../rest/server/views/BulkRequest.html" class="type-name-link" title="class in org.apache.juneau.rest.server.views">BulkRequest</a></code></div>
+<div class="col-last odd-row-color">
+<div class="block">The request body of an <code>aggregate</code>-mode bulk action (<a href="../../../rest/server/views/RowAction.BulkMode.html#AGGREGATE"><code>RowAction.BulkMode.AGGREGATE</code></a>) &mdash;
+ every selected row's stable id, plus a client-generated idempotency key so a retried submit (e.g. after a
+ dropped connection) never double-applies.</div>
+</div>
+<div class="col-first even-row-color"><code>final class&nbsp;</code></div>
+<div class="col-second even-row-color"><code><a href="../../../rest/server/views/BulkResult.html" class="type-name-link" title="class in org.apache.juneau.rest.server.views">BulkResult</a></code></div>
+<div class="col-last even-row-color">
+<div class="block">The response shape of an <code>aggregate</code>-mode bulk action (<a href="../../../rest/server/views/RowAction.BulkMode.html#AGGREGATE"><code>RowAction.BulkMode.AGGREGATE</code></a>) &mdash;
+ one outcome per id submitted in the matching <a href="../../../rest/server/views/BulkRequest.html" title="class in org.apache.juneau.rest.server.views"><code>BulkRequest</code></a>.</div>
+</div>
+<div class="col-first odd-row-color"><code>class&nbsp;</code></div>
+<div class="col-second odd-row-color"><code><a href="../../../rest/server/views/CellPopover.html" class="type-name-link" title="class in org.apache.juneau.rest.server.views">CellPopover</a></code></div>
+<div class="col-last odd-row-color">
+<div class="block">Author-declared per-cell popover attached to a <a href="../../../rest/server/views/Render.html" title="class in org.apache.juneau.rest.server.views"><code>Render</code></a>.</div>
+</div>
+<div class="col-first even-row-color"><code>class&nbsp;</code></div>
+<div class="col-second even-row-color"><code><a href="../../../rest/server/views/PopoverField.html" class="type-name-link" title="class in org.apache.juneau.rest.server.views">PopoverField</a></code></div>
+<div class="col-last even-row-color">
+<div class="block">One labelled value in a <a href="../../../rest/server/views/CellPopover.html" title="class in org.apache.juneau.rest.server.views"><code>CellPopover</code></a>, bound to a top-level row-data key.</div>
+</div>
+<div class="col-first odd-row-color"><code>class&nbsp;</code></div>
+<div class="col-second odd-row-color"><code><a href="../../../rest/server/views/Render.html" class="type-name-link" title="class in org.apache.juneau.rest.server.views">Render</a></code></div>
+<div class="col-last odd-row-color">
+<div class="block">A named cell-renderer reference in the <code>VIEW_META</code> wire contract.</div>
+</div>
+<div class="col-first even-row-color"><code>class&nbsp;</code></div>
+<div class="col-second even-row-color"><code><a href="../../../rest/server/views/RowAction.html" class="type-name-link" title="class in org.apache.juneau.rest.server.views">RowAction</a></code></div>
+<div class="col-last even-row-color">
+<div class="block">A per-row action descriptor in the <code>VIEW_META</code> wire contract (the transport-agnostic
+ "row-action intent" model).</div>
+</div>
+<div class="col-first odd-row-color"><code>class&nbsp;</code></div>
+<div class="col-second odd-row-color"><code><a href="../../../rest/server/views/RowActionEnabledRule.html" class="type-name-link" title="class in org.apache.juneau.rest.server.views">RowActionEnabledRule</a></code></div>
+<div class="col-last odd-row-color">
+<div class="block">A declarative disable-with-reason rule gating a <a href="../../../rest/server/views/RowAction.html" title="class in org.apache.juneau.rest.server.views"><code>RowAction</code></a> on the row's own state, in the
+ <code>VIEW_META</code> wire contract.</div>
+</div>
+<div class="col-first even-row-color"><code>final class&nbsp;</code></div>
+<div class="col-second even-row-color"><code><a href="../../../rest/server/views/VisibilityRule.html" class="type-name-link" title="class in org.apache.juneau.rest.server.views">VisibilityRule</a></code></div>
+<div class="col-last even-row-color">
+<div class="block">A presentation-only visibility rule: the element is shown only when every rule in its list matches.</div>
+</div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="org.apache.juneau.rest.server.widgets">
+<h2>Uses of <a href="../BeanType.html" title="annotation interface in org.apache.juneau.commons.bean">BeanType</a> in <a href="../../../rest/server/widgets/package-summary.html">org.apache.juneau.rest.server.widgets</a></h2>
+<div class="caption"><span>Classes in <a href="../../../rest/server/widgets/package-summary.html">org.apache.juneau.rest.server.widgets</a> with annotations of type <a href="../BeanType.html" title="annotation interface in org.apache.juneau.commons.bean">BeanType</a></span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier and Type</div>
+<div class="table-header col-second">Class</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code>class&nbsp;</code></div>
+<div class="col-second even-row-color"><code><a href="../../../rest/server/widgets/Badge.html" class="type-name-link" title="class in org.apache.juneau.rest.server.widgets">Badge</a></code></div>
+<div class="col-last even-row-color">
+<div class="block">An overlay badge on a header action (a bell count, for example) or a <a href="../../../rest/server/widgets/BarBadge.html" title="class in org.apache.juneau.rest.server.widgets"><code>BarBadge</code></a>.</div>
+</div>
+<div class="col-first odd-row-color"><code>final class&nbsp;</code></div>
+<div class="col-second odd-row-color"><code><a href="../../../rest/server/widgets/BarBadge.html" class="type-name-link" title="class in org.apache.juneau.rest.server.widgets">BarBadge</a></code></div>
+<div class="col-last odd-row-color">
+<div class="block">A labelled count widget in a <a href="../../../rest/server/widgets/BarSlot.html" title="class in org.apache.juneau.rest.server.widgets"><code>BarSlot</code></a> &mdash; the "N change pending"-style badge to the right of the subtab
+ ribbon.</div>
+</div>
+<div class="col-first even-row-color"><code>class&nbsp;</code></div>
+<div class="col-second even-row-color"><code><a href="../../../rest/server/widgets/BarSlot.html" class="type-name-link" title="class in org.apache.juneau.rest.server.widgets">BarSlot</a></code></div>
+<div class="col-last even-row-color">
+<div class="block">An additive trailing region beside the subtab ribbon: a small row of <a href="../../../rest/server/widgets/BarWidget.html" title="interface in org.apache.juneau.rest.server.widgets"><code>BarWidget</code></a>s (concept #9).</div>
+</div>
+<div class="col-first odd-row-color"><code>final class&nbsp;</code></div>
+<div class="col-second odd-row-color"><code><a href="../../../rest/server/widgets/BarText.html" class="type-name-link" title="class in org.apache.juneau.rest.server.widgets">BarText</a></code></div>
+<div class="col-last odd-row-color">
+<div class="block">A static contextual label widget in a <a href="../../../rest/server/widgets/BarSlot.html" title="class in org.apache.juneau.rest.server.widgets"><code>BarSlot</code></a>.</div>
+</div>
+<div class="col-first even-row-color"><code>class&nbsp;</code></div>
+<div class="col-second even-row-color"><code><a href="../../../rest/server/widgets/FormDef.html" class="type-name-link" title="class in org.apache.juneau.rest.server.widgets">FormDef</a></code></div>
+<div class="col-last even-row-color">
+<div class="block">The declarative source of a row-action modal's input form (the form half of a <code>present=dialog</code> action).</div>
+</div>
+<div class="col-first odd-row-color"><code>static class&nbsp;</code></div>
+<div class="col-second odd-row-color"><code><a href="../../../rest/server/widgets/FormDef.Input.html" class="type-name-link" title="class in org.apache.juneau.rest.server.widgets">FormDef.Input</a></code></div>
+<div class="col-last odd-row-color">
+<div class="block">A single typed form input painted client-side with <code>createElement</code> (never <code>innerHTML</code>).</div>
+</div>
+<div class="col-first even-row-color"><code>static class&nbsp;</code></div>
+<div class="col-second even-row-color"><code><a href="../../../rest/server/widgets/FormDef.Input.Option.html" class="type-name-link" title="class in org.apache.juneau.rest.server.widgets">FormDef.Input.Option</a></code></div>
+<div class="col-last even-row-color">
+<div class="block">A single <code>select</code> option: a submit value and its visible label.</div>
+</div>
+<div class="col-first odd-row-color"><code>static class&nbsp;</code></div>
+<div class="col-second odd-row-color"><code><a href="../../../rest/server/widgets/FormDef.Section.html" class="type-name-link" title="class in org.apache.juneau.rest.server.widgets">FormDef.Section</a></code></div>
+<div class="col-last odd-row-color">
+<div class="block">One labelled group of inputs inside a sectioned form: the multi-page dialog shape.</div>
+</div>
+<div class="col-first even-row-color"><code>class&nbsp;</code></div>
+<div class="col-second even-row-color"><code><a href="../../../rest/server/widgets/MenuItem.html" class="type-name-link" title="class in org.apache.juneau.rest.server.widgets">MenuItem</a></code></div>
+<div class="col-last even-row-color">
+<div class="block">A single row in an attached header or avatar menu.</div>
+</div>
+<div class="col-first odd-row-color"><code>class&nbsp;</code></div>
+<div class="col-second odd-row-color"><code><a href="../../../rest/server/widgets/ModalDef.html" class="type-name-link" title="class in org.apache.juneau.rest.server.widgets">ModalDef</a></code></div>
+<div class="col-last odd-row-color">
+<div class="block">The declarative modal (dialog) a <code>present=dialog</code> row action opens &mdash; the payload the
+ <b>modal-open confirmation fetch</b> returns.</div>
+</div>
+<div class="col-first even-row-color"><code>static class&nbsp;</code></div>
+<div class="col-second even-row-color"><code><a href="../../../rest/server/widgets/ModalDef.ChildAction.html" class="type-name-link" title="class in org.apache.juneau.rest.server.widgets">ModalDef.ChildAction</a></code></div>
+<div class="col-last even-row-color">
+<div class="block">One entry in a dialog's <a href="../../../rest/server/widgets/ModalDef.html#childActions"><code>ModalDef.childActions</code></a> catalog &mdash; a stacked step a <code>type="action"</code>
+ input inside <i>this</i> dialog's form may open.</div>
+</div>
+<div class="col-first odd-row-color"><code>static class&nbsp;</code></div>
+<div class="col-second odd-row-color"><code><a href="../../../rest/server/widgets/ModalDef.Field.html" class="type-name-link" title="class in org.apache.juneau.rest.server.widgets">ModalDef.Field</a></code></div>
+<div class="col-last odd-row-color">
+<div class="block">A single typed confirmation field: a label and a value, painted client-side with <code>textContent</code> (never
+ <code>innerHTML</code>).</div>
+</div>
+<div class="col-first even-row-color"><code>static class&nbsp;</code></div>
+<div class="col-second even-row-color"><code><a href="../../../rest/server/widgets/ModalDef.Step.html" class="type-name-link" title="class in org.apache.juneau.rest.server.widgets">ModalDef.Step</a></code></div>
+<div class="col-last even-row-color">
+<div class="block">One page of a <a href="../../../rest/server/widgets/ModalDef.html#steps"><code>ModalDef.steps</code></a> wizard: an id, an optional title and confirm-button label, and the typed
+ display fields painted for that page.</div>
 </div>
 </div>
 </section>

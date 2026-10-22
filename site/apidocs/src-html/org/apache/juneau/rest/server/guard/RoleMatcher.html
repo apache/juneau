@@ -116,7 +116,7 @@
 <span class="source-line-no">103</span><span id="line-103">      @Override /* Overridden from Exp */</span>
 <span class="source-line-no">104</span><span id="line-104">      boolean matches(Set&lt;String&gt; roles) {</span>
 <span class="source-line-no">105</span><span id="line-105">         for (var role : roles)</span>
-<span class="source-line-no">106</span><span id="line-106">            if (operand.equals(role))</span>
+<span class="source-line-no">106</span><span id="line-106">            if (eq(operand, role))</span>
 <span class="source-line-no">107</span><span id="line-107">               return true;</span>
 <span class="source-line-no">108</span><span id="line-108">         return false;</span>
 <span class="source-line-no">109</span><span id="line-109">      }</span>
@@ -257,10 +257,10 @@
 <span class="source-line-no">244</span><span id="line-244">   }</span>
 <span class="source-line-no">245</span><span id="line-245"></span>
 <span class="source-line-no">246</span><span id="line-246">   @SuppressWarnings({</span>
-<span class="source-line-no">247</span><span id="line-247">      "java:S125",    // Inline /*...*/ documents implicit else condition</span>
-<span class="source-line-no">248</span><span id="line-248">      "java:S135",    // Multiple break statements necessary for state machine error handling</span>
-<span class="source-line-no">249</span><span id="line-249">      "java:S3776",   // Cognitive complexity acceptable for parser state machine</span>
-<span class="source-line-no">250</span><span id="line-250">      "java:S6541"    // Thread-safe singleton pattern acceptable</span>
+<span class="source-line-no">247</span><span id="line-247">      "java:S125", // Inline /*...*/ documents implicit else condition</span>
+<span class="source-line-no">248</span><span id="line-248">      "java:S135", // Multiple break statements necessary for state machine error handling</span>
+<span class="source-line-no">249</span><span id="line-249">      "java:S3776", // Cognitive complexity acceptable for parser state machine</span>
+<span class="source-line-no">250</span><span id="line-250">      "java:S6541" // Thread-safe singleton pattern acceptable</span>
 <span class="source-line-no">251</span><span id="line-251">   })</span>
 <span class="source-line-no">252</span><span id="line-252">   private Exp parse(String expression) throws ParseException {</span>
 <span class="source-line-no">253</span><span id="line-253">      if (StringUtils.isBlank(expression))</span>

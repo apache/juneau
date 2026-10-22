@@ -137,9 +137,9 @@
 <span class="source-line-no">124</span><span id="line-124">   }</span>
 <span class="source-line-no">125</span><span id="line-125"></span>
 <span class="source-line-no">126</span><span id="line-126">   @SuppressWarnings({</span>
-<span class="source-line-no">127</span><span id="line-127">      "java:S2160", // equals() inherited from AnnotationObject compares all annotation interface methods; subclass fields are accessed via those methods</span>
-<span class="source-line-no">128</span><span id="line-128">      "ClassExplicitlyAnnotation", // IntelliJ / SonarLint: Instance implements @Response (AnnotationObject runtime proxy pattern)</span>
-<span class="source-line-no">129</span><span id="line-129">      "all" // Eclipse JDT: AnnotationTypeUsedAsSuperInterface has no dedicated @SuppressWarnings token (JLS 9.6)</span>
+<span class="source-line-no">127</span><span id="line-127">      "ClassExplicitlyAnnotation", // IntelliJ / SonarLint: Instance implements @Response (AnnotationObject runtime proxy pattern)</span>
+<span class="source-line-no">128</span><span id="line-128">      "all", // Eclipse JDT: AnnotationTypeUsedAsSuperInterface has no dedicated @SuppressWarnings token (JLS 9.6)</span>
+<span class="source-line-no">129</span><span id="line-129">      "java:S2160" // equals() inherited from AnnotationObject compares all annotation interface methods; subclass fields are accessed via those methods</span>
 <span class="source-line-no">130</span><span id="line-130">   })</span>
 <span class="source-line-no">131</span><span id="line-131">   private static class Instance extends AnnotationObject implements Response {</span>
 <span class="source-line-no">132</span><span id="line-132"></span>

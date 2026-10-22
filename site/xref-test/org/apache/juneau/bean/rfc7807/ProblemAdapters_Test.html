@@ -196,7 +196,7 @@
 <a class="jxr_linenumber" name="L188" href="#L188">188</a> 
 <a class="jxr_linenumber" name="L189" href="#L189">189</a> 	@Test
 <a class="jxr_linenumber" name="L190" href="#L190">190</a> 	<strong class="jxr_keyword">void</strong> d02_type_isNeverSynthesized() {
-<a class="jxr_linenumber" name="L191" href="#L191">191</a> 		<em class="jxr_comment">// Locked decision Q7: never set type (don't synthesize about:blank on the wire).</em>
+<a class="jxr_linenumber" name="L191" href="#L191">191</a> 		<em class="jxr_comment">// Never set type (don't synthesize about:blank on the wire).</em>
 <a class="jxr_linenumber" name="L192" href="#L192">192</a> 		<strong class="jxr_keyword">var</strong> p = ProblemAdapters.fromException(<strong class="jxr_keyword">new</strong> BadRequest(<span class="jxr_string">"oops"</span>));
 <a class="jxr_linenumber" name="L193" href="#L193">193</a> 		assertNull(p.getType());
 <a class="jxr_linenumber" name="L194" href="#L194">194</a> 		assertNull(p.getInstance());

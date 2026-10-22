@@ -43,8 +43,8 @@
 <span class="source-line-no">030</span><span id="line-30"> * &lt;/ul&gt;</span>
 <span class="source-line-no">031</span><span id="line-31"> */</span>
 <span class="source-line-no">032</span><span id="line-32">@SuppressWarnings({</span>
-<span class="source-line-no">033</span><span id="line-33">   "resource",  // Writer resource managed by calling code</span>
-<span class="source-line-no">034</span><span id="line-34">   "java:S3776" // Cognitive complexity acceptable for CSV cell quoting/escaping logic</span>
+<span class="source-line-no">033</span><span id="line-33">   "java:S3776", // Cognitive complexity acceptable for CSV cell quoting/escaping logic</span>
+<span class="source-line-no">034</span><span id="line-34">   "resource" // Writer resource managed by calling code</span>
 <span class="source-line-no">035</span><span id="line-35">})</span>
 <span class="source-line-no">036</span><span id="line-36">public class CsvWriter extends SerializerWriter&lt;CsvWriter&gt; {</span>
 <span class="source-line-no">037</span><span id="line-37"></span>

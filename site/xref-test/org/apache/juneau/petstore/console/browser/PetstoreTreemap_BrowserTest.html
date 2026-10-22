@@ -1,0 +1,283 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="" lang="">
+<head><meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<title>PetstoreTreemap_BrowserTest xref</title>
+<link type="text/css" rel="stylesheet" href="../../../../../../stylesheet.css" />
+</head>
+<body>
+<div id="overview"><a href="../../../../../../../testapidocs/org/apache/juneau/petstore/console/browser/PetstoreTreemap_BrowserTest.html">View Javadoc</a></div><pre>
+<a class="jxr_linenumber" name="L1" href="#L1">1</a>   <em class="jxr_comment">/*</em>
+<a class="jxr_linenumber" name="L2" href="#L2">2</a>   <em class="jxr_comment"> * Licensed to the Apache Software Foundation (ASF) under one or more</em>
+<a class="jxr_linenumber" name="L3" href="#L3">3</a>   <em class="jxr_comment"> * contributor license agreements.  See the NOTICE file distributed with</em>
+<a class="jxr_linenumber" name="L4" href="#L4">4</a>   <em class="jxr_comment"> * this work for additional information regarding copyright ownership.</em>
+<a class="jxr_linenumber" name="L5" href="#L5">5</a>   <em class="jxr_comment"> * The ASF licenses this file to You under the Apache License, Version 2.0</em>
+<a class="jxr_linenumber" name="L6" href="#L6">6</a>   <em class="jxr_comment"> * (the "License"); you may not use this file except in compliance with</em>
+<a class="jxr_linenumber" name="L7" href="#L7">7</a>   <em class="jxr_comment"> * the License.  You may obtain a copy of the License at</em>
+<a class="jxr_linenumber" name="L8" href="#L8">8</a>   <em class="jxr_comment"> *</em>
+<a class="jxr_linenumber" name="L9" href="#L9">9</a>   <em class="jxr_comment"> *      <a href="http://www.apache.org/licenses/LICENSE-2.0" target="alexandria_uri">http://www.apache.org/licenses/LICENSE-2.0</a></em>
+<a class="jxr_linenumber" name="L10" href="#L10">10</a>  <em class="jxr_comment"> *</em>
+<a class="jxr_linenumber" name="L11" href="#L11">11</a>  <em class="jxr_comment"> * Unless required by applicable law or agreed to in writing, software</em>
+<a class="jxr_linenumber" name="L12" href="#L12">12</a>  <em class="jxr_comment"> * distributed under the License is distributed on an "AS IS" BASIS,</em>
+<a class="jxr_linenumber" name="L13" href="#L13">13</a>  <em class="jxr_comment"> * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</em>
+<a class="jxr_linenumber" name="L14" href="#L14">14</a>  <em class="jxr_comment"> * See the License for the specific language governing permissions and</em>
+<a class="jxr_linenumber" name="L15" href="#L15">15</a>  <em class="jxr_comment"> * limitations under the License.</em>
+<a class="jxr_linenumber" name="L16" href="#L16">16</a>  <em class="jxr_comment"> */</em>
+<a class="jxr_linenumber" name="L17" href="#L17">17</a>  
+<a class="jxr_linenumber" name="L18" href="#L18">18</a>  <strong class="jxr_keyword">package</strong> org.apache.juneau.petstore.console.browser;
+<a class="jxr_linenumber" name="L19" href="#L19">19</a>  
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.petstore.console.browser.PetstoreBrowser.*;
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.test.bct.BctAssertions.*;
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.junit.jupiter.api.Assertions.*;
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> java.net.*;
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> java.net.http.*;
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> java.net.http.HttpResponse.*;
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> java.util.*;
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.*;
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.marshall.collections.*;
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.microservice.*;
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <strong class="jxr_keyword">import</strong> org.junit.jupiter.api.*;
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <strong class="jxr_keyword">import</strong> org.junit.jupiter.api.condition.*;
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>  <strong class="jxr_keyword">import</strong> org.junit.jupiter.api.extension.*;
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>  
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>  <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>  <em class="jxr_javadoccomment"> * The Store page's pets treemap in the real browser: one tile per pet grouped by species then status, a pet tile</em>
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>  <em class="jxr_javadoccomment"> * click (or Enter on the keyboard-walked tile) opens the pet edit dialog, saving it sends a CSRF-protected PUT and</em>
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>  <em class="jxr_javadoccomment"> * redraws the treemap, and a group tile click does nothing.</em>
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>  <em class="jxr_javadoccomment"> */</em>
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>  @Covers(value=<span class="jxr_string">"charts"</span>, pages=<span class="jxr_string">"/console/store"</span>)
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>  @HookCovers({<span class="jxr_string">"actions"</span>, <span class="jxr_string">"csrf"</span>})
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>  @EnabledIfSystemProperty(named=PetstoreBrowser.GATE, matches=<span class="jxr_string">"true"</span>, disabledReason=PetstoreBrowser.DISABLED)
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>  <strong class="jxr_keyword">class</strong> PetstoreTreemap_BrowserTest <strong class="jxr_keyword">extends</strong> TestBase {
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>  
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>  	@RegisterExtension
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>  	<strong class="jxr_keyword">static</strong> MicroserviceTestFixture server = PetstoreTestServer.fixture();
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>  
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String DLG = <span class="jxr_string">"[role=dialog]"</span>;
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String CONFIRM = DLG + <span class="jxr_string">" .juneau-view-dialog-confirm"</span>;
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String NAME = DLG + <span class="jxr_string">" [data-juneau-form-field=name]"</span>;
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>  
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>  	<em class="jxr_comment">// Records every non-GET fetch the page makes, with its status and its CSRF header.</em>
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String RECORD = <span class="jxr_string">"(() =&gt; { window.__writes = []; const f = window.fetch;"</span>
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>  		+ <span class="jxr_string">" window.fetch = async (u, o) =&gt; { const r = await f(u, o); const m = (o &amp;&amp; o.method) || 'GET';"</span>
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>  		+ <span class="jxr_string">" if (m !== 'GET') { const h = (o &amp;&amp; o.headers) || {}; const t = h instanceof Headers ? h.get('X-Csrf-Token') : (h['X-Csrf-Token'] || h['x-csrf-token'] || null);"</span>
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>  		+ <span class="jxr_string">" window.__writes.push({url: String(u), method: m, status: r.status, csrf: t, body: String(o &amp;&amp; o.body || '')}); }"</span>
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>  		+ <span class="jxr_string">" return r; }; })()"</span>;
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>  
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>  	<em class="jxr_comment">// Reads the drawn treemap: every node in data-index order with its pixel box, and clicks by real mouse events on the canvas.</em>
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String TM = <span class="jxr_string">""</span><span class="jxr_string">"
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>  		(() =&gt; {
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>  		  <strong class="jxr_keyword">const</strong> chart = () =&gt; window.JuneauConsole.cardApi('pets-map').chart();
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>  		  <strong class="jxr_keyword">const</strong> data = c =&gt; c.getModel().getSeriesByIndex(0).getData();
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>  		  <strong class="jxr_keyword">const</strong> box = (c, i) =&gt; { <strong class="jxr_keyword">const</strong> el = data(c).getItemGraphicEl(i); <strong class="jxr_keyword">if</strong> (!el) <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>  		    <strong class="jxr_keyword">const</strong> r = el.getBoundingRect().clone(), m = el.getComputedTransform(); <strong class="jxr_keyword">if</strong> (m) r.applyTransform(m);
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>  		    <strong class="jxr_keyword">return</strong> { x: r.x, y: r.y, w: r.width, h: r.height }; };
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>  		  <strong class="jxr_keyword">const</strong> nodes = () =&gt; { <strong class="jxr_keyword">const</strong> c = chart(), d = data(c), out = [];
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>  		    <strong class="jxr_keyword">for</strong> (let i = 0; i &lt; d.count(); i++) { <strong class="jxr_keyword">const</strong> n = d.tree.getNodeByDataIndex(i), l = n &amp;&amp; n.getLayout();
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>  		      <strong class="jxr_keyword">if</strong> (n &amp;&amp; l) out.push({ i, name: n.name, leaf: n.children.length === 0, status: n.parentNode ? n.parentNode.name : <strong class="jxr_keyword">null</strong>, species: n.parentNode &amp;&amp; n.parentNode.parentNode ? n.parentNode.parentNode.name : <strong class="jxr_keyword">null</strong>, box: box(c, i) }); }
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>  		    <strong class="jxr_keyword">return</strong> out; };
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>  		  <strong class="jxr_keyword">const</strong> fire = (type, x, y) =&gt; { <strong class="jxr_keyword">const</strong> el = chart().getZr().painter.getViewportRoot(), r = el.getBoundingClientRect();
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>  		    el.dispatchEvent(<strong class="jxr_keyword">new</strong> MouseEvent(type, { bubbles: <strong class="jxr_keyword">true</strong>, cancelable: <strong class="jxr_keyword">true</strong>, clientX: r.left + x, clientY: r.top + y })); };
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>  		  <strong class="jxr_keyword">const</strong> click = (x, y) =&gt; { fire('mousemove', x, y); fire('mousedown', x, y); fire('mouseup', x, y); fire('click', x, y); };
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>  		  <strong class="jxr_keyword">const</strong> leaf = name =&gt; nodes().find(n =&gt; n.leaf &amp;&amp; n.name === name);
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>  		  window.__tm = {
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>  		    nodes,
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>  		    placed: () =&gt; nodes().filter(n =&gt; n.leaf).map(n =&gt; ({ name: n.name, status: n.status, species: n.species })),
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>  		    leaves: () =&gt; nodes().filter(n =&gt; n.leaf).map(n =&gt; n.name),
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>  		    groups: () =&gt; nodes().filter(n =&gt; !n.leaf &amp;&amp; n.name).map(n =&gt; n.name),
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>  		    speciesOf: name =&gt; { <strong class="jxr_keyword">const</strong> n = leaf(name); <strong class="jxr_keyword">return</strong> n ? n.species : <strong class="jxr_keyword">null</strong>; },
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>  		    clickLeaf: name =&gt; { <strong class="jxr_keyword">const</strong> n = leaf(name); click(n.box.x + n.box.w / 2, n.box.y + n.box.h / 2); },
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>  		    clickGroup: name =&gt; { <strong class="jxr_keyword">const</strong> n = nodes().find(x =&gt; !x.leaf &amp;&amp; x.name === name); click(n.box.x + n.box.w / 2, n.box.y + 3); }
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>  		  };
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>  		})()<span class="jxr_string">""</span><span class="jxr_string">";
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>  
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String READY = <span class="jxr_string">"(() =&gt; { try { const t = window.__tm; return !!t &amp;&amp; t.leaves().length &gt; 3 &amp;&amp; !!document.querySelector('#pets-map canvas'); } catch (e) { return false; } })()"</span>;
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String DRAWN = <span class="jxr_string">"(() =&gt; { try { const a = window.JuneauConsole.cardApi('pets-map'); return !!a.chart() &amp;&amp; !!a.getOption() &amp;&amp; !!document.querySelector('#pets-map canvas'); } catch (e) { return false; } })()"</span>;
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>  
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String base;
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> JsonList pets;
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> JsonMap target;
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String moveTo;
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Map&lt;String,Map&lt;String,Object&gt;&gt; report;
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>  
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Map&lt;String,Object&gt; wait(String js) {
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>  		<strong class="jxr_keyword">return</strong> Map.of(<span class="jxr_string">"waitFor"</span>, js, <span class="jxr_string">"timeoutMs"</span>, 15000);
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>  	}
+<a class="jxr_linenumber" name="L99" href="#L99">99</a>  
+<a class="jxr_linenumber" name="L100" href="#L100">100</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Map&lt;String,Object&gt; eval(String js) {
+<a class="jxr_linenumber" name="L101" href="#L101">101</a> 		<strong class="jxr_keyword">return</strong> Map.of(<span class="jxr_string">"evaluate"</span>, js);
+<a class="jxr_linenumber" name="L102" href="#L102">102</a> 	}
+<a class="jxr_linenumber" name="L103" href="#L103">103</a> 
+<a class="jxr_linenumber" name="L104" href="#L104">104</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String js(String s) {
+<a class="jxr_linenumber" name="L105" href="#L105">105</a> 		<strong class="jxr_keyword">return</strong> <span class="jxr_string">"'"</span> + s.replace(<span class="jxr_string">"&#92;&#92;"</span>, <span class="jxr_string">"&#92;&#92;&#92;&#92;"</span>).replace(<span class="jxr_string">"'"</span>, <span class="jxr_string">"&#92;&#92;'"</span>) + <span class="jxr_string">"'"</span>;
+<a class="jxr_linenumber" name="L106" href="#L106">106</a> 	}
+<a class="jxr_linenumber" name="L107" href="#L107">107</a> 
+<a class="jxr_linenumber" name="L108" href="#L108">108</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String get(String path) <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L109" href="#L109">109</a> 		<strong class="jxr_keyword">return</strong> HttpClient.newHttpClient().send(HttpRequest.newBuilder(URI.create(base + path)).header(<span class="jxr_string">"Accept"</span>, <span class="jxr_string">"application/json"</span>).GET().build(), BodyHandlers.ofString()).body();
+<a class="jxr_linenumber" name="L110" href="#L110">110</a> 	}
+<a class="jxr_linenumber" name="L111" href="#L111">111</a> 
+<a class="jxr_linenumber" name="L112" href="#L112">112</a> 	<em class="jxr_javadoccomment">/** The steps that wait for the treemap to draw and install the page helper. */</em>
+<a class="jxr_linenumber" name="L113" href="#L113">113</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> List&lt;Map&lt;String,Object&gt;&gt; open() {
+<a class="jxr_linenumber" name="L114" href="#L114">114</a> 		<strong class="jxr_keyword">return</strong> List.of(wait(DRAWN), eval(TM), wait(READY), eval(RECORD));
+<a class="jxr_linenumber" name="L115" href="#L115">115</a> 	}
+<a class="jxr_linenumber" name="L116" href="#L116">116</a> 
+<a class="jxr_linenumber" name="L117" href="#L117">117</a> 	@SafeVarargs
+<a class="jxr_linenumber" name="L118" href="#L118">118</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> List&lt;Map&lt;String,Object&gt;&gt; then(List&lt;Map&lt;String,Object&gt;&gt; first, Map&lt;String,Object&gt;...more) {
+<a class="jxr_linenumber" name="L119" href="#L119">119</a> 		<strong class="jxr_keyword">var</strong> l = <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;(first);
+<a class="jxr_linenumber" name="L120" href="#L120">120</a> 		l.addAll(Arrays.asList(more));
+<a class="jxr_linenumber" name="L121" href="#L121">121</a> 		<strong class="jxr_keyword">return</strong> l;
+<a class="jxr_linenumber" name="L122" href="#L122">122</a> 	}
+<a class="jxr_linenumber" name="L123" href="#L123">123</a> 
+<a class="jxr_linenumber" name="L124" href="#L124">124</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Map&lt;String,Object&gt; pick(String name, List&lt;Map&lt;String,Object&gt;&gt; steps, Map&lt;String,String&gt; queries) {
+<a class="jxr_linenumber" name="L125" href="#L125">125</a> 		<strong class="jxr_keyword">return</strong> pick(name, <span class="jxr_string">"/console/store"</span>, steps, queries);
+<a class="jxr_linenumber" name="L126" href="#L126">126</a> 	}
+<a class="jxr_linenumber" name="L127" href="#L127">127</a> 
+<a class="jxr_linenumber" name="L128" href="#L128">128</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Map&lt;String,Object&gt; pick(String name, String path, List&lt;Map&lt;String,Object&gt;&gt; steps, Map&lt;String,String&gt; queries) {
+<a class="jxr_linenumber" name="L129" href="#L129">129</a> 		<strong class="jxr_keyword">return</strong> Map.of(<span class="jxr_string">"name"</span>, name, <span class="jxr_string">"path"</span>, path, <span class="jxr_string">"actions"</span>, steps, <span class="jxr_string">"queries"</span>, queries);
+<a class="jxr_linenumber" name="L130" href="#L130">130</a> 	}
+<a class="jxr_linenumber" name="L131" href="#L131">131</a> 
+<a class="jxr_linenumber" name="L132" href="#L132">132</a> 	<em class="jxr_javadoccomment">/** Edits the target pet's species through its tile, then waits for the redrawn tree to show it under {@code species}. */</em>
+<a class="jxr_linenumber" name="L133" href="#L133">133</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Map&lt;String,Object&gt; save(String name, String path, String species) {
+<a class="jxr_linenumber" name="L134" href="#L134">134</a> 		<strong class="jxr_keyword">var</strong> n = js(target.getString(<span class="jxr_string">"name"</span>));
+<a class="jxr_linenumber" name="L135" href="#L135">135</a> 		<strong class="jxr_keyword">return</strong> pick(name, path, then(open(),
+<a class="jxr_linenumber" name="L136" href="#L136">136</a> 			eval(<span class="jxr_string">"window.__tm.clickLeaf("</span> + n + <span class="jxr_string">")"</span>),
+<a class="jxr_linenumber" name="L137" href="#L137">137</a> 			wait(<span class="jxr_string">"document.querySelector('"</span> + NAME + <span class="jxr_string">"')?.value"</span>),
+<a class="jxr_linenumber" name="L138" href="#L138">138</a> 			eval(<span class="jxr_string">"(() =&gt; { const s = document.querySelector('"</span> + DLG + <span class="jxr_string">" [data-juneau-form-field=species]'); s.value = '"</span> + species + <span class="jxr_string">"'; s.dispatchEvent(new Event('change', {bubbles: true})); })()"</span>),
+<a class="jxr_linenumber" name="L139" href="#L139">139</a> 			Map.of(<span class="jxr_string">"click"</span>, CONFIRM),
+<a class="jxr_linenumber" name="L140" href="#L140">140</a> 			wait(<span class="jxr_string">"(window.__writes || []).some(w =&gt; w.method === 'PUT')"</span>),
+<a class="jxr_linenumber" name="L141" href="#L141">141</a> 			wait(<span class="jxr_string">"document.querySelectorAll('"</span> + DLG + <span class="jxr_string">"').length === 0"</span>),
+<a class="jxr_linenumber" name="L142" href="#L142">142</a> 			wait(<span class="jxr_string">"(() =&gt; { try { return window.__tm.speciesOf("</span> + n + <span class="jxr_string">") === '"</span> + species + <span class="jxr_string">"'; } catch (e) { return false; } })()"</span>)), Map.of(
+<a class="jxr_linenumber" name="L143" href="#L143">143</a> 			<span class="jxr_string">"writes"</span>, <span class="jxr_string">"window.__writes"</span>,
+<a class="jxr_linenumber" name="L144" href="#L144">144</a> 			<span class="jxr_string">"dialogs"</span>, <span class="jxr_string">"document.querySelectorAll('"</span> + DLG + <span class="jxr_string">"').length"</span>,
+<a class="jxr_linenumber" name="L145" href="#L145">145</a> 			<span class="jxr_string">"backdrops"</span>, <span class="jxr_string">"document.querySelectorAll('dialog[open], .juneau-view-dialog-backdrop').length"</span>,
+<a class="jxr_linenumber" name="L146" href="#L146">146</a> 			<span class="jxr_string">"species"</span>, <span class="jxr_string">"window.__tm.speciesOf("</span> + n + <span class="jxr_string">")"</span>,
+<a class="jxr_linenumber" name="L147" href="#L147">147</a> 			<span class="jxr_string">"banner"</span>, <span class="jxr_string">"(document.querySelector('#pets-map [data-testid=chart-action-banner]') || {}).textContent || ''"</span>));
+<a class="jxr_linenumber" name="L148" href="#L148">148</a> 	}
+<a class="jxr_linenumber" name="L149" href="#L149">149</a> 
+<a class="jxr_linenumber" name="L150" href="#L150">150</a> 	@BeforeAll
+<a class="jxr_linenumber" name="L151" href="#L151">151</a> 	<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> probe() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L152" href="#L152">152</a> 		base = PetstoreTestServer.awaitReady(server);
+<a class="jxr_linenumber" name="L153" href="#L153">153</a> 		pets = <strong class="jxr_keyword">new</strong> JsonList(get(<span class="jxr_string">"/console/store/stats/pets"</span>));
+<a class="jxr_linenumber" name="L154" href="#L154">154</a> 		<strong class="jxr_keyword">var</strong> names = <strong class="jxr_keyword">new</strong> HashMap&lt;String,Integer&gt;();
+<a class="jxr_linenumber" name="L155" href="#L155">155</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> p : pets.elements(JsonMap.<strong class="jxr_keyword">class</strong>))
+<a class="jxr_linenumber" name="L156" href="#L156">156</a> 			names.merge(p.getString(<span class="jxr_string">"name"</span>), 1, Integer::sum);
+<a class="jxr_linenumber" name="L157" href="#L157">157</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> p : pets.elements(JsonMap.<strong class="jxr_keyword">class</strong>))
+<a class="jxr_linenumber" name="L158" href="#L158">158</a> 			<strong class="jxr_keyword">if</strong> (target == <strong class="jxr_keyword">null</strong> &amp;&amp; names.get(p.getString(<span class="jxr_string">"name"</span>)) == 1 &amp;&amp; <span class="jxr_string">"AVAILABLE"</span>.equals(p.getString(<span class="jxr_string">"status"</span>)))
+<a class="jxr_linenumber" name="L159" href="#L159">159</a> 				target = p;
+<a class="jxr_linenumber" name="L160" href="#L160">160</a> 		assertNotNull(target, <span class="jxr_string">"no uniquely named available pet"</span>);
+<a class="jxr_linenumber" name="L161" href="#L161">161</a> 		<strong class="jxr_keyword">var</strong> from = target.getString(<span class="jxr_string">"species"</span>);
+<a class="jxr_linenumber" name="L162" href="#L162">162</a> 		moveTo = <span class="jxr_string">"FISH"</span>.equals(from) ? <span class="jxr_string">"BIRD"</span> : <span class="jxr_string">"FISH"</span>;
+<a class="jxr_linenumber" name="L163" href="#L163">163</a> 		<strong class="jxr_keyword">var</strong> n = js(target.getString(<span class="jxr_string">"name"</span>));
+<a class="jxr_linenumber" name="L164" href="#L164">164</a> 
+<a class="jxr_linenumber" name="L165" href="#L165">165</a> 		report = run(<span class="jxr_string">"treemap"</span>, base, List.of(
+<a class="jxr_linenumber" name="L166" href="#L166">166</a> 			pick(<span class="jxr_string">"render"</span>, open(), Map.of(
+<a class="jxr_linenumber" name="L167" href="#L167">167</a> 				<span class="jxr_string">"leaves"</span>, <span class="jxr_string">"window.__tm.leaves()"</span>,
+<a class="jxr_linenumber" name="L168" href="#L168">168</a> 				<span class="jxr_string">"groups"</span>, <span class="jxr_string">"window.__tm.groups()"</span>,
+<a class="jxr_linenumber" name="L169" href="#L169">169</a> 				<span class="jxr_string">"placed"</span>, <span class="jxr_string">"window.__tm.placed()"</span>,
+<a class="jxr_linenumber" name="L170" href="#L170">170</a> 				<span class="jxr_string">"live"</span>, <span class="jxr_string">"window.JuneauConsole.charts.__liveCount()"</span>)),
+<a class="jxr_linenumber" name="L171" href="#L171">171</a> 			pick(<span class="jxr_string">"open"</span>, then(open(),
+<a class="jxr_linenumber" name="L172" href="#L172">172</a> 				eval(<span class="jxr_string">"window.__tm.clickLeaf("</span> + n + <span class="jxr_string">")"</span>),
+<a class="jxr_linenumber" name="L173" href="#L173">173</a> 				wait(<span class="jxr_string">"document.querySelector('"</span> + NAME + <span class="jxr_string">"')?.value"</span>)), Map.of(
+<a class="jxr_linenumber" name="L174" href="#L174">174</a> 				<span class="jxr_string">"dialog"</span>, <span class="jxr_string">"document.querySelector('"</span> + DLG + <span class="jxr_string">"').textContent"</span>,
+<a class="jxr_linenumber" name="L175" href="#L175">175</a> 				<span class="jxr_string">"nameValue"</span>, <span class="jxr_string">"document.querySelector('"</span> + NAME + <span class="jxr_string">"').value"</span>,
+<a class="jxr_linenumber" name="L176" href="#L176">176</a> 				<span class="jxr_string">"speciesValue"</span>, <span class="jxr_string">"document.querySelector('"</span> + DLG + <span class="jxr_string">" [data-juneau-form-field=species]').value"</span>,
+<a class="jxr_linenumber" name="L177" href="#L177">177</a> 				<span class="jxr_string">"writes"</span>, <span class="jxr_string">"window.__writes"</span>)),
+<a class="jxr_linenumber" name="L178" href="#L178">178</a> 			save(<span class="jxr_string">"save"</span>, <span class="jxr_string">"/console/store"</span>, moveTo),
+<a class="jxr_linenumber" name="L179" href="#L179">179</a> 			save(<span class="jxr_string">"saveBuilder"</span>, <span class="jxr_string">"/console/store?builder"</span>, from),
+<a class="jxr_linenumber" name="L180" href="#L180">180</a> 			pick(<span class="jxr_string">"group"</span>, then(open(),
+<a class="jxr_linenumber" name="L181" href="#L181">181</a> 				eval(<span class="jxr_string">"window.__clicks = []; window.__groupHits = 0;"</span>
+<a class="jxr_linenumber" name="L182" href="#L182">182</a> 					+ <span class="jxr_string">" window.JuneauViews.bus.subscribe('pets-map.click', function (v) { window.__clicks.push(v); }, { retained: false });"</span>
+<a class="jxr_linenumber" name="L183" href="#L183">183</a> 					+ <span class="jxr_string">" window.JuneauConsole.cardApi('pets-map').chart().on('click', function (p) { if (p.data &amp;&amp; p.data.children &amp;&amp; p.data.children.length) window.__groupHits++; });"</span>),
+<a class="jxr_linenumber" name="L184" href="#L184">184</a> 				eval(<span class="jxr_string">"window.__tm.clickGroup("</span> + js(from) + <span class="jxr_string">")"</span>),
+<a class="jxr_linenumber" name="L185" href="#L185">185</a> 				wait(<span class="jxr_string">"window.__groupHits &gt;= 1"</span>),
+<a class="jxr_linenumber" name="L186" href="#L186">186</a> 				eval(<span class="jxr_string">"new Promise(r =&gt; setTimeout(r, 800))"</span>)), Map.of(
+<a class="jxr_linenumber" name="L187" href="#L187">187</a> 				<span class="jxr_string">"dialogs"</span>, <span class="jxr_string">"document.querySelectorAll('"</span> + DLG + <span class="jxr_string">"').length"</span>,
+<a class="jxr_linenumber" name="L188" href="#L188">188</a> 				<span class="jxr_string">"writes"</span>, <span class="jxr_string">"window.__writes"</span>,
+<a class="jxr_linenumber" name="L189" href="#L189">189</a> 				<span class="jxr_string">"hits"</span>, <span class="jxr_string">"window.__groupHits"</span>,
+<a class="jxr_linenumber" name="L190" href="#L190">190</a> 				<span class="jxr_string">"clicks"</span>, <span class="jxr_string">"window.__clicks"</span>,
+<a class="jxr_linenumber" name="L191" href="#L191">191</a> 				<span class="jxr_string">"banner"</span>, <span class="jxr_string">"(document.querySelector('#pets-map [data-testid=chart-action-banner]') || {}).textContent || ''"</span>)),
+<a class="jxr_linenumber" name="L192" href="#L192">192</a> 			pick(<span class="jxr_string">"key"</span>, then(open(),
+<a class="jxr_linenumber" name="L193" href="#L193">193</a> 				eval(<span class="jxr_string">"window.__first = window.__tm.leaves()[0]"</span>),
+<a class="jxr_linenumber" name="L194" href="#L194">194</a> 				Map.of(<span class="jxr_string">"press"</span>, List.of(<span class="jxr_string">"#pets-map .jc-chart-plot"</span>, <span class="jxr_string">"ArrowRight"</span>)),
+<a class="jxr_linenumber" name="L195" href="#L195">195</a> 				Map.of(<span class="jxr_string">"press"</span>, List.of(<span class="jxr_string">"#pets-map .jc-chart-plot"</span>, <span class="jxr_string">"Enter"</span>)),
+<a class="jxr_linenumber" name="L196" href="#L196">196</a> 				wait(<span class="jxr_string">"document.querySelector('"</span> + NAME + <span class="jxr_string">"')?.value"</span>)), Map.of(
+<a class="jxr_linenumber" name="L197" href="#L197">197</a> 				<span class="jxr_string">"first"</span>, <span class="jxr_string">"window.__first"</span>,
+<a class="jxr_linenumber" name="L198" href="#L198">198</a> 				<span class="jxr_string">"nameValue"</span>, <span class="jxr_string">"document.querySelector('"</span> + NAME + <span class="jxr_string">"').value"</span>,
+<a class="jxr_linenumber" name="L199" href="#L199">199</a> 				<span class="jxr_string">"dialog"</span>, <span class="jxr_string">"document.querySelector('"</span> + DLG + <span class="jxr_string">"').textContent"</span>))));
+<a class="jxr_linenumber" name="L200" href="#L200">200</a> 	}
+<a class="jxr_linenumber" name="L201" href="#L201">201</a> 
+<a class="jxr_linenumber" name="L202" href="#L202">202</a> 	@Test <strong class="jxr_keyword">void</strong> a01_storePage_rendersPetsTreemap_groupedBySpeciesThenStatus() {
+<a class="jxr_linenumber" name="L203" href="#L203">203</a> 		<strong class="jxr_keyword">var</strong> c = assertClean(report, <span class="jxr_string">"render"</span>);
+<a class="jxr_linenumber" name="L204" href="#L204">204</a> 		<strong class="jxr_keyword">var</strong> leaves = <strong class="jxr_keyword">new</strong> TreeSet&lt;String&gt;();
+<a class="jxr_linenumber" name="L205" href="#L205">205</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> p : pets.elements(JsonMap.<strong class="jxr_keyword">class</strong>))
+<a class="jxr_linenumber" name="L206" href="#L206">206</a> 			leaves.add(p.getString(<span class="jxr_string">"name"</span>));
+<a class="jxr_linenumber" name="L207" href="#L207">207</a> 		assertEquals(leaves, <strong class="jxr_keyword">new</strong> TreeSet&lt;&gt;(asStrings(query(c, <span class="jxr_string">"leaves"</span>))));
+<a class="jxr_linenumber" name="L208" href="#L208">208</a> 		@SuppressWarnings(<span class="jxr_string">"unchecked"</span>) <em class="jxr_comment">// placed is a JSON array of {name, status, species}.</em>
+<a class="jxr_linenumber" name="L209" href="#L209">209</a> 		<strong class="jxr_keyword">var</strong> placed = (List&lt;Map&lt;String,Object&gt;&gt;)query(c, <span class="jxr_string">"placed"</span>);
+<a class="jxr_linenumber" name="L210" href="#L210">210</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> p : pets.elements(JsonMap.<strong class="jxr_keyword">class</strong>))
+<a class="jxr_linenumber" name="L211" href="#L211">211</a> 			assertTrue(placed.stream().anyMatch(x -&gt; p.getString(<span class="jxr_string">"name"</span>).equals(x.get(<span class="jxr_string">"name"</span>))
+<a class="jxr_linenumber" name="L212" href="#L212">212</a> 				&amp;&amp; p.getString(<span class="jxr_string">"status"</span>).equals(x.get(<span class="jxr_string">"status"</span>)) &amp;&amp; p.getString(<span class="jxr_string">"species"</span>).equals(x.get(<span class="jxr_string">"species"</span>))),
+<a class="jxr_linenumber" name="L213" href="#L213">213</a> 				() -&gt; <span class="jxr_string">"pet "</span> + p.getString(<span class="jxr_string">"name"</span>) + <span class="jxr_string">" is not under status "</span> + p.getString(<span class="jxr_string">"status"</span>) + <span class="jxr_string">" under species "</span> + p.getString(<span class="jxr_string">"species"</span>) + <span class="jxr_string">": "</span> + placed);
+<a class="jxr_linenumber" name="L214" href="#L214">214</a> 		assertEquals(4, ((Number)query(c, <span class="jxr_string">"live"</span>)).intValue());
+<a class="jxr_linenumber" name="L215" href="#L215">215</a> 	}
+<a class="jxr_linenumber" name="L216" href="#L216">216</a> 
+<a class="jxr_linenumber" name="L217" href="#L217">217</a> 	@Test <strong class="jxr_keyword">void</strong> a02_clickPetTile_opensEditDialog_prefilledWithThatPet() {
+<a class="jxr_linenumber" name="L218" href="#L218">218</a> 		<strong class="jxr_keyword">var</strong> c = assertClean(report, <span class="jxr_string">"open"</span>);
+<a class="jxr_linenumber" name="L219" href="#L219">219</a> 		assertString(target.getString(<span class="jxr_string">"name"</span>), query(c, <span class="jxr_string">"nameValue"</span>));
+<a class="jxr_linenumber" name="L220" href="#L220">220</a> 		assertString(target.getString(<span class="jxr_string">"species"</span>), query(c, <span class="jxr_string">"speciesValue"</span>));
+<a class="jxr_linenumber" name="L221" href="#L221">221</a> 		assertContains(<span class="jxr_string">"Edit '"</span> + target.getString(<span class="jxr_string">"name"</span>) + <span class="jxr_string">"'"</span>, String.valueOf(query(c, <span class="jxr_string">"dialog"</span>)));
+<a class="jxr_linenumber" name="L222" href="#L222">222</a> 		assertEquals(List.of(), query(c, <span class="jxr_string">"writes"</span>));
+<a class="jxr_linenumber" name="L223" href="#L223">223</a> 	}
+<a class="jxr_linenumber" name="L224" href="#L224">224</a> 
+<a class="jxr_linenumber" name="L225" href="#L225">225</a> 	@Test <strong class="jxr_keyword">void</strong> a03_submitEdit_putWithCsrf_dialogCloses_treemapRedrawsWithNewSpecies() {
+<a class="jxr_linenumber" name="L226" href="#L226">226</a> 		assertSaved(<span class="jxr_string">"save"</span>, moveTo);
+<a class="jxr_linenumber" name="L227" href="#L227">227</a> 	}
+<a class="jxr_linenumber" name="L228" href="#L228">228</a> 
+<a class="jxr_linenumber" name="L229" href="#L229">229</a> 	@Test <strong class="jxr_keyword">void</strong> a03b_builderPage_submitEdit_redrawsTheTreemapToo() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L230" href="#L230">230</a> 		assertSaved(<span class="jxr_string">"saveBuilder"</span>, target.getString(<span class="jxr_string">"species"</span>));
+<a class="jxr_linenumber" name="L231" href="#L231">231</a> 		assertEquals(target.getString(<span class="jxr_string">"species"</span>), <strong class="jxr_keyword">new</strong> JsonMap(get(<span class="jxr_string">"/petstore/pets/"</span> + target.getLong(<span class="jxr_string">"id"</span>))).getString(<span class="jxr_string">"species"</span>));
+<a class="jxr_linenumber" name="L232" href="#L232">232</a> 	}
+<a class="jxr_linenumber" name="L233" href="#L233">233</a> 
+<a class="jxr_linenumber" name="L234" href="#L234">234</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> assertSaved(String name, String species) {
+<a class="jxr_linenumber" name="L235" href="#L235">235</a> 		<strong class="jxr_keyword">var</strong> c = assertClean(report, name);
+<a class="jxr_linenumber" name="L236" href="#L236">236</a> 		@SuppressWarnings(<span class="jxr_string">"unchecked"</span>) <em class="jxr_comment">// writes is a JSON array of {url, method, status, csrf, body}.</em>
+<a class="jxr_linenumber" name="L237" href="#L237">237</a> 		<strong class="jxr_keyword">var</strong> w = (List&lt;Map&lt;String,Object&gt;&gt;)query(c, <span class="jxr_string">"writes"</span>);
+<a class="jxr_linenumber" name="L238" href="#L238">238</a> 		assertSize(1, w);
+<a class="jxr_linenumber" name="L239" href="#L239">239</a> 		assertString(<span class="jxr_string">"PUT"</span>, w.get(0).get(<span class="jxr_string">"method"</span>));
+<a class="jxr_linenumber" name="L240" href="#L240">240</a> 		assertContains(<span class="jxr_string">"/console/pets/"</span> + target.getLong(<span class="jxr_string">"id"</span>), String.valueOf(w.get(0).get(<span class="jxr_string">"url"</span>)));
+<a class="jxr_linenumber" name="L241" href="#L241">241</a> 		assertEquals(200, ((Number)w.get(0).get(<span class="jxr_string">"status"</span>)).intValue(), String.valueOf(w.get(0)));
+<a class="jxr_linenumber" name="L242" href="#L242">242</a> 		assertNotNull(w.get(0).get(<span class="jxr_string">"csrf"</span>), <span class="jxr_string">"the PUT carried no CSRF token"</span>);
+<a class="jxr_linenumber" name="L243" href="#L243">243</a> 		assertFalse(String.valueOf(w.get(0).get(<span class="jxr_string">"csrf"</span>)).isBlank());
+<a class="jxr_linenumber" name="L244" href="#L244">244</a> 		assertContains(<span class="jxr_string">"\&quot;"</span> + species + <span class="jxr_string">"\&quot;"</span>, String.valueOf(w.get(0).get(<span class="jxr_string">"body"</span>)));
+<a class="jxr_linenumber" name="L245" href="#L245">245</a> 		assertEquals(0, ((Number)query(c, <span class="jxr_string">"dialogs"</span>)).intValue());
+<a class="jxr_linenumber" name="L246" href="#L246">246</a> 		assertEquals(0, ((Number)query(c, <span class="jxr_string">"backdrops"</span>)).intValue());
+<a class="jxr_linenumber" name="L247" href="#L247">247</a> 		assertContains(<span class="jxr_string">"Saved '"</span> + target.getString(<span class="jxr_string">"name"</span>) + <span class="jxr_string">"'"</span>, String.valueOf(query(c, <span class="jxr_string">"banner"</span>)));
+<a class="jxr_linenumber" name="L248" href="#L248">248</a> 		assertString(species, query(c, <span class="jxr_string">"species"</span>));
+<a class="jxr_linenumber" name="L249" href="#L249">249</a> 	}
+<a class="jxr_linenumber" name="L250" href="#L250">250</a> 
+<a class="jxr_linenumber" name="L251" href="#L251">251</a> 	@Test <strong class="jxr_keyword">void</strong> a04_clickGroupTile_doesNotOpenDialog() {
+<a class="jxr_linenumber" name="L252" href="#L252">252</a> 		<strong class="jxr_keyword">var</strong> c = assertClean(report, <span class="jxr_string">"group"</span>);
+<a class="jxr_linenumber" name="L253" href="#L253">253</a> 		assertEquals(0, ((Number)query(c, <span class="jxr_string">"dialogs"</span>)).intValue());
+<a class="jxr_linenumber" name="L254" href="#L254">254</a> 		assertEquals(List.of(), query(c, <span class="jxr_string">"writes"</span>));
+<a class="jxr_linenumber" name="L255" href="#L255">255</a> 		assertTrue(((Number)query(c, <span class="jxr_string">"hits"</span>)).intValue() &gt;= 1, <span class="jxr_string">"the group click never reached the chart"</span>);
+<a class="jxr_linenumber" name="L256" href="#L256">256</a> 		assertEquals(List.of(), query(c, <span class="jxr_string">"clicks"</span>));
+<a class="jxr_linenumber" name="L257" href="#L257">257</a> 		assertEquals(<span class="jxr_string">""</span>, String.valueOf(query(c, <span class="jxr_string">"banner"</span>)));
+<a class="jxr_linenumber" name="L258" href="#L258">258</a> 	}
+<a class="jxr_linenumber" name="L259" href="#L259">259</a> 
+<a class="jxr_linenumber" name="L260" href="#L260">260</a> 	@Test <strong class="jxr_keyword">void</strong> a05_keyboardEnterOnLeaf_opensSameDialog() {
+<a class="jxr_linenumber" name="L261" href="#L261">261</a> 		<strong class="jxr_keyword">var</strong> c = assertClean(report, <span class="jxr_string">"key"</span>);
+<a class="jxr_linenumber" name="L262" href="#L262">262</a> 		assertString(String.valueOf(query(c, <span class="jxr_string">"first"</span>)), query(c, <span class="jxr_string">"nameValue"</span>));
+<a class="jxr_linenumber" name="L263" href="#L263">263</a> 		assertContains(<span class="jxr_string">"Edit '"</span> + query(c, <span class="jxr_string">"first"</span>) + <span class="jxr_string">"'"</span>, String.valueOf(query(c, <span class="jxr_string">"dialog"</span>)));
+<a class="jxr_linenumber" name="L264" href="#L264">264</a> 	}
+<a class="jxr_linenumber" name="L265" href="#L265">265</a> 
+<a class="jxr_linenumber" name="L266" href="#L266">266</a> 	@SuppressWarnings(<span class="jxr_string">"unchecked"</span>) <em class="jxr_comment">// a JSON array of strings.</em>
+<a class="jxr_linenumber" name="L267" href="#L267">267</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> List&lt;String&gt; asStrings(Object o) {
+<a class="jxr_linenumber" name="L268" href="#L268">268</a> 		<strong class="jxr_keyword">return</strong> (List&lt;String&gt;)o;
+<a class="jxr_linenumber" name="L269" href="#L269">269</a> 	}
+<a class="jxr_linenumber" name="L270" href="#L270">270</a> }
+</pre>
+<hr/>
+<div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>
+</body>
+</html>

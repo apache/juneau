@@ -73,11 +73,17 @@ loadScripts(document, 'script');</script>
 <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/annotation/Retention.html" title="class or interface in java.lang.annotation" class="external-link">@Retention</a>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/annotation/RetentionPolicy.html#RUNTIME" title="class or interface in java.lang.annotation" class="external-link">RUNTIME</a>)
 <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/annotation/Inherited.html" title="class or interface in java.lang.annotation" class="external-link">@Inherited</a>
 <a href="../ContextApply.html" title="annotation interface in org.apache.juneau.marshall">@ContextApply</a>({<a href="TomlConfigAnnotation.SerializerApply.html" title="class in org.apache.juneau.marshall.toml">SerializerApply.class</a>,<a href="TomlConfigAnnotation.ParserApply.html" title="class in org.apache.juneau.marshall.toml">ParserApply.class</a>})
-</span><span class="modifiers">public @interface </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/toml/TomlConfig.html#line-32">TomlConfig</a></span></div>
+</span><span class="modifiers">public @interface </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/toml/TomlConfig.html#line-38">TomlConfig</a></span></div>
 <div class="block">Annotation for specifying config properties defined in <a href="TomlSerializer.html" title="class in org.apache.juneau.marshall.toml"><code>TomlSerializer</code></a> and <a href="TomlParser.html" title="class in org.apache.juneau.marshall.toml"><code>TomlParser</code></a>.
 
  <p>
- Used primarily for specifying bean configuration properties on REST classes and methods.</div>
+ Used primarily for specifying bean configuration properties on REST classes and methods.
+
+ <h5 class='section'>Example:</h5>
+ <p class='bjava'>
+   <ja>@TomlConfig</ja>(sortKeys=<js>"true"</js>, inlineTableThreshold=<js>"5"</js>, nullValue=<js>"~"</js>)
+   <jk>public class</jk> MyRestClass {}
+ </p></div>
 </section>
 <section class="summary">
 <ul class="summary-list">
@@ -90,10 +96,30 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Optional Element</div>
 <div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second even-row-color"><code><a href="#inlineTableThreshold()" class="member-name-link">inlineTableThreshold</a></code></div>
+<div class="col-last even-row-color">
+<div class="block">Maximum number of properties for a table to be written in inline-table format.</div>
+</div>
+<div class="col-first odd-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second odd-row-color"><code><a href="#nullValue()" class="member-name-link">nullValue</a></code></div>
+<div class="col-last odd-row-color">
+<div class="block">String written for null values; the parser treats values matching this string as null.</div>
+</div>
 <div class="col-first even-row-color"><code>int</code></div>
 <div class="col-second even-row-color"><code><a href="#rank()" class="member-name-link">rank</a></code></div>
 <div class="col-last even-row-color">
 <div class="block">Optional rank for this config.</div>
+</div>
+<div class="col-first odd-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second odd-row-color"><code><a href="#sortKeys()" class="member-name-link">sortKeys</a></code></div>
+<div class="col-last odd-row-color">
+<div class="block">Sort keys alphabetically in output.</div>
+</div>
+<div class="col-first even-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second even-row-color"><code><a href="#useInlineTables()" class="member-name-link">useInlineTables</a></code></div>
+<div class="col-last even-row-color">
+<div class="block">Use inline tables when possible.</div>
 </div>
 </div>
 </section>
@@ -108,9 +134,123 @@ loadScripts(document, 'script');</script>
 <h2>Element Details</h2>
 <ul class="member-list">
 <li>
+<section class="detail" id="nullValue()">
+<h3>nullValue</h3>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/toml/TomlConfig.html#line-63">nullValue</a></span></div>
+<div class="block">String written for null values; the parser treats values matching this string as null.
+
+ <p>
+ An empty value (the default) leaves the builder default of <js>"&lt;NULL&gt;"</js> in place.
+ Applied to both <a href="TomlSerializer.html" title="class in org.apache.juneau.marshall.toml"><code>TomlSerializer</code></a> and <a href="TomlParser.html" title="class in org.apache.juneau.marshall.toml"><code>TomlParser</code></a>.
+
+ <h5 class='section'>Notes:</h5><ul>
+   <li class='note'>
+      Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
+ </ul>
+
+ <h5 class='section'>See Also:</h5><ul>
+   <li class='jm'><a href="TomlSerializer.Builder.html#nullValue(java.lang.String)"><code>TomlSerializer.Builder.nullValue(String)</code></a>
+   <li class='jm'><a href="TomlParser.Builder.html#nullValue(java.lang.String)"><code>TomlParser.Builder.nullValue(String)</code></a>
+ </ul></div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>The annotation value.</dd>
+</dl>
+<dl class="notes">
+<dt>Default:</dt>
+<dd>""</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="inlineTableThreshold()">
+<h3>inlineTableThreshold</h3>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/toml/TomlConfig.html#line-82">inlineTableThreshold</a></span></div>
+<div class="block">Maximum number of properties for a table to be written in inline-table format.
+
+ <p>
+ An empty value (the default) leaves the builder default in place.
+
+ <h5 class='section'>Notes:</h5><ul>
+   <li class='note'>
+      Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
+ </ul>
+
+ <h5 class='section'>See Also:</h5><ul>
+   <li class='jm'><a href="TomlSerializer.Builder.html#inlineTableThreshold(int)"><code>TomlSerializer.Builder.inlineTableThreshold(int)</code></a>
+ </ul></div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>The annotation value.</dd>
+</dl>
+<dl class="notes">
+<dt>Default:</dt>
+<dd>""</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="useInlineTables()">
+<h3>useInlineTables</h3>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/toml/TomlConfig.html#line-103">useInlineTables</a></span></div>
+<div class="block">Use inline tables when possible.
+
+ <ul class='values'>
+   <li><js>"true"</js>
+   <li><js>"false"</js>
+ </ul>
+
+ <h5 class='section'>Notes:</h5><ul>
+   <li class='note'>
+      Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
+ </ul>
+
+ <h5 class='section'>See Also:</h5><ul>
+   <li class='jm'><a href="TomlSerializer.Builder.html#useInlineTables(boolean)"><code>TomlSerializer.Builder.useInlineTables(boolean)</code></a>
+ </ul></div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>The annotation value.</dd>
+</dl>
+<dl class="notes">
+<dt>Default:</dt>
+<dd>""</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="sortKeys()">
+<h3>sortKeys</h3>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/toml/TomlConfig.html#line-124">sortKeys</a></span></div>
+<div class="block">Sort keys alphabetically in output.
+
+ <ul class='values'>
+   <li><js>"true"</js>
+   <li><js>"false"</js>
+ </ul>
+
+ <h5 class='section'>Notes:</h5><ul>
+   <li class='note'>
+      Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
+ </ul>
+
+ <h5 class='section'>See Also:</h5><ul>
+   <li class='jm'><a href="TomlSerializer.Builder.html#sortKeys(boolean)"><code>TomlSerializer.Builder.sortKeys(boolean)</code></a>
+ </ul></div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>The annotation value.</dd>
+</dl>
+<dl class="notes">
+<dt>Default:</dt>
+<dd>""</dd>
+</dl>
+</section>
+</li>
+<li>
 <section class="detail" id="rank()">
 <h3>rank</h3>
-<div class="member-signature"><span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/toml/TomlConfig.html#line-46">rank</a></span></div>
+<div class="member-signature"><span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/toml/TomlConfig.html#line-134">rank</a></span></div>
 <div class="block">Optional rank for this config.
 
  <p>

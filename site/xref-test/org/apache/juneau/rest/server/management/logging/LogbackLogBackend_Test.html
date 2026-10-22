@@ -93,12 +93,32 @@
 <a class="jxr_linenumber" name="L85" href="#L85">85</a>  	}
 <a class="jxr_linenumber" name="L86" href="#L86">86</a>  
 <a class="jxr_linenumber" name="L87" href="#L87">87</a>  	@Test
-<a class="jxr_linenumber" name="L88" href="#L88">88</a>  	@SuppressWarnings(<span class="jxr_string">"java:S1612"</span>) <em class="jxr_comment">// LogbackLogBackend::new is ambiguous here: it matches both assertDoesNotThrow(Executable) and assertDoesNotThrow(ThrowingSupplier&lt;T&gt;), unlike the equivalent lambda.</em>
-<a class="jxr_linenumber" name="L89" href="#L89">89</a>  	<strong class="jxr_keyword">void</strong> a09_defaultCtorRequiresLogbackBinding() {
-<a class="jxr_linenumber" name="L90" href="#L90">90</a>  		<em class="jxr_comment">// The test classpath binds SLF4J to Logback, so the no-arg ctor resolves the bound context.</em>
-<a class="jxr_linenumber" name="L91" href="#L91">91</a>  		assertDoesNotThrow(() -&gt; <strong class="jxr_keyword">new</strong> LogbackLogBackend());
-<a class="jxr_linenumber" name="L92" href="#L92">92</a>  	}
-<a class="jxr_linenumber" name="L93" href="#L93">93</a>  }
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>  	@SuppressWarnings({
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>  		<span class="jxr_string">"java:S1612"</span> <em class="jxr_comment">// LogbackLogBackend::new is ambiguous here: it matches both assertDoesNotThrow(Executable) and assertDoesNotThrow(ThrowingSupplier&lt;T&gt;), unlike the equivalent lambda.</em>
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>  	})
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>  	<strong class="jxr_keyword">void</strong> a09_defaultCtorRequiresLogbackBinding() {
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>  		<em class="jxr_comment">// The test classpath binds SLF4J to Logback, so the no-arg ctor resolves the bound context.</em>
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>  		assertDoesNotThrow(() -&gt; <strong class="jxr_keyword">new</strong> LogbackLogBackend());
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>  	}
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>  
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>  	@Test <strong class="jxr_keyword">void</strong> b01_nullNameAddressesRoot() {
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>  		backend.setLevel(<strong class="jxr_keyword">null</strong>, <span class="jxr_string">"WARN"</span>);
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>  		assertEquals(<span class="jxr_string">"WARN"</span>, backend.getLevel(<strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L99" href="#L99">99</a>  		assertEquals(<span class="jxr_string">"WARN"</span>, backend.getLevel(<span class="jxr_string">"ROOT"</span>));
+<a class="jxr_linenumber" name="L100" href="#L100">100</a> 		assertEquals(<span class="jxr_string">"WARN"</span>, backend.getLevels().get(<span class="jxr_string">"ROOT"</span>));
+<a class="jxr_linenumber" name="L101" href="#L101">101</a> 	}
+<a class="jxr_linenumber" name="L102" href="#L102">102</a> 
+<a class="jxr_linenumber" name="L103" href="#L103">103</a> 	@Test <strong class="jxr_keyword">void</strong> b02_inheritedLoggerListedAsEmpty() {
+<a class="jxr_linenumber" name="L104" href="#L104">104</a> 		backend.setLevel(LNAME, <span class="jxr_string">"DEBUG"</span>);
+<a class="jxr_linenumber" name="L105" href="#L105">105</a> 		backend.setLevel(LNAME, <strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L106" href="#L106">106</a> 		assertEquals(<span class="jxr_string">""</span>, backend.getLevels().get(LNAME));
+<a class="jxr_linenumber" name="L107" href="#L107">107</a> 	}
+<a class="jxr_linenumber" name="L108" href="#L108">108</a> 
+<a class="jxr_linenumber" name="L109" href="#L109">109</a> 	@Test <strong class="jxr_keyword">void</strong> b03_levelNameIsTrimmed() {
+<a class="jxr_linenumber" name="L110" href="#L110">110</a> 		backend.setLevel(LNAME, <span class="jxr_string">"  error "</span>);
+<a class="jxr_linenumber" name="L111" href="#L111">111</a> 		assertEquals(<span class="jxr_string">"ERROR"</span>, backend.getLevel(LNAME));
+<a class="jxr_linenumber" name="L112" href="#L112">112</a> 	}
+<a class="jxr_linenumber" name="L113" href="#L113">113</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

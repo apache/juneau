@@ -145,21 +145,29 @@ loadScripts(document, 'script');</script>
 <div class="col-last odd-row-color">
 <div class="block">SOAP/XML Marshalling Support</div>
 </div>
-<div class="col-first even-row-color"><a href="#org.apache.juneau.marshall.swap">org.apache.juneau.marshall.swap</a></div>
+<div class="col-first even-row-color"><a href="#org.apache.juneau.marshall.swap.spi">org.apache.juneau.marshall.swap.spi</a></div>
 <div class="col-last even-row-color">
 <div class="block">Swap API</div>
 </div>
-<div class="col-first odd-row-color"><a href="#org.apache.juneau.marshall.uon">org.apache.juneau.marshall.uon</a></div>
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.marshall.toml">org.apache.juneau.marshall.toml</a></div>
 <div class="col-last odd-row-color">
+<div class="block">TOML v1.0.0 serializer and parser for Apache Juneau.</div>
+</div>
+<div class="col-first even-row-color"><a href="#org.apache.juneau.marshall.uon">org.apache.juneau.marshall.uon</a></div>
+<div class="col-last even-row-color">
 <div class="block">UON Marshalling Support</div>
 </div>
-<div class="col-first even-row-color"><a href="#org.apache.juneau.marshall.urlencoding">org.apache.juneau.marshall.urlencoding</a></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.marshall.urlencoding">org.apache.juneau.marshall.urlencoding</a></div>
+<div class="col-last odd-row-color">
 <div class="block">URL-Encoding Marshalling Support</div>
 </div>
-<div class="col-first odd-row-color"><a href="#org.apache.juneau.marshall.xml">org.apache.juneau.marshall.xml</a></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><a href="#org.apache.juneau.marshall.xml">org.apache.juneau.marshall.xml</a></div>
+<div class="col-last even-row-color">
 <div class="block">XML Marshalling Support</div>
+</div>
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.marshall.yaml">org.apache.juneau.marshall.yaml</a></div>
+<div class="col-last odd-row-color">
+<div class="block">YAML Marshalling Support</div>
 </div>
 <div class="col-first even-row-color"><a href="#org.apache.juneau.rest.server.stats">org.apache.juneau.rest.server.stats</a></div>
 <div class="col-last even-row-color">
@@ -920,98 +928,92 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color">
 <div class="block">Interface class.</div>
 </div>
-<div class="col-first odd-row-color"><code>protected final boolean</code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">MarshallingContext.</span><code><a href="../../../marshall/MarshallingContext.html#isNotABean(org.apache.juneau.commons.reflect.ClassInfo)" class="member-name-link">isNotABean</a><wbr>(<a href="../ClassInfo.html" title="class in org.apache.juneau.commons.reflect">ClassInfo</a>&nbsp;ci)</code></div>
+<div class="col-first odd-row-color"><code><a href="../../../marshall/MarshallingContext.Builder.html" title="class in org.apache.juneau.marshall">MarshallingContext.Builder</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">MarshallingContext.Builder.</span><code><a href="../../../marshall/MarshallingContext.Builder.html#notBeanClasses(org.apache.juneau.commons.reflect.ClassInfo...)" class="member-name-link">notBeanClasses</a><wbr>(<a href="../ClassInfo.html" title="class in org.apache.juneau.commons.reflect">ClassInfo</a>...&nbsp;values)</code></div>
 <div class="col-last odd-row-color">
-<div class="block">Determines whether the specified class is ignored as a bean class based on the various exclusion parameters
- specified on this context class.</div>
-</div>
-<div class="col-first even-row-color"><code><a href="../../../marshall/MarshallingContext.Builder.html" title="class in org.apache.juneau.marshall">MarshallingContext.Builder</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">MarshallingContext.Builder.</span><code><a href="../../../marshall/MarshallingContext.Builder.html#notBeanClasses(org.apache.juneau.commons.reflect.ClassInfo...)" class="member-name-link">notBeanClasses</a><wbr>(<a href="../ClassInfo.html" title="class in org.apache.juneau.commons.reflect">ClassInfo</a>...&nbsp;values)</code></div>
-<div class="col-last even-row-color">
 <div class="block">Bean class exclusions.</div>
 </div>
-<div class="col-first odd-row-color"><code><a href="../../../marshall/BeanCtorApplyAnnotation.Builder.html" title="class in org.apache.juneau.marshall">BeanCtorApplyAnnotation.Builder</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">BeanCtorApplyAnnotation.Builder.</span><code><a href="../../../marshall/BeanCtorApplyAnnotation.Builder.html#on(org.apache.juneau.commons.reflect.ClassInfo...)" class="member-name-link">on</a><wbr>(<a href="../ClassInfo.html" title="class in org.apache.juneau.commons.reflect">ClassInfo</a>...&nbsp;value)</code></div>
-<div class="col-last odd-row-color">&nbsp;</div>
-<div class="col-first even-row-color"><code><a href="../../../marshall/BeanIgnoreApplyAnnotation.Builder.html" title="class in org.apache.juneau.marshall">BeanIgnoreApplyAnnotation.Builder</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">BeanIgnoreApplyAnnotation.Builder.</span><code><a href="../../../marshall/BeanIgnoreApplyAnnotation.Builder.html#on(org.apache.juneau.commons.reflect.ClassInfo...)" class="member-name-link">on</a><wbr>(<a href="../ClassInfo.html" title="class in org.apache.juneau.commons.reflect">ClassInfo</a>...&nbsp;value)</code></div>
-<div class="col-last even-row-color">&nbsp;</div>
-<div class="col-first odd-row-color"><code><a href="../../../marshall/BeanPropApplyAnnotation.Builder.html" title="class in org.apache.juneau.marshall">BeanPropApplyAnnotation.Builder</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">BeanPropApplyAnnotation.Builder.</span><code><a href="../../../marshall/BeanPropApplyAnnotation.Builder.html#on(org.apache.juneau.commons.reflect.ClassInfo...)" class="member-name-link">on</a><wbr>(<a href="../ClassInfo.html" title="class in org.apache.juneau.commons.reflect">ClassInfo</a>...&nbsp;value)</code></div>
-<div class="col-last odd-row-color">&nbsp;</div>
-<div class="col-first even-row-color"><code><a href="../../../marshall/BeanTypeApplyAnnotation.Builder.html" title="class in org.apache.juneau.marshall">BeanTypeApplyAnnotation.Builder</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">BeanTypeApplyAnnotation.Builder.</span><code><a href="../../../marshall/BeanTypeApplyAnnotation.Builder.html#on(org.apache.juneau.commons.reflect.ClassInfo...)" class="member-name-link">on</a><wbr>(<a href="../ClassInfo.html" title="class in org.apache.juneau.commons.reflect">ClassInfo</a>...&nbsp;value)</code></div>
-<div class="col-last even-row-color">&nbsp;</div>
-<div class="col-first odd-row-color"><code><a href="../../../marshall/ExampleApplyAnnotation.Builder.html" title="class in org.apache.juneau.marshall">ExampleApplyAnnotation.Builder</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">ExampleApplyAnnotation.Builder.</span><code><a href="../../../marshall/ExampleApplyAnnotation.Builder.html#on(org.apache.juneau.commons.reflect.ClassInfo...)" class="member-name-link">on</a><wbr>(<a href="../ClassInfo.html" title="class in org.apache.juneau.commons.reflect">ClassInfo</a>...&nbsp;value)</code></div>
-<div class="col-last odd-row-color">&nbsp;</div>
-<div class="col-first even-row-color"><code><a href="../../../marshall/MarshalledApplyAnnotation.Builder.html" title="class in org.apache.juneau.marshall">MarshalledApplyAnnotation.Builder</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">MarshalledApplyAnnotation.Builder.</span><code><a href="../../../marshall/MarshalledApplyAnnotation.Builder.html#on(org.apache.juneau.commons.reflect.ClassInfo...)" class="member-name-link">on</a><wbr>(<a href="../ClassInfo.html" title="class in org.apache.juneau.commons.reflect">ClassInfo</a>...&nbsp;value)</code></div>
-<div class="col-last even-row-color">&nbsp;</div>
-<div class="col-first odd-row-color"><code><a href="../../../marshall/MarshalledIgnoreApplyAnnotation.Builder.html" title="class in org.apache.juneau.marshall">MarshalledIgnoreApplyAnnotation.Builder</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">MarshalledIgnoreApplyAnnotation.Builder.</span><code><a href="../../../marshall/MarshalledIgnoreApplyAnnotation.Builder.html#on(org.apache.juneau.commons.reflect.ClassInfo...)" class="member-name-link">on</a><wbr>(<a href="../ClassInfo.html" title="class in org.apache.juneau.commons.reflect">ClassInfo</a>...&nbsp;value)</code></div>
-<div class="col-last odd-row-color">&nbsp;</div>
-<div class="col-first even-row-color"><code><a href="../../../marshall/MarshalledPropApplyAnnotation.Builder.html" title="class in org.apache.juneau.marshall">MarshalledPropApplyAnnotation.Builder</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">MarshalledPropApplyAnnotation.Builder.</span><code><a href="../../../marshall/MarshalledPropApplyAnnotation.Builder.html#on(org.apache.juneau.commons.reflect.ClassInfo...)" class="member-name-link">on</a><wbr>(<a href="../ClassInfo.html" title="class in org.apache.juneau.commons.reflect">ClassInfo</a>...&nbsp;value)</code></div>
-<div class="col-last even-row-color">&nbsp;</div>
-<div class="col-first odd-row-color"><code><a href="../../../marshall/SchemaApplyAnnotation.Builder.html" title="class in org.apache.juneau.marshall">SchemaApplyAnnotation.Builder</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">SchemaApplyAnnotation.Builder.</span><code><a href="../../../marshall/SchemaApplyAnnotation.Builder.html#on(org.apache.juneau.commons.reflect.ClassInfo...)" class="member-name-link">on</a><wbr>(<a href="../ClassInfo.html" title="class in org.apache.juneau.commons.reflect">ClassInfo</a>...&nbsp;value)</code></div>
-<div class="col-last odd-row-color">&nbsp;</div>
-<div class="col-first even-row-color"><code><a href="../../../marshall/SwapApplyAnnotation.Builder.html" title="class in org.apache.juneau.marshall">SwapApplyAnnotation.Builder</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">SwapApplyAnnotation.Builder.</span><code><a href="../../../marshall/SwapApplyAnnotation.Builder.html#on(org.apache.juneau.commons.reflect.ClassInfo...)" class="member-name-link">on</a><wbr>(<a href="../ClassInfo.html" title="class in org.apache.juneau.commons.reflect">ClassInfo</a>...&nbsp;value)</code></div>
-<div class="col-last even-row-color">&nbsp;</div>
-<div class="col-first odd-row-color"><code><a href="../../../marshall/UriApplyAnnotation.Builder.html" title="class in org.apache.juneau.marshall">UriApplyAnnotation.Builder</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">UriApplyAnnotation.Builder.</span><code><a href="../../../marshall/UriApplyAnnotation.Builder.html#on(org.apache.juneau.commons.reflect.ClassInfo...)" class="member-name-link">on</a><wbr>(<a href="../ClassInfo.html" title="class in org.apache.juneau.commons.reflect">ClassInfo</a>...&nbsp;value)</code></div>
-<div class="col-last odd-row-color">&nbsp;</div>
 <div class="col-first even-row-color"><code><a href="../../../marshall/BeanCtorApplyAnnotation.Builder.html" title="class in org.apache.juneau.marshall">BeanCtorApplyAnnotation.Builder</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">BeanCtorApplyAnnotation.Builder.</span><code><a href="../../../marshall/BeanCtorApplyAnnotation.Builder.html#onClass(org.apache.juneau.commons.reflect.ClassInfo...)" class="member-name-link">onClass</a><wbr>(<a href="../ClassInfo.html" title="class in org.apache.juneau.commons.reflect">ClassInfo</a>...&nbsp;value)</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">BeanCtorApplyAnnotation.Builder.</span><code><a href="../../../marshall/BeanCtorApplyAnnotation.Builder.html#on(org.apache.juneau.commons.reflect.ClassInfo...)" class="member-name-link">on</a><wbr>(<a href="../ClassInfo.html" title="class in org.apache.juneau.commons.reflect">ClassInfo</a>...&nbsp;value)</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
 <div class="col-first odd-row-color"><code><a href="../../../marshall/BeanIgnoreApplyAnnotation.Builder.html" title="class in org.apache.juneau.marshall">BeanIgnoreApplyAnnotation.Builder</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">BeanIgnoreApplyAnnotation.Builder.</span><code><a href="../../../marshall/BeanIgnoreApplyAnnotation.Builder.html#onClass(org.apache.juneau.commons.reflect.ClassInfo...)" class="member-name-link">onClass</a><wbr>(<a href="../ClassInfo.html" title="class in org.apache.juneau.commons.reflect">ClassInfo</a>...&nbsp;value)</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">BeanIgnoreApplyAnnotation.Builder.</span><code><a href="../../../marshall/BeanIgnoreApplyAnnotation.Builder.html#on(org.apache.juneau.commons.reflect.ClassInfo...)" class="member-name-link">on</a><wbr>(<a href="../ClassInfo.html" title="class in org.apache.juneau.commons.reflect">ClassInfo</a>...&nbsp;value)</code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
 <div class="col-first even-row-color"><code><a href="../../../marshall/BeanPropApplyAnnotation.Builder.html" title="class in org.apache.juneau.marshall">BeanPropApplyAnnotation.Builder</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">BeanPropApplyAnnotation.Builder.</span><code><a href="../../../marshall/BeanPropApplyAnnotation.Builder.html#onClass(org.apache.juneau.commons.reflect.ClassInfo...)" class="member-name-link">onClass</a><wbr>(<a href="../ClassInfo.html" title="class in org.apache.juneau.commons.reflect">ClassInfo</a>...&nbsp;value)</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">BeanPropApplyAnnotation.Builder.</span><code><a href="../../../marshall/BeanPropApplyAnnotation.Builder.html#on(org.apache.juneau.commons.reflect.ClassInfo...)" class="member-name-link">on</a><wbr>(<a href="../ClassInfo.html" title="class in org.apache.juneau.commons.reflect">ClassInfo</a>...&nbsp;value)</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
 <div class="col-first odd-row-color"><code><a href="../../../marshall/BeanTypeApplyAnnotation.Builder.html" title="class in org.apache.juneau.marshall">BeanTypeApplyAnnotation.Builder</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">BeanTypeApplyAnnotation.Builder.</span><code><a href="../../../marshall/BeanTypeApplyAnnotation.Builder.html#onClass(org.apache.juneau.commons.reflect.ClassInfo...)" class="member-name-link">onClass</a><wbr>(<a href="../ClassInfo.html" title="class in org.apache.juneau.commons.reflect">ClassInfo</a>...&nbsp;value)</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">BeanTypeApplyAnnotation.Builder.</span><code><a href="../../../marshall/BeanTypeApplyAnnotation.Builder.html#on(org.apache.juneau.commons.reflect.ClassInfo...)" class="member-name-link">on</a><wbr>(<a href="../ClassInfo.html" title="class in org.apache.juneau.commons.reflect">ClassInfo</a>...&nbsp;value)</code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
 <div class="col-first even-row-color"><code><a href="../../../marshall/ExampleApplyAnnotation.Builder.html" title="class in org.apache.juneau.marshall">ExampleApplyAnnotation.Builder</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">ExampleApplyAnnotation.Builder.</span><code><a href="../../../marshall/ExampleApplyAnnotation.Builder.html#onClass(org.apache.juneau.commons.reflect.ClassInfo...)" class="member-name-link">onClass</a><wbr>(<a href="../ClassInfo.html" title="class in org.apache.juneau.commons.reflect">ClassInfo</a>...&nbsp;value)</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">ExampleApplyAnnotation.Builder.</span><code><a href="../../../marshall/ExampleApplyAnnotation.Builder.html#on(org.apache.juneau.commons.reflect.ClassInfo...)" class="member-name-link">on</a><wbr>(<a href="../ClassInfo.html" title="class in org.apache.juneau.commons.reflect">ClassInfo</a>...&nbsp;value)</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
 <div class="col-first odd-row-color"><code><a href="../../../marshall/MarshalledApplyAnnotation.Builder.html" title="class in org.apache.juneau.marshall">MarshalledApplyAnnotation.Builder</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">MarshalledApplyAnnotation.Builder.</span><code><a href="../../../marshall/MarshalledApplyAnnotation.Builder.html#onClass(org.apache.juneau.commons.reflect.ClassInfo...)" class="member-name-link">onClass</a><wbr>(<a href="../ClassInfo.html" title="class in org.apache.juneau.commons.reflect">ClassInfo</a>...&nbsp;value)</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">MarshalledApplyAnnotation.Builder.</span><code><a href="../../../marshall/MarshalledApplyAnnotation.Builder.html#on(org.apache.juneau.commons.reflect.ClassInfo...)" class="member-name-link">on</a><wbr>(<a href="../ClassInfo.html" title="class in org.apache.juneau.commons.reflect">ClassInfo</a>...&nbsp;value)</code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
 <div class="col-first even-row-color"><code><a href="../../../marshall/MarshalledIgnoreApplyAnnotation.Builder.html" title="class in org.apache.juneau.marshall">MarshalledIgnoreApplyAnnotation.Builder</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">MarshalledIgnoreApplyAnnotation.Builder.</span><code><a href="../../../marshall/MarshalledIgnoreApplyAnnotation.Builder.html#onClass(org.apache.juneau.commons.reflect.ClassInfo...)" class="member-name-link">onClass</a><wbr>(<a href="../ClassInfo.html" title="class in org.apache.juneau.commons.reflect">ClassInfo</a>...&nbsp;value)</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">MarshalledIgnoreApplyAnnotation.Builder.</span><code><a href="../../../marshall/MarshalledIgnoreApplyAnnotation.Builder.html#on(org.apache.juneau.commons.reflect.ClassInfo...)" class="member-name-link">on</a><wbr>(<a href="../ClassInfo.html" title="class in org.apache.juneau.commons.reflect">ClassInfo</a>...&nbsp;value)</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
 <div class="col-first odd-row-color"><code><a href="../../../marshall/MarshalledPropApplyAnnotation.Builder.html" title="class in org.apache.juneau.marshall">MarshalledPropApplyAnnotation.Builder</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">MarshalledPropApplyAnnotation.Builder.</span><code><a href="../../../marshall/MarshalledPropApplyAnnotation.Builder.html#onClass(org.apache.juneau.commons.reflect.ClassInfo...)" class="member-name-link">onClass</a><wbr>(<a href="../ClassInfo.html" title="class in org.apache.juneau.commons.reflect">ClassInfo</a>...&nbsp;value)</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">MarshalledPropApplyAnnotation.Builder.</span><code><a href="../../../marshall/MarshalledPropApplyAnnotation.Builder.html#on(org.apache.juneau.commons.reflect.ClassInfo...)" class="member-name-link">on</a><wbr>(<a href="../ClassInfo.html" title="class in org.apache.juneau.commons.reflect">ClassInfo</a>...&nbsp;value)</code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
 <div class="col-first even-row-color"><code><a href="../../../marshall/SchemaApplyAnnotation.Builder.html" title="class in org.apache.juneau.marshall">SchemaApplyAnnotation.Builder</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">SchemaApplyAnnotation.Builder.</span><code><a href="../../../marshall/SchemaApplyAnnotation.Builder.html#onClass(org.apache.juneau.commons.reflect.ClassInfo...)" class="member-name-link">onClass</a><wbr>(<a href="../ClassInfo.html" title="class in org.apache.juneau.commons.reflect">ClassInfo</a>...&nbsp;value)</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">SchemaApplyAnnotation.Builder.</span><code><a href="../../../marshall/SchemaApplyAnnotation.Builder.html#on(org.apache.juneau.commons.reflect.ClassInfo...)" class="member-name-link">on</a><wbr>(<a href="../ClassInfo.html" title="class in org.apache.juneau.commons.reflect">ClassInfo</a>...&nbsp;value)</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
 <div class="col-first odd-row-color"><code><a href="../../../marshall/SwapApplyAnnotation.Builder.html" title="class in org.apache.juneau.marshall">SwapApplyAnnotation.Builder</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">SwapApplyAnnotation.Builder.</span><code><a href="../../../marshall/SwapApplyAnnotation.Builder.html#onClass(org.apache.juneau.commons.reflect.ClassInfo...)" class="member-name-link">onClass</a><wbr>(<a href="../ClassInfo.html" title="class in org.apache.juneau.commons.reflect">ClassInfo</a>...&nbsp;value)</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">SwapApplyAnnotation.Builder.</span><code><a href="../../../marshall/SwapApplyAnnotation.Builder.html#on(org.apache.juneau.commons.reflect.ClassInfo...)" class="member-name-link">on</a><wbr>(<a href="../ClassInfo.html" title="class in org.apache.juneau.commons.reflect">ClassInfo</a>...&nbsp;value)</code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
 <div class="col-first even-row-color"><code><a href="../../../marshall/UriApplyAnnotation.Builder.html" title="class in org.apache.juneau.marshall">UriApplyAnnotation.Builder</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">UriApplyAnnotation.Builder.</span><code><a href="../../../marshall/UriApplyAnnotation.Builder.html#onClass(org.apache.juneau.commons.reflect.ClassInfo...)" class="member-name-link">onClass</a><wbr>(<a href="../ClassInfo.html" title="class in org.apache.juneau.commons.reflect">ClassInfo</a>...&nbsp;value)</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">UriApplyAnnotation.Builder.</span><code><a href="../../../marshall/UriApplyAnnotation.Builder.html#on(org.apache.juneau.commons.reflect.ClassInfo...)" class="member-name-link">on</a><wbr>(<a href="../ClassInfo.html" title="class in org.apache.juneau.commons.reflect">ClassInfo</a>...&nbsp;value)</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
-<div class="col-first odd-row-color"><code>protected final &lt;T&gt;&nbsp;<a href="../../../marshall/ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;T&gt;</code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">MarshallingContext.</span><code><a href="../../../marshall/MarshallingContext.html#resolveClassMeta(org.apache.juneau.commons.reflect.AnnotationInfo,org.apache.juneau.commons.reflect.ClassInfo,org.apache.juneau.commons.reflect.TypeVariables)" class="member-name-link">resolveClassMeta</a><wbr>(<a href="../AnnotationInfo.html" title="class in org.apache.juneau.commons.reflect">AnnotationInfo</a>&lt;<a href="../../bean/BeanProp.html" title="annotation interface in org.apache.juneau.commons.bean">BeanProp</a>&gt;&nbsp;p,
+<div class="col-first odd-row-color"><code><a href="../../../marshall/BeanCtorApplyAnnotation.Builder.html" title="class in org.apache.juneau.marshall">BeanCtorApplyAnnotation.Builder</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">BeanCtorApplyAnnotation.Builder.</span><code><a href="../../../marshall/BeanCtorApplyAnnotation.Builder.html#onClass(org.apache.juneau.commons.reflect.ClassInfo...)" class="member-name-link">onClass</a><wbr>(<a href="../ClassInfo.html" title="class in org.apache.juneau.commons.reflect">ClassInfo</a>...&nbsp;value)</code></div>
+<div class="col-last odd-row-color">&nbsp;</div>
+<div class="col-first even-row-color"><code><a href="../../../marshall/BeanIgnoreApplyAnnotation.Builder.html" title="class in org.apache.juneau.marshall">BeanIgnoreApplyAnnotation.Builder</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">BeanIgnoreApplyAnnotation.Builder.</span><code><a href="../../../marshall/BeanIgnoreApplyAnnotation.Builder.html#onClass(org.apache.juneau.commons.reflect.ClassInfo...)" class="member-name-link">onClass</a><wbr>(<a href="../ClassInfo.html" title="class in org.apache.juneau.commons.reflect">ClassInfo</a>...&nbsp;value)</code></div>
+<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-first odd-row-color"><code><a href="../../../marshall/BeanPropApplyAnnotation.Builder.html" title="class in org.apache.juneau.marshall">BeanPropApplyAnnotation.Builder</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">BeanPropApplyAnnotation.Builder.</span><code><a href="../../../marshall/BeanPropApplyAnnotation.Builder.html#onClass(org.apache.juneau.commons.reflect.ClassInfo...)" class="member-name-link">onClass</a><wbr>(<a href="../ClassInfo.html" title="class in org.apache.juneau.commons.reflect">ClassInfo</a>...&nbsp;value)</code></div>
+<div class="col-last odd-row-color">&nbsp;</div>
+<div class="col-first even-row-color"><code><a href="../../../marshall/BeanTypeApplyAnnotation.Builder.html" title="class in org.apache.juneau.marshall">BeanTypeApplyAnnotation.Builder</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">BeanTypeApplyAnnotation.Builder.</span><code><a href="../../../marshall/BeanTypeApplyAnnotation.Builder.html#onClass(org.apache.juneau.commons.reflect.ClassInfo...)" class="member-name-link">onClass</a><wbr>(<a href="../ClassInfo.html" title="class in org.apache.juneau.commons.reflect">ClassInfo</a>...&nbsp;value)</code></div>
+<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-first odd-row-color"><code><a href="../../../marshall/ExampleApplyAnnotation.Builder.html" title="class in org.apache.juneau.marshall">ExampleApplyAnnotation.Builder</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">ExampleApplyAnnotation.Builder.</span><code><a href="../../../marshall/ExampleApplyAnnotation.Builder.html#onClass(org.apache.juneau.commons.reflect.ClassInfo...)" class="member-name-link">onClass</a><wbr>(<a href="../ClassInfo.html" title="class in org.apache.juneau.commons.reflect">ClassInfo</a>...&nbsp;value)</code></div>
+<div class="col-last odd-row-color">&nbsp;</div>
+<div class="col-first even-row-color"><code><a href="../../../marshall/MarshalledApplyAnnotation.Builder.html" title="class in org.apache.juneau.marshall">MarshalledApplyAnnotation.Builder</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">MarshalledApplyAnnotation.Builder.</span><code><a href="../../../marshall/MarshalledApplyAnnotation.Builder.html#onClass(org.apache.juneau.commons.reflect.ClassInfo...)" class="member-name-link">onClass</a><wbr>(<a href="../ClassInfo.html" title="class in org.apache.juneau.commons.reflect">ClassInfo</a>...&nbsp;value)</code></div>
+<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-first odd-row-color"><code><a href="../../../marshall/MarshalledIgnoreApplyAnnotation.Builder.html" title="class in org.apache.juneau.marshall">MarshalledIgnoreApplyAnnotation.Builder</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">MarshalledIgnoreApplyAnnotation.Builder.</span><code><a href="../../../marshall/MarshalledIgnoreApplyAnnotation.Builder.html#onClass(org.apache.juneau.commons.reflect.ClassInfo...)" class="member-name-link">onClass</a><wbr>(<a href="../ClassInfo.html" title="class in org.apache.juneau.commons.reflect">ClassInfo</a>...&nbsp;value)</code></div>
+<div class="col-last odd-row-color">&nbsp;</div>
+<div class="col-first even-row-color"><code><a href="../../../marshall/MarshalledPropApplyAnnotation.Builder.html" title="class in org.apache.juneau.marshall">MarshalledPropApplyAnnotation.Builder</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">MarshalledPropApplyAnnotation.Builder.</span><code><a href="../../../marshall/MarshalledPropApplyAnnotation.Builder.html#onClass(org.apache.juneau.commons.reflect.ClassInfo...)" class="member-name-link">onClass</a><wbr>(<a href="../ClassInfo.html" title="class in org.apache.juneau.commons.reflect">ClassInfo</a>...&nbsp;value)</code></div>
+<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-first odd-row-color"><code><a href="../../../marshall/SchemaApplyAnnotation.Builder.html" title="class in org.apache.juneau.marshall">SchemaApplyAnnotation.Builder</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">SchemaApplyAnnotation.Builder.</span><code><a href="../../../marshall/SchemaApplyAnnotation.Builder.html#onClass(org.apache.juneau.commons.reflect.ClassInfo...)" class="member-name-link">onClass</a><wbr>(<a href="../ClassInfo.html" title="class in org.apache.juneau.commons.reflect">ClassInfo</a>...&nbsp;value)</code></div>
+<div class="col-last odd-row-color">&nbsp;</div>
+<div class="col-first even-row-color"><code><a href="../../../marshall/SwapApplyAnnotation.Builder.html" title="class in org.apache.juneau.marshall">SwapApplyAnnotation.Builder</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">SwapApplyAnnotation.Builder.</span><code><a href="../../../marshall/SwapApplyAnnotation.Builder.html#onClass(org.apache.juneau.commons.reflect.ClassInfo...)" class="member-name-link">onClass</a><wbr>(<a href="../ClassInfo.html" title="class in org.apache.juneau.commons.reflect">ClassInfo</a>...&nbsp;value)</code></div>
+<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-first odd-row-color"><code><a href="../../../marshall/UriApplyAnnotation.Builder.html" title="class in org.apache.juneau.marshall">UriApplyAnnotation.Builder</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">UriApplyAnnotation.Builder.</span><code><a href="../../../marshall/UriApplyAnnotation.Builder.html#onClass(org.apache.juneau.commons.reflect.ClassInfo...)" class="member-name-link">onClass</a><wbr>(<a href="../ClassInfo.html" title="class in org.apache.juneau.commons.reflect">ClassInfo</a>...&nbsp;value)</code></div>
+<div class="col-last odd-row-color">&nbsp;</div>
+<div class="col-first even-row-color"><code>protected final &lt;T&gt;&nbsp;<a href="../../../marshall/ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;T&gt;</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">MarshallingContext.</span><code><a href="../../../marshall/MarshallingContext.html#resolveClassMeta(org.apache.juneau.commons.reflect.AnnotationInfo,org.apache.juneau.commons.reflect.ClassInfo,org.apache.juneau.commons.reflect.TypeVariables)" class="member-name-link">resolveClassMeta</a><wbr>(<a href="../AnnotationInfo.html" title="class in org.apache.juneau.commons.reflect">AnnotationInfo</a>&lt;<a href="../../bean/BeanProp.html" title="annotation interface in org.apache.juneau.commons.bean">BeanProp</a>&gt;&nbsp;p,
  <a href="../ClassInfo.html" title="class in org.apache.juneau.commons.reflect">ClassInfo</a>&nbsp;ci,
  <a href="../TypeVariables.html" title="class in org.apache.juneau.commons.reflect">TypeVariables</a>&nbsp;typeVarImpls)</code></div>
-<div class="col-last odd-row-color">
+<div class="col-last even-row-color">
 <div class="block">Used for determining the class type on a method or field where a <code>@BeanProp</code> annotation may be present.</div>
 </div>
-<div class="col-first even-row-color"><code><a href="../../bean/BeanInfo.html" title="class in org.apache.juneau.commons.bean">BeanInfo</a>&lt;?&gt;</code></div>
-<div class="col-second even-row-color"><span class="type-name-label">MarshallingContext.</span><code><a href="../../../marshall/MarshallingContext.html#resolveType(org.apache.juneau.commons.reflect.AnnotationInfo,org.apache.juneau.commons.reflect.ClassInfo,org.apache.juneau.commons.reflect.TypeVariables)" class="member-name-link">resolveType</a><wbr>(<a href="../AnnotationInfo.html" title="class in org.apache.juneau.commons.reflect">AnnotationInfo</a>&lt;<a href="../../bean/BeanProp.html" title="annotation interface in org.apache.juneau.commons.bean">BeanProp</a>&gt;&nbsp;lastBeanProp,
+<div class="col-first odd-row-color"><code><a href="../../bean/BeanInfo.html" title="class in org.apache.juneau.commons.bean">BeanInfo</a>&lt;?&gt;</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">MarshallingContext.</span><code><a href="../../../marshall/MarshallingContext.html#resolveType(org.apache.juneau.commons.reflect.AnnotationInfo,org.apache.juneau.commons.reflect.ClassInfo,org.apache.juneau.commons.reflect.TypeVariables)" class="member-name-link">resolveType</a><wbr>(<a href="../AnnotationInfo.html" title="class in org.apache.juneau.commons.reflect">AnnotationInfo</a>&lt;<a href="../../bean/BeanProp.html" title="annotation interface in org.apache.juneau.commons.bean">BeanProp</a>&gt;&nbsp;lastBeanProp,
  <a href="../ClassInfo.html" title="class in org.apache.juneau.commons.reflect">ClassInfo</a>&nbsp;type,
  <a href="../TypeVariables.html" title="class in org.apache.juneau.commons.reflect">TypeVariables</a>&nbsp;typeVarImpls)</code></div>
-<div class="col-last even-row-color">&nbsp;</div>
-<div class="col-first odd-row-color"><code><a href="../../../marshall/MarshalledFilter.Builder.html" title="class in org.apache.juneau.marshall">MarshalledFilter.Builder</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">MarshalledFilter.Builder.</span><code><a href="../../../marshall/MarshalledFilter.Builder.html#stopClass(org.apache.juneau.commons.reflect.ClassInfo)" class="member-name-link">stopClass</a><wbr>(<a href="../ClassInfo.html" title="class in org.apache.juneau.commons.reflect">ClassInfo</a>&nbsp;value)</code></div>
-<div class="col-last odd-row-color">
+<div class="col-last odd-row-color">&nbsp;</div>
+<div class="col-first even-row-color"><code><a href="../../../marshall/MarshalledFilter.Builder.html" title="class in org.apache.juneau.marshall">MarshalledFilter.Builder</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">MarshalledFilter.Builder.</span><code><a href="../../../marshall/MarshalledFilter.Builder.html#stopClass(org.apache.juneau.commons.reflect.ClassInfo)" class="member-name-link">stopClass</a><wbr>(<a href="../ClassInfo.html" title="class in org.apache.juneau.commons.reflect">ClassInfo</a>&nbsp;value)</code></div>
+<div class="col-last even-row-color">
 <div class="block">Stop class.</div>
 </div>
 </div>
@@ -1316,58 +1318,75 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
-<section class="detail" id="org.apache.juneau.marshall.swap">
-<h2>Uses of <a href="../ClassInfo.html" title="class in org.apache.juneau.commons.reflect">ClassInfo</a> in <a href="../../../marshall/swap/package-summary.html">org.apache.juneau.marshall.swap</a></h2>
-<div class="caption"><span>Methods in <a href="../../../marshall/swap/package-summary.html">org.apache.juneau.marshall.swap</a> that return <a href="../ClassInfo.html" title="class in org.apache.juneau.commons.reflect">ClassInfo</a></span></div>
+<section class="detail" id="org.apache.juneau.marshall.swap.spi">
+<h2>Uses of <a href="../ClassInfo.html" title="class in org.apache.juneau.commons.reflect">ClassInfo</a> in <a href="../../../marshall/swap/spi/package-summary.html">org.apache.juneau.marshall.swap.spi</a></h2>
+<div class="caption"><span>Methods in <a href="../../../marshall/swap/spi/package-summary.html">org.apache.juneau.marshall.swap.spi</a> that return <a href="../ClassInfo.html" title="class in org.apache.juneau.commons.reflect">ClassInfo</a></span></div>
 <div class="summary-table three-column-summary">
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color"><code><a href="../ClassInfo.html" title="class in org.apache.juneau.commons.reflect">ClassInfo</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">ObjectSwap.</span><code><a href="../../../marshall/swap/ObjectSwap.html#getNormalClass()" class="member-name-link">getNormalClass</a>()</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">ObjectSwap.</span><code><a href="../../../marshall/swap/spi/ObjectSwap.html#getNormalClass()" class="member-name-link">getNormalClass</a>()</code></div>
 <div class="col-last even-row-color">
 <div class="block">Returns the T class, the normalized form of the class.</div>
 </div>
 <div class="col-first odd-row-color"><code><a href="../ClassInfo.html" title="class in org.apache.juneau.commons.reflect">ClassInfo</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">ObjectSwap.</span><code><a href="../../../marshall/swap/ObjectSwap.html#getSwapClass()" class="member-name-link">getSwapClass</a>()</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">ObjectSwap.</span><code><a href="../../../marshall/swap/spi/ObjectSwap.html#getSwapClass()" class="member-name-link">getSwapClass</a>()</code></div>
 <div class="col-last odd-row-color">
 <div class="block">Returns the G class, the generalized form of the class.</div>
 </div>
 </div>
-<div class="caption"><span>Methods in <a href="../../../marshall/swap/package-summary.html">org.apache.juneau.marshall.swap</a> with parameters of type <a href="../ClassInfo.html" title="class in org.apache.juneau.commons.reflect">ClassInfo</a></span></div>
+<div class="caption"><span>Methods in <a href="../../../marshall/swap/spi/package-summary.html">org.apache.juneau.marshall.swap.spi</a> with parameters of type <a href="../ClassInfo.html" title="class in org.apache.juneau.commons.reflect">ClassInfo</a></span></div>
 <div class="summary-table three-column-summary">
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><code>static <a href="../../../marshall/swap/ObjectSwap.html" title="class in org.apache.juneau.marshall.swap">ObjectSwap</a>&lt;?,<wbr>?&gt;</code></div>
-<div class="col-second even-row-color"><span class="type-name-label">AutoListSwap.</span><code><a href="../../../marshall/swap/AutoListSwap.html#find(org.apache.juneau.marshall.MarshallingContext,org.apache.juneau.commons.reflect.ClassInfo)" class="member-name-link">find</a><wbr>(<a href="../../../marshall/MarshallingContext.html" title="class in org.apache.juneau.marshall">MarshallingContext</a>&nbsp;bc,
+<div class="col-first even-row-color"><code>static <a href="../../../marshall/swap/spi/ObjectSwap.html" title="class in org.apache.juneau.marshall.swap.spi">ObjectSwap</a>&lt;?,<wbr>?&gt;</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">AutoListSwap.</span><code><a href="../../../marshall/swap/spi/AutoListSwap.html#find(org.apache.juneau.marshall.MarshallingContext,org.apache.juneau.commons.reflect.ClassInfo)" class="member-name-link">find</a><wbr>(<a href="../../../marshall/MarshallingContext.html" title="class in org.apache.juneau.marshall">MarshallingContext</a>&nbsp;bc,
  <a href="../ClassInfo.html" title="class in org.apache.juneau.commons.reflect">ClassInfo</a>&nbsp;ci)</code></div>
 <div class="col-last even-row-color">
 <div class="block">Look for constructors and methods on this class and construct a dynamic swap if it's possible to do so.</div>
 </div>
-<div class="col-first odd-row-color"><code>static <a href="../../../marshall/swap/ObjectSwap.html" title="class in org.apache.juneau.marshall.swap">ObjectSwap</a>&lt;?,<wbr>?&gt;</code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">AutoMapSwap.</span><code><a href="../../../marshall/swap/AutoMapSwap.html#find(org.apache.juneau.marshall.MarshallingContext,org.apache.juneau.commons.reflect.ClassInfo)" class="member-name-link">find</a><wbr>(<a href="../../../marshall/MarshallingContext.html" title="class in org.apache.juneau.marshall">MarshallingContext</a>&nbsp;bc,
+<div class="col-first odd-row-color"><code>static <a href="../../../marshall/swap/spi/ObjectSwap.html" title="class in org.apache.juneau.marshall.swap.spi">ObjectSwap</a>&lt;?,<wbr>?&gt;</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">AutoMapSwap.</span><code><a href="../../../marshall/swap/spi/AutoMapSwap.html#find(org.apache.juneau.marshall.MarshallingContext,org.apache.juneau.commons.reflect.ClassInfo)" class="member-name-link">find</a><wbr>(<a href="../../../marshall/MarshallingContext.html" title="class in org.apache.juneau.marshall">MarshallingContext</a>&nbsp;bc,
  <a href="../ClassInfo.html" title="class in org.apache.juneau.commons.reflect">ClassInfo</a>&nbsp;ci)</code></div>
 <div class="col-last odd-row-color">
 <div class="block">Look for constructors and methods on this class and construct a dynamic swap if it's possible to do so.</div>
 </div>
-<div class="col-first even-row-color"><code>static <a href="../../../marshall/swap/ObjectSwap.html" title="class in org.apache.juneau.marshall.swap">ObjectSwap</a>&lt;?,<wbr>?&gt;</code></div>
-<div class="col-second even-row-color"><span class="type-name-label">AutoNumberSwap.</span><code><a href="../../../marshall/swap/AutoNumberSwap.html#find(org.apache.juneau.marshall.MarshallingContext,org.apache.juneau.commons.reflect.ClassInfo)" class="member-name-link">find</a><wbr>(<a href="../../../marshall/MarshallingContext.html" title="class in org.apache.juneau.marshall">MarshallingContext</a>&nbsp;bc,
+<div class="col-first even-row-color"><code>static <a href="../../../marshall/swap/spi/ObjectSwap.html" title="class in org.apache.juneau.marshall.swap.spi">ObjectSwap</a>&lt;?,<wbr>?&gt;</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">AutoNumberSwap.</span><code><a href="../../../marshall/swap/spi/AutoNumberSwap.html#find(org.apache.juneau.marshall.MarshallingContext,org.apache.juneau.commons.reflect.ClassInfo)" class="member-name-link">find</a><wbr>(<a href="../../../marshall/MarshallingContext.html" title="class in org.apache.juneau.marshall">MarshallingContext</a>&nbsp;bc,
  <a href="../ClassInfo.html" title="class in org.apache.juneau.commons.reflect">ClassInfo</a>&nbsp;ci)</code></div>
 <div class="col-last even-row-color">
 <div class="block">Look for constructors and methods on this class and construct a dynamic swap if it's possible to do so.</div>
 </div>
-<div class="col-first odd-row-color"><code>static <a href="../../../marshall/swap/ObjectSwap.html" title="class in org.apache.juneau.marshall.swap">ObjectSwap</a>&lt;?,<wbr>?&gt;</code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">AutoObjectSwap.</span><code><a href="../../../marshall/swap/AutoObjectSwap.html#find(org.apache.juneau.marshall.MarshallingContext,org.apache.juneau.commons.reflect.ClassInfo)" class="member-name-link">find</a><wbr>(<a href="../../../marshall/MarshallingContext.html" title="class in org.apache.juneau.marshall">MarshallingContext</a>&nbsp;bc,
+<div class="col-first odd-row-color"><code>static <a href="../../../marshall/swap/spi/ObjectSwap.html" title="class in org.apache.juneau.marshall.swap.spi">ObjectSwap</a>&lt;?,<wbr>?&gt;</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">AutoObjectSwap.</span><code><a href="../../../marshall/swap/spi/AutoObjectSwap.html#find(org.apache.juneau.marshall.MarshallingContext,org.apache.juneau.commons.reflect.ClassInfo)" class="member-name-link">find</a><wbr>(<a href="../../../marshall/MarshallingContext.html" title="class in org.apache.juneau.marshall">MarshallingContext</a>&nbsp;bc,
  <a href="../ClassInfo.html" title="class in org.apache.juneau.commons.reflect">ClassInfo</a>&nbsp;ci)</code></div>
 <div class="col-last odd-row-color">
 <div class="block">Inspects the specified class and returns a swap of this type if possible.</div>
 </div>
-<div class="col-first even-row-color"><code>static <a href="../../../marshall/swap/ObjectSwap.html" title="class in org.apache.juneau.marshall.swap">ObjectSwap</a>&lt;?,<wbr>?&gt;</code></div>
-<div class="col-second even-row-color"><span class="type-name-label">DefaultSwaps.</span><code><a href="../../../marshall/swap/DefaultSwaps.html#find(org.apache.juneau.commons.reflect.ClassInfo)" class="member-name-link">find</a><wbr>(<a href="../ClassInfo.html" title="class in org.apache.juneau.commons.reflect">ClassInfo</a>&nbsp;ci)</code></div>
+<div class="col-first even-row-color"><code>static <a href="../../../marshall/swap/spi/ObjectSwap.html" title="class in org.apache.juneau.marshall.swap.spi">ObjectSwap</a>&lt;?,<wbr>?&gt;</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">DefaultSwaps.</span><code><a href="../../../marshall/swap/spi/DefaultSwaps.html#find(org.apache.juneau.commons.reflect.ClassInfo)" class="member-name-link">find</a><wbr>(<a href="../ClassInfo.html" title="class in org.apache.juneau.commons.reflect">ClassInfo</a>&nbsp;ci)</code></div>
 <div class="col-last even-row-color">
 <div class="block">Find the default ObjectSwap for the specified class.</div>
 </div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="org.apache.juneau.marshall.toml">
+<h2>Uses of <a href="../ClassInfo.html" title="class in org.apache.juneau.commons.reflect">ClassInfo</a> in <a href="../../../marshall/toml/package-summary.html">org.apache.juneau.marshall.toml</a></h2>
+<div class="caption"><span>Methods in <a href="../../../marshall/toml/package-summary.html">org.apache.juneau.marshall.toml</a> with parameters of type <a href="../ClassInfo.html" title="class in org.apache.juneau.commons.reflect">ClassInfo</a></span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier and Type</div>
+<div class="table-header col-second">Method</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code><a href="../../../marshall/toml/TomlApplyAnnotation.Builder.html" title="class in org.apache.juneau.marshall.toml">TomlApplyAnnotation.Builder</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">TomlApplyAnnotation.Builder.</span><code><a href="../../../marshall/toml/TomlApplyAnnotation.Builder.html#on(org.apache.juneau.commons.reflect.ClassInfo...)" class="member-name-link">on</a><wbr>(<a href="../ClassInfo.html" title="class in org.apache.juneau.commons.reflect">ClassInfo</a>...&nbsp;value)</code></div>
+<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-first odd-row-color"><code><a href="../../../marshall/toml/TomlApplyAnnotation.Builder.html" title="class in org.apache.juneau.marshall.toml">TomlApplyAnnotation.Builder</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">TomlApplyAnnotation.Builder.</span><code><a href="../../../marshall/toml/TomlApplyAnnotation.Builder.html#onClass(org.apache.juneau.commons.reflect.ClassInfo...)" class="member-name-link">onClass</a><wbr>(<a href="../ClassInfo.html" title="class in org.apache.juneau.commons.reflect">ClassInfo</a>...&nbsp;value)</code></div>
+<div class="col-last odd-row-color">&nbsp;</div>
 </div>
 </section>
 </li>
@@ -1418,6 +1437,23 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color">&nbsp;</div>
 <div class="col-first odd-row-color"><code><a href="../../../marshall/xml/XmlApplyAnnotation.Builder.html" title="class in org.apache.juneau.marshall.xml">XmlApplyAnnotation.Builder</a></code></div>
 <div class="col-second odd-row-color"><span class="type-name-label">XmlApplyAnnotation.Builder.</span><code><a href="../../../marshall/xml/XmlApplyAnnotation.Builder.html#onClass(org.apache.juneau.commons.reflect.ClassInfo...)" class="member-name-link">onClass</a><wbr>(<a href="../ClassInfo.html" title="class in org.apache.juneau.commons.reflect">ClassInfo</a>...&nbsp;value)</code></div>
+<div class="col-last odd-row-color">&nbsp;</div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="org.apache.juneau.marshall.yaml">
+<h2>Uses of <a href="../ClassInfo.html" title="class in org.apache.juneau.commons.reflect">ClassInfo</a> in <a href="../../../marshall/yaml/package-summary.html">org.apache.juneau.marshall.yaml</a></h2>
+<div class="caption"><span>Methods in <a href="../../../marshall/yaml/package-summary.html">org.apache.juneau.marshall.yaml</a> with parameters of type <a href="../ClassInfo.html" title="class in org.apache.juneau.commons.reflect">ClassInfo</a></span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier and Type</div>
+<div class="table-header col-second">Method</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code><a href="../../../marshall/yaml/YamlApplyAnnotation.Builder.html" title="class in org.apache.juneau.marshall.yaml">YamlApplyAnnotation.Builder</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">YamlApplyAnnotation.Builder.</span><code><a href="../../../marshall/yaml/YamlApplyAnnotation.Builder.html#on(org.apache.juneau.commons.reflect.ClassInfo...)" class="member-name-link">on</a><wbr>(<a href="../ClassInfo.html" title="class in org.apache.juneau.commons.reflect">ClassInfo</a>...&nbsp;value)</code></div>
+<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-first odd-row-color"><code><a href="../../../marshall/yaml/YamlApplyAnnotation.Builder.html" title="class in org.apache.juneau.marshall.yaml">YamlApplyAnnotation.Builder</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">YamlApplyAnnotation.Builder.</span><code><a href="../../../marshall/yaml/YamlApplyAnnotation.Builder.html#onClass(org.apache.juneau.commons.reflect.ClassInfo...)" class="member-name-link">onClass</a><wbr>(<a href="../ClassInfo.html" title="class in org.apache.juneau.commons.reflect">ClassInfo</a>...&nbsp;value)</code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
 </div>
 </section>

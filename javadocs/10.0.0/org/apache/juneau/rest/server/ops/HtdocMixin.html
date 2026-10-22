@@ -80,14 +80,16 @@ loadScripts(document, 'script');</script>
 </div>
 <section class="class-description" id="class-description">
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/ops/HtdocMixin.html#line-44">HtdocMixin</a></span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/ops/HtdocMixin.html#line-47">HtdocMixin</a></span>
 <span class="extends-implements">extends <a href="../servlet/RestMixin.html" title="class in org.apache.juneau.rest.server.servlet">RestMixin</a></span></div>
 <div class="block">Mixin providing the residual <code>[GET /htdocs/*]</code> static-file endpoint.
 
  <p>
- Single-responsibility op-mixin carved out of the former <code>BasicRestOperations</code> interface. Resolves
- the requested path against the active <a href="../staticfile/StaticFiles.html" title="interface in org.apache.juneau.rest.server.staticfile"><code>StaticFiles</code></a> bean via
- <a href="../RestContext.html#getStaticFiles()"><code>RestContext.getStaticFiles()</code></a>.
+ Single-responsibility op-mixin carved out of the former <code>BasicRestOperations</code> interface. Delegates the
+ requested path to <a href="../staticfile/StaticFilesMixin.html#resolveStaticFile(org.apache.juneau.rest.server.RestRequest,java.lang.String,java.util.Locale)"><code>StaticFilesMixin.resolveStaticFile(RestRequest,String,Locale)</code></a> &mdash; the same
+ resolution chokepoint used by the newer <a href="../staticfile/StaticFilesMixin.html" title="class in org.apache.juneau.rest.server.staticfile"><code>StaticFilesMixin</code></a>'s configurable-mount handlers &mdash; so
+ there is a single implementation of the static-file lookup logic even though this mixin keeps its own fixed,
+ <code>GET</code>-only <code>/htdocs/*</code> mount for backward compatibility.
 
  <p>
  The greedy <code>/htdocs/*</code> blob handler is not API-meaningful and is excluded from the published
@@ -166,7 +168,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;()">
 <h3>HtdocMixin</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/ops/HtdocMixin.html#line-45">HtdocMixin</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/ops/HtdocMixin.html#line-48">HtdocMixin</a></span>()</div>
 </section>
 </li>
 </ul>
@@ -180,7 +182,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getHtdoc(org.apache.juneau.rest.server.RestRequest,java.lang.String,java.util.Locale)">
 <h3>getHtdoc</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../../http/HttpResource.html" title="interface in org.apache.juneau.http">HttpResource</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/ops/HtdocMixin.html#line-56">getHtdoc</a></span><wbr><span class="parameters">(<a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../../http/HttpResource.html" title="interface in org.apache.juneau.http">HttpResource</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/ops/HtdocMixin.html#line-59">getHtdoc</a></span><wbr><span class="parameters">(<a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req,
  <a href="../../../http/Path.html" title="annotation interface in org.apache.juneau.http">@Path</a>("/*")
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;path,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Locale.html" title="class or interface in java.util" class="external-link">Locale</a>&nbsp;locale)</span>

@@ -112,9 +112,9 @@
 <span class="source-line-no">099</span><span id="line-99">   }</span>
 <span class="source-line-no">100</span><span id="line-100"></span>
 <span class="source-line-no">101</span><span id="line-101">   @SuppressWarnings({</span>
-<span class="source-line-no">102</span><span id="line-102">      "java:S2160", // equals() inherited from AnnotationObject compares all annotation interface methods; subclass fields are accessed via those methods</span>
-<span class="source-line-no">103</span><span id="line-103">      "ClassExplicitlyAnnotation", // IntelliJ / SonarLint: Instance implements @Tag (AnnotationObject runtime proxy pattern)</span>
-<span class="source-line-no">104</span><span id="line-104">      "all" // Eclipse JDT: AnnotationTypeUsedAsSuperInterface has no dedicated @SuppressWarnings token (JLS 9.6)</span>
+<span class="source-line-no">102</span><span id="line-102">      "ClassExplicitlyAnnotation", // IntelliJ / SonarLint: Instance implements @Tag (AnnotationObject runtime proxy pattern)</span>
+<span class="source-line-no">103</span><span id="line-103">      "all", // Eclipse JDT: AnnotationTypeUsedAsSuperInterface has no dedicated @SuppressWarnings token (JLS 9.6)</span>
+<span class="source-line-no">104</span><span id="line-104">      "java:S2160" // equals() inherited from AnnotationObject compares all annotation interface methods; subclass fields are accessed via those methods</span>
 <span class="source-line-no">105</span><span id="line-105">   })</span>
 <span class="source-line-no">106</span><span id="line-106">   private static class Instance extends AnnotationObject implements Tag {</span>
 <span class="source-line-no">107</span><span id="line-107"></span>

@@ -106,8 +106,8 @@
 <a class="jxr_linenumber" name="L98" href="#L98">98</a>  <em class="jxr_javadoccomment"> * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L99" href="#L99">99</a>  <em class="jxr_javadoccomment"> */</em>
 <a class="jxr_linenumber" name="L100" href="#L100">100</a> @SuppressWarnings({
-<a class="jxr_linenumber" name="L101" href="#L101">101</a> 	<span class="jxr_string">"unchecked"</span>, <em class="jxr_comment">// Type erasure requires unchecked casts in content parsing</em>
-<a class="jxr_linenumber" name="L102" href="#L102">102</a> 	<span class="jxr_string">"resource"</span>, <em class="jxr_comment">// Resource management handled externally</em>
+<a class="jxr_linenumber" name="L101" href="#L101">101</a> 	<span class="jxr_string">"resource"</span>, <em class="jxr_comment">// Resource management handled externally</em>
+<a class="jxr_linenumber" name="L102" href="#L102">102</a> 	<span class="jxr_string">"unchecked"</span> <em class="jxr_comment">// Type erasure requires unchecked casts in content parsing</em>
 <a class="jxr_linenumber" name="L103" href="#L103">103</a> })
 <a class="jxr_linenumber" name="L104" href="#L104">104</a> <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> RequestContent {
 <a class="jxr_linenumber" name="L105" href="#L105">105</a> 
@@ -118,7 +118,7 @@
 <a class="jxr_linenumber" name="L110" href="#L110">110</a> 	@SuppressWarnings({
 <a class="jxr_linenumber" name="L111" href="#L111">111</a> 		<span class="jxr_string">"java:S1450"</span> <em class="jxr_comment">// Field backs the public fluent parsers(ParserSet) setter; the value is set externally and consumed later in getParserMatch(), so it cannot be a local variable.</em>
 <a class="jxr_linenumber" name="L112" href="#L112">112</a> 	})
-<a class="jxr_linenumber" name="L113" href="#L113">113</a> 	<strong class="jxr_keyword">private</strong> <a name="ParserSet" href="../../../../../../org/apache/juneau/marshall/parser/ParserSet.html#ParserSet">ParserSet</a> parsers;
+<a class="jxr_linenumber" name="L113" href="#L113">113</a> 	<strong class="jxr_keyword">private</strong> ParserSet parsers;
 <a class="jxr_linenumber" name="L114" href="#L114">114</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">long</strong> maxInput;
 <a class="jxr_linenumber" name="L115" href="#L115">115</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">int</strong> contentLength;
 <a class="jxr_linenumber" name="L116" href="#L116">116</a> 	<strong class="jxr_keyword">private</strong> MediaType mediaType;
@@ -494,7 +494,7 @@
 <a class="jxr_linenumber" name="L486" href="#L486">486</a> <em class="jxr_javadoccomment">	 * @param value The new value for this setting.</em>
 <a class="jxr_linenumber" name="L487" href="#L487">487</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
 <a class="jxr_linenumber" name="L488" href="#L488">488</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L489" href="#L489">489</a> 	<strong class="jxr_keyword">public</strong> RequestContent parsers(<a name="ParserSet" href="../../../../../../org/apache/juneau/marshall/parser/ParserSet.html#ParserSet">ParserSet</a> value) {
+<a class="jxr_linenumber" name="L489" href="#L489">489</a> 	<strong class="jxr_keyword">public</strong> RequestContent parsers(ParserSet value) {
 <a class="jxr_linenumber" name="L490" href="#L490">490</a> 		parsers = value;
 <a class="jxr_linenumber" name="L491" href="#L491">491</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L492" href="#L492">492</a> 	}
@@ -594,54 +594,81 @@
 <a class="jxr_linenumber" name="L586" href="#L586">586</a> 				.locale(locale)
 <a class="jxr_linenumber" name="L587" href="#L587">587</a> 				.timeZone(timeZone.orElse(<strong class="jxr_keyword">null</strong>))
 <a class="jxr_linenumber" name="L588" href="#L588">588</a> 				.mediaType(mediaType2)
-<a class="jxr_linenumber" name="L589" href="#L589">589</a> 				<em class="jxr_comment">// Note: `p.createSession()` returns a *session* builder (a ParserSession.Builder subtype, e.g.</em>
-<a class="jxr_linenumber" name="L590" href="#L590">590</a> 				<em class="jxr_comment">// ReaderParserSession.Builder), never a Parser.Builder subtype, so `ReaderParser.Builder.class`</em>
-<a class="jxr_linenumber" name="L591" href="#L591">591</a> 				<em class="jxr_comment">// below can never match. Likely meant `ReaderParserSession.Builder.class` -- flagged as an</em>
-<a class="jxr_linenumber" name="L592" href="#L592">592</a> 				<em class="jxr_comment">// incidental finding, not fixed here (out of scope for a coverage-only change).</em>
-<a class="jxr_linenumber" name="L593" href="#L593">593</a> 				.apply(ReaderParser.Builder.<strong class="jxr_keyword">class</strong>, x -&gt; x.streamCharset(req.getCharset()))  <em class="jxr_comment">// HTT: unreachable -- apply()'s type filter never matches (see note above), so the lambda body is provably dead code</em>
-<a class="jxr_linenumber" name="L594" href="#L594">594</a> 				.schema(schema)
-<a class="jxr_linenumber" name="L595" href="#L595">595</a> 				.debug(req.isDebug() ? <strong class="jxr_keyword">true</strong> : <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L596" href="#L596">596</a> 				.build();
-<a class="jxr_linenumber" name="L597" href="#L597">597</a> 			<em class="jxr_comment">// @formatter:on</em>
-<a class="jxr_linenumber" name="L598" href="#L598">598</a> 
-<a class="jxr_linenumber" name="L599" href="#L599">599</a> 			<strong class="jxr_keyword">try</strong> (Closeable in = session.isReaderParser() ? getUnbufferedReader() : getInputStream()) {  <em class="jxr_comment">// HTT: the compiler-generated null-check on `in` in this try-with-resources' implicit finally is unreachable -- both getUnbufferedReader() and getInputStream() are annotated/documented to never return null, and the ternary itself has both arms covered by RequestContent_Test (h/k groups).</em>
-<a class="jxr_linenumber" name="L600" href="#L600">600</a> 				<strong class="jxr_keyword">var</strong> o = session.read(in, cm);
-<a class="jxr_linenumber" name="L601" href="#L601">601</a> 				<strong class="jxr_keyword">if</strong> (nn(schema))  <em class="jxr_comment">// HTT: unreachable-false-arm -- schema is unconditionally defaulted to HttpPartSchema.DEFAULT a few lines above and never reset to null before this point.</em>
-<a class="jxr_linenumber" name="L602" href="#L602">602</a> 					schema.validateOutput(o);
-<a class="jxr_linenumber" name="L603" href="#L603">603</a> 				<strong class="jxr_keyword">return</strong> o;
-<a class="jxr_linenumber" name="L604" href="#L604">604</a> 			}
-<a class="jxr_linenumber" name="L605" href="#L605">605</a> 		}
+<a class="jxr_linenumber" name="L589" href="#L589">589</a> 				.apply(ReaderParser.Builder.<strong class="jxr_keyword">class</strong>, x -&gt; x.streamCharset(req.getCharset()))
+<a class="jxr_linenumber" name="L590" href="#L590">590</a> 				.schema(schema)
+<a class="jxr_linenumber" name="L591" href="#L591">591</a> 				.debug(req.isDebugMarshalling() ? <strong class="jxr_keyword">true</strong> : <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L592" href="#L592">592</a> 				.build();
+<a class="jxr_linenumber" name="L593" href="#L593">593</a> 			<em class="jxr_comment">// @formatter:on</em>
+<a class="jxr_linenumber" name="L594" href="#L594">594</a> 
+<a class="jxr_linenumber" name="L595" href="#L595">595</a> 			<strong class="jxr_keyword">try</strong> (Closeable in = session.isReaderParser() ? getUnbufferedReader() : getInputStream()) {
+<a class="jxr_linenumber" name="L596" href="#L596">596</a> 				<strong class="jxr_keyword">var</strong> o = session.read(in, cm);
+<a class="jxr_linenumber" name="L597" href="#L597">597</a> 				drainQuietly(in);
+<a class="jxr_linenumber" name="L598" href="#L598">598</a> 				<strong class="jxr_keyword">if</strong> (nn(schema))
+<a class="jxr_linenumber" name="L599" href="#L599">599</a> 					schema.validateOutput(o);
+<a class="jxr_linenumber" name="L600" href="#L600">600</a> 				<strong class="jxr_keyword">return</strong> o;
+<a class="jxr_linenumber" name="L601" href="#L601">601</a> 			}
+<a class="jxr_linenumber" name="L602" href="#L602">602</a> 		}
+<a class="jxr_linenumber" name="L603" href="#L603">603</a> 
+<a class="jxr_linenumber" name="L604" href="#L604">604</a> 		<strong class="jxr_keyword">if</strong> (cm.hasReaderMutater())
+<a class="jxr_linenumber" name="L605" href="#L605">605</a> 			<strong class="jxr_keyword">return</strong> convertUnparsed(getReader(), cm);
 <a class="jxr_linenumber" name="L606" href="#L606">606</a> 
-<a class="jxr_linenumber" name="L607" href="#L607">607</a> 		<strong class="jxr_keyword">if</strong> (cm.hasReaderMutater())
-<a class="jxr_linenumber" name="L608" href="#L608">608</a> 			<strong class="jxr_keyword">return</strong> BasicConverter.INSTANCE.to(getReader(), cm.<strong class="jxr_keyword">inner</strong>());
+<a class="jxr_linenumber" name="L607" href="#L607">607</a> 		<strong class="jxr_keyword">if</strong> (cm.hasInputStreamMutater())
+<a class="jxr_linenumber" name="L608" href="#L608">608</a> 			<strong class="jxr_keyword">return</strong> convertUnparsed(getInputStream(), cm);
 <a class="jxr_linenumber" name="L609" href="#L609">609</a> 
-<a class="jxr_linenumber" name="L610" href="#L610">610</a> 		<strong class="jxr_keyword">if</strong> (cm.hasInputStreamMutater())
-<a class="jxr_linenumber" name="L611" href="#L611">611</a> 			<strong class="jxr_keyword">return</strong> BasicConverter.INSTANCE.to(getInputStream(), cm.<strong class="jxr_keyword">inner</strong>());
-<a class="jxr_linenumber" name="L612" href="#L612">612</a> 
-<a class="jxr_linenumber" name="L613" href="#L613">613</a> 		<strong class="jxr_keyword">var</strong> mt = getMediaType();
+<a class="jxr_linenumber" name="L610" href="#L610">610</a> 		<strong class="jxr_keyword">var</strong> mt = getMediaType();
+<a class="jxr_linenumber" name="L611" href="#L611">611</a> 
+<a class="jxr_linenumber" name="L612" href="#L612">612</a> 		<strong class="jxr_keyword">if</strong> ((isEmpty(s(mt)) || mt.toString().startsWith(<span class="jxr_string">"text/plain"</span>)) &amp;&amp; cm.hasStringMutater())
+<a class="jxr_linenumber" name="L613" href="#L613">613</a> 			<strong class="jxr_keyword">return</strong> BasicConverter.INSTANCE.to(asString(), cm.<strong class="jxr_keyword">inner</strong>());
 <a class="jxr_linenumber" name="L614" href="#L614">614</a> 
-<a class="jxr_linenumber" name="L615" href="#L615">615</a> 		<strong class="jxr_keyword">if</strong> ((isEmpty(s(mt)) || mt.toString().startsWith(<span class="jxr_string">"text/plain"</span>)) &amp;&amp; cm.hasStringMutater())
-<a class="jxr_linenumber" name="L616" href="#L616">616</a> 			<strong class="jxr_keyword">return</strong> BasicConverter.INSTANCE.to(asString(), cm.<strong class="jxr_keyword">inner</strong>());
+<a class="jxr_linenumber" name="L615" href="#L615">615</a> 		<strong class="jxr_keyword">throw</strong> unsupportedMediaType(<strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L616" href="#L616">616</a> 	}
 <a class="jxr_linenumber" name="L617" href="#L617">617</a> 
-<a class="jxr_linenumber" name="L618" href="#L618">618</a> 		<strong class="jxr_keyword">var</strong> ct = req.getHeader(ContentType.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L619" href="#L619">619</a> 		<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> UnsupportedMediaType(<span class="jxr_string">"Unsupported media-type in request header 'Content-Type': '%s'\n\tSupported media-types: %s"</span>,
-<a class="jxr_linenumber" name="L620" href="#L620">620</a> 			ct.isPresent() ? ct.get().asMediaType().orElse(<strong class="jxr_keyword">null</strong>) : <span class="jxr_string">"not-specified"</span>, Json5.of(req.getOpContext().getParsers().getSupportedMediaTypes()));
-<a class="jxr_linenumber" name="L621" href="#L621">621</a> 	}
-<a class="jxr_linenumber" name="L622" href="#L622">622</a> 
-<a class="jxr_linenumber" name="L623" href="#L623">623</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L624" href="#L624">624</a> <em class="jxr_javadoccomment">	 * Same as {@link #getReader()}, but doesn't encapsulate the result in a {@link BufferedReader};</em>
-<a class="jxr_linenumber" name="L625" href="#L625">625</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L626" href="#L626">626</a> <em class="jxr_javadoccomment">	 * @return An unbuffered reader.</em>
-<a class="jxr_linenumber" name="L627" href="#L627">627</a> <em class="jxr_javadoccomment">	 * @throws IOException Thrown by underlying stream.</em>
-<a class="jxr_linenumber" name="L628" href="#L628">628</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L629" href="#L629">629</a> 	<strong class="jxr_keyword">protected</strong> Reader getUnbufferedReader() <strong class="jxr_keyword">throws</strong> IOException {
-<a class="jxr_linenumber" name="L630" href="#L630">630</a> 		<strong class="jxr_keyword">if</strong> (nn(content))
-<a class="jxr_linenumber" name="L631" href="#L631">631</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> CharSequenceReader(<strong class="jxr_keyword">new</strong> String(content, UTF8));
-<a class="jxr_linenumber" name="L632" href="#L632">632</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> InputStreamReader(getInputStream(), req.getCharset());
-<a class="jxr_linenumber" name="L633" href="#L633">633</a> 	}
-<a class="jxr_linenumber" name="L634" href="#L634">634</a> 
-<a class="jxr_linenumber" name="L635" href="#L635">635</a> 	<strong class="jxr_keyword">boolean</strong> isLoaded() { <strong class="jxr_keyword">return</strong> nn(content); }
-<a class="jxr_linenumber" name="L636" href="#L636">636</a> }
+<a class="jxr_linenumber" name="L618" href="#L618">618</a> 	<em class="jxr_comment">// Converts the unparsed content using the type's own Reader/InputStream constructor or factory method.</em>
+<a class="jxr_linenumber" name="L619" href="#L619">619</a> 	<em class="jxr_comment">//</em>
+<a class="jxr_linenumber" name="L620" href="#L620">620</a> 	<em class="jxr_comment">// When the request named a Content-Type that matched no parser, a conversion failure means the content was in a</em>
+<a class="jxr_linenumber" name="L621" href="#L621">621</a> 	<em class="jxr_comment">// media type nobody here understands (for example JSON5 into the strict-JSON JsonMap(Reader) constructor), so it is</em>
+<a class="jxr_linenumber" name="L622" href="#L622">622</a> 	<em class="jxr_comment">// reported as 415 rather than as a 500.  Without a Content-Type the failure propagates as before.</em>
+<a class="jxr_linenumber" name="L623" href="#L623">623</a> 	<strong class="jxr_keyword">private</strong> &lt;T&gt; T convertUnparsed(Object in, ClassMeta&lt;T&gt; cm) <strong class="jxr_keyword">throws</strong> UnsupportedMediaType {
+<a class="jxr_linenumber" name="L624" href="#L624">624</a> 		<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L625" href="#L625">625</a> 			<strong class="jxr_keyword">return</strong> BasicConverter.INSTANCE.to(in, cm.<strong class="jxr_keyword">inner</strong>());
+<a class="jxr_linenumber" name="L626" href="#L626">626</a> 		} <strong class="jxr_keyword">catch</strong> (RuntimeException e) {
+<a class="jxr_linenumber" name="L627" href="#L627">627</a> 			<strong class="jxr_keyword">if</strong> (isEmpty(s(req.getHeader(ContentType.<strong class="jxr_keyword">class</strong>).flatMap(ContentType::asMediaType).orElse(<strong class="jxr_keyword">null</strong>))))
+<a class="jxr_linenumber" name="L628" href="#L628">628</a> 				<strong class="jxr_keyword">throw</strong> e;
+<a class="jxr_linenumber" name="L629" href="#L629">629</a> 			<strong class="jxr_keyword">throw</strong> unsupportedMediaType(e);
+<a class="jxr_linenumber" name="L630" href="#L630">630</a> 		}
+<a class="jxr_linenumber" name="L631" href="#L631">631</a> 	}
+<a class="jxr_linenumber" name="L632" href="#L632">632</a> 
+<a class="jxr_linenumber" name="L633" href="#L633">633</a> 	<strong class="jxr_keyword">private</strong> UnsupportedMediaType unsupportedMediaType(Throwable cause) {
+<a class="jxr_linenumber" name="L634" href="#L634">634</a> 		<strong class="jxr_keyword">var</strong> ct = req.getHeader(ContentType.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L635" href="#L635">635</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> UnsupportedMediaType(cause, <span class="jxr_string">"Unsupported media-type in request header 'Content-Type': '%s'\n\tSupported media-types: %s"</span>,
+<a class="jxr_linenumber" name="L636" href="#L636">636</a> 			ct.isPresent() ? ct.get().asMediaType().orElse(<strong class="jxr_keyword">null</strong>) : <span class="jxr_string">"not-specified"</span>, Json5.of(req.getOpContext().getParsers().getSupportedMediaTypes()));
+<a class="jxr_linenumber" name="L637" href="#L637">637</a> 	}
+<a class="jxr_linenumber" name="L638" href="#L638">638</a> 
+<a class="jxr_linenumber" name="L639" href="#L639">639</a> 	<em class="jxr_comment">// Reads and discards whatever remains of the request entity after a parser has returned.</em>
+<a class="jxr_linenumber" name="L640" href="#L640">640</a> 	<em class="jxr_comment">//</em>
+<a class="jxr_linenumber" name="L641" href="#L641">641</a> 	<em class="jxr_comment">// A parser stops as soon as the top-level value is complete, leaving the end of the entity unread: for a</em>
+<a class="jxr_linenumber" name="L642" href="#L642">642</a> 	<em class="jxr_comment">// Transfer-Encoding: chunked request, at least the zero-length terminating chunk whenever the client flushes it</em>
+<a class="jxr_linenumber" name="L643" href="#L643">643</a> 	<em class="jxr_comment">// separately from the content.  If that is still unread when the response completes, the container finds</em>
+<a class="jxr_linenumber" name="L644" href="#L644">644</a> 	<em class="jxr_comment">// unconsumed request content and aborts the connection.  By then the response is usually committed, so no</em>
+<a class="jxr_linenumber" name="L645" href="#L645">645</a> 	<em class="jxr_comment">// Connection: close can be added, and a client reusing the pooled keep-alive connection fails its next request</em>
+<a class="jxr_linenumber" name="L646" href="#L646">646</a> 	<em class="jxr_comment">// with an immediate EOF.  Draining here (blocking until end-of-stream) keeps the connection reusable.</em>
+<a class="jxr_linenumber" name="L647" href="#L647">647</a> 	<em class="jxr_comment">//</em>
+<a class="jxr_linenumber" name="L648" href="#L648">648</a> 	<em class="jxr_comment">// Best effort: the stream is still bounded by @Rest(maxInput), and any failure (limit exceeded, client gone)</em>
+<a class="jxr_linenumber" name="L649" href="#L649">649</a> 	<em class="jxr_comment">// just falls back to the container's own unconsumed-content handling.</em>
+<a class="jxr_linenumber" name="L650" href="#L650">650</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L651" href="#L651">651</a> <em class="jxr_javadoccomment">	 * Same as {@link #getReader()}, but doesn't encapsulate the result in a {@link BufferedReader};</em>
+<a class="jxr_linenumber" name="L652" href="#L652">652</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L653" href="#L653">653</a> <em class="jxr_javadoccomment">	 * @return An unbuffered reader.</em>
+<a class="jxr_linenumber" name="L654" href="#L654">654</a> <em class="jxr_javadoccomment">	 * @throws IOException Thrown by underlying stream.</em>
+<a class="jxr_linenumber" name="L655" href="#L655">655</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L656" href="#L656">656</a> 	<strong class="jxr_keyword">protected</strong> Reader getUnbufferedReader() <strong class="jxr_keyword">throws</strong> IOException {
+<a class="jxr_linenumber" name="L657" href="#L657">657</a> 		<strong class="jxr_keyword">if</strong> (nn(content))
+<a class="jxr_linenumber" name="L658" href="#L658">658</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> CharSequenceReader(<strong class="jxr_keyword">new</strong> String(content, UTF8));
+<a class="jxr_linenumber" name="L659" href="#L659">659</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> InputStreamReader(getInputStream(), req.getCharset());
+<a class="jxr_linenumber" name="L660" href="#L660">660</a> 	}
+<a class="jxr_linenumber" name="L661" href="#L661">661</a> 
+<a class="jxr_linenumber" name="L662" href="#L662">662</a> 	<strong class="jxr_keyword">boolean</strong> isLoaded() { <strong class="jxr_keyword">return</strong> nn(content); }
+<a class="jxr_linenumber" name="L663" href="#L663">663</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

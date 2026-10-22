@@ -50,15 +50,15 @@
 <span class="source-line-no">037</span><span id="line-37"> * &lt;/ul&gt;</span>
 <span class="source-line-no">038</span><span id="line-38"> */</span>
 <span class="source-line-no">039</span><span id="line-39">@SuppressWarnings({</span>
-<span class="source-line-no">040</span><span id="line-40">   "resource", // Resource management handled externally</span>
+<span class="source-line-no">040</span><span id="line-40">   "java:S110", // Body-var-resolving anonymous writer inherits the inherent CRTP writer chain (Writer-&gt;SerializerWriter-&gt;XmlWriter-&gt;HtmlWriter-&gt;BasicHtmlWriter); depth is not reducible without unwinding CRTP.</span>
 <span class="source-line-no">041</span><span id="line-41">   "java:S112", // Generic exception thrown; template methods throw Exception for subclass flexibility</span>
 <span class="source-line-no">042</span><span id="line-42">   "java:S1192", // HTML tag names (e.g. aside, section) repeated in template; constants would obscure markup</span>
-<span class="source-line-no">043</span><span id="line-43">   "java:S110" // Body-var-resolving anonymous writer inherits the inherent CRTP writer chain (Writer-&gt;SerializerWriter-&gt;XmlWriter-&gt;HtmlWriter-&gt;BasicHtmlWriter); depth is not reducible without unwinding CRTP.</span>
+<span class="source-line-no">043</span><span id="line-43">   "resource" // Resource management handled externally</span>
 <span class="source-line-no">044</span><span id="line-44">})</span>
 <span class="source-line-no">045</span><span id="line-45">public class BasicHtmlDocTemplate implements HtmlDocTemplate {</span>
 <span class="source-line-no">046</span><span id="line-46"></span>
 <span class="source-line-no">047</span><span id="line-47">   private static boolean exists(String s) {</span>
-<span class="source-line-no">048</span><span id="line-48">      return nn(s) &amp;&amp; ! "NONE".equals(s);</span>
+<span class="source-line-no">048</span><span id="line-48">      return nn(s) &amp;&amp; neq(s, "NONE");</span>
 <span class="source-line-no">049</span><span id="line-49">   }</span>
 <span class="source-line-no">050</span><span id="line-50"></span>
 <span class="source-line-no">051</span><span id="line-51">   private static boolean isEmptyObject(Object o) {</span>
@@ -107,7 +107,7 @@
 <span class="source-line-no">094</span><span id="line-94">      } else if (isEmptyObject(o)) {</span>
 <span class="source-line-no">095</span><span id="line-95">         String m = session.getNoResultsMessage();</span>
 <span class="source-line-no">096</span><span id="line-96">         if (exists(m))</span>
-<span class="source-line-no">097</span><span id="line-97">            w.append(6, session.resolve(m)).nl(6);</span>
+<span class="source-line-no">097</span><span id="line-97">            w.append(6, session.resolveHtmlDoc(m)).nl(6);</span>
 <span class="source-line-no">098</span><span id="line-98">      } else {</span>
 <span class="source-line-no">099</span><span id="line-99">         session.indent = 6;</span>
 <span class="source-line-no">100</span><span id="line-100">         w.flush();</span>
@@ -137,7 +137,7 @@
 <span class="source-line-no">124</span><span id="line-124">   protected void aside(HtmlDocSerializerSession session, HtmlWriter&lt;?&gt; w, Object o) throws Exception {</span>
 <span class="source-line-no">125</span><span id="line-125">      var aside = session.getAside();</span>
 <span class="source-line-no">126</span><span id="line-126">      for (var i = 0; i &lt; aside.length; i++)</span>
-<span class="source-line-no">127</span><span id="line-127">         w.sIf(i &gt; 0).appendln(4, session.resolve(aside[i]));</span>
+<span class="source-line-no">127</span><span id="line-127">         w.sIf(i &gt; 0).appendln(4, session.resolveHtmlDoc(aside[i]));</span>
 <span class="source-line-no">128</span><span id="line-128">   }</span>
 <span class="source-line-no">129</span><span id="line-129"></span>
 <span class="source-line-no">130</span><span id="line-130">   /**</span>
@@ -219,7 +219,7 @@
 <span class="source-line-no">206</span><span id="line-206">   protected void footer(HtmlDocSerializerSession session, HtmlWriter&lt;?&gt; w, Object o) throws Exception {</span>
 <span class="source-line-no">207</span><span id="line-207">      var footer = session.getFooter();</span>
 <span class="source-line-no">208</span><span id="line-208">      for (var i = 0; i &lt; footer.length; i++)</span>
-<span class="source-line-no">209</span><span id="line-209">         w.sIf(i &gt; 0).appendln(3, session.resolve(footer[i]));</span>
+<span class="source-line-no">209</span><span id="line-209">         w.sIf(i &gt; 0).appendln(3, session.resolveHtmlDoc(footer[i]));</span>
 <span class="source-line-no">210</span><span id="line-210">   }</span>
 <span class="source-line-no">211</span><span id="line-211"></span>
 <span class="source-line-no">212</span><span id="line-212">   /**</span>
@@ -298,7 +298,7 @@
 <span class="source-line-no">285</span><span id="line-285"></span>
 <span class="source-line-no">286</span><span id="line-286">      var head = session.getHead();</span>
 <span class="source-line-no">287</span><span id="line-287">      for (var i = 0; i &lt; head.length; i++)</span>
-<span class="source-line-no">288</span><span id="line-288">         w.sIf(i &gt; 0).appendln(2, session.resolve(head[i]));</span>
+<span class="source-line-no">288</span><span id="line-288">         w.sIf(i &gt; 0).appendln(2, session.resolveHtmlDoc(head[i]));</span>
 <span class="source-line-no">289</span><span id="line-289"></span>
 <span class="source-line-no">290</span><span id="line-290">      var nonce = session.getNonce();</span>
 <span class="source-line-no">291</span><span id="line-291">      if (hasStyle(session)) {</span>
@@ -331,7 +331,7 @@
 <span class="source-line-no">318</span><span id="line-318">      // Write the title of the page.</span>
 <span class="source-line-no">319</span><span id="line-319">      var header = session.getHeader();</span>
 <span class="source-line-no">320</span><span id="line-320">      for (var i = 0; i &lt; header.length; i++)</span>
-<span class="source-line-no">321</span><span id="line-321">         w.sIf(i &gt; 0).appendln(3, session.resolve(header[i]));</span>
+<span class="source-line-no">321</span><span id="line-321">         w.sIf(i &gt; 0).appendln(3, session.resolveHtmlDoc(header[i]));</span>
 <span class="source-line-no">322</span><span id="line-322">   }</span>
 <span class="source-line-no">323</span><span id="line-323"></span>
 <span class="source-line-no">324</span><span id="line-324">   /**</span>
@@ -351,76 +351,81 @@
 <span class="source-line-no">338</span><span id="line-338">         w.sTag(3, "ol").nl(3);</span>
 <span class="source-line-no">339</span><span id="line-339">         for (var l : links) {</span>
 <span class="source-line-no">340</span><span id="line-340">            w.sTag(4, "li");</span>
-<span class="source-line-no">341</span><span id="line-341">            l = session.resolve(l);</span>
-<span class="source-line-no">342</span><span id="line-342">            if (l.matches("(?s)\\S+\\:.*")) {</span>
-<span class="source-line-no">343</span><span id="line-343">               var i = l.indexOf(':');</span>
-<span class="source-line-no">344</span><span id="line-344">               var key = l.substring(0, i);</span>
-<span class="source-line-no">345</span><span id="line-345">               var val = l.substring(i + 1).trim();</span>
-<span class="source-line-no">346</span><span id="line-346">               // Bare "request:/?q", "request:?q", "servlet:...", "context:..." were split so key was the scheme</span>
-<span class="source-line-no">347</span><span id="line-347">               // and val lost the scheme; resolveUri then saw /? or ? only and browsers turned "request:?q" into a</span>
-<span class="source-line-no">348</span><span id="line-348">               // bogus path segment. Rejoin to a full marshall URI when val is path/query/fragment only.</span>
-<span class="source-line-no">349</span><span id="line-349">               var scheme = MARSHALL_URI_NAVLINK_SCHEMES.stream()</span>
-<span class="source-line-no">350</span><span id="line-350">                  .filter(sch -&gt; sch.equalsIgnoreCase(key))</span>
-<span class="source-line-no">351</span><span id="line-351">                  .findFirst()</span>
-<span class="source-line-no">352</span><span id="line-352">                  .orElse(null);</span>
-<span class="source-line-no">353</span><span id="line-353">               if (scheme != null &amp;&amp; ! val.isEmpty()) {</span>
-<span class="source-line-no">354</span><span id="line-354">                  var c0 = val.charAt(0);</span>
-<span class="source-line-no">355</span><span id="line-355">                  if (c0 == '/' || c0 == '?' || c0 == '#')</span>
-<span class="source-line-no">356</span><span id="line-356">                     val = scheme + ':' + val;</span>
-<span class="source-line-no">357</span><span id="line-357">               }</span>
-<span class="source-line-no">358</span><span id="line-358">               if (val.startsWith("&lt;"))</span>
-<span class="source-line-no">359</span><span id="line-359">                  w.nl(4).appendln(5, val);</span>
-<span class="source-line-no">360</span><span id="line-360">               else</span>
-<span class="source-line-no">361</span><span id="line-361">                  w.oTag("a").attr("href", session.resolveUri(val), true).cTag().text(key, true).eTag("a");</span>
-<span class="source-line-no">362</span><span id="line-362">               w.eTag("li").nl(4);</span>
-<span class="source-line-no">363</span><span id="line-363">            } else {</span>
-<span class="source-line-no">364</span><span id="line-364">               w.nl(4).appendln(5, l);</span>
-<span class="source-line-no">365</span><span id="line-365">               w.eTag(4, "li").nl(4);</span>
-<span class="source-line-no">366</span><span id="line-366">            }</span>
-<span class="source-line-no">367</span><span id="line-367">         }</span>
-<span class="source-line-no">368</span><span id="line-368">         w.eTag(3, "ol").nl(3);</span>
-<span class="source-line-no">369</span><span id="line-369">      }</span>
-<span class="source-line-no">370</span><span id="line-370">      var nav = session.getNav();</span>
-<span class="source-line-no">371</span><span id="line-371">      if (nav.length &gt; 0) {</span>
-<span class="source-line-no">372</span><span id="line-372">         for (var i = 0; i &lt; nav.length; i++)</span>
-<span class="source-line-no">373</span><span id="line-373">            w.sIf(i &gt; 0).appendln(3, session.resolve(nav[i]));</span>
+<span class="source-line-no">341</span><span id="line-341">            var original = l;</span>
+<span class="source-line-no">342</span><span id="line-342">            l = session.resolve(l);</span>
+<span class="source-line-no">343</span><span id="line-343">            if (l.matches("(?s)\\S+\\:.*")) {</span>
+<span class="source-line-no">344</span><span id="line-344">               var i = l.indexOf(':');</span>
+<span class="source-line-no">345</span><span id="line-345">               var key = l.substring(0, i);</span>
+<span class="source-line-no">346</span><span id="line-346">               var val = l.substring(i + 1).trim();</span>
+<span class="source-line-no">347</span><span id="line-347">               // Bare "request:/?q", "request:?q", "servlet:...", "context:..." were split so key was the scheme</span>
+<span class="source-line-no">348</span><span id="line-348">               // and val lost the scheme; resolveUri then saw /? or ? only and browsers turned "request:?q" into a</span>
+<span class="source-line-no">349</span><span id="line-349">               // bogus path segment. Rejoin to a full marshall URI when val is path/query/fragment only.</span>
+<span class="source-line-no">350</span><span id="line-350">               var scheme = MARSHALL_URI_NAVLINK_SCHEMES.stream()</span>
+<span class="source-line-no">351</span><span id="line-351">                  .filter(sch -&gt; eqic(sch, key))</span>
+<span class="source-line-no">352</span><span id="line-352">                  .findFirst()</span>
+<span class="source-line-no">353</span><span id="line-353">                  .orElse(null);</span>
+<span class="source-line-no">354</span><span id="line-354">               if (scheme != null &amp;&amp; ! val.isEmpty()) {</span>
+<span class="source-line-no">355</span><span id="line-355">                  var c0 = val.charAt(0);</span>
+<span class="source-line-no">356</span><span id="line-356">                  if (c0 == '/' || c0 == '?' || c0 == '#')</span>
+<span class="source-line-no">357</span><span id="line-357">                     val = scheme + ':' + val;</span>
+<span class="source-line-no">358</span><span id="line-358">               }</span>
+<span class="source-line-no">359</span><span id="line-359">               if (val.startsWith("&lt;")) {</span>
+<span class="source-line-no">360</span><span id="line-360">                  var encoded = session.resolveHtmlDoc(original);</span>
+<span class="source-line-no">361</span><span id="line-361">                  var i2 = encoded.indexOf(':');</span>
+<span class="source-line-no">362</span><span id="line-362">                  if (i2 != -1)</span>
+<span class="source-line-no">363</span><span id="line-363">                     encoded = encoded.substring(i2 + 1).trim();</span>
+<span class="source-line-no">364</span><span id="line-364">                  w.nl(4).appendln(5, encoded);</span>
+<span class="source-line-no">365</span><span id="line-365">               } else</span>
+<span class="source-line-no">366</span><span id="line-366">                  w.oTag("a").attr("href", session.resolveUri(val), true).cTag().text(key, true).eTag("a");</span>
+<span class="source-line-no">367</span><span id="line-367">               w.eTag("li").nl(4);</span>
+<span class="source-line-no">368</span><span id="line-368">            } else {</span>
+<span class="source-line-no">369</span><span id="line-369">               w.nl(4).appendln(5, session.resolveHtmlDoc(original));</span>
+<span class="source-line-no">370</span><span id="line-370">               w.eTag(4, "li").nl(4);</span>
+<span class="source-line-no">371</span><span id="line-371">            }</span>
+<span class="source-line-no">372</span><span id="line-372">         }</span>
+<span class="source-line-no">373</span><span id="line-373">         w.eTag(3, "ol").nl(3);</span>
 <span class="source-line-no">374</span><span id="line-374">      }</span>
-<span class="source-line-no">375</span><span id="line-375">   }</span>
-<span class="source-line-no">376</span><span id="line-376"></span>
-<span class="source-line-no">377</span><span id="line-377">   /**</span>
-<span class="source-line-no">378</span><span id="line-378">    * Renders the contents of the &lt;code&gt;&lt;xt&gt;&amp;lt;head&amp;gt;&lt;/xt&gt;/&lt;xt&gt;&amp;lt;script&amp;gt;&lt;/xt&gt;&lt;/code&gt; element.</span>
-<span class="source-line-no">379</span><span id="line-379">    *</span>
-<span class="source-line-no">380</span><span id="line-380">    * @param session The current serializer session.</span>
-<span class="source-line-no">381</span><span id="line-381">    * @param w The writer being written to.</span>
-<span class="source-line-no">382</span><span id="line-382">    * @param o The object being serialized.</span>
-<span class="source-line-no">383</span><span id="line-383">    * @throws Exception Any exception can be thrown.</span>
-<span class="source-line-no">384</span><span id="line-384">    */</span>
-<span class="source-line-no">385</span><span id="line-385">   protected void script(HtmlDocSerializerSession session, HtmlWriter&lt;?&gt; w, Object o) throws Exception {</span>
-<span class="source-line-no">386</span><span id="line-386">      var addSpace = Flag.create();</span>
-<span class="source-line-no">387</span><span id="line-387">      for (var s : session.getScript())</span>
-<span class="source-line-no">388</span><span id="line-388">         w.sIf(addSpace.getAndSet()).append(3, session.resolve(s)).append('\n'); // Must always append a newline even if whitespace disabled!</span>
-<span class="source-line-no">389</span><span id="line-389">      session.forEachWidget(x -&gt; w.sIf(addSpace.getAndSet()).append(3, session.resolve(x.getScript(session.getVarResolver()))).w('\n')); // Must always append a newline even if whitespace disabled!</span>
-<span class="source-line-no">390</span><span id="line-390">   }</span>
-<span class="source-line-no">391</span><span id="line-391"></span>
-<span class="source-line-no">392</span><span id="line-392">   /**</span>
-<span class="source-line-no">393</span><span id="line-393">    * Renders the contents of the &lt;code&gt;&lt;xt&gt;&amp;lt;head&amp;gt;&lt;/xt&gt;/&lt;xt&gt;&amp;lt;style&amp;gt;&lt;/xt&gt;&lt;/code&gt; element.</span>
-<span class="source-line-no">394</span><span id="line-394">    *</span>
-<span class="source-line-no">395</span><span id="line-395">    * @param session The current serializer session.</span>
-<span class="source-line-no">396</span><span id="line-396">    * @param w The writer being written to.</span>
-<span class="source-line-no">397</span><span id="line-397">    * @param o The object being serialized.</span>
-<span class="source-line-no">398</span><span id="line-398">    * @throws Exception Any exception can be thrown.</span>
-<span class="source-line-no">399</span><span id="line-399">    */</span>
-<span class="source-line-no">400</span><span id="line-400">   protected void style(HtmlDocSerializerSession session, HtmlWriter&lt;?&gt; w, Object o) throws Exception {</span>
-<span class="source-line-no">401</span><span id="line-401">      var addSpace = Flag.create();</span>
-<span class="source-line-no">402</span><span id="line-402">      for (var s : session.getStylesheet())</span>
-<span class="source-line-no">403</span><span id="line-403">         w.sIf(addSpace.getAndSet()).append(3, "@import ").q().append(session.resolveUri(session.resolve(s))).q().appendln(";");</span>
-<span class="source-line-no">404</span><span id="line-404">      if (session.isNowrap())</span>
-<span class="source-line-no">405</span><span id="line-405">         w.appendln(3, "div.data * {white-space:nowrap;} ");</span>
-<span class="source-line-no">406</span><span id="line-406">      for (var s : session.getStyle())</span>
-<span class="source-line-no">407</span><span id="line-407">         w.sIf(addSpace.getAndSet()).appendln(3, session.resolve(s));</span>
-<span class="source-line-no">408</span><span id="line-408">      session.forEachWidget(x -&gt; w.sIf(addSpace.getAndSet()).appendln(3, session.resolve(x.getStyle(session.getVarResolver()))));</span>
-<span class="source-line-no">409</span><span id="line-409">   }</span>
-<span class="source-line-no">410</span><span id="line-410">}</span>
+<span class="source-line-no">375</span><span id="line-375">      var nav = session.getNav();</span>
+<span class="source-line-no">376</span><span id="line-376">      if (nav.length &gt; 0) {</span>
+<span class="source-line-no">377</span><span id="line-377">         for (var i = 0; i &lt; nav.length; i++)</span>
+<span class="source-line-no">378</span><span id="line-378">            w.sIf(i &gt; 0).appendln(3, session.resolveHtmlDoc(nav[i]));</span>
+<span class="source-line-no">379</span><span id="line-379">      }</span>
+<span class="source-line-no">380</span><span id="line-380">   }</span>
+<span class="source-line-no">381</span><span id="line-381"></span>
+<span class="source-line-no">382</span><span id="line-382">   /**</span>
+<span class="source-line-no">383</span><span id="line-383">    * Renders the contents of the &lt;code&gt;&lt;xt&gt;&amp;lt;head&amp;gt;&lt;/xt&gt;/&lt;xt&gt;&amp;lt;script&amp;gt;&lt;/xt&gt;&lt;/code&gt; element.</span>
+<span class="source-line-no">384</span><span id="line-384">    *</span>
+<span class="source-line-no">385</span><span id="line-385">    * @param session The current serializer session.</span>
+<span class="source-line-no">386</span><span id="line-386">    * @param w The writer being written to.</span>
+<span class="source-line-no">387</span><span id="line-387">    * @param o The object being serialized.</span>
+<span class="source-line-no">388</span><span id="line-388">    * @throws Exception Any exception can be thrown.</span>
+<span class="source-line-no">389</span><span id="line-389">    */</span>
+<span class="source-line-no">390</span><span id="line-390">   protected void script(HtmlDocSerializerSession session, HtmlWriter&lt;?&gt; w, Object o) throws Exception {</span>
+<span class="source-line-no">391</span><span id="line-391">      var addSpace = Flag.create();</span>
+<span class="source-line-no">392</span><span id="line-392">      for (var s : session.getScript())</span>
+<span class="source-line-no">393</span><span id="line-393">         w.sIf(addSpace.getAndSet()).append(3, session.resolveScriptStyle(s)).append('\n'); // Must always append a newline even if whitespace disabled!</span>
+<span class="source-line-no">394</span><span id="line-394">      session.forEachWidget(x -&gt; w.sIf(addSpace.getAndSet()).append(3, session.resolveScriptStyle(x.getScript(session.getVarResolver()))).w('\n')); // Must always append a newline even if whitespace disabled!</span>
+<span class="source-line-no">395</span><span id="line-395">   }</span>
+<span class="source-line-no">396</span><span id="line-396"></span>
+<span class="source-line-no">397</span><span id="line-397">   /**</span>
+<span class="source-line-no">398</span><span id="line-398">    * Renders the contents of the &lt;code&gt;&lt;xt&gt;&amp;lt;head&amp;gt;&lt;/xt&gt;/&lt;xt&gt;&amp;lt;style&amp;gt;&lt;/xt&gt;&lt;/code&gt; element.</span>
+<span class="source-line-no">399</span><span id="line-399">    *</span>
+<span class="source-line-no">400</span><span id="line-400">    * @param session The current serializer session.</span>
+<span class="source-line-no">401</span><span id="line-401">    * @param w The writer being written to.</span>
+<span class="source-line-no">402</span><span id="line-402">    * @param o The object being serialized.</span>
+<span class="source-line-no">403</span><span id="line-403">    * @throws Exception Any exception can be thrown.</span>
+<span class="source-line-no">404</span><span id="line-404">    */</span>
+<span class="source-line-no">405</span><span id="line-405">   protected void style(HtmlDocSerializerSession session, HtmlWriter&lt;?&gt; w, Object o) throws Exception {</span>
+<span class="source-line-no">406</span><span id="line-406">      var addSpace = Flag.create();</span>
+<span class="source-line-no">407</span><span id="line-407">      for (var s : session.getStylesheet())</span>
+<span class="source-line-no">408</span><span id="line-408">         w.sIf(addSpace.getAndSet()).append(3, "@import ").q().append(session.resolveUri(session.resolve(s))).q().appendln(";");</span>
+<span class="source-line-no">409</span><span id="line-409">      if (session.isNowrap())</span>
+<span class="source-line-no">410</span><span id="line-410">         w.appendln(3, "div.data * {white-space:nowrap;} ");</span>
+<span class="source-line-no">411</span><span id="line-411">      for (var s : session.getStyle())</span>
+<span class="source-line-no">412</span><span id="line-412">         w.sIf(addSpace.getAndSet()).appendln(3, session.resolveScriptStyle(s));</span>
+<span class="source-line-no">413</span><span id="line-413">      session.forEachWidget(x -&gt; w.sIf(addSpace.getAndSet()).appendln(3, session.resolveScriptStyle(x.getStyle(session.getVarResolver()))));</span>
+<span class="source-line-no">414</span><span id="line-414">   }</span>
+<span class="source-line-no">415</span><span id="line-415">}</span>
 
 
 

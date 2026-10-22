@@ -207,11 +207,11 @@
 <a class="jxr_linenumber" name="L199" href="#L199">199</a> 		<strong class="jxr_keyword">var</strong> id = readIdentifier();
 <a class="jxr_linenumber" name="L200" href="#L200">200</a> 		<strong class="jxr_keyword">if</strong> (id.isEmpty())
 <a class="jxr_linenumber" name="L201" href="#L201">201</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> ParseException(<span class="jxr_string">"Expected value at position "</span> + pos);
-<a class="jxr_linenumber" name="L202" href="#L202">202</a> 		<strong class="jxr_keyword">if</strong> (id.equalsIgnoreCase(nullMarker))
+<a class="jxr_linenumber" name="L202" href="#L202">202</a> 		<strong class="jxr_keyword">if</strong> (eqic(id, nullMarker))
 <a class="jxr_linenumber" name="L203" href="#L203">203</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L204" href="#L204">204</a> 		<strong class="jxr_keyword">if</strong> (id.equals(<span class="jxr_string">"true"</span>))
+<a class="jxr_linenumber" name="L204" href="#L204">204</a> 		<strong class="jxr_keyword">if</strong> (eq(id, <span class="jxr_string">"true"</span>))
 <a class="jxr_linenumber" name="L205" href="#L205">205</a> 			<strong class="jxr_keyword">return</strong> Boolean.TRUE;
-<a class="jxr_linenumber" name="L206" href="#L206">206</a> 		<strong class="jxr_keyword">if</strong> (id.equals(<span class="jxr_string">"false"</span>))
+<a class="jxr_linenumber" name="L206" href="#L206">206</a> 		<strong class="jxr_keyword">if</strong> (eq(id, <span class="jxr_string">"false"</span>))
 <a class="jxr_linenumber" name="L207" href="#L207">207</a> 			<strong class="jxr_keyword">return</strong> Boolean.FALSE;
 <a class="jxr_linenumber" name="L208" href="#L208">208</a> 		<em class="jxr_comment">// Try number</em>
 <a class="jxr_linenumber" name="L209" href="#L209">209</a> 		<strong class="jxr_keyword">try</strong> {

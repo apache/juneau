@@ -57,10 +57,10 @@
 <span class="source-line-no">044</span><span id="line-44">   public static boolean isSecureOrLoopback(URI uri) {</span>
 <span class="source-line-no">045</span><span id="line-45">      if (uri == null)</span>
 <span class="source-line-no">046</span><span id="line-46">         return false;</span>
-<span class="source-line-no">047</span><span id="line-47">      if ("https".equalsIgnoreCase(uri.getScheme()))</span>
+<span class="source-line-no">047</span><span id="line-47">      if (eqic("https", uri.getScheme()))</span>
 <span class="source-line-no">048</span><span id="line-48">         return true;</span>
 <span class="source-line-no">049</span><span id="line-49">      var host = uri.getHost();</span>
-<span class="source-line-no">050</span><span id="line-50">      return host != null &amp;&amp; (host.equals("127.0.0.1") || host.equalsIgnoreCase("localhost") || host.equals("[::1]") || host.equals("::1"));</span>
+<span class="source-line-no">050</span><span id="line-50">      return host != null &amp;&amp; (eq(host, "127.0.0.1") || eqic(host, "localhost") || eqa(host, "[::1]", "::1"));</span>
 <span class="source-line-no">051</span><span id="line-51">   }</span>
 <span class="source-line-no">052</span><span id="line-52"></span>
 <span class="source-line-no">053</span><span id="line-53">   /**</span>

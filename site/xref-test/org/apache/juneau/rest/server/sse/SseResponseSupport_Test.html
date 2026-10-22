@@ -51,13 +51,14 @@
 <a class="jxr_linenumber" name="L43" href="#L43">43</a>  		<strong class="jxr_keyword">var</strong> a = MockRestClient.buildLax(A.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L44" href="#L44">44</a>  		<strong class="jxr_keyword">var</strong> b = a.get(<span class="jxr_string">"/stream"</span>).header(<span class="jxr_string">"Accept"</span>, <span class="jxr_string">"text/event-stream"</span>).run();
 <a class="jxr_linenumber" name="L45" href="#L45">45</a>  		b.assertHeader(<span class="jxr_string">"Content-Type"</span>).isContains(<span class="jxr_string">"text/event-stream"</span>);
-<a class="jxr_linenumber" name="L46" href="#L46">46</a>  		<strong class="jxr_keyword">var</strong> c = b.getContent().asString();
-<a class="jxr_linenumber" name="L47" href="#L47">47</a>  		assertTrue(c.contains(<span class="jxr_string">"event: tick"</span>));
-<a class="jxr_linenumber" name="L48" href="#L48">48</a>  		assertTrue(c.contains(<span class="jxr_string">"data: one"</span>));
-<a class="jxr_linenumber" name="L49" href="#L49">49</a>  		assertTrue(c.contains(<span class="jxr_string">": ping"</span>));
-<a class="jxr_linenumber" name="L50" href="#L50">50</a>  		assertTrue(c.contains(<span class="jxr_string">"data: two"</span>));
-<a class="jxr_linenumber" name="L51" href="#L51">51</a>  	}
-<a class="jxr_linenumber" name="L52" href="#L52">52</a>  }
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>  		b.assertHeader(<span class="jxr_string">"X-Accel-Buffering"</span>).is(<span class="jxr_string">"no"</span>);
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>  		<strong class="jxr_keyword">var</strong> c = b.getContent().asString();
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>  		assertTrue(c.contains(<span class="jxr_string">"event: tick"</span>));
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>  		assertTrue(c.contains(<span class="jxr_string">"data: one"</span>));
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>  		assertTrue(c.contains(<span class="jxr_string">": ping"</span>));
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>  		assertTrue(c.contains(<span class="jxr_string">"data: two"</span>));
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>  	}
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>  }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

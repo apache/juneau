@@ -42,8 +42,8 @@
 <a class="jxr_linenumber" name="L34" href="#L34">34</a>  <em class="jxr_javadoccomment"> * and edge case handling for PropertyExtractor implementations.&lt;/p&gt;</em>
 <a class="jxr_linenumber" name="L35" href="#L35">35</a>  <em class="jxr_javadoccomment"> */</em>
 <a class="jxr_linenumber" name="L36" href="#L36">36</a>  @SuppressWarnings({
-<a class="jxr_linenumber" name="L37" href="#L37">37</a>  	<span class="jxr_string">"unchecked"</span>, <em class="jxr_comment">// Cast from Object to List; toList raw invocation in tests</em>
-<a class="jxr_linenumber" name="L38" href="#L38">38</a>  	<span class="jxr_string">"cast"</span> <em class="jxr_comment">// Explicit cast needed for type testing</em>
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>  	<span class="jxr_string">"cast"</span>, <em class="jxr_comment">// Explicit cast needed for type testing</em>
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>  	<span class="jxr_string">"unchecked"</span> <em class="jxr_comment">// Cast from Object to List; toList raw invocation in tests</em>
 <a class="jxr_linenumber" name="L39" href="#L39">39</a>  })
 <a class="jxr_linenumber" name="L40" href="#L40">40</a>  <strong class="jxr_keyword">class</strong> PropertyExtractor_Test <strong class="jxr_keyword">extends</strong> TestBase {
 <a class="jxr_linenumber" name="L41" href="#L41">41</a>  
@@ -234,7 +234,7 @@
 <a class="jxr_linenumber" name="L226" href="#L226">226</a> 
 <a class="jxr_linenumber" name="L227" href="#L227">227</a> 				@Override
 <a class="jxr_linenumber" name="L228" href="#L228">228</a> 				<strong class="jxr_keyword">public</strong> Object extract(BeanConverter converter, Object o, String key) {
-<a class="jxr_linenumber" name="L229" href="#L229">229</a> 					<strong class="jxr_keyword">if</strong> (<span class="jxr_string">"error"</span>.equals(key)) {
+<a class="jxr_linenumber" name="L229" href="#L229">229</a> 					<strong class="jxr_keyword">if</strong> (eq(key, <span class="jxr_string">"error"</span>)) {
 <a class="jxr_linenumber" name="L230" href="#L230">230</a> 						<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> RuntimeException(<span class="jxr_string">"Intentional test exception"</span>);
 <a class="jxr_linenumber" name="L231" href="#L231">231</a> 					}
 <a class="jxr_linenumber" name="L232" href="#L232">232</a> 					<strong class="jxr_keyword">return</strong> <span class="jxr_string">"SUCCESS:"</span> + key;
@@ -255,12 +255,12 @@
 <a class="jxr_linenumber" name="L247" href="#L247">247</a> 			<strong class="jxr_keyword">var</strong> recursive = <strong class="jxr_keyword">new</strong> PropertyExtractor() {
 <a class="jxr_linenumber" name="L248" href="#L248">248</a> 				@Override
 <a class="jxr_linenumber" name="L249" href="#L249">249</a> 				<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> canExtract(BeanConverter converter, Object o, String key) {
-<a class="jxr_linenumber" name="L250" href="#L250">250</a> 					<strong class="jxr_keyword">return</strong> o instanceof String &amp;&amp; <span class="jxr_string">"recursive"</span>.equals(key);
+<a class="jxr_linenumber" name="L250" href="#L250">250</a> 					<strong class="jxr_keyword">return</strong> o instanceof String &amp;&amp; eq(key, <span class="jxr_string">"recursive"</span>);
 <a class="jxr_linenumber" name="L251" href="#L251">251</a> 				}
 <a class="jxr_linenumber" name="L252" href="#L252">252</a> 
 <a class="jxr_linenumber" name="L253" href="#L253">253</a> 				@Override
 <a class="jxr_linenumber" name="L254" href="#L254">254</a> 				<strong class="jxr_keyword">public</strong> Object extract(BeanConverter converter, Object o, String key) {
-<a class="jxr_linenumber" name="L255" href="#L255">255</a> 					<strong class="jxr_keyword">if</strong> (<span class="jxr_string">"recursive"</span>.equals(key) &amp;&amp; o instanceof String o2) {
+<a class="jxr_linenumber" name="L255" href="#L255">255</a> 					<strong class="jxr_keyword">if</strong> (eq(key, <span class="jxr_string">"recursive"</span>) &amp;&amp; o instanceof String o2) {
 <a class="jxr_linenumber" name="L256" href="#L256">256</a> 						<em class="jxr_comment">// Use the converter recursively</em>
 <a class="jxr_linenumber" name="L257" href="#L257">257</a> 						<strong class="jxr_keyword">return</strong> <span class="jxr_string">"RECURSIVE["</span> + converter.stringify(o2.length()) + <span class="jxr_string">"]"</span>;
 <a class="jxr_linenumber" name="L258" href="#L258">258</a> 					}
@@ -323,7 +323,7 @@
 <a class="jxr_linenumber" name="L315" href="#L315">315</a> 			<strong class="jxr_keyword">var</strong> customExtractor = <strong class="jxr_keyword">new</strong> PropertyExtractor() {
 <a class="jxr_linenumber" name="L316" href="#L316">316</a> 				@Override
 <a class="jxr_linenumber" name="L317" href="#L317">317</a> 				<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> canExtract(BeanConverter converter, Object o, String key) {
-<a class="jxr_linenumber" name="L318" href="#L318">318</a> 					<strong class="jxr_keyword">return</strong> <span class="jxr_string">"customProp"</span>.equals(key);
+<a class="jxr_linenumber" name="L318" href="#L318">318</a> 					<strong class="jxr_keyword">return</strong> eq(key, <span class="jxr_string">"customProp"</span>);
 <a class="jxr_linenumber" name="L319" href="#L319">319</a> 				}
 <a class="jxr_linenumber" name="L320" href="#L320">320</a> 
 <a class="jxr_linenumber" name="L321" href="#L321">321</a> 				@Override
@@ -352,7 +352,7 @@
 <a class="jxr_linenumber" name="L344" href="#L344">344</a> 			<strong class="jxr_keyword">var</strong> first = <strong class="jxr_keyword">new</strong> PropertyExtractor() {
 <a class="jxr_linenumber" name="L345" href="#L345">345</a> 				@Override
 <a class="jxr_linenumber" name="L346" href="#L346">346</a> 				<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> canExtract(BeanConverter converter, Object o, String key) {
-<a class="jxr_linenumber" name="L347" href="#L347">347</a> 					<strong class="jxr_keyword">return</strong> <span class="jxr_string">"first"</span>.equals(key);
+<a class="jxr_linenumber" name="L347" href="#L347">347</a> 					<strong class="jxr_keyword">return</strong> eq(key, <span class="jxr_string">"first"</span>);
 <a class="jxr_linenumber" name="L348" href="#L348">348</a> 				}
 <a class="jxr_linenumber" name="L349" href="#L349">349</a> 
 <a class="jxr_linenumber" name="L350" href="#L350">350</a> 				@Override
@@ -364,7 +364,7 @@
 <a class="jxr_linenumber" name="L356" href="#L356">356</a> 			<strong class="jxr_keyword">var</strong> second = <strong class="jxr_keyword">new</strong> PropertyExtractor() {
 <a class="jxr_linenumber" name="L357" href="#L357">357</a> 				@Override
 <a class="jxr_linenumber" name="L358" href="#L358">358</a> 				<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> canExtract(BeanConverter converter, Object o, String key) {
-<a class="jxr_linenumber" name="L359" href="#L359">359</a> 					<strong class="jxr_keyword">return</strong> <span class="jxr_string">"second"</span>.equals(key);
+<a class="jxr_linenumber" name="L359" href="#L359">359</a> 					<strong class="jxr_keyword">return</strong> eq(key, <span class="jxr_string">"second"</span>);
 <a class="jxr_linenumber" name="L360" href="#L360">360</a> 				}
 <a class="jxr_linenumber" name="L361" href="#L361">361</a> 
 <a class="jxr_linenumber" name="L362" href="#L362">362</a> 				@Override
@@ -393,7 +393,7 @@
 <a class="jxr_linenumber" name="L385" href="#L385">385</a> 			<strong class="jxr_keyword">var</strong> custom = <strong class="jxr_keyword">new</strong> PropertyExtractor() {
 <a class="jxr_linenumber" name="L386" href="#L386">386</a> 				@Override
 <a class="jxr_linenumber" name="L387" href="#L387">387</a> 				<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> canExtract(BeanConverter converter, Object o, String key) {
-<a class="jxr_linenumber" name="L388" href="#L388">388</a> 					<strong class="jxr_keyword">return</strong> <span class="jxr_string">"custom"</span>.equals(key);
+<a class="jxr_linenumber" name="L388" href="#L388">388</a> 					<strong class="jxr_keyword">return</strong> eq(key, <span class="jxr_string">"custom"</span>);
 <a class="jxr_linenumber" name="L389" href="#L389">389</a> 				}
 <a class="jxr_linenumber" name="L390" href="#L390">390</a> 
 <a class="jxr_linenumber" name="L391" href="#L391">391</a> 				@Override

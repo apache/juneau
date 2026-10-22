@@ -74,14 +74,14 @@ loadScripts(document, 'script');</script>
 <h1 title="Class SwaggerUI" class="title">Class SwaggerUI</h1>
 </div>
 <div class="inheritance" title="Inheritance Tree"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">java.lang.Object</a>
-<div class="inheritance"><a href="../../../marshall/swap/ObjectSwap.html" title="class in org.apache.juneau.marshall.swap">org.apache.juneau.marshall.swap.ObjectSwap</a>&lt;<a href="../Swagger.html" title="class in org.apache.juneau.bean.swagger">Swagger</a>,<wbr><a href="../../html5/Div.html" title="class in org.apache.juneau.bean.html5">Div</a>&gt;
+<div class="inheritance"><a href="../../../marshall/swap/spi/ObjectSwap.html" title="class in org.apache.juneau.marshall.swap.spi">org.apache.juneau.marshall.swap.spi.ObjectSwap</a>&lt;<a href="../Swagger.html" title="class in org.apache.juneau.bean.swagger">Swagger</a>,<wbr><a href="../../html5/Div.html" title="class in org.apache.juneau.bean.html5">Div</a>&gt;
 <div class="inheritance">org.apache.juneau.bean.swagger.ui.SwaggerUI</div>
 </div>
 </div>
 <section class="class-description" id="class-description">
 <hr>
 <div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/bean/swagger/ui/SwaggerUI.html#line-49">SwaggerUI</a></span>
-<span class="extends-implements">extends <a href="../../../marshall/swap/ObjectSwap.html" title="class in org.apache.juneau.marshall.swap">ObjectSwap</a>&lt;<a href="../Swagger.html" title="class in org.apache.juneau.bean.swagger">Swagger</a>,<wbr><a href="../../html5/Div.html" title="class in org.apache.juneau.bean.html5">Div</a>&gt;</span></div>
+<span class="extends-implements">extends <a href="../../../marshall/swap/spi/ObjectSwap.html" title="class in org.apache.juneau.marshall.swap.spi">ObjectSwap</a>&lt;<a href="../Swagger.html" title="class in org.apache.juneau.bean.swagger">Swagger</a>,<wbr><a href="../../html5/Div.html" title="class in org.apache.juneau.bean.html5">Div</a>&gt;</span></div>
 <div class="block">Generates a Swagger-UI interface from a Swagger document.
 
  <h5 class='section'>See Also:</h5><ul>
@@ -95,8 +95,8 @@ loadScripts(document, 'script');</script>
 <section class="field-summary" id="field-summary">
 <h2>Field Summary</h2>
 <div class="inherited-list">
-<h3 id="fields-inherited-from-class-org.apache.juneau.marshall.swap.ObjectSwap">Fields inherited from class&nbsp;org.apache.juneau.marshall.swap.<a href="../../../marshall/swap/ObjectSwap.html" title="class in org.apache.juneau.marshall.swap">ObjectSwap</a></h3>
-<code><a href="../../../marshall/swap/ObjectSwap.html#NULL">NULL</a></code></div>
+<h3 id="fields-inherited-from-class-org.apache.juneau.marshall.swap.spi.ObjectSwap">Fields inherited from class&nbsp;org.apache.juneau.marshall.swap.spi.<a href="../../../marshall/swap/spi/ObjectSwap.html" title="class in org.apache.juneau.marshall.swap.spi">ObjectSwap</a></h3>
+<code><a href="../../../marshall/swap/spi/ObjectSwap.html#NULL">NULL</a></code></div>
 </section>
 </li>
 <!-- ======== CONSTRUCTOR SUMMARY ======== -->
@@ -138,8 +138,8 @@ loadScripts(document, 'script');</script>
 </div>
 </div>
 <div class="inherited-list">
-<h3 id="methods-inherited-from-class-org.apache.juneau.marshall.swap.ObjectSwap">Methods inherited from class&nbsp;org.apache.juneau.marshall.swap.<a href="../../../marshall/swap/ObjectSwap.html" title="class in org.apache.juneau.marshall.swap">ObjectSwap</a></h3>
-<code><a href="../../../marshall/swap/ObjectSwap.html#forMediaTypes(org.apache.juneau.commons.http.MediaType%5B%5D)">forMediaTypes</a>, <a href="../../../marshall/swap/ObjectSwap.html#getNormalClass()">getNormalClass</a>, <a href="../../../marshall/swap/ObjectSwap.html#getSwapClass()">getSwapClass</a>, <a href="../../../marshall/swap/ObjectSwap.html#getSwapClassMeta(org.apache.juneau.marshall.MarshallingSession)">getSwapClassMeta</a>, <a href="../../../marshall/swap/ObjectSwap.html#isNormalObject(java.lang.Object)">isNormalObject</a>, <a href="../../../marshall/swap/ObjectSwap.html#isSwappedObject(java.lang.Object)">isSwappedObject</a>, <a href="../../../marshall/swap/ObjectSwap.html#match(org.apache.juneau.marshall.MarshallingSession)">match</a>, <a href="../../../marshall/swap/ObjectSwap.html#swap(org.apache.juneau.marshall.MarshallingSession,T,java.lang.String)">swap</a>, <a href="../../../marshall/swap/ObjectSwap.html#toString()">toString</a>, <a href="../../../marshall/swap/ObjectSwap.html#unswap(org.apache.juneau.marshall.MarshallingSession,S,org.apache.juneau.marshall.ClassMeta)">unswap</a>, <a href="../../../marshall/swap/ObjectSwap.html#unswap(org.apache.juneau.marshall.MarshallingSession,S,org.apache.juneau.marshall.ClassMeta,java.lang.String)">unswap</a>, <a href="../../../marshall/swap/ObjectSwap.html#withTemplate()">withTemplate</a>, <a href="../../../marshall/swap/ObjectSwap.html#withTemplate(java.lang.String)">withTemplate</a></code></div>
+<h3 id="methods-inherited-from-class-org.apache.juneau.marshall.swap.spi.ObjectSwap">Methods inherited from class&nbsp;org.apache.juneau.marshall.swap.spi.<a href="../../../marshall/swap/spi/ObjectSwap.html" title="class in org.apache.juneau.marshall.swap.spi">ObjectSwap</a></h3>
+<code><a href="../../../marshall/swap/spi/ObjectSwap.html#forMediaTypes(org.apache.juneau.commons.http.MediaType%5B%5D)">forMediaTypes</a>, <a href="../../../marshall/swap/spi/ObjectSwap.html#getNormalClass()">getNormalClass</a>, <a href="../../../marshall/swap/spi/ObjectSwap.html#getSwapClass()">getSwapClass</a>, <a href="../../../marshall/swap/spi/ObjectSwap.html#getSwapClassMeta(org.apache.juneau.marshall.MarshallingSession)">getSwapClassMeta</a>, <a href="../../../marshall/swap/spi/ObjectSwap.html#isNormalObject(java.lang.Object)">isNormalObject</a>, <a href="../../../marshall/swap/spi/ObjectSwap.html#isSwappedObject(java.lang.Object)">isSwappedObject</a>, <a href="../../../marshall/swap/spi/ObjectSwap.html#match(org.apache.juneau.marshall.MarshallingSession)">match</a>, <a href="../../../marshall/swap/spi/ObjectSwap.html#swap(org.apache.juneau.marshall.MarshallingSession,T,java.lang.String)">swap</a>, <a href="../../../marshall/swap/spi/ObjectSwap.html#toString()">toString</a>, <a href="../../../marshall/swap/spi/ObjectSwap.html#unswap(org.apache.juneau.marshall.MarshallingSession,S,org.apache.juneau.marshall.ClassMeta)">unswap</a>, <a href="../../../marshall/swap/spi/ObjectSwap.html#unswap(org.apache.juneau.marshall.MarshallingSession,S,org.apache.juneau.marshall.ClassMeta,java.lang.String)">unswap</a>, <a href="../../../marshall/swap/spi/ObjectSwap.html#withTemplate()">withTemplate</a>, <a href="../../../marshall/swap/spi/ObjectSwap.html#withTemplate(java.lang.String)">withTemplate</a></code></div>
 <div class="inherited-list">
 <h3 id="methods-inherited-from-class-java.lang.Object">Methods inherited from class&nbsp;java.lang.<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></h3>
 <code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#clone()" title="class or interface in java.lang" class="external-link">clone</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#equals(java.lang.Object)" title="class or interface in java.lang" class="external-link">equals</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#finalize()" title="class or interface in java.lang" class="external-link">finalize</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#getClass()" title="class or interface in java.lang" class="external-link">getClass</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#hashCode()" title="class or interface in java.lang" class="external-link">hashCode</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#notify()" title="class or interface in java.lang" class="external-link">notify</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#notifyAll()" title="class or interface in java.lang" class="external-link">notifyAll</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#wait()" title="class or interface in java.lang" class="external-link">wait</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#wait(long)" title="class or interface in java.lang" class="external-link">wait</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#wait(long,int)" title="class or interface in java.lang" class="external-link">wait</a></code></div>
@@ -157,7 +157,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;()">
 <h3>SwaggerUI</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/bean/swagger/ui/SwaggerUI.html#line-53">SwaggerUI</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/bean/swagger/ui/SwaggerUI.html#line-54">SwaggerUI</a></span>()</div>
 </section>
 </li>
 </ul>
@@ -171,11 +171,11 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="forMediaTypes()">
 <h3>forMediaTypes</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../../commons/http/MediaType.html" title="class in org.apache.juneau.commons.http">MediaType</a>[]</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/bean/swagger/ui/SwaggerUI.html#line-410">forMediaTypes</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../../commons/http/MediaType.html" title="class in org.apache.juneau.commons.http">MediaType</a>[]</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/bean/swagger/ui/SwaggerUI.html#line-405">forMediaTypes</a></span>()</div>
 <div class="block">This UI applies to HTML requests only.</div>
 <dl class="notes">
 <dt>Overrides:</dt>
-<dd><code><a href="../../../marshall/swap/ObjectSwap.html#forMediaTypes()">forMediaTypes</a></code>&nbsp;in class&nbsp;<code><a href="../../../marshall/swap/ObjectSwap.html" title="class in org.apache.juneau.marshall.swap">ObjectSwap</a>&lt;<a href="../Swagger.html" title="class in org.apache.juneau.bean.swagger">Swagger</a>,<wbr><a href="../../html5/Div.html" title="class in org.apache.juneau.bean.html5">Div</a>&gt;</code></dd>
+<dd><code><a href="../../../marshall/swap/spi/ObjectSwap.html#forMediaTypes()">forMediaTypes</a></code>&nbsp;in class&nbsp;<code><a href="../../../marshall/swap/spi/ObjectSwap.html" title="class in org.apache.juneau.marshall.swap.spi">ObjectSwap</a>&lt;<a href="../Swagger.html" title="class in org.apache.juneau.bean.swagger">Swagger</a>,<wbr><a href="../../html5/Div.html" title="class in org.apache.juneau.bean.html5">Div</a>&gt;</code></dd>
 <dt>Returns:</dt>
 <dd>The media types that this swap is applicable to, or <jk>null</jk> if it's applicable for all media types.</dd>
 </dl>
@@ -184,10 +184,10 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="swap(org.apache.juneau.marshall.MarshallingSession,org.apache.juneau.bean.swagger.Swagger)">
 <h3>swap</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../html5/Div.html" title="class in org.apache.juneau.bean.html5">Div</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/bean/swagger/ui/SwaggerUI.html#line-415">swap</a></span><wbr><span class="parameters">(<a href="../../../marshall/MarshallingSession.html" title="class in org.apache.juneau.marshall">MarshallingSession</a>&nbsp;marshallingSession,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../html5/Div.html" title="class in org.apache.juneau.bean.html5">Div</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/bean/swagger/ui/SwaggerUI.html#line-410">swap</a></span><wbr><span class="parameters">(<a href="../../../marshall/MarshallingSession.html" title="class in org.apache.juneau.marshall">MarshallingSession</a>&nbsp;marshallingSession,
  <a href="../Swagger.html" title="class in org.apache.juneau.bean.swagger">Swagger</a>&nbsp;swagger)</span>
          throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Exception.html" title="class or interface in java.lang" class="external-link">Exception</a></span></div>
-<div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../../../marshall/swap/ObjectSwap.html#swap(org.apache.juneau.marshall.MarshallingSession,T)">ObjectSwap</a></code></span></div>
+<div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../../../marshall/swap/spi/ObjectSwap.html#swap(org.apache.juneau.marshall.MarshallingSession,T)">ObjectSwap</a></code></span></div>
 <div class="block">If this transform is to be used to serialize non-serializable objects, it must implement this method.
 
  <p>
@@ -210,7 +210,7 @@ loadScripts(document, 'script');</script>
  </ul></div>
 <dl class="notes">
 <dt>Overrides:</dt>
-<dd><code><a href="../../../marshall/swap/ObjectSwap.html#swap(org.apache.juneau.marshall.MarshallingSession,T)">swap</a></code>&nbsp;in class&nbsp;<code><a href="../../../marshall/swap/ObjectSwap.html" title="class in org.apache.juneau.marshall.swap">ObjectSwap</a>&lt;<a href="../Swagger.html" title="class in org.apache.juneau.bean.swagger">Swagger</a>,<wbr><a href="../../html5/Div.html" title="class in org.apache.juneau.bean.html5">Div</a>&gt;</code></dd>
+<dd><code><a href="../../../marshall/swap/spi/ObjectSwap.html#swap(org.apache.juneau.marshall.MarshallingSession,T)">swap</a></code>&nbsp;in class&nbsp;<code><a href="../../../marshall/swap/spi/ObjectSwap.html" title="class in org.apache.juneau.marshall.swap.spi">ObjectSwap</a>&lt;<a href="../Swagger.html" title="class in org.apache.juneau.bean.swagger">Swagger</a>,<wbr><a href="../../html5/Div.html" title="class in org.apache.juneau.bean.html5">Div</a>&gt;</code></dd>
 <dt>Parameters:</dt>
 <dd><code>marshallingSession</code> - The bean session to use to get the class meta.
    This is always going to be the same bean context that created this swap.</dd>

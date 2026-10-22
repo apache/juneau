@@ -740,7 +740,68 @@
 <a class="jxr_linenumber" name="L732" href="#L732">732</a> 		op.put(<span class="jxr_string">"responses"</span>, responses);
 <a class="jxr_linenumber" name="L733" href="#L733">733</a> 		<strong class="jxr_keyword">return</strong> op;
 <a class="jxr_linenumber" name="L734" href="#L734">734</a> 	}
-<a class="jxr_linenumber" name="L735" href="#L735">735</a> }
+<a class="jxr_linenumber" name="L735" href="#L735">735</a> 
+<a class="jxr_linenumber" name="L736" href="#L736">736</a> 	<em class="jxr_comment">//------------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L737" href="#L737">737</a> 	<em class="jxr_comment">// Write-only properties: Swagger 2 carries x-writeOnly, OpenAPI 3.1 uses the native keyword.</em>
+<a class="jxr_linenumber" name="L738" href="#L738">738</a> 	<em class="jxr_comment">//------------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L739" href="#L739">739</a> 
+<a class="jxr_linenumber" name="L740" href="#L740">740</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> WoBean {
+<a class="jxr_linenumber" name="L741" href="#L741">741</a> 		<strong class="jxr_keyword">public</strong> String name;
+<a class="jxr_linenumber" name="L742" href="#L742">742</a> 
+<a class="jxr_linenumber" name="L743" href="#L743">743</a> 		@org.apache.juneau.commons.bean.BeanProp(wo=<span class="jxr_string">"true"</span>)
+<a class="jxr_linenumber" name="L744" href="#L744">744</a> 		<strong class="jxr_keyword">public</strong> String secretword;
+<a class="jxr_linenumber" name="L745" href="#L745">745</a> 	}
+<a class="jxr_linenumber" name="L746" href="#L746">746</a> 
+<a class="jxr_linenumber" name="L747" href="#L747">747</a> 	@Rest
+<a class="jxr_linenumber" name="L748" href="#L748">748</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> WoOff {
+<a class="jxr_linenumber" name="L749" href="#L749">749</a> 		@RestPost(path=<span class="jxr_string">"/wo"</span>)
+<a class="jxr_linenumber" name="L750" href="#L750">750</a> 		<strong class="jxr_keyword">public</strong> WoBean a(@Content WoBean body) { <strong class="jxr_keyword">return</strong> body; }
+<a class="jxr_linenumber" name="L751" href="#L751">751</a> 	}
+<a class="jxr_linenumber" name="L752" href="#L752">752</a> 
+<a class="jxr_linenumber" name="L753" href="#L753">753</a> 	@Rest
+<a class="jxr_linenumber" name="L754" href="#L754">754</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> WoOn <strong class="jxr_keyword">extends</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.server.servlet.BasicRestResource {
+<a class="jxr_linenumber" name="L755" href="#L755">755</a> 		@RestPost(path=<span class="jxr_string">"/wo"</span>)
+<a class="jxr_linenumber" name="L756" href="#L756">756</a> 		<strong class="jxr_keyword">public</strong> WoBean a(@Content WoBean body) { <strong class="jxr_keyword">return</strong> body; }
+<a class="jxr_linenumber" name="L757" href="#L757">757</a> 	}
+<a class="jxr_linenumber" name="L758" href="#L758">758</a> 
+<a class="jxr_linenumber" name="L759" href="#L759">759</a> 	@Test <strong class="jxr_keyword">void</strong> wo01_transform_mapsExtensionBack() {
+<a class="jxr_linenumber" name="L760" href="#L760">760</a> 		<strong class="jxr_keyword">var</strong> swagger = Json5Parser.DEFAULT.read(<span class="jxr_string">"{swagger:'2.0',definitions:{A:{type:'object',properties:{p:{type:'string','x-writeOnly':true},example:{type:'string','x-writeOnly':true},nest:{type:'object',properties:{default:{type:'string','x-writeOnly':true}}}},example:{'x-writeOnly':true}}}}"</span>, Json5Map.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L761" href="#L761">761</a> 		<strong class="jxr_keyword">var</strong> a = (Map&lt;?,?&gt;)((Map&lt;?,?&gt;)BasicOpenApiProviderSession.transform(swagger).getMap(<span class="jxr_string">"components"</span>).getMap(<span class="jxr_string">"schemas"</span>)).get(<span class="jxr_string">"A"</span>);
+<a class="jxr_linenumber" name="L762" href="#L762">762</a> 		<strong class="jxr_keyword">var</strong> props = (Map&lt;?,?&gt;)a.get(<span class="jxr_string">"properties"</span>);
+<a class="jxr_linenumber" name="L763" href="#L763">763</a> 		assertEquals(Boolean.TRUE, ((Map&lt;?,?&gt;)props.get(<span class="jxr_string">"p"</span>)).get(<span class="jxr_string">"writeOnly"</span>));
+<a class="jxr_linenumber" name="L764" href="#L764">764</a> 		assertFalse(((Map&lt;?,?&gt;)props.get(<span class="jxr_string">"p"</span>)).containsKey(<span class="jxr_string">"x-writeOnly"</span>));
+<a class="jxr_linenumber" name="L765" href="#L765">765</a> 		<em class="jxr_comment">// A property literally named "example" is still a schema position.</em>
+<a class="jxr_linenumber" name="L766" href="#L766">766</a> 		assertEquals(Boolean.TRUE, ((Map&lt;?,?&gt;)props.get(<span class="jxr_string">"example"</span>)).get(<span class="jxr_string">"writeOnly"</span>));
+<a class="jxr_linenumber" name="L767" href="#L767">767</a> 		assertFalse(((Map&lt;?,?&gt;)props.get(<span class="jxr_string">"example"</span>)).containsKey(<span class="jxr_string">"x-writeOnly"</span>));
+<a class="jxr_linenumber" name="L768" href="#L768">768</a> 		<strong class="jxr_keyword">var</strong> nest = (Map&lt;?,?&gt;)((Map&lt;?,?&gt;)((Map&lt;?,?&gt;)props.get(<span class="jxr_string">"nest"</span>)).get(<span class="jxr_string">"properties"</span>)).get(<span class="jxr_string">"default"</span>);
+<a class="jxr_linenumber" name="L769" href="#L769">769</a> 		assertEquals(Boolean.TRUE, nest.get(<span class="jxr_string">"writeOnly"</span>));
+<a class="jxr_linenumber" name="L770" href="#L770">770</a> 		<em class="jxr_comment">// The schema-level example value is not a schema position and is left untouched.</em>
+<a class="jxr_linenumber" name="L771" href="#L771">771</a> 		assertEquals(Boolean.TRUE, ((Map&lt;?,?&gt;)a.get(<span class="jxr_string">"example"</span>)).get(<span class="jxr_string">"x-writeOnly"</span>));
+<a class="jxr_linenumber" name="L772" href="#L772">772</a> 	}
+<a class="jxr_linenumber" name="L773" href="#L773">773</a> 
+<a class="jxr_linenumber" name="L774" href="#L774">774</a> 	@Test <strong class="jxr_keyword">void</strong> wo01b_transform_operationExtensionUntouched() {
+<a class="jxr_linenumber" name="L775" href="#L775">775</a> 		<strong class="jxr_keyword">var</strong> swagger = Json5Parser.DEFAULT.read(<span class="jxr_string">"{swagger:'2.0',paths:{'/a':{get:{'x-writeOnly':true,parameters:[{'in':'query',name:'q',type:'string','x-writeOnly':true}],responses:{'200':{description:'ok'}}}}}}"</span>, Json5Map.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L776" href="#L776">776</a> 		<strong class="jxr_keyword">var</strong> op = (Map&lt;?,?&gt;)((Map&lt;?,?&gt;)BasicOpenApiProviderSession.transform(swagger).getMap(<span class="jxr_string">"paths"</span>).getMap(<span class="jxr_string">"/a"</span>)).get(<span class="jxr_string">"get"</span>);
+<a class="jxr_linenumber" name="L777" href="#L777">777</a> 		assertEquals(Boolean.TRUE, op.get(<span class="jxr_string">"x-writeOnly"</span>));
+<a class="jxr_linenumber" name="L778" href="#L778">778</a> 		assertFalse(op.containsKey(<span class="jxr_string">"writeOnly"</span>));
+<a class="jxr_linenumber" name="L779" href="#L779">779</a> 		<strong class="jxr_keyword">var</strong> param = (Map&lt;?,?&gt;)((List&lt;?&gt;)op.get(<span class="jxr_string">"parameters"</span>)).get(0);
+<a class="jxr_linenumber" name="L780" href="#L780">780</a> 		assertFalse(param.containsKey(<span class="jxr_string">"writeOnly"</span>));
+<a class="jxr_linenumber" name="L781" href="#L781">781</a> 	}
+<a class="jxr_linenumber" name="L782" href="#L782">782</a> 
+<a class="jxr_linenumber" name="L783" href="#L783">783</a> 	@Test <strong class="jxr_keyword">void</strong> wo02_endToEnd_beanDefsOff() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L784" href="#L784">784</a> 		<strong class="jxr_keyword">var</strong> json = Json5Serializer.DEFAULT.toString(getOpenApi(<strong class="jxr_keyword">new</strong> WoOff()));
+<a class="jxr_linenumber" name="L785" href="#L785">785</a> 		assertTrue(json.contains(<span class="jxr_string">"secretword"</span>), json);
+<a class="jxr_linenumber" name="L786" href="#L786">786</a> 		assertTrue(json.contains(<span class="jxr_string">"writeOnly:true"</span>), json);
+<a class="jxr_linenumber" name="L787" href="#L787">787</a> 		assertFalse(json.contains(<span class="jxr_string">"x-writeOnly"</span>), json);
+<a class="jxr_linenumber" name="L788" href="#L788">788</a> 	}
+<a class="jxr_linenumber" name="L789" href="#L789">789</a> 
+<a class="jxr_linenumber" name="L790" href="#L790">790</a> 	@Test <strong class="jxr_keyword">void</strong> wo03_endToEnd_beanDefsOn() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L791" href="#L791">791</a> 		<strong class="jxr_keyword">var</strong> json = Json5Serializer.DEFAULT.toString(getOpenApi(<strong class="jxr_keyword">new</strong> WoOn()));
+<a class="jxr_linenumber" name="L792" href="#L792">792</a> 		assertTrue(json.contains(<span class="jxr_string">"secretword"</span>), json);
+<a class="jxr_linenumber" name="L793" href="#L793">793</a> 		assertTrue(json.contains(<span class="jxr_string">"writeOnly:true"</span>), json);
+<a class="jxr_linenumber" name="L794" href="#L794">794</a> 		assertFalse(json.contains(<span class="jxr_string">"x-writeOnly"</span>), json);
+<a class="jxr_linenumber" name="L795" href="#L795">795</a> 	}
+<a class="jxr_linenumber" name="L796" href="#L796">796</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

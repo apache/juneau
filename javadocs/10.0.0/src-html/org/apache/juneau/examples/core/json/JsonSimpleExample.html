@@ -54,7 +54,7 @@
 <span class="source-line-no">041</span><span id="line-41">   @SuppressWarnings({</span>
 <span class="source-line-no">042</span><span id="line-42">      "java:S125", // S125: example output comments document expected output</span>
 <span class="source-line-no">043</span><span id="line-43">      "rawtypes", // Raw types necessary for generic type handling</span>
-<span class="source-line-no">044</span><span id="line-44">      "unused", // main(String[] args) - args required by JVM signature but unused in example</span>
+<span class="source-line-no">044</span><span id="line-44">      "unused" // main(String[] args) - args required by JVM signature but unused in example</span>
 <span class="source-line-no">045</span><span id="line-45">   })</span>
 <span class="source-line-no">046</span><span id="line-46">   public static void main(String[] args) throws Exception {</span>
 <span class="source-line-no">047</span><span id="line-47">      // Juneau provides static constants with the most commonly used configurations</span>
@@ -66,7 +66,7 @@
 <span class="source-line-no">053</span><span id="line-53"></span>
 <span class="source-line-no">054</span><span id="line-54">      var flat = jsonSerializer.write(pojo);</span>
 <span class="source-line-no">055</span><span id="line-55">      // Print out the created POJO in JSON format.</span>
-<span class="source-line-no">056</span><span id="line-56">      Logger.getLogger(JsonSimpleExample.class).info(flat);</span>
+<span class="source-line-no">056</span><span id="line-56">      RichLogger.getLogger(JsonSimpleExample.class).info(flat);</span>
 <span class="source-line-no">057</span><span id="line-57"></span>
 <span class="source-line-no">058</span><span id="line-58">      var parse = jsonParser.read(flat, Pojo.class);</span>
 <span class="source-line-no">059</span><span id="line-59"></span>
@@ -74,7 +74,7 @@
 <span class="source-line-no">061</span><span id="line-61">      assert parse.getName().equals(pojo.getName());</span>
 <span class="source-line-no">062</span><span id="line-62"></span>
 <span class="source-line-no">063</span><span id="line-63">      var json5 = Json5Serializer.DEFAULT.write(pojo);</span>
-<span class="source-line-no">064</span><span id="line-64">      Logger.getLogger(JsonSimpleExample.class).info(json5);</span>
+<span class="source-line-no">064</span><span id="line-64">      RichLogger.getLogger(JsonSimpleExample.class).info(json5);</span>
 <span class="source-line-no">065</span><span id="line-65"></span>
 <span class="source-line-no">066</span><span id="line-66">      // Parse a JSON object (creates a generic JsonMap).</span>
 <span class="source-line-no">067</span><span id="line-67">      var json = "{name:'John Smith',age:21}";</span>

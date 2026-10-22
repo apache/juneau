@@ -70,15 +70,15 @@
 <a class="jxr_linenumber" name="L62" href="#L62">62</a>  <em class="jxr_javadoccomment"> * any custom codec) agree on exactly what is authenticated.</em>
 <a class="jxr_linenumber" name="L63" href="#L63">63</a>  <em class="jxr_javadoccomment"> *</em>
 <a class="jxr_linenumber" name="L64" href="#L64">64</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L65" href="#L65">65</a>  <em class="jxr_javadoccomment"> * &lt;b&gt;Authenticated principal (READY-312f F4).&lt;/b&gt; Both {@link #seal(McpRequestState, String, Principal)} and</em>
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>  <em class="jxr_javadoccomment"> * &lt;b&gt;Authenticated principal.&lt;/b&gt; Both {@link #seal(McpRequestState, String, Principal)} and</em>
 <a class="jxr_linenumber" name="L66" href="#L66">66</a>  <em class="jxr_javadoccomment"> * {@link #unseal(String, String, Principal)} receive the caller's authenticated {@link Principal} &amp;mdash; the same</em>
-<a class="jxr_linenumber" name="L67" href="#L67">67</a>  <em class="jxr_javadoccomment"> * identity the F2 resource-server layer establishes (see {@code McpResourceServerSupport#principal}). This is the</em>
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>  <em class="jxr_javadoccomment"> * identity the resource-server layer establishes (see {@code McpResourceServerSupport#principal}). This is the</em>
 <a class="jxr_linenumber" name="L68" href="#L68">68</a>  <em class="jxr_javadoccomment"> * &lt;i&gt;seam&lt;/i&gt; a hardened codec uses to fold the caller identity into its authenticated data, so a</em>
 <a class="jxr_linenumber" name="L69" href="#L69">69</a>  <em class="jxr_javadoccomment"> * {@code requestState} minted for principal A cannot be resumed by principal B. The built-in</em>
 <a class="jxr_linenumber" name="L70" href="#L70">70</a>  <em class="jxr_javadoccomment"> * {@link AeadRequestStateCodec} binds exactly that: it folds a canonical, deterministic {@code iss|sub} identity</em>
 <a class="jxr_linenumber" name="L71" href="#L71">71</a>  <em class="jxr_javadoccomment"> * (see {@link AeadRequestStateCodec#principalIdentity(Principal)}) into its AEAD authenticated data, so a</em>
-<a class="jxr_linenumber" name="L72" href="#L72">72</a>  <em class="jxr_javadoccomment"> * mismatched principal fails the GCM tag check and {@link #unseal} returns {@link Optional#empty()}. F4 is what</em>
-<a class="jxr_linenumber" name="L73" href="#L73">73</a>  <em class="jxr_javadoccomment"> * guarantees the principal is delivered to the codec at both seal and unseal in the first place; a custom codec</em>
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>  <em class="jxr_javadoccomment"> * mismatched principal fails the GCM tag check and {@link #unseal} returns {@link Optional#empty()}. The</em>
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>  <em class="jxr_javadoccomment"> * dispatcher guarantees the principal is delivered to the codec at both seal and unseal; a custom codec</em>
 <a class="jxr_linenumber" name="L74" href="#L74">74</a>  <em class="jxr_javadoccomment"> * remains free to bind a different identity attribute (subject claim, issuer+subject, full claim set) or none at</em>
 <a class="jxr_linenumber" name="L75" href="#L75">75</a>  <em class="jxr_javadoccomment"> * all. The principal is &lt;b&gt;nullable&lt;/b&gt;: when RS auth is disabled or the caller is anonymous it is &lt;jk&gt;null&lt;/jk&gt;,</em>
 <a class="jxr_linenumber" name="L76" href="#L76">76</a>  <em class="jxr_javadoccomment"> * and every codec must seal/unseal cleanly (no NPE) in that case. The two-argument</em>

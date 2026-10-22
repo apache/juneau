@@ -72,7 +72,7 @@ loadScripts(document, 'script');</script>
 <div class="type-signature"><span class="annotations"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/annotation/Target.html" title="class or interface in java.lang.annotation" class="external-link">@Target</a>({<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/annotation/ElementType.html#METHOD" title="class or interface in java.lang.annotation" class="external-link">METHOD</a>,<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/annotation/ElementType.html#FIELD" title="class or interface in java.lang.annotation" class="external-link">FIELD</a>})
 <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/annotation/Retention.html" title="class or interface in java.lang.annotation" class="external-link">@Retention</a>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/annotation/RetentionPolicy.html#RUNTIME" title="class or interface in java.lang.annotation" class="external-link">RUNTIME</a>)
 <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/annotation/Inherited.html" title="class or interface in java.lang.annotation" class="external-link">@Inherited</a>
-</span><span class="modifiers">public @interface </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/inject/Bean.html#line-147">Bean</a></span></div>
+</span><span class="modifiers">public @interface </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/inject/Bean.html#line-174">Bean</a></span></div>
 <div class="block">Bean injection annotation.
 
  <p>
@@ -81,18 +81,18 @@ loadScripts(document, 'script');</script>
 
  <h5 class='figure'>Example</h5>
  <p class='bcode'>
-   <jc>// Rest resource that uses a customized call logger.</jc>
+   <jc>// Rest resource that uses a customized logger.</jc>
    <ja>@Rest</ja>
    <jk>public class</jk> MyRest <jk>extends</jk> BasicRestServlet {
 
       <jc>// Option #1:  As a field.</jc>
       <ja>@Bean</ja>
-      CallLogger <jf>myCallLogger</jf> = CallLogger.<jsm>create</jsm>().logger(<js>"mylogger"</js>).build();
+      RichLogger <jf>myLogger</jf> = RichLogger.<jsm>getLogger</jsm>(<js>"mylogger"</js>);
 
       <jc>// Option #2:  As a method.</jc>
       <ja>@Bean</ja>
-      <jk>public</jk> CallLogger myCallLogger() {
-         <jk>return</jk> CallLogger.<jsm>create</jsm>().logger(<js>"mylogger"</js>).build();
+      <jk>public</jk> RichLogger myLogger() {
+         <jk>return</jk> RichLogger.<jsm>getLogger</jsm>(<js>"mylogger"</js>);
       }
    }
  </p>
@@ -150,7 +150,7 @@ loadScripts(document, 'script');</script>
  <h5 class='figure'>Example</h5>
  <p class='bcode'>
    <jc>// Fields that get set during initialization based on beans found in the bean store.</jc>
-   <ja>@Bean</ja> CallLogger <jf>callLogger</jf>;
+   <ja>@Bean</ja> RichLogger <jf>logger</jf>;
    <ja>@Bean</ja> BeanStore <jf>beanStore</jf>;  <jc>// Note that the BeanStore itself can be accessed this way.</jc>
  </p>
 
@@ -158,15 +158,42 @@ loadScripts(document, 'script');</script>
    <li class='note'>Methods and fields can be static or non-static.
    <li class='note'>Any injectable beans (including spring beans) can be passed as arguments into methods.
    <li class='note'>Bean names are required when multiple beans of the same type exist in the bean store.
+   <li class='note'><code>@Bean</code> methods and fields may have any visibility (public, protected, package-private or private).
+      Non-public members are made accessible before use, so the containing package must be opened to
+      module <c>org.apache.juneau.commons</c> when running on the module path.
    <li class='note'>By default, the injected bean scope is class-level (applies to the entire class).  The
       <a href="#methodScope()"><code>methodScope()</code></a> annotation can be used to apply to method-level only (when applicable).
  </ul>
+
+ <h5 class='section'>Bean names:</h5>
+ <p>
+   Each <code>@Bean</code> method registers its own result.  Two methods returning the same type are distinguished by name,
+   and both beans are kept.  Factory methods on <ja>@Rest</ja> resources and <ja>@Configuration</ja> classes
+   are the common use.
+ </p>
+ <h5 class='section'>Example:</h5>
+ <p class='bjava'>
+   <jc>// Two beans of the same type, distinguished by name.  Each method's own result is registered.</jc>
+   <ja>@Rest</ja>
+   <jk>public class</jk> MyResource <jk>extends</jk> BasicRestServlet {
+
+      <ja>@Bean</ja>(name=<js>"db"</js>)
+      HealthIndicator dbIndicator() {
+         <jk>return</jk> () -&gt; Health.<jsm>up</jsm>(<js>"db"</js>).build();
+      }
+
+      <ja>@Bean</ja>(name=<js>"cache"</js>)
+      HealthIndicator cacheIndicator() {
+         <jk>return</jk> () -&gt; Health.<jsm>up</jsm>(<js>"cache"</js>).build();
+      }
+   }
+ </p>
 
  <h5 class='section'>Precedence (since 10.0.0):</h5>
  <p>
    <code>@Bean</code> acts as a <i>programmable default</i>, analogous to Spring's
    <c>&#64;ConditionalOnMissingBean</c>.  When a REST context resolves a framework-managed bean
-   (<c>CallLogger</c>, <c>EncoderSet</c>, <c>SerializerSet</c>, <c>ParserSet</c>, <c>ThrownStore</c>,
+   (<c>RichLogger</c>, <c>EncoderSet</c>, <c>SerializerSet</c>, <c>ParserSet</c>, <c>ThrownStore</c>,
    <c>Config</c>, <c>VarResolver</c>, <c>HttpPartSerializer</c>, <c>HttpPartParser</c>, etc.), the lookup
    walks the following tiers in order, returning the first hit:
  </p>
@@ -179,9 +206,9 @@ loadScripts(document, 'script');</script>
    <li><b>Memoizer-backed framework default</b> — built into the context as a default supplier.</li>
  </ol>
  <p>
-   In other words: a Spring <c>&#64;Bean</c> of type <c>CallLogger</c> wins over a <code>@Bean CallLogger</code>
-   method on the same servlet, which in turn wins over the framework's built-in <c>BasicCallLogger</c>.  Non-Spring
-   deployments have an empty overriding-parent layer, so the chain naturally collapses to
+   In other words: a Spring <c>&#64;Bean</c> of type <c>RichLogger</c> wins over a <code>@Bean RichLogger</code>
+   method on the same servlet, which in turn wins over the framework's built-in class-name-based default logger.
+   Non-Spring deployments have an empty overriding-parent layer, so the chain naturally collapses to
    <code>@Bean &gt; default</code>.
  </p>
  <p>
@@ -246,7 +273,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="description()">
 <h3>description</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>[]</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/inject/Bean.html#line-158">description</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>[]</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/inject/Bean.html#line-185">description</a></span></div>
 <div class="block">Optional description for the exposed API.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -263,7 +290,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="methodScope()">
 <h3>methodScope</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>[]</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/inject/Bean.html#line-171">methodScope</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>[]</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/inject/Bean.html#line-198">methodScope</a></span></div>
 <div class="block">The short names of the methods that this annotation applies to.
 
  <p>
@@ -284,7 +311,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="name()">
 <h3>name</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/inject/Bean.html#line-182">name</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/inject/Bean.html#line-209">name</a></span></div>
 <div class="block">The bean name to use to distinguish beans of the same type for different purposes.
 
  <p>
@@ -303,7 +330,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="value()">
 <h3>value</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/inject/Bean.html#line-189">value</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/inject/Bean.html#line-216">value</a></span></div>
 <div class="block">Same as <a href="#name()"><code>name()</code></a>.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -318,7 +345,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="priority()">
 <h3>priority</h3>
-<div class="member-signature"><span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/inject/Bean.html#line-200">priority</a></span></div>
+<div class="member-signature"><span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/inject/Bean.html#line-227">priority</a></span></div>
 <div class="block">Optional ordering value used when exporting ordered bean collections.
 
  <p>

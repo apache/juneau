@@ -56,8 +56,8 @@
 <span class="source-line-no">043</span><span id="line-43"></span>
 <span class="source-line-no">044</span><span id="line-44">   /** All function classes in this category. */</span>
 <span class="source-line-no">045</span><span id="line-45">   @SuppressWarnings({</span>
-<span class="source-line-no">046</span><span id="line-46">      "unchecked", // Cast is safe: type verified by caller context.</span>
-<span class="source-line-no">047</span><span id="line-47">      "java:S2386" // ALL is an immutable compile-time registry; exposed as an array for the cross-package/varargs functions(...) API, so visibility cannot be reduced.</span>
+<span class="source-line-no">046</span><span id="line-46">      "java:S2386", // ALL is an immutable compile-time registry; exposed as an array for the cross-package/varargs functions(...) API, so visibility cannot be reduced.</span>
+<span class="source-line-no">047</span><span id="line-47">      "unchecked" // Cast is safe: type verified by caller context.</span>
 <span class="source-line-no">048</span><span id="line-48">   })</span>
 <span class="source-line-no">049</span><span id="line-49">   public static final Class&lt;? extends VarFunction&gt;[] ALL = new Class[] {</span>
 <span class="source-line-no">050</span><span id="line-50">      Match.class, Extract.class, ReplaceRegex.class</span>

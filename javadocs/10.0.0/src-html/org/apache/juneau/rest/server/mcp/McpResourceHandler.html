@@ -29,11 +29,11 @@
 <span class="source-line-no">016</span><span id="line-16"> */</span>
 <span class="source-line-no">017</span><span id="line-17">package org.apache.juneau.rest.server.mcp;</span>
 <span class="source-line-no">018</span><span id="line-18"></span>
-<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.AssertionUtils.*;</span>
-<span class="source-line-no">020</span><span id="line-20"></span>
-<span class="source-line-no">021</span><span id="line-21">import java.util.function.*;</span>
-<span class="source-line-no">022</span><span id="line-22"></span>
-<span class="source-line-no">023</span><span id="line-23">import org.apache.juneau.commons.inject.*;</span>
+<span class="source-line-no">019</span><span id="line-19"></span>
+<span class="source-line-no">020</span><span id="line-20">import java.util.function.*;</span>
+<span class="source-line-no">021</span><span id="line-21"></span>
+<span class="source-line-no">022</span><span id="line-22">import org.apache.juneau.commons.inject.*;</span>
+<span class="source-line-no">023</span><span id="line-23">import static org.apache.juneau.commons.utils.Shorts.*;</span>
 <span class="source-line-no">024</span><span id="line-24"></span>
 <span class="source-line-no">025</span><span id="line-25">/**</span>
 <span class="source-line-no">026</span><span id="line-26"> * Handler for a single MCP resource.</span>
@@ -70,9 +70,9 @@
 <span class="source-line-no">057</span><span id="line-57">    * @return A new handler wiring both. Never &lt;jk&gt;null&lt;/jk&gt;.</span>
 <span class="source-line-no">058</span><span id="line-58">    */</span>
 <span class="source-line-no">059</span><span id="line-59">   static McpResourceHandler of(McpResourceSpec descriptor, BiFunction&lt;String,BeanStore,McpResourceOutcome&gt; read) {</span>
-<span class="source-line-no">060</span><span id="line-60">      assertArgNotNull("descriptor", descriptor);</span>
-<span class="source-line-no">061</span><span id="line-61">      assertArgNotNullOrBlank("descriptor.getUri()", descriptor.getUri());</span>
-<span class="source-line-no">062</span><span id="line-62">      assertArgNotNull("read", read);</span>
+<span class="source-line-no">060</span><span id="line-60">      reqnn("descriptor", descriptor);</span>
+<span class="source-line-no">061</span><span id="line-61">      reqnb("descriptor.getUri()", descriptor.getUri());</span>
+<span class="source-line-no">062</span><span id="line-62">      reqnn("read", read);</span>
 <span class="source-line-no">063</span><span id="line-63">      return new McpResourceHandler() {</span>
 <span class="source-line-no">064</span><span id="line-64">         @Override public McpResourceSpec descriptor() {</span>
 <span class="source-line-no">065</span><span id="line-65">            return descriptor;</span>

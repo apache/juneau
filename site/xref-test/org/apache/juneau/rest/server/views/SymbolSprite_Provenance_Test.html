@@ -1,0 +1,329 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="" lang="">
+<head><meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<title>SymbolSprite_Provenance_Test xref</title>
+<link type="text/css" rel="stylesheet" href="../../../../../../stylesheet.css" />
+</head>
+<body>
+<div id="overview"><a href="../../../../../../../testapidocs/org/apache/juneau/rest/server/views/SymbolSprite_Provenance_Test.html">View Javadoc</a></div><pre>
+<a class="jxr_linenumber" name="L1" href="#L1">1</a>   <em class="jxr_comment">/*</em>
+<a class="jxr_linenumber" name="L2" href="#L2">2</a>   <em class="jxr_comment"> * Licensed to the Apache Software Foundation (ASF) under one or more</em>
+<a class="jxr_linenumber" name="L3" href="#L3">3</a>   <em class="jxr_comment"> * contributor license agreements.  See the NOTICE file distributed with</em>
+<a class="jxr_linenumber" name="L4" href="#L4">4</a>   <em class="jxr_comment"> * this work for additional information regarding copyright ownership.</em>
+<a class="jxr_linenumber" name="L5" href="#L5">5</a>   <em class="jxr_comment"> * The ASF licenses this file to You under the Apache License, Version 2.0</em>
+<a class="jxr_linenumber" name="L6" href="#L6">6</a>   <em class="jxr_comment"> * (the "License"); you may not use this file except in compliance with</em>
+<a class="jxr_linenumber" name="L7" href="#L7">7</a>   <em class="jxr_comment"> * the License.  You may obtain a copy of the License at</em>
+<a class="jxr_linenumber" name="L8" href="#L8">8</a>   <em class="jxr_comment"> *</em>
+<a class="jxr_linenumber" name="L9" href="#L9">9</a>   <em class="jxr_comment"> *      <a href="http://www.apache.org/licenses/LICENSE-2.0" target="alexandria_uri">http://www.apache.org/licenses/LICENSE-2.0</a></em>
+<a class="jxr_linenumber" name="L10" href="#L10">10</a>  <em class="jxr_comment"> *</em>
+<a class="jxr_linenumber" name="L11" href="#L11">11</a>  <em class="jxr_comment"> * Unless required by applicable law or agreed to in writing, software</em>
+<a class="jxr_linenumber" name="L12" href="#L12">12</a>  <em class="jxr_comment"> * distributed under the License is distributed on an "AS IS" BASIS,</em>
+<a class="jxr_linenumber" name="L13" href="#L13">13</a>  <em class="jxr_comment"> * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</em>
+<a class="jxr_linenumber" name="L14" href="#L14">14</a>  <em class="jxr_comment"> * See the License for the specific language governing permissions and</em>
+<a class="jxr_linenumber" name="L15" href="#L15">15</a>  <em class="jxr_comment"> * limitations under the License.</em>
+<a class="jxr_linenumber" name="L16" href="#L16">16</a>  <em class="jxr_comment"> */</em>
+<a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.server.views;
+<a class="jxr_linenumber" name="L18" href="#L18">18</a>  
+<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.commons.utils.Shorts.*;
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.test.bct.BctAssertions.*;
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.junit.jupiter.api.Assertions.*;
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> java.nio.file.*;
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> java.util.*;
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> java.util.regex.*;
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.*;
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">import</strong> org.junit.jupiter.api.*;
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <em class="jxr_javadoccomment"> * The licensing-drift guard for {@code juneau-symbols.svg}: asserts that the shipped artwork is still the artwork</em>
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <em class="jxr_javadoccomment"> * the provenance manifest ({@code juneau-symbols-provenance.md}) approved, and that the sprite still honours the</em>
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <em class="jxr_javadoccomment"> * contracts the manifest declares.</em>
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>  <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>  <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;Why this exists at all&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>  <em class="jxr_javadoccomment"> * Because origin and fingerprint are facts about today, and the failure they guard is silent. Some glyphs are</em>
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>  <em class="jxr_javadoccomment"> * Juneau-original; others are console-sprite counterparts cleared for artwork copy (operator ruling 2026-09-24) and</em>
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>  <em class="jxr_javadoccomment"> * recorded as {@code original-artwork}. The cheapest way for an unreviewed paste to land again is for</em>
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>  <em class="jxr_javadoccomment"> * someone to overwrite a path during an unrelated polish pass. Nothing else in the build would notice: the artwork</em>
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>  <em class="jxr_javadoccomment"> * renders, the ids are unchanged, and {@link SymbolSprite_StemIds_Test} pins &lt;i&gt;names&lt;/i&gt; rather than paths. This</em>
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>  <em class="jxr_javadoccomment"> * test makes such a paste fail until the manifest row is deliberately edited, which turns an invisible act into a</em>
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>  <em class="jxr_javadoccomment"> * reviewable one.</em>
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>  <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>  <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;Deliberately separate from the stem-id guard&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>  <em class="jxr_javadoccomment"> * {@link SymbolSprite_StemIds_Test} guards correctness &amp;mdash; a rename blanks the Support Console's toolbar,</em>
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>  <em class="jxr_javadoccomment"> * because an app overrides these glyphs by stem name through the page-level override sprite (see</em>
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>  <em class="jxr_javadoccomment"> * {@code juneau-icons.js}), and an unresolved stem draws nothing rather than throwing. This one guards licensing drift. They fail</em>
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>  <em class="jxr_javadoccomment"> * for unrelated reasons and read as unrelated diagnostics, so they are two tests rather than one.</em>
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>  <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>  <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;What it asserts&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>  <em class="jxr_javadoccomment"> * &lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>  <em class="jxr_javadoccomment"> * 	&lt;li&gt;The manifest and the sprite describe the same glyph set, in the same order.</em>
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>  <em class="jxr_javadoccomment"> * 	&lt;li&gt;Every glyph's fingerprint still matches its approved value.</em>
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>  <em class="jxr_javadoccomment"> * 	&lt;li&gt;Every glyph's declared origin is either {@code juneau-original} or {@code original-artwork} &amp;mdash; the only</em>
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>  <em class="jxr_javadoccomment"> * 		origins the manifest authorises. (This test does not read {@code NOTICE}; keeping its attribution in step</em>
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>  <em class="jxr_javadoccomment"> * 		with the {@code original-artwork} rows is a manual, reviewed act.)</em>
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>  <em class="jxr_javadoccomment"> * 	&lt;li&gt;The three contracts the manifest states as rules: {@code viewBox="0 0 24 24"} on every glyph, paint only</em>
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>  <em class="jxr_javadoccomment"> * 		ever {@code none}, {@code currentColor} or a themable {@code var(--x, currentColor)}, and an explicit</em>
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>  <em class="jxr_javadoccomment"> * 		{@code stroke-width} wherever a stroke is painted.</em>
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>  <em class="jxr_javadoccomment"> * &lt;/ul&gt;</em>
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>  <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>  <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;What it deliberately does not assert&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>  <em class="jxr_javadoccomment"> * Anything about how the artwork &lt;i&gt;looks&lt;/i&gt;. Rasterised review is</em>
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>  <em class="jxr_javadoccomment"> * {@link SymbolSprite_Render_BrowserTest}'s job and it needs a browser, so it sits behind the {@code js-tests}</em>
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>  <em class="jxr_javadoccomment"> * profile. This test is cheap, needs nothing, and therefore runs on every build &amp;mdash; which is the right split,</em>
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>  <em class="jxr_javadoccomment"> * because a provenance guard that only runs under an opt-in profile guards nothing on the default gate.</em>
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>  <em class="jxr_javadoccomment"> */</em>
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>  @SuppressWarnings({
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>  	<span class="jxr_string">"java:S8786"</span> <em class="jxr_comment">// Test regex is intentional; tightening would change match semantics.</em>
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>  })
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>  <strong class="jxr_keyword">class</strong> SymbolSprite_Provenance_Test <strong class="jxr_keyword">extends</strong> TestBase {
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>  
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>  	<em class="jxr_javadoccomment">/** How to put it back, quoted in every failure message rather than left for the reader to find. */</em>
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String MANIFEST_IS_THE_REVIEW =
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>  		<span class="jxr_string">"If the artwork change is intended, update the row in "</span> + SymbolProvenanceScanner.MANIFEST
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>  			+ <span class="jxr_string">" - and read that file's `Authoring rules` section first, because editing the row is the reviewed act"</span>
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>  			+ <span class="jxr_string">" that this test exists to force."</span>;
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>  
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String REQUIRED_VIEWBOX = <span class="jxr_string">"0 0 24 24"</span>;
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Set&lt;String&gt; ALLOWED_ORIGINS = Set.of(<span class="jxr_string">"juneau-original"</span>, <span class="jxr_string">"original-artwork"</span>);
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>  
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String sprite() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>  		<strong class="jxr_keyword">var</strong> s = SymbolProvenanceScanner.read(SymbolProvenanceScanner.SPRITE);
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>  		assertNotNull(s, <span class="jxr_string">"could not read "</span> + SymbolProvenanceScanner.SPRITE + <span class="jxr_string">" from the module's own resources"</span>);
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>  		<strong class="jxr_keyword">return</strong> s;
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>  	}
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>  
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String manifest() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>  		<strong class="jxr_keyword">var</strong> s = SymbolProvenanceScanner.read(SymbolProvenanceScanner.MANIFEST);
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>  		assertNotNull(s, <span class="jxr_string">"could not read "</span> + SymbolProvenanceScanner.MANIFEST + <span class="jxr_string">" from the module's own resources"</span>);
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>  		<strong class="jxr_keyword">return</strong> s;
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>  	}
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>  
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>  	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>  <em class="jxr_javadoccomment">	 * Appends a redundant {@code Z} to the first path of a document - a byte change that is valid in any path.</em>
+<a class="jxr_linenumber" name="L99" href="#L99">99</a>  <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L100" href="#L100">100</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L101" href="#L101">101</a> <em class="jxr_javadoccomment">	 * The needle carries its leading space deliberately: {@code id="} contains {@code d="}, so searching for the</em>
+<a class="jxr_linenumber" name="L102" href="#L102">102</a> <em class="jxr_javadoccomment">	 * bare attribute name finds every glyph's &lt;i&gt;id&lt;/i&gt; first and mutates the stem name instead of the artwork.</em>
+<a class="jxr_linenumber" name="L103" href="#L103">103</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L104" href="#L104">104</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String mutateFirstPath(String svg) {
+<a class="jxr_linenumber" name="L105" href="#L105">105</a> 		<strong class="jxr_keyword">var</strong> at = svg.indexOf(<span class="jxr_string">" d=\&quot;"</span>);
+<a class="jxr_linenumber" name="L106" href="#L106">106</a> 		assertTrue(at &gt;= 0, <span class="jxr_string">"no path data to mutate; this file's anti-vacuous checks cannot run"</span>);
+<a class="jxr_linenumber" name="L107" href="#L107">107</a> 		<strong class="jxr_keyword">var</strong> close = svg.indexOf('&quot;', at + 4);
+<a class="jxr_linenumber" name="L108" href="#L108">108</a> 		assertTrue(close &gt; at, <span class="jxr_string">"unterminated path data"</span>);
+<a class="jxr_linenumber" name="L109" href="#L109">109</a> 		<strong class="jxr_keyword">return</strong> svg.substring(0, close) + <span class="jxr_string">"Z"</span> + svg.substring(close);
+<a class="jxr_linenumber" name="L110" href="#L110">110</a> 	}
+<a class="jxr_linenumber" name="L111" href="#L111">111</a> 
+<a class="jxr_linenumber" name="L112" href="#L112">112</a> 	<em class="jxr_comment">//------------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L113" href="#L113">113</a> 	<em class="jxr_comment">// a: the manifest and the sprite agree</em>
+<a class="jxr_linenumber" name="L114" href="#L114">114</a> 	<em class="jxr_comment">//------------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L115" href="#L115">115</a> 
+<a class="jxr_linenumber" name="L116" href="#L116">116</a> 	@Test <strong class="jxr_keyword">void</strong> a01_manifestCoversExactlyTheShippedGlyphs() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L117" href="#L117">117</a> 		<strong class="jxr_keyword">var</strong> shipped = <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;(SymbolProvenanceScanner.symbols(sprite()).keySet());
+<a class="jxr_linenumber" name="L118" href="#L118">118</a> 		<strong class="jxr_keyword">var</strong> declared = <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;(SymbolProvenanceScanner.manifestFingerprints(manifest()).keySet());
+<a class="jxr_linenumber" name="L119" href="#L119">119</a> 		assertNotEmpty(() -&gt; <span class="jxr_string">"no &lt;symbol&gt; elements found in the sprite - this test would be vacuous"</span>, shipped);
+<a class="jxr_linenumber" name="L120" href="#L120">120</a> 		assertList(() -&gt; <span class="jxr_string">"the manifest and the sprite describe different glyph sets (or the same set in a different order)."</span>
+<a class="jxr_linenumber" name="L121" href="#L121">121</a> 				+ <span class="jxr_string">" A glyph shipped without a manifest row is unpinned artwork; a row without a glyph is a stale"</span>
+<a class="jxr_linenumber" name="L122" href="#L122">122</a> 				+ <span class="jxr_string">" approval. "</span> + MANIFEST_IS_THE_REVIEW, declared, shipped.toArray());
+<a class="jxr_linenumber" name="L123" href="#L123">123</a> 	}
+<a class="jxr_linenumber" name="L124" href="#L124">124</a> 
+<a class="jxr_linenumber" name="L125" href="#L125">125</a> 	@Test <strong class="jxr_keyword">void</strong> a02_everyGlyphMatchesItsApprovedFingerprint() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L126" href="#L126">126</a> 		<strong class="jxr_keyword">var</strong> shipped = SymbolProvenanceScanner.symbols(sprite());
+<a class="jxr_linenumber" name="L127" href="#L127">127</a> 		<strong class="jxr_keyword">var</strong> approved = SymbolProvenanceScanner.manifestFingerprints(manifest());
+<a class="jxr_linenumber" name="L128" href="#L128">128</a> 		<strong class="jxr_keyword">var</strong> drifted = <strong class="jxr_keyword">new</strong> ArrayList&lt;String&gt;();
+<a class="jxr_linenumber" name="L129" href="#L129">129</a> 		shipped.forEach((stem, element) -&gt; {
+<a class="jxr_linenumber" name="L130" href="#L130">130</a> 			<strong class="jxr_keyword">var</strong> actual = SymbolProvenanceScanner.fingerprint(element);
+<a class="jxr_linenumber" name="L131" href="#L131">131</a> 			<strong class="jxr_keyword">if</strong> (!actual.equals(approved.get(stem)))
+<a class="jxr_linenumber" name="L132" href="#L132">132</a> 				drifted.add(stem + <span class="jxr_string">": manifest="</span> + approved.get(stem) + <span class="jxr_string">" actual="</span> + actual);
+<a class="jxr_linenumber" name="L133" href="#L133">133</a> 		});
+<a class="jxr_linenumber" name="L134" href="#L134">134</a> 		assertEmpty(() -&gt; <span class="jxr_string">"the artwork of these glyphs no longer matches what the manifest approved. "</span>
+<a class="jxr_linenumber" name="L135" href="#L135">135</a> 			+ MANIFEST_IS_THE_REVIEW, drifted);
+<a class="jxr_linenumber" name="L136" href="#L136">136</a> 	}
+<a class="jxr_linenumber" name="L137" href="#L137">137</a> 
+<a class="jxr_linenumber" name="L138" href="#L138">138</a> 	@Test <strong class="jxr_keyword">void</strong> a03_everyGlyphDeclaresAnAllowedOrigin() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L139" href="#L139">139</a> 		<em class="jxr_comment">// Origins are either Juneau-original or artwork cleared for copy.  Any other token would</em>
+<a class="jxr_linenumber" name="L140" href="#L140">140</a> 		<em class="jxr_comment">// leave LICENSE/NOTICE and the dual-hat rule out of sync with the sprite.</em>
+<a class="jxr_linenumber" name="L141" href="#L141">141</a> 		<strong class="jxr_keyword">var</strong> origins = SymbolProvenanceScanner.manifestOrigins(manifest());
+<a class="jxr_linenumber" name="L142" href="#L142">142</a> 		assertNotEmpty(() -&gt; <span class="jxr_string">"no manifest rows parsed - this test would be vacuous"</span>, origins);
+<a class="jxr_linenumber" name="L143" href="#L143">143</a> 		<strong class="jxr_keyword">var</strong> foreign = origins.entrySet().stream()
+<a class="jxr_linenumber" name="L144" href="#L144">144</a> 			.filter(e -&gt; !ALLOWED_ORIGINS.contains(e.getValue()))
+<a class="jxr_linenumber" name="L145" href="#L145">145</a> 			.map(Object::toString)
+<a class="jxr_linenumber" name="L146" href="#L146">146</a> 			.toList();
+<a class="jxr_linenumber" name="L147" href="#L147">147</a> 		assertEmpty(() -&gt; <span class="jxr_string">"a glyph declares an origin outside "</span> + ALLOWED_ORIGINS + <span class="jxr_string">". Update the manifest only after the artwork"</span>
+<a class="jxr_linenumber" name="L148" href="#L148">148</a> 				+ <span class="jxr_string">" clearance and NOTICE attribution match."</span>, foreign);
+<a class="jxr_linenumber" name="L149" href="#L149">149</a> 	}
+<a class="jxr_linenumber" name="L150" href="#L150">150</a> 
+<a class="jxr_linenumber" name="L151" href="#L151">151</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L152" href="#L152">152</a> <em class="jxr_javadoccomment">	 * The a04 check as a function of its inputs: every document-family stem must be shipped and declared</em>
+<a class="jxr_linenumber" name="L153" href="#L153">153</a> <em class="jxr_javadoccomment">	 * {@code original-artwork}.  Returns one problem string per violation (empty when the family is intact).</em>
+<a class="jxr_linenumber" name="L154" href="#L154">154</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L155" href="#L155">155</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> List&lt;String&gt; documentFamilyProblems(Map&lt;String,String&gt; shipped, Map&lt;String,String&gt; origins) {
+<a class="jxr_linenumber" name="L156" href="#L156">156</a> 		<strong class="jxr_keyword">var</strong> problems = <strong class="jxr_keyword">new</strong> ArrayList&lt;String&gt;();
+<a class="jxr_linenumber" name="L157" href="#L157">157</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> stem : SymbolProvenanceScanner.FRAMED_FAMILY) {
+<a class="jxr_linenumber" name="L158" href="#L158">158</a> 			<strong class="jxr_keyword">if</strong> (shipped.get(stem) == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L159" href="#L159">159</a> 				problems.add(<span class="jxr_string">"the document family member "</span> + stem + <span class="jxr_string">" is missing from the sprite"</span>);
+<a class="jxr_linenumber" name="L160" href="#L160">160</a> 			<strong class="jxr_keyword">if</strong> (neq(origins.get(stem), <span class="jxr_string">"original-artwork"</span>))
+<a class="jxr_linenumber" name="L161" href="#L161">161</a> 				problems.add(<span class="jxr_string">"document-family stem "</span> + stem + <span class="jxr_string">" is expected to be original-artwork after the artwork replacement"</span>
+<a class="jxr_linenumber" name="L162" href="#L162">162</a> 					+ <span class="jxr_string">" but is "</span> + origins.get(stem));
+<a class="jxr_linenumber" name="L163" href="#L163">163</a> 		}
+<a class="jxr_linenumber" name="L164" href="#L164">164</a> 		<strong class="jxr_keyword">return</strong> problems;
+<a class="jxr_linenumber" name="L165" href="#L165">165</a> 	}
+<a class="jxr_linenumber" name="L166" href="#L166">166</a> 
+<a class="jxr_linenumber" name="L167" href="#L167">167</a> 	@Test <strong class="jxr_keyword">void</strong> a04_documentFamilyMembersRemainShipped() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L168" href="#L168">168</a> 		<em class="jxr_comment">// csv / pdf / spreadsheet previously shared a Juneau-original byte-identical frame.  They now ship</em>
+<a class="jxr_linenumber" name="L169" href="#L169">169</a> 		<em class="jxr_comment">// copied artwork, so frame-identity is no longer asserted — only that the three stems still exist</em>
+<a class="jxr_linenumber" name="L170" href="#L170">170</a> 		<em class="jxr_comment">// and keep their original-artwork origin.</em>
+<a class="jxr_linenumber" name="L171" href="#L171">171</a> 		assertEmpty(() -&gt; <span class="jxr_string">"document family drifted. "</span> + MANIFEST_IS_THE_REVIEW,
+<a class="jxr_linenumber" name="L172" href="#L172">172</a> 			documentFamilyProblems(SymbolProvenanceScanner.symbols(sprite()), SymbolProvenanceScanner.manifestOrigins(manifest())));
+<a class="jxr_linenumber" name="L173" href="#L173">173</a> 	}
+<a class="jxr_linenumber" name="L174" href="#L174">174</a> 
+<a class="jxr_linenumber" name="L175" href="#L175">175</a> 	@Test <strong class="jxr_keyword">void</strong> a05_everyGlyphIsNormalisedToTheHostViewBox() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L176" href="#L176">176</a> 		<strong class="jxr_keyword">var</strong> offModulus = <strong class="jxr_keyword">new</strong> ArrayList&lt;String&gt;();
+<a class="jxr_linenumber" name="L177" href="#L177">177</a> 		SymbolProvenanceScanner.symbols(sprite()).forEach((stem, element) -&gt; {
+<a class="jxr_linenumber" name="L178" href="#L178">178</a> 			<strong class="jxr_keyword">var</strong> vb = SymbolProvenanceScanner.viewBox(element);
+<a class="jxr_linenumber" name="L179" href="#L179">179</a> 			<strong class="jxr_keyword">if</strong> (neq(vb, REQUIRED_VIEWBOX))
+<a class="jxr_linenumber" name="L180" href="#L180">180</a> 				offModulus.add(stem + <span class="jxr_string">": viewBox=\&quot;"</span> + vb + <span class="jxr_string">"\&quot;"</span>);
+<a class="jxr_linenumber" name="L181" href="#L181">181</a> 		});
+<a class="jxr_linenumber" name="L182" href="#L182">182</a> 		assertEmpty(() -&gt; <span class="jxr_string">"a glyph declares a viewBox other than \&quot;"</span> + REQUIRED_VIEWBOX + <span class="jxr_string">"\&quot;. juneau-icons.js hard-codes the"</span>
+<a class="jxr_linenumber" name="L183" href="#L183">183</a> 				+ <span class="jxr_string">" host &lt;svg&gt; at that modulus, so any other one interposes a scale factor between the author's"</span>
+<a class="jxr_linenumber" name="L184" href="#L184">184</a> 				+ <span class="jxr_string">" coordinates and the pixel grid and the glyph's strokes stop landing on pixel boundaries."</span>, offModulus);
+<a class="jxr_linenumber" name="L185" href="#L185">185</a> 	}
+<a class="jxr_linenumber" name="L186" href="#L186">186</a> 
+<a class="jxr_linenumber" name="L187" href="#L187">187</a> 	@Test <strong class="jxr_keyword">void</strong> a06_paintIsOnlyEverNoneOrCurrentColor() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L188" href="#L188">188</a> 		assertEmpty(() -&gt; <span class="jxr_string">"a hard-coded paint value appeared in the sprite. Hover, focus and disabled tinting is a CSS"</span>
+<a class="jxr_linenumber" name="L189" href="#L189">189</a> 				+ <span class="jxr_string">" `color` change (or, for a part with a themable `var(--x, currentColor)` paint, a custom-property"</span>
+<a class="jxr_linenumber" name="L190" href="#L190">190</a> 				+ <span class="jxr_string">" change), so a glyph painted with a literal colour silently opts out of all of it and needs a"</span>
+<a class="jxr_linenumber" name="L191" href="#L191">191</a> 				+ <span class="jxr_string">" second asset to be themed."</span>, SymbolProvenanceScanner.offContractPaints(sprite()));
+<a class="jxr_linenumber" name="L192" href="#L192">192</a> 	}
+<a class="jxr_linenumber" name="L193" href="#L193">193</a> 
+<a class="jxr_linenumber" name="L194" href="#L194">194</a> 	@Test <strong class="jxr_keyword">void</strong> a07_everyStrokedElementDeclaresItsWidth() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L195" href="#L195">195</a> 		<strong class="jxr_keyword">var</strong> shipped = SymbolProvenanceScanner.symbols(sprite());
+<a class="jxr_linenumber" name="L196" href="#L196">196</a> 		<strong class="jxr_keyword">var</strong> underspecified = <strong class="jxr_keyword">new</strong> ArrayList&lt;String&gt;();
+<a class="jxr_linenumber" name="L197" href="#L197">197</a> 		shipped.forEach((stem, element) -&gt;
+<a class="jxr_linenumber" name="L198" href="#L198">198</a> 			SymbolProvenanceScanner.strokedWithoutWidth(element).forEach(e -&gt; underspecified.add(stem + <span class="jxr_string">": &lt;"</span> + e + <span class="jxr_string">"&gt;"</span>)));
+<a class="jxr_linenumber" name="L199" href="#L199">199</a> 		assertEmpty(() -&gt; <span class="jxr_string">"an element paints a stroke without declaring stroke-width, so its rendered weight depends on"</span>
+<a class="jxr_linenumber" name="L200" href="#L200">200</a> 				+ <span class="jxr_string">" where the glyph is used rather than on the glyph."</span>, underspecified);
+<a class="jxr_linenumber" name="L201" href="#L201">201</a> 	}
+<a class="jxr_linenumber" name="L202" href="#L202">202</a> 
+<a class="jxr_linenumber" name="L203" href="#L203">203</a> 	<em class="jxr_comment">//------------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L204" href="#L204">204</a> 	<em class="jxr_comment">// b: the assertions above can actually fail</em>
+<a class="jxr_linenumber" name="L205" href="#L205">205</a> 	<em class="jxr_comment">//</em>
+<a class="jxr_linenumber" name="L206" href="#L206">206</a> 	<em class="jxr_comment">// A provenance guard that silently stopped seeing artwork reads as a passing test, which is strictly worse than</em>
+<a class="jxr_linenumber" name="L207" href="#L207">207</a> 	<em class="jxr_comment">// no guard - the same discipline ShippedJs_SinkScan_Test applies to its scanner.</em>
+<a class="jxr_linenumber" name="L208" href="#L208">208</a> 	<em class="jxr_comment">//------------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L209" href="#L209">209</a> 
+<a class="jxr_linenumber" name="L210" href="#L210">210</a> 	@Test <strong class="jxr_keyword">void</strong> b01_aOneCharacterArtworkChangeMovesTheFingerprint() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L211" href="#L211">211</a> 		<strong class="jxr_keyword">var</strong> real = sprite();
+<a class="jxr_linenumber" name="L212" href="#L212">212</a> 		<strong class="jxr_keyword">var</strong> mutated = mutateFirstPath(real);
+<a class="jxr_linenumber" name="L213" href="#L213">213</a> 		<strong class="jxr_keyword">var</strong> before = SymbolProvenanceScanner.symbols(real);
+<a class="jxr_linenumber" name="L214" href="#L214">214</a> 		<strong class="jxr_keyword">var</strong> after = SymbolProvenanceScanner.symbols(mutated);
+<a class="jxr_linenumber" name="L215" href="#L215">215</a> 		assertList(() -&gt; <span class="jxr_string">"the mutation must not change the glyph set"</span>, after.keySet(), before.keySet().toArray());
+<a class="jxr_linenumber" name="L216" href="#L216">216</a> 		<strong class="jxr_keyword">var</strong> stem = before.keySet().iterator().next();
+<a class="jxr_linenumber" name="L217" href="#L217">217</a> 		assertNotEquals(SymbolProvenanceScanner.fingerprint(before.get(stem)),
+<a class="jxr_linenumber" name="L218" href="#L218">218</a> 			SymbolProvenanceScanner.fingerprint(after.get(stem)),
+<a class="jxr_linenumber" name="L219" href="#L219">219</a> 			<span class="jxr_string">"a single added path command left the fingerprint unchanged, so a02 is hashing something other than the"</span>
+<a class="jxr_linenumber" name="L220" href="#L220">220</a> 				+ <span class="jxr_string">" artwork - a normalised string, or a regex capturing only the opening tag, both look like this"</span>);
+<a class="jxr_linenumber" name="L221" href="#L221">221</a> 	}
+<a class="jxr_linenumber" name="L222" href="#L222">222</a> 
+<a class="jxr_linenumber" name="L223" href="#L223">223</a> 	@Test <strong class="jxr_keyword">void</strong> b02_aViewBoxChangeMovesTheFingerprint() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L224" href="#L224">224</a> 		<em class="jxr_comment">// The gap this closes was explicit in the item: the stem-id guard never reads viewBox, so before this test</em>
+<a class="jxr_linenumber" name="L225" href="#L225">225</a> 		<em class="jxr_comment">// a glyph arriving at a foreign modulus passed every guard in the tree silently.</em>
+<a class="jxr_linenumber" name="L226" href="#L226">226</a> 		<strong class="jxr_keyword">var</strong> real = sprite();
+<a class="jxr_linenumber" name="L227" href="#L227">227</a> 		<strong class="jxr_keyword">var</strong> mutated = real.replace(<span class="jxr_string">"viewBox=\&quot;"</span> + REQUIRED_VIEWBOX + <span class="jxr_string">"\&quot;"</span>, <span class="jxr_string">"viewBox=\&quot;0 0 16 16\&quot;"</span>);
+<a class="jxr_linenumber" name="L228" href="#L228">228</a> 		assertNotEquals(real, mutated, <span class="jxr_string">"the sprite no longer declares the host viewBox, so this check cannot run"</span>);
+<a class="jxr_linenumber" name="L229" href="#L229">229</a> 		<strong class="jxr_keyword">var</strong> before = SymbolProvenanceScanner.symbols(real);
+<a class="jxr_linenumber" name="L230" href="#L230">230</a> 		<strong class="jxr_keyword">var</strong> after = SymbolProvenanceScanner.symbols(mutated);
+<a class="jxr_linenumber" name="L231" href="#L231">231</a> 		<strong class="jxr_keyword">var</strong> stem = before.keySet().iterator().next();
+<a class="jxr_linenumber" name="L232" href="#L232">232</a> 		assertNotEquals(SymbolProvenanceScanner.fingerprint(before.get(stem)),
+<a class="jxr_linenumber" name="L233" href="#L233">233</a> 			SymbolProvenanceScanner.fingerprint(after.get(stem)),
+<a class="jxr_linenumber" name="L234" href="#L234">234</a> 			<span class="jxr_string">"a viewBox change left the fingerprint unchanged, so the hash is not covering the opening tag"</span>);
+<a class="jxr_linenumber" name="L235" href="#L235">235</a> 	}
+<a class="jxr_linenumber" name="L236" href="#L236">236</a> 
+<a class="jxr_linenumber" name="L237" href="#L237">237</a> 	@Test <strong class="jxr_keyword">void</strong> b03_documentFamilyOriginAssertCanFail() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L238" href="#L238">238</a> 		<em class="jxr_comment">// a04 pins original-artwork on the framed-family stems.  Run the SAME check against a mutated origins map and a</em>
+<a class="jxr_linenumber" name="L239" href="#L239">239</a> 		<em class="jxr_comment">// mutated sprite and require it to report the breach; a vacuous check (or a vacuous origins map) would not.</em>
+<a class="jxr_linenumber" name="L240" href="#L240">240</a> 		<strong class="jxr_keyword">var</strong> shipped = SymbolProvenanceScanner.symbols(sprite());
+<a class="jxr_linenumber" name="L241" href="#L241">241</a> 		<strong class="jxr_keyword">var</strong> origins = SymbolProvenanceScanner.manifestOrigins(manifest());
+<a class="jxr_linenumber" name="L242" href="#L242">242</a> 		assertNotEmpty(() -&gt; <span class="jxr_string">"precondition: manifest origins parse"</span>, origins);
+<a class="jxr_linenumber" name="L243" href="#L243">243</a> 		assertEmpty(() -&gt; <span class="jxr_string">"precondition: the unmutated inputs must pass the check"</span>, documentFamilyProblems(shipped, origins));
+<a class="jxr_linenumber" name="L244" href="#L244">244</a> 
+<a class="jxr_linenumber" name="L245" href="#L245">245</a> 		<strong class="jxr_keyword">var</strong> first = SymbolProvenanceScanner.FRAMED_FAMILY.get(0);
+<a class="jxr_linenumber" name="L246" href="#L246">246</a> 		<strong class="jxr_keyword">var</strong> drifted = <strong class="jxr_keyword">new</strong> LinkedHashMap&lt;&gt;(origins);
+<a class="jxr_linenumber" name="L247" href="#L247">247</a> 		drifted.put(first, <span class="jxr_string">"juneau-original"</span>);
+<a class="jxr_linenumber" name="L248" href="#L248">248</a> 		assertList(documentFamilyProblems(shipped, drifted),
+<a class="jxr_linenumber" name="L249" href="#L249">249</a> 			<span class="jxr_string">"document-family stem "</span> + first + <span class="jxr_string">" is expected to be original-artwork after the artwork replacement but is juneau-original"</span>);
+<a class="jxr_linenumber" name="L250" href="#L250">250</a> 
+<a class="jxr_linenumber" name="L251" href="#L251">251</a> 		<strong class="jxr_keyword">var</strong> missing = <strong class="jxr_keyword">new</strong> LinkedHashMap&lt;&gt;(shipped);
+<a class="jxr_linenumber" name="L252" href="#L252">252</a> 		missing.remove(first);
+<a class="jxr_linenumber" name="L253" href="#L253">253</a> 		assertList(documentFamilyProblems(missing, origins), <span class="jxr_string">"the document family member "</span> + first + <span class="jxr_string">" is missing from the sprite"</span>);
+<a class="jxr_linenumber" name="L254" href="#L254">254</a> 	}
+<a class="jxr_linenumber" name="L255" href="#L255">255</a> 
+<a class="jxr_linenumber" name="L256" href="#L256">256</a> 	@Test <strong class="jxr_keyword">void</strong> a08_shippedResourcesNameNoReferenceConsole() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L257" href="#L257">257</a> 		<em class="jxr_comment">// The shipped sprites, manifests, scripts and stylesheets are Apache artifacts: provenance is recorded by origin</em>
+<a class="jxr_linenumber" name="L258" href="#L258">258</a> 		<em class="jxr_comment">// token (juneau-original / original-artwork), never by naming the console the artwork was cleared from.  The</em>
+<a class="jxr_linenumber" name="L259" href="#L259">259</a> 		<em class="jxr_comment">// bracketed letters keep this pattern from matching its own source text.</em>
+<a class="jxr_linenumber" name="L260" href="#L260">260</a> 		<strong class="jxr_keyword">var</strong> leak = Pattern.compile(<span class="jxr_string">"&#92;&#92;bI[R]S|&#92;&#92;bi[r]s[-_.]"</span>);
+<a class="jxr_linenumber" name="L261" href="#L261">261</a> 		<strong class="jxr_keyword">var</strong> root = RawContentSinkScanner.locateModuleRoot();
+<a class="jxr_linenumber" name="L262" href="#L262">262</a> 		assertNotNull(root, <span class="jxr_string">"could not locate the module's own resources"</span>);
+<a class="jxr_linenumber" name="L263" href="#L263">263</a> 		<strong class="jxr_keyword">var</strong> dir = root.resolve(SymbolProvenanceScanner.RESOURCE_DIR);
+<a class="jxr_linenumber" name="L264" href="#L264">264</a> 		<strong class="jxr_keyword">var</strong> offenders = <strong class="jxr_keyword">new</strong> ArrayList&lt;String&gt;();
+<a class="jxr_linenumber" name="L265" href="#L265">265</a> 		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> files = Files.list(dir)) {
+<a class="jxr_linenumber" name="L266" href="#L266">266</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> f : files.filter(Files::isRegularFile).sorted().toList()) {
+<a class="jxr_linenumber" name="L267" href="#L267">267</a> 				<strong class="jxr_keyword">var</strong> name = f.getFileName().toString();
+<a class="jxr_linenumber" name="L268" href="#L268">268</a> 				<strong class="jxr_keyword">if</strong> (name.matches(<span class="jxr_string">".*&#92;&#92;.(md|svg|css|js)"</span>)) {
+<a class="jxr_linenumber" name="L269" href="#L269">269</a> 					<strong class="jxr_keyword">var</strong> m = leak.matcher(Files.readString(f));
+<a class="jxr_linenumber" name="L270" href="#L270">270</a> 					<strong class="jxr_keyword">if</strong> (m.find())
+<a class="jxr_linenumber" name="L271" href="#L271">271</a> 						offenders.add(name);
+<a class="jxr_linenumber" name="L272" href="#L272">272</a> 				}
+<a class="jxr_linenumber" name="L273" href="#L273">273</a> 			}
+<a class="jxr_linenumber" name="L274" href="#L274">274</a> 		}
+<a class="jxr_linenumber" name="L275" href="#L275">275</a> 		assertEmpty(() -&gt; <span class="jxr_string">"these shipped resources name the source console; describe the reason instead"</span>, offenders);
+<a class="jxr_linenumber" name="L276" href="#L276">276</a> 		<em class="jxr_comment">// Non-vacuous: the scan really lists the provenance manifest it is supposed to be covering.</em>
+<a class="jxr_linenumber" name="L277" href="#L277">277</a> 		assertTrue(Files.isRegularFile(dir.resolve(SymbolProvenanceScanner.MANIFEST)), <span class="jxr_string">"scanned directory does not hold the manifest"</span>);
+<a class="jxr_linenumber" name="L278" href="#L278">278</a> 	}
+<a class="jxr_linenumber" name="L279" href="#L279">279</a> 
+<a class="jxr_linenumber" name="L280" href="#L280">280</a> 	@Test <strong class="jxr_keyword">void</strong> b04_theManifestRowPatternMatchesEveryRealRow() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L281" href="#L281">281</a> 		<em class="jxr_comment">// a01/a02/a03 all read the manifest through one regex.  A manifest reformatted so that regex stopped</em>
+<a class="jxr_linenumber" name="L282" href="#L282">282</a> 		<em class="jxr_comment">// matching would make all three vacuous at once, and each of them would still pass.</em>
+<a class="jxr_linenumber" name="L283" href="#L283">283</a> 		<strong class="jxr_keyword">var</strong> declared = SymbolProvenanceScanner.manifestFingerprints(manifest());
+<a class="jxr_linenumber" name="L284" href="#L284">284</a> 		<strong class="jxr_keyword">var</strong> shipped = SymbolProvenanceScanner.symbols(sprite());
+<a class="jxr_linenumber" name="L285" href="#L285">285</a> 		assertSize(() -&gt; <span class="jxr_string">"the manifest's fingerprint-row format no longer parses for every glyph. "</span> + MANIFEST_IS_THE_REVIEW,
+<a class="jxr_linenumber" name="L286" href="#L286">286</a> 			shipped.size(), declared);
+<a class="jxr_linenumber" name="L287" href="#L287">287</a> 	}
+<a class="jxr_linenumber" name="L288" href="#L288">288</a> 
+<a class="jxr_linenumber" name="L289" href="#L289">289</a> 	@Test <strong class="jxr_keyword">void</strong> b05_theScannersDetectAnInjectedBreach() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L290" href="#L290">290</a> 		<strong class="jxr_keyword">var</strong> real = sprite();
+<a class="jxr_linenumber" name="L291" href="#L291">291</a> 		assertNotEmpty(() -&gt; <span class="jxr_string">"an injected literal colour went undetected, so a06 cannot fail"</span>,
+<a class="jxr_linenumber" name="L292" href="#L292">292</a> 			SymbolProvenanceScanner.offContractPaints(real.replace(<span class="jxr_string">"fill=\&quot;none\&quot;"</span>, <span class="jxr_string">"fill=\&quot;#1589EE\&quot;"</span>)));
+<a class="jxr_linenumber" name="L293" href="#L293">293</a> 		assertNotEmpty(() -&gt; <span class="jxr_string">"a literal colour hidden in a var() fallback went undetected, so a06 cannot fail"</span>,
+<a class="jxr_linenumber" name="L294" href="#L294">294</a> 			SymbolProvenanceScanner.offContractPaints(<span class="jxr_string">"&lt;symbol id=\&quot;juneau-sym-x\&quot;&gt;&lt;path fill=\&quot;var(--jc-x, #1589EE)\&quot; d=\&quot;M0 0\&quot;/&gt;&lt;/symbol&gt;"</span>));
+<a class="jxr_linenumber" name="L295" href="#L295">295</a> 		assertEmpty(() -&gt; <span class="jxr_string">"a themable var(--x, currentColor) paint must be accepted"</span>,
+<a class="jxr_linenumber" name="L296" href="#L296">296</a> 			SymbolProvenanceScanner.offContractPaints(<span class="jxr_string">"&lt;symbol id=\&quot;juneau-sym-x\&quot;&gt;&lt;path fill=\&quot;var(--jc-x, currentColor)\&quot; d=\&quot;M0 0\&quot;/&gt;&lt;/symbol&gt;"</span>));
+<a class="jxr_linenumber" name="L297" href="#L297">297</a> 
+<a class="jxr_linenumber" name="L298" href="#L298">298</a> 		<strong class="jxr_keyword">var</strong> stripped = real.replaceAll(<span class="jxr_string">"&#92;&#92;s+stroke-width=\&quot;[^\&quot;]*\&quot;"</span>, <span class="jxr_string">""</span>);
+<a class="jxr_linenumber" name="L299" href="#L299">299</a> 		assertNotEquals(real, stripped, <span class="jxr_string">"the sprite declares no stroke-width at all, so this check cannot run"</span>);
+<a class="jxr_linenumber" name="L300" href="#L300">300</a> 		<strong class="jxr_keyword">var</strong> breaches = SymbolProvenanceScanner.symbols(stripped).values().stream()
+<a class="jxr_linenumber" name="L301" href="#L301">301</a> 			.flatMap(e -&gt; SymbolProvenanceScanner.strokedWithoutWidth(e).stream()).toList();
+<a class="jxr_linenumber" name="L302" href="#L302">302</a> 		assertNotEmpty(() -&gt; <span class="jxr_string">"removing every stroke-width went undetected, so a07 cannot fail"</span>, breaches);
+<a class="jxr_linenumber" name="L303" href="#L303">303</a> 	}
+<a class="jxr_linenumber" name="L304" href="#L304">304</a> 
+<a class="jxr_linenumber" name="L305" href="#L305">305</a> 	@Test <strong class="jxr_keyword">void</strong> b06_theStrokeWidthScanSeesTheRealStrokedElements() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L306" href="#L306">306</a> 		<em class="jxr_comment">// a07 asserts an empty list, which an element pattern that matched nothing would satisfy trivially.  This</em>
+<a class="jxr_linenumber" name="L307" href="#L307">307</a> 		<em class="jxr_comment">// pins that the sprite really does paint strokes and that they really are being examined.</em>
+<a class="jxr_linenumber" name="L308" href="#L308">308</a> 		<strong class="jxr_keyword">var</strong> stripped = SymbolProvenanceScanner.read(SymbolProvenanceScanner.SPRITE)
+<a class="jxr_linenumber" name="L309" href="#L309">309</a> 			.replaceAll(<span class="jxr_string">"&#92;&#92;s+stroke-width=\&quot;[^\&quot;]*\&quot;"</span>, <span class="jxr_string">""</span>);
+<a class="jxr_linenumber" name="L310" href="#L310">310</a> 		<strong class="jxr_keyword">var</strong> seen = SymbolProvenanceScanner.symbols(stripped).values().stream()
+<a class="jxr_linenumber" name="L311" href="#L311">311</a> 			.mapToInt(e -&gt; SymbolProvenanceScanner.strokedWithoutWidth(e).size()).sum();
+<a class="jxr_linenumber" name="L312" href="#L312">312</a> 		assertTrue(seen &gt;= 10,
+<a class="jxr_linenumber" name="L313" href="#L313">313</a> 			() -&gt; <span class="jxr_string">"only "</span> + seen + <span class="jxr_string">" stroked elements were found across the whole sprite after stripping"</span>
+<a class="jxr_linenumber" name="L314" href="#L314">314</a> 				+ <span class="jxr_string">" stroke-width - the element pattern has stopped matching the remaining stroked artwork"</span>);
+<a class="jxr_linenumber" name="L315" href="#L315">315</a> 	}
+<a class="jxr_linenumber" name="L316" href="#L316">316</a> }
+</pre>
+<hr/>
+<div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>
+</body>
+</html>

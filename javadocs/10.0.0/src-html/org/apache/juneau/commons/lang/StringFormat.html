@@ -30,565 +30,557 @@
 <span class="source-line-no">017</span><span id="line-17">package org.apache.juneau.commons.lang;</span>
 <span class="source-line-no">018</span><span id="line-18"></span>
 <span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.lang.StateEnum.*;</span>
-<span class="source-line-no">020</span><span id="line-20">import static org.apache.juneau.commons.utils.AssertionUtils.*;</span>
-<span class="source-line-no">021</span><span id="line-21">import static org.apache.juneau.commons.utils.Shorts.*;</span>
-<span class="source-line-no">022</span><span id="line-22">import static org.apache.juneau.commons.utils.SystemUtils.*;</span>
-<span class="source-line-no">023</span><span id="line-23"></span>
-<span class="source-line-no">024</span><span id="line-24">import java.util.*;</span>
-<span class="source-line-no">025</span><span id="line-25">import java.util.stream.*;</span>
-<span class="source-line-no">026</span><span id="line-26"></span>
-<span class="source-line-no">027</span><span id="line-27">import org.apache.juneau.commons.collections.*;</span>
-<span class="source-line-no">028</span><span id="line-28">import org.apache.juneau.commons.utils.*;</span>
-<span class="source-line-no">029</span><span id="line-29"></span>
-<span class="source-line-no">030</span><span id="line-30">/**</span>
-<span class="source-line-no">031</span><span id="line-31"> * Printf-style string formatter with a small cache and lenient argument handling.</span>
-<span class="source-line-no">032</span><span id="line-32"> *</span>
-<span class="source-line-no">033</span><span id="line-33"> * &lt;p&gt;</span>
-<span class="source-line-no">034</span><span id="line-34"> * This class provides a thread-safe, cacheable formatter for printf-style ({@link java.util.Formatter}) patterns</span>
-<span class="source-line-no">035</span><span id="line-35"> * (&lt;js&gt;"%s"&lt;/js&gt;, &lt;js&gt;"%d"&lt;/js&gt;, &lt;js&gt;"%.2f"&lt;/js&gt;, &lt;js&gt;"%1$s"&lt;/js&gt;, etc.). MessageFormat-style (&lt;js&gt;"{0}"&lt;/js&gt;)</span>
-<span class="source-line-no">036</span><span id="line-36"> * patterns are &lt;b&gt;not&lt;/b&gt; recognized here — &lt;c&gt;{&lt;/c&gt; and &lt;c&gt;'&lt;/c&gt; are treated as literal text. For MessageFormat</span>
-<span class="source-line-no">037</span><span id="line-37"> * rendering use {@link StringUtils#mformat(String, Object...)} / {@code Shorts.mf(...)}/{@code Shorts.mfs(...)}</span>
-<span class="source-line-no">038</span><span id="line-38"> * (backed by {@link java.text.MessageFormat}).</span>
-<span class="source-line-no">039</span><span id="line-39"> *</span>
-<span class="source-line-no">040</span><span id="line-40"> * &lt;h5 class='section'&gt;Features:&lt;/h5&gt;</span>
-<span class="source-line-no">041</span><span id="line-41"> * &lt;ul&gt;</span>
-<span class="source-line-no">042</span><span id="line-42"> *   &lt;li&gt;&lt;b&gt;Printf grammar:&lt;/b&gt; &lt;js&gt;"%s"&lt;/js&gt;, &lt;js&gt;"%d"&lt;/js&gt;, &lt;js&gt;"%.2f"&lt;/js&gt;, &lt;js&gt;"%1$s"&lt;/js&gt;, etc.&lt;/li&gt;</span>
-<span class="source-line-no">043</span><span id="line-43"> *   &lt;li&gt;&lt;b&gt;Thread-Safe:&lt;/b&gt; Immutable class, safe for concurrent use&lt;/li&gt;</span>
-<span class="source-line-no">044</span><span id="line-44"> *   &lt;li&gt;&lt;b&gt;Cacheable:&lt;/b&gt; Use {@link #ofPrintf(String)} for cached instances&lt;/li&gt;</span>
-<span class="source-line-no">045</span><span id="line-45"> *   &lt;li&gt;&lt;b&gt;Lenient null handling:&lt;/b&gt; &lt;jk&gt;null&lt;/jk&gt; arguments render as &lt;js&gt;"null"&lt;/js&gt; for string conversions</span>
-<span class="source-line-no">046</span><span id="line-46"> *       (rather than throwing) and a fast path avoids {@link java.util.Formatter} for simple &lt;js&gt;"%s"&lt;/js&gt; tokens&lt;/li&gt;</span>
-<span class="source-line-no">047</span><span id="line-47"> * &lt;/ul&gt;</span>
-<span class="source-line-no">048</span><span id="line-48"> *</span>
-<span class="source-line-no">049</span><span id="line-49"> * &lt;h5 class='section'&gt;Examples:&lt;/h5&gt;</span>
-<span class="source-line-no">050</span><span id="line-50"> * &lt;p class='bjava'&gt;</span>
-<span class="source-line-no">051</span><span id="line-51"> *    &lt;jc&gt;// Simple printf&lt;/jc&gt;</span>
-<span class="source-line-no">052</span><span id="line-52"> *    StringFormat &lt;jv&gt;fmt&lt;/jv&gt; = StringFormat.&lt;jsm&gt;ofPrintf&lt;/jsm&gt;(&lt;js&gt;"Hello %s, you have %d items"&lt;/js&gt;);</span>
-<span class="source-line-no">053</span><span id="line-53"> *    String &lt;jv&gt;result&lt;/jv&gt; = &lt;jv&gt;fmt&lt;/jv&gt;.&lt;jsm&gt;format&lt;/jsm&gt;(&lt;js&gt;"John"&lt;/js&gt;, 5);</span>
-<span class="source-line-no">054</span><span id="line-54"> *    &lt;jc&gt;// Returns: "Hello John, you have 5 items"&lt;/jc&gt;</span>
-<span class="source-line-no">055</span><span id="line-55"> *</span>
-<span class="source-line-no">056</span><span id="line-56"> *    &lt;jc&gt;// Argument index (reuse arguments)&lt;/jc&gt;</span>
-<span class="source-line-no">057</span><span id="line-57"> *    StringFormat &lt;jv&gt;fmt2&lt;/jv&gt; = StringFormat.&lt;jsm&gt;ofPrintf&lt;/jsm&gt;(&lt;js&gt;"%1$s loves %2$s, and %1$s also loves %3$s"&lt;/js&gt;);</span>
-<span class="source-line-no">058</span><span id="line-58"> *    String &lt;jv&gt;result2&lt;/jv&gt; = &lt;jv&gt;fmt2&lt;/jv&gt;.&lt;jsm&gt;format&lt;/jsm&gt;(&lt;js&gt;"Alice"&lt;/js&gt;, &lt;js&gt;"Bob"&lt;/js&gt;, &lt;js&gt;"Charlie"&lt;/js&gt;);</span>
-<span class="source-line-no">059</span><span id="line-59"> *    &lt;jc&gt;// Returns: "Alice loves Bob, and Alice also loves Charlie"&lt;/jc&gt;</span>
-<span class="source-line-no">060</span><span id="line-60"> * &lt;/p&gt;</span>
-<span class="source-line-no">061</span><span id="line-61"> *</span>
-<span class="source-line-no">062</span><span id="line-62"> * &lt;h5 class='section'&gt;Caching:&lt;/h5&gt;</span>
-<span class="source-line-no">063</span><span id="line-63"> * &lt;p&gt;</span>
-<span class="source-line-no">064</span><span id="line-64"> * Use {@link #ofPrintf(String)} to get cached instances. The cache is thread-safe and limited to 1000 entries.</span>
-<span class="source-line-no">065</span><span id="line-65"> * For uncached instances, use the constructor directly.</span>
-<span class="source-line-no">066</span><span id="line-66"> * &lt;/p&gt;</span>
-<span class="source-line-no">067</span><span id="line-67"> *</span>
-<span class="source-line-no">068</span><span id="line-68"> * &lt;h5 class='section'&gt;Thread Safety:&lt;/h5&gt;</span>
-<span class="source-line-no">069</span><span id="line-69"> * &lt;p&gt;</span>
-<span class="source-line-no">070</span><span id="line-70"> * This class is immutable and thread-safe. Multiple threads can safely use the same instance concurrently.</span>
-<span class="source-line-no">071</span><span id="line-71"> * &lt;/p&gt;</span>
-<span class="source-line-no">072</span><span id="line-72"> *</span>
-<span class="source-line-no">073</span><span id="line-73"> * @see StringUtils#format(String, Object...)</span>
-<span class="source-line-no">074</span><span id="line-74"> * @see StringUtils#mformat(String, Object...)</span>
-<span class="source-line-no">075</span><span id="line-75"> */</span>
-<span class="source-line-no">076</span><span id="line-76">@SuppressWarnings({</span>
-<span class="source-line-no">077</span><span id="line-77">   "java:S115" // Constants use UPPER_snakeCase convention</span>
-<span class="source-line-no">078</span><span id="line-78">})</span>
-<span class="source-line-no">079</span><span id="line-79">public final class StringFormat {</span>
-<span class="source-line-no">080</span><span id="line-80"></span>
-<span class="source-line-no">081</span><span id="line-81">   // Argument name constants for assertArgNotNull</span>
-<span class="source-line-no">082</span><span id="line-82">   private static final String ARG_pattern = "pattern";</span>
-<span class="source-line-no">083</span><span id="line-83"></span>
-<span class="source-line-no">084</span><span id="line-84">   /**</span>
-<span class="source-line-no">085</span><span id="line-85">    * Literal text token.</span>
-<span class="source-line-no">086</span><span id="line-86">    */</span>
-<span class="source-line-no">087</span><span id="line-87">   private static final class LiteralToken extends Token {</span>
-<span class="source-line-no">088</span><span id="line-88">      private final String text;</span>
-<span class="source-line-no">089</span><span id="line-89"></span>
-<span class="source-line-no">090</span><span id="line-90">      LiteralToken(String text) {</span>
-<span class="source-line-no">091</span><span id="line-91">         this.text = text;</span>
-<span class="source-line-no">092</span><span id="line-92">      }</span>
-<span class="source-line-no">093</span><span id="line-93"></span>
-<span class="source-line-no">094</span><span id="line-94">      @Override</span>
-<span class="source-line-no">095</span><span id="line-95">      public String toString() {</span>
-<span class="source-line-no">096</span><span id="line-96">         return "[L:" + text + "]";</span>
-<span class="source-line-no">097</span><span id="line-97">      }</span>
-<span class="source-line-no">098</span><span id="line-98"></span>
-<span class="source-line-no">099</span><span id="line-99">      @Override</span>
-<span class="source-line-no">100</span><span id="line-100">      void append(StringBuilder sb, Object[] args, Locale locale) {</span>
-<span class="source-line-no">101</span><span id="line-101">         sb.append(text);</span>
-<span class="source-line-no">102</span><span id="line-102">      }</span>
-<span class="source-line-no">103</span><span id="line-103">   }</span>
-<span class="source-line-no">104</span><span id="line-104"></span>
-<span class="source-line-no">105</span><span id="line-105">   /**</span>
-<span class="source-line-no">106</span><span id="line-106">    * Printf-style token (e.g., %s, %d, %.2f).</span>
-<span class="source-line-no">107</span><span id="line-107">    */</span>
-<span class="source-line-no">108</span><span id="line-108">   private static final class StringFormatToken extends Token {</span>
-<span class="source-line-no">109</span><span id="line-109">      private final char format; // 's' = simple (handle directly), 'o' = other (use String.format)</span>
-<span class="source-line-no">110</span><span id="line-110">      private final String content; // The format string to pass to String.format (null for simple formats)</span>
-<span class="source-line-no">111</span><span id="line-111">      private final int index; // 0-based index</span>
-<span class="source-line-no">112</span><span id="line-112"></span>
-<span class="source-line-no">113</span><span id="line-113">   StringFormatToken(String content, int index) {</span>
-<span class="source-line-no">114</span><span id="line-114">      // content is everything after '%' (e.g., "s", "1$s", "d", ".2f", "1$.2f")</span>
-<span class="source-line-no">115</span><span id="line-115">      var dollarIndex = content.indexOf('$');</span>
-<span class="source-line-no">116</span><span id="line-116">      if (dollarIndex &gt;= 0) {</span>
-<span class="source-line-no">117</span><span id="line-117">         index = parseIndex(content.substring(0, dollarIndex)) - 1;</span>
-<span class="source-line-no">118</span><span id="line-118">         content = content.substring(dollarIndex + 1);</span>
-<span class="source-line-no">119</span><span id="line-119">      }</span>
-<span class="source-line-no">120</span><span id="line-120">         this.format = content.length() == 1 ? content.charAt(content.length() - 1) : 'z';</span>
-<span class="source-line-no">121</span><span id="line-121">         this.index = index;</span>
-<span class="source-line-no">122</span><span id="line-122">         this.content = "%" + content;</span>
-<span class="source-line-no">123</span><span id="line-123">      }</span>
-<span class="source-line-no">124</span><span id="line-124"></span>
-<span class="source-line-no">125</span><span id="line-125">      /**</span>
-<span class="source-line-no">126</span><span id="line-126">       * Parses the index from a StringFormat content string.</span>
-<span class="source-line-no">127</span><span id="line-127">       *</span>
-<span class="source-line-no">128</span><span id="line-128">       * @param s The content string (e.g., "1", "2").</span>
-<span class="source-line-no">129</span><span id="line-129">       * @return The parsed index.</span>
-<span class="source-line-no">130</span><span id="line-130">       */</span>
-<span class="source-line-no">131</span><span id="line-131">      private static int parseIndex(String s) {</span>
-<span class="source-line-no">132</span><span id="line-132">         return Integer.parseInt(s);</span>
-<span class="source-line-no">133</span><span id="line-133">      }</span>
-<span class="source-line-no">134</span><span id="line-134"></span>
-<span class="source-line-no">135</span><span id="line-135">      /**</span>
-<span class="source-line-no">136</span><span id="line-136">       * Creates a StringFormatToken and adds it to the tokens list.</span>
-<span class="source-line-no">137</span><span id="line-137">       *</span>
-<span class="source-line-no">138</span><span id="line-138">       * @param tokens The list of tokens to add to.</span>
-<span class="source-line-no">139</span><span id="line-139">       * @param pattern The pattern string.</span>
-<span class="source-line-no">140</span><span id="line-140">       * @param start The start index in the pattern.</span>
-<span class="source-line-no">141</span><span id="line-141">       * @param end The end index in the pattern.</span>
-<span class="source-line-no">142</span><span id="line-142">       * @param index The token index.</span>
-<span class="source-line-no">143</span><span id="line-143">       */</span>
-<span class="source-line-no">144</span><span id="line-144">      static void create(List&lt;Token&gt; tokens, String pattern, int start, int end, int index) {</span>
-<span class="source-line-no">145</span><span id="line-145">         tokens.add(new StringFormatToken(pattern.substring(start, end), index));</span>
-<span class="source-line-no">146</span><span id="line-146">      }</span>
-<span class="source-line-no">147</span><span id="line-147"></span>
-<span class="source-line-no">148</span><span id="line-148">      @Override</span>
-<span class="source-line-no">149</span><span id="line-149">      public String toString() {</span>
-<span class="source-line-no">150</span><span id="line-150">         return "[S:" + format + index + ":" + content + "]";</span>
-<span class="source-line-no">151</span><span id="line-151">      }</span>
-<span class="source-line-no">152</span><span id="line-152"></span>
-<span class="source-line-no">153</span><span id="line-153">      @Override</span>
-<span class="source-line-no">154</span><span id="line-154">      @SuppressWarnings({</span>
-<span class="source-line-no">155</span><span id="line-155">         "java:S3776", // Cognitive complexity acceptable for this specific logic</span>
-<span class="source-line-no">156</span><span id="line-156">         "java:S6541", // StringBuilder used in local scope; no synchronization needed</span>
-<span class="source-line-no">157</span><span id="line-157">      })</span>
-<span class="source-line-no">158</span><span id="line-158">      void append(StringBuilder sb, Object[] args, Locale locale) {</span>
-<span class="source-line-no">159</span><span id="line-159">         // String.format() throws MissingFormatArgumentException when argument is missing</span>
-<span class="source-line-no">160</span><span id="line-160">         if (args == null || index &gt;= args.length || index &lt; 0) {</span>
-<span class="source-line-no">161</span><span id="line-161">            throw new MissingFormatArgumentException(content);</span>
-<span class="source-line-no">162</span><span id="line-162">         }</span>
-<span class="source-line-no">163</span><span id="line-163">         var o = args[index];</span>
-<span class="source-line-no">164</span><span id="line-164">         var l = locale == null ? Locale.getDefault() : locale;</span>
-<span class="source-line-no">165</span><span id="line-165">         var dl = locale == null || locale.equals(Locale.getDefault());</span>
-<span class="source-line-no">166</span><span id="line-166">         switch (format) {</span>
-<span class="source-line-no">167</span><span id="line-167">            case 'b':</span>
-<span class="source-line-no">168</span><span id="line-168">               // String.format() with %b converts:</span>
-<span class="source-line-no">169</span><span id="line-169">               // - null -&gt; "false"</span>
-<span class="source-line-no">170</span><span id="line-170">               // - Boolean -&gt; toString()</span>
-<span class="source-line-no">171</span><span id="line-171">               // - Any other non-null value -&gt; "true"</span>
-<span class="source-line-no">172</span><span id="line-172">               if (o == null) {</span>
-<span class="source-line-no">173</span><span id="line-173">                  sb.append("false");</span>
-<span class="source-line-no">174</span><span id="line-174">               } else if (o instanceof Boolean) {</span>
-<span class="source-line-no">175</span><span id="line-175">                  sb.append(o.toString());</span>
-<span class="source-line-no">176</span><span id="line-176">               } else {</span>
-<span class="source-line-no">177</span><span id="line-177">                  sb.append("true");</span>
-<span class="source-line-no">178</span><span id="line-178">               }</span>
-<span class="source-line-no">179</span><span id="line-179">               return;</span>
-<span class="source-line-no">180</span><span id="line-180">            case 'B':</span>
-<span class="source-line-no">181</span><span id="line-181">               // String.format() with %B converts:</span>
-<span class="source-line-no">182</span><span id="line-182">               // - null -&gt; "FALSE"</span>
-<span class="source-line-no">183</span><span id="line-183">               // - Boolean -&gt; toString().toUpperCase()</span>
-<span class="source-line-no">184</span><span id="line-184">               // - Any other non-null value -&gt; "TRUE"</span>
-<span class="source-line-no">185</span><span id="line-185">               if (o == null) {</span>
-<span class="source-line-no">186</span><span id="line-186">                  sb.append("FALSE");</span>
-<span class="source-line-no">187</span><span id="line-187">               } else if (o instanceof Boolean) {</span>
-<span class="source-line-no">188</span><span id="line-188">                  sb.append(o.toString().toUpperCase());</span>
-<span class="source-line-no">189</span><span id="line-189">               } else {</span>
-<span class="source-line-no">190</span><span id="line-190">                  sb.append("TRUE");</span>
+<span class="source-line-no">020</span><span id="line-20">import static org.apache.juneau.commons.utils.Shorts.*;</span>
+<span class="source-line-no">021</span><span id="line-21">import static org.apache.juneau.commons.utils.SystemUtils.*;</span>
+<span class="source-line-no">022</span><span id="line-22"></span>
+<span class="source-line-no">023</span><span id="line-23">import java.util.*;</span>
+<span class="source-line-no">024</span><span id="line-24">import java.util.stream.*;</span>
+<span class="source-line-no">025</span><span id="line-25"></span>
+<span class="source-line-no">026</span><span id="line-26">import org.apache.juneau.commons.collections.*;</span>
+<span class="source-line-no">027</span><span id="line-27">import org.apache.juneau.commons.utils.*;</span>
+<span class="source-line-no">028</span><span id="line-28"></span>
+<span class="source-line-no">029</span><span id="line-29">/**</span>
+<span class="source-line-no">030</span><span id="line-30"> * Printf-style string formatter with a small cache and lenient argument handling.</span>
+<span class="source-line-no">031</span><span id="line-31"> *</span>
+<span class="source-line-no">032</span><span id="line-32"> * &lt;p&gt;</span>
+<span class="source-line-no">033</span><span id="line-33"> * This class provides a thread-safe, cacheable formatter for printf-style ({@link java.util.Formatter}) patterns</span>
+<span class="source-line-no">034</span><span id="line-34"> * (&lt;js&gt;"%s"&lt;/js&gt;, &lt;js&gt;"%d"&lt;/js&gt;, &lt;js&gt;"%.2f"&lt;/js&gt;, &lt;js&gt;"%1$s"&lt;/js&gt;, etc.). MessageFormat-style (&lt;js&gt;"{0}"&lt;/js&gt;)</span>
+<span class="source-line-no">035</span><span id="line-35"> * patterns are &lt;b&gt;not&lt;/b&gt; recognized here — &lt;c&gt;{&lt;/c&gt; and &lt;c&gt;'&lt;/c&gt; are treated as literal text. For MessageFormat</span>
+<span class="source-line-no">036</span><span id="line-36"> * rendering use {@link StringUtils#mformat(String, Object...)} / {@code Shorts.mf(...)}/{@code Shorts.mfs(...)}</span>
+<span class="source-line-no">037</span><span id="line-37"> * (backed by {@link java.text.MessageFormat}).</span>
+<span class="source-line-no">038</span><span id="line-38"> *</span>
+<span class="source-line-no">039</span><span id="line-39"> * &lt;h5 class='section'&gt;Features:&lt;/h5&gt;</span>
+<span class="source-line-no">040</span><span id="line-40"> * &lt;ul&gt;</span>
+<span class="source-line-no">041</span><span id="line-41"> *   &lt;li&gt;&lt;b&gt;Printf grammar:&lt;/b&gt; &lt;js&gt;"%s"&lt;/js&gt;, &lt;js&gt;"%d"&lt;/js&gt;, &lt;js&gt;"%.2f"&lt;/js&gt;, &lt;js&gt;"%1$s"&lt;/js&gt;, etc.&lt;/li&gt;</span>
+<span class="source-line-no">042</span><span id="line-42"> *   &lt;li&gt;&lt;b&gt;Thread-Safe:&lt;/b&gt; Immutable class, safe for concurrent use&lt;/li&gt;</span>
+<span class="source-line-no">043</span><span id="line-43"> *   &lt;li&gt;&lt;b&gt;Cacheable:&lt;/b&gt; Use {@link #ofPrintf(String)} for cached instances&lt;/li&gt;</span>
+<span class="source-line-no">044</span><span id="line-44"> *   &lt;li&gt;&lt;b&gt;Lenient null handling:&lt;/b&gt; &lt;jk&gt;null&lt;/jk&gt; arguments render as &lt;js&gt;"null"&lt;/js&gt; for string conversions</span>
+<span class="source-line-no">045</span><span id="line-45"> *       (rather than throwing) and a fast path avoids {@link java.util.Formatter} for simple &lt;js&gt;"%s"&lt;/js&gt; tokens&lt;/li&gt;</span>
+<span class="source-line-no">046</span><span id="line-46"> * &lt;/ul&gt;</span>
+<span class="source-line-no">047</span><span id="line-47"> *</span>
+<span class="source-line-no">048</span><span id="line-48"> * &lt;h5 class='section'&gt;Examples:&lt;/h5&gt;</span>
+<span class="source-line-no">049</span><span id="line-49"> * &lt;p class='bjava'&gt;</span>
+<span class="source-line-no">050</span><span id="line-50"> *    &lt;jc&gt;// Simple printf&lt;/jc&gt;</span>
+<span class="source-line-no">051</span><span id="line-51"> *    StringFormat &lt;jv&gt;fmt&lt;/jv&gt; = StringFormat.&lt;jsm&gt;ofPrintf&lt;/jsm&gt;(&lt;js&gt;"Hello %s, you have %d items"&lt;/js&gt;);</span>
+<span class="source-line-no">052</span><span id="line-52"> *    String &lt;jv&gt;result&lt;/jv&gt; = &lt;jv&gt;fmt&lt;/jv&gt;.&lt;jsm&gt;format&lt;/jsm&gt;(&lt;js&gt;"John"&lt;/js&gt;, 5);</span>
+<span class="source-line-no">053</span><span id="line-53"> *    &lt;jc&gt;// Returns: "Hello John, you have 5 items"&lt;/jc&gt;</span>
+<span class="source-line-no">054</span><span id="line-54"> *</span>
+<span class="source-line-no">055</span><span id="line-55"> *    &lt;jc&gt;// Argument index (reuse arguments)&lt;/jc&gt;</span>
+<span class="source-line-no">056</span><span id="line-56"> *    StringFormat &lt;jv&gt;fmt2&lt;/jv&gt; = StringFormat.&lt;jsm&gt;ofPrintf&lt;/jsm&gt;(&lt;js&gt;"%1$s loves %2$s, and %1$s also loves %3$s"&lt;/js&gt;);</span>
+<span class="source-line-no">057</span><span id="line-57"> *    String &lt;jv&gt;result2&lt;/jv&gt; = &lt;jv&gt;fmt2&lt;/jv&gt;.&lt;jsm&gt;format&lt;/jsm&gt;(&lt;js&gt;"Alice"&lt;/js&gt;, &lt;js&gt;"Bob"&lt;/js&gt;, &lt;js&gt;"Charlie"&lt;/js&gt;);</span>
+<span class="source-line-no">058</span><span id="line-58"> *    &lt;jc&gt;// Returns: "Alice loves Bob, and Alice also loves Charlie"&lt;/jc&gt;</span>
+<span class="source-line-no">059</span><span id="line-59"> * &lt;/p&gt;</span>
+<span class="source-line-no">060</span><span id="line-60"> *</span>
+<span class="source-line-no">061</span><span id="line-61"> * &lt;h5 class='section'&gt;Caching:&lt;/h5&gt;</span>
+<span class="source-line-no">062</span><span id="line-62"> * &lt;p&gt;</span>
+<span class="source-line-no">063</span><span id="line-63"> * Use {@link #ofPrintf(String)} to get cached instances. The cache is thread-safe and limited to 1000 entries.</span>
+<span class="source-line-no">064</span><span id="line-64"> * For uncached instances, use the constructor directly.</span>
+<span class="source-line-no">065</span><span id="line-65"> * &lt;/p&gt;</span>
+<span class="source-line-no">066</span><span id="line-66"> *</span>
+<span class="source-line-no">067</span><span id="line-67"> * &lt;h5 class='section'&gt;Thread Safety:&lt;/h5&gt;</span>
+<span class="source-line-no">068</span><span id="line-68"> * &lt;p&gt;</span>
+<span class="source-line-no">069</span><span id="line-69"> * This class is immutable and thread-safe. Multiple threads can safely use the same instance concurrently.</span>
+<span class="source-line-no">070</span><span id="line-70"> * &lt;/p&gt;</span>
+<span class="source-line-no">071</span><span id="line-71"> *</span>
+<span class="source-line-no">072</span><span id="line-72"> * @see StringUtils#format(String, Object...)</span>
+<span class="source-line-no">073</span><span id="line-73"> * @see StringUtils#mformat(String, Object...)</span>
+<span class="source-line-no">074</span><span id="line-74"> */</span>
+<span class="source-line-no">075</span><span id="line-75">@SuppressWarnings({</span>
+<span class="source-line-no">076</span><span id="line-76">   "java:S1192", // Duplicated literals (argument/property names) read more clearly inline than as constants</span>
+<span class="source-line-no">077</span><span id="line-77">   "java:S3776", // Cognitive complexity acceptable for this specific logic</span>
+<span class="source-line-no">078</span><span id="line-78">   "java:S6541" // parseTokens() is a single-pass tokenizer over the whole MessageFormat/printf pattern grammar</span>
+<span class="source-line-no">079</span><span id="line-79">})</span>
+<span class="source-line-no">080</span><span id="line-80">public final class StringFormat {</span>
+<span class="source-line-no">081</span><span id="line-81"></span>
+<span class="source-line-no">082</span><span id="line-82">   /**</span>
+<span class="source-line-no">083</span><span id="line-83">    * Literal text token.</span>
+<span class="source-line-no">084</span><span id="line-84">    */</span>
+<span class="source-line-no">085</span><span id="line-85">   private static final class LiteralToken extends Token {</span>
+<span class="source-line-no">086</span><span id="line-86">      private final String text;</span>
+<span class="source-line-no">087</span><span id="line-87"></span>
+<span class="source-line-no">088</span><span id="line-88">      LiteralToken(String text) {</span>
+<span class="source-line-no">089</span><span id="line-89">         this.text = text;</span>
+<span class="source-line-no">090</span><span id="line-90">      }</span>
+<span class="source-line-no">091</span><span id="line-91"></span>
+<span class="source-line-no">092</span><span id="line-92">      @Override</span>
+<span class="source-line-no">093</span><span id="line-93">      public String toString() {</span>
+<span class="source-line-no">094</span><span id="line-94">         return "[L:" + text + "]";</span>
+<span class="source-line-no">095</span><span id="line-95">      }</span>
+<span class="source-line-no">096</span><span id="line-96"></span>
+<span class="source-line-no">097</span><span id="line-97">      @Override</span>
+<span class="source-line-no">098</span><span id="line-98">      void append(StringBuilder sb, Object[] args, Locale locale) {</span>
+<span class="source-line-no">099</span><span id="line-99">         sb.append(text);</span>
+<span class="source-line-no">100</span><span id="line-100">      }</span>
+<span class="source-line-no">101</span><span id="line-101">   }</span>
+<span class="source-line-no">102</span><span id="line-102"></span>
+<span class="source-line-no">103</span><span id="line-103">   /**</span>
+<span class="source-line-no">104</span><span id="line-104">    * Printf-style token (e.g., %s, %d, %.2f).</span>
+<span class="source-line-no">105</span><span id="line-105">    */</span>
+<span class="source-line-no">106</span><span id="line-106">   private static final class StringFormatToken extends Token {</span>
+<span class="source-line-no">107</span><span id="line-107">      private final char format; // 's' = simple (handle directly), 'o' = other (use String.format)</span>
+<span class="source-line-no">108</span><span id="line-108">      private final String content; // The format string to pass to String.format (null for simple formats)</span>
+<span class="source-line-no">109</span><span id="line-109">      private final int index; // 0-based index</span>
+<span class="source-line-no">110</span><span id="line-110"></span>
+<span class="source-line-no">111</span><span id="line-111">   StringFormatToken(String content, int index) {</span>
+<span class="source-line-no">112</span><span id="line-112">      // content is everything after '%' (e.g., "s", "1$s", "d", ".2f", "1$.2f")</span>
+<span class="source-line-no">113</span><span id="line-113">      var dollarIndex = content.indexOf('$');</span>
+<span class="source-line-no">114</span><span id="line-114">      if (dollarIndex &gt;= 0) {</span>
+<span class="source-line-no">115</span><span id="line-115">         index = parseIndex(content.substring(0, dollarIndex)) - 1;</span>
+<span class="source-line-no">116</span><span id="line-116">         content = content.substring(dollarIndex + 1);</span>
+<span class="source-line-no">117</span><span id="line-117">      }</span>
+<span class="source-line-no">118</span><span id="line-118">         this.format = content.length() == 1 ? content.charAt(content.length() - 1) : 'z';</span>
+<span class="source-line-no">119</span><span id="line-119">         this.index = index;</span>
+<span class="source-line-no">120</span><span id="line-120">         this.content = "%" + content;</span>
+<span class="source-line-no">121</span><span id="line-121">      }</span>
+<span class="source-line-no">122</span><span id="line-122"></span>
+<span class="source-line-no">123</span><span id="line-123">      /**</span>
+<span class="source-line-no">124</span><span id="line-124">       * Parses the index from a StringFormat content string.</span>
+<span class="source-line-no">125</span><span id="line-125">       *</span>
+<span class="source-line-no">126</span><span id="line-126">       * @param s The content string (e.g., "1", "2").</span>
+<span class="source-line-no">127</span><span id="line-127">       * @return The parsed index.</span>
+<span class="source-line-no">128</span><span id="line-128">       */</span>
+<span class="source-line-no">129</span><span id="line-129">      private static int parseIndex(String s) {</span>
+<span class="source-line-no">130</span><span id="line-130">         return Integer.parseInt(s);</span>
+<span class="source-line-no">131</span><span id="line-131">      }</span>
+<span class="source-line-no">132</span><span id="line-132"></span>
+<span class="source-line-no">133</span><span id="line-133">      /**</span>
+<span class="source-line-no">134</span><span id="line-134">       * Creates a StringFormatToken and adds it to the tokens list.</span>
+<span class="source-line-no">135</span><span id="line-135">       *</span>
+<span class="source-line-no">136</span><span id="line-136">       * @param tokens The list of tokens to add to.</span>
+<span class="source-line-no">137</span><span id="line-137">       * @param pattern The pattern string.</span>
+<span class="source-line-no">138</span><span id="line-138">       * @param start The start index in the pattern.</span>
+<span class="source-line-no">139</span><span id="line-139">       * @param end The end index in the pattern.</span>
+<span class="source-line-no">140</span><span id="line-140">       * @param index The token index.</span>
+<span class="source-line-no">141</span><span id="line-141">       */</span>
+<span class="source-line-no">142</span><span id="line-142">      static void create(List&lt;Token&gt; tokens, String pattern, int start, int end, int index) {</span>
+<span class="source-line-no">143</span><span id="line-143">         tokens.add(new StringFormatToken(pattern.substring(start, end), index));</span>
+<span class="source-line-no">144</span><span id="line-144">      }</span>
+<span class="source-line-no">145</span><span id="line-145"></span>
+<span class="source-line-no">146</span><span id="line-146">      @Override</span>
+<span class="source-line-no">147</span><span id="line-147">      public String toString() {</span>
+<span class="source-line-no">148</span><span id="line-148">         return "[S:" + format + index + ":" + content + "]";</span>
+<span class="source-line-no">149</span><span id="line-149">      }</span>
+<span class="source-line-no">150</span><span id="line-150"></span>
+<span class="source-line-no">151</span><span id="line-151">      @Override</span>
+<span class="source-line-no">152</span><span id="line-152">      void append(StringBuilder sb, Object[] args, Locale locale) {</span>
+<span class="source-line-no">153</span><span id="line-153">         // String.format() throws MissingFormatArgumentException when argument is missing</span>
+<span class="source-line-no">154</span><span id="line-154">         if (args == null || index &gt;= args.length || index &lt; 0) {</span>
+<span class="source-line-no">155</span><span id="line-155">            throw new MissingFormatArgumentException(content);</span>
+<span class="source-line-no">156</span><span id="line-156">         }</span>
+<span class="source-line-no">157</span><span id="line-157">         var o = args[index];</span>
+<span class="source-line-no">158</span><span id="line-158">         var l = locale == null ? Locale.getDefault() : locale;</span>
+<span class="source-line-no">159</span><span id="line-159">         var dl = locale == null || locale.equals(Locale.getDefault());</span>
+<span class="source-line-no">160</span><span id="line-160">         switch (format) {</span>
+<span class="source-line-no">161</span><span id="line-161">            case 'b':</span>
+<span class="source-line-no">162</span><span id="line-162">               // String.format() with %b converts:</span>
+<span class="source-line-no">163</span><span id="line-163">               // - null -&gt; "false"</span>
+<span class="source-line-no">164</span><span id="line-164">               // - Boolean -&gt; toString()</span>
+<span class="source-line-no">165</span><span id="line-165">               // - Any other non-null value -&gt; "true"</span>
+<span class="source-line-no">166</span><span id="line-166">               if (o == null) {</span>
+<span class="source-line-no">167</span><span id="line-167">                  sb.append("false");</span>
+<span class="source-line-no">168</span><span id="line-168">               } else if (o instanceof Boolean) {</span>
+<span class="source-line-no">169</span><span id="line-169">                  sb.append(o.toString());</span>
+<span class="source-line-no">170</span><span id="line-170">               } else {</span>
+<span class="source-line-no">171</span><span id="line-171">                  sb.append("true");</span>
+<span class="source-line-no">172</span><span id="line-172">               }</span>
+<span class="source-line-no">173</span><span id="line-173">               return;</span>
+<span class="source-line-no">174</span><span id="line-174">            case 'B':</span>
+<span class="source-line-no">175</span><span id="line-175">               // String.format() with %B converts:</span>
+<span class="source-line-no">176</span><span id="line-176">               // - null -&gt; "FALSE"</span>
+<span class="source-line-no">177</span><span id="line-177">               // - Boolean -&gt; toString().toUpperCase()</span>
+<span class="source-line-no">178</span><span id="line-178">               // - Any other non-null value -&gt; "TRUE"</span>
+<span class="source-line-no">179</span><span id="line-179">               if (o == null) {</span>
+<span class="source-line-no">180</span><span id="line-180">                  sb.append("FALSE");</span>
+<span class="source-line-no">181</span><span id="line-181">               } else if (o instanceof Boolean) {</span>
+<span class="source-line-no">182</span><span id="line-182">                  sb.append(o.toString().toUpperCase());</span>
+<span class="source-line-no">183</span><span id="line-183">               } else {</span>
+<span class="source-line-no">184</span><span id="line-184">                  sb.append("TRUE");</span>
+<span class="source-line-no">185</span><span id="line-185">               }</span>
+<span class="source-line-no">186</span><span id="line-186">               return;</span>
+<span class="source-line-no">187</span><span id="line-187">            case 's':</span>
+<span class="source-line-no">188</span><span id="line-188">               if (o == null) {</span>
+<span class="source-line-no">189</span><span id="line-189">                  sb.append("null");</span>
+<span class="source-line-no">190</span><span id="line-190">                  return;</span>
 <span class="source-line-no">191</span><span id="line-191">               }</span>
-<span class="source-line-no">192</span><span id="line-192">               return;</span>
-<span class="source-line-no">193</span><span id="line-193">            case 's':</span>
-<span class="source-line-no">194</span><span id="line-194">               if (o == null) {</span>
-<span class="source-line-no">195</span><span id="line-195">                  sb.append("null");</span>
-<span class="source-line-no">196</span><span id="line-196">                  return;</span>
-<span class="source-line-no">197</span><span id="line-197">               }</span>
-<span class="source-line-no">198</span><span id="line-198">               sb.append(o.toString());</span>
-<span class="source-line-no">199</span><span id="line-199">               return;</span>
-<span class="source-line-no">200</span><span id="line-200">            case 'S':</span>
-<span class="source-line-no">201</span><span id="line-201">               if (o == null) {</span>
-<span class="source-line-no">202</span><span id="line-202">                  sb.append("NULL");</span>
-<span class="source-line-no">203</span><span id="line-203">                  return;</span>
-<span class="source-line-no">204</span><span id="line-204">               }</span>
-<span class="source-line-no">205</span><span id="line-205">               sb.append(o.toString().toUpperCase());</span>
-<span class="source-line-no">206</span><span id="line-206">               return;</span>
-<span class="source-line-no">207</span><span id="line-207">            case 'd':</span>
-<span class="source-line-no">208</span><span id="line-208">               if (o == null) {</span>
-<span class="source-line-no">209</span><span id="line-209">                  sb.append("null");</span>
-<span class="source-line-no">210</span><span id="line-210">                  return;</span>
-<span class="source-line-no">211</span><span id="line-211">               }</span>
-<span class="source-line-no">212</span><span id="line-212">               if (o instanceof Number o2) {</span>
-<span class="source-line-no">213</span><span id="line-213">                  if (dl) {</span>
-<span class="source-line-no">214</span><span id="line-214">                     if (o instanceof Integer || o instanceof Long || o instanceof Byte || o instanceof Short) {</span>
-<span class="source-line-no">215</span><span id="line-215">                        sb.append(o);</span>
-<span class="source-line-no">216</span><span id="line-216">                     } else {</span>
-<span class="source-line-no">217</span><span id="line-217">                        // For other Number types (BigDecimal, BigInteger, etc.), convert to long</span>
-<span class="source-line-no">218</span><span id="line-218">                        sb.append(o2.longValue());</span>
-<span class="source-line-no">219</span><span id="line-219">                     }</span>
-<span class="source-line-no">220</span><span id="line-220">                     return;</span>
-<span class="source-line-no">221</span><span id="line-221">                  }</span>
-<span class="source-line-no">222</span><span id="line-222">                  // For non-default locales, use String.format to ensure printf-style consistency</span>
-<span class="source-line-no">223</span><span id="line-223">                  sb.append(sf(l, "%d", o));</span>
+<span class="source-line-no">192</span><span id="line-192">               sb.append(o.toString());</span>
+<span class="source-line-no">193</span><span id="line-193">               return;</span>
+<span class="source-line-no">194</span><span id="line-194">            case 'S':</span>
+<span class="source-line-no">195</span><span id="line-195">               if (o == null) {</span>
+<span class="source-line-no">196</span><span id="line-196">                  sb.append("NULL");</span>
+<span class="source-line-no">197</span><span id="line-197">                  return;</span>
+<span class="source-line-no">198</span><span id="line-198">               }</span>
+<span class="source-line-no">199</span><span id="line-199">               sb.append(o.toString().toUpperCase());</span>
+<span class="source-line-no">200</span><span id="line-200">               return;</span>
+<span class="source-line-no">201</span><span id="line-201">            case 'd':</span>
+<span class="source-line-no">202</span><span id="line-202">               if (o == null) {</span>
+<span class="source-line-no">203</span><span id="line-203">                  sb.append("null");</span>
+<span class="source-line-no">204</span><span id="line-204">                  return;</span>
+<span class="source-line-no">205</span><span id="line-205">               }</span>
+<span class="source-line-no">206</span><span id="line-206">               if (o instanceof Number o2) {</span>
+<span class="source-line-no">207</span><span id="line-207">                  if (dl) {</span>
+<span class="source-line-no">208</span><span id="line-208">                     if (o instanceof Integer || o instanceof Long || o instanceof Byte || o instanceof Short) {</span>
+<span class="source-line-no">209</span><span id="line-209">                        sb.append(o);</span>
+<span class="source-line-no">210</span><span id="line-210">                     } else {</span>
+<span class="source-line-no">211</span><span id="line-211">                        // For other Number types (BigDecimal, BigInteger, etc.), convert to long</span>
+<span class="source-line-no">212</span><span id="line-212">                        sb.append(o2.longValue());</span>
+<span class="source-line-no">213</span><span id="line-213">                     }</span>
+<span class="source-line-no">214</span><span id="line-214">                     return;</span>
+<span class="source-line-no">215</span><span id="line-215">                  }</span>
+<span class="source-line-no">216</span><span id="line-216">                  // For non-default locales, use String.format to ensure printf-style consistency</span>
+<span class="source-line-no">217</span><span id="line-217">                  sb.append(sf(l, "%d", o));</span>
+<span class="source-line-no">218</span><span id="line-218">                  return;</span>
+<span class="source-line-no">219</span><span id="line-219">               }</span>
+<span class="source-line-no">220</span><span id="line-220">               break;</span>
+<span class="source-line-no">221</span><span id="line-221">            case 'x':</span>
+<span class="source-line-no">222</span><span id="line-222">               if (o == null) {</span>
+<span class="source-line-no">223</span><span id="line-223">                  sb.append("null");</span>
 <span class="source-line-no">224</span><span id="line-224">                  return;</span>
 <span class="source-line-no">225</span><span id="line-225">               }</span>
-<span class="source-line-no">226</span><span id="line-226">               break;</span>
-<span class="source-line-no">227</span><span id="line-227">            case 'x':</span>
-<span class="source-line-no">228</span><span id="line-228">               if (o == null) {</span>
-<span class="source-line-no">229</span><span id="line-229">                  sb.append("null");</span>
-<span class="source-line-no">230</span><span id="line-230">                  return;</span>
-<span class="source-line-no">231</span><span id="line-231">               }</span>
-<span class="source-line-no">232</span><span id="line-232">               if (o instanceof Integer o2) {</span>
-<span class="source-line-no">233</span><span id="line-233">                  sb.append(Integer.toHexString(o2));</span>
-<span class="source-line-no">234</span><span id="line-234">                  return;</span>
-<span class="source-line-no">235</span><span id="line-235">               } else if (o instanceof Long o2) {</span>
-<span class="source-line-no">236</span><span id="line-236">                  sb.append(Long.toHexString(o2));</span>
+<span class="source-line-no">226</span><span id="line-226">               if (o instanceof Integer o2) {</span>
+<span class="source-line-no">227</span><span id="line-227">                  sb.append(Integer.toHexString(o2));</span>
+<span class="source-line-no">228</span><span id="line-228">                  return;</span>
+<span class="source-line-no">229</span><span id="line-229">               } else if (o instanceof Long o2) {</span>
+<span class="source-line-no">230</span><span id="line-230">                  sb.append(Long.toHexString(o2));</span>
+<span class="source-line-no">231</span><span id="line-231">                  return;</span>
+<span class="source-line-no">232</span><span id="line-232">               }</span>
+<span class="source-line-no">233</span><span id="line-233">               break;</span>
+<span class="source-line-no">234</span><span id="line-234">            case 'X':</span>
+<span class="source-line-no">235</span><span id="line-235">               if (o == null) {</span>
+<span class="source-line-no">236</span><span id="line-236">                  sb.append("NULL");</span>
 <span class="source-line-no">237</span><span id="line-237">                  return;</span>
 <span class="source-line-no">238</span><span id="line-238">               }</span>
-<span class="source-line-no">239</span><span id="line-239">               break;</span>
-<span class="source-line-no">240</span><span id="line-240">            case 'X':</span>
-<span class="source-line-no">241</span><span id="line-241">               if (o == null) {</span>
-<span class="source-line-no">242</span><span id="line-242">                  sb.append("NULL");</span>
-<span class="source-line-no">243</span><span id="line-243">                  return;</span>
-<span class="source-line-no">244</span><span id="line-244">               }</span>
-<span class="source-line-no">245</span><span id="line-245">               if (o instanceof Integer o2) {</span>
-<span class="source-line-no">246</span><span id="line-246">                  sb.append(Integer.toHexString(o2).toUpperCase());</span>
-<span class="source-line-no">247</span><span id="line-247">                  return;</span>
-<span class="source-line-no">248</span><span id="line-248">               } else if (o instanceof Long o2) {</span>
-<span class="source-line-no">249</span><span id="line-249">                  sb.append(Long.toHexString(o2).toUpperCase());</span>
+<span class="source-line-no">239</span><span id="line-239">               if (o instanceof Integer o2) {</span>
+<span class="source-line-no">240</span><span id="line-240">                  sb.append(Integer.toHexString(o2).toUpperCase());</span>
+<span class="source-line-no">241</span><span id="line-241">                  return;</span>
+<span class="source-line-no">242</span><span id="line-242">               } else if (o instanceof Long o2) {</span>
+<span class="source-line-no">243</span><span id="line-243">                  sb.append(Long.toHexString(o2).toUpperCase());</span>
+<span class="source-line-no">244</span><span id="line-244">                  return;</span>
+<span class="source-line-no">245</span><span id="line-245">               }</span>
+<span class="source-line-no">246</span><span id="line-246">               break;</span>
+<span class="source-line-no">247</span><span id="line-247">            case 'o':</span>
+<span class="source-line-no">248</span><span id="line-248">               if (o == null) {</span>
+<span class="source-line-no">249</span><span id="line-249">                  sb.append("null");</span>
 <span class="source-line-no">250</span><span id="line-250">                  return;</span>
 <span class="source-line-no">251</span><span id="line-251">               }</span>
-<span class="source-line-no">252</span><span id="line-252">               break;</span>
-<span class="source-line-no">253</span><span id="line-253">            case 'o':</span>
-<span class="source-line-no">254</span><span id="line-254">               if (o == null) {</span>
-<span class="source-line-no">255</span><span id="line-255">                  sb.append("null");</span>
-<span class="source-line-no">256</span><span id="line-256">                  return;</span>
-<span class="source-line-no">257</span><span id="line-257">               }</span>
-<span class="source-line-no">258</span><span id="line-258">               if (o instanceof Integer o2) {</span>
-<span class="source-line-no">259</span><span id="line-259">                  sb.append(Integer.toOctalString(o2));</span>
-<span class="source-line-no">260</span><span id="line-260">                  return;</span>
-<span class="source-line-no">261</span><span id="line-261">               } else if (o instanceof Long o2) {</span>
-<span class="source-line-no">262</span><span id="line-262">                  sb.append(Long.toOctalString(o2));</span>
+<span class="source-line-no">252</span><span id="line-252">               if (o instanceof Integer o2) {</span>
+<span class="source-line-no">253</span><span id="line-253">                  sb.append(Integer.toOctalString(o2));</span>
+<span class="source-line-no">254</span><span id="line-254">                  return;</span>
+<span class="source-line-no">255</span><span id="line-255">               } else if (o instanceof Long o2) {</span>
+<span class="source-line-no">256</span><span id="line-256">                  sb.append(Long.toOctalString(o2));</span>
+<span class="source-line-no">257</span><span id="line-257">                  return;</span>
+<span class="source-line-no">258</span><span id="line-258">               }</span>
+<span class="source-line-no">259</span><span id="line-259">               break;</span>
+<span class="source-line-no">260</span><span id="line-260">            case 'c':</span>
+<span class="source-line-no">261</span><span id="line-261">               if (o == null) {</span>
+<span class="source-line-no">262</span><span id="line-262">                  sb.append("null");</span>
 <span class="source-line-no">263</span><span id="line-263">                  return;</span>
 <span class="source-line-no">264</span><span id="line-264">               }</span>
-<span class="source-line-no">265</span><span id="line-265">               break;</span>
-<span class="source-line-no">266</span><span id="line-266">            case 'c':</span>
-<span class="source-line-no">267</span><span id="line-267">               if (o == null) {</span>
-<span class="source-line-no">268</span><span id="line-268">                  sb.append("null");</span>
-<span class="source-line-no">269</span><span id="line-269">                  return;</span>
-<span class="source-line-no">270</span><span id="line-270">               }</span>
-<span class="source-line-no">271</span><span id="line-271">               if (o instanceof Character) {</span>
-<span class="source-line-no">272</span><span id="line-272">                  sb.append(o);</span>
-<span class="source-line-no">273</span><span id="line-273">                  return;</span>
-<span class="source-line-no">274</span><span id="line-274">               } else if (o instanceof Integer o2) {</span>
-<span class="source-line-no">275</span><span id="line-275">                  sb.append((char)o2.intValue());</span>
+<span class="source-line-no">265</span><span id="line-265">               if (o instanceof Character) {</span>
+<span class="source-line-no">266</span><span id="line-266">                  sb.append(o);</span>
+<span class="source-line-no">267</span><span id="line-267">                  return;</span>
+<span class="source-line-no">268</span><span id="line-268">               } else if (o instanceof Integer o2) {</span>
+<span class="source-line-no">269</span><span id="line-269">                  sb.append((char)o2.intValue());</span>
+<span class="source-line-no">270</span><span id="line-270">                  return;</span>
+<span class="source-line-no">271</span><span id="line-271">               }</span>
+<span class="source-line-no">272</span><span id="line-272">               break;</span>
+<span class="source-line-no">273</span><span id="line-273">            case 'C':</span>
+<span class="source-line-no">274</span><span id="line-274">               if (o == null) {</span>
+<span class="source-line-no">275</span><span id="line-275">                  sb.append("NULL");</span>
 <span class="source-line-no">276</span><span id="line-276">                  return;</span>
 <span class="source-line-no">277</span><span id="line-277">               }</span>
-<span class="source-line-no">278</span><span id="line-278">               break;</span>
-<span class="source-line-no">279</span><span id="line-279">            case 'C':</span>
-<span class="source-line-no">280</span><span id="line-280">               if (o == null) {</span>
-<span class="source-line-no">281</span><span id="line-281">                  sb.append("NULL");</span>
-<span class="source-line-no">282</span><span id="line-282">                  return;</span>
-<span class="source-line-no">283</span><span id="line-283">               }</span>
-<span class="source-line-no">284</span><span id="line-284">               if (o instanceof Character o2) {</span>
-<span class="source-line-no">285</span><span id="line-285">                  sb.append(Character.toUpperCase(o2));</span>
-<span class="source-line-no">286</span><span id="line-286">                  return;</span>
-<span class="source-line-no">287</span><span id="line-287">               } else if (o instanceof Integer o2) {</span>
-<span class="source-line-no">288</span><span id="line-288">                  sb.append(Character.toUpperCase((char)o2.intValue()));</span>
+<span class="source-line-no">278</span><span id="line-278">               if (o instanceof Character o2) {</span>
+<span class="source-line-no">279</span><span id="line-279">                  sb.append(Character.toUpperCase(o2));</span>
+<span class="source-line-no">280</span><span id="line-280">                  return;</span>
+<span class="source-line-no">281</span><span id="line-281">               } else if (o instanceof Integer o2) {</span>
+<span class="source-line-no">282</span><span id="line-282">                  sb.append(Character.toUpperCase((char)o2.intValue()));</span>
+<span class="source-line-no">283</span><span id="line-283">                  return;</span>
+<span class="source-line-no">284</span><span id="line-284">               }</span>
+<span class="source-line-no">285</span><span id="line-285">               break;</span>
+<span class="source-line-no">286</span><span id="line-286">            case 'f':</span>
+<span class="source-line-no">287</span><span id="line-287">               if (o == null) {</span>
+<span class="source-line-no">288</span><span id="line-288">                  sb.append("null");</span>
 <span class="source-line-no">289</span><span id="line-289">                  return;</span>
 <span class="source-line-no">290</span><span id="line-290">               }</span>
-<span class="source-line-no">291</span><span id="line-291">               break;</span>
-<span class="source-line-no">292</span><span id="line-292">            case 'f':</span>
-<span class="source-line-no">293</span><span id="line-293">               if (o == null) {</span>
-<span class="source-line-no">294</span><span id="line-294">                  sb.append("null");</span>
-<span class="source-line-no">295</span><span id="line-295">                  return;</span>
-<span class="source-line-no">296</span><span id="line-296">               }</span>
-<span class="source-line-no">297</span><span id="line-297">               // Always use String.format() to match exact behavior (precision, etc.)</span>
-<span class="source-line-no">298</span><span id="line-298">               if (o instanceof Number) {</span>
-<span class="source-line-no">299</span><span id="line-299">                  sb.append(sf(l, "%f", o));</span>
-<span class="source-line-no">300</span><span id="line-300">                  return;</span>
-<span class="source-line-no">301</span><span id="line-301">               }</span>
-<span class="source-line-no">302</span><span id="line-302">               break;</span>
-<span class="source-line-no">303</span><span id="line-303">            default:</span>
-<span class="source-line-no">304</span><span id="line-304">               break;</span>
-<span class="source-line-no">305</span><span id="line-305">         }</span>
-<span class="source-line-no">306</span><span id="line-306"></span>
-<span class="source-line-no">307</span><span id="line-307">         // Fallback to String.format for any other simple format</span>
-<span class="source-line-no">308</span><span id="line-308">         sb.append(sf(l, content, o));</span>
-<span class="source-line-no">309</span><span id="line-309">      }</span>
-<span class="source-line-no">310</span><span id="line-310">   }</span>
-<span class="source-line-no">311</span><span id="line-311"></span>
-<span class="source-line-no">312</span><span id="line-312">   /**</span>
-<span class="source-line-no">313</span><span id="line-313">    * Base class for format tokens.</span>
-<span class="source-line-no">314</span><span id="line-314">    */</span>
-<span class="source-line-no">315</span><span id="line-315">   private abstract static class Token {</span>
-<span class="source-line-no">316</span><span id="line-316"></span>
-<span class="source-line-no">317</span><span id="line-317">      /**</span>
-<span class="source-line-no">318</span><span id="line-318">       * Appends the formatted content to the StringBuilder.</span>
-<span class="source-line-no">319</span><span id="line-319">       *</span>
-<span class="source-line-no">320</span><span id="line-320">       * @param sb The StringBuilder to append to.</span>
-<span class="source-line-no">321</span><span id="line-321">       * @param args The arguments array.</span>
-<span class="source-line-no">322</span><span id="line-322">       * @param locale The locale for formatting (can be null for default).</span>
-<span class="source-line-no">323</span><span id="line-323">       */</span>
-<span class="source-line-no">324</span><span id="line-324">      abstract void append(StringBuilder sb, Object[] args, Locale locale);</span>
-<span class="source-line-no">325</span><span id="line-325">   }</span>
+<span class="source-line-no">291</span><span id="line-291">               // Always use String.format() to match exact behavior (precision, etc.)</span>
+<span class="source-line-no">292</span><span id="line-292">               if (o instanceof Number) {</span>
+<span class="source-line-no">293</span><span id="line-293">                  sb.append(sf(l, "%f", o));</span>
+<span class="source-line-no">294</span><span id="line-294">                  return;</span>
+<span class="source-line-no">295</span><span id="line-295">               }</span>
+<span class="source-line-no">296</span><span id="line-296">               break;</span>
+<span class="source-line-no">297</span><span id="line-297">            default:</span>
+<span class="source-line-no">298</span><span id="line-298">               break;</span>
+<span class="source-line-no">299</span><span id="line-299">         }</span>
+<span class="source-line-no">300</span><span id="line-300"></span>
+<span class="source-line-no">301</span><span id="line-301">         // Fallback to String.format for any other simple format</span>
+<span class="source-line-no">302</span><span id="line-302">         sb.append(sf(l, content, o));</span>
+<span class="source-line-no">303</span><span id="line-303">      }</span>
+<span class="source-line-no">304</span><span id="line-304">   }</span>
+<span class="source-line-no">305</span><span id="line-305"></span>
+<span class="source-line-no">306</span><span id="line-306">   /**</span>
+<span class="source-line-no">307</span><span id="line-307">    * Base class for format tokens.</span>
+<span class="source-line-no">308</span><span id="line-308">    */</span>
+<span class="source-line-no">309</span><span id="line-309">   private abstract static class Token {</span>
+<span class="source-line-no">310</span><span id="line-310"></span>
+<span class="source-line-no">311</span><span id="line-311">      /**</span>
+<span class="source-line-no">312</span><span id="line-312">       * Appends the formatted content to the StringBuilder.</span>
+<span class="source-line-no">313</span><span id="line-313">       *</span>
+<span class="source-line-no">314</span><span id="line-314">       * @param sb The StringBuilder to append to.</span>
+<span class="source-line-no">315</span><span id="line-315">       * @param args The arguments array.</span>
+<span class="source-line-no">316</span><span id="line-316">       * @param locale The locale for formatting (can be null for default).</span>
+<span class="source-line-no">317</span><span id="line-317">       */</span>
+<span class="source-line-no">318</span><span id="line-318">      abstract void append(StringBuilder sb, Object[] args, Locale locale);</span>
+<span class="source-line-no">319</span><span id="line-319">   }</span>
+<span class="source-line-no">320</span><span id="line-320"></span>
+<span class="source-line-no">321</span><span id="line-321">   private static final CacheMode CACHE_MODE = env("juneau.StringFormat.caching", CacheMode.FULL);</span>
+<span class="source-line-no">322</span><span id="line-322"></span>
+<span class="source-line-no">323</span><span id="line-323">   private static final Cache&lt;String,StringFormat&gt; CACHE = Cache.of(String.class, StringFormat.class).maxSize(1000).cacheMode(CACHE_MODE).build();</span>
+<span class="source-line-no">324</span><span id="line-324"></span>
+<span class="source-line-no">325</span><span id="line-325">   private static final AsciiSet PRINTF_CONVERSION_CHARS = AsciiSet.of("bBhHsScCdoxXeEfgGaAtTn%");</span>
 <span class="source-line-no">326</span><span id="line-326"></span>
-<span class="source-line-no">327</span><span id="line-327">   private static final CacheMode CACHE_MODE = env("juneau.StringFormat.caching", CacheMode.FULL);</span>
+<span class="source-line-no">327</span><span id="line-327">   private static final AsciiSet PRINTF_FORMAT_CHARS = AsciiSet.of("-+ 0(#.*$");</span>
 <span class="source-line-no">328</span><span id="line-328"></span>
-<span class="source-line-no">329</span><span id="line-329">   private static final Cache&lt;String,StringFormat&gt; CACHE = Cache.of(String.class, StringFormat.class).maxSize(1000).cacheMode(CACHE_MODE).build();</span>
-<span class="source-line-no">330</span><span id="line-330"></span>
-<span class="source-line-no">331</span><span id="line-331">   private static final AsciiSet PRINTF_CONVERSION_CHARS = AsciiSet.of("bBhHsScCdoxXeEfgGaAtTn%");</span>
-<span class="source-line-no">332</span><span id="line-332"></span>
-<span class="source-line-no">333</span><span id="line-333">   private static final AsciiSet PRINTF_FORMAT_CHARS = AsciiSet.of("-+ 0(#.*$");</span>
-<span class="source-line-no">334</span><span id="line-334"></span>
-<span class="source-line-no">335</span><span id="line-335">   /**</span>
-<span class="source-line-no">336</span><span id="line-336">    * Formats a pattern string with the given arguments using printf-style semantics.</span>
-<span class="source-line-no">337</span><span id="line-337">    *</span>
-<span class="source-line-no">338</span><span id="line-338">    * &lt;p&gt;</span>
-<span class="source-line-no">339</span><span id="line-339">    * &lt;c&gt;{&lt;/c&gt; and &lt;c&gt;'&lt;/c&gt; are literal text, matching {@link java.util.Formatter} semantics.</span>
-<span class="source-line-no">340</span><span id="line-340">    * If no arguments are passed in, the pattern is returned as-is.</span>
-<span class="source-line-no">341</span><span id="line-341">    *</span>
-<span class="source-line-no">342</span><span id="line-342">    * @param pattern The format pattern.</span>
-<span class="source-line-no">343</span><span id="line-343">    * @param args The arguments to format.</span>
-<span class="source-line-no">344</span><span id="line-344">    * @return The formatted string.</span>
-<span class="source-line-no">345</span><span id="line-345">    * @throws IllegalArgumentException If the pattern is &lt;jk&gt;null&lt;/jk&gt; or format specifiers are invalid.</span>
-<span class="source-line-no">346</span><span id="line-346">    */</span>
-<span class="source-line-no">347</span><span id="line-347">   public static String formatPrintf(String pattern, Object...args) {</span>
-<span class="source-line-no">348</span><span id="line-348">      if (args.length == 0)</span>
-<span class="source-line-no">349</span><span id="line-349">         return pattern;</span>
-<span class="source-line-no">350</span><span id="line-350">      return ofPrintf(pattern).format(args);</span>
-<span class="source-line-no">351</span><span id="line-351">   }</span>
-<span class="source-line-no">352</span><span id="line-352"></span>
-<span class="source-line-no">353</span><span id="line-353">   /**</span>
-<span class="source-line-no">354</span><span id="line-354">    * Formats a pattern string with the given arguments using printf-style semantics and the specified locale.</span>
-<span class="source-line-no">355</span><span id="line-355">    *</span>
-<span class="source-line-no">356</span><span id="line-356">    * @param pattern The format pattern.</span>
-<span class="source-line-no">357</span><span id="line-357">    * @param locale The locale to use for formatting. If &lt;jk&gt;null&lt;/jk&gt;, uses the default locale.</span>
-<span class="source-line-no">358</span><span id="line-358">    * @param args The arguments to format.</span>
-<span class="source-line-no">359</span><span id="line-359">    * @return The formatted string.</span>
-<span class="source-line-no">360</span><span id="line-360">    * @throws IllegalArgumentException If the pattern is &lt;jk&gt;null&lt;/jk&gt; or format specifiers are invalid.</span>
-<span class="source-line-no">361</span><span id="line-361">    */</span>
-<span class="source-line-no">362</span><span id="line-362">   public static String formatPrintf(String pattern, Locale locale, Object...args) {</span>
-<span class="source-line-no">363</span><span id="line-363">      if (args.length == 0)</span>
-<span class="source-line-no">364</span><span id="line-364">         return pattern;</span>
-<span class="source-line-no">365</span><span id="line-365">      return ofPrintf(pattern).format(locale, args);</span>
-<span class="source-line-no">366</span><span id="line-366">   }</span>
-<span class="source-line-no">367</span><span id="line-367"></span>
-<span class="source-line-no">368</span><span id="line-368">   /**</span>
-<span class="source-line-no">369</span><span id="line-369">    * Returns a cached printf StringFormat instance for the given pattern.</span>
-<span class="source-line-no">370</span><span id="line-370">    *</span>
-<span class="source-line-no">371</span><span id="line-371">    * &lt;p&gt;</span>
-<span class="source-line-no">372</span><span id="line-372">    * This method uses a thread-safe cache to avoid recreating StringFormat instances for the same pattern.</span>
-<span class="source-line-no">373</span><span id="line-373">    * The cache is limited to 1000 entries. &lt;c&gt;{&lt;/c&gt; and &lt;c&gt;'&lt;/c&gt; are treated as literal text (genuine</span>
-<span class="source-line-no">374</span><span id="line-374">    * {@link java.util.Formatter} semantics); only printf-style placeholders are recognized.</span>
-<span class="source-line-no">375</span><span id="line-375">    *</span>
-<span class="source-line-no">376</span><span id="line-376">    * @param pattern The format pattern.</span>
-<span class="source-line-no">377</span><span id="line-377">    * @return A cached or new StringFormat instance.</span>
-<span class="source-line-no">378</span><span id="line-378">    * @throws IllegalArgumentException If the pattern is &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">379</span><span id="line-379">    */</span>
-<span class="source-line-no">380</span><span id="line-380">   public static StringFormat ofPrintf(String pattern) {</span>
-<span class="source-line-no">381</span><span id="line-381">      assertArgNotNull(ARG_pattern, pattern);</span>
-<span class="source-line-no">382</span><span id="line-382">      return CACHE.get(pattern, () -&gt; new StringFormat(pattern));</span>
+<span class="source-line-no">329</span><span id="line-329">   /**</span>
+<span class="source-line-no">330</span><span id="line-330">    * Formats a pattern string with the given arguments using printf-style semantics.</span>
+<span class="source-line-no">331</span><span id="line-331">    *</span>
+<span class="source-line-no">332</span><span id="line-332">    * &lt;p&gt;</span>
+<span class="source-line-no">333</span><span id="line-333">    * &lt;c&gt;{&lt;/c&gt; and &lt;c&gt;'&lt;/c&gt; are literal text, matching {@link java.util.Formatter} semantics.</span>
+<span class="source-line-no">334</span><span id="line-334">    * If no arguments are passed in, the pattern is returned as-is.</span>
+<span class="source-line-no">335</span><span id="line-335">    *</span>
+<span class="source-line-no">336</span><span id="line-336">    * @param pattern The format pattern.</span>
+<span class="source-line-no">337</span><span id="line-337">    * @param args The arguments to format.</span>
+<span class="source-line-no">338</span><span id="line-338">    * @return The formatted string.</span>
+<span class="source-line-no">339</span><span id="line-339">    * @throws IllegalArgumentException If the pattern is &lt;jk&gt;null&lt;/jk&gt; or format specifiers are invalid.</span>
+<span class="source-line-no">340</span><span id="line-340">    */</span>
+<span class="source-line-no">341</span><span id="line-341">   public static String formatPrintf(String pattern, Object...args) {</span>
+<span class="source-line-no">342</span><span id="line-342">      if (args.length == 0)</span>
+<span class="source-line-no">343</span><span id="line-343">         return pattern;</span>
+<span class="source-line-no">344</span><span id="line-344">      return ofPrintf(pattern).format(args);</span>
+<span class="source-line-no">345</span><span id="line-345">   }</span>
+<span class="source-line-no">346</span><span id="line-346"></span>
+<span class="source-line-no">347</span><span id="line-347">   /**</span>
+<span class="source-line-no">348</span><span id="line-348">    * Formats a pattern string with the given arguments using printf-style semantics and the specified locale.</span>
+<span class="source-line-no">349</span><span id="line-349">    *</span>
+<span class="source-line-no">350</span><span id="line-350">    * @param pattern The format pattern.</span>
+<span class="source-line-no">351</span><span id="line-351">    * @param locale The locale to use for formatting. If &lt;jk&gt;null&lt;/jk&gt;, uses the default locale.</span>
+<span class="source-line-no">352</span><span id="line-352">    * @param args The arguments to format.</span>
+<span class="source-line-no">353</span><span id="line-353">    * @return The formatted string.</span>
+<span class="source-line-no">354</span><span id="line-354">    * @throws IllegalArgumentException If the pattern is &lt;jk&gt;null&lt;/jk&gt; or format specifiers are invalid.</span>
+<span class="source-line-no">355</span><span id="line-355">    */</span>
+<span class="source-line-no">356</span><span id="line-356">   public static String formatPrintf(String pattern, Locale locale, Object...args) {</span>
+<span class="source-line-no">357</span><span id="line-357">      if (args.length == 0)</span>
+<span class="source-line-no">358</span><span id="line-358">         return pattern;</span>
+<span class="source-line-no">359</span><span id="line-359">      return ofPrintf(pattern).format(locale, args);</span>
+<span class="source-line-no">360</span><span id="line-360">   }</span>
+<span class="source-line-no">361</span><span id="line-361"></span>
+<span class="source-line-no">362</span><span id="line-362">   /**</span>
+<span class="source-line-no">363</span><span id="line-363">    * Returns a cached printf StringFormat instance for the given pattern.</span>
+<span class="source-line-no">364</span><span id="line-364">    *</span>
+<span class="source-line-no">365</span><span id="line-365">    * &lt;p&gt;</span>
+<span class="source-line-no">366</span><span id="line-366">    * This method uses a thread-safe cache to avoid recreating StringFormat instances for the same pattern.</span>
+<span class="source-line-no">367</span><span id="line-367">    * The cache is limited to 1000 entries. &lt;c&gt;{&lt;/c&gt; and &lt;c&gt;'&lt;/c&gt; are treated as literal text (genuine</span>
+<span class="source-line-no">368</span><span id="line-368">    * {@link java.util.Formatter} semantics); only printf-style placeholders are recognized.</span>
+<span class="source-line-no">369</span><span id="line-369">    *</span>
+<span class="source-line-no">370</span><span id="line-370">    * @param pattern The format pattern.</span>
+<span class="source-line-no">371</span><span id="line-371">    * @return A cached or new StringFormat instance.</span>
+<span class="source-line-no">372</span><span id="line-372">    * @throws IllegalArgumentException If the pattern is &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">373</span><span id="line-373">    */</span>
+<span class="source-line-no">374</span><span id="line-374">   public static StringFormat ofPrintf(String pattern) {</span>
+<span class="source-line-no">375</span><span id="line-375">      reqnn("pattern", pattern);</span>
+<span class="source-line-no">376</span><span id="line-376">      return CACHE.get(pattern, () -&gt; new StringFormat(pattern));</span>
+<span class="source-line-no">377</span><span id="line-377">   }</span>
+<span class="source-line-no">378</span><span id="line-378"></span>
+<span class="source-line-no">379</span><span id="line-379">   private static void lit(List&lt;Token&gt; tokens, String pattern, int start) {</span>
+<span class="source-line-no">380</span><span id="line-380">      if (start == pattern.length())</span>
+<span class="source-line-no">381</span><span id="line-381">         return;</span>
+<span class="source-line-no">382</span><span id="line-382">      tokens.add(new LiteralToken(pattern.substring(start)));</span>
 <span class="source-line-no">383</span><span id="line-383">   }</span>
 <span class="source-line-no">384</span><span id="line-384"></span>
-<span class="source-line-no">385</span><span id="line-385">   private static void lit(List&lt;Token&gt; tokens, String pattern, int start) {</span>
-<span class="source-line-no">386</span><span id="line-386">      if (start == pattern.length())</span>
+<span class="source-line-no">385</span><span id="line-385">   private static void lit(List&lt;Token&gt; tokens, String pattern, int start, int end) {</span>
+<span class="source-line-no">386</span><span id="line-386">      if (start == end)</span>
 <span class="source-line-no">387</span><span id="line-387">         return;</span>
-<span class="source-line-no">388</span><span id="line-388">      tokens.add(new LiteralToken(pattern.substring(start)));</span>
+<span class="source-line-no">388</span><span id="line-388">      tokens.add(new LiteralToken(pattern.substring(start, end)));</span>
 <span class="source-line-no">389</span><span id="line-389">   }</span>
 <span class="source-line-no">390</span><span id="line-390"></span>
-<span class="source-line-no">391</span><span id="line-391">   private static void lit(List&lt;Token&gt; tokens, String pattern, int start, int end) {</span>
-<span class="source-line-no">392</span><span id="line-392">      if (start == end)</span>
-<span class="source-line-no">393</span><span id="line-393">         return;</span>
-<span class="source-line-no">394</span><span id="line-394">      tokens.add(new LiteralToken(pattern.substring(start, end)));</span>
-<span class="source-line-no">395</span><span id="line-395">   }</span>
-<span class="source-line-no">396</span><span id="line-396"></span>
-<span class="source-line-no">397</span><span id="line-397">   /**</span>
-<span class="source-line-no">398</span><span id="line-398">    * Parses the pattern into a list of tokens.</span>
-<span class="source-line-no">399</span><span id="line-399">    */</span>
-<span class="source-line-no">400</span><span id="line-400">   @SuppressWarnings({</span>
-<span class="source-line-no">401</span><span id="line-401">      "java:S125", // S125: state-machine/docs comments</span>
-<span class="source-line-no">402</span><span id="line-402">      "java:S3776", // Cognitive complexity acceptable for this specific logic</span>
-<span class="source-line-no">403</span><span id="line-403">      "java:S6541", // Single-threaded context; synchronization unnecessary</span>
-<span class="source-line-no">404</span><span id="line-404">      "java:S1871" // else-branch intentionally duplicates known-conversion branch; semantics differ (valid vs unknown format char)</span>
-<span class="source-line-no">405</span><span id="line-405">   })</span>
-<span class="source-line-no">406</span><span id="line-406">   private static List&lt;Token&gt; parseTokens(String pattern) {</span>
-<span class="source-line-no">407</span><span id="line-407">      var tokens = new ArrayList&lt;Token&gt;();</span>
-<span class="source-line-no">408</span><span id="line-408">      var length = pattern.length();</span>
-<span class="source-line-no">409</span><span id="line-409">      var i = 0;</span>
-<span class="source-line-no">410</span><span id="line-410">      var sequentialIndex = 0; // 0-based index for sequential placeholders</span>
-<span class="source-line-no">411</span><span id="line-411"></span>
-<span class="source-line-no">412</span><span id="line-412">      // Possible String.format variable formats:</span>
-<span class="source-line-no">413</span><span id="line-413">      // %[argument_index$][flags][width][.precision]conversion</span>
-<span class="source-line-no">414</span><span id="line-414">      // %[argument_index$][flags][width]conversion</span>
-<span class="source-line-no">415</span><span id="line-415">      // %[flags][width]conversion</span>
+<span class="source-line-no">391</span><span id="line-391">   /**</span>
+<span class="source-line-no">392</span><span id="line-392">    * Parses the pattern into a list of tokens.</span>
+<span class="source-line-no">393</span><span id="line-393">    */</span>
+<span class="source-line-no">394</span><span id="line-394">   @SuppressWarnings({</span>
+<span class="source-line-no">395</span><span id="line-395">      "java:S125", // S125: state-machine/docs comments</span>
+<span class="source-line-no">396</span><span id="line-396">      "java:S1871" // else-branch intentionally duplicates known-conversion branch; semantics differ (valid vs unknown format char)</span>
+<span class="source-line-no">397</span><span id="line-397">   })</span>
+<span class="source-line-no">398</span><span id="line-398">   private static List&lt;Token&gt; parseTokens(String pattern) {</span>
+<span class="source-line-no">399</span><span id="line-399">      var tokens = new ArrayList&lt;Token&gt;();</span>
+<span class="source-line-no">400</span><span id="line-400">      var length = pattern.length();</span>
+<span class="source-line-no">401</span><span id="line-401">      var i = 0;</span>
+<span class="source-line-no">402</span><span id="line-402">      var sequentialIndex = 0; // 0-based index for sequential placeholders</span>
+<span class="source-line-no">403</span><span id="line-403"></span>
+<span class="source-line-no">404</span><span id="line-404">      // Possible String.format variable formats:</span>
+<span class="source-line-no">405</span><span id="line-405">      // %[argument_index$][flags][width][.precision]conversion</span>
+<span class="source-line-no">406</span><span id="line-406">      // %[argument_index$][flags][width]conversion</span>
+<span class="source-line-no">407</span><span id="line-407">      // %[flags][width]conversion</span>
+<span class="source-line-no">408</span><span id="line-408"></span>
+<span class="source-line-no">409</span><span id="line-409">      // S1 - In literal, looking for %</span>
+<span class="source-line-no">410</span><span id="line-410">      // S2 - Found %, looking for conversion char or t or T</span>
+<span class="source-line-no">411</span><span id="line-411">      var state = S1;</span>
+<span class="source-line-no">412</span><span id="line-412"></span>
+<span class="source-line-no">413</span><span id="line-413">      var mark = 0;</span>
+<span class="source-line-no">414</span><span id="line-414">      while (i &lt; length) {</span>
+<span class="source-line-no">415</span><span id="line-415">         var ch = pattern.charAt(i++);</span>
 <span class="source-line-no">416</span><span id="line-416"></span>
-<span class="source-line-no">417</span><span id="line-417">      // S1 - In literal, looking for %</span>
-<span class="source-line-no">418</span><span id="line-418">      // S2 - Found %, looking for conversion char or t or T</span>
-<span class="source-line-no">419</span><span id="line-419">      var state = S1;</span>
-<span class="source-line-no">420</span><span id="line-420"></span>
-<span class="source-line-no">421</span><span id="line-421">      var mark = 0;</span>
-<span class="source-line-no">422</span><span id="line-422">      while (i &lt; length) {</span>
-<span class="source-line-no">423</span><span id="line-423">         var ch = pattern.charAt(i++);</span>
-<span class="source-line-no">424</span><span id="line-424"></span>
-<span class="source-line-no">425</span><span id="line-425">         if (state == S1) {</span>
-<span class="source-line-no">426</span><span id="line-426">            if (ch == '%') {</span>
-<span class="source-line-no">427</span><span id="line-427">               lit(tokens, pattern, mark, i - 1);</span>
-<span class="source-line-no">428</span><span id="line-428">               state = S2;</span>
-<span class="source-line-no">429</span><span id="line-429">               mark = i;</span>
-<span class="source-line-no">430</span><span id="line-430">            }</span>
-<span class="source-line-no">431</span><span id="line-431">         } else /* if (state == S2) */ {</span>
-<span class="source-line-no">432</span><span id="line-432">            if (ch == '%') {</span>
-<span class="source-line-no">433</span><span id="line-433">               tokens.add(new LiteralToken("%"));</span>
-<span class="source-line-no">434</span><span id="line-434">               state = S1;</span>
-<span class="source-line-no">435</span><span id="line-435">               mark = i;</span>
-<span class="source-line-no">436</span><span id="line-436">            } else if (ch == 'n') {</span>
-<span class="source-line-no">437</span><span id="line-437">               // %n is special - it doesn't consume an argument, so handle it as a literal token</span>
-<span class="source-line-no">438</span><span id="line-438">               tokens.add(new LiteralToken(System.lineSeparator()));</span>
-<span class="source-line-no">439</span><span id="line-439">               state = S1;</span>
-<span class="source-line-no">440</span><span id="line-440">               mark = i;</span>
-<span class="source-line-no">441</span><span id="line-441">            } else if (ch == 't' || ch == 'T') {</span>
-<span class="source-line-no">442</span><span id="line-442">               // Do nothing.  Part of 2-character time conversion.</span>
-<span class="source-line-no">443</span><span id="line-443">            } else if (PRINTF_CONVERSION_CHARS.contains(ch)) {</span>
-<span class="source-line-no">444</span><span id="line-444">               StringFormatToken.create(tokens, pattern, mark, i, sequentialIndex++);</span>
-<span class="source-line-no">445</span><span id="line-445">               state = S1;</span>
-<span class="source-line-no">446</span><span id="line-446">               mark = i;</span>
-<span class="source-line-no">447</span><span id="line-447">            } else if (PRINTF_FORMAT_CHARS.contains(ch) || Character.isDigit(ch)) {</span>
-<span class="source-line-no">448</span><span id="line-448">               // Do nothing.</span>
-<span class="source-line-no">449</span><span id="line-449">            } else {</span>
-<span class="source-line-no">450</span><span id="line-450">               // Unknown character - could be invalid conversion or end of format</span>
-<span class="source-line-no">451</span><span id="line-451">               // Create StringFormatToken and let String.format() validate it</span>
-<span class="source-line-no">452</span><span id="line-452">               // This allows String.format() to throw IllegalFormatException for invalid conversions like %F</span>
-<span class="source-line-no">453</span><span id="line-453">               // printfStart is position after '%', so substring from printfStart-1 (the '%') to i (after the char)</span>
-<span class="source-line-no">454</span><span id="line-454">               StringFormatToken.create(tokens, pattern, mark, i, sequentialIndex++);</span>
-<span class="source-line-no">455</span><span id="line-455">               state = S1;</span>
-<span class="source-line-no">456</span><span id="line-456">               mark = i;</span>
-<span class="source-line-no">457</span><span id="line-457">            }</span>
-<span class="source-line-no">458</span><span id="line-458">         }</span>
-<span class="source-line-no">459</span><span id="line-459">      }</span>
-<span class="source-line-no">460</span><span id="line-460"></span>
-<span class="source-line-no">461</span><span id="line-461">      // Process remaining content based on final state</span>
-<span class="source-line-no">462</span><span id="line-462">      if (state == S1) {</span>
-<span class="source-line-no">463</span><span id="line-463">         lit(tokens, pattern, mark);</span>
-<span class="source-line-no">464</span><span id="line-464">      } else /* if (state == S2) */ {</span>
-<span class="source-line-no">465</span><span id="line-465">         // Dangling '%' without conversion - throw exception to match String.format() behavior</span>
-<span class="source-line-no">466</span><span id="line-466">         // UnknownFormatConversionException constructor takes just the conversion character</span>
-<span class="source-line-no">467</span><span id="line-467">         throw new UnknownFormatConversionException("%");</span>
-<span class="source-line-no">468</span><span id="line-468">      }</span>
-<span class="source-line-no">469</span><span id="line-469"></span>
-<span class="source-line-no">470</span><span id="line-470">      return tokens;</span>
+<span class="source-line-no">417</span><span id="line-417">         if (state == S1) {</span>
+<span class="source-line-no">418</span><span id="line-418">            if (ch == '%') {</span>
+<span class="source-line-no">419</span><span id="line-419">               lit(tokens, pattern, mark, i - 1);</span>
+<span class="source-line-no">420</span><span id="line-420">               state = S2;</span>
+<span class="source-line-no">421</span><span id="line-421">               mark = i;</span>
+<span class="source-line-no">422</span><span id="line-422">            }</span>
+<span class="source-line-no">423</span><span id="line-423">         } else /* if (state == S2) */ {</span>
+<span class="source-line-no">424</span><span id="line-424">            if (ch == '%') {</span>
+<span class="source-line-no">425</span><span id="line-425">               tokens.add(new LiteralToken("%"));</span>
+<span class="source-line-no">426</span><span id="line-426">               state = S1;</span>
+<span class="source-line-no">427</span><span id="line-427">               mark = i;</span>
+<span class="source-line-no">428</span><span id="line-428">            } else if (ch == 'n') {</span>
+<span class="source-line-no">429</span><span id="line-429">               // %n is special - it doesn't consume an argument, so handle it as a literal token</span>
+<span class="source-line-no">430</span><span id="line-430">               tokens.add(new LiteralToken(System.lineSeparator()));</span>
+<span class="source-line-no">431</span><span id="line-431">               state = S1;</span>
+<span class="source-line-no">432</span><span id="line-432">               mark = i;</span>
+<span class="source-line-no">433</span><span id="line-433">            } else if (ch == 't' || ch == 'T') {</span>
+<span class="source-line-no">434</span><span id="line-434">               // Do nothing.  Part of 2-character time conversion.</span>
+<span class="source-line-no">435</span><span id="line-435">            } else if (PRINTF_CONVERSION_CHARS.contains(ch)) {</span>
+<span class="source-line-no">436</span><span id="line-436">               StringFormatToken.create(tokens, pattern, mark, i, sequentialIndex++);</span>
+<span class="source-line-no">437</span><span id="line-437">               state = S1;</span>
+<span class="source-line-no">438</span><span id="line-438">               mark = i;</span>
+<span class="source-line-no">439</span><span id="line-439">            } else if (PRINTF_FORMAT_CHARS.contains(ch) || Character.isDigit(ch)) {</span>
+<span class="source-line-no">440</span><span id="line-440">               // Do nothing.</span>
+<span class="source-line-no">441</span><span id="line-441">            } else {</span>
+<span class="source-line-no">442</span><span id="line-442">               // Unknown character - could be invalid conversion or end of format</span>
+<span class="source-line-no">443</span><span id="line-443">               // Create StringFormatToken and let String.format() validate it</span>
+<span class="source-line-no">444</span><span id="line-444">               // This allows String.format() to throw IllegalFormatException for invalid conversions like %F</span>
+<span class="source-line-no">445</span><span id="line-445">               // printfStart is position after '%', so substring from printfStart-1 (the '%') to i (after the char)</span>
+<span class="source-line-no">446</span><span id="line-446">               StringFormatToken.create(tokens, pattern, mark, i, sequentialIndex++);</span>
+<span class="source-line-no">447</span><span id="line-447">               state = S1;</span>
+<span class="source-line-no">448</span><span id="line-448">               mark = i;</span>
+<span class="source-line-no">449</span><span id="line-449">            }</span>
+<span class="source-line-no">450</span><span id="line-450">         }</span>
+<span class="source-line-no">451</span><span id="line-451">      }</span>
+<span class="source-line-no">452</span><span id="line-452"></span>
+<span class="source-line-no">453</span><span id="line-453">      // Process remaining content based on final state</span>
+<span class="source-line-no">454</span><span id="line-454">      if (state == S1) {</span>
+<span class="source-line-no">455</span><span id="line-455">         lit(tokens, pattern, mark);</span>
+<span class="source-line-no">456</span><span id="line-456">      } else /* if (state == S2) */ {</span>
+<span class="source-line-no">457</span><span id="line-457">         // Dangling '%' without conversion - throw exception to match String.format() behavior</span>
+<span class="source-line-no">458</span><span id="line-458">         // UnknownFormatConversionException constructor takes just the conversion character</span>
+<span class="source-line-no">459</span><span id="line-459">         throw new UnknownFormatConversionException("%");</span>
+<span class="source-line-no">460</span><span id="line-460">      }</span>
+<span class="source-line-no">461</span><span id="line-461"></span>
+<span class="source-line-no">462</span><span id="line-462">      return tokens;</span>
+<span class="source-line-no">463</span><span id="line-463">   }</span>
+<span class="source-line-no">464</span><span id="line-464"></span>
+<span class="source-line-no">465</span><span id="line-465"></span>
+<span class="source-line-no">466</span><span id="line-466">   @SuppressWarnings({</span>
+<span class="source-line-no">467</span><span id="line-467">      "java:S3398" // sf() is a generic String.format wrapper; keeping it at outer-class scope alongside other utility methods is intentional</span>
+<span class="source-line-no">468</span><span id="line-468">   })</span>
+<span class="source-line-no">469</span><span id="line-469">   private static String sf(Locale l, String s, Object o) {</span>
+<span class="source-line-no">470</span><span id="line-470">      return String.format(l, s, a(o));</span>
 <span class="source-line-no">471</span><span id="line-471">   }</span>
 <span class="source-line-no">472</span><span id="line-472"></span>
-<span class="source-line-no">473</span><span id="line-473"></span>
-<span class="source-line-no">474</span><span id="line-474">   @SuppressWarnings({</span>
-<span class="source-line-no">475</span><span id="line-475">      "java:S3398" // sf() is a generic String.format wrapper; keeping it at outer-class scope alongside other utility methods is intentional</span>
-<span class="source-line-no">476</span><span id="line-476">   })</span>
-<span class="source-line-no">477</span><span id="line-477">   private static String sf(Locale l, String s, Object o) {</span>
-<span class="source-line-no">478</span><span id="line-478">      return String.format(l, s, a(o));</span>
-<span class="source-line-no">479</span><span id="line-479">   }</span>
-<span class="source-line-no">480</span><span id="line-480"></span>
-<span class="source-line-no">481</span><span id="line-481">   private final String pattern;</span>
-<span class="source-line-no">482</span><span id="line-482"></span>
-<span class="source-line-no">483</span><span id="line-483">   private final Token[] tokens;</span>
-<span class="source-line-no">484</span><span id="line-484"></span>
-<span class="source-line-no">485</span><span id="line-485">   /**</span>
-<span class="source-line-no">486</span><span id="line-486">    * Creates a new printf StringFormat instance.</span>
-<span class="source-line-no">487</span><span id="line-487">    *</span>
-<span class="source-line-no">488</span><span id="line-488">    * &lt;p&gt;</span>
-<span class="source-line-no">489</span><span id="line-489">    * &lt;c&gt;{&lt;/c&gt; and &lt;c&gt;'&lt;/c&gt; are treated as literal text (genuine {@link java.util.Formatter} semantics); only</span>
-<span class="source-line-no">490</span><span id="line-490">    * printf-style placeholders are recognized.</span>
-<span class="source-line-no">491</span><span id="line-491">    *</span>
-<span class="source-line-no">492</span><span id="line-492">    * @param pattern The format pattern.</span>
-<span class="source-line-no">493</span><span id="line-493">    * @throws IllegalArgumentException If the pattern is &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">494</span><span id="line-494">    */</span>
-<span class="source-line-no">495</span><span id="line-495">   public StringFormat(String pattern) {</span>
-<span class="source-line-no">496</span><span id="line-496">      this.pattern = assertArgNotNull(ARG_pattern, pattern);</span>
-<span class="source-line-no">497</span><span id="line-497">      this.tokens = parseTokens(pattern).toArray(Token[]::new);</span>
-<span class="source-line-no">498</span><span id="line-498">   }</span>
-<span class="source-line-no">499</span><span id="line-499"></span>
-<span class="source-line-no">500</span><span id="line-500">   @Override</span>
-<span class="source-line-no">501</span><span id="line-501">   public boolean equals(Object o) {</span>
-<span class="source-line-no">502</span><span id="line-502">      return o instanceof StringFormat o2 &amp;&amp; eq(this, o2, (x, y) -&gt; eq(x.pattern, y.pattern));</span>
-<span class="source-line-no">503</span><span id="line-503">   }</span>
-<span class="source-line-no">504</span><span id="line-504"></span>
-<span class="source-line-no">505</span><span id="line-505">   /**</span>
-<span class="source-line-no">506</span><span id="line-506">    * Formats the pattern with the given arguments using the specified locale.</span>
-<span class="source-line-no">507</span><span id="line-507">    *</span>
-<span class="source-line-no">508</span><span id="line-508">    * &lt;p&gt;</span>
-<span class="source-line-no">509</span><span id="line-509">    * The locale affects locale-specific printf number formatting (decimal separators, etc.).</span>
-<span class="source-line-no">510</span><span id="line-510">    *</span>
-<span class="source-line-no">511</span><span id="line-511">    * @param locale The locale to use for formatting. If &lt;jk&gt;null&lt;/jk&gt;, uses the default locale.</span>
-<span class="source-line-no">512</span><span id="line-512">    * @param args The arguments to format.</span>
-<span class="source-line-no">513</span><span id="line-513">    * @return The formatted string.</span>
-<span class="source-line-no">514</span><span id="line-514">    * @throws IllegalArgumentException If format specifiers are invalid or arguments don't match.</span>
-<span class="source-line-no">515</span><span id="line-515">    */</span>
-<span class="source-line-no">516</span><span id="line-516">   public String format(Locale locale, Object...args) {</span>
-<span class="source-line-no">517</span><span id="line-517">      var sb = new StringBuilder(pattern.length() + 64);</span>
-<span class="source-line-no">518</span><span id="line-518">      for (var token : tokens) {</span>
-<span class="source-line-no">519</span><span id="line-519">         token.append(sb, args, locale);</span>
-<span class="source-line-no">520</span><span id="line-520">      }</span>
-<span class="source-line-no">521</span><span id="line-521">      return sb.toString();</span>
-<span class="source-line-no">522</span><span id="line-522">   }</span>
-<span class="source-line-no">523</span><span id="line-523"></span>
-<span class="source-line-no">524</span><span id="line-524">   /**</span>
-<span class="source-line-no">525</span><span id="line-525">    * Formats the pattern with the given arguments using the default locale.</span>
-<span class="source-line-no">526</span><span id="line-526">    *</span>
-<span class="source-line-no">527</span><span id="line-527">    * @param args The arguments to format.</span>
-<span class="source-line-no">528</span><span id="line-528">    * @return The formatted string.</span>
-<span class="source-line-no">529</span><span id="line-529">    * @throws IllegalArgumentException If format specifiers are invalid or arguments don't match.</span>
-<span class="source-line-no">530</span><span id="line-530">    */</span>
-<span class="source-line-no">531</span><span id="line-531">   public String format(Object...args) {</span>
-<span class="source-line-no">532</span><span id="line-532">      return format(Locale.getDefault(), args);</span>
-<span class="source-line-no">533</span><span id="line-533">   }</span>
-<span class="source-line-no">534</span><span id="line-534"></span>
-<span class="source-line-no">535</span><span id="line-535">   @Override</span>
-<span class="source-line-no">536</span><span id="line-536">   public int hashCode() {</span>
-<span class="source-line-no">537</span><span id="line-537">      return pattern.hashCode();</span>
-<span class="source-line-no">538</span><span id="line-538">   }</span>
-<span class="source-line-no">539</span><span id="line-539"></span>
-<span class="source-line-no">540</span><span id="line-540">   /**</span>
-<span class="source-line-no">541</span><span id="line-541">    * Returns a debug representation of the parsed pattern showing the token structure.</span>
-<span class="source-line-no">542</span><span id="line-542">    *</span>
-<span class="source-line-no">543</span><span id="line-543">    * &lt;p&gt;</span>
-<span class="source-line-no">544</span><span id="line-544">    * This method is useful for debugging and understanding how a pattern was parsed.</span>
-<span class="source-line-no">545</span><span id="line-545">    * It returns a string showing each token in the format:</span>
-<span class="source-line-no">546</span><span id="line-546">    * &lt;ul&gt;</span>
-<span class="source-line-no">547</span><span id="line-547">    *   &lt;li&gt;&lt;b&gt;Literal tokens:&lt;/b&gt; &lt;js&gt;"[L:text]"&lt;/js&gt; - Literal text&lt;/li&gt;</span>
-<span class="source-line-no">548</span><span id="line-548">    *   &lt;li&gt;&lt;b&gt;StringFormat tokens (simple):&lt;/b&gt; &lt;js&gt;"[S:s0:%s]"&lt;/js&gt; - Simple printf placeholder (format='s', index=0, content)&lt;/li&gt;</span>
-<span class="source-line-no">549</span><span id="line-549">    *   &lt;li&gt;&lt;b&gt;StringFormat tokens (complex):&lt;/b&gt; &lt;js&gt;"[S:z0:%.2f]"&lt;/js&gt; - Complex printf placeholder (format='z', index=0, content)&lt;/li&gt;</span>
-<span class="source-line-no">550</span><span id="line-550">    * &lt;/ul&gt;</span>
-<span class="source-line-no">551</span><span id="line-551">    *</span>
-<span class="source-line-no">552</span><span id="line-552">    * &lt;h5 class='section'&gt;Token Format:&lt;/h5&gt;</span>
-<span class="source-line-no">553</span><span id="line-553">    * &lt;ul&gt;</span>
-<span class="source-line-no">554</span><span id="line-554">    *   &lt;li&gt;&lt;b&gt;L&lt;/b&gt; = Literal token&lt;/li&gt;</span>
-<span class="source-line-no">555</span><span id="line-555">    *   &lt;li&gt;&lt;b&gt;S&lt;/b&gt; = StringFormat (printf) token&lt;/li&gt;</span>
-<span class="source-line-no">556</span><span id="line-556">    *   &lt;li&gt;&lt;b&gt;Format character:&lt;/b&gt; 's' = simple, 'z' = complex printf&lt;/li&gt;</span>
-<span class="source-line-no">557</span><span id="line-557">    *   &lt;li&gt;&lt;b&gt;Index:&lt;/b&gt; 0-based argument index&lt;/li&gt;</span>
-<span class="source-line-no">558</span><span id="line-558">    *   &lt;li&gt;&lt;b&gt;Content:&lt;/b&gt; The format string content (for complex tokens)&lt;/li&gt;</span>
-<span class="source-line-no">559</span><span id="line-559">    * &lt;/ul&gt;</span>
-<span class="source-line-no">560</span><span id="line-560">    *</span>
-<span class="source-line-no">561</span><span id="line-561">    * &lt;h5 class='section'&gt;Examples:&lt;/h5&gt;</span>
-<span class="source-line-no">562</span><span id="line-562">    * &lt;p class='bjava'&gt;</span>
-<span class="source-line-no">563</span><span id="line-563">    *    StringFormat &lt;jv&gt;fmt&lt;/jv&gt; = StringFormat.&lt;jsm&gt;ofPrintf&lt;/jsm&gt;(&lt;js&gt;"Hello %s, you have %d items"&lt;/js&gt;);</span>
-<span class="source-line-no">564</span><span id="line-564">    *    &lt;jv&gt;fmt&lt;/jv&gt;.&lt;jsm&gt;toPattern&lt;/jsm&gt;();</span>
-<span class="source-line-no">565</span><span id="line-565">    *    &lt;jc&gt;// Returns: "[L:Hello ][S:s0:%s][L:, you have ][S:d1:%d][L: items]"&lt;/jc&gt;</span>
-<span class="source-line-no">566</span><span id="line-566">    * &lt;/p&gt;</span>
-<span class="source-line-no">567</span><span id="line-567">    *</span>
-<span class="source-line-no">568</span><span id="line-568">    * @return A debug string showing the parsed token structure.</span>
-<span class="source-line-no">569</span><span id="line-569">    */</span>
-<span class="source-line-no">570</span><span id="line-570">   public String toPattern() {</span>
-<span class="source-line-no">571</span><span id="line-571">      return Arrays.stream(tokens).map(Object::toString).collect(Collectors.joining());</span>
-<span class="source-line-no">572</span><span id="line-572">   }</span>
-<span class="source-line-no">573</span><span id="line-573"></span>
-<span class="source-line-no">574</span><span id="line-574">   @Override</span>
-<span class="source-line-no">575</span><span id="line-575">   public String toString() {</span>
-<span class="source-line-no">576</span><span id="line-576">      return pattern;</span>
-<span class="source-line-no">577</span><span id="line-577">   }</span>
-<span class="source-line-no">578</span><span id="line-578">}</span>
+<span class="source-line-no">473</span><span id="line-473">   private final String pattern;</span>
+<span class="source-line-no">474</span><span id="line-474"></span>
+<span class="source-line-no">475</span><span id="line-475">   private final Token[] tokens;</span>
+<span class="source-line-no">476</span><span id="line-476"></span>
+<span class="source-line-no">477</span><span id="line-477">   /**</span>
+<span class="source-line-no">478</span><span id="line-478">    * Creates a new printf StringFormat instance.</span>
+<span class="source-line-no">479</span><span id="line-479">    *</span>
+<span class="source-line-no">480</span><span id="line-480">    * &lt;p&gt;</span>
+<span class="source-line-no">481</span><span id="line-481">    * &lt;c&gt;{&lt;/c&gt; and &lt;c&gt;'&lt;/c&gt; are treated as literal text (genuine {@link java.util.Formatter} semantics); only</span>
+<span class="source-line-no">482</span><span id="line-482">    * printf-style placeholders are recognized.</span>
+<span class="source-line-no">483</span><span id="line-483">    *</span>
+<span class="source-line-no">484</span><span id="line-484">    * @param pattern The format pattern.</span>
+<span class="source-line-no">485</span><span id="line-485">    * @throws IllegalArgumentException If the pattern is &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">486</span><span id="line-486">    */</span>
+<span class="source-line-no">487</span><span id="line-487">   public StringFormat(String pattern) {</span>
+<span class="source-line-no">488</span><span id="line-488">      this.pattern = reqnn("pattern", pattern);</span>
+<span class="source-line-no">489</span><span id="line-489">      this.tokens = parseTokens(pattern).toArray(Token[]::new);</span>
+<span class="source-line-no">490</span><span id="line-490">   }</span>
+<span class="source-line-no">491</span><span id="line-491"></span>
+<span class="source-line-no">492</span><span id="line-492">   @Override</span>
+<span class="source-line-no">493</span><span id="line-493">   public boolean equals(Object o) {</span>
+<span class="source-line-no">494</span><span id="line-494">      return o instanceof StringFormat o2 &amp;&amp; eq(this, o2, (x, y) -&gt; eq(x.pattern, y.pattern));</span>
+<span class="source-line-no">495</span><span id="line-495">   }</span>
+<span class="source-line-no">496</span><span id="line-496"></span>
+<span class="source-line-no">497</span><span id="line-497">   /**</span>
+<span class="source-line-no">498</span><span id="line-498">    * Formats the pattern with the given arguments using the specified locale.</span>
+<span class="source-line-no">499</span><span id="line-499">    *</span>
+<span class="source-line-no">500</span><span id="line-500">    * &lt;p&gt;</span>
+<span class="source-line-no">501</span><span id="line-501">    * The locale affects locale-specific printf number formatting (decimal separators, etc.).</span>
+<span class="source-line-no">502</span><span id="line-502">    *</span>
+<span class="source-line-no">503</span><span id="line-503">    * @param locale The locale to use for formatting. If &lt;jk&gt;null&lt;/jk&gt;, uses the default locale.</span>
+<span class="source-line-no">504</span><span id="line-504">    * @param args The arguments to format.</span>
+<span class="source-line-no">505</span><span id="line-505">    * @return The formatted string.</span>
+<span class="source-line-no">506</span><span id="line-506">    * @throws IllegalArgumentException If format specifiers are invalid or arguments don't match.</span>
+<span class="source-line-no">507</span><span id="line-507">    */</span>
+<span class="source-line-no">508</span><span id="line-508">   public String format(Locale locale, Object...args) {</span>
+<span class="source-line-no">509</span><span id="line-509">      var sb = new StringBuilder(pattern.length() + 64);</span>
+<span class="source-line-no">510</span><span id="line-510">      for (var token : tokens) {</span>
+<span class="source-line-no">511</span><span id="line-511">         token.append(sb, args, locale);</span>
+<span class="source-line-no">512</span><span id="line-512">      }</span>
+<span class="source-line-no">513</span><span id="line-513">      return sb.toString();</span>
+<span class="source-line-no">514</span><span id="line-514">   }</span>
+<span class="source-line-no">515</span><span id="line-515"></span>
+<span class="source-line-no">516</span><span id="line-516">   /**</span>
+<span class="source-line-no">517</span><span id="line-517">    * Formats the pattern with the given arguments using the default locale.</span>
+<span class="source-line-no">518</span><span id="line-518">    *</span>
+<span class="source-line-no">519</span><span id="line-519">    * @param args The arguments to format.</span>
+<span class="source-line-no">520</span><span id="line-520">    * @return The formatted string.</span>
+<span class="source-line-no">521</span><span id="line-521">    * @throws IllegalArgumentException If format specifiers are invalid or arguments don't match.</span>
+<span class="source-line-no">522</span><span id="line-522">    */</span>
+<span class="source-line-no">523</span><span id="line-523">   public String format(Object...args) {</span>
+<span class="source-line-no">524</span><span id="line-524">      return format(Locale.getDefault(), args);</span>
+<span class="source-line-no">525</span><span id="line-525">   }</span>
+<span class="source-line-no">526</span><span id="line-526"></span>
+<span class="source-line-no">527</span><span id="line-527">   @Override</span>
+<span class="source-line-no">528</span><span id="line-528">   public int hashCode() {</span>
+<span class="source-line-no">529</span><span id="line-529">      return pattern.hashCode();</span>
+<span class="source-line-no">530</span><span id="line-530">   }</span>
+<span class="source-line-no">531</span><span id="line-531"></span>
+<span class="source-line-no">532</span><span id="line-532">   /**</span>
+<span class="source-line-no">533</span><span id="line-533">    * Returns a debug representation of the parsed pattern showing the token structure.</span>
+<span class="source-line-no">534</span><span id="line-534">    *</span>
+<span class="source-line-no">535</span><span id="line-535">    * &lt;p&gt;</span>
+<span class="source-line-no">536</span><span id="line-536">    * This method is useful for debugging and understanding how a pattern was parsed.</span>
+<span class="source-line-no">537</span><span id="line-537">    * It returns a string showing each token in the format:</span>
+<span class="source-line-no">538</span><span id="line-538">    * &lt;ul&gt;</span>
+<span class="source-line-no">539</span><span id="line-539">    *   &lt;li&gt;&lt;b&gt;Literal tokens:&lt;/b&gt; &lt;js&gt;"[L:text]"&lt;/js&gt; - Literal text&lt;/li&gt;</span>
+<span class="source-line-no">540</span><span id="line-540">    *   &lt;li&gt;&lt;b&gt;StringFormat tokens (simple):&lt;/b&gt; &lt;js&gt;"[S:s0:%s]"&lt;/js&gt; - Simple printf placeholder (format='s', index=0, content)&lt;/li&gt;</span>
+<span class="source-line-no">541</span><span id="line-541">    *   &lt;li&gt;&lt;b&gt;StringFormat tokens (complex):&lt;/b&gt; &lt;js&gt;"[S:z0:%.2f]"&lt;/js&gt; - Complex printf placeholder (format='z', index=0, content)&lt;/li&gt;</span>
+<span class="source-line-no">542</span><span id="line-542">    * &lt;/ul&gt;</span>
+<span class="source-line-no">543</span><span id="line-543">    *</span>
+<span class="source-line-no">544</span><span id="line-544">    * &lt;h5 class='section'&gt;Token Format:&lt;/h5&gt;</span>
+<span class="source-line-no">545</span><span id="line-545">    * &lt;ul&gt;</span>
+<span class="source-line-no">546</span><span id="line-546">    *   &lt;li&gt;&lt;b&gt;L&lt;/b&gt; = Literal token&lt;/li&gt;</span>
+<span class="source-line-no">547</span><span id="line-547">    *   &lt;li&gt;&lt;b&gt;S&lt;/b&gt; = StringFormat (printf) token&lt;/li&gt;</span>
+<span class="source-line-no">548</span><span id="line-548">    *   &lt;li&gt;&lt;b&gt;Format character:&lt;/b&gt; 's' = simple, 'z' = complex printf&lt;/li&gt;</span>
+<span class="source-line-no">549</span><span id="line-549">    *   &lt;li&gt;&lt;b&gt;Index:&lt;/b&gt; 0-based argument index&lt;/li&gt;</span>
+<span class="source-line-no">550</span><span id="line-550">    *   &lt;li&gt;&lt;b&gt;Content:&lt;/b&gt; The format string content (for complex tokens)&lt;/li&gt;</span>
+<span class="source-line-no">551</span><span id="line-551">    * &lt;/ul&gt;</span>
+<span class="source-line-no">552</span><span id="line-552">    *</span>
+<span class="source-line-no">553</span><span id="line-553">    * &lt;h5 class='section'&gt;Examples:&lt;/h5&gt;</span>
+<span class="source-line-no">554</span><span id="line-554">    * &lt;p class='bjava'&gt;</span>
+<span class="source-line-no">555</span><span id="line-555">    *    StringFormat &lt;jv&gt;fmt&lt;/jv&gt; = StringFormat.&lt;jsm&gt;ofPrintf&lt;/jsm&gt;(&lt;js&gt;"Hello %s, you have %d items"&lt;/js&gt;);</span>
+<span class="source-line-no">556</span><span id="line-556">    *    &lt;jv&gt;fmt&lt;/jv&gt;.&lt;jsm&gt;toPattern&lt;/jsm&gt;();</span>
+<span class="source-line-no">557</span><span id="line-557">    *    &lt;jc&gt;// Returns: "[L:Hello ][S:s0:%s][L:, you have ][S:d1:%d][L: items]"&lt;/jc&gt;</span>
+<span class="source-line-no">558</span><span id="line-558">    * &lt;/p&gt;</span>
+<span class="source-line-no">559</span><span id="line-559">    *</span>
+<span class="source-line-no">560</span><span id="line-560">    * @return A debug string showing the parsed token structure.</span>
+<span class="source-line-no">561</span><span id="line-561">    */</span>
+<span class="source-line-no">562</span><span id="line-562">   public String toPattern() {</span>
+<span class="source-line-no">563</span><span id="line-563">      return Arrays.stream(tokens).map(Object::toString).collect(Collectors.joining());</span>
+<span class="source-line-no">564</span><span id="line-564">   }</span>
+<span class="source-line-no">565</span><span id="line-565"></span>
+<span class="source-line-no">566</span><span id="line-566">   @Override</span>
+<span class="source-line-no">567</span><span id="line-567">   public String toString() {</span>
+<span class="source-line-no">568</span><span id="line-568">      return pattern;</span>
+<span class="source-line-no">569</span><span id="line-569">   }</span>
+<span class="source-line-no">570</span><span id="line-570">}</span>
 
 
 

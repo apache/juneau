@@ -29,137 +29,271 @@
 <span class="source-line-no">016</span><span id="line-16"> */</span>
 <span class="source-line-no">017</span><span id="line-17">package org.apache.juneau.rest.server.converter;</span>
 <span class="source-line-no">018</span><span id="line-18"></span>
-<span class="source-line-no">019</span><span id="line-19">import org.apache.juneau.commons.lang.*;</span>
-<span class="source-line-no">020</span><span id="line-20">import org.apache.juneau.marshall.*;</span>
-<span class="source-line-no">021</span><span id="line-21">import org.apache.juneau.marshall.objecttools.*;</span>
-<span class="source-line-no">022</span><span id="line-22">import org.apache.juneau.rest.server.*;</span>
-<span class="source-line-no">023</span><span id="line-23">import org.apache.juneau.rest.server.httppart.*;</span>
+<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.CollectionUtils.*;</span>
+<span class="source-line-no">020</span><span id="line-20"></span>
+<span class="source-line-no">021</span><span id="line-21">import java.time.temporal.*;</span>
+<span class="source-line-no">022</span><span id="line-22">import java.util.*;</span>
+<span class="source-line-no">023</span><span id="line-23">import java.util.concurrent.*;</span>
 <span class="source-line-no">024</span><span id="line-24"></span>
-<span class="source-line-no">025</span><span id="line-25">/**</span>
-<span class="source-line-no">026</span><span id="line-26"> * Converter for enabling of search/view/sort/page support on response objects returned by a &lt;c&gt;@RestOp&lt;/c&gt;-annotated method.</span>
-<span class="source-line-no">027</span><span id="line-27"> *</span>
-<span class="source-line-no">028</span><span id="line-28"> * &lt;p&gt;</span>
-<span class="source-line-no">029</span><span id="line-29"> * When enabled, objects in a POJO tree can be filtered using the functionality described in the {@link ObjectSearcher},</span>
-<span class="source-line-no">030</span><span id="line-30"> * {@link ObjectViewer}, {@link ObjectSorter}, and {@link ObjectPaginator} classes.</span>
-<span class="source-line-no">031</span><span id="line-31"> *</span>
-<span class="source-line-no">032</span><span id="line-32"> * &lt;p&gt;</span>
-<span class="source-line-no">033</span><span id="line-33"> * The following HTTP request parameters are available for tabular data (e.g. {@code Collections} of {@code Maps},</span>
-<span class="source-line-no">034</span><span id="line-34"> * arrays of beans, etc...):</span>
-<span class="source-line-no">035</span><span id="line-35"> * &lt;ul class='spaced-list'&gt;</span>
-<span class="source-line-no">036</span><span id="line-36"> *    &lt;li&gt;</span>
-<span class="source-line-no">037</span><span id="line-37"> *       &lt;c&gt;&amp;amp;s=&lt;/c&gt; Search arguments.</span>
-<span class="source-line-no">038</span><span id="line-38"> *       &lt;br&gt;Comma-delimited list of key/value pairs representing column names and search tokens.</span>
-<span class="source-line-no">039</span><span id="line-39"> *       &lt;br&gt;Example:</span>
-<span class="source-line-no">040</span><span id="line-40"> *       &lt;p class='burlenc'&gt;</span>
-<span class="source-line-no">041</span><span id="line-41"> *    &amp;amp;s=name=Bill*,birthDate&amp;gt;2000</span>
-<span class="source-line-no">042</span><span id="line-42"> *       &lt;/p&gt;</span>
-<span class="source-line-no">043</span><span id="line-43"> *    &lt;li&gt;</span>
-<span class="source-line-no">044</span><span id="line-44"> *       &lt;c&gt;&amp;amp;v=&lt;/c&gt; Visible columns.</span>
-<span class="source-line-no">045</span><span id="line-45"> *       &lt;br&gt;Comma-delimited list of column names to display.</span>
-<span class="source-line-no">046</span><span id="line-46"> *       &lt;br&gt;Example:</span>
-<span class="source-line-no">047</span><span id="line-47"> *       &lt;p class='burlenc'&gt;</span>
-<span class="source-line-no">048</span><span id="line-48"> *    &amp;amp;v=name,birthDate</span>
-<span class="source-line-no">049</span><span id="line-49"> *       &lt;/p&gt;</span>
-<span class="source-line-no">050</span><span id="line-50"> *    &lt;li&gt;</span>
-<span class="source-line-no">051</span><span id="line-51"> *       &lt;c&gt;&amp;amp;o=&lt;/c&gt; Sort commands.</span>
-<span class="source-line-no">052</span><span id="line-52"> *       &lt;br&gt;Comma-delimited list of columns to sort by.</span>
-<span class="source-line-no">053</span><span id="line-53"> *       &lt;br&gt;Column names can be suffixed with &lt;js&gt;'+'&lt;/js&gt; or &lt;js&gt;'-'&lt;/js&gt; to indicate ascending or descending order.</span>
-<span class="source-line-no">054</span><span id="line-54"> *       &lt;br&gt;The default is ascending order.</span>
-<span class="source-line-no">055</span><span id="line-55"> *       &lt;br&gt;Example:</span>
-<span class="source-line-no">056</span><span id="line-56"> *       &lt;p class='burlenc'&gt;</span>
-<span class="source-line-no">057</span><span id="line-57"> *    &amp;amp;o=name,birthDate-</span>
-<span class="source-line-no">058</span><span id="line-58"> *       &lt;/p&gt;</span>
-<span class="source-line-no">059</span><span id="line-59"> *    &lt;li&gt;</span>
-<span class="source-line-no">060</span><span id="line-60"> *       &lt;c&gt;&amp;amp;i=&lt;/c&gt; Case-insensitive parameter.</span>
-<span class="source-line-no">061</span><span id="line-61"> *       &lt;br&gt;Boolean flag for case-insensitive matching on the search parameters.</span>
-<span class="source-line-no">062</span><span id="line-62"> *    &lt;li&gt;</span>
-<span class="source-line-no">063</span><span id="line-63"> *       &lt;c&gt;&amp;amp;p=&lt;/c&gt; - Position parameter.</span>
-<span class="source-line-no">064</span><span id="line-64"> *       &lt;br&gt;Only return rows starting at the specified index position (zero-indexed).</span>
-<span class="source-line-no">065</span><span id="line-65"> *       &lt;br&gt;Default is {@code 0}.</span>
-<span class="source-line-no">066</span><span id="line-66"> *    &lt;li&gt;</span>
-<span class="source-line-no">067</span><span id="line-67"> *       &lt;c&gt;&amp;amp;l=&lt;/c&gt; Limit parameter.</span>
-<span class="source-line-no">068</span><span id="line-68"> *       &lt;br&gt;Only return the specified number of rows.</span>
-<span class="source-line-no">069</span><span id="line-69"> *       &lt;br&gt;Default is {@code 0} (meaning return all rows).</span>
-<span class="source-line-no">070</span><span id="line-70"> * &lt;/ul&gt;</span>
-<span class="source-line-no">071</span><span id="line-71"> *</span>
-<span class="source-line-no">072</span><span id="line-72"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
-<span class="source-line-no">073</span><span id="line-73"> *    &lt;li class='jc'&gt;{@link ObjectSearcher} - Additional information on searching POJO models.</span>
-<span class="source-line-no">074</span><span id="line-74"> *    &lt;li class='jc'&gt;{@link ObjectViewer} - Additional information on filtering POJO models.</span>
-<span class="source-line-no">075</span><span id="line-75"> *    &lt;li class='jc'&gt;{@link ObjectSorter} - Additional information on sorting POJO models.</span>
-<span class="source-line-no">076</span><span id="line-76"> *    &lt;li class='jc'&gt;{@link ObjectPaginator} - Additional information on paginating POJO models.</span>
-<span class="source-line-no">077</span><span id="line-77"> *    &lt;li class='ja'&gt;{@link RestOp#converters()} - Registering converters with REST resources.</span>
-<span class="source-line-no">078</span><span id="line-78"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/Converters"&gt;Converters&lt;/a&gt;</span>
-<span class="source-line-no">079</span><span id="line-79"> * &lt;/ul&gt;</span>
-<span class="source-line-no">080</span><span id="line-80"> */</span>
-<span class="source-line-no">081</span><span id="line-81">public class Queryable implements RestConverter {</span>
-<span class="source-line-no">082</span><span id="line-82"></span>
-<span class="source-line-no">083</span><span id="line-83">   /**</span>
-<span class="source-line-no">084</span><span id="line-84">    * Swagger parameters for this converter.</span>
-<span class="source-line-no">085</span><span id="line-85">    */</span>
-<span class="source-line-no">086</span><span id="line-86">   public static final String SWAGGER_PARAMS = """</span>
-<span class="source-line-no">087</span><span id="line-87">\t\t{</span>
-<span class="source-line-no">088</span><span id="line-88">\t\t\tin:'query',</span>
-<span class="source-line-no">089</span><span id="line-89">\t\t\tname:'s',</span>
-<span class="source-line-no">090</span><span id="line-90">\t\t\tdescription:'Search.</span>
-<span class="source-line-no">091</span><span id="line-91">\t\t\t\tKey/value pairs representing column names and search tokens.</span>
-<span class="source-line-no">092</span><span id="line-92">\t\t\t\t\\'*\\' and \\'?\\' can be used as meta-characters in string fields.</span>
-<span class="source-line-no">093</span><span id="line-93">\t\t\t\t\\'&gt;\\', \\'&gt;=\\', \\'&lt;\\', and \\'&lt;=\\' can be used as limits on numeric and date fields.</span>
-<span class="source-line-no">094</span><span id="line-94">\t\t\t\tDate fields can be matched with partial dates (e.g. \\'2018\\' to match any date in the year 2018).',</span>
-<span class="source-line-no">095</span><span id="line-95">\t\t\ttype:'array',</span>
-<span class="source-line-no">096</span><span id="line-96">\t\t\tcollectionFormat:'csv',</span>
-<span class="source-line-no">097</span><span id="line-97">\t\t\texamples:{example:'?s=Bill*,birthDate&gt;2000'}</span>
-<span class="source-line-no">098</span><span id="line-98">\t\t},{</span>
-<span class="source-line-no">099</span><span id="line-99">\t\t\tin:'query',</span>
-<span class="source-line-no">100</span><span id="line-100">\t\t\tname:'v',</span>
-<span class="source-line-no">101</span><span id="line-101">\t\t\tdescription:'View.</span>
-<span class="source-line-no">102</span><span id="line-102">\t\t\t\tColumn names to display.',</span>
-<span class="source-line-no">103</span><span id="line-103">\t\t\ttype:'array',</span>
-<span class="source-line-no">104</span><span id="line-104">\t\t\tcollectionFormat:'csv',</span>
-<span class="source-line-no">105</span><span id="line-105">\t\t\texamples:{example:'?v=name,birthDate'}</span>
-<span class="source-line-no">106</span><span id="line-106">\t\t},{</span>
-<span class="source-line-no">107</span><span id="line-107">\t\t\tin:'query',</span>
-<span class="source-line-no">108</span><span id="line-108">\t\t\tname:'o',</span>
-<span class="source-line-no">109</span><span id="line-109">\t\t\tdescription:'Order by.</span>
-<span class="source-line-no">110</span><span id="line-110">\t\t\t\tColumns to sort by.</span>
-<span class="source-line-no">111</span><span id="line-111">\t\t\t\tColumn names can be suffixed with \\'+\\' or \\'-\\' to indicate ascending or descending order.</span>
-<span class="source-line-no">112</span><span id="line-112">\t\t\t\tThe default is ascending order.',</span>
-<span class="source-line-no">113</span><span id="line-113">\t\t\ttype:'array',</span>
-<span class="source-line-no">114</span><span id="line-114">\t\t\tcollectionFormat:'csv',</span>
-<span class="source-line-no">115</span><span id="line-115">\t\t\texamples:{example:'?o=name,birthDate-'}</span>
-<span class="source-line-no">116</span><span id="line-116">\t\t},{</span>
-<span class="source-line-no">117</span><span id="line-117">\t\t\tin:'query',</span>
-<span class="source-line-no">118</span><span id="line-118">\t\t\tname:'p',</span>
-<span class="source-line-no">119</span><span id="line-119">\t\t\tdescription:'Position.</span>
-<span class="source-line-no">120</span><span id="line-120">\t\t\t\tOnly return rows starting at the specified index position (zero-indexed).</span>
-<span class="source-line-no">121</span><span id="line-121">\t\t\t\tDefault is 0',</span>
-<span class="source-line-no">122</span><span id="line-122">\t\t\ttype:'integer',</span>
-<span class="source-line-no">123</span><span id="line-123">\t\t\texamples:{example:'?p=100'}</span>
-<span class="source-line-no">124</span><span id="line-124">\t\t},{</span>
-<span class="source-line-no">125</span><span id="line-125">\t\t\tin:'query',</span>
-<span class="source-line-no">126</span><span id="line-126">\t\t\tname:'l',</span>
-<span class="source-line-no">127</span><span id="line-127">\t\t\tdescription:'Limit.</span>
-<span class="source-line-no">128</span><span id="line-128">\t\t\t\tOnly return the specified number of rows.</span>
-<span class="source-line-no">129</span><span id="line-129">\t\t\t\tDefault is 0 (meaning return all rows).',</span>
-<span class="source-line-no">130</span><span id="line-130">\t\t\ttype:'integer',</span>
-<span class="source-line-no">131</span><span id="line-131">\t\t\texamples:{example:'?l=100'}</span>
-<span class="source-line-no">132</span><span id="line-132">\t\t}""";</span>
-<span class="source-line-no">133</span><span id="line-133"></span>
-<span class="source-line-no">134</span><span id="line-134">   @Override /* Overridden from RestConverter */</span>
-<span class="source-line-no">135</span><span id="line-135">   public Object convert(RestRequest req, Object o) {</span>
-<span class="source-line-no">136</span><span id="line-136">      if (o == null)</span>
-<span class="source-line-no">137</span><span id="line-137">         return null;</span>
-<span class="source-line-no">138</span><span id="line-138"></span>
-<span class="source-line-no">139</span><span id="line-139">      Holder&lt;Object&gt; v = Holder.of(o);</span>
-<span class="source-line-no">140</span><span id="line-140">      RequestQueryParamList params = req.getQueryParams();</span>
-<span class="source-line-no">141</span><span id="line-141">      MarshallingSession bs = req.getMarshallingSession();</span>
-<span class="source-line-no">142</span><span id="line-142"></span>
-<span class="source-line-no">143</span><span id="line-143">      params.getSearchArgs().ifPresent(x -&gt; v.set(ObjectSearcher.create().run(bs, v.get(), x)));</span>
-<span class="source-line-no">144</span><span id="line-144">      params.getSortArgs().ifPresent(x -&gt; v.set(ObjectSorter.create().run(bs, v.get(), x)));</span>
-<span class="source-line-no">145</span><span id="line-145">      params.getViewArgs().ifPresent(x -&gt; v.set(ObjectViewer.create().run(bs, v.get(), x)));</span>
-<span class="source-line-no">146</span><span id="line-146">      params.getPageArgs().ifPresent(x -&gt; v.set(ObjectPaginator.create().run(bs, v.get(), x)));</span>
-<span class="source-line-no">147</span><span id="line-147">      return v.get();</span>
-<span class="source-line-no">148</span><span id="line-148">   }</span>
-<span class="source-line-no">149</span><span id="line-149">}</span>
+<span class="source-line-no">025</span><span id="line-25">import org.apache.juneau.commons.beanquery.*;</span>
+<span class="source-line-no">026</span><span id="line-26">import org.apache.juneau.http.*;</span>
+<span class="source-line-no">027</span><span id="line-27">import org.apache.juneau.rest.server.*;</span>
+<span class="source-line-no">028</span><span id="line-28"></span>
+<span class="source-line-no">029</span><span id="line-29">/**</span>
+<span class="source-line-no">030</span><span id="line-30"> * Converter for enabling search/view/sort/paging support on response objects returned by a</span>
+<span class="source-line-no">031</span><span id="line-31"> * &lt;c&gt;@RestOp&lt;/c&gt;-annotated method, backed by the BeanQuery engine.</span>
+<span class="source-line-no">032</span><span id="line-32"> *</span>
+<span class="source-line-no">033</span><span id="line-33"> * &lt;p&gt;</span>
+<span class="source-line-no">034</span><span id="line-34"> * When enabled, a response that's a {@link Collection} or object array of beans, or of {@link Map Maps}, can be</span>
+<span class="source-line-no">035</span><span id="line-35"> * filtered with the BeanQuery search language via the following request parameters (see {@link BeanQueryRequest}</span>
+<span class="source-line-no">036</span><span id="line-36"> * for the per-parameter Swagger docs):</span>
+<span class="source-line-no">037</span><span id="line-37"> * &lt;ul class='spaced-list'&gt;</span>
+<span class="source-line-no">038</span><span id="line-38"> *    &lt;li&gt;&lt;c&gt;&amp;amp;search=&lt;/c&gt; Comma-separated &lt;c&gt;column=expression&lt;/c&gt; clauses.</span>
+<span class="source-line-no">039</span><span id="line-39"> *    &lt;li&gt;&lt;c&gt;&amp;amp;view=&lt;/c&gt; Comma-separated columns to return, in order.</span>
+<span class="source-line-no">040</span><span id="line-40"> *    &lt;li&gt;&lt;c&gt;&amp;amp;sort=&lt;/c&gt; Comma-separated sort columns; append &lt;js&gt;":desc"&lt;/js&gt; (or &lt;js&gt;"-"&lt;/js&gt;) for descending.</span>
+<span class="source-line-no">041</span><span id="line-41"> *    &lt;li&gt;&lt;c&gt;&amp;amp;position=&lt;/c&gt; 0-based index of the first row.</span>
+<span class="source-line-no">042</span><span id="line-42"> *    &lt;li&gt;&lt;c&gt;&amp;amp;limit=&lt;/c&gt; Maximum rows to return.</span>
+<span class="source-line-no">043</span><span id="line-43"> *    &lt;li&gt;&lt;c&gt;&amp;amp;opts=&lt;/c&gt; Options as &lt;c&gt;key=value&lt;/c&gt; clauses (e.g. &lt;c&gt;counts=true&lt;/c&gt;).</span>
+<span class="source-line-no">044</span><span id="line-44"> * &lt;/ul&gt;</span>
+<span class="source-line-no">045</span><span id="line-45"> *</span>
+<span class="source-line-no">046</span><span id="line-46"> * &lt;p&gt;</span>
+<span class="source-line-no">047</span><span id="line-47"> * A response that isn't tabular &amp;mdash; not a {@link Collection} or object array, or one whose first non-null element</span>
+<span class="source-line-no">048</span><span id="line-48"> * is a plain string, number, date or other scalar &amp;mdash; is returned &lt;b&gt;unchanged&lt;/b&gt;; the query parameters are</span>
+<span class="source-line-no">049</span><span id="line-49"> * ignored, exactly as they were for non-tabular results before 10.0.  An empty or all-null collection is likewise</span>
+<span class="source-line-no">050</span><span id="line-50"> * returned unchanged (there's no element to derive columns from).</span>
+<span class="source-line-no">051</span><span id="line-51"> *</span>
+<span class="source-line-no">052</span><span id="line-52"> * &lt;p&gt;</span>
+<span class="source-line-no">053</span><span id="line-53"> * &lt;b&gt;Bean rows&lt;/b&gt; get one {@link InMemoryBeanQueryContext} per element class, built once (with any</span>
+<span class="source-line-no">054</span><span id="line-54"> * {@link QueryableSettings} bean applied) and cached for the lifetime of this converter instance, so</span>
+<span class="source-line-no">055</span><span id="line-55"> * {@link QueryableSettings} is read once per element class, not on every request.  &lt;b&gt;{@link Map} rows&lt;/b&gt; get one</span>
+<span class="source-line-no">056</span><span id="line-56"> * column per key of the first non-null row (type inferred from that row's value by the same rule as bean</span>
+<span class="source-line-no">057</span><span id="line-57"> * properties, see {@link QueryProperty#searchTypeOf(Class)}: a {@link Number} &amp;rarr; {@link SearchType#NUMERIC}, a</span>
+<span class="source-line-no">058</span><span id="line-58"> * {@link Boolean} &amp;rarr; {@link SearchType#BOOLEAN}, an enum &amp;rarr; {@link SearchType#ENUM}, a</span>
+<span class="source-line-no">059</span><span id="line-59"> * date/calendar/temporal &amp;rarr; {@link SearchType#TIMESTAMP}, anything else (or a &lt;jk&gt;null&lt;/jk&gt;) &amp;rarr;</span>
+<span class="source-line-no">060</span><span id="line-60"> * {@link SearchType#TEXT}); this context is built on every</span>
+<span class="source-line-no">061</span><span id="line-61"> * request, since the key set can differ per response.  Keys that appear only in later rows are not queryable.</span>
+<span class="source-line-no">062</span><span id="line-62"> *</span>
+<span class="source-line-no">063</span><span id="line-63"> * &lt;p&gt;</span>
+<span class="source-line-no">064</span><span id="line-64"> * &lt;c&gt;&amp;amp;opts=counts=true&lt;/c&gt; adds {@link #TOTAL_HEADER} / {@link #MATCHED_HEADER} response headers carrying the</span>
+<span class="source-line-no">065</span><span id="line-65"> * session's &lt;c&gt;total&lt;/c&gt;/&lt;c&gt;matched&lt;/c&gt; row counts &amp;mdash; each header is set only when the corresponding count</span>
+<span class="source-line-no">066</span><span id="line-66"> * is present.  Without it, neither header is set.  The response body itself stays a bare list either way.</span>
+<span class="source-line-no">067</span><span id="line-67"> *</span>
+<span class="source-line-no">068</span><span id="line-68"> * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">069</span><span id="line-69"> * &lt;p class='bjava'&gt;</span>
+<span class="source-line-no">070</span><span id="line-70"> *    &lt;ja&gt;@Rest&lt;/ja&gt;(converters=Queryable.&lt;jk&gt;class&lt;/jk&gt;)</span>
+<span class="source-line-no">071</span><span id="line-71"> *    &lt;jk&gt;public class&lt;/jk&gt; PeopleResource &lt;jk&gt;extends&lt;/jk&gt; BasicRestServlet {</span>
+<span class="source-line-no">072</span><span id="line-72"> *</span>
+<span class="source-line-no">073</span><span id="line-73"> *       &lt;ja&gt;@Bean&lt;/ja&gt;</span>
+<span class="source-line-no">074</span><span id="line-74"> *       &lt;jk&gt;public&lt;/jk&gt; QueryableSettings queryableSettings() {</span>
+<span class="source-line-no">075</span><span id="line-75"> *          &lt;jk&gt;return&lt;/jk&gt; QueryableSettings.&lt;jsm&gt;create&lt;/jsm&gt;().maxLimit(500).build();</span>
+<span class="source-line-no">076</span><span id="line-76"> *       }</span>
+<span class="source-line-no">077</span><span id="line-77"> *</span>
+<span class="source-line-no">078</span><span id="line-78"> *       &lt;ja&gt;@RestGet&lt;/ja&gt;(&lt;js&gt;"/people"&lt;/js&gt;)</span>
+<span class="source-line-no">079</span><span id="line-79"> *       &lt;jk&gt;public&lt;/jk&gt; List&amp;lt;Person&amp;gt; getPeople() {</span>
+<span class="source-line-no">080</span><span id="line-80"> *          &lt;jk&gt;return&lt;/jk&gt; &lt;jf&gt;people&lt;/jf&gt;;</span>
+<span class="source-line-no">081</span><span id="line-81"> *       }</span>
+<span class="source-line-no">082</span><span id="line-82"> *    }</span>
+<span class="source-line-no">083</span><span id="line-83"> * &lt;/p&gt;</span>
+<span class="source-line-no">084</span><span id="line-84"> * &lt;p&gt;</span>
+<span class="source-line-no">085</span><span id="line-85"> *    &lt;c&gt;GET /people?search=age=$gte(18)&amp;amp;sort=name,age:desc&amp;amp;view=name,age&amp;amp;position=20&amp;amp;limit=10&lt;/c&gt;</span>
+<span class="source-line-no">086</span><span id="line-86"> * &lt;/p&gt;</span>
+<span class="source-line-no">087</span><span id="line-87"> * &lt;p&gt;</span>
+<span class="source-line-no">088</span><span id="line-88"> *    A bad column or option (e.g. &lt;c&gt;?sort=noSuchColumn&lt;/c&gt;) throws {@link BeanQuerySyntaxException}, which</span>
+<span class="source-line-no">089</span><span id="line-89"> *    {@code RestContext.convertThrowable} maps to an HTTP&amp;nbsp;400 carrying an &lt;c&gt;X-BeanQuery-Error&lt;/c&gt; header and,</span>
+<span class="source-line-no">090</span><span id="line-90"> *    with problem details on, a &lt;js&gt;"code"&lt;/js&gt; member.</span>
+<span class="source-line-no">091</span><span id="line-91"> * &lt;/p&gt;</span>
+<span class="source-line-no">092</span><span id="line-92"> * &lt;p&gt;</span>
+<span class="source-line-no">093</span><span id="line-93"> *    &lt;c&gt;GET /people?search=age=$gte(18)&amp;amp;opts=counts=true&lt;/c&gt; adds count headers to the (still bare-list) body:</span>
+<span class="source-line-no">094</span><span id="line-94"> * &lt;/p&gt;</span>
+<span class="source-line-no">095</span><span id="line-95"> * &lt;p class='bcode'&gt;</span>
+<span class="source-line-no">096</span><span id="line-96"> *    X-BeanQuery-Total: 42</span>
+<span class="source-line-no">097</span><span id="line-97"> *    X-BeanQuery-Matched: 7</span>
+<span class="source-line-no">098</span><span id="line-98"> * &lt;/p&gt;</span>
+<span class="source-line-no">099</span><span id="line-99"> *</span>
+<span class="source-line-no">100</span><span id="line-100"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">101</span><span id="line-101"> *    &lt;li class='jc'&gt;{@link QueryableSettings} - Per-resource limits and defaults for this converter.</span>
+<span class="source-line-no">102</span><span id="line-102"> *    &lt;li class='jc'&gt;{@link BeanQueryRequest} - The request parameters this converter binds.</span>
+<span class="source-line-no">103</span><span id="line-103"> *    &lt;li class='jc'&gt;{@link InMemoryBeanQueryContext} - The engine this converter drives.</span>
+<span class="source-line-no">104</span><span id="line-104"> *    &lt;li class='ja'&gt;{@link RestOp#converters()} - Registering converters with REST resources.</span>
+<span class="source-line-no">105</span><span id="line-105"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/Converters"&gt;Converters&lt;/a&gt;</span>
+<span class="source-line-no">106</span><span id="line-106"> * &lt;/ul&gt;</span>
+<span class="source-line-no">107</span><span id="line-107"> *</span>
+<span class="source-line-no">108</span><span id="line-108"> * @since 10.0.0</span>
+<span class="source-line-no">109</span><span id="line-109"> */</span>
+<span class="source-line-no">110</span><span id="line-110">@SuppressWarnings({</span>
+<span class="source-line-no">111</span><span id="line-111">   "unchecked" // convertBeanRows() casts the runtime element Class&lt;?&gt; to Class&lt;Object&gt; to build the in-memory query context</span>
+<span class="source-line-no">112</span><span id="line-112">})</span>
+<span class="source-line-no">113</span><span id="line-113">public class Queryable implements RestConverter {</span>
+<span class="source-line-no">114</span><span id="line-114"></span>
+<span class="source-line-no">115</span><span id="line-115">   /**</span>
+<span class="source-line-no">116</span><span id="line-116">    * Response header carrying the total (unfiltered) row count.</span>
+<span class="source-line-no">117</span><span id="line-117">    *</span>
+<span class="source-line-no">118</span><span id="line-118">    * &lt;p&gt;</span>
+<span class="source-line-no">119</span><span id="line-119">    * Set only when {@code &amp;opts=counts=true} is requested and the session reports a {@code total()} count.</span>
+<span class="source-line-no">120</span><span id="line-120">    */</span>
+<span class="source-line-no">121</span><span id="line-121">   public static final String TOTAL_HEADER = "X-BeanQuery-Total";</span>
+<span class="source-line-no">122</span><span id="line-122"></span>
+<span class="source-line-no">123</span><span id="line-123">   /**</span>
+<span class="source-line-no">124</span><span id="line-124">    * Response header carrying the filtered (matched) row count.</span>
+<span class="source-line-no">125</span><span id="line-125">    *</span>
+<span class="source-line-no">126</span><span id="line-126">    * &lt;p&gt;</span>
+<span class="source-line-no">127</span><span id="line-127">    * Set only when {@code &amp;opts=counts=true} is requested and the session reports a {@code matched()} count.</span>
+<span class="source-line-no">128</span><span id="line-128">    */</span>
+<span class="source-line-no">129</span><span id="line-129">   public static final String MATCHED_HEADER = "X-BeanQuery-Matched";</span>
+<span class="source-line-no">130</span><span id="line-130"></span>
+<span class="source-line-no">131</span><span id="line-131">   /**</span>
+<span class="source-line-no">132</span><span id="line-132">    * Swagger parameters for this converter.</span>
+<span class="source-line-no">133</span><span id="line-133">    */</span>
+<span class="source-line-no">134</span><span id="line-134">   public static final String SWAGGER_PARAMS = """</span>
+<span class="source-line-no">135</span><span id="line-135">\t\t{</span>
+<span class="source-line-no">136</span><span id="line-136">\t\t\tin:'query',</span>
+<span class="source-line-no">137</span><span id="line-137">\t\t\tname:'search',</span>
+<span class="source-line-no">138</span><span id="line-138">\t\t\tdescription:'Search expression: comma-separated column=expression clauses, e.g.</span>
+<span class="source-line-no">139</span><span id="line-139">\t\t\t\tname=$contains(smith),age=$gte(18). See the BeanQuery search language docs:</span>
+<span class="source-line-no">140</span><span id="line-140">\t\t\t\thttps://juneau.apache.org/docs/topics/JuneauCommonsBeanQuery',</span>
+<span class="source-line-no">141</span><span id="line-141">\t\t\ttype:'string',</span>
+<span class="source-line-no">142</span><span id="line-142">\t\t\texamples:{example:'?search=name=$contains(smith),age=$gte(18)'}</span>
+<span class="source-line-no">143</span><span id="line-143">\t\t},{</span>
+<span class="source-line-no">144</span><span id="line-144">\t\t\tin:'query',</span>
+<span class="source-line-no">145</span><span id="line-145">\t\t\tname:'view',</span>
+<span class="source-line-no">146</span><span id="line-146">\t\t\tdescription:'Comma-separated columns to return, in order.',</span>
+<span class="source-line-no">147</span><span id="line-147">\t\t\ttype:'string',</span>
+<span class="source-line-no">148</span><span id="line-148">\t\t\texamples:{example:'?view=name,age'}</span>
+<span class="source-line-no">149</span><span id="line-149">\t\t},{</span>
+<span class="source-line-no">150</span><span id="line-150">\t\t\tin:'query',</span>
+<span class="source-line-no">151</span><span id="line-151">\t\t\tname:'sort',</span>
+<span class="source-line-no">152</span><span id="line-152">\t\t\tdescription:'Comma-separated sort columns.</span>
+<span class="source-line-no">153</span><span id="line-153">\t\t\t\tAppend \\':desc\\' (or \\'-\\') for descending.</span>
+<span class="source-line-no">154</span><span id="line-154">\t\t\t\tThe default is ascending order.',</span>
+<span class="source-line-no">155</span><span id="line-155">\t\t\ttype:'string',</span>
+<span class="source-line-no">156</span><span id="line-156">\t\t\texamples:{example:'?sort=name,age:desc'}</span>
+<span class="source-line-no">157</span><span id="line-157">\t\t},{</span>
+<span class="source-line-no">158</span><span id="line-158">\t\t\tin:'query',</span>
+<span class="source-line-no">159</span><span id="line-159">\t\t\tname:'position',</span>
+<span class="source-line-no">160</span><span id="line-160">\t\t\tdescription:'0-based index of the first row.',</span>
+<span class="source-line-no">161</span><span id="line-161">\t\t\ttype:'integer',</span>
+<span class="source-line-no">162</span><span id="line-162">\t\t\tminimum:0,</span>
+<span class="source-line-no">163</span><span id="line-163">\t\t\texamples:{example:'?position=20'}</span>
+<span class="source-line-no">164</span><span id="line-164">\t\t},{</span>
+<span class="source-line-no">165</span><span id="line-165">\t\t\tin:'query',</span>
+<span class="source-line-no">166</span><span id="line-166">\t\t\tname:'limit',</span>
+<span class="source-line-no">167</span><span id="line-167">\t\t\tdescription:'Maximum rows to return.</span>
+<span class="source-line-no">168</span><span id="line-168">\t\t\t\tDefaults and caps are set by the server.',</span>
+<span class="source-line-no">169</span><span id="line-169">\t\t\ttype:'integer',</span>
+<span class="source-line-no">170</span><span id="line-170">\t\t\texamples:{example:'?limit=10'}</span>
+<span class="source-line-no">171</span><span id="line-171">\t\t},{</span>
+<span class="source-line-no">172</span><span id="line-172">\t\t\tin:'query',</span>
+<span class="source-line-no">173</span><span id="line-173">\t\t\tname:'opts',</span>
+<span class="source-line-no">174</span><span id="line-174">\t\t\tdescription:'Options as key=value clauses, e.g. counts=true.',</span>
+<span class="source-line-no">175</span><span id="line-175">\t\t\ttype:'string',</span>
+<span class="source-line-no">176</span><span id="line-176">\t\t\texamples:{example:'?opts=counts=true'}</span>
+<span class="source-line-no">177</span><span id="line-177">\t\t}""";</span>
+<span class="source-line-no">178</span><span id="line-178"></span>
+<span class="source-line-no">179</span><span id="line-179">   private static final List&lt;Class&lt;?&gt;&gt; SIMPLE_ELEMENT_TYPES = List.of(</span>
+<span class="source-line-no">180</span><span id="line-180">      CharSequence.class, Number.class, Boolean.class, Character.class, Enum.class,</span>
+<span class="source-line-no">181</span><span id="line-181">      Date.class, Calendar.class, Temporal.class</span>
+<span class="source-line-no">182</span><span id="line-182">   );</span>
+<span class="source-line-no">183</span><span id="line-183"></span>
+<span class="source-line-no">184</span><span id="line-184">   private final ConcurrentHashMap&lt;Class&lt;?&gt;,Optional&lt;InMemoryBeanQueryContext&lt;Object&gt;&gt;&gt; contextCache = new ConcurrentHashMap&lt;&gt;();</span>
+<span class="source-line-no">185</span><span id="line-185"></span>
+<span class="source-line-no">186</span><span id="line-186">   @Override /* Overridden from RestConverter */</span>
+<span class="source-line-no">187</span><span id="line-187">   public Object convert(RestRequest req, Object o) {</span>
+<span class="source-line-no">188</span><span id="line-188">      if (o == null)</span>
+<span class="source-line-no">189</span><span id="line-189">         return null;</span>
+<span class="source-line-no">190</span><span id="line-190"></span>
+<span class="source-line-no">191</span><span id="line-191">      List&lt;Object&gt; rows;</span>
+<span class="source-line-no">192</span><span id="line-192">      if (o instanceof Collection&lt;?&gt; c)</span>
+<span class="source-line-no">193</span><span id="line-193">         rows = nonNull(c);</span>
+<span class="source-line-no">194</span><span id="line-194">      else if (o instanceof Object[] a)</span>
+<span class="source-line-no">195</span><span id="line-195">         rows = nonNull(Arrays.asList(a));</span>
+<span class="source-line-no">196</span><span id="line-196">      else</span>
+<span class="source-line-no">197</span><span id="line-197">         return o;</span>
+<span class="source-line-no">198</span><span id="line-198"></span>
+<span class="source-line-no">199</span><span id="line-199">      if (rows.isEmpty())</span>
+<span class="source-line-no">200</span><span id="line-200">         return o;</span>
+<span class="source-line-no">201</span><span id="line-201"></span>
+<span class="source-line-no">202</span><span id="line-202">      var first = rows.get(0);</span>
+<span class="source-line-no">203</span><span id="line-203">      Optional&lt;Page&lt;?&gt;&gt; page;</span>
+<span class="source-line-no">204</span><span id="line-204">      if (first instanceof Map&lt;?,?&gt; m)</span>
+<span class="source-line-no">205</span><span id="line-205">         page = convertMapRows(req, rows, m);</span>
+<span class="source-line-no">206</span><span id="line-206">      else if (isSimpleType(first.getClass()))</span>
+<span class="source-line-no">207</span><span id="line-207">         page = Optional.empty();</span>
+<span class="source-line-no">208</span><span id="line-208">      else</span>
+<span class="source-line-no">209</span><span id="line-209">         page = convertBeanRows(req, rows, first.getClass());</span>
+<span class="source-line-no">210</span><span id="line-210"></span>
+<span class="source-line-no">211</span><span id="line-211">      return page.isPresent() ? page.get().rows() : o;</span>
+<span class="source-line-no">212</span><span id="line-212">   }</span>
+<span class="source-line-no">213</span><span id="line-213"></span>
+<span class="source-line-no">214</span><span id="line-214">   /**</span>
+<span class="source-line-no">215</span><span id="line-215">    * Returns the cached bean context for an element class, or &lt;jk&gt;null&lt;/jk&gt; if none has been built (package-private, for tests).</span>
+<span class="source-line-no">216</span><span id="line-216">    *</span>
+<span class="source-line-no">217</span><span id="line-217">    * @param elementClass The row class.</span>
+<span class="source-line-no">218</span><span id="line-218">    * @return The cached context, or &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">219</span><span id="line-219">    */</span>
+<span class="source-line-no">220</span><span id="line-220">   InMemoryBeanQueryContext&lt;Object&gt; cachedContext(Class&lt;?&gt; elementClass) {</span>
+<span class="source-line-no">221</span><span id="line-221">      return contextCache.getOrDefault(elementClass, Optional.empty()).orElse(null);</span>
+<span class="source-line-no">222</span><span id="line-222">   }</span>
+<span class="source-line-no">223</span><span id="line-223"></span>
+<span class="source-line-no">224</span><span id="line-224">   private static List&lt;Object&gt; nonNull(Collection&lt;?&gt; c) {</span>
+<span class="source-line-no">225</span><span id="line-225">      return addAllNn(new ArrayList&lt;Object&gt;(c.size()), c);</span>
+<span class="source-line-no">226</span><span id="line-226">   }</span>
+<span class="source-line-no">227</span><span id="line-227"></span>
+<span class="source-line-no">228</span><span id="line-228">   private Optional&lt;Page&lt;?&gt;&gt; convertBeanRows(RestRequest req, List&lt;Object&gt; rows, Class&lt;?&gt; elementClass) {</span>
+<span class="source-line-no">229</span><span id="line-229">      var ctx = contextCache.computeIfAbsent(elementClass, c -&gt; {</span>
+<span class="source-line-no">230</span><span id="line-230">         if (QueryModel.of(c).getReadableProperties().isEmpty())</span>
+<span class="source-line-no">231</span><span id="line-231">            return Optional.empty();</span>
+<span class="source-line-no">232</span><span id="line-232">         var b = InMemoryBeanQueryContext.create((Class&lt;Object&gt;)c);</span>
+<span class="source-line-no">233</span><span id="line-233">         return Optional.of(settingsOf(req).applyTo(b).build());</span>
+<span class="source-line-no">234</span><span id="line-234">      });</span>
+<span class="source-line-no">235</span><span id="line-235">      if (ctx.isEmpty())</span>
+<span class="source-line-no">236</span><span id="line-236">         return Optional.empty();</span>
+<span class="source-line-no">237</span><span id="line-237">      return Optional.of(run(req, ctx.get(), rows));</span>
+<span class="source-line-no">238</span><span id="line-238">   }</span>
+<span class="source-line-no">239</span><span id="line-239"></span>
+<span class="source-line-no">240</span><span id="line-240">   private Optional&lt;Page&lt;?&gt;&gt; convertMapRows(RestRequest req, List&lt;Object&gt; rows, Map&lt;?,?&gt; first) {</span>
+<span class="source-line-no">241</span><span id="line-241">      var b = InMemoryBeanQueryContext.&lt;Object&gt;create();</span>
+<span class="source-line-no">242</span><span id="line-242">      var columns = 0;</span>
+<span class="source-line-no">243</span><span id="line-243">      for (var e : first.entrySet()) {</span>
+<span class="source-line-no">244</span><span id="line-244">         var name = String.valueOf(e.getKey());</span>
+<span class="source-line-no">245</span><span id="line-245">         if (! name.isBlank()) {</span>
+<span class="source-line-no">246</span><span id="line-246">            b.column(name, e.getValue() == null ? SearchType.TEXT : QueryProperty.searchTypeOf(e.getValue().getClass()));</span>
+<span class="source-line-no">247</span><span id="line-247">            columns++;</span>
+<span class="source-line-no">248</span><span id="line-248">         }</span>
+<span class="source-line-no">249</span><span id="line-249">      }</span>
+<span class="source-line-no">250</span><span id="line-250">      if (columns == 0)</span>
+<span class="source-line-no">251</span><span id="line-251">         return Optional.empty();</span>
+<span class="source-line-no">252</span><span id="line-252">      return Optional.of(run(req, settingsOf(req).applyTo(b).build(), rows));</span>
+<span class="source-line-no">253</span><span id="line-253">   }</span>
+<span class="source-line-no">254</span><span id="line-254"></span>
+<span class="source-line-no">255</span><span id="line-255">   private static Page&lt;?&gt; run(RestRequest req, InMemoryBeanQueryContext&lt;Object&gt; ctx, List&lt;Object&gt; rows) {</span>
+<span class="source-line-no">256</span><span id="line-256">      var query = req.getRequest(BeanQueryRequest.class);</span>
+<span class="source-line-no">257</span><span id="line-257">      try (var s = ctx.getSession(rows)) {</span>
+<span class="source-line-no">258</span><span id="line-258">         var view = query.getView();</span>
+<span class="source-line-no">259</span><span id="line-259">         var page = view == null || view.isBlank() ? s.find(query) : s.findValues(query);</span>
+<span class="source-line-no">260</span><span id="line-260">         setCountHeaders(req, page);</span>
+<span class="source-line-no">261</span><span id="line-261">         return page;</span>
+<span class="source-line-no">262</span><span id="line-262">      }</span>
+<span class="source-line-no">263</span><span id="line-263">   }</span>
+<span class="source-line-no">264</span><span id="line-264"></span>
+<span class="source-line-no">265</span><span id="line-265">   private static void setCountHeaders(RestRequest req, Page&lt;?&gt; page) {</span>
+<span class="source-line-no">266</span><span id="line-266">      page.total().ifPresent(v -&gt; req.getResponse().setHeader(TOTAL_HEADER, String.valueOf(v)));</span>
+<span class="source-line-no">267</span><span id="line-267">      page.matched().ifPresent(v -&gt; req.getResponse().setHeader(MATCHED_HEADER, String.valueOf(v)));</span>
+<span class="source-line-no">268</span><span id="line-268">   }</span>
+<span class="source-line-no">269</span><span id="line-269"></span>
+<span class="source-line-no">270</span><span id="line-270">   private static boolean isSimpleType(Class&lt;?&gt; c) {</span>
+<span class="source-line-no">271</span><span id="line-271">      for (var t : SIMPLE_ELEMENT_TYPES)</span>
+<span class="source-line-no">272</span><span id="line-272">         if (t.isAssignableFrom(c))</span>
+<span class="source-line-no">273</span><span id="line-273">            return true;</span>
+<span class="source-line-no">274</span><span id="line-274">      return false;</span>
+<span class="source-line-no">275</span><span id="line-275">   }</span>
+<span class="source-line-no">276</span><span id="line-276"></span>
+<span class="source-line-no">277</span><span id="line-277">   @SuppressWarnings({</span>
+<span class="source-line-no">278</span><span id="line-278">      "resource" // The bean store is owned by the RestContext; this only borrows a bean and must not close it.</span>
+<span class="source-line-no">279</span><span id="line-279">   })</span>
+<span class="source-line-no">280</span><span id="line-280">   private static QueryableSettings settingsOf(RestRequest req) {</span>
+<span class="source-line-no">281</span><span id="line-281">      return req.getContext().getBeanStore().getBean(QueryableSettings.class).orElse(QueryableSettings.DEFAULT);</span>
+<span class="source-line-no">282</span><span id="line-282">   }</span>
+<span class="source-line-no">283</span><span id="line-283">}</span>
 
 
 

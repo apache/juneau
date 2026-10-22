@@ -29,8 +29,8 @@
 <span class="source-line-no">016</span><span id="line-16"> */</span>
 <span class="source-line-no">017</span><span id="line-17">package org.apache.juneau.commons.reflect;</span>
 <span class="source-line-no">018</span><span id="line-18"></span>
-<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.AssertionUtils.*;</span>
-<span class="source-line-no">020</span><span id="line-20">import static org.apache.juneau.commons.utils.ClassUtils.*;</span>
+<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.ClassUtils.*;</span>
+<span class="source-line-no">020</span><span id="line-20">import static org.apache.juneau.commons.utils.Shorts.*;</span>
 <span class="source-line-no">021</span><span id="line-21"></span>
 <span class="source-line-no">022</span><span id="line-22">import java.lang.reflect.*;</span>
 <span class="source-line-no">023</span><span id="line-23"></span>
@@ -51,7 +51,7 @@
 <span class="source-line-no">038</span><span id="line-38"> *</span>
 <span class="source-line-no">039</span><span id="line-39"> */</span>
 <span class="source-line-no">040</span><span id="line-40">@SuppressWarnings({</span>
-<span class="source-line-no">041</span><span id="line-41">   "java:S115" // Constants use UPPER_snakeCase convention</span>
+<span class="source-line-no">041</span><span id="line-41">   "java:S1192" // Duplicated literals (argument/property names) read more clearly inline than as constants</span>
 <span class="source-line-no">042</span><span id="line-42">})</span>
 <span class="source-line-no">043</span><span id="line-43">public enum Visibility {</span>
 <span class="source-line-no">044</span><span id="line-44"></span>
@@ -70,121 +70,118 @@
 <span class="source-line-no">057</span><span id="line-57">   /** Include all classes/fields/methods. */</span>
 <span class="source-line-no">058</span><span id="line-58">   PRIVATE;</span>
 <span class="source-line-no">059</span><span id="line-59"></span>
-<span class="source-line-no">060</span><span id="line-60">   // Argument name constants for assertArgNotNull</span>
-<span class="source-line-no">061</span><span id="line-61">   private static final String ARG_x = "x";</span>
-<span class="source-line-no">062</span><span id="line-62"></span>
-<span class="source-line-no">063</span><span id="line-63">   /**</span>
-<span class="source-line-no">064</span><span id="line-64">    * Shortcut for &lt;c&gt;isVisible(x.getModifiers());&lt;/c&gt;</span>
-<span class="source-line-no">065</span><span id="line-65">    *</span>
-<span class="source-line-no">066</span><span id="line-66">    * @param x The class to check. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">067</span><span id="line-67">    * @return &lt;jk&gt;true&lt;/jk&gt; if the class is at least as visible as this object.</span>
-<span class="source-line-no">068</span><span id="line-68">    */</span>
-<span class="source-line-no">069</span><span id="line-69">   public boolean isVisible(Class&lt;?&gt; x) {</span>
-<span class="source-line-no">070</span><span id="line-70">      return isVisible(x.getModifiers());</span>
-<span class="source-line-no">071</span><span id="line-71">   }</span>
-<span class="source-line-no">072</span><span id="line-72"></span>
-<span class="source-line-no">073</span><span id="line-73">   /**</span>
-<span class="source-line-no">074</span><span id="line-74">    * Shortcut for &lt;c&gt;isVisible(x.getModifiers());&lt;/c&gt;</span>
-<span class="source-line-no">075</span><span id="line-75">    *</span>
-<span class="source-line-no">076</span><span id="line-76">    * @param x The constructor to check. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">077</span><span id="line-77">    * @return &lt;jk&gt;true&lt;/jk&gt; if the constructor is at least as visible as this object.</span>
-<span class="source-line-no">078</span><span id="line-78">    */</span>
-<span class="source-line-no">079</span><span id="line-79">   public boolean isVisible(Executable x) {</span>
-<span class="source-line-no">080</span><span id="line-80">      return isVisible(x.getModifiers());</span>
-<span class="source-line-no">081</span><span id="line-81">   }</span>
-<span class="source-line-no">082</span><span id="line-82"></span>
-<span class="source-line-no">083</span><span id="line-83">   /**</span>
-<span class="source-line-no">084</span><span id="line-84">    * Shortcut for &lt;c&gt;isVisible(x.getModifiers());&lt;/c&gt;</span>
-<span class="source-line-no">085</span><span id="line-85">    *</span>
-<span class="source-line-no">086</span><span id="line-86">    * @param x The field to check. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">087</span><span id="line-87">    * @return &lt;jk&gt;true&lt;/jk&gt; if the field is at least as visible as this object.</span>
-<span class="source-line-no">088</span><span id="line-88">    */</span>
-<span class="source-line-no">089</span><span id="line-89">   public boolean isVisible(Field x) {</span>
-<span class="source-line-no">090</span><span id="line-90">      return isVisible(x.getModifiers());</span>
-<span class="source-line-no">091</span><span id="line-91">   }</span>
-<span class="source-line-no">092</span><span id="line-92"></span>
-<span class="source-line-no">093</span><span id="line-93">   /**</span>
-<span class="source-line-no">094</span><span id="line-94">    * Identifies if the specified mod matches this visibility.</span>
-<span class="source-line-no">095</span><span id="line-95">    *</span>
-<span class="source-line-no">096</span><span id="line-96">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
-<span class="source-line-no">097</span><span id="line-97">    * &lt;p class='bjava'&gt;</span>
-<span class="source-line-no">098</span><span id="line-98">    *    &lt;jsf&gt;PUBLIC&lt;/jsf&gt;.isVisible(MyPublicClass.&lt;jk&gt;class&lt;/jk&gt;.getModifiers()); &lt;jc&gt;//true&lt;/jc&gt;</span>
-<span class="source-line-no">099</span><span id="line-99">    *    &lt;jsf&gt;PUBLIC&lt;/jsf&gt;.isVisible(MyPrivateClass.&lt;jk&gt;class&lt;/jk&gt;.getModifiers()); &lt;jc&gt;//false&lt;/jc&gt;</span>
-<span class="source-line-no">100</span><span id="line-100">    *    &lt;jsf&gt;PRIVATE&lt;/jsf&gt;.isVisible(MyPrivateClass.&lt;jk&gt;class&lt;/jk&gt;.getModifiers()); &lt;jc&gt;//true&lt;/jc&gt;</span>
-<span class="source-line-no">101</span><span id="line-101">    *    &lt;jsf&gt;NONE&lt;/jsf&gt;.isVisible(MyPublicClass.&lt;jk&gt;class&lt;/jk&gt;.getModifiers()); &lt;jc&gt;//false&lt;/jc&gt;</span>
-<span class="source-line-no">102</span><span id="line-102">    * &lt;/p&gt;</span>
-<span class="source-line-no">103</span><span id="line-103">    *</span>
-<span class="source-line-no">104</span><span id="line-104">    * @param mod The modifier from the object being tested (e.g. results from {@link Class#getModifiers()}.</span>
-<span class="source-line-no">105</span><span id="line-105">    * @return &lt;jk&gt;true&lt;/jk&gt; if this visibility matches the specified modifier attribute.</span>
-<span class="source-line-no">106</span><span id="line-106">    */</span>
-<span class="source-line-no">107</span><span id="line-107">   public boolean isVisible(int mod) {</span>
-<span class="source-line-no">108</span><span id="line-108">      return switch (this) {</span>
-<span class="source-line-no">109</span><span id="line-109">         case NONE -&gt; false;</span>
-<span class="source-line-no">110</span><span id="line-110">         case PRIVATE -&gt; true;</span>
-<span class="source-line-no">111</span><span id="line-111">         case DEFAULT -&gt; ! Modifier.isPrivate(mod);</span>
-<span class="source-line-no">112</span><span id="line-112">         case PROTECTED -&gt; Modifier.isProtected(mod) || Modifier.isPublic(mod);</span>
-<span class="source-line-no">113</span><span id="line-113">         default -&gt; Modifier.isPublic(mod);</span>
-<span class="source-line-no">114</span><span id="line-114">      };</span>
-<span class="source-line-no">115</span><span id="line-115">   }</span>
-<span class="source-line-no">116</span><span id="line-116"></span>
-<span class="source-line-no">117</span><span id="line-117">   /**</span>
-<span class="source-line-no">118</span><span id="line-118">    * Makes constructor accessible if it matches the visibility requirements, or returns &lt;jk&gt;null&lt;/jk&gt; if it doesn't.</span>
+<span class="source-line-no">060</span><span id="line-60">   /**</span>
+<span class="source-line-no">061</span><span id="line-61">    * Shortcut for &lt;c&gt;isVisible(x.getModifiers());&lt;/c&gt;</span>
+<span class="source-line-no">062</span><span id="line-62">    *</span>
+<span class="source-line-no">063</span><span id="line-63">    * @param x The class to check. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">064</span><span id="line-64">    * @return &lt;jk&gt;true&lt;/jk&gt; if the class is at least as visible as this object.</span>
+<span class="source-line-no">065</span><span id="line-65">    */</span>
+<span class="source-line-no">066</span><span id="line-66">   public boolean isVisible(Class&lt;?&gt; x) {</span>
+<span class="source-line-no">067</span><span id="line-67">      return isVisible(x.getModifiers());</span>
+<span class="source-line-no">068</span><span id="line-68">   }</span>
+<span class="source-line-no">069</span><span id="line-69"></span>
+<span class="source-line-no">070</span><span id="line-70">   /**</span>
+<span class="source-line-no">071</span><span id="line-71">    * Shortcut for &lt;c&gt;isVisible(x.getModifiers());&lt;/c&gt;</span>
+<span class="source-line-no">072</span><span id="line-72">    *</span>
+<span class="source-line-no">073</span><span id="line-73">    * @param x The constructor to check. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">074</span><span id="line-74">    * @return &lt;jk&gt;true&lt;/jk&gt; if the constructor is at least as visible as this object.</span>
+<span class="source-line-no">075</span><span id="line-75">    */</span>
+<span class="source-line-no">076</span><span id="line-76">   public boolean isVisible(Executable x) {</span>
+<span class="source-line-no">077</span><span id="line-77">      return isVisible(x.getModifiers());</span>
+<span class="source-line-no">078</span><span id="line-78">   }</span>
+<span class="source-line-no">079</span><span id="line-79"></span>
+<span class="source-line-no">080</span><span id="line-80">   /**</span>
+<span class="source-line-no">081</span><span id="line-81">    * Shortcut for &lt;c&gt;isVisible(x.getModifiers());&lt;/c&gt;</span>
+<span class="source-line-no">082</span><span id="line-82">    *</span>
+<span class="source-line-no">083</span><span id="line-83">    * @param x The field to check. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">084</span><span id="line-84">    * @return &lt;jk&gt;true&lt;/jk&gt; if the field is at least as visible as this object.</span>
+<span class="source-line-no">085</span><span id="line-85">    */</span>
+<span class="source-line-no">086</span><span id="line-86">   public boolean isVisible(Field x) {</span>
+<span class="source-line-no">087</span><span id="line-87">      return isVisible(x.getModifiers());</span>
+<span class="source-line-no">088</span><span id="line-88">   }</span>
+<span class="source-line-no">089</span><span id="line-89"></span>
+<span class="source-line-no">090</span><span id="line-90">   /**</span>
+<span class="source-line-no">091</span><span id="line-91">    * Identifies if the specified mod matches this visibility.</span>
+<span class="source-line-no">092</span><span id="line-92">    *</span>
+<span class="source-line-no">093</span><span id="line-93">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">094</span><span id="line-94">    * &lt;p class='bjava'&gt;</span>
+<span class="source-line-no">095</span><span id="line-95">    *    &lt;jsf&gt;PUBLIC&lt;/jsf&gt;.isVisible(MyPublicClass.&lt;jk&gt;class&lt;/jk&gt;.getModifiers()); &lt;jc&gt;//true&lt;/jc&gt;</span>
+<span class="source-line-no">096</span><span id="line-96">    *    &lt;jsf&gt;PUBLIC&lt;/jsf&gt;.isVisible(MyPrivateClass.&lt;jk&gt;class&lt;/jk&gt;.getModifiers()); &lt;jc&gt;//false&lt;/jc&gt;</span>
+<span class="source-line-no">097</span><span id="line-97">    *    &lt;jsf&gt;PRIVATE&lt;/jsf&gt;.isVisible(MyPrivateClass.&lt;jk&gt;class&lt;/jk&gt;.getModifiers()); &lt;jc&gt;//true&lt;/jc&gt;</span>
+<span class="source-line-no">098</span><span id="line-98">    *    &lt;jsf&gt;NONE&lt;/jsf&gt;.isVisible(MyPublicClass.&lt;jk&gt;class&lt;/jk&gt;.getModifiers()); &lt;jc&gt;//false&lt;/jc&gt;</span>
+<span class="source-line-no">099</span><span id="line-99">    * &lt;/p&gt;</span>
+<span class="source-line-no">100</span><span id="line-100">    *</span>
+<span class="source-line-no">101</span><span id="line-101">    * @param mod The modifier from the object being tested (e.g. results from {@link Class#getModifiers()}.</span>
+<span class="source-line-no">102</span><span id="line-102">    * @return &lt;jk&gt;true&lt;/jk&gt; if this visibility matches the specified modifier attribute.</span>
+<span class="source-line-no">103</span><span id="line-103">    */</span>
+<span class="source-line-no">104</span><span id="line-104">   public boolean isVisible(int mod) {</span>
+<span class="source-line-no">105</span><span id="line-105">      return switch (this) {</span>
+<span class="source-line-no">106</span><span id="line-106">         case NONE -&gt; false;</span>
+<span class="source-line-no">107</span><span id="line-107">         case PRIVATE -&gt; true;</span>
+<span class="source-line-no">108</span><span id="line-108">         case DEFAULT -&gt; ! Modifier.isPrivate(mod);</span>
+<span class="source-line-no">109</span><span id="line-109">         case PROTECTED -&gt; Modifier.isProtected(mod) || Modifier.isPublic(mod);</span>
+<span class="source-line-no">110</span><span id="line-110">         default -&gt; Modifier.isPublic(mod);</span>
+<span class="source-line-no">111</span><span id="line-111">      };</span>
+<span class="source-line-no">112</span><span id="line-112">   }</span>
+<span class="source-line-no">113</span><span id="line-113"></span>
+<span class="source-line-no">114</span><span id="line-114">   /**</span>
+<span class="source-line-no">115</span><span id="line-115">    * Makes constructor accessible if it matches the visibility requirements, or returns &lt;jk&gt;null&lt;/jk&gt; if it doesn't.</span>
+<span class="source-line-no">116</span><span id="line-116">    *</span>
+<span class="source-line-no">117</span><span id="line-117">    * &lt;p&gt;</span>
+<span class="source-line-no">118</span><span id="line-118">    * Security exceptions thrown on the call to {@link Constructor#setAccessible(boolean)} are quietly ignored.</span>
 <span class="source-line-no">119</span><span id="line-119">    *</span>
-<span class="source-line-no">120</span><span id="line-120">    * &lt;p&gt;</span>
-<span class="source-line-no">121</span><span id="line-121">    * Security exceptions thrown on the call to {@link Constructor#setAccessible(boolean)} are quietly ignored.</span>
-<span class="source-line-no">122</span><span id="line-122">    *</span>
-<span class="source-line-no">123</span><span id="line-123">    * @param &lt;T&gt; The class type.</span>
-<span class="source-line-no">124</span><span id="line-124">    * @param x The constructor. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">125</span><span id="line-125">    * @return</span>
-<span class="source-line-no">126</span><span id="line-126">    *    The same constructor if visibility requirements met, or &lt;jk&gt;null&lt;/jk&gt; if visibility requirement not</span>
-<span class="source-line-no">127</span><span id="line-127">    *    met or call to {@link Constructor#setAccessible(boolean)} throws a security exception.</span>
-<span class="source-line-no">128</span><span id="line-128">    * @throws IllegalArgumentException If &lt;c&gt;x&lt;/c&gt; is &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">129</span><span id="line-129">    */</span>
-<span class="source-line-no">130</span><span id="line-130">   public &lt;T&gt; Constructor&lt;T&gt; transform(Constructor&lt;T&gt; x) {</span>
-<span class="source-line-no">131</span><span id="line-131">      assertArgNotNull(ARG_x, x);</span>
-<span class="source-line-no">132</span><span id="line-132">      if (isVisible(x) &amp;&amp; ! setAccessible(x))</span>
-<span class="source-line-no">133</span><span id="line-133">         return null;  // HTT</span>
-<span class="source-line-no">134</span><span id="line-134">      return x;</span>
-<span class="source-line-no">135</span><span id="line-135">   }</span>
-<span class="source-line-no">136</span><span id="line-136"></span>
-<span class="source-line-no">137</span><span id="line-137">   /**</span>
-<span class="source-line-no">138</span><span id="line-138">    * Makes field accessible if it matches the visibility requirements, or returns &lt;jk&gt;null&lt;/jk&gt; if it doesn't.</span>
+<span class="source-line-no">120</span><span id="line-120">    * @param &lt;T&gt; The class type.</span>
+<span class="source-line-no">121</span><span id="line-121">    * @param x The constructor. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">122</span><span id="line-122">    * @return</span>
+<span class="source-line-no">123</span><span id="line-123">    *    The same constructor if visibility requirements met, or &lt;jk&gt;null&lt;/jk&gt; if visibility requirement not</span>
+<span class="source-line-no">124</span><span id="line-124">    *    met or call to {@link Constructor#setAccessible(boolean)} throws a security exception.</span>
+<span class="source-line-no">125</span><span id="line-125">    * @throws IllegalArgumentException If &lt;c&gt;x&lt;/c&gt; is &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">126</span><span id="line-126">    */</span>
+<span class="source-line-no">127</span><span id="line-127">   public &lt;T&gt; Constructor&lt;T&gt; transform(Constructor&lt;T&gt; x) {</span>
+<span class="source-line-no">128</span><span id="line-128">      reqnn("x", x);</span>
+<span class="source-line-no">129</span><span id="line-129">      if (isVisible(x) &amp;&amp; ! setAccessible(x))</span>
+<span class="source-line-no">130</span><span id="line-130">         return null;  // HTT</span>
+<span class="source-line-no">131</span><span id="line-131">      return x;</span>
+<span class="source-line-no">132</span><span id="line-132">   }</span>
+<span class="source-line-no">133</span><span id="line-133"></span>
+<span class="source-line-no">134</span><span id="line-134">   /**</span>
+<span class="source-line-no">135</span><span id="line-135">    * Makes field accessible if it matches the visibility requirements, or returns &lt;jk&gt;null&lt;/jk&gt; if it doesn't.</span>
+<span class="source-line-no">136</span><span id="line-136">    *</span>
+<span class="source-line-no">137</span><span id="line-137">    * &lt;p&gt;</span>
+<span class="source-line-no">138</span><span id="line-138">    * Security exceptions thrown on the call to {@link Field#setAccessible(boolean)} are quietly ignored.</span>
 <span class="source-line-no">139</span><span id="line-139">    *</span>
-<span class="source-line-no">140</span><span id="line-140">    * &lt;p&gt;</span>
-<span class="source-line-no">141</span><span id="line-141">    * Security exceptions thrown on the call to {@link Field#setAccessible(boolean)} are quietly ignored.</span>
-<span class="source-line-no">142</span><span id="line-142">    *</span>
-<span class="source-line-no">143</span><span id="line-143">    * @param x The field. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">144</span><span id="line-144">    * @return</span>
-<span class="source-line-no">145</span><span id="line-145">    *    The same field if visibility requirements met, or &lt;jk&gt;null&lt;/jk&gt; if visibility requirement not</span>
-<span class="source-line-no">146</span><span id="line-146">    *    met or call to {@link Field#setAccessible(boolean)} throws a security exception.</span>
-<span class="source-line-no">147</span><span id="line-147">    * @throws IllegalArgumentException If &lt;c&gt;x&lt;/c&gt; is &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">148</span><span id="line-148">    */</span>
-<span class="source-line-no">149</span><span id="line-149">   public Field transform(Field x) {</span>
-<span class="source-line-no">150</span><span id="line-150">      assertArgNotNull(ARG_x, x);</span>
-<span class="source-line-no">151</span><span id="line-151">      if (isVisible(x) &amp;&amp; ! setAccessible(x))</span>
-<span class="source-line-no">152</span><span id="line-152">         return null;  // HTT</span>
-<span class="source-line-no">153</span><span id="line-153">      return x;</span>
-<span class="source-line-no">154</span><span id="line-154">   }</span>
-<span class="source-line-no">155</span><span id="line-155"></span>
-<span class="source-line-no">156</span><span id="line-156">   /**</span>
-<span class="source-line-no">157</span><span id="line-157">    * Makes method accessible if it matches the visibility requirements, or returns &lt;jk&gt;null&lt;/jk&gt; if it doesn't.</span>
+<span class="source-line-no">140</span><span id="line-140">    * @param x The field. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">141</span><span id="line-141">    * @return</span>
+<span class="source-line-no">142</span><span id="line-142">    *    The same field if visibility requirements met, or &lt;jk&gt;null&lt;/jk&gt; if visibility requirement not</span>
+<span class="source-line-no">143</span><span id="line-143">    *    met or call to {@link Field#setAccessible(boolean)} throws a security exception.</span>
+<span class="source-line-no">144</span><span id="line-144">    * @throws IllegalArgumentException If &lt;c&gt;x&lt;/c&gt; is &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">145</span><span id="line-145">    */</span>
+<span class="source-line-no">146</span><span id="line-146">   public Field transform(Field x) {</span>
+<span class="source-line-no">147</span><span id="line-147">      reqnn("x", x);</span>
+<span class="source-line-no">148</span><span id="line-148">      if (isVisible(x) &amp;&amp; ! setAccessible(x))</span>
+<span class="source-line-no">149</span><span id="line-149">         return null;  // HTT</span>
+<span class="source-line-no">150</span><span id="line-150">      return x;</span>
+<span class="source-line-no">151</span><span id="line-151">   }</span>
+<span class="source-line-no">152</span><span id="line-152"></span>
+<span class="source-line-no">153</span><span id="line-153">   /**</span>
+<span class="source-line-no">154</span><span id="line-154">    * Makes method accessible if it matches the visibility requirements, or returns &lt;jk&gt;null&lt;/jk&gt; if it doesn't.</span>
+<span class="source-line-no">155</span><span id="line-155">    *</span>
+<span class="source-line-no">156</span><span id="line-156">    * &lt;p&gt;</span>
+<span class="source-line-no">157</span><span id="line-157">    * Security exceptions thrown on the call to {@link Method#setAccessible(boolean)} are quietly ignored.</span>
 <span class="source-line-no">158</span><span id="line-158">    *</span>
-<span class="source-line-no">159</span><span id="line-159">    * &lt;p&gt;</span>
-<span class="source-line-no">160</span><span id="line-160">    * Security exceptions thrown on the call to {@link Method#setAccessible(boolean)} are quietly ignored.</span>
-<span class="source-line-no">161</span><span id="line-161">    *</span>
-<span class="source-line-no">162</span><span id="line-162">    * @param x The method. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">163</span><span id="line-163">    * @return</span>
-<span class="source-line-no">164</span><span id="line-164">    *    The same method if visibility requirements met, or &lt;jk&gt;null&lt;/jk&gt; if visibility requirement not</span>
-<span class="source-line-no">165</span><span id="line-165">    *    met or call to {@link Method#setAccessible(boolean)} throws a security exception.</span>
-<span class="source-line-no">166</span><span id="line-166">    * @throws IllegalArgumentException If &lt;c&gt;x&lt;/c&gt; is &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">167</span><span id="line-167">    */</span>
-<span class="source-line-no">168</span><span id="line-168">   public Method transform(Method x) {</span>
-<span class="source-line-no">169</span><span id="line-169">      assertArgNotNull(ARG_x, x);</span>
-<span class="source-line-no">170</span><span id="line-170">      if (isVisible(x) &amp;&amp; ! setAccessible(x))</span>
-<span class="source-line-no">171</span><span id="line-171">         return null;  // HTT</span>
-<span class="source-line-no">172</span><span id="line-172">      return x;</span>
-<span class="source-line-no">173</span><span id="line-173">   }</span>
-<span class="source-line-no">174</span><span id="line-174">}</span>
+<span class="source-line-no">159</span><span id="line-159">    * @param x The method. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">160</span><span id="line-160">    * @return</span>
+<span class="source-line-no">161</span><span id="line-161">    *    The same method if visibility requirements met, or &lt;jk&gt;null&lt;/jk&gt; if visibility requirement not</span>
+<span class="source-line-no">162</span><span id="line-162">    *    met or call to {@link Method#setAccessible(boolean)} throws a security exception.</span>
+<span class="source-line-no">163</span><span id="line-163">    * @throws IllegalArgumentException If &lt;c&gt;x&lt;/c&gt; is &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">164</span><span id="line-164">    */</span>
+<span class="source-line-no">165</span><span id="line-165">   public Method transform(Method x) {</span>
+<span class="source-line-no">166</span><span id="line-166">      reqnn("x", x);</span>
+<span class="source-line-no">167</span><span id="line-167">      if (isVisible(x) &amp;&amp; ! setAccessible(x))</span>
+<span class="source-line-no">168</span><span id="line-168">         return null;  // HTT</span>
+<span class="source-line-no">169</span><span id="line-169">      return x;</span>
+<span class="source-line-no">170</span><span id="line-170">   }</span>
+<span class="source-line-no">171</span><span id="line-171">}</span>
 
 
 

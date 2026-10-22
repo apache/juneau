@@ -92,42 +92,50 @@ loadScripts(document, 'script');</script>
 </div>
 <div class="col-first odd-row-color class-summary class-summary-tab2"><a href="CachingHttpServletRequest.html" title="class in org.apache.juneau.rest.server.util">CachingHttpServletRequest</a></div>
 <div class="col-last odd-row-color class-summary class-summary-tab2">
-<div class="block">Wraps an <code>HttpServletRequest</code> and preloads the content into memory for debugging purposes.</div>
+<div class="block">Wraps an <code>HttpServletRequest</code> and tees a <b>bounded</b> copy of the request body into memory for debug logging.</div>
 </div>
 <div class="col-first even-row-color class-summary class-summary-tab2"><a href="CachingHttpServletResponse.html" title="class in org.apache.juneau.rest.server.util">CachingHttpServletResponse</a></div>
 <div class="col-last even-row-color class-summary class-summary-tab2">
-<div class="block">Wraps an <code>HttpServletResponse</code> and caches the output stream in a separate buffer for debugging purposes.</div>
+<div class="block">Wraps an <code>HttpServletResponse</code> and tees a <b>bounded</b> copy of the output stream into memory for debug logging.</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="FinishablePrintWriter.html" title="class in org.apache.juneau.rest.server.util">FinishablePrintWriter</a></div>
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="ClasspathAssetCache.html" title="class in org.apache.juneau.rest.server.util">ClasspathAssetCache</a></div>
 <div class="col-last odd-row-color class-summary class-summary-tab2">
+<div class="block">A themeable/configurable asset-serving mixin's cache of classpath-shipped assets: reads each configured
+ resource's bytes once, computes and caches its <a href="../../../commons/utils/ChecksumUtils.html#hash8(byte%5B%5D)"><code>content hash</code></a>, and wraps
+ bytes as a cacheable <a href="../../../http/HttpResource.html" title="interface in org.apache.juneau.http"><code>HttpResource</code></a> - the read+cache+hash+cache-buster-URL+serve bundle that
+ <code>ConsoleChromeMixin</code> (juneau-rest-server-console-ui) and <code>ViewsMixin</code> (juneau-rest-server-views)
+ previously each hand-rolled as their own private statics and static cache maps.</div>
+</div>
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="FinishablePrintWriter.html" title="class in org.apache.juneau.rest.server.util">FinishablePrintWriter</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab2">
 <div class="block">A wrapped <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/PrintWriter.html" title="class or interface in java.io" class="external-link"><code>PrintWriter</code></a> with an added <c>finish()</c> method.</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab2"><a href="FinishableServletOutputStream.html" title="class in org.apache.juneau.rest.server.util">FinishableServletOutputStream</a></div>
-<div class="col-last even-row-color class-summary class-summary-tab2">
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="FinishableServletOutputStream.html" title="class in org.apache.juneau.rest.server.util">FinishableServletOutputStream</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">
 <div class="block">A wrapped <code>ServletOutputStream</code> with an added <c>finish()</c> method.</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="MethodList.html" title="class in org.apache.juneau.rest.server.util">MethodList</a></div>
-<div class="col-last odd-row-color class-summary class-summary-tab2">
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="MethodList.html" title="class in org.apache.juneau.rest.server.util">MethodList</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab2">
 <div class="block">A simple list of <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Method.html" title="class or interface in java.lang.reflect" class="external-link"><code>Method</code></a> objects.</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab2"><a href="RestUtils.html" title="class in org.apache.juneau.rest.server.util">RestUtils</a></div>
-<div class="col-last even-row-color class-summary class-summary-tab2">
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="RestUtils.html" title="class in org.apache.juneau.rest.server.util">RestUtils</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">
 <div class="block">Various reusable utility methods.</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="UrlPath.html" title="class in org.apache.juneau.rest.server.util">UrlPath</a></div>
-<div class="col-last odd-row-color class-summary class-summary-tab2">
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="UrlPath.html" title="class in org.apache.juneau.rest.server.util">UrlPath</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab2">
 <div class="block">Represents a parsed URL path-info string.</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab2"><a href="UrlPathMatch.html" title="class in org.apache.juneau.rest.server.util">UrlPathMatch</a></div>
-<div class="col-last even-row-color class-summary class-summary-tab2">
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="UrlPathMatch.html" title="class in org.apache.juneau.rest.server.util">UrlPathMatch</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">
 <div class="block">Represents a URL path pattern match.</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="UrlPathMatcher.html" title="class in org.apache.juneau.rest.server.util">UrlPathMatcher</a></div>
-<div class="col-last odd-row-color class-summary class-summary-tab2">
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="UrlPathMatcher.html" title="class in org.apache.juneau.rest.server.util">UrlPathMatcher</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab2">
 <div class="block">A parsed path pattern constructed from a <a href="../RestOp.html#path()"><code>@RestOp(path)</code></a> value.</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab2"><a href="UrlPathMatcherList.html" title="class in org.apache.juneau.rest.server.util">UrlPathMatcherList</a></div>
-<div class="col-last even-row-color class-summary class-summary-tab2">
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="UrlPathMatcherList.html" title="class in org.apache.juneau.rest.server.util">UrlPathMatcherList</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">
 <div class="block">A list of <a href="UrlPathMatcher.html" title="class in org.apache.juneau.rest.server.util"><code>UrlPathMatcher</code></a> objects.</div>
 </div>
 </div>

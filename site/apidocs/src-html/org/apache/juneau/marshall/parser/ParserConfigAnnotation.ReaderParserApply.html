@@ -40,19 +40,19 @@
 <span class="source-line-no">027</span><span id="line-27"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/SerializersAndParsers"&gt;Serializers and Parsers&lt;/a&gt;</span>
 <span class="source-line-no">028</span><span id="line-28"> * &lt;/ul&gt;</span>
 <span class="source-line-no">029</span><span id="line-29"> */</span>
-<span class="source-line-no">030</span><span id="line-30">public class ParserConfigAnnotation {</span>
-<span class="source-line-no">031</span><span id="line-31"></span>
-<span class="source-line-no">032</span><span id="line-32">   /**</span>
-<span class="source-line-no">033</span><span id="line-33">    * Prevents instantiation.</span>
-<span class="source-line-no">034</span><span id="line-34">    */</span>
-<span class="source-line-no">035</span><span id="line-35">   private ParserConfigAnnotation() {}</span>
-<span class="source-line-no">036</span><span id="line-36"></span>
-<span class="source-line-no">037</span><span id="line-37">   /**</span>
-<span class="source-line-no">038</span><span id="line-38">    * Applies {@link ParserConfig} annotations to a {@link InputStreamParser.Builder}.</span>
-<span class="source-line-no">039</span><span id="line-39">    */</span>
-<span class="source-line-no">040</span><span id="line-40">   @SuppressWarnings({</span>
-<span class="source-line-no">041</span><span id="line-41">      "rawtypes" // Raw types required for reflective annotation application.</span>
-<span class="source-line-no">042</span><span id="line-42">   })</span>
+<span class="source-line-no">030</span><span id="line-30">@SuppressWarnings({</span>
+<span class="source-line-no">031</span><span id="line-31">   "rawtypes" // Raw types required for reflective annotation application.</span>
+<span class="source-line-no">032</span><span id="line-32">})</span>
+<span class="source-line-no">033</span><span id="line-33">public class ParserConfigAnnotation {</span>
+<span class="source-line-no">034</span><span id="line-34"></span>
+<span class="source-line-no">035</span><span id="line-35">   /**</span>
+<span class="source-line-no">036</span><span id="line-36">    * Prevents instantiation.</span>
+<span class="source-line-no">037</span><span id="line-37">    */</span>
+<span class="source-line-no">038</span><span id="line-38">   private ParserConfigAnnotation() {}</span>
+<span class="source-line-no">039</span><span id="line-39"></span>
+<span class="source-line-no">040</span><span id="line-40">   /**</span>
+<span class="source-line-no">041</span><span id="line-41">    * Applies {@link ParserConfig} annotations to a {@link InputStreamParser.Builder}.</span>
+<span class="source-line-no">042</span><span id="line-42">    */</span>
 <span class="source-line-no">043</span><span id="line-43">   public static class InputStreamParserApply extends AnnotationApplier&lt;ParserConfig,InputStreamParser.Builder&gt; {</span>
 <span class="source-line-no">044</span><span id="line-44"></span>
 <span class="source-line-no">045</span><span id="line-45">      /**</span>
@@ -76,58 +76,54 @@
 <span class="source-line-no">063</span><span id="line-63">    * Applies {@link ParserConfig} annotations to a {@link Parser.Builder}.</span>
 <span class="source-line-no">064</span><span id="line-64">    */</span>
 <span class="source-line-no">065</span><span id="line-65">   @SuppressWarnings({</span>
-<span class="source-line-no">066</span><span id="line-66">      "unchecked", // Raw types required for reflective annotation application.</span>
-<span class="source-line-no">067</span><span id="line-67">      "rawtypes"   // Raw types required for reflective annotation application.</span>
-<span class="source-line-no">068</span><span id="line-68">   })</span>
-<span class="source-line-no">069</span><span id="line-69">   public static class ParserApply extends AnnotationApplier&lt;ParserConfig,Parser.Builder&gt; {</span>
-<span class="source-line-no">070</span><span id="line-70"></span>
-<span class="source-line-no">071</span><span id="line-71">      /**</span>
-<span class="source-line-no">072</span><span id="line-72">       * Constructor.</span>
-<span class="source-line-no">073</span><span id="line-73">       *</span>
-<span class="source-line-no">074</span><span id="line-74">       * @param vr The resolver for resolving values in annotations. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">075</span><span id="line-75">       */</span>
-<span class="source-line-no">076</span><span id="line-76">      public ParserApply(VarResolverSession vr) {</span>
-<span class="source-line-no">077</span><span id="line-77">         super(ParserConfig.class, Parser.Builder.class, vr);</span>
-<span class="source-line-no">078</span><span id="line-78">      }</span>
-<span class="source-line-no">079</span><span id="line-79"></span>
-<span class="source-line-no">080</span><span id="line-80">      @Override</span>
-<span class="source-line-no">081</span><span id="line-81">      public void apply(AnnotationInfo&lt;ParserConfig&gt; ai, Parser.Builder b) {</span>
-<span class="source-line-no">082</span><span id="line-82">         ParserConfig a = ai.inner();</span>
-<span class="source-line-no">083</span><span id="line-83"></span>
-<span class="source-line-no">084</span><span id="line-84">         bool(a.autoCloseStreams()).ifPresent(b::autoCloseStreams);</span>
-<span class="source-line-no">085</span><span id="line-85">         integer(a.debugOutputLines(), "debugOutputLines").ifPresent(b::debugOutputLines);</span>
-<span class="source-line-no">086</span><span id="line-86">         type(a.listener()).ifPresent(b::listener);</span>
-<span class="source-line-no">087</span><span id="line-87">         bool(a.trimStrings()).ifPresent(b::trimStrings);</span>
-<span class="source-line-no">088</span><span id="line-88">         bool(a.unbuffered()).ifPresent(b::unbuffered);</span>
-<span class="source-line-no">089</span><span id="line-89">         string(a.nulls()).map(Nulls::valueOf).ifPresent(b::nulls);</span>
-<span class="source-line-no">090</span><span id="line-90">      }</span>
-<span class="source-line-no">091</span><span id="line-91">   }</span>
-<span class="source-line-no">092</span><span id="line-92"></span>
-<span class="source-line-no">093</span><span id="line-93">   /**</span>
-<span class="source-line-no">094</span><span id="line-94">    * Applies {@link ParserConfig} annotations to a {@link ReaderParser.Builder}.</span>
-<span class="source-line-no">095</span><span id="line-95">    */</span>
-<span class="source-line-no">096</span><span id="line-96">   @SuppressWarnings({</span>
-<span class="source-line-no">097</span><span id="line-97">      "rawtypes" // Raw types required for reflective annotation application.</span>
-<span class="source-line-no">098</span><span id="line-98">   })</span>
-<span class="source-line-no">099</span><span id="line-99">   public static class ReaderParserApply extends AnnotationApplier&lt;ParserConfig,ReaderParser.Builder&gt; {</span>
-<span class="source-line-no">100</span><span id="line-100"></span>
-<span class="source-line-no">101</span><span id="line-101">      /**</span>
-<span class="source-line-no">102</span><span id="line-102">       * Constructor.</span>
-<span class="source-line-no">103</span><span id="line-103">       *</span>
-<span class="source-line-no">104</span><span id="line-104">       * @param vr The resolver for resolving values in annotations. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">105</span><span id="line-105">       */</span>
-<span class="source-line-no">106</span><span id="line-106">      public ReaderParserApply(VarResolverSession vr) {</span>
-<span class="source-line-no">107</span><span id="line-107">         super(ParserConfig.class, ReaderParser.Builder.class, vr);</span>
-<span class="source-line-no">108</span><span id="line-108">      }</span>
+<span class="source-line-no">066</span><span id="line-66">      "unchecked" // Raw types required for reflective annotation application.</span>
+<span class="source-line-no">067</span><span id="line-67">   })</span>
+<span class="source-line-no">068</span><span id="line-68">   public static class ParserApply extends AnnotationApplier&lt;ParserConfig,Parser.Builder&gt; {</span>
+<span class="source-line-no">069</span><span id="line-69"></span>
+<span class="source-line-no">070</span><span id="line-70">      /**</span>
+<span class="source-line-no">071</span><span id="line-71">       * Constructor.</span>
+<span class="source-line-no">072</span><span id="line-72">       *</span>
+<span class="source-line-no">073</span><span id="line-73">       * @param vr The resolver for resolving values in annotations. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">074</span><span id="line-74">       */</span>
+<span class="source-line-no">075</span><span id="line-75">      public ParserApply(VarResolverSession vr) {</span>
+<span class="source-line-no">076</span><span id="line-76">         super(ParserConfig.class, Parser.Builder.class, vr);</span>
+<span class="source-line-no">077</span><span id="line-77">      }</span>
+<span class="source-line-no">078</span><span id="line-78"></span>
+<span class="source-line-no">079</span><span id="line-79">      @Override</span>
+<span class="source-line-no">080</span><span id="line-80">      public void apply(AnnotationInfo&lt;ParserConfig&gt; ai, Parser.Builder b) {</span>
+<span class="source-line-no">081</span><span id="line-81">         ParserConfig a = ai.inner();</span>
+<span class="source-line-no">082</span><span id="line-82"></span>
+<span class="source-line-no">083</span><span id="line-83">         bool(a.autoCloseStreams()).ifPresent(b::autoCloseStreams);</span>
+<span class="source-line-no">084</span><span id="line-84">         integer(a.debugOutputLines(), "debugOutputLines").ifPresent(b::debugOutputLines);</span>
+<span class="source-line-no">085</span><span id="line-85">         type(a.listener()).ifPresent(b::listener);</span>
+<span class="source-line-no">086</span><span id="line-86">         bool(a.trimStrings()).ifPresent(b::trimStrings);</span>
+<span class="source-line-no">087</span><span id="line-87">         bool(a.unbuffered()).ifPresent(b::unbuffered);</span>
+<span class="source-line-no">088</span><span id="line-88">         string(a.nulls()).map(Nulls::valueOf).ifPresent(b::nulls);</span>
+<span class="source-line-no">089</span><span id="line-89">      }</span>
+<span class="source-line-no">090</span><span id="line-90">   }</span>
+<span class="source-line-no">091</span><span id="line-91"></span>
+<span class="source-line-no">092</span><span id="line-92">   /**</span>
+<span class="source-line-no">093</span><span id="line-93">    * Applies {@link ParserConfig} annotations to a {@link ReaderParser.Builder}.</span>
+<span class="source-line-no">094</span><span id="line-94">    */</span>
+<span class="source-line-no">095</span><span id="line-95">   public static class ReaderParserApply extends AnnotationApplier&lt;ParserConfig,ReaderParser.Builder&gt; {</span>
+<span class="source-line-no">096</span><span id="line-96"></span>
+<span class="source-line-no">097</span><span id="line-97">      /**</span>
+<span class="source-line-no">098</span><span id="line-98">       * Constructor.</span>
+<span class="source-line-no">099</span><span id="line-99">       *</span>
+<span class="source-line-no">100</span><span id="line-100">       * @param vr The resolver for resolving values in annotations. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">101</span><span id="line-101">       */</span>
+<span class="source-line-no">102</span><span id="line-102">      public ReaderParserApply(VarResolverSession vr) {</span>
+<span class="source-line-no">103</span><span id="line-103">         super(ParserConfig.class, ReaderParser.Builder.class, vr);</span>
+<span class="source-line-no">104</span><span id="line-104">      }</span>
+<span class="source-line-no">105</span><span id="line-105"></span>
+<span class="source-line-no">106</span><span id="line-106">      @Override</span>
+<span class="source-line-no">107</span><span id="line-107">      public void apply(AnnotationInfo&lt;ParserConfig&gt; ai, ReaderParser.Builder b) {</span>
+<span class="source-line-no">108</span><span id="line-108">         ParserConfig a = ai.inner();</span>
 <span class="source-line-no">109</span><span id="line-109"></span>
-<span class="source-line-no">110</span><span id="line-110">      @Override</span>
-<span class="source-line-no">111</span><span id="line-111">      public void apply(AnnotationInfo&lt;ParserConfig&gt; ai, ReaderParser.Builder b) {</span>
-<span class="source-line-no">112</span><span id="line-112">         ParserConfig a = ai.inner();</span>
-<span class="source-line-no">113</span><span id="line-113"></span>
-<span class="source-line-no">114</span><span id="line-114">         charset(a.streamCharset()).ifPresent(b::streamCharset);</span>
-<span class="source-line-no">115</span><span id="line-115">      }</span>
-<span class="source-line-no">116</span><span id="line-116">   }</span>
-<span class="source-line-no">117</span><span id="line-117">}</span>
+<span class="source-line-no">110</span><span id="line-110">         charset(a.streamCharset()).ifPresent(b::streamCharset);</span>
+<span class="source-line-no">111</span><span id="line-111">      }</span>
+<span class="source-line-no">112</span><span id="line-112">   }</span>
+<span class="source-line-no">113</span><span id="line-113">}</span>
 
 
 

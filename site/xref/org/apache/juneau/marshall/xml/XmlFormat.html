@@ -38,7 +38,7 @@
 <a class="jxr_linenumber" name="L30" href="#L30">30</a>  <em class="jxr_javadoccomment">	 * Normal formatting (default).</em>
 <a class="jxr_linenumber" name="L31" href="#L31">31</a>  <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L32" href="#L32">32</a>  <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <em class="jxr_javadoccomment">	 * On a bean class, implies {@link #ELEMENTS} meaning bean properties will be serialized as child elements by default.</em>
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <em class="jxr_javadoccomment">	 * On a bean class, implies {@link #FREEFORM} meaning bean properties will be serialized as child elements by default.</em>
 <a class="jxr_linenumber" name="L34" href="#L34">34</a>  <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L35" href="#L35">35</a>  <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
 <a class="jxr_linenumber" name="L36" href="#L36">36</a>  <em class="jxr_javadoccomment">	 * On a bean property, implies {@link #ELEMENT} meaning the bean property will be serialized as a child element.</em>
@@ -95,10 +95,10 @@
 <a class="jxr_linenumber" name="L87" href="#L87">87</a>  <em class="jxr_javadoccomment">	 * On a bean property, implies that the bean property value itself should be serialized as child elements of the</em>
 <a class="jxr_linenumber" name="L88" href="#L88">88</a>  <em class="jxr_javadoccomment">	 * bean element.</em>
 <a class="jxr_linenumber" name="L89" href="#L89">89</a>  <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L90" href="#L90">90</a>  	ELEMENTS,
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>  	FREEFORM,
 <a class="jxr_linenumber" name="L91" href="#L91">91</a>  
 <a class="jxr_linenumber" name="L92" href="#L92">92</a>  	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L93" href="#L93">93</a>  <em class="jxr_javadoccomment">	 * Same as {@link #ELEMENTS} except primitive types (string/boolean/number/null for example) are not wrapped in elements.</em>
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>  <em class="jxr_javadoccomment">	 * Same as {@link #FREEFORM} except primitive types (string/boolean/number/null for example) are not wrapped in elements.</em>
 <a class="jxr_linenumber" name="L94" href="#L94">94</a>  <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L95" href="#L95">95</a>  <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
 <a class="jxr_linenumber" name="L96" href="#L96">96</a>  <em class="jxr_javadoccomment">	 * Only applicable for bean properties, not bean classes.</em>
@@ -153,42 +153,67 @@
 <a class="jxr_linenumber" name="L145" href="#L145">145</a> 	XMLTEXT,
 <a class="jxr_linenumber" name="L146" href="#L146">146</a> 
 <a class="jxr_linenumber" name="L147" href="#L147">147</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L148" href="#L148">148</a> <em class="jxr_javadoccomment">	 * Prevents collections and arrays from being enclosed in &lt;xt&gt;&amp;lt;array&amp;gt;&lt;/xt&gt; elements.</em>
+<a class="jxr_linenumber" name="L148" href="#L148">148</a> <em class="jxr_javadoccomment">	 * Render property value as the raw, verbatim text content of the element.</em>
 <a class="jxr_linenumber" name="L149" href="#L149">149</a> <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L150" href="#L150">150</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L151" href="#L151">151</a> <em class="jxr_javadoccomment">	 * Can only be applied to properties (methods/fields) of type collection or array, or collection classes.</em>
-<a class="jxr_linenumber" name="L152" href="#L152">152</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L153" href="#L153">153</a> 	COLLAPSED,
-<a class="jxr_linenumber" name="L154" href="#L154">154</a> 
-<a class="jxr_linenumber" name="L155" href="#L155">155</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L156" href="#L156">156</a> <em class="jxr_javadoccomment">	 * Identifies a void element.</em>
-<a class="jxr_linenumber" name="L157" href="#L157">157</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L158" href="#L158">158</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L159" href="#L159">159</a> <em class="jxr_javadoccomment">	 * Only applicable for bean classes.</em>
+<a class="jxr_linenumber" name="L151" href="#L151">151</a> <em class="jxr_javadoccomment">	 * Similar to {@link #TEXT_PWS} (single, whitespace-preserving value), but the value is emitted with NO XML entity</em>
+<a class="jxr_linenumber" name="L152" href="#L152">152</a> <em class="jxr_javadoccomment">	 * escaping (no &lt;c&gt;&amp;amp;amp;&lt;/c&gt;/&lt;c&gt;&amp;amp;lt;&lt;/c&gt;/&lt;c&gt;&amp;amp;gt;&lt;/c&gt; substitution) and NO &lt;c&gt;_x####_&lt;/c&gt;</em>
+<a class="jxr_linenumber" name="L153" href="#L153">153</a> <em class="jxr_javadoccomment">	 * whitespace/invalid-char encoding.</em>
+<a class="jxr_linenumber" name="L154" href="#L154">154</a> <em class="jxr_javadoccomment">	 * This matches HTML5 "raw text" element semantics (&lt;xt&gt;&amp;lt;script&amp;gt;&lt;/xt&gt;/&lt;xt&gt;&amp;lt;style&amp;gt;&lt;/xt&gt;) where browsers do</em>
+<a class="jxr_linenumber" name="L155" href="#L155">155</a> <em class="jxr_javadoccomment">	 * not decode character references.</em>
+<a class="jxr_linenumber" name="L156" href="#L156">156</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L157" href="#L157">157</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L158" href="#L158">158</a> <em class="jxr_javadoccomment">	 * Unlike {@link #XMLTEXT}, the content is NOT re-parsed as XML on parse; it is read back verbatim as a text node</em>
+<a class="jxr_linenumber" name="L159" href="#L159">159</a> <em class="jxr_javadoccomment">	 * (no &lt;c&gt;_x####_&lt;/c&gt; decoding, no trimming).</em>
 <a class="jxr_linenumber" name="L160" href="#L160">160</a> <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L161" href="#L161">161</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L162" href="#L162">162</a> <em class="jxr_javadoccomment">	 * Identifies an element that never contains content.</em>
+<a class="jxr_linenumber" name="L162" href="#L162">162</a> <em class="jxr_javadoccomment">	 * Only applicable for scalar (non-collection) bean properties.</em>
 <a class="jxr_linenumber" name="L163" href="#L163">163</a> <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L164" href="#L164">164</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L165" href="#L165">165</a> <em class="jxr_javadoccomment">	 * The main difference in behavior is how non-void empty elements are handled in the HTML serializer.</em>
-<a class="jxr_linenumber" name="L166" href="#L166">166</a> <em class="jxr_javadoccomment">	 * Void elements are serialized as collapsed nodes (e.g. &lt;js&gt;"&amp;lt;br/&amp;gt;"&lt;/js&gt;) whereas non-void empty elements are</em>
-<a class="jxr_linenumber" name="L167" href="#L167">167</a> <em class="jxr_javadoccomment">	 * serialized with an end tag (e.g. "&amp;lt;p&amp;gt;&amp;lt;/p&amp;gt;").</em>
-<a class="jxr_linenumber" name="L168" href="#L168">168</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L169" href="#L169">169</a> 	VOID;
-<a class="jxr_linenumber" name="L170" href="#L170">170</a> 
-<a class="jxr_linenumber" name="L171" href="#L171">171</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L172" href="#L172">172</a> <em class="jxr_javadoccomment">	 * Returns &lt;jk&gt;true&lt;/jk&gt; if this format is one of those specified.</em>
-<a class="jxr_linenumber" name="L173" href="#L173">173</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L174" href="#L174">174</a> <em class="jxr_javadoccomment">	 * @param formats The formats to match against.</em>
-<a class="jxr_linenumber" name="L175" href="#L175">175</a> <em class="jxr_javadoccomment">	 * @return &lt;jk&gt;true&lt;/jk&gt; if this format is one of those specified.</em>
-<a class="jxr_linenumber" name="L176" href="#L176">176</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L177" href="#L177">177</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> isOneOf(XmlFormat...formats) {
-<a class="jxr_linenumber" name="L178" href="#L178">178</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> format : formats)
-<a class="jxr_linenumber" name="L179" href="#L179">179</a> 			<strong class="jxr_keyword">if</strong> (format == <strong class="jxr_keyword">this</strong>)
-<a class="jxr_linenumber" name="L180" href="#L180">180</a> 				<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
-<a class="jxr_linenumber" name="L181" href="#L181">181</a> 		<strong class="jxr_keyword">return</strong> false;
-<a class="jxr_linenumber" name="L182" href="#L182">182</a> 	}
-<a class="jxr_linenumber" name="L183" href="#L183">183</a> }
+<a class="jxr_linenumber" name="L165" href="#L165">165</a> <em class="jxr_javadoccomment">	 * &lt;b&gt;Round-trip caveat:&lt;/b&gt; because Juneau parses via a StAX {@link javax.xml.stream.XMLStreamReader}, a value</em>
+<a class="jxr_linenumber" name="L166" href="#L166">166</a> <em class="jxr_javadoccomment">	 * containing a raw &lt;js&gt;'&amp;lt;'&lt;/js&gt; or a bare &lt;js&gt;'&amp;amp;'&lt;/js&gt; will NOT be parseable back.</em>
+<a class="jxr_linenumber" name="L167" href="#L167">167</a> <em class="jxr_javadoccomment">	 * Callers embedding markup-bearing content are responsible for escaping &lt;js&gt;'&amp;lt;'&lt;/js&gt; (e.g. to the JS/CSS unicode</em>
+<a class="jxr_linenumber" name="L168" href="#L168">168</a> <em class="jxr_javadoccomment">	 * escape &lt;js&gt;"&#92;&#92;u003c"&lt;/js&gt;) before use, exactly as required for browser-safe raw-text content.</em>
+<a class="jxr_linenumber" name="L169" href="#L169">169</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L170" href="#L170">170</a> 	RAWTEXT,
+<a class="jxr_linenumber" name="L171" href="#L171">171</a> 
+<a class="jxr_linenumber" name="L172" href="#L172">172</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L173" href="#L173">173</a> <em class="jxr_javadoccomment">	 * Prevents collections and arrays from being enclosed in &lt;xt&gt;&amp;lt;array&amp;gt;&lt;/xt&gt; elements.</em>
+<a class="jxr_linenumber" name="L174" href="#L174">174</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L175" href="#L175">175</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L176" href="#L176">176</a> <em class="jxr_javadoccomment">	 * Can only be applied to properties (methods/fields) of type collection or array, or collection classes.</em>
+<a class="jxr_linenumber" name="L177" href="#L177">177</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L178" href="#L178">178</a> 	COLLAPSED,
+<a class="jxr_linenumber" name="L179" href="#L179">179</a> 
+<a class="jxr_linenumber" name="L180" href="#L180">180</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L181" href="#L181">181</a> <em class="jxr_javadoccomment">	 * Identifies a void element.</em>
+<a class="jxr_linenumber" name="L182" href="#L182">182</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L183" href="#L183">183</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L184" href="#L184">184</a> <em class="jxr_javadoccomment">	 * Only applicable for bean classes.</em>
+<a class="jxr_linenumber" name="L185" href="#L185">185</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L186" href="#L186">186</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L187" href="#L187">187</a> <em class="jxr_javadoccomment">	 * Identifies an element that never contains content.</em>
+<a class="jxr_linenumber" name="L188" href="#L188">188</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L189" href="#L189">189</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L190" href="#L190">190</a> <em class="jxr_javadoccomment">	 * The main difference in behavior is how non-void empty elements are handled in the HTML serializer.</em>
+<a class="jxr_linenumber" name="L191" href="#L191">191</a> <em class="jxr_javadoccomment">	 * Void elements are serialized as collapsed nodes (e.g. &lt;js&gt;"&amp;lt;br/&amp;gt;"&lt;/js&gt;) whereas non-void empty elements are</em>
+<a class="jxr_linenumber" name="L192" href="#L192">192</a> <em class="jxr_javadoccomment">	 * serialized with an end tag (e.g. "&amp;lt;p&amp;gt;&amp;lt;/p&amp;gt;").</em>
+<a class="jxr_linenumber" name="L193" href="#L193">193</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L194" href="#L194">194</a> 	VOID;
+<a class="jxr_linenumber" name="L195" href="#L195">195</a> 
+<a class="jxr_linenumber" name="L196" href="#L196">196</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L197" href="#L197">197</a> <em class="jxr_javadoccomment">	 * Returns &lt;jk&gt;true&lt;/jk&gt; if this format is one of those specified.</em>
+<a class="jxr_linenumber" name="L198" href="#L198">198</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L199" href="#L199">199</a> <em class="jxr_javadoccomment">	 * @param formats The formats to match against.</em>
+<a class="jxr_linenumber" name="L200" href="#L200">200</a> <em class="jxr_javadoccomment">	 * @return &lt;jk&gt;true&lt;/jk&gt; if this format is one of those specified.</em>
+<a class="jxr_linenumber" name="L201" href="#L201">201</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L202" href="#L202">202</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> isOneOf(XmlFormat...formats) {
+<a class="jxr_linenumber" name="L203" href="#L203">203</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> format : formats)
+<a class="jxr_linenumber" name="L204" href="#L204">204</a> 			<strong class="jxr_keyword">if</strong> (format == <strong class="jxr_keyword">this</strong>)
+<a class="jxr_linenumber" name="L205" href="#L205">205</a> 				<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
+<a class="jxr_linenumber" name="L206" href="#L206">206</a> 		<strong class="jxr_keyword">return</strong> false;
+<a class="jxr_linenumber" name="L207" href="#L207">207</a> 	}
+<a class="jxr_linenumber" name="L208" href="#L208">208</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

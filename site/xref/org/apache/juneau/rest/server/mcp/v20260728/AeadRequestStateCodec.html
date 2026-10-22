@@ -187,7 +187,7 @@
 <a class="jxr_linenumber" name="L179" href="#L179">179</a> 			<em class="jxr_comment">// base64url(ciphertext+tag); reject any token with the wrong segment count, an unrecognized version,</em>
 <a class="jxr_linenumber" name="L180" href="#L180">180</a> 			<em class="jxr_comment">// an empty/oversized keyId segment, or a nonce segment that isn't the expected length before any</em>
 <a class="jxr_linenumber" name="L181" href="#L181">181</a> 			<em class="jxr_comment">// base64 decode.</em>
-<a class="jxr_linenumber" name="L182" href="#L182">182</a> 			<strong class="jxr_keyword">if</strong> (parts.length != 4 || !VERSION.equals(parts[0]) || parts[1].isEmpty() || parts[1].length() &gt; MAX_KEY_ID_B64_CHARS
+<a class="jxr_linenumber" name="L182" href="#L182">182</a> 			<strong class="jxr_keyword">if</strong> (parts.length != 4 || neq(VERSION, parts[0]) || parts[1].isEmpty() || parts[1].length() &gt; MAX_KEY_ID_B64_CHARS
 <a class="jxr_linenumber" name="L183" href="#L183">183</a> 					|| parts[2].length() != NONCE_B64_CHARS)
 <a class="jxr_linenumber" name="L184" href="#L184">184</a> 				<strong class="jxr_keyword">return</strong> Optional.empty();
 <a class="jxr_linenumber" name="L185" href="#L185">185</a> 			<strong class="jxr_keyword">var</strong> keyId = <strong class="jxr_keyword">new</strong> String(Base64.getUrlDecoder().decode(parts[1]), StandardCharsets.UTF_8);
@@ -218,7 +218,7 @@
 <a class="jxr_linenumber" name="L210" href="#L210">210</a> <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L211" href="#L211">211</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
 <a class="jxr_linenumber" name="L212" href="#L212">212</a> <em class="jxr_javadoccomment">	 * &lt;b&gt;Bound identity (settled decision 1): {@code iss|sub}.&lt;/b&gt; When {@code principal} is a {@link ClaimsPrincipal}</em>
-<a class="jxr_linenumber" name="L213" href="#L213">213</a> <em class="jxr_javadoccomment">	 * (the type the F2 resource-server layer produces &amp;mdash; {@code JwtTokenValidator}, OAuth introspection, OIDC, and</em>
+<a class="jxr_linenumber" name="L213" href="#L213">213</a> <em class="jxr_javadoccomment">	 * (the type the resource-server layer produces &amp;mdash; {@code JwtTokenValidator}, OAuth introspection, OIDC, and</em>
 <a class="jxr_linenumber" name="L214" href="#L214">214</a> <em class="jxr_javadoccomment">	 * SAML all return one), the {@code iss} and {@code sub} claims are read from its claim set; the issuer scopes the</em>
 <a class="jxr_linenumber" name="L215" href="#L215">215</a> <em class="jxr_javadoccomment">	 * subject so a bare {@code sub} cannot collide across IdPs. When {@code sub} is absent or empty (or the principal</em>
 <a class="jxr_linenumber" name="L216" href="#L216">216</a> <em class="jxr_javadoccomment">	 * is a bare {@link Principal} that exposes only {@link Principal#getName() getName()}), {@link Principal#getName()</em>

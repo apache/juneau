@@ -86,7 +86,7 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Closeable.html" title="class or interface in java.io" class="external-link">Closeable</a></code>, <code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/AutoCloseable.html" title="class or interface in java.lang" class="external-link">AutoCloseable</a></code>, <code><a href="../parser/Positionable.html" title="interface in org.apache.juneau.marshall.parser">Positionable</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/bson/BsonInputStream.html#line-42">BsonInputStream</a></span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/bson/BsonInputStream.html#line-43">BsonInputStream</a></span>
 <span class="extends-implements">extends <a href="../parser/ParserInputStream.html" title="class in org.apache.juneau.marshall.parser">ParserInputStream</a></span></div>
 <div class="block">Specialized input stream for parsing BSON (Binary JSON) streams.
 
@@ -168,12 +168,16 @@ loadScripts(document, 'script');</script>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>int</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#readDocumentSize()" class="member-name-link">readDocumentSize</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Reads the document size (int32) from the stream.</div>
+<div class="block">Reads the document size (int32) from the stream and opens a length-bounded scope for the document
+ body that follows, so a forged-short declared length cannot be bypassed by traversal that otherwise
+ relies solely on finding a <code>0x00</code> terminator.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#readDocumentTerminator()" class="member-name-link">readDocumentTerminator</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Consumes the document terminator byte (0x00).</div>
+<div class="block">Consumes the document terminator byte (0x00) and closes the length-bounded scope opened by the
+ matching <a href="#readDocumentSize()"><code>readDocumentSize()</code></a>, rejecting trailing bytes left unconsumed within the declared
+ length.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>double</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#readDouble()" class="member-name-link">readDouble</a>()</code></div>
@@ -251,7 +255,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.marshall.parser.ParserPipe)">
 <h3>BsonInputStream</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/bson/BsonInputStream.html#line-58">BsonInputStream</a></span><wbr><span class="parameters">(<a href="../parser/ParserPipe.html" title="class in org.apache.juneau.marshall.parser">ParserPipe</a>&nbsp;pipe)</span>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/bson/BsonInputStream.html#line-65">BsonInputStream</a></span><wbr><span class="parameters">(<a href="../parser/ParserPipe.html" title="class in org.apache.juneau.marshall.parser">ParserPipe</a>&nbsp;pipe)</span>
                    throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">Constructor.</div>
 <dl class="notes">
@@ -273,7 +277,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="read()">
 <h3>read</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/bson/BsonInputStream.html#line-62">read</a></span>()
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/bson/BsonInputStream.html#line-69">read</a></span>()
          throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <dl class="notes">
 <dt>Overrides:</dt>
@@ -286,7 +290,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="readLE4()">
 <h3>readLE4</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/bson/BsonInputStream.html#line-85">readLE4</a></span>()
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/bson/BsonInputStream.html#line-138">readLE4</a></span>()
             throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">Reads a 4-byte little-endian integer.</div>
 <dl class="notes">
@@ -300,7 +304,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="readLE8()">
 <h3>readLE8</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">long</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/bson/BsonInputStream.html#line-101">readLE8</a></span>()
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">long</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/bson/BsonInputStream.html#line-154">readLE8</a></span>()
              throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">Reads an 8-byte little-endian long.</div>
 <dl class="notes">
@@ -314,9 +318,11 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="readDocumentSize()">
 <h3>readDocumentSize</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/bson/BsonInputStream.html#line-113">readDocumentSize</a></span>()
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/bson/BsonInputStream.html#line-168">readDocumentSize</a></span>()
                      throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
-<div class="block">Reads the document size (int32) from the stream.</div>
+<div class="block">Reads the document size (int32) from the stream and opens a length-bounded scope for the document
+ body that follows, so a forged-short declared length cannot be bypassed by traversal that otherwise
+ relies solely on finding a <code>0x00</code> terminator.</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>The document size in bytes.</dd>
@@ -328,7 +334,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="readElementType()">
 <h3>readElementType</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/bson/BsonInputStream.html#line-123">readElementType</a></span>()
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/bson/BsonInputStream.html#line-180">readElementType</a></span>()
                     throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">Reads the 1-byte element type.</div>
 <dl class="notes">
@@ -342,7 +348,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="readElementName()">
 <h3>readElementName</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/bson/BsonInputStream.html#line-136">readElementName</a></span>()
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/bson/BsonInputStream.html#line-193">readElementName</a></span>()
                        throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">Reads a cstring (null-terminated UTF-8).</div>
 <dl class="notes">
@@ -356,21 +362,26 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="readCString()">
 <h3>readCString</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/bson/BsonInputStream.html#line-146">readCString</a></span>()
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/bson/BsonInputStream.html#line-208">readCString</a></span>()
                    throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
-<div class="block">Reads a cstring (UTF-8 bytes until 0x00).</div>
+<div class="block">Reads a cstring (UTF-8 bytes until 0x00).
+
+ <p>
+ Growth is capped by whichever is tighter of the innermost open document/array bound (enforced by
+ <a href="#read()"><code>read()</code></a>) or the configured <a href="../parser/ParserInputStream.html#setMaxLength(int)"><code>maxLength</code></a>, so an unterminated cstring
+ cannot grow the backing buffer without limit.</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>The string value.</dd>
 <dt>Throws:</dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></code> - If the stream ends prematurely.</dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></code> - If the stream ends prematurely or the cstring exceeds the configured maximum length.</dd>
 </dl>
 </section>
 </li>
 <li>
 <section class="detail" id="isDocumentEnd()">
 <h3>isDocumentEnd</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/bson/BsonInputStream.html#line-162">isDocumentEnd</a></span>()
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/bson/BsonInputStream.html#line-226">isDocumentEnd</a></span>()
                       throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">Returns whether the next byte is the document terminator (0x00).</div>
 <dl class="notes">
@@ -384,19 +395,22 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="readDocumentTerminator()">
 <h3>readDocumentTerminator</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/bson/BsonInputStream.html#line-174">readDocumentTerminator</a></span>()
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/bson/BsonInputStream.html#line-241">readDocumentTerminator</a></span>()
                             throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
-<div class="block">Consumes the document terminator byte (0x00).</div>
+<div class="block">Consumes the document terminator byte (0x00) and closes the length-bounded scope opened by the
+ matching <a href="#readDocumentSize()"><code>readDocumentSize()</code></a>, rejecting trailing bytes left unconsumed within the declared
+ length.</div>
 <dl class="notes">
 <dt>Throws:</dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></code> - If the stream ends prematurely or byte is not 0x00.</dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></code> - If the stream ends prematurely, the byte is not 0x00, or the declared document
+   length was not fully consumed.</dd>
 </dl>
 </section>
 </li>
 <li>
 <section class="detail" id="readDouble()">
 <h3>readDouble</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">double</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/bson/BsonInputStream.html#line-186">readDouble</a></span>()
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">double</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/bson/BsonInputStream.html#line-254">readDouble</a></span>()
                   throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">Reads an IEEE 754 double (8 bytes, little-endian).</div>
 <dl class="notes">
@@ -410,7 +424,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="readInt32()">
 <h3>readInt32</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/bson/BsonInputStream.html#line-196">readInt32</a></span>()
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/bson/BsonInputStream.html#line-264">readInt32</a></span>()
               throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">Reads a 32-bit integer (4 bytes, little-endian).</div>
 <dl class="notes">
@@ -424,7 +438,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="readInt64()">
 <h3>readInt64</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">long</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/bson/BsonInputStream.html#line-206">readInt64</a></span>()
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">long</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/bson/BsonInputStream.html#line-274">readInt64</a></span>()
                throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">Reads a 64-bit integer (8 bytes, little-endian).</div>
 <dl class="notes">
@@ -438,7 +452,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="readBoolean()">
 <h3>readBoolean</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/bson/BsonInputStream.html#line-216">readBoolean</a></span>()
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/bson/BsonInputStream.html#line-284">readBoolean</a></span>()
                     throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">Reads a boolean (1 byte: 0x00=false, 0x01=true).</div>
 <dl class="notes">
@@ -452,7 +466,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="readString()">
 <h3>readString</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/bson/BsonInputStream.html#line-229">readString</a></span>()
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/bson/BsonInputStream.html#line-297">readString</a></span>()
                   throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">Reads a BSON string (int32 length + UTF-8 + 0x00).</div>
 <dl class="notes">
@@ -466,7 +480,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="readBinary()">
 <h3>readBinary</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">byte[]</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/bson/BsonInputStream.html#line-253">readBinary</a></span>()
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">byte[]</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/bson/BsonInputStream.html#line-321">readBinary</a></span>()
                   throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">Reads BSON binary (int32 length + subtype + bytes).</div>
 <dl class="notes">
@@ -480,7 +494,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="readDateTime()">
 <h3>readDateTime</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">long</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/bson/BsonInputStream.html#line-274">readDateTime</a></span>()
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">long</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/bson/BsonInputStream.html#line-342">readDateTime</a></span>()
                   throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">Reads BSON datetime (int64, UTC millis since epoch).</div>
 <dl class="notes">
@@ -494,7 +508,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="readObjectId()">
 <h3>readObjectId</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/bson/BsonInputStream.html#line-284">readObjectId</a></span>()
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/bson/BsonInputStream.html#line-352">readObjectId</a></span>()
                     throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">Reads ObjectId (12 bytes) as 24-character hex string.</div>
 <dl class="notes">
@@ -508,7 +522,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="readDecimal128()">
 <h3>readDecimal128</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/math/BigDecimal.html" title="class or interface in java.math" class="external-link">BigDecimal</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/bson/BsonInputStream.html#line-304">readDecimal128</a></span>()
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/math/BigDecimal.html" title="class or interface in java.math" class="external-link">BigDecimal</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/bson/BsonInputStream.html#line-372">readDecimal128</a></span>()
                           throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">Reads BSON decimal128 (16 bytes, IEEE 754-2008) as BigDecimal.</div>
 <dl class="notes">
@@ -522,7 +536,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="skipValue(int)">
 <h3>skipValue</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/bson/BsonInputStream.html#line-321">skipValue</a></span><wbr><span class="parameters">(int&nbsp;type)</span>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/bson/BsonInputStream.html#line-389">skipValue</a></span><wbr><span class="parameters">(int&nbsp;type)</span>
                throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">Skips a value of the given BSON type.</div>
 <dl class="notes">

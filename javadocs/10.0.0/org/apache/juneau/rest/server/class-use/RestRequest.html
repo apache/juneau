@@ -64,6 +64,46 @@ loadScripts(document, 'script');</script>
 <div class="col-last odd-row-color">
 <div class="block">Actuator-style management-surface endpoints (microservice-module flavors).</div>
 </div>
+<div class="col-first even-row-color"><a href="#org.apache.juneau.petstore.console">org.apache.juneau.petstore.console</a></div>
+<div class="col-last even-row-color">
+<div class="block">Petstore admin console: the <code>/console</code> page tree.</div>
+</div>
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.petstore.console.dev">org.apache.juneau.petstore.console.dev</a></div>
+<div class="col-last odd-row-color">
+<div class="block">Petstore console Developer pages: custom cards, themes, rendering flavors and the secure API demo.</div>
+</div>
+<div class="col-first even-row-color"><a href="#org.apache.juneau.petstore.console.dev.flavors">org.apache.juneau.petstore.console.dev.flavors</a></div>
+<div class="col-last even-row-color">
+<div class="block">Petstore console Rendering flavors: one console page per petstore view technology.</div>
+</div>
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.petstore.console.ops">org.apache.juneau.petstore.console.ops</a></div>
+<div class="col-last odd-row-color">
+<div class="block">Petstore console operations pages: background jobs and the audit log.</div>
+</div>
+<div class="col-first even-row-color"><a href="#org.apache.juneau.petstore.console.orders">org.apache.juneau.petstore.console.orders</a></div>
+<div class="col-last even-row-color">
+<div class="block">Petstore console orders page and its JSON endpoints.</div>
+</div>
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.petstore.console.pets">org.apache.juneau.petstore.console.pets</a></div>
+<div class="col-last odd-row-color">
+<div class="block">Petstore console pets pages and their JSON endpoints.</div>
+</div>
+<div class="col-first even-row-color"><a href="#org.apache.juneau.petstore.console.users">org.apache.juneau.petstore.console.users</a></div>
+<div class="col-last even-row-color">
+<div class="block">Petstore console users page and its JSON endpoints.</div>
+</div>
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.petstore.jetty">org.apache.juneau.petstore.jetty</a></div>
+<div class="col-last odd-row-color">
+<div class="block">Apache Juneau Petstore - Jetty/Microservice deployment.</div>
+</div>
+<div class="col-first even-row-color"><a href="#org.apache.juneau.petstore.rest">org.apache.juneau.petstore.rest</a></div>
+<div class="col-last even-row-color">
+<div class="block">Petstore REST resources.</div>
+</div>
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.petstore.springboot">org.apache.juneau.petstore.springboot</a></div>
+<div class="col-last odd-row-color">
+<div class="block">Apache Juneau Petstore - Spring Boot deployment.</div>
+</div>
 <div class="col-first even-row-color"><a href="#org.apache.juneau.rest.server">org.apache.juneau.rest.server</a></div>
 <div class="col-last even-row-color">
 <div class="block">REST Server API</div>
@@ -81,26 +121,46 @@ loadScripts(document, 'script');</script>
 <div class="col-last odd-row-color">
 <div class="block">REST Interface Helper Classes</div>
 </div>
-<div class="col-first even-row-color"><a href="#org.apache.juneau.rest.server.converter">org.apache.juneau.rest.server.converter</a></div>
+<div class="col-first even-row-color"><a href="#org.apache.juneau.rest.server.bus">org.apache.juneau.rest.server.bus</a></div>
 <div class="col-last even-row-color">
+<div class="block">Server half of the console message bus.</div>
+</div>
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.rest.server.console">org.apache.juneau.rest.server.console</a></div>
+<div class="col-last odd-row-color">
+<div class="block">Engine-agnostic themeable admin-console chrome: <a href="../console/Theme.html" title="class in org.apache.juneau.rest.server.console"><code>Theme</code></a>, the stock
+ theme stylesheets, the bundled <code>chrome.css</code> asset, and
+ <a href="../console/ConsoleChromeMixin.html" title="class in org.apache.juneau.rest.server.console"><code>ConsoleChromeMixin</code></a>.</div>
+</div>
+<div class="col-first even-row-color"><a href="#org.apache.juneau.rest.server.console.data">org.apache.juneau.rest.server.console.data</a></div>
+<div class="col-last even-row-color">
+<div class="block">Server helpers for console data sources: <a href="../console/data/SeriesSource.html" title="class in org.apache.juneau.rest.server.console.data"><code>SeriesSource</code></a> streams
+ rows as CSV or NDJSON, and <a href="../console/data/SeriesAggregator.html" title="class in org.apache.juneau.rest.server.console.data"><code>SeriesAggregator</code></a> answers the
+ aggregate request a data source sends when its result is too large to load raw.</div>
+</div>
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.rest.server.converter">org.apache.juneau.rest.server.converter</a></div>
+<div class="col-last odd-row-color">
 <div class="block">REST Response Converters</div>
 </div>
-<div class="col-first odd-row-color"><a href="#org.apache.juneau.rest.server.docs">org.apache.juneau.rest.server.docs</a></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><a href="#org.apache.juneau.rest.server.docs">org.apache.juneau.rest.server.docs</a></div>
+<div class="col-last even-row-color">
 <div class="block">API-docs mixin pack — composable <code>@Rest(mixins=...)</code> resources that publish Swagger v2
  and OpenAPI 3.1 spec endpoints with Swagger-UI and Redoc HTML mounts.</div>
 </div>
-<div class="col-first even-row-color"><a href="#org.apache.juneau.rest.server.guard">org.apache.juneau.rest.server.guard</a></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.rest.server.guard">org.apache.juneau.rest.server.guard</a></div>
+<div class="col-last odd-row-color">
 <div class="block">REST Guards</div>
 </div>
-<div class="col-first odd-row-color"><a href="#org.apache.juneau.rest.server.health">org.apache.juneau.rest.server.health</a></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><a href="#org.apache.juneau.rest.server.health">org.apache.juneau.rest.server.health</a></div>
+<div class="col-last even-row-color">
 <div class="block">Built-in health, readiness, and liveness probe support for Juneau REST servers.</div>
 </div>
-<div class="col-first even-row-color"><a href="#org.apache.juneau.rest.server.httppart">org.apache.juneau.rest.server.httppart</a></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.rest.server.httppart">org.apache.juneau.rest.server.httppart</a></div>
+<div class="col-last odd-row-color">
 <div class="block">REST HTTP Parts</div>
+</div>
+<div class="col-first even-row-color"><a href="#org.apache.juneau.rest.server.logging">org.apache.juneau.rest.server.logging</a></div>
+<div class="col-last even-row-color">
+<div class="block">JUL-level-driven REST debug logging API.</div>
 </div>
 <div class="col-first odd-row-color"><a href="#org.apache.juneau.rest.server.management">org.apache.juneau.rest.server.management</a></div>
 <div class="col-last odd-row-color">
@@ -133,24 +193,36 @@ loadScripts(document, 'script');</script>
 <div class="col-last odd-row-color">
 <div class="block">REST Static Files Support</div>
 </div>
-<div class="col-first even-row-color"><a href="#org.apache.juneau.rest.server.tracing">org.apache.juneau.rest.server.tracing</a></div>
+<div class="col-first even-row-color"><a href="#org.apache.juneau.rest.server.terminal">org.apache.juneau.rest.server.terminal</a></div>
 <div class="col-last even-row-color">
+<div class="block">Raw command output in the browser: a byte-offset endpoint over a <a href="../terminal/TerminalSource.html" title="interface in org.apache.juneau.rest.server.terminal"><code>TerminalSource</code></a>
+ and an xterm.js panel that renders it the way a terminal would.</div>
+</div>
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.rest.server.tracing">org.apache.juneau.rest.server.tracing</a></div>
+<div class="col-last odd-row-color">
 <div class="block">Tracing SPI for <code>juneau-rest-server</code> &mdash; per-request span hook backed by a
  caller-supplied <a href="../tracing/TracerHook.html" title="interface in org.apache.juneau.rest.server.tracing"><code>TracerHook</code></a> bean.</div>
 </div>
-<div class="col-first odd-row-color"><a href="#org.apache.juneau.rest.server.tracing.otel">org.apache.juneau.rest.server.tracing.otel</a></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><a href="#org.apache.juneau.rest.server.tracing.otel">org.apache.juneau.rest.server.tracing.otel</a></div>
+<div class="col-last even-row-color">
 <div class="block">OpenTelemetry bridge for the <code>juneau-rest-server</code>
  <a href="../tracing/TracerHook.html" title="interface in org.apache.juneau.rest.server.tracing"><code>TracerHook</code></a> SPI.</div>
 </div>
-<div class="col-first even-row-color"><a href="#org.apache.juneau.rest.server.view">org.apache.juneau.rest.server.view</a></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.rest.server.view">org.apache.juneau.rest.server.view</a></div>
+<div class="col-last odd-row-color">
 <div class="block">Engine-agnostic server-side-rendered view extension point.</div>
 </div>
-<div class="col-first odd-row-color"><a href="#org.apache.juneau.rest.server.view.freemarker">org.apache.juneau.rest.server.view.freemarker</a></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><a href="#org.apache.juneau.rest.server.view.freemarker">org.apache.juneau.rest.server.view.freemarker</a></div>
+<div class="col-last even-row-color">
 <div class="block">Apache FreeMarker view-rendering bridge &mdash; opt-in <code>juneau-rest-server-view-freemarker</code>
  module.</div>
+</div>
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.rest.server.view.freemarker.console">org.apache.juneau.rest.server.view.freemarker.console</a></div>
+<div class="col-last odd-row-color">
+<div class="block">FreeMarker-only delivery of the admin-console chrome: the reserved-classpath <code>base.ftlh</code> template, the
+ <code>&lt;@tag&gt;</code> macro, and <a href="../view/freemarker/console/ConsoleFreemarkerMixin.html" title="class in org.apache.juneau.rest.server.view.freemarker.console"><code>ConsoleFreemarkerMixin</code></a>
+ (registers a reserved-path <code>ClassTemplateLoader</code> on top of the host's own <code>FreemarkerMixin</code>
+ configuration).</div>
 </div>
 <div class="col-first even-row-color"><a href="#org.apache.juneau.rest.server.view.jsp">org.apache.juneau.rest.server.view.jsp</a></div>
 <div class="col-last even-row-color">
@@ -164,9 +236,18 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color">
 <div class="block">Thymeleaf view-rendering bridge &mdash; opt-in <code>juneau-rest-server-view-thymeleaf</code> module.</div>
 </div>
-<div class="col-first odd-row-color"><a href="#org.apache.juneau.rest.server.widget">org.apache.juneau.rest.server.widget</a></div>
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.rest.server.views">org.apache.juneau.rest.server.views</a></div>
 <div class="col-last odd-row-color">
+<div class="block">A typed, declarative "rich DataTables view" toolkit that serializes to the frozen <code>VIEW_META</code> JSON wire
+ contract consumed by the first-party client runtime.</div>
+</div>
+<div class="col-first even-row-color"><a href="#org.apache.juneau.rest.server.widget">org.apache.juneau.rest.server.widget</a></div>
+<div class="col-last even-row-color">
 <div class="block">HTML Widget API</div>
+</div>
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.rest.server.widgets">org.apache.juneau.rest.server.widgets</a></div>
+<div class="col-last odd-row-color">
+<div class="block">Reusable widget primitives for the Juneau REST server toolkit.</div>
 </div>
 </div>
 <section class="class-uses">
@@ -239,6 +320,448 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
+<section class="detail" id="org.apache.juneau.petstore.console">
+<h2>Uses of <a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a> in <a href="../../../petstore/console/package-summary.html">org.apache.juneau.petstore.console</a></h2>
+<div class="caption"><span>Methods in <a href="../../../petstore/console/package-summary.html">org.apache.juneau.petstore.console</a> with parameters of type <a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a></span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier and Type</div>
+<div class="table-header col-second">Method</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code>static <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">ConsoleWrites.</span><code><a href="../../../petstore/console/ConsoleWrites.html#actor(org.apache.juneau.rest.server.RestRequest)" class="member-name-link">actor</a><wbr>(<a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Checks the write gate and returns the audit actor.</div>
+</div>
+<div class="col-first odd-row-color"><code>static boolean</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">PetstoreConsolePage.</span><code><a href="../../../petstore/console/PetstoreConsolePage.html#builder(org.apache.juneau.rest.server.RestRequest)" class="member-name-link">builder</a><wbr>(<a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Whether this request asks for the builder twin of a page (<code>?builder</code>, with or without a value).</div>
+</div>
+<div class="col-first even-row-color"><code><a href="../../../http/response/SeeOther.html" title="class in org.apache.juneau.http.response">SeeOther</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">PetstoreConsoleResource.</span><code><a href="../../../petstore/console/PetstoreConsoleResource.html#index(org.apache.juneau.rest.server.RestRequest)" class="member-name-link">index</a><wbr>(<a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req)</code></div>
+<div class="col-last even-row-color">
+<div class="block"><code>GET /console</code> redirects to the store dashboard.</div>
+</div>
+<div class="col-first odd-row-color"><code><a href="../view/View.html" title="interface in org.apache.juneau.rest.server.view">View</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">AboutRest.</span><code><a href="../../../petstore/console/AboutRest.html#page(org.apache.juneau.rest.server.RestRequest)" class="member-name-link">page</a><wbr>(<a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">The About page.</div>
+</div>
+<div class="col-first even-row-color"><code><a href="../view/View.html" title="interface in org.apache.juneau.rest.server.view">View</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">StoreRest.</span><code><a href="../../../petstore/console/StoreRest.html#page(org.apache.juneau.rest.server.RestRequest)" class="member-name-link">page</a><wbr>(<a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Renders the Store page, with the quick-stat tile values computed from the store.</div>
+</div>
+<div class="col-first odd-row-color"><code>static <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">ConsoleWrites.</span><code><a href="../../../petstore/console/ConsoleWrites.html#roles(org.apache.juneau.rest.server.RestRequest)" class="member-name-link">roles</a><wbr>(<a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">The viewer's roles, for <code>&lt;@facts&gt;</code> and server-side omission of role-gated cards.</div>
+</div>
+<div class="col-first even-row-color"><code>static <a href="../view/View.html" title="interface in org.apache.juneau.rest.server.view">View</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">PetstoreConsolePage.</span><code><a href="../../../petstore/console/PetstoreConsolePage.html#twin(org.apache.juneau.rest.server.RestRequest,org.apache.juneau.rest.server.view.freemarker.console.PageSpec)" class="member-name-link">twin</a><wbr>(<a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req,
+ <a href="../view/freemarker/console/PageSpec.html" title="class in org.apache.juneau.rest.server.view.freemarker.console">PageSpec</a>&nbsp;spec)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Renders a builder-twin page, marked with <a href="../../../petstore/console/PetstoreConsolePage.html#PAGE_HEADER"><code>PetstoreConsolePage.PAGE_HEADER</code></a>.</div>
+</div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="org.apache.juneau.petstore.console.dev">
+<h2>Uses of <a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a> in <a href="../../../petstore/console/dev/package-summary.html">org.apache.juneau.petstore.console.dev</a></h2>
+<div class="caption"><span>Methods in <a href="../../../petstore/console/dev/package-summary.html">org.apache.juneau.petstore.console.dev</a> with parameters of type <a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a></span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier and Type</div>
+<div class="table-header col-second">Method</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code><a href="../../../http/response/SeeOther.html" title="class in org.apache.juneau.http.response">SeeOther</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">DevRest.</span><code><a href="../../../petstore/console/dev/DevRest.html#index(org.apache.juneau.rest.server.RestRequest)" class="member-name-link">index</a><wbr>(<a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Redirects the section root to its first child.</div>
+</div>
+<div class="col-first odd-row-color"><code><a href="../view/View.html" title="interface in org.apache.juneau.rest.server.view">View</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">ChartsRest.</span><code><a href="../../../petstore/console/dev/ChartsRest.html#page(org.apache.juneau.rest.server.RestRequest)" class="member-name-link">page</a><wbr>(<a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Renders the Charts page.</div>
+</div>
+<div class="col-first even-row-color"><code><a href="../view/View.html" title="interface in org.apache.juneau.rest.server.view">View</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">CustomCardsRest.</span><code><a href="../../../petstore/console/dev/CustomCardsRest.html#page(org.apache.juneau.rest.server.RestRequest)" class="member-name-link">page</a><wbr>(<a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req)</code></div>
+<div class="col-last even-row-color">
+<div class="block">The Custom cards page.</div>
+</div>
+<div class="col-first odd-row-color"><code><a href="../view/View.html" title="interface in org.apache.juneau.rest.server.view">View</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">DashboardRest.</span><code><a href="../../../petstore/console/dev/DashboardRest.html#page(org.apache.juneau.rest.server.RestRequest,java.lang.String,java.lang.Integer)" class="member-name-link">page</a><wbr>(<a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;variant,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Integer.html" title="class or interface in java.lang" class="external-link">Integer</a>&nbsp;v)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Renders the Dashboard page.</div>
+</div>
+<div class="col-first even-row-color"><code><a href="../view/View.html" title="interface in org.apache.juneau.rest.server.view">View</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">DataRest.</span><code><a href="../../../petstore/console/dev/DataRest.html#page(org.apache.juneau.rest.server.RestRequest)" class="member-name-link">page</a><wbr>(<a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Renders the Data sources page.</div>
+</div>
+<div class="col-first odd-row-color"><code><a href="../view/View.html" title="interface in org.apache.juneau.rest.server.view">View</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">SecureRest.</span><code><a href="../../../petstore/console/dev/SecureRest.html#page(org.apache.juneau.rest.server.RestRequest)" class="member-name-link">page</a><wbr>(<a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">The Secure page.</div>
+</div>
+<div class="col-first even-row-color"><code><a href="../view/View.html" title="interface in org.apache.juneau.rest.server.view">View</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">ThemesRest.</span><code><a href="../../../petstore/console/dev/ThemesRest.html#page(org.apache.juneau.rest.server.RestRequest,java.lang.String)" class="member-name-link">page</a><wbr>(<a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;theme)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Renders the Themes page.</div>
+</div>
+<div class="col-first odd-row-color"><code>void</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">DashboardRest.</span><code><a href="../../../petstore/console/dev/DashboardRest.html#series(org.apache.juneau.rest.server.RestRequest,org.apache.juneau.rest.server.RestResponse,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String)" class="member-name-link">series</a><wbr>(<a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req,
+ <a href="../RestResponse.html" title="class in org.apache.juneau.rest.server">RestResponse</a>&nbsp;res,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;variant,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;q,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;start,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;end,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;lateOnly)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">The <code>orders</code> source: <code>day,reason,orders</code>, one row per UTC day.</div>
+</div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="org.apache.juneau.petstore.console.dev.flavors">
+<h2>Uses of <a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a> in <a href="../../../petstore/console/dev/flavors/package-summary.html">org.apache.juneau.petstore.console.dev.flavors</a></h2>
+<div class="caption"><span>Methods in <a href="../../../petstore/console/dev/flavors/package-summary.html">org.apache.juneau.petstore.console.dev.flavors</a> with parameters of type <a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a></span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier and Type</div>
+<div class="table-header col-second">Method</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code><a href="../../../http/response/SeeOther.html" title="class in org.apache.juneau.http.response">SeeOther</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">FlavorsRest.</span><code><a href="../../../petstore/console/dev/flavors/FlavorsRest.html#index(org.apache.juneau.rest.server.RestRequest)" class="member-name-link">index</a><wbr>(<a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Redirects to the first flavor.</div>
+</div>
+<div class="col-first odd-row-color"><code><a href="../view/View.html" title="interface in org.apache.juneau.rest.server.view">View</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">Flavor.</span><code><a href="../../../petstore/console/dev/flavors/Flavor.html#page(org.apache.juneau.rest.server.RestRequest)" class="member-name-link">page</a><wbr>(<a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">The console page for this flavor, from its builder twin on <code>?builder</code>.</div>
+</div>
+<div class="col-first even-row-color"><code><a href="../view/View.html" title="interface in org.apache.juneau.rest.server.view">View</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">FreemarkerFlavorRest.</span><code><a href="../../../petstore/console/dev/flavors/FreemarkerFlavorRest.html#page(org.apache.juneau.rest.server.RestRequest)" class="member-name-link">page</a><wbr>(<a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req)</code></div>
+<div class="col-last even-row-color">
+<div class="block">The console page, from its builder twin on <code>?builder</code>.</div>
+</div>
+<div class="col-first odd-row-color"><code><a href="../view/View.html" title="interface in org.apache.juneau.rest.server.view">View</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">HtmlFlavorRest.</span><code><a href="../../../petstore/console/dev/flavors/HtmlFlavorRest.html#page(org.apache.juneau.rest.server.RestRequest)" class="member-name-link">page</a><wbr>(<a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">The console page, from its builder twin on <code>?builder</code>.</div>
+</div>
+<div class="col-first even-row-color"><code><a href="../view/View.html" title="interface in org.apache.juneau.rest.server.view">View</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">MustacheFlavorRest.</span><code><a href="../../../petstore/console/dev/flavors/MustacheFlavorRest.html#page(org.apache.juneau.rest.server.RestRequest)" class="member-name-link">page</a><wbr>(<a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req)</code></div>
+<div class="col-last even-row-color">
+<div class="block">The console page, from its builder twin on <code>?builder</code>.</div>
+</div>
+<div class="col-first odd-row-color"><code><a href="../view/View.html" title="interface in org.apache.juneau.rest.server.view">View</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">FlavorsRest.</span><code><a href="../../../petstore/console/dev/flavors/FlavorsRest.html#react(org.apache.juneau.rest.server.RestRequest)" class="member-name-link">react</a><wbr>(<a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">The React flavor page, from its builder twin on <code>?builder</code>.</div>
+</div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="org.apache.juneau.petstore.console.ops">
+<h2>Uses of <a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a> in <a href="../../../petstore/console/ops/package-summary.html">org.apache.juneau.petstore.console.ops</a></h2>
+<div class="caption"><span>Methods in <a href="../../../petstore/console/ops/package-summary.html">org.apache.juneau.petstore.console.ops</a> with parameters of type <a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a></span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier and Type</div>
+<div class="table-header col-second">Method</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">JobsRest.</span><code><a href="../../../petstore/console/ops/JobsRest.html#groomRunKey(org.apache.juneau.rest.server.RestRequest,java.lang.String)" class="member-name-link">groomRunKey</a><wbr>(<a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;id)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Issues a regroom key bound to one groom run and the caller.</div>
+</div>
+<div class="col-first odd-row-color"><code><a href="../../../http/response/SeeOther.html" title="class in org.apache.juneau.http.response">SeeOther</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">OpsRest.</span><code><a href="../../../petstore/console/ops/OpsRest.html#index(org.apache.juneau.rest.server.RestRequest)" class="member-name-link">index</a><wbr>(<a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req)</code></div>
+<div class="col-last odd-row-color">
+<div class="block"><code>GET /console/ops</code> redirects to the Jobs page.</div>
+</div>
+<div class="col-first even-row-color"><code><a href="../view/View.html" title="interface in org.apache.juneau.rest.server.view">View</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">AuditRest.</span><code><a href="../../../petstore/console/ops/AuditRest.html#page(org.apache.juneau.rest.server.RestRequest)" class="member-name-link">page</a><wbr>(<a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Renders the Audit page.</div>
+</div>
+<div class="col-first odd-row-color"><code><a href="../view/View.html" title="interface in org.apache.juneau.rest.server.view">View</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">JobsRest.</span><code><a href="../../../petstore/console/ops/JobsRest.html#page(org.apache.juneau.rest.server.RestRequest,java.lang.String)" class="member-name-link">page</a><wbr>(<a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;run)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Renders the Jobs page.</div>
+</div>
+<div class="col-first even-row-color"><code><a href="../views/ActionResult.html" title="class in org.apache.juneau.rest.server.views">ActionResult</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">JobsRest.</span><code><a href="../../../petstore/console/ops/JobsRest.html#regroom(org.apache.juneau.rest.server.RestRequest,org.apache.juneau.rest.server.RestResponse,java.lang.String,org.apache.juneau.marshall.collections.JsonMap)" class="member-name-link">regroom</a><wbr>(<a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req,
+ <a href="../RestResponse.html" title="class in org.apache.juneau.rest.server">RestResponse</a>&nbsp;res,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;id,
+ <a href="../../../marshall/collections/JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a>&nbsp;json)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Grooms a run's pet again.</div>
+</div>
+<div class="col-first odd-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">JobsRest.</span><code><a href="../../../petstore/console/ops/JobsRest.html#restock(org.apache.juneau.rest.server.RestRequest,org.apache.juneau.rest.server.RestResponse,org.apache.juneau.marshall.collections.JsonMap)" class="member-name-link">restock</a><wbr>(<a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req,
+ <a href="../RestResponse.html" title="class in org.apache.juneau.rest.server">RestResponse</a>&nbsp;res,
+ <a href="../../../marshall/collections/JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a>&nbsp;json)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Submits a restock.</div>
+</div>
+<div class="col-first even-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">JobsRest.</span><code><a href="../../../petstore/console/ops/JobsRest.html#restockSpecies(org.apache.juneau.rest.server.RestRequest,org.apache.juneau.rest.server.RestResponse,java.lang.String,org.apache.juneau.marshall.collections.JsonMap)" class="member-name-link">restockSpecies</a><wbr>(<a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req,
+ <a href="../RestResponse.html" title="class in org.apache.juneau.rest.server">RestResponse</a>&nbsp;res,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;id,
+ <a href="../../../marshall/collections/JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a>&nbsp;json)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Restocks one species from its row's detail panel.</div>
+</div>
+<div class="col-first odd-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">JobsRest.</span><code><a href="../../../petstore/console/ops/JobsRest.html#speciesKey(org.apache.juneau.rest.server.RestRequest,java.lang.String)" class="member-name-link">speciesKey</a><wbr>(<a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;id)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Issues a restock key bound to one species and the caller.</div>
+</div>
+<div class="col-first even-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="../terminal/TerminalSource.html" title="interface in org.apache.juneau.rest.server.terminal">TerminalSource</a>&gt;</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">JobsRest.</span><code><a href="../../../petstore/console/ops/JobsRest.html#terminalSource(java.lang.String,org.apache.juneau.rest.server.RestRequest)" class="member-name-link">terminalSource</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;id,
+ <a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req)</code></div>
+<div class="col-last even-row-color">&nbsp;</div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="org.apache.juneau.petstore.console.orders">
+<h2>Uses of <a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a> in <a href="../../../petstore/console/orders/package-summary.html">org.apache.juneau.petstore.console.orders</a></h2>
+<div class="caption"><span>Methods in <a href="../../../petstore/console/orders/package-summary.html">org.apache.juneau.petstore.console.orders</a> with parameters of type <a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a></span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier and Type</div>
+<div class="table-header col-second">Method</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code><a href="../views/ActionResult.html" title="class in org.apache.juneau.rest.server.views">ActionResult</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">OrdersRest.</span><code><a href="../../../petstore/console/orders/OrdersRest.html#approve(org.apache.juneau.rest.server.RestRequest,long)" class="member-name-link">approve</a><wbr>(<a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req,
+ long&nbsp;id)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Approves a placed order.</div>
+</div>
+<div class="col-first odd-row-color"><code><a href="../views/ActionResult.html" title="class in org.apache.juneau.rest.server.views">ActionResult</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">OrdersRest.</span><code><a href="../../../petstore/console/orders/OrdersRest.html#cancel(org.apache.juneau.rest.server.RestRequest,long)" class="member-name-link">cancel</a><wbr>(<a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req,
+ long&nbsp;id)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Deletes (cancels) an order.</div>
+</div>
+<div class="col-first even-row-color"><code><a href="../views/ActionResult.html" title="class in org.apache.juneau.rest.server.views">ActionResult</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">OrdersRest.</span><code><a href="../../../petstore/console/orders/OrdersRest.html#create(org.apache.juneau.rest.server.RestRequest,org.apache.juneau.marshall.collections.JsonMap)" class="member-name-link">create</a><wbr>(<a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req,
+ <a href="../../../marshall/collections/JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a>&nbsp;body)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Places a new order.</div>
+</div>
+<div class="col-first odd-row-color"><code><a href="../views/ActionResult.html" title="class in org.apache.juneau.rest.server.views">ActionResult</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">OrdersRest.</span><code><a href="../../../petstore/console/orders/OrdersRest.html#deliver(org.apache.juneau.rest.server.RestRequest,long)" class="member-name-link">deliver</a><wbr>(<a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req,
+ long&nbsp;id)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Delivers an approved order.</div>
+</div>
+<div class="col-first even-row-color"><code><a href="../view/View.html" title="interface in org.apache.juneau.rest.server.view">View</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">OrdersRest.</span><code><a href="../../../petstore/console/orders/OrdersRest.html#page(org.apache.juneau.rest.server.RestRequest)" class="member-name-link">page</a><wbr>(<a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req)</code></div>
+<div class="col-last even-row-color">
+<div class="block">The Orders page.</div>
+</div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="org.apache.juneau.petstore.console.pets">
+<h2>Uses of <a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a> in <a href="../../../petstore/console/pets/package-summary.html">org.apache.juneau.petstore.console.pets</a></h2>
+<div class="caption"><span>Methods in <a href="../../../petstore/console/pets/package-summary.html">org.apache.juneau.petstore.console.pets</a> with parameters of type <a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a></span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier and Type</div>
+<div class="table-header col-second">Method</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code><a href="../views/ActionResult.html" title="class in org.apache.juneau.rest.server.views">ActionResult</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">ChangesRest.</span><code><a href="../../../petstore/console/pets/ChangesRest.html#apply(org.apache.juneau.rest.server.RestRequest,long)" class="member-name-link">apply</a><wbr>(<a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req,
+ long&nbsp;id)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Applies one change (the bulk perRow action).</div>
+</div>
+<div class="col-first odd-row-color"><code><a href="../views/ActionResult.html" title="class in org.apache.juneau.rest.server.views">ActionResult</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">PetsRest.</span><code><a href="../../../petstore/console/pets/PetsRest.html#create(org.apache.juneau.rest.server.RestRequest,org.apache.juneau.marshall.collections.JsonMap)" class="member-name-link">create</a><wbr>(<a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req,
+ <a href="../../../marshall/collections/JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a>&nbsp;body)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Creates a pet.</div>
+</div>
+<div class="col-first even-row-color"><code><a href="../views/ActionResult.html" title="class in org.apache.juneau.rest.server.views">ActionResult</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">PetsRest.</span><code><a href="../../../petstore/console/pets/PetsRest.html#delete(org.apache.juneau.rest.server.RestRequest,long)" class="member-name-link">delete</a><wbr>(<a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req,
+ long&nbsp;id)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Deletes a pet.</div>
+</div>
+<div class="col-first odd-row-color"><code><a href="../../../http/response/SeeOther.html" title="class in org.apache.juneau.http.response">SeeOther</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">PetsRest.</span><code><a href="../../../petstore/console/pets/PetsRest.html#detail(org.apache.juneau.rest.server.RestRequest,long)" class="member-name-link">detail</a><wbr>(<a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req,
+ long&nbsp;id)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">The bare pet URL; lands on the first tab.</div>
+</div>
+<div class="col-first even-row-color"><code><a href="../view/View.html" title="interface in org.apache.juneau.rest.server.view">View</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">PetsRest.</span><code><a href="../../../petstore/console/pets/PetsRest.html#detailOrder(org.apache.juneau.rest.server.RestRequest,org.apache.juneau.rest.server.RestResponse,long,long)" class="member-name-link">detailOrder</a><wbr>(<a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req,
+ <a href="../RestResponse.html" title="class in org.apache.juneau.rest.server">RestResponse</a>&nbsp;res,
+ long&nbsp;id,
+ long&nbsp;orderId)</code></div>
+<div class="col-last even-row-color">
+<div class="block">P4 at nav depth 4: the Orders tab with one of this pet's orders selected.</div>
+</div>
+<div class="col-first odd-row-color"><code><a href="../view/View.html" title="interface in org.apache.juneau.rest.server.view">View</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">PetsRest.</span><code><a href="../../../petstore/console/pets/PetsRest.html#detailTab(org.apache.juneau.rest.server.RestRequest,org.apache.juneau.rest.server.RestResponse,long,java.lang.String)" class="member-name-link">detailTab</a><wbr>(<a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req,
+ <a href="../RestResponse.html" title="class in org.apache.juneau.rest.server">RestResponse</a>&nbsp;res,
+ long&nbsp;id,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;tab)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">P4, one tab.</div>
+</div>
+<div class="col-first even-row-color"><code><a href="../views/BulkResult.html" title="class in org.apache.juneau.rest.server.views">BulkResult</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">ChangesRest.</span><code><a href="../../../petstore/console/pets/ChangesRest.html#discard(org.apache.juneau.rest.server.RestRequest,org.apache.juneau.rest.server.views.BulkRequest,java.lang.String)" class="member-name-link">discard</a><wbr>(<a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req,
+ <a href="../views/BulkRequest.html" title="class in org.apache.juneau.rest.server.views">BulkRequest</a>&nbsp;body,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;fail)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Discards changes in one aggregate call.</div>
+</div>
+<div class="col-first odd-row-color"><code><a href="../view/View.html" title="interface in org.apache.juneau.rest.server.view">View</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">ChangesRest.</span><code><a href="../../../petstore/console/pets/ChangesRest.html#page(org.apache.juneau.rest.server.RestRequest)" class="member-name-link">page</a><wbr>(<a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">The Pending changes page.</div>
+</div>
+<div class="col-first even-row-color"><code><a href="../view/View.html" title="interface in org.apache.juneau.rest.server.view">View</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">PetsRest.</span><code><a href="../../../petstore/console/pets/PetsRest.html#page(org.apache.juneau.rest.server.RestRequest)" class="member-name-link">page</a><wbr>(<a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req)</code></div>
+<div class="col-last even-row-color">
+<div class="block">The Pets page.</div>
+</div>
+<div class="col-first odd-row-color"><code><a href="../../../marshall/collections/JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">ChangesRest.</span><code><a href="../../../petstore/console/pets/ChangesRest.html#pending(org.apache.juneau.rest.server.RestRequest)" class="member-name-link">pending</a><wbr>(<a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">The header badge source: pending changes, flagged <code>mine</code> for the caller.</div>
+</div>
+<div class="col-first even-row-color"><code><a href="../views/ActionResult.html" title="class in org.apache.juneau.rest.server.views">ActionResult</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">ChangesRest.</span><code><a href="../../../petstore/console/pets/ChangesRest.html#retry(org.apache.juneau.rest.server.RestRequest,long)" class="member-name-link">retry</a><wbr>(<a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req,
+ long&nbsp;id)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Retries a failed change.</div>
+</div>
+<div class="col-first odd-row-color"><code><a href="../views/ActionResult.html" title="class in org.apache.juneau.rest.server.views">ActionResult</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">PetsRest.</span><code><a href="../../../petstore/console/pets/PetsRest.html#sell(org.apache.juneau.rest.server.RestRequest,long)" class="member-name-link">sell</a><wbr>(<a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req,
+ long&nbsp;id)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Marks a pet sold.</div>
+</div>
+<div class="col-first even-row-color"><code><a href="../view/View.html" title="interface in org.apache.juneau.rest.server.view">View</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">PetsRest.</span><code><a href="../../../petstore/console/pets/PetsRest.html#sold(org.apache.juneau.rest.server.RestRequest)" class="member-name-link">sold</a><wbr>(<a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req)</code></div>
+<div class="col-last even-row-color">
+<div class="block">The Sold pets page.</div>
+</div>
+<div class="col-first odd-row-color"><code><a href="../views/ActionResult.html" title="class in org.apache.juneau.rest.server.views">ActionResult</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">PetsRest.</span><code><a href="../../../petstore/console/pets/PetsRest.html#stage(org.apache.juneau.rest.server.RestRequest,long,org.apache.juneau.marshall.collections.JsonMap)" class="member-name-link">stage</a><wbr>(<a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req,
+ long&nbsp;id,
+ <a href="../../../marshall/collections/JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a>&nbsp;body)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Stages an inline edit for review on the Pending changes page.</div>
+</div>
+<div class="col-first even-row-color"><code><a href="../views/ActionResult.html" title="class in org.apache.juneau.rest.server.views">ActionResult</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">PetsRest.</span><code><a href="../../../petstore/console/pets/PetsRest.html#update(org.apache.juneau.rest.server.RestRequest,long,org.apache.juneau.marshall.collections.JsonMap)" class="member-name-link">update</a><wbr>(<a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req,
+ long&nbsp;id,
+ <a href="../../../marshall/collections/JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a>&nbsp;body)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Replaces a pet.</div>
+</div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="org.apache.juneau.petstore.console.users">
+<h2>Uses of <a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a> in <a href="../../../petstore/console/users/package-summary.html">org.apache.juneau.petstore.console.users</a></h2>
+<div class="caption"><span>Methods in <a href="../../../petstore/console/users/package-summary.html">org.apache.juneau.petstore.console.users</a> with parameters of type <a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a></span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier and Type</div>
+<div class="table-header col-second">Method</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code><a href="../views/ActionResult.html" title="class in org.apache.juneau.rest.server.views">ActionResult</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">UsersRest.</span><code><a href="../../../petstore/console/users/UsersRest.html#create(org.apache.juneau.rest.server.RestRequest,org.apache.juneau.marshall.collections.JsonMap)" class="member-name-link">create</a><wbr>(<a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req,
+ <a href="../../../marshall/collections/JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a>&nbsp;body)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Creates a user.</div>
+</div>
+<div class="col-first odd-row-color"><code><a href="../views/ActionResult.html" title="class in org.apache.juneau.rest.server.views">ActionResult</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">UsersRest.</span><code><a href="../../../petstore/console/users/UsersRest.html#delete(org.apache.juneau.rest.server.RestRequest,java.lang.String)" class="member-name-link">delete</a><wbr>(<a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;username)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Deletes a user.</div>
+</div>
+<div class="col-first even-row-color"><code><a href="../view/View.html" title="interface in org.apache.juneau.rest.server.view">View</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">UsersRest.</span><code><a href="../../../petstore/console/users/UsersRest.html#page(org.apache.juneau.rest.server.RestRequest)" class="member-name-link">page</a><wbr>(<a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req)</code></div>
+<div class="col-last even-row-color">
+<div class="block">The Users page.</div>
+</div>
+<div class="col-first odd-row-color"><code><a href="../views/ActionResult.html" title="class in org.apache.juneau.rest.server.views">ActionResult</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">UsersRest.</span><code><a href="../../../petstore/console/users/UsersRest.html#update(org.apache.juneau.rest.server.RestRequest,java.lang.String,org.apache.juneau.marshall.collections.JsonMap)" class="member-name-link">update</a><wbr>(<a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;username,
+ <a href="../../../marshall/collections/JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a>&nbsp;body)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Updates a user.</div>
+</div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="org.apache.juneau.petstore.jetty">
+<h2>Uses of <a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a> in <a href="../../../petstore/jetty/package-summary.html">org.apache.juneau.petstore.jetty</a></h2>
+<div class="caption"><span>Methods in <a href="../../../petstore/jetty/package-summary.html">org.apache.juneau.petstore.jetty</a> with parameters of type <a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a></span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier and Type</div>
+<div class="table-header col-second">Method</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code><a href="../../../http/response/SeeOther.html" title="class in org.apache.juneau.http.response">SeeOther</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">RootResources.</span><code><a href="../../../petstore/jetty/RootResources.html#index(org.apache.juneau.rest.server.RestRequest)" class="member-name-link">index</a><wbr>(<a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req)</code></div>
+<div class="col-last even-row-color">
+<div class="block"><code>GET /</code> goes to the console store page.</div>
+</div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="org.apache.juneau.petstore.rest">
+<h2>Uses of <a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a> in <a href="../../../petstore/rest/package-summary.html">org.apache.juneau.petstore.rest</a></h2>
+<div class="caption"><span>Methods in <a href="../../../petstore/rest/package-summary.html">org.apache.juneau.petstore.rest</a> with parameters of type <a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a></span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier and Type</div>
+<div class="table-header col-second">Method</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code><a href="../../../http/HttpResource.html" title="interface in org.apache.juneau.http">HttpResource</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">PetstoreUiResource.</span><code><a href="../../../petstore/rest/PetstoreUiResource.html#app(org.apache.juneau.rest.server.RestRequest,java.util.Locale)" class="member-name-link">app</a><wbr>(<a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Locale.html" title="class or interface in java.util" class="external-link">Locale</a>&nbsp;locale)</code></div>
+<div class="col-last even-row-color">
+<div class="block">[GET /] &mdash; the single-page app.</div>
+</div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="org.apache.juneau.petstore.springboot">
+<h2>Uses of <a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a> in <a href="../../../petstore/springboot/package-summary.html">org.apache.juneau.petstore.springboot</a></h2>
+<div class="caption"><span>Methods in <a href="../../../petstore/springboot/package-summary.html">org.apache.juneau.petstore.springboot</a> with parameters of type <a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a></span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier and Type</div>
+<div class="table-header col-second">Method</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code><a href="../../../http/response/SeeOther.html" title="class in org.apache.juneau.http.response">SeeOther</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">RootResources.</span><code><a href="../../../petstore/springboot/RootResources.html#index(org.apache.juneau.rest.server.RestRequest)" class="member-name-link">index</a><wbr>(<a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req)</code></div>
+<div class="col-last even-row-color">
+<div class="block"><code>GET /</code> goes to the console store page.</div>
+</div>
+</div>
+</section>
+</li>
+<li>
 <section class="detail" id="org.apache.juneau.rest.server">
 <h2>Uses of <a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a> in <a href="../package-summary.html">org.apache.juneau.rest.server</a></h2>
 <div class="caption"><span>Methods in <a href="../package-summary.html">org.apache.juneau.rest.server</a> that return <a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a></span></div>
@@ -260,16 +783,6 @@ loadScripts(document, 'script');</script>
 <div class="col-second even-row-color"><span class="type-name-label">RestRequest.</span><code><a href="../RestRequest.html#setAuthResult(org.apache.juneau.rest.server.auth.AuthResult)" class="member-name-link">setAuthResult</a><wbr>(<a href="../auth/AuthResult.html" title="class in org.apache.juneau.rest.server.auth">AuthResult</a>&nbsp;value)</code></div>
 <div class="col-last even-row-color">
 <div class="block">Sets the resolved resource-level authentication result.</div>
-</div>
-<div class="col-first odd-row-color"><code><a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">RestRequest.</span><code><a href="../RestRequest.html#setDebug()" class="member-name-link">setDebug</a>()</code></div>
-<div class="col-last odd-row-color">
-<div class="block">Shortcut for calling <c>setDebug(<jk>true</jk>)</c>.</div>
-</div>
-<div class="col-first even-row-color"><code><a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">RestRequest.</span><code><a href="../RestRequest.html#setDebug(java.lang.Boolean)" class="member-name-link">setDebug</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Boolean.html" title="class or interface in java.lang" class="external-link">Boolean</a>&nbsp;b)</code></div>
-<div class="col-last even-row-color">
-<div class="block">Sets the <js>"Debug"</js> attribute to the specified boolean.</div>
 </div>
 <div class="col-first odd-row-color"><code><a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a></code></div>
 <div class="col-second odd-row-color"><span class="type-name-label">RestRequest.</span><code><a href="../RestRequest.html#setException(java.lang.Throwable)" class="member-name-link">setException</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html" title="class or interface in java.lang" class="external-link">Throwable</a>&nbsp;t)</code></div>
@@ -450,6 +963,101 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
+<section class="detail" id="org.apache.juneau.rest.server.bus">
+<h2>Uses of <a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a> in <a href="../bus/package-summary.html">org.apache.juneau.rest.server.bus</a></h2>
+<div class="caption"><span>Methods in <a href="../bus/package-summary.html">org.apache.juneau.rest.server.bus</a> with parameters of type <a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a></span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier and Type</div>
+<div class="table-header col-second">Method</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code>default <a href="../../../marshall/collections/JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">BusEventsMixin.</span><code><a href="../bus/BusEventsMixin.html#openBusSession(org.apache.juneau.rest.server.RestRequest,org.apache.juneau.rest.server.RestResponse)" class="member-name-link">openBusSession</a><wbr>(<a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req,
+ <a href="../RestResponse.html" title="class in org.apache.juneau.rest.server">RestResponse</a>&nbsp;res)</code></div>
+<div class="col-last even-row-color">
+<div class="block">[POST /juneau-bus/session] &mdash; opens a bus session.</div>
+</div>
+<div class="col-first odd-row-color"><code>default void</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">BusEventsMixin.</span><code><a href="../bus/BusEventsMixin.html#streamBus(java.lang.String,org.apache.juneau.rest.server.RestRequest,org.apache.juneau.rest.server.RestResponse)" class="member-name-link">streamBus</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;id,
+ <a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req,
+ <a href="../RestResponse.html" title="class in org.apache.juneau.rest.server">RestResponse</a>&nbsp;res)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">[GET /juneau-bus/stream/{sessionId}] &mdash; streams the session's frames as Server-Sent Events.</div>
+</div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="org.apache.juneau.rest.server.console">
+<h2>Uses of <a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a> in <a href="../console/package-summary.html">org.apache.juneau.rest.server.console</a></h2>
+<div class="caption"><span>Methods in <a href="../console/package-summary.html">org.apache.juneau.rest.server.console</a> with parameters of type <a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a></span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier and Type</div>
+<div class="table-header col-second">Method</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code>static <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">ConsoleChromeMixin.</span><code><a href="../console/ConsoleChromeMixin.html#badgesJsUrl(org.apache.juneau.rest.server.RestRequest)" class="member-name-link">badgesJsUrl</a><wbr>(<a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Context-root-absolute, cache-busted URL of the count-badge script.</div>
+</div>
+<div class="col-first odd-row-color"><code>static <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">ConsoleChromeMixin.</span><code><a href="../console/ConsoleChromeMixin.html#chromeCssUrl(org.apache.juneau.rest.server.RestRequest)" class="member-name-link">chromeCssUrl</a><wbr>(<a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Returns a real, browser-fetchable URL for the shipped <code>chrome.css</code>, resolved against the request's
+ <b>context root</b> (not the page resource) and carrying the same content-sensitive <code>?v=…</code> cache-buster
+ the theme stylesheets use.</div>
+</div>
+<div class="col-first even-row-color"><code>static <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">ConsoleChromeMixin.</span><code><a href="../console/ConsoleChromeMixin.html#consoleAssetUrl(org.apache.juneau.rest.server.RestRequest,java.lang.String)" class="member-name-link">consoleAssetUrl</a><wbr>(<a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;path)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Context-root-absolute, cache-busted URL of a console card runtime; the resolver of the <code>charts</code> and
+ <code>joblog</code> toolkit packs.</div>
+</div>
+<div class="col-first odd-row-color"><code>static <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">ConsoleChromeMixin.</span><code><a href="../console/ConsoleChromeMixin.html#consoleJsUrl(org.apache.juneau.rest.server.RestRequest)" class="member-name-link">consoleJsUrl</a><wbr>(<a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Context-root-absolute, cache-busted URL of the console shell script.</div>
+</div>
+<div class="col-first even-row-color"><code><a href="../../../http/HttpResource.html" title="interface in org.apache.juneau.http">HttpResource</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">ConsoleChromeMixin.</span><code><a href="../console/ConsoleChromeMixin.html#getChromeCss(org.apache.juneau.rest.server.RestRequest)" class="member-name-link">getChromeCss</a><wbr>(<a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req)</code></div>
+<div class="col-last even-row-color">
+<div class="block">[GET /juneau-console/chrome.css] &mdash; serve the admin-console chrome stylesheet.</div>
+</div>
+<div class="col-first odd-row-color"><code>static <a href="../console/ConsoleChromeMixin.SchemeHead.html" title="class in org.apache.juneau.rest.server.console">ConsoleChromeMixin.SchemeHead</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">ConsoleChromeMixin.</span><code><a href="../console/ConsoleChromeMixin.html#schemeHead(org.apache.juneau.rest.server.RestRequest,java.lang.String,boolean)" class="member-name-link">schemeHead</a><wbr>(<a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;pin,
+ boolean&nbsp;toggle)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Returns the colour-scheme head pieces for a page that does not render through the FreeMarker console directive.</div>
+</div>
+<div class="col-first even-row-color"><code>static <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">ConsoleChromeMixin.</span><code><a href="../console/ConsoleChromeMixin.html#themeAssetUrl(org.apache.juneau.rest.server.RestRequest,java.lang.String)" class="member-name-link">themeAssetUrl</a><wbr>(<a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Returns a real, browser-fetchable URL for a shipped theme stylesheet, resolved against the request's
+ <b>context root</b> (not the page resource) and carrying the same <code>?v=&lt;buildVersion&gt;-&lt;hash8&gt;</code>
+ content-sensitive cache-buster <a href="../console/ConsoleChromeMixin.html#chromeCssUrl(org.apache.juneau.rest.server.RestRequest)"><code>ConsoleChromeMixin.chromeCssUrl(RestRequest)</code></a> uses.</div>
+</div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="org.apache.juneau.rest.server.console.data">
+<h2>Uses of <a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a> in <a href="../console/data/package-summary.html">org.apache.juneau.rest.server.console.data</a></h2>
+<div class="caption"><span>Methods in <a href="../console/data/package-summary.html">org.apache.juneau.rest.server.console.data</a> with parameters of type <a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a></span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier and Type</div>
+<div class="table-header col-second">Method</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code>static <a href="../console/data/SeriesAggregator.Request.html" title="class in org.apache.juneau.rest.server.console.data">SeriesAggregator.Request</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">SeriesAggregator.Request.</span><code><a href="../console/data/SeriesAggregator.Request.html#from(org.apache.juneau.rest.server.RestRequest)" class="member-name-link">from</a><wbr>(<a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Parses the request's query parameters.</div>
+</div>
+</div>
+</section>
+</li>
+<li>
 <section class="detail" id="org.apache.juneau.rest.server.converter">
 <h2>Uses of <a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a> in <a href="../converter/package-summary.html">org.apache.juneau.rest.server.converter</a></h2>
 <div class="caption"><span>Methods in <a href="../converter/package-summary.html">org.apache.juneau.rest.server.converter</a> with parameters of type <a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a></span></div>
@@ -605,6 +1213,17 @@ loadScripts(document, 'script');</script>
 <div class="block">Liveness probe endpoint.</div>
 </div>
 <div class="col-first even-row-color"><code><a href="../health/HealthAggregator.HealthResponse.html" title="class in org.apache.juneau.rest.server.health">HealthAggregator.HealthResponse</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">HealthServlet.</span><code><a href="../health/HealthServlet.html#probe(org.apache.juneau.rest.server.RestRequest,org.apache.juneau.rest.server.RestResponse)" class="member-name-link">probe</a><wbr>(<a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req,
+ <a href="../RestResponse.html" title="class in org.apache.juneau.rest.server">RestResponse</a>&nbsp;res)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Health/readiness/liveness probe endpoint.</div>
+</div>
+<div class="col-first odd-row-color"><code>protected <a href="../health/HealthProbe.html" title="enum class in org.apache.juneau.rest.server.health">HealthProbe</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">HealthServlet.</span><code><a href="../health/HealthServlet.html#probeFor(org.apache.juneau.rest.server.RestRequest)" class="member-name-link">probeFor</a><wbr>(<a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Resolves which probe this request is for, keyed off the LAST PATH SEGMENT.</div>
+</div>
+<div class="col-first even-row-color"><code><a href="../health/HealthAggregator.HealthResponse.html" title="class in org.apache.juneau.rest.server.health">HealthAggregator.HealthResponse</a></code></div>
 <div class="col-second even-row-color"><span class="type-name-label">HealthMixin.</span><code><a href="../health/HealthMixin.html#readyz(org.apache.juneau.rest.server.RestRequest,org.apache.juneau.rest.server.RestResponse)" class="member-name-link">readyz</a><wbr>(<a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req,
  <a href="../RestResponse.html" title="class in org.apache.juneau.rest.server">RestResponse</a>&nbsp;res)</code></div>
 <div class="col-last even-row-color">
@@ -723,6 +1342,47 @@ loadScripts(document, 'script');</script>
  boolean&nbsp;caseSensitive)</code></div>
 <div class="col-last even-row-color">
 <div class="block">Constructor.</div>
+</div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="org.apache.juneau.rest.server.logging">
+<h2>Uses of <a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a> in <a href="../logging/package-summary.html">org.apache.juneau.rest.server.logging</a></h2>
+<div class="caption"><span>Methods in <a href="../logging/package-summary.html">org.apache.juneau.rest.server.logging</a> with parameters of type <a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a></span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier and Type</div>
+<div class="table-header col-second">Method</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">BasicRestDebugFormatter.</span><code><a href="../logging/BasicRestDebugFormatter.html#formatBasic(org.apache.juneau.rest.server.RestRequest,org.apache.juneau.rest.server.RestResponse)" class="member-name-link">formatBasic</a><wbr>(<a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req,
+ <a href="../RestResponse.html" title="class in org.apache.juneau.rest.server">RestResponse</a>&nbsp;res)</code></div>
+<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-first odd-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">RestDebugFormatter.</span><code><a href="../logging/RestDebugFormatter.html#formatBasic(org.apache.juneau.rest.server.RestRequest,org.apache.juneau.rest.server.RestResponse)" class="member-name-link">formatBasic</a><wbr>(<a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req,
+ <a href="../RestResponse.html" title="class in org.apache.juneau.rest.server">RestResponse</a>&nbsp;res)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Renders the basic (<code>INFO</code>-tier) portion of the debug record.</div>
+</div>
+<div class="col-first even-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">BasicRestDebugFormatter.</span><code><a href="../logging/BasicRestDebugFormatter.html#formatBody(org.apache.juneau.rest.server.RestRequest,org.apache.juneau.rest.server.RestResponse)" class="member-name-link">formatBody</a><wbr>(<a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req,
+ <a href="../RestResponse.html" title="class in org.apache.juneau.rest.server">RestResponse</a>&nbsp;res)</code></div>
+<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-first odd-row-color"><code>default <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">RestDebugFormatter.</span><code><a href="../logging/RestDebugFormatter.html#formatBody(org.apache.juneau.rest.server.RestRequest,org.apache.juneau.rest.server.RestResponse)" class="member-name-link">formatBody</a><wbr>(<a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req,
+ <a href="../RestResponse.html" title="class in org.apache.juneau.rest.server">RestResponse</a>&nbsp;res)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Renders the body (<code>FINEST</code>-tier) portion of the debug record.</div>
+</div>
+<div class="col-first even-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">BasicRestDebugFormatter.</span><code><a href="../logging/BasicRestDebugFormatter.html#formatHeaders(org.apache.juneau.rest.server.RestRequest,org.apache.juneau.rest.server.RestResponse)" class="member-name-link">formatHeaders</a><wbr>(<a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req,
+ <a href="../RestResponse.html" title="class in org.apache.juneau.rest.server">RestResponse</a>&nbsp;res)</code></div>
+<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-first odd-row-color"><code>default <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">RestDebugFormatter.</span><code><a href="../logging/RestDebugFormatter.html#formatHeaders(org.apache.juneau.rest.server.RestRequest,org.apache.juneau.rest.server.RestResponse)" class="member-name-link">formatHeaders</a><wbr>(<a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req,
+ <a href="../RestResponse.html" title="class in org.apache.juneau.rest.server">RestResponse</a>&nbsp;res)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Renders the headers (<code>FINE</code>-tier) portion of the debug record.</div>
 </div>
 </div>
 </section>
@@ -857,13 +1517,13 @@ loadScripts(document, 'script');</script>
 <div class="col-second even-row-color"><span class="type-name-label">McpEndpoint.</span><code><a href="../mcp/v20260728/McpEndpoint.html#mcpProtectedResourceMetadataPathInserted(org.apache.juneau.rest.server.RestRequest)" class="member-name-link">mcpProtectedResourceMetadataPathInserted</a><wbr>(<a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req)</code></div>
 <div class="col-last even-row-color">
 <div class="block">Serves the RFC 9728 Protected Resource Metadata document at the path-inserted well-known location (SEP-2351), but
- only when the requested suffix matches this resource's expected well-known path; otherwise <code>404</code> (M5).</div>
+ only when the requested suffix matches this resource's expected well-known path; otherwise <code>404</code>.</div>
 </div>
 <div class="col-first odd-row-color"><code><a href="../mcp/v20260728/McpProtectedResourceMetadata.html" title="class in org.apache.juneau.rest.server.mcp.v20260728">McpProtectedResourceMetadata</a></code></div>
 <div class="col-second odd-row-color"><span class="type-name-label">McpRestServlet.</span><code><a href="../mcp/v20260728/McpRestServlet.html#mcpProtectedResourceMetadataPathInserted(org.apache.juneau.rest.server.RestRequest)" class="member-name-link">mcpProtectedResourceMetadataPathInserted</a><wbr>(<a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req)</code></div>
 <div class="col-last odd-row-color">
 <div class="block">Serves the RFC 9728 Protected Resource Metadata document at the path-inserted well-known location (SEP-2351), but
- only when the requested suffix matches this resource's expected well-known path; otherwise <code>404</code> (M5).</div>
+ only when the requested suffix matches this resource's expected well-known path; otherwise <code>404</code>.</div>
 </div>
 <div class="col-first even-row-color"><code>default <a href="../mcp/v20260728/McpProtectedResourceMetadata.html" title="class in org.apache.juneau.rest.server.mcp.v20260728">McpProtectedResourceMetadata</a></code></div>
 <div class="col-second even-row-color"><span class="type-name-label">McpEndpoint.</span><code><a href="../mcp/v20260728/McpEndpoint.html#mcpProtectedResourceMetadataRoot(org.apache.juneau.rest.server.RestRequest)" class="member-name-link">mcpProtectedResourceMetadataRoot</a><wbr>(<a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req)</code></div>
@@ -880,14 +1540,14 @@ loadScripts(document, 'script');</script>
  <a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req)</code></div>
 <div class="col-last even-row-color">
 <div class="block">Serves this endpoint's PRM from the RFC 9728 path-inserted well-known location, but only when the requested suffix
- matches this resource's expected well-known path (M5); otherwise <code>404</code>.</div>
+ matches this resource's expected well-known path; otherwise <code>404</code>.</div>
 </div>
 <div class="col-first odd-row-color"><code>static <a href="../mcp/v20260728/McpProtectedResourceMetadata.html" title="class in org.apache.juneau.rest.server.mcp.v20260728">McpProtectedResourceMetadata</a></code></div>
 <div class="col-second odd-row-color"><span class="type-name-label">McpResourceServerSupport.</span><code><a href="../mcp/v20260728/McpResourceServerSupport.html#metadataForWellKnownRoot(org.apache.juneau.rest.server.mcp.v20260728.McpResourceServerConfig,org.apache.juneau.rest.server.RestRequest)" class="member-name-link">metadataForWellKnownRoot</a><wbr>(<a href="../mcp/v20260728/McpResourceServerConfig.html" title="class in org.apache.juneau.rest.server.mcp.v20260728">McpResourceServerConfig</a>&nbsp;cfg,
  <a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req)</code></div>
 <div class="col-last odd-row-color">
 <div class="block">Serves this endpoint's PRM from the SEP-2351 root well-known location (fallback), failing fast on a non-root or
- re-mounted mount (H1); a no-op-throwing <code>404</code> when RS auth is disabled.</div>
+ re-mounted mount; a no-op-throwing <code>404</code> when RS auth is disabled.</div>
 </div>
 </div>
 </section>
@@ -1052,25 +1712,100 @@ loadScripts(document, 'script');</script>
 <div class="block">[GET /*] &mdash; serve a static file from the active <a href="../staticfile/StaticFiles.html" title="interface in org.apache.juneau.rest.server.staticfile"><code>StaticFiles</code></a> worker bean.</div>
 </div>
 <div class="col-first odd-row-color"><code><a href="../../../http/HttpResource.html" title="interface in org.apache.juneau.http">HttpResource</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">StaticFilesMixin.</span><code><a href="../staticfile/StaticFilesMixin.html#headStaticFile(org.apache.juneau.rest.server.RestRequest,java.lang.String,java.util.Locale)" class="member-name-link">headStaticFile</a><wbr>(<a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req,
+<div class="col-second odd-row-color"><span class="type-name-label">WebJarsMixin.</span><code><a href="../staticfile/WebJarsMixin.html#getWebJarFile(org.apache.juneau.rest.server.RestRequest)" class="member-name-link">getWebJarFile</a><wbr>(<a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">[GET /webjars/*] &mdash; serve one WebJar file.</div>
+</div>
+<div class="col-first even-row-color"><code><a href="../../../http/HttpResource.html" title="interface in org.apache.juneau.http">HttpResource</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">StaticFilesMixin.</span><code><a href="../staticfile/StaticFilesMixin.html#headStaticFile(org.apache.juneau.rest.server.RestRequest,java.lang.String,java.util.Locale)" class="member-name-link">headStaticFile</a><wbr>(<a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;path,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Locale.html" title="class or interface in java.util" class="external-link">Locale</a>&nbsp;locale)</code></div>
+<div class="col-last even-row-color">
+<div class="block">[HEAD /static/*] &mdash; return GET headers for a static file without the body.</div>
+</div>
+<div class="col-first odd-row-color"><code><a href="../../../http/HttpResource.html" title="interface in org.apache.juneau.http">HttpResource</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">StaticFilesResource.</span><code><a href="../staticfile/StaticFilesResource.html#headStaticFile(org.apache.juneau.rest.server.RestRequest,java.lang.String,java.util.Locale)" class="member-name-link">headStaticFile</a><wbr>(<a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;path,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Locale.html" title="class or interface in java.util" class="external-link">Locale</a>&nbsp;locale)</code></div>
 <div class="col-last odd-row-color">
-<div class="block">[HEAD /static/*] &mdash; return GET headers for a static file without the body.</div>
+<div class="block">[HEAD /*] &mdash; return GET headers for a static file without the body.</div>
 </div>
 <div class="col-first even-row-color"><code><a href="../../../http/HttpResource.html" title="interface in org.apache.juneau.http">HttpResource</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">StaticFilesResource.</span><code><a href="../staticfile/StaticFilesResource.html#headStaticFile(org.apache.juneau.rest.server.RestRequest,java.lang.String,java.util.Locale)" class="member-name-link">headStaticFile</a><wbr>(<a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req,
+<div class="col-second even-row-color"><span class="type-name-label">StaticFilesServlet.</span><code><a href="../staticfile/StaticFilesServlet.html#headStaticFile(org.apache.juneau.rest.server.RestRequest,java.lang.String,java.util.Locale)" class="member-name-link">headStaticFile</a><wbr>(<a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;path,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Locale.html" title="class or interface in java.util" class="external-link">Locale</a>&nbsp;locale)</code></div>
 <div class="col-last even-row-color">
 <div class="block">[HEAD /*] &mdash; return GET headers for a static file without the body.</div>
 </div>
 <div class="col-first odd-row-color"><code><a href="../../../http/HttpResource.html" title="interface in org.apache.juneau.http">HttpResource</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">StaticFilesServlet.</span><code><a href="../staticfile/StaticFilesServlet.html#headStaticFile(org.apache.juneau.rest.server.RestRequest,java.lang.String,java.util.Locale)" class="member-name-link">headStaticFile</a><wbr>(<a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req,
+<div class="col-second odd-row-color"><span class="type-name-label">WebJarsMixin.</span><code><a href="../staticfile/WebJarsMixin.html#headWebJarFile(org.apache.juneau.rest.server.RestRequest)" class="member-name-link">headWebJarFile</a><wbr>(<a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">[HEAD /webjars/*] &mdash; the <code>GET</code> headers without the body (the response processor drops the body).</div>
+</div>
+<div class="col-first even-row-color"><code>static <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">WebJarResolver.</span><code><a href="../staticfile/WebJarResolver.html#resolve(org.apache.juneau.rest.server.RestRequest,java.lang.String)" class="member-name-link">resolve</a><wbr>(<a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;asset)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Resolves an asset id to an absolute, cache-busted URL under the <a href="../staticfile/WebJarsMixin.html" title="class in org.apache.juneau.rest.server.staticfile"><code>WebJarsMixin</code></a> mount of the request's servlet.</div>
+</div>
+<div class="col-first odd-row-color"><code>static <a href="../../../http/HttpResource.html" title="interface in org.apache.juneau.http">HttpResource</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">StaticFilesMixin.</span><code><a href="../staticfile/StaticFilesMixin.html#resolveStaticFile(org.apache.juneau.rest.server.RestRequest,java.lang.String,java.util.Locale)" class="member-name-link">resolveStaticFile</a><wbr>(<a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;path,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Locale.html" title="class or interface in java.util" class="external-link">Locale</a>&nbsp;locale)</code></div>
 <div class="col-last odd-row-color">
-<div class="block">[HEAD /*] &mdash; return GET headers for a static file without the body.</div>
+<div class="block">Shared static-file resolution chokepoint &mdash; resolves the requested path against the request's active
+ <a href="../staticfile/StaticFiles.html" title="interface in org.apache.juneau.rest.server.staticfile"><code>StaticFiles</code></a> bean.</div>
+</div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="org.apache.juneau.rest.server.terminal">
+<h2>Uses of <a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a> in <a href="../terminal/package-summary.html">org.apache.juneau.rest.server.terminal</a></h2>
+<div class="caption"><span>Methods in <a href="../terminal/package-summary.html">org.apache.juneau.rest.server.terminal</a> with parameters of type <a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a></span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier and Type</div>
+<div class="table-header col-second">Method</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code>static void</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">TerminalEndpoints.</span><code><a href="../terminal/TerminalEndpoints.html#bytes(java.util.Optional,org.apache.juneau.rest.server.RestRequest,org.apache.juneau.rest.server.RestResponse)" class="member-name-link">bytes</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="../terminal/TerminalSource.html" title="interface in org.apache.juneau.rest.server.terminal">TerminalSource</a>&gt;&nbsp;source,
+ <a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req,
+ <a href="../RestResponse.html" title="class in org.apache.juneau.rest.server">RestResponse</a>&nbsp;res)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Serves <code>?from=&lt;offset&gt;&amp;max=&lt;n&gt;</code> as raw bytes with the <code>Term-*</code> headers.</div>
+</div>
+<div class="col-first odd-row-color"><code>static <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">TerminalEndpoints.</span><code><a href="../terminal/TerminalEndpoints.html#terminalAssetUrl(org.apache.juneau.rest.server.RestRequest,java.lang.String)" class="member-name-link">terminalAssetUrl</a><wbr>(<a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;path)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Returns the absolute URL of a terminal asset, resolved against the request, with a
+ <code>?v=&lt;buildVersion&gt;-&lt;hash8&gt;</code> cache-buster.</div>
+</div>
+<div class="col-first even-row-color"><code>static <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">TerminalMixin.</span><code><a href="../terminal/TerminalMixin.html#terminalAssetUrl(org.apache.juneau.rest.server.RestRequest,java.lang.String)" class="member-name-link">terminalAssetUrl</a><wbr>(<a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;path)</code></div>
+<div class="col-last even-row-color">
+<div class="block">The absolute URL of a terminal asset; the toolkit pack resolver for the <code>terminal</code> pack.</div>
+</div>
+<div class="col-first odd-row-color"><code>default void</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">TerminalMixin.</span><code><a href="../terminal/TerminalMixin.html#terminalBytes(java.lang.String,org.apache.juneau.rest.server.RestRequest,org.apache.juneau.rest.server.RestResponse)" class="member-name-link">terminalBytes</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;id,
+ <a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req,
+ <a href="../RestResponse.html" title="class in org.apache.juneau.rest.server">RestResponse</a>&nbsp;res)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">[GET /juneau-terminal/{id}/bytes] &mdash; raw bytes from an offset.</div>
+</div>
+<div class="col-first even-row-color"><code>default void</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">TerminalMixin.</span><code><a href="../terminal/TerminalMixin.html#terminalRaw(java.lang.String,org.apache.juneau.rest.server.RestRequest,org.apache.juneau.rest.server.RestResponse)" class="member-name-link">terminalRaw</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;id,
+ <a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req,
+ <a href="../RestResponse.html" title="class in org.apache.juneau.rest.server">RestResponse</a>&nbsp;res)</code></div>
+<div class="col-last even-row-color">
+<div class="block">[GET /juneau-terminal/{id}/raw] &mdash; the whole log as an attachment.</div>
+</div>
+<div class="col-first odd-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="../terminal/TerminalSource.html" title="interface in org.apache.juneau.rest.server.terminal">TerminalSource</a>&gt;</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">TerminalMixin.</span><code><a href="../terminal/TerminalMixin.html#terminalSource(java.lang.String,org.apache.juneau.rest.server.RestRequest)" class="member-name-link">terminalSource</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;id,
+ <a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Resolves the source for a terminal id, applying the application's own access rules.</div>
 </div>
 </div>
 </section>
@@ -1177,6 +1912,17 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="org.apache.juneau.rest.server.view.freemarker">
 <h2>Uses of <a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a> in <a href="../view/freemarker/package-summary.html">org.apache.juneau.rest.server.view.freemarker</a></h2>
+<div class="caption"><span>Methods in <a href="../view/freemarker/package-summary.html">org.apache.juneau.rest.server.view.freemarker</a> that return <a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a></span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier and Type</div>
+<div class="table-header col-second">Method</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code>static <a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">FreemarkerRenderScope.</span><code><a href="../view/freemarker/FreemarkerRenderScope.html#request()" class="member-name-link">request</a>()</code></div>
+<div class="col-last even-row-color">
+<div class="block">Returns the request for the in-flight FreeMarker render.</div>
+</div>
+</div>
 <div class="caption"><span>Methods in <a href="../view/freemarker/package-summary.html">org.apache.juneau.rest.server.view.freemarker</a> with parameters of type <a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a></span></div>
 <div class="summary-table three-column-summary">
 <div class="table-header col-first">Modifier and Type</div>
@@ -1205,6 +1951,39 @@ loadScripts(document, 'script');</script>
 <div class="col-second odd-row-color"><span class="type-name-label">FreemarkerMixin.</span><code><a href="../view/freemarker/FreemarkerMixin.html#resolveConfiguration(org.apache.juneau.rest.server.RestRequest)" class="member-name-link">resolveConfiguration</a><wbr>(<a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req)</code></div>
 <div class="col-last odd-row-color">
 <div class="block">Resolves the active <code>Configuration</code> via the shared <a href="../view/freemarker/FreemarkerDispatcher.html" title="class in org.apache.juneau.rest.server.view.freemarker"><code>FreemarkerDispatcher</code></a> worker.</div>
+</div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="org.apache.juneau.rest.server.view.freemarker.console">
+<h2>Uses of <a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a> in <a href="../view/freemarker/console/package-summary.html">org.apache.juneau.rest.server.view.freemarker.console</a></h2>
+<div class="caption"><span>Methods in <a href="../view/freemarker/console/package-summary.html">org.apache.juneau.rest.server.view.freemarker.console</a> with parameters of type <a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a></span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier and Type</div>
+<div class="table-header col-second">Method</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">ToolkitPackRegistry.AssetUrlResolver.</span><code><a href="../view/freemarker/console/ToolkitPackRegistry.AssetUrlResolver.html#resolve(org.apache.juneau.rest.server.RestRequest,java.lang.String)" class="member-name-link">resolve</a><wbr>(<a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;path)</code></div>
+<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-first odd-row-color"><code><a href="../view/freemarker/console/ToolkitPackRegistry.Resolved.html" title="class in org.apache.juneau.rest.server.view.freemarker.console">ToolkitPackRegistry.Resolved</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">ToolkitPackRegistry.</span><code><a href="../view/freemarker/console/ToolkitPackRegistry.html#resolve(java.util.List,org.apache.juneau.rest.server.RestRequest,java.util.List,java.lang.String)" class="member-name-link">resolve</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;names,
+ <a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;pageUrls,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;template)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Resolves the root packs and their dependencies to absolute URLs, split by kind.</div>
+</div>
+<div class="col-first even-row-color"><code>freemarker.template.Configuration</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">ConsoleFreemarkerMixin.</span><code><a href="../view/freemarker/console/ConsoleFreemarkerMixin.html#resolveConfiguration(org.apache.juneau.rest.server.RestRequest)" class="member-name-link">resolveConfiguration</a><wbr>(<a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Resolves the active <code>Configuration</code> and fill-missing-stamps console shared variables onto it.</div>
+</div>
+<div class="col-first odd-row-color"><code><a href="../view/freemarker/FreemarkerView.html" title="class in org.apache.juneau.rest.server.view.freemarker">FreemarkerView</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">PageSpec.</span><code><a href="../view/freemarker/console/PageSpec.html#view(org.apache.juneau.rest.server.RestRequest)" class="member-name-link">view</a><wbr>(<a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Builds the view for this spec.</div>
 </div>
 </div>
 </section>
@@ -1300,6 +2079,52 @@ loadScripts(document, 'script');</script>
 <div class="col-second odd-row-color"><span class="type-name-label">ThymeleafMixin.</span><code><a href="../view/thymeleaf/ThymeleafMixin.html#resolveTemplateEngine(org.apache.juneau.rest.server.RestRequest)" class="member-name-link">resolveTemplateEngine</a><wbr>(<a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req)</code></div>
 <div class="col-last odd-row-color">
 <div class="block">Resolves the active <code>TemplateEngine</code> via the shared <a href="../view/thymeleaf/ThymeleafDispatcher.html" title="class in org.apache.juneau.rest.server.view.thymeleaf"><code>ThymeleafDispatcher</code></a> worker.</div>
+</div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="org.apache.juneau.rest.server.views">
+<h2>Uses of <a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a> in <a href="../views/package-summary.html">org.apache.juneau.rest.server.views</a></h2>
+<div class="caption"><span>Methods in <a href="../views/package-summary.html">org.apache.juneau.rest.server.views</a> with parameters of type <a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a></span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier and Type</div>
+<div class="table-header col-second">Method</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code>static void</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">RunViewEndpoints.</span><code><a href="../views/RunViewEndpoints.html#events(java.util.Optional,org.apache.juneau.rest.server.RestRequest,org.apache.juneau.rest.server.RestResponse)" class="member-name-link">events</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="../views/RunViewSource.html" title="interface in org.apache.juneau.rest.server.views">RunViewSource</a>&gt;&nbsp;source,
+ <a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req,
+ <a href="../RestResponse.html" title="class in org.apache.juneau.rest.server">RestResponse</a>&nbsp;res)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Serves one page of the events endpoint (<code>?after=</code>) as JSON.</div>
+</div>
+<div class="col-first odd-row-color"><code>default void</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">RunViewMixin.</span><code><a href="../views/RunViewMixin.html#runViewEvents(java.lang.String,org.apache.juneau.rest.server.RestRequest,org.apache.juneau.rest.server.RestResponse)" class="member-name-link">runViewEvents</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;runId,
+ <a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req,
+ <a href="../RestResponse.html" title="class in org.apache.juneau.rest.server">RestResponse</a>&nbsp;res)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">[GET /juneau-run-view/{runId}/events] &mdash; one page of events as JSON.</div>
+</div>
+<div class="col-first even-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="../views/RunViewSource.html" title="interface in org.apache.juneau.rest.server.views">RunViewSource</a>&gt;</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">RunViewMixin.</span><code><a href="../views/RunViewMixin.html#runViewSource(java.lang.String,org.apache.juneau.rest.server.RestRequest)" class="member-name-link">runViewSource</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;runId,
+ <a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Resolves the source for a run id, applying the application's own access rules.</div>
+</div>
+<div class="col-first odd-row-color"><code>default void</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">AsyncJobsMixin.</span><code><a href="../views/AsyncJobsMixin.html#streamJob(java.lang.String,org.apache.juneau.rest.server.RestRequest,org.apache.juneau.rest.server.RestResponse)" class="member-name-link">streamJob</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;jobId,
+ <a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req,
+ <a href="../RestResponse.html" title="class in org.apache.juneau.rest.server">RestResponse</a>&nbsp;res)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">[GET /juneau-jobs/{jobId}/stream] &mdash; stream a job's progress as Server-Sent Events.</div>
+</div>
+<div class="col-first even-row-color"><code>static <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">ViewsMixin.</span><code><a href="../views/ViewsMixin.html#viewAssetUrl(org.apache.juneau.rest.server.RestRequest,java.lang.String)" class="member-name-link">viewAssetUrl</a><wbr>(<a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;path)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Returns a real, browser-fetchable <b>absolute</b> URL for a served asset, resolved against the given
+ request's context path and mount &mdash; carrying the same <code>?v=&lt;buildVersion&gt;-&lt;hash8&gt;</code> content-
+ sensitive cache-buster as <a href="../views/ViewsMixin.html#viewAssetUrl(java.lang.String)"><code>ViewsMixin.viewAssetUrl(String)</code></a> (see the class Javadoc's cache-busting section).</div>
 </div>
 </div>
 </section>
@@ -1456,6 +2281,25 @@ loadScripts(document, 'script');</script>
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</code></div>
 <div class="col-last odd-row-color">
 <div class="block">Same as <a href="../widget/Widget.html#loadStyle(org.apache.juneau.rest.server.RestRequest,java.lang.String)"><code>Widget.loadStyle(RestRequest,String)</code></a> but replaces request-time SVL variables.</div>
+</div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="org.apache.juneau.rest.server.widgets">
+<h2>Uses of <a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a> in <a href="../widgets/package-summary.html">org.apache.juneau.rest.server.widgets</a></h2>
+<div class="caption"><span>Methods in <a href="../widgets/package-summary.html">org.apache.juneau.rest.server.widgets</a> with parameters of type <a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a></span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier and Type</div>
+<div class="table-header col-second">Method</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code>static <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">WidgetsMixin.</span><code><a href="../widgets/WidgetsMixin.html#widgetAssetUrl(org.apache.juneau.rest.server.RestRequest,java.lang.String)" class="member-name-link">widgetAssetUrl</a><wbr>(<a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;path)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Returns a real, browser-fetchable <b>absolute</b> URL for a widget asset served by this mixin, resolved against
+ the given request's context path and mount &mdash; carrying the same cache-buster as
+ <a href="../widgets/WidgetsMixin.html#widgetAssetUrl(java.lang.String)"><code>WidgetsMixin.widgetAssetUrl(String)</code></a>.</div>
 </div>
 </div>
 </section>

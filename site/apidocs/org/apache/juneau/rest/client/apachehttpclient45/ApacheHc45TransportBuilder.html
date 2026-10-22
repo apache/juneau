@@ -78,7 +78,7 @@ loadScripts(document, 'script');</script>
 </div>
 <section class="class-description" id="class-description">
 <hr>
-<div class="type-signature"><span class="modifiers">public final class </span><span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/client/apachehttpclient45/ApacheHc45TransportBuilder.html#line-41">ApacheHc45TransportBuilder</a></span>
+<div class="type-signature"><span class="modifiers">public final class </span><span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/client/apachehttpclient45/ApacheHc45TransportBuilder.html#line-40">ApacheHc45TransportBuilder</a></span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
 <div class="block">Fluent builder for <a href="ApacheHc45Transport.html" title="class in org.apache.juneau.rest.client.apachehttpclient45"><code>ApacheHc45Transport</code></a>.
 
@@ -86,8 +86,7 @@ loadScripts(document, 'script');</script>
  Obtain an instance via <a href="ApacheHc45Transport.html#builder()"><code>ApacheHc45Transport.builder()</code></a>.
 
  <p>
- <b>Beta — API subject to change:</b> This type is part of the next-generation REST client and HTTP stack
- (<code>org.apache.juneau.marshall.ng.*</code>).
+ <b>Beta — API subject to change:</b> This type is part of the next-generation REST client and HTTP stack.
  It is not API-frozen: binary- and source-incompatible changes may appear in the <b>next major</b> Juneau release
  (and possibly earlier).
 
@@ -142,26 +141,40 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="httpClient(org.apache.http.impl.client.CloseableHttpClient)">
 <h3>httpClient</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ApacheHc45TransportBuilder.html" title="class in org.apache.juneau.rest.client.apachehttpclient45">ApacheHc45TransportBuilder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/client/apachehttpclient45/ApacheHc45TransportBuilder.html#line-62">httpClient</a></span><wbr><span class="parameters">(<a href="https://hc.apache.org/httpcomponents-client-4.5.x/current/httpclient/apidocs/org/apache/http/impl/client/CloseableHttpClient.html" title="class or interface in org.apache.http.impl.client" class="external-link">CloseableHttpClient</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ApacheHc45TransportBuilder.html" title="class in org.apache.juneau.rest.client.apachehttpclient45">ApacheHc45TransportBuilder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/client/apachehttpclient45/ApacheHc45TransportBuilder.html#line-74">httpClient</a></span><wbr><span class="parameters">(<a href="https://hc.apache.org/httpcomponents-client-4.5.x/current/httpclient/apidocs/org/apache/http/impl/client/CloseableHttpClient.html" title="class or interface in org.apache.http.impl.client" class="external-link">CloseableHttpClient</a>&nbsp;value)</span></div>
 <div class="block">Sets the underlying <a href="https://hc.apache.org/httpcomponents-client-4.5.x/current/httpclient/apidocs/org/apache/http/impl/client/CloseableHttpClient.html" title="class or interface in org.apache.http.impl.client" class="external-link"><code>CloseableHttpClient</code></a> to use.
 
  <p>
- If not set, a default client is created via <a href="https://hc.apache.org/httpcomponents-client-4.5.x/current/httpclient/apidocs/org/apache/http/impl/client/HttpClients.html#createDefault--" title="class or interface in org.apache.http.impl.client" class="external-link"><code>HttpClients.createDefault()</code></a>.
+ If not set, the transport creates its own default clients: one for ordinary requests, and one with a separate
+ connection pool whose connections are all pinned to a policy-allowed address, for SSRF-guard-active
+ <code>@Remote</code> requests.
 
  <p>
- The transport takes ownership of the client and will close it when <a href="ApacheHc45Transport.html#close()"><code>ApacheHc45Transport.close()</code></a> is called.</div>
+ A caller-supplied client cannot be given that pin-on-connect pool, so a transport built with one reports
+ <a href="ApacheHc45Transport.html#supportsUrlPolicy()"><code>ApacheHc45Transport.supportsUrlPolicy()</code></a> as <jk>false</jk>, and <code>RestRequest</code> refuses to send an
+ SSRF-guard-active request through it.
+
+ <p>
+ The transport takes ownership of the client and will close it when <a href="ApacheHc45Transport.html#close()"><code>ApacheHc45Transport.close()</code></a> is called.
+
+ <p>
+ A legacy <a href="https://hc.apache.org/httpcomponents-client-4.5.x/current/httpclient/apidocs/org/apache/http/impl/client/AbstractHttpClient.html" title="class or interface in org.apache.http.impl.client" class="external-link"><code>AbstractHttpClient</code></a> subclass (such as <code>DefaultHttpClient</code>) is refused: it never sets the request
+ again just before it is written, so the redirect credential guard cannot strip the credentials HttpClient adds itself
+ (for example the cookie-store <code>Cookie</code>) on a cross-origin redirect.  Build the client with <code>HttpClients</code>.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>value</code> - The client to use. Must not be <jk>null</jk>.</dd>
 <dt>Returns:</dt>
 <dd>This object.</dd>
+<dt>Throws:</dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/IllegalArgumentException.html" title="class or interface in java.lang" class="external-link">IllegalArgumentException</a></code> - If the client is an <a href="https://hc.apache.org/httpcomponents-client-4.5.x/current/httpclient/apidocs/org/apache/http/impl/client/AbstractHttpClient.html" title="class or interface in org.apache.http.impl.client" class="external-link"><code>AbstractHttpClient</code></a>.</dd>
 </dl>
 </section>
 </li>
 <li>
 <section class="detail" id="build()">
 <h3>build</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ApacheHc45Transport.html" title="class in org.apache.juneau.rest.client.apachehttpclient45">ApacheHc45Transport</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/client/apachehttpclient45/ApacheHc45TransportBuilder.html#line-72">build</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ApacheHc45Transport.html" title="class in org.apache.juneau.rest.client.apachehttpclient45">ApacheHc45Transport</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/client/apachehttpclient45/ApacheHc45TransportBuilder.html#line-89">build</a></span>()</div>
 <div class="block">Builds and returns the <a href="ApacheHc45Transport.html" title="class in org.apache.juneau.rest.client.apachehttpclient45"><code>ApacheHc45Transport</code></a>.</div>
 <dl class="notes">
 <dt>Returns:</dt>

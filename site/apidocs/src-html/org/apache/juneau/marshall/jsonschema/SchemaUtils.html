@@ -86,7 +86,7 @@
 <span class="source-line-no">073</span><span id="line-73">         var s = o2;</span>
 <span class="source-line-no">074</span><span id="line-74">         if (s.isEmpty())</span>
 <span class="source-line-no">075</span><span id="line-75">            return new JsonMap();</span>
-<span class="source-line-no">076</span><span id="line-76">         if ("IGNORE".equalsIgnoreCase(s))</span>
+<span class="source-line-no">076</span><span id="line-76">         if (eqic("IGNORE", s))</span>
 <span class="source-line-no">077</span><span id="line-77">            return JsonMap.of("ignore", true);</span>
 <span class="source-line-no">078</span><span id="line-78">         if (! isProbablyJsonObject(s, true))</span>
 <span class="source-line-no">079</span><span id="line-79">            s = "{" + s + "}";</span>

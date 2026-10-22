@@ -80,8 +80,8 @@
 <span class="source-line-no">067</span><span id="line-67"> *       Only &lt;c&gt;http&lt;/c&gt;/&lt;c&gt;https&lt;/c&gt; schemes are permitted; other schemes (e.g. &lt;c&gt;file:&lt;/c&gt;, &lt;c&gt;gopher:&lt;/c&gt;) are</span>
 <span class="source-line-no">068</span><span id="line-68"> *       rejected (SSRF guardrail).</span>
 <span class="source-line-no">069</span><span id="line-69"> *    &lt;li class='note'&gt;</span>
-<span class="source-line-no">070</span><span id="line-70"> *       Honored by the next-generation engine (&lt;c&gt;RestClient.remote(...)&lt;/c&gt;) only; the classic engine currently</span>
-<span class="source-line-no">071</span><span id="line-71"> *       ignores this annotation.</span>
+<span class="source-line-no">070</span><span id="line-70"> *       Honored by both the next-generation engine (&lt;c&gt;RestClient.remote(...)&lt;/c&gt;) and the classic engine</span>
+<span class="source-line-no">071</span><span id="line-71"> *       (&lt;c&gt;RestClient.getRemote(...)&lt;/c&gt;), with the same http/https-only scheme guard on both.</span>
 <span class="source-line-no">072</span><span id="line-72"> * &lt;/ul&gt;</span>
 <span class="source-line-no">073</span><span id="line-73"> *</span>
 <span class="source-line-no">074</span><span id="line-74"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>

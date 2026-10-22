@@ -110,8 +110,8 @@
 <span class="source-line-no">097</span><span id="line-97"> * &lt;/ul&gt;</span>
 <span class="source-line-no">098</span><span id="line-98"> */</span>
 <span class="source-line-no">099</span><span id="line-99">@SuppressWarnings({</span>
-<span class="source-line-no">100</span><span id="line-100">   "resource",  // RequestFormParam manages Closeable resources</span>
-<span class="source-line-no">101</span><span id="line-101">   "java:S2160" // equals() inherited from parent context; form param identity based on name+value from parent</span>
+<span class="source-line-no">100</span><span id="line-100">   "java:S2160", // equals() inherited from parent context; form param identity based on name+value from parent</span>
+<span class="source-line-no">101</span><span id="line-101">   "resource" // RequestFormParam manages Closeable resources</span>
 <span class="source-line-no">102</span><span id="line-102">})</span>
 <span class="source-line-no">103</span><span id="line-103">public class RequestFormParam extends RequestHttpPart implements HttpPart {</span>
 <span class="source-line-no">104</span><span id="line-104"></span>

@@ -120,16 +120,10 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color class-summary class-summary-tab2">
 <div class="block">Builder class.</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab7"><a href="Debug.html" title="annotation interface in org.apache.juneau.rest.server">Debug</a></div>
-<div class="col-last odd-row-color class-summary class-summary-tab7">
-<div class="block">Debug configuration metadata for <a href="Rest.html" title="annotation interface in org.apache.juneau.rest.server"><code>@Rest</code></a> and <a href="RestOp.html" title="annotation interface in org.apache.juneau.rest.server"><code>@RestOp</code></a>.</div>
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="ClientAborts.html" title="class in org.apache.juneau.rest.server">ClientAborts</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">
+<div class="block">Internal utility for recognizing failures caused by the client disconnecting before the response completed.</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab2"><a href="DebugAnnotation.html" title="class in org.apache.juneau.rest.server">DebugAnnotation</a></div>
-<div class="col-last even-row-color class-summary class-summary-tab2">
-<div class="block">Utility classes and methods for <a href="Debug.html" title="annotation interface in org.apache.juneau.rest.server"><code>Debug</code></a>.</div>
-</div>
-<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="DebugAnnotation.Builder.html" title="class in org.apache.juneau.rest.server">DebugAnnotation.Builder</a></div>
-<div class="col-last odd-row-color class-summary class-summary-tab2">&nbsp;</div>
 <div class="col-first even-row-color class-summary class-summary-tab2"><a href="Inherit.html" title="class in org.apache.juneau.rest.server">Inherit</a></div>
 <div class="col-last even-row-color class-summary class-summary-tab2">
 <div class="block">Dummy class that indicates that serializers, parsers, or transforms should be inherited from parent-class-to-class or class-to-method.</div>
@@ -139,17 +133,27 @@ loadScripts(document, 'script');</script>
 <div class="block">Annotation that can be applied to a parameter of a <a href="RestOp.html" title="annotation interface in org.apache.juneau.rest.server"><code>@RestOp</code></a> annotated method to identify it as the HTTP
  method.</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab7"><a href="Mixin.html" title="annotation interface in org.apache.juneau.rest.server">Mixin</a></div>
-<div class="col-last even-row-color class-summary class-summary-tab7">
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="MethodSafety.html" title="class in org.apache.juneau.rest.server">MethodSafety</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab2">
+<div class="block">Which HTTP methods are safe, and the startup check that an operation declared <a href="Mutating.html" title="annotation interface in org.apache.juneau.rest.server"><code>Mutating</code></a> is not bound to
+ one of them.</div>
+</div>
+<div class="col-first odd-row-color class-summary class-summary-tab7"><a href="Mixin.html" title="annotation interface in org.apache.juneau.rest.server">Mixin</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab7">
 <div class="block">Rich mixin definition for the <a href="Rest.html#mixinDefs()"><code>@Rest(mixinDefs=...)</code></a> attribute.</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="MixinAnnotation.html" title="class in org.apache.juneau.rest.server">MixinAnnotation</a></div>
-<div class="col-last odd-row-color class-summary class-summary-tab2">
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="MixinAnnotation.html" title="class in org.apache.juneau.rest.server">MixinAnnotation</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab2">
 <div class="block">Utility classes and methods for the <a href="Mixin.html" title="annotation interface in org.apache.juneau.rest.server"><code>@Mixin</code></a> annotation.</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab2"><a href="MixinAnnotation.Builder.html" title="class in org.apache.juneau.rest.server">MixinAnnotation.Builder</a></div>
-<div class="col-last even-row-color class-summary class-summary-tab2">
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="MixinAnnotation.Builder.html" title="class in org.apache.juneau.rest.server">MixinAnnotation.Builder</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">
 <div class="block">Builder class.</div>
+</div>
+<div class="col-first even-row-color class-summary class-summary-tab7"><a href="Mutating.html" title="annotation interface in org.apache.juneau.rest.server">Mutating</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab7">
+<div class="block">Declares that a REST operation changes state, so that binding it to an HTTP method defined as safe becomes a
+ startup failure instead of a silent mistake.</div>
 </div>
 <div class="col-first odd-row-color class-summary class-summary-tab2"><a href="None.html" title="class in org.apache.juneau.rest.server">None</a></div>
 <div class="col-last odd-row-color class-summary class-summary-tab2">
@@ -166,6 +170,14 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color class-summary class-summary-tab2"><a href="OpSwaggerAnnotation.Builder.html" title="class in org.apache.juneau.rest.server">OpSwaggerAnnotation.Builder</a></div>
 <div class="col-last even-row-color class-summary class-summary-tab2">
 <div class="block">Builder class.</div>
+</div>
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="RequestIdSettings.html" title="class in org.apache.juneau.rest.server">RequestIdSettings</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">
+<div class="block">Configuration for the always-on request-id correlation resolver run at <a href="RestSession.html" title="class in org.apache.juneau.rest.server"><code>RestSession</code></a> build time.</div>
+</div>
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="RequestIdSettings.Builder.html" title="class in org.apache.juneau.rest.server">RequestIdSettings.Builder</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab2">
+<div class="block">Builder for <a href="RequestIdSettings.html" title="class in org.apache.juneau.rest.server"><code>RequestIdSettings</code></a>.</div>
 </div>
 <div class="col-first odd-row-color class-summary class-summary-tab2"><a href="ResourceSupplier.html" title="class in org.apache.juneau.rest.server">ResourceSupplier</a></div>
 <div class="col-last odd-row-color class-summary class-summary-tab2">
@@ -424,18 +436,9 @@ loadScripts(document, 'script');</script>
 <div class="col-last odd-row-color class-summary class-summary-tab2">
 <div class="block">Represents an HTTP request for a REST resource.</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab2"><a href="RestRequest.DebugScope.html" title="class in org.apache.juneau.rest.server">RestRequest.DebugScope</a></div>
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="RestResponse.html" title="class in org.apache.juneau.rest.server">RestResponse</a></div>
 <div class="col-last even-row-color class-summary class-summary-tab2">
-<div class="block">Request-scoped debug controls.</div>
-</div>
-<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="RestResponse.html" title="class in org.apache.juneau.rest.server">RestResponse</a></div>
-<div class="col-last odd-row-color class-summary class-summary-tab2">
 <div class="block">Represents an HTTP response for a REST resource.</div>
-</div>
-<div class="col-first even-row-color class-summary class-summary-tab2"><a href="RestServerConstants.html" title="class in org.apache.juneau.rest.server">RestServerConstants</a></div>
-<div class="col-last even-row-color class-summary class-summary-tab2">
-<div class="block">Static literals for <code>juneau-rest-server</code>: annotation attribute name constants used for
- allowlist inheritance checks and other module-internal logic.</div>
 </div>
 <div class="col-first odd-row-color class-summary class-summary-tab2"><a href="RestSession.html" title="class in org.apache.juneau.rest.server">RestSession</a></div>
 <div class="col-last odd-row-color class-summary class-summary-tab2">

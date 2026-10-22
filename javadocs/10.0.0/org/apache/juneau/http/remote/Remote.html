@@ -96,79 +96,85 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color">
 <div class="block">Interface-level default <code>Accept</code> header (and response parser fallback) for all methods.</div>
 </div>
-<div class="col-first odd-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second odd-row-color"><code><a href="#baseUrl()" class="member-name-link">baseUrl</a></code></div>
+<div class="col-first odd-row-color"><code>boolean</code></div>
+<div class="col-second odd-row-color"><code><a href="#allowPrivateUrls()" class="member-name-link">allowPrivateUrls</a></code></div>
 <div class="col-last odd-row-color">
+<div class="block">Opts this interface's absolute <code>@Remote</code>/<code>@Url</code>/<code>baseUrl()</code> targets out of the default
+ deny-private SSRF guardrail, applied to every method on the proxy.</div>
+</div>
+<div class="col-first even-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second even-row-color"><code><a href="#baseUrl()" class="member-name-link">baseUrl</a></code></div>
+<div class="col-last even-row-color">
 <div class="block">Base/host override applied to every request the proxy makes.</div>
 </div>
-<div class="col-first even-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second even-row-color"><code><a href="#contentType()" class="member-name-link">contentType</a></code></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second odd-row-color"><code><a href="#contentType()" class="member-name-link">contentType</a></code></div>
+<div class="col-last odd-row-color">
 <div class="block">Interface-level default request body format (and <code>Content-Type</code> header) for all methods.</div>
 </div>
-<div class="col-first odd-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>[]</code></div>
-<div class="col-second odd-row-color"><code><a href="#formData()" class="member-name-link">formData</a></code></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>[]</code></div>
+<div class="col-second even-row-color"><code><a href="#formData()" class="member-name-link">formData</a></code></div>
+<div class="col-last even-row-color">
 <div class="block">Default request form-data parameters.</div>
 </div>
-<div class="col-first even-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;</code></div>
-<div class="col-second even-row-color"><code><a href="#headerList()" class="member-name-link">headerList</a></code></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;</code></div>
+<div class="col-second odd-row-color"><code><a href="#headerList()" class="member-name-link">headerList</a></code></div>
+<div class="col-last odd-row-color">
 <div class="block">Default request header list.</div>
 </div>
-<div class="col-first odd-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>[]</code></div>
-<div class="col-second odd-row-color"><code><a href="#headers()" class="member-name-link">headers</a></code></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>[]</code></div>
+<div class="col-second even-row-color"><code><a href="#headers()" class="member-name-link">headers</a></code></div>
+<div class="col-last even-row-color">
 <div class="block">Default request headers.</div>
 </div>
-<div class="col-first even-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;[]</code></div>
-<div class="col-second even-row-color"><code><a href="#interceptors()" class="member-name-link">interceptors</a></code></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;[]</code></div>
+<div class="col-second odd-row-color"><code><a href="#interceptors()" class="member-name-link">interceptors</a></code></div>
+<div class="col-last odd-row-color">
 <div class="block">Default lifecycle interceptors applied to every request the proxy makes.</div>
 </div>
-<div class="col-first odd-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second odd-row-color"><code><a href="#path()" class="member-name-link">path</a></code></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second even-row-color"><code><a href="#path()" class="member-name-link">path</a></code></div>
+<div class="col-last even-row-color">
 <div class="block">REST service path.</div>
 </div>
-<div class="col-first even-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>[]</code></div>
-<div class="col-second even-row-color"><code><a href="#queryData()" class="member-name-link">queryData</a></code></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>[]</code></div>
+<div class="col-second odd-row-color"><code><a href="#queryData()" class="member-name-link">queryData</a></code></div>
+<div class="col-last odd-row-color">
 <div class="block">Default request query parameters.</div>
 </div>
-<div class="col-first odd-row-color"><code>int</code></div>
-<div class="col-second odd-row-color"><code><a href="#retries()" class="member-name-link">retries</a></code></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><code>int</code></div>
+<div class="col-second even-row-color"><code><a href="#retries()" class="member-name-link">retries</a></code></div>
+<div class="col-last even-row-color">
 <div class="block">Default maximum number of automatic retry attempts applied to every request the proxy makes.</div>
 </div>
-<div class="col-first even-row-color"><code>boolean</code></div>
-<div class="col-second even-row-color"><code><a href="#retryNonIdempotent()" class="member-name-link">retryNonIdempotent</a></code></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><code>boolean</code></div>
+<div class="col-second odd-row-color"><code><a href="#retryNonIdempotent()" class="member-name-link">retryNonIdempotent</a></code></div>
+<div class="col-last odd-row-color">
 <div class="block">Opts non-idempotent verbs (<c>POST</c>/<c>PATCH</c>) into automatic retries for every method on the proxy.</div>
 </div>
-<div class="col-first odd-row-color"><code>boolean</code></div>
-<div class="col-second odd-row-color"><code><a href="#throwOnError()" class="member-name-link">throwOnError</a></code></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><code>boolean</code></div>
+<div class="col-second even-row-color"><code><a href="#throwOnError()" class="member-name-link">throwOnError</a></code></div>
+<div class="col-last even-row-color">
 <div class="block">Default for throwing a generic exception on an error response, applied to every method on the proxy.</div>
 </div>
-<div class="col-first even-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second even-row-color"><code><a href="#timeout()" class="member-name-link">timeout</a></code></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second odd-row-color"><code><a href="#timeout()" class="member-name-link">timeout</a></code></div>
+<div class="col-last odd-row-color">
 <div class="block">Default per-call response/read timeout applied to every request the proxy makes.</div>
 </div>
-<div class="col-first odd-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second odd-row-color"><code><a href="#value()" class="member-name-link">value</a></code></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second even-row-color"><code><a href="#value()" class="member-name-link">value</a></code></div>
+<div class="col-last even-row-color">
 <div class="block">Alias for <a href="#path()"><code>path()</code></a>.</div>
 </div>
-<div class="col-first even-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second even-row-color"><code><a href="#version()" class="member-name-link">version</a></code></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second odd-row-color"><code><a href="#version()" class="member-name-link">version</a></code></div>
+<div class="col-last odd-row-color">
 <div class="block">Specifies the client version of this interface.</div>
 </div>
-<div class="col-first odd-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second odd-row-color"><code><a href="#versionHeader()" class="member-name-link">versionHeader</a></code></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second even-row-color"><code><a href="#versionHeader()" class="member-name-link">versionHeader</a></code></div>
+<div class="col-last even-row-color">
 <div class="block">Specifies the client version header name.</div>
 </div>
 </div>
@@ -256,8 +262,8 @@ loadScripts(document, 'script');</script>
       Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a>
       (e.g. <js>"$S{mySystemProperty}"</js>).
    <li class='note'>
-      Honored by the next-generation engine (<c>RestClient.remote(...)</c>) only; the classic engine currently
-      ignores this attribute.
+      Honored by both the next-generation engine (<c>RestClient.remote(...)</c>) and the classic engine
+      (<c>RestClient.getRemote(...)</c>).
  </ul></div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -291,8 +297,8 @@ loadScripts(document, 'script');</script>
       Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a>
       (e.g. <js>"$S{mySystemProperty}"</js>).
    <li class='note'>
-      Honored by the next-generation engine (<c>RestClient.remote(...)</c>) only; the classic engine currently
-      ignores this attribute.
+      Honored by both the next-generation engine (<c>RestClient.remote(...)</c>) and the classic engine
+      (<c>RestClient.getRemote(...)</c>).
  </ul></div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -377,8 +383,8 @@ loadScripts(document, 'script');</script>
       Only <c>http</c>/<c>https</c> schemes are permitted when the override yields an absolute URL; other schemes
       are rejected (SSRF guardrail).
    <li class='note'>
-      Honored by the next-generation engine (<c>RestClient.remote(...)</c>) only; the classic engine currently
-      ignores this attribute.
+      Honored by both the next-generation engine (<c>RestClient.remote(...)</c>) and the classic engine
+      (<c>RestClient.getRemote(...)</c>), with the same http/https-only scheme guard on both.
  </ul></div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -409,8 +415,8 @@ loadScripts(document, 'script');</script>
 
  <h5 class='section'>Notes:</h5><ul>
    <li class='note'>
-      Honored by the next-generation engine (<c>RestClient.remote(...)</c>) only; the classic engine currently
-      ignores this attribute.
+      Honored by both the next-generation engine (<c>RestClient.remote(...)</c>) and the classic engine
+      (<c>RestClient.getRemote(...)</c>).
  </ul></div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -438,8 +444,8 @@ loadScripts(document, 'script');</script>
 
  <h5 class='section'>Notes:</h5><ul>
    <li class='note'>
-      Honored by the next-generation engine (<c>RestClient.remote(...)</c>) only; the classic engine currently
-      ignores this attribute.
+      Honored by both the next-generation engine (<c>RestClient.remote(...)</c>) and the classic engine
+      (<c>RestClient.getRemote(...)</c>).
  </ul></div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -564,8 +570,8 @@ loadScripts(document, 'script');</script>
 
  <h5 class='section'>Notes:</h5><ul>
    <li class='note'>
-      Honored by the next-generation engine (<c>RestClient.remote(...)</c>) only; the classic engine currently
-      ignores this attribute.
+      Honored by both the next-generation engine (<c>RestClient.remote(...)</c>) and the classic engine
+      (<c>RestClient.getRemote(...)</c>).
  </ul></div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -589,8 +595,8 @@ loadScripts(document, 'script');</script>
 
  <h5 class='section'>Notes:</h5><ul>
    <li class='note'>
-      Honored by the next-generation engine (<c>RestClient.remote(...)</c>) only; the classic engine currently
-      ignores this attribute.
+      Honored by both the next-generation engine (<c>RestClient.remote(...)</c>) and the classic engine
+      (<c>RestClient.getRemote(...)</c>).
  </ul></div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -615,8 +621,8 @@ loadScripts(document, 'script');</script>
 
  <h5 class='section'>Notes:</h5><ul>
    <li class='note'>
-      Honored by the next-generation engine (<c>RestClient.remote(...)</c>) only; the classic engine currently
-      ignores this attribute.
+      Honored by both the next-generation engine (<c>RestClient.remote(...)</c>) and the classic engine
+      (<c>RestClient.getRemote(...)</c>).
  </ul></div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -641,8 +647,44 @@ loadScripts(document, 'script');</script>
 
  <h5 class='section'>Notes:</h5><ul>
    <li class='note'>
-      Honored by the next-generation engine (<c>RestClient.remote(...)</c>) only; the classic engine currently
-      ignores this attribute.
+      Honored by both the next-generation engine (<c>RestClient.remote(...)</c>) and the classic engine
+      (<c>RestClient.getRemote(...)</c>).
+ </ul></div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>The annotation value.</dd>
+</dl>
+<dl class="notes">
+<dt>Default:</dt>
+<dd>false</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="allowPrivateUrls()">
+<h3>allowPrivateUrls</h3>
+<div class="member-signature"><span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/remote/Remote.html#line-406">allowPrivateUrls</a></span></div>
+<div class="block">Opts this interface's absolute <code>@Remote</code>/<code>@Url</code>/<code>baseUrl()</code> targets out of the default
+ deny-private SSRF guardrail, applied to every method on the proxy.
+
+ <p>
+ By default, an absolute <c>http</c>/<c>https</c> URL supplied via <a href="#baseUrl()"><code>baseUrl()</code></a>, an <code>@Url</code>
+ parameter, or an already-absolute <a href="#path()"><code>path()</code></a>/<a href="#value()"><code>value()</code></a> is rejected &mdash; both at pre-check time
+ and at connect time via resolved-address pinning, re-checked on every followed redirect &mdash; when it targets
+ a loopback, RFC1918/link-local, IPv6 unique-local, or cloud-metadata address.  Setting this to <jk>true</jk>
+ disables that check for local-dev/intranet targets that are intentionally private.
+
+ <p>
+ The effective value is the logical OR of this annotation value, the <code>RestClient</code> builder's
+ <code>allowPrivateUrls(...)</code> setting, and the <js>"RestClient.allowPrivateUrls"</js> system property: any one
+ of the three opting in is sufficient.
+
+ <h5 class='section'>Notes:</h5><ul>
+   <li class='note'>
+      Honored by both the next-generation engine (<c>RestClient.remote(...)</c>) and the classic engine
+      (<c>RestClient.getRemote(...)</c>).
+   <li class='note'>
+      Does not affect the http/https-only scheme guard, which always applies.
  </ul></div>
 <dl class="notes">
 <dt>Returns:</dt>

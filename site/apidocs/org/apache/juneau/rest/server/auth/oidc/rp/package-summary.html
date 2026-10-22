@@ -95,16 +95,6 @@ loadScripts(document, 'script');</script>
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Class</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color class-summary class-summary-tab2"><a href="EphemeralStore.html" title="class in org.apache.juneau.rest.server.auth.oidc.rp">EphemeralStore</a></div>
-<div class="col-last even-row-color class-summary class-summary-tab2">
-<div class="block">Single-use, TTL-bounded store for the per-login <code>state</code> &rarr; <code>(nonce, codeVerifier,
- redirectTarget)</code> association created during <a href="OidcRelyingParty.html#startLogin(jakarta.servlet.http.HttpServletRequest,jakarta.servlet.http.HttpServletResponse)"><code>OidcRelyingParty.startLogin(jakarta.servlet.http.HttpServletRequest, jakarta.servlet.http.HttpServletResponse)</code></a> and consumed during
- <a href="OidcRelyingParty.html#completeLogin(jakarta.servlet.http.HttpServletRequest,jakarta.servlet.http.HttpServletResponse)"><code>OidcRelyingParty.completeLogin(jakarta.servlet.http.HttpServletRequest, jakarta.servlet.http.HttpServletResponse)</code></a>.</div>
-</div>
-<div class="col-first odd-row-color class-summary class-summary-tab4"><a href="EphemeralStore.PendingLogin.html" title="class in org.apache.juneau.rest.server.auth.oidc.rp">EphemeralStore.PendingLogin</a></div>
-<div class="col-last odd-row-color class-summary class-summary-tab4">
-<div class="block">A pending-login association awaiting the IdP callback.</div>
-</div>
 <div class="col-first even-row-color class-summary class-summary-tab2"><a href="IdTokenValidatorAdapter.html" title="class in org.apache.juneau.rest.server.auth.oidc.rp">IdTokenValidatorAdapter</a></div>
 <div class="col-last even-row-color class-summary class-summary-tab2">
 <div class="block">Wraps Nimbus's <code>IDTokenValidator</code> to validate an OpenID Connect ID token's signature and claims
@@ -114,41 +104,57 @@ loadScripts(document, 'script');</script>
 <div class="col-last odd-row-color class-summary class-summary-tab2">
 <div class="block">Builder.</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab2"><a href="InMemorySessionStore.html" title="class in org.apache.juneau.rest.server.auth.oidc.rp">InMemorySessionStore</a></div>
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="InMemoryLoginStateStore.html" title="class in org.apache.juneau.rest.server.auth.oidc.rp">InMemoryLoginStateStore</a></div>
 <div class="col-last even-row-color class-summary class-summary-tab2">
+<div class="block">The shipped, single-node default <a href="LoginStateStore.html" title="interface in org.apache.juneau.rest.server.auth.oidc.rp"><code>LoginStateStore</code></a>: a single-use, TTL-bounded, size-bounded
+ in-memory store for the per-login <code>state</code> &rarr; <a href="LoginStateStore.PendingLogin.html" title="class in org.apache.juneau.rest.server.auth.oidc.rp"><code>LoginStateStore.PendingLogin</code></a> association
+ created during <a href="OidcRelyingParty.html#startLogin(jakarta.servlet.http.HttpServletRequest,jakarta.servlet.http.HttpServletResponse)"><code>OidcRelyingParty.startLogin(jakarta.servlet.http.HttpServletRequest, jakarta.servlet.http.HttpServletResponse)</code></a> and consumed during <a href="OidcRelyingParty.html#completeLogin(jakarta.servlet.http.HttpServletRequest,jakarta.servlet.http.HttpServletResponse)"><code>OidcRelyingParty.completeLogin(jakarta.servlet.http.HttpServletRequest, jakarta.servlet.http.HttpServletResponse)</code></a>.</div>
+</div>
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="InMemorySessionStore.html" title="class in org.apache.juneau.rest.server.auth.oidc.rp">InMemorySessionStore</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">
 <div class="block">In-memory <a href="SessionStore.html" title="interface in org.apache.juneau.rest.server.auth.oidc.rp"><code>SessionStore</code></a> backed by a bounded-LRU map, indexed by <code>sub</code> and <code>sid</code> so
  it can satisfy back-channel logout.</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="OidcRelyingParty.html" title="class in org.apache.juneau.rest.server.auth.oidc.rp">OidcRelyingParty</a></div>
-<div class="col-last odd-row-color class-summary class-summary-tab2">
+<div class="col-first even-row-color class-summary class-summary-tab1"><a href="LoginStateStore.html" title="interface in org.apache.juneau.rest.server.auth.oidc.rp">LoginStateStore</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab1">
+<div class="block">SPI for the single-use, TTL-bounded <code>state</code> &rarr; (<code>nonce</code>, PKCE <code>code_verifier</code>,
+ redirect target) association created during <a href="OidcRelyingParty.html#startLogin(jakarta.servlet.http.HttpServletRequest,jakarta.servlet.http.HttpServletResponse)"><code>OidcRelyingParty.startLogin(jakarta.servlet.http.HttpServletRequest, jakarta.servlet.http.HttpServletResponse)</code></a> and consumed during
+ <a href="OidcRelyingParty.html#completeLogin(jakarta.servlet.http.HttpServletRequest,jakarta.servlet.http.HttpServletResponse)"><code>OidcRelyingParty.completeLogin(jakarta.servlet.http.HttpServletRequest, jakarta.servlet.http.HttpServletResponse)</code></a>.</div>
+</div>
+<div class="col-first odd-row-color class-summary class-summary-tab4"><a href="LoginStateStore.PendingLogin.html" title="class in org.apache.juneau.rest.server.auth.oidc.rp">LoginStateStore.PendingLogin</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab4">
+<div class="block">A pending-login association awaiting the IdP callback.</div>
+</div>
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="OidcRelyingParty.html" title="class in org.apache.juneau.rest.server.auth.oidc.rp">OidcRelyingParty</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab2">
 <div class="block">Facade orchestrating an OpenID Connect Authorization-Code-with-PKCE <i>Relying Party</i> login flow on
  top of the <code>juneau-rest-server-auth-oauth</code> building blocks.</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab2"><a href="OidcRelyingParty.Builder.html" title="class in org.apache.juneau.rest.server.auth.oidc.rp">OidcRelyingParty.Builder</a></div>
-<div class="col-last even-row-color class-summary class-summary-tab2">
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="OidcRelyingParty.Builder.html" title="class in org.apache.juneau.rest.server.auth.oidc.rp">OidcRelyingParty.Builder</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">
 <div class="block">Builder.</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab4"><a href="OidcSession.html" title="class in org.apache.juneau.rest.server.auth.oidc.rp">OidcSession</a></div>
-<div class="col-last odd-row-color class-summary class-summary-tab4">
+<div class="col-first even-row-color class-summary class-summary-tab4"><a href="OidcSession.html" title="class in org.apache.juneau.rest.server.auth.oidc.rp">OidcSession</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab4">
 <div class="block">Immutable record describing a logged-in OpenID Connect Relying Party session.</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab2"><a href="OidcSessionAuthFilter.html" title="class in org.apache.juneau.rest.server.auth.oidc.rp">OidcSessionAuthFilter</a></div>
-<div class="col-last even-row-color class-summary class-summary-tab2">
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="OidcSessionAuthFilter.html" title="class in org.apache.juneau.rest.server.auth.oidc.rp">OidcSessionAuthFilter</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">
 <div class="block"><a href="../../AuthFilter.html" title="class in org.apache.juneau.rest.server.auth"><code>AuthFilter</code></a> that resolves the OIDC Relying Party session cookie into a <a href="../../ClaimsPrincipal.html" title="class in org.apache.juneau.rest.server.auth"><code>ClaimsPrincipal</code></a>
  on each request, so <code>RoleBasedRestGuard</code> and <code>@Auth Principal</code> injection see the
  filter-resolved identity (via <a href="../../AuthenticatedRequestWrapper.html" title="class in org.apache.juneau.rest.server.auth"><code>AuthenticatedRequestWrapper</code></a>) with zero downstream changes.</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab1"><a href="SessionStore.html" title="interface in org.apache.juneau.rest.server.auth.oidc.rp">SessionStore</a></div>
-<div class="col-last odd-row-color class-summary class-summary-tab1">
+<div class="col-first even-row-color class-summary class-summary-tab1"><a href="SessionStore.html" title="interface in org.apache.juneau.rest.server.auth.oidc.rp">SessionStore</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab1">
 <div class="block">SPI for persisting <a href="OidcSession.html" title="class in org.apache.juneau.rest.server.auth.oidc.rp"><code>OidcSession</code></a> instances and resolving them back from a session-cookie value.</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab2"><a href="SignedCookieSessionStore.html" title="class in org.apache.juneau.rest.server.auth.oidc.rp">SignedCookieSessionStore</a></div>
-<div class="col-last even-row-color class-summary class-summary-tab2">
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="SignedCookieSessionStore.html" title="class in org.apache.juneau.rest.server.auth.oidc.rp">SignedCookieSessionStore</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">
 <div class="block">Stateless <a href="SessionStore.html" title="interface in org.apache.juneau.rest.server.auth.oidc.rp"><code>SessionStore</code></a> that serializes the session into an HMAC-signed compact JWT carried
  entirely in the session cookie.</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="SignedCookieSessionStore.Builder.html" title="class in org.apache.juneau.rest.server.auth.oidc.rp">SignedCookieSessionStore.Builder</a></div>
-<div class="col-last odd-row-color class-summary class-summary-tab2">
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="SignedCookieSessionStore.Builder.html" title="class in org.apache.juneau.rest.server.auth.oidc.rp">SignedCookieSessionStore.Builder</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab2">
 <div class="block">Builder.</div>
 </div>
 </div>

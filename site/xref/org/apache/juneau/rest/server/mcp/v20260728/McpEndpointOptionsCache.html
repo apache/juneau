@@ -106,7 +106,7 @@
 <a class="jxr_linenumber" name="L98" href="#L98">98</a>  <em class="jxr_javadoccomment">	 * cleared), and {@code equals()} is reference equality on the referent &amp;mdash; deliberately never</em>
 <a class="jxr_linenumber" name="L99" href="#L99">99</a>  <em class="jxr_javadoccomment">	 * delegating to the endpoint's own {@code equals()}/{@code hashCode()}, since those may be value-based.</em>
 <a class="jxr_linenumber" name="L100" href="#L100">100</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L101" href="#L101">101</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">class</strong> IdentityKey <strong class="jxr_keyword">extends</strong> WeakReference&lt;McpEndpoint&gt; {
+<a class="jxr_linenumber" name="L101" href="#L101">101</a> 	<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">class</strong> IdentityKey <strong class="jxr_keyword">extends</strong> WeakReference&lt;McpEndpoint&gt; {
 <a class="jxr_linenumber" name="L102" href="#L102">102</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> hash;
 <a class="jxr_linenumber" name="L103" href="#L103">103</a> 
 <a class="jxr_linenumber" name="L104" href="#L104">104</a> 		IdentityKey(<a name="McpEndpoint" href="../../../../../../../org/apache/juneau/rest/server/mcp/v20260728/McpEndpoint.html#McpEndpoint">McpEndpoint</a> referent) {

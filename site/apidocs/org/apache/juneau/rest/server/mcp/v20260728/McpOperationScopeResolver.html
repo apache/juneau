@@ -90,8 +90,8 @@ loadScripts(document, 'script');</script>
 
  <p>
  The default resolver is a <b>static per-operation map</b> populated via
- <a href="McpResourceServerConfig.html#addOperationScope(java.lang.String,java.lang.String,java.lang.String...)"><code>McpResourceServerConfig.addOperationScope(String, String, String...)</code></a> &mdash; sufficient for 10.0 per the
- READY-312f settled premise.  This interface is the seam a future <em>dynamic</em> resolver (e.g. one inspecting
+ <a href="McpResourceServerConfig.html#addOperationScope(java.lang.String,java.lang.String,java.lang.String...)"><code>McpResourceServerConfig.addOperationScope(String, String, String...)</code></a> &mdash; sufficient for 10.0.
+ This interface is the seam a future <em>dynamic</em> resolver (e.g. one inspecting
  <a href="McpOperationContext.html#params()"><code>params</code></a>) could plug into via
  <a href="McpResourceServerConfig.html#setOperationScopeResolver(org.apache.juneau.rest.server.mcp.v20260728.McpOperationScopeResolver)"><code>McpResourceServerConfig.setOperationScopeResolver(McpOperationScopeResolver)</code></a>; that dynamic capability is
  deliberately not built for 10.0.</div>

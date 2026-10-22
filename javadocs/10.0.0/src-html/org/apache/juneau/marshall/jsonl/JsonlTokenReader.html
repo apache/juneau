@@ -62,47 +62,44 @@
 <span class="source-line-no">049</span><span id="line-49"> *    &lt;li&gt;The cursor is a true O(1)-memory streaming cursor ({@link #isStreaming()} == &lt;jk&gt;true&lt;/jk&gt;).</span>
 <span class="source-line-no">050</span><span id="line-50"> * &lt;/ul&gt;</span>
 <span class="source-line-no">051</span><span id="line-51"> */</span>
-<span class="source-line-no">052</span><span id="line-52">@SuppressWarnings({</span>
-<span class="source-line-no">053</span><span id="line-53">   "resource" // The cursor's underlying ParserPipe is owned by the caller via try-with-resources on the cursor itself; Eclipse JDT flags the inner pipe as unclosed but that's by design.</span>
-<span class="source-line-no">054</span><span id="line-54">})</span>
-<span class="source-line-no">055</span><span id="line-55">public class JsonlTokenReader extends JsonTokenReader {</span>
-<span class="source-line-no">056</span><span id="line-56"></span>
-<span class="source-line-no">057</span><span id="line-57">   /**</span>
-<span class="source-line-no">058</span><span id="line-58">    * Constructor with default settings.</span>
-<span class="source-line-no">059</span><span id="line-59">    *</span>
-<span class="source-line-no">060</span><span id="line-60">    * @param pipe The parser input pipe to read from.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">061</span><span id="line-61">    * @throws IOException If a problem occurred opening the underlying reader.</span>
-<span class="source-line-no">062</span><span id="line-62">    */</span>
-<span class="source-line-no">063</span><span id="line-63">   public JsonlTokenReader(ParserPipe pipe) throws IOException {</span>
-<span class="source-line-no">064</span><span id="line-64">      super(pipe);</span>
-<span class="source-line-no">065</span><span id="line-65">   }</span>
-<span class="source-line-no">066</span><span id="line-66"></span>
-<span class="source-line-no">067</span><span id="line-67">   /**</span>
-<span class="source-line-no">068</span><span id="line-68">    * Constructor used by {@link JsonlParserSession#readTokens(Object)} to plumb the calling</span>
-<span class="source-line-no">069</span><span id="line-69">    * session through.</span>
-<span class="source-line-no">070</span><span id="line-70">    *</span>
-<span class="source-line-no">071</span><span id="line-71">    * @param pipe The parser input pipe.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">072</span><span id="line-72">    * @param settings The cursor-level settings.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">073</span><span id="line-73">    * @param session The {@link JsonlParserSession} for {@link #read(Class)} delegation, or</span>
-<span class="source-line-no">074</span><span id="line-74">    *    &lt;jk&gt;null&lt;/jk&gt; to disable {@code read}.</span>
-<span class="source-line-no">075</span><span id="line-75">    * @throws IOException If a problem occurred opening the underlying reader.</span>
-<span class="source-line-no">076</span><span id="line-76">    */</span>
-<span class="source-line-no">077</span><span id="line-77">   public JsonlTokenReader(ParserPipe pipe, Settings settings, JsonlParserSession session) throws IOException {</span>
-<span class="source-line-no">078</span><span id="line-78">      super(pipe, settings, session);</span>
-<span class="source-line-no">079</span><span id="line-79">   }</span>
-<span class="source-line-no">080</span><span id="line-80"></span>
-<span class="source-line-no">081</span><span id="line-81">   @Override /* JsonTokenReader */</span>
-<span class="source-line-no">082</span><span id="line-82">   protected void afterValue() {</span>
-<span class="source-line-no">083</span><span id="line-83">      // At depth 0, a top-level value just completed and we want the next next() / read()</span>
-<span class="source-line-no">084</span><span id="line-84">      // to consume the next line's value (instead of transitioning to S05_end as plain JSON</span>
-<span class="source-line-no">085</span><span id="line-85">      // would).  Inside a container the parent's logic (S03_expectCommaOrEndObject /</span>
-<span class="source-line-no">086</span><span id="line-86">      // S04_expectCommaOrEndArray) is still correct.</span>
-<span class="source-line-no">087</span><span id="line-87">      if (depth == 0)</span>
-<span class="source-line-no">088</span><span id="line-88">         state = S00_expectValue;</span>
-<span class="source-line-no">089</span><span id="line-89">      else</span>
-<span class="source-line-no">090</span><span id="line-90">         super.afterValue();</span>
-<span class="source-line-no">091</span><span id="line-91">   }</span>
-<span class="source-line-no">092</span><span id="line-92">}</span>
+<span class="source-line-no">052</span><span id="line-52">public class JsonlTokenReader extends JsonTokenReader {</span>
+<span class="source-line-no">053</span><span id="line-53"></span>
+<span class="source-line-no">054</span><span id="line-54">   /**</span>
+<span class="source-line-no">055</span><span id="line-55">    * Constructor with default settings.</span>
+<span class="source-line-no">056</span><span id="line-56">    *</span>
+<span class="source-line-no">057</span><span id="line-57">    * @param pipe The parser input pipe to read from.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">058</span><span id="line-58">    * @throws IOException If a problem occurred opening the underlying reader.</span>
+<span class="source-line-no">059</span><span id="line-59">    */</span>
+<span class="source-line-no">060</span><span id="line-60">   public JsonlTokenReader(ParserPipe pipe) throws IOException {</span>
+<span class="source-line-no">061</span><span id="line-61">      super(pipe);</span>
+<span class="source-line-no">062</span><span id="line-62">   }</span>
+<span class="source-line-no">063</span><span id="line-63"></span>
+<span class="source-line-no">064</span><span id="line-64">   /**</span>
+<span class="source-line-no">065</span><span id="line-65">    * Constructor used by {@link JsonlParserSession#readTokens(Object)} to plumb the calling</span>
+<span class="source-line-no">066</span><span id="line-66">    * session through.</span>
+<span class="source-line-no">067</span><span id="line-67">    *</span>
+<span class="source-line-no">068</span><span id="line-68">    * @param pipe The parser input pipe.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">069</span><span id="line-69">    * @param settings The cursor-level settings.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">070</span><span id="line-70">    * @param session The {@link JsonlParserSession} for {@link #read(Class)} delegation, or</span>
+<span class="source-line-no">071</span><span id="line-71">    *    &lt;jk&gt;null&lt;/jk&gt; to disable {@code read}.</span>
+<span class="source-line-no">072</span><span id="line-72">    * @throws IOException If a problem occurred opening the underlying reader.</span>
+<span class="source-line-no">073</span><span id="line-73">    */</span>
+<span class="source-line-no">074</span><span id="line-74">   public JsonlTokenReader(ParserPipe pipe, Settings settings, JsonlParserSession session) throws IOException {</span>
+<span class="source-line-no">075</span><span id="line-75">      super(pipe, settings, session);</span>
+<span class="source-line-no">076</span><span id="line-76">   }</span>
+<span class="source-line-no">077</span><span id="line-77"></span>
+<span class="source-line-no">078</span><span id="line-78">   @Override /* JsonTokenReader */</span>
+<span class="source-line-no">079</span><span id="line-79">   protected void afterValue() {</span>
+<span class="source-line-no">080</span><span id="line-80">      // At depth 0, a top-level value just completed and we want the next next() / read()</span>
+<span class="source-line-no">081</span><span id="line-81">      // to consume the next line's value (instead of transitioning to S05_end as plain JSON</span>
+<span class="source-line-no">082</span><span id="line-82">      // would).  Inside a container the parent's logic (S03_expectCommaOrEndObject /</span>
+<span class="source-line-no">083</span><span id="line-83">      // S04_expectCommaOrEndArray) is still correct.</span>
+<span class="source-line-no">084</span><span id="line-84">      if (depth == 0)</span>
+<span class="source-line-no">085</span><span id="line-85">         state = S00_expectValue;</span>
+<span class="source-line-no">086</span><span id="line-86">      else</span>
+<span class="source-line-no">087</span><span id="line-87">         super.afterValue();</span>
+<span class="source-line-no">088</span><span id="line-88">   }</span>
+<span class="source-line-no">089</span><span id="line-89">}</span>
 
 
 

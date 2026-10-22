@@ -115,6 +115,26 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="Pet.html" title="class in org.apache.juneau.petstore.dto">Pet</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#defaultPhoto(java.lang.String)" class="member-name-link">defaultPhoto</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Sets the photo URI only if it is currently <jk>null</jk>.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="Pet.html" title="class in org.apache.juneau.petstore.dto">Pet</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#defaultSpecies(org.apache.juneau.petstore.dto.Species)" class="member-name-link">defaultSpecies</a><wbr>(<a href="Species.html" title="enum class in org.apache.juneau.petstore.dto">Species</a>&nbsp;value)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Sets the species only if it is currently <jk>null</jk>.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="Pet.html" title="class in org.apache.juneau.petstore.dto">Pet</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#defaultStatus(org.apache.juneau.petstore.dto.PetStatus)" class="member-name-link">defaultStatus</a><wbr>(<a href="PetStatus.html" title="enum class in org.apache.juneau.petstore.dto">PetStatus</a>&nbsp;value)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Sets the lifecycle status only if it is currently <jk>null</jk>.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="Pet.html" title="class in org.apache.juneau.petstore.dto">Pet</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#defaultTags(java.util.List)" class="member-name-link">defaultTags</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;value)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Sets the tags only if they are currently <jk>null</jk>.</div>
+</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>long</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getId()" class="member-name-link">getId</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
@@ -379,6 +399,58 @@ loadScripts(document, 'script');</script>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>value</code> - The new value.  Can be <jk>null</jk> to unset the property.</dd>
+<dt>Returns:</dt>
+<dd>This object.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="defaultSpecies(org.apache.juneau.petstore.dto.Species)">
+<h3>defaultSpecies</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Pet.html" title="class in org.apache.juneau.petstore.dto">Pet</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/petstore/dto/Pet.html#line-189">defaultSpecies</a></span><wbr><span class="parameters">(<a href="Species.html" title="enum class in org.apache.juneau.petstore.dto">Species</a>&nbsp;value)</span></div>
+<div class="block">Sets the species only if it is currently <jk>null</jk>.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>value</code> - The fallback value.</dd>
+<dt>Returns:</dt>
+<dd>This object.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="defaultTags(java.util.List)">
+<h3>defaultTags</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Pet.html" title="class in org.apache.juneau.petstore.dto">Pet</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/petstore/dto/Pet.html#line-201">defaultTags</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;value)</span></div>
+<div class="block">Sets the tags only if they are currently <jk>null</jk>.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>value</code> - The fallback value.</dd>
+<dt>Returns:</dt>
+<dd>This object.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="defaultStatus(org.apache.juneau.petstore.dto.PetStatus)">
+<h3>defaultStatus</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Pet.html" title="class in org.apache.juneau.petstore.dto">Pet</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/petstore/dto/Pet.html#line-213">defaultStatus</a></span><wbr><span class="parameters">(<a href="PetStatus.html" title="enum class in org.apache.juneau.petstore.dto">PetStatus</a>&nbsp;value)</span></div>
+<div class="block">Sets the lifecycle status only if it is currently <jk>null</jk>.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>value</code> - The fallback value.</dd>
+<dt>Returns:</dt>
+<dd>This object.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="defaultPhoto(java.lang.String)">
+<h3>defaultPhoto</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Pet.html" title="class in org.apache.juneau.petstore.dto">Pet</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/petstore/dto/Pet.html#line-225">defaultPhoto</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="block">Sets the photo URI only if it is currently <jk>null</jk>.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>value</code> - The fallback value.</dd>
 <dt>Returns:</dt>
 <dd>This object.</dd>
 </dl>

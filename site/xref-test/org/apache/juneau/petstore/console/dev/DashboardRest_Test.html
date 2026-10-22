@@ -1,0 +1,158 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="" lang="">
+<head><meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<title>DashboardRest_Test xref</title>
+<link type="text/css" rel="stylesheet" href="../../../../../../stylesheet.css" />
+</head>
+<body>
+<div id="overview"><a href="../../../../../../../testapidocs/org/apache/juneau/petstore/console/dev/DashboardRest_Test.html">View Javadoc</a></div><pre>
+<a class="jxr_linenumber" name="L1" href="#L1">1</a>   <em class="jxr_comment">/*</em>
+<a class="jxr_linenumber" name="L2" href="#L2">2</a>   <em class="jxr_comment"> * Licensed to the Apache Software Foundation (ASF) under one or more</em>
+<a class="jxr_linenumber" name="L3" href="#L3">3</a>   <em class="jxr_comment"> * contributor license agreements.  See the NOTICE file distributed with</em>
+<a class="jxr_linenumber" name="L4" href="#L4">4</a>   <em class="jxr_comment"> * this work for additional information regarding copyright ownership.</em>
+<a class="jxr_linenumber" name="L5" href="#L5">5</a>   <em class="jxr_comment"> * The ASF licenses this file to You under the Apache License, Version 2.0</em>
+<a class="jxr_linenumber" name="L6" href="#L6">6</a>   <em class="jxr_comment"> * (the "License"); you may not use this file except in compliance with</em>
+<a class="jxr_linenumber" name="L7" href="#L7">7</a>   <em class="jxr_comment"> * the License.  You may obtain a copy of the License at</em>
+<a class="jxr_linenumber" name="L8" href="#L8">8</a>   <em class="jxr_comment"> *</em>
+<a class="jxr_linenumber" name="L9" href="#L9">9</a>   <em class="jxr_comment"> *      <a href="http://www.apache.org/licenses/LICENSE-2.0" target="alexandria_uri">http://www.apache.org/licenses/LICENSE-2.0</a></em>
+<a class="jxr_linenumber" name="L10" href="#L10">10</a>  <em class="jxr_comment"> *</em>
+<a class="jxr_linenumber" name="L11" href="#L11">11</a>  <em class="jxr_comment"> * Unless required by applicable law or agreed to in writing, software</em>
+<a class="jxr_linenumber" name="L12" href="#L12">12</a>  <em class="jxr_comment"> * distributed under the License is distributed on an "AS IS" BASIS,</em>
+<a class="jxr_linenumber" name="L13" href="#L13">13</a>  <em class="jxr_comment"> * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</em>
+<a class="jxr_linenumber" name="L14" href="#L14">14</a>  <em class="jxr_comment"> * See the License for the specific language governing permissions and</em>
+<a class="jxr_linenumber" name="L15" href="#L15">15</a>  <em class="jxr_comment"> * limitations under the License.</em>
+<a class="jxr_linenumber" name="L16" href="#L16">16</a>  <em class="jxr_comment"> */</em>
+<a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> org.apache.juneau.petstore.console.dev;
+<a class="jxr_linenumber" name="L18" href="#L18">18</a>  
+<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.petstore.console.PetstoreConsoleFixture.*;
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.server.console.test.PageContractAssert.*;
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.test.bct.BctAssertions.*;
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.junit.jupiter.api.Assertions.*;
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.*;
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> org.junit.jupiter.api.*;
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <em class="jxr_javadoccomment"> * The petstore dashboard page, its CSV source variants and its request counter.</em>
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <em class="jxr_javadoccomment"> */</em>
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  @SuppressWarnings({
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>  	<span class="jxr_string">"resource"</span> <em class="jxr_comment">// MockRestClient is a no-op close.</em>
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>  })
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <strong class="jxr_keyword">class</strong> DashboardRest_Test <strong class="jxr_keyword">extends</strong> TestBase {
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>  
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String BASE = <span class="jxr_string">"/console/dev/dashboard"</span>;
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>  
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String csv(String variant, String query) <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>  		<strong class="jxr_keyword">return</strong> client().get(BASE + <span class="jxr_string">"/series/"</span> + variant + query).run().assertStatus(200)
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>  			.assertHeader(<span class="jxr_string">"Content-Type"</span>).isContains(<span class="jxr_string">"text/csv"</span>).getContent().asString();
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>  	}
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>  
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>  	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>  	<em class="jxr_comment">// a - page</em>
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>  	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>  
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>  	@Test <strong class="jxr_keyword">void</strong> a01_dashboardContract() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>  		<strong class="jxr_keyword">var</strong> html = page(client(), BASE);
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>  		<strong class="jxr_keyword">var</strong> page = assertPage(html).isValid().hasActiveNav(<span class="jxr_string">"dev"</span>).hasNoWiringErrors()
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>  			.hasCard(<span class="jxr_string">"daily"</span>, <span class="jxr_string">"chart"</span>).hasCard(<span class="jxr_string">"by-reason"</span>, <span class="jxr_string">"chart"</span>).hasCard(<span class="jxr_string">"by-weekday"</span>, <span class="jxr_string">"chart"</span>).hasCard(<span class="jxr_string">"share"</span>, <span class="jxr_string">"chart"</span>)
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>  			.publishes(<span class="jxr_string">"daily"</span>, <span class="jxr_string">"zoom:daily"</span>);
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>  		<strong class="jxr_keyword">var</strong> d = page.contract().getMap(<span class="jxr_string">"dashboard"</span>);
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>  		assertBean(d, <span class="jxr_string">"id,title,grid,status{length,0}"</span>, <span class="jxr_string">"overview,Order issues,2,{1,data:orders}"</span>);
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>  		assertBean(d, <span class="jxr_string">"panels{length,0{card,span},1{card,span},2{card,span}}"</span>, <span class="jxr_string">"{3,{daily,2},{by-reason,1},{by-weekday,1}}"</span>);
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>  		assertBean(d, <span class="jxr_string">"rail{side,width,sections{length,0{kind,id,custom,defaultPreset},1{kind,id},2{kind,id,source,dim},3{kind,card},4{kind,id,name}}}"</span>,
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>  			<span class="jxr_string">"{left,280,{5,{range,range,true,30d},{search,q},{choice,reasons,orders,reason},{card,share},{custom,late,petstore.late}}}"</span>);
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>  		assertBean(d, <span class="jxr_string">"persist{ns,version,shareLink,topics{length,0,1,2,3}}"</span>,
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>  			<span class="jxr_string">"{petstore.dashboard,1,true,{4,filter:range,filter:q,filter:reasons,zoom:daily}}"</span>);
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>  		<em class="jxr_comment">// The source entry; the page script and the dashboard runtime both load.</em>
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>  		assertBean(page.contract().getList(<span class="jxr_string">"dataSources"</span>).getMap(0), <span class="jxr_string">"id,kind,url,subscribes{length}"</span>, <span class="jxr_string">"orders,source,/console/dev/dashboard/series/ok,{4}"</span>);
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>  		assertContainsAll(html, <span class="jxr_string">"/console/dev/dashboard/dashboard.js"</span>, <span class="jxr_string">"juneau-dashboard.js"</span>, BASE + <span class="jxr_string">"/series/ok"</span>);
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>  	}
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>  
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>  	@Test <strong class="jxr_keyword">void</strong> a02_builderOnly() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>  		<strong class="jxr_keyword">var</strong> rsp = client().get(BASE).accept(<span class="jxr_string">"text/html"</span>).run().assertStatus(200);
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>  		assertEquals(<span class="jxr_string">"builder"</span>, rsp.getHeader(<span class="jxr_string">"X-Petstore-Page"</span>).orElse(<strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>  	}
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>  
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>  	@Test <strong class="jxr_keyword">void</strong> a03_variantAndVersionParams() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>  		assertContains(BASE + <span class="jxr_string">"/series/slow"</span>, page(client(), BASE + <span class="jxr_string">"?variant=slow"</span>));
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>  		assertContains(BASE + <span class="jxr_string">"/series/ok"</span>, page(client(), BASE + <span class="jxr_string">"?variant=bogus"</span>));   <em class="jxr_comment">// unknown is ok</em>
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>  		assertBean(assertPage(page(client(), BASE + <span class="jxr_string">"?variant=right"</span>)).contract().getMap(<span class="jxr_string">"dashboard"</span>).getMap(<span class="jxr_string">"rail"</span>), <span class="jxr_string">"side"</span>, <span class="jxr_string">"right"</span>);
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>  		assertBean(assertPage(page(client(), BASE + <span class="jxr_string">"?v=3"</span>)).contract().getMap(<span class="jxr_string">"dashboard"</span>), <span class="jxr_string">"persist{version}"</span>, <span class="jxr_string">"{3}"</span>);
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>  		assertBean(assertPage(page(client(), BASE + <span class="jxr_string">"?v=0"</span>)).contract().getMap(<span class="jxr_string">"dashboard"</span>), <span class="jxr_string">"persist{version}"</span>, <span class="jxr_string">"{1}"</span>);
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>  	}
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>  
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>  	@Test <strong class="jxr_keyword">void</strong> a04_scriptIsServed() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>  		client().get(BASE + <span class="jxr_string">"/dashboard.js"</span>).run()
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>  			.assertStatus(200)
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>  			.assertHeader(<span class="jxr_string">"Content-Type"</span>).isContains(<span class="jxr_string">"javascript"</span>)
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>  			.assertContent().isContains(<span class="jxr_string">"petstore.late"</span>, <span class="jxr_string">"JuneauConsoleDashboard"</span>);
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>  	}
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>  
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>  	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>  	<em class="jxr_comment">// b - the source endpoints</em>
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>  	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>  
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>  	@Test <strong class="jxr_keyword">void</strong> b01_oneRowPerUtcDay() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>  		assertString(<span class="jxr_string">""</span><span class="jxr_string">"
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>  			day,reason,orders
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>  			2026-10-01T00:00:00Z,wrong-item,15
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>  			2026-10-02T00:00:00Z,late,22
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>  			2026-10-03T00:00:00Z,lost,29
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>  			<span class="jxr_string">""</span><span class="jxr_string">",
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>  			csv(<span class="jxr_string">"ok"</span>, <span class="jxr_string">"?start=2026-10-01T00:00:00Z&amp;end=2026-10-04T00:00:00Z"</span>));
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>  	}
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>  
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>  	@Test <strong class="jxr_keyword">void</strong> b02_filters() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>  		<strong class="jxr_keyword">var</strong> week = <span class="jxr_string">"?start=2026-10-01T00:00:00Z&amp;end=2026-10-08T00:00:00Z"</span>;
+<a class="jxr_linenumber" name="L99" href="#L99">99</a>  		assertString(<span class="jxr_string">""</span><span class="jxr_string">"
+<a class="jxr_linenumber" name="L100" href="#L100">100</a> 			day,reason,orders
+<a class="jxr_linenumber" name="L101" href="#L101">101</a> 			2026-10-02T00:00:00Z,late,22
+<a class="jxr_linenumber" name="L102" href="#L102">102</a> 			2026-10-03T00:00:00Z,lost,29
+<a class="jxr_linenumber" name="L103" href="#L103">103</a> 			2026-10-06T00:00:00Z,late,27
+<a class="jxr_linenumber" name="L104" href="#L104">104</a> 			2026-10-07T00:00:00Z,lost,11
+<a class="jxr_linenumber" name="L105" href="#L105">105</a> 			<span class="jxr_string">""</span><span class="jxr_string">",
+<a class="jxr_linenumber" name="L106" href="#L106">106</a> 			csv(<span class="jxr_string">"ok"</span>, week + <span class="jxr_string">"&amp;reasons=late&amp;reasons=lost"</span>));
+<a class="jxr_linenumber" name="L107" href="#L107">107</a> 		assertString(<span class="jxr_string">"day,reason,orders\n2026-10-03T00:00:00Z,lost,29\n2026-10-07T00:00:00Z,lost,11\n"</span>, csv(<span class="jxr_string">"ok"</span>, week + <span class="jxr_string">"&amp;q=OS"</span>));
+<a class="jxr_linenumber" name="L108" href="#L108">108</a> 		assertString(<span class="jxr_string">"day,reason,orders\n2026-10-02T00:00:00Z,late,22\n2026-10-06T00:00:00Z,late,27\n"</span>, csv(<span class="jxr_string">"ok"</span>, week + <span class="jxr_string">"&amp;lateOnly=true"</span>));
+<a class="jxr_linenumber" name="L109" href="#L109">109</a> 		<em class="jxr_comment">// The search box sends an empty q, which means no filter (a typed String parameter would have answered 400).</em>
+<a class="jxr_linenumber" name="L110" href="#L110">110</a> 		assertString(csv(<span class="jxr_string">"ok"</span>, week), csv(<span class="jxr_string">"ok"</span>, week + <span class="jxr_string">"&amp;q=&amp;lateOnly=false"</span>));
+<a class="jxr_linenumber" name="L111" href="#L111">111</a> 		assertString(<span class="jxr_string">"day,reason,orders\n"</span>, csv(<span class="jxr_string">"ok"</span>, week + <span class="jxr_string">"&amp;reasons=late&amp;q=lost"</span>));
+<a class="jxr_linenumber" name="L112" href="#L112">112</a> 	}
+<a class="jxr_linenumber" name="L113" href="#L113">113</a> 
+<a class="jxr_linenumber" name="L114" href="#L114">114</a> 	@Test <strong class="jxr_keyword">void</strong> b03_truncatedEndsWithTheSentinel() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L115" href="#L115">115</a> 		<strong class="jxr_keyword">var</strong> lines = csv(<span class="jxr_string">"truncated"</span>, <span class="jxr_string">"?start=2026-09-01T00:00:00Z&amp;end=2026-10-11T00:00:00Z"</span>).split(<span class="jxr_string">"\n"</span>);
+<a class="jxr_linenumber" name="L116" href="#L116">116</a> 		assertEquals(22, lines.length);   <em class="jxr_comment">// the header, 20 rows, the sentinel</em>
+<a class="jxr_linenumber" name="L117" href="#L117">117</a> 		assertString(<span class="jxr_string">"2026-09-20T00:00:00Z,late,30"</span>, lines[20]);
+<a class="jxr_linenumber" name="L118" href="#L118">118</a> 		assertString(<span class="jxr_string">"#truncated,20"</span>, lines[21]);
+<a class="jxr_linenumber" name="L119" href="#L119">119</a> 	}
+<a class="jxr_linenumber" name="L120" href="#L120">120</a> 
+<a class="jxr_linenumber" name="L121" href="#L121">121</a> 	@Test <strong class="jxr_keyword">void</strong> b04_slowStillReturnsEveryRow() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L122" href="#L122">122</a> 		assertEquals(4, csv(<span class="jxr_string">"slow"</span>, <span class="jxr_string">"?start=2026-10-01T00:00:00Z&amp;end=2026-10-04T00:00:00Z"</span>).split(<span class="jxr_string">"\n"</span>).length);
+<a class="jxr_linenumber" name="L123" href="#L123">123</a> 	}
+<a class="jxr_linenumber" name="L124" href="#L124">124</a> 
+<a class="jxr_linenumber" name="L125" href="#L125">125</a> 	@Test <strong class="jxr_keyword">void</strong> b05_errorIs500() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L126" href="#L126">126</a> 		client().get(BASE + <span class="jxr_string">"/series/error"</span>).run().assertStatus(500);
+<a class="jxr_linenumber" name="L127" href="#L127">127</a> 	}
+<a class="jxr_linenumber" name="L128" href="#L128">128</a> 
+<a class="jxr_linenumber" name="L129" href="#L129">129</a> 	@Test <strong class="jxr_keyword">void</strong> b06_everySeriesRequestIsCounted() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L130" href="#L130">130</a> 		<strong class="jxr_keyword">var</strong> n0 = DashboardRest.SERIES_REQUESTS.get();
+<a class="jxr_linenumber" name="L131" href="#L131">131</a> 		csv(<span class="jxr_string">"ok"</span>, <span class="jxr_string">""</span>);
+<a class="jxr_linenumber" name="L132" href="#L132">132</a> 		client().get(BASE + <span class="jxr_string">"/series/error"</span>).run();
+<a class="jxr_linenumber" name="L133" href="#L133">133</a> 		assertEquals(n0 + 2, DashboardRest.SERIES_REQUESTS.get());
+<a class="jxr_linenumber" name="L134" href="#L134">134</a> 		assertContains(<span class="jxr_string">"\&quot;series\&quot;:"</span> + (n0 + 2), client().get(BASE + <span class="jxr_string">"/requests"</span>).accept(<span class="jxr_string">"application/json"</span>).run()
+<a class="jxr_linenumber" name="L135" href="#L135">135</a> 			.assertStatus(200).getContent().asString());
+<a class="jxr_linenumber" name="L136" href="#L136">136</a> 	}
+<a class="jxr_linenumber" name="L137" href="#L137">137</a> 
+<a class="jxr_linenumber" name="L138" href="#L138">138</a> 	@Test <strong class="jxr_keyword">void</strong> b07_fixedWindowTotals() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L139" href="#L139">139</a> 		<strong class="jxr_keyword">var</strong> reasons = client().get(BASE + <span class="jxr_string">"/reasons"</span>).accept(<span class="jxr_string">"application/json"</span>).run().assertStatus(200).getContent().asString();
+<a class="jxr_linenumber" name="L140" href="#L140">140</a> 		assertContainsAll(reasons, <span class="jxr_string">"\&quot;reason\&quot;:\&quot;late\&quot;,\&quot;orders\&quot;:129"</span>, <span class="jxr_string">"\&quot;reason\&quot;:\&quot;lost\&quot;,\&quot;orders\&quot;:143"</span>,
+<a class="jxr_linenumber" name="L141" href="#L141">141</a> 			<span class="jxr_string">"\&quot;reason\&quot;:\&quot;damaged\&quot;,\&quot;orders\&quot;:146"</span>, <span class="jxr_string">"\&quot;reason\&quot;:\&quot;wrong-item\&quot;,\&quot;orders\&quot;:149"</span>);
+<a class="jxr_linenumber" name="L142" href="#L142">142</a> 		<strong class="jxr_keyword">var</strong> days = client().get(BASE + <span class="jxr_string">"/weekdays"</span>).accept(<span class="jxr_string">"application/json"</span>).run().assertStatus(200).getContent().asString();
+<a class="jxr_linenumber" name="L143" href="#L143">143</a> 		assertContainsAll(days, <span class="jxr_string">"\&quot;weekday\&quot;:\&quot;Mon\&quot;,\&quot;orders\&quot;:73"</span>, <span class="jxr_string">"\&quot;weekday\&quot;:\&quot;Sun\&quot;,\&quot;orders\&quot;:91"</span>);
+<a class="jxr_linenumber" name="L144" href="#L144">144</a> 	}
+<a class="jxr_linenumber" name="L145" href="#L145">145</a> }
+</pre>
+<hr/>
+<div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>
+</body>
+</html>

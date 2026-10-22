@@ -98,9 +98,17 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color">
 <div class="block">Swagger Data Transfer Objects</div>
 </div>
-<div class="col-first odd-row-color"><a href="#org.apache.juneau.commons.bean">org.apache.juneau.commons.bean</a></div>
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.beanquery.sql">org.apache.juneau.beanquery.sql</a></div>
 <div class="col-last odd-row-color">
+<div class="block">Shared JDBC <a href="../beanquery/BeanQueryContext.html" title="class in org.apache.juneau.commons.beanquery"><code>BeanQueryContext</code></a> plumbing for BeanQuery (design §5.3).</div>
+</div>
+<div class="col-first even-row-color"><a href="#org.apache.juneau.commons.bean">org.apache.juneau.commons.bean</a></div>
+<div class="col-last even-row-color">
 <div class="block">Bean-modeling layer for Juneau.</div>
+</div>
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.commons.beanquery">org.apache.juneau.commons.beanquery</a></div>
+<div class="col-last odd-row-color">
+<div class="block">A protocol-agnostic query API for filtering, sorting, and paging collections of beans (design §5).</div>
 </div>
 <div class="col-first even-row-color"><a href="#org.apache.juneau.commons.http">org.apache.juneau.commons.http</a></div>
 <div class="col-last even-row-color">
@@ -242,21 +250,31 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color">
 <div class="block">Example / demo Microservice REST Resources</div>
 </div>
-<div class="col-first odd-row-color"><a href="#org.apache.juneau.rest.client.classic">org.apache.juneau.rest.client.classic</a></div>
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.petstore.dto">org.apache.juneau.petstore.dto</a></div>
 <div class="col-last odd-row-color">
+<div class="block">Petstore domain beans (DTOs).</div>
+</div>
+<div class="col-first even-row-color"><a href="#org.apache.juneau.rest.client.classic">org.apache.juneau.rest.client.classic</a></div>
+<div class="col-last even-row-color">
 <div class="block">REST Client API</div>
 </div>
-<div class="col-first even-row-color"><a href="#org.apache.juneau.rest.mock.classic">org.apache.juneau.rest.mock.classic</a></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.rest.mock.classic">org.apache.juneau.rest.mock.classic</a></div>
+<div class="col-last odd-row-color">
 <div class="block">Mocked REST client and supporting classes for in-JVM testing built on the classic Apache HttpClient API.</div>
 </div>
-<div class="col-first odd-row-color"><a href="#org.apache.juneau.rest.server.beans">org.apache.juneau.rest.server.beans</a></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><a href="#org.apache.juneau.rest.server.beans">org.apache.juneau.rest.server.beans</a></div>
+<div class="col-last even-row-color">
 <div class="block">REST Interface Helper Classes</div>
 </div>
-<div class="col-first even-row-color"><a href="#org.apache.juneau.rest.server.config">org.apache.juneau.rest.server.config</a></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.rest.server.config">org.apache.juneau.rest.server.config</a></div>
+<div class="col-last odd-row-color">
 <div class="block">Predefined REST configuration interfaces</div>
+</div>
+<div class="col-first even-row-color"><a href="#org.apache.juneau.rest.server.datatables">org.apache.juneau.rest.server.datatables</a></div>
+<div class="col-last even-row-color">
+<div class="block">The DataTables server-side-processing JSON beans implementing the
+ <a class="doclink" href="https://datatables.net/manual/server-side">DataTables server-side processing</a> wire
+ contract.</div>
 </div>
 <div class="col-first odd-row-color"><a href="#org.apache.juneau.rest.server.mcp.v20260728">org.apache.juneau.rest.server.mcp.v20260728</a></div>
 <div class="col-last odd-row-color">
@@ -265,6 +283,15 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color"><a href="#org.apache.juneau.rest.server.stats">org.apache.juneau.rest.server.stats</a></div>
 <div class="col-last even-row-color">
 <div class="block">Method exec stats utilities</div>
+</div>
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.rest.server.views">org.apache.juneau.rest.server.views</a></div>
+<div class="col-last odd-row-color">
+<div class="block">A typed, declarative "rich DataTables view" toolkit that serializes to the frozen <code>VIEW_META</code> JSON wire
+ contract consumed by the first-party client runtime.</div>
+</div>
+<div class="col-first even-row-color"><a href="#org.apache.juneau.rest.server.widgets">org.apache.juneau.rest.server.widgets</a></div>
+<div class="col-last even-row-color">
+<div class="block">Reusable widget primitives for the Juneau REST server toolkit.</div>
 </div>
 </div>
 <section class="package-uses">
@@ -419,6 +446,19 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
+<section class="detail" id="org.apache.juneau.beanquery.sql">
+<div class="caption"><span>Classes in <a href="package-summary.html">org.apache.juneau.commons.bean</a> used by <a href="../../beanquery/sql/package-summary.html">org.apache.juneau.beanquery.sql</a></span></div>
+<div class="summary-table two-column-summary">
+<div class="table-header col-first">Class</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><a href="class-use/BeanMeta.html#org.apache.juneau.beanquery.sql">BeanMeta</a></div>
+<div class="col-last even-row-color">
+<div class="block">Encapsulates all access to the properties of a bean class (like a souped-up <a href="BeanInfo.html" title="class in org.apache.juneau.commons.bean"><code>BeanInfo</code></a>).</div>
+</div>
+</div>
+</section>
+</li>
+<li>
 <section class="detail" id="org.apache.juneau.commons.bean">
 <div class="caption"><span>Classes in <a href="package-summary.html">org.apache.juneau.commons.bean</a> used by <a href="package-summary.html">org.apache.juneau.commons.bean</a></span></div>
 <div class="summary-table two-column-summary">
@@ -551,6 +591,23 @@ loadScripts(document, 'script');</script>
 <div class="col-first odd-row-color"><a href="class-use/PropertyValidatorFactory.html#org.apache.juneau.commons.bean">PropertyValidatorFactory</a></div>
 <div class="col-last odd-row-color">
 <div class="block">Builds <a href="PropertyValidator.html" title="interface in org.apache.juneau.commons.bean"><code>PropertyValidator</code></a> instances from a JSON-Schema-shaped map of constraints.</div>
+</div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="org.apache.juneau.commons.beanquery">
+<div class="caption"><span>Classes in <a href="package-summary.html">org.apache.juneau.commons.bean</a> used by <a href="../beanquery/package-summary.html">org.apache.juneau.commons.beanquery</a></span></div>
+<div class="summary-table two-column-summary">
+<div class="table-header col-first">Class</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><a href="class-use/BeanConfigContext.html#org.apache.juneau.commons.beanquery">BeanConfigContext</a></div>
+<div class="col-last even-row-color">
+<div class="block">Immutable runtime configuration for the bean-modeling layer.</div>
+</div>
+<div class="col-first odd-row-color"><a href="class-use/BeanMeta.html#org.apache.juneau.commons.beanquery">BeanMeta</a></div>
+<div class="col-last odd-row-color">
+<div class="block">Encapsulates all access to the properties of a bean class (like a souped-up <a href="BeanInfo.html" title="class in org.apache.juneau.commons.bean"><code>BeanInfo</code></a>).</div>
 </div>
 </div>
 </section>
@@ -1125,8 +1182,12 @@ loadScripts(document, 'script');</script>
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Class</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><a href="class-use/BeanSession.html#org.apache.juneau.marshall.toml">BeanSession</a></div>
+<div class="col-first even-row-color"><a href="class-use/BeanPropertyMeta.html#org.apache.juneau.marshall.toml">BeanPropertyMeta</a></div>
 <div class="col-last even-row-color">
+<div class="block">Contains metadata about a bean property.</div>
+</div>
+<div class="col-first odd-row-color"><a href="class-use/BeanSession.html#org.apache.juneau.marshall.toml">BeanSession</a></div>
+<div class="col-last odd-row-color">
 <div class="block">Minimum runtime surface that the bean-modeling layer needs from a marshalling session.</div>
 </div>
 </div>
@@ -1218,6 +1279,20 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
+<section class="detail" id="org.apache.juneau.petstore.dto">
+<div class="caption"><span>Classes in <a href="package-summary.html">org.apache.juneau.commons.bean</a> used by <a href="../../petstore/dto/package-summary.html">org.apache.juneau.petstore.dto</a></span></div>
+<div class="summary-table two-column-summary">
+<div class="table-header col-first">Class</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><a href="class-use/BeanProp.html#org.apache.juneau.petstore.dto">BeanProp</a></div>
+<div class="col-last even-row-color">
+<div class="block">Annotation that can be applied to bean fields, getter/setter methods, and constructor parameters
+ to control bean introspection and property modeling.</div>
+</div>
+</div>
+</section>
+</li>
+<li>
 <section class="detail" id="org.apache.juneau.rest.client.classic">
 <div class="caption"><span>Classes in <a href="package-summary.html">org.apache.juneau.commons.bean</a> used by <a href="../../rest/client/classic/package-summary.html">org.apache.juneau.rest.client.classic</a></span></div>
 <div class="summary-table two-column-summary">
@@ -1270,6 +1345,24 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
+<section class="detail" id="org.apache.juneau.rest.server.datatables">
+<div class="caption"><span>Classes in <a href="package-summary.html">org.apache.juneau.commons.bean</a> used by <a href="../../rest/server/datatables/package-summary.html">org.apache.juneau.rest.server.datatables</a></span></div>
+<div class="summary-table two-column-summary">
+<div class="table-header col-first">Class</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><a href="class-use/BeanIgnore.html#org.apache.juneau.rest.server.datatables">BeanIgnore</a></div>
+<div class="col-last even-row-color">
+<div class="block">Excludes a class, field, method, or constructor from bean introspection.</div>
+</div>
+<div class="col-first odd-row-color"><a href="class-use/BeanProp.html#org.apache.juneau.rest.server.datatables">BeanProp</a></div>
+<div class="col-last odd-row-color">
+<div class="block">Annotation that can be applied to bean fields, getter/setter methods, and constructor parameters
+ to control bean introspection and property modeling.</div>
+</div>
+</div>
+</section>
+</li>
+<li>
 <section class="detail" id="org.apache.juneau.rest.server.mcp.v20260728">
 <div class="caption"><span>Classes in <a href="package-summary.html">org.apache.juneau.commons.bean</a> used by <a href="../../rest/server/mcp/v20260728/package-summary.html">org.apache.juneau.rest.server.mcp.v20260728</a></span></div>
 <div class="summary-table two-column-summary">
@@ -1289,6 +1382,32 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">Class</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color"><a href="class-use/BeanType.html#org.apache.juneau.rest.server.stats">BeanType</a></div>
+<div class="col-last even-row-color">
+<div class="block">Annotation that can be applied to classes to control bean introspection and modeling.</div>
+</div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="org.apache.juneau.rest.server.views">
+<div class="caption"><span>Classes in <a href="package-summary.html">org.apache.juneau.commons.bean</a> used by <a href="../../rest/server/views/package-summary.html">org.apache.juneau.rest.server.views</a></span></div>
+<div class="summary-table two-column-summary">
+<div class="table-header col-first">Class</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><a href="class-use/BeanType.html#org.apache.juneau.rest.server.views">BeanType</a></div>
+<div class="col-last even-row-color">
+<div class="block">Annotation that can be applied to classes to control bean introspection and modeling.</div>
+</div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="org.apache.juneau.rest.server.widgets">
+<div class="caption"><span>Classes in <a href="package-summary.html">org.apache.juneau.commons.bean</a> used by <a href="../../rest/server/widgets/package-summary.html">org.apache.juneau.rest.server.widgets</a></span></div>
+<div class="summary-table two-column-summary">
+<div class="table-header col-first">Class</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><a href="class-use/BeanType.html#org.apache.juneau.rest.server.widgets">BeanType</a></div>
 <div class="col-last even-row-color">
 <div class="block">Annotation that can be applied to classes to control bean introspection and modeling.</div>
 </div>

@@ -29,7 +29,7 @@
 <span class="source-line-no">016</span><span id="line-16"> */</span>
 <span class="source-line-no">017</span><span id="line-17">package org.apache.juneau.marshall.parquet;</span>
 <span class="source-line-no">018</span><span id="line-18"></span>
-<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.AssertionUtils.*;</span>
+<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.Shorts.*;</span>
 <span class="source-line-no">020</span><span id="line-20">import static org.apache.juneau.commons.utils.SystemUtils.*;</span>
 <span class="source-line-no">021</span><span id="line-21"></span>
 <span class="source-line-no">022</span><span id="line-22">import java.io.*;</span>
@@ -53,17 +53,17 @@
 <span class="source-line-no">040</span><span id="line-40"> * Handles &lt;c&gt;Content-Type&lt;/c&gt;: &lt;bc&gt;application/vnd.apache.parquet&lt;/bc&gt;</span>
 <span class="source-line-no">041</span><span id="line-41"> */</span>
 <span class="source-line-no">042</span><span id="line-42">@SuppressWarnings({</span>
-<span class="source-line-no">043</span><span id="line-43">   "java:S110",</span>
-<span class="source-line-no">044</span><span id="line-44">   "java:S115",</span>
-<span class="source-line-no">045</span><span id="line-45">   "resource" // Closeable resources are owned by the caller's parser session; Eclipse JDT @Owning warning is by design.</span>
-<span class="source-line-no">046</span><span id="line-46">})</span>
-<span class="source-line-no">047</span><span id="line-47">public class ParquetParser extends InputStreamParser implements ParquetMetaProvider, RecordReadable, ArrayRecordReadable {</span>
-<span class="source-line-no">048</span><span id="line-48"></span>
-<span class="source-line-no">049</span><span id="line-49">   private static final String ARG_copyFrom = "copyFrom";</span>
-<span class="source-line-no">050</span><span id="line-50"></span>
-<span class="source-line-no">051</span><span id="line-51">   private static final int DEFAULT_MAX_LENGTH = ParquetParserSession.DEFAULT_MAX_LENGTH;</span>
-<span class="source-line-no">052</span><span id="line-52">   private static final int DEFAULT_MAX_COUNT = ParquetParserSession.DEFAULT_MAX_COUNT;</span>
-<span class="source-line-no">053</span><span id="line-53">   private static final int DEFAULT_MAX_INPUT_LENGTH = ParquetParserSession.DEFAULT_MAX_INPUT_LENGTH;</span>
+<span class="source-line-no">043</span><span id="line-43">   "java:S110", // ParquetParser extends InputStreamParser, which sits on the shared Parser base-class chain; the depth comes from that format-family design.</span>
+<span class="source-line-no">044</span><span id="line-44">   "java:S1192", // Duplicated literals (argument/property names) read more clearly inline than as constants</span>
+<span class="source-line-no">045</span><span id="line-45">   "java:S9149", // Per-format static factories intentionally shadow the parent's.</span>
+<span class="source-line-no">046</span><span id="line-46">   "resource" // Closeable resources are owned by the caller's parser session; Eclipse JDT @Owning warning is by design.</span>
+<span class="source-line-no">047</span><span id="line-47">})</span>
+<span class="source-line-no">048</span><span id="line-48">public class ParquetParser extends InputStreamParser implements ParquetMetaProvider, RecordReadable, ArrayRecordReadable {</span>
+<span class="source-line-no">049</span><span id="line-49"></span>
+<span class="source-line-no">050</span><span id="line-50">   private static final int DEFAULT_MAX_LENGTH = ParquetParserSession.DEFAULT_MAX_LENGTH;</span>
+<span class="source-line-no">051</span><span id="line-51">   private static final int DEFAULT_MAX_COUNT = ParquetParserSession.DEFAULT_MAX_COUNT;</span>
+<span class="source-line-no">052</span><span id="line-52">   private static final int DEFAULT_MAX_INPUT_LENGTH = ParquetParserSession.DEFAULT_MAX_INPUT_LENGTH;</span>
+<span class="source-line-no">053</span><span id="line-53">   private static final int DEFAULT_MAX_DECOMPRESSED_BYTES = ParquetParserSession.DEFAULT_MAX_DECOMPRESSED_BYTES;</span>
 <span class="source-line-no">054</span><span id="line-54"></span>
 <span class="source-line-no">055</span><span id="line-55">   private final Map&lt;BeanPropertyMeta,ParquetBeanPropertyMeta&gt; parquetBeanPropertyMetas = new ConcurrentHashMap&lt;&gt;();</span>
 <span class="source-line-no">056</span><span id="line-56">   private final Map&lt;ClassMeta&lt;?&gt;,ParquetClassMeta&gt; parquetClassMetas = new ConcurrentHashMap&lt;&gt;();</span>
@@ -82,233 +82,267 @@
 <span class="source-line-no">069</span><span id="line-69">      private int maxLength = DEFAULT_MAX_LENGTH;</span>
 <span class="source-line-no">070</span><span id="line-70">      private int maxCount = DEFAULT_MAX_COUNT;</span>
 <span class="source-line-no">071</span><span id="line-71">      private int maxInputLength = DEFAULT_MAX_INPUT_LENGTH;</span>
-<span class="source-line-no">072</span><span id="line-72"></span>
-<span class="source-line-no">073</span><span id="line-73">      /**</span>
-<span class="source-line-no">074</span><span id="line-74">       * Constructor, default settings.</span>
-<span class="source-line-no">075</span><span id="line-75">       */</span>
-<span class="source-line-no">076</span><span id="line-76">      protected Builder() {</span>
-<span class="source-line-no">077</span><span id="line-77">         consumes("application/vnd.apache.parquet");</span>
-<span class="source-line-no">078</span><span id="line-78">         nullKeyString = env("ParquetParser.nullKeyString", "&lt;NULL&gt;");</span>
-<span class="source-line-no">079</span><span id="line-79">         maxLength = env("ParquetParser.maxLength", DEFAULT_MAX_LENGTH);</span>
-<span class="source-line-no">080</span><span id="line-80">         maxCount = env("ParquetParser.maxCount", DEFAULT_MAX_COUNT);</span>
-<span class="source-line-no">081</span><span id="line-81">         maxInputLength = env("ParquetParser.maxInputLength", DEFAULT_MAX_INPUT_LENGTH);</span>
-<span class="source-line-no">082</span><span id="line-82">      }</span>
-<span class="source-line-no">083</span><span id="line-83"></span>
-<span class="source-line-no">084</span><span id="line-84">      protected Builder(Builder copyFrom) {</span>
-<span class="source-line-no">085</span><span id="line-85">         super(assertArgNotNull(ARG_copyFrom, copyFrom));</span>
-<span class="source-line-no">086</span><span id="line-86">         nullKeyString = copyFrom.nullKeyString;</span>
-<span class="source-line-no">087</span><span id="line-87">         maxLength = copyFrom.maxLength;</span>
-<span class="source-line-no">088</span><span id="line-88">         maxCount = copyFrom.maxCount;</span>
-<span class="source-line-no">089</span><span id="line-89">         maxInputLength = copyFrom.maxInputLength;</span>
-<span class="source-line-no">090</span><span id="line-90">      }</span>
-<span class="source-line-no">091</span><span id="line-91"></span>
-<span class="source-line-no">092</span><span id="line-92">      protected Builder(ParquetParser copyFrom) {</span>
-<span class="source-line-no">093</span><span id="line-93">         super(assertArgNotNull(ARG_copyFrom, copyFrom));</span>
-<span class="source-line-no">094</span><span id="line-94">         nullKeyString = copyFrom.nullKeyString;</span>
-<span class="source-line-no">095</span><span id="line-95">         maxLength = copyFrom.maxLength;</span>
-<span class="source-line-no">096</span><span id="line-96">         maxCount = copyFrom.maxCount;</span>
-<span class="source-line-no">097</span><span id="line-97">         maxInputLength = copyFrom.maxInputLength;</span>
-<span class="source-line-no">098</span><span id="line-98">      }</span>
-<span class="source-line-no">099</span><span id="line-99"></span>
-<span class="source-line-no">100</span><span id="line-100">      /**</span>
-<span class="source-line-no">101</span><span id="line-101">       * The string used when parsing Parquet MAP keys that represent &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">102</span><span id="line-102">       *</span>
-<span class="source-line-no">103</span><span id="line-103">       * &lt;p&gt;</span>
-<span class="source-line-no">104</span><span id="line-104">       * Must match {@link ParquetSerializer.Builder#nullKeyString(String)} for round-trip.</span>
-<span class="source-line-no">105</span><span id="line-105">       *</span>
-<span class="source-line-no">106</span><span id="line-106">       * @param value The placeholder string. Default is &lt;js&gt;"&amp;lt;NULL&amp;gt;"&lt;/js&gt;.</span>
-<span class="source-line-no">107</span><span id="line-107">       * @return This object.</span>
-<span class="source-line-no">108</span><span id="line-108">       */</span>
-<span class="source-line-no">109</span><span id="line-109">      public Builder nullKeyString(String value) {</span>
-<span class="source-line-no">110</span><span id="line-110">         nullKeyString = value == null ? "&lt;NULL&gt;" : value;</span>
-<span class="source-line-no">111</span><span id="line-111">         return this;</span>
-<span class="source-line-no">112</span><span id="line-112">      }</span>
-<span class="source-line-no">113</span><span id="line-113"></span>
-<span class="source-line-no">114</span><span id="line-114">      /**</span>
-<span class="source-line-no">115</span><span id="line-115">       * The maximum allowed wire-declared length (in bytes) for a single Parquet page (compressed or</span>
-<span class="source-line-no">116</span><span id="line-116">       * uncompressed).</span>
-<span class="source-line-no">117</span><span id="line-117">       *</span>
-<span class="source-line-no">118</span><span id="line-118">       * &lt;p&gt;</span>
-<span class="source-line-no">119</span><span id="line-119">       * Guards against malformed or adversarial input where a small file declares a huge per-page byte</span>
-<span class="source-line-no">120</span><span id="line-120">       * size, which would otherwise trigger {@link OutOfMemoryError}.  Malformed page headers are</span>
-<span class="source-line-no">121</span><span id="line-121">       * reported as a clean parse error instead.</span>
-<span class="source-line-no">122</span><span id="line-122">       *</span>
-<span class="source-line-no">123</span><span id="line-123">       * @param value The maximum length in bytes.  Default is 256 MiB.  Values &amp;le; 0 disable the cap.</span>
-<span class="source-line-no">124</span><span id="line-124">       * @return This object.</span>
-<span class="source-line-no">125</span><span id="line-125">       */</span>
-<span class="source-line-no">126</span><span id="line-126">      public Builder maxLength(int value) {</span>
-<span class="source-line-no">127</span><span id="line-127">         maxLength = value;</span>
-<span class="source-line-no">128</span><span id="line-128">         return this;</span>
-<span class="source-line-no">129</span><span id="line-129">      }</span>
-<span class="source-line-no">130</span><span id="line-130"></span>
-<span class="source-line-no">131</span><span id="line-131">      /**</span>
-<span class="source-line-no">132</span><span id="line-132">       * The maximum allowed wire-declared element count (file/row-group row counts, column-chunk value</span>
-<span class="source-line-no">133</span><span id="line-133">       * counts).</span>
-<span class="source-line-no">134</span><span id="line-134">       *</span>
-<span class="source-line-no">135</span><span id="line-135">       * &lt;p&gt;</span>
-<span class="source-line-no">136</span><span id="line-136">       * Guards against malformed or adversarial input where a small footer declares a huge row or value</span>
-<span class="source-line-no">137</span><span id="line-137">       * count, which would otherwise drive a huge {@code ArrayList} pre-allocation.  Malformed counts are</span>
-<span class="source-line-no">138</span><span id="line-138">       * reported as a clean parse error instead.</span>
-<span class="source-line-no">139</span><span id="line-139">       *</span>
-<span class="source-line-no">140</span><span id="line-140">       * @param value The maximum count.  Default is 10 million.  Values &amp;le; 0 disable the cap.</span>
-<span class="source-line-no">141</span><span id="line-141">       * @return This object.</span>
-<span class="source-line-no">142</span><span id="line-142">       */</span>
-<span class="source-line-no">143</span><span id="line-143">      public Builder maxCount(int value) {</span>
-<span class="source-line-no">144</span><span id="line-144">         maxCount = value;</span>
-<span class="source-line-no">145</span><span id="line-145">         return this;</span>
-<span class="source-line-no">146</span><span id="line-146">      }</span>
-<span class="source-line-no">147</span><span id="line-147"></span>
-<span class="source-line-no">148</span><span id="line-148">      /**</span>
-<span class="source-line-no">149</span><span id="line-149">       * The maximum allowed size (in bytes) of the whole Parquet input buffered into memory before parsing.</span>
-<span class="source-line-no">150</span><span id="line-150">       *</span>
-<span class="source-line-no">151</span><span id="line-151">       * &lt;p&gt;</span>
-<span class="source-line-no">152</span><span id="line-152">       * Parquet's end-of-file footer and column-major layout require the entire input to be buffered before</span>
-<span class="source-line-no">153</span><span id="line-153">       * any record can be reconstructed.  This cap rejects an oversized input with a clean parse error</span>
-<span class="source-line-no">154</span><span id="line-154">       * instead of buffering an unbounded body into memory.</span>
-<span class="source-line-no">155</span><span id="line-155">       *</span>
-<span class="source-line-no">156</span><span id="line-156">       * @param value The maximum input size in bytes.  Default is 256 MiB.  Values &amp;le; 0 disable the cap.</span>
-<span class="source-line-no">157</span><span id="line-157">       * @return This object.</span>
-<span class="source-line-no">158</span><span id="line-158">       */</span>
-<span class="source-line-no">159</span><span id="line-159">      public Builder maxInputLength(int value) {</span>
-<span class="source-line-no">160</span><span id="line-160">         maxInputLength = value;</span>
-<span class="source-line-no">161</span><span id="line-161">         return this;</span>
-<span class="source-line-no">162</span><span id="line-162">      }</span>
-<span class="source-line-no">163</span><span id="line-163"></span>
-<span class="source-line-no">164</span><span id="line-164">      @Override /* InputStreamParser.Builder&lt;?&gt; */</span>
-<span class="source-line-no">165</span><span id="line-165">      public Builder copy() {</span>
-<span class="source-line-no">166</span><span id="line-166">         return new Builder(this);</span>
-<span class="source-line-no">167</span><span id="line-167">      }</span>
-<span class="source-line-no">168</span><span id="line-168"></span>
-<span class="source-line-no">169</span><span id="line-169">      @Override</span>
-<span class="source-line-no">170</span><span id="line-170">      public ParquetParser build() {</span>
-<span class="source-line-no">171</span><span id="line-171">         return cache(CACHE).build(ParquetParser.class);</span>
-<span class="source-line-no">172</span><span id="line-172">      }</span>
-<span class="source-line-no">173</span><span id="line-173"></span>
-<span class="source-line-no">174</span><span id="line-174">      @Override</span>
-<span class="source-line-no">175</span><span id="line-175">      public HashKey hashKey() {</span>
-<span class="source-line-no">176</span><span id="line-176">         return HashKey.of(super.hashKey(), nullKeyString, maxLength, maxCount, maxInputLength);</span>
-<span class="source-line-no">177</span><span id="line-177">      }</span>
-<span class="source-line-no">178</span><span id="line-178">   }</span>
-<span class="source-line-no">179</span><span id="line-179"></span>
-<span class="source-line-no">180</span><span id="line-180">   /**</span>
-<span class="source-line-no">181</span><span id="line-181">    * Creates a new parser builder.</span>
-<span class="source-line-no">182</span><span id="line-182">    *</span>
-<span class="source-line-no">183</span><span id="line-183">    * @return A new builder.</span>
-<span class="source-line-no">184</span><span id="line-184">    */</span>
-<span class="source-line-no">185</span><span id="line-185">   public static Builder create() {</span>
-<span class="source-line-no">186</span><span id="line-186">      return new Builder();</span>
-<span class="source-line-no">187</span><span id="line-187">   }</span>
-<span class="source-line-no">188</span><span id="line-188"></span>
-<span class="source-line-no">189</span><span id="line-189">   final String nullKeyString;</span>
-<span class="source-line-no">190</span><span id="line-190">   private final int maxLength;</span>
-<span class="source-line-no">191</span><span id="line-191">   private final int maxCount;</span>
-<span class="source-line-no">192</span><span id="line-192">   private final int maxInputLength;</span>
-<span class="source-line-no">193</span><span id="line-193"></span>
-<span class="source-line-no">194</span><span id="line-194">   /**</span>
-<span class="source-line-no">195</span><span id="line-195">    * Constructor.</span>
-<span class="source-line-no">196</span><span id="line-196">    *</span>
-<span class="source-line-no">197</span><span id="line-197">    * @param builder The builder for this parser.</span>
-<span class="source-line-no">198</span><span id="line-198">    */</span>
-<span class="source-line-no">199</span><span id="line-199">   public ParquetParser(Builder builder) {</span>
-<span class="source-line-no">200</span><span id="line-200">      super(builder);</span>
-<span class="source-line-no">201</span><span id="line-201">      nullKeyString = builder.nullKeyString;</span>
-<span class="source-line-no">202</span><span id="line-202">      maxLength = builder.maxLength;</span>
-<span class="source-line-no">203</span><span id="line-203">      maxCount = builder.maxCount;</span>
-<span class="source-line-no">204</span><span id="line-204">      maxInputLength = builder.maxInputLength;</span>
-<span class="source-line-no">205</span><span id="line-205">   }</span>
-<span class="source-line-no">206</span><span id="line-206"></span>
-<span class="source-line-no">207</span><span id="line-207">   /**</span>
-<span class="source-line-no">208</span><span id="line-208">    * Returns the maximum allowed wire-declared length (in bytes) for a single Parquet page.</span>
-<span class="source-line-no">209</span><span id="line-209">    *</span>
-<span class="source-line-no">210</span><span id="line-210">    * @return The maximum length in bytes.</span>
-<span class="source-line-no">211</span><span id="line-211">    */</span>
-<span class="source-line-no">212</span><span id="line-212">   public int getMaxLength() {</span>
-<span class="source-line-no">213</span><span id="line-213">      return maxLength;</span>
-<span class="source-line-no">214</span><span id="line-214">   }</span>
-<span class="source-line-no">215</span><span id="line-215"></span>
-<span class="source-line-no">216</span><span id="line-216">   /**</span>
-<span class="source-line-no">217</span><span id="line-217">    * Returns the maximum allowed wire-declared element count (row/value counts).</span>
-<span class="source-line-no">218</span><span id="line-218">    *</span>
-<span class="source-line-no">219</span><span id="line-219">    * @return The maximum count.</span>
-<span class="source-line-no">220</span><span id="line-220">    */</span>
-<span class="source-line-no">221</span><span id="line-221">   public int getMaxCount() {</span>
-<span class="source-line-no">222</span><span id="line-222">      return maxCount;</span>
-<span class="source-line-no">223</span><span id="line-223">   }</span>
-<span class="source-line-no">224</span><span id="line-224"></span>
-<span class="source-line-no">225</span><span id="line-225">   /**</span>
-<span class="source-line-no">226</span><span id="line-226">    * Returns the maximum allowed size (in bytes) of the whole Parquet input buffered before parsing.</span>
-<span class="source-line-no">227</span><span id="line-227">    *</span>
-<span class="source-line-no">228</span><span id="line-228">    * @return The maximum input size in bytes.</span>
-<span class="source-line-no">229</span><span id="line-229">    */</span>
-<span class="source-line-no">230</span><span id="line-230">   public int getMaxInputLength() {</span>
-<span class="source-line-no">231</span><span id="line-231">      return maxInputLength;</span>
-<span class="source-line-no">232</span><span id="line-232">   }</span>
-<span class="source-line-no">233</span><span id="line-233"></span>
-<span class="source-line-no">234</span><span id="line-234">   @Override /* Overridden from Context */</span>
-<span class="source-line-no">235</span><span id="line-235">   public Builder copy() {</span>
-<span class="source-line-no">236</span><span id="line-236">      return new Builder(this);</span>
-<span class="source-line-no">237</span><span id="line-237">   }</span>
-<span class="source-line-no">238</span><span id="line-238"></span>
-<span class="source-line-no">239</span><span id="line-239">   @Override</span>
-<span class="source-line-no">240</span><span id="line-240">   public ParquetParserSession.Builder createSession() {</span>
-<span class="source-line-no">241</span><span id="line-241">      return ParquetParserSession.create(this);</span>
-<span class="source-line-no">242</span><span id="line-242">   }</span>
-<span class="source-line-no">243</span><span id="line-243"></span>
-<span class="source-line-no">244</span><span id="line-244">   @Override</span>
-<span class="source-line-no">245</span><span id="line-245">   public ParquetBeanPropertyMeta getParquetBeanPropertyMeta(BeanPropertyMeta bpm) {</span>
-<span class="source-line-no">246</span><span id="line-246">      return bpm == null ? ParquetBeanPropertyMeta.DEFAULT</span>
-<span class="source-line-no">247</span><span id="line-247">         : parquetBeanPropertyMetas.computeIfAbsent(bpm, k -&gt; new ParquetBeanPropertyMeta(k.getDelegateFor(), this));</span>
-<span class="source-line-no">248</span><span id="line-248">   }</span>
-<span class="source-line-no">249</span><span id="line-249"></span>
-<span class="source-line-no">250</span><span id="line-250">   @Override</span>
-<span class="source-line-no">251</span><span id="line-251">   public ParquetClassMeta getParquetClassMeta(ClassMeta&lt;?&gt; cm) {</span>
-<span class="source-line-no">252</span><span id="line-252">      return parquetClassMetas.computeIfAbsent(cm, k -&gt; new ParquetClassMeta(k, this));</span>
-<span class="source-line-no">253</span><span id="line-253">   }</span>
-<span class="source-line-no">254</span><span id="line-254"></span>
-<span class="source-line-no">255</span><span id="line-255">   /**</span>
-<span class="source-line-no">256</span><span id="line-256">    * Convenience delegator for the whole-value {@link RecordReader} using &lt;b&gt;default session</span>
-<span class="source-line-no">257</span><span id="line-257">    * arguments&lt;/b&gt;.  The real implementation lives on</span>
-<span class="source-line-no">258</span><span id="line-258">    * {@link ParquetParserSession#readRecords(Object)}.</span>
-<span class="source-line-no">259</span><span id="line-259">    *</span>
-<span class="source-line-no">260</span><span id="line-260">    * @param input The input.</span>
-<span class="source-line-no">261</span><span id="line-261">    * @return A new {@link RecordReader} cursor.</span>
-<span class="source-line-no">262</span><span id="line-262">    * @throws IOException If a problem occurred opening the underlying input.</span>
+<span class="source-line-no">072</span><span id="line-72">      private int maxDecompressedBytes = DEFAULT_MAX_DECOMPRESSED_BYTES;</span>
+<span class="source-line-no">073</span><span id="line-73"></span>
+<span class="source-line-no">074</span><span id="line-74">      /**</span>
+<span class="source-line-no">075</span><span id="line-75">       * Constructor, default settings.</span>
+<span class="source-line-no">076</span><span id="line-76">       */</span>
+<span class="source-line-no">077</span><span id="line-77">      protected Builder() {</span>
+<span class="source-line-no">078</span><span id="line-78">         consumes("application/vnd.apache.parquet");</span>
+<span class="source-line-no">079</span><span id="line-79">         nullKeyString = env("ParquetParser.nullKeyString", "&lt;NULL&gt;");</span>
+<span class="source-line-no">080</span><span id="line-80">         maxLength = env("ParquetParser.maxLength", DEFAULT_MAX_LENGTH);</span>
+<span class="source-line-no">081</span><span id="line-81">         maxCount = env("ParquetParser.maxCount", DEFAULT_MAX_COUNT);</span>
+<span class="source-line-no">082</span><span id="line-82">         maxInputLength = env("ParquetParser.maxInputLength", DEFAULT_MAX_INPUT_LENGTH);</span>
+<span class="source-line-no">083</span><span id="line-83">         maxDecompressedBytes = env("ParquetParser.maxDecompressedBytes", DEFAULT_MAX_DECOMPRESSED_BYTES);</span>
+<span class="source-line-no">084</span><span id="line-84">      }</span>
+<span class="source-line-no">085</span><span id="line-85"></span>
+<span class="source-line-no">086</span><span id="line-86">      protected Builder(Builder copyFrom) {</span>
+<span class="source-line-no">087</span><span id="line-87">         super(reqnn("copyFrom", copyFrom));</span>
+<span class="source-line-no">088</span><span id="line-88">         nullKeyString = copyFrom.nullKeyString;</span>
+<span class="source-line-no">089</span><span id="line-89">         maxLength = copyFrom.maxLength;</span>
+<span class="source-line-no">090</span><span id="line-90">         maxCount = copyFrom.maxCount;</span>
+<span class="source-line-no">091</span><span id="line-91">         maxInputLength = copyFrom.maxInputLength;</span>
+<span class="source-line-no">092</span><span id="line-92">         maxDecompressedBytes = copyFrom.maxDecompressedBytes;</span>
+<span class="source-line-no">093</span><span id="line-93">      }</span>
+<span class="source-line-no">094</span><span id="line-94"></span>
+<span class="source-line-no">095</span><span id="line-95">      protected Builder(ParquetParser copyFrom) {</span>
+<span class="source-line-no">096</span><span id="line-96">         super(reqnn("copyFrom", copyFrom));</span>
+<span class="source-line-no">097</span><span id="line-97">         nullKeyString = copyFrom.nullKeyString;</span>
+<span class="source-line-no">098</span><span id="line-98">         maxLength = copyFrom.maxLength;</span>
+<span class="source-line-no">099</span><span id="line-99">         maxCount = copyFrom.maxCount;</span>
+<span class="source-line-no">100</span><span id="line-100">         maxInputLength = copyFrom.maxInputLength;</span>
+<span class="source-line-no">101</span><span id="line-101">         maxDecompressedBytes = copyFrom.maxDecompressedBytes;</span>
+<span class="source-line-no">102</span><span id="line-102">      }</span>
+<span class="source-line-no">103</span><span id="line-103"></span>
+<span class="source-line-no">104</span><span id="line-104">      /**</span>
+<span class="source-line-no">105</span><span id="line-105">       * The string used when parsing Parquet MAP keys that represent &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">106</span><span id="line-106">       *</span>
+<span class="source-line-no">107</span><span id="line-107">       * &lt;p&gt;</span>
+<span class="source-line-no">108</span><span id="line-108">       * Must match {@link ParquetSerializer.Builder#nullKeyString(String)} for round-trip.</span>
+<span class="source-line-no">109</span><span id="line-109">       *</span>
+<span class="source-line-no">110</span><span id="line-110">       * @param value The placeholder string. Default is &lt;js&gt;"&amp;lt;NULL&amp;gt;"&lt;/js&gt;.</span>
+<span class="source-line-no">111</span><span id="line-111">       * @return This object.</span>
+<span class="source-line-no">112</span><span id="line-112">       */</span>
+<span class="source-line-no">113</span><span id="line-113">      public Builder nullKeyString(String value) {</span>
+<span class="source-line-no">114</span><span id="line-114">         nullKeyString = value == null ? "&lt;NULL&gt;" : value;</span>
+<span class="source-line-no">115</span><span id="line-115">         return this;</span>
+<span class="source-line-no">116</span><span id="line-116">      }</span>
+<span class="source-line-no">117</span><span id="line-117"></span>
+<span class="source-line-no">118</span><span id="line-118">      /**</span>
+<span class="source-line-no">119</span><span id="line-119">       * The maximum allowed wire-declared length (in bytes) for a single Parquet page (compressed or</span>
+<span class="source-line-no">120</span><span id="line-120">       * uncompressed).</span>
+<span class="source-line-no">121</span><span id="line-121">       *</span>
+<span class="source-line-no">122</span><span id="line-122">       * &lt;p&gt;</span>
+<span class="source-line-no">123</span><span id="line-123">       * Guards against malformed or adversarial input where a small file declares a huge per-page byte</span>
+<span class="source-line-no">124</span><span id="line-124">       * size, which would otherwise trigger {@link OutOfMemoryError}.  Malformed page headers are</span>
+<span class="source-line-no">125</span><span id="line-125">       * reported as a clean parse error instead.</span>
+<span class="source-line-no">126</span><span id="line-126">       *</span>
+<span class="source-line-no">127</span><span id="line-127">       * @param value The maximum length in bytes.  Default is 256 MiB.  Values &amp;le; 0 disable the cap.</span>
+<span class="source-line-no">128</span><span id="line-128">       * @return This object.</span>
+<span class="source-line-no">129</span><span id="line-129">       */</span>
+<span class="source-line-no">130</span><span id="line-130">      public Builder maxLength(int value) {</span>
+<span class="source-line-no">131</span><span id="line-131">         maxLength = value;</span>
+<span class="source-line-no">132</span><span id="line-132">         return this;</span>
+<span class="source-line-no">133</span><span id="line-133">      }</span>
+<span class="source-line-no">134</span><span id="line-134"></span>
+<span class="source-line-no">135</span><span id="line-135">      /**</span>
+<span class="source-line-no">136</span><span id="line-136">       * The maximum allowed wire-declared element count (file/row-group row counts, column-chunk value</span>
+<span class="source-line-no">137</span><span id="line-137">       * counts).</span>
+<span class="source-line-no">138</span><span id="line-138">       *</span>
+<span class="source-line-no">139</span><span id="line-139">       * &lt;p&gt;</span>
+<span class="source-line-no">140</span><span id="line-140">       * Guards against malformed or adversarial input where a small footer declares a huge row or value</span>
+<span class="source-line-no">141</span><span id="line-141">       * count, which would otherwise drive a huge {@code ArrayList} pre-allocation.  Malformed counts are</span>
+<span class="source-line-no">142</span><span id="line-142">       * reported as a clean parse error instead.</span>
+<span class="source-line-no">143</span><span id="line-143">       *</span>
+<span class="source-line-no">144</span><span id="line-144">       * @param value The maximum count.  Default is 10 million.  Values &amp;le; 0 disable the cap.</span>
+<span class="source-line-no">145</span><span id="line-145">       * @return This object.</span>
+<span class="source-line-no">146</span><span id="line-146">       */</span>
+<span class="source-line-no">147</span><span id="line-147">      public Builder maxCount(int value) {</span>
+<span class="source-line-no">148</span><span id="line-148">         maxCount = value;</span>
+<span class="source-line-no">149</span><span id="line-149">         return this;</span>
+<span class="source-line-no">150</span><span id="line-150">      }</span>
+<span class="source-line-no">151</span><span id="line-151"></span>
+<span class="source-line-no">152</span><span id="line-152">      /**</span>
+<span class="source-line-no">153</span><span id="line-153">       * The maximum allowed size (in bytes) of the whole Parquet input buffered into memory before parsing.</span>
+<span class="source-line-no">154</span><span id="line-154">       *</span>
+<span class="source-line-no">155</span><span id="line-155">       * &lt;p&gt;</span>
+<span class="source-line-no">156</span><span id="line-156">       * Parquet's end-of-file footer and column-major layout require the entire input to be buffered before</span>
+<span class="source-line-no">157</span><span id="line-157">       * any record can be reconstructed.  This cap rejects an oversized input with a clean parse error</span>
+<span class="source-line-no">158</span><span id="line-158">       * instead of buffering an unbounded body into memory.</span>
+<span class="source-line-no">159</span><span id="line-159">       *</span>
+<span class="source-line-no">160</span><span id="line-160">       * @param value The maximum input size in bytes.  Default is 256 MiB.  Values &amp;le; 0 disable the cap.</span>
+<span class="source-line-no">161</span><span id="line-161">       * @return This object.</span>
+<span class="source-line-no">162</span><span id="line-162">       */</span>
+<span class="source-line-no">163</span><span id="line-163">      public Builder maxInputLength(int value) {</span>
+<span class="source-line-no">164</span><span id="line-164">         maxInputLength = value;</span>
+<span class="source-line-no">165</span><span id="line-165">         return this;</span>
+<span class="source-line-no">166</span><span id="line-166">      }</span>
+<span class="source-line-no">167</span><span id="line-167"></span>
+<span class="source-line-no">168</span><span id="line-168">      /**</span>
+<span class="source-line-no">169</span><span id="line-169">       * The maximum allowed aggregate decompressed-byte total across every Parquet page read during a</span>
+<span class="source-line-no">170</span><span id="line-170">       * single parse.</span>
+<span class="source-line-no">171</span><span id="line-171">       *</span>
+<span class="source-line-no">172</span><span id="line-172">       * &lt;p&gt;</span>
+<span class="source-line-no">173</span><span id="line-173">       * Guards against a decompression bomb assembled from many pages that each individually pass the</span>
+<span class="source-line-no">174</span><span id="line-174">       * per-page {@link #maxLength(int)} cap: this ceiling charges every page's declared uncompressed</span>
+<span class="source-line-no">175</span><span id="line-175">       * size against a running per-parse total, so a chunk (or a whole file) whose pages sum past the</span>
+<span class="source-line-no">176</span><span id="line-176">       * ceiling is rejected with a clean parse error instead of buffering the excess.</span>
+<span class="source-line-no">177</span><span id="line-177">       *</span>
+<span class="source-line-no">178</span><span id="line-178">       * @param value The maximum aggregate decompressed-byte total.  Default is 64 MiB.  Values &amp;le; 0 disable the cap.</span>
+<span class="source-line-no">179</span><span id="line-179">       * @return This object.</span>
+<span class="source-line-no">180</span><span id="line-180">       */</span>
+<span class="source-line-no">181</span><span id="line-181">      public Builder maxDecompressedBytes(int value) {</span>
+<span class="source-line-no">182</span><span id="line-182">         maxDecompressedBytes = value;</span>
+<span class="source-line-no">183</span><span id="line-183">         return this;</span>
+<span class="source-line-no">184</span><span id="line-184">      }</span>
+<span class="source-line-no">185</span><span id="line-185"></span>
+<span class="source-line-no">186</span><span id="line-186">      @Override /* InputStreamParser.Builder&lt;?&gt; */</span>
+<span class="source-line-no">187</span><span id="line-187">      public Builder copy() {</span>
+<span class="source-line-no">188</span><span id="line-188">         return new Builder(this);</span>
+<span class="source-line-no">189</span><span id="line-189">      }</span>
+<span class="source-line-no">190</span><span id="line-190"></span>
+<span class="source-line-no">191</span><span id="line-191">      @Override</span>
+<span class="source-line-no">192</span><span id="line-192">      public ParquetParser build() {</span>
+<span class="source-line-no">193</span><span id="line-193">         return cache(CACHE).build(ParquetParser.class);</span>
+<span class="source-line-no">194</span><span id="line-194">      }</span>
+<span class="source-line-no">195</span><span id="line-195"></span>
+<span class="source-line-no">196</span><span id="line-196">      @Override</span>
+<span class="source-line-no">197</span><span id="line-197">      public HashKey hashKey() {</span>
+<span class="source-line-no">198</span><span id="line-198">         return HashKey.of(super.hashKey(), nullKeyString, maxLength, maxCount, maxInputLength, maxDecompressedBytes);</span>
+<span class="source-line-no">199</span><span id="line-199">      }</span>
+<span class="source-line-no">200</span><span id="line-200">   }</span>
+<span class="source-line-no">201</span><span id="line-201"></span>
+<span class="source-line-no">202</span><span id="line-202">   /**</span>
+<span class="source-line-no">203</span><span id="line-203">    * Creates a new parser builder.</span>
+<span class="source-line-no">204</span><span id="line-204">    *</span>
+<span class="source-line-no">205</span><span id="line-205">    * @return A new builder.</span>
+<span class="source-line-no">206</span><span id="line-206">    */</span>
+<span class="source-line-no">207</span><span id="line-207">   public static Builder create() {</span>
+<span class="source-line-no">208</span><span id="line-208">      return new Builder();</span>
+<span class="source-line-no">209</span><span id="line-209">   }</span>
+<span class="source-line-no">210</span><span id="line-210"></span>
+<span class="source-line-no">211</span><span id="line-211">   final String nullKeyString;</span>
+<span class="source-line-no">212</span><span id="line-212">   private final int maxLength;</span>
+<span class="source-line-no">213</span><span id="line-213">   private final int maxCount;</span>
+<span class="source-line-no">214</span><span id="line-214">   private final int maxInputLength;</span>
+<span class="source-line-no">215</span><span id="line-215">   private final int maxDecompressedBytes;</span>
+<span class="source-line-no">216</span><span id="line-216"></span>
+<span class="source-line-no">217</span><span id="line-217">   /**</span>
+<span class="source-line-no">218</span><span id="line-218">    * Constructor.</span>
+<span class="source-line-no">219</span><span id="line-219">    *</span>
+<span class="source-line-no">220</span><span id="line-220">    * @param builder The builder for this parser.</span>
+<span class="source-line-no">221</span><span id="line-221">    */</span>
+<span class="source-line-no">222</span><span id="line-222">   public ParquetParser(Builder builder) {</span>
+<span class="source-line-no">223</span><span id="line-223">      super(builder);</span>
+<span class="source-line-no">224</span><span id="line-224">      nullKeyString = builder.nullKeyString;</span>
+<span class="source-line-no">225</span><span id="line-225">      maxLength = builder.maxLength;</span>
+<span class="source-line-no">226</span><span id="line-226">      maxCount = builder.maxCount;</span>
+<span class="source-line-no">227</span><span id="line-227">      maxInputLength = builder.maxInputLength;</span>
+<span class="source-line-no">228</span><span id="line-228">      maxDecompressedBytes = builder.maxDecompressedBytes;</span>
+<span class="source-line-no">229</span><span id="line-229">   }</span>
+<span class="source-line-no">230</span><span id="line-230"></span>
+<span class="source-line-no">231</span><span id="line-231">   /**</span>
+<span class="source-line-no">232</span><span id="line-232">    * Returns the maximum allowed wire-declared length (in bytes) for a single Parquet page.</span>
+<span class="source-line-no">233</span><span id="line-233">    *</span>
+<span class="source-line-no">234</span><span id="line-234">    * @return The maximum length in bytes.</span>
+<span class="source-line-no">235</span><span id="line-235">    */</span>
+<span class="source-line-no">236</span><span id="line-236">   public int getMaxLength() {</span>
+<span class="source-line-no">237</span><span id="line-237">      return maxLength;</span>
+<span class="source-line-no">238</span><span id="line-238">   }</span>
+<span class="source-line-no">239</span><span id="line-239"></span>
+<span class="source-line-no">240</span><span id="line-240">   /**</span>
+<span class="source-line-no">241</span><span id="line-241">    * Returns the maximum allowed wire-declared element count (row/value counts).</span>
+<span class="source-line-no">242</span><span id="line-242">    *</span>
+<span class="source-line-no">243</span><span id="line-243">    * @return The maximum count.</span>
+<span class="source-line-no">244</span><span id="line-244">    */</span>
+<span class="source-line-no">245</span><span id="line-245">   public int getMaxCount() {</span>
+<span class="source-line-no">246</span><span id="line-246">      return maxCount;</span>
+<span class="source-line-no">247</span><span id="line-247">   }</span>
+<span class="source-line-no">248</span><span id="line-248"></span>
+<span class="source-line-no">249</span><span id="line-249">   /**</span>
+<span class="source-line-no">250</span><span id="line-250">    * Returns the maximum allowed size (in bytes) of the whole Parquet input buffered before parsing.</span>
+<span class="source-line-no">251</span><span id="line-251">    *</span>
+<span class="source-line-no">252</span><span id="line-252">    * @return The maximum input size in bytes.</span>
+<span class="source-line-no">253</span><span id="line-253">    */</span>
+<span class="source-line-no">254</span><span id="line-254">   public int getMaxInputLength() {</span>
+<span class="source-line-no">255</span><span id="line-255">      return maxInputLength;</span>
+<span class="source-line-no">256</span><span id="line-256">   }</span>
+<span class="source-line-no">257</span><span id="line-257"></span>
+<span class="source-line-no">258</span><span id="line-258">   /**</span>
+<span class="source-line-no">259</span><span id="line-259">    * Returns the maximum allowed aggregate decompressed-byte total across every page read during a</span>
+<span class="source-line-no">260</span><span id="line-260">    * single parse.</span>
+<span class="source-line-no">261</span><span id="line-261">    *</span>
+<span class="source-line-no">262</span><span id="line-262">    * @return The maximum aggregate decompressed-byte total.</span>
 <span class="source-line-no">263</span><span id="line-263">    */</span>
-<span class="source-line-no">264</span><span id="line-264">   @Override /* RecordReadable */</span>
-<span class="source-line-no">265</span><span id="line-265">   public RecordReader readRecords(Object input) throws IOException {</span>
-<span class="source-line-no">266</span><span id="line-266">      return ((RecordReadable) getSession()).readRecords(input);</span>
-<span class="source-line-no">267</span><span id="line-267">   }</span>
-<span class="source-line-no">268</span><span id="line-268"></span>
-<span class="source-line-no">269</span><span id="line-269">   /**</span>
-<span class="source-line-no">270</span><span id="line-270">    * Convenience delegator for the buffered array-element {@link RecordReader} using &lt;b&gt;default</span>
-<span class="source-line-no">271</span><span id="line-271">    * session arguments&lt;/b&gt;.  The real implementation lives on</span>
-<span class="source-line-no">272</span><span id="line-272">    * {@link ParquetParserSession#readArrayRecords(Object)}.</span>
-<span class="source-line-no">273</span><span id="line-273">    *</span>
-<span class="source-line-no">274</span><span id="line-274">    * @param input The input.</span>
-<span class="source-line-no">275</span><span id="line-275">    * @return A buffered {@link RecordReader}.</span>
-<span class="source-line-no">276</span><span id="line-276">    * @throws IOException If a problem occurred reading the input.</span>
-<span class="source-line-no">277</span><span id="line-277">    */</span>
-<span class="source-line-no">278</span><span id="line-278">   @Override /* ArrayRecordReadable */</span>
-<span class="source-line-no">279</span><span id="line-279">   public RecordReader readArrayRecords(Object input) throws IOException {</span>
-<span class="source-line-no">280</span><span id="line-280">      return ((ArrayRecordReadable) getSession()).readArrayRecords(input);</span>
-<span class="source-line-no">281</span><span id="line-281">   }</span>
-<span class="source-line-no">282</span><span id="line-282"></span>
-<span class="source-line-no">283</span><span id="line-283">   /**</span>
-<span class="source-line-no">284</span><span id="line-284">    * The Parquet record cursor is buffered/{@link RecordAdapter}-backed, not O(1) streaming.</span>
-<span class="source-line-no">285</span><span id="line-285">    *</span>
-<span class="source-line-no">286</span><span id="line-286">    * @return Always &lt;jk&gt;false&lt;/jk&gt;.</span>
-<span class="source-line-no">287</span><span id="line-287">    */</span>
-<span class="source-line-no">288</span><span id="line-288">   @Override /* RecordReadable */</span>
-<span class="source-line-no">289</span><span id="line-289">   public boolean isRecordStreaming() { return false; }</span>
-<span class="source-line-no">290</span><span id="line-290"></span>
-<span class="source-line-no">291</span><span id="line-291">   /**</span>
-<span class="source-line-no">292</span><span id="line-292">    * The Parquet array-record cursor is buffered/{@link RecordAdapter}-backed, not O(1) streaming.</span>
+<span class="source-line-no">264</span><span id="line-264">   public int getMaxDecompressedBytes() {</span>
+<span class="source-line-no">265</span><span id="line-265">      return maxDecompressedBytes;</span>
+<span class="source-line-no">266</span><span id="line-266">   }</span>
+<span class="source-line-no">267</span><span id="line-267"></span>
+<span class="source-line-no">268</span><span id="line-268">   @Override /* Overridden from Context */</span>
+<span class="source-line-no">269</span><span id="line-269">   public Builder copy() {</span>
+<span class="source-line-no">270</span><span id="line-270">      return new Builder(this);</span>
+<span class="source-line-no">271</span><span id="line-271">   }</span>
+<span class="source-line-no">272</span><span id="line-272"></span>
+<span class="source-line-no">273</span><span id="line-273">   @Override</span>
+<span class="source-line-no">274</span><span id="line-274">   public ParquetParserSession.Builder createSession() {</span>
+<span class="source-line-no">275</span><span id="line-275">      return ParquetParserSession.create(this);</span>
+<span class="source-line-no">276</span><span id="line-276">   }</span>
+<span class="source-line-no">277</span><span id="line-277"></span>
+<span class="source-line-no">278</span><span id="line-278">   @Override</span>
+<span class="source-line-no">279</span><span id="line-279">   public ParquetBeanPropertyMeta getParquetBeanPropertyMeta(BeanPropertyMeta bpm) {</span>
+<span class="source-line-no">280</span><span id="line-280">      return bpm == null ? ParquetBeanPropertyMeta.DEFAULT</span>
+<span class="source-line-no">281</span><span id="line-281">         : parquetBeanPropertyMetas.computeIfAbsent(bpm, k -&gt; new ParquetBeanPropertyMeta(k.getDelegateFor(), this));</span>
+<span class="source-line-no">282</span><span id="line-282">   }</span>
+<span class="source-line-no">283</span><span id="line-283"></span>
+<span class="source-line-no">284</span><span id="line-284">   @Override</span>
+<span class="source-line-no">285</span><span id="line-285">   public ParquetClassMeta getParquetClassMeta(ClassMeta&lt;?&gt; cm) {</span>
+<span class="source-line-no">286</span><span id="line-286">      return parquetClassMetas.computeIfAbsent(cm, k -&gt; new ParquetClassMeta(k, this));</span>
+<span class="source-line-no">287</span><span id="line-287">   }</span>
+<span class="source-line-no">288</span><span id="line-288"></span>
+<span class="source-line-no">289</span><span id="line-289">   /**</span>
+<span class="source-line-no">290</span><span id="line-290">    * Convenience delegator for the whole-value {@link RecordReader} using &lt;b&gt;default session</span>
+<span class="source-line-no">291</span><span id="line-291">    * arguments&lt;/b&gt;.  The real implementation lives on</span>
+<span class="source-line-no">292</span><span id="line-292">    * {@link ParquetParserSession#readRecords(Object)}.</span>
 <span class="source-line-no">293</span><span id="line-293">    *</span>
-<span class="source-line-no">294</span><span id="line-294">    * @return Always &lt;jk&gt;false&lt;/jk&gt;.</span>
-<span class="source-line-no">295</span><span id="line-295">    */</span>
-<span class="source-line-no">296</span><span id="line-296">   @Override /* ArrayRecordReadable */</span>
-<span class="source-line-no">297</span><span id="line-297">   public boolean isArrayRecordStreaming() { return false; }</span>
-<span class="source-line-no">298</span><span id="line-298">}</span>
+<span class="source-line-no">294</span><span id="line-294">    * @param input The input.</span>
+<span class="source-line-no">295</span><span id="line-295">    * @return A new {@link RecordReader} cursor.</span>
+<span class="source-line-no">296</span><span id="line-296">    * @throws IOException If a problem occurred opening the underlying input.</span>
+<span class="source-line-no">297</span><span id="line-297">    */</span>
+<span class="source-line-no">298</span><span id="line-298">   @Override /* RecordReadable */</span>
+<span class="source-line-no">299</span><span id="line-299">   public RecordReader readRecords(Object input) throws IOException {</span>
+<span class="source-line-no">300</span><span id="line-300">      return ((RecordReadable) getSession()).readRecords(input);</span>
+<span class="source-line-no">301</span><span id="line-301">   }</span>
+<span class="source-line-no">302</span><span id="line-302"></span>
+<span class="source-line-no">303</span><span id="line-303">   /**</span>
+<span class="source-line-no">304</span><span id="line-304">    * Convenience delegator for the buffered array-element {@link RecordReader} using &lt;b&gt;default</span>
+<span class="source-line-no">305</span><span id="line-305">    * session arguments&lt;/b&gt;.  The real implementation lives on</span>
+<span class="source-line-no">306</span><span id="line-306">    * {@link ParquetParserSession#readArrayRecords(Object)}.</span>
+<span class="source-line-no">307</span><span id="line-307">    *</span>
+<span class="source-line-no">308</span><span id="line-308">    * @param input The input.</span>
+<span class="source-line-no">309</span><span id="line-309">    * @return A buffered {@link RecordReader}.</span>
+<span class="source-line-no">310</span><span id="line-310">    * @throws IOException If a problem occurred reading the input.</span>
+<span class="source-line-no">311</span><span id="line-311">    */</span>
+<span class="source-line-no">312</span><span id="line-312">   @Override /* ArrayRecordReadable */</span>
+<span class="source-line-no">313</span><span id="line-313">   public RecordReader readArrayRecords(Object input) throws IOException {</span>
+<span class="source-line-no">314</span><span id="line-314">      return ((ArrayRecordReadable) getSession()).readArrayRecords(input);</span>
+<span class="source-line-no">315</span><span id="line-315">   }</span>
+<span class="source-line-no">316</span><span id="line-316"></span>
+<span class="source-line-no">317</span><span id="line-317">   /**</span>
+<span class="source-line-no">318</span><span id="line-318">    * The Parquet record cursor is buffered/{@link RecordAdapter}-backed, not O(1) streaming.</span>
+<span class="source-line-no">319</span><span id="line-319">    *</span>
+<span class="source-line-no">320</span><span id="line-320">    * @return Always &lt;jk&gt;false&lt;/jk&gt;.</span>
+<span class="source-line-no">321</span><span id="line-321">    */</span>
+<span class="source-line-no">322</span><span id="line-322">   @Override /* RecordReadable */</span>
+<span class="source-line-no">323</span><span id="line-323">   public boolean isRecordStreaming() { return false; }</span>
+<span class="source-line-no">324</span><span id="line-324"></span>
+<span class="source-line-no">325</span><span id="line-325">   /**</span>
+<span class="source-line-no">326</span><span id="line-326">    * The Parquet array-record cursor is buffered/{@link RecordAdapter}-backed, not O(1) streaming.</span>
+<span class="source-line-no">327</span><span id="line-327">    *</span>
+<span class="source-line-no">328</span><span id="line-328">    * @return Always &lt;jk&gt;false&lt;/jk&gt;.</span>
+<span class="source-line-no">329</span><span id="line-329">    */</span>
+<span class="source-line-no">330</span><span id="line-330">   @Override /* ArrayRecordReadable */</span>
+<span class="source-line-no">331</span><span id="line-331">   public boolean isArrayRecordStreaming() { return false; }</span>
+<span class="source-line-no">332</span><span id="line-332">}</span>
 
 
 

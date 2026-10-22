@@ -50,56 +50,76 @@
 <span class="source-line-no">037</span><span id="line-37">@ContextApply({ ParquetConfigAnnotation.SerializerApply.class, ParquetConfigAnnotation.ParserApply.class })</span>
 <span class="source-line-no">038</span><span id="line-38">public @interface ParquetConfig {</span>
 <span class="source-line-no">039</span><span id="line-39"></span>
-<span class="source-line-no">040</span><span id="line-40">   /** Compression codec (UNCOMPRESSED, GZIP). */</span>
-<span class="source-line-no">041</span><span id="line-41">   String compressionCodec() default "";</span>
-<span class="source-line-no">042</span><span id="line-42"></span>
-<span class="source-line-no">043</span><span id="line-43">   /** Row group size in bytes. */</span>
-<span class="source-line-no">044</span><span id="line-44">   String rowGroupSize() default "";</span>
-<span class="source-line-no">045</span><span id="line-45"></span>
-<span class="source-line-no">046</span><span id="line-46">   /** Page size in bytes. */</span>
-<span class="source-line-no">047</span><span id="line-47">   String pageSize() default "";</span>
-<span class="source-line-no">048</span><span id="line-48"></span>
-<span class="source-line-no">049</span><span id="line-49">   /** Add bean types column. */</span>
-<span class="source-line-no">050</span><span id="line-50">   String addBeanTypes() default "";</span>
-<span class="source-line-no">051</span><span id="line-51"></span>
-<span class="source-line-no">052</span><span id="line-52">   /**</span>
-<span class="source-line-no">053</span><span id="line-53">    * Maximum allowed wire-declared length (in bytes) for a single Parquet page (compressed or</span>
-<span class="source-line-no">054</span><span id="line-54">    * uncompressed) when parsing.</span>
-<span class="source-line-no">055</span><span id="line-55">    *</span>
-<span class="source-line-no">056</span><span id="line-56">    * &lt;p&gt;</span>
-<span class="source-line-no">057</span><span id="line-57">    * Guards against malformed or adversarial input where a small file declares a huge per-page byte</span>
-<span class="source-line-no">058</span><span id="line-58">    * size. Default is &lt;js&gt;"268435456"&lt;/js&gt; (256 MiB). A value of &lt;js&gt;"0"&lt;/js&gt; or less disables the cap.</span>
-<span class="source-line-no">059</span><span id="line-59">    *</span>
-<span class="source-line-no">060</span><span id="line-60">    * @return The annotation value.</span>
-<span class="source-line-no">061</span><span id="line-61">    */</span>
-<span class="source-line-no">062</span><span id="line-62">   String maxLength() default "";</span>
-<span class="source-line-no">063</span><span id="line-63"></span>
-<span class="source-line-no">064</span><span id="line-64">   /**</span>
-<span class="source-line-no">065</span><span id="line-65">    * Maximum allowed wire-declared element count (file/row-group row counts, column-chunk value counts)</span>
-<span class="source-line-no">066</span><span id="line-66">    * when parsing.</span>
-<span class="source-line-no">067</span><span id="line-67">    *</span>
-<span class="source-line-no">068</span><span id="line-68">    * &lt;p&gt;</span>
-<span class="source-line-no">069</span><span id="line-69">    * Guards against malformed or adversarial input where a small footer declares a huge row or value</span>
-<span class="source-line-no">070</span><span id="line-70">    * count. Default is &lt;js&gt;"10000000"&lt;/js&gt; (10 million). A value of &lt;js&gt;"0"&lt;/js&gt; or less disables the cap.</span>
-<span class="source-line-no">071</span><span id="line-71">    *</span>
-<span class="source-line-no">072</span><span id="line-72">    * @return The annotation value.</span>
-<span class="source-line-no">073</span><span id="line-73">    */</span>
-<span class="source-line-no">074</span><span id="line-74">   String maxCount() default "";</span>
-<span class="source-line-no">075</span><span id="line-75"></span>
-<span class="source-line-no">076</span><span id="line-76">   /**</span>
-<span class="source-line-no">077</span><span id="line-77">    * Maximum allowed size (in bytes) of the whole Parquet input buffered into memory before parsing.</span>
+<span class="source-line-no">040</span><span id="line-40">   /**</span>
+<span class="source-line-no">041</span><span id="line-41">    * Compression codec used when &lt;b&gt;writing&lt;/b&gt; (&lt;js&gt;"UNCOMPRESSED"&lt;/js&gt; or &lt;js&gt;"GZIP"&lt;/js&gt;, case-insensitive).</span>
+<span class="source-line-no">042</span><span id="line-42">    *</span>
+<span class="source-line-no">043</span><span id="line-43">    * &lt;p&gt;</span>
+<span class="source-line-no">044</span><span id="line-44">    * Any other value fails fast with an {@link IllegalArgumentException} naming the bad value and the valid write</span>
+<span class="source-line-no">045</span><span id="line-45">    * codecs.  This includes unknown names (typos) and &lt;js&gt;"SNAPPY"&lt;/js&gt;, which the parser can decode but the</span>
+<span class="source-line-no">046</span><span id="line-46">    * serializer cannot write.  The parser detects the codec from the file and ignores this setting.</span>
+<span class="source-line-no">047</span><span id="line-47">    */</span>
+<span class="source-line-no">048</span><span id="line-48">   String compressionCodec() default "";</span>
+<span class="source-line-no">049</span><span id="line-49"></span>
+<span class="source-line-no">050</span><span id="line-50">   /** Row group size in bytes. */</span>
+<span class="source-line-no">051</span><span id="line-51">   String rowGroupSize() default "";</span>
+<span class="source-line-no">052</span><span id="line-52"></span>
+<span class="source-line-no">053</span><span id="line-53">   /** Page size in bytes. */</span>
+<span class="source-line-no">054</span><span id="line-54">   String pageSize() default "";</span>
+<span class="source-line-no">055</span><span id="line-55"></span>
+<span class="source-line-no">056</span><span id="line-56">   /** Add bean types column. */</span>
+<span class="source-line-no">057</span><span id="line-57">   String addBeanTypes() default "";</span>
+<span class="source-line-no">058</span><span id="line-58"></span>
+<span class="source-line-no">059</span><span id="line-59">   /**</span>
+<span class="source-line-no">060</span><span id="line-60">    * Maximum allowed wire-declared length (in bytes) for a single Parquet page (compressed or</span>
+<span class="source-line-no">061</span><span id="line-61">    * uncompressed) when parsing.</span>
+<span class="source-line-no">062</span><span id="line-62">    *</span>
+<span class="source-line-no">063</span><span id="line-63">    * &lt;p&gt;</span>
+<span class="source-line-no">064</span><span id="line-64">    * Guards against malformed or adversarial input where a small file declares a huge per-page byte</span>
+<span class="source-line-no">065</span><span id="line-65">    * size. Default is &lt;js&gt;"268435456"&lt;/js&gt; (256 MiB). A value of &lt;js&gt;"0"&lt;/js&gt; or less disables the cap.</span>
+<span class="source-line-no">066</span><span id="line-66">    *</span>
+<span class="source-line-no">067</span><span id="line-67">    * @return The annotation value.</span>
+<span class="source-line-no">068</span><span id="line-68">    */</span>
+<span class="source-line-no">069</span><span id="line-69">   String maxLength() default "";</span>
+<span class="source-line-no">070</span><span id="line-70"></span>
+<span class="source-line-no">071</span><span id="line-71">   /**</span>
+<span class="source-line-no">072</span><span id="line-72">    * Maximum allowed wire-declared element count (file/row-group row counts, column-chunk value counts)</span>
+<span class="source-line-no">073</span><span id="line-73">    * when parsing.</span>
+<span class="source-line-no">074</span><span id="line-74">    *</span>
+<span class="source-line-no">075</span><span id="line-75">    * &lt;p&gt;</span>
+<span class="source-line-no">076</span><span id="line-76">    * Guards against malformed or adversarial input where a small footer declares a huge row or value</span>
+<span class="source-line-no">077</span><span id="line-77">    * count. Default is &lt;js&gt;"10000000"&lt;/js&gt; (10 million). A value of &lt;js&gt;"0"&lt;/js&gt; or less disables the cap.</span>
 <span class="source-line-no">078</span><span id="line-78">    *</span>
-<span class="source-line-no">079</span><span id="line-79">    * &lt;p&gt;</span>
-<span class="source-line-no">080</span><span id="line-80">    * Guards against an oversized input being buffered unbounded into memory. Default is</span>
-<span class="source-line-no">081</span><span id="line-81">    * &lt;js&gt;"268435456"&lt;/js&gt; (256 MiB). A value of &lt;js&gt;"0"&lt;/js&gt; or less disables the cap.</span>
-<span class="source-line-no">082</span><span id="line-82">    *</span>
-<span class="source-line-no">083</span><span id="line-83">    * @return The annotation value.</span>
-<span class="source-line-no">084</span><span id="line-84">    */</span>
-<span class="source-line-no">085</span><span id="line-85">   String maxInputLength() default "";</span>
-<span class="source-line-no">086</span><span id="line-86"></span>
-<span class="source-line-no">087</span><span id="line-87">   /** Rank for application order. */</span>
-<span class="source-line-no">088</span><span id="line-88">   int rank() default 0;</span>
-<span class="source-line-no">089</span><span id="line-89">}</span>
+<span class="source-line-no">079</span><span id="line-79">    * @return The annotation value.</span>
+<span class="source-line-no">080</span><span id="line-80">    */</span>
+<span class="source-line-no">081</span><span id="line-81">   String maxCount() default "";</span>
+<span class="source-line-no">082</span><span id="line-82"></span>
+<span class="source-line-no">083</span><span id="line-83">   /**</span>
+<span class="source-line-no">084</span><span id="line-84">    * Maximum allowed size (in bytes) of the whole Parquet input buffered into memory before parsing.</span>
+<span class="source-line-no">085</span><span id="line-85">    *</span>
+<span class="source-line-no">086</span><span id="line-86">    * &lt;p&gt;</span>
+<span class="source-line-no">087</span><span id="line-87">    * Guards against an oversized input being buffered unbounded into memory. Default is</span>
+<span class="source-line-no">088</span><span id="line-88">    * &lt;js&gt;"268435456"&lt;/js&gt; (256 MiB). A value of &lt;js&gt;"0"&lt;/js&gt; or less disables the cap.</span>
+<span class="source-line-no">089</span><span id="line-89">    *</span>
+<span class="source-line-no">090</span><span id="line-90">    * @return The annotation value.</span>
+<span class="source-line-no">091</span><span id="line-91">    */</span>
+<span class="source-line-no">092</span><span id="line-92">   String maxInputLength() default "";</span>
+<span class="source-line-no">093</span><span id="line-93"></span>
+<span class="source-line-no">094</span><span id="line-94">   /**</span>
+<span class="source-line-no">095</span><span id="line-95">    * Maximum allowed aggregate decompressed-byte total across every Parquet page read during a single</span>
+<span class="source-line-no">096</span><span id="line-96">    * parse.</span>
+<span class="source-line-no">097</span><span id="line-97">    *</span>
+<span class="source-line-no">098</span><span id="line-98">    * &lt;p&gt;</span>
+<span class="source-line-no">099</span><span id="line-99">    * Guards against a decompression bomb assembled from many pages that each individually pass the</span>
+<span class="source-line-no">100</span><span id="line-100">    * per-page {@link #maxLength()} cap. Default is &lt;js&gt;"67108864"&lt;/js&gt; (64 MiB). A value of</span>
+<span class="source-line-no">101</span><span id="line-101">    * &lt;js&gt;"0"&lt;/js&gt; or less disables the cap.</span>
+<span class="source-line-no">102</span><span id="line-102">    *</span>
+<span class="source-line-no">103</span><span id="line-103">    * @return The annotation value.</span>
+<span class="source-line-no">104</span><span id="line-104">    */</span>
+<span class="source-line-no">105</span><span id="line-105">   String maxDecompressedBytes() default "";</span>
+<span class="source-line-no">106</span><span id="line-106"></span>
+<span class="source-line-no">107</span><span id="line-107">   /** Rank for application order. */</span>
+<span class="source-line-no">108</span><span id="line-108">   int rank() default 0;</span>
+<span class="source-line-no">109</span><span id="line-109">}</span>
 
 
 

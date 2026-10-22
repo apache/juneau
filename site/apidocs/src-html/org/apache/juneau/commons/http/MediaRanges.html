@@ -220,41 +220,47 @@
 <span class="source-line-no">207</span><span id="line-207">            var mt = mediaTypes.get(i);</span>
 <span class="source-line-no">208</span><span id="line-208">            var matchQuant2 = mr.match(mt, false);</span>
 <span class="source-line-no">209</span><span id="line-209"></span>
-<span class="source-line-no">210</span><span id="line-210">            if (matchQuant2 &gt; matchQuant) {</span>
-<span class="source-line-no">211</span><span id="line-211">               matchIndex = i;</span>
-<span class="source-line-no">212</span><span id="line-212">               matchQuant = matchQuant2;</span>
-<span class="source-line-no">213</span><span id="line-213">               q = q2;</span>
-<span class="source-line-no">214</span><span id="line-214">            }</span>
-<span class="source-line-no">215</span><span id="line-215">         }</span>
-<span class="source-line-no">216</span><span id="line-216">      }</span>
-<span class="source-line-no">217</span><span id="line-217"></span>
-<span class="source-line-no">218</span><span id="line-218">      return matchIndex;</span>
-<span class="source-line-no">219</span><span id="line-219">   }</span>
-<span class="source-line-no">220</span><span id="line-220"></span>
-<span class="source-line-no">221</span><span id="line-221">   /**</span>
-<span class="source-line-no">222</span><span id="line-222">    * Returns the media ranges that make up this object.</span>
-<span class="source-line-no">223</span><span id="line-223">    *</span>
-<span class="source-line-no">224</span><span id="line-224">    * @return The media ranges that make up this object.</span>
-<span class="source-line-no">225</span><span id="line-225">    */</span>
-<span class="source-line-no">226</span><span id="line-226">   public List&lt;MediaRange&gt; toList() {</span>
-<span class="source-line-no">227</span><span id="line-227">      return l(ranges);</span>
-<span class="source-line-no">228</span><span id="line-228">   }</span>
-<span class="source-line-no">229</span><span id="line-229"></span>
-<span class="source-line-no">230</span><span id="line-230">   @Override</span>
-<span class="source-line-no">231</span><span id="line-231">   public boolean equals(Object o) {</span>
-<span class="source-line-no">232</span><span id="line-232">      return o instanceof MediaRanges o2 &amp;&amp; eq(this, o2, (x, y) -&gt; eq(x.string, y.string));</span>
-<span class="source-line-no">233</span><span id="line-233">   }</span>
-<span class="source-line-no">234</span><span id="line-234"></span>
-<span class="source-line-no">235</span><span id="line-235">   @Override</span>
-<span class="source-line-no">236</span><span id="line-236">   public int hashCode() {</span>
-<span class="source-line-no">237</span><span id="line-237">      return Objects.hashCode(string);</span>
-<span class="source-line-no">238</span><span id="line-238">   }</span>
-<span class="source-line-no">239</span><span id="line-239"></span>
-<span class="source-line-no">240</span><span id="line-240">   @Override /* Overridden from Object */</span>
-<span class="source-line-no">241</span><span id="line-241">   public String toString() {</span>
-<span class="source-line-no">242</span><span id="line-242">      return string;</span>
-<span class="source-line-no">243</span><span id="line-243">   }</span>
-<span class="source-line-no">244</span><span id="line-244">}</span>
+<span class="source-line-no">210</span><span id="line-210">            // On an equally good match, prefer the candidate that declares itself with a higher q-value</span>
+<span class="source-line-no">211</span><span id="line-211">            // (e.g. a serializer that only handles "application/jsonl;q=0.9" as a fallback).</span>
+<span class="source-line-no">212</span><span id="line-212">            if (matchQuant2 &gt; matchQuant || (matchQuant2 &gt; 0 &amp;&amp; matchQuant2 == matchQuant &amp;&amp; q2 == q &amp;&amp; qValueOf(mt) &gt; qValueOf(mediaTypes.get(matchIndex)))) {</span>
+<span class="source-line-no">213</span><span id="line-213">               matchIndex = i;</span>
+<span class="source-line-no">214</span><span id="line-214">               matchQuant = matchQuant2;</span>
+<span class="source-line-no">215</span><span id="line-215">               q = q2;</span>
+<span class="source-line-no">216</span><span id="line-216">            }</span>
+<span class="source-line-no">217</span><span id="line-217">         }</span>
+<span class="source-line-no">218</span><span id="line-218">      }</span>
+<span class="source-line-no">219</span><span id="line-219"></span>
+<span class="source-line-no">220</span><span id="line-220">      return matchIndex;</span>
+<span class="source-line-no">221</span><span id="line-221">   }</span>
+<span class="source-line-no">222</span><span id="line-222"></span>
+<span class="source-line-no">223</span><span id="line-223">   private static float qValueOf(MediaType mt) {</span>
+<span class="source-line-no">224</span><span id="line-224">      return mt instanceof MediaRange mr ? mr.getQValue() : 1f;</span>
+<span class="source-line-no">225</span><span id="line-225">   }</span>
+<span class="source-line-no">226</span><span id="line-226"></span>
+<span class="source-line-no">227</span><span id="line-227">   /**</span>
+<span class="source-line-no">228</span><span id="line-228">    * Returns the media ranges that make up this object.</span>
+<span class="source-line-no">229</span><span id="line-229">    *</span>
+<span class="source-line-no">230</span><span id="line-230">    * @return The media ranges that make up this object.</span>
+<span class="source-line-no">231</span><span id="line-231">    */</span>
+<span class="source-line-no">232</span><span id="line-232">   public List&lt;MediaRange&gt; toList() {</span>
+<span class="source-line-no">233</span><span id="line-233">      return l(ranges);</span>
+<span class="source-line-no">234</span><span id="line-234">   }</span>
+<span class="source-line-no">235</span><span id="line-235"></span>
+<span class="source-line-no">236</span><span id="line-236">   @Override</span>
+<span class="source-line-no">237</span><span id="line-237">   public boolean equals(Object o) {</span>
+<span class="source-line-no">238</span><span id="line-238">      return o instanceof MediaRanges o2 &amp;&amp; eq(this, o2, (x, y) -&gt; eq(x.string, y.string));</span>
+<span class="source-line-no">239</span><span id="line-239">   }</span>
+<span class="source-line-no">240</span><span id="line-240"></span>
+<span class="source-line-no">241</span><span id="line-241">   @Override</span>
+<span class="source-line-no">242</span><span id="line-242">   public int hashCode() {</span>
+<span class="source-line-no">243</span><span id="line-243">      return Objects.hashCode(string);</span>
+<span class="source-line-no">244</span><span id="line-244">   }</span>
+<span class="source-line-no">245</span><span id="line-245"></span>
+<span class="source-line-no">246</span><span id="line-246">   @Override /* Overridden from Object */</span>
+<span class="source-line-no">247</span><span id="line-247">   public String toString() {</span>
+<span class="source-line-no">248</span><span id="line-248">      return string;</span>
+<span class="source-line-no">249</span><span id="line-249">   }</span>
+<span class="source-line-no">250</span><span id="line-250">}</span>
 
 
 

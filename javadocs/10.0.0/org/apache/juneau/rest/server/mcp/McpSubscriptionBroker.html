@@ -111,7 +111,7 @@ extends <a href="McpSubscriptions.html" title="interface in org.apache.juneau.re
 <section class="method-summary" id="method-summary">
 <h2>Method Summary</h2>
 <div id="method-summary-table">
-<div class="table-tabs" role="tablist" aria-orientation="horizontal"><button id="method-summary-table-tab0" role="tab" aria-selected="true" aria-controls="method-summary-table.tabpanel" tabindex="0" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table', 3)" class="active-table-tab">All Methods</button><button id="method-summary-table-tab2" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab2', 3)" class="table-tab">Instance Methods</button><button id="method-summary-table-tab3" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab3', 3)" class="table-tab">Abstract Methods</button></div>
+<div class="table-tabs" role="tablist" aria-orientation="horizontal"><button id="method-summary-table-tab0" role="tab" aria-selected="true" aria-controls="method-summary-table.tabpanel" tabindex="0" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table', 3)" class="active-table-tab">All Methods</button><button id="method-summary-table-tab2" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab2', 3)" class="table-tab">Instance Methods</button><button id="method-summary-table-tab3" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab3', 3)" class="table-tab">Abstract Methods</button><button id="method-summary-table-tab5" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab5', 3)" class="table-tab">Default Methods</button></div>
 <div id="method-summary-table.tabpanel" role="tabpanel" aria-labelledby="method-summary-table-tab0">
 <div class="summary-table three-column-summary">
 <div class="table-header col-first">Modifier and Type</div>
@@ -122,24 +122,29 @@ extends <a href="McpSubscriptions.html" title="interface in org.apache.juneau.re
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
 <div class="block">The number of currently registered (not yet closed) subscriptions.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="McpSubscription.html" title="interface in org.apache.juneau.rest.server.mcp">McpSubscription</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#register(java.lang.String,org.apache.juneau.rest.server.mcp.McpSubscriptionFilter)" class="member-name-link">register</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;subscriptionId,
- <a href="McpSubscriptionFilter.html" title="class in org.apache.juneau.rest.server.mcp">McpSubscriptionFilter</a>&nbsp;honoredFilter)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
-<div class="block">Registers a new subscription and returns its queue handle.</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code>default void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code><a href="#closeAll()" class="member-name-link">closeAll</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5">
+<div class="block">Closes every currently registered subscription.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="McpSubscription.html" title="interface in org.apache.juneau.rest.server.mcp">McpSubscription</a>&gt;</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#registerIfUnder(int,java.lang.String,org.apache.juneau.rest.server.mcp.McpSubscriptionFilter)" class="member-name-link">registerIfUnder</a><wbr>(int&nbsp;max,
- <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;subscriptionId,
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="McpSubscription.html" title="interface in org.apache.juneau.rest.server.mcp">McpSubscription</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#register(java.lang.String,org.apache.juneau.rest.server.mcp.McpSubscriptionFilter)" class="member-name-link">register</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;subscriptionId,
  <a href="McpSubscriptionFilter.html" title="class in org.apache.juneau.rest.server.mcp">McpSubscriptionFilter</a>&nbsp;honoredFilter)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
+<div class="block">Registers a new subscription and returns its queue handle.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="McpSubscription.html" title="interface in org.apache.juneau.rest.server.mcp">McpSubscription</a>&gt;</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#registerIfUnder(int,java.lang.String,org.apache.juneau.rest.server.mcp.McpSubscriptionFilter)" class="member-name-link">registerIfUnder</a><wbr>(int&nbsp;max,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;subscriptionId,
+ <a href="McpSubscriptionFilter.html" title="class in org.apache.juneau.rest.server.mcp">McpSubscriptionFilter</a>&nbsp;honoredFilter)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
 <div class="block">Atomically admission-checks against <code>max</code> and registers, closing the TOCTOU window a separate
  <a href="#activeCount()"><code>activeCount()</code></a> check plus <a href="#register(java.lang.String,org.apache.juneau.rest.server.mcp.McpSubscriptionFilter)"><code>register(java.lang.String, org.apache.juneau.rest.server.mcp.McpSubscriptionFilter)</code></a> call would leave open under concurrent callers
  (in particular against a JVM-wide shared broker instance, where unrelated callers race each other).</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#unregister(java.lang.String)" class="member-name-link">unregister</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;subscriptionId)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#unregister(java.lang.String)" class="member-name-link">unregister</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;subscriptionId)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
 <div class="block">Deregisters and closes the subscription with the given id, if present.</div>
 </div>
 </div>
@@ -224,6 +229,19 @@ extends <a href="McpSubscriptions.html" title="interface in org.apache.juneau.re
 <dt>Returns:</dt>
 <dd>The active count.</dd>
 </dl>
+</section>
+</li>
+<li>
+<section class="detail" id="closeAll()">
+<h3>closeAll</h3>
+<div class="member-signature"><span class="modifiers">default</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/mcp/McpSubscriptionBroker.html#line-99">closeAll</a></span>()</div>
+<div class="block">Closes every currently registered subscription.
+
+ <p>
+ Called when the server begins shutting down, so open <code>subscriptions/listen</code> streams complete
+ promptly instead of holding the graceful drain open until its stop timeout.  The default implementation
+ does nothing, so custom brokers that predate this method keep working (their streams then end on the
+ normal heartbeat/idle-timeout paths).</div>
 </section>
 </li>
 </ul>

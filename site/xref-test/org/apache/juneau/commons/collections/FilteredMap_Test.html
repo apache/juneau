@@ -25,8 +25,8 @@
 <a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> org.apache.juneau.commons.collections;
 <a class="jxr_linenumber" name="L18" href="#L18">18</a>  
 <a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.commons.TestAssertions.*;
-<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.commons.utils.AssertionUtils.*;
-<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.commons.utils.CollectionUtils.*;
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.commons.utils.CollectionUtils.*;
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.commons.utils.Shorts.*;
 <a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.junit.jupiter.api.Assertions.*;
 <a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.junit.jupiter.api.Assertions.assertNotNull;
 <a class="jxr_linenumber" name="L24" href="#L24">24</a>  
@@ -816,7 +816,7 @@
 <a class="jxr_linenumber" name="L808" href="#L808">808</a> 			.create(String.<strong class="jxr_keyword">class</strong>, Integer.<strong class="jxr_keyword">class</strong>)
 <a class="jxr_linenumber" name="L809" href="#L809">809</a> 			.filter((k, v) -&gt; v != <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L810" href="#L810">810</a> 			.keyFunction(o -&gt; {
-<a class="jxr_linenumber" name="L811" href="#L811">811</a> 				assertArgNotNull(<span class="jxr_string">"key"</span>, o);
+<a class="jxr_linenumber" name="L811" href="#L811">811</a> 				reqnn(<span class="jxr_string">"key"</span>, o);
 <a class="jxr_linenumber" name="L812" href="#L812">812</a> 				<strong class="jxr_keyword">return</strong> o.toString();
 <a class="jxr_linenumber" name="L813" href="#L813">813</a> 			})
 <a class="jxr_linenumber" name="L814" href="#L814">814</a> 			.build();
@@ -832,7 +832,7 @@
 <a class="jxr_linenumber" name="L824" href="#L824">824</a> 			.create(String.<strong class="jxr_keyword">class</strong>, Integer.<strong class="jxr_keyword">class</strong>)
 <a class="jxr_linenumber" name="L825" href="#L825">825</a> 			.filter((k, v) -&gt; v != <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L826" href="#L826">826</a> 			.valueFunction(o -&gt; {
-<a class="jxr_linenumber" name="L827" href="#L827">827</a> 				assertArgNotNull(<span class="jxr_string">"value"</span>, o);
+<a class="jxr_linenumber" name="L827" href="#L827">827</a> 				reqnn(<span class="jxr_string">"value"</span>, o);
 <a class="jxr_linenumber" name="L828" href="#L828">828</a> 				<strong class="jxr_keyword">return</strong> Integer.parseInt(o.toString());
 <a class="jxr_linenumber" name="L829" href="#L829">829</a> 			})
 <a class="jxr_linenumber" name="L830" href="#L830">830</a> 			.build();

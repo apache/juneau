@@ -95,8 +95,8 @@
 <a class="jxr_linenumber" name="L87" href="#L87">87</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">boolean</strong> sameOrigin(URI from, URI to) {
 <a class="jxr_linenumber" name="L88" href="#L88">88</a>  		requireAbsolute(from, <span class="jxr_string">"from"</span>);
 <a class="jxr_linenumber" name="L89" href="#L89">89</a>  		requireAbsolute(to, <span class="jxr_string">"to"</span>);
-<a class="jxr_linenumber" name="L90" href="#L90">90</a>  		<strong class="jxr_keyword">return</strong> from.getScheme().equalsIgnoreCase(to.getScheme())
-<a class="jxr_linenumber" name="L91" href="#L91">91</a>  			&amp;&amp; from.getHost().equalsIgnoreCase(to.getHost())
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>  		<strong class="jxr_keyword">return</strong> eqic(from.getScheme(), to.getScheme())
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>  			&amp;&amp; eqic(from.getHost(), to.getHost())
 <a class="jxr_linenumber" name="L92" href="#L92">92</a>  			&amp;&amp; normalizedPort(from) == normalizedPort(to);
 <a class="jxr_linenumber" name="L93" href="#L93">93</a>  	}
 <a class="jxr_linenumber" name="L94" href="#L94">94</a>  
@@ -112,7 +112,7 @@
 <a class="jxr_linenumber" name="L104" href="#L104">104</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">boolean</strong> isDowngrade(URI from, URI to) {
 <a class="jxr_linenumber" name="L105" href="#L105">105</a> 		requireAbsolute(from, <span class="jxr_string">"from"</span>);
 <a class="jxr_linenumber" name="L106" href="#L106">106</a> 		requireAbsolute(to, <span class="jxr_string">"to"</span>);
-<a class="jxr_linenumber" name="L107" href="#L107">107</a> 		<strong class="jxr_keyword">return</strong> <span class="jxr_string">"https"</span>.equalsIgnoreCase(from.getScheme()) &amp;&amp; <span class="jxr_string">"http"</span>.equalsIgnoreCase(to.getScheme());
+<a class="jxr_linenumber" name="L107" href="#L107">107</a> 		<strong class="jxr_keyword">return</strong> eqic(<span class="jxr_string">"https"</span>, from.getScheme()) &amp;&amp; eqic(<span class="jxr_string">"http"</span>, to.getScheme());
 <a class="jxr_linenumber" name="L108" href="#L108">108</a> 	}
 <a class="jxr_linenumber" name="L109" href="#L109">109</a> 
 <a class="jxr_linenumber" name="L110" href="#L110">110</a> 	<em class="jxr_javadoccomment">/**</em>
@@ -137,7 +137,7 @@
 <a class="jxr_linenumber" name="L129" href="#L129">129</a> <em class="jxr_javadoccomment">	 * @throws IllegalArgumentException If either argument is {@code null} or not an absolute URI.</em>
 <a class="jxr_linenumber" name="L130" href="#L130">130</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L131" href="#L131">131</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">boolean</strong> shouldStripCredentials(URI from, URI to) {
-<a class="jxr_linenumber" name="L132" href="#L132">132</a> 		<strong class="jxr_keyword">return</strong> ! sameOrigin(from, to) || isDowngrade(from, to); <em class="jxr_comment">// HTT: isDowngrade's true-branch is unreachable here -- it's only reached when sameOrigin is true, which requires equal schemes, but isDowngrade requires https-vs-http (unequal schemes); likely-dead defensive code, flagged rather than removed.</em>
+<a class="jxr_linenumber" name="L132" href="#L132">132</a> 		<strong class="jxr_keyword">return</strong> ! sameOrigin(from, to) || isDowngrade(from, to);
 <a class="jxr_linenumber" name="L133" href="#L133">133</a> 	}
 <a class="jxr_linenumber" name="L134" href="#L134">134</a> 
 <a class="jxr_linenumber" name="L135" href="#L135">135</a> 	<em class="jxr_javadoccomment">/**</em>

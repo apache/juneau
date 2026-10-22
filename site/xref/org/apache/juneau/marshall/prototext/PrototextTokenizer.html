@@ -24,38 +24,38 @@
 <a class="jxr_linenumber" name="L16" href="#L16">16</a>  <em class="jxr_comment"> */</em>
 <a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> org.apache.juneau.marshall.prototext;
 <a class="jxr_linenumber" name="L18" href="#L18">18</a>  
-<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> java.io.*;
-<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> java.util.*;
-<a class="jxr_linenumber" name="L21" href="#L21">21</a>  
-<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.marshall.parser.*;
+<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.commons.utils.Shorts.*;
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> java.io.*;
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> java.util.*;
 <a class="jxr_linenumber" name="L23" href="#L23">23</a>  
-<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <em class="jxr_javadoccomment"> * Internal tokenizer for Protobuf Text Format parsing.</em>
-<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <em class="jxr_javadoccomment"> *</em>
-<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <em class="jxr_javadoccomment"> * Character-by-character reader that handles the full Protobuf Text Format grammar:</em>
-<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <em class="jxr_javadoccomment"> * identifiers, strings (with C-style escaping), numbers (decimal, hex, octal, float),</em>
-<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <em class="jxr_javadoccomment"> * booleans, comments, and structural tokens.</em>
-<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <em class="jxr_javadoccomment"> *</em>
-<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</em>
-<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <em class="jxr_javadoccomment"> * 	&lt;li class='note'&gt;This class is package-private and not intended for external use.</em>
-<a class="jxr_linenumber" name="L34" href="#L34">34</a>  <em class="jxr_javadoccomment"> * &lt;/ul&gt;</em>
-<a class="jxr_linenumber" name="L35" href="#L35">35</a>  <em class="jxr_javadoccomment"> *</em>
-<a class="jxr_linenumber" name="L36" href="#L36">36</a>  <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</em>
-<a class="jxr_linenumber" name="L37" href="#L37">37</a>  <em class="jxr_javadoccomment"> * 	&lt;li class='link'&gt;&lt;a class="doclink" href="<a href="https://protobuf.dev/reference/protobuf/textformat-spec" target="alexandria_uri">https://protobuf.dev/reference/protobuf/textformat-spec</a>"&gt;Protobuf Text Format Specification&lt;/a&gt;</em>
-<a class="jxr_linenumber" name="L38" href="#L38">38</a>  <em class="jxr_javadoccomment"> * &lt;/ul&gt;</em>
-<a class="jxr_linenumber" name="L39" href="#L39">39</a>  <em class="jxr_javadoccomment"> */</em>
-<a class="jxr_linenumber" name="L40" href="#L40">40</a>  @SuppressWarnings({
-<a class="jxr_linenumber" name="L41" href="#L41">41</a>  	<span class="jxr_string">"java:S115"</span>,  <em class="jxr_comment">// CONST_ prefix follows framework convention</em>
-<a class="jxr_linenumber" name="L42" href="#L42">42</a>  	<span class="jxr_string">"java:S135"</span>,  <em class="jxr_comment">// Multiple break/continue necessary for tokenizer state machine loops</em>
-<a class="jxr_linenumber" name="L43" href="#L43">43</a>  	<span class="jxr_string">"java:S3776"</span>, <em class="jxr_comment">// Cognitive complexity acceptable for protobuf grammar</em>
-<a class="jxr_linenumber" name="L44" href="#L44">44</a>  	<span class="jxr_string">"java:S6541"</span>, <em class="jxr_comment">// Brain method acceptable for tokenizer</em>
-<a class="jxr_linenumber" name="L45" href="#L45">45</a>  	<span class="jxr_string">"resource"</span> <em class="jxr_comment">// Reader field is owned by the caller; the tokenizer reads from it but does not own its lifecycle.</em>
-<a class="jxr_linenumber" name="L46" href="#L46">46</a>  })
-<a class="jxr_linenumber" name="L47" href="#L47">47</a>  <strong class="jxr_keyword">class</strong> PrototextTokenizer {
-<a class="jxr_linenumber" name="L48" href="#L48">48</a>  
-<a class="jxr_linenumber" name="L49" href="#L49">49</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String CONST_integerOverflow = <span class="jxr_string">"Integer overflow: "</span>;
-<a class="jxr_linenumber" name="L50" href="#L50">50</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String CONST_invalidFloat = <span class="jxr_string">"Invalid float: "</span>;
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.marshall.parser.*;
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <em class="jxr_javadoccomment"> * Internal tokenizer for Protobuf Text Format parsing.</em>
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <em class="jxr_javadoccomment"> * Character-by-character reader that handles the full Protobuf Text Format grammar:</em>
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <em class="jxr_javadoccomment"> * identifiers, strings (with C-style escaping), numbers (decimal, hex, octal, float),</em>
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <em class="jxr_javadoccomment"> * booleans, comments, and structural tokens.</em>
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>  <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>  <em class="jxr_javadoccomment"> * 	&lt;li class='note'&gt;This class is package-private and not intended for external use.</em>
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>  <em class="jxr_javadoccomment"> * &lt;/ul&gt;</em>
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>  <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>  <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>  <em class="jxr_javadoccomment"> * 	&lt;li class='link'&gt;&lt;a class="doclink" href="<a href="https://protobuf.dev/reference/protobuf/textformat-spec" target="alexandria_uri">https://protobuf.dev/reference/protobuf/textformat-spec</a>"&gt;Protobuf Text Format Specification&lt;/a&gt;</em>
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>  <em class="jxr_javadoccomment"> * &lt;/ul&gt;</em>
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>  <em class="jxr_javadoccomment"> */</em>
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>  @SuppressWarnings({
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>  	<span class="jxr_string">"java:S115"</span>, <em class="jxr_comment">// CONST_ prefix follows framework convention</em>
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>  	<span class="jxr_string">"java:S135"</span>, <em class="jxr_comment">// Multiple break/continue necessary for tokenizer state machine loops</em>
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>  	<span class="jxr_string">"java:S1192"</span>, <em class="jxr_comment">// Duplicated literals read more clearly inline than as constants.</em>
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>  	<span class="jxr_string">"java:S3776"</span>, <em class="jxr_comment">// Cognitive complexity acceptable for protobuf grammar</em>
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>  	<span class="jxr_string">"java:S6541"</span>, <em class="jxr_comment">// Brain method acceptable for tokenizer</em>
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>  	<span class="jxr_string">"resource"</span> <em class="jxr_comment">// Reader field is owned by the caller; the tokenizer reads from it but does not own its lifecycle.</em>
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>  })
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>  <strong class="jxr_keyword">class</strong> PrototextTokenizer {
 <a class="jxr_linenumber" name="L51" href="#L51">51</a>  
 <a class="jxr_linenumber" name="L52" href="#L52">52</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Reader reader;
 <a class="jxr_linenumber" name="L53" href="#L53">53</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Deque&lt;Integer&gt; pushback = <strong class="jxr_keyword">new</strong> ArrayDeque&lt;&gt;();
@@ -206,7 +206,7 @@
 <a class="jxr_linenumber" name="L198" href="#L198">198</a> 			|| term == ' ' || term == '\t' || term == '\n' || term == '\r' || term == 0x0B || term == 0x0C
 <a class="jxr_linenumber" name="L199" href="#L199">199</a> 			|| term == ',' || term == ';' || term == ']' || term == '}';
 <a class="jxr_linenumber" name="L200" href="#L200">200</a> 		<strong class="jxr_keyword">var</strong> tok = buf.toString().toLowerCase(Locale.ROOT);
-<a class="jxr_linenumber" name="L201" href="#L201">201</a> 		<strong class="jxr_keyword">var</strong> isSpecial = isTerminator &amp;&amp; (tok.equals(<span class="jxr_string">"nan"</span>) || tok.equals(<span class="jxr_string">"inf"</span>) || tok.equals(<span class="jxr_string">"infinity"</span>));
+<a class="jxr_linenumber" name="L201" href="#L201">201</a> 		<strong class="jxr_keyword">var</strong> isSpecial = isTerminator &amp;&amp; (eqa(tok, <span class="jxr_string">"nan"</span>, <span class="jxr_string">"inf"</span>, <span class="jxr_string">"infinity"</span>));
 <a class="jxr_linenumber" name="L202" href="#L202">202</a> 		<em class="jxr_comment">// Restore consumed chars in reverse order (pushback is a LIFO stack — to make the next read</em>
 <a class="jxr_linenumber" name="L203" href="#L203">203</a> 		<em class="jxr_comment">// return buf[0], buf[0] must be on top, so we push buf[N-1] ... buf[0]).</em>
 <a class="jxr_linenumber" name="L204" href="#L204">204</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = buf.length() - 1; i &gt;= 0; i--)
@@ -269,7 +269,7 @@
 <a class="jxr_linenumber" name="L261" href="#L261">261</a> 		<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L262" href="#L262">262</a> 			<strong class="jxr_keyword">return</strong> Long.parseLong(sb.toString(), 16);
 <a class="jxr_linenumber" name="L263" href="#L263">263</a> 		} <strong class="jxr_keyword">catch</strong> (@SuppressWarnings(<span class="jxr_string">"unused"</span>) NumberFormatException e) {
-<a class="jxr_linenumber" name="L264" href="#L264">264</a> 			<strong class="jxr_keyword">throw</strong> parseException(CONST_integerOverflow + sb);
+<a class="jxr_linenumber" name="L264" href="#L264">264</a> 			<strong class="jxr_keyword">throw</strong> parseException(<span class="jxr_string">"Integer overflow: "</span> + sb);
 <a class="jxr_linenumber" name="L265" href="#L265">265</a> 		}
 <a class="jxr_linenumber" name="L266" href="#L266">266</a> 	}
 <a class="jxr_linenumber" name="L267" href="#L267">267</a> 
@@ -280,7 +280,7 @@
 <a class="jxr_linenumber" name="L272" href="#L272">272</a> 		<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L273" href="#L273">273</a> 			<strong class="jxr_keyword">return</strong> Long.parseLong(sb.toString(), 8);
 <a class="jxr_linenumber" name="L274" href="#L274">274</a> 		} <strong class="jxr_keyword">catch</strong> (@SuppressWarnings(<span class="jxr_string">"unused"</span>) NumberFormatException e) {
-<a class="jxr_linenumber" name="L275" href="#L275">275</a> 			<strong class="jxr_keyword">throw</strong> parseException(CONST_integerOverflow + sb);
+<a class="jxr_linenumber" name="L275" href="#L275">275</a> 			<strong class="jxr_keyword">throw</strong> parseException(<span class="jxr_string">"Integer overflow: "</span> + sb);
 <a class="jxr_linenumber" name="L276" href="#L276">276</a> 		}
 <a class="jxr_linenumber" name="L277" href="#L277">277</a> 	}
 <a class="jxr_linenumber" name="L278" href="#L278">278</a> 
@@ -318,7 +318,7 @@
 <a class="jxr_linenumber" name="L310" href="#L310">310</a> 				<strong class="jxr_keyword">double</strong> val = Double.parseDouble(s);
 <a class="jxr_linenumber" name="L311" href="#L311">311</a> 				<strong class="jxr_keyword">return</strong> neg ? -val : val;
 <a class="jxr_linenumber" name="L312" href="#L312">312</a> 			} <strong class="jxr_keyword">catch</strong> (@SuppressWarnings(<span class="jxr_string">"unused"</span>) NumberFormatException e) {
-<a class="jxr_linenumber" name="L313" href="#L313">313</a> 				<strong class="jxr_keyword">throw</strong> parseException(CONST_invalidFloat + s);
+<a class="jxr_linenumber" name="L313" href="#L313">313</a> 				<strong class="jxr_keyword">throw</strong> parseException(<span class="jxr_string">"Invalid float: "</span> + s);
 <a class="jxr_linenumber" name="L314" href="#L314">314</a> 			}
 <a class="jxr_linenumber" name="L315" href="#L315">315</a> 		}
 <a class="jxr_linenumber" name="L316" href="#L316">316</a> 		<strong class="jxr_keyword">if</strong> (peekChar() == 'f' || peekChar() == 'F') {
@@ -328,7 +328,7 @@
 <a class="jxr_linenumber" name="L320" href="#L320">320</a> 				<strong class="jxr_keyword">double</strong> val = Double.parseDouble(s);
 <a class="jxr_linenumber" name="L321" href="#L321">321</a> 				<strong class="jxr_keyword">return</strong> neg ? -val : val;
 <a class="jxr_linenumber" name="L322" href="#L322">322</a> 			} <strong class="jxr_keyword">catch</strong> (@SuppressWarnings(<span class="jxr_string">"unused"</span>) NumberFormatException e) {
-<a class="jxr_linenumber" name="L323" href="#L323">323</a> 				<strong class="jxr_keyword">throw</strong> parseException(CONST_invalidFloat + s);
+<a class="jxr_linenumber" name="L323" href="#L323">323</a> 				<strong class="jxr_keyword">throw</strong> parseException(<span class="jxr_string">"Invalid float: "</span> + s);
 <a class="jxr_linenumber" name="L324" href="#L324">324</a> 			}
 <a class="jxr_linenumber" name="L325" href="#L325">325</a> 		}
 <a class="jxr_linenumber" name="L326" href="#L326">326</a> 		<strong class="jxr_keyword">if</strong> (sb.isEmpty())
@@ -337,7 +337,7 @@
 <a class="jxr_linenumber" name="L329" href="#L329">329</a> 		<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L330" href="#L330">330</a> 			<strong class="jxr_keyword">return</strong> neg ? -Long.parseLong(s) : Long.parseLong(s);
 <a class="jxr_linenumber" name="L331" href="#L331">331</a> 		} <strong class="jxr_keyword">catch</strong> (@SuppressWarnings(<span class="jxr_string">"unused"</span>) NumberFormatException e) {
-<a class="jxr_linenumber" name="L332" href="#L332">332</a> 			<strong class="jxr_keyword">throw</strong> parseException(CONST_integerOverflow + s);
+<a class="jxr_linenumber" name="L332" href="#L332">332</a> 			<strong class="jxr_keyword">throw</strong> parseException(<span class="jxr_string">"Integer overflow: "</span> + s);
 <a class="jxr_linenumber" name="L333" href="#L333">333</a> 		}
 <a class="jxr_linenumber" name="L334" href="#L334">334</a> 	}
 <a class="jxr_linenumber" name="L335" href="#L335">335</a> 
@@ -352,9 +352,9 @@
 <a class="jxr_linenumber" name="L344" href="#L344">344</a> 			sb.append((<strong class="jxr_keyword">char</strong>) readChar());
 <a class="jxr_linenumber" name="L345" href="#L345">345</a> 		<strong class="jxr_keyword">var</strong> s = sb.toString();
 <a class="jxr_linenumber" name="L346" href="#L346">346</a> 		<strong class="jxr_keyword">var</strong> lower = s.toLowerCase(Locale.ROOT);
-<a class="jxr_linenumber" name="L347" href="#L347">347</a> 		<strong class="jxr_keyword">if</strong> (lower.equals(<span class="jxr_string">"inf"</span>) || lower.equals(<span class="jxr_string">"infinity"</span>))
+<a class="jxr_linenumber" name="L347" href="#L347">347</a> 		<strong class="jxr_keyword">if</strong> (eqa(lower, <span class="jxr_string">"inf"</span>, <span class="jxr_string">"infinity"</span>))
 <a class="jxr_linenumber" name="L348" href="#L348">348</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="PrototextToken" href="../../../../../org/apache/juneau/marshall/prototext/PrototextToken.html#PrototextToken">PrototextToken</a>(PrototextToken.TokenType.FLOAT, neg ? Double.NEGATIVE_INFINITY : Double.POSITIVE_INFINITY);
-<a class="jxr_linenumber" name="L349" href="#L349">349</a> 		<strong class="jxr_keyword">if</strong> (lower.equals(<span class="jxr_string">"nan"</span>))
+<a class="jxr_linenumber" name="L349" href="#L349">349</a> 		<strong class="jxr_keyword">if</strong> (eq(lower, <span class="jxr_string">"nan"</span>))
 <a class="jxr_linenumber" name="L350" href="#L350">350</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="PrototextToken" href="../../../../../org/apache/juneau/marshall/prototext/PrototextToken.html#PrototextToken">PrototextToken</a>(PrototextToken.TokenType.FLOAT, Double.NaN);
 <a class="jxr_linenumber" name="L351" href="#L351">351</a> 		<strong class="jxr_keyword">if</strong> (neg)
 <a class="jxr_linenumber" name="L352" href="#L352">352</a> 			<strong class="jxr_keyword">throw</strong> parseException(<span class="jxr_string">"Invalid float literal: -"</span> + s);
@@ -401,7 +401,7 @@
 <a class="jxr_linenumber" name="L393" href="#L393">393</a> 		<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L394" href="#L394">394</a> 			<strong class="jxr_keyword">return</strong> Double.parseDouble(s);
 <a class="jxr_linenumber" name="L395" href="#L395">395</a> 		} <strong class="jxr_keyword">catch</strong> (@SuppressWarnings(<span class="jxr_string">"unused"</span>) NumberFormatException e) {
-<a class="jxr_linenumber" name="L396" href="#L396">396</a> 			<strong class="jxr_keyword">throw</strong> parseException(CONST_invalidFloat + s);
+<a class="jxr_linenumber" name="L396" href="#L396">396</a> 			<strong class="jxr_keyword">throw</strong> parseException(<span class="jxr_string">"Invalid float: "</span> + s);
 <a class="jxr_linenumber" name="L397" href="#L397">397</a> 		}
 <a class="jxr_linenumber" name="L398" href="#L398">398</a> 	}
 <a class="jxr_linenumber" name="L399" href="#L399">399</a> 
@@ -531,9 +531,9 @@
 <a class="jxr_linenumber" name="L523" href="#L523">523</a> 		<strong class="jxr_keyword">var</strong> t = read();
 <a class="jxr_linenumber" name="L524" href="#L524">524</a> 		<strong class="jxr_keyword">if</strong> (t.type() == PrototextToken.TokenType.IDENT) {
 <a class="jxr_linenumber" name="L525" href="#L525">525</a> 			<strong class="jxr_keyword">var</strong> s = t.stringValue().toLowerCase(Locale.ROOT);
-<a class="jxr_linenumber" name="L526" href="#L526">526</a> 			<strong class="jxr_keyword">if</strong> (s.equals(<span class="jxr_string">"true"</span>) || s.equals(<span class="jxr_string">"t"</span>) || s.equals(<span class="jxr_string">"1"</span>))
+<a class="jxr_linenumber" name="L526" href="#L526">526</a> 			<strong class="jxr_keyword">if</strong> (eqa(s, <span class="jxr_string">"true"</span>, <span class="jxr_string">"t"</span>, <span class="jxr_string">"1"</span>))
 <a class="jxr_linenumber" name="L527" href="#L527">527</a> 				<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
-<a class="jxr_linenumber" name="L528" href="#L528">528</a> 			<strong class="jxr_keyword">if</strong> (s.equals(<span class="jxr_string">"false"</span>) || s.equals(<span class="jxr_string">"f"</span>) || s.equals(<span class="jxr_string">"0"</span>))
+<a class="jxr_linenumber" name="L528" href="#L528">528</a> 			<strong class="jxr_keyword">if</strong> (eqa(s, <span class="jxr_string">"false"</span>, <span class="jxr_string">"f"</span>, <span class="jxr_string">"0"</span>))
 <a class="jxr_linenumber" name="L529" href="#L529">529</a> 				<strong class="jxr_keyword">return</strong> false;
 <a class="jxr_linenumber" name="L530" href="#L530">530</a> 		}
 <a class="jxr_linenumber" name="L531" href="#L531">531</a> 		<strong class="jxr_keyword">if</strong> (t.type() == PrototextToken.TokenType.DEC_INT) {

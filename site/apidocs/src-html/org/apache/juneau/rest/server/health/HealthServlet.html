@@ -29,80 +29,152 @@
 <span class="source-line-no">016</span><span id="line-16"> */</span>
 <span class="source-line-no">017</span><span id="line-17">package org.apache.juneau.rest.server.health;</span>
 <span class="source-line-no">018</span><span id="line-18"></span>
-<span class="source-line-no">019</span><span id="line-19">import java.util.*;</span>
+<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.Shorts.*;</span>
 <span class="source-line-no">020</span><span id="line-20"></span>
-<span class="source-line-no">021</span><span id="line-21">import org.apache.juneau.rest.server.*;</span>
-<span class="source-line-no">022</span><span id="line-22">import org.apache.juneau.rest.server.health.HealthAggregator.*;</span>
-<span class="source-line-no">023</span><span id="line-23">import org.apache.juneau.rest.server.servlet.*;</span>
-<span class="source-line-no">024</span><span id="line-24"></span>
-<span class="source-line-no">025</span><span id="line-25">/**</span>
-<span class="source-line-no">026</span><span id="line-26"> * Servlet flavor of the built-in health/readiness/liveness probe capability.</span>
-<span class="source-line-no">027</span><span id="line-27"> *</span>
-<span class="source-line-no">028</span><span id="line-28"> * &lt;p&gt;</span>
-<span class="source-line-no">029</span><span id="line-29"> * Mounts as a standalone top-level servlet at {@code /healthz}, {@code /readyz}, and {@code /livez},</span>
-<span class="source-line-no">030</span><span id="line-30"> * delegating to a shared {@link HealthAggregator} worker bean. The {@link HealthMixin} mixin flavor</span>
-<span class="source-line-no">031</span><span id="line-31"> * delegates to the same bean, so the two forms cannot drift.</span>
-<span class="source-line-no">032</span><span id="line-32"> *</span>
-<span class="source-line-no">033</span><span id="line-33"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
-<span class="source-line-no">034</span><span id="line-34"> *    &lt;li class='jc'&gt;{@link HealthMixin}</span>
-<span class="source-line-no">035</span><span id="line-35"> *    &lt;li class='jc'&gt;{@link HealthAggregator}</span>
-<span class="source-line-no">036</span><span id="line-36"> * &lt;/ul&gt;</span>
-<span class="source-line-no">037</span><span id="line-37"> *</span>
-<span class="source-line-no">038</span><span id="line-38"> * @serial exclude</span>
-<span class="source-line-no">039</span><span id="line-39"> * @since 10.0.0</span>
-<span class="source-line-no">040</span><span id="line-40"> */</span>
-<span class="source-line-no">041</span><span id="line-41">@Rest(paths={"/healthz","/readyz","/livez"})</span>
-<span class="source-line-no">042</span><span id="line-42">public class HealthServlet extends BasicRestServlet {</span>
-<span class="source-line-no">043</span><span id="line-43">   private static final long serialVersionUID = 1L;</span>
-<span class="source-line-no">044</span><span id="line-44"></span>
-<span class="source-line-no">045</span><span id="line-45">   private final transient HealthAggregator aggregator = new HealthAggregator();</span>
-<span class="source-line-no">046</span><span id="line-46"></span>
-<span class="source-line-no">047</span><span id="line-47">   /**</span>
-<span class="source-line-no">048</span><span id="line-48">    * Health probe endpoint.</span>
-<span class="source-line-no">049</span><span id="line-49">    *</span>
-<span class="source-line-no">050</span><span id="line-50">    * @param res The response.</span>
-<span class="source-line-no">051</span><span id="line-51">    * @return Aggregated health payload.</span>
-<span class="source-line-no">052</span><span id="line-52">    */</span>
-<span class="source-line-no">053</span><span id="line-53">   @RestGet(path="/healthz")</span>
-<span class="source-line-no">054</span><span id="line-54">   public HealthResponse healthz(RestResponse res) {</span>
-<span class="source-line-no">055</span><span id="line-55">      return aggregator.aggregate(getContext(), indicators(), null, res);</span>
-<span class="source-line-no">056</span><span id="line-56">   }</span>
+<span class="source-line-no">021</span><span id="line-21">import java.util.*;</span>
+<span class="source-line-no">022</span><span id="line-22"></span>
+<span class="source-line-no">023</span><span id="line-23">import org.apache.juneau.commons.inject.*;</span>
+<span class="source-line-no">024</span><span id="line-24">import org.apache.juneau.rest.server.*;</span>
+<span class="source-line-no">025</span><span id="line-25">import org.apache.juneau.rest.server.health.HealthAggregator.*;</span>
+<span class="source-line-no">026</span><span id="line-26">import org.apache.juneau.rest.server.servlet.*;</span>
+<span class="source-line-no">027</span><span id="line-27"></span>
+<span class="source-line-no">028</span><span id="line-28">/**</span>
+<span class="source-line-no">029</span><span id="line-29"> * Servlet flavor of the built-in health/readiness/liveness probe capability.</span>
+<span class="source-line-no">030</span><span id="line-30"> *</span>
+<span class="source-line-no">031</span><span id="line-31"> * &lt;p&gt;</span>
+<span class="source-line-no">032</span><span id="line-32"> * Mounts as a standalone top-level servlet at {@code /healthz}, {@code /readyz}, and {@code /livez},</span>
+<span class="source-line-no">033</span><span id="line-33"> * delegating to a shared {@link HealthAggregator} worker bean. The {@link HealthMixin} mixin flavor</span>
+<span class="source-line-no">034</span><span id="line-34"> * delegates to the same bean, so the two forms cannot drift.</span>
+<span class="source-line-no">035</span><span id="line-35"> *</span>
+<span class="source-line-no">036</span><span id="line-36"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">037</span><span id="line-37"> *    &lt;li class='jc'&gt;{@link HealthMixin}</span>
+<span class="source-line-no">038</span><span id="line-38"> *    &lt;li class='jc'&gt;{@link HealthAggregator}</span>
+<span class="source-line-no">039</span><span id="line-39"> * &lt;/ul&gt;</span>
+<span class="source-line-no">040</span><span id="line-40"> *</span>
+<span class="source-line-no">041</span><span id="line-41"> * @serial exclude</span>
+<span class="source-line-no">042</span><span id="line-42"> * @since 10.0.0</span>
+<span class="source-line-no">043</span><span id="line-43"> */</span>
+<span class="source-line-no">044</span><span id="line-44">@Rest(paths={"/healthz","/readyz","/livez"})</span>
+<span class="source-line-no">045</span><span id="line-45">public class HealthServlet extends BasicRestServlet {</span>
+<span class="source-line-no">046</span><span id="line-46">   private static final long serialVersionUID = 1L;</span>
+<span class="source-line-no">047</span><span id="line-47"></span>
+<span class="source-line-no">048</span><span id="line-48">   private final transient HealthAggregator aggregator = new HealthAggregator();</span>
+<span class="source-line-no">049</span><span id="line-49"></span>
+<span class="source-line-no">050</span><span id="line-50">   @SuppressWarnings({</span>
+<span class="source-line-no">051</span><span id="line-51">      "java:S2226", // Mutable by design: the embedded-server lifecycle publishes this post-construction, from a</span>
+<span class="source-line-no">052</span><span id="line-52">                    // thread other than the request-handling threads that read it via probe()/initReadinessState()</span>
+<span class="source-line-no">053</span><span id="line-53">      "java:S3077"  // volatile is used only to publish the reference itself (write-once, read-many); ReadinessState</span>
+<span class="source-line-no">054</span><span id="line-54">                    // is treated as an opaque handle here, never mutated through this field</span>
+<span class="source-line-no">055</span><span id="line-55">   })</span>
+<span class="source-line-no">056</span><span id="line-56">   private transient volatile ReadinessState readinessState;</span>
 <span class="source-line-no">057</span><span id="line-57"></span>
 <span class="source-line-no">058</span><span id="line-58">   /**</span>
-<span class="source-line-no">059</span><span id="line-59">    * Readiness probe endpoint.</span>
+<span class="source-line-no">059</span><span id="line-59">    * Publishes the lifecycle-owned {@link ReadinessState} that this probe should observe.</span>
 <span class="source-line-no">060</span><span id="line-60">    *</span>
-<span class="source-line-no">061</span><span id="line-61">    * @param res The response.</span>
-<span class="source-line-no">062</span><span id="line-62">    * @return Aggregated health payload.</span>
-<span class="source-line-no">063</span><span id="line-63">    */</span>
-<span class="source-line-no">064</span><span id="line-64">   @RestGet(path="/readyz")</span>
-<span class="source-line-no">065</span><span id="line-65">   public HealthResponse readyz(RestResponse res) {</span>
-<span class="source-line-no">066</span><span id="line-66">      return aggregator.aggregate(getContext(), indicators(), HealthProbe.READY, res);</span>
-<span class="source-line-no">067</span><span id="line-67">   }</span>
-<span class="source-line-no">068</span><span id="line-68"></span>
-<span class="source-line-no">069</span><span id="line-69">   /**</span>
-<span class="source-line-no">070</span><span id="line-70">    * Liveness probe endpoint.</span>
-<span class="source-line-no">071</span><span id="line-71">    *</span>
-<span class="source-line-no">072</span><span id="line-72">    * @param res The response.</span>
-<span class="source-line-no">073</span><span id="line-73">    * @return Aggregated health payload.</span>
-<span class="source-line-no">074</span><span id="line-74">    */</span>
-<span class="source-line-no">075</span><span id="line-75">   @RestGet(path="/livez")</span>
-<span class="source-line-no">076</span><span id="line-76">   public HealthResponse livez(RestResponse res) {</span>
-<span class="source-line-no">077</span><span id="line-77">      return aggregator.aggregate(getContext(), indicators(), HealthProbe.LIVE, res);</span>
-<span class="source-line-no">078</span><span id="line-78">   }</span>
-<span class="source-line-no">079</span><span id="line-79"></span>
-<span class="source-line-no">080</span><span id="line-80">   /**</span>
-<span class="source-line-no">081</span><span id="line-81">    * Returns the indicators to evaluate for this request.</span>
-<span class="source-line-no">082</span><span id="line-82">    *</span>
-<span class="source-line-no">083</span><span id="line-83">    * &lt;p&gt;</span>
-<span class="source-line-no">084</span><span id="line-84">    * Defaults to every {@link HealthIndicator} bean registered in this resource's bean store.</span>
-<span class="source-line-no">085</span><span id="line-85">    * Subclasses may override to supply a fixed indicator set.</span>
-<span class="source-line-no">086</span><span id="line-86">    *</span>
-<span class="source-line-no">087</span><span id="line-87">    * @return Indicator map keyed by bean name.</span>
-<span class="source-line-no">088</span><span id="line-88">    */</span>
-<span class="source-line-no">089</span><span id="line-89">   protected Map&lt;String,HealthIndicator&gt; indicators() {</span>
-<span class="source-line-no">090</span><span id="line-90">      return aggregator.indicators(getContext());</span>
-<span class="source-line-no">091</span><span id="line-91">   }</span>
-<span class="source-line-no">092</span><span id="line-92">}</span>
+<span class="source-line-no">061</span><span id="line-61">    * &lt;p&gt;</span>
+<span class="source-line-no">062</span><span id="line-62">    * Called by the embedded-server lifecycle component (e.g. {@code JettyServerComponent},</span>
+<span class="source-line-no">063</span><span id="line-63">    * {@code TomcatServerComponent}) before the server starts, so the per-service instance that component flips</span>
+<span class="source-line-no">064</span><span id="line-64">    * on shutdown is registered into this resource's own bean store &amp;mdash; see {@link #initReadinessState}</span>
+<span class="source-line-no">065</span><span id="line-65">    * &amp;mdash; closing the gap between the microservice's bean store and this servlet's bean store that</span>
+<span class="source-line-no">066</span><span id="line-66">    * {@link HealthAggregator} consults.</span>
+<span class="source-line-no">067</span><span id="line-67">    *</span>
+<span class="source-line-no">068</span><span id="line-68">    * @param state The per-service readiness state.  Ignored if &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">069</span><span id="line-69">    * @return This object.</span>
+<span class="source-line-no">070</span><span id="line-70">    */</span>
+<span class="source-line-no">071</span><span id="line-71">   public HealthServlet publishReadinessState(ReadinessState state) {</span>
+<span class="source-line-no">072</span><span id="line-72">      this.readinessState = state;</span>
+<span class="source-line-no">073</span><span id="line-73">      return this;</span>
+<span class="source-line-no">074</span><span id="line-74">   }</span>
+<span class="source-line-no">075</span><span id="line-75"></span>
+<span class="source-line-no">076</span><span id="line-76">   /**</span>
+<span class="source-line-no">077</span><span id="line-77">    * Registers the {@linkplain #publishReadinessState(ReadinessState) published} readiness state (if any) into</span>
+<span class="source-line-no">078</span><span id="line-78">    * this resource's own bean store, so {@link HealthAggregator#aggregate} resolves the lifecycle-owned</span>
+<span class="source-line-no">079</span><span id="line-79">    * instance instead of falling back to {@link ReadinessState#shared()}.</span>
+<span class="source-line-no">080</span><span id="line-80">    *</span>
+<span class="source-line-no">081</span><span id="line-81">    * @param beanStore This resource's bean store.</span>
+<span class="source-line-no">082</span><span id="line-82">    */</span>
+<span class="source-line-no">083</span><span id="line-83">   @RestInit</span>
+<span class="source-line-no">084</span><span id="line-84">   @SuppressWarnings({</span>
+<span class="source-line-no">085</span><span id="line-85">      "resource" // addBean returns this; the discarded return is the store the caller already holds</span>
+<span class="source-line-no">086</span><span id="line-86">   })</span>
+<span class="source-line-no">087</span><span id="line-87">   public void initReadinessState(WritableBeanStore beanStore) {</span>
+<span class="source-line-no">088</span><span id="line-88">      if (readinessState != null)</span>
+<span class="source-line-no">089</span><span id="line-89">         beanStore.addBean(ReadinessState.class, readinessState);</span>
+<span class="source-line-no">090</span><span id="line-90">   }</span>
+<span class="source-line-no">091</span><span id="line-91"></span>
+<span class="source-line-no">092</span><span id="line-92">   /**</span>
+<span class="source-line-no">093</span><span id="line-93">    * Health/readiness/liveness probe endpoint.</span>
+<span class="source-line-no">094</span><span id="line-94">    *</span>
+<span class="source-line-no">095</span><span id="line-95">    * &lt;p&gt;</span>
+<span class="source-line-no">096</span><span id="line-96">    * Serves all three mount paths ({@code /healthz}, {@code /readyz}, {@code /livez}) through one</span>
+<span class="source-line-no">097</span><span id="line-97">    * {@code /*} operation, dispatching on the request's last path segment.  A single zero-part,</span>
+<span class="source-line-no">098</span><span id="line-98">    * {@code hasRemainder=true} matcher is required because this servlet is auto-mounted at three &lt;i&gt;exact-match&lt;/i&gt;</span>
+<span class="source-line-no">099</span><span id="line-99">    * top-level path-specs: a real container delivers a bare {@code GET /readyz} with a zero-segment</span>
+<span class="source-line-no">100</span><span id="line-100">    * {@code pathInfo} that no 1-segment matcher can satisfy, so three separate {@code @RestGet(path="/{probe}")}</span>
+<span class="source-line-no">101</span><span id="line-101">    * operations all 404.  The last-path-segment key ({@link #probeFor}) is the only thing that differs per mount,</span>
+<span class="source-line-no">102</span><span id="line-102">    * so it is the disambiguator.</span>
+<span class="source-line-no">103</span><span id="line-103">    *</span>
+<span class="source-line-no">104</span><span id="line-104">    * &lt;p&gt;</span>
+<span class="source-line-no">105</span><span id="line-105">    * This replaces the former {@code healthz(...)}/{@code readyz(...)}/{@code livez(...)} entry points; subclasses</span>
+<span class="source-line-no">106</span><span id="line-106">    * that overrode any of those must override {@link #probeFor(RestRequest)} (or this method) instead.</span>
+<span class="source-line-no">107</span><span id="line-107">    *</span>
+<span class="source-line-no">108</span><span id="line-108">    * @param req The request (its last path segment selects the probe).</span>
+<span class="source-line-no">109</span><span id="line-109">    * @param res The response.</span>
+<span class="source-line-no">110</span><span id="line-110">    * @return Aggregated health payload.</span>
+<span class="source-line-no">111</span><span id="line-111">    */</span>
+<span class="source-line-no">112</span><span id="line-112">   @RestGet(path="/*")  // Sibling-servlet pin (matches FaviconServlet/VersionServlet): a zero-part, hasRemainder=true</span>
+<span class="source-line-no">113</span><span id="line-113">                        // matcher that resolves BOTH a container's zero-segment bare-mount hit AND a mock/remount remainder.</span>
+<span class="source-line-no">114</span><span id="line-114">   public HealthResponse probe(RestRequest req, RestResponse res) {</span>
+<span class="source-line-no">115</span><span id="line-115">      return aggregator.aggregate(getContext(), indicators(), probeFor(req), res);</span>
+<span class="source-line-no">116</span><span id="line-116">   }</span>
+<span class="source-line-no">117</span><span id="line-117"></span>
+<span class="source-line-no">118</span><span id="line-118">   /**</span>
+<span class="source-line-no">119</span><span id="line-119">    * Resolves which probe this request is for, keyed off the LAST PATH SEGMENT.</span>
+<span class="source-line-no">120</span><span id="line-120">    *</span>
+<span class="source-line-no">121</span><span id="line-121">    * &lt;p&gt;</span>
+<span class="source-line-no">122</span><span id="line-122">    * Prefers {@link RestRequest#getPathInfo()} when it carries a real (non-root) value &amp;mdash; this is what</span>
+<span class="source-line-no">123</span><span id="line-123">    * {@code MockRestClient} and any remainder-based remount populate ({@code servletPath="", pathInfo="/readyz"}).</span>
+<span class="source-line-no">124</span><span id="line-124">    * Falls back to {@link RestRequest#getServletPath()} for a real container's bare exact-match hit, where</span>
+<span class="source-line-no">125</span><span id="line-125">    * {@code pathInfo} is {@code null} ({@code servletPath="/readyz", pathInfo=null}).</span>
+<span class="source-line-no">126</span><span id="line-126">    *</span>
+<span class="source-line-no">127</span><span id="line-127">    * @param req The request.</span>
+<span class="source-line-no">128</span><span id="line-128">    * @return The resolved probe, or {@code null} for {@code /healthz} (the overall aggregate).</span>
+<span class="source-line-no">129</span><span id="line-129">    */</span>
+<span class="source-line-no">130</span><span id="line-130">   protected HealthProbe probeFor(RestRequest req) {</span>
+<span class="source-line-no">131</span><span id="line-131">      var hint = req.getPathInfo();</span>
+<span class="source-line-no">132</span><span id="line-132">      if (hint == null || hint.isEmpty() || eq(hint, "/"))</span>
+<span class="source-line-no">133</span><span id="line-133">         hint = req.getServletPath();</span>
+<span class="source-line-no">134</span><span id="line-134">      var last = lastSegment(hint);</span>
+<span class="source-line-no">135</span><span id="line-135">      if (eqa(last, "readyz", "ready"))</span>
+<span class="source-line-no">136</span><span id="line-136">         return HealthProbe.READY;</span>
+<span class="source-line-no">137</span><span id="line-137">      if (eqa(last, "livez", "live"))</span>
+<span class="source-line-no">138</span><span id="line-138">         return HealthProbe.LIVE;</span>
+<span class="source-line-no">139</span><span id="line-139">      return null; // "/healthz" (or anything else this instance is mounted at) -- overall aggregate.</span>
+<span class="source-line-no">140</span><span id="line-140">   }</span>
+<span class="source-line-no">141</span><span id="line-141"></span>
+<span class="source-line-no">142</span><span id="line-142">   private static String lastSegment(String path) {</span>
+<span class="source-line-no">143</span><span id="line-143">      if (path == null)</span>
+<span class="source-line-no">144</span><span id="line-144">         return "";</span>
+<span class="source-line-no">145</span><span id="line-145">      var p = path;</span>
+<span class="source-line-no">146</span><span id="line-146">      while (p.length() &gt; 1 &amp;&amp; p.endsWith("/"))</span>
+<span class="source-line-no">147</span><span id="line-147">         p = p.substring(0, p.length() - 1);</span>
+<span class="source-line-no">148</span><span id="line-148">      var i = p.lastIndexOf('/');</span>
+<span class="source-line-no">149</span><span id="line-149">      return i &lt; 0 ? p : p.substring(i + 1);</span>
+<span class="source-line-no">150</span><span id="line-150">   }</span>
+<span class="source-line-no">151</span><span id="line-151"></span>
+<span class="source-line-no">152</span><span id="line-152">   /**</span>
+<span class="source-line-no">153</span><span id="line-153">    * Returns the indicators to evaluate for this request.</span>
+<span class="source-line-no">154</span><span id="line-154">    *</span>
+<span class="source-line-no">155</span><span id="line-155">    * &lt;p&gt;</span>
+<span class="source-line-no">156</span><span id="line-156">    * Defaults to every {@link HealthIndicator} bean registered in this resource's bean store.</span>
+<span class="source-line-no">157</span><span id="line-157">    * Subclasses may override to supply a fixed indicator set.</span>
+<span class="source-line-no">158</span><span id="line-158">    *</span>
+<span class="source-line-no">159</span><span id="line-159">    * @return Indicator map keyed by bean name.</span>
+<span class="source-line-no">160</span><span id="line-160">    */</span>
+<span class="source-line-no">161</span><span id="line-161">   protected Map&lt;String,HealthIndicator&gt; indicators() {</span>
+<span class="source-line-no">162</span><span id="line-162">      return aggregator.indicators(getContext());</span>
+<span class="source-line-no">163</span><span id="line-163">   }</span>
+<span class="source-line-no">164</span><span id="line-164">}</span>
 
 
 

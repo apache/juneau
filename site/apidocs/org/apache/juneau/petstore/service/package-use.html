@@ -52,7 +52,195 @@ loadScripts(document, 'script');</script>
 <div class="header">
 <h1 title="Uses of Package org.apache.juneau.petstore.service" class="title">Uses of Package<br>org.apache.juneau.petstore.service</h1>
 </div>
-No usage of org.apache.juneau.petstore.service</main>
+<div class="caption"><span>Packages that use <a href="package-summary.html">org.apache.juneau.petstore.service</a></span></div>
+<div class="summary-table two-column-summary">
+<div class="table-header col-first">Package</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><a href="#org.apache.juneau.petstore.console">org.apache.juneau.petstore.console</a></div>
+<div class="col-last even-row-color">
+<div class="block">Petstore admin console: the <code>/console</code> page tree.</div>
+</div>
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.petstore.console.data">org.apache.juneau.petstore.console.data</a></div>
+<div class="col-last odd-row-color">
+<div class="block">Deterministic demo data for the petstore console.</div>
+</div>
+<div class="col-first even-row-color"><a href="#org.apache.juneau.petstore.console.dev.flavors">org.apache.juneau.petstore.console.dev.flavors</a></div>
+<div class="col-last even-row-color">
+<div class="block">Petstore console Rendering flavors: one console page per petstore view technology.</div>
+</div>
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.petstore.console.ops">org.apache.juneau.petstore.console.ops</a></div>
+<div class="col-last odd-row-color">
+<div class="block">Petstore console operations pages: background jobs and the audit log.</div>
+</div>
+<div class="col-first even-row-color"><a href="#org.apache.juneau.petstore.console.pages">org.apache.juneau.petstore.console.pages</a></div>
+<div class="col-last even-row-color">
+<div class="block">Builder twins of the petstore console pages: each page's <code>.ftlh</code> file rebuilt with <code>PageSpec</code>, served
+ when the page is requested with <code>?builder</code>.</div>
+</div>
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.petstore.console.pets">org.apache.juneau.petstore.console.pets</a></div>
+<div class="col-last odd-row-color">
+<div class="block">Petstore console pets pages and their JSON endpoints.</div>
+</div>
+<div class="col-first even-row-color"><a href="#org.apache.juneau.petstore.jetty">org.apache.juneau.petstore.jetty</a></div>
+<div class="col-last even-row-color">
+<div class="block">Apache Juneau Petstore - Jetty/Microservice deployment.</div>
+</div>
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.petstore.service">org.apache.juneau.petstore.service</a></div>
+<div class="col-last odd-row-color">
+<div class="block">Petstore service layer (in-memory store).</div>
+</div>
+<div class="col-first even-row-color"><a href="#org.apache.juneau.petstore.springboot">org.apache.juneau.petstore.springboot</a></div>
+<div class="col-last even-row-color">
+<div class="block">Apache Juneau Petstore - Spring Boot deployment.</div>
+</div>
+</div>
+<section class="package-uses">
+<ul class="block-list">
+<li>
+<section class="detail" id="org.apache.juneau.petstore.console">
+<div class="caption"><span>Classes in <a href="package-summary.html">org.apache.juneau.petstore.service</a> used by <a href="../console/package-summary.html">org.apache.juneau.petstore.console</a></span></div>
+<div class="summary-table two-column-summary">
+<div class="table-header col-first">Class</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><a href="class-use/PetStore.html#org.apache.juneau.petstore.console">PetStore</a></div>
+<div class="col-last even-row-color">
+<div class="block">In-memory <a href="../dto/Pet.html" title="class in org.apache.juneau.petstore.dto"><code>Pet</code></a>/<a href="../dto/Order.html" title="class in org.apache.juneau.petstore.dto"><code>Order</code></a>/<a href="../dto/User.html" title="class in org.apache.juneau.petstore.dto"><code>User</code></a> store seeded from classpath JSON.</div>
+</div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="org.apache.juneau.petstore.console.data">
+<div class="caption"><span>Classes in <a href="package-summary.html">org.apache.juneau.petstore.service</a> used by <a href="../console/data/package-summary.html">org.apache.juneau.petstore.console.data</a></span></div>
+<div class="summary-table two-column-summary">
+<div class="table-header col-first">Class</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><a href="class-use/PetStore.html#org.apache.juneau.petstore.console.data">PetStore</a></div>
+<div class="col-last even-row-color">
+<div class="block">In-memory <a href="../dto/Pet.html" title="class in org.apache.juneau.petstore.dto"><code>Pet</code></a>/<a href="../dto/Order.html" title="class in org.apache.juneau.petstore.dto"><code>Order</code></a>/<a href="../dto/User.html" title="class in org.apache.juneau.petstore.dto"><code>User</code></a> store seeded from classpath JSON.</div>
+</div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="org.apache.juneau.petstore.console.dev.flavors">
+<div class="caption"><span>Classes in <a href="package-summary.html">org.apache.juneau.petstore.service</a> used by <a href="../console/dev/flavors/package-summary.html">org.apache.juneau.petstore.console.dev.flavors</a></span></div>
+<div class="summary-table two-column-summary">
+<div class="table-header col-first">Class</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><a href="class-use/PetStore.html#org.apache.juneau.petstore.console.dev.flavors">PetStore</a></div>
+<div class="col-last even-row-color">
+<div class="block">In-memory <a href="../dto/Pet.html" title="class in org.apache.juneau.petstore.dto"><code>Pet</code></a>/<a href="../dto/Order.html" title="class in org.apache.juneau.petstore.dto"><code>Order</code></a>/<a href="../dto/User.html" title="class in org.apache.juneau.petstore.dto"><code>User</code></a> store seeded from classpath JSON.</div>
+</div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="org.apache.juneau.petstore.console.ops">
+<div class="caption"><span>Classes in <a href="package-summary.html">org.apache.juneau.petstore.service</a> used by <a href="../console/ops/package-summary.html">org.apache.juneau.petstore.console.ops</a></span></div>
+<div class="summary-table two-column-summary">
+<div class="table-header col-first">Class</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><a href="class-use/AuditEntry.html#org.apache.juneau.petstore.console.ops">AuditEntry</a></div>
+<div class="col-last even-row-color">
+<div class="block">One audit-trail record: who changed which petstore entity, how, and when.</div>
+</div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="org.apache.juneau.petstore.console.pages">
+<div class="caption"><span>Classes in <a href="package-summary.html">org.apache.juneau.petstore.service</a> used by <a href="../console/pages/package-summary.html">org.apache.juneau.petstore.console.pages</a></span></div>
+<div class="summary-table two-column-summary">
+<div class="table-header col-first">Class</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><a href="class-use/PetStore.html#org.apache.juneau.petstore.console.pages">PetStore</a></div>
+<div class="col-last even-row-color">
+<div class="block">In-memory <a href="../dto/Pet.html" title="class in org.apache.juneau.petstore.dto"><code>Pet</code></a>/<a href="../dto/Order.html" title="class in org.apache.juneau.petstore.dto"><code>Order</code></a>/<a href="../dto/User.html" title="class in org.apache.juneau.petstore.dto"><code>User</code></a> store seeded from classpath JSON.</div>
+</div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="org.apache.juneau.petstore.console.pets">
+<div class="caption"><span>Classes in <a href="package-summary.html">org.apache.juneau.petstore.service</a> used by <a href="../console/pets/package-summary.html">org.apache.juneau.petstore.console.pets</a></span></div>
+<div class="summary-table two-column-summary">
+<div class="table-header col-first">Class</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><a href="class-use/AuditEntry.html#org.apache.juneau.petstore.console.pets">AuditEntry</a></div>
+<div class="col-last even-row-color">
+<div class="block">One audit-trail record: who changed which petstore entity, how, and when.</div>
+</div>
+<div class="col-first odd-row-color"><a href="class-use/PendingChange.html#org.apache.juneau.petstore.console.pets">PendingChange</a></div>
+<div class="col-last odd-row-color">
+<div class="block">One staged inline edit of a pet field, waiting on the Pending changes page to be applied or discarded.</div>
+</div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="org.apache.juneau.petstore.jetty">
+<div class="caption"><span>Classes in <a href="package-summary.html">org.apache.juneau.petstore.service</a> used by <a href="../jetty/package-summary.html">org.apache.juneau.petstore.jetty</a></span></div>
+<div class="summary-table two-column-summary">
+<div class="table-header col-first">Class</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><a href="class-use/PetStore.html#org.apache.juneau.petstore.jetty">PetStore</a></div>
+<div class="col-last even-row-color">
+<div class="block">In-memory <a href="../dto/Pet.html" title="class in org.apache.juneau.petstore.dto"><code>Pet</code></a>/<a href="../dto/Order.html" title="class in org.apache.juneau.petstore.dto"><code>Order</code></a>/<a href="../dto/User.html" title="class in org.apache.juneau.petstore.dto"><code>User</code></a> store seeded from classpath JSON.</div>
+</div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="org.apache.juneau.petstore.service">
+<div class="caption"><span>Classes in <a href="package-summary.html">org.apache.juneau.petstore.service</a> used by <a href="package-summary.html">org.apache.juneau.petstore.service</a></span></div>
+<div class="summary-table two-column-summary">
+<div class="table-header col-first">Class</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><a href="class-use/AuditEntry.html#org.apache.juneau.petstore.service">AuditEntry</a></div>
+<div class="col-last even-row-color">
+<div class="block">One audit-trail record: who changed which petstore entity, how, and when.</div>
+</div>
+<div class="col-first odd-row-color"><a href="class-use/PendingChange.html#org.apache.juneau.petstore.service">PendingChange</a></div>
+<div class="col-last odd-row-color">
+<div class="block">One staged inline edit of a pet field, waiting on the Pending changes page to be applied or discarded.</div>
+</div>
+<div class="col-first even-row-color"><a href="class-use/PendingChange.State.html#org.apache.juneau.petstore.service">PendingChange.State</a></div>
+<div class="col-last even-row-color">
+<div class="block">Lifecycle of a staged change.</div>
+</div>
+<div class="col-first odd-row-color"><a href="class-use/PendingChanges.html#org.apache.juneau.petstore.service">PendingChanges</a></div>
+<div class="col-last odd-row-color">
+<div class="block">The staging area for pet-detail inline edits: edits are staged here instead of mutating the pet, then applied
+ (perRow, with retry on failure) or discarded (aggregate) from the Pending changes page.</div>
+</div>
+<div class="col-first even-row-color"><a href="class-use/PendingChanges.DiscardOutcome.html#org.apache.juneau.petstore.service">PendingChanges.DiscardOutcome</a></div>
+<div class="col-last even-row-color">
+<div class="block">Result of an aggregate discard, mapped 1:1 onto the console's <code>BulkResult</code> by <code>ChangesRest</code>.</div>
+</div>
+<div class="col-first odd-row-color"><a href="class-use/PendingChanges.Failure.html#org.apache.juneau.petstore.service">PendingChanges.Failure</a></div>
+<div class="col-last odd-row-color">
+<div class="block">One failed id in a <a href="PendingChanges.DiscardOutcome.html" title="class in org.apache.juneau.petstore.service"><code>PendingChanges.DiscardOutcome</code></a>.</div>
+</div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="org.apache.juneau.petstore.springboot">
+<div class="caption"><span>Classes in <a href="package-summary.html">org.apache.juneau.petstore.service</a> used by <a href="../springboot/package-summary.html">org.apache.juneau.petstore.springboot</a></span></div>
+<div class="summary-table two-column-summary">
+<div class="table-header col-first">Class</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><a href="class-use/PetStore.html#org.apache.juneau.petstore.springboot">PetStore</a></div>
+<div class="col-last even-row-color">
+<div class="block">In-memory <a href="../dto/Pet.html" title="class in org.apache.juneau.petstore.dto"><code>Pet</code></a>/<a href="../dto/Order.html" title="class in org.apache.juneau.petstore.dto"><code>Order</code></a>/<a href="../dto/User.html" title="class in org.apache.juneau.petstore.dto"><code>User</code></a> store seeded from classpath JSON.</div>
+</div>
+</div>
+</section>
+</li>
+</ul>
+</section>
+</main>
 <footer role="contentinfo">
 <hr>
 <p class="legal-copy"><small>Copyright &#169; 2016&#x2013;2026 <a href="https://www.apache.org/">The Apache Software Foundation</a>. All rights reserved.</small></p>

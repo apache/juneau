@@ -1,0 +1,397 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="" lang="">
+<head><meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<title>TableSpec_ToCardBody_Test xref</title>
+<link type="text/css" rel="stylesheet" href="../../../../../../stylesheet.css" />
+</head>
+<body>
+<div id="overview"><a href="../../../../../../../testapidocs/org/apache/juneau/rest/server/views/TableSpec_ToCardBody_Test.html">View Javadoc</a></div><pre>
+<a class="jxr_linenumber" name="L1" href="#L1">1</a>   <em class="jxr_comment">/*</em>
+<a class="jxr_linenumber" name="L2" href="#L2">2</a>   <em class="jxr_comment"> * Licensed to the Apache Software Foundation (ASF) under one or more</em>
+<a class="jxr_linenumber" name="L3" href="#L3">3</a>   <em class="jxr_comment"> * contributor license agreements.  See the NOTICE file distributed with</em>
+<a class="jxr_linenumber" name="L4" href="#L4">4</a>   <em class="jxr_comment"> * this work for additional information regarding copyright ownership.</em>
+<a class="jxr_linenumber" name="L5" href="#L5">5</a>   <em class="jxr_comment"> * The ASF licenses this file to You under the Apache License, Version 2.0</em>
+<a class="jxr_linenumber" name="L6" href="#L6">6</a>   <em class="jxr_comment"> * (the "License"); you may not use this file except in compliance with</em>
+<a class="jxr_linenumber" name="L7" href="#L7">7</a>   <em class="jxr_comment"> * the License.  You may obtain a copy of the License at</em>
+<a class="jxr_linenumber" name="L8" href="#L8">8</a>   <em class="jxr_comment"> *</em>
+<a class="jxr_linenumber" name="L9" href="#L9">9</a>   <em class="jxr_comment"> *      <a href="http://www.apache.org/licenses/LICENSE-2.0" target="alexandria_uri">http://www.apache.org/licenses/LICENSE-2.0</a></em>
+<a class="jxr_linenumber" name="L10" href="#L10">10</a>  <em class="jxr_comment"> *</em>
+<a class="jxr_linenumber" name="L11" href="#L11">11</a>  <em class="jxr_comment"> * Unless required by applicable law or agreed to in writing, software</em>
+<a class="jxr_linenumber" name="L12" href="#L12">12</a>  <em class="jxr_comment"> * distributed under the License is distributed on an "AS IS" BASIS,</em>
+<a class="jxr_linenumber" name="L13" href="#L13">13</a>  <em class="jxr_comment"> * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</em>
+<a class="jxr_linenumber" name="L14" href="#L14">14</a>  <em class="jxr_comment"> * See the License for the specific language governing permissions and</em>
+<a class="jxr_linenumber" name="L15" href="#L15">15</a>  <em class="jxr_comment"> * limitations under the License.</em>
+<a class="jxr_linenumber" name="L16" href="#L16">16</a>  <em class="jxr_comment"> */</em>
+<a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.server.views;
+<a class="jxr_linenumber" name="L18" href="#L18">18</a>  
+<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.junit.jupiter.api.Assertions.*;
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> java.util.*;
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.*;
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.commons.beanquery.*;
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.marshall.marshaller.*;
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.server.widgets.Op;
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.server.widgets.StatusTone;
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">import</strong> org.junit.jupiter.api.*;
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <em class="jxr_javadoccomment">/** {@link TableSpec#toCardBody()}: key order, omit-when-absent, and the nested wire shapes (rowClassRules' {@code class}</em>
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <em class="jxr_javadoccomment"> * key, defaultOrder's {@code key} key, selection/bulk, quickStats' {@code id}/{@code items}). */</em>
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>  @SuppressWarnings(<span class="jxr_string">"unchecked"</span>)
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <strong class="jxr_keyword">class</strong> <a name="TableSpec_ToCardBody_Test" href="../../../../../../org/apache/juneau/rest/server/views/TableSpec_ToCardBody_Test.html#TableSpec_ToCardBody_Test">TableSpec_ToCardBody_Test</a> <strong class="jxr_keyword">extends</strong> TestBase {
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>  
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> RowDetail detail() {
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>  		<strong class="jxr_keyword">return</strong> RowDetail.create(<span class="jxr_string">"/rest/slo/data/{id}"</span>)
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>  			.region(RegionDef.create(<span class="jxr_string">"slo-detail"</span>).populate(<span class="jxr_string">"slo-detail"</span>).allowPopulators(<span class="jxr_string">"slo-detail"</span>));
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>  	}
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>  
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>  	@Test <strong class="jxr_keyword">void</strong> a01_minimal_keyOrderAndOmission() {
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>  		<strong class="jxr_keyword">var</strong> body = TableSpec.create(<span class="jxr_string">"slo"</span>).dataUrl(<span class="jxr_string">"/rest/slo/data"</span>).columns(Column.create(<span class="jxr_string">"pod"</span>)).toCardBody();
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>  		assertEquals(List.of(<span class="jxr_string">"dataUrl"</span>, <span class="jxr_string">"columns"</span>), List.copyOf(body.keySet()));
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>  		assertEquals(<span class="jxr_string">"/rest/slo/data"</span>, body.get(<span class="jxr_string">"dataUrl"</span>));
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>  		assertFalse(body.containsKey(<span class="jxr_string">"contractVersion"</span>));
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>  	}
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>  
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>  	@Test <strong class="jxr_keyword">void</strong> a02_fullTable_keyOrder() {
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>  		<strong class="jxr_keyword">var</strong> permit = WritePermit.forCapability(<span class="jxr_string">"slo:bulk"</span>);
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>  		<strong class="jxr_keyword">var</strong> selection = SelectionDef.create(<span class="jxr_string">"id"</span>);
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>  		<strong class="jxr_keyword">var</strong> bulk = BulkMutateDef.create(permit, selection).actions(RowAction.create(<span class="jxr_string">"ack"</span>));
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>  		<strong class="jxr_keyword">var</strong> body = TableSpec.create(<span class="jxr_string">"slo"</span>)
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>  			.dataUrl(<span class="jxr_string">"/rest/slo/data"</span>)
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>  			.columns(Column.create(<span class="jxr_string">"pod"</span>))
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>  			.dataMode(TableSpec.DataMode.CLIENT)
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>  			.defaultOrder(<span class="jxr_string">"pod"</span>, TableSpec.Sort.ASC)
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>  			.ribbon(RibbonItem.refresh())
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>  			.rowType(String.<strong class="jxr_keyword">class</strong>)
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>  			.pollIntervalMs(5000)
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>  			.primary(<strong class="jxr_keyword">true</strong>)
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>  			.rowClass(<span class="jxr_string">"state"</span>, Op.EQ, <span class="jxr_string">"degraded"</span>, <span class="jxr_string">"row-degraded"</span>)
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>  			.rowActions(RowAction.create(<span class="jxr_string">"ack"</span>))
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>  			.selection(selection)
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>  			.bulk(bulk)
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>  			.detail(detail())
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>  			.quickStats(<span class="jxr_string">"strip"</span>, QuickStat.of(<span class="jxr_string">"x"</span>, <span class="jxr_string">"X"</span>, 1))
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>  			.toCardBody();
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>  		assertEquals(List.of(<span class="jxr_string">"dataUrl"</span>, <span class="jxr_string">"columns"</span>, <span class="jxr_string">"dataMode"</span>, <span class="jxr_string">"defaultOrder"</span>, <span class="jxr_string">"ribbon"</span>, <span class="jxr_string">"rowType"</span>,
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>  			<span class="jxr_string">"pollIntervalMs"</span>, <span class="jxr_string">"primary"</span>, <span class="jxr_string">"rowClassRules"</span>, <span class="jxr_string">"rowActions"</span>, <span class="jxr_string">"selection"</span>, <span class="jxr_string">"bulk"</span>, <span class="jxr_string">"detail"</span>, <span class="jxr_string">"quickStats"</span>),
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>  			List.copyOf(body.keySet()));
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>  	}
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>  
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>  	@Test <strong class="jxr_keyword">void</strong> a03_rowClassRule_usesClassKeyNotCssClass() {
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>  		<strong class="jxr_keyword">var</strong> body = TableSpec.create(<span class="jxr_string">"slo"</span>).dataUrl(<span class="jxr_string">"/rest/slo/data"</span>).columns(Column.create(<span class="jxr_string">"pod"</span>))
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>  			.rowClass(<span class="jxr_string">"state"</span>, Op.EQ, <span class="jxr_string">"degraded"</span>, <span class="jxr_string">"row-degraded"</span>).toCardBody();
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>  		<strong class="jxr_keyword">var</strong> rules = (List&lt;Map&lt;String,Object&gt;&gt;) body.get(<span class="jxr_string">"rowClassRules"</span>);
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>  		assertEquals(<span class="jxr_string">"row-degraded"</span>, rules.get(0).get(<span class="jxr_string">"class"</span>));
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>  		assertFalse(rules.get(0).containsKey(<span class="jxr_string">"cssClass"</span>));
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>  	}
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>  
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>  	@Test <strong class="jxr_keyword">void</strong> a04_defaultOrder_usesKeyNotData() {
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>  		<strong class="jxr_keyword">var</strong> body = TableSpec.create(<span class="jxr_string">"slo"</span>).dataUrl(<span class="jxr_string">"/rest/slo/data"</span>).columns(Column.create(<span class="jxr_string">"pod"</span>))
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>  			.defaultOrder(<span class="jxr_string">"pod"</span>, TableSpec.Sort.DESC).toCardBody();
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>  		<strong class="jxr_keyword">var</strong> order = (List&lt;Map&lt;String,Object&gt;&gt;) body.get(<span class="jxr_string">"defaultOrder"</span>);
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>  		assertEquals(<span class="jxr_string">"pod"</span>, order.get(0).get(<span class="jxr_string">"key"</span>));
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>  		assertEquals(<span class="jxr_string">"desc"</span>, order.get(0).get(<span class="jxr_string">"dir"</span>));
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>  	}
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>  
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>  	@Test <strong class="jxr_keyword">void</strong> a05_selection_omitsBulkFields_bulk_omitsContractVersion() {
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>  		<strong class="jxr_keyword">var</strong> permit = WritePermit.forCapability(<span class="jxr_string">"slo:bulk"</span>);
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>  		<strong class="jxr_keyword">var</strong> selection = SelectionDef.create(<span class="jxr_string">"id"</span>).selectAll(false);
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>  		<strong class="jxr_keyword">var</strong> bulk = BulkMutateDef.create(permit, selection).actions(RowAction.create(<span class="jxr_string">"ack"</span>));
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>  		<strong class="jxr_keyword">var</strong> body = TableSpec.create(<span class="jxr_string">"slo"</span>).dataUrl(<span class="jxr_string">"/rest/slo/data"</span>).columns(Column.create(<span class="jxr_string">"pod"</span>))
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>  			.selection(selection).bulk(bulk).toCardBody();
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>  		<strong class="jxr_keyword">var</strong> s = (Map&lt;String,Object&gt;) body.get(<span class="jxr_string">"selection"</span>);
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>  		assertEquals(<span class="jxr_string">"id"</span>, s.get(<span class="jxr_string">"rowIdField"</span>));
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>  		assertEquals(false, s.get(<span class="jxr_string">"selectAll"</span>));
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>  		<strong class="jxr_keyword">var</strong> b = (Map&lt;String,Object&gt;) body.get(<span class="jxr_string">"bulk"</span>);
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>  		assertFalse(b.containsKey(<span class="jxr_string">"contractVersion"</span>));
+<a class="jxr_linenumber" name="L99" href="#L99">99</a>  		assertEquals(1, ((List&lt;?&gt;) b.get(<span class="jxr_string">"actions"</span>)).size());
+<a class="jxr_linenumber" name="L100" href="#L100">100</a> 	}
+<a class="jxr_linenumber" name="L101" href="#L101">101</a> 
+<a class="jxr_linenumber" name="L102" href="#L102">102</a> 	@Test <strong class="jxr_keyword">void</strong> a06_quickStats_shape() {
+<a class="jxr_linenumber" name="L103" href="#L103">103</a> 		<strong class="jxr_keyword">var</strong> body = TableSpec.create(<span class="jxr_string">"slo"</span>).dataUrl(<span class="jxr_string">"/rest/slo/data"</span>).columns(Column.create(<span class="jxr_string">"pod"</span>))
+<a class="jxr_linenumber" name="L104" href="#L104">104</a> 			.quickStats(<span class="jxr_string">"strip"</span>, QuickStat.of(<span class="jxr_string">"x"</span>, <span class="jxr_string">"X"</span>, 1)).toCardBody();
+<a class="jxr_linenumber" name="L105" href="#L105">105</a> 		<strong class="jxr_keyword">var</strong> q = (Map&lt;String,Object&gt;) body.get(<span class="jxr_string">"quickStats"</span>);
+<a class="jxr_linenumber" name="L106" href="#L106">106</a> 		assertEquals(<span class="jxr_string">"strip"</span>, q.get(<span class="jxr_string">"id"</span>));
+<a class="jxr_linenumber" name="L107" href="#L107">107</a> 		assertEquals(1, ((List&lt;?&gt;) q.get(<span class="jxr_string">"items"</span>)).size());
+<a class="jxr_linenumber" name="L108" href="#L108">108</a> 	}
+<a class="jxr_linenumber" name="L109" href="#L109">109</a> 
+<a class="jxr_linenumber" name="L110" href="#L110">110</a> 	@Test <strong class="jxr_keyword">void</strong> a07_detail_delegatesToRowDetailToMap() {
+<a class="jxr_linenumber" name="L111" href="#L111">111</a> 		<strong class="jxr_keyword">var</strong> detail = detail().title(<span class="jxr_string">"{pod}"</span>);
+<a class="jxr_linenumber" name="L112" href="#L112">112</a> 		<strong class="jxr_keyword">var</strong> body = TableSpec.create(<span class="jxr_string">"slo"</span>).dataUrl(<span class="jxr_string">"/rest/slo/data"</span>).columns(Column.create(<span class="jxr_string">"pod"</span>))
+<a class="jxr_linenumber" name="L113" href="#L113">113</a> 			.detail(detail).toCardBody();
+<a class="jxr_linenumber" name="L114" href="#L114">114</a> 		assertEquals(detail.toMap(), body.get(<span class="jxr_string">"detail"</span>));
+<a class="jxr_linenumber" name="L115" href="#L115">115</a> 	}
+<a class="jxr_linenumber" name="L116" href="#L116">116</a> 
+<a class="jxr_linenumber" name="L117" href="#L117">117</a> 	@Test <strong class="jxr_keyword">void</strong> a08_detail_includesEndpoint() {
+<a class="jxr_linenumber" name="L118" href="#L118">118</a> 		<strong class="jxr_keyword">var</strong> body = TableSpec.create(<span class="jxr_string">"slo"</span>).dataUrl(<span class="jxr_string">"/rest/slo/data"</span>).columns(Column.create(<span class="jxr_string">"pod"</span>))
+<a class="jxr_linenumber" name="L119" href="#L119">119</a> 			.detail(detail()).toCardBody();
+<a class="jxr_linenumber" name="L120" href="#L120">120</a> 		assertEquals(<span class="jxr_string">"/rest/slo/data/{id}"</span>, ((Map&lt;String,Object&gt;)body.get(<span class="jxr_string">"detail"</span>)).get(<span class="jxr_string">"endpoint"</span>));
+<a class="jxr_linenumber" name="L121" href="#L121">121</a> 	}
+<a class="jxr_linenumber" name="L122" href="#L122">122</a> 
+<a class="jxr_linenumber" name="L123" href="#L123">123</a> 	@Test <strong class="jxr_keyword">void</strong> a09_selection_emitsScope() {
+<a class="jxr_linenumber" name="L124" href="#L124">124</a> 		<strong class="jxr_keyword">var</strong> body = TableSpec.create(<span class="jxr_string">"slo"</span>).dataUrl(<span class="jxr_string">"/rest/slo/data"</span>).columns(Column.create(<span class="jxr_string">"pod"</span>))
+<a class="jxr_linenumber" name="L125" href="#L125">125</a> 			.selection(SelectionDef.create(<span class="jxr_string">"id"</span>).labelField(<span class="jxr_string">"pod"</span>)).toCardBody();
+<a class="jxr_linenumber" name="L126" href="#L126">126</a> 		<strong class="jxr_keyword">var</strong> s = (Map&lt;String,Object&gt;)body.get(<span class="jxr_string">"selection"</span>);
+<a class="jxr_linenumber" name="L127" href="#L127">127</a> 		assertEquals(SelectionDef.Scope.PERSISTENT.wire(), s.get(<span class="jxr_string">"scope"</span>));
+<a class="jxr_linenumber" name="L128" href="#L128">128</a> 		assertEquals(<span class="jxr_string">"pod"</span>, s.get(<span class="jxr_string">"labelField"</span>));
+<a class="jxr_linenumber" name="L129" href="#L129">129</a> 		assertFalse(s.containsKey(<span class="jxr_string">"selectableWhen"</span>));
+<a class="jxr_linenumber" name="L130" href="#L130">130</a> 	}
+<a class="jxr_linenumber" name="L131" href="#L131">131</a> 
+<a class="jxr_linenumber" name="L132" href="#L132">132</a> 	@Test <strong class="jxr_keyword">void</strong> a10_tableOperators_reachInheritingColumns() {
+<a class="jxr_linenumber" name="L133" href="#L133">133</a> 		<strong class="jxr_keyword">var</strong> table = SearchOperatorSet.of(SearchOperatorSet.standard().get(<span class="jxr_string">"$eq"</span>));
+<a class="jxr_linenumber" name="L134" href="#L134">134</a> 		<strong class="jxr_keyword">var</strong> body = TableSpec.create(<span class="jxr_string">"slo"</span>).dataUrl(<span class="jxr_string">"/rest/slo/data"</span>).operators(table)
+<a class="jxr_linenumber" name="L135" href="#L135">135</a> 			.columns(Column.create(<span class="jxr_string">"pod"</span>).searchType(SearchType.TEXT), Column.create(<span class="jxr_string">"note"</span>)).toCardBody();
+<a class="jxr_linenumber" name="L136" href="#L136">136</a> 		<strong class="jxr_keyword">var</strong> cols = (List&lt;Map&lt;String,Object&gt;&gt;)body.get(<span class="jxr_string">"columns"</span>);
+<a class="jxr_linenumber" name="L137" href="#L137">137</a> 		assertEquals(List.of(<span class="jxr_string">"$eq"</span>), cols.get(0).get(<span class="jxr_string">"searchOperators"</span>));
+<a class="jxr_linenumber" name="L138" href="#L138">138</a> 		assertFalse(cols.get(1).containsKey(<span class="jxr_string">"searchOperators"</span>));
+<a class="jxr_linenumber" name="L139" href="#L139">139</a> 	}
+<a class="jxr_linenumber" name="L140" href="#L140">140</a> 
+<a class="jxr_linenumber" name="L141" href="#L141">141</a> 	@Test <strong class="jxr_keyword">void</strong> a11_selection_scopePageAndSelectableWhen() {
+<a class="jxr_linenumber" name="L142" href="#L142">142</a> 		<strong class="jxr_keyword">var</strong> body = TableSpec.create(<span class="jxr_string">"slo"</span>).dataUrl(<span class="jxr_string">"/rest/slo/data"</span>).columns(Column.create(<span class="jxr_string">"pod"</span>))
+<a class="jxr_linenumber" name="L143" href="#L143">143</a> 			.selection(SelectionDef.create(<span class="jxr_string">"id"</span>).scope(SelectionDef.Scope.PAGE)
+<a class="jxr_linenumber" name="L144" href="#L144">144</a> 				.selectableWhen(RowActionEnabledRule.of(<span class="jxr_string">"state"</span>, Op.EQ, <span class="jxr_string">"open"</span>, <span class="jxr_string">"Not open"</span>)))
+<a class="jxr_linenumber" name="L145" href="#L145">145</a> 			.toCardBody();
+<a class="jxr_linenumber" name="L146" href="#L146">146</a> 		<strong class="jxr_keyword">var</strong> s = (Map&lt;String,Object&gt;)body.get(<span class="jxr_string">"selection"</span>);
+<a class="jxr_linenumber" name="L147" href="#L147">147</a> 		assertEquals(<span class="jxr_string">"page"</span>, s.get(<span class="jxr_string">"scope"</span>));
+<a class="jxr_linenumber" name="L148" href="#L148">148</a> 		<strong class="jxr_keyword">var</strong> rules = (List&lt;Map&lt;String,Object&gt;&gt;)s.get(<span class="jxr_string">"selectableWhen"</span>);
+<a class="jxr_linenumber" name="L149" href="#L149">149</a> 		assertEquals(<span class="jxr_string">"state"</span>, rules.get(0).get(<span class="jxr_string">"field"</span>));
+<a class="jxr_linenumber" name="L150" href="#L150">150</a> 		assertEquals(<span class="jxr_string">"Not open"</span>, rules.get(0).get(<span class="jxr_string">"reason"</span>));
+<a class="jxr_linenumber" name="L151" href="#L151">151</a> 	}
+<a class="jxr_linenumber" name="L152" href="#L152">152</a> 
+<a class="jxr_linenumber" name="L153" href="#L153">153</a> 	@Test <strong class="jxr_keyword">void</strong> a12_bodyHoldsOnlyPlainData() {
+<a class="jxr_linenumber" name="L154" href="#L154">154</a> 		<strong class="jxr_keyword">var</strong> permit = WritePermit.forCapability(<span class="jxr_string">"slo:bulk"</span>);
+<a class="jxr_linenumber" name="L155" href="#L155">155</a> 		<strong class="jxr_keyword">var</strong> selection = SelectionDef.create(<span class="jxr_string">"id"</span>);
+<a class="jxr_linenumber" name="L156" href="#L156">156</a> 		<strong class="jxr_keyword">var</strong> bulk = BulkMutateDef.create(permit, selection)
+<a class="jxr_linenumber" name="L157" href="#L157">157</a> 			.actions(RowAction.create(<span class="jxr_string">"ack"</span>).endpoint(<span class="jxr_string">"/rest/slo/ack"</span>).bulkMode(RowAction.BulkMode.AGGREGATE));
+<a class="jxr_linenumber" name="L158" href="#L158">158</a> 		<strong class="jxr_keyword">var</strong> body = TableSpec.create(<span class="jxr_string">"slo"</span>).dataUrl(<span class="jxr_string">"/rest/slo/data"</span>)
+<a class="jxr_linenumber" name="L159" href="#L159">159</a> 			.columns(Column.create(<span class="jxr_string">"pod"</span>).render(<span class="jxr_string">"tag:state"</span>).href(<span class="jxr_string">"{url}"</span>).searchType(SearchType.TEXT))
+<a class="jxr_linenumber" name="L160" href="#L160">160</a> 			.rowActions(RowAction.create(<span class="jxr_string">"go"</span>).endpoint(<span class="jxr_string">"/rest/slo/go"</span>).enabledWhen(<span class="jxr_string">"state"</span>, Op.EQ, <span class="jxr_string">"open"</span>, <span class="jxr_string">"Not open"</span>))
+<a class="jxr_linenumber" name="L161" href="#L161">161</a> 			.selection(selection).bulk(bulk).toCardBody();
+<a class="jxr_linenumber" name="L162" href="#L162">162</a> 		assertPlain(body);
+<a class="jxr_linenumber" name="L163" href="#L163">163</a> 		<strong class="jxr_keyword">var</strong> actions = (List&lt;Map&lt;String,Object&gt;&gt;)((Map&lt;String,Object&gt;)body.get(<span class="jxr_string">"bulk"</span>)).get(<span class="jxr_string">"actions"</span>);
+<a class="jxr_linenumber" name="L164" href="#L164">164</a> 		assertEquals(<span class="jxr_string">"aggregate"</span>, actions.get(0).get(<span class="jxr_string">"bulkMode"</span>));
+<a class="jxr_linenumber" name="L165" href="#L165">165</a> 		<strong class="jxr_keyword">var</strong> col = ((List&lt;Map&lt;String,Object&gt;&gt;)body.get(<span class="jxr_string">"columns"</span>)).get(0);
+<a class="jxr_linenumber" name="L166" href="#L166">166</a> 		assertEquals(<span class="jxr_string">"tag"</span>, ((Map&lt;String,Object&gt;)col.get(<span class="jxr_string">"render"</span>)).get(<span class="jxr_string">"id"</span>));
+<a class="jxr_linenumber" name="L167" href="#L167">167</a> 		assertEquals(List.of(<span class="jxr_string">"key"</span>, <span class="jxr_string">"label"</span>, <span class="jxr_string">"render"</span>, <span class="jxr_string">"href"</span>), List.copyOf(col.keySet()).subList(0, 4));
+<a class="jxr_linenumber" name="L168" href="#L168">168</a> 	}
+<a class="jxr_linenumber" name="L169" href="#L169">169</a> 
+<a class="jxr_linenumber" name="L170" href="#L170">170</a> 	@Test <strong class="jxr_keyword">void</strong> a13_quickStats_mixedKinds_inOrder() {
+<a class="jxr_linenumber" name="L171" href="#L171">171</a> 		<strong class="jxr_keyword">var</strong> body = minimal().quickStats(<span class="jxr_string">"strip"</span>, QuickStat.of(<span class="jxr_string">"t"</span>, <span class="jxr_string">"T"</span>, 1), QuickStat.meter(<span class="jxr_string">"m"</span>, <span class="jxr_string">"M"</span>, 1, 2),
+<a class="jxr_linenumber" name="L172" href="#L172">172</a> 			QuickStat.segmented(<span class="jxr_string">"g"</span>, <span class="jxr_string">"G"</span>).segment(<span class="jxr_string">"A"</span>, 1, StatusTone.INFO)).toCardBody();
+<a class="jxr_linenumber" name="L173" href="#L173">173</a> 		<strong class="jxr_keyword">var</strong> items = (List&lt;Map&lt;String,Object&gt;&gt;)((Map&lt;String,Object&gt;) body.get(<span class="jxr_string">"quickStats"</span>)).get(<span class="jxr_string">"items"</span>);
+<a class="jxr_linenumber" name="L174" href="#L174">174</a> 		assertEquals(List.of(<span class="jxr_string">"t"</span>, <span class="jxr_string">"m"</span>, <span class="jxr_string">"g"</span>), items.stream().map(i -&gt; i.get(<span class="jxr_string">"id"</span>)).toList());
+<a class="jxr_linenumber" name="L175" href="#L175">175</a> 		assertFalse(items.get(0).containsKey(<span class="jxr_string">"type"</span>));
+<a class="jxr_linenumber" name="L176" href="#L176">176</a> 		assertEquals(<span class="jxr_string">"meter"</span>, items.get(1).get(<span class="jxr_string">"type"</span>));
+<a class="jxr_linenumber" name="L177" href="#L177">177</a> 		assertEquals(<span class="jxr_string">"A"</span>, ((Map&lt;String,Object&gt;)((List&lt;?&gt;)items.get(2).get(<span class="jxr_string">"segments"</span>)).get(0)).get(<span class="jxr_string">"label"</span>));
+<a class="jxr_linenumber" name="L178" href="#L178">178</a> 	}
+<a class="jxr_linenumber" name="L179" href="#L179">179</a> 
+<a class="jxr_linenumber" name="L180" href="#L180">180</a> 	@Test <strong class="jxr_keyword">void</strong> a14_quickStats_emptySegmented_throwsAtToCardBody() {
+<a class="jxr_linenumber" name="L181" href="#L181">181</a> 		<strong class="jxr_keyword">var</strong> t = minimal().quickStats(<span class="jxr_string">"strip"</span>, QuickStat.segmented(<span class="jxr_string">"g"</span>, <span class="jxr_string">"G"</span>));
+<a class="jxr_linenumber" name="L182" href="#L182">182</a> 		<strong class="jxr_keyword">var</strong> ex = assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, t::toCardBody);
+<a class="jxr_linenumber" name="L183" href="#L183">183</a> 		assertTrue(ex.getMessage().contains(<span class="jxr_string">"a segmented item needs at least one segment."</span>), ex.getMessage());
+<a class="jxr_linenumber" name="L184" href="#L184">184</a> 	}
+<a class="jxr_linenumber" name="L185" href="#L185">185</a> 
+<a class="jxr_linenumber" name="L186" href="#L186">186</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> TableSpec minimal() {
+<a class="jxr_linenumber" name="L187" href="#L187">187</a> 		<strong class="jxr_keyword">return</strong> TableSpec.create(<span class="jxr_string">"slo"</span>).dataUrl(<span class="jxr_string">"/rest/slo/data"</span>).columns(Column.create(<span class="jxr_string">"pod"</span>));
+<a class="jxr_linenumber" name="L188" href="#L188">188</a> 	}
+<a class="jxr_linenumber" name="L189" href="#L189">189</a> 
+<a class="jxr_linenumber" name="L190" href="#L190">190</a> 	@Test <strong class="jxr_keyword">void</strong> b01_viewKeys_absentWhenUnset() {
+<a class="jxr_linenumber" name="L191" href="#L191">191</a> 		<strong class="jxr_keyword">var</strong> body = minimal().toCardBody();
+<a class="jxr_linenumber" name="L192" href="#L192">192</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> key : List.of(<span class="jxr_string">"columnConfig"</span>, <span class="jxr_string">"copyLink"</span>, <span class="jxr_string">"cleanAddress"</span>, <span class="jxr_string">"pausePollingWhileEditing"</span>))
+<a class="jxr_linenumber" name="L193" href="#L193">193</a> 			assertFalse(body.containsKey(key), key);
+<a class="jxr_linenumber" name="L194" href="#L194">194</a> 	}
+<a class="jxr_linenumber" name="L195" href="#L195">195</a> 
+<a class="jxr_linenumber" name="L196" href="#L196">196</a> 	@Test <strong class="jxr_keyword">void</strong> b02_viewKeys_emittedWhenSet() {
+<a class="jxr_linenumber" name="L197" href="#L197">197</a> 		<strong class="jxr_keyword">var</strong> body = minimal().columnConfig(<strong class="jxr_keyword">true</strong>).copyLink(<strong class="jxr_keyword">true</strong>).cleanAddress(<strong class="jxr_keyword">true</strong>).pausePollingWhileEditing(<strong class="jxr_keyword">true</strong>).toCardBody();
+<a class="jxr_linenumber" name="L198" href="#L198">198</a> 		assertPlain(body);
+<a class="jxr_linenumber" name="L199" href="#L199">199</a> 		assertEquals(<strong class="jxr_keyword">true</strong>, body.get(<span class="jxr_string">"columnConfig"</span>));
+<a class="jxr_linenumber" name="L200" href="#L200">200</a> 		assertEquals(<strong class="jxr_keyword">true</strong>, body.get(<span class="jxr_string">"copyLink"</span>));
+<a class="jxr_linenumber" name="L201" href="#L201">201</a> 		assertEquals(<strong class="jxr_keyword">true</strong>, body.get(<span class="jxr_string">"cleanAddress"</span>));
+<a class="jxr_linenumber" name="L202" href="#L202">202</a> 		assertEquals(<strong class="jxr_keyword">true</strong>, body.get(<span class="jxr_string">"pausePollingWhileEditing"</span>));
+<a class="jxr_linenumber" name="L203" href="#L203">203</a> 	}
+<a class="jxr_linenumber" name="L204" href="#L204">204</a> 
+<a class="jxr_linenumber" name="L205" href="#L205">205</a> 	@Test <strong class="jxr_keyword">void</strong> b02b_urlState_absentWhenUnset_andEmittedAsDirectiveObjects() {
+<a class="jxr_linenumber" name="L206" href="#L206">206</a> 		assertFalse(minimal().toCardBody().containsKey(<span class="jxr_string">"urlState"</span>));
+<a class="jxr_linenumber" name="L207" href="#L207">207</a> 		<strong class="jxr_keyword">var</strong> body = minimal().urlState(<span class="jxr_string">"day"</span>, <span class="jxr_string">"ids"</span>).toCardBody();
+<a class="jxr_linenumber" name="L208" href="#L208">208</a> 		assertPlain(body);
+<a class="jxr_linenumber" name="L209" href="#L209">209</a> 		assertEquals(Map.of(<span class="jxr_string">"day"</span>, Map.of(), <span class="jxr_string">"ids"</span>, Map.of()), body.get(<span class="jxr_string">"urlState"</span>));
+<a class="jxr_linenumber" name="L210" href="#L210">210</a> 	}
+<a class="jxr_linenumber" name="L211" href="#L211">211</a> 
+<a class="jxr_linenumber" name="L212" href="#L212">212</a> 	@Test <strong class="jxr_keyword">void</strong> b02d_urlStateDayParam_emitsTheParamName_andPlainDayStaysEmpty() {
+<a class="jxr_linenumber" name="L213" href="#L213">213</a> 		assertEquals(Map.of(<span class="jxr_string">"day"</span>, Map.of(<span class="jxr_string">"param"</span>, <span class="jxr_string">"on"</span>)), minimal().urlStateDayParam(<span class="jxr_string">"on"</span>).toCardBody().get(<span class="jxr_string">"urlState"</span>));
+<a class="jxr_linenumber" name="L214" href="#L214">214</a> 		assertEquals(Map.of(<span class="jxr_string">"day"</span>, Map.of()), minimal().urlState(<span class="jxr_string">"day"</span>).toCardBody().get(<span class="jxr_string">"urlState"</span>));
+<a class="jxr_linenumber" name="L215" href="#L215">215</a> 		<strong class="jxr_keyword">var</strong> both = minimal().urlState(<span class="jxr_string">"ids"</span>).urlStateDayParam(<span class="jxr_string">"on"</span>).urlState(<span class="jxr_string">"day"</span>, <span class="jxr_string">"window"</span>).toCardBody();
+<a class="jxr_linenumber" name="L216" href="#L216">216</a> 		assertPlain(both);
+<a class="jxr_linenumber" name="L217" href="#L217">217</a> 		assertEquals(Map.of(<span class="jxr_string">"ids"</span>, Map.of(), <span class="jxr_string">"day"</span>, Map.of(<span class="jxr_string">"param"</span>, <span class="jxr_string">"on"</span>), <span class="jxr_string">"window"</span>, Map.of()), both.get(<span class="jxr_string">"urlState"</span>));
+<a class="jxr_linenumber" name="L218" href="#L218">218</a> 		assertEquals(List.of(<span class="jxr_string">"ids"</span>, <span class="jxr_string">"day"</span>, <span class="jxr_string">"window"</span>), List.copyOf(((Map&lt;?,?&gt;)both.get(<span class="jxr_string">"urlState"</span>)).keySet()));
+<a class="jxr_linenumber" name="L219" href="#L219">219</a> 	}
+<a class="jxr_linenumber" name="L220" href="#L220">220</a> 
+<a class="jxr_linenumber" name="L221" href="#L221">221</a> 	@Test <strong class="jxr_keyword">void</strong> b02e_urlStateDayParam_rejectsBlankAndMalformed() {
+<a class="jxr_linenumber" name="L222" href="#L222">222</a> 		<strong class="jxr_keyword">var</strong> target = minimal();
+<a class="jxr_linenumber" name="L223" href="#L223">223</a> 		assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; target.urlStateDayParam(<span class="jxr_string">" "</span>));
+<a class="jxr_linenumber" name="L224" href="#L224">224</a> 		<strong class="jxr_keyword">var</strong> target2 = minimal();
+<a class="jxr_linenumber" name="L225" href="#L225">225</a> 		assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; target2.urlStateDayParam(<strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L226" href="#L226">226</a> 		<strong class="jxr_keyword">var</strong> target3 = minimal();
+<a class="jxr_linenumber" name="L227" href="#L227">227</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> bad : List.of(<span class="jxr_string">""</span>, <span class="jxr_string">"on&amp;x=1"</span>, <span class="jxr_string">"a b"</span>, <span class="jxr_string">" on"</span>, <span class="jxr_string">"on "</span>, <span class="jxr_string">"1on"</span>, <span class="jxr_string">"-on"</span>, <span class="jxr_string">"o.n"</span>, <span class="jxr_string">"a"</span>.repeat(65)))
+<a class="jxr_linenumber" name="L228" href="#L228">228</a> 			assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; target3.urlStateDayParam(bad), <span class="jxr_string">"'"</span> + bad + <span class="jxr_string">"'"</span>);
+<a class="jxr_linenumber" name="L229" href="#L229">229</a> 		assertEquals(Map.of(<span class="jxr_string">"day"</span>, Map.of(<span class="jxr_string">"param"</span>, <span class="jxr_string">"a"</span>.repeat(64))), minimal().urlStateDayParam(<span class="jxr_string">"a"</span>.repeat(64)).toCardBody().get(<span class="jxr_string">"urlState"</span>));
+<a class="jxr_linenumber" name="L230" href="#L230">230</a> 	}
+<a class="jxr_linenumber" name="L231" href="#L231">231</a> 
+<a class="jxr_linenumber" name="L232" href="#L232">232</a> 	@Test <strong class="jxr_keyword">void</strong> b02f_urlStateDayParam_lastCallWins_andPlainUrlStateKeepsIt() {
+<a class="jxr_linenumber" name="L233" href="#L233">233</a> 		<strong class="jxr_keyword">var</strong> body = minimal().urlStateDayParam(<span class="jxr_string">"a"</span>).urlStateDayParam(<span class="jxr_string">"b"</span>).urlState(<span class="jxr_string">"day"</span>).toCardBody();
+<a class="jxr_linenumber" name="L234" href="#L234">234</a> 		assertEquals(Map.of(<span class="jxr_string">"day"</span>, Map.of(<span class="jxr_string">"param"</span>, <span class="jxr_string">"b"</span>)), body.get(<span class="jxr_string">"urlState"</span>));
+<a class="jxr_linenumber" name="L235" href="#L235">235</a> 	}
+<a class="jxr_linenumber" name="L236" href="#L236">236</a> 
+<a class="jxr_linenumber" name="L237" href="#L237">237</a> 	@Test <strong class="jxr_keyword">void</strong> b02g_urlStateConfig_idsAndWindow_emittedAndMatchTheFtlMapForm() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L238" href="#L238">238</a> 		<strong class="jxr_keyword">var</strong> body = minimal().urlState(<span class="jxr_string">"ids"</span>, Map.of(<span class="jxr_string">"param"</span>, <span class="jxr_string">"pid"</span>, <span class="jxr_string">"max"</span>, 50)).toCardBody();
+<a class="jxr_linenumber" name="L239" href="#L239">239</a> 		assertPlain(body);
+<a class="jxr_linenumber" name="L240" href="#L240">240</a> 		assertEquals(Map.of(<span class="jxr_string">"ids"</span>, Map.of(<span class="jxr_string">"param"</span>, <span class="jxr_string">"pid"</span>, <span class="jxr_string">"max"</span>, 50)), body.get(<span class="jxr_string">"urlState"</span>));
+<a class="jxr_linenumber" name="L241" href="#L241">241</a> 		<em class="jxr_comment">// Twin: the map a page author writes in FTL / JSON5 is the same value the builder emits.</em>
+<a class="jxr_linenumber" name="L242" href="#L242">242</a> 		assertEquals(Json5.to(<span class="jxr_string">"{ids:{param:'pid',max:50}}"</span>, Map.<strong class="jxr_keyword">class</strong>), body.get(<span class="jxr_string">"urlState"</span>));
+<a class="jxr_linenumber" name="L243" href="#L243">243</a> 		<strong class="jxr_keyword">var</strong> w = minimal().urlState(<span class="jxr_string">"window"</span>, Map.of(<span class="jxr_string">"params"</span>, Map.of(<span class="jxr_string">"start"</span>, <span class="jxr_string">"from"</span>, <span class="jxr_string">"end"</span>, <span class="jxr_string">"to"</span>))).toCardBody();
+<a class="jxr_linenumber" name="L244" href="#L244">244</a> 		assertPlain(w);
+<a class="jxr_linenumber" name="L245" href="#L245">245</a> 		assertEquals(Map.of(<span class="jxr_string">"window"</span>, Map.of(<span class="jxr_string">"params"</span>, Map.of(<span class="jxr_string">"start"</span>, <span class="jxr_string">"from"</span>, <span class="jxr_string">"end"</span>, <span class="jxr_string">"to"</span>))), w.get(<span class="jxr_string">"urlState"</span>));
+<a class="jxr_linenumber" name="L246" href="#L246">246</a> 		assertEquals(Json5.to(<span class="jxr_string">"{window:{params:{start:'from',end:'to'}}}"</span>, Map.<strong class="jxr_keyword">class</strong>), w.get(<span class="jxr_string">"urlState"</span>));
+<a class="jxr_linenumber" name="L247" href="#L247">247</a> 		assertEquals(Map.of(<span class="jxr_string">"day"</span>, Map.of(<span class="jxr_string">"param"</span>, <span class="jxr_string">"on"</span>)), minimal().urlState(<span class="jxr_string">"day"</span>, Map.of(<span class="jxr_string">"param"</span>, <span class="jxr_string">"on"</span>)).toCardBody().get(<span class="jxr_string">"urlState"</span>));
+<a class="jxr_linenumber" name="L248" href="#L248">248</a> 	}
+<a class="jxr_linenumber" name="L249" href="#L249">249</a> 
+<a class="jxr_linenumber" name="L250" href="#L250">250</a> 	@Test <strong class="jxr_keyword">void</strong> b02h_urlStateConfig_mergesIntoExistingEntry_keepsFirstMentionPosition() {
+<a class="jxr_linenumber" name="L251" href="#L251">251</a> 		<strong class="jxr_keyword">var</strong> body = minimal().urlState(<span class="jxr_string">"ids"</span>, <span class="jxr_string">"day"</span>).urlState(<span class="jxr_string">"ids"</span>, Map.of(<span class="jxr_string">"param"</span>, <span class="jxr_string">"a"</span>)).urlState(<span class="jxr_string">"ids"</span>, Map.of(<span class="jxr_string">"max"</span>, 5)).urlState(<span class="jxr_string">"ids"</span>, Map.of(<span class="jxr_string">"param"</span>, <span class="jxr_string">"b"</span>)).toCardBody();
+<a class="jxr_linenumber" name="L252" href="#L252">252</a> 		assertEquals(Map.of(<span class="jxr_string">"ids"</span>, Map.of(<span class="jxr_string">"param"</span>, <span class="jxr_string">"b"</span>, <span class="jxr_string">"max"</span>, 5), <span class="jxr_string">"day"</span>, Map.of()), body.get(<span class="jxr_string">"urlState"</span>));
+<a class="jxr_linenumber" name="L253" href="#L253">253</a> 		assertEquals(List.of(<span class="jxr_string">"ids"</span>, <span class="jxr_string">"day"</span>), List.copyOf(((Map&lt;?,?&gt;)body.get(<span class="jxr_string">"urlState"</span>)).keySet()));
+<a class="jxr_linenumber" name="L254" href="#L254">254</a> 		<em class="jxr_comment">// A later plain mention never clears it, and day shares the entry with urlStateDayParam.</em>
+<a class="jxr_linenumber" name="L255" href="#L255">255</a> 		<strong class="jxr_keyword">var</strong> d = minimal().urlStateDayParam(<span class="jxr_string">"on"</span>).urlState(<span class="jxr_string">"day"</span>, Map.of()).urlState(<span class="jxr_string">"day"</span>).toCardBody();
+<a class="jxr_linenumber" name="L256" href="#L256">256</a> 		assertEquals(Map.of(<span class="jxr_string">"day"</span>, Map.of(<span class="jxr_string">"param"</span>, <span class="jxr_string">"on"</span>)), d.get(<span class="jxr_string">"urlState"</span>));
+<a class="jxr_linenumber" name="L257" href="#L257">257</a> 		<strong class="jxr_keyword">var</strong> wp = minimal().urlState(<span class="jxr_string">"window"</span>, Map.of(<span class="jxr_string">"params"</span>, Map.of(<span class="jxr_string">"start"</span>, <span class="jxr_string">"from"</span>))).urlState(<span class="jxr_string">"window"</span>, Map.of(<span class="jxr_string">"params"</span>, Map.of(<span class="jxr_string">"end"</span>, <span class="jxr_string">"to"</span>))).toCardBody();
+<a class="jxr_linenumber" name="L258" href="#L258">258</a> 		assertEquals(Map.of(<span class="jxr_string">"window"</span>, Map.of(<span class="jxr_string">"params"</span>, Map.of(<span class="jxr_string">"start"</span>, <span class="jxr_string">"from"</span>, <span class="jxr_string">"end"</span>, <span class="jxr_string">"to"</span>))), wp.get(<span class="jxr_string">"urlState"</span>));
+<a class="jxr_linenumber" name="L259" href="#L259">259</a> 		<em class="jxr_comment">// New names are appended after existing ones.</em>
+<a class="jxr_linenumber" name="L260" href="#L260">260</a> 		assertEquals(List.of(<span class="jxr_string">"day"</span>, <span class="jxr_string">"ids"</span>), List.copyOf(((Map&lt;?,?&gt;)minimal().urlState(<span class="jxr_string">"day"</span>).urlState(<span class="jxr_string">"ids"</span>, Map.of(<span class="jxr_string">"max"</span>, 3)).toCardBody().get(<span class="jxr_string">"urlState"</span>)).keySet()));
+<a class="jxr_linenumber" name="L261" href="#L261">261</a> 	}
+<a class="jxr_linenumber" name="L262" href="#L262">262</a> 
+<a class="jxr_linenumber" name="L263" href="#L263">263</a> 	@Test <strong class="jxr_keyword">void</strong> b02i_urlStateConfig_refusesInvalidOptions() {
+<a class="jxr_linenumber" name="L264" href="#L264">264</a> 		<strong class="jxr_keyword">var</strong> t = minimal();
+<a class="jxr_linenumber" name="L265" href="#L265">265</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> bad : List.&lt;Map&lt;String,Object&gt;&gt;of(
+<a class="jxr_linenumber" name="L266" href="#L266">266</a> 			Map.of(<span class="jxr_string">"bogus"</span>, 1), Map.of(<span class="jxr_string">"param"</span>, <span class="jxr_string">""</span>), Map.of(<span class="jxr_string">"param"</span>, <span class="jxr_string">"a&amp;b"</span>), Map.of(<span class="jxr_string">"param"</span>, 5), Map.of(<span class="jxr_string">"param"</span>, <span class="jxr_string">"1x"</span>),
+<a class="jxr_linenumber" name="L267" href="#L267">267</a> 			Map.of(<span class="jxr_string">"max"</span>, 0), Map.of(<span class="jxr_string">"max"</span>, -1), Map.of(<span class="jxr_string">"max"</span>, 1.5), Map.of(<span class="jxr_string">"max"</span>, <span class="jxr_string">"50"</span>), Map.of(<span class="jxr_string">"max"</span>, 2.0)))
+<a class="jxr_linenumber" name="L268" href="#L268">268</a> 			assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; t.urlState(<span class="jxr_string">"ids"</span>, bad), <span class="jxr_string">"ids "</span> + bad);
+<a class="jxr_linenumber" name="L269" href="#L269">269</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> bad : List.&lt;Map&lt;String,Object&gt;&gt;of(
+<a class="jxr_linenumber" name="L270" href="#L270">270</a> 			Map.of(<span class="jxr_string">"param"</span>, <span class="jxr_string">"a b"</span>), Map.of(<span class="jxr_string">"param"</span>, <span class="jxr_string">"x"</span>.repeat(65)), Map.of(<span class="jxr_string">"max"</span>, 5), Map.of(<span class="jxr_string">"bogus"</span>, <span class="jxr_string">"x"</span>)))
+<a class="jxr_linenumber" name="L271" href="#L271">271</a> 			assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; t.urlState(<span class="jxr_string">"day"</span>, bad), <span class="jxr_string">"day "</span> + bad);
+<a class="jxr_linenumber" name="L272" href="#L272">272</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> bad : List.&lt;Map&lt;String,Object&gt;&gt;of(
+<a class="jxr_linenumber" name="L273" href="#L273">273</a> 			Map.of(<span class="jxr_string">"param"</span>, <span class="jxr_string">"x"</span>), Map.of(<span class="jxr_string">"params"</span>, <span class="jxr_string">"x"</span>), Map.of(<span class="jxr_string">"params"</span>, Map.of(<span class="jxr_string">"middle"</span>, <span class="jxr_string">"m"</span>)), Map.of(<span class="jxr_string">"params"</span>, Map.of(<span class="jxr_string">"start"</span>, <span class="jxr_string">""</span>)),
+<a class="jxr_linenumber" name="L274" href="#L274">274</a> 			Map.of(<span class="jxr_string">"params"</span>, Map.of(<span class="jxr_string">"end"</span>, <span class="jxr_string">"a&amp;b"</span>)), Map.of(<span class="jxr_string">"params"</span>, Map.of(<span class="jxr_string">"start"</span>, 1))))
+<a class="jxr_linenumber" name="L275" href="#L275">275</a> 			assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; t.urlState(<span class="jxr_string">"window"</span>, bad), <span class="jxr_string">"window "</span> + bad);
+<a class="jxr_linenumber" name="L276" href="#L276">276</a> 		Map&lt;String,Object&gt; arg2 = Map.of();
+<a class="jxr_linenumber" name="L277" href="#L277">277</a> 		assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; t.urlState(<span class="jxr_string">" "</span>, arg2));
+<a class="jxr_linenumber" name="L278" href="#L278">278</a> 		Map&lt;String,Object&gt; arg3 = Map.of();
+<a class="jxr_linenumber" name="L279" href="#L279">279</a> 		assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; t.urlState((String)<strong class="jxr_keyword">null</strong>, arg3));
+<a class="jxr_linenumber" name="L280" href="#L280">280</a> 		<strong class="jxr_keyword">var</strong> arg4 = (Map&lt;String,Object&gt;)<strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L281" href="#L281">281</a> 		assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; t.urlState(<span class="jxr_string">"ids"</span>, arg4));
+<a class="jxr_linenumber" name="L282" href="#L282">282</a> 		<em class="jxr_comment">// A refused call leaves nothing behind.</em>
+<a class="jxr_linenumber" name="L283" href="#L283">283</a> 		assertFalse(t.toCardBody().containsKey(<span class="jxr_string">"urlState"</span>));
+<a class="jxr_linenumber" name="L284" href="#L284">284</a> 		<strong class="jxr_keyword">var</strong> partial = minimal().urlState(<span class="jxr_string">"ids"</span>, Map.of(<span class="jxr_string">"param"</span>, <span class="jxr_string">"ok"</span>));
+<a class="jxr_linenumber" name="L285" href="#L285">285</a> 		Map&lt;String,Object&gt; invalid = Map.of(<span class="jxr_string">"param"</span>, <span class="jxr_string">"also-ok"</span>, <span class="jxr_string">"max"</span>, 0);
+<a class="jxr_linenumber" name="L286" href="#L286">286</a> 		assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; partial.urlState(<span class="jxr_string">"ids"</span>, invalid));
+<a class="jxr_linenumber" name="L287" href="#L287">287</a> 		assertEquals(Map.of(<span class="jxr_string">"ids"</span>, Map.of(<span class="jxr_string">"param"</span>, <span class="jxr_string">"ok"</span>)), partial.toCardBody().get(<span class="jxr_string">"urlState"</span>));
+<a class="jxr_linenumber" name="L288" href="#L288">288</a> 	}
+<a class="jxr_linenumber" name="L289" href="#L289">289</a> 
+<a class="jxr_linenumber" name="L290" href="#L290">290</a> 	@Test <strong class="jxr_keyword">void</strong> b02j_urlStateConfig_refusesNonBuiltInDirectives() {
+<a class="jxr_linenumber" name="L291" href="#L291">291</a> 		<strong class="jxr_keyword">var</strong> target4 = minimal();
+<a class="jxr_linenumber" name="L292" href="#L292">292</a> 		Map&lt;String,Object&gt; none = Map.of();
+<a class="jxr_linenumber" name="L293" href="#L293">293</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> name : List.of(<span class="jxr_string">"custom"</span>, <span class="jxr_string">"Day"</span>, <span class="jxr_string">"tab"</span>, <span class="jxr_string">"filter"</span>, <span class="jxr_string">"sort"</span>))
+<a class="jxr_linenumber" name="L294" href="#L294">294</a> 			assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; target4.urlState(name, none), name);
+<a class="jxr_linenumber" name="L295" href="#L295">295</a> 		<strong class="jxr_keyword">var</strong> target5 = minimal();
+<a class="jxr_linenumber" name="L296" href="#L296">296</a> 		Map&lt;String,Object&gt; arg = Map.of(<span class="jxr_string">"k"</span>, <span class="jxr_string">"v"</span>);
+<a class="jxr_linenumber" name="L297" href="#L297">297</a> 		assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; target5.urlState(<span class="jxr_string">"custom"</span>, arg));
+<a class="jxr_linenumber" name="L298" href="#L298">298</a> 		<em class="jxr_comment">// The names-only form refuses the same names, with the same message.</em>
+<a class="jxr_linenumber" name="L299" href="#L299">299</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> name : List.of(<span class="jxr_string">"custom"</span>, <span class="jxr_string">"Day"</span>, <span class="jxr_string">"tab"</span>, <span class="jxr_string">"filter"</span>, <span class="jxr_string">"sort"</span>)) {
+<a class="jxr_linenumber" name="L300" href="#L300">300</a> 			<strong class="jxr_keyword">var</strong> target6 = minimal();
+<a class="jxr_linenumber" name="L301" href="#L301">301</a> 			<strong class="jxr_keyword">var</strong> ex = assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; target6.urlState(name), name);
+<a class="jxr_linenumber" name="L302" href="#L302">302</a> 			assertEquals(<span class="jxr_string">"urlState '"</span> + name + <span class="jxr_string">"' is not a built-in directive; expected day, ids or window."</span>, ex.getMessage());
+<a class="jxr_linenumber" name="L303" href="#L303">303</a> 		}
+<a class="jxr_linenumber" name="L304" href="#L304">304</a> 		assertEquals(Map.of(<span class="jxr_string">"day"</span>, Map.of(), <span class="jxr_string">"ids"</span>, Map.of(), <span class="jxr_string">"window"</span>, Map.of()), minimal().urlState(<span class="jxr_string">"day"</span>, <span class="jxr_string">"ids"</span>, <span class="jxr_string">"window"</span>).toCardBody().get(<span class="jxr_string">"urlState"</span>));
+<a class="jxr_linenumber" name="L305" href="#L305">305</a> 	}
+<a class="jxr_linenumber" name="L306" href="#L306">306</a> 
+<a class="jxr_linenumber" name="L307" href="#L307">307</a> 	@Test <strong class="jxr_keyword">void</strong> b02j2_urlState_namesOnly_isAtomic() {
+<a class="jxr_linenumber" name="L308" href="#L308">308</a> 		<strong class="jxr_keyword">var</strong> t = minimal();
+<a class="jxr_linenumber" name="L309" href="#L309">309</a> 		assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; t.urlState(<span class="jxr_string">"ids"</span>, <span class="jxr_string">"bogus"</span>));
+<a class="jxr_linenumber" name="L310" href="#L310">310</a> 		assertNull(t.toCardBody().get(<span class="jxr_string">"urlState"</span>));
+<a class="jxr_linenumber" name="L311" href="#L311">311</a> 		assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; t.urlState(<span class="jxr_string">"ids"</span>, <span class="jxr_string">" "</span>));
+<a class="jxr_linenumber" name="L312" href="#L312">312</a> 		assertNull(t.toCardBody().get(<span class="jxr_string">"urlState"</span>));
+<a class="jxr_linenumber" name="L313" href="#L313">313</a> 		<strong class="jxr_keyword">var</strong> u = minimal().urlState(<span class="jxr_string">"day"</span>);
+<a class="jxr_linenumber" name="L314" href="#L314">314</a> 		assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; u.urlState(<span class="jxr_string">"ids"</span>, <span class="jxr_string">"window"</span>, <span class="jxr_string">"bogus"</span>));
+<a class="jxr_linenumber" name="L315" href="#L315">315</a> 		assertEquals(Map.of(<span class="jxr_string">"day"</span>, Map.of()), u.toCardBody().get(<span class="jxr_string">"urlState"</span>));
+<a class="jxr_linenumber" name="L316" href="#L316">316</a> 	}
+<a class="jxr_linenumber" name="L317" href="#L317">317</a> 
+<a class="jxr_linenumber" name="L318" href="#L318">318</a> 	@Test <strong class="jxr_keyword">void</strong> b02k_urlStateConfig_isDeepCopiedOnInputAndOnEmit() {
+<a class="jxr_linenumber" name="L319" href="#L319">319</a> 		<strong class="jxr_keyword">var</strong> params = <strong class="jxr_keyword">new</strong> java.util.HashMap&lt;String,Object&gt;();
+<a class="jxr_linenumber" name="L320" href="#L320">320</a> 		params.put(<span class="jxr_string">"start"</span>, <span class="jxr_string">"from"</span>);
+<a class="jxr_linenumber" name="L321" href="#L321">321</a> 		<strong class="jxr_keyword">var</strong> cfg = <strong class="jxr_keyword">new</strong> java.util.HashMap&lt;String,Object&gt;();
+<a class="jxr_linenumber" name="L322" href="#L322">322</a> 		cfg.put(<span class="jxr_string">"params"</span>, params);
+<a class="jxr_linenumber" name="L323" href="#L323">323</a> 		<strong class="jxr_keyword">var</strong> t = minimal().urlState(<span class="jxr_string">"window"</span>, cfg);
+<a class="jxr_linenumber" name="L324" href="#L324">324</a> 		params.put(<span class="jxr_string">"start"</span>, <span class="jxr_string">"mutated"</span>);
+<a class="jxr_linenumber" name="L325" href="#L325">325</a> 		params.put(<span class="jxr_string">"end"</span>, <span class="jxr_string">"extra"</span>);
+<a class="jxr_linenumber" name="L326" href="#L326">326</a> 		cfg.put(<span class="jxr_string">"bogus"</span>, 1);
+<a class="jxr_linenumber" name="L327" href="#L327">327</a> 		<strong class="jxr_keyword">var</strong> expected = Map.of(<span class="jxr_string">"window"</span>, Map.of(<span class="jxr_string">"params"</span>, Map.of(<span class="jxr_string">"start"</span>, <span class="jxr_string">"from"</span>)));
+<a class="jxr_linenumber" name="L328" href="#L328">328</a> 		assertEquals(expected, t.toCardBody().get(<span class="jxr_string">"urlState"</span>));
+<a class="jxr_linenumber" name="L329" href="#L329">329</a> 		<em class="jxr_comment">// Mutating what toCardBody() returned must not reach the spec's own state.</em>
+<a class="jxr_linenumber" name="L330" href="#L330">330</a> 		<strong class="jxr_keyword">var</strong> emitted = (Map&lt;String,Object&gt;)t.toCardBody().get(<span class="jxr_string">"urlState"</span>);
+<a class="jxr_linenumber" name="L331" href="#L331">331</a> 		((Map&lt;String,Object&gt;)((Map&lt;String,Object&gt;)emitted.get(<span class="jxr_string">"window"</span>)).get(<span class="jxr_string">"params"</span>)).put(<span class="jxr_string">"start"</span>, <span class="jxr_string">"emitted"</span>);
+<a class="jxr_linenumber" name="L332" href="#L332">332</a> 		((Map&lt;String,Object&gt;)emitted.get(<span class="jxr_string">"window"</span>)).put(<span class="jxr_string">"param"</span>, <span class="jxr_string">"x"</span>);
+<a class="jxr_linenumber" name="L333" href="#L333">333</a> 		assertEquals(expected, t.toCardBody().get(<span class="jxr_string">"urlState"</span>));
+<a class="jxr_linenumber" name="L334" href="#L334">334</a> 		<em class="jxr_comment">// Same for a flat config.</em>
+<a class="jxr_linenumber" name="L335" href="#L335">335</a> 		<strong class="jxr_keyword">var</strong> flat = <strong class="jxr_keyword">new</strong> java.util.HashMap&lt;String,Object&gt;();
+<a class="jxr_linenumber" name="L336" href="#L336">336</a> 		flat.put(<span class="jxr_string">"param"</span>, <span class="jxr_string">"pid"</span>);
+<a class="jxr_linenumber" name="L337" href="#L337">337</a> 		<strong class="jxr_keyword">var</strong> t2 = minimal().urlState(<span class="jxr_string">"ids"</span>, flat);
+<a class="jxr_linenumber" name="L338" href="#L338">338</a> 		flat.put(<span class="jxr_string">"param"</span>, <span class="jxr_string">"mutated"</span>);
+<a class="jxr_linenumber" name="L339" href="#L339">339</a> 		((Map&lt;String,Object&gt;)((Map&lt;String,Object&gt;)t2.toCardBody().get(<span class="jxr_string">"urlState"</span>)).get(<span class="jxr_string">"ids"</span>)).put(<span class="jxr_string">"param"</span>, <span class="jxr_string">"emitted"</span>);
+<a class="jxr_linenumber" name="L340" href="#L340">340</a> 		assertEquals(Map.of(<span class="jxr_string">"ids"</span>, Map.of(<span class="jxr_string">"param"</span>, <span class="jxr_string">"pid"</span>)), t2.toCardBody().get(<span class="jxr_string">"urlState"</span>));
+<a class="jxr_linenumber" name="L341" href="#L341">341</a> 	}
+<a class="jxr_linenumber" name="L342" href="#L342">342</a> 
+<a class="jxr_linenumber" name="L343" href="#L343">343</a> 	@Test <strong class="jxr_keyword">void</strong> b02l_urlStateConfig_windowParams_sameKeyLastWins_otherKeyKept() {
+<a class="jxr_linenumber" name="L344" href="#L344">344</a> 		<strong class="jxr_keyword">var</strong> body = minimal().urlState(<span class="jxr_string">"window"</span>, Map.of(<span class="jxr_string">"params"</span>, Map.of(<span class="jxr_string">"start"</span>, <span class="jxr_string">"from"</span>, <span class="jxr_string">"end"</span>, <span class="jxr_string">"to"</span>)))
+<a class="jxr_linenumber" name="L345" href="#L345">345</a> 			.urlState(<span class="jxr_string">"window"</span>, Map.of(<span class="jxr_string">"params"</span>, Map.of(<span class="jxr_string">"start"</span>, <span class="jxr_string">"FROM"</span>))).toCardBody();
+<a class="jxr_linenumber" name="L346" href="#L346">346</a> 		assertEquals(Map.of(<span class="jxr_string">"window"</span>, Map.of(<span class="jxr_string">"params"</span>, Map.of(<span class="jxr_string">"start"</span>, <span class="jxr_string">"FROM"</span>, <span class="jxr_string">"end"</span>, <span class="jxr_string">"to"</span>))), body.get(<span class="jxr_string">"urlState"</span>));
+<a class="jxr_linenumber" name="L347" href="#L347">347</a> 	}
+<a class="jxr_linenumber" name="L348" href="#L348">348</a> 
+<a class="jxr_linenumber" name="L349" href="#L349">349</a> 	@Test <strong class="jxr_keyword">void</strong> b02c_urlState_rejectsABlankName() {
+<a class="jxr_linenumber" name="L350" href="#L350">350</a> 		<strong class="jxr_keyword">var</strong> target7 = minimal();
+<a class="jxr_linenumber" name="L351" href="#L351">351</a> 		assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; target7.urlState(<span class="jxr_string">" "</span>));
+<a class="jxr_linenumber" name="L352" href="#L352">352</a> 		<strong class="jxr_keyword">var</strong> target8 = minimal();
+<a class="jxr_linenumber" name="L353" href="#L353">353</a> 		assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; target8.urlState((String)<strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L354" href="#L354">354</a> 	}
+<a class="jxr_linenumber" name="L355" href="#L355">355</a> 
+<a class="jxr_linenumber" name="L356" href="#L356">356</a> 	@Test <strong class="jxr_keyword">void</strong> b03_viewKeys_falseIsEmitted() {
+<a class="jxr_linenumber" name="L357" href="#L357">357</a> 		<strong class="jxr_keyword">var</strong> body = minimal().columnConfig(false).copyLink(false).cleanAddress(false).pausePollingWhileEditing(false).toCardBody();
+<a class="jxr_linenumber" name="L358" href="#L358">358</a> 		assertEquals(false, body.get(<span class="jxr_string">"columnConfig"</span>));
+<a class="jxr_linenumber" name="L359" href="#L359">359</a> 		assertEquals(false, body.get(<span class="jxr_string">"copyLink"</span>));
+<a class="jxr_linenumber" name="L360" href="#L360">360</a> 		assertEquals(false, body.get(<span class="jxr_string">"cleanAddress"</span>));
+<a class="jxr_linenumber" name="L361" href="#L361">361</a> 		assertEquals(false, body.get(<span class="jxr_string">"pausePollingWhileEditing"</span>));
+<a class="jxr_linenumber" name="L362" href="#L362">362</a> 	}
+<a class="jxr_linenumber" name="L363" href="#L363">363</a> 
+<a class="jxr_linenumber" name="L364" href="#L364">364</a> 	@Test <strong class="jxr_keyword">void</strong> b04_columnConfig_objectForm() {
+<a class="jxr_linenumber" name="L365" href="#L365">365</a> 		<strong class="jxr_keyword">var</strong> body = minimal().columnConfig(Map.of(<span class="jxr_string">"chooser"</span>, <strong class="jxr_keyword">true</strong>)).toCardBody();
+<a class="jxr_linenumber" name="L366" href="#L366">366</a> 		assertPlain(body);
+<a class="jxr_linenumber" name="L367" href="#L367">367</a> 		assertEquals(Map.of(<span class="jxr_string">"chooser"</span>, <strong class="jxr_keyword">true</strong>), body.get(<span class="jxr_string">"columnConfig"</span>));
+<a class="jxr_linenumber" name="L368" href="#L368">368</a> 	}
+<a class="jxr_linenumber" name="L369" href="#L369">369</a> 
+<a class="jxr_linenumber" name="L370" href="#L370">370</a> 	@Test <strong class="jxr_keyword">void</strong> b05_columnConfig_nullOptionsRejected() {
+<a class="jxr_linenumber" name="L371" href="#L371">371</a> 		<strong class="jxr_keyword">var</strong> t = minimal();
+<a class="jxr_linenumber" name="L372" href="#L372">372</a> 		<strong class="jxr_keyword">var</strong> arg5 = (Map&lt;String,Object&gt;)<strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L373" href="#L373">373</a> 		assertThrows(NullPointerException.<strong class="jxr_keyword">class</strong>, () -&gt; t.columnConfig(arg5));
+<a class="jxr_linenumber" name="L374" href="#L374">374</a> 	}
+<a class="jxr_linenumber" name="L375" href="#L375">375</a> 
+<a class="jxr_linenumber" name="L376" href="#L376">376</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> assertPlain(Object o) {
+<a class="jxr_linenumber" name="L377" href="#L377">377</a> 		<strong class="jxr_keyword">if</strong> (o instanceof Map&lt;?,?&gt; m)
+<a class="jxr_linenumber" name="L378" href="#L378">378</a> 			m.values().forEach(TableSpec_ToCardBody_Test::assertPlain);
+<a class="jxr_linenumber" name="L379" href="#L379">379</a> 		<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (o instanceof List&lt;?&gt; l)
+<a class="jxr_linenumber" name="L380" href="#L380">380</a> 			l.forEach(TableSpec_ToCardBody_Test::assertPlain);
+<a class="jxr_linenumber" name="L381" href="#L381">381</a> 		<strong class="jxr_keyword">else</strong>
+<a class="jxr_linenumber" name="L382" href="#L382">382</a> 			assertTrue(o == <strong class="jxr_keyword">null</strong> || o instanceof String || o instanceof Number || o instanceof Boolean, String.valueOf(o));
+<a class="jxr_linenumber" name="L383" href="#L383">383</a> 	}
+<a class="jxr_linenumber" name="L384" href="#L384">384</a> }
+</pre>
+<hr/>
+<div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>
+</body>
+</html>

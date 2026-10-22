@@ -160,7 +160,7 @@
 <a class="jxr_linenumber" name="L152" href="#L152">152</a> 
 <a class="jxr_linenumber" name="L153" href="#L153">153</a> 		@RestStartCall
 <a class="jxr_linenumber" name="L154" href="#L154">154</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> stashWrongType(HttpServletRequest req) {
-<a class="jxr_linenumber" name="L155" href="#L155">155</a> 			req.setAttribute(RestServerConstants.PRINCIPAL_ATTR, <span class="jxr_string">"not-a-principal"</span>);
+<a class="jxr_linenumber" name="L155" href="#L155">155</a> 			req.setAttribute(<span class="jxr_string">"juneau.principal"</span>, <span class="jxr_string">"not-a-principal"</span>);
 <a class="jxr_linenumber" name="L156" href="#L156">156</a> 		}
 <a class="jxr_linenumber" name="L157" href="#L157">157</a> 
 <a class="jxr_linenumber" name="L158" href="#L158">158</a> 		@RestGet(path=<span class="jxr_string">"/me"</span>)

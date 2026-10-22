@@ -145,7 +145,7 @@
 <span class="source-line-no">132</span><span id="line-132">   }</span>
 <span class="source-line-no">133</span><span id="line-133"></span>
 <span class="source-line-no">134</span><span id="line-134">   /**</span>
-<span class="source-line-no">135</span><span id="line-135">    * OAuth 2.1 resource-server bearer gate for the mixin's MCP {@code POST /mcp} endpoint (READY-312f F2).</span>
+<span class="source-line-no">135</span><span id="line-135">    * OAuth 2.1 resource-server bearer gate for the mixin's MCP {@code POST /mcp} endpoint.</span>
 <span class="source-line-no">136</span><span id="line-136">    *</span>
 <span class="source-line-no">137</span><span id="line-137">    * &lt;p&gt;</span>
 <span class="source-line-no">138</span><span id="line-138">    * A no-op unless {@link McpResourceServerConfig#isEnabled() RS auth is enabled}; when enabled, a request that</span>
@@ -154,8 +154,8 @@
 <span class="source-line-no">141</span><span id="line-141">    * the MCP dispatch &lt;i&gt;operation&lt;/i&gt; (identified by resolved-operation identity, or by that operation's own router</span>
 <span class="source-line-no">142</span><span id="line-142">    * matchers &amp;mdash; see {@link McpResourceServerSupport#resolvesToMcpDispatch}) so other {@code POST} operations on the</span>
 <span class="source-line-no">143</span><span id="line-143">    * host resource are unaffected, and it cannot drift from the router: a trailing slash, percent-encoding, a</span>
-<span class="source-line-no">144</span><span id="line-144">    * {@code ?method=}/{@code X-Method} override, or a host-chosen {@code @Mixin(path/paths)} re-mount cannot slip past it</span>
-<span class="source-line-no">145</span><span id="line-145">    * (B1/H3).  The well-known {@code GET} routes are left unauthenticated for PRM discovery.</span>
+<span class="source-line-no">144</span><span id="line-144">    * {@code POST} claim on any override channel ({@code ?method=} or an override header), or a host-chosen {@code @Mixin(path/paths)} re-mount cannot slip past it</span>
+<span class="source-line-no">145</span><span id="line-145">    *.  The well-known {@code GET} routes are left unauthenticated for PRM discovery.</span>
 <span class="source-line-no">146</span><span id="line-146">    *</span>
 <span class="source-line-no">147</span><span id="line-147">    * @param ctx The host {@link org.apache.juneau.rest.server.RestContext} handling this request.</span>
 <span class="source-line-no">148</span><span id="line-148">    * @param req The raw HTTP request.</span>
@@ -172,7 +172,7 @@
 <span class="source-line-no">159</span><span id="line-159">    * &lt;p&gt;</span>
 <span class="source-line-no">160</span><span id="line-160">    * This route (and its path-inserted sibling) is registered unconditionally, but returns {@code 404} whenever RS auth</span>
 <span class="source-line-no">161</span><span id="line-161">    * is {@link McpResourceServerConfig#isEnabled() disabled} &amp;mdash; so a non-opted-in endpoint claims the well-known</span>
-<span class="source-line-no">162</span><span id="line-162">    * namespace but exposes no observable metadata (READY-312f F2, M7).</span>
+<span class="source-line-no">162</span><span id="line-162">    * namespace but exposes no observable metadata.</span>
 <span class="source-line-no">163</span><span id="line-163">    *</span>
 <span class="source-line-no">164</span><span id="line-164">    * @param req The REST request.</span>
 <span class="source-line-no">165</span><span id="line-165">    * @return The PRM document.</span>
@@ -184,7 +184,7 @@
 <span class="source-line-no">171</span><span id="line-171"></span>
 <span class="source-line-no">172</span><span id="line-172">   /**</span>
 <span class="source-line-no">173</span><span id="line-173">    * Serves the RFC 9728 Protected Resource Metadata document at the path-inserted well-known location (SEP-2351), but</span>
-<span class="source-line-no">174</span><span id="line-174">    * only when the requested suffix matches this resource's expected well-known path; otherwise {@code 404} (M5).</span>
+<span class="source-line-no">174</span><span id="line-174">    * only when the requested suffix matches this resource's expected well-known path; otherwise {@code 404}.</span>
 <span class="source-line-no">175</span><span id="line-175">    *</span>
 <span class="source-line-no">176</span><span id="line-176">    * @param req The REST request.</span>
 <span class="source-line-no">177</span><span id="line-177">    * @return The PRM document.</span>

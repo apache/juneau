@@ -30,7 +30,7 @@
 <a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> java.util.function.*;
 <a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> java.util.logging.*;
 <a class="jxr_linenumber" name="L24" href="#L24">24</a>  
-<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.commons.logging.Logger;
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.commons.logging.RichLogger;
 <a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.http.response.*;
 <a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.server.*;
 <a class="jxr_linenumber" name="L28" href="#L28">28</a>  
@@ -158,7 +158,7 @@
 <a class="jxr_linenumber" name="L150" href="#L150">150</a> 		<strong class="jxr_keyword">var</strong> c = context.get();
 <a class="jxr_linenumber" name="L151" href="#L151">151</a> 		<strong class="jxr_keyword">var</strong> logger = c == <strong class="jxr_keyword">null</strong> ? <strong class="jxr_keyword">null</strong> : c.getLogger();
 <a class="jxr_linenumber" name="L152" href="#L152">152</a> 		<strong class="jxr_keyword">if</strong> (logger == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L153" href="#L153">153</a> 			logger = Logger.getLogger(cn(<strong class="jxr_keyword">this</strong>));
+<a class="jxr_linenumber" name="L153" href="#L153">153</a> 			logger = RichLogger.getLogger(cn(<strong class="jxr_keyword">this</strong>));
 <a class="jxr_linenumber" name="L154" href="#L154">154</a> 		logger.log(level, cause, msg);
 <a class="jxr_linenumber" name="L155" href="#L155">155</a> 	}
 <a class="jxr_linenumber" name="L156" href="#L156">156</a> 

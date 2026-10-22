@@ -129,123 +129,158 @@
 <a class="jxr_linenumber" name="L121" href="#L121">121</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L122" href="#L122">122</a> 	}
 <a class="jxr_linenumber" name="L123" href="#L123">123</a> 
-<a class="jxr_linenumber" name="L124" href="#L124">124</a> 	<em class="jxr_javadoccomment">/** Parses the cookie value out of a {@code Set-Cookie} header (the bit between {@code =} and the first {@code ;}). */</em>
-<a class="jxr_linenumber" name="L125" href="#L125">125</a> 	<strong class="jxr_keyword">static</strong> String cookieValue(String setCookieHeader) {
-<a class="jxr_linenumber" name="L126" href="#L126">126</a> 		<strong class="jxr_keyword">if</strong> (setCookieHeader == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L124" href="#L124">124</a> 	<em class="jxr_javadoccomment">/** Extracts a single {@code application/x-www-form-urlencoded} field value from a request body (URL-decoded). */</em>
+<a class="jxr_linenumber" name="L125" href="#L125">125</a> 	<strong class="jxr_keyword">static</strong> String formField(String body, String name) {
+<a class="jxr_linenumber" name="L126" href="#L126">126</a> 		<strong class="jxr_keyword">if</strong> (body == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L127" href="#L127">127</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L128" href="#L128">128</a> 		<strong class="jxr_keyword">var</strong> eq = setCookieHeader.indexOf('=');
-<a class="jxr_linenumber" name="L129" href="#L129">129</a> 		<strong class="jxr_keyword">var</strong> semi = setCookieHeader.indexOf(';');
-<a class="jxr_linenumber" name="L130" href="#L130">130</a> 		<strong class="jxr_keyword">return</strong> setCookieHeader.substring(eq + 1, semi &lt; 0 ? setCookieHeader.length() : semi);
-<a class="jxr_linenumber" name="L131" href="#L131">131</a> 	}
-<a class="jxr_linenumber" name="L132" href="#L132">132</a> 
-<a class="jxr_linenumber" name="L133" href="#L133">133</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L134" href="#L134">134</a> <em class="jxr_javadoccomment">	 * In-JVM stub IdP exposing a {@code /token} and {@code /userinfo} endpoint over loopback.</em>
-<a class="jxr_linenumber" name="L135" href="#L135">135</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L136" href="#L136">136</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L137" href="#L137">137</a> <em class="jxr_javadoccomment">	 * The {@code /token} response is driven by mutable fields the test sets between flow steps (the ID</em>
-<a class="jxr_linenumber" name="L138" href="#L138">138</a> <em class="jxr_javadoccomment">	 * token must echo the nonce the relying party generated, which is only known after {@code startLogin}).</em>
-<a class="jxr_linenumber" name="L139" href="#L139">139</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L140" href="#L140">140</a> 	<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">class</strong> StubIdp <strong class="jxr_keyword">implements</strong> AutoCloseable {
-<a class="jxr_linenumber" name="L141" href="#L141">141</a> 
-<a class="jxr_linenumber" name="L142" href="#L142">142</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> HttpServer server;
-<a class="jxr_linenumber" name="L143" href="#L143">143</a> 		<strong class="jxr_keyword">final</strong> String issuer = <span class="jxr_string">"https://stub-idp.example.com"</span>;
-<a class="jxr_linenumber" name="L144" href="#L144">144</a> 
-<a class="jxr_linenumber" name="L145" href="#L145">145</a> 		<em class="jxr_javadoccomment">/** The ID token returned by the next {@code /token} call. */</em>
-<a class="jxr_linenumber" name="L146" href="#L146">146</a> 		<strong class="jxr_keyword">volatile</strong> String idToken;
-<a class="jxr_linenumber" name="L147" href="#L147">147</a> 		<em class="jxr_javadoccomment">/** The refresh token returned by an authorization-code {@code /token} call. */</em>
-<a class="jxr_linenumber" name="L148" href="#L148">148</a> 		<strong class="jxr_keyword">volatile</strong> String refreshToken = <span class="jxr_string">"rt-1"</span>;
-<a class="jxr_linenumber" name="L149" href="#L149">149</a> 		<em class="jxr_javadoccomment">/** The refresh token returned by a refresh-grant {@code /token} call (rotation). */</em>
-<a class="jxr_linenumber" name="L150" href="#L150">150</a> 		<strong class="jxr_keyword">volatile</strong> String rotatedRefreshToken = <span class="jxr_string">"rt-2"</span>;
-<a class="jxr_linenumber" name="L151" href="#L151">151</a> 		<em class="jxr_javadoccomment">/** When true, the {@code /token} endpoint returns an error (simulates revoked / reused refresh token). */</em>
-<a class="jxr_linenumber" name="L152" href="#L152">152</a> 		<strong class="jxr_keyword">volatile</strong> <strong class="jxr_keyword">boolean</strong> failToken;
-<a class="jxr_linenumber" name="L153" href="#L153">153</a> 		<em class="jxr_javadoccomment">/** When true, the {@code /userinfo} endpoint returns 401 (simulates a non-success UserInfo response). */</em>
-<a class="jxr_linenumber" name="L154" href="#L154">154</a> 		<strong class="jxr_keyword">volatile</strong> <strong class="jxr_keyword">boolean</strong> userInfoFail;
-<a class="jxr_linenumber" name="L155" href="#L155">155</a> 		<em class="jxr_javadoccomment">/** Extra claims served by {@code /userinfo}. */</em>
-<a class="jxr_linenumber" name="L156" href="#L156">156</a> 		<strong class="jxr_keyword">volatile</strong> Map&lt;String,Object&gt; userInfo = <strong class="jxr_keyword">new</strong> LinkedHashMap&lt;&gt;();
+<a class="jxr_linenumber" name="L128" href="#L128">128</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> pair : body.split(<span class="jxr_string">"&amp;"</span>)) {
+<a class="jxr_linenumber" name="L129" href="#L129">129</a> 			<strong class="jxr_keyword">var</strong> i = pair.indexOf('=');
+<a class="jxr_linenumber" name="L130" href="#L130">130</a> 			<strong class="jxr_keyword">var</strong> k = i &lt; 0 ? pair : pair.substring(0, i);
+<a class="jxr_linenumber" name="L131" href="#L131">131</a> 			<strong class="jxr_keyword">if</strong> (k.equals(name))
+<a class="jxr_linenumber" name="L132" href="#L132">132</a> 				<strong class="jxr_keyword">return</strong> i &lt; 0 ? <span class="jxr_string">""</span> : URLDecoder.decode(pair.substring(i + 1), StandardCharsets.UTF_8);
+<a class="jxr_linenumber" name="L133" href="#L133">133</a> 		}
+<a class="jxr_linenumber" name="L134" href="#L134">134</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L135" href="#L135">135</a> 	}
+<a class="jxr_linenumber" name="L136" href="#L136">136</a> 
+<a class="jxr_linenumber" name="L137" href="#L137">137</a> 	<em class="jxr_javadoccomment">/** Parses the cookie value out of a {@code Set-Cookie} header (the bit between {@code =} and the first {@code ;}). */</em>
+<a class="jxr_linenumber" name="L138" href="#L138">138</a> 	<strong class="jxr_keyword">static</strong> String cookieValue(String setCookieHeader) {
+<a class="jxr_linenumber" name="L139" href="#L139">139</a> 		<strong class="jxr_keyword">if</strong> (setCookieHeader == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L140" href="#L140">140</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L141" href="#L141">141</a> 		<strong class="jxr_keyword">var</strong> eq = setCookieHeader.indexOf('=');
+<a class="jxr_linenumber" name="L142" href="#L142">142</a> 		<strong class="jxr_keyword">var</strong> semi = setCookieHeader.indexOf(';');
+<a class="jxr_linenumber" name="L143" href="#L143">143</a> 		<strong class="jxr_keyword">return</strong> setCookieHeader.substring(eq + 1, semi &lt; 0 ? setCookieHeader.length() : semi);
+<a class="jxr_linenumber" name="L144" href="#L144">144</a> 	}
+<a class="jxr_linenumber" name="L145" href="#L145">145</a> 
+<a class="jxr_linenumber" name="L146" href="#L146">146</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L147" href="#L147">147</a> <em class="jxr_javadoccomment">	 * In-JVM stub IdP exposing a {@code /token} and {@code /userinfo} endpoint over loopback.</em>
+<a class="jxr_linenumber" name="L148" href="#L148">148</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L149" href="#L149">149</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L150" href="#L150">150</a> <em class="jxr_javadoccomment">	 * The {@code /token} response is driven by mutable fields the test sets between flow steps (the ID</em>
+<a class="jxr_linenumber" name="L151" href="#L151">151</a> <em class="jxr_javadoccomment">	 * token must echo the nonce the relying party generated, which is only known after {@code startLogin}).</em>
+<a class="jxr_linenumber" name="L152" href="#L152">152</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L153" href="#L153">153</a> 	<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">class</strong> StubIdp <strong class="jxr_keyword">implements</strong> AutoCloseable {
+<a class="jxr_linenumber" name="L154" href="#L154">154</a> 
+<a class="jxr_linenumber" name="L155" href="#L155">155</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> HttpServer server;
+<a class="jxr_linenumber" name="L156" href="#L156">156</a> 		<strong class="jxr_keyword">final</strong> String issuer = <span class="jxr_string">"https://stub-idp.example.com"</span>;
 <a class="jxr_linenumber" name="L157" href="#L157">157</a> 
-<a class="jxr_linenumber" name="L158" href="#L158">158</a> 		StubIdp() <strong class="jxr_keyword">throws</strong> IOException {
-<a class="jxr_linenumber" name="L159" href="#L159">159</a> 			server = HttpServer.create(<strong class="jxr_keyword">new</strong> InetSocketAddress(InetAddress.getLoopbackAddress(), 0), 0);
-<a class="jxr_linenumber" name="L160" href="#L160">160</a> 			server.createContext(<span class="jxr_string">"/token"</span>, <strong class="jxr_keyword">this</strong>::handleToken);
-<a class="jxr_linenumber" name="L161" href="#L161">161</a> 			server.createContext(<span class="jxr_string">"/userinfo"</span>, <strong class="jxr_keyword">this</strong>::handleUserInfo);
-<a class="jxr_linenumber" name="L162" href="#L162">162</a> 			server.start();
-<a class="jxr_linenumber" name="L163" href="#L163">163</a> 		}
-<a class="jxr_linenumber" name="L164" href="#L164">164</a> 
-<a class="jxr_linenumber" name="L165" href="#L165">165</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> handleToken(HttpExchange ex) <strong class="jxr_keyword">throws</strong> IOException {
-<a class="jxr_linenumber" name="L166" href="#L166">166</a> 			<strong class="jxr_keyword">var</strong> body = <strong class="jxr_keyword">new</strong> String(ex.getRequestBody().readAllBytes(), StandardCharsets.UTF_8);
-<a class="jxr_linenumber" name="L167" href="#L167">167</a> 			<strong class="jxr_keyword">if</strong> (failToken) {
-<a class="jxr_linenumber" name="L168" href="#L168">168</a> 				writeJson(ex, 400, <span class="jxr_string">"{\&quot;error\&quot;:\&quot;invalid_grant\&quot;}"</span>);
-<a class="jxr_linenumber" name="L169" href="#L169">169</a> 				<strong class="jxr_keyword">return</strong>;
-<a class="jxr_linenumber" name="L170" href="#L170">170</a> 			}
-<a class="jxr_linenumber" name="L171" href="#L171">171</a> 			<strong class="jxr_keyword">var</strong> isRefresh = body.contains(<span class="jxr_string">"grant_type=refresh_token"</span>);
-<a class="jxr_linenumber" name="L172" href="#L172">172</a> 			<strong class="jxr_keyword">var</strong> rt = isRefresh ? rotatedRefreshToken : refreshToken;
-<a class="jxr_linenumber" name="L173" href="#L173">173</a> 			<strong class="jxr_keyword">var</strong> json = <strong class="jxr_keyword">new</strong> StringBuilder(<span class="jxr_string">"{"</span>)
-<a class="jxr_linenumber" name="L174" href="#L174">174</a> 				.append(<span class="jxr_string">"\&quot;access_token\&quot;:\&quot;at-"</span>).append(isRefresh ? <span class="jxr_string">"refreshed"</span> : <span class="jxr_string">"initial"</span>).append(<span class="jxr_string">"\&quot;,"</span>)
-<a class="jxr_linenumber" name="L175" href="#L175">175</a> 				.append(<span class="jxr_string">"\&quot;token_type\&quot;:\&quot;Bearer\&quot;,"</span>)
-<a class="jxr_linenumber" name="L176" href="#L176">176</a> 				.append(<span class="jxr_string">"\&quot;expires_in\&quot;:3600,"</span>);
-<a class="jxr_linenumber" name="L177" href="#L177">177</a> 			<strong class="jxr_keyword">if</strong> (rt != <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L178" href="#L178">178</a> 				json.append(<span class="jxr_string">"\&quot;refresh_token\&quot;:\&quot;"</span>).append(rt).append(<span class="jxr_string">"\&quot;,"</span>);
-<a class="jxr_linenumber" name="L179" href="#L179">179</a> 			<strong class="jxr_keyword">if</strong> (idToken != <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L180" href="#L180">180</a> 				json.append(<span class="jxr_string">"\&quot;id_token\&quot;:\&quot;"</span>).append(idToken).append(<span class="jxr_string">"\&quot;,"</span>);
-<a class="jxr_linenumber" name="L181" href="#L181">181</a> 			json.append(<span class="jxr_string">"\&quot;scope\&quot;:\&quot;openid profile\&quot;}"</span>);
-<a class="jxr_linenumber" name="L182" href="#L182">182</a> 			writeJson(ex, 200, json.toString());
-<a class="jxr_linenumber" name="L183" href="#L183">183</a> 		}
-<a class="jxr_linenumber" name="L184" href="#L184">184</a> 
-<a class="jxr_linenumber" name="L185" href="#L185">185</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> handleUserInfo(HttpExchange ex) <strong class="jxr_keyword">throws</strong> IOException {
-<a class="jxr_linenumber" name="L186" href="#L186">186</a> 			<strong class="jxr_keyword">if</strong> (userInfoFail) {
-<a class="jxr_linenumber" name="L187" href="#L187">187</a> 				writeJson(ex, 401, <span class="jxr_string">"{\&quot;error\&quot;:\&quot;invalid_token\&quot;}"</span>);
-<a class="jxr_linenumber" name="L188" href="#L188">188</a> 				<strong class="jxr_keyword">return</strong>;
-<a class="jxr_linenumber" name="L189" href="#L189">189</a> 			}
-<a class="jxr_linenumber" name="L190" href="#L190">190</a> 			<strong class="jxr_keyword">var</strong> sb = <strong class="jxr_keyword">new</strong> StringBuilder(<span class="jxr_string">"{\&quot;sub\&quot;:\&quot;alice\&quot;"</span>);
-<a class="jxr_linenumber" name="L191" href="#L191">191</a> 			userInfo.forEach((k, v) -&gt; sb.append(<span class="jxr_string">",\&quot;"</span>).append(k).append(<span class="jxr_string">"\&quot;:\&quot;"</span>).append(v).append(<span class="jxr_string">"\&quot;"</span>));
-<a class="jxr_linenumber" name="L192" href="#L192">192</a> 			sb.append(<span class="jxr_string">"}"</span>);
-<a class="jxr_linenumber" name="L193" href="#L193">193</a> 			writeJson(ex, 200, sb.toString());
-<a class="jxr_linenumber" name="L194" href="#L194">194</a> 		}
-<a class="jxr_linenumber" name="L195" href="#L195">195</a> 
-<a class="jxr_linenumber" name="L196" href="#L196">196</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> writeJson(HttpExchange ex, <strong class="jxr_keyword">int</strong> status, String body) <strong class="jxr_keyword">throws</strong> IOException {
-<a class="jxr_linenumber" name="L197" href="#L197">197</a> 			<strong class="jxr_keyword">var</strong> bytes = body.getBytes(StandardCharsets.UTF_8);
-<a class="jxr_linenumber" name="L198" href="#L198">198</a> 			ex.getResponseHeaders().add(<span class="jxr_string">"Content-Type"</span>, <span class="jxr_string">"application/json"</span>);
-<a class="jxr_linenumber" name="L199" href="#L199">199</a> 			ex.sendResponseHeaders(status, bytes.length);
-<a class="jxr_linenumber" name="L200" href="#L200">200</a> 			<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> os = ex.getResponseBody()) {
-<a class="jxr_linenumber" name="L201" href="#L201">201</a> 				os.write(bytes);
-<a class="jxr_linenumber" name="L202" href="#L202">202</a> 			}
-<a class="jxr_linenumber" name="L203" href="#L203">203</a> 		}
-<a class="jxr_linenumber" name="L204" href="#L204">204</a> 
-<a class="jxr_linenumber" name="L205" href="#L205">205</a> 		<strong class="jxr_keyword">int</strong> port() {
-<a class="jxr_linenumber" name="L206" href="#L206">206</a> 			<strong class="jxr_keyword">return</strong> server.getAddress().getPort();
-<a class="jxr_linenumber" name="L207" href="#L207">207</a> 		}
-<a class="jxr_linenumber" name="L208" href="#L208">208</a> 
-<a class="jxr_linenumber" name="L209" href="#L209">209</a> 		URI baseUri() {
-<a class="jxr_linenumber" name="L210" href="#L210">210</a> 			<strong class="jxr_keyword">return</strong> URI.create(<span class="jxr_string">"http://127.0.0.1:"</span> + port());
-<a class="jxr_linenumber" name="L211" href="#L211">211</a> 		}
-<a class="jxr_linenumber" name="L212" href="#L212">212</a> 
-<a class="jxr_linenumber" name="L213" href="#L213">213</a> 		URI tokenEndpoint() {
-<a class="jxr_linenumber" name="L214" href="#L214">214</a> 			<strong class="jxr_keyword">return</strong> URI.create(baseUri() + <span class="jxr_string">"/token"</span>);
-<a class="jxr_linenumber" name="L215" href="#L215">215</a> 		}
-<a class="jxr_linenumber" name="L216" href="#L216">216</a> 
-<a class="jxr_linenumber" name="L217" href="#L217">217</a> 		URI userinfoEndpoint() {
-<a class="jxr_linenumber" name="L218" href="#L218">218</a> 			<strong class="jxr_keyword">return</strong> URI.create(baseUri() + <span class="jxr_string">"/userinfo"</span>);
+<a class="jxr_linenumber" name="L158" href="#L158">158</a> 		<em class="jxr_javadoccomment">/** The ID token returned by the next {@code /token} call. */</em>
+<a class="jxr_linenumber" name="L159" href="#L159">159</a> 		<strong class="jxr_keyword">volatile</strong> String idToken;
+<a class="jxr_linenumber" name="L160" href="#L160">160</a> 		<em class="jxr_javadoccomment">/** The refresh token returned by an authorization-code {@code /token} call. */</em>
+<a class="jxr_linenumber" name="L161" href="#L161">161</a> 		<strong class="jxr_keyword">volatile</strong> String refreshToken = <span class="jxr_string">"rt-1"</span>;
+<a class="jxr_linenumber" name="L162" href="#L162">162</a> 		<em class="jxr_javadoccomment">/** The refresh token returned by a refresh-grant {@code /token} call (rotation). */</em>
+<a class="jxr_linenumber" name="L163" href="#L163">163</a> 		<strong class="jxr_keyword">volatile</strong> String rotatedRefreshToken = <span class="jxr_string">"rt-2"</span>;
+<a class="jxr_linenumber" name="L164" href="#L164">164</a> 		<em class="jxr_javadoccomment">/** When true, the {@code /token} endpoint returns an error (simulates revoked / reused refresh token). */</em>
+<a class="jxr_linenumber" name="L165" href="#L165">165</a> 		<strong class="jxr_keyword">volatile</strong> <strong class="jxr_keyword">boolean</strong> failToken;
+<a class="jxr_linenumber" name="L166" href="#L166">166</a> 		<em class="jxr_javadoccomment">/** When true, the {@code /userinfo} endpoint returns 401 (simulates a non-success UserInfo response). */</em>
+<a class="jxr_linenumber" name="L167" href="#L167">167</a> 		<strong class="jxr_keyword">volatile</strong> <strong class="jxr_keyword">boolean</strong> userInfoFail;
+<a class="jxr_linenumber" name="L168" href="#L168">168</a> 		<em class="jxr_javadoccomment">/** Extra claims served by {@code /userinfo}. */</em>
+<a class="jxr_linenumber" name="L169" href="#L169">169</a> 		<strong class="jxr_keyword">volatile</strong> Map&lt;String,Object&gt; userInfo = <strong class="jxr_keyword">new</strong> LinkedHashMap&lt;&gt;();
+<a class="jxr_linenumber" name="L170" href="#L170">170</a> 		<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L171" href="#L171">171</a> <em class="jxr_javadoccomment">		 * Number of times {@code /token} was invoked.  An ordering proof for the expiry ceiling: a rejected {@code completeLogin}</em>
+<a class="jxr_linenumber" name="L172" href="#L172">172</a> <em class="jxr_javadoccomment">		 * that never reaches {@code codeFlow().exchange} leaves this at {@code 0}.</em>
+<a class="jxr_linenumber" name="L173" href="#L173">173</a> <em class="jxr_javadoccomment">		 */</em>
+<a class="jxr_linenumber" name="L174" href="#L174">174</a> 		<strong class="jxr_keyword">final</strong> java.util.concurrent.atomic.AtomicInteger tokenHits = <strong class="jxr_keyword">new</strong> java.util.concurrent.atomic.AtomicInteger();
+<a class="jxr_linenumber" name="L175" href="#L175">175</a> 		<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L176" href="#L176">176</a> <em class="jxr_javadoccomment">		 * The PKCE {@code code_verifier} observed on the most recent {@code /token} call.  Record-only &amp;mdash; the</em>
+<a class="jxr_linenumber" name="L177" href="#L177">177</a> <em class="jxr_javadoccomment">		 * stub still succeeds with any verifier; this only lets a test assert the injected verifier was exchanged.</em>
+<a class="jxr_linenumber" name="L178" href="#L178">178</a> <em class="jxr_javadoccomment">		 */</em>
+<a class="jxr_linenumber" name="L179" href="#L179">179</a> 		<strong class="jxr_keyword">volatile</strong> String lastCodeVerifier;
+<a class="jxr_linenumber" name="L180" href="#L180">180</a> 
+<a class="jxr_linenumber" name="L181" href="#L181">181</a> 		StubIdp() <strong class="jxr_keyword">throws</strong> IOException {
+<a class="jxr_linenumber" name="L182" href="#L182">182</a> 			server = HttpServer.create(<strong class="jxr_keyword">new</strong> InetSocketAddress(InetAddress.getLoopbackAddress(), 0), 0);
+<a class="jxr_linenumber" name="L183" href="#L183">183</a> 			server.createContext(<span class="jxr_string">"/token"</span>, <strong class="jxr_keyword">this</strong>::handleToken);
+<a class="jxr_linenumber" name="L184" href="#L184">184</a> 			server.createContext(<span class="jxr_string">"/userinfo"</span>, <strong class="jxr_keyword">this</strong>::handleUserInfo);
+<a class="jxr_linenumber" name="L185" href="#L185">185</a> 			server.start();
+<a class="jxr_linenumber" name="L186" href="#L186">186</a> 		}
+<a class="jxr_linenumber" name="L187" href="#L187">187</a> 
+<a class="jxr_linenumber" name="L188" href="#L188">188</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> handleToken(HttpExchange ex) <strong class="jxr_keyword">throws</strong> IOException {
+<a class="jxr_linenumber" name="L189" href="#L189">189</a> 			tokenHits.incrementAndGet();
+<a class="jxr_linenumber" name="L190" href="#L190">190</a> 			<strong class="jxr_keyword">var</strong> body = <strong class="jxr_keyword">new</strong> String(ex.getRequestBody().readAllBytes(), StandardCharsets.UTF_8);
+<a class="jxr_linenumber" name="L191" href="#L191">191</a> 			lastCodeVerifier = formField(body, <span class="jxr_string">"code_verifier"</span>);
+<a class="jxr_linenumber" name="L192" href="#L192">192</a> 			<strong class="jxr_keyword">if</strong> (failToken) {
+<a class="jxr_linenumber" name="L193" href="#L193">193</a> 				writeJson(ex, 400, <span class="jxr_string">"{\&quot;error\&quot;:\&quot;invalid_grant\&quot;}"</span>);
+<a class="jxr_linenumber" name="L194" href="#L194">194</a> 				<strong class="jxr_keyword">return</strong>;
+<a class="jxr_linenumber" name="L195" href="#L195">195</a> 			}
+<a class="jxr_linenumber" name="L196" href="#L196">196</a> 			<strong class="jxr_keyword">var</strong> isRefresh = body.contains(<span class="jxr_string">"grant_type=refresh_token"</span>);
+<a class="jxr_linenumber" name="L197" href="#L197">197</a> 			<strong class="jxr_keyword">var</strong> rt = isRefresh ? rotatedRefreshToken : refreshToken;
+<a class="jxr_linenumber" name="L198" href="#L198">198</a> 			<strong class="jxr_keyword">var</strong> json = <strong class="jxr_keyword">new</strong> StringBuilder(<span class="jxr_string">"{"</span>)
+<a class="jxr_linenumber" name="L199" href="#L199">199</a> 				.append(<span class="jxr_string">"\&quot;access_token\&quot;:\&quot;at-"</span>).append(isRefresh ? <span class="jxr_string">"refreshed"</span> : <span class="jxr_string">"initial"</span>).append(<span class="jxr_string">"\&quot;,"</span>)
+<a class="jxr_linenumber" name="L200" href="#L200">200</a> 				.append(<span class="jxr_string">"\&quot;token_type\&quot;:\&quot;Bearer\&quot;,"</span>)
+<a class="jxr_linenumber" name="L201" href="#L201">201</a> 				.append(<span class="jxr_string">"\&quot;expires_in\&quot;:3600,"</span>);
+<a class="jxr_linenumber" name="L202" href="#L202">202</a> 			<strong class="jxr_keyword">if</strong> (rt != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L203" href="#L203">203</a> 				json.append(<span class="jxr_string">"\&quot;refresh_token\&quot;:\&quot;"</span>).append(rt).append(<span class="jxr_string">"\&quot;,"</span>);
+<a class="jxr_linenumber" name="L204" href="#L204">204</a> 			<strong class="jxr_keyword">if</strong> (idToken != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L205" href="#L205">205</a> 				json.append(<span class="jxr_string">"\&quot;id_token\&quot;:\&quot;"</span>).append(idToken).append(<span class="jxr_string">"\&quot;,"</span>);
+<a class="jxr_linenumber" name="L206" href="#L206">206</a> 			json.append(<span class="jxr_string">"\&quot;scope\&quot;:\&quot;openid profile\&quot;}"</span>);
+<a class="jxr_linenumber" name="L207" href="#L207">207</a> 			writeJson(ex, 200, json.toString());
+<a class="jxr_linenumber" name="L208" href="#L208">208</a> 		}
+<a class="jxr_linenumber" name="L209" href="#L209">209</a> 
+<a class="jxr_linenumber" name="L210" href="#L210">210</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> handleUserInfo(HttpExchange ex) <strong class="jxr_keyword">throws</strong> IOException {
+<a class="jxr_linenumber" name="L211" href="#L211">211</a> 			<strong class="jxr_keyword">if</strong> (userInfoFail) {
+<a class="jxr_linenumber" name="L212" href="#L212">212</a> 				writeJson(ex, 401, <span class="jxr_string">"{\&quot;error\&quot;:\&quot;invalid_token\&quot;}"</span>);
+<a class="jxr_linenumber" name="L213" href="#L213">213</a> 				<strong class="jxr_keyword">return</strong>;
+<a class="jxr_linenumber" name="L214" href="#L214">214</a> 			}
+<a class="jxr_linenumber" name="L215" href="#L215">215</a> 			<strong class="jxr_keyword">var</strong> sb = <strong class="jxr_keyword">new</strong> StringBuilder(<span class="jxr_string">"{\&quot;sub\&quot;:\&quot;alice\&quot;"</span>);
+<a class="jxr_linenumber" name="L216" href="#L216">216</a> 			userInfo.forEach((k, v) -&gt; sb.append(<span class="jxr_string">",\&quot;"</span>).append(k).append(<span class="jxr_string">"\&quot;:\&quot;"</span>).append(v).append(<span class="jxr_string">"\&quot;"</span>));
+<a class="jxr_linenumber" name="L217" href="#L217">217</a> 			sb.append(<span class="jxr_string">"}"</span>);
+<a class="jxr_linenumber" name="L218" href="#L218">218</a> 			writeJson(ex, 200, sb.toString());
 <a class="jxr_linenumber" name="L219" href="#L219">219</a> 		}
 <a class="jxr_linenumber" name="L220" href="#L220">220</a> 
-<a class="jxr_linenumber" name="L221" href="#L221">221</a> 		<em class="jxr_javadoccomment">/** Builds an {@link OidcMetadata} record pointing the token/userinfo endpoints at this stub. */</em>
-<a class="jxr_linenumber" name="L222" href="#L222">222</a> 		OidcMetadata metadata(URI authorizationEndpoint, URI endSessionEndpoint) {
-<a class="jxr_linenumber" name="L223" href="#L223">223</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> OidcMetadata(
-<a class="jxr_linenumber" name="L224" href="#L224">224</a> 				URI.create(issuer),
-<a class="jxr_linenumber" name="L225" href="#L225">225</a> 				tokenEndpoint(),
-<a class="jxr_linenumber" name="L226" href="#L226">226</a> 				authorizationEndpoint,
-<a class="jxr_linenumber" name="L227" href="#L227">227</a> 				<strong class="jxr_keyword">null</strong>,
-<a class="jxr_linenumber" name="L228" href="#L228">228</a> 				URI.create(baseUri() + <span class="jxr_string">"/jwks"</span>),
-<a class="jxr_linenumber" name="L229" href="#L229">229</a> 				userinfoEndpoint(),
-<a class="jxr_linenumber" name="L230" href="#L230">230</a> 				endSessionEndpoint,
-<a class="jxr_linenumber" name="L231" href="#L231">231</a> 				Set.of(<span class="jxr_string">"openid"</span>, <span class="jxr_string">"profile"</span>, <span class="jxr_string">"email"</span>),
-<a class="jxr_linenumber" name="L232" href="#L232">232</a> 				Map.of());
-<a class="jxr_linenumber" name="L233" href="#L233">233</a> 		}
-<a class="jxr_linenumber" name="L234" href="#L234">234</a> 
-<a class="jxr_linenumber" name="L235" href="#L235">235</a> 		@Override
-<a class="jxr_linenumber" name="L236" href="#L236">236</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> close() {
-<a class="jxr_linenumber" name="L237" href="#L237">237</a> 			server.stop(0);
-<a class="jxr_linenumber" name="L238" href="#L238">238</a> 		}
-<a class="jxr_linenumber" name="L239" href="#L239">239</a> 	}
-<a class="jxr_linenumber" name="L240" href="#L240">240</a> }
+<a class="jxr_linenumber" name="L221" href="#L221">221</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> writeJson(HttpExchange ex, <strong class="jxr_keyword">int</strong> status, String body) <strong class="jxr_keyword">throws</strong> IOException {
+<a class="jxr_linenumber" name="L222" href="#L222">222</a> 			<strong class="jxr_keyword">var</strong> bytes = body.getBytes(StandardCharsets.UTF_8);
+<a class="jxr_linenumber" name="L223" href="#L223">223</a> 			ex.getResponseHeaders().add(<span class="jxr_string">"Content-Type"</span>, <span class="jxr_string">"application/json"</span>);
+<a class="jxr_linenumber" name="L224" href="#L224">224</a> 			ex.sendResponseHeaders(status, bytes.length);
+<a class="jxr_linenumber" name="L225" href="#L225">225</a> 			<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> os = ex.getResponseBody()) {
+<a class="jxr_linenumber" name="L226" href="#L226">226</a> 				os.write(bytes);
+<a class="jxr_linenumber" name="L227" href="#L227">227</a> 			}
+<a class="jxr_linenumber" name="L228" href="#L228">228</a> 		}
+<a class="jxr_linenumber" name="L229" href="#L229">229</a> 
+<a class="jxr_linenumber" name="L230" href="#L230">230</a> 		<strong class="jxr_keyword">int</strong> port() {
+<a class="jxr_linenumber" name="L231" href="#L231">231</a> 			<strong class="jxr_keyword">return</strong> server.getAddress().getPort();
+<a class="jxr_linenumber" name="L232" href="#L232">232</a> 		}
+<a class="jxr_linenumber" name="L233" href="#L233">233</a> 
+<a class="jxr_linenumber" name="L234" href="#L234">234</a> 		URI baseUri() {
+<a class="jxr_linenumber" name="L235" href="#L235">235</a> 			<strong class="jxr_keyword">return</strong> URI.create(<span class="jxr_string">"http://127.0.0.1:"</span> + port());
+<a class="jxr_linenumber" name="L236" href="#L236">236</a> 		}
+<a class="jxr_linenumber" name="L237" href="#L237">237</a> 
+<a class="jxr_linenumber" name="L238" href="#L238">238</a> 		URI tokenEndpoint() {
+<a class="jxr_linenumber" name="L239" href="#L239">239</a> 			<strong class="jxr_keyword">return</strong> URI.create(baseUri() + <span class="jxr_string">"/token"</span>);
+<a class="jxr_linenumber" name="L240" href="#L240">240</a> 		}
+<a class="jxr_linenumber" name="L241" href="#L241">241</a> 
+<a class="jxr_linenumber" name="L242" href="#L242">242</a> 		URI userinfoEndpoint() {
+<a class="jxr_linenumber" name="L243" href="#L243">243</a> 			<strong class="jxr_keyword">return</strong> URI.create(baseUri() + <span class="jxr_string">"/userinfo"</span>);
+<a class="jxr_linenumber" name="L244" href="#L244">244</a> 		}
+<a class="jxr_linenumber" name="L245" href="#L245">245</a> 
+<a class="jxr_linenumber" name="L246" href="#L246">246</a> 		<em class="jxr_javadoccomment">/** Builds an {@link OidcMetadata} record pointing the token/userinfo endpoints at this stub. */</em>
+<a class="jxr_linenumber" name="L247" href="#L247">247</a> 		OidcMetadata metadata(URI authorizationEndpoint, URI endSessionEndpoint) {
+<a class="jxr_linenumber" name="L248" href="#L248">248</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> OidcMetadata(
+<a class="jxr_linenumber" name="L249" href="#L249">249</a> 				URI.create(issuer),
+<a class="jxr_linenumber" name="L250" href="#L250">250</a> 				tokenEndpoint(),
+<a class="jxr_linenumber" name="L251" href="#L251">251</a> 				authorizationEndpoint,
+<a class="jxr_linenumber" name="L252" href="#L252">252</a> 				<strong class="jxr_keyword">null</strong>,
+<a class="jxr_linenumber" name="L253" href="#L253">253</a> 				URI.create(baseUri() + <span class="jxr_string">"/jwks"</span>),
+<a class="jxr_linenumber" name="L254" href="#L254">254</a> 				userinfoEndpoint(),
+<a class="jxr_linenumber" name="L255" href="#L255">255</a> 				endSessionEndpoint,
+<a class="jxr_linenumber" name="L256" href="#L256">256</a> 				Set.of(<span class="jxr_string">"openid"</span>, <span class="jxr_string">"profile"</span>, <span class="jxr_string">"email"</span>),
+<a class="jxr_linenumber" name="L257" href="#L257">257</a> 				Map.of());
+<a class="jxr_linenumber" name="L258" href="#L258">258</a> 		}
+<a class="jxr_linenumber" name="L259" href="#L259">259</a> 
+<a class="jxr_linenumber" name="L260" href="#L260">260</a> 		@Override
+<a class="jxr_linenumber" name="L261" href="#L261">261</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> close() {
+<a class="jxr_linenumber" name="L262" href="#L262">262</a> 			server.stop(0);
+<a class="jxr_linenumber" name="L263" href="#L263">263</a> 		}
+<a class="jxr_linenumber" name="L264" href="#L264">264</a> 	}
+<a class="jxr_linenumber" name="L265" href="#L265">265</a> 
+<a class="jxr_linenumber" name="L266" href="#L266">266</a> 	<em class="jxr_javadoccomment">/** A test clock the test can advance manually. */</em>
+<a class="jxr_linenumber" name="L267" href="#L267">267</a> 	<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">class</strong> MutableClock <strong class="jxr_keyword">extends</strong> Clock {
+<a class="jxr_linenumber" name="L268" href="#L268">268</a> 		<strong class="jxr_keyword">private</strong> Instant now;
+<a class="jxr_linenumber" name="L269" href="#L269">269</a> 		MutableClock(Instant start) { now = start; }
+<a class="jxr_linenumber" name="L270" href="#L270">270</a> 		<strong class="jxr_keyword">void</strong> advance(Duration d) { now = now.plus(d); }
+<a class="jxr_linenumber" name="L271" href="#L271">271</a> 		@Override <strong class="jxr_keyword">public</strong> ZoneId getZone() { <strong class="jxr_keyword">return</strong> ZoneOffset.UTC; }
+<a class="jxr_linenumber" name="L272" href="#L272">272</a> 		@Override <strong class="jxr_keyword">public</strong> Clock withZone(ZoneId zone) { <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>; }
+<a class="jxr_linenumber" name="L273" href="#L273">273</a> 		@Override <strong class="jxr_keyword">public</strong> Instant instant() { <strong class="jxr_keyword">return</strong> now; }
+<a class="jxr_linenumber" name="L274" href="#L274">274</a> 	}
+<a class="jxr_linenumber" name="L275" href="#L275">275</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

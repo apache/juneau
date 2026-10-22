@@ -86,7 +86,7 @@ loadScripts(document, 'script');</script>
 </li>
 <li>
 <div id="class-summary">
-<div class="table-tabs" role="tablist" aria-orientation="horizontal"><button id="class-summary-tab0" role="tab" aria-selected="true" aria-controls="class-summary.tabpanel" tabindex="0" onkeydown="switchTab(event)" onclick="show('class-summary', 'class-summary', 2)" class="active-table-tab">All Classes and Interfaces</button><button id="class-summary-tab2" role="tab" aria-selected="false" aria-controls="class-summary.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('class-summary', 'class-summary-tab2', 2)" class="table-tab">Classes</button><button id="class-summary-tab3" role="tab" aria-selected="false" aria-controls="class-summary.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('class-summary', 'class-summary-tab3', 2)" class="table-tab">Enum Classes</button><button id="class-summary-tab4" role="tab" aria-selected="false" aria-controls="class-summary.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('class-summary', 'class-summary-tab4', 2)" class="table-tab">Record Classes</button><button id="class-summary-tab7" role="tab" aria-selected="false" aria-controls="class-summary.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('class-summary', 'class-summary-tab7', 2)" class="table-tab">Annotation Interfaces</button></div>
+<div class="table-tabs" role="tablist" aria-orientation="horizontal"><button id="class-summary-tab0" role="tab" aria-selected="true" aria-controls="class-summary.tabpanel" tabindex="0" onkeydown="switchTab(event)" onclick="show('class-summary', 'class-summary', 2)" class="active-table-tab">All Classes and Interfaces</button><button id="class-summary-tab1" role="tab" aria-selected="false" aria-controls="class-summary.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('class-summary', 'class-summary-tab1', 2)" class="table-tab">Interfaces</button><button id="class-summary-tab2" role="tab" aria-selected="false" aria-controls="class-summary.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('class-summary', 'class-summary-tab2', 2)" class="table-tab">Classes</button><button id="class-summary-tab3" role="tab" aria-selected="false" aria-controls="class-summary.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('class-summary', 'class-summary-tab3', 2)" class="table-tab">Enum Classes</button><button id="class-summary-tab4" role="tab" aria-selected="false" aria-controls="class-summary.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('class-summary', 'class-summary-tab4', 2)" class="table-tab">Record Classes</button><button id="class-summary-tab7" role="tab" aria-selected="false" aria-controls="class-summary.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('class-summary', 'class-summary-tab7', 2)" class="table-tab">Annotation Interfaces</button></div>
 <div id="class-summary.tabpanel" role="tabpanel" aria-labelledby="class-summary-tab0">
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Class</div>
@@ -128,26 +128,39 @@ loadScripts(document, 'script');</script>
 <div class="block">Possible values for the <a href="RemoteOp.html#returns()"><code>@RemoteOp(returns)</code></a> annotation and the <code>returns</code> attribute on
  <a href="RemoteGet.html" title="annotation interface in org.apache.juneau.http.remote"><code>RemoteGet</code></a>, <a href="RemotePost.html" title="annotation interface in org.apache.juneau.http.remote"><code>RemotePost</code></a>, <a href="RemotePut.html" title="annotation interface in org.apache.juneau.http.remote"><code>RemotePut</code></a>, <a href="RemotePatch.html" title="annotation interface in org.apache.juneau.http.remote"><code>RemotePatch</code></a>, and <a href="RemoteDelete.html" title="annotation interface in org.apache.juneau.http.remote"><code>RemoteDelete</code></a>.</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="RemoteUtils.html" title="class in org.apache.juneau.http.remote">RemoteUtils</a></div>
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="RemoteUrlPolicy.html" title="class in org.apache.juneau.http.remote">RemoteUrlPolicy</a></div>
 <div class="col-last odd-row-color class-summary class-summary-tab2">
+<div class="block">Shared SSRF-hardening policy for the <a href="Remote.html" title="annotation interface in org.apache.juneau.http.remote"><code>@Remote</code></a>/<a href="RemoteOp.html" title="annotation interface in org.apache.juneau.http.remote"><code>@RemoteOp</code></a> proxy engines.</div>
+</div>
+<div class="col-first even-row-color class-summary class-summary-tab1"><a href="RemoteUrlPolicy.AddressResolver.html" title="interface in org.apache.juneau.http.remote">RemoteUrlPolicy.AddressResolver</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab1">
+<div class="block">Resolves the <code>InetAddress</code> candidates for a hostname.</div>
+</div>
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="RemoteUrlPolicy.AllowedRanges.html" title="class in org.apache.juneau.http.remote">RemoteUrlPolicy.AllowedRanges</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">
+<div class="block">A validated, parsed per-client allow-list of special-purpose address ranges, the per-client counterpart of the
+ <a href="RemoteUrlPolicy.html#ALLOW_ADDRESS_RANGES_PROPERTY">"RestClient.allowAddressRanges"</a> system property.</div>
+</div>
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="RemoteUtils.html" title="class in org.apache.juneau.http.remote">RemoteUtils</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab2">
 <div class="block">Utilities.</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab2"><a href="RrpcInterfaceMeta.html" title="class in org.apache.juneau.http.remote">RrpcInterfaceMeta</a></div>
-<div class="col-last even-row-color class-summary class-summary-tab2">
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="RrpcInterfaceMeta.html" title="class in org.apache.juneau.http.remote">RrpcInterfaceMeta</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">
 <div class="block">Holds resolved metadata for an interface annotated with <a href="Remote.html" title="annotation interface in org.apache.juneau.http.remote"><code>@Remote</code></a>.</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="RrpcInterfaceMethodMeta.html" title="class in org.apache.juneau.http.remote">RrpcInterfaceMethodMeta</a></div>
-<div class="col-last odd-row-color class-summary class-summary-tab2">
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="RrpcInterfaceMethodMeta.html" title="class in org.apache.juneau.http.remote">RrpcInterfaceMethodMeta</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab2">
 <div class="block">Holds resolved metadata for a single method on an interface annotated with
  <a href="Remote.html" title="annotation interface in org.apache.juneau.http.remote"><code>Remote</code></a>.</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab4"><a href="RrpcInterfaceMethodMeta.ContentNegotiation.html" title="class in org.apache.juneau.http.remote">RrpcInterfaceMethodMeta.ContentNegotiation</a></div>
-<div class="col-last even-row-color class-summary class-summary-tab4">
+<div class="col-first odd-row-color class-summary class-summary-tab4"><a href="RrpcInterfaceMethodMeta.ContentNegotiation.html" title="class in org.apache.juneau.http.remote">RrpcInterfaceMethodMeta.ContentNegotiation</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab4">
 <div class="block">Method-level content negotiation: the <code>accept</code> and <code>contentType</code> media-type
  overrides sourced from <code>@RemoteOp</code>/verb-annotation members.</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab4"><a href="RrpcInterfaceMethodMeta.Policy.html" title="class in org.apache.juneau.http.remote">RrpcInterfaceMethodMeta.Policy</a></div>
-<div class="col-last odd-row-color class-summary class-summary-tab4">
+<div class="col-first even-row-color class-summary class-summary-tab4"><a href="RrpcInterfaceMethodMeta.Policy.html" title="class in org.apache.juneau.http.remote">RrpcInterfaceMethodMeta.Policy</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab4">
 <div class="block">Method-level cross-cutting call policy: interceptors, per-call timeout, retries, and the
  generic <code>throwOnError</code> flag, sourced from <code>@RemoteOp</code>/verb annotation members.</div>
 </div>

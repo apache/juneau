@@ -15,7 +15,11 @@
 <script type="text/javascript" src="../../../../../../../script-dir/jquery-ui.min.js"></script>
 </head>
 <body class="package-declaration-page">
-<script type="text/javascript">var pathtoroot = "../../../../../../../";
+<script type="text/javascript">var evenRowColor = "even-row-color";
+var oddRowColor = "odd-row-color";
+var tableTab = "table-tab";
+var activeTableTab = "active-table-tab";
+var pathtoroot = "../../../../../../../";
 loadScripts(document, 'script');</script>
 <noscript>
 <div>JavaScript is disabled on your browser.</div>
@@ -161,16 +165,23 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color">
 <div class="block">Engine-agnostic server-side-rendered view extension point.</div>
 </div>
-<div class="col-first odd-row-color"><a href="../jsp/package-summary.html">org.apache.juneau.rest.server.view.jsp</a></div>
+<div class="col-first odd-row-color"><a href="console/package-summary.html">org.apache.juneau.rest.server.view.freemarker.console</a></div>
 <div class="col-last odd-row-color">
+<div class="block">FreeMarker-only delivery of the admin-console chrome: the reserved-classpath <code>base.ftlh</code> template, the
+ <code>&lt;@tag&gt;</code> macro, and <a href="console/ConsoleFreemarkerMixin.html" title="class in org.apache.juneau.rest.server.view.freemarker.console"><code>ConsoleFreemarkerMixin</code></a>
+ (registers a reserved-path <code>ClassTemplateLoader</code> on top of the host's own <code>FreemarkerMixin</code>
+ configuration).</div>
+</div>
+<div class="col-first even-row-color"><a href="../jsp/package-summary.html">org.apache.juneau.rest.server.view.jsp</a></div>
+<div class="col-last even-row-color">
 <div class="block">JSP view-rendering bridge &mdash; opt-in <code>juneau-rest-server-view-jsp</code> module.</div>
 </div>
-<div class="col-first even-row-color"><a href="../mustache/package-summary.html">org.apache.juneau.rest.server.view.mustache</a></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><a href="../mustache/package-summary.html">org.apache.juneau.rest.server.view.mustache</a></div>
+<div class="col-last odd-row-color">
 <div class="block">Mustache view-rendering bridge &mdash; opt-in <code>juneau-rest-server-view-mustache</code> module.</div>
 </div>
-<div class="col-first odd-row-color"><a href="../thymeleaf/package-summary.html">org.apache.juneau.rest.server.view.thymeleaf</a></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><a href="../thymeleaf/package-summary.html">org.apache.juneau.rest.server.view.thymeleaf</a></div>
+<div class="col-last even-row-color">
 <div class="block">Thymeleaf view-rendering bridge &mdash; opt-in <code>juneau-rest-server-view-thymeleaf</code> module.</div>
 </div>
 </div>
@@ -178,7 +189,8 @@ loadScripts(document, 'script');</script>
 </li>
 <li>
 <div id="class-summary">
-<div class="caption"><span>Classes</span></div>
+<div class="table-tabs" role="tablist" aria-orientation="horizontal"><button id="class-summary-tab0" role="tab" aria-selected="true" aria-controls="class-summary.tabpanel" tabindex="0" onkeydown="switchTab(event)" onclick="show('class-summary', 'class-summary', 2)" class="active-table-tab">All Classes and Interfaces</button><button id="class-summary-tab1" role="tab" aria-selected="false" aria-controls="class-summary.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('class-summary', 'class-summary-tab1', 2)" class="table-tab">Interfaces</button><button id="class-summary-tab2" role="tab" aria-selected="false" aria-controls="class-summary.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('class-summary', 'class-summary-tab2', 2)" class="table-tab">Classes</button></div>
+<div id="class-summary.tabpanel" role="tabpanel" aria-labelledby="class-summary-tab0">
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Class</div>
 <div class="table-header col-last">Description</div>
@@ -200,23 +212,35 @@ loadScripts(document, 'script');</script>
 <div class="col-last odd-row-color class-summary class-summary-tab2">
 <div class="block">Builder for <a href="FreemarkerMixin.html" title="class in org.apache.juneau.rest.server.view.freemarker"><code>FreemarkerMixin</code></a>.</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab2"><a href="FreemarkerResource.html" title="class in org.apache.juneau.rest.server.view.freemarker">FreemarkerResource</a></div>
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="FreemarkerRenderScope.html" title="class in org.apache.juneau.rest.server.view.freemarker">FreemarkerRenderScope</a></div>
 <div class="col-last even-row-color class-summary class-summary-tab2">
+<div class="block">Request-scoped handle so FreeMarker <code>TemplateDirectiveModel</code>s can resolve per-request
+ asset URLs during <code>template.process</code>.</div>
+</div>
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="FreemarkerResource.html" title="class in org.apache.juneau.rest.server.view.freemarker">FreemarkerResource</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">
 <div class="block">Child-resource flavor of the <a href="FreemarkerMixin.html" title="class in org.apache.juneau.rest.server.view.freemarker"><code>FreemarkerMixin</code></a> mixin.</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="FreemarkerServlet.html" title="class in org.apache.juneau.rest.server.view.freemarker">FreemarkerServlet</a></div>
-<div class="col-last odd-row-color class-summary class-summary-tab2">
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="FreemarkerServlet.html" title="class in org.apache.juneau.rest.server.view.freemarker">FreemarkerServlet</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab2">
 <div class="block">Standalone servlet companion of the <a href="FreemarkerMixin.html" title="class in org.apache.juneau.rest.server.view.freemarker"><code>FreemarkerMixin</code></a> mixin.</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab2"><a href="FreemarkerView.html" title="class in org.apache.juneau.rest.server.view.freemarker">FreemarkerView</a></div>
-<div class="col-last even-row-color class-summary class-summary-tab2">
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="FreemarkerView.html" title="class in org.apache.juneau.rest.server.view.freemarker">FreemarkerView</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">
 <div class="block">Immutable value class returned from <code>@RestOp</code>-annotated methods to ask the framework to
  render an Apache FreeMarker template.</div>
+</div>
+<div class="col-first even-row-color class-summary class-summary-tab1"><a href="FreemarkerView.MustConsume.html" title="interface in org.apache.juneau.rest.server.view.freemarker">FreemarkerView.MustConsume</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab1">
+<div class="block">Marker for an attribute value that promises to be adopted during the render (unwrapped from the data model by
+ some directive and applied to render-scoped state), and wants the render to fail if that never happens
+ instead of silently behaving as if the attribute was absent.</div>
 </div>
 <div class="col-first odd-row-color class-summary class-summary-tab2"><a href="FreemarkerViewRenderer.html" title="class in org.apache.juneau.rest.server.view.freemarker">FreemarkerViewRenderer</a></div>
 <div class="col-last odd-row-color class-summary class-summary-tab2">
 <div class="block"><a href="../../processor/ResponseProcessor.html" title="interface in org.apache.juneau.rest.server.processor"><code>ResponseProcessor</code></a> that detects <a href="FreemarkerView.html" title="class in org.apache.juneau.rest.server.view.freemarker"><code>FreemarkerView</code></a>-typed return values and asks the
  configured <code>Configuration</code> to render them directly onto the response writer.</div>
+</div>
 </div>
 </div>
 </div>

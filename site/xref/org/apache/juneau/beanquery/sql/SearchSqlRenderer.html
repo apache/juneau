@@ -1,0 +1,101 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="" lang="">
+<head><meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<title>SearchSqlRenderer xref</title>
+<link type="text/css" rel="stylesheet" href="../../../../../stylesheet.css" />
+</head>
+<body>
+<div id="overview"><a href="../../../../../../apidocs/org/apache/juneau/beanquery/sql/SearchSqlRenderer.html">View Javadoc</a></div><pre>
+<a class="jxr_linenumber" name="L1" href="#L1">1</a>   <em class="jxr_comment">/*</em>
+<a class="jxr_linenumber" name="L2" href="#L2">2</a>   <em class="jxr_comment"> * Licensed to the Apache Software Foundation (ASF) under one or more</em>
+<a class="jxr_linenumber" name="L3" href="#L3">3</a>   <em class="jxr_comment"> * contributor license agreements.  See the NOTICE file distributed with</em>
+<a class="jxr_linenumber" name="L4" href="#L4">4</a>   <em class="jxr_comment"> * this work for additional information regarding copyright ownership.</em>
+<a class="jxr_linenumber" name="L5" href="#L5">5</a>   <em class="jxr_comment"> * The ASF licenses this file to You under the Apache License, Version 2.0</em>
+<a class="jxr_linenumber" name="L6" href="#L6">6</a>   <em class="jxr_comment"> * (the "License"); you may not use this file except in compliance with</em>
+<a class="jxr_linenumber" name="L7" href="#L7">7</a>   <em class="jxr_comment"> * the License.  You may obtain a copy of the License at</em>
+<a class="jxr_linenumber" name="L8" href="#L8">8</a>   <em class="jxr_comment"> *</em>
+<a class="jxr_linenumber" name="L9" href="#L9">9</a>   <em class="jxr_comment"> *      <a href="http://www.apache.org/licenses/LICENSE-2.0" target="alexandria_uri">http://www.apache.org/licenses/LICENSE-2.0</a></em>
+<a class="jxr_linenumber" name="L10" href="#L10">10</a>  <em class="jxr_comment"> *</em>
+<a class="jxr_linenumber" name="L11" href="#L11">11</a>  <em class="jxr_comment"> * Unless required by applicable law or agreed to in writing, software</em>
+<a class="jxr_linenumber" name="L12" href="#L12">12</a>  <em class="jxr_comment"> * distributed under the License is distributed on an "AS IS" BASIS,</em>
+<a class="jxr_linenumber" name="L13" href="#L13">13</a>  <em class="jxr_comment"> * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</em>
+<a class="jxr_linenumber" name="L14" href="#L14">14</a>  <em class="jxr_comment"> * See the License for the specific language governing permissions and</em>
+<a class="jxr_linenumber" name="L15" href="#L15">15</a>  <em class="jxr_comment"> * limitations under the License.</em>
+<a class="jxr_linenumber" name="L16" href="#L16">16</a>  <em class="jxr_comment"> */</em>
+<a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> org.apache.juneau.beanquery.sql;
+<a class="jxr_linenumber" name="L18" href="#L18">18</a>  
+<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> java.util.*;
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.commons.beanquery.*;
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <em class="jxr_javadoccomment"> * The SQL callback an application supplies for a &lt;b&gt;custom&lt;/b&gt; search operator (design §5.3) so a SQL context can</em>
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <em class="jxr_javadoccomment"> * render it into a {@code WHERE} clause.</em>
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <em class="jxr_javadoccomment"> * The renderer receives the target {@link SqlDialect}, the already-quoted column reference, the column's</em>
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <em class="jxr_javadoccomment"> * {@link SearchType value type} (so it can bind values as the right JDBC type), and the operator's arguments (typed</em>
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <em class="jxr_javadoccomment"> * values when the operator asks for them, otherwise the literal strings; see {@link org.apache.juneau.commons.beanquery.SearchOperator.Builder#typedArgs(boolean)}),</em>
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <em class="jxr_javadoccomment"> * and returns a {@link SqlFragment} (a boolean SQL expression plus its ordered bind values).  It is the</em>
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <em class="jxr_javadoccomment"> * SQL-side analog of {@link SearchPredicate} (the in-memory evaluator): built-in operators do not use it &amp;mdash; their</em>
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <em class="jxr_javadoccomment"> * SQL comes from {@link SqlDialect#builtinRenderer(String)}.</em>
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>  <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>  <em class="jxr_javadoccomment"> * A renderer is attached to a {@link SearchOperator} as a typed extension keyed by this interface, with</em>
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>  <em class="jxr_javadoccomment"> * {@link org.apache.juneau.commons.beanquery.SearchOperator.Builder#extension(Class, Object)</em>
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>  <em class="jxr_javadoccomment"> * extension(SearchSqlRenderer.class, renderer)}; the context retrieves it with {@link SearchOperator#extension(Class)},</em>
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>  <em class="jxr_javadoccomment"> * so commons never depends on SQL dialect types.  A</em>
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>  <em class="jxr_javadoccomment"> * renderer that does not support the supplied dialect returns &lt;jk&gt;null&lt;/jk&gt;; the context then fails with a clear error</em>
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>  <em class="jxr_javadoccomment"> * rather than emitting wrong SQL.  Values must be returned as {@link SqlFragment} binds, never concatenated into the</em>
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>  <em class="jxr_javadoccomment"> * SQL text.</em>
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>  <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>  <em class="jxr_javadoccomment"> * For the built-in value operators, and for a custom operator built with {@code typedArgs(true)}, each argument arrives</em>
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>  <em class="jxr_javadoccomment"> * already parsed by {@link SearchType#parse(String)} during query resolution: a {@link java.math.BigDecimal} for a</em>
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>  <em class="jxr_javadoccomment"> * {@code NUMERIC} column, a {@link Boolean} for {@code BOOLEAN}, and an {@link java.time.OffsetDateTime},</em>
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>  <em class="jxr_javadoccomment"> * {@link java.time.LocalDateTime} or {@link java.time.LocalDate} for {@code TIMESTAMP}.  Text-like types</em>
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>  <em class="jxr_javadoccomment"> * ({@code TEXT}, {@code ID}, {@code ENUM}, {@code VERSION}) are always {@link String}.  A malformed value never reaches a</em>
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>  <em class="jxr_javadoccomment"> * renderer; it fails resolution with code {@code BAD_VALUE}.</em>
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>  <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>  <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>  <em class="jxr_javadoccomment"> * &lt;p class='bjava'&gt;</em>
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>  <em class="jxr_javadoccomment"> * 	&lt;jc&gt;// A custom "$even" operator rendered as a modulo check (one bind-free fragment).&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>  <em class="jxr_javadoccomment"> * 	SearchSqlRenderer &lt;jv&gt;renderer&lt;/jv&gt; = (&lt;jv&gt;dialect&lt;/jv&gt;, &lt;jv&gt;col&lt;/jv&gt;, &lt;jv&gt;type&lt;/jv&gt;, &lt;jv&gt;args&lt;/jv&gt;) -&amp;gt;</em>
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>  <em class="jxr_javadoccomment"> * 		SqlFragment.&lt;jsm&gt;of&lt;/jsm&gt;(&lt;js&gt;"("&lt;/js&gt; + &lt;jv&gt;col&lt;/jv&gt; + &lt;js&gt;" % 2 = 0)"&lt;/js&gt;);</em>
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>  <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>  <em class="jxr_javadoccomment"> * 	&lt;jc&gt;// A typed-args operator: args.get(0) is a BigDecimal on a NUMERIC column, bound as-is.&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>  <em class="jxr_javadoccomment"> * 	SearchSqlRenderer &lt;jv&gt;divisibleBy&lt;/jv&gt; = (&lt;jv&gt;dialect&lt;/jv&gt;, &lt;jv&gt;col&lt;/jv&gt;, &lt;jv&gt;type&lt;/jv&gt;, &lt;jv&gt;args&lt;/jv&gt;) -&amp;gt;</em>
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>  <em class="jxr_javadoccomment"> * 		SqlFragment.&lt;jsm&gt;of&lt;/jsm&gt;(&lt;js&gt;"("&lt;/js&gt; + &lt;jv&gt;col&lt;/jv&gt; + &lt;js&gt;" % ? = 0)"&lt;/js&gt;, &lt;jv&gt;args&lt;/jv&gt;.get(0));</em>
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>  <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>  <em class="jxr_javadoccomment"> * 	SearchOperator &lt;jv&gt;even&lt;/jv&gt; = SearchOperator</em>
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>  <em class="jxr_javadoccomment"> * 		.&lt;jsm&gt;create&lt;/jsm&gt;(&lt;js&gt;"$even"&lt;/js&gt;, &lt;js&gt;"Matches even numbers. Example: $even()"&lt;/js&gt;)</em>
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>  <em class="jxr_javadoccomment"> * 		.minArgs(0).maxArgs(0)</em>
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>  <em class="jxr_javadoccomment"> * 		.extension(SearchSqlRenderer.&lt;jk&gt;class&lt;/jk&gt;, &lt;jv&gt;renderer&lt;/jv&gt;)</em>
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>  <em class="jxr_javadoccomment"> * 		.build();</em>
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>  <em class="jxr_javadoccomment"> * &lt;/p&gt;</em>
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>  <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>  <em class="jxr_javadoccomment"> * @since 10.0.0</em>
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>  <em class="jxr_javadoccomment"> */</em>
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>  @FunctionalInterface
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">interface</strong> <a name="SearchSqlRenderer" href="../../../../../org/apache/juneau/beanquery/sql/SearchSqlRenderer.html#SearchSqlRenderer">SearchSqlRenderer</a> {
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>  
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>  	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>  <em class="jxr_javadoccomment">	 * Renders this custom operator into a SQL predicate fragment.</em>
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>  <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>  <em class="jxr_javadoccomment">	 * @param dialect The target SQL dialect.  Never &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>  <em class="jxr_javadoccomment">	 * @param columnSql The dialect-quoted column reference the predicate applies to (for example {@code "\&quot;age\&quot;"}).</em>
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>  <em class="jxr_javadoccomment">	 * 	Never &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>  <em class="jxr_javadoccomment">	 * @param type The column's value type, so the renderer can bind values as the right JDBC type.  Never &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>  <em class="jxr_javadoccomment">	 * @param args The operator's arguments (never &lt;jk&gt;null&lt;/jk&gt;; may be empty): {@link SearchExpression#typedArgs() typed</em>
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>  <em class="jxr_javadoccomment">	 * 	values} ({@link java.math.BigDecimal}, {@link Boolean}, {@link java.time.OffsetDateTime},</em>
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>  <em class="jxr_javadoccomment">	 * 	{@link java.time.LocalDateTime}, {@link java.time.LocalDate}, or {@link String} for text-like types) for a built-in</em>
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>  <em class="jxr_javadoccomment">	 * 	value operator or a custom operator with {@code typedArgs(true)}; plain {@link String} literals otherwise.</em>
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>  <em class="jxr_javadoccomment">	 * @return The predicate fragment, or &lt;jk&gt;null&lt;/jk&gt; if this renderer does not support {@code dialect}.</em>
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>  <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>  	SqlFragment render(<a name="SqlDialect" href="../../../../../org/apache/juneau/beanquery/sql/SqlDialect.html#SqlDialect">SqlDialect</a> dialect, String columnSql, <a name="SearchType" href="../../../../../org/apache/juneau/commons/beanquery/SearchType.html#SearchType">SearchType</a> type, List&lt;Object&gt; args);
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>  }
+</pre>
+<hr/>
+<div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>
+</body>
+</html>

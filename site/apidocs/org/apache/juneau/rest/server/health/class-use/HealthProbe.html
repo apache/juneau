@@ -71,14 +71,19 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><code>static <a href="../HealthProbe.html" title="enum class in org.apache.juneau.rest.server.health">HealthProbe</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">HealthProbe.</span><code><a href="../HealthProbe.html#valueOf(java.lang.String)" class="member-name-link">valueOf</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</code></div>
+<div class="col-first even-row-color"><code>protected <a href="../HealthProbe.html" title="enum class in org.apache.juneau.rest.server.health">HealthProbe</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">HealthServlet.</span><code><a href="../HealthServlet.html#probeFor(org.apache.juneau.rest.server.RestRequest)" class="member-name-link">probeFor</a><wbr>(<a href="../../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req)</code></div>
 <div class="col-last even-row-color">
+<div class="block">Resolves which probe this request is for, keyed off the LAST PATH SEGMENT.</div>
+</div>
+<div class="col-first odd-row-color"><code>static <a href="../HealthProbe.html" title="enum class in org.apache.juneau.rest.server.health">HealthProbe</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">HealthProbe.</span><code><a href="../HealthProbe.html#valueOf(java.lang.String)" class="member-name-link">valueOf</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</code></div>
+<div class="col-last odd-row-color">
 <div class="block">Returns the enum constant of this class with the specified name.</div>
 </div>
-<div class="col-first odd-row-color"><code>static <a href="../HealthProbe.html" title="enum class in org.apache.juneau.rest.server.health">HealthProbe</a>[]</code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">HealthProbe.</span><code><a href="../HealthProbe.html#values()" class="member-name-link">values</a>()</code></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><code>static <a href="../HealthProbe.html" title="enum class in org.apache.juneau.rest.server.health">HealthProbe</a>[]</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">HealthProbe.</span><code><a href="../HealthProbe.html#values()" class="member-name-link">values</a>()</code></div>
+<div class="col-last even-row-color">
 <div class="block">Returns an array containing the constants of this enum class, in
 the order they are declared.</div>
 </div>

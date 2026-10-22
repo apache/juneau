@@ -276,14 +276,14 @@ loadScripts(document, 'script');</script>
 <dt>Parameters:</dt>
 <dd><code>response</code> - The HTTP response to copy from.  Must not be <jk>null</jk>.</dd>
 <dt>Throws:</dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/AssertionError.html" title="class or interface in java.lang" class="external-link">AssertionError</a></code> - If HTTP response status code does not match what was expected.</dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/IllegalArgumentException.html" title="class or interface in java.lang" class="external-link">IllegalArgumentException</a></code> - If HTTP response status code does not match what was expected.</dd>
 </dl>
 </section>
 </li>
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.http.classic.response.MultiStatus)">
 <h3>MultiStatus</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/response/MultiStatus.html#line-80">MultiStatus</a></span><wbr><span class="parameters">(<a href="MultiStatus.html" title="class in org.apache.juneau.http.classic.response">MultiStatus</a>&nbsp;copyFrom)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/response/MultiStatus.html#line-79">MultiStatus</a></span><wbr><span class="parameters">(<a href="MultiStatus.html" title="class in org.apache.juneau.http.classic.response">MultiStatus</a>&nbsp;copyFrom)</span></div>
 <div class="block">Copy constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -302,7 +302,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="copy()">
 <h3>copy</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MultiStatus.html" title="class in org.apache.juneau.http.classic.response">MultiStatus</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/response/MultiStatus.html#line-89">copy</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MultiStatus.html" title="class in org.apache.juneau.http.classic.response">MultiStatus</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/response/MultiStatus.html#line-88">copy</a></span>()</div>
 <div class="block">Creates a builder for this class initialized with the contents of this bean.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -313,7 +313,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="unmodifiable()">
 <h3>unmodifiable</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MultiStatus.html" title="class in org.apache.juneau.http.classic.response">MultiStatus</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/response/MultiStatus.html#line-93">unmodifiable</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MultiStatus.html" title="class in org.apache.juneau.http.classic.response">MultiStatus</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/response/MultiStatus.html#line-92">unmodifiable</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="BasicHttpResponse.html#unmodifiable()">BasicHttpResponse</a></code></span></div>
 <div class="block">Returns an unmodifiable snapshot of this bean.
 

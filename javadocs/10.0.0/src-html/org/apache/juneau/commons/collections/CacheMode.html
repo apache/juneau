@@ -89,62 +89,73 @@
 <span class="source-line-no">076</span><span id="line-76">    *    &lt;li&gt;Entries may be removed unpredictably by the garbage collector</span>
 <span class="source-line-no">077</span><span id="line-77">    *    &lt;li&gt;Not suitable for high-concurrency scenarios</span>
 <span class="source-line-no">078</span><span id="line-78">    * &lt;/ul&gt;</span>
-<span class="source-line-no">079</span><span id="line-79">    */</span>
-<span class="source-line-no">080</span><span id="line-80">   WEAK,</span>
-<span class="source-line-no">081</span><span id="line-81"></span>
-<span class="source-line-no">082</span><span id="line-82">   /**</span>
-<span class="source-line-no">083</span><span id="line-83">    * Full caching - uses {@link java.util.concurrent.ConcurrentHashMap} for storage.</span>
-<span class="source-line-no">084</span><span id="line-84">    *</span>
-<span class="source-line-no">085</span><span id="line-85">    * &lt;p&gt;</span>
-<span class="source-line-no">086</span><span id="line-86">    * Provides the best performance with lock-free reads and writes. Cached entries</span>
-<span class="source-line-no">087</span><span id="line-87">    * will remain in memory until explicitly removed or the cache is cleared due to</span>
-<span class="source-line-no">088</span><span id="line-88">    * exceeding the maximum size.</span>
-<span class="source-line-no">089</span><span id="line-89">    *</span>
-<span class="source-line-no">090</span><span id="line-90">    * &lt;p&gt;</span>
-<span class="source-line-no">091</span><span id="line-91">    * This is the default and recommended mode for most use cases, offering:</span>
-<span class="source-line-no">092</span><span id="line-92">    * &lt;ul&gt;</span>
-<span class="source-line-no">093</span><span id="line-93">    *    &lt;li&gt;Excellent performance with no synchronization overhead for reads</span>
-<span class="source-line-no">094</span><span id="line-94">    *    &lt;li&gt;Thread-safe concurrent access</span>
-<span class="source-line-no">095</span><span id="line-95">    *    &lt;li&gt;Predictable memory usage (entries stay until evicted)</span>
-<span class="source-line-no">096</span><span id="line-96">    *    &lt;li&gt;Suitable for high-concurrency scenarios</span>
-<span class="source-line-no">097</span><span id="line-97">    * &lt;/ul&gt;</span>
-<span class="source-line-no">098</span><span id="line-98">    */</span>
-<span class="source-line-no">099</span><span id="line-99">   FULL;</span>
-<span class="source-line-no">100</span><span id="line-100"></span>
-<span class="source-line-no">101</span><span id="line-101">   // Constant values for parsing</span>
-<span class="source-line-no">102</span><span id="line-102">   private static final String CONST_NONE = "NONE";</span>
-<span class="source-line-no">103</span><span id="line-103">   private static final String CONST_WEAK = "WEAK";</span>
-<span class="source-line-no">104</span><span id="line-104">   private static final String CONST_FULL = "FULL";</span>
-<span class="source-line-no">105</span><span id="line-105"></span>
-<span class="source-line-no">106</span><span id="line-106">   /**</span>
-<span class="source-line-no">107</span><span id="line-107">    * Parses a string value into a {@link CacheMode}.</span>
-<span class="source-line-no">108</span><span id="line-108">    *</span>
-<span class="source-line-no">109</span><span id="line-109">    * &lt;p&gt;</span>
-<span class="source-line-no">110</span><span id="line-110">    * Performs case-insensitive matching against the enum constant names.</span>
-<span class="source-line-no">111</span><span id="line-111">    *</span>
-<span class="source-line-no">112</span><span id="line-112">    * &lt;h5 class='section'&gt;Examples:&lt;/h5&gt;</span>
-<span class="source-line-no">113</span><span id="line-113">    * &lt;p class='bjava'&gt;</span>
-<span class="source-line-no">114</span><span id="line-114">    *    CacheMode.&lt;jsm&gt;parse&lt;/jsm&gt;(&lt;js&gt;"none"&lt;/js&gt;);  &lt;jc&gt;// Returns NONE&lt;/jc&gt;</span>
-<span class="source-line-no">115</span><span id="line-115">    *    CacheMode.&lt;jsm&gt;parse&lt;/jsm&gt;(&lt;js&gt;"WEAK"&lt;/js&gt;);  &lt;jc&gt;// Returns WEAK&lt;/jc&gt;</span>
-<span class="source-line-no">116</span><span id="line-116">    *    CacheMode.&lt;jsm&gt;parse&lt;/jsm&gt;(&lt;js&gt;"Full"&lt;/js&gt;);  &lt;jc&gt;// Returns FULL&lt;/jc&gt;</span>
-<span class="source-line-no">117</span><span id="line-117">    *    CacheMode.&lt;jsm&gt;parse&lt;/jsm&gt;(&lt;jk&gt;null&lt;/jk&gt;);    &lt;jc&gt;// Returns FULL (default)&lt;/jc&gt;</span>
-<span class="source-line-no">118</span><span id="line-118">    *    CacheMode.&lt;jsm&gt;parse&lt;/jsm&gt;(&lt;js&gt;"invalid"&lt;/js&gt;); &lt;jc&gt;// Returns FULL (default)&lt;/jc&gt;</span>
-<span class="source-line-no">119</span><span id="line-119">    * &lt;/p&gt;</span>
-<span class="source-line-no">120</span><span id="line-120">    *</span>
-<span class="source-line-no">121</span><span id="line-121">    * @param value The string value to parse. Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">122</span><span id="line-122">    * @return The corresponding {@link CacheMode}, or {@link #FULL} if the value is &lt;jk&gt;null&lt;/jk&gt; or invalid.</span>
-<span class="source-line-no">123</span><span id="line-123">    */</span>
-<span class="source-line-no">124</span><span id="line-124">   public static CacheMode parse(String value) {</span>
-<span class="source-line-no">125</span><span id="line-125">      if (value == null)</span>
-<span class="source-line-no">126</span><span id="line-126">         return FULL;</span>
-<span class="source-line-no">127</span><span id="line-127">      return switch (ucr(value)) {</span>
-<span class="source-line-no">128</span><span id="line-128">         case CONST_NONE -&gt; NONE;</span>
-<span class="source-line-no">129</span><span id="line-129">         case CONST_WEAK -&gt; WEAK;</span>
-<span class="source-line-no">130</span><span id="line-130">         case CONST_FULL -&gt; FULL;</span>
-<span class="source-line-no">131</span><span id="line-131">         default -&gt; FULL;</span>
-<span class="source-line-no">132</span><span id="line-132">      };</span>
-<span class="source-line-no">133</span><span id="line-133">   }</span>
-<span class="source-line-no">134</span><span id="line-134">}</span>
+<span class="source-line-no">079</span><span id="line-79">    *</span>
+<span class="source-line-no">080</span><span id="line-80">    * &lt;p&gt;</span>
+<span class="source-line-no">081</span><span id="line-81">    * &lt;b&gt;Composite-key caches:&lt;/b&gt; {@link Cache2}, {@link Cache3}, {@link Cache4}, and {@link Cache5} synthesize</span>
+<span class="source-line-no">082</span><span id="line-82">    * an internal composite-key object (e.g. a {@code TupleN}) on every lookup, and that object is never exposed</span>
+<span class="source-line-no">083</span><span id="line-83">    * to the caller - it is reachable only from the cache's own backing map. As a result, a WEAK-mode entry in</span>
+<span class="source-line-no">084</span><span id="line-84">    * one of these caches becomes GC-eligible &lt;b&gt;immediately&lt;/b&gt; after insertion and may be reclaimed at the very</span>
+<span class="source-line-no">085</span><span id="line-85">    * next garbage collection, i.e. WEAK effectively behaves like {@link #NONE} once any GC has occurred. This is</span>
+<span class="source-line-no">086</span><span id="line-86">    * best-effort, &lt;b&gt;not retention-guaranteed&lt;/b&gt; weak-key caching by design (not a bug) and is &lt;i&gt;not&lt;/i&gt;</span>
+<span class="source-line-no">087</span><span id="line-87">    * equivalent to WEAK on the single-key {@link Cache}, where retention instead tracks the caller's own key and</span>
+<span class="source-line-no">088</span><span id="line-88">    * an entry survives for as long as that key remains strongly reachable elsewhere. If guaranteed retention is</span>
+<span class="source-line-no">089</span><span id="line-89">    * required, use {@link #FULL} (the default mode) instead of WEAK for the composite-key caches.</span>
+<span class="source-line-no">090</span><span id="line-90">    */</span>
+<span class="source-line-no">091</span><span id="line-91">   WEAK,</span>
+<span class="source-line-no">092</span><span id="line-92"></span>
+<span class="source-line-no">093</span><span id="line-93">   /**</span>
+<span class="source-line-no">094</span><span id="line-94">    * Full caching - uses {@link java.util.concurrent.ConcurrentHashMap} for storage.</span>
+<span class="source-line-no">095</span><span id="line-95">    *</span>
+<span class="source-line-no">096</span><span id="line-96">    * &lt;p&gt;</span>
+<span class="source-line-no">097</span><span id="line-97">    * Provides the best performance with lock-free reads and writes. Cached entries</span>
+<span class="source-line-no">098</span><span id="line-98">    * will remain in memory until explicitly removed or the cache is cleared due to</span>
+<span class="source-line-no">099</span><span id="line-99">    * exceeding the maximum size.</span>
+<span class="source-line-no">100</span><span id="line-100">    *</span>
+<span class="source-line-no">101</span><span id="line-101">    * &lt;p&gt;</span>
+<span class="source-line-no">102</span><span id="line-102">    * This is the default and recommended mode for most use cases, offering:</span>
+<span class="source-line-no">103</span><span id="line-103">    * &lt;ul&gt;</span>
+<span class="source-line-no">104</span><span id="line-104">    *    &lt;li&gt;Excellent performance with no synchronization overhead for reads</span>
+<span class="source-line-no">105</span><span id="line-105">    *    &lt;li&gt;Thread-safe concurrent access</span>
+<span class="source-line-no">106</span><span id="line-106">    *    &lt;li&gt;Predictable memory usage (entries stay until evicted)</span>
+<span class="source-line-no">107</span><span id="line-107">    *    &lt;li&gt;Suitable for high-concurrency scenarios</span>
+<span class="source-line-no">108</span><span id="line-108">    * &lt;/ul&gt;</span>
+<span class="source-line-no">109</span><span id="line-109">    */</span>
+<span class="source-line-no">110</span><span id="line-110">   FULL;</span>
+<span class="source-line-no">111</span><span id="line-111"></span>
+<span class="source-line-no">112</span><span id="line-112">   // Constant values for parsing</span>
+<span class="source-line-no">113</span><span id="line-113">   private static final String CONST_NONE = "NONE";</span>
+<span class="source-line-no">114</span><span id="line-114">   private static final String CONST_WEAK = "WEAK";</span>
+<span class="source-line-no">115</span><span id="line-115">   private static final String CONST_FULL = "FULL";</span>
+<span class="source-line-no">116</span><span id="line-116"></span>
+<span class="source-line-no">117</span><span id="line-117">   /**</span>
+<span class="source-line-no">118</span><span id="line-118">    * Parses a string value into a {@link CacheMode}.</span>
+<span class="source-line-no">119</span><span id="line-119">    *</span>
+<span class="source-line-no">120</span><span id="line-120">    * &lt;p&gt;</span>
+<span class="source-line-no">121</span><span id="line-121">    * Performs case-insensitive matching against the enum constant names.</span>
+<span class="source-line-no">122</span><span id="line-122">    *</span>
+<span class="source-line-no">123</span><span id="line-123">    * &lt;h5 class='section'&gt;Examples:&lt;/h5&gt;</span>
+<span class="source-line-no">124</span><span id="line-124">    * &lt;p class='bjava'&gt;</span>
+<span class="source-line-no">125</span><span id="line-125">    *    CacheMode.&lt;jsm&gt;parse&lt;/jsm&gt;(&lt;js&gt;"none"&lt;/js&gt;);  &lt;jc&gt;// Returns NONE&lt;/jc&gt;</span>
+<span class="source-line-no">126</span><span id="line-126">    *    CacheMode.&lt;jsm&gt;parse&lt;/jsm&gt;(&lt;js&gt;"WEAK"&lt;/js&gt;);  &lt;jc&gt;// Returns WEAK&lt;/jc&gt;</span>
+<span class="source-line-no">127</span><span id="line-127">    *    CacheMode.&lt;jsm&gt;parse&lt;/jsm&gt;(&lt;js&gt;"Full"&lt;/js&gt;);  &lt;jc&gt;// Returns FULL&lt;/jc&gt;</span>
+<span class="source-line-no">128</span><span id="line-128">    *    CacheMode.&lt;jsm&gt;parse&lt;/jsm&gt;(&lt;jk&gt;null&lt;/jk&gt;);    &lt;jc&gt;// Returns FULL (default)&lt;/jc&gt;</span>
+<span class="source-line-no">129</span><span id="line-129">    *    CacheMode.&lt;jsm&gt;parse&lt;/jsm&gt;(&lt;js&gt;"invalid"&lt;/js&gt;); &lt;jc&gt;// Returns FULL (default)&lt;/jc&gt;</span>
+<span class="source-line-no">130</span><span id="line-130">    * &lt;/p&gt;</span>
+<span class="source-line-no">131</span><span id="line-131">    *</span>
+<span class="source-line-no">132</span><span id="line-132">    * @param value The string value to parse. Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">133</span><span id="line-133">    * @return The corresponding {@link CacheMode}, or {@link #FULL} if the value is &lt;jk&gt;null&lt;/jk&gt; or invalid.</span>
+<span class="source-line-no">134</span><span id="line-134">    */</span>
+<span class="source-line-no">135</span><span id="line-135">   public static CacheMode parse(String value) {</span>
+<span class="source-line-no">136</span><span id="line-136">      if (value == null)</span>
+<span class="source-line-no">137</span><span id="line-137">         return FULL;</span>
+<span class="source-line-no">138</span><span id="line-138">      return switch (ucr(value)) {</span>
+<span class="source-line-no">139</span><span id="line-139">         case CONST_NONE -&gt; NONE;</span>
+<span class="source-line-no">140</span><span id="line-140">         case CONST_WEAK -&gt; WEAK;</span>
+<span class="source-line-no">141</span><span id="line-141">         case CONST_FULL -&gt; FULL;</span>
+<span class="source-line-no">142</span><span id="line-142">         default -&gt; FULL;</span>
+<span class="source-line-no">143</span><span id="line-143">      };</span>
+<span class="source-line-no">144</span><span id="line-144">   }</span>
+<span class="source-line-no">145</span><span id="line-145">}</span>
 
 
 

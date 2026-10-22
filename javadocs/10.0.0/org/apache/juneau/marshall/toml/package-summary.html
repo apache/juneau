@@ -100,26 +100,66 @@ loadScripts(document, 'script');</script>
 </li>
 <li>
 <div id="class-summary">
-<div class="table-tabs" role="tablist" aria-orientation="horizontal"><button id="class-summary-tab0" role="tab" aria-selected="true" aria-controls="class-summary.tabpanel" tabindex="0" onkeydown="switchTab(event)" onclick="show('class-summary', 'class-summary', 2)" class="active-table-tab">All Classes and Interfaces</button><button id="class-summary-tab2" role="tab" aria-selected="false" aria-controls="class-summary.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('class-summary', 'class-summary-tab2', 2)" class="table-tab">Classes</button><button id="class-summary-tab7" role="tab" aria-selected="false" aria-controls="class-summary.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('class-summary', 'class-summary-tab7', 2)" class="table-tab">Annotation Interfaces</button></div>
+<div class="table-tabs" role="tablist" aria-orientation="horizontal"><button id="class-summary-tab0" role="tab" aria-selected="true" aria-controls="class-summary.tabpanel" tabindex="0" onkeydown="switchTab(event)" onclick="show('class-summary', 'class-summary', 2)" class="active-table-tab">All Classes and Interfaces</button><button id="class-summary-tab1" role="tab" aria-selected="false" aria-controls="class-summary.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('class-summary', 'class-summary-tab1', 2)" class="table-tab">Interfaces</button><button id="class-summary-tab2" role="tab" aria-selected="false" aria-controls="class-summary.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('class-summary', 'class-summary-tab2', 2)" class="table-tab">Classes</button><button id="class-summary-tab7" role="tab" aria-selected="false" aria-controls="class-summary.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('class-summary', 'class-summary-tab7', 2)" class="table-tab">Annotation Interfaces</button></div>
 <div id="class-summary.tabpanel" role="tabpanel" aria-labelledby="class-summary-tab0">
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Class</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color class-summary class-summary-tab7"><a href="TomlConfig.html" title="annotation interface in org.apache.juneau.marshall.toml">TomlConfig</a></div>
+<div class="col-first even-row-color class-summary class-summary-tab7"><a href="Toml.html" title="annotation interface in org.apache.juneau.marshall.toml">Toml</a></div>
 <div class="col-last even-row-color class-summary class-summary-tab7">
+<div class="block">Annotation for customizing TOML serialization and parsing behavior on classes, methods, and fields.</div>
+</div>
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="TomlAnnotation.html" title="class in org.apache.juneau.marshall.toml">TomlAnnotation</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">
+<div class="block">Utility classes and methods for the <a href="Toml.html" title="annotation interface in org.apache.juneau.marshall.toml"><code>@Toml</code></a> annotation.</div>
+</div>
+<div class="col-first even-row-color class-summary class-summary-tab7"><a href="TomlApply.html" title="annotation interface in org.apache.juneau.marshall.toml">TomlApply</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab7">
+<div class="block">Dynamically applies a <a href="Toml.html" title="annotation interface in org.apache.juneau.marshall.toml"><code>@Toml</code></a> annotation to specified classes, methods, or fields.</div>
+</div>
+<div class="col-first odd-row-color class-summary class-summary-tab7"><a href="TomlApply.Array.html" title="annotation interface in org.apache.juneau.marshall.toml">TomlApply.Array</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab7">
+<div class="block">A collection of <a href="TomlApply.html" title="annotation interface in org.apache.juneau.marshall.toml"><code>@TomlApply annotations</code></a>.</div>
+</div>
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="TomlApplyAnnotation.html" title="class in org.apache.juneau.marshall.toml">TomlApplyAnnotation</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab2">
+<div class="block">Utility classes and methods for the <a href="TomlApply.html" title="annotation interface in org.apache.juneau.marshall.toml"><code>@TomlApply</code></a> annotation.</div>
+</div>
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="TomlApplyAnnotation.Applier.html" title="class in org.apache.juneau.marshall.toml">TomlApplyAnnotation.Applier</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">
+<div class="block">Applies targeted <a href="TomlApply.html" title="annotation interface in org.apache.juneau.marshall.toml"><code>TomlApply</code></a> annotations to a <a href="../Context.Builder.html" title="class in org.apache.juneau.marshall"><code>Context.Builder</code></a>.</div>
+</div>
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="TomlApplyAnnotation.Builder.html" title="class in org.apache.juneau.marshall.toml">TomlApplyAnnotation.Builder</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab2">
+<div class="block">Builder class.</div>
+</div>
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="TomlBeanPropertyMeta.html" title="class in org.apache.juneau.marshall.toml">TomlBeanPropertyMeta</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">
+<div class="block">Metadata on bean properties specific to TOML serializers and parsers.</div>
+</div>
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="TomlClassMeta.html" title="class in org.apache.juneau.marshall.toml">TomlClassMeta</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab2">
+<div class="block">Metadata on classes specific to TOML serializers and parsers.</div>
+</div>
+<div class="col-first odd-row-color class-summary class-summary-tab7"><a href="TomlConfig.html" title="annotation interface in org.apache.juneau.marshall.toml">TomlConfig</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab7">
 <div class="block">Annotation for specifying config properties defined in <a href="TomlSerializer.html" title="class in org.apache.juneau.marshall.toml"><code>TomlSerializer</code></a> and <a href="TomlParser.html" title="class in org.apache.juneau.marshall.toml"><code>TomlParser</code></a>.</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="TomlConfigAnnotation.html" title="class in org.apache.juneau.marshall.toml">TomlConfigAnnotation</a></div>
-<div class="col-last odd-row-color class-summary class-summary-tab2">
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="TomlConfigAnnotation.html" title="class in org.apache.juneau.marshall.toml">TomlConfigAnnotation</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab2">
 <div class="block">Utility classes and methods for the <a href="TomlConfig.html" title="annotation interface in org.apache.juneau.marshall.toml"><code>@TomlConfig</code></a> annotation.</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab2"><a href="TomlConfigAnnotation.ParserApply.html" title="class in org.apache.juneau.marshall.toml">TomlConfigAnnotation.ParserApply</a></div>
-<div class="col-last even-row-color class-summary class-summary-tab2">
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="TomlConfigAnnotation.ParserApply.html" title="class in org.apache.juneau.marshall.toml">TomlConfigAnnotation.ParserApply</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">
 <div class="block">Applies <a href="TomlConfig.html" title="annotation interface in org.apache.juneau.marshall.toml"><code>TomlConfig</code></a> annotations to a <a href="TomlParser.Builder.html" title="class in org.apache.juneau.marshall.toml"><code>TomlParser.Builder</code></a>.</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="TomlConfigAnnotation.SerializerApply.html" title="class in org.apache.juneau.marshall.toml">TomlConfigAnnotation.SerializerApply</a></div>
-<div class="col-last odd-row-color class-summary class-summary-tab2">
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="TomlConfigAnnotation.SerializerApply.html" title="class in org.apache.juneau.marshall.toml">TomlConfigAnnotation.SerializerApply</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab2">
 <div class="block">Applies <a href="TomlConfig.html" title="annotation interface in org.apache.juneau.marshall.toml"><code>TomlConfig</code></a> annotations to a <a href="TomlSerializer.Builder.html" title="class in org.apache.juneau.marshall.toml"><code>TomlSerializer.Builder</code></a>.</div>
+</div>
+<div class="col-first odd-row-color class-summary class-summary-tab1"><a href="TomlMetaProvider.html" title="interface in org.apache.juneau.marshall.toml">TomlMetaProvider</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab1">
+<div class="block">Interface for providing access to <a href="TomlClassMeta.html" title="class in org.apache.juneau.marshall.toml"><code>TomlClassMeta</code></a> and <a href="TomlBeanPropertyMeta.html" title="class in org.apache.juneau.marshall.toml"><code>TomlBeanPropertyMeta</code></a> objects.</div>
 </div>
 <div class="col-first even-row-color class-summary class-summary-tab2"><a href="TomlParser.html" title="class in org.apache.juneau.marshall.toml">TomlParser</a></div>
 <div class="col-last even-row-color class-summary class-summary-tab2">

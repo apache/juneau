@@ -36,7 +36,7 @@
 <a class="jxr_linenumber" name="L28" href="#L28">28</a>  
 <a class="jxr_linenumber" name="L29" href="#L29">29</a>  <em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L30" href="#L30">30</a>  <em class="jxr_javadoccomment"> * Unit coverage for {@link McpAudienceValidator} &amp;mdash; RFC 8707 audience matching against the resource identifier,</em>
-<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <em class="jxr_javadoccomment"> * including the H2 {@code requireAudienceClaim} fail-closed default.</em>
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <em class="jxr_javadoccomment"> * including the {@code requireAudienceClaim} fail-closed default.</em>
 <a class="jxr_linenumber" name="L32" href="#L32">32</a>  <em class="jxr_javadoccomment"> */</em>
 <a class="jxr_linenumber" name="L33" href="#L33">33</a>  <strong class="jxr_keyword">class</strong> <a name="McpAudienceValidator_Test" href="../../../../../../../org/apache/juneau/rest/server/mcp/v20260728/McpAudienceValidator_Test.html#McpAudienceValidator_Test">McpAudienceValidator_Test</a> <strong class="jxr_keyword">extends</strong> TestBase {
 <a class="jxr_linenumber" name="L34" href="#L34">34</a>  
@@ -70,14 +70,14 @@
 <a class="jxr_linenumber" name="L62" href="#L62">62</a>  		assertFalse(McpAudienceValidator.matches(<strong class="jxr_keyword">null</strong>, RES, <strong class="jxr_keyword">true</strong>));
 <a class="jxr_linenumber" name="L63" href="#L63">63</a>  	}
 <a class="jxr_linenumber" name="L64" href="#L64">64</a>  
-<a class="jxr_linenumber" name="L65" href="#L65">65</a>  	<em class="jxr_comment">// H2: a bare (claims-less) Principal is rejected by default (fail-closed) so the confused-deputy defense is not a</em>
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>  	<em class="jxr_comment">// A bare (claims-less) Principal is rejected by default (fail-closed) so the confused-deputy defense is not a</em>
 <a class="jxr_linenumber" name="L66" href="#L66">66</a>  	<em class="jxr_comment">// silent no-op.</em>
 <a class="jxr_linenumber" name="L67" href="#L67">67</a>  	@Test <strong class="jxr_keyword">void</strong> c01_nonClaimsPrincipalRejectedByDefault() {
 <a class="jxr_linenumber" name="L68" href="#L68">68</a>  		Principal bare = () -&gt; <span class="jxr_string">"alice"</span>;
 <a class="jxr_linenumber" name="L69" href="#L69">69</a>  		assertFalse(McpAudienceValidator.matches(bare, RES, <strong class="jxr_keyword">true</strong>));
 <a class="jxr_linenumber" name="L70" href="#L70">70</a>  	}
 <a class="jxr_linenumber" name="L71" href="#L71">71</a>  
-<a class="jxr_linenumber" name="L72" href="#L72">72</a>  	<em class="jxr_comment">// H2: the lenient behavior remains available only as an explicit opt-out (validator owns audience enforcement).</em>
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>  	<em class="jxr_comment">// The lenient behavior remains available only as an explicit opt-out (validator owns audience enforcement).</em>
 <a class="jxr_linenumber" name="L73" href="#L73">73</a>  	@Test <strong class="jxr_keyword">void</strong> c02_nonClaimsPrincipalPassesWhenClaimNotRequired() {
 <a class="jxr_linenumber" name="L74" href="#L74">74</a>  		Principal bare = () -&gt; <span class="jxr_string">"alice"</span>;
 <a class="jxr_linenumber" name="L75" href="#L75">75</a>  		assertTrue(McpAudienceValidator.matches(bare, RES, false));

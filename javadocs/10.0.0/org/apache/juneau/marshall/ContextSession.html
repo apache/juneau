@@ -82,7 +82,7 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="MarshallingSession.html" title="class in org.apache.juneau.marshall">MarshallingSession</a></code>, <code><a href="../rest/server/RestOpSession.html" title="class in org.apache.juneau.rest.server">RestOpSession</a></code>, <code><a href="../rest/server/RestSession.html" title="class in org.apache.juneau.rest.server">RestSession</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public abstract class </span><span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/ContextSession.html#line-42">ContextSession</a></span>
+<div class="type-signature"><span class="modifiers">public abstract class </span><span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/ContextSession.html#line-41">ContextSession</a></span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
 <div class="block">A one-time-use non-thread-safe object that's meant to be used once and then thrown away.
 
@@ -196,7 +196,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.marshall.ContextSession.Builder)">
 <h3>ContextSession</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/ContextSession.html#line-234">ContextSession</a></span><wbr><span class="parameters">(<a href="ContextSession.Builder.html" title="class in org.apache.juneau.marshall">ContextSession.Builder</a>&lt;?&gt;&nbsp;builder)</span></div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/ContextSession.html#line-219">ContextSession</a></span><wbr><span class="parameters">(<a href="ContextSession.Builder.html" title="class in org.apache.juneau.marshall">ContextSession.Builder</a>&lt;?&gt;&nbsp;builder)</span></div>
 <div class="block">Default constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -216,7 +216,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="addWarning(java.lang.String,java.lang.Object...)">
 <h3>addWarning</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/ContextSession.html#line-255">addWarning</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;msg,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/ContextSession.html#line-240">addWarning</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;msg,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>...&nbsp;args)</span></div>
 <div class="block">Logs a warning message.</div>
 <dl class="notes">
@@ -231,14 +231,14 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="checkForWarnings()">
 <h3>checkForWarnings</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/ContextSession.html#line-267">checkForWarnings</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/ContextSession.html#line-252">checkForWarnings</a></span>()</div>
 <div class="block">Throws a <a href="../commons/reflect/BeanRuntimeException.html" title="class in org.apache.juneau.commons.reflect"><code>BeanRuntimeException</code></a> if any warnings occurred in this session and debug is enabled.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="getContext()">
 <h3>getContext</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Context.html" title="class in org.apache.juneau.marshall">Context</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/ContextSession.html#line-277">getContext</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Context.html" title="class in org.apache.juneau.marshall">Context</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/ContextSession.html#line-262">getContext</a></span>()</div>
 <div class="block">Returns the context that created this session.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -249,7 +249,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getSessionProperties()">
 <h3>getSessionProperties</h3>
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/ContextSession.html#line-284">getSessionProperties</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/ContextSession.html#line-269">getSessionProperties</a></span>()</div>
 <div class="block">Returns the session properties on this session.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -260,7 +260,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getWarnings()">
 <h3>getWarnings</h3>
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/ContextSession.html#line-291">getWarnings</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/ContextSession.html#line-276">getWarnings</a></span>()</div>
 <div class="block">Returns the warnings that occurred in this session.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -271,7 +271,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="isDebug()">
 <h3>isDebug</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/ContextSession.html#line-300">isDebug</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/ContextSession.html#line-285">isDebug</a></span>()</div>
 <div class="block">Debug mode enabled.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -288,7 +288,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="toString()">
 <h3>toString</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/ContextSession.html#line-302">toString</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/ContextSession.html#line-287">toString</a></span>()</div>
 <dl class="notes">
 <dt>Overrides:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#toString()" title="class or interface in java.lang" class="external-link">toString</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></code></dd>
@@ -298,7 +298,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="properties()">
 <h3>properties</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="../commons/collections/FluentMap.html" title="class in org.apache.juneau.commons.collections">FluentMap</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/ContextSession.html#line-312">properties</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="../commons/collections/FluentMap.html" title="class in org.apache.juneau.commons.collections">FluentMap</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/ContextSession.html#line-297">properties</a></span>()</div>
 <div class="block">Returns the properties on this bean as a map for debugging.</div>
 <dl class="notes">
 <dt>Returns:</dt>

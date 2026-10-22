@@ -72,30 +72,42 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color"><code><a href="../TransportRequest.Builder.html" title="class in org.apache.juneau.rest.client">TransportRequest.Builder</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">TransportRequest.Builder.</span><code><a href="../TransportRequest.Builder.html#body(org.apache.juneau.rest.client.TransportBody)" class="member-name-link">body</a><wbr>(<a href="../TransportBody.html" title="class in org.apache.juneau.rest.client">TransportBody</a>&nbsp;value)</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">TransportRequest.Builder.</span><code><a href="../TransportRequest.Builder.html#allowedAddressRanges(org.apache.juneau.http.remote.RemoteUrlPolicy.AllowedRanges)" class="member-name-link">allowedAddressRanges</a><wbr>(<a href="../../../http/remote/RemoteUrlPolicy.AllowedRanges.html" title="class in org.apache.juneau.http.remote">RemoteUrlPolicy.AllowedRanges</a>&nbsp;value)</code></div>
 <div class="col-last even-row-color">
-<div class="block">Sets the request body.</div>
-</div>
-<div class="col-first odd-row-color"><code>static <a href="../TransportRequest.Builder.html" title="class in org.apache.juneau.rest.client">TransportRequest.Builder</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">TransportRequest.</span><code><a href="../TransportRequest.html#builder()" class="member-name-link">builder</a>()</code></div>
-<div class="col-last odd-row-color">
-<div class="block">Returns a new <a href="../TransportRequest.Builder.html" title="class in org.apache.juneau.rest.client"><code>TransportRequest.Builder</code></a>.</div>
-</div>
-<div class="col-first even-row-color"><code><a href="../TransportRequest.Builder.html" title="class in org.apache.juneau.rest.client">TransportRequest.Builder</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">TransportRequest.Builder.</span><code><a href="../TransportRequest.Builder.html#header(java.lang.String,java.lang.String)" class="member-name-link">header</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
- <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</code></div>
-<div class="col-last even-row-color">
-<div class="block">Appends a request header.</div>
+<div class="block">Sets the per-client special-purpose address ranges the SSRF guardrail re-permits for this request.</div>
 </div>
 <div class="col-first odd-row-color"><code><a href="../TransportRequest.Builder.html" title="class in org.apache.juneau.rest.client">TransportRequest.Builder</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">TransportRequest.Builder.</span><code><a href="../TransportRequest.Builder.html#headers(java.util.Collection)" class="member-name-link">headers</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;<a href="../TransportHeader.html" title="class in org.apache.juneau.rest.client">TransportHeader</a>&gt;&nbsp;value)</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">TransportRequest.Builder.</span><code><a href="../TransportRequest.Builder.html#body(org.apache.juneau.rest.client.TransportBody)" class="member-name-link">body</a><wbr>(<a href="../TransportBody.html" title="class in org.apache.juneau.rest.client">TransportBody</a>&nbsp;value)</code></div>
 <div class="col-last odd-row-color">
-<div class="block">Appends multiple request headers.</div>
+<div class="block">Sets the request body.</div>
+</div>
+<div class="col-first even-row-color"><code>static <a href="../TransportRequest.Builder.html" title="class in org.apache.juneau.rest.client">TransportRequest.Builder</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">TransportRequest.</span><code><a href="../TransportRequest.html#builder()" class="member-name-link">builder</a>()</code></div>
+<div class="col-last even-row-color">
+<div class="block">Returns a new <a href="../TransportRequest.Builder.html" title="class in org.apache.juneau.rest.client"><code>TransportRequest.Builder</code></a>.</div>
+</div>
+<div class="col-first odd-row-color"><code><a href="../TransportRequest.Builder.html" title="class in org.apache.juneau.rest.client">TransportRequest.Builder</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">TransportRequest.Builder.</span><code><a href="../TransportRequest.Builder.html#header(java.lang.String,java.lang.String)" class="member-name-link">header</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Appends a request header.</div>
 </div>
 <div class="col-first even-row-color"><code><a href="../TransportRequest.Builder.html" title="class in org.apache.juneau.rest.client">TransportRequest.Builder</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">TransportRequest.Builder.</span><code><a href="../TransportRequest.Builder.html#method(java.lang.String)" class="member-name-link">method</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">TransportRequest.Builder.</span><code><a href="../TransportRequest.Builder.html#headers(java.util.Collection)" class="member-name-link">headers</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;<a href="../TransportHeader.html" title="class in org.apache.juneau.rest.client">TransportHeader</a>&gt;&nbsp;value)</code></div>
 <div class="col-last even-row-color">
+<div class="block">Appends multiple request headers.</div>
+</div>
+<div class="col-first odd-row-color"><code><a href="../TransportRequest.Builder.html" title="class in org.apache.juneau.rest.client">TransportRequest.Builder</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">TransportRequest.Builder.</span><code><a href="../TransportRequest.Builder.html#method(java.lang.String)" class="member-name-link">method</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</code></div>
+<div class="col-last odd-row-color">
 <div class="block">Sets the HTTP method.</div>
+</div>
+<div class="col-first even-row-color"><code><a href="../TransportRequest.Builder.html" title="class in org.apache.juneau.rest.client">TransportRequest.Builder</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">TransportRequest.Builder.</span><code><a href="../TransportRequest.Builder.html#remoteUrlPolicy(boolean,boolean)" class="member-name-link">remoteUrlPolicy</a><wbr>(boolean&nbsp;policyEnforced,
+ boolean&nbsp;allowPrivateUrls)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Marks this request as originating from a <code>@Remote</code>/<code>@Url</code> call, subject to the SSRF guardrail,
+ and records whether the <code>allowPrivateUrls</code> opt-in is in effect.</div>
 </div>
 <div class="col-first odd-row-color"><code><a href="../TransportRequest.Builder.html" title="class in org.apache.juneau.rest.client">TransportRequest.Builder</a></code></div>
 <div class="col-second odd-row-color"><span class="type-name-label">TransportRequest.Builder.</span><code><a href="../TransportRequest.Builder.html#timeout(java.time.Duration)" class="member-name-link">timeout</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a>&nbsp;value)</code></div>

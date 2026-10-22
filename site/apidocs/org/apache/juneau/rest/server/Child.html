@@ -71,7 +71,7 @@ loadScripts(document, 'script');</script>
 <hr>
 <div class="type-signature"><span class="annotations"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/annotation/Target.html" title="class or interface in java.lang.annotation" class="external-link">@Target</a>({})
 <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/annotation/Retention.html" title="class or interface in java.lang.annotation" class="external-link">@Retention</a>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/annotation/RetentionPolicy.html#RUNTIME" title="class or interface in java.lang.annotation" class="external-link">RUNTIME</a>)
-</span><span class="modifiers">public @interface </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/Child.html#line-74">Child</a></span></div>
+</span><span class="modifiers">public @interface </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/Child.html#line-73">Child</a></span></div>
 <div class="block">Host-side setting seed for the <a href="Rest.html#childrenDefs()"><code>@Rest(childrenDefs=...)</code></a> attribute.
 
  <p>
@@ -83,7 +83,7 @@ loadScripts(document, 'script');</script>
  <h5 class='section'>Example:</h5>
  <p class='bjava'>
    <ja>@Rest</ja>(
-      childrenDefs=<ja>@Child</ja>(type=FooChild.<jk>class</jk>, callLogger=SeedLogger.<jk>class</jk>)
+      childrenDefs=<ja>@Child</ja>(type=FooChild.<jk>class</jk>, maxInput=<js>"10M"</js>)
    )
    <jk>public class</jk> MyResource { ... }
  </p>
@@ -97,7 +97,7 @@ loadScripts(document, 'script');</script>
    <li><b>Additive-security</b> (<code>guards</code>, <code>converters</code>, <code>roleGuard</code>, <code>rolesDeclared</code>)
       &mdash; the host contributes, the child can't remove or weaken it (list-shaped members prepend; the two
       role-based members AND-stack alongside the child's own value).
-   <li><b>Child-wins scalars</b> (<code>callLogger</code>, <code>partSerializer</code>, <code>partParser</code>, <code>debug</code>,
+   <li><b>Child-wins scalars</b> (<code>partSerializer</code>, <code>partParser</code>,
       <code>defaultCharset</code>, <code>maxInput</code>) &mdash; the seed is a default/fallback; the child's own explicit
       <code>@Rest</code> declaration wins when present.
  </ul>
@@ -147,20 +147,10 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Optional Element</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;? extends <a href="logger/CallLogger.html" title="class in org.apache.juneau.rest.server.logger">CallLogger</a>&gt;</code></div>
-<div class="col-second even-row-color"><code><a href="#callLogger()" class="member-name-link">callLogger</a></code></div>
+<div class="col-first even-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;? extends <a href="converter/RestConverter.html" title="interface in org.apache.juneau.rest.server.converter">RestConverter</a>&gt;[]</code></div>
+<div class="col-second even-row-color"><code><a href="#converters()" class="member-name-link">converters</a></code></div>
 <div class="col-last even-row-color">
-<div class="block">Host-seeded <a href="Rest.html#callLogger()"><code>callLogger</code></a> default for this child's endpoints.</div>
-</div>
-<div class="col-first odd-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;? extends <a href="converter/RestConverter.html" title="interface in org.apache.juneau.rest.server.converter">RestConverter</a>&gt;[]</code></div>
-<div class="col-second odd-row-color"><code><a href="#converters()" class="member-name-link">converters</a></code></div>
-<div class="col-last odd-row-color">
 <div class="block">Host-seeded <a href="Rest.html#converters()"><code>converters</code></a> for this child's endpoints (prepended before the child's own).</div>
-</div>
-<div class="col-first even-row-color"><code><a href="Debug.html" title="annotation interface in org.apache.juneau.rest.server">Debug</a></code></div>
-<div class="col-second even-row-color"><code><a href="#debug()" class="member-name-link">debug</a></code></div>
-<div class="col-last even-row-color">
-<div class="block">Host-seeded <a href="Rest.html#debug()"><code>debug</code></a> default for this child's endpoints (each sub-field independently seeded).</div>
 </div>
 <div class="col-first odd-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
 <div class="col-second odd-row-color"><code><a href="#defaultCharset()" class="member-name-link">defaultCharset</a></code></div>
@@ -212,7 +202,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="type()">
 <h3>type</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/Child.html#line-86">type</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/Child.html#line-85">type</a></span></div>
 <div class="block">The child class to route.
 
  <p>
@@ -233,7 +223,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="guards()">
 <h3>guards</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;? extends <a href="guard/RestGuard.html" title="class in org.apache.juneau.rest.server.guard">RestGuard</a>&gt;[]</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/Child.html#line-97">guards</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;? extends <a href="guard/RestGuard.html" title="class in org.apache.juneau.rest.server.guard">RestGuard</a>&gt;[]</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/Child.html#line-96">guards</a></span></div>
 <div class="block">Host-seeded <a href="Rest.html#guards()"><code>guards</code></a> for this child's endpoints (prepended before the child's own).</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -248,7 +238,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="converters()">
 <h3>converters</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;? extends <a href="converter/RestConverter.html" title="interface in org.apache.juneau.rest.server.converter">RestConverter</a>&gt;[]</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/Child.html#line-104">converters</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;? extends <a href="converter/RestConverter.html" title="interface in org.apache.juneau.rest.server.converter">RestConverter</a>&gt;[]</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/Child.html#line-103">converters</a></span></div>
 <div class="block">Host-seeded <a href="Rest.html#converters()"><code>converters</code></a> for this child's endpoints (prepended before the child's own).</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -263,7 +253,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="roleGuard()">
 <h3>roleGuard</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/Child.html#line-111">roleGuard</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/Child.html#line-110">roleGuard</a></span></div>
 <div class="block">Host-seeded <a href="Rest.html#roleGuard()"><code>roleGuard</code></a> for this child's endpoints (AND-stacks with the child's own).</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -278,7 +268,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="rolesDeclared()">
 <h3>rolesDeclared</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/Child.html#line-118">rolesDeclared</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/Child.html#line-117">rolesDeclared</a></span></div>
 <div class="block">Host-seeded <a href="Rest.html#rolesDeclared()"><code>rolesDeclared</code></a> for this child's endpoints (AND-stacks with the child's own).</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -291,24 +281,9 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
-<section class="detail" id="callLogger()">
-<h3>callLogger</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;? extends <a href="logger/CallLogger.html" title="class in org.apache.juneau.rest.server.logger">CallLogger</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/Child.html#line-129">callLogger</a></span></div>
-<div class="block">Host-seeded <a href="Rest.html#callLogger()"><code>callLogger</code></a> default for this child's endpoints.</div>
-<dl class="notes">
-<dt>Returns:</dt>
-<dd>The annotation value.</dd>
-</dl>
-<dl class="notes">
-<dt>Default:</dt>
-<dd>org.apache.juneau.rest.server.logger.CallLogger.Void.class</dd>
-</dl>
-</section>
-</li>
-<li>
 <section class="detail" id="partSerializer()">
 <h3>partSerializer</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;? extends <a href="../../marshall/httppart/HttpPartSerializer.html" title="interface in org.apache.juneau.marshall.httppart">HttpPartSerializer</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/Child.html#line-136">partSerializer</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;? extends <a href="../../marshall/httppart/HttpPartSerializer.html" title="interface in org.apache.juneau.marshall.httppart">HttpPartSerializer</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/Child.html#line-128">partSerializer</a></span></div>
 <div class="block">Host-seeded <a href="Rest.html#partSerializer()"><code>partSerializer</code></a> default for this child's endpoints.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -323,7 +298,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="partParser()">
 <h3>partParser</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;? extends <a href="../../marshall/httppart/HttpPartParser.html" title="interface in org.apache.juneau.marshall.httppart">HttpPartParser</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/Child.html#line-143">partParser</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;? extends <a href="../../marshall/httppart/HttpPartParser.html" title="interface in org.apache.juneau.marshall.httppart">HttpPartParser</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/Child.html#line-135">partParser</a></span></div>
 <div class="block">Host-seeded <a href="Rest.html#partParser()"><code>partParser</code></a> default for this child's endpoints.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -336,24 +311,9 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
-<section class="detail" id="debug()">
-<h3>debug</h3>
-<div class="member-signature"><span class="return-type"><a href="Debug.html" title="annotation interface in org.apache.juneau.rest.server">Debug</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/Child.html#line-150">debug</a></span></div>
-<div class="block">Host-seeded <a href="Rest.html#debug()"><code>debug</code></a> default for this child's endpoints (each sub-field independently seeded).</div>
-<dl class="notes">
-<dt>Returns:</dt>
-<dd>The annotation value.</dd>
-</dl>
-<dl class="notes">
-<dt>Default:</dt>
-<dd>@org.apache.juneau.rest.server.Debug</dd>
-</dl>
-</section>
-</li>
-<li>
 <section class="detail" id="defaultCharset()">
 <h3>defaultCharset</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/Child.html#line-157">defaultCharset</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/Child.html#line-142">defaultCharset</a></span></div>
 <div class="block">Host-seeded <a href="Rest.html#defaultCharset()"><code>defaultCharset</code></a> default for this child's endpoints.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -368,7 +328,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="maxInput()">
 <h3>maxInput</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/Child.html#line-164">maxInput</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/Child.html#line-149">maxInput</a></span></div>
 <div class="block">Host-seeded <a href="Rest.html#maxInput()"><code>maxInput</code></a> default for this child's endpoints.</div>
 <dl class="notes">
 <dt>Returns:</dt>

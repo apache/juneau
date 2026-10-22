@@ -29,7 +29,7 @@
 <span class="source-line-no">016</span><span id="line-16"> */</span>
 <span class="source-line-no">017</span><span id="line-17">package org.apache.juneau.marshall.hocon;</span>
 <span class="source-line-no">018</span><span id="line-18"></span>
-<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.AssertionUtils.*;</span>
+<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.Shorts.*;</span>
 <span class="source-line-no">020</span><span id="line-20"></span>
 <span class="source-line-no">021</span><span id="line-21">import java.io.*;</span>
 <span class="source-line-no">022</span><span id="line-22"></span>
@@ -80,12 +80,12 @@
 <span class="source-line-no">067</span><span id="line-67"> * &lt;/ul&gt;</span>
 <span class="source-line-no">068</span><span id="line-68"> */</span>
 <span class="source-line-no">069</span><span id="line-69">@SuppressWarnings({</span>
-<span class="source-line-no">070</span><span id="line-70">   "java:S110", "java:S115",</span>
-<span class="source-line-no">071</span><span id="line-71">   "resource" // Closeable resources are owned by the caller's parser session; Eclipse JDT @Owning warning is by design.</span>
-<span class="source-line-no">072</span><span id="line-72">})</span>
-<span class="source-line-no">073</span><span id="line-73">public class HoconParser extends ReaderParser implements HoconMetaProvider, RecordReadable {</span>
-<span class="source-line-no">074</span><span id="line-74"></span>
-<span class="source-line-no">075</span><span id="line-75">   private static final String ARG_ctx = "ctx";</span>
+<span class="source-line-no">070</span><span id="line-70">   "java:S110", // Depth comes from the shared Parser -&gt; ReaderParser base hierarchy</span>
+<span class="source-line-no">071</span><span id="line-71">   "java:S1192", // Duplicated literals (argument/property names) read more clearly inline than as constants</span>
+<span class="source-line-no">072</span><span id="line-72">   "java:S9149", // Per-format static factories intentionally shadow the parent's.</span>
+<span class="source-line-no">073</span><span id="line-73">   "resource" // Closeable resources are owned by the caller's parser session; Eclipse JDT @Owning warning is by design.</span>
+<span class="source-line-no">074</span><span id="line-74">})</span>
+<span class="source-line-no">075</span><span id="line-75">public class HoconParser extends ReaderParser implements HoconMetaProvider, RecordReadable {</span>
 <span class="source-line-no">076</span><span id="line-76"></span>
 <span class="source-line-no">077</span><span id="line-77">   private final java.util.concurrent.ConcurrentHashMap&lt;ClassMeta&lt;?&gt;,HoconClassMeta&gt; hoconClassMetas = new java.util.concurrent.ConcurrentHashMap&lt;&gt;();</span>
 <span class="source-line-no">078</span><span id="line-78">   private final java.util.concurrent.ConcurrentHashMap&lt;BeanPropertyMeta,HoconBeanPropertyMeta&gt; hoconBeanPropertyMetas = new java.util.concurrent.ConcurrentHashMap&lt;&gt;();</span>
@@ -107,12 +107,12 @@
 <span class="source-line-no">094</span><span id="line-94">      }</span>
 <span class="source-line-no">095</span><span id="line-95"></span>
 <span class="source-line-no">096</span><span id="line-96">      protected Builder(Builder copyFrom) {</span>
-<span class="source-line-no">097</span><span id="line-97">         super(assertArgNotNull(ARG_ctx, copyFrom));</span>
+<span class="source-line-no">097</span><span id="line-97">         super(reqnn("ctx", copyFrom));</span>
 <span class="source-line-no">098</span><span id="line-98">         resolveSubstitutions = copyFrom.resolveSubstitutions;</span>
 <span class="source-line-no">099</span><span id="line-99">      }</span>
 <span class="source-line-no">100</span><span id="line-100"></span>
 <span class="source-line-no">101</span><span id="line-101">      protected Builder(HoconParser copyFrom) {</span>
-<span class="source-line-no">102</span><span id="line-102">         super(assertArgNotNull(ARG_ctx, copyFrom));</span>
+<span class="source-line-no">102</span><span id="line-102">         super(reqnn("ctx", copyFrom));</span>
 <span class="source-line-no">103</span><span id="line-103">         resolveSubstitutions = copyFrom.resolveSubstitutions;</span>
 <span class="source-line-no">104</span><span id="line-104">      }</span>
 <span class="source-line-no">105</span><span id="line-105"></span>

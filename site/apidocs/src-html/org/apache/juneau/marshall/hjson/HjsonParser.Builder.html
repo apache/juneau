@@ -29,7 +29,7 @@
 <span class="source-line-no">016</span><span id="line-16"> */</span>
 <span class="source-line-no">017</span><span id="line-17">package org.apache.juneau.marshall.hjson;</span>
 <span class="source-line-no">018</span><span id="line-18"></span>
-<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.AssertionUtils.*;</span>
+<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.Shorts.*;</span>
 <span class="source-line-no">020</span><span id="line-20"></span>
 <span class="source-line-no">021</span><span id="line-21">import java.io.*;</span>
 <span class="source-line-no">022</span><span id="line-22"></span>
@@ -132,12 +132,12 @@
 <span class="source-line-no">119</span><span id="line-119"> * &lt;/ul&gt;</span>
 <span class="source-line-no">120</span><span id="line-120"> */</span>
 <span class="source-line-no">121</span><span id="line-121">@SuppressWarnings({</span>
-<span class="source-line-no">122</span><span id="line-122">   "java:S110", "java:S115",</span>
-<span class="source-line-no">123</span><span id="line-123">   "resource" // Closeable resources are owned by the caller's parser session; Eclipse JDT @Owning warning is by design.</span>
-<span class="source-line-no">124</span><span id="line-124">})</span>
-<span class="source-line-no">125</span><span id="line-125">public class HjsonParser extends ReaderParser implements HjsonMetaProvider, RecordReadable {</span>
-<span class="source-line-no">126</span><span id="line-126"></span>
-<span class="source-line-no">127</span><span id="line-127">   private static final String ARG_ctx = "ctx";</span>
+<span class="source-line-no">122</span><span id="line-122">   "java:S110", // Extends ReaderParser, which sits in the shared Context &gt; Parser &gt; ReaderParser hierarchy used by every character-based parser</span>
+<span class="source-line-no">123</span><span id="line-123">   "java:S1192", // Duplicated literals (argument/property names) read more clearly inline than as constants</span>
+<span class="source-line-no">124</span><span id="line-124">   "java:S9149", // Per-format static factories intentionally shadow the parent's.</span>
+<span class="source-line-no">125</span><span id="line-125">   "resource" // Closeable resources are owned by the caller's parser session; Eclipse JDT @Owning warning is by design.</span>
+<span class="source-line-no">126</span><span id="line-126">})</span>
+<span class="source-line-no">127</span><span id="line-127">public class HjsonParser extends ReaderParser implements HjsonMetaProvider, RecordReadable {</span>
 <span class="source-line-no">128</span><span id="line-128"></span>
 <span class="source-line-no">129</span><span id="line-129">   private final java.util.concurrent.ConcurrentHashMap&lt;ClassMeta&lt;?&gt;,HjsonClassMeta&gt; hjsonClassMetas = new java.util.concurrent.ConcurrentHashMap&lt;&gt;();</span>
 <span class="source-line-no">130</span><span id="line-130">   private final java.util.concurrent.ConcurrentHashMap&lt;BeanPropertyMeta,HjsonBeanPropertyMeta&gt; hjsonBeanPropertyMetas = new java.util.concurrent.ConcurrentHashMap&lt;&gt;();</span>
@@ -152,11 +152,11 @@
 <span class="source-line-no">139</span><span id="line-139">      }</span>
 <span class="source-line-no">140</span><span id="line-140"></span>
 <span class="source-line-no">141</span><span id="line-141">      protected Builder(Builder copyFrom) {</span>
-<span class="source-line-no">142</span><span id="line-142">         super(assertArgNotNull(ARG_ctx, copyFrom));</span>
+<span class="source-line-no">142</span><span id="line-142">         super(reqnn("ctx", copyFrom));</span>
 <span class="source-line-no">143</span><span id="line-143">      }</span>
 <span class="source-line-no">144</span><span id="line-144"></span>
 <span class="source-line-no">145</span><span id="line-145">      protected Builder(HjsonParser copyFrom) {</span>
-<span class="source-line-no">146</span><span id="line-146">         super(assertArgNotNull(ARG_ctx, copyFrom));</span>
+<span class="source-line-no">146</span><span id="line-146">         super(reqnn("ctx", copyFrom));</span>
 <span class="source-line-no">147</span><span id="line-147">      }</span>
 <span class="source-line-no">148</span><span id="line-148"></span>
 <span class="source-line-no">149</span><span id="line-149">      @Override</span>

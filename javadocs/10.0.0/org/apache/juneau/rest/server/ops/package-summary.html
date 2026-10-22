@@ -69,15 +69,14 @@ loadScripts(document, 'script');</script>
 
  <p>
  Three sibling mixins compose into the host <code>@Rest</code>-annotated resource. Each mixin owns
- its default mount paths, ships secure-by-default (debug-gated for echo, deny-all-guard for
+ its default mount paths, ships secure-by-default (disabled-by-default for echo, deny-all-guard for
  admin), and is independently mountable; the three together drop in as a pack via
  <code>@Rest(mixins={EchoMixin.class, AdminMixin.class, RouteIndexMixin.class})</code>.
  </p>
 
  <ul class='javatreec'>
    <li class='jc'><a href="EchoMixin.html" title="class in org.apache.juneau.rest.server.ops"><code>EchoMixin</code></a> —
-      <code>/echo/*</code> request echo (SVL-configurable mount), gated behind the host's
-      <a href="../debug/DebugEnablement.html" title="class in org.apache.juneau.rest.server.debug"><code>DebugEnablement</code></a>; sensitive headers
+      <code>/echo/*</code> request echo (SVL-configurable mount); sensitive headers
       (<code>Authorization</code>, <code>Cookie</code>, etc.) are redacted by default.
    <li class='jc'><a href="AdminMixin.html" title="class in org.apache.juneau.rest.server.ops"><code>AdminMixin</code></a> —
       <code>/admin/threads</code>, <code>/admin/heap</code>, <code>/admin/cache/flush</code> (POST), and
@@ -99,8 +98,7 @@ loadScripts(document, 'script');</script>
          EchoMixin.<jk>class</jk>,
          AdminMixin.<jk>class</jk>,
          RouteIndexMixin.<jk>class</jk>
-      },
-      debug=<js>"conditional"</js>            <jc>// gates EchoMixin per-request</jc>
+      }
    )
    <jk>public class</jk> ApiResource <jk>extends</jk> RestServlet {
 

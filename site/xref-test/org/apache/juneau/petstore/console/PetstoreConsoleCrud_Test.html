@@ -1,0 +1,125 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="" lang="">
+<head><meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<title>PetstoreConsoleCrud_Test xref</title>
+<link type="text/css" rel="stylesheet" href="../../../../../stylesheet.css" />
+</head>
+<body>
+<div id="overview"><a href="../../../../../../testapidocs/org/apache/juneau/petstore/console/PetstoreConsoleCrud_Test.html">View Javadoc</a></div><pre>
+<a class="jxr_linenumber" name="L1" href="#L1">1</a>   <em class="jxr_comment">/*</em>
+<a class="jxr_linenumber" name="L2" href="#L2">2</a>   <em class="jxr_comment"> * Licensed to the Apache Software Foundation (ASF) under one or more</em>
+<a class="jxr_linenumber" name="L3" href="#L3">3</a>   <em class="jxr_comment"> * contributor license agreements.  See the NOTICE file distributed with</em>
+<a class="jxr_linenumber" name="L4" href="#L4">4</a>   <em class="jxr_comment"> * this work for additional information regarding copyright ownership.</em>
+<a class="jxr_linenumber" name="L5" href="#L5">5</a>   <em class="jxr_comment"> * The ASF licenses this file to You under the Apache License, Version 2.0</em>
+<a class="jxr_linenumber" name="L6" href="#L6">6</a>   <em class="jxr_comment"> * (the "License"); you may not use this file except in compliance with</em>
+<a class="jxr_linenumber" name="L7" href="#L7">7</a>   <em class="jxr_comment"> * the License.  You may obtain a copy of the License at</em>
+<a class="jxr_linenumber" name="L8" href="#L8">8</a>   <em class="jxr_comment"> *</em>
+<a class="jxr_linenumber" name="L9" href="#L9">9</a>   <em class="jxr_comment"> *      <a href="http://www.apache.org/licenses/LICENSE-2.0" target="alexandria_uri">http://www.apache.org/licenses/LICENSE-2.0</a></em>
+<a class="jxr_linenumber" name="L10" href="#L10">10</a>  <em class="jxr_comment"> *</em>
+<a class="jxr_linenumber" name="L11" href="#L11">11</a>  <em class="jxr_comment"> * Unless required by applicable law or agreed to in writing, software</em>
+<a class="jxr_linenumber" name="L12" href="#L12">12</a>  <em class="jxr_comment"> * distributed under the License is distributed on an "AS IS" BASIS,</em>
+<a class="jxr_linenumber" name="L13" href="#L13">13</a>  <em class="jxr_comment"> * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</em>
+<a class="jxr_linenumber" name="L14" href="#L14">14</a>  <em class="jxr_comment"> * See the License for the specific language governing permissions and</em>
+<a class="jxr_linenumber" name="L15" href="#L15">15</a>  <em class="jxr_comment"> * limitations under the License.</em>
+<a class="jxr_linenumber" name="L16" href="#L16">16</a>  <em class="jxr_comment"> */</em>
+<a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> org.apache.juneau.petstore.console;
+<a class="jxr_linenumber" name="L18" href="#L18">18</a>  
+<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.petstore.console.PetstoreConsoleFixture.*;
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.test.bct.BctAssertions.*;
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.junit.jupiter.api.Assertions.assertEquals;
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.*;
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.marshall.collections.*;
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.mock.classic.*;
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> org.junit.jupiter.api.*;
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <em class="jxr_javadoccomment"> * Writes made on the console are visible to the {@code /petstore} API and the other way round: one shared store.</em>
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <em class="jxr_javadoccomment"> */</em>
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>  @SuppressWarnings({
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>  	<span class="jxr_string">"resource"</span> <em class="jxr_comment">// MockRestClient is a no-op close.</em>
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>  })
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>  <strong class="jxr_keyword">class</strong> PetstoreConsoleCrud_Test <strong class="jxr_keyword">extends</strong> TestBase {
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>  
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> MockRestClient json() {
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>  		<strong class="jxr_keyword">return</strong> MockRestClient.create(Host.<strong class="jxr_keyword">class</strong>).noTrace().ignoreErrors().header(<span class="jxr_string">"Accept"</span>, <span class="jxr_string">"application/json"</span>).build();
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>  	}
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>  
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>  	@Test <strong class="jxr_keyword">void</strong> a01_consolePetIsOnTheApi() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>  		<strong class="jxr_keyword">var</strong> c = json();
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>  		<strong class="jxr_keyword">var</strong> id = <strong class="jxr_keyword">new</strong> JsonMap(c.post(<span class="jxr_string">"/console/pets"</span>, <span class="jxr_string">"{\&quot;name\&quot;:\&quot;Crudpet\&quot;,\&quot;price\&quot;:3}"</span>).contentType(<span class="jxr_string">"application/json"</span>).run().assertStatus(200).getContent().asString()).getMap(<span class="jxr_string">"row"</span>).getLong(<span class="jxr_string">"id"</span>);
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>  		c.get(<span class="jxr_string">"/petstore/pets/"</span> + id).run().assertStatus(200).assertContent().isContains(<span class="jxr_string">"Crudpet"</span>);
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>  		c.delete(<span class="jxr_string">"/petstore/pets/"</span> + id).run().assertStatus(200);
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>  		c.get(<span class="jxr_string">"/console/pets/"</span> + id + <span class="jxr_string">"/row"</span>).run().assertStatus(404);
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>  	}
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>  
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>  	@Test <strong class="jxr_keyword">void</strong> b01_consoleApprovedOrderReadsBackApproved() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>  		<strong class="jxr_keyword">var</strong> c = json();
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>  		<strong class="jxr_keyword">var</strong> id = <strong class="jxr_keyword">new</strong> JsonMap(c.post(<span class="jxr_string">"/petstore/orders"</span>, <span class="jxr_string">"{\&quot;petId\&quot;:1,\&quot;status\&quot;:\&quot;PLACED\&quot;}"</span>).contentType(<span class="jxr_string">"application/json"</span>).run().assertStatus(200).getContent().asString()).getLong(<span class="jxr_string">"id"</span>);
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>  		c.post(<span class="jxr_string">"/console/orders/"</span> + id + <span class="jxr_string">"/approve"</span>, <span class="jxr_string">""</span>).run().assertStatus(200);
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>  		c.get(<span class="jxr_string">"/petstore/orders/"</span> + id).run().assertStatus(200).assertContent().isContains(<span class="jxr_string">"APPROVED"</span>);
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>  	}
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>  
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>  	@Test <strong class="jxr_keyword">void</strong> c01_passwordIsKeptAcrossAConsoleEdit() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>  		<strong class="jxr_keyword">var</strong> c = json();
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>  		c.post(<span class="jxr_string">"/petstore/users"</span>, <span class="jxr_string">"{\&quot;username\&quot;:\&quot;crud1\&quot;,\&quot;firstName\&quot;:\&quot;C\&quot;,\&quot;password\&quot;:\&quot;kept\&quot;}"</span>).contentType(<span class="jxr_string">"application/json"</span>).run().assertStatus(200);
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>  		c.put(<span class="jxr_string">"/console/users/crud1"</span>, <span class="jxr_string">"{\&quot;firstName\&quot;:\&quot;Changed\&quot;}"</span>).contentType(<span class="jxr_string">"application/json"</span>).run().assertStatus(200);
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>  		c.get(<span class="jxr_string">"/petstore/users/crud1"</span>).run().assertContent().isContains(<span class="jxr_string">"Changed"</span>);
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>  		assertBean(store().getUser(<span class="jxr_string">"crud1"</span>), <span class="jxr_string">"password"</span>, <span class="jxr_string">"kept"</span>);
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>  	}
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>  
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String body(MockRestClient c, String path) <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>  		<strong class="jxr_keyword">return</strong> c.get(path).run().assertStatus(200).getContent().asString();
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>  	}
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>  
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>  	@Test <strong class="jxr_keyword">void</strong> c02_apiNeverReturnsPasswordButAcceptsIt() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>  		<strong class="jxr_keyword">var</strong> c = json();
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>  		<strong class="jxr_keyword">var</strong> created = c.post(<span class="jxr_string">"/petstore/users"</span>, <span class="jxr_string">"{\&quot;username\&quot;:\&quot;crud2\&quot;,\&quot;firstName\&quot;:\&quot;D\&quot;,\&quot;password\&quot;:\&quot;hunter2\&quot;}"</span>).contentType(<span class="jxr_string">"application/json"</span>).run().assertStatus(200).getContent().asString();
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>  		assertNotContains(<span class="jxr_string">"hunter2"</span>, created);
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>  		assertBean(store().getUser(<span class="jxr_string">"crud2"</span>), <span class="jxr_string">"password"</span>, <span class="jxr_string">"hunter2"</span>);
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>  		c.get(<span class="jxr_string">"/petstore/users/crud2"</span>).run().assertStatus(200).assertContent().isContains(<span class="jxr_string">"crud2"</span>);
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>  		assertNotContains(<span class="jxr_string">"password"</span>, body(c, <span class="jxr_string">"/petstore/users/crud2"</span>));
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>  		assertNotContains(<span class="jxr_string">"hunter2"</span>, body(c, <span class="jxr_string">"/petstore/users/crud2"</span>));
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>  		c.get(<span class="jxr_string">"/petstore/users"</span>).run().assertStatus(200).assertContent().isContains(<span class="jxr_string">"mwatson"</span>);
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>  		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> x : <strong class="jxr_keyword">new</strong> String[]{<span class="jxr_string">"hunter2"</span>, <span class="jxr_string">"123456"</span>, <span class="jxr_string">"password"</span>})
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>  			assertNotContains(x, body(c, <span class="jxr_string">"/petstore/users"</span>));
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>  		c.put(<span class="jxr_string">"/petstore/users/crud2"</span>, <span class="jxr_string">"{\&quot;firstName\&quot;:\&quot;E\&quot;,\&quot;password\&quot;:\&quot;hunter3\&quot;}"</span>).contentType(<span class="jxr_string">"application/json"</span>).run().assertStatus(200).assertContent().isNotContains(<span class="jxr_string">"hunter3"</span>);
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>  		assertBean(store().getUser(<span class="jxr_string">"crud2"</span>), <span class="jxr_string">"password"</span>, <span class="jxr_string">"hunter3"</span>);
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>  	}
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>  
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>  	@Test <strong class="jxr_keyword">void</strong> c03_apiPasswordIsHiddenInEveryFormat() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>  		<strong class="jxr_keyword">var</strong> c = MockRestClient.create(Host.<strong class="jxr_keyword">class</strong>).noTrace().ignoreErrors().build();
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>  		<em class="jxr_comment">// Formats the users endpoint does not serve (e.g. text/ini answers 500, text/prototext 406) fail the same way</em>
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>  		<em class="jxr_comment">// without this patch, so only 200 responses are checked; the password VALUE must never appear in any of them.</em>
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>  		<strong class="jxr_keyword">var</strong> checked = 0;
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>  		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> accept : <strong class="jxr_keyword">new</strong> String[]{<span class="jxr_string">"application/json"</span>, <span class="jxr_string">"text/json5"</span>, <span class="jxr_string">"application/jsonl"</span>, <span class="jxr_string">"text/html"</span>, <span class="jxr_string">"text/html+stripped"</span>, <span class="jxr_string">"text/xml"</span>, <span class="jxr_string">"text/xml+soap"</span>, <span class="jxr_string">"text/uon"</span>, <span class="jxr_string">"application/x-www-form-urlencoded"</span>, <span class="jxr_string">"text/plain"</span>, <span class="jxr_string">"text/yaml"</span>, <span class="jxr_string">"text/csv"</span>, <span class="jxr_string">"text/markdown"</span>, <span class="jxr_string">"octal/msgpack"</span>, <span class="jxr_string">"application/cbor"</span>, <span class="jxr_string">"application/bson"</span>, <span class="jxr_string">"text/ini"</span>, <span class="jxr_string">"text/prototext"</span>}) {
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>  			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> path : <strong class="jxr_keyword">new</strong> String[]{<span class="jxr_string">"/petstore/users/mwatson"</span>, <span class="jxr_string">"/petstore/users"</span>}) {
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>  				<strong class="jxr_keyword">var</strong> r = c.get(path).accept(accept).run();
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>  				<strong class="jxr_keyword">if</strong> (r.getStatusCode() != 200)
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>  					<strong class="jxr_keyword">continue</strong>;
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>  				checked++;
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>  				<strong class="jxr_keyword">var</strong> body = r.getContent().asString();
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>  				assertContains(<span class="jxr_string">"mwatson"</span>, body);
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>  				assertNotContains(<span class="jxr_string">"123456"</span>, body);
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>  			}
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>  		}
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>  		assertEquals(33, checked, <span class="jxr_string">"of 36 format/path combinations, exactly 33 are served (200)"</span>);
+<a class="jxr_linenumber" name="L99" href="#L99">99</a>  	}
+<a class="jxr_linenumber" name="L100" href="#L100">100</a> 
+<a class="jxr_linenumber" name="L101" href="#L101">101</a> 	@Test <strong class="jxr_keyword">void</strong> c04_getThenPutKeepsThePassword() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L102" href="#L102">102</a> 		<strong class="jxr_keyword">var</strong> c = json();
+<a class="jxr_linenumber" name="L103" href="#L103">103</a> 		c.post(<span class="jxr_string">"/petstore/users"</span>, <span class="jxr_string">"{\&quot;username\&quot;:\&quot;crud4\&quot;,\&quot;firstName\&quot;:\&quot;F\&quot;,\&quot;password\&quot;:\&quot;keepme\&quot;}"</span>).contentType(<span class="jxr_string">"application/json"</span>).run().assertStatus(200);
+<a class="jxr_linenumber" name="L104" href="#L104">104</a> 		<strong class="jxr_keyword">var</strong> got = body(c, <span class="jxr_string">"/petstore/users/crud4"</span>);
+<a class="jxr_linenumber" name="L105" href="#L105">105</a> 		c.put(<span class="jxr_string">"/petstore/users/crud4"</span>, got).contentType(<span class="jxr_string">"application/json"</span>).run().assertStatus(200);
+<a class="jxr_linenumber" name="L106" href="#L106">106</a> 		assertBean(store().getUser(<span class="jxr_string">"crud4"</span>), <span class="jxr_string">"password"</span>, <span class="jxr_string">"keepme"</span>);
+<a class="jxr_linenumber" name="L107" href="#L107">107</a> 		c.put(<span class="jxr_string">"/petstore/users/crud4"</span>, <span class="jxr_string">"{\&quot;firstName\&quot;:\&quot;F\&quot;,\&quot;password\&quot;:\&quot; \&quot;}"</span>).contentType(<span class="jxr_string">"application/json"</span>).run().assertStatus(200);
+<a class="jxr_linenumber" name="L108" href="#L108">108</a> 		assertBean(store().getUser(<span class="jxr_string">"crud4"</span>), <span class="jxr_string">"password"</span>, <span class="jxr_string">"keepme"</span>);
+<a class="jxr_linenumber" name="L109" href="#L109">109</a> 		c.put(<span class="jxr_string">"/petstore/users/crud4"</span>, <span class="jxr_string">"{\&quot;firstName\&quot;:\&quot;F\&quot;,\&quot;password\&quot;:\&quot;fresh\&quot;}"</span>).contentType(<span class="jxr_string">"application/json"</span>).run().assertStatus(200);
+<a class="jxr_linenumber" name="L110" href="#L110">110</a> 		assertBean(store().getUser(<span class="jxr_string">"crud4"</span>), <span class="jxr_string">"password"</span>, <span class="jxr_string">"fresh"</span>);
+<a class="jxr_linenumber" name="L111" href="#L111">111</a> 	}
+<a class="jxr_linenumber" name="L112" href="#L112">112</a> }
+</pre>
+<hr/>
+<div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>
+</body>
+</html>

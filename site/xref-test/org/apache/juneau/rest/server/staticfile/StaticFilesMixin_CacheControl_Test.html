@@ -57,7 +57,7 @@
 <a class="jxr_linenumber" name="L49" href="#L49">49</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> MockRestClient c = MockRestClient.buildLax(A.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L50" href="#L50">50</a>  
 <a class="jxr_linenumber" name="L51" href="#L51">51</a>  	@Test <strong class="jxr_keyword">void</strong> a01_cacheControlOnStaticMount() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L52" href="#L52">52</a>  		c.get(<span class="jxr_string">"/static/javadoc.css"</span>)
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>  		c.get(<span class="jxr_string">"/static/themes/devops.css"</span>)
 <a class="jxr_linenumber" name="L53" href="#L53">53</a>  			.run()
 <a class="jxr_linenumber" name="L54" href="#L54">54</a>  			.assertStatus(200)
 <a class="jxr_linenumber" name="L55" href="#L55">55</a>  			.assertHeader(<span class="jxr_string">"Cache-Control"</span>).is(<span class="jxr_string">"max-age=86400, public"</span>);
@@ -68,7 +68,7 @@
 <a class="jxr_linenumber" name="L60" href="#L60">60</a>  		<em class="jxr_comment">// BasicRestServlet still owns the legacy /htdocs/* via BasicRestOperations#getHtdoc.</em>
 <a class="jxr_linenumber" name="L61" href="#L61">61</a>  		<em class="jxr_comment">// That handler also reads from BasicStaticFiles, so the Cache-Control default flows</em>
 <a class="jxr_linenumber" name="L62" href="#L62">62</a>  		<em class="jxr_comment">// through unchanged.</em>
-<a class="jxr_linenumber" name="L63" href="#L63">63</a>  		c.get(<span class="jxr_string">"/htdocs/javadoc.css"</span>)
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>  		c.get(<span class="jxr_string">"/htdocs/themes/devops.css"</span>)
 <a class="jxr_linenumber" name="L64" href="#L64">64</a>  			.run()
 <a class="jxr_linenumber" name="L65" href="#L65">65</a>  			.assertStatus(200)
 <a class="jxr_linenumber" name="L66" href="#L66">66</a>  			.assertHeader(<span class="jxr_string">"Cache-Control"</span>).is(<span class="jxr_string">"max-age=86400, public"</span>);
@@ -76,7 +76,7 @@
 <a class="jxr_linenumber" name="L68" href="#L68">68</a>  
 <a class="jxr_linenumber" name="L69" href="#L69">69</a>  	@Test <strong class="jxr_keyword">void</strong> a03_cacheControlOnHeadRequest() <strong class="jxr_keyword">throws</strong> Exception {
 <a class="jxr_linenumber" name="L70" href="#L70">70</a>  		<em class="jxr_comment">// HEAD must mirror the GET's headers verbatim — Cache-Control included.</em>
-<a class="jxr_linenumber" name="L71" href="#L71">71</a>  		c.head(<span class="jxr_string">"/static/javadoc.css"</span>)
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>  		c.head(<span class="jxr_string">"/static/themes/devops.css"</span>)
 <a class="jxr_linenumber" name="L72" href="#L72">72</a>  			.run()
 <a class="jxr_linenumber" name="L73" href="#L73">73</a>  			.assertStatus(200)
 <a class="jxr_linenumber" name="L74" href="#L74">74</a>  			.assertContent().is(<span class="jxr_string">""</span>)

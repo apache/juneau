@@ -535,6 +535,16 @@ loadScripts(document, 'script');</script>
 <div class="block">Bean property namer</div>
 </div>
 <div class="col-first even-row-color"><code><a href="../MarshallingContext.Builder.html" title="class in org.apache.juneau.marshall">MarshallingContext.Builder</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">MarshallingContext.Builder.</span><code><a href="../MarshallingContext.Builder.html#recordComponentOrder()" class="member-name-link">recordComponentOrder</a>()</code></div>
+<div class="col-last even-row-color">
+<div class="block">Use record component order for <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Record.html" title="class or interface in java.lang" class="external-link"><code>Record</code></a> beans.</div>
+</div>
+<div class="col-first odd-row-color"><code><a href="../MarshallingContext.Builder.html" title="class in org.apache.juneau.marshall">MarshallingContext.Builder</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">MarshallingContext.Builder.</span><code><a href="../MarshallingContext.Builder.html#recordComponentOrder(boolean)" class="member-name-link">recordComponentOrder</a><wbr>(boolean&nbsp;value)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Same as <a href="../MarshallingContext.Builder.html#recordComponentOrder()"><code>recordComponentOrder()</code></a> but allows you to explicitly specify the value.</div>
+</div>
+<div class="col-first even-row-color"><code><a href="../MarshallingContext.Builder.html" title="class in org.apache.juneau.marshall">MarshallingContext.Builder</a></code></div>
 <div class="col-second even-row-color"><span class="type-name-label">MarshallingContext.Builder.</span><code><a href="../MarshallingContext.Builder.html#stopClass(java.lang.Class,java.lang.Class)" class="member-name-link">stopClass</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;&nbsp;on,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;&nbsp;value)</code></div>
 <div class="col-last even-row-color">
@@ -546,7 +556,7 @@ S&gt;&nbsp;<a href="../MarshallingContext.Builder.html" title="class in org.apac
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;S&gt;&nbsp;swappedClass,
  <a href="../../commons/function/ThrowingFunction.html" title="interface in org.apache.juneau.commons.function">ThrowingFunction</a>&lt;T,<wbr>S&gt;&nbsp;swapFunction)</code></div>
 <div class="col-last odd-row-color">
-<div class="block">A shortcut for defining a <a href="../swap/FunctionalSwap.html" title="class in org.apache.juneau.marshall.swap"><code>FunctionalSwap</code></a>.</div>
+<div class="block">A shortcut for defining a <a href="../swap/spi/FunctionalSwap.html" title="class in org.apache.juneau.marshall.swap.spi"><code>FunctionalSwap</code></a>.</div>
 </div>
 <div class="col-first even-row-color"><code>&lt;T,<wbr>
 S&gt;&nbsp;<a href="../MarshallingContext.Builder.html" title="class in org.apache.juneau.marshall">MarshallingContext.Builder</a></code></div>
@@ -555,7 +565,7 @@ S&gt;&nbsp;<a href="../MarshallingContext.Builder.html" title="class in org.apac
  <a href="../../commons/function/ThrowingFunction.html" title="interface in org.apache.juneau.commons.function">ThrowingFunction</a>&lt;T,<wbr>S&gt;&nbsp;swapFunction,
  <a href="../../commons/function/ThrowingFunction.html" title="interface in org.apache.juneau.commons.function">ThrowingFunction</a>&lt;S,<wbr>T&gt;&nbsp;unswapFunction)</code></div>
 <div class="col-last even-row-color">
-<div class="block">A shortcut for defining a <a href="../swap/FunctionalSwap.html" title="class in org.apache.juneau.marshall.swap"><code>FunctionalSwap</code></a>.</div>
+<div class="block">A shortcut for defining a <a href="../swap/spi/FunctionalSwap.html" title="class in org.apache.juneau.marshall.swap.spi"><code>FunctionalSwap</code></a>.</div>
 </div>
 <div class="col-first odd-row-color"><code><a href="../MarshallingContext.Builder.html" title="class in org.apache.juneau.marshall">MarshallingContext.Builder</a></code></div>
 <div class="col-second odd-row-color"><span class="type-name-label">MarshallingContext.Builder.</span><code><a href="../MarshallingContext.Builder.html#swaps(java.lang.Class...)" class="member-name-link">swaps</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;...&nbsp;values)</code></div>

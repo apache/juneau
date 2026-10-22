@@ -99,7 +99,20 @@
 <span class="source-line-no">086</span><span id="line-86">    * @return The active count.</span>
 <span class="source-line-no">087</span><span id="line-87">    */</span>
 <span class="source-line-no">088</span><span id="line-88">   int activeCount();</span>
-<span class="source-line-no">089</span><span id="line-89">}</span>
+<span class="source-line-no">089</span><span id="line-89"></span>
+<span class="source-line-no">090</span><span id="line-90">   /**</span>
+<span class="source-line-no">091</span><span id="line-91">    * Closes every currently registered subscription.</span>
+<span class="source-line-no">092</span><span id="line-92">    *</span>
+<span class="source-line-no">093</span><span id="line-93">    * &lt;p&gt;</span>
+<span class="source-line-no">094</span><span id="line-94">    * Called when the server begins shutting down, so open {@code subscriptions/listen} streams complete</span>
+<span class="source-line-no">095</span><span id="line-95">    * promptly instead of holding the graceful drain open until its stop timeout.  The default implementation</span>
+<span class="source-line-no">096</span><span id="line-96">    * does nothing, so custom brokers that predate this method keep working (their streams then end on the</span>
+<span class="source-line-no">097</span><span id="line-97">    * normal heartbeat/idle-timeout paths).</span>
+<span class="source-line-no">098</span><span id="line-98">    */</span>
+<span class="source-line-no">099</span><span id="line-99">   default void closeAll() {</span>
+<span class="source-line-no">100</span><span id="line-100">      // No-op by default.</span>
+<span class="source-line-no">101</span><span id="line-101">   }</span>
+<span class="source-line-no">102</span><span id="line-102">}</span>
 
 
 

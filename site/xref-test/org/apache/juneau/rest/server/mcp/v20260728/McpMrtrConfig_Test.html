@@ -91,7 +91,7 @@
 <a class="jxr_linenumber" name="L83" href="#L83">83</a>  	@Test <strong class="jxr_keyword">void</strong> a07_setKeyProviderWiresAeadCodecSharingTheProvider() {
 <a class="jxr_linenumber" name="L84" href="#L84">84</a>  		<em class="jxr_comment">// "behaves": prove the KeyProvider is actually threaded through, not just type-checked -- two</em>
 <a class="jxr_linenumber" name="L85" href="#L85">85</a>  		<em class="jxr_comment">// independently-constructed McpMrtrConfig instances sharing one StaticKeyProvider unseal each other's</em>
-<a class="jxr_linenumber" name="L86" href="#L86">86</a>  		<em class="jxr_comment">// tokens, the config-level analog of the dispatch-level d04 test added in Task 11.</em>
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>  		<em class="jxr_comment">// tokens, the config-level analog of the dispatch-level d04 test.</em>
 <a class="jxr_linenumber" name="L87" href="#L87">87</a>  		<strong class="jxr_keyword">var</strong> provider = StaticKeyProvider.of(<span class="jxr_string">"k1"</span>, StaticKeyProvider.aesKey(<strong class="jxr_keyword">new</strong> byte[32]));
 <a class="jxr_linenumber" name="L88" href="#L88">88</a>  		<strong class="jxr_keyword">var</strong> a = <strong class="jxr_keyword">new</strong> McpMrtrConfig().setKeyProvider(provider);
 <a class="jxr_linenumber" name="L89" href="#L89">89</a>  		assertInstanceOf(AeadRequestStateCodec.<strong class="jxr_keyword">class</strong>, a.getCodec());
@@ -121,7 +121,7 @@
 <a class="jxr_linenumber" name="L113" href="#L113">113</a> 	}
 <a class="jxr_linenumber" name="L114" href="#L114">114</a> 
 <a class="jxr_linenumber" name="L115" href="#L115">115</a> 	@Test <strong class="jxr_keyword">void</strong> a10_defaultReplayCacheIsNull() {
-<a class="jxr_linenumber" name="L116" href="#L116">116</a> 		<em class="jxr_comment">// D1 (opt-in): replay rejection must be disabled by default -- no ReplayCache is auto-wired.</em>
+<a class="jxr_linenumber" name="L116" href="#L116">116</a> 		<em class="jxr_comment">// Replay rejection must be disabled by default -- no ReplayCache is auto-wired.</em>
 <a class="jxr_linenumber" name="L117" href="#L117">117</a> 		assertNull(<strong class="jxr_keyword">new</strong> McpMrtrConfig().getReplayCache());
 <a class="jxr_linenumber" name="L118" href="#L118">118</a> 	}
 <a class="jxr_linenumber" name="L119" href="#L119">119</a> 

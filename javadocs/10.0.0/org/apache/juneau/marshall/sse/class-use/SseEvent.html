@@ -152,8 +152,13 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color"><code><a href="../SseEvent.html" title="class in org.apache.juneau.marshall.sse">SseEvent</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">SseSubscription.</span><code><a href="../../../rest/server/sse/SseSubscription.html#take()" class="member-name-link">take</a>()</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">SseSubscription.</span><code><a href="../../../rest/server/sse/SseSubscription.html#poll(java.time.Duration)" class="member-name-link">poll</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a>&nbsp;timeout)</code></div>
 <div class="col-last even-row-color">
+<div class="block">Waits up to a timeout for the next event.</div>
+</div>
+<div class="col-first odd-row-color"><code><a href="../SseEvent.html" title="class in org.apache.juneau.marshall.sse">SseEvent</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">SseSubscription.</span><code><a href="../../../rest/server/sse/SseSubscription.html#take()" class="member-name-link">take</a>()</code></div>
+<div class="col-last odd-row-color">
 <div class="block">Blocks until the next event is available.</div>
 </div>
 </div>
@@ -171,14 +176,19 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><code>void</code></div>
-<div class="col-second even-row-color"><span class="type-name-label">SseBroadcaster.</span><code><a href="../../../rest/server/sse/SseBroadcaster.html#publish(org.apache.juneau.marshall.sse.SseEvent)" class="member-name-link">publish</a><wbr>(<a href="../SseEvent.html" title="class in org.apache.juneau.marshall.sse">SseEvent</a>&nbsp;event)</code></div>
+<div class="col-first even-row-color"><code>boolean</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">SseSubscription.</span><code><a href="../../../rest/server/sse/SseSubscription.html#offer(org.apache.juneau.marshall.sse.SseEvent)" class="member-name-link">offer</a><wbr>(<a href="../SseEvent.html" title="class in org.apache.juneau.marshall.sse">SseEvent</a>&nbsp;event)</code></div>
 <div class="col-last even-row-color">
+<div class="block">Queues an event, dropping the oldest queued event when the queue is full.</div>
+</div>
+<div class="col-first odd-row-color"><code>void</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">SseBroadcaster.</span><code><a href="../../../rest/server/sse/SseBroadcaster.html#publish(org.apache.juneau.marshall.sse.SseEvent)" class="member-name-link">publish</a><wbr>(<a href="../SseEvent.html" title="class in org.apache.juneau.marshall.sse">SseEvent</a>&nbsp;event)</code></div>
+<div class="col-last odd-row-color">
 <div class="block">Publishes an event to all active subscribers.</div>
 </div>
-<div class="col-first odd-row-color"><code><a href="../../../rest/server/sse/SseResponseSupport.html" title="class in org.apache.juneau.rest.server.sse">SseResponseSupport</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">SseResponseSupport.</span><code><a href="../../../rest/server/sse/SseResponseSupport.html#sendEvent(org.apache.juneau.marshall.sse.SseEvent)" class="member-name-link">sendEvent</a><wbr>(<a href="../SseEvent.html" title="class in org.apache.juneau.marshall.sse">SseEvent</a>&nbsp;event)</code></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><code><a href="../../../rest/server/sse/SseResponseSupport.html" title="class in org.apache.juneau.rest.server.sse">SseResponseSupport</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">SseResponseSupport.</span><code><a href="../../../rest/server/sse/SseResponseSupport.html#sendEvent(org.apache.juneau.marshall.sse.SseEvent)" class="member-name-link">sendEvent</a><wbr>(<a href="../SseEvent.html" title="class in org.apache.juneau.marshall.sse">SseEvent</a>&nbsp;event)</code></div>
+<div class="col-last even-row-color">
 <div class="block">Sends an SSE event.</div>
 </div>
 </div>

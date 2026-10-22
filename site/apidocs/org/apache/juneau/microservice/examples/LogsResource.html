@@ -90,9 +90,44 @@ loadScripts(document, 'script');</script>
 <dd><code>jakarta.servlet.Servlet</code>, <code>jakarta.servlet.ServletConfig</code>, <code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a></code>, <code><a href="../../rest/server/config/BasicUniversalConfig.html" title="interface in org.apache.juneau.rest.server.config">BasicUniversalConfig</a></code>, <code><a href="../../rest/server/config/DefaultConfig.html" title="interface in org.apache.juneau.rest.server.config">DefaultConfig</a></code>, <code><a href="../../rest/server/config/DefaultHtmlConfig.html" title="interface in org.apache.juneau.rest.server.config">DefaultHtmlConfig</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/microservice/examples/LogsResource.html#line-47">LogsResource</a></span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/microservice/examples/LogsResource.html#line-83">LogsResource</a></span>
 <span class="extends-implements">extends <a href="../../rest/server/servlet/BasicRestServlet.html" title="class in org.apache.juneau.rest.server.servlet">BasicRestServlet</a></span></div>
-<div class="block">REST resource for viewing and accessing log files.</div>
+<div class="block">REST resource for viewing and accessing log files.
+
+ <h5 class='section'>Routes</h5>
+ <table class='styled'>
+   <tr><th>Request</th><th>Does</th></tr>
+   <tr><td><code>GET /logs/{path}</code></td><td>Information on a file, or a directory listing</td></tr>
+   <tr><td><code>GET /logs/view/{path}</code></td><td>The file's contents as text, or as HTML with <code>?highlight=true</code></td></tr>
+   <tr><td><code>GET /logs/parse/{path}</code></td><td>The file's parsed log entries</td></tr>
+   <tr><td><code>GET /logs/download/{path}</code></td><td>The file's contents as <code>application/octet-stream</code></td></tr>
+   <tr><td><code>DELETE /logs/{path}</code></td><td>Deletes the file or directory, when <code>Logging/allowDeletes</code> is on</td></tr>
+ </table>
+
+ <p>
+ The <code>view</code>, <code>parse</code> and <code>download</code> prefixes are reserved: they always name an action, never a
+ directory.  A log directory with one of those names cannot be listed through <code>GET /logs/view</code> and so on, but
+ its files are still reachable through the action routes, for example <code>GET /logs/view/view/app.log</code>.  The
+ listing's link to such a directory routes to the action and is answered with <code>404</code>, as is any action on a
+ directory.  <code>DELETE</code> reserves no prefix: <code>DELETE /logs/view/app.log</code> deletes <code>app.log</code> in the
+ <code>view</code> directory.
+
+ <p>
+ Every read is a plain <code>GET</code>, and the <code>method</code> query parameter is not accepted, so no <code>GET</code> link
+ can delete anything.  A delete must be a real <code>DELETE</code>, sent by a REST client or from the command line; the
+ HTML listing has no delete link, because a browser link or form cannot carry the header-borne token a CSRF
+ boundary requires.  A <code>DELETE</code> cannot be sent cross-site without a CORS preflight, so a boundary in front of
+ this resource (see <a href="AdminBoundary.html" title="class in org.apache.juneau.microservice.examples"><code>AdminBoundary</code></a>) admits it without a token:
+ <p class='bcode'>
+   curl -X DELETE http://localhost:10000/logs/old.log
+ </p>
+
+ <p>
+ This resource has no authentication of its own.  Do not expose it on an untrusted network.
+
+ <h5 class='section'>See Also:</h5><ul>
+   <li class='jc'><a href="AdminBoundary.html" title="class in org.apache.juneau.microservice.examples"><code>AdminBoundary</code></a>
+ </ul></div>
 <dl class="notes">
 <dt>See Also:</dt>
 <dd>
@@ -236,7 +271,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;()">
 <h3>LogsResource</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/microservice/examples/LogsResource.html#line-57">LogsResource</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/microservice/examples/LogsResource.html#line-92">LogsResource</a></span>()</div>
 </section>
 </li>
 </ul>
@@ -250,7 +285,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="deleteFile(java.lang.String)">
 <h3>deleteFile</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">org.apache.juneau.microservice.examples.LogsResource.RedirectToRoot</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/microservice/examples/LogsResource.html#line-240">deleteFile</a></span><wbr><span class="parameters">(<a href="../../http/Path.html" title="annotation interface in org.apache.juneau.http">@Path</a>("/*")
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">org.apache.juneau.microservice.examples.LogsResource.RedirectToRoot</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/microservice/examples/LogsResource.html#line-274">deleteFile</a></span><wbr><span class="parameters">(<a href="../../http/Path.html" title="annotation interface in org.apache.juneau.http">@Path</a>("/*")
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;path)</span>
                                                                                throws <span class="exceptions"><a href="../../http/classic/response/MethodNotAllowed.html" title="class in org.apache.juneau.http.classic.response">MethodNotAllowed</a></span></div>
 <div class="block">Deletes a log file on the file system.</div>
@@ -267,11 +302,10 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="downloadFile(org.apache.juneau.rest.server.RestResponse,java.lang.String)">
 <h3>downloadFile</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">org.apache.juneau.microservice.examples.LogsResource.FileContents</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/microservice/examples/LogsResource.html#line-258">downloadFile</a></span><wbr><span class="parameters">(<a href="../../rest/server/RestResponse.html" title="class in org.apache.juneau.rest.server">RestResponse</a>&nbsp;res,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">org.apache.juneau.microservice.examples.LogsResource.FileContents</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/microservice/examples/LogsResource.html#line-292">downloadFile</a></span><wbr><span class="parameters">(<a href="../../rest/server/RestResponse.html" title="class in org.apache.juneau.rest.server">RestResponse</a>&nbsp;res,
  <a href="../../http/Path.html" title="annotation interface in org.apache.juneau.http">@Path</a>("/*")
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;path)</span>
-                                                                               throws <span class="exceptions"><a href="../../http/classic/response/NotFound.html" title="class in org.apache.juneau.http.classic.response">NotFound</a>,
-<a href="../../http/classic/response/MethodNotAllowed.html" title="class in org.apache.juneau.http.classic.response">MethodNotAllowed</a></span></div>
+                                                                               throws <span class="exceptions"><a href="../../http/classic/response/NotFound.html" title="class in org.apache.juneau.http.classic.response">NotFound</a></span></div>
 <div class="block">Downloads the contents of a file.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -280,15 +314,14 @@ loadScripts(document, 'script');</script>
 <dt>Returns:</dt>
 <dd>The file contents stream.</dd>
 <dt>Throws:</dt>
-<dd><code><a href="../../http/classic/response/NotFound.html" title="class in org.apache.juneau.http.classic.response">NotFound</a></code> - If the file is not found.</dd>
-<dd><code><a href="../../http/classic/response/MethodNotAllowed.html" title="class in org.apache.juneau.http.classic.response">MethodNotAllowed</a></code> - If method not allowed.</dd>
+<dd><code><a href="../../http/classic/response/NotFound.html" title="class in org.apache.juneau.http.classic.response">NotFound</a></code> - If the file is not found, or is a directory.</dd>
 </dl>
 </section>
 </li>
 <li>
 <section class="detail" id="getFile(org.apache.juneau.rest.server.RestRequest,java.lang.String)">
 <h3>getFile</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="LogsResource.FileResource.html" title="class in org.apache.juneau.microservice.examples">LogsResource.FileResource</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/microservice/examples/LogsResource.html#line-282">getFile</a></span><wbr><span class="parameters">(<a href="../../rest/server/RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="LogsResource.FileResource.html" title="class in org.apache.juneau.microservice.examples">LogsResource.FileResource</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/microservice/examples/LogsResource.html#line-316">getFile</a></span><wbr><span class="parameters">(<a href="../../rest/server/RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req,
  <a href="../../http/Path.html" title="annotation interface in org.apache.juneau.http">@Path</a>("/*")
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;path)</span>
                                   throws <span class="exceptions"><a href="../../http/classic/response/NotFound.html" title="class in org.apache.juneau.http.classic.response">NotFound</a>,
@@ -309,7 +342,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="init(org.apache.juneau.config.Config)">
 <h3>init</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/microservice/examples/LogsResource.html#line-306">init</a></span><wbr><span class="parameters">(<a href="../../config/Config.html" title="class in org.apache.juneau.config">Config</a>&nbsp;config)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/microservice/examples/LogsResource.html#line-340">init</a></span><wbr><span class="parameters">(<a href="../../config/Config.html" title="class in org.apache.juneau.config">Config</a>&nbsp;config)</span></div>
 <div class="block">Initializes log directory and formatter from config.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -320,7 +353,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="viewFile(org.apache.juneau.rest.server.RestResponse,java.lang.String,boolean,java.lang.String,java.lang.String,java.lang.String,java.lang.String[],java.lang.String[])">
 <h3>viewFile</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/microservice/examples/LogsResource.html#line-335">viewFile</a></span><wbr><span class="parameters">(<a href="../../rest/server/RestResponse.html" title="class in org.apache.juneau.rest.server">RestResponse</a>&nbsp;res,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/microservice/examples/LogsResource.html#line-368">viewFile</a></span><wbr><span class="parameters">(<a href="../../rest/server/RestResponse.html" title="class in org.apache.juneau.rest.server">RestResponse</a>&nbsp;res,
  <a href="../../http/Path.html" title="annotation interface in org.apache.juneau.http">@Path</a>("/*")
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;path,
  <a href="../../http/Query.html" title="annotation interface in org.apache.juneau.http">@Query</a>(<a href="../../http/Query.html#name()">name</a>="highlight",<a href="../../http/Query.html#schema()">schema</a>=<a href="../../commons/Schema.html" title="annotation interface in org.apache.juneau.commons">@Schema</a>(<a href="../../commons/Schema.html#d()">d</a>="Add severity color highlighting."))
@@ -336,7 +369,6 @@ loadScripts(document, 'script');</script>
  <a href="../../http/Query.html" title="annotation interface in org.apache.juneau.http">@Query</a>(<a href="../../http/Query.html#name()">name</a>="severity",<a href="../../http/Query.html#schema()">schema</a>=<a href="../../commons/Schema.html" title="annotation interface in org.apache.juneau.commons">@Schema</a>(<a href="../../commons/Schema.html#d()">d</a>="Severity filter.\nOnly show log entries with the specified severity."))
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>[]&nbsp;severity)</span>
               throws <span class="exceptions"><a href="../../http/classic/response/NotFound.html" title="class in org.apache.juneau.http.classic.response">NotFound</a>,
-<a href="../../http/classic/response/MethodNotAllowed.html" title="class in org.apache.juneau.http.classic.response">MethodNotAllowed</a>,
 <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">Views the contents of a log file with optional filtering.</div>
 <dl class="notes">
@@ -350,8 +382,7 @@ loadScripts(document, 'script');</script>
 <dd><code>loggers</code> - Logger filter.</dd>
 <dd><code>severity</code> - Severity filter.</dd>
 <dt>Throws:</dt>
-<dd><code><a href="../../http/classic/response/NotFound.html" title="class in org.apache.juneau.http.classic.response">NotFound</a></code> - If the file is not found.</dd>
-<dd><code><a href="../../http/classic/response/MethodNotAllowed.html" title="class in org.apache.juneau.http.classic.response">MethodNotAllowed</a></code> - If method not allowed.</dd>
+<dd><code><a href="../../http/classic/response/NotFound.html" title="class in org.apache.juneau.http.classic.response">NotFound</a></code> - If the file is not found, or is a directory.</dd>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></code> - If an I/O error occurs.</dd>
 </dl>
 </section>
@@ -359,7 +390,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="viewParsedEntries(org.apache.juneau.rest.server.RestRequest,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String[],java.lang.String[])">
 <h3>viewParsedEntries</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="LogParser.html" title="class in org.apache.juneau.microservice.examples">LogParser</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/microservice/examples/LogsResource.html#line-414">viewParsedEntries</a></span><wbr><span class="parameters">(<a href="../../rest/server/RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="LogParser.html" title="class in org.apache.juneau.microservice.examples">LogParser</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/microservice/examples/LogsResource.html#line-446">viewParsedEntries</a></span><wbr><span class="parameters">(<a href="../../rest/server/RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req,
  <a href="../../http/Path.html" title="annotation interface in org.apache.juneau.http">@Path</a>("/*")
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;path,
  <a href="../../http/Query.html" title="annotation interface in org.apache.juneau.http">@Query</a>(<a href="../../http/Query.html#name()">name</a>="start",<a href="../../http/Query.html#schema()">schema</a>=<a href="../../commons/Schema.html" title="annotation interface in org.apache.juneau.commons">@Schema</a>(<a href="../../commons/Schema.html#d()">d</a>="Start timestamp (ISO8601, full or partial).\nDon\'t print lines logged before the specified timestamp.\nUse any of the following formats: yyyy, yyyy-MM, yyyy-MM-dd, yyyy-MM-ddThh, yyyy-MM-ddThh:mm, yyyy-MM-ddThh:mm:ss, yyyy-MM-ddThh:mm:ss.SSS"))

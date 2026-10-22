@@ -78,7 +78,7 @@ loadScripts(document, 'script');</script>
 </div>
 <section class="class-description" id="class-description">
 <hr>
-<div class="type-signature"><span class="modifiers">public final class </span><span class="element-name"><a href="../../../../src-html/org/apache/juneau/http/HttpParts.html#line-56">HttpParts</a></span>
+<div class="type-signature"><span class="modifiers">public final class </span><span class="element-name"><a href="../../../../src-html/org/apache/juneau/http/HttpParts.html#line-55">HttpParts</a></span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
 <div class="block">Static factory methods for creating HTTP parts (query parameters, form fields, path variables).
 
@@ -94,8 +94,7 @@ loadScripts(document, 'script');</script>
  </p>
 
  <p>
- <b>Beta — API subject to change:</b> This type is part of the next-generation REST client and HTTP stack
- (<code>org.apache.juneau.marshall.ng.*</code>).
+ <b>Beta — API subject to change:</b> This type is part of the next-generation REST client and HTTP stack.
  It is not API-frozen: binary- and source-incompatible changes may appear in the <b>next major</b> Juneau release
  (and possibly earlier).
 
@@ -181,7 +180,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="part(java.lang.String,java.lang.String)">
 <h3>part</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="HttpPart.html" title="interface in org.apache.juneau.http">HttpPart</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/http/HttpParts.html#line-67">part</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="HttpPart.html" title="interface in org.apache.juneau.http">HttpPart</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/http/HttpParts.html#line-66">part</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block">Creates an <a href="HttpPart.html" title="interface in org.apache.juneau.http"><code>HttpPart</code></a> with an eager string value.</div>
 <dl class="notes">
@@ -196,7 +195,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="part(java.lang.String,java.util.function.Supplier)">
 <h3>part</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="HttpPart.html" title="interface in org.apache.juneau.http">HttpPart</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/http/HttpParts.html#line-78">part</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="HttpPart.html" title="interface in org.apache.juneau.http">HttpPart</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/http/HttpParts.html#line-77">part</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;valueSupplier)</span></div>
 <div class="block">Creates an <a href="HttpPart.html" title="interface in org.apache.juneau.http"><code>HttpPart</code></a> with a lazy value supplier.</div>
 <dl class="notes">
@@ -211,7 +210,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="partList(org.apache.juneau.http.HttpPart...)">
 <h3>partList</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="part/PartList.html" title="class in org.apache.juneau.http.part">PartList</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/http/HttpParts.html#line-88">partList</a></span><wbr><span class="parameters">(<a href="HttpPart.html" title="interface in org.apache.juneau.http">HttpPart</a>...&nbsp;parts)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="part/PartList.html" title="class in org.apache.juneau.http.part">PartList</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/http/HttpParts.html#line-87">partList</a></span><wbr><span class="parameters">(<a href="HttpPart.html" title="interface in org.apache.juneau.http">HttpPart</a>...&nbsp;parts)</span></div>
 <div class="block">Creates a <a href="part/PartList.html" title="class in org.apache.juneau.http.part"><code>PartList</code></a> from the given parts.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -224,7 +223,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="partListOfPairs(java.lang.String...)">
 <h3>partListOfPairs</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="part/PartList.html" title="class in org.apache.juneau.http.part">PartList</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/http/HttpParts.html#line-98">partListOfPairs</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;pairs)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="part/PartList.html" title="class in org.apache.juneau.http.part">PartList</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/http/HttpParts.html#line-97">partListOfPairs</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;pairs)</span></div>
 <div class="block">Creates a <a href="part/PartList.html" title="class in org.apache.juneau.http.part"><code>PartList</code></a> from alternating name/value string pairs.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -237,7 +236,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getConstructor(org.apache.juneau.marshall.ClassMeta)">
 <h3>getConstructor</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="../commons/reflect/ConstructorInfo.html" title="class in org.apache.juneau.commons.reflect">ConstructorInfo</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/http/HttpParts.html#line-115">getConstructor</a></span><wbr><span class="parameters">(<a href="../marshall/ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;?&gt;&nbsp;type)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="../commons/reflect/ConstructorInfo.html" title="class in org.apache.juneau.commons.reflect">ConstructorInfo</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/http/HttpParts.html#line-114">getConstructor</a></span><wbr><span class="parameters">(<a href="../marshall/ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;?&gt;&nbsp;type)</span></div>
 <div class="block">Returns the <code>(String)</code> or <code>(String,String)</code> public constructor for the specified type.
 
  <p>
@@ -253,7 +252,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="isHttpPart(org.apache.juneau.commons.httppart.HttpPartType,org.apache.juneau.marshall.ClassMeta)">
 <h3>isHttpPart</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/http/HttpParts.html#line-131">isHttpPart</a></span><wbr><span class="parameters">(<a href="../commons/httppart/HttpPartType.html" title="enum class in org.apache.juneau.commons.httppart">HttpPartType</a>&nbsp;partType,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/http/HttpParts.html#line-130">isHttpPart</a></span><wbr><span class="parameters">(<a href="../commons/httppart/HttpPartType.html" title="enum class in org.apache.juneau.commons.httppart">HttpPartType</a>&nbsp;partType,
  <a href="../marshall/ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;?&gt;&nbsp;type)</span></div>
 <div class="block">Returns <jk>true</jk> if the specified type is a transport-neutral part type for the given
  <a href="../commons/httppart/HttpPartType.html" title="enum class in org.apache.juneau.commons.httppart"><code>HttpPartType</code></a>.
@@ -273,7 +272,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getName(org.apache.juneau.commons.httppart.HttpPartType,org.apache.juneau.marshall.ClassMeta)">
 <h3>getName</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/http/HttpParts.html#line-196">getName</a></span><wbr><span class="parameters">(<a href="../commons/httppart/HttpPartType.html" title="enum class in org.apache.juneau.commons.httppart">HttpPartType</a>&nbsp;partType,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/http/HttpParts.html#line-195">getName</a></span><wbr><span class="parameters">(<a href="../commons/httppart/HttpPartType.html" title="enum class in org.apache.juneau.commons.httppart">HttpPartType</a>&nbsp;partType,
  <a href="../marshall/ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;?&gt;&nbsp;type)</span></div>
 <div class="block">Returns the name of the specified part type by reading the <code>@Header</code>, <code>@Query</code>,
  <code>@FormData</code>, or <code>@Path</code> annotation on the class.</div>

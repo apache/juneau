@@ -94,6 +94,10 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color">
 <div class="block">Thymeleaf view-rendering bridge &mdash; opt-in <code>juneau-rest-server-view-thymeleaf</code> module.</div>
 </div>
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.rest.server.widgets">org.apache.juneau.rest.server.widgets</a></div>
+<div class="col-last odd-row-color">
+<div class="block">Reusable widget primitives for the Juneau REST server toolkit.</div>
+</div>
 </div>
 <section class="class-uses">
 <ul class="block-list">
@@ -334,6 +338,24 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color">
 <div class="block"><a href="../ResponseProcessor.html" title="interface in org.apache.juneau.rest.server.processor"><code>ResponseProcessor</code></a> that detects <a href="../../view/thymeleaf/ThymeleafView.html" title="class in org.apache.juneau.rest.server.view.thymeleaf"><code>ThymeleafView</code></a>-typed return values and asks the
  configured <code>TemplateEngine</code> to render them directly onto the response writer.</div>
+</div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="org.apache.juneau.rest.server.widgets">
+<h2>Uses of <a href="../ResponseProcessor.html" title="interface in org.apache.juneau.rest.server.processor">ResponseProcessor</a> in <a href="../../widgets/package-summary.html">org.apache.juneau.rest.server.widgets</a></h2>
+<div class="caption"><span>Classes in <a href="../../widgets/package-summary.html">org.apache.juneau.rest.server.widgets</a> that implement <a href="../ResponseProcessor.html" title="interface in org.apache.juneau.rest.server.processor">ResponseProcessor</a></span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier and Type</div>
+<div class="table-header col-second">Class</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code>static class&nbsp;</code></div>
+<div class="col-second even-row-color"><code><a href="../../widgets/WidgetsMixin.WidgetValidationProcessor.html" class="type-name-link" title="class in org.apache.juneau.rest.server.widgets">WidgetsMixin.WidgetValidationProcessor</a></code></div>
+<div class="col-last even-row-color">
+<div class="block">The serving-path <a href="../../widgets/Widget.html#validate()"><code>Widget.validate()</code></a> gate: fail-closed structural validation for any
+ REST response content that is a <a href="../../widgets/Widget.html" title="interface in org.apache.juneau.rest.server.widgets"><code>Widget</code></a>, giving the JSON serving path the same gate the
+ <code>juneau-rest-server-views</code> HTML emitters already give every <code>Widget</code> they consume.</div>
 </div>
 </div>
 </section>

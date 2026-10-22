@@ -78,9 +78,9 @@ loadScripts(document, 'script');</script>
 </div>
 <section class="class-description" id="class-description">
 <hr>
-<div class="type-signature"><span class="modifiers">public final class </span><span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/McpClientRegistrations.html#line-36">McpClientRegistrations</a></span>
+<div class="type-signature"><span class="modifiers">public final class </span><span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/McpClientRegistrations.html#line-37">McpClientRegistrations</a></span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
-<div class="block">Bridges a Dynamic-Client-Registration result (<a href="McpClientRegistration.html" title="class in org.apache.juneau.rest.client.mcp.auth"><code>McpClientRegistration</code></a>) into F1's existing token flows &mdash;
+<div class="block">Bridges a Dynamic-Client-Registration result (<a href="McpClientRegistration.html" title="class in org.apache.juneau.rest.client.mcp.auth"><code>McpClientRegistration</code></a>) into the existing token flows &mdash;
  the <a href="McpAuthorizationCodeAcquirer.html" title="class in org.apache.juneau.rest.client.mcp.auth"><code>McpAuthorizationCodeAcquirer</code></a> (interactive auth-code + PKCE) and <a href="McpTokenProvider.html" title="class in org.apache.juneau.rest.client.mcp.auth"><code>McpTokenProvider</code></a>
  (client-credentials / refresh).
 
@@ -143,7 +143,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="configure(org.apache.juneau.rest.client.mcp.auth.McpAuthorizationCodeAcquirer.Builder,org.apache.juneau.rest.client.mcp.auth.McpClientRegistration)">
 <h3>configure</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="McpAuthorizationCodeAcquirer.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpAuthorizationCodeAcquirer.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/McpClientRegistrations.html#line-55">configure</a></span><wbr><span class="parameters">(<a href="McpAuthorizationCodeAcquirer.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpAuthorizationCodeAcquirer.Builder</a>&nbsp;builder,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="McpAuthorizationCodeAcquirer.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpAuthorizationCodeAcquirer.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/McpClientRegistrations.html#line-56">configure</a></span><wbr><span class="parameters">(<a href="McpAuthorizationCodeAcquirer.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpAuthorizationCodeAcquirer.Builder</a>&nbsp;builder,
  <a href="McpClientRegistration.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpClientRegistration</a>&nbsp;registration)</span></div>
 <div class="block">Applies a DCR-issued registration's <code>client_id</code>, optional <code>client_secret</code>, and registered loopback
  redirect path (and port, for a bind-first registration) onto an <a href="McpAuthorizationCodeAcquirer.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth"><code>McpAuthorizationCodeAcquirer.Builder</code></a>.
@@ -166,7 +166,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="configure(org.apache.juneau.rest.client.mcp.auth.McpTokenProvider.Builder,org.apache.juneau.rest.client.mcp.auth.McpClientRegistration)">
 <h3>configure</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="McpTokenProvider.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpTokenProvider.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/McpClientRegistrations.html#line-83">configure</a></span><wbr><span class="parameters">(<a href="McpTokenProvider.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpTokenProvider.Builder</a>&nbsp;builder,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="McpTokenProvider.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpTokenProvider.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/McpClientRegistrations.html#line-84">configure</a></span><wbr><span class="parameters">(<a href="McpTokenProvider.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpTokenProvider.Builder</a>&nbsp;builder,
  <a href="McpClientRegistration.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpClientRegistration</a>&nbsp;registration)</span></div>
 <div class="block">Applies a DCR-issued registration's <code>client_id</code> and optional <code>client_secret</code> onto an
  <a href="McpTokenProvider.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth"><code>McpTokenProvider.Builder</code></a> (client-credentials / refresh modes).</div>

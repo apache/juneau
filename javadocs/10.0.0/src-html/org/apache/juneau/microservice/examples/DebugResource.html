@@ -42,87 +42,93 @@
 <span class="source-line-no">029</span><span id="line-29">/**</span>
 <span class="source-line-no">030</span><span id="line-30"> * Microservice debug utilities.</span>
 <span class="source-line-no">031</span><span id="line-31"> *</span>
-<span class="source-line-no">032</span><span id="line-32"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
-<span class="source-line-no">033</span><span id="line-33"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauMicroserviceJetty"&gt;juneau-microservice-jetty Basics&lt;/a&gt;</span>
-<span class="source-line-no">034</span><span id="line-34"></span>
-<span class="source-line-no">035</span><span id="line-35"> * &lt;/ul&gt;</span>
-<span class="source-line-no">036</span><span id="line-36"> *</span>
-<span class="source-line-no">037</span><span id="line-37"> * @serial exclude</span>
-<span class="source-line-no">038</span><span id="line-38"> */</span>
-<span class="source-line-no">039</span><span id="line-39">// @formatter:off</span>
-<span class="source-line-no">040</span><span id="line-40">@Rest(</span>
-<span class="source-line-no">041</span><span id="line-41">   path="/debug",</span>
-<span class="source-line-no">042</span><span id="line-42">   title="Debug",</span>
-<span class="source-line-no">043</span><span id="line-43">   description="Debug Utilities.",</span>
-<span class="source-line-no">044</span><span id="line-44">   allowedMethodParams="OPTIONS,POST"</span>
-<span class="source-line-no">045</span><span id="line-45">)</span>
-<span class="source-line-no">046</span><span id="line-46">@HtmlDocConfig(</span>
-<span class="source-line-no">047</span><span id="line-47">   navlinks={</span>
-<span class="source-line-no">048</span><span id="line-48">      "up: request:/..",</span>
-<span class="source-line-no">049</span><span id="line-49">      "jetty-thread-dump: servlet:/jetty/dump?method=POST",</span>
-<span class="source-line-no">050</span><span id="line-50">      "api: servlet:/api",</span>
-<span class="source-line-no">051</span><span id="line-51">      "stats: servlet:/stats"</span>
-<span class="source-line-no">052</span><span id="line-52">   }</span>
-<span class="source-line-no">053</span><span id="line-53">)</span>
-<span class="source-line-no">054</span><span id="line-54">// @formatter:on</span>
-<span class="source-line-no">055</span><span id="line-55">public class DebugResource extends BasicRestServlet {</span>
-<span class="source-line-no">056</span><span id="line-56">   private static final long serialVersionUID = 1L;</span>
-<span class="source-line-no">057</span><span id="line-57"></span>
-<span class="source-line-no">058</span><span id="line-58">   /**</span>
-<span class="source-line-no">059</span><span id="line-59">    * [POST /jetty/dump] - Generates and saves the jetty thread dump file to jetty-thread-dump.log.</span>
-<span class="source-line-no">060</span><span id="line-60">    *</span>
-<span class="source-line-no">061</span><span id="line-61">    * @param req The request.</span>
-<span class="source-line-no">062</span><span id="line-62">    * @param res The response.</span>
-<span class="source-line-no">063</span><span id="line-63">    * @throws Exception Gets converted to 500 response.</span>
-<span class="source-line-no">064</span><span id="line-64">    * @return The thread dump contents.</span>
-<span class="source-line-no">065</span><span id="line-65">    */</span>
-<span class="source-line-no">066</span><span id="line-66">   @RestPost(path = "/jetty/dump", description = "Generates and saves the jetty thread dump file to jetty-thread-dump.log.")</span>
-<span class="source-line-no">067</span><span id="line-67">   @SuppressWarnings({</span>
-<span class="source-line-no">068</span><span id="line-68">      "java:S112" // throws Exception intentional - callback/lifecycle method</span>
-<span class="source-line-no">069</span><span id="line-69">   })</span>
-<span class="source-line-no">070</span><span id="line-70">   public Ok createJettyDump(RestRequest req, RestResponse res) throws Exception {</span>
-<span class="source-line-no">071</span><span id="line-71">      var dump = jettyServerComponent().getServer().dump();</span>
-<span class="source-line-no">072</span><span id="line-72">      try (var fw = new FileWriter(req.getConfig().get("Logging/logDir").orElse("") + "/jetty-thread-dump.log")) {</span>
-<span class="source-line-no">073</span><span id="line-73">         fw.write(dump);</span>
-<span class="source-line-no">074</span><span id="line-74">      }</span>
-<span class="source-line-no">075</span><span id="line-75">      return Ok.OK;</span>
-<span class="source-line-no">076</span><span id="line-76">   }</span>
-<span class="source-line-no">077</span><span id="line-77"></span>
-<span class="source-line-no">078</span><span id="line-78">   /**</span>
-<span class="source-line-no">079</span><span id="line-79">    * [GET /] - Shows child utilities.</span>
-<span class="source-line-no">080</span><span id="line-80">    *</span>
-<span class="source-line-no">081</span><span id="line-81">    * @return Child utility links.</span>
-<span class="source-line-no">082</span><span id="line-82">    */</span>
-<span class="source-line-no">083</span><span id="line-83">   @RestGet(path="/", description="Show contents of config file.")</span>
-<span class="source-line-no">084</span><span id="line-84">   public ResourceDescriptions getChildren() {</span>
-<span class="source-line-no">085</span><span id="line-85">      // @formatter:off</span>
-<span class="source-line-no">086</span><span id="line-86">      return ResourceDescriptions</span>
-<span class="source-line-no">087</span><span id="line-87">         .create()</span>
-<span class="source-line-no">088</span><span id="line-88">         .append("jetty/dump", "Jetty thread dump");</span>
-<span class="source-line-no">089</span><span id="line-89">      // @formatter:on</span>
-<span class="source-line-no">090</span><span id="line-90">   }</span>
-<span class="source-line-no">091</span><span id="line-91"></span>
-<span class="source-line-no">092</span><span id="line-92">   /**</span>
-<span class="source-line-no">093</span><span id="line-93">    * [GET /jetty/dump] - Generates and retrieves the jetty thread dump.</span>
-<span class="source-line-no">094</span><span id="line-94">    *</span>
-<span class="source-line-no">095</span><span id="line-95">    * @param req The request.</span>
-<span class="source-line-no">096</span><span id="line-96">    * @param res The response.</span>
-<span class="source-line-no">097</span><span id="line-97">    * @return The thread dump contents.</span>
-<span class="source-line-no">098</span><span id="line-98">    */</span>
-<span class="source-line-no">099</span><span id="line-99">   @RestGet(path = "/jetty/dump", description = "Generates and retrieves the jetty thread dump.")</span>
-<span class="source-line-no">100</span><span id="line-100">   public Reader getJettyDump(RestRequest req, RestResponse res) {</span>
-<span class="source-line-no">101</span><span id="line-101">      res.setContentType("text/plain");</span>
-<span class="source-line-no">102</span><span id="line-102">      return new StringReader(jettyServerComponent().getServer().dump());</span>
-<span class="source-line-no">103</span><span id="line-103">   }</span>
-<span class="source-line-no">104</span><span id="line-104"></span>
-<span class="source-line-no">105</span><span id="line-105">   @SuppressWarnings({</span>
-<span class="source-line-no">106</span><span id="line-106">      "resource" // BeanStore returned by Microservice.getBeanStore() is owned by the microservice lifecycle; do not close here.</span>
-<span class="source-line-no">107</span><span id="line-107">   })</span>
-<span class="source-line-no">108</span><span id="line-108">   private static JettyServerComponent jettyServerComponent() {</span>
-<span class="source-line-no">109</span><span id="line-109">      return Microservice.getInstance().getBeanStore().getBean(JettyServerComponent.class)</span>
-<span class="source-line-no">110</span><span id="line-110">         .orElseThrow(() -&gt; new IllegalStateException("JettyServerComponent bean not found.  Did you forget to add JettyConfiguration.class to Microservice.Builder.configurations(...)?"));</span>
-<span class="source-line-no">111</span><span id="line-111">   }</span>
-<span class="source-line-no">112</span><span id="line-112">}</span>
+<span class="source-line-no">032</span><span id="line-32"> * &lt;p&gt;</span>
+<span class="source-line-no">033</span><span id="line-33"> * The {@code jetty-thread-dump} navlink is a plain {@code GET /jetty/dump}, which shows the dump.  Writing the dump to</span>
+<span class="source-line-no">034</span><span id="line-34"> * &lt;l&gt;jetty-thread-dump.log&lt;/l&gt; needs a real {@code POST /jetty/dump}; a link can't reach it, because the router refuses</span>
+<span class="source-line-no">035</span><span id="line-35"> * any override of a {@code GET} to {@code POST}.  Put the resource behind a CSRF boundary before mounting it anywhere a</span>
+<span class="source-line-no">036</span><span id="line-36"> * browser can reach.</span>
+<span class="source-line-no">037</span><span id="line-37"> *</span>
+<span class="source-line-no">038</span><span id="line-38"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">039</span><span id="line-39"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauMicroserviceJetty"&gt;juneau-microservice-jetty Basics&lt;/a&gt;</span>
+<span class="source-line-no">040</span><span id="line-40"></span>
+<span class="source-line-no">041</span><span id="line-41"> * &lt;/ul&gt;</span>
+<span class="source-line-no">042</span><span id="line-42"> *</span>
+<span class="source-line-no">043</span><span id="line-43"> * @serial exclude</span>
+<span class="source-line-no">044</span><span id="line-44"> */</span>
+<span class="source-line-no">045</span><span id="line-45">// @formatter:off</span>
+<span class="source-line-no">046</span><span id="line-46">@Rest(</span>
+<span class="source-line-no">047</span><span id="line-47">   path="/debug",</span>
+<span class="source-line-no">048</span><span id="line-48">   title="Debug",</span>
+<span class="source-line-no">049</span><span id="line-49">   description="Debug Utilities.",</span>
+<span class="source-line-no">050</span><span id="line-50">   allowedMethodParams="OPTIONS"</span>
+<span class="source-line-no">051</span><span id="line-51">)</span>
+<span class="source-line-no">052</span><span id="line-52">@HtmlDocConfig(</span>
+<span class="source-line-no">053</span><span id="line-53">   navlinks={</span>
+<span class="source-line-no">054</span><span id="line-54">      "up: request:/..",</span>
+<span class="source-line-no">055</span><span id="line-55">      "jetty-thread-dump: servlet:/jetty/dump",</span>
+<span class="source-line-no">056</span><span id="line-56">      "api: servlet:/api",</span>
+<span class="source-line-no">057</span><span id="line-57">      "stats: servlet:/stats"</span>
+<span class="source-line-no">058</span><span id="line-58">   }</span>
+<span class="source-line-no">059</span><span id="line-59">)</span>
+<span class="source-line-no">060</span><span id="line-60">// @formatter:on</span>
+<span class="source-line-no">061</span><span id="line-61">public class DebugResource extends BasicRestServlet {</span>
+<span class="source-line-no">062</span><span id="line-62">   private static final long serialVersionUID = 1L;</span>
+<span class="source-line-no">063</span><span id="line-63"></span>
+<span class="source-line-no">064</span><span id="line-64">   /**</span>
+<span class="source-line-no">065</span><span id="line-65">    * [POST /jetty/dump] - Generates and saves the jetty thread dump file to jetty-thread-dump.log.</span>
+<span class="source-line-no">066</span><span id="line-66">    *</span>
+<span class="source-line-no">067</span><span id="line-67">    * @param req The request.</span>
+<span class="source-line-no">068</span><span id="line-68">    * @param res The response.</span>
+<span class="source-line-no">069</span><span id="line-69">    * @throws Exception Gets converted to 500 response.</span>
+<span class="source-line-no">070</span><span id="line-70">    * @return The thread dump contents.</span>
+<span class="source-line-no">071</span><span id="line-71">    */</span>
+<span class="source-line-no">072</span><span id="line-72">   @RestPost(path = "/jetty/dump", description = "Generates and saves the jetty thread dump file to jetty-thread-dump.log.")</span>
+<span class="source-line-no">073</span><span id="line-73">   @SuppressWarnings({</span>
+<span class="source-line-no">074</span><span id="line-74">      "java:S112" // throws Exception intentional - callback/lifecycle method</span>
+<span class="source-line-no">075</span><span id="line-75">   })</span>
+<span class="source-line-no">076</span><span id="line-76">   public Ok createJettyDump(RestRequest req, RestResponse res) throws Exception {</span>
+<span class="source-line-no">077</span><span id="line-77">      var dump = jettyServerComponent().getServer().dump();</span>
+<span class="source-line-no">078</span><span id="line-78">      try (var fw = new FileWriter(req.getConfig().get("Logging/logDir").orElse("") + "/jetty-thread-dump.log")) {</span>
+<span class="source-line-no">079</span><span id="line-79">         fw.write(dump);</span>
+<span class="source-line-no">080</span><span id="line-80">      }</span>
+<span class="source-line-no">081</span><span id="line-81">      return Ok.OK;</span>
+<span class="source-line-no">082</span><span id="line-82">   }</span>
+<span class="source-line-no">083</span><span id="line-83"></span>
+<span class="source-line-no">084</span><span id="line-84">   /**</span>
+<span class="source-line-no">085</span><span id="line-85">    * [GET /] - Shows child utilities.</span>
+<span class="source-line-no">086</span><span id="line-86">    *</span>
+<span class="source-line-no">087</span><span id="line-87">    * @return Child utility links.</span>
+<span class="source-line-no">088</span><span id="line-88">    */</span>
+<span class="source-line-no">089</span><span id="line-89">   @RestGet(path="/", description="Show contents of config file.")</span>
+<span class="source-line-no">090</span><span id="line-90">   public ResourceDescriptions getChildren() {</span>
+<span class="source-line-no">091</span><span id="line-91">      // @formatter:off</span>
+<span class="source-line-no">092</span><span id="line-92">      return ResourceDescriptions</span>
+<span class="source-line-no">093</span><span id="line-93">         .create()</span>
+<span class="source-line-no">094</span><span id="line-94">         .append("jetty/dump", "Jetty thread dump");</span>
+<span class="source-line-no">095</span><span id="line-95">      // @formatter:on</span>
+<span class="source-line-no">096</span><span id="line-96">   }</span>
+<span class="source-line-no">097</span><span id="line-97"></span>
+<span class="source-line-no">098</span><span id="line-98">   /**</span>
+<span class="source-line-no">099</span><span id="line-99">    * [GET /jetty/dump] - Generates and retrieves the jetty thread dump.</span>
+<span class="source-line-no">100</span><span id="line-100">    *</span>
+<span class="source-line-no">101</span><span id="line-101">    * @param req The request.</span>
+<span class="source-line-no">102</span><span id="line-102">    * @param res The response.</span>
+<span class="source-line-no">103</span><span id="line-103">    * @return The thread dump contents.</span>
+<span class="source-line-no">104</span><span id="line-104">    */</span>
+<span class="source-line-no">105</span><span id="line-105">   @RestGet(path = "/jetty/dump", description = "Generates and retrieves the jetty thread dump.")</span>
+<span class="source-line-no">106</span><span id="line-106">   public Reader getJettyDump(RestRequest req, RestResponse res) {</span>
+<span class="source-line-no">107</span><span id="line-107">      res.setContentType("text/plain");</span>
+<span class="source-line-no">108</span><span id="line-108">      return new StringReader(jettyServerComponent().getServer().dump());</span>
+<span class="source-line-no">109</span><span id="line-109">   }</span>
+<span class="source-line-no">110</span><span id="line-110"></span>
+<span class="source-line-no">111</span><span id="line-111">   @SuppressWarnings({</span>
+<span class="source-line-no">112</span><span id="line-112">      "resource" // BeanStore returned by Microservice.getBeanStore() is owned by the microservice lifecycle; do not close here.</span>
+<span class="source-line-no">113</span><span id="line-113">   })</span>
+<span class="source-line-no">114</span><span id="line-114">   private static JettyServerComponent jettyServerComponent() {</span>
+<span class="source-line-no">115</span><span id="line-115">      return Microservice.getInstance().getBeanStore().getBean(JettyServerComponent.class)</span>
+<span class="source-line-no">116</span><span id="line-116">         .orElseThrow(() -&gt; new IllegalStateException("JettyServerComponent bean not found.  Did you forget to add JettyConfiguration.class to Microservice.Builder.configurations(...)?"));</span>
+<span class="source-line-no">117</span><span id="line-117">   }</span>
+<span class="source-line-no">118</span><span id="line-118">}</span>
 
 
 

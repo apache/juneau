@@ -160,7 +160,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="single(java.util.concurrent.CompletionStage)">
 <h3>single</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="Adaptation.html" title="class in org.apache.juneau.rest.server.reactive">Adaptation</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/reactive/Adaptation.html#line-55">single</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/concurrent/CompletionStage.html" title="class or interface in java.util.concurrent" class="external-link">CompletionStage</a>&lt;?&gt;&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="Adaptation.html" title="class in org.apache.juneau.rest.server.reactive">Adaptation</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/reactive/Adaptation.html#line-58">single</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/concurrent/CompletionStage.html" title="class or interface in java.util.concurrent" class="external-link">CompletionStage</a>&lt;?&gt;&nbsp;value)</span></div>
 <div class="block">Creates a single-value adaptation backed by a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/concurrent/CompletionStage.html" title="class or interface in java.util.concurrent" class="external-link"><code>CompletionStage</code></a>.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -173,7 +173,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="stream(java.util.concurrent.Flow.Publisher)">
 <h3>stream</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="Adaptation.html" title="class in org.apache.juneau.rest.server.reactive">Adaptation</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/reactive/Adaptation.html#line-65">stream</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/concurrent/Flow.Publisher.html" title="class or interface in java.util.concurrent" class="external-link">Flow.Publisher</a>&lt;?&gt;&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="Adaptation.html" title="class in org.apache.juneau.rest.server.reactive">Adaptation</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/reactive/Adaptation.html#line-68">stream</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/concurrent/Flow.Publisher.html" title="class or interface in java.util.concurrent" class="external-link">Flow.Publisher</a>&lt;?&gt;&nbsp;value)</span></div>
 <div class="block">Creates a streaming adaptation backed by a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/concurrent/Flow.Publisher.html" title="class or interface in java.util.concurrent" class="external-link"><code>Flow.Publisher</code></a>.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -186,7 +186,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="isStream()">
 <h3>isStream</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/reactive/Adaptation.html#line-74">isStream</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/reactive/Adaptation.html#line-77">isStream</a></span>()</div>
 <div class="block">Returns whether this adaptation is a multi-value stream (vs. a single value).</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -197,7 +197,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="single()">
 <h3>single</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/concurrent/CompletionStage.html" title="class or interface in java.util.concurrent" class="external-link">CompletionStage</a>&lt;?&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/reactive/Adaptation.html#line-83">single</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/concurrent/CompletionStage.html" title="class or interface in java.util.concurrent" class="external-link">CompletionStage</a>&lt;?&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/reactive/Adaptation.html#line-86">single</a></span>()</div>
 <div class="block">Returns the single-value completion stage, or <code>null</code> if this is a streaming adaptation.</div>
 <dl class="notes">
 <dt>Returns:</dt>

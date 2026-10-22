@@ -54,7 +54,7 @@
 <a class="jxr_linenumber" name="L46" href="#L46">46</a>  		HttpPartSchema schema;
 <a class="jxr_linenumber" name="L47" href="#L47">47</a>  		Method getter;
 <a class="jxr_linenumber" name="L48" href="#L48">48</a>  
-<a class="jxr_linenumber" name="L49" href="#L49">49</a>  		RequestBeanPropertyMeta build(<a name="HttpPartSerializer" href="../../../../../org/apache/juneau/marshall/httppart/HttpPartSerializer.html#HttpPartSerializer">HttpPartSerializer</a> serializer, <a name="HttpPartParser" href="../../../../../org/apache/juneau/marshall/httppart/HttpPartParser.html#HttpPartParser">HttpPartParser</a> parser) {
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>  		RequestBeanPropertyMeta build(HttpPartSerializer serializer, HttpPartParser parser) {
 <a class="jxr_linenumber" name="L50" href="#L50">50</a>  			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="RequestBeanPropertyMeta" href="../../../../../org/apache/juneau/httppart/bean/RequestBeanPropertyMeta.html#RequestBeanPropertyMeta">RequestBeanPropertyMeta</a>(<strong class="jxr_keyword">this</strong>, serializer, parser);
 <a class="jxr_linenumber" name="L51" href="#L51">51</a>  		}
 <a class="jxr_linenumber" name="L52" href="#L52">52</a>  
@@ -85,14 +85,14 @@
 <a class="jxr_linenumber" name="L77" href="#L77">77</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Method getter;
 <a class="jxr_linenumber" name="L78" href="#L78">78</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a name="HttpPartType" href="../../../../../org/apache/juneau/commons/httppart/HttpPartType.html#HttpPartType">HttpPartType</a> partType;
 <a class="jxr_linenumber" name="L79" href="#L79">79</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Optional&lt;HttpPartSerializer&gt; serializer;
-<a class="jxr_linenumber" name="L80" href="#L80">80</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a name="HttpPartParser" href="../../../../../org/apache/juneau/marshall/httppart/HttpPartParser.html#HttpPartParser">HttpPartParser</a> parser;
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> HttpPartParser parser;
 <a class="jxr_linenumber" name="L81" href="#L81">81</a>  
 <a class="jxr_linenumber" name="L82" href="#L82">82</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> HttpPartSchema schema;
 <a class="jxr_linenumber" name="L83" href="#L83">83</a>  
 <a class="jxr_linenumber" name="L84" href="#L84">84</a>  	@SuppressWarnings({
 <a class="jxr_linenumber" name="L85" href="#L85">85</a>  		<span class="jxr_string">"unchecked"</span> <em class="jxr_comment">// Type erasure on reflective/generic cast; element type is verified at call site</em>
 <a class="jxr_linenumber" name="L86" href="#L86">86</a>  	})
-<a class="jxr_linenumber" name="L87" href="#L87">87</a>  	RequestBeanPropertyMeta(Builder b, <a name="HttpPartSerializer" href="../../../../../org/apache/juneau/marshall/httppart/HttpPartSerializer.html#HttpPartSerializer">HttpPartSerializer</a> serializer, <a name="HttpPartParser" href="../../../../../org/apache/juneau/marshall/httppart/HttpPartParser.html#HttpPartParser">HttpPartParser</a> parser) {
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>  	RequestBeanPropertyMeta(Builder b, HttpPartSerializer serializer, HttpPartParser parser) {
 <a class="jxr_linenumber" name="L88" href="#L88">88</a>  		partType = b.partType;
 <a class="jxr_linenumber" name="L89" href="#L89">89</a>  		schema = b.schema;
 <a class="jxr_linenumber" name="L90" href="#L90">90</a>  		getter = b.getter;

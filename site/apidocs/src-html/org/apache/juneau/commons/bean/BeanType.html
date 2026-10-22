@@ -294,56 +294,57 @@
 <span class="source-line-no">281</span><span id="line-281">    *</span>
 <span class="source-line-no">282</span><span id="line-282">    * &lt;p&gt;</span>
 <span class="source-line-no">283</span><span id="line-283">    * By default, bean properties are serialized in alphabetical order.</span>
-<span class="source-line-no">284</span><span id="line-284">    * When &lt;jk&gt;true&lt;/jk&gt;, properties of this bean will use the natural JVM-dependent order instead.</span>
-<span class="source-line-no">285</span><span id="line-285">    *</span>
-<span class="source-line-no">286</span><span id="line-286">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
-<span class="source-line-no">287</span><span id="line-287">    * &lt;p class='bjava'&gt;</span>
-<span class="source-line-no">288</span><span id="line-288">    *    &lt;jc&gt;// Disable sorted properties for this specific bean.&lt;/jc&gt;</span>
-<span class="source-line-no">289</span><span id="line-289">    *    &lt;ja&gt;@BeanType&lt;/ja&gt;(unsorted=&lt;jk&gt;true&lt;/jk&gt;)</span>
-<span class="source-line-no">290</span><span id="line-290">    *    &lt;jk&gt;public class&lt;/jk&gt; MyBean {...}</span>
-<span class="source-line-no">291</span><span id="line-291">    * &lt;/p&gt;</span>
-<span class="source-line-no">292</span><span id="line-292">    *</span>
-<span class="source-line-no">293</span><span id="line-293">    * @return The annotation value.</span>
-<span class="source-line-no">294</span><span id="line-294">    */</span>
-<span class="source-line-no">295</span><span id="line-295">   boolean unsorted() default false;</span>
-<span class="source-line-no">296</span><span id="line-296"></span>
-<span class="source-line-no">297</span><span id="line-297">   /**</span>
-<span class="source-line-no">298</span><span id="line-298">    * Synonym for {@link #writeOnlyProperties()}.</span>
-<span class="source-line-no">299</span><span id="line-299">    *</span>
-<span class="source-line-no">300</span><span id="line-300">    * @return The annotation value.</span>
-<span class="source-line-no">301</span><span id="line-301">    */</span>
-<span class="source-line-no">302</span><span id="line-302">   String wo() default "";</span>
-<span class="source-line-no">303</span><span id="line-303"></span>
-<span class="source-line-no">304</span><span id="line-304">   /**</span>
-<span class="source-line-no">305</span><span id="line-305">    * Write-only bean properties.</span>
-<span class="source-line-no">306</span><span id="line-306">    *</span>
-<span class="source-line-no">307</span><span id="line-307">    * &lt;p&gt;</span>
-<span class="source-line-no">308</span><span id="line-308">    * Specifies one or more properties on a bean that are write-only despite having valid setters.</span>
-<span class="source-line-no">309</span><span id="line-309">    * Parsers will parse such properties as usual, but serializers will silently ignore them.</span>
-<span class="source-line-no">310</span><span id="line-310">    *</span>
-<span class="source-line-no">311</span><span id="line-311">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
-<span class="source-line-no">312</span><span id="line-312">    * &lt;p class='bjava'&gt;</span>
-<span class="source-line-no">313</span><span id="line-313">    *    &lt;jc&gt;// Exclude the 'city' and 'state' properties from being serialized, but not parsed.&lt;/jc&gt;</span>
-<span class="source-line-no">314</span><span id="line-314">    *    &lt;ja&gt;@BeanType&lt;/ja&gt;(writeOnlyProperties=&lt;js&gt;"city,state"&lt;/js&gt;})</span>
-<span class="source-line-no">315</span><span id="line-315">    *    &lt;jk&gt;public class&lt;/jk&gt; Address {...}</span>
-<span class="source-line-no">316</span><span id="line-316">    * &lt;/p&gt;</span>
-<span class="source-line-no">317</span><span id="line-317">    *</span>
-<span class="source-line-no">318</span><span id="line-318">    * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</span>
-<span class="source-line-no">319</span><span id="line-319">    *    &lt;li class='note'&gt;</span>
-<span class="source-line-no">320</span><span id="line-320">    *       {@link #wo()} is a shortened synonym for this value.</span>
-<span class="source-line-no">321</span><span id="line-321">    * &lt;/ul&gt;</span>
-<span class="source-line-no">322</span><span id="line-322">    *</span>
-<span class="source-line-no">323</span><span id="line-323">    * @return The annotation value.</span>
-<span class="source-line-no">324</span><span id="line-324">    */</span>
-<span class="source-line-no">325</span><span id="line-325">   String writeOnlyProperties() default "";</span>
-<span class="source-line-no">326</span><span id="line-326"></span>
-<span class="source-line-no">327</span><span id="line-327">   /**</span>
-<span class="source-line-no">328</span><span id="line-328">    * Synonym for {@link #excludeProperties()}.</span>
-<span class="source-line-no">329</span><span id="line-329">    *</span>
-<span class="source-line-no">330</span><span id="line-330">    * @return The annotation value.</span>
-<span class="source-line-no">331</span><span id="line-331">    */</span>
-<span class="source-line-no">332</span><span id="line-332">   String xp() default "";</span>
-<span class="source-line-no">333</span><span id="line-333">}</span>
+<span class="source-line-no">284</span><span id="line-284">    * When &lt;jk&gt;true&lt;/jk&gt;, properties of this bean use declaration order instead: record component order for records,</span>
+<span class="source-line-no">285</span><span id="line-285">    * field declaration order (superclass first) for other classes, then method-only properties alphabetically.</span>
+<span class="source-line-no">286</span><span id="line-286">    *</span>
+<span class="source-line-no">287</span><span id="line-287">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">288</span><span id="line-288">    * &lt;p class='bjava'&gt;</span>
+<span class="source-line-no">289</span><span id="line-289">    *    &lt;jc&gt;// Disable sorted properties for this specific bean.&lt;/jc&gt;</span>
+<span class="source-line-no">290</span><span id="line-290">    *    &lt;ja&gt;@BeanType&lt;/ja&gt;(unsorted=&lt;jk&gt;true&lt;/jk&gt;)</span>
+<span class="source-line-no">291</span><span id="line-291">    *    &lt;jk&gt;public class&lt;/jk&gt; MyBean {...}</span>
+<span class="source-line-no">292</span><span id="line-292">    * &lt;/p&gt;</span>
+<span class="source-line-no">293</span><span id="line-293">    *</span>
+<span class="source-line-no">294</span><span id="line-294">    * @return The annotation value.</span>
+<span class="source-line-no">295</span><span id="line-295">    */</span>
+<span class="source-line-no">296</span><span id="line-296">   boolean unsorted() default false;</span>
+<span class="source-line-no">297</span><span id="line-297"></span>
+<span class="source-line-no">298</span><span id="line-298">   /**</span>
+<span class="source-line-no">299</span><span id="line-299">    * Synonym for {@link #writeOnlyProperties()}.</span>
+<span class="source-line-no">300</span><span id="line-300">    *</span>
+<span class="source-line-no">301</span><span id="line-301">    * @return The annotation value.</span>
+<span class="source-line-no">302</span><span id="line-302">    */</span>
+<span class="source-line-no">303</span><span id="line-303">   String wo() default "";</span>
+<span class="source-line-no">304</span><span id="line-304"></span>
+<span class="source-line-no">305</span><span id="line-305">   /**</span>
+<span class="source-line-no">306</span><span id="line-306">    * Write-only bean properties.</span>
+<span class="source-line-no">307</span><span id="line-307">    *</span>
+<span class="source-line-no">308</span><span id="line-308">    * &lt;p&gt;</span>
+<span class="source-line-no">309</span><span id="line-309">    * Specifies one or more properties on a bean that are write-only despite having valid setters.</span>
+<span class="source-line-no">310</span><span id="line-310">    * Parsers will parse such properties as usual, but serializers will silently ignore them.</span>
+<span class="source-line-no">311</span><span id="line-311">    *</span>
+<span class="source-line-no">312</span><span id="line-312">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">313</span><span id="line-313">    * &lt;p class='bjava'&gt;</span>
+<span class="source-line-no">314</span><span id="line-314">    *    &lt;jc&gt;// Exclude the 'city' and 'state' properties from being serialized, but not parsed.&lt;/jc&gt;</span>
+<span class="source-line-no">315</span><span id="line-315">    *    &lt;ja&gt;@BeanType&lt;/ja&gt;(writeOnlyProperties=&lt;js&gt;"city,state"&lt;/js&gt;})</span>
+<span class="source-line-no">316</span><span id="line-316">    *    &lt;jk&gt;public class&lt;/jk&gt; Address {...}</span>
+<span class="source-line-no">317</span><span id="line-317">    * &lt;/p&gt;</span>
+<span class="source-line-no">318</span><span id="line-318">    *</span>
+<span class="source-line-no">319</span><span id="line-319">    * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">320</span><span id="line-320">    *    &lt;li class='note'&gt;</span>
+<span class="source-line-no">321</span><span id="line-321">    *       {@link #wo()} is a shortened synonym for this value.</span>
+<span class="source-line-no">322</span><span id="line-322">    * &lt;/ul&gt;</span>
+<span class="source-line-no">323</span><span id="line-323">    *</span>
+<span class="source-line-no">324</span><span id="line-324">    * @return The annotation value.</span>
+<span class="source-line-no">325</span><span id="line-325">    */</span>
+<span class="source-line-no">326</span><span id="line-326">   String writeOnlyProperties() default "";</span>
+<span class="source-line-no">327</span><span id="line-327"></span>
+<span class="source-line-no">328</span><span id="line-328">   /**</span>
+<span class="source-line-no">329</span><span id="line-329">    * Synonym for {@link #excludeProperties()}.</span>
+<span class="source-line-no">330</span><span id="line-330">    *</span>
+<span class="source-line-no">331</span><span id="line-331">    * @return The annotation value.</span>
+<span class="source-line-no">332</span><span id="line-332">    */</span>
+<span class="source-line-no">333</span><span id="line-333">   String xp() default "";</span>
+<span class="source-line-no">334</span><span id="line-334">}</span>
 
 
 

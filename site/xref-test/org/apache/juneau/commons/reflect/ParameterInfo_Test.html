@@ -28,29 +28,29 @@
 <a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> java.lang.annotation.RetentionPolicy.*;
 <a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.commons.utils.ClassUtils.*;
 <a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.commons.utils.CollectionUtils.*;
-<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.junit.jupiter.api.Assertions.*;
-<a class="jxr_linenumber" name="L24" href="#L24">24</a>  
-<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> java.lang.annotation.*;
-<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> java.lang.reflect.*;
-<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> java.util.*;
-<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">import</strong> java.util.function.*;
-<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <strong class="jxr_keyword">import</strong> java.util.stream.*;
-<a class="jxr_linenumber" name="L30" href="#L30">30</a>  
-<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.commons.*;
-<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.commons.bean.*;
-<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.commons.inject.Named;
-<a class="jxr_linenumber" name="L34" href="#L34">34</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.commons.settings.*;
-<a class="jxr_linenumber" name="L35" href="#L35">35</a>  <strong class="jxr_keyword">import</strong> org.junit.jupiter.api.*;
-<a class="jxr_linenumber" name="L36" href="#L36">36</a>  
-<a class="jxr_linenumber" name="L37" href="#L37">37</a>  @SuppressWarnings({
-<a class="jxr_linenumber" name="L38" href="#L38">38</a>  	<span class="jxr_string">"java:S117"</span>,  <em class="jxr_comment">// Field names use underscores for test data (e.g., b_b_a, b_a1_a); unused parameters in tests are typically intentional</em>
-<a class="jxr_linenumber" name="L39" href="#L39">39</a>  	<span class="jxr_string">"java:S5961"</span>, <em class="jxr_comment">// High assertion count acceptable in comprehensive tests</em>
-<a class="jxr_linenumber" name="L40" href="#L40">40</a>  	<span class="jxr_string">"java:S1186"</span>, <em class="jxr_comment">// Empty method body intentional for callback testing</em>
-<a class="jxr_linenumber" name="L41" href="#L41">41</a>  	<span class="jxr_string">"java:S116"</span>,  <em class="jxr_comment">// Field names use underscores for test data clarity</em>
-<a class="jxr_linenumber" name="L42" href="#L42">42</a>  	<span class="jxr_string">"java:S1172"</span>, <em class="jxr_comment">// Unused parameters kept for API consistency or framework requirements</em>
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.commons.utils.Shorts.*;
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.junit.jupiter.api.Assertions.*;
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> java.lang.annotation.*;
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> java.lang.reflect.*;
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">import</strong> java.util.*;
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <strong class="jxr_keyword">import</strong> java.util.function.*;
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <strong class="jxr_keyword">import</strong> java.util.stream.*;
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>  
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.commons.*;
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.commons.bean.*;
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.commons.inject.Named;
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.commons.settings.*;
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>  <strong class="jxr_keyword">import</strong> org.junit.jupiter.api.*;
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>  
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>  @SuppressWarnings({
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>  	<span class="jxr_string">"java:S116"</span>, <em class="jxr_comment">// Field names use underscores for test data clarity</em>
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>  	<span class="jxr_string">"java:S117"</span>, <em class="jxr_comment">// Field names use underscores for test data (e.g., b_b_a, b_a1_a); unused parameters in tests are typically intentional</em>
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>  	<span class="jxr_string">"java:S1172"</span>, <em class="jxr_comment">// Unused parameters kept for API consistency or framework requirements</em>
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>  	<span class="jxr_string">"java:S1186"</span>, <em class="jxr_comment">// Empty method body intentional for callback testing</em>
 <a class="jxr_linenumber" name="L43" href="#L43">43</a>  	<span class="jxr_string">"java:S3008"</span>, <em class="jxr_comment">// Static field names use underscores for test data clarity</em>
-<a class="jxr_linenumber" name="L44" href="#L44">44</a>  	<span class="jxr_string">"resource"</span>,   <em class="jxr_comment">// Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.</em>
-<a class="jxr_linenumber" name="L45" href="#L45">45</a>  	<span class="jxr_string">"unused"</span>      <em class="jxr_comment">// Unused parameters/variables kept for consistent method signatures across test utilities.</em>
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>  	<span class="jxr_string">"java:S5961"</span>, <em class="jxr_comment">// High assertion count acceptable in comprehensive tests</em>
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>  	<span class="jxr_string">"unused"</span> <em class="jxr_comment">// Unused parameters/variables kept for consistent method signatures across test utilities.</em>
 <a class="jxr_linenumber" name="L46" href="#L46">46</a>  })
 <a class="jxr_linenumber" name="L47" href="#L47">47</a>  <strong class="jxr_keyword">class</strong> ParameterInfo_Test <strong class="jxr_keyword">extends</strong> <a name="TestBase" href="../../../../../org/apache/juneau/commons/TestBase.html#TestBase">TestBase</a> {
 <a class="jxr_linenumber" name="L48" href="#L48">48</a>  
@@ -907,9 +907,9 @@
 <a class="jxr_linenumber" name="L899" href="#L899">899</a> 		<em class="jxr_comment">// Basic parameters (names may or may not be available in bytecode)</em>
 <a class="jxr_linenumber" name="L900" href="#L900">900</a> 		<strong class="jxr_keyword">var</strong> method1 = ci.getPublicMethod(x -&gt; x.hasName(<span class="jxr_string">"basicMethod"</span>)).get();
 <a class="jxr_linenumber" name="L901" href="#L901">901</a> 		<strong class="jxr_keyword">var</strong> param1_0 = method1.getParameter(0).toString();
-<a class="jxr_linenumber" name="L902" href="#L902">902</a> 		assertTrue(param1_0.equals(<span class="jxr_string">"int a"</span>) || param1_0.equals(<span class="jxr_string">"int arg0"</span>), <span class="jxr_string">"Expected 'int a' or 'int arg0', got: "</span> + param1_0);
+<a class="jxr_linenumber" name="L902" href="#L902">902</a> 		assertTrue(eqa(param1_0, <span class="jxr_string">"int a"</span>, <span class="jxr_string">"int arg0"</span>), <span class="jxr_string">"Expected 'int a' or 'int arg0', got: "</span> + param1_0);
 <a class="jxr_linenumber" name="L903" href="#L903">903</a> 		<strong class="jxr_keyword">var</strong> param1_1 = method1.getParameter(1).toString();
-<a class="jxr_linenumber" name="L904" href="#L904">904</a> 		assertTrue(param1_1.equals(<span class="jxr_string">"java.lang.String b"</span>) || param1_1.equals(<span class="jxr_string">"java.lang.String arg1"</span>), <span class="jxr_string">"Expected 'java.lang.String b' or 'java.lang.String arg1', got: "</span> + param1_1);
+<a class="jxr_linenumber" name="L904" href="#L904">904</a> 		assertTrue(eqa(param1_1, <span class="jxr_string">"java.lang.String b"</span>, <span class="jxr_string">"java.lang.String arg1"</span>), <span class="jxr_string">"Expected 'java.lang.String b' or 'java.lang.String arg1', got: "</span> + param1_1);
 <a class="jxr_linenumber" name="L905" href="#L905">905</a> 
 <a class="jxr_linenumber" name="L906" href="#L906">906</a> 		<em class="jxr_comment">// Parameters with @Name annotation (always have names)</em>
 <a class="jxr_linenumber" name="L907" href="#L907">907</a> 		<strong class="jxr_keyword">var</strong> method2 = ci.getPublicMethod(x -&gt; x.hasName(<span class="jxr_string">"namedMethod"</span>)).get();
@@ -921,110 +921,109 @@
 <a class="jxr_linenumber" name="L913" href="#L913">913</a> 		<strong class="jxr_keyword">var</strong> method3 = ci.getPublicMethod(x -&gt; x.hasName(<span class="jxr_string">"finalMethod"</span>)).get();
 <a class="jxr_linenumber" name="L914" href="#L914">914</a> 		<strong class="jxr_keyword">var</strong> param3_0 = method3.getParameter(0).toString();
 <a class="jxr_linenumber" name="L915" href="#L915">915</a> 		assertTrue(
-<a class="jxr_linenumber" name="L916" href="#L916">916</a> 			param3_0.equals(<span class="jxr_string">"int value"</span>) || param3_0.equals(<span class="jxr_string">"int arg0"</span>) ||
-<a class="jxr_linenumber" name="L917" href="#L917">917</a> 			param3_0.equals(<span class="jxr_string">"final int value"</span>) || param3_0.equals(<span class="jxr_string">"final int arg0"</span>),
-<a class="jxr_linenumber" name="L918" href="#L918">918</a> 			<span class="jxr_string">"Expected 'int value', 'int arg0', 'final int value', or 'final int arg0', got: "</span> + param3_0);
-<a class="jxr_linenumber" name="L919" href="#L919">919</a> 
-<a class="jxr_linenumber" name="L920" href="#L920">920</a> 		<em class="jxr_comment">// Generic parameters</em>
-<a class="jxr_linenumber" name="L921" href="#L921">921</a> 		<strong class="jxr_keyword">var</strong> method4 = ci.getPublicMethod(x -&gt; x.hasName(<span class="jxr_string">"genericMethod"</span>)).get();
-<a class="jxr_linenumber" name="L922" href="#L922">922</a> 		assertEquals(<span class="jxr_string">"java.util.List&lt;java.lang.String&gt; list"</span>, method4.getParameter(0).toString());
-<a class="jxr_linenumber" name="L923" href="#L923">923</a> 		assertEquals(<span class="jxr_string">"java.util.Map&lt;java.lang.String,java.lang.Integer&gt; map"</span>, method4.getParameter(1).toString());
-<a class="jxr_linenumber" name="L924" href="#L924">924</a> 
-<a class="jxr_linenumber" name="L925" href="#L925">925</a> 		<em class="jxr_comment">// Varargs parameter</em>
-<a class="jxr_linenumber" name="L926" href="#L926">926</a> 		<strong class="jxr_keyword">var</strong> method5 = ci.getPublicMethod(x -&gt; x.hasName(<span class="jxr_string">"varargsMethod"</span>)).get();
-<a class="jxr_linenumber" name="L927" href="#L927">927</a> 		assertEquals(<span class="jxr_string">"java.lang.String... values"</span>, method5.getParameter(0).toString());
-<a class="jxr_linenumber" name="L928" href="#L928">928</a> 
-<a class="jxr_linenumber" name="L929" href="#L929">929</a> 		<em class="jxr_comment">// Final varargs parameter (final modifier may or may not appear depending on JVM/environment)</em>
-<a class="jxr_linenumber" name="L930" href="#L930">930</a> 		<strong class="jxr_keyword">var</strong> method6 = ci.getPublicMethod(x -&gt; x.hasName(<span class="jxr_string">"finalVarargsMethod"</span>)).get();
-<a class="jxr_linenumber" name="L931" href="#L931">931</a> 		<strong class="jxr_keyword">var</strong> param6_0 = method6.getParameter(0).toString();
-<a class="jxr_linenumber" name="L932" href="#L932">932</a> 		assertTrue(
-<a class="jxr_linenumber" name="L933" href="#L933">933</a> 			param6_0.equals(<span class="jxr_string">"java.lang.String... args"</span>) || param6_0.equals(<span class="jxr_string">"final java.lang.String... args"</span>),
-<a class="jxr_linenumber" name="L934" href="#L934">934</a> 			<span class="jxr_string">"Expected 'java.lang.String... args' or 'final java.lang.String... args', got: "</span> + param6_0);
-<a class="jxr_linenumber" name="L935" href="#L935">935</a> 
-<a class="jxr_linenumber" name="L936" href="#L936">936</a> 		<em class="jxr_comment">// Array parameters</em>
-<a class="jxr_linenumber" name="L937" href="#L937">937</a> 		<strong class="jxr_keyword">var</strong> method7 = ci.getPublicMethod(x -&gt; x.hasName(<span class="jxr_string">"arrayMethod"</span>)).get();
-<a class="jxr_linenumber" name="L938" href="#L938">938</a> 		assertEquals(<span class="jxr_string">"int[] numbers"</span>, method7.getParameter(0).toString());
-<a class="jxr_linenumber" name="L939" href="#L939">939</a> 		assertEquals(<span class="jxr_string">"java.lang.String[][] matrix"</span>, method7.getParameter(1).toString());
-<a class="jxr_linenumber" name="L940" href="#L940">940</a> 
-<a class="jxr_linenumber" name="L941" href="#L941">941</a> 		<em class="jxr_comment">// Generic array parameters</em>
-<a class="jxr_linenumber" name="L942" href="#L942">942</a> 		<strong class="jxr_keyword">var</strong> method8 = ci.getPublicMethod(x -&gt; x.hasName(<span class="jxr_string">"genericArrayMethod"</span>)).get();
-<a class="jxr_linenumber" name="L943" href="#L943">943</a> 		assertEquals(<span class="jxr_string">"java.util.List&lt;java.lang.String&gt;[] lists"</span>, method8.getParameter(0).toString());
-<a class="jxr_linenumber" name="L944" href="#L944">944</a> 
-<a class="jxr_linenumber" name="L945" href="#L945">945</a> 		<em class="jxr_comment">// Primitive types</em>
-<a class="jxr_linenumber" name="L946" href="#L946">946</a> 		<strong class="jxr_keyword">var</strong> method9 = ci.getPublicMethod(x -&gt; x.hasName(<span class="jxr_string">"primitiveMethod"</span>)).get();
-<a class="jxr_linenumber" name="L947" href="#L947">947</a> 		assertEquals(<span class="jxr_string">"boolean flag"</span>, method9.getParameter(0).toString());
-<a class="jxr_linenumber" name="L948" href="#L948">948</a> 		assertEquals(<span class="jxr_string">"double value"</span>, method9.getParameter(1).toString());
-<a class="jxr_linenumber" name="L949" href="#L949">949</a> 		assertEquals(<span class="jxr_string">"long count"</span>, method9.getParameter(2).toString());
-<a class="jxr_linenumber" name="L950" href="#L950">950</a> 
-<a class="jxr_linenumber" name="L951" href="#L951">951</a> 		<em class="jxr_comment">// Constructor parameters (with @Name annotations, always have names)</em>
-<a class="jxr_linenumber" name="L952" href="#L952">952</a> 		<strong class="jxr_keyword">var</strong> ctor1 = ci.getPublicConstructor(x -&gt; x.getParameterCount() == 2).get();
-<a class="jxr_linenumber" name="L953" href="#L953">953</a> 		assertEquals(<span class="jxr_string">"int id"</span>, ctor1.getParameter(0).toString());
-<a class="jxr_linenumber" name="L954" href="#L954">954</a> 		assertEquals(<span class="jxr_string">"java.lang.String name"</span>, ctor1.getParameter(1).toString());
-<a class="jxr_linenumber" name="L955" href="#L955">955</a> 
-<a class="jxr_linenumber" name="L956" href="#L956">956</a> 		<em class="jxr_comment">// Parameters without @Name annotations (names may or may not be available in bytecode)</em>
-<a class="jxr_linenumber" name="L957" href="#L957">957</a> 		<strong class="jxr_keyword">var</strong> method10 = ci.getPublicMethod(x -&gt; x.hasName(<span class="jxr_string">"unnamedMethod"</span>)).get();
-<a class="jxr_linenumber" name="L958" href="#L958">958</a> 		<strong class="jxr_keyword">var</strong> param10_0 = method10.getParameter(0).toString();
-<a class="jxr_linenumber" name="L959" href="#L959">959</a> 		assertTrue(param10_0.equals(<span class="jxr_string">"int param1"</span>) || param10_0.equals(<span class="jxr_string">"int arg0"</span>), <span class="jxr_string">"Expected 'int param1' or 'int arg0', got: "</span> + param10_0);
-<a class="jxr_linenumber" name="L960" href="#L960">960</a> 		<strong class="jxr_keyword">var</strong> param10_1 = method10.getParameter(1).toString();
-<a class="jxr_linenumber" name="L961" href="#L961">961</a> 		assertTrue(param10_1.equals(<span class="jxr_string">"java.lang.String param2"</span>) || param10_1.equals(<span class="jxr_string">"java.lang.String arg1"</span>), <span class="jxr_string">"Expected 'java.lang.String param2' or 'java.lang.String arg1', got: "</span> + param10_1);
-<a class="jxr_linenumber" name="L962" href="#L962">962</a> 	}
-<a class="jxr_linenumber" name="L963" href="#L963">963</a> 
-<a class="jxr_linenumber" name="L964" href="#L964">964</a> 	<em class="jxr_comment">//====================================================================================================</em>
-<a class="jxr_linenumber" name="L965" href="#L965">965</a> 	<em class="jxr_comment">// equals(Object) and hashCode()</em>
-<a class="jxr_linenumber" name="L966" href="#L966">966</a> 	<em class="jxr_comment">//====================================================================================================</em>
-<a class="jxr_linenumber" name="L967" href="#L967">967</a> 	@Test
-<a class="jxr_linenumber" name="L968" href="#L968">968</a> 	<strong class="jxr_keyword">void</strong> a030_equals_hashCode() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L969" href="#L969">969</a> 		<em class="jxr_comment">// Get ParameterInfo instances from the same Parameter</em>
-<a class="jxr_linenumber" name="L970" href="#L970">970</a> 		Method method = EqualsTestClass.<strong class="jxr_keyword">class</strong>.getMethod(<span class="jxr_string">"method"</span>, String.<strong class="jxr_keyword">class</strong>, <strong class="jxr_keyword">int</strong>.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L971" href="#L971">971</a> 		Parameter p1 = method.getParameters()[0];
-<a class="jxr_linenumber" name="L972" href="#L972">972</a> 		ParameterInfo pi1a = ParameterInfo.of(p1);
-<a class="jxr_linenumber" name="L973" href="#L973">973</a> 		ParameterInfo pi1b = ParameterInfo.of(p1);
-<a class="jxr_linenumber" name="L974" href="#L974">974</a> 
-<a class="jxr_linenumber" name="L975" href="#L975">975</a> 		Parameter p2 = method.getParameters()[1];
-<a class="jxr_linenumber" name="L976" href="#L976">976</a> 		ParameterInfo pi2 = ParameterInfo.of(p2);
-<a class="jxr_linenumber" name="L977" href="#L977">977</a> 
-<a class="jxr_linenumber" name="L978" href="#L978">978</a> 		<em class="jxr_comment">// Same parameter should be equal</em>
-<a class="jxr_linenumber" name="L979" href="#L979">979</a> 		assertEquals(pi1a, pi1b);
-<a class="jxr_linenumber" name="L980" href="#L980">980</a> 		assertEquals(pi1a.hashCode(), pi1b.hashCode());
-<a class="jxr_linenumber" name="L981" href="#L981">981</a> 
-<a class="jxr_linenumber" name="L982" href="#L982">982</a> 		<em class="jxr_comment">// Different parameters should not be equal</em>
-<a class="jxr_linenumber" name="L983" href="#L983">983</a> 		assertNotEquals(pi1a, pi2);
-<a class="jxr_linenumber" name="L984" href="#L984">984</a> 		assertNotEquals(<strong class="jxr_keyword">null</strong>, pi1a);
-<a class="jxr_linenumber" name="L985" href="#L985">985</a> 		assertNotEquals(<span class="jxr_string">"not a ParameterInfo"</span>, pi1a);
-<a class="jxr_linenumber" name="L986" href="#L986">986</a> 
-<a class="jxr_linenumber" name="L987" href="#L987">987</a> 		<em class="jxr_comment">// Reflexive</em>
-<a class="jxr_linenumber" name="L988" href="#L988">988</a> 		assertEquals(pi1a, pi1a);
-<a class="jxr_linenumber" name="L989" href="#L989">989</a> 
-<a class="jxr_linenumber" name="L990" href="#L990">990</a> 		<em class="jxr_comment">// Symmetric</em>
-<a class="jxr_linenumber" name="L991" href="#L991">991</a> 		assertEquals(pi1a, pi1b);
-<a class="jxr_linenumber" name="L992" href="#L992">992</a> 		assertEquals(pi1b, pi1a);
-<a class="jxr_linenumber" name="L993" href="#L993">993</a> 
-<a class="jxr_linenumber" name="L994" href="#L994">994</a> 		<em class="jxr_comment">// Transitive</em>
-<a class="jxr_linenumber" name="L995" href="#L995">995</a> 		ParameterInfo pi1c = ParameterInfo.of(p1);
-<a class="jxr_linenumber" name="L996" href="#L996">996</a> 		assertEquals(pi1a, pi1b);
-<a class="jxr_linenumber" name="L997" href="#L997">997</a> 		assertEquals(pi1b, pi1c);
-<a class="jxr_linenumber" name="L998" href="#L998">998</a> 		assertEquals(pi1a, pi1c);
-<a class="jxr_linenumber" name="L999" href="#L999">999</a> 
-<a class="jxr_linenumber" name="L1000" href="#L1000">1000</a> 		<em class="jxr_comment">// HashMap usage - same parameter should map to same value</em>
-<a class="jxr_linenumber" name="L1001" href="#L1001">1001</a> 		Map&lt;ParameterInfo,String&gt; map = <strong class="jxr_keyword">new</strong> HashMap&lt;&gt;();
-<a class="jxr_linenumber" name="L1002" href="#L1002">1002</a> 		map.put(pi1a, <span class="jxr_string">"value1"</span>);
-<a class="jxr_linenumber" name="L1003" href="#L1003">1003</a> 		assertEquals(<span class="jxr_string">"value1"</span>, map.get(pi1b));
-<a class="jxr_linenumber" name="L1004" href="#L1004">1004</a> 		assertEquals(<span class="jxr_string">"value1"</span>, map.get(pi1c));
-<a class="jxr_linenumber" name="L1005" href="#L1005">1005</a> 
-<a class="jxr_linenumber" name="L1006" href="#L1006">1006</a> 		<em class="jxr_comment">// HashMap usage - different parameters should map to different values</em>
-<a class="jxr_linenumber" name="L1007" href="#L1007">1007</a> 		map.put(pi2, <span class="jxr_string">"value2"</span>);
-<a class="jxr_linenumber" name="L1008" href="#L1008">1008</a> 		assertEquals(<span class="jxr_string">"value2"</span>, map.get(pi2));
-<a class="jxr_linenumber" name="L1009" href="#L1009">1009</a> 		assertNotEquals(<span class="jxr_string">"value2"</span>, map.get(pi1a));
-<a class="jxr_linenumber" name="L1010" href="#L1010">1010</a> 
-<a class="jxr_linenumber" name="L1011" href="#L1011">1011</a> 		<em class="jxr_comment">// HashSet usage</em>
-<a class="jxr_linenumber" name="L1012" href="#L1012">1012</a> 		Set&lt;ParameterInfo&gt; set = <strong class="jxr_keyword">new</strong> HashSet&lt;&gt;();
-<a class="jxr_linenumber" name="L1013" href="#L1013">1013</a> 		set.add(pi1a);
-<a class="jxr_linenumber" name="L1014" href="#L1014">1014</a> 		assertTrue(set.contains(pi1b));
-<a class="jxr_linenumber" name="L1015" href="#L1015">1015</a> 		assertTrue(set.contains(pi1c));
-<a class="jxr_linenumber" name="L1016" href="#L1016">1016</a> 		assertFalse(set.contains(pi2));
-<a class="jxr_linenumber" name="L1017" href="#L1017">1017</a> 	}
-<a class="jxr_linenumber" name="L1018" href="#L1018">1018</a> }
-<a class="jxr_linenumber" name="L1019" href="#L1019">1019</a> 
+<a class="jxr_linenumber" name="L916" href="#L916">916</a> 			eqa(param3_0, <span class="jxr_string">"int value"</span>, <span class="jxr_string">"int arg0"</span>, <span class="jxr_string">"final int value"</span>, <span class="jxr_string">"final int arg0"</span>),
+<a class="jxr_linenumber" name="L917" href="#L917">917</a> 			<span class="jxr_string">"Expected 'int value', 'int arg0', 'final int value', or 'final int arg0', got: "</span> + param3_0);
+<a class="jxr_linenumber" name="L918" href="#L918">918</a> 
+<a class="jxr_linenumber" name="L919" href="#L919">919</a> 		<em class="jxr_comment">// Generic parameters</em>
+<a class="jxr_linenumber" name="L920" href="#L920">920</a> 		<strong class="jxr_keyword">var</strong> method4 = ci.getPublicMethod(x -&gt; x.hasName(<span class="jxr_string">"genericMethod"</span>)).get();
+<a class="jxr_linenumber" name="L921" href="#L921">921</a> 		assertEquals(<span class="jxr_string">"java.util.List&lt;java.lang.String&gt; list"</span>, method4.getParameter(0).toString());
+<a class="jxr_linenumber" name="L922" href="#L922">922</a> 		assertEquals(<span class="jxr_string">"java.util.Map&lt;java.lang.String,java.lang.Integer&gt; map"</span>, method4.getParameter(1).toString());
+<a class="jxr_linenumber" name="L923" href="#L923">923</a> 
+<a class="jxr_linenumber" name="L924" href="#L924">924</a> 		<em class="jxr_comment">// Varargs parameter</em>
+<a class="jxr_linenumber" name="L925" href="#L925">925</a> 		<strong class="jxr_keyword">var</strong> method5 = ci.getPublicMethod(x -&gt; x.hasName(<span class="jxr_string">"varargsMethod"</span>)).get();
+<a class="jxr_linenumber" name="L926" href="#L926">926</a> 		assertEquals(<span class="jxr_string">"java.lang.String... values"</span>, method5.getParameter(0).toString());
+<a class="jxr_linenumber" name="L927" href="#L927">927</a> 
+<a class="jxr_linenumber" name="L928" href="#L928">928</a> 		<em class="jxr_comment">// Final varargs parameter (final modifier may or may not appear depending on JVM/environment)</em>
+<a class="jxr_linenumber" name="L929" href="#L929">929</a> 		<strong class="jxr_keyword">var</strong> method6 = ci.getPublicMethod(x -&gt; x.hasName(<span class="jxr_string">"finalVarargsMethod"</span>)).get();
+<a class="jxr_linenumber" name="L930" href="#L930">930</a> 		<strong class="jxr_keyword">var</strong> param6_0 = method6.getParameter(0).toString();
+<a class="jxr_linenumber" name="L931" href="#L931">931</a> 		assertTrue(
+<a class="jxr_linenumber" name="L932" href="#L932">932</a> 			eqa(param6_0, <span class="jxr_string">"java.lang.String... args"</span>, <span class="jxr_string">"final java.lang.String... args"</span>),
+<a class="jxr_linenumber" name="L933" href="#L933">933</a> 			<span class="jxr_string">"Expected 'java.lang.String... args' or 'final java.lang.String... args', got: "</span> + param6_0);
+<a class="jxr_linenumber" name="L934" href="#L934">934</a> 
+<a class="jxr_linenumber" name="L935" href="#L935">935</a> 		<em class="jxr_comment">// Array parameters</em>
+<a class="jxr_linenumber" name="L936" href="#L936">936</a> 		<strong class="jxr_keyword">var</strong> method7 = ci.getPublicMethod(x -&gt; x.hasName(<span class="jxr_string">"arrayMethod"</span>)).get();
+<a class="jxr_linenumber" name="L937" href="#L937">937</a> 		assertEquals(<span class="jxr_string">"int[] numbers"</span>, method7.getParameter(0).toString());
+<a class="jxr_linenumber" name="L938" href="#L938">938</a> 		assertEquals(<span class="jxr_string">"java.lang.String[][] matrix"</span>, method7.getParameter(1).toString());
+<a class="jxr_linenumber" name="L939" href="#L939">939</a> 
+<a class="jxr_linenumber" name="L940" href="#L940">940</a> 		<em class="jxr_comment">// Generic array parameters</em>
+<a class="jxr_linenumber" name="L941" href="#L941">941</a> 		<strong class="jxr_keyword">var</strong> method8 = ci.getPublicMethod(x -&gt; x.hasName(<span class="jxr_string">"genericArrayMethod"</span>)).get();
+<a class="jxr_linenumber" name="L942" href="#L942">942</a> 		assertEquals(<span class="jxr_string">"java.util.List&lt;java.lang.String&gt;[] lists"</span>, method8.getParameter(0).toString());
+<a class="jxr_linenumber" name="L943" href="#L943">943</a> 
+<a class="jxr_linenumber" name="L944" href="#L944">944</a> 		<em class="jxr_comment">// Primitive types</em>
+<a class="jxr_linenumber" name="L945" href="#L945">945</a> 		<strong class="jxr_keyword">var</strong> method9 = ci.getPublicMethod(x -&gt; x.hasName(<span class="jxr_string">"primitiveMethod"</span>)).get();
+<a class="jxr_linenumber" name="L946" href="#L946">946</a> 		assertEquals(<span class="jxr_string">"boolean flag"</span>, method9.getParameter(0).toString());
+<a class="jxr_linenumber" name="L947" href="#L947">947</a> 		assertEquals(<span class="jxr_string">"double value"</span>, method9.getParameter(1).toString());
+<a class="jxr_linenumber" name="L948" href="#L948">948</a> 		assertEquals(<span class="jxr_string">"long count"</span>, method9.getParameter(2).toString());
+<a class="jxr_linenumber" name="L949" href="#L949">949</a> 
+<a class="jxr_linenumber" name="L950" href="#L950">950</a> 		<em class="jxr_comment">// Constructor parameters (with @Name annotations, always have names)</em>
+<a class="jxr_linenumber" name="L951" href="#L951">951</a> 		<strong class="jxr_keyword">var</strong> ctor1 = ci.getPublicConstructor(x -&gt; x.getParameterCount() == 2).get();
+<a class="jxr_linenumber" name="L952" href="#L952">952</a> 		assertEquals(<span class="jxr_string">"int id"</span>, ctor1.getParameter(0).toString());
+<a class="jxr_linenumber" name="L953" href="#L953">953</a> 		assertEquals(<span class="jxr_string">"java.lang.String name"</span>, ctor1.getParameter(1).toString());
+<a class="jxr_linenumber" name="L954" href="#L954">954</a> 
+<a class="jxr_linenumber" name="L955" href="#L955">955</a> 		<em class="jxr_comment">// Parameters without @Name annotations (names may or may not be available in bytecode)</em>
+<a class="jxr_linenumber" name="L956" href="#L956">956</a> 		<strong class="jxr_keyword">var</strong> method10 = ci.getPublicMethod(x -&gt; x.hasName(<span class="jxr_string">"unnamedMethod"</span>)).get();
+<a class="jxr_linenumber" name="L957" href="#L957">957</a> 		<strong class="jxr_keyword">var</strong> param10_0 = method10.getParameter(0).toString();
+<a class="jxr_linenumber" name="L958" href="#L958">958</a> 		assertTrue(eqa(param10_0, <span class="jxr_string">"int param1"</span>, <span class="jxr_string">"int arg0"</span>), <span class="jxr_string">"Expected 'int param1' or 'int arg0', got: "</span> + param10_0);
+<a class="jxr_linenumber" name="L959" href="#L959">959</a> 		<strong class="jxr_keyword">var</strong> param10_1 = method10.getParameter(1).toString();
+<a class="jxr_linenumber" name="L960" href="#L960">960</a> 		assertTrue(eqa(param10_1, <span class="jxr_string">"java.lang.String param2"</span>, <span class="jxr_string">"java.lang.String arg1"</span>), <span class="jxr_string">"Expected 'java.lang.String param2' or 'java.lang.String arg1', got: "</span> + param10_1);
+<a class="jxr_linenumber" name="L961" href="#L961">961</a> 	}
+<a class="jxr_linenumber" name="L962" href="#L962">962</a> 
+<a class="jxr_linenumber" name="L963" href="#L963">963</a> 	<em class="jxr_comment">//====================================================================================================</em>
+<a class="jxr_linenumber" name="L964" href="#L964">964</a> 	<em class="jxr_comment">// equals(Object) and hashCode()</em>
+<a class="jxr_linenumber" name="L965" href="#L965">965</a> 	<em class="jxr_comment">//====================================================================================================</em>
+<a class="jxr_linenumber" name="L966" href="#L966">966</a> 	@Test
+<a class="jxr_linenumber" name="L967" href="#L967">967</a> 	<strong class="jxr_keyword">void</strong> a030_equals_hashCode() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L968" href="#L968">968</a> 		<em class="jxr_comment">// Get ParameterInfo instances from the same Parameter</em>
+<a class="jxr_linenumber" name="L969" href="#L969">969</a> 		Method method = EqualsTestClass.<strong class="jxr_keyword">class</strong>.getMethod(<span class="jxr_string">"method"</span>, String.<strong class="jxr_keyword">class</strong>, <strong class="jxr_keyword">int</strong>.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L970" href="#L970">970</a> 		Parameter p1 = method.getParameters()[0];
+<a class="jxr_linenumber" name="L971" href="#L971">971</a> 		ParameterInfo pi1a = ParameterInfo.of(p1);
+<a class="jxr_linenumber" name="L972" href="#L972">972</a> 		ParameterInfo pi1b = ParameterInfo.of(p1);
+<a class="jxr_linenumber" name="L973" href="#L973">973</a> 
+<a class="jxr_linenumber" name="L974" href="#L974">974</a> 		Parameter p2 = method.getParameters()[1];
+<a class="jxr_linenumber" name="L975" href="#L975">975</a> 		ParameterInfo pi2 = ParameterInfo.of(p2);
+<a class="jxr_linenumber" name="L976" href="#L976">976</a> 
+<a class="jxr_linenumber" name="L977" href="#L977">977</a> 		<em class="jxr_comment">// Same parameter should be equal</em>
+<a class="jxr_linenumber" name="L978" href="#L978">978</a> 		assertEquals(pi1a, pi1b);
+<a class="jxr_linenumber" name="L979" href="#L979">979</a> 		assertEquals(pi1a.hashCode(), pi1b.hashCode());
+<a class="jxr_linenumber" name="L980" href="#L980">980</a> 
+<a class="jxr_linenumber" name="L981" href="#L981">981</a> 		<em class="jxr_comment">// Different parameters should not be equal</em>
+<a class="jxr_linenumber" name="L982" href="#L982">982</a> 		assertNotEquals(pi1a, pi2);
+<a class="jxr_linenumber" name="L983" href="#L983">983</a> 		assertNotEquals(<strong class="jxr_keyword">null</strong>, pi1a);
+<a class="jxr_linenumber" name="L984" href="#L984">984</a> 		assertNotEquals(<span class="jxr_string">"not a ParameterInfo"</span>, pi1a);
+<a class="jxr_linenumber" name="L985" href="#L985">985</a> 
+<a class="jxr_linenumber" name="L986" href="#L986">986</a> 		<em class="jxr_comment">// Reflexive</em>
+<a class="jxr_linenumber" name="L987" href="#L987">987</a> 		assertEquals(pi1a, pi1a);
+<a class="jxr_linenumber" name="L988" href="#L988">988</a> 
+<a class="jxr_linenumber" name="L989" href="#L989">989</a> 		<em class="jxr_comment">// Symmetric</em>
+<a class="jxr_linenumber" name="L990" href="#L990">990</a> 		assertEquals(pi1a, pi1b);
+<a class="jxr_linenumber" name="L991" href="#L991">991</a> 		assertEquals(pi1b, pi1a);
+<a class="jxr_linenumber" name="L992" href="#L992">992</a> 
+<a class="jxr_linenumber" name="L993" href="#L993">993</a> 		<em class="jxr_comment">// Transitive</em>
+<a class="jxr_linenumber" name="L994" href="#L994">994</a> 		ParameterInfo pi1c = ParameterInfo.of(p1);
+<a class="jxr_linenumber" name="L995" href="#L995">995</a> 		assertEquals(pi1a, pi1b);
+<a class="jxr_linenumber" name="L996" href="#L996">996</a> 		assertEquals(pi1b, pi1c);
+<a class="jxr_linenumber" name="L997" href="#L997">997</a> 		assertEquals(pi1a, pi1c);
+<a class="jxr_linenumber" name="L998" href="#L998">998</a> 
+<a class="jxr_linenumber" name="L999" href="#L999">999</a> 		<em class="jxr_comment">// HashMap usage - same parameter should map to same value</em>
+<a class="jxr_linenumber" name="L1000" href="#L1000">1000</a> 		Map&lt;ParameterInfo,String&gt; map = <strong class="jxr_keyword">new</strong> HashMap&lt;&gt;();
+<a class="jxr_linenumber" name="L1001" href="#L1001">1001</a> 		map.put(pi1a, <span class="jxr_string">"value1"</span>);
+<a class="jxr_linenumber" name="L1002" href="#L1002">1002</a> 		assertEquals(<span class="jxr_string">"value1"</span>, map.get(pi1b));
+<a class="jxr_linenumber" name="L1003" href="#L1003">1003</a> 		assertEquals(<span class="jxr_string">"value1"</span>, map.get(pi1c));
+<a class="jxr_linenumber" name="L1004" href="#L1004">1004</a> 
+<a class="jxr_linenumber" name="L1005" href="#L1005">1005</a> 		<em class="jxr_comment">// HashMap usage - different parameters should map to different values</em>
+<a class="jxr_linenumber" name="L1006" href="#L1006">1006</a> 		map.put(pi2, <span class="jxr_string">"value2"</span>);
+<a class="jxr_linenumber" name="L1007" href="#L1007">1007</a> 		assertEquals(<span class="jxr_string">"value2"</span>, map.get(pi2));
+<a class="jxr_linenumber" name="L1008" href="#L1008">1008</a> 		assertNotEquals(<span class="jxr_string">"value2"</span>, map.get(pi1a));
+<a class="jxr_linenumber" name="L1009" href="#L1009">1009</a> 
+<a class="jxr_linenumber" name="L1010" href="#L1010">1010</a> 		<em class="jxr_comment">// HashSet usage</em>
+<a class="jxr_linenumber" name="L1011" href="#L1011">1011</a> 		Set&lt;ParameterInfo&gt; set = <strong class="jxr_keyword">new</strong> HashSet&lt;&gt;();
+<a class="jxr_linenumber" name="L1012" href="#L1012">1012</a> 		set.add(pi1a);
+<a class="jxr_linenumber" name="L1013" href="#L1013">1013</a> 		assertTrue(set.contains(pi1b));
+<a class="jxr_linenumber" name="L1014" href="#L1014">1014</a> 		assertTrue(set.contains(pi1c));
+<a class="jxr_linenumber" name="L1015" href="#L1015">1015</a> 		assertFalse(set.contains(pi2));
+<a class="jxr_linenumber" name="L1016" href="#L1016">1016</a> 	}
+<a class="jxr_linenumber" name="L1017" href="#L1017">1017</a> }
+<a class="jxr_linenumber" name="L1018" href="#L1018">1018</a> 
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

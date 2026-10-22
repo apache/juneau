@@ -319,7 +319,7 @@
 <a class="jxr_linenumber" name="L311" href="#L311">311</a> 			McpResourceTemplateHandler h = <strong class="jxr_keyword">new</strong> McpResourceTemplateHandler() {
 <a class="jxr_linenumber" name="L312" href="#L312">312</a> 				@Override <strong class="jxr_keyword">public</strong> McpResourceTemplateSpec descriptor() { <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> McpResourceTemplateSpec().setUriTemplate(<span class="jxr_string">"file:///{name}"</span>); }
 <a class="jxr_linenumber" name="L313" href="#L313">313</a> 				@Override <strong class="jxr_keyword">public</strong> McpResourceOutcome read(String uri, Map&lt;String,String&gt; variables, BeanStore ctx) { <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>; }
-<a class="jxr_linenumber" name="L314" href="#L314">314</a> 				@Override <strong class="jxr_keyword">public</strong> McpCompleter completer(String variableName) { <strong class="jxr_keyword">return</strong> <span class="jxr_string">"name"</span>.equals(variableName) ? STUB : <strong class="jxr_keyword">null</strong>; }
+<a class="jxr_linenumber" name="L314" href="#L314">314</a> 				@Override <strong class="jxr_keyword">public</strong> McpCompleter completer(String variableName) { <strong class="jxr_keyword">return</strong> eq(variableName, <span class="jxr_string">"name"</span>) ? STUB : <strong class="jxr_keyword">null</strong>; }
 <a class="jxr_linenumber" name="L315" href="#L315">315</a> 			};
 <a class="jxr_linenumber" name="L316" href="#L316">316</a> 			assertSame(STUB, McpServerConfig.resourceTemplateCompleter(h, <span class="jxr_string">"name"</span>));
 <a class="jxr_linenumber" name="L317" href="#L317">317</a> 		}
@@ -348,72 +348,74 @@
 <a class="jxr_linenumber" name="L340" href="#L340">340</a> 
 <a class="jxr_linenumber" name="L341" href="#L341">341</a> 	@Nested <strong class="jxr_keyword">class</strong> G_compiledMatcherCache {
 <a class="jxr_linenumber" name="L342" href="#L342">342</a> 
-<a class="jxr_linenumber" name="L343" href="#L343">343</a> 		@SuppressWarnings(<span class="jxr_string">"unchecked"</span>)
-<a class="jxr_linenumber" name="L344" href="#L344">344</a> 		<strong class="jxr_keyword">private</strong> Map&lt;McpResourceTemplateHandler,McpUriTemplateMatcher&gt; compiledMatchers(McpServerConfig config) {
-<a class="jxr_linenumber" name="L345" href="#L345">345</a> 			<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L346" href="#L346">346</a> 				<strong class="jxr_keyword">var</strong> f = McpServerConfig.<strong class="jxr_keyword">class</strong>.getDeclaredField(<span class="jxr_string">"compiledResourceTemplateMatchers"</span>);
-<a class="jxr_linenumber" name="L347" href="#L347">347</a> 				f.setAccessible(<strong class="jxr_keyword">true</strong>);
-<a class="jxr_linenumber" name="L348" href="#L348">348</a> 				<strong class="jxr_keyword">return</strong> (Map&lt;McpResourceTemplateHandler,McpUriTemplateMatcher&gt;) f.get(config);
-<a class="jxr_linenumber" name="L349" href="#L349">349</a> 			} <strong class="jxr_keyword">catch</strong> (ReflectiveOperationException e) {
-<a class="jxr_linenumber" name="L350" href="#L350">350</a> 				<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> RuntimeException(e);
-<a class="jxr_linenumber" name="L351" href="#L351">351</a> 			}
-<a class="jxr_linenumber" name="L352" href="#L352">352</a> 		}
-<a class="jxr_linenumber" name="L353" href="#L353">353</a> 
-<a class="jxr_linenumber" name="L354" href="#L354">354</a> 		@Test <strong class="jxr_keyword">void</strong> g01_registrationPopulatesACompiledMatcherPerHandler() {
-<a class="jxr_linenumber" name="L355" href="#L355">355</a> 			<strong class="jxr_keyword">var</strong> a = handler(<span class="jxr_string">"file:///a/{x}"</span>);
-<a class="jxr_linenumber" name="L356" href="#L356">356</a> 			<strong class="jxr_keyword">var</strong> b = handler(<span class="jxr_string">"file:///b/{y}"</span>);
-<a class="jxr_linenumber" name="L357" href="#L357">357</a> 			<strong class="jxr_keyword">var</strong> config = <strong class="jxr_keyword">new</strong> McpServerConfig().addResourceTemplate(a, b);
-<a class="jxr_linenumber" name="L358" href="#L358">358</a> 			<strong class="jxr_keyword">var</strong> matchers = compiledMatchers(config);
-<a class="jxr_linenumber" name="L359" href="#L359">359</a> 			assertEquals(Set.of(a, b), matchers.keySet());
-<a class="jxr_linenumber" name="L360" href="#L360">360</a> 			assertEquals(List.of(<span class="jxr_string">"x"</span>), matchers.get(a).variableNames());
-<a class="jxr_linenumber" name="L361" href="#L361">361</a> 			assertEquals(List.of(<span class="jxr_string">"y"</span>), matchers.get(b).variableNames());
-<a class="jxr_linenumber" name="L362" href="#L362">362</a> 		}
-<a class="jxr_linenumber" name="L363" href="#L363">363</a> 
-<a class="jxr_linenumber" name="L364" href="#L364">364</a> 		@Test <strong class="jxr_keyword">void</strong> g02_resolveHasAnyCompleterAndTemplateCompleterReuseTheCachedMatcherWithoutRebuildingIt() {
-<a class="jxr_linenumber" name="L365" href="#L365">365</a> 			<strong class="jxr_keyword">var</strong> h = handler(<span class="jxr_string">"file:///a/{x}"</span>);
-<a class="jxr_linenumber" name="L366" href="#L366">366</a> 			<strong class="jxr_keyword">var</strong> config = <strong class="jxr_keyword">new</strong> McpServerConfig().addResourceTemplate(h);
-<a class="jxr_linenumber" name="L367" href="#L367">367</a> 			<strong class="jxr_keyword">var</strong> matchers = compiledMatchers(config);
-<a class="jxr_linenumber" name="L368" href="#L368">368</a> 			<strong class="jxr_keyword">var</strong> cached = matchers.get(h);
-<a class="jxr_linenumber" name="L369" href="#L369">369</a> 			assertNotNull(cached);
-<a class="jxr_linenumber" name="L370" href="#L370">370</a> 
-<a class="jxr_linenumber" name="L371" href="#L371">371</a> 			config.resolveResourceTemplate(<span class="jxr_string">"file:///a/1"</span>);
-<a class="jxr_linenumber" name="L372" href="#L372">372</a> 			config.hasAnyCompleter();
-<a class="jxr_linenumber" name="L373" href="#L373">373</a> 			config.templateCompleter(<span class="jxr_string">"file:///a/{x}"</span>, <span class="jxr_string">"x"</span>);
-<a class="jxr_linenumber" name="L374" href="#L374">374</a> 
-<a class="jxr_linenumber" name="L375" href="#L375">375</a> 			<em class="jxr_comment">// None of the per-request read paths may rebuild the cache: same map, same compiled matcher instance.</em>
-<a class="jxr_linenumber" name="L376" href="#L376">376</a> 			assertSame(matchers, compiledMatchers(config));
-<a class="jxr_linenumber" name="L377" href="#L377">377</a> 			assertSame(cached, compiledMatchers(config).get(h));
-<a class="jxr_linenumber" name="L378" href="#L378">378</a> 		}
-<a class="jxr_linenumber" name="L379" href="#L379">379</a> 
-<a class="jxr_linenumber" name="L380" href="#L380">380</a> 		@Test <strong class="jxr_keyword">void</strong> g03_reRegistrationRefreshesTheCacheRatherThanGoingStale() {
-<a class="jxr_linenumber" name="L381" href="#L381">381</a> 			<strong class="jxr_keyword">var</strong> a = handler(<span class="jxr_string">"file:///a/{x}"</span>);
-<a class="jxr_linenumber" name="L382" href="#L382">382</a> 			<strong class="jxr_keyword">var</strong> config = <strong class="jxr_keyword">new</strong> McpServerConfig().addResourceTemplate(a);
-<a class="jxr_linenumber" name="L383" href="#L383">383</a> 			<strong class="jxr_keyword">var</strong> b = handler(<span class="jxr_string">"file:///b/{y}"</span>);
-<a class="jxr_linenumber" name="L384" href="#L384">384</a> 			config.addResourceTemplate(b);
-<a class="jxr_linenumber" name="L385" href="#L385">385</a> 
-<a class="jxr_linenumber" name="L386" href="#L386">386</a> 			<strong class="jxr_keyword">var</strong> matchers = compiledMatchers(config);
-<a class="jxr_linenumber" name="L387" href="#L387">387</a> 			assertEquals(Set.of(a, b), matchers.keySet());
-<a class="jxr_linenumber" name="L388" href="#L388">388</a> 
-<a class="jxr_linenumber" name="L389" href="#L389">389</a> 			<em class="jxr_comment">// End-to-end: both templates remain correctly resolvable after the cache refresh.</em>
-<a class="jxr_linenumber" name="L390" href="#L390">390</a> 			assertSame(a, config.resolveResourceTemplate(<span class="jxr_string">"file:///a/1"</span>).handler());
-<a class="jxr_linenumber" name="L391" href="#L391">391</a> 			assertSame(b, config.resolveResourceTemplate(<span class="jxr_string">"file:///b/1"</span>).handler());
-<a class="jxr_linenumber" name="L392" href="#L392">392</a> 		}
-<a class="jxr_linenumber" name="L393" href="#L393">393</a> 
-<a class="jxr_linenumber" name="L394" href="#L394">394</a> 		@Test <strong class="jxr_keyword">void</strong> g04_directListMutationRevalidationRefreshesTheMatcherCacheToo() {
-<a class="jxr_linenumber" name="L395" href="#L395">395</a> 			<strong class="jxr_keyword">var</strong> a = handler(<span class="jxr_string">"file:///a/{x}"</span>);
-<a class="jxr_linenumber" name="L396" href="#L396">396</a> 			<strong class="jxr_keyword">var</strong> config = <strong class="jxr_keyword">new</strong> McpServerConfig().addResourceTemplate(a);
-<a class="jxr_linenumber" name="L397" href="#L397">397</a> 			<strong class="jxr_keyword">var</strong> b = handler(<span class="jxr_string">"file:///b/{y}"</span>);
-<a class="jxr_linenumber" name="L398" href="#L398">398</a> 			<em class="jxr_comment">// Bypass the validated add surface, mirroring D_mutationDetectionAndStability.</em>
-<a class="jxr_linenumber" name="L399" href="#L399">399</a> 			config.getResourceTemplates().add(b);
-<a class="jxr_linenumber" name="L400" href="#L400">400</a> 
-<a class="jxr_linenumber" name="L401" href="#L401">401</a> 			<em class="jxr_comment">// First consumption after the direct mutation must revalidate and (re)compile, picking up b.</em>
-<a class="jxr_linenumber" name="L402" href="#L402">402</a> 			<strong class="jxr_keyword">var</strong> match = config.resolveResourceTemplate(<span class="jxr_string">"file:///b/1"</span>);
-<a class="jxr_linenumber" name="L403" href="#L403">403</a> 			assertNotNull(match);
-<a class="jxr_linenumber" name="L404" href="#L404">404</a> 			assertSame(b, match.handler());
-<a class="jxr_linenumber" name="L405" href="#L405">405</a> 			assertEquals(Set.of(a, b), compiledMatchers(config).keySet());
-<a class="jxr_linenumber" name="L406" href="#L406">406</a> 		}
-<a class="jxr_linenumber" name="L407" href="#L407">407</a> 	}
-<a class="jxr_linenumber" name="L408" href="#L408">408</a> }
+<a class="jxr_linenumber" name="L343" href="#L343">343</a> 		@SuppressWarnings({
+<a class="jxr_linenumber" name="L344" href="#L344">344</a> 			<span class="jxr_string">"unchecked"</span> <em class="jxr_comment">// The (Map&lt;...&gt;) cast of the reflectively-read compiledResourceTemplateMatchers field matches its declared type.</em>
+<a class="jxr_linenumber" name="L345" href="#L345">345</a> 		})
+<a class="jxr_linenumber" name="L346" href="#L346">346</a> 		<strong class="jxr_keyword">private</strong> Map&lt;McpResourceTemplateHandler,McpUriTemplateMatcher&gt; compiledMatchers(McpServerConfig config) {
+<a class="jxr_linenumber" name="L347" href="#L347">347</a> 			<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L348" href="#L348">348</a> 				<strong class="jxr_keyword">var</strong> f = McpServerConfig.<strong class="jxr_keyword">class</strong>.getDeclaredField(<span class="jxr_string">"compiledResourceTemplateMatchers"</span>);
+<a class="jxr_linenumber" name="L349" href="#L349">349</a> 				f.setAccessible(<strong class="jxr_keyword">true</strong>);
+<a class="jxr_linenumber" name="L350" href="#L350">350</a> 				<strong class="jxr_keyword">return</strong> (Map&lt;McpResourceTemplateHandler,McpUriTemplateMatcher&gt;) f.get(config);
+<a class="jxr_linenumber" name="L351" href="#L351">351</a> 			} <strong class="jxr_keyword">catch</strong> (ReflectiveOperationException e) {
+<a class="jxr_linenumber" name="L352" href="#L352">352</a> 				<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> RuntimeException(e);
+<a class="jxr_linenumber" name="L353" href="#L353">353</a> 			}
+<a class="jxr_linenumber" name="L354" href="#L354">354</a> 		}
+<a class="jxr_linenumber" name="L355" href="#L355">355</a> 
+<a class="jxr_linenumber" name="L356" href="#L356">356</a> 		@Test <strong class="jxr_keyword">void</strong> g01_registrationPopulatesACompiledMatcherPerHandler() {
+<a class="jxr_linenumber" name="L357" href="#L357">357</a> 			<strong class="jxr_keyword">var</strong> a = handler(<span class="jxr_string">"file:///a/{x}"</span>);
+<a class="jxr_linenumber" name="L358" href="#L358">358</a> 			<strong class="jxr_keyword">var</strong> b = handler(<span class="jxr_string">"file:///b/{y}"</span>);
+<a class="jxr_linenumber" name="L359" href="#L359">359</a> 			<strong class="jxr_keyword">var</strong> config = <strong class="jxr_keyword">new</strong> McpServerConfig().addResourceTemplate(a, b);
+<a class="jxr_linenumber" name="L360" href="#L360">360</a> 			<strong class="jxr_keyword">var</strong> matchers = compiledMatchers(config);
+<a class="jxr_linenumber" name="L361" href="#L361">361</a> 			assertEquals(Set.of(a, b), matchers.keySet());
+<a class="jxr_linenumber" name="L362" href="#L362">362</a> 			assertEquals(List.of(<span class="jxr_string">"x"</span>), matchers.get(a).variableNames());
+<a class="jxr_linenumber" name="L363" href="#L363">363</a> 			assertEquals(List.of(<span class="jxr_string">"y"</span>), matchers.get(b).variableNames());
+<a class="jxr_linenumber" name="L364" href="#L364">364</a> 		}
+<a class="jxr_linenumber" name="L365" href="#L365">365</a> 
+<a class="jxr_linenumber" name="L366" href="#L366">366</a> 		@Test <strong class="jxr_keyword">void</strong> g02_resolveHasAnyCompleterAndTemplateCompleterReuseTheCachedMatcherWithoutRebuildingIt() {
+<a class="jxr_linenumber" name="L367" href="#L367">367</a> 			<strong class="jxr_keyword">var</strong> h = handler(<span class="jxr_string">"file:///a/{x}"</span>);
+<a class="jxr_linenumber" name="L368" href="#L368">368</a> 			<strong class="jxr_keyword">var</strong> config = <strong class="jxr_keyword">new</strong> McpServerConfig().addResourceTemplate(h);
+<a class="jxr_linenumber" name="L369" href="#L369">369</a> 			<strong class="jxr_keyword">var</strong> matchers = compiledMatchers(config);
+<a class="jxr_linenumber" name="L370" href="#L370">370</a> 			<strong class="jxr_keyword">var</strong> cached = matchers.get(h);
+<a class="jxr_linenumber" name="L371" href="#L371">371</a> 			assertNotNull(cached);
+<a class="jxr_linenumber" name="L372" href="#L372">372</a> 
+<a class="jxr_linenumber" name="L373" href="#L373">373</a> 			config.resolveResourceTemplate(<span class="jxr_string">"file:///a/1"</span>);
+<a class="jxr_linenumber" name="L374" href="#L374">374</a> 			config.hasAnyCompleter();
+<a class="jxr_linenumber" name="L375" href="#L375">375</a> 			config.templateCompleter(<span class="jxr_string">"file:///a/{x}"</span>, <span class="jxr_string">"x"</span>);
+<a class="jxr_linenumber" name="L376" href="#L376">376</a> 
+<a class="jxr_linenumber" name="L377" href="#L377">377</a> 			<em class="jxr_comment">// None of the per-request read paths may rebuild the cache: same map, same compiled matcher instance.</em>
+<a class="jxr_linenumber" name="L378" href="#L378">378</a> 			assertSame(matchers, compiledMatchers(config));
+<a class="jxr_linenumber" name="L379" href="#L379">379</a> 			assertSame(cached, compiledMatchers(config).get(h));
+<a class="jxr_linenumber" name="L380" href="#L380">380</a> 		}
+<a class="jxr_linenumber" name="L381" href="#L381">381</a> 
+<a class="jxr_linenumber" name="L382" href="#L382">382</a> 		@Test <strong class="jxr_keyword">void</strong> g03_reRegistrationRefreshesTheCacheRatherThanGoingStale() {
+<a class="jxr_linenumber" name="L383" href="#L383">383</a> 			<strong class="jxr_keyword">var</strong> a = handler(<span class="jxr_string">"file:///a/{x}"</span>);
+<a class="jxr_linenumber" name="L384" href="#L384">384</a> 			<strong class="jxr_keyword">var</strong> config = <strong class="jxr_keyword">new</strong> McpServerConfig().addResourceTemplate(a);
+<a class="jxr_linenumber" name="L385" href="#L385">385</a> 			<strong class="jxr_keyword">var</strong> b = handler(<span class="jxr_string">"file:///b/{y}"</span>);
+<a class="jxr_linenumber" name="L386" href="#L386">386</a> 			config.addResourceTemplate(b);
+<a class="jxr_linenumber" name="L387" href="#L387">387</a> 
+<a class="jxr_linenumber" name="L388" href="#L388">388</a> 			<strong class="jxr_keyword">var</strong> matchers = compiledMatchers(config);
+<a class="jxr_linenumber" name="L389" href="#L389">389</a> 			assertEquals(Set.of(a, b), matchers.keySet());
+<a class="jxr_linenumber" name="L390" href="#L390">390</a> 
+<a class="jxr_linenumber" name="L391" href="#L391">391</a> 			<em class="jxr_comment">// End-to-end: both templates remain correctly resolvable after the cache refresh.</em>
+<a class="jxr_linenumber" name="L392" href="#L392">392</a> 			assertSame(a, config.resolveResourceTemplate(<span class="jxr_string">"file:///a/1"</span>).handler());
+<a class="jxr_linenumber" name="L393" href="#L393">393</a> 			assertSame(b, config.resolveResourceTemplate(<span class="jxr_string">"file:///b/1"</span>).handler());
+<a class="jxr_linenumber" name="L394" href="#L394">394</a> 		}
+<a class="jxr_linenumber" name="L395" href="#L395">395</a> 
+<a class="jxr_linenumber" name="L396" href="#L396">396</a> 		@Test <strong class="jxr_keyword">void</strong> g04_directListMutationRevalidationRefreshesTheMatcherCacheToo() {
+<a class="jxr_linenumber" name="L397" href="#L397">397</a> 			<strong class="jxr_keyword">var</strong> a = handler(<span class="jxr_string">"file:///a/{x}"</span>);
+<a class="jxr_linenumber" name="L398" href="#L398">398</a> 			<strong class="jxr_keyword">var</strong> config = <strong class="jxr_keyword">new</strong> McpServerConfig().addResourceTemplate(a);
+<a class="jxr_linenumber" name="L399" href="#L399">399</a> 			<strong class="jxr_keyword">var</strong> b = handler(<span class="jxr_string">"file:///b/{y}"</span>);
+<a class="jxr_linenumber" name="L400" href="#L400">400</a> 			<em class="jxr_comment">// Bypass the validated add surface, mirroring D_mutationDetectionAndStability.</em>
+<a class="jxr_linenumber" name="L401" href="#L401">401</a> 			config.getResourceTemplates().add(b);
+<a class="jxr_linenumber" name="L402" href="#L402">402</a> 
+<a class="jxr_linenumber" name="L403" href="#L403">403</a> 			<em class="jxr_comment">// First consumption after the direct mutation must revalidate and (re)compile, picking up b.</em>
+<a class="jxr_linenumber" name="L404" href="#L404">404</a> 			<strong class="jxr_keyword">var</strong> match = config.resolveResourceTemplate(<span class="jxr_string">"file:///b/1"</span>);
+<a class="jxr_linenumber" name="L405" href="#L405">405</a> 			assertNotNull(match);
+<a class="jxr_linenumber" name="L406" href="#L406">406</a> 			assertSame(b, match.handler());
+<a class="jxr_linenumber" name="L407" href="#L407">407</a> 			assertEquals(Set.of(a, b), compiledMatchers(config).keySet());
+<a class="jxr_linenumber" name="L408" href="#L408">408</a> 		}
+<a class="jxr_linenumber" name="L409" href="#L409">409</a> 	}
+<a class="jxr_linenumber" name="L410" href="#L410">410</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

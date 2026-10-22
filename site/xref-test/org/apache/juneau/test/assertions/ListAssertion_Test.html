@@ -359,19 +359,19 @@
 <a class="jxr_linenumber" name="L351" href="#L351">351</a> 	@Test <strong class="jxr_keyword">void</strong> cb05_any() {
 <a class="jxr_linenumber" name="L352" href="#L352">352</a> 		<strong class="jxr_keyword">var</strong> x1 = l(<span class="jxr_string">"a"</span>,<span class="jxr_string">"b"</span>);
 <a class="jxr_linenumber" name="L353" href="#L353">353</a> 		<strong class="jxr_keyword">var</strong> nil = nullList(String.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L354" href="#L354">354</a> 		test(x1).isAny(x-&gt;x.equals(<span class="jxr_string">"a"</span>));
-<a class="jxr_linenumber" name="L355" href="#L355">355</a> 		assertThrown(()-&gt;test(x1).isAny(x-&gt;x.equals(<span class="jxr_string">"z"</span>))).asMessage().asOneLine().is(<span class="jxr_string">"Collection did not contain tested value.  Value='[a,b]'."</span>);
+<a class="jxr_linenumber" name="L354" href="#L354">354</a> 		test(x1).isAny(x-&gt;eq(x, <span class="jxr_string">"a"</span>));
+<a class="jxr_linenumber" name="L355" href="#L355">355</a> 		assertThrown(()-&gt;test(x1).isAny(x-&gt;eq(x, <span class="jxr_string">"z"</span>))).asMessage().asOneLine().is(<span class="jxr_string">"Collection did not contain tested value.  Value='[a,b]'."</span>);
 <a class="jxr_linenumber" name="L356" href="#L356">356</a> 		<strong class="jxr_keyword">var</strong> assertion12 = test(nil);
-<a class="jxr_linenumber" name="L357" href="#L357">357</a> 		assertThrows(BasicAssertionError.<strong class="jxr_keyword">class</strong>, ()-&gt;assertion12.isAny(x-&gt;x.equals(<span class="jxr_string">"z"</span>)), <span class="jxr_string">"Value was null."</span>);
+<a class="jxr_linenumber" name="L357" href="#L357">357</a> 		assertThrows(BasicAssertionError.<strong class="jxr_keyword">class</strong>, ()-&gt;assertion12.isAny(x-&gt;eq(x, <span class="jxr_string">"z"</span>)), <span class="jxr_string">"Value was null."</span>);
 <a class="jxr_linenumber" name="L358" href="#L358">358</a> 	}
 <a class="jxr_linenumber" name="L359" href="#L359">359</a> 
 <a class="jxr_linenumber" name="L360" href="#L360">360</a> 	@Test <strong class="jxr_keyword">void</strong> cb06_all() {
 <a class="jxr_linenumber" name="L361" href="#L361">361</a> 		<strong class="jxr_keyword">var</strong> x1 = l(<span class="jxr_string">"a"</span>,<span class="jxr_string">"b"</span>);
 <a class="jxr_linenumber" name="L362" href="#L362">362</a> 		<strong class="jxr_keyword">var</strong> nil = nullList(String.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L363" href="#L363">363</a> 		test(x1).isAll(x-&gt;x!=<strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L364" href="#L364">364</a> 		assertThrown(()-&gt;test(x1).isAll(x-&gt;x.equals(<span class="jxr_string">"z"</span>))).asMessage().asOneLine().is(<span class="jxr_string">"Collection did not contain tested value.  Value='[a,b]'."</span>);
+<a class="jxr_linenumber" name="L364" href="#L364">364</a> 		assertThrown(()-&gt;test(x1).isAll(x-&gt;eq(x, <span class="jxr_string">"z"</span>))).asMessage().asOneLine().is(<span class="jxr_string">"Collection did not contain tested value.  Value='[a,b]'."</span>);
 <a class="jxr_linenumber" name="L365" href="#L365">365</a> 		<strong class="jxr_keyword">var</strong> assertion13 = test(nil);
-<a class="jxr_linenumber" name="L366" href="#L366">366</a> 		assertThrows(BasicAssertionError.<strong class="jxr_keyword">class</strong>, ()-&gt;assertion13.isAll(x-&gt;x.equals(<span class="jxr_string">"z"</span>)), <span class="jxr_string">"Value was null."</span>);
+<a class="jxr_linenumber" name="L366" href="#L366">366</a> 		assertThrows(BasicAssertionError.<strong class="jxr_keyword">class</strong>, ()-&gt;assertion13.isAll(x-&gt;eq(x, <span class="jxr_string">"z"</span>)), <span class="jxr_string">"Value was null."</span>);
 <a class="jxr_linenumber" name="L367" href="#L367">367</a> 	}
 <a class="jxr_linenumber" name="L368" href="#L368">368</a> 
 <a class="jxr_linenumber" name="L369" href="#L369">369</a> 	@Test <strong class="jxr_keyword">void</strong> cb07_isSize() {

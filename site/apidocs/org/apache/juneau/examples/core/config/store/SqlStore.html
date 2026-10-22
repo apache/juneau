@@ -192,7 +192,7 @@ loadScripts(document, 'script');</script>
 </div>
 <div class="inherited-list">
 <h3 id="methods-inherited-from-class-org.apache.juneau.config.store.ConfigStore">Methods inherited from class&nbsp;org.apache.juneau.config.store.<a href="../../../../config/store/ConfigStore.html" title="class in org.apache.juneau.config.store">ConfigStore</a></h3>
-<code><a href="../../../../config/store/ConfigStore.html#getMap(java.lang.String)">getMap</a>, <a href="../../../../config/store/ConfigStore.html#getMap(java.lang.String,org.apache.juneau.config.format.ConfigFormat)">getMap</a>, <a href="../../../../config/store/ConfigStore.html#register(java.lang.String,org.apache.juneau.config.store.ConfigStoreListener)">register</a>, <a href="../../../../config/store/ConfigStore.html#resolveName(java.lang.String)">resolveName</a>, <a href="../../../../config/store/ConfigStore.html#unregister(java.lang.String,org.apache.juneau.config.store.ConfigStoreListener)">unregister</a>, <a href="../../../../config/store/ConfigStore.html#update(java.lang.String,java.lang.String...)">update</a></code></div>
+<code><a href="../../../../config/store/ConfigStore.html#getMap(java.lang.String)">getMap</a>, <a href="../../../../config/store/ConfigStore.html#getMap(java.lang.String,org.apache.juneau.config.format.ConfigFormat)">getMap</a>, <a href="../../../../config/store/ConfigStore.html#getNotifiedContents(java.lang.String,java.lang.String)">getNotifiedContents</a>, <a href="../../../../config/store/ConfigStore.html#register(java.lang.String,org.apache.juneau.config.store.ConfigStoreListener)">register</a>, <a href="../../../../config/store/ConfigStore.html#resolveName(java.lang.String)">resolveName</a>, <a href="../../../../config/store/ConfigStore.html#unregister(java.lang.String,org.apache.juneau.config.store.ConfigStoreListener)">unregister</a>, <a href="../../../../config/store/ConfigStore.html#update(java.lang.String,java.lang.String...)">update</a></code></div>
 <div class="inherited-list">
 <h3 id="methods-inherited-from-class-org.apache.juneau.marshall.Context">Methods inherited from class&nbsp;org.apache.juneau.marshall.<a href="../../../../marshall/Context.html" title="class in org.apache.juneau.marshall">Context</a></h3>
 <code><a href="../../../../marshall/Context.html#copy()">copy</a>, <a href="../../../../marshall/Context.html#createBuilder(java.lang.Class)">createBuilder</a>, <a href="../../../../marshall/Context.html#createSession()">createSession</a>, <a href="../../../../marshall/Context.html#getAnnotationProvider()">getAnnotationProvider</a>, <a href="../../../../marshall/Context.html#getSession()">getSession</a>, <a href="../../../../marshall/Context.html#init(org.apache.juneau.marshall.Context.Builder)">init</a>, <a href="../../../../marshall/Context.html#isDebug()">isDebug</a>, <a href="../../../../marshall/Context.html#properties()">properties</a>, <a href="../../../../marshall/Context.html#toString()">toString</a></code></div>
@@ -213,7 +213,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.examples.core.config.store.SqlStore.Builder)">
 <h3>SqlStore</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/examples/core/config/store/SqlStore.html#line-156">SqlStore</a></span><wbr><span class="parameters">(<a href="SqlStore.Builder.html" title="class in org.apache.juneau.examples.core.config.store">SqlStore.Builder</a>&nbsp;builder)</span></div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/examples/core/config/store/SqlStore.html#line-150">SqlStore</a></span><wbr><span class="parameters">(<a href="SqlStore.Builder.html" title="class in org.apache.juneau.examples.core.config.store">SqlStore.Builder</a>&nbsp;builder)</span></div>
 <div class="block">Constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -232,7 +232,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="create()">
 <h3>create</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="SqlStore.Builder.html" title="class in org.apache.juneau.examples.core.config.store">SqlStore.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/examples/core/config/store/SqlStore.html#line-140">create</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="SqlStore.Builder.html" title="class in org.apache.juneau.examples.core.config.store">SqlStore.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/examples/core/config/store/SqlStore.html#line-134">create</a></span>()</div>
 <div class="block">Instantiates a builder for this object.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -243,13 +243,13 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="close()">
 <h3>close</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/examples/core/config/store/SqlStore.html#line-176">close</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/examples/core/config/store/SqlStore.html#line-170">close</a></span>()</div>
 </section>
 </li>
 <li>
 <section class="detail" id="exists(java.lang.String)">
 <h3>exists</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/examples/core/config/store/SqlStore.html#line-182">exists</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/examples/core/config/store/SqlStore.html#line-176">exists</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../../../../config/store/ConfigStore.html#exists(java.lang.String)">ConfigStore</a></code></span></div>
 <div class="block">Checks whether the configuration with the specified name exists in this store.</div>
 <dl class="notes">
@@ -265,7 +265,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="read(java.lang.String)">
 <h3>read</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/examples/core/config/store/SqlStore.html#line-188">read</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/examples/core/config/store/SqlStore.html#line-182">read</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../../../../config/store/ConfigStore.html#read(java.lang.String)">ConfigStore</a></code></span></div>
 <div class="block">Returns the contents of the configuration file.</div>
 <dl class="notes">
@@ -283,7 +283,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="update(java.lang.String,java.lang.String)">
 <h3>update</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="SqlStore.html" title="class in org.apache.juneau.examples.core.config.store">SqlStore</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/examples/core/config/store/SqlStore.html#line-198">update</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="SqlStore.html" title="class in org.apache.juneau.examples.core.config.store">SqlStore</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/examples/core/config/store/SqlStore.html#line-192">update</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;newContents)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../../../../config/store/ConfigStore.html#update(java.lang.String,java.lang.String)">ConfigStore</a></code></span></div>
 <div class="block">Called when the physical contents of a config file have changed.
@@ -305,7 +305,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="write(java.lang.String,java.lang.String,java.lang.String)">
 <h3>write</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/examples/core/config/store/SqlStore.html#line-208">write</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/examples/core/config/store/SqlStore.html#line-202">write</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;expectedContents,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;newContents)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../../../../config/store/ConfigStore.html#write(java.lang.String,java.lang.String,java.lang.String)">ConfigStore</a></code></span></div>
@@ -326,7 +326,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getDatabaseValue(java.lang.String)">
 <h3>getDatabaseValue</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/examples/core/config/store/SqlStore.html#line-227">getDatabaseValue</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/examples/core/config/store/SqlStore.html#line-221">getDatabaseValue</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
 </section>
 </li>
 </ul>

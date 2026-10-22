@@ -86,7 +86,7 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="HttpBooleanHeader.html" title="class in org.apache.juneau.http.header">HttpBooleanHeader</a></code>, <code><a href="HttpCsvHeader.html" title="class in org.apache.juneau.http.header">HttpCsvHeader</a></code>, <code><a href="HttpDateHeader.html" title="class in org.apache.juneau.http.header">HttpDateHeader</a></code>, <code><a href="HttpEntityTagHeader.html" title="class in org.apache.juneau.http.header">HttpEntityTagHeader</a></code>, <code><a href="HttpEntityTagsHeader.html" title="class in org.apache.juneau.http.header">HttpEntityTagsHeader</a></code>, <code><a href="HttpIntegerHeader.html" title="class in org.apache.juneau.http.header">HttpIntegerHeader</a></code>, <code><a href="HttpLongHeader.html" title="class in org.apache.juneau.http.header">HttpLongHeader</a></code>, <code><a href="HttpMediaRangesHeader.html" title="class in org.apache.juneau.http.header">HttpMediaRangesHeader</a></code>, <code><a href="HttpMediaTypeHeader.html" title="class in org.apache.juneau.http.header">HttpMediaTypeHeader</a></code>, <code><a href="HttpStringHeader.html" title="class in org.apache.juneau.http.header">HttpStringHeader</a></code>, <code><a href="HttpStringRangesHeader.html" title="class in org.apache.juneau.http.header">HttpStringRangesHeader</a></code>, <code><a href="HttpUriHeader.html" title="class in org.apache.juneau.http.header">HttpUriHeader</a></code>, <code><a href="IfRange.html" title="class in org.apache.juneau.http.header">IfRange</a></code>, <code><a href="RetryAfter.html" title="class in org.apache.juneau.http.header">RetryAfter</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/HttpHeaderBean.html#line-59">HttpHeaderBean</a></span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/HttpHeaderBean.html#line-57">HttpHeaderBean</a></span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>
 implements <a href="../HttpHeader.html" title="interface in org.apache.juneau.http">HttpHeader</a></span></div>
 <div class="block">Root concrete implementation of <a href="../HttpHeader.html" title="interface in org.apache.juneau.http"><code>HttpHeader</code></a>.
@@ -107,8 +107,7 @@ implements <a href="../HttpHeader.html" title="interface in org.apache.juneau.ht
  </p>
 
  <p>
- <b>Beta — API subject to change:</b> This type is part of the next-generation REST client and HTTP stack
- (<code>org.apache.juneau.marshall.ng.*</code>).
+ <b>Beta — API subject to change:</b> This type is part of the next-generation REST client and HTTP stack.
  It is not API-frozen: binary- and source-incompatible changes may appear in the <b>next major</b> Juneau release
  (and possibly earlier).
  For production use cases that require long-term binary stability, continue using the existing
@@ -215,7 +214,7 @@ implements <a href="../HttpHeader.html" title="interface in org.apache.juneau.ht
 <li>
 <section class="detail" id="&lt;init&gt;(java.lang.String,java.lang.String)">
 <h3>HttpHeaderBean</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/HttpHeaderBean.html#line-70">HttpHeaderBean</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/HttpHeaderBean.html#line-68">HttpHeaderBean</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block">Constructor.</div>
 <dl class="notes">
@@ -228,7 +227,7 @@ implements <a href="../HttpHeader.html" title="interface in org.apache.juneau.ht
 <li>
 <section class="detail" id="&lt;init&gt;(java.lang.String,java.util.function.Supplier)">
 <h3>HttpHeaderBean</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/HttpHeaderBean.html#line-81">HttpHeaderBean</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/HttpHeaderBean.html#line-79">HttpHeaderBean</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;valueSupplier)</span></div>
 <div class="block">Constructor with lazy value supplier.</div>
 <dl class="notes">
@@ -249,7 +248,7 @@ implements <a href="../HttpHeader.html" title="interface in org.apache.juneau.ht
 <li>
 <section class="detail" id="of(java.lang.String,java.lang.String)">
 <h3>of</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="HttpHeaderBean.html" title="class in org.apache.juneau.http.header">HttpHeaderBean</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/HttpHeaderBean.html#line-93">of</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="HttpHeaderBean.html" title="class in org.apache.juneau.http.header">HttpHeaderBean</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/HttpHeaderBean.html#line-91">of</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block">Creates an <a href="HttpHeaderBean.html" title="class in org.apache.juneau.http.header"><code>HttpHeaderBean</code></a> with an eager string value.</div>
 <dl class="notes">
@@ -264,7 +263,7 @@ implements <a href="../HttpHeader.html" title="interface in org.apache.juneau.ht
 <li>
 <section class="detail" id="of(java.lang.String,java.util.function.Supplier)">
 <h3>of</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="HttpHeaderBean.html" title="class in org.apache.juneau.http.header">HttpHeaderBean</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/HttpHeaderBean.html#line-107">of</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="HttpHeaderBean.html" title="class in org.apache.juneau.http.header">HttpHeaderBean</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/HttpHeaderBean.html#line-105">of</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;valueSupplier)</span></div>
 <div class="block">Creates an <a href="HttpHeaderBean.html" title="class in org.apache.juneau.http.header"><code>HttpHeaderBean</code></a> with a lazy value supplier.
 
@@ -282,7 +281,7 @@ implements <a href="../HttpHeader.html" title="interface in org.apache.juneau.ht
 <li>
 <section class="detail" id="getName()">
 <h3>getName</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/HttpHeaderBean.html#line-111">getName</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/HttpHeaderBean.html#line-109">getName</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="../HttpHeader.html#getName()">HttpHeader</a></code></span></div>
 <div class="block">Returns the header name.</div>
 <dl class="notes">
@@ -296,7 +295,7 @@ implements <a href="../HttpHeader.html" title="interface in org.apache.juneau.ht
 <li>
 <section class="detail" id="getValue()">
 <h3>getValue</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/HttpHeaderBean.html#line-116">getValue</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/HttpHeaderBean.html#line-114">getValue</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="../HttpHeader.html#getValue()">HttpHeader</a></code></span></div>
 <div class="block">Returns the header value, or <jk>null</jk> if the header has no value.</div>
 <dl class="notes">
@@ -310,7 +309,7 @@ implements <a href="../HttpHeader.html" title="interface in org.apache.juneau.ht
 <li>
 <section class="detail" id="equalsIgnoreCase(java.lang.String)">
 <h3>equalsIgnoreCase</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/HttpHeaderBean.html#line-127">equalsIgnoreCase</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;other)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/HttpHeaderBean.html#line-125">equalsIgnoreCase</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;other)</span></div>
 <div class="block">Returns <code>true</code> if the header value is equal to the given value, ignoring case.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -323,7 +322,7 @@ implements <a href="../HttpHeader.html" title="interface in org.apache.juneau.ht
 <li>
 <section class="detail" id="toString()">
 <h3>toString</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/HttpHeaderBean.html#line-131">toString</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/HttpHeaderBean.html#line-129">toString</a></span>()</div>
 <dl class="notes">
 <dt>Overrides:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#toString()" title="class or interface in java.lang" class="external-link">toString</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></code></dd>
@@ -333,7 +332,7 @@ implements <a href="../HttpHeader.html" title="interface in org.apache.juneau.ht
 <li>
 <section class="detail" id="equals(java.lang.Object)">
 <h3>equals</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/HttpHeaderBean.html#line-136">equals</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;obj)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/HttpHeaderBean.html#line-134">equals</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;obj)</span></div>
 <dl class="notes">
 <dt>Overrides:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#equals(java.lang.Object)" title="class or interface in java.lang" class="external-link">equals</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></code></dd>
@@ -343,7 +342,7 @@ implements <a href="../HttpHeader.html" title="interface in org.apache.juneau.ht
 <li>
 <section class="detail" id="hashCode()">
 <h3>hashCode</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/HttpHeaderBean.html#line-141">hashCode</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/HttpHeaderBean.html#line-139">hashCode</a></span>()</div>
 <dl class="notes">
 <dt>Overrides:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#hashCode()" title="class or interface in java.lang" class="external-link">hashCode</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></code></dd>

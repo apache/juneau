@@ -88,9 +88,14 @@ loadScripts(document, 'script');</script>
 <dd><code>jakarta.servlet.Servlet</code>, <code>jakarta.servlet.ServletConfig</code>, <code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a></code>, <code><a href="../../rest/server/config/BasicUniversalConfig.html" title="interface in org.apache.juneau.rest.server.config">BasicUniversalConfig</a></code>, <code><a href="../../rest/server/config/DefaultConfig.html" title="interface in org.apache.juneau.rest.server.config">DefaultConfig</a></code>, <code><a href="../../rest/server/config/DefaultHtmlConfig.html" title="interface in org.apache.juneau.rest.server.config">DefaultHtmlConfig</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/microservice/examples/SampleRootResource.html#line-31">SampleRootResource</a></span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/microservice/examples/SampleRootResource.html#line-36">SampleRootResource</a></span>
 <span class="extends-implements">extends <a href="../../rest/server/servlet/BasicRestServletGroup.html" title="class in org.apache.juneau.rest.server.servlet">BasicRestServletGroup</a></span></div>
 <div class="block">Sample root REST resource.
+
+ <p>
+ It mounts <a href="ConfigResource.html" title="class in org.apache.juneau.microservice.examples"><code>ConfigResource</code></a> with no CSRF boundary in front of it.  <code>ConfigResource</code> has no HTML form, and
+ its writes are <code>PUT</code>s, which a browser cannot send cross-site without a CORS preflight.  An application that
+ mounts the admin resources where a browser can reach them should still register <a href="AdminBoundary.html" title="class in org.apache.juneau.microservice.examples"><code>AdminBoundary</code></a>.
 
  <h5 class='section'>See Also:</h5><ul>
    <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauMicroservice">juneau-microservice Basics</a>
@@ -162,7 +167,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;()">
 <h3>SampleRootResource</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/microservice/examples/SampleRootResource.html#line-40">SampleRootResource</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/microservice/examples/SampleRootResource.html#line-45">SampleRootResource</a></span>()</div>
 </section>
 </li>
 </ul>

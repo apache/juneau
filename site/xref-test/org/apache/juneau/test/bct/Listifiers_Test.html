@@ -383,10 +383,10 @@
 <a class="jxr_linenumber" name="L375" href="#L375">375</a> 			assertSize(2, result);
 <a class="jxr_linenumber" name="L376" href="#L376">376</a> 			<em class="jxr_comment">// Check that we have the expected entries</em>
 <a class="jxr_linenumber" name="L377" href="#L377">377</a> 			<strong class="jxr_keyword">var</strong> hasKey1Entry = result.stream().filter(obj -&gt; obj instanceof Map.Entry).map(obj -&gt; (Map.Entry&lt;?,?&gt;)obj)
-<a class="jxr_linenumber" name="L378" href="#L378">378</a> 				.anyMatch(entry -&gt; <span class="jxr_string">"key1"</span>.equals(entry.getKey()) &amp;&amp; <span class="jxr_string">"value1"</span>.equals(entry.getValue()));
+<a class="jxr_linenumber" name="L378" href="#L378">378</a> 				.anyMatch(entry -&gt; eq(entry.getKey(), <span class="jxr_string">"key1"</span>) &amp;&amp; eq(entry.getValue(), <span class="jxr_string">"value1"</span>));
 <a class="jxr_linenumber" name="L379" href="#L379">379</a> 			assertTrue(hasKey1Entry);
 <a class="jxr_linenumber" name="L380" href="#L380">380</a> 
-<a class="jxr_linenumber" name="L381" href="#L381">381</a> 			<strong class="jxr_keyword">var</strong> hasKey2Entry = result.stream().filter(obj -&gt; obj instanceof Map.Entry).map(obj -&gt; (Map.Entry&lt;?,?&gt;)obj).anyMatch(entry -&gt; <span class="jxr_string">"key2"</span>.equals(entry.getKey()) &amp;&amp; entry.getValue() == <strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L381" href="#L381">381</a> 			<strong class="jxr_keyword">var</strong> hasKey2Entry = result.stream().filter(obj -&gt; obj instanceof Map.Entry).map(obj -&gt; (Map.Entry&lt;?,?&gt;)obj).anyMatch(entry -&gt; eq(entry.getKey(), <span class="jxr_string">"key2"</span>) &amp;&amp; entry.getValue() == <strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L382" href="#L382">382</a> 			assertTrue(hasKey2Entry);
 <a class="jxr_linenumber" name="L383" href="#L383">383</a> 		}
 <a class="jxr_linenumber" name="L384" href="#L384">384</a> 

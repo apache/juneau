@@ -56,37 +56,70 @@ loadScripts(document, 'script');</script>
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Package</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><a href="#org.apache.juneau.marshall.jcs">org.apache.juneau.marshall.jcs</a></div>
+<div class="col-first even-row-color"><a href="#org.apache.juneau.bean.jsonpatch">org.apache.juneau.bean.jsonpatch</a></div>
 <div class="col-last even-row-color">
+<div class="block">Juneau <a href="../../Marshalled.html" title="annotation interface in org.apache.juneau.marshall"><code>@Marshalled</code></a> types for
+ <a href="https://datatracker.ietf.org/doc/html/rfc6902">JSON Patch (RFC 6902)</a>.</div>
+</div>
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.marshall.jcs">org.apache.juneau.marshall.jcs</a></div>
+<div class="col-last odd-row-color">
 <div class="block">JCS (JSON Canonicalization Scheme) Marshalling Support.</div>
 </div>
-<div class="col-first odd-row-color"><a href="#org.apache.juneau.marshall.json">org.apache.juneau.marshall.json</a></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><a href="#org.apache.juneau.marshall.json">org.apache.juneau.marshall.json</a></div>
+<div class="col-last even-row-color">
 <div class="block">JSON Marshalling Support.</div>
 </div>
-<div class="col-first even-row-color"><a href="#org.apache.juneau.marshall.json5">org.apache.juneau.marshall.json5</a></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.marshall.json5">org.apache.juneau.marshall.json5</a></div>
+<div class="col-last odd-row-color">
 <div class="block">JSON5 Marshalling Support.</div>
 </div>
-<div class="col-first odd-row-color"><a href="#org.apache.juneau.marshall.json5l">org.apache.juneau.marshall.json5l</a></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><a href="#org.apache.juneau.marshall.json5l">org.apache.juneau.marshall.json5l</a></div>
+<div class="col-last even-row-color">
 <div class="block">JSON5L (JSON5 Lines) marshalling support.</div>
 </div>
-<div class="col-first even-row-color"><a href="#org.apache.juneau.marshall.jsonl">org.apache.juneau.marshall.jsonl</a></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.marshall.jsonl">org.apache.juneau.marshall.jsonl</a></div>
+<div class="col-last odd-row-color">
 <div class="block">JSONL (JSON Lines) marshalling support.</div>
 </div>
-<div class="col-first odd-row-color"><a href="#org.apache.juneau.marshall.jsonschema">org.apache.juneau.marshall.jsonschema</a></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><a href="#org.apache.juneau.marshall.jsonschema">org.apache.juneau.marshall.jsonschema</a></div>
+<div class="col-last even-row-color">
 <div class="block">JSON-Schema Marshalling Support</div>
 </div>
-<div class="col-first even-row-color"><a href="#org.apache.juneau.marshall.marshaller">org.apache.juneau.marshall.marshaller</a></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.marshall.marshaller">org.apache.juneau.marshall.marshaller</a></div>
+<div class="col-last odd-row-color">
 <div class="block">Marshallers</div>
 </div>
 </div>
 <section class="class-uses">
 <ul class="block-list">
+<li>
+<section class="detail" id="org.apache.juneau.bean.jsonpatch">
+<h2>Uses of <a href="../JsonSerializer.html" title="class in org.apache.juneau.marshall.json">JsonSerializer</a> in <a href="../../../bean/jsonpatch/package-summary.html">org.apache.juneau.bean.jsonpatch</a></h2>
+<div class="caption"><span>Fields in <a href="../../../bean/jsonpatch/package-summary.html">org.apache.juneau.bean.jsonpatch</a> declared as <a href="../JsonSerializer.html" title="class in org.apache.juneau.marshall.json">JsonSerializer</a></span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier and Type</div>
+<div class="table-header col-second">Field</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code>static final <a href="../JsonSerializer.html" title="class in org.apache.juneau.marshall.json">JsonSerializer</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">JsonPatchMarshaller.</span><code><a href="../../../bean/jsonpatch/JsonPatchMarshaller.html#SERIALIZER" class="member-name-link">SERIALIZER</a></code></div>
+<div class="col-last even-row-color">
+<div class="block">Default <a href="../JsonSerializer.html" title="class in org.apache.juneau.marshall.json"><code>JsonSerializer</code></a>, pre-wired with the <code>"op"</code> discriminator for <a href="../../../bean/jsonpatch/JsonPatchOperation.html" title="class in org.apache.juneau.bean.jsonpatch"><code>JsonPatchOperation</code></a>.</div>
+</div>
+</div>
+<div class="caption"><span>Constructors in <a href="../../../bean/jsonpatch/package-summary.html">org.apache.juneau.bean.jsonpatch</a> with parameters of type <a href="../JsonSerializer.html" title="class in org.apache.juneau.marshall.json">JsonSerializer</a></span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier</div>
+<div class="table-header col-second">Constructor</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code>&nbsp;</code></div>
+<div class="col-second even-row-color"><code><a href="../../../bean/jsonpatch/JsonPatchMarshaller.html#%3Cinit%3E(org.apache.juneau.marshall.json.JsonSerializer,org.apache.juneau.marshall.json.JsonParser)" class="member-name-link">JsonPatchMarshaller</a><wbr>(<a href="../JsonSerializer.html" title="class in org.apache.juneau.marshall.json">JsonSerializer</a>&nbsp;s,
+ <a href="../JsonParser.html" title="class in org.apache.juneau.marshall.json">JsonParser</a>&nbsp;p)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Creates with custom serializer and parser.</div>
+</div>
+</div>
+</section>
+</li>
 <li>
 <section class="detail" id="org.apache.juneau.marshall.jcs">
 <h2>Uses of <a href="../JsonSerializer.html" title="class in org.apache.juneau.marshall.json">JsonSerializer</a> in <a href="../../jcs/package-summary.html">org.apache.juneau.marshall.jcs</a></h2>

@@ -289,56 +289,57 @@
 <a class="jxr_linenumber" name="L281" href="#L281">281</a> <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L282" href="#L282">282</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
 <a class="jxr_linenumber" name="L283" href="#L283">283</a> <em class="jxr_javadoccomment">	 * By default, bean properties are serialized in alphabetical order.</em>
-<a class="jxr_linenumber" name="L284" href="#L284">284</a> <em class="jxr_javadoccomment">	 * When &lt;jk&gt;true&lt;/jk&gt;, properties of this bean will use the natural JVM-dependent order instead.</em>
-<a class="jxr_linenumber" name="L285" href="#L285">285</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L286" href="#L286">286</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
-<a class="jxr_linenumber" name="L287" href="#L287">287</a> <em class="jxr_javadoccomment">	 * &lt;p class='bjava'&gt;</em>
-<a class="jxr_linenumber" name="L288" href="#L288">288</a> <em class="jxr_javadoccomment">	 * 	&lt;jc&gt;// Disable sorted properties for this specific bean.&lt;/jc&gt;</em>
-<a class="jxr_linenumber" name="L289" href="#L289">289</a> <em class="jxr_javadoccomment">	 * 	&lt;ja&gt;@BeanType&lt;/ja&gt;(unsorted=&lt;jk&gt;true&lt;/jk&gt;)</em>
-<a class="jxr_linenumber" name="L290" href="#L290">290</a> <em class="jxr_javadoccomment">	 * 	&lt;jk&gt;public class&lt;/jk&gt; MyBean {...}</em>
-<a class="jxr_linenumber" name="L291" href="#L291">291</a> <em class="jxr_javadoccomment">	 * &lt;/p&gt;</em>
-<a class="jxr_linenumber" name="L292" href="#L292">292</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L293" href="#L293">293</a> <em class="jxr_javadoccomment">	 * @return The annotation value.</em>
-<a class="jxr_linenumber" name="L294" href="#L294">294</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L295" href="#L295">295</a> 	<strong class="jxr_keyword">boolean</strong> unsorted() <strong class="jxr_keyword">default</strong> false;
-<a class="jxr_linenumber" name="L296" href="#L296">296</a> 
-<a class="jxr_linenumber" name="L297" href="#L297">297</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L298" href="#L298">298</a> <em class="jxr_javadoccomment">	 * Synonym for {@link #writeOnlyProperties()}.</em>
-<a class="jxr_linenumber" name="L299" href="#L299">299</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L300" href="#L300">300</a> <em class="jxr_javadoccomment">	 * @return The annotation value.</em>
-<a class="jxr_linenumber" name="L301" href="#L301">301</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L302" href="#L302">302</a> 	String wo() <strong class="jxr_keyword">default</strong> <span class="jxr_string">""</span>;
-<a class="jxr_linenumber" name="L303" href="#L303">303</a> 
-<a class="jxr_linenumber" name="L304" href="#L304">304</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L305" href="#L305">305</a> <em class="jxr_javadoccomment">	 * Write-only bean properties.</em>
-<a class="jxr_linenumber" name="L306" href="#L306">306</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L307" href="#L307">307</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L308" href="#L308">308</a> <em class="jxr_javadoccomment">	 * Specifies one or more properties on a bean that are write-only despite having valid setters.</em>
-<a class="jxr_linenumber" name="L309" href="#L309">309</a> <em class="jxr_javadoccomment">	 * Parsers will parse such properties as usual, but serializers will silently ignore them.</em>
-<a class="jxr_linenumber" name="L310" href="#L310">310</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L311" href="#L311">311</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
-<a class="jxr_linenumber" name="L312" href="#L312">312</a> <em class="jxr_javadoccomment">	 * &lt;p class='bjava'&gt;</em>
-<a class="jxr_linenumber" name="L313" href="#L313">313</a> <em class="jxr_javadoccomment">	 * 	&lt;jc&gt;// Exclude the 'city' and 'state' properties from being serialized, but not parsed.&lt;/jc&gt;</em>
-<a class="jxr_linenumber" name="L314" href="#L314">314</a> <em class="jxr_javadoccomment">	 * 	&lt;ja&gt;@BeanType&lt;/ja&gt;(writeOnlyProperties=&lt;js&gt;"city,state"&lt;/js&gt;})</em>
-<a class="jxr_linenumber" name="L315" href="#L315">315</a> <em class="jxr_javadoccomment">	 * 	&lt;jk&gt;public class&lt;/jk&gt; Address {...}</em>
-<a class="jxr_linenumber" name="L316" href="#L316">316</a> <em class="jxr_javadoccomment">	 * &lt;/p&gt;</em>
-<a class="jxr_linenumber" name="L317" href="#L317">317</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L318" href="#L318">318</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</em>
-<a class="jxr_linenumber" name="L319" href="#L319">319</a> <em class="jxr_javadoccomment">	 * 	&lt;li class='note'&gt;</em>
-<a class="jxr_linenumber" name="L320" href="#L320">320</a> <em class="jxr_javadoccomment">	 * 		{@link #wo()} is a shortened synonym for this value.</em>
-<a class="jxr_linenumber" name="L321" href="#L321">321</a> <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
-<a class="jxr_linenumber" name="L322" href="#L322">322</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L323" href="#L323">323</a> <em class="jxr_javadoccomment">	 * @return The annotation value.</em>
-<a class="jxr_linenumber" name="L324" href="#L324">324</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L325" href="#L325">325</a> 	String writeOnlyProperties() <strong class="jxr_keyword">default</strong> <span class="jxr_string">""</span>;
-<a class="jxr_linenumber" name="L326" href="#L326">326</a> 
-<a class="jxr_linenumber" name="L327" href="#L327">327</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L328" href="#L328">328</a> <em class="jxr_javadoccomment">	 * Synonym for {@link #excludeProperties()}.</em>
-<a class="jxr_linenumber" name="L329" href="#L329">329</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L330" href="#L330">330</a> <em class="jxr_javadoccomment">	 * @return The annotation value.</em>
-<a class="jxr_linenumber" name="L331" href="#L331">331</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L332" href="#L332">332</a> 	String xp() <strong class="jxr_keyword">default</strong> <span class="jxr_string">""</span>;
-<a class="jxr_linenumber" name="L333" href="#L333">333</a> }
+<a class="jxr_linenumber" name="L284" href="#L284">284</a> <em class="jxr_javadoccomment">	 * When &lt;jk&gt;true&lt;/jk&gt;, properties of this bean use declaration order instead: record component order for records,</em>
+<a class="jxr_linenumber" name="L285" href="#L285">285</a> <em class="jxr_javadoccomment">	 * field declaration order (superclass first) for other classes, then method-only properties alphabetically.</em>
+<a class="jxr_linenumber" name="L286" href="#L286">286</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L287" href="#L287">287</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L288" href="#L288">288</a> <em class="jxr_javadoccomment">	 * &lt;p class='bjava'&gt;</em>
+<a class="jxr_linenumber" name="L289" href="#L289">289</a> <em class="jxr_javadoccomment">	 * 	&lt;jc&gt;// Disable sorted properties for this specific bean.&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L290" href="#L290">290</a> <em class="jxr_javadoccomment">	 * 	&lt;ja&gt;@BeanType&lt;/ja&gt;(unsorted=&lt;jk&gt;true&lt;/jk&gt;)</em>
+<a class="jxr_linenumber" name="L291" href="#L291">291</a> <em class="jxr_javadoccomment">	 * 	&lt;jk&gt;public class&lt;/jk&gt; MyBean {...}</em>
+<a class="jxr_linenumber" name="L292" href="#L292">292</a> <em class="jxr_javadoccomment">	 * &lt;/p&gt;</em>
+<a class="jxr_linenumber" name="L293" href="#L293">293</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L294" href="#L294">294</a> <em class="jxr_javadoccomment">	 * @return The annotation value.</em>
+<a class="jxr_linenumber" name="L295" href="#L295">295</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L296" href="#L296">296</a> 	<strong class="jxr_keyword">boolean</strong> unsorted() <strong class="jxr_keyword">default</strong> false;
+<a class="jxr_linenumber" name="L297" href="#L297">297</a> 
+<a class="jxr_linenumber" name="L298" href="#L298">298</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L299" href="#L299">299</a> <em class="jxr_javadoccomment">	 * Synonym for {@link #writeOnlyProperties()}.</em>
+<a class="jxr_linenumber" name="L300" href="#L300">300</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L301" href="#L301">301</a> <em class="jxr_javadoccomment">	 * @return The annotation value.</em>
+<a class="jxr_linenumber" name="L302" href="#L302">302</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L303" href="#L303">303</a> 	String wo() <strong class="jxr_keyword">default</strong> <span class="jxr_string">""</span>;
+<a class="jxr_linenumber" name="L304" href="#L304">304</a> 
+<a class="jxr_linenumber" name="L305" href="#L305">305</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L306" href="#L306">306</a> <em class="jxr_javadoccomment">	 * Write-only bean properties.</em>
+<a class="jxr_linenumber" name="L307" href="#L307">307</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L308" href="#L308">308</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L309" href="#L309">309</a> <em class="jxr_javadoccomment">	 * Specifies one or more properties on a bean that are write-only despite having valid setters.</em>
+<a class="jxr_linenumber" name="L310" href="#L310">310</a> <em class="jxr_javadoccomment">	 * Parsers will parse such properties as usual, but serializers will silently ignore them.</em>
+<a class="jxr_linenumber" name="L311" href="#L311">311</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L312" href="#L312">312</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L313" href="#L313">313</a> <em class="jxr_javadoccomment">	 * &lt;p class='bjava'&gt;</em>
+<a class="jxr_linenumber" name="L314" href="#L314">314</a> <em class="jxr_javadoccomment">	 * 	&lt;jc&gt;// Exclude the 'city' and 'state' properties from being serialized, but not parsed.&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L315" href="#L315">315</a> <em class="jxr_javadoccomment">	 * 	&lt;ja&gt;@BeanType&lt;/ja&gt;(writeOnlyProperties=&lt;js&gt;"city,state"&lt;/js&gt;})</em>
+<a class="jxr_linenumber" name="L316" href="#L316">316</a> <em class="jxr_javadoccomment">	 * 	&lt;jk&gt;public class&lt;/jk&gt; Address {...}</em>
+<a class="jxr_linenumber" name="L317" href="#L317">317</a> <em class="jxr_javadoccomment">	 * &lt;/p&gt;</em>
+<a class="jxr_linenumber" name="L318" href="#L318">318</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L319" href="#L319">319</a> <em class="jxr_javadoccomment">	 * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L320" href="#L320">320</a> <em class="jxr_javadoccomment">	 * 	&lt;li class='note'&gt;</em>
+<a class="jxr_linenumber" name="L321" href="#L321">321</a> <em class="jxr_javadoccomment">	 * 		{@link #wo()} is a shortened synonym for this value.</em>
+<a class="jxr_linenumber" name="L322" href="#L322">322</a> <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
+<a class="jxr_linenumber" name="L323" href="#L323">323</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L324" href="#L324">324</a> <em class="jxr_javadoccomment">	 * @return The annotation value.</em>
+<a class="jxr_linenumber" name="L325" href="#L325">325</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L326" href="#L326">326</a> 	String writeOnlyProperties() <strong class="jxr_keyword">default</strong> <span class="jxr_string">""</span>;
+<a class="jxr_linenumber" name="L327" href="#L327">327</a> 
+<a class="jxr_linenumber" name="L328" href="#L328">328</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L329" href="#L329">329</a> <em class="jxr_javadoccomment">	 * Synonym for {@link #excludeProperties()}.</em>
+<a class="jxr_linenumber" name="L330" href="#L330">330</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L331" href="#L331">331</a> <em class="jxr_javadoccomment">	 * @return The annotation value.</em>
+<a class="jxr_linenumber" name="L332" href="#L332">332</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L333" href="#L333">333</a> 	String xp() <strong class="jxr_keyword">default</strong> <span class="jxr_string">""</span>;
+<a class="jxr_linenumber" name="L334" href="#L334">334</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

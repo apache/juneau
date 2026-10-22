@@ -125,11 +125,11 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color"><a href="class-use/CachingHttpServletRequest.html#org.apache.juneau.rest.server.util">CachingHttpServletRequest</a></div>
 <div class="col-last even-row-color">
-<div class="block">Wraps an <code>HttpServletRequest</code> and preloads the content into memory for debugging purposes.</div>
+<div class="block">Wraps an <code>HttpServletRequest</code> and tees a <b>bounded</b> copy of the request body into memory for debug logging.</div>
 </div>
 <div class="col-first odd-row-color"><a href="class-use/CachingHttpServletResponse.html#org.apache.juneau.rest.server.util">CachingHttpServletResponse</a></div>
 <div class="col-last odd-row-color">
-<div class="block">Wraps an <code>HttpServletResponse</code> and caches the output stream in a separate buffer for debugging purposes.</div>
+<div class="block">Wraps an <code>HttpServletResponse</code> and tees a <b>bounded</b> copy of the output stream into memory for debug logging.</div>
 </div>
 <div class="col-first even-row-color"><a href="class-use/MethodList.html#org.apache.juneau.rest.server.util">MethodList</a></div>
 <div class="col-last even-row-color">

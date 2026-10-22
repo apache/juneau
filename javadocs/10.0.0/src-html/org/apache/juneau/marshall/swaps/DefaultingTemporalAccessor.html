@@ -106,8 +106,8 @@
 <span class="source-line-no">093</span><span id="line-93"></span>
 <span class="source-line-no">094</span><span id="line-94">   @Override /* Overridden from TemporalAccessor */</span>
 <span class="source-line-no">095</span><span id="line-95">   @SuppressWarnings({</span>
-<span class="source-line-no">096</span><span id="line-96">      "unchecked", // Type erasure requires unchecked casts</span>
-<span class="source-line-no">097</span><span id="line-97">      "java:S3776", // Cognitive complexity acceptable for this specific logic</span>
+<span class="source-line-no">096</span><span id="line-96">      "java:S3776", // Cognitive complexity acceptable for this specific logic</span>
+<span class="source-line-no">097</span><span id="line-97">      "unchecked" // Type erasure requires unchecked casts</span>
 <span class="source-line-no">098</span><span id="line-98">   })</span>
 <span class="source-line-no">099</span><span id="line-99">   public &lt;R&gt; R query(TemporalQuery&lt;R&gt; query) {</span>
 <span class="source-line-no">100</span><span id="line-100">      var r = inner.query(query);</span>

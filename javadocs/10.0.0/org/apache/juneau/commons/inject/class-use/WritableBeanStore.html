@@ -80,8 +80,12 @@ loadScripts(document, 'script');</script>
 <div class="col-last odd-row-color">
 <div class="block">REST Server API</div>
 </div>
-<div class="col-first even-row-color"><a href="#org.apache.juneau.rest.server.springboot">org.apache.juneau.rest.server.springboot</a></div>
+<div class="col-first even-row-color"><a href="#org.apache.juneau.rest.server.health">org.apache.juneau.rest.server.health</a></div>
 <div class="col-last even-row-color">
+<div class="block">Built-in health, readiness, and liveness probe support for Juneau REST servers.</div>
+</div>
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.rest.server.springboot">org.apache.juneau.rest.server.springboot</a></div>
+<div class="col-last odd-row-color">
 <div class="block">Spring Boot Integration</div>
 </div>
 </div>
@@ -296,6 +300,9 @@ loadScripts(document, 'script');</script>
 <div class="col-first odd-row-color"><code>protected final <a href="../WritableBeanStore.html" title="interface in org.apache.juneau.commons.inject">WritableBeanStore</a></code></div>
 <div class="col-second odd-row-color"><span class="type-name-label">RestContext.</span><code><a href="../../../rest/server/RestContext.html#bootstrapBeanStore" class="member-name-link">bootstrapBeanStore</a></code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
+<div class="col-first even-row-color"><code>protected final <a href="../WritableBeanStore.html" title="interface in org.apache.juneau.commons.inject">WritableBeanStore</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">RestContext.</span><code><a href="../../../rest/server/RestContext.html#inheritableBeanStore" class="member-name-link">inheritableBeanStore</a></code></div>
+<div class="col-last even-row-color">&nbsp;</div>
 </div>
 <div class="caption"><span>Methods in <a href="../../../rest/server/package-summary.html">org.apache.juneau.rest.server</a> that return <a href="../WritableBeanStore.html" title="interface in org.apache.juneau.commons.inject">WritableBeanStore</a></span></div>
 <div class="summary-table three-column-summary">
@@ -321,6 +328,11 @@ loadScripts(document, 'script');</script>
 <div class="col-second odd-row-color"><span class="type-name-label">RestContext.</span><code><a href="../../../rest/server/RestContext.html#getBootstrapBeanStore()" class="member-name-link">getBootstrapBeanStore</a>()</code></div>
 <div class="col-last odd-row-color">
 <div class="block">Returns the bootstrap bean store for this context.</div>
+</div>
+<div class="col-first even-row-color"><code><a href="../WritableBeanStore.html" title="interface in org.apache.juneau.commons.inject">WritableBeanStore</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">RestContext.</span><code><a href="../../../rest/server/RestContext.html#getInheritableBeanStore()" class="member-name-link">getInheritableBeanStore</a>()</code></div>
+<div class="col-last even-row-color">
+<div class="block">Returns the bean store that this resource exposes to its <a href="../../../rest/server/Rest.html#children()"><code>@Rest(children)</code></a> sub-resources.</div>
 </div>
 </div>
 <div class="caption"><span>Methods in <a href="../../../rest/server/package-summary.html">org.apache.juneau.rest.server</a> that return types with arguments of type <a href="../WritableBeanStore.html" title="interface in org.apache.juneau.commons.inject">WritableBeanStore</a></span></div>
@@ -365,6 +377,24 @@ loadScripts(document, 'script');</script>
  <a href="../../../rest/server/RestBuilder.html" title="interface in org.apache.juneau.rest.server">RestBuilder</a>&lt;?&gt;&nbsp;restBuilder)</code></div>
 <div class="col-last odd-row-color">
 <div class="block">Compact canonical constructor — null-coalesces optional fields and validates required ones.</div>
+</div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="org.apache.juneau.rest.server.health">
+<h2>Uses of <a href="../WritableBeanStore.html" title="interface in org.apache.juneau.commons.inject">WritableBeanStore</a> in <a href="../../../rest/server/health/package-summary.html">org.apache.juneau.rest.server.health</a></h2>
+<div class="caption"><span>Methods in <a href="../../../rest/server/health/package-summary.html">org.apache.juneau.rest.server.health</a> with parameters of type <a href="../WritableBeanStore.html" title="interface in org.apache.juneau.commons.inject">WritableBeanStore</a></span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier and Type</div>
+<div class="table-header col-second">Method</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code>void</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">HealthServlet.</span><code><a href="../../../rest/server/health/HealthServlet.html#initReadinessState(org.apache.juneau.commons.inject.WritableBeanStore)" class="member-name-link">initReadinessState</a><wbr>(<a href="../WritableBeanStore.html" title="interface in org.apache.juneau.commons.inject">WritableBeanStore</a>&nbsp;beanStore)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Registers the <a href="../../../rest/server/health/HealthServlet.html#publishReadinessState(org.apache.juneau.rest.server.health.ReadinessState)">published</a> readiness state (if any) into
+ this resource's own bean store, so <a href="../../../rest/server/health/HealthAggregator.html#aggregate(org.apache.juneau.rest.server.RestContext,java.util.Map,org.apache.juneau.rest.server.health.HealthProbe,org.apache.juneau.rest.server.RestResponse)"><code>HealthAggregator.aggregate(org.apache.juneau.rest.server.RestContext, java.util.Map&lt;java.lang.String, org.apache.juneau.rest.server.health.HealthIndicator&gt;, org.apache.juneau.rest.server.health.HealthProbe, org.apache.juneau.rest.server.RestResponse)</code></a> resolves the lifecycle-owned
+ instance instead of falling back to <a href="../../../rest/server/health/ReadinessState.html#shared()"><code>ReadinessState.shared()</code></a>.</div>
 </div>
 </div>
 </section>

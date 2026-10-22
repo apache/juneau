@@ -29,118 +29,120 @@
 <span class="source-line-no">016</span><span id="line-16"> */</span>
 <span class="source-line-no">017</span><span id="line-17">package org.apache.juneau.rest.server.servlet;</span>
 <span class="source-line-no">018</span><span id="line-18"></span>
-<span class="source-line-no">019</span><span id="line-19">import java.lang.reflect.*;</span>
-<span class="source-line-no">020</span><span id="line-20">import java.util.*;</span>
-<span class="source-line-no">021</span><span id="line-21"></span>
-<span class="source-line-no">022</span><span id="line-22">import org.apache.juneau.rest.server.*;</span>
+<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.Shorts.*;</span>
+<span class="source-line-no">020</span><span id="line-20"></span>
+<span class="source-line-no">021</span><span id="line-21">import java.lang.reflect.*;</span>
+<span class="source-line-no">022</span><span id="line-22">import java.util.*;</span>
 <span class="source-line-no">023</span><span id="line-23"></span>
-<span class="source-line-no">024</span><span id="line-24">import jakarta.servlet.*;</span>
-<span class="source-line-no">025</span><span id="line-25">import jakarta.servlet.annotation.*;</span>
-<span class="source-line-no">026</span><span id="line-26"></span>
-<span class="source-line-no">027</span><span id="line-27">/**</span>
-<span class="source-line-no">028</span><span id="line-28"> * Plain Servlet-spec {@link ServletContainerInitializer} that auto-mounts {@link RestServlet}</span>
-<span class="source-line-no">029</span><span id="line-29"> * subclasses at their self-declared top-level paths in non-Spring (e.g. {@code web.xml} / external</span>
-<span class="source-line-no">030</span><span id="line-30"> * WAR) deployments.</span>
-<span class="source-line-no">031</span><span id="line-31"> *</span>
-<span class="source-line-no">032</span><span id="line-32"> * &lt;p&gt;</span>
-<span class="source-line-no">033</span><span id="line-33"> * Discovered by the container via {@code META-INF/services/jakarta.servlet.ServletContainerInitializer}</span>
-<span class="source-line-no">034</span><span id="line-34"> * and (through {@link HandlesTypes @HandlesTypes(RestServlet.class)}) handed every concrete</span>
-<span class="source-line-no">035</span><span id="line-35"> * {@link RestServlet} on the webapp classpath. It mirrors the Jetty-microservice and Spring Boot</span>
-<span class="source-line-no">036</span><span id="line-36"> * auto-registration mechanisms: the mount paths are read from the top-level chain</span>
-<span class="source-line-no">037</span><span id="line-37"> * ({@link Rest#paths() @Rest(paths)} / {@code getPaths()}) via</span>
-<span class="source-line-no">038</span><span id="line-38"> * {@link RestContext#resolveTopLevelPaths(Class, Object, org.apache.juneau.commons.inject.BeanStore)</span>
-<span class="source-line-no">039</span><span id="line-39"> * RestContext.resolveTopLevelPaths(...)} &amp;mdash; &lt;b&gt;not&lt;/b&gt; {@code path()} (child-composition).</span>
-<span class="source-line-no">040</span><span id="line-40"> *</span>
-<span class="source-line-no">041</span><span id="line-41"> * &lt;h5 class='section'&gt;Activation:&lt;/h5&gt;</span>
+<span class="source-line-no">024</span><span id="line-24">import org.apache.juneau.rest.server.*;</span>
+<span class="source-line-no">025</span><span id="line-25"></span>
+<span class="source-line-no">026</span><span id="line-26">import jakarta.servlet.*;</span>
+<span class="source-line-no">027</span><span id="line-27">import jakarta.servlet.annotation.*;</span>
+<span class="source-line-no">028</span><span id="line-28"></span>
+<span class="source-line-no">029</span><span id="line-29">/**</span>
+<span class="source-line-no">030</span><span id="line-30"> * Plain Servlet-spec {@link ServletContainerInitializer} that auto-mounts {@link RestServlet}</span>
+<span class="source-line-no">031</span><span id="line-31"> * subclasses at their self-declared top-level paths in non-Spring (e.g. {@code web.xml} / external</span>
+<span class="source-line-no">032</span><span id="line-32"> * WAR) deployments.</span>
+<span class="source-line-no">033</span><span id="line-33"> *</span>
+<span class="source-line-no">034</span><span id="line-34"> * &lt;p&gt;</span>
+<span class="source-line-no">035</span><span id="line-35"> * Discovered by the container via {@code META-INF/services/jakarta.servlet.ServletContainerInitializer}</span>
+<span class="source-line-no">036</span><span id="line-36"> * and (through {@link HandlesTypes @HandlesTypes(RestServlet.class)}) handed every concrete</span>
+<span class="source-line-no">037</span><span id="line-37"> * {@link RestServlet} on the webapp classpath. It mirrors the Jetty-microservice and Spring Boot</span>
+<span class="source-line-no">038</span><span id="line-38"> * auto-registration mechanisms: the mount paths are read from the top-level chain</span>
+<span class="source-line-no">039</span><span id="line-39"> * ({@link Rest#paths() @Rest(paths)} / {@code getPaths()}) via</span>
+<span class="source-line-no">040</span><span id="line-40"> * {@link RestContext#resolveTopLevelPaths(Class, Object, org.apache.juneau.commons.inject.BeanStore)</span>
+<span class="source-line-no">041</span><span id="line-41"> * RestContext.resolveTopLevelPaths(...)} &amp;mdash; &lt;b&gt;not&lt;/b&gt; {@code path()} (child-composition).</span>
 <span class="source-line-no">042</span><span id="line-42"> *</span>
-<span class="source-line-no">043</span><span id="line-43"> * &lt;p&gt;</span>
-<span class="source-line-no">044</span><span id="line-44"> * Opt-in via the context init parameter {@code juneau.rest.auto-register=true} (parity with the</span>
-<span class="source-line-no">045</span><span id="line-45"> * Spring Boot {@code juneau.rest.auto-register} property). When unset or not {@code true}, the</span>
-<span class="source-line-no">046</span><span id="line-46"> * initializer does nothing, so it never collides with servlets the deployer declared manually in</span>
-<span class="source-line-no">047</span><span id="line-47"> * {@code web.xml}. Declare it in {@code web.xml}:</span>
-<span class="source-line-no">048</span><span id="line-48"> *</span>
-<span class="source-line-no">049</span><span id="line-49"> * &lt;p class='bxml'&gt;</span>
-<span class="source-line-no">050</span><span id="line-50"> *    &lt;xt&gt;&amp;lt;context-param&amp;gt;&lt;/xt&gt;</span>
-<span class="source-line-no">051</span><span id="line-51"> *       &lt;xt&gt;&amp;lt;param-name&amp;gt;&lt;/xt&gt;juneau.rest.auto-register&lt;xt&gt;&amp;lt;/param-name&amp;gt;&lt;/xt&gt;</span>
-<span class="source-line-no">052</span><span id="line-52"> *       &lt;xt&gt;&amp;lt;param-value&amp;gt;&lt;/xt&gt;true&lt;xt&gt;&amp;lt;/param-value&amp;gt;&lt;/xt&gt;</span>
-<span class="source-line-no">053</span><span id="line-53"> *    &lt;xt&gt;&amp;lt;/context-param&amp;gt;&lt;/xt&gt;</span>
-<span class="source-line-no">054</span><span id="line-54"> * &lt;/p&gt;</span>
-<span class="source-line-no">055</span><span id="line-55"> *</span>
-<span class="source-line-no">056</span><span id="line-56"> * &lt;h5 class='section'&gt;Behavior:&lt;/h5&gt;</span>
+<span class="source-line-no">043</span><span id="line-43"> * &lt;h5 class='section'&gt;Activation:&lt;/h5&gt;</span>
+<span class="source-line-no">044</span><span id="line-44"> *</span>
+<span class="source-line-no">045</span><span id="line-45"> * &lt;p&gt;</span>
+<span class="source-line-no">046</span><span id="line-46"> * Opt-in via the context init parameter {@code juneau.rest.auto-register=true} (parity with the</span>
+<span class="source-line-no">047</span><span id="line-47"> * Spring Boot {@code juneau.rest.auto-register} property). When unset or not {@code true}, the</span>
+<span class="source-line-no">048</span><span id="line-48"> * initializer does nothing, so it never collides with servlets the deployer declared manually in</span>
+<span class="source-line-no">049</span><span id="line-49"> * {@code web.xml}. Declare it in {@code web.xml}:</span>
+<span class="source-line-no">050</span><span id="line-50"> *</span>
+<span class="source-line-no">051</span><span id="line-51"> * &lt;p class='bxml'&gt;</span>
+<span class="source-line-no">052</span><span id="line-52"> *    &lt;xt&gt;&amp;lt;context-param&amp;gt;&lt;/xt&gt;</span>
+<span class="source-line-no">053</span><span id="line-53"> *       &lt;xt&gt;&amp;lt;param-name&amp;gt;&lt;/xt&gt;juneau.rest.auto-register&lt;xt&gt;&amp;lt;/param-name&amp;gt;&lt;/xt&gt;</span>
+<span class="source-line-no">054</span><span id="line-54"> *       &lt;xt&gt;&amp;lt;param-value&amp;gt;&lt;/xt&gt;true&lt;xt&gt;&amp;lt;/param-value&amp;gt;&lt;/xt&gt;</span>
+<span class="source-line-no">055</span><span id="line-55"> *    &lt;xt&gt;&amp;lt;/context-param&amp;gt;&lt;/xt&gt;</span>
+<span class="source-line-no">056</span><span id="line-56"> * &lt;/p&gt;</span>
 <span class="source-line-no">057</span><span id="line-57"> *</span>
-<span class="source-line-no">058</span><span id="line-58"> * &lt;p&gt;</span>
-<span class="source-line-no">059</span><span id="line-59"> * For each handled class that is concrete, carries a {@link Rest @Rest} annotation, is no-arg</span>
-<span class="source-line-no">060</span><span id="line-60"> * instantiable, and resolves to at least one top-level path, an instance is created and added to the</span>
-<span class="source-line-no">061</span><span id="line-61"> * servlet context at each resolved path. Classes that resolve to no top-level paths (pure mixins /</span>
-<span class="source-line-no">062</span><span id="line-62"> * child-composed resources) or that cannot be instantiated with a no-arg constructor are skipped.</span>
-<span class="source-line-no">063</span><span id="line-63"> *</span>
-<span class="source-line-no">064</span><span id="line-64"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
-<span class="source-line-no">065</span><span id="line-65"> *    &lt;li class='jm'&gt;{@link RestContext#resolveTopLevelPaths(Class, Object, org.apache.juneau.commons.inject.BeanStore)}</span>
-<span class="source-line-no">066</span><span id="line-66"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerComposition"&gt;REST Server &amp;mdash; Mixins and Multi-Mount Paths&lt;/a&gt;</span>
-<span class="source-line-no">067</span><span id="line-67"> * &lt;/ul&gt;</span>
-<span class="source-line-no">068</span><span id="line-68"> *</span>
-<span class="source-line-no">069</span><span id="line-69"> * @since 10.0.0</span>
-<span class="source-line-no">070</span><span id="line-70"> */</span>
-<span class="source-line-no">071</span><span id="line-71">@HandlesTypes(RestServlet.class)</span>
-<span class="source-line-no">072</span><span id="line-72">public class JuneauRestServletContainerInitializer implements ServletContainerInitializer {</span>
-<span class="source-line-no">073</span><span id="line-73"></span>
-<span class="source-line-no">074</span><span id="line-74">   /** Context init parameter that opts a webapp into auto-registration. */</span>
-<span class="source-line-no">075</span><span id="line-75">   public static final String AUTO_REGISTER_PARAM = "juneau.rest.auto-register";</span>
-<span class="source-line-no">076</span><span id="line-76"></span>
-<span class="source-line-no">077</span><span id="line-77">   @Override /* ServletContainerInitializer */</span>
-<span class="source-line-no">078</span><span id="line-78">   public void onStartup(Set&lt;Class&lt;?&gt;&gt; classes, ServletContext ctx) throws ServletException {</span>
-<span class="source-line-no">079</span><span id="line-79">      if (! "true".equalsIgnoreCase(ctx.getInitParameter(AUTO_REGISTER_PARAM)))</span>
-<span class="source-line-no">080</span><span id="line-80">         return;</span>
-<span class="source-line-no">081</span><span id="line-81">      if (classes == null)</span>
+<span class="source-line-no">058</span><span id="line-58"> * &lt;h5 class='section'&gt;Behavior:&lt;/h5&gt;</span>
+<span class="source-line-no">059</span><span id="line-59"> *</span>
+<span class="source-line-no">060</span><span id="line-60"> * &lt;p&gt;</span>
+<span class="source-line-no">061</span><span id="line-61"> * For each handled class that is concrete, carries a {@link Rest @Rest} annotation, is no-arg</span>
+<span class="source-line-no">062</span><span id="line-62"> * instantiable, and resolves to at least one top-level path, an instance is created and added to the</span>
+<span class="source-line-no">063</span><span id="line-63"> * servlet context at each resolved path. Classes that resolve to no top-level paths (pure mixins /</span>
+<span class="source-line-no">064</span><span id="line-64"> * child-composed resources) or that cannot be instantiated with a no-arg constructor are skipped.</span>
+<span class="source-line-no">065</span><span id="line-65"> *</span>
+<span class="source-line-no">066</span><span id="line-66"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">067</span><span id="line-67"> *    &lt;li class='jm'&gt;{@link RestContext#resolveTopLevelPaths(Class, Object, org.apache.juneau.commons.inject.BeanStore)}</span>
+<span class="source-line-no">068</span><span id="line-68"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerComposition"&gt;REST Server &amp;mdash; Mixins and Multi-Mount Paths&lt;/a&gt;</span>
+<span class="source-line-no">069</span><span id="line-69"> * &lt;/ul&gt;</span>
+<span class="source-line-no">070</span><span id="line-70"> *</span>
+<span class="source-line-no">071</span><span id="line-71"> * @since 10.0.0</span>
+<span class="source-line-no">072</span><span id="line-72"> */</span>
+<span class="source-line-no">073</span><span id="line-73">@HandlesTypes(RestServlet.class)</span>
+<span class="source-line-no">074</span><span id="line-74">public class JuneauRestServletContainerInitializer implements ServletContainerInitializer {</span>
+<span class="source-line-no">075</span><span id="line-75"></span>
+<span class="source-line-no">076</span><span id="line-76">   /** Context init parameter that opts a webapp into auto-registration. */</span>
+<span class="source-line-no">077</span><span id="line-77">   public static final String AUTO_REGISTER_PARAM = "juneau.rest.auto-register";</span>
+<span class="source-line-no">078</span><span id="line-78"></span>
+<span class="source-line-no">079</span><span id="line-79">   @Override /* ServletContainerInitializer */</span>
+<span class="source-line-no">080</span><span id="line-80">   public void onStartup(Set&lt;Class&lt;?&gt;&gt; classes, ServletContext ctx) throws ServletException {</span>
+<span class="source-line-no">081</span><span id="line-81">      if (neqic("true", ctx.getInitParameter(AUTO_REGISTER_PARAM)))</span>
 <span class="source-line-no">082</span><span id="line-82">         return;</span>
-<span class="source-line-no">083</span><span id="line-83"></span>
-<span class="source-line-no">084</span><span id="line-84">      for (var c : classes)</span>
-<span class="source-line-no">085</span><span id="line-85">         tryMount(c, ctx);</span>
-<span class="source-line-no">086</span><span id="line-86">   }</span>
-<span class="source-line-no">087</span><span id="line-87"></span>
-<span class="source-line-no">088</span><span id="line-88">   private static void tryMount(Class&lt;?&gt; c, ServletContext ctx) {</span>
-<span class="source-line-no">089</span><span id="line-89">      if (! isMountable(c))</span>
-<span class="source-line-no">090</span><span id="line-90">         return;</span>
-<span class="source-line-no">091</span><span id="line-91">      var servlet = instantiate(c);</span>
-<span class="source-line-no">092</span><span id="line-92">      if (servlet == null)</span>
-<span class="source-line-no">093</span><span id="line-93">         return;</span>
-<span class="source-line-no">094</span><span id="line-94">      var resolved = RestContext.resolveTopLevelPaths(c, servlet, null);</span>
-<span class="source-line-no">095</span><span id="line-95">      if (resolved.length == 0)</span>
-<span class="source-line-no">096</span><span id="line-96">         return;</span>
-<span class="source-line-no">097</span><span id="line-97">      var reg = ctx.addServlet(c.getName(), servlet);</span>
-<span class="source-line-no">098</span><span id="line-98">      if (reg == null)</span>
-<span class="source-line-no">099</span><span id="line-99">         return; // A servlet with this name is already registered (e.g. via web.xml).</span>
-<span class="source-line-no">100</span><span id="line-100">      for (var path : resolved)</span>
-<span class="source-line-no">101</span><span id="line-101">         reg.addMapping(toUrlMapping(path));</span>
-<span class="source-line-no">102</span><span id="line-102">   }</span>
-<span class="source-line-no">103</span><span id="line-103"></span>
-<span class="source-line-no">104</span><span id="line-104">   private static boolean isMountable(Class&lt;?&gt; c) {</span>
-<span class="source-line-no">105</span><span id="line-105">      if (c == null || c.isInterface() || Modifier.isAbstract(c.getModifiers()))</span>
-<span class="source-line-no">106</span><span id="line-106">         return false;</span>
-<span class="source-line-no">107</span><span id="line-107">      return c.isAnnotationPresent(Rest.class);</span>
-<span class="source-line-no">108</span><span id="line-108">   }</span>
-<span class="source-line-no">109</span><span id="line-109"></span>
-<span class="source-line-no">110</span><span id="line-110">   private static RestServlet instantiate(Class&lt;?&gt; c) {</span>
-<span class="source-line-no">111</span><span id="line-111">      try {</span>
-<span class="source-line-no">112</span><span id="line-112">         return (RestServlet) c.getDeclaredConstructor().newInstance();</span>
-<span class="source-line-no">113</span><span id="line-113">      } catch (ReflectiveOperationException | RuntimeException e) {</span>
-<span class="source-line-no">114</span><span id="line-114">         // Best-effort: a servlet that needs constructor-injected collaborators can't be</span>
-<span class="source-line-no">115</span><span id="line-115">         // auto-mounted by the plain Servlet-spec path and is simply skipped here.</span>
-<span class="source-line-no">116</span><span id="line-116">         return null;</span>
-<span class="source-line-no">117</span><span id="line-117">      }</span>
-<span class="source-line-no">118</span><span id="line-118">   }</span>
-<span class="source-line-no">119</span><span id="line-119"></span>
-<span class="source-line-no">120</span><span id="line-120">   private static String toUrlMapping(String rawPath) {</span>
-<span class="source-line-no">121</span><span id="line-121">      var p = rawPath == null ? "" : rawPath;</span>
-<span class="source-line-no">122</span><span id="line-122">      while (p.endsWith("/") &amp;&amp; p.length() &gt; 1)</span>
-<span class="source-line-no">123</span><span id="line-123">         p = p.substring(0, p.length() - 1);</span>
-<span class="source-line-no">124</span><span id="line-124">      if (p.isEmpty())</span>
-<span class="source-line-no">125</span><span id="line-125">         return "/";</span>
-<span class="source-line-no">126</span><span id="line-126">      if (! p.startsWith("/"))</span>
-<span class="source-line-no">127</span><span id="line-127">         p = "/" + p;</span>
-<span class="source-line-no">128</span><span id="line-128">      return p;</span>
-<span class="source-line-no">129</span><span id="line-129">   }</span>
-<span class="source-line-no">130</span><span id="line-130">}</span>
+<span class="source-line-no">083</span><span id="line-83">      if (classes == null)</span>
+<span class="source-line-no">084</span><span id="line-84">         return;</span>
+<span class="source-line-no">085</span><span id="line-85"></span>
+<span class="source-line-no">086</span><span id="line-86">      for (var c : classes)</span>
+<span class="source-line-no">087</span><span id="line-87">         tryMount(c, ctx);</span>
+<span class="source-line-no">088</span><span id="line-88">   }</span>
+<span class="source-line-no">089</span><span id="line-89"></span>
+<span class="source-line-no">090</span><span id="line-90">   private static void tryMount(Class&lt;?&gt; c, ServletContext ctx) {</span>
+<span class="source-line-no">091</span><span id="line-91">      if (! isMountable(c))</span>
+<span class="source-line-no">092</span><span id="line-92">         return;</span>
+<span class="source-line-no">093</span><span id="line-93">      var servlet = instantiate(c);</span>
+<span class="source-line-no">094</span><span id="line-94">      if (servlet == null)</span>
+<span class="source-line-no">095</span><span id="line-95">         return;</span>
+<span class="source-line-no">096</span><span id="line-96">      var resolved = RestContext.resolveTopLevelPaths(c, servlet, null);</span>
+<span class="source-line-no">097</span><span id="line-97">      if (resolved.length == 0)</span>
+<span class="source-line-no">098</span><span id="line-98">         return;</span>
+<span class="source-line-no">099</span><span id="line-99">      var reg = ctx.addServlet(c.getName(), servlet);</span>
+<span class="source-line-no">100</span><span id="line-100">      if (reg == null)</span>
+<span class="source-line-no">101</span><span id="line-101">         return; // A servlet with this name is already registered (e.g. via web.xml).</span>
+<span class="source-line-no">102</span><span id="line-102">      for (var path : resolved)</span>
+<span class="source-line-no">103</span><span id="line-103">         reg.addMapping(toUrlMapping(path));</span>
+<span class="source-line-no">104</span><span id="line-104">   }</span>
+<span class="source-line-no">105</span><span id="line-105"></span>
+<span class="source-line-no">106</span><span id="line-106">   private static boolean isMountable(Class&lt;?&gt; c) {</span>
+<span class="source-line-no">107</span><span id="line-107">      if (c == null || c.isInterface() || Modifier.isAbstract(c.getModifiers()))</span>
+<span class="source-line-no">108</span><span id="line-108">         return false;</span>
+<span class="source-line-no">109</span><span id="line-109">      return c.isAnnotationPresent(Rest.class);</span>
+<span class="source-line-no">110</span><span id="line-110">   }</span>
+<span class="source-line-no">111</span><span id="line-111"></span>
+<span class="source-line-no">112</span><span id="line-112">   private static RestServlet instantiate(Class&lt;?&gt; c) {</span>
+<span class="source-line-no">113</span><span id="line-113">      try {</span>
+<span class="source-line-no">114</span><span id="line-114">         return (RestServlet) c.getDeclaredConstructor().newInstance();</span>
+<span class="source-line-no">115</span><span id="line-115">      } catch (ReflectiveOperationException | RuntimeException e) {</span>
+<span class="source-line-no">116</span><span id="line-116">         // Best-effort: a servlet that needs constructor-injected collaborators can't be</span>
+<span class="source-line-no">117</span><span id="line-117">         // auto-mounted by the plain Servlet-spec path and is simply skipped here.</span>
+<span class="source-line-no">118</span><span id="line-118">         return null;</span>
+<span class="source-line-no">119</span><span id="line-119">      }</span>
+<span class="source-line-no">120</span><span id="line-120">   }</span>
+<span class="source-line-no">121</span><span id="line-121"></span>
+<span class="source-line-no">122</span><span id="line-122">   private static String toUrlMapping(String rawPath) {</span>
+<span class="source-line-no">123</span><span id="line-123">      var p = rawPath == null ? "" : rawPath;</span>
+<span class="source-line-no">124</span><span id="line-124">      while (p.endsWith("/") &amp;&amp; p.length() &gt; 1)</span>
+<span class="source-line-no">125</span><span id="line-125">         p = p.substring(0, p.length() - 1);</span>
+<span class="source-line-no">126</span><span id="line-126">      if (p.isEmpty())</span>
+<span class="source-line-no">127</span><span id="line-127">         return "/";</span>
+<span class="source-line-no">128</span><span id="line-128">      if (! p.startsWith("/"))</span>
+<span class="source-line-no">129</span><span id="line-129">         p = "/" + p;</span>
+<span class="source-line-no">130</span><span id="line-130">      return p;</span>
+<span class="source-line-no">131</span><span id="line-131">   }</span>
+<span class="source-line-no">132</span><span id="line-132">}</span>
 
 
 

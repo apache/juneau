@@ -94,7 +94,7 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color"><code><a href="../OidcRelyingParty.Builder.html" title="class in org.apache.juneau.rest.server.auth.oidc.rp">OidcRelyingParty.Builder</a></code></div>
 <div class="col-second even-row-color"><span class="type-name-label">OidcRelyingParty.Builder.</span><code><a href="../OidcRelyingParty.Builder.html#clock(java.time.Clock)" class="member-name-link">clock</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Clock.html" title="class or interface in java.time" class="external-link">Clock</a>&nbsp;value)</code></div>
 <div class="col-last even-row-color">
-<div class="block">Overrides the clock used for session expiry + the ephemeral store.</div>
+<div class="block">Overrides the clock used for session expiry and the login-state store.</div>
 </div>
 <div class="col-first odd-row-color"><code><a href="../OidcRelyingParty.Builder.html" title="class in org.apache.juneau.rest.server.auth.oidc.rp">OidcRelyingParty.Builder</a></code></div>
 <div class="col-second odd-row-color"><span class="type-name-label">OidcRelyingParty.Builder.</span><code><a href="../OidcRelyingParty.Builder.html#clockSkewSeconds(int)" class="member-name-link">clockSkewSeconds</a><wbr>(int&nbsp;value)</code></div>
@@ -154,54 +154,61 @@ loadScripts(document, 'script');</script>
 <div class="block">Injects a custom JWK source for ID-token / logout-token signature verification.</div>
 </div>
 <div class="col-first even-row-color"><code><a href="../OidcRelyingParty.Builder.html" title="class in org.apache.juneau.rest.server.auth.oidc.rp">OidcRelyingParty.Builder</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">OidcRelyingParty.Builder.</span><code><a href="../OidcRelyingParty.Builder.html#metadata(org.apache.juneau.rest.auth.oauth.oidc.OidcMetadata)" class="member-name-link">metadata</a><wbr>(<a href="../../../../../auth/oauth/oidc/OidcMetadata.html" title="class in org.apache.juneau.rest.auth.oauth.oidc">OidcMetadata</a>&nbsp;value)</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">OidcRelyingParty.Builder.</span><code><a href="../OidcRelyingParty.Builder.html#loginStateStore(org.apache.juneau.rest.server.auth.oidc.rp.LoginStateStore)" class="member-name-link">loginStateStore</a><wbr>(<a href="../LoginStateStore.html" title="interface in org.apache.juneau.rest.server.auth.oidc.rp">LoginStateStore</a>&nbsp;value)</code></div>
 <div class="col-last even-row-color">
-<div class="block">Sets the IdP metadata explicitly, bypassing discovery.</div>
+<div class="block">Sets an optional custom <a href="../LoginStateStore.html" title="interface in org.apache.juneau.rest.server.auth.oidc.rp"><code>LoginStateStore</code></a> for the pending-login (<code>state</code> &rarr;
+ <code>nonce</code> / PKCE <code>code_verifier</code> / redirect) association.</div>
 </div>
 <div class="col-first odd-row-color"><code><a href="../OidcRelyingParty.Builder.html" title="class in org.apache.juneau.rest.server.auth.oidc.rp">OidcRelyingParty.Builder</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">OidcRelyingParty.Builder.</span><code><a href="../OidcRelyingParty.Builder.html#postLoginRedirect(java.lang.String)" class="member-name-link">postLoginRedirect</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">OidcRelyingParty.Builder.</span><code><a href="../OidcRelyingParty.Builder.html#metadata(org.apache.juneau.rest.auth.oauth.oidc.OidcMetadata)" class="member-name-link">metadata</a><wbr>(<a href="../../../../../auth/oauth/oidc/OidcMetadata.html" title="class in org.apache.juneau.rest.auth.oauth.oidc">OidcMetadata</a>&nbsp;value)</code></div>
 <div class="col-last odd-row-color">
+<div class="block">Sets the IdP metadata explicitly, bypassing discovery.</div>
+</div>
+<div class="col-first even-row-color"><code><a href="../OidcRelyingParty.Builder.html" title="class in org.apache.juneau.rest.server.auth.oidc.rp">OidcRelyingParty.Builder</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">OidcRelyingParty.Builder.</span><code><a href="../OidcRelyingParty.Builder.html#postLoginRedirect(java.lang.String)" class="member-name-link">postLoginRedirect</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</code></div>
+<div class="col-last even-row-color">
 <div class="block">Sets the default post-login redirect target (when the login request supplied no safe
  <code>redirect</code> parameter).</div>
 </div>
-<div class="col-first even-row-color"><code><a href="../OidcRelyingParty.Builder.html" title="class in org.apache.juneau.rest.server.auth.oidc.rp">OidcRelyingParty.Builder</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">OidcRelyingParty.Builder.</span><code><a href="../OidcRelyingParty.Builder.html#postLogoutRedirectUri(java.net.URI)" class="member-name-link">postLogoutRedirectUri</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a>&nbsp;value)</code></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><code><a href="../OidcRelyingParty.Builder.html" title="class in org.apache.juneau.rest.server.auth.oidc.rp">OidcRelyingParty.Builder</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">OidcRelyingParty.Builder.</span><code><a href="../OidcRelyingParty.Builder.html#postLogoutRedirectUri(java.net.URI)" class="member-name-link">postLogoutRedirectUri</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a>&nbsp;value)</code></div>
+<div class="col-last odd-row-color">
 <div class="block">Sets the post-logout redirect URI passed to the IdP end-session endpoint.</div>
 </div>
-<div class="col-first odd-row-color"><code><a href="../OidcRelyingParty.Builder.html" title="class in org.apache.juneau.rest.server.auth.oidc.rp">OidcRelyingParty.Builder</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">OidcRelyingParty.Builder.</span><code><a href="../OidcRelyingParty.Builder.html#redirectUri(java.net.URI)" class="member-name-link">redirectUri</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a>&nbsp;value)</code></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><code><a href="../OidcRelyingParty.Builder.html" title="class in org.apache.juneau.rest.server.auth.oidc.rp">OidcRelyingParty.Builder</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">OidcRelyingParty.Builder.</span><code><a href="../OidcRelyingParty.Builder.html#redirectUri(java.net.URI)" class="member-name-link">redirectUri</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a>&nbsp;value)</code></div>
+<div class="col-last even-row-color">
 <div class="block">Sets the redirect URI registered with the IdP.</div>
 </div>
-<div class="col-first even-row-color"><code><a href="../OidcRelyingParty.Builder.html" title="class in org.apache.juneau.rest.server.auth.oidc.rp">OidcRelyingParty.Builder</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">OidcRelyingParty.Builder.</span><code><a href="../OidcRelyingParty.Builder.html#rolesClaim(java.lang.String)" class="member-name-link">rolesClaim</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</code></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><code><a href="../OidcRelyingParty.Builder.html" title="class in org.apache.juneau.rest.server.auth.oidc.rp">OidcRelyingParty.Builder</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">OidcRelyingParty.Builder.</span><code><a href="../OidcRelyingParty.Builder.html#rolesClaim(java.lang.String)" class="member-name-link">rolesClaim</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</code></div>
+<div class="col-last odd-row-color">
 <div class="block">Sets the claim roles are extracted from.</div>
 </div>
-<div class="col-first odd-row-color"><code><a href="../OidcRelyingParty.Builder.html" title="class in org.apache.juneau.rest.server.auth.oidc.rp">OidcRelyingParty.Builder</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">OidcRelyingParty.Builder.</span><code><a href="../OidcRelyingParty.Builder.html#scope(java.lang.String...)" class="member-name-link">scope</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;values)</code></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><code><a href="../OidcRelyingParty.Builder.html" title="class in org.apache.juneau.rest.server.auth.oidc.rp">OidcRelyingParty.Builder</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">OidcRelyingParty.Builder.</span><code><a href="../OidcRelyingParty.Builder.html#scope(java.lang.String...)" class="member-name-link">scope</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;values)</code></div>
+<div class="col-last even-row-color">
 <div class="block">Adds requested scopes.</div>
 </div>
-<div class="col-first even-row-color"><code><a href="../OidcRelyingParty.Builder.html" title="class in org.apache.juneau.rest.server.auth.oidc.rp">OidcRelyingParty.Builder</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">OidcRelyingParty.Builder.</span><code><a href="../OidcRelyingParty.Builder.html#sessionStore(org.apache.juneau.rest.server.auth.oidc.rp.SessionStore)" class="member-name-link">sessionStore</a><wbr>(<a href="../SessionStore.html" title="interface in org.apache.juneau.rest.server.auth.oidc.rp">SessionStore</a>&nbsp;value)</code></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><code><a href="../OidcRelyingParty.Builder.html" title="class in org.apache.juneau.rest.server.auth.oidc.rp">OidcRelyingParty.Builder</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">OidcRelyingParty.Builder.</span><code><a href="../OidcRelyingParty.Builder.html#sessionStore(org.apache.juneau.rest.server.auth.oidc.rp.SessionStore)" class="member-name-link">sessionStore</a><wbr>(<a href="../SessionStore.html" title="interface in org.apache.juneau.rest.server.auth.oidc.rp">SessionStore</a>&nbsp;value)</code></div>
+<div class="col-last odd-row-color">
 <div class="block">Sets the session store.</div>
 </div>
-<div class="col-first odd-row-color"><code><a href="../OidcRelyingParty.Builder.html" title="class in org.apache.juneau.rest.server.auth.oidc.rp">OidcRelyingParty.Builder</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">OidcRelyingParty.Builder.</span><code><a href="../OidcRelyingParty.Builder.html#sessionTtl(java.time.Duration)" class="member-name-link">sessionTtl</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a>&nbsp;value)</code></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><code><a href="../OidcRelyingParty.Builder.html" title="class in org.apache.juneau.rest.server.auth.oidc.rp">OidcRelyingParty.Builder</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">OidcRelyingParty.Builder.</span><code><a href="../OidcRelyingParty.Builder.html#sessionTtl(java.time.Duration)" class="member-name-link">sessionTtl</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a>&nbsp;value)</code></div>
+<div class="col-last even-row-color">
 <div class="block">Sets the session lifetime (bounded independently of token lifetime).</div>
 </div>
-<div class="col-first even-row-color"><code><a href="../OidcRelyingParty.Builder.html" title="class in org.apache.juneau.rest.server.auth.oidc.rp">OidcRelyingParty.Builder</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">OidcRelyingParty.Builder.</span><code><a href="../OidcRelyingParty.Builder.html#stateNonceTtl(java.time.Duration)" class="member-name-link">stateNonceTtl</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a>&nbsp;value)</code></div>
-<div class="col-last even-row-color">
-<div class="block">Sets the single-use TTL for the <code>state</code> / <code>nonce</code> store.</div>
-</div>
 <div class="col-first odd-row-color"><code><a href="../OidcRelyingParty.Builder.html" title="class in org.apache.juneau.rest.server.auth.oidc.rp">OidcRelyingParty.Builder</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">OidcRelyingParty.Builder.</span><code><a href="../OidcRelyingParty.Builder.html#userInfoClaims(java.lang.String...)" class="member-name-link">userInfoClaims</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;values)</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">OidcRelyingParty.Builder.</span><code><a href="../OidcRelyingParty.Builder.html#stateNonceTtl(java.time.Duration)" class="member-name-link">stateNonceTtl</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a>&nbsp;value)</code></div>
 <div class="col-last odd-row-color">
+<div class="block">Sets the single-use TTL the framework enforces for the login-state (<code>state</code> / <code>nonce</code> /
+ PKCE <code>code_verifier</code>) association.</div>
+</div>
+<div class="col-first even-row-color"><code><a href="../OidcRelyingParty.Builder.html" title="class in org.apache.juneau.rest.server.auth.oidc.rp">OidcRelyingParty.Builder</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">OidcRelyingParty.Builder.</span><code><a href="../OidcRelyingParty.Builder.html#userInfoClaims(java.lang.String...)" class="member-name-link">userInfoClaims</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;values)</code></div>
+<div class="col-last even-row-color">
 <div class="block">Adds claim names to backfill from the UserInfo endpoint when absent from the ID token.</div>
 </div>
 </div>

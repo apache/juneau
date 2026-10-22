@@ -94,7 +94,7 @@
 <span class="source-line-no">081</span><span id="line-81">               .mediaType(mediaType)</span>
 <span class="source-line-no">082</span><span id="line-82">               .apply(WriterSerializerSession.Builder.class, x -&gt; x.streamCharset(res.getCharset()).useWhitespace(req.isPlainText() ? true : null))</span>
 <span class="source-line-no">083</span><span id="line-83">               .schema(schema)</span>
-<span class="source-line-no">084</span><span id="line-84">               .debug(req.isDebug() ? true : null)</span>
+<span class="source-line-no">084</span><span id="line-84">               .debug(req.isDebugMarshalling() ? true : null)</span>
 <span class="source-line-no">085</span><span id="line-85">               .uriContext(req.getUriContext())</span>
 <span class="source-line-no">086</span><span id="line-86">               .resolver(req.getVarResolverSession())</span>
 <span class="source-line-no">087</span><span id="line-87">               .apply(HtmlDocSerializerSession.Builder.class, x -&gt; req.getAttribute(RestRequest.CSP_NONCE_ATTR).as(String.class).ifPresent(x::nonce))</span>

@@ -64,7 +64,7 @@
 <a class="jxr_linenumber" name="L56" href="#L56">56</a>  		<strong class="jxr_keyword">private</strong> <a name="PeriodFormat" href="../../../../org/apache/juneau/marshall/PeriodFormat.html#PeriodFormat">PeriodFormat</a> periodFormat = PeriodFormat.NOT_SET;
 <a class="jxr_linenumber" name="L57" href="#L57">57</a>  		<strong class="jxr_keyword">private</strong> <a name="CalendarFormat" href="../../../../org/apache/juneau/marshall/CalendarFormat.html#CalendarFormat">CalendarFormat</a> calendarFormat = CalendarFormat.NOT_SET;
 <a class="jxr_linenumber" name="L58" href="#L58">58</a>  		<strong class="jxr_keyword">private</strong> DateFormat dateFormat = DateFormat.NOT_SET;
-<a class="jxr_linenumber" name="L59" href="#L59">59</a>  		<strong class="jxr_keyword">private</strong> <a name="TemporalFormat" href="../../../../org/apache/juneau/marshall/TemporalFormat.html#TemporalFormat">TemporalFormat</a> temporalFormat = TemporalFormat.NOT_SET;
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>  		<strong class="jxr_keyword">private</strong> TemporalFormat temporalFormat = TemporalFormat.NOT_SET;
 <a class="jxr_linenumber" name="L60" href="#L60">60</a>  		<strong class="jxr_keyword">private</strong> <a name="TimeZoneFormat" href="../../../../org/apache/juneau/marshall/TimeZoneFormat.html#TimeZoneFormat">TimeZoneFormat</a> timeZoneFormat = TimeZoneFormat.NOT_SET;
 <a class="jxr_linenumber" name="L61" href="#L61">61</a>  		<strong class="jxr_keyword">private</strong> <a name="LocaleFormat" href="../../../../org/apache/juneau/marshall/LocaleFormat.html#LocaleFormat">LocaleFormat</a> localeFormat = LocaleFormat.NOT_SET;
 <a class="jxr_linenumber" name="L62" href="#L62">62</a>  		<strong class="jxr_keyword">private</strong> <a name="BinaryFormat" href="../../../../org/apache/juneau/marshall/BinaryFormat.html#BinaryFormat">BinaryFormat</a> binaryFormat = BinaryFormat.NOT_SET;
@@ -187,7 +187,7 @@
 <a class="jxr_linenumber" name="L179" href="#L179">179</a> <em class="jxr_javadoccomment">		 * @param value The new value for this property.</em>
 <a class="jxr_linenumber" name="L180" href="#L180">180</a> <em class="jxr_javadoccomment">		 * @return This object.</em>
 <a class="jxr_linenumber" name="L181" href="#L181">181</a> <em class="jxr_javadoccomment">		 */</em>
-<a class="jxr_linenumber" name="L182" href="#L182">182</a> 		<strong class="jxr_keyword">public</strong> Builder temporalFormat(<a name="TemporalFormat" href="../../../../org/apache/juneau/marshall/TemporalFormat.html#TemporalFormat">TemporalFormat</a> value) {
+<a class="jxr_linenumber" name="L182" href="#L182">182</a> 		<strong class="jxr_keyword">public</strong> Builder temporalFormat(TemporalFormat value) {
 <a class="jxr_linenumber" name="L183" href="#L183">183</a> 			temporalFormat = value;
 <a class="jxr_linenumber" name="L184" href="#L184">184</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L185" href="#L185">185</a> 		}
@@ -388,7 +388,7 @@
 <a class="jxr_linenumber" name="L380" href="#L380">380</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a name="PeriodFormat" href="../../../../org/apache/juneau/marshall/PeriodFormat.html#PeriodFormat">PeriodFormat</a> periodFormat;
 <a class="jxr_linenumber" name="L381" href="#L381">381</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a name="CalendarFormat" href="../../../../org/apache/juneau/marshall/CalendarFormat.html#CalendarFormat">CalendarFormat</a> calendarFormat;
 <a class="jxr_linenumber" name="L382" href="#L382">382</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> DateFormat dateFormat;
-<a class="jxr_linenumber" name="L383" href="#L383">383</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a name="TemporalFormat" href="../../../../org/apache/juneau/marshall/TemporalFormat.html#TemporalFormat">TemporalFormat</a> temporalFormat;
+<a class="jxr_linenumber" name="L383" href="#L383">383</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> TemporalFormat temporalFormat;
 <a class="jxr_linenumber" name="L384" href="#L384">384</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a name="TimeZoneFormat" href="../../../../org/apache/juneau/marshall/TimeZoneFormat.html#TimeZoneFormat">TimeZoneFormat</a> timeZoneFormat;
 <a class="jxr_linenumber" name="L385" href="#L385">385</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a name="LocaleFormat" href="../../../../org/apache/juneau/marshall/LocaleFormat.html#LocaleFormat">LocaleFormat</a> localeFormat;
 <a class="jxr_linenumber" name="L386" href="#L386">386</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a name="BinaryFormat" href="../../../../org/apache/juneau/marshall/BinaryFormat.html#BinaryFormat">BinaryFormat</a> binaryFormat;
@@ -466,7 +466,7 @@
 <a class="jxr_linenumber" name="L458" href="#L458">458</a> 		}
 <a class="jxr_linenumber" name="L459" href="#L459">459</a> 
 <a class="jxr_linenumber" name="L460" href="#L460">460</a> 		@Override <em class="jxr_comment">/* Overridden from Marshalled */</em>
-<a class="jxr_linenumber" name="L461" href="#L461">461</a> 		<strong class="jxr_keyword">public</strong> <a name="TemporalFormat" href="../../../../org/apache/juneau/marshall/TemporalFormat.html#TemporalFormat">TemporalFormat</a> temporalFormat() {
+<a class="jxr_linenumber" name="L461" href="#L461">461</a> 		<strong class="jxr_keyword">public</strong> TemporalFormat temporalFormat() {
 <a class="jxr_linenumber" name="L462" href="#L462">462</a> 			<strong class="jxr_keyword">return</strong> temporalFormat;
 <a class="jxr_linenumber" name="L463" href="#L463">463</a> 		}
 <a class="jxr_linenumber" name="L464" href="#L464">464</a> 

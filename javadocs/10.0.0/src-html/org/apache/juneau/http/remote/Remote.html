@@ -101,8 +101,8 @@
 <span class="source-line-no">088</span><span id="line-88">    *       Supports &lt;a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver"&gt;VarResolver.DEFAULT&lt;/a&gt;</span>
 <span class="source-line-no">089</span><span id="line-89">    *       (e.g. &lt;js&gt;"$S{mySystemProperty}"&lt;/js&gt;).</span>
 <span class="source-line-no">090</span><span id="line-90">    *    &lt;li class='note'&gt;</span>
-<span class="source-line-no">091</span><span id="line-91">    *       Honored by the next-generation engine (&lt;c&gt;RestClient.remote(...)&lt;/c&gt;) only; the classic engine currently</span>
-<span class="source-line-no">092</span><span id="line-92">    *       ignores this attribute.</span>
+<span class="source-line-no">091</span><span id="line-91">    *       Honored by both the next-generation engine (&lt;c&gt;RestClient.remote(...)&lt;/c&gt;) and the classic engine</span>
+<span class="source-line-no">092</span><span id="line-92">    *       (&lt;c&gt;RestClient.getRemote(...)&lt;/c&gt;).</span>
 <span class="source-line-no">093</span><span id="line-93">    * &lt;/ul&gt;</span>
 <span class="source-line-no">094</span><span id="line-94">    *</span>
 <span class="source-line-no">095</span><span id="line-95">    * @return The annotation value.</span>
@@ -128,8 +128,8 @@
 <span class="source-line-no">115</span><span id="line-115">    *       Supports &lt;a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver"&gt;VarResolver.DEFAULT&lt;/a&gt;</span>
 <span class="source-line-no">116</span><span id="line-116">    *       (e.g. &lt;js&gt;"$S{mySystemProperty}"&lt;/js&gt;).</span>
 <span class="source-line-no">117</span><span id="line-117">    *    &lt;li class='note'&gt;</span>
-<span class="source-line-no">118</span><span id="line-118">    *       Honored by the next-generation engine (&lt;c&gt;RestClient.remote(...)&lt;/c&gt;) only; the classic engine currently</span>
-<span class="source-line-no">119</span><span id="line-119">    *       ignores this attribute.</span>
+<span class="source-line-no">118</span><span id="line-118">    *       Honored by both the next-generation engine (&lt;c&gt;RestClient.remote(...)&lt;/c&gt;) and the classic engine</span>
+<span class="source-line-no">119</span><span id="line-119">    *       (&lt;c&gt;RestClient.getRemote(...)&lt;/c&gt;).</span>
 <span class="source-line-no">120</span><span id="line-120">    * &lt;/ul&gt;</span>
 <span class="source-line-no">121</span><span id="line-121">    *</span>
 <span class="source-line-no">122</span><span id="line-122">    * @return The annotation value.</span>
@@ -190,8 +190,8 @@
 <span class="source-line-no">177</span><span id="line-177">    *       Only &lt;c&gt;http&lt;/c&gt;/&lt;c&gt;https&lt;/c&gt; schemes are permitted when the override yields an absolute URL; other schemes</span>
 <span class="source-line-no">178</span><span id="line-178">    *       are rejected (SSRF guardrail).</span>
 <span class="source-line-no">179</span><span id="line-179">    *    &lt;li class='note'&gt;</span>
-<span class="source-line-no">180</span><span id="line-180">    *       Honored by the next-generation engine (&lt;c&gt;RestClient.remote(...)&lt;/c&gt;) only; the classic engine currently</span>
-<span class="source-line-no">181</span><span id="line-181">    *       ignores this attribute.</span>
+<span class="source-line-no">180</span><span id="line-180">    *       Honored by both the next-generation engine (&lt;c&gt;RestClient.remote(...)&lt;/c&gt;) and the classic engine</span>
+<span class="source-line-no">181</span><span id="line-181">    *       (&lt;c&gt;RestClient.getRemote(...)&lt;/c&gt;), with the same http/https-only scheme guard on both.</span>
 <span class="source-line-no">182</span><span id="line-182">    * &lt;/ul&gt;</span>
 <span class="source-line-no">183</span><span id="line-183">    *</span>
 <span class="source-line-no">184</span><span id="line-184">    * @return The annotation value.</span>
@@ -214,8 +214,8 @@
 <span class="source-line-no">201</span><span id="line-201">    *</span>
 <span class="source-line-no">202</span><span id="line-202">    * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</span>
 <span class="source-line-no">203</span><span id="line-203">    *    &lt;li class='note'&gt;</span>
-<span class="source-line-no">204</span><span id="line-204">    *       Honored by the next-generation engine (&lt;c&gt;RestClient.remote(...)&lt;/c&gt;) only; the classic engine currently</span>
-<span class="source-line-no">205</span><span id="line-205">    *       ignores this attribute.</span>
+<span class="source-line-no">204</span><span id="line-204">    *       Honored by both the next-generation engine (&lt;c&gt;RestClient.remote(...)&lt;/c&gt;) and the classic engine</span>
+<span class="source-line-no">205</span><span id="line-205">    *       (&lt;c&gt;RestClient.getRemote(...)&lt;/c&gt;).</span>
 <span class="source-line-no">206</span><span id="line-206">    * &lt;/ul&gt;</span>
 <span class="source-line-no">207</span><span id="line-207">    *</span>
 <span class="source-line-no">208</span><span id="line-208">    * @return The annotation value.</span>
@@ -235,8 +235,8 @@
 <span class="source-line-no">222</span><span id="line-222">    *</span>
 <span class="source-line-no">223</span><span id="line-223">    * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</span>
 <span class="source-line-no">224</span><span id="line-224">    *    &lt;li class='note'&gt;</span>
-<span class="source-line-no">225</span><span id="line-225">    *       Honored by the next-generation engine (&lt;c&gt;RestClient.remote(...)&lt;/c&gt;) only; the classic engine currently</span>
-<span class="source-line-no">226</span><span id="line-226">    *       ignores this attribute.</span>
+<span class="source-line-no">225</span><span id="line-225">    *       Honored by both the next-generation engine (&lt;c&gt;RestClient.remote(...)&lt;/c&gt;) and the classic engine</span>
+<span class="source-line-no">226</span><span id="line-226">    *       (&lt;c&gt;RestClient.getRemote(...)&lt;/c&gt;).</span>
 <span class="source-line-no">227</span><span id="line-227">    * &lt;/ul&gt;</span>
 <span class="source-line-no">228</span><span id="line-228">    *</span>
 <span class="source-line-no">229</span><span id="line-229">    * @return The annotation value.</span>
@@ -329,8 +329,8 @@
 <span class="source-line-no">316</span><span id="line-316">    *</span>
 <span class="source-line-no">317</span><span id="line-317">    * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</span>
 <span class="source-line-no">318</span><span id="line-318">    *    &lt;li class='note'&gt;</span>
-<span class="source-line-no">319</span><span id="line-319">    *       Honored by the next-generation engine (&lt;c&gt;RestClient.remote(...)&lt;/c&gt;) only; the classic engine currently</span>
-<span class="source-line-no">320</span><span id="line-320">    *       ignores this attribute.</span>
+<span class="source-line-no">319</span><span id="line-319">    *       Honored by both the next-generation engine (&lt;c&gt;RestClient.remote(...)&lt;/c&gt;) and the classic engine</span>
+<span class="source-line-no">320</span><span id="line-320">    *       (&lt;c&gt;RestClient.getRemote(...)&lt;/c&gt;).</span>
 <span class="source-line-no">321</span><span id="line-321">    * &lt;/ul&gt;</span>
 <span class="source-line-no">322</span><span id="line-322">    *</span>
 <span class="source-line-no">323</span><span id="line-323">    * @return The annotation value.</span>
@@ -346,8 +346,8 @@
 <span class="source-line-no">333</span><span id="line-333">    *</span>
 <span class="source-line-no">334</span><span id="line-334">    * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</span>
 <span class="source-line-no">335</span><span id="line-335">    *    &lt;li class='note'&gt;</span>
-<span class="source-line-no">336</span><span id="line-336">    *       Honored by the next-generation engine (&lt;c&gt;RestClient.remote(...)&lt;/c&gt;) only; the classic engine currently</span>
-<span class="source-line-no">337</span><span id="line-337">    *       ignores this attribute.</span>
+<span class="source-line-no">336</span><span id="line-336">    *       Honored by both the next-generation engine (&lt;c&gt;RestClient.remote(...)&lt;/c&gt;) and the classic engine</span>
+<span class="source-line-no">337</span><span id="line-337">    *       (&lt;c&gt;RestClient.getRemote(...)&lt;/c&gt;).</span>
 <span class="source-line-no">338</span><span id="line-338">    * &lt;/ul&gt;</span>
 <span class="source-line-no">339</span><span id="line-339">    *</span>
 <span class="source-line-no">340</span><span id="line-340">    * @return The annotation value.</span>
@@ -364,8 +364,8 @@
 <span class="source-line-no">351</span><span id="line-351">    *</span>
 <span class="source-line-no">352</span><span id="line-352">    * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</span>
 <span class="source-line-no">353</span><span id="line-353">    *    &lt;li class='note'&gt;</span>
-<span class="source-line-no">354</span><span id="line-354">    *       Honored by the next-generation engine (&lt;c&gt;RestClient.remote(...)&lt;/c&gt;) only; the classic engine currently</span>
-<span class="source-line-no">355</span><span id="line-355">    *       ignores this attribute.</span>
+<span class="source-line-no">354</span><span id="line-354">    *       Honored by both the next-generation engine (&lt;c&gt;RestClient.remote(...)&lt;/c&gt;) and the classic engine</span>
+<span class="source-line-no">355</span><span id="line-355">    *       (&lt;c&gt;RestClient.getRemote(...)&lt;/c&gt;).</span>
 <span class="source-line-no">356</span><span id="line-356">    * &lt;/ul&gt;</span>
 <span class="source-line-no">357</span><span id="line-357">    *</span>
 <span class="source-line-no">358</span><span id="line-358">    * @return The annotation value.</span>
@@ -382,14 +382,42 @@
 <span class="source-line-no">369</span><span id="line-369">    *</span>
 <span class="source-line-no">370</span><span id="line-370">    * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</span>
 <span class="source-line-no">371</span><span id="line-371">    *    &lt;li class='note'&gt;</span>
-<span class="source-line-no">372</span><span id="line-372">    *       Honored by the next-generation engine (&lt;c&gt;RestClient.remote(...)&lt;/c&gt;) only; the classic engine currently</span>
-<span class="source-line-no">373</span><span id="line-373">    *       ignores this attribute.</span>
+<span class="source-line-no">372</span><span id="line-372">    *       Honored by both the next-generation engine (&lt;c&gt;RestClient.remote(...)&lt;/c&gt;) and the classic engine</span>
+<span class="source-line-no">373</span><span id="line-373">    *       (&lt;c&gt;RestClient.getRemote(...)&lt;/c&gt;).</span>
 <span class="source-line-no">374</span><span id="line-374">    * &lt;/ul&gt;</span>
 <span class="source-line-no">375</span><span id="line-375">    *</span>
 <span class="source-line-no">376</span><span id="line-376">    * @return The annotation value.</span>
 <span class="source-line-no">377</span><span id="line-377">    */</span>
 <span class="source-line-no">378</span><span id="line-378">   boolean throwOnError() default false;</span>
-<span class="source-line-no">379</span><span id="line-379">}</span>
+<span class="source-line-no">379</span><span id="line-379"></span>
+<span class="source-line-no">380</span><span id="line-380">   /**</span>
+<span class="source-line-no">381</span><span id="line-381">    * Opts this interface's absolute {@code @Remote}/{@code @Url}/{@code baseUrl()} targets out of the default</span>
+<span class="source-line-no">382</span><span id="line-382">    * deny-private SSRF guardrail, applied to every method on the proxy.</span>
+<span class="source-line-no">383</span><span id="line-383">    *</span>
+<span class="source-line-no">384</span><span id="line-384">    * &lt;p&gt;</span>
+<span class="source-line-no">385</span><span id="line-385">    * By default, an absolute &lt;c&gt;http&lt;/c&gt;/&lt;c&gt;https&lt;/c&gt; URL supplied via {@link #baseUrl()}, an {@code @Url}</span>
+<span class="source-line-no">386</span><span id="line-386">    * parameter, or an already-absolute {@link #path()}/{@link #value()} is rejected &amp;mdash; both at pre-check time</span>
+<span class="source-line-no">387</span><span id="line-387">    * and at connect time via resolved-address pinning, re-checked on every followed redirect &amp;mdash; when it targets</span>
+<span class="source-line-no">388</span><span id="line-388">    * a loopback, RFC1918/link-local, IPv6 unique-local, or cloud-metadata address.  Setting this to &lt;jk&gt;true&lt;/jk&gt;</span>
+<span class="source-line-no">389</span><span id="line-389">    * disables that check for local-dev/intranet targets that are intentionally private.</span>
+<span class="source-line-no">390</span><span id="line-390">    *</span>
+<span class="source-line-no">391</span><span id="line-391">    * &lt;p&gt;</span>
+<span class="source-line-no">392</span><span id="line-392">    * The effective value is the logical OR of this annotation value, the {@code RestClient} builder's</span>
+<span class="source-line-no">393</span><span id="line-393">    * {@code allowPrivateUrls(...)} setting, and the &lt;js&gt;"RestClient.allowPrivateUrls"&lt;/js&gt; system property: any one</span>
+<span class="source-line-no">394</span><span id="line-394">    * of the three opting in is sufficient.</span>
+<span class="source-line-no">395</span><span id="line-395">    *</span>
+<span class="source-line-no">396</span><span id="line-396">    * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">397</span><span id="line-397">    *    &lt;li class='note'&gt;</span>
+<span class="source-line-no">398</span><span id="line-398">    *       Honored by both the next-generation engine (&lt;c&gt;RestClient.remote(...)&lt;/c&gt;) and the classic engine</span>
+<span class="source-line-no">399</span><span id="line-399">    *       (&lt;c&gt;RestClient.getRemote(...)&lt;/c&gt;).</span>
+<span class="source-line-no">400</span><span id="line-400">    *    &lt;li class='note'&gt;</span>
+<span class="source-line-no">401</span><span id="line-401">    *       Does not affect the http/https-only scheme guard, which always applies.</span>
+<span class="source-line-no">402</span><span id="line-402">    * &lt;/ul&gt;</span>
+<span class="source-line-no">403</span><span id="line-403">    *</span>
+<span class="source-line-no">404</span><span id="line-404">    * @return The annotation value.</span>
+<span class="source-line-no">405</span><span id="line-405">    */</span>
+<span class="source-line-no">406</span><span id="line-406">   boolean allowPrivateUrls() default false;</span>
+<span class="source-line-no">407</span><span id="line-407">}</span>
 
 
 

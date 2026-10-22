@@ -651,43 +651,75 @@
 <span class="source-line-no">638</span><span id="line-638">    * Disable sorted bean properties.</span>
 <span class="source-line-no">639</span><span id="line-639">    *</span>
 <span class="source-line-no">640</span><span id="line-640">    * &lt;p&gt;</span>
-<span class="source-line-no">641</span><span id="line-641">    * When &lt;jk&gt;true&lt;/jk&gt;, bean properties are serialized and accessed in natural JVM order instead of the default alphabetical order.</span>
-<span class="source-line-no">642</span><span id="line-642">    *</span>
-<span class="source-line-no">643</span><span id="line-643">    * &lt;ul class='values'&gt;</span>
-<span class="source-line-no">644</span><span id="line-644">    *    &lt;li&gt;&lt;js&gt;"true"&lt;/js&gt;</span>
-<span class="source-line-no">645</span><span id="line-645">    *    &lt;li&gt;&lt;js&gt;"false"&lt;/js&gt; (default — properties are sorted alphabetically)</span>
-<span class="source-line-no">646</span><span id="line-646">    * &lt;/ul&gt;</span>
-<span class="source-line-no">647</span><span id="line-647">    *</span>
-<span class="source-line-no">648</span><span id="line-648">    * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</span>
-<span class="source-line-no">649</span><span id="line-649">    *    &lt;li&gt;</span>
-<span class="source-line-no">650</span><span id="line-650">    *       Supports &lt;a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver"&gt;VarResolver.DEFAULT&lt;/a&gt; (e.g. &lt;js&gt;"$C{myConfigVar}"&lt;/js&gt;).</span>
-<span class="source-line-no">651</span><span id="line-651">    * &lt;/ul&gt;</span>
-<span class="source-line-no">652</span><span id="line-652">    *</span>
-<span class="source-line-no">653</span><span id="line-653">    * @return The annotation value.</span>
-<span class="source-line-no">654</span><span id="line-654">    */</span>
-<span class="source-line-no">655</span><span id="line-655">   String unsortedProperties() default "";</span>
-<span class="source-line-no">656</span><span id="line-656"></span>
-<span class="source-line-no">657</span><span id="line-657">   /**</span>
-<span class="source-line-no">658</span><span id="line-658">    * Use Java Introspector.</span>
-<span class="source-line-no">659</span><span id="line-659">    *</span>
-<span class="source-line-no">660</span><span id="line-660">    * &lt;p&gt;</span>
-<span class="source-line-no">661</span><span id="line-661">    * Using the built-in Java bean introspector will not pick up fields or non-standard getters/setters.</span>
-<span class="source-line-no">662</span><span id="line-662">    * &lt;br&gt;Most {@link BeanType @BeanType} annotations will be ignored.</span>
-<span class="source-line-no">663</span><span id="line-663">    *</span>
-<span class="source-line-no">664</span><span id="line-664">    * &lt;ul class='values'&gt;</span>
-<span class="source-line-no">665</span><span id="line-665">    *    &lt;li&gt;&lt;js&gt;"true"&lt;/js&gt;</span>
-<span class="source-line-no">666</span><span id="line-666">    *    &lt;li&gt;&lt;js&gt;"false"&lt;/js&gt; (default)</span>
-<span class="source-line-no">667</span><span id="line-667">    * &lt;/ul&gt;</span>
-<span class="source-line-no">668</span><span id="line-668">    *</span>
-<span class="source-line-no">669</span><span id="line-669">    * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</span>
-<span class="source-line-no">670</span><span id="line-670">    *    &lt;li class='note'&gt;</span>
-<span class="source-line-no">671</span><span id="line-671">    *       Supports &lt;a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver"&gt;VarResolver.DEFAULT&lt;/a&gt; (e.g. &lt;js&gt;"$C{myConfigVar}"&lt;/js&gt;).</span>
-<span class="source-line-no">672</span><span id="line-672">    * &lt;/ul&gt;</span>
-<span class="source-line-no">673</span><span id="line-673">    *</span>
-<span class="source-line-no">674</span><span id="line-674">    * @return The annotation value.</span>
-<span class="source-line-no">675</span><span id="line-675">    */</span>
-<span class="source-line-no">676</span><span id="line-676">   String useJavaBeanIntrospector() default "";</span>
-<span class="source-line-no">677</span><span id="line-677">}</span>
+<span class="source-line-no">641</span><span id="line-641">    * When &lt;jk&gt;true&lt;/jk&gt;, bean properties are serialized and accessed in declaration order instead of the default</span>
+<span class="source-line-no">642</span><span id="line-642">    * alphabetical order: record component order for records, field declaration order (superclass first) for other</span>
+<span class="source-line-no">643</span><span id="line-643">    * classes, then method-only properties alphabetically.</span>
+<span class="source-line-no">644</span><span id="line-644">    *</span>
+<span class="source-line-no">645</span><span id="line-645">    * &lt;ul class='values'&gt;</span>
+<span class="source-line-no">646</span><span id="line-646">    *    &lt;li&gt;&lt;js&gt;"true"&lt;/js&gt;</span>
+<span class="source-line-no">647</span><span id="line-647">    *    &lt;li&gt;&lt;js&gt;"false"&lt;/js&gt; (default — properties are sorted alphabetically)</span>
+<span class="source-line-no">648</span><span id="line-648">    * &lt;/ul&gt;</span>
+<span class="source-line-no">649</span><span id="line-649">    *</span>
+<span class="source-line-no">650</span><span id="line-650">    * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">651</span><span id="line-651">    *    &lt;li&gt;</span>
+<span class="source-line-no">652</span><span id="line-652">    *       Supports &lt;a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver"&gt;VarResolver.DEFAULT&lt;/a&gt; (e.g. &lt;js&gt;"$C{myConfigVar}"&lt;/js&gt;).</span>
+<span class="source-line-no">653</span><span id="line-653">    * &lt;/ul&gt;</span>
+<span class="source-line-no">654</span><span id="line-654">    *</span>
+<span class="source-line-no">655</span><span id="line-655">    * @return The annotation value.</span>
+<span class="source-line-no">656</span><span id="line-656">    */</span>
+<span class="source-line-no">657</span><span id="line-657">   String unsortedProperties() default "";</span>
+<span class="source-line-no">658</span><span id="line-658"></span>
+<span class="source-line-no">659</span><span id="line-659">   /**</span>
+<span class="source-line-no">660</span><span id="line-660">    * Record component order.</span>
+<span class="source-line-no">661</span><span id="line-661">    *</span>
+<span class="source-line-no">662</span><span id="line-662">    * &lt;p&gt;</span>
+<span class="source-line-no">663</span><span id="line-663">    * When &lt;jk&gt;true&lt;/jk&gt;, the properties of {@link Record} beans use record component (declaration) order even when</span>
+<span class="source-line-no">664</span><span id="line-664">    * other beans are sorted alphabetically.  Non-record beans are unaffected.</span>
+<span class="source-line-no">665</span><span id="line-665">    *</span>
+<span class="source-line-no">666</span><span id="line-666">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">667</span><span id="line-667">    * &lt;p class='bjava'&gt;</span>
+<span class="source-line-no">668</span><span id="line-668">    *    &lt;ja&gt;@BeanConfig&lt;/ja&gt;(recordComponentOrder=&lt;js&gt;"true"&lt;/js&gt;)</span>
+<span class="source-line-no">669</span><span id="line-669">    *    &lt;jk&gt;public class&lt;/jk&gt; MyRestResource { ... }</span>
+<span class="source-line-no">670</span><span id="line-670">    *</span>
+<span class="source-line-no">671</span><span id="line-671">    *    &lt;jk&gt;public record&lt;/jk&gt; Person(String &lt;jv&gt;name&lt;/jv&gt;, &lt;jk&gt;int&lt;/jk&gt; &lt;jv&gt;age&lt;/jv&gt;) {}</span>
+<span class="source-line-no">672</span><span id="line-672">    *    &lt;jc&gt;// Serialized as {"name":"Alice","age":30} instead of {"age":30,"name":"Alice"}&lt;/jc&gt;</span>
+<span class="source-line-no">673</span><span id="line-673">    * &lt;/p&gt;</span>
+<span class="source-line-no">674</span><span id="line-674">    *</span>
+<span class="source-line-no">675</span><span id="line-675">    * &lt;ul class='values'&gt;</span>
+<span class="source-line-no">676</span><span id="line-676">    *    &lt;li&gt;&lt;js&gt;"true"&lt;/js&gt;</span>
+<span class="source-line-no">677</span><span id="line-677">    *    &lt;li&gt;&lt;js&gt;"false"&lt;/js&gt; (default: record properties are sorted alphabetically like other beans)</span>
+<span class="source-line-no">678</span><span id="line-678">    * &lt;/ul&gt;</span>
+<span class="source-line-no">679</span><span id="line-679">    *</span>
+<span class="source-line-no">680</span><span id="line-680">    * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">681</span><span id="line-681">    *    &lt;li&gt;</span>
+<span class="source-line-no">682</span><span id="line-682">    *       Supports &lt;a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver"&gt;VarResolver.DEFAULT&lt;/a&gt; (e.g. &lt;js&gt;"$C{myConfigVar}"&lt;/js&gt;).</span>
+<span class="source-line-no">683</span><span id="line-683">    * &lt;/ul&gt;</span>
+<span class="source-line-no">684</span><span id="line-684">    *</span>
+<span class="source-line-no">685</span><span id="line-685">    * @return The annotation value.</span>
+<span class="source-line-no">686</span><span id="line-686">    */</span>
+<span class="source-line-no">687</span><span id="line-687">   String recordComponentOrder() default "";</span>
+<span class="source-line-no">688</span><span id="line-688"></span>
+<span class="source-line-no">689</span><span id="line-689">   /**</span>
+<span class="source-line-no">690</span><span id="line-690">    * Use Java Introspector.</span>
+<span class="source-line-no">691</span><span id="line-691">    *</span>
+<span class="source-line-no">692</span><span id="line-692">    * &lt;p&gt;</span>
+<span class="source-line-no">693</span><span id="line-693">    * Using the built-in Java bean introspector will not pick up fields or non-standard getters/setters.</span>
+<span class="source-line-no">694</span><span id="line-694">    * &lt;br&gt;Most {@link BeanType @BeanType} annotations will be ignored.</span>
+<span class="source-line-no">695</span><span id="line-695">    *</span>
+<span class="source-line-no">696</span><span id="line-696">    * &lt;ul class='values'&gt;</span>
+<span class="source-line-no">697</span><span id="line-697">    *    &lt;li&gt;&lt;js&gt;"true"&lt;/js&gt;</span>
+<span class="source-line-no">698</span><span id="line-698">    *    &lt;li&gt;&lt;js&gt;"false"&lt;/js&gt; (default)</span>
+<span class="source-line-no">699</span><span id="line-699">    * &lt;/ul&gt;</span>
+<span class="source-line-no">700</span><span id="line-700">    *</span>
+<span class="source-line-no">701</span><span id="line-701">    * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">702</span><span id="line-702">    *    &lt;li class='note'&gt;</span>
+<span class="source-line-no">703</span><span id="line-703">    *       Supports &lt;a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver"&gt;VarResolver.DEFAULT&lt;/a&gt; (e.g. &lt;js&gt;"$C{myConfigVar}"&lt;/js&gt;).</span>
+<span class="source-line-no">704</span><span id="line-704">    * &lt;/ul&gt;</span>
+<span class="source-line-no">705</span><span id="line-705">    *</span>
+<span class="source-line-no">706</span><span id="line-706">    * @return The annotation value.</span>
+<span class="source-line-no">707</span><span id="line-707">    */</span>
+<span class="source-line-no">708</span><span id="line-708">   String useJavaBeanIntrospector() default "";</span>
+<span class="source-line-no">709</span><span id="line-709">}</span>
 
 
 

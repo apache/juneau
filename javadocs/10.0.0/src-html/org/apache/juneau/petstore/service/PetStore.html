@@ -33,295 +33,625 @@
 <span class="source-line-no">020</span><span id="line-20"></span>
 <span class="source-line-no">021</span><span id="line-21">import java.io.*;</span>
 <span class="source-line-no">022</span><span id="line-22">import java.nio.charset.*;</span>
-<span class="source-line-no">023</span><span id="line-23">import java.util.*;</span>
-<span class="source-line-no">024</span><span id="line-24">import java.util.concurrent.*;</span>
-<span class="source-line-no">025</span><span id="line-25">import java.util.concurrent.atomic.*;</span>
-<span class="source-line-no">026</span><span id="line-26"></span>
-<span class="source-line-no">027</span><span id="line-27">import org.apache.juneau.marshall.marshaller.*;</span>
-<span class="source-line-no">028</span><span id="line-28">import org.apache.juneau.petstore.dto.*;</span>
-<span class="source-line-no">029</span><span id="line-29"></span>
-<span class="source-line-no">030</span><span id="line-30">/**</span>
-<span class="source-line-no">031</span><span id="line-31"> * In-memory {@link Pet}/{@link Order}/{@link User} store seeded from classpath JSON.</span>
-<span class="source-line-no">032</span><span id="line-32"> *</span>
-<span class="source-line-no">033</span><span id="line-33"> * &lt;p&gt;</span>
-<span class="source-line-no">034</span><span id="line-34"> * Backed by {@link ConcurrentHashMap}s; pet and order IDs auto-assign via {@link AtomicLong} starting from</span>
-<span class="source-line-no">035</span><span id="line-35"> * the highest seeded ID plus one (or {@code 1} if no seeds existed).  Seed files live on the classpath at</span>
-<span class="source-line-no">036</span><span id="line-36"> * {@code petstore/init/{Pets,Orders,Users}.json} and are loaded lazily on first access.</span>
-<span class="source-line-no">037</span><span id="line-37"> *</span>
-<span class="source-line-no">038</span><span id="line-38"> * &lt;p&gt;</span>
-<span class="source-line-no">039</span><span id="line-39"> * This is a sample/demo store — there is no persistence, no transactions, and no replication.  Restart wipes</span>
-<span class="source-line-no">040</span><span id="line-40"> * state back to the seeded baseline.</span>
-<span class="source-line-no">041</span><span id="line-41"> *</span>
-<span class="source-line-no">042</span><span id="line-42"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
-<span class="source-line-no">043</span><span id="line-43"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauPetstore"&gt;juneau-petstore&lt;/a&gt;</span>
-<span class="source-line-no">044</span><span id="line-44"> * &lt;/ul&gt;</span>
-<span class="source-line-no">045</span><span id="line-45"> */</span>
-<span class="source-line-no">046</span><span id="line-46">public class PetStore {</span>
-<span class="source-line-no">047</span><span id="line-47"></span>
-<span class="source-line-no">048</span><span id="line-48">   private static final String SEED_PETS = "petstore/init/Pets.json";</span>
-<span class="source-line-no">049</span><span id="line-49">   private static final String SEED_ORDERS = "petstore/init/Orders.json";</span>
-<span class="source-line-no">050</span><span id="line-50">   private static final String SEED_USERS = "petstore/init/Users.json";</span>
-<span class="source-line-no">051</span><span id="line-51"></span>
-<span class="source-line-no">052</span><span id="line-52">   private final Map&lt;Long,Pet&gt; pets = new ConcurrentHashMap&lt;&gt;();</span>
-<span class="source-line-no">053</span><span id="line-53">   private final Map&lt;Long,Order&gt; orders = new ConcurrentHashMap&lt;&gt;();</span>
-<span class="source-line-no">054</span><span id="line-54">   private final Map&lt;String,User&gt; users = new ConcurrentHashMap&lt;&gt;();</span>
-<span class="source-line-no">055</span><span id="line-55"></span>
-<span class="source-line-no">056</span><span id="line-56">   private final AtomicLong nextPetId = new AtomicLong();</span>
-<span class="source-line-no">057</span><span id="line-57">   private final AtomicLong nextOrderId = new AtomicLong();</span>
-<span class="source-line-no">058</span><span id="line-58"></span>
-<span class="source-line-no">059</span><span id="line-59">   /**</span>
-<span class="source-line-no">060</span><span id="line-60">    * Constructor.</span>
-<span class="source-line-no">061</span><span id="line-61">    *</span>
-<span class="source-line-no">062</span><span id="line-62">    * &lt;p&gt;</span>
-<span class="source-line-no">063</span><span id="line-63">    * Eagerly loads the bundled classpath seed data.</span>
-<span class="source-line-no">064</span><span id="line-64">    */</span>
-<span class="source-line-no">065</span><span id="line-65">   public PetStore() {</span>
-<span class="source-line-no">066</span><span id="line-66">      var seededPets = loadList(SEED_PETS, Pet.class);</span>
-<span class="source-line-no">067</span><span id="line-67">      var maxPetId = 0L;</span>
-<span class="source-line-no">068</span><span id="line-68">      for (var p : seededPets) {</span>
-<span class="source-line-no">069</span><span id="line-69">         if (p.getId() == 0L)</span>
-<span class="source-line-no">070</span><span id="line-70">            p.setId(++maxPetId);</span>
-<span class="source-line-no">071</span><span id="line-71">         else</span>
-<span class="source-line-no">072</span><span id="line-72">            maxPetId = Math.max(maxPetId, p.getId());</span>
-<span class="source-line-no">073</span><span id="line-73">         pets.put(p.getId(), p);</span>
-<span class="source-line-no">074</span><span id="line-74">      }</span>
-<span class="source-line-no">075</span><span id="line-75">      nextPetId.set(maxPetId);</span>
+<span class="source-line-no">023</span><span id="line-23">import java.time.*;</span>
+<span class="source-line-no">024</span><span id="line-24">import java.util.*;</span>
+<span class="source-line-no">025</span><span id="line-25">import java.util.concurrent.*;</span>
+<span class="source-line-no">026</span><span id="line-26">import java.util.concurrent.atomic.*;</span>
+<span class="source-line-no">027</span><span id="line-27">import java.util.function.*;</span>
+<span class="source-line-no">028</span><span id="line-28"></span>
+<span class="source-line-no">029</span><span id="line-29">import org.apache.juneau.commons.beanquery.*;</span>
+<span class="source-line-no">030</span><span id="line-30">import org.apache.juneau.marshall.marshaller.*;</span>
+<span class="source-line-no">031</span><span id="line-31">import org.apache.juneau.petstore.dto.*;</span>
+<span class="source-line-no">032</span><span id="line-32"></span>
+<span class="source-line-no">033</span><span id="line-33">/**</span>
+<span class="source-line-no">034</span><span id="line-34"> * In-memory {@link Pet}/{@link Order}/{@link User} store seeded from classpath JSON.</span>
+<span class="source-line-no">035</span><span id="line-35"> *</span>
+<span class="source-line-no">036</span><span id="line-36"> * &lt;p&gt;</span>
+<span class="source-line-no">037</span><span id="line-37"> * Backed by {@link ConcurrentHashMap}s; pet and order IDs auto-assign via {@link AtomicLong} starting from</span>
+<span class="source-line-no">038</span><span id="line-38"> * the highest seeded ID plus one (or {@code 1} if no seeds existed).  Seed files live on the classpath at</span>
+<span class="source-line-no">039</span><span id="line-39"> * {@code petstore/init/{Pets,Orders,Users}.json} and are loaded lazily on first access.</span>
+<span class="source-line-no">040</span><span id="line-40"> *</span>
+<span class="source-line-no">041</span><span id="line-41"> * &lt;p&gt;</span>
+<span class="source-line-no">042</span><span id="line-42"> * This is a sample/demo store — there is no persistence, no transactions, and no replication.  Restart wipes</span>
+<span class="source-line-no">043</span><span id="line-43"> * state back to the seeded baseline (and clears the audit trail).</span>
+<span class="source-line-no">044</span><span id="line-44"> *</span>
+<span class="source-line-no">045</span><span id="line-45"> * &lt;p&gt;</span>
+<span class="source-line-no">046</span><span id="line-46"> * Every successful create, update or delete is recorded in the audit trail; see {@link #getAudit()}.</span>
+<span class="source-line-no">047</span><span id="line-47"> *</span>
+<span class="source-line-no">048</span><span id="line-48"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">049</span><span id="line-49"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauPetstore"&gt;juneau-petstore&lt;/a&gt;</span>
+<span class="source-line-no">050</span><span id="line-50"> * &lt;/ul&gt;</span>
+<span class="source-line-no">051</span><span id="line-51"> */</span>
+<span class="source-line-no">052</span><span id="line-52">@SuppressWarnings({</span>
+<span class="source-line-no">053</span><span id="line-53">   "resource" // Returns an owned session; the caller closes it.</span>
+<span class="source-line-no">054</span><span id="line-54">})</span>
+<span class="source-line-no">055</span><span id="line-55">public class PetStore {</span>
+<span class="source-line-no">056</span><span id="line-56"></span>
+<span class="source-line-no">057</span><span id="line-57">   private static final String ACTION_CREATE = "CREATE";</span>
+<span class="source-line-no">058</span><span id="line-58">   private static final String ACTION_UPDATE = "UPDATE";</span>
+<span class="source-line-no">059</span><span id="line-59">   private static final String ACTION_DELETE = "DELETE";</span>
+<span class="source-line-no">060</span><span id="line-60">   private static final String ENTITY_ORDER = "Order";</span>
+<span class="source-line-no">061</span><span id="line-61">   private static final String SEED_PETS = "petstore/init/Pets.json";</span>
+<span class="source-line-no">062</span><span id="line-62">   private static final String SEED_ORDERS = "petstore/init/Orders.json";</span>
+<span class="source-line-no">063</span><span id="line-63">   private static final String SEED_USERS = "petstore/init/Users.json";</span>
+<span class="source-line-no">064</span><span id="line-64"></span>
+<span class="source-line-no">065</span><span id="line-65">   /** Actor recorded for mutations made through the {@code /petstore} API. */</span>
+<span class="source-line-no">066</span><span id="line-66">   public static final String ACTOR_API = "api";</span>
+<span class="source-line-no">067</span><span id="line-67"></span>
+<span class="source-line-no">068</span><span id="line-68">   /** The most pets {@link #restock} adds for one species in one call. */</span>
+<span class="source-line-no">069</span><span id="line-69">   public static final int MAX_RESTOCK_PER_SPECIES = 1000;</span>
+<span class="source-line-no">070</span><span id="line-70"></span>
+<span class="source-line-no">071</span><span id="line-71">   /** Query context over pets; {@code tags} and {@code photo} are not searchable. */</span>
+<span class="source-line-no">072</span><span id="line-72">   public static final InMemoryBeanQueryContext&lt;Pet&gt; PET_QUERY = InMemoryBeanQueryContext.create(Pet.class).exclude("tags", "photo").build();</span>
+<span class="source-line-no">073</span><span id="line-73"></span>
+<span class="source-line-no">074</span><span id="line-74">   /** Query context over orders. */</span>
+<span class="source-line-no">075</span><span id="line-75">   public static final InMemoryBeanQueryContext&lt;Order&gt; ORDER_QUERY = InMemoryBeanQueryContext.create(Order.class).build();</span>
 <span class="source-line-no">076</span><span id="line-76"></span>
-<span class="source-line-no">077</span><span id="line-77">      var seededOrders = loadList(SEED_ORDERS, Order.class);</span>
-<span class="source-line-no">078</span><span id="line-78">      var maxOrderId = 0L;</span>
-<span class="source-line-no">079</span><span id="line-79">      for (var o : seededOrders) {</span>
-<span class="source-line-no">080</span><span id="line-80">         if (o.getId() == 0L)</span>
-<span class="source-line-no">081</span><span id="line-81">            o.setId(++maxOrderId);</span>
-<span class="source-line-no">082</span><span id="line-82">         else</span>
-<span class="source-line-no">083</span><span id="line-83">            maxOrderId = Math.max(maxOrderId, o.getId());</span>
-<span class="source-line-no">084</span><span id="line-84">         orders.put(o.getId(), o);</span>
-<span class="source-line-no">085</span><span id="line-85">      }</span>
-<span class="source-line-no">086</span><span id="line-86">      nextOrderId.set(maxOrderId);</span>
-<span class="source-line-no">087</span><span id="line-87"></span>
-<span class="source-line-no">088</span><span id="line-88">      var seededUsers = loadList(SEED_USERS, User.class);</span>
-<span class="source-line-no">089</span><span id="line-89">      for (var u : seededUsers)</span>
-<span class="source-line-no">090</span><span id="line-90">         users.put(u.getUsername(), u);</span>
-<span class="source-line-no">091</span><span id="line-91">   }</span>
+<span class="source-line-no">077</span><span id="line-77">   /** Query context over users; {@code password} is write-only on {@link User}, so it is neither searchable nor a column. */</span>
+<span class="source-line-no">078</span><span id="line-78">   public static final InMemoryBeanQueryContext&lt;User&gt; USER_QUERY = InMemoryBeanQueryContext.create(User.class).build();</span>
+<span class="source-line-no">079</span><span id="line-79"></span>
+<span class="source-line-no">080</span><span id="line-80">   /** Query context over the audit trail. */</span>
+<span class="source-line-no">081</span><span id="line-81">   public static final InMemoryBeanQueryContext&lt;AuditEntry&gt; AUDIT_QUERY = InMemoryBeanQueryContext.create(AuditEntry.class).build();</span>
+<span class="source-line-no">082</span><span id="line-82"></span>
+<span class="source-line-no">083</span><span id="line-83">   /** Query context over staged changes. */</span>
+<span class="source-line-no">084</span><span id="line-84">   public static final InMemoryBeanQueryContext&lt;PendingChange&gt; CHANGE_QUERY = InMemoryBeanQueryContext.create(PendingChange.class).build();</span>
+<span class="source-line-no">085</span><span id="line-85"></span>
+<span class="source-line-no">086</span><span id="line-86">   private final Map&lt;Long,Pet&gt; pets = new ConcurrentHashMap&lt;&gt;();</span>
+<span class="source-line-no">087</span><span id="line-87">   private final Map&lt;Long,Order&gt; orders = new ConcurrentHashMap&lt;&gt;();</span>
+<span class="source-line-no">088</span><span id="line-88">   private final Map&lt;String,User&gt; users = new ConcurrentHashMap&lt;&gt;();</span>
+<span class="source-line-no">089</span><span id="line-89"></span>
+<span class="source-line-no">090</span><span id="line-90">   private final AtomicLong nextPetId = new AtomicLong();</span>
+<span class="source-line-no">091</span><span id="line-91">   private final AtomicLong nextOrderId = new AtomicLong();</span>
 <span class="source-line-no">092</span><span id="line-92"></span>
-<span class="source-line-no">093</span><span id="line-93">   private static &lt;T&gt; List&lt;T&gt; loadList(String resourcePath, Class&lt;T&gt; elementType) {</span>
-<span class="source-line-no">094</span><span id="line-94">      var loader = PetStore.class.getClassLoader();</span>
-<span class="source-line-no">095</span><span id="line-95">      try (var in = loader.getResourceAsStream(resourcePath)) {</span>
-<span class="source-line-no">096</span><span id="line-96">         if (in == null)</span>
-<span class="source-line-no">097</span><span id="line-97">            return l();</span>
-<span class="source-line-no">098</span><span id="line-98">         try (var reader = new InputStreamReader(in, StandardCharsets.UTF_8)) {</span>
-<span class="source-line-no">099</span><span id="line-99">            return Json5.DEFAULT.read(reader, List.class, elementType);</span>
-<span class="source-line-no">100</span><span id="line-100">         }</span>
-<span class="source-line-no">101</span><span id="line-101">      } catch (Exception e) {</span>
-<span class="source-line-no">102</span><span id="line-102">         throw brex(e, "Failed to load petstore seed resource '%s'", resourcePath);</span>
-<span class="source-line-no">103</span><span id="line-103">      }</span>
-<span class="source-line-no">104</span><span id="line-104">   }</span>
-<span class="source-line-no">105</span><span id="line-105"></span>
-<span class="source-line-no">106</span><span id="line-106">   //------------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">107</span><span id="line-107">   // Pets</span>
-<span class="source-line-no">108</span><span id="line-108">   //------------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">109</span><span id="line-109"></span>
-<span class="source-line-no">110</span><span id="line-110">   /**</span>
-<span class="source-line-no">111</span><span id="line-111">    * Returns all pets.</span>
-<span class="source-line-no">112</span><span id="line-112">    *</span>
-<span class="source-line-no">113</span><span id="line-113">    * @return All pets, in arbitrary order.  Never &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">114</span><span id="line-114">    */</span>
-<span class="source-line-no">115</span><span id="line-115">   public Collection&lt;Pet&gt; getPets() {</span>
-<span class="source-line-no">116</span><span id="line-116">      // Return an immutable snapshot so callers can't mutate the backing store through the returned collection.</span>
-<span class="source-line-no">117</span><span id="line-117">      return List.copyOf(pets.values());</span>
-<span class="source-line-no">118</span><span id="line-118">   }</span>
-<span class="source-line-no">119</span><span id="line-119"></span>
-<span class="source-line-no">120</span><span id="line-120">   /**</span>
-<span class="source-line-no">121</span><span id="line-121">    * Returns a pet by ID.</span>
-<span class="source-line-no">122</span><span id="line-122">    *</span>
-<span class="source-line-no">123</span><span id="line-123">    * @param id The pet ID.</span>
-<span class="source-line-no">124</span><span id="line-124">    * @return The pet, or &lt;jk&gt;null&lt;/jk&gt; if not found.</span>
-<span class="source-line-no">125</span><span id="line-125">    */</span>
-<span class="source-line-no">126</span><span id="line-126">   public Pet getPet(long id) {</span>
-<span class="source-line-no">127</span><span id="line-127">      return pets.get(id);</span>
-<span class="source-line-no">128</span><span id="line-128">   }</span>
-<span class="source-line-no">129</span><span id="line-129"></span>
-<span class="source-line-no">130</span><span id="line-130">   /**</span>
-<span class="source-line-no">131</span><span id="line-131">    * Creates a new pet.</span>
-<span class="source-line-no">132</span><span id="line-132">    *</span>
-<span class="source-line-no">133</span><span id="line-133">    * &lt;p&gt;</span>
-<span class="source-line-no">134</span><span id="line-134">    * Assigns the next available ID, ignoring any caller-supplied ID.</span>
-<span class="source-line-no">135</span><span id="line-135">    *</span>
-<span class="source-line-no">136</span><span id="line-136">    * @param pet The pet to create.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">137</span><span id="line-137">    * @return The created pet (same instance, with assigned ID).</span>
-<span class="source-line-no">138</span><span id="line-138">    */</span>
-<span class="source-line-no">139</span><span id="line-139">   public Pet createPet(Pet pet) {</span>
-<span class="source-line-no">140</span><span id="line-140">      if (pet == null)</span>
-<span class="source-line-no">141</span><span id="line-141">         throw iaex("Pet must not be null");</span>
-<span class="source-line-no">142</span><span id="line-142">      var id = nextPetId.incrementAndGet();</span>
-<span class="source-line-no">143</span><span id="line-143">      pet.setId(id);</span>
-<span class="source-line-no">144</span><span id="line-144">      pets.put(id, pet);</span>
-<span class="source-line-no">145</span><span id="line-145">      return pet;</span>
-<span class="source-line-no">146</span><span id="line-146">   }</span>
-<span class="source-line-no">147</span><span id="line-147"></span>
-<span class="source-line-no">148</span><span id="line-148">   /**</span>
-<span class="source-line-no">149</span><span id="line-149">    * Updates an existing pet.</span>
-<span class="source-line-no">150</span><span id="line-150">    *</span>
-<span class="source-line-no">151</span><span id="line-151">    * @param pet The pet to update.  Must not be &lt;jk&gt;null&lt;/jk&gt;; must carry an ID matching an existing pet.</span>
-<span class="source-line-no">152</span><span id="line-152">    * @return The updated pet.</span>
-<span class="source-line-no">153</span><span id="line-153">    * @throws PetstoreNotFoundException If no pet with the given ID exists.</span>
-<span class="source-line-no">154</span><span id="line-154">    */</span>
-<span class="source-line-no">155</span><span id="line-155">   public Pet updatePet(Pet pet) {</span>
-<span class="source-line-no">156</span><span id="line-156">      if (pet == null)</span>
-<span class="source-line-no">157</span><span id="line-157">         throw iaex("Pet must not be null");</span>
-<span class="source-line-no">158</span><span id="line-158">      if (! pets.containsKey(pet.getId()))</span>
-<span class="source-line-no">159</span><span id="line-159">         throw new PetstoreNotFoundException("Pet not found: id=" + pet.getId());</span>
-<span class="source-line-no">160</span><span id="line-160">      pets.put(pet.getId(), pet);</span>
-<span class="source-line-no">161</span><span id="line-161">      return pet;</span>
-<span class="source-line-no">162</span><span id="line-162">   }</span>
-<span class="source-line-no">163</span><span id="line-163"></span>
-<span class="source-line-no">164</span><span id="line-164">   /**</span>
-<span class="source-line-no">165</span><span id="line-165">    * Deletes a pet by ID.</span>
-<span class="source-line-no">166</span><span id="line-166">    *</span>
-<span class="source-line-no">167</span><span id="line-167">    * @param id The pet ID.</span>
-<span class="source-line-no">168</span><span id="line-168">    * @throws PetstoreNotFoundException If no pet with the given ID exists.</span>
-<span class="source-line-no">169</span><span id="line-169">    */</span>
-<span class="source-line-no">170</span><span id="line-170">   public void deletePet(long id) {</span>
-<span class="source-line-no">171</span><span id="line-171">      if (pets.remove(id) == null)</span>
-<span class="source-line-no">172</span><span id="line-172">         throw new PetstoreNotFoundException("Pet not found: id=" + id);</span>
-<span class="source-line-no">173</span><span id="line-173">   }</span>
-<span class="source-line-no">174</span><span id="line-174"></span>
-<span class="source-line-no">175</span><span id="line-175">   //------------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">176</span><span id="line-176">   // Orders</span>
-<span class="source-line-no">177</span><span id="line-177">   //------------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">178</span><span id="line-178"></span>
-<span class="source-line-no">179</span><span id="line-179">   /**</span>
-<span class="source-line-no">180</span><span id="line-180">    * Returns all orders.</span>
-<span class="source-line-no">181</span><span id="line-181">    *</span>
-<span class="source-line-no">182</span><span id="line-182">    * @return All orders, in arbitrary order.  Never &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">183</span><span id="line-183">    */</span>
-<span class="source-line-no">184</span><span id="line-184">   public Collection&lt;Order&gt; getOrders() {</span>
-<span class="source-line-no">185</span><span id="line-185">      return List.copyOf(orders.values());</span>
-<span class="source-line-no">186</span><span id="line-186">   }</span>
-<span class="source-line-no">187</span><span id="line-187"></span>
-<span class="source-line-no">188</span><span id="line-188">   /**</span>
-<span class="source-line-no">189</span><span id="line-189">    * Returns an order by ID.</span>
-<span class="source-line-no">190</span><span id="line-190">    *</span>
-<span class="source-line-no">191</span><span id="line-191">    * @param id The order ID.</span>
-<span class="source-line-no">192</span><span id="line-192">    * @return The order, or &lt;jk&gt;null&lt;/jk&gt; if not found.</span>
-<span class="source-line-no">193</span><span id="line-193">    */</span>
-<span class="source-line-no">194</span><span id="line-194">   public Order getOrder(long id) {</span>
-<span class="source-line-no">195</span><span id="line-195">      return orders.get(id);</span>
-<span class="source-line-no">196</span><span id="line-196">   }</span>
-<span class="source-line-no">197</span><span id="line-197"></span>
-<span class="source-line-no">198</span><span id="line-198">   /**</span>
-<span class="source-line-no">199</span><span id="line-199">    * Creates a new order.</span>
-<span class="source-line-no">200</span><span id="line-200">    *</span>
-<span class="source-line-no">201</span><span id="line-201">    * &lt;p&gt;</span>
-<span class="source-line-no">202</span><span id="line-202">    * Assigns the next available ID, ignoring any caller-supplied ID.</span>
-<span class="source-line-no">203</span><span id="line-203">    *</span>
-<span class="source-line-no">204</span><span id="line-204">    * @param order The order to create.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">205</span><span id="line-205">    * @return The created order (same instance, with assigned ID).</span>
-<span class="source-line-no">206</span><span id="line-206">    */</span>
-<span class="source-line-no">207</span><span id="line-207">   public Order createOrder(Order order) {</span>
-<span class="source-line-no">208</span><span id="line-208">      if (order == null)</span>
-<span class="source-line-no">209</span><span id="line-209">         throw iaex("Order must not be null");</span>
-<span class="source-line-no">210</span><span id="line-210">      var id = nextOrderId.incrementAndGet();</span>
-<span class="source-line-no">211</span><span id="line-211">      order.setId(id);</span>
-<span class="source-line-no">212</span><span id="line-212">      orders.put(id, order);</span>
-<span class="source-line-no">213</span><span id="line-213">      return order;</span>
-<span class="source-line-no">214</span><span id="line-214">   }</span>
-<span class="source-line-no">215</span><span id="line-215"></span>
-<span class="source-line-no">216</span><span id="line-216">   /**</span>
-<span class="source-line-no">217</span><span id="line-217">    * Updates an existing order.</span>
-<span class="source-line-no">218</span><span id="line-218">    *</span>
-<span class="source-line-no">219</span><span id="line-219">    * @param order The order to update.  Must not be &lt;jk&gt;null&lt;/jk&gt;; must carry an ID matching an existing order.</span>
-<span class="source-line-no">220</span><span id="line-220">    * @return The updated order.</span>
-<span class="source-line-no">221</span><span id="line-221">    * @throws PetstoreNotFoundException If no order with the given ID exists.</span>
-<span class="source-line-no">222</span><span id="line-222">    */</span>
-<span class="source-line-no">223</span><span id="line-223">   public Order updateOrder(Order order) {</span>
-<span class="source-line-no">224</span><span id="line-224">      if (order == null)</span>
-<span class="source-line-no">225</span><span id="line-225">         throw iaex("Order must not be null");</span>
-<span class="source-line-no">226</span><span id="line-226">      if (! orders.containsKey(order.getId()))</span>
-<span class="source-line-no">227</span><span id="line-227">         throw new PetstoreNotFoundException("Order not found: id=" + order.getId());</span>
-<span class="source-line-no">228</span><span id="line-228">      orders.put(order.getId(), order);</span>
-<span class="source-line-no">229</span><span id="line-229">      return order;</span>
-<span class="source-line-no">230</span><span id="line-230">   }</span>
-<span class="source-line-no">231</span><span id="line-231"></span>
-<span class="source-line-no">232</span><span id="line-232">   /**</span>
-<span class="source-line-no">233</span><span id="line-233">    * Deletes an order by ID.</span>
-<span class="source-line-no">234</span><span id="line-234">    *</span>
-<span class="source-line-no">235</span><span id="line-235">    * @param id The order ID.</span>
-<span class="source-line-no">236</span><span id="line-236">    * @throws PetstoreNotFoundException If no order with the given ID exists.</span>
-<span class="source-line-no">237</span><span id="line-237">    */</span>
-<span class="source-line-no">238</span><span id="line-238">   public void deleteOrder(long id) {</span>
-<span class="source-line-no">239</span><span id="line-239">      if (orders.remove(id) == null)</span>
-<span class="source-line-no">240</span><span id="line-240">         throw new PetstoreNotFoundException("Order not found: id=" + id);</span>
-<span class="source-line-no">241</span><span id="line-241">   }</span>
-<span class="source-line-no">242</span><span id="line-242"></span>
-<span class="source-line-no">243</span><span id="line-243">   //------------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">244</span><span id="line-244">   // Users</span>
-<span class="source-line-no">245</span><span id="line-245">   //------------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">246</span><span id="line-246"></span>
-<span class="source-line-no">247</span><span id="line-247">   /**</span>
-<span class="source-line-no">248</span><span id="line-248">    * Returns all users.</span>
-<span class="source-line-no">249</span><span id="line-249">    *</span>
-<span class="source-line-no">250</span><span id="line-250">    * @return All users, in arbitrary order.  Never &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">251</span><span id="line-251">    */</span>
-<span class="source-line-no">252</span><span id="line-252">   public Collection&lt;User&gt; getUsers() {</span>
-<span class="source-line-no">253</span><span id="line-253">      return List.copyOf(users.values());</span>
-<span class="source-line-no">254</span><span id="line-254">   }</span>
-<span class="source-line-no">255</span><span id="line-255"></span>
-<span class="source-line-no">256</span><span id="line-256">   /**</span>
-<span class="source-line-no">257</span><span id="line-257">    * Returns a user by username.</span>
-<span class="source-line-no">258</span><span id="line-258">    *</span>
-<span class="source-line-no">259</span><span id="line-259">    * @param username The username (primary key).</span>
-<span class="source-line-no">260</span><span id="line-260">    * @return The user, or &lt;jk&gt;null&lt;/jk&gt; if not found.</span>
-<span class="source-line-no">261</span><span id="line-261">    */</span>
-<span class="source-line-no">262</span><span id="line-262">   public User getUser(String username) {</span>
-<span class="source-line-no">263</span><span id="line-263">      return users.get(username);</span>
-<span class="source-line-no">264</span><span id="line-264">   }</span>
-<span class="source-line-no">265</span><span id="line-265"></span>
-<span class="source-line-no">266</span><span id="line-266">   /**</span>
-<span class="source-line-no">267</span><span id="line-267">    * Creates a new user.</span>
-<span class="source-line-no">268</span><span id="line-268">    *</span>
-<span class="source-line-no">269</span><span id="line-269">    * @param user The user to create.  Must not be &lt;jk&gt;null&lt;/jk&gt;; must carry a non-null username not already in use.</span>
-<span class="source-line-no">270</span><span id="line-270">    * @return The created user.</span>
-<span class="source-line-no">271</span><span id="line-271">    * @throws IllegalArgumentException If the username is already in use.</span>
-<span class="source-line-no">272</span><span id="line-272">    */</span>
-<span class="source-line-no">273</span><span id="line-273">   public User createUser(User user) {</span>
-<span class="source-line-no">274</span><span id="line-274">      if (user == null)</span>
-<span class="source-line-no">275</span><span id="line-275">         throw iaex("User must not be null");</span>
-<span class="source-line-no">276</span><span id="line-276">      if (user.getUsername() == null)</span>
-<span class="source-line-no">277</span><span id="line-277">         throw iaex("User username must not be null");</span>
-<span class="source-line-no">278</span><span id="line-278">      if (users.putIfAbsent(user.getUsername(), user) != null)</span>
-<span class="source-line-no">279</span><span id="line-279">         throw iaex("User already exists: username='%s'", user.getUsername());</span>
-<span class="source-line-no">280</span><span id="line-280">      return user;</span>
-<span class="source-line-no">281</span><span id="line-281">   }</span>
-<span class="source-line-no">282</span><span id="line-282"></span>
-<span class="source-line-no">283</span><span id="line-283">   /**</span>
-<span class="source-line-no">284</span><span id="line-284">    * Updates an existing user.</span>
-<span class="source-line-no">285</span><span id="line-285">    *</span>
-<span class="source-line-no">286</span><span id="line-286">    * @param user The user to update.  Must not be &lt;jk&gt;null&lt;/jk&gt;; must carry a username matching an existing user.</span>
-<span class="source-line-no">287</span><span id="line-287">    * @return The updated user.</span>
-<span class="source-line-no">288</span><span id="line-288">    * @throws PetstoreNotFoundException If no user with the given username exists.</span>
-<span class="source-line-no">289</span><span id="line-289">    */</span>
-<span class="source-line-no">290</span><span id="line-290">   public User updateUser(User user) {</span>
-<span class="source-line-no">291</span><span id="line-291">      if (user == null)</span>
-<span class="source-line-no">292</span><span id="line-292">         throw iaex("User must not be null");</span>
-<span class="source-line-no">293</span><span id="line-293">      if (user.getUsername() == null)</span>
-<span class="source-line-no">294</span><span id="line-294">         throw iaex("User username must not be null");</span>
-<span class="source-line-no">295</span><span id="line-295">      if (! users.containsKey(user.getUsername()))</span>
-<span class="source-line-no">296</span><span id="line-296">         throw new PetstoreNotFoundException("User not found: username=" + user.getUsername());</span>
-<span class="source-line-no">297</span><span id="line-297">      users.put(user.getUsername(), user);</span>
-<span class="source-line-no">298</span><span id="line-298">      return user;</span>
-<span class="source-line-no">299</span><span id="line-299">   }</span>
-<span class="source-line-no">300</span><span id="line-300"></span>
-<span class="source-line-no">301</span><span id="line-301">   /**</span>
-<span class="source-line-no">302</span><span id="line-302">    * Deletes a user by username.</span>
-<span class="source-line-no">303</span><span id="line-303">    *</span>
-<span class="source-line-no">304</span><span id="line-304">    * @param username The username.</span>
-<span class="source-line-no">305</span><span id="line-305">    * @throws PetstoreNotFoundException If no user with the given username exists.</span>
-<span class="source-line-no">306</span><span id="line-306">    */</span>
-<span class="source-line-no">307</span><span id="line-307">   public void deleteUser(String username) {</span>
-<span class="source-line-no">308</span><span id="line-308">      if (users.remove(username) == null)</span>
-<span class="source-line-no">309</span><span id="line-309">         throw new PetstoreNotFoundException("User not found: username=" + username);</span>
-<span class="source-line-no">310</span><span id="line-310">   }</span>
-<span class="source-line-no">311</span><span id="line-311">}</span>
+<span class="source-line-no">093</span><span id="line-93">   private final Clock clock;</span>
+<span class="source-line-no">094</span><span id="line-94">   private final List&lt;AuditEntry&gt; audit = new CopyOnWriteArrayList&lt;&gt;();</span>
+<span class="source-line-no">095</span><span id="line-95">   private final AtomicLong nextAuditId = new AtomicLong();</span>
+<span class="source-line-no">096</span><span id="line-96">   private final PendingChanges pendingChanges = new PendingChanges(this);</span>
+<span class="source-line-no">097</span><span id="line-97"></span>
+<span class="source-line-no">098</span><span id="line-98">   /**</span>
+<span class="source-line-no">099</span><span id="line-99">    * Constructor using the system UTC clock.</span>
+<span class="source-line-no">100</span><span id="line-100">    *</span>
+<span class="source-line-no">101</span><span id="line-101">    * &lt;p&gt;</span>
+<span class="source-line-no">102</span><span id="line-102">    * Eagerly loads the bundled classpath seed data.  Seeding writes no audit.</span>
+<span class="source-line-no">103</span><span id="line-103">    */</span>
+<span class="source-line-no">104</span><span id="line-104">   public PetStore() {</span>
+<span class="source-line-no">105</span><span id="line-105">      this(Clock.systemUTC());</span>
+<span class="source-line-no">106</span><span id="line-106">   }</span>
+<span class="source-line-no">107</span><span id="line-107"></span>
+<span class="source-line-no">108</span><span id="line-108">   /**</span>
+<span class="source-line-no">109</span><span id="line-109">    * Constructor.</span>
+<span class="source-line-no">110</span><span id="line-110">    *</span>
+<span class="source-line-no">111</span><span id="line-111">    * @param clock The clock used to timestamp audit entries.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">112</span><span id="line-112">    */</span>
+<span class="source-line-no">113</span><span id="line-113">   public PetStore(Clock clock) {</span>
+<span class="source-line-no">114</span><span id="line-114">      this.clock = Objects.requireNonNull(clock, "clock");</span>
+<span class="source-line-no">115</span><span id="line-115">      var seededPets = loadList(SEED_PETS, Pet.class);</span>
+<span class="source-line-no">116</span><span id="line-116">      var maxPetId = 0L;</span>
+<span class="source-line-no">117</span><span id="line-117">      for (var p : seededPets) {</span>
+<span class="source-line-no">118</span><span id="line-118">         if (p.getId() == 0L)</span>
+<span class="source-line-no">119</span><span id="line-119">            p.setId(++maxPetId);</span>
+<span class="source-line-no">120</span><span id="line-120">         else</span>
+<span class="source-line-no">121</span><span id="line-121">            maxPetId = Math.max(maxPetId, p.getId());</span>
+<span class="source-line-no">122</span><span id="line-122">         pets.put(p.getId(), p);</span>
+<span class="source-line-no">123</span><span id="line-123">      }</span>
+<span class="source-line-no">124</span><span id="line-124">      nextPetId.set(maxPetId);</span>
+<span class="source-line-no">125</span><span id="line-125"></span>
+<span class="source-line-no">126</span><span id="line-126">      var seededOrders = loadList(SEED_ORDERS, Order.class);</span>
+<span class="source-line-no">127</span><span id="line-127">      var maxOrderId = 0L;</span>
+<span class="source-line-no">128</span><span id="line-128">      for (var o : seededOrders) {</span>
+<span class="source-line-no">129</span><span id="line-129">         if (o.getId() == 0L)</span>
+<span class="source-line-no">130</span><span id="line-130">            o.setId(++maxOrderId);</span>
+<span class="source-line-no">131</span><span id="line-131">         else</span>
+<span class="source-line-no">132</span><span id="line-132">            maxOrderId = Math.max(maxOrderId, o.getId());</span>
+<span class="source-line-no">133</span><span id="line-133">         orders.put(o.getId(), o);</span>
+<span class="source-line-no">134</span><span id="line-134">      }</span>
+<span class="source-line-no">135</span><span id="line-135">      nextOrderId.set(maxOrderId);</span>
+<span class="source-line-no">136</span><span id="line-136"></span>
+<span class="source-line-no">137</span><span id="line-137">      var seededUsers = loadList(SEED_USERS, User.class);</span>
+<span class="source-line-no">138</span><span id="line-138">      for (var u : seededUsers)</span>
+<span class="source-line-no">139</span><span id="line-139">         users.put(u.getUsername(), u);</span>
+<span class="source-line-no">140</span><span id="line-140">   }</span>
+<span class="source-line-no">141</span><span id="line-141"></span>
+<span class="source-line-no">142</span><span id="line-142">   /** @return The clock this store timestamps with. */</span>
+<span class="source-line-no">143</span><span id="line-143">   public Clock clock() { return clock; }</span>
+<span class="source-line-no">144</span><span id="line-144"></span>
+<span class="source-line-no">145</span><span id="line-145">   private static &lt;T&gt; List&lt;T&gt; loadList(String resourcePath, Class&lt;T&gt; elementType) {</span>
+<span class="source-line-no">146</span><span id="line-146">      var loader = PetStore.class.getClassLoader();</span>
+<span class="source-line-no">147</span><span id="line-147">      try (var in = loader.getResourceAsStream(resourcePath)) {</span>
+<span class="source-line-no">148</span><span id="line-148">         if (in == null)</span>
+<span class="source-line-no">149</span><span id="line-149">            return l();</span>
+<span class="source-line-no">150</span><span id="line-150">         try (var reader = new InputStreamReader(in, StandardCharsets.UTF_8)) {</span>
+<span class="source-line-no">151</span><span id="line-151">            return Json5.DEFAULT.read(reader, List.class, elementType);</span>
+<span class="source-line-no">152</span><span id="line-152">         }</span>
+<span class="source-line-no">153</span><span id="line-153">      } catch (Exception e) {</span>
+<span class="source-line-no">154</span><span id="line-154">         throw brex(e, "Failed to load petstore seed resource '%s'", resourcePath);</span>
+<span class="source-line-no">155</span><span id="line-155">      }</span>
+<span class="source-line-no">156</span><span id="line-156">   }</span>
+<span class="source-line-no">157</span><span id="line-157"></span>
+<span class="source-line-no">158</span><span id="line-158">   //------------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">159</span><span id="line-159">   // Pets</span>
+<span class="source-line-no">160</span><span id="line-160">   //------------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">161</span><span id="line-161"></span>
+<span class="source-line-no">162</span><span id="line-162">   /**</span>
+<span class="source-line-no">163</span><span id="line-163">    * Returns all pets.</span>
+<span class="source-line-no">164</span><span id="line-164">    *</span>
+<span class="source-line-no">165</span><span id="line-165">    * @return All pets, in arbitrary order.  Never &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">166</span><span id="line-166">    */</span>
+<span class="source-line-no">167</span><span id="line-167">   public Collection&lt;Pet&gt; getPets() {</span>
+<span class="source-line-no">168</span><span id="line-168">      // Return an immutable snapshot so callers can't mutate the backing store through the returned collection.</span>
+<span class="source-line-no">169</span><span id="line-169">      return List.copyOf(pets.values());</span>
+<span class="source-line-no">170</span><span id="line-170">   }</span>
+<span class="source-line-no">171</span><span id="line-171"></span>
+<span class="source-line-no">172</span><span id="line-172">   /**</span>
+<span class="source-line-no">173</span><span id="line-173">    * Returns a pet by ID.</span>
+<span class="source-line-no">174</span><span id="line-174">    *</span>
+<span class="source-line-no">175</span><span id="line-175">    * @param id The pet ID.</span>
+<span class="source-line-no">176</span><span id="line-176">    * @return The pet, or &lt;jk&gt;null&lt;/jk&gt; if not found.</span>
+<span class="source-line-no">177</span><span id="line-177">    */</span>
+<span class="source-line-no">178</span><span id="line-178">   public Pet getPet(long id) {</span>
+<span class="source-line-no">179</span><span id="line-179">      return pets.get(id);</span>
+<span class="source-line-no">180</span><span id="line-180">   }</span>
+<span class="source-line-no">181</span><span id="line-181"></span>
+<span class="source-line-no">182</span><span id="line-182">   /**</span>
+<span class="source-line-no">183</span><span id="line-183">    * Creates a new pet.</span>
+<span class="source-line-no">184</span><span id="line-184">    *</span>
+<span class="source-line-no">185</span><span id="line-185">    * &lt;p&gt;</span>
+<span class="source-line-no">186</span><span id="line-186">    * Assigns the next available ID, ignoring any caller-supplied ID.</span>
+<span class="source-line-no">187</span><span id="line-187">    *</span>
+<span class="source-line-no">188</span><span id="line-188">    * @param pet The pet to create.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">189</span><span id="line-189">    * @return The created pet (same instance, with assigned ID).</span>
+<span class="source-line-no">190</span><span id="line-190">    */</span>
+<span class="source-line-no">191</span><span id="line-191">   public Pet createPet(Pet pet) {</span>
+<span class="source-line-no">192</span><span id="line-192">      return createPet(pet, ACTOR_API);</span>
+<span class="source-line-no">193</span><span id="line-193">   }</span>
+<span class="source-line-no">194</span><span id="line-194"></span>
+<span class="source-line-no">195</span><span id="line-195">   /**</span>
+<span class="source-line-no">196</span><span id="line-196">    * Creates a pet and records a {@code CREATE} audit entry.</span>
+<span class="source-line-no">197</span><span id="line-197">    *</span>
+<span class="source-line-no">198</span><span id="line-198">    * @param pet The pet.  Its ID is overwritten.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">199</span><span id="line-199">    * @param actor Who is creating it, e.g. {@code "console:alice"}.</span>
+<span class="source-line-no">200</span><span id="line-200">    * @return The stored pet.</span>
+<span class="source-line-no">201</span><span id="line-201">    */</span>
+<span class="source-line-no">202</span><span id="line-202">   public Pet createPet(Pet pet, String actor) {</span>
+<span class="source-line-no">203</span><span id="line-203">      return addPet(pet, actor, null);</span>
+<span class="source-line-no">204</span><span id="line-204">   }</span>
+<span class="source-line-no">205</span><span id="line-205"></span>
+<span class="source-line-no">206</span><span id="line-206">   private Pet addPet(Pet pet, String actor, LongFunction&lt;String&gt; nameFromId) {</span>
+<span class="source-line-no">207</span><span id="line-207">      if (pet == null)</span>
+<span class="source-line-no">208</span><span id="line-208">         throw iaex("Pet must not be null");</span>
+<span class="source-line-no">209</span><span id="line-209">      var id = nextPetId.incrementAndGet();</span>
+<span class="source-line-no">210</span><span id="line-210">      pet.setId(id);</span>
+<span class="source-line-no">211</span><span id="line-211">      if (nameFromId != null)</span>
+<span class="source-line-no">212</span><span id="line-212">         pet.setName(nameFromId.apply(id));</span>
+<span class="source-line-no">213</span><span id="line-213">      pets.put(id, pet);</span>
+<span class="source-line-no">214</span><span id="line-214">      recordAudit(actor, "Pet", String.valueOf(id), ACTION_CREATE, pet.getName());</span>
+<span class="source-line-no">215</span><span id="line-215">      return pet;</span>
+<span class="source-line-no">216</span><span id="line-216">   }</span>
+<span class="source-line-no">217</span><span id="line-217"></span>
+<span class="source-line-no">218</span><span id="line-218">   /**</span>
+<span class="source-line-no">219</span><span id="line-219">    * Adds a batch of available pets, one per requested count, and records one summary {@code RESTOCK} audit entry.</span>
+<span class="source-line-no">220</span><span id="line-220">    *</span>
+<span class="source-line-no">221</span><span id="line-221">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">222</span><span id="line-222">    * &lt;p class='bjava'&gt;</span>
+<span class="source-line-no">223</span><span id="line-223">    *    &lt;jk&gt;var&lt;/jk&gt; &lt;jv&gt;added&lt;/jv&gt; = &lt;jv&gt;store&lt;/jv&gt;.restock(Map.&lt;jsm&gt;of&lt;/jsm&gt;(Species.&lt;jsf&gt;DOG&lt;/jsf&gt;, 2, Species.&lt;jsf&gt;CAT&lt;/jsf&gt;, 1), &lt;js&gt;"job:restock"&lt;/js&gt;);</span>
+<span class="source-line-no">224</span><span id="line-224">    *    &lt;jc&gt;// 3 new pets named "DOG #101", "DOG #102", "CAT #103" (species + store-unique id), plus one RESTOCK audit entry.&lt;/jc&gt;</span>
+<span class="source-line-no">225</span><span id="line-225">    * &lt;/p&gt;</span>
+<span class="source-line-no">226</span><span id="line-226">    *</span>
+<span class="source-line-no">227</span><span id="line-227">    * @param perSpecies How many pets of each species to add.  Must not be &lt;jk&gt;null&lt;/jk&gt;; each count must be</span>
+<span class="source-line-no">228</span><span id="line-228">    *    {@code 0..}{@link #MAX_RESTOCK_PER_SPECIES}.</span>
+<span class="source-line-no">229</span><span id="line-229">    * @param actor Who is restocking, e.g. {@code "job:restock:console:alice"}.</span>
+<span class="source-line-no">230</span><span id="line-230">    * @return The created pets.</span>
+<span class="source-line-no">231</span><span id="line-231">    * @throws IllegalArgumentException If the map, a species, or a count is null, negative, or above the cap.  Nothing is added.</span>
+<span class="source-line-no">232</span><span id="line-232">    */</span>
+<span class="source-line-no">233</span><span id="line-233">   public List&lt;Pet&gt; restock(Map&lt;Species,Integer&gt; perSpecies, String actor) {</span>
+<span class="source-line-no">234</span><span id="line-234">      if (perSpecies == null)</span>
+<span class="source-line-no">235</span><span id="line-235">         throw iaex("PerSpecies must not be null");</span>
+<span class="source-line-no">236</span><span id="line-236">      perSpecies.forEach((species, count) -&gt; {</span>
+<span class="source-line-no">237</span><span id="line-237">         if (species == null)</span>
+<span class="source-line-no">238</span><span id="line-238">            throw iaex("Species must not be null");</span>
+<span class="source-line-no">239</span><span id="line-239">         if (count == null || count &lt; 0 || count &gt; MAX_RESTOCK_PER_SPECIES)</span>
+<span class="source-line-no">240</span><span id="line-240">            throw iaex("Count for '%s' must be between 0 and %s", species, MAX_RESTOCK_PER_SPECIES);</span>
+<span class="source-line-no">241</span><span id="line-241">      });</span>
+<span class="source-line-no">242</span><span id="line-242">      var created = new ArrayList&lt;Pet&gt;();</span>
+<span class="source-line-no">243</span><span id="line-243">      perSpecies.forEach((species, count) -&gt; {</span>
+<span class="source-line-no">244</span><span id="line-244">         for (var i = 0; i &lt; count; i++)</span>
+<span class="source-line-no">245</span><span id="line-245">            created.add(addPet(new Pet().setSpecies(species).setPrice(9.99f).setStatus(PetStatus.AVAILABLE), actor, id -&gt; species + " #" + id));</span>
+<span class="source-line-no">246</span><span id="line-246">      });</span>
+<span class="source-line-no">247</span><span id="line-247">      recordAudit(actor, "Job", "restock", "RESTOCK", created.size() + " pets");</span>
+<span class="source-line-no">248</span><span id="line-248">      return created;</span>
+<span class="source-line-no">249</span><span id="line-249">   }</span>
+<span class="source-line-no">250</span><span id="line-250"></span>
+<span class="source-line-no">251</span><span id="line-251">   /**</span>
+<span class="source-line-no">252</span><span id="line-252">    * Updates an existing pet.</span>
+<span class="source-line-no">253</span><span id="line-253">    *</span>
+<span class="source-line-no">254</span><span id="line-254">    * @param pet The pet to update.  Must not be &lt;jk&gt;null&lt;/jk&gt;; must carry an ID matching an existing pet.</span>
+<span class="source-line-no">255</span><span id="line-255">    * @return The updated pet.</span>
+<span class="source-line-no">256</span><span id="line-256">    * @throws PetstoreNotFoundException If no pet with the given ID exists.</span>
+<span class="source-line-no">257</span><span id="line-257">    */</span>
+<span class="source-line-no">258</span><span id="line-258">   public Pet updatePet(Pet pet) {</span>
+<span class="source-line-no">259</span><span id="line-259">      return updatePet(pet, ACTOR_API);</span>
+<span class="source-line-no">260</span><span id="line-260">   }</span>
+<span class="source-line-no">261</span><span id="line-261"></span>
+<span class="source-line-no">262</span><span id="line-262">   /**</span>
+<span class="source-line-no">263</span><span id="line-263">    * Replaces a pet and records an {@code UPDATE} audit entry.</span>
+<span class="source-line-no">264</span><span id="line-264">    *</span>
+<span class="source-line-no">265</span><span id="line-265">    * @param pet The pet.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">266</span><span id="line-266">    * @param actor Who is updating it.</span>
+<span class="source-line-no">267</span><span id="line-267">    * @return The stored pet.</span>
+<span class="source-line-no">268</span><span id="line-268">    * @throws PetstoreNotFoundException If no pet with the given ID exists.</span>
+<span class="source-line-no">269</span><span id="line-269">    */</span>
+<span class="source-line-no">270</span><span id="line-270">   public Pet updatePet(Pet pet, String actor) {</span>
+<span class="source-line-no">271</span><span id="line-271">      if (pet == null)</span>
+<span class="source-line-no">272</span><span id="line-272">         throw iaex("Pet must not be null");</span>
+<span class="source-line-no">273</span><span id="line-273">      if (! pets.containsKey(pet.getId()))</span>
+<span class="source-line-no">274</span><span id="line-274">         throw new PetstoreNotFoundException("Pet not found: id=" + pet.getId());</span>
+<span class="source-line-no">275</span><span id="line-275">      pets.put(pet.getId(), pet);</span>
+<span class="source-line-no">276</span><span id="line-276">      recordAudit(actor, "Pet", String.valueOf(pet.getId()), ACTION_UPDATE, pet.getName());</span>
+<span class="source-line-no">277</span><span id="line-277">      return pet;</span>
+<span class="source-line-no">278</span><span id="line-278">   }</span>
+<span class="source-line-no">279</span><span id="line-279"></span>
+<span class="source-line-no">280</span><span id="line-280">   /**</span>
+<span class="source-line-no">281</span><span id="line-281">    * Deletes a pet by ID.</span>
+<span class="source-line-no">282</span><span id="line-282">    *</span>
+<span class="source-line-no">283</span><span id="line-283">    * @param id The pet ID.</span>
+<span class="source-line-no">284</span><span id="line-284">    * @throws PetstoreNotFoundException If no pet with the given ID exists.</span>
+<span class="source-line-no">285</span><span id="line-285">    */</span>
+<span class="source-line-no">286</span><span id="line-286">   public void deletePet(long id) {</span>
+<span class="source-line-no">287</span><span id="line-287">      deletePet(id, ACTOR_API);</span>
+<span class="source-line-no">288</span><span id="line-288">   }</span>
+<span class="source-line-no">289</span><span id="line-289"></span>
+<span class="source-line-no">290</span><span id="line-290">   /**</span>
+<span class="source-line-no">291</span><span id="line-291">    * Deletes a pet and records a {@code DELETE} audit entry.</span>
+<span class="source-line-no">292</span><span id="line-292">    *</span>
+<span class="source-line-no">293</span><span id="line-293">    * @param id The pet ID.</span>
+<span class="source-line-no">294</span><span id="line-294">    * @param actor Who is deleting it.</span>
+<span class="source-line-no">295</span><span id="line-295">    * @throws PetstoreNotFoundException If no pet with the given ID exists.</span>
+<span class="source-line-no">296</span><span id="line-296">    */</span>
+<span class="source-line-no">297</span><span id="line-297">   public void deletePet(long id, String actor) {</span>
+<span class="source-line-no">298</span><span id="line-298">      var removed = pets.remove(id);</span>
+<span class="source-line-no">299</span><span id="line-299">      if (removed == null)</span>
+<span class="source-line-no">300</span><span id="line-300">         throw new PetstoreNotFoundException("Pet not found: id=" + id);</span>
+<span class="source-line-no">301</span><span id="line-301">      recordAudit(actor, "Pet", String.valueOf(id), ACTION_DELETE, removed.getName());</span>
+<span class="source-line-no">302</span><span id="line-302">   }</span>
+<span class="source-line-no">303</span><span id="line-303"></span>
+<span class="source-line-no">304</span><span id="line-304">   //------------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">305</span><span id="line-305">   // Orders</span>
+<span class="source-line-no">306</span><span id="line-306">   //------------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">307</span><span id="line-307"></span>
+<span class="source-line-no">308</span><span id="line-308">   /**</span>
+<span class="source-line-no">309</span><span id="line-309">    * Returns all orders.</span>
+<span class="source-line-no">310</span><span id="line-310">    *</span>
+<span class="source-line-no">311</span><span id="line-311">    * @return All orders, in arbitrary order.  Never &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">312</span><span id="line-312">    */</span>
+<span class="source-line-no">313</span><span id="line-313">   public Collection&lt;Order&gt; getOrders() {</span>
+<span class="source-line-no">314</span><span id="line-314">      return List.copyOf(orders.values());</span>
+<span class="source-line-no">315</span><span id="line-315">   }</span>
+<span class="source-line-no">316</span><span id="line-316"></span>
+<span class="source-line-no">317</span><span id="line-317">   /**</span>
+<span class="source-line-no">318</span><span id="line-318">    * Returns an order by ID.</span>
+<span class="source-line-no">319</span><span id="line-319">    *</span>
+<span class="source-line-no">320</span><span id="line-320">    * @param id The order ID.</span>
+<span class="source-line-no">321</span><span id="line-321">    * @return The order, or &lt;jk&gt;null&lt;/jk&gt; if not found.</span>
+<span class="source-line-no">322</span><span id="line-322">    */</span>
+<span class="source-line-no">323</span><span id="line-323">   public Order getOrder(long id) {</span>
+<span class="source-line-no">324</span><span id="line-324">      return orders.get(id);</span>
+<span class="source-line-no">325</span><span id="line-325">   }</span>
+<span class="source-line-no">326</span><span id="line-326"></span>
+<span class="source-line-no">327</span><span id="line-327">   /**</span>
+<span class="source-line-no">328</span><span id="line-328">    * Creates a new order.</span>
+<span class="source-line-no">329</span><span id="line-329">    *</span>
+<span class="source-line-no">330</span><span id="line-330">    * &lt;p&gt;</span>
+<span class="source-line-no">331</span><span id="line-331">    * Assigns the next available ID, ignoring any caller-supplied ID.</span>
+<span class="source-line-no">332</span><span id="line-332">    *</span>
+<span class="source-line-no">333</span><span id="line-333">    * @param order The order to create.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">334</span><span id="line-334">    * @return The created order (same instance, with assigned ID).</span>
+<span class="source-line-no">335</span><span id="line-335">    */</span>
+<span class="source-line-no">336</span><span id="line-336">   public Order createOrder(Order order) {</span>
+<span class="source-line-no">337</span><span id="line-337">      return createOrder(order, ACTOR_API);</span>
+<span class="source-line-no">338</span><span id="line-338">   }</span>
+<span class="source-line-no">339</span><span id="line-339"></span>
+<span class="source-line-no">340</span><span id="line-340">   /**</span>
+<span class="source-line-no">341</span><span id="line-341">    * Creates an order and records a {@code CREATE} audit entry.</span>
+<span class="source-line-no">342</span><span id="line-342">    *</span>
+<span class="source-line-no">343</span><span id="line-343">    * @param order The order.  Its ID is overwritten.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">344</span><span id="line-344">    * @param actor Who is creating it.</span>
+<span class="source-line-no">345</span><span id="line-345">    * @return The stored order.</span>
+<span class="source-line-no">346</span><span id="line-346">    */</span>
+<span class="source-line-no">347</span><span id="line-347">   public Order createOrder(Order order, String actor) {</span>
+<span class="source-line-no">348</span><span id="line-348">      if (order == null)</span>
+<span class="source-line-no">349</span><span id="line-349">         throw iaex("Order must not be null");</span>
+<span class="source-line-no">350</span><span id="line-350">      var id = nextOrderId.incrementAndGet();</span>
+<span class="source-line-no">351</span><span id="line-351">      order.setId(id);</span>
+<span class="source-line-no">352</span><span id="line-352">      orders.put(id, order);</span>
+<span class="source-line-no">353</span><span id="line-353">      recordAudit(actor, ENTITY_ORDER, String.valueOf(id), ACTION_CREATE, String.valueOf(order.getStatus()));</span>
+<span class="source-line-no">354</span><span id="line-354">      return order;</span>
+<span class="source-line-no">355</span><span id="line-355">   }</span>
+<span class="source-line-no">356</span><span id="line-356"></span>
+<span class="source-line-no">357</span><span id="line-357">   /**</span>
+<span class="source-line-no">358</span><span id="line-358">    * Updates an existing order.</span>
+<span class="source-line-no">359</span><span id="line-359">    *</span>
+<span class="source-line-no">360</span><span id="line-360">    * @param order The order to update.  Must not be &lt;jk&gt;null&lt;/jk&gt;; must carry an ID matching an existing order.</span>
+<span class="source-line-no">361</span><span id="line-361">    * @return The updated order.</span>
+<span class="source-line-no">362</span><span id="line-362">    * @throws PetstoreNotFoundException If no order with the given ID exists.</span>
+<span class="source-line-no">363</span><span id="line-363">    */</span>
+<span class="source-line-no">364</span><span id="line-364">   public Order updateOrder(Order order) {</span>
+<span class="source-line-no">365</span><span id="line-365">      return updateOrder(order, ACTOR_API);</span>
+<span class="source-line-no">366</span><span id="line-366">   }</span>
+<span class="source-line-no">367</span><span id="line-367"></span>
+<span class="source-line-no">368</span><span id="line-368">   /**</span>
+<span class="source-line-no">369</span><span id="line-369">    * Replaces an order and records an {@code UPDATE} audit entry.</span>
+<span class="source-line-no">370</span><span id="line-370">    *</span>
+<span class="source-line-no">371</span><span id="line-371">    * @param order The order.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">372</span><span id="line-372">    * @param actor Who is updating it.</span>
+<span class="source-line-no">373</span><span id="line-373">    * @return The stored order.</span>
+<span class="source-line-no">374</span><span id="line-374">    * @throws PetstoreNotFoundException If no order with the given ID exists.</span>
+<span class="source-line-no">375</span><span id="line-375">    */</span>
+<span class="source-line-no">376</span><span id="line-376">   public Order updateOrder(Order order, String actor) {</span>
+<span class="source-line-no">377</span><span id="line-377">      if (order == null)</span>
+<span class="source-line-no">378</span><span id="line-378">         throw iaex("Order must not be null");</span>
+<span class="source-line-no">379</span><span id="line-379">      if (! orders.containsKey(order.getId()))</span>
+<span class="source-line-no">380</span><span id="line-380">         throw new PetstoreNotFoundException("Order not found: id=" + order.getId());</span>
+<span class="source-line-no">381</span><span id="line-381">      orders.put(order.getId(), order);</span>
+<span class="source-line-no">382</span><span id="line-382">      recordAudit(actor, ENTITY_ORDER, String.valueOf(order.getId()), ACTION_UPDATE, String.valueOf(order.getStatus()));</span>
+<span class="source-line-no">383</span><span id="line-383">      return order;</span>
+<span class="source-line-no">384</span><span id="line-384">   }</span>
+<span class="source-line-no">385</span><span id="line-385"></span>
+<span class="source-line-no">386</span><span id="line-386">   /**</span>
+<span class="source-line-no">387</span><span id="line-387">    * Deletes an order by ID.</span>
+<span class="source-line-no">388</span><span id="line-388">    *</span>
+<span class="source-line-no">389</span><span id="line-389">    * @param id The order ID.</span>
+<span class="source-line-no">390</span><span id="line-390">    * @throws PetstoreNotFoundException If no order with the given ID exists.</span>
+<span class="source-line-no">391</span><span id="line-391">    */</span>
+<span class="source-line-no">392</span><span id="line-392">   public void deleteOrder(long id) {</span>
+<span class="source-line-no">393</span><span id="line-393">      deleteOrder(id, ACTOR_API);</span>
+<span class="source-line-no">394</span><span id="line-394">   }</span>
+<span class="source-line-no">395</span><span id="line-395"></span>
+<span class="source-line-no">396</span><span id="line-396">   /**</span>
+<span class="source-line-no">397</span><span id="line-397">    * Deletes an order and records a {@code DELETE} audit entry.</span>
+<span class="source-line-no">398</span><span id="line-398">    *</span>
+<span class="source-line-no">399</span><span id="line-399">    * @param id The order ID.</span>
+<span class="source-line-no">400</span><span id="line-400">    * @param actor Who is deleting it.</span>
+<span class="source-line-no">401</span><span id="line-401">    * @throws PetstoreNotFoundException If no order with the given ID exists.</span>
+<span class="source-line-no">402</span><span id="line-402">    */</span>
+<span class="source-line-no">403</span><span id="line-403">   public void deleteOrder(long id, String actor) {</span>
+<span class="source-line-no">404</span><span id="line-404">      deleteOrder(id, actor, null);</span>
+<span class="source-line-no">405</span><span id="line-405">   }</span>
+<span class="source-line-no">406</span><span id="line-406"></span>
+<span class="source-line-no">407</span><span id="line-407">   /**</span>
+<span class="source-line-no">408</span><span id="line-408">    * Cancels an order, recording the reason as the {@code DELETE} audit detail.</span>
+<span class="source-line-no">409</span><span id="line-409">    *</span>
+<span class="source-line-no">410</span><span id="line-410">    * @param id The order ID.</span>
+<span class="source-line-no">411</span><span id="line-411">    * @param actor Who is cancelling it.</span>
+<span class="source-line-no">412</span><span id="line-412">    * @param reason Why, or &lt;jk&gt;null&lt;/jk&gt; or blank for none (the audit detail is then the order status).</span>
+<span class="source-line-no">413</span><span id="line-413">    * @throws PetstoreNotFoundException If no order with the given ID exists.</span>
+<span class="source-line-no">414</span><span id="line-414">    */</span>
+<span class="source-line-no">415</span><span id="line-415">   public void deleteOrder(long id, String actor, String reason) {</span>
+<span class="source-line-no">416</span><span id="line-416">      var removed = orders.remove(id);</span>
+<span class="source-line-no">417</span><span id="line-417">      if (removed == null)</span>
+<span class="source-line-no">418</span><span id="line-418">         throw new PetstoreNotFoundException("Order not found: id=" + id);</span>
+<span class="source-line-no">419</span><span id="line-419">      var detail = reason == null || reason.isBlank() ? String.valueOf(removed.getStatus()) : "cancelled: " + reason;</span>
+<span class="source-line-no">420</span><span id="line-420">      recordAudit(actor, ENTITY_ORDER, String.valueOf(id), ACTION_DELETE, detail);</span>
+<span class="source-line-no">421</span><span id="line-421">   }</span>
+<span class="source-line-no">422</span><span id="line-422"></span>
+<span class="source-line-no">423</span><span id="line-423">   //------------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">424</span><span id="line-424">   // Users</span>
+<span class="source-line-no">425</span><span id="line-425">   //------------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">426</span><span id="line-426"></span>
+<span class="source-line-no">427</span><span id="line-427">   /**</span>
+<span class="source-line-no">428</span><span id="line-428">    * Returns all users.</span>
+<span class="source-line-no">429</span><span id="line-429">    *</span>
+<span class="source-line-no">430</span><span id="line-430">    * @return All users, in arbitrary order.  Never &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">431</span><span id="line-431">    */</span>
+<span class="source-line-no">432</span><span id="line-432">   public Collection&lt;User&gt; getUsers() {</span>
+<span class="source-line-no">433</span><span id="line-433">      return List.copyOf(users.values());</span>
+<span class="source-line-no">434</span><span id="line-434">   }</span>
+<span class="source-line-no">435</span><span id="line-435"></span>
+<span class="source-line-no">436</span><span id="line-436">   /**</span>
+<span class="source-line-no">437</span><span id="line-437">    * Returns a user by username.</span>
+<span class="source-line-no">438</span><span id="line-438">    *</span>
+<span class="source-line-no">439</span><span id="line-439">    * @param username The username (primary key).</span>
+<span class="source-line-no">440</span><span id="line-440">    * @return The user, or &lt;jk&gt;null&lt;/jk&gt; if not found.</span>
+<span class="source-line-no">441</span><span id="line-441">    */</span>
+<span class="source-line-no">442</span><span id="line-442">   public User getUser(String username) {</span>
+<span class="source-line-no">443</span><span id="line-443">      return users.get(username);</span>
+<span class="source-line-no">444</span><span id="line-444">   }</span>
+<span class="source-line-no">445</span><span id="line-445"></span>
+<span class="source-line-no">446</span><span id="line-446">   /**</span>
+<span class="source-line-no">447</span><span id="line-447">    * Creates a new user.</span>
+<span class="source-line-no">448</span><span id="line-448">    *</span>
+<span class="source-line-no">449</span><span id="line-449">    * @param user The user to create.  Must not be &lt;jk&gt;null&lt;/jk&gt;; must carry a non-null username not already in use.</span>
+<span class="source-line-no">450</span><span id="line-450">    * @return The created user.</span>
+<span class="source-line-no">451</span><span id="line-451">    * @throws IllegalArgumentException If the username is already in use.</span>
+<span class="source-line-no">452</span><span id="line-452">    */</span>
+<span class="source-line-no">453</span><span id="line-453">   public User createUser(User user) {</span>
+<span class="source-line-no">454</span><span id="line-454">      return createUser(user, ACTOR_API);</span>
+<span class="source-line-no">455</span><span id="line-455">   }</span>
+<span class="source-line-no">456</span><span id="line-456"></span>
+<span class="source-line-no">457</span><span id="line-457">   /**</span>
+<span class="source-line-no">458</span><span id="line-458">    * Creates a user and records a {@code CREATE} audit entry.</span>
+<span class="source-line-no">459</span><span id="line-459">    *</span>
+<span class="source-line-no">460</span><span id="line-460">    * @param user The user.  Must carry a non-null username not already in use.</span>
+<span class="source-line-no">461</span><span id="line-461">    * @param actor Who is creating it.</span>
+<span class="source-line-no">462</span><span id="line-462">    * @return The stored user.</span>
+<span class="source-line-no">463</span><span id="line-463">    * @throws IllegalArgumentException If the username is already in use.</span>
+<span class="source-line-no">464</span><span id="line-464">    */</span>
+<span class="source-line-no">465</span><span id="line-465">   public User createUser(User user, String actor) {</span>
+<span class="source-line-no">466</span><span id="line-466">      if (user == null)</span>
+<span class="source-line-no">467</span><span id="line-467">         throw iaex("User must not be null");</span>
+<span class="source-line-no">468</span><span id="line-468">      if (user.getUsername() == null)</span>
+<span class="source-line-no">469</span><span id="line-469">         throw iaex("User username must not be null");</span>
+<span class="source-line-no">470</span><span id="line-470">      if (users.putIfAbsent(user.getUsername(), user) != null)</span>
+<span class="source-line-no">471</span><span id="line-471">         throw iaex("User already exists: username='%s'", user.getUsername());</span>
+<span class="source-line-no">472</span><span id="line-472">      recordAudit(actor, "User", user.getUsername(), ACTION_CREATE, user.getUsername());</span>
+<span class="source-line-no">473</span><span id="line-473">      return user;</span>
+<span class="source-line-no">474</span><span id="line-474">   }</span>
+<span class="source-line-no">475</span><span id="line-475"></span>
+<span class="source-line-no">476</span><span id="line-476">   /**</span>
+<span class="source-line-no">477</span><span id="line-477">    * Updates an existing user.</span>
+<span class="source-line-no">478</span><span id="line-478">    *</span>
+<span class="source-line-no">479</span><span id="line-479">    * @param user The user to update.  Must not be &lt;jk&gt;null&lt;/jk&gt;; must carry a username matching an existing user.</span>
+<span class="source-line-no">480</span><span id="line-480">    * @return The updated user.</span>
+<span class="source-line-no">481</span><span id="line-481">    * @throws PetstoreNotFoundException If no user with the given username exists.</span>
+<span class="source-line-no">482</span><span id="line-482">    */</span>
+<span class="source-line-no">483</span><span id="line-483">   public User updateUser(User user) {</span>
+<span class="source-line-no">484</span><span id="line-484">      return updateUser(user, ACTOR_API);</span>
+<span class="source-line-no">485</span><span id="line-485">   }</span>
+<span class="source-line-no">486</span><span id="line-486"></span>
+<span class="source-line-no">487</span><span id="line-487">   /**</span>
+<span class="source-line-no">488</span><span id="line-488">    * Replaces a user and records an {@code UPDATE} audit entry.</span>
+<span class="source-line-no">489</span><span id="line-489">    *</span>
+<span class="source-line-no">490</span><span id="line-490">    * &lt;p&gt;</span>
+<span class="source-line-no">491</span><span id="line-491">    * The password is write-only and never read back, so a &lt;jk&gt;null&lt;/jk&gt; or blank password on the replacement keeps the</span>
+<span class="source-line-no">492</span><span id="line-492">    * stored one.</span>
+<span class="source-line-no">493</span><span id="line-493">    *</span>
+<span class="source-line-no">494</span><span id="line-494">    * @param user The user.  Must carry a username matching an existing user.</span>
+<span class="source-line-no">495</span><span id="line-495">    * @param actor Who is updating it.</span>
+<span class="source-line-no">496</span><span id="line-496">    * @return The stored user.</span>
+<span class="source-line-no">497</span><span id="line-497">    * @throws PetstoreNotFoundException If no user with the given username exists.</span>
+<span class="source-line-no">498</span><span id="line-498">    */</span>
+<span class="source-line-no">499</span><span id="line-499">   public User updateUser(User user, String actor) {</span>
+<span class="source-line-no">500</span><span id="line-500">      if (user == null)</span>
+<span class="source-line-no">501</span><span id="line-501">         throw iaex("User must not be null");</span>
+<span class="source-line-no">502</span><span id="line-502">      if (user.getUsername() == null)</span>
+<span class="source-line-no">503</span><span id="line-503">         throw iaex("User username must not be null");</span>
+<span class="source-line-no">504</span><span id="line-504">      if (! users.containsKey(user.getUsername()))</span>
+<span class="source-line-no">505</span><span id="line-505">         throw new PetstoreNotFoundException("User not found: username=" + user.getUsername());</span>
+<span class="source-line-no">506</span><span id="line-506">      var pw = user.getPassword();</span>
+<span class="source-line-no">507</span><span id="line-507">      if (pw == null || pw.isBlank())</span>
+<span class="source-line-no">508</span><span id="line-508">         user.setPassword(users.get(user.getUsername()).getPassword());</span>
+<span class="source-line-no">509</span><span id="line-509">      users.put(user.getUsername(), user);</span>
+<span class="source-line-no">510</span><span id="line-510">      recordAudit(actor, "User", user.getUsername(), ACTION_UPDATE, user.getUsername());</span>
+<span class="source-line-no">511</span><span id="line-511">      return user;</span>
+<span class="source-line-no">512</span><span id="line-512">   }</span>
+<span class="source-line-no">513</span><span id="line-513"></span>
+<span class="source-line-no">514</span><span id="line-514">   /**</span>
+<span class="source-line-no">515</span><span id="line-515">    * Deletes a user by username.</span>
+<span class="source-line-no">516</span><span id="line-516">    *</span>
+<span class="source-line-no">517</span><span id="line-517">    * @param username The username.</span>
+<span class="source-line-no">518</span><span id="line-518">    * @throws PetstoreNotFoundException If no user with the given username exists.</span>
+<span class="source-line-no">519</span><span id="line-519">    */</span>
+<span class="source-line-no">520</span><span id="line-520">   public void deleteUser(String username) {</span>
+<span class="source-line-no">521</span><span id="line-521">      deleteUser(username, ACTOR_API);</span>
+<span class="source-line-no">522</span><span id="line-522">   }</span>
+<span class="source-line-no">523</span><span id="line-523"></span>
+<span class="source-line-no">524</span><span id="line-524">   /**</span>
+<span class="source-line-no">525</span><span id="line-525">    * Deletes a user and records a {@code DELETE} audit entry.</span>
+<span class="source-line-no">526</span><span id="line-526">    *</span>
+<span class="source-line-no">527</span><span id="line-527">    * @param username The username.</span>
+<span class="source-line-no">528</span><span id="line-528">    * @param actor Who is deleting it.</span>
+<span class="source-line-no">529</span><span id="line-529">    * @throws PetstoreNotFoundException If no user with the given username exists.</span>
+<span class="source-line-no">530</span><span id="line-530">    */</span>
+<span class="source-line-no">531</span><span id="line-531">   public void deleteUser(String username, String actor) {</span>
+<span class="source-line-no">532</span><span id="line-532">      if (users.remove(username) == null)</span>
+<span class="source-line-no">533</span><span id="line-533">         throw new PetstoreNotFoundException("User not found: username=" + username);</span>
+<span class="source-line-no">534</span><span id="line-534">      recordAudit(actor, "User", username, ACTION_DELETE, username);</span>
+<span class="source-line-no">535</span><span id="line-535">   }</span>
+<span class="source-line-no">536</span><span id="line-536"></span>
+<span class="source-line-no">537</span><span id="line-537">   //------------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">538</span><span id="line-538">   // Audit</span>
+<span class="source-line-no">539</span><span id="line-539">   //------------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">540</span><span id="line-540"></span>
+<span class="source-line-no">541</span><span id="line-541">   /**</span>
+<span class="source-line-no">542</span><span id="line-542">    * Returns the audit trail.</span>
+<span class="source-line-no">543</span><span id="line-543">    *</span>
+<span class="source-line-no">544</span><span id="line-544">    * @return An immutable snapshot, oldest first.  Never &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">545</span><span id="line-545">    */</span>
+<span class="source-line-no">546</span><span id="line-546">   public List&lt;AuditEntry&gt; getAudit() {</span>
+<span class="source-line-no">547</span><span id="line-547">      return List.copyOf(audit);</span>
+<span class="source-line-no">548</span><span id="line-548">   }</span>
+<span class="source-line-no">549</span><span id="line-549"></span>
+<span class="source-line-no">550</span><span id="line-550">   /**</span>
+<span class="source-line-no">551</span><span id="line-551">    * Appends an audit entry stamped with this store's clock.</span>
+<span class="source-line-no">552</span><span id="line-552">    *</span>
+<span class="source-line-no">553</span><span id="line-553">    * &lt;p&gt;</span>
+<span class="source-line-no">554</span><span id="line-554">    * Public so console operations that are not plain CRUD (restock, apply/discard pending changes) are audited too.</span>
+<span class="source-line-no">555</span><span id="line-555">    *</span>
+<span class="source-line-no">556</span><span id="line-556">    * @param actor Who did it.</span>
+<span class="source-line-no">557</span><span id="line-557">    * @param entity The entity kind.</span>
+<span class="source-line-no">558</span><span id="line-558">    * @param entityId The entity id.</span>
+<span class="source-line-no">559</span><span id="line-559">    * @param action The action.</span>
+<span class="source-line-no">560</span><span id="line-560">    * @param detail A short detail, or &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">561</span><span id="line-561">    * @return The new entry.</span>
+<span class="source-line-no">562</span><span id="line-562">    */</span>
+<span class="source-line-no">563</span><span id="line-563">   public AuditEntry recordAudit(String actor, String entity, String entityId, String action, String detail) {</span>
+<span class="source-line-no">564</span><span id="line-564">      // Id assignment and append are one step so the trail stays in id order under concurrent writes.</span>
+<span class="source-line-no">565</span><span id="line-565">      synchronized (audit) {</span>
+<span class="source-line-no">566</span><span id="line-566">         var e = new AuditEntry().setId(nextAuditId.incrementAndGet()).setAt(clock.instant())</span>
+<span class="source-line-no">567</span><span id="line-567">            .setActor(actor).setEntity(entity).setEntityId(entityId).setAction(action).setDetail(detail);</span>
+<span class="source-line-no">568</span><span id="line-568">         audit.add(e);</span>
+<span class="source-line-no">569</span><span id="line-569">         return e;</span>
+<span class="source-line-no">570</span><span id="line-570">      }</span>
+<span class="source-line-no">571</span><span id="line-571">   }</span>
+<span class="source-line-no">572</span><span id="line-572"></span>
+<span class="source-line-no">573</span><span id="line-573">   /**</span>
+<span class="source-line-no">574</span><span id="line-574">    * Returns the staging area for console inline edits (pet detail to Pending changes).</span>
+<span class="source-line-no">575</span><span id="line-575">    *</span>
+<span class="source-line-no">576</span><span id="line-576">    * @return The pending-changes staging area.  Never &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">577</span><span id="line-577">    */</span>
+<span class="source-line-no">578</span><span id="line-578">   public PendingChanges pendingChanges() {</span>
+<span class="source-line-no">579</span><span id="line-579">      return pendingChanges;</span>
+<span class="source-line-no">580</span><span id="line-580">   }</span>
+<span class="source-line-no">581</span><span id="line-581"></span>
+<span class="source-line-no">582</span><span id="line-582">   /**</span>
+<span class="source-line-no">583</span><span id="line-583">    * Bulk-loads rows with their ids preserved, writing no audit.  Used by {@code PetstoreSeed}.</span>
+<span class="source-line-no">584</span><span id="line-584">    *</span>
+<span class="source-line-no">585</span><span id="line-585">    * &lt;p&gt;</span>
+<span class="source-line-no">586</span><span id="line-586">    * Id counters advance past the highest loaded id, so later creates never collide.</span>
+<span class="source-line-no">587</span><span id="line-587">    *</span>
+<span class="source-line-no">588</span><span id="line-588">    * @param newPets Pets to add or replace.</span>
+<span class="source-line-no">589</span><span id="line-589">    * @param newOrders Orders to add or replace.</span>
+<span class="source-line-no">590</span><span id="line-590">    * @param newUsers Users to add or replace.</span>
+<span class="source-line-no">591</span><span id="line-591">    * @param newAudit Audit rows to append, in order.</span>
+<span class="source-line-no">592</span><span id="line-592">    */</span>
+<span class="source-line-no">593</span><span id="line-593">   public void load(Collection&lt;Pet&gt; newPets, Collection&lt;Order&gt; newOrders, Collection&lt;User&gt; newUsers, Collection&lt;AuditEntry&gt; newAudit) {</span>
+<span class="source-line-no">594</span><span id="line-594">      for (var p : newPets) {</span>
+<span class="source-line-no">595</span><span id="line-595">         pets.put(p.getId(), p);</span>
+<span class="source-line-no">596</span><span id="line-596">         nextPetId.accumulateAndGet(p.getId(), Math::max);</span>
+<span class="source-line-no">597</span><span id="line-597">      }</span>
+<span class="source-line-no">598</span><span id="line-598">      for (var o : newOrders) {</span>
+<span class="source-line-no">599</span><span id="line-599">         orders.put(o.getId(), o);</span>
+<span class="source-line-no">600</span><span id="line-600">         nextOrderId.accumulateAndGet(o.getId(), Math::max);</span>
+<span class="source-line-no">601</span><span id="line-601">      }</span>
+<span class="source-line-no">602</span><span id="line-602">      for (var u : newUsers)</span>
+<span class="source-line-no">603</span><span id="line-603">         users.put(u.getUsername(), u);</span>
+<span class="source-line-no">604</span><span id="line-604">      synchronized (audit) {</span>
+<span class="source-line-no">605</span><span id="line-605">         for (var a : newAudit) {</span>
+<span class="source-line-no">606</span><span id="line-606">            audit.add(a);</span>
+<span class="source-line-no">607</span><span id="line-607">            nextAuditId.accumulateAndGet(a.getId(), Math::max);</span>
+<span class="source-line-no">608</span><span id="line-608">         }</span>
+<span class="source-line-no">609</span><span id="line-609">      }</span>
+<span class="source-line-no">610</span><span id="line-610">   }</span>
+<span class="source-line-no">611</span><span id="line-611"></span>
+<span class="source-line-no">612</span><span id="line-612">   //------------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">613</span><span id="line-613">   // BeanQuery views</span>
+<span class="source-line-no">614</span><span id="line-614">   //------------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">615</span><span id="line-615"></span>
+<span class="source-line-no">616</span><span id="line-616">   /**</span>
+<span class="source-line-no">617</span><span id="line-617">    * Opens a query session over a snapshot of the pets.</span>
+<span class="source-line-no">618</span><span id="line-618">    *</span>
+<span class="source-line-no">619</span><span id="line-619">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">620</span><span id="line-620">    * &lt;p class='bjava'&gt;</span>
+<span class="source-line-no">621</span><span id="line-621">    *    &lt;jk&gt;try&lt;/jk&gt; (&lt;jk&gt;var&lt;/jk&gt; &lt;jv&gt;s&lt;/jv&gt; = &lt;jv&gt;store&lt;/jv&gt;.queryPets()) {</span>
+<span class="source-line-no">622</span><span id="line-622">    *       &lt;jk&gt;return&lt;/jk&gt; DataTablesQuery.&lt;jsm&gt;run&lt;/jsm&gt;(&lt;jv&gt;req&lt;/jv&gt;, &lt;jv&gt;s&lt;/jv&gt;);</span>
+<span class="source-line-no">623</span><span id="line-623">    *    }</span>
+<span class="source-line-no">624</span><span id="line-624">    * &lt;/p&gt;</span>
+<span class="source-line-no">625</span><span id="line-625">    *</span>
+<span class="source-line-no">626</span><span id="line-626">    * @return A new session; close it.</span>
+<span class="source-line-no">627</span><span id="line-627">    */</span>
+<span class="source-line-no">628</span><span id="line-628">   public InMemoryBeanQuerySession&lt;Pet&gt; queryPets() { return PET_QUERY.getSession(getPets()); }</span>
+<span class="source-line-no">629</span><span id="line-629"></span>
+<span class="source-line-no">630</span><span id="line-630">   /** @return A new session over a snapshot of the orders; close it. */</span>
+<span class="source-line-no">631</span><span id="line-631">   public InMemoryBeanQuerySession&lt;Order&gt; queryOrders() { return ORDER_QUERY.getSession(getOrders()); }</span>
+<span class="source-line-no">632</span><span id="line-632"></span>
+<span class="source-line-no">633</span><span id="line-633">   /** @return A new session over a snapshot of the users; close it. */</span>
+<span class="source-line-no">634</span><span id="line-634">   public InMemoryBeanQuerySession&lt;User&gt; queryUsers() { return USER_QUERY.getSession(getUsers()); }</span>
+<span class="source-line-no">635</span><span id="line-635"></span>
+<span class="source-line-no">636</span><span id="line-636">   /** @return A new session over a snapshot of the audit trail; close it. */</span>
+<span class="source-line-no">637</span><span id="line-637">   public InMemoryBeanQuerySession&lt;AuditEntry&gt; queryAudit() { return AUDIT_QUERY.getSession(getAudit()); }</span>
+<span class="source-line-no">638</span><span id="line-638"></span>
+<span class="source-line-no">639</span><span id="line-639">   /** @return A new session over a snapshot of the staged changes; close it. */</span>
+<span class="source-line-no">640</span><span id="line-640">   public InMemoryBeanQuerySession&lt;PendingChange&gt; queryPendingChanges() { return CHANGE_QUERY.getSession(pendingChanges.list()); }</span>
+<span class="source-line-no">641</span><span id="line-641">}</span>
 
 
 

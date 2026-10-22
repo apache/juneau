@@ -191,7 +191,9 @@ loadScripts(document, 'script');</script>
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;contentType,
  <a href="../HttpBody.html" title="interface in org.apache.juneau.http">HttpBody</a>&nbsp;body)</code></div>
 <div class="col-last even-row-color">
-<div class="block">Compact constructor enforcing the documented non-null contract on <code>name</code> and <code>body</code>.</div>
+<div class="block">Compact constructor enforcing the documented non-null contract on <code>name</code> and <code>body</code>, and
+ rejecting CR/LF and other control characters in <code>name</code>, <code>filename</code>, and <code>contentType</code>
+ that could otherwise inject an extra MIME header line into the multipart wire format.</div>
 </div>
 </div>
 </section>

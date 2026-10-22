@@ -103,6 +103,10 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color">
 <div class="block">Thymeleaf view-rendering bridge &mdash; opt-in <code>juneau-rest-server-view-thymeleaf</code> module.</div>
 </div>
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.rest.server.widgets">org.apache.juneau.rest.server.widgets</a></div>
+<div class="col-last odd-row-color">
+<div class="block">Reusable widget primitives for the Juneau REST server toolkit.</div>
+</div>
 </div>
 <section class="class-uses">
 <ul class="block-list">
@@ -287,44 +291,50 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color">
 <div class="block">Returns whether the given session has been handed off to async dispatch.</div>
 </div>
-<div class="col-first odd-row-color"><code>int</code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">AsyncResponseProcessor.</span><code><a href="../processor/AsyncResponseProcessor.html#process(org.apache.juneau.rest.server.RestOpSession)" class="member-name-link">process</a><wbr>(<a href="../RestOpSession.html" title="class in org.apache.juneau.rest.server">RestOpSession</a>&nbsp;opSession)</code></div>
-<div class="col-last odd-row-color">&nbsp;</div>
+<div class="col-first odd-row-color"><code>static void</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">AsyncResponseProcessor.</span><code><a href="../processor/AsyncResponseProcessor.html#markAsyncOwnedAndSnapshot(org.apache.juneau.rest.server.RestOpSession)" class="member-name-link">markAsyncOwnedAndSnapshot</a><wbr>(<a href="../RestOpSession.html" title="class in org.apache.juneau.rest.server">RestOpSession</a>&nbsp;opSession)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Publishes async ownership and the resolved debug snapshot on the request thread, before any completion callback or
+ streaming subscription is registered.</div>
+</div>
 <div class="col-first even-row-color"><code>int</code></div>
-<div class="col-second even-row-color"><span class="type-name-label">HttpBodyProcessor.</span><code><a href="../processor/HttpBodyProcessor.html#process(org.apache.juneau.rest.server.RestOpSession)" class="member-name-link">process</a><wbr>(<a href="../RestOpSession.html" title="class in org.apache.juneau.rest.server">RestOpSession</a>&nbsp;opSession)</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">AsyncResponseProcessor.</span><code><a href="../processor/AsyncResponseProcessor.html#process(org.apache.juneau.rest.server.RestOpSession)" class="member-name-link">process</a><wbr>(<a href="../RestOpSession.html" title="class in org.apache.juneau.rest.server">RestOpSession</a>&nbsp;opSession)</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
 <div class="col-first odd-row-color"><code>int</code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">HttpResourceProcessor.</span><code><a href="../processor/HttpResourceProcessor.html#process(org.apache.juneau.rest.server.RestOpSession)" class="member-name-link">process</a><wbr>(<a href="../RestOpSession.html" title="class in org.apache.juneau.rest.server">RestOpSession</a>&nbsp;opSession)</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">HttpBodyProcessor.</span><code><a href="../processor/HttpBodyProcessor.html#process(org.apache.juneau.rest.server.RestOpSession)" class="member-name-link">process</a><wbr>(<a href="../RestOpSession.html" title="class in org.apache.juneau.rest.server">RestOpSession</a>&nbsp;opSession)</code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
 <div class="col-first even-row-color"><code>int</code></div>
-<div class="col-second even-row-color"><span class="type-name-label">HttpResponseProcessor.</span><code><a href="../processor/HttpResponseProcessor.html#process(org.apache.juneau.rest.server.RestOpSession)" class="member-name-link">process</a><wbr>(<a href="../RestOpSession.html" title="class in org.apache.juneau.rest.server">RestOpSession</a>&nbsp;opSession)</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">HttpResourceProcessor.</span><code><a href="../processor/HttpResourceProcessor.html#process(org.apache.juneau.rest.server.RestOpSession)" class="member-name-link">process</a><wbr>(<a href="../RestOpSession.html" title="class in org.apache.juneau.rest.server">RestOpSession</a>&nbsp;opSession)</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
 <div class="col-first odd-row-color"><code>int</code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">InputStreamProcessor.</span><code><a href="../processor/InputStreamProcessor.html#process(org.apache.juneau.rest.server.RestOpSession)" class="member-name-link">process</a><wbr>(<a href="../RestOpSession.html" title="class in org.apache.juneau.rest.server">RestOpSession</a>&nbsp;opSession)</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">HttpResponseProcessor.</span><code><a href="../processor/HttpResponseProcessor.html#process(org.apache.juneau.rest.server.RestOpSession)" class="member-name-link">process</a><wbr>(<a href="../RestOpSession.html" title="class in org.apache.juneau.rest.server">RestOpSession</a>&nbsp;opSession)</code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
 <div class="col-first even-row-color"><code>int</code></div>
-<div class="col-second even-row-color"><span class="type-name-label">PlainTextPojoProcessor.</span><code><a href="../processor/PlainTextPojoProcessor.html#process(org.apache.juneau.rest.server.RestOpSession)" class="member-name-link">process</a><wbr>(<a href="../RestOpSession.html" title="class in org.apache.juneau.rest.server">RestOpSession</a>&nbsp;opSession)</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">InputStreamProcessor.</span><code><a href="../processor/InputStreamProcessor.html#process(org.apache.juneau.rest.server.RestOpSession)" class="member-name-link">process</a><wbr>(<a href="../RestOpSession.html" title="class in org.apache.juneau.rest.server">RestOpSession</a>&nbsp;opSession)</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
 <div class="col-first odd-row-color"><code>int</code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">ProblemDetailsProcessor.</span><code><a href="../processor/ProblemDetailsProcessor.html#process(org.apache.juneau.rest.server.RestOpSession)" class="member-name-link">process</a><wbr>(<a href="../RestOpSession.html" title="class in org.apache.juneau.rest.server">RestOpSession</a>&nbsp;opSession)</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">PlainTextPojoProcessor.</span><code><a href="../processor/PlainTextPojoProcessor.html#process(org.apache.juneau.rest.server.RestOpSession)" class="member-name-link">process</a><wbr>(<a href="../RestOpSession.html" title="class in org.apache.juneau.rest.server">RestOpSession</a>&nbsp;opSession)</code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
 <div class="col-first even-row-color"><code>int</code></div>
-<div class="col-second even-row-color"><span class="type-name-label">ReaderProcessor.</span><code><a href="../processor/ReaderProcessor.html#process(org.apache.juneau.rest.server.RestOpSession)" class="member-name-link">process</a><wbr>(<a href="../RestOpSession.html" title="class in org.apache.juneau.rest.server">RestOpSession</a>&nbsp;opSession)</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">ProblemDetailsProcessor.</span><code><a href="../processor/ProblemDetailsProcessor.html#process(org.apache.juneau.rest.server.RestOpSession)" class="member-name-link">process</a><wbr>(<a href="../RestOpSession.html" title="class in org.apache.juneau.rest.server">RestOpSession</a>&nbsp;opSession)</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
 <div class="col-first odd-row-color"><code>int</code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">ResponseBeanProcessor.</span><code><a href="../processor/ResponseBeanProcessor.html#process(org.apache.juneau.rest.server.RestOpSession)" class="member-name-link">process</a><wbr>(<a href="../RestOpSession.html" title="class in org.apache.juneau.rest.server">RestOpSession</a>&nbsp;opSession)</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">ReaderProcessor.</span><code><a href="../processor/ReaderProcessor.html#process(org.apache.juneau.rest.server.RestOpSession)" class="member-name-link">process</a><wbr>(<a href="../RestOpSession.html" title="class in org.apache.juneau.rest.server">RestOpSession</a>&nbsp;opSession)</code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
 <div class="col-first even-row-color"><code>int</code></div>
-<div class="col-second even-row-color"><span class="type-name-label">ResponseProcessor.</span><code><a href="../processor/ResponseProcessor.html#process(org.apache.juneau.rest.server.RestOpSession)" class="member-name-link">process</a><wbr>(<a href="../RestOpSession.html" title="class in org.apache.juneau.rest.server">RestOpSession</a>&nbsp;opSession)</code></div>
-<div class="col-last even-row-color">
+<div class="col-second even-row-color"><span class="type-name-label">ResponseBeanProcessor.</span><code><a href="../processor/ResponseBeanProcessor.html#process(org.apache.juneau.rest.server.RestOpSession)" class="member-name-link">process</a><wbr>(<a href="../RestOpSession.html" title="class in org.apache.juneau.rest.server">RestOpSession</a>&nbsp;opSession)</code></div>
+<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-first odd-row-color"><code>int</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">ResponseProcessor.</span><code><a href="../processor/ResponseProcessor.html#process(org.apache.juneau.rest.server.RestOpSession)" class="member-name-link">process</a><wbr>(<a href="../RestOpSession.html" title="class in org.apache.juneau.rest.server">RestOpSession</a>&nbsp;opSession)</code></div>
+<div class="col-last odd-row-color">
 <div class="block">Process this response if possible.</div>
 </div>
-<div class="col-first odd-row-color"><code>int</code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">SerializedPojoProcessor.</span><code><a href="../processor/SerializedPojoProcessor.html#process(org.apache.juneau.rest.server.RestOpSession)" class="member-name-link">process</a><wbr>(<a href="../RestOpSession.html" title="class in org.apache.juneau.rest.server">RestOpSession</a>&nbsp;opSession)</code></div>
-<div class="col-last odd-row-color">&nbsp;</div>
 <div class="col-first even-row-color"><code>int</code></div>
-<div class="col-second even-row-color"><span class="type-name-label">ThrowableProcessor.</span><code><a href="../processor/ThrowableProcessor.html#process(org.apache.juneau.rest.server.RestOpSession)" class="member-name-link">process</a><wbr>(<a href="../RestOpSession.html" title="class in org.apache.juneau.rest.server">RestOpSession</a>&nbsp;opSession)</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">SerializedPojoProcessor.</span><code><a href="../processor/SerializedPojoProcessor.html#process(org.apache.juneau.rest.server.RestOpSession)" class="member-name-link">process</a><wbr>(<a href="../RestOpSession.html" title="class in org.apache.juneau.rest.server">RestOpSession</a>&nbsp;opSession)</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
+<div class="col-first odd-row-color"><code>int</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">ThrowableProcessor.</span><code><a href="../processor/ThrowableProcessor.html#process(org.apache.juneau.rest.server.RestOpSession)" class="member-name-link">process</a><wbr>(<a href="../RestOpSession.html" title="class in org.apache.juneau.rest.server">RestOpSession</a>&nbsp;opSession)</code></div>
+<div class="col-last odd-row-color">&nbsp;</div>
 </div>
 </section>
 </li>
@@ -424,6 +434,20 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color"><code>int</code></div>
 <div class="col-second even-row-color"><span class="type-name-label">ThymeleafViewRenderer.</span><code><a href="../view/thymeleaf/ThymeleafViewRenderer.html#process(org.apache.juneau.rest.server.RestOpSession)" class="member-name-link">process</a><wbr>(<a href="../RestOpSession.html" title="class in org.apache.juneau.rest.server">RestOpSession</a>&nbsp;opSession)</code></div>
+<div class="col-last even-row-color">&nbsp;</div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="org.apache.juneau.rest.server.widgets">
+<h2>Uses of <a href="../RestOpSession.html" title="class in org.apache.juneau.rest.server">RestOpSession</a> in <a href="../widgets/package-summary.html">org.apache.juneau.rest.server.widgets</a></h2>
+<div class="caption"><span>Methods in <a href="../widgets/package-summary.html">org.apache.juneau.rest.server.widgets</a> with parameters of type <a href="../RestOpSession.html" title="class in org.apache.juneau.rest.server">RestOpSession</a></span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier and Type</div>
+<div class="table-header col-second">Method</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code>int</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">WidgetsMixin.WidgetValidationProcessor.</span><code><a href="../widgets/WidgetsMixin.WidgetValidationProcessor.html#process(org.apache.juneau.rest.server.RestOpSession)" class="member-name-link">process</a><wbr>(<a href="../RestOpSession.html" title="class in org.apache.juneau.rest.server">RestOpSession</a>&nbsp;opSession)</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
 </div>
 </section>

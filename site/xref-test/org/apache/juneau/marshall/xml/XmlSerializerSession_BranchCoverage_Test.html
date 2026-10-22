@@ -278,7 +278,7 @@
 <a class="jxr_linenumber" name="L270" href="#L270">270</a> 
 <a class="jxr_linenumber" name="L271" href="#L271">271</a> 	<em class="jxr_javadoccomment">/** Bean with list property annotated as XML elements format. */</em>
 <a class="jxr_linenumber" name="L272" href="#L272">272</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> BeanWithListProp {
-<a class="jxr_linenumber" name="L273" href="#L273">273</a> 		@Xml(format=XmlFormat.ELEMENTS)
+<a class="jxr_linenumber" name="L273" href="#L273">273</a> 		@Xml(format=XmlFormat.FREEFORM)
 <a class="jxr_linenumber" name="L274" href="#L274">274</a> 		<strong class="jxr_keyword">public</strong> List&lt;String&gt; items = List.of(<span class="jxr_string">"a"</span>, <span class="jxr_string">"b"</span>, <span class="jxr_string">"c"</span>);
 <a class="jxr_linenumber" name="L275" href="#L275">275</a> 	}
 <a class="jxr_linenumber" name="L276" href="#L276">276</a> 
@@ -321,23 +321,48 @@
 <a class="jxr_linenumber" name="L313" href="#L313">313</a> 	}
 <a class="jxr_linenumber" name="L314" href="#L314">314</a> 
 <a class="jxr_linenumber" name="L315" href="#L315">315</a> 	<em class="jxr_comment">// ------------------------------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L316" href="#L316">316</a> 	<em class="jxr_comment">// Helper bean classes</em>
+<a class="jxr_linenumber" name="L316" href="#L316">316</a> 	<em class="jxr_comment">// k - Default namespace resolution against registered namespaces (constructor field-init ordering)</em>
 <a class="jxr_linenumber" name="L317" href="#L317">317</a> 	<em class="jxr_comment">// ------------------------------------------------------------------------------------------------------------------</em>
 <a class="jxr_linenumber" name="L318" href="#L318">318</a> 
-<a class="jxr_linenumber" name="L319" href="#L319">319</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> SimpleBean {
-<a class="jxr_linenumber" name="L320" href="#L320">320</a> 		<strong class="jxr_keyword">public</strong> String name;
-<a class="jxr_linenumber" name="L321" href="#L321">321</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">int</strong> age;
-<a class="jxr_linenumber" name="L322" href="#L322">322</a> 	}
-<a class="jxr_linenumber" name="L323" href="#L323">323</a> 
-<a class="jxr_linenumber" name="L324" href="#L324">324</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> EmptyBean {
-<a class="jxr_linenumber" name="L325" href="#L325">325</a> 		<strong class="jxr_keyword">public</strong> String placeholder;
-<a class="jxr_linenumber" name="L326" href="#L326">326</a> 	}
-<a class="jxr_linenumber" name="L327" href="#L327">327</a> 
-<a class="jxr_linenumber" name="L328" href="#L328">328</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> OuterBean {
-<a class="jxr_linenumber" name="L329" href="#L329">329</a> 		<strong class="jxr_keyword">public</strong> String label;
-<a class="jxr_linenumber" name="L330" href="#L330">330</a> 		<strong class="jxr_keyword">public</strong> SimpleBean <strong class="jxr_keyword">inner</strong>;
-<a class="jxr_linenumber" name="L331" href="#L331">331</a> 	}
-<a class="jxr_linenumber" name="L332" href="#L332">332</a> }
+<a class="jxr_linenumber" name="L319" href="#L319">319</a> 	<em class="jxr_javadoccomment">/** Name-only default namespace resolves its URI from a registered namespace with a matching name. */</em>
+<a class="jxr_linenumber" name="L320" href="#L320">320</a> 	@Test <strong class="jxr_keyword">void</strong> k01_defaultNamespaceNameOnlyResolvesAgainstRegisteredNamespaces() {
+<a class="jxr_linenumber" name="L321" href="#L321">321</a> 		<em class="jxr_comment">// FIXED: the session constructor used to call findDefaultNamespace(...) BEFORE the namespaces field</em>
+<a class="jxr_linenumber" name="L322" href="#L322">322</a> 		<em class="jxr_comment">// was populated from ctx, so findDefaultNamespace's "n.uri == null" search loop (which resolves a</em>
+<a class="jxr_linenumber" name="L323" href="#L323">323</a> 		<em class="jxr_comment">// name-only default namespace by matching a registered namespace's name) always saw the field</em>
+<a class="jxr_linenumber" name="L324" href="#L324">324</a> 		<em class="jxr_comment">// initializer's empty list and iterated zero times -- the default namespace was returned unresolved,</em>
+<a class="jxr_linenumber" name="L325" href="#L325">325</a> 		<em class="jxr_comment">// missing its URI. namespaces is now populated first, so the loop actually finds a match.</em>
+<a class="jxr_linenumber" name="L326" href="#L326">326</a> 		<strong class="jxr_keyword">var</strong> full = Namespace.of(<span class="jxr_string">"foo"</span>, <span class="jxr_string">"http://example.com/foo"</span>);
+<a class="jxr_linenumber" name="L327" href="#L327">327</a> 		<strong class="jxr_keyword">var</strong> s = XmlSerializer.create().enableNamespaces().namespaces(full).build().createSession().property(<span class="jxr_string">"defaultNamespace"</span>, <span class="jxr_string">"foo"</span>).build();
+<a class="jxr_linenumber" name="L328" href="#L328">328</a> 		assertEquals(<span class="jxr_string">"http://example.com/foo"</span>, s.getDefaultNamespace().getUri());
+<a class="jxr_linenumber" name="L329" href="#L329">329</a> 	}
+<a class="jxr_linenumber" name="L330" href="#L330">330</a> 
+<a class="jxr_linenumber" name="L331" href="#L331">331</a> 	<em class="jxr_javadoccomment">/** URI-only default namespace resolves its name from a registered namespace with a matching URI. */</em>
+<a class="jxr_linenumber" name="L332" href="#L332">332</a> 	@Test <strong class="jxr_keyword">void</strong> k02_defaultNamespaceUriOnlyResolvesAgainstRegisteredNamespaces() {
+<a class="jxr_linenumber" name="L333" href="#L333">333</a> 		<em class="jxr_comment">// Same underlying fix as k01, exercised via findDefaultNamespace's other dead loop body: a</em>
+<a class="jxr_linenumber" name="L334" href="#L334">334</a> 		<em class="jxr_comment">// URI-only default namespace resolving its name by matching a registered namespace's URI.</em>
+<a class="jxr_linenumber" name="L335" href="#L335">335</a> 		<strong class="jxr_keyword">var</strong> full = Namespace.of(<span class="jxr_string">"foo"</span>, <span class="jxr_string">"http://example.com/foo"</span>);
+<a class="jxr_linenumber" name="L336" href="#L336">336</a> 		<strong class="jxr_keyword">var</strong> s = XmlSerializer.create().enableNamespaces().namespaces(full).build().createSession().property(<span class="jxr_string">"defaultNamespace"</span>, <span class="jxr_string">"http://example.com/foo"</span>).build();
+<a class="jxr_linenumber" name="L337" href="#L337">337</a> 		assertEquals(<span class="jxr_string">"foo"</span>, s.getDefaultNamespace().getName());
+<a class="jxr_linenumber" name="L338" href="#L338">338</a> 	}
+<a class="jxr_linenumber" name="L339" href="#L339">339</a> 
+<a class="jxr_linenumber" name="L340" href="#L340">340</a> 	<em class="jxr_comment">// ------------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L341" href="#L341">341</a> 	<em class="jxr_comment">// Helper bean classes</em>
+<a class="jxr_linenumber" name="L342" href="#L342">342</a> 	<em class="jxr_comment">// ------------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L343" href="#L343">343</a> 
+<a class="jxr_linenumber" name="L344" href="#L344">344</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> SimpleBean {
+<a class="jxr_linenumber" name="L345" href="#L345">345</a> 		<strong class="jxr_keyword">public</strong> String name;
+<a class="jxr_linenumber" name="L346" href="#L346">346</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">int</strong> age;
+<a class="jxr_linenumber" name="L347" href="#L347">347</a> 	}
+<a class="jxr_linenumber" name="L348" href="#L348">348</a> 
+<a class="jxr_linenumber" name="L349" href="#L349">349</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> EmptyBean {
+<a class="jxr_linenumber" name="L350" href="#L350">350</a> 		<strong class="jxr_keyword">public</strong> String placeholder;
+<a class="jxr_linenumber" name="L351" href="#L351">351</a> 	}
+<a class="jxr_linenumber" name="L352" href="#L352">352</a> 
+<a class="jxr_linenumber" name="L353" href="#L353">353</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> OuterBean {
+<a class="jxr_linenumber" name="L354" href="#L354">354</a> 		<strong class="jxr_keyword">public</strong> String label;
+<a class="jxr_linenumber" name="L355" href="#L355">355</a> 		<strong class="jxr_keyword">public</strong> SimpleBean <strong class="jxr_keyword">inner</strong>;
+<a class="jxr_linenumber" name="L356" href="#L356">356</a> 	}
+<a class="jxr_linenumber" name="L357" href="#L357">357</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

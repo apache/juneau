@@ -63,9 +63,9 @@
 <a class="jxr_linenumber" name="L55" href="#L55">55</a>  		<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L56" href="#L56">56</a>  			<strong class="jxr_keyword">var</strong> c = MockRestClient.buildLax(A01_OverridePath.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L57" href="#L57">57</a>  
-<a class="jxr_linenumber" name="L58" href="#L58">58</a>  			c.get(<span class="jxr_string">"/static/javadoc.css"</span>).run().assertStatus(404);
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>  			c.get(<span class="jxr_string">"/static/themes/devops.css"</span>).run().assertStatus(404);
 <a class="jxr_linenumber" name="L59" href="#L59">59</a>  
-<a class="jxr_linenumber" name="L60" href="#L60">60</a>  			c.get(<span class="jxr_string">"/assets/javadoc.css"</span>)
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>  			c.get(<span class="jxr_string">"/assets/themes/devops.css"</span>)
 <a class="jxr_linenumber" name="L61" href="#L61">61</a>  				.run()
 <a class="jxr_linenumber" name="L62" href="#L62">62</a>  				.assertStatus(200)
 <a class="jxr_linenumber" name="L63" href="#L63">63</a>  				.assertContent().asString().isContains(<span class="jxr_string">"Licensed to the Apache Software Foundation"</span>);
@@ -90,9 +90,9 @@
 <a class="jxr_linenumber" name="L82" href="#L82">82</a>  		<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L83" href="#L83">83</a>  			<strong class="jxr_keyword">var</strong> c = MockRestClient.buildLax(A02_HtdocsAliasMigration.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L84" href="#L84">84</a>  
-<a class="jxr_linenumber" name="L85" href="#L85">85</a>  			c.get(<span class="jxr_string">"/static/javadoc.css"</span>).run().assertStatus(404);
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>  			c.get(<span class="jxr_string">"/static/themes/devops.css"</span>).run().assertStatus(404);
 <a class="jxr_linenumber" name="L86" href="#L86">86</a>  
-<a class="jxr_linenumber" name="L87" href="#L87">87</a>  			c.get(<span class="jxr_string">"/htdocs/javadoc.css"</span>)
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>  			c.get(<span class="jxr_string">"/htdocs/themes/devops.css"</span>)
 <a class="jxr_linenumber" name="L88" href="#L88">88</a>  				.run()
 <a class="jxr_linenumber" name="L89" href="#L89">89</a>  				.assertStatus(200)
 <a class="jxr_linenumber" name="L90" href="#L90">90</a>  				.assertContent().asString().isContains(<span class="jxr_string">"Licensed to the Apache Software Foundation"</span>);
@@ -113,7 +113,7 @@
 <a class="jxr_linenumber" name="L105" href="#L105">105</a> 		System.setProperty(key, <span class="jxr_string">"xxx"</span>);
 <a class="jxr_linenumber" name="L106" href="#L106">106</a> 		<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L107" href="#L107">107</a> 			<strong class="jxr_keyword">var</strong> c = MockRestClient.buildLax(A03_BareToken.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L108" href="#L108">108</a> 			c.get(<span class="jxr_string">"/xxx/javadoc.css"</span>).run().assertStatus(200).assertContent().asString().isContains(<span class="jxr_string">"Licensed to the Apache Software Foundation"</span>);
+<a class="jxr_linenumber" name="L108" href="#L108">108</a> 			c.get(<span class="jxr_string">"/xxx/themes/devops.css"</span>).run().assertStatus(200).assertContent().asString().isContains(<span class="jxr_string">"Licensed to the Apache Software Foundation"</span>);
 <a class="jxr_linenumber" name="L109" href="#L109">109</a> 		} <strong class="jxr_keyword">finally</strong> {
 <a class="jxr_linenumber" name="L110" href="#L110">110</a> 			<strong class="jxr_keyword">if</strong> (prev == <strong class="jxr_keyword">null</strong>) System.clearProperty(key);
 <a class="jxr_linenumber" name="L111" href="#L111">111</a> 			<strong class="jxr_keyword">else</strong> System.setProperty(key, prev);
@@ -131,7 +131,7 @@
 <a class="jxr_linenumber" name="L123" href="#L123">123</a> 		System.setProperty(key, <span class="jxr_string">"/xxx"</span>);
 <a class="jxr_linenumber" name="L124" href="#L124">124</a> 		<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L125" href="#L125">125</a> 			<strong class="jxr_keyword">var</strong> c = MockRestClient.buildLax(A04_LeadingSlash.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L126" href="#L126">126</a> 			c.get(<span class="jxr_string">"/xxx/javadoc.css"</span>).run().assertStatus(200).assertContent().asString().isContains(<span class="jxr_string">"Licensed to the Apache Software Foundation"</span>);
+<a class="jxr_linenumber" name="L126" href="#L126">126</a> 			c.get(<span class="jxr_string">"/xxx/themes/devops.css"</span>).run().assertStatus(200).assertContent().asString().isContains(<span class="jxr_string">"Licensed to the Apache Software Foundation"</span>);
 <a class="jxr_linenumber" name="L127" href="#L127">127</a> 		} <strong class="jxr_keyword">finally</strong> {
 <a class="jxr_linenumber" name="L128" href="#L128">128</a> 			<strong class="jxr_keyword">if</strong> (prev == <strong class="jxr_keyword">null</strong>) System.clearProperty(key);
 <a class="jxr_linenumber" name="L129" href="#L129">129</a> 			<strong class="jxr_keyword">else</strong> System.setProperty(key, prev);
@@ -149,7 +149,7 @@
 <a class="jxr_linenumber" name="L141" href="#L141">141</a> 		System.setProperty(key, <span class="jxr_string">"xxx/"</span>);
 <a class="jxr_linenumber" name="L142" href="#L142">142</a> 		<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L143" href="#L143">143</a> 			<strong class="jxr_keyword">var</strong> c = MockRestClient.buildLax(A05_TrailingSlash.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L144" href="#L144">144</a> 			c.get(<span class="jxr_string">"/xxx/javadoc.css"</span>).run().assertStatus(200).assertContent().asString().isContains(<span class="jxr_string">"Licensed to the Apache Software Foundation"</span>);
+<a class="jxr_linenumber" name="L144" href="#L144">144</a> 			c.get(<span class="jxr_string">"/xxx/themes/devops.css"</span>).run().assertStatus(200).assertContent().asString().isContains(<span class="jxr_string">"Licensed to the Apache Software Foundation"</span>);
 <a class="jxr_linenumber" name="L145" href="#L145">145</a> 		} <strong class="jxr_keyword">finally</strong> {
 <a class="jxr_linenumber" name="L146" href="#L146">146</a> 			<strong class="jxr_keyword">if</strong> (prev == <strong class="jxr_keyword">null</strong>) System.clearProperty(key);
 <a class="jxr_linenumber" name="L147" href="#L147">147</a> 			<strong class="jxr_keyword">else</strong> System.setProperty(key, prev);
@@ -167,7 +167,7 @@
 <a class="jxr_linenumber" name="L159" href="#L159">159</a> 		System.setProperty(key, <span class="jxr_string">"/xxx/"</span>);
 <a class="jxr_linenumber" name="L160" href="#L160">160</a> 		<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L161" href="#L161">161</a> 			<strong class="jxr_keyword">var</strong> c = MockRestClient.buildLax(A06_BothSlashes.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L162" href="#L162">162</a> 			c.get(<span class="jxr_string">"/xxx/javadoc.css"</span>).run().assertStatus(200).assertContent().asString().isContains(<span class="jxr_string">"Licensed to the Apache Software Foundation"</span>);
+<a class="jxr_linenumber" name="L162" href="#L162">162</a> 			c.get(<span class="jxr_string">"/xxx/themes/devops.css"</span>).run().assertStatus(200).assertContent().asString().isContains(<span class="jxr_string">"Licensed to the Apache Software Foundation"</span>);
 <a class="jxr_linenumber" name="L163" href="#L163">163</a> 		} <strong class="jxr_keyword">finally</strong> {
 <a class="jxr_linenumber" name="L164" href="#L164">164</a> 			<strong class="jxr_keyword">if</strong> (prev == <strong class="jxr_keyword">null</strong>) System.clearProperty(key);
 <a class="jxr_linenumber" name="L165" href="#L165">165</a> 			<strong class="jxr_keyword">else</strong> System.setProperty(key, prev);
@@ -185,7 +185,7 @@
 <a class="jxr_linenumber" name="L177" href="#L177">177</a> 		System.setProperty(key, <span class="jxr_string">"/xxx/*"</span>);
 <a class="jxr_linenumber" name="L178" href="#L178">178</a> 		<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L179" href="#L179">179</a> 			<strong class="jxr_keyword">var</strong> c = MockRestClient.buildLax(A07_WildcardSuffix.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L180" href="#L180">180</a> 			c.get(<span class="jxr_string">"/xxx/javadoc.css"</span>).run().assertStatus(200).assertContent().asString().isContains(<span class="jxr_string">"Licensed to the Apache Software Foundation"</span>);
+<a class="jxr_linenumber" name="L180" href="#L180">180</a> 			c.get(<span class="jxr_string">"/xxx/themes/devops.css"</span>).run().assertStatus(200).assertContent().asString().isContains(<span class="jxr_string">"Licensed to the Apache Software Foundation"</span>);
 <a class="jxr_linenumber" name="L181" href="#L181">181</a> 		} <strong class="jxr_keyword">finally</strong> {
 <a class="jxr_linenumber" name="L182" href="#L182">182</a> 			<strong class="jxr_keyword">if</strong> (prev == <strong class="jxr_keyword">null</strong>) System.clearProperty(key);
 <a class="jxr_linenumber" name="L183" href="#L183">183</a> 			<strong class="jxr_keyword">else</strong> System.setProperty(key, prev);
@@ -203,7 +203,7 @@
 <a class="jxr_linenumber" name="L195" href="#L195">195</a> 		System.setProperty(key, <span class="jxr_string">"/api/v1/xxx/*"</span>);
 <a class="jxr_linenumber" name="L196" href="#L196">196</a> 		<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L197" href="#L197">197</a> 			<strong class="jxr_keyword">var</strong> c = MockRestClient.buildLax(A08_MultiSegment.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L198" href="#L198">198</a> 			c.get(<span class="jxr_string">"/api/v1/xxx/javadoc.css"</span>).run().assertStatus(200).assertContent().asString().isContains(<span class="jxr_string">"Licensed to the Apache Software Foundation"</span>);
+<a class="jxr_linenumber" name="L198" href="#L198">198</a> 			c.get(<span class="jxr_string">"/api/v1/xxx/themes/devops.css"</span>).run().assertStatus(200).assertContent().asString().isContains(<span class="jxr_string">"Licensed to the Apache Software Foundation"</span>);
 <a class="jxr_linenumber" name="L199" href="#L199">199</a> 		} <strong class="jxr_keyword">finally</strong> {
 <a class="jxr_linenumber" name="L200" href="#L200">200</a> 			<strong class="jxr_keyword">if</strong> (prev == <strong class="jxr_keyword">null</strong>) System.clearProperty(key);
 <a class="jxr_linenumber" name="L201" href="#L201">201</a> 			<strong class="jxr_keyword">else</strong> System.setProperty(key, prev);

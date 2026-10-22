@@ -36,8 +36,8 @@
 <a class="jxr_linenumber" name="L28" href="#L28">28</a>  <em class="jxr_javadoccomment"> *</em>
 <a class="jxr_linenumber" name="L29" href="#L29">29</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
 <a class="jxr_linenumber" name="L30" href="#L30">30</a>  <em class="jxr_javadoccomment"> * The default resolver is a &lt;b&gt;static per-operation map&lt;/b&gt; populated via</em>
-<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <em class="jxr_javadoccomment"> * {@link McpResourceServerConfig#addOperationScope(String, String, String...)} &amp;mdash; sufficient for 10.0 per the</em>
-<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <em class="jxr_javadoccomment"> * READY-312f settled premise.  This interface is the seam a future &lt;em&gt;dynamic&lt;/em&gt; resolver (e.g. one inspecting</em>
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <em class="jxr_javadoccomment"> * {@link McpResourceServerConfig#addOperationScope(String, String, String...)} &amp;mdash; sufficient for 10.0.</em>
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <em class="jxr_javadoccomment"> * This interface is the seam a future &lt;em&gt;dynamic&lt;/em&gt; resolver (e.g. one inspecting</em>
 <a class="jxr_linenumber" name="L33" href="#L33">33</a>  <em class="jxr_javadoccomment"> * {@link McpOperationContext#params() params}) could plug into via</em>
 <a class="jxr_linenumber" name="L34" href="#L34">34</a>  <em class="jxr_javadoccomment"> * {@link McpResourceServerConfig#setOperationScopeResolver(McpOperationScopeResolver)}; that dynamic capability is</em>
 <a class="jxr_linenumber" name="L35" href="#L35">35</a>  <em class="jxr_javadoccomment"> * deliberately not built for 10.0.</em>

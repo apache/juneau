@@ -77,11 +77,12 @@
 <a class="jxr_linenumber" name="L69" href="#L69">69</a>  
 <a class="jxr_linenumber" name="L70" href="#L70">70</a>  	@Test <strong class="jxr_keyword">void</strong> c03_ofRejectsBlankUriTemplate() {
 <a class="jxr_linenumber" name="L71" href="#L71">71</a>  		McpResourceTemplateHandler.ReadFunction read = (uri, variables, ctx) -&gt; <strong class="jxr_keyword">new</strong> McpResourceOutcome();
-<a class="jxr_linenumber" name="L72" href="#L72">72</a>  		assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; McpResourceTemplateHandler.of(<strong class="jxr_keyword">new</strong> McpResourceTemplateSpec(), read));
-<a class="jxr_linenumber" name="L73" href="#L73">73</a>  		<strong class="jxr_keyword">var</strong> spec = <strong class="jxr_keyword">new</strong> McpResourceTemplateSpec().setUriTemplate(<span class="jxr_string">" "</span>);
-<a class="jxr_linenumber" name="L74" href="#L74">74</a>  		assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; McpResourceTemplateHandler.of(spec, read));
-<a class="jxr_linenumber" name="L75" href="#L75">75</a>  	}
-<a class="jxr_linenumber" name="L76" href="#L76">76</a>  }
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>  		<strong class="jxr_keyword">var</strong> spec1 = <strong class="jxr_keyword">new</strong> McpResourceTemplateSpec();
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>  		assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; McpResourceTemplateHandler.of(spec1, read));
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>  		<strong class="jxr_keyword">var</strong> spec2 = <strong class="jxr_keyword">new</strong> McpResourceTemplateSpec().setUriTemplate(<span class="jxr_string">" "</span>);
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>  		assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; McpResourceTemplateHandler.of(spec2, read));
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>  	}
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>  }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

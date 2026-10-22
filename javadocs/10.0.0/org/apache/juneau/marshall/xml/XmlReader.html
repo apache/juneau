@@ -309,7 +309,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.xml/
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.marshall.parser.ParserPipe,boolean,javax.xml.stream.XMLReporter,javax.xml.stream.XMLResolver,javax.xml.stream.util.XMLEventAllocator)">
 <h3>XmlReader</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlReader.html#line-65">XmlReader</a></span><wbr><span class="parameters">(<a href="../parser/ParserPipe.html" title="class in org.apache.juneau.marshall.parser">ParserPipe</a>&nbsp;pipe,
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlReader.html#line-67">XmlReader</a></span><wbr><span class="parameters">(<a href="../parser/ParserPipe.html" title="class in org.apache.juneau.marshall.parser">ParserPipe</a>&nbsp;pipe,
  boolean&nbsp;validating,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.xml/javax/xml/stream/XMLReporter.html" title="class or interface in javax.xml.stream" class="external-link">XMLReporter</a>&nbsp;reporter,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.xml/javax/xml/stream/XMLResolver.html" title="class or interface in javax.xml.stream" class="external-link">XMLResolver</a>&nbsp;resolver,
@@ -345,7 +345,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.xml/
 <li>
 <section class="detail" id="close()">
 <h3>close</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlReader.html#line-98">close</a></span>()
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlReader.html#line-151">close</a></span>()
            throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.xml/javax/xml/stream/XMLStreamException.html" title="class or interface in javax.xml.stream" class="external-link">XMLStreamException</a></span></div>
 <dl class="notes">
 <dt>Specified by:</dt>
@@ -358,7 +358,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.xml/
 <li>
 <section class="detail" id="getAttributeCount()">
 <h3>getAttributeCount</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlReader.html#line-103">getAttributeCount</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlReader.html#line-156">getAttributeCount</a></span>()</div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.xml/javax/xml/stream/XMLStreamReader.html#getAttributeCount()" title="class or interface in javax.xml.stream" class="external-link">getAttributeCount</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.xml/javax/xml/stream/XMLStreamReader.html" title="class or interface in javax.xml.stream" class="external-link">XMLStreamReader</a></code></dd>
@@ -368,7 +368,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.xml/
 <li>
 <section class="detail" id="getAttributeLocalName(int)">
 <h3>getAttributeLocalName</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlReader.html#line-106">getAttributeLocalName</a></span><wbr><span class="parameters">(int&nbsp;index)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlReader.html#line-159">getAttributeLocalName</a></span><wbr><span class="parameters">(int&nbsp;index)</span></div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.xml/javax/xml/stream/XMLStreamReader.html#getAttributeLocalName(int)" title="class or interface in javax.xml.stream" class="external-link">getAttributeLocalName</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.xml/javax/xml/stream/XMLStreamReader.html" title="class or interface in javax.xml.stream" class="external-link">XMLStreamReader</a></code></dd>
@@ -378,7 +378,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.xml/
 <li>
 <section class="detail" id="getAttributeName(int)">
 <h3>getAttributeName</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.xml/javax/xml/namespace/QName.html" title="class or interface in javax.xml.namespace" class="external-link">QName</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlReader.html#line-111">getAttributeName</a></span><wbr><span class="parameters">(int&nbsp;index)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.xml/javax/xml/namespace/QName.html" title="class or interface in javax.xml.namespace" class="external-link">QName</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlReader.html#line-164">getAttributeName</a></span><wbr><span class="parameters">(int&nbsp;index)</span></div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.xml/javax/xml/stream/XMLStreamReader.html#getAttributeName(int)" title="class or interface in javax.xml.stream" class="external-link">getAttributeName</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.xml/javax/xml/stream/XMLStreamReader.html" title="class or interface in javax.xml.stream" class="external-link">XMLStreamReader</a></code></dd>
@@ -388,7 +388,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.xml/
 <li>
 <section class="detail" id="getAttributeNamespace(int)">
 <h3>getAttributeNamespace</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlReader.html#line-116">getAttributeNamespace</a></span><wbr><span class="parameters">(int&nbsp;index)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlReader.html#line-169">getAttributeNamespace</a></span><wbr><span class="parameters">(int&nbsp;index)</span></div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.xml/javax/xml/stream/XMLStreamReader.html#getAttributeNamespace(int)" title="class or interface in javax.xml.stream" class="external-link">getAttributeNamespace</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.xml/javax/xml/stream/XMLStreamReader.html" title="class or interface in javax.xml.stream" class="external-link">XMLStreamReader</a></code></dd>
@@ -398,7 +398,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.xml/
 <li>
 <section class="detail" id="getAttributePrefix(int)">
 <h3>getAttributePrefix</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlReader.html#line-121">getAttributePrefix</a></span><wbr><span class="parameters">(int&nbsp;index)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlReader.html#line-174">getAttributePrefix</a></span><wbr><span class="parameters">(int&nbsp;index)</span></div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.xml/javax/xml/stream/XMLStreamReader.html#getAttributePrefix(int)" title="class or interface in javax.xml.stream" class="external-link">getAttributePrefix</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.xml/javax/xml/stream/XMLStreamReader.html" title="class or interface in javax.xml.stream" class="external-link">XMLStreamReader</a></code></dd>
@@ -408,7 +408,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.xml/
 <li>
 <section class="detail" id="getAttributeType(int)">
 <h3>getAttributeType</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlReader.html#line-126">getAttributeType</a></span><wbr><span class="parameters">(int&nbsp;index)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlReader.html#line-179">getAttributeType</a></span><wbr><span class="parameters">(int&nbsp;index)</span></div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.xml/javax/xml/stream/XMLStreamReader.html#getAttributeType(int)" title="class or interface in javax.xml.stream" class="external-link">getAttributeType</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.xml/javax/xml/stream/XMLStreamReader.html" title="class or interface in javax.xml.stream" class="external-link">XMLStreamReader</a></code></dd>
@@ -418,7 +418,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.xml/
 <li>
 <section class="detail" id="getAttributeValue(int)">
 <h3>getAttributeValue</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlReader.html#line-131">getAttributeValue</a></span><wbr><span class="parameters">(int&nbsp;index)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlReader.html#line-184">getAttributeValue</a></span><wbr><span class="parameters">(int&nbsp;index)</span></div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.xml/javax/xml/stream/XMLStreamReader.html#getAttributeValue(int)" title="class or interface in javax.xml.stream" class="external-link">getAttributeValue</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.xml/javax/xml/stream/XMLStreamReader.html" title="class or interface in javax.xml.stream" class="external-link">XMLStreamReader</a></code></dd>
@@ -428,7 +428,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.xml/
 <li>
 <section class="detail" id="getAttributeValue(java.lang.String,java.lang.String)">
 <h3>getAttributeValue</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlReader.html#line-136">getAttributeValue</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;namespaceURI,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlReader.html#line-189">getAttributeValue</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;namespaceURI,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;localName)</span></div>
 <dl class="notes">
 <dt>Specified by:</dt>
@@ -439,7 +439,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.xml/
 <li>
 <section class="detail" id="getCharacterEncodingScheme()">
 <h3>getCharacterEncodingScheme</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlReader.html#line-141">getCharacterEncodingScheme</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlReader.html#line-194">getCharacterEncodingScheme</a></span>()</div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.xml/javax/xml/stream/XMLStreamReader.html#getCharacterEncodingScheme()" title="class or interface in javax.xml.stream" class="external-link">getCharacterEncodingScheme</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.xml/javax/xml/stream/XMLStreamReader.html" title="class or interface in javax.xml.stream" class="external-link">XMLStreamReader</a></code></dd>
@@ -449,7 +449,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.xml/
 <li>
 <section class="detail" id="getElementText()">
 <h3>getElementText</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlReader.html#line-144">getElementText</a></span>()
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlReader.html#line-197">getElementText</a></span>()
                       throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.xml/javax/xml/stream/XMLStreamException.html" title="class or interface in javax.xml.stream" class="external-link">XMLStreamException</a></span></div>
 <dl class="notes">
 <dt>Specified by:</dt>
@@ -462,7 +462,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.xml/
 <li>
 <section class="detail" id="getEncoding()">
 <h3>getEncoding</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlReader.html#line-147">getEncoding</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlReader.html#line-200">getEncoding</a></span>()</div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.xml/javax/xml/stream/XMLStreamReader.html#getEncoding()" title="class or interface in javax.xml.stream" class="external-link">getEncoding</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.xml/javax/xml/stream/XMLStreamReader.html" title="class or interface in javax.xml.stream" class="external-link">XMLStreamReader</a></code></dd>
@@ -472,7 +472,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.xml/
 <li>
 <section class="detail" id="getEventType()">
 <h3>getEventType</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlReader.html#line-150">getEventType</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlReader.html#line-203">getEventType</a></span>()</div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.xml/javax/xml/stream/XMLStreamReader.html#getEventType()" title="class or interface in javax.xml.stream" class="external-link">getEventType</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.xml/javax/xml/stream/XMLStreamReader.html" title="class or interface in javax.xml.stream" class="external-link">XMLStreamReader</a></code></dd>
@@ -482,7 +482,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.xml/
 <li>
 <section class="detail" id="getLocalName()">
 <h3>getLocalName</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlReader.html#line-153">getLocalName</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlReader.html#line-206">getLocalName</a></span>()</div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.xml/javax/xml/stream/XMLStreamReader.html#getLocalName()" title="class or interface in javax.xml.stream" class="external-link">getLocalName</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.xml/javax/xml/stream/XMLStreamReader.html" title="class or interface in javax.xml.stream" class="external-link">XMLStreamReader</a></code></dd>
@@ -492,7 +492,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.xml/
 <li>
 <section class="detail" id="getLocation()">
 <h3>getLocation</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.xml/javax/xml/stream/Location.html" title="class or interface in javax.xml.stream" class="external-link">Location</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlReader.html#line-156">getLocation</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.xml/javax/xml/stream/Location.html" title="class or interface in javax.xml.stream" class="external-link">Location</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlReader.html#line-209">getLocation</a></span>()</div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.xml/javax/xml/stream/XMLStreamReader.html#getLocation()" title="class or interface in javax.xml.stream" class="external-link">getLocation</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.xml/javax/xml/stream/XMLStreamReader.html" title="class or interface in javax.xml.stream" class="external-link">XMLStreamReader</a></code></dd>
@@ -502,7 +502,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.xml/
 <li>
 <section class="detail" id="getName()">
 <h3>getName</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.xml/javax/xml/namespace/QName.html" title="class or interface in javax.xml.namespace" class="external-link">QName</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlReader.html#line-159">getName</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.xml/javax/xml/namespace/QName.html" title="class or interface in javax.xml.namespace" class="external-link">QName</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlReader.html#line-212">getName</a></span>()</div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.xml/javax/xml/stream/XMLStreamReader.html#getName()" title="class or interface in javax.xml.stream" class="external-link">getName</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.xml/javax/xml/stream/XMLStreamReader.html" title="class or interface in javax.xml.stream" class="external-link">XMLStreamReader</a></code></dd>
@@ -512,7 +512,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.xml/
 <li>
 <section class="detail" id="getNamespaceContext()">
 <h3>getNamespaceContext</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.xml/javax/xml/namespace/NamespaceContext.html" title="class or interface in javax.xml.namespace" class="external-link">NamespaceContext</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlReader.html#line-162">getNamespaceContext</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.xml/javax/xml/namespace/NamespaceContext.html" title="class or interface in javax.xml.namespace" class="external-link">NamespaceContext</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlReader.html#line-215">getNamespaceContext</a></span>()</div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.xml/javax/xml/stream/XMLStreamReader.html#getNamespaceContext()" title="class or interface in javax.xml.stream" class="external-link">getNamespaceContext</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.xml/javax/xml/stream/XMLStreamReader.html" title="class or interface in javax.xml.stream" class="external-link">XMLStreamReader</a></code></dd>
@@ -522,7 +522,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.xml/
 <li>
 <section class="detail" id="getNamespaceCount()">
 <h3>getNamespaceCount</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlReader.html#line-165">getNamespaceCount</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlReader.html#line-218">getNamespaceCount</a></span>()</div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.xml/javax/xml/stream/XMLStreamReader.html#getNamespaceCount()" title="class or interface in javax.xml.stream" class="external-link">getNamespaceCount</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.xml/javax/xml/stream/XMLStreamReader.html" title="class or interface in javax.xml.stream" class="external-link">XMLStreamReader</a></code></dd>
@@ -532,7 +532,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.xml/
 <li>
 <section class="detail" id="getNamespacePrefix(int)">
 <h3>getNamespacePrefix</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlReader.html#line-168">getNamespacePrefix</a></span><wbr><span class="parameters">(int&nbsp;index)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlReader.html#line-221">getNamespacePrefix</a></span><wbr><span class="parameters">(int&nbsp;index)</span></div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.xml/javax/xml/stream/XMLStreamReader.html#getNamespacePrefix(int)" title="class or interface in javax.xml.stream" class="external-link">getNamespacePrefix</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.xml/javax/xml/stream/XMLStreamReader.html" title="class or interface in javax.xml.stream" class="external-link">XMLStreamReader</a></code></dd>
@@ -542,7 +542,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.xml/
 <li>
 <section class="detail" id="getNamespaceURI()">
 <h3>getNamespaceURI</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlReader.html#line-173">getNamespaceURI</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlReader.html#line-226">getNamespaceURI</a></span>()</div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.xml/javax/xml/stream/XMLStreamReader.html#getNamespaceURI()" title="class or interface in javax.xml.stream" class="external-link">getNamespaceURI</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.xml/javax/xml/stream/XMLStreamReader.html" title="class or interface in javax.xml.stream" class="external-link">XMLStreamReader</a></code></dd>
@@ -552,7 +552,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.xml/
 <li>
 <section class="detail" id="getNamespaceURI(int)">
 <h3>getNamespaceURI</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlReader.html#line-176">getNamespaceURI</a></span><wbr><span class="parameters">(int&nbsp;index)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlReader.html#line-229">getNamespaceURI</a></span><wbr><span class="parameters">(int&nbsp;index)</span></div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.xml/javax/xml/stream/XMLStreamReader.html#getNamespaceURI(int)" title="class or interface in javax.xml.stream" class="external-link">getNamespaceURI</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.xml/javax/xml/stream/XMLStreamReader.html" title="class or interface in javax.xml.stream" class="external-link">XMLStreamReader</a></code></dd>
@@ -562,7 +562,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.xml/
 <li>
 <section class="detail" id="getNamespaceURI(java.lang.String)">
 <h3>getNamespaceURI</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlReader.html#line-181">getNamespaceURI</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;prefix)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlReader.html#line-234">getNamespaceURI</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;prefix)</span></div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.xml/javax/xml/stream/XMLStreamReader.html#getNamespaceURI(java.lang.String)" title="class or interface in javax.xml.stream" class="external-link">getNamespaceURI</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.xml/javax/xml/stream/XMLStreamReader.html" title="class or interface in javax.xml.stream" class="external-link">XMLStreamReader</a></code></dd>
@@ -572,7 +572,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.xml/
 <li>
 <section class="detail" id="getPIData()">
 <h3>getPIData</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlReader.html#line-186">getPIData</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlReader.html#line-239">getPIData</a></span>()</div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.xml/javax/xml/stream/XMLStreamReader.html#getPIData()" title="class or interface in javax.xml.stream" class="external-link">getPIData</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.xml/javax/xml/stream/XMLStreamReader.html" title="class or interface in javax.xml.stream" class="external-link">XMLStreamReader</a></code></dd>
@@ -582,7 +582,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.xml/
 <li>
 <section class="detail" id="getPipe()">
 <h3>getPipe</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../parser/ParserPipe.html" title="class in org.apache.juneau.marshall.parser">ParserPipe</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlReader.html#line-194">getPipe</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../parser/ParserPipe.html" title="class in org.apache.juneau.marshall.parser">ParserPipe</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlReader.html#line-247">getPipe</a></span>()</div>
 <div class="block">Returns the pipe passed into the constructor.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -593,7 +593,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.xml/
 <li>
 <section class="detail" id="getPITarget()">
 <h3>getPITarget</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlReader.html#line-196">getPITarget</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlReader.html#line-249">getPITarget</a></span>()</div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.xml/javax/xml/stream/XMLStreamReader.html#getPITarget()" title="class or interface in javax.xml.stream" class="external-link">getPITarget</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.xml/javax/xml/stream/XMLStreamReader.html" title="class or interface in javax.xml.stream" class="external-link">XMLStreamReader</a></code></dd>
@@ -603,7 +603,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.xml/
 <li>
 <section class="detail" id="getPosition()">
 <h3>getPosition</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../parser/Position.html" title="class in org.apache.juneau.marshall.parser">Position</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlReader.html#line-199">getPosition</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../parser/Position.html" title="class in org.apache.juneau.marshall.parser">Position</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlReader.html#line-252">getPosition</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="../parser/Positionable.html#getPosition()">Positionable</a></code></span></div>
 <div class="block">Returns the current position in a reader or input stream.</div>
 <dl class="notes">
@@ -617,7 +617,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.xml/
 <li>
 <section class="detail" id="getPrefix()">
 <h3>getPrefix</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlReader.html#line-205">getPrefix</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlReader.html#line-258">getPrefix</a></span>()</div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.xml/javax/xml/stream/XMLStreamReader.html#getPrefix()" title="class or interface in javax.xml.stream" class="external-link">getPrefix</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.xml/javax/xml/stream/XMLStreamReader.html" title="class or interface in javax.xml.stream" class="external-link">XMLStreamReader</a></code></dd>
@@ -627,7 +627,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.xml/
 <li>
 <section class="detail" id="getProperty(java.lang.String)">
 <h3>getProperty</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlReader.html#line-208">getProperty</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlReader.html#line-261">getProperty</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span>
                    throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/IllegalArgumentException.html" title="class or interface in java.lang" class="external-link">IllegalArgumentException</a></span></div>
 <dl class="notes">
 <dt>Specified by:</dt>
@@ -640,7 +640,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.xml/
 <li>
 <section class="detail" id="getText()">
 <h3>getText</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlReader.html#line-213">getText</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlReader.html#line-266">getText</a></span>()</div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.xml/javax/xml/stream/XMLStreamReader.html#getText()" title="class or interface in javax.xml.stream" class="external-link">getText</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.xml/javax/xml/stream/XMLStreamReader.html" title="class or interface in javax.xml.stream" class="external-link">XMLStreamReader</a></code></dd>
@@ -650,7 +650,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.xml/
 <li>
 <section class="detail" id="getTextCharacters()">
 <h3>getTextCharacters</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">char[]</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlReader.html#line-216">getTextCharacters</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">char[]</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlReader.html#line-269">getTextCharacters</a></span>()</div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.xml/javax/xml/stream/XMLStreamReader.html#getTextCharacters()" title="class or interface in javax.xml.stream" class="external-link">getTextCharacters</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.xml/javax/xml/stream/XMLStreamReader.html" title="class or interface in javax.xml.stream" class="external-link">XMLStreamReader</a></code></dd>
@@ -660,7 +660,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.xml/
 <li>
 <section class="detail" id="getTextCharacters(int,char[],int,int)">
 <h3>getTextCharacters</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlReader.html#line-219">getTextCharacters</a></span><wbr><span class="parameters">(int&nbsp;sourceStart,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlReader.html#line-272">getTextCharacters</a></span><wbr><span class="parameters">(int&nbsp;sourceStart,
  char[]&nbsp;target,
  int&nbsp;targetStart,
  int&nbsp;length)</span>
@@ -676,7 +676,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.xml/
 <li>
 <section class="detail" id="getTextLength()">
 <h3>getTextLength</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlReader.html#line-224">getTextLength</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlReader.html#line-277">getTextLength</a></span>()</div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.xml/javax/xml/stream/XMLStreamReader.html#getTextLength()" title="class or interface in javax.xml.stream" class="external-link">getTextLength</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.xml/javax/xml/stream/XMLStreamReader.html" title="class or interface in javax.xml.stream" class="external-link">XMLStreamReader</a></code></dd>
@@ -686,7 +686,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.xml/
 <li>
 <section class="detail" id="getTextStart()">
 <h3>getTextStart</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlReader.html#line-227">getTextStart</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlReader.html#line-280">getTextStart</a></span>()</div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.xml/javax/xml/stream/XMLStreamReader.html#getTextStart()" title="class or interface in javax.xml.stream" class="external-link">getTextStart</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.xml/javax/xml/stream/XMLStreamReader.html" title="class or interface in javax.xml.stream" class="external-link">XMLStreamReader</a></code></dd>
@@ -696,7 +696,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.xml/
 <li>
 <section class="detail" id="getVersion()">
 <h3>getVersion</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlReader.html#line-230">getVersion</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlReader.html#line-283">getVersion</a></span>()</div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.xml/javax/xml/stream/XMLStreamReader.html#getVersion()" title="class or interface in javax.xml.stream" class="external-link">getVersion</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.xml/javax/xml/stream/XMLStreamReader.html" title="class or interface in javax.xml.stream" class="external-link">XMLStreamReader</a></code></dd>
@@ -706,7 +706,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.xml/
 <li>
 <section class="detail" id="hasName()">
 <h3>hasName</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlReader.html#line-233">hasName</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlReader.html#line-286">hasName</a></span>()</div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.xml/javax/xml/stream/XMLStreamReader.html#hasName()" title="class or interface in javax.xml.stream" class="external-link">hasName</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.xml/javax/xml/stream/XMLStreamReader.html" title="class or interface in javax.xml.stream" class="external-link">XMLStreamReader</a></code></dd>
@@ -716,7 +716,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.xml/
 <li>
 <section class="detail" id="hasNext()">
 <h3>hasNext</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlReader.html#line-238">hasNext</a></span>()
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlReader.html#line-291">hasNext</a></span>()
                 throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.xml/javax/xml/stream/XMLStreamException.html" title="class or interface in javax.xml.stream" class="external-link">XMLStreamException</a></span></div>
 <dl class="notes">
 <dt>Specified by:</dt>
@@ -729,7 +729,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.xml/
 <li>
 <section class="detail" id="hasText()">
 <h3>hasText</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlReader.html#line-243">hasText</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlReader.html#line-296">hasText</a></span>()</div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.xml/javax/xml/stream/XMLStreamReader.html#hasText()" title="class or interface in javax.xml.stream" class="external-link">hasText</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.xml/javax/xml/stream/XMLStreamReader.html" title="class or interface in javax.xml.stream" class="external-link">XMLStreamReader</a></code></dd>
@@ -739,7 +739,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.xml/
 <li>
 <section class="detail" id="isAttributeSpecified(int)">
 <h3>isAttributeSpecified</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlReader.html#line-248">isAttributeSpecified</a></span><wbr><span class="parameters">(int&nbsp;index)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlReader.html#line-301">isAttributeSpecified</a></span><wbr><span class="parameters">(int&nbsp;index)</span></div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.xml/javax/xml/stream/XMLStreamReader.html#isAttributeSpecified(int)" title="class or interface in javax.xml.stream" class="external-link">isAttributeSpecified</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.xml/javax/xml/stream/XMLStreamReader.html" title="class or interface in javax.xml.stream" class="external-link">XMLStreamReader</a></code></dd>
@@ -749,7 +749,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.xml/
 <li>
 <section class="detail" id="isCharacters()">
 <h3>isCharacters</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlReader.html#line-253">isCharacters</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlReader.html#line-306">isCharacters</a></span>()</div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.xml/javax/xml/stream/XMLStreamReader.html#isCharacters()" title="class or interface in javax.xml.stream" class="external-link">isCharacters</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.xml/javax/xml/stream/XMLStreamReader.html" title="class or interface in javax.xml.stream" class="external-link">XMLStreamReader</a></code></dd>
@@ -759,7 +759,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.xml/
 <li>
 <section class="detail" id="isEndElement()">
 <h3>isEndElement</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlReader.html#line-256">isEndElement</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlReader.html#line-309">isEndElement</a></span>()</div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.xml/javax/xml/stream/XMLStreamReader.html#isEndElement()" title="class or interface in javax.xml.stream" class="external-link">isEndElement</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.xml/javax/xml/stream/XMLStreamReader.html" title="class or interface in javax.xml.stream" class="external-link">XMLStreamReader</a></code></dd>
@@ -769,7 +769,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.xml/
 <li>
 <section class="detail" id="isStandalone()">
 <h3>isStandalone</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlReader.html#line-259">isStandalone</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlReader.html#line-312">isStandalone</a></span>()</div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.xml/javax/xml/stream/XMLStreamReader.html#isStandalone()" title="class or interface in javax.xml.stream" class="external-link">isStandalone</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.xml/javax/xml/stream/XMLStreamReader.html" title="class or interface in javax.xml.stream" class="external-link">XMLStreamReader</a></code></dd>
@@ -779,7 +779,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.xml/
 <li>
 <section class="detail" id="isStartElement()">
 <h3>isStartElement</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlReader.html#line-262">isStartElement</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlReader.html#line-315">isStartElement</a></span>()</div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.xml/javax/xml/stream/XMLStreamReader.html#isStartElement()" title="class or interface in javax.xml.stream" class="external-link">isStartElement</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.xml/javax/xml/stream/XMLStreamReader.html" title="class or interface in javax.xml.stream" class="external-link">XMLStreamReader</a></code></dd>
@@ -789,7 +789,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.xml/
 <li>
 <section class="detail" id="isWhiteSpace()">
 <h3>isWhiteSpace</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlReader.html#line-265">isWhiteSpace</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlReader.html#line-318">isWhiteSpace</a></span>()</div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.xml/javax/xml/stream/XMLStreamReader.html#isWhiteSpace()" title="class or interface in javax.xml.stream" class="external-link">isWhiteSpace</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.xml/javax/xml/stream/XMLStreamReader.html" title="class or interface in javax.xml.stream" class="external-link">XMLStreamReader</a></code></dd>
@@ -799,7 +799,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.xml/
 <li>
 <section class="detail" id="next()">
 <h3>next</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlReader.html#line-268">next</a></span>()
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlReader.html#line-321">next</a></span>()
          throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.xml/javax/xml/stream/XMLStreamException.html" title="class or interface in javax.xml.stream" class="external-link">XMLStreamException</a></span></div>
 <dl class="notes">
 <dt>Specified by:</dt>
@@ -812,7 +812,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.xml/
 <li>
 <section class="detail" id="nextTag()">
 <h3>nextTag</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlReader.html#line-273">nextTag</a></span>()
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlReader.html#line-326">nextTag</a></span>()
             throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.xml/javax/xml/stream/XMLStreamException.html" title="class or interface in javax.xml.stream" class="external-link">XMLStreamException</a></span></div>
 <dl class="notes">
 <dt>Specified by:</dt>
@@ -825,7 +825,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.xml/
 <li>
 <section class="detail" id="require(int,java.lang.String,java.lang.String)">
 <h3>require</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlReader.html#line-278">require</a></span><wbr><span class="parameters">(int&nbsp;type,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlReader.html#line-331">require</a></span><wbr><span class="parameters">(int&nbsp;type,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;namespaceURI,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;localName)</span>
              throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.xml/javax/xml/stream/XMLStreamException.html" title="class or interface in javax.xml.stream" class="external-link">XMLStreamException</a></span></div>
@@ -840,7 +840,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.xml/
 <li>
 <section class="detail" id="standaloneSet()">
 <h3>standaloneSet</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlReader.html#line-283">standaloneSet</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlReader.html#line-336">standaloneSet</a></span>()</div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.xml/javax/xml/stream/XMLStreamReader.html#standaloneSet()" title="class or interface in javax.xml.stream" class="external-link">standaloneSet</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.xml/javax/xml/stream/XMLStreamReader.html" title="class or interface in javax.xml.stream" class="external-link">XMLStreamReader</a></code></dd>

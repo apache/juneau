@@ -61,8 +61,53 @@ loadScripts(document, 'script');</script>
 <ul>
 <li class="circle">java.lang.<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" class="type-name-link external-link" title="class or interface in java.lang">Object</a>
 <ul>
+<li class="circle">org.apache.juneau.rest.server.filter.<a href="BoundaryResult.html" class="type-name-link" title="class in org.apache.juneau.rest.server.filter">BoundaryResult</a></li>
+<li class="circle">org.apache.juneau.rest.server.filter.<a href="CsrfBoundary.html" class="type-name-link" title="class in org.apache.juneau.rest.server.filter">CsrfBoundary</a> (implements org.apache.juneau.rest.server.filter.<a href="RequestBoundary.html" title="interface in org.apache.juneau.rest.server.filter">RequestBoundary</a>)</li>
+<li class="circle">org.apache.juneau.rest.server.filter.<a href="CsrfBoundary.Builder.html" class="type-name-link" title="class in org.apache.juneau.rest.server.filter">CsrfBoundary.Builder</a></li>
+<li class="circle">org.apache.juneau.rest.server.filter.<a href="CsrfTokens.html" class="type-name-link" title="class in org.apache.juneau.rest.server.filter">CsrfTokens</a>
+<ul>
+<li class="circle">org.apache.juneau.rest.server.filter.<a href="CsrfTokens.PerSession.html" class="type-name-link" title="class in org.apache.juneau.rest.server.filter">CsrfTokens.PerSession</a></li>
+</ul>
+</li>
+<li class="circle">org.apache.juneau.rest.server.filter.<a href="LoopbackBoundary.html" class="type-name-link" title="class in org.apache.juneau.rest.server.filter">LoopbackBoundary</a> (implements org.apache.juneau.rest.server.filter.<a href="RequestBoundary.html" title="interface in org.apache.juneau.rest.server.filter">RequestBoundary</a>)</li>
+<li class="circle">org.apache.juneau.rest.server.filter.<a href="LoopbackBoundary.Builder.html" class="type-name-link" title="class in org.apache.juneau.rest.server.filter">LoopbackBoundary.Builder</a></li>
+<li class="circle">java.lang.<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Record.html" class="type-name-link external-link" title="class or interface in java.lang">Record</a>
+<ul>
+<li class="circle">org.apache.juneau.rest.server.filter.<a href="HandshakeHosts.html" class="type-name-link" title="class in org.apache.juneau.rest.server.filter">HandshakeHosts</a></li>
+</ul>
+</li>
+<li class="circle">org.apache.juneau.rest.server.filter.<a href="RequestBoundaryFilter.html" class="type-name-link" title="class in org.apache.juneau.rest.server.filter">RequestBoundaryFilter</a> (implements jakarta.servlet.Filter)
+<ul>
+<li class="circle">org.apache.juneau.rest.server.filter.<a href="LoopbackBoundaryFilter.html" class="type-name-link" title="class in org.apache.juneau.rest.server.filter">LoopbackBoundaryFilter</a></li>
+</ul>
+</li>
+<li class="circle">org.apache.juneau.rest.server.filter.<a href="RequestBoundaryFilter.TokenSupplier.html" class="type-name-link" title="class in org.apache.juneau.rest.server.filter">RequestBoundaryFilter.TokenSupplier</a> (implements java.util.function.<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;T&gt;)</li>
 <li class="circle">org.apache.juneau.rest.server.filter.<a href="RequestIdFilter.html" class="type-name-link" title="class in org.apache.juneau.rest.server.filter">RequestIdFilter</a></li>
 <li class="circle">org.apache.juneau.rest.server.filter.<a href="RequestIdFilter.Builder.html" class="type-name-link" title="class in org.apache.juneau.rest.server.filter">RequestIdFilter.Builder</a></li>
+<li class="circle">org.apache.juneau.rest.server.filter.<a href="SynchronizerToken.html" class="type-name-link" title="class in org.apache.juneau.rest.server.filter">SynchronizerToken</a></li>
+</ul>
+</li>
+</ul>
+</section>
+<section class="hierarchy">
+<h2 title="Interface Hierarchy">Interface Hierarchy</h2>
+<ul>
+<li class="circle">org.apache.juneau.rest.server.filter.<a href="RequestBoundary.html" class="type-name-link" title="interface in org.apache.juneau.rest.server.filter">RequestBoundary</a></li>
+</ul>
+</section>
+<section class="hierarchy">
+<h2 title="Enum Class Hierarchy">Enum Class Hierarchy</h2>
+<ul>
+<li class="circle">java.lang.<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" class="type-name-link external-link" title="class or interface in java.lang">Object</a>
+<ul>
+<li class="circle">java.lang.<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Enum.html" class="type-name-link external-link" title="class or interface in java.lang">Enum</a>&lt;E&gt; (implements java.lang.<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Comparable.html" title="class or interface in java.lang" class="external-link">Comparable</a>&lt;T&gt;, java.lang.constant.<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/constant/Constable.html" title="class or interface in java.lang.constant" class="external-link">Constable</a>, java.io.<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a>)
+<ul>
+<li class="circle">org.apache.juneau.rest.server.filter.<a href="BoundaryReason.html" class="type-name-link" title="enum class in org.apache.juneau.rest.server.filter">BoundaryReason</a></li>
+<li class="circle">org.apache.juneau.rest.server.filter.<a href="CsrfBoundary.ForwardedSource.html" class="type-name-link" title="enum class in org.apache.juneau.rest.server.filter">CsrfBoundary.ForwardedSource</a></li>
+<li class="circle">org.apache.juneau.rest.server.filter.<a href="CsrfBoundary.NonBrowser.html" class="type-name-link" title="enum class in org.apache.juneau.rest.server.filter">CsrfBoundary.NonBrowser</a></li>
+<li class="circle">org.apache.juneau.rest.server.filter.<a href="CsrfBoundary.OriginSource.html" class="type-name-link" title="enum class in org.apache.juneau.rest.server.filter">CsrfBoundary.OriginSource</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>

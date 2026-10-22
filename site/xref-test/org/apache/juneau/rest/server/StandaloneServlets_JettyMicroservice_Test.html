@@ -102,7 +102,7 @@
 <a class="jxr_linenumber" name="L94" href="#L94">94</a>  	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
 <a class="jxr_linenumber" name="L95" href="#L95">95</a>  
 <a class="jxr_linenumber" name="L96" href="#L96">96</a>  	@Test <strong class="jxr_keyword">void</strong> b01_staticFilesServlet() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L97" href="#L97">97</a>  		<strong class="jxr_keyword">var</strong> resp = get(<span class="jxr_string">"/static/javadoc.css"</span>);
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>  		<strong class="jxr_keyword">var</strong> resp = get(<span class="jxr_string">"/static/themes/devops.css"</span>);
 <a class="jxr_linenumber" name="L98" href="#L98">98</a>  		assertEquals(200, resp.statusCode(), <span class="jxr_string">"body: "</span> + resp.body());
 <a class="jxr_linenumber" name="L99" href="#L99">99</a>  		assertTrue(resp.body().contains(<span class="jxr_string">"Licensed to the Apache Software Foundation"</span>),
 <a class="jxr_linenumber" name="L100" href="#L100">100</a> 			<span class="jxr_string">"static file body should contain the Apache license header"</span>);

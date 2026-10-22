@@ -29,39 +29,58 @@
 <span class="source-line-no">016</span><span id="line-16"> */</span>
 <span class="source-line-no">017</span><span id="line-17">package org.apache.juneau.petstore.rest;</span>
 <span class="source-line-no">018</span><span id="line-18"></span>
-<span class="source-line-no">019</span><span id="line-19">import org.apache.juneau.rest.server.*;</span>
-<span class="source-line-no">020</span><span id="line-20">import org.apache.juneau.rest.server.servlet.*;</span>
-<span class="source-line-no">021</span><span id="line-21">import org.apache.juneau.rest.server.staticfile.*;</span>
-<span class="source-line-no">022</span><span id="line-22"></span>
-<span class="source-line-no">023</span><span id="line-23">/**</span>
-<span class="source-line-no">024</span><span id="line-24"> * Petstore React SPA demo — serves the no-build single-page React UI from the core classpath.</span>
-<span class="source-line-no">025</span><span id="line-25"> *</span>
-<span class="source-line-no">026</span><span id="line-26"> * &lt;p&gt;</span>
-<span class="source-line-no">027</span><span id="line-27"> * Composes {@link StaticFilesMixin} to serve {@code /static/*} from the importer's classpath: the file</span>
-<span class="source-line-no">028</span><span id="line-28"> * {@code static/petstore-ui.html} is reachable at {@code GET /petstore-ui/static/petstore-ui.html}.  The HTML</span>
-<span class="source-line-no">029</span><span id="line-29"> * loads React + Babel and uses {@code fetch()} against {@code /petstore/pets} to demonstrate the headless-JSON +</span>
-<span class="source-line-no">030</span><span id="line-30"> * decoupled-SPA pattern alongside the server-rendered HTML-doc UI.</span>
-<span class="source-line-no">031</span><span id="line-31"> *</span>
-<span class="source-line-no">032</span><span id="line-32"> * &lt;p&gt;</span>
-<span class="source-line-no">033</span><span id="line-33"> * Lives in {@code juneau-petstore-core} so both the Jetty and Spring Boot deployments inherit it for free.</span>
+<span class="source-line-no">019</span><span id="line-19">import java.util.*;</span>
+<span class="source-line-no">020</span><span id="line-20"></span>
+<span class="source-line-no">021</span><span id="line-21">import org.apache.juneau.http.*;</span>
+<span class="source-line-no">022</span><span id="line-22">import org.apache.juneau.rest.server.*;</span>
+<span class="source-line-no">023</span><span id="line-23">import org.apache.juneau.rest.server.servlet.*;</span>
+<span class="source-line-no">024</span><span id="line-24">import org.apache.juneau.rest.server.staticfile.*;</span>
+<span class="source-line-no">025</span><span id="line-25"></span>
+<span class="source-line-no">026</span><span id="line-26">/**</span>
+<span class="source-line-no">027</span><span id="line-27"> * Petstore React SPA demo — serves the no-build single-page React UI from the core classpath.</span>
+<span class="source-line-no">028</span><span id="line-28"> *</span>
+<span class="source-line-no">029</span><span id="line-29"> * &lt;p&gt;</span>
+<span class="source-line-no">030</span><span id="line-30"> * Composes {@link StaticFilesMixin} to serve {@code /static/*} from the importer's classpath: the file</span>
+<span class="source-line-no">031</span><span id="line-31"> * {@code static/petstore-ui.html} is reachable at {@code GET /petstore-ui/static/petstore-ui.html}.  The HTML</span>
+<span class="source-line-no">032</span><span id="line-32"> * loads the vendored React + ReactDOM bundles ({@code static/vendor/}) and uses {@code fetch()} against {@code /petstore/pets} to demonstrate the headless-JSON +</span>
+<span class="source-line-no">033</span><span id="line-33"> * decoupled-SPA pattern alongside the server-rendered HTML-doc UI.</span>
 <span class="source-line-no">034</span><span id="line-34"> *</span>
-<span class="source-line-no">035</span><span id="line-35"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
-<span class="source-line-no">036</span><span id="line-36"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauPetstore"&gt;juneau-petstore&lt;/a&gt;</span>
-<span class="source-line-no">037</span><span id="line-37"> * &lt;/ul&gt;</span>
-<span class="source-line-no">038</span><span id="line-38"> */</span>
-<span class="source-line-no">039</span><span id="line-39">@Rest(</span>
-<span class="source-line-no">040</span><span id="line-40">   path="/petstore-ui",</span>
-<span class="source-line-no">041</span><span id="line-41">   title="Petstore — React SPA demo",</span>
-<span class="source-line-no">042</span><span id="line-42">   description="No-build single-page React UI loaded as static classpath resource; calls /petstore/* over fetch().",</span>
-<span class="source-line-no">043</span><span id="line-43">   mixins=StaticFilesMixin.class</span>
-<span class="source-line-no">044</span><span id="line-44">)</span>
-<span class="source-line-no">045</span><span id="line-45">@SuppressWarnings({</span>
-<span class="source-line-no">046</span><span id="line-46">   "java:S110" // Inheritance depth acceptable for example/demo code</span>
-<span class="source-line-no">047</span><span id="line-47">})</span>
-<span class="source-line-no">048</span><span id="line-48">public class PetstoreUiResource extends BasicRestServlet {</span>
-<span class="source-line-no">049</span><span id="line-49"></span>
-<span class="source-line-no">050</span><span id="line-50">   private static final long serialVersionUID = 1L;</span>
-<span class="source-line-no">051</span><span id="line-51">}</span>
+<span class="source-line-no">035</span><span id="line-35"> * &lt;p&gt;</span>
+<span class="source-line-no">036</span><span id="line-36"> * The app is also served at the resource root ({@code GET /petstore-ui}), so the console can embed and link it without</span>
+<span class="source-line-no">037</span><span id="line-37"> * knowing the static mount.</span>
+<span class="source-line-no">038</span><span id="line-38"> *</span>
+<span class="source-line-no">039</span><span id="line-39"> * &lt;p&gt;</span>
+<span class="source-line-no">040</span><span id="line-40"> * Lives in {@code juneau-petstore-core} so both the Jetty and Spring Boot deployments inherit it for free.</span>
+<span class="source-line-no">041</span><span id="line-41"> *</span>
+<span class="source-line-no">042</span><span id="line-42"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">043</span><span id="line-43"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauPetstore"&gt;juneau-petstore&lt;/a&gt;</span>
+<span class="source-line-no">044</span><span id="line-44"> * &lt;/ul&gt;</span>
+<span class="source-line-no">045</span><span id="line-45"> */</span>
+<span class="source-line-no">046</span><span id="line-46">@Rest(</span>
+<span class="source-line-no">047</span><span id="line-47">   path="/petstore-ui",</span>
+<span class="source-line-no">048</span><span id="line-48">   title="Petstore — React SPA demo",</span>
+<span class="source-line-no">049</span><span id="line-49">   description="No-build single-page React UI loaded as static classpath resource; calls /petstore/* over fetch().",</span>
+<span class="source-line-no">050</span><span id="line-50">   mixins=StaticFilesMixin.class</span>
+<span class="source-line-no">051</span><span id="line-51">)</span>
+<span class="source-line-no">052</span><span id="line-52">@SuppressWarnings({</span>
+<span class="source-line-no">053</span><span id="line-53">   "java:S110" // Inheritance depth acceptable for example/demo code</span>
+<span class="source-line-no">054</span><span id="line-54">})</span>
+<span class="source-line-no">055</span><span id="line-55">public class PetstoreUiResource extends BasicRestServlet {</span>
+<span class="source-line-no">056</span><span id="line-56"></span>
+<span class="source-line-no">057</span><span id="line-57">   private static final long serialVersionUID = 1L;</span>
+<span class="source-line-no">058</span><span id="line-58"></span>
+<span class="source-line-no">059</span><span id="line-59">   /**</span>
+<span class="source-line-no">060</span><span id="line-60">    * [GET /] &amp;mdash; the single-page app.</span>
+<span class="source-line-no">061</span><span id="line-61">    *</span>
+<span class="source-line-no">062</span><span id="line-62">    * @param req The current request.</span>
+<span class="source-line-no">063</span><span id="line-63">    * @param locale The request locale.</span>
+<span class="source-line-no">064</span><span id="line-64">    * @return The app's HTML page.</span>
+<span class="source-line-no">065</span><span id="line-65">    */</span>
+<span class="source-line-no">066</span><span id="line-66">   @RestGet(path="/", summary="The React app", swagger=@OpSwagger(ignore=true))</span>
+<span class="source-line-no">067</span><span id="line-67">   public HttpResource app(RestRequest req, Locale locale) {</span>
+<span class="source-line-no">068</span><span id="line-68">      return StaticFilesMixin.resolveStaticFile(req, "petstore-ui.html", locale);</span>
+<span class="source-line-no">069</span><span id="line-69">   }</span>
+<span class="source-line-no">070</span><span id="line-70">}</span>
 
 
 

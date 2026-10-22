@@ -49,8 +49,8 @@
 <span class="source-line-no">036</span><span id="line-36"></span>
 <span class="source-line-no">037</span><span id="line-37">   /** All function classes in this category. */</span>
 <span class="source-line-no">038</span><span id="line-38">   @SuppressWarnings({</span>
-<span class="source-line-no">039</span><span id="line-39">      "unchecked", // Cast is safe: type verified by caller context.</span>
-<span class="source-line-no">040</span><span id="line-40">      "java:S2386" // ALL is an immutable compile-time registry; exposed as an array for the cross-package/varargs functions(...) API, so visibility cannot be reduced.</span>
+<span class="source-line-no">039</span><span id="line-39">      "java:S2386", // ALL is an immutable compile-time registry; exposed as an array for the cross-package/varargs functions(...) API, so visibility cannot be reduced.</span>
+<span class="source-line-no">040</span><span id="line-40">      "unchecked" // Cast is safe: type verified by caller context.</span>
 <span class="source-line-no">041</span><span id="line-41">   })</span>
 <span class="source-line-no">042</span><span id="line-42">   public static final Class&lt;? extends VarFunction&gt;[] ALL = new Class[] {</span>
 <span class="source-line-no">043</span><span id="line-43">      And.class, Or.class, Not.class, Xor.class,</span>
@@ -128,9 +128,9 @@
 <span class="source-line-no">115</span><span id="line-115">   /** Same truthiness table as {@link ArgCoercer}, exposed for variadic use in {@link And}/{@link Or}. */</span>
 <span class="source-line-no">116</span><span id="line-116">   private static boolean parseBool(String s) {</span>
 <span class="source-line-no">117</span><span id="line-117">      var t = s == null ? "" : s.trim();</span>
-<span class="source-line-no">118</span><span id="line-118">      if (t.equalsIgnoreCase("true") || t.equals("1") || t.equalsIgnoreCase("yes") || t.equalsIgnoreCase("on"))</span>
+<span class="source-line-no">118</span><span id="line-118">      if (eqic(t, "true") || eq(t, "1") || eqic(t, "yes") || eqic(t, "on"))</span>
 <span class="source-line-no">119</span><span id="line-119">         return true;</span>
-<span class="source-line-no">120</span><span id="line-120">      if (t.isEmpty() || t.equalsIgnoreCase("false") || t.equals("0") || t.equalsIgnoreCase("no") || t.equalsIgnoreCase("off"))</span>
+<span class="source-line-no">120</span><span id="line-120">      if (t.isEmpty() || eqic(t, "false") || eq(t, "0") || eqic(t, "no") || eqic(t, "off"))</span>
 <span class="source-line-no">121</span><span id="line-121">         return false;</span>
 <span class="source-line-no">122</span><span id="line-122">      throw iaex("cannot coerce '%s' to boolean (accepted: true/1/yes/on, false/0/no/off, empty)", s);</span>
 <span class="source-line-no">123</span><span id="line-123">   }</span>

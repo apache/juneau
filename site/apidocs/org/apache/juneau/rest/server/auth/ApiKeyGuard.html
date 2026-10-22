@@ -91,7 +91,7 @@ loadScripts(document, 'script');</script>
       <code>X-API-Key</code>), query parameter, or cookie.
    <li>Delegates lookup to the configured <a href="ApiKeyStore.html" title="interface in org.apache.juneau.rest.server.auth"><code>ApiKeyStore</code></a>.
    <li>On success, stashes the returned <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/security/Principal.html" title="class or interface in java.security" class="external-link"><code>Principal</code></a> on the request attributes under
-      <a href="../RestServerConstants.html#PRINCIPAL_ATTR"><code>RestServerConstants.PRINCIPAL_ATTR</code></a>.
+      <code>"juneau.principal"</code>.
    <li>On any failure path (missing key, unknown key), throws <a href="AuthenticationException.html" title="class in org.apache.juneau.rest.server.auth"><code>AuthenticationException</code></a>
       with a <code>WWW-Authenticate: ApiKey realm="&lt;realm&gt;"</code> response header.
  </ol>

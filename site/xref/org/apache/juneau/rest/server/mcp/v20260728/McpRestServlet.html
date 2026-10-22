@@ -184,53 +184,54 @@
 <a class="jxr_linenumber" name="L176" href="#L176">176</a> 	}
 <a class="jxr_linenumber" name="L177" href="#L177">177</a> 
 <a class="jxr_linenumber" name="L178" href="#L178">178</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L179" href="#L179">179</a> <em class="jxr_javadoccomment">	 * OAuth 2.1 resource-server bearer gate for the MCP {@code POST /} endpoint (READY-312f F2).</em>
+<a class="jxr_linenumber" name="L179" href="#L179">179</a> <em class="jxr_javadoccomment">	 * OAuth 2.1 resource-server bearer gate for the MCP {@code POST /} endpoint.</em>
 <a class="jxr_linenumber" name="L180" href="#L180">180</a> <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L181" href="#L181">181</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L182" href="#L182">182</a> <em class="jxr_javadoccomment">	 * A no-op unless {@link McpResourceServerConfig#isEnabled() RS auth is enabled}; when enabled, every request the</em>
-<a class="jxr_linenumber" name="L183" href="#L183">183</a> <em class="jxr_javadoccomment">	 * router resolves to a {@code POST} (the dedicated MCP servlet's only writable surface) must present a valid bearer</em>
+<a class="jxr_linenumber" name="L182" href="#L182">182</a> <em class="jxr_javadoccomment">	 * A no-op unless {@link McpResourceServerConfig#isEnabled() RS auth is enabled}; when enabled, every request that is</em>
+<a class="jxr_linenumber" name="L183" href="#L183">183</a> <em class="jxr_javadoccomment">	 * a {@code POST}, or that claims one (the dedicated MCP servlet's only writable surface) must present a valid bearer</em>
 <a class="jxr_linenumber" name="L184" href="#L184">184</a> <em class="jxr_javadoccomment">	 * token or it is rejected with {@code 401} / {@code 403} and a {@code WWW-Authenticate: Bearer ...} challenge (see</em>
 <a class="jxr_linenumber" name="L185" href="#L185">185</a> <em class="jxr_javadoccomment">	 * {@link McpResourceServerSupport#gateMcpServlet(McpResourceServerConfig, HttpServletRequest, HttpServletResponse)}).</em>
-<a class="jxr_linenumber" name="L186" href="#L186">186</a> <em class="jxr_javadoccomment">	 * The gate reads the router-&lt;i&gt;resolved&lt;/i&gt; method (honoring {@code ?method=}/{@code X-Method} overrides) rather than</em>
-<a class="jxr_linenumber" name="L187" href="#L187">187</a> <em class="jxr_javadoccomment">	 * the raw servlet method, so a method-override cannot slip past it (H3).  The well-known {@code GET} routes below are</em>
-<a class="jxr_linenumber" name="L188" href="#L188">188</a> <em class="jxr_javadoccomment">	 * intentionally left unauthenticated so a client can discover the PRM document.</em>
-<a class="jxr_linenumber" name="L189" href="#L189">189</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L190" href="#L190">190</a> <em class="jxr_javadoccomment">	 * @param req The raw HTTP request.</em>
-<a class="jxr_linenumber" name="L191" href="#L191">191</a> <em class="jxr_javadoccomment">	 * @param res The raw HTTP response (used to emit the challenge header on rejection).</em>
-<a class="jxr_linenumber" name="L192" href="#L192">192</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L193" href="#L193">193</a> 	@RestStartCall
-<a class="jxr_linenumber" name="L194" href="#L194">194</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">void</strong> mcpResourceServerAuth(HttpServletRequest req, HttpServletResponse res) {
-<a class="jxr_linenumber" name="L195" href="#L195">195</a> 		McpResourceServerSupport.gateMcpServlet(getMcpOptions().getResourceServer(), req, res);
-<a class="jxr_linenumber" name="L196" href="#L196">196</a> 	}
-<a class="jxr_linenumber" name="L197" href="#L197">197</a> 
-<a class="jxr_linenumber" name="L198" href="#L198">198</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L199" href="#L199">199</a> <em class="jxr_javadoccomment">	 * Serves the RFC 9728 Protected Resource Metadata document at the root well-known location (SEP-2351 fallback).</em>
-<a class="jxr_linenumber" name="L200" href="#L200">200</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L201" href="#L201">201</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L202" href="#L202">202</a> <em class="jxr_javadoccomment">	 * This route (and its path-inserted sibling) is registered unconditionally, but returns {@code 404} whenever RS auth</em>
-<a class="jxr_linenumber" name="L203" href="#L203">203</a> <em class="jxr_javadoccomment">	 * is {@link McpResourceServerConfig#isEnabled() disabled} &amp;mdash; so a non-opted-in servlet claims the well-known</em>
-<a class="jxr_linenumber" name="L204" href="#L204">204</a> <em class="jxr_javadoccomment">	 * namespace but exposes no observable metadata (READY-312f F2, M7).</em>
-<a class="jxr_linenumber" name="L205" href="#L205">205</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L206" href="#L206">206</a> <em class="jxr_javadoccomment">	 * @param req The REST request.</em>
-<a class="jxr_linenumber" name="L207" href="#L207">207</a> <em class="jxr_javadoccomment">	 * @return The PRM document.</em>
-<a class="jxr_linenumber" name="L208" href="#L208">208</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L209" href="#L209">209</a> 	@RestGet(path = <span class="jxr_string">"/.well-known/oauth-protected-resource"</span>)
-<a class="jxr_linenumber" name="L210" href="#L210">210</a> 	<strong class="jxr_keyword">public</strong> <a name="McpProtectedResourceMetadata" href="../../../../../../../org/apache/juneau/rest/server/mcp/v20260728/McpProtectedResourceMetadata.html#McpProtectedResourceMetadata">McpProtectedResourceMetadata</a> mcpProtectedResourceMetadataRoot(RestRequest req) {
-<a class="jxr_linenumber" name="L211" href="#L211">211</a> 		<strong class="jxr_keyword">return</strong> McpResourceServerSupport.metadataForWellKnownRoot(getMcpOptions().getResourceServer(), req);
-<a class="jxr_linenumber" name="L212" href="#L212">212</a> 	}
-<a class="jxr_linenumber" name="L213" href="#L213">213</a> 
-<a class="jxr_linenumber" name="L214" href="#L214">214</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L215" href="#L215">215</a> <em class="jxr_javadoccomment">	 * Serves the RFC 9728 Protected Resource Metadata document at the path-inserted well-known location (SEP-2351), but</em>
-<a class="jxr_linenumber" name="L216" href="#L216">216</a> <em class="jxr_javadoccomment">	 * only when the requested suffix matches this resource's expected well-known path; otherwise {@code 404} (M5).</em>
-<a class="jxr_linenumber" name="L217" href="#L217">217</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L218" href="#L218">218</a> <em class="jxr_javadoccomment">	 * @param req The REST request.</em>
-<a class="jxr_linenumber" name="L219" href="#L219">219</a> <em class="jxr_javadoccomment">	 * @return The PRM document.</em>
-<a class="jxr_linenumber" name="L220" href="#L220">220</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L221" href="#L221">221</a> 	@RestGet(path = <span class="jxr_string">"/.well-known/oauth-protected-resource/*"</span>)
-<a class="jxr_linenumber" name="L222" href="#L222">222</a> 	<strong class="jxr_keyword">public</strong> <a name="McpProtectedResourceMetadata" href="../../../../../../../org/apache/juneau/rest/server/mcp/v20260728/McpProtectedResourceMetadata.html#McpProtectedResourceMetadata">McpProtectedResourceMetadata</a> mcpProtectedResourceMetadataPathInserted(RestRequest req) {
-<a class="jxr_linenumber" name="L223" href="#L223">223</a> 		<strong class="jxr_keyword">return</strong> McpResourceServerSupport.metadataForWellKnownPathInserted(getMcpOptions().getResourceServer(), req);
-<a class="jxr_linenumber" name="L224" href="#L224">224</a> 	}
-<a class="jxr_linenumber" name="L225" href="#L225">225</a> }
+<a class="jxr_linenumber" name="L186" href="#L186">186</a> <em class="jxr_javadoccomment">	 * The gate treats a {@code POST} claim on any override channel ({@code ?method=} or any of the four override</em>
+<a class="jxr_linenumber" name="L187" href="#L187">187</a> <em class="jxr_javadoccomment">	 * headers, any value) as a {@code POST}, rather than reading only the raw servlet method, so a method-override cannot</em>
+<a class="jxr_linenumber" name="L188" href="#L188">188</a> <em class="jxr_javadoccomment">	 * slip past it.  The well-known {@code GET} routes below are</em>
+<a class="jxr_linenumber" name="L189" href="#L189">189</a> <em class="jxr_javadoccomment">	 * intentionally left unauthenticated so a client can discover the PRM document.</em>
+<a class="jxr_linenumber" name="L190" href="#L190">190</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L191" href="#L191">191</a> <em class="jxr_javadoccomment">	 * @param req The raw HTTP request.</em>
+<a class="jxr_linenumber" name="L192" href="#L192">192</a> <em class="jxr_javadoccomment">	 * @param res The raw HTTP response (used to emit the challenge header on rejection).</em>
+<a class="jxr_linenumber" name="L193" href="#L193">193</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L194" href="#L194">194</a> 	@RestStartCall
+<a class="jxr_linenumber" name="L195" href="#L195">195</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">void</strong> mcpResourceServerAuth(HttpServletRequest req, HttpServletResponse res) {
+<a class="jxr_linenumber" name="L196" href="#L196">196</a> 		McpResourceServerSupport.gateMcpServlet(getMcpOptions().getResourceServer(), req, res);
+<a class="jxr_linenumber" name="L197" href="#L197">197</a> 	}
+<a class="jxr_linenumber" name="L198" href="#L198">198</a> 
+<a class="jxr_linenumber" name="L199" href="#L199">199</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L200" href="#L200">200</a> <em class="jxr_javadoccomment">	 * Serves the RFC 9728 Protected Resource Metadata document at the root well-known location (SEP-2351 fallback).</em>
+<a class="jxr_linenumber" name="L201" href="#L201">201</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L202" href="#L202">202</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L203" href="#L203">203</a> <em class="jxr_javadoccomment">	 * This route (and its path-inserted sibling) is registered unconditionally, but returns {@code 404} whenever RS auth</em>
+<a class="jxr_linenumber" name="L204" href="#L204">204</a> <em class="jxr_javadoccomment">	 * is {@link McpResourceServerConfig#isEnabled() disabled} &amp;mdash; so a non-opted-in servlet claims the well-known</em>
+<a class="jxr_linenumber" name="L205" href="#L205">205</a> <em class="jxr_javadoccomment">	 * namespace but exposes no observable metadata.</em>
+<a class="jxr_linenumber" name="L206" href="#L206">206</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L207" href="#L207">207</a> <em class="jxr_javadoccomment">	 * @param req The REST request.</em>
+<a class="jxr_linenumber" name="L208" href="#L208">208</a> <em class="jxr_javadoccomment">	 * @return The PRM document.</em>
+<a class="jxr_linenumber" name="L209" href="#L209">209</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L210" href="#L210">210</a> 	@RestGet(path = <span class="jxr_string">"/.well-known/oauth-protected-resource"</span>)
+<a class="jxr_linenumber" name="L211" href="#L211">211</a> 	<strong class="jxr_keyword">public</strong> <a name="McpProtectedResourceMetadata" href="../../../../../../../org/apache/juneau/rest/server/mcp/v20260728/McpProtectedResourceMetadata.html#McpProtectedResourceMetadata">McpProtectedResourceMetadata</a> mcpProtectedResourceMetadataRoot(RestRequest req) {
+<a class="jxr_linenumber" name="L212" href="#L212">212</a> 		<strong class="jxr_keyword">return</strong> McpResourceServerSupport.metadataForWellKnownRoot(getMcpOptions().getResourceServer(), req);
+<a class="jxr_linenumber" name="L213" href="#L213">213</a> 	}
+<a class="jxr_linenumber" name="L214" href="#L214">214</a> 
+<a class="jxr_linenumber" name="L215" href="#L215">215</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L216" href="#L216">216</a> <em class="jxr_javadoccomment">	 * Serves the RFC 9728 Protected Resource Metadata document at the path-inserted well-known location (SEP-2351), but</em>
+<a class="jxr_linenumber" name="L217" href="#L217">217</a> <em class="jxr_javadoccomment">	 * only when the requested suffix matches this resource's expected well-known path; otherwise {@code 404}.</em>
+<a class="jxr_linenumber" name="L218" href="#L218">218</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L219" href="#L219">219</a> <em class="jxr_javadoccomment">	 * @param req The REST request.</em>
+<a class="jxr_linenumber" name="L220" href="#L220">220</a> <em class="jxr_javadoccomment">	 * @return The PRM document.</em>
+<a class="jxr_linenumber" name="L221" href="#L221">221</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L222" href="#L222">222</a> 	@RestGet(path = <span class="jxr_string">"/.well-known/oauth-protected-resource/*"</span>)
+<a class="jxr_linenumber" name="L223" href="#L223">223</a> 	<strong class="jxr_keyword">public</strong> <a name="McpProtectedResourceMetadata" href="../../../../../../../org/apache/juneau/rest/server/mcp/v20260728/McpProtectedResourceMetadata.html#McpProtectedResourceMetadata">McpProtectedResourceMetadata</a> mcpProtectedResourceMetadataPathInserted(RestRequest req) {
+<a class="jxr_linenumber" name="L224" href="#L224">224</a> 		<strong class="jxr_keyword">return</strong> McpResourceServerSupport.metadataForWellKnownPathInserted(getMcpOptions().getResourceServer(), req);
+<a class="jxr_linenumber" name="L225" href="#L225">225</a> 	}
+<a class="jxr_linenumber" name="L226" href="#L226">226</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

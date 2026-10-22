@@ -56,9 +56,9 @@ loadScripts(document, 'script');</script>
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Package</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><a href="#org.apache.juneau.petstore.rest">org.apache.juneau.petstore.rest</a></div>
+<div class="col-first even-row-color"><a href="#org.apache.juneau.petstore.console.dev">org.apache.juneau.petstore.console.dev</a></div>
 <div class="col-last even-row-color">
-<div class="block">Petstore REST resources.</div>
+<div class="block">Petstore console Developer pages: custom cards, themes, rendering flavors and the secure API demo.</div>
 </div>
 <div class="col-first odd-row-color"><a href="#org.apache.juneau.rest.server.guard">org.apache.juneau.rest.server.guard</a></div>
 <div class="col-last odd-row-color">
@@ -68,18 +68,17 @@ loadScripts(document, 'script');</script>
 <section class="class-uses">
 <ul class="block-list">
 <li>
-<section class="detail" id="org.apache.juneau.petstore.rest">
-<h2>Uses of <a href="../RestGuardList.html" title="class in org.apache.juneau.rest.server.guard">RestGuardList</a> in <a href="../../../../petstore/rest/package-summary.html">org.apache.juneau.petstore.rest</a></h2>
-<div class="caption"><span>Methods in <a href="../../../../petstore/rest/package-summary.html">org.apache.juneau.petstore.rest</a> that return <a href="../RestGuardList.html" title="class in org.apache.juneau.rest.server.guard">RestGuardList</a></span></div>
+<section class="detail" id="org.apache.juneau.petstore.console.dev">
+<h2>Uses of <a href="../RestGuardList.html" title="class in org.apache.juneau.rest.server.guard">RestGuardList</a> in <a href="../../../../petstore/console/dev/package-summary.html">org.apache.juneau.petstore.console.dev</a></h2>
+<div class="caption"><span>Methods in <a href="../../../../petstore/console/dev/package-summary.html">org.apache.juneau.petstore.console.dev</a> that return <a href="../RestGuardList.html" title="class in org.apache.juneau.rest.server.guard">RestGuardList</a></span></div>
 <div class="summary-table three-column-summary">
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color"><code><a href="../RestGuardList.html" title="class in org.apache.juneau.rest.server.guard">RestGuardList</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">PetSecureResource.</span><code><a href="../../../../petstore/rest/PetSecureResource.html#guards(org.apache.juneau.commons.inject.BeanStore)" class="member-name-link">guards</a><wbr>(<a href="../../../../commons/inject/BeanStore.html" title="interface in org.apache.juneau.commons.inject">BeanStore</a>&nbsp;bs)</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">SecureApiRest.</span><code><a href="../../../../petstore/console/dev/SecureApiRest.html#guards(org.apache.juneau.commons.inject.BeanStore)" class="member-name-link">guards</a><wbr>(<a href="../../../../commons/inject/BeanStore.html" title="interface in org.apache.juneau.commons.inject">BeanStore</a>&nbsp;bs)</code></div>
 <div class="col-last even-row-color">
-<div class="block">Provides the <a href="../RestGuardList.html" title="class in org.apache.juneau.rest.server.guard"><code>RestGuardList</code></a> that gates every op on this resource with a
- <a href="../../auth/BearerTokenGuard.html" title="class in org.apache.juneau.rest.server.auth"><code>BearerTokenGuard</code></a> — fail-closed bearer-token enforcement.</div>
+<div class="block">Gates every op on this resource with a bearer-token guard.</div>
 </div>
 </div>
 </section>

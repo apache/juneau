@@ -25,21 +25,21 @@
 <a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.mock;
 <a class="jxr_linenumber" name="L18" href="#L18">18</a>  
 <a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.commons.utils.Shorts.*;
-<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.marshall.Enablement.*;
-<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.server.util.RestUtils.*;
-<a class="jxr_linenumber" name="L22" href="#L22">22</a>  
-<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> java.io.*;
-<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> java.util.*;
-<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> java.util.concurrent.*;
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.server.util.RestUtils.*;
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> java.io.*;
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> java.util.*;
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> java.util.concurrent.*;
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> java.util.logging.*;
 <a class="jxr_linenumber" name="L26" href="#L26">26</a>  
 <a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.commons.inject.*;
-<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.marshall.*;
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.http.header.NoTrace;
 <a class="jxr_linenumber" name="L29" href="#L29">29</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.marshall.json.*;
 <a class="jxr_linenumber" name="L30" href="#L30">30</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.marshall.parser.*;
 <a class="jxr_linenumber" name="L31" href="#L31">31</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.client.*;
 <a class="jxr_linenumber" name="L32" href="#L32">32</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.client.RestRequest;
 <a class="jxr_linenumber" name="L33" href="#L33">33</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.server.*;
-<a class="jxr_linenumber" name="L34" href="#L34">34</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.server.logger.*;
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.server.logging.*;
 <a class="jxr_linenumber" name="L35" href="#L35">35</a>  
 <a class="jxr_linenumber" name="L36" href="#L36">36</a>  <strong class="jxr_keyword">import</strong> jakarta.servlet.*;
 <a class="jxr_linenumber" name="L37" href="#L37">37</a>  
@@ -69,35 +69,35 @@
 <a class="jxr_linenumber" name="L61" href="#L61">61</a>  <em class="jxr_javadoccomment"> * &lt;/p&gt;</em>
 <a class="jxr_linenumber" name="L62" href="#L62">62</a>  <em class="jxr_javadoccomment"> *</em>
 <a class="jxr_linenumber" name="L63" href="#L63">63</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L64" href="#L64">64</a>  <em class="jxr_javadoccomment"> * &lt;b&gt;Beta — API subject to change:&lt;/b&gt; This type is part of the next-generation REST client and HTTP stack</em>
-<a class="jxr_linenumber" name="L65" href="#L65">65</a>  <em class="jxr_javadoccomment"> * ({@code org.apache.juneau.marshall.ng.*}).</em>
-<a class="jxr_linenumber" name="L66" href="#L66">66</a>  <em class="jxr_javadoccomment"> * It is not API-frozen: binary- and source-incompatible changes may appear in the &lt;b&gt;next major&lt;/b&gt; Juneau release</em>
-<a class="jxr_linenumber" name="L67" href="#L67">67</a>  <em class="jxr_javadoccomment"> * (and possibly earlier).</em>
-<a class="jxr_linenumber" name="L68" href="#L68">68</a>  <em class="jxr_javadoccomment"> *</em>
-<a class="jxr_linenumber" name="L69" href="#L69">69</a>  <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</em>
-<a class="jxr_linenumber" name="L70" href="#L70">70</a>  <em class="jxr_javadoccomment"> * 	&lt;li class='link'&gt;&lt;a class="doclink" href="<a href="https://juneau.apache.org/docs/topics/NextGenRestClient" target="alexandria_uri">https://juneau.apache.org/docs/topics/NextGenRestClient</a>"&gt;juneau-ng REST client&lt;/a&gt;</em>
-<a class="jxr_linenumber" name="L71" href="#L71">71</a>  <em class="jxr_javadoccomment"> * &lt;/ul&gt;</em>
-<a class="jxr_linenumber" name="L72" href="#L72">72</a>  <em class="jxr_javadoccomment"> *</em>
-<a class="jxr_linenumber" name="L73" href="#L73">73</a>  <em class="jxr_javadoccomment"> * @since 9.2.1</em>
-<a class="jxr_linenumber" name="L74" href="#L74">74</a>  <em class="jxr_javadoccomment"> */</em>
-<a class="jxr_linenumber" name="L75" href="#L75">75</a>  @SuppressWarnings({
-<a class="jxr_linenumber" name="L76" href="#L76">76</a>  	<span class="jxr_string">"resource"</span> <em class="jxr_comment">// RestClient is closed by MockRestClient.close(); transport is owned by the client</em>
-<a class="jxr_linenumber" name="L77" href="#L77">77</a>  })
-<a class="jxr_linenumber" name="L78" href="#L78">78</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">class</strong> MockRestClient <strong class="jxr_keyword">implements</strong> Closeable {
-<a class="jxr_linenumber" name="L79" href="#L79">79</a>  
-<a class="jxr_linenumber" name="L80" href="#L80">80</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Map&lt;Class&lt;?&gt;,RestContext&gt; restContextCache = <strong class="jxr_keyword">new</strong> ConcurrentHashMap&lt;&gt;();
-<a class="jxr_linenumber" name="L81" href="#L81">81</a>  
-<a class="jxr_linenumber" name="L82" href="#L82">82</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> RestClient client;
-<a class="jxr_linenumber" name="L83" href="#L83">83</a>  
-<a class="jxr_linenumber" name="L84" href="#L84">84</a>  	<strong class="jxr_keyword">private</strong> MockRestClient(RestClient client) {
-<a class="jxr_linenumber" name="L85" href="#L85">85</a>  		<strong class="jxr_keyword">this</strong>.client = client;
-<a class="jxr_linenumber" name="L86" href="#L86">86</a>  	}
-<a class="jxr_linenumber" name="L87" href="#L87">87</a>  
-<a class="jxr_linenumber" name="L88" href="#L88">88</a>  	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L89" href="#L89">89</a>  <em class="jxr_javadoccomment">	 * Creates an {@link MockRestClient} backed by the given REST bean or bean class.</em>
-<a class="jxr_linenumber" name="L90" href="#L90">90</a>  <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L91" href="#L91">91</a>  <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L92" href="#L92">92</a>  <em class="jxr_javadoccomment">	 * {@link RestContext} instances are cached per class for performance.</em>
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>  <em class="jxr_javadoccomment"> * &lt;b&gt;Beta — API subject to change:&lt;/b&gt; This type is part of the next-generation REST client and HTTP stack.</em>
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>  <em class="jxr_javadoccomment"> * It is not API-frozen: binary- and source-incompatible changes may appear in the &lt;b&gt;next major&lt;/b&gt; Juneau release</em>
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>  <em class="jxr_javadoccomment"> * (and possibly earlier).</em>
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>  <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>  <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>  <em class="jxr_javadoccomment"> * 	&lt;li class='link'&gt;&lt;a class="doclink" href="<a href="https://juneau.apache.org/docs/topics/NextGenRestClient" target="alexandria_uri">https://juneau.apache.org/docs/topics/NextGenRestClient</a>"&gt;juneau-ng REST client&lt;/a&gt;</em>
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>  <em class="jxr_javadoccomment"> * &lt;/ul&gt;</em>
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>  <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>  <em class="jxr_javadoccomment"> * @since 9.2.1</em>
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>  <em class="jxr_javadoccomment"> */</em>
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>  @SuppressWarnings({
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>  	<span class="jxr_string">"resource"</span> <em class="jxr_comment">// RestClient is closed by MockRestClient.close(); transport is owned by the client</em>
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>  })
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">class</strong> MockRestClient <strong class="jxr_keyword">implements</strong> Closeable {
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>  
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Map&lt;Class&lt;?&gt;,RestContext&gt; restContextCache = <strong class="jxr_keyword">new</strong> ConcurrentHashMap&lt;&gt;();
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>  
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> RestClient client;
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>  
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>  	<strong class="jxr_keyword">private</strong> MockRestClient(RestClient client) {
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>  		<strong class="jxr_keyword">this</strong>.client = client;
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>  	}
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>  
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>  	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>  <em class="jxr_javadoccomment">	 * Creates an {@link MockRestClient} backed by the given REST bean or bean class.</em>
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>  <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>  <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>  <em class="jxr_javadoccomment">	 * {@link RestContext} instances are cached per class for performance when a {@link Class} is passed;</em>
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>  <em class="jxr_javadoccomment">	 * a supplied bean instance always gets its own context.</em>
 <a class="jxr_linenumber" name="L93" href="#L93">93</a>  <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L94" href="#L94">94</a>  <em class="jxr_javadoccomment">	 * @param impl</em>
 <a class="jxr_linenumber" name="L95" href="#L95">95</a>  <em class="jxr_javadoccomment">	 * 	The REST bean or bean class annotated with {@link Rest @Rest}.</em>
@@ -204,193 +204,242 @@
 <a class="jxr_linenumber" name="L196" href="#L196">196</a> 		<strong class="jxr_keyword">private</strong> String contextPath;
 <a class="jxr_linenumber" name="L197" href="#L197">197</a> 		<strong class="jxr_keyword">private</strong> <a name="BeanStore" href="../../../../../org/apache/juneau/commons/inject/BeanStore.html#BeanStore">BeanStore</a> overridingBeanStore;
 <a class="jxr_linenumber" name="L198" href="#L198">198</a> 		<strong class="jxr_keyword">private</strong> Parser defaultParser;
-<a class="jxr_linenumber" name="L199" href="#L199">199</a> 
-<a class="jxr_linenumber" name="L200" href="#L200">200</a> 		<strong class="jxr_keyword">private</strong> Builder(Object impl) {
-<a class="jxr_linenumber" name="L201" href="#L201">201</a> 			<strong class="jxr_keyword">this</strong>.impl = impl;
-<a class="jxr_linenumber" name="L202" href="#L202">202</a> 		}
-<a class="jxr_linenumber" name="L203" href="#L203">203</a> 
-<a class="jxr_linenumber" name="L204" href="#L204">204</a> 		<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L205" href="#L205">205</a> <em class="jxr_javadoccomment">		 * Sets the servlet context path (e.g. {@code "/myapp"}).</em>
-<a class="jxr_linenumber" name="L206" href="#L206">206</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L207" href="#L207">207</a> <em class="jxr_javadoccomment">		 * @param value The context path. May be &lt;jk&gt;null&lt;/jk&gt;.</em>
-<a class="jxr_linenumber" name="L208" href="#L208">208</a> <em class="jxr_javadoccomment">		 * @return This object.</em>
-<a class="jxr_linenumber" name="L209" href="#L209">209</a> <em class="jxr_javadoccomment">		 */</em>
-<a class="jxr_linenumber" name="L210" href="#L210">210</a> 		<strong class="jxr_keyword">public</strong> Builder contextPath(String value) {
-<a class="jxr_linenumber" name="L211" href="#L211">211</a> 			contextPath = toValidContextPath(value);
-<a class="jxr_linenumber" name="L212" href="#L212">212</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
-<a class="jxr_linenumber" name="L213" href="#L213">213</a> 		}
-<a class="jxr_linenumber" name="L214" href="#L214">214</a> 
-<a class="jxr_linenumber" name="L215" href="#L215">215</a> 		<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L216" href="#L216">216</a> <em class="jxr_javadoccomment">		 * Installs a {@link BeanStore} as the {@code overridingParent} of the {@link RestContext}'s</em>
-<a class="jxr_linenumber" name="L217" href="#L217">217</a> <em class="jxr_javadoccomment">		 * bean store, so test-time overrides (e.g. {@code TestBeanStore}) resolve at tier 1 of the</em>
-<a class="jxr_linenumber" name="L218" href="#L218">218</a> <em class="jxr_javadoccomment">		 * lookup chain &amp;mdash; above the resource's local {@code @Bean} factory entries.</em>
-<a class="jxr_linenumber" name="L219" href="#L219">219</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L220" href="#L220">220</a> <em class="jxr_javadoccomment">		 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L221" href="#L221">221</a> <em class="jxr_javadoccomment">		 * Setting this disables the per-resource {@link RestContext} cache for the duration of this</em>
-<a class="jxr_linenumber" name="L222" href="#L222">222</a> <em class="jxr_javadoccomment">		 * build, so the overlay is not silently shared with a previously-cached instance.</em>
-<a class="jxr_linenumber" name="L223" href="#L223">223</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L224" href="#L224">224</a> <em class="jxr_javadoccomment">		 * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
-<a class="jxr_linenumber" name="L225" href="#L225">225</a> <em class="jxr_javadoccomment">		 * &lt;p class='bjava'&gt;</em>
-<a class="jxr_linenumber" name="L226" href="#L226">226</a> <em class="jxr_javadoccomment">		 * 	&lt;jk&gt;var&lt;/jk&gt; &lt;jv&gt;overlay&lt;/jv&gt; = &lt;jk&gt;new&lt;/jk&gt; TestBeanStore().override(MyService.&lt;jk&gt;class&lt;/jk&gt;, mockSvc);</em>
-<a class="jxr_linenumber" name="L227" href="#L227">227</a> <em class="jxr_javadoccomment">		 * 	&lt;jk&gt;try&lt;/jk&gt; (&lt;jv&gt;client&lt;/jv&gt; = MockRestClient.&lt;jsm&gt;builder&lt;/jsm&gt;(MyResource.&lt;jk&gt;class&lt;/jk&gt;)</em>
-<a class="jxr_linenumber" name="L228" href="#L228">228</a> <em class="jxr_javadoccomment">		 * 			.overridingBeanStore(&lt;jv&gt;overlay&lt;/jv&gt;)</em>
-<a class="jxr_linenumber" name="L229" href="#L229">229</a> <em class="jxr_javadoccomment">		 * 			.build()) {</em>
-<a class="jxr_linenumber" name="L230" href="#L230">230</a> <em class="jxr_javadoccomment">		 * 		&lt;jv&gt;client&lt;/jv&gt;.get(&lt;js&gt;"/widgets/1"&lt;/js&gt;).run().assertStatus().is(200);</em>
-<a class="jxr_linenumber" name="L231" href="#L231">231</a> <em class="jxr_javadoccomment">		 * 	}</em>
-<a class="jxr_linenumber" name="L232" href="#L232">232</a> <em class="jxr_javadoccomment">		 * &lt;/p&gt;</em>
-<a class="jxr_linenumber" name="L233" href="#L233">233</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L234" href="#L234">234</a> <em class="jxr_javadoccomment">		 * @param value The override layer. Can be &lt;jk&gt;null&lt;/jk&gt; to clear a previously-set value.</em>
-<a class="jxr_linenumber" name="L235" href="#L235">235</a> <em class="jxr_javadoccomment">		 * @return This object.</em>
-<a class="jxr_linenumber" name="L236" href="#L236">236</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L237" href="#L237">237</a> <em class="jxr_javadoccomment">		 * @since 10.0.0</em>
-<a class="jxr_linenumber" name="L238" href="#L238">238</a> <em class="jxr_javadoccomment">		 */</em>
-<a class="jxr_linenumber" name="L239" href="#L239">239</a> 		@Override
-<a class="jxr_linenumber" name="L240" href="#L240">240</a> 		<strong class="jxr_keyword">public</strong> Builder overridingBeanStore(<a name="BeanStore" href="../../../../../org/apache/juneau/commons/inject/BeanStore.html#BeanStore">BeanStore</a> value) {
-<a class="jxr_linenumber" name="L241" href="#L241">241</a> 			overridingBeanStore = value;
-<a class="jxr_linenumber" name="L242" href="#L242">242</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
-<a class="jxr_linenumber" name="L243" href="#L243">243</a> 		}
-<a class="jxr_linenumber" name="L244" href="#L244">244</a> 
-<a class="jxr_linenumber" name="L245" href="#L245">245</a> 		<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L246" href="#L246">246</a> <em class="jxr_javadoccomment">		 * Sets an explicit default parser used when the response {@code Content-Type} matches no registered parser.</em>
-<a class="jxr_linenumber" name="L247" href="#L247">247</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L248" href="#L248">248</a> <em class="jxr_javadoccomment">		 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L249" href="#L249">249</a> <em class="jxr_javadoccomment">		 * Setting this also causes the client to advertise the parser's media types in the {@code Accept} header,</em>
-<a class="jxr_linenumber" name="L250" href="#L250">250</a> <em class="jxr_javadoccomment">		 * so the server must be able to produce that content type.  Omit this (the default) when the target</em>
-<a class="jxr_linenumber" name="L251" href="#L251">251</a> <em class="jxr_javadoccomment">		 * resource does not have a JSON serializer configured.</em>
-<a class="jxr_linenumber" name="L252" href="#L252">252</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L253" href="#L253">253</a> <em class="jxr_javadoccomment">		 * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
-<a class="jxr_linenumber" name="L254" href="#L254">254</a> <em class="jxr_javadoccomment">		 * &lt;p class='bjava'&gt;</em>
-<a class="jxr_linenumber" name="L255" href="#L255">255</a> <em class="jxr_javadoccomment">		 * 	&lt;jk&gt;try&lt;/jk&gt; (&lt;jv&gt;client&lt;/jv&gt; = MockRestClient.&lt;jsm&gt;builder&lt;/jsm&gt;(MyJsonResource.&lt;jk&gt;class&lt;/jk&gt;)</em>
-<a class="jxr_linenumber" name="L256" href="#L256">256</a> <em class="jxr_javadoccomment">		 * 			.defaultParser(JsonParser.&lt;jsf&gt;DEFAULT&lt;/jsf&gt;)</em>
-<a class="jxr_linenumber" name="L257" href="#L257">257</a> <em class="jxr_javadoccomment">		 * 			.build()) {</em>
-<a class="jxr_linenumber" name="L258" href="#L258">258</a> <em class="jxr_javadoccomment">		 * 		&lt;jk&gt;var&lt;/jk&gt; &lt;jv&gt;api&lt;/jv&gt; = &lt;jv&gt;client&lt;/jv&gt;.getClient().remote(MyApi.&lt;jk&gt;class&lt;/jk&gt;);</em>
-<a class="jxr_linenumber" name="L259" href="#L259">259</a> <em class="jxr_javadoccomment">		 * 		&lt;jv&gt;api&lt;/jv&gt;.someMethod();</em>
-<a class="jxr_linenumber" name="L260" href="#L260">260</a> <em class="jxr_javadoccomment">		 * 	}</em>
-<a class="jxr_linenumber" name="L261" href="#L261">261</a> <em class="jxr_javadoccomment">		 * &lt;/p&gt;</em>
-<a class="jxr_linenumber" name="L262" href="#L262">262</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L263" href="#L263">263</a> <em class="jxr_javadoccomment">		 * @param value The parser. May be &lt;jk&gt;null&lt;/jk&gt;.</em>
-<a class="jxr_linenumber" name="L264" href="#L264">264</a> <em class="jxr_javadoccomment">		 * @return This object.</em>
-<a class="jxr_linenumber" name="L265" href="#L265">265</a> <em class="jxr_javadoccomment">		 */</em>
-<a class="jxr_linenumber" name="L266" href="#L266">266</a> 		<strong class="jxr_keyword">public</strong> Builder defaultParser(Parser value) {
-<a class="jxr_linenumber" name="L267" href="#L267">267</a> 			defaultParser = value;
-<a class="jxr_linenumber" name="L268" href="#L268">268</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
-<a class="jxr_linenumber" name="L269" href="#L269">269</a> 		}
-<a class="jxr_linenumber" name="L270" href="#L270">270</a> 
-<a class="jxr_linenumber" name="L271" href="#L271">271</a> 		<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L272" href="#L272">272</a> <em class="jxr_javadoccomment">		 * Builds and returns the {@link MockRestClient}.</em>
-<a class="jxr_linenumber" name="L273" href="#L273">273</a> <em class="jxr_javadoccomment">		 *</em>
-<a class="jxr_linenumber" name="L274" href="#L274">274</a> <em class="jxr_javadoccomment">		 * @return A new instance. Never &lt;jk&gt;null&lt;/jk&gt;.</em>
-<a class="jxr_linenumber" name="L275" href="#L275">275</a> <em class="jxr_javadoccomment">		 */</em>
-<a class="jxr_linenumber" name="L276" href="#L276">276</a> 		@SuppressWarnings({
-<a class="jxr_linenumber" name="L277" href="#L277">277</a> 			<span class="jxr_string">"java:S112"</span> <em class="jxr_comment">// Re-wrap as RuntimeException - build() wraps arbitrary checked exceptions from reflection (newInstance) and RestContext init/postInit; no specific type fits and the fluent build() method cannot declare checked exceptions.</em>
-<a class="jxr_linenumber" name="L278" href="#L278">278</a> 		})
-<a class="jxr_linenumber" name="L279" href="#L279">279</a> 		<strong class="jxr_keyword">public</strong> MockRestClient build() {
-<a class="jxr_linenumber" name="L280" href="#L280">280</a> 			<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L281" href="#L281">281</a> 				<strong class="jxr_keyword">var</strong> c = impl instanceof Class&lt;?&gt; c2 ? c2 : impl.getClass();
-<a class="jxr_linenumber" name="L282" href="#L282">282</a> 				<strong class="jxr_keyword">var</strong> overlay = overridingBeanStore;
-<a class="jxr_linenumber" name="L283" href="#L283">283</a> 				RestContext restContext;
-<a class="jxr_linenumber" name="L284" href="#L284">284</a> 				<strong class="jxr_keyword">if</strong> (overlay == <strong class="jxr_keyword">null</strong> &amp;&amp; restContextCache.containsKey(c)) {
-<a class="jxr_linenumber" name="L285" href="#L285">285</a> 					restContext = restContextCache.get(c);
-<a class="jxr_linenumber" name="L286" href="#L286">286</a> 				} <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L287" href="#L287">287</a> 					<strong class="jxr_keyword">var</strong> isClass = impl instanceof Class&lt;?&gt;;
-<a class="jxr_linenumber" name="L288" href="#L288">288</a> 					<strong class="jxr_keyword">var</strong> o = isClass ? ((Class&lt;?&gt;)impl).getDeclaredConstructor().newInstance() : impl;
-<a class="jxr_linenumber" name="L289" href="#L289">289</a> 					restContext = <strong class="jxr_keyword">new</strong> RestContext(<strong class="jxr_keyword">new</strong> RestContext.Args(o.getClass(), <strong class="jxr_keyword">null</strong>, <strong class="jxr_keyword">null</strong>, () -&gt; o, <span class="jxr_string">""</span>, bs -&gt; {
-<a class="jxr_linenumber" name="L290" href="#L290">290</a> 						bs.addBean(Enablement.<strong class="jxr_keyword">class</strong>, CONDITIONAL);
-<a class="jxr_linenumber" name="L291" href="#L291">291</a> 						bs.addBeanType(CallLogger.<strong class="jxr_keyword">class</strong>, BasicTestCallLogger.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L292" href="#L292">292</a> 					}, overlay, <strong class="jxr_keyword">null</strong>, RestContext.ContextKind.ROOT)).postInit().postInitChildFirst();
-<a class="jxr_linenumber" name="L293" href="#L293">293</a> 					<strong class="jxr_keyword">if</strong> (overlay == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L294" href="#L294">294</a> 						restContextCache.put(c, restContext);
-<a class="jxr_linenumber" name="L295" href="#L295">295</a> 				}
-<a class="jxr_linenumber" name="L296" href="#L296">296</a> 
-<a class="jxr_linenumber" name="L297" href="#L297">297</a> 				<strong class="jxr_keyword">var</strong> servletPath = toValidContextPath(restContext.getFullPath());
-<a class="jxr_linenumber" name="L298" href="#L298">298</a> 				<strong class="jxr_keyword">var</strong> fullContextPath = emptyIfNull(contextPath) + emptyIfNull(servletPath);
-<a class="jxr_linenumber" name="L299" href="#L299">299</a> 
-<a class="jxr_linenumber" name="L300" href="#L300">300</a> 			<strong class="jxr_keyword">var</strong> transport = <strong class="jxr_keyword">new</strong> JuneauRestTransport(restContext, servletPath);
-<a class="jxr_linenumber" name="L301" href="#L301">301</a> 			<strong class="jxr_keyword">var</strong> clientBuilder = RestClient.builder()
-<a class="jxr_linenumber" name="L302" href="#L302">302</a> 				.transport(transport)
-<a class="jxr_linenumber" name="L303" href="#L303">303</a> 				.rootUrl(<span class="jxr_string">"http://localhost"</span> + fullContextPath)
-<a class="jxr_linenumber" name="L304" href="#L304">304</a> 				.defaultSerializer(JsonSerializer.DEFAULT);
-<a class="jxr_linenumber" name="L305" href="#L305">305</a> 			<strong class="jxr_keyword">if</strong> (defaultParser != <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L306" href="#L306">306</a> 				clientBuilder.defaultParser(defaultParser);
-<a class="jxr_linenumber" name="L307" href="#L307">307</a> 			<strong class="jxr_keyword">var</strong> ngClient = clientBuilder.build();
-<a class="jxr_linenumber" name="L308" href="#L308">308</a> 
-<a class="jxr_linenumber" name="L309" href="#L309">309</a> 				<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> MockRestClient(ngClient);
-<a class="jxr_linenumber" name="L310" href="#L310">310</a> 			} <strong class="jxr_keyword">catch</strong> (Exception e) {
-<a class="jxr_linenumber" name="L311" href="#L311">311</a> 				<strong class="jxr_keyword">throw</strong> rex(e, <span class="jxr_string">"Could not initialize MockRestClient"</span>);
-<a class="jxr_linenumber" name="L312" href="#L312">312</a> 			}
-<a class="jxr_linenumber" name="L313" href="#L313">313</a> 		}
-<a class="jxr_linenumber" name="L314" href="#L314">314</a> 
-<a class="jxr_linenumber" name="L315" href="#L315">315</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String emptyIfNull(String s) { <strong class="jxr_keyword">return</strong> s == <strong class="jxr_keyword">null</strong> ? <span class="jxr_string">""</span> : s; }
-<a class="jxr_linenumber" name="L316" href="#L316">316</a> 	}
+<a class="jxr_linenumber" name="L199" href="#L199">199</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">boolean</strong> noTrace;
+<a class="jxr_linenumber" name="L200" href="#L200">200</a> 
+<a class="jxr_linenumber" name="L201" href="#L201">201</a> 		<strong class="jxr_keyword">private</strong> Builder(Object impl) {
+<a class="jxr_linenumber" name="L202" href="#L202">202</a> 			<strong class="jxr_keyword">this</strong>.impl = impl;
+<a class="jxr_linenumber" name="L203" href="#L203">203</a> 		}
+<a class="jxr_linenumber" name="L204" href="#L204">204</a> 
+<a class="jxr_linenumber" name="L205" href="#L205">205</a> 		<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L206" href="#L206">206</a> <em class="jxr_javadoccomment">		 * Sets the servlet context path (e.g. {@code "/myapp"}).</em>
+<a class="jxr_linenumber" name="L207" href="#L207">207</a> <em class="jxr_javadoccomment">		 *</em>
+<a class="jxr_linenumber" name="L208" href="#L208">208</a> <em class="jxr_javadoccomment">		 * @param value The context path. May be &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L209" href="#L209">209</a> <em class="jxr_javadoccomment">		 * @return This object.</em>
+<a class="jxr_linenumber" name="L210" href="#L210">210</a> <em class="jxr_javadoccomment">		 */</em>
+<a class="jxr_linenumber" name="L211" href="#L211">211</a> 		<strong class="jxr_keyword">public</strong> Builder contextPath(String value) {
+<a class="jxr_linenumber" name="L212" href="#L212">212</a> 			contextPath = toValidContextPath(value);
+<a class="jxr_linenumber" name="L213" href="#L213">213</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L214" href="#L214">214</a> 		}
+<a class="jxr_linenumber" name="L215" href="#L215">215</a> 
+<a class="jxr_linenumber" name="L216" href="#L216">216</a> 		<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L217" href="#L217">217</a> <em class="jxr_javadoccomment">		 * Installs a {@link BeanStore} as the {@code overridingParent} of the {@link RestContext}'s</em>
+<a class="jxr_linenumber" name="L218" href="#L218">218</a> <em class="jxr_javadoccomment">		 * bean store, so test-time overrides (e.g. {@code TestBeanStore}) resolve at tier 1 of the</em>
+<a class="jxr_linenumber" name="L219" href="#L219">219</a> <em class="jxr_javadoccomment">		 * lookup chain &amp;mdash; above the resource's local {@code @Bean} factory entries.</em>
+<a class="jxr_linenumber" name="L220" href="#L220">220</a> <em class="jxr_javadoccomment">		 *</em>
+<a class="jxr_linenumber" name="L221" href="#L221">221</a> <em class="jxr_javadoccomment">		 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L222" href="#L222">222</a> <em class="jxr_javadoccomment">		 * Setting this disables the per-resource {@link RestContext} cache for the duration of this</em>
+<a class="jxr_linenumber" name="L223" href="#L223">223</a> <em class="jxr_javadoccomment">		 * build, so the overlay is not silently shared with a previously-cached instance.</em>
+<a class="jxr_linenumber" name="L224" href="#L224">224</a> <em class="jxr_javadoccomment">		 *</em>
+<a class="jxr_linenumber" name="L225" href="#L225">225</a> <em class="jxr_javadoccomment">		 * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L226" href="#L226">226</a> <em class="jxr_javadoccomment">		 * &lt;p class='bjava'&gt;</em>
+<a class="jxr_linenumber" name="L227" href="#L227">227</a> <em class="jxr_javadoccomment">		 * 	&lt;jk&gt;var&lt;/jk&gt; &lt;jv&gt;overlay&lt;/jv&gt; = &lt;jk&gt;new&lt;/jk&gt; TestBeanStore().override(MyService.&lt;jk&gt;class&lt;/jk&gt;, mockSvc);</em>
+<a class="jxr_linenumber" name="L228" href="#L228">228</a> <em class="jxr_javadoccomment">		 * 	&lt;jk&gt;try&lt;/jk&gt; (&lt;jv&gt;client&lt;/jv&gt; = MockRestClient.&lt;jsm&gt;builder&lt;/jsm&gt;(MyResource.&lt;jk&gt;class&lt;/jk&gt;)</em>
+<a class="jxr_linenumber" name="L229" href="#L229">229</a> <em class="jxr_javadoccomment">		 * 			.overridingBeanStore(&lt;jv&gt;overlay&lt;/jv&gt;)</em>
+<a class="jxr_linenumber" name="L230" href="#L230">230</a> <em class="jxr_javadoccomment">		 * 			.build()) {</em>
+<a class="jxr_linenumber" name="L231" href="#L231">231</a> <em class="jxr_javadoccomment">		 * 		&lt;jv&gt;client&lt;/jv&gt;.get(&lt;js&gt;"/widgets/1"&lt;/js&gt;).run().assertStatus().is(200);</em>
+<a class="jxr_linenumber" name="L232" href="#L232">232</a> <em class="jxr_javadoccomment">		 * 	}</em>
+<a class="jxr_linenumber" name="L233" href="#L233">233</a> <em class="jxr_javadoccomment">		 * &lt;/p&gt;</em>
+<a class="jxr_linenumber" name="L234" href="#L234">234</a> <em class="jxr_javadoccomment">		 *</em>
+<a class="jxr_linenumber" name="L235" href="#L235">235</a> <em class="jxr_javadoccomment">		 * @param value The override layer. Can be &lt;jk&gt;null&lt;/jk&gt; to clear a previously-set value.</em>
+<a class="jxr_linenumber" name="L236" href="#L236">236</a> <em class="jxr_javadoccomment">		 * @return This object.</em>
+<a class="jxr_linenumber" name="L237" href="#L237">237</a> <em class="jxr_javadoccomment">		 *</em>
+<a class="jxr_linenumber" name="L238" href="#L238">238</a> <em class="jxr_javadoccomment">		 * @since 10.0.0</em>
+<a class="jxr_linenumber" name="L239" href="#L239">239</a> <em class="jxr_javadoccomment">		 */</em>
+<a class="jxr_linenumber" name="L240" href="#L240">240</a> 		@Override
+<a class="jxr_linenumber" name="L241" href="#L241">241</a> 		<strong class="jxr_keyword">public</strong> Builder overridingBeanStore(<a name="BeanStore" href="../../../../../org/apache/juneau/commons/inject/BeanStore.html#BeanStore">BeanStore</a> value) {
+<a class="jxr_linenumber" name="L242" href="#L242">242</a> 			overridingBeanStore = value;
+<a class="jxr_linenumber" name="L243" href="#L243">243</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L244" href="#L244">244</a> 		}
+<a class="jxr_linenumber" name="L245" href="#L245">245</a> 
+<a class="jxr_linenumber" name="L246" href="#L246">246</a> 		<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L247" href="#L247">247</a> <em class="jxr_javadoccomment">		 * Sets an explicit default parser used when the response {@code Content-Type} matches no registered parser.</em>
+<a class="jxr_linenumber" name="L248" href="#L248">248</a> <em class="jxr_javadoccomment">		 *</em>
+<a class="jxr_linenumber" name="L249" href="#L249">249</a> <em class="jxr_javadoccomment">		 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L250" href="#L250">250</a> <em class="jxr_javadoccomment">		 * Setting this also causes the client to advertise the parser's media types in the {@code Accept} header,</em>
+<a class="jxr_linenumber" name="L251" href="#L251">251</a> <em class="jxr_javadoccomment">		 * so the server must be able to produce that content type.  Omit this (the default) when the target</em>
+<a class="jxr_linenumber" name="L252" href="#L252">252</a> <em class="jxr_javadoccomment">		 * resource does not have a JSON serializer configured.</em>
+<a class="jxr_linenumber" name="L253" href="#L253">253</a> <em class="jxr_javadoccomment">		 *</em>
+<a class="jxr_linenumber" name="L254" href="#L254">254</a> <em class="jxr_javadoccomment">		 * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L255" href="#L255">255</a> <em class="jxr_javadoccomment">		 * &lt;p class='bjava'&gt;</em>
+<a class="jxr_linenumber" name="L256" href="#L256">256</a> <em class="jxr_javadoccomment">		 * 	&lt;jk&gt;try&lt;/jk&gt; (&lt;jv&gt;client&lt;/jv&gt; = MockRestClient.&lt;jsm&gt;builder&lt;/jsm&gt;(MyJsonResource.&lt;jk&gt;class&lt;/jk&gt;)</em>
+<a class="jxr_linenumber" name="L257" href="#L257">257</a> <em class="jxr_javadoccomment">		 * 			.defaultParser(JsonParser.&lt;jsf&gt;DEFAULT&lt;/jsf&gt;)</em>
+<a class="jxr_linenumber" name="L258" href="#L258">258</a> <em class="jxr_javadoccomment">		 * 			.build()) {</em>
+<a class="jxr_linenumber" name="L259" href="#L259">259</a> <em class="jxr_javadoccomment">		 * 		&lt;jk&gt;var&lt;/jk&gt; &lt;jv&gt;api&lt;/jv&gt; = &lt;jv&gt;client&lt;/jv&gt;.getClient().remote(MyApi.&lt;jk&gt;class&lt;/jk&gt;);</em>
+<a class="jxr_linenumber" name="L260" href="#L260">260</a> <em class="jxr_javadoccomment">		 * 		&lt;jv&gt;api&lt;/jv&gt;.someMethod();</em>
+<a class="jxr_linenumber" name="L261" href="#L261">261</a> <em class="jxr_javadoccomment">		 * 	}</em>
+<a class="jxr_linenumber" name="L262" href="#L262">262</a> <em class="jxr_javadoccomment">		 * &lt;/p&gt;</em>
+<a class="jxr_linenumber" name="L263" href="#L263">263</a> <em class="jxr_javadoccomment">		 *</em>
+<a class="jxr_linenumber" name="L264" href="#L264">264</a> <em class="jxr_javadoccomment">		 * @param value The parser. May be &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L265" href="#L265">265</a> <em class="jxr_javadoccomment">		 * @return This object.</em>
+<a class="jxr_linenumber" name="L266" href="#L266">266</a> <em class="jxr_javadoccomment">		 */</em>
+<a class="jxr_linenumber" name="L267" href="#L267">267</a> 		<strong class="jxr_keyword">public</strong> Builder defaultParser(Parser value) {
+<a class="jxr_linenumber" name="L268" href="#L268">268</a> 			defaultParser = value;
+<a class="jxr_linenumber" name="L269" href="#L269">269</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L270" href="#L270">270</a> 		}
+<a class="jxr_linenumber" name="L271" href="#L271">271</a> 
+<a class="jxr_linenumber" name="L272" href="#L272">272</a> 		<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L273" href="#L273">273</a> <em class="jxr_javadoccomment">		 * Sends a &lt;c&gt;No-Trace: true&lt;/c&gt; header with every request, so the server leaves the stack trace of a failed</em>
+<a class="jxr_linenumber" name="L274" href="#L274">274</a> <em class="jxr_javadoccomment">		 * call out of its log record.</em>
+<a class="jxr_linenumber" name="L275" href="#L275">275</a> <em class="jxr_javadoccomment">		 *</em>
+<a class="jxr_linenumber" name="L276" href="#L276">276</a> <em class="jxr_javadoccomment">		 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L277" href="#L277">277</a> <em class="jxr_javadoccomment">		 * Opt-in only; no other builder option turns it on. The one-line access record is still logged.  To do the</em>
+<a class="jxr_linenumber" name="L278" href="#L278">278</a> <em class="jxr_javadoccomment">		 * same for a single call, use {@link RestRequest#noTrace()}.</em>
+<a class="jxr_linenumber" name="L279" href="#L279">279</a> <em class="jxr_javadoccomment">		 *</em>
+<a class="jxr_linenumber" name="L280" href="#L280">280</a> <em class="jxr_javadoccomment">		 * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L281" href="#L281">281</a> <em class="jxr_javadoccomment">		 * &lt;p class='bjava'&gt;</em>
+<a class="jxr_linenumber" name="L282" href="#L282">282</a> <em class="jxr_javadoccomment">		 * 	&lt;jk&gt;try&lt;/jk&gt; (&lt;jv&gt;client&lt;/jv&gt; = MockRestClient.&lt;jsm&gt;builder&lt;/jsm&gt;(MyResource.&lt;jk&gt;class&lt;/jk&gt;).noTrace().build()) {</em>
+<a class="jxr_linenumber" name="L283" href="#L283">283</a> <em class="jxr_javadoccomment">		 * 		&lt;jv&gt;client&lt;/jv&gt;.get(&lt;js&gt;"/missing"&lt;/js&gt;).run().assertStatus().is(404);</em>
+<a class="jxr_linenumber" name="L284" href="#L284">284</a> <em class="jxr_javadoccomment">		 * 	}</em>
+<a class="jxr_linenumber" name="L285" href="#L285">285</a> <em class="jxr_javadoccomment">		 * &lt;/p&gt;</em>
+<a class="jxr_linenumber" name="L286" href="#L286">286</a> <em class="jxr_javadoccomment">		 *</em>
+<a class="jxr_linenumber" name="L287" href="#L287">287</a> <em class="jxr_javadoccomment">		 * @return This object.</em>
+<a class="jxr_linenumber" name="L288" href="#L288">288</a> <em class="jxr_javadoccomment">		 */</em>
+<a class="jxr_linenumber" name="L289" href="#L289">289</a> 		<strong class="jxr_keyword">public</strong> Builder noTrace() {
+<a class="jxr_linenumber" name="L290" href="#L290">290</a> 			noTrace = <strong class="jxr_keyword">true</strong>;
+<a class="jxr_linenumber" name="L291" href="#L291">291</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L292" href="#L292">292</a> 		}
+<a class="jxr_linenumber" name="L293" href="#L293">293</a> 
+<a class="jxr_linenumber" name="L294" href="#L294">294</a> 		<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L295" href="#L295">295</a> <em class="jxr_javadoccomment">		 * Builds and returns the {@link MockRestClient}.</em>
+<a class="jxr_linenumber" name="L296" href="#L296">296</a> <em class="jxr_javadoccomment">		 *</em>
+<a class="jxr_linenumber" name="L297" href="#L297">297</a> <em class="jxr_javadoccomment">		 * @return A new instance. Never &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L298" href="#L298">298</a> <em class="jxr_javadoccomment">		 */</em>
+<a class="jxr_linenumber" name="L299" href="#L299">299</a> 		@SuppressWarnings({
+<a class="jxr_linenumber" name="L300" href="#L300">300</a> 			<span class="jxr_string">"java:S112"</span> <em class="jxr_comment">// Re-wrap as RuntimeException - build() wraps arbitrary checked exceptions from reflection (newInstance) and RestContext init/postInit; no specific type fits and the fluent build() method cannot declare checked exceptions.</em>
+<a class="jxr_linenumber" name="L301" href="#L301">301</a> 		})
+<a class="jxr_linenumber" name="L302" href="#L302">302</a> 		<strong class="jxr_keyword">public</strong> MockRestClient build() {
+<a class="jxr_linenumber" name="L303" href="#L303">303</a> 			<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L304" href="#L304">304</a> 				<strong class="jxr_keyword">var</strong> isClass = impl instanceof Class&lt;?&gt;;
+<a class="jxr_linenumber" name="L305" href="#L305">305</a> 				<strong class="jxr_keyword">var</strong> overlay = overridingBeanStore;
+<a class="jxr_linenumber" name="L306" href="#L306">306</a> 				<em class="jxr_comment">// Only class-based contexts are cached; a caller-supplied instance always gets its own context.</em>
+<a class="jxr_linenumber" name="L307" href="#L307">307</a> 				<strong class="jxr_keyword">var</strong> cacheable = isClass &amp;&amp; overlay == <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L308" href="#L308">308</a> 				RestContext restContext = cacheable ? restContextCache.get(impl) : <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L309" href="#L309">309</a> 				<strong class="jxr_keyword">if</strong> (restContext == <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L310" href="#L310">310</a> 					<strong class="jxr_keyword">var</strong> o = isClass ? ((Class&lt;?&gt;)impl).getDeclaredConstructor().newInstance() : impl;
+<a class="jxr_linenumber" name="L311" href="#L311">311</a> 					restContext = <strong class="jxr_keyword">new</strong> RestContext(<strong class="jxr_keyword">new</strong> RestContext.Args(o.getClass(), <strong class="jxr_keyword">null</strong>, <strong class="jxr_keyword">null</strong>, () -&gt; o, <span class="jxr_string">""</span>, bs -&gt; {
+<a class="jxr_linenumber" name="L312" href="#L312">312</a> 						bs.addBeanType(RestDebugFormatter.<strong class="jxr_keyword">class</strong>, BasicTestRestDebugFormatter.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L313" href="#L313">313</a> 					}, overlay, <strong class="jxr_keyword">null</strong>, RestContext.ContextKind.ROOT)).postInit().postInitChildFirst();
+<a class="jxr_linenumber" name="L314" href="#L314">314</a> 					<strong class="jxr_keyword">if</strong> (cacheable)
+<a class="jxr_linenumber" name="L315" href="#L315">315</a> 						restContextCache.put((Class&lt;?&gt;)impl, restContext);
+<a class="jxr_linenumber" name="L316" href="#L316">316</a> 				}
 <a class="jxr_linenumber" name="L317" href="#L317">317</a> 
-<a class="jxr_linenumber" name="L318" href="#L318">318</a> 	<em class="jxr_comment">// -----------------------------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L319" href="#L319">319</a> 	<em class="jxr_comment">// Transport implementation</em>
-<a class="jxr_linenumber" name="L320" href="#L320">320</a> 	<em class="jxr_comment">// -----------------------------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L321" href="#L321">321</a> 
-<a class="jxr_linenumber" name="L322" href="#L322">322</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L323" href="#L323">323</a> <em class="jxr_javadoccomment">	 * An {@link HttpTransport} that dispatches requests in-process through a Juneau {@link RestContext}.</em>
-<a class="jxr_linenumber" name="L324" href="#L324">324</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L325" href="#L325">325</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">class</strong> JuneauRestTransport <strong class="jxr_keyword">implements</strong> <a name="HttpTransport" href="../../../../../org/apache/juneau/rest/client/HttpTransport.html#HttpTransport">HttpTransport</a> {
-<a class="jxr_linenumber" name="L326" href="#L326">326</a> 
-<a class="jxr_linenumber" name="L327" href="#L327">327</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> RestContext restContext;
-<a class="jxr_linenumber" name="L328" href="#L328">328</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Object restObject;
-<a class="jxr_linenumber" name="L329" href="#L329">329</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> String servletPath;
-<a class="jxr_linenumber" name="L330" href="#L330">330</a> 
-<a class="jxr_linenumber" name="L331" href="#L331">331</a> 		JuneauRestTransport(RestContext restContext, String servletPath) {
-<a class="jxr_linenumber" name="L332" href="#L332">332</a> 			<strong class="jxr_keyword">this</strong>.restContext = restContext;
-<a class="jxr_linenumber" name="L333" href="#L333">333</a> 			<strong class="jxr_keyword">this</strong>.restObject = restContext.getResource();
-<a class="jxr_linenumber" name="L334" href="#L334">334</a> 			<strong class="jxr_keyword">this</strong>.servletPath = servletPath;
-<a class="jxr_linenumber" name="L335" href="#L335">335</a> 		}
-<a class="jxr_linenumber" name="L336" href="#L336">336</a> 
-<a class="jxr_linenumber" name="L337" href="#L337">337</a> 		@Override <em class="jxr_comment">/* HttpTransport */</em>
-<a class="jxr_linenumber" name="L338" href="#L338">338</a> 		<strong class="jxr_keyword">public</strong> TransportResponse execute(<a name="TransportRequest" href="../../../../../org/apache/juneau/rest/client/TransportRequest.html#TransportRequest">TransportRequest</a> request) <strong class="jxr_keyword">throws</strong> <a name="TransportException" href="../../../../../org/apache/juneau/rest/client/TransportException.html#TransportException">TransportException</a> {
-<a class="jxr_linenumber" name="L339" href="#L339">339</a> 			<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L340" href="#L340">340</a> 				<strong class="jxr_keyword">var</strong> method = request.getMethod();
-<a class="jxr_linenumber" name="L341" href="#L341">341</a> 				<strong class="jxr_keyword">var</strong> uri = request.getUri().toString();
-<a class="jxr_linenumber" name="L342" href="#L342">342</a> 
-<a class="jxr_linenumber" name="L343" href="#L343">343</a> 				<strong class="jxr_keyword">var</strong> servletReq = MockServletRequest.create(method, uri)
-<a class="jxr_linenumber" name="L344" href="#L344">344</a> 					.servletPath(servletPath)
-<a class="jxr_linenumber" name="L345" href="#L345">345</a> 					.contextPath(<span class="jxr_string">""</span>);
-<a class="jxr_linenumber" name="L346" href="#L346">346</a> 
-<a class="jxr_linenumber" name="L347" href="#L347">347</a> 				<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> h : request.getHeaders())
-<a class="jxr_linenumber" name="L348" href="#L348">348</a> 					servletReq.header(h.name(), h.value());
+<a class="jxr_linenumber" name="L318" href="#L318">318</a> 				<strong class="jxr_keyword">var</strong> servletPath = toValidContextPath(restContext.getFullPath());
+<a class="jxr_linenumber" name="L319" href="#L319">319</a> 				<strong class="jxr_keyword">var</strong> fullContextPath = emptyIfNull(contextPath) + emptyIfNull(servletPath);
+<a class="jxr_linenumber" name="L320" href="#L320">320</a> 
+<a class="jxr_linenumber" name="L321" href="#L321">321</a> 			<strong class="jxr_keyword">var</strong> transport = <strong class="jxr_keyword">new</strong> JuneauRestTransport(restContext, servletPath);
+<a class="jxr_linenumber" name="L322" href="#L322">322</a> 			<strong class="jxr_keyword">var</strong> clientBuilder = RestClient.builder()
+<a class="jxr_linenumber" name="L323" href="#L323">323</a> 				.transport(transport)
+<a class="jxr_linenumber" name="L324" href="#L324">324</a> 				.rootUrl(<span class="jxr_string">"http://localhost"</span> + fullContextPath)
+<a class="jxr_linenumber" name="L325" href="#L325">325</a> 				.defaultSerializer(JsonSerializer.DEFAULT);
+<a class="jxr_linenumber" name="L326" href="#L326">326</a> 			<strong class="jxr_keyword">if</strong> (defaultParser != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L327" href="#L327">327</a> 				clientBuilder.defaultParser(defaultParser);
+<a class="jxr_linenumber" name="L328" href="#L328">328</a> 			<strong class="jxr_keyword">if</strong> (noTrace)
+<a class="jxr_linenumber" name="L329" href="#L329">329</a> 				clientBuilder.header(NoTrace.NAME, <span class="jxr_string">"true"</span>);
+<a class="jxr_linenumber" name="L330" href="#L330">330</a> 			<strong class="jxr_keyword">var</strong> ngClient = clientBuilder.build();
+<a class="jxr_linenumber" name="L331" href="#L331">331</a> 
+<a class="jxr_linenumber" name="L332" href="#L332">332</a> 				<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> MockRestClient(ngClient);
+<a class="jxr_linenumber" name="L333" href="#L333">333</a> 			} <strong class="jxr_keyword">catch</strong> (Exception e) {
+<a class="jxr_linenumber" name="L334" href="#L334">334</a> 				<strong class="jxr_keyword">throw</strong> rex(e, <span class="jxr_string">"Could not initialize MockRestClient"</span>);
+<a class="jxr_linenumber" name="L335" href="#L335">335</a> 			}
+<a class="jxr_linenumber" name="L336" href="#L336">336</a> 		}
+<a class="jxr_linenumber" name="L337" href="#L337">337</a> 
+<a class="jxr_linenumber" name="L338" href="#L338">338</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String emptyIfNull(String s) { <strong class="jxr_keyword">return</strong> s == <strong class="jxr_keyword">null</strong> ? <span class="jxr_string">""</span> : s; }
+<a class="jxr_linenumber" name="L339" href="#L339">339</a> 	}
+<a class="jxr_linenumber" name="L340" href="#L340">340</a> 
+<a class="jxr_linenumber" name="L341" href="#L341">341</a> 	<em class="jxr_comment">// -----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L342" href="#L342">342</a> 	<em class="jxr_comment">// Transport implementation</em>
+<a class="jxr_linenumber" name="L343" href="#L343">343</a> 	<em class="jxr_comment">// -----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L344" href="#L344">344</a> 
+<a class="jxr_linenumber" name="L345" href="#L345">345</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L346" href="#L346">346</a> <em class="jxr_javadoccomment">	 * An {@link HttpTransport} that dispatches requests in-process through a Juneau {@link RestContext}.</em>
+<a class="jxr_linenumber" name="L347" href="#L347">347</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L348" href="#L348">348</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">class</strong> JuneauRestTransport <strong class="jxr_keyword">implements</strong> <a name="HttpTransport" href="../../../../../org/apache/juneau/rest/client/HttpTransport.html#HttpTransport">HttpTransport</a> {
 <a class="jxr_linenumber" name="L349" href="#L349">349</a> 
-<a class="jxr_linenumber" name="L350" href="#L350">350</a> 				<strong class="jxr_keyword">var</strong> body = request.getBody();
-<a class="jxr_linenumber" name="L351" href="#L351">351</a> 				<strong class="jxr_keyword">if</strong> (body != <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L352" href="#L352">352</a> 					<strong class="jxr_keyword">var</strong> baos = <strong class="jxr_keyword">new</strong> ByteArrayOutputStream();
-<a class="jxr_linenumber" name="L353" href="#L353">353</a> 					body.writeTo(baos);
-<a class="jxr_linenumber" name="L354" href="#L354">354</a> 					servletReq.content(baos.toByteArray());
-<a class="jxr_linenumber" name="L355" href="#L355">355</a> 				}
-<a class="jxr_linenumber" name="L356" href="#L356">356</a> 
-<a class="jxr_linenumber" name="L357" href="#L357">357</a> 				<strong class="jxr_keyword">var</strong> servletRes = MockServletResponse.create();
-<a class="jxr_linenumber" name="L358" href="#L358">358</a> 
-<a class="jxr_linenumber" name="L359" href="#L359">359</a> 				restContext.execute(restObject, servletReq, servletRes);
-<a class="jxr_linenumber" name="L360" href="#L360">360</a> 
-<a class="jxr_linenumber" name="L361" href="#L361">361</a> 				<strong class="jxr_keyword">if</strong> (servletRes.getStatus() == 0) <em class="jxr_comment">// HTT: would require a buggy RestContext that never sets a status</em>
-<a class="jxr_linenumber" name="L362" href="#L362">362</a> 					<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="TransportException" href="../../../../../org/apache/juneau/rest/client/TransportException.html#TransportException">TransportException</a>(<span class="jxr_string">"REST context returned status 0 — response was never committed"</span>);
-<a class="jxr_linenumber" name="L363" href="#L363">363</a> 
-<a class="jxr_linenumber" name="L364" href="#L364">364</a> 				<strong class="jxr_keyword">var</strong> responseBuilder = TransportResponse.builder()
-<a class="jxr_linenumber" name="L365" href="#L365">365</a> 					.statusCode(servletRes.getStatus())
-<a class="jxr_linenumber" name="L366" href="#L366">366</a> 					.reasonPhrase(servletRes.getMessage());
-<a class="jxr_linenumber" name="L367" href="#L367">367</a> 
-<a class="jxr_linenumber" name="L368" href="#L368">368</a> 				<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> name : servletRes.getHeaderNames())
-<a class="jxr_linenumber" name="L369" href="#L369">369</a> 					<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> value : servletRes.getHeaders(name))
-<a class="jxr_linenumber" name="L370" href="#L370">370</a> 						responseBuilder.header(name, value);
-<a class="jxr_linenumber" name="L371" href="#L371">371</a> 
-<a class="jxr_linenumber" name="L372" href="#L372">372</a> 				<strong class="jxr_keyword">var</strong> content = servletRes.getContent();
-<a class="jxr_linenumber" name="L373" href="#L373">373</a> 				<strong class="jxr_keyword">if</strong> (content.length &gt; 0)
-<a class="jxr_linenumber" name="L374" href="#L374">374</a> 					responseBuilder.body(<strong class="jxr_keyword">new</strong> ByteArrayInputStream(content));
-<a class="jxr_linenumber" name="L375" href="#L375">375</a> 
-<a class="jxr_linenumber" name="L376" href="#L376">376</a> 				<strong class="jxr_keyword">return</strong> responseBuilder.build();
+<a class="jxr_linenumber" name="L350" href="#L350">350</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> RestContext restContext;
+<a class="jxr_linenumber" name="L351" href="#L351">351</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Object restObject;
+<a class="jxr_linenumber" name="L352" href="#L352">352</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> String servletPath;
+<a class="jxr_linenumber" name="L353" href="#L353">353</a> 
+<a class="jxr_linenumber" name="L354" href="#L354">354</a> 		JuneauRestTransport(RestContext restContext, String servletPath) {
+<a class="jxr_linenumber" name="L355" href="#L355">355</a> 			<strong class="jxr_keyword">this</strong>.restContext = restContext;
+<a class="jxr_linenumber" name="L356" href="#L356">356</a> 			<strong class="jxr_keyword">this</strong>.restObject = restContext.getResource();
+<a class="jxr_linenumber" name="L357" href="#L357">357</a> 			<strong class="jxr_keyword">this</strong>.servletPath = servletPath;
+<a class="jxr_linenumber" name="L358" href="#L358">358</a> 		}
+<a class="jxr_linenumber" name="L359" href="#L359">359</a> 
+<a class="jxr_linenumber" name="L360" href="#L360">360</a> 		@Override <em class="jxr_comment">/* HttpTransport */</em>
+<a class="jxr_linenumber" name="L361" href="#L361">361</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> supportsUrlPolicy() {
+<a class="jxr_linenumber" name="L362" href="#L362">362</a> 			<em class="jxr_comment">// Requests are dispatched in-process, directly to the RestContext -- there is no real DNS resolution or</em>
+<a class="jxr_linenumber" name="L363" href="#L363">363</a> 			<em class="jxr_comment">// socket connect to pin-on-connect, so the "cannot honor the connect-time contract" fail-closed</em>
+<a class="jxr_linenumber" name="L364" href="#L364">364</a> 			<em class="jxr_comment">// rationale does not apply. The deny-private lexical pre-check (RemoteUrlPolicy.requireAllowedUrl)</em>
+<a class="jxr_linenumber" name="L365" href="#L365">365</a> 			<em class="jxr_comment">// still runs upstream in the @Remote proxy engine before any request reaches this transport, and this</em>
+<a class="jxr_linenumber" name="L366" href="#L366">366</a> 			<em class="jxr_comment">// class's own "http://localhost" root (see MockRestClient.Builder.build()) is never re-checked by that</em>
+<a class="jxr_linenumber" name="L367" href="#L367">367</a> 			<em class="jxr_comment">// pre-check -- only an explicit absolute @Url/baseUrl() override on the proxy interface is.</em>
+<a class="jxr_linenumber" name="L368" href="#L368">368</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
+<a class="jxr_linenumber" name="L369" href="#L369">369</a> 		}
+<a class="jxr_linenumber" name="L370" href="#L370">370</a> 
+<a class="jxr_linenumber" name="L371" href="#L371">371</a> 		@Override <em class="jxr_comment">/* HttpTransport */</em>
+<a class="jxr_linenumber" name="L372" href="#L372">372</a> 		<strong class="jxr_keyword">public</strong> TransportResponse execute(<a name="TransportRequest" href="../../../../../org/apache/juneau/rest/client/TransportRequest.html#TransportRequest">TransportRequest</a> request) <strong class="jxr_keyword">throws</strong> <a name="TransportException" href="../../../../../org/apache/juneau/rest/client/TransportException.html#TransportException">TransportException</a> {
+<a class="jxr_linenumber" name="L373" href="#L373">373</a> 			<strong class="jxr_keyword">if</strong> (request.isSsrfGuardActive())
+<a class="jxr_linenumber" name="L374" href="#L374">374</a> 				<strong class="jxr_keyword">return</strong> PolicyEnforcedRedirects.execute(request, <strong class="jxr_keyword">this</strong>::dispatch);
+<a class="jxr_linenumber" name="L375" href="#L375">375</a> 			<strong class="jxr_keyword">return</strong> dispatch(request);
+<a class="jxr_linenumber" name="L376" href="#L376">376</a> 		}
 <a class="jxr_linenumber" name="L377" href="#L377">377</a> 
-<a class="jxr_linenumber" name="L378" href="#L378">378</a> 			} <strong class="jxr_keyword">catch</strong> (<a name="TransportException" href="../../../../../org/apache/juneau/rest/client/TransportException.html#TransportException">TransportException</a> e) {
-<a class="jxr_linenumber" name="L379" href="#L379">379</a> 				<strong class="jxr_keyword">throw</strong> e;
-<a class="jxr_linenumber" name="L380" href="#L380">380</a> 			} <strong class="jxr_keyword">catch</strong> (ServletException | IOException e) {
-<a class="jxr_linenumber" name="L381" href="#L381">381</a> 				<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="TransportException" href="../../../../../org/apache/juneau/rest/client/TransportException.html#TransportException">TransportException</a>(<span class="jxr_string">"In-process dispatch failed: "</span> + e.getMessage(), e);
-<a class="jxr_linenumber" name="L382" href="#L382">382</a> 			}
-<a class="jxr_linenumber" name="L383" href="#L383">383</a> 		}
-<a class="jxr_linenumber" name="L384" href="#L384">384</a> 	}
-<a class="jxr_linenumber" name="L385" href="#L385">385</a> }
+<a class="jxr_linenumber" name="L378" href="#L378">378</a> 		<strong class="jxr_keyword">private</strong> TransportResponse dispatch(<a name="TransportRequest" href="../../../../../org/apache/juneau/rest/client/TransportRequest.html#TransportRequest">TransportRequest</a> request) <strong class="jxr_keyword">throws</strong> <a name="TransportException" href="../../../../../org/apache/juneau/rest/client/TransportException.html#TransportException">TransportException</a> {
+<a class="jxr_linenumber" name="L379" href="#L379">379</a> 			<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L380" href="#L380">380</a> 				<strong class="jxr_keyword">var</strong> method = request.getMethod();
+<a class="jxr_linenumber" name="L381" href="#L381">381</a> 				<strong class="jxr_keyword">var</strong> uri = request.getUri().toString();
+<a class="jxr_linenumber" name="L382" href="#L382">382</a> 
+<a class="jxr_linenumber" name="L383" href="#L383">383</a> 				<strong class="jxr_keyword">var</strong> servletReq = MockServletRequest.create(method, uri)
+<a class="jxr_linenumber" name="L384" href="#L384">384</a> 					.servletPath(servletPath)
+<a class="jxr_linenumber" name="L385" href="#L385">385</a> 					.contextPath(<span class="jxr_string">""</span>);
+<a class="jxr_linenumber" name="L386" href="#L386">386</a> 
+<a class="jxr_linenumber" name="L387" href="#L387">387</a> 				<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> h : request.getHeaders())
+<a class="jxr_linenumber" name="L388" href="#L388">388</a> 					servletReq.header(h.name(), h.value());
+<a class="jxr_linenumber" name="L389" href="#L389">389</a> 
+<a class="jxr_linenumber" name="L390" href="#L390">390</a> 				<strong class="jxr_keyword">var</strong> body = request.getBody();
+<a class="jxr_linenumber" name="L391" href="#L391">391</a> 				<strong class="jxr_keyword">if</strong> (body != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L392" href="#L392">392</a> 					<strong class="jxr_keyword">var</strong> baos = <strong class="jxr_keyword">new</strong> ByteArrayOutputStream();
+<a class="jxr_linenumber" name="L393" href="#L393">393</a> 					body.writeTo(baos);
+<a class="jxr_linenumber" name="L394" href="#L394">394</a> 					servletReq.content(baos.toByteArray());
+<a class="jxr_linenumber" name="L395" href="#L395">395</a> 				}
+<a class="jxr_linenumber" name="L396" href="#L396">396</a> 
+<a class="jxr_linenumber" name="L397" href="#L397">397</a> 				<strong class="jxr_keyword">var</strong> servletRes = MockServletResponse.create();
+<a class="jxr_linenumber" name="L398" href="#L398">398</a> 
+<a class="jxr_linenumber" name="L399" href="#L399">399</a> 				<strong class="jxr_keyword">var</strong> logLevel = servletReq.getLogLevel();
+<a class="jxr_linenumber" name="L400" href="#L400">400</a> 				<strong class="jxr_keyword">if</strong> (logLevel != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L401" href="#L401">401</a> 					<strong class="jxr_keyword">var</strong> target = Logger.getLogger(restObject.getClass().getName());
+<a class="jxr_linenumber" name="L402" href="#L402">402</a> 					<strong class="jxr_keyword">var</strong> prevLevel = target.getLevel();
+<a class="jxr_linenumber" name="L403" href="#L403">403</a> 					target.setLevel(logLevel);
+<a class="jxr_linenumber" name="L404" href="#L404">404</a> 					<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L405" href="#L405">405</a> 						restContext.execute(restObject, servletReq, servletRes);
+<a class="jxr_linenumber" name="L406" href="#L406">406</a> 					} <strong class="jxr_keyword">finally</strong> {
+<a class="jxr_linenumber" name="L407" href="#L407">407</a> 						target.setLevel(prevLevel);
+<a class="jxr_linenumber" name="L408" href="#L408">408</a> 					}
+<a class="jxr_linenumber" name="L409" href="#L409">409</a> 				} <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L410" href="#L410">410</a> 					restContext.execute(restObject, servletReq, servletRes);
+<a class="jxr_linenumber" name="L411" href="#L411">411</a> 				}
+<a class="jxr_linenumber" name="L412" href="#L412">412</a> 
+<a class="jxr_linenumber" name="L413" href="#L413">413</a> 				<strong class="jxr_keyword">var</strong> responseBuilder = TransportResponse.builder()
+<a class="jxr_linenumber" name="L414" href="#L414">414</a> 					.statusCode(servletRes.getStatus())
+<a class="jxr_linenumber" name="L415" href="#L415">415</a> 					.reasonPhrase(servletRes.getMessage());
+<a class="jxr_linenumber" name="L416" href="#L416">416</a> 
+<a class="jxr_linenumber" name="L417" href="#L417">417</a> 				<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> name : servletRes.getHeaderNames())
+<a class="jxr_linenumber" name="L418" href="#L418">418</a> 					<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> value : servletRes.getHeaders(name))
+<a class="jxr_linenumber" name="L419" href="#L419">419</a> 						responseBuilder.header(name, value);
+<a class="jxr_linenumber" name="L420" href="#L420">420</a> 
+<a class="jxr_linenumber" name="L421" href="#L421">421</a> 				<strong class="jxr_keyword">var</strong> content = servletRes.getContent();
+<a class="jxr_linenumber" name="L422" href="#L422">422</a> 				<strong class="jxr_keyword">if</strong> (content.length &gt; 0)
+<a class="jxr_linenumber" name="L423" href="#L423">423</a> 					responseBuilder.body(<strong class="jxr_keyword">new</strong> ByteArrayInputStream(content));
+<a class="jxr_linenumber" name="L424" href="#L424">424</a> 
+<a class="jxr_linenumber" name="L425" href="#L425">425</a> 				<strong class="jxr_keyword">return</strong> responseBuilder.build();
+<a class="jxr_linenumber" name="L426" href="#L426">426</a> 
+<a class="jxr_linenumber" name="L427" href="#L427">427</a> 			} <strong class="jxr_keyword">catch</strong> (<a name="TransportException" href="../../../../../org/apache/juneau/rest/client/TransportException.html#TransportException">TransportException</a> e) {
+<a class="jxr_linenumber" name="L428" href="#L428">428</a> 				<strong class="jxr_keyword">throw</strong> e;
+<a class="jxr_linenumber" name="L429" href="#L429">429</a> 			} <strong class="jxr_keyword">catch</strong> (ServletException | IOException e) {
+<a class="jxr_linenumber" name="L430" href="#L430">430</a> 				<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="TransportException" href="../../../../../org/apache/juneau/rest/client/TransportException.html#TransportException">TransportException</a>(<span class="jxr_string">"In-process dispatch failed: "</span> + e.getMessage(), e);
+<a class="jxr_linenumber" name="L431" href="#L431">431</a> 			}
+<a class="jxr_linenumber" name="L432" href="#L432">432</a> 		}
+<a class="jxr_linenumber" name="L433" href="#L433">433</a> 	}
+<a class="jxr_linenumber" name="L434" href="#L434">434</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

@@ -506,12 +506,13 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="unsorted()">
 <h3>unsorted</h3>
-<div class="member-signature"><span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanType.html#line-295">unsorted</a></span></div>
+<div class="member-signature"><span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanType.html#line-296">unsorted</a></span></div>
 <div class="block">Opt out of alphabetical sorting for this specific bean's properties.
 
  <p>
  By default, bean properties are serialized in alphabetical order.
- When <jk>true</jk>, properties of this bean will use the natural JVM-dependent order instead.
+ When <jk>true</jk>, properties of this bean use declaration order instead: record component order for records,
+ field declaration order (superclass first) for other classes, then method-only properties alphabetically.
 
  <h5 class='section'>Example:</h5>
  <p class='bjava'>
@@ -532,7 +533,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="wo()">
 <h3>wo</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanType.html#line-302">wo</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanType.html#line-303">wo</a></span></div>
 <div class="block">Synonym for <a href="#writeOnlyProperties()"><code>writeOnlyProperties()</code></a>.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -547,7 +548,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="writeOnlyProperties()">
 <h3>writeOnlyProperties</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanType.html#line-325">writeOnlyProperties</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanType.html#line-326">writeOnlyProperties</a></span></div>
 <div class="block">Write-only bean properties.
 
  <p>
@@ -578,7 +579,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="xp()">
 <h3>xp</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanType.html#line-332">xp</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanType.html#line-333">xp</a></span></div>
 <div class="block">Synonym for <a href="#excludeProperties()"><code>excludeProperties()</code></a>.</div>
 <dl class="notes">
 <dt>Returns:</dt>

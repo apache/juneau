@@ -64,12 +64,8 @@ loadScripts(document, 'script');</script>
 <div class="col-last odd-row-color">
 <div class="block">REST Method Argument Beans</div>
 </div>
-<div class="col-first even-row-color"><a href="#org.apache.juneau.rest.server.debug">org.apache.juneau.rest.server.debug</a></div>
+<div class="col-first even-row-color"><a href="#org.apache.juneau.rest.server.rrpc">org.apache.juneau.rest.server.rrpc</a></div>
 <div class="col-last even-row-color">
-<div class="block">REST Debug APIs</div>
-</div>
-<div class="col-first odd-row-color"><a href="#org.apache.juneau.rest.server.rrpc">org.apache.juneau.rest.server.rrpc</a></div>
-<div class="col-last odd-row-color">
 <div class="block">REST Remote Procedure Call API</div>
 </div>
 </div>
@@ -148,6 +144,18 @@ loadScripts(document, 'script');</script>
 <div class="block">Static creator.</div>
 </div>
 </div>
+<div class="caption"><span>Method parameters in <a href="../package-summary.html">org.apache.juneau.rest.server</a> with type arguments of type <a href="../RestOpContext.html" title="class in org.apache.juneau.rest.server">RestOpContext</a></span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier and Type</div>
+<div class="table-header col-second">Method</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code>static void</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">MethodSafety.</span><code><a href="../MethodSafety.html#check(java.util.List)" class="member-name-link">check</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../RestOpContext.html" title="class in org.apache.juneau.rest.server">RestOpContext</a>&gt;&nbsp;ops)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Fails when any operation declared <a href="../Mutating.html" title="annotation interface in org.apache.juneau.rest.server"><code>@Mutating</code></a> is bound to a safe method, or any operation
+ declared <a href="../RestOp.html#read()"><code>read=true</code></a> is bound to a method that cannot be a read.</div>
+</div>
+</div>
 <div class="caption"><span>Constructors in <a href="../package-summary.html">org.apache.juneau.rest.server</a> with parameters of type <a href="../RestOpContext.html" title="class in org.apache.juneau.rest.server">RestOpContext</a></span></div>
 <div class="summary-table three-column-summary">
 <div class="table-header col-first">Modifier</div>
@@ -174,29 +182,6 @@ loadScripts(document, 'script');</script>
 <div class="col-second even-row-color"><code><a href="../arg/RestOpContextArgs.html#%3Cinit%3E(org.apache.juneau.commons.function.ThrowingFunction)" class="member-name-link">RestOpContextArgs</a><wbr>(<a href="../../../commons/function/ThrowingFunction.html" title="interface in org.apache.juneau.commons.function">ThrowingFunction</a>&lt;<a href="../RestOpContext.html" title="class in org.apache.juneau.rest.server">RestOpContext</a>,<wbr>T&gt;&nbsp;function)</code></div>
 <div class="col-last even-row-color">
 <div class="block">Constructor.</div>
-</div>
-</div>
-</section>
-</li>
-<li>
-<section class="detail" id="org.apache.juneau.rest.server.debug">
-<h2>Uses of <a href="../RestOpContext.html" title="class in org.apache.juneau.rest.server">RestOpContext</a> in <a href="../debug/package-summary.html">org.apache.juneau.rest.server.debug</a></h2>
-<div class="caption"><span>Methods in <a href="../debug/package-summary.html">org.apache.juneau.rest.server.debug</a> with parameters of type <a href="../RestOpContext.html" title="class in org.apache.juneau.rest.server">RestOpContext</a></span></div>
-<div class="summary-table three-column-summary">
-<div class="table-header col-first">Modifier and Type</div>
-<div class="table-header col-second">Method</div>
-<div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><code>boolean</code></div>
-<div class="col-second even-row-color"><span class="type-name-label">DebugEnablement.</span><code><a href="../debug/DebugEnablement.html#isDebug(org.apache.juneau.rest.server.RestOpContext,jakarta.servlet.http.HttpServletRequest)" class="member-name-link">isDebug</a><wbr>(<a href="../RestOpContext.html" title="class in org.apache.juneau.rest.server">RestOpContext</a>&nbsp;context,
- jakarta.servlet.http.HttpServletRequest&nbsp;req)</code></div>
-<div class="col-last even-row-color">
-<div class="block">Returns <jk>true</jk> if debug is enabled on the specified method and request.</div>
-</div>
-<div class="col-first odd-row-color"><code><a href="../debug/DebugResult.html" title="class in org.apache.juneau.rest.server.debug">DebugResult</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">DebugConfig.</span><code><a href="../debug/DebugConfig.html#resolve(org.apache.juneau.rest.server.RestOpContext,jakarta.servlet.http.HttpServletRequest)" class="member-name-link">resolve</a><wbr>(<a href="../RestOpContext.html" title="class in org.apache.juneau.rest.server">RestOpContext</a>&nbsp;context,
- jakarta.servlet.http.HttpServletRequest&nbsp;req)</code></div>
-<div class="col-last odd-row-color">
-<div class="block">Resolves debug for operation-level requests.</div>
 </div>
 </div>
 </section>

@@ -24,11 +24,11 @@
 <a class="jxr_linenumber" name="L16" href="#L16">16</a>  <em class="jxr_comment"> */</em>
 <a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.server.mcp;
 <a class="jxr_linenumber" name="L18" href="#L18">18</a>  
-<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.commons.utils.AssertionUtils.*;
-<a class="jxr_linenumber" name="L20" href="#L20">20</a>  
-<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> java.util.*;
-<a class="jxr_linenumber" name="L22" href="#L22">22</a>  
-<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.commons.inject.*;
+<a class="jxr_linenumber" name="L19" href="#L19">19</a>  
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> java.util.*;
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.commons.inject.*;
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.commons.utils.Shorts.*;
 <a class="jxr_linenumber" name="L24" href="#L24">24</a>  
 <a class="jxr_linenumber" name="L25" href="#L25">25</a>  <em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L26" href="#L26">26</a>  <em class="jxr_javadoccomment"> * Handler for a single MCP resource template.</em>
@@ -89,9 +89,9 @@
 <a class="jxr_linenumber" name="L81" href="#L81">81</a>  <em class="jxr_javadoccomment">	 * @return A new handler wiring both. Never &lt;jk&gt;null&lt;/jk&gt;.</em>
 <a class="jxr_linenumber" name="L82" href="#L82">82</a>  <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L83" href="#L83">83</a>  	<strong class="jxr_keyword">static</strong> <a name="McpResourceTemplateHandler" href="../../../../../../org/apache/juneau/rest/server/mcp/McpResourceTemplateHandler.html#McpResourceTemplateHandler">McpResourceTemplateHandler</a> of(<a name="McpResourceTemplateSpec" href="../../../../../../org/apache/juneau/rest/server/mcp/McpResourceTemplateSpec.html#McpResourceTemplateSpec">McpResourceTemplateSpec</a> descriptor, ReadFunction read) {
-<a class="jxr_linenumber" name="L84" href="#L84">84</a>  		assertArgNotNull(<span class="jxr_string">"descriptor"</span>, descriptor);
-<a class="jxr_linenumber" name="L85" href="#L85">85</a>  		assertArgNotNullOrBlank(<span class="jxr_string">"descriptor.getUriTemplate()"</span>, descriptor.getUriTemplate());
-<a class="jxr_linenumber" name="L86" href="#L86">86</a>  		assertArgNotNull(<span class="jxr_string">"read"</span>, read);
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>  		reqnn(<span class="jxr_string">"descriptor"</span>, descriptor);
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>  		reqnb(<span class="jxr_string">"descriptor.getUriTemplate()"</span>, descriptor.getUriTemplate());
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>  		reqnn(<span class="jxr_string">"read"</span>, read);
 <a class="jxr_linenumber" name="L87" href="#L87">87</a>  		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="McpResourceTemplateHandler" href="../../../../../../org/apache/juneau/rest/server/mcp/McpResourceTemplateHandler.html#McpResourceTemplateHandler">McpResourceTemplateHandler</a>() {
 <a class="jxr_linenumber" name="L88" href="#L88">88</a>  			@Override <strong class="jxr_keyword">public</strong> <a name="McpResourceTemplateSpec" href="../../../../../../org/apache/juneau/rest/server/mcp/McpResourceTemplateSpec.html#McpResourceTemplateSpec">McpResourceTemplateSpec</a> descriptor() {
 <a class="jxr_linenumber" name="L89" href="#L89">89</a>  				<strong class="jxr_keyword">return</strong> descriptor;

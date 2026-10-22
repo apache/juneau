@@ -78,7 +78,7 @@ loadScripts(document, 'script');</script>
 </div>
 <section class="class-description" id="class-description">
 <hr>
-<div class="type-signature"><span class="modifiers">public final class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanConfigContext.html#line-76">BeanConfigContext</a></span>
+<div class="type-signature"><span class="modifiers">public final class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanConfigContext.html#line-75">BeanConfigContext</a></span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
 <div class="block">Immutable runtime configuration for the bean-modeling layer.
 
@@ -311,18 +311,23 @@ loadScripts(document, 'script');</script>
 <div class="block">Returns <jk>true</jk> if the specified class is excluded from bean detection.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#isUnsortedProperties()" class="member-name-link">isUnsortedProperties</a>()</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#isRecordComponentOrder()" class="member-name-link">isRecordComponentOrder</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Returns whether properties should preserve their JVM-discovered (non-alphabetical) order.</div>
+<div class="block">Returns whether record properties use record component (declaration) order.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#isUseInterfaceProxies()" class="member-name-link">isUseInterfaceProxies</a>()</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#isUnsortedProperties()" class="member-name-link">isUnsortedProperties</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Returns whether interface proxies should be created for bean interfaces.</div>
+<div class="block">Returns whether properties use declaration order instead of alphabetical order.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#isUseJavaBeanIntrospector()" class="member-name-link">isUseJavaBeanIntrospector</a>()</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#isUseInterfaceProxies()" class="member-name-link">isUseInterfaceProxies</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Returns whether interface proxies should be created for bean interfaces.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#isUseJavaBeanIntrospector()" class="member-name-link">isUseJavaBeanIntrospector</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns whether <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.desktop/java/beans/Introspector.html" title="class or interface in java.beans" class="external-link"><code>Introspector</code></a> should be used to discover bean properties.</div>
 </div>
 </div>
@@ -345,7 +350,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="DEFAULT">
 <h3>DEFAULT</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="BeanConfigContext.html" title="class in org.apache.juneau.commons.bean">BeanConfigContext</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanConfigContext.html#line-88">DEFAULT</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="BeanConfigContext.html" title="class in org.apache.juneau.commons.bean">BeanConfigContext</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanConfigContext.html#line-87">DEFAULT</a></span></div>
 <div class="block">Default <a href="BeanConfigContext.html" title="class in org.apache.juneau.commons.bean"><code>BeanConfigContext</code></a> instance with all settings at their defaults.
 
  <p>
@@ -363,7 +368,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="create()">
 <h3>create</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="BeanConfigContext.Builder.html" title="class in org.apache.juneau.commons.bean">BeanConfigContext.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanConfigContext.html#line-95">create</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="BeanConfigContext.Builder.html" title="class in org.apache.juneau.commons.bean">BeanConfigContext.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanConfigContext.html#line-94">create</a></span>()</div>
 <div class="block">Creates a new builder for <a href="BeanConfigContext.html" title="class in org.apache.juneau.commons.bean"><code>BeanConfigContext</code></a>.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -374,7 +379,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="copy()">
 <h3>copy</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanConfigContext.Builder.html" title="class in org.apache.juneau.commons.bean">BeanConfigContext.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanConfigContext.html#line-170">copy</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanConfigContext.Builder.html" title="class in org.apache.juneau.commons.bean">BeanConfigContext.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanConfigContext.html#line-171">copy</a></span>()</div>
 <div class="block">Returns a builder pre-populated with the values from this context.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -385,7 +390,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getBeanClassVisibility()">
 <h3>getBeanClassVisibility</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../reflect/Visibility.html" title="enum class in org.apache.juneau.commons.reflect">Visibility</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanConfigContext.html#line-182">getBeanClassVisibility</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../reflect/Visibility.html" title="enum class in org.apache.juneau.commons.reflect">Visibility</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanConfigContext.html#line-183">getBeanClassVisibility</a></span>()</div>
 <div class="block">Minimum bean class visibility.
 
  <p>
@@ -399,7 +404,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getBeanConstructorVisibility()">
 <h3>getBeanConstructorVisibility</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../reflect/Visibility.html" title="enum class in org.apache.juneau.commons.reflect">Visibility</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanConfigContext.html#line-189">getBeanConstructorVisibility</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../reflect/Visibility.html" title="enum class in org.apache.juneau.commons.reflect">Visibility</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanConfigContext.html#line-190">getBeanConstructorVisibility</a></span>()</div>
 <div class="block">Minimum bean constructor visibility.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -410,7 +415,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getBeanFieldVisibility()">
 <h3>getBeanFieldVisibility</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../reflect/Visibility.html" title="enum class in org.apache.juneau.commons.reflect">Visibility</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanConfigContext.html#line-196">getBeanFieldVisibility</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../reflect/Visibility.html" title="enum class in org.apache.juneau.commons.reflect">Visibility</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanConfigContext.html#line-197">getBeanFieldVisibility</a></span>()</div>
 <div class="block">Minimum bean field visibility.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -421,7 +426,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getBeanMethodVisibility()">
 <h3>getBeanMethodVisibility</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../reflect/Visibility.html" title="enum class in org.apache.juneau.commons.reflect">Visibility</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanConfigContext.html#line-203">getBeanMethodVisibility</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../reflect/Visibility.html" title="enum class in org.apache.juneau.commons.reflect">Visibility</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanConfigContext.html#line-204">getBeanMethodVisibility</a></span>()</div>
 <div class="block">Minimum bean method visibility.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -432,7 +437,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="isBeanMapPutReturnsOldValue()">
 <h3>isBeanMapPutReturnsOldValue</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanConfigContext.html#line-214">isBeanMapPutReturnsOldValue</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanConfigContext.html#line-215">isBeanMapPutReturnsOldValue</a></span>()</div>
 <div class="block">Returns whether <code>BeanMap.put(String,Object)</code> returns the previous property value.
 
  <p>
@@ -447,7 +452,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="isBeansRequireDefaultConstructor()">
 <h3>isBeansRequireDefaultConstructor</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanConfigContext.html#line-221">isBeansRequireDefaultConstructor</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanConfigContext.html#line-222">isBeansRequireDefaultConstructor</a></span>()</div>
 <div class="block">Returns whether classes must have a no-arg constructor to be considered beans.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -458,7 +463,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="isBeansRequireSerializable()">
 <h3>isBeansRequireSerializable</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanConfigContext.html#line-228">isBeansRequireSerializable</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanConfigContext.html#line-229">isBeansRequireSerializable</a></span>()</div>
 <div class="block">Returns whether classes must implement <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link"><code>Serializable</code></a> to be considered beans.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -469,7 +474,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="isBeansRequireSettersForGetters()">
 <h3>isBeansRequireSettersForGetters</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanConfigContext.html#line-235">isBeansRequireSettersForGetters</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanConfigContext.html#line-236">isBeansRequireSettersForGetters</a></span>()</div>
 <div class="block">Returns whether bean properties must have a setter to be considered writable from the getter.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -480,7 +485,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="isBeansRequireSomeProperties()">
 <h3>isBeansRequireSomeProperties</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanConfigContext.html#line-242">isBeansRequireSomeProperties</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanConfigContext.html#line-243">isBeansRequireSomeProperties</a></span>()</div>
 <div class="block">Returns whether classes must have at least one property to be considered beans.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -491,7 +496,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="isFindFluentSetters()">
 <h3>isFindFluentSetters</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanConfigContext.html#line-249">isFindFluentSetters</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanConfigContext.html#line-250">isFindFluentSetters</a></span>()</div>
 <div class="block">Returns whether fluent-style setters (returning <c>this</c>) should be detected.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -502,7 +507,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="isIgnoreInvocationExceptionsOnGetters()">
 <h3>isIgnoreInvocationExceptionsOnGetters</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanConfigContext.html#line-260">isIgnoreInvocationExceptionsOnGetters</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanConfigContext.html#line-261">isIgnoreInvocationExceptionsOnGetters</a></span>()</div>
 <div class="block">Returns whether exceptions thrown from bean property getters should be silently swallowed.
 
  <p>
@@ -517,7 +522,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="isIgnoreInvocationExceptionsOnSetters()">
 <h3>isIgnoreInvocationExceptionsOnSetters</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanConfigContext.html#line-270">isIgnoreInvocationExceptionsOnSetters</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanConfigContext.html#line-271">isIgnoreInvocationExceptionsOnSetters</a></span>()</div>
 <div class="block">Returns whether exceptions thrown from bean property setters should be silently swallowed.
 
  <p>
@@ -531,7 +536,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="isIgnoreMissingSetters()">
 <h3>isIgnoreMissingSetters</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanConfigContext.html#line-277">isIgnoreMissingSetters</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanConfigContext.html#line-278">isIgnoreMissingSetters</a></span>()</div>
 <div class="block">Returns whether bean properties without setters should be silently ignored during deserialization.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -542,7 +547,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="isIgnoreTransientFields()">
 <h3>isIgnoreTransientFields</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanConfigContext.html#line-284">isIgnoreTransientFields</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanConfigContext.html#line-285">isIgnoreTransientFields</a></span>()</div>
 <div class="block">Returns whether <code>transient</code> fields should be excluded from bean property detection.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -553,7 +558,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="isIgnoreUnknownBeanProperties()">
 <h3>isIgnoreUnknownBeanProperties</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanConfigContext.html#line-291">isIgnoreUnknownBeanProperties</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanConfigContext.html#line-292">isIgnoreUnknownBeanProperties</a></span>()</div>
 <div class="block">Returns whether unknown properties on incoming bean payloads should be ignored.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -564,7 +569,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="isIgnoreUnknownNullBeanProperties()">
 <h3>isIgnoreUnknownNullBeanProperties</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanConfigContext.html#line-302">isIgnoreUnknownNullBeanProperties</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanConfigContext.html#line-303">isIgnoreUnknownNullBeanProperties</a></span>()</div>
 <div class="block">Returns whether attempts to set unknown bean properties to <jk>null</jk> should be silently ignored.
 
  <p>
@@ -579,8 +584,12 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="isUnsortedProperties()">
 <h3>isUnsortedProperties</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanConfigContext.html#line-309">isUnsortedProperties</a></span>()</div>
-<div class="block">Returns whether properties should preserve their JVM-discovered (non-alphabetical) order.</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanConfigContext.html#line-314">isUnsortedProperties</a></span>()</div>
+<div class="block">Returns whether properties use declaration order instead of alphabetical order.
+
+ <p>
+ Declaration order means record component order for records, field declaration order (superclass first) for
+ other classes, followed by method-only properties in alphabetical order.</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd><jk>true</jk> if properties remain unsorted.</dd>
@@ -588,9 +597,24 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
+<section class="detail" id="isRecordComponentOrder()">
+<h3>isRecordComponentOrder</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanConfigContext.html#line-325">isRecordComponentOrder</a></span>()</div>
+<div class="block">Returns whether record properties use record component (declaration) order.
+
+ <p>
+ When <jk>true</jk>, the properties of a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Record.html" title="class or interface in java.lang" class="external-link"><code>Record</code></a> are ordered by <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html#getRecordComponents()" title="class or interface in java.lang" class="external-link"><code>Class.getRecordComponents()</code></a> even in
+ the default sorted mode.  Non-record beans are unaffected.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd><jk>true</jk> if records use component order.</dd>
+</dl>
+</section>
+</li>
+<li>
 <section class="detail" id="isUseInterfaceProxies()">
 <h3>isUseInterfaceProxies</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanConfigContext.html#line-316">isUseInterfaceProxies</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanConfigContext.html#line-332">isUseInterfaceProxies</a></span>()</div>
 <div class="block">Returns whether interface proxies should be created for bean interfaces.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -601,7 +625,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="isUseJavaBeanIntrospector()">
 <h3>isUseJavaBeanIntrospector</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanConfigContext.html#line-323">isUseJavaBeanIntrospector</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanConfigContext.html#line-339">isUseJavaBeanIntrospector</a></span>()</div>
 <div class="block">Returns whether <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.desktop/java/beans/Introspector.html" title="class or interface in java.beans" class="external-link"><code>Introspector</code></a> should be used to discover bean properties.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -612,7 +636,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getPropertyNamer()">
 <h3>getPropertyNamer</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="PropertyNamer.html" title="interface in org.apache.juneau.commons.bean">PropertyNamer</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanConfigContext.html#line-330">getPropertyNamer</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="PropertyNamer.html" title="interface in org.apache.juneau.commons.bean">PropertyNamer</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanConfigContext.html#line-346">getPropertyNamer</a></span>()</div>
 <div class="block">Returns the <a href="PropertyNamer.html" title="interface in org.apache.juneau.commons.bean"><code>PropertyNamer</code></a> used to derive property names from getter/setter/field names.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -623,7 +647,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getBeanTypePropertyName()">
 <h3>getBeanTypePropertyName</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanConfigContext.html#line-337">getBeanTypePropertyName</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanConfigContext.html#line-353">getBeanTypePropertyName</a></span>()</div>
 <div class="block">Returns the property name used to embed the bean dictionary type name (default: <js>"_type"</js>).</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -634,7 +658,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getNotBeanPackageNames()">
 <h3>getNotBeanPackageNames</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanConfigContext.html#line-344">getNotBeanPackageNames</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanConfigContext.html#line-360">getNotBeanPackageNames</a></span>()</div>
 <div class="block">Returns the set of fully qualified package names whose classes are excluded from bean detection.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -645,7 +669,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getNotBeanPackagePrefixes()">
 <h3>getNotBeanPackagePrefixes</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanConfigContext.html#line-351">getNotBeanPackagePrefixes</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanConfigContext.html#line-367">getNotBeanPackagePrefixes</a></span>()</div>
 <div class="block">Returns the set of fully qualified package prefixes whose classes are excluded from bean detection.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -656,7 +680,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getNotBeanClasses()">
 <h3>getNotBeanClasses</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanConfigContext.html#line-358">getNotBeanClasses</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanConfigContext.html#line-374">getNotBeanClasses</a></span>()</div>
 <div class="block">Returns the set of classes (and supertypes) that are explicitly excluded from bean detection.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -667,7 +691,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getBeanStore()">
 <h3>getBeanStore</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../inject/BeanStore.html" title="interface in org.apache.juneau.commons.inject">BeanStore</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanConfigContext.html#line-365">getBeanStore</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../inject/BeanStore.html" title="interface in org.apache.juneau.commons.inject">BeanStore</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanConfigContext.html#line-381">getBeanStore</a></span>()</div>
 <div class="block">Returns the active <a href="../inject/BeanStore.html" title="interface in org.apache.juneau.commons.inject"><code>BeanStore</code></a> used for factory-based bean instantiation, or <jk>null</jk> if none configured.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -678,7 +702,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getAnnotationProvider()">
 <h3>getAnnotationProvider</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../reflect/AnnotationProvider.html" title="class in org.apache.juneau.commons.reflect">AnnotationProvider</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanConfigContext.html#line-372">getAnnotationProvider</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../reflect/AnnotationProvider.html" title="class in org.apache.juneau.commons.reflect">AnnotationProvider</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanConfigContext.html#line-388">getAnnotationProvider</a></span>()</div>
 <div class="block">Returns the <a href="../reflect/AnnotationProvider.html" title="class in org.apache.juneau.commons.reflect"><code>AnnotationProvider</code></a> used to discover annotations on classes/methods/fields/parameters.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -689,7 +713,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getBeanMetaInitializer()">
 <h3>getBeanMetaInitializer</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanMetaInitializer.html" title="interface in org.apache.juneau.commons.bean">BeanMetaInitializer</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanConfigContext.html#line-384">getBeanMetaInitializer</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanMetaInitializer.html" title="interface in org.apache.juneau.commons.bean">BeanMetaInitializer</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanConfigContext.html#line-400">getBeanMetaInitializer</a></span>()</div>
 <div class="block">Returns the <a href="BeanMetaInitializer.html" title="interface in org.apache.juneau.commons.bean"><code>BeanMetaInitializer</code></a> SPI hook used during <a href="BeanMeta.html" title="class in org.apache.juneau.commons.bean"><code>BeanMeta</code></a> construction.
 
  <p>
@@ -705,7 +729,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getBeanPropertyPostProcessor()">
 <h3>getBeanPropertyPostProcessor</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanPropertyPostProcessor.html" title="interface in org.apache.juneau.commons.bean">BeanPropertyPostProcessor</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanConfigContext.html#line-396">getBeanPropertyPostProcessor</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanPropertyPostProcessor.html" title="interface in org.apache.juneau.commons.bean">BeanPropertyPostProcessor</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanConfigContext.html#line-412">getBeanPropertyPostProcessor</a></span>()</div>
 <div class="block">Returns the <a href="BeanPropertyPostProcessor.html" title="interface in org.apache.juneau.commons.bean"><code>BeanPropertyPostProcessor</code></a> SPI hook used during <a href="BeanPropertyMeta.html" title="class in org.apache.juneau.commons.bean"><code>BeanPropertyMeta</code></a> construction.
 
  <p>
@@ -721,7 +745,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="isNotABean(org.apache.juneau.commons.reflect.ClassInfo)">
 <h3>isNotABean</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanConfigContext.html#line-409">isNotABean</a></span><wbr><span class="parameters">(<a href="../reflect/ClassInfo.html" title="class in org.apache.juneau.commons.reflect">ClassInfo</a>&nbsp;ci)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanConfigContext.html#line-425">isNotABean</a></span><wbr><span class="parameters">(<a href="../reflect/ClassInfo.html" title="class in org.apache.juneau.commons.reflect">ClassInfo</a>&nbsp;ci)</span></div>
 <div class="block">Returns <jk>true</jk> if the specified class is excluded from bean detection.
 
  <p>

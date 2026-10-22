@@ -1,0 +1,83 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="" lang="">
+<head><meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<title>ChangesPageBuilders xref</title>
+<link type="text/css" rel="stylesheet" href="../../../../../../stylesheet.css" />
+</head>
+<body>
+<div id="overview"><a href="../../../../../../../apidocs/org/apache/juneau/petstore/console/pages/ChangesPageBuilders.html">View Javadoc</a></div><pre>
+<a class="jxr_linenumber" name="L1" href="#L1">1</a>   <em class="jxr_comment">/*</em>
+<a class="jxr_linenumber" name="L2" href="#L2">2</a>   <em class="jxr_comment"> * Licensed to the Apache Software Foundation (ASF) under one or more</em>
+<a class="jxr_linenumber" name="L3" href="#L3">3</a>   <em class="jxr_comment"> * contributor license agreements.  See the NOTICE file distributed with</em>
+<a class="jxr_linenumber" name="L4" href="#L4">4</a>   <em class="jxr_comment"> * this work for additional information regarding copyright ownership.</em>
+<a class="jxr_linenumber" name="L5" href="#L5">5</a>   <em class="jxr_comment"> * The ASF licenses this file to You under the Apache License, Version 2.0</em>
+<a class="jxr_linenumber" name="L6" href="#L6">6</a>   <em class="jxr_comment"> * (the "License"); you may not use this file except in compliance with</em>
+<a class="jxr_linenumber" name="L7" href="#L7">7</a>   <em class="jxr_comment"> * the License.  You may obtain a copy of the License at</em>
+<a class="jxr_linenumber" name="L8" href="#L8">8</a>   <em class="jxr_comment"> *</em>
+<a class="jxr_linenumber" name="L9" href="#L9">9</a>   <em class="jxr_comment"> *      <a href="http://www.apache.org/licenses/LICENSE-2.0" target="alexandria_uri">http://www.apache.org/licenses/LICENSE-2.0</a></em>
+<a class="jxr_linenumber" name="L10" href="#L10">10</a>  <em class="jxr_comment"> *</em>
+<a class="jxr_linenumber" name="L11" href="#L11">11</a>  <em class="jxr_comment"> * Unless required by applicable law or agreed to in writing, software</em>
+<a class="jxr_linenumber" name="L12" href="#L12">12</a>  <em class="jxr_comment"> * distributed under the License is distributed on an "AS IS" BASIS,</em>
+<a class="jxr_linenumber" name="L13" href="#L13">13</a>  <em class="jxr_comment"> * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</em>
+<a class="jxr_linenumber" name="L14" href="#L14">14</a>  <em class="jxr_comment"> * See the License for the specific language governing permissions and</em>
+<a class="jxr_linenumber" name="L15" href="#L15">15</a>  <em class="jxr_comment"> * limitations under the License.</em>
+<a class="jxr_linenumber" name="L16" href="#L16">16</a>  <em class="jxr_comment"> */</em>
+<a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> org.apache.juneau.petstore.console.pages;
+<a class="jxr_linenumber" name="L18" href="#L18">18</a>  
+<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.server.view.freemarker.console.*;
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.server.views.*;
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.server.views.RowAction.*;
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.server.views.TableSpec.*;
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.server.widgets.*;
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <em class="jxr_javadoccomment"> * Builder twin of the Pending changes page (P10, {@code changes.ftlh}).</em>
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <em class="jxr_javadoccomment"> * &lt;p class='bjava'&gt;</em>
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <em class="jxr_javadoccomment"> * 	&lt;jk&gt;return&lt;/jk&gt; &lt;jsm&gt;twin&lt;/jsm&gt;(&lt;jv&gt;req&lt;/jv&gt;, ChangesPageBuilders.&lt;jsm&gt;changes&lt;/jsm&gt;());</em>
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <em class="jxr_javadoccomment"> * &lt;/p&gt;</em>
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <em class="jxr_javadoccomment"> */</em>
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>  @SuppressWarnings({
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>  	<span class="jxr_string">"java:S1192"</span> <em class="jxr_comment">// Page-definition ids and labels repeat as inline literals by design.</em>
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>  })
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">class</strong> ChangesPageBuilders {
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>  
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>  	<strong class="jxr_keyword">private</strong> ChangesPageBuilders() {}
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>  
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>  	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>  <em class="jxr_javadoccomment">	 * P10 Pending changes.</em>
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>  <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>  <em class="jxr_javadoccomment">	 * @return The page spec.</em>
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>  <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> PageSpec changes() {
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>  		<strong class="jxr_keyword">var</strong> selection = SelectionDef.create(<span class="jxr_string">"id"</span>).selectAll(<strong class="jxr_keyword">true</strong>).scope(SelectionDef.Scope.PERSISTENT).labelField(<span class="jxr_string">"summary"</span>)
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>  			.selectableWhen(RowActionEnabledRule.of(<span class="jxr_string">"state"</span>, Op.EQ, <span class="jxr_string">"PENDING"</span>, <span class="jxr_string">"Only pending changes can be discarded or applied."</span>));
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>  		<strong class="jxr_keyword">return</strong> PageSpec.create().tab(<span class="jxr_string">"pets/changes"</span>).toolkit(<span class="jxr_string">"views"</span>)
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>  			.table(TableSpec.create(<span class="jxr_string">"changes"</span>).rowType(<span class="jxr_string">"PendingChange"</span>).dataMode(DataMode.SERVER).dataUrl(<span class="jxr_string">"/console/pets/changes/query"</span>)
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>  				.defaultOrder(<span class="jxr_string">"id"</span>, Sort.DESC)
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>  				.columns(
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>  					Column.create(<span class="jxr_string">"id"</span>).label(<span class="jxr_string">"Change"</span>),
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>  					Column.create(<span class="jxr_string">"summary"</span>).label(<span class="jxr_string">"Change summary"</span>),
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>  					Column.create(<span class="jxr_string">"author"</span>).label(<span class="jxr_string">"Author"</span>),
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>  					Column.create(<span class="jxr_string">"state"</span>).label(<span class="jxr_string">"State"</span>).render(<span class="jxr_string">"pill"</span>),
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>  					Column.create(<span class="jxr_string">"message"</span>).label(<span class="jxr_string">"Message"</span>).defaultVisible(false))
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>  				.ribbon(
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>  					RibbonItem.option(<span class="jxr_string">"pending-only"</span>).title(<span class="jxr_string">"Pending only"</span>).column(<span class="jxr_string">"state"</span>).value(<span class="jxr_string">"$eq(PENDING)"</span>).defaultOn(),
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>  					RibbonItem.refresh())
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>  				.rowActions(
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>  					RowAction.create(<span class="jxr_string">"retry"</span>).label(<span class="jxr_string">"Retry"</span>).endpoint(<span class="jxr_string">"/console/pets/changes/{id}/retry"</span>).method(Method.POST).onSuccess(OnSuccess.REDRAW)
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>  						.visibleWhen(VisibilityRule.when(<span class="jxr_string">"state"</span>).eq(<span class="jxr_string">"FAILED"</span>)))
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>  				.selection(selection)
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>  				.bulk(BulkMutateDef.create(WritePermit.forCapability(<span class="jxr_string">"pets.changes"</span>), selection).actions(
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>  					RowAction.create(<span class="jxr_string">"discard"</span>).label(<span class="jxr_string">"Discard"</span>).endpoint(<span class="jxr_string">"/console/pets/changes/discard"</span>).method(Method.POST).bulkMode(BulkMode.AGGREGATE)
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>  						.confirmTitle(<span class="jxr_string">"Discard changes"</span>).confirm(<span class="jxr_string">"Discard the selected changes?"</span>).tone(Tone.DANGER).confirmRenderer(<span class="jxr_string">"typed"</span>),
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>  					RowAction.create(<span class="jxr_string">"apply"</span>).label(<span class="jxr_string">"Apply"</span>).endpoint(<span class="jxr_string">"/console/pets/changes/{id}/apply"</span>).method(Method.POST).bulkMode(BulkMode.PER_ROW))),
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>  				<span class="jxr_string">"Pending changes"</span>);
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>  	}
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>  }
+</pre>
+<hr/>
+<div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>
+</body>
+</html>

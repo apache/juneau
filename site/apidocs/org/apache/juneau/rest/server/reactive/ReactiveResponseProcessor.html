@@ -82,7 +82,7 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="../processor/ResponseProcessor.html" title="interface in org.apache.juneau.rest.server.processor">ResponseProcessor</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/reactive/ReactiveResponseProcessor.html#line-113">ReactiveResponseProcessor</a></span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/reactive/ReactiveResponseProcessor.html#line-119">ReactiveResponseProcessor</a></span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>
 implements <a href="../processor/ResponseProcessor.html" title="interface in org.apache.juneau.rest.server.processor">ResponseProcessor</a></span></div>
 <div class="block">Response processor that bridges <a class="doclink" href="https://www.reactive-streams.org/">Reactive Streams</a>
@@ -120,8 +120,12 @@ implements <a href="../processor/ResponseProcessor.html" title="interface in org
    <li><b>SSE</b> (<code>text/event-stream</code>) &mdash; each element is emitted as a Server-Sent-Events
       frame. <a href="../../../marshall/sse/SseEvent.html" title="class in org.apache.juneau.marshall.sse"><code>SseEvent</code></a> elements are written verbatim; any other element type is JSON-encoded
       into the <code>data:</code> field.
-   <li><b>NDJSON</b> (<code>application/x-ndjson</code>, <code>application/jsonl</code>, <code>application/json5l</code>) &mdash; each element is
-      JSON-encoded on its own line.
+   <li><b>NDJSON</b> (<code>application/x-ndjson</code>, <code>application/jsonl</code>, <code>application/jsonlines</code>,
+      <code>application/json5l</code>, <code>application/json5lines</code>, <code>application/json-seq</code>) &mdash; each
+      element is JSON-encoded on its own line. Unless the handler set a Content-Type, the response echoes the
+      highest-ranked NDJSON-family <code>Accept</code> range in canonical form (<code>jsonlines</code> becomes
+      <code>jsonl</code>, <code>json5lines</code> becomes <code>json5l</code>, <code>json-seq</code> becomes <code>x-ndjson</code>);
+      otherwise it is <code>application/x-ndjson</code>. See <code>NDJSON_ALIASES</code>.
    <li><b>Buffer</b> (default, any other media type) &mdash; all elements are collected into a
       <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link"><code>List</code></a> and serialized through the normal serializer chain (e.g. a JSON
       array). The collection is wrapped in a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/concurrent/CompletableFuture.html" title="class or interface in java.util.concurrent" class="external-link"><code>CompletableFuture</code></a> and handed to the async path,
@@ -224,7 +228,7 @@ implements <a href="../processor/ResponseProcessor.html" title="interface in org
 <li>
 <section class="detail" id="&lt;init&gt;()">
 <h3>ReactiveResponseProcessor</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/reactive/ReactiveResponseProcessor.html#line-116">ReactiveResponseProcessor</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/reactive/ReactiveResponseProcessor.html#line-124">ReactiveResponseProcessor</a></span>()</div>
 </section>
 </li>
 </ul>
@@ -238,7 +242,7 @@ implements <a href="../processor/ResponseProcessor.html" title="interface in org
 <li>
 <section class="detail" id="process(org.apache.juneau.rest.server.RestOpSession)">
 <h3>process</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/reactive/ReactiveResponseProcessor.html#line-132">process</a></span><wbr><span class="parameters">(<a href="../RestOpSession.html" title="class in org.apache.juneau.rest.server">RestOpSession</a>&nbsp;opSession)</span>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/reactive/ReactiveResponseProcessor.html#line-172">process</a></span><wbr><span class="parameters">(<a href="../RestOpSession.html" title="class in org.apache.juneau.rest.server">RestOpSession</a>&nbsp;opSession)</span>
             throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a>,
 <a href="../../../http/response/BasicHttpException.html" title="class in org.apache.juneau.http.response">BasicHttpException</a></span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="../processor/ResponseProcessor.html#process(org.apache.juneau.rest.server.RestOpSession)">ResponseProcessor</a></code></span></div>

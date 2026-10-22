@@ -82,7 +82,7 @@ loadScripts(document, 'script');</script>
 <dd><a href="BeanConfigContext.html" title="class in org.apache.juneau.commons.bean">BeanConfigContext</a></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public static final class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanConfigContext.html#line-437">BeanConfigContext.Builder</a></span>
+<div class="type-signature"><span class="modifiers">public static final class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanConfigContext.html#line-453">BeanConfigContext.Builder</a></span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
 <div class="block">Builder for <a href="BeanConfigContext.html" title="class in org.apache.juneau.commons.bean"><code>BeanConfigContext</code></a>.</div>
 </section>
@@ -250,18 +250,23 @@ loadScripts(document, 'script');</script>
 <div class="block">Sets the <a href="PropertyNamer.html" title="interface in org.apache.juneau.commons.bean"><code>PropertyNamer</code></a> used to derive property names.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="BeanConfigContext.Builder.html" title="class in org.apache.juneau.commons.bean">BeanConfigContext.Builder</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#unsortedProperties(boolean)" class="member-name-link">unsortedProperties</a><wbr>(boolean&nbsp;value)</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#recordComponentOrder(boolean)" class="member-name-link">recordComponentOrder</a><wbr>(boolean&nbsp;value)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Toggles whether properties remain in JVM-discovered (non-alphabetical) order.</div>
+<div class="block">Toggles record component (declaration) ordering for <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Record.html" title="class or interface in java.lang" class="external-link"><code>Record</code></a> beans.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="BeanConfigContext.Builder.html" title="class in org.apache.juneau.commons.bean">BeanConfigContext.Builder</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#useInterfaceProxies(boolean)" class="member-name-link">useInterfaceProxies</a><wbr>(boolean&nbsp;value)</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#unsortedProperties(boolean)" class="member-name-link">unsortedProperties</a><wbr>(boolean&nbsp;value)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Toggles automatic creation of interface proxies for bean interfaces.</div>
+<div class="block">Toggles declaration order (instead of alphabetical order) for bean properties.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="BeanConfigContext.Builder.html" title="class in org.apache.juneau.commons.bean">BeanConfigContext.Builder</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#useJavaBeanIntrospector(boolean)" class="member-name-link">useJavaBeanIntrospector</a><wbr>(boolean&nbsp;value)</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#useInterfaceProxies(boolean)" class="member-name-link">useInterfaceProxies</a><wbr>(boolean&nbsp;value)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Toggles automatic creation of interface proxies for bean interfaces.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="BeanConfigContext.Builder.html" title="class in org.apache.juneau.commons.bean">BeanConfigContext.Builder</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#useJavaBeanIntrospector(boolean)" class="member-name-link">useJavaBeanIntrospector</a><wbr>(boolean&nbsp;value)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Toggles use of <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.desktop/java/beans/Introspector.html" title="class or interface in java.beans" class="external-link"><code>Introspector</code></a> for property discovery.</div>
 </div>
 </div>
@@ -284,7 +289,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="build()">
 <h3>build</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanConfigContext.html" title="class in org.apache.juneau.commons.bean">BeanConfigContext</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanConfigContext.Builder.html#line-512">build</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanConfigContext.html" title="class in org.apache.juneau.commons.bean">BeanConfigContext</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanConfigContext.Builder.html#line-530">build</a></span>()</div>
 <div class="block">Builds a new <a href="BeanConfigContext.html" title="class in org.apache.juneau.commons.bean"><code>BeanConfigContext</code></a> from this builder's state.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -295,7 +300,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="beanClassVisibility(org.apache.juneau.commons.reflect.Visibility)">
 <h3>beanClassVisibility</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanConfigContext.Builder.html" title="class in org.apache.juneau.commons.bean">BeanConfigContext.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanConfigContext.Builder.html#line-522">beanClassVisibility</a></span><wbr><span class="parameters">(<a href="../reflect/Visibility.html" title="enum class in org.apache.juneau.commons.reflect">Visibility</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanConfigContext.Builder.html" title="class in org.apache.juneau.commons.bean">BeanConfigContext.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanConfigContext.Builder.html#line-540">beanClassVisibility</a></span><wbr><span class="parameters">(<a href="../reflect/Visibility.html" title="enum class in org.apache.juneau.commons.reflect">Visibility</a>&nbsp;value)</span></div>
 <div class="block">Sets the minimum bean class visibility.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -308,7 +313,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="beanConstructorVisibility(org.apache.juneau.commons.reflect.Visibility)">
 <h3>beanConstructorVisibility</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanConfigContext.Builder.html" title="class in org.apache.juneau.commons.bean">BeanConfigContext.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanConfigContext.Builder.html#line-530">beanConstructorVisibility</a></span><wbr><span class="parameters">(<a href="../reflect/Visibility.html" title="enum class in org.apache.juneau.commons.reflect">Visibility</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanConfigContext.Builder.html" title="class in org.apache.juneau.commons.bean">BeanConfigContext.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanConfigContext.Builder.html#line-548">beanConstructorVisibility</a></span><wbr><span class="parameters">(<a href="../reflect/Visibility.html" title="enum class in org.apache.juneau.commons.reflect">Visibility</a>&nbsp;value)</span></div>
 <div class="block">Sets the minimum bean constructor visibility.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -321,7 +326,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="beanFieldVisibility(org.apache.juneau.commons.reflect.Visibility)">
 <h3>beanFieldVisibility</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanConfigContext.Builder.html" title="class in org.apache.juneau.commons.bean">BeanConfigContext.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanConfigContext.Builder.html#line-538">beanFieldVisibility</a></span><wbr><span class="parameters">(<a href="../reflect/Visibility.html" title="enum class in org.apache.juneau.commons.reflect">Visibility</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanConfigContext.Builder.html" title="class in org.apache.juneau.commons.bean">BeanConfigContext.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanConfigContext.Builder.html#line-556">beanFieldVisibility</a></span><wbr><span class="parameters">(<a href="../reflect/Visibility.html" title="enum class in org.apache.juneau.commons.reflect">Visibility</a>&nbsp;value)</span></div>
 <div class="block">Sets the minimum bean field visibility.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -334,7 +339,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="beanMethodVisibility(org.apache.juneau.commons.reflect.Visibility)">
 <h3>beanMethodVisibility</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanConfigContext.Builder.html" title="class in org.apache.juneau.commons.bean">BeanConfigContext.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanConfigContext.Builder.html#line-546">beanMethodVisibility</a></span><wbr><span class="parameters">(<a href="../reflect/Visibility.html" title="enum class in org.apache.juneau.commons.reflect">Visibility</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanConfigContext.Builder.html" title="class in org.apache.juneau.commons.bean">BeanConfigContext.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanConfigContext.Builder.html#line-564">beanMethodVisibility</a></span><wbr><span class="parameters">(<a href="../reflect/Visibility.html" title="enum class in org.apache.juneau.commons.reflect">Visibility</a>&nbsp;value)</span></div>
 <div class="block">Sets the minimum bean method visibility.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -347,7 +352,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="beanMapPutReturnsOldValue(boolean)">
 <h3>beanMapPutReturnsOldValue</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanConfigContext.Builder.html" title="class in org.apache.juneau.commons.bean">BeanConfigContext.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanConfigContext.Builder.html#line-554">beanMapPutReturnsOldValue</a></span><wbr><span class="parameters">(boolean&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanConfigContext.Builder.html" title="class in org.apache.juneau.commons.bean">BeanConfigContext.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanConfigContext.Builder.html#line-572">beanMapPutReturnsOldValue</a></span><wbr><span class="parameters">(boolean&nbsp;value)</span></div>
 <div class="block">Toggles whether <code>BeanMap.put(String,Object)</code> returns the previous value rather than <jk>null</jk>.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -360,7 +365,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="beansRequireDefaultConstructor(boolean)">
 <h3>beansRequireDefaultConstructor</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanConfigContext.Builder.html" title="class in org.apache.juneau.commons.bean">BeanConfigContext.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanConfigContext.Builder.html#line-562">beansRequireDefaultConstructor</a></span><wbr><span class="parameters">(boolean&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanConfigContext.Builder.html" title="class in org.apache.juneau.commons.bean">BeanConfigContext.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanConfigContext.Builder.html#line-580">beansRequireDefaultConstructor</a></span><wbr><span class="parameters">(boolean&nbsp;value)</span></div>
 <div class="block">Toggles the requirement that beans have a no-arg default constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -373,7 +378,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="beansRequireSerializable(boolean)">
 <h3>beansRequireSerializable</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanConfigContext.Builder.html" title="class in org.apache.juneau.commons.bean">BeanConfigContext.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanConfigContext.Builder.html#line-570">beansRequireSerializable</a></span><wbr><span class="parameters">(boolean&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanConfigContext.Builder.html" title="class in org.apache.juneau.commons.bean">BeanConfigContext.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanConfigContext.Builder.html#line-588">beansRequireSerializable</a></span><wbr><span class="parameters">(boolean&nbsp;value)</span></div>
 <div class="block">Toggles the requirement that beans implement <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link"><code>Serializable</code></a>.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -386,7 +391,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="beansRequireSettersForGetters(boolean)">
 <h3>beansRequireSettersForGetters</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanConfigContext.Builder.html" title="class in org.apache.juneau.commons.bean">BeanConfigContext.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanConfigContext.Builder.html#line-578">beansRequireSettersForGetters</a></span><wbr><span class="parameters">(boolean&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanConfigContext.Builder.html" title="class in org.apache.juneau.commons.bean">BeanConfigContext.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanConfigContext.Builder.html#line-596">beansRequireSettersForGetters</a></span><wbr><span class="parameters">(boolean&nbsp;value)</span></div>
 <div class="block">Toggles the requirement that bean getters have matching setters.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -399,7 +404,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="beansRequireSomeProperties(boolean)">
 <h3>beansRequireSomeProperties</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanConfigContext.Builder.html" title="class in org.apache.juneau.commons.bean">BeanConfigContext.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanConfigContext.Builder.html#line-586">beansRequireSomeProperties</a></span><wbr><span class="parameters">(boolean&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanConfigContext.Builder.html" title="class in org.apache.juneau.commons.bean">BeanConfigContext.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanConfigContext.Builder.html#line-604">beansRequireSomeProperties</a></span><wbr><span class="parameters">(boolean&nbsp;value)</span></div>
 <div class="block">Toggles the requirement that beans expose at least one property.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -412,7 +417,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="findFluentSetters(boolean)">
 <h3>findFluentSetters</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanConfigContext.Builder.html" title="class in org.apache.juneau.commons.bean">BeanConfigContext.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanConfigContext.Builder.html#line-594">findFluentSetters</a></span><wbr><span class="parameters">(boolean&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanConfigContext.Builder.html" title="class in org.apache.juneau.commons.bean">BeanConfigContext.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanConfigContext.Builder.html#line-612">findFluentSetters</a></span><wbr><span class="parameters">(boolean&nbsp;value)</span></div>
 <div class="block">Toggles fluent-setter detection (setters that return <c>this</c>).</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -425,7 +430,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="ignoreInvocationExceptionsOnGetters(boolean)">
 <h3>ignoreInvocationExceptionsOnGetters</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanConfigContext.Builder.html" title="class in org.apache.juneau.commons.bean">BeanConfigContext.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanConfigContext.Builder.html#line-602">ignoreInvocationExceptionsOnGetters</a></span><wbr><span class="parameters">(boolean&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanConfigContext.Builder.html" title="class in org.apache.juneau.commons.bean">BeanConfigContext.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanConfigContext.Builder.html#line-620">ignoreInvocationExceptionsOnGetters</a></span><wbr><span class="parameters">(boolean&nbsp;value)</span></div>
 <div class="block">Toggles silent suppression of exceptions thrown by bean property getters.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -438,7 +443,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="ignoreInvocationExceptionsOnSetters(boolean)">
 <h3>ignoreInvocationExceptionsOnSetters</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanConfigContext.Builder.html" title="class in org.apache.juneau.commons.bean">BeanConfigContext.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanConfigContext.Builder.html#line-610">ignoreInvocationExceptionsOnSetters</a></span><wbr><span class="parameters">(boolean&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanConfigContext.Builder.html" title="class in org.apache.juneau.commons.bean">BeanConfigContext.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanConfigContext.Builder.html#line-628">ignoreInvocationExceptionsOnSetters</a></span><wbr><span class="parameters">(boolean&nbsp;value)</span></div>
 <div class="block">Toggles silent suppression of exceptions thrown by bean property setters.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -451,7 +456,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="ignoreMissingSetters(boolean)">
 <h3>ignoreMissingSetters</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanConfigContext.Builder.html" title="class in org.apache.juneau.commons.bean">BeanConfigContext.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanConfigContext.Builder.html#line-618">ignoreMissingSetters</a></span><wbr><span class="parameters">(boolean&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanConfigContext.Builder.html" title="class in org.apache.juneau.commons.bean">BeanConfigContext.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanConfigContext.Builder.html#line-636">ignoreMissingSetters</a></span><wbr><span class="parameters">(boolean&nbsp;value)</span></div>
 <div class="block">Toggles silent ignoring of properties without setters during deserialization.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -464,7 +469,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="ignoreTransientFields(boolean)">
 <h3>ignoreTransientFields</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanConfigContext.Builder.html" title="class in org.apache.juneau.commons.bean">BeanConfigContext.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanConfigContext.Builder.html#line-626">ignoreTransientFields</a></span><wbr><span class="parameters">(boolean&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanConfigContext.Builder.html" title="class in org.apache.juneau.commons.bean">BeanConfigContext.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanConfigContext.Builder.html#line-644">ignoreTransientFields</a></span><wbr><span class="parameters">(boolean&nbsp;value)</span></div>
 <div class="block">Toggles exclusion of <code>transient</code> fields from bean property detection.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -477,7 +482,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="ignoreUnknownBeanProperties(boolean)">
 <h3>ignoreUnknownBeanProperties</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanConfigContext.Builder.html" title="class in org.apache.juneau.commons.bean">BeanConfigContext.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanConfigContext.Builder.html#line-634">ignoreUnknownBeanProperties</a></span><wbr><span class="parameters">(boolean&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanConfigContext.Builder.html" title="class in org.apache.juneau.commons.bean">BeanConfigContext.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanConfigContext.Builder.html#line-652">ignoreUnknownBeanProperties</a></span><wbr><span class="parameters">(boolean&nbsp;value)</span></div>
 <div class="block">Toggles silent ignoring of unknown properties on incoming bean payloads.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -490,7 +495,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="ignoreUnknownNullBeanProperties(boolean)">
 <h3>ignoreUnknownNullBeanProperties</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanConfigContext.Builder.html" title="class in org.apache.juneau.commons.bean">BeanConfigContext.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanConfigContext.Builder.html#line-642">ignoreUnknownNullBeanProperties</a></span><wbr><span class="parameters">(boolean&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanConfigContext.Builder.html" title="class in org.apache.juneau.commons.bean">BeanConfigContext.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanConfigContext.Builder.html#line-660">ignoreUnknownNullBeanProperties</a></span><wbr><span class="parameters">(boolean&nbsp;value)</span></div>
 <div class="block">Toggles silent ignoring of attempts to set unknown bean properties to <jk>null</jk>.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -503,8 +508,21 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="unsortedProperties(boolean)">
 <h3>unsortedProperties</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanConfigContext.Builder.html" title="class in org.apache.juneau.commons.bean">BeanConfigContext.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanConfigContext.Builder.html#line-650">unsortedProperties</a></span><wbr><span class="parameters">(boolean&nbsp;value)</span></div>
-<div class="block">Toggles whether properties remain in JVM-discovered (non-alphabetical) order.</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanConfigContext.Builder.html" title="class in org.apache.juneau.commons.bean">BeanConfigContext.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanConfigContext.Builder.html#line-668">unsortedProperties</a></span><wbr><span class="parameters">(boolean&nbsp;value)</span></div>
+<div class="block">Toggles declaration order (instead of alphabetical order) for bean properties.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>value</code> - The new value.</dd>
+<dt>Returns:</dt>
+<dd>This object.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="recordComponentOrder(boolean)">
+<h3>recordComponentOrder</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanConfigContext.Builder.html" title="class in org.apache.juneau.commons.bean">BeanConfigContext.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanConfigContext.Builder.html#line-676">recordComponentOrder</a></span><wbr><span class="parameters">(boolean&nbsp;value)</span></div>
+<div class="block">Toggles record component (declaration) ordering for <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Record.html" title="class or interface in java.lang" class="external-link"><code>Record</code></a> beans.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>value</code> - The new value.</dd>
@@ -516,7 +534,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="useInterfaceProxies(boolean)">
 <h3>useInterfaceProxies</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanConfigContext.Builder.html" title="class in org.apache.juneau.commons.bean">BeanConfigContext.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanConfigContext.Builder.html#line-658">useInterfaceProxies</a></span><wbr><span class="parameters">(boolean&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanConfigContext.Builder.html" title="class in org.apache.juneau.commons.bean">BeanConfigContext.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanConfigContext.Builder.html#line-684">useInterfaceProxies</a></span><wbr><span class="parameters">(boolean&nbsp;value)</span></div>
 <div class="block">Toggles automatic creation of interface proxies for bean interfaces.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -529,7 +547,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="useJavaBeanIntrospector(boolean)">
 <h3>useJavaBeanIntrospector</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanConfigContext.Builder.html" title="class in org.apache.juneau.commons.bean">BeanConfigContext.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanConfigContext.Builder.html#line-666">useJavaBeanIntrospector</a></span><wbr><span class="parameters">(boolean&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanConfigContext.Builder.html" title="class in org.apache.juneau.commons.bean">BeanConfigContext.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanConfigContext.Builder.html#line-692">useJavaBeanIntrospector</a></span><wbr><span class="parameters">(boolean&nbsp;value)</span></div>
 <div class="block">Toggles use of <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.desktop/java/beans/Introspector.html" title="class or interface in java.beans" class="external-link"><code>Introspector</code></a> for property discovery.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -542,7 +560,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="propertyNamer(org.apache.juneau.commons.bean.PropertyNamer)">
 <h3>propertyNamer</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanConfigContext.Builder.html" title="class in org.apache.juneau.commons.bean">BeanConfigContext.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanConfigContext.Builder.html#line-674">propertyNamer</a></span><wbr><span class="parameters">(<a href="PropertyNamer.html" title="interface in org.apache.juneau.commons.bean">PropertyNamer</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanConfigContext.Builder.html" title="class in org.apache.juneau.commons.bean">BeanConfigContext.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanConfigContext.Builder.html#line-700">propertyNamer</a></span><wbr><span class="parameters">(<a href="PropertyNamer.html" title="interface in org.apache.juneau.commons.bean">PropertyNamer</a>&nbsp;value)</span></div>
 <div class="block">Sets the <a href="PropertyNamer.html" title="interface in org.apache.juneau.commons.bean"><code>PropertyNamer</code></a> used to derive property names.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -555,7 +573,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="beanTypePropertyName(java.lang.String)">
 <h3>beanTypePropertyName</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanConfigContext.Builder.html" title="class in org.apache.juneau.commons.bean">BeanConfigContext.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanConfigContext.Builder.html#line-682">beanTypePropertyName</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanConfigContext.Builder.html" title="class in org.apache.juneau.commons.bean">BeanConfigContext.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanConfigContext.Builder.html#line-708">beanTypePropertyName</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block">Sets the property name used to embed the bean dictionary type (default: <js>"_type"</js>).</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -568,7 +586,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="notBeanPackageNames(java.lang.String...)">
 <h3>notBeanPackageNames</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanConfigContext.Builder.html" title="class in org.apache.juneau.commons.bean">BeanConfigContext.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanConfigContext.Builder.html#line-690">notBeanPackageNames</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;values)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanConfigContext.Builder.html" title="class in org.apache.juneau.commons.bean">BeanConfigContext.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanConfigContext.Builder.html#line-716">notBeanPackageNames</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;values)</span></div>
 <div class="block">Adds package names whose classes should be excluded from bean detection.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -581,7 +599,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="notBeanPackagePrefixes(java.lang.String...)">
 <h3>notBeanPackagePrefixes</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanConfigContext.Builder.html" title="class in org.apache.juneau.commons.bean">BeanConfigContext.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanConfigContext.Builder.html#line-702">notBeanPackagePrefixes</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;values)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanConfigContext.Builder.html" title="class in org.apache.juneau.commons.bean">BeanConfigContext.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanConfigContext.Builder.html#line-728">notBeanPackagePrefixes</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;values)</span></div>
 <div class="block">Adds package prefixes whose classes should be excluded from bean detection.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -594,7 +612,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="notBeanClasses(java.lang.Class...)">
 <h3>notBeanClasses</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanConfigContext.Builder.html" title="class in org.apache.juneau.commons.bean">BeanConfigContext.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanConfigContext.Builder.html#line-714">notBeanClasses</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;...&nbsp;values)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanConfigContext.Builder.html" title="class in org.apache.juneau.commons.bean">BeanConfigContext.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanConfigContext.Builder.html#line-740">notBeanClasses</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;...&nbsp;values)</span></div>
 <div class="block">Adds classes (and supertypes) that should be excluded from bean detection.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -607,7 +625,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="notBeanPackageNames(java.util.Collection)">
 <h3>notBeanPackageNames</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanConfigContext.Builder.html" title="class in org.apache.juneau.commons.bean">BeanConfigContext.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanConfigContext.Builder.html#line-726">notBeanPackageNames</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;values)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanConfigContext.Builder.html" title="class in org.apache.juneau.commons.bean">BeanConfigContext.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanConfigContext.Builder.html#line-752">notBeanPackageNames</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;values)</span></div>
 <div class="block">Replaces the not-a-bean package name set.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -620,7 +638,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="notBeanPackagePrefixes(java.util.Collection)">
 <h3>notBeanPackagePrefixes</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanConfigContext.Builder.html" title="class in org.apache.juneau.commons.bean">BeanConfigContext.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanConfigContext.Builder.html#line-737">notBeanPackagePrefixes</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;values)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanConfigContext.Builder.html" title="class in org.apache.juneau.commons.bean">BeanConfigContext.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanConfigContext.Builder.html#line-763">notBeanPackagePrefixes</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;values)</span></div>
 <div class="block">Replaces the not-a-bean package prefix set.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -633,7 +651,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="notBeanClasses(java.util.Collection)">
 <h3>notBeanClasses</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanConfigContext.Builder.html" title="class in org.apache.juneau.commons.bean">BeanConfigContext.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanConfigContext.Builder.html#line-748">notBeanClasses</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;? extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;&gt;&nbsp;values)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanConfigContext.Builder.html" title="class in org.apache.juneau.commons.bean">BeanConfigContext.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanConfigContext.Builder.html#line-774">notBeanClasses</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;? extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;&gt;&nbsp;values)</span></div>
 <div class="block">Replaces the not-a-bean class set.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -646,7 +664,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="beanStore(org.apache.juneau.commons.inject.BeanStore)">
 <h3>beanStore</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanConfigContext.Builder.html" title="class in org.apache.juneau.commons.bean">BeanConfigContext.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanConfigContext.Builder.html#line-762">beanStore</a></span><wbr><span class="parameters">(<a href="../inject/BeanStore.html" title="interface in org.apache.juneau.commons.inject">BeanStore</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanConfigContext.Builder.html" title="class in org.apache.juneau.commons.bean">BeanConfigContext.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanConfigContext.Builder.html#line-788">beanStore</a></span><wbr><span class="parameters">(<a href="../inject/BeanStore.html" title="interface in org.apache.juneau.commons.inject">BeanStore</a>&nbsp;value)</span></div>
 <div class="block">Sets the active <a href="../inject/BeanStore.html" title="interface in org.apache.juneau.commons.inject"><code>BeanStore</code></a> used for factory-based bean instantiation.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -659,7 +677,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="annotationProvider(org.apache.juneau.commons.reflect.AnnotationProvider)">
 <h3>annotationProvider</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanConfigContext.Builder.html" title="class in org.apache.juneau.commons.bean">BeanConfigContext.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanConfigContext.Builder.html#line-770">annotationProvider</a></span><wbr><span class="parameters">(<a href="../reflect/AnnotationProvider.html" title="class in org.apache.juneau.commons.reflect">AnnotationProvider</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanConfigContext.Builder.html" title="class in org.apache.juneau.commons.bean">BeanConfigContext.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanConfigContext.Builder.html#line-796">annotationProvider</a></span><wbr><span class="parameters">(<a href="../reflect/AnnotationProvider.html" title="class in org.apache.juneau.commons.reflect">AnnotationProvider</a>&nbsp;value)</span></div>
 <div class="block">Sets the active <a href="../reflect/AnnotationProvider.html" title="class in org.apache.juneau.commons.reflect"><code>AnnotationProvider</code></a>.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -672,7 +690,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="notABeanPredicate(java.util.function.Predicate)">
 <h3>notABeanPredicate</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanConfigContext.Builder.html" title="class in org.apache.juneau.commons.bean">BeanConfigContext.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanConfigContext.Builder.html#line-782">notABeanPredicate</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Predicate.html" title="class or interface in java.util.function" class="external-link">Predicate</a>&lt;<a href="../reflect/ClassInfo.html" title="class in org.apache.juneau.commons.reflect">ClassInfo</a>&gt;&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanConfigContext.Builder.html" title="class in org.apache.juneau.commons.bean">BeanConfigContext.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanConfigContext.Builder.html#line-808">notABeanPredicate</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Predicate.html" title="class or interface in java.util.function" class="external-link">Predicate</a>&lt;<a href="../reflect/ClassInfo.html" title="class in org.apache.juneau.commons.reflect">ClassInfo</a>&gt;&nbsp;value)</span></div>
 <div class="block">Installs a custom predicate that fully overrides <a href="BeanConfigContext.html#isNotABean(org.apache.juneau.commons.reflect.ClassInfo)"><code>BeanConfigContext.isNotABean(ClassInfo)</code></a>.
 
  <p>
@@ -689,7 +707,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="beanMetaInitializer(org.apache.juneau.commons.bean.BeanMetaInitializer)">
 <h3>beanMetaInitializer</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanConfigContext.Builder.html" title="class in org.apache.juneau.commons.bean">BeanConfigContext.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanConfigContext.Builder.html#line-793">beanMetaInitializer</a></span><wbr><span class="parameters">(<a href="BeanMetaInitializer.html" title="interface in org.apache.juneau.commons.bean">BeanMetaInitializer</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanConfigContext.Builder.html" title="class in org.apache.juneau.commons.bean">BeanConfigContext.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanConfigContext.Builder.html#line-819">beanMetaInitializer</a></span><wbr><span class="parameters">(<a href="BeanMetaInitializer.html" title="interface in org.apache.juneau.commons.bean">BeanMetaInitializer</a>&nbsp;value)</span></div>
 <div class="block">Sets the <a href="BeanMetaInitializer.html" title="interface in org.apache.juneau.commons.bean"><code>BeanMetaInitializer</code></a> SPI hook for marshalling-side <a href="BeanMeta.html" title="class in org.apache.juneau.commons.bean"><code>BeanMeta</code></a> construction.
 
  <p>
@@ -705,7 +723,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="beanPropertyPostProcessor(org.apache.juneau.commons.bean.BeanPropertyPostProcessor)">
 <h3>beanPropertyPostProcessor</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanConfigContext.Builder.html" title="class in org.apache.juneau.commons.bean">BeanConfigContext.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanConfigContext.Builder.html#line-804">beanPropertyPostProcessor</a></span><wbr><span class="parameters">(<a href="BeanPropertyPostProcessor.html" title="interface in org.apache.juneau.commons.bean">BeanPropertyPostProcessor</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanConfigContext.Builder.html" title="class in org.apache.juneau.commons.bean">BeanConfigContext.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanConfigContext.Builder.html#line-830">beanPropertyPostProcessor</a></span><wbr><span class="parameters">(<a href="BeanPropertyPostProcessor.html" title="interface in org.apache.juneau.commons.bean">BeanPropertyPostProcessor</a>&nbsp;value)</span></div>
 <div class="block">Sets the <a href="BeanPropertyPostProcessor.html" title="interface in org.apache.juneau.commons.bean"><code>BeanPropertyPostProcessor</code></a> SPI hook for marshalling-side bean-property post-processing.
 
  <p>

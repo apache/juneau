@@ -81,9 +81,9 @@
 <a class="jxr_linenumber" name="L73" href="#L73">73</a>  <em class="jxr_javadoccomment"> * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L74" href="#L74">74</a>  <em class="jxr_javadoccomment"> */</em>
 <a class="jxr_linenumber" name="L75" href="#L75">75</a>  @SuppressWarnings({
-<a class="jxr_linenumber" name="L76" href="#L76">76</a>  	<span class="jxr_string">"resource"</span>, <em class="jxr_comment">// Resource management handled externally</em>
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>  	<span class="jxr_string">"java:S1133"</span>, <em class="jxr_comment">// Intentional deprecation retained for backward compatibility until the documented removal; the reminder is not actionable now.</em>
 <a class="jxr_linenumber" name="L77" href="#L77">77</a>  	<span class="jxr_string">"java:S4144"</span>, <em class="jxr_comment">// Identical methods intentional for different test scenarios</em>
-<a class="jxr_linenumber" name="L78" href="#L78">78</a>  	<span class="jxr_string">"java:S1133"</span>, <em class="jxr_comment">// Intentional deprecation retained for backward compatibility until the documented removal; the reminder is not actionable now.</em>
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>  	<span class="jxr_string">"resource"</span> <em class="jxr_comment">// Resource management handled externally</em>
 <a class="jxr_linenumber" name="L79" href="#L79">79</a>  })
 <a class="jxr_linenumber" name="L80" href="#L80">80</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> RestResponse <strong class="jxr_keyword">implements</strong> HttpResponse, AutoCloseable {
 <a class="jxr_linenumber" name="L81" href="#L81">81</a>  
@@ -930,7 +930,7 @@
 <a class="jxr_linenumber" name="L922" href="#L922">922</a> <em class="jxr_javadoccomment">	 * @param parser The parser to create a session for.</em>
 <a class="jxr_linenumber" name="L923" href="#L923">923</a> <em class="jxr_javadoccomment">	 * @return A session of the specified parser.</em>
 <a class="jxr_linenumber" name="L924" href="#L924">924</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L925" href="#L925">925</a> 	<strong class="jxr_keyword">protected</strong> <a name="HttpPartParserSession" href="../../../../../../org/apache/juneau/marshall/httppart/HttpPartParserSession.html#HttpPartParserSession">HttpPartParserSession</a> getPartParserSession(<a name="HttpPartParser" href="../../../../../../org/apache/juneau/marshall/httppart/HttpPartParser.html#HttpPartParser">HttpPartParser</a> parser) {
+<a class="jxr_linenumber" name="L925" href="#L925">925</a> 	<strong class="jxr_keyword">protected</strong> <a name="HttpPartParserSession" href="../../../../../../org/apache/juneau/marshall/httppart/HttpPartParserSession.html#HttpPartParserSession">HttpPartParserSession</a> getPartParserSession(HttpPartParser parser) {
 <a class="jxr_linenumber" name="L926" href="#L926">926</a> 		<strong class="jxr_keyword">return</strong> partParserSessions.computeIfAbsent(parser, HttpPartParser::getPartSession);
 <a class="jxr_linenumber" name="L927" href="#L927">927</a> 	}
 <a class="jxr_linenumber" name="L928" href="#L928">928</a> 

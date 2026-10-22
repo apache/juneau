@@ -111,19 +111,19 @@
 <a class="jxr_linenumber" name="L103" href="#L103">103</a> 
 <a class="jxr_linenumber" name="L104" href="#L104">104</a> 	@Override
 <a class="jxr_linenumber" name="L105" href="#L105">105</a> 	@SuppressWarnings({
-<a class="jxr_linenumber" name="L106" href="#L106">106</a> 		<span class="jxr_string">"java:S2589"</span> <em class="jxr_comment">// Double-checked locking: the inner `if (!resolved)` and its else-branch look redundant to Sonar's single-threaded symbolic execution but are essential for MT correctness (another thread can set resolved=true between the outer and inner checks).</em>
+<a class="jxr_linenumber" name="L106" href="#L106">106</a> 		<span class="jxr_string">"java:S2589"</span> <em class="jxr_comment">// Double-checked locking: the inner resolved re-check and its else branch look redundant under Sonar's single-threaded symbolic execution, but are essential for correctness under concurrency — another thread can flip resolved to true between the outer and inner checks.</em>
 <a class="jxr_linenumber" name="L107" href="#L107">107</a> 	})
 <a class="jxr_linenumber" name="L108" href="#L108">108</a> 	<strong class="jxr_keyword">public</strong> org.apache.juneau.commons.settings.PropertyLookupResult get(String name) {
 <a class="jxr_linenumber" name="L109" href="#L109">109</a> 		<strong class="jxr_keyword">var</strong> e = env;
 <a class="jxr_linenumber" name="L110" href="#L110">110</a> 		<strong class="jxr_keyword">if</strong> (! resolved) {
 <a class="jxr_linenumber" name="L111" href="#L111">111</a> 			<strong class="jxr_keyword">synchronized</strong> (<strong class="jxr_keyword">this</strong>) {
-<a class="jxr_linenumber" name="L112" href="#L112">112</a> 				<strong class="jxr_keyword">if</strong> (! resolved) {
+<a class="jxr_linenumber" name="L112" href="#L112">112</a> 				<strong class="jxr_keyword">if</strong> (! resolved) {  <em class="jxr_comment">// HTT: double-checked locking second check; false only when another thread resolves between the outer check and lock acquisition, which a single-threaded test cannot force</em>
 <a class="jxr_linenumber" name="L113" href="#L113">113</a> 					<em class="jxr_comment">// safeOpt swallows exceptions thrown by the supplier — e.g. a mocked</em>
 <a class="jxr_linenumber" name="L114" href="#L114">114</a> 					<em class="jxr_comment">// ApplicationContext that returns null or throws during getEnvironment().</em>
 <a class="jxr_linenumber" name="L115" href="#L115">115</a> 					env = e = safeOpt(envSupplier::get).orElse(<strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L116" href="#L116">116</a> 					resolved = <strong class="jxr_keyword">true</strong>;
 <a class="jxr_linenumber" name="L117" href="#L117">117</a> 				} <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L118" href="#L118">118</a> 					e = env;
+<a class="jxr_linenumber" name="L118" href="#L118">118</a> 					e = env;  <em class="jxr_comment">// HTT: double-checked locking else branch; reachable only under a concurrent resolve race</em>
 <a class="jxr_linenumber" name="L119" href="#L119">119</a> 				}
 <a class="jxr_linenumber" name="L120" href="#L120">120</a> 			}
 <a class="jxr_linenumber" name="L121" href="#L121">121</a> 		}
@@ -132,7 +132,7 @@
 <a class="jxr_linenumber" name="L124" href="#L124">124</a> 		<em class="jxr_comment">// Profile piggyback: a Juneau config-profile activation lookup resolves to Spring's active profiles, so a</em>
 <a class="jxr_linenumber" name="L125" href="#L125">125</a> 		<em class="jxr_comment">// Spring-Boot deployment has a single source of truth for which profiles are active.  Only answered when the</em>
 <a class="jxr_linenumber" name="L126" href="#L126">126</a> 		<em class="jxr_comment">// caller has NOT explicitly set juneau.profiles.active as a property (that exact key wins if present).</em>
-<a class="jxr_linenumber" name="L127" href="#L127">127</a> 		<strong class="jxr_keyword">if</strong> (PROFILES_ACTIVE_KEY.equals(name) &amp;&amp; ! e.containsProperty(name)) {
+<a class="jxr_linenumber" name="L127" href="#L127">127</a> 		<strong class="jxr_keyword">if</strong> (eq(name, PROFILES_ACTIVE_KEY) &amp;&amp; ! e.containsProperty(name)) {
 <a class="jxr_linenumber" name="L128" href="#L128">128</a> 			<strong class="jxr_keyword">var</strong> active = e.getActiveProfiles();
 <a class="jxr_linenumber" name="L129" href="#L129">129</a> 			<strong class="jxr_keyword">if</strong> (active.length &gt; 0)  <em class="jxr_comment">// getActiveProfiles() never returns null per the Environment contract.</em>
 <a class="jxr_linenumber" name="L130" href="#L130">130</a> 				<strong class="jxr_keyword">return</strong> org.apache.juneau.commons.settings.PropertyLookupResult.present(o(String.join(<span class="jxr_string">","</span>, active)));

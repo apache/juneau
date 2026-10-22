@@ -77,8 +77,12 @@ loadScripts(document, 'script');</script>
 <div class="inheritance">org.apache.juneau.rest.server.view.freemarker.FreemarkerMixin</div>
 </div>
 <section class="class-description" id="class-description">
+<dl class="notes">
+<dt>Direct Known Subclasses:</dt>
+<dd><code><a href="console/ConsoleFreemarkerMixin.html" title="class in org.apache.juneau.rest.server.view.freemarker.console">ConsoleFreemarkerMixin</a></code></dd>
+</dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/view/freemarker/FreemarkerMixin.html#line-156">FreemarkerMixin</a></span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/view/freemarker/FreemarkerMixin.html#line-210">FreemarkerMixin</a></span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
 <div class="block">Mixin that wires Apache FreeMarker view-rendering onto any Juneau REST resource.
 
@@ -91,11 +95,44 @@ loadScripts(document, 'script');</script>
       the importer's classpath by asking the configured <code>Configuration</code> for the named
       template and rendering it with an empty data model (raw render path; callers who want
       attributes use <a href="FreemarkerView.html" title="class in org.apache.juneau.rest.server.view.freemarker"><code>FreemarkerView</code></a> from a typed handler instead).
-   <li>Picks up <a href="FreemarkerViewRenderer.html" title="class in org.apache.juneau.rest.server.view.freemarker"><code>FreemarkerViewRenderer</code></a> automatically via the mixin's
-      <a href="../../Rest.html#responseProcessors()"><code>@Rest(responseProcessors=...)</code></a> declaration, so
-      <code>@RestOp</code>-method return values of type <a href="FreemarkerView.html" title="class in org.apache.juneau.rest.server.view.freemarker"><code>FreemarkerView</code></a> render through the
-      FreeMarker engine without any additional wiring.
+   <li>Registers <a href="FreemarkerViewRenderer.html" title="class in org.apache.juneau.rest.server.view.freemarker"><code>FreemarkerViewRenderer</code></a> for the mixin's <b>own</b> endpoints (e.g. the
+      <code>/freemarker/*</code> route above) via the mixin's own
+      <a href="../../Rest.html#responseProcessors()"><code>@Rest(responseProcessors=...)</code></a> declaration.
  </ol>
+
+ <h5 class='section'>Auto-wiring the renderer into the host's own endpoints:</h5>
+
+ <p>
+ A bare <code>@Rest(mixins=FreemarkerMixin.class)</code> is enough &mdash; a host whose own <code>@RestOp</code> method
+ returns <a href="FreemarkerView.html" title="class in org.apache.juneau.rest.server.view.freemarker"><code>FreemarkerView</code></a> renders it through the FreeMarker engine with no extra wiring. That works
+ because <code>FreemarkerMixin</code> declares
+ <a href="../../Rest.html#mergeResponseProcessorsIntoHost()"><code>@Rest(mergeResponseProcessorsIntoHost=true)</code></a> on its own class,
+ so the framework folds <code>FreemarkerMixin</code>'s <a href="FreemarkerViewRenderer.html" title="class in org.apache.juneau.rest.server.view.freemarker"><code>FreemarkerViewRenderer</code></a> into the host's own
+ response-processor chain automatically.
+
+ <p>
+ This fold is per-mixin, opt-in, and response-processor-scoped: it happens only because
+ <code>FreemarkerMixin</code> declares the opt-in (a mixin that does not is still scoped to its own endpoints, the
+ standard <a href="../../Rest.html#mixins()"><code>@Rest(mixins=...)</code></a> rule), and it folds only the renderer &mdash; never
+ <code>guards</code>, <code>serializers</code>, or any other list-shaped attribute.
+
+ <p>
+ Two explicit wirings remain supported &mdash; useful when you want to be explicit, or to fold more than the
+ renderer:
+
+ <ol class='spaced-list'>
+   <li><b><a href="../../Mixin.html#mergeIntoHost()"><code>@Mixin(mergeIntoHost=true)</code></a></b> via the rich <a href="../../Rest.html#mixinDefs()"><code>mixinDefs</code></a> form &mdash; folds <b>all</b> of <code>FreemarkerMixin</code>'s list-shaped <code>@Rest</code>
+      attributes into the host's own chain, not just the renderer.
+   <li><b>List <a href="FreemarkerViewRenderer.html" title="class in org.apache.juneau.rest.server.view.freemarker"><code>FreemarkerViewRenderer.class</code></a> explicitly</b> in the host's own
+      <code>@Rest(responseProcessors=...)</code> &mdash; the fully manual equivalent.
+ </ol>
+
+ <p>
+ The <a href="../../processor/ResponseProcessorList.html" title="class in org.apache.juneau.rest.server.processor"><code>ResponseProcessorList</code></a> partition pass repositions
+ <a href="FreemarkerViewRenderer.html" title="class in org.apache.juneau.rest.server.view.freemarker"><code>FreemarkerViewRenderer</code></a> (a
+ <a href="../ViewRenderer.html" title="interface in org.apache.juneau.rest.server.view"><code>ViewRenderer</code></a>) ahead of
+ <code>SerializedPojoProcessor</code> in every case, so the <a href="FreemarkerView.html" title="class in org.apache.juneau.rest.server.view.freemarker"><code>FreemarkerView</code></a> bean is dispatched to the
+ FreeMarker engine rather than bean-serialized.
 
  <h5 class='figure'>Composition example (microservice):</h5>
 
@@ -156,15 +193,32 @@ loadScripts(document, 'script');</script>
       <code>ClassLoaderTemplateResolver</code>-equivalent prefix <code>"/templates"</code>). The default
       pins <code>IncompatibleImprovements</code> to the bridge-tested minor version
       (<code>Configuration.VERSION_2_3_34</code>), sets <code>DefaultEncoding</code> to <code>UTF-8</code>,
-      uses <code>HTMLOutputFormat</code> so HTML escaping is the natural target, and applies
+      uses <code>HTMLOutputFormat</code> so HTML escaping is the natural target, applies
       <code>TemplateUpdateDelayMilliseconds</code> per the <a href="#isCacheTemplates()"><code>cacheTemplates</code></a>
       flag (production-safe by default; users opt into hot-reload via
-      <a href="FreemarkerMixin.Builder.html#cacheTemplates(boolean)"><code>cacheTemplates(false)</code></a>).
+      <a href="FreemarkerMixin.Builder.html#cacheTemplates(boolean)"><code>cacheTemplates(false)</code></a>), and sets an
+      <code>ObjectWrapper</code> with <code>exposeFields=true</code> (see below) unless overridden.
  </ul>
 
  <p>
  When no FreeMarker engine is on the classpath, the renderer surfaces
  <a href="FreemarkerViewRenderer.html#NO_ENGINE_DIAGNOSTIC"><code>FreemarkerViewRenderer.NO_ENGINE_DIAGNOSTIC</code></a> naming the missing dependency.
+
+ <h5 class='section'>Public-field DTOs (getter-only default trap):</h5>
+
+ <p>
+ FreeMarker's own version-default <code>ObjectWrapper</code> exposes only JavaBean getters &mdash; a
+ view-model bean written as a simple DTO with public fields and no getters resolves every
+ <code>${bean.field}</code> reference to <code>null</code>/missing, <b>silently</b> (a template using
+ <code>!'default'</code> fallbacks renders the default with no error at all; a bare <code>${bean.field}</code>
+ with no fallback throws at render time). This bridge avoids that trap by default: the bridge-built
+ <code>Configuration</code> sets a <code>DefaultObjectWrapper</code> with <code>exposeFields=true</code>
+ (<a href="#DEFAULT_EXPOSE_FIELDS"><code>DEFAULT_EXPOSE_FIELDS</code></a>), so public-field DTOs render their field values out of the
+ box &mdash; matching how Juneau's own marshalling is comfortable with public-field beans elsewhere.
+ Use <a href="FreemarkerMixin.Builder.html#exposeFields(boolean)"><code>exposeFields(false)</code></a> to restore FreeMarker's getter-only
+ behavior, or <a href="FreemarkerMixin.Builder.html#objectWrapper(freemarker.template.ObjectWrapper)"><code>objectWrapper(...)</code></a> for full control
+ (e.g. a <code>BeansWrapper</code> with custom exposure rules). Both knobs only affect the
+ bridge-default <code>Configuration</code>; a user-supplied <code>@Bean Configuration</code> is used as-is.
 
  <h5 class='section'>Template suffix:</h5>
 
@@ -247,9 +301,14 @@ loadScripts(document, 'script');</script>
 <div class="col-last odd-row-color">
 <div class="block">Default template-cache flag &mdash; <code>true</code> (production-safe).</div>
 </div>
-<div class="col-first even-row-color"><code>static final <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second even-row-color"><code><a href="#DEFAULT_TEMPLATE_SUFFIX" class="member-name-link">DEFAULT_TEMPLATE_SUFFIX</a></code></div>
+<div class="col-first even-row-color"><code>static final boolean</code></div>
+<div class="col-second even-row-color"><code><a href="#DEFAULT_EXPOSE_FIELDS" class="member-name-link">DEFAULT_EXPOSE_FIELDS</a></code></div>
 <div class="col-last even-row-color">
+<div class="block">Default field-exposure flag &mdash; <code>true</code> (public-field DTOs render out of the box).</div>
+</div>
+<div class="col-first odd-row-color"><code>static final <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second odd-row-color"><code><a href="#DEFAULT_TEMPLATE_SUFFIX" class="member-name-link">DEFAULT_TEMPLATE_SUFFIX</a></code></div>
+<div class="col-last odd-row-color">
 <div class="block">Default template suffix &mdash; empty (literal template names, no implicit suffix).</div>
 </div>
 </div>
@@ -305,15 +364,34 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns the base path under which template resources are resolved.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getTemplateSuffix()" class="member-name-link">getTemplateSuffix</a>()</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>freemarker.template.ObjectWrapper</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getObjectWrapper()" class="member-name-link">getObjectWrapper</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Returns the user-supplied <code>ObjectWrapper</code> override, if any.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getTemplateSuffix()" class="member-name-link">getTemplateSuffix</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns the configured template-name suffix.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#isCacheTemplates()" class="member-name-link">isCacheTemplates</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#isCacheTemplates()" class="member-name-link">isCacheTemplates</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns the template-cache flag.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#isExposeFields()" class="member-name-link">isExposeFields</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Returns the field-exposure flag applied to the bridge-default object wrapper.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;? extends <a href="FreemarkerMixin.html" title="class in org.apache.juneau.rest.server.view.freemarker">FreemarkerMixin</a>&gt;&gt;</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#registeredSubtypes()" class="member-name-link">registeredSubtypes</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#registerSubtype(java.lang.Class)" class="member-name-link">registerSubtype</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;? extends <a href="FreemarkerMixin.html" title="class in org.apache.juneau.rest.server.view.freemarker">FreemarkerMixin</a>&gt;&nbsp;type)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="block">Registers a subclass so <a href="FreemarkerViewRenderer.html" title="class in org.apache.juneau.rest.server.view.freemarker"><code>FreemarkerViewRenderer</code></a> also finds a bean declared with that subclass as its
+ <code>@Bean</code> return type.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#render(java.lang.String,org.apache.juneau.rest.server.RestRequest,org.apache.juneau.rest.server.RestResponse)" class="member-name-link">render</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;path,
@@ -347,7 +425,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="DEFAULT_BASE_PATH">
 <h3>DEFAULT_BASE_PATH</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/view/freemarker/FreemarkerMixin.html#line-162">DEFAULT_BASE_PATH</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/view/freemarker/FreemarkerMixin.html#line-217">DEFAULT_BASE_PATH</a></span></div>
 <div class="block">Default base path applied when no <a href="FreemarkerMixin.Builder.html#basePath(java.lang.String)"><code>FreemarkerMixin.Builder.basePath(String)</code></a> call has been made.</div>
 <dl class="notes">
 <dt>See Also:</dt>
@@ -362,7 +440,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="DEFAULT_TEMPLATE_SUFFIX">
 <h3>DEFAULT_TEMPLATE_SUFFIX</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/view/freemarker/FreemarkerMixin.html#line-165">DEFAULT_TEMPLATE_SUFFIX</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/view/freemarker/FreemarkerMixin.html#line-220">DEFAULT_TEMPLATE_SUFFIX</a></span></div>
 <div class="block">Default template suffix &mdash; empty (literal template names, no implicit suffix).</div>
 <dl class="notes">
 <dt>See Also:</dt>
@@ -377,13 +455,28 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="DEFAULT_CACHE_TEMPLATES">
 <h3>DEFAULT_CACHE_TEMPLATES</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/view/freemarker/FreemarkerMixin.html#line-168">DEFAULT_CACHE_TEMPLATES</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/view/freemarker/FreemarkerMixin.html#line-223">DEFAULT_CACHE_TEMPLATES</a></span></div>
 <div class="block">Default template-cache flag &mdash; <code>true</code> (production-safe).</div>
 <dl class="notes">
 <dt>See Also:</dt>
 <dd>
 <ul class="see-list">
 <li><a href="../../../../../../../constant-values.html#org.apache.juneau.rest.server.view.freemarker.FreemarkerMixin.DEFAULT_CACHE_TEMPLATES">Constant Field Values</a></li>
+</ul>
+</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="DEFAULT_EXPOSE_FIELDS">
+<h3>DEFAULT_EXPOSE_FIELDS</h3>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/view/freemarker/FreemarkerMixin.html#line-226">DEFAULT_EXPOSE_FIELDS</a></span></div>
+<div class="block">Default field-exposure flag &mdash; <code>true</code> (public-field DTOs render out of the box).</div>
+<dl class="notes">
+<dt>See Also:</dt>
+<dd>
+<ul class="see-list">
+<li><a href="../../../../../../../constant-values.html#org.apache.juneau.rest.server.view.freemarker.FreemarkerMixin.DEFAULT_EXPOSE_FIELDS">Constant Field Values</a></li>
 </ul>
 </dd>
 </dl>
@@ -400,7 +493,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;()">
 <h3>FreemarkerMixin</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/view/freemarker/FreemarkerMixin.html#line-191">FreemarkerMixin</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/view/freemarker/FreemarkerMixin.html#line-280">FreemarkerMixin</a></span>()</div>
 <div class="block">No-arg constructor &mdash; uses <a href="#DEFAULT_BASE_PATH"><code>DEFAULT_BASE_PATH</code></a> as the base path,
  <a href="#DEFAULT_TEMPLATE_SUFFIX"><code>DEFAULT_TEMPLATE_SUFFIX</code></a> as the template suffix, and
  <a href="#DEFAULT_CACHE_TEMPLATES"><code>DEFAULT_CACHE_TEMPLATES</code></a> as the cache flag.
@@ -414,7 +507,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.rest.server.view.freemarker.FreemarkerMixin.Builder)">
 <h3>FreemarkerMixin</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/view/freemarker/FreemarkerMixin.html#line-200">FreemarkerMixin</a></span><wbr><span class="parameters">(<a href="FreemarkerMixin.Builder.html" title="class in org.apache.juneau.rest.server.view.freemarker">FreemarkerMixin.Builder</a>&nbsp;builder)</span></div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/view/freemarker/FreemarkerMixin.html#line-289">FreemarkerMixin</a></span><wbr><span class="parameters">(<a href="FreemarkerMixin.Builder.html" title="class in org.apache.juneau.rest.server.view.freemarker">FreemarkerMixin.Builder</a>&nbsp;builder)</span></div>
 <div class="block">Builder constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -431,9 +524,43 @@ loadScripts(document, 'script');</script>
 <h2>Method Details</h2>
 <ul class="member-list">
 <li>
+<section class="detail" id="registerSubtype(java.lang.Class)">
+<h3>registerSubtype</h3>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/view/freemarker/FreemarkerMixin.html#line-248">registerSubtype</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;? extends <a href="FreemarkerMixin.html" title="class in org.apache.juneau.rest.server.view.freemarker">FreemarkerMixin</a>&gt;&nbsp;type)</span></div>
+<div class="block">Registers a subclass so <a href="FreemarkerViewRenderer.html" title="class in org.apache.juneau.rest.server.view.freemarker"><code>FreemarkerViewRenderer</code></a> also finds a bean declared with that subclass as its
+ <code>@Bean</code> return type.
+
+ <p>
+ The bean store is keyed by declared type, so without this a <code>@Bean public ConsoleFreemarkerMixin
+ freemarker()</code> was not found and the renderer silently used a plain mixin. Subclasses call this from a static
+ initializer.
+
+ <h5 class='section'>Example:</h5>
+ <p class='bjava'>
+   <jk>public class</jk> MyMixin <jk>extends</jk> FreemarkerMixin {
+      <jk>static</jk> { FreemarkerMixin.<jsm>registerSubtype</jsm>(MyMixin.<jk>class</jk>); }
+   }
+ </p></div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>type</code> - The subclass. Must not be <code>null</code>.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="registeredSubtypes()">
+<h3>registeredSubtypes</h3>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;? extends <a href="FreemarkerMixin.html" title="class in org.apache.juneau.rest.server.view.freemarker">FreemarkerMixin</a>&gt;&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/view/freemarker/FreemarkerMixin.html#line-255">registeredSubtypes</a></span>()</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>The registered subclasses, in registration order.</dd>
+</dl>
+</section>
+</li>
+<li>
 <section class="detail" id="create()">
 <h3>create</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="FreemarkerMixin.Builder.html" title="class in org.apache.juneau.rest.server.view.freemarker">FreemarkerMixin.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/view/freemarker/FreemarkerMixin.html#line-177">create</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="FreemarkerMixin.Builder.html" title="class in org.apache.juneau.rest.server.view.freemarker">FreemarkerMixin.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/view/freemarker/FreemarkerMixin.html#line-266">create</a></span>()</div>
 <div class="block">Creates a new builder.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -444,7 +571,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getBasePath()">
 <h3>getBasePath</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/view/freemarker/FreemarkerMixin.html#line-209">getBasePath</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/view/freemarker/FreemarkerMixin.html#line-298">getBasePath</a></span>()</div>
 <div class="block">Returns the base path under which template resources are resolved.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -455,7 +582,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getTemplateSuffix()">
 <h3>getTemplateSuffix</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/view/freemarker/FreemarkerMixin.html#line-218">getTemplateSuffix</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/view/freemarker/FreemarkerMixin.html#line-307">getTemplateSuffix</a></span>()</div>
 <div class="block">Returns the configured template-name suffix.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -466,7 +593,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="isCacheTemplates()">
 <h3>isCacheTemplates</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/view/freemarker/FreemarkerMixin.html#line-227">isCacheTemplates</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/view/freemarker/FreemarkerMixin.html#line-316">isCacheTemplates</a></span>()</div>
 <div class="block">Returns the template-cache flag.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -475,9 +602,31 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
+<section class="detail" id="isExposeFields()">
+<h3>isExposeFields</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/view/freemarker/FreemarkerMixin.html#line-325">isExposeFields</a></span>()</div>
+<div class="block">Returns the field-exposure flag applied to the bridge-default object wrapper.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>The field-exposure flag. Ignored once <a href="#getObjectWrapper()"><code>getObjectWrapper()</code></a> returns non-<code>null</code>.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="getObjectWrapper()">
+<h3>getObjectWrapper</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">freemarker.template.ObjectWrapper</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/view/freemarker/FreemarkerMixin.html#line-334">getObjectWrapper</a></span>()</div>
+<div class="block">Returns the user-supplied <code>ObjectWrapper</code> override, if any.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>The object wrapper override, or <code>null</code> if the bridge builds its own default.</dd>
+</dl>
+</section>
+</li>
+<li>
 <section class="detail" id="applyTemplateSuffix(java.lang.String)">
 <h3>applyTemplateSuffix</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/view/freemarker/FreemarkerMixin.html#line-237">applyTemplateSuffix</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/view/freemarker/FreemarkerMixin.html#line-344">applyTemplateSuffix</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
 <div class="block">Appends <a href="#getTemplateSuffix()"><code>getTemplateSuffix()</code></a> to <code>name</code> if not already present (idempotent).</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -490,7 +639,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="resolveConfiguration(org.apache.juneau.rest.server.RestRequest)">
 <h3>resolveConfiguration</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">freemarker.template.Configuration</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/view/freemarker/FreemarkerMixin.html#line-247">resolveConfiguration</a></span><wbr><span class="parameters">(<a href="../../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">freemarker.template.Configuration</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/view/freemarker/FreemarkerMixin.html#line-354">resolveConfiguration</a></span><wbr><span class="parameters">(<a href="../../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req)</span></div>
 <div class="block">Resolves the active <code>Configuration</code> via the shared <a href="FreemarkerDispatcher.html" title="class in org.apache.juneau.rest.server.view.freemarker"><code>FreemarkerDispatcher</code></a> worker.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -503,7 +652,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="render(java.lang.String,org.apache.juneau.rest.server.RestRequest,org.apache.juneau.rest.server.RestResponse)">
 <h3>render</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/view/freemarker/FreemarkerMixin.html#line-274">render</a></span><wbr><span class="parameters">(<a href="../../../../http/Path.html" title="annotation interface in org.apache.juneau.http">@Path</a>("/*")
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/view/freemarker/FreemarkerMixin.html#line-381">render</a></span><wbr><span class="parameters">(<a href="../../../../http/Path.html" title="annotation interface in org.apache.juneau.http">@Path</a>("/*")
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;path,
  <a href="../../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req,
  <a href="../../RestResponse.html" title="class in org.apache.juneau.rest.server">RestResponse</a>&nbsp;res)</span>

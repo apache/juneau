@@ -45,15 +45,15 @@
 <a class="jxr_linenumber" name="L37" href="#L37">37</a>  <em class="jxr_javadoccomment"> * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L38" href="#L38">38</a>  <em class="jxr_javadoccomment"> */</em>
 <a class="jxr_linenumber" name="L39" href="#L39">39</a>  @SuppressWarnings({
-<a class="jxr_linenumber" name="L40" href="#L40">40</a>  	<span class="jxr_string">"resource"</span>, <em class="jxr_comment">// Resource management handled externally</em>
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>  	<span class="jxr_string">"java:S110"</span>, <em class="jxr_comment">// Body-var-resolving anonymous writer inherits the inherent CRTP writer chain (Writer-&gt;SerializerWriter-&gt;XmlWriter-&gt;HtmlWriter-&gt;BasicHtmlWriter); depth is not reducible without unwinding CRTP.</em>
 <a class="jxr_linenumber" name="L41" href="#L41">41</a>  	<span class="jxr_string">"java:S112"</span>, <em class="jxr_comment">// Generic exception thrown; template methods throw Exception for subclass flexibility</em>
 <a class="jxr_linenumber" name="L42" href="#L42">42</a>  	<span class="jxr_string">"java:S1192"</span>, <em class="jxr_comment">// HTML tag names (e.g. aside, section) repeated in template; constants would obscure markup</em>
-<a class="jxr_linenumber" name="L43" href="#L43">43</a>  	<span class="jxr_string">"java:S110"</span> <em class="jxr_comment">// Body-var-resolving anonymous writer inherits the inherent CRTP writer chain (Writer-&gt;SerializerWriter-&gt;XmlWriter-&gt;HtmlWriter-&gt;BasicHtmlWriter); depth is not reducible without unwinding CRTP.</em>
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>  	<span class="jxr_string">"resource"</span> <em class="jxr_comment">// Resource management handled externally</em>
 <a class="jxr_linenumber" name="L44" href="#L44">44</a>  })
 <a class="jxr_linenumber" name="L45" href="#L45">45</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> BasicHtmlDocTemplate <strong class="jxr_keyword">implements</strong> HtmlDocTemplate {
 <a class="jxr_linenumber" name="L46" href="#L46">46</a>  
 <a class="jxr_linenumber" name="L47" href="#L47">47</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">boolean</strong> exists(String s) {
-<a class="jxr_linenumber" name="L48" href="#L48">48</a>  		<strong class="jxr_keyword">return</strong> nn(s) &amp;&amp; ! <span class="jxr_string">"NONE"</span>.equals(s);
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>  		<strong class="jxr_keyword">return</strong> nn(s) &amp;&amp; neq(s, <span class="jxr_string">"NONE"</span>);
 <a class="jxr_linenumber" name="L49" href="#L49">49</a>  	}
 <a class="jxr_linenumber" name="L50" href="#L50">50</a>  
 <a class="jxr_linenumber" name="L51" href="#L51">51</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">boolean</strong> isEmptyObject(Object o) {
@@ -102,14 +102,14 @@
 <a class="jxr_linenumber" name="L94" href="#L94">94</a>  		} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (isEmptyObject(o)) {
 <a class="jxr_linenumber" name="L95" href="#L95">95</a>  			String m = session.getNoResultsMessage();
 <a class="jxr_linenumber" name="L96" href="#L96">96</a>  			<strong class="jxr_keyword">if</strong> (exists(m))
-<a class="jxr_linenumber" name="L97" href="#L97">97</a>  				w.append(6, session.resolve(m)).nl(6);
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>  				w.append(6, session.resolveHtmlDoc(m)).nl(6);
 <a class="jxr_linenumber" name="L98" href="#L98">98</a>  		} <strong class="jxr_keyword">else</strong> {
 <a class="jxr_linenumber" name="L99" href="#L99">99</a>  			session.indent = 6;
 <a class="jxr_linenumber" name="L100" href="#L100">100</a> 			w.flush();
 <a class="jxr_linenumber" name="L101" href="#L101">101</a> 			<strong class="jxr_keyword">if</strong> (session.isResolveBodyVars()) {
-<a class="jxr_linenumber" name="L102" href="#L102">102</a> 				w = <strong class="jxr_keyword">new</strong> BasicHtmlWriter(w) {
+<a class="jxr_linenumber" name="L102" href="#L102">102</a> 				w = <strong class="jxr_keyword">new</strong> <a name="BasicHtmlWriter" href="../../../../../org/apache/juneau/marshall/html/BasicHtmlWriter.html#BasicHtmlWriter">BasicHtmlWriter</a>(w) {
 <a class="jxr_linenumber" name="L103" href="#L103">103</a> 					@Override
-<a class="jxr_linenumber" name="L104" href="#L104">104</a> 					<strong class="jxr_keyword">public</strong> BasicHtmlWriter text(Object value, <strong class="jxr_keyword">boolean</strong> preserveWhitespace) {
+<a class="jxr_linenumber" name="L104" href="#L104">104</a> 					<strong class="jxr_keyword">public</strong> <a name="BasicHtmlWriter" href="../../../../../org/apache/juneau/marshall/html/BasicHtmlWriter.html#BasicHtmlWriter">BasicHtmlWriter</a> text(Object value, <strong class="jxr_keyword">boolean</strong> preserveWhitespace) {
 <a class="jxr_linenumber" name="L105" href="#L105">105</a> 						<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">super</strong>.text(session.resolve(Shorts.s(value)), preserveWhitespace);
 <a class="jxr_linenumber" name="L106" href="#L106">106</a> 					}
 <a class="jxr_linenumber" name="L107" href="#L107">107</a> 				};
@@ -132,7 +132,7 @@
 <a class="jxr_linenumber" name="L124" href="#L124">124</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">void</strong> aside(HtmlDocSerializerSession session, HtmlWriter&lt;?&gt; w, Object o) <strong class="jxr_keyword">throws</strong> Exception {
 <a class="jxr_linenumber" name="L125" href="#L125">125</a> 		<strong class="jxr_keyword">var</strong> aside = session.getAside();
 <a class="jxr_linenumber" name="L126" href="#L126">126</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt; aside.length; i++)
-<a class="jxr_linenumber" name="L127" href="#L127">127</a> 			w.sIf(i &gt; 0).appendln(4, session.resolve(aside[i]));
+<a class="jxr_linenumber" name="L127" href="#L127">127</a> 			w.sIf(i &gt; 0).appendln(4, session.resolveHtmlDoc(aside[i]));
 <a class="jxr_linenumber" name="L128" href="#L128">128</a> 	}
 <a class="jxr_linenumber" name="L129" href="#L129">129</a> 
 <a class="jxr_linenumber" name="L130" href="#L130">130</a> 	<em class="jxr_javadoccomment">/**</em>
@@ -214,7 +214,7 @@
 <a class="jxr_linenumber" name="L206" href="#L206">206</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">void</strong> footer(HtmlDocSerializerSession session, HtmlWriter&lt;?&gt; w, Object o) <strong class="jxr_keyword">throws</strong> Exception {
 <a class="jxr_linenumber" name="L207" href="#L207">207</a> 		<strong class="jxr_keyword">var</strong> footer = session.getFooter();
 <a class="jxr_linenumber" name="L208" href="#L208">208</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt; footer.length; i++)
-<a class="jxr_linenumber" name="L209" href="#L209">209</a> 			w.sIf(i &gt; 0).appendln(3, session.resolve(footer[i]));
+<a class="jxr_linenumber" name="L209" href="#L209">209</a> 			w.sIf(i &gt; 0).appendln(3, session.resolveHtmlDoc(footer[i]));
 <a class="jxr_linenumber" name="L210" href="#L210">210</a> 	}
 <a class="jxr_linenumber" name="L211" href="#L211">211</a> 
 <a class="jxr_linenumber" name="L212" href="#L212">212</a> 	<em class="jxr_javadoccomment">/**</em>
@@ -293,7 +293,7 @@
 <a class="jxr_linenumber" name="L285" href="#L285">285</a> 
 <a class="jxr_linenumber" name="L286" href="#L286">286</a> 		<strong class="jxr_keyword">var</strong> head = session.getHead();
 <a class="jxr_linenumber" name="L287" href="#L287">287</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt; head.length; i++)
-<a class="jxr_linenumber" name="L288" href="#L288">288</a> 			w.sIf(i &gt; 0).appendln(2, session.resolve(head[i]));
+<a class="jxr_linenumber" name="L288" href="#L288">288</a> 			w.sIf(i &gt; 0).appendln(2, session.resolveHtmlDoc(head[i]));
 <a class="jxr_linenumber" name="L289" href="#L289">289</a> 
 <a class="jxr_linenumber" name="L290" href="#L290">290</a> 		<strong class="jxr_keyword">var</strong> nonce = session.getNonce();
 <a class="jxr_linenumber" name="L291" href="#L291">291</a> 		<strong class="jxr_keyword">if</strong> (hasStyle(session)) {
@@ -326,7 +326,7 @@
 <a class="jxr_linenumber" name="L318" href="#L318">318</a> 		<em class="jxr_comment">// Write the title of the page.</em>
 <a class="jxr_linenumber" name="L319" href="#L319">319</a> 		<strong class="jxr_keyword">var</strong> header = session.getHeader();
 <a class="jxr_linenumber" name="L320" href="#L320">320</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt; header.length; i++)
-<a class="jxr_linenumber" name="L321" href="#L321">321</a> 			w.sIf(i &gt; 0).appendln(3, session.resolve(header[i]));
+<a class="jxr_linenumber" name="L321" href="#L321">321</a> 			w.sIf(i &gt; 0).appendln(3, session.resolveHtmlDoc(header[i]));
 <a class="jxr_linenumber" name="L322" href="#L322">322</a> 	}
 <a class="jxr_linenumber" name="L323" href="#L323">323</a> 
 <a class="jxr_linenumber" name="L324" href="#L324">324</a> 	<em class="jxr_javadoccomment">/**</em>
@@ -346,76 +346,81 @@
 <a class="jxr_linenumber" name="L338" href="#L338">338</a> 			w.sTag(3, <span class="jxr_string">"ol"</span>).nl(3);
 <a class="jxr_linenumber" name="L339" href="#L339">339</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> l : links) {
 <a class="jxr_linenumber" name="L340" href="#L340">340</a> 				w.sTag(4, <span class="jxr_string">"li"</span>);
-<a class="jxr_linenumber" name="L341" href="#L341">341</a> 				l = session.resolve(l);
-<a class="jxr_linenumber" name="L342" href="#L342">342</a> 				<strong class="jxr_keyword">if</strong> (l.matches(<span class="jxr_string">"(?s)&#92;&#92;S+&#92;&#92;:.*"</span>)) {
-<a class="jxr_linenumber" name="L343" href="#L343">343</a> 					<strong class="jxr_keyword">var</strong> i = l.indexOf(':');
-<a class="jxr_linenumber" name="L344" href="#L344">344</a> 					<strong class="jxr_keyword">var</strong> key = l.substring(0, i);
-<a class="jxr_linenumber" name="L345" href="#L345">345</a> 					<strong class="jxr_keyword">var</strong> val = l.substring(i + 1).trim();
-<a class="jxr_linenumber" name="L346" href="#L346">346</a> 					<em class="jxr_comment">// Bare "request:/?q", "request:?q", "servlet:...", "context:..." were split so key was the scheme</em>
-<a class="jxr_linenumber" name="L347" href="#L347">347</a> 					<em class="jxr_comment">// and val lost the scheme; resolveUri then saw /? or ? only and browsers turned "request:?q" into a</em>
-<a class="jxr_linenumber" name="L348" href="#L348">348</a> 					<em class="jxr_comment">// bogus path segment. Rejoin to a full marshall URI when val is path/query/fragment only.</em>
-<a class="jxr_linenumber" name="L349" href="#L349">349</a> 					<strong class="jxr_keyword">var</strong> scheme = MARSHALL_URI_NAVLINK_SCHEMES.stream()
-<a class="jxr_linenumber" name="L350" href="#L350">350</a> 						.filter(sch -&gt; sch.equalsIgnoreCase(key))
-<a class="jxr_linenumber" name="L351" href="#L351">351</a> 						.findFirst()
-<a class="jxr_linenumber" name="L352" href="#L352">352</a> 						.orElse(<strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L353" href="#L353">353</a> 					<strong class="jxr_keyword">if</strong> (scheme != <strong class="jxr_keyword">null</strong> &amp;&amp; ! val.isEmpty()) {
-<a class="jxr_linenumber" name="L354" href="#L354">354</a> 						<strong class="jxr_keyword">var</strong> c0 = val.charAt(0);
-<a class="jxr_linenumber" name="L355" href="#L355">355</a> 						<strong class="jxr_keyword">if</strong> (c0 == '/' || c0 == '?' || c0 == '#')
-<a class="jxr_linenumber" name="L356" href="#L356">356</a> 							val = scheme + ':' + val;
-<a class="jxr_linenumber" name="L357" href="#L357">357</a> 					}
-<a class="jxr_linenumber" name="L358" href="#L358">358</a> 					<strong class="jxr_keyword">if</strong> (val.startsWith(<span class="jxr_string">"&lt;"</span>))
-<a class="jxr_linenumber" name="L359" href="#L359">359</a> 						w.nl(4).appendln(5, val);
-<a class="jxr_linenumber" name="L360" href="#L360">360</a> 					<strong class="jxr_keyword">else</strong>
-<a class="jxr_linenumber" name="L361" href="#L361">361</a> 						w.oTag(<span class="jxr_string">"a"</span>).attr(<span class="jxr_string">"href"</span>, session.resolveUri(val), <strong class="jxr_keyword">true</strong>).cTag().text(key, <strong class="jxr_keyword">true</strong>).eTag(<span class="jxr_string">"a"</span>);
-<a class="jxr_linenumber" name="L362" href="#L362">362</a> 					w.eTag(<span class="jxr_string">"li"</span>).nl(4);
-<a class="jxr_linenumber" name="L363" href="#L363">363</a> 				} <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L364" href="#L364">364</a> 					w.nl(4).appendln(5, l);
-<a class="jxr_linenumber" name="L365" href="#L365">365</a> 					w.eTag(4, <span class="jxr_string">"li"</span>).nl(4);
-<a class="jxr_linenumber" name="L366" href="#L366">366</a> 				}
-<a class="jxr_linenumber" name="L367" href="#L367">367</a> 			}
-<a class="jxr_linenumber" name="L368" href="#L368">368</a> 			w.eTag(3, <span class="jxr_string">"ol"</span>).nl(3);
-<a class="jxr_linenumber" name="L369" href="#L369">369</a> 		}
-<a class="jxr_linenumber" name="L370" href="#L370">370</a> 		<strong class="jxr_keyword">var</strong> nav = session.getNav();
-<a class="jxr_linenumber" name="L371" href="#L371">371</a> 		<strong class="jxr_keyword">if</strong> (nav.length &gt; 0) {
-<a class="jxr_linenumber" name="L372" href="#L372">372</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt; nav.length; i++)
-<a class="jxr_linenumber" name="L373" href="#L373">373</a> 				w.sIf(i &gt; 0).appendln(3, session.resolve(nav[i]));
+<a class="jxr_linenumber" name="L341" href="#L341">341</a> 				<strong class="jxr_keyword">var</strong> original = l;
+<a class="jxr_linenumber" name="L342" href="#L342">342</a> 				l = session.resolve(l);
+<a class="jxr_linenumber" name="L343" href="#L343">343</a> 				<strong class="jxr_keyword">if</strong> (l.matches(<span class="jxr_string">"(?s)&#92;&#92;S+&#92;&#92;:.*"</span>)) {
+<a class="jxr_linenumber" name="L344" href="#L344">344</a> 					<strong class="jxr_keyword">var</strong> i = l.indexOf(':');
+<a class="jxr_linenumber" name="L345" href="#L345">345</a> 					<strong class="jxr_keyword">var</strong> key = l.substring(0, i);
+<a class="jxr_linenumber" name="L346" href="#L346">346</a> 					<strong class="jxr_keyword">var</strong> val = l.substring(i + 1).trim();
+<a class="jxr_linenumber" name="L347" href="#L347">347</a> 					<em class="jxr_comment">// Bare "request:/?q", "request:?q", "servlet:...", "context:..." were split so key was the scheme</em>
+<a class="jxr_linenumber" name="L348" href="#L348">348</a> 					<em class="jxr_comment">// and val lost the scheme; resolveUri then saw /? or ? only and browsers turned "request:?q" into a</em>
+<a class="jxr_linenumber" name="L349" href="#L349">349</a> 					<em class="jxr_comment">// bogus path segment. Rejoin to a full marshall URI when val is path/query/fragment only.</em>
+<a class="jxr_linenumber" name="L350" href="#L350">350</a> 					<strong class="jxr_keyword">var</strong> scheme = MARSHALL_URI_NAVLINK_SCHEMES.stream()
+<a class="jxr_linenumber" name="L351" href="#L351">351</a> 						.filter(sch -&gt; eqic(sch, key))
+<a class="jxr_linenumber" name="L352" href="#L352">352</a> 						.findFirst()
+<a class="jxr_linenumber" name="L353" href="#L353">353</a> 						.orElse(<strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L354" href="#L354">354</a> 					<strong class="jxr_keyword">if</strong> (scheme != <strong class="jxr_keyword">null</strong> &amp;&amp; ! val.isEmpty()) {
+<a class="jxr_linenumber" name="L355" href="#L355">355</a> 						<strong class="jxr_keyword">var</strong> c0 = val.charAt(0);
+<a class="jxr_linenumber" name="L356" href="#L356">356</a> 						<strong class="jxr_keyword">if</strong> (c0 == '/' || c0 == '?' || c0 == '#')
+<a class="jxr_linenumber" name="L357" href="#L357">357</a> 							val = scheme + ':' + val;
+<a class="jxr_linenumber" name="L358" href="#L358">358</a> 					}
+<a class="jxr_linenumber" name="L359" href="#L359">359</a> 					<strong class="jxr_keyword">if</strong> (val.startsWith(<span class="jxr_string">"&lt;"</span>)) {
+<a class="jxr_linenumber" name="L360" href="#L360">360</a> 						<strong class="jxr_keyword">var</strong> encoded = session.resolveHtmlDoc(original);
+<a class="jxr_linenumber" name="L361" href="#L361">361</a> 						<strong class="jxr_keyword">var</strong> i2 = encoded.indexOf(':');
+<a class="jxr_linenumber" name="L362" href="#L362">362</a> 						<strong class="jxr_keyword">if</strong> (i2 != -1)
+<a class="jxr_linenumber" name="L363" href="#L363">363</a> 							encoded = encoded.substring(i2 + 1).trim();
+<a class="jxr_linenumber" name="L364" href="#L364">364</a> 						w.nl(4).appendln(5, encoded);
+<a class="jxr_linenumber" name="L365" href="#L365">365</a> 					} <strong class="jxr_keyword">else</strong>
+<a class="jxr_linenumber" name="L366" href="#L366">366</a> 						w.oTag(<span class="jxr_string">"a"</span>).attr(<span class="jxr_string">"href"</span>, session.resolveUri(val), <strong class="jxr_keyword">true</strong>).cTag().text(key, <strong class="jxr_keyword">true</strong>).eTag(<span class="jxr_string">"a"</span>);
+<a class="jxr_linenumber" name="L367" href="#L367">367</a> 					w.eTag(<span class="jxr_string">"li"</span>).nl(4);
+<a class="jxr_linenumber" name="L368" href="#L368">368</a> 				} <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L369" href="#L369">369</a> 					w.nl(4).appendln(5, session.resolveHtmlDoc(original));
+<a class="jxr_linenumber" name="L370" href="#L370">370</a> 					w.eTag(4, <span class="jxr_string">"li"</span>).nl(4);
+<a class="jxr_linenumber" name="L371" href="#L371">371</a> 				}
+<a class="jxr_linenumber" name="L372" href="#L372">372</a> 			}
+<a class="jxr_linenumber" name="L373" href="#L373">373</a> 			w.eTag(3, <span class="jxr_string">"ol"</span>).nl(3);
 <a class="jxr_linenumber" name="L374" href="#L374">374</a> 		}
-<a class="jxr_linenumber" name="L375" href="#L375">375</a> 	}
-<a class="jxr_linenumber" name="L376" href="#L376">376</a> 
-<a class="jxr_linenumber" name="L377" href="#L377">377</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L378" href="#L378">378</a> <em class="jxr_javadoccomment">	 * Renders the contents of the &lt;code&gt;&lt;xt&gt;&amp;lt;head&amp;gt;&lt;/xt&gt;/&lt;xt&gt;&amp;lt;script&amp;gt;&lt;/xt&gt;&lt;/code&gt; element.</em>
-<a class="jxr_linenumber" name="L379" href="#L379">379</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L380" href="#L380">380</a> <em class="jxr_javadoccomment">	 * @param session The current serializer session.</em>
-<a class="jxr_linenumber" name="L381" href="#L381">381</a> <em class="jxr_javadoccomment">	 * @param w The writer being written to.</em>
-<a class="jxr_linenumber" name="L382" href="#L382">382</a> <em class="jxr_javadoccomment">	 * @param o The object being serialized.</em>
-<a class="jxr_linenumber" name="L383" href="#L383">383</a> <em class="jxr_javadoccomment">	 * @throws Exception Any exception can be thrown.</em>
-<a class="jxr_linenumber" name="L384" href="#L384">384</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L385" href="#L385">385</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">void</strong> script(HtmlDocSerializerSession session, HtmlWriter&lt;?&gt; w, Object o) <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L386" href="#L386">386</a> 		<strong class="jxr_keyword">var</strong> addSpace = Flag.create();
-<a class="jxr_linenumber" name="L387" href="#L387">387</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> s : session.getScript())
-<a class="jxr_linenumber" name="L388" href="#L388">388</a> 			w.sIf(addSpace.getAndSet()).append(3, session.resolve(s)).append('\n'); <em class="jxr_comment">// Must always append a newline even if whitespace disabled!</em>
-<a class="jxr_linenumber" name="L389" href="#L389">389</a> 		session.forEachWidget(x -&gt; w.sIf(addSpace.getAndSet()).append(3, session.resolve(x.getScript(session.getVarResolver()))).w('\n')); <em class="jxr_comment">// Must always append a newline even if whitespace disabled!</em>
-<a class="jxr_linenumber" name="L390" href="#L390">390</a> 	}
-<a class="jxr_linenumber" name="L391" href="#L391">391</a> 
-<a class="jxr_linenumber" name="L392" href="#L392">392</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L393" href="#L393">393</a> <em class="jxr_javadoccomment">	 * Renders the contents of the &lt;code&gt;&lt;xt&gt;&amp;lt;head&amp;gt;&lt;/xt&gt;/&lt;xt&gt;&amp;lt;style&amp;gt;&lt;/xt&gt;&lt;/code&gt; element.</em>
-<a class="jxr_linenumber" name="L394" href="#L394">394</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L395" href="#L395">395</a> <em class="jxr_javadoccomment">	 * @param session The current serializer session.</em>
-<a class="jxr_linenumber" name="L396" href="#L396">396</a> <em class="jxr_javadoccomment">	 * @param w The writer being written to.</em>
-<a class="jxr_linenumber" name="L397" href="#L397">397</a> <em class="jxr_javadoccomment">	 * @param o The object being serialized.</em>
-<a class="jxr_linenumber" name="L398" href="#L398">398</a> <em class="jxr_javadoccomment">	 * @throws Exception Any exception can be thrown.</em>
-<a class="jxr_linenumber" name="L399" href="#L399">399</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L400" href="#L400">400</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">void</strong> style(HtmlDocSerializerSession session, HtmlWriter&lt;?&gt; w, Object o) <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L401" href="#L401">401</a> 		<strong class="jxr_keyword">var</strong> addSpace = Flag.create();
-<a class="jxr_linenumber" name="L402" href="#L402">402</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> s : session.getStylesheet())
-<a class="jxr_linenumber" name="L403" href="#L403">403</a> 			w.sIf(addSpace.getAndSet()).append(3, <span class="jxr_string">"@import "</span>).q().append(session.resolveUri(session.resolve(s))).q().appendln(<span class="jxr_string">";"</span>);
-<a class="jxr_linenumber" name="L404" href="#L404">404</a> 		<strong class="jxr_keyword">if</strong> (session.isNowrap())
-<a class="jxr_linenumber" name="L405" href="#L405">405</a> 			w.appendln(3, <span class="jxr_string">"div.data * {white-space:nowrap;} "</span>);
-<a class="jxr_linenumber" name="L406" href="#L406">406</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> s : session.getStyle())
-<a class="jxr_linenumber" name="L407" href="#L407">407</a> 			w.sIf(addSpace.getAndSet()).appendln(3, session.resolve(s));
-<a class="jxr_linenumber" name="L408" href="#L408">408</a> 		session.forEachWidget(x -&gt; w.sIf(addSpace.getAndSet()).appendln(3, session.resolve(x.getStyle(session.getVarResolver()))));
-<a class="jxr_linenumber" name="L409" href="#L409">409</a> 	}
-<a class="jxr_linenumber" name="L410" href="#L410">410</a> }
+<a class="jxr_linenumber" name="L375" href="#L375">375</a> 		<strong class="jxr_keyword">var</strong> nav = session.getNav();
+<a class="jxr_linenumber" name="L376" href="#L376">376</a> 		<strong class="jxr_keyword">if</strong> (nav.length &gt; 0) {
+<a class="jxr_linenumber" name="L377" href="#L377">377</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt; nav.length; i++)
+<a class="jxr_linenumber" name="L378" href="#L378">378</a> 				w.sIf(i &gt; 0).appendln(3, session.resolveHtmlDoc(nav[i]));
+<a class="jxr_linenumber" name="L379" href="#L379">379</a> 		}
+<a class="jxr_linenumber" name="L380" href="#L380">380</a> 	}
+<a class="jxr_linenumber" name="L381" href="#L381">381</a> 
+<a class="jxr_linenumber" name="L382" href="#L382">382</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L383" href="#L383">383</a> <em class="jxr_javadoccomment">	 * Renders the contents of the &lt;code&gt;&lt;xt&gt;&amp;lt;head&amp;gt;&lt;/xt&gt;/&lt;xt&gt;&amp;lt;script&amp;gt;&lt;/xt&gt;&lt;/code&gt; element.</em>
+<a class="jxr_linenumber" name="L384" href="#L384">384</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L385" href="#L385">385</a> <em class="jxr_javadoccomment">	 * @param session The current serializer session.</em>
+<a class="jxr_linenumber" name="L386" href="#L386">386</a> <em class="jxr_javadoccomment">	 * @param w The writer being written to.</em>
+<a class="jxr_linenumber" name="L387" href="#L387">387</a> <em class="jxr_javadoccomment">	 * @param o The object being serialized.</em>
+<a class="jxr_linenumber" name="L388" href="#L388">388</a> <em class="jxr_javadoccomment">	 * @throws Exception Any exception can be thrown.</em>
+<a class="jxr_linenumber" name="L389" href="#L389">389</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L390" href="#L390">390</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">void</strong> script(HtmlDocSerializerSession session, HtmlWriter&lt;?&gt; w, Object o) <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L391" href="#L391">391</a> 		<strong class="jxr_keyword">var</strong> addSpace = Flag.create();
+<a class="jxr_linenumber" name="L392" href="#L392">392</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> s : session.getScript())
+<a class="jxr_linenumber" name="L393" href="#L393">393</a> 			w.sIf(addSpace.getAndSet()).append(3, session.resolveScriptStyle(s)).append('\n'); <em class="jxr_comment">// Must always append a newline even if whitespace disabled!</em>
+<a class="jxr_linenumber" name="L394" href="#L394">394</a> 		session.forEachWidget(x -&gt; w.sIf(addSpace.getAndSet()).append(3, session.resolveScriptStyle(x.getScript(session.getVarResolver()))).w('\n')); <em class="jxr_comment">// Must always append a newline even if whitespace disabled!</em>
+<a class="jxr_linenumber" name="L395" href="#L395">395</a> 	}
+<a class="jxr_linenumber" name="L396" href="#L396">396</a> 
+<a class="jxr_linenumber" name="L397" href="#L397">397</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L398" href="#L398">398</a> <em class="jxr_javadoccomment">	 * Renders the contents of the &lt;code&gt;&lt;xt&gt;&amp;lt;head&amp;gt;&lt;/xt&gt;/&lt;xt&gt;&amp;lt;style&amp;gt;&lt;/xt&gt;&lt;/code&gt; element.</em>
+<a class="jxr_linenumber" name="L399" href="#L399">399</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L400" href="#L400">400</a> <em class="jxr_javadoccomment">	 * @param session The current serializer session.</em>
+<a class="jxr_linenumber" name="L401" href="#L401">401</a> <em class="jxr_javadoccomment">	 * @param w The writer being written to.</em>
+<a class="jxr_linenumber" name="L402" href="#L402">402</a> <em class="jxr_javadoccomment">	 * @param o The object being serialized.</em>
+<a class="jxr_linenumber" name="L403" href="#L403">403</a> <em class="jxr_javadoccomment">	 * @throws Exception Any exception can be thrown.</em>
+<a class="jxr_linenumber" name="L404" href="#L404">404</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L405" href="#L405">405</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">void</strong> style(HtmlDocSerializerSession session, HtmlWriter&lt;?&gt; w, Object o) <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L406" href="#L406">406</a> 		<strong class="jxr_keyword">var</strong> addSpace = Flag.create();
+<a class="jxr_linenumber" name="L407" href="#L407">407</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> s : session.getStylesheet())
+<a class="jxr_linenumber" name="L408" href="#L408">408</a> 			w.sIf(addSpace.getAndSet()).append(3, <span class="jxr_string">"@import "</span>).q().append(session.resolveUri(session.resolve(s))).q().appendln(<span class="jxr_string">";"</span>);
+<a class="jxr_linenumber" name="L409" href="#L409">409</a> 		<strong class="jxr_keyword">if</strong> (session.isNowrap())
+<a class="jxr_linenumber" name="L410" href="#L410">410</a> 			w.appendln(3, <span class="jxr_string">"div.data * {white-space:nowrap;} "</span>);
+<a class="jxr_linenumber" name="L411" href="#L411">411</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> s : session.getStyle())
+<a class="jxr_linenumber" name="L412" href="#L412">412</a> 			w.sIf(addSpace.getAndSet()).appendln(3, session.resolveScriptStyle(s));
+<a class="jxr_linenumber" name="L413" href="#L413">413</a> 		session.forEachWidget(x -&gt; w.sIf(addSpace.getAndSet()).appendln(3, session.resolveScriptStyle(x.getStyle(session.getVarResolver()))));
+<a class="jxr_linenumber" name="L414" href="#L414">414</a> 	}
+<a class="jxr_linenumber" name="L415" href="#L415">415</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

@@ -126,9 +126,9 @@ loadScripts(document, 'script');</script>
 <div class="block">Class-level response converters.</div>
 </div>
 <div class="col-first even-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second even-row-color"><code><a href="#debug()" class="member-name-link">debug</a></code></div>
+<div class="col-second even-row-color"><code><a href="#debugMarshalling()" class="member-name-link">debugMarshalling</a></code></div>
 <div class="col-last even-row-color">
-<div class="block">Enable debug mode.</div>
+<div class="block">Per-operation override for <a href="Rest.html#debugMarshalling()"><code>@Rest(debugMarshalling)</code></a>.</div>
 </div>
 <div class="col-first odd-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
 <div class="col-second odd-row-color"><code><a href="#defaultAccept()" class="member-name-link">defaultAccept</a></code></div>
@@ -393,50 +393,9 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
-<section class="detail" id="debug()">
-<h3>debug</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestPut.html#line-176">debug</a></span></div>
-<div class="block">Enable debug mode.
-
- <p>
- Enables the following:
- <ul class='spaced-list'>
-   <li>
-      HTTP request/response bodies are cached in memory for logging purposes.
-   <li>
-      Request/response messages are automatically logged.
- </ul>
-
- <ul class='values'>
-   <li><js>"true"</js> - Debug is enabled for all requests.
-   <li><js>"false"</js> - Debug is disabled for all requests.
-   <li><js>"conditional"</js> - Debug is enabled only for requests that have a <c class='snippet'>Debug: true</c> header.
-   <li><js>""</js> (or anything else) - Debug mode is inherited from class.
- </ul>
-
- <h5 class='section'>Notes:</h5><ul>
-   <li class='note'>
-      Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">SVL Variables</a>
-      (e.g. <js>"$L{my.localized.variable}"</js>).
- </ul>
-
- <h5 class='section'>See Also:</h5><ul>
-   <li class='jm'><a href="RestContext.html#getDebugEnablement()"><code>RestContext.getDebugEnablement()</code></a>
- </ul></div>
-<dl class="notes">
-<dt>Returns:</dt>
-<dd>The annotation value.</dd>
-</dl>
-<dl class="notes">
-<dt>Default:</dt>
-<dd>""</dd>
-</dl>
-</section>
-</li>
-<li>
 <section class="detail" id="defaultAccept()">
 <h3>defaultAccept</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestPut.html#line-189">defaultAccept</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestPut.html#line-156">defaultAccept</a></span></div>
 <div class="block">Default <c>Accept</c> header.
 
  <p>
@@ -457,7 +416,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="defaultCharset()">
 <h3>defaultCharset</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestPut.html#line-209">defaultCharset</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestPut.html#line-176">defaultCharset</a></span></div>
 <div class="block">Default character encoding.
 
  <p>
@@ -485,7 +444,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="defaultContentType()">
 <h3>defaultContentType</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestPut.html#line-222">defaultContentType</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestPut.html#line-189">defaultContentType</a></span></div>
 <div class="block">Default <c>Content-Type</c> header.
 
  <p>
@@ -506,7 +465,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="defaultRequestAttributes()">
 <h3>defaultRequestAttributes</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>[]</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestPut.html#line-261">defaultRequestAttributes</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>[]</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestPut.html#line-228">defaultRequestAttributes</a></span></div>
 <div class="block">Default request attributes.
 
  <p>
@@ -553,7 +512,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="defaultRequestFormData()">
 <h3>defaultRequestFormData</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>[]</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestPut.html#line-291">defaultRequestFormData</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>[]</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestPut.html#line-258">defaultRequestFormData</a></span></div>
 <div class="block">Specifies default values for form-data parameters.
 
  <p>
@@ -591,7 +550,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="defaultRequestHeaders()">
 <h3>defaultRequestHeaders</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>[]</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestPut.html#line-315">defaultRequestHeaders</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>[]</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestPut.html#line-282">defaultRequestHeaders</a></span></div>
 <div class="block">Default request headers.
 
  <p>
@@ -622,7 +581,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="defaultRequestQueryData()">
 <h3>defaultRequestQueryData</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>[]</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestPut.html#line-344">defaultRequestQueryData</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>[]</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestPut.html#line-311">defaultRequestQueryData</a></span></div>
 <div class="block">Specifies default values for query parameters.
 
  <p>
@@ -659,7 +618,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="defaultResponseHeaders()">
 <h3>defaultResponseHeaders</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>[]</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestPut.html#line-368">defaultResponseHeaders</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>[]</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestPut.html#line-335">defaultResponseHeaders</a></span></div>
 <div class="block">Default response headers.
 
  <p>
@@ -690,7 +649,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="description()">
 <h3>description</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>[]</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestPut.html#line-394">description</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>[]</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestPut.html#line-361">description</a></span></div>
 <div class="block">Optional description for the exposed API.
 
  <p>
@@ -724,7 +683,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="encoders()">
 <h3>encoders</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;? extends <a href="../../marshall/encoders/Encoder.html" title="class in org.apache.juneau.marshall.encoders">Encoder</a>&gt;[]</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestPut.html#line-438">encoders</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;? extends <a href="../../marshall/encoders/Encoder.html" title="class in org.apache.juneau.marshall.encoders">Encoder</a>&gt;[]</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestPut.html#line-405">encoders</a></span></div>
 <div class="block">Specifies the compression encoders for this method.
 
  <p>
@@ -776,7 +735,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="guards()">
 <h3>guards</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;? extends <a href="guard/RestGuard.html" title="class in org.apache.juneau.rest.server.guard">RestGuard</a>&gt;[]</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestPut.html#line-449">guards</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;? extends <a href="guard/RestGuard.html" title="class in org.apache.juneau.rest.server.guard">RestGuard</a>&gt;[]</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestPut.html#line-416">guards</a></span></div>
 <div class="block">Method-level guards.
 
  <p>
@@ -794,7 +753,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="matchers()">
 <h3>matchers</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;? extends <a href="matcher/RestMatcher.html" title="class in org.apache.juneau.rest.server.matcher">RestMatcher</a>&gt;[]</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestPut.html#line-467">matchers</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;? extends <a href="matcher/RestMatcher.html" title="class in org.apache.juneau.rest.server.matcher">RestMatcher</a>&gt;[]</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestPut.html#line-434">matchers</a></span></div>
 <div class="block">Method matchers.
 
  <p>
@@ -820,7 +779,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="maxInput()">
 <h3>maxInput</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestPut.html#line-495">maxInput</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestPut.html#line-462">maxInput</a></span></div>
 <div class="block">The maximum allowed input size (in bytes) on HTTP requests.
 
  <p>
@@ -856,7 +815,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="parsers()">
 <h3>parsers</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;[]</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestPut.html#line-546">parsers</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;[]</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestPut.html#line-513">parsers</a></span></div>
 <div class="block">Specifies the parsers for converting HTTP request bodies into POJOs for this method.
 
  <p>
@@ -915,7 +874,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="path()">
 <h3>path</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>[]</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestPut.html#line-586">path</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>[]</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestPut.html#line-553">path</a></span></div>
 <div class="block">Optional path pattern for the specified method.
 
  <p>
@@ -963,7 +922,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="problemDetails()">
 <h3>problemDetails</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestPut.html#line-614">problemDetails</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestPut.html#line-581">problemDetails</a></span></div>
 <div class="block">Per-operation override for <a href="Rest.html#problemDetails()"><code>@Rest(problemDetails)</code></a>.
 
  <p>
@@ -997,9 +956,38 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
+<section class="detail" id="debugMarshalling()">
+<h3>debugMarshalling</h3>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestPut.html#line-602">debugMarshalling</a></span></div>
+<div class="block">Per-operation override for <a href="Rest.html#debugMarshalling()"><code>@Rest(debugMarshalling)</code></a>.
+
+ <p>
+ When set on a <code>@RestPut</code> method, this value takes precedence over the resource-level
+ <code>@Rest(debugMarshalling)</code> attribute for this operation. Tri-state semantics:
+
+ <ul class='values'>
+   <li><js>"true"</js> &mdash; enable marshalling debug for this operation.
+   <li><js>"false"</js> &mdash; disable marshalling debug for this operation (overrides an opted-in resource).
+   <li><js>""</js> (default) &mdash; inherit from <a href="Rest.html#debugMarshalling()"><code>Rest.debugMarshalling()</code></a>.
+ </ul>
+
+ <h5 class='section'>See Also:</h5><ul>
+   <li class='ja'><a href="Rest.html#debugMarshalling()"><code>Rest.debugMarshalling()</code></a>
+ </ul></div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>The annotation value.</dd>
+</dl>
+<dl class="notes">
+<dt>Default:</dt>
+<dd>""</dd>
+</dl>
+</section>
+</li>
+<li>
 <section class="detail" id="observability()">
 <h3>observability</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestPut.html#line-635">observability</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestPut.html#line-623">observability</a></span></div>
 <div class="block">Per-operation observability opt-in / opt-out control.
 
  <p>
@@ -1029,7 +1017,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="asyncCompletionExecutor()">
 <h3>asyncCompletionExecutor</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestPut.html#line-653">asyncCompletionExecutor</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestPut.html#line-641">asyncCompletionExecutor</a></span></div>
 <div class="block">Per-operation override for <a href="Rest.html#asyncCompletionExecutor()"><code>@Rest(asyncCompletionExecutor)</code></a>.
 
  <p>
@@ -1056,7 +1044,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="metricName()">
 <h3>metricName</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestPut.html#line-665">metricName</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestPut.html#line-653">metricName</a></span></div>
 <div class="block">Per-operation metric name override. Empty string (default) uses the recorder's own name derivation.
 
  <h5 class='section'>See Also:</h5><ul>
@@ -1077,7 +1065,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="metricTags()">
 <h3>metricTags</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestPut.html#line-678">metricTags</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestPut.html#line-666">metricTags</a></span></div>
 <div class="block">Per-operation metric tags. Format: comma-separated <code>key=value</code> pairs.
  Empty string (default) means no additional tags.
 
@@ -1099,7 +1087,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="produces()">
 <h3>produces</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>[]</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestPut.html#line-698">produces</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>[]</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestPut.html#line-686">produces</a></span></div>
 <div class="block">Supported accept media types.
 
  <p>
@@ -1127,7 +1115,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="allowedSerializerOptions()">
 <h3>allowedSerializerOptions</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>[]</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestPut.html#line-715">allowedSerializerOptions</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>[]</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestPut.html#line-703">allowedSerializerOptions</a></span></div>
 <div class="block">Allowed serializer session option keys for this operation (ordered merge, prefix <code>-key</code> removes a key).
 
  <p>
@@ -1152,7 +1140,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="allowedParserOptions()">
 <h3>allowedParserOptions</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>[]</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestPut.html#line-732">allowedParserOptions</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>[]</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestPut.html#line-720">allowedParserOptions</a></span></div>
 <div class="block">Allowed parser session option keys for this operation (ordered merge, prefix <code>-key</code> removes a key).
 
  <p>
@@ -1177,11 +1165,12 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="noInherit()">
 <h3>noInherit</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>[]</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestPut.html#line-748">noInherit</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>[]</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestPut.html#line-737">noInherit</a></span></div>
 <div class="block">Property names for which less-derived contributions are NOT inherited.
 
  <p>
- Accepted values: <code>"allowedSerializerOptions"</code>, <code>"allowedParserOptions"</code>.
+ Accepted values: <code>"allowedSerializerOptions"</code>, <code>"allowedParserOptions"</code>,
+ <code>"problemDetails"</code>, <code>"debugMarshalling"</code>.
  Prevents the named property from inheriting values from the enclosing <code>@Rest</code> annotation.
  The <code>noInherit</code> attribute itself is never inherited.
 
@@ -1201,7 +1190,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="roleGuard()">
 <h3>roleGuard</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestPut.html#line-800">roleGuard</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestPut.html#line-789">roleGuard</a></span></div>
 <div class="block">Role guard.
 
  <p>
@@ -1260,7 +1249,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="rolesDeclared()">
 <h3>rolesDeclared</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestPut.html#line-828">rolesDeclared</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestPut.html#line-817">rolesDeclared</a></span></div>
 <div class="block">Declared roles.
 
  <p>
@@ -1295,7 +1284,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="serializers()">
 <h3>serializers</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;? extends <a href="../../marshall/serializer/Serializer.html" title="class in org.apache.juneau.marshall.serializer">Serializer</a>&gt;[]</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestPut.html#line-879">serializers</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;? extends <a href="../../marshall/serializer/Serializer.html" title="class in org.apache.juneau.marshall.serializer">Serializer</a>&gt;[]</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestPut.html#line-868">serializers</a></span></div>
 <div class="block">Specifies the serializers for marshalling POJOs into response bodies for this method.
 
  <p>
@@ -1354,7 +1343,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="summary()">
 <h3>summary</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestPut.html#line-905">summary</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestPut.html#line-894">summary</a></span></div>
 <div class="block">Optional summary for the exposed API.
 
  <p>
@@ -1388,7 +1377,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="swagger()">
 <h3>swagger</h3>
-<div class="member-signature"><span class="return-type"><a href="OpSwagger.html" title="annotation interface in org.apache.juneau.rest.server">OpSwagger</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestPut.html#line-956">swagger</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="OpSwagger.html" title="annotation interface in org.apache.juneau.rest.server">OpSwagger</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestPut.html#line-945">swagger</a></span></div>
 <div class="block">Provides swagger-specific metadata on this method.
 
  <p>
@@ -1447,7 +1436,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="value()">
 <h3>value</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestPut.html#line-976">value</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestPut.html#line-965">value</a></span></div>
 <div class="block">REST method path.
 
  <p>

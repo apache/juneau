@@ -1,0 +1,220 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="" lang="">
+<head><meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<title>SqlBeanQueryContext_Builder_Test xref</title>
+<link type="text/css" rel="stylesheet" href="../../../../../stylesheet.css" />
+</head>
+<body>
+<div id="overview"><a href="../../../../../../testapidocs/org/apache/juneau/beanquery/sql/SqlBeanQueryContext_Builder_Test.html">View Javadoc</a></div><pre>
+<a class="jxr_linenumber" name="L1" href="#L1">1</a>   <em class="jxr_comment">/*</em>
+<a class="jxr_linenumber" name="L2" href="#L2">2</a>   <em class="jxr_comment"> * Licensed to the Apache Software Foundation (ASF) under one or more</em>
+<a class="jxr_linenumber" name="L3" href="#L3">3</a>   <em class="jxr_comment"> * contributor license agreements.  See the NOTICE file distributed with</em>
+<a class="jxr_linenumber" name="L4" href="#L4">4</a>   <em class="jxr_comment"> * this work for additional information regarding copyright ownership.</em>
+<a class="jxr_linenumber" name="L5" href="#L5">5</a>   <em class="jxr_comment"> * The ASF licenses this file to You under the Apache License, Version 2.0</em>
+<a class="jxr_linenumber" name="L6" href="#L6">6</a>   <em class="jxr_comment"> * (the "License"); you may not use this file except in compliance with</em>
+<a class="jxr_linenumber" name="L7" href="#L7">7</a>   <em class="jxr_comment"> * the License.  You may obtain a copy of the License at</em>
+<a class="jxr_linenumber" name="L8" href="#L8">8</a>   <em class="jxr_comment"> *</em>
+<a class="jxr_linenumber" name="L9" href="#L9">9</a>   <em class="jxr_comment"> *      <a href="http://www.apache.org/licenses/LICENSE-2.0" target="alexandria_uri">http://www.apache.org/licenses/LICENSE-2.0</a></em>
+<a class="jxr_linenumber" name="L10" href="#L10">10</a>  <em class="jxr_comment"> *</em>
+<a class="jxr_linenumber" name="L11" href="#L11">11</a>  <em class="jxr_comment"> * Unless required by applicable law or agreed to in writing, software</em>
+<a class="jxr_linenumber" name="L12" href="#L12">12</a>  <em class="jxr_comment"> * distributed under the License is distributed on an "AS IS" BASIS,</em>
+<a class="jxr_linenumber" name="L13" href="#L13">13</a>  <em class="jxr_comment"> * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</em>
+<a class="jxr_linenumber" name="L14" href="#L14">14</a>  <em class="jxr_comment"> * See the License for the specific language governing permissions and</em>
+<a class="jxr_linenumber" name="L15" href="#L15">15</a>  <em class="jxr_comment"> * limitations under the License.</em>
+<a class="jxr_linenumber" name="L16" href="#L16">16</a>  <em class="jxr_comment"> */</em>
+<a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> org.apache.juneau.beanquery.sql;
+<a class="jxr_linenumber" name="L18" href="#L18">18</a>  
+<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.commons.beanquery.SearchType.*;
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.test.bct.BctAssertions.*;
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.junit.jupiter.api.Assertions.*;
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> java.lang.reflect.*;
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> java.sql.*;
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> java.time.*;
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> java.util.*;
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">import</strong> javax.sql.*;
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.commons.beanquery.*;
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <strong class="jxr_keyword">import</strong> org.junit.jupiter.api.*;
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>  
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <strong class="jxr_keyword">class</strong> <a name="SqlBeanQueryContext_Builder_Test" href="../../../../../org/apache/juneau/beanquery/sql/SqlBeanQueryContext_Builder_Test.html#SqlBeanQueryContext_Builder_Test">SqlBeanQueryContext_Builder_Test</a> {
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>  
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <a name="TestDialect" href="../../../../../org/apache/juneau/beanquery/sql/TestDialect.html#TestDialect">TestDialect</a> D = TestDialect.INSTANCE;
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>  
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> SqlBeanQueryContext.Builder&lt;Object&gt; builder() {
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>  		<strong class="jxr_keyword">return</strong> SqlBeanQueryContext.create(Object.<strong class="jxr_keyword">class</strong>)
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>  			.dialect(D)
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>  			.table(<span class="jxr_string">"person"</span>)
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>  			.column(<span class="jxr_string">"name"</span>, TEXT)
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>  			.column(<span class="jxr_string">"age"</span>, NUMERIC)
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>  			.connectionSupplier(() -&gt; { <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> UnsupportedOperationException(<span class="jxr_string">"render-only test"</span>); });
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>  	}
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>  
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> assertIse(String message, SqlBeanQueryContext.Builder&lt;Object&gt; b) {
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>  		assertEquals(message, assertThrows(IllegalStateException.<strong class="jxr_keyword">class</strong>, b::build).getMessage());
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>  	}
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>  
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>  	@Test
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>  	<strong class="jxr_keyword">void</strong> a01_buildRequiresDialectTableConnectionAndColumns() {
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>  		assertIse(<span class="jxr_string">"SqlBeanQueryContext requires a dialect."</span>, SqlBeanQueryContext.create(Object.<strong class="jxr_keyword">class</strong>).table(<span class="jxr_string">"t"</span>).column(<span class="jxr_string">"a"</span>, TEXT).connectionSupplier(() -&gt; <strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>  		assertIse(<span class="jxr_string">"SqlBeanQueryContext requires a table."</span>, SqlBeanQueryContext.create(Object.<strong class="jxr_keyword">class</strong>).dialect(D).column(<span class="jxr_string">"a"</span>, TEXT).connectionSupplier(() -&gt; <strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>  		assertIse(<span class="jxr_string">"SqlBeanQueryContext requires a connection source."</span>, SqlBeanQueryContext.create(Object.<strong class="jxr_keyword">class</strong>).dialect(D).table(<span class="jxr_string">"t"</span>).column(<span class="jxr_string">"a"</span>, TEXT));
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>  		assertIse(<span class="jxr_string">"At least one column must be declared."</span>, SqlBeanQueryContext.create(Object.<strong class="jxr_keyword">class</strong>).dialect(D).table(<span class="jxr_string">"t"</span>).connectionSupplier(() -&gt; <strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>  		assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; SqlBeanQueryContext.create(<strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>  	}
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>  
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>  	@Test
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>  	<strong class="jxr_keyword">void</strong> a02_setterArgumentChecks() {
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>  		<strong class="jxr_keyword">var</strong> hoistedTarget1 = builder();
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>  		assertEquals(<span class="jxr_string">"Column 'nope' is not declared."</span>, assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; hoistedTarget1.columnSql(<span class="jxr_string">"nope"</span>, <span class="jxr_string">"x"</span>)).getMessage());
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>  		<strong class="jxr_keyword">var</strong> hoistedTarget2 = builder();
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>  		assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; hoistedTarget2.columnSql(<span class="jxr_string">"name"</span>, <span class="jxr_string">" "</span>));
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>  		<strong class="jxr_keyword">var</strong> hoistedTarget3 = builder();
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>  		assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; hoistedTarget3.dialect(<strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>  		<strong class="jxr_keyword">var</strong> hoistedTarget4 = builder();
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>  		assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; hoistedTarget4.table(<span class="jxr_string">""</span>));
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>  		<strong class="jxr_keyword">var</strong> hoistedTarget5 = builder();
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>  		assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; hoistedTarget5.fetchSize(0));
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>  		<strong class="jxr_keyword">var</strong> hoistedTarget6 = builder();
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>  		assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; hoistedTarget6.queryTimeout(Duration.ZERO));
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>  		<strong class="jxr_keyword">var</strong> hoistedTarget7 = builder();
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>  		assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; hoistedTarget7.connectionReleaser(<strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>  	}
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>  
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>  	@Test
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>  	<strong class="jxr_keyword">void</strong> a03_renderRowsUsesResolvedQuery() {
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>  		<strong class="jxr_keyword">var</strong> c = builder().columnSql(<span class="jxr_string">"name"</span>, <span class="jxr_string">"full_name"</span>).build();
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>  		<strong class="jxr_keyword">var</strong> s = c.renderRows(c.resolve(<strong class="jxr_keyword">new</strong> BeanQuery().setSearch(<span class="jxr_string">"age=$gt(21)"</span>).setSort(<span class="jxr_string">"name-"</span>).setView(<span class="jxr_string">"name"</span>).setPosition(10).setLimit(5)));
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>  		assertBean(s, <span class="jxr_string">"sql,binds,columns"</span>, <span class="jxr_string">"SELECT \&quot;full_name\&quot; FROM \&quot;person\&quot; WHERE \&quot;age\&quot; &gt; ? ORDER BY \&quot;full_name\&quot; DESC LIMIT 5 OFFSET 10,[21],[name]"</span>);
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>  		assertEquals(<span class="jxr_string">"SELECT \&quot;full_name\&quot;, \&quot;age\&quot; FROM \&quot;person\&quot; LIMIT 100"</span>, c.renderRows(c.resolve(<strong class="jxr_keyword">new</strong> BeanQuery())).sql());
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>  	}
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>  
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>  	@Test
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>  	<strong class="jxr_keyword">void</strong> a04_guardsAreParenthesizedAndAnded() {
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>  		<strong class="jxr_keyword">var</strong> c = builder().guard(SqlFragment.of(<span class="jxr_string">"\&quot;tenant\&quot; = ? OR \&quot;tenant\&quot; = ?"</span>, <span class="jxr_string">"t1"</span>, <span class="jxr_string">"t2"</span>)).build();
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>  		<strong class="jxr_keyword">var</strong> q = c.resolve(<strong class="jxr_keyword">new</strong> BeanQuery().setSearch(<span class="jxr_string">"age=$gt(21)"</span>));
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>  		<strong class="jxr_keyword">var</strong> total = c.renderCount(q, false);
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>  		assertEquals(<span class="jxr_string">"SELECT count(*) FROM \&quot;person\&quot; WHERE (\&quot;tenant\&quot; = ? OR \&quot;tenant\&quot; = ?)"</span>, total.sql());
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>  		<strong class="jxr_keyword">var</strong> matched = c.renderCount(q, <strong class="jxr_keyword">true</strong>, SqlFragment.of(<span class="jxr_string">"\&quot;age\&quot; &lt; ?"</span>, 65));
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>  		assertBean(matched, <span class="jxr_string">"sql,binds"</span>, <span class="jxr_string">"SELECT count(*) FROM \&quot;person\&quot; WHERE (\&quot;tenant\&quot; = ? OR \&quot;tenant\&quot; = ?) AND (\&quot;age\&quot; &lt; ?) AND \&quot;age\&quot; &gt; ?,[t1,t2,65,21]"</span>);
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>  	}
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>  
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>  	@Test
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>  	<strong class="jxr_keyword">void</strong> a05_copyRoundTrips() {
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>  		<strong class="jxr_keyword">var</strong> c = builder().columnSql(<span class="jxr_string">"name"</span>, <span class="jxr_string">"full_name"</span>).guard(SqlFragment.of(<span class="jxr_string">"\&quot;x\&quot; = 1"</span>)).build();
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>  		<strong class="jxr_keyword">var</strong> d = c.copy().table(<span class="jxr_string">"people"</span>).build();
+<a class="jxr_linenumber" name="L99" href="#L99">99</a>  		<strong class="jxr_keyword">var</strong> q = <strong class="jxr_keyword">new</strong> BeanQuery().setView(<span class="jxr_string">"name"</span>);
+<a class="jxr_linenumber" name="L100" href="#L100">100</a> 		assertEquals(<span class="jxr_string">"SELECT \&quot;full_name\&quot; FROM \&quot;people\&quot; WHERE (\&quot;x\&quot; = 1) LIMIT 100"</span>, d.renderRows(d.resolve(q)).sql());
+<a class="jxr_linenumber" name="L101" href="#L101">101</a> 		assertEquals(<span class="jxr_string">"SELECT \&quot;full_name\&quot; FROM \&quot;person\&quot; WHERE (\&quot;x\&quot; = 1) LIMIT 100"</span>, c.renderRows(c.resolve(q)).sql());  <em class="jxr_comment">// Unchanged.</em>
+<a class="jxr_linenumber" name="L102" href="#L102">102</a> 		assertSame(Object.<strong class="jxr_keyword">class</strong>, c.getType());
+<a class="jxr_linenumber" name="L103" href="#L103">103</a> 		assertSame(Object.<strong class="jxr_keyword">class</strong>, d.getType());  <em class="jxr_comment">// Carried through copy().</em>
+<a class="jxr_linenumber" name="L104" href="#L104">104</a> 	}
+<a class="jxr_linenumber" name="L105" href="#L105">105</a> 
+<a class="jxr_linenumber" name="L106" href="#L106">106</a> 	@Test
+<a class="jxr_linenumber" name="L107" href="#L107">107</a> 	<strong class="jxr_keyword">void</strong> a06_dataSourceFailureIsExecutionError() {
+<a class="jxr_linenumber" name="L108" href="#L108">108</a> 		<strong class="jxr_keyword">var</strong> cause = <strong class="jxr_keyword">new</strong> SQLException(<span class="jxr_string">"no route to host"</span>);
+<a class="jxr_linenumber" name="L109" href="#L109">109</a> 		<strong class="jxr_keyword">var</strong> ds = (DataSource)Proxy.newProxyInstance(getClass().getClassLoader(), <strong class="jxr_keyword">new</strong> Class&lt;?&gt;[] {DataSource.<strong class="jxr_keyword">class</strong>}, (p, m, a) -&gt; {
+<a class="jxr_linenumber" name="L110" href="#L110">110</a> 			<strong class="jxr_keyword">throw</strong> cause;
+<a class="jxr_linenumber" name="L111" href="#L111">111</a> 		});
+<a class="jxr_linenumber" name="L112" href="#L112">112</a> 		<strong class="jxr_keyword">var</strong> c = builder().dataSource(ds).build();
+<a class="jxr_linenumber" name="L113" href="#L113">113</a> 		<strong class="jxr_keyword">var</strong> e = assertThrows(BeanQueryExecutionException.<strong class="jxr_keyword">class</strong>, c::getSession);
+<a class="jxr_linenumber" name="L114" href="#L114">114</a> 		assertEquals(<span class="jxr_string">"Failed to open a database connection."</span>, e.getMessage());
+<a class="jxr_linenumber" name="L115" href="#L115">115</a> 		assertSame(cause, e.getCause());
+<a class="jxr_linenumber" name="L116" href="#L116">116</a> 	}
+<a class="jxr_linenumber" name="L117" href="#L117">117</a> 
+<a class="jxr_linenumber" name="L118" href="#L118">118</a> 	@Test
+<a class="jxr_linenumber" name="L119" href="#L119">119</a> 	<strong class="jxr_keyword">void</strong> a07_unknownColumnsNeverReachSql() {
+<a class="jxr_linenumber" name="L120" href="#L120">120</a> 		<strong class="jxr_keyword">var</strong> c = builder().build();
+<a class="jxr_linenumber" name="L121" href="#L121">121</a> 		<strong class="jxr_keyword">var</strong> hoistedArg1 = <strong class="jxr_keyword">new</strong> BeanQuery().setSearch(<span class="jxr_string">"password=x"</span>);
+<a class="jxr_linenumber" name="L122" href="#L122">122</a> 		assertThrows(BeanQuerySyntaxException.<strong class="jxr_keyword">class</strong>, () -&gt; c.resolve(hoistedArg1));
+<a class="jxr_linenumber" name="L123" href="#L123">123</a> 		<strong class="jxr_keyword">var</strong> hoistedArg2 = <strong class="jxr_keyword">new</strong> BeanQuery().setSort(<span class="jxr_string">"password"</span>);
+<a class="jxr_linenumber" name="L124" href="#L124">124</a> 		assertThrows(BeanQuerySyntaxException.<strong class="jxr_keyword">class</strong>, () -&gt; c.resolve(hoistedArg2));
+<a class="jxr_linenumber" name="L125" href="#L125">125</a> 	}
+<a class="jxr_linenumber" name="L126" href="#L126">126</a> 
+<a class="jxr_linenumber" name="L127" href="#L127">127</a> 	@Test
+<a class="jxr_linenumber" name="L128" href="#L128">128</a> 	<strong class="jxr_keyword">void</strong> a08_columnTypeAndCaps() {
+<a class="jxr_linenumber" name="L129" href="#L129">129</a> 		<strong class="jxr_keyword">var</strong> c = builder().maxSearchClauses(5).maxSortKeys(3).build();
+<a class="jxr_linenumber" name="L130" href="#L130">130</a> 		assertMapped(c, (o, p) -&gt; o.getColumnType(p), <span class="jxr_string">"name,age"</span>, <span class="jxr_string">"TEXT,NUMERIC"</span>);
+<a class="jxr_linenumber" name="L131" href="#L131">131</a> 		assertEquals(<span class="jxr_string">"Unknown column 'nope'."</span>, assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; c.getColumnType(<span class="jxr_string">"nope"</span>)).getMessage());
+<a class="jxr_linenumber" name="L132" href="#L132">132</a> 		assertBean(c, <span class="jxr_string">"maxSearchClauses,maxSortKeys"</span>, <span class="jxr_string">"5,3"</span>);
+<a class="jxr_linenumber" name="L133" href="#L133">133</a> 	}
+<a class="jxr_linenumber" name="L134" href="#L134">134</a> 
+<a class="jxr_linenumber" name="L135" href="#L135">135</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L136" href="#L136">136</a> 	<em class="jxr_comment">// Default row-mapper selection</em>
+<a class="jxr_linenumber" name="L137" href="#L137">137</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L138" href="#L138">138</a> 
+<a class="jxr_linenumber" name="L139" href="#L139">139</a> 	record Person(String name, <strong class="jxr_keyword">int</strong> age) {}
+<a class="jxr_linenumber" name="L140" href="#L140">140</a> 
+<a class="jxr_linenumber" name="L141" href="#L141">141</a> 	<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> NotPlannable {
+<a class="jxr_linenumber" name="L142" href="#L142">142</a> 		NotPlannable(<strong class="jxr_keyword">int</strong> x) {}
+<a class="jxr_linenumber" name="L143" href="#L143">143</a> 	}
+<a class="jxr_linenumber" name="L144" href="#L144">144</a> 
+<a class="jxr_linenumber" name="L145" href="#L145">145</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> &lt;T&gt; SqlBeanQueryContext.Builder&lt;T&gt; builderOf(Class&lt;T&gt; type) {
+<a class="jxr_linenumber" name="L146" href="#L146">146</a> 		<strong class="jxr_keyword">return</strong> SqlBeanQueryContext.create(type)
+<a class="jxr_linenumber" name="L147" href="#L147">147</a> 			.dialect(D)
+<a class="jxr_linenumber" name="L148" href="#L148">148</a> 			.table(<span class="jxr_string">"person"</span>)
+<a class="jxr_linenumber" name="L149" href="#L149">149</a> 			.column(<span class="jxr_string">"name"</span>, TEXT)
+<a class="jxr_linenumber" name="L150" href="#L150">150</a> 			.connectionSupplier(() -&gt; { <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> UnsupportedOperationException(<span class="jxr_string">"render-only test"</span>); });
+<a class="jxr_linenumber" name="L151" href="#L151">151</a> 	}
+<a class="jxr_linenumber" name="L152" href="#L152">152</a> 
+<a class="jxr_linenumber" name="L153" href="#L153">153</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String rowMapperMessage(SqlBeanQueryContext&lt;?&gt; c) {
+<a class="jxr_linenumber" name="L154" href="#L154">154</a> 		<strong class="jxr_keyword">return</strong> assertThrows(IllegalStateException.<strong class="jxr_keyword">class</strong>, c::rowMapper).getMessage();
+<a class="jxr_linenumber" name="L155" href="#L155">155</a> 	}
+<a class="jxr_linenumber" name="L156" href="#L156">156</a> 
+<a class="jxr_linenumber" name="L157" href="#L157">157</a> 	@Test
+<a class="jxr_linenumber" name="L158" href="#L158">158</a> 	<strong class="jxr_keyword">void</strong> d01_mapTypesDefaultToMapMapper() {
+<a class="jxr_linenumber" name="L159" href="#L159">159</a> 		assertSame(SqlRowMapper.map(), builderOf(Map.<strong class="jxr_keyword">class</strong>).build().rowMapper());
+<a class="jxr_linenumber" name="L160" href="#L160">160</a> 		assertSame(SqlRowMapper.map(), builderOf(HashMap.<strong class="jxr_keyword">class</strong>).build().rowMapper());
+<a class="jxr_linenumber" name="L161" href="#L161">161</a> 		assertSame(SqlRowMapper.map(), builderOf(LinkedHashMap.<strong class="jxr_keyword">class</strong>).build().rowMapper());
+<a class="jxr_linenumber" name="L162" href="#L162">162</a> 	}
+<a class="jxr_linenumber" name="L163" href="#L163">163</a> 
+<a class="jxr_linenumber" name="L164" href="#L164">164</a> 	@Test
+<a class="jxr_linenumber" name="L165" href="#L165">165</a> 	<strong class="jxr_keyword">void</strong> d02_otherMapSubtypeHasNoDefaultAndKeepsReason() {
+<a class="jxr_linenumber" name="L166" href="#L166">166</a> 		assertEquals(<span class="jxr_string">"SqlBeanQueryContext requires a rowMapper for find and stream: rows are LinkedHashMap."</span>, rowMapperMessage(builderOf(TreeMap.<strong class="jxr_keyword">class</strong>).build()));
+<a class="jxr_linenumber" name="L167" href="#L167">167</a> 	}
+<a class="jxr_linenumber" name="L168" href="#L168">168</a> 
+<a class="jxr_linenumber" name="L169" href="#L169">169</a> 	@Test
+<a class="jxr_linenumber" name="L170" href="#L170">170</a> 	<strong class="jxr_keyword">void</strong> d03_objectHasNoDefaultAndNoReason() {
+<a class="jxr_linenumber" name="L171" href="#L171">171</a> 		assertEquals(<span class="jxr_string">"SqlBeanQueryContext requires a rowMapper for find and stream."</span>, rowMapperMessage(builderOf(Object.<strong class="jxr_keyword">class</strong>).build()));
+<a class="jxr_linenumber" name="L172" href="#L172">172</a> 	}
+<a class="jxr_linenumber" name="L173" href="#L173">173</a> 
+<a class="jxr_linenumber" name="L174" href="#L174">174</a> 	@Test
+<a class="jxr_linenumber" name="L175" href="#L175">175</a> 	<strong class="jxr_keyword">void</strong> d04_plannableBeanTypeDefaultsToBeanMapper() {
+<a class="jxr_linenumber" name="L176" href="#L176">176</a> 		<strong class="jxr_keyword">var</strong> mapper = builderOf(Person.<strong class="jxr_keyword">class</strong>).build().rowMapper();
+<a class="jxr_linenumber" name="L177" href="#L177">177</a> 		assertNotNull(mapper);
+<a class="jxr_linenumber" name="L178" href="#L178">178</a> 		assertNotSame(SqlRowMappers.MAP, mapper);
+<a class="jxr_linenumber" name="L179" href="#L179">179</a> 		assertEquals(<span class="jxr_string">"BeanMapper"</span>, mapper.getClass().getSimpleName());
+<a class="jxr_linenumber" name="L180" href="#L180">180</a> 	}
+<a class="jxr_linenumber" name="L181" href="#L181">181</a> 
+<a class="jxr_linenumber" name="L182" href="#L182">182</a> 	@Test
+<a class="jxr_linenumber" name="L183" href="#L183">183</a> 	<strong class="jxr_keyword">void</strong> d05_unplannableTypeHasNoDefaultAndKeepsPlanningReason() {
+<a class="jxr_linenumber" name="L184" href="#L184">184</a> 		assertEquals(<span class="jxr_string">"SqlBeanQueryContext requires a rowMapper for find and stream: cannot map rows to 'NotPlannable': no public no-arg constructor."</span>,
+<a class="jxr_linenumber" name="L185" href="#L185">185</a> 			rowMapperMessage(builderOf(NotPlannable.<strong class="jxr_keyword">class</strong>).build()));
+<a class="jxr_linenumber" name="L186" href="#L186">186</a> 	}
+<a class="jxr_linenumber" name="L187" href="#L187">187</a> 
+<a class="jxr_linenumber" name="L188" href="#L188">188</a> 	@Test
+<a class="jxr_linenumber" name="L189" href="#L189">189</a> 	<strong class="jxr_keyword">void</strong> d06_explicitRowMapperWinsOverDefault() {
+<a class="jxr_linenumber" name="L190" href="#L190">190</a> 		SqlRowMapper&lt;Person&gt; explicit = (rs, cols) -&gt; <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L191" href="#L191">191</a> 		assertSame(explicit, builderOf(Person.<strong class="jxr_keyword">class</strong>).rowMapper(explicit).build().rowMapper());
+<a class="jxr_linenumber" name="L192" href="#L192">192</a> 		@SuppressWarnings({
+<a class="jxr_linenumber" name="L193" href="#L193">193</a> 			<span class="jxr_string">"unchecked"</span> <em class="jxr_comment">// Class literals are raw; TreeMap.class is safe to view as the parameterized type.</em>
+<a class="jxr_linenumber" name="L194" href="#L194">194</a> 		})
+<a class="jxr_linenumber" name="L195" href="#L195">195</a> 		<strong class="jxr_keyword">var</strong> treeType = (Class&lt;TreeMap&lt;String,Object&gt;&gt;)(Class&lt;?&gt;)TreeMap.<strong class="jxr_keyword">class</strong>;
+<a class="jxr_linenumber" name="L196" href="#L196">196</a> 		SqlRowMapper&lt;TreeMap&lt;String,Object&gt;&gt; explicitTree = (rs, cols) -&gt; <strong class="jxr_keyword">new</strong> TreeMap&lt;&gt;();
+<a class="jxr_linenumber" name="L197" href="#L197">197</a> 		assertSame(explicitTree, builderOf(treeType).rowMapper(explicitTree).build().rowMapper());
+<a class="jxr_linenumber" name="L198" href="#L198">198</a> 	}
+<a class="jxr_linenumber" name="L199" href="#L199">199</a> 
+<a class="jxr_linenumber" name="L200" href="#L200">200</a> 	@Test
+<a class="jxr_linenumber" name="L201" href="#L201">201</a> 	<strong class="jxr_keyword">void</strong> d07_copyKeepsTheSelection() {
+<a class="jxr_linenumber" name="L202" href="#L202">202</a> 		<strong class="jxr_keyword">var</strong> ctx = builderOf(Person.<strong class="jxr_keyword">class</strong>).build();
+<a class="jxr_linenumber" name="L203" href="#L203">203</a> 		assertSame(ctx.rowMapper(), ctx.copy().build().rowMapper());
+<a class="jxr_linenumber" name="L204" href="#L204">204</a> 		assertEquals(<span class="jxr_string">"SqlBeanQueryContext requires a rowMapper for find and stream: rows are LinkedHashMap."</span>,
+<a class="jxr_linenumber" name="L205" href="#L205">205</a> 			rowMapperMessage(builderOf(TreeMap.<strong class="jxr_keyword">class</strong>).build().copy().build()));
+<a class="jxr_linenumber" name="L206" href="#L206">206</a> 	}
+<a class="jxr_linenumber" name="L207" href="#L207">207</a> }
+</pre>
+<hr/>
+<div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>
+</body>
+</html>

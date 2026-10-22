@@ -60,37 +60,37 @@
 <a class="jxr_linenumber" name="L52" href="#L52">52</a>  <em class="jxr_javadoccomment"> * 	&lt;li class='link'&gt;&lt;a class="doclink" href="<a href="https://juneau.apache.org/docs/topics/RestAnnotatedClasses" target="alexandria_uri">https://juneau.apache.org/docs/topics/RestAnnotatedClasses</a>"&gt;@Rest-Annotated Class Basics&lt;/a&gt;</em>
 <a class="jxr_linenumber" name="L53" href="#L53">53</a>  <em class="jxr_javadoccomment"> * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L54" href="#L54">54</a>  <em class="jxr_javadoccomment"> */</em>
-<a class="jxr_linenumber" name="L55" href="#L55">55</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a name="RestChildren" href="../../../../../org/apache/juneau/rest/server/RestChildren.html#RestChildren">RestChildren</a> {
-<a class="jxr_linenumber" name="L56" href="#L56">56</a>  
-<a class="jxr_linenumber" name="L57" href="#L57">57</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Logger LOGGER = Logger.getLogger(RestChildren.<strong class="jxr_keyword">class</strong>.getName());
-<a class="jxr_linenumber" name="L58" href="#L58">58</a>  
-<a class="jxr_linenumber" name="L59" href="#L59">59</a>  	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L60" href="#L60">60</a>  <em class="jxr_javadoccomment">	 * Holder for a lazy-init child resource entry.</em>
-<a class="jxr_linenumber" name="L61" href="#L61">61</a>  <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L62" href="#L62">62</a>  <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L63" href="#L63">63</a>  <em class="jxr_javadoccomment">	 * At parent startup, only the path prefix and {@link UrlPathMatcher} are populated.  The full</em>
-<a class="jxr_linenumber" name="L64" href="#L64">64</a>  <em class="jxr_javadoccomment">	 * {@link RestContext} is built on the first request that matches the path prefix; subsequent requests</em>
-<a class="jxr_linenumber" name="L65" href="#L65">65</a>  <em class="jxr_javadoccomment">	 * reuse the cached context.  Two concurrent first-requests serialize on {@link #lock} so that exactly</em>
-<a class="jxr_linenumber" name="L66" href="#L66">66</a>  <em class="jxr_javadoccomment">	 * one materialization runs.</em>
-<a class="jxr_linenumber" name="L67" href="#L67">67</a>  <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L68" href="#L68">68</a>  <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L69" href="#L69">69</a>  <em class="jxr_javadoccomment">	 * If materialization throws, the exception propagates to the caller as a {@link jakarta.servlet.ServletException};</em>
-<a class="jxr_linenumber" name="L70" href="#L70">70</a>  <em class="jxr_javadoccomment">	 * the {@link #materialized} field is left {@code null}, so the next request will retry.</em>
-<a class="jxr_linenumber" name="L71" href="#L71">71</a>  <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L72" href="#L72">72</a>  	<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> LazyChildEntry {
-<a class="jxr_linenumber" name="L73" href="#L73">73</a>  
-<a class="jxr_linenumber" name="L74" href="#L74">74</a>  		<strong class="jxr_keyword">final</strong> RestContext.ResolvedChild resolvedChild;
-<a class="jxr_linenumber" name="L75" href="#L75">75</a>  		<strong class="jxr_keyword">final</strong> Class&lt;?&gt; resourceClass;
-<a class="jxr_linenumber" name="L76" href="#L76">76</a>  		<strong class="jxr_keyword">final</strong> String path;
-<a class="jxr_linenumber" name="L77" href="#L77">77</a>  		<strong class="jxr_keyword">final</strong> <a name="UrlPathMatcher" href="../../../../../org/apache/juneau/rest/server/util/UrlPathMatcher.html#UrlPathMatcher">UrlPathMatcher</a> pathMatcher;
-<a class="jxr_linenumber" name="L78" href="#L78">78</a>  		<strong class="jxr_keyword">final</strong> RestContext parent;
-<a class="jxr_linenumber" name="L79" href="#L79">79</a>  		<strong class="jxr_keyword">final</strong> <a name="BeanStore" href="../../../../../org/apache/juneau/commons/inject/BeanStore.html#BeanStore">BeanStore</a> beanStore;
-<a class="jxr_linenumber" name="L80" href="#L80">80</a>  		<strong class="jxr_keyword">final</strong> ServletConfig servletConfig;
-<a class="jxr_linenumber" name="L81" href="#L81">81</a>  
-<a class="jxr_linenumber" name="L82" href="#L82">82</a>  		<em class="jxr_javadoccomment">/** Written once under {@link #lock}; volatile for lock-free reads. */</em>
-<a class="jxr_linenumber" name="L83" href="#L83">83</a>  		@SuppressWarnings({
-<a class="jxr_linenumber" name="L84" href="#L84">84</a>  			<span class="jxr_string">"java:S3077"</span> <em class="jxr_comment">// Publish-once reference: assigned once under double-checked locking in materialize(); the RestContext is fully built before assignment, so volatile safe-publication is sufficient.</em>
-<a class="jxr_linenumber" name="L85" href="#L85">85</a>  		})
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>  @SuppressWarnings({
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>  	<span class="jxr_string">"java:S3077"</span> <em class="jxr_comment">// The volatile Map snapshot and volatile RestContext are published immutable/fully built (copy-on-write).</em>
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>  })
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> RestChildren {
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>  
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Logger LOGGER = Logger.getLogger(RestChildren.<strong class="jxr_keyword">class</strong>.getName());
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>  
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>  	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>  <em class="jxr_javadoccomment">	 * Holder for a lazy-init child resource entry.</em>
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>  <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>  <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>  <em class="jxr_javadoccomment">	 * At parent startup, only the path prefix and {@link UrlPathMatcher} are populated.  The full</em>
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>  <em class="jxr_javadoccomment">	 * {@link RestContext} is built on the first request that matches the path prefix; subsequent requests</em>
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>  <em class="jxr_javadoccomment">	 * reuse the cached context.  Two concurrent first-requests serialize on {@link #lock} so that exactly</em>
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>  <em class="jxr_javadoccomment">	 * one materialization runs.</em>
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>  <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>  <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>  <em class="jxr_javadoccomment">	 * If materialization throws, the exception propagates to the caller as a {@link jakarta.servlet.ServletException};</em>
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>  <em class="jxr_javadoccomment">	 * the {@link #materialized} field is left {@code null}, so the next request will retry.</em>
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>  <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>  	<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> LazyChildEntry {
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>  
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>  		<strong class="jxr_keyword">final</strong> RestContext.ResolvedChild resolvedChild;
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>  		<strong class="jxr_keyword">final</strong> Class&lt;?&gt; resourceClass;
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>  		<strong class="jxr_keyword">final</strong> String path;
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>  		<strong class="jxr_keyword">final</strong> UrlPathMatcher pathMatcher;
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>  		<strong class="jxr_keyword">final</strong> RestContext parent;
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>  		<strong class="jxr_keyword">final</strong> <a name="BeanStore" href="../../../../../org/apache/juneau/commons/inject/BeanStore.html#BeanStore">BeanStore</a> beanStore;
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>  		<strong class="jxr_keyword">final</strong> ServletConfig servletConfig;
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>  
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>  		<em class="jxr_javadoccomment">/** Written once under {@link #lock}; volatile for lock-free reads. */</em>
 <a class="jxr_linenumber" name="L86" href="#L86">86</a>  		<strong class="jxr_keyword">volatile</strong> RestContext materialized;
 <a class="jxr_linenumber" name="L87" href="#L87">87</a>  
 <a class="jxr_linenumber" name="L88" href="#L88">88</a>  		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Object lock = <strong class="jxr_keyword">new</strong> Object();
@@ -268,8 +268,8 @@
 <a class="jxr_linenumber" name="L260" href="#L260">260</a> <em class="jxr_javadoccomment">		 *</em>
 <a class="jxr_linenumber" name="L261" href="#L261">261</a> <em class="jxr_javadoccomment">		 * @return A new {@link RestChildren}.</em>
 <a class="jxr_linenumber" name="L262" href="#L262">262</a> <em class="jxr_javadoccomment">		 */</em>
-<a class="jxr_linenumber" name="L263" href="#L263">263</a> 		<strong class="jxr_keyword">public</strong> <a name="RestChildren" href="../../../../../org/apache/juneau/rest/server/RestChildren.html#RestChildren">RestChildren</a> build() {
-<a class="jxr_linenumber" name="L264" href="#L264">264</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="RestChildren" href="../../../../../org/apache/juneau/rest/server/RestChildren.html#RestChildren">RestChildren</a>(<strong class="jxr_keyword">this</strong>);
+<a class="jxr_linenumber" name="L263" href="#L263">263</a> 		<strong class="jxr_keyword">public</strong> RestChildren build() {
+<a class="jxr_linenumber" name="L264" href="#L264">264</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> RestChildren(<strong class="jxr_keyword">this</strong>);
 <a class="jxr_linenumber" name="L265" href="#L265">265</a> 		}
 <a class="jxr_linenumber" name="L266" href="#L266">266</a> 	}
 <a class="jxr_linenumber" name="L267" href="#L267">267</a> 
@@ -292,401 +292,398 @@
 <a class="jxr_linenumber" name="L284" href="#L284">284</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Object writeLock = <strong class="jxr_keyword">new</strong> Object();
 <a class="jxr_linenumber" name="L285" href="#L285">285</a> 
 <a class="jxr_linenumber" name="L286" href="#L286">286</a> 	<em class="jxr_javadoccomment">/** Eager-init children keyed by composed path. Copy-on-write; volatile for lock-free reads. */</em>
-<a class="jxr_linenumber" name="L287" href="#L287">287</a> 	@SuppressWarnings({
-<a class="jxr_linenumber" name="L288" href="#L288">288</a> 		<span class="jxr_string">"java:S3077"</span> <em class="jxr_comment">// Copy-on-write snapshot: the map reference is replaced wholesale under writeLock and never compound-mutated, so volatile safe-publication is sufficient for lock-free reads.</em>
-<a class="jxr_linenumber" name="L289" href="#L289">289</a> 	})
-<a class="jxr_linenumber" name="L290" href="#L290">290</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">volatile</strong> Map&lt;String,RestContext&gt; children;
-<a class="jxr_linenumber" name="L291" href="#L291">291</a> 
-<a class="jxr_linenumber" name="L292" href="#L292">292</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L293" href="#L293">293</a> <em class="jxr_javadoccomment">	 * Lazy-init children keyed by path prefix.</em>
-<a class="jxr_linenumber" name="L294" href="#L294">294</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L295" href="#L295">295</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L296" href="#L296">296</a> <em class="jxr_javadoccomment">	 * These entries are registered at parent startup for routing purposes; their {@link RestContext} bodies</em>
-<a class="jxr_linenumber" name="L297" href="#L297">297</a> <em class="jxr_javadoccomment">	 * are built on first use.  Once materialized, the entry's {@link LazyChildEntry#materialized} field is set</em>
-<a class="jxr_linenumber" name="L298" href="#L298">298</a> <em class="jxr_javadoccomment">	 * but the entry remains in this map so subsequent reads are lock-free (volatile field read on the entry).</em>
-<a class="jxr_linenumber" name="L299" href="#L299">299</a> <em class="jxr_javadoccomment">	 * This map itself is never mutated after construction, so no copy-on-write is needed.</em>
-<a class="jxr_linenumber" name="L300" href="#L300">300</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L301" href="#L301">301</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Map&lt;String,LazyChildEntry&gt; lazyEntries;
-<a class="jxr_linenumber" name="L302" href="#L302">302</a> 
-<a class="jxr_linenumber" name="L303" href="#L303">303</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L304" href="#L304">304</a> <em class="jxr_javadoccomment">	 * Constructor.</em>
-<a class="jxr_linenumber" name="L305" href="#L305">305</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L306" href="#L306">306</a> <em class="jxr_javadoccomment">	 * @param builder The builder containing the settings for this object. Must not be &lt;jk&gt;null&lt;/jk&gt;.</em>
-<a class="jxr_linenumber" name="L307" href="#L307">307</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L308" href="#L308">308</a> 	<strong class="jxr_keyword">public</strong> <a name="RestChildren" href="../../../../../org/apache/juneau/rest/server/RestChildren.html#RestChildren">RestChildren</a>(Builder builder) {
-<a class="jxr_linenumber" name="L309" href="#L309">309</a> 		<strong class="jxr_keyword">this</strong>.parent = builder.parent;
-<a class="jxr_linenumber" name="L310" href="#L310">310</a> 		<strong class="jxr_keyword">this</strong>.beanStore = builder.beanStore;
-<a class="jxr_linenumber" name="L311" href="#L311">311</a> 		<strong class="jxr_keyword">this</strong>.servletConfig = builder.servletConfig;
-<a class="jxr_linenumber" name="L312" href="#L312">312</a> 		<strong class="jxr_keyword">var</strong> initial = <strong class="jxr_keyword">new</strong> LinkedHashMap&lt;String,RestContext&gt;();
-<a class="jxr_linenumber" name="L313" href="#L313">313</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> rc : builder.list)
-<a class="jxr_linenumber" name="L314" href="#L314">314</a> 			initial.put(rc.getPath(), rc);
-<a class="jxr_linenumber" name="L315" href="#L315">315</a> 		<strong class="jxr_keyword">this</strong>.children = u(initial);
-<a class="jxr_linenumber" name="L316" href="#L316">316</a> 		<strong class="jxr_keyword">var</strong> lazyMap = <strong class="jxr_keyword">new</strong> LinkedHashMap&lt;String,LazyChildEntry&gt;();
-<a class="jxr_linenumber" name="L317" href="#L317">317</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> e : builder.lazyList)
-<a class="jxr_linenumber" name="L318" href="#L318">318</a> 			lazyMap.put(e.path, e);
-<a class="jxr_linenumber" name="L319" href="#L319">319</a> 		<strong class="jxr_keyword">this</strong>.lazyEntries = u(lazyMap);
-<a class="jxr_linenumber" name="L320" href="#L320">320</a> 	}
-<a class="jxr_linenumber" name="L321" href="#L321">321</a> 
-<a class="jxr_linenumber" name="L322" href="#L322">322</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L323" href="#L323">323</a> <em class="jxr_javadoccomment">	 * Returns the children in this object as a map.</em>
-<a class="jxr_linenumber" name="L324" href="#L324">324</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L325" href="#L325">325</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L326" href="#L326">326</a> <em class="jxr_javadoccomment">	 * The keys are the {@link RestContext#getPath() paths} of the child contexts. The returned map is an</em>
-<a class="jxr_linenumber" name="L327" href="#L327">327</a> <em class="jxr_javadoccomment">	 * unmodifiable snapshot taken at the time of the call; subsequent {@link #addChild(Class) addChild} /</em>
-<a class="jxr_linenumber" name="L328" href="#L328">328</a> <em class="jxr_javadoccomment">	 * {@link #removeChild(String) removeChild} calls do not affect this view.</em>
-<a class="jxr_linenumber" name="L329" href="#L329">329</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L330" href="#L330">330</a> <em class="jxr_javadoccomment">	 * @return The children as an unmodifiable map.</em>
-<a class="jxr_linenumber" name="L331" href="#L331">331</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L332" href="#L332">332</a> 	<strong class="jxr_keyword">public</strong> Map&lt;String,RestContext&gt; asMap() {
-<a class="jxr_linenumber" name="L333" href="#L333">333</a> 		<strong class="jxr_keyword">return</strong> children;
-<a class="jxr_linenumber" name="L334" href="#L334">334</a> 	}
-<a class="jxr_linenumber" name="L335" href="#L335">335</a> 
-<a class="jxr_linenumber" name="L336" href="#L336">336</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L337" href="#L337">337</a> <em class="jxr_javadoccomment">	 * Called during servlet destruction on all children to invoke all {@link RestDestroy} and {@link Servlet#destroy()} methods.</em>
-<a class="jxr_linenumber" name="L338" href="#L338">338</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L339" href="#L339">339</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L340" href="#L340">340</a> <em class="jxr_javadoccomment">	 * Lazy children that were never materialized are silently skipped (no context was ever built for them).</em>
-<a class="jxr_linenumber" name="L341" href="#L341">341</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L342" href="#L342">342</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> destroy() {
-<a class="jxr_linenumber" name="L343" href="#L343">343</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> r : children.values())
-<a class="jxr_linenumber" name="L344" href="#L344">344</a> 			destroyChild(r);
-<a class="jxr_linenumber" name="L345" href="#L345">345</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> e : lazyEntries.values()) {
-<a class="jxr_linenumber" name="L346" href="#L346">346</a> 			<strong class="jxr_keyword">var</strong> rc = e.materialized;  <em class="jxr_comment">// volatile read — safe without lock</em>
-<a class="jxr_linenumber" name="L347" href="#L347">347</a> 			<strong class="jxr_keyword">if</strong> (rc != <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L348" href="#L348">348</a> 				destroyChild(rc);
-<a class="jxr_linenumber" name="L349" href="#L349">349</a> 		}
-<a class="jxr_linenumber" name="L350" href="#L350">350</a> 	}
-<a class="jxr_linenumber" name="L351" href="#L351">351</a> 
-<a class="jxr_linenumber" name="L352" href="#L352">352</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L353" href="#L353">353</a> <em class="jxr_javadoccomment">	 * Looks through the registered children of this object and returns the best match.</em>
-<a class="jxr_linenumber" name="L354" href="#L354">354</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L355" href="#L355">355</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L356" href="#L356">356</a> <em class="jxr_javadoccomment">	 * Eager children are checked first (lock-free volatile read), then lazy entries.  A matching lazy entry</em>
-<a class="jxr_linenumber" name="L357" href="#L357">357</a> <em class="jxr_javadoccomment">	 * triggers {@link LazyChildEntry#materialize()} which builds the full {@link RestContext} on first call</em>
-<a class="jxr_linenumber" name="L358" href="#L358">358</a> <em class="jxr_javadoccomment">	 * (blocking concurrent first-requests until construction completes) and caches the result.</em>
-<a class="jxr_linenumber" name="L359" href="#L359">359</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L360" href="#L360">360</a> <em class="jxr_javadoccomment">	 * @param builder The HTTP call builder. Must not be &lt;jk&gt;null&lt;/jk&gt;.</em>
-<a class="jxr_linenumber" name="L361" href="#L361">361</a> <em class="jxr_javadoccomment">	 * @return The child that best matches the call, or an empty {@link Optional} if a match could not be made.</em>
-<a class="jxr_linenumber" name="L362" href="#L362">362</a> <em class="jxr_javadoccomment">	 * @throws ServletException If a lazy child fails to materialize.</em>
-<a class="jxr_linenumber" name="L363" href="#L363">363</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L364" href="#L364">364</a> 	<strong class="jxr_keyword">public</strong> Optional&lt;RestChildMatch&gt; findMatch(RestSession.Builder builder) <strong class="jxr_keyword">throws</strong> ServletException {
-<a class="jxr_linenumber" name="L365" href="#L365">365</a> 		<strong class="jxr_keyword">var</strong> pi = builder.getPathInfoUndecoded();
-<a class="jxr_linenumber" name="L366" href="#L366">366</a> 		<strong class="jxr_keyword">if</strong> (nn(pi) &amp;&amp; ! pi.equals(<span class="jxr_string">"/"</span>)) {
-<a class="jxr_linenumber" name="L367" href="#L367">367</a> 			<em class="jxr_comment">// Check eager children first.</em>
-<a class="jxr_linenumber" name="L368" href="#L368">368</a> 			<strong class="jxr_keyword">var</strong> snapshot = children;  <em class="jxr_comment">// single volatile read</em>
-<a class="jxr_linenumber" name="L369" href="#L369">369</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> rc : snapshot.values()) {
-<a class="jxr_linenumber" name="L370" href="#L370">370</a> 				<strong class="jxr_keyword">var</strong> pm = rc.getPathMatcher();  <em class="jxr_comment">// Treated as nullable per RestContext's own usage (see RestContext.getPathMatcher() null-guards).</em>
-<a class="jxr_linenumber" name="L371" href="#L371">371</a> 				UrlPathMatch uppm = pm == <strong class="jxr_keyword">null</strong> ? <strong class="jxr_keyword">null</strong> : pm.match(builder.getUrlPath());
-<a class="jxr_linenumber" name="L372" href="#L372">372</a> 				<strong class="jxr_keyword">if</strong> (nn(uppm))
-<a class="jxr_linenumber" name="L373" href="#L373">373</a> 					<strong class="jxr_keyword">return</strong> o(RestChildMatch.create(uppm, rc));
-<a class="jxr_linenumber" name="L374" href="#L374">374</a> 			}
-<a class="jxr_linenumber" name="L375" href="#L375">375</a> 			<em class="jxr_comment">// Check lazy entries.</em>
-<a class="jxr_linenumber" name="L376" href="#L376">376</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> e : lazyEntries.values()) {
-<a class="jxr_linenumber" name="L377" href="#L377">377</a> 				UrlPathMatch uppm = e.pathMatcher.match(builder.getUrlPath());
-<a class="jxr_linenumber" name="L378" href="#L378">378</a> 				<strong class="jxr_keyword">if</strong> (nn(uppm)) {
-<a class="jxr_linenumber" name="L379" href="#L379">379</a> 					<strong class="jxr_keyword">var</strong> rc = e.materialize();
-<a class="jxr_linenumber" name="L380" href="#L380">380</a> 					<strong class="jxr_keyword">return</strong> o(RestChildMatch.create(uppm, rc));
-<a class="jxr_linenumber" name="L381" href="#L381">381</a> 				}
-<a class="jxr_linenumber" name="L382" href="#L382">382</a> 			}
-<a class="jxr_linenumber" name="L383" href="#L383">383</a> 		}
-<a class="jxr_linenumber" name="L384" href="#L384">384</a> 		<strong class="jxr_keyword">return</strong> oe();
-<a class="jxr_linenumber" name="L385" href="#L385">385</a> 	}
-<a class="jxr_linenumber" name="L386" href="#L386">386</a> 
-<a class="jxr_linenumber" name="L387" href="#L387">387</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L388" href="#L388">388</a> <em class="jxr_javadoccomment">	 * Called during servlet initialization on all eager children to invoke all {@link RestPostInit} child-last methods.</em>
+<a class="jxr_linenumber" name="L287" href="#L287">287</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">volatile</strong> Map&lt;String,RestContext&gt; children;
+<a class="jxr_linenumber" name="L288" href="#L288">288</a> 
+<a class="jxr_linenumber" name="L289" href="#L289">289</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L290" href="#L290">290</a> <em class="jxr_javadoccomment">	 * Lazy-init children keyed by path prefix.</em>
+<a class="jxr_linenumber" name="L291" href="#L291">291</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L292" href="#L292">292</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L293" href="#L293">293</a> <em class="jxr_javadoccomment">	 * These entries are registered at parent startup for routing purposes; their {@link RestContext} bodies</em>
+<a class="jxr_linenumber" name="L294" href="#L294">294</a> <em class="jxr_javadoccomment">	 * are built on first use.  Once materialized, the entry's {@link LazyChildEntry#materialized} field is set</em>
+<a class="jxr_linenumber" name="L295" href="#L295">295</a> <em class="jxr_javadoccomment">	 * but the entry remains in this map so subsequent reads are lock-free (volatile field read on the entry).</em>
+<a class="jxr_linenumber" name="L296" href="#L296">296</a> <em class="jxr_javadoccomment">	 * This map itself is never mutated after construction, so no copy-on-write is needed.</em>
+<a class="jxr_linenumber" name="L297" href="#L297">297</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L298" href="#L298">298</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Map&lt;String,LazyChildEntry&gt; lazyEntries;
+<a class="jxr_linenumber" name="L299" href="#L299">299</a> 
+<a class="jxr_linenumber" name="L300" href="#L300">300</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L301" href="#L301">301</a> <em class="jxr_javadoccomment">	 * Constructor.</em>
+<a class="jxr_linenumber" name="L302" href="#L302">302</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L303" href="#L303">303</a> <em class="jxr_javadoccomment">	 * @param builder The builder containing the settings for this object. Must not be &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L304" href="#L304">304</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L305" href="#L305">305</a> 	<strong class="jxr_keyword">public</strong> RestChildren(Builder builder) {
+<a class="jxr_linenumber" name="L306" href="#L306">306</a> 		<strong class="jxr_keyword">this</strong>.parent = builder.parent;
+<a class="jxr_linenumber" name="L307" href="#L307">307</a> 		<strong class="jxr_keyword">this</strong>.beanStore = builder.beanStore;
+<a class="jxr_linenumber" name="L308" href="#L308">308</a> 		<strong class="jxr_keyword">this</strong>.servletConfig = builder.servletConfig;
+<a class="jxr_linenumber" name="L309" href="#L309">309</a> 		<strong class="jxr_keyword">var</strong> initial = <strong class="jxr_keyword">new</strong> LinkedHashMap&lt;String,RestContext&gt;();
+<a class="jxr_linenumber" name="L310" href="#L310">310</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> rc : builder.list)
+<a class="jxr_linenumber" name="L311" href="#L311">311</a> 			initial.put(rc.getPath(), rc);
+<a class="jxr_linenumber" name="L312" href="#L312">312</a> 		<strong class="jxr_keyword">this</strong>.children = u(initial);
+<a class="jxr_linenumber" name="L313" href="#L313">313</a> 		<strong class="jxr_keyword">var</strong> lazyMap = <strong class="jxr_keyword">new</strong> LinkedHashMap&lt;String,LazyChildEntry&gt;();
+<a class="jxr_linenumber" name="L314" href="#L314">314</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> e : builder.lazyList)
+<a class="jxr_linenumber" name="L315" href="#L315">315</a> 			lazyMap.put(e.path, e);
+<a class="jxr_linenumber" name="L316" href="#L316">316</a> 		<strong class="jxr_keyword">this</strong>.lazyEntries = u(lazyMap);
+<a class="jxr_linenumber" name="L317" href="#L317">317</a> 	}
+<a class="jxr_linenumber" name="L318" href="#L318">318</a> 
+<a class="jxr_linenumber" name="L319" href="#L319">319</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L320" href="#L320">320</a> <em class="jxr_javadoccomment">	 * Returns the children in this object as a map.</em>
+<a class="jxr_linenumber" name="L321" href="#L321">321</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L322" href="#L322">322</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L323" href="#L323">323</a> <em class="jxr_javadoccomment">	 * The keys are the {@link RestContext#getPath() paths} of the child contexts. The returned map is an</em>
+<a class="jxr_linenumber" name="L324" href="#L324">324</a> <em class="jxr_javadoccomment">	 * unmodifiable snapshot taken at the time of the call; subsequent {@link #addChild(Class) addChild} /</em>
+<a class="jxr_linenumber" name="L325" href="#L325">325</a> <em class="jxr_javadoccomment">	 * {@link #removeChild(String) removeChild} calls do not affect this view.</em>
+<a class="jxr_linenumber" name="L326" href="#L326">326</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L327" href="#L327">327</a> <em class="jxr_javadoccomment">	 * @return The children as an unmodifiable map.</em>
+<a class="jxr_linenumber" name="L328" href="#L328">328</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L329" href="#L329">329</a> 	<strong class="jxr_keyword">public</strong> Map&lt;String,RestContext&gt; asMap() {
+<a class="jxr_linenumber" name="L330" href="#L330">330</a> 		<strong class="jxr_keyword">return</strong> children;
+<a class="jxr_linenumber" name="L331" href="#L331">331</a> 	}
+<a class="jxr_linenumber" name="L332" href="#L332">332</a> 
+<a class="jxr_linenumber" name="L333" href="#L333">333</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L334" href="#L334">334</a> <em class="jxr_javadoccomment">	 * Called during servlet destruction on all children to invoke all {@link RestDestroy} and {@link Servlet#destroy()} methods.</em>
+<a class="jxr_linenumber" name="L335" href="#L335">335</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L336" href="#L336">336</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L337" href="#L337">337</a> <em class="jxr_javadoccomment">	 * Lazy children that were never materialized are silently skipped (no context was ever built for them).</em>
+<a class="jxr_linenumber" name="L338" href="#L338">338</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L339" href="#L339">339</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> destroy() {
+<a class="jxr_linenumber" name="L340" href="#L340">340</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> r : children.values())
+<a class="jxr_linenumber" name="L341" href="#L341">341</a> 			destroyChild(r);
+<a class="jxr_linenumber" name="L342" href="#L342">342</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> e : lazyEntries.values()) {
+<a class="jxr_linenumber" name="L343" href="#L343">343</a> 			<strong class="jxr_keyword">var</strong> rc = e.materialized;  <em class="jxr_comment">// volatile read — safe without lock</em>
+<a class="jxr_linenumber" name="L344" href="#L344">344</a> 			<strong class="jxr_keyword">if</strong> (rc != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L345" href="#L345">345</a> 				destroyChild(rc);
+<a class="jxr_linenumber" name="L346" href="#L346">346</a> 		}
+<a class="jxr_linenumber" name="L347" href="#L347">347</a> 	}
+<a class="jxr_linenumber" name="L348" href="#L348">348</a> 
+<a class="jxr_linenumber" name="L349" href="#L349">349</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L350" href="#L350">350</a> <em class="jxr_javadoccomment">	 * Looks through the registered children of this object and returns the best match.</em>
+<a class="jxr_linenumber" name="L351" href="#L351">351</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L352" href="#L352">352</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L353" href="#L353">353</a> <em class="jxr_javadoccomment">	 * Eager children are checked first (lock-free volatile read), then lazy entries.  A matching lazy entry</em>
+<a class="jxr_linenumber" name="L354" href="#L354">354</a> <em class="jxr_javadoccomment">	 * triggers {@link LazyChildEntry#materialize()} which builds the full {@link RestContext} on first call</em>
+<a class="jxr_linenumber" name="L355" href="#L355">355</a> <em class="jxr_javadoccomment">	 * (blocking concurrent first-requests until construction completes) and caches the result.</em>
+<a class="jxr_linenumber" name="L356" href="#L356">356</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L357" href="#L357">357</a> <em class="jxr_javadoccomment">	 * @param builder The HTTP call builder. Must not be &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L358" href="#L358">358</a> <em class="jxr_javadoccomment">	 * @return The child that best matches the call, or an empty {@link Optional} if a match could not be made.</em>
+<a class="jxr_linenumber" name="L359" href="#L359">359</a> <em class="jxr_javadoccomment">	 * @throws ServletException If a lazy child fails to materialize.</em>
+<a class="jxr_linenumber" name="L360" href="#L360">360</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L361" href="#L361">361</a> 	<strong class="jxr_keyword">public</strong> Optional&lt;RestChildMatch&gt; findMatch(RestSession.Builder builder) <strong class="jxr_keyword">throws</strong> ServletException {
+<a class="jxr_linenumber" name="L362" href="#L362">362</a> 		<strong class="jxr_keyword">var</strong> pi = builder.getPathInfoUndecoded();
+<a class="jxr_linenumber" name="L363" href="#L363">363</a> 		<strong class="jxr_keyword">if</strong> (nn(pi) &amp;&amp; neq(pi, <span class="jxr_string">"/"</span>)) {
+<a class="jxr_linenumber" name="L364" href="#L364">364</a> 			<em class="jxr_comment">// Check eager children first.</em>
+<a class="jxr_linenumber" name="L365" href="#L365">365</a> 			<strong class="jxr_keyword">var</strong> snapshot = children;  <em class="jxr_comment">// single volatile read</em>
+<a class="jxr_linenumber" name="L366" href="#L366">366</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> rc : snapshot.values()) {
+<a class="jxr_linenumber" name="L367" href="#L367">367</a> 				<strong class="jxr_keyword">var</strong> pm = rc.getPathMatcher();  <em class="jxr_comment">// Treated as nullable per RestContext's own usage (see RestContext.getPathMatcher() null-guards).</em>
+<a class="jxr_linenumber" name="L368" href="#L368">368</a> 				UrlPathMatch uppm = pm == <strong class="jxr_keyword">null</strong> ? <strong class="jxr_keyword">null</strong> : pm.match(builder.getUrlPath());
+<a class="jxr_linenumber" name="L369" href="#L369">369</a> 				<strong class="jxr_keyword">if</strong> (nn(uppm))
+<a class="jxr_linenumber" name="L370" href="#L370">370</a> 					<strong class="jxr_keyword">return</strong> o(RestChildMatch.create(uppm, rc));
+<a class="jxr_linenumber" name="L371" href="#L371">371</a> 			}
+<a class="jxr_linenumber" name="L372" href="#L372">372</a> 			<em class="jxr_comment">// Check lazy entries.</em>
+<a class="jxr_linenumber" name="L373" href="#L373">373</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> e : lazyEntries.values()) {
+<a class="jxr_linenumber" name="L374" href="#L374">374</a> 				UrlPathMatch uppm = e.pathMatcher.match(builder.getUrlPath());
+<a class="jxr_linenumber" name="L375" href="#L375">375</a> 				<strong class="jxr_keyword">if</strong> (nn(uppm)) {
+<a class="jxr_linenumber" name="L376" href="#L376">376</a> 					<strong class="jxr_keyword">var</strong> rc = e.materialize();
+<a class="jxr_linenumber" name="L377" href="#L377">377</a> 					<strong class="jxr_keyword">return</strong> o(RestChildMatch.create(uppm, rc));
+<a class="jxr_linenumber" name="L378" href="#L378">378</a> 				}
+<a class="jxr_linenumber" name="L379" href="#L379">379</a> 			}
+<a class="jxr_linenumber" name="L380" href="#L380">380</a> 		}
+<a class="jxr_linenumber" name="L381" href="#L381">381</a> 		<strong class="jxr_keyword">return</strong> oe();
+<a class="jxr_linenumber" name="L382" href="#L382">382</a> 	}
+<a class="jxr_linenumber" name="L383" href="#L383">383</a> 
+<a class="jxr_linenumber" name="L384" href="#L384">384</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L385" href="#L385">385</a> <em class="jxr_javadoccomment">	 * Called during servlet initialization on all eager children to invoke all {@link RestPostInit} child-last methods.</em>
+<a class="jxr_linenumber" name="L386" href="#L386">386</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L387" href="#L387">387</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L388" href="#L388">388</a> <em class="jxr_javadoccomment">	 * Lazy children are intentionally excluded — they are initialized on first invocation, not at startup.</em>
 <a class="jxr_linenumber" name="L389" href="#L389">389</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L390" href="#L390">390</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L391" href="#L391">391</a> <em class="jxr_javadoccomment">	 * Lazy children are intentionally excluded — they are initialized on first invocation, not at startup.</em>
-<a class="jxr_linenumber" name="L392" href="#L392">392</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L393" href="#L393">393</a> <em class="jxr_javadoccomment">	 * @throws ServletException Error occurred.</em>
-<a class="jxr_linenumber" name="L394" href="#L394">394</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L395" href="#L395">395</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> postInit() <strong class="jxr_keyword">throws</strong> ServletException {
-<a class="jxr_linenumber" name="L396" href="#L396">396</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> childContext : children.values())
-<a class="jxr_linenumber" name="L397" href="#L397">397</a> 			childContext.postInit();
-<a class="jxr_linenumber" name="L398" href="#L398">398</a> 	}
-<a class="jxr_linenumber" name="L399" href="#L399">399</a> 
-<a class="jxr_linenumber" name="L400" href="#L400">400</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L401" href="#L401">401</a> <em class="jxr_javadoccomment">	 * Called during servlet initialization on all eager children to invoke all {@link RestPostInit} child-first methods.</em>
+<a class="jxr_linenumber" name="L390" href="#L390">390</a> <em class="jxr_javadoccomment">	 * @throws ServletException Error occurred.</em>
+<a class="jxr_linenumber" name="L391" href="#L391">391</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L392" href="#L392">392</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> postInit() <strong class="jxr_keyword">throws</strong> ServletException {
+<a class="jxr_linenumber" name="L393" href="#L393">393</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> childContext : children.values())
+<a class="jxr_linenumber" name="L394" href="#L394">394</a> 			childContext.postInit();
+<a class="jxr_linenumber" name="L395" href="#L395">395</a> 	}
+<a class="jxr_linenumber" name="L396" href="#L396">396</a> 
+<a class="jxr_linenumber" name="L397" href="#L397">397</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L398" href="#L398">398</a> <em class="jxr_javadoccomment">	 * Called during servlet initialization on all eager children to invoke all {@link RestPostInit} child-first methods.</em>
+<a class="jxr_linenumber" name="L399" href="#L399">399</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L400" href="#L400">400</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L401" href="#L401">401</a> <em class="jxr_javadoccomment">	 * Lazy children are intentionally excluded — they are initialized on first invocation, not at startup.</em>
 <a class="jxr_linenumber" name="L402" href="#L402">402</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L403" href="#L403">403</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L404" href="#L404">404</a> <em class="jxr_javadoccomment">	 * Lazy children are intentionally excluded — they are initialized on first invocation, not at startup.</em>
-<a class="jxr_linenumber" name="L405" href="#L405">405</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L406" href="#L406">406</a> <em class="jxr_javadoccomment">	 * @throws ServletException Error occurred.</em>
-<a class="jxr_linenumber" name="L407" href="#L407">407</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L408" href="#L408">408</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> postInitChildFirst() <strong class="jxr_keyword">throws</strong> ServletException {
-<a class="jxr_linenumber" name="L409" href="#L409">409</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> childContext : children.values())
-<a class="jxr_linenumber" name="L410" href="#L410">410</a> 			childContext.postInitChildFirst();
-<a class="jxr_linenumber" name="L411" href="#L411">411</a> 	}
-<a class="jxr_linenumber" name="L412" href="#L412">412</a> 
-<a class="jxr_linenumber" name="L413" href="#L413">413</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L414" href="#L414">414</a> <em class="jxr_javadoccomment">	 * Returns the lazy child entries registered on this object.</em>
+<a class="jxr_linenumber" name="L403" href="#L403">403</a> <em class="jxr_javadoccomment">	 * @throws ServletException Error occurred.</em>
+<a class="jxr_linenumber" name="L404" href="#L404">404</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L405" href="#L405">405</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> postInitChildFirst() <strong class="jxr_keyword">throws</strong> ServletException {
+<a class="jxr_linenumber" name="L406" href="#L406">406</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> childContext : children.values())
+<a class="jxr_linenumber" name="L407" href="#L407">407</a> 			childContext.postInitChildFirst();
+<a class="jxr_linenumber" name="L408" href="#L408">408</a> 	}
+<a class="jxr_linenumber" name="L409" href="#L409">409</a> 
+<a class="jxr_linenumber" name="L410" href="#L410">410</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L411" href="#L411">411</a> <em class="jxr_javadoccomment">	 * Returns the lazy child entries registered on this object.</em>
+<a class="jxr_linenumber" name="L412" href="#L412">412</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L413" href="#L413">413</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L414" href="#L414">414</a> <em class="jxr_javadoccomment">	 * Each entry carries the path prefix and materialization state. Primarily used for testing.</em>
 <a class="jxr_linenumber" name="L415" href="#L415">415</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L416" href="#L416">416</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L417" href="#L417">417</a> <em class="jxr_javadoccomment">	 * Each entry carries the path prefix and materialization state. Primarily used for testing.</em>
-<a class="jxr_linenumber" name="L418" href="#L418">418</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L419" href="#L419">419</a> <em class="jxr_javadoccomment">	 * @return An unmodifiable map of path-to-lazy-entry. Never {@code null}.</em>
-<a class="jxr_linenumber" name="L420" href="#L420">420</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L421" href="#L421">421</a> 	<strong class="jxr_keyword">public</strong> Map&lt;String,LazyChildEntry&gt; getLazyEntries() {
-<a class="jxr_linenumber" name="L422" href="#L422">422</a> 		<strong class="jxr_keyword">return</strong> lazyEntries;
-<a class="jxr_linenumber" name="L423" href="#L423">423</a> 	}
-<a class="jxr_linenumber" name="L424" href="#L424">424</a> 
-<a class="jxr_linenumber" name="L425" href="#L425">425</a> 	<em class="jxr_comment">//-------------------------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L426" href="#L426">426</a> 	<em class="jxr_comment">// Dynamic add/remove API.</em>
-<a class="jxr_linenumber" name="L427" href="#L427">427</a> 	<em class="jxr_comment">//</em>
-<a class="jxr_linenumber" name="L428" href="#L428">428</a> 	<em class="jxr_comment">// Routing reads (findMatch / asMap) are lock-free against the volatile `children` snapshot.</em>
-<a class="jxr_linenumber" name="L429" href="#L429">429</a> 	<em class="jxr_comment">// Mutations synchronize on writeLock and atomically swap in a new unmodifiable LinkedHashMap.</em>
-<a class="jxr_linenumber" name="L430" href="#L430">430</a> 	<em class="jxr_comment">//-------------------------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L431" href="#L431">431</a> 
-<a class="jxr_linenumber" name="L432" href="#L432">432</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L433" href="#L433">433</a> <em class="jxr_javadoccomment">	 * Dynamically registers a child REST resource by class, instantiating it via the parent's {@link BeanStore}.</em>
-<a class="jxr_linenumber" name="L434" href="#L434">434</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L435" href="#L435">435</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L436" href="#L436">436</a> <em class="jxr_javadoccomment">	 * The path under which the child is registered is determined by the {@link Rest#path() @Rest(path)} annotation</em>
-<a class="jxr_linenumber" name="L437" href="#L437">437</a> <em class="jxr_javadoccomment">	 * on the resource class composed against the parent's full path.</em>
-<a class="jxr_linenumber" name="L438" href="#L438">438</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L439" href="#L439">439</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L440" href="#L440">440</a> <em class="jxr_javadoccomment">	 * The new child's {@link RestContext#postInit()} and {@link RestContext#postInitChildFirst()} lifecycle hooks</em>
-<a class="jxr_linenumber" name="L441" href="#L441">441</a> <em class="jxr_javadoccomment">	 * are invoked before this method returns, mirroring the eager-init behavior of {@code @Rest(children = ...)}.</em>
-<a class="jxr_linenumber" name="L442" href="#L442">442</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L443" href="#L443">443</a> <em class="jxr_javadoccomment">	 * @param resourceClass The {@code @Rest}-annotated resource class. Must not be &lt;jk&gt;null&lt;/jk&gt;.</em>
-<a class="jxr_linenumber" name="L444" href="#L444">444</a> <em class="jxr_javadoccomment">	 * @return The newly-built child {@link RestContext}.</em>
-<a class="jxr_linenumber" name="L445" href="#L445">445</a> <em class="jxr_javadoccomment">	 * @throws ServletException If construction or lifecycle initialization of the child fails.</em>
-<a class="jxr_linenumber" name="L446" href="#L446">446</a> <em class="jxr_javadoccomment">	 * @throws IllegalStateException If a child is already registered at the resolved path.</em>
-<a class="jxr_linenumber" name="L447" href="#L447">447</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L448" href="#L448">448</a> 	<strong class="jxr_keyword">public</strong> RestContext addChild(Class&lt;?&gt; resourceClass) <strong class="jxr_keyword">throws</strong> ServletException {
-<a class="jxr_linenumber" name="L449" href="#L449">449</a> 		<strong class="jxr_keyword">return</strong> addChildInternal(resourceClass, <strong class="jxr_keyword">null</strong>, <span class="jxr_string">""</span>, false);
-<a class="jxr_linenumber" name="L450" href="#L450">450</a> 	}
-<a class="jxr_linenumber" name="L451" href="#L451">451</a> 
-<a class="jxr_linenumber" name="L452" href="#L452">452</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L453" href="#L453">453</a> <em class="jxr_javadoccomment">	 * Dynamically registers a pre-instantiated child REST resource.</em>
-<a class="jxr_linenumber" name="L454" href="#L454">454</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L455" href="#L455">455</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L456" href="#L456">456</a> <em class="jxr_javadoccomment">	 * The path under which the child is registered is determined by the {@link Rest#path() @Rest(path)} annotation</em>
-<a class="jxr_linenumber" name="L457" href="#L457">457</a> <em class="jxr_javadoccomment">	 * on the resource's class composed against the parent's full path.</em>
-<a class="jxr_linenumber" name="L458" href="#L458">458</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L459" href="#L459">459</a> <em class="jxr_javadoccomment">	 * @param resource The {@code @Rest}-annotated resource instance. Must not be &lt;jk&gt;null&lt;/jk&gt;.</em>
-<a class="jxr_linenumber" name="L460" href="#L460">460</a> <em class="jxr_javadoccomment">	 * @return The newly-built child {@link RestContext}.</em>
-<a class="jxr_linenumber" name="L461" href="#L461">461</a> <em class="jxr_javadoccomment">	 * @throws ServletException If construction or lifecycle initialization of the child fails.</em>
-<a class="jxr_linenumber" name="L462" href="#L462">462</a> <em class="jxr_javadoccomment">	 * @throws IllegalStateException If a child is already registered at the resolved path.</em>
-<a class="jxr_linenumber" name="L463" href="#L463">463</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L464" href="#L464">464</a> 	<strong class="jxr_keyword">public</strong> RestContext addChild(Object resource) <strong class="jxr_keyword">throws</strong> ServletException {
-<a class="jxr_linenumber" name="L465" href="#L465">465</a> 		<strong class="jxr_keyword">return</strong> addChildInternal(resource.getClass(), resource, <span class="jxr_string">""</span>, false);
-<a class="jxr_linenumber" name="L466" href="#L466">466</a> 	}
-<a class="jxr_linenumber" name="L467" href="#L467">467</a> 
-<a class="jxr_linenumber" name="L468" href="#L468">468</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L469" href="#L469">469</a> <em class="jxr_javadoccomment">	 * Dynamically registers a pre-instantiated child REST resource, optionally replacing any existing child at the</em>
-<a class="jxr_linenumber" name="L470" href="#L470">470</a> <em class="jxr_javadoccomment">	 * same resolved path.</em>
-<a class="jxr_linenumber" name="L471" href="#L471">471</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L472" href="#L472">472</a> <em class="jxr_javadoccomment">	 * @param resource The {@code @Rest}-annotated resource instance. Must not be &lt;jk&gt;null&lt;/jk&gt;.</em>
-<a class="jxr_linenumber" name="L473" href="#L473">473</a> <em class="jxr_javadoccomment">	 * @param replace If {@code true}, an existing child at the same path is destroyed and removed before the new</em>
-<a class="jxr_linenumber" name="L474" href="#L474">474</a> <em class="jxr_javadoccomment">	 * 	child is added. If {@code false}, an existing child causes an {@link IllegalStateException}.</em>
-<a class="jxr_linenumber" name="L475" href="#L475">475</a> <em class="jxr_javadoccomment">	 * @return The newly-built child {@link RestContext}.</em>
-<a class="jxr_linenumber" name="L476" href="#L476">476</a> <em class="jxr_javadoccomment">	 * @throws ServletException If construction or lifecycle initialization of the child fails.</em>
-<a class="jxr_linenumber" name="L477" href="#L477">477</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L478" href="#L478">478</a> 	<strong class="jxr_keyword">public</strong> RestContext addChild(Object resource, <strong class="jxr_keyword">boolean</strong> replace) <strong class="jxr_keyword">throws</strong> ServletException {
-<a class="jxr_linenumber" name="L479" href="#L479">479</a> 		<strong class="jxr_keyword">return</strong> addChildInternal(resource.getClass(), resource, <span class="jxr_string">""</span>, replace);
-<a class="jxr_linenumber" name="L480" href="#L480">480</a> 	}
-<a class="jxr_linenumber" name="L481" href="#L481">481</a> 
-<a class="jxr_linenumber" name="L482" href="#L482">482</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L483" href="#L483">483</a> <em class="jxr_javadoccomment">	 * Dynamically registers a pre-instantiated child REST resource at an explicit path.</em>
-<a class="jxr_linenumber" name="L484" href="#L484">484</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L485" href="#L485">485</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L486" href="#L486">486</a> <em class="jxr_javadoccomment">	 * The supplied {@code path} overrides whatever {@link Rest#path() @Rest(path)} would normally provide. Useful</em>
-<a class="jxr_linenumber" name="L487" href="#L487">487</a> <em class="jxr_javadoccomment">	 * for mounting the same servlet class at multiple paths, or for test fixtures that compose paths programmatically.</em>
-<a class="jxr_linenumber" name="L488" href="#L488">488</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L489" href="#L489">489</a> <em class="jxr_javadoccomment">	 * @param path The path segment under the parent at which to mount this child. Leading slashes are trimmed.</em>
-<a class="jxr_linenumber" name="L490" href="#L490">490</a> <em class="jxr_javadoccomment">	 * @param resource The {@code @Rest}-annotated resource instance. Must not be &lt;jk&gt;null&lt;/jk&gt;.</em>
-<a class="jxr_linenumber" name="L491" href="#L491">491</a> <em class="jxr_javadoccomment">	 * @return The newly-built child {@link RestContext}.</em>
-<a class="jxr_linenumber" name="L492" href="#L492">492</a> <em class="jxr_javadoccomment">	 * @throws ServletException If construction or lifecycle initialization of the child fails.</em>
-<a class="jxr_linenumber" name="L493" href="#L493">493</a> <em class="jxr_javadoccomment">	 * @throws IllegalStateException If a child is already registered at the resolved path.</em>
-<a class="jxr_linenumber" name="L494" href="#L494">494</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L495" href="#L495">495</a> 	<strong class="jxr_keyword">public</strong> RestContext addChild(String path, Object resource) <strong class="jxr_keyword">throws</strong> ServletException {
-<a class="jxr_linenumber" name="L496" href="#L496">496</a> 		<strong class="jxr_keyword">return</strong> addChildInternal(resource.getClass(), resource, path, false);
-<a class="jxr_linenumber" name="L497" href="#L497">497</a> 	}
-<a class="jxr_linenumber" name="L498" href="#L498">498</a> 
-<a class="jxr_linenumber" name="L499" href="#L499">499</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L500" href="#L500">500</a> <em class="jxr_javadoccomment">	 * Dynamically registers a pre-instantiated child REST resource at an explicit path, optionally replacing any</em>
-<a class="jxr_linenumber" name="L501" href="#L501">501</a> <em class="jxr_javadoccomment">	 * existing child at the same path.</em>
-<a class="jxr_linenumber" name="L502" href="#L502">502</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L503" href="#L503">503</a> <em class="jxr_javadoccomment">	 * @param path The path segment under the parent at which to mount this child. Leading slashes are trimmed.</em>
-<a class="jxr_linenumber" name="L504" href="#L504">504</a> <em class="jxr_javadoccomment">	 * @param resource The {@code @Rest}-annotated resource instance. Must not be &lt;jk&gt;null&lt;/jk&gt;.</em>
-<a class="jxr_linenumber" name="L505" href="#L505">505</a> <em class="jxr_javadoccomment">	 * @param replace If {@code true}, an existing child at the same path is destroyed and removed before the new</em>
-<a class="jxr_linenumber" name="L506" href="#L506">506</a> <em class="jxr_javadoccomment">	 * 	child is added. If {@code false}, an existing child causes an {@link IllegalStateException}.</em>
-<a class="jxr_linenumber" name="L507" href="#L507">507</a> <em class="jxr_javadoccomment">	 * @return The newly-built child {@link RestContext}.</em>
-<a class="jxr_linenumber" name="L508" href="#L508">508</a> <em class="jxr_javadoccomment">	 * @throws ServletException If construction or lifecycle initialization of the child fails.</em>
-<a class="jxr_linenumber" name="L509" href="#L509">509</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L510" href="#L510">510</a> 	<strong class="jxr_keyword">public</strong> RestContext addChild(String path, Object resource, <strong class="jxr_keyword">boolean</strong> replace) <strong class="jxr_keyword">throws</strong> ServletException {
-<a class="jxr_linenumber" name="L511" href="#L511">511</a> 		<strong class="jxr_keyword">return</strong> addChildInternal(resource.getClass(), resource, path, replace);
-<a class="jxr_linenumber" name="L512" href="#L512">512</a> 	}
-<a class="jxr_linenumber" name="L513" href="#L513">513</a> 
-<a class="jxr_linenumber" name="L514" href="#L514">514</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L515" href="#L515">515</a> <em class="jxr_javadoccomment">	 * Removes the child registered at the given composed path.</em>
-<a class="jxr_linenumber" name="L516" href="#L516">516</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L517" href="#L517">517</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L518" href="#L518">518</a> <em class="jxr_javadoccomment">	 * The removed child has {@link RestContext#destroy()} invoked (which runs {@code @RestDestroy} hooks and</em>
-<a class="jxr_linenumber" name="L519" href="#L519">519</a> <em class="jxr_javadoccomment">	 * recursively destroys any grandchildren), followed by {@link Servlet#destroy()} if the underlying resource is</em>
-<a class="jxr_linenumber" name="L520" href="#L520">520</a> <em class="jxr_javadoccomment">	 * a {@link Servlet}.</em>
-<a class="jxr_linenumber" name="L521" href="#L521">521</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L522" href="#L522">522</a> <em class="jxr_javadoccomment">	 * @param path The composed path key (as returned by {@link RestContext#getPath()}) of the child to remove.</em>
-<a class="jxr_linenumber" name="L523" href="#L523">523</a> <em class="jxr_javadoccomment">	 * @return The removed and destroyed {@link RestContext}, or {@code null} if no child was registered at the</em>
-<a class="jxr_linenumber" name="L524" href="#L524">524</a> <em class="jxr_javadoccomment">	 * 	given path.</em>
-<a class="jxr_linenumber" name="L525" href="#L525">525</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L526" href="#L526">526</a> 	<strong class="jxr_keyword">public</strong> RestContext removeChild(String path) {
-<a class="jxr_linenumber" name="L527" href="#L527">527</a> 		RestContext removed;
-<a class="jxr_linenumber" name="L528" href="#L528">528</a> 		<strong class="jxr_keyword">synchronized</strong> (writeLock) {
-<a class="jxr_linenumber" name="L529" href="#L529">529</a> 			removed = children.get(path);
-<a class="jxr_linenumber" name="L530" href="#L530">530</a> 			<strong class="jxr_keyword">if</strong> (removed == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L531" href="#L531">531</a> 				<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L532" href="#L532">532</a> 			<strong class="jxr_keyword">var</strong> next = <strong class="jxr_keyword">new</strong> LinkedHashMap&lt;&gt;(children);
-<a class="jxr_linenumber" name="L533" href="#L533">533</a> 			next.remove(path);
-<a class="jxr_linenumber" name="L534" href="#L534">534</a> 			children = u(next);
-<a class="jxr_linenumber" name="L535" href="#L535">535</a> 		}
-<a class="jxr_linenumber" name="L536" href="#L536">536</a> 		destroyChild(removed);
-<a class="jxr_linenumber" name="L537" href="#L537">537</a> 		<strong class="jxr_keyword">return</strong> removed;
-<a class="jxr_linenumber" name="L538" href="#L538">538</a> 	}
-<a class="jxr_linenumber" name="L539" href="#L539">539</a> 
-<a class="jxr_linenumber" name="L540" href="#L540">540</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L541" href="#L541">541</a> <em class="jxr_javadoccomment">	 * Removes the first child whose resource class matches the given type.</em>
-<a class="jxr_linenumber" name="L542" href="#L542">542</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L543" href="#L543">543</a> <em class="jxr_javadoccomment">	 * @param resourceClass The resource class to match. Matching is performed via {@link RestContext#getResourceClass()}.</em>
-<a class="jxr_linenumber" name="L544" href="#L544">544</a> <em class="jxr_javadoccomment">	 * @return The removed and destroyed {@link RestContext}, or {@code null} if no matching child was found.</em>
-<a class="jxr_linenumber" name="L545" href="#L545">545</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L546" href="#L546">546</a> 	<strong class="jxr_keyword">public</strong> RestContext removeChild(Class&lt;?&gt; resourceClass) {
-<a class="jxr_linenumber" name="L547" href="#L547">547</a> 		String key = <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L548" href="#L548">548</a> 		RestContext removed = <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L549" href="#L549">549</a> 		<strong class="jxr_keyword">synchronized</strong> (writeLock) {
-<a class="jxr_linenumber" name="L550" href="#L550">550</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> e : children.entrySet()) {
-<a class="jxr_linenumber" name="L551" href="#L551">551</a> 				<strong class="jxr_keyword">if</strong> (e.getValue().getResourceClass() == resourceClass) {
-<a class="jxr_linenumber" name="L552" href="#L552">552</a> 					key = e.getKey();
-<a class="jxr_linenumber" name="L553" href="#L553">553</a> 					removed = e.getValue();
-<a class="jxr_linenumber" name="L554" href="#L554">554</a> 					<strong class="jxr_keyword">break</strong>;
-<a class="jxr_linenumber" name="L555" href="#L555">555</a> 				}
-<a class="jxr_linenumber" name="L556" href="#L556">556</a> 			}
-<a class="jxr_linenumber" name="L557" href="#L557">557</a> 			<strong class="jxr_keyword">if</strong> (removed == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L558" href="#L558">558</a> 				<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L559" href="#L559">559</a> 			<strong class="jxr_keyword">var</strong> next = <strong class="jxr_keyword">new</strong> LinkedHashMap&lt;&gt;(children);
-<a class="jxr_linenumber" name="L560" href="#L560">560</a> 			next.remove(key);
-<a class="jxr_linenumber" name="L561" href="#L561">561</a> 			children = u(next);
-<a class="jxr_linenumber" name="L562" href="#L562">562</a> 		}
-<a class="jxr_linenumber" name="L563" href="#L563">563</a> 		destroyChild(removed);
-<a class="jxr_linenumber" name="L564" href="#L564">564</a> 		<strong class="jxr_keyword">return</strong> removed;
-<a class="jxr_linenumber" name="L565" href="#L565">565</a> 	}
-<a class="jxr_linenumber" name="L566" href="#L566">566</a> 
-<a class="jxr_linenumber" name="L567" href="#L567">567</a> 	<em class="jxr_comment">//-------------------------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L568" href="#L568">568</a> 	<em class="jxr_comment">// Internal helpers.</em>
-<a class="jxr_linenumber" name="L569" href="#L569">569</a> 	<em class="jxr_comment">//-------------------------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L570" href="#L570">570</a> 
-<a class="jxr_linenumber" name="L571" href="#L571">571</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L572" href="#L572">572</a> <em class="jxr_javadoccomment">	 * Shared child-context construction recipe — used both by the eager init memoizer in {@link RestContext} and by</em>
-<a class="jxr_linenumber" name="L573" href="#L573">573</a> <em class="jxr_javadoccomment">	 * the runtime {@link #addChild(Class) addChild} family of methods.</em>
-<a class="jxr_linenumber" name="L574" href="#L574">574</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L575" href="#L575">575</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L576" href="#L576">576</a> <em class="jxr_javadoccomment">	 * Resolves a {@link Supplier} for the resource (prefers an existing bean of the same class in the bean store,</em>
-<a class="jxr_linenumber" name="L577" href="#L577">577</a> <em class="jxr_javadoccomment">	 * otherwise instantiates via {@link BeanInstantiator}), constructs the child {@link RestContext} using the</em>
-<a class="jxr_linenumber" name="L578" href="#L578">578</a> <em class="jxr_javadoccomment">	 * supplied {@code parent} / {@code servletConfig} / {@code pathOverride}, and invokes any</em>
-<a class="jxr_linenumber" name="L579" href="#L579">579</a> <em class="jxr_javadoccomment">	 * {@code setContext(RestContext)} method on the resource via reflection (so that {@code RestServlet}-style</em>
-<a class="jxr_linenumber" name="L580" href="#L580">580</a> <em class="jxr_javadoccomment">	 * resources receive their context handle).</em>
-<a class="jxr_linenumber" name="L581" href="#L581">581</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L582" href="#L582">582</a> <em class="jxr_javadoccomment">	 * @param parent The parent {@link RestContext}. Must not be {@code null}.</em>
-<a class="jxr_linenumber" name="L583" href="#L583">583</a> <em class="jxr_javadoccomment">	 * @param beanStore The bean store to resolve instances and dependencies from. Must not be {@code null}.</em>
-<a class="jxr_linenumber" name="L584" href="#L584">584</a> <em class="jxr_javadoccomment">	 * @param servletConfig The {@link ServletConfig} to pass through to the child. May be {@code null}.</em>
-<a class="jxr_linenumber" name="L585" href="#L585">585</a> <em class="jxr_javadoccomment">	 * @param resolvedChild The normalized child declaration (class plus any host-declared {@code @Child} seed).</em>
-<a class="jxr_linenumber" name="L586" href="#L586">586</a> <em class="jxr_javadoccomment">	 * 	Must not be {@code null}.</em>
-<a class="jxr_linenumber" name="L587" href="#L587">587</a> <em class="jxr_javadoccomment">	 * @param resourceInstance A pre-supplied instance of the resource. If {@code null}, the instance is resolved</em>
-<a class="jxr_linenumber" name="L588" href="#L588">588</a> <em class="jxr_javadoccomment">	 * 	from the bean store or freshly instantiated via {@link BeanInstantiator}.</em>
-<a class="jxr_linenumber" name="L589" href="#L589">589</a> <em class="jxr_javadoccomment">	 * @param pathOverride An explicit path segment (relative to the parent). Use {@code ""} to read the path from</em>
-<a class="jxr_linenumber" name="L590" href="#L590">590</a> <em class="jxr_javadoccomment">	 * 	{@link Rest#path() @Rest(path)} on the resource class.</em>
-<a class="jxr_linenumber" name="L591" href="#L591">591</a> <em class="jxr_javadoccomment">	 * @return The newly-built child {@link RestContext}, with its {@code setContext} method (if any) invoked.</em>
-<a class="jxr_linenumber" name="L592" href="#L592">592</a> <em class="jxr_javadoccomment">	 * @throws Exception If construction or reflective wiring fails.</em>
-<a class="jxr_linenumber" name="L593" href="#L593">593</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L594" href="#L594">594</a> 	<strong class="jxr_keyword">static</strong> RestContext buildChildContext(
-<a class="jxr_linenumber" name="L595" href="#L595">595</a> 			RestContext parent,
-<a class="jxr_linenumber" name="L596" href="#L596">596</a> 			BeanStore beanStore,
-<a class="jxr_linenumber" name="L597" href="#L597">597</a> 			ServletConfig servletConfig,
-<a class="jxr_linenumber" name="L598" href="#L598">598</a> 			RestContext.ResolvedChild resolvedChild,
-<a class="jxr_linenumber" name="L599" href="#L599">599</a> 			Object resourceInstance,
-<a class="jxr_linenumber" name="L600" href="#L600">600</a> 			String pathOverride) <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L601" href="#L601">601</a> 		<strong class="jxr_keyword">var</strong> resourceClass = resolvedChild.type();
-<a class="jxr_linenumber" name="L602" href="#L602">602</a> 		Supplier&lt;?&gt; so;
-<a class="jxr_linenumber" name="L603" href="#L603">603</a> 		<strong class="jxr_keyword">if</strong> (resourceInstance != <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L604" href="#L604">604</a> 			<strong class="jxr_keyword">final</strong> Object r = resourceInstance;
-<a class="jxr_linenumber" name="L605" href="#L605">605</a> 			so = () -&gt; r;
-<a class="jxr_linenumber" name="L606" href="#L606">606</a> 		} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (beanStore.getBean(resourceClass).isPresent()) {
-<a class="jxr_linenumber" name="L607" href="#L607">607</a> 			so = () -&gt; beanStore.getBean(resourceClass).get();
-<a class="jxr_linenumber" name="L608" href="#L608">608</a> 		} <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L609" href="#L609">609</a> 			Object o = BeanInstantiator.of(resourceClass, beanStore).run();
-<a class="jxr_linenumber" name="L610" href="#L610">610</a> 			so = () -&gt; o;
-<a class="jxr_linenumber" name="L611" href="#L611">611</a> 		}
-<a class="jxr_linenumber" name="L612" href="#L612">612</a> 		<strong class="jxr_keyword">var</strong> cc = <strong class="jxr_keyword">new</strong> RestContext(<strong class="jxr_keyword">new</strong> RestContext.Args(resourceClass, parent, servletConfig, so, pathOverride, <strong class="jxr_keyword">null</strong>, <strong class="jxr_keyword">null</strong>, <strong class="jxr_keyword">null</strong>, <strong class="jxr_keyword">new</strong> RestContext.ContextKind.Child(resolvedChild)));
-<a class="jxr_linenumber" name="L613" href="#L613">613</a> 		<strong class="jxr_keyword">var</strong> mi = ClassInfo.of(so.get())
-<a class="jxr_linenumber" name="L614" href="#L614">614</a> 			.getMethod(x -&gt; x.hasName(<span class="jxr_string">"setContext"</span>) &amp;&amp; x.hasParameterTypes(RestContext.<strong class="jxr_keyword">class</strong>))
-<a class="jxr_linenumber" name="L615" href="#L615">615</a> 			.orElse(<strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L616" href="#L616">616</a> 		<strong class="jxr_keyword">if</strong> (nn(mi))
-<a class="jxr_linenumber" name="L617" href="#L617">617</a> 			mi.accessible().invoke(so.get(), cc);
-<a class="jxr_linenumber" name="L618" href="#L618">618</a> 		<strong class="jxr_keyword">return</strong> cc;
-<a class="jxr_linenumber" name="L619" href="#L619">619</a> 	}
-<a class="jxr_linenumber" name="L620" href="#L620">620</a> 
-<a class="jxr_linenumber" name="L621" href="#L621">621</a> 	<strong class="jxr_keyword">private</strong> RestContext addChildInternal(Class&lt;?&gt; resourceClass, Object resourceInstance, String pathOverride, <strong class="jxr_keyword">boolean</strong> replace) <strong class="jxr_keyword">throws</strong> ServletException {
-<a class="jxr_linenumber" name="L622" href="#L622">622</a> 		<strong class="jxr_keyword">if</strong> (parent == <strong class="jxr_keyword">null</strong> || beanStore == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L623" href="#L623">623</a> 			<strong class="jxr_keyword">throw</strong> isex(<span class="jxr_string">"Cannot add a child to a RestChildren that was not initialized with a parent RestContext."</span>);
-<a class="jxr_linenumber" name="L624" href="#L624">624</a> 		RestContext cc;
-<a class="jxr_linenumber" name="L625" href="#L625">625</a> 		<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L626" href="#L626">626</a> 			<em class="jxr_comment">// The dynamic-add API has no seed — a bare ResolvedChild preserves its existing no-override behavior.</em>
-<a class="jxr_linenumber" name="L627" href="#L627">627</a> 			cc = buildChildContext(parent, beanStore, servletConfig, RestContext.ResolvedChild.ofBare(resourceClass), resourceInstance, pathOverride);
-<a class="jxr_linenumber" name="L628" href="#L628">628</a> 		} <strong class="jxr_keyword">catch</strong> (Exception e) {
-<a class="jxr_linenumber" name="L629" href="#L629">629</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> ServletException(<span class="jxr_string">"Failed to build child REST context for "</span> + resourceClass.getName(), unwrapThrowable(e));
-<a class="jxr_linenumber" name="L630" href="#L630">630</a> 		}
-<a class="jxr_linenumber" name="L631" href="#L631">631</a> 		<strong class="jxr_keyword">var</strong> key = cc.getPath();
-<a class="jxr_linenumber" name="L632" href="#L632">632</a> 		RestContext replaced = <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L633" href="#L633">633</a> 		<strong class="jxr_keyword">synchronized</strong> (writeLock) {
-<a class="jxr_linenumber" name="L634" href="#L634">634</a> 			<strong class="jxr_keyword">if</strong> (children.containsKey(key)) {
-<a class="jxr_linenumber" name="L635" href="#L635">635</a> 				<strong class="jxr_keyword">if</strong> (! replace) {
-<a class="jxr_linenumber" name="L636" href="#L636">636</a> 					destroyQuietly(cc);
-<a class="jxr_linenumber" name="L637" href="#L637">637</a> 					<strong class="jxr_keyword">throw</strong> isex(<span class="jxr_string">"Child resource already registered at path '%s'."</span>, key);
-<a class="jxr_linenumber" name="L638" href="#L638">638</a> 				}
-<a class="jxr_linenumber" name="L639" href="#L639">639</a> 				replaced = children.get(key);
-<a class="jxr_linenumber" name="L640" href="#L640">640</a> 				<strong class="jxr_keyword">var</strong> withoutExisting = <strong class="jxr_keyword">new</strong> LinkedHashMap&lt;&gt;(children);
-<a class="jxr_linenumber" name="L641" href="#L641">641</a> 				withoutExisting.remove(key);
-<a class="jxr_linenumber" name="L642" href="#L642">642</a> 				<em class="jxr_comment">// We don't publish the intermediate "without existing" snapshot — single atomic swap below.</em>
-<a class="jxr_linenumber" name="L643" href="#L643">643</a> 				withoutExisting.put(key, cc);
-<a class="jxr_linenumber" name="L644" href="#L644">644</a> 				children = u(withoutExisting);
-<a class="jxr_linenumber" name="L645" href="#L645">645</a> 			} <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L646" href="#L646">646</a> 				<strong class="jxr_keyword">var</strong> next = <strong class="jxr_keyword">new</strong> LinkedHashMap&lt;&gt;(children);
-<a class="jxr_linenumber" name="L647" href="#L647">647</a> 				next.put(key, cc);
-<a class="jxr_linenumber" name="L648" href="#L648">648</a> 				children = u(next);
-<a class="jxr_linenumber" name="L649" href="#L649">649</a> 			}
-<a class="jxr_linenumber" name="L650" href="#L650">650</a> 		}
-<a class="jxr_linenumber" name="L651" href="#L651">651</a> 		<strong class="jxr_keyword">if</strong> (replaced != <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L652" href="#L652">652</a> 			destroyChild(replaced);
-<a class="jxr_linenumber" name="L653" href="#L653">653</a> 		cc.postInit();
-<a class="jxr_linenumber" name="L654" href="#L654">654</a> 		cc.postInitChildFirst();
-<a class="jxr_linenumber" name="L655" href="#L655">655</a> 		<strong class="jxr_keyword">return</strong> cc;
-<a class="jxr_linenumber" name="L656" href="#L656">656</a> 	}
-<a class="jxr_linenumber" name="L657" href="#L657">657</a> 
-<a class="jxr_linenumber" name="L658" href="#L658">658</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> destroyChild(RestContext child) {
-<a class="jxr_linenumber" name="L659" href="#L659">659</a> 		<em class="jxr_comment">// Servlet-backed resources delegate Servlet.destroy() through to RestContext.destroy() (see RestServlet.destroy),</em>
-<a class="jxr_linenumber" name="L660" href="#L660">660</a> 		<em class="jxr_comment">// so we must avoid double-destruction in that case — call Servlet.destroy() and let it transitively call</em>
-<a class="jxr_linenumber" name="L661" href="#L661">661</a> 		<em class="jxr_comment">// RestContext.destroy() exactly once.</em>
-<a class="jxr_linenumber" name="L662" href="#L662">662</a> 		<strong class="jxr_keyword">if</strong> (child.getResource() instanceof Servlet s)
-<a class="jxr_linenumber" name="L663" href="#L663">663</a> 			s.destroy();
-<a class="jxr_linenumber" name="L664" href="#L664">664</a> 		<strong class="jxr_keyword">else</strong>
-<a class="jxr_linenumber" name="L665" href="#L665">665</a> 			child.destroy();
-<a class="jxr_linenumber" name="L666" href="#L666">666</a> 	}
-<a class="jxr_linenumber" name="L667" href="#L667">667</a> 
-<a class="jxr_linenumber" name="L668" href="#L668">668</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> destroyQuietly(RestContext child) {
-<a class="jxr_linenumber" name="L669" href="#L669">669</a> 		<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L670" href="#L670">670</a> 			destroyChild(child);
-<a class="jxr_linenumber" name="L671" href="#L671">671</a> 		} <strong class="jxr_keyword">catch</strong> (Exception ignored) {
-<a class="jxr_linenumber" name="L672" href="#L672">672</a> 			<em class="jxr_comment">// best-effort cleanup of a child we're about to throw away</em>
-<a class="jxr_linenumber" name="L673" href="#L673">673</a> 		}
-<a class="jxr_linenumber" name="L674" href="#L674">674</a> 	}
-<a class="jxr_linenumber" name="L675" href="#L675">675</a> 
-<a class="jxr_linenumber" name="L676" href="#L676">676</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Throwable unwrapThrowable(Throwable t) {
-<a class="jxr_linenumber" name="L677" href="#L677">677</a> 		<strong class="jxr_keyword">if</strong> (t instanceof InvocationTargetException t2)
-<a class="jxr_linenumber" name="L678" href="#L678">678</a> 			<strong class="jxr_keyword">return</strong> t2.getTargetException();
-<a class="jxr_linenumber" name="L679" href="#L679">679</a> 		<strong class="jxr_keyword">return</strong> t;
-<a class="jxr_linenumber" name="L680" href="#L680">680</a> 	}
-<a class="jxr_linenumber" name="L681" href="#L681">681</a> }
+<a class="jxr_linenumber" name="L416" href="#L416">416</a> <em class="jxr_javadoccomment">	 * @return An unmodifiable map of path-to-lazy-entry. Never {@code null}.</em>
+<a class="jxr_linenumber" name="L417" href="#L417">417</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L418" href="#L418">418</a> 	<strong class="jxr_keyword">public</strong> Map&lt;String,LazyChildEntry&gt; getLazyEntries() {
+<a class="jxr_linenumber" name="L419" href="#L419">419</a> 		<strong class="jxr_keyword">return</strong> lazyEntries;
+<a class="jxr_linenumber" name="L420" href="#L420">420</a> 	}
+<a class="jxr_linenumber" name="L421" href="#L421">421</a> 
+<a class="jxr_linenumber" name="L422" href="#L422">422</a> 	<em class="jxr_comment">//-------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L423" href="#L423">423</a> 	<em class="jxr_comment">// Dynamic add/remove API.</em>
+<a class="jxr_linenumber" name="L424" href="#L424">424</a> 	<em class="jxr_comment">//</em>
+<a class="jxr_linenumber" name="L425" href="#L425">425</a> 	<em class="jxr_comment">// Routing reads (findMatch / asMap) are lock-free against the volatile `children` snapshot.</em>
+<a class="jxr_linenumber" name="L426" href="#L426">426</a> 	<em class="jxr_comment">// Mutations synchronize on writeLock and atomically swap in a new unmodifiable LinkedHashMap.</em>
+<a class="jxr_linenumber" name="L427" href="#L427">427</a> 	<em class="jxr_comment">//-------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L428" href="#L428">428</a> 
+<a class="jxr_linenumber" name="L429" href="#L429">429</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L430" href="#L430">430</a> <em class="jxr_javadoccomment">	 * Dynamically registers a child REST resource by class, instantiating it via the parent's {@link BeanStore}.</em>
+<a class="jxr_linenumber" name="L431" href="#L431">431</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L432" href="#L432">432</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L433" href="#L433">433</a> <em class="jxr_javadoccomment">	 * The path under which the child is registered is determined by the {@link Rest#path() @Rest(path)} annotation</em>
+<a class="jxr_linenumber" name="L434" href="#L434">434</a> <em class="jxr_javadoccomment">	 * on the resource class composed against the parent's full path.</em>
+<a class="jxr_linenumber" name="L435" href="#L435">435</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L436" href="#L436">436</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L437" href="#L437">437</a> <em class="jxr_javadoccomment">	 * The new child's {@link RestContext#postInit()} and {@link RestContext#postInitChildFirst()} lifecycle hooks</em>
+<a class="jxr_linenumber" name="L438" href="#L438">438</a> <em class="jxr_javadoccomment">	 * are invoked before this method returns, mirroring the eager-init behavior of {@code @Rest(children = ...)}.</em>
+<a class="jxr_linenumber" name="L439" href="#L439">439</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L440" href="#L440">440</a> <em class="jxr_javadoccomment">	 * @param resourceClass The {@code @Rest}-annotated resource class. Must not be &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L441" href="#L441">441</a> <em class="jxr_javadoccomment">	 * @return The newly-built child {@link RestContext}.</em>
+<a class="jxr_linenumber" name="L442" href="#L442">442</a> <em class="jxr_javadoccomment">	 * @throws ServletException If construction or lifecycle initialization of the child fails.</em>
+<a class="jxr_linenumber" name="L443" href="#L443">443</a> <em class="jxr_javadoccomment">	 * @throws IllegalStateException If a child is already registered at the resolved path.</em>
+<a class="jxr_linenumber" name="L444" href="#L444">444</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L445" href="#L445">445</a> 	<strong class="jxr_keyword">public</strong> RestContext addChild(Class&lt;?&gt; resourceClass) <strong class="jxr_keyword">throws</strong> ServletException {
+<a class="jxr_linenumber" name="L446" href="#L446">446</a> 		<strong class="jxr_keyword">return</strong> addChildInternal(resourceClass, <strong class="jxr_keyword">null</strong>, <span class="jxr_string">""</span>, false);
+<a class="jxr_linenumber" name="L447" href="#L447">447</a> 	}
+<a class="jxr_linenumber" name="L448" href="#L448">448</a> 
+<a class="jxr_linenumber" name="L449" href="#L449">449</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L450" href="#L450">450</a> <em class="jxr_javadoccomment">	 * Dynamically registers a pre-instantiated child REST resource.</em>
+<a class="jxr_linenumber" name="L451" href="#L451">451</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L452" href="#L452">452</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L453" href="#L453">453</a> <em class="jxr_javadoccomment">	 * The path under which the child is registered is determined by the {@link Rest#path() @Rest(path)} annotation</em>
+<a class="jxr_linenumber" name="L454" href="#L454">454</a> <em class="jxr_javadoccomment">	 * on the resource's class composed against the parent's full path.</em>
+<a class="jxr_linenumber" name="L455" href="#L455">455</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L456" href="#L456">456</a> <em class="jxr_javadoccomment">	 * @param resource The {@code @Rest}-annotated resource instance. Must not be &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L457" href="#L457">457</a> <em class="jxr_javadoccomment">	 * @return The newly-built child {@link RestContext}.</em>
+<a class="jxr_linenumber" name="L458" href="#L458">458</a> <em class="jxr_javadoccomment">	 * @throws ServletException If construction or lifecycle initialization of the child fails.</em>
+<a class="jxr_linenumber" name="L459" href="#L459">459</a> <em class="jxr_javadoccomment">	 * @throws IllegalStateException If a child is already registered at the resolved path.</em>
+<a class="jxr_linenumber" name="L460" href="#L460">460</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L461" href="#L461">461</a> 	<strong class="jxr_keyword">public</strong> RestContext addChild(Object resource) <strong class="jxr_keyword">throws</strong> ServletException {
+<a class="jxr_linenumber" name="L462" href="#L462">462</a> 		<strong class="jxr_keyword">return</strong> addChildInternal(resource.getClass(), resource, <span class="jxr_string">""</span>, false);
+<a class="jxr_linenumber" name="L463" href="#L463">463</a> 	}
+<a class="jxr_linenumber" name="L464" href="#L464">464</a> 
+<a class="jxr_linenumber" name="L465" href="#L465">465</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L466" href="#L466">466</a> <em class="jxr_javadoccomment">	 * Dynamically registers a pre-instantiated child REST resource, optionally replacing any existing child at the</em>
+<a class="jxr_linenumber" name="L467" href="#L467">467</a> <em class="jxr_javadoccomment">	 * same resolved path.</em>
+<a class="jxr_linenumber" name="L468" href="#L468">468</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L469" href="#L469">469</a> <em class="jxr_javadoccomment">	 * @param resource The {@code @Rest}-annotated resource instance. Must not be &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L470" href="#L470">470</a> <em class="jxr_javadoccomment">	 * @param replace If {@code true}, an existing child at the same path is destroyed and removed before the new</em>
+<a class="jxr_linenumber" name="L471" href="#L471">471</a> <em class="jxr_javadoccomment">	 * 	child is added. If {@code false}, an existing child causes an {@link IllegalStateException}.</em>
+<a class="jxr_linenumber" name="L472" href="#L472">472</a> <em class="jxr_javadoccomment">	 * @return The newly-built child {@link RestContext}.</em>
+<a class="jxr_linenumber" name="L473" href="#L473">473</a> <em class="jxr_javadoccomment">	 * @throws ServletException If construction or lifecycle initialization of the child fails.</em>
+<a class="jxr_linenumber" name="L474" href="#L474">474</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L475" href="#L475">475</a> 	<strong class="jxr_keyword">public</strong> RestContext addChild(Object resource, <strong class="jxr_keyword">boolean</strong> replace) <strong class="jxr_keyword">throws</strong> ServletException {
+<a class="jxr_linenumber" name="L476" href="#L476">476</a> 		<strong class="jxr_keyword">return</strong> addChildInternal(resource.getClass(), resource, <span class="jxr_string">""</span>, replace);
+<a class="jxr_linenumber" name="L477" href="#L477">477</a> 	}
+<a class="jxr_linenumber" name="L478" href="#L478">478</a> 
+<a class="jxr_linenumber" name="L479" href="#L479">479</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L480" href="#L480">480</a> <em class="jxr_javadoccomment">	 * Dynamically registers a pre-instantiated child REST resource at an explicit path.</em>
+<a class="jxr_linenumber" name="L481" href="#L481">481</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L482" href="#L482">482</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L483" href="#L483">483</a> <em class="jxr_javadoccomment">	 * The supplied {@code path} overrides whatever {@link Rest#path() @Rest(path)} would normally provide. Useful</em>
+<a class="jxr_linenumber" name="L484" href="#L484">484</a> <em class="jxr_javadoccomment">	 * for mounting the same servlet class at multiple paths, or for test fixtures that compose paths programmatically.</em>
+<a class="jxr_linenumber" name="L485" href="#L485">485</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L486" href="#L486">486</a> <em class="jxr_javadoccomment">	 * @param path The path segment under the parent at which to mount this child. Leading slashes are trimmed.</em>
+<a class="jxr_linenumber" name="L487" href="#L487">487</a> <em class="jxr_javadoccomment">	 * @param resource The {@code @Rest}-annotated resource instance. Must not be &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L488" href="#L488">488</a> <em class="jxr_javadoccomment">	 * @return The newly-built child {@link RestContext}.</em>
+<a class="jxr_linenumber" name="L489" href="#L489">489</a> <em class="jxr_javadoccomment">	 * @throws ServletException If construction or lifecycle initialization of the child fails.</em>
+<a class="jxr_linenumber" name="L490" href="#L490">490</a> <em class="jxr_javadoccomment">	 * @throws IllegalStateException If a child is already registered at the resolved path.</em>
+<a class="jxr_linenumber" name="L491" href="#L491">491</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L492" href="#L492">492</a> 	<strong class="jxr_keyword">public</strong> RestContext addChild(String path, Object resource) <strong class="jxr_keyword">throws</strong> ServletException {
+<a class="jxr_linenumber" name="L493" href="#L493">493</a> 		<strong class="jxr_keyword">return</strong> addChildInternal(resource.getClass(), resource, path, false);
+<a class="jxr_linenumber" name="L494" href="#L494">494</a> 	}
+<a class="jxr_linenumber" name="L495" href="#L495">495</a> 
+<a class="jxr_linenumber" name="L496" href="#L496">496</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L497" href="#L497">497</a> <em class="jxr_javadoccomment">	 * Dynamically registers a pre-instantiated child REST resource at an explicit path, optionally replacing any</em>
+<a class="jxr_linenumber" name="L498" href="#L498">498</a> <em class="jxr_javadoccomment">	 * existing child at the same path.</em>
+<a class="jxr_linenumber" name="L499" href="#L499">499</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L500" href="#L500">500</a> <em class="jxr_javadoccomment">	 * @param path The path segment under the parent at which to mount this child. Leading slashes are trimmed.</em>
+<a class="jxr_linenumber" name="L501" href="#L501">501</a> <em class="jxr_javadoccomment">	 * @param resource The {@code @Rest}-annotated resource instance. Must not be &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L502" href="#L502">502</a> <em class="jxr_javadoccomment">	 * @param replace If {@code true}, an existing child at the same path is destroyed and removed before the new</em>
+<a class="jxr_linenumber" name="L503" href="#L503">503</a> <em class="jxr_javadoccomment">	 * 	child is added. If {@code false}, an existing child causes an {@link IllegalStateException}.</em>
+<a class="jxr_linenumber" name="L504" href="#L504">504</a> <em class="jxr_javadoccomment">	 * @return The newly-built child {@link RestContext}.</em>
+<a class="jxr_linenumber" name="L505" href="#L505">505</a> <em class="jxr_javadoccomment">	 * @throws ServletException If construction or lifecycle initialization of the child fails.</em>
+<a class="jxr_linenumber" name="L506" href="#L506">506</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L507" href="#L507">507</a> 	<strong class="jxr_keyword">public</strong> RestContext addChild(String path, Object resource, <strong class="jxr_keyword">boolean</strong> replace) <strong class="jxr_keyword">throws</strong> ServletException {
+<a class="jxr_linenumber" name="L508" href="#L508">508</a> 		<strong class="jxr_keyword">return</strong> addChildInternal(resource.getClass(), resource, path, replace);
+<a class="jxr_linenumber" name="L509" href="#L509">509</a> 	}
+<a class="jxr_linenumber" name="L510" href="#L510">510</a> 
+<a class="jxr_linenumber" name="L511" href="#L511">511</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L512" href="#L512">512</a> <em class="jxr_javadoccomment">	 * Removes the child registered at the given composed path.</em>
+<a class="jxr_linenumber" name="L513" href="#L513">513</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L514" href="#L514">514</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L515" href="#L515">515</a> <em class="jxr_javadoccomment">	 * The removed child has {@link RestContext#destroy()} invoked (which runs {@code @RestDestroy} hooks and</em>
+<a class="jxr_linenumber" name="L516" href="#L516">516</a> <em class="jxr_javadoccomment">	 * recursively destroys any grandchildren), followed by {@link Servlet#destroy()} if the underlying resource is</em>
+<a class="jxr_linenumber" name="L517" href="#L517">517</a> <em class="jxr_javadoccomment">	 * a {@link Servlet}.</em>
+<a class="jxr_linenumber" name="L518" href="#L518">518</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L519" href="#L519">519</a> <em class="jxr_javadoccomment">	 * @param path The composed path key (as returned by {@link RestContext#getPath()}) of the child to remove.</em>
+<a class="jxr_linenumber" name="L520" href="#L520">520</a> <em class="jxr_javadoccomment">	 * @return The removed and destroyed {@link RestContext}, or {@code null} if no child was registered at the</em>
+<a class="jxr_linenumber" name="L521" href="#L521">521</a> <em class="jxr_javadoccomment">	 * 	given path.</em>
+<a class="jxr_linenumber" name="L522" href="#L522">522</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L523" href="#L523">523</a> 	<strong class="jxr_keyword">public</strong> RestContext removeChild(String path) {
+<a class="jxr_linenumber" name="L524" href="#L524">524</a> 		RestContext removed;
+<a class="jxr_linenumber" name="L525" href="#L525">525</a> 		<strong class="jxr_keyword">synchronized</strong> (writeLock) {
+<a class="jxr_linenumber" name="L526" href="#L526">526</a> 			removed = children.get(path);
+<a class="jxr_linenumber" name="L527" href="#L527">527</a> 			<strong class="jxr_keyword">if</strong> (removed == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L528" href="#L528">528</a> 				<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L529" href="#L529">529</a> 			<strong class="jxr_keyword">var</strong> next = <strong class="jxr_keyword">new</strong> LinkedHashMap&lt;&gt;(children);
+<a class="jxr_linenumber" name="L530" href="#L530">530</a> 			next.remove(path);
+<a class="jxr_linenumber" name="L531" href="#L531">531</a> 			children = u(next);
+<a class="jxr_linenumber" name="L532" href="#L532">532</a> 		}
+<a class="jxr_linenumber" name="L533" href="#L533">533</a> 		destroyChild(removed);
+<a class="jxr_linenumber" name="L534" href="#L534">534</a> 		<strong class="jxr_keyword">return</strong> removed;
+<a class="jxr_linenumber" name="L535" href="#L535">535</a> 	}
+<a class="jxr_linenumber" name="L536" href="#L536">536</a> 
+<a class="jxr_linenumber" name="L537" href="#L537">537</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L538" href="#L538">538</a> <em class="jxr_javadoccomment">	 * Removes the first child whose resource class matches the given type.</em>
+<a class="jxr_linenumber" name="L539" href="#L539">539</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L540" href="#L540">540</a> <em class="jxr_javadoccomment">	 * @param resourceClass The resource class to match. Matching is performed via {@link RestContext#getResourceClass()}.</em>
+<a class="jxr_linenumber" name="L541" href="#L541">541</a> <em class="jxr_javadoccomment">	 * @return The removed and destroyed {@link RestContext}, or {@code null} if no matching child was found.</em>
+<a class="jxr_linenumber" name="L542" href="#L542">542</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L543" href="#L543">543</a> 	<strong class="jxr_keyword">public</strong> RestContext removeChild(Class&lt;?&gt; resourceClass) {
+<a class="jxr_linenumber" name="L544" href="#L544">544</a> 		String key = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L545" href="#L545">545</a> 		RestContext removed = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L546" href="#L546">546</a> 		<strong class="jxr_keyword">synchronized</strong> (writeLock) {
+<a class="jxr_linenumber" name="L547" href="#L547">547</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> e : children.entrySet()) {
+<a class="jxr_linenumber" name="L548" href="#L548">548</a> 				<strong class="jxr_keyword">if</strong> (e.getValue().getResourceClass() == resourceClass) {
+<a class="jxr_linenumber" name="L549" href="#L549">549</a> 					key = e.getKey();
+<a class="jxr_linenumber" name="L550" href="#L550">550</a> 					removed = e.getValue();
+<a class="jxr_linenumber" name="L551" href="#L551">551</a> 					<strong class="jxr_keyword">break</strong>;
+<a class="jxr_linenumber" name="L552" href="#L552">552</a> 				}
+<a class="jxr_linenumber" name="L553" href="#L553">553</a> 			}
+<a class="jxr_linenumber" name="L554" href="#L554">554</a> 			<strong class="jxr_keyword">if</strong> (removed == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L555" href="#L555">555</a> 				<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L556" href="#L556">556</a> 			<strong class="jxr_keyword">var</strong> next = <strong class="jxr_keyword">new</strong> LinkedHashMap&lt;&gt;(children);
+<a class="jxr_linenumber" name="L557" href="#L557">557</a> 			next.remove(key);
+<a class="jxr_linenumber" name="L558" href="#L558">558</a> 			children = u(next);
+<a class="jxr_linenumber" name="L559" href="#L559">559</a> 		}
+<a class="jxr_linenumber" name="L560" href="#L560">560</a> 		destroyChild(removed);
+<a class="jxr_linenumber" name="L561" href="#L561">561</a> 		<strong class="jxr_keyword">return</strong> removed;
+<a class="jxr_linenumber" name="L562" href="#L562">562</a> 	}
+<a class="jxr_linenumber" name="L563" href="#L563">563</a> 
+<a class="jxr_linenumber" name="L564" href="#L564">564</a> 	<em class="jxr_comment">//-------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L565" href="#L565">565</a> 	<em class="jxr_comment">// Internal helpers.</em>
+<a class="jxr_linenumber" name="L566" href="#L566">566</a> 	<em class="jxr_comment">//-------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L567" href="#L567">567</a> 
+<a class="jxr_linenumber" name="L568" href="#L568">568</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L569" href="#L569">569</a> <em class="jxr_javadoccomment">	 * Shared child-context construction recipe — used both by the eager init memoizer in {@link RestContext} and by</em>
+<a class="jxr_linenumber" name="L570" href="#L570">570</a> <em class="jxr_javadoccomment">	 * the runtime {@link #addChild(Class) addChild} family of methods.</em>
+<a class="jxr_linenumber" name="L571" href="#L571">571</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L572" href="#L572">572</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L573" href="#L573">573</a> <em class="jxr_javadoccomment">	 * Resolves a {@link Supplier} for the resource (prefers an existing bean of the same class in the bean store,</em>
+<a class="jxr_linenumber" name="L574" href="#L574">574</a> <em class="jxr_javadoccomment">	 * otherwise instantiates via {@link BeanInstantiator}), constructs the child {@link RestContext} using the</em>
+<a class="jxr_linenumber" name="L575" href="#L575">575</a> <em class="jxr_javadoccomment">	 * supplied {@code parent} / {@code servletConfig} / {@code pathOverride}, and invokes any</em>
+<a class="jxr_linenumber" name="L576" href="#L576">576</a> <em class="jxr_javadoccomment">	 * {@code setContext(RestContext)} method on the resource via reflection (so that {@code RestServlet}-style</em>
+<a class="jxr_linenumber" name="L577" href="#L577">577</a> <em class="jxr_javadoccomment">	 * resources receive their context handle).</em>
+<a class="jxr_linenumber" name="L578" href="#L578">578</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L579" href="#L579">579</a> <em class="jxr_javadoccomment">	 * @param parent The parent {@link RestContext}. Must not be {@code null}.</em>
+<a class="jxr_linenumber" name="L580" href="#L580">580</a> <em class="jxr_javadoccomment">	 * @param beanStore The bean store to resolve instances and dependencies from. Must not be {@code null}.</em>
+<a class="jxr_linenumber" name="L581" href="#L581">581</a> <em class="jxr_javadoccomment">	 * @param servletConfig The {@link ServletConfig} to pass through to the child. May be {@code null}.</em>
+<a class="jxr_linenumber" name="L582" href="#L582">582</a> <em class="jxr_javadoccomment">	 * @param resolvedChild The normalized child declaration (class plus any host-declared {@code @Child} seed).</em>
+<a class="jxr_linenumber" name="L583" href="#L583">583</a> <em class="jxr_javadoccomment">	 * 	Must not be {@code null}.</em>
+<a class="jxr_linenumber" name="L584" href="#L584">584</a> <em class="jxr_javadoccomment">	 * @param resourceInstance A pre-supplied instance of the resource. If {@code null}, the instance is resolved</em>
+<a class="jxr_linenumber" name="L585" href="#L585">585</a> <em class="jxr_javadoccomment">	 * 	from the bean store or freshly instantiated via {@link BeanInstantiator}.</em>
+<a class="jxr_linenumber" name="L586" href="#L586">586</a> <em class="jxr_javadoccomment">	 * @param pathOverride An explicit path segment (relative to the parent). Use {@code ""} to read the path from</em>
+<a class="jxr_linenumber" name="L587" href="#L587">587</a> <em class="jxr_javadoccomment">	 * 	{@link Rest#path() @Rest(path)} on the resource class.</em>
+<a class="jxr_linenumber" name="L588" href="#L588">588</a> <em class="jxr_javadoccomment">	 * @return The newly-built child {@link RestContext}, with its {@code setContext} method (if any) invoked.</em>
+<a class="jxr_linenumber" name="L589" href="#L589">589</a> <em class="jxr_javadoccomment">	 * @throws Exception If construction or reflective wiring fails.</em>
+<a class="jxr_linenumber" name="L590" href="#L590">590</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L591" href="#L591">591</a> 	<strong class="jxr_keyword">static</strong> RestContext buildChildContext(
+<a class="jxr_linenumber" name="L592" href="#L592">592</a> 			RestContext parent,
+<a class="jxr_linenumber" name="L593" href="#L593">593</a> 			BeanStore beanStore,
+<a class="jxr_linenumber" name="L594" href="#L594">594</a> 			ServletConfig servletConfig,
+<a class="jxr_linenumber" name="L595" href="#L595">595</a> 			RestContext.ResolvedChild resolvedChild,
+<a class="jxr_linenumber" name="L596" href="#L596">596</a> 			Object resourceInstance,
+<a class="jxr_linenumber" name="L597" href="#L597">597</a> 			String pathOverride) <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L598" href="#L598">598</a> 		<strong class="jxr_keyword">var</strong> resourceClass = resolvedChild.type();
+<a class="jxr_linenumber" name="L599" href="#L599">599</a> 		Supplier&lt;?&gt; so;
+<a class="jxr_linenumber" name="L600" href="#L600">600</a> 		<strong class="jxr_keyword">if</strong> (resourceInstance != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L601" href="#L601">601</a> 			<strong class="jxr_keyword">final</strong> Object r = resourceInstance;
+<a class="jxr_linenumber" name="L602" href="#L602">602</a> 			so = () -&gt; r;
+<a class="jxr_linenumber" name="L603" href="#L603">603</a> 		} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (beanStore.getBean(resourceClass).isPresent()) {
+<a class="jxr_linenumber" name="L604" href="#L604">604</a> 			so = () -&gt; beanStore.getBean(resourceClass).get();
+<a class="jxr_linenumber" name="L605" href="#L605">605</a> 		} <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L606" href="#L606">606</a> 			Object o = BeanInstantiator.of(resourceClass, beanStore).run();
+<a class="jxr_linenumber" name="L607" href="#L607">607</a> 			so = () -&gt; o;
+<a class="jxr_linenumber" name="L608" href="#L608">608</a> 		}
+<a class="jxr_linenumber" name="L609" href="#L609">609</a> 		<strong class="jxr_keyword">var</strong> cc = <strong class="jxr_keyword">new</strong> RestContext(<strong class="jxr_keyword">new</strong> RestContext.Args(resourceClass, parent, servletConfig, so, pathOverride, <strong class="jxr_keyword">null</strong>, <strong class="jxr_keyword">null</strong>, <strong class="jxr_keyword">null</strong>, <strong class="jxr_keyword">new</strong> RestContext.ContextKind.Child(resolvedChild)));
+<a class="jxr_linenumber" name="L610" href="#L610">610</a> 		<strong class="jxr_keyword">var</strong> mi = ClassInfo.of(so.get())
+<a class="jxr_linenumber" name="L611" href="#L611">611</a> 			.getMethod(x -&gt; x.hasName(<span class="jxr_string">"setContext"</span>) &amp;&amp; x.hasParameterTypes(RestContext.<strong class="jxr_keyword">class</strong>))
+<a class="jxr_linenumber" name="L612" href="#L612">612</a> 			.orElse(<strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L613" href="#L613">613</a> 		<strong class="jxr_keyword">if</strong> (nn(mi))
+<a class="jxr_linenumber" name="L614" href="#L614">614</a> 			mi.accessible().invoke(so.get(), cc);
+<a class="jxr_linenumber" name="L615" href="#L615">615</a> 		<strong class="jxr_keyword">return</strong> cc;
+<a class="jxr_linenumber" name="L616" href="#L616">616</a> 	}
+<a class="jxr_linenumber" name="L617" href="#L617">617</a> 
+<a class="jxr_linenumber" name="L618" href="#L618">618</a> 	<strong class="jxr_keyword">private</strong> RestContext addChildInternal(Class&lt;?&gt; resourceClass, Object resourceInstance, String pathOverride, <strong class="jxr_keyword">boolean</strong> replace) <strong class="jxr_keyword">throws</strong> ServletException {
+<a class="jxr_linenumber" name="L619" href="#L619">619</a> 		<strong class="jxr_keyword">if</strong> (parent == <strong class="jxr_keyword">null</strong> || beanStore == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L620" href="#L620">620</a> 			<strong class="jxr_keyword">throw</strong> isex(<span class="jxr_string">"Cannot add a child to a RestChildren that was not initialized with a parent RestContext."</span>);
+<a class="jxr_linenumber" name="L621" href="#L621">621</a> 		RestContext cc;
+<a class="jxr_linenumber" name="L622" href="#L622">622</a> 		<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L623" href="#L623">623</a> 			<em class="jxr_comment">// The dynamic-add API has no seed — a bare ResolvedChild preserves its existing no-override behavior.</em>
+<a class="jxr_linenumber" name="L624" href="#L624">624</a> 			cc = buildChildContext(parent, beanStore, servletConfig, RestContext.ResolvedChild.ofBare(resourceClass), resourceInstance, pathOverride);
+<a class="jxr_linenumber" name="L625" href="#L625">625</a> 		} <strong class="jxr_keyword">catch</strong> (Exception e) {
+<a class="jxr_linenumber" name="L626" href="#L626">626</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> ServletException(<span class="jxr_string">"Failed to build child REST context for "</span> + resourceClass.getName(), unwrapThrowable(e));
+<a class="jxr_linenumber" name="L627" href="#L627">627</a> 		}
+<a class="jxr_linenumber" name="L628" href="#L628">628</a> 		<strong class="jxr_keyword">var</strong> key = cc.getPath();
+<a class="jxr_linenumber" name="L629" href="#L629">629</a> 		RestContext replaced = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L630" href="#L630">630</a> 		<strong class="jxr_keyword">synchronized</strong> (writeLock) {
+<a class="jxr_linenumber" name="L631" href="#L631">631</a> 			<strong class="jxr_keyword">if</strong> (children.containsKey(key)) {
+<a class="jxr_linenumber" name="L632" href="#L632">632</a> 				<strong class="jxr_keyword">if</strong> (! replace) {
+<a class="jxr_linenumber" name="L633" href="#L633">633</a> 					destroyQuietly(cc);
+<a class="jxr_linenumber" name="L634" href="#L634">634</a> 					<strong class="jxr_keyword">throw</strong> isex(<span class="jxr_string">"Child resource already registered at path '%s'."</span>, key);
+<a class="jxr_linenumber" name="L635" href="#L635">635</a> 				}
+<a class="jxr_linenumber" name="L636" href="#L636">636</a> 				replaced = children.get(key);
+<a class="jxr_linenumber" name="L637" href="#L637">637</a> 				<strong class="jxr_keyword">var</strong> withoutExisting = <strong class="jxr_keyword">new</strong> LinkedHashMap&lt;&gt;(children);
+<a class="jxr_linenumber" name="L638" href="#L638">638</a> 				withoutExisting.remove(key);
+<a class="jxr_linenumber" name="L639" href="#L639">639</a> 				<em class="jxr_comment">// We don't publish the intermediate "without existing" snapshot — single atomic swap below.</em>
+<a class="jxr_linenumber" name="L640" href="#L640">640</a> 				withoutExisting.put(key, cc);
+<a class="jxr_linenumber" name="L641" href="#L641">641</a> 				children = u(withoutExisting);
+<a class="jxr_linenumber" name="L642" href="#L642">642</a> 			} <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L643" href="#L643">643</a> 				<strong class="jxr_keyword">var</strong> next = <strong class="jxr_keyword">new</strong> LinkedHashMap&lt;&gt;(children);
+<a class="jxr_linenumber" name="L644" href="#L644">644</a> 				next.put(key, cc);
+<a class="jxr_linenumber" name="L645" href="#L645">645</a> 				children = u(next);
+<a class="jxr_linenumber" name="L646" href="#L646">646</a> 			}
+<a class="jxr_linenumber" name="L647" href="#L647">647</a> 		}
+<a class="jxr_linenumber" name="L648" href="#L648">648</a> 		<strong class="jxr_keyword">if</strong> (replaced != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L649" href="#L649">649</a> 			destroyChild(replaced);
+<a class="jxr_linenumber" name="L650" href="#L650">650</a> 		cc.postInit();
+<a class="jxr_linenumber" name="L651" href="#L651">651</a> 		cc.postInitChildFirst();
+<a class="jxr_linenumber" name="L652" href="#L652">652</a> 		<strong class="jxr_keyword">return</strong> cc;
+<a class="jxr_linenumber" name="L653" href="#L653">653</a> 	}
+<a class="jxr_linenumber" name="L654" href="#L654">654</a> 
+<a class="jxr_linenumber" name="L655" href="#L655">655</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> destroyChild(RestContext child) {
+<a class="jxr_linenumber" name="L656" href="#L656">656</a> 		<em class="jxr_comment">// Servlet-backed resources delegate Servlet.destroy() through to RestContext.destroy() (see RestServlet.destroy),</em>
+<a class="jxr_linenumber" name="L657" href="#L657">657</a> 		<em class="jxr_comment">// so we must avoid double-destruction in that case — call Servlet.destroy() and let it transitively call</em>
+<a class="jxr_linenumber" name="L658" href="#L658">658</a> 		<em class="jxr_comment">// RestContext.destroy() exactly once.</em>
+<a class="jxr_linenumber" name="L659" href="#L659">659</a> 		<strong class="jxr_keyword">if</strong> (child.getResource() instanceof Servlet s)
+<a class="jxr_linenumber" name="L660" href="#L660">660</a> 			s.destroy();
+<a class="jxr_linenumber" name="L661" href="#L661">661</a> 		<strong class="jxr_keyword">else</strong>
+<a class="jxr_linenumber" name="L662" href="#L662">662</a> 			child.destroy();
+<a class="jxr_linenumber" name="L663" href="#L663">663</a> 	}
+<a class="jxr_linenumber" name="L664" href="#L664">664</a> 
+<a class="jxr_linenumber" name="L665" href="#L665">665</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> destroyQuietly(RestContext child) {
+<a class="jxr_linenumber" name="L666" href="#L666">666</a> 		<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L667" href="#L667">667</a> 			destroyChild(child);
+<a class="jxr_linenumber" name="L668" href="#L668">668</a> 		} <strong class="jxr_keyword">catch</strong> (Exception ignored) {
+<a class="jxr_linenumber" name="L669" href="#L669">669</a> 			<em class="jxr_comment">// best-effort cleanup of a child we're about to throw away</em>
+<a class="jxr_linenumber" name="L670" href="#L670">670</a> 		}
+<a class="jxr_linenumber" name="L671" href="#L671">671</a> 	}
+<a class="jxr_linenumber" name="L672" href="#L672">672</a> 
+<a class="jxr_linenumber" name="L673" href="#L673">673</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Throwable unwrapThrowable(Throwable t) {
+<a class="jxr_linenumber" name="L674" href="#L674">674</a> 		<strong class="jxr_keyword">if</strong> (t instanceof InvocationTargetException t2)
+<a class="jxr_linenumber" name="L675" href="#L675">675</a> 			<strong class="jxr_keyword">return</strong> t2.getTargetException();
+<a class="jxr_linenumber" name="L676" href="#L676">676</a> 		<strong class="jxr_keyword">return</strong> t;
+<a class="jxr_linenumber" name="L677" href="#L677">677</a> 	}
+<a class="jxr_linenumber" name="L678" href="#L678">678</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

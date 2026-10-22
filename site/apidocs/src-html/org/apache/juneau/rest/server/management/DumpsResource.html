@@ -57,21 +57,21 @@
 <span class="source-line-no">044</span><span id="line-44"> * @since 10.0.0</span>
 <span class="source-line-no">045</span><span id="line-45"> */</span>
 <span class="source-line-no">046</span><span id="line-46">@Rest(path="/dumps")</span>
-<span class="source-line-no">047</span><span id="line-47">public class DumpsResource extends BasicRestResource {</span>
-<span class="source-line-no">048</span><span id="line-48"></span>
-<span class="source-line-no">049</span><span id="line-49">   private final DumpsManager defaultManager = new DumpsManager();</span>
-<span class="source-line-no">050</span><span id="line-50"></span>
-<span class="source-line-no">051</span><span id="line-51">   /**</span>
-<span class="source-line-no">052</span><span id="line-52">    * Returns the {@link DumpsManager} worker, resolved from the bean store when a consumer registers one, else a</span>
-<span class="source-line-no">053</span><span id="line-53">    * built-in default.  Resolving through the bean store lets consumers (and tests) supply an alternate worker</span>
-<span class="source-line-no">054</span><span id="line-54">    * without subclassing.</span>
-<span class="source-line-no">055</span><span id="line-55">    *</span>
-<span class="source-line-no">056</span><span id="line-56">    * @param req The HTTP request (its context's bean store is searched).</span>
-<span class="source-line-no">057</span><span id="line-57">    * @return The resolved manager; never &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">058</span><span id="line-58">    */</span>
-<span class="source-line-no">059</span><span id="line-59">   @SuppressWarnings({</span>
-<span class="source-line-no">060</span><span id="line-60">      "resource" // The bean store is owned by the RestContext; this only borrows a bean and must not close it.</span>
-<span class="source-line-no">061</span><span id="line-61">   })</span>
+<span class="source-line-no">047</span><span id="line-47">@SuppressWarnings({</span>
+<span class="source-line-no">048</span><span id="line-48">   "resource" // getHeapDump() returns a self-deleting InputStream that the REST framework streams to the response and closes.</span>
+<span class="source-line-no">049</span><span id="line-49">})</span>
+<span class="source-line-no">050</span><span id="line-50">public class DumpsResource extends BasicRestResource {</span>
+<span class="source-line-no">051</span><span id="line-51"></span>
+<span class="source-line-no">052</span><span id="line-52">   private final DumpsManager defaultManager = new DumpsManager();</span>
+<span class="source-line-no">053</span><span id="line-53"></span>
+<span class="source-line-no">054</span><span id="line-54">   /**</span>
+<span class="source-line-no">055</span><span id="line-55">    * Returns the {@link DumpsManager} worker, resolved from the bean store when a consumer registers one, else a</span>
+<span class="source-line-no">056</span><span id="line-56">    * built-in default.  Resolving through the bean store lets consumers (and tests) supply an alternate worker</span>
+<span class="source-line-no">057</span><span id="line-57">    * without subclassing.</span>
+<span class="source-line-no">058</span><span id="line-58">    *</span>
+<span class="source-line-no">059</span><span id="line-59">    * @param req The HTTP request (its context's bean store is searched).</span>
+<span class="source-line-no">060</span><span id="line-60">    * @return The resolved manager; never &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">061</span><span id="line-61">    */</span>
 <span class="source-line-no">062</span><span id="line-62">   protected DumpsManager manager(RestRequest req) {</span>
 <span class="source-line-no">063</span><span id="line-63">      return req.getContext().getBeanStore().getBean(DumpsManager.class).orElse(defaultManager);</span>
 <span class="source-line-no">064</span><span id="line-64">   }</span>
@@ -110,21 +110,18 @@
 <span class="source-line-no">097</span><span id="line-97">      summary="Heap dump",</span>
 <span class="source-line-no">098</span><span id="line-98">      description="Produces a HotSpot heap dump (hprof).  Disabled by default; opt in via DumpsSettings."</span>
 <span class="source-line-no">099</span><span id="line-99">   )</span>
-<span class="source-line-no">100</span><span id="line-100">   @SuppressWarnings({</span>
-<span class="source-line-no">101</span><span id="line-101">      "resource" // The returned stream is handed off to the framework's InputStreamProcessor, which pipes then closes it (and the backing temp file self-deletes on close).</span>
-<span class="source-line-no">102</span><span id="line-102">   })</span>
-<span class="source-line-no">103</span><span id="line-103">   public InputStream getHeapDump(RestRequest req, RestResponse res) throws IOException {</span>
-<span class="source-line-no">104</span><span id="line-104">      var manager = manager(req);</span>
-<span class="source-line-no">105</span><span id="line-105">      if (! manager.resolveSettings(req.getContext()).isHeapDumpEnabled())</span>
-<span class="source-line-no">106</span><span id="line-106">         throw new Forbidden("The /heapdump endpoint is disabled.  Register a DumpsSettings bean with heapDump enabled to use it.");</span>
-<span class="source-line-no">107</span><span id="line-107">      var stream = manager.heapDumpStream(true);</span>
-<span class="source-line-no">108</span><span id="line-108">      if (stream == null)  // HTT: null only on a non-HotSpot JVM — not reproducible on HotSpot CI.</span>
-<span class="source-line-no">109</span><span id="line-109">         throw new NotImplemented("Heap dumps are not supported on this JVM (no HotSpotDiagnosticMXBean).");</span>
-<span class="source-line-no">110</span><span id="line-110">      res.setHeader("Content-Type", "application/octet-stream");</span>
-<span class="source-line-no">111</span><span id="line-111">      res.setHeader("Content-Disposition", "attachment; filename=\"heapdump.hprof\"");</span>
-<span class="source-line-no">112</span><span id="line-112">      return stream;</span>
-<span class="source-line-no">113</span><span id="line-113">   }</span>
-<span class="source-line-no">114</span><span id="line-114">}</span>
+<span class="source-line-no">100</span><span id="line-100">   public InputStream getHeapDump(RestRequest req, RestResponse res) throws IOException {</span>
+<span class="source-line-no">101</span><span id="line-101">      var manager = manager(req);</span>
+<span class="source-line-no">102</span><span id="line-102">      if (! manager.resolveSettings(req.getContext()).isHeapDumpEnabled())</span>
+<span class="source-line-no">103</span><span id="line-103">         throw new Forbidden("The /heapdump endpoint is disabled.  Register a DumpsSettings bean with heapDump enabled to use it.");</span>
+<span class="source-line-no">104</span><span id="line-104">      var stream = manager.heapDumpStream(true);</span>
+<span class="source-line-no">105</span><span id="line-105">      if (stream == null)  // HTT: null only on a non-HotSpot JVM — not reproducible on HotSpot CI.</span>
+<span class="source-line-no">106</span><span id="line-106">         throw new NotImplemented("Heap dumps are not supported on this JVM (no HotSpotDiagnosticMXBean).");</span>
+<span class="source-line-no">107</span><span id="line-107">      res.setHeader("Content-Type", "application/octet-stream");</span>
+<span class="source-line-no">108</span><span id="line-108">      res.setHeader("Content-Disposition", "attachment; filename=\"heapdump.hprof\"");</span>
+<span class="source-line-no">109</span><span id="line-109">      return stream;</span>
+<span class="source-line-no">110</span><span id="line-110">   }</span>
+<span class="source-line-no">111</span><span id="line-111">}</span>
 
 
 

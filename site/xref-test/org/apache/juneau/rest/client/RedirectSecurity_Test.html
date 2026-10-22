@@ -110,28 +110,7 @@
 <a class="jxr_linenumber" name="L102" href="#L102">102</a> 		<strong class="jxr_keyword">var</strong> to = URI.create(<span class="jxr_string">"https://example.com/other"</span>);
 <a class="jxr_linenumber" name="L103" href="#L103">103</a> 		assertTrue(RedirectSecurity.sameOrigin(from, to));
 <a class="jxr_linenumber" name="L104" href="#L104">104</a> 	}
-<a class="jxr_linenumber" name="L105" href="#L105">105</a> 
-<a class="jxr_linenumber" name="L106" href="#L106">106</a> 	@Test <strong class="jxr_keyword">void</strong> f01_sameOrigin_implicitHttpDefaultPort_matches() {
-<a class="jxr_linenumber" name="L107" href="#L107">107</a> 		<em class="jxr_comment">// Exercises normalizedPort()'s "http" switch case (only "https" was reached via other tests).</em>
-<a class="jxr_linenumber" name="L108" href="#L108">108</a> 		<strong class="jxr_keyword">var</strong> from = URI.create(<span class="jxr_string">"http://example.com/api"</span>);
-<a class="jxr_linenumber" name="L109" href="#L109">109</a> 		<strong class="jxr_keyword">var</strong> to = URI.create(<span class="jxr_string">"http://example.com:80/other"</span>);
-<a class="jxr_linenumber" name="L110" href="#L110">110</a> 		assertTrue(RedirectSecurity.sameOrigin(from, to));
-<a class="jxr_linenumber" name="L111" href="#L111">111</a> 	}
-<a class="jxr_linenumber" name="L112" href="#L112">112</a> 
-<a class="jxr_linenumber" name="L113" href="#L113">113</a> 	@Test <strong class="jxr_keyword">void</strong> f02_sameOrigin_nonHttpScheme_implicitPortsMatch() {
-<a class="jxr_linenumber" name="L114" href="#L114">114</a> 		<em class="jxr_comment">// Exercises normalizedPort()'s "default" switch case (-1) for a scheme with no well-known default port.</em>
-<a class="jxr_linenumber" name="L115" href="#L115">115</a> 		<strong class="jxr_keyword">var</strong> from = URI.create(<span class="jxr_string">"ftp://example.com/api"</span>);
-<a class="jxr_linenumber" name="L116" href="#L116">116</a> 		<strong class="jxr_keyword">var</strong> to = URI.create(<span class="jxr_string">"ftp://example.com/other"</span>);
-<a class="jxr_linenumber" name="L117" href="#L117">117</a> 		assertTrue(RedirectSecurity.sameOrigin(from, to));
-<a class="jxr_linenumber" name="L118" href="#L118">118</a> 	}
-<a class="jxr_linenumber" name="L119" href="#L119">119</a> 
-<a class="jxr_linenumber" name="L120" href="#L120">120</a> 	@Test <strong class="jxr_keyword">void</strong> g01_nonNullSchemeWithNullHost_<strong class="jxr_keyword">throws</strong>() {
-<a class="jxr_linenumber" name="L121" href="#L121">121</a> 		<em class="jxr_comment">// mailto: URIs have a non-null scheme but no host, exercising the scheme!=null / host==null combination.</em>
-<a class="jxr_linenumber" name="L122" href="#L122">122</a> 		<strong class="jxr_keyword">var</strong> mailto = URI.create(<span class="jxr_string">"mailto:foo@example.com"</span>);
-<a class="jxr_linenumber" name="L123" href="#L123">123</a> 		<strong class="jxr_keyword">var</strong> absolute = URI.create(<span class="jxr_string">"https://example.com/"</span>);
-<a class="jxr_linenumber" name="L124" href="#L124">124</a> 		assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; RedirectSecurity.sameOrigin(mailto, absolute));
-<a class="jxr_linenumber" name="L125" href="#L125">125</a> 	}
-<a class="jxr_linenumber" name="L126" href="#L126">126</a> }
+<a class="jxr_linenumber" name="L105" href="#L105">105</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

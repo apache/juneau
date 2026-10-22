@@ -111,8 +111,8 @@
 <span class="source-line-no">098</span><span id="line-98"> * &lt;/ul&gt;</span>
 <span class="source-line-no">099</span><span id="line-99"> */</span>
 <span class="source-line-no">100</span><span id="line-100">@SuppressWarnings({</span>
-<span class="source-line-no">101</span><span id="line-101">   "unchecked", // Type erasure requires unchecked casts in content parsing</span>
-<span class="source-line-no">102</span><span id="line-102">   "resource", // Resource management handled externally</span>
+<span class="source-line-no">101</span><span id="line-101">   "resource", // Resource management handled externally</span>
+<span class="source-line-no">102</span><span id="line-102">   "unchecked" // Type erasure requires unchecked casts in content parsing</span>
 <span class="source-line-no">103</span><span id="line-103">})</span>
 <span class="source-line-no">104</span><span id="line-104">public class RequestContent {</span>
 <span class="source-line-no">105</span><span id="line-105"></span>
@@ -599,54 +599,81 @@
 <span class="source-line-no">586</span><span id="line-586">            .locale(locale)</span>
 <span class="source-line-no">587</span><span id="line-587">            .timeZone(timeZone.orElse(null))</span>
 <span class="source-line-no">588</span><span id="line-588">            .mediaType(mediaType2)</span>
-<span class="source-line-no">589</span><span id="line-589">            // Note: `p.createSession()` returns a *session* builder (a ParserSession.Builder subtype, e.g.</span>
-<span class="source-line-no">590</span><span id="line-590">            // ReaderParserSession.Builder), never a Parser.Builder subtype, so `ReaderParser.Builder.class`</span>
-<span class="source-line-no">591</span><span id="line-591">            // below can never match. Likely meant `ReaderParserSession.Builder.class` -- flagged as an</span>
-<span class="source-line-no">592</span><span id="line-592">            // incidental finding, not fixed here (out of scope for a coverage-only change).</span>
-<span class="source-line-no">593</span><span id="line-593">            .apply(ReaderParser.Builder.class, x -&gt; x.streamCharset(req.getCharset()))  // HTT: unreachable -- apply()'s type filter never matches (see note above), so the lambda body is provably dead code</span>
-<span class="source-line-no">594</span><span id="line-594">            .schema(schema)</span>
-<span class="source-line-no">595</span><span id="line-595">            .debug(req.isDebug() ? true : null)</span>
-<span class="source-line-no">596</span><span id="line-596">            .build();</span>
-<span class="source-line-no">597</span><span id="line-597">         // @formatter:on</span>
-<span class="source-line-no">598</span><span id="line-598"></span>
-<span class="source-line-no">599</span><span id="line-599">         try (Closeable in = session.isReaderParser() ? getUnbufferedReader() : getInputStream()) {  // HTT: the compiler-generated null-check on `in` in this try-with-resources' implicit finally is unreachable -- both getUnbufferedReader() and getInputStream() are annotated/documented to never return null, and the ternary itself has both arms covered by RequestContent_Test (h/k groups).</span>
-<span class="source-line-no">600</span><span id="line-600">            var o = session.read(in, cm);</span>
-<span class="source-line-no">601</span><span id="line-601">            if (nn(schema))  // HTT: unreachable-false-arm -- schema is unconditionally defaulted to HttpPartSchema.DEFAULT a few lines above and never reset to null before this point.</span>
-<span class="source-line-no">602</span><span id="line-602">               schema.validateOutput(o);</span>
-<span class="source-line-no">603</span><span id="line-603">            return o;</span>
-<span class="source-line-no">604</span><span id="line-604">         }</span>
-<span class="source-line-no">605</span><span id="line-605">      }</span>
+<span class="source-line-no">589</span><span id="line-589">            .apply(ReaderParser.Builder.class, x -&gt; x.streamCharset(req.getCharset()))</span>
+<span class="source-line-no">590</span><span id="line-590">            .schema(schema)</span>
+<span class="source-line-no">591</span><span id="line-591">            .debug(req.isDebugMarshalling() ? true : null)</span>
+<span class="source-line-no">592</span><span id="line-592">            .build();</span>
+<span class="source-line-no">593</span><span id="line-593">         // @formatter:on</span>
+<span class="source-line-no">594</span><span id="line-594"></span>
+<span class="source-line-no">595</span><span id="line-595">         try (Closeable in = session.isReaderParser() ? getUnbufferedReader() : getInputStream()) {</span>
+<span class="source-line-no">596</span><span id="line-596">            var o = session.read(in, cm);</span>
+<span class="source-line-no">597</span><span id="line-597">            drainQuietly(in);</span>
+<span class="source-line-no">598</span><span id="line-598">            if (nn(schema))</span>
+<span class="source-line-no">599</span><span id="line-599">               schema.validateOutput(o);</span>
+<span class="source-line-no">600</span><span id="line-600">            return o;</span>
+<span class="source-line-no">601</span><span id="line-601">         }</span>
+<span class="source-line-no">602</span><span id="line-602">      }</span>
+<span class="source-line-no">603</span><span id="line-603"></span>
+<span class="source-line-no">604</span><span id="line-604">      if (cm.hasReaderMutater())</span>
+<span class="source-line-no">605</span><span id="line-605">         return convertUnparsed(getReader(), cm);</span>
 <span class="source-line-no">606</span><span id="line-606"></span>
-<span class="source-line-no">607</span><span id="line-607">      if (cm.hasReaderMutater())</span>
-<span class="source-line-no">608</span><span id="line-608">         return BasicConverter.INSTANCE.to(getReader(), cm.inner());</span>
+<span class="source-line-no">607</span><span id="line-607">      if (cm.hasInputStreamMutater())</span>
+<span class="source-line-no">608</span><span id="line-608">         return convertUnparsed(getInputStream(), cm);</span>
 <span class="source-line-no">609</span><span id="line-609"></span>
-<span class="source-line-no">610</span><span id="line-610">      if (cm.hasInputStreamMutater())</span>
-<span class="source-line-no">611</span><span id="line-611">         return BasicConverter.INSTANCE.to(getInputStream(), cm.inner());</span>
-<span class="source-line-no">612</span><span id="line-612"></span>
-<span class="source-line-no">613</span><span id="line-613">      var mt = getMediaType();</span>
+<span class="source-line-no">610</span><span id="line-610">      var mt = getMediaType();</span>
+<span class="source-line-no">611</span><span id="line-611"></span>
+<span class="source-line-no">612</span><span id="line-612">      if ((isEmpty(s(mt)) || mt.toString().startsWith("text/plain")) &amp;&amp; cm.hasStringMutater())</span>
+<span class="source-line-no">613</span><span id="line-613">         return BasicConverter.INSTANCE.to(asString(), cm.inner());</span>
 <span class="source-line-no">614</span><span id="line-614"></span>
-<span class="source-line-no">615</span><span id="line-615">      if ((isEmpty(s(mt)) || mt.toString().startsWith("text/plain")) &amp;&amp; cm.hasStringMutater())</span>
-<span class="source-line-no">616</span><span id="line-616">         return BasicConverter.INSTANCE.to(asString(), cm.inner());</span>
+<span class="source-line-no">615</span><span id="line-615">      throw unsupportedMediaType(null);</span>
+<span class="source-line-no">616</span><span id="line-616">   }</span>
 <span class="source-line-no">617</span><span id="line-617"></span>
-<span class="source-line-no">618</span><span id="line-618">      var ct = req.getHeader(ContentType.class);</span>
-<span class="source-line-no">619</span><span id="line-619">      throw new UnsupportedMediaType("Unsupported media-type in request header 'Content-Type': '%s'\n\tSupported media-types: %s",</span>
-<span class="source-line-no">620</span><span id="line-620">         ct.isPresent() ? ct.get().asMediaType().orElse(null) : "not-specified", Json5.of(req.getOpContext().getParsers().getSupportedMediaTypes()));</span>
-<span class="source-line-no">621</span><span id="line-621">   }</span>
-<span class="source-line-no">622</span><span id="line-622"></span>
-<span class="source-line-no">623</span><span id="line-623">   /**</span>
-<span class="source-line-no">624</span><span id="line-624">    * Same as {@link #getReader()}, but doesn't encapsulate the result in a {@link BufferedReader};</span>
-<span class="source-line-no">625</span><span id="line-625">    *</span>
-<span class="source-line-no">626</span><span id="line-626">    * @return An unbuffered reader.</span>
-<span class="source-line-no">627</span><span id="line-627">    * @throws IOException Thrown by underlying stream.</span>
-<span class="source-line-no">628</span><span id="line-628">    */</span>
-<span class="source-line-no">629</span><span id="line-629">   protected Reader getUnbufferedReader() throws IOException {</span>
-<span class="source-line-no">630</span><span id="line-630">      if (nn(content))</span>
-<span class="source-line-no">631</span><span id="line-631">         return new CharSequenceReader(new String(content, UTF8));</span>
-<span class="source-line-no">632</span><span id="line-632">      return new InputStreamReader(getInputStream(), req.getCharset());</span>
-<span class="source-line-no">633</span><span id="line-633">   }</span>
-<span class="source-line-no">634</span><span id="line-634"></span>
-<span class="source-line-no">635</span><span id="line-635">   boolean isLoaded() { return nn(content); }</span>
-<span class="source-line-no">636</span><span id="line-636">}</span>
+<span class="source-line-no">618</span><span id="line-618">   // Converts the unparsed content using the type's own Reader/InputStream constructor or factory method.</span>
+<span class="source-line-no">619</span><span id="line-619">   //</span>
+<span class="source-line-no">620</span><span id="line-620">   // When the request named a Content-Type that matched no parser, a conversion failure means the content was in a</span>
+<span class="source-line-no">621</span><span id="line-621">   // media type nobody here understands (for example JSON5 into the strict-JSON JsonMap(Reader) constructor), so it is</span>
+<span class="source-line-no">622</span><span id="line-622">   // reported as 415 rather than as a 500.  Without a Content-Type the failure propagates as before.</span>
+<span class="source-line-no">623</span><span id="line-623">   private &lt;T&gt; T convertUnparsed(Object in, ClassMeta&lt;T&gt; cm) throws UnsupportedMediaType {</span>
+<span class="source-line-no">624</span><span id="line-624">      try {</span>
+<span class="source-line-no">625</span><span id="line-625">         return BasicConverter.INSTANCE.to(in, cm.inner());</span>
+<span class="source-line-no">626</span><span id="line-626">      } catch (RuntimeException e) {</span>
+<span class="source-line-no">627</span><span id="line-627">         if (isEmpty(s(req.getHeader(ContentType.class).flatMap(ContentType::asMediaType).orElse(null))))</span>
+<span class="source-line-no">628</span><span id="line-628">            throw e;</span>
+<span class="source-line-no">629</span><span id="line-629">         throw unsupportedMediaType(e);</span>
+<span class="source-line-no">630</span><span id="line-630">      }</span>
+<span class="source-line-no">631</span><span id="line-631">   }</span>
+<span class="source-line-no">632</span><span id="line-632"></span>
+<span class="source-line-no">633</span><span id="line-633">   private UnsupportedMediaType unsupportedMediaType(Throwable cause) {</span>
+<span class="source-line-no">634</span><span id="line-634">      var ct = req.getHeader(ContentType.class);</span>
+<span class="source-line-no">635</span><span id="line-635">      return new UnsupportedMediaType(cause, "Unsupported media-type in request header 'Content-Type': '%s'\n\tSupported media-types: %s",</span>
+<span class="source-line-no">636</span><span id="line-636">         ct.isPresent() ? ct.get().asMediaType().orElse(null) : "not-specified", Json5.of(req.getOpContext().getParsers().getSupportedMediaTypes()));</span>
+<span class="source-line-no">637</span><span id="line-637">   }</span>
+<span class="source-line-no">638</span><span id="line-638"></span>
+<span class="source-line-no">639</span><span id="line-639">   // Reads and discards whatever remains of the request entity after a parser has returned.</span>
+<span class="source-line-no">640</span><span id="line-640">   //</span>
+<span class="source-line-no">641</span><span id="line-641">   // A parser stops as soon as the top-level value is complete, leaving the end of the entity unread: for a</span>
+<span class="source-line-no">642</span><span id="line-642">   // Transfer-Encoding: chunked request, at least the zero-length terminating chunk whenever the client flushes it</span>
+<span class="source-line-no">643</span><span id="line-643">   // separately from the content.  If that is still unread when the response completes, the container finds</span>
+<span class="source-line-no">644</span><span id="line-644">   // unconsumed request content and aborts the connection.  By then the response is usually committed, so no</span>
+<span class="source-line-no">645</span><span id="line-645">   // Connection: close can be added, and a client reusing the pooled keep-alive connection fails its next request</span>
+<span class="source-line-no">646</span><span id="line-646">   // with an immediate EOF.  Draining here (blocking until end-of-stream) keeps the connection reusable.</span>
+<span class="source-line-no">647</span><span id="line-647">   //</span>
+<span class="source-line-no">648</span><span id="line-648">   // Best effort: the stream is still bounded by @Rest(maxInput), and any failure (limit exceeded, client gone)</span>
+<span class="source-line-no">649</span><span id="line-649">   // just falls back to the container's own unconsumed-content handling.</span>
+<span class="source-line-no">650</span><span id="line-650">   /**</span>
+<span class="source-line-no">651</span><span id="line-651">    * Same as {@link #getReader()}, but doesn't encapsulate the result in a {@link BufferedReader};</span>
+<span class="source-line-no">652</span><span id="line-652">    *</span>
+<span class="source-line-no">653</span><span id="line-653">    * @return An unbuffered reader.</span>
+<span class="source-line-no">654</span><span id="line-654">    * @throws IOException Thrown by underlying stream.</span>
+<span class="source-line-no">655</span><span id="line-655">    */</span>
+<span class="source-line-no">656</span><span id="line-656">   protected Reader getUnbufferedReader() throws IOException {</span>
+<span class="source-line-no">657</span><span id="line-657">      if (nn(content))</span>
+<span class="source-line-no">658</span><span id="line-658">         return new CharSequenceReader(new String(content, UTF8));</span>
+<span class="source-line-no">659</span><span id="line-659">      return new InputStreamReader(getInputStream(), req.getCharset());</span>
+<span class="source-line-no">660</span><span id="line-660">   }</span>
+<span class="source-line-no">661</span><span id="line-661"></span>
+<span class="source-line-no">662</span><span id="line-662">   boolean isLoaded() { return nn(content); }</span>
+<span class="source-line-no">663</span><span id="line-663">}</span>
 
 
 

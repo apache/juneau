@@ -60,6 +60,10 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color">
 <div class="block">Built-in health, readiness, and liveness probe support for Juneau REST servers.</div>
 </div>
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.rest.server.mcp">org.apache.juneau.rest.server.mcp</a></div>
+<div class="col-last odd-row-color">
+<div class="block">Revision-neutral core for MCP endpoints built on <code>juneau-rest-server</code>.</div>
+</div>
 </div>
 <section class="class-uses">
 <ul class="block-list">
@@ -81,15 +85,53 @@ loadScripts(document, 'script');</script>
 <div class="col-last odd-row-color">
 <div class="block">Marks this service as ready to receive traffic.</div>
 </div>
-<div class="col-first even-row-color"><code>static <a href="../ReadinessState.html" title="class in org.apache.juneau.rest.server.health">ReadinessState</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">ReadinessState.</span><code><a href="../ReadinessState.html#resolve(org.apache.juneau.commons.inject.BeanStore)" class="member-name-link">resolve</a><wbr>(<a href="../../../../commons/inject/BeanStore.html" title="interface in org.apache.juneau.commons.inject">BeanStore</a>&nbsp;beanStore)</code></div>
+<div class="col-first even-row-color"><code><a href="../ReadinessState.html" title="class in org.apache.juneau.rest.server.health">ReadinessState</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">ReadinessState.</span><code><a href="../ReadinessState.html#onOutOfService(java.lang.Object,java.lang.Runnable)" class="member-name-link">onOutOfService</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;key,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Runnable.html" title="class or interface in java.lang" class="external-link">Runnable</a>&nbsp;callback)</code></div>
 <div class="col-last even-row-color">
-<div class="block">Resolves the readiness state from the given bean store, falling back to the <a href="../ReadinessState.html#shared()"><code>shared</code></a> instance.</div>
+<div class="block">Registers a callback to run when this state is <a href="../ReadinessState.html#markOutOfService()"><code>marked out of service</code></a>.</div>
 </div>
 <div class="col-first odd-row-color"><code>static <a href="../ReadinessState.html" title="class in org.apache.juneau.rest.server.health">ReadinessState</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">ReadinessState.</span><code><a href="../ReadinessState.html#shared()" class="member-name-link">shared</a>()</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">ReadinessState.</span><code><a href="../ReadinessState.html#resolve(org.apache.juneau.commons.inject.BeanStore)" class="member-name-link">resolve</a><wbr>(<a href="../../../../commons/inject/BeanStore.html" title="interface in org.apache.juneau.commons.inject">BeanStore</a>&nbsp;beanStore)</code></div>
 <div class="col-last odd-row-color">
+<div class="block">Resolves the readiness state from the given bean store, falling back to the <a href="../ReadinessState.html#shared()"><code>shared</code></a> instance.</div>
+</div>
+<div class="col-first even-row-color"><code>static <a href="../ReadinessState.html" title="class in org.apache.juneau.rest.server.health">ReadinessState</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">ReadinessState.</span><code><a href="../ReadinessState.html#shared()" class="member-name-link">shared</a>()</code></div>
+<div class="col-last even-row-color">
 <div class="block">Returns the process-wide shared readiness state.</div>
+</div>
+</div>
+<div class="caption"><span>Methods in <a href="../package-summary.html">org.apache.juneau.rest.server.health</a> with parameters of type <a href="../ReadinessState.html" title="class in org.apache.juneau.rest.server.health">ReadinessState</a></span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier and Type</div>
+<div class="table-header col-second">Method</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code>void</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">ReadinessStateAware.</span><code><a href="../ReadinessStateAware.html#acceptReadinessState(org.apache.juneau.rest.server.health.ReadinessState)" class="member-name-link">acceptReadinessState</a><wbr>(<a href="../ReadinessState.html" title="class in org.apache.juneau.rest.server.health">ReadinessState</a>&nbsp;state)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Receives the lifecycle-owned readiness state.</div>
+</div>
+<div class="col-first odd-row-color"><code><a href="../HealthServlet.html" title="class in org.apache.juneau.rest.server.health">HealthServlet</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">HealthServlet.</span><code><a href="../HealthServlet.html#publishReadinessState(org.apache.juneau.rest.server.health.ReadinessState)" class="member-name-link">publishReadinessState</a><wbr>(<a href="../ReadinessState.html" title="class in org.apache.juneau.rest.server.health">ReadinessState</a>&nbsp;state)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Publishes the lifecycle-owned <a href="../ReadinessState.html" title="class in org.apache.juneau.rest.server.health"><code>ReadinessState</code></a> that this probe should observe.</div>
+</div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="org.apache.juneau.rest.server.mcp">
+<h2>Uses of <a href="../ReadinessState.html" title="class in org.apache.juneau.rest.server.health">ReadinessState</a> in <a href="../../mcp/package-summary.html">org.apache.juneau.rest.server.mcp</a></h2>
+<div class="caption"><span>Methods in <a href="../../mcp/package-summary.html">org.apache.juneau.rest.server.mcp</a> with parameters of type <a href="../ReadinessState.html" title="class in org.apache.juneau.rest.server.health">ReadinessState</a></span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier and Type</div>
+<div class="table-header col-second">Method</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code>void</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">AbstractMcpRestServlet.</span><code><a href="../../mcp/AbstractMcpRestServlet.html#acceptReadinessState(org.apache.juneau.rest.server.health.ReadinessState)" class="member-name-link">acceptReadinessState</a><wbr>(<a href="../ReadinessState.html" title="class in org.apache.juneau.rest.server.health">ReadinessState</a>&nbsp;state)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Closes this servlet's open subscription streams as soon as the embedded server begins shutting down.</div>
 </div>
 </div>
 </section>

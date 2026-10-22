@@ -310,8 +310,8 @@ loadScripts(document, 'script');</script>
       Only <c>http</c>/<c>https</c> schemes are permitted when the override yields an absolute URL; other schemes
       are rejected (SSRF guardrail).
    <li class='note'>
-      Honored by the next-generation engine (<c>RestClient.remote(...)</c>) only; the classic engine currently
-      ignores this attribute.
+      Honored by both the next-generation engine (<c>RestClient.remote(...)</c>) and the classic engine
+      (<c>RestClient.getRemote(...)</c>), with the same http/https-only scheme guard on both.
  </ul></div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -348,8 +348,8 @@ loadScripts(document, 'script');</script>
 
  <h5 class='section'>Notes:</h5><ul>
    <li class='note'>
-      Honored by the next-generation engine (<c>RestClient.remote(...)</c>) only; the classic engine currently
-      ignores this attribute.
+      Honored by both the next-generation engine (<c>RestClient.remote(...)</c>) and the classic engine
+      (<c>RestClient.getRemote(...)</c>).
  </ul></div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -384,8 +384,8 @@ loadScripts(document, 'script');</script>
 
  <h5 class='section'>Notes:</h5><ul>
    <li class='note'>
-      Honored by the next-generation engine (<c>RestClient.remote(...)</c>) only; the classic engine currently
-      ignores this attribute.
+      Honored by both the next-generation engine (<c>RestClient.remote(...)</c>) and the classic engine
+      (<c>RestClient.getRemote(...)</c>).
  </ul></div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -415,8 +415,8 @@ loadScripts(document, 'script');</script>
       Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a>
       (e.g. <js>"$S{mySystemProperty}"</js>).
    <li class='note'>
-      Honored by the next-generation engine (<c>RestClient.remote(...)</c>) only; the classic engine currently
-      ignores this attribute.
+      Honored by both the next-generation engine (<c>RestClient.remote(...)</c>) and the classic engine
+      (<c>RestClient.getRemote(...)</c>).
  </ul></div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -446,8 +446,8 @@ loadScripts(document, 'script');</script>
       Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a>
       (e.g. <js>"$S{mySystemProperty}"</js>).
    <li class='note'>
-      Honored by the next-generation engine (<c>RestClient.remote(...)</c>) only; the classic engine currently
-      ignores this attribute.
+      Honored by both the next-generation engine (<c>RestClient.remote(...)</c>) and the classic engine
+      (<c>RestClient.getRemote(...)</c>).
  </ul></div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -477,8 +477,8 @@ loadScripts(document, 'script');</script>
       Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a>
       (e.g. <js>"$S{mySystemProperty}"</js>).
    <li class='note'>
-      Honored by the next-generation engine (<c>RestClient.remote(...)</c>) only; the classic engine currently
-      ignores this attribute.
+      Honored by both the next-generation engine (<c>RestClient.remote(...)</c>) and the classic engine
+      (<c>RestClient.getRemote(...)</c>).
  </ul></div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -535,8 +535,8 @@ loadScripts(document, 'script');</script>
 
  <h5 class='section'>Notes:</h5><ul>
    <li class='note'>
-      Honored by the next-generation engine (<c>RestClient.remote(...)</c>) only; the classic engine currently
-      ignores this attribute.
+      Honored by both the next-generation engine (<c>RestClient.remote(...)</c>) and the classic engine
+      (<c>RestClient.getRemote(...)</c>).
  </ul></div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -575,8 +575,8 @@ loadScripts(document, 'script');</script>
 
  <h5 class='section'>Notes:</h5><ul>
    <li class='note'>
-      Honored by the next-generation engine (<c>RestClient.remote(...)</c>) only; the classic engine currently
-      ignores this attribute.
+      Honored by both the next-generation engine (<c>RestClient.remote(...)</c>) and the classic engine
+      (<c>RestClient.getRemote(...)</c>).
  </ul></div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -601,8 +601,8 @@ loadScripts(document, 'script');</script>
 
  <h5 class='section'>Notes:</h5><ul>
    <li class='note'>
-      Honored by the next-generation engine (<c>RestClient.remote(...)</c>) only; the classic engine currently
-      ignores this attribute.
+      Honored by both the next-generation engine (<c>RestClient.remote(...)</c>) and the classic engine
+      (<c>RestClient.getRemote(...)</c>).
  </ul></div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -629,8 +629,8 @@ loadScripts(document, 'script');</script>
 
  <h5 class='section'>Notes:</h5><ul>
    <li class='note'>
-      Honored by the next-generation engine (<c>RestClient.remote(...)</c>) only; the classic engine currently
-      ignores this attribute.
+      Honored by both the next-generation engine (<c>RestClient.remote(...)</c>) and the classic engine
+      (<c>RestClient.getRemote(...)</c>).
  </ul></div>
 <dl class="notes">
 <dt>Returns:</dt>

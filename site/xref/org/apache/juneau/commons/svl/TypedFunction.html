@@ -64,7 +64,7 @@
 <a class="jxr_linenumber" name="L56" href="#L56">56</a>  <em class="jxr_javadoccomment"> * &lt;/p&gt;</em>
 <a class="jxr_linenumber" name="L57" href="#L57">57</a>  <em class="jxr_javadoccomment"> */</em>
 <a class="jxr_linenumber" name="L58" href="#L58">58</a>  @SuppressWarnings({
-<a class="jxr_linenumber" name="L59" href="#L59">59</a>  	<span class="jxr_string">"java:S3776"</span>, <em class="jxr_comment">// Cognitive complexity acceptable for the reflection-driven dispatch.</em>
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>  	<span class="jxr_string">"java:S3776"</span> <em class="jxr_comment">// Cognitive complexity acceptable for the reflection-driven dispatch.</em>
 <a class="jxr_linenumber" name="L60" href="#L60">60</a>  })
 <a class="jxr_linenumber" name="L61" href="#L61">61</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">abstract</strong> <strong class="jxr_keyword">class</strong> TypedFunction <strong class="jxr_keyword">implements</strong> <a name="VarFunction" href="../../../../../org/apache/juneau/commons/svl/VarFunction.html#VarFunction">VarFunction</a> {
 <a class="jxr_linenumber" name="L62" href="#L62">62</a>  
@@ -92,7 +92,7 @@
 <a class="jxr_linenumber" name="L84" href="#L84">84</a>  		@Override <em class="jxr_comment">/* Content-based: the 'argTypes' array must compare by content, not identity (S6218). */</em>
 <a class="jxr_linenumber" name="L85" href="#L85">85</a>  		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> equals(Object o) {
 <a class="jxr_linenumber" name="L86" href="#L86">86</a>  			<strong class="jxr_keyword">return</strong> o instanceof Overload x
-<a class="jxr_linenumber" name="L87" href="#L87">87</a>  				&amp;&amp; Objects.equals(method, x.method)
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>  				&amp;&amp; eq(method, x.method)
 <a class="jxr_linenumber" name="L88" href="#L88">88</a>  				&amp;&amp; Arrays.equals(argTypes, x.argTypes)
 <a class="jxr_linenumber" name="L89" href="#L89">89</a>  				&amp;&amp; takesSession == x.takesSession
 <a class="jxr_linenumber" name="L90" href="#L90">90</a>  				&amp;&amp; variadic == x.variadic;
@@ -173,7 +173,7 @@
 <a class="jxr_linenumber" name="L165" href="#L165">165</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Overload[] findInvokeOverloads(Class&lt;? <strong class="jxr_keyword">extends</strong> TypedFunction&gt; cls) {
 <a class="jxr_linenumber" name="L166" href="#L166">166</a> 		<strong class="jxr_keyword">var</strong> found = <strong class="jxr_keyword">new</strong> ArrayList&lt;Overload&gt;();
 <a class="jxr_linenumber" name="L167" href="#L167">167</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> m : cls.getMethods()) {
-<a class="jxr_linenumber" name="L168" href="#L168">168</a> 			<strong class="jxr_keyword">if</strong> (!<span class="jxr_string">"invoke"</span>.equals(m.getName())
+<a class="jxr_linenumber" name="L168" href="#L168">168</a> 			<strong class="jxr_keyword">if</strong> (neq(m.getName(), <span class="jxr_string">"invoke"</span>)
 <a class="jxr_linenumber" name="L169" href="#L169">169</a> 				|| m.getDeclaringClass() == TypedFunction.<strong class="jxr_keyword">class</strong>
 <a class="jxr_linenumber" name="L170" href="#L170">170</a> 				|| m.getDeclaringClass() == Object.<strong class="jxr_keyword">class</strong>
 <a class="jxr_linenumber" name="L171" href="#L171">171</a> 				|| m.getDeclaringClass() == VarFunction.<strong class="jxr_keyword">class</strong>)

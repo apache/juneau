@@ -87,11 +87,13 @@
 <span class="source-line-no">074</span><span id="line-74">    *</span>
 <span class="source-line-no">075</span><span id="line-75">    * @param args Standard Spring Boot arguments.</span>
 <span class="source-line-no">076</span><span id="line-76">    */</span>
-<span class="source-line-no">077</span><span id="line-77">   @SuppressWarnings("resource") // the returned application context intentionally lives for the app's lifetime.</span>
-<span class="source-line-no">078</span><span id="line-78">   public static void main(String[] args) {</span>
-<span class="source-line-no">079</span><span id="line-79">      SpringApplication.run(SpringExampleApplication.class, args);</span>
-<span class="source-line-no">080</span><span id="line-80">   }</span>
-<span class="source-line-no">081</span><span id="line-81">}</span>
+<span class="source-line-no">077</span><span id="line-77">   @SuppressWarnings({</span>
+<span class="source-line-no">078</span><span id="line-78">      "resource" // the returned application context intentionally lives for the app's lifetime.</span>
+<span class="source-line-no">079</span><span id="line-79">   })</span>
+<span class="source-line-no">080</span><span id="line-80">   public static void main(String[] args) {</span>
+<span class="source-line-no">081</span><span id="line-81">      SpringApplication.run(SpringExampleApplication.class, args);</span>
+<span class="source-line-no">082</span><span id="line-82">   }</span>
+<span class="source-line-no">083</span><span id="line-83">}</span>
 
 
 

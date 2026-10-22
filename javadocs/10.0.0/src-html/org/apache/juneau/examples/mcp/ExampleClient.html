@@ -57,42 +57,42 @@
 <span class="source-line-no">044</span><span id="line-44"> * wire format carries, so what you see here is not byte-for-byte what came off the wire.</span>
 <span class="source-line-no">045</span><span id="line-45"> */</span>
 <span class="source-line-no">046</span><span id="line-46">@SuppressWarnings({</span>
-<span class="source-line-no">047</span><span id="line-47">   "java:S106" // Example walkthrough intentionally prints to stdout; console output is the demo's deliverable.</span>
-<span class="source-line-no">048</span><span id="line-48">})</span>
-<span class="source-line-no">049</span><span id="line-49">public final class ExampleClient {</span>
-<span class="source-line-no">050</span><span id="line-50"></span>
-<span class="source-line-no">051</span><span id="line-51">   /** The {@code title} argument/variable name shared by the tool, prompt, and resource-template calls below. */</span>
-<span class="source-line-no">052</span><span id="line-52">   private static final String TITLE_ARG = "title";</span>
-<span class="source-line-no">053</span><span id="line-53"></span>
-<span class="source-line-no">054</span><span id="line-54">   /** The sample note title used throughout this walkthrough. */</span>
-<span class="source-line-no">055</span><span id="line-55">   private static final String GROCERIES_NOTE_TITLE = "groceries";</span>
-<span class="source-line-no">056</span><span id="line-56"></span>
-<span class="source-line-no">057</span><span id="line-57">   private ExampleClient() {}</span>
-<span class="source-line-no">058</span><span id="line-58"></span>
-<span class="source-line-no">059</span><span id="line-59">   /**</span>
-<span class="source-line-no">060</span><span id="line-60">    * Runs the walkthrough against a running {@link ExampleServer}.</span>
-<span class="source-line-no">061</span><span id="line-61">    *</span>
-<span class="source-line-no">062</span><span id="line-62">    * @param args Optional single argument: the server endpoint (defaults to {@code http://localhost:5000/}).</span>
-<span class="source-line-no">063</span><span id="line-63">    * @throws Exception If any step fails.</span>
-<span class="source-line-no">064</span><span id="line-64">    */</span>
-<span class="source-line-no">065</span><span id="line-65">   @SuppressWarnings({</span>
-<span class="source-line-no">066</span><span id="line-66">      "java:S112" // throws Exception intentional - example main() kept simple for demo readability</span>
-<span class="source-line-no">067</span><span id="line-67">   })</span>
-<span class="source-line-no">068</span><span id="line-68">   public static void main(String[] args) throws Exception {</span>
-<span class="source-line-no">069</span><span id="line-69">      var endpoint = args.length &gt; 0 ? args[0] : "http://localhost:" + ExampleServer.DEFAULT_PORT + "/";</span>
-<span class="source-line-no">070</span><span id="line-70">      try (var client = connect(endpoint)) {</span>
-<span class="source-line-no">071</span><span id="line-71">         run(client);</span>
-<span class="source-line-no">072</span><span id="line-72">      }</span>
-<span class="source-line-no">073</span><span id="line-73">   }</span>
-<span class="source-line-no">074</span><span id="line-74"></span>
-<span class="source-line-no">075</span><span id="line-75">   /**</span>
-<span class="source-line-no">076</span><span id="line-76">    * Builds and connects a client that advertises the elicitation capability.</span>
-<span class="source-line-no">077</span><span id="line-77">    *</span>
-<span class="source-line-no">078</span><span id="line-78">    * @param endpoint The MCP server endpoint URL.</span>
-<span class="source-line-no">079</span><span id="line-79">    * @return A connected client (its mandatory {@code server/discover} handshake already done).</span>
-<span class="source-line-no">080</span><span id="line-80">    * @throws IOException If the connection or handshake fails.</span>
-<span class="source-line-no">081</span><span id="line-81">    */</span>
-<span class="source-line-no">082</span><span id="line-82">   @SuppressWarnings("resource") // returned client is owned and closed by the caller (see main() above).</span>
+<span class="source-line-no">047</span><span id="line-47">   "java:S106", // Example walkthrough intentionally prints to stdout; console output is the demo's deliverable.</span>
+<span class="source-line-no">048</span><span id="line-48">   "java:S112" // main(), run() and the demo helpers declare throws Exception so the walkthrough can propagate any client failure without boilerplate</span>
+<span class="source-line-no">049</span><span id="line-49">})</span>
+<span class="source-line-no">050</span><span id="line-50">public final class ExampleClient {</span>
+<span class="source-line-no">051</span><span id="line-51"></span>
+<span class="source-line-no">052</span><span id="line-52">   /** The {@code title} argument/variable name shared by the tool, prompt, and resource-template calls below. */</span>
+<span class="source-line-no">053</span><span id="line-53">   private static final String TITLE_ARG = "title";</span>
+<span class="source-line-no">054</span><span id="line-54"></span>
+<span class="source-line-no">055</span><span id="line-55">   /** The sample note title used throughout this walkthrough. */</span>
+<span class="source-line-no">056</span><span id="line-56">   private static final String GROCERIES_NOTE_TITLE = "groceries";</span>
+<span class="source-line-no">057</span><span id="line-57"></span>
+<span class="source-line-no">058</span><span id="line-58">   private ExampleClient() {}</span>
+<span class="source-line-no">059</span><span id="line-59"></span>
+<span class="source-line-no">060</span><span id="line-60">   /**</span>
+<span class="source-line-no">061</span><span id="line-61">    * Runs the walkthrough against a running {@link ExampleServer}.</span>
+<span class="source-line-no">062</span><span id="line-62">    *</span>
+<span class="source-line-no">063</span><span id="line-63">    * @param args Optional single argument: the server endpoint (defaults to {@code http://localhost:5000/}).</span>
+<span class="source-line-no">064</span><span id="line-64">    * @throws Exception If any step fails.</span>
+<span class="source-line-no">065</span><span id="line-65">    */</span>
+<span class="source-line-no">066</span><span id="line-66">   public static void main(String[] args) throws Exception {</span>
+<span class="source-line-no">067</span><span id="line-67">      var endpoint = args.length &gt; 0 ? args[0] : "http://localhost:" + ExampleServer.DEFAULT_PORT + "/";</span>
+<span class="source-line-no">068</span><span id="line-68">      try (var client = connect(endpoint)) {</span>
+<span class="source-line-no">069</span><span id="line-69">         run(client);</span>
+<span class="source-line-no">070</span><span id="line-70">      }</span>
+<span class="source-line-no">071</span><span id="line-71">   }</span>
+<span class="source-line-no">072</span><span id="line-72"></span>
+<span class="source-line-no">073</span><span id="line-73">   /**</span>
+<span class="source-line-no">074</span><span id="line-74">    * Builds and connects a client that advertises the elicitation capability.</span>
+<span class="source-line-no">075</span><span id="line-75">    *</span>
+<span class="source-line-no">076</span><span id="line-76">    * @param endpoint The MCP server endpoint URL.</span>
+<span class="source-line-no">077</span><span id="line-77">    * @return A connected client (its mandatory {@code server/discover} handshake already done).</span>
+<span class="source-line-no">078</span><span id="line-78">    * @throws IOException If the connection or handshake fails.</span>
+<span class="source-line-no">079</span><span id="line-79">    */</span>
+<span class="source-line-no">080</span><span id="line-80">   @SuppressWarnings({</span>
+<span class="source-line-no">081</span><span id="line-81">      "resource" // returned client is owned and closed by the caller (see main() above).</span>
+<span class="source-line-no">082</span><span id="line-82">   })</span>
 <span class="source-line-no">083</span><span id="line-83">   public static McpClient connect(String endpoint) throws IOException {</span>
 <span class="source-line-no">084</span><span id="line-84">      return McpClient.connect(McpClient.builder()</span>
 <span class="source-line-no">085</span><span id="line-85">         .endpoint(endpoint)</span>
@@ -108,105 +108,96 @@
 <span class="source-line-no">095</span><span id="line-95">    * @param client The connected MCP client.</span>
 <span class="source-line-no">096</span><span id="line-96">    * @throws Exception If any step fails.</span>
 <span class="source-line-no">097</span><span id="line-97">    */</span>
-<span class="source-line-no">098</span><span id="line-98">   @SuppressWarnings({</span>
-<span class="source-line-no">099</span><span id="line-99">      "java:S112" // throws Exception intentional - example walkthrough kept simple for demo readability</span>
-<span class="source-line-no">100</span><span id="line-100">   })</span>
-<span class="source-line-no">101</span><span id="line-101">   public static void run(McpClient client) throws Exception {</span>
-<span class="source-line-no">102</span><span id="line-102"></span>
-<span class="source-line-no">103</span><span id="line-103">      section("1. server/discover — who are we talking to?");</span>
-<span class="source-line-no">104</span><span id="line-104">      var discovered = client.discoveredServer();</span>
-<span class="source-line-no">105</span><span id="line-105">      System.out.println("   server info:  " + Json.of(discovered.getServerInfo()));</span>
-<span class="source-line-no">106</span><span id="line-106">      System.out.println("   versions:     " + Json.of(discovered.getSupportedVersions()));</span>
-<span class="source-line-no">107</span><span id="line-107">      System.out.println("   capabilities: " + Json.of(discovered.getCapabilities()));</span>
-<span class="source-line-no">108</span><span id="line-108">      System.out.println("   instructions: " + discovered.getInstructions());</span>
-<span class="source-line-no">109</span><span id="line-109"></span>
-<span class="source-line-no">110</span><span id="line-110">      section("2. Discovery — list every advertised surface");</span>
-<span class="source-line-no">111</span><span id="line-111">      System.out.println("   tools:             " + Json.of(client.listTools().getTools()));</span>
-<span class="source-line-no">112</span><span id="line-112">      System.out.println("   prompts:           " + Json.of(client.listPrompts().getPrompts()));</span>
-<span class="source-line-no">113</span><span id="line-113">      System.out.println("   resources:         " + Json.of(client.listResources().getResources()));</span>
-<span class="source-line-no">114</span><span id="line-114">      System.out.println("   resourceTemplates: " + Json.of(client.listResourceTemplates().getResourceTemplates()));</span>
+<span class="source-line-no">098</span><span id="line-98">   public static void run(McpClient client) throws Exception {</span>
+<span class="source-line-no">099</span><span id="line-99"></span>
+<span class="source-line-no">100</span><span id="line-100">      section("1. server/discover — who are we talking to?");</span>
+<span class="source-line-no">101</span><span id="line-101">      var discovered = client.discoveredServer();</span>
+<span class="source-line-no">102</span><span id="line-102">      System.out.println("   server info:  " + Json.of(discovered.getServerInfo()));</span>
+<span class="source-line-no">103</span><span id="line-103">      System.out.println("   versions:     " + Json.of(discovered.getSupportedVersions()));</span>
+<span class="source-line-no">104</span><span id="line-104">      System.out.println("   capabilities: " + Json.of(discovered.getCapabilities()));</span>
+<span class="source-line-no">105</span><span id="line-105">      System.out.println("   instructions: " + discovered.getInstructions());</span>
+<span class="source-line-no">106</span><span id="line-106"></span>
+<span class="source-line-no">107</span><span id="line-107">      section("2. Discovery — list every advertised surface");</span>
+<span class="source-line-no">108</span><span id="line-108">      System.out.println("   tools:             " + Json.of(client.listTools().getTools()));</span>
+<span class="source-line-no">109</span><span id="line-109">      System.out.println("   prompts:           " + Json.of(client.listPrompts().getPrompts()));</span>
+<span class="source-line-no">110</span><span id="line-110">      System.out.println("   resources:         " + Json.of(client.listResources().getResources()));</span>
+<span class="source-line-no">111</span><span id="line-111">      System.out.println("   resourceTemplates: " + Json.of(client.listResourceTemplates().getResourceTemplates()));</span>
+<span class="source-line-no">112</span><span id="line-112"></span>
+<span class="source-line-no">113</span><span id="line-113">      section("3. tools/call publishNote — store a note (and notify subscribers)");</span>
+<span class="source-line-no">114</span><span id="line-114">      System.out.println("   -&gt; " + client.callToolText("publishNote", Map.of(TITLE_ARG, GROCERIES_NOTE_TITLE, "body", "Milk, eggs, bread")));</span>
 <span class="source-line-no">115</span><span id="line-115"></span>
-<span class="source-line-no">116</span><span id="line-116">      section("3. tools/call publishNote — store a note (and notify subscribers)");</span>
-<span class="source-line-no">117</span><span id="line-117">      System.out.println("   -&gt; " + client.callToolText("publishNote", Map.of(TITLE_ARG, GROCERIES_NOTE_TITLE, "body", "Milk, eggs, bread")));</span>
-<span class="source-line-no">118</span><span id="line-118"></span>
-<span class="source-line-no">119</span><span id="line-119">      section("4. resources/read note:///groceries — read it back via the template");</span>
-<span class="source-line-no">120</span><span id="line-120">      var read = client.readResource(NoteStore.uriFor(GROCERIES_NOTE_TITLE));</span>
-<span class="source-line-no">121</span><span id="line-121">      System.out.println("   " + Json.of(read.getContents()));</span>
+<span class="source-line-no">116</span><span id="line-116">      section("4. resources/read note:///groceries — read it back via the template");</span>
+<span class="source-line-no">117</span><span id="line-117">      var read = client.readResource(NoteStore.uriFor(GROCERIES_NOTE_TITLE));</span>
+<span class="source-line-no">118</span><span id="line-118">      System.out.println("   " + Json.of(read.getContents()));</span>
+<span class="source-line-no">119</span><span id="line-119"></span>
+<span class="source-line-no">120</span><span id="line-120">      section("5. resources/read note:///index — the fixed index resource");</span>
+<span class="source-line-no">121</span><span id="line-121">      System.out.println("   " + Json.of(client.readResource(NoteStore.SCHEME + "index").getContents()));</span>
 <span class="source-line-no">122</span><span id="line-122"></span>
-<span class="source-line-no">123</span><span id="line-123">      section("5. resources/read note:///index — the fixed index resource");</span>
-<span class="source-line-no">124</span><span id="line-124">      System.out.println("   " + Json.of(client.readResource(NoteStore.SCHEME + "index").getContents()));</span>
-<span class="source-line-no">125</span><span id="line-125"></span>
-<span class="source-line-no">126</span><span id="line-126">      section("6. completion/complete — complete the template's {title} variable for prefix 'gr'");</span>
-<span class="source-line-no">127</span><span id="line-127">      var ref = new ResourceTemplateReference().setUri(NoteStore.SCHEME + "{title}");</span>
-<span class="source-line-no">128</span><span id="line-128">      var completion = client.complete(ref, TITLE_ARG, "gr", null);</span>
-<span class="source-line-no">129</span><span id="line-129">      System.out.println("   suggestions: " + Json.of(completion.getCompletion()));</span>
-<span class="source-line-no">130</span><span id="line-130"></span>
-<span class="source-line-no">131</span><span id="line-131">      section("7. prompts/get summarize — render a prompt from the stored note");</span>
-<span class="source-line-no">132</span><span id="line-132">      var prompt = client.getPrompt("summarize", Map.of(TITLE_ARG, GROCERIES_NOTE_TITLE));</span>
-<span class="source-line-no">133</span><span id="line-133">      System.out.println("   " + Json.of(prompt.getMessages()));</span>
+<span class="source-line-no">123</span><span id="line-123">      section("6. completion/complete — complete the template's {title} variable for prefix 'gr'");</span>
+<span class="source-line-no">124</span><span id="line-124">      var ref = new ResourceTemplateReference().setUri(NoteStore.SCHEME + "{title}");</span>
+<span class="source-line-no">125</span><span id="line-125">      var completion = client.complete(ref, TITLE_ARG, "gr", null);</span>
+<span class="source-line-no">126</span><span id="line-126">      System.out.println("   suggestions: " + Json.of(completion.getCompletion()));</span>
+<span class="source-line-no">127</span><span id="line-127"></span>
+<span class="source-line-no">128</span><span id="line-128">      section("7. prompts/get summarize — render a prompt from the stored note");</span>
+<span class="source-line-no">129</span><span id="line-129">      var prompt = client.getPrompt("summarize", Map.of(TITLE_ARG, GROCERIES_NOTE_TITLE));</span>
+<span class="source-line-no">130</span><span id="line-130">      System.out.println("   " + Json.of(prompt.getMessages()));</span>
+<span class="source-line-no">131</span><span id="line-131"></span>
+<span class="source-line-no">132</span><span id="line-132">      section("8. subscriptions/listen — receive a live change notification");</span>
+<span class="source-line-no">133</span><span id="line-133">      runSubscriptionDemo(client);</span>
 <span class="source-line-no">134</span><span id="line-134"></span>
-<span class="source-line-no">135</span><span id="line-135">      section("8. subscriptions/listen — receive a live change notification");</span>
-<span class="source-line-no">136</span><span id="line-136">      runSubscriptionDemo(client);</span>
-<span class="source-line-no">137</span><span id="line-137"></span>
-<span class="source-line-no">138</span><span id="line-138">      section("9. tools/call deleteNote — an elicitation (confirm) round-trip, auto-answered");</span>
-<span class="source-line-no">139</span><span id="line-139">      var deleted = client.callToolWithElicitation("deleteNote", Map.of(TITLE_ARG, GROCERIES_NOTE_TITLE), requests -&gt; {</span>
-<span class="source-line-no">140</span><span id="line-140">         // The server asked one or more questions; answer each with ACCEPT + confirm=true. A real client</span>
-<span class="source-line-no">141</span><span id="line-141">         // would present these to a user (the schema in each request says how to render the control).</span>
-<span class="source-line-no">142</span><span id="line-142">         System.out.println("   server asked: " + Json.of(requests));</span>
-<span class="source-line-no">143</span><span id="line-143">         var answers = new LinkedHashMap&lt;String,ElicitResult&gt;();</span>
-<span class="source-line-no">144</span><span id="line-144">         requests.keySet().forEach(id -&gt; answers.put(id,</span>
-<span class="source-line-no">145</span><span id="line-145">            new ElicitResult().setAction(ElicitAction.ACCEPT).putContent("confirm", true)));</span>
-<span class="source-line-no">146</span><span id="line-146">         return answers;</span>
-<span class="source-line-no">147</span><span id="line-147">      });</span>
-<span class="source-line-no">148</span><span id="line-148">      System.out.println("   -&gt; " + deleted.firstText());</span>
+<span class="source-line-no">135</span><span id="line-135">      section("9. tools/call deleteNote — an elicitation (confirm) round-trip, auto-answered");</span>
+<span class="source-line-no">136</span><span id="line-136">      var deleted = client.callToolWithElicitation("deleteNote", Map.of(TITLE_ARG, GROCERIES_NOTE_TITLE), requests -&gt; {</span>
+<span class="source-line-no">137</span><span id="line-137">         // The server asked one or more questions; answer each with ACCEPT + confirm=true. A real client</span>
+<span class="source-line-no">138</span><span id="line-138">         // would present these to a user (the schema in each request says how to render the control).</span>
+<span class="source-line-no">139</span><span id="line-139">         System.out.println("   server asked: " + Json.of(requests));</span>
+<span class="source-line-no">140</span><span id="line-140">         var answers = new LinkedHashMap&lt;String,ElicitResult&gt;();</span>
+<span class="source-line-no">141</span><span id="line-141">         requests.keySet().forEach(id -&gt; answers.put(id,</span>
+<span class="source-line-no">142</span><span id="line-142">            new ElicitResult().setAction(ElicitAction.ACCEPT).putContent("confirm", true)));</span>
+<span class="source-line-no">143</span><span id="line-143">         return answers;</span>
+<span class="source-line-no">144</span><span id="line-144">      });</span>
+<span class="source-line-no">145</span><span id="line-145">      System.out.println("   -&gt; " + deleted.firstText());</span>
+<span class="source-line-no">146</span><span id="line-146"></span>
+<span class="source-line-no">147</span><span id="line-147">      section("10. resources/read note:///index — confirm the note is gone");</span>
+<span class="source-line-no">148</span><span id="line-148">      System.out.println("   " + Json.of(client.readResource(NoteStore.SCHEME + "index").getContents()));</span>
 <span class="source-line-no">149</span><span id="line-149"></span>
-<span class="source-line-no">150</span><span id="line-150">      section("10. resources/read note:///index — confirm the note is gone");</span>
-<span class="source-line-no">151</span><span id="line-151">      System.out.println("   " + Json.of(client.readResource(NoteStore.SCHEME + "index").getContents()));</span>
+<span class="source-line-no">150</span><span id="line-150">      System.out.println("\nWalkthrough complete.");</span>
+<span class="source-line-no">151</span><span id="line-151">   }</span>
 <span class="source-line-no">152</span><span id="line-152"></span>
-<span class="source-line-no">153</span><span id="line-153">      System.out.println("\nWalkthrough complete.");</span>
-<span class="source-line-no">154</span><span id="line-154">   }</span>
-<span class="source-line-no">155</span><span id="line-155"></span>
-<span class="source-line-no">156</span><span id="line-156">   /**</span>
-<span class="source-line-no">157</span><span id="line-157">    * Subscribes for changes to a note URI, publishes that note, and prints the change frame that arrives</span>
-<span class="source-line-no">158</span><span id="line-158">    * over the held-open SSE stream.</span>
-<span class="source-line-no">159</span><span id="line-159">    */</span>
-<span class="source-line-no">160</span><span id="line-160">   @SuppressWarnings({</span>
-<span class="source-line-no">161</span><span id="line-161">      "java:S112" // throws Exception intentional - example walkthrough kept simple for demo readability</span>
-<span class="source-line-no">162</span><span id="line-162">   })</span>
-<span class="source-line-no">163</span><span id="line-163">   private static void runSubscriptionDemo(McpClient client) throws Exception {</span>
-<span class="source-line-no">164</span><span id="line-164">      var noteUri = NoteStore.uriFor("todo");</span>
-<span class="source-line-no">165</span><span id="line-165">      var updates = new LinkedBlockingQueue&lt;String&gt;();</span>
-<span class="source-line-no">166</span><span id="line-166">      var acknowledged = new CountDownLatch(1);</span>
-<span class="source-line-no">167</span><span id="line-167"></span>
-<span class="source-line-no">168</span><span id="line-168">      var handle = client.listen(</span>
-<span class="source-line-no">169</span><span id="line-169">         new SubscriptionFilter().setResourceSubscriptions(List.of(noteUri)),</span>
-<span class="source-line-no">170</span><span id="line-170">         new McpSubscriptionListener() {</span>
-<span class="source-line-no">171</span><span id="line-171">            @Override public void onAcknowledged(SubscriptionFilter honoredFilter) { acknowledged.countDown(); }</span>
-<span class="source-line-no">172</span><span id="line-172">            @Override public void onResourceUpdated(String uri) { updates.add(uri); }</span>
-<span class="source-line-no">173</span><span id="line-173">            @Override public void onError(Throwable t) { System.out.println("   subscription error: " + t); }</span>
-<span class="source-line-no">174</span><span id="line-174">         });</span>
-<span class="source-line-no">175</span><span id="line-175">      try {</span>
-<span class="source-line-no">176</span><span id="line-176">         if (! acknowledged.await(10, TimeUnit.SECONDS))</span>
-<span class="source-line-no">177</span><span id="line-177">            System.out.println("   (warning: subscription was not acknowledged in time)");</span>
-<span class="source-line-no">178</span><span id="line-178">         else</span>
-<span class="source-line-no">179</span><span id="line-179">            System.out.println("   subscription acknowledged; publishing '" + noteUri + "' ...");</span>
-<span class="source-line-no">180</span><span id="line-180"></span>
-<span class="source-line-no">181</span><span id="line-181">         client.callTool("publishNote", Map.of(TITLE_ARG, "todo", "body", "Write MCP example"));</span>
-<span class="source-line-no">182</span><span id="line-182"></span>
-<span class="source-line-no">183</span><span id="line-183">         var updatedUri = updates.poll(10, TimeUnit.SECONDS);</span>
-<span class="source-line-no">184</span><span id="line-184">         if (updatedUri == null)</span>
-<span class="source-line-no">185</span><span id="line-185">            System.out.println("   (warning: no resources/updated notification arrived in time)");</span>
-<span class="source-line-no">186</span><span id="line-186">         else</span>
-<span class="source-line-no">187</span><span id="line-187">            System.out.println("   -&gt; received resources/updated for: " + updatedUri);</span>
-<span class="source-line-no">188</span><span id="line-188">      } finally {</span>
-<span class="source-line-no">189</span><span id="line-189">         handle.close();</span>
-<span class="source-line-no">190</span><span id="line-190">      }</span>
-<span class="source-line-no">191</span><span id="line-191">   }</span>
-<span class="source-line-no">192</span><span id="line-192"></span>
-<span class="source-line-no">193</span><span id="line-193">   private static void section(String title) {</span>
-<span class="source-line-no">194</span><span id="line-194">      System.out.println("\n=== " + title + " ===");</span>
-<span class="source-line-no">195</span><span id="line-195">   }</span>
-<span class="source-line-no">196</span><span id="line-196">}</span>
+<span class="source-line-no">153</span><span id="line-153">   /**</span>
+<span class="source-line-no">154</span><span id="line-154">    * Subscribes for changes to a note URI, publishes that note, and prints the change frame that arrives</span>
+<span class="source-line-no">155</span><span id="line-155">    * over the held-open SSE stream.</span>
+<span class="source-line-no">156</span><span id="line-156">    */</span>
+<span class="source-line-no">157</span><span id="line-157">   private static void runSubscriptionDemo(McpClient client) throws Exception {</span>
+<span class="source-line-no">158</span><span id="line-158">      var noteUri = NoteStore.uriFor("todo");</span>
+<span class="source-line-no">159</span><span id="line-159">      var updates = new LinkedBlockingQueue&lt;String&gt;();</span>
+<span class="source-line-no">160</span><span id="line-160">      var acknowledged = new CountDownLatch(1);</span>
+<span class="source-line-no">161</span><span id="line-161"></span>
+<span class="source-line-no">162</span><span id="line-162">      try (var handle = client.listen(</span>
+<span class="source-line-no">163</span><span id="line-163">         new SubscriptionFilter().setResourceSubscriptions(List.of(noteUri)),</span>
+<span class="source-line-no">164</span><span id="line-164">         new McpSubscriptionListener() {</span>
+<span class="source-line-no">165</span><span id="line-165">            @Override public void onAcknowledged(SubscriptionFilter honoredFilter) { acknowledged.countDown(); }</span>
+<span class="source-line-no">166</span><span id="line-166">            @Override public void onResourceUpdated(String uri) { updates.add(uri); }</span>
+<span class="source-line-no">167</span><span id="line-167">            @Override public void onError(Throwable t) { System.out.println("   subscription error: " + t); }</span>
+<span class="source-line-no">168</span><span id="line-168">         })) {</span>
+<span class="source-line-no">169</span><span id="line-169">         if (! acknowledged.await(10, TimeUnit.SECONDS))</span>
+<span class="source-line-no">170</span><span id="line-170">            System.out.println("   (warning: subscription was not acknowledged in time)");</span>
+<span class="source-line-no">171</span><span id="line-171">         else</span>
+<span class="source-line-no">172</span><span id="line-172">            System.out.println("   subscription acknowledged; publishing '" + noteUri + "' ...");</span>
+<span class="source-line-no">173</span><span id="line-173"></span>
+<span class="source-line-no">174</span><span id="line-174">         client.callTool("publishNote", Map.of(TITLE_ARG, "todo", "body", "Write MCP example"));</span>
+<span class="source-line-no">175</span><span id="line-175"></span>
+<span class="source-line-no">176</span><span id="line-176">         var updatedUri = updates.poll(10, TimeUnit.SECONDS);</span>
+<span class="source-line-no">177</span><span id="line-177">         if (updatedUri == null)</span>
+<span class="source-line-no">178</span><span id="line-178">            System.out.println("   (warning: no resources/updated notification arrived in time)");</span>
+<span class="source-line-no">179</span><span id="line-179">         else</span>
+<span class="source-line-no">180</span><span id="line-180">            System.out.println("   -&gt; received resources/updated for: " + updatedUri);</span>
+<span class="source-line-no">181</span><span id="line-181">      }</span>
+<span class="source-line-no">182</span><span id="line-182">   }</span>
+<span class="source-line-no">183</span><span id="line-183"></span>
+<span class="source-line-no">184</span><span id="line-184">   private static void section(String title) {</span>
+<span class="source-line-no">185</span><span id="line-185">      System.out.println("\n=== " + title + " ===");</span>
+<span class="source-line-no">186</span><span id="line-186">   }</span>
+<span class="source-line-no">187</span><span id="line-187">}</span>
 
 
 

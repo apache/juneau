@@ -76,7 +76,7 @@
 <span class="source-line-no">063</span><span id="line-63">    *    &lt;jk&gt;public&lt;/jk&gt; String getBeforeShowScript(RestRequest &lt;jv&gt;req&lt;/jv&gt;, RestResponse &lt;jv&gt;res&lt;/jv&gt;) {</span>
 <span class="source-line-no">064</span><span id="line-64">    *       &lt;jk&gt;return&lt;/jk&gt; &lt;js&gt;""&lt;/js&gt;</span>
 <span class="source-line-no">065</span><span id="line-65">    *          + &lt;js&gt;"\n   var xhr = new XMLHttpRequest();"&lt;/js&gt;</span>
-<span class="source-line-no">066</span><span id="line-66">    *          + &lt;js&gt;"\n   xhr.open('GET', '/petstore/pet?s=status=AVAILABLE&amp;amp;v=id,name', true);"&lt;/js&gt;</span>
+<span class="source-line-no">066</span><span id="line-66">    *          + &lt;js&gt;"\n   xhr.open('GET', '/petstore/pet?search=status=AVAILABLE&amp;amp;view=id,name', true);"&lt;/js&gt;</span>
 <span class="source-line-no">067</span><span id="line-67">    *          + &lt;js&gt;"\n   xhr.setRequestHeader('Accept', 'application/json');"&lt;/js&gt;</span>
 <span class="source-line-no">068</span><span id="line-68">    *          + &lt;js&gt;"\n   xhr.onload = function() {"&lt;/js&gt;</span>
 <span class="source-line-no">069</span><span id="line-69">    *          + &lt;js&gt;"\n       var pets = JSON.parse(xhr.responseText);"&lt;/js&gt;</span>
@@ -183,7 +183,7 @@
 <span class="source-line-no">170</span><span id="line-170">         var session = HtmlSerializer.DEFAULT</span>
 <span class="source-line-no">171</span><span id="line-171">            .createSession()</span>
 <span class="source-line-no">172</span><span id="line-172">            .properties(req.getAttributes().asMap())</span>
-<span class="source-line-no">173</span><span id="line-173">            .debug(req.isDebug() ? true : null)</span>
+<span class="source-line-no">173</span><span id="line-173">            .debug(req.isDebugMarshalling() ? true : null)</span>
 <span class="source-line-no">174</span><span id="line-174">            .uriContext(req.getUriContext())</span>
 <span class="source-line-no">175</span><span id="line-175">            .useWhitespace(req.isPlainText() ? true : null)</span>
 <span class="source-line-no">176</span><span id="line-176">            .resolver(req.getVarResolverSession())</span>

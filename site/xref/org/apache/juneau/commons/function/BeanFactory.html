@@ -88,17 +88,18 @@
 <a class="jxr_linenumber" name="L80" href="#L80">80</a>  <em class="jxr_javadoccomment">	 * {@code @BeanProp(factory=...)} when no factory is specified.</em>
 <a class="jxr_linenumber" name="L81" href="#L81">81</a>  <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L82" href="#L82">82</a>  	@SuppressWarnings({
-<a class="jxr_linenumber" name="L83" href="#L83">83</a>  		<span class="jxr_string">"rawtypes"</span> <em class="jxr_comment">// Raw type required for use as annotation sentinel</em>
-<a class="jxr_linenumber" name="L84" href="#L84">84</a>  	})
-<a class="jxr_linenumber" name="L85" href="#L85">85</a>  	<strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">class</strong> Void <strong class="jxr_keyword">implements</strong> <a name="BeanFactory" href="../../../../../org/apache/juneau/commons/function/BeanFactory.html#BeanFactory">BeanFactory</a> {
-<a class="jxr_linenumber" name="L86" href="#L86">86</a>  		<strong class="jxr_keyword">private</strong> Void() {}
-<a class="jxr_linenumber" name="L87" href="#L87">87</a>  
-<a class="jxr_linenumber" name="L88" href="#L88">88</a>  		@Override
-<a class="jxr_linenumber" name="L89" href="#L89">89</a>  		<strong class="jxr_keyword">public</strong> Object create() {
-<a class="jxr_linenumber" name="L90" href="#L90">90</a>  			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> UnsupportedOperationException(<span class="jxr_string">"BeanFactory.Void is a sentinel and cannot be instantiated."</span>);
-<a class="jxr_linenumber" name="L91" href="#L91">91</a>  		}
-<a class="jxr_linenumber" name="L92" href="#L92">92</a>  	}
-<a class="jxr_linenumber" name="L93" href="#L93">93</a>  }
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>  		<span class="jxr_string">"java:S9398"</span>, <em class="jxr_comment">// Public API annotation-default sentinel; moving it breaks adopters.</em>
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>  		<span class="jxr_string">"rawtypes"</span> <em class="jxr_comment">// Raw type required for use as annotation sentinel</em>
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>  	})
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>  	<strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">class</strong> Void <strong class="jxr_keyword">implements</strong> <a name="BeanFactory" href="../../../../../org/apache/juneau/commons/function/BeanFactory.html#BeanFactory">BeanFactory</a> {
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>  		<strong class="jxr_keyword">private</strong> Void() {}
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>  
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>  		@Override
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>  		<strong class="jxr_keyword">public</strong> Object create() {
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>  			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> UnsupportedOperationException(<span class="jxr_string">"BeanFactory.Void is a sentinel and cannot be instantiated."</span>);
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>  		}
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>  	}
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>  }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

@@ -124,17 +124,25 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color">
 <div class="block">SOAP/XML Marshalling Support</div>
 </div>
-<div class="col-first odd-row-color"><a href="#org.apache.juneau.marshall.uon">org.apache.juneau.marshall.uon</a></div>
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.marshall.toml">org.apache.juneau.marshall.toml</a></div>
 <div class="col-last odd-row-color">
+<div class="block">TOML v1.0.0 serializer and parser for Apache Juneau.</div>
+</div>
+<div class="col-first even-row-color"><a href="#org.apache.juneau.marshall.uon">org.apache.juneau.marshall.uon</a></div>
+<div class="col-last even-row-color">
 <div class="block">UON Marshalling Support</div>
 </div>
-<div class="col-first even-row-color"><a href="#org.apache.juneau.marshall.urlencoding">org.apache.juneau.marshall.urlencoding</a></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.marshall.urlencoding">org.apache.juneau.marshall.urlencoding</a></div>
+<div class="col-last odd-row-color">
 <div class="block">URL-Encoding Marshalling Support</div>
 </div>
-<div class="col-first odd-row-color"><a href="#org.apache.juneau.marshall.xml">org.apache.juneau.marshall.xml</a></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><a href="#org.apache.juneau.marshall.xml">org.apache.juneau.marshall.xml</a></div>
+<div class="col-last even-row-color">
 <div class="block">XML Marshalling Support</div>
+</div>
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.marshall.yaml">org.apache.juneau.marshall.yaml</a></div>
+<div class="col-last odd-row-color">
+<div class="block">YAML Marshalling Support</div>
 </div>
 </div>
 <section class="class-uses">
@@ -532,6 +540,27 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
+<section class="detail" id="org.apache.juneau.marshall.toml">
+<h2>Uses of <a href="../ExtendedMeta.html" title="class in org.apache.juneau.marshall">ExtendedMeta</a> in <a href="../toml/package-summary.html">org.apache.juneau.marshall.toml</a></h2>
+<div class="caption"><span>Subclasses of <a href="../ExtendedMeta.html" title="class in org.apache.juneau.marshall">ExtendedMeta</a> in <a href="../toml/package-summary.html">org.apache.juneau.marshall.toml</a></span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier and Type</div>
+<div class="table-header col-second">Class</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code>class&nbsp;</code></div>
+<div class="col-second even-row-color"><code><a href="../toml/TomlBeanPropertyMeta.html" class="type-name-link" title="class in org.apache.juneau.marshall.toml">TomlBeanPropertyMeta</a></code></div>
+<div class="col-last even-row-color">
+<div class="block">Metadata on bean properties specific to TOML serializers and parsers.</div>
+</div>
+<div class="col-first odd-row-color"><code>class&nbsp;</code></div>
+<div class="col-second odd-row-color"><code><a href="../toml/TomlClassMeta.html" class="type-name-link" title="class in org.apache.juneau.marshall.toml">TomlClassMeta</a></code></div>
+<div class="col-last odd-row-color">
+<div class="block">Metadata on classes specific to TOML serializers and parsers.</div>
+</div>
+</div>
+</section>
+</li>
+<li>
 <section class="detail" id="org.apache.juneau.marshall.uon">
 <h2>Uses of <a href="../ExtendedMeta.html" title="class in org.apache.juneau.marshall">ExtendedMeta</a> in <a href="../uon/package-summary.html">org.apache.juneau.marshall.uon</a></h2>
 <div class="caption"><span>Subclasses of <a href="../ExtendedMeta.html" title="class in org.apache.juneau.marshall">ExtendedMeta</a> in <a href="../uon/package-summary.html">org.apache.juneau.marshall.uon</a></span></div>
@@ -601,6 +630,27 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color">
 <div class="block">Metadata on classes specific to the XML serializers and parsers pulled from the <a href="../xml/Xml.html" title="annotation interface in org.apache.juneau.marshall.xml"><code>@Xml</code></a> annotation on the
  class.</div>
+</div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="org.apache.juneau.marshall.yaml">
+<h2>Uses of <a href="../ExtendedMeta.html" title="class in org.apache.juneau.marshall">ExtendedMeta</a> in <a href="../yaml/package-summary.html">org.apache.juneau.marshall.yaml</a></h2>
+<div class="caption"><span>Subclasses of <a href="../ExtendedMeta.html" title="class in org.apache.juneau.marshall">ExtendedMeta</a> in <a href="../yaml/package-summary.html">org.apache.juneau.marshall.yaml</a></span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier and Type</div>
+<div class="table-header col-second">Class</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code>class&nbsp;</code></div>
+<div class="col-second even-row-color"><code><a href="../yaml/YamlBeanPropertyMeta.html" class="type-name-link" title="class in org.apache.juneau.marshall.yaml">YamlBeanPropertyMeta</a></code></div>
+<div class="col-last even-row-color">
+<div class="block">Metadata on bean properties specific to YAML serializers and parsers.</div>
+</div>
+<div class="col-first odd-row-color"><code>class&nbsp;</code></div>
+<div class="col-second odd-row-color"><code><a href="../yaml/YamlClassMeta.html" class="type-name-link" title="class in org.apache.juneau.marshall.yaml">YamlClassMeta</a></code></div>
+<div class="col-last odd-row-color">
+<div class="block">Metadata on classes specific to YAML serializers and parsers.</div>
 </div>
 </div>
 </section>

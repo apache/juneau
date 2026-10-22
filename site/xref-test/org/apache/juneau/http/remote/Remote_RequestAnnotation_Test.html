@@ -296,7 +296,7 @@
 <a class="jxr_linenumber" name="L288" href="#L288">288</a> 	<em class="jxr_comment">//------------------------------------------------------------------------------------------------------------------</em>
 <a class="jxr_linenumber" name="L289" href="#L289">289</a> 
 <a class="jxr_linenumber" name="L290" href="#L290">290</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> &lt;T&gt; T remote(Class&lt;?&gt; <strong class="jxr_keyword">rest</strong>, Class&lt;T&gt; t) {
-<a class="jxr_linenumber" name="L291" href="#L291">291</a> 		<strong class="jxr_keyword">return</strong> MockRestClient.build(<strong class="jxr_keyword">rest</strong>).getRemote(t);
+<a class="jxr_linenumber" name="L291" href="#L291">291</a> 		<strong class="jxr_keyword">return</strong> MockRestClient.create(<strong class="jxr_keyword">rest</strong>).allowPrivateUrls(<strong class="jxr_keyword">true</strong>).build().getRemote(t);
 <a class="jxr_linenumber" name="L292" href="#L292">292</a> 	}
 <a class="jxr_linenumber" name="L293" href="#L293">293</a> }
 </pre>

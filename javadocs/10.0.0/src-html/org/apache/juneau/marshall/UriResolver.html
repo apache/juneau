@@ -148,7 +148,7 @@
 <span class="source-line-no">135</span><span id="line-135">    */</span>
 <span class="source-line-no">136</span><span id="line-136">   @SuppressWarnings({</span>
 <span class="source-line-no">137</span><span id="line-137">      "java:S3776", // Cognitive complexity acceptable for URI resolution logic</span>
-<span class="source-line-no">138</span><span id="line-138">      "java:S6541"  // Brain Method acceptable for URI resolution state machine</span>
+<span class="source-line-no">138</span><span id="line-138">      "java:S6541" // Brain Method acceptable for URI resolution state machine</span>
 <span class="source-line-no">139</span><span id="line-139">   })</span>
 <span class="source-line-no">140</span><span id="line-140">   public Appendable append(Appendable a, Object o) {</span>
 <span class="source-line-no">141</span><span id="line-141"></span>
@@ -187,7 +187,7 @@
 <span class="source-line-no">174</span><span id="line-174">            if (uri.length() &gt; 8) {</span>
 <span class="source-line-no">175</span><span id="line-175">               var remainder = uri.substring(8);</span>
 <span class="source-line-no">176</span><span id="line-176">               // Skip if remainder is just "/" and something was appended OR we're at authority level with nothing else</span>
-<span class="source-line-no">177</span><span id="line-177">               if (remainder.equals("/") &amp;&amp; (hasContext || (resolution == ABSOLUTE &amp;&amp; nn(authority)))) {</span>
+<span class="source-line-no">177</span><span id="line-177">               if (eq(remainder, "/") &amp;&amp; (hasContext || (resolution == ABSOLUTE &amp;&amp; nn(authority)))) {</span>
 <span class="source-line-no">178</span><span id="line-178">                  // Do nothing</span>
 <span class="source-line-no">179</span><span id="line-179">               } else if (! remainder.isEmpty() &amp;&amp; remainder.charAt(0) != '/' &amp;&amp; remainder.charAt(0) != '?' &amp;&amp; remainder.charAt(0) != '#') {</span>
 <span class="source-line-no">180</span><span id="line-180">                  a2.append('/').append(remainder);</span>
@@ -211,7 +211,7 @@
 <span class="source-line-no">198</span><span id="line-198">            if (uri.length() &gt; 8) {</span>
 <span class="source-line-no">199</span><span id="line-199">               var remainder = uri.substring(8);</span>
 <span class="source-line-no">200</span><span id="line-200">               // Skip if remainder is just "/" and something was appended OR we're at authority level with nothing else</span>
-<span class="source-line-no">201</span><span id="line-201">               if (remainder.equals("/") &amp;&amp; (hasContext || hasServlet || (resolution == ABSOLUTE &amp;&amp; nn(authority)))) {</span>
+<span class="source-line-no">201</span><span id="line-201">               if (eq(remainder, "/") &amp;&amp; (hasContext || hasServlet || (resolution == ABSOLUTE &amp;&amp; nn(authority)))) {</span>
 <span class="source-line-no">202</span><span id="line-202">                  // Do nothing</span>
 <span class="source-line-no">203</span><span id="line-203">               } else if (! remainder.isEmpty() &amp;&amp; remainder.charAt(0) != '/' &amp;&amp; remainder.charAt(0) != '?' &amp;&amp; remainder.charAt(0) != '#') {</span>
 <span class="source-line-no">204</span><span id="line-204">                  a2.append('/').append(remainder);</span>
@@ -238,7 +238,7 @@
 <span class="source-line-no">225</span><span id="line-225">            if (uri.length() &gt; 8) {</span>
 <span class="source-line-no">226</span><span id="line-226">               var remainder = uri.substring(8);</span>
 <span class="source-line-no">227</span><span id="line-227">               // Skip if remainder is just "/" and something was appended OR we're at authority level with nothing else</span>
-<span class="source-line-no">228</span><span id="line-228">               if (remainder.equals("/") &amp;&amp; (hasContext || hasServlet || hasPath || (resolution == ABSOLUTE &amp;&amp; nn(authority)))) {</span>
+<span class="source-line-no">228</span><span id="line-228">               if (eq(remainder, "/") &amp;&amp; (hasContext || hasServlet || hasPath || (resolution == ABSOLUTE &amp;&amp; nn(authority)))) {</span>
 <span class="source-line-no">229</span><span id="line-229">                  // Do nothing</span>
 <span class="source-line-no">230</span><span id="line-230">               } else if (! remainder.isEmpty() &amp;&amp; remainder.charAt(0) != '/' &amp;&amp; remainder.charAt(0) != '?' &amp;&amp; remainder.charAt(0) != '#') {</span>
 <span class="source-line-no">231</span><span id="line-231">                  a2.append('/').append(remainder);</span>

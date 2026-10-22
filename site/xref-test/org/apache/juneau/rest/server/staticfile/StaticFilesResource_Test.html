@@ -36,11 +36,11 @@
 <a class="jxr_linenumber" name="L28" href="#L28">28</a>  <em class="jxr_javadoccomment"> *</em>
 <a class="jxr_linenumber" name="L29" href="#L29">29</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
 <a class="jxr_linenumber" name="L30" href="#L30">30</a>  <em class="jxr_javadoccomment"> * The child mounts at the subtree {@code /static} (op pinned at {@code /*}) and delegates to a shared</em>
-<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <em class="jxr_javadoccomment"> * {@link StaticFilesMixin} worker. The classpath resource {@code htdocs/javadoc.css} ships with</em>
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <em class="jxr_javadoccomment"> * {@link StaticFilesMixin} worker. The classpath resource {@code htdocs/themes/devops.css} ships with</em>
 <a class="jxr_linenumber" name="L32" href="#L32">32</a>  <em class="jxr_javadoccomment"> * {@code juneau-rest-server} and is visible via the default {@link BasicStaticFiles} recursive</em>
 <a class="jxr_linenumber" name="L33" href="#L33">33</a>  <em class="jxr_javadoccomment"> * classpath walk. Cases:</em>
 <a class="jxr_linenumber" name="L34" href="#L34">34</a>  <em class="jxr_javadoccomment"> * &lt;ul&gt;</em>
-<a class="jxr_linenumber" name="L35" href="#L35">35</a>  <em class="jxr_javadoccomment"> * 	&lt;li&gt;{@code GET /static/javadoc.css} serves the classpath file.</em>
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>  <em class="jxr_javadoccomment"> * 	&lt;li&gt;{@code GET /static/themes/devops.css} serves the classpath file.</em>
 <a class="jxr_linenumber" name="L36" href="#L36">36</a>  <em class="jxr_javadoccomment"> * 	&lt;li&gt;A missing path returns {@code 404}.</em>
 <a class="jxr_linenumber" name="L37" href="#L37">37</a>  <em class="jxr_javadoccomment"> * 	&lt;li&gt;The host's own endpoints are unaffected by the mounted child.</em>
 <a class="jxr_linenumber" name="L38" href="#L38">38</a>  <em class="jxr_javadoccomment"> * &lt;/ul&gt;</em>
@@ -58,7 +58,7 @@
 <a class="jxr_linenumber" name="L50" href="#L50">50</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> MockRestClient c = MockRestClient.buildLax(A.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L51" href="#L51">51</a>  
 <a class="jxr_linenumber" name="L52" href="#L52">52</a>  	@Test <strong class="jxr_keyword">void</strong> a01_servesClasspathFileAsChild() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L53" href="#L53">53</a>  		c.get(<span class="jxr_string">"/static/javadoc.css"</span>)
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>  		c.get(<span class="jxr_string">"/static/themes/devops.css"</span>)
 <a class="jxr_linenumber" name="L54" href="#L54">54</a>  			.run()
 <a class="jxr_linenumber" name="L55" href="#L55">55</a>  			.assertStatus(200)
 <a class="jxr_linenumber" name="L56" href="#L56">56</a>  			.assertContent().asString().isContains(<span class="jxr_string">"Licensed to the Apache Software Foundation"</span>);

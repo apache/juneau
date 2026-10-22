@@ -36,7 +36,7 @@
 <a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.*;
 <a class="jxr_linenumber" name="L29" href="#L29">29</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.marshall.*;
 <a class="jxr_linenumber" name="L30" href="#L30">30</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.marshall.serializer.*;
-<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.marshall.swap.*;
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.marshall.swap.spi.*;
 <a class="jxr_linenumber" name="L32" href="#L32">32</a>  <strong class="jxr_keyword">import</strong> org.junit.jupiter.api.*;
 <a class="jxr_linenumber" name="L33" href="#L33">33</a>  
 <a class="jxr_linenumber" name="L34" href="#L34">34</a>  <em class="jxr_javadoccomment">/**</em>
@@ -1125,8 +1125,8 @@
 <a class="jxr_linenumber" name="L1117" href="#L1117">1117</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
 <a class="jxr_linenumber" name="L1118" href="#L1118">1118</a> 
 <a class="jxr_linenumber" name="L1119" href="#L1119">1119</a> 	@SuppressWarnings({
-<a class="jxr_linenumber" name="L1120" href="#L1120">1120</a> 		<span class="jxr_string">"unchecked"</span>, <em class="jxr_comment">// DelegateList construction from raw ClassMeta is intentional in this test</em>
-<a class="jxr_linenumber" name="L1121" href="#L1121">1121</a> 		<span class="jxr_string">"rawtypes"</span>   <em class="jxr_comment">// ClassMeta must be raw: DelegateList&lt;T extends Collection&lt;?&gt;&gt; bound prevents parameterizing here</em>
+<a class="jxr_linenumber" name="L1120" href="#L1120">1120</a> 		<span class="jxr_string">"rawtypes"</span>, <em class="jxr_comment">// ClassMeta must be raw: DelegateList&lt;T extends Collection&lt;?&gt;&gt; bound prevents parameterizing here</em>
+<a class="jxr_linenumber" name="L1121" href="#L1121">1121</a> 		<span class="jxr_string">"unchecked"</span> <em class="jxr_comment">// DelegateList construction from raw ClassMeta is intentional in this test</em>
 <a class="jxr_linenumber" name="L1122" href="#L1122">1122</a> 	})
 <a class="jxr_linenumber" name="L1123" href="#L1123">1123</a> 	@Test <strong class="jxr_keyword">void</strong> o01_delegateList_usesClassMeta() <strong class="jxr_keyword">throws</strong> Exception {
 <a class="jxr_linenumber" name="L1124" href="#L1124">1124</a> 		<em class="jxr_comment">// isDelegate() branch at line 1063 in XmlWriter version of writeAnything</em>

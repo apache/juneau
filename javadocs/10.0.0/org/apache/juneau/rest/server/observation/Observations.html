@@ -183,7 +183,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="install(org.apache.juneau.rest.server.observation.Observer)">
 <h3>install</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/observation/Observations.html#line-88">install</a></span><wbr><span class="parameters">(<a href="Observer.html" title="class in org.apache.juneau.rest.server.observation">Observer</a>&nbsp;observer)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/observation/Observations.html#line-85">install</a></span><wbr><span class="parameters">(<a href="Observer.html" title="class in org.apache.juneau.rest.server.observation">Observer</a>&nbsp;observer)</span></div>
 <div class="block">Installs the process-wide default <a href="Observer.html" title="class in org.apache.juneau.rest.server.observation"><code>Observer</code></a> used by <a href="#observe(java.lang.String,java.lang.String)"><code>observe(String, String)</code></a>.
 
  <p>
@@ -198,14 +198,14 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="reset()">
 <h3>reset</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/observation/Observations.html#line-95">reset</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/observation/Observations.html#line-92">reset</a></span>()</div>
 <div class="block">Resets the process-wide default observer back to <a href="Observer.html#NOOP"><code>Observer.NOOP</code></a>.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="observer()">
 <h3>observer</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="Observer.html" title="class in org.apache.juneau.rest.server.observation">Observer</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/observation/Observations.html#line-104">observer</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="Observer.html" title="class in org.apache.juneau.rest.server.observation">Observer</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/observation/Observations.html#line-101">observer</a></span>()</div>
 <div class="block">Returns the currently-installed default <a href="Observer.html" title="class in org.apache.juneau.rest.server.observation"><code>Observer</code></a>.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -216,7 +216,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="observe(java.lang.String,java.lang.String)">
 <h3>observe</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="Observation.html" title="interface in org.apache.juneau.rest.server.observation">Observation</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/observation/Observations.html#line-117">observe</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="Observation.html" title="interface in org.apache.juneau.rest.server.observation">Observation</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/observation/Observations.html#line-114">observe</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;tags)</span></div>
 <div class="block">Starts a custom observation against the installed default <a href="Observer.html" title="class in org.apache.juneau.rest.server.observation"><code>Observer</code></a>.</div>
 <dl class="notes">
@@ -233,7 +233,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="observe(java.lang.String)">
 <h3>observe</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="Observation.html" title="interface in org.apache.juneau.rest.server.observation">Observation</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/observation/Observations.html#line-127">observe</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="Observation.html" title="interface in org.apache.juneau.rest.server.observation">Observation</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/observation/Observations.html#line-124">observe</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
 <div class="block">Starts a custom observation with no additional tags.</div>
 <dl class="notes">
 <dt>Parameters:</dt>

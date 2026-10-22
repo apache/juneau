@@ -66,7 +66,7 @@
 <a class="jxr_linenumber" name="L58" href="#L58">58</a>  <em class="jxr_javadoccomment">		 */</em>
 <a class="jxr_linenumber" name="L59" href="#L59">59</a>  		<strong class="jxr_keyword">var</strong> uonSerializer = UonSerializer.DEFAULT;
 <a class="jxr_linenumber" name="L60" href="#L60">60</a>  		<em class="jxr_comment">// This will show the final output from the bean</em>
-<a class="jxr_linenumber" name="L61" href="#L61">61</a>  		Logger.getLogger(UonComplexExample.<strong class="jxr_keyword">class</strong>).info(uonSerializer.write(pojoc));
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>  		RichLogger.getLogger(UonComplexExample.<strong class="jxr_keyword">class</strong>).info(uonSerializer.write(pojoc));
 <a class="jxr_linenumber" name="L62" href="#L62">62</a>  
 <a class="jxr_linenumber" name="L63" href="#L63">63</a>  		<strong class="jxr_keyword">var</strong> obj = UonParser.DEFAULT.read(uonSerializer.write(pojoc), PojoComplex.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L64" href="#L64">64</a>  

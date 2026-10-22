@@ -87,7 +87,7 @@
 <a class="jxr_linenumber" name="L79" href="#L79">79</a>  	<strong class="jxr_keyword">public</strong> BeanMap&lt;?&gt; getBeanMap() { <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>.beanMap; }
 <a class="jxr_linenumber" name="L80" href="#L80">80</a>  
 <a class="jxr_linenumber" name="L81" href="#L81">81</a>  	@Override <em class="jxr_comment">/* Overridden from Map.Entry */</em>
-<a class="jxr_linenumber" name="L82" href="#L82">82</a>  	<strong class="jxr_keyword">public</strong> String getKey() { <strong class="jxr_keyword">return</strong> meta.getName(); }
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>  	<strong class="jxr_keyword">public</strong> String getKey() { <strong class="jxr_keyword">return</strong> pName != <strong class="jxr_keyword">null</strong> ? pName : meta.getName(); }
 <a class="jxr_linenumber" name="L83" href="#L83">83</a>  
 <a class="jxr_linenumber" name="L84" href="#L84">84</a>  	<em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L85" href="#L85">85</a>  <em class="jxr_javadoccomment">	 * Returns the metadata about this bean property.</em>

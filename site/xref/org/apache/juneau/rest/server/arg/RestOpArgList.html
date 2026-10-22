@@ -24,8 +24,8 @@
 <a class="jxr_linenumber" name="L16" href="#L16">16</a>  <em class="jxr_comment"> */</em>
 <a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.server.arg;
 <a class="jxr_linenumber" name="L18" href="#L18">18</a>  
-<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.commons.utils.AssertionUtils.*;
-<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.commons.utils.CollectionUtils.*;
+<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.commons.utils.CollectionUtils.*;
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.commons.utils.Shorts.*;
 <a class="jxr_linenumber" name="L21" href="#L21">21</a>  
 <a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> java.util.*;
 <a class="jxr_linenumber" name="L23" href="#L23">23</a>  
@@ -75,7 +75,7 @@
 <a class="jxr_linenumber" name="L67" href="#L67">67</a>  <em class="jxr_javadoccomment">		 * @throws IllegalArgumentException if any class does not extend from {@link RestOpArg}.</em>
 <a class="jxr_linenumber" name="L68" href="#L68">68</a>  <em class="jxr_javadoccomment">		 */</em>
 <a class="jxr_linenumber" name="L69" href="#L69">69</a>  		<strong class="jxr_keyword">public</strong> Builder add(Class&lt;?&gt;...values) {
-<a class="jxr_linenumber" name="L70" href="#L70">70</a>  			prependAll(entries, assertClassArrayArgIsType(<span class="jxr_string">"values"</span>, RestOpArg.<strong class="jxr_keyword">class</strong>, values));
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>  			prependAll(entries, reqcat(<span class="jxr_string">"values"</span>, RestOpArg.<strong class="jxr_keyword">class</strong>, values));
 <a class="jxr_linenumber" name="L71" href="#L71">71</a>  			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L72" href="#L72">72</a>  		}
 <a class="jxr_linenumber" name="L73" href="#L73">73</a>  

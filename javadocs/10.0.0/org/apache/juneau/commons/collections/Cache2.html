@@ -84,7 +84,7 @@ loadScripts(document, 'script');</script>
 <dd><code>V</code> - The value type.</dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/collections/Cache2.html#line-135">Cache2</a>&lt;K1,<wbr>K2,<wbr>V&gt;</span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/collections/Cache2.html#line-146">Cache2</a>&lt;K1,<wbr>K2,<wbr>V&gt;</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
 <div class="block">Simple in-memory cache for storing and retrieving objects by two-part keys.
 
@@ -105,6 +105,17 @@ loadScripts(document, 'script');</script>
    <li>Optional logging of cache statistics on JVM shutdown
    <li>Can be disabled entirely via builder or system property
  </ul>
+
+ <h5 class='section'>WEAK Mode Semantics:</h5>
+ <p>
+ <a href="CacheMode.html#WEAK"><code>CacheMode.WEAK</code></a> on this class is <b>best-effort</b>, not retention-guaranteed. Each lookup synthesizes
+ an internal <code>Tuple2</code> composite key that is never exposed to the caller, so that key is reachable only
+ from this cache's own backing <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/WeakHashMap.html" title="class or interface in java.util" class="external-link"><code>WeakHashMap</code></a>. Consequently a WEAK-mode entry becomes GC-eligible
+ <b>immediately</b> after insertion and may be reclaimed at the very next garbage collection - effectively
+ behaving like <a href="CacheMode.html#NONE"><code>CacheMode.NONE</code></a> once any GC has occurred. This differs from the single-key <a href="Cache.html" title="class in org.apache.juneau.commons.collections"><code>Cache</code></a>,
+ where WEAK mode keys directly on the caller's own key and therefore retains an entry for as long as that key
+ remains strongly reachable elsewhere. If guaranteed retention is required, use <a href="CacheMode.html#FULL"><code>CacheMode.FULL</code></a> (the
+ default mode) instead of WEAK. See <a href="CacheMode.html#WEAK"><code>CacheMode.WEAK</code></a> for details.
 
  <h5 class='section'>Usage:</h5>
  <p class='bjava'>
@@ -332,7 +343,7 @@ V&gt;&nbsp;<a href="Cache2.Builder.html" title="class in org.apache.juneau.commo
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.commons.collections.Cache2.Builder)">
 <h3>Cache2</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/collections/Cache2.html#line-422">Cache2</a></span><wbr><span class="parameters">(<a href="Cache2.Builder.html" title="class in org.apache.juneau.commons.collections">Cache2.Builder</a>&lt;<a href="Cache2.html" title="type parameter in Cache2">K1</a>,<wbr><a href="Cache2.html" title="type parameter in Cache2">K2</a>,<wbr><a href="Cache2.html" title="type parameter in Cache2">V</a>&gt;&nbsp;builder)</span></div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/collections/Cache2.html#line-438">Cache2</a></span><wbr><span class="parameters">(<a href="Cache2.Builder.html" title="class in org.apache.juneau.commons.collections">Cache2.Builder</a>&lt;<a href="Cache2.html" title="type parameter in Cache2">K1</a>,<wbr><a href="Cache2.html" title="type parameter in Cache2">K2</a>,<wbr><a href="Cache2.html" title="type parameter in Cache2">V</a>&gt;&nbsp;builder)</span></div>
 <div class="block">Constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -353,7 +364,7 @@ V&gt;&nbsp;<a href="Cache2.Builder.html" title="class in org.apache.juneau.commo
 <h3>create</h3>
 <div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;K1,<wbr>
 K2,<wbr>
-V&gt;</span>&nbsp;<span class="return-type"><a href="Cache2.Builder.html" title="class in org.apache.juneau.commons.collections">Cache2.Builder</a>&lt;K1,<wbr>K2,<wbr>V&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/collections/Cache2.html#line-371">create</a></span>()</div>
+V&gt;</span>&nbsp;<span class="return-type"><a href="Cache2.Builder.html" title="class in org.apache.juneau.commons.collections">Cache2.Builder</a>&lt;K1,<wbr>K2,<wbr>V&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/collections/Cache2.html#line-387">create</a></span>()</div>
 <div class="block">Creates a new <a href="Cache2.Builder.html" title="class in org.apache.juneau.commons.collections"><code>Cache2.Builder</code></a> for constructing a cache with explicit type parameters.
 
  <p>
@@ -383,7 +394,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="Cache2.Builder.html" title=
 <h3>of</h3>
 <div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;K1,<wbr>
 K2,<wbr>
-V&gt;</span>&nbsp;<span class="return-type"><a href="Cache2.Builder.html" title="class in org.apache.juneau.commons.collections">Cache2.Builder</a>&lt;K1,<wbr>K2,<wbr>V&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/collections/Cache2.html#line-394">of</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;K1&gt;&nbsp;key1,
+V&gt;</span>&nbsp;<span class="return-type"><a href="Cache2.Builder.html" title="class in org.apache.juneau.commons.collections">Cache2.Builder</a>&lt;K1,<wbr>K2,<wbr>V&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/collections/Cache2.html#line-410">of</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;K1&gt;&nbsp;key1,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;K2&gt;&nbsp;key2,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;V&gt;&nbsp;type)</span></div>
 <div class="block">Creates a new <a href="Cache2.Builder.html" title="class in org.apache.juneau.commons.collections"><code>Cache2.Builder</code></a> for constructing a cache.
@@ -412,14 +423,14 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="Cache2.Builder.html" title=
 <li>
 <section class="detail" id="clear()">
 <h3>clear</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/collections/Cache2.html#line-453">clear</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/collections/Cache2.html#line-469">clear</a></span>()</div>
 <div class="block">Removes all entries from the cache.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="cleanup()">
 <h3>cleanup</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/collections/Cache2.html#line-465">cleanup</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/collections/Cache2.html#line-481">cleanup</a></span>()</div>
 <div class="block">Cleans up thread-local storage for the current thread.
 
  <p>
@@ -431,7 +442,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="Cache2.Builder.html" title=
 <li>
 <section class="detail" id="containsKey(K1,K2)">
 <h3 id="containsKey(java.lang.Object,java.lang.Object)">containsKey</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/collections/Cache2.html#line-478">containsKey</a></span><wbr><span class="parameters">(<a href="Cache2.html" title="type parameter in Cache2">K1</a>&nbsp;key1,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/collections/Cache2.html#line-494">containsKey</a></span><wbr><span class="parameters">(<a href="Cache2.html" title="type parameter in Cache2">K1</a>&nbsp;key1,
  <a href="Cache2.html" title="type parameter in Cache2">K2</a>&nbsp;key2)</span></div>
 <div class="block">Returns <jk>true</jk> if the cache contains a mapping for the specified key pair.</div>
 <dl class="notes">
@@ -446,7 +457,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="Cache2.Builder.html" title=
 <li>
 <section class="detail" id="containsValue(V)">
 <h3 id="containsValue(java.lang.Object)">containsValue</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/collections/Cache2.html#line-488">containsValue</a></span><wbr><span class="parameters">(<a href="Cache2.html" title="type parameter in Cache2">V</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/collections/Cache2.html#line-504">containsValue</a></span><wbr><span class="parameters">(<a href="Cache2.html" title="type parameter in Cache2">V</a>&nbsp;value)</span></div>
 <div class="block">Returns <jk>true</jk> if the cache contains one or more entries with the specified value.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -459,7 +470,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="Cache2.Builder.html" title=
 <li>
 <section class="detail" id="get(K1,K2)">
 <h3 id="get(java.lang.Object,java.lang.Object)">get</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Cache2.html" title="type parameter in Cache2">V</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/collections/Cache2.html#line-518">get</a></span><wbr><span class="parameters">(<a href="Cache2.html" title="type parameter in Cache2">K1</a>&nbsp;key1,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Cache2.html" title="type parameter in Cache2">V</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/collections/Cache2.html#line-534">get</a></span><wbr><span class="parameters">(<a href="Cache2.html" title="type parameter in Cache2">K1</a>&nbsp;key1,
  <a href="Cache2.html" title="type parameter in Cache2">K2</a>&nbsp;key2)</span></div>
 <div class="block">Retrieves a cached value by key pair using the default supplier.
 
@@ -491,7 +502,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="Cache2.Builder.html" title=
 <li>
 <section class="detail" id="get(K1,K2,java.util.function.Supplier)">
 <h3 id="get(java.lang.Object,java.lang.Object,java.util.function.Supplier)">get</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Cache2.html" title="type parameter in Cache2">V</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/collections/Cache2.html#line-562">get</a></span><wbr><span class="parameters">(<a href="Cache2.html" title="type parameter in Cache2">K1</a>&nbsp;key1,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Cache2.html" title="type parameter in Cache2">V</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/collections/Cache2.html#line-578">get</a></span><wbr><span class="parameters">(<a href="Cache2.html" title="type parameter in Cache2">K1</a>&nbsp;key1,
  <a href="Cache2.html" title="type parameter in Cache2">K2</a>&nbsp;key2,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;<a href="Cache2.html" title="type parameter in Cache2">V</a>&gt;&nbsp;supplier)</span></div>
 <div class="block">Retrieves a cached value by key pair, computing it if necessary using the provided supplier.
@@ -540,7 +551,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="Cache2.Builder.html" title=
 <li>
 <section class="detail" id="getCacheHits()">
 <h3>getCacheHits</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/collections/Cache2.html#line-610">getCacheHits</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/collections/Cache2.html#line-626">getCacheHits</a></span>()</div>
 <div class="block">Returns the total number of cache hits since this cache was created.
 
  <p>
@@ -573,7 +584,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="Cache2.Builder.html" title=
 <li>
 <section class="detail" id="isEmpty()">
 <h3>isEmpty</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/collections/Cache2.html#line-617">isEmpty</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/collections/Cache2.html#line-633">isEmpty</a></span>()</div>
 <div class="block">Returns <jk>true</jk> if the cache contains no entries.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -584,7 +595,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="Cache2.Builder.html" title=
 <li>
 <section class="detail" id="put(K1,K2,V)">
 <h3 id="put(java.lang.Object,java.lang.Object,java.lang.Object)">put</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Cache2.html" title="type parameter in Cache2">V</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/collections/Cache2.html#line-627">put</a></span><wbr><span class="parameters">(<a href="Cache2.html" title="type parameter in Cache2">K1</a>&nbsp;key1,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Cache2.html" title="type parameter in Cache2">V</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/collections/Cache2.html#line-643">put</a></span><wbr><span class="parameters">(<a href="Cache2.html" title="type parameter in Cache2">K1</a>&nbsp;key1,
  <a href="Cache2.html" title="type parameter in Cache2">K2</a>&nbsp;key2,
  <a href="Cache2.html" title="type parameter in Cache2">V</a>&nbsp;value)</span></div>
 <div class="block">Associates the specified value with the specified key pair.</div>
@@ -601,7 +612,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="Cache2.Builder.html" title=
 <li>
 <section class="detail" id="remove(K1,K2)">
 <h3 id="remove(java.lang.Object,java.lang.Object)">remove</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Cache2.html" title="type parameter in Cache2">V</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/collections/Cache2.html#line-641">remove</a></span><wbr><span class="parameters">(<a href="Cache2.html" title="type parameter in Cache2">K1</a>&nbsp;key1,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Cache2.html" title="type parameter in Cache2">V</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/collections/Cache2.html#line-657">remove</a></span><wbr><span class="parameters">(<a href="Cache2.html" title="type parameter in Cache2">K1</a>&nbsp;key1,
  <a href="Cache2.html" title="type parameter in Cache2">K2</a>&nbsp;key2)</span></div>
 <div class="block">Removes the entry for the specified key pair from the cache.</div>
 <dl class="notes">
@@ -616,7 +627,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="Cache2.Builder.html" title=
 <li>
 <section class="detail" id="size()">
 <h3>size</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/collections/Cache2.html#line-650">size</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/collections/Cache2.html#line-666">size</a></span>()</div>
 <div class="block">Returns the number of entries in the cache.</div>
 <dl class="notes">
 <dt>Returns:</dt>

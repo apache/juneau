@@ -47,7 +47,7 @@ loadScripts(document, 'script');</script>
 <ul class="sub-nav-list">
 <li>Summary:&nbsp;</li>
 <li>Nested&nbsp;|&nbsp;</li>
-<li><a href="#field-summary">Field</a>&nbsp;|&nbsp;</li>
+<li>Field&nbsp;|&nbsp;</li>
 <li><a href="#constructor-summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method-summary">Method</a></li>
 </ul>
@@ -92,7 +92,7 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="StringSetting.html" title="class in org.apache.juneau.commons.settings">StringSetting</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/settings/Setting.html#line-47">Setting</a>&lt;T&gt;</span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/settings/Setting.html#line-46">Setting</a>&lt;T&gt;</span>
 <span class="extends-implements">extends <a href="../function/Memoizer.html" title="class in org.apache.juneau.commons.function">Memoizer</a>&lt;T&gt;</span></div>
 <div class="block">A memoizer that provides convenience methods for type conversion.
 
@@ -113,15 +113,6 @@ loadScripts(document, 'script');</script>
 </section>
 <section class="summary">
 <ul class="summary-list">
-<!-- =========== FIELD SUMMARY =========== -->
-<li>
-<section class="field-summary" id="field-summary">
-<h2>Field Summary</h2>
-<div class="inherited-list">
-<h3 id="fields-inherited-from-class-org.apache.juneau.commons.function.NullableSupplier">Fields inherited from interface&nbsp;org.apache.juneau.commons.function.<a href="../function/NullableSupplier.html" title="interface in org.apache.juneau.commons.function">NullableSupplier</a></h3>
-<code><a href="../function/NullableSupplier.html#ARG_action">ARG_action</a>, <a href="../function/NullableSupplier.html#ARG_emptyAction">ARG_emptyAction</a>, <a href="../function/NullableSupplier.html#ARG_exceptionSupplier">ARG_exceptionSupplier</a>, <a href="../function/NullableSupplier.html#ARG_other">ARG_other</a></code></div>
-</section>
-</li>
 <!-- ======== CONSTRUCTOR SUMMARY ======== -->
 <li>
 <section class="constructor-summary" id="constructor-summary">
@@ -195,7 +186,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.commons.settings.Settings,java.util.function.Supplier)">
 <h3>Setting</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/settings/Setting.html#line-65">Setting</a></span><wbr><span class="parameters">(<a href="Settings.html" title="class in org.apache.juneau.commons.settings">Settings</a>&nbsp;settings,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/settings/Setting.html#line-59">Setting</a></span><wbr><span class="parameters">(<a href="Settings.html" title="class in org.apache.juneau.commons.settings">Settings</a>&nbsp;settings,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;<a href="Setting.html" title="type parameter in Setting">T</a>&gt;&nbsp;supplier)</span></div>
 <div class="block">Creates a new Setting from a Settings instance and a Supplier.</div>
 <dl class="notes">
@@ -216,7 +207,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getSettings()">
 <h3>getSettings</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Settings.html" title="class in org.apache.juneau.commons.settings">Settings</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/settings/Setting.html#line-75">getSettings</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Settings.html" title="class in org.apache.juneau.commons.settings">Settings</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/settings/Setting.html#line-69">getSettings</a></span>()</div>
 <div class="block">Returns the Settings instance that created this setting.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -227,7 +218,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="asOptional()">
 <h3>asOptional</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="Setting.html" title="type parameter in Setting">T</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/settings/Setting.html#line-89">asOptional</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="Setting.html" title="type parameter in Setting">T</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/settings/Setting.html#line-83">asOptional</a></span>()</div>
 <div class="block">Returns the underlying Optional&lt;T&gt;.
 
  <p>
@@ -243,7 +234,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="map(java.util.function.Function)">
 <h3>map</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;U&gt;</span>&nbsp;<span class="return-type"><a href="Setting.html" title="class in org.apache.juneau.commons.settings">Setting</a>&lt;U&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/settings/Setting.html#line-104">map</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Function.html" title="class or interface in java.util.function" class="external-link">Function</a>&lt;? super <a href="Setting.html" title="type parameter in Setting">T</a>,<wbr>? extends U&gt;&nbsp;mapper)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;U&gt;</span>&nbsp;<span class="return-type"><a href="Setting.html" title="class in org.apache.juneau.commons.settings">Setting</a>&lt;U&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/settings/Setting.html#line-98">map</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Function.html" title="class or interface in java.util.function" class="external-link">Function</a>&lt;? super <a href="Setting.html" title="type parameter in Setting">T</a>,<wbr>? extends U&gt;&nbsp;mapper)</span></div>
 <div class="block">If a value is present, applies the provided mapping function to it and returns a Setting describing the result.
 
  <p>
@@ -266,7 +257,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="filter(java.util.function.Predicate)">
 <h3>filter</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Setting.html" title="class in org.apache.juneau.commons.settings">Setting</a>&lt;<a href="Setting.html" title="type parameter in Setting">T</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/settings/Setting.html#line-123">filter</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Predicate.html" title="class or interface in java.util.function" class="external-link">Predicate</a>&lt;? super <a href="Setting.html" title="type parameter in Setting">T</a>&gt;&nbsp;predicate)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Setting.html" title="class in org.apache.juneau.commons.settings">Setting</a>&lt;<a href="Setting.html" title="type parameter in Setting">T</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/settings/Setting.html#line-117">filter</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Predicate.html" title="class or interface in java.util.function" class="external-link">Predicate</a>&lt;? super <a href="Setting.html" title="type parameter in Setting">T</a>&gt;&nbsp;predicate)</span></div>
 <div class="block">If a value is present, and the value matches the given predicate, returns a Setting describing the value, otherwise returns an empty Setting.
 
  <p>

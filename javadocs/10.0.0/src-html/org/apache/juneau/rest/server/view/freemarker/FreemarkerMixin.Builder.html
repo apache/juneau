@@ -30,378 +30,544 @@
 <span class="source-line-no">017</span><span id="line-17">package org.apache.juneau.rest.server.view.freemarker;</span>
 <span class="source-line-no">018</span><span id="line-18"></span>
 <span class="source-line-no">019</span><span id="line-19">import java.io.*;</span>
-<span class="source-line-no">020</span><span id="line-20"></span>
-<span class="source-line-no">021</span><span id="line-21">import org.apache.juneau.http.*;</span>
-<span class="source-line-no">022</span><span id="line-22">import org.apache.juneau.http.response.*;</span>
-<span class="source-line-no">023</span><span id="line-23">import org.apache.juneau.rest.server.*;</span>
-<span class="source-line-no">024</span><span id="line-24"></span>
-<span class="source-line-no">025</span><span id="line-25">import freemarker.template.*;</span>
-<span class="source-line-no">026</span><span id="line-26"></span>
-<span class="source-line-no">027</span><span id="line-27">/**</span>
-<span class="source-line-no">028</span><span id="line-28"> * Mixin that wires Apache FreeMarker view-rendering onto any Juneau REST resource.</span>
-<span class="source-line-no">029</span><span id="line-29"> *</span>
-<span class="source-line-no">030</span><span id="line-30"> * &lt;p&gt;</span>
-<span class="source-line-no">031</span><span id="line-31"> * Compose into a host resource via</span>
-<span class="source-line-no">032</span><span id="line-32"> * {@link Rest#mixins() @Rest(mixins=FreemarkerMixin.class)}; the host then:</span>
-<span class="source-line-no">033</span><span id="line-33"> *</span>
-<span class="source-line-no">034</span><span id="line-34"> * &lt;ol class='spaced-list'&gt;</span>
-<span class="source-line-no">035</span><span id="line-35"> *    &lt;li&gt;Gains a default mount at {@code /freemarker/*} that serves raw FreeMarker templates from</span>
-<span class="source-line-no">036</span><span id="line-36"> *       the importer's classpath by asking the configured {@link Configuration} for the named</span>
-<span class="source-line-no">037</span><span id="line-37"> *       template and rendering it with an empty data model (raw render path; callers who want</span>
-<span class="source-line-no">038</span><span id="line-38"> *       attributes use {@link FreemarkerView} from a typed handler instead).</span>
-<span class="source-line-no">039</span><span id="line-39"> *    &lt;li&gt;Picks up {@link FreemarkerViewRenderer} automatically via the mixin's</span>
-<span class="source-line-no">040</span><span id="line-40"> *       {@link Rest#responseProcessors() @Rest(responseProcessors=...)} declaration, so</span>
-<span class="source-line-no">041</span><span id="line-41"> *       {@code @RestOp}-method return values of type {@link FreemarkerView} render through the</span>
-<span class="source-line-no">042</span><span id="line-42"> *       FreeMarker engine without any additional wiring.</span>
-<span class="source-line-no">043</span><span id="line-43"> * &lt;/ol&gt;</span>
-<span class="source-line-no">044</span><span id="line-44"> *</span>
-<span class="source-line-no">045</span><span id="line-45"> * &lt;h5 class='figure'&gt;Composition example (microservice):&lt;/h5&gt;</span>
+<span class="source-line-no">020</span><span id="line-20">import java.util.*;</span>
+<span class="source-line-no">021</span><span id="line-21">import java.util.concurrent.*;</span>
+<span class="source-line-no">022</span><span id="line-22"></span>
+<span class="source-line-no">023</span><span id="line-23">import org.apache.juneau.http.*;</span>
+<span class="source-line-no">024</span><span id="line-24">import org.apache.juneau.http.response.*;</span>
+<span class="source-line-no">025</span><span id="line-25">import org.apache.juneau.rest.server.*;</span>
+<span class="source-line-no">026</span><span id="line-26">import org.apache.juneau.rest.server.view.*;</span>
+<span class="source-line-no">027</span><span id="line-27"></span>
+<span class="source-line-no">028</span><span id="line-28">import freemarker.template.*;</span>
+<span class="source-line-no">029</span><span id="line-29"></span>
+<span class="source-line-no">030</span><span id="line-30">/**</span>
+<span class="source-line-no">031</span><span id="line-31"> * Mixin that wires Apache FreeMarker view-rendering onto any Juneau REST resource.</span>
+<span class="source-line-no">032</span><span id="line-32"> *</span>
+<span class="source-line-no">033</span><span id="line-33"> * &lt;p&gt;</span>
+<span class="source-line-no">034</span><span id="line-34"> * Compose into a host resource via</span>
+<span class="source-line-no">035</span><span id="line-35"> * {@link Rest#mixins() @Rest(mixins=FreemarkerMixin.class)}; the host then:</span>
+<span class="source-line-no">036</span><span id="line-36"> *</span>
+<span class="source-line-no">037</span><span id="line-37"> * &lt;ol class='spaced-list'&gt;</span>
+<span class="source-line-no">038</span><span id="line-38"> *    &lt;li&gt;Gains a default mount at {@code /freemarker/*} that serves raw FreeMarker templates from</span>
+<span class="source-line-no">039</span><span id="line-39"> *       the importer's classpath by asking the configured {@link Configuration} for the named</span>
+<span class="source-line-no">040</span><span id="line-40"> *       template and rendering it with an empty data model (raw render path; callers who want</span>
+<span class="source-line-no">041</span><span id="line-41"> *       attributes use {@link FreemarkerView} from a typed handler instead).</span>
+<span class="source-line-no">042</span><span id="line-42"> *    &lt;li&gt;Registers {@link FreemarkerViewRenderer} for the mixin's &lt;b&gt;own&lt;/b&gt; endpoints (e.g. the</span>
+<span class="source-line-no">043</span><span id="line-43"> *       {@code /freemarker/*} route above) via the mixin's own</span>
+<span class="source-line-no">044</span><span id="line-44"> *       {@link Rest#responseProcessors() @Rest(responseProcessors=...)} declaration.</span>
+<span class="source-line-no">045</span><span id="line-45"> * &lt;/ol&gt;</span>
 <span class="source-line-no">046</span><span id="line-46"> *</span>
-<span class="source-line-no">047</span><span id="line-47"> * &lt;p class='bjava'&gt;</span>
-<span class="source-line-no">048</span><span id="line-48"> *    &lt;ja&gt;@Rest&lt;/ja&gt;(path=&lt;js&gt;"/app"&lt;/js&gt;, mixins=FreemarkerMixin.&lt;jk&gt;class&lt;/jk&gt;)</span>
-<span class="source-line-no">049</span><span id="line-49"> *    &lt;jk&gt;public class&lt;/jk&gt; AppResource &lt;jk&gt;extends&lt;/jk&gt; RestServlet {</span>
-<span class="source-line-no">050</span><span id="line-50"> *</span>
-<span class="source-line-no">051</span><span id="line-51"> *       &lt;ja&gt;@Bean&lt;/ja&gt; FreemarkerMixin freemarker() {</span>
-<span class="source-line-no">052</span><span id="line-52"> *          &lt;jk&gt;return&lt;/jk&gt; FreemarkerMixin.&lt;jsm&gt;create&lt;/jsm&gt;()</span>
-<span class="source-line-no">053</span><span id="line-53"> *             .basePath(&lt;js&gt;"/templates/"&lt;/js&gt;)</span>
-<span class="source-line-no">054</span><span id="line-54"> *             .templateSuffix(&lt;js&gt;".ftlh"&lt;/js&gt;)</span>
-<span class="source-line-no">055</span><span id="line-55"> *             .build();</span>
-<span class="source-line-no">056</span><span id="line-56"> *       }</span>
-<span class="source-line-no">057</span><span id="line-57"> *</span>
-<span class="source-line-no">058</span><span id="line-58"> *       &lt;ja&gt;@RestGet&lt;/ja&gt;(&lt;js&gt;"/hello/{name}"&lt;/js&gt;)</span>
-<span class="source-line-no">059</span><span id="line-59"> *       &lt;jk&gt;public&lt;/jk&gt; View hello(&lt;ja&gt;@Path&lt;/ja&gt; String &lt;jv&gt;name&lt;/jv&gt;) {</span>
-<span class="source-line-no">060</span><span id="line-60"> *          &lt;jk&gt;return&lt;/jk&gt; FreemarkerView.&lt;jsm&gt;of&lt;/jsm&gt;(&lt;js&gt;"hello"&lt;/js&gt;).attr(&lt;js&gt;"name"&lt;/js&gt;, &lt;jv&gt;name&lt;/jv&gt;);</span>
-<span class="source-line-no">061</span><span id="line-61"> *       }</span>
-<span class="source-line-no">062</span><span id="line-62"> *    }</span>
-<span class="source-line-no">063</span><span id="line-63"> * &lt;/p&gt;</span>
-<span class="source-line-no">064</span><span id="line-64"> *</span>
-<span class="source-line-no">065</span><span id="line-65"> * &lt;h5 class='section'&gt;Configurable mount path:&lt;/h5&gt;</span>
+<span class="source-line-no">047</span><span id="line-47"> * &lt;h5 class='section'&gt;Auto-wiring the renderer into the host's own endpoints:&lt;/h5&gt;</span>
+<span class="source-line-no">048</span><span id="line-48"> *</span>
+<span class="source-line-no">049</span><span id="line-49"> * &lt;p&gt;</span>
+<span class="source-line-no">050</span><span id="line-50"> * A bare {@code @Rest(mixins=FreemarkerMixin.class)} is enough &amp;mdash; a host whose own {@code @RestOp} method</span>
+<span class="source-line-no">051</span><span id="line-51"> * returns {@link FreemarkerView} renders it through the FreeMarker engine with no extra wiring. That works</span>
+<span class="source-line-no">052</span><span id="line-52"> * because {@code FreemarkerMixin} declares</span>
+<span class="source-line-no">053</span><span id="line-53"> * {@link Rest#mergeResponseProcessorsIntoHost() @Rest(mergeResponseProcessorsIntoHost=true)} on its own class,</span>
+<span class="source-line-no">054</span><span id="line-54"> * so the framework folds {@code FreemarkerMixin}'s {@link FreemarkerViewRenderer} into the host's own</span>
+<span class="source-line-no">055</span><span id="line-55"> * response-processor chain automatically.</span>
+<span class="source-line-no">056</span><span id="line-56"> *</span>
+<span class="source-line-no">057</span><span id="line-57"> * &lt;p&gt;</span>
+<span class="source-line-no">058</span><span id="line-58"> * This fold is per-mixin, opt-in, and response-processor-scoped: it happens only because</span>
+<span class="source-line-no">059</span><span id="line-59"> * {@code FreemarkerMixin} declares the opt-in (a mixin that does not is still scoped to its own endpoints, the</span>
+<span class="source-line-no">060</span><span id="line-60"> * standard {@link Rest#mixins() @Rest(mixins=...)} rule), and it folds only the renderer &amp;mdash; never</span>
+<span class="source-line-no">061</span><span id="line-61"> * {@code guards}, {@code serializers}, or any other list-shaped attribute.</span>
+<span class="source-line-no">062</span><span id="line-62"> *</span>
+<span class="source-line-no">063</span><span id="line-63"> * &lt;p&gt;</span>
+<span class="source-line-no">064</span><span id="line-64"> * Two explicit wirings remain supported &amp;mdash; useful when you want to be explicit, or to fold more than the</span>
+<span class="source-line-no">065</span><span id="line-65"> * renderer:</span>
 <span class="source-line-no">066</span><span id="line-66"> *</span>
-<span class="source-line-no">067</span><span id="line-67"> * &lt;p&gt;</span>
-<span class="source-line-no">068</span><span id="line-68"> * The default mount {@code /freemarker/*} can be overridden via the SVL variable</span>
-<span class="source-line-no">069</span><span id="line-69"> * {@code ${juneau.freemarker.path:freemarker}} &amp;mdash; set via system property</span>
-<span class="source-line-no">070</span><span id="line-70"> * ({@code -Djuneau.freemarker.path=views}), environment variable</span>
-<span class="source-line-no">071</span><span id="line-71"> * ({@code JUNEAU_FREEMARKER_PATH=views}), or {@code Config} key</span>
-<span class="source-line-no">072</span><span id="line-72"> * ({@code juneau.freemarker.path = views}) to change the runtime mount without subclassing.</span>
-<span class="source-line-no">073</span><span id="line-73"> * Resolution happens once at {@link RestContext} construction time (SVL resolution in {@code @RestOp(path)}).</span>
+<span class="source-line-no">067</span><span id="line-67"> * &lt;ol class='spaced-list'&gt;</span>
+<span class="source-line-no">068</span><span id="line-68"> *    &lt;li&gt;&lt;b&gt;{@link Mixin#mergeIntoHost() @Mixin(mergeIntoHost=true)}&lt;/b&gt; via the rich {@link Rest#mixinDefs()</span>
+<span class="source-line-no">069</span><span id="line-69"> *       mixinDefs} form &amp;mdash; folds &lt;b&gt;all&lt;/b&gt; of {@code FreemarkerMixin}'s list-shaped {@code @Rest}</span>
+<span class="source-line-no">070</span><span id="line-70"> *       attributes into the host's own chain, not just the renderer.</span>
+<span class="source-line-no">071</span><span id="line-71"> *    &lt;li&gt;&lt;b&gt;List {@link FreemarkerViewRenderer FreemarkerViewRenderer.class} explicitly&lt;/b&gt; in the host's own</span>
+<span class="source-line-no">072</span><span id="line-72"> *       {@code @Rest(responseProcessors=...)} &amp;mdash; the fully manual equivalent.</span>
+<span class="source-line-no">073</span><span id="line-73"> * &lt;/ol&gt;</span>
 <span class="source-line-no">074</span><span id="line-74"> *</span>
-<span class="source-line-no">075</span><span id="line-75"> * &lt;h5 class='section'&gt;Mixin-only deployment:&lt;/h5&gt;</span>
-<span class="source-line-no">076</span><span id="line-76"> *</span>
-<span class="source-line-no">077</span><span id="line-77"> * &lt;p&gt;</span>
-<span class="source-line-no">078</span><span id="line-78"> * This resource is designed for composition via {@code @Rest(mixins=...)}. The mount path is</span>
-<span class="source-line-no">079</span><span id="line-79"> * pinned at the op level by</span>
-<span class="source-line-no">080</span><span id="line-80"> * {@link RestGet @RestGet(path="/&amp;#123;juneau.freemarker.path:freemarker&amp;#125;/*")} on {@link #render};</span>
-<span class="source-line-no">081</span><span id="line-81"> * a class-level {@code @Rest(paths=...)} declaration would be silently ignored under the mixin</span>
-<span class="source-line-no">082</span><span id="line-82"> * pattern (see {@link Rest#paths() @Rest(paths)} Javadoc).</span>
+<span class="source-line-no">075</span><span id="line-75"> * &lt;p&gt;</span>
+<span class="source-line-no">076</span><span id="line-76"> * The {@link org.apache.juneau.rest.server.processor.ResponseProcessorList} partition pass repositions</span>
+<span class="source-line-no">077</span><span id="line-77"> * {@link FreemarkerViewRenderer} (a</span>
+<span class="source-line-no">078</span><span id="line-78"> * {@link org.apache.juneau.rest.server.view.ViewRenderer ViewRenderer}) ahead of</span>
+<span class="source-line-no">079</span><span id="line-79"> * {@code SerializedPojoProcessor} in every case, so the {@link FreemarkerView} bean is dispatched to the</span>
+<span class="source-line-no">080</span><span id="line-80"> * FreeMarker engine rather than bean-serialized.</span>
+<span class="source-line-no">081</span><span id="line-81"> *</span>
+<span class="source-line-no">082</span><span id="line-82"> * &lt;h5 class='figure'&gt;Composition example (microservice):&lt;/h5&gt;</span>
 <span class="source-line-no">083</span><span id="line-83"> *</span>
-<span class="source-line-no">084</span><span id="line-84"> * &lt;h5 class='section'&gt;Choosing a Configuration:&lt;/h5&gt;</span>
-<span class="source-line-no">085</span><span id="line-85"> *</span>
-<span class="source-line-no">086</span><span id="line-86"> * &lt;p&gt;</span>
-<span class="source-line-no">087</span><span id="line-87"> * The {@code juneau-rest-server-view-freemarker} module ships &lt;b&gt;only&lt;/b&gt;</span>
-<span class="source-line-no">088</span><span id="line-88"> * {@code org.freemarker:freemarker} in {@code provided} scope. &lt;b&gt;No configuration bean is</span>
-<span class="source-line-no">089</span><span id="line-89"> * bundled.&lt;/b&gt; The bridge resolves a {@link Configuration} at first use from three sources, in</span>
-<span class="source-line-no">090</span><span id="line-90"> * order:</span>
-<span class="source-line-no">091</span><span id="line-91"> *</span>
-<span class="source-line-no">092</span><span id="line-92"> * &lt;ul class='spaced-list'&gt;</span>
-<span class="source-line-no">093</span><span id="line-93"> *    &lt;li&gt;&lt;b&gt;User-supplied bean:&lt;/b&gt; register a {@code @Bean freemarker.template.Configuration}</span>
-<span class="source-line-no">094</span><span id="line-94"> *       (Spring) or</span>
-<span class="source-line-no">095</span><span id="line-95"> *       {@code BasicBeanStore.put(freemarker.template.Configuration.class, cfg)} (microservice).</span>
-<span class="source-line-no">096</span><span id="line-96"> *       Spring Boot's {@code spring-boot-starter-freemarker} autoconfigures one out of the box;</span>
-<span class="source-line-no">097</span><span id="line-97"> *       the bridge picks it up via {@code BeanStore.getBean(Configuration.class)}.</span>
-<span class="source-line-no">098</span><span id="line-98"> *    &lt;li&gt;&lt;b&gt;Bridge default:&lt;/b&gt; when nothing is registered, the bridge constructs a default</span>
-<span class="source-line-no">099</span><span id="line-99"> *       {@link Configuration} anchored on a classpath resource root derived from</span>
-<span class="source-line-no">100</span><span id="line-100"> *       {@link #getBasePath() basePath} ({@code "/templates/"} becomes</span>
-<span class="source-line-no">101</span><span id="line-101"> *       {@code ClassLoaderTemplateResolver}-equivalent prefix {@code "/templates"}). The default</span>
-<span class="source-line-no">102</span><span id="line-102"> *       pins {@code IncompatibleImprovements} to the bridge-tested minor version</span>
-<span class="source-line-no">103</span><span id="line-103"> *       ({@code Configuration.VERSION_2_3_34}), sets {@code DefaultEncoding} to {@code UTF-8},</span>
-<span class="source-line-no">104</span><span id="line-104"> *       uses {@code HTMLOutputFormat} so HTML escaping is the natural target, and applies</span>
-<span class="source-line-no">105</span><span id="line-105"> *       {@code TemplateUpdateDelayMilliseconds} per the {@link #isCacheTemplates() cacheTemplates}</span>
-<span class="source-line-no">106</span><span id="line-106"> *       flag (production-safe by default; users opt into hot-reload via</span>
-<span class="source-line-no">107</span><span id="line-107"> *       {@link Builder#cacheTemplates(boolean) cacheTemplates(false)}).</span>
-<span class="source-line-no">108</span><span id="line-108"> * &lt;/ul&gt;</span>
-<span class="source-line-no">109</span><span id="line-109"> *</span>
-<span class="source-line-no">110</span><span id="line-110"> * &lt;p&gt;</span>
-<span class="source-line-no">111</span><span id="line-111"> * When no FreeMarker engine is on the classpath, the renderer surfaces</span>
-<span class="source-line-no">112</span><span id="line-112"> * {@link FreemarkerViewRenderer#NO_ENGINE_DIAGNOSTIC} naming the missing dependency.</span>
+<span class="source-line-no">084</span><span id="line-84"> * &lt;p class='bjava'&gt;</span>
+<span class="source-line-no">085</span><span id="line-85"> *    &lt;ja&gt;@Rest&lt;/ja&gt;(path=&lt;js&gt;"/app"&lt;/js&gt;, mixins=FreemarkerMixin.&lt;jk&gt;class&lt;/jk&gt;)</span>
+<span class="source-line-no">086</span><span id="line-86"> *    &lt;jk&gt;public class&lt;/jk&gt; AppResource &lt;jk&gt;extends&lt;/jk&gt; RestServlet {</span>
+<span class="source-line-no">087</span><span id="line-87"> *</span>
+<span class="source-line-no">088</span><span id="line-88"> *       &lt;ja&gt;@Bean&lt;/ja&gt; FreemarkerMixin freemarker() {</span>
+<span class="source-line-no">089</span><span id="line-89"> *          &lt;jk&gt;return&lt;/jk&gt; FreemarkerMixin.&lt;jsm&gt;create&lt;/jsm&gt;()</span>
+<span class="source-line-no">090</span><span id="line-90"> *             .basePath(&lt;js&gt;"/templates/"&lt;/js&gt;)</span>
+<span class="source-line-no">091</span><span id="line-91"> *             .templateSuffix(&lt;js&gt;".ftlh"&lt;/js&gt;)</span>
+<span class="source-line-no">092</span><span id="line-92"> *             .build();</span>
+<span class="source-line-no">093</span><span id="line-93"> *       }</span>
+<span class="source-line-no">094</span><span id="line-94"> *</span>
+<span class="source-line-no">095</span><span id="line-95"> *       &lt;ja&gt;@RestGet&lt;/ja&gt;(&lt;js&gt;"/hello/{name}"&lt;/js&gt;)</span>
+<span class="source-line-no">096</span><span id="line-96"> *       &lt;jk&gt;public&lt;/jk&gt; View hello(&lt;ja&gt;@Path&lt;/ja&gt; String &lt;jv&gt;name&lt;/jv&gt;) {</span>
+<span class="source-line-no">097</span><span id="line-97"> *          &lt;jk&gt;return&lt;/jk&gt; FreemarkerView.&lt;jsm&gt;of&lt;/jsm&gt;(&lt;js&gt;"hello"&lt;/js&gt;).attr(&lt;js&gt;"name"&lt;/js&gt;, &lt;jv&gt;name&lt;/jv&gt;);</span>
+<span class="source-line-no">098</span><span id="line-98"> *       }</span>
+<span class="source-line-no">099</span><span id="line-99"> *    }</span>
+<span class="source-line-no">100</span><span id="line-100"> * &lt;/p&gt;</span>
+<span class="source-line-no">101</span><span id="line-101"> *</span>
+<span class="source-line-no">102</span><span id="line-102"> * &lt;h5 class='section'&gt;Configurable mount path:&lt;/h5&gt;</span>
+<span class="source-line-no">103</span><span id="line-103"> *</span>
+<span class="source-line-no">104</span><span id="line-104"> * &lt;p&gt;</span>
+<span class="source-line-no">105</span><span id="line-105"> * The default mount {@code /freemarker/*} can be overridden via the SVL variable</span>
+<span class="source-line-no">106</span><span id="line-106"> * {@code ${juneau.freemarker.path:freemarker}} &amp;mdash; set via system property</span>
+<span class="source-line-no">107</span><span id="line-107"> * ({@code -Djuneau.freemarker.path=views}), environment variable</span>
+<span class="source-line-no">108</span><span id="line-108"> * ({@code JUNEAU_FREEMARKER_PATH=views}), or {@code Config} key</span>
+<span class="source-line-no">109</span><span id="line-109"> * ({@code juneau.freemarker.path = views}) to change the runtime mount without subclassing.</span>
+<span class="source-line-no">110</span><span id="line-110"> * Resolution happens once at {@link RestContext} construction time (SVL resolution in {@code @RestOp(path)}).</span>
+<span class="source-line-no">111</span><span id="line-111"> *</span>
+<span class="source-line-no">112</span><span id="line-112"> * &lt;h5 class='section'&gt;Mixin-only deployment:&lt;/h5&gt;</span>
 <span class="source-line-no">113</span><span id="line-113"> *</span>
-<span class="source-line-no">114</span><span id="line-114"> * &lt;h5 class='section'&gt;Template suffix:&lt;/h5&gt;</span>
-<span class="source-line-no">115</span><span id="line-115"> *</span>
-<span class="source-line-no">116</span><span id="line-116"> * &lt;p&gt;</span>
-<span class="source-line-no">117</span><span id="line-117"> * FreeMarker's API does not expose a configuration-level resolver suffix &amp;mdash; the literal</span>
-<span class="source-line-no">118</span><span id="line-118"> * template name is what {@link Configuration#getTemplate(String) cfg.getTemplate(...)} sees. The</span>
-<span class="source-line-no">119</span><span id="line-119"> * {@link Builder#templateSuffix(String) templateSuffix(...)} builder knob fills the gap: when</span>
-<span class="source-line-no">120</span><span id="line-120"> * non-blank, the bridge appends the configured suffix to template names that don't already end</span>
-<span class="source-line-no">121</span><span id="line-121"> * with it (idempotent), so callers can write {@code FreemarkerView.of("hello")} or request</span>
-<span class="source-line-no">122</span><span id="line-122"> * {@code /freemarker/hello} and have it resolve to {@code hello.ftlh} on the classpath.</span>
-<span class="source-line-no">123</span><span id="line-123"> *</span>
-<span class="source-line-no">124</span><span id="line-124"> * &lt;h5 class='section'&gt;{@code .ftl} vs {@code .ftlh}:&lt;/h5&gt;</span>
-<span class="source-line-no">125</span><span id="line-125"> *</span>
-<span class="source-line-no">126</span><span id="line-126"> * &lt;p&gt;</span>
-<span class="source-line-no">127</span><span id="line-127"> * FreeMarker auto-selects HTML escaping by file extension: {@code .ftlh} templates emit</span>
-<span class="source-line-no">128</span><span id="line-128"> * HTML-escaped output; {@code .ftl} templates emit raw output. For HTML responses, prefer</span>
-<span class="source-line-no">129</span><span id="line-129"> * {@code .ftlh} so a future attribute-binding change can't introduce an XSS regression.</span>
-<span class="source-line-no">130</span><span id="line-130"> *</span>
-<span class="source-line-no">131</span><span id="line-131"> * &lt;h5 class='section'&gt;Multiple base paths:&lt;/h5&gt;</span>
-<span class="source-line-no">132</span><span id="line-132"> *</span>
-<span class="source-line-no">133</span><span id="line-133"> * &lt;p&gt;</span>
-<span class="source-line-no">134</span><span id="line-134"> * A host with {@code /templates/} and {@code /admin/templates/} template trees registers two</span>
-<span class="source-line-no">135</span><span id="line-135"> * {@code FreemarkerMixin} beans, each mounted via a subclass declaring its own op-level</span>
-<span class="source-line-no">136</span><span id="line-136"> * {@code @RestGet(path=...)} override and its own {@code basePath}. See the</span>
-<span class="source-line-no">137</span><span id="line-137"> * {@code FreemarkerMixin_MockRest_Test} test in {@code juneau-integration-tests} for the canonical</span>
-<span class="source-line-no">138</span><span id="line-138"> * pattern.</span>
-<span class="source-line-no">139</span><span id="line-139"> *</span>
-<span class="source-line-no">140</span><span id="line-140"> * &lt;h5 class='section'&gt;OpenAPI surface:&lt;/h5&gt;</span>
-<span class="source-line-no">141</span><span id="line-141"> *</span>
-<span class="source-line-no">142</span><span id="line-142"> * &lt;p&gt;</span>
-<span class="source-line-no">143</span><span id="line-143"> * The greedy {@code /*} handler is not API-meaningful and is excluded from generated</span>
-<span class="source-line-no">144</span><span id="line-144"> * Swagger / OpenAPI specs via {@link OpSwagger#ignore() @OpSwagger(ignore=true)}.</span>
-<span class="source-line-no">145</span><span id="line-145"> *</span>
-<span class="source-line-no">146</span><span id="line-146"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
-<span class="source-line-no">147</span><span id="line-147"> *    &lt;li class='jc'&gt;{@link FreemarkerView}</span>
-<span class="source-line-no">148</span><span id="line-148"> *    &lt;li class='jc'&gt;{@link FreemarkerViewRenderer}</span>
-<span class="source-line-no">149</span><span id="line-149"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/FreemarkerViewSupport"&gt;FreeMarker View Support&lt;/a&gt;</span>
-<span class="source-line-no">150</span><span id="line-150"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerComposition"&gt;REST Server &amp;mdash; Mixins and Multi-Mount Paths&lt;/a&gt;</span>
-<span class="source-line-no">151</span><span id="line-151"> * &lt;/ul&gt;</span>
-<span class="source-line-no">152</span><span id="line-152"> *</span>
-<span class="source-line-no">153</span><span id="line-153"> * @since 10.0.0</span>
-<span class="source-line-no">154</span><span id="line-154"> */</span>
-<span class="source-line-no">155</span><span id="line-155">// @formatter:off</span>
-<span class="source-line-no">156</span><span id="line-156">@Rest(</span>
-<span class="source-line-no">157</span><span id="line-157">   responseProcessors={FreemarkerViewRenderer.class}</span>
-<span class="source-line-no">158</span><span id="line-158">)</span>
-<span class="source-line-no">159</span><span id="line-159">public class FreemarkerMixin {</span>
-<span class="source-line-no">160</span><span id="line-160"></span>
-<span class="source-line-no">161</span><span id="line-161">   /** Default base path applied when no {@link Builder#basePath(String)} call has been made. */</span>
-<span class="source-line-no">162</span><span id="line-162">   public static final String DEFAULT_BASE_PATH = FreemarkerDispatcher.DEFAULT_BASE_PATH;</span>
-<span class="source-line-no">163</span><span id="line-163"></span>
-<span class="source-line-no">164</span><span id="line-164">   /** Default template suffix &amp;mdash; empty (literal template names, no implicit suffix). */</span>
-<span class="source-line-no">165</span><span id="line-165">   public static final String DEFAULT_TEMPLATE_SUFFIX = FreemarkerDispatcher.DEFAULT_TEMPLATE_SUFFIX;</span>
-<span class="source-line-no">166</span><span id="line-166"></span>
-<span class="source-line-no">167</span><span id="line-167">   /** Default template-cache flag &amp;mdash; {@code true} (production-safe). */</span>
-<span class="source-line-no">168</span><span id="line-168">   public static final boolean DEFAULT_CACHE_TEMPLATES = FreemarkerDispatcher.DEFAULT_CACHE_TEMPLATES;</span>
-<span class="source-line-no">169</span><span id="line-169"></span>
-<span class="source-line-no">170</span><span id="line-170">   private final FreemarkerDispatcher worker;</span>
-<span class="source-line-no">171</span><span id="line-171"></span>
-<span class="source-line-no">172</span><span id="line-172">   /**</span>
-<span class="source-line-no">173</span><span id="line-173">    * Creates a new builder.</span>
-<span class="source-line-no">174</span><span id="line-174">    *</span>
-<span class="source-line-no">175</span><span id="line-175">    * @return A new builder.</span>
-<span class="source-line-no">176</span><span id="line-176">    */</span>
-<span class="source-line-no">177</span><span id="line-177">   public static Builder create() {</span>
-<span class="source-line-no">178</span><span id="line-178">      return new Builder();</span>
-<span class="source-line-no">179</span><span id="line-179">   }</span>
-<span class="source-line-no">180</span><span id="line-180"></span>
-<span class="source-line-no">181</span><span id="line-181">   /**</span>
-<span class="source-line-no">182</span><span id="line-182">    * No-arg constructor &amp;mdash; uses {@link #DEFAULT_BASE_PATH} as the base path,</span>
-<span class="source-line-no">183</span><span id="line-183">    * {@link #DEFAULT_TEMPLATE_SUFFIX} as the template suffix, and</span>
-<span class="source-line-no">184</span><span id="line-184">    * {@link #DEFAULT_CACHE_TEMPLATES} as the cache flag.</span>
-<span class="source-line-no">185</span><span id="line-185">    *</span>
-<span class="source-line-no">186</span><span id="line-186">    * &lt;p&gt;</span>
-<span class="source-line-no">187</span><span id="line-187">    * The mixin walk falls back to this constructor when the</span>
-<span class="source-line-no">188</span><span id="line-188">    * {@link org.apache.juneau.commons.inject.BeanStore BeanStore} does not have a registered</span>
-<span class="source-line-no">189</span><span id="line-189">    * {@code FreemarkerMixin} bean.</span>
-<span class="source-line-no">190</span><span id="line-190">    */</span>
-<span class="source-line-no">191</span><span id="line-191">   public FreemarkerMixin() {</span>
-<span class="source-line-no">192</span><span id="line-192">      this(create());</span>
-<span class="source-line-no">193</span><span id="line-193">   }</span>
-<span class="source-line-no">194</span><span id="line-194"></span>
-<span class="source-line-no">195</span><span id="line-195">   /**</span>
-<span class="source-line-no">196</span><span id="line-196">    * Builder constructor.</span>
-<span class="source-line-no">197</span><span id="line-197">    *</span>
-<span class="source-line-no">198</span><span id="line-198">    * @param builder The builder. Must not be {@code null}.</span>
-<span class="source-line-no">199</span><span id="line-199">    */</span>
-<span class="source-line-no">200</span><span id="line-200">   protected FreemarkerMixin(Builder builder) {</span>
-<span class="source-line-no">201</span><span id="line-201">      worker = builder.worker.build();</span>
-<span class="source-line-no">202</span><span id="line-202">   }</span>
-<span class="source-line-no">203</span><span id="line-203"></span>
-<span class="source-line-no">204</span><span id="line-204">   /**</span>
-<span class="source-line-no">205</span><span id="line-205">    * Returns the base path under which template resources are resolved.</span>
-<span class="source-line-no">206</span><span id="line-206">    *</span>
-<span class="source-line-no">207</span><span id="line-207">    * @return The base path. Never {@code null}.</span>
-<span class="source-line-no">208</span><span id="line-208">    */</span>
-<span class="source-line-no">209</span><span id="line-209">   public String getBasePath() {</span>
-<span class="source-line-no">210</span><span id="line-210">      return worker.getBasePath();</span>
-<span class="source-line-no">211</span><span id="line-211">   }</span>
-<span class="source-line-no">212</span><span id="line-212"></span>
-<span class="source-line-no">213</span><span id="line-213">   /**</span>
-<span class="source-line-no">214</span><span id="line-214">    * Returns the configured template-name suffix.</span>
-<span class="source-line-no">215</span><span id="line-215">    *</span>
-<span class="source-line-no">216</span><span id="line-216">    * @return The template suffix. Never {@code null}.</span>
-<span class="source-line-no">217</span><span id="line-217">    */</span>
-<span class="source-line-no">218</span><span id="line-218">   public String getTemplateSuffix() {</span>
-<span class="source-line-no">219</span><span id="line-219">      return worker.getTemplateSuffix();</span>
-<span class="source-line-no">220</span><span id="line-220">   }</span>
+<span class="source-line-no">114</span><span id="line-114"> * &lt;p&gt;</span>
+<span class="source-line-no">115</span><span id="line-115"> * This resource is designed for composition via {@code @Rest(mixins=...)}. The mount path is</span>
+<span class="source-line-no">116</span><span id="line-116"> * pinned at the op level by</span>
+<span class="source-line-no">117</span><span id="line-117"> * {@link RestGet @RestGet(path="/&amp;#123;juneau.freemarker.path:freemarker&amp;#125;/*")} on {@link #render};</span>
+<span class="source-line-no">118</span><span id="line-118"> * a class-level {@code @Rest(paths=...)} declaration would be silently ignored under the mixin</span>
+<span class="source-line-no">119</span><span id="line-119"> * pattern (see {@link Rest#paths() @Rest(paths)} Javadoc).</span>
+<span class="source-line-no">120</span><span id="line-120"> *</span>
+<span class="source-line-no">121</span><span id="line-121"> * &lt;h5 class='section'&gt;Choosing a Configuration:&lt;/h5&gt;</span>
+<span class="source-line-no">122</span><span id="line-122"> *</span>
+<span class="source-line-no">123</span><span id="line-123"> * &lt;p&gt;</span>
+<span class="source-line-no">124</span><span id="line-124"> * The {@code juneau-rest-server-view-freemarker} module ships &lt;b&gt;only&lt;/b&gt;</span>
+<span class="source-line-no">125</span><span id="line-125"> * {@code org.freemarker:freemarker} in {@code provided} scope. &lt;b&gt;No configuration bean is</span>
+<span class="source-line-no">126</span><span id="line-126"> * bundled.&lt;/b&gt; The bridge resolves a {@link Configuration} at first use from three sources, in</span>
+<span class="source-line-no">127</span><span id="line-127"> * order:</span>
+<span class="source-line-no">128</span><span id="line-128"> *</span>
+<span class="source-line-no">129</span><span id="line-129"> * &lt;ul class='spaced-list'&gt;</span>
+<span class="source-line-no">130</span><span id="line-130"> *    &lt;li&gt;&lt;b&gt;User-supplied bean:&lt;/b&gt; register a {@code @Bean freemarker.template.Configuration}</span>
+<span class="source-line-no">131</span><span id="line-131"> *       (Spring) or</span>
+<span class="source-line-no">132</span><span id="line-132"> *       {@code BasicBeanStore.put(freemarker.template.Configuration.class, cfg)} (microservice).</span>
+<span class="source-line-no">133</span><span id="line-133"> *       Spring Boot's {@code spring-boot-starter-freemarker} autoconfigures one out of the box;</span>
+<span class="source-line-no">134</span><span id="line-134"> *       the bridge picks it up via {@code BeanStore.getBean(Configuration.class)}.</span>
+<span class="source-line-no">135</span><span id="line-135"> *    &lt;li&gt;&lt;b&gt;Bridge default:&lt;/b&gt; when nothing is registered, the bridge constructs a default</span>
+<span class="source-line-no">136</span><span id="line-136"> *       {@link Configuration} anchored on a classpath resource root derived from</span>
+<span class="source-line-no">137</span><span id="line-137"> *       {@link #getBasePath() basePath} ({@code "/templates/"} becomes</span>
+<span class="source-line-no">138</span><span id="line-138"> *       {@code ClassLoaderTemplateResolver}-equivalent prefix {@code "/templates"}). The default</span>
+<span class="source-line-no">139</span><span id="line-139"> *       pins {@code IncompatibleImprovements} to the bridge-tested minor version</span>
+<span class="source-line-no">140</span><span id="line-140"> *       ({@code Configuration.VERSION_2_3_34}), sets {@code DefaultEncoding} to {@code UTF-8},</span>
+<span class="source-line-no">141</span><span id="line-141"> *       uses {@code HTMLOutputFormat} so HTML escaping is the natural target, applies</span>
+<span class="source-line-no">142</span><span id="line-142"> *       {@code TemplateUpdateDelayMilliseconds} per the {@link #isCacheTemplates() cacheTemplates}</span>
+<span class="source-line-no">143</span><span id="line-143"> *       flag (production-safe by default; users opt into hot-reload via</span>
+<span class="source-line-no">144</span><span id="line-144"> *       {@link Builder#cacheTemplates(boolean) cacheTemplates(false)}), and sets an</span>
+<span class="source-line-no">145</span><span id="line-145"> *       {@code ObjectWrapper} with {@code exposeFields=true} (see below) unless overridden.</span>
+<span class="source-line-no">146</span><span id="line-146"> * &lt;/ul&gt;</span>
+<span class="source-line-no">147</span><span id="line-147"> *</span>
+<span class="source-line-no">148</span><span id="line-148"> * &lt;p&gt;</span>
+<span class="source-line-no">149</span><span id="line-149"> * When no FreeMarker engine is on the classpath, the renderer surfaces</span>
+<span class="source-line-no">150</span><span id="line-150"> * {@link FreemarkerViewRenderer#NO_ENGINE_DIAGNOSTIC} naming the missing dependency.</span>
+<span class="source-line-no">151</span><span id="line-151"> *</span>
+<span class="source-line-no">152</span><span id="line-152"> * &lt;h5 class='section'&gt;Public-field DTOs (getter-only default trap):&lt;/h5&gt;</span>
+<span class="source-line-no">153</span><span id="line-153"> *</span>
+<span class="source-line-no">154</span><span id="line-154"> * &lt;p&gt;</span>
+<span class="source-line-no">155</span><span id="line-155"> * FreeMarker's own version-default {@code ObjectWrapper} exposes only JavaBean getters &amp;mdash; a</span>
+<span class="source-line-no">156</span><span id="line-156"> * view-model bean written as a simple DTO with public fields and no getters resolves every</span>
+<span class="source-line-no">157</span><span id="line-157"> * {@code ${bean.field}} reference to {@code null}/missing, &lt;b&gt;silently&lt;/b&gt; (a template using</span>
+<span class="source-line-no">158</span><span id="line-158"> * {@code !'default'} fallbacks renders the default with no error at all; a bare {@code ${bean.field}}</span>
+<span class="source-line-no">159</span><span id="line-159"> * with no fallback throws at render time). This bridge avoids that trap by default: the bridge-built</span>
+<span class="source-line-no">160</span><span id="line-160"> * {@link Configuration} sets a {@link DefaultObjectWrapper} with {@code exposeFields=true}</span>
+<span class="source-line-no">161</span><span id="line-161"> * ({@link #DEFAULT_EXPOSE_FIELDS}), so public-field DTOs render their field values out of the</span>
+<span class="source-line-no">162</span><span id="line-162"> * box &amp;mdash; matching how Juneau's own marshalling is comfortable with public-field beans elsewhere.</span>
+<span class="source-line-no">163</span><span id="line-163"> * Use {@link Builder#exposeFields(boolean) exposeFields(false)} to restore FreeMarker's getter-only</span>
+<span class="source-line-no">164</span><span id="line-164"> * behavior, or {@link Builder#objectWrapper(ObjectWrapper) objectWrapper(...)} for full control</span>
+<span class="source-line-no">165</span><span id="line-165"> * (e.g. a {@code BeansWrapper} with custom exposure rules). Both knobs only affect the</span>
+<span class="source-line-no">166</span><span id="line-166"> * bridge-default {@link Configuration}; a user-supplied {@code @Bean Configuration} is used as-is.</span>
+<span class="source-line-no">167</span><span id="line-167"> *</span>
+<span class="source-line-no">168</span><span id="line-168"> * &lt;h5 class='section'&gt;Template suffix:&lt;/h5&gt;</span>
+<span class="source-line-no">169</span><span id="line-169"> *</span>
+<span class="source-line-no">170</span><span id="line-170"> * &lt;p&gt;</span>
+<span class="source-line-no">171</span><span id="line-171"> * FreeMarker's API does not expose a configuration-level resolver suffix &amp;mdash; the literal</span>
+<span class="source-line-no">172</span><span id="line-172"> * template name is what {@link Configuration#getTemplate(String) cfg.getTemplate(...)} sees. The</span>
+<span class="source-line-no">173</span><span id="line-173"> * {@link Builder#templateSuffix(String) templateSuffix(...)} builder knob fills the gap: when</span>
+<span class="source-line-no">174</span><span id="line-174"> * non-blank, the bridge appends the configured suffix to template names that don't already end</span>
+<span class="source-line-no">175</span><span id="line-175"> * with it (idempotent), so callers can write {@code FreemarkerView.of("hello")} or request</span>
+<span class="source-line-no">176</span><span id="line-176"> * {@code /freemarker/hello} and have it resolve to {@code hello.ftlh} on the classpath.</span>
+<span class="source-line-no">177</span><span id="line-177"> *</span>
+<span class="source-line-no">178</span><span id="line-178"> * &lt;h5 class='section'&gt;{@code .ftl} vs {@code .ftlh}:&lt;/h5&gt;</span>
+<span class="source-line-no">179</span><span id="line-179"> *</span>
+<span class="source-line-no">180</span><span id="line-180"> * &lt;p&gt;</span>
+<span class="source-line-no">181</span><span id="line-181"> * FreeMarker auto-selects HTML escaping by file extension: {@code .ftlh} templates emit</span>
+<span class="source-line-no">182</span><span id="line-182"> * HTML-escaped output; {@code .ftl} templates emit raw output. For HTML responses, prefer</span>
+<span class="source-line-no">183</span><span id="line-183"> * {@code .ftlh} so a future attribute-binding change can't introduce an XSS regression.</span>
+<span class="source-line-no">184</span><span id="line-184"> *</span>
+<span class="source-line-no">185</span><span id="line-185"> * &lt;h5 class='section'&gt;Multiple base paths:&lt;/h5&gt;</span>
+<span class="source-line-no">186</span><span id="line-186"> *</span>
+<span class="source-line-no">187</span><span id="line-187"> * &lt;p&gt;</span>
+<span class="source-line-no">188</span><span id="line-188"> * A host with {@code /templates/} and {@code /admin/templates/} template trees registers two</span>
+<span class="source-line-no">189</span><span id="line-189"> * {@code FreemarkerMixin} beans, each mounted via a subclass declaring its own op-level</span>
+<span class="source-line-no">190</span><span id="line-190"> * {@code @RestGet(path=...)} override and its own {@code basePath}. See the</span>
+<span class="source-line-no">191</span><span id="line-191"> * {@code FreemarkerMixin_MockRest_Test} test in {@code juneau-integration-tests} for the canonical</span>
+<span class="source-line-no">192</span><span id="line-192"> * pattern.</span>
+<span class="source-line-no">193</span><span id="line-193"> *</span>
+<span class="source-line-no">194</span><span id="line-194"> * &lt;h5 class='section'&gt;OpenAPI surface:&lt;/h5&gt;</span>
+<span class="source-line-no">195</span><span id="line-195"> *</span>
+<span class="source-line-no">196</span><span id="line-196"> * &lt;p&gt;</span>
+<span class="source-line-no">197</span><span id="line-197"> * The greedy {@code /*} handler is not API-meaningful and is excluded from generated</span>
+<span class="source-line-no">198</span><span id="line-198"> * Swagger / OpenAPI specs via {@link OpSwagger#ignore() @OpSwagger(ignore=true)}.</span>
+<span class="source-line-no">199</span><span id="line-199"> *</span>
+<span class="source-line-no">200</span><span id="line-200"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">201</span><span id="line-201"> *    &lt;li class='jc'&gt;{@link FreemarkerView}</span>
+<span class="source-line-no">202</span><span id="line-202"> *    &lt;li class='jc'&gt;{@link FreemarkerViewRenderer}</span>
+<span class="source-line-no">203</span><span id="line-203"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/FreemarkerViewSupport"&gt;FreeMarker View Support&lt;/a&gt;</span>
+<span class="source-line-no">204</span><span id="line-204"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerComposition"&gt;REST Server &amp;mdash; Mixins and Multi-Mount Paths&lt;/a&gt;</span>
+<span class="source-line-no">205</span><span id="line-205"> * &lt;/ul&gt;</span>
+<span class="source-line-no">206</span><span id="line-206"> *</span>
+<span class="source-line-no">207</span><span id="line-207"> * @since 10.0.0</span>
+<span class="source-line-no">208</span><span id="line-208"> */</span>
+<span class="source-line-no">209</span><span id="line-209">// @formatter:off</span>
+<span class="source-line-no">210</span><span id="line-210">@Rest(</span>
+<span class="source-line-no">211</span><span id="line-211">   responseProcessors={FreemarkerViewRenderer.class},</span>
+<span class="source-line-no">212</span><span id="line-212">   mergeResponseProcessorsIntoHost=true</span>
+<span class="source-line-no">213</span><span id="line-213">)</span>
+<span class="source-line-no">214</span><span id="line-214">public class FreemarkerMixin {</span>
+<span class="source-line-no">215</span><span id="line-215"></span>
+<span class="source-line-no">216</span><span id="line-216">   /** Default base path applied when no {@link Builder#basePath(String)} call has been made. */</span>
+<span class="source-line-no">217</span><span id="line-217">   public static final String DEFAULT_BASE_PATH = FreemarkerDispatcher.DEFAULT_BASE_PATH;</span>
+<span class="source-line-no">218</span><span id="line-218"></span>
+<span class="source-line-no">219</span><span id="line-219">   /** Default template suffix &amp;mdash; empty (literal template names, no implicit suffix). */</span>
+<span class="source-line-no">220</span><span id="line-220">   public static final String DEFAULT_TEMPLATE_SUFFIX = FreemarkerDispatcher.DEFAULT_TEMPLATE_SUFFIX;</span>
 <span class="source-line-no">221</span><span id="line-221"></span>
-<span class="source-line-no">222</span><span id="line-222">   /**</span>
-<span class="source-line-no">223</span><span id="line-223">    * Returns the template-cache flag.</span>
-<span class="source-line-no">224</span><span id="line-224">    *</span>
-<span class="source-line-no">225</span><span id="line-225">    * @return The cache flag.</span>
-<span class="source-line-no">226</span><span id="line-226">    */</span>
-<span class="source-line-no">227</span><span id="line-227">   public boolean isCacheTemplates() {</span>
-<span class="source-line-no">228</span><span id="line-228">      return worker.isCacheTemplates();</span>
-<span class="source-line-no">229</span><span id="line-229">   }</span>
-<span class="source-line-no">230</span><span id="line-230"></span>
-<span class="source-line-no">231</span><span id="line-231">   /**</span>
-<span class="source-line-no">232</span><span id="line-232">    * Appends {@link #getTemplateSuffix()} to {@code name} if not already present (idempotent).</span>
+<span class="source-line-no">222</span><span id="line-222">   /** Default template-cache flag &amp;mdash; {@code true} (production-safe). */</span>
+<span class="source-line-no">223</span><span id="line-223">   public static final boolean DEFAULT_CACHE_TEMPLATES = FreemarkerDispatcher.DEFAULT_CACHE_TEMPLATES;</span>
+<span class="source-line-no">224</span><span id="line-224"></span>
+<span class="source-line-no">225</span><span id="line-225">   /** Default field-exposure flag &amp;mdash; {@code true} (public-field DTOs render out of the box). */</span>
+<span class="source-line-no">226</span><span id="line-226">   public static final boolean DEFAULT_EXPOSE_FIELDS = FreemarkerDispatcher.DEFAULT_EXPOSE_FIELDS;</span>
+<span class="source-line-no">227</span><span id="line-227"></span>
+<span class="source-line-no">228</span><span id="line-228">   private static final Set&lt;Class&lt;? extends FreemarkerMixin&gt;&gt; SUBTYPES = new CopyOnWriteArraySet&lt;&gt;();</span>
+<span class="source-line-no">229</span><span id="line-229"></span>
+<span class="source-line-no">230</span><span id="line-230">   /**</span>
+<span class="source-line-no">231</span><span id="line-231">    * Registers a subclass so {@link FreemarkerViewRenderer} also finds a bean declared with that subclass as its</span>
+<span class="source-line-no">232</span><span id="line-232">    * {@code @Bean} return type.</span>
 <span class="source-line-no">233</span><span id="line-233">    *</span>
-<span class="source-line-no">234</span><span id="line-234">    * @param name The template name. Must not be {@code null}.</span>
-<span class="source-line-no">235</span><span id="line-235">    * @return The template name with the configured suffix appended (if applicable).</span>
-<span class="source-line-no">236</span><span id="line-236">    */</span>
-<span class="source-line-no">237</span><span id="line-237">   public String applyTemplateSuffix(String name) {</span>
-<span class="source-line-no">238</span><span id="line-238">      return worker.applyTemplateSuffix(name);</span>
-<span class="source-line-no">239</span><span id="line-239">   }</span>
-<span class="source-line-no">240</span><span id="line-240"></span>
-<span class="source-line-no">241</span><span id="line-241">   /**</span>
-<span class="source-line-no">242</span><span id="line-242">    * Resolves the active {@link Configuration} via the shared {@link FreemarkerDispatcher} worker.</span>
-<span class="source-line-no">243</span><span id="line-243">    *</span>
-<span class="source-line-no">244</span><span id="line-244">    * @param req The current REST request.</span>
-<span class="source-line-no">245</span><span id="line-245">    * @return The active FreeMarker configuration. Never {@code null}.</span>
-<span class="source-line-no">246</span><span id="line-246">    */</span>
-<span class="source-line-no">247</span><span id="line-247">   public Configuration resolveConfiguration(RestRequest req) {</span>
-<span class="source-line-no">248</span><span id="line-248">      return worker.resolveConfiguration(req);</span>
-<span class="source-line-no">249</span><span id="line-249">   }</span>
-<span class="source-line-no">250</span><span id="line-250"></span>
-<span class="source-line-no">251</span><span id="line-251">   /**</span>
-<span class="source-line-no">252</span><span id="line-252">    * [GET /freemarker/*] &amp;mdash; render a raw template through the FreeMarker engine.</span>
-<span class="source-line-no">253</span><span id="line-253">    *</span>
-<span class="source-line-no">254</span><span id="line-254">    * &lt;p&gt;</span>
-<span class="source-line-no">255</span><span id="line-255">    * The {@code @Path("/*") String path} captures the multi-segment trailing remainder (e.g. a</span>
-<span class="source-line-no">256</span><span id="line-256">    * request for {@code /freemarker/about.ftlh} matches the mount with</span>
-<span class="source-line-no">257</span><span id="line-257">    * {@code path = "about.ftlh"}). Delegates to the shared {@link FreemarkerDispatcher} worker</span>
-<span class="source-line-no">258</span><span id="line-258">    * (path-traversal hardening, suffix application, configuration resolution, and render).</span>
-<span class="source-line-no">259</span><span id="line-259">    *</span>
-<span class="source-line-no">260</span><span id="line-260">    * &lt;p&gt;</span>
-<span class="source-line-no">261</span><span id="line-261">    * Missing template surfaces as the engine's own {@link TemplateNotFoundException}</span>
-<span class="source-line-no">262</span><span id="line-262">    * (HTTP 500 from the renderer's catch-all); missing engine surfaces as</span>
-<span class="source-line-no">263</span><span id="line-263">    * {@link FreemarkerViewRenderer#NO_ENGINE_DIAGNOSTIC}.</span>
-<span class="source-line-no">264</span><span id="line-264">    *</span>
-<span class="source-line-no">265</span><span id="line-265">    * @param path The trailing path segment after {@code /freemarker/} (the template name</span>
-<span class="source-line-no">266</span><span id="line-266">    *    relative to the configured {@link #getBasePath() base path}; configured suffix appended</span>
-<span class="source-line-no">267</span><span id="line-267">    *    if missing).</span>
-<span class="source-line-no">268</span><span id="line-268">    * @param req The current REST request.</span>
-<span class="source-line-no">269</span><span id="line-269">    * @param res The current REST response.</span>
-<span class="source-line-no">270</span><span id="line-270">    * @throws IOException If the underlying response writer fails.</span>
-<span class="source-line-no">271</span><span id="line-271">    * @throws BasicHttpException On boundary violation (403), missing engine (500), or render</span>
-<span class="source-line-no">272</span><span id="line-272">    *    failure (500).</span>
-<span class="source-line-no">273</span><span id="line-273">    */</span>
-<span class="source-line-no">274</span><span id="line-274">   @RestGet(</span>
-<span class="source-line-no">275</span><span id="line-275">      path="/${juneau.freemarker.path:freemarker}/*",</span>
-<span class="source-line-no">276</span><span id="line-276">      summary="FreeMarker view",</span>
-<span class="source-line-no">277</span><span id="line-277">      description="Render a raw FreeMarker template under the configured base path.",</span>
-<span class="source-line-no">278</span><span id="line-278">      swagger=@OpSwagger(ignore=true)</span>
-<span class="source-line-no">279</span><span id="line-279">   )</span>
-<span class="source-line-no">280</span><span id="line-280">   public void render(@Path("/*") String path, RestRequest req, RestResponse res)</span>
-<span class="source-line-no">281</span><span id="line-281">         throws IOException, BasicHttpException {</span>
-<span class="source-line-no">282</span><span id="line-282">      worker.render(path, req, res);</span>
-<span class="source-line-no">283</span><span id="line-283">   }</span>
-<span class="source-line-no">284</span><span id="line-284"></span>
-<span class="source-line-no">285</span><span id="line-285">   /**</span>
-<span class="source-line-no">286</span><span id="line-286">    * Builder for {@link FreemarkerMixin}.</span>
-<span class="source-line-no">287</span><span id="line-287">    *</span>
-<span class="source-line-no">288</span><span id="line-288">    * &lt;p&gt;</span>
-<span class="source-line-no">289</span><span id="line-289">    * Mirrors {@link FreemarkerDispatcher.Builder}'s configuration methods on its own surface and</span>
-<span class="source-line-no">290</span><span id="line-290">    * forwards each call into a held {@link FreemarkerDispatcher.Builder} (§2.3.1 worker-bean</span>
-<span class="source-line-no">291</span><span id="line-291">    * composition).</span>
-<span class="source-line-no">292</span><span id="line-292">    */</span>
-<span class="source-line-no">293</span><span id="line-293">   public static class Builder {</span>
-<span class="source-line-no">294</span><span id="line-294"></span>
-<span class="source-line-no">295</span><span id="line-295">      private final FreemarkerDispatcher.Builder worker = FreemarkerDispatcher.create();</span>
-<span class="source-line-no">296</span><span id="line-296"></span>
-<span class="source-line-no">297</span><span id="line-297">      /** Constructor &amp;mdash; package access for {@link FreemarkerMixin#create()}. */</span>
-<span class="source-line-no">298</span><span id="line-298">      protected Builder() {}</span>
-<span class="source-line-no">299</span><span id="line-299"></span>
-<span class="source-line-no">300</span><span id="line-300">      /**</span>
-<span class="source-line-no">301</span><span id="line-301">       * Sets the classpath base path under which template resources are resolved.</span>
-<span class="source-line-no">302</span><span id="line-302">       *</span>
-<span class="source-line-no">303</span><span id="line-303">       * &lt;p&gt;</span>
-<span class="source-line-no">304</span><span id="line-304">       * Defaults to {@link FreemarkerMixin#DEFAULT_BASE_PATH "/"}. A typical configured</span>
-<span class="source-line-no">305</span><span id="line-305">       * value is {@code "/templates/"} &amp;mdash; the same Spring-Boot-compatible layout</span>
-<span class="source-line-no">306</span><span id="line-306">       * convention the sibling JSP / Thymeleaf / Mustache bridges use.</span>
-<span class="source-line-no">307</span><span id="line-307">       *</span>
-<span class="source-line-no">308</span><span id="line-308">       * @param value The base path. {@code null} or blank values reset to the default</span>
-<span class="source-line-no">309</span><span id="line-309">       *    {@link FreemarkerMixin#DEFAULT_BASE_PATH}.</span>
-<span class="source-line-no">310</span><span id="line-310">       * @return This object.</span>
-<span class="source-line-no">311</span><span id="line-311">       */</span>
-<span class="source-line-no">312</span><span id="line-312">      public Builder basePath(String value) {</span>
-<span class="source-line-no">313</span><span id="line-313">         worker.basePath(value);</span>
-<span class="source-line-no">314</span><span id="line-314">         return this;</span>
-<span class="source-line-no">315</span><span id="line-315">      }</span>
-<span class="source-line-no">316</span><span id="line-316"></span>
-<span class="source-line-no">317</span><span id="line-317">      /**</span>
-<span class="source-line-no">318</span><span id="line-318">       * Sets the suffix to append to template names that don't already end with it</span>
-<span class="source-line-no">319</span><span id="line-319">       * (idempotent).</span>
-<span class="source-line-no">320</span><span id="line-320">       *</span>
-<span class="source-line-no">321</span><span id="line-321">       * &lt;p&gt;</span>
-<span class="source-line-no">322</span><span id="line-322">       * Defaults to {@link FreemarkerMixin#DEFAULT_TEMPLATE_SUFFIX ""} (no implicit</span>
-<span class="source-line-no">323</span><span id="line-323">       * suffix &amp;mdash; literal template names). Typical configured values are {@code ".ftlh"}</span>
-<span class="source-line-no">324</span><span id="line-324">       * (HTML auto-escape) or {@code ".ftl"} (no auto-escape).</span>
-<span class="source-line-no">325</span><span id="line-325">       *</span>
-<span class="source-line-no">326</span><span id="line-326">       * @param value The new suffix. {@code null} resets to</span>
-<span class="source-line-no">327</span><span id="line-327">       *    {@link FreemarkerMixin#DEFAULT_TEMPLATE_SUFFIX}.</span>
-<span class="source-line-no">328</span><span id="line-328">       * @return This object.</span>
-<span class="source-line-no">329</span><span id="line-329">       */</span>
-<span class="source-line-no">330</span><span id="line-330">      public Builder templateSuffix(String value) {</span>
-<span class="source-line-no">331</span><span id="line-331">         worker.templateSuffix(value);</span>
-<span class="source-line-no">332</span><span id="line-332">         return this;</span>
-<span class="source-line-no">333</span><span id="line-333">      }</span>
-<span class="source-line-no">334</span><span id="line-334"></span>
-<span class="source-line-no">335</span><span id="line-335">      /**</span>
-<span class="source-line-no">336</span><span id="line-336">       * Sets the template-cache flag for the bridge-default configuration.</span>
-<span class="source-line-no">337</span><span id="line-337">       *</span>
-<span class="source-line-no">338</span><span id="line-338">       * &lt;p&gt;</span>
-<span class="source-line-no">339</span><span id="line-339">       * Defaults to {@link FreemarkerMixin#DEFAULT_CACHE_TEMPLATES true} (cache</span>
-<span class="source-line-no">340</span><span id="line-340">       * forever &amp;mdash; production-safe). Set {@code false} to enable dev hot-reload (FreeMarker</span>
-<span class="source-line-no">341</span><span id="line-341">       * re-checks the underlying resource on every render).</span>
-<span class="source-line-no">342</span><span id="line-342">       *</span>
-<span class="source-line-no">343</span><span id="line-343">       * &lt;p&gt;</span>
-<span class="source-line-no">344</span><span id="line-344">       * This flag only affects the bridge-default {@link Configuration}; user-supplied</span>
-<span class="source-line-no">345</span><span id="line-345">       * {@code @Bean Configuration}s are not modified.</span>
-<span class="source-line-no">346</span><span id="line-346">       *</span>
-<span class="source-line-no">347</span><span id="line-347">       * @param value The cache flag.</span>
-<span class="source-line-no">348</span><span id="line-348">       * @return This object.</span>
-<span class="source-line-no">349</span><span id="line-349">       */</span>
-<span class="source-line-no">350</span><span id="line-350">      public Builder cacheTemplates(boolean value) {</span>
-<span class="source-line-no">351</span><span id="line-351">         worker.cacheTemplates(value);</span>
-<span class="source-line-no">352</span><span id="line-352">         return this;</span>
-<span class="source-line-no">353</span><span id="line-353">      }</span>
-<span class="source-line-no">354</span><span id="line-354"></span>
-<span class="source-line-no">355</span><span id="line-355">      /**</span>
-<span class="source-line-no">356</span><span id="line-356">       * Reads the current base path setting (test/inspection helper).</span>
-<span class="source-line-no">357</span><span id="line-357">       *</span>
-<span class="source-line-no">358</span><span id="line-358">       * @return The base path. Never {@code null}.</span>
-<span class="source-line-no">359</span><span id="line-359">       */</span>
-<span class="source-line-no">360</span><span id="line-360">      public String getBasePath() {</span>
-<span class="source-line-no">361</span><span id="line-361">         return worker.getBasePath();</span>
-<span class="source-line-no">362</span><span id="line-362">      }</span>
-<span class="source-line-no">363</span><span id="line-363"></span>
-<span class="source-line-no">364</span><span id="line-364">      /**</span>
-<span class="source-line-no">365</span><span id="line-365">       * Reads the current template-suffix setting (test/inspection helper).</span>
-<span class="source-line-no">366</span><span id="line-366">       *</span>
-<span class="source-line-no">367</span><span id="line-367">       * @return The template suffix. Never {@code null}.</span>
-<span class="source-line-no">368</span><span id="line-368">       */</span>
-<span class="source-line-no">369</span><span id="line-369">      public String getTemplateSuffix() {</span>
-<span class="source-line-no">370</span><span id="line-370">         return worker.getTemplateSuffix();</span>
-<span class="source-line-no">371</span><span id="line-371">      }</span>
-<span class="source-line-no">372</span><span id="line-372"></span>
-<span class="source-line-no">373</span><span id="line-373">      /**</span>
-<span class="source-line-no">374</span><span id="line-374">       * Reads the current cache-templates setting (test/inspection helper).</span>
-<span class="source-line-no">375</span><span id="line-375">       *</span>
-<span class="source-line-no">376</span><span id="line-376">       * @return The cache flag.</span>
-<span class="source-line-no">377</span><span id="line-377">       */</span>
-<span class="source-line-no">378</span><span id="line-378">      public boolean isCacheTemplates() {</span>
-<span class="source-line-no">379</span><span id="line-379">         return worker.isCacheTemplates();</span>
-<span class="source-line-no">380</span><span id="line-380">      }</span>
-<span class="source-line-no">381</span><span id="line-381"></span>
-<span class="source-line-no">382</span><span id="line-382">      /**</span>
-<span class="source-line-no">383</span><span id="line-383">       * Builds the {@link FreemarkerMixin}.</span>
-<span class="source-line-no">384</span><span id="line-384">       *</span>
-<span class="source-line-no">385</span><span id="line-385">       * @return A new {@link FreemarkerMixin} instance.</span>
-<span class="source-line-no">386</span><span id="line-386">       */</span>
-<span class="source-line-no">387</span><span id="line-387">      public FreemarkerMixin build() {</span>
-<span class="source-line-no">388</span><span id="line-388">         return new FreemarkerMixin(this);</span>
-<span class="source-line-no">389</span><span id="line-389">      }</span>
+<span class="source-line-no">234</span><span id="line-234">    * &lt;p&gt;</span>
+<span class="source-line-no">235</span><span id="line-235">    * The bean store is keyed by declared type, so without this a {@code @Bean public ConsoleFreemarkerMixin</span>
+<span class="source-line-no">236</span><span id="line-236">    * freemarker()} was not found and the renderer silently used a plain mixin. Subclasses call this from a static</span>
+<span class="source-line-no">237</span><span id="line-237">    * initializer.</span>
+<span class="source-line-no">238</span><span id="line-238">    *</span>
+<span class="source-line-no">239</span><span id="line-239">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">240</span><span id="line-240">    * &lt;p class='bjava'&gt;</span>
+<span class="source-line-no">241</span><span id="line-241">    *    &lt;jk&gt;public class&lt;/jk&gt; MyMixin &lt;jk&gt;extends&lt;/jk&gt; FreemarkerMixin {</span>
+<span class="source-line-no">242</span><span id="line-242">    *       &lt;jk&gt;static&lt;/jk&gt; { FreemarkerMixin.&lt;jsm&gt;registerSubtype&lt;/jsm&gt;(MyMixin.&lt;jk&gt;class&lt;/jk&gt;); }</span>
+<span class="source-line-no">243</span><span id="line-243">    *    }</span>
+<span class="source-line-no">244</span><span id="line-244">    * &lt;/p&gt;</span>
+<span class="source-line-no">245</span><span id="line-245">    *</span>
+<span class="source-line-no">246</span><span id="line-246">    * @param type The subclass. Must not be {@code null}.</span>
+<span class="source-line-no">247</span><span id="line-247">    */</span>
+<span class="source-line-no">248</span><span id="line-248">   public static void registerSubtype(Class&lt;? extends FreemarkerMixin&gt; type) {</span>
+<span class="source-line-no">249</span><span id="line-249">      if (type == null)</span>
+<span class="source-line-no">250</span><span id="line-250">         throw new IllegalArgumentException("registerSubtype(type): type must not be null.");</span>
+<span class="source-line-no">251</span><span id="line-251">      SUBTYPES.add(type);</span>
+<span class="source-line-no">252</span><span id="line-252">   }</span>
+<span class="source-line-no">253</span><span id="line-253"></span>
+<span class="source-line-no">254</span><span id="line-254">   /** @return The registered subclasses, in registration order. */</span>
+<span class="source-line-no">255</span><span id="line-255">   public static Set&lt;Class&lt;? extends FreemarkerMixin&gt;&gt; registeredSubtypes() {</span>
+<span class="source-line-no">256</span><span id="line-256">      return Collections.unmodifiableSet(SUBTYPES);</span>
+<span class="source-line-no">257</span><span id="line-257">   }</span>
+<span class="source-line-no">258</span><span id="line-258"></span>
+<span class="source-line-no">259</span><span id="line-259">   private final FreemarkerDispatcher worker;</span>
+<span class="source-line-no">260</span><span id="line-260"></span>
+<span class="source-line-no">261</span><span id="line-261">   /**</span>
+<span class="source-line-no">262</span><span id="line-262">    * Creates a new builder.</span>
+<span class="source-line-no">263</span><span id="line-263">    *</span>
+<span class="source-line-no">264</span><span id="line-264">    * @return A new builder.</span>
+<span class="source-line-no">265</span><span id="line-265">    */</span>
+<span class="source-line-no">266</span><span id="line-266">   public static Builder create() {</span>
+<span class="source-line-no">267</span><span id="line-267">      return new Builder();</span>
+<span class="source-line-no">268</span><span id="line-268">   }</span>
+<span class="source-line-no">269</span><span id="line-269"></span>
+<span class="source-line-no">270</span><span id="line-270">   /**</span>
+<span class="source-line-no">271</span><span id="line-271">    * No-arg constructor &amp;mdash; uses {@link #DEFAULT_BASE_PATH} as the base path,</span>
+<span class="source-line-no">272</span><span id="line-272">    * {@link #DEFAULT_TEMPLATE_SUFFIX} as the template suffix, and</span>
+<span class="source-line-no">273</span><span id="line-273">    * {@link #DEFAULT_CACHE_TEMPLATES} as the cache flag.</span>
+<span class="source-line-no">274</span><span id="line-274">    *</span>
+<span class="source-line-no">275</span><span id="line-275">    * &lt;p&gt;</span>
+<span class="source-line-no">276</span><span id="line-276">    * The mixin walk falls back to this constructor when the</span>
+<span class="source-line-no">277</span><span id="line-277">    * {@link org.apache.juneau.commons.inject.BeanStore BeanStore} does not have a registered</span>
+<span class="source-line-no">278</span><span id="line-278">    * {@code FreemarkerMixin} bean.</span>
+<span class="source-line-no">279</span><span id="line-279">    */</span>
+<span class="source-line-no">280</span><span id="line-280">   public FreemarkerMixin() {</span>
+<span class="source-line-no">281</span><span id="line-281">      this(create());</span>
+<span class="source-line-no">282</span><span id="line-282">   }</span>
+<span class="source-line-no">283</span><span id="line-283"></span>
+<span class="source-line-no">284</span><span id="line-284">   /**</span>
+<span class="source-line-no">285</span><span id="line-285">    * Builder constructor.</span>
+<span class="source-line-no">286</span><span id="line-286">    *</span>
+<span class="source-line-no">287</span><span id="line-287">    * @param builder The builder. Must not be {@code null}.</span>
+<span class="source-line-no">288</span><span id="line-288">    */</span>
+<span class="source-line-no">289</span><span id="line-289">   protected FreemarkerMixin(Builder builder) {</span>
+<span class="source-line-no">290</span><span id="line-290">      worker = builder.worker.build();</span>
+<span class="source-line-no">291</span><span id="line-291">   }</span>
+<span class="source-line-no">292</span><span id="line-292"></span>
+<span class="source-line-no">293</span><span id="line-293">   /**</span>
+<span class="source-line-no">294</span><span id="line-294">    * Returns the base path under which template resources are resolved.</span>
+<span class="source-line-no">295</span><span id="line-295">    *</span>
+<span class="source-line-no">296</span><span id="line-296">    * @return The base path. Never {@code null}.</span>
+<span class="source-line-no">297</span><span id="line-297">    */</span>
+<span class="source-line-no">298</span><span id="line-298">   public String getBasePath() {</span>
+<span class="source-line-no">299</span><span id="line-299">      return worker.getBasePath();</span>
+<span class="source-line-no">300</span><span id="line-300">   }</span>
+<span class="source-line-no">301</span><span id="line-301"></span>
+<span class="source-line-no">302</span><span id="line-302">   /**</span>
+<span class="source-line-no">303</span><span id="line-303">    * Returns the configured template-name suffix.</span>
+<span class="source-line-no">304</span><span id="line-304">    *</span>
+<span class="source-line-no">305</span><span id="line-305">    * @return The template suffix. Never {@code null}.</span>
+<span class="source-line-no">306</span><span id="line-306">    */</span>
+<span class="source-line-no">307</span><span id="line-307">   public String getTemplateSuffix() {</span>
+<span class="source-line-no">308</span><span id="line-308">      return worker.getTemplateSuffix();</span>
+<span class="source-line-no">309</span><span id="line-309">   }</span>
+<span class="source-line-no">310</span><span id="line-310"></span>
+<span class="source-line-no">311</span><span id="line-311">   /**</span>
+<span class="source-line-no">312</span><span id="line-312">    * Returns the template-cache flag.</span>
+<span class="source-line-no">313</span><span id="line-313">    *</span>
+<span class="source-line-no">314</span><span id="line-314">    * @return The cache flag.</span>
+<span class="source-line-no">315</span><span id="line-315">    */</span>
+<span class="source-line-no">316</span><span id="line-316">   public boolean isCacheTemplates() {</span>
+<span class="source-line-no">317</span><span id="line-317">      return worker.isCacheTemplates();</span>
+<span class="source-line-no">318</span><span id="line-318">   }</span>
+<span class="source-line-no">319</span><span id="line-319"></span>
+<span class="source-line-no">320</span><span id="line-320">   /**</span>
+<span class="source-line-no">321</span><span id="line-321">    * Returns the field-exposure flag applied to the bridge-default object wrapper.</span>
+<span class="source-line-no">322</span><span id="line-322">    *</span>
+<span class="source-line-no">323</span><span id="line-323">    * @return The field-exposure flag. Ignored once {@link #getObjectWrapper()} returns non-{@code null}.</span>
+<span class="source-line-no">324</span><span id="line-324">    */</span>
+<span class="source-line-no">325</span><span id="line-325">   public boolean isExposeFields() {</span>
+<span class="source-line-no">326</span><span id="line-326">      return worker.isExposeFields();</span>
+<span class="source-line-no">327</span><span id="line-327">   }</span>
+<span class="source-line-no">328</span><span id="line-328"></span>
+<span class="source-line-no">329</span><span id="line-329">   /**</span>
+<span class="source-line-no">330</span><span id="line-330">    * Returns the user-supplied {@link ObjectWrapper} override, if any.</span>
+<span class="source-line-no">331</span><span id="line-331">    *</span>
+<span class="source-line-no">332</span><span id="line-332">    * @return The object wrapper override, or {@code null} if the bridge builds its own default.</span>
+<span class="source-line-no">333</span><span id="line-333">    */</span>
+<span class="source-line-no">334</span><span id="line-334">   public ObjectWrapper getObjectWrapper() {</span>
+<span class="source-line-no">335</span><span id="line-335">      return worker.getObjectWrapper();</span>
+<span class="source-line-no">336</span><span id="line-336">   }</span>
+<span class="source-line-no">337</span><span id="line-337"></span>
+<span class="source-line-no">338</span><span id="line-338">   /**</span>
+<span class="source-line-no">339</span><span id="line-339">    * Appends {@link #getTemplateSuffix()} to {@code name} if not already present (idempotent).</span>
+<span class="source-line-no">340</span><span id="line-340">    *</span>
+<span class="source-line-no">341</span><span id="line-341">    * @param name The template name. Must not be {@code null}.</span>
+<span class="source-line-no">342</span><span id="line-342">    * @return The template name with the configured suffix appended (if applicable).</span>
+<span class="source-line-no">343</span><span id="line-343">    */</span>
+<span class="source-line-no">344</span><span id="line-344">   public String applyTemplateSuffix(String name) {</span>
+<span class="source-line-no">345</span><span id="line-345">      return worker.applyTemplateSuffix(name);</span>
+<span class="source-line-no">346</span><span id="line-346">   }</span>
+<span class="source-line-no">347</span><span id="line-347"></span>
+<span class="source-line-no">348</span><span id="line-348">   /**</span>
+<span class="source-line-no">349</span><span id="line-349">    * Resolves the active {@link Configuration} via the shared {@link FreemarkerDispatcher} worker.</span>
+<span class="source-line-no">350</span><span id="line-350">    *</span>
+<span class="source-line-no">351</span><span id="line-351">    * @param req The current REST request.</span>
+<span class="source-line-no">352</span><span id="line-352">    * @return The active FreeMarker configuration. Never {@code null}.</span>
+<span class="source-line-no">353</span><span id="line-353">    */</span>
+<span class="source-line-no">354</span><span id="line-354">   public Configuration resolveConfiguration(RestRequest req) {</span>
+<span class="source-line-no">355</span><span id="line-355">      return worker.resolveConfiguration(req);</span>
+<span class="source-line-no">356</span><span id="line-356">   }</span>
+<span class="source-line-no">357</span><span id="line-357"></span>
+<span class="source-line-no">358</span><span id="line-358">   /**</span>
+<span class="source-line-no">359</span><span id="line-359">    * [GET /freemarker/*] &amp;mdash; render a raw template through the FreeMarker engine.</span>
+<span class="source-line-no">360</span><span id="line-360">    *</span>
+<span class="source-line-no">361</span><span id="line-361">    * &lt;p&gt;</span>
+<span class="source-line-no">362</span><span id="line-362">    * The {@code @Path("/*") String path} captures the multi-segment trailing remainder (e.g. a</span>
+<span class="source-line-no">363</span><span id="line-363">    * request for {@code /freemarker/about.ftlh} matches the mount with</span>
+<span class="source-line-no">364</span><span id="line-364">    * {@code path = "about.ftlh"}). Delegates to the shared {@link FreemarkerDispatcher} worker</span>
+<span class="source-line-no">365</span><span id="line-365">    * (path-traversal hardening, suffix application, configuration resolution, and render).</span>
+<span class="source-line-no">366</span><span id="line-366">    *</span>
+<span class="source-line-no">367</span><span id="line-367">    * &lt;p&gt;</span>
+<span class="source-line-no">368</span><span id="line-368">    * Missing template surfaces as the engine's own {@link TemplateNotFoundException}</span>
+<span class="source-line-no">369</span><span id="line-369">    * (HTTP 500 from the renderer's catch-all); missing engine surfaces as</span>
+<span class="source-line-no">370</span><span id="line-370">    * {@link FreemarkerViewRenderer#NO_ENGINE_DIAGNOSTIC}.</span>
+<span class="source-line-no">371</span><span id="line-371">    *</span>
+<span class="source-line-no">372</span><span id="line-372">    * @param path The trailing path segment after {@code /freemarker/} (the template name</span>
+<span class="source-line-no">373</span><span id="line-373">    *    relative to the configured {@link #getBasePath() base path}; configured suffix appended</span>
+<span class="source-line-no">374</span><span id="line-374">    *    if missing).</span>
+<span class="source-line-no">375</span><span id="line-375">    * @param req The current REST request.</span>
+<span class="source-line-no">376</span><span id="line-376">    * @param res The current REST response.</span>
+<span class="source-line-no">377</span><span id="line-377">    * @throws IOException If the underlying response writer fails.</span>
+<span class="source-line-no">378</span><span id="line-378">    * @throws BasicHttpException On boundary violation (403), missing engine (500), or render</span>
+<span class="source-line-no">379</span><span id="line-379">    *    failure (500).</span>
+<span class="source-line-no">380</span><span id="line-380">    */</span>
+<span class="source-line-no">381</span><span id="line-381">   @RestGet(</span>
+<span class="source-line-no">382</span><span id="line-382">      path="/${juneau.freemarker.path:freemarker}/*",</span>
+<span class="source-line-no">383</span><span id="line-383">      summary="FreeMarker view",</span>
+<span class="source-line-no">384</span><span id="line-384">      description="Render a raw FreeMarker template under the configured base path.",</span>
+<span class="source-line-no">385</span><span id="line-385">      swagger=@OpSwagger(ignore=true)</span>
+<span class="source-line-no">386</span><span id="line-386">   )</span>
+<span class="source-line-no">387</span><span id="line-387">   public void render(@Path("/*") String path, RestRequest req, RestResponse res)</span>
+<span class="source-line-no">388</span><span id="line-388">         throws IOException, BasicHttpException {</span>
+<span class="source-line-no">389</span><span id="line-389">      worker.render(path, req, res);</span>
 <span class="source-line-no">390</span><span id="line-390">   }</span>
-<span class="source-line-no">391</span><span id="line-391">}</span>
+<span class="source-line-no">391</span><span id="line-391"></span>
+<span class="source-line-no">392</span><span id="line-392">   /**</span>
+<span class="source-line-no">393</span><span id="line-393">    * Builder for {@link FreemarkerMixin}.</span>
+<span class="source-line-no">394</span><span id="line-394">    *</span>
+<span class="source-line-no">395</span><span id="line-395">    * &lt;p&gt;</span>
+<span class="source-line-no">396</span><span id="line-396">    * Mirrors {@link FreemarkerDispatcher.Builder}'s configuration methods on its own surface and</span>
+<span class="source-line-no">397</span><span id="line-397">    * forwards each call into a held {@link FreemarkerDispatcher.Builder} (worker-bean</span>
+<span class="source-line-no">398</span><span id="line-398">    * composition). Implements {@link ViewMixinBuilder} so {@link #basePath(String)} and</span>
+<span class="source-line-no">399</span><span id="line-399">    * {@link #cacheTemplates(boolean)} are guaranteed to transfer to the sibling JSP / Thymeleaf /</span>
+<span class="source-line-no">400</span><span id="line-400">    * Mustache bridge builders.</span>
+<span class="source-line-no">401</span><span id="line-401">    */</span>
+<span class="source-line-no">402</span><span id="line-402">   public static class Builder implements ViewMixinBuilder&lt;Builder&gt; {</span>
+<span class="source-line-no">403</span><span id="line-403"></span>
+<span class="source-line-no">404</span><span id="line-404">      private final FreemarkerDispatcher.Builder worker = FreemarkerDispatcher.create();</span>
+<span class="source-line-no">405</span><span id="line-405"></span>
+<span class="source-line-no">406</span><span id="line-406">      /** Constructor &amp;mdash; package access for {@link FreemarkerMixin#create()}. */</span>
+<span class="source-line-no">407</span><span id="line-407">      protected Builder() {}</span>
+<span class="source-line-no">408</span><span id="line-408"></span>
+<span class="source-line-no">409</span><span id="line-409">      /**</span>
+<span class="source-line-no">410</span><span id="line-410">       * Sets the classpath base path under which template resources are resolved.</span>
+<span class="source-line-no">411</span><span id="line-411">       *</span>
+<span class="source-line-no">412</span><span id="line-412">       * &lt;p&gt;</span>
+<span class="source-line-no">413</span><span id="line-413">       * Defaults to {@link FreemarkerMixin#DEFAULT_BASE_PATH "/"}. A typical configured</span>
+<span class="source-line-no">414</span><span id="line-414">       * value is {@code "/templates/"} &amp;mdash; the same Spring-Boot-compatible layout</span>
+<span class="source-line-no">415</span><span id="line-415">       * convention the sibling JSP / Thymeleaf / Mustache bridges use.</span>
+<span class="source-line-no">416</span><span id="line-416">       *</span>
+<span class="source-line-no">417</span><span id="line-417">       * @param value The base path. {@code null} or blank values reset to the default</span>
+<span class="source-line-no">418</span><span id="line-418">       *    {@link FreemarkerMixin#DEFAULT_BASE_PATH}.</span>
+<span class="source-line-no">419</span><span id="line-419">       * @return This object.</span>
+<span class="source-line-no">420</span><span id="line-420">       */</span>
+<span class="source-line-no">421</span><span id="line-421">      @Override /* ViewMixinBuilder */</span>
+<span class="source-line-no">422</span><span id="line-422">      public Builder basePath(String value) {</span>
+<span class="source-line-no">423</span><span id="line-423">         worker.basePath(value);</span>
+<span class="source-line-no">424</span><span id="line-424">         return this;</span>
+<span class="source-line-no">425</span><span id="line-425">      }</span>
+<span class="source-line-no">426</span><span id="line-426"></span>
+<span class="source-line-no">427</span><span id="line-427">      /**</span>
+<span class="source-line-no">428</span><span id="line-428">       * Sets the suffix to append to template names that don't already end with it</span>
+<span class="source-line-no">429</span><span id="line-429">       * (idempotent).</span>
+<span class="source-line-no">430</span><span id="line-430">       *</span>
+<span class="source-line-no">431</span><span id="line-431">       * &lt;p&gt;</span>
+<span class="source-line-no">432</span><span id="line-432">       * Defaults to {@link FreemarkerMixin#DEFAULT_TEMPLATE_SUFFIX ""} (no implicit</span>
+<span class="source-line-no">433</span><span id="line-433">       * suffix &amp;mdash; literal template names). Typical configured values are {@code ".ftlh"}</span>
+<span class="source-line-no">434</span><span id="line-434">       * (HTML auto-escape) or {@code ".ftl"} (no auto-escape).</span>
+<span class="source-line-no">435</span><span id="line-435">       *</span>
+<span class="source-line-no">436</span><span id="line-436">       * @param value The new suffix. {@code null} resets to</span>
+<span class="source-line-no">437</span><span id="line-437">       *    {@link FreemarkerMixin#DEFAULT_TEMPLATE_SUFFIX}.</span>
+<span class="source-line-no">438</span><span id="line-438">       * @return This object.</span>
+<span class="source-line-no">439</span><span id="line-439">       */</span>
+<span class="source-line-no">440</span><span id="line-440">      public Builder templateSuffix(String value) {</span>
+<span class="source-line-no">441</span><span id="line-441">         worker.templateSuffix(value);</span>
+<span class="source-line-no">442</span><span id="line-442">         return this;</span>
+<span class="source-line-no">443</span><span id="line-443">      }</span>
+<span class="source-line-no">444</span><span id="line-444"></span>
+<span class="source-line-no">445</span><span id="line-445">      /**</span>
+<span class="source-line-no">446</span><span id="line-446">       * Sets the template-cache flag for the bridge-default configuration.</span>
+<span class="source-line-no">447</span><span id="line-447">       *</span>
+<span class="source-line-no">448</span><span id="line-448">       * &lt;p&gt;</span>
+<span class="source-line-no">449</span><span id="line-449">       * Defaults to {@link FreemarkerMixin#DEFAULT_CACHE_TEMPLATES true} (cache</span>
+<span class="source-line-no">450</span><span id="line-450">       * forever &amp;mdash; production-safe). Set {@code false} to enable dev hot-reload (FreeMarker</span>
+<span class="source-line-no">451</span><span id="line-451">       * re-checks the underlying resource on every render).</span>
+<span class="source-line-no">452</span><span id="line-452">       *</span>
+<span class="source-line-no">453</span><span id="line-453">       * &lt;p&gt;</span>
+<span class="source-line-no">454</span><span id="line-454">       * This flag only affects the bridge-default {@link Configuration}; user-supplied</span>
+<span class="source-line-no">455</span><span id="line-455">       * {@code @Bean Configuration}s are not modified.</span>
+<span class="source-line-no">456</span><span id="line-456">       *</span>
+<span class="source-line-no">457</span><span id="line-457">       * @param value The cache flag.</span>
+<span class="source-line-no">458</span><span id="line-458">       * @return This object.</span>
+<span class="source-line-no">459</span><span id="line-459">       */</span>
+<span class="source-line-no">460</span><span id="line-460">      @Override /* ViewMixinBuilder */</span>
+<span class="source-line-no">461</span><span id="line-461">      public Builder cacheTemplates(boolean value) {</span>
+<span class="source-line-no">462</span><span id="line-462">         worker.cacheTemplates(value);</span>
+<span class="source-line-no">463</span><span id="line-463">         return this;</span>
+<span class="source-line-no">464</span><span id="line-464">      }</span>
+<span class="source-line-no">465</span><span id="line-465"></span>
+<span class="source-line-no">466</span><span id="line-466">      /**</span>
+<span class="source-line-no">467</span><span id="line-467">       * Sets whether the bridge-default {@code ObjectWrapper} exposes public fields (not just</span>
+<span class="source-line-no">468</span><span id="line-468">       * JavaBean getters) to templates.</span>
+<span class="source-line-no">469</span><span id="line-469">       *</span>
+<span class="source-line-no">470</span><span id="line-470">       * &lt;p&gt;</span>
+<span class="source-line-no">471</span><span id="line-471">       * Defaults to {@link FreemarkerMixin#DEFAULT_EXPOSE_FIELDS true} so simple view-model</span>
+<span class="source-line-no">472</span><span id="line-472">       * DTOs written with public fields and no getters render their field values instead of</span>
+<span class="source-line-no">473</span><span id="line-473">       * silently resolving to {@code null}/missing (see the class-level</span>
+<span class="source-line-no">474</span><span id="line-474">       * "Public-field DTOs" section). Has no effect once {@link #objectWrapper(ObjectWrapper)}</span>
+<span class="source-line-no">475</span><span id="line-475">       * has been called with a non-{@code null} value &amp;mdash; the explicit wrapper always wins.</span>
+<span class="source-line-no">476</span><span id="line-476">       *</span>
+<span class="source-line-no">477</span><span id="line-477">       * @param value The field-exposure flag.</span>
+<span class="source-line-no">478</span><span id="line-478">       * @return This object.</span>
+<span class="source-line-no">479</span><span id="line-479">       */</span>
+<span class="source-line-no">480</span><span id="line-480">      public Builder exposeFields(boolean value) {</span>
+<span class="source-line-no">481</span><span id="line-481">         worker.exposeFields(value);</span>
+<span class="source-line-no">482</span><span id="line-482">         return this;</span>
+<span class="source-line-no">483</span><span id="line-483">      }</span>
+<span class="source-line-no">484</span><span id="line-484"></span>
+<span class="source-line-no">485</span><span id="line-485">      /**</span>
+<span class="source-line-no">486</span><span id="line-486">       * Sets a fully custom {@code ObjectWrapper} for the bridge-default configuration,</span>
+<span class="source-line-no">487</span><span id="line-487">       * overriding {@link #exposeFields(boolean)} entirely.</span>
+<span class="source-line-no">488</span><span id="line-488">       *</span>
+<span class="source-line-no">489</span><span id="line-489">       * &lt;p&gt;</span>
+<span class="source-line-no">490</span><span id="line-490">       * Escape hatch for consumers who need full control (e.g. a {@code BeansWrapper} with</span>
+<span class="source-line-no">491</span><span id="line-491">       * custom method/property exposure, or a third-party wrapper) without hand-rolling and</span>
+<span class="source-line-no">492</span><span id="line-492">       * registering a whole replacement {@code Configuration} bean.</span>
+<span class="source-line-no">493</span><span id="line-493">       *</span>
+<span class="source-line-no">494</span><span id="line-494">       * @param value The object wrapper. {@code null} reverts to the bridge-built</span>
+<span class="source-line-no">495</span><span id="line-495">       *    {@link DefaultObjectWrapper} (per {@link #exposeFields(boolean)}).</span>
+<span class="source-line-no">496</span><span id="line-496">       * @return This object.</span>
+<span class="source-line-no">497</span><span id="line-497">       */</span>
+<span class="source-line-no">498</span><span id="line-498">      public Builder objectWrapper(ObjectWrapper value) {</span>
+<span class="source-line-no">499</span><span id="line-499">         worker.objectWrapper(value);</span>
+<span class="source-line-no">500</span><span id="line-500">         return this;</span>
+<span class="source-line-no">501</span><span id="line-501">      }</span>
+<span class="source-line-no">502</span><span id="line-502"></span>
+<span class="source-line-no">503</span><span id="line-503">      /**</span>
+<span class="source-line-no">504</span><span id="line-504">       * Reads the current base path setting (test/inspection helper).</span>
+<span class="source-line-no">505</span><span id="line-505">       *</span>
+<span class="source-line-no">506</span><span id="line-506">       * @return The base path. Never {@code null}.</span>
+<span class="source-line-no">507</span><span id="line-507">       */</span>
+<span class="source-line-no">508</span><span id="line-508">      public String getBasePath() {</span>
+<span class="source-line-no">509</span><span id="line-509">         return worker.getBasePath();</span>
+<span class="source-line-no">510</span><span id="line-510">      }</span>
+<span class="source-line-no">511</span><span id="line-511"></span>
+<span class="source-line-no">512</span><span id="line-512">      /**</span>
+<span class="source-line-no">513</span><span id="line-513">       * Reads the current template-suffix setting (test/inspection helper).</span>
+<span class="source-line-no">514</span><span id="line-514">       *</span>
+<span class="source-line-no">515</span><span id="line-515">       * @return The template suffix. Never {@code null}.</span>
+<span class="source-line-no">516</span><span id="line-516">       */</span>
+<span class="source-line-no">517</span><span id="line-517">      public String getTemplateSuffix() {</span>
+<span class="source-line-no">518</span><span id="line-518">         return worker.getTemplateSuffix();</span>
+<span class="source-line-no">519</span><span id="line-519">      }</span>
+<span class="source-line-no">520</span><span id="line-520"></span>
+<span class="source-line-no">521</span><span id="line-521">      /**</span>
+<span class="source-line-no">522</span><span id="line-522">       * Reads the current cache-templates setting (test/inspection helper).</span>
+<span class="source-line-no">523</span><span id="line-523">       *</span>
+<span class="source-line-no">524</span><span id="line-524">       * @return The cache flag.</span>
+<span class="source-line-no">525</span><span id="line-525">       */</span>
+<span class="source-line-no">526</span><span id="line-526">      public boolean isCacheTemplates() {</span>
+<span class="source-line-no">527</span><span id="line-527">         return worker.isCacheTemplates();</span>
+<span class="source-line-no">528</span><span id="line-528">      }</span>
+<span class="source-line-no">529</span><span id="line-529"></span>
+<span class="source-line-no">530</span><span id="line-530">      /**</span>
+<span class="source-line-no">531</span><span id="line-531">       * Reads the current field-exposure setting (test/inspection helper).</span>
+<span class="source-line-no">532</span><span id="line-532">       *</span>
+<span class="source-line-no">533</span><span id="line-533">       * @return The field-exposure flag.</span>
+<span class="source-line-no">534</span><span id="line-534">       */</span>
+<span class="source-line-no">535</span><span id="line-535">      public boolean isExposeFields() {</span>
+<span class="source-line-no">536</span><span id="line-536">         return worker.isExposeFields();</span>
+<span class="source-line-no">537</span><span id="line-537">      }</span>
+<span class="source-line-no">538</span><span id="line-538"></span>
+<span class="source-line-no">539</span><span id="line-539">      /**</span>
+<span class="source-line-no">540</span><span id="line-540">       * Reads the current object-wrapper override (test/inspection helper).</span>
+<span class="source-line-no">541</span><span id="line-541">       *</span>
+<span class="source-line-no">542</span><span id="line-542">       * @return The object wrapper override, or {@code null} if none has been set.</span>
+<span class="source-line-no">543</span><span id="line-543">       */</span>
+<span class="source-line-no">544</span><span id="line-544">      public ObjectWrapper getObjectWrapper() {</span>
+<span class="source-line-no">545</span><span id="line-545">         return worker.getObjectWrapper();</span>
+<span class="source-line-no">546</span><span id="line-546">      }</span>
+<span class="source-line-no">547</span><span id="line-547"></span>
+<span class="source-line-no">548</span><span id="line-548">      /**</span>
+<span class="source-line-no">549</span><span id="line-549">       * Builds the {@link FreemarkerMixin}.</span>
+<span class="source-line-no">550</span><span id="line-550">       *</span>
+<span class="source-line-no">551</span><span id="line-551">       * @return A new {@link FreemarkerMixin} instance.</span>
+<span class="source-line-no">552</span><span id="line-552">       */</span>
+<span class="source-line-no">553</span><span id="line-553">      public FreemarkerMixin build() {</span>
+<span class="source-line-no">554</span><span id="line-554">         return new FreemarkerMixin(this);</span>
+<span class="source-line-no">555</span><span id="line-555">      }</span>
+<span class="source-line-no">556</span><span id="line-556">   }</span>
+<span class="source-line-no">557</span><span id="line-557">}</span>
 
 
 

@@ -112,21 +112,88 @@ loadScripts(document, 'script');</script>
 <div class="col-last odd-row-color">
 <div class="block">Parser API</div>
 </div>
-<div class="col-first even-row-color"><a href="#org.apache.juneau.marshall.utils">org.apache.juneau.marshall.utils</a></div>
+<div class="col-first even-row-color"><a href="#org.apache.juneau.marshall.uon">org.apache.juneau.marshall.uon</a></div>
 <div class="col-last even-row-color">
+<div class="block">UON Marshalling Support</div>
+</div>
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.marshall.utils">org.apache.juneau.marshall.utils</a></div>
+<div class="col-last odd-row-color">
 <div class="block">URL-Encoding Annotations</div>
 </div>
-<div class="col-first odd-row-color"><a href="#org.apache.juneau.microservice.examples">org.apache.juneau.microservice.examples</a></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><a href="#org.apache.juneau.microservice.examples">org.apache.juneau.microservice.examples</a></div>
+<div class="col-last even-row-color">
 <div class="block">Example / demo Microservice REST Resources</div>
 </div>
-<div class="col-first even-row-color"><a href="#org.apache.juneau.microservice.management">org.apache.juneau.microservice.management</a></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.microservice.management">org.apache.juneau.microservice.management</a></div>
+<div class="col-last odd-row-color">
 <div class="block">Actuator-style management-surface endpoints (microservice-module flavors).</div>
 </div>
-<div class="col-first odd-row-color"><a href="#org.apache.juneau.rest.server.mcp">org.apache.juneau.rest.server.mcp</a></div>
+<div class="col-first even-row-color"><a href="#org.apache.juneau.petstore.console">org.apache.juneau.petstore.console</a></div>
+<div class="col-last even-row-color">
+<div class="block">Petstore admin console: the <code>/console</code> page tree.</div>
+</div>
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.petstore.console.dev">org.apache.juneau.petstore.console.dev</a></div>
 <div class="col-last odd-row-color">
+<div class="block">Petstore console Developer pages: custom cards, themes, rendering flavors and the secure API demo.</div>
+</div>
+<div class="col-first even-row-color"><a href="#org.apache.juneau.petstore.console.ops">org.apache.juneau.petstore.console.ops</a></div>
+<div class="col-last even-row-color">
+<div class="block">Petstore console operations pages: background jobs and the audit log.</div>
+</div>
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.petstore.console.orders">org.apache.juneau.petstore.console.orders</a></div>
+<div class="col-last odd-row-color">
+<div class="block">Petstore console orders page and its JSON endpoints.</div>
+</div>
+<div class="col-first even-row-color"><a href="#org.apache.juneau.petstore.console.pets">org.apache.juneau.petstore.console.pets</a></div>
+<div class="col-last even-row-color">
+<div class="block">Petstore console pets pages and their JSON endpoints.</div>
+</div>
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.petstore.console.users">org.apache.juneau.petstore.console.users</a></div>
+<div class="col-last odd-row-color">
+<div class="block">Petstore console users page and its JSON endpoints.</div>
+</div>
+<div class="col-first even-row-color"><a href="#org.apache.juneau.rest.server.bus">org.apache.juneau.rest.server.bus</a></div>
+<div class="col-last even-row-color">
+<div class="block">Server half of the console message bus.</div>
+</div>
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.rest.server.console">org.apache.juneau.rest.server.console</a></div>
+<div class="col-last odd-row-color">
+<div class="block">Engine-agnostic themeable admin-console chrome: <a href="../../rest/server/console/Theme.html" title="class in org.apache.juneau.rest.server.console"><code>Theme</code></a>, the stock
+ theme stylesheets, the bundled <code>chrome.css</code> asset, and
+ <a href="../../rest/server/console/ConsoleChromeMixin.html" title="class in org.apache.juneau.rest.server.console"><code>ConsoleChromeMixin</code></a>.</div>
+</div>
+<div class="col-first even-row-color"><a href="#org.apache.juneau.rest.server.console.data">org.apache.juneau.rest.server.console.data</a></div>
+<div class="col-last even-row-color">
+<div class="block">Server helpers for console data sources: <a href="../../rest/server/console/data/SeriesSource.html" title="class in org.apache.juneau.rest.server.console.data"><code>SeriesSource</code></a> streams
+ rows as CSV or NDJSON, and <a href="../../rest/server/console/data/SeriesAggregator.html" title="class in org.apache.juneau.rest.server.console.data"><code>SeriesAggregator</code></a> answers the
+ aggregate request a data source sends when its result is too large to load raw.</div>
+</div>
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.rest.server.console.test">org.apache.juneau.rest.server.console.test</a></div>
+<div class="col-last odd-row-color">
+<div class="block">Test helpers for console pages: <a href="../../rest/server/console/test/PageContractAssert.html" title="class in org.apache.juneau.rest.server.console.test"><code>PageContractAssert</code></a> asserts on the
+ <code>#juneau-page</code> contract of a rendered page instead of on rendered chrome HTML, and
+ <a href="../../rest/server/console/test/AssetResolutionAssert.html" title="class in org.apache.juneau.rest.server.console.test"><code>AssetResolutionAssert</code></a> asserts that every asset a page links resolves.</div>
+</div>
+<div class="col-first even-row-color"><a href="#org.apache.juneau.rest.server.mcp">org.apache.juneau.rest.server.mcp</a></div>
+<div class="col-last even-row-color">
 <div class="block">Revision-neutral core for MCP endpoints built on <code>juneau-rest-server</code>.</div>
+</div>
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.rest.server.terminal.bus">org.apache.juneau.rest.server.terminal.bus</a></div>
+<div class="col-last odd-row-color">
+<div class="block">Connects terminals to the Juneau server bus: the <code>term.input</code> upstream handler, and the <code>term.nudge:&lt;id&gt;</code>
+ downstream nudges that tell a terminal card when new bytes are ready.</div>
+</div>
+<div class="col-first even-row-color"><a href="#org.apache.juneau.rest.server.view.freemarker.console">org.apache.juneau.rest.server.view.freemarker.console</a></div>
+<div class="col-last even-row-color">
+<div class="block">FreeMarker-only delivery of the admin-console chrome: the reserved-classpath <code>base.ftlh</code> template, the
+ <code>&lt;@tag&gt;</code> macro, and <a href="../../rest/server/view/freemarker/console/ConsoleFreemarkerMixin.html" title="class in org.apache.juneau.rest.server.view.freemarker.console"><code>ConsoleFreemarkerMixin</code></a>
+ (registers a reserved-path <code>ClassTemplateLoader</code> on top of the host's own <code>FreemarkerMixin</code>
+ configuration).</div>
+</div>
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.rest.server.views">org.apache.juneau.rest.server.views</a></div>
+<div class="col-last odd-row-color">
+<div class="block">A typed, declarative "rich DataTables view" toolkit that serializes to the frozen <code>VIEW_META</code> JSON wire
+ contract consumed by the first-party client runtime.</div>
 </div>
 </div>
 <section class="package-uses">
@@ -380,6 +447,19 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
+<section class="detail" id="org.apache.juneau.marshall.uon">
+<div class="caption"><span>Classes in <a href="package-summary.html">org.apache.juneau.marshall.collections</a> used by <a href="../uon/package-summary.html">org.apache.juneau.marshall.uon</a></span></div>
+<div class="summary-table two-column-summary">
+<div class="table-header col-first">Class</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><a href="class-use/JsonMap.html#org.apache.juneau.marshall.uon">JsonMap</a></div>
+<div class="col-last even-row-color">
+<div class="block">Java implementation of a JSON object.</div>
+</div>
+</div>
+</section>
+</li>
+<li>
 <section class="detail" id="org.apache.juneau.marshall.utils">
 <div class="caption"><span>Classes in <a href="package-summary.html">org.apache.juneau.marshall.collections</a> used by <a href="../utils/package-summary.html">org.apache.juneau.marshall.utils</a></span></div>
 <div class="summary-table two-column-summary">
@@ -419,12 +499,189 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
+<section class="detail" id="org.apache.juneau.petstore.console">
+<div class="caption"><span>Classes in <a href="package-summary.html">org.apache.juneau.marshall.collections</a> used by <a href="../../petstore/console/package-summary.html">org.apache.juneau.petstore.console</a></span></div>
+<div class="summary-table two-column-summary">
+<div class="table-header col-first">Class</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><a href="class-use/JsonList.html#org.apache.juneau.petstore.console">JsonList</a></div>
+<div class="col-last even-row-color">
+<div class="block">Java implementation of a JSON array.</div>
+</div>
+<div class="col-first odd-row-color"><a href="class-use/JsonMap.html#org.apache.juneau.petstore.console">JsonMap</a></div>
+<div class="col-last odd-row-color">
+<div class="block">Java implementation of a JSON object.</div>
+</div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="org.apache.juneau.petstore.console.dev">
+<div class="caption"><span>Classes in <a href="package-summary.html">org.apache.juneau.marshall.collections</a> used by <a href="../../petstore/console/dev/package-summary.html">org.apache.juneau.petstore.console.dev</a></span></div>
+<div class="summary-table two-column-summary">
+<div class="table-header col-first">Class</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><a href="class-use/JsonList.html#org.apache.juneau.petstore.console.dev">JsonList</a></div>
+<div class="col-last even-row-color">
+<div class="block">Java implementation of a JSON array.</div>
+</div>
+<div class="col-first odd-row-color"><a href="class-use/JsonMap.html#org.apache.juneau.petstore.console.dev">JsonMap</a></div>
+<div class="col-last odd-row-color">
+<div class="block">Java implementation of a JSON object.</div>
+</div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="org.apache.juneau.petstore.console.ops">
+<div class="caption"><span>Classes in <a href="package-summary.html">org.apache.juneau.marshall.collections</a> used by <a href="../../petstore/console/ops/package-summary.html">org.apache.juneau.petstore.console.ops</a></span></div>
+<div class="summary-table two-column-summary">
+<div class="table-header col-first">Class</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><a href="class-use/JsonMap.html#org.apache.juneau.petstore.console.ops">JsonMap</a></div>
+<div class="col-last even-row-color">
+<div class="block">Java implementation of a JSON object.</div>
+</div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="org.apache.juneau.petstore.console.orders">
+<div class="caption"><span>Classes in <a href="package-summary.html">org.apache.juneau.marshall.collections</a> used by <a href="../../petstore/console/orders/package-summary.html">org.apache.juneau.petstore.console.orders</a></span></div>
+<div class="summary-table two-column-summary">
+<div class="table-header col-first">Class</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><a href="class-use/JsonMap.html#org.apache.juneau.petstore.console.orders">JsonMap</a></div>
+<div class="col-last even-row-color">
+<div class="block">Java implementation of a JSON object.</div>
+</div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="org.apache.juneau.petstore.console.pets">
+<div class="caption"><span>Classes in <a href="package-summary.html">org.apache.juneau.marshall.collections</a> used by <a href="../../petstore/console/pets/package-summary.html">org.apache.juneau.petstore.console.pets</a></span></div>
+<div class="summary-table two-column-summary">
+<div class="table-header col-first">Class</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><a href="class-use/JsonMap.html#org.apache.juneau.petstore.console.pets">JsonMap</a></div>
+<div class="col-last even-row-color">
+<div class="block">Java implementation of a JSON object.</div>
+</div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="org.apache.juneau.petstore.console.users">
+<div class="caption"><span>Classes in <a href="package-summary.html">org.apache.juneau.marshall.collections</a> used by <a href="../../petstore/console/users/package-summary.html">org.apache.juneau.petstore.console.users</a></span></div>
+<div class="summary-table two-column-summary">
+<div class="table-header col-first">Class</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><a href="class-use/JsonMap.html#org.apache.juneau.petstore.console.users">JsonMap</a></div>
+<div class="col-last even-row-color">
+<div class="block">Java implementation of a JSON object.</div>
+</div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="org.apache.juneau.rest.server.bus">
+<div class="caption"><span>Classes in <a href="package-summary.html">org.apache.juneau.marshall.collections</a> used by <a href="../../rest/server/bus/package-summary.html">org.apache.juneau.rest.server.bus</a></span></div>
+<div class="summary-table two-column-summary">
+<div class="table-header col-first">Class</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><a href="class-use/JsonMap.html#org.apache.juneau.rest.server.bus">JsonMap</a></div>
+<div class="col-last even-row-color">
+<div class="block">Java implementation of a JSON object.</div>
+</div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="org.apache.juneau.rest.server.console">
+<div class="caption"><span>Classes in <a href="package-summary.html">org.apache.juneau.marshall.collections</a> used by <a href="../../rest/server/console/package-summary.html">org.apache.juneau.rest.server.console</a></span></div>
+<div class="summary-table two-column-summary">
+<div class="table-header col-first">Class</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><a href="class-use/JsonMap.html#org.apache.juneau.rest.server.console">JsonMap</a></div>
+<div class="col-last even-row-color">
+<div class="block">Java implementation of a JSON object.</div>
+</div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="org.apache.juneau.rest.server.console.data">
+<div class="caption"><span>Classes in <a href="package-summary.html">org.apache.juneau.marshall.collections</a> used by <a href="../../rest/server/console/data/package-summary.html">org.apache.juneau.rest.server.console.data</a></span></div>
+<div class="summary-table two-column-summary">
+<div class="table-header col-first">Class</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><a href="class-use/JsonMap.html#org.apache.juneau.rest.server.console.data">JsonMap</a></div>
+<div class="col-last even-row-color">
+<div class="block">Java implementation of a JSON object.</div>
+</div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="org.apache.juneau.rest.server.console.test">
+<div class="caption"><span>Classes in <a href="package-summary.html">org.apache.juneau.marshall.collections</a> used by <a href="../../rest/server/console/test/package-summary.html">org.apache.juneau.rest.server.console.test</a></span></div>
+<div class="summary-table two-column-summary">
+<div class="table-header col-first">Class</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><a href="class-use/JsonMap.html#org.apache.juneau.rest.server.console.test">JsonMap</a></div>
+<div class="col-last even-row-color">
+<div class="block">Java implementation of a JSON object.</div>
+</div>
+</div>
+</section>
+</li>
+<li>
 <section class="detail" id="org.apache.juneau.rest.server.mcp">
 <div class="caption"><span>Classes in <a href="package-summary.html">org.apache.juneau.marshall.collections</a> used by <a href="../../rest/server/mcp/package-summary.html">org.apache.juneau.rest.server.mcp</a></span></div>
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Class</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color"><a href="class-use/JsonMap.html#org.apache.juneau.rest.server.mcp">JsonMap</a></div>
+<div class="col-last even-row-color">
+<div class="block">Java implementation of a JSON object.</div>
+</div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="org.apache.juneau.rest.server.terminal.bus">
+<div class="caption"><span>Classes in <a href="package-summary.html">org.apache.juneau.marshall.collections</a> used by <a href="../../rest/server/terminal/bus/package-summary.html">org.apache.juneau.rest.server.terminal.bus</a></span></div>
+<div class="summary-table two-column-summary">
+<div class="table-header col-first">Class</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><a href="class-use/JsonMap.html#org.apache.juneau.rest.server.terminal.bus">JsonMap</a></div>
+<div class="col-last even-row-color">
+<div class="block">Java implementation of a JSON object.</div>
+</div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="org.apache.juneau.rest.server.view.freemarker.console">
+<div class="caption"><span>Classes in <a href="package-summary.html">org.apache.juneau.marshall.collections</a> used by <a href="../../rest/server/view/freemarker/console/package-summary.html">org.apache.juneau.rest.server.view.freemarker.console</a></span></div>
+<div class="summary-table two-column-summary">
+<div class="table-header col-first">Class</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><a href="class-use/JsonMap.html#org.apache.juneau.rest.server.view.freemarker.console">JsonMap</a></div>
+<div class="col-last even-row-color">
+<div class="block">Java implementation of a JSON object.</div>
+</div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="org.apache.juneau.rest.server.views">
+<div class="caption"><span>Classes in <a href="package-summary.html">org.apache.juneau.marshall.collections</a> used by <a href="../../rest/server/views/package-summary.html">org.apache.juneau.rest.server.views</a></span></div>
+<div class="summary-table two-column-summary">
+<div class="table-header col-first">Class</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><a href="class-use/JsonMap.html#org.apache.juneau.rest.server.views">JsonMap</a></div>
 <div class="col-last even-row-color">
 <div class="block">Java implementation of a JSON object.</div>
 </div>

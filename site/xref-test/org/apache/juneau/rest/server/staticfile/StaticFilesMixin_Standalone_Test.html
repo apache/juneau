@@ -42,7 +42,7 @@
 <a class="jxr_linenumber" name="L34" href="#L34">34</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> MockRestClient c = MockRestClient.buildLax(CdnResource.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L35" href="#L35">35</a>  
 <a class="jxr_linenumber" name="L36" href="#L36">36</a>  	@Test <strong class="jxr_keyword">void</strong> a01_standaloneServesFromStaticMount() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L37" href="#L37">37</a>  		c.get(<span class="jxr_string">"/static/javadoc.css"</span>)
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>  		c.get(<span class="jxr_string">"/static/themes/devops.css"</span>)
 <a class="jxr_linenumber" name="L38" href="#L38">38</a>  			.run()
 <a class="jxr_linenumber" name="L39" href="#L39">39</a>  			.assertStatus(200)
 <a class="jxr_linenumber" name="L40" href="#L40">40</a>  			.assertContent().asString().isContains(<span class="jxr_string">"Licensed to the Apache Software Foundation"</span>);
@@ -51,7 +51,7 @@
 <a class="jxr_linenumber" name="L43" href="#L43">43</a>  	@Test <strong class="jxr_keyword">void</strong> a02_legacyHtdocsAliasNotMountedByDefault() <strong class="jxr_keyword">throws</strong> Exception {
 <a class="jxr_linenumber" name="L44" href="#L44">44</a>  		<em class="jxr_comment">// /htdocs/* is no longer a multi-path default. Migration covered by</em>
 <a class="jxr_linenumber" name="L45" href="#L45">45</a>  		<em class="jxr_comment">// StaticFilesMixin_SvlPathOverride_Test#a02.</em>
-<a class="jxr_linenumber" name="L46" href="#L46">46</a>  		c.get(<span class="jxr_string">"/htdocs/javadoc.css"</span>)
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>  		c.get(<span class="jxr_string">"/htdocs/themes/devops.css"</span>)
 <a class="jxr_linenumber" name="L47" href="#L47">47</a>  			.run()
 <a class="jxr_linenumber" name="L48" href="#L48">48</a>  			.assertStatus(404);
 <a class="jxr_linenumber" name="L49" href="#L49">49</a>  	}
@@ -63,14 +63,14 @@
 <a class="jxr_linenumber" name="L55" href="#L55">55</a>  	}
 <a class="jxr_linenumber" name="L56" href="#L56">56</a>  
 <a class="jxr_linenumber" name="L57" href="#L57">57</a>  	@Test <strong class="jxr_keyword">void</strong> a04_standaloneHeadProbe() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L58" href="#L58">58</a>  		c.head(<span class="jxr_string">"/static/javadoc.css"</span>)
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>  		c.head(<span class="jxr_string">"/static/themes/devops.css"</span>)
 <a class="jxr_linenumber" name="L59" href="#L59">59</a>  			.run()
 <a class="jxr_linenumber" name="L60" href="#L60">60</a>  			.assertStatus(200)
 <a class="jxr_linenumber" name="L61" href="#L61">61</a>  			.assertContent().is(<span class="jxr_string">""</span>);
 <a class="jxr_linenumber" name="L62" href="#L62">62</a>  	}
 <a class="jxr_linenumber" name="L63" href="#L63">63</a>  
 <a class="jxr_linenumber" name="L64" href="#L64">64</a>  	@Test <strong class="jxr_keyword">void</strong> a05_standaloneCacheControl() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L65" href="#L65">65</a>  		c.get(<span class="jxr_string">"/static/javadoc.css"</span>)
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>  		c.get(<span class="jxr_string">"/static/themes/devops.css"</span>)
 <a class="jxr_linenumber" name="L66" href="#L66">66</a>  			.run()
 <a class="jxr_linenumber" name="L67" href="#L67">67</a>  			.assertStatus(200)
 <a class="jxr_linenumber" name="L68" href="#L68">68</a>  			.assertHeader(<span class="jxr_string">"Cache-Control"</span>).is(<span class="jxr_string">"max-age=86400, public"</span>);

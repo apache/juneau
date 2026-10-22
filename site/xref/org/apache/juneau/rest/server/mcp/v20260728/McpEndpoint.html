@@ -140,7 +140,7 @@
 <a class="jxr_linenumber" name="L132" href="#L132">132</a> 	}
 <a class="jxr_linenumber" name="L133" href="#L133">133</a> 
 <a class="jxr_linenumber" name="L134" href="#L134">134</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L135" href="#L135">135</a> <em class="jxr_javadoccomment">	 * OAuth 2.1 resource-server bearer gate for the mixin's MCP {@code POST /mcp} endpoint (READY-312f F2).</em>
+<a class="jxr_linenumber" name="L135" href="#L135">135</a> <em class="jxr_javadoccomment">	 * OAuth 2.1 resource-server bearer gate for the mixin's MCP {@code POST /mcp} endpoint.</em>
 <a class="jxr_linenumber" name="L136" href="#L136">136</a> <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L137" href="#L137">137</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
 <a class="jxr_linenumber" name="L138" href="#L138">138</a> <em class="jxr_javadoccomment">	 * A no-op unless {@link McpResourceServerConfig#isEnabled() RS auth is enabled}; when enabled, a request that</em>
@@ -149,8 +149,8 @@
 <a class="jxr_linenumber" name="L141" href="#L141">141</a> <em class="jxr_javadoccomment">	 * the MCP dispatch &lt;i&gt;operation&lt;/i&gt; (identified by resolved-operation identity, or by that operation's own router</em>
 <a class="jxr_linenumber" name="L142" href="#L142">142</a> <em class="jxr_javadoccomment">	 * matchers &amp;mdash; see {@link McpResourceServerSupport#resolvesToMcpDispatch}) so other {@code POST} operations on the</em>
 <a class="jxr_linenumber" name="L143" href="#L143">143</a> <em class="jxr_javadoccomment">	 * host resource are unaffected, and it cannot drift from the router: a trailing slash, percent-encoding, a</em>
-<a class="jxr_linenumber" name="L144" href="#L144">144</a> <em class="jxr_javadoccomment">	 * {@code ?method=}/{@code X-Method} override, or a host-chosen {@code @Mixin(path/paths)} re-mount cannot slip past it</em>
-<a class="jxr_linenumber" name="L145" href="#L145">145</a> <em class="jxr_javadoccomment">	 * (B1/H3).  The well-known {@code GET} routes are left unauthenticated for PRM discovery.</em>
+<a class="jxr_linenumber" name="L144" href="#L144">144</a> <em class="jxr_javadoccomment">	 * {@code POST} claim on any override channel ({@code ?method=} or an override header), or a host-chosen {@code @Mixin(path/paths)} re-mount cannot slip past it</em>
+<a class="jxr_linenumber" name="L145" href="#L145">145</a> <em class="jxr_javadoccomment">	 *.  The well-known {@code GET} routes are left unauthenticated for PRM discovery.</em>
 <a class="jxr_linenumber" name="L146" href="#L146">146</a> <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L147" href="#L147">147</a> <em class="jxr_javadoccomment">	 * @param ctx The host {@link org.apache.juneau.rest.server.RestContext} handling this request.</em>
 <a class="jxr_linenumber" name="L148" href="#L148">148</a> <em class="jxr_javadoccomment">	 * @param req The raw HTTP request.</em>
@@ -167,7 +167,7 @@
 <a class="jxr_linenumber" name="L159" href="#L159">159</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
 <a class="jxr_linenumber" name="L160" href="#L160">160</a> <em class="jxr_javadoccomment">	 * This route (and its path-inserted sibling) is registered unconditionally, but returns {@code 404} whenever RS auth</em>
 <a class="jxr_linenumber" name="L161" href="#L161">161</a> <em class="jxr_javadoccomment">	 * is {@link McpResourceServerConfig#isEnabled() disabled} &amp;mdash; so a non-opted-in endpoint claims the well-known</em>
-<a class="jxr_linenumber" name="L162" href="#L162">162</a> <em class="jxr_javadoccomment">	 * namespace but exposes no observable metadata (READY-312f F2, M7).</em>
+<a class="jxr_linenumber" name="L162" href="#L162">162</a> <em class="jxr_javadoccomment">	 * namespace but exposes no observable metadata.</em>
 <a class="jxr_linenumber" name="L163" href="#L163">163</a> <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L164" href="#L164">164</a> <em class="jxr_javadoccomment">	 * @param req The REST request.</em>
 <a class="jxr_linenumber" name="L165" href="#L165">165</a> <em class="jxr_javadoccomment">	 * @return The PRM document.</em>
@@ -179,7 +179,7 @@
 <a class="jxr_linenumber" name="L171" href="#L171">171</a> 
 <a class="jxr_linenumber" name="L172" href="#L172">172</a> 	<em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L173" href="#L173">173</a> <em class="jxr_javadoccomment">	 * Serves the RFC 9728 Protected Resource Metadata document at the path-inserted well-known location (SEP-2351), but</em>
-<a class="jxr_linenumber" name="L174" href="#L174">174</a> <em class="jxr_javadoccomment">	 * only when the requested suffix matches this resource's expected well-known path; otherwise {@code 404} (M5).</em>
+<a class="jxr_linenumber" name="L174" href="#L174">174</a> <em class="jxr_javadoccomment">	 * only when the requested suffix matches this resource's expected well-known path; otherwise {@code 404}.</em>
 <a class="jxr_linenumber" name="L175" href="#L175">175</a> <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L176" href="#L176">176</a> <em class="jxr_javadoccomment">	 * @param req The REST request.</em>
 <a class="jxr_linenumber" name="L177" href="#L177">177</a> <em class="jxr_javadoccomment">	 * @return The PRM document.</em>

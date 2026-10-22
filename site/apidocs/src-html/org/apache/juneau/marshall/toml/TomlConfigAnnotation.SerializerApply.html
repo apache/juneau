@@ -57,31 +57,36 @@
 <span class="source-line-no">044</span><span id="line-44"></span>
 <span class="source-line-no">045</span><span id="line-45">      @Override</span>
 <span class="source-line-no">046</span><span id="line-46">      public void apply(AnnotationInfo&lt;TomlConfig&gt; ai, TomlParser.Builder b) {</span>
-<span class="source-line-no">047</span><span id="line-47">         // No-op: Annotation applier with no work to do</span>
-<span class="source-line-no">048</span><span id="line-48">      }</span>
-<span class="source-line-no">049</span><span id="line-49">   }</span>
-<span class="source-line-no">050</span><span id="line-50"></span>
-<span class="source-line-no">051</span><span id="line-51">   /**</span>
-<span class="source-line-no">052</span><span id="line-52">    * Applies {@link TomlConfig} annotations to a {@link TomlSerializer.Builder}.</span>
-<span class="source-line-no">053</span><span id="line-53">    */</span>
-<span class="source-line-no">054</span><span id="line-54">   public static class SerializerApply extends AnnotationApplier&lt;TomlConfig,TomlSerializer.Builder&gt; {</span>
-<span class="source-line-no">055</span><span id="line-55"></span>
-<span class="source-line-no">056</span><span id="line-56">      /**</span>
-<span class="source-line-no">057</span><span id="line-57">       * Constructor.</span>
-<span class="source-line-no">058</span><span id="line-58">       *</span>
-<span class="source-line-no">059</span><span id="line-59">       * @param vr The resolver for resolving values in annotations.</span>
-<span class="source-line-no">060</span><span id="line-60">       *    &lt;br&gt;Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">061</span><span id="line-61">       */</span>
-<span class="source-line-no">062</span><span id="line-62">      public SerializerApply(VarResolverSession vr) {</span>
-<span class="source-line-no">063</span><span id="line-63">         super(TomlConfig.class, TomlSerializer.Builder.class, vr);</span>
-<span class="source-line-no">064</span><span id="line-64">      }</span>
-<span class="source-line-no">065</span><span id="line-65"></span>
-<span class="source-line-no">066</span><span id="line-66">      @Override</span>
-<span class="source-line-no">067</span><span id="line-67">      public void apply(AnnotationInfo&lt;TomlConfig&gt; ai, TomlSerializer.Builder b) {</span>
-<span class="source-line-no">068</span><span id="line-68">         // No-op: Annotation applier with no work to do</span>
-<span class="source-line-no">069</span><span id="line-69">      }</span>
-<span class="source-line-no">070</span><span id="line-70">   }</span>
-<span class="source-line-no">071</span><span id="line-71">}</span>
+<span class="source-line-no">047</span><span id="line-47">         TomlConfig a = ai.inner();</span>
+<span class="source-line-no">048</span><span id="line-48">         string(a.nullValue()).ifPresent(b::nullValue);</span>
+<span class="source-line-no">049</span><span id="line-49">      }</span>
+<span class="source-line-no">050</span><span id="line-50">   }</span>
+<span class="source-line-no">051</span><span id="line-51"></span>
+<span class="source-line-no">052</span><span id="line-52">   /**</span>
+<span class="source-line-no">053</span><span id="line-53">    * Applies {@link TomlConfig} annotations to a {@link TomlSerializer.Builder}.</span>
+<span class="source-line-no">054</span><span id="line-54">    */</span>
+<span class="source-line-no">055</span><span id="line-55">   public static class SerializerApply extends AnnotationApplier&lt;TomlConfig,TomlSerializer.Builder&gt; {</span>
+<span class="source-line-no">056</span><span id="line-56"></span>
+<span class="source-line-no">057</span><span id="line-57">      /**</span>
+<span class="source-line-no">058</span><span id="line-58">       * Constructor.</span>
+<span class="source-line-no">059</span><span id="line-59">       *</span>
+<span class="source-line-no">060</span><span id="line-60">       * @param vr The resolver for resolving values in annotations.</span>
+<span class="source-line-no">061</span><span id="line-61">       *    &lt;br&gt;Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">062</span><span id="line-62">       */</span>
+<span class="source-line-no">063</span><span id="line-63">      public SerializerApply(VarResolverSession vr) {</span>
+<span class="source-line-no">064</span><span id="line-64">         super(TomlConfig.class, TomlSerializer.Builder.class, vr);</span>
+<span class="source-line-no">065</span><span id="line-65">      }</span>
+<span class="source-line-no">066</span><span id="line-66"></span>
+<span class="source-line-no">067</span><span id="line-67">      @Override</span>
+<span class="source-line-no">068</span><span id="line-68">      public void apply(AnnotationInfo&lt;TomlConfig&gt; ai, TomlSerializer.Builder b) {</span>
+<span class="source-line-no">069</span><span id="line-69">         TomlConfig a = ai.inner();</span>
+<span class="source-line-no">070</span><span id="line-70">         string(a.nullValue()).ifPresent(b::nullValue);</span>
+<span class="source-line-no">071</span><span id="line-71">         integer(a.inlineTableThreshold(), "inlineTableThreshold").ifPresent(b::inlineTableThreshold);</span>
+<span class="source-line-no">072</span><span id="line-72">         bool(a.useInlineTables()).ifPresent(b::useInlineTables);</span>
+<span class="source-line-no">073</span><span id="line-73">         bool(a.sortKeys()).ifPresent(b::sortKeys);</span>
+<span class="source-line-no">074</span><span id="line-74">      }</span>
+<span class="source-line-no">075</span><span id="line-75">   }</span>
+<span class="source-line-no">076</span><span id="line-76">}</span>
 
 
 

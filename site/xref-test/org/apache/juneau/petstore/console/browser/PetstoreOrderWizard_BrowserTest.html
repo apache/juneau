@@ -1,0 +1,183 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="" lang="">
+<head><meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<title>PetstoreOrderWizard_BrowserTest xref</title>
+<link type="text/css" rel="stylesheet" href="../../../../../../stylesheet.css" />
+</head>
+<body>
+<div id="overview"><a href="../../../../../../../testapidocs/org/apache/juneau/petstore/console/browser/PetstoreOrderWizard_BrowserTest.html">View Javadoc</a></div><pre>
+<a class="jxr_linenumber" name="L1" href="#L1">1</a>   <em class="jxr_comment">/*</em>
+<a class="jxr_linenumber" name="L2" href="#L2">2</a>   <em class="jxr_comment"> * Licensed to the Apache Software Foundation (ASF) under one or more</em>
+<a class="jxr_linenumber" name="L3" href="#L3">3</a>   <em class="jxr_comment"> * contributor license agreements.  See the NOTICE file distributed with</em>
+<a class="jxr_linenumber" name="L4" href="#L4">4</a>   <em class="jxr_comment"> * this work for additional information regarding copyright ownership.</em>
+<a class="jxr_linenumber" name="L5" href="#L5">5</a>   <em class="jxr_comment"> * The ASF licenses this file to You under the Apache License, Version 2.0</em>
+<a class="jxr_linenumber" name="L6" href="#L6">6</a>   <em class="jxr_comment"> * (the "License"); you may not use this file except in compliance with</em>
+<a class="jxr_linenumber" name="L7" href="#L7">7</a>   <em class="jxr_comment"> * the License.  You may obtain a copy of the License at</em>
+<a class="jxr_linenumber" name="L8" href="#L8">8</a>   <em class="jxr_comment"> *</em>
+<a class="jxr_linenumber" name="L9" href="#L9">9</a>   <em class="jxr_comment"> *      <a href="http://www.apache.org/licenses/LICENSE-2.0" target="alexandria_uri">http://www.apache.org/licenses/LICENSE-2.0</a></em>
+<a class="jxr_linenumber" name="L10" href="#L10">10</a>  <em class="jxr_comment"> *</em>
+<a class="jxr_linenumber" name="L11" href="#L11">11</a>  <em class="jxr_comment"> * Unless required by applicable law or agreed to in writing, software</em>
+<a class="jxr_linenumber" name="L12" href="#L12">12</a>  <em class="jxr_comment"> * distributed under the License is distributed on an "AS IS" BASIS,</em>
+<a class="jxr_linenumber" name="L13" href="#L13">13</a>  <em class="jxr_comment"> * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</em>
+<a class="jxr_linenumber" name="L14" href="#L14">14</a>  <em class="jxr_comment"> * See the License for the specific language governing permissions and</em>
+<a class="jxr_linenumber" name="L15" href="#L15">15</a>  <em class="jxr_comment"> * limitations under the License.</em>
+<a class="jxr_linenumber" name="L16" href="#L16">16</a>  <em class="jxr_comment"> */</em>
+<a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> org.apache.juneau.petstore.console.browser;
+<a class="jxr_linenumber" name="L18" href="#L18">18</a>  
+<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.petstore.console.browser.PetstoreBrowser.*;
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.test.bct.BctAssertions.*;
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.junit.jupiter.api.Assertions.assertEquals;
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.junit.jupiter.api.Assertions.assertTrue;
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> java.util.*;
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.*;
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.microservice.*;
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">import</strong> org.junit.jupiter.api.*;
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <strong class="jxr_keyword">import</strong> org.junit.jupiter.api.condition.*;
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <strong class="jxr_keyword">import</strong> org.junit.jupiter.api.extension.*;
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>  
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <em class="jxr_javadoccomment"> * The Orders "+ New order" wizard in the real browser: the ribbon item opens the compact first step, its Review</em>
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>  <em class="jxr_javadoccomment"> * button stacks the second step with the first step's inputs, and that step's Confirm places the order (it posts to</em>
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>  <em class="jxr_javadoccomment"> * the endpoint and method its child action declares), closes both steps, shows the success banner under the</em>
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>  <em class="jxr_javadoccomment"> * ribbon and redraws the table.</em>
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>  <em class="jxr_javadoccomment"> */</em>
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>  @EnabledIfSystemProperty(named=PetstoreBrowser.GATE, matches=<span class="jxr_string">"true"</span>, disabledReason=PetstoreBrowser.DISABLED)
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>  <strong class="jxr_keyword">class</strong> <a name="PetstoreOrderWizard_BrowserTest" href="../../../../../../org/apache/juneau/petstore/console/browser/PetstoreOrderWizard_BrowserTest.html#PetstoreOrderWizard_BrowserTest">PetstoreOrderWizard_BrowserTest</a> <strong class="jxr_keyword">extends</strong> TestBase {
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>  
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>  	@RegisterExtension
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>  	<strong class="jxr_keyword">static</strong> MicroserviceTestFixture server = PetstoreTestServer.fixture();
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>  
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String TOP = <span class="jxr_string">"(() =&gt; { const d = document.querySelectorAll('[role=dialog]'); return d[d.length - 1]; })()"</span>;
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>  
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String NEW_ORDER = <span class="jxr_string">"[...document.querySelectorAll('.juneau-view-ribbon-btn')].find(b =&gt; b.getAttribute('aria-label') === '+ New order')"</span>;
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>  
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Map&lt;String,Object&gt; wait(String js) {
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>  		<strong class="jxr_keyword">return</strong> Map.of(<span class="jxr_string">"waitFor"</span>, js, <span class="jxr_string">"timeoutMs"</span>, 5000);
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>  	}
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>  
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Map&lt;String,Object&gt; eval(String js) {
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>  		<strong class="jxr_keyword">return</strong> Map.of(<span class="jxr_string">"evaluate"</span>, js);
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>  	}
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>  
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String FIELD = <span class="jxr_string">"(n =&gt; document.querySelector('[data-juneau-form-field=' + n + ']'))"</span>;
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>  
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String ROWS = <span class="jxr_string">"document.querySelectorAll('table tbody tr').length"</span>;
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>  
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>  	<em class="jxr_javadoccomment">/** The table's total row count, read from its "1-25 of 2,001" summary. */</em>
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String TOTAL = <span class="jxr_string">"Number(/of (&#92;&#92;d+(?:,&#92;&#92;d{3})*)/.exec(document.body.textContent)[1].replace(/,/g, ''))"</span>;
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>  
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Map&lt;String,Map&lt;String,Object&gt;&gt; report;
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>  
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>  	<em class="jxr_javadoccomment">/** One full pass through the wizard at the given viewport, shipping on the given date. */</em>
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Map&lt;String,Object&gt; wizard(String name, List&lt;Integer&gt; viewport, String shipDate) {
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>  		<strong class="jxr_keyword">return</strong> Map.of(<span class="jxr_string">"name"</span>, name, <span class="jxr_string">"path"</span>, <span class="jxr_string">"/console/orders"</span>, <span class="jxr_string">"capture"</span>, <span class="jxr_string">"/console/orders"</span>, <span class="jxr_string">"viewport"</span>, viewport,
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>  			<span class="jxr_string">"actions"</span>, List.of(
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>  				wait(NEW_ORDER + <span class="jxr_string">" &amp;&amp; "</span> + ROWS + <span class="jxr_string">" &gt; 0"</span>),
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>  				eval(<span class="jxr_string">"window.__totalBefore = "</span> + TOTAL),
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>  				eval(NEW_ORDER + <span class="jxr_string">".click()"</span>),
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>  				wait(<span class="jxr_string">"document.querySelector('[data-juneau-form-field=review]')"</span>),
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>  				eval(<span class="jxr_string">"window.__step1 = "</span> + TOP + <span class="jxr_string">".querySelector('h2, [class*=title]').textContent"</span>),
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>  				<em class="jxr_comment">// Choose the second available pet and a ship date, as a user would.</em>
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>  				eval(<span class="jxr_string">"(() =&gt; { const f = "</span> + FIELD + <span class="jxr_string">"('petId'); f.selectedIndex = 1; window.__petId = f.value; window.__petName = f.options[1].textContent;"</span>
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>  					+ <span class="jxr_string">" f.dispatchEvent(new Event('input', {bubbles: true})); f.dispatchEvent(new Event('change', {bubbles: true}));"</span>
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>  					+ <span class="jxr_string">" const d = "</span> + FIELD + <span class="jxr_string">"('shipDate'); d.value = '"</span> + shipDate + <span class="jxr_string">"';"</span>
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>  					+ <span class="jxr_string">" d.dispatchEvent(new Event('input', {bubbles: true})); d.dispatchEvent(new Event('change', {bubbles: true})); })()"</span>),
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>  				eval(FIELD + <span class="jxr_string">"('review').click()"</span>),
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>  				wait(<span class="jxr_string">"[...document.querySelectorAll('[role=dialog]')].length &gt; 1 &amp;&amp; "</span> + TOP + <span class="jxr_string">".querySelector('.juneau-view-dialog-confirm')"</span>),
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>  				eval(<span class="jxr_string">"window.__step2 = "</span> + TOP + <span class="jxr_string">".textContent"</span>),
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>  				eval(<span class="jxr_string">"window.__dialogs = document.querySelectorAll('[role=dialog]').length"</span>),
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>  				eval(<span class="jxr_string">"window.__compact = document.querySelectorAll('.petstore-dialog-compact').length"</span>),
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>  				<em class="jxr_comment">// The stacked step sits inside the viewport, not spilling off a narrow screen.</em>
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>  				eval(<span class="jxr_string">"window.__rect = JSON.stringify("</span> + TOP + <span class="jxr_string">".getBoundingClientRect()) + ' vs ' + window.innerWidth + 'x' + window.innerHeight"</span>),
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>  				eval(<span class="jxr_string">"window.__offset = "</span> + TOP + <span class="jxr_string">".getBoundingClientRect().left - document.querySelectorAll('[role=dialog]')[0].getBoundingClientRect().left"</span>),
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>  				eval(<span class="jxr_string">"window.__fits = (r =&gt; r.left &gt;= 0 &amp;&amp; r.right &lt;= window.innerWidth + 1 &amp;&amp; r.top &gt;= 0 &amp;&amp; r.bottom &lt;= window.innerHeight + 1)("</span> + TOP + <span class="jxr_string">".getBoundingClientRect())"</span>),
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>  				eval(<span class="jxr_string">"window.__fontPx = parseFloat(getComputedStyle(document.querySelectorAll('[role=dialog]')[0]).fontSize)"</span>),
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>  				eval(<span class="jxr_string">"window.__innerWidth = window.innerWidth"</span>),
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>  				eval(<span class="jxr_string">"window.__firstRect = JSON.stringify(document.querySelectorAll('[role=dialog]')[0].getBoundingClientRect())"</span>),
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>  				eval(<span class="jxr_string">"window.__firstFits = (r =&gt; r.left &gt;= 0 &amp;&amp; r.right &lt;= window.innerWidth + 1 &amp;&amp; r.top &gt;= 0 &amp;&amp; r.bottom &lt;= window.innerHeight + 1)(document.querySelectorAll('[role=dialog]')[0].getBoundingClientRect())"</span>),
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>  				eval(<span class="jxr_string">"window.__firstWidth = document.querySelectorAll('[role=dialog]')[0].getBoundingClientRect().width"</span>),
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>  				eval(TOP + <span class="jxr_string">".querySelector('.juneau-view-dialog-confirm').click()"</span>),
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>  				wait(<span class="jxr_string">"document.querySelector('.juneau-view-ribbon-action-outcome[data-state=success]') &amp;&amp; "</span> + TOTAL + <span class="jxr_string">" === window.__totalBefore + 1"</span>),
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>  				<em class="jxr_comment">// Sort by id, newest first, so the placed order is the first row.  With the View Settings gear the sort controls are Juneau's .juneau-view-col-sort-icon; the Id column is first.</em>
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>  				eval(<span class="jxr_string">"window.__orderId = /Placed order '(&#92;&#92;d+)'/.exec(document.body.textContent)[1]"</span>),
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>  				eval(<span class="jxr_string">"document.querySelector('th .juneau-view-col-sort-icon').click()"</span>),
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>  				wait(<span class="jxr_string">"document.querySelector('table tbody tr td')?.textContent.trim() === window.__orderId"</span>)),
+<a class="jxr_linenumber" name="L99" href="#L99">99</a>  			<span class="jxr_string">"queries"</span>, Map.ofEntries(
+<a class="jxr_linenumber" name="L100" href="#L100">100</a> 				Map.entry(<span class="jxr_string">"step1"</span>, <span class="jxr_string">"window.__step1"</span>), Map.entry(<span class="jxr_string">"step2"</span>, <span class="jxr_string">"window.__step2"</span>), Map.entry(<span class="jxr_string">"compact"</span>, <span class="jxr_string">"window.__compact"</span>),
+<a class="jxr_linenumber" name="L101" href="#L101">101</a> 				Map.entry(<span class="jxr_string">"dialogs"</span>, <span class="jxr_string">"window.__dialogs"</span>), Map.entry(<span class="jxr_string">"fits"</span>, <span class="jxr_string">"window.__fits"</span>), Map.entry(<span class="jxr_string">"firstFits"</span>, <span class="jxr_string">"window.__firstFits"</span>), Map.entry(<span class="jxr_string">"firstWidth"</span>, <span class="jxr_string">"window.__firstWidth"</span>), Map.entry(<span class="jxr_string">"fontPx"</span>, <span class="jxr_string">"window.__fontPx"</span>), Map.entry(<span class="jxr_string">"innerWidth"</span>, <span class="jxr_string">"window.__innerWidth"</span>), Map.entry(<span class="jxr_string">"firstRect"</span>, <span class="jxr_string">"window.__firstRect"</span>), Map.entry(<span class="jxr_string">"rect"</span>, <span class="jxr_string">"window.__rect"</span>), Map.entry(<span class="jxr_string">"offset"</span>, <span class="jxr_string">"window.__offset"</span>), Map.entry(<span class="jxr_string">"petId"</span>, <span class="jxr_string">"window.__petId"</span>),
+<a class="jxr_linenumber" name="L102" href="#L102">102</a> 				Map.entry(<span class="jxr_string">"petName"</span>, <span class="jxr_string">"window.__petName"</span>), Map.entry(<span class="jxr_string">"totalBefore"</span>, <span class="jxr_string">"window.__totalBefore"</span>), Map.entry(<span class="jxr_string">"totalAfter"</span>, TOTAL),
+<a class="jxr_linenumber" name="L103" href="#L103">103</a> 				Map.entry(<span class="jxr_string">"firstRow"</span>, <span class="jxr_string">"document.querySelector('table tbody tr').textContent"</span>), Map.entry(<span class="jxr_string">"orderId"</span>, <span class="jxr_string">"window.__orderId"</span>),
+<a class="jxr_linenumber" name="L104" href="#L104">104</a> 				Map.entry(<span class="jxr_string">"backdrops"</span>, <span class="jxr_string">"document.querySelectorAll('.juneau-view-dialog-backdrop').length"</span>),
+<a class="jxr_linenumber" name="L105" href="#L105">105</a> 				Map.entry(<span class="jxr_string">"banner"</span>, <span class="jxr_string">"document.querySelector('.juneau-view-ribbon-action-outcome[data-state=success]')?.textContent ?? null"</span>),
+<a class="jxr_linenumber" name="L106" href="#L106">106</a> 				Map.entry(<span class="jxr_string">"all"</span>, <span class="jxr_string">"document.body.textContent"</span>)));
+<a class="jxr_linenumber" name="L107" href="#L107">107</a> 	}
+<a class="jxr_linenumber" name="L108" href="#L108">108</a> 
+<a class="jxr_linenumber" name="L109" href="#L109">109</a> 	@BeforeAll
+<a class="jxr_linenumber" name="L110" href="#L110">110</a> 	<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> probe() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L111" href="#L111">111</a> 		<strong class="jxr_keyword">var</strong> base = PetstoreTestServer.awaitReady(server);
+<a class="jxr_linenumber" name="L112" href="#L112">112</a> 		report = run(<span class="jxr_string">"order-wizard"</span>, base, List.of(
+<a class="jxr_linenumber" name="L113" href="#L113">113</a> 			wizard(<span class="jxr_string">"wide"</span>, List.of(1280, 900), <span class="jxr_string">"2031-03-14"</span>),
+<a class="jxr_linenumber" name="L114" href="#L114">114</a> 			wizard(<span class="jxr_string">"narrow"</span>, List.of(420, 800), <span class="jxr_string">"2032-04-15"</span>)));
+<a class="jxr_linenumber" name="L115" href="#L115">115</a> 	}
+<a class="jxr_linenumber" name="L116" href="#L116">116</a> 
+<a class="jxr_linenumber" name="L117" href="#L117">117</a> 	<em class="jxr_javadoccomment">/** The order this places is left in the throwaway test server's store; nothing else reads it. */</em>
+<a class="jxr_linenumber" name="L118" href="#L118">118</a> 	@SuppressWarnings(<span class="jxr_string">"unchecked"</span>) <em class="jxr_comment">// requests is a JSON array of {url, method, postData}.</em>
+<a class="jxr_linenumber" name="L119" href="#L119">119</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> verify(String name, String shipDate, String shown) {
+<a class="jxr_linenumber" name="L120" href="#L120">120</a> 		<strong class="jxr_keyword">var</strong> c = assertClean(report, name);
+<a class="jxr_linenumber" name="L121" href="#L121">121</a> 		assertContains(<span class="jxr_string">"New order"</span>, String.valueOf(query(c, <span class="jxr_string">"step1"</span>)));
+<a class="jxr_linenumber" name="L122" href="#L122">122</a> 		<em class="jxr_comment">// The second step reads back the first step's inputs: the chosen pet and the ship date.</em>
+<a class="jxr_linenumber" name="L123" href="#L123">123</a> 		<strong class="jxr_keyword">var</strong> step2 = String.valueOf(query(c, <span class="jxr_string">"step2"</span>));
+<a class="jxr_linenumber" name="L124" href="#L124">124</a> 		assertContains(<span class="jxr_string">"Review order"</span>, step2);
+<a class="jxr_linenumber" name="L125" href="#L125">125</a> 		assertContains(String.valueOf(query(c, <span class="jxr_string">"petName"</span>)), step2);
+<a class="jxr_linenumber" name="L126" href="#L126">126</a> 		assertContains(shipDate, step2);
+<a class="jxr_linenumber" name="L127" href="#L127">127</a> 		assertEquals(2, ((Number)query(c, <span class="jxr_string">"dialogs"</span>)).intValue(), <span class="jxr_string">"both steps are stacked"</span>);
+<a class="jxr_linenumber" name="L128" href="#L128">128</a> 		assertTrue((Integer)query(c, <span class="jxr_string">"compact"</span>) &gt; 0);
+<a class="jxr_linenumber" name="L129" href="#L129">129</a> 		assertTrue(((Number)query(c, <span class="jxr_string">"offset"</span>)).doubleValue() &gt; 0, <span class="jxr_string">"the second step is offset from the first, so the two read as a stack"</span>);
+<a class="jxr_linenumber" name="L130" href="#L130">130</a> 		assertEquals(Boolean.TRUE, query(c, <span class="jxr_string">"fits"</span>), () -&gt; <span class="jxr_string">"the stacked step must fit the viewport: "</span> + query(c, <span class="jxr_string">"rect"</span>));
+<a class="jxr_linenumber" name="L131" href="#L131">131</a> 		assertEquals(Boolean.TRUE, query(c, <span class="jxr_string">"firstFits"</span>), () -&gt; <span class="jxr_string">"the compact first step must fit the viewport: "</span> + query(c, <span class="jxr_string">"firstRect"</span>));
+<a class="jxr_linenumber" name="L132" href="#L132">132</a> 		<strong class="jxr_keyword">var</strong> em = ((Number)query(c, <span class="jxr_string">"fontPx"</span>)).doubleValue();
+<a class="jxr_linenumber" name="L133" href="#L133">133</a> 		<strong class="jxr_keyword">var</strong> width = ((Number)query(c, <span class="jxr_string">"firstWidth"</span>)).doubleValue();
+<a class="jxr_linenumber" name="L134" href="#L134">134</a> 		<strong class="jxr_keyword">var</strong> offset = ((Number)query(c, <span class="jxr_string">"offset"</span>)).doubleValue();
+<a class="jxr_linenumber" name="L135" href="#L135">135</a> 		assertEquals(1.5 * em, offset, 1.0, <span class="jxr_string">"the stack offset is one 1.5em shift"</span>);
+<a class="jxr_linenumber" name="L136" href="#L136">136</a> 		<strong class="jxr_keyword">if</strong> (<span class="jxr_string">"wide"</span>.equals(name))
+<a class="jxr_linenumber" name="L137" href="#L137">137</a> 			assertTrue(width &gt;= 28 * em - 1, <span class="jxr_string">"wide geometry keeps the 28em minimum width: "</span> + width);
+<a class="jxr_linenumber" name="L138" href="#L138">138</a> 		<strong class="jxr_keyword">else</strong>
+<a class="jxr_linenumber" name="L139" href="#L139">139</a> 			assertEquals(((Number)query(c, <span class="jxr_string">"innerWidth"</span>)).doubleValue() - 3 * em, width, 2.0, <span class="jxr_string">"narrow: the compact step fills the viewport less the 3em slack"</span>);
+<a class="jxr_linenumber" name="L140" href="#L140">140</a> 		<strong class="jxr_keyword">var</strong> posted = ((List&lt;Map&lt;String,Object&gt;&gt;)c.get(<span class="jxr_string">"requests"</span>)).stream()
+<a class="jxr_linenumber" name="L141" href="#L141">141</a> 			.filter(r -&gt; <span class="jxr_string">"POST"</span>.equals(r.get(<span class="jxr_string">"method"</span>)) &amp;&amp; String.valueOf(r.get(<span class="jxr_string">"url"</span>)).endsWith(<span class="jxr_string">"/console/orders"</span>)).toList();
+<a class="jxr_linenumber" name="L142" href="#L142">142</a> 		assertEquals(1, posted.size());
+<a class="jxr_linenumber" name="L143" href="#L143">143</a> 		<em class="jxr_comment">// A successful submit redraws the table, which re-queries it after the order was posted.</em>
+<a class="jxr_linenumber" name="L144" href="#L144">144</a> 		<strong class="jxr_keyword">var</strong> urls = ((List&lt;Map&lt;String,Object&gt;&gt;)c.get(<span class="jxr_string">"requests"</span>)).stream().filter(r -&gt; <span class="jxr_string">"POST"</span>.equals(r.get(<span class="jxr_string">"method"</span>))).map(r -&gt; String.valueOf(r.get(<span class="jxr_string">"url"</span>))).toList();
+<a class="jxr_linenumber" name="L145" href="#L145">145</a> 		assertTrue(urls.lastIndexOf(posted.get(0).get(<span class="jxr_string">"url"</span>).toString() + <span class="jxr_string">"/query"</span>) &gt; urls.indexOf(posted.get(0).get(<span class="jxr_string">"url"</span>).toString()));
+<a class="jxr_linenumber" name="L146" href="#L146">146</a> 		<strong class="jxr_keyword">var</strong> body = <strong class="jxr_keyword">new</strong> org.apache.juneau.marshall.collections.JsonMap(String.valueOf(posted.get(0).get(<span class="jxr_string">"postData"</span>)));
+<a class="jxr_linenumber" name="L147" href="#L147">147</a> 		assertEquals(String.valueOf(query(c, <span class="jxr_string">"petId"</span>)), body.getMap(<span class="jxr_string">"fields"</span>).getString(<span class="jxr_string">"petId"</span>));
+<a class="jxr_linenumber" name="L148" href="#L148">148</a> 		assertEquals(shipDate, body.getMap(<span class="jxr_string">"fields"</span>).getString(<span class="jxr_string">"shipDate"</span>));
+<a class="jxr_linenumber" name="L149" href="#L149">149</a> 		<em class="jxr_comment">// The committed write closes the whole stack - the first step too, not just the one that submitted - and</em>
+<a class="jxr_linenumber" name="L150" href="#L150">150</a> 		<em class="jxr_comment">// its outcome is the banner under the ribbon.</em>
+<a class="jxr_linenumber" name="L151" href="#L151">151</a> 		assertEquals(0, ((Number)query(c, <span class="jxr_string">"backdrops"</span>)).intValue());
+<a class="jxr_linenumber" name="L152" href="#L152">152</a> 		assertContains(<span class="jxr_string">"Placed order"</span>, String.valueOf(query(c, <span class="jxr_string">"banner"</span>)));
+<a class="jxr_linenumber" name="L153" href="#L153">153</a> 		<em class="jxr_comment">// The new order is in the redrawn table: the total grew by one and the newest row is that order, still placed</em>
+<a class="jxr_linenumber" name="L154" href="#L154">154</a> 		<em class="jxr_comment">// and carrying the chosen pet and ship date.</em>
+<a class="jxr_linenumber" name="L155" href="#L155">155</a> 		assertEquals(((Number)query(c, <span class="jxr_string">"totalBefore"</span>)).intValue() + 1, ((Number)query(c, <span class="jxr_string">"totalAfter"</span>)).intValue());
+<a class="jxr_linenumber" name="L156" href="#L156">156</a> 		<strong class="jxr_keyword">var</strong> row = String.valueOf(query(c, <span class="jxr_string">"firstRow"</span>));
+<a class="jxr_linenumber" name="L157" href="#L157">157</a> 		assertTrue(row.startsWith(String.valueOf(query(c, <span class="jxr_string">"orderId"</span>)) + query(c, <span class="jxr_string">"petId"</span>)), row);
+<a class="jxr_linenumber" name="L158" href="#L158">158</a> 		<em class="jxr_comment">// A date-only value renders as the calendar day it names, in any browser time zone.</em>
+<a class="jxr_linenumber" name="L159" href="#L159">159</a> 		assertTrue(row.matches(<span class="jxr_string">".*"</span> + shown + <span class="jxr_string">".*"</span>), row);
+<a class="jxr_linenumber" name="L160" href="#L160">160</a> 		assertTrue(row.endsWith(<span class="jxr_string">"PLACED"</span>), row);
+<a class="jxr_linenumber" name="L161" href="#L161">161</a> 	}
+<a class="jxr_linenumber" name="L162" href="#L162">162</a> 
+<a class="jxr_linenumber" name="L163" href="#L163">163</a> 	@Test <strong class="jxr_keyword">void</strong> a01_wideViewport() {
+<a class="jxr_linenumber" name="L164" href="#L164">164</a> 		verify(<span class="jxr_string">"wide"</span>, <span class="jxr_string">"2031-03-14"</span>, <span class="jxr_string">"Mar 14, 2031"</span>);
+<a class="jxr_linenumber" name="L165" href="#L165">165</a> 	}
+<a class="jxr_linenumber" name="L166" href="#L166">166</a> 
+<a class="jxr_linenumber" name="L167" href="#L167">167</a> 	@Test <strong class="jxr_keyword">void</strong> a02_narrowViewport() {
+<a class="jxr_linenumber" name="L168" href="#L168">168</a> 		verify(<span class="jxr_string">"narrow"</span>, <span class="jxr_string">"2032-04-15"</span>, <span class="jxr_string">"Apr 15, 2032"</span>);
+<a class="jxr_linenumber" name="L169" href="#L169">169</a> 	}
+<a class="jxr_linenumber" name="L170" href="#L170">170</a> }
+</pre>
+<hr/>
+<div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>
+</body>
+</html>

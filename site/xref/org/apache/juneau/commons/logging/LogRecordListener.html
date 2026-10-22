@@ -28,12 +28,12 @@
 <a class="jxr_linenumber" name="L20" href="#L20">20</a>  <em class="jxr_javadoccomment"> * Interface for listening to log records.</em>
 <a class="jxr_linenumber" name="L21" href="#L21">21</a>  <em class="jxr_javadoccomment"> *</em>
 <a class="jxr_linenumber" name="L22" href="#L22">22</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <em class="jxr_javadoccomment"> * Implementations of this interface can be registered with a {@link Logger} to receive</em>
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <em class="jxr_javadoccomment"> * Implementations of this interface can be registered with a {@link RichLogger} to receive</em>
 <a class="jxr_linenumber" name="L24" href="#L24">24</a>  <em class="jxr_javadoccomment"> * notifications when log records are logged.</em>
 <a class="jxr_linenumber" name="L25" href="#L25">25</a>  <em class="jxr_javadoccomment"> *</em>
 <a class="jxr_linenumber" name="L26" href="#L26">26</a>  <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</em>
 <a class="jxr_linenumber" name="L27" href="#L27">27</a>  <em class="jxr_javadoccomment"> * 	&lt;li class='jc'&gt;{@link LogRecordCapture}</em>
-<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <em class="jxr_javadoccomment"> * 	&lt;li class='jc'&gt;{@link Logger}</em>
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <em class="jxr_javadoccomment"> * 	&lt;li class='jc'&gt;{@link RichLogger}</em>
 <a class="jxr_linenumber" name="L29" href="#L29">29</a>  <em class="jxr_javadoccomment"> * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L30" href="#L30">30</a>  <em class="jxr_javadoccomment"> */</em>
 <a class="jxr_linenumber" name="L31" href="#L31">31</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">interface</strong> <a name="LogRecordListener" href="../../../../../org/apache/juneau/commons/logging/LogRecordListener.html#LogRecordListener">LogRecordListener</a> {
@@ -43,7 +43,7 @@
 <a class="jxr_linenumber" name="L35" href="#L35">35</a>  <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L36" href="#L36">36</a>  <em class="jxr_javadoccomment">	 * @param rec The log record that was logged.</em>
 <a class="jxr_linenumber" name="L37" href="#L37">37</a>  <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L38" href="#L38">38</a>  	<strong class="jxr_keyword">void</strong> onLogRecord(LogRecord rec);
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>  	<strong class="jxr_keyword">void</strong> onLogRecord(java.util.logging.LogRecord rec);
 <a class="jxr_linenumber" name="L39" href="#L39">39</a>  }
 </pre>
 <hr/>

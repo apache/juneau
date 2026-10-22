@@ -53,7 +53,7 @@
 <a class="jxr_linenumber" name="L45" href="#L45">45</a>  		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> A of(Integer a, Integer b) { <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> A(a, b); }
 <a class="jxr_linenumber" name="L46" href="#L46">46</a>  		@Override <strong class="jxr_keyword">public</strong> String toString() { <strong class="jxr_keyword">return</strong> <span class="jxr_string">"(a="</span>+a+<span class="jxr_string">",b="</span>+b+<span class="jxr_string">")"</span>; }
 <a class="jxr_linenumber" name="L47" href="#L47">47</a>  		@Override <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> equals(Object o) { <strong class="jxr_keyword">return</strong> eq(<strong class="jxr_keyword">this</strong>, (A)o, (x,y)-&gt;eq(x.a,y.a) &amp;&amp; eq(x.b,y.b)); }
-<a class="jxr_linenumber" name="L48" href="#L48">48</a>  		@Override <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">int</strong> compareTo(A o) { <strong class="jxr_keyword">return</strong> a-o.a; }
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>  		@Override <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">int</strong> compareTo(A o) { <strong class="jxr_keyword">return</strong> Integer.compare(a, o.a); }
 <a class="jxr_linenumber" name="L49" href="#L49">49</a>  	}
 <a class="jxr_linenumber" name="L50" href="#L50">50</a>  
 <a class="jxr_linenumber" name="L51" href="#L51">51</a>  	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>

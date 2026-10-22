@@ -1,0 +1,142 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="" lang="">
+<head><meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<title>CommonmarkMarkdownRenderer_Test xref</title>
+<link type="text/css" rel="stylesheet" href="../../../../../../../stylesheet.css" />
+</head>
+<body>
+<div id="overview"><a href="../../../../../../../../testapidocs/org/apache/juneau/rest/server/views/markdown/CommonmarkMarkdownRenderer_Test.html">View Javadoc</a></div><pre>
+<a class="jxr_linenumber" name="L1" href="#L1">1</a>   <em class="jxr_comment">/*</em>
+<a class="jxr_linenumber" name="L2" href="#L2">2</a>   <em class="jxr_comment"> * Licensed to the Apache Software Foundation (ASF) under one or more</em>
+<a class="jxr_linenumber" name="L3" href="#L3">3</a>   <em class="jxr_comment"> * contributor license agreements.  See the NOTICE file distributed with</em>
+<a class="jxr_linenumber" name="L4" href="#L4">4</a>   <em class="jxr_comment"> * this work for additional information regarding copyright ownership.</em>
+<a class="jxr_linenumber" name="L5" href="#L5">5</a>   <em class="jxr_comment"> * The ASF licenses this file to You under the Apache License, Version 2.0</em>
+<a class="jxr_linenumber" name="L6" href="#L6">6</a>   <em class="jxr_comment"> * (the "License"); you may not use this file except in compliance with</em>
+<a class="jxr_linenumber" name="L7" href="#L7">7</a>   <em class="jxr_comment"> * the License.  You may obtain a copy of the License at</em>
+<a class="jxr_linenumber" name="L8" href="#L8">8</a>   <em class="jxr_comment"> *</em>
+<a class="jxr_linenumber" name="L9" href="#L9">9</a>   <em class="jxr_comment"> *      <a href="http://www.apache.org/licenses/LICENSE-2.0" target="alexandria_uri">http://www.apache.org/licenses/LICENSE-2.0</a></em>
+<a class="jxr_linenumber" name="L10" href="#L10">10</a>  <em class="jxr_comment"> *</em>
+<a class="jxr_linenumber" name="L11" href="#L11">11</a>  <em class="jxr_comment"> * Unless required by applicable law or agreed to in writing, software</em>
+<a class="jxr_linenumber" name="L12" href="#L12">12</a>  <em class="jxr_comment"> * distributed under the License is distributed on an "AS IS" BASIS,</em>
+<a class="jxr_linenumber" name="L13" href="#L13">13</a>  <em class="jxr_comment"> * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</em>
+<a class="jxr_linenumber" name="L14" href="#L14">14</a>  <em class="jxr_comment"> * See the License for the specific language governing permissions and</em>
+<a class="jxr_linenumber" name="L15" href="#L15">15</a>  <em class="jxr_comment"> * limitations under the License.</em>
+<a class="jxr_linenumber" name="L16" href="#L16">16</a>  <em class="jxr_comment"> */</em>
+<a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.server.views.markdown;
+<a class="jxr_linenumber" name="L18" href="#L18">18</a>  
+<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.BasicTestUtils.*;
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.junit.jupiter.api.Assertions.*;
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.*;
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> org.junit.jupiter.api.*;
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <em class="jxr_javadoccomment"> * Behavioural tests for {@link CommonmarkMarkdownRenderer} - the shipped commonmark-java default with the GFM</em>
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <em class="jxr_javadoccomment"> * tables extension enabled.</em>
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <em class="jxr_javadoccomment"> */</em>
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <strong class="jxr_keyword">class</strong> <a name="CommonmarkMarkdownRenderer_Test" href="../../../../../../../org/apache/juneau/rest/server/views/markdown/CommonmarkMarkdownRenderer_Test.html#CommonmarkMarkdownRenderer_Test">CommonmarkMarkdownRenderer_Test</a> <strong class="jxr_keyword">extends</strong> TestBase {
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> CommonmarkMarkdownRenderer RENDERER = <strong class="jxr_keyword">new</strong> CommonmarkMarkdownRenderer();
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>  
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>  	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>  	<em class="jxr_comment">// a) Core CommonMark rendering</em>
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>  	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>  
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>  	@Test <strong class="jxr_keyword">void</strong> a01_paragraph() {
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>  		assertEquals(<span class="jxr_string">"&lt;p&gt;Hello world.&lt;/p&gt;\n"</span>, RENDERER.toHtml(<span class="jxr_string">"Hello world."</span>));
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>  	}
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>  
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>  	@Test <strong class="jxr_keyword">void</strong> a02_heading() {
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>  		assertEquals(<span class="jxr_string">"&lt;h1&gt;Runbook&lt;/h1&gt;\n"</span>, RENDERER.toHtml(<span class="jxr_string">"# Runbook"</span>));
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>  	}
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>  
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>  	@Test <strong class="jxr_keyword">void</strong> a03_unorderedList() {
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>  		assertEquals(<span class="jxr_string">"&lt;ul&gt;\n&lt;li&gt;one&lt;/li&gt;\n&lt;li&gt;two&lt;/li&gt;\n&lt;/ul&gt;\n"</span>, RENDERER.toHtml(<span class="jxr_string">"- one\n- two"</span>));
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>  	}
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>  
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>  	@Test <strong class="jxr_keyword">void</strong> a04_fencedCodeBlock() {
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>  		<strong class="jxr_keyword">var</strong> html = RENDERER.toHtml(<span class="jxr_string">"```\ncode();\n```"</span>);
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>  		assertTrue(html.contains(<span class="jxr_string">"&lt;pre&gt;&lt;code&gt;"</span>), () -&gt; <span class="jxr_string">"expected a code block, got:\n"</span> + html);
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>  		assertTrue(html.contains(<span class="jxr_string">"code();"</span>), () -&gt; <span class="jxr_string">"expected code content, got:\n"</span> + html);
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>  	}
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>  
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>  	@Test <strong class="jxr_keyword">void</strong> a05_inlineEmphasisAndLink() {
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>  		assertEquals(<span class="jxr_string">"&lt;p&gt;&lt;em&gt;hi&lt;/em&gt; &lt;a href=\&quot;https://x\&quot;&gt;y&lt;/a&gt;&lt;/p&gt;\n"</span>, RENDERER.toHtml(<span class="jxr_string">"*hi* [y](https://x)"</span>));
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>  	}
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>  
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>  	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>  	<em class="jxr_comment">// b) GFM tables extension - the reason this ships enabled by default</em>
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>  	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>  
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>  	@Test <strong class="jxr_keyword">void</strong> b01_pipeTable_rendersAsTable_notLiteralPipes() {
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>  		<strong class="jxr_keyword">var</strong> md = <span class="jxr_string">"| A | B |\n| --- | --- |\n| 1 | 2 |"</span>;
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>  		<strong class="jxr_keyword">var</strong> html = RENDERER.toHtml(md);
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>  		assertTrue(html.contains(<span class="jxr_string">"&lt;table&gt;"</span>), () -&gt; <span class="jxr_string">"GFM tables extension not enabled - got:\n"</span> + html);
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>  		assertTrue(html.contains(<span class="jxr_string">"&lt;th&gt;A&lt;/th&gt;"</span>), () -&gt; <span class="jxr_string">"expected header cell, got:\n"</span> + html);
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>  		assertTrue(html.contains(<span class="jxr_string">"&lt;td&gt;1&lt;/td&gt;"</span>), () -&gt; <span class="jxr_string">"expected body cell, got:\n"</span> + html);
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>  		assertFalse(html.contains(<span class="jxr_string">"| A | B |"</span>), () -&gt; <span class="jxr_string">"table rendered as literal pipes, got:\n"</span> + html);
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>  	}
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>  
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>  	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>  	<em class="jxr_comment">// c) Edge cases</em>
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>  	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>  
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>  	@Test <strong class="jxr_keyword">void</strong> c01_emptyString_rendersEmpty() {
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>  		assertEquals(<span class="jxr_string">""</span>, RENDERER.toHtml(<span class="jxr_string">""</span>));
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>  	}
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>  
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>  	@Test <strong class="jxr_keyword">void</strong> c02_<strong class="jxr_keyword">null</strong>_<strong class="jxr_keyword">throws</strong>() {
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>  		assertThrowsWithMessage(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"Markdown source must not be null."</span>, () -&gt; RENDERER.toHtml(<strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>  	}
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>  
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>  	@Test <strong class="jxr_keyword">void</strong> c03_rendererIsReusableAcrossCalls() {
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>  		assertEquals(<span class="jxr_string">"&lt;p&gt;one&lt;/p&gt;\n"</span>, RENDERER.toHtml(<span class="jxr_string">"one"</span>));
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>  		assertEquals(<span class="jxr_string">"&lt;p&gt;two&lt;/p&gt;\n"</span>, RENDERER.toHtml(<span class="jxr_string">"two"</span>));
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>  	}
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>  
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>  	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>  	<em class="jxr_comment">// d) XSS: raw HTML escaped, javascript:/data: URLs stripped</em>
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>  	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>  
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>  	@Test <strong class="jxr_keyword">void</strong> d01_rawScript_isEscapedNotAnElement() {
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>  		<strong class="jxr_keyword">var</strong> html = RENDERER.toHtml(<span class="jxr_string">"hello &lt;script&gt;alert(1)&lt;/script&gt;"</span>);
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>  		assertFalse(html.contains(<span class="jxr_string">"&lt;script"</span>), () -&gt; html);
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>  		assertTrue(html.contains(<span class="jxr_string">"&amp;lt;script"</span>), () -&gt; html);
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>  	}
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>  
+<a class="jxr_linenumber" name="L99" href="#L99">99</a>  	@Test <strong class="jxr_keyword">void</strong> d02_imgOnerror_isEscaped() {
+<a class="jxr_linenumber" name="L100" href="#L100">100</a> 		<strong class="jxr_keyword">var</strong> html = RENDERER.toHtml(<span class="jxr_string">"&lt;img src=x onerror=alert(1)&gt;"</span>);
+<a class="jxr_linenumber" name="L101" href="#L101">101</a> 		assertFalse(html.contains(<span class="jxr_string">"&lt;img"</span>), () -&gt; html);
+<a class="jxr_linenumber" name="L102" href="#L102">102</a> 		assertTrue(html.contains(<span class="jxr_string">"&amp;lt;img"</span>), () -&gt; html);
+<a class="jxr_linenumber" name="L103" href="#L103">103</a> 	}
+<a class="jxr_linenumber" name="L104" href="#L104">104</a> 
+<a class="jxr_linenumber" name="L105" href="#L105">105</a> 	@Test <strong class="jxr_keyword">void</strong> d03_javascriptHref_isStripped() {
+<a class="jxr_linenumber" name="L106" href="#L106">106</a> 		<strong class="jxr_keyword">var</strong> html = RENDERER.toHtml(<span class="jxr_string">"[x](javascript:alert(1))"</span>);
+<a class="jxr_linenumber" name="L107" href="#L107">107</a> 		assertFalse(html.contains(<span class="jxr_string">"javascript:"</span>), () -&gt; html);
+<a class="jxr_linenumber" name="L108" href="#L108">108</a> 		assertTrue(html.contains(<span class="jxr_string">"&lt;a&gt;"</span>) || html.contains(<span class="jxr_string">"&lt;a &gt;"</span>) || html.contains(<span class="jxr_string">"&lt;a&gt;x&lt;/a&gt;"</span>), () -&gt; html);
+<a class="jxr_linenumber" name="L109" href="#L109">109</a> 	}
+<a class="jxr_linenumber" name="L110" href="#L110">110</a> 
+<a class="jxr_linenumber" name="L111" href="#L111">111</a> 	@Test <strong class="jxr_keyword">void</strong> d04_httpsHref_isKept() {
+<a class="jxr_linenumber" name="L112" href="#L112">112</a> 		<strong class="jxr_keyword">var</strong> html = RENDERER.toHtml(<span class="jxr_string">"[y](https://example.com)"</span>);
+<a class="jxr_linenumber" name="L113" href="#L113">113</a> 		assertTrue(html.contains(<span class="jxr_string">"href=\&quot;https://example.com\&quot;"</span>), () -&gt; html);
+<a class="jxr_linenumber" name="L114" href="#L114">114</a> 	}
+<a class="jxr_linenumber" name="L115" href="#L115">115</a> 
+<a class="jxr_linenumber" name="L116" href="#L116">116</a> 	@Test <strong class="jxr_keyword">void</strong> d05_dataUrl_isRejected() {
+<a class="jxr_linenumber" name="L117" href="#L117">117</a> 		assertFalse(CommonmarkMarkdownRenderer.isSafeUrl(<span class="jxr_string">"data:text/html,&lt;script&gt;"</span>));
+<a class="jxr_linenumber" name="L118" href="#L118">118</a> 		assertFalse(CommonmarkMarkdownRenderer.isSafeUrl(<span class="jxr_string">"javascript:alert(1)"</span>));
+<a class="jxr_linenumber" name="L119" href="#L119">119</a> 		assertFalse(CommonmarkMarkdownRenderer.isSafeUrl(<span class="jxr_string">"vbscript:msg"</span>));
+<a class="jxr_linenumber" name="L120" href="#L120">120</a> 		assertTrue(CommonmarkMarkdownRenderer.isSafeUrl(<span class="jxr_string">"https://x"</span>));
+<a class="jxr_linenumber" name="L121" href="#L121">121</a> 		assertTrue(CommonmarkMarkdownRenderer.isSafeUrl(<span class="jxr_string">"http://x"</span>));
+<a class="jxr_linenumber" name="L122" href="#L122">122</a> 		assertTrue(CommonmarkMarkdownRenderer.isSafeUrl(<span class="jxr_string">"mailto:a@b"</span>));
+<a class="jxr_linenumber" name="L123" href="#L123">123</a> 		assertTrue(CommonmarkMarkdownRenderer.isSafeUrl(<span class="jxr_string">"#frag"</span>));
+<a class="jxr_linenumber" name="L124" href="#L124">124</a> 		assertTrue(CommonmarkMarkdownRenderer.isSafeUrl(<span class="jxr_string">"/rest/skills"</span>));
+<a class="jxr_linenumber" name="L125" href="#L125">125</a> 		assertTrue(CommonmarkMarkdownRenderer.isSafeUrl(<span class="jxr_string">"relative/path"</span>));
+<a class="jxr_linenumber" name="L126" href="#L126">126</a> 		assertFalse(CommonmarkMarkdownRenderer.isSafeUrl(<strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L127" href="#L127">127</a> 		assertFalse(CommonmarkMarkdownRenderer.isSafeUrl(<span class="jxr_string">""</span>));
+<a class="jxr_linenumber" name="L128" href="#L128">128</a> 	}
+<a class="jxr_linenumber" name="L129" href="#L129">129</a> }
+</pre>
+<hr/>
+<div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>
+</body>
+</html>

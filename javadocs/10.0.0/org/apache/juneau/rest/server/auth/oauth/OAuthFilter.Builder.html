@@ -82,7 +82,7 @@ loadScripts(document, 'script');</script>
 <dd><a href="OAuthFilter.html" title="class in org.apache.juneau.rest.server.auth.oauth">OAuthFilter</a></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public static class </span><span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/oauth/OAuthFilter.html#line-89">OAuthFilter.Builder</a></span>
+<div class="type-signature"><span class="modifiers">public static class </span><span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/oauth/OAuthFilter.html#line-88">OAuthFilter.Builder</a></span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
 <div class="block">Builder.</div>
 </section>
@@ -156,7 +156,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;()">
 <h3>Builder</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/oauth/OAuthFilter.Builder.html#line-95">Builder</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/oauth/OAuthFilter.Builder.html#line-94">Builder</a></span>()</div>
 <div class="block">Constructor.</div>
 </section>
 </li>
@@ -171,7 +171,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="validator(org.apache.juneau.rest.server.auth.TokenValidator)">
 <h3>validator</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="OAuthFilter.Builder.html" title="class in org.apache.juneau.rest.server.auth.oauth">OAuthFilter.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/oauth/OAuthFilter.Builder.html#line-103">validator</a></span><wbr><span class="parameters">(<a href="../TokenValidator.html" title="interface in org.apache.juneau.rest.server.auth">TokenValidator</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="OAuthFilter.Builder.html" title="class in org.apache.juneau.rest.server.auth.oauth">OAuthFilter.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/oauth/OAuthFilter.Builder.html#line-102">validator</a></span><wbr><span class="parameters">(<a href="../TokenValidator.html" title="interface in org.apache.juneau.rest.server.auth">TokenValidator</a>&nbsp;value)</span></div>
 <div class="block">Sets the <a href="../TokenValidator.html" title="interface in org.apache.juneau.rest.server.auth"><code>TokenValidator</code></a>.  Required.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -184,7 +184,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="realm(java.lang.String)">
 <h3>realm</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="OAuthFilter.Builder.html" title="class in org.apache.juneau.rest.server.auth.oauth">OAuthFilter.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/oauth/OAuthFilter.Builder.html#line-114">realm</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="OAuthFilter.Builder.html" title="class in org.apache.juneau.rest.server.auth.oauth">OAuthFilter.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/oauth/OAuthFilter.Builder.html#line-113">realm</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block">Sets the <code>WWW-Authenticate: Bearer realm="&lt;value&gt;"</code> challenge realm.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -197,7 +197,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="rolesClaim(java.lang.String)">
 <h3>rolesClaim</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="OAuthFilter.Builder.html" title="class in org.apache.juneau.rest.server.auth.oauth">OAuthFilter.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/oauth/OAuthFilter.Builder.html#line-126">rolesClaim</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="OAuthFilter.Builder.html" title="class in org.apache.juneau.rest.server.auth.oauth">OAuthFilter.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/oauth/OAuthFilter.Builder.html#line-125">rolesClaim</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block">Sets the claim used to extract roles.  Defaults to <code>"scope"</code>; values are split on
  whitespace per RFC 6749 &sect;3.3.</div>
 <dl class="notes">
@@ -211,7 +211,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="build()">
 <h3>build</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="OAuthFilter.html" title="class in org.apache.juneau.rest.server.auth.oauth">OAuthFilter</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/oauth/OAuthFilter.Builder.html#line-136">build</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="OAuthFilter.html" title="class in org.apache.juneau.rest.server.auth.oauth">OAuthFilter</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/oauth/OAuthFilter.Builder.html#line-135">build</a></span>()</div>
 <div class="block">Builds the filter.</div>
 <dl class="notes">
 <dt>Returns:</dt>

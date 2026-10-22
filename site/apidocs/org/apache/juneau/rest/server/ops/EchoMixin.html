@@ -78,7 +78,7 @@ loadScripts(document, 'script');</script>
 </div>
 <section class="class-description" id="class-description">
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/ops/EchoMixin.html#line-161">EchoMixin</a></span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/ops/EchoMixin.html#line-183">EchoMixin</a></span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
 <div class="block">Mixin that serves a request-echo / round-trip introspection endpoint at <code>/echo/*</code>
  (configurable).
@@ -128,31 +128,52 @@ loadScripts(document, 'script');</script>
  <p class='bjava'>
    <ja>@Rest</ja>(
       path=<js>"/api"</js>,
-      mixins=EchoMixin.<jk>class</jk>,
-      debug=<js>"conditional"</js>          <jc>// gates the echo endpoint per request</jc>
+      mixins=EchoMixin.<jk>class</jk>
    )
    <jk>public class</jk> ApiResource <jk>extends</jk> RestServlet { }
 
-   <jc>// Optional: tighten the body cap or adjust redacted headers via a @Bean factory:</jc>
+   <jc>// Enable the endpoint (default OFF) and, optionally, tighten the body cap or adjust</jc>
+   <jc>// redacted headers via a @Bean factory:</jc>
    <ja>@Bean</ja> EchoMixin echo() {
       <jk>return</jk> EchoMixin.<jsm>create</jsm>()
+         .enabled()
          .bodyLimit(64 * 1024L)
          .redactHeader(<js>"X-Internal-Trace"</js>)
          .build();
    }
  </p>
 
- <h5 class='section'>Debug gating:</h5>
+ <h5 class='section'>Enablement:</h5>
 
  <p>
- The handler is gated behind the host's
- <a href="../RestContext.html#getDebugEnablement()"><code>DebugEnablement</code></a> chain &mdash; the same mechanism that
- powers <code>@Rest(debug=...)</code>. When <code>Debug</code> resolves to <code>OFF</code> for the current
- request, the handler returns <code>404 Not Found</code> (so the existence of the endpoint isn't
- disclosed). When debug is <code>ALWAYS</code>, or <code>CONDITIONAL</code> with the <code>Debug: true</code>
- request header, the full echo payload is returned. The recommended posture for production
- deployments is <code>@Rest(debug="conditional")</code> paired with a guard chain so only authorized
- operators can flip the <code>Debug</code> header.
+ The endpoint is <b>disabled by default</b>. Reachability is controlled by an explicit, non-logging switch and is
+ <b>independent of the JUL logger level</b> &mdash; raising a resource's (or operation's) logger to
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/Level.html#FINE" title="class or interface in java.util.logging" class="external-link"><code>FINE</code></a>/<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/Level.html#FINEST" title="class or interface in java.util.logging" class="external-link"><code>FINEST</code></a> never exposes <code>/echo/*</code>.
+ When the endpoint is disabled the handler returns <code>404 Not Found</code> (so the existence of the endpoint isn't
+ disclosed).
+
+ <p>
+ Enablement is tri-state, resolved per request:
+ <ul class='spaced-list'>
+   <li>An explicit <a href="EchoMixin.Builder.html#enabled(java.lang.Boolean)"><code>builder value</code></a> (<code>true</code>/<code>false</code>) always wins.
+   <li>When the builder value is left unset (<code>null</code>, the default), the handler resolves the SVL expression
+      <code>${juneau.echo.enabled:false}</code> through <a href="../RestRequest.html#getVarResolverSession()"><code>RestRequest.getVarResolverSession()</code></a> &mdash; i.e. the
+      system property <code>-Djuneau.echo.enabled=true</code> or the relaxed environment variable
+      <code>JUNEAU_ECHO_ENABLED=true</code>. A per-resource <code>Config</code> key is <b>not</b> consulted for this switch.
+ </ul>
+
+ <p>
+ <b>GLOBAL blast-radius warning:</b> <code>juneau.echo.enabled=true</code> is a <b>process-wide</b> system-property /
+ environment switch. It enables <code>/echo/*</code> on <b>every</b> host in the JVM that mixes in <code>EchoMixin</code>
+ &mdash; including hosts the operator did not intend to open &mdash; and, because it is resolved per request, setting
+ it flips this <b>security</b> switch mid-process without a restart. It is a convenience for single-app deployments
+ and local testing, <b>not</b> the recommended production posture.
+
+ <p>
+ <b>Recommended production posture:</b> leave echo OFF by default and enable it per host explicitly via a
+ <code>@Bean EchoMixin</code> factory that calls <a href="EchoMixin.Builder.html#enabled()"><code>EchoMixin.Builder.enabled()</code></a>, gated behind an authorization guard chain.
+ Host-level <a href="../Rest.html#guards()"><code>@Rest(guards=...)</code></a> inherit onto the mixed-in <code>/echo/*</code> operation, so declaring
+ guards at the host authorizes the endpoint.
 
  <h5 class='section'>Sensitive-header redaction:</h5>
 
@@ -306,9 +327,14 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns the configured body-capture cap (test/inspection helper).</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getRedactedHeadersLower()" class="member-name-link">getRedactedHeadersLower</a>()</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Boolean.html" title="class or interface in java.lang" class="external-link">Boolean</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getEnabled()" class="member-name-link">getEnabled</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Returns the explicit enablement tri-state configured on the builder (test/inspection helper).</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getRedactedHeadersLower()" class="member-name-link">getRedactedHeadersLower</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns the redacted-header set as lowercased, immutable strings (test/inspection helper).</div>
 </div>
 </div>
@@ -331,7 +357,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="REDACTED">
 <h3>REDACTED</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/ops/EchoMixin.html#line-165">REDACTED</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/ops/EchoMixin.html#line-187">REDACTED</a></span></div>
 <div class="block">Sentinel value emitted in place of redacted header values. Re-exports <a href="../../../http/RedactedHeaders.html#REDACTED"><code>RedactedHeaders.REDACTED</code></a>.</div>
 <dl class="notes">
 <dt>See Also:</dt>
@@ -346,7 +372,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="DEFAULT_BODY_LIMIT">
 <h3>DEFAULT_BODY_LIMIT</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">long</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/ops/EchoMixin.html#line-168">DEFAULT_BODY_LIMIT</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">long</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/ops/EchoMixin.html#line-190">DEFAULT_BODY_LIMIT</a></span></div>
 <div class="block">Default body capture cap, in bytes (1&nbsp;MB).</div>
 <dl class="notes">
 <dt>See Also:</dt>
@@ -361,7 +387,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="DEFAULT_REDACTED_HEADERS">
 <h3>DEFAULT_REDACTED_HEADERS</h3>
-<div class="member-signature"><span class="modifiers">protected static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/ops/EchoMixin.html#line-174">DEFAULT_REDACTED_HEADERS</a></span></div>
+<div class="member-signature"><span class="modifiers">protected static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/ops/EchoMixin.html#line-196">DEFAULT_REDACTED_HEADERS</a></span></div>
 <div class="block">Default redacted-header set (case-insensitive lookup). Re-exports <a href="../../../http/RedactedHeaders.html#DEFAULT"><code>RedactedHeaders.DEFAULT</code></a>.</div>
 </section>
 </li>
@@ -376,14 +402,14 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;()">
 <h3>EchoMixin</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/ops/EchoMixin.html#line-190">EchoMixin</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/ops/EchoMixin.html#line-213">EchoMixin</a></span>()</div>
 <div class="block">No-arg constructor &mdash; uses <a href="#DEFAULT_BODY_LIMIT"><code>DEFAULT_BODY_LIMIT</code></a> and <a href="#DEFAULT_REDACTED_HEADERS"><code>DEFAULT_REDACTED_HEADERS</code></a>.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.rest.server.ops.EchoMixin.Builder)">
 <h3>EchoMixin</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/ops/EchoMixin.html#line-199">EchoMixin</a></span><wbr><span class="parameters">(<a href="EchoMixin.Builder.html" title="class in org.apache.juneau.rest.server.ops">EchoMixin.Builder</a>&nbsp;builder)</span></div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/ops/EchoMixin.html#line-222">EchoMixin</a></span><wbr><span class="parameters">(<a href="EchoMixin.Builder.html" title="class in org.apache.juneau.rest.server.ops">EchoMixin.Builder</a>&nbsp;builder)</span></div>
 <div class="block">Builder constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -402,7 +428,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="create()">
 <h3>create</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="EchoMixin.Builder.html" title="class in org.apache.juneau.rest.server.ops">EchoMixin.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/ops/EchoMixin.html#line-181">create</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="EchoMixin.Builder.html" title="class in org.apache.juneau.rest.server.ops">EchoMixin.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/ops/EchoMixin.html#line-203">create</a></span>()</div>
 <div class="block">Creates a new builder.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -413,7 +439,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="echo(org.apache.juneau.rest.server.RestRequest,org.apache.juneau.rest.server.RestResponse,java.lang.String)">
 <h3>echo</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/ops/EchoMixin.html#line-220">echo</a></span><wbr><span class="parameters">(<a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/ops/EchoMixin.html#line-244">echo</a></span><wbr><span class="parameters">(<a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req,
  <a href="../RestResponse.html" title="class in org.apache.juneau.rest.server">RestResponse</a>&nbsp;res,
  <a href="../../../http/Path.html" title="annotation interface in org.apache.juneau.http">@Path</a>("/*")
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;remainder)</span>
@@ -421,7 +447,9 @@ loadScripts(document, 'script');</script>
 <div class="block">[* /echo/*] &mdash; emit an introspection echo of the inbound request.
 
  <p>
- Returns <code>404 Not Found</code> when <code>Debug</code> is not enabled for the current request.</div>
+ Returns <code>404 Not Found</code> when the endpoint is not <a href="EchoMixin.Builder.html#enabled(java.lang.Boolean)"><code>enabled</code></a> for the current
+ request. Reachability is independent of the JUL logger level (see the class-level Javadoc for the enablement
+ rules and the global-fallback blast-radius warning).</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>req</code> - The current REST request.</dd>
@@ -429,14 +457,14 @@ loadScripts(document, 'script');</script>
 <dd><code>remainder</code> - The path remainder after the mount prefix (multi-segment, may be empty).</dd>
 <dt>Throws:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></code> - If an I/O error occurs while reading the request or writing the response.</dd>
-<dd><code><a href="../../../http/response/NotFound.html" title="class in org.apache.juneau.http.response">NotFound</a></code> - When <code>Debug</code> resolves to <code>OFF</code> for the current request.</dd>
+<dd><code><a href="../../../http/response/NotFound.html" title="class in org.apache.juneau.http.response">NotFound</a></code> - When the endpoint resolves to disabled for the current request.</dd>
 </dl>
 </section>
 </li>
 <li>
 <section class="detail" id="getBodyLimit()">
 <h3>getBodyLimit</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">long</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/ops/EchoMixin.html#line-276">getBodyLimit</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">long</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/ops/EchoMixin.html#line-299">getBodyLimit</a></span>()</div>
 <div class="block">Returns the configured body-capture cap (test/inspection helper).</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -447,11 +475,23 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getRedactedHeadersLower()">
 <h3>getRedactedHeadersLower</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/ops/EchoMixin.html#line-285">getRedactedHeadersLower</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/ops/EchoMixin.html#line-308">getRedactedHeadersLower</a></span>()</div>
 <div class="block">Returns the redacted-header set as lowercased, immutable strings (test/inspection helper).</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>The redacted-header set.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="getEnabled()">
+<h3>getEnabled</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Boolean.html" title="class or interface in java.lang" class="external-link">Boolean</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/ops/EchoMixin.html#line-318">getEnabled</a></span>()</div>
+<div class="block">Returns the explicit enablement tri-state configured on the builder (test/inspection helper).</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd><code>Boolean.TRUE</code>/<code>Boolean.FALSE</code> when explicitly configured, or <code>null</code> when unset
+   (deferred to the <code>${juneau.echo.enabled:false}</code> deployment fallback).</dd>
 </dl>
 </section>
 </li>

@@ -24,39 +24,58 @@
 <a class="jxr_linenumber" name="L16" href="#L16">16</a>  <em class="jxr_comment"> */</em>
 <a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> org.apache.juneau.petstore.<strong class="jxr_keyword">rest</strong>;
 <a class="jxr_linenumber" name="L18" href="#L18">18</a>  
-<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.server.*;
-<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.server.servlet.*;
-<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.server.staticfile.*;
-<a class="jxr_linenumber" name="L22" href="#L22">22</a>  
-<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <em class="jxr_javadoccomment"> * Petstore React SPA demo — serves the no-build single-page React UI from the core classpath.</em>
-<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <em class="jxr_javadoccomment"> *</em>
-<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <em class="jxr_javadoccomment"> * Composes {@link StaticFilesMixin} to serve {@code /static/*} from the importer's classpath: the file</em>
-<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <em class="jxr_javadoccomment"> * {@code static/petstore-ui.html} is reachable at {@code GET /petstore-ui/static/petstore-ui.html}.  The HTML</em>
-<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <em class="jxr_javadoccomment"> * loads React + Babel and uses {@code fetch()} against {@code /petstore/pets} to demonstrate the headless-JSON +</em>
-<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <em class="jxr_javadoccomment"> * decoupled-SPA pattern alongside the server-rendered HTML-doc UI.</em>
-<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <em class="jxr_javadoccomment"> *</em>
-<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <em class="jxr_javadoccomment"> * Lives in {@code juneau-petstore-core} so both the Jetty and Spring Boot deployments inherit it for free.</em>
+<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> java.util.*;
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.http.*;
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.server.*;
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.server.servlet.*;
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.server.staticfile.*;
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <em class="jxr_javadoccomment"> * Petstore React SPA demo — serves the no-build single-page React UI from the core classpath.</em>
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <em class="jxr_javadoccomment"> * Composes {@link StaticFilesMixin} to serve {@code /static/*} from the importer's classpath: the file</em>
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <em class="jxr_javadoccomment"> * {@code static/petstore-ui.html} is reachable at {@code GET /petstore-ui/static/petstore-ui.html}.  The HTML</em>
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <em class="jxr_javadoccomment"> * loads the vendored React + ReactDOM bundles ({@code static/vendor/}) and uses {@code fetch()} against {@code /petstore/pets} to demonstrate the headless-JSON +</em>
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <em class="jxr_javadoccomment"> * decoupled-SPA pattern alongside the server-rendered HTML-doc UI.</em>
 <a class="jxr_linenumber" name="L34" href="#L34">34</a>  <em class="jxr_javadoccomment"> *</em>
-<a class="jxr_linenumber" name="L35" href="#L35">35</a>  <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</em>
-<a class="jxr_linenumber" name="L36" href="#L36">36</a>  <em class="jxr_javadoccomment"> * 	&lt;li class='link'&gt;&lt;a class="doclink" href="<a href="https://juneau.apache.org/docs/topics/JuneauPetstore" target="alexandria_uri">https://juneau.apache.org/docs/topics/JuneauPetstore</a>"&gt;juneau-petstore&lt;/a&gt;</em>
-<a class="jxr_linenumber" name="L37" href="#L37">37</a>  <em class="jxr_javadoccomment"> * &lt;/ul&gt;</em>
-<a class="jxr_linenumber" name="L38" href="#L38">38</a>  <em class="jxr_javadoccomment"> */</em>
-<a class="jxr_linenumber" name="L39" href="#L39">39</a>  @Rest(
-<a class="jxr_linenumber" name="L40" href="#L40">40</a>  	path=<span class="jxr_string">"/petstore-ui"</span>,
-<a class="jxr_linenumber" name="L41" href="#L41">41</a>  	title=<span class="jxr_string">"Petstore — React SPA demo"</span>,
-<a class="jxr_linenumber" name="L42" href="#L42">42</a>  	description=<span class="jxr_string">"No-build single-page React UI loaded as static classpath resource; calls /petstore/* over fetch()."</span>,
-<a class="jxr_linenumber" name="L43" href="#L43">43</a>  	mixins=StaticFilesMixin.<strong class="jxr_keyword">class</strong>
-<a class="jxr_linenumber" name="L44" href="#L44">44</a>  )
-<a class="jxr_linenumber" name="L45" href="#L45">45</a>  @SuppressWarnings({
-<a class="jxr_linenumber" name="L46" href="#L46">46</a>  	<span class="jxr_string">"java:S110"</span> <em class="jxr_comment">// Inheritance depth acceptable for example/demo code</em>
-<a class="jxr_linenumber" name="L47" href="#L47">47</a>  })
-<a class="jxr_linenumber" name="L48" href="#L48">48</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> PetstoreUiResource <strong class="jxr_keyword">extends</strong> BasicRestServlet {
-<a class="jxr_linenumber" name="L49" href="#L49">49</a>  
-<a class="jxr_linenumber" name="L50" href="#L50">50</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">long</strong> serialVersionUID = 1L;
-<a class="jxr_linenumber" name="L51" href="#L51">51</a>  }
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>  <em class="jxr_javadoccomment"> * The app is also served at the resource root ({@code GET /petstore-ui}), so the console can embed and link it without</em>
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>  <em class="jxr_javadoccomment"> * knowing the static mount.</em>
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>  <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>  <em class="jxr_javadoccomment"> * Lives in {@code juneau-petstore-core} so both the Jetty and Spring Boot deployments inherit it for free.</em>
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>  <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>  <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>  <em class="jxr_javadoccomment"> * 	&lt;li class='link'&gt;&lt;a class="doclink" href="<a href="https://juneau.apache.org/docs/topics/JuneauPetstore" target="alexandria_uri">https://juneau.apache.org/docs/topics/JuneauPetstore</a>"&gt;juneau-petstore&lt;/a&gt;</em>
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>  <em class="jxr_javadoccomment"> * &lt;/ul&gt;</em>
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>  <em class="jxr_javadoccomment"> */</em>
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>  @Rest(
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>  	path=<span class="jxr_string">"/petstore-ui"</span>,
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>  	title=<span class="jxr_string">"Petstore — React SPA demo"</span>,
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>  	description=<span class="jxr_string">"No-build single-page React UI loaded as static classpath resource; calls /petstore/* over fetch()."</span>,
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>  	mixins=StaticFilesMixin.<strong class="jxr_keyword">class</strong>
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>  )
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>  @SuppressWarnings({
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>  	<span class="jxr_string">"java:S110"</span> <em class="jxr_comment">// Inheritance depth acceptable for example/demo code</em>
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>  })
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> PetstoreUiResource <strong class="jxr_keyword">extends</strong> BasicRestServlet {
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>  
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">long</strong> serialVersionUID = 1L;
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>  
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>  	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>  <em class="jxr_javadoccomment">	 * [GET /] &amp;mdash; the single-page app.</em>
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>  <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>  <em class="jxr_javadoccomment">	 * @param req The current request.</em>
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>  <em class="jxr_javadoccomment">	 * @param locale The request locale.</em>
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>  <em class="jxr_javadoccomment">	 * @return The app's HTML page.</em>
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>  <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>  	@RestGet(path=<span class="jxr_string">"/"</span>, summary=<span class="jxr_string">"The React app"</span>, swagger=@OpSwagger(ignore=<strong class="jxr_keyword">true</strong>))
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>  	<strong class="jxr_keyword">public</strong> <a name="HttpResource" href="../../../../../org/apache/juneau/http/HttpResource.html#HttpResource">HttpResource</a> app(RestRequest req, Locale locale) {
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>  		<strong class="jxr_keyword">return</strong> StaticFilesMixin.resolveStaticFile(req, <span class="jxr_string">"petstore-ui.html"</span>, locale);
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>  	}
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>  }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

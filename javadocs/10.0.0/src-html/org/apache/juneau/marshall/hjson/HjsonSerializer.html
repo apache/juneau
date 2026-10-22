@@ -29,7 +29,7 @@
 <span class="source-line-no">016</span><span id="line-16"> */</span>
 <span class="source-line-no">017</span><span id="line-17">package org.apache.juneau.marshall.hjson;</span>
 <span class="source-line-no">018</span><span id="line-18"></span>
-<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.AssertionUtils.*;</span>
+<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.Shorts.*;</span>
 <span class="source-line-no">020</span><span id="line-20"></span>
 <span class="source-line-no">021</span><span id="line-21">import java.io.*;</span>
 <span class="source-line-no">022</span><span id="line-22">import java.util.*;</span>
@@ -39,7 +39,7 @@
 <span class="source-line-no">026</span><span id="line-26">import org.apache.juneau.marshall.*;</span>
 <span class="source-line-no">027</span><span id="line-27">import org.apache.juneau.marshall.serializer.*;</span>
 <span class="source-line-no">028</span><span id="line-28">import org.apache.juneau.marshall.stream.*;</span>
-<span class="source-line-no">029</span><span id="line-29">import org.apache.juneau.marshall.swap.*;</span>
+<span class="source-line-no">029</span><span id="line-29">import org.apache.juneau.marshall.swap.spi.*;</span>
 <span class="source-line-no">030</span><span id="line-30"></span>
 <span class="source-line-no">031</span><span id="line-31">/**</span>
 <span class="source-line-no">032</span><span id="line-32"> * Serializes POJO models to Hjson (Human JSON).</span>
@@ -127,12 +127,12 @@
 <span class="source-line-no">114</span><span id="line-114"> * &lt;/ul&gt;</span>
 <span class="source-line-no">115</span><span id="line-115"> */</span>
 <span class="source-line-no">116</span><span id="line-116">@SuppressWarnings({</span>
-<span class="source-line-no">117</span><span id="line-117">   "java:S110", "java:S115",</span>
-<span class="source-line-no">118</span><span id="line-118">   "resource" // Closeable resources are owned by the caller's serializer session; Eclipse JDT @Owning warning is by design.</span>
-<span class="source-line-no">119</span><span id="line-119">})</span>
-<span class="source-line-no">120</span><span id="line-120">public class HjsonSerializer extends WriterSerializer implements HjsonMetaProvider, RecordWritable {</span>
-<span class="source-line-no">121</span><span id="line-121"></span>
-<span class="source-line-no">122</span><span id="line-122">   private static final String ARG_copyFrom = "copyFrom";</span>
+<span class="source-line-no">117</span><span id="line-117">   "java:S110", // Depth comes from the Serializer -&gt; WriterSerializer base chain shared by all text-format serializers</span>
+<span class="source-line-no">118</span><span id="line-118">   "java:S1192", // Duplicated literals (argument/property names) read more clearly inline than as constants</span>
+<span class="source-line-no">119</span><span id="line-119">   "java:S9149", // Per-format static factories intentionally shadow the parent's.</span>
+<span class="source-line-no">120</span><span id="line-120">   "resource" // Closeable resources are owned by the caller's serializer session; Eclipse JDT @Owning warning is by design.</span>
+<span class="source-line-no">121</span><span id="line-121">})</span>
+<span class="source-line-no">122</span><span id="line-122">public class HjsonSerializer extends WriterSerializer implements HjsonMetaProvider, RecordWritable {</span>
 <span class="source-line-no">123</span><span id="line-123"></span>
 <span class="source-line-no">124</span><span id="line-124">   private final java.util.concurrent.ConcurrentHashMap&lt;ClassMeta&lt;?&gt;,HjsonClassMeta&gt; hjsonClassMetas = new java.util.concurrent.ConcurrentHashMap&lt;&gt;();</span>
 <span class="source-line-no">125</span><span id="line-125">   private final java.util.concurrent.ConcurrentHashMap&lt;BeanPropertyMeta,HjsonBeanPropertyMeta&gt; hjsonBeanPropertyMetas = new java.util.concurrent.ConcurrentHashMap&lt;&gt;();</span>
@@ -171,7 +171,7 @@
 <span class="source-line-no">158</span><span id="line-158">      }</span>
 <span class="source-line-no">159</span><span id="line-159"></span>
 <span class="source-line-no">160</span><span id="line-160">      protected Builder(Builder copyFrom) {</span>
-<span class="source-line-no">161</span><span id="line-161">         super(assertArgNotNull(ARG_copyFrom, copyFrom));</span>
+<span class="source-line-no">161</span><span id="line-161">         super(reqnn("copyFrom", copyFrom));</span>
 <span class="source-line-no">162</span><span id="line-162">         useMultilineStrings = copyFrom.useMultilineStrings;</span>
 <span class="source-line-no">163</span><span id="line-163">         useQuotelessStrings = copyFrom.useQuotelessStrings;</span>
 <span class="source-line-no">164</span><span id="line-164">         useQuotelessKeys = copyFrom.useQuotelessKeys;</span>
@@ -180,7 +180,7 @@
 <span class="source-line-no">167</span><span id="line-167">      }</span>
 <span class="source-line-no">168</span><span id="line-168"></span>
 <span class="source-line-no">169</span><span id="line-169">      protected Builder(HjsonSerializer copyFrom) {</span>
-<span class="source-line-no">170</span><span id="line-170">         super(assertArgNotNull(ARG_copyFrom, copyFrom));</span>
+<span class="source-line-no">170</span><span id="line-170">         super(reqnn("copyFrom", copyFrom));</span>
 <span class="source-line-no">171</span><span id="line-171">         useMultilineStrings = copyFrom.useMultilineStrings;</span>
 <span class="source-line-no">172</span><span id="line-172">         useQuotelessStrings = copyFrom.useQuotelessStrings;</span>
 <span class="source-line-no">173</span><span id="line-173">         useQuotelessKeys = copyFrom.useQuotelessKeys;</span>

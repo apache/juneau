@@ -78,7 +78,7 @@ loadScripts(document, 'script');</script>
 </div>
 <section class="class-description" id="class-description">
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/settings/Settings.html#line-132">Settings</a></span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/settings/Settings.html#line-131">Settings</a></span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
 <div class="block">Encapsulates Java system properties with support for global and per-thread overrides for unit testing.
 
@@ -349,21 +349,21 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="SYSTEM_PROPERTY_SOURCE">
 <h3>SYSTEM_PROPERTY_SOURCE</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="PropertySource.html" title="interface in org.apache.juneau.commons.settings">PropertySource</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/settings/Settings.html#line-153">SYSTEM_PROPERTY_SOURCE</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="PropertySource.html" title="interface in org.apache.juneau.commons.settings">PropertySource</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/settings/Settings.html#line-141">SYSTEM_PROPERTY_SOURCE</a></span></div>
 <div class="block">System property source that delegates to <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/System.html#getProperty(java.lang.String)" title="class or interface in java.lang" class="external-link"><code>System.getProperty(String)</code></a>.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="SYSTEM_ENV_SOURCE">
 <h3>SYSTEM_ENV_SOURCE</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="PropertySource.html" title="interface in org.apache.juneau.commons.settings">PropertySource</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/settings/Settings.html#line-160">SYSTEM_ENV_SOURCE</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="PropertySource.html" title="interface in org.apache.juneau.commons.settings">PropertySource</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/settings/Settings.html#line-148">SYSTEM_ENV_SOURCE</a></span></div>
 <div class="block">System environment variable source that delegates to <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/System.html#getenv(java.lang.String)" title="class or interface in java.lang" class="external-link"><code>System.getenv(String)</code></a>.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="RELAXED_SYSTEM_ENV_SOURCE">
 <h3>RELAXED_SYSTEM_ENV_SOURCE</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="PropertySource.html" title="interface in org.apache.juneau.commons.settings">PropertySource</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/settings/Settings.html#line-173">RELAXED_SYSTEM_ENV_SOURCE</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="PropertySource.html" title="interface in org.apache.juneau.commons.settings">PropertySource</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/settings/Settings.html#line-161">RELAXED_SYSTEM_ENV_SOURCE</a></span></div>
 <div class="block"><a href="#SYSTEM_ENV_SOURCE"><code>SYSTEM_ENV_SOURCE</code></a> wrapped with <a href="RelaxedPropertySource.html" title="class in org.apache.juneau.commons.settings"><code>relaxed binding</code></a>, so a single logical key
  resolves from any of the common environment-variable spellings (e.g. <code>my.prop</code> / <code>myProp</code> /
  <code>MySection/myKey</code> all satisfied by <code>MY_PROP</code> / <code>MY_SECTION_MY_KEY</code>).
@@ -388,7 +388,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="create()">
 <h3>create</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="Settings.Builder.html" title="class in org.apache.juneau.commons.settings">Settings.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/settings/Settings.html#line-213">create</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="Settings.Builder.html" title="class in org.apache.juneau.commons.settings">Settings.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/settings/Settings.html#line-201">create</a></span>()</div>
 <div class="block">Creates a new builder for constructing a Settings instance.
 
  <p>
@@ -414,7 +414,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="get()">
 <h3>get</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="Settings.html" title="class in org.apache.juneau.commons.settings">Settings</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/settings/Settings.html#line-359">get</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="Settings.html" title="class in org.apache.juneau.commons.settings">Settings</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/settings/Settings.html#line-347">get</a></span>()</div>
 <div class="block">Returns the singleton instance of Settings.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -425,7 +425,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="addSource(org.apache.juneau.commons.settings.PropertySource)">
 <h3>addSource</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Settings.html" title="class in org.apache.juneau.commons.settings">Settings</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/settings/Settings.html#line-387">addSource</a></span><wbr><span class="parameters">(<a href="PropertySource.html" title="interface in org.apache.juneau.commons.settings">PropertySource</a>&nbsp;source)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Settings.html" title="class in org.apache.juneau.commons.settings">Settings</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/settings/Settings.html#line-375">addSource</a></span><wbr><span class="parameters">(<a href="PropertySource.html" title="interface in org.apache.juneau.commons.settings">PropertySource</a>&nbsp;source)</span></div>
 <div class="block">Adds a property source after this settings instance has been built.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -438,7 +438,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="sourceCount()">
 <h3>sourceCount</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/settings/Settings.html#line-406">sourceCount</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/settings/Settings.html#line-394">sourceCount</a></span>()</div>
 <div class="block">Returns the number of <a href="PropertySource.html" title="interface in org.apache.juneau.commons.settings"><code>PropertySource</code></a>s currently registered with this
  <code>Settings</code> instance.
 
@@ -457,7 +457,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="removeSource(org.apache.juneau.commons.settings.PropertySource)">
 <h3>removeSource</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/settings/Settings.html#line-422">removeSource</a></span><wbr><span class="parameters">(<a href="PropertySource.html" title="interface in org.apache.juneau.commons.settings">PropertySource</a>&nbsp;source)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/settings/Settings.html#line-410">removeSource</a></span><wbr><span class="parameters">(<a href="PropertySource.html" title="interface in org.apache.juneau.commons.settings">PropertySource</a>&nbsp;source)</span></div>
 <div class="block">Removes a previously-added property source.
 
  <p>
@@ -476,7 +476,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="get(java.lang.String)">
 <h3>get</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="StringSetting.html" title="class in org.apache.juneau.commons.settings">StringSetting</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/settings/Settings.html#line-456">get</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="StringSetting.html" title="class in org.apache.juneau.commons.settings">StringSetting</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/settings/Settings.html#line-444">get</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
 <div class="block">Returns a <a href="StringSetting.html" title="class in org.apache.juneau.commons.settings"><code>StringSetting</code></a> for the specified system property.
 
  <p>
@@ -504,7 +504,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getOverride(java.lang.String)">
 <h3>getOverride</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/settings/Settings.html#line-511">getOverride</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/settings/Settings.html#line-499">getOverride</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
 <div class="block">Returns the override value for the specified property, consulting only the per-thread
  (local) and global stores &mdash; <i>not</i> the sources list.
 
@@ -546,7 +546,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="isOverridden(java.lang.String)">
 <h3>isOverridden</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/settings/Settings.html#line-534">isOverridden</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/settings/Settings.html#line-522">isOverridden</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
 <div class="block">Returns <jk>true</jk> if the specified property has an override in either the per-thread
  (local) or global store.
 
@@ -565,7 +565,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="get(java.lang.String,T)">
 <h3 id="get(java.lang.String,java.lang.Object)">get</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/settings/Settings.html#line-567">get</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/settings/Settings.html#line-555">get</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  T&nbsp;def)</span></div>
 <div class="block">Looks up a system property, returning a default value if not found.
 
@@ -607,7 +607,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="setGlobal(java.lang.String,java.lang.String)">
 <h3>setGlobal</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Settings.html" title="class in org.apache.juneau.commons.settings">Settings</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/settings/Settings.html#line-598">setGlobal</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Settings.html" title="class in org.apache.juneau.commons.settings">Settings</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/settings/Settings.html#line-583">setGlobal</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block">Sets a global override for the specified property.
 
@@ -643,7 +643,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="unsetGlobal(java.lang.String)">
 <h3>unsetGlobal</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/settings/Settings.html#line-615">unsetGlobal</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/settings/Settings.html#line-600">unsetGlobal</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
 <div class="block">Removes a global override for the specified property.
 
  <p>
@@ -665,7 +665,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="setLocal(java.lang.String,java.lang.String)">
 <h3>setLocal</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Settings.html" title="class in org.apache.juneau.commons.settings">Settings</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/settings/Settings.html#line-638">setLocal</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Settings.html" title="class in org.apache.juneau.commons.settings">Settings</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/settings/Settings.html#line-623">setLocal</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block">Sets a per-thread override for the specified property.
 
@@ -696,7 +696,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="unsetLocal(java.lang.String)">
 <h3>unsetLocal</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/settings/Settings.html#line-656">unsetLocal</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/settings/Settings.html#line-641">unsetLocal</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
 <div class="block">Removes a per-thread override for the specified property.
 
  <p>
@@ -718,7 +718,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="clearLocal()">
 <h3>clearLocal</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Settings.html" title="class in org.apache.juneau.commons.settings">Settings</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/settings/Settings.html#line-677">clearLocal</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Settings.html" title="class in org.apache.juneau.commons.settings">Settings</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/settings/Settings.html#line-662">clearLocal</a></span>()</div>
 <div class="block">Clears all per-thread overrides for the current thread.
 
  <p>
@@ -744,7 +744,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="cleanup()">
 <h3>cleanup</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/settings/Settings.html#line-690">cleanup</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/settings/Settings.html#line-675">cleanup</a></span>()</div>
 <div class="block">Cleans up thread-local storage for the current thread.
 
  <p>
@@ -755,7 +755,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="clearGlobal()">
 <h3>clearGlobal</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Settings.html" title="class in org.apache.juneau.commons.settings">Settings</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/settings/Settings.html#line-707">clearGlobal</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Settings.html" title="class in org.apache.juneau.commons.settings">Settings</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/settings/Settings.html#line-692">clearGlobal</a></span>()</div>
 <div class="block">Clears all global overrides.
 
  <p>
@@ -777,7 +777,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="toType(java.lang.String,java.lang.Class)">
 <h3>toType</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/settings/Settings.html#line-746">toType</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;s,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/settings/Settings.html#line-731">toType</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;s,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;T&gt;&nbsp;c)</span></div>
 <div class="block">Converts a string to the specified type using reflection to find conversion methods or constructors.
 

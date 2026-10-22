@@ -78,14 +78,17 @@ loadScripts(document, 'script');</script>
 </div>
 <section class="class-description" id="class-description">
 <hr>
-<div class="type-signature"><span class="modifiers">public final class </span><span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/auth/AuthResultAccumulator.html#line-41">AuthResultAccumulator</a></span>
+<div class="type-signature"><span class="modifiers">public final class </span><span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/auth/AuthResultAccumulator.html#line-46">AuthResultAccumulator</a></span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
 <div class="block">Mutable helper that folds a sequence of <a href="AuthResult.html" title="class in org.apache.juneau.rest.server.auth"><code>AuthResult</code></a>s into a single result, honoring
  <a href="AuthResult.MergeMode.html" title="enum class in org.apache.juneau.rest.server.auth"><code>AuthResult.MergeMode</code></a>.
 
  <p>
- <a href="AuthResult.MergeMode.html#ADD"><code>ADD</code></a> unions roles and keeps the first non-<jk>null</jk> principal;
- <a href="AuthResult.MergeMode.html#REPLACE"><code>REPLACE</code></a> resets the accumulated principal + roles.  Used by both
+ <a href="AuthResult.MergeMode.html#ADD"><code>ADD</code></a> keeps the first non-<jk>null</jk> principal and unions roles from
+ later results <b>only when</b> those results carry no principal of their own or the <b>same</b> principal
+ (compared by <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/security/Principal.html#getName()" title="class or interface in java.security" class="external-link"><code>Principal.getName()</code></a>, null-safe).  A later result with a <i>different</i> non-<jk>null</jk>
+ principal does not contribute its roles &mdash; a second authenticated identity must not silently elevate the
+ first.  <a href="AuthResult.MergeMode.html#REPLACE"><code>REPLACE</code></a> resets the accumulated principal + roles.  Used by both
  <a href="AuthFilterChain.html" title="class in org.apache.juneau.rest.server.auth"><code>AuthFilterChain</code></a> and the resource-level fold in <a href="../RestContext.html" title="class in org.apache.juneau.rest.server"><code>RestContext</code></a>.
 
  <h5 class='section'>See Also:</h5><ul>
@@ -154,7 +157,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;()">
 <h3>AuthResultAccumulator</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/auth/AuthResultAccumulator.html#line-41">AuthResultAccumulator</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/auth/AuthResultAccumulator.html#line-46">AuthResultAccumulator</a></span>()</div>
 </section>
 </li>
 </ul>
@@ -168,7 +171,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="add(org.apache.juneau.rest.server.auth.AuthResult)">
 <h3>add</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="AuthResultAccumulator.html" title="class in org.apache.juneau.rest.server.auth">AuthResultAccumulator</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/auth/AuthResultAccumulator.html#line-53">add</a></span><wbr><span class="parameters">(<a href="AuthResult.html" title="class in org.apache.juneau.rest.server.auth">AuthResult</a>&nbsp;r)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="AuthResultAccumulator.html" title="class in org.apache.juneau.rest.server.auth">AuthResultAccumulator</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/auth/AuthResultAccumulator.html#line-60">add</a></span><wbr><span class="parameters">(<a href="AuthResult.html" title="class in org.apache.juneau.rest.server.auth">AuthResult</a>&nbsp;r)</span></div>
 <div class="block">Folds the next result into this accumulator.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -181,7 +184,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="result()">
 <h3>result</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="AuthResult.html" title="class in org.apache.juneau.rest.server.auth">AuthResult</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/auth/AuthResultAccumulator.html#line-74">result</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="AuthResult.html" title="class in org.apache.juneau.rest.server.auth">AuthResult</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/auth/AuthResultAccumulator.html#line-91">result</a></span>()</div>
 <div class="block">Returns the folded result.</div>
 <dl class="notes">
 <dt>Returns:</dt>

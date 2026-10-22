@@ -29,12 +29,12 @@
 <span class="source-line-no">016</span><span id="line-16"> */</span>
 <span class="source-line-no">017</span><span id="line-17">package org.apache.juneau.rest.client.mcp.auth;</span>
 <span class="source-line-no">018</span><span id="line-18"></span>
-<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.AssertionUtils.*;</span>
-<span class="source-line-no">020</span><span id="line-20">import static org.apache.juneau.commons.utils.Shorts.*;</span>
-<span class="source-line-no">021</span><span id="line-21"></span>
-<span class="source-line-no">022</span><span id="line-22">import java.io.*;</span>
-<span class="source-line-no">023</span><span id="line-23">import java.net.*;</span>
-<span class="source-line-no">024</span><span id="line-24">import java.util.*;</span>
+<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.Shorts.*;</span>
+<span class="source-line-no">020</span><span id="line-20"></span>
+<span class="source-line-no">021</span><span id="line-21">import java.io.*;</span>
+<span class="source-line-no">022</span><span id="line-22">import java.net.*;</span>
+<span class="source-line-no">023</span><span id="line-23">import java.util.*;</span>
+<span class="source-line-no">024</span><span id="line-24">import java.util.stream.*;</span>
 <span class="source-line-no">025</span><span id="line-25"></span>
 <span class="source-line-no">026</span><span id="line-26">/**</span>
 <span class="source-line-no">027</span><span id="line-27"> * A parsed {@code WWW-Authenticate: Bearer ...} challenge as returned by an OAuth 2.1 / MCP resource server on a</span>
@@ -65,8 +65,8 @@
 <span class="source-line-no">052</span><span id="line-52">    * @param parameters The auth-params (lower-cased keys).  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
 <span class="source-line-no">053</span><span id="line-53">    */</span>
 <span class="source-line-no">054</span><span id="line-54">   protected WwwAuthenticateChallenge(String scheme, Map&lt;String,String&gt; parameters) {</span>
-<span class="source-line-no">055</span><span id="line-55">      this.scheme = assertArgNotNullOrBlank("scheme", scheme);</span>
-<span class="source-line-no">056</span><span id="line-56">      this.parameters = u(cp(assertArgNotNull("parameters", parameters)));</span>
+<span class="source-line-no">055</span><span id="line-55">      this.scheme = reqnb("scheme", scheme);</span>
+<span class="source-line-no">056</span><span id="line-56">      this.parameters = u(cp(reqnn("parameters", parameters)));</span>
 <span class="source-line-no">057</span><span id="line-57">   }</span>
 <span class="source-line-no">058</span><span id="line-58"></span>
 <span class="source-line-no">059</span><span id="line-59">   /**</span>
@@ -179,7 +179,7 @@
 <span class="source-line-no">166</span><span id="line-166">    * @return &lt;jk&gt;true&lt;/jk&gt; if this is a Bearer challenge.</span>
 <span class="source-line-no">167</span><span id="line-167">    */</span>
 <span class="source-line-no">168</span><span id="line-168">   public boolean isBearer() {</span>
-<span class="source-line-no">169</span><span id="line-169">      return "bearer".equalsIgnoreCase(scheme);</span>
+<span class="source-line-no">169</span><span id="line-169">      return eqic("bearer", scheme);</span>
 <span class="source-line-no">170</span><span id="line-170">   }</span>
 <span class="source-line-no">171</span><span id="line-171"></span>
 <span class="source-line-no">172</span><span id="line-172">   /**</span>
@@ -198,7 +198,7 @@
 <span class="source-line-no">185</span><span id="line-185">    * @return The value, or {@link Optional#empty()} if absent.</span>
 <span class="source-line-no">186</span><span id="line-186">    */</span>
 <span class="source-line-no">187</span><span id="line-187">   public Optional&lt;String&gt; parameter(String name) {</span>
-<span class="source-line-no">188</span><span id="line-188">      assertArgNotNull("name", name);</span>
+<span class="source-line-no">188</span><span id="line-188">      reqnn("name", name);</span>
 <span class="source-line-no">189</span><span id="line-189">      return o(parameters.get(name.toLowerCase(Locale.ROOT)));</span>
 <span class="source-line-no">190</span><span id="line-190">   }</span>
 <span class="source-line-no">191</span><span id="line-191"></span>
@@ -213,7 +213,7 @@
 <span class="source-line-no">200</span><span id="line-200">         return oe();</span>
 <span class="source-line-no">201</span><span id="line-201">      try {</span>
 <span class="source-line-no">202</span><span id="line-202">         return o(URI.create(v));</span>
-<span class="source-line-no">203</span><span id="line-203">      } catch (IllegalArgumentException e) { // defensive: a malformed resource_metadata value (e.g. unescaped space) makes URI.create(...) throw</span>
+<span class="source-line-no">203</span><span id="line-203">      } catch (IllegalArgumentException e) {</span>
 <span class="source-line-no">204</span><span id="line-204">         return oe();</span>
 <span class="source-line-no">205</span><span id="line-205">      }</span>
 <span class="source-line-no">206</span><span id="line-206">   }</span>
@@ -236,13 +236,11 @@
 <span class="source-line-no">223</span><span id="line-223">      var v = parameters.get("scope");</span>
 <span class="source-line-no">224</span><span id="line-224">      if (v == null || v.isBlank())</span>
 <span class="source-line-no">225</span><span id="line-225">         return Set.of();</span>
-<span class="source-line-no">226</span><span id="line-226">      var out = new LinkedHashSet&lt;String&gt;();</span>
-<span class="source-line-no">227</span><span id="line-227">      for (var tok : v.strip().split("\\s+"))</span>
-<span class="source-line-no">228</span><span id="line-228">         if (!tok.isEmpty()) // HTT: v is already known non-blank (guarded above) and pre-stripped, and split("\\s+")'s "+" quantifier collapses runs of delimiters into one match, so it cannot yield an empty leading/trailing/internal token for any String input (verified by exhaustive scan of all BMP chars where Character.isWhitespace(...) and the \s regex disagree) -- defensive-only</span>
-<span class="source-line-no">229</span><span id="line-229">            out.add(tok);</span>
-<span class="source-line-no">230</span><span id="line-230">      return u(out);</span>
-<span class="source-line-no">231</span><span id="line-231">   }</span>
-<span class="source-line-no">232</span><span id="line-232">}</span>
+<span class="source-line-no">226</span><span id="line-226">      var out = Arrays.stream(v.strip().split("\\s+"))</span>
+<span class="source-line-no">227</span><span id="line-227">         .collect(Collectors.toCollection(LinkedHashSet&lt;String&gt;::new));</span>
+<span class="source-line-no">228</span><span id="line-228">      return u(out);</span>
+<span class="source-line-no">229</span><span id="line-229">   }</span>
+<span class="source-line-no">230</span><span id="line-230">}</span>
 
 
 

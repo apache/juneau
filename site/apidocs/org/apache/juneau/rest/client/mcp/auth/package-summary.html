@@ -74,9 +74,9 @@ loadScripts(document, 'script');</script>
  <code>juneau-rest-client-mcp</code> (its <code>Supplier&lt;String&gt;</code>).  It deliberately does <b>not</b> depend on
  <code>juneau-rest-server</code> &mdash; the client-side flow/discovery helpers are relocated (see the <code>flow</code> and
  <code>oidc</code> sub-packages) rather than reused from <code>juneau-rest-server-auth-oauth</code>, which compile-depends on
- the server.  Sub-project D (auth-module de-layering) is expected to later rationalize this relocation.
+ the server.  A later auth-module de-layering is expected to rationalize this relocation.
 
- <h5 class='topic'>What's here (F1)</h5>
+ <h5 class='topic'>What's here</h5>
  <ul>
    <li><a href="McpTokenProvider.html" title="class in org.apache.juneau.rest.client.mcp.auth"><code>McpTokenProvider</code></a> &mdash; a <code>Supplier&lt;String&gt;</code> token
       manager for pre-provisioned (static) tokens, the client-credentials grant, and the refresh-token grant
@@ -92,7 +92,7 @@ loadScripts(document, 'script');</script>
  </ul>
 
  <p>
- Adoption-focused documentation for this module is intentionally tracked as a separate follow-up (not part of F1).</div>
+ Adoption-focused documentation for this module is intentionally tracked as a separate follow-up.</div>
 <dl class="notes">
 <dt>Since:</dt>
 <dd>10.0.0</dd>
@@ -166,7 +166,7 @@ loadScripts(document, 'script');</script>
 </div>
 <div class="col-first odd-row-color class-summary class-summary-tab2"><a href="McpAuthorizationCodeAcquirer.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpAuthorizationCodeAcquirer</a></div>
 <div class="col-last odd-row-color class-summary class-summary-tab2">
-<div class="block">Interactive authorization-code + PKCE (S256) token acquisition for headless / CLI use (F1 Phase B).</div>
+<div class="block">Interactive authorization-code + PKCE (S256) token acquisition for headless / CLI use.</div>
 </div>
 <div class="col-first even-row-color class-summary class-summary-tab2"><a href="McpAuthorizationCodeAcquirer.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpAuthorizationCodeAcquirer.Builder</a></div>
 <div class="col-last even-row-color class-summary class-summary-tab2">
@@ -188,7 +188,7 @@ loadScripts(document, 'script');</script>
 </div>
 <div class="col-first even-row-color class-summary class-summary-tab2"><a href="McpClientRegistrations.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpClientRegistrations</a></div>
 <div class="col-last even-row-color class-summary class-summary-tab2">
-<div class="block">Bridges a Dynamic-Client-Registration result (<a href="McpClientRegistration.html" title="class in org.apache.juneau.rest.client.mcp.auth"><code>McpClientRegistration</code></a>) into F1's existing token flows &mdash;
+<div class="block">Bridges a Dynamic-Client-Registration result (<a href="McpClientRegistration.html" title="class in org.apache.juneau.rest.client.mcp.auth"><code>McpClientRegistration</code></a>) into the existing token flows &mdash;
  the <a href="McpAuthorizationCodeAcquirer.html" title="class in org.apache.juneau.rest.client.mcp.auth"><code>McpAuthorizationCodeAcquirer</code></a> (interactive auth-code + PKCE) and <a href="McpTokenProvider.html" title="class in org.apache.juneau.rest.client.mcp.auth"><code>McpTokenProvider</code></a>
  (client-credentials / refresh).</div>
 </div>

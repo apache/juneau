@@ -79,7 +79,7 @@
 <a class="jxr_linenumber" name="L71" href="#L71">71</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <a name="HttpPartCollectionFormat" href="../../../../../org/apache/juneau/commons/httppart/HttpPartCollectionFormat.html#HttpPartCollectionFormat">HttpPartCollectionFormat</a> fromString(String value) {
 <a class="jxr_linenumber" name="L72" href="#L72">72</a>  		<strong class="jxr_keyword">if</strong> (value == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L73" href="#L73">73</a>  			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L74" href="#L74">74</a>  		<strong class="jxr_keyword">if</strong> (value.equalsIgnoreCase(<span class="jxr_string">"UON"</span>))
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>  		<strong class="jxr_keyword">if</strong> (eqic(value, <span class="jxr_string">"UON"</span>))
 <a class="jxr_linenumber" name="L75" href="#L75">75</a>  			<strong class="jxr_keyword">return</strong> UONC;
 <a class="jxr_linenumber" name="L76" href="#L76">76</a>  		<strong class="jxr_keyword">return</strong> valueOf(ucr(value));
 <a class="jxr_linenumber" name="L77" href="#L77">77</a>  	}

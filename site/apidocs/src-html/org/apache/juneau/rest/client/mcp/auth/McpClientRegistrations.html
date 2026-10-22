@@ -29,78 +29,79 @@
 <span class="source-line-no">016</span><span id="line-16"> */</span>
 <span class="source-line-no">017</span><span id="line-17">package org.apache.juneau.rest.client.mcp.auth;</span>
 <span class="source-line-no">018</span><span id="line-18"></span>
-<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.AssertionUtils.*;</span>
+<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.Shorts.*;</span>
 <span class="source-line-no">020</span><span id="line-20"></span>
-<span class="source-line-no">021</span><span id="line-21">/**</span>
-<span class="source-line-no">022</span><span id="line-22"> * Bridges a Dynamic-Client-Registration result ({@link McpClientRegistration}) into F1's existing token flows &amp;mdash;</span>
-<span class="source-line-no">023</span><span id="line-23"> * the {@link McpAuthorizationCodeAcquirer} (interactive auth-code + PKCE) and {@link McpTokenProvider}</span>
-<span class="source-line-no">024</span><span id="line-24"> * (client-credentials / refresh).</span>
-<span class="source-line-no">025</span><span id="line-25"> *</span>
-<span class="source-line-no">026</span><span id="line-26"> * &lt;p&gt;</span>
-<span class="source-line-no">027</span><span id="line-27"> * DCR changes only how the {@code client_id}/secret were obtained; it does &lt;b&gt;not&lt;/b&gt; alter the {@code resource=}</span>
-<span class="source-line-no">028</span><span id="line-28"> * (RFC 8707) or {@code iss} (RFC 9207 / SEP-2468) enforcement those flows already perform &amp;mdash; the caller still sets</span>
-<span class="source-line-no">029</span><span id="line-29"> * {@code resource(...)} / {@code expectedIssuer(...)} exactly as for a statically-configured client.  These helpers only</span>
-<span class="source-line-no">030</span><span id="line-30"> * transplant the DCR-issued credential material (and, for the acquirer, keep the loopback redirect &lt;em&gt;path and port&lt;/em&gt;</span>
-<span class="source-line-no">031</span><span id="line-31"> * consistent with what was registered, so a bind-first {@link LoopbackRedirectUris#forPort forPort} registration matches</span>
-<span class="source-line-no">032</span><span id="line-32"> * at a strict exact-match authorization server).</span>
-<span class="source-line-no">033</span><span id="line-33"> *</span>
-<span class="source-line-no">034</span><span id="line-34"> * @since 10.0.0</span>
-<span class="source-line-no">035</span><span id="line-35"> */</span>
-<span class="source-line-no">036</span><span id="line-36">public final class McpClientRegistrations {</span>
-<span class="source-line-no">037</span><span id="line-37"></span>
-<span class="source-line-no">038</span><span id="line-38">   private McpClientRegistrations() {}</span>
-<span class="source-line-no">039</span><span id="line-39"></span>
-<span class="source-line-no">040</span><span id="line-40">   /**</span>
-<span class="source-line-no">041</span><span id="line-41">    * Applies a DCR-issued registration's {@code client_id}, optional {@code client_secret}, and registered loopback</span>
-<span class="source-line-no">042</span><span id="line-42">    * redirect path (and port, for a bind-first registration) onto an {@link McpAuthorizationCodeAcquirer.Builder}.</span>
-<span class="source-line-no">043</span><span id="line-43">    *</span>
-<span class="source-line-no">044</span><span id="line-44">    * &lt;p&gt;</span>
-<span class="source-line-no">045</span><span id="line-45">    * When the registration's first redirect URI carries an explicit port (a bind-first</span>
-<span class="source-line-no">046</span><span id="line-46">    * {@link LoopbackRedirectUris#forPort forPort} registration), that port is wired onto the builder via</span>
-<span class="source-line-no">047</span><span id="line-47">    * {@link McpAuthorizationCodeAcquirer.Builder#redirectPort(int) redirectPort} so the loopback receiver binds exactly</span>
-<span class="source-line-no">048</span><span id="line-48">    * the port the authorization server was told; a port-agnostic registration leaves the acquirer on its ephemeral-port</span>
-<span class="source-line-no">049</span><span id="line-49">    * default.</span>
-<span class="source-line-no">050</span><span id="line-50">    *</span>
-<span class="source-line-no">051</span><span id="line-51">    * @param builder The acquirer builder.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">052</span><span id="line-52">    * @param registration The DCR-issued registration.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">053</span><span id="line-53">    * @return The same builder, for chaining.</span>
-<span class="source-line-no">054</span><span id="line-54">    */</span>
-<span class="source-line-no">055</span><span id="line-55">   public static McpAuthorizationCodeAcquirer.Builder configure(McpAuthorizationCodeAcquirer.Builder builder, McpClientRegistration registration) {</span>
-<span class="source-line-no">056</span><span id="line-56">      assertArgNotNull("builder", builder);</span>
-<span class="source-line-no">057</span><span id="line-57">      assertArgNotNull("registration", registration);</span>
-<span class="source-line-no">058</span><span id="line-58">      builder.clientId(registration.clientId());</span>
-<span class="source-line-no">059</span><span id="line-59">      registration.clientSecret().ifPresent(builder::clientSecret);</span>
-<span class="source-line-no">060</span><span id="line-60">      // Keep the loopback receiver's callback path AND port consistent with the redirect URI that was actually</span>
-<span class="source-line-no">061</span><span id="line-61">      // registered: a strict exact-match AS matches the redirect URI exactly, so a bind-first forPort(port,path)</span>
-<span class="source-line-no">062</span><span id="line-62">      // registration only works if the receiver binds the same path and the same port.</span>
-<span class="source-line-no">063</span><span id="line-63">      if (! registration.redirectUris().isEmpty()) {</span>
-<span class="source-line-no">064</span><span id="line-64">         var redirect = registration.redirectUris().get(0);</span>
-<span class="source-line-no">065</span><span id="line-65">         var path = redirect.getPath();</span>
-<span class="source-line-no">066</span><span id="line-66">         if (path != null &amp;&amp; path.startsWith("/"))  // HTT: java.net.URI#getPath() returns "" (not null) for a hierarchical URI with authority and no path -- the null case is only reachable for an opaque URI, which a DCR redirect URI never is</span>
-<span class="source-line-no">067</span><span id="line-67">            builder.redirectPath(path);</span>
-<span class="source-line-no">068</span><span id="line-68">         var port = redirect.getPort();</span>
-<span class="source-line-no">069</span><span id="line-69">         if (port &gt; 0)</span>
-<span class="source-line-no">070</span><span id="line-70">            builder.redirectPort(port);</span>
-<span class="source-line-no">071</span><span id="line-71">      }</span>
-<span class="source-line-no">072</span><span id="line-72">      return builder;</span>
-<span class="source-line-no">073</span><span id="line-73">   }</span>
-<span class="source-line-no">074</span><span id="line-74"></span>
-<span class="source-line-no">075</span><span id="line-75">   /**</span>
-<span class="source-line-no">076</span><span id="line-76">    * Applies a DCR-issued registration's {@code client_id} and optional {@code client_secret} onto an</span>
-<span class="source-line-no">077</span><span id="line-77">    * {@link McpTokenProvider.Builder} (client-credentials / refresh modes).</span>
-<span class="source-line-no">078</span><span id="line-78">    *</span>
-<span class="source-line-no">079</span><span id="line-79">    * @param builder The token-provider builder.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">080</span><span id="line-80">    * @param registration The DCR-issued registration.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">081</span><span id="line-81">    * @return The same builder, for chaining.</span>
-<span class="source-line-no">082</span><span id="line-82">    */</span>
-<span class="source-line-no">083</span><span id="line-83">   public static McpTokenProvider.Builder configure(McpTokenProvider.Builder builder, McpClientRegistration registration) {</span>
-<span class="source-line-no">084</span><span id="line-84">      assertArgNotNull("builder", builder);</span>
-<span class="source-line-no">085</span><span id="line-85">      assertArgNotNull("registration", registration);</span>
-<span class="source-line-no">086</span><span id="line-86">      builder.clientId(registration.clientId());</span>
-<span class="source-line-no">087</span><span id="line-87">      registration.clientSecret().ifPresent(builder::clientSecret);</span>
-<span class="source-line-no">088</span><span id="line-88">      return builder;</span>
-<span class="source-line-no">089</span><span id="line-89">   }</span>
-<span class="source-line-no">090</span><span id="line-90">}</span>
+<span class="source-line-no">021</span><span id="line-21"></span>
+<span class="source-line-no">022</span><span id="line-22">/**</span>
+<span class="source-line-no">023</span><span id="line-23"> * Bridges a Dynamic-Client-Registration result ({@link McpClientRegistration}) into the existing token flows &amp;mdash;</span>
+<span class="source-line-no">024</span><span id="line-24"> * the {@link McpAuthorizationCodeAcquirer} (interactive auth-code + PKCE) and {@link McpTokenProvider}</span>
+<span class="source-line-no">025</span><span id="line-25"> * (client-credentials / refresh).</span>
+<span class="source-line-no">026</span><span id="line-26"> *</span>
+<span class="source-line-no">027</span><span id="line-27"> * &lt;p&gt;</span>
+<span class="source-line-no">028</span><span id="line-28"> * DCR changes only how the {@code client_id}/secret were obtained; it does &lt;b&gt;not&lt;/b&gt; alter the {@code resource=}</span>
+<span class="source-line-no">029</span><span id="line-29"> * (RFC 8707) or {@code iss} (RFC 9207 / SEP-2468) enforcement those flows already perform &amp;mdash; the caller still sets</span>
+<span class="source-line-no">030</span><span id="line-30"> * {@code resource(...)} / {@code expectedIssuer(...)} exactly as for a statically-configured client.  These helpers only</span>
+<span class="source-line-no">031</span><span id="line-31"> * transplant the DCR-issued credential material (and, for the acquirer, keep the loopback redirect &lt;em&gt;path and port&lt;/em&gt;</span>
+<span class="source-line-no">032</span><span id="line-32"> * consistent with what was registered, so a bind-first {@link LoopbackRedirectUris#forPort forPort} registration matches</span>
+<span class="source-line-no">033</span><span id="line-33"> * at a strict exact-match authorization server).</span>
+<span class="source-line-no">034</span><span id="line-34"> *</span>
+<span class="source-line-no">035</span><span id="line-35"> * @since 10.0.0</span>
+<span class="source-line-no">036</span><span id="line-36"> */</span>
+<span class="source-line-no">037</span><span id="line-37">public final class McpClientRegistrations {</span>
+<span class="source-line-no">038</span><span id="line-38"></span>
+<span class="source-line-no">039</span><span id="line-39">   private McpClientRegistrations() {}</span>
+<span class="source-line-no">040</span><span id="line-40"></span>
+<span class="source-line-no">041</span><span id="line-41">   /**</span>
+<span class="source-line-no">042</span><span id="line-42">    * Applies a DCR-issued registration's {@code client_id}, optional {@code client_secret}, and registered loopback</span>
+<span class="source-line-no">043</span><span id="line-43">    * redirect path (and port, for a bind-first registration) onto an {@link McpAuthorizationCodeAcquirer.Builder}.</span>
+<span class="source-line-no">044</span><span id="line-44">    *</span>
+<span class="source-line-no">045</span><span id="line-45">    * &lt;p&gt;</span>
+<span class="source-line-no">046</span><span id="line-46">    * When the registration's first redirect URI carries an explicit port (a bind-first</span>
+<span class="source-line-no">047</span><span id="line-47">    * {@link LoopbackRedirectUris#forPort forPort} registration), that port is wired onto the builder via</span>
+<span class="source-line-no">048</span><span id="line-48">    * {@link McpAuthorizationCodeAcquirer.Builder#redirectPort(int) redirectPort} so the loopback receiver binds exactly</span>
+<span class="source-line-no">049</span><span id="line-49">    * the port the authorization server was told; a port-agnostic registration leaves the acquirer on its ephemeral-port</span>
+<span class="source-line-no">050</span><span id="line-50">    * default.</span>
+<span class="source-line-no">051</span><span id="line-51">    *</span>
+<span class="source-line-no">052</span><span id="line-52">    * @param builder The acquirer builder.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">053</span><span id="line-53">    * @param registration The DCR-issued registration.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">054</span><span id="line-54">    * @return The same builder, for chaining.</span>
+<span class="source-line-no">055</span><span id="line-55">    */</span>
+<span class="source-line-no">056</span><span id="line-56">   public static McpAuthorizationCodeAcquirer.Builder configure(McpAuthorizationCodeAcquirer.Builder builder, McpClientRegistration registration) {</span>
+<span class="source-line-no">057</span><span id="line-57">      reqnn("builder", builder);</span>
+<span class="source-line-no">058</span><span id="line-58">      reqnn("registration", registration);</span>
+<span class="source-line-no">059</span><span id="line-59">      builder.clientId(registration.clientId());</span>
+<span class="source-line-no">060</span><span id="line-60">      registration.clientSecret().ifPresent(builder::clientSecret);</span>
+<span class="source-line-no">061</span><span id="line-61">      // Keep the loopback receiver's callback path AND port consistent with the redirect URI that was actually</span>
+<span class="source-line-no">062</span><span id="line-62">      // registered: a strict exact-match AS matches the redirect URI exactly, so a bind-first forPort(port,path)</span>
+<span class="source-line-no">063</span><span id="line-63">      // registration only works if the receiver binds the same path and the same port.</span>
+<span class="source-line-no">064</span><span id="line-64">      if (! registration.redirectUris().isEmpty()) {</span>
+<span class="source-line-no">065</span><span id="line-65">         var redirect = registration.redirectUris().get(0);</span>
+<span class="source-line-no">066</span><span id="line-66">         var path = redirect.getPath();</span>
+<span class="source-line-no">067</span><span id="line-67">         if (path != null &amp;&amp; path.startsWith("/"))</span>
+<span class="source-line-no">068</span><span id="line-68">            builder.redirectPath(path);</span>
+<span class="source-line-no">069</span><span id="line-69">         var port = redirect.getPort();</span>
+<span class="source-line-no">070</span><span id="line-70">         if (port &gt; 0)</span>
+<span class="source-line-no">071</span><span id="line-71">            builder.redirectPort(port);</span>
+<span class="source-line-no">072</span><span id="line-72">      }</span>
+<span class="source-line-no">073</span><span id="line-73">      return builder;</span>
+<span class="source-line-no">074</span><span id="line-74">   }</span>
+<span class="source-line-no">075</span><span id="line-75"></span>
+<span class="source-line-no">076</span><span id="line-76">   /**</span>
+<span class="source-line-no">077</span><span id="line-77">    * Applies a DCR-issued registration's {@code client_id} and optional {@code client_secret} onto an</span>
+<span class="source-line-no">078</span><span id="line-78">    * {@link McpTokenProvider.Builder} (client-credentials / refresh modes).</span>
+<span class="source-line-no">079</span><span id="line-79">    *</span>
+<span class="source-line-no">080</span><span id="line-80">    * @param builder The token-provider builder.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">081</span><span id="line-81">    * @param registration The DCR-issued registration.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">082</span><span id="line-82">    * @return The same builder, for chaining.</span>
+<span class="source-line-no">083</span><span id="line-83">    */</span>
+<span class="source-line-no">084</span><span id="line-84">   public static McpTokenProvider.Builder configure(McpTokenProvider.Builder builder, McpClientRegistration registration) {</span>
+<span class="source-line-no">085</span><span id="line-85">      reqnn("builder", builder);</span>
+<span class="source-line-no">086</span><span id="line-86">      reqnn("registration", registration);</span>
+<span class="source-line-no">087</span><span id="line-87">      builder.clientId(registration.clientId());</span>
+<span class="source-line-no">088</span><span id="line-88">      registration.clientSecret().ifPresent(builder::clientSecret);</span>
+<span class="source-line-no">089</span><span id="line-89">      return builder;</span>
+<span class="source-line-no">090</span><span id="line-90">   }</span>
+<span class="source-line-no">091</span><span id="line-91">}</span>
 
 
 

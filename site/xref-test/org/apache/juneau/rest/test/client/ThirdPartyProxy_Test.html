@@ -85,7 +85,7 @@
 <a class="jxr_linenumber" name="L77" href="#L77">77</a>  		ThirdPartyProxy proxy;
 <a class="jxr_linenumber" name="L78" href="#L78">78</a>  
 <a class="jxr_linenumber" name="L79" href="#L79">79</a>  		Input(String label, Serializer serializer, Parser parser) {
-<a class="jxr_linenumber" name="L80" href="#L80">80</a>  			proxy = MockRestClient.create(ThirdPartyProxyResource.<strong class="jxr_keyword">class</strong>).ignoreErrors().serializer(serializer).parser(parser).partSerializer(UonSerializer.create().addBeanTypes().addRootType().build()).build().getRemote(ThirdPartyProxy.<strong class="jxr_keyword">class</strong>, <strong class="jxr_keyword">null</strong>, serializer, parser);
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>  			proxy = MockRestClient.create(ThirdPartyProxyResource.<strong class="jxr_keyword">class</strong>).ignoreErrors().serializer(serializer).parser(parser).partSerializer(UonSerializer.create().addBeanTypes().addRootType().build()).allowPrivateUrls(<strong class="jxr_keyword">true</strong>).build().getRemote(ThirdPartyProxy.<strong class="jxr_keyword">class</strong>, <strong class="jxr_keyword">null</strong>, serializer, parser);
 <a class="jxr_linenumber" name="L81" href="#L81">81</a>  		}
 <a class="jxr_linenumber" name="L82" href="#L82">82</a>  	}
 <a class="jxr_linenumber" name="L83" href="#L83">83</a>  

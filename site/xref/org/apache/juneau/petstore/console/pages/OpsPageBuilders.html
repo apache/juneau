@@ -1,0 +1,131 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="" lang="">
+<head><meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<title>OpsPageBuilders xref</title>
+<link type="text/css" rel="stylesheet" href="../../../../../../stylesheet.css" />
+</head>
+<body>
+<div id="overview"><a href="../../../../../../../apidocs/org/apache/juneau/petstore/console/pages/OpsPageBuilders.html">View Javadoc</a></div><pre>
+<a class="jxr_linenumber" name="L1" href="#L1">1</a>   <em class="jxr_comment">/*</em>
+<a class="jxr_linenumber" name="L2" href="#L2">2</a>   <em class="jxr_comment"> * Licensed to the Apache Software Foundation (ASF) under one or more</em>
+<a class="jxr_linenumber" name="L3" href="#L3">3</a>   <em class="jxr_comment"> * contributor license agreements.  See the NOTICE file distributed with</em>
+<a class="jxr_linenumber" name="L4" href="#L4">4</a>   <em class="jxr_comment"> * this work for additional information regarding copyright ownership.</em>
+<a class="jxr_linenumber" name="L5" href="#L5">5</a>   <em class="jxr_comment"> * The ASF licenses this file to You under the Apache License, Version 2.0</em>
+<a class="jxr_linenumber" name="L6" href="#L6">6</a>   <em class="jxr_comment"> * (the "License"); you may not use this file except in compliance with</em>
+<a class="jxr_linenumber" name="L7" href="#L7">7</a>   <em class="jxr_comment"> * the License.  You may obtain a copy of the License at</em>
+<a class="jxr_linenumber" name="L8" href="#L8">8</a>   <em class="jxr_comment"> *</em>
+<a class="jxr_linenumber" name="L9" href="#L9">9</a>   <em class="jxr_comment"> *      <a href="http://www.apache.org/licenses/LICENSE-2.0" target="alexandria_uri">http://www.apache.org/licenses/LICENSE-2.0</a></em>
+<a class="jxr_linenumber" name="L10" href="#L10">10</a>  <em class="jxr_comment"> *</em>
+<a class="jxr_linenumber" name="L11" href="#L11">11</a>  <em class="jxr_comment"> * Unless required by applicable law or agreed to in writing, software</em>
+<a class="jxr_linenumber" name="L12" href="#L12">12</a>  <em class="jxr_comment"> * distributed under the License is distributed on an "AS IS" BASIS,</em>
+<a class="jxr_linenumber" name="L13" href="#L13">13</a>  <em class="jxr_comment"> * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</em>
+<a class="jxr_linenumber" name="L14" href="#L14">14</a>  <em class="jxr_comment"> * See the License for the specific language governing permissions and</em>
+<a class="jxr_linenumber" name="L15" href="#L15">15</a>  <em class="jxr_comment"> * limitations under the License.</em>
+<a class="jxr_linenumber" name="L16" href="#L16">16</a>  <em class="jxr_comment"> */</em>
+<a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> org.apache.juneau.petstore.console.pages;
+<a class="jxr_linenumber" name="L18" href="#L18">18</a>  
+<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> java.util.*;
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.commons.beanquery.*;
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.server.terminal.*;
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.server.view.freemarker.console.*;
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.server.views.*;
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.server.views.RowAction.*;
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.server.views.TableSpec.*;
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <em class="jxr_javadoccomment"> * Builder twins of the Operations pages: P6 Jobs ({@code jobs.ftlh}) and P7 Audit ({@code audit.ftlh}).</em>
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <em class="jxr_javadoccomment"> * &lt;p class='bjava'&gt;</em>
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <em class="jxr_javadoccomment"> * 	&lt;jk&gt;return&lt;/jk&gt; &lt;jsm&gt;twin&lt;/jsm&gt;(&lt;jv&gt;req&lt;/jv&gt;, OpsPageBuilders.&lt;jsm&gt;audit&lt;/jsm&gt;());</em>
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>  <em class="jxr_javadoccomment"> * &lt;/p&gt;</em>
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>  <em class="jxr_javadoccomment"> */</em>
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>  @SuppressWarnings({
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>  	<span class="jxr_string">"java:S1192"</span> <em class="jxr_comment">// Page-definition ids and labels repeat as inline literals by design.</em>
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>  })
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">class</strong> OpsPageBuilders {
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>  
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>  	<strong class="jxr_keyword">private</strong> OpsPageBuilders() {}
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>  
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>  	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>  <em class="jxr_javadoccomment">	 * P6 Jobs.</em>
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>  <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>  <em class="jxr_javadoccomment">	 * @param groomOutput The latest groom run's terminal.</em>
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>  <em class="jxr_javadoccomment">	 * @param groomFile The latest groom run's transcript file.</em>
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>  <em class="jxr_javadoccomment">	 * @return The page spec.</em>
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>  <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> PageSpec jobs(TerminalDef groomOutput, TerminalDef groomFile) {
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>  		<strong class="jxr_keyword">return</strong> PageSpec.create().tab(<span class="jxr_string">"ops/jobs"</span>).toolkit(<span class="jxr_string">"views"</span>)
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>  			.html(<span class="jxr_string">"restock-help"</span>, <span class="jxr_string">"Restocking"</span>, <span class="jxr_string">""</span><span class="jxr_string">"
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>  				&lt;div class=<span class="jxr_string">"jc-prose"</span>&gt;&lt;p&gt;Restock adds <strong class="jxr_keyword">new</strong> available pets to the store as a background job; progress shows here until it finishes.
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>  				Submitting twice from the same dialog runs one job.  Give the card below a wait to see a cancel before anything changes, or a longer hold to see one after.&lt;/p&gt;&lt;/div&gt;<span class="jxr_string">""</span><span class="jxr_string">")
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>  			.card(CardSpec.of(<span class="jxr_string">"job-log"</span>, <span class="jxr_string">"restock"</span>).title(<span class="jxr_string">"Restock inventory"</span>)
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>  				.body(<span class="jxr_string">"submit"</span>, Map.of(<span class="jxr_string">"endpoint"</span>, <span class="jxr_string">"/console/ops/jobs/restock"</span>, <span class="jxr_string">"submitLabel"</span>, <span class="jxr_string">"Restock"</span>, <span class="jxr_string">"fields"</span>, List.of(
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>  					Map.of(<span class="jxr_string">"name"</span>, <span class="jxr_string">"DOG"</span>, <span class="jxr_string">"label"</span>, <span class="jxr_string">"Dogs (0-50)"</span>, <span class="jxr_string">"type"</span>, <span class="jxr_string">"number"</span>, <span class="jxr_string">"default"</span>, 1),
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>  					Map.of(<span class="jxr_string">"name"</span>, <span class="jxr_string">"slowMs"</span>, <span class="jxr_string">"label"</span>, <span class="jxr_string">"Wait before restocking (ms, 0-10000)"</span>, <span class="jxr_string">"type"</span>, <span class="jxr_string">"number"</span>, <span class="jxr_string">"default"</span>, 0),
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>  					Map.of(<span class="jxr_string">"name"</span>, <span class="jxr_string">"holdMs"</span>, <span class="jxr_string">"label"</span>, <span class="jxr_string">"Hold after restocking (ms, 0-10000)"</span>, <span class="jxr_string">"type"</span>, <span class="jxr_string">"number"</span>, <span class="jxr_string">"default"</span>, 1000))))
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>  				.body(<span class="jxr_string">"urlParam"</span>, <span class="jxr_string">"job"</span>))
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>  			.table(TableSpec.create(<span class="jxr_string">"jobs"</span>).dataMode(DataMode.CLIENT).dataUrl(<span class="jxr_string">"/console/ops/jobs/rows"</span>)
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>  				.pollIntervalMs(2000)
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>  				.columns(
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>  					Column.create(<span class="jxr_string">"jobId"</span>).label(<span class="jxr_string">"Job"</span>),
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>  					Column.create(<span class="jxr_string">"submitted"</span>).label(<span class="jxr_string">"Submitted"</span>).render(<span class="jxr_string">"timestamp"</span>),
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>  					Column.create(<span class="jxr_string">"state"</span>).label(<span class="jxr_string">"State"</span>).render(<span class="jxr_string">"pill"</span>),
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>  					Column.create(<span class="jxr_string">"result.message"</span>).label(<span class="jxr_string">"Result"</span>))
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>  				.ribbon(
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>  					RibbonItem.dialog(<span class="jxr_string">"restock"</span>).title(<span class="jxr_string">"Restock"</span>).endpoint(<span class="jxr_string">"/console/ops/jobs/restock"</span>).method(Method.POST).form(<span class="jxr_string">"/console/ops/jobs/restock-form"</span>),
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>  					RibbonItem.refresh().id(<span class="jxr_string">"refresh"</span>)))
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>  			.table(TableSpec.create(<span class="jxr_string">"species"</span>).dataMode(DataMode.CLIENT).dataUrl(<span class="jxr_string">"/console/ops/jobs/species"</span>)
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>  				.pollIntervalMs(2000)
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>  				.columns(
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>  					Column.create(<span class="jxr_string">"species"</span>).label(<span class="jxr_string">"Species"</span>),
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>  					Column.create(<span class="jxr_string">"available"</span>).label(<span class="jxr_string">"Available"</span>))
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>  				.detail(RowDetail.create(<span class="jxr_string">"/console/ops/jobs/species/{id}"</span>).region(JobLogRegion.create(<span class="jxr_string">"restock-species"</span>)
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>  					.submit(JobLogRegion.Submit.create(<span class="jxr_string">"/console/ops/jobs/species/{id}/restock"</span>, <span class="jxr_string">"restock-species"</span>, <span class="jxr_string">"/console/ops/jobs/species/{id}/key"</span>)
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>  						.submitLabel(<span class="jxr_string">"Restock"</span>)
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>  						.field(JobLogRegion.Field.of(<span class="jxr_string">"count"</span>).label(<span class="jxr_string">"How many (1-50)"</span>).type(<span class="jxr_string">"number"</span>).defaultValue(1).required(<strong class="jxr_keyword">true</strong>))
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>  						.field(JobLogRegion.Field.of(<span class="jxr_string">"species"</span>).type(<span class="jxr_string">"hidden"</span>).source(<span class="jxr_string">"row.species"</span>)))
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>  					.detail(JobLogRegion.Detail.of(<span class="jxr_string">"fieldGrid"</span>, RegionDef.Field.of(<span class="jxr_string">"available"</span>).label(<span class="jxr_string">"Available"</span>)))
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>  					.output(JobLogRegion.Output.field(<span class="jxr_string">"available"</span>).from(<span class="jxr_string">"row.available"</span>))
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>  					.toRegion())))
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>  			.card(CardSpec.of(<span class="jxr_string">"terminal"</span>, <span class="jxr_string">"groom-output"</span>).title(<span class="jxr_string">"Groom run"</span>).body(<span class="jxr_string">"terminal"</span>, groomOutput.toMap()))
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>  			.card(CardSpec.of(<span class="jxr_string">"terminal"</span>, <span class="jxr_string">"groom-file"</span>).title(<span class="jxr_string">"Groom transcript (file)"</span>).body(<span class="jxr_string">"terminal"</span>, groomFile.toMap()))
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>  			.table(TableSpec.create(<span class="jxr_string">"groom-runs"</span>).dataMode(DataMode.CLIENT).dataUrl(<span class="jxr_string">"/console/ops/jobs/groom-rows"</span>)
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>  				.columns(
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>  					Column.create(<span class="jxr_string">"pet"</span>).label(<span class="jxr_string">"Pet"</span>),
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>  					Column.create(<span class="jxr_string">"submitted"</span>).label(<span class="jxr_string">"Submitted"</span>).render(<span class="jxr_string">"timestamp"</span>),
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>  					Column.create(<span class="jxr_string">"state"</span>).label(<span class="jxr_string">"State"</span>).render(<span class="jxr_string">"pill"</span>),
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>  					Column.create(<span class="jxr_string">"lines"</span>).label(<span class="jxr_string">"Lines"</span>))
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>  				.detail(RowDetail.create(<span class="jxr_string">"/console/ops/jobs/groom-runs/{id}"</span>)
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>  					.region(RegionDef.create(<span class="jxr_string">"regroom"</span>).type(RegionDef.TYPE_ROW_DETAIL).populate(<span class="jxr_string">"petstore-regroom"</span>).allowPopulators(<span class="jxr_string">"petstore-regroom"</span>)))
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>  				.ribbon(
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>  					RibbonItem.dialog(<span class="jxr_string">"groom"</span>).title(<span class="jxr_string">"Groom"</span>).endpoint(<span class="jxr_string">"/console/ops/jobs/groom"</span>).method(Method.POST).form(<span class="jxr_string">"/console/ops/jobs/groom-form"</span>),
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>  					RibbonItem.refresh().id(<span class="jxr_string">"groom-refresh"</span>)));
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>  	}
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>  
+<a class="jxr_linenumber" name="L99" href="#L99">99</a>  	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L100" href="#L100">100</a> <em class="jxr_javadoccomment">	 * P7 Audit.</em>
+<a class="jxr_linenumber" name="L101" href="#L101">101</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L102" href="#L102">102</a> <em class="jxr_javadoccomment">	 * @return The page spec.</em>
+<a class="jxr_linenumber" name="L103" href="#L103">103</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L104" href="#L104">104</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> PageSpec audit() {
+<a class="jxr_linenumber" name="L105" href="#L105">105</a> 		<strong class="jxr_keyword">return</strong> PageSpec.create().tab(<span class="jxr_string">"ops/audit"</span>).toolkit(<span class="jxr_string">"views"</span>)
+<a class="jxr_linenumber" name="L106" href="#L106">106</a> 			.table(TableSpec.create(<span class="jxr_string">"audit"</span>).dataMode(DataMode.SERVER).dataUrl(<span class="jxr_string">"/console/ops/audit/query"</span>)
+<a class="jxr_linenumber" name="L107" href="#L107">107</a> 				.operators(SearchOperatorSet.standard())
+<a class="jxr_linenumber" name="L108" href="#L108">108</a> 				.defaultOrder(<span class="jxr_string">"at"</span>, Sort.DESC)
+<a class="jxr_linenumber" name="L109" href="#L109">109</a> 				.columns(
+<a class="jxr_linenumber" name="L110" href="#L110">110</a> 					Column.create(<span class="jxr_string">"at"</span>).label(<span class="jxr_string">"When"</span>).render(<span class="jxr_string">"timestamp"</span>).searchType(SearchType.TIMESTAMP),
+<a class="jxr_linenumber" name="L111" href="#L111">111</a> 					Column.create(<span class="jxr_string">"actor"</span>).label(<span class="jxr_string">"Actor"</span>).searchType(SearchType.TEXT),
+<a class="jxr_linenumber" name="L112" href="#L112">112</a> 					Column.create(<span class="jxr_string">"action"</span>).label(<span class="jxr_string">"Action"</span>).searchType(SearchType.TEXT),
+<a class="jxr_linenumber" name="L113" href="#L113">113</a> 					Column.create(<span class="jxr_string">"entity"</span>).label(<span class="jxr_string">"Entity"</span>).searchType(SearchType.TEXT),
+<a class="jxr_linenumber" name="L114" href="#L114">114</a> 					Column.create(<span class="jxr_string">"entityId"</span>).label(<span class="jxr_string">"Id"</span>).searchType(SearchType.TEXT),
+<a class="jxr_linenumber" name="L115" href="#L115">115</a> 					Column.create(<span class="jxr_string">"detail"</span>).label(<span class="jxr_string">"Detail"</span>).searchType(SearchType.TEXT))
+<a class="jxr_linenumber" name="L116" href="#L116">116</a> 				.ribbon(RibbonItem.export(<span class="jxr_string">"copy"</span>, <span class="jxr_string">"csv"</span>), RibbonItem.refresh().id(<span class="jxr_string">"refresh"</span>)));
+<a class="jxr_linenumber" name="L117" href="#L117">117</a> 	}
+<a class="jxr_linenumber" name="L118" href="#L118">118</a> }
+</pre>
+<hr/>
+<div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>
+</body>
+</html>

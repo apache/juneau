@@ -53,7 +53,7 @@ loadScripts(document, 'script');</script>
 </ul>
 <ul class="sub-nav-list">
 <li>Detail:&nbsp;</li>
-<li><a href="#field-detail">Field</a>&nbsp;|&nbsp;</li>
+<li>Field&nbsp;|&nbsp;</li>
 <li><a href="#constructor-detail">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method-detail">Method</a></li>
 </ul>
@@ -90,7 +90,7 @@ loadScripts(document, 'script');</script>
 <dd><code>jakarta.servlet.Servlet</code>, <code>jakarta.servlet.ServletConfig</code>, <code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a></code>, <code><a href="../../rest/server/config/BasicUniversalConfig.html" title="interface in org.apache.juneau.rest.server.config">BasicUniversalConfig</a></code>, <code><a href="../../rest/server/config/DefaultConfig.html" title="interface in org.apache.juneau.rest.server.config">DefaultConfig</a></code>, <code><a href="../../rest/server/config/DefaultHtmlConfig.html" title="interface in org.apache.juneau.rest.server.config">DefaultHtmlConfig</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/microservice/examples/DirectoryResource.html#line-71">DirectoryResource</a></span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/microservice/examples/DirectoryResource.html#line-89">DirectoryResource</a></span>
 <span class="extends-implements">extends <a href="../../rest/server/servlet/BasicRestServlet.html" title="class in org.apache.juneau.rest.server.servlet">BasicRestServlet</a></span></div>
 <div class="block">REST resource that allows access to a file system directory.
 
@@ -104,6 +104,14 @@ loadScripts(document, 'script');</script>
  </ul>
 
  <p>
+ Files are listed with <l>view</l> and <l>download</l> links, which reach the <code>VIEW</code> and <code>DOWNLOAD</code>
+ operations through <code>?method=</code>.  Both are declared <a href="../../rest/server/RestOp.html#read()"><code>read=true</code></a>.  Deleting a file needs a real
+ <code>DELETE</code>, for example:
+ <p class='bcode'>
+   curl -X DELETE http://localhost:10000/&lt;mount-path&gt;/foo.txt
+ </p>
+
+ <p>
  Read/write access control is handled through the following properties:
  <ul class='spaced-list'>
    <li>
@@ -113,6 +121,15 @@ loadScripts(document, 'script');</script>
    <li>
       <l>DirectoryResource.allowDeletes</l> - If <jk>true</jk>, allows files to be deleted.
  </ul>
+
+ <p>
+ <b>Note:</b> the <code>method</code> query parameter is accepted only for <code>HEAD</code>, <code>OPTIONS</code> and the two read
+ verbs <code>VIEW</code> and <code>DOWNLOAD</code>, so a link can view or download a file but never change one.  A subclass that
+ widens <code>allowedMethodParams</code> still can't turn a <code>GET</code> into a write: the router refuses any override of a
+ <code>GET</code> to a method that is not a read.  Uploads and deletes still change files, so put the resource behind a
+ CSRF boundary before mounting it anywhere a browser can reach.  A boundary judges a <code>?method=VIEW</code> or
+ <code>?method=DOWNLOAD</code> link as a write and refuses it, so behind one the listing's links stop working; send real
+ <code>VIEW</code> or <code>DOWNLOAD</code> requests instead.
 
  <h5 class='section'>See Also:</h5><ul>
    <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauMicroservice">juneau-microservice Basics</a>
@@ -149,32 +166,6 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="field-summary" id="field-summary">
 <h2>Field Summary</h2>
-<div class="caption"><span>Fields</span></div>
-<div class="summary-table three-column-summary">
-<div class="table-header col-first">Modifier and Type</div>
-<div class="table-header col-second">Field</div>
-<div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><code>static final <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second even-row-color"><code><a href="#DIRECTORY_RESOURCE_allowDeletes" class="member-name-link">DIRECTORY_RESOURCE_allowDeletes</a></code></div>
-<div class="col-last even-row-color">
-<div class="block">Allow deletes on files.</div>
-</div>
-<div class="col-first odd-row-color"><code>static final <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second odd-row-color"><code><a href="#DIRECTORY_RESOURCE_allowUploads" class="member-name-link">DIRECTORY_RESOURCE_allowUploads</a></code></div>
-<div class="col-last odd-row-color">
-<div class="block">Allow uploads on files.</div>
-</div>
-<div class="col-first even-row-color"><code>static final <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second even-row-color"><code><a href="#DIRECTORY_RESOURCE_allowViews" class="member-name-link">DIRECTORY_RESOURCE_allowViews</a></code></div>
-<div class="col-last even-row-color">
-<div class="block">Allow view and downloads on files.</div>
-</div>
-<div class="col-first odd-row-color"><code>static final <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second odd-row-color"><code><a href="#DIRECTORY_RESOURCE_rootDir" class="member-name-link">DIRECTORY_RESOURCE_rootDir</a></code></div>
-<div class="col-last odd-row-color">
-<div class="block">Root directory.</div>
-</div>
-</div>
 <div class="inherited-list">
 <h3 id="fields-inherited-from-class-jakarta.servlet.http.HttpServlet">Fields inherited from class&nbsp;jakarta.servlet.http.HttpServlet</h3>
 <code>LEGACY_DO_HEAD</code></div>
@@ -261,74 +252,6 @@ loadScripts(document, 'script');</script>
 </section>
 <section class="details">
 <ul class="details-list">
-<!-- ============ FIELD DETAIL =========== -->
-<li>
-<section class="field-details" id="field-detail">
-<h2>Field Details</h2>
-<ul class="member-list">
-<li>
-<section class="detail" id="DIRECTORY_RESOURCE_rootDir">
-<h3>DIRECTORY_RESOURCE_rootDir</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/microservice/examples/DirectoryResource.html#line-258">DIRECTORY_RESOURCE_rootDir</a></span></div>
-<div class="block">Root directory.</div>
-<dl class="notes">
-<dt>See Also:</dt>
-<dd>
-<ul class="see-list">
-<li><a href="../../../../../constant-values.html#org.apache.juneau.microservice.examples.DirectoryResource.DIRECTORY_RESOURCE_rootDir">Constant Field Values</a></li>
-</ul>
-</dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="DIRECTORY_RESOURCE_allowViews">
-<h3>DIRECTORY_RESOURCE_allowViews</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/microservice/examples/DirectoryResource.html#line-263">DIRECTORY_RESOURCE_allowViews</a></span></div>
-<div class="block">Allow view and downloads on files.</div>
-<dl class="notes">
-<dt>See Also:</dt>
-<dd>
-<ul class="see-list">
-<li><a href="../../../../../constant-values.html#org.apache.juneau.microservice.examples.DirectoryResource.DIRECTORY_RESOURCE_allowViews">Constant Field Values</a></li>
-</ul>
-</dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="DIRECTORY_RESOURCE_allowDeletes">
-<h3>DIRECTORY_RESOURCE_allowDeletes</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/microservice/examples/DirectoryResource.html#line-268">DIRECTORY_RESOURCE_allowDeletes</a></span></div>
-<div class="block">Allow deletes on files.</div>
-<dl class="notes">
-<dt>See Also:</dt>
-<dd>
-<ul class="see-list">
-<li><a href="../../../../../constant-values.html#org.apache.juneau.microservice.examples.DirectoryResource.DIRECTORY_RESOURCE_allowDeletes">Constant Field Values</a></li>
-</ul>
-</dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="DIRECTORY_RESOURCE_allowUploads">
-<h3>DIRECTORY_RESOURCE_allowUploads</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/microservice/examples/DirectoryResource.html#line-273">DIRECTORY_RESOURCE_allowUploads</a></span></div>
-<div class="block">Allow uploads on files.</div>
-<dl class="notes">
-<dt>See Also:</dt>
-<dd>
-<ul class="see-list">
-<li><a href="../../../../../constant-values.html#org.apache.juneau.microservice.examples.DirectoryResource.DIRECTORY_RESOURCE_allowUploads">Constant Field Values</a></li>
-</ul>
-</dd>
-</dl>
-</section>
-</li>
-</ul>
-</section>
-</li>
 <!-- ========= CONSTRUCTOR DETAIL ======== -->
 <li>
 <section class="constructor-details" id="constructor-detail">
@@ -337,7 +260,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.config.Config)">
 <h3>DirectoryResource</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/microservice/examples/DirectoryResource.html#line-287">DirectoryResource</a></span><wbr><span class="parameters">(<a href="../../config/Config.html" title="class in org.apache.juneau.config">Config</a>&nbsp;c)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/microservice/examples/DirectoryResource.html#line-280">DirectoryResource</a></span><wbr><span class="parameters">(<a href="../../config/Config.html" title="class in org.apache.juneau.config">Config</a>&nbsp;c)</span></div>
 <div class="block">Constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -356,7 +279,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="deleteFile(java.lang.String)">
 <h3>deleteFile</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">org.apache.juneau.microservice.examples.DirectoryResource.RedirectToRoot</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/microservice/examples/DirectoryResource.html#line-300">deleteFile</a></span><wbr><span class="parameters">(<a href="../../http/Path.html" title="annotation interface in org.apache.juneau.http">@Path</a>("/*")
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">org.apache.juneau.microservice.examples.DirectoryResource.RedirectToRoot</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/microservice/examples/DirectoryResource.html#line-293">deleteFile</a></span><wbr><span class="parameters">(<a href="../../http/Path.html" title="annotation interface in org.apache.juneau.http">@Path</a>("/*")
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;path)</span>
                                                                                     throws <span class="exceptions"><a href="../../http/classic/response/MethodNotAllowed.html" title="class in org.apache.juneau.http.classic.response">MethodNotAllowed</a></span></div>
 <div class="block">Deletes a file on the file system.</div>
@@ -373,7 +296,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="downloadFile(org.apache.juneau.rest.server.RestResponse,java.lang.String)">
 <h3>downloadFile</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">org.apache.juneau.microservice.examples.DirectoryResource.FileContents</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/microservice/examples/DirectoryResource.html#line-319">downloadFile</a></span><wbr><span class="parameters">(<a href="../../rest/server/RestResponse.html" title="class in org.apache.juneau.rest.server">RestResponse</a>&nbsp;res,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">org.apache.juneau.microservice.examples.DirectoryResource.FileContents</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/microservice/examples/DirectoryResource.html#line-312">downloadFile</a></span><wbr><span class="parameters">(<a href="../../rest/server/RestResponse.html" title="class in org.apache.juneau.rest.server">RestResponse</a>&nbsp;res,
  <a href="../../http/Path.html" title="annotation interface in org.apache.juneau.http">@Path</a>("/*")
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;path)</span>
                                                                                     throws <span class="exceptions"><a href="../../http/classic/response/NotFound.html" title="class in org.apache.juneau.http.classic.response">NotFound</a>,
@@ -394,7 +317,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getFile(org.apache.juneau.rest.server.RestRequest,java.lang.String)">
 <h3>getFile</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="DirectoryResource.FileResource.html" title="class in org.apache.juneau.microservice.examples">DirectoryResource.FileResource</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/microservice/examples/DirectoryResource.html#line-346">getFile</a></span><wbr><span class="parameters">(<a href="../../rest/server/RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="DirectoryResource.FileResource.html" title="class in org.apache.juneau.microservice.examples">DirectoryResource.FileResource</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/microservice/examples/DirectoryResource.html#line-340">getFile</a></span><wbr><span class="parameters">(<a href="../../rest/server/RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req,
  <a href="../../http/Path.html" title="annotation interface in org.apache.juneau.http">@Path</a>("/*")
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;path)</span>
                                        throws <span class="exceptions"><a href="../../http/classic/response/NotFound.html" title="class in org.apache.juneau.http.classic.response">NotFound</a>,
@@ -415,7 +338,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="updateFile(java.io.InputStream,java.lang.String)">
 <h3>updateFile</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">org.apache.juneau.microservice.examples.DirectoryResource.RedirectToRoot</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/microservice/examples/DirectoryResource.html#line-373">updateFile</a></span><wbr><span class="parameters">(<a href="../../http/Content.html" title="annotation interface in org.apache.juneau.http">@Content</a> <a href="../../commons/Schema.html" title="annotation interface in org.apache.juneau.commons">@Schema</a>(<a href="../../commons/Schema.html#type()">type</a>="string",<a href="../../commons/Schema.html#format()">format</a>="binary")
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">org.apache.juneau.microservice.examples.DirectoryResource.RedirectToRoot</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/microservice/examples/DirectoryResource.html#line-367">updateFile</a></span><wbr><span class="parameters">(<a href="../../http/Content.html" title="annotation interface in org.apache.juneau.http">@Content</a> <a href="../../commons/Schema.html" title="annotation interface in org.apache.juneau.commons">@Schema</a>(<a href="../../commons/Schema.html#type()">type</a>="string",<a href="../../commons/Schema.html#format()">format</a>="binary")
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/InputStream.html" title="class or interface in java.io" class="external-link">InputStream</a>&nbsp;is,
  <a href="../../http/Path.html" title="annotation interface in org.apache.juneau.http">@Path</a>("/*")
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;path)</span>
@@ -435,7 +358,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="viewFile(org.apache.juneau.rest.server.RestResponse,java.lang.String)">
 <h3>viewFile</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">org.apache.juneau.microservice.examples.DirectoryResource.FileContents</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/microservice/examples/DirectoryResource.html#line-406">viewFile</a></span><wbr><span class="parameters">(<a href="../../rest/server/RestResponse.html" title="class in org.apache.juneau.rest.server">RestResponse</a>&nbsp;res,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">org.apache.juneau.microservice.examples.DirectoryResource.FileContents</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/microservice/examples/DirectoryResource.html#line-400">viewFile</a></span><wbr><span class="parameters">(<a href="../../rest/server/RestResponse.html" title="class in org.apache.juneau.rest.server">RestResponse</a>&nbsp;res,
  <a href="../../http/Path.html" title="annotation interface in org.apache.juneau.http">@Path</a>("/*")
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;path)</span>
                                                                                 throws <span class="exceptions"><a href="../../http/classic/response/NotFound.html" title="class in org.apache.juneau.http.classic.response">NotFound</a>,
@@ -456,7 +379,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getRootDir()">
 <h3>getRootDir</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/File.html" title="class or interface in java.io" class="external-link">File</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/microservice/examples/DirectoryResource.html#line-498">getRootDir</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/File.html" title="class or interface in java.io" class="external-link">File</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/microservice/examples/DirectoryResource.html#line-493">getRootDir</a></span>()</div>
 <div class="block">Returns the root directory.</div>
 <dl class="notes">
 <dt>Returns:</dt>

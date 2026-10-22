@@ -1,0 +1,157 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="" lang="">
+<head><meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<title>ConsoleDirective_ChromeAssetUrls_Test xref</title>
+<link type="text/css" rel="stylesheet" href="../../../../../../../../stylesheet.css" />
+</head>
+<body>
+<div id="overview"><a href="../../../../../../../../../testapidocs/org/apache/juneau/rest/server/view/freemarker/console/ConsoleDirective_ChromeAssetUrls_Test.html">View Javadoc</a></div><pre>
+<a class="jxr_linenumber" name="L1" href="#L1">1</a>   <em class="jxr_comment">/*</em>
+<a class="jxr_linenumber" name="L2" href="#L2">2</a>   <em class="jxr_comment"> * Licensed to the Apache Software Foundation (ASF) under one or more</em>
+<a class="jxr_linenumber" name="L3" href="#L3">3</a>   <em class="jxr_comment"> * contributor license agreements.  See the NOTICE file distributed with</em>
+<a class="jxr_linenumber" name="L4" href="#L4">4</a>   <em class="jxr_comment"> * this work for additional information regarding copyright ownership.</em>
+<a class="jxr_linenumber" name="L5" href="#L5">5</a>   <em class="jxr_comment"> * The ASF licenses this file to You under the Apache License, Version 2.0</em>
+<a class="jxr_linenumber" name="L6" href="#L6">6</a>   <em class="jxr_comment"> * (the "License"); you may not use this file except in compliance with</em>
+<a class="jxr_linenumber" name="L7" href="#L7">7</a>   <em class="jxr_comment"> * the License.  You may obtain a copy of the License at</em>
+<a class="jxr_linenumber" name="L8" href="#L8">8</a>   <em class="jxr_comment"> *</em>
+<a class="jxr_linenumber" name="L9" href="#L9">9</a>   <em class="jxr_comment"> *      <a href="http://www.apache.org/licenses/LICENSE-2.0" target="alexandria_uri">http://www.apache.org/licenses/LICENSE-2.0</a></em>
+<a class="jxr_linenumber" name="L10" href="#L10">10</a>  <em class="jxr_comment"> *</em>
+<a class="jxr_linenumber" name="L11" href="#L11">11</a>  <em class="jxr_comment"> * Unless required by applicable law or agreed to in writing, software</em>
+<a class="jxr_linenumber" name="L12" href="#L12">12</a>  <em class="jxr_comment"> * distributed under the License is distributed on an "AS IS" BASIS,</em>
+<a class="jxr_linenumber" name="L13" href="#L13">13</a>  <em class="jxr_comment"> * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</em>
+<a class="jxr_linenumber" name="L14" href="#L14">14</a>  <em class="jxr_comment"> * See the License for the specific language governing permissions and</em>
+<a class="jxr_linenumber" name="L15" href="#L15">15</a>  <em class="jxr_comment"> * limitations under the License.</em>
+<a class="jxr_linenumber" name="L16" href="#L16">16</a>  <em class="jxr_comment"> */</em>
+<a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.server.view.freemarker.console;
+<a class="jxr_linenumber" name="L18" href="#L18">18</a>  
+<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.server.console.test.PageContractAssert.*;
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.junit.jupiter.api.Assertions.*;
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> java.net.*;
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> java.util.*;
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> java.util.regex.*;
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.*;
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.commons.inject.*;
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.mock.classic.*;
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.server.*;
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.server.console.*;
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.server.servlet.*;
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.server.view.*;
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.server.view.freemarker.*;
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>  <strong class="jxr_keyword">import</strong> org.junit.jupiter.api.*;
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>  
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>  <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>  <em class="jxr_javadoccomment"> * Nested-path console chrome CSS. A relative or page-prefixed {@code juneau-console/chrome.css}</em>
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>  <em class="jxr_javadoccomment"> * href on a page at {@code /rest/setup} 404s (the browser asks for</em>
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>  <em class="jxr_javadoccomment"> * {@code /rest/setup/juneau-console/...}) and the page paints with no chrome. Root-absolute</em>
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>  <em class="jxr_javadoccomment"> * {@code /juneau-console/chrome.css} is 200 and the chrome paints.</em>
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>  <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>  <em class="jxr_javadoccomment"> * This is an HTTP render of a real {@code &lt;@console&gt;} page, not a string-contains check on the</em>
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>  <em class="jxr_javadoccomment"> * href (that substring also matches the buggy {@code /rest/setup/juneau-console/chrome.css}</em>
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>  <em class="jxr_javadoccomment"> * form). Juneau has no Playwright e2e suite; this is the closest existing harness</em>
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>  <em class="jxr_javadoccomment"> * ({@link MockRestClient} against the console-ui-freemarker module).</em>
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>  <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>  <em class="jxr_javadoccomment"> * @since 10.0.0</em>
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>  <em class="jxr_javadoccomment"> */</em>
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>  @SuppressWarnings({
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>  	<span class="jxr_string">"java:S8786"</span>, <em class="jxr_comment">// Test-only patterns scan small rendered pages; the scan-to-attribute shape needs backtracking.</em>
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>  	<span class="jxr_string">"resource"</span> <em class="jxr_comment">// MockRestClient/RestResponse are closed in try-with-resources; fluent assertStatus returns this.</em>
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>  })
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>  <strong class="jxr_keyword">class</strong> ConsoleDirective_ChromeAssetUrls_Test <strong class="jxr_keyword">extends</strong> TestBase {
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>  
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Pattern STYLESHEET_HREF = Pattern.compile(
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>  		<span class="jxr_string">"&lt;link&#92;&#92;s[^&gt;]*rel=\&quot;stylesheet\&quot;[^&gt;]*href=\&quot;([^\&quot;]+)\&quot;"</span>,
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>  		Pattern.CASE_INSENSITIVE
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>  	);
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Pattern THEME_PATH = Pattern.compile(
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>  		<span class="jxr_string">"^/juneau-console/themes/juneau-theme-[a-z0-9-]+&#92;&#92;.css$"</span>
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>  	);
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>  
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>  	@Rest(mixins={ FreemarkerMixin.<strong class="jxr_keyword">class</strong>, ConsoleChromeMixin.<strong class="jxr_keyword">class</strong> }, renderResponseStackTraces=<span class="jxr_string">"true"</span>)
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> NestedPageHost <strong class="jxr_keyword">extends</strong> BasicRestServlet {
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>  		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">long</strong> serialVersionUID = 1L;
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>  		@Bean <strong class="jxr_keyword">public</strong> FreemarkerMixin freemarker() {
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>  			<strong class="jxr_keyword">return</strong> ConsoleFreemarkerMixin.create()
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>  				.basePath(<span class="jxr_string">"/templates/"</span>)
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>  				.chromeTemplate(<span class="jxr_string">"admin/console-chrome-pagetabs.ftlh"</span>)
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>  				.build();
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>  		}
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>  		@RestGet(path=<span class="jxr_string">"/rest/setup"</span>)
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>  		<strong class="jxr_keyword">public</strong> View setup() {
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>  			<strong class="jxr_keyword">return</strong> FreemarkerView.of(<span class="jxr_string">"admin/page-naked.ftlh"</span>);
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>  		}
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>  	}
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>  
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>  	@Test <strong class="jxr_keyword">void</strong> a01_nestedPage_chromeAndThemeHrefsAreSiteRootAndFetchable() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>  		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> c = MockRestClient.buildLax(NestedPageHost.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>  			<strong class="jxr_keyword">var</strong> page = c.get(<span class="jxr_string">"/rest/setup"</span>).run()) {
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>  			page.assertStatus(200);
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>  			<strong class="jxr_keyword">var</strong> html = page.getContent().asString();
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>  			<strong class="jxr_keyword">var</strong> pageUri = URI.create(<span class="jxr_string">"http://localhost/rest/setup"</span>);
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>  
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>  			<strong class="jxr_keyword">var</strong> chromeHref = requiredHref(html, <span class="jxr_string">"chrome.css"</span>);
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>  			<strong class="jxr_keyword">var</strong> themeHref = requiredHref(html, <span class="jxr_string">"juneau-theme-"</span>);
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>  			<strong class="jxr_keyword">var</strong> chromePath = resolvedPath(pageUri, chromeHref);
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>  			<strong class="jxr_keyword">var</strong> themePath = resolvedPath(pageUri, themeHref);
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>  
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>  			assertEquals(<span class="jxr_string">"/juneau-console/chrome.css"</span>, chromePath,
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>  				() -&gt; <span class="jxr_string">"chrome.css must be site-root, not under the page path; href="</span> + chromeHref);
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>  			assertTrue(THEME_PATH.matcher(themePath).matches(),
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>  				() -&gt; <span class="jxr_string">"theme CSS must be site-root, not under the page path; href="</span> + themeHref + <span class="jxr_string">" path="</span> + themePath);
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>  
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>  			<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> chrome = c.get(chromePath).run()) {
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>  				chrome.assertStatus(200).assertHeader(<span class="jxr_string">"Content-Type"</span>).isContains(<span class="jxr_string">"text/css"</span>);
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>  				<strong class="jxr_keyword">var</strong> css = chrome.getContent().asString();
+<a class="jxr_linenumber" name="L99" href="#L99">99</a>  				assertTrue(css.contains(<span class="jxr_string">".jc-header"</span>), () -&gt; css);
+<a class="jxr_linenumber" name="L100" href="#L100">100</a> 				assertTrue(css.contains(<span class="jxr_string">".juneau-page-nav"</span>), () -&gt; css);
+<a class="jxr_linenumber" name="L101" href="#L101">101</a> 			}
+<a class="jxr_linenumber" name="L102" href="#L102">102</a> 			<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> theme = c.get(themePath).run()) {
+<a class="jxr_linenumber" name="L103" href="#L103">103</a> 				theme.assertStatus(200).assertHeader(<span class="jxr_string">"Content-Type"</span>).isContains(<span class="jxr_string">"text/css"</span>);
+<a class="jxr_linenumber" name="L104" href="#L104">104</a> 			}
+<a class="jxr_linenumber" name="L105" href="#L105">105</a> 
+<a class="jxr_linenumber" name="L106" href="#L106">106</a> 			<em class="jxr_comment">// The shell script is site-root too, and served.</em>
+<a class="jxr_linenumber" name="L107" href="#L107">107</a> 			<strong class="jxr_keyword">var</strong> m = Pattern.compile(<span class="jxr_string">"&lt;script src=\&quot;([^\&quot;]*juneau-console&#92;&#92;.js[^\&quot;]*)\&quot;"</span>).matcher(html);
+<a class="jxr_linenumber" name="L108" href="#L108">108</a> 			assertTrue(m.find(), () -&gt; html);
+<a class="jxr_linenumber" name="L109" href="#L109">109</a> 			<strong class="jxr_keyword">var</strong> shellPath = resolvedPath(pageUri, m.group(1));
+<a class="jxr_linenumber" name="L110" href="#L110">110</a> 			assertEquals(<span class="jxr_string">"/juneau-console/juneau-console.js"</span>, shellPath, () -&gt; html);
+<a class="jxr_linenumber" name="L111" href="#L111">111</a> 			<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> shell = c.get(shellPath).run()) {
+<a class="jxr_linenumber" name="L112" href="#L112">112</a> 				shell.assertStatus(200).assertHeader(<span class="jxr_string">"Content-Type"</span>).isContains(<span class="jxr_string">"javascript"</span>);
+<a class="jxr_linenumber" name="L113" href="#L113">113</a> 			}
+<a class="jxr_linenumber" name="L114" href="#L114">114</a> 
+<a class="jxr_linenumber" name="L115" href="#L115">115</a> 			<em class="jxr_comment">// Home, Items and Admin are three top-level nav entries in the contract.</em>
+<a class="jxr_linenumber" name="L116" href="#L116">116</a> 			assertPage(html).isValid().hasNavHref(<span class="jxr_string">"home"</span>, <span class="jxr_string">"/home"</span>).hasNavHref(<span class="jxr_string">"items"</span>, <span class="jxr_string">"/items"</span>).hasNavHref(<span class="jxr_string">"admin"</span>, <span class="jxr_string">"/admin"</span>);
+<a class="jxr_linenumber" name="L117" href="#L117">117</a> 			assertEquals(3, assertPage(html).contract().getList(<span class="jxr_string">"nav"</span>).size(), () -&gt; html);
+<a class="jxr_linenumber" name="L118" href="#L118">118</a> 			assertFalse(html.contains(<span class="jxr_string">"slds-"</span>), () -&gt; html);
+<a class="jxr_linenumber" name="L119" href="#L119">119</a> 		}
+<a class="jxr_linenumber" name="L120" href="#L120">120</a> 	}
+<a class="jxr_linenumber" name="L121" href="#L121">121</a> 
+<a class="jxr_linenumber" name="L122" href="#L122">122</a> 	<strong class="jxr_keyword">static</strong> String requiredHref(String html, String needle) {
+<a class="jxr_linenumber" name="L123" href="#L123">123</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> href : stylesheetHrefs(html)) {
+<a class="jxr_linenumber" name="L124" href="#L124">124</a> 			<strong class="jxr_keyword">if</strong> (href.contains(needle) &amp;&amp; href.contains(<span class="jxr_string">"juneau-console"</span>))
+<a class="jxr_linenumber" name="L125" href="#L125">125</a> 				<strong class="jxr_keyword">return</strong> href;
+<a class="jxr_linenumber" name="L126" href="#L126">126</a> 		}
+<a class="jxr_linenumber" name="L127" href="#L127">127</a> 		fail(<span class="jxr_string">"no juneau-console stylesheet href containing '"</span> + needle + <span class="jxr_string">"' in:\n"</span> + html);
+<a class="jxr_linenumber" name="L128" href="#L128">128</a> 		<strong class="jxr_keyword">return</strong> <span class="jxr_string">""</span>;
+<a class="jxr_linenumber" name="L129" href="#L129">129</a> 	}
+<a class="jxr_linenumber" name="L130" href="#L130">130</a> 
+<a class="jxr_linenumber" name="L131" href="#L131">131</a> 	<strong class="jxr_keyword">static</strong> List&lt;String&gt; stylesheetHrefs(String html) {
+<a class="jxr_linenumber" name="L132" href="#L132">132</a> 		<strong class="jxr_keyword">var</strong> out = <strong class="jxr_keyword">new</strong> ArrayList&lt;String&gt;();
+<a class="jxr_linenumber" name="L133" href="#L133">133</a> 		<strong class="jxr_keyword">var</strong> m = STYLESHEET_HREF.matcher(html);
+<a class="jxr_linenumber" name="L134" href="#L134">134</a> 		<strong class="jxr_keyword">while</strong> (m.find())
+<a class="jxr_linenumber" name="L135" href="#L135">135</a> 			out.add(m.group(1));
+<a class="jxr_linenumber" name="L136" href="#L136">136</a> 		<strong class="jxr_keyword">return</strong> out;
+<a class="jxr_linenumber" name="L137" href="#L137">137</a> 	}
+<a class="jxr_linenumber" name="L138" href="#L138">138</a> 
+<a class="jxr_linenumber" name="L139" href="#L139">139</a> 	<strong class="jxr_keyword">static</strong> String resolvedPath(URI pageUri, String href) {
+<a class="jxr_linenumber" name="L140" href="#L140">140</a> 		<strong class="jxr_keyword">var</strong> resolved = pageUri.resolve(href);
+<a class="jxr_linenumber" name="L141" href="#L141">141</a> 		<strong class="jxr_keyword">var</strong> path = resolved.getPath();
+<a class="jxr_linenumber" name="L142" href="#L142">142</a> 		<strong class="jxr_keyword">return</strong> path == <strong class="jxr_keyword">null</strong> ? <span class="jxr_string">""</span> : path;
+<a class="jxr_linenumber" name="L143" href="#L143">143</a> 	}
+<a class="jxr_linenumber" name="L144" href="#L144">144</a> }
+</pre>
+<hr/>
+<div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>
+</body>
+</html>

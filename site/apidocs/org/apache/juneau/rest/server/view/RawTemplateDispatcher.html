@@ -93,7 +93,7 @@ loadScripts(document, 'script');</script>
  The per-engine flavor-neutral worker beans (<code>JspDispatcher</code>, <code>FreemarkerDispatcher</code>,
  <code>MustacheDispatcher</code>, <code>ThymeleafDispatcher</code>) implement this interface; the three flavor
  classes (<code>&lt;Engine&gt;Mixin</code> / <code>&lt;Engine&gt;Servlet</code> / <code>&lt;Engine&gt;Resource</code>) each hold one
- of these workers and delegate to it (§2.3.1). Sharing a single implementation at the worker-bean
+ of these workers and delegate to it. Sharing a single implementation at the worker-bean
  level means the mixin, servlet, and child forms cannot drift in their file-serving behavior.
 
  <p>

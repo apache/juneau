@@ -242,91 +242,140 @@
 <span class="source-line-no">229</span><span id="line-229">   Class&lt;?&gt;[] params() default {};</span>
 <span class="source-line-no">230</span><span id="line-230"></span>
 <span class="source-line-no">231</span><span id="line-231">   /**</span>
-<span class="source-line-no">232</span><span id="line-232">    * Identifies a property as read-only.</span>
+<span class="source-line-no">232</span><span id="line-232">    * Marks this property as required on input.</span>
 <span class="source-line-no">233</span><span id="line-233">    *</span>
 <span class="source-line-no">234</span><span id="line-234">    * &lt;p&gt;</span>
-<span class="source-line-no">235</span><span id="line-235">    * Serializers will serialize such properties as usual, but parsers will silently ignore them.</span>
-<span class="source-line-no">236</span><span id="line-236">    *</span>
-<span class="source-line-no">237</span><span id="line-237">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
-<span class="source-line-no">238</span><span id="line-238">    * &lt;p class='bjava'&gt;</span>
-<span class="source-line-no">239</span><span id="line-239">    *    &lt;jk&gt;public class&lt;/jk&gt; MyBean {</span>
-<span class="source-line-no">240</span><span id="line-240">    *       &lt;ja&gt;@BeanProp&lt;/ja&gt;(ro=&lt;js&gt;"true"&lt;/js&gt;)</span>
-<span class="source-line-no">241</span><span id="line-241">    *       &lt;jk&gt;public float&lt;/jk&gt; &lt;jf&gt;price&lt;/jf&gt;;</span>
-<span class="source-line-no">242</span><span id="line-242">    *    }</span>
-<span class="source-line-no">243</span><span id="line-243">    * &lt;/p&gt;</span>
-<span class="source-line-no">244</span><span id="line-244">    *</span>
-<span class="source-line-no">245</span><span id="line-245">    * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</span>
-<span class="source-line-no">246</span><span id="line-246">    *    &lt;li class='note'&gt;</span>
-<span class="source-line-no">247</span><span id="line-247">    *       &lt;b&gt;Java Records:&lt;/b&gt; Marking record components as read-only is not supported during parsing.</span>
-<span class="source-line-no">248</span><span id="line-248">    *       Because records are immutable, all components must be provided to the canonical constructor.</span>
-<span class="source-line-no">249</span><span id="line-249">    *       Read-only components will be serialized as usual, but the parser will be unable to instantiate the</span>
-<span class="source-line-no">250</span><span id="line-250">    *       record if the read-only component values are missing from the input.</span>
-<span class="source-line-no">251</span><span id="line-251">    * &lt;/ul&gt;</span>
-<span class="source-line-no">252</span><span id="line-252">    *</span>
-<span class="source-line-no">253</span><span id="line-253">    * @return The annotation value.</span>
-<span class="source-line-no">254</span><span id="line-254">    */</span>
-<span class="source-line-no">255</span><span id="line-255">   String ro() default "";</span>
-<span class="source-line-no">256</span><span id="line-256"></span>
-<span class="source-line-no">257</span><span id="line-257">   /**</span>
-<span class="source-line-no">258</span><span id="line-258">    * Identifies a specialized class type for the property.</span>
+<span class="source-line-no">235</span><span id="line-235">    * When &lt;jk&gt;true&lt;/jk&gt;, parsers (and {@code Map}-to-bean conversion) throw a</span>
+<span class="source-line-no">236</span><span id="line-236">    * {@code org.apache.juneau.marshall.parser.MissingRequiredPropertyException} if the input does not contain this</span>
+<span class="source-line-no">237</span><span id="line-237">    * property.  The check runs once per bean, before the bean is constructed, so records and constructor-argument</span>
+<span class="source-line-no">238</span><span id="line-238">    * beans get a clear error instead of a constructor failure.</span>
+<span class="source-line-no">239</span><span id="line-239">    *</span>
+<span class="source-line-no">240</span><span id="line-240">    * &lt;p&gt;</span>
+<span class="source-line-no">241</span><span id="line-241">    * "Present" means the key appears in the input.  An explicit &lt;jk&gt;null&lt;/jk&gt; value counts as present; use your own</span>
+<span class="source-line-no">242</span><span id="line-242">    * validation (or a compact record constructor) to reject null values.</span>
+<span class="source-line-no">243</span><span id="line-243">    *</span>
+<span class="source-line-no">244</span><span id="line-244">    * &lt;p&gt;</span>
+<span class="source-line-no">245</span><span id="line-245">    * The flag is OR-merged across the field, getter and setter: annotating any one of them makes the property required.</span>
+<span class="source-line-no">246</span><span id="line-246">    * Wrapping an existing object (for example {@code MarshallingSession.toBeanMap(Object)}) never checks.</span>
+<span class="source-line-no">247</span><span id="line-247">    *</span>
+<span class="source-line-no">248</span><span id="line-248">    * &lt;p&gt;</span>
+<span class="source-line-no">249</span><span id="line-249">    * This attribute is independent of {@code @Schema(required)}, which only affects generated schema documentation and</span>
+<span class="source-line-no">250</span><span id="line-250">    * HTTP part validation.</span>
+<span class="source-line-no">251</span><span id="line-251">    *</span>
+<span class="source-line-no">252</span><span id="line-252">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">253</span><span id="line-253">    * &lt;p class='bjava'&gt;</span>
+<span class="source-line-no">254</span><span id="line-254">    *    &lt;jk&gt;public record&lt;/jk&gt; Person(&lt;ja&gt;@BeanProp&lt;/ja&gt;(required=&lt;jk&gt;true&lt;/jk&gt;) String &lt;jv&gt;name&lt;/jv&gt;, Integer &lt;jv&gt;age&lt;/jv&gt;) {}</span>
+<span class="source-line-no">255</span><span id="line-255">    *</span>
+<span class="source-line-no">256</span><span id="line-256">    *    &lt;jc&gt;// Throws MissingRequiredPropertyException:</span>
+<span class="source-line-no">257</span><span id="line-257">    *    //   Missing required properties on bean class 'Person': [name]&lt;/jc&gt;</span>
+<span class="source-line-no">258</span><span id="line-258">    *    JsonParser.&lt;jsf&gt;DEFAULT&lt;/jsf&gt;.read(&lt;js&gt;"{\"age\":30}"&lt;/js&gt;, Person.&lt;jk&gt;class&lt;/jk&gt;);</span>
 <span class="source-line-no">259</span><span id="line-259">    *</span>
-<span class="source-line-no">260</span><span id="line-260">    * &lt;p&gt;</span>
-<span class="source-line-no">261</span><span id="line-261">    * Normally this can be inferred through reflection of the field type or getter return type.</span>
-<span class="source-line-no">262</span><span id="line-262">    * However, you'll want to specify this value if you're parsing beans where the bean property class is an interface</span>
-<span class="source-line-no">263</span><span id="line-263">    * or abstract class to identify the bean type to instantiate.</span>
-<span class="source-line-no">264</span><span id="line-264">    * Otherwise, you may cause an {@link InstantiationException} when trying to set these fields.</span>
-<span class="source-line-no">265</span><span id="line-265">    *</span>
-<span class="source-line-no">266</span><span id="line-266">    * &lt;p&gt;</span>
-<span class="source-line-no">267</span><span id="line-267">    * This property must denote a concrete bean class with a no-arg constructor.</span>
-<span class="source-line-no">268</span><span id="line-268">    *</span>
-<span class="source-line-no">269</span><span id="line-269">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
-<span class="source-line-no">270</span><span id="line-270">    * &lt;p class='bjava'&gt;</span>
-<span class="source-line-no">271</span><span id="line-271">    *    &lt;jk&gt;public class&lt;/jk&gt; MyBean {</span>
-<span class="source-line-no">272</span><span id="line-272">    *</span>
-<span class="source-line-no">273</span><span id="line-273">    *       &lt;jc&gt;// Identify concrete map type.&lt;/jc&gt;</span>
-<span class="source-line-no">274</span><span id="line-274">    *       &lt;ja&gt;@BeanProp&lt;/ja&gt;(type=HashMap.&lt;jk&gt;class&lt;/jk&gt;)</span>
-<span class="source-line-no">275</span><span id="line-275">    *       &lt;jk&gt;public&lt;/jk&gt; Map &lt;jf&gt;p1&lt;/jf&gt;;</span>
-<span class="source-line-no">276</span><span id="line-276">    *    }</span>
-<span class="source-line-no">277</span><span id="line-277">    * &lt;/p&gt;</span>
-<span class="source-line-no">278</span><span id="line-278">    *</span>
-<span class="source-line-no">279</span><span id="line-279">    * @return The annotation value.</span>
-<span class="source-line-no">280</span><span id="line-280">    */</span>
-<span class="source-line-no">281</span><span id="line-281">   Class&lt;?&gt; type() default void.class;</span>
-<span class="source-line-no">282</span><span id="line-282"></span>
-<span class="source-line-no">283</span><span id="line-283">   /**</span>
-<span class="source-line-no">284</span><span id="line-284">    * A synonym for {@link #name()}.</span>
+<span class="source-line-no">260</span><span id="line-260">    *    &lt;jc&gt;// OK: explicit null counts as present.&lt;/jc&gt;</span>
+<span class="source-line-no">261</span><span id="line-261">    *    JsonParser.&lt;jsf&gt;DEFAULT&lt;/jsf&gt;.read(&lt;js&gt;"{\"name\":null}"&lt;/js&gt;, Person.&lt;jk&gt;class&lt;/jk&gt;);</span>
+<span class="source-line-no">262</span><span id="line-262">    * &lt;/p&gt;</span>
+<span class="source-line-no">263</span><span id="line-263">    *</span>
+<span class="source-line-no">264</span><span id="line-264">    * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">265</span><span id="line-265">    *    &lt;li class='note'&gt;</span>
+<span class="source-line-no">266</span><span id="line-266">    *       A required property must be writable (a field, setter or constructor argument).  Marking a read-only</span>
+<span class="source-line-no">267</span><span id="line-267">    *       property required fails when the bean metadata is built.</span>
+<span class="source-line-no">268</span><span id="line-268">    *    &lt;li class='note'&gt;</span>
+<span class="source-line-no">269</span><span id="line-269">    *       For builder-based beans, put the annotation on the builder's setter.</span>
+<span class="source-line-no">270</span><span id="line-270">    *    &lt;li class='note'&gt;</span>
+<span class="source-line-no">271</span><span id="line-271">    *       On a non-record bean, put the annotation on the field or getter; it is not read from constructor parameters.</span>
+<span class="source-line-no">272</span><span id="line-272">    *    &lt;li class='note'&gt;</span>
+<span class="source-line-no">273</span><span id="line-273">    *       In REST methods, a missing required property in an {@code @Content} body produces &lt;c&gt;400 Bad Request&lt;/c&gt;.</span>
+<span class="source-line-no">274</span><span id="line-274">    * &lt;/ul&gt;</span>
+<span class="source-line-no">275</span><span id="line-275">    *</span>
+<span class="source-line-no">276</span><span id="line-276">    * @return &lt;jk&gt;true&lt;/jk&gt; if this property must be present in the input.</span>
+<span class="source-line-no">277</span><span id="line-277">    */</span>
+<span class="source-line-no">278</span><span id="line-278">   boolean required() default false;</span>
+<span class="source-line-no">279</span><span id="line-279"></span>
+<span class="source-line-no">280</span><span id="line-280">   /**</span>
+<span class="source-line-no">281</span><span id="line-281">    * Identifies a property as read-only.</span>
+<span class="source-line-no">282</span><span id="line-282">    *</span>
+<span class="source-line-no">283</span><span id="line-283">    * &lt;p&gt;</span>
+<span class="source-line-no">284</span><span id="line-284">    * Serializers will serialize such properties as usual, but parsers will silently ignore them.</span>
 <span class="source-line-no">285</span><span id="line-285">    *</span>
-<span class="source-line-no">286</span><span id="line-286">    * &lt;p&gt;</span>
-<span class="source-line-no">287</span><span id="line-287">    * The following annotations are equivalent:</span>
-<span class="source-line-no">288</span><span id="line-288">    *</span>
-<span class="source-line-no">289</span><span id="line-289">    * &lt;p class='bjava'&gt;</span>
-<span class="source-line-no">290</span><span id="line-290">    *    &lt;ja&gt;@BeanProp&lt;/ja&gt;(name=&lt;js&gt;"foo"&lt;/js&gt;)</span>
-<span class="source-line-no">291</span><span id="line-291">    *</span>
-<span class="source-line-no">292</span><span id="line-292">    *    &lt;ja&gt;@BeanProp&lt;/ja&gt;(&lt;js&gt;"foo"&lt;/js&gt;)</span>
-<span class="source-line-no">293</span><span id="line-293">    * &lt;/p&gt;</span>
-<span class="source-line-no">294</span><span id="line-294">    *</span>
-<span class="source-line-no">295</span><span id="line-295">    * @return The annotation value.</span>
-<span class="source-line-no">296</span><span id="line-296">    */</span>
-<span class="source-line-no">297</span><span id="line-297">   String value() default "";</span>
-<span class="source-line-no">298</span><span id="line-298"></span>
-<span class="source-line-no">299</span><span id="line-299">   /**</span>
-<span class="source-line-no">300</span><span id="line-300">    * Identifies a property as write-only.</span>
+<span class="source-line-no">286</span><span id="line-286">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">287</span><span id="line-287">    * &lt;p class='bjava'&gt;</span>
+<span class="source-line-no">288</span><span id="line-288">    *    &lt;jk&gt;public class&lt;/jk&gt; MyBean {</span>
+<span class="source-line-no">289</span><span id="line-289">    *       &lt;ja&gt;@BeanProp&lt;/ja&gt;(ro=&lt;js&gt;"true"&lt;/js&gt;)</span>
+<span class="source-line-no">290</span><span id="line-290">    *       &lt;jk&gt;public float&lt;/jk&gt; &lt;jf&gt;price&lt;/jf&gt;;</span>
+<span class="source-line-no">291</span><span id="line-291">    *    }</span>
+<span class="source-line-no">292</span><span id="line-292">    * &lt;/p&gt;</span>
+<span class="source-line-no">293</span><span id="line-293">    *</span>
+<span class="source-line-no">294</span><span id="line-294">    * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">295</span><span id="line-295">    *    &lt;li class='note'&gt;</span>
+<span class="source-line-no">296</span><span id="line-296">    *       &lt;b&gt;Java Records:&lt;/b&gt; Marking record components as read-only is not supported during parsing.</span>
+<span class="source-line-no">297</span><span id="line-297">    *       Because records are immutable, all components must be provided to the canonical constructor.</span>
+<span class="source-line-no">298</span><span id="line-298">    *       Read-only components will be serialized as usual, but the parser will be unable to instantiate the</span>
+<span class="source-line-no">299</span><span id="line-299">    *       record if the read-only component values are missing from the input.</span>
+<span class="source-line-no">300</span><span id="line-300">    * &lt;/ul&gt;</span>
 <span class="source-line-no">301</span><span id="line-301">    *</span>
-<span class="source-line-no">302</span><span id="line-302">    * &lt;p&gt;</span>
-<span class="source-line-no">303</span><span id="line-303">    * Parsers will parse such properties as usual, but serializers will silently ignore them.</span>
-<span class="source-line-no">304</span><span id="line-304">    *</span>
-<span class="source-line-no">305</span><span id="line-305">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
-<span class="source-line-no">306</span><span id="line-306">    * &lt;p class='bjava'&gt;</span>
-<span class="source-line-no">307</span><span id="line-307">    *    &lt;jk&gt;public class&lt;/jk&gt; MyBean {</span>
-<span class="source-line-no">308</span><span id="line-308">    *       &lt;ja&gt;@BeanProp&lt;/ja&gt;(wo=&lt;js&gt;"true"&lt;/js&gt;)</span>
-<span class="source-line-no">309</span><span id="line-309">    *       &lt;jk&gt;public float&lt;/jk&gt; &lt;jf&gt;price&lt;/jf&gt;;</span>
-<span class="source-line-no">310</span><span id="line-310">    *    }</span>
-<span class="source-line-no">311</span><span id="line-311">    * &lt;/p&gt;</span>
-<span class="source-line-no">312</span><span id="line-312">    *</span>
-<span class="source-line-no">313</span><span id="line-313">    * @return The annotation value.</span>
-<span class="source-line-no">314</span><span id="line-314">    */</span>
-<span class="source-line-no">315</span><span id="line-315">   String wo() default "";</span>
-<span class="source-line-no">316</span><span id="line-316">}</span>
+<span class="source-line-no">302</span><span id="line-302">    * @return The annotation value.</span>
+<span class="source-line-no">303</span><span id="line-303">    */</span>
+<span class="source-line-no">304</span><span id="line-304">   String ro() default "";</span>
+<span class="source-line-no">305</span><span id="line-305"></span>
+<span class="source-line-no">306</span><span id="line-306">   /**</span>
+<span class="source-line-no">307</span><span id="line-307">    * Identifies a specialized class type for the property.</span>
+<span class="source-line-no">308</span><span id="line-308">    *</span>
+<span class="source-line-no">309</span><span id="line-309">    * &lt;p&gt;</span>
+<span class="source-line-no">310</span><span id="line-310">    * Normally this can be inferred through reflection of the field type or getter return type.</span>
+<span class="source-line-no">311</span><span id="line-311">    * However, you'll want to specify this value if you're parsing beans where the bean property class is an interface</span>
+<span class="source-line-no">312</span><span id="line-312">    * or abstract class to identify the bean type to instantiate.</span>
+<span class="source-line-no">313</span><span id="line-313">    * Otherwise, you may cause an {@link InstantiationException} when trying to set these fields.</span>
+<span class="source-line-no">314</span><span id="line-314">    *</span>
+<span class="source-line-no">315</span><span id="line-315">    * &lt;p&gt;</span>
+<span class="source-line-no">316</span><span id="line-316">    * This property must denote a concrete bean class with a no-arg constructor.</span>
+<span class="source-line-no">317</span><span id="line-317">    *</span>
+<span class="source-line-no">318</span><span id="line-318">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">319</span><span id="line-319">    * &lt;p class='bjava'&gt;</span>
+<span class="source-line-no">320</span><span id="line-320">    *    &lt;jk&gt;public class&lt;/jk&gt; MyBean {</span>
+<span class="source-line-no">321</span><span id="line-321">    *</span>
+<span class="source-line-no">322</span><span id="line-322">    *       &lt;jc&gt;// Identify concrete map type.&lt;/jc&gt;</span>
+<span class="source-line-no">323</span><span id="line-323">    *       &lt;ja&gt;@BeanProp&lt;/ja&gt;(type=HashMap.&lt;jk&gt;class&lt;/jk&gt;)</span>
+<span class="source-line-no">324</span><span id="line-324">    *       &lt;jk&gt;public&lt;/jk&gt; Map &lt;jf&gt;p1&lt;/jf&gt;;</span>
+<span class="source-line-no">325</span><span id="line-325">    *    }</span>
+<span class="source-line-no">326</span><span id="line-326">    * &lt;/p&gt;</span>
+<span class="source-line-no">327</span><span id="line-327">    *</span>
+<span class="source-line-no">328</span><span id="line-328">    * @return The annotation value.</span>
+<span class="source-line-no">329</span><span id="line-329">    */</span>
+<span class="source-line-no">330</span><span id="line-330">   Class&lt;?&gt; type() default void.class;</span>
+<span class="source-line-no">331</span><span id="line-331"></span>
+<span class="source-line-no">332</span><span id="line-332">   /**</span>
+<span class="source-line-no">333</span><span id="line-333">    * A synonym for {@link #name()}.</span>
+<span class="source-line-no">334</span><span id="line-334">    *</span>
+<span class="source-line-no">335</span><span id="line-335">    * &lt;p&gt;</span>
+<span class="source-line-no">336</span><span id="line-336">    * The following annotations are equivalent:</span>
+<span class="source-line-no">337</span><span id="line-337">    *</span>
+<span class="source-line-no">338</span><span id="line-338">    * &lt;p class='bjava'&gt;</span>
+<span class="source-line-no">339</span><span id="line-339">    *    &lt;ja&gt;@BeanProp&lt;/ja&gt;(name=&lt;js&gt;"foo"&lt;/js&gt;)</span>
+<span class="source-line-no">340</span><span id="line-340">    *</span>
+<span class="source-line-no">341</span><span id="line-341">    *    &lt;ja&gt;@BeanProp&lt;/ja&gt;(&lt;js&gt;"foo"&lt;/js&gt;)</span>
+<span class="source-line-no">342</span><span id="line-342">    * &lt;/p&gt;</span>
+<span class="source-line-no">343</span><span id="line-343">    *</span>
+<span class="source-line-no">344</span><span id="line-344">    * @return The annotation value.</span>
+<span class="source-line-no">345</span><span id="line-345">    */</span>
+<span class="source-line-no">346</span><span id="line-346">   String value() default "";</span>
+<span class="source-line-no">347</span><span id="line-347"></span>
+<span class="source-line-no">348</span><span id="line-348">   /**</span>
+<span class="source-line-no">349</span><span id="line-349">    * Identifies a property as write-only.</span>
+<span class="source-line-no">350</span><span id="line-350">    *</span>
+<span class="source-line-no">351</span><span id="line-351">    * &lt;p&gt;</span>
+<span class="source-line-no">352</span><span id="line-352">    * Parsers will parse such properties as usual, but serializers will silently ignore them.</span>
+<span class="source-line-no">353</span><span id="line-353">    *</span>
+<span class="source-line-no">354</span><span id="line-354">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">355</span><span id="line-355">    * &lt;p class='bjava'&gt;</span>
+<span class="source-line-no">356</span><span id="line-356">    *    &lt;jk&gt;public class&lt;/jk&gt; MyBean {</span>
+<span class="source-line-no">357</span><span id="line-357">    *       &lt;ja&gt;@BeanProp&lt;/ja&gt;(wo=&lt;js&gt;"true"&lt;/js&gt;)</span>
+<span class="source-line-no">358</span><span id="line-358">    *       &lt;jk&gt;public float&lt;/jk&gt; &lt;jf&gt;price&lt;/jf&gt;;</span>
+<span class="source-line-no">359</span><span id="line-359">    *    }</span>
+<span class="source-line-no">360</span><span id="line-360">    * &lt;/p&gt;</span>
+<span class="source-line-no">361</span><span id="line-361">    *</span>
+<span class="source-line-no">362</span><span id="line-362">    * @return The annotation value.</span>
+<span class="source-line-no">363</span><span id="line-363">    */</span>
+<span class="source-line-no">364</span><span id="line-364">   String wo() default "";</span>
+<span class="source-line-no">365</span><span id="line-365">}</span>
 
 
 

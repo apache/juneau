@@ -78,14 +78,14 @@ loadScripts(document, 'script');</script>
 </div>
 <section class="class-description" id="class-description">
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/EphemeralStore.html#line-51">EphemeralStore</a></span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/EphemeralStore.html#line-50">EphemeralStore</a></span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
 <div class="block">Single-use, TTL-bounded store for the per-authorization <code>state</code> &rarr; <code>(codeVerifier, expectedIssuer)</code>
  association created when an interactive authorization-code + PKCE flow is started and consumed when the loopback
  redirect arrives.
 
  <p>
- Relocation of the <code>EphemeralStore</code> pattern from <code>juneau-rest-server-auth-oidc-rp</code> (Q3) for headless
+ Relocation of the <code>EphemeralStore</code> pattern from <code>juneau-rest-server-auth-oidc-rp</code> for headless
  (CLI/desktop) use.  The browser-session <code>redirectTarget</code>/<code>nonce</code> shape is dropped; this headless variant
  stores the PKCE <code>code_verifier</code> and the discovered <code>expectedIssuer</code> used for the SEP-2468 <code>iss</code>
  check on the callback.
@@ -218,7 +218,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="DEFAULT_MAX_ENTRIES">
 <h3>DEFAULT_MAX_ENTRIES</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/EphemeralStore.html#line-54">DEFAULT_MAX_ENTRIES</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/EphemeralStore.html#line-53">DEFAULT_MAX_ENTRIES</a></span></div>
 <div class="block">Default maximum number of in-flight authorization attempts retained.</div>
 <dl class="notes">
 <dt>See Also:</dt>
@@ -233,7 +233,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="DEFAULT_TTL">
 <h3>DEFAULT_TTL</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/EphemeralStore.html#line-57">DEFAULT_TTL</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/EphemeralStore.html#line-56">DEFAULT_TTL</a></span></div>
 <div class="block">Default time-to-live for a pending authorization (the user has at most a few minutes at the IdP).</div>
 </section>
 </li>
@@ -248,7 +248,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;(java.time.Duration,int,java.time.Clock)">
 <h3>EphemeralStore</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/EphemeralStore.html#line-107">EphemeralStore</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a>&nbsp;ttl,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/EphemeralStore.html#line-106">EphemeralStore</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a>&nbsp;ttl,
  int&nbsp;maxEntries,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Clock.html" title="class or interface in java.time" class="external-link">Clock</a>&nbsp;clock)</span></div>
 <div class="block">Constructor.</div>
@@ -271,7 +271,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="create()">
 <h3>create</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="EphemeralStore.html" title="class in org.apache.juneau.rest.client.mcp.auth">EphemeralStore</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/EphemeralStore.html#line-96">create</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="EphemeralStore.html" title="class in org.apache.juneau.rest.client.mcp.auth">EphemeralStore</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/EphemeralStore.html#line-95">create</a></span>()</div>
 <div class="block">Creates a store with the default TTL, size cap, and system UTC clock.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -282,7 +282,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="store(java.lang.String,java.lang.String,java.net.URI)">
 <h3>store</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/EphemeralStore.html#line-131">store</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;state,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/EphemeralStore.html#line-130">store</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;state,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;codeVerifier,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a>&nbsp;expectedIssuer)</span></div>
 <div class="block">Stores a pending-authorization association keyed by <code>state</code>.</div>
@@ -297,7 +297,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="consume(java.lang.String)">
 <h3>consume</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="EphemeralStore.PendingAuthorization.html" title="class in org.apache.juneau.rest.client.mcp.auth">EphemeralStore.PendingAuthorization</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/EphemeralStore.html#line-148">consume</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;state)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="EphemeralStore.PendingAuthorization.html" title="class in org.apache.juneau.rest.client.mcp.auth">EphemeralStore.PendingAuthorization</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/EphemeralStore.html#line-147">consume</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;state)</span></div>
 <div class="block">Atomically removes and returns the pending-authorization association for <code>state</code>, if present and
  not expired.</div>
 <dl class="notes">
@@ -311,7 +311,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="size()">
 <h3>size</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/EphemeralStore.html#line-167">size</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/EphemeralStore.html#line-166">size</a></span>()</div>
 <div class="block">Returns the current entry count.  Primarily for tests and metrics.</div>
 <dl class="notes">
 <dt>Returns:</dt>

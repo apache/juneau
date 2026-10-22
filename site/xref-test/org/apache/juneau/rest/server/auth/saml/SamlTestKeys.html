@@ -1,0 +1,124 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="" lang="">
+<head><meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<title>SamlTestKeys xref</title>
+<link type="text/css" rel="stylesheet" href="../../../../../../../stylesheet.css" />
+</head>
+<body>
+<div id="overview"><a href="../../../../../../../../testapidocs/org/apache/juneau/rest/server/auth/saml/SamlTestKeys.html">View Javadoc</a></div><pre>
+<a class="jxr_linenumber" name="L1" href="#L1">1</a>   <em class="jxr_comment">/*</em>
+<a class="jxr_linenumber" name="L2" href="#L2">2</a>   <em class="jxr_comment"> * Licensed to the Apache Software Foundation (ASF) under one or more</em>
+<a class="jxr_linenumber" name="L3" href="#L3">3</a>   <em class="jxr_comment"> * contributor license agreements.  See the NOTICE file distributed with</em>
+<a class="jxr_linenumber" name="L4" href="#L4">4</a>   <em class="jxr_comment"> * this work for additional information regarding copyright ownership.</em>
+<a class="jxr_linenumber" name="L5" href="#L5">5</a>   <em class="jxr_comment"> * The ASF licenses this file to You under the Apache License, Version 2.0</em>
+<a class="jxr_linenumber" name="L6" href="#L6">6</a>   <em class="jxr_comment"> * (the "License"); you may not use this file except in compliance with</em>
+<a class="jxr_linenumber" name="L7" href="#L7">7</a>   <em class="jxr_comment"> * the License.  You may obtain a copy of the License at</em>
+<a class="jxr_linenumber" name="L8" href="#L8">8</a>   <em class="jxr_comment"> *</em>
+<a class="jxr_linenumber" name="L9" href="#L9">9</a>   <em class="jxr_comment"> *      <a href="http://www.apache.org/licenses/LICENSE-2.0" target="alexandria_uri">http://www.apache.org/licenses/LICENSE-2.0</a></em>
+<a class="jxr_linenumber" name="L10" href="#L10">10</a>  <em class="jxr_comment"> *</em>
+<a class="jxr_linenumber" name="L11" href="#L11">11</a>  <em class="jxr_comment"> * Unless required by applicable law or agreed to in writing, software</em>
+<a class="jxr_linenumber" name="L12" href="#L12">12</a>  <em class="jxr_comment"> * distributed under the License is distributed on an "AS IS" BASIS,</em>
+<a class="jxr_linenumber" name="L13" href="#L13">13</a>  <em class="jxr_comment"> * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</em>
+<a class="jxr_linenumber" name="L14" href="#L14">14</a>  <em class="jxr_comment"> * See the License for the specific language governing permissions and</em>
+<a class="jxr_linenumber" name="L15" href="#L15">15</a>  <em class="jxr_comment"> * limitations under the License.</em>
+<a class="jxr_linenumber" name="L16" href="#L16">16</a>  <em class="jxr_comment"> */</em>
+<a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.server.auth.saml;
+<a class="jxr_linenumber" name="L18" href="#L18">18</a>  
+<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> java.io.*;
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> java.security.*;
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> java.security.cert.*;
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> java.security.spec.*;
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> java.util.*;
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> org.opensaml.security.credential.*;
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> org.opensaml.security.x509.*;
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <em class="jxr_javadoccomment"> * A fixed, self-signed RSA identity (certificate valid 2026-10-11 through 2126-09-17) shared by the metadata-driven</em>
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <em class="jxr_javadoccomment"> * tests, so they need no certificate-generation dependency.</em>
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <em class="jxr_javadoccomment"> * The key pair exists only for these tests and protects nothing.</em>
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>  <em class="jxr_javadoccomment"> */</em>
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>  <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">class</strong> <a name="SamlTestKeys" href="../../../../../../../org/apache/juneau/rest/server/auth/saml/SamlTestKeys.html#SamlTestKeys">SamlTestKeys</a> {
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>  
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>  	<em class="jxr_javadoccomment">/** Base64 DER of the self-signed X.509 certificate. */</em>
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>  	<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String CERT_BASE64 =
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>  		<span class="jxr_string">"MIIDFzCCAf+gAwIBAgIUXK0vYKCqDvjiO4DHfXeuH6X8UpMwDQYJKoZIhvcNAQELBQAwGjEYMBYGA1UEAwwPaWRwLmV4YW1w"</span>
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>  		+ <span class="jxr_string">"bGUuY29tMCAXDTI2MTAxMTIzNTkxNloYDzIxMjYwOTE3MjM1OTE2WjAaMRgwFgYDVQQDDA9pZHAuZXhhbXBsZS5jb20wggEi"</span>
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>  		+ <span class="jxr_string">"MA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQDfdpOIKouMuD5uxYiKN6UDsubm6a6nRw/GZspHbDLrGQvnfxHb1h9b6zEG"</span>
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>  		+ <span class="jxr_string">"yhobzvlukhATv+9HL0glhL7/a5ginzQUwPbvtk+z8z6dzz2Hja6b89rSPSqxwvs9Ks4JmKUiFxQGp7cYA/gkSkN4sLlCwWn0"</span>
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>  		+ <span class="jxr_string">"TrMAGXQi8CAxJ7kMAzfeaCfuuh/xD1f/nl8h+QTu/0SQA7G6ledXqwOe/hwIOM2ZSB0LIIkQb4zDRoBcG6CcSsegUxnMLVwF"</span>
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>  		+ <span class="jxr_string">"GKjc87n7mOiUVTLMZR82s6ziY2lvcVTGLw0JWjnZQA94tao6g6FP5sL73CPmswgX8NKWuFIRrceusOJB+mhPoRXBZkynAgMB"</span>
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>  		+ <span class="jxr_string">"AAGjUzBRMB0GA1UdDgQWBBScpsKKZeQyevv33NvLogtmm3jbMDAfBgNVHSMEGDAWgBScpsKKZeQyevv33NvLogtmm3jbMDAP"</span>
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>  		+ <span class="jxr_string">"BgNVHRMBAf8EBTADAQH/MA0GCSqGSIb3DQEBCwUAA4IBAQAgIRGqPgh5YKCRvoOaNQZmCUTkWufBXgxlxzUcJHhMH1OM0Aqt"</span>
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>  		+ <span class="jxr_string">"0+Btqgtbc0550FE8UwuH62tNJQ0wh+kS9I4KoREoP5JPeoz3PJF+bStBg3oFlLP3sGcQKPd3HSP3ODOMvAIMgipCLUxWmQf7"</span>
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>  		+ <span class="jxr_string">"8HSfYxhSi3x7BjaZpJLnIz2gSEG7udtjOJU8E/woAdC7UOZFXZV4vSiOtv53xrzXuGH+TxyoNkY0ridnXjyVHxxU4k9XzqVF"</span>
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>  		+ <span class="jxr_string">"9TH4LfChNAftKosL54l1uvXoRAM4w2OyIgIvoHJNpy76c9Ns+//RIdTiZa4SD8xRHCvx/P6AYlnRQrB/oDeaXmJQz44Gis53"</span>
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>  		+ <span class="jxr_string">"18xH"</span>;
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>  
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>  	<em class="jxr_javadoccomment">/** Base64 DER of a second, unrelated self-signed certificate (no matching key is kept). */</em>
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>  	<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String OTHER_CERT_BASE64 =
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>  		<span class="jxr_string">"MIIDGzCCAgOgAwIBAgIUEtuSohAQ3OvFb0vMIYdCsI5Ax6MwDQYJKoZIhvcNAQELBQAwHDEaMBgGA1UEAwwRb3RoZXIuZXhh"</span>
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>  		+ <span class="jxr_string">"bXBsZS5jb20wIBcNMjYxMDEyMDAzMjM5WhgPMjEyNjA5MTgwMDMyMzlaMBwxGjAYBgNVBAMMEW90aGVyLmV4YW1wbGUuY29t"</span>
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>  		+ <span class="jxr_string">"MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAosYQ1zluzDDHWUZcgL392mi5NaQqeH0dMxw4Hxa/61u3PC5eJ9H7"</span>
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>  		+ <span class="jxr_string">"sW++qlcQvYgvBIZhZ4orP/Nm29XPJnuoiAPCgxWKgksTTIR7hRK3NmE22OuFCqJplAq6L4nU4MsE1nPYDBF94rKgs/IflvJl"</span>
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>  		+ <span class="jxr_string">"inntdC4Kk1Lcdp5iZWx5SCMplUjadr73hYRlOi9NzwwgPdtsocUTvtV3A5dNO800YWkaPqjjDL7Mf9qznqkguecrDdglSKP3"</span>
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>  		+ <span class="jxr_string">"iDfjpbWiXHAPWKsHNUFrXTB7N7CDHl/pGAkbp+C+7Fgea1Q8+EXwN5fFaUX32KxinM3k/x8wCW2LxjwVs0LkHscxYy/Q7JI7"</span>
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>  		+ <span class="jxr_string">"GwIDAQABo1MwUTAdBgNVHQ4EFgQU9su5e5pPME8usnsPGJeW/9uXoJIwHwYDVR0jBBgwFoAU9su5e5pPME8usnsPGJeW/9uX"</span>
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>  		+ <span class="jxr_string">"oJIwDwYDVR0TAQH/BAUwAwEB/zANBgkqhkiG9w0BAQsFAAOCAQEAHefxTO8vEBrToIhpBBELpXpt4ZK3yled6QGezZiCsCkc"</span>
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>  		+ <span class="jxr_string">"MwlIKBjvXj8FDYaCLEn1PUqaQ9Re8LvGzkwNxT74Vp8NlVjI82D8ZCZaDaiqVkpYoKX5DOZF/9YvG4YTJtPcWagJyD/LMD71"</span>
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>  		+ <span class="jxr_string">"074uUryy1IsX236avHcMayCdnYHRbvE8oDaIM0eHnEv4/hGTuAc7ZtOklCsFgMTd1qW0W/iDDNEePRhAesbg+9tPtP0J36+k"</span>
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>  		+ <span class="jxr_string">"pYA+5gGOxAZmAKwwWaRVfWhwf+uxu5uVZWqVjREoCBDD9WMXkMnEfQumGeKwlYaACbVoT4dnTt0/rWitzSj8kfoNlIfVVSyi"</span>
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>  		+ <span class="jxr_string">"3HgY4NrUFw=="</span>;
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>  
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String KEY_BASE64 =
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>  		<span class="jxr_string">"MIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQDfdpOIKouMuD5uxYiKN6UDsubm6a6nRw/GZspHbDLrGQvn"</span>
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>  		+ <span class="jxr_string">"fxHb1h9b6zEGyhobzvlukhATv+9HL0glhL7/a5ginzQUwPbvtk+z8z6dzz2Hja6b89rSPSqxwvs9Ks4JmKUiFxQGp7cYA/gk"</span>
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>  		+ <span class="jxr_string">"SkN4sLlCwWn0TrMAGXQi8CAxJ7kMAzfeaCfuuh/xD1f/nl8h+QTu/0SQA7G6ledXqwOe/hwIOM2ZSB0LIIkQb4zDRoBcG6Cc"</span>
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>  		+ <span class="jxr_string">"SsegUxnMLVwFGKjc87n7mOiUVTLMZR82s6ziY2lvcVTGLw0JWjnZQA94tao6g6FP5sL73CPmswgX8NKWuFIRrceusOJB+mhP"</span>
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>  		+ <span class="jxr_string">"oRXBZkynAgMBAAECggEAR74JeodyOxDx1l1ryzg3LbtTn2H51TGe0msw2QJXTJxDcqScprAVbEzTdiMPg8sM0J9rMvQFjZyT"</span>
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>  		+ <span class="jxr_string">"9JusOFOiScdEEL+s5+PnrdXTzhV5YxotK1t8bs/9c4muYIJsGK+doJa5MrPIuBiaI4iGJerS56gx7KIRnOAPJaJjK3Td14ld"</span>
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>  		+ <span class="jxr_string">"T1DLqPCbtaY1ukVuC7/EJlBVjR05RMIO+e+v37Gamdt8g4ZFSlJtnpehmKUAenY4nZEqrxR0qi6EkUTue7dICySqzb2oboy6"</span>
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>  		+ <span class="jxr_string">"YDKAT0z8IVanyRkttgK+vuly1WGy7CK8asCE41zmaYSpf1bqH/w/zZ2FDE/MKy920JwA3+RwyQKBgQD3D6DcaRUV5vWrSEDY"</span>
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>  		+ <span class="jxr_string">"uCkQ8LZcqR+E9VZ0gQRoV/kzextvH7z0YhEgHg2G33J0MNn3kcbE8iya0CNCBtRHZv8qMk9PObkR3oGdO3M8/ZnhXU2lpBNh"</span>
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>  		+ <span class="jxr_string">"+mCzs/iicemekgQA8p77UnBMgtEiMvBEMKWs2eZXMzOeuVbSA3BDIEJsuQKBgQDnjGAxKloyt3suvs9DtisuvaEmFQHMAai+"</span>
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>  		+ <span class="jxr_string">"wS4c5N/OvtcZm/9COm3SEc0Ys/AREQ74u0Ms7V5T1SIaoOXBObtCCj0Pw7DUJZTM3T5HALaImJ+8yaFIVUOZiCbgSvTNI9iE"</span>
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>  		+ <span class="jxr_string">"mXJxHPritNvq8Z7UzFs5Y6+VfxlE+1kVGGE0gI2UXwKBgFjgbmXcB5HRfB8Z5voPhfZqIbBDxur1txxCLWu7+hHi/4OCT186"</span>
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>  		+ <span class="jxr_string">"yB5dsVALogjaag79ihvfYtxuc8CU5FirXK+5WX6OrV0YRlhhwpr2QB0qi3xDAhYFFDSRUahegkRhEr+kiDyw82USylkbKgPd"</span>
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>  		+ <span class="jxr_string">"3DvKR2qnKLK4ydrTEdeUC1FBAoGBAICfTMvi3+nuXGISImZVqlUzh3H1F2NwxID6JJhuVxiskCYsrrXmaRzZQJnpUoDYff2T"</span>
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>  		+ <span class="jxr_string">"YHRzgwOEkIZEPHyCik/cCiFYrkCag7bta2vbrIniZlFjm9DndD60EAxl9uiBcgPujVDiLUeD+enfwEArKL2Pb3jW+n2ENe7u"</span>
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>  		+ <span class="jxr_string">"9QhKJNt3AoGBAKo0du/l2ClJol4UoVxDCYSBaIU4x+xDdYJAma6QuTY601F2J5l/ctZjoxQBfFD3N91G0v8Nu6CT8uZX8mWu"</span>
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>  		+ <span class="jxr_string">"tX5zRmjT3e1cJT6stbzA2K+CAw8Pk368Qd5W5sPr6Ikz8UhHdSUB9MWQ35cHQjEHvlOYKaFK4Sd9TKpuAbgY/0Hy"</span>;
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>  
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>  	<em class="jxr_javadoccomment">/** The first instant at which the certificate is valid (with margin); later instants up to 2126 are valid. */</em>
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>  	<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> java.time.Instant VALID_AT = java.time.Instant.parse(<span class="jxr_string">"2027-06-01T00:00:00Z"</span>);
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>  
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>  	<strong class="jxr_keyword">private</strong> <a name="SamlTestKeys" href="../../../../../../../org/apache/juneau/rest/server/auth/saml/SamlTestKeys.html#SamlTestKeys">SamlTestKeys</a>() {}
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>  
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>  	<em class="jxr_javadoccomment">/** Returns the parsed certificate. */</em>
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>  	<strong class="jxr_keyword">static</strong> X509Certificate certificate() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>  		<strong class="jxr_keyword">var</strong> bytes = Base64.getDecoder().decode(CERT_BASE64);
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>  		<strong class="jxr_keyword">return</strong> (X509Certificate) CertificateFactory.getInstance(<span class="jxr_string">"X.509"</span>).generateCertificate(<strong class="jxr_keyword">new</strong> ByteArrayInputStream(bytes));
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>  	}
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>  
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>  	<em class="jxr_javadoccomment">/** Returns the second, unrelated certificate. */</em>
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>  	<strong class="jxr_keyword">static</strong> X509Certificate otherCertificate() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L99" href="#L99">99</a>  		<strong class="jxr_keyword">var</strong> bytes = Base64.getDecoder().decode(OTHER_CERT_BASE64);
+<a class="jxr_linenumber" name="L100" href="#L100">100</a> 		<strong class="jxr_keyword">return</strong> (X509Certificate) CertificateFactory.getInstance(<span class="jxr_string">"X.509"</span>).generateCertificate(<strong class="jxr_keyword">new</strong> ByteArrayInputStream(bytes));
+<a class="jxr_linenumber" name="L101" href="#L101">101</a> 	}
+<a class="jxr_linenumber" name="L102" href="#L102">102</a> 
+<a class="jxr_linenumber" name="L103" href="#L103">103</a> 	<em class="jxr_javadoccomment">/** Returns a signing/decryption credential holding the certificate's key pair. */</em>
+<a class="jxr_linenumber" name="L104" href="#L104">104</a> 	<strong class="jxr_keyword">static</strong> BasicX509Credential credential() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L105" href="#L105">105</a> 		<strong class="jxr_keyword">var</strong> cert = certificate();
+<a class="jxr_linenumber" name="L106" href="#L106">106</a> 		<strong class="jxr_keyword">var</strong> key = KeyFactory.getInstance(<span class="jxr_string">"RSA"</span>).generatePrivate(<strong class="jxr_keyword">new</strong> PKCS8EncodedKeySpec(Base64.getDecoder().decode(KEY_BASE64)));
+<a class="jxr_linenumber" name="L107" href="#L107">107</a> 		<strong class="jxr_keyword">var</strong> c = <strong class="jxr_keyword">new</strong> BasicX509Credential(cert, key);
+<a class="jxr_linenumber" name="L108" href="#L108">108</a> 		c.setUsageType(UsageType.UNSPECIFIED);
+<a class="jxr_linenumber" name="L109" href="#L109">109</a> 		<strong class="jxr_keyword">return</strong> c;
+<a class="jxr_linenumber" name="L110" href="#L110">110</a> 	}
+<a class="jxr_linenumber" name="L111" href="#L111">111</a> }
+</pre>
+<hr/>
+<div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>
+</body>
+</html>

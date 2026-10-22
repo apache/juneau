@@ -109,110 +109,110 @@
 <span class="source-line-no">096</span><span id="line-96"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/JavaMethodParameters"&gt;Java Method Parameters&lt;/a&gt;</span>
 <span class="source-line-no">097</span><span id="line-97"> * &lt;/ul&gt;</span>
 <span class="source-line-no">098</span><span id="line-98"> */</span>
-<span class="source-line-no">099</span><span id="line-99">public class HeaderArg implements RestOpArg {</span>
-<span class="source-line-no">100</span><span id="line-100"></span>
-<span class="source-line-no">101</span><span id="line-101">   private static final AnnotationProvider AP = AnnotationProvider.INSTANCE;</span>
-<span class="source-line-no">102</span><span id="line-102"></span>
-<span class="source-line-no">103</span><span id="line-103">   /**</span>
-<span class="source-line-no">104</span><span id="line-104">    * Static creator.</span>
-<span class="source-line-no">105</span><span id="line-105">    *</span>
-<span class="source-line-no">106</span><span id="line-106">    * @param paramInfo The Java method parameter being resolved. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">107</span><span id="line-107">    * @param annotations The annotations to apply to any new part parsers.</span>
-<span class="source-line-no">108</span><span id="line-108">    * @return A new {@link HeaderArg}, or &lt;jk&gt;null&lt;/jk&gt; if the parameter is not annotated with {@link Header}.</span>
-<span class="source-line-no">109</span><span id="line-109">    */</span>
-<span class="source-line-no">110</span><span id="line-110">   public static HeaderArg create(ParameterInfo paramInfo, AnnotationWorkList annotations) {</span>
-<span class="source-line-no">111</span><span id="line-111">      if (paramInfo.getParameterType().is(Holder.class))</span>
-<span class="source-line-no">112</span><span id="line-112">         return null;</span>
-<span class="source-line-no">113</span><span id="line-113">      if (AP.has(Header.class, paramInfo) || nameFromTypeNameField(paramInfo) != null)</span>
-<span class="source-line-no">114</span><span id="line-114">         return new HeaderArg(paramInfo, annotations);</span>
-<span class="source-line-no">115</span><span id="line-115">      return null;</span>
-<span class="source-line-no">116</span><span id="line-116">   }</span>
-<span class="source-line-no">117</span><span id="line-117"></span>
-<span class="source-line-no">118</span><span id="line-118">   private static Optional&lt;String&gt; findName(ParameterInfo pi) {</span>
-<span class="source-line-no">119</span><span id="line-119">      // @formatter:off</span>
-<span class="source-line-no">120</span><span id="line-120">      var fromAnnotation = AP.find(Header.class, pi)</span>
-<span class="source-line-no">121</span><span id="line-121">         .stream()</span>
-<span class="source-line-no">122</span><span id="line-122">         .map(AnnotationInfo::inner)</span>
-<span class="source-line-no">123</span><span id="line-123">         .filter(x -&gt; isAnyNotBlank(x.value(), x.name()))</span>
-<span class="source-line-no">124</span><span id="line-124">         .findFirst()</span>
-<span class="source-line-no">125</span><span id="line-125">         .map(x -&gt; firstNonBlank(x.name(), x.value()));</span>
-<span class="source-line-no">126</span><span id="line-126">      // @formatter:on</span>
-<span class="source-line-no">127</span><span id="line-127">      if (fromAnnotation.isPresent())</span>
-<span class="source-line-no">128</span><span id="line-128">         return fromAnnotation;</span>
-<span class="source-line-no">129</span><span id="line-129">      return o(nameFromTypeNameField(pi));</span>
-<span class="source-line-no">130</span><span id="line-130">   }</span>
-<span class="source-line-no">131</span><span id="line-131"></span>
-<span class="source-line-no">132</span><span id="line-132">   private static String nameFromTypeNameField(ParameterInfo pi) {</span>
-<span class="source-line-no">133</span><span id="line-133">      try {</span>
-<span class="source-line-no">134</span><span id="line-134">         var c = pi.getParameterType().inner();</span>
-<span class="source-line-no">135</span><span id="line-135">         if (c == null)</span>
-<span class="source-line-no">136</span><span id="line-136">            return null;</span>
-<span class="source-line-no">137</span><span id="line-137">         var f = c.getField("NAME");</span>
-<span class="source-line-no">138</span><span id="line-138">         if (java.lang.reflect.Modifier.isStatic(f.getModifiers()) &amp;&amp; f.getType() == String.class) {</span>
-<span class="source-line-no">139</span><span id="line-139">            var v = f.get(null);</span>
-<span class="source-line-no">140</span><span id="line-140">            return v == null ? null : v.toString();</span>
-<span class="source-line-no">141</span><span id="line-141">         }</span>
-<span class="source-line-no">142</span><span id="line-142">      } catch (ReflectiveOperationException ignored) {</span>
-<span class="source-line-no">143</span><span id="line-143">         // Type has no NAME field; not a recognized typed-header bean.</span>
-<span class="source-line-no">144</span><span id="line-144">      }</span>
-<span class="source-line-no">145</span><span id="line-145">      return null;</span>
-<span class="source-line-no">146</span><span id="line-146">   }</span>
-<span class="source-line-no">147</span><span id="line-147"></span>
-<span class="source-line-no">148</span><span id="line-148">   private static Optional&lt;String&gt; findDef(ParameterInfo pi) {</span>
-<span class="source-line-no">149</span><span id="line-149">      // @formatter:off</span>
-<span class="source-line-no">150</span><span id="line-150">      return AP.find(Header.class, pi)</span>
-<span class="source-line-no">151</span><span id="line-151">         .stream()</span>
-<span class="source-line-no">152</span><span id="line-152">         .map(AnnotationInfo::inner)</span>
-<span class="source-line-no">153</span><span id="line-153">         .filter(x -&gt; ine(x.def()))</span>
-<span class="source-line-no">154</span><span id="line-154">         .findFirst()</span>
-<span class="source-line-no">155</span><span id="line-155">         .map(Header::def);</span>
-<span class="source-line-no">156</span><span id="line-156">      // @formatter:on</span>
-<span class="source-line-no">157</span><span id="line-157">   }</span>
-<span class="source-line-no">158</span><span id="line-158"></span>
-<span class="source-line-no">159</span><span id="line-159">   private static Header getClassLevelHeader(ParameterInfo pi, String paramName) {</span>
-<span class="source-line-no">160</span><span id="line-160">      var declaringClass = pi.getMethod().getDeclaringClass();</span>
-<span class="source-line-no">161</span><span id="line-161">      if (declaringClass == null)</span>
-<span class="source-line-no">162</span><span id="line-162">         return null;</span>
-<span class="source-line-no">163</span><span id="line-163">      var restAnnotation = declaringClass.getAnnotations(Rest.class).findFirst().map(AnnotationInfo::inner).orElse(null);</span>
-<span class="source-line-no">164</span><span id="line-164">      if (restAnnotation == null)</span>
+<span class="source-line-no">099</span><span id="line-99">@SuppressWarnings({</span>
+<span class="source-line-no">100</span><span id="line-100">   "unchecked" // The (Class&lt;? extends HttpPartParser&gt;) cast of the schema parser class is safe because the schema only holds HttpPartParser subclasses.</span>
+<span class="source-line-no">101</span><span id="line-101">})</span>
+<span class="source-line-no">102</span><span id="line-102">public class HeaderArg implements RestOpArg {</span>
+<span class="source-line-no">103</span><span id="line-103"></span>
+<span class="source-line-no">104</span><span id="line-104">   private static final AnnotationProvider AP = AnnotationProvider.INSTANCE;</span>
+<span class="source-line-no">105</span><span id="line-105"></span>
+<span class="source-line-no">106</span><span id="line-106">   /**</span>
+<span class="source-line-no">107</span><span id="line-107">    * Static creator.</span>
+<span class="source-line-no">108</span><span id="line-108">    *</span>
+<span class="source-line-no">109</span><span id="line-109">    * @param paramInfo The Java method parameter being resolved. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">110</span><span id="line-110">    * @param annotations The annotations to apply to any new part parsers.</span>
+<span class="source-line-no">111</span><span id="line-111">    * @return A new {@link HeaderArg}, or &lt;jk&gt;null&lt;/jk&gt; if the parameter is not annotated with {@link Header}.</span>
+<span class="source-line-no">112</span><span id="line-112">    */</span>
+<span class="source-line-no">113</span><span id="line-113">   public static HeaderArg create(ParameterInfo paramInfo, AnnotationWorkList annotations) {</span>
+<span class="source-line-no">114</span><span id="line-114">      if (paramInfo.getParameterType().is(Holder.class))</span>
+<span class="source-line-no">115</span><span id="line-115">         return null;</span>
+<span class="source-line-no">116</span><span id="line-116">      if (AP.has(Header.class, paramInfo) || nameFromTypeNameField(paramInfo) != null)</span>
+<span class="source-line-no">117</span><span id="line-117">         return new HeaderArg(paramInfo, annotations);</span>
+<span class="source-line-no">118</span><span id="line-118">      return null;</span>
+<span class="source-line-no">119</span><span id="line-119">   }</span>
+<span class="source-line-no">120</span><span id="line-120"></span>
+<span class="source-line-no">121</span><span id="line-121">   private static Optional&lt;String&gt; findName(ParameterInfo pi) {</span>
+<span class="source-line-no">122</span><span id="line-122">      // @formatter:off</span>
+<span class="source-line-no">123</span><span id="line-123">      var fromAnnotation = AP.find(Header.class, pi)</span>
+<span class="source-line-no">124</span><span id="line-124">         .stream()</span>
+<span class="source-line-no">125</span><span id="line-125">         .map(AnnotationInfo::inner)</span>
+<span class="source-line-no">126</span><span id="line-126">         .filter(x -&gt; isAnyNotBlank(x.value(), x.name()))</span>
+<span class="source-line-no">127</span><span id="line-127">         .findFirst()</span>
+<span class="source-line-no">128</span><span id="line-128">         .map(x -&gt; firstNonBlank(x.name(), x.value()));</span>
+<span class="source-line-no">129</span><span id="line-129">      // @formatter:on</span>
+<span class="source-line-no">130</span><span id="line-130">      if (fromAnnotation.isPresent())</span>
+<span class="source-line-no">131</span><span id="line-131">         return fromAnnotation;</span>
+<span class="source-line-no">132</span><span id="line-132">      return o(nameFromTypeNameField(pi));</span>
+<span class="source-line-no">133</span><span id="line-133">   }</span>
+<span class="source-line-no">134</span><span id="line-134"></span>
+<span class="source-line-no">135</span><span id="line-135">   private static String nameFromTypeNameField(ParameterInfo pi) {</span>
+<span class="source-line-no">136</span><span id="line-136">      try {</span>
+<span class="source-line-no">137</span><span id="line-137">         var c = pi.getParameterType().inner();</span>
+<span class="source-line-no">138</span><span id="line-138">         if (c == null)</span>
+<span class="source-line-no">139</span><span id="line-139">            return null;</span>
+<span class="source-line-no">140</span><span id="line-140">         var f = c.getField("NAME");</span>
+<span class="source-line-no">141</span><span id="line-141">         if (java.lang.reflect.Modifier.isStatic(f.getModifiers()) &amp;&amp; f.getType() == String.class) {</span>
+<span class="source-line-no">142</span><span id="line-142">            var v = f.get(null);</span>
+<span class="source-line-no">143</span><span id="line-143">            return v == null ? null : v.toString();</span>
+<span class="source-line-no">144</span><span id="line-144">         }</span>
+<span class="source-line-no">145</span><span id="line-145">      } catch (ReflectiveOperationException ignored) {</span>
+<span class="source-line-no">146</span><span id="line-146">         // Type has no NAME field; not a recognized typed-header bean.</span>
+<span class="source-line-no">147</span><span id="line-147">      }</span>
+<span class="source-line-no">148</span><span id="line-148">      return null;</span>
+<span class="source-line-no">149</span><span id="line-149">   }</span>
+<span class="source-line-no">150</span><span id="line-150"></span>
+<span class="source-line-no">151</span><span id="line-151">   private static Optional&lt;String&gt; findDef(ParameterInfo pi) {</span>
+<span class="source-line-no">152</span><span id="line-152">      // @formatter:off</span>
+<span class="source-line-no">153</span><span id="line-153">      return AP.find(Header.class, pi)</span>
+<span class="source-line-no">154</span><span id="line-154">         .stream()</span>
+<span class="source-line-no">155</span><span id="line-155">         .map(AnnotationInfo::inner)</span>
+<span class="source-line-no">156</span><span id="line-156">         .filter(x -&gt; ine(x.def()))</span>
+<span class="source-line-no">157</span><span id="line-157">         .findFirst()</span>
+<span class="source-line-no">158</span><span id="line-158">         .map(Header::def);</span>
+<span class="source-line-no">159</span><span id="line-159">      // @formatter:on</span>
+<span class="source-line-no">160</span><span id="line-160">   }</span>
+<span class="source-line-no">161</span><span id="line-161"></span>
+<span class="source-line-no">162</span><span id="line-162">   private static Header getClassLevelHeader(ParameterInfo pi, String paramName) {</span>
+<span class="source-line-no">163</span><span id="line-163">      var declaringClass = pi.getMethod().getDeclaringClass();</span>
+<span class="source-line-no">164</span><span id="line-164">      if (declaringClass == null)</span>
 <span class="source-line-no">165</span><span id="line-165">         return null;</span>
-<span class="source-line-no">166</span><span id="line-166">      for (var h : restAnnotation.headerParams()) {</span>
-<span class="source-line-no">167</span><span id="line-167">         var hName = firstNonEmpty(h.name(), h.value());</span>
-<span class="source-line-no">168</span><span id="line-168">         if (paramName.equals(hName))</span>
-<span class="source-line-no">169</span><span id="line-169">            return h;</span>
-<span class="source-line-no">170</span><span id="line-170">      }</span>
-<span class="source-line-no">171</span><span id="line-171">      return null;</span>
-<span class="source-line-no">172</span><span id="line-172">   }</span>
-<span class="source-line-no">173</span><span id="line-173"></span>
-<span class="source-line-no">174</span><span id="line-174">   private final HttpPartParser partParser;</span>
-<span class="source-line-no">175</span><span id="line-175">   private final HttpPartSchema schema;</span>
-<span class="source-line-no">176</span><span id="line-176">   private final boolean multi;</span>
-<span class="source-line-no">177</span><span id="line-177">   private final String name;</span>
-<span class="source-line-no">178</span><span id="line-178">   private final String def;</span>
-<span class="source-line-no">179</span><span id="line-179">   private final ClassInfo type;</span>
-<span class="source-line-no">180</span><span id="line-180"></span>
-<span class="source-line-no">181</span><span id="line-181">   /**</span>
-<span class="source-line-no">182</span><span id="line-182">    * Constructor.</span>
-<span class="source-line-no">183</span><span id="line-183">    *</span>
-<span class="source-line-no">184</span><span id="line-184">    * @param pi The Java method parameter being resolved. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">185</span><span id="line-185">    * @param annotations The annotations to apply to any new part parsers.</span>
-<span class="source-line-no">186</span><span id="line-186">    */</span>
-<span class="source-line-no">187</span><span id="line-187">   protected HeaderArg(ParameterInfo pi, AnnotationWorkList annotations) {</span>
-<span class="source-line-no">188</span><span id="line-188">      this.name = findName(pi).orElseThrow(() -&gt; new ArgException(pi, "@Header used without name or value"));</span>
-<span class="source-line-no">189</span><span id="line-189"></span>
-<span class="source-line-no">190</span><span id="line-190">      var classLevelHeader = getClassLevelHeader(pi, name);</span>
-<span class="source-line-no">191</span><span id="line-191"></span>
-<span class="source-line-no">192</span><span id="line-192">      var schemaBuilder = HttpPartSchema.create();</span>
-<span class="source-line-no">193</span><span id="line-193">      if (classLevelHeader != null)</span>
-<span class="source-line-no">194</span><span id="line-194">         schemaBuilder.apply(classLevelHeader);</span>
-<span class="source-line-no">195</span><span id="line-195">      schemaBuilder.applyAll(Header.class, pi);</span>
-<span class="source-line-no">196</span><span id="line-196">      this.schema = schemaBuilder.build();</span>
-<span class="source-line-no">197</span><span id="line-197"></span>
-<span class="source-line-no">198</span><span id="line-198">      this.def = findDef(pi).or(() -&gt; o(classLevelHeader).filter(h -&gt; ine(h.def())).map(Header::def)).orElse(null);</span>
-<span class="source-line-no">199</span><span id="line-199">      this.type = pi.getParameterType();</span>
-<span class="source-line-no">200</span><span id="line-200">      @SuppressWarnings({</span>
-<span class="source-line-no">201</span><span id="line-201">         "unchecked" // Type erasure on reflective/generic cast; element type is verified at call site</span>
-<span class="source-line-no">202</span><span id="line-202">      })</span>
+<span class="source-line-no">166</span><span id="line-166">      var restAnnotation = declaringClass.getAnnotations(Rest.class).findFirst().map(AnnotationInfo::inner).orElse(null);</span>
+<span class="source-line-no">167</span><span id="line-167">      if (restAnnotation == null)</span>
+<span class="source-line-no">168</span><span id="line-168">         return null;</span>
+<span class="source-line-no">169</span><span id="line-169">      for (var h : restAnnotation.headerParams()) {</span>
+<span class="source-line-no">170</span><span id="line-170">         var hName = firstNonEmpty(h.name(), h.value());</span>
+<span class="source-line-no">171</span><span id="line-171">         if (eq(paramName, hName))</span>
+<span class="source-line-no">172</span><span id="line-172">            return h;</span>
+<span class="source-line-no">173</span><span id="line-173">      }</span>
+<span class="source-line-no">174</span><span id="line-174">      return null;</span>
+<span class="source-line-no">175</span><span id="line-175">   }</span>
+<span class="source-line-no">176</span><span id="line-176"></span>
+<span class="source-line-no">177</span><span id="line-177">   private final HttpPartParser partParser;</span>
+<span class="source-line-no">178</span><span id="line-178">   private final HttpPartSchema schema;</span>
+<span class="source-line-no">179</span><span id="line-179">   private final boolean multi;</span>
+<span class="source-line-no">180</span><span id="line-180">   private final String name;</span>
+<span class="source-line-no">181</span><span id="line-181">   private final String def;</span>
+<span class="source-line-no">182</span><span id="line-182">   private final ClassInfo type;</span>
+<span class="source-line-no">183</span><span id="line-183"></span>
+<span class="source-line-no">184</span><span id="line-184">   /**</span>
+<span class="source-line-no">185</span><span id="line-185">    * Constructor.</span>
+<span class="source-line-no">186</span><span id="line-186">    *</span>
+<span class="source-line-no">187</span><span id="line-187">    * @param pi The Java method parameter being resolved. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">188</span><span id="line-188">    * @param annotations The annotations to apply to any new part parsers.</span>
+<span class="source-line-no">189</span><span id="line-189">    */</span>
+<span class="source-line-no">190</span><span id="line-190">   protected HeaderArg(ParameterInfo pi, AnnotationWorkList annotations) {</span>
+<span class="source-line-no">191</span><span id="line-191">      this.name = findName(pi).orElseThrow(() -&gt; new ArgException(pi, "@Header used without name or value"));</span>
+<span class="source-line-no">192</span><span id="line-192"></span>
+<span class="source-line-no">193</span><span id="line-193">      var classLevelHeader = getClassLevelHeader(pi, name);</span>
+<span class="source-line-no">194</span><span id="line-194"></span>
+<span class="source-line-no">195</span><span id="line-195">      var schemaBuilder = HttpPartSchema.create();</span>
+<span class="source-line-no">196</span><span id="line-196">      if (classLevelHeader != null)</span>
+<span class="source-line-no">197</span><span id="line-197">         schemaBuilder.apply(classLevelHeader);</span>
+<span class="source-line-no">198</span><span id="line-198">      schemaBuilder.applyAll(Header.class, pi);</span>
+<span class="source-line-no">199</span><span id="line-199">      this.schema = schemaBuilder.build();</span>
+<span class="source-line-no">200</span><span id="line-200"></span>
+<span class="source-line-no">201</span><span id="line-201">      this.def = findDef(pi).or(() -&gt; o(classLevelHeader).filter(h -&gt; ine(h.def())).map(Header::def)).orElse(null);</span>
+<span class="source-line-no">202</span><span id="line-202">      this.type = pi.getParameterType();</span>
 <span class="source-line-no">203</span><span id="line-203">      var pp = (Class&lt;? extends HttpPartParser&gt;)schema.getParser();</span>
 <span class="source-line-no">204</span><span id="line-204">      this.partParser = nn(pp) ? HttpPartParser.creator().type(pp).apply(annotations).create() : null;</span>
 <span class="source-line-no">205</span><span id="line-205">      this.multi = schema.getCollectionFormat() == HttpPartCollectionFormat.MULTI;</span>
@@ -222,39 +222,38 @@
 <span class="source-line-no">209</span><span id="line-209">   }</span>
 <span class="source-line-no">210</span><span id="line-210"></span>
 <span class="source-line-no">211</span><span id="line-211">   @SuppressWarnings({</span>
-<span class="source-line-no">212</span><span id="line-212">      "rawtypes", // Raw types necessary for REST argument resolution with generic types</span>
-<span class="source-line-no">213</span><span id="line-213">      "unchecked", // Type erasure requires unchecked casts in REST argument parsing</span>
-<span class="source-line-no">214</span><span id="line-214">   })</span>
-<span class="source-line-no">215</span><span id="line-215">   @Override /* Overridden from RestOpArg */</span>
-<span class="source-line-no">216</span><span id="line-216">   public Object resolve(RestOpSession opSession) throws Exception {</span>
-<span class="source-line-no">217</span><span id="line-217">      var req = opSession.getRequest();</span>
-<span class="source-line-no">218</span><span id="line-218">      var ps = partParser == null ? req.getPartParserSession() : partParser.getPartSession();</span>
-<span class="source-line-no">219</span><span id="line-219">      var rh = req.getHeaders();</span>
-<span class="source-line-no">220</span><span id="line-220">      var bs = req.getMarshallingSession();</span>
-<span class="source-line-no">221</span><span id="line-221">      var cm = bs.getClassMeta(type.innerType());</span>
-<span class="source-line-no">222</span><span id="line-222"></span>
-<span class="source-line-no">223</span><span id="line-223">      if (multi) {</span>
-<span class="source-line-no">224</span><span id="line-224">         Collection c;</span>
-<span class="source-line-no">225</span><span id="line-225">         if (cm.isArray()) {</span>
-<span class="source-line-no">226</span><span id="line-226">            c = list();</span>
-<span class="source-line-no">227</span><span id="line-227">         } else if (cm.canCreateNewInstance()) {</span>
-<span class="source-line-no">228</span><span id="line-228">            c = (Collection)cm.newInstance();</span>
-<span class="source-line-no">229</span><span id="line-229">         } else {</span>
-<span class="source-line-no">230</span><span id="line-230">            c = new JsonList();</span>
-<span class="source-line-no">231</span><span id="line-231">         }</span>
-<span class="source-line-no">232</span><span id="line-232">         rh.stream(name).map(x -&gt; x.parser(ps).schema(schema).as(cm.getElementType()).orElse(null)).forEach(c::add);</span>
-<span class="source-line-no">233</span><span id="line-233">         return cm.isArray() ? toArray(c, cm.getElementType().inner()) : c;</span>
-<span class="source-line-no">234</span><span id="line-234">      }</span>
-<span class="source-line-no">235</span><span id="line-235"></span>
-<span class="source-line-no">236</span><span id="line-236">      if (cm.isMapOrBean() &amp;&amp; isOneOf(name, "*", "")) {</span>
-<span class="source-line-no">237</span><span id="line-237">         var m = new JsonMap();</span>
-<span class="source-line-no">238</span><span id="line-238">         rh.forEach(x -&gt; m.put(x.getName(), x.parser(ps).schema(schema == null ? null : schema.getProperty(x.getName())).as(cm.getValueType()).orElse(null)));</span>
-<span class="source-line-no">239</span><span id="line-239">         return req.getMarshallingSession().convertToType(m, cm);</span>
-<span class="source-line-no">240</span><span id="line-240">      }</span>
-<span class="source-line-no">241</span><span id="line-241"></span>
-<span class="source-line-no">242</span><span id="line-242">      return rh.getLast(name).parser(ps).schema(schema).def(def).as(type.innerType()).orElse(null);</span>
-<span class="source-line-no">243</span><span id="line-243">   }</span>
-<span class="source-line-no">244</span><span id="line-244">}</span>
+<span class="source-line-no">212</span><span id="line-212">      "rawtypes" // Raw types necessary for REST argument resolution with generic types</span>
+<span class="source-line-no">213</span><span id="line-213">   })</span>
+<span class="source-line-no">214</span><span id="line-214">   @Override /* Overridden from RestOpArg */</span>
+<span class="source-line-no">215</span><span id="line-215">   public Object resolve(RestOpSession opSession) throws Exception {</span>
+<span class="source-line-no">216</span><span id="line-216">      var req = opSession.getRequest();</span>
+<span class="source-line-no">217</span><span id="line-217">      var ps = partParser == null ? req.getPartParserSession() : partParser.getPartSession();</span>
+<span class="source-line-no">218</span><span id="line-218">      var rh = req.getHeaders();</span>
+<span class="source-line-no">219</span><span id="line-219">      var bs = req.getMarshallingSession();</span>
+<span class="source-line-no">220</span><span id="line-220">      var cm = bs.getClassMeta(type.innerType());</span>
+<span class="source-line-no">221</span><span id="line-221"></span>
+<span class="source-line-no">222</span><span id="line-222">      if (multi) {</span>
+<span class="source-line-no">223</span><span id="line-223">         Collection c;</span>
+<span class="source-line-no">224</span><span id="line-224">         if (cm.isArray()) {</span>
+<span class="source-line-no">225</span><span id="line-225">            c = list();</span>
+<span class="source-line-no">226</span><span id="line-226">         } else if (cm.canCreateNewInstance()) {</span>
+<span class="source-line-no">227</span><span id="line-227">            c = (Collection)cm.newInstance();</span>
+<span class="source-line-no">228</span><span id="line-228">         } else {</span>
+<span class="source-line-no">229</span><span id="line-229">            c = new JsonList();</span>
+<span class="source-line-no">230</span><span id="line-230">         }</span>
+<span class="source-line-no">231</span><span id="line-231">         rh.stream(name).map(x -&gt; x.parser(ps).schema(schema).as(cm.getElementType()).orElse(null)).forEach(c::add);</span>
+<span class="source-line-no">232</span><span id="line-232">         return cm.isArray() ? toArray(c, cm.getElementType().inner()) : c;</span>
+<span class="source-line-no">233</span><span id="line-233">      }</span>
+<span class="source-line-no">234</span><span id="line-234"></span>
+<span class="source-line-no">235</span><span id="line-235">      if (cm.isMapOrBean() &amp;&amp; isOneOf(name, "*", "")) {</span>
+<span class="source-line-no">236</span><span id="line-236">         var m = new JsonMap();</span>
+<span class="source-line-no">237</span><span id="line-237">         rh.forEach(x -&gt; m.put(x.getName(), x.parser(ps).schema(schema == null ? null : schema.getProperty(x.getName())).as(cm.getValueType()).orElse(null)));</span>
+<span class="source-line-no">238</span><span id="line-238">         return req.getMarshallingSession().convertToType(m, cm);</span>
+<span class="source-line-no">239</span><span id="line-239">      }</span>
+<span class="source-line-no">240</span><span id="line-240"></span>
+<span class="source-line-no">241</span><span id="line-241">      return rh.getLast(name).parser(ps).schema(schema).def(def).as(type.innerType()).orElse(null);</span>
+<span class="source-line-no">242</span><span id="line-242">   }</span>
+<span class="source-line-no">243</span><span id="line-243">}</span>
 
 
 

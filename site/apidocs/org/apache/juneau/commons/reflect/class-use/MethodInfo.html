@@ -141,21 +141,29 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color">
 <div class="block">SOAP/XML Marshalling Support</div>
 </div>
-<div class="col-first odd-row-color"><a href="#org.apache.juneau.marshall.swap">org.apache.juneau.marshall.swap</a></div>
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.marshall.swap.spi">org.apache.juneau.marshall.swap.spi</a></div>
 <div class="col-last odd-row-color">
 <div class="block">Swap API</div>
 </div>
-<div class="col-first even-row-color"><a href="#org.apache.juneau.marshall.uon">org.apache.juneau.marshall.uon</a></div>
+<div class="col-first even-row-color"><a href="#org.apache.juneau.marshall.toml">org.apache.juneau.marshall.toml</a></div>
 <div class="col-last even-row-color">
+<div class="block">TOML v1.0.0 serializer and parser for Apache Juneau.</div>
+</div>
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.marshall.uon">org.apache.juneau.marshall.uon</a></div>
+<div class="col-last odd-row-color">
 <div class="block">UON Marshalling Support</div>
 </div>
-<div class="col-first odd-row-color"><a href="#org.apache.juneau.marshall.urlencoding">org.apache.juneau.marshall.urlencoding</a></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><a href="#org.apache.juneau.marshall.urlencoding">org.apache.juneau.marshall.urlencoding</a></div>
+<div class="col-last even-row-color">
 <div class="block">URL-Encoding Marshalling Support</div>
 </div>
-<div class="col-first even-row-color"><a href="#org.apache.juneau.marshall.xml">org.apache.juneau.marshall.xml</a></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.marshall.xml">org.apache.juneau.marshall.xml</a></div>
+<div class="col-last odd-row-color">
 <div class="block">XML Marshalling Support</div>
+</div>
+<div class="col-first even-row-color"><a href="#org.apache.juneau.marshall.yaml">org.apache.juneau.marshall.yaml</a></div>
+<div class="col-last even-row-color">
+<div class="block">YAML Marshalling Support</div>
 </div>
 <div class="col-first odd-row-color"><a href="#org.apache.juneau.rest.server">org.apache.juneau.rest.server</a></div>
 <div class="col-last odd-row-color">
@@ -271,6 +279,19 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code>static <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="../../inject/Bean.html" title="annotation interface in org.apache.juneau.commons.inject">Bean</a>&gt;</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">BeanAnnotation.</span><code><a href="../../inject/BeanAnnotation.html#find(org.apache.juneau.commons.reflect.MethodInfo)" class="member-name-link">find</a><wbr>(<a href="../MethodInfo.html" title="class in org.apache.juneau.commons.reflect">MethodInfo</a>&nbsp;method)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Finds the <a href="../../inject/Bean.html" title="annotation interface in org.apache.juneau.commons.inject"><code>@Bean</code></a> annotation that applies to the specified method.</div>
+</div>
+<div class="col-first odd-row-color"><code>default &lt;T&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;T&gt;</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">BeanStore.</span><code><a href="../../inject/BeanStore.html#invokeBeanMethod(java.lang.Class,org.apache.juneau.commons.reflect.MethodInfo,java.lang.Object,java.lang.Object...)" class="member-name-link">invokeBeanMethod</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;T&gt;&nbsp;beanType,
+ <a href="../MethodInfo.html" title="class in org.apache.juneau.commons.reflect">MethodInfo</a>&nbsp;method,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;onClassOrObject,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>...&nbsp;extraBeans)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Invokes one specific factory method to produce a bean of type <c>beanType</c>.</div>
+</div>
 <div class="col-first even-row-color"><code><a href="../../inject/BeanAnnotation.Builder.html" title="class in org.apache.juneau.commons.inject">BeanAnnotation.Builder</a></code></div>
 <div class="col-second even-row-color"><span class="type-name-label">BeanAnnotation.Builder.</span><code><a href="../../inject/BeanAnnotation.Builder.html#on(org.apache.juneau.commons.reflect.MethodInfo...)" class="member-name-link">on</a><wbr>(<a href="../MethodInfo.html" title="class in org.apache.juneau.commons.reflect">MethodInfo</a>...&nbsp;value)</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
@@ -755,23 +776,37 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
-<section class="detail" id="org.apache.juneau.marshall.swap">
-<h2>Uses of <a href="../MethodInfo.html" title="class in org.apache.juneau.commons.reflect">MethodInfo</a> in <a href="../../../marshall/swap/package-summary.html">org.apache.juneau.marshall.swap</a></h2>
-<div class="caption"><span>Constructors in <a href="../../../marshall/swap/package-summary.html">org.apache.juneau.marshall.swap</a> with parameters of type <a href="../MethodInfo.html" title="class in org.apache.juneau.commons.reflect">MethodInfo</a></span></div>
+<section class="detail" id="org.apache.juneau.marshall.swap.spi">
+<h2>Uses of <a href="../MethodInfo.html" title="class in org.apache.juneau.commons.reflect">MethodInfo</a> in <a href="../../../marshall/swap/spi/package-summary.html">org.apache.juneau.marshall.swap.spi</a></h2>
+<div class="caption"><span>Constructors in <a href="../../../marshall/swap/spi/package-summary.html">org.apache.juneau.marshall.swap.spi</a> with parameters of type <a href="../MethodInfo.html" title="class in org.apache.juneau.commons.reflect">MethodInfo</a></span></div>
 <div class="summary-table three-column-summary">
 <div class="table-header col-first">Modifier</div>
 <div class="table-header col-second">Constructor</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color"><code>protected </code></div>
-<div class="col-second even-row-color"><code><a href="../../../marshall/swap/BuilderSwap.html#%3Cinit%3E(java.lang.Class,java.lang.Class,java.lang.reflect.Constructor,java.lang.reflect.Constructor,org.apache.juneau.commons.reflect.MethodInfo,org.apache.juneau.commons.reflect.MethodInfo)" class="member-name-link">BuilderSwap</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;<a href="../../../marshall/swap/BuilderSwap.html" title="type parameter in BuilderSwap">T</a>&gt;&nbsp;objectClass,
- <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;<a href="../../../marshall/swap/BuilderSwap.html" title="type parameter in BuilderSwap">B</a>&gt;&nbsp;builderClass,
- <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Constructor.html" title="class or interface in java.lang.reflect" class="external-link">Constructor</a>&lt;<a href="../../../marshall/swap/BuilderSwap.html" title="type parameter in BuilderSwap">T</a>&gt;&nbsp;objectConstructor,
- <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Constructor.html" title="class or interface in java.lang.reflect" class="external-link">Constructor</a>&lt;<a href="../../../marshall/swap/BuilderSwap.html" title="type parameter in BuilderSwap">B</a>&gt;&nbsp;builderConstructor,
+<div class="col-second even-row-color"><code><a href="../../../marshall/swap/spi/BuilderSwap.html#%3Cinit%3E(java.lang.Class,java.lang.Class,java.lang.reflect.Constructor,java.lang.reflect.Constructor,org.apache.juneau.commons.reflect.MethodInfo,org.apache.juneau.commons.reflect.MethodInfo)" class="member-name-link">BuilderSwap</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;<a href="../../../marshall/swap/spi/BuilderSwap.html" title="type parameter in BuilderSwap">T</a>&gt;&nbsp;objectClass,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;<a href="../../../marshall/swap/spi/BuilderSwap.html" title="type parameter in BuilderSwap">B</a>&gt;&nbsp;builderClass,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Constructor.html" title="class or interface in java.lang.reflect" class="external-link">Constructor</a>&lt;<a href="../../../marshall/swap/spi/BuilderSwap.html" title="type parameter in BuilderSwap">T</a>&gt;&nbsp;objectConstructor,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Constructor.html" title="class or interface in java.lang.reflect" class="external-link">Constructor</a>&lt;<a href="../../../marshall/swap/spi/BuilderSwap.html" title="type parameter in BuilderSwap">B</a>&gt;&nbsp;builderConstructor,
  <a href="../MethodInfo.html" title="class in org.apache.juneau.commons.reflect">MethodInfo</a>&nbsp;createBuilderMethod,
  <a href="../MethodInfo.html" title="class in org.apache.juneau.commons.reflect">MethodInfo</a>&nbsp;createObjectMethod)</code></div>
 <div class="col-last even-row-color">
 <div class="block">Constructor.</div>
 </div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="org.apache.juneau.marshall.toml">
+<h2>Uses of <a href="../MethodInfo.html" title="class in org.apache.juneau.commons.reflect">MethodInfo</a> in <a href="../../../marshall/toml/package-summary.html">org.apache.juneau.marshall.toml</a></h2>
+<div class="caption"><span>Methods in <a href="../../../marshall/toml/package-summary.html">org.apache.juneau.marshall.toml</a> with parameters of type <a href="../MethodInfo.html" title="class in org.apache.juneau.commons.reflect">MethodInfo</a></span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier and Type</div>
+<div class="table-header col-second">Method</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code><a href="../../../marshall/toml/TomlApplyAnnotation.Builder.html" title="class in org.apache.juneau.marshall.toml">TomlApplyAnnotation.Builder</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">TomlApplyAnnotation.Builder.</span><code><a href="../../../marshall/toml/TomlApplyAnnotation.Builder.html#on(org.apache.juneau.commons.reflect.MethodInfo...)" class="member-name-link">on</a><wbr>(<a href="../MethodInfo.html" title="class in org.apache.juneau.commons.reflect">MethodInfo</a>...&nbsp;value)</code></div>
+<div class="col-last even-row-color">&nbsp;</div>
 </div>
 </section>
 </li>
@@ -813,6 +848,20 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color"><code><a href="../../../marshall/xml/XmlApplyAnnotation.Builder.html" title="class in org.apache.juneau.marshall.xml">XmlApplyAnnotation.Builder</a></code></div>
 <div class="col-second even-row-color"><span class="type-name-label">XmlApplyAnnotation.Builder.</span><code><a href="../../../marshall/xml/XmlApplyAnnotation.Builder.html#on(org.apache.juneau.commons.reflect.MethodInfo...)" class="member-name-link">on</a><wbr>(<a href="../MethodInfo.html" title="class in org.apache.juneau.commons.reflect">MethodInfo</a>...&nbsp;value)</code></div>
+<div class="col-last even-row-color">&nbsp;</div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="org.apache.juneau.marshall.yaml">
+<h2>Uses of <a href="../MethodInfo.html" title="class in org.apache.juneau.commons.reflect">MethodInfo</a> in <a href="../../../marshall/yaml/package-summary.html">org.apache.juneau.marshall.yaml</a></h2>
+<div class="caption"><span>Methods in <a href="../../../marshall/yaml/package-summary.html">org.apache.juneau.marshall.yaml</a> with parameters of type <a href="../MethodInfo.html" title="class in org.apache.juneau.commons.reflect">MethodInfo</a></span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier and Type</div>
+<div class="table-header col-second">Method</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code><a href="../../../marshall/yaml/YamlApplyAnnotation.Builder.html" title="class in org.apache.juneau.marshall.yaml">YamlApplyAnnotation.Builder</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">YamlApplyAnnotation.Builder.</span><code><a href="../../../marshall/yaml/YamlApplyAnnotation.Builder.html#on(org.apache.juneau.commons.reflect.MethodInfo...)" class="member-name-link">on</a><wbr>(<a href="../MethodInfo.html" title="class in org.apache.juneau.commons.reflect">MethodInfo</a>...&nbsp;value)</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
 </div>
 </section>

@@ -84,7 +84,7 @@ loadScripts(document, 'script');</script>
  authorization server's <code>issuer</code> identifier.
 
  <p>
- Persistence is <b>SHOULD-level</b> (READY-312f Q8): an MCP client that performs on-demand DCR on every connection
+ Persistence is <b>SHOULD-level</b>: an MCP client that performs on-demand DCR on every connection
  with <i>no</i> store is fully compliant.  When a store <i>is</i> used, the SEP-2352 keying MUST bites &mdash;
  credentials MUST be associated with the specific AS that issued them, and separate registration state MUST be kept per
  AS (<a href="InMemoryMcpClientRegistrationStore.html" title="class in org.apache.juneau.rest.client.mcp.auth"><code>InMemoryMcpClientRegistrationStore</code></a> keys by <code>issuer.toString()</code>).  <a href="McpClientRegistrationManager.html" title="class in org.apache.juneau.rest.client.mcp.auth"><code>McpClientRegistrationManager</code></a>

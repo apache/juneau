@@ -111,56 +111,66 @@
 <span class="source-line-no">098</span><span id="line-98"></span>
 <span class="source-line-no">099</span><span id="line-99">   @Override /* Overridden from InputStream */</span>
 <span class="source-line-no">100</span><span id="line-100">   public int read() throws IOException {</span>
-<span class="source-line-no">101</span><span id="line-101">      decrement();</span>
-<span class="source-line-no">102</span><span id="line-102">      return is.read();</span>
-<span class="source-line-no">103</span><span id="line-103">   }</span>
-<span class="source-line-no">104</span><span id="line-104"></span>
-<span class="source-line-no">105</span><span id="line-105">   @Override /* Overridden from InputStream */</span>
-<span class="source-line-no">106</span><span id="line-106">   public int read(byte[] b) throws IOException {</span>
-<span class="source-line-no">107</span><span id="line-107">      return read(b, 0, b.length);</span>
-<span class="source-line-no">108</span><span id="line-108">   }</span>
-<span class="source-line-no">109</span><span id="line-109"></span>
-<span class="source-line-no">110</span><span id="line-110">   @Override /* Overridden from InputStream */</span>
-<span class="source-line-no">111</span><span id="line-111">   public int read(byte[] b, int off, int len) throws IOException {</span>
-<span class="source-line-no">112</span><span id="line-112">      long numBytes = Math.min(len, remain);</span>
-<span class="source-line-no">113</span><span id="line-113">      int r = is.read(b, off, (int)numBytes);</span>
-<span class="source-line-no">114</span><span id="line-114">      if (r == -1)</span>
-<span class="source-line-no">115</span><span id="line-115">         return -1;</span>
-<span class="source-line-no">116</span><span id="line-116">      decrement(numBytes);</span>
-<span class="source-line-no">117</span><span id="line-117">      return r;</span>
-<span class="source-line-no">118</span><span id="line-118">   }</span>
-<span class="source-line-no">119</span><span id="line-119"></span>
-<span class="source-line-no">120</span><span id="line-120">   @Override /* Overridden from InputStream */</span>
-<span class="source-line-no">121</span><span id="line-121">   public synchronized void reset() throws IOException {</span>
-<span class="source-line-no">122</span><span id="line-122">      is.reset();</span>
-<span class="source-line-no">123</span><span id="line-123">   }</span>
-<span class="source-line-no">124</span><span id="line-124"></span>
-<span class="source-line-no">125</span><span id="line-125">   @Override /* Overridden from ServletInputStream */</span>
-<span class="source-line-no">126</span><span id="line-126">   public void setReadListener(ReadListener arg0) {</span>
-<span class="source-line-no">127</span><span id="line-127">      if (nn(sis))</span>
-<span class="source-line-no">128</span><span id="line-128">         sis.setReadListener(arg0);</span>
+<span class="source-line-no">101</span><span id="line-101">      if (remain &lt;= 0)</span>
+<span class="source-line-no">102</span><span id="line-102">         return probeAtLimit();</span>
+<span class="source-line-no">103</span><span id="line-103">      var r = is.read();</span>
+<span class="source-line-no">104</span><span id="line-104">      if (r != -1)</span>
+<span class="source-line-no">105</span><span id="line-105">         remain--;</span>
+<span class="source-line-no">106</span><span id="line-106">      return r;</span>
+<span class="source-line-no">107</span><span id="line-107">   }</span>
+<span class="source-line-no">108</span><span id="line-108"></span>
+<span class="source-line-no">109</span><span id="line-109">   @Override /* Overridden from InputStream */</span>
+<span class="source-line-no">110</span><span id="line-110">   public int read(byte[] b) throws IOException {</span>
+<span class="source-line-no">111</span><span id="line-111">      return read(b, 0, b.length);</span>
+<span class="source-line-no">112</span><span id="line-112">   }</span>
+<span class="source-line-no">113</span><span id="line-113"></span>
+<span class="source-line-no">114</span><span id="line-114">   @Override /* Overridden from InputStream */</span>
+<span class="source-line-no">115</span><span id="line-115">   public int read(byte[] b, int off, int len) throws IOException {</span>
+<span class="source-line-no">116</span><span id="line-116">      if (len == 0)</span>
+<span class="source-line-no">117</span><span id="line-117">         return 0;</span>
+<span class="source-line-no">118</span><span id="line-118">      if (remain &lt;= 0)</span>
+<span class="source-line-no">119</span><span id="line-119">         return probeAtLimit();</span>
+<span class="source-line-no">120</span><span id="line-120">      int r = is.read(b, off, (int)Math.min(len, remain));</span>
+<span class="source-line-no">121</span><span id="line-121">      if (r &gt; 0)</span>
+<span class="source-line-no">122</span><span id="line-122">         remain -= r;</span>
+<span class="source-line-no">123</span><span id="line-123">      return r;</span>
+<span class="source-line-no">124</span><span id="line-124">   }</span>
+<span class="source-line-no">125</span><span id="line-125"></span>
+<span class="source-line-no">126</span><span id="line-126">   @Override /* Overridden from InputStream */</span>
+<span class="source-line-no">127</span><span id="line-127">   public synchronized void reset() throws IOException {</span>
+<span class="source-line-no">128</span><span id="line-128">      is.reset();</span>
 <span class="source-line-no">129</span><span id="line-129">   }</span>
 <span class="source-line-no">130</span><span id="line-130"></span>
-<span class="source-line-no">131</span><span id="line-131">   @Override /* Overridden from InputStream */</span>
-<span class="source-line-no">132</span><span id="line-132">   public long skip(long n) throws IOException {</span>
-<span class="source-line-no">133</span><span id="line-133">      long toSkip = Math.min(n, remain);</span>
-<span class="source-line-no">134</span><span id="line-134">      long r = is.skip(toSkip);</span>
-<span class="source-line-no">135</span><span id="line-135">      decrement(r);</span>
-<span class="source-line-no">136</span><span id="line-136">      return r;</span>
-<span class="source-line-no">137</span><span id="line-137">   }</span>
-<span class="source-line-no">138</span><span id="line-138"></span>
-<span class="source-line-no">139</span><span id="line-139">   private void decrement() throws IOException {</span>
-<span class="source-line-no">140</span><span id="line-140">      remain--;</span>
-<span class="source-line-no">141</span><span id="line-141">      if (remain &lt; 0)</span>
-<span class="source-line-no">142</span><span id="line-142">         throw ioex("Input limit exceeded.  See @Rest(maxInput).");</span>
+<span class="source-line-no">131</span><span id="line-131">   @Override /* Overridden from ServletInputStream */</span>
+<span class="source-line-no">132</span><span id="line-132">   public void setReadListener(ReadListener arg0) {</span>
+<span class="source-line-no">133</span><span id="line-133">      if (nn(sis))</span>
+<span class="source-line-no">134</span><span id="line-134">         sis.setReadListener(arg0);</span>
+<span class="source-line-no">135</span><span id="line-135">   }</span>
+<span class="source-line-no">136</span><span id="line-136"></span>
+<span class="source-line-no">137</span><span id="line-137">   @Override /* Overridden from InputStream */</span>
+<span class="source-line-no">138</span><span id="line-138">   public long skip(long n) throws IOException {</span>
+<span class="source-line-no">139</span><span id="line-139">      long toSkip = Math.min(n, remain);</span>
+<span class="source-line-no">140</span><span id="line-140">      long r = is.skip(toSkip);</span>
+<span class="source-line-no">141</span><span id="line-141">      decrement(r);</span>
+<span class="source-line-no">142</span><span id="line-142">      return r;</span>
 <span class="source-line-no">143</span><span id="line-143">   }</span>
 <span class="source-line-no">144</span><span id="line-144"></span>
-<span class="source-line-no">145</span><span id="line-145">   private void decrement(long count) throws IOException {</span>
-<span class="source-line-no">146</span><span id="line-146">      remain -= count;</span>
-<span class="source-line-no">147</span><span id="line-147">      if (remain &lt; 0)</span>
-<span class="source-line-no">148</span><span id="line-148">         throw ioex("Input limit exceeded.  See @Rest(maxInput).");</span>
-<span class="source-line-no">149</span><span id="line-149">   }</span>
-<span class="source-line-no">150</span><span id="line-150">}</span>
+<span class="source-line-no">145</span><span id="line-145">   /**</span>
+<span class="source-line-no">146</span><span id="line-146">    * Called when the limit has been reached: returns -1 if the underlying stream is also at end-of-stream</span>
+<span class="source-line-no">147</span><span id="line-147">    * (i.e. the body was exactly the maximum size), otherwise the limit has been exceeded.</span>
+<span class="source-line-no">148</span><span id="line-148">    */</span>
+<span class="source-line-no">149</span><span id="line-149">   private int probeAtLimit() throws IOException {</span>
+<span class="source-line-no">150</span><span id="line-150">      if (is.read() == -1)</span>
+<span class="source-line-no">151</span><span id="line-151">         return -1;</span>
+<span class="source-line-no">152</span><span id="line-152">      throw ioex("Input limit exceeded.  See @Rest(maxInput).");</span>
+<span class="source-line-no">153</span><span id="line-153">   }</span>
+<span class="source-line-no">154</span><span id="line-154"></span>
+<span class="source-line-no">155</span><span id="line-155">   private void decrement(long count) throws IOException {</span>
+<span class="source-line-no">156</span><span id="line-156">      remain -= count;</span>
+<span class="source-line-no">157</span><span id="line-157">      if (remain &lt; 0)</span>
+<span class="source-line-no">158</span><span id="line-158">         throw ioex("Input limit exceeded.  See @Rest(maxInput).");</span>
+<span class="source-line-no">159</span><span id="line-159">   }</span>
+<span class="source-line-no">160</span><span id="line-160">}</span>
 
 
 

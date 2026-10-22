@@ -92,7 +92,7 @@ loadScripts(document, 'script');</script>
    <li>Confirms it starts with <code>"Bearer "</code> (case-insensitive) followed by a non-blank token.
    <li>Delegates the raw token to the configured <a href="TokenValidator.html" title="interface in org.apache.juneau.rest.server.auth"><code>TokenValidator</code></a>.
    <li>On success, stashes the returned <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/security/Principal.html" title="class or interface in java.security" class="external-link"><code>Principal</code></a> on the request attributes under
-      <a href="../RestServerConstants.html#PRINCIPAL_ATTR"><code>RestServerConstants.PRINCIPAL_ATTR</code></a> so downstream handlers can read it via
+      <code>"juneau.principal"</code> so downstream handlers can read it via
       <a href="AuthArg.html" title="class in org.apache.juneau.rest.server.auth"><code>@Auth Principal</code></a> or <code>req.getAttributes().get(PRINCIPAL_ATTR)</code>.
    <li>On any failure path (missing header, malformed scheme, validator throws), throws
       <a href="AuthenticationException.html" title="class in org.apache.juneau.rest.server.auth"><code>AuthenticationException</code></a> with a <code>WWW-Authenticate: Bearer realm="&lt;realm&gt;"</code> response

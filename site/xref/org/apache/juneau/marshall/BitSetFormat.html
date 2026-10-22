@@ -209,8 +209,8 @@
 <a class="jxr_linenumber" name="L201" href="#L201">201</a> <em class="jxr_javadoccomment">	 * @return &lt;jk&gt;false&lt;/jk&gt;.</em>
 <a class="jxr_linenumber" name="L202" href="#L202">202</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L203" href="#L203">203</a> 	@SuppressWarnings({
-<a class="jxr_linenumber" name="L204" href="#L204">204</a> 		<span class="jxr_string">"static-method"</span>, <em class="jxr_comment">// Kept as an instance method for polymorphic-by-convention symmetry with the other Format classes (BigNumberFormat, FloatFormat, DurationFormat, etc.) where isNumeric() depends on the enum constant.</em>
-<a class="jxr_linenumber" name="L205" href="#L205">205</a> 		<span class="jxr_string">"java:S3400"</span>     <em class="jxr_comment">// Same rationale — must remain an instance method, not a constant, to match the cross-Format API contract.</em>
+<a class="jxr_linenumber" name="L204" href="#L204">204</a> 		<span class="jxr_string">"java:S3400"</span>, <em class="jxr_comment">// Same rationale — must remain an instance method, not a constant, to match the cross-Format API contract.</em>
+<a class="jxr_linenumber" name="L205" href="#L205">205</a> 		<span class="jxr_string">"static-method"</span> <em class="jxr_comment">// Kept as an instance method for polymorphic-by-convention symmetry with the other Format classes (BigNumberFormat, FloatFormat, DurationFormat, etc.) where isNumeric() depends on the enum constant.</em>
 <a class="jxr_linenumber" name="L206" href="#L206">206</a> 	})
 <a class="jxr_linenumber" name="L207" href="#L207">207</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> isNumeric() {
 <a class="jxr_linenumber" name="L208" href="#L208">208</a> 		<strong class="jxr_keyword">return</strong> false;

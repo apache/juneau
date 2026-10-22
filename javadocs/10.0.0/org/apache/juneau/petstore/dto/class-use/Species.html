@@ -56,13 +56,51 @@ loadScripts(document, 'script');</script>
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Package</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><a href="#org.apache.juneau.petstore.dto">org.apache.juneau.petstore.dto</a></div>
+<div class="col-first even-row-color"><a href="#org.apache.juneau.petstore.console.ops">org.apache.juneau.petstore.console.ops</a></div>
 <div class="col-last even-row-color">
+<div class="block">Petstore console operations pages: background jobs and the audit log.</div>
+</div>
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.petstore.dto">org.apache.juneau.petstore.dto</a></div>
+<div class="col-last odd-row-color">
 <div class="block">Petstore domain beans (DTOs).</div>
+</div>
+<div class="col-first even-row-color"><a href="#org.apache.juneau.petstore.service">org.apache.juneau.petstore.service</a></div>
+<div class="col-last even-row-color">
+<div class="block">Petstore service layer (in-memory store).</div>
 </div>
 </div>
 <section class="class-uses">
 <ul class="block-list">
+<li>
+<section class="detail" id="org.apache.juneau.petstore.console.ops">
+<h2>Uses of <a href="../Species.html" title="enum class in org.apache.juneau.petstore.dto">Species</a> in <a href="../../console/ops/package-summary.html">org.apache.juneau.petstore.console.ops</a></h2>
+<div class="caption"><span>Methods in <a href="../../console/ops/package-summary.html">org.apache.juneau.petstore.console.ops</a> that return types with arguments of type <a href="../Species.html" title="enum class in org.apache.juneau.petstore.dto">Species</a></span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier and Type</div>
+<div class="table-header col-second">Method</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="../Species.html" title="enum class in org.apache.juneau.petstore.dto">Species</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Integer.html" title="class or interface in java.lang" class="external-link">Integer</a>&gt;</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">JobsRest.Restock.</span><code><a href="../../console/ops/JobsRest.Restock.html#perSpecies()" class="member-name-link">perSpecies</a>()</code></div>
+<div class="col-last even-row-color">
+<div class="block">Returns the value of the <a href="../../../../../../org/apache/juneau/petstore/console/ops/JobsRest.Restock.html#param-perSpecies"><code>perSpecies</code></a> record component.</div>
+</div>
+</div>
+<div class="caption"><span>Constructor parameters in <a href="../../console/ops/package-summary.html">org.apache.juneau.petstore.console.ops</a> with type arguments of type <a href="../Species.html" title="enum class in org.apache.juneau.petstore.dto">Species</a></span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier</div>
+<div class="table-header col-second">Constructor</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code>&nbsp;</code></div>
+<div class="col-second even-row-color"><code><a href="../../console/ops/JobsRest.Restock.html#%3Cinit%3E(java.util.Map,java.lang.String,int,int)" class="member-name-link">Restock</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="../Species.html" title="enum class in org.apache.juneau.petstore.dto">Species</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Integer.html" title="class or interface in java.lang" class="external-link">Integer</a>&gt;&nbsp;perSpecies,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;idempotencyKey,
+ int&nbsp;slowMs,
+ int&nbsp;holdMs)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Creates an instance of a <code>Restock</code> record class.</div>
+</div>
+</div>
+</section>
+</li>
 <li>
 <section class="detail" id="org.apache.juneau.petstore.dto">
 <h2>Uses of <a href="../Species.html" title="enum class in org.apache.juneau.petstore.dto">Species</a> in <a href="../package-summary.html">org.apache.juneau.petstore.dto</a></h2>
@@ -94,9 +132,31 @@ the order they are declared.</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color"><code><a href="../Pet.html" title="class in org.apache.juneau.petstore.dto">Pet</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">Pet.</span><code><a href="../Pet.html#setSpecies(org.apache.juneau.petstore.dto.Species)" class="member-name-link">setSpecies</a><wbr>(<a href="../Species.html" title="enum class in org.apache.juneau.petstore.dto">Species</a>&nbsp;value)</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">Pet.</span><code><a href="../Pet.html#defaultSpecies(org.apache.juneau.petstore.dto.Species)" class="member-name-link">defaultSpecies</a><wbr>(<a href="../Species.html" title="enum class in org.apache.juneau.petstore.dto">Species</a>&nbsp;value)</code></div>
 <div class="col-last even-row-color">
+<div class="block">Sets the species only if it is currently <jk>null</jk>.</div>
+</div>
+<div class="col-first odd-row-color"><code><a href="../Pet.html" title="class in org.apache.juneau.petstore.dto">Pet</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">Pet.</span><code><a href="../Pet.html#setSpecies(org.apache.juneau.petstore.dto.Species)" class="member-name-link">setSpecies</a><wbr>(<a href="../Species.html" title="enum class in org.apache.juneau.petstore.dto">Species</a>&nbsp;value)</code></div>
+<div class="col-last odd-row-color">
 <div class="block">Sets the species of the pet.</div>
+</div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="org.apache.juneau.petstore.service">
+<h2>Uses of <a href="../Species.html" title="enum class in org.apache.juneau.petstore.dto">Species</a> in <a href="../../service/package-summary.html">org.apache.juneau.petstore.service</a></h2>
+<div class="caption"><span>Method parameters in <a href="../../service/package-summary.html">org.apache.juneau.petstore.service</a> with type arguments of type <a href="../Species.html" title="enum class in org.apache.juneau.petstore.dto">Species</a></span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier and Type</div>
+<div class="table-header col-second">Method</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../Pet.html" title="class in org.apache.juneau.petstore.dto">Pet</a>&gt;</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">PetStore.</span><code><a href="../../service/PetStore.html#restock(java.util.Map,java.lang.String)" class="member-name-link">restock</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="../Species.html" title="enum class in org.apache.juneau.petstore.dto">Species</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Integer.html" title="class or interface in java.lang" class="external-link">Integer</a>&gt;&nbsp;perSpecies,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;actor)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Adds a batch of available pets, one per requested count, and records one summary <code>RESTOCK</code> audit entry.</div>
 </div>
 </div>
 </section>

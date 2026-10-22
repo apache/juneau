@@ -69,95 +69,95 @@
 <span class="source-line-no">056</span><span id="line-56"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/JavaMethodParameters"&gt;Java Method Parameters&lt;/a&gt;</span>
 <span class="source-line-no">057</span><span id="line-57"> * &lt;/ul&gt;</span>
 <span class="source-line-no">058</span><span id="line-58"> */</span>
-<span class="source-line-no">059</span><span id="line-59">public class FormDataArg implements RestOpArg {</span>
-<span class="source-line-no">060</span><span id="line-60"></span>
-<span class="source-line-no">061</span><span id="line-61">   private static final AnnotationProvider AP = AnnotationProvider.INSTANCE;</span>
-<span class="source-line-no">062</span><span id="line-62"></span>
-<span class="source-line-no">063</span><span id="line-63">   /**</span>
-<span class="source-line-no">064</span><span id="line-64">    * Static creator.</span>
-<span class="source-line-no">065</span><span id="line-65">    *</span>
-<span class="source-line-no">066</span><span id="line-66">    * @param paramInfo The Java method parameter being resolved. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">067</span><span id="line-67">    * @param annotations The annotations to apply to any new part parsers.</span>
-<span class="source-line-no">068</span><span id="line-68">    * @return A new {@link FormDataArg}, or &lt;jk&gt;null&lt;/jk&gt; if the parameter is not annotated with {@link FormData}.</span>
-<span class="source-line-no">069</span><span id="line-69">    */</span>
-<span class="source-line-no">070</span><span id="line-70">   public static FormDataArg create(ParameterInfo paramInfo, AnnotationWorkList annotations) {</span>
-<span class="source-line-no">071</span><span id="line-71">      if (AP.has(FormData.class, paramInfo))</span>
-<span class="source-line-no">072</span><span id="line-72">         return new FormDataArg(paramInfo, annotations);</span>
-<span class="source-line-no">073</span><span id="line-73">      return null;</span>
-<span class="source-line-no">074</span><span id="line-74">   }</span>
-<span class="source-line-no">075</span><span id="line-75"></span>
-<span class="source-line-no">076</span><span id="line-76">   private static Optional&lt;String&gt; findName(ParameterInfo pi) {</span>
-<span class="source-line-no">077</span><span id="line-77">      // @formatter:off</span>
-<span class="source-line-no">078</span><span id="line-78">      return AP.find(FormData.class, pi)</span>
-<span class="source-line-no">079</span><span id="line-79">         .stream()</span>
-<span class="source-line-no">080</span><span id="line-80">         .map(AnnotationInfo::inner)</span>
-<span class="source-line-no">081</span><span id="line-81">         .filter(x -&gt; isAnyNotBlank(x.value(), x.name()))</span>
-<span class="source-line-no">082</span><span id="line-82">         .findFirst()</span>
-<span class="source-line-no">083</span><span id="line-83">         .map(x -&gt; firstNonBlank(x.name(), x.value()));</span>
-<span class="source-line-no">084</span><span id="line-84">      // @formatter:on</span>
-<span class="source-line-no">085</span><span id="line-85">   }</span>
-<span class="source-line-no">086</span><span id="line-86"></span>
-<span class="source-line-no">087</span><span id="line-87">   private static Optional&lt;String&gt; findDef(ParameterInfo pi) {</span>
-<span class="source-line-no">088</span><span id="line-88">      // @formatter:off</span>
-<span class="source-line-no">089</span><span id="line-89">      return AP.find(FormData.class, pi)</span>
-<span class="source-line-no">090</span><span id="line-90">         .stream()</span>
-<span class="source-line-no">091</span><span id="line-91">         .map(AnnotationInfo::inner)</span>
-<span class="source-line-no">092</span><span id="line-92">         .filter(x -&gt; ine(x.def()))</span>
-<span class="source-line-no">093</span><span id="line-93">         .findFirst()</span>
-<span class="source-line-no">094</span><span id="line-94">         .map(FormData::def);</span>
-<span class="source-line-no">095</span><span id="line-95">      // @formatter:on</span>
-<span class="source-line-no">096</span><span id="line-96">   }</span>
-<span class="source-line-no">097</span><span id="line-97"></span>
-<span class="source-line-no">098</span><span id="line-98">   private static FormData getClassLevelFormData(ParameterInfo pi, String paramName) {</span>
-<span class="source-line-no">099</span><span id="line-99">      var declaringClass = pi.getMethod().getDeclaringClass();</span>
-<span class="source-line-no">100</span><span id="line-100">      if (declaringClass == null)</span>
-<span class="source-line-no">101</span><span id="line-101">         return null;</span>
-<span class="source-line-no">102</span><span id="line-102">      var restAnnotation = declaringClass.getAnnotations(Rest.class).findFirst().map(AnnotationInfo::inner).orElse(null);</span>
-<span class="source-line-no">103</span><span id="line-103">      if (restAnnotation == null)</span>
+<span class="source-line-no">059</span><span id="line-59">@SuppressWarnings({</span>
+<span class="source-line-no">060</span><span id="line-60">   "unchecked" // The schema parser is cast to Class&lt;? extends HttpPartParser&gt;; the annotation contract guarantees the bound</span>
+<span class="source-line-no">061</span><span id="line-61">})</span>
+<span class="source-line-no">062</span><span id="line-62">public class FormDataArg implements RestOpArg {</span>
+<span class="source-line-no">063</span><span id="line-63"></span>
+<span class="source-line-no">064</span><span id="line-64">   private static final AnnotationProvider AP = AnnotationProvider.INSTANCE;</span>
+<span class="source-line-no">065</span><span id="line-65"></span>
+<span class="source-line-no">066</span><span id="line-66">   /**</span>
+<span class="source-line-no">067</span><span id="line-67">    * Static creator.</span>
+<span class="source-line-no">068</span><span id="line-68">    *</span>
+<span class="source-line-no">069</span><span id="line-69">    * @param paramInfo The Java method parameter being resolved. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">070</span><span id="line-70">    * @param annotations The annotations to apply to any new part parsers.</span>
+<span class="source-line-no">071</span><span id="line-71">    * @return A new {@link FormDataArg}, or &lt;jk&gt;null&lt;/jk&gt; if the parameter is not annotated with {@link FormData}.</span>
+<span class="source-line-no">072</span><span id="line-72">    */</span>
+<span class="source-line-no">073</span><span id="line-73">   public static FormDataArg create(ParameterInfo paramInfo, AnnotationWorkList annotations) {</span>
+<span class="source-line-no">074</span><span id="line-74">      if (AP.has(FormData.class, paramInfo))</span>
+<span class="source-line-no">075</span><span id="line-75">         return new FormDataArg(paramInfo, annotations);</span>
+<span class="source-line-no">076</span><span id="line-76">      return null;</span>
+<span class="source-line-no">077</span><span id="line-77">   }</span>
+<span class="source-line-no">078</span><span id="line-78"></span>
+<span class="source-line-no">079</span><span id="line-79">   private static Optional&lt;String&gt; findName(ParameterInfo pi) {</span>
+<span class="source-line-no">080</span><span id="line-80">      // @formatter:off</span>
+<span class="source-line-no">081</span><span id="line-81">      return AP.find(FormData.class, pi)</span>
+<span class="source-line-no">082</span><span id="line-82">         .stream()</span>
+<span class="source-line-no">083</span><span id="line-83">         .map(AnnotationInfo::inner)</span>
+<span class="source-line-no">084</span><span id="line-84">         .filter(x -&gt; isAnyNotBlank(x.value(), x.name()))</span>
+<span class="source-line-no">085</span><span id="line-85">         .findFirst()</span>
+<span class="source-line-no">086</span><span id="line-86">         .map(x -&gt; firstNonBlank(x.name(), x.value()));</span>
+<span class="source-line-no">087</span><span id="line-87">      // @formatter:on</span>
+<span class="source-line-no">088</span><span id="line-88">   }</span>
+<span class="source-line-no">089</span><span id="line-89"></span>
+<span class="source-line-no">090</span><span id="line-90">   private static Optional&lt;String&gt; findDef(ParameterInfo pi) {</span>
+<span class="source-line-no">091</span><span id="line-91">      // @formatter:off</span>
+<span class="source-line-no">092</span><span id="line-92">      return AP.find(FormData.class, pi)</span>
+<span class="source-line-no">093</span><span id="line-93">         .stream()</span>
+<span class="source-line-no">094</span><span id="line-94">         .map(AnnotationInfo::inner)</span>
+<span class="source-line-no">095</span><span id="line-95">         .filter(x -&gt; ine(x.def()))</span>
+<span class="source-line-no">096</span><span id="line-96">         .findFirst()</span>
+<span class="source-line-no">097</span><span id="line-97">         .map(FormData::def);</span>
+<span class="source-line-no">098</span><span id="line-98">      // @formatter:on</span>
+<span class="source-line-no">099</span><span id="line-99">   }</span>
+<span class="source-line-no">100</span><span id="line-100"></span>
+<span class="source-line-no">101</span><span id="line-101">   private static FormData getClassLevelFormData(ParameterInfo pi, String paramName) {</span>
+<span class="source-line-no">102</span><span id="line-102">      var declaringClass = pi.getMethod().getDeclaringClass();</span>
+<span class="source-line-no">103</span><span id="line-103">      if (declaringClass == null)</span>
 <span class="source-line-no">104</span><span id="line-104">         return null;</span>
-<span class="source-line-no">105</span><span id="line-105">      for (var f : restAnnotation.formDataParams()) {</span>
-<span class="source-line-no">106</span><span id="line-106">         var fName = firstNonEmpty(f.name(), f.value());</span>
-<span class="source-line-no">107</span><span id="line-107">         if (eq(paramName, fName))</span>
-<span class="source-line-no">108</span><span id="line-108">            return f;</span>
-<span class="source-line-no">109</span><span id="line-109">      }</span>
-<span class="source-line-no">110</span><span id="line-110">      return null;</span>
-<span class="source-line-no">111</span><span id="line-111">   }</span>
-<span class="source-line-no">112</span><span id="line-112"></span>
-<span class="source-line-no">113</span><span id="line-113">   private final boolean multi;</span>
-<span class="source-line-no">114</span><span id="line-114">   private final HttpPartParser partParser;</span>
-<span class="source-line-no">115</span><span id="line-115">   private final HttpPartSchema schema;</span>
-<span class="source-line-no">116</span><span id="line-116">   private final String name;</span>
-<span class="source-line-no">117</span><span id="line-117">   private final String def;</span>
-<span class="source-line-no">118</span><span id="line-118">   private final ClassInfo type;</span>
-<span class="source-line-no">119</span><span id="line-119"></span>
-<span class="source-line-no">120</span><span id="line-120">   /**</span>
-<span class="source-line-no">121</span><span id="line-121">    * Pre-computed flag &amp;mdash; {@code true} iff this parameter carries a Jakarta Bean Validation</span>
-<span class="source-line-no">122</span><span id="line-122">    * {@code @Valid} (or equivalent) marker. Off-by-default opt-in &amp;mdash; see {@link BeanValidator}.</span>
-<span class="source-line-no">123</span><span id="line-123">    */</span>
-<span class="source-line-no">124</span><span id="line-124">   private final boolean validate;</span>
-<span class="source-line-no">125</span><span id="line-125"></span>
-<span class="source-line-no">126</span><span id="line-126">   /**</span>
-<span class="source-line-no">127</span><span id="line-127">    * Constructor.</span>
-<span class="source-line-no">128</span><span id="line-128">    *</span>
-<span class="source-line-no">129</span><span id="line-129">    * @param pi The Java method parameter being resolved. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">130</span><span id="line-130">    * @param annotations The annotations to apply to any new part parsers.</span>
-<span class="source-line-no">131</span><span id="line-131">    */</span>
-<span class="source-line-no">132</span><span id="line-132">   protected FormDataArg(ParameterInfo pi, AnnotationWorkList annotations) {</span>
-<span class="source-line-no">133</span><span id="line-133">      this.name = findName(pi).orElseThrow(() -&gt; new ArgException(pi, "@FormData used without name or value"));</span>
-<span class="source-line-no">134</span><span id="line-134"></span>
-<span class="source-line-no">135</span><span id="line-135">      var classLevelFormData = getClassLevelFormData(pi, name);</span>
-<span class="source-line-no">136</span><span id="line-136"></span>
-<span class="source-line-no">137</span><span id="line-137">      var schemaBuilder = HttpPartSchema.create();</span>
-<span class="source-line-no">138</span><span id="line-138">      if (classLevelFormData != null)</span>
-<span class="source-line-no">139</span><span id="line-139">         schemaBuilder.apply(classLevelFormData);</span>
-<span class="source-line-no">140</span><span id="line-140">      schemaBuilder.applyAll(FormData.class, pi);</span>
-<span class="source-line-no">141</span><span id="line-141">      this.schema = schemaBuilder.build();</span>
-<span class="source-line-no">142</span><span id="line-142"></span>
-<span class="source-line-no">143</span><span id="line-143">      this.def = findDef(pi).or(() -&gt; o(classLevelFormData).filter(f -&gt; ine(f.def())).map(FormData::def)).orElse(null);</span>
-<span class="source-line-no">144</span><span id="line-144">      this.type = pi.getParameterType();</span>
-<span class="source-line-no">145</span><span id="line-145">      @SuppressWarnings({</span>
-<span class="source-line-no">146</span><span id="line-146">         "unchecked" // Type erasure on reflective/generic cast; element type is verified at call site</span>
-<span class="source-line-no">147</span><span id="line-147">      })</span>
+<span class="source-line-no">105</span><span id="line-105">      var restAnnotation = declaringClass.getAnnotations(Rest.class).findFirst().map(AnnotationInfo::inner).orElse(null);</span>
+<span class="source-line-no">106</span><span id="line-106">      if (restAnnotation == null)</span>
+<span class="source-line-no">107</span><span id="line-107">         return null;</span>
+<span class="source-line-no">108</span><span id="line-108">      for (var f : restAnnotation.formDataParams()) {</span>
+<span class="source-line-no">109</span><span id="line-109">         var fName = firstNonEmpty(f.name(), f.value());</span>
+<span class="source-line-no">110</span><span id="line-110">         if (eq(paramName, fName))</span>
+<span class="source-line-no">111</span><span id="line-111">            return f;</span>
+<span class="source-line-no">112</span><span id="line-112">      }</span>
+<span class="source-line-no">113</span><span id="line-113">      return null;</span>
+<span class="source-line-no">114</span><span id="line-114">   }</span>
+<span class="source-line-no">115</span><span id="line-115"></span>
+<span class="source-line-no">116</span><span id="line-116">   private final boolean multi;</span>
+<span class="source-line-no">117</span><span id="line-117">   private final HttpPartParser partParser;</span>
+<span class="source-line-no">118</span><span id="line-118">   private final HttpPartSchema schema;</span>
+<span class="source-line-no">119</span><span id="line-119">   private final String name;</span>
+<span class="source-line-no">120</span><span id="line-120">   private final String def;</span>
+<span class="source-line-no">121</span><span id="line-121">   private final ClassInfo type;</span>
+<span class="source-line-no">122</span><span id="line-122"></span>
+<span class="source-line-no">123</span><span id="line-123">   /**</span>
+<span class="source-line-no">124</span><span id="line-124">    * Pre-computed flag &amp;mdash; {@code true} iff this parameter carries a Jakarta Bean Validation</span>
+<span class="source-line-no">125</span><span id="line-125">    * {@code @Valid} (or equivalent) marker. Off-by-default opt-in &amp;mdash; see {@link BeanValidator}.</span>
+<span class="source-line-no">126</span><span id="line-126">    */</span>
+<span class="source-line-no">127</span><span id="line-127">   private final boolean validate;</span>
+<span class="source-line-no">128</span><span id="line-128"></span>
+<span class="source-line-no">129</span><span id="line-129">   /**</span>
+<span class="source-line-no">130</span><span id="line-130">    * Constructor.</span>
+<span class="source-line-no">131</span><span id="line-131">    *</span>
+<span class="source-line-no">132</span><span id="line-132">    * @param pi The Java method parameter being resolved. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">133</span><span id="line-133">    * @param annotations The annotations to apply to any new part parsers.</span>
+<span class="source-line-no">134</span><span id="line-134">    */</span>
+<span class="source-line-no">135</span><span id="line-135">   protected FormDataArg(ParameterInfo pi, AnnotationWorkList annotations) {</span>
+<span class="source-line-no">136</span><span id="line-136">      this.name = findName(pi).orElseThrow(() -&gt; new ArgException(pi, "@FormData used without name or value"));</span>
+<span class="source-line-no">137</span><span id="line-137"></span>
+<span class="source-line-no">138</span><span id="line-138">      var classLevelFormData = getClassLevelFormData(pi, name);</span>
+<span class="source-line-no">139</span><span id="line-139"></span>
+<span class="source-line-no">140</span><span id="line-140">      var schemaBuilder = HttpPartSchema.create();</span>
+<span class="source-line-no">141</span><span id="line-141">      if (classLevelFormData != null)</span>
+<span class="source-line-no">142</span><span id="line-142">         schemaBuilder.apply(classLevelFormData);</span>
+<span class="source-line-no">143</span><span id="line-143">      schemaBuilder.applyAll(FormData.class, pi);</span>
+<span class="source-line-no">144</span><span id="line-144">      this.schema = schemaBuilder.build();</span>
+<span class="source-line-no">145</span><span id="line-145"></span>
+<span class="source-line-no">146</span><span id="line-146">      this.def = findDef(pi).or(() -&gt; o(classLevelFormData).filter(f -&gt; ine(f.def())).map(FormData::def)).orElse(null);</span>
+<span class="source-line-no">147</span><span id="line-147">      this.type = pi.getParameterType();</span>
 <span class="source-line-no">148</span><span id="line-148">      var pp = (Class&lt;? extends HttpPartParser&gt;)schema.getParser();</span>
 <span class="source-line-no">149</span><span id="line-149">      this.partParser = nn(pp) ? HttpPartParser.creator().type(pp).apply(annotations).create() : null;</span>
 <span class="source-line-no">150</span><span id="line-150">      this.multi = schema.getCollectionFormat() == HttpPartCollectionFormat.MULTI;</span>
@@ -169,39 +169,38 @@
 <span class="source-line-no">156</span><span id="line-156"></span>
 <span class="source-line-no">157</span><span id="line-157">   @SuppressWarnings({</span>
 <span class="source-line-no">158</span><span id="line-158">      "rawtypes", // Raw types necessary for REST argument resolution with generic types</span>
-<span class="source-line-no">159</span><span id="line-159">      "unchecked", // Type erasure requires unchecked casts in REST argument parsing</span>
-<span class="source-line-no">160</span><span id="line-160">      "resource", // as(Class)/as(Type,Type...) calls below are generic and conservatively treated as Closeable; the resolved form value is handed to the invoked op method, not owned/closed here.</span>
-<span class="source-line-no">161</span><span id="line-161">   })</span>
-<span class="source-line-no">162</span><span id="line-162">   @Override /* Overridden from RestOpArg */</span>
-<span class="source-line-no">163</span><span id="line-163">   public Object resolve(RestOpSession opSession) throws Exception {</span>
-<span class="source-line-no">164</span><span id="line-164">      var req = opSession.getRequest();</span>
-<span class="source-line-no">165</span><span id="line-165">      var ps = partParser == null ? req.getPartParserSession() : partParser.getPartSession();</span>
-<span class="source-line-no">166</span><span id="line-166">      var rh = req.getFormParams();</span>
-<span class="source-line-no">167</span><span id="line-167">      var bs = req.getMarshallingSession();</span>
-<span class="source-line-no">168</span><span id="line-168">      var cm = bs.getClassMeta(type.innerType());</span>
-<span class="source-line-no">169</span><span id="line-169"></span>
-<span class="source-line-no">170</span><span id="line-170">      Object result;</span>
-<span class="source-line-no">171</span><span id="line-171">      if (multi) {</span>
-<span class="source-line-no">172</span><span id="line-172">         Collection c;</span>
-<span class="source-line-no">173</span><span id="line-173">         if (cm.isArray()) {</span>
-<span class="source-line-no">174</span><span id="line-174">            c = list();</span>
-<span class="source-line-no">175</span><span id="line-175">         } else if (cm.canCreateNewInstance()) {</span>
-<span class="source-line-no">176</span><span id="line-176">            c = (Collection)cm.newInstance();</span>
-<span class="source-line-no">177</span><span id="line-177">         } else {</span>
-<span class="source-line-no">178</span><span id="line-178">            c = new JsonList();</span>
-<span class="source-line-no">179</span><span id="line-179">         }</span>
-<span class="source-line-no">180</span><span id="line-180">         rh.getAll(name).stream().map(x -&gt; x.parser(ps).schema(schema).as(cm.getElementType()).orElse(null)).forEach(c::add);</span>
-<span class="source-line-no">181</span><span id="line-181">         result = cm.isArray() ? toArray(c, cm.getElementType().inner()) : c;</span>
-<span class="source-line-no">182</span><span id="line-182">      } else if (cm.isMapOrBean() &amp;&amp; isOneOf(name, "*", "")) {</span>
-<span class="source-line-no">183</span><span id="line-183">         var m = new JsonMap();</span>
-<span class="source-line-no">184</span><span id="line-184">         rh.forEach(e -&gt; m.put(e.getName(), e.parser(ps).schema(schema == null ? null : schema.getProperty(e.getName())).as(cm.getValueType()).orElse(null)));</span>
-<span class="source-line-no">185</span><span id="line-185">         result = req.getMarshallingSession().convertToType(m, cm);</span>
-<span class="source-line-no">186</span><span id="line-186">      } else {</span>
-<span class="source-line-no">187</span><span id="line-187">         result = rh.getLast(name).parser(ps).schema(schema).def(def).as(type.innerType()).orElse(null);</span>
-<span class="source-line-no">188</span><span id="line-188">      }</span>
-<span class="source-line-no">189</span><span id="line-189">      return validate ? BeanValidator.validate(result, opSession.getBeanStore()) : result;</span>
-<span class="source-line-no">190</span><span id="line-190">   }</span>
-<span class="source-line-no">191</span><span id="line-191">}</span>
+<span class="source-line-no">159</span><span id="line-159">      "resource" // as(Class)/as(Type,Type...) calls below are generic and conservatively treated as Closeable; the resolved form value is handed to the invoked op method, not owned/closed here.</span>
+<span class="source-line-no">160</span><span id="line-160">   })</span>
+<span class="source-line-no">161</span><span id="line-161">   @Override /* Overridden from RestOpArg */</span>
+<span class="source-line-no">162</span><span id="line-162">   public Object resolve(RestOpSession opSession) throws Exception {</span>
+<span class="source-line-no">163</span><span id="line-163">      var req = opSession.getRequest();</span>
+<span class="source-line-no">164</span><span id="line-164">      var ps = partParser == null ? req.getPartParserSession() : partParser.getPartSession();</span>
+<span class="source-line-no">165</span><span id="line-165">      var rh = req.getFormParams();</span>
+<span class="source-line-no">166</span><span id="line-166">      var bs = req.getMarshallingSession();</span>
+<span class="source-line-no">167</span><span id="line-167">      var cm = bs.getClassMeta(type.innerType());</span>
+<span class="source-line-no">168</span><span id="line-168"></span>
+<span class="source-line-no">169</span><span id="line-169">      Object result;</span>
+<span class="source-line-no">170</span><span id="line-170">      if (multi) {</span>
+<span class="source-line-no">171</span><span id="line-171">         Collection c;</span>
+<span class="source-line-no">172</span><span id="line-172">         if (cm.isArray()) {</span>
+<span class="source-line-no">173</span><span id="line-173">            c = list();</span>
+<span class="source-line-no">174</span><span id="line-174">         } else if (cm.canCreateNewInstance()) {</span>
+<span class="source-line-no">175</span><span id="line-175">            c = (Collection)cm.newInstance();</span>
+<span class="source-line-no">176</span><span id="line-176">         } else {</span>
+<span class="source-line-no">177</span><span id="line-177">            c = new JsonList();</span>
+<span class="source-line-no">178</span><span id="line-178">         }</span>
+<span class="source-line-no">179</span><span id="line-179">         rh.getAll(name).stream().map(x -&gt; x.parser(ps).schema(schema).as(cm.getElementType()).orElse(null)).forEach(c::add);</span>
+<span class="source-line-no">180</span><span id="line-180">         result = cm.isArray() ? toArray(c, cm.getElementType().inner()) : c;</span>
+<span class="source-line-no">181</span><span id="line-181">      } else if (cm.isMapOrBean() &amp;&amp; isOneOf(name, "*", "")) {</span>
+<span class="source-line-no">182</span><span id="line-182">         var m = new JsonMap();</span>
+<span class="source-line-no">183</span><span id="line-183">         rh.forEach(e -&gt; m.put(e.getName(), e.parser(ps).schema(schema == null ? null : schema.getProperty(e.getName())).as(cm.getValueType()).orElse(null)));</span>
+<span class="source-line-no">184</span><span id="line-184">         result = req.getMarshallingSession().convertToType(m, cm);</span>
+<span class="source-line-no">185</span><span id="line-185">      } else {</span>
+<span class="source-line-no">186</span><span id="line-186">         result = rh.getLast(name).parser(ps).schema(schema).def(def).as(type.innerType()).orElse(null);</span>
+<span class="source-line-no">187</span><span id="line-187">      }</span>
+<span class="source-line-no">188</span><span id="line-188">      return validate ? BeanValidator.validate(result, opSession.getBeanStore()) : result;</span>
+<span class="source-line-no">189</span><span id="line-189">   }</span>
+<span class="source-line-no">190</span><span id="line-190">}</span>
 
 
 

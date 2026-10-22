@@ -106,7 +106,7 @@
 <span class="source-line-no">093</span><span id="line-93">            w('\\').w('f');</span>
 <span class="source-line-no">094</span><span id="line-94">         else if (c == '\r')</span>
 <span class="source-line-no">095</span><span id="line-95">            w('\\').w('r');</span>
-<span class="source-line-no">096</span><span id="line-96">         else if (c &gt;= 0 &amp;&amp; c &lt;= 0x1F)</span>
+<span class="source-line-no">096</span><span id="line-96">         else if (c &lt;= 0x1F)</span>
 <span class="source-line-no">097</span><span id="line-97">            w(String.format("\\u%04x", (int) c));</span>
 <span class="source-line-no">098</span><span id="line-98">         else</span>
 <span class="source-line-no">099</span><span id="line-99">            w(c);</span>

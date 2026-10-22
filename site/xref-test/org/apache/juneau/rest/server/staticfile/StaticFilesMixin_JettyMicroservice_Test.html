@@ -62,7 +62,7 @@
 <a class="jxr_linenumber" name="L54" href="#L54">54</a>  <em class="jxr_javadoccomment"> * 		response writer suppresses the body via</em>
 <a class="jxr_linenumber" name="L55" href="#L55">55</a>  <em class="jxr_javadoccomment"> * 		{@link org.apache.juneau.rest.server.server.processor.HttpResourceProcessor}.</em>
 <a class="jxr_linenumber" name="L56" href="#L56">56</a>  <em class="jxr_javadoccomment"> * 	&lt;li&gt;&lt;b&gt;Real classpath resource resolution under a JAR.&lt;/b&gt; {@code BasicStaticFiles} walks the</em>
-<a class="jxr_linenumber" name="L57" href="#L57">57</a>  <em class="jxr_javadoccomment"> * 		classloader for {@code htdocs/javadoc.css} (contributed by {@code juneau-rest-server}'s</em>
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>  <em class="jxr_javadoccomment"> * 		classloader for {@code htdocs/themes/devops.css} (contributed by {@code juneau-rest-server}'s</em>
 <a class="jxr_linenumber" name="L58" href="#L58">58</a>  <em class="jxr_javadoccomment"> * 		main resources) so the URL routing flows end-to-end through the real network stack.</em>
 <a class="jxr_linenumber" name="L59" href="#L59">59</a>  <em class="jxr_javadoccomment"> * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L60" href="#L60">60</a>  <em class="jxr_javadoccomment"> *</em>
@@ -114,7 +114,7 @@
 <a class="jxr_linenumber" name="L106" href="#L106">106</a> 	}
 <a class="jxr_linenumber" name="L107" href="#L107">107</a> 
 <a class="jxr_linenumber" name="L108" href="#L108">108</a> 	@Test <strong class="jxr_keyword">void</strong> a01_getStaticFileOverRealHttp() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L109" href="#L109">109</a> 		<strong class="jxr_keyword">var</strong> resp = get(<span class="jxr_string">"/static/javadoc.css"</span>);
+<a class="jxr_linenumber" name="L109" href="#L109">109</a> 		<strong class="jxr_keyword">var</strong> resp = get(<span class="jxr_string">"/static/themes/devops.css"</span>);
 <a class="jxr_linenumber" name="L110" href="#L110">110</a> 		assertEquals(200, resp.statusCode());
 <a class="jxr_linenumber" name="L111" href="#L111">111</a> 		assertTrue(resp.body().contains(<span class="jxr_string">"Licensed to the Apache Software Foundation"</span>),
 <a class="jxr_linenumber" name="L112" href="#L112">112</a> 			<span class="jxr_string">"Body should contain the Apache license header"</span>);
@@ -129,7 +129,7 @@
 <a class="jxr_linenumber" name="L121" href="#L121">121</a> 	@Test <strong class="jxr_keyword">void</strong> a02_getHtdocsFileViaLegacyMount() <strong class="jxr_keyword">throws</strong> Exception {
 <a class="jxr_linenumber" name="L122" href="#L122">122</a> 		<em class="jxr_comment">// /htdocs/* is no longer a multi-path default on the mixin, but</em>
 <a class="jxr_linenumber" name="L123" href="#L123">123</a> 		<em class="jxr_comment">// BasicRestServlet still owns the legacy /htdocs/* via BasicRestOperations#getHtdoc.</em>
-<a class="jxr_linenumber" name="L124" href="#L124">124</a> 		<strong class="jxr_keyword">var</strong> resp = get(<span class="jxr_string">"/htdocs/javadoc.css"</span>);
+<a class="jxr_linenumber" name="L124" href="#L124">124</a> 		<strong class="jxr_keyword">var</strong> resp = get(<span class="jxr_string">"/htdocs/themes/devops.css"</span>);
 <a class="jxr_linenumber" name="L125" href="#L125">125</a> 		assertEquals(200, resp.statusCode());
 <a class="jxr_linenumber" name="L126" href="#L126">126</a> 		assertTrue(resp.body().contains(<span class="jxr_string">"Licensed to the Apache Software Foundation"</span>),
 <a class="jxr_linenumber" name="L127" href="#L127">127</a> 			<span class="jxr_string">"Body should contain the Apache license header"</span>);
@@ -142,8 +142,8 @@
 <a class="jxr_linenumber" name="L134" href="#L134">134</a> 
 <a class="jxr_linenumber" name="L135" href="#L135">135</a> 	@Test <strong class="jxr_keyword">void</strong> a04_headOverRealHttpReturnsHeadersWithEmptyBody() <strong class="jxr_keyword">throws</strong> Exception {
 <a class="jxr_linenumber" name="L136" href="#L136">136</a> 		<em class="jxr_comment">// HEAD: identical headers to GET, empty body. Compare against the prior GET result.</em>
-<a class="jxr_linenumber" name="L137" href="#L137">137</a> 		<strong class="jxr_keyword">var</strong> getResp = get(<span class="jxr_string">"/static/javadoc.css"</span>);
-<a class="jxr_linenumber" name="L138" href="#L138">138</a> 		<strong class="jxr_keyword">var</strong> headResp = head(<span class="jxr_string">"/static/javadoc.css"</span>);
+<a class="jxr_linenumber" name="L137" href="#L137">137</a> 		<strong class="jxr_keyword">var</strong> getResp = get(<span class="jxr_string">"/static/themes/devops.css"</span>);
+<a class="jxr_linenumber" name="L138" href="#L138">138</a> 		<strong class="jxr_keyword">var</strong> headResp = head(<span class="jxr_string">"/static/themes/devops.css"</span>);
 <a class="jxr_linenumber" name="L139" href="#L139">139</a> 
 <a class="jxr_linenumber" name="L140" href="#L140">140</a> 		assertEquals(200, headResp.statusCode());
 <a class="jxr_linenumber" name="L141" href="#L141">141</a> 		assertEquals(<span class="jxr_string">""</span>, headResp.body(), <span class="jxr_string">"HEAD body must be empty"</span>);

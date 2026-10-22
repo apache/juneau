@@ -90,11 +90,28 @@ loadScripts(document, 'script');</script>
 <dd><code>jakarta.servlet.Servlet</code>, <code>jakarta.servlet.ServletConfig</code>, <code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a></code>, <code><a href="../../rest/server/config/BasicUniversalConfig.html" title="interface in org.apache.juneau.rest.server.config">BasicUniversalConfig</a></code>, <code><a href="../../rest/server/config/DefaultConfig.html" title="interface in org.apache.juneau.rest.server.config">DefaultConfig</a></code>, <code><a href="../../rest/server/config/DefaultHtmlConfig.html" title="interface in org.apache.juneau.rest.server.config">DefaultHtmlConfig</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/microservice/examples/ShutdownResource.html#line-31">ShutdownResource</a></span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/microservice/examples/ShutdownResource.html#line-50">ShutdownResource</a></span>
 <span class="extends-implements">extends <a href="../../rest/server/servlet/BasicRestServlet.html" title="class in org.apache.juneau.rest.server.servlet">BasicRestServlet</a></span></div>
 <div class="block">Provides the capability to shut down this REST microservice through a REST call.
 
+ <p>
+ <code>POST /shutdown</code> stops the process: the <code>"OK"</code> response is sent first, and the exit follows about a
+ second later on a background thread.  Shutting down is a write, so it is a <code>POST</code>, never a <code>GET</code>: a safe
+ method passes every CSRF check, so a <code>GET</code> would let any page that embeds <code>&lt;img src=".../shutdown"&gt;</code>
+ stop the process.  <code>GET /shutdown</code> is answered with <code>405</code>.
+
+ <p>
+ From the command line, send a non-form content type so a CSRF boundary in front of this resource (see
+ <a href="AdminBoundary.html" title="class in org.apache.juneau.microservice.examples"><code>AdminBoundary</code></a>) admits the request without a token:
+ <p class='bcode'>
+   curl -X POST -H 'Content-Type: application/json' http://localhost:10000/shutdown
+ </p>
+
+ <p>
+ This resource has no authentication of its own.  Do not expose it on an untrusted network.
+
  <h5 class='section'>See Also:</h5><ul>
+   <li class='jc'><a href="AdminBoundary.html" title="class in org.apache.juneau.microservice.examples"><code>AdminBoundary</code></a>
    <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauMicroservice">juneau-microservice Basics</a>
  </ul></div>
 </section>
@@ -104,6 +121,17 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="nested-class-summary" id="nested-class-summary">
 <h2>Nested Class Summary</h2>
+<div class="caption"><span>Nested Classes</span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier and Type</div>
+<div class="table-header col-second">Class</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code>static interface&nbsp;</code></div>
+<div class="col-second even-row-color"><code><a href="ShutdownResource.Exit.html" class="type-name-link" title="interface in org.apache.juneau.microservice.examples">ShutdownResource.Exit</a></code></div>
+<div class="col-last even-row-color">
+<div class="block">How the process is stopped.</div>
+</div>
+</div>
 <div class="inherited-list">
 <h2 id="nested-classes-inherited-from-class-org.apache.juneau.rest.server.servlet.RestServlet">Nested classes/interfaces inherited from class&nbsp;org.apache.juneau.rest.server.servlet.<a href="../../rest/server/servlet/RestServlet.html" title="class in org.apache.juneau.rest.server.servlet">RestServlet</a></h2>
 <code><a href="../../rest/server/servlet/RestServlet.Builder.html" title="class in org.apache.juneau.rest.server.servlet">RestServlet.Builder</a>&lt;<a href="../../rest/server/servlet/RestServlet.Builder.html" title="type parameter in RestServlet.Builder">R</a> extends <a href="../../rest/server/servlet/RestServlet.html" title="class in org.apache.juneau.rest.server.servlet">RestServlet</a>,<wbr><a href="../../rest/server/servlet/RestServlet.Builder.html" title="type parameter in RestServlet.Builder">SELF</a> extends <a href="../../rest/server/servlet/RestServlet.Builder.html" title="class in org.apache.juneau.rest.server.servlet">RestServlet.Builder</a>&lt;<a href="../../rest/server/servlet/RestServlet.Builder.html" title="type parameter in RestServlet.Builder">R</a>,<wbr><a href="../../rest/server/servlet/RestServlet.Builder.html" title="type parameter in RestServlet.Builder">SELF</a>&gt;&gt;, <a href="../../rest/server/servlet/RestServlet.DefaultBuilder.html" title="class in org.apache.juneau.rest.server.servlet">RestServlet.DefaultBuilder</a>&lt;<a href="../../rest/server/servlet/RestServlet.DefaultBuilder.html" title="type parameter in RestServlet.DefaultBuilder">R</a> extends <a href="../../rest/server/servlet/RestServlet.html" title="class in org.apache.juneau.rest.server.servlet">RestServlet</a>&gt;</code></div>
@@ -127,7 +155,13 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">Constructor</div>
 <div class="table-header col-last">Description</div>
 <div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E()" class="member-name-link">ShutdownResource</a>()</code></div>
-<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-last even-row-color">
+<div class="block">Constructor.</div>
+</div>
+<div class="col-constructor-name odd-row-color"><code><a href="#%3Cinit%3E(org.apache.juneau.microservice.examples.ShutdownResource.Exit)" class="member-name-link">ShutdownResource</a><wbr>(<a href="ShutdownResource.Exit.html" title="interface in org.apache.juneau.microservice.examples">ShutdownResource.Exit</a>&nbsp;exit)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Constructor.</div>
+</div>
 </div>
 </section>
 </li>
@@ -145,7 +179,7 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#shutdown()" class="member-name-link">shutdown</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">[GET /] - Shutdown this resource.</div>
+<div class="block">[POST /] - Shuts down this microservice.</div>
 </div>
 </div>
 </div>
@@ -176,7 +210,29 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;()">
 <h3>ShutdownResource</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/microservice/examples/ShutdownResource.html#line-32">ShutdownResource</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/microservice/examples/ShutdownResource.html#line-83">ShutdownResource</a></span>()</div>
+<div class="block">Constructor.
+
+ <p>
+ A shutdown calls <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/System.html#exit(int)" title="class or interface in java.lang" class="external-link"><code>System.exit(int)</code></a>.</div>
+</section>
+</li>
+<li>
+<section class="detail" id="&lt;init&gt;(org.apache.juneau.microservice.examples.ShutdownResource.Exit)">
+<h3>ShutdownResource</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/microservice/examples/ShutdownResource.html#line-98">ShutdownResource</a></span><wbr><span class="parameters">(<a href="ShutdownResource.Exit.html" title="interface in org.apache.juneau.microservice.examples">ShutdownResource.Exit</a>&nbsp;exit)</span></div>
+<div class="block">Constructor.
+
+ <p>
+ When the resource is mounted as a child by class, this constructor is used if the parent resource's bean store
+ holds an <a href="ShutdownResource.Exit.html" title="interface in org.apache.juneau.microservice.examples"><code>ShutdownResource.Exit</code></a>, for example from a <c>@Bean</c> method on the parent.  A microservice's own beans are not
+ in that store.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>exit</code> - How a shutdown stops the process.  Must not be <jk>null</jk>.</dd>
+<dt>Throws:</dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/IllegalArgumentException.html" title="class or interface in java.lang" class="external-link">IllegalArgumentException</a></code> - If <code>exit</code> is <jk>null</jk>.</dd>
+</dl>
 </section>
 </li>
 </ul>
@@ -190,8 +246,8 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="shutdown()">
 <h3>shutdown</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/microservice/examples/ShutdownResource.html#line-41">shutdown</a></span>()</div>
-<div class="block">[GET /] - Shutdown this resource.</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/microservice/examples/ShutdownResource.html#line-107">shutdown</a></span>()</div>
+<div class="block">[POST /] - Shuts down this microservice.</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>The string <js>"OK"</js>.</dd>

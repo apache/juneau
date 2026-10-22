@@ -24,13 +24,13 @@
 <a class="jxr_linenumber" name="L16" href="#L16">16</a>  <em class="jxr_comment"> */</em>
 <a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.client.mcp.v20260728;
 <a class="jxr_linenumber" name="L18" href="#L18">18</a>  
-<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.commons.utils.AssertionUtils.*;
-<a class="jxr_linenumber" name="L20" href="#L20">20</a>  
-<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> java.util.*;
-<a class="jxr_linenumber" name="L22" href="#L22">22</a>  
-<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.bean.mcp.v20260728.*;
-<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.marshall.collections.*;
-<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.marshall.marshaller.*;
+<a class="jxr_linenumber" name="L19" href="#L19">19</a>  
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> java.util.*;
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.bean.mcp.v20260728.*;
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.marshall.collections.*;
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.marshall.marshaller.*;
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.commons.utils.Shorts.*;
 <a class="jxr_linenumber" name="L26" href="#L26">26</a>  
 <a class="jxr_linenumber" name="L27" href="#L27">27</a>  <em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L28" href="#L28">28</a>  <em class="jxr_javadoccomment"> * Static helper for encoding the client's answers to server&amp;rarr;client MCP {@code 2026-07-28} SEP-2322</em>
@@ -59,8 +59,8 @@
 <a class="jxr_linenumber" name="L51" href="#L51">51</a>  <em class="jxr_javadoccomment">	 * @throws IllegalArgumentException If {@code id} or {@code result} is &lt;jk&gt;null&lt;/jk&gt;.</em>
 <a class="jxr_linenumber" name="L52" href="#L52">52</a>  <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L53" href="#L53">53</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> Map&lt;String,Object&gt; toInputResponse(String id, <a name="ElicitResult" href="../../../../../../../org/apache/juneau/bean/mcp/v20260728/ElicitResult.html#ElicitResult">ElicitResult</a> result) {
-<a class="jxr_linenumber" name="L54" href="#L54">54</a>  		assertArgNotNull(<span class="jxr_string">"id"</span>, id);
-<a class="jxr_linenumber" name="L55" href="#L55">55</a>  		assertArgNotNull(<span class="jxr_string">"result"</span>, result);
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>  		reqnn(<span class="jxr_string">"id"</span>, id);
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>  		reqnn(<span class="jxr_string">"result"</span>, result);
 <a class="jxr_linenumber" name="L56" href="#L56">56</a>  		<strong class="jxr_keyword">return</strong> toInputResponses(Map.of(id, result));
 <a class="jxr_linenumber" name="L57" href="#L57">57</a>  	}
 <a class="jxr_linenumber" name="L58" href="#L58">58</a>  
@@ -81,10 +81,10 @@
 <a class="jxr_linenumber" name="L73" href="#L73">73</a>  <em class="jxr_javadoccomment">	 * @throws IllegalArgumentException If {@code results} is &lt;jk&gt;null&lt;/jk&gt;, or any value in it is &lt;jk&gt;null&lt;/jk&gt;.</em>
 <a class="jxr_linenumber" name="L74" href="#L74">74</a>  <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L75" href="#L75">75</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> Map&lt;String,Object&gt; toInputResponses(Map&lt;String,ElicitResult&gt; results) {
-<a class="jxr_linenumber" name="L76" href="#L76">76</a>  		assertArgNotNull(<span class="jxr_string">"results"</span>, results);
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>  		reqnn(<span class="jxr_string">"results"</span>, results);
 <a class="jxr_linenumber" name="L77" href="#L77">77</a>  		Map&lt;String,Object&gt; out = <strong class="jxr_keyword">new</strong> LinkedHashMap&lt;&gt;();
 <a class="jxr_linenumber" name="L78" href="#L78">78</a>  		results.forEach((id, result) -&gt; {
-<a class="jxr_linenumber" name="L79" href="#L79">79</a>  			assertArgNotNull(<span class="jxr_string">"results["</span> + id + <span class="jxr_string">"]"</span>, result);
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>  			reqnn(<span class="jxr_string">"results["</span> + id + <span class="jxr_string">"]"</span>, result);
 <a class="jxr_linenumber" name="L80" href="#L80">80</a>  			<em class="jxr_comment">// Pre-marshalled to JsonMap here (rather than left as the typed ElicitResult for McpClient.call's</em>
 <a class="jxr_linenumber" name="L81" href="#L81">81</a>  			<em class="jxr_comment">// own toWireParams flattening) so that (a) a null-check on the encoded shape is meaningful even</em>
 <a class="jxr_linenumber" name="L82" href="#L82">82</a>  			<em class="jxr_comment">// when this helper is used standalone, outside McpClient.call's flow, and (b) the returned map is</em>

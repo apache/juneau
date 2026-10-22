@@ -37,7 +37,7 @@
 <a class="jxr_linenumber" name="L29" href="#L29">29</a>  <em class="jxr_javadoccomment"> * When a request reaches an op handler annotated with {@code @Auth}, the framework's</em>
 <a class="jxr_linenumber" name="L30" href="#L30">30</a>  <em class="jxr_javadoccomment"> * {@link AuthArg} resolver pulls the {@link Principal} previously stashed by an upstream AuthN guard</em>
 <a class="jxr_linenumber" name="L31" href="#L31">31</a>  <em class="jxr_javadoccomment"> * (such as {@link BearerTokenGuard} or {@link ApiKeyGuard}) on the request attributes under the</em>
-<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <em class="jxr_javadoccomment"> * {@link org.apache.juneau.rest.server.RestServerConstants#PRINCIPAL_ATTR PRINCIPAL_ATTR} key.</em>
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <em class="jxr_javadoccomment"> * {@code "juneau.principal"} key.</em>
 <a class="jxr_linenumber" name="L33" href="#L33">33</a>  <em class="jxr_javadoccomment"> *</em>
 <a class="jxr_linenumber" name="L34" href="#L34">34</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
 <a class="jxr_linenumber" name="L35" href="#L35">35</a>  <em class="jxr_javadoccomment"> * If an annotated parameter is reached without a principal being stashed (i.e. no guard ran, or the</em>

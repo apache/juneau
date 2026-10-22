@@ -79,7 +79,7 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="mcp/McpAuthInterceptor.html" title="class in org.apache.juneau.rest.client.mcp">McpAuthInterceptor</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public interface </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestCallInterceptor.html#line-51">RestCallInterceptor</a></span></div>
+<div class="type-signature"><span class="modifiers">public interface </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestCallInterceptor.html#line-50">RestCallInterceptor</a></span></div>
 <div class="block">Lifecycle interceptor for REST calls made by <a href="RestClient.html" title="class in org.apache.juneau.rest.client"><code>RestClient</code></a>.
 
  <p>
@@ -100,8 +100,7 @@ loadScripts(document, 'script');</script>
  </p>
 
  <p>
- <b>Beta — API subject to change:</b> This type is part of the next-generation REST client and HTTP stack
- (<code>org.apache.juneau.marshall.ng.*</code>).
+ <b>Beta — API subject to change:</b> This type is part of the next-generation REST client and HTTP stack.
  It is not API-frozen: binary- and source-incompatible changes may appear in the <b>next major</b> Juneau release
  (and possibly earlier).
 
@@ -160,7 +159,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="onInit(org.apache.juneau.rest.client.RestRequest)">
 <h3>onInit</h3>
-<div class="member-signature"><span class="modifiers">default</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestCallInterceptor.html#line-65">onInit</a></span><wbr><span class="parameters">(<a href="RestRequest.html" title="class in org.apache.juneau.rest.client">RestRequest</a>&nbsp;req)</span>
+<div class="member-signature"><span class="modifiers">default</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestCallInterceptor.html#line-64">onInit</a></span><wbr><span class="parameters">(<a href="RestRequest.html" title="class in org.apache.juneau.rest.client">RestRequest</a>&nbsp;req)</span>
              throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Exception.html" title="class or interface in java.lang" class="external-link">Exception</a></span></div>
 <div class="block">Called before the transport request is built and sent.
 
@@ -177,7 +176,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="onConnect(org.apache.juneau.rest.client.RestRequest,org.apache.juneau.rest.client.RestResponse)">
 <h3>onConnect</h3>
-<div class="member-signature"><span class="modifiers">default</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestCallInterceptor.html#line-77">onConnect</a></span><wbr><span class="parameters">(<a href="RestRequest.html" title="class in org.apache.juneau.rest.client">RestRequest</a>&nbsp;req,
+<div class="member-signature"><span class="modifiers">default</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestCallInterceptor.html#line-76">onConnect</a></span><wbr><span class="parameters">(<a href="RestRequest.html" title="class in org.apache.juneau.rest.client">RestRequest</a>&nbsp;req,
  <a href="RestResponse.html" title="class in org.apache.juneau.rest.client">RestResponse</a>&nbsp;res)</span>
                 throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Exception.html" title="class or interface in java.lang" class="external-link">Exception</a></span></div>
 <div class="block">Called after a response has been received from the transport.
@@ -196,7 +195,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="onClose(org.apache.juneau.rest.client.RestRequest,org.apache.juneau.rest.client.RestResponse)">
 <h3>onClose</h3>
-<div class="member-signature"><span class="modifiers">default</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestCallInterceptor.html#line-90">onClose</a></span><wbr><span class="parameters">(<a href="RestRequest.html" title="class in org.apache.juneau.rest.client">RestRequest</a>&nbsp;req,
+<div class="member-signature"><span class="modifiers">default</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RestCallInterceptor.html#line-89">onClose</a></span><wbr><span class="parameters">(<a href="RestRequest.html" title="class in org.apache.juneau.rest.client">RestRequest</a>&nbsp;req,
  <a href="RestResponse.html" title="class in org.apache.juneau.rest.client">RestResponse</a>&nbsp;res)</span>
               throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Exception.html" title="class or interface in java.lang" class="external-link">Exception</a></span></div>
 <div class="block">Called when the request is being closed (in the <code>finally</code> block of <a href="RestRequest.html#run()"><code>RestRequest.run()</code></a>).

@@ -89,7 +89,7 @@
 <a class="jxr_linenumber" name="L81" href="#L81">81</a>  					.mediaType(mediaType)
 <a class="jxr_linenumber" name="L82" href="#L82">82</a>  					.apply(WriterSerializerSession.Builder.<strong class="jxr_keyword">class</strong>, x -&gt; x.streamCharset(res.getCharset()).useWhitespace(req.isPlainText() ? <strong class="jxr_keyword">true</strong> : <strong class="jxr_keyword">null</strong>))
 <a class="jxr_linenumber" name="L83" href="#L83">83</a>  					.schema(schema)
-<a class="jxr_linenumber" name="L84" href="#L84">84</a>  					.debug(req.isDebug() ? <strong class="jxr_keyword">true</strong> : <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>  					.debug(req.isDebugMarshalling() ? <strong class="jxr_keyword">true</strong> : <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L85" href="#L85">85</a>  					.uriContext(req.getUriContext())
 <a class="jxr_linenumber" name="L86" href="#L86">86</a>  					.resolver(req.getVarResolverSession())
 <a class="jxr_linenumber" name="L87" href="#L87">87</a>  					.apply(HtmlDocSerializerSession.Builder.<strong class="jxr_keyword">class</strong>, x -&gt; req.getAttribute(RestRequest.CSP_NONCE_ATTR).as(String.<strong class="jxr_keyword">class</strong>).ifPresent(x::nonce))

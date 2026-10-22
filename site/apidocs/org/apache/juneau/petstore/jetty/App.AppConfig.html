@@ -83,9 +83,10 @@ loadScripts(document, 'script');</script>
 </dl>
 <hr>
 <div class="type-signature"><span class="annotations"><a href="../../commons/inject/Configuration.html" title="annotation interface in org.apache.juneau.commons.inject">@Configuration</a>
-</span><span class="modifiers">public static class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/petstore/jetty/App.html#line-60">App.AppConfig</a></span>
+</span><span class="modifiers">public static class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/petstore/jetty/App.html#line-73">App.AppConfig</a></span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
-<div class="block">Application-specific configuration class contributing the top-level REST servlet.</div>
+<div class="block">Application-specific configuration class contributing the top-level REST servlet and the console, API and admin
+ boundary filters.</div>
 </section>
 <section class="summary">
 <ul class="summary-list">
@@ -113,9 +114,24 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>jakarta.servlet.Servlet</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#rootResources()" class="member-name-link">rootResources</a>()</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../../microservice/ServletFilterRegistration.html" title="class in org.apache.juneau.microservice">ServletFilterRegistration</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#adminBoundary()" class="member-name-link">adminBoundary</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Provides the admin resources' CSRF boundary, covering <code>/config</code>, <code>/logs</code> and <code>/shutdown</code>.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../../microservice/ServletFilterRegistration.html" title="class in org.apache.juneau.microservice">ServletFilterRegistration</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#apiBoundary()" class="member-name-link">apiBoundary</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Provides the API's CSRF boundary, covering <code>/petstore/*</code>.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../../microservice/ServletFilterRegistration.html" title="class in org.apache.juneau.microservice">ServletFilterRegistration</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#consoleBoundary()" class="member-name-link">consoleBoundary</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Provides the console's CSRF boundary, covering <code>/console</code> only.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>jakarta.servlet.Servlet</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#rootResources()" class="member-name-link">rootResources</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Provides the top-level REST servlet, auto-mounted by <code>JettyServerComponent</code> at
  <a href="../../rest/server/Rest.html#path()"><code>Rest.path()</code></a>.</div>
 </div>
@@ -139,7 +155,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;()">
 <h3>AppConfig</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/petstore/jetty/App.AppConfig.html#line-61">AppConfig</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/petstore/jetty/App.AppConfig.html#line-74">AppConfig</a></span>()</div>
 </section>
 </li>
 </ul>
@@ -153,12 +169,66 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="rootResources()">
 <h3>rootResources</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">jakarta.servlet.Servlet</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/petstore/jetty/App.AppConfig.html#line-69">rootResources</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">jakarta.servlet.Servlet</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/petstore/jetty/App.AppConfig.html#line-85">rootResources</a></span>()</div>
 <div class="block">Provides the top-level REST servlet, auto-mounted by <code>JettyServerComponent</code> at
  <a href="../../rest/server/Rest.html#path()"><code>Rest.path()</code></a>.</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>The root servlet.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="consoleBoundary()">
+<h3>consoleBoundary</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../microservice/ServletFilterRegistration.html" title="class in org.apache.juneau.microservice">ServletFilterRegistration</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/petstore/jetty/App.AppConfig.html#line-102">consoleBoundary</a></span>()</div>
+<div class="block">Provides the console's CSRF boundary, covering <code>/console</code> only.
+
+ <p>
+ The <code>/petstore</code> API is covered by <a href="#apiBoundary()"><code>apiBoundary()</code></a> and the admin resources by
+ <a href="#adminBoundary()"><code>adminBoundary()</code></a>; <code>/petstore-ui</code> is outside all three: see <a href="../console/PetstoreConsoleBoundary.html" title="class in org.apache.juneau.petstore.console"><code>PetstoreConsoleBoundary</code></a>.
+ It runs ahead of routing and ahead of authentication, for the request, forward, async and error dispatches;
+ the include dispatch is deliberately not mapped.  It is built over the same <a href="../console/PetstoreApiBoundary.html" title="class in org.apache.juneau.petstore.console"><code>PetstoreApiBoundary</code></a> that
+ <a href="#apiBoundary()"><code>apiBoundary()</code></a> mounts, so the API token its pages carry is one the API filter accepts.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>The filter registration.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="apiBoundary()">
+<h3>apiBoundary</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../microservice/ServletFilterRegistration.html" title="class in org.apache.juneau.microservice">ServletFilterRegistration</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/petstore/jetty/App.AppConfig.html#line-121">apiBoundary</a></span>()</div>
+<div class="block">Provides the API's CSRF boundary, covering <code>/petstore/*</code>.
+
+ <p>
+ It runs only on the original request: an internal forward or error dispatch to the API is not a new
+ attacker-controlled request.  The order keeps it just behind <a href="#consoleBoundary()"><code>consoleBoundary()</code></a>; the two patterns never
+ overlap.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>The filter registration.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="adminBoundary()">
+<h3>adminBoundary</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../microservice/ServletFilterRegistration.html" title="class in org.apache.juneau.microservice">ServletFilterRegistration</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/petstore/jetty/App.AppConfig.html#line-143">adminBoundary</a></span>()</div>
+<div class="block">Provides the admin resources' CSRF boundary, covering <code>/config</code>, <code>/logs</code> and <code>/shutdown</code>.
+
+ <p>
+ A filter of its own, answering to the host names in <a href="App.html#ADMIN_ALLOWED_HOSTS_PROPERTY">"petstore.admin.allowedHosts"</a>, or to the
+ loopback names only while that is unset.  The admin resources have no forms, so a browser write to them is
+ refused, and command-line writes are admitted: see <a href="../../microservice/examples/AdminBoundary.html" title="class in org.apache.juneau.microservice.examples"><code>AdminBoundary</code></a>.  The boundary does not authenticate:
+ the admin resources must not be exposed on an untrusted network.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>The filter registration.</dd>
+<dt>Throws:</dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/IllegalArgumentException.html" title="class or interface in java.lang" class="external-link">IllegalArgumentException</a></code> - If <a href="App.html#ADMIN_ALLOWED_HOSTS_PROPERTY">"petstore.admin.allowedHosts"</a> holds an entry that is blank or
+   not a bare host name.</dd>
 </dl>
 </section>
 </li>

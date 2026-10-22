@@ -160,26 +160,6 @@ loadScripts(document, 'script');</script>
 <div class="block">RDF resource that identifies a <c>Bag</c> value.</div>
 </div>
 <div class="col-first odd-row-color"><code>static final <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second odd-row-color"><code><a href="#RDF_juneauNs_ITEMS" class="member-name-link">RDF_juneauNs_ITEMS</a></code></div>
-<div class="col-last odd-row-color">
-<div class="block">RDF property identifier <js>"items"</js>.</div>
-</div>
-<div class="col-first even-row-color"><code>static final <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second even-row-color"><code><a href="#RDF_juneauNs_ROOT" class="member-name-link">RDF_juneauNs_ROOT</a></code></div>
-<div class="col-last even-row-color">
-<div class="block">RDF property identifier <js>"root"</js>.</div>
-</div>
-<div class="col-first odd-row-color"><code>static final <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second odd-row-color"><code><a href="#RDF_juneauNs_TYPE" class="member-name-link">RDF_juneauNs_TYPE</a></code></div>
-<div class="col-last odd-row-color">
-<div class="block">RDF property identifier <js>"class"</js>.</div>
-</div>
-<div class="col-first even-row-color"><code>static final <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second even-row-color"><code><a href="#RDF_juneauNs_VALUE" class="member-name-link">RDF_juneauNs_VALUE</a></code></div>
-<div class="col-last even-row-color">
-<div class="block">RDF property identifier <js>"value"</js>.</div>
-</div>
-<div class="col-first odd-row-color"><code>static final <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
 <div class="col-second odd-row-color"><code><a href="#RDF_NIL" class="member-name-link">RDF_NIL</a></code></div>
 <div class="col-last odd-row-color">
 <div class="block">RDF resource that identifies a <jk>null</jk> value.</div>
@@ -391,88 +371,9 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
-<section class="detail" id="RDF_juneauNs_ITEMS">
-<h3>RDF_juneauNs_ITEMS</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/jena/Constants.html#line-77">RDF_juneauNs_ITEMS</a></span></div>
-<div class="block">RDF property identifier <js>"items"</js>.
-
- <p>
- For resources that are collections, this property identifies the RDF Sequence container for the items in the
- collection.</div>
-<dl class="notes">
-<dt>See Also:</dt>
-<dd>
-<ul class="see-list">
-<li><a href="../../../../../constant-values.html#org.apache.juneau.marshall.jena.Constants.RDF_juneauNs_ITEMS">Constant Field Values</a></li>
-</ul>
-</dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="RDF_juneauNs_ROOT">
-<h3>RDF_juneauNs_ROOT</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/jena/Constants.html#line-88">RDF_juneauNs_ROOT</a></span></div>
-<div class="block">RDF property identifier <js>"root"</js>.
-
- <p>
- Property added to root nodes to help identify them as root elements during parsing.
-
- <p>
- Added if <a href="RdfSerializer.Builder.html#addRootProperty()"><code>RdfSerializer.Builder.addRootProperty()</code></a> setting is enabled.</div>
-<dl class="notes">
-<dt>See Also:</dt>
-<dd>
-<ul class="see-list">
-<li><a href="../../../../../constant-values.html#org.apache.juneau.marshall.jena.Constants.RDF_juneauNs_ROOT">Constant Field Values</a></li>
-</ul>
-</dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="RDF_juneauNs_TYPE">
-<h3>RDF_juneauNs_TYPE</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/jena/Constants.html#line-99">RDF_juneauNs_TYPE</a></span></div>
-<div class="block">RDF property identifier <js>"class"</js>.
-
- <p>
- Property added to bean resources to identify the class type.
-
- <p>
- Added if <a href="../serializer/Serializer.Builder.html#addBeanTypes()"><code>Serializer.Builder.addBeanTypes()</code></a> setting is enabled.</div>
-<dl class="notes">
-<dt>See Also:</dt>
-<dd>
-<ul class="see-list">
-<li><a href="../../../../../constant-values.html#org.apache.juneau.marshall.jena.Constants.RDF_juneauNs_TYPE">Constant Field Values</a></li>
-</ul>
-</dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="RDF_juneauNs_VALUE">
-<h3>RDF_juneauNs_VALUE</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/jena/Constants.html#line-107">RDF_juneauNs_VALUE</a></span></div>
-<div class="block">RDF property identifier <js>"value"</js>.
-
- <p>
- Property added to nodes to identify a simple value.</div>
-<dl class="notes">
-<dt>See Also:</dt>
-<dd>
-<ul class="see-list">
-<li><a href="../../../../../constant-values.html#org.apache.juneau.marshall.jena.Constants.RDF_juneauNs_VALUE">Constant Field Values</a></li>
-</ul>
-</dd>
-</dl>
-</section>
-</li>
-<li>
 <section class="detail" id="RDF_NIL">
 <h3>RDF_NIL</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/jena/Constants.html#line-112">RDF_NIL</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/jena/Constants.html#line-73">RDF_NIL</a></span></div>
 <div class="block">RDF resource that identifies a <jk>null</jk> value.</div>
 <dl class="notes">
 <dt>See Also:</dt>
@@ -487,7 +388,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="RDF_SEQ">
 <h3>RDF_SEQ</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/jena/Constants.html#line-117">RDF_SEQ</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/jena/Constants.html#line-78">RDF_SEQ</a></span></div>
 <div class="block">RDF resource that identifies a <c>Seq</c> value.</div>
 <dl class="notes">
 <dt>See Also:</dt>
@@ -502,7 +403,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="RDF_BAG">
 <h3>RDF_BAG</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/jena/Constants.html#line-122">RDF_BAG</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/jena/Constants.html#line-83">RDF_BAG</a></span></div>
 <div class="block">RDF resource that identifies a <c>Bag</c> value.</div>
 <dl class="notes">
 <dt>See Also:</dt>

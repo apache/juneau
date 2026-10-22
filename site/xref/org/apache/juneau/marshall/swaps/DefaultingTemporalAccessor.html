@@ -101,8 +101,8 @@
 <a class="jxr_linenumber" name="L93" href="#L93">93</a>  
 <a class="jxr_linenumber" name="L94" href="#L94">94</a>  	@Override <em class="jxr_comment">/* Overridden from TemporalAccessor */</em>
 <a class="jxr_linenumber" name="L95" href="#L95">95</a>  	@SuppressWarnings({
-<a class="jxr_linenumber" name="L96" href="#L96">96</a>  		<span class="jxr_string">"unchecked"</span>, <em class="jxr_comment">// Type erasure requires unchecked casts</em>
-<a class="jxr_linenumber" name="L97" href="#L97">97</a>  		<span class="jxr_string">"java:S3776"</span>, <em class="jxr_comment">// Cognitive complexity acceptable for this specific logic</em>
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>  		<span class="jxr_string">"java:S3776"</span>, <em class="jxr_comment">// Cognitive complexity acceptable for this specific logic</em>
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>  		<span class="jxr_string">"unchecked"</span> <em class="jxr_comment">// Type erasure requires unchecked casts</em>
 <a class="jxr_linenumber" name="L98" href="#L98">98</a>  	})
 <a class="jxr_linenumber" name="L99" href="#L99">99</a>  	<strong class="jxr_keyword">public</strong> &lt;R&gt; R query(TemporalQuery&lt;R&gt; query) {
 <a class="jxr_linenumber" name="L100" href="#L100">100</a> 		<strong class="jxr_keyword">var</strong> r = <strong class="jxr_keyword">inner</strong>.query(query);

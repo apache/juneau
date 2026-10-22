@@ -223,7 +223,33 @@
 <a class="jxr_linenumber" name="L215" href="#L215">215</a> 		);
 <a class="jxr_linenumber" name="L216" href="#L216">216</a> 		assertEquals(Namespace.of(<span class="jxr_string">"baz"</span>, <span class="jxr_string">"http://foo/"</span>), result);
 <a class="jxr_linenumber" name="L217" href="#L217">217</a> 	}
-<a class="jxr_linenumber" name="L218" href="#L218">218</a> }
+<a class="jxr_linenumber" name="L218" href="#L218">218</a> 
+<a class="jxr_linenumber" name="L219" href="#L219">219</a> 	@Test <strong class="jxr_keyword">void</strong> a19_rdf_onlyPrefix_rdfNsExhaustedThenNextSchemaMatches() {
+<a class="jxr_linenumber" name="L220" href="#L220">220</a> 		<em class="jxr_comment">// First schema's rdfNs() entries are all non-matching (the for-each loop over rdfNs()</em>
+<a class="jxr_linenumber" name="L221" href="#L221">221</a> 		<em class="jxr_comment">// runs to completion without a match), so the outer schema loop must continue on to a</em>
+<a class="jxr_linenumber" name="L222" href="#L222">222</a> 		<em class="jxr_comment">// second schema that matches directly via schema.prefix() -- covers the "no match found</em>
+<a class="jxr_linenumber" name="L223" href="#L223">223</a> 		<em class="jxr_comment">// anywhere in this schema's rdfNs()" fallthrough that a15 (which matches on its 2nd entry)</em>
+<a class="jxr_linenumber" name="L224" href="#L224">224</a> 		<em class="jxr_comment">// doesn't exercise.</em>
+<a class="jxr_linenumber" name="L225" href="#L225">225</a> 		<strong class="jxr_keyword">var</strong> result = RdfUtils.findNamespace(
+<a class="jxr_linenumber" name="L226" href="#L226">226</a> 			List.of(rdfPrefix(<span class="jxr_string">"foo"</span>)),
+<a class="jxr_linenumber" name="L227" href="#L227">227</a> 			List.of(schema(<span class="jxr_string">""</span>, <span class="jxr_string">""</span>, rdfNs(<span class="jxr_string">"other1"</span>, <span class="jxr_string">"http://other1/"</span>)), schema(<span class="jxr_string">"foo"</span>, <span class="jxr_string">"http://actual/"</span>))
+<a class="jxr_linenumber" name="L228" href="#L228">228</a> 		);
+<a class="jxr_linenumber" name="L229" href="#L229">229</a> 		assertEquals(Namespace.of(<span class="jxr_string">"foo"</span>, <span class="jxr_string">"http://actual/"</span>), result);
+<a class="jxr_linenumber" name="L230" href="#L230">230</a> 	}
+<a class="jxr_linenumber" name="L231" href="#L231">231</a> 
+<a class="jxr_linenumber" name="L232" href="#L232">232</a> 	@Test <strong class="jxr_keyword">void</strong> a20_schemaLevel_onlyNamespace_selfMatch_emptyPrefix_viaRdfNs() {
+<a class="jxr_linenumber" name="L233" href="#L233">233</a> 		<em class="jxr_comment">// A namespace-only schema (empty prefix) reached via the SCHEMA-level top loop (rdfs=null</em>
+<a class="jxr_linenumber" name="L234" href="#L234">234</a> 		<em class="jxr_comment">// for this recursive call) whose own namespace matches the target -- covers the nn(rdfs)</em>
+<a class="jxr_linenumber" name="L235" href="#L235">235</a> 		<em class="jxr_comment">// FALSE branch (only reachable from the schema-level loop, never the rdf-level loop) AND the</em>
+<a class="jxr_linenumber" name="L236" href="#L236">236</a> 		<em class="jxr_comment">// "namespace matches but prefix IS empty" combination (falls through to the rdfNs() lookup</em>
+<a class="jxr_linenumber" name="L237" href="#L237">237</a> 		<em class="jxr_comment">// instead of returning directly, unlike a08 where the matching schema has a non-empty prefix).</em>
+<a class="jxr_linenumber" name="L238" href="#L238">238</a> 		<strong class="jxr_keyword">var</strong> result = RdfUtils.findNamespace(
+<a class="jxr_linenumber" name="L239" href="#L239">239</a> 			emptyList(),
+<a class="jxr_linenumber" name="L240" href="#L240">240</a> 			List.of(schema(<span class="jxr_string">""</span>, <span class="jxr_string">"http://onlyns/"</span>, rdfNs(<span class="jxr_string">"q"</span>, <span class="jxr_string">"http://onlyns/"</span>)))
+<a class="jxr_linenumber" name="L241" href="#L241">241</a> 		);
+<a class="jxr_linenumber" name="L242" href="#L242">242</a> 		assertEquals(Namespace.of(<span class="jxr_string">"q"</span>, <span class="jxr_string">"http://onlyns/"</span>), result);
+<a class="jxr_linenumber" name="L243" href="#L243">243</a> 	}
+<a class="jxr_linenumber" name="L244" href="#L244">244</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

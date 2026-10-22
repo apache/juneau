@@ -80,7 +80,7 @@
 <a class="jxr_linenumber" name="L72" href="#L72">72</a>  		c.reset();
 <a class="jxr_linenumber" name="L73" href="#L73">73</a>  
 <a class="jxr_linenumber" name="L74" href="#L74">74</a>  		client().logRequests(DetailLevel.FULL,Level.SEVERE,<strong class="jxr_keyword">null</strong>).logToConsole().logger(l).console(c).build().post(<span class="jxr_string">"/bean"</span>,bean).complete();
-<a class="jxr_linenumber" name="L75" href="#L75">75</a>  		c.assertContents().asTrimmed().isLines(
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>  		c.assertContents().asReplaceAll(<span class="jxr_string">"&#92;&#92;tX-Request-Id: [^&#92;&#92;r&#92;&#92;n]*&#92;&#92;R"</span>, <span class="jxr_string">""</span>).asTrimmed().isLines(
 <a class="jxr_linenumber" name="L76" href="#L76">76</a>  			<span class="jxr_string">"=== HTTP Call (outgoing) ======================================================"</span>,
 <a class="jxr_linenumber" name="L77" href="#L77">77</a>  			<span class="jxr_string">"=== REQUEST ==="</span>,
 <a class="jxr_linenumber" name="L78" href="#L78">78</a>  			<span class="jxr_string">"POST http://localhost/bean"</span>,
@@ -101,7 +101,7 @@
 <a class="jxr_linenumber" name="L93" href="#L93">93</a>  		c.reset();
 <a class="jxr_linenumber" name="L94" href="#L94">94</a>  
 <a class="jxr_linenumber" name="L95" href="#L95">95</a>  		client().logRequests(DetailLevel.FULL,Level.SEVERE,<strong class="jxr_keyword">null</strong>).logToConsole().logger(l).console(c).build().get(<span class="jxr_string">"/bean"</span>).complete();
-<a class="jxr_linenumber" name="L96" href="#L96">96</a>  		c.assertContents().asTrimmed().isLines(
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>  		c.assertContents().asReplaceAll(<span class="jxr_string">"&#92;&#92;tX-Request-Id: [^&#92;&#92;r&#92;&#92;n]*&#92;&#92;R"</span>, <span class="jxr_string">""</span>).asTrimmed().isLines(
 <a class="jxr_linenumber" name="L97" href="#L97">97</a>  			<span class="jxr_string">"=== HTTP Call (outgoing) ======================================================"</span>,
 <a class="jxr_linenumber" name="L98" href="#L98">98</a>  			<span class="jxr_string">"=== REQUEST ==="</span>,
 <a class="jxr_linenumber" name="L99" href="#L99">99</a>  			<span class="jxr_string">"GET http://localhost/bean"</span>,
@@ -118,7 +118,7 @@
 <a class="jxr_linenumber" name="L110" href="#L110">110</a> 		c.reset();
 <a class="jxr_linenumber" name="L111" href="#L111">111</a> 
 <a class="jxr_linenumber" name="L112" href="#L112">112</a> 		clientPlain().logRequests(DetailLevel.FULL,Level.SEVERE,<strong class="jxr_keyword">null</strong>).logToConsole().logger(l).console(c).build().post(<span class="jxr_string">"/stream"</span>,<strong class="jxr_keyword">new</strong> InputStreamEntity(inputStream(<span class="jxr_string">"foo"</span>))).complete();
-<a class="jxr_linenumber" name="L113" href="#L113">113</a> 		c.assertContents().asTrimmed().isLines(
+<a class="jxr_linenumber" name="L113" href="#L113">113</a> 		c.assertContents().asReplaceAll(<span class="jxr_string">"&#92;&#92;tX-Request-Id: [^&#92;&#92;r&#92;&#92;n]*&#92;&#92;R"</span>, <span class="jxr_string">""</span>).asTrimmed().isLines(
 <a class="jxr_linenumber" name="L114" href="#L114">114</a> 			<span class="jxr_string">"=== HTTP Call (outgoing) ======================================================"</span>,
 <a class="jxr_linenumber" name="L115" href="#L115">115</a> 			<span class="jxr_string">"=== REQUEST ==="</span>,
 <a class="jxr_linenumber" name="L116" href="#L116">116</a> 			<span class="jxr_string">"POST http://localhost/stream"</span>,
@@ -155,7 +155,7 @@
 <a class="jxr_linenumber" name="L147" href="#L147">147</a> 
 <a class="jxr_linenumber" name="L148" href="#L148">148</a> 		client().logger(l).logRequests(DetailLevel.FULL,Level.WARNING,<strong class="jxr_keyword">null</strong>).build().post(<span class="jxr_string">"/bean"</span>,bean).complete();
 <a class="jxr_linenumber" name="L149" href="#L149">149</a> 		l.assertLastLevel(Level.WARNING);
-<a class="jxr_linenumber" name="L150" href="#L150">150</a> 		l.assertLastMessage().asTrimmed().isLines(
+<a class="jxr_linenumber" name="L150" href="#L150">150</a> 		l.assertLastMessage().asReplaceAll(<span class="jxr_string">"&#92;&#92;tX-Request-Id: [^&#92;&#92;r&#92;&#92;n]*&#92;&#92;R"</span>, <span class="jxr_string">""</span>).asTrimmed().isLines(
 <a class="jxr_linenumber" name="L151" href="#L151">151</a> 			<span class="jxr_string">"=== HTTP Call (outgoing) ======================================================"</span>,
 <a class="jxr_linenumber" name="L152" href="#L152">152</a> 			<span class="jxr_string">"=== REQUEST ==="</span>,
 <a class="jxr_linenumber" name="L153" href="#L153">153</a> 			<span class="jxr_string">"POST http://localhost/bean"</span>,

@@ -78,7 +78,7 @@ loadScripts(document, 'script');</script>
 </div>
 <section class="class-description" id="class-description">
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/io/FileReaderBuilder.html#line-81">FileReaderBuilder</a></span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/io/FileReaderBuilder.html#line-82">FileReaderBuilder</a></span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
 <div class="block">A fluent builder for creating <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Reader.html" title="class or interface in java.io" class="external-link"><code>Reader</code></a> instances from files with configurable character encoding.
 
@@ -167,40 +167,50 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Enables handling of missing files by returning an empty reader instead of throwing an exception.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Reader.html" title="class or interface in java.io" class="external-link">Reader</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#build()" class="member-name-link">build</a>()</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="FileReaderBuilder.html" title="class in org.apache.juneau.commons.io">FileReaderBuilder</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#allowNoFile(boolean)" class="member-name-link">allowNoFile</a><wbr>(boolean&nbsp;value)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Enables or disables handling of missing files by returning an empty reader instead of throwing an exception.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Reader.html" title="class or interface in java.io" class="external-link">Reader</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#build()" class="member-name-link">build</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Creates a new <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Reader.html" title="class or interface in java.io" class="external-link"><code>Reader</code></a> for reading from the configured file.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="FileReaderBuilder.html" title="class in org.apache.juneau.commons.io">FileReaderBuilder</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#charset(java.lang.String)" class="member-name-link">charset</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;cs)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="FileReaderBuilder.html" title="class in org.apache.juneau.commons.io">FileReaderBuilder</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#charset(java.lang.String)" class="member-name-link">charset</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;cs)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Sets the character encoding for reading the file by charset name.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="FileReaderBuilder.html" title="class in org.apache.juneau.commons.io">FileReaderBuilder</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#charset(java.nio.charset.Charset)" class="member-name-link">charset</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/nio/charset/Charset.html" title="class or interface in java.nio.charset" class="external-link">Charset</a>&nbsp;cs)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="FileReaderBuilder.html" title="class in org.apache.juneau.commons.io">FileReaderBuilder</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#charset(java.nio.charset.Charset)" class="member-name-link">charset</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/nio/charset/Charset.html" title="class or interface in java.nio.charset" class="external-link">Charset</a>&nbsp;cs)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Sets the character encoding for reading the file.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="FileReaderBuilder.html" title="class in org.apache.juneau.commons.io">FileReaderBuilder</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#create()" class="member-name-link">create</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="FileReaderBuilder.html" title="class in org.apache.juneau.commons.io">FileReaderBuilder</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#create()" class="member-name-link">create</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Creates a new builder.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="FileReaderBuilder.html" title="class in org.apache.juneau.commons.io">FileReaderBuilder</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#create(java.io.File)" class="member-name-link">create</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;file)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="FileReaderBuilder.html" title="class in org.apache.juneau.commons.io">FileReaderBuilder</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#create(java.io.File)" class="member-name-link">create</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;file)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Creates a new builder initialized with the specified file.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="FileReaderBuilder.html" title="class in org.apache.juneau.commons.io">FileReaderBuilder</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#file(java.io.File)" class="member-name-link">file</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;value)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="FileReaderBuilder.html" title="class in org.apache.juneau.commons.io">FileReaderBuilder</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#file(java.io.File)" class="member-name-link">file</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;value)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Sets the file to read from.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="FileReaderBuilder.html" title="class in org.apache.juneau.commons.io">FileReaderBuilder</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#file(java.lang.String)" class="member-name-link">file</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;path)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="FileReaderBuilder.html" title="class in org.apache.juneau.commons.io">FileReaderBuilder</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#file(java.lang.String)" class="member-name-link">file</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;path)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Sets the file path to read from.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="FileReaderBuilder.html" title="class in org.apache.juneau.commons.io">FileReaderBuilder</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#file(java.nio.file.Path)" class="member-name-link">file</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/nio/file/Path.html" title="class or interface in java.nio.file" class="external-link">Path</a>&nbsp;value)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Sets the file to read from.</div>
 </div>
 </div>
 </div>
@@ -222,7 +232,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;()">
 <h3>FileReaderBuilder</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/io/FileReaderBuilder.html#line-84">FileReaderBuilder</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/io/FileReaderBuilder.html#line-85">FileReaderBuilder</a></span>()</div>
 </section>
 </li>
 </ul>
@@ -236,7 +246,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="create()">
 <h3>create</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="FileReaderBuilder.html" title="class in org.apache.juneau.commons.io">FileReaderBuilder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/io/FileReaderBuilder.html#line-102">create</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="FileReaderBuilder.html" title="class in org.apache.juneau.commons.io">FileReaderBuilder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/io/FileReaderBuilder.html#line-99">create</a></span>()</div>
 <div class="block">Creates a new builder.
 
  <h5 class='section'>Example:</h5>
@@ -254,7 +264,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="create(java.io.File)">
 <h3>create</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="FileReaderBuilder.html" title="class in org.apache.juneau.commons.io">FileReaderBuilder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/io/FileReaderBuilder.html#line-120">create</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;file)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="FileReaderBuilder.html" title="class in org.apache.juneau.commons.io">FileReaderBuilder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/io/FileReaderBuilder.html#line-117">create</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;file)</span></div>
 <div class="block">Creates a new builder initialized with the specified file.
 
  <h5 class='section'>Example:</h5>
@@ -275,7 +285,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="allowNoFile()">
 <h3>allowNoFile</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="FileReaderBuilder.html" title="class in org.apache.juneau.commons.io">FileReaderBuilder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/io/FileReaderBuilder.html#line-154">allowNoFile</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="FileReaderBuilder.html" title="class in org.apache.juneau.commons.io">FileReaderBuilder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/io/FileReaderBuilder.html#line-151">allowNoFile</a></span>()</div>
 <div class="block">Enables handling of missing files by returning an empty reader instead of throwing an exception.
 
  <p>
@@ -303,9 +313,33 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
+<section class="detail" id="allowNoFile(boolean)">
+<h3>allowNoFile</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="FileReaderBuilder.html" title="class in org.apache.juneau.commons.io">FileReaderBuilder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/io/FileReaderBuilder.html#line-172">allowNoFile</a></span><wbr><span class="parameters">(boolean&nbsp;value)</span></div>
+<div class="block">Enables or disables handling of missing files by returning an empty reader instead of throwing an exception.
+
+ <p>
+ Boolean-arg form of <a href="#allowNoFile()"><code>allowNoFile()</code></a>, useful when the setting is conditional.
+
+ <h5 class='section'>Example:</h5>
+ <p class='bjava'>
+   Reader <jv>reader</jv> = FileReaderBuilder.<jsm>create</jsm>()
+      .file(<js>"optional.txt"</js>)
+      .allowNoFile(<jv>isOptional</jv>)
+      .build();
+ </p></div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>value</code> - <jk>true</jk> to return an empty reader when the file is missing.</dd>
+<dt>Returns:</dt>
+<dd>This object for method chaining.</dd>
+</dl>
+</section>
+</li>
+<li>
 <section class="detail" id="build()">
 <h3>build</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Reader.html" title="class or interface in java.io" class="external-link">Reader</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/io/FileReaderBuilder.html#line-180">build</a></span>()
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Reader.html" title="class or interface in java.io" class="external-link">Reader</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/io/FileReaderBuilder.html#line-198">build</a></span>()
              throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/FileNotFoundException.html" title="class or interface in java.io" class="external-link">FileNotFoundException</a></span></div>
 <div class="block">Creates a new <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Reader.html" title="class or interface in java.io" class="external-link"><code>Reader</code></a> for reading from the configured file.
 
@@ -334,7 +368,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="charset(java.nio.charset.Charset)">
 <h3>charset</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="FileReaderBuilder.html" title="class in org.apache.juneau.commons.io">FileReaderBuilder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/io/FileReaderBuilder.html#line-209">charset</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/nio/charset/Charset.html" title="class or interface in java.nio.charset" class="external-link">Charset</a>&nbsp;cs)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="FileReaderBuilder.html" title="class in org.apache.juneau.commons.io">FileReaderBuilder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/io/FileReaderBuilder.html#line-227">charset</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/nio/charset/Charset.html" title="class or interface in java.nio.charset" class="external-link">Charset</a>&nbsp;cs)</span></div>
 <div class="block">Sets the character encoding for reading the file.
 
  <p>
@@ -360,7 +394,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="charset(java.lang.String)">
 <h3>charset</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="FileReaderBuilder.html" title="class in org.apache.juneau.commons.io">FileReaderBuilder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/io/FileReaderBuilder.html#line-234">charset</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;cs)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="FileReaderBuilder.html" title="class in org.apache.juneau.commons.io">FileReaderBuilder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/io/FileReaderBuilder.html#line-252">charset</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;cs)</span></div>
 <div class="block">Sets the character encoding for reading the file by charset name.
 
  <p>
@@ -387,7 +421,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="file(java.io.File)">
 <h3>file</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="FileReaderBuilder.html" title="class in org.apache.juneau.commons.io">FileReaderBuilder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/io/FileReaderBuilder.html#line-253">file</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="FileReaderBuilder.html" title="class in org.apache.juneau.commons.io">FileReaderBuilder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/io/FileReaderBuilder.html#line-271">file</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;value)</span></div>
 <div class="block">Sets the file to read from.
 
  <h5 class='section'>Example:</h5>
@@ -408,7 +442,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="file(java.lang.String)">
 <h3>file</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="FileReaderBuilder.html" title="class in org.apache.juneau.commons.io">FileReaderBuilder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/io/FileReaderBuilder.html#line-271">file</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;path)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="FileReaderBuilder.html" title="class in org.apache.juneau.commons.io">FileReaderBuilder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/io/FileReaderBuilder.html#line-289">file</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;path)</span></div>
 <div class="block">Sets the file path to read from.
 
  <h5 class='section'>Example:</h5>
@@ -420,6 +454,30 @@ loadScripts(document, 'script');</script>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>path</code> - The file path to read from.  Must not be <jk>null</jk>.</dd>
+<dt>Returns:</dt>
+<dd>This object for method chaining.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="file(java.nio.file.Path)">
+<h3>file</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="FileReaderBuilder.html" title="class in org.apache.juneau.commons.io">FileReaderBuilder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/io/FileReaderBuilder.html#line-311">file</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/nio/file/Path.html" title="class or interface in java.nio.file" class="external-link">Path</a>&nbsp;value)</span></div>
+<div class="block">Sets the file to read from.
+
+ <p>
+ Convenience overload for callers working with the NIO <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/nio/file/Path.html" title="class or interface in java.nio.file" class="external-link"><code>Path</code></a> API, consistent with
+ <a href="PathReaderBuilder.html#path(java.nio.file.Path)"><code>PathReaderBuilder.path(Path)</code></a>.
+
+ <h5 class='section'>Example:</h5>
+ <p class='bjava'>
+   Reader <jv>reader</jv> = FileReaderBuilder.<jsm>create</jsm>()
+      .file(Paths.<jsm>get</jsm>(<js>"/path/to/file.txt"</js>))
+      .build();
+ </p></div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>value</code> - The file path to read from.  Can be <jk>null</jk> (<a href="#build()"><code>build()</code></a> then throws an <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/IllegalArgumentException.html" title="class or interface in java.lang" class="external-link"><code>IllegalArgumentException</code></a> unless <a href="#allowNoFile()"><code>allowNoFile()</code></a> is set).</dd>
 <dt>Returns:</dt>
 <dd>This object for method chaining.</dd>
 </dl>

@@ -118,162 +118,187 @@
 <a class="jxr_linenumber" name="L110" href="#L110">110</a> 		assertThrowsWithMessage(Exception.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"Invalid JSON number"</span>, ()-&gt;p.read(<span class="jxr_string">"-0123"</span>, Number.<strong class="jxr_keyword">class</strong>));
 <a class="jxr_linenumber" name="L111" href="#L111">111</a> 		assertThrowsWithMessage(Exception.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"Invalid JSON number"</span>, ()-&gt;p.read(<span class="jxr_string">"0x123"</span>, Number.<strong class="jxr_keyword">class</strong>));
 <a class="jxr_linenumber" name="L112" href="#L112">112</a> 		assertThrowsWithMessage(Exception.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"Invalid JSON number"</span>, ()-&gt;p.read(<span class="jxr_string">"-0x123"</span>, Number.<strong class="jxr_keyword">class</strong>));
-<a class="jxr_linenumber" name="L113" href="#L113">113</a> 	}
-<a class="jxr_linenumber" name="L114" href="#L114">114</a> 
-<a class="jxr_linenumber" name="L115" href="#L115">115</a> 	@Test <strong class="jxr_keyword">void</strong> a06b_validJsonNumbers() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L116" href="#L116">116</a> 		assertEquals(0, p.read(<span class="jxr_string">"0"</span>, Number.<strong class="jxr_keyword">class</strong>).intValue());
-<a class="jxr_linenumber" name="L117" href="#L117">117</a> 		assertEquals(0, p.read(<span class="jxr_string">"-0"</span>, Number.<strong class="jxr_keyword">class</strong>).intValue());
-<a class="jxr_linenumber" name="L118" href="#L118">118</a> 	}
-<a class="jxr_linenumber" name="L119" href="#L119">119</a> 
-<a class="jxr_linenumber" name="L120" href="#L120">120</a> 	<em class="jxr_comment">//====================================================================================================</em>
-<a class="jxr_linenumber" name="L121" href="#L121">121</a> 	<em class="jxr_comment">// testUnquotedStrings</em>
-<a class="jxr_linenumber" name="L122" href="#L122">122</a> 	<em class="jxr_comment">// Lax parser allows unquoted strings if POJO can be converted from a string.</em>
-<a class="jxr_linenumber" name="L123" href="#L123">123</a> 	<em class="jxr_comment">//====================================================================================================</em>
-<a class="jxr_linenumber" name="L124" href="#L124">124</a> 	@Test <strong class="jxr_keyword">void</strong> a07_unquotedStrings() {
-<a class="jxr_linenumber" name="L125" href="#L125">125</a> 		assertThrows(ParseException.<strong class="jxr_keyword">class</strong>, ()-&gt;p.read(<span class="jxr_string">"foobar"</span>, C.<strong class="jxr_keyword">class</strong>));
+<a class="jxr_linenumber" name="L113" href="#L113">113</a> 		assertThrows(ParseException.<strong class="jxr_keyword">class</strong>, ()-&gt;p.read(<span class="jxr_string">"017"</span>, Number.<strong class="jxr_keyword">class</strong>));
+<a class="jxr_linenumber" name="L114" href="#L114">114</a> 		assertThrows(ParseException.<strong class="jxr_keyword">class</strong>, ()-&gt;p.read(<span class="jxr_string">"-017"</span>, Number.<strong class="jxr_keyword">class</strong>));
+<a class="jxr_linenumber" name="L115" href="#L115">115</a> 	}
+<a class="jxr_linenumber" name="L116" href="#L116">116</a> 
+<a class="jxr_linenumber" name="L117" href="#L117">117</a> 	@Test <strong class="jxr_keyword">void</strong> a06b_validJsonNumbers() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L118" href="#L118">118</a> 		assertEquals(0, p.read(<span class="jxr_string">"0"</span>, Number.<strong class="jxr_keyword">class</strong>).intValue());
+<a class="jxr_linenumber" name="L119" href="#L119">119</a> 		assertEquals(0, p.read(<span class="jxr_string">"-0"</span>, Number.<strong class="jxr_keyword">class</strong>).intValue());
+<a class="jxr_linenumber" name="L120" href="#L120">120</a> 	}
+<a class="jxr_linenumber" name="L121" href="#L121">121</a> 
+<a class="jxr_linenumber" name="L122" href="#L122">122</a> 	@Test <strong class="jxr_keyword">void</strong> a06c_laxJson5AcceptsHexAndOctal() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L123" href="#L123">123</a> 		<strong class="jxr_keyword">var</strong> p5 = Json5Parser.DEFAULT;
+<a class="jxr_linenumber" name="L124" href="#L124">124</a> 		assertEquals(31, p5.read(<span class="jxr_string">"0x1F"</span>, Number.<strong class="jxr_keyword">class</strong>).intValue());
+<a class="jxr_linenumber" name="L125" href="#L125">125</a> 		assertEquals(15, p5.read(<span class="jxr_string">"017"</span>, Number.<strong class="jxr_keyword">class</strong>).intValue());
 <a class="jxr_linenumber" name="L126" href="#L126">126</a> 	}
 <a class="jxr_linenumber" name="L127" href="#L127">127</a> 
-<a class="jxr_linenumber" name="L128" href="#L128">128</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> C {
-<a class="jxr_linenumber" name="L129" href="#L129">129</a> 		String f;
-<a class="jxr_linenumber" name="L130" href="#L130">130</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> C valueOf(String s) {
-<a class="jxr_linenumber" name="L131" href="#L131">131</a> 			<strong class="jxr_keyword">var</strong> c = <strong class="jxr_keyword">new</strong> C();
-<a class="jxr_linenumber" name="L132" href="#L132">132</a> 			c.f = s;
-<a class="jxr_linenumber" name="L133" href="#L133">133</a> 			<strong class="jxr_keyword">return</strong> c;
-<a class="jxr_linenumber" name="L134" href="#L134">134</a> 		}
-<a class="jxr_linenumber" name="L135" href="#L135">135</a> 		@Override <em class="jxr_comment">/* Overridden from Object */</em>
-<a class="jxr_linenumber" name="L136" href="#L136">136</a> 		<strong class="jxr_keyword">public</strong> String toString() {
-<a class="jxr_linenumber" name="L137" href="#L137">137</a> 			<strong class="jxr_keyword">return</strong> <span class="jxr_string">"f="</span>+f;
-<a class="jxr_linenumber" name="L138" href="#L138">138</a> 		}
-<a class="jxr_linenumber" name="L139" href="#L139">139</a> 	}
-<a class="jxr_linenumber" name="L140" href="#L140">140</a> 
-<a class="jxr_linenumber" name="L141" href="#L141">141</a> 	<em class="jxr_comment">//====================================================================================================</em>
-<a class="jxr_linenumber" name="L142" href="#L142">142</a> 	<em class="jxr_comment">// testStreamsAutoClose</em>
-<a class="jxr_linenumber" name="L143" href="#L143">143</a> 	<em class="jxr_comment">// Validates PARSER_autoCloseStreams.</em>
-<a class="jxr_linenumber" name="L144" href="#L144">144</a> 	<em class="jxr_comment">//====================================================================================================</em>
-<a class="jxr_linenumber" name="L145" href="#L145">145</a> 	@Test <strong class="jxr_keyword">void</strong> a08_streamsAutoClose() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L146" href="#L146">146</a> 		<strong class="jxr_keyword">var</strong> p2 = Json5Parser.DEFAULT.copy().autoCloseStreams().build();
-<a class="jxr_linenumber" name="L147" href="#L147">147</a> 		<strong class="jxr_keyword">var</strong> r = reader(<span class="jxr_string">"{foo:'bar'}{baz:'qux'}"</span>);
-<a class="jxr_linenumber" name="L148" href="#L148">148</a> 
-<a class="jxr_linenumber" name="L149" href="#L149">149</a> 		<strong class="jxr_keyword">var</strong> x = p2.read(r, JsonMap.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L150" href="#L150">150</a> 		assertBean(x, <span class="jxr_string">"foo"</span>, <span class="jxr_string">"bar"</span>);
-<a class="jxr_linenumber" name="L151" href="#L151">151</a> 		assertThrowsWithMessage(Exception.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"Reader is closed"</span>, ()-&gt;p2.read(r, JsonMap.<strong class="jxr_keyword">class</strong>));
-<a class="jxr_linenumber" name="L152" href="#L152">152</a> 	}
-<a class="jxr_linenumber" name="L153" href="#L153">153</a> 
-<a class="jxr_linenumber" name="L154" href="#L154">154</a> 	<em class="jxr_comment">//====================================================================================================</em>
-<a class="jxr_linenumber" name="L155" href="#L155">155</a> 	<em class="jxr_comment">// testMultipleObjectsInStream</em>
-<a class="jxr_linenumber" name="L156" href="#L156">156</a> 	<em class="jxr_comment">// Validates that readers are not closed so that we can read streams of POJOs.</em>
-<a class="jxr_linenumber" name="L157" href="#L157">157</a> 	<em class="jxr_comment">//====================================================================================================</em>
-<a class="jxr_linenumber" name="L158" href="#L158">158</a> 	@Test <strong class="jxr_keyword">void</strong> a09_multipleObjectsInStream() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L159" href="#L159">159</a> 		<strong class="jxr_keyword">var</strong> p2 = Json5Parser.create().unbuffered().build();
-<a class="jxr_linenumber" name="L160" href="#L160">160</a> 		<strong class="jxr_keyword">var</strong> r = reader(<span class="jxr_string">"{foo:'bar'}{baz:'qux'}"</span>);
-<a class="jxr_linenumber" name="L161" href="#L161">161</a> 
-<a class="jxr_linenumber" name="L162" href="#L162">162</a> 		<strong class="jxr_keyword">var</strong> x = (Object)p2.read(r, JsonMap.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L163" href="#L163">163</a> 		assertBean(x, <span class="jxr_string">"foo"</span>, <span class="jxr_string">"bar"</span>);
-<a class="jxr_linenumber" name="L164" href="#L164">164</a> 		x = p2.read(r, JsonMap.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L165" href="#L165">165</a> 		assertBean(x, <span class="jxr_string">"baz"</span>, <span class="jxr_string">"qux"</span>);
-<a class="jxr_linenumber" name="L166" href="#L166">166</a> 
-<a class="jxr_linenumber" name="L167" href="#L167">167</a> 		r = reader(<span class="jxr_string">"[123][456]"</span>);
-<a class="jxr_linenumber" name="L168" href="#L168">168</a> 		x = p2.read(r, JsonList.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L169" href="#L169">169</a> 		assertList(x, <span class="jxr_string">"123"</span>);
-<a class="jxr_linenumber" name="L170" href="#L170">170</a> 		x = p2.read(r, JsonList.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L171" href="#L171">171</a> 		assertList(x, <span class="jxr_string">"456"</span>);
-<a class="jxr_linenumber" name="L172" href="#L172">172</a> 	}
+<a class="jxr_linenumber" name="L128" href="#L128">128</a> 	<em class="jxr_comment">//====================================================================================================</em>
+<a class="jxr_linenumber" name="L129" href="#L129">129</a> 	<em class="jxr_comment">// DEL (U+007F) is legal unescaped in JSON strings and must survive a round-trip.</em>
+<a class="jxr_linenumber" name="L130" href="#L130">130</a> 	<em class="jxr_comment">//====================================================================================================</em>
+<a class="jxr_linenumber" name="L131" href="#L131">131</a> 	@Test <strong class="jxr_keyword">void</strong> a06d_delCharacterRoundTrip() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L132" href="#L132">132</a> 		<strong class="jxr_keyword">var</strong> s = <span class="jxr_string">"a\u007Fb"</span>;
+<a class="jxr_linenumber" name="L133" href="#L133">133</a> 		<strong class="jxr_keyword">var</strong> json = JsonSerializer.DEFAULT.toString(s);
+<a class="jxr_linenumber" name="L134" href="#L134">134</a> 		assertString(s, p.read(json, String.<strong class="jxr_keyword">class</strong>));
+<a class="jxr_linenumber" name="L135" href="#L135">135</a> 		assertEquals(3, p.read(json, String.<strong class="jxr_keyword">class</strong>).length());
+<a class="jxr_linenumber" name="L136" href="#L136">136</a> 	}
+<a class="jxr_linenumber" name="L137" href="#L137">137</a> 
+<a class="jxr_linenumber" name="L138" href="#L138">138</a> 	@Test <strong class="jxr_keyword">void</strong> a06e_delCharacterUnescaped() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L139" href="#L139">139</a> 		<strong class="jxr_keyword">var</strong> r = p.read(<span class="jxr_string">"\&quot;a\u007Fb\&quot;"</span>, String.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L140" href="#L140">140</a> 		assertString(<span class="jxr_string">"a\u007Fb"</span>, r);
+<a class="jxr_linenumber" name="L141" href="#L141">141</a> 		assertEquals(3, r.length());
+<a class="jxr_linenumber" name="L142" href="#L142">142</a> 		assertEquals(0x7F, r.charAt(1));
+<a class="jxr_linenumber" name="L143" href="#L143">143</a> 	}
+<a class="jxr_linenumber" name="L144" href="#L144">144</a> 
+<a class="jxr_linenumber" name="L145" href="#L145">145</a> 	<em class="jxr_comment">//====================================================================================================</em>
+<a class="jxr_linenumber" name="L146" href="#L146">146</a> 	<em class="jxr_comment">// testUnquotedStrings</em>
+<a class="jxr_linenumber" name="L147" href="#L147">147</a> 	<em class="jxr_comment">// Lax parser allows unquoted strings if POJO can be converted from a string.</em>
+<a class="jxr_linenumber" name="L148" href="#L148">148</a> 	<em class="jxr_comment">//====================================================================================================</em>
+<a class="jxr_linenumber" name="L149" href="#L149">149</a> 	@Test <strong class="jxr_keyword">void</strong> a07_unquotedStrings() {
+<a class="jxr_linenumber" name="L150" href="#L150">150</a> 		assertThrows(ParseException.<strong class="jxr_keyword">class</strong>, ()-&gt;p.read(<span class="jxr_string">"foobar"</span>, C.<strong class="jxr_keyword">class</strong>));
+<a class="jxr_linenumber" name="L151" href="#L151">151</a> 	}
+<a class="jxr_linenumber" name="L152" href="#L152">152</a> 
+<a class="jxr_linenumber" name="L153" href="#L153">153</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> C {
+<a class="jxr_linenumber" name="L154" href="#L154">154</a> 		String f;
+<a class="jxr_linenumber" name="L155" href="#L155">155</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> C valueOf(String s) {
+<a class="jxr_linenumber" name="L156" href="#L156">156</a> 			<strong class="jxr_keyword">var</strong> c = <strong class="jxr_keyword">new</strong> C();
+<a class="jxr_linenumber" name="L157" href="#L157">157</a> 			c.f = s;
+<a class="jxr_linenumber" name="L158" href="#L158">158</a> 			<strong class="jxr_keyword">return</strong> c;
+<a class="jxr_linenumber" name="L159" href="#L159">159</a> 		}
+<a class="jxr_linenumber" name="L160" href="#L160">160</a> 		@Override <em class="jxr_comment">/* Overridden from Object */</em>
+<a class="jxr_linenumber" name="L161" href="#L161">161</a> 		<strong class="jxr_keyword">public</strong> String toString() {
+<a class="jxr_linenumber" name="L162" href="#L162">162</a> 			<strong class="jxr_keyword">return</strong> <span class="jxr_string">"f="</span>+f;
+<a class="jxr_linenumber" name="L163" href="#L163">163</a> 		}
+<a class="jxr_linenumber" name="L164" href="#L164">164</a> 	}
+<a class="jxr_linenumber" name="L165" href="#L165">165</a> 
+<a class="jxr_linenumber" name="L166" href="#L166">166</a> 	<em class="jxr_comment">//====================================================================================================</em>
+<a class="jxr_linenumber" name="L167" href="#L167">167</a> 	<em class="jxr_comment">// testStreamsAutoClose</em>
+<a class="jxr_linenumber" name="L168" href="#L168">168</a> 	<em class="jxr_comment">// Validates PARSER_autoCloseStreams.</em>
+<a class="jxr_linenumber" name="L169" href="#L169">169</a> 	<em class="jxr_comment">//====================================================================================================</em>
+<a class="jxr_linenumber" name="L170" href="#L170">170</a> 	@Test <strong class="jxr_keyword">void</strong> a08_streamsAutoClose() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L171" href="#L171">171</a> 		<strong class="jxr_keyword">var</strong> p2 = Json5Parser.DEFAULT.copy().autoCloseStreams().build();
+<a class="jxr_linenumber" name="L172" href="#L172">172</a> 		<strong class="jxr_keyword">var</strong> r = reader(<span class="jxr_string">"{foo:'bar'}{baz:'qux'}"</span>);
 <a class="jxr_linenumber" name="L173" href="#L173">173</a> 
-<a class="jxr_linenumber" name="L174" href="#L174">174</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Reader reader(String in) {
-<a class="jxr_linenumber" name="L175" href="#L175">175</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> CloseableStringReader(in);
-<a class="jxr_linenumber" name="L176" href="#L176">176</a> 	}
-<a class="jxr_linenumber" name="L177" href="#L177">177</a> 
-<a class="jxr_linenumber" name="L178" href="#L178">178</a> 	<strong class="jxr_keyword">public</strong> enum B_Enum { A, B, C }
-<a class="jxr_linenumber" name="L179" href="#L179">179</a> 
-<a class="jxr_linenumber" name="L180" href="#L180">180</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> B01_Bean {
-<a class="jxr_linenumber" name="L181" href="#L181">181</a> 		<strong class="jxr_keyword">private</strong> Set&lt;B_Enum&gt; v;
-<a class="jxr_linenumber" name="L182" href="#L182">182</a> 		<strong class="jxr_keyword">public</strong> Set&lt;B_Enum&gt; getV() { <strong class="jxr_keyword">return</strong> v; }
-<a class="jxr_linenumber" name="L183" href="#L183">183</a> 		<strong class="jxr_keyword">public</strong> B01_Bean setV(Set&lt;B_Enum&gt; x) { v = x; <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>; }
-<a class="jxr_linenumber" name="L184" href="#L184">184</a> 	}
-<a class="jxr_linenumber" name="L185" href="#L185">185</a> 
-<a class="jxr_linenumber" name="L186" href="#L186">186</a> 	<em class="jxr_comment">// Headline case: abstract Set&lt;Enum&gt;, empty array, null field.</em>
-<a class="jxr_linenumber" name="L187" href="#L187">187</a> 	@Test <strong class="jxr_keyword">void</strong> b01_emptyArrayIntoAbstractSetOfEnum() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L188" href="#L188">188</a> 		<strong class="jxr_keyword">var</strong> p2 = JsonParser.create().ignoreUnknownBeanProperties().build();
-<a class="jxr_linenumber" name="L189" href="#L189">189</a> 		<strong class="jxr_keyword">var</strong> x = p2.read(<span class="jxr_string">"{\&quot;v\&quot;:[]}"</span>, B01_Bean.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L190" href="#L190">190</a> 		assertNotNull(x.getV());
-<a class="jxr_linenumber" name="L191" href="#L191">191</a> 		assertTrue(x.getV().isEmpty());
-<a class="jxr_linenumber" name="L192" href="#L192">192</a> 		assertInstanceOf(LinkedHashSet.<strong class="jxr_keyword">class</strong>, x.getV());
-<a class="jxr_linenumber" name="L193" href="#L193">193</a> 	}
-<a class="jxr_linenumber" name="L194" href="#L194">194</a> 
-<a class="jxr_linenumber" name="L195" href="#L195">195</a> 	<em class="jxr_comment">// Non-empty array of the same shape must still populate (guards the populated path).</em>
-<a class="jxr_linenumber" name="L196" href="#L196">196</a> 	@Test <strong class="jxr_keyword">void</strong> b02_populatedArrayIntoAbstractSetOfEnum() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L197" href="#L197">197</a> 		<strong class="jxr_keyword">var</strong> x = p.read(<span class="jxr_string">"{\&quot;v\&quot;:[\&quot;A\&quot;,\&quot;B\&quot;]}"</span>, B01_Bean.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L198" href="#L198">198</a> 		assertInstanceOf(LinkedHashSet.<strong class="jxr_keyword">class</strong>, x.getV());
-<a class="jxr_linenumber" name="L199" href="#L199">199</a> 		assertEquals(Set.of(B_Enum.A, B_Enum.B), x.getV());
-<a class="jxr_linenumber" name="L200" href="#L200">200</a> 	}
-<a class="jxr_linenumber" name="L201" href="#L201">201</a> 
-<a class="jxr_linenumber" name="L202" href="#L202">202</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> B03_Bean {
-<a class="jxr_linenumber" name="L203" href="#L203">203</a> 		<strong class="jxr_keyword">private</strong> List&lt;B_Enum&gt; v;
-<a class="jxr_linenumber" name="L204" href="#L204">204</a> 		<strong class="jxr_keyword">public</strong> List&lt;B_Enum&gt; getV() { <strong class="jxr_keyword">return</strong> v; }
-<a class="jxr_linenumber" name="L205" href="#L205">205</a> 		<strong class="jxr_keyword">public</strong> B03_Bean setV(List&lt;B_Enum&gt; x) { v = x; <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>; }
-<a class="jxr_linenumber" name="L206" href="#L206">206</a> 	}
-<a class="jxr_linenumber" name="L207" href="#L207">207</a> 
-<a class="jxr_linenumber" name="L208" href="#L208">208</a> 	<em class="jxr_comment">// For a List field the parser's native JsonList is itself a List, so it is assigned directly (no</em>
-<a class="jxr_linenumber" name="L209" href="#L209">209</a> 	<em class="jxr_comment">// abstract-materialization coercion is needed).  Either way the contract is: non-null, empty List.</em>
-<a class="jxr_linenumber" name="L210" href="#L210">210</a> 	@Test <strong class="jxr_keyword">void</strong> b03_emptyArrayIntoAbstractListOfEnum() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L211" href="#L211">211</a> 		<strong class="jxr_keyword">var</strong> x = p.read(<span class="jxr_string">"{\&quot;v\&quot;:[]}"</span>, B03_Bean.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L212" href="#L212">212</a> 		assertNotNull(x.getV());
-<a class="jxr_linenumber" name="L213" href="#L213">213</a> 		assertTrue(x.getV().isEmpty());
-<a class="jxr_linenumber" name="L214" href="#L214">214</a> 		assertInstanceOf(List.<strong class="jxr_keyword">class</strong>, x.getV());
-<a class="jxr_linenumber" name="L215" href="#L215">215</a> 	}
-<a class="jxr_linenumber" name="L216" href="#L216">216</a> 
-<a class="jxr_linenumber" name="L217" href="#L217">217</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> B04_Bean {
-<a class="jxr_linenumber" name="L218" href="#L218">218</a> 		<strong class="jxr_keyword">private</strong> Map&lt;String,B_Enum&gt; v;
-<a class="jxr_linenumber" name="L219" href="#L219">219</a> 		<strong class="jxr_keyword">public</strong> Map&lt;String,B_Enum&gt; getV() { <strong class="jxr_keyword">return</strong> v; }
-<a class="jxr_linenumber" name="L220" href="#L220">220</a> 		<strong class="jxr_keyword">public</strong> B04_Bean setV(Map&lt;String,B_Enum&gt; x) { v = x; <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>; }
-<a class="jxr_linenumber" name="L221" href="#L221">221</a> 	}
-<a class="jxr_linenumber" name="L222" href="#L222">222</a> 
-<a class="jxr_linenumber" name="L223" href="#L223">223</a> 	@Test <strong class="jxr_keyword">void</strong> b04_emptyObjectIntoAbstractMapOfEnum() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L224" href="#L224">224</a> 		<strong class="jxr_keyword">var</strong> x = p.read(<span class="jxr_string">"{\&quot;v\&quot;:{}}"</span>, B04_Bean.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L225" href="#L225">225</a> 		assertNotNull(x.getV());
-<a class="jxr_linenumber" name="L226" href="#L226">226</a> 		assertTrue(x.getV().isEmpty());
-<a class="jxr_linenumber" name="L227" href="#L227">227</a> 		assertInstanceOf(LinkedHashMap.<strong class="jxr_keyword">class</strong>, x.getV());
-<a class="jxr_linenumber" name="L228" href="#L228">228</a> 	}
-<a class="jxr_linenumber" name="L229" href="#L229">229</a> 
-<a class="jxr_linenumber" name="L230" href="#L230">230</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> B05_Bean {
-<a class="jxr_linenumber" name="L231" href="#L231">231</a> 		<strong class="jxr_keyword">private</strong> Set&lt;String&gt; v;
-<a class="jxr_linenumber" name="L232" href="#L232">232</a> 		<strong class="jxr_keyword">public</strong> Set&lt;String&gt; getV() { <strong class="jxr_keyword">return</strong> v; }
-<a class="jxr_linenumber" name="L233" href="#L233">233</a> 		<strong class="jxr_keyword">public</strong> B05_Bean setV(Set&lt;String&gt; x) { v = x; <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>; }
-<a class="jxr_linenumber" name="L234" href="#L234">234</a> 	}
-<a class="jxr_linenumber" name="L235" href="#L235">235</a> 
-<a class="jxr_linenumber" name="L236" href="#L236">236</a> 	@Test <strong class="jxr_keyword">void</strong> b05_emptyArrayIntoAbstractSetOfString() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L237" href="#L237">237</a> 		<strong class="jxr_keyword">var</strong> x = p.read(<span class="jxr_string">"{\&quot;v\&quot;:[]}"</span>, B05_Bean.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L238" href="#L238">238</a> 		assertNotNull(x.getV());
-<a class="jxr_linenumber" name="L239" href="#L239">239</a> 		assertTrue(x.getV().isEmpty());
-<a class="jxr_linenumber" name="L240" href="#L240">240</a> 		assertInstanceOf(LinkedHashSet.<strong class="jxr_keyword">class</strong>, x.getV());
-<a class="jxr_linenumber" name="L241" href="#L241">241</a> 	}
-<a class="jxr_linenumber" name="L242" href="#L242">242</a> 
-<a class="jxr_linenumber" name="L243" href="#L243">243</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> B06_Bean {
-<a class="jxr_linenumber" name="L244" href="#L244">244</a> 		<strong class="jxr_keyword">private</strong> List&lt;String&gt; v;
-<a class="jxr_linenumber" name="L245" href="#L245">245</a> 		<strong class="jxr_keyword">public</strong> List&lt;String&gt; getV() { <strong class="jxr_keyword">return</strong> v; }
-<a class="jxr_linenumber" name="L246" href="#L246">246</a> 		<strong class="jxr_keyword">public</strong> B06_Bean setV(List&lt;String&gt; x) { v = x; <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>; }
-<a class="jxr_linenumber" name="L247" href="#L247">247</a> 	}
-<a class="jxr_linenumber" name="L248" href="#L248">248</a> 
-<a class="jxr_linenumber" name="L249" href="#L249">249</a> 	@Test <strong class="jxr_keyword">void</strong> b06_emptyArrayIntoAbstractListOfString() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L250" href="#L250">250</a> 		<strong class="jxr_keyword">var</strong> x = p.read(<span class="jxr_string">"{\&quot;v\&quot;:[]}"</span>, B06_Bean.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L251" href="#L251">251</a> 		assertNotNull(x.getV());
-<a class="jxr_linenumber" name="L252" href="#L252">252</a> 		assertTrue(x.getV().isEmpty());
-<a class="jxr_linenumber" name="L253" href="#L253">253</a> 		assertInstanceOf(List.<strong class="jxr_keyword">class</strong>, x.getV());
-<a class="jxr_linenumber" name="L254" href="#L254">254</a> 	}
-<a class="jxr_linenumber" name="L255" href="#L255">255</a> 
-<a class="jxr_linenumber" name="L256" href="#L256">256</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> B07_Bean {
-<a class="jxr_linenumber" name="L257" href="#L257">257</a> 		<strong class="jxr_keyword">private</strong> Map&lt;String,String&gt; v;
-<a class="jxr_linenumber" name="L258" href="#L258">258</a> 		<strong class="jxr_keyword">public</strong> Map&lt;String,String&gt; getV() { <strong class="jxr_keyword">return</strong> v; }
-<a class="jxr_linenumber" name="L259" href="#L259">259</a> 		<strong class="jxr_keyword">public</strong> B07_Bean setV(Map&lt;String,String&gt; x) { v = x; <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>; }
-<a class="jxr_linenumber" name="L260" href="#L260">260</a> 	}
-<a class="jxr_linenumber" name="L261" href="#L261">261</a> 
-<a class="jxr_linenumber" name="L262" href="#L262">262</a> 	@Test <strong class="jxr_keyword">void</strong> b07_emptyObjectIntoAbstractMapOfString() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L263" href="#L263">263</a> 		<strong class="jxr_keyword">var</strong> x = p.read(<span class="jxr_string">"{\&quot;v\&quot;:{}}"</span>, B07_Bean.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L264" href="#L264">264</a> 		assertNotNull(x.getV());
-<a class="jxr_linenumber" name="L265" href="#L265">265</a> 		assertTrue(x.getV().isEmpty());
-<a class="jxr_linenumber" name="L266" href="#L266">266</a> 		assertInstanceOf(LinkedHashMap.<strong class="jxr_keyword">class</strong>, x.getV());
-<a class="jxr_linenumber" name="L267" href="#L267">267</a> 	}
-<a class="jxr_linenumber" name="L268" href="#L268">268</a> }
+<a class="jxr_linenumber" name="L174" href="#L174">174</a> 		<strong class="jxr_keyword">var</strong> x = p2.read(r, JsonMap.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L175" href="#L175">175</a> 		assertBean(x, <span class="jxr_string">"foo"</span>, <span class="jxr_string">"bar"</span>);
+<a class="jxr_linenumber" name="L176" href="#L176">176</a> 		assertThrowsWithMessage(Exception.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"Reader is closed"</span>, ()-&gt;p2.read(r, JsonMap.<strong class="jxr_keyword">class</strong>));
+<a class="jxr_linenumber" name="L177" href="#L177">177</a> 	}
+<a class="jxr_linenumber" name="L178" href="#L178">178</a> 
+<a class="jxr_linenumber" name="L179" href="#L179">179</a> 	<em class="jxr_comment">//====================================================================================================</em>
+<a class="jxr_linenumber" name="L180" href="#L180">180</a> 	<em class="jxr_comment">// testMultipleObjectsInStream</em>
+<a class="jxr_linenumber" name="L181" href="#L181">181</a> 	<em class="jxr_comment">// Validates that readers are not closed so that we can read streams of POJOs.</em>
+<a class="jxr_linenumber" name="L182" href="#L182">182</a> 	<em class="jxr_comment">//====================================================================================================</em>
+<a class="jxr_linenumber" name="L183" href="#L183">183</a> 	@Test <strong class="jxr_keyword">void</strong> a09_multipleObjectsInStream() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L184" href="#L184">184</a> 		<strong class="jxr_keyword">var</strong> p2 = Json5Parser.create().unbuffered().build();
+<a class="jxr_linenumber" name="L185" href="#L185">185</a> 		<strong class="jxr_keyword">var</strong> r = reader(<span class="jxr_string">"{foo:'bar'}{baz:'qux'}"</span>);
+<a class="jxr_linenumber" name="L186" href="#L186">186</a> 
+<a class="jxr_linenumber" name="L187" href="#L187">187</a> 		<strong class="jxr_keyword">var</strong> x = (Object)p2.read(r, JsonMap.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L188" href="#L188">188</a> 		assertBean(x, <span class="jxr_string">"foo"</span>, <span class="jxr_string">"bar"</span>);
+<a class="jxr_linenumber" name="L189" href="#L189">189</a> 		x = p2.read(r, JsonMap.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L190" href="#L190">190</a> 		assertBean(x, <span class="jxr_string">"baz"</span>, <span class="jxr_string">"qux"</span>);
+<a class="jxr_linenumber" name="L191" href="#L191">191</a> 
+<a class="jxr_linenumber" name="L192" href="#L192">192</a> 		r = reader(<span class="jxr_string">"[123][456]"</span>);
+<a class="jxr_linenumber" name="L193" href="#L193">193</a> 		x = p2.read(r, JsonList.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L194" href="#L194">194</a> 		assertList(x, <span class="jxr_string">"123"</span>);
+<a class="jxr_linenumber" name="L195" href="#L195">195</a> 		x = p2.read(r, JsonList.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L196" href="#L196">196</a> 		assertList(x, <span class="jxr_string">"456"</span>);
+<a class="jxr_linenumber" name="L197" href="#L197">197</a> 	}
+<a class="jxr_linenumber" name="L198" href="#L198">198</a> 
+<a class="jxr_linenumber" name="L199" href="#L199">199</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Reader reader(String in) {
+<a class="jxr_linenumber" name="L200" href="#L200">200</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> CloseableStringReader(in);
+<a class="jxr_linenumber" name="L201" href="#L201">201</a> 	}
+<a class="jxr_linenumber" name="L202" href="#L202">202</a> 
+<a class="jxr_linenumber" name="L203" href="#L203">203</a> 	<strong class="jxr_keyword">public</strong> enum B_Enum { A, B, C }
+<a class="jxr_linenumber" name="L204" href="#L204">204</a> 
+<a class="jxr_linenumber" name="L205" href="#L205">205</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> B01_Bean {
+<a class="jxr_linenumber" name="L206" href="#L206">206</a> 		<strong class="jxr_keyword">private</strong> Set&lt;B_Enum&gt; v;
+<a class="jxr_linenumber" name="L207" href="#L207">207</a> 		<strong class="jxr_keyword">public</strong> Set&lt;B_Enum&gt; getV() { <strong class="jxr_keyword">return</strong> v; }
+<a class="jxr_linenumber" name="L208" href="#L208">208</a> 		<strong class="jxr_keyword">public</strong> B01_Bean setV(Set&lt;B_Enum&gt; x) { v = x; <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>; }
+<a class="jxr_linenumber" name="L209" href="#L209">209</a> 	}
+<a class="jxr_linenumber" name="L210" href="#L210">210</a> 
+<a class="jxr_linenumber" name="L211" href="#L211">211</a> 	<em class="jxr_comment">// Headline case: abstract Set&lt;Enum&gt;, empty array, null field.</em>
+<a class="jxr_linenumber" name="L212" href="#L212">212</a> 	@Test <strong class="jxr_keyword">void</strong> b01_emptyArrayIntoAbstractSetOfEnum() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L213" href="#L213">213</a> 		<strong class="jxr_keyword">var</strong> p2 = JsonParser.create().ignoreUnknownBeanProperties().build();
+<a class="jxr_linenumber" name="L214" href="#L214">214</a> 		<strong class="jxr_keyword">var</strong> x = p2.read(<span class="jxr_string">"{\&quot;v\&quot;:[]}"</span>, B01_Bean.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L215" href="#L215">215</a> 		assertNotNull(x.getV());
+<a class="jxr_linenumber" name="L216" href="#L216">216</a> 		assertTrue(x.getV().isEmpty());
+<a class="jxr_linenumber" name="L217" href="#L217">217</a> 		assertInstanceOf(LinkedHashSet.<strong class="jxr_keyword">class</strong>, x.getV());
+<a class="jxr_linenumber" name="L218" href="#L218">218</a> 	}
+<a class="jxr_linenumber" name="L219" href="#L219">219</a> 
+<a class="jxr_linenumber" name="L220" href="#L220">220</a> 	<em class="jxr_comment">// Non-empty array of the same shape must still populate (guards the populated path).</em>
+<a class="jxr_linenumber" name="L221" href="#L221">221</a> 	@Test <strong class="jxr_keyword">void</strong> b02_populatedArrayIntoAbstractSetOfEnum() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L222" href="#L222">222</a> 		<strong class="jxr_keyword">var</strong> x = p.read(<span class="jxr_string">"{\&quot;v\&quot;:[\&quot;A\&quot;,\&quot;B\&quot;]}"</span>, B01_Bean.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L223" href="#L223">223</a> 		assertInstanceOf(LinkedHashSet.<strong class="jxr_keyword">class</strong>, x.getV());
+<a class="jxr_linenumber" name="L224" href="#L224">224</a> 		assertEquals(Set.of(B_Enum.A, B_Enum.B), x.getV());
+<a class="jxr_linenumber" name="L225" href="#L225">225</a> 	}
+<a class="jxr_linenumber" name="L226" href="#L226">226</a> 
+<a class="jxr_linenumber" name="L227" href="#L227">227</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> B03_Bean {
+<a class="jxr_linenumber" name="L228" href="#L228">228</a> 		<strong class="jxr_keyword">private</strong> List&lt;B_Enum&gt; v;
+<a class="jxr_linenumber" name="L229" href="#L229">229</a> 		<strong class="jxr_keyword">public</strong> List&lt;B_Enum&gt; getV() { <strong class="jxr_keyword">return</strong> v; }
+<a class="jxr_linenumber" name="L230" href="#L230">230</a> 		<strong class="jxr_keyword">public</strong> B03_Bean setV(List&lt;B_Enum&gt; x) { v = x; <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>; }
+<a class="jxr_linenumber" name="L231" href="#L231">231</a> 	}
+<a class="jxr_linenumber" name="L232" href="#L232">232</a> 
+<a class="jxr_linenumber" name="L233" href="#L233">233</a> 	<em class="jxr_comment">// For a List field the parser's native JsonList is itself a List, so it is assigned directly (no</em>
+<a class="jxr_linenumber" name="L234" href="#L234">234</a> 	<em class="jxr_comment">// abstract-materialization coercion is needed).  Either way the contract is: non-null, empty List.</em>
+<a class="jxr_linenumber" name="L235" href="#L235">235</a> 	@Test <strong class="jxr_keyword">void</strong> b03_emptyArrayIntoAbstractListOfEnum() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L236" href="#L236">236</a> 		<strong class="jxr_keyword">var</strong> x = p.read(<span class="jxr_string">"{\&quot;v\&quot;:[]}"</span>, B03_Bean.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L237" href="#L237">237</a> 		assertNotNull(x.getV());
+<a class="jxr_linenumber" name="L238" href="#L238">238</a> 		assertTrue(x.getV().isEmpty());
+<a class="jxr_linenumber" name="L239" href="#L239">239</a> 		assertInstanceOf(List.<strong class="jxr_keyword">class</strong>, x.getV());
+<a class="jxr_linenumber" name="L240" href="#L240">240</a> 	}
+<a class="jxr_linenumber" name="L241" href="#L241">241</a> 
+<a class="jxr_linenumber" name="L242" href="#L242">242</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> B04_Bean {
+<a class="jxr_linenumber" name="L243" href="#L243">243</a> 		<strong class="jxr_keyword">private</strong> Map&lt;String,B_Enum&gt; v;
+<a class="jxr_linenumber" name="L244" href="#L244">244</a> 		<strong class="jxr_keyword">public</strong> Map&lt;String,B_Enum&gt; getV() { <strong class="jxr_keyword">return</strong> v; }
+<a class="jxr_linenumber" name="L245" href="#L245">245</a> 		<strong class="jxr_keyword">public</strong> B04_Bean setV(Map&lt;String,B_Enum&gt; x) { v = x; <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>; }
+<a class="jxr_linenumber" name="L246" href="#L246">246</a> 	}
+<a class="jxr_linenumber" name="L247" href="#L247">247</a> 
+<a class="jxr_linenumber" name="L248" href="#L248">248</a> 	@Test <strong class="jxr_keyword">void</strong> b04_emptyObjectIntoAbstractMapOfEnum() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L249" href="#L249">249</a> 		<strong class="jxr_keyword">var</strong> x = p.read(<span class="jxr_string">"{\&quot;v\&quot;:{}}"</span>, B04_Bean.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L250" href="#L250">250</a> 		assertNotNull(x.getV());
+<a class="jxr_linenumber" name="L251" href="#L251">251</a> 		assertTrue(x.getV().isEmpty());
+<a class="jxr_linenumber" name="L252" href="#L252">252</a> 		assertInstanceOf(LinkedHashMap.<strong class="jxr_keyword">class</strong>, x.getV());
+<a class="jxr_linenumber" name="L253" href="#L253">253</a> 	}
+<a class="jxr_linenumber" name="L254" href="#L254">254</a> 
+<a class="jxr_linenumber" name="L255" href="#L255">255</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> B05_Bean {
+<a class="jxr_linenumber" name="L256" href="#L256">256</a> 		<strong class="jxr_keyword">private</strong> Set&lt;String&gt; v;
+<a class="jxr_linenumber" name="L257" href="#L257">257</a> 		<strong class="jxr_keyword">public</strong> Set&lt;String&gt; getV() { <strong class="jxr_keyword">return</strong> v; }
+<a class="jxr_linenumber" name="L258" href="#L258">258</a> 		<strong class="jxr_keyword">public</strong> B05_Bean setV(Set&lt;String&gt; x) { v = x; <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>; }
+<a class="jxr_linenumber" name="L259" href="#L259">259</a> 	}
+<a class="jxr_linenumber" name="L260" href="#L260">260</a> 
+<a class="jxr_linenumber" name="L261" href="#L261">261</a> 	@Test <strong class="jxr_keyword">void</strong> b05_emptyArrayIntoAbstractSetOfString() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L262" href="#L262">262</a> 		<strong class="jxr_keyword">var</strong> x = p.read(<span class="jxr_string">"{\&quot;v\&quot;:[]}"</span>, B05_Bean.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L263" href="#L263">263</a> 		assertNotNull(x.getV());
+<a class="jxr_linenumber" name="L264" href="#L264">264</a> 		assertTrue(x.getV().isEmpty());
+<a class="jxr_linenumber" name="L265" href="#L265">265</a> 		assertInstanceOf(LinkedHashSet.<strong class="jxr_keyword">class</strong>, x.getV());
+<a class="jxr_linenumber" name="L266" href="#L266">266</a> 	}
+<a class="jxr_linenumber" name="L267" href="#L267">267</a> 
+<a class="jxr_linenumber" name="L268" href="#L268">268</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> B06_Bean {
+<a class="jxr_linenumber" name="L269" href="#L269">269</a> 		<strong class="jxr_keyword">private</strong> List&lt;String&gt; v;
+<a class="jxr_linenumber" name="L270" href="#L270">270</a> 		<strong class="jxr_keyword">public</strong> List&lt;String&gt; getV() { <strong class="jxr_keyword">return</strong> v; }
+<a class="jxr_linenumber" name="L271" href="#L271">271</a> 		<strong class="jxr_keyword">public</strong> B06_Bean setV(List&lt;String&gt; x) { v = x; <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>; }
+<a class="jxr_linenumber" name="L272" href="#L272">272</a> 	}
+<a class="jxr_linenumber" name="L273" href="#L273">273</a> 
+<a class="jxr_linenumber" name="L274" href="#L274">274</a> 	@Test <strong class="jxr_keyword">void</strong> b06_emptyArrayIntoAbstractListOfString() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L275" href="#L275">275</a> 		<strong class="jxr_keyword">var</strong> x = p.read(<span class="jxr_string">"{\&quot;v\&quot;:[]}"</span>, B06_Bean.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L276" href="#L276">276</a> 		assertNotNull(x.getV());
+<a class="jxr_linenumber" name="L277" href="#L277">277</a> 		assertTrue(x.getV().isEmpty());
+<a class="jxr_linenumber" name="L278" href="#L278">278</a> 		assertInstanceOf(List.<strong class="jxr_keyword">class</strong>, x.getV());
+<a class="jxr_linenumber" name="L279" href="#L279">279</a> 	}
+<a class="jxr_linenumber" name="L280" href="#L280">280</a> 
+<a class="jxr_linenumber" name="L281" href="#L281">281</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> B07_Bean {
+<a class="jxr_linenumber" name="L282" href="#L282">282</a> 		<strong class="jxr_keyword">private</strong> Map&lt;String,String&gt; v;
+<a class="jxr_linenumber" name="L283" href="#L283">283</a> 		<strong class="jxr_keyword">public</strong> Map&lt;String,String&gt; getV() { <strong class="jxr_keyword">return</strong> v; }
+<a class="jxr_linenumber" name="L284" href="#L284">284</a> 		<strong class="jxr_keyword">public</strong> B07_Bean setV(Map&lt;String,String&gt; x) { v = x; <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>; }
+<a class="jxr_linenumber" name="L285" href="#L285">285</a> 	}
+<a class="jxr_linenumber" name="L286" href="#L286">286</a> 
+<a class="jxr_linenumber" name="L287" href="#L287">287</a> 	@Test <strong class="jxr_keyword">void</strong> b07_emptyObjectIntoAbstractMapOfString() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L288" href="#L288">288</a> 		<strong class="jxr_keyword">var</strong> x = p.read(<span class="jxr_string">"{\&quot;v\&quot;:{}}"</span>, B07_Bean.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L289" href="#L289">289</a> 		assertNotNull(x.getV());
+<a class="jxr_linenumber" name="L290" href="#L290">290</a> 		assertTrue(x.getV().isEmpty());
+<a class="jxr_linenumber" name="L291" href="#L291">291</a> 		assertInstanceOf(LinkedHashMap.<strong class="jxr_keyword">class</strong>, x.getV());
+<a class="jxr_linenumber" name="L292" href="#L292">292</a> 	}
+<a class="jxr_linenumber" name="L293" href="#L293">293</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

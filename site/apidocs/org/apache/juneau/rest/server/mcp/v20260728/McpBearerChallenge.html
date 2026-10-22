@@ -90,13 +90,13 @@ loadScripts(document, 'script');</script>
  (<code>&lt; 0x20</code> and <code>0x7F</code>, including CR/LF that would otherwise enable header injection) are stripped, and
  <code>"</code>/<code>\</code> are backslash-escaped (<code>\"</code> / <code>\\</code>) rather than mangled.
 
- <h5 class='section'>F3 extensibility:</h5>
+ <h5 class='section'>Extensibility:</h5>
  <p>
  The baseline emits <a href="#realm(java.lang.String)"><code>realm</code></a>, <a href="#error(java.lang.String)"><code>error</code></a>,
  <a href="#errorDescription(java.lang.String)"><code>error_description</code></a>, <a href="#scope(java.util.Collection)"><code>scope</code></a>, and
- <a href="#resourceMetadata(java.net.URI)"><code>resource_metadata</code></a>.  The generic <a href="#param(java.lang.String,java.lang.String)"><code>param(String, String)</code></a> seam lets F3
- (SEP-2350 scoped step-up) add further auth-params without touching this class &mdash; F2 deliberately does not
- implement scope-accumulation/step-up.</div>
+ <a href="#resourceMetadata(java.net.URI)"><code>resource_metadata</code></a>.  The generic <a href="#param(java.lang.String,java.lang.String)"><code>param(String, String)</code></a> seam lets a
+ later layer (SEP-2350 scoped step-up) add further auth-params without touching this class &mdash; this class
+ deliberately does not implement scope-accumulation/step-up.</div>
 <dl class="notes">
 <dt>Since:</dt>
 <dd>10.0.0</dd>

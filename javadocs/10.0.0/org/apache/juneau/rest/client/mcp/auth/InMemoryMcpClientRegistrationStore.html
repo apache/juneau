@@ -82,7 +82,7 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="McpClientRegistrationStore.html" title="interface in org.apache.juneau.rest.client.mcp.auth">McpClientRegistrationStore</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/InMemoryMcpClientRegistrationStore.html#line-36">InMemoryMcpClientRegistrationStore</a></span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/InMemoryMcpClientRegistrationStore.html#line-35">InMemoryMcpClientRegistrationStore</a></span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>
 implements <a href="McpClientRegistrationStore.html" title="interface in org.apache.juneau.rest.client.mcp.auth">McpClientRegistrationStore</a></span></div>
 <div class="block">Thread-safe, process-scoped default <a href="McpClientRegistrationStore.html" title="interface in org.apache.juneau.rest.client.mcp.auth"><code>McpClientRegistrationStore</code></a> keying registrations by
@@ -166,7 +166,7 @@ implements <a href="McpClientRegistrationStore.html" title="interface in org.apa
 <li>
 <section class="detail" id="&lt;init&gt;()">
 <h3>InMemoryMcpClientRegistrationStore</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/InMemoryMcpClientRegistrationStore.html#line-39">InMemoryMcpClientRegistrationStore</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/InMemoryMcpClientRegistrationStore.html#line-38">InMemoryMcpClientRegistrationStore</a></span>()</div>
 </section>
 </li>
 </ul>
@@ -180,7 +180,7 @@ implements <a href="McpClientRegistrationStore.html" title="interface in org.apa
 <li>
 <section class="detail" id="find(java.net.URI)">
 <h3>find</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="McpClientRegistration.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpClientRegistration</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/InMemoryMcpClientRegistrationStore.html#line-46">find</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a>&nbsp;issuer)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="McpClientRegistration.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpClientRegistration</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/InMemoryMcpClientRegistrationStore.html#line-42">find</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a>&nbsp;issuer)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="McpClientRegistrationStore.html#find(java.net.URI)">McpClientRegistrationStore</a></code></span></div>
 <div class="block">Returns the registration stored for the given AS issuer, if any.</div>
 <dl class="notes">
@@ -196,7 +196,7 @@ implements <a href="McpClientRegistrationStore.html" title="interface in org.apa
 <li>
 <section class="detail" id="put(java.net.URI,org.apache.juneau.rest.client.mcp.auth.McpClientRegistration)">
 <h3>put</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/InMemoryMcpClientRegistrationStore.html#line-52">put</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a>&nbsp;issuer,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/InMemoryMcpClientRegistrationStore.html#line-48">put</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a>&nbsp;issuer,
  <a href="McpClientRegistration.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpClientRegistration</a>&nbsp;registration)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="McpClientRegistrationStore.html#put(java.net.URI,org.apache.juneau.rest.client.mcp.auth.McpClientRegistration)">McpClientRegistrationStore</a></code></span></div>
 <div class="block">Stores (or replaces) the registration for the given AS issuer.</div>
@@ -212,7 +212,7 @@ implements <a href="McpClientRegistrationStore.html" title="interface in org.apa
 <li>
 <section class="detail" id="remove(java.net.URI)">
 <h3>remove</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/InMemoryMcpClientRegistrationStore.html#line-59">remove</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a>&nbsp;issuer)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/InMemoryMcpClientRegistrationStore.html#line-55">remove</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a>&nbsp;issuer)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="McpClientRegistrationStore.html#remove(java.net.URI)">McpClientRegistrationStore</a></code></span></div>
 <div class="block">Removes any registration stored for the given AS issuer.</div>
 <dl class="notes">
@@ -226,7 +226,7 @@ implements <a href="McpClientRegistrationStore.html" title="interface in org.apa
 <li>
 <section class="detail" id="size()">
 <h3>size</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/InMemoryMcpClientRegistrationStore.html#line-70">size</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/InMemoryMcpClientRegistrationStore.html#line-66">size</a></span>()</div>
 <div class="block">Returns the number of stored registrations.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -237,7 +237,7 @@ implements <a href="McpClientRegistrationStore.html" title="interface in org.apa
 <li>
 <section class="detail" id="toString()">
 <h3>toString</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/InMemoryMcpClientRegistrationStore.html#line-74">toString</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/InMemoryMcpClientRegistrationStore.html#line-70">toString</a></span>()</div>
 <dl class="notes">
 <dt>Overrides:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#toString()" title="class or interface in java.lang" class="external-link">toString</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></code></dd>

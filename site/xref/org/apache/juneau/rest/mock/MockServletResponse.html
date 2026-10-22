@@ -45,8 +45,8 @@
 <a class="jxr_linenumber" name="L37" href="#L37">37</a>  <em class="jxr_javadoccomment"> * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L38" href="#L38">38</a>  <em class="jxr_javadoccomment">*/</em>
 <a class="jxr_linenumber" name="L39" href="#L39">39</a>  @SuppressWarnings({
-<a class="jxr_linenumber" name="L40" href="#L40">40</a>  	<span class="jxr_string">"java:S4144"</span>, <em class="jxr_comment">// Identical methods intentional for different test scenarios</em>
-<a class="jxr_linenumber" name="L41" href="#L41">41</a>  	<span class="jxr_string">"java:S115"</span>, <em class="jxr_comment">// Constants use UPPER_snakeCase convention (e.g., HEADER_ContentType)</em>
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>  	<span class="jxr_string">"java:S115"</span>, <em class="jxr_comment">// Constants use UPPER_snakeCase convention (e.g., HEADER_ContentType)</em>
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>  	<span class="jxr_string">"java:S4144"</span>, <em class="jxr_comment">// Identical methods intentional for different test scenarios</em>
 <a class="jxr_linenumber" name="L42" href="#L42">42</a>  	<span class="jxr_string">"resource"</span> <em class="jxr_comment">// Streams returned to servlet container; lifecycle managed by the container</em>
 <a class="jxr_linenumber" name="L43" href="#L43">43</a>  })
 <a class="jxr_linenumber" name="L44" href="#L44">44</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> MockServletResponse <strong class="jxr_keyword">implements</strong> HttpServletResponse {
@@ -66,7 +66,7 @@
 <a class="jxr_linenumber" name="L58" href="#L58">58</a>  	<strong class="jxr_keyword">private</strong> ByteArrayOutputStream baos = <strong class="jxr_keyword">new</strong> ByteArrayOutputStream();
 <a class="jxr_linenumber" name="L59" href="#L59">59</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">int</strong> bufferSize;
 <a class="jxr_linenumber" name="L60" href="#L60">60</a>  	<strong class="jxr_keyword">private</strong> Locale locale;
-<a class="jxr_linenumber" name="L61" href="#L61">61</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">int</strong> sc;
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">int</strong> sc = 200;
 <a class="jxr_linenumber" name="L62" href="#L62">62</a>  	<strong class="jxr_keyword">private</strong> String msg;
 <a class="jxr_linenumber" name="L63" href="#L63">63</a>  
 <a class="jxr_linenumber" name="L64" href="#L64">64</a>  	<strong class="jxr_keyword">private</strong> Map&lt;String,String[]&gt; headerMap = map();
@@ -271,7 +271,7 @@
 <a class="jxr_linenumber" name="L263" href="#L263">263</a> 		<strong class="jxr_keyword">if</strong> (nn(contentType) &amp;&amp; nn(charset)) {
 <a class="jxr_linenumber" name="L264" href="#L264">264</a> 			<strong class="jxr_keyword">if</strong> (contentType.indexOf(<span class="jxr_string">"charset="</span>) != -1)
 <a class="jxr_linenumber" name="L265" href="#L265">265</a> 				contentType = contentType.replaceAll(<span class="jxr_string">"&#92;&#92;;&#92;&#92;s*charset=.*"</span>, <span class="jxr_string">""</span>);
-<a class="jxr_linenumber" name="L266" href="#L266">266</a> 			<strong class="jxr_keyword">if</strong> (! <span class="jxr_string">"UTF-8"</span>.equalsIgnoreCase(charset))
+<a class="jxr_linenumber" name="L266" href="#L266">266</a> 			<strong class="jxr_keyword">if</strong> (neqic(<span class="jxr_string">"UTF-8"</span>, charset))
 <a class="jxr_linenumber" name="L267" href="#L267">267</a> 				contentType = contentType + <span class="jxr_string">";charset="</span> + charset;
 <a class="jxr_linenumber" name="L268" href="#L268">268</a> 			header(HEADER_ContentType, contentType);
 <a class="jxr_linenumber" name="L269" href="#L269">269</a> 		}

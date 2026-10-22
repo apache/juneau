@@ -60,31 +60,31 @@
 <a class="jxr_linenumber" name="L52" href="#L52">52</a>  <em class="jxr_javadoccomment"> * This class is thread-safe. The cache uses {@link ConcurrentHashMap} for safe concurrent access.</em>
 <a class="jxr_linenumber" name="L53" href="#L53">53</a>  <em class="jxr_javadoccomment"> * &lt;/p&gt;</em>
 <a class="jxr_linenumber" name="L54" href="#L54">54</a>  <em class="jxr_javadoccomment"> */</em>
-<a class="jxr_linenumber" name="L55" href="#L55">55</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">abstract</strong> <strong class="jxr_keyword">class</strong> <a name="CachingConverter" href="../../../../../org/apache/juneau/commons/conversion/CachingConverter.html#CachingConverter">CachingConverter</a> <strong class="jxr_keyword">implements</strong> <a name="Converter" href="../../../../../org/apache/juneau/commons/conversion/Converter.html#Converter">Converter</a> {
-<a class="jxr_linenumber" name="L56" href="#L56">56</a>  
-<a class="jxr_linenumber" name="L57" href="#L57">57</a>  	<em class="jxr_comment">// Sentinel stored in the cache when findConversion() returns null.</em>
-<a class="jxr_linenumber" name="L58" href="#L58">58</a>  	<em class="jxr_comment">// ConcurrentHashMap does not permit null values, so we cannot store null directly.</em>
-<a class="jxr_linenumber" name="L59" href="#L59">59</a>  	<em class="jxr_comment">// Using this sentinel avoids re-invoking findConversion() for unconvertable type pairs.</em>
-<a class="jxr_linenumber" name="L60" href="#L60">60</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Conversion&lt;?,?&gt; NO_CONVERSION = (in, memberOf, session, args) -&gt; <strong class="jxr_keyword">null</strong>; <em class="jxr_comment">// HTT: sentinel body is never invoked; ConcurrentHashMap prohibits null values so we use this placeholder</em>
-<a class="jxr_linenumber" name="L61" href="#L61">61</a>  
-<a class="jxr_linenumber" name="L62" href="#L62">62</a>  	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L63" href="#L63">63</a>  <em class="jxr_javadoccomment">	 * Returns the appropriate default value for a null input to the given target type.</em>
-<a class="jxr_linenumber" name="L64" href="#L64">64</a>  <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L65" href="#L65">65</a>  <em class="jxr_javadoccomment">	 * &lt;ul&gt;</em>
-<a class="jxr_linenumber" name="L66" href="#L66">66</a>  <em class="jxr_javadoccomment">	 * 	&lt;li&gt;For {@link Optional}: returns {@link Optional#empty()}, or {@code Optional.of(Optional.empty())} for</em>
-<a class="jxr_linenumber" name="L67" href="#L67">67</a>  <em class="jxr_javadoccomment">	 * 		nested optional types such as {@code Optional&lt;Optional&lt;Integer&gt;&gt;}.</em>
-<a class="jxr_linenumber" name="L68" href="#L68">68</a>  <em class="jxr_javadoccomment">	 * 	&lt;li&gt;For primitives: returns the JVM zero/false default (e.g. {@code 0} for {@code int}).</em>
-<a class="jxr_linenumber" name="L69" href="#L69">69</a>  <em class="jxr_javadoccomment">	 * 	&lt;li&gt;For all other types: returns {@code null}.</em>
-<a class="jxr_linenumber" name="L70" href="#L70">70</a>  <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
-<a class="jxr_linenumber" name="L71" href="#L71">71</a>  <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L72" href="#L72">72</a>  <em class="jxr_javadoccomment">	 * @param type The target type.</em>
-<a class="jxr_linenumber" name="L73" href="#L73">73</a>  <em class="jxr_javadoccomment">	 * @param args The generic type arguments (e.g. element type for {@link Optional}).</em>
-<a class="jxr_linenumber" name="L74" href="#L74">74</a>  <em class="jxr_javadoccomment">	 * @param &lt;T&gt; The target type.</em>
-<a class="jxr_linenumber" name="L75" href="#L75">75</a>  <em class="jxr_javadoccomment">	 * @return The appropriate null default.</em>
-<a class="jxr_linenumber" name="L76" href="#L76">76</a>  <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L77" href="#L77">77</a>  	@SuppressWarnings({
-<a class="jxr_linenumber" name="L78" href="#L78">78</a>  		<span class="jxr_string">"unchecked"</span> <em class="jxr_comment">// Cast is safe: type parameter is verified at construction.</em>
-<a class="jxr_linenumber" name="L79" href="#L79">79</a>  	})
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>  @SuppressWarnings({
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>  	<span class="jxr_string">"unchecked"</span> <em class="jxr_comment">// Cast is safe: type parameter is verified at construction.</em>
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>  })
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">abstract</strong> <strong class="jxr_keyword">class</strong> CachingConverter <strong class="jxr_keyword">implements</strong> <a name="Converter" href="../../../../../org/apache/juneau/commons/conversion/Converter.html#Converter">Converter</a> {
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>  
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>  	<em class="jxr_comment">// Sentinel stored in the cache when findConversion() returns null.</em>
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>  	<em class="jxr_comment">// ConcurrentHashMap does not permit null values, so we cannot store null directly.</em>
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>  	<em class="jxr_comment">// Using this sentinel avoids re-invoking findConversion() for unconvertable type pairs.</em>
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Conversion&lt;?,?&gt; NO_CONVERSION = (in, memberOf, session, args) -&gt; <strong class="jxr_keyword">null</strong>; <em class="jxr_comment">// HTT: sentinel body is never invoked; ConcurrentHashMap prohibits null values so we use this placeholder</em>
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>  
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>  	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>  <em class="jxr_javadoccomment">	 * Returns the appropriate default value for a null input to the given target type.</em>
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>  <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>  <em class="jxr_javadoccomment">	 * &lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>  <em class="jxr_javadoccomment">	 * 	&lt;li&gt;For {@link Optional}: returns {@link Optional#empty()}, or {@code Optional.of(Optional.empty())} for</em>
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>  <em class="jxr_javadoccomment">	 * 		nested optional types such as {@code Optional&lt;Optional&lt;Integer&gt;&gt;}.</em>
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>  <em class="jxr_javadoccomment">	 * 	&lt;li&gt;For primitives: returns the JVM zero/false default (e.g. {@code 0} for {@code int}).</em>
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>  <em class="jxr_javadoccomment">	 * 	&lt;li&gt;For all other types: returns {@code null}.</em>
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>  <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>  <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>  <em class="jxr_javadoccomment">	 * @param type The target type.</em>
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>  <em class="jxr_javadoccomment">	 * @param args The generic type arguments (e.g. element type for {@link Optional}).</em>
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>  <em class="jxr_javadoccomment">	 * @param &lt;T&gt; The target type.</em>
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>  <em class="jxr_javadoccomment">	 * @return The appropriate null default.</em>
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>  <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L80" href="#L80">80</a>  	<strong class="jxr_keyword">static</strong> &lt;T&gt; T nullDefault(Class&lt;T&gt; type, Class&lt;?&gt;... args) {
 <a class="jxr_linenumber" name="L81" href="#L81">81</a>  		<strong class="jxr_keyword">if</strong> (type == Optional.<strong class="jxr_keyword">class</strong>) {
 <a class="jxr_linenumber" name="L82" href="#L82">82</a>  			<strong class="jxr_keyword">if</strong> (args.length &gt; 0)
@@ -111,203 +111,185 @@
 <a class="jxr_linenumber" name="L103" href="#L103">103</a> <em class="jxr_javadoccomment">	 * @param &lt;T&gt; The target type.</em>
 <a class="jxr_linenumber" name="L104" href="#L104">104</a> <em class="jxr_javadoccomment">	 * @return The JVM zero/false default, or &lt;jk&gt;null&lt;/jk&gt; if {@code type} is not a primitive.</em>
 <a class="jxr_linenumber" name="L105" href="#L105">105</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L106" href="#L106">106</a> 	@SuppressWarnings({
-<a class="jxr_linenumber" name="L107" href="#L107">107</a> 		<span class="jxr_string">"unchecked"</span> <em class="jxr_comment">// Cast is safe: type parameter is verified at construction.</em>
-<a class="jxr_linenumber" name="L108" href="#L108">108</a> 	})
-<a class="jxr_linenumber" name="L109" href="#L109">109</a> 	<strong class="jxr_keyword">static</strong> &lt;T&gt; T primitiveDefault(Class&lt;T&gt; type) {
-<a class="jxr_linenumber" name="L110" href="#L110">110</a> 		<strong class="jxr_keyword">if</strong> (type == Integer.TYPE)   <strong class="jxr_keyword">return</strong> (T) Integer.valueOf(0);
-<a class="jxr_linenumber" name="L111" href="#L111">111</a> 		<strong class="jxr_keyword">if</strong> (type == Long.TYPE)      <strong class="jxr_keyword">return</strong> (T) Long.valueOf(0L);
-<a class="jxr_linenumber" name="L112" href="#L112">112</a> 		<strong class="jxr_keyword">if</strong> (type == Double.TYPE)    <strong class="jxr_keyword">return</strong> (T) Double.valueOf(0.0d);
-<a class="jxr_linenumber" name="L113" href="#L113">113</a> 		<strong class="jxr_keyword">if</strong> (type == Float.TYPE)     <strong class="jxr_keyword">return</strong> (T) Float.valueOf(0.0f);
-<a class="jxr_linenumber" name="L114" href="#L114">114</a> 		<strong class="jxr_keyword">if</strong> (type == Boolean.TYPE)   <strong class="jxr_keyword">return</strong> (T) Boolean.FALSE;
-<a class="jxr_linenumber" name="L115" href="#L115">115</a> 		<strong class="jxr_keyword">if</strong> (type == Short.TYPE)     <strong class="jxr_keyword">return</strong> (T) Short.valueOf((<strong class="jxr_keyword">short</strong>)0);
-<a class="jxr_linenumber" name="L116" href="#L116">116</a> 		<strong class="jxr_keyword">if</strong> (type == Byte.TYPE)      <strong class="jxr_keyword">return</strong> (T) Byte.valueOf((byte)0);
-<a class="jxr_linenumber" name="L117" href="#L117">117</a> 		<strong class="jxr_keyword">if</strong> (type == Character.TYPE) <strong class="jxr_keyword">return</strong> (T) Character.valueOf('\0');
-<a class="jxr_linenumber" name="L118" href="#L118">118</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>; <em class="jxr_comment">// HTT: no other primitive types exist in Java</em>
-<a class="jxr_linenumber" name="L119" href="#L119">119</a> 	}
+<a class="jxr_linenumber" name="L106" href="#L106">106</a> 	<strong class="jxr_keyword">static</strong> &lt;T&gt; T primitiveDefault(Class&lt;T&gt; type) {
+<a class="jxr_linenumber" name="L107" href="#L107">107</a> 		<strong class="jxr_keyword">if</strong> (type == Integer.TYPE)   <strong class="jxr_keyword">return</strong> (T) Integer.valueOf(0);
+<a class="jxr_linenumber" name="L108" href="#L108">108</a> 		<strong class="jxr_keyword">if</strong> (type == Long.TYPE)      <strong class="jxr_keyword">return</strong> (T) Long.valueOf(0L);
+<a class="jxr_linenumber" name="L109" href="#L109">109</a> 		<strong class="jxr_keyword">if</strong> (type == Double.TYPE)    <strong class="jxr_keyword">return</strong> (T) Double.valueOf(0.0d);
+<a class="jxr_linenumber" name="L110" href="#L110">110</a> 		<strong class="jxr_keyword">if</strong> (type == Float.TYPE)     <strong class="jxr_keyword">return</strong> (T) Float.valueOf(0.0f);
+<a class="jxr_linenumber" name="L111" href="#L111">111</a> 		<strong class="jxr_keyword">if</strong> (type == Boolean.TYPE)   <strong class="jxr_keyword">return</strong> (T) Boolean.FALSE;
+<a class="jxr_linenumber" name="L112" href="#L112">112</a> 		<strong class="jxr_keyword">if</strong> (type == Short.TYPE)     <strong class="jxr_keyword">return</strong> (T) Short.valueOf((<strong class="jxr_keyword">short</strong>)0);
+<a class="jxr_linenumber" name="L113" href="#L113">113</a> 		<strong class="jxr_keyword">if</strong> (type == Byte.TYPE)      <strong class="jxr_keyword">return</strong> (T) Byte.valueOf((byte)0);
+<a class="jxr_linenumber" name="L114" href="#L114">114</a> 		<strong class="jxr_keyword">if</strong> (type == Character.TYPE) <strong class="jxr_keyword">return</strong> (T) Character.valueOf('\0');
+<a class="jxr_linenumber" name="L115" href="#L115">115</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>; <em class="jxr_comment">// HTT: no other primitive types exist in Java</em>
+<a class="jxr_linenumber" name="L116" href="#L116">116</a> 	}
+<a class="jxr_linenumber" name="L117" href="#L117">117</a> 
+<a class="jxr_linenumber" name="L118" href="#L118">118</a> 	<em class="jxr_comment">// Two-level cache: input type -&gt; output type -&gt; conversion function (or NO_CONVERSION sentinel).</em>
+<a class="jxr_linenumber" name="L119" href="#L119">119</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Map&lt;Class&lt;?&gt;,Map&lt;Class&lt;?&gt;,Conversion&lt;?,?&gt;&gt;&gt; conversions = <strong class="jxr_keyword">new</strong> ConcurrentHashMap&lt;&gt;();
 <a class="jxr_linenumber" name="L120" href="#L120">120</a> 
-<a class="jxr_linenumber" name="L121" href="#L121">121</a> 	<em class="jxr_comment">// Two-level cache: input type -&gt; output type -&gt; conversion function (or NO_CONVERSION sentinel).</em>
-<a class="jxr_linenumber" name="L122" href="#L122">122</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Map&lt;Class&lt;?&gt;,Map&lt;Class&lt;?&gt;,Conversion&lt;?,?&gt;&gt;&gt; conversions = <strong class="jxr_keyword">new</strong> ConcurrentHashMap&lt;&gt;();
-<a class="jxr_linenumber" name="L123" href="#L123">123</a> 
-<a class="jxr_linenumber" name="L124" href="#L124">124</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L125" href="#L125">125</a> <em class="jxr_javadoccomment">	 * Finds a conversion function from the specified input type to the specified output type.</em>
-<a class="jxr_linenumber" name="L126" href="#L126">126</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L127" href="#L127">127</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L128" href="#L128">128</a> <em class="jxr_javadoccomment">	 * This method is called lazily the first time a conversion between a given type pair is requested.</em>
-<a class="jxr_linenumber" name="L129" href="#L129">129</a> <em class="jxr_javadoccomment">	 * The result is cached so subsequent calls for the same type pair bypass this method entirely.</em>
-<a class="jxr_linenumber" name="L130" href="#L130">130</a> <em class="jxr_javadoccomment">	 * When this method returns &lt;jk&gt;null&lt;/jk&gt;, a sentinel is stored so that unconvertable type pairs</em>
-<a class="jxr_linenumber" name="L131" href="#L131">131</a> <em class="jxr_javadoccomment">	 * are also only evaluated once.</em>
-<a class="jxr_linenumber" name="L132" href="#L132">132</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L133" href="#L133">133</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L134" href="#L134">134</a> <em class="jxr_javadoccomment">	 * Implementations should return &lt;jk&gt;null&lt;/jk&gt; if no conversion is possible for the given types,</em>
-<a class="jxr_linenumber" name="L135" href="#L135">135</a> <em class="jxr_javadoccomment">	 * which will cause {@link #to(Object, Class)} and {@link #to(Object, Type, Type...)} to throw</em>
-<a class="jxr_linenumber" name="L136" href="#L136">136</a> <em class="jxr_javadoccomment">	 * {@link InvalidConversionException} for that type pair.</em>
-<a class="jxr_linenumber" name="L137" href="#L137">137</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L138" href="#L138">138</a> <em class="jxr_javadoccomment">	 * @param &lt;I&gt; The input type.</em>
-<a class="jxr_linenumber" name="L139" href="#L139">139</a> <em class="jxr_javadoccomment">	 * @param &lt;O&gt; The output type.</em>
-<a class="jxr_linenumber" name="L140" href="#L140">140</a> <em class="jxr_javadoccomment">	 * @param inType The runtime class of the input object.</em>
-<a class="jxr_linenumber" name="L141" href="#L141">141</a> <em class="jxr_javadoccomment">	 * @param outType The target output class.</em>
-<a class="jxr_linenumber" name="L142" href="#L142">142</a> <em class="jxr_javadoccomment">	 * @return A {@link Conversion} function, or &lt;jk&gt;null&lt;/jk&gt; if no conversion is available.</em>
-<a class="jxr_linenumber" name="L143" href="#L143">143</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L144" href="#L144">144</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">abstract</strong> &lt;I,O&gt; Conversion&lt;I,O&gt; findConversion(Class&lt;I&gt; inType, Class&lt;O&gt; outType);
-<a class="jxr_linenumber" name="L145" href="#L145">145</a> 
-<a class="jxr_linenumber" name="L146" href="#L146">146</a> 	@SuppressWarnings({
-<a class="jxr_linenumber" name="L147" href="#L147">147</a> 		<span class="jxr_string">"unchecked"</span> <em class="jxr_comment">// Cast is safe: type parameter is verified at construction.</em>
-<a class="jxr_linenumber" name="L148" href="#L148">148</a> 	})
-<a class="jxr_linenumber" name="L149" href="#L149">149</a> 	<strong class="jxr_keyword">private</strong> &lt;I,O&gt; Conversion&lt;I,O&gt; lookupConversion(Class&lt;I&gt; inType, Class&lt;O&gt; outType) {
-<a class="jxr_linenumber" name="L150" href="#L150">150</a> 		<strong class="jxr_keyword">var</strong> fn = conversions
-<a class="jxr_linenumber" name="L151" href="#L151">151</a> 			.computeIfAbsent(inType, k -&gt; <strong class="jxr_keyword">new</strong> ConcurrentHashMap&lt;&gt;())
-<a class="jxr_linenumber" name="L152" href="#L152">152</a> 			.computeIfAbsent(outType, k -&gt; {
-<a class="jxr_linenumber" name="L153" href="#L153">153</a> 				Conversion&lt;I,O&gt; found = findConversion(inType, outType);
-<a class="jxr_linenumber" name="L154" href="#L154">154</a> 				<strong class="jxr_keyword">return</strong> found != <strong class="jxr_keyword">null</strong> ? found : NO_CONVERSION;
-<a class="jxr_linenumber" name="L155" href="#L155">155</a> 			});
-<a class="jxr_linenumber" name="L156" href="#L156">156</a> 		<strong class="jxr_keyword">return</strong> fn == NO_CONVERSION ? <strong class="jxr_keyword">null</strong> : (Conversion&lt;I,O&gt;) fn;
-<a class="jxr_linenumber" name="L157" href="#L157">157</a> 	}
-<a class="jxr_linenumber" name="L158" href="#L158">158</a> 
-<a class="jxr_linenumber" name="L159" href="#L159">159</a> 	@Override
-<a class="jxr_linenumber" name="L160" href="#L160">160</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> canConvert(Class&lt;?&gt; inType, Class&lt;?&gt; outType) {
-<a class="jxr_linenumber" name="L161" href="#L161">161</a> 		<strong class="jxr_keyword">if</strong> (inType == outType)
-<a class="jxr_linenumber" name="L162" href="#L162">162</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
-<a class="jxr_linenumber" name="L163" href="#L163">163</a> 		<strong class="jxr_keyword">return</strong> lookupConversion(inType, outType) != <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L164" href="#L164">164</a> 	}
-<a class="jxr_linenumber" name="L165" href="#L165">165</a> 
-<a class="jxr_linenumber" name="L166" href="#L166">166</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L167" href="#L167">167</a> <em class="jxr_javadoccomment">	 * Converts the specified object to the specified type.</em>
-<a class="jxr_linenumber" name="L168" href="#L168">168</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L169" href="#L169">169</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L170" href="#L170">170</a> <em class="jxr_javadoccomment">	 * On the first call for a given input/output type pair, {@link #findConversion(Class, Class)} is</em>
-<a class="jxr_linenumber" name="L171" href="#L171">171</a> <em class="jxr_javadoccomment">	 * invoked and the result is cached. Subsequent calls use the cached function directly.</em>
-<a class="jxr_linenumber" name="L172" href="#L172">172</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L173" href="#L173">173</a> <em class="jxr_javadoccomment">	 * @param o The object to convert. Can be &lt;jk&gt;null&lt;/jk&gt;.</em>
-<a class="jxr_linenumber" name="L174" href="#L174">174</a> <em class="jxr_javadoccomment">	 * @param type The target type.</em>
-<a class="jxr_linenumber" name="L175" href="#L175">175</a> <em class="jxr_javadoccomment">	 * @param &lt;T&gt; The target type.</em>
-<a class="jxr_linenumber" name="L176" href="#L176">176</a> <em class="jxr_javadoccomment">	 * @return The converted object, or the primitive zero-value if the input is &lt;jk&gt;null&lt;/jk&gt; and the target</em>
-<a class="jxr_linenumber" name="L177" href="#L177">177</a> <em class="jxr_javadoccomment">	 * 	is a primitive type, or &lt;jk&gt;null&lt;/jk&gt; otherwise.</em>
-<a class="jxr_linenumber" name="L178" href="#L178">178</a> <em class="jxr_javadoccomment">	 * @throws InvalidConversionException If no conversion path exists from the input type to the target type.</em>
-<a class="jxr_linenumber" name="L179" href="#L179">179</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L180" href="#L180">180</a> 	@Override
-<a class="jxr_linenumber" name="L181" href="#L181">181</a> 	@SuppressWarnings({
-<a class="jxr_linenumber" name="L182" href="#L182">182</a> 		<span class="jxr_string">"unchecked"</span> <em class="jxr_comment">// Cast is safe: type parameter is verified at construction.</em>
-<a class="jxr_linenumber" name="L183" href="#L183">183</a> 	})
-<a class="jxr_linenumber" name="L184" href="#L184">184</a> 	<strong class="jxr_keyword">public</strong> &lt;T&gt; T to(Object o, Class&lt;T&gt; type) {
-<a class="jxr_linenumber" name="L185" href="#L185">185</a> 		<strong class="jxr_keyword">if</strong> (o == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L186" href="#L186">186</a> 			<strong class="jxr_keyword">return</strong> type.isPrimitive() ? primitiveDefault(type) : <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L187" href="#L187">187</a> 		<strong class="jxr_keyword">var</strong> inType = o.getClass();
-<a class="jxr_linenumber" name="L188" href="#L188">188</a> 		<strong class="jxr_keyword">if</strong> (inType == type)
-<a class="jxr_linenumber" name="L189" href="#L189">189</a> 			<strong class="jxr_keyword">return</strong> (T) o;
-<a class="jxr_linenumber" name="L190" href="#L190">190</a> 		<strong class="jxr_keyword">var</strong> fn = (Conversion&lt;Object,T&gt;) lookupConversion(inType, type);
-<a class="jxr_linenumber" name="L191" href="#L191">191</a> 		<strong class="jxr_keyword">if</strong> (fn == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L192" href="#L192">192</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="InvalidConversionException" href="../../../../../org/apache/juneau/commons/conversion/InvalidConversionException.html#InvalidConversionException">InvalidConversionException</a>(inType, type);
-<a class="jxr_linenumber" name="L193" href="#L193">193</a> 		<strong class="jxr_keyword">return</strong> fn.to(o, <strong class="jxr_keyword">null</strong>, (<a name="ConverterSession" href="../../../../../org/apache/juneau/commons/conversion/ConverterSession.html#ConverterSession">ConverterSession</a>)<strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L194" href="#L194">194</a> 	}
-<a class="jxr_linenumber" name="L195" href="#L195">195</a> 
-<a class="jxr_linenumber" name="L196" href="#L196">196</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L197" href="#L197">197</a> <em class="jxr_javadoccomment">	 * Converts the specified object to the specified parameterized type.</em>
-<a class="jxr_linenumber" name="L198" href="#L198">198</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L199" href="#L199">199</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L200" href="#L200">200</a> <em class="jxr_javadoccomment">	 * The raw class is extracted from {@code mainType} (supporting both {@link Class} and</em>
-<a class="jxr_linenumber" name="L201" href="#L201">201</a> <em class="jxr_javadoccomment">	 * {@link ParameterizedType} values). Type arguments are extracted from {@code args} the same way</em>
-<a class="jxr_linenumber" name="L202" href="#L202">202</a> <em class="jxr_javadoccomment">	 * and passed through to the cached {@link Conversion} function at call time.</em>
-<a class="jxr_linenumber" name="L203" href="#L203">203</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L204" href="#L204">204</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L205" href="#L205">205</a> <em class="jxr_javadoccomment">	 * The cache is keyed on the raw input and output classes only. The {@code args} are not part of</em>
-<a class="jxr_linenumber" name="L206" href="#L206">206</a> <em class="jxr_javadoccomment">	 * the cache key — a single cached {@link Conversion} handles all parameterizations of a given</em>
-<a class="jxr_linenumber" name="L207" href="#L207">207</a> <em class="jxr_javadoccomment">	 * output type.</em>
-<a class="jxr_linenumber" name="L208" href="#L208">208</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L209" href="#L209">209</a> <em class="jxr_javadoccomment">	 * @param o The object to convert. Can be &lt;jk&gt;null&lt;/jk&gt;.</em>
-<a class="jxr_linenumber" name="L210" href="#L210">210</a> <em class="jxr_javadoccomment">	 * @param mainType The target type. May be a {@link Class} or {@link ParameterizedType}.</em>
-<a class="jxr_linenumber" name="L211" href="#L211">211</a> <em class="jxr_javadoccomment">	 * @param args The type arguments of the target type (e.g. element type for collections).</em>
-<a class="jxr_linenumber" name="L212" href="#L212">212</a> <em class="jxr_javadoccomment">	 * @param &lt;T&gt; The target type.</em>
-<a class="jxr_linenumber" name="L213" href="#L213">213</a> <em class="jxr_javadoccomment">	 * @return The converted object, or &lt;jk&gt;null&lt;/jk&gt; if the input is &lt;jk&gt;null&lt;/jk&gt;.</em>
-<a class="jxr_linenumber" name="L214" href="#L214">214</a> <em class="jxr_javadoccomment">	 * @throws InvalidConversionException If no conversion path exists from the input type to the target type.</em>
-<a class="jxr_linenumber" name="L215" href="#L215">215</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L216" href="#L216">216</a> 	@Override
-<a class="jxr_linenumber" name="L217" href="#L217">217</a> 	@SuppressWarnings({
-<a class="jxr_linenumber" name="L218" href="#L218">218</a> 		<span class="jxr_string">"unchecked"</span> <em class="jxr_comment">// Cast is safe: type parameter is verified at construction.</em>
-<a class="jxr_linenumber" name="L219" href="#L219">219</a> 	})
-<a class="jxr_linenumber" name="L220" href="#L220">220</a> 	<strong class="jxr_keyword">public</strong> &lt;T&gt; T to(Object o, Type mainType, Type... args) {
-<a class="jxr_linenumber" name="L221" href="#L221">221</a> 		<strong class="jxr_keyword">var</strong> rawType = (Class&lt;T&gt;) (mainType instanceof ParameterizedType mainType2 ? mainType2.getRawType() : (Class&lt;?&gt;) mainType);
-<a class="jxr_linenumber" name="L222" href="#L222">222</a> 		<strong class="jxr_keyword">var</strong> argClasses = Stream.of(args)
-<a class="jxr_linenumber" name="L223" href="#L223">223</a> 			.map(t -&gt; (Class&lt;?&gt;) (t instanceof ParameterizedType t2 ? t2.getRawType() : t))
-<a class="jxr_linenumber" name="L224" href="#L224">224</a> 			.toArray(Class[]::<strong class="jxr_keyword">new</strong>);
-<a class="jxr_linenumber" name="L225" href="#L225">225</a> 		<strong class="jxr_keyword">if</strong> (o == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L226" href="#L226">226</a> 			<strong class="jxr_keyword">return</strong> nullDefault(rawType, argClasses);
-<a class="jxr_linenumber" name="L227" href="#L227">227</a> 		<strong class="jxr_keyword">var</strong> inType = o.getClass();
-<a class="jxr_linenumber" name="L228" href="#L228">228</a> 		<strong class="jxr_keyword">var</strong> fn = (Conversion&lt;Object,T&gt;) lookupConversion(inType, rawType);
-<a class="jxr_linenumber" name="L229" href="#L229">229</a> 		<strong class="jxr_keyword">if</strong> (fn == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L230" href="#L230">230</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="InvalidConversionException" href="../../../../../org/apache/juneau/commons/conversion/InvalidConversionException.html#InvalidConversionException">InvalidConversionException</a>(inType, rawType);
-<a class="jxr_linenumber" name="L231" href="#L231">231</a> 		<strong class="jxr_keyword">return</strong> fn.to(o, <strong class="jxr_keyword">null</strong>, (<a name="ConverterSession" href="../../../../../org/apache/juneau/commons/conversion/ConverterSession.html#ConverterSession">ConverterSession</a>)<strong class="jxr_keyword">null</strong>, argClasses);
-<a class="jxr_linenumber" name="L232" href="#L232">232</a> 	}
-<a class="jxr_linenumber" name="L233" href="#L233">233</a> 
-<a class="jxr_linenumber" name="L234" href="#L234">234</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L235" href="#L235">235</a> <em class="jxr_javadoccomment">	 * Converts the specified object to the specified type, using the given outer instance and converter session.</em>
-<a class="jxr_linenumber" name="L236" href="#L236">236</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L237" href="#L237">237</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L238" href="#L238">238</a> <em class="jxr_javadoccomment">	 * The session is forwarded to the cached {@link Conversion} function so conversion lambdas can access</em>
-<a class="jxr_linenumber" name="L239" href="#L239">239</a> <em class="jxr_javadoccomment">	 * contextual objects such as {@link TimeZone} or {@link Locale}.</em>
-<a class="jxr_linenumber" name="L240" href="#L240">240</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L241" href="#L241">241</a> <em class="jxr_javadoccomment">	 * @param o The object to convert. Can be &lt;jk&gt;null&lt;/jk&gt;.</em>
-<a class="jxr_linenumber" name="L242" href="#L242">242</a> <em class="jxr_javadoccomment">	 * @param memberOf The outer instance for non-static inner class construction, or &lt;jk&gt;null&lt;/jk&gt;.</em>
-<a class="jxr_linenumber" name="L243" href="#L243">243</a> <em class="jxr_javadoccomment">	 * @param session The converter session providing contextual objects, or &lt;jk&gt;null&lt;/jk&gt;.</em>
-<a class="jxr_linenumber" name="L244" href="#L244">244</a> <em class="jxr_javadoccomment">	 * @param type The target type.</em>
-<a class="jxr_linenumber" name="L245" href="#L245">245</a> <em class="jxr_javadoccomment">	 * @param &lt;T&gt; The target type.</em>
-<a class="jxr_linenumber" name="L246" href="#L246">246</a> <em class="jxr_javadoccomment">	 * @return The converted object, or the primitive zero-value if the input is &lt;jk&gt;null&lt;/jk&gt; and the target</em>
-<a class="jxr_linenumber" name="L247" href="#L247">247</a> <em class="jxr_javadoccomment">	 * 	is a primitive type, or &lt;jk&gt;null&lt;/jk&gt; otherwise.</em>
-<a class="jxr_linenumber" name="L248" href="#L248">248</a> <em class="jxr_javadoccomment">	 * @throws InvalidConversionException If no conversion path exists from the input type to the target type.</em>
-<a class="jxr_linenumber" name="L249" href="#L249">249</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L250" href="#L250">250</a> 	@Override
-<a class="jxr_linenumber" name="L251" href="#L251">251</a> 	@SuppressWarnings({
-<a class="jxr_linenumber" name="L252" href="#L252">252</a> 		<span class="jxr_string">"unchecked"</span> <em class="jxr_comment">// Cast is safe: type parameter is verified at construction.</em>
-<a class="jxr_linenumber" name="L253" href="#L253">253</a> 	})
-<a class="jxr_linenumber" name="L254" href="#L254">254</a> 	<strong class="jxr_keyword">public</strong> &lt;T&gt; T to(Object o, Object memberOf, <a name="ConverterSession" href="../../../../../org/apache/juneau/commons/conversion/ConverterSession.html#ConverterSession">ConverterSession</a> session, Class&lt;T&gt; type) {
-<a class="jxr_linenumber" name="L255" href="#L255">255</a> 		<strong class="jxr_keyword">if</strong> (o == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L256" href="#L256">256</a> 			<strong class="jxr_keyword">return</strong> nullDefault(type);
-<a class="jxr_linenumber" name="L257" href="#L257">257</a> 		<strong class="jxr_keyword">var</strong> inType = o.getClass();
-<a class="jxr_linenumber" name="L258" href="#L258">258</a> 		<strong class="jxr_keyword">if</strong> (inType == type)
-<a class="jxr_linenumber" name="L259" href="#L259">259</a> 			<strong class="jxr_keyword">return</strong> (T) o;
-<a class="jxr_linenumber" name="L260" href="#L260">260</a> 		<strong class="jxr_keyword">var</strong> fn = (Conversion&lt;Object,T&gt;) lookupConversion(inType, type);
-<a class="jxr_linenumber" name="L261" href="#L261">261</a> 		<strong class="jxr_keyword">if</strong> (fn == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L262" href="#L262">262</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="InvalidConversionException" href="../../../../../org/apache/juneau/commons/conversion/InvalidConversionException.html#InvalidConversionException">InvalidConversionException</a>(inType, type);
-<a class="jxr_linenumber" name="L263" href="#L263">263</a> 		<strong class="jxr_keyword">return</strong> fn.to(o, memberOf, session);
-<a class="jxr_linenumber" name="L264" href="#L264">264</a> 	}
-<a class="jxr_linenumber" name="L265" href="#L265">265</a> 
-<a class="jxr_linenumber" name="L266" href="#L266">266</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L267" href="#L267">267</a> <em class="jxr_javadoccomment">	 * Converts the specified object to the specified parameterized type, using the given outer instance and converter session.</em>
-<a class="jxr_linenumber" name="L268" href="#L268">268</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L269" href="#L269">269</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L270" href="#L270">270</a> <em class="jxr_javadoccomment">	 * The session is forwarded to the cached {@link Conversion} function so conversion lambdas can access</em>
-<a class="jxr_linenumber" name="L271" href="#L271">271</a> <em class="jxr_javadoccomment">	 * contextual objects such as {@link TimeZone} or {@link Locale}.</em>
-<a class="jxr_linenumber" name="L272" href="#L272">272</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L273" href="#L273">273</a> <em class="jxr_javadoccomment">	 * @param o The object to convert. Can be &lt;jk&gt;null&lt;/jk&gt;.</em>
-<a class="jxr_linenumber" name="L274" href="#L274">274</a> <em class="jxr_javadoccomment">	 * @param memberOf The outer instance for non-static inner class construction, or &lt;jk&gt;null&lt;/jk&gt;.</em>
-<a class="jxr_linenumber" name="L275" href="#L275">275</a> <em class="jxr_javadoccomment">	 * @param session The converter session providing contextual objects, or &lt;jk&gt;null&lt;/jk&gt;.</em>
-<a class="jxr_linenumber" name="L276" href="#L276">276</a> <em class="jxr_javadoccomment">	 * @param mainType The target type. May be a {@link Class} or {@link ParameterizedType}.</em>
-<a class="jxr_linenumber" name="L277" href="#L277">277</a> <em class="jxr_javadoccomment">	 * @param args The type arguments of the target type (e.g. element type for collections).</em>
-<a class="jxr_linenumber" name="L278" href="#L278">278</a> <em class="jxr_javadoccomment">	 * @param &lt;T&gt; The target type.</em>
-<a class="jxr_linenumber" name="L279" href="#L279">279</a> <em class="jxr_javadoccomment">	 * @return The converted object, or &lt;jk&gt;null&lt;/jk&gt; if the input is &lt;jk&gt;null&lt;/jk&gt;.</em>
-<a class="jxr_linenumber" name="L280" href="#L280">280</a> <em class="jxr_javadoccomment">	 * @throws InvalidConversionException If no conversion path exists from the input type to the target type.</em>
-<a class="jxr_linenumber" name="L281" href="#L281">281</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L282" href="#L282">282</a> 	@Override
-<a class="jxr_linenumber" name="L283" href="#L283">283</a> 	@SuppressWarnings({
-<a class="jxr_linenumber" name="L284" href="#L284">284</a> 		<span class="jxr_string">"unchecked"</span> <em class="jxr_comment">// Cast is safe: type parameter is verified at construction.</em>
-<a class="jxr_linenumber" name="L285" href="#L285">285</a> 	})
-<a class="jxr_linenumber" name="L286" href="#L286">286</a> 	<strong class="jxr_keyword">public</strong> &lt;T&gt; T to(Object o, Object memberOf, <a name="ConverterSession" href="../../../../../org/apache/juneau/commons/conversion/ConverterSession.html#ConverterSession">ConverterSession</a> session, Type mainType, Type... args) {
-<a class="jxr_linenumber" name="L287" href="#L287">287</a> 		<strong class="jxr_keyword">var</strong> rawType = (Class&lt;T&gt;) (mainType instanceof ParameterizedType mainType2 ? mainType2.getRawType() : (Class&lt;?&gt;) mainType);
-<a class="jxr_linenumber" name="L288" href="#L288">288</a> 		<strong class="jxr_keyword">var</strong> argClasses = Stream.of(args)
-<a class="jxr_linenumber" name="L289" href="#L289">289</a> 			.map(t -&gt; (Class&lt;?&gt;) (t instanceof ParameterizedType t2 ? t2.getRawType() : t))
-<a class="jxr_linenumber" name="L290" href="#L290">290</a> 			.toArray(Class[]::<strong class="jxr_keyword">new</strong>);
-<a class="jxr_linenumber" name="L291" href="#L291">291</a> 		<strong class="jxr_keyword">if</strong> (o == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L292" href="#L292">292</a> 			<strong class="jxr_keyword">return</strong> nullDefault(rawType, argClasses);
-<a class="jxr_linenumber" name="L293" href="#L293">293</a> 		<strong class="jxr_keyword">var</strong> inType = o.getClass();
-<a class="jxr_linenumber" name="L294" href="#L294">294</a> 		<strong class="jxr_keyword">var</strong> fn = (Conversion&lt;Object,T&gt;) lookupConversion(inType, rawType);
-<a class="jxr_linenumber" name="L295" href="#L295">295</a> 		<strong class="jxr_keyword">if</strong> (fn == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L296" href="#L296">296</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="InvalidConversionException" href="../../../../../org/apache/juneau/commons/conversion/InvalidConversionException.html#InvalidConversionException">InvalidConversionException</a>(inType, rawType);
-<a class="jxr_linenumber" name="L297" href="#L297">297</a> 		<strong class="jxr_keyword">var</strong> result = fn.to(o, memberOf, session, argClasses);
-<a class="jxr_linenumber" name="L298" href="#L298">298</a> 		<strong class="jxr_keyword">if</strong> (result == <strong class="jxr_keyword">null</strong> &amp;&amp; rawType.isPrimitive())
-<a class="jxr_linenumber" name="L299" href="#L299">299</a> 			<strong class="jxr_keyword">return</strong> primitiveDefault(rawType);
-<a class="jxr_linenumber" name="L300" href="#L300">300</a> 		<strong class="jxr_keyword">return</strong> result;
-<a class="jxr_linenumber" name="L301" href="#L301">301</a> 	}
-<a class="jxr_linenumber" name="L302" href="#L302">302</a> }
+<a class="jxr_linenumber" name="L121" href="#L121">121</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L122" href="#L122">122</a> <em class="jxr_javadoccomment">	 * Finds a conversion function from the specified input type to the specified output type.</em>
+<a class="jxr_linenumber" name="L123" href="#L123">123</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L124" href="#L124">124</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L125" href="#L125">125</a> <em class="jxr_javadoccomment">	 * This method is called lazily the first time a conversion between a given type pair is requested.</em>
+<a class="jxr_linenumber" name="L126" href="#L126">126</a> <em class="jxr_javadoccomment">	 * The result is cached so subsequent calls for the same type pair bypass this method entirely.</em>
+<a class="jxr_linenumber" name="L127" href="#L127">127</a> <em class="jxr_javadoccomment">	 * When this method returns &lt;jk&gt;null&lt;/jk&gt;, a sentinel is stored so that unconvertable type pairs</em>
+<a class="jxr_linenumber" name="L128" href="#L128">128</a> <em class="jxr_javadoccomment">	 * are also only evaluated once.</em>
+<a class="jxr_linenumber" name="L129" href="#L129">129</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L130" href="#L130">130</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L131" href="#L131">131</a> <em class="jxr_javadoccomment">	 * Implementations should return &lt;jk&gt;null&lt;/jk&gt; if no conversion is possible for the given types,</em>
+<a class="jxr_linenumber" name="L132" href="#L132">132</a> <em class="jxr_javadoccomment">	 * which will cause {@link #to(Object, Class)} and {@link #to(Object, Type, Type...)} to throw</em>
+<a class="jxr_linenumber" name="L133" href="#L133">133</a> <em class="jxr_javadoccomment">	 * {@link InvalidConversionException} for that type pair.</em>
+<a class="jxr_linenumber" name="L134" href="#L134">134</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L135" href="#L135">135</a> <em class="jxr_javadoccomment">	 * @param &lt;I&gt; The input type.</em>
+<a class="jxr_linenumber" name="L136" href="#L136">136</a> <em class="jxr_javadoccomment">	 * @param &lt;O&gt; The output type.</em>
+<a class="jxr_linenumber" name="L137" href="#L137">137</a> <em class="jxr_javadoccomment">	 * @param inType The runtime class of the input object.</em>
+<a class="jxr_linenumber" name="L138" href="#L138">138</a> <em class="jxr_javadoccomment">	 * @param outType The target output class.</em>
+<a class="jxr_linenumber" name="L139" href="#L139">139</a> <em class="jxr_javadoccomment">	 * @return A {@link Conversion} function, or &lt;jk&gt;null&lt;/jk&gt; if no conversion is available.</em>
+<a class="jxr_linenumber" name="L140" href="#L140">140</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L141" href="#L141">141</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">abstract</strong> &lt;I,O&gt; Conversion&lt;I,O&gt; findConversion(Class&lt;I&gt; inType, Class&lt;O&gt; outType);
+<a class="jxr_linenumber" name="L142" href="#L142">142</a> 
+<a class="jxr_linenumber" name="L143" href="#L143">143</a> 	<strong class="jxr_keyword">private</strong> &lt;I,O&gt; Conversion&lt;I,O&gt; lookupConversion(Class&lt;I&gt; inType, Class&lt;O&gt; outType) {
+<a class="jxr_linenumber" name="L144" href="#L144">144</a> 		<strong class="jxr_keyword">var</strong> fn = conversions
+<a class="jxr_linenumber" name="L145" href="#L145">145</a> 			.computeIfAbsent(inType, k -&gt; <strong class="jxr_keyword">new</strong> ConcurrentHashMap&lt;&gt;())
+<a class="jxr_linenumber" name="L146" href="#L146">146</a> 			.computeIfAbsent(outType, k -&gt; {
+<a class="jxr_linenumber" name="L147" href="#L147">147</a> 				Conversion&lt;I,O&gt; found = findConversion(inType, outType);
+<a class="jxr_linenumber" name="L148" href="#L148">148</a> 				<strong class="jxr_keyword">return</strong> found != <strong class="jxr_keyword">null</strong> ? found : NO_CONVERSION;
+<a class="jxr_linenumber" name="L149" href="#L149">149</a> 			});
+<a class="jxr_linenumber" name="L150" href="#L150">150</a> 		<strong class="jxr_keyword">return</strong> fn == NO_CONVERSION ? <strong class="jxr_keyword">null</strong> : (Conversion&lt;I,O&gt;) fn;
+<a class="jxr_linenumber" name="L151" href="#L151">151</a> 	}
+<a class="jxr_linenumber" name="L152" href="#L152">152</a> 
+<a class="jxr_linenumber" name="L153" href="#L153">153</a> 	@Override
+<a class="jxr_linenumber" name="L154" href="#L154">154</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> canConvert(Class&lt;?&gt; inType, Class&lt;?&gt; outType) {
+<a class="jxr_linenumber" name="L155" href="#L155">155</a> 		<strong class="jxr_keyword">if</strong> (inType == outType)
+<a class="jxr_linenumber" name="L156" href="#L156">156</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
+<a class="jxr_linenumber" name="L157" href="#L157">157</a> 		<strong class="jxr_keyword">return</strong> lookupConversion(inType, outType) != <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L158" href="#L158">158</a> 	}
+<a class="jxr_linenumber" name="L159" href="#L159">159</a> 
+<a class="jxr_linenumber" name="L160" href="#L160">160</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L161" href="#L161">161</a> <em class="jxr_javadoccomment">	 * Converts the specified object to the specified type.</em>
+<a class="jxr_linenumber" name="L162" href="#L162">162</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L163" href="#L163">163</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L164" href="#L164">164</a> <em class="jxr_javadoccomment">	 * On the first call for a given input/output type pair, {@link #findConversion(Class, Class)} is</em>
+<a class="jxr_linenumber" name="L165" href="#L165">165</a> <em class="jxr_javadoccomment">	 * invoked and the result is cached. Subsequent calls use the cached function directly.</em>
+<a class="jxr_linenumber" name="L166" href="#L166">166</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L167" href="#L167">167</a> <em class="jxr_javadoccomment">	 * @param o The object to convert. Can be &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L168" href="#L168">168</a> <em class="jxr_javadoccomment">	 * @param type The target type.</em>
+<a class="jxr_linenumber" name="L169" href="#L169">169</a> <em class="jxr_javadoccomment">	 * @param &lt;T&gt; The target type.</em>
+<a class="jxr_linenumber" name="L170" href="#L170">170</a> <em class="jxr_javadoccomment">	 * @return The converted object, or the primitive zero-value if the input is &lt;jk&gt;null&lt;/jk&gt; and the target</em>
+<a class="jxr_linenumber" name="L171" href="#L171">171</a> <em class="jxr_javadoccomment">	 * 	is a primitive type, or &lt;jk&gt;null&lt;/jk&gt; otherwise.</em>
+<a class="jxr_linenumber" name="L172" href="#L172">172</a> <em class="jxr_javadoccomment">	 * @throws InvalidConversionException If no conversion path exists from the input type to the target type.</em>
+<a class="jxr_linenumber" name="L173" href="#L173">173</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L174" href="#L174">174</a> 	@Override
+<a class="jxr_linenumber" name="L175" href="#L175">175</a> 	<strong class="jxr_keyword">public</strong> &lt;T&gt; T to(Object o, Class&lt;T&gt; type) {
+<a class="jxr_linenumber" name="L176" href="#L176">176</a> 		<strong class="jxr_keyword">if</strong> (o == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L177" href="#L177">177</a> 			<strong class="jxr_keyword">return</strong> type.isPrimitive() ? primitiveDefault(type) : <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L178" href="#L178">178</a> 		<strong class="jxr_keyword">var</strong> inType = o.getClass();
+<a class="jxr_linenumber" name="L179" href="#L179">179</a> 		<strong class="jxr_keyword">if</strong> (inType == type)
+<a class="jxr_linenumber" name="L180" href="#L180">180</a> 			<strong class="jxr_keyword">return</strong> (T) o;
+<a class="jxr_linenumber" name="L181" href="#L181">181</a> 		<strong class="jxr_keyword">var</strong> fn = (Conversion&lt;Object,T&gt;) lookupConversion(inType, type);
+<a class="jxr_linenumber" name="L182" href="#L182">182</a> 		<strong class="jxr_keyword">if</strong> (fn == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L183" href="#L183">183</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="InvalidConversionException" href="../../../../../org/apache/juneau/commons/conversion/InvalidConversionException.html#InvalidConversionException">InvalidConversionException</a>(inType, type);
+<a class="jxr_linenumber" name="L184" href="#L184">184</a> 		<strong class="jxr_keyword">return</strong> fn.to(o, <strong class="jxr_keyword">null</strong>, (<a name="ConverterSession" href="../../../../../org/apache/juneau/commons/conversion/ConverterSession.html#ConverterSession">ConverterSession</a>)<strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L185" href="#L185">185</a> 	}
+<a class="jxr_linenumber" name="L186" href="#L186">186</a> 
+<a class="jxr_linenumber" name="L187" href="#L187">187</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L188" href="#L188">188</a> <em class="jxr_javadoccomment">	 * Converts the specified object to the specified parameterized type.</em>
+<a class="jxr_linenumber" name="L189" href="#L189">189</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L190" href="#L190">190</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L191" href="#L191">191</a> <em class="jxr_javadoccomment">	 * The raw class is extracted from {@code mainType} (supporting both {@link Class} and</em>
+<a class="jxr_linenumber" name="L192" href="#L192">192</a> <em class="jxr_javadoccomment">	 * {@link ParameterizedType} values). Type arguments are extracted from {@code args} the same way</em>
+<a class="jxr_linenumber" name="L193" href="#L193">193</a> <em class="jxr_javadoccomment">	 * and passed through to the cached {@link Conversion} function at call time.</em>
+<a class="jxr_linenumber" name="L194" href="#L194">194</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L195" href="#L195">195</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L196" href="#L196">196</a> <em class="jxr_javadoccomment">	 * The cache is keyed on the raw input and output classes only. The {@code args} are not part of</em>
+<a class="jxr_linenumber" name="L197" href="#L197">197</a> <em class="jxr_javadoccomment">	 * the cache key — a single cached {@link Conversion} handles all parameterizations of a given</em>
+<a class="jxr_linenumber" name="L198" href="#L198">198</a> <em class="jxr_javadoccomment">	 * output type.</em>
+<a class="jxr_linenumber" name="L199" href="#L199">199</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L200" href="#L200">200</a> <em class="jxr_javadoccomment">	 * @param o The object to convert. Can be &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L201" href="#L201">201</a> <em class="jxr_javadoccomment">	 * @param mainType The target type. May be a {@link Class} or {@link ParameterizedType}.</em>
+<a class="jxr_linenumber" name="L202" href="#L202">202</a> <em class="jxr_javadoccomment">	 * @param args The type arguments of the target type (e.g. element type for collections).</em>
+<a class="jxr_linenumber" name="L203" href="#L203">203</a> <em class="jxr_javadoccomment">	 * @param &lt;T&gt; The target type.</em>
+<a class="jxr_linenumber" name="L204" href="#L204">204</a> <em class="jxr_javadoccomment">	 * @return The converted object, or &lt;jk&gt;null&lt;/jk&gt; if the input is &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L205" href="#L205">205</a> <em class="jxr_javadoccomment">	 * @throws InvalidConversionException If no conversion path exists from the input type to the target type.</em>
+<a class="jxr_linenumber" name="L206" href="#L206">206</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L207" href="#L207">207</a> 	@Override
+<a class="jxr_linenumber" name="L208" href="#L208">208</a> 	<strong class="jxr_keyword">public</strong> &lt;T&gt; T to(Object o, Type mainType, Type... args) {
+<a class="jxr_linenumber" name="L209" href="#L209">209</a> 		<strong class="jxr_keyword">var</strong> rawType = (Class&lt;T&gt;) (mainType instanceof ParameterizedType mainType2 ? mainType2.getRawType() : (Class&lt;?&gt;) mainType);
+<a class="jxr_linenumber" name="L210" href="#L210">210</a> 		<strong class="jxr_keyword">var</strong> argClasses = Stream.of(args)
+<a class="jxr_linenumber" name="L211" href="#L211">211</a> 			.map(t -&gt; (Class&lt;?&gt;) (t instanceof ParameterizedType t2 ? t2.getRawType() : t))
+<a class="jxr_linenumber" name="L212" href="#L212">212</a> 			.toArray(Class[]::<strong class="jxr_keyword">new</strong>);
+<a class="jxr_linenumber" name="L213" href="#L213">213</a> 		<strong class="jxr_keyword">if</strong> (o == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L214" href="#L214">214</a> 			<strong class="jxr_keyword">return</strong> nullDefault(rawType, argClasses);
+<a class="jxr_linenumber" name="L215" href="#L215">215</a> 		<strong class="jxr_keyword">var</strong> inType = o.getClass();
+<a class="jxr_linenumber" name="L216" href="#L216">216</a> 		<strong class="jxr_keyword">var</strong> fn = (Conversion&lt;Object,T&gt;) lookupConversion(inType, rawType);
+<a class="jxr_linenumber" name="L217" href="#L217">217</a> 		<strong class="jxr_keyword">if</strong> (fn == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L218" href="#L218">218</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="InvalidConversionException" href="../../../../../org/apache/juneau/commons/conversion/InvalidConversionException.html#InvalidConversionException">InvalidConversionException</a>(inType, rawType);
+<a class="jxr_linenumber" name="L219" href="#L219">219</a> 		<strong class="jxr_keyword">return</strong> fn.to(o, <strong class="jxr_keyword">null</strong>, (<a name="ConverterSession" href="../../../../../org/apache/juneau/commons/conversion/ConverterSession.html#ConverterSession">ConverterSession</a>)<strong class="jxr_keyword">null</strong>, argClasses);
+<a class="jxr_linenumber" name="L220" href="#L220">220</a> 	}
+<a class="jxr_linenumber" name="L221" href="#L221">221</a> 
+<a class="jxr_linenumber" name="L222" href="#L222">222</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L223" href="#L223">223</a> <em class="jxr_javadoccomment">	 * Converts the specified object to the specified type, using the given outer instance and converter session.</em>
+<a class="jxr_linenumber" name="L224" href="#L224">224</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L225" href="#L225">225</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L226" href="#L226">226</a> <em class="jxr_javadoccomment">	 * The session is forwarded to the cached {@link Conversion} function so conversion lambdas can access</em>
+<a class="jxr_linenumber" name="L227" href="#L227">227</a> <em class="jxr_javadoccomment">	 * contextual objects such as {@link TimeZone} or {@link Locale}.</em>
+<a class="jxr_linenumber" name="L228" href="#L228">228</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L229" href="#L229">229</a> <em class="jxr_javadoccomment">	 * @param o The object to convert. Can be &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L230" href="#L230">230</a> <em class="jxr_javadoccomment">	 * @param memberOf The outer instance for non-static inner class construction, or &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L231" href="#L231">231</a> <em class="jxr_javadoccomment">	 * @param session The converter session providing contextual objects, or &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L232" href="#L232">232</a> <em class="jxr_javadoccomment">	 * @param type The target type.</em>
+<a class="jxr_linenumber" name="L233" href="#L233">233</a> <em class="jxr_javadoccomment">	 * @param &lt;T&gt; The target type.</em>
+<a class="jxr_linenumber" name="L234" href="#L234">234</a> <em class="jxr_javadoccomment">	 * @return The converted object, or the primitive zero-value if the input is &lt;jk&gt;null&lt;/jk&gt; and the target</em>
+<a class="jxr_linenumber" name="L235" href="#L235">235</a> <em class="jxr_javadoccomment">	 * 	is a primitive type, or &lt;jk&gt;null&lt;/jk&gt; otherwise.</em>
+<a class="jxr_linenumber" name="L236" href="#L236">236</a> <em class="jxr_javadoccomment">	 * @throws InvalidConversionException If no conversion path exists from the input type to the target type.</em>
+<a class="jxr_linenumber" name="L237" href="#L237">237</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L238" href="#L238">238</a> 	@Override
+<a class="jxr_linenumber" name="L239" href="#L239">239</a> 	<strong class="jxr_keyword">public</strong> &lt;T&gt; T to(Object o, Object memberOf, <a name="ConverterSession" href="../../../../../org/apache/juneau/commons/conversion/ConverterSession.html#ConverterSession">ConverterSession</a> session, Class&lt;T&gt; type) {
+<a class="jxr_linenumber" name="L240" href="#L240">240</a> 		<strong class="jxr_keyword">if</strong> (o == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L241" href="#L241">241</a> 			<strong class="jxr_keyword">return</strong> nullDefault(type);
+<a class="jxr_linenumber" name="L242" href="#L242">242</a> 		<strong class="jxr_keyword">var</strong> inType = o.getClass();
+<a class="jxr_linenumber" name="L243" href="#L243">243</a> 		<strong class="jxr_keyword">if</strong> (inType == type)
+<a class="jxr_linenumber" name="L244" href="#L244">244</a> 			<strong class="jxr_keyword">return</strong> (T) o;
+<a class="jxr_linenumber" name="L245" href="#L245">245</a> 		<strong class="jxr_keyword">var</strong> fn = (Conversion&lt;Object,T&gt;) lookupConversion(inType, type);
+<a class="jxr_linenumber" name="L246" href="#L246">246</a> 		<strong class="jxr_keyword">if</strong> (fn == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L247" href="#L247">247</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="InvalidConversionException" href="../../../../../org/apache/juneau/commons/conversion/InvalidConversionException.html#InvalidConversionException">InvalidConversionException</a>(inType, type);
+<a class="jxr_linenumber" name="L248" href="#L248">248</a> 		<strong class="jxr_keyword">return</strong> fn.to(o, memberOf, session);
+<a class="jxr_linenumber" name="L249" href="#L249">249</a> 	}
+<a class="jxr_linenumber" name="L250" href="#L250">250</a> 
+<a class="jxr_linenumber" name="L251" href="#L251">251</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L252" href="#L252">252</a> <em class="jxr_javadoccomment">	 * Converts the specified object to the specified parameterized type, using the given outer instance and converter session.</em>
+<a class="jxr_linenumber" name="L253" href="#L253">253</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L254" href="#L254">254</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L255" href="#L255">255</a> <em class="jxr_javadoccomment">	 * The session is forwarded to the cached {@link Conversion} function so conversion lambdas can access</em>
+<a class="jxr_linenumber" name="L256" href="#L256">256</a> <em class="jxr_javadoccomment">	 * contextual objects such as {@link TimeZone} or {@link Locale}.</em>
+<a class="jxr_linenumber" name="L257" href="#L257">257</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L258" href="#L258">258</a> <em class="jxr_javadoccomment">	 * @param o The object to convert. Can be &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L259" href="#L259">259</a> <em class="jxr_javadoccomment">	 * @param memberOf The outer instance for non-static inner class construction, or &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L260" href="#L260">260</a> <em class="jxr_javadoccomment">	 * @param session The converter session providing contextual objects, or &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L261" href="#L261">261</a> <em class="jxr_javadoccomment">	 * @param mainType The target type. May be a {@link Class} or {@link ParameterizedType}.</em>
+<a class="jxr_linenumber" name="L262" href="#L262">262</a> <em class="jxr_javadoccomment">	 * @param args The type arguments of the target type (e.g. element type for collections).</em>
+<a class="jxr_linenumber" name="L263" href="#L263">263</a> <em class="jxr_javadoccomment">	 * @param &lt;T&gt; The target type.</em>
+<a class="jxr_linenumber" name="L264" href="#L264">264</a> <em class="jxr_javadoccomment">	 * @return The converted object, or &lt;jk&gt;null&lt;/jk&gt; if the input is &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L265" href="#L265">265</a> <em class="jxr_javadoccomment">	 * @throws InvalidConversionException If no conversion path exists from the input type to the target type.</em>
+<a class="jxr_linenumber" name="L266" href="#L266">266</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L267" href="#L267">267</a> 	@Override
+<a class="jxr_linenumber" name="L268" href="#L268">268</a> 	<strong class="jxr_keyword">public</strong> &lt;T&gt; T to(Object o, Object memberOf, <a name="ConverterSession" href="../../../../../org/apache/juneau/commons/conversion/ConverterSession.html#ConverterSession">ConverterSession</a> session, Type mainType, Type... args) {
+<a class="jxr_linenumber" name="L269" href="#L269">269</a> 		<strong class="jxr_keyword">var</strong> rawType = (Class&lt;T&gt;) (mainType instanceof ParameterizedType mainType2 ? mainType2.getRawType() : (Class&lt;?&gt;) mainType);
+<a class="jxr_linenumber" name="L270" href="#L270">270</a> 		<strong class="jxr_keyword">var</strong> argClasses = Stream.of(args)
+<a class="jxr_linenumber" name="L271" href="#L271">271</a> 			.map(t -&gt; (Class&lt;?&gt;) (t instanceof ParameterizedType t2 ? t2.getRawType() : t))
+<a class="jxr_linenumber" name="L272" href="#L272">272</a> 			.toArray(Class[]::<strong class="jxr_keyword">new</strong>);
+<a class="jxr_linenumber" name="L273" href="#L273">273</a> 		<strong class="jxr_keyword">if</strong> (o == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L274" href="#L274">274</a> 			<strong class="jxr_keyword">return</strong> nullDefault(rawType, argClasses);
+<a class="jxr_linenumber" name="L275" href="#L275">275</a> 		<strong class="jxr_keyword">var</strong> inType = o.getClass();
+<a class="jxr_linenumber" name="L276" href="#L276">276</a> 		<strong class="jxr_keyword">var</strong> fn = (Conversion&lt;Object,T&gt;) lookupConversion(inType, rawType);
+<a class="jxr_linenumber" name="L277" href="#L277">277</a> 		<strong class="jxr_keyword">if</strong> (fn == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L278" href="#L278">278</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="InvalidConversionException" href="../../../../../org/apache/juneau/commons/conversion/InvalidConversionException.html#InvalidConversionException">InvalidConversionException</a>(inType, rawType);
+<a class="jxr_linenumber" name="L279" href="#L279">279</a> 		<strong class="jxr_keyword">var</strong> result = fn.to(o, memberOf, session, argClasses);
+<a class="jxr_linenumber" name="L280" href="#L280">280</a> 		<strong class="jxr_keyword">if</strong> (result == <strong class="jxr_keyword">null</strong> &amp;&amp; rawType.isPrimitive())
+<a class="jxr_linenumber" name="L281" href="#L281">281</a> 			<strong class="jxr_keyword">return</strong> primitiveDefault(rawType);
+<a class="jxr_linenumber" name="L282" href="#L282">282</a> 		<strong class="jxr_keyword">return</strong> result;
+<a class="jxr_linenumber" name="L283" href="#L283">283</a> 	}
+<a class="jxr_linenumber" name="L284" href="#L284">284</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

@@ -72,7 +72,7 @@
 <a class="jxr_linenumber" name="L64" href="#L64">64</a>  	}
 <a class="jxr_linenumber" name="L65" href="#L65">65</a>  
 <a class="jxr_linenumber" name="L66" href="#L66">66</a>  	@Test <strong class="jxr_keyword">void</strong> a03_property_nullKey() {
-<a class="jxr_linenumber" name="L67" href="#L67">67</a>  		<em class="jxr_comment">// Test line 142: assertArgNotNull on key</em>
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>  		<em class="jxr_comment">// Test line 142: reqnn on key</em>
 <a class="jxr_linenumber" name="L68" href="#L68">68</a>  		<strong class="jxr_keyword">var</strong> session = MarshallingContext.DEFAULT.createSession();
 <a class="jxr_linenumber" name="L69" href="#L69">69</a>  		assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; {
 <a class="jxr_linenumber" name="L70" href="#L70">70</a>  			session.property(<strong class="jxr_keyword">null</strong>, <span class="jxr_string">"value"</span>);

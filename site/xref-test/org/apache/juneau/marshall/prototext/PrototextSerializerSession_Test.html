@@ -27,26 +27,26 @@
 <a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.commons.utils.Shorts.*;
 <a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.junit.jupiter.api.Assertions.*;
 <a class="jxr_linenumber" name="L21" href="#L21">21</a>  
-<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> java.io.*;
-<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> java.time.*;
-<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> java.util.*;
-<a class="jxr_linenumber" name="L25" href="#L25">25</a>  
-<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.*;
-<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.marshall.Marshalled;
-<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.marshall.collections.*;
-<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <strong class="jxr_keyword">import</strong> org.junit.jupiter.api.*;
-<a class="jxr_linenumber" name="L30" href="#L30">30</a>  
-<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <em class="jxr_javadoccomment"> * Tests targeting low-coverage paths in {@link PrototextSerializerSession}.</em>
-<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <em class="jxr_javadoccomment"> *</em>
-<a class="jxr_linenumber" name="L34" href="#L34">34</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;Exercises serializer paths that the higher-level Prototext*_Test files don't reach:</em>
-<a class="jxr_linenumber" name="L35" href="#L35">35</a>  <em class="jxr_javadoccomment"> * collections-of-beans inside beans, arrays of primitives/beans, streamable element types</em>
-<a class="jxr_linenumber" name="L36" href="#L36">36</a>  <em class="jxr_javadoccomment"> * (Iterable/Iterator/Stream), nested map-of-maps, debug trace toggle, useColon/listSyntax</em>
-<a class="jxr_linenumber" name="L37" href="#L37">37</a>  <em class="jxr_javadoccomment"> * options, scalar value type dispatch (Date/Calendar/Temporal/Duration/Period/byte[]), and</em>
-<a class="jxr_linenumber" name="L38" href="#L38">38</a>  <em class="jxr_javadoccomment"> * bean property comments.</em>
-<a class="jxr_linenumber" name="L39" href="#L39">39</a>  <em class="jxr_javadoccomment"> */</em>
-<a class="jxr_linenumber" name="L40" href="#L40">40</a>  @SuppressWarnings(<span class="jxr_string">"unchecked"</span>)
-<a class="jxr_linenumber" name="L41" href="#L41">41</a>  <strong class="jxr_keyword">class</strong> <a name="PrototextSerializerSession_Test" href="../../../../../org/apache/juneau/marshall/prototext/PrototextSerializerSession_Test.html#PrototextSerializerSession_Test">PrototextSerializerSession_Test</a> <strong class="jxr_keyword">extends</strong> TestBase {
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> java.time.*;
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> java.util.*;
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.*;
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.marshall.collections.*;
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> org.junit.jupiter.api.*;
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <em class="jxr_javadoccomment"> * Tests targeting low-coverage paths in {@link PrototextSerializerSession}.</em>
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;Exercises serializer paths that the higher-level Prototext*_Test files don't reach:</em>
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <em class="jxr_javadoccomment"> * collections-of-beans inside beans, arrays of primitives/beans, streamable element types</em>
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>  <em class="jxr_javadoccomment"> * (Iterable/Iterator/Stream), nested map-of-maps, debug trace toggle, useColon/listSyntax</em>
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>  <em class="jxr_javadoccomment"> * options, scalar value type dispatch (Date/Calendar/Temporal/Duration/Period/byte[]), and</em>
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>  <em class="jxr_javadoccomment"> * bean property comments.</em>
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>  <em class="jxr_javadoccomment"> */</em>
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>  @SuppressWarnings({
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>  	<span class="jxr_string">"unchecked"</span> <em class="jxr_comment">// Tests cast generic parsed values to typed Map/List for assertions</em>
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>  })
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>  <strong class="jxr_keyword">class</strong> PrototextSerializerSession_Test <strong class="jxr_keyword">extends</strong> TestBase {
 <a class="jxr_linenumber" name="L42" href="#L42">42</a>  
 <a class="jxr_linenumber" name="L43" href="#L43">43</a>  	<em class="jxr_comment">// Debug trace</em>
 <a class="jxr_linenumber" name="L44" href="#L44">44</a>  
@@ -432,716 +432,397 @@
 <a class="jxr_linenumber" name="L424" href="#L424">424</a> 	}
 <a class="jxr_linenumber" name="L425" href="#L425">425</a> 
 <a class="jxr_linenumber" name="L426" href="#L426">426</a> 	@Test <strong class="jxr_keyword">void</strong> h02_beanWithListOfMaps() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L427" href="#L427">427</a> 		<em class="jxr_comment">// Bean has a List&lt;Map&gt; property — exercises writeBeanMap collection-with-bean-elements</em>
-<a class="jxr_linenumber" name="L428" href="#L428">428</a> 		<em class="jxr_comment">// path (lines 270-296 in PrototextSerializerSession).</em>
-<a class="jxr_linenumber" name="L429" href="#L429">429</a> 		<strong class="jxr_keyword">var</strong> bean = <strong class="jxr_keyword">new</strong> BeanWithListOfMaps();
-<a class="jxr_linenumber" name="L430" href="#L430">430</a> 		<strong class="jxr_keyword">var</strong> c1 = <strong class="jxr_keyword">new</strong> LinkedHashMap&lt;String,Object&gt;();
-<a class="jxr_linenumber" name="L431" href="#L431">431</a> 		c1.put(<span class="jxr_string">"k"</span>, <span class="jxr_string">"alpha"</span>);
-<a class="jxr_linenumber" name="L432" href="#L432">432</a> 		<strong class="jxr_keyword">var</strong> c2 = <strong class="jxr_keyword">new</strong> LinkedHashMap&lt;String,Object&gt;();
-<a class="jxr_linenumber" name="L433" href="#L433">433</a> 		c2.put(<span class="jxr_string">"k"</span>, <span class="jxr_string">"beta"</span>);
-<a class="jxr_linenumber" name="L434" href="#L434">434</a> 		bean.setItems(List.of(c1, c2));
-<a class="jxr_linenumber" name="L435" href="#L435">435</a> 		<strong class="jxr_keyword">var</strong> proto = PrototextSerializer.DEFAULT.write(bean);
-<a class="jxr_linenumber" name="L436" href="#L436">436</a> 		assertNotNull(proto);
-<a class="jxr_linenumber" name="L437" href="#L437">437</a> 		assertTrue(proto.contains(<span class="jxr_string">"alpha"</span>) &amp;&amp; proto.contains(<span class="jxr_string">"beta"</span>), () -&gt; <span class="jxr_string">"Expected alpha+beta in: "</span> + proto);
-<a class="jxr_linenumber" name="L438" href="#L438">438</a> 	}
-<a class="jxr_linenumber" name="L439" href="#L439">439</a> 
-<a class="jxr_linenumber" name="L440" href="#L440">440</a> 	@Test <strong class="jxr_keyword">void</strong> h03_beanWithListOfMaps_useListSyntax() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L441" href="#L441">441</a> 		<em class="jxr_comment">// Bean with List&lt;Map&gt; + useListSyntaxForBeans — hits the [{...},{...}] writer path inside</em>
-<a class="jxr_linenumber" name="L442" href="#L442">442</a> 		<em class="jxr_comment">// writeBeanMap (lines 274-288).</em>
-<a class="jxr_linenumber" name="L443" href="#L443">443</a> 		<strong class="jxr_keyword">var</strong> bean = <strong class="jxr_keyword">new</strong> BeanWithListOfMaps();
-<a class="jxr_linenumber" name="L444" href="#L444">444</a> 		<strong class="jxr_keyword">var</strong> c1 = <strong class="jxr_keyword">new</strong> LinkedHashMap&lt;String,Object&gt;();
-<a class="jxr_linenumber" name="L445" href="#L445">445</a> 		c1.put(<span class="jxr_string">"k"</span>, <span class="jxr_string">"alpha"</span>);
-<a class="jxr_linenumber" name="L446" href="#L446">446</a> 		<strong class="jxr_keyword">var</strong> c2 = <strong class="jxr_keyword">new</strong> LinkedHashMap&lt;String,Object&gt;();
-<a class="jxr_linenumber" name="L447" href="#L447">447</a> 		c2.put(<span class="jxr_string">"k"</span>, <span class="jxr_string">"beta"</span>);
-<a class="jxr_linenumber" name="L448" href="#L448">448</a> 		bean.setItems(List.of(c1, c2));
-<a class="jxr_linenumber" name="L449" href="#L449">449</a> 		<strong class="jxr_keyword">var</strong> ser = PrototextSerializer.create().useListSyntaxForBeans(<strong class="jxr_keyword">true</strong>).build();
-<a class="jxr_linenumber" name="L450" href="#L450">450</a> 		<strong class="jxr_keyword">var</strong> proto = ser.write(bean);
-<a class="jxr_linenumber" name="L451" href="#L451">451</a> 		assertNotNull(proto);
-<a class="jxr_linenumber" name="L452" href="#L452">452</a> 		assertTrue(proto.contains(<span class="jxr_string">"["</span>) &amp;&amp; proto.contains(<span class="jxr_string">"]"</span>), () -&gt; <span class="jxr_string">"Expected list syntax in: "</span> + proto);
-<a class="jxr_linenumber" name="L453" href="#L453">453</a> 		assertTrue(proto.contains(<span class="jxr_string">"alpha"</span>) &amp;&amp; proto.contains(<span class="jxr_string">"beta"</span>));
-<a class="jxr_linenumber" name="L454" href="#L454">454</a> 	}
-<a class="jxr_linenumber" name="L455" href="#L455">455</a> 
-<a class="jxr_linenumber" name="L456" href="#L456">456</a> 	@Test <strong class="jxr_keyword">void</strong> h04_beanWithMapArray() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L457" href="#L457">457</a> 		<em class="jxr_comment">// Bean with Map[] property — regression coverage: writeBeanMap was calling</em>
-<a class="jxr_linenumber" name="L458" href="#L458">458</a> 		<em class="jxr_comment">// toBeanMap() unconditionally on the map elements, which threw BeanRuntimeException.</em>
-<a class="jxr_linenumber" name="L459" href="#L459">459</a> 		<em class="jxr_comment">// The array path now dispatches Map vs Bean correctly.</em>
-<a class="jxr_linenumber" name="L460" href="#L460">460</a> 		<strong class="jxr_keyword">var</strong> bean = <strong class="jxr_keyword">new</strong> BeanWithMapArray();
-<a class="jxr_linenumber" name="L461" href="#L461">461</a> 		<strong class="jxr_keyword">var</strong> c1 = <strong class="jxr_keyword">new</strong> LinkedHashMap&lt;String,Object&gt;();
-<a class="jxr_linenumber" name="L462" href="#L462">462</a> 		c1.put(<span class="jxr_string">"k"</span>, <span class="jxr_string">"alpha"</span>);
-<a class="jxr_linenumber" name="L463" href="#L463">463</a> 		<strong class="jxr_keyword">var</strong> c2 = <strong class="jxr_keyword">new</strong> LinkedHashMap&lt;String,Object&gt;();
-<a class="jxr_linenumber" name="L464" href="#L464">464</a> 		c2.put(<span class="jxr_string">"k"</span>, <span class="jxr_string">"beta"</span>);
-<a class="jxr_linenumber" name="L465" href="#L465">465</a> 		@SuppressWarnings({
-<a class="jxr_linenumber" name="L466" href="#L466">466</a> 		})
-<a class="jxr_linenumber" name="L467" href="#L467">467</a> 		<strong class="jxr_keyword">var</strong> arr = <strong class="jxr_keyword">new</strong> Map[] { c1, c2 };
-<a class="jxr_linenumber" name="L468" href="#L468">468</a> 		bean.setItems(arr);
-<a class="jxr_linenumber" name="L469" href="#L469">469</a> 		<strong class="jxr_keyword">var</strong> proto = PrototextSerializer.DEFAULT.write(bean);
-<a class="jxr_linenumber" name="L470" href="#L470">470</a> 		assertNotNull(proto);
-<a class="jxr_linenumber" name="L471" href="#L471">471</a> 		assertTrue(proto.contains(<span class="jxr_string">"alpha"</span>) &amp;&amp; proto.contains(<span class="jxr_string">"beta"</span>), () -&gt; <span class="jxr_string">"Expected alpha+beta in: "</span> + proto);
-<a class="jxr_linenumber" name="L472" href="#L472">472</a> 	}
-<a class="jxr_linenumber" name="L473" href="#L473">473</a> 
-<a class="jxr_linenumber" name="L474" href="#L474">474</a> 	@Test <strong class="jxr_keyword">void</strong> h04b_beanWithMapArray_useListSyntax() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L475" href="#L475">475</a> 		<em class="jxr_comment">// Same as h04 but with useListSyntaxForBeans=true — covers the [{...},{...}] writer branch</em>
-<a class="jxr_linenumber" name="L476" href="#L476">476</a> 		<em class="jxr_comment">// where the dispatch fix also applies.</em>
-<a class="jxr_linenumber" name="L477" href="#L477">477</a> 		<strong class="jxr_keyword">var</strong> bean = <strong class="jxr_keyword">new</strong> BeanWithMapArray();
-<a class="jxr_linenumber" name="L478" href="#L478">478</a> 		<strong class="jxr_keyword">var</strong> c1 = <strong class="jxr_keyword">new</strong> LinkedHashMap&lt;String,Object&gt;();
-<a class="jxr_linenumber" name="L479" href="#L479">479</a> 		c1.put(<span class="jxr_string">"k"</span>, <span class="jxr_string">"alpha"</span>);
-<a class="jxr_linenumber" name="L480" href="#L480">480</a> 		<strong class="jxr_keyword">var</strong> c2 = <strong class="jxr_keyword">new</strong> LinkedHashMap&lt;String,Object&gt;();
-<a class="jxr_linenumber" name="L481" href="#L481">481</a> 		c2.put(<span class="jxr_string">"k"</span>, <span class="jxr_string">"beta"</span>);
-<a class="jxr_linenumber" name="L482" href="#L482">482</a> 		@SuppressWarnings({
-<a class="jxr_linenumber" name="L483" href="#L483">483</a> 		})
-<a class="jxr_linenumber" name="L484" href="#L484">484</a> 		<strong class="jxr_keyword">var</strong> arr = <strong class="jxr_keyword">new</strong> Map[] { c1, c2 };
-<a class="jxr_linenumber" name="L485" href="#L485">485</a> 		bean.setItems(arr);
-<a class="jxr_linenumber" name="L486" href="#L486">486</a> 		<strong class="jxr_keyword">var</strong> ser = PrototextSerializer.create().useListSyntaxForBeans(<strong class="jxr_keyword">true</strong>).build();
-<a class="jxr_linenumber" name="L487" href="#L487">487</a> 		<strong class="jxr_keyword">var</strong> proto = ser.write(bean);
+<a class="jxr_linenumber" name="L427" href="#L427">427</a> 		<em class="jxr_comment">// FIXED: writeBeanMap's inline-collection element-type check used to resolve elType from</em>
+<a class="jxr_linenumber" name="L428" href="#L428">428</a> 		<em class="jxr_comment">// getClassMetaForObject(value, cMeta)'s *runtime* result -- for a List&lt;T&gt; property that's always</em>
+<a class="jxr_linenumber" name="L429" href="#L429">429</a> 		<em class="jxr_comment">// the erased ArrayList meta (whose own getElementType() is Object) once value is non-null, unlike</em>
+<a class="jxr_linenumber" name="L430" href="#L430">430</a> 		<em class="jxr_comment">// an array whose component type survives erasure. elType now falls back to the property's own</em>
+<a class="jxr_linenumber" name="L431" href="#L431">431</a> 		<em class="jxr_comment">// declared cMeta.getElementType() for a Collection, so a List&lt;Map&gt; bean property still resolves to</em>
+<a class="jxr_linenumber" name="L432" href="#L432">432</a> 		<em class="jxr_comment">// nested "items { ... }" messages instead of degrading to a single scalar-list field whose entries</em>
+<a class="jxr_linenumber" name="L433" href="#L433">433</a> 		<em class="jxr_comment">// stringify via Map.toString() (which would still happen to contain "alpha"/"beta" as substrings,</em>
+<a class="jxr_linenumber" name="L434" href="#L434">434</a> 		<em class="jxr_comment">// so the old assertion here couldn't tell the two apart).</em>
+<a class="jxr_linenumber" name="L435" href="#L435">435</a> 		<strong class="jxr_keyword">var</strong> bean = <strong class="jxr_keyword">new</strong> BeanWithListOfMaps();
+<a class="jxr_linenumber" name="L436" href="#L436">436</a> 		<strong class="jxr_keyword">var</strong> c1 = <strong class="jxr_keyword">new</strong> LinkedHashMap&lt;String,Object&gt;();
+<a class="jxr_linenumber" name="L437" href="#L437">437</a> 		c1.put(<span class="jxr_string">"k"</span>, <span class="jxr_string">"alpha"</span>);
+<a class="jxr_linenumber" name="L438" href="#L438">438</a> 		<strong class="jxr_keyword">var</strong> c2 = <strong class="jxr_keyword">new</strong> LinkedHashMap&lt;String,Object&gt;();
+<a class="jxr_linenumber" name="L439" href="#L439">439</a> 		c2.put(<span class="jxr_string">"k"</span>, <span class="jxr_string">"beta"</span>);
+<a class="jxr_linenumber" name="L440" href="#L440">440</a> 		bean.setItems(List.of(c1, c2));
+<a class="jxr_linenumber" name="L441" href="#L441">441</a> 		<strong class="jxr_keyword">var</strong> proto = PrototextSerializer.DEFAULT.write(bean);
+<a class="jxr_linenumber" name="L442" href="#L442">442</a> 		assertTrue(proto.contains(<span class="jxr_string">"items {"</span>), () -&gt; <span class="jxr_string">"Expected nested 'items { ... }' messages but got: "</span> + proto);
+<a class="jxr_linenumber" name="L443" href="#L443">443</a> 		assertTrue(proto.contains(<span class="jxr_string">"k: \&quot;alpha\&quot;"</span>) || proto.contains(<span class="jxr_string">"k \&quot;alpha\&quot;"</span>), () -&gt; <span class="jxr_string">"Expected nested k=alpha field but got: "</span> + proto);
+<a class="jxr_linenumber" name="L444" href="#L444">444</a> 		assertFalse(proto.contains(<span class="jxr_string">"{k=alpha}"</span>), () -&gt; <span class="jxr_string">"Value should not have been stringified via Map.toString() but got: "</span> + proto);
+<a class="jxr_linenumber" name="L445" href="#L445">445</a> 	}
+<a class="jxr_linenumber" name="L446" href="#L446">446</a> 
+<a class="jxr_linenumber" name="L447" href="#L447">447</a> 	@Test <strong class="jxr_keyword">void</strong> h03_beanWithListOfMaps_useListSyntax() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L448" href="#L448">448</a> 		<em class="jxr_comment">// Same underlying fix as h02, reached via the useListSyntaxForBeans=true "[{...},{...}]" branch.</em>
+<a class="jxr_linenumber" name="L449" href="#L449">449</a> 		<strong class="jxr_keyword">var</strong> bean = <strong class="jxr_keyword">new</strong> BeanWithListOfMaps();
+<a class="jxr_linenumber" name="L450" href="#L450">450</a> 		<strong class="jxr_keyword">var</strong> c1 = <strong class="jxr_keyword">new</strong> LinkedHashMap&lt;String,Object&gt;();
+<a class="jxr_linenumber" name="L451" href="#L451">451</a> 		c1.put(<span class="jxr_string">"k"</span>, <span class="jxr_string">"alpha"</span>);
+<a class="jxr_linenumber" name="L452" href="#L452">452</a> 		<strong class="jxr_keyword">var</strong> c2 = <strong class="jxr_keyword">new</strong> LinkedHashMap&lt;String,Object&gt;();
+<a class="jxr_linenumber" name="L453" href="#L453">453</a> 		c2.put(<span class="jxr_string">"k"</span>, <span class="jxr_string">"beta"</span>);
+<a class="jxr_linenumber" name="L454" href="#L454">454</a> 		bean.setItems(List.of(c1, c2));
+<a class="jxr_linenumber" name="L455" href="#L455">455</a> 		<strong class="jxr_keyword">var</strong> ser = PrototextSerializer.create().useListSyntaxForBeans(<strong class="jxr_keyword">true</strong>).build();
+<a class="jxr_linenumber" name="L456" href="#L456">456</a> 		<strong class="jxr_keyword">var</strong> proto = ser.write(bean);
+<a class="jxr_linenumber" name="L457" href="#L457">457</a> 		assertTrue(proto.contains(<span class="jxr_string">"items: [{"</span>), () -&gt; <span class="jxr_string">"Expected list syntax 'items: [{' but got: "</span> + proto);
+<a class="jxr_linenumber" name="L458" href="#L458">458</a> 		assertTrue(proto.contains(<span class="jxr_string">"k: \&quot;alpha\&quot;"</span>) || proto.contains(<span class="jxr_string">"k \&quot;alpha\&quot;"</span>), () -&gt; <span class="jxr_string">"Expected nested k=alpha field but got: "</span> + proto);
+<a class="jxr_linenumber" name="L459" href="#L459">459</a> 		assertFalse(proto.contains(<span class="jxr_string">"{k=alpha}"</span>), () -&gt; <span class="jxr_string">"Value should not have been stringified via Map.toString() but got: "</span> + proto);
+<a class="jxr_linenumber" name="L460" href="#L460">460</a> 	}
+<a class="jxr_linenumber" name="L461" href="#L461">461</a> 
+<a class="jxr_linenumber" name="L462" href="#L462">462</a> 	@Test <strong class="jxr_keyword">void</strong> h02b_beanWithListOfBeans() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L463" href="#L463">463</a> 		<em class="jxr_comment">// Same fix as h02, exercised for a bean-element (not map-element) List&lt;T&gt; property, which is the</em>
+<a class="jxr_linenumber" name="L464" href="#L464">464</a> 		<em class="jxr_comment">// shape explicitly called out by the bug report (generic erasure on List&lt;ChildBean&gt;).</em>
+<a class="jxr_linenumber" name="L465" href="#L465">465</a> 		<strong class="jxr_keyword">var</strong> bean = <strong class="jxr_keyword">new</strong> BeanWithListOfChildBeans();
+<a class="jxr_linenumber" name="L466" href="#L466">466</a> 		<strong class="jxr_keyword">var</strong> c1 = <strong class="jxr_keyword">new</strong> H02b_ChildBean();
+<a class="jxr_linenumber" name="L467" href="#L467">467</a> 		c1.name = <span class="jxr_string">"alpha"</span>;
+<a class="jxr_linenumber" name="L468" href="#L468">468</a> 		<strong class="jxr_keyword">var</strong> c2 = <strong class="jxr_keyword">new</strong> H02b_ChildBean();
+<a class="jxr_linenumber" name="L469" href="#L469">469</a> 		c2.name = <span class="jxr_string">"beta"</span>;
+<a class="jxr_linenumber" name="L470" href="#L470">470</a> 		bean.setItems(List.of(c1, c2));
+<a class="jxr_linenumber" name="L471" href="#L471">471</a> 		<strong class="jxr_keyword">var</strong> proto = PrototextSerializer.DEFAULT.write(bean);
+<a class="jxr_linenumber" name="L472" href="#L472">472</a> 		assertTrue(proto.contains(<span class="jxr_string">"items {"</span>), () -&gt; <span class="jxr_string">"Expected nested 'items { ... }' messages but got: "</span> + proto);
+<a class="jxr_linenumber" name="L473" href="#L473">473</a> 		assertTrue(proto.contains(<span class="jxr_string">"name: \&quot;alpha\&quot;"</span>) || proto.contains(<span class="jxr_string">"name \&quot;alpha\&quot;"</span>), () -&gt; <span class="jxr_string">"Expected nested name=alpha field but got: "</span> + proto);
+<a class="jxr_linenumber" name="L474" href="#L474">474</a> 	}
+<a class="jxr_linenumber" name="L475" href="#L475">475</a> 
+<a class="jxr_linenumber" name="L476" href="#L476">476</a> 	@Test <strong class="jxr_keyword">void</strong> h04_beanWithMapArray() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L477" href="#L477">477</a> 		<em class="jxr_comment">// Bean with Map[] property — regression coverage: writeBeanMap was calling</em>
+<a class="jxr_linenumber" name="L478" href="#L478">478</a> 		<em class="jxr_comment">// toBeanMap() unconditionally on the map elements, which threw BeanRuntimeException.</em>
+<a class="jxr_linenumber" name="L479" href="#L479">479</a> 		<em class="jxr_comment">// The array path now dispatches Map vs Bean correctly.</em>
+<a class="jxr_linenumber" name="L480" href="#L480">480</a> 		<strong class="jxr_keyword">var</strong> bean = <strong class="jxr_keyword">new</strong> BeanWithMapArray();
+<a class="jxr_linenumber" name="L481" href="#L481">481</a> 		<strong class="jxr_keyword">var</strong> c1 = <strong class="jxr_keyword">new</strong> LinkedHashMap&lt;String,Object&gt;();
+<a class="jxr_linenumber" name="L482" href="#L482">482</a> 		c1.put(<span class="jxr_string">"k"</span>, <span class="jxr_string">"alpha"</span>);
+<a class="jxr_linenumber" name="L483" href="#L483">483</a> 		<strong class="jxr_keyword">var</strong> c2 = <strong class="jxr_keyword">new</strong> LinkedHashMap&lt;String,Object&gt;();
+<a class="jxr_linenumber" name="L484" href="#L484">484</a> 		c2.put(<span class="jxr_string">"k"</span>, <span class="jxr_string">"beta"</span>);
+<a class="jxr_linenumber" name="L485" href="#L485">485</a> 		<strong class="jxr_keyword">var</strong> arr = <strong class="jxr_keyword">new</strong> Map[] { c1, c2 };
+<a class="jxr_linenumber" name="L486" href="#L486">486</a> 		bean.setItems(arr);
+<a class="jxr_linenumber" name="L487" href="#L487">487</a> 		<strong class="jxr_keyword">var</strong> proto = PrototextSerializer.DEFAULT.write(bean);
 <a class="jxr_linenumber" name="L488" href="#L488">488</a> 		assertNotNull(proto);
-<a class="jxr_linenumber" name="L489" href="#L489">489</a> 		assertTrue(proto.contains(<span class="jxr_string">"["</span>) &amp;&amp; proto.contains(<span class="jxr_string">"]"</span>), () -&gt; <span class="jxr_string">"Expected list syntax in: "</span> + proto);
-<a class="jxr_linenumber" name="L490" href="#L490">490</a> 		assertTrue(proto.contains(<span class="jxr_string">"alpha"</span>) &amp;&amp; proto.contains(<span class="jxr_string">"beta"</span>));
-<a class="jxr_linenumber" name="L491" href="#L491">491</a> 	}
-<a class="jxr_linenumber" name="L492" href="#L492">492</a> 
-<a class="jxr_linenumber" name="L493" href="#L493">493</a> 	@Test <strong class="jxr_keyword">void</strong> h05_beanWithListOfStrings() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L494" href="#L494">494</a> 		<em class="jxr_comment">// Bean with List&lt;String&gt; — exercises writeBeanMap scalar-list branch (lines 298-309).</em>
-<a class="jxr_linenumber" name="L495" href="#L495">495</a> 		<strong class="jxr_keyword">var</strong> bean = <strong class="jxr_keyword">new</strong> BeanWithListOfStrings();
-<a class="jxr_linenumber" name="L496" href="#L496">496</a> 		bean.setTags(List.of(<span class="jxr_string">"a"</span>, <span class="jxr_string">"b"</span>, <span class="jxr_string">"c"</span>));
-<a class="jxr_linenumber" name="L497" href="#L497">497</a> 		<strong class="jxr_keyword">var</strong> proto = PrototextSerializer.DEFAULT.write(bean);
-<a class="jxr_linenumber" name="L498" href="#L498">498</a> 		assertNotNull(proto);
-<a class="jxr_linenumber" name="L499" href="#L499">499</a> 		assertTrue(proto.contains(<span class="jxr_string">"a"</span>) &amp;&amp; proto.contains(<span class="jxr_string">"b"</span>) &amp;&amp; proto.contains(<span class="jxr_string">"c"</span>));
-<a class="jxr_linenumber" name="L500" href="#L500">500</a> 	}
-<a class="jxr_linenumber" name="L501" href="#L501">501</a> 
-<a class="jxr_linenumber" name="L502" href="#L502">502</a> 	@Test <strong class="jxr_keyword">void</strong> h06_beanWithIntArrayProperty() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L503" href="#L503">503</a> 		<em class="jxr_comment">// Bean with int[] — exercises writeBeanMap array→list branch with primitive elements.</em>
-<a class="jxr_linenumber" name="L504" href="#L504">504</a> 		<strong class="jxr_keyword">var</strong> bean = <strong class="jxr_keyword">new</strong> BeanWithIntArrayProp();
-<a class="jxr_linenumber" name="L505" href="#L505">505</a> 		bean.setValues(<strong class="jxr_keyword">new</strong> <strong class="jxr_keyword">int</strong>[] { 1, 2, 3 });
-<a class="jxr_linenumber" name="L506" href="#L506">506</a> 		<strong class="jxr_keyword">var</strong> proto = PrototextSerializer.DEFAULT.write(bean);
-<a class="jxr_linenumber" name="L507" href="#L507">507</a> 		assertNotNull(proto);
-<a class="jxr_linenumber" name="L508" href="#L508">508</a> 		assertTrue(proto.contains(<span class="jxr_string">"1"</span>) &amp;&amp; proto.contains(<span class="jxr_string">"2"</span>) &amp;&amp; proto.contains(<span class="jxr_string">"3"</span>));
-<a class="jxr_linenumber" name="L509" href="#L509">509</a> 	}
-<a class="jxr_linenumber" name="L510" href="#L510">510</a> 
-<a class="jxr_linenumber" name="L511" href="#L511">511</a> 	<em class="jxr_comment">// Streamable bean property — exercises writeStreamable (lines 405-425)</em>
-<a class="jxr_linenumber" name="L512" href="#L512">512</a> 
-<a class="jxr_linenumber" name="L513" href="#L513">513</a> 	@Test <strong class="jxr_keyword">void</strong> h07_topLevelStreamOfMaps() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L514" href="#L514">514</a> 		<em class="jxr_comment">// Top-level Stream&lt;Map&gt; — hits writeStreamable bean-element branch.</em>
-<a class="jxr_linenumber" name="L515" href="#L515">515</a> 		<strong class="jxr_keyword">var</strong> c1 = <strong class="jxr_keyword">new</strong> LinkedHashMap&lt;String,Object&gt;();
-<a class="jxr_linenumber" name="L516" href="#L516">516</a> 		c1.put(<span class="jxr_string">"k"</span>, <span class="jxr_string">"alpha"</span>);
-<a class="jxr_linenumber" name="L517" href="#L517">517</a> 		<strong class="jxr_keyword">var</strong> c2 = <strong class="jxr_keyword">new</strong> LinkedHashMap&lt;String,Object&gt;();
-<a class="jxr_linenumber" name="L518" href="#L518">518</a> 		c2.put(<span class="jxr_string">"k"</span>, <span class="jxr_string">"beta"</span>);
-<a class="jxr_linenumber" name="L519" href="#L519">519</a> 		<strong class="jxr_keyword">var</strong> stream = java.util.stream.Stream.of(c1, c2);
-<a class="jxr_linenumber" name="L520" href="#L520">520</a> 		<strong class="jxr_keyword">var</strong> proto = PrototextSerializer.DEFAULT.write(stream);
-<a class="jxr_linenumber" name="L521" href="#L521">521</a> 		assertNotNull(proto);
-<a class="jxr_linenumber" name="L522" href="#L522">522</a> 		assertTrue(proto.contains(<span class="jxr_string">"alpha"</span>) &amp;&amp; proto.contains(<span class="jxr_string">"beta"</span>), () -&gt; <span class="jxr_string">"Expected alpha+beta in: "</span> + proto);
-<a class="jxr_linenumber" name="L523" href="#L523">523</a> 	}
-<a class="jxr_linenumber" name="L524" href="#L524">524</a> 
-<a class="jxr_linenumber" name="L525" href="#L525">525</a> 	@Test <strong class="jxr_keyword">void</strong> h08_topLevelStreamOfStrings() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L526" href="#L526">526</a> 		<em class="jxr_comment">// Top-level Stream&lt;String&gt; — hits writeStreamable scalar branch.</em>
-<a class="jxr_linenumber" name="L527" href="#L527">527</a> 		<strong class="jxr_keyword">var</strong> stream = java.util.stream.Stream.of(<span class="jxr_string">"a"</span>, <span class="jxr_string">"b"</span>, <span class="jxr_string">"c"</span>);
-<a class="jxr_linenumber" name="L528" href="#L528">528</a> 		<strong class="jxr_keyword">var</strong> proto = PrototextSerializer.DEFAULT.write(stream);
-<a class="jxr_linenumber" name="L529" href="#L529">529</a> 		assertNotNull(proto);
-<a class="jxr_linenumber" name="L530" href="#L530">530</a> 		assertTrue(proto.contains(<span class="jxr_string">"a"</span>) &amp;&amp; proto.contains(<span class="jxr_string">"b"</span>) &amp;&amp; proto.contains(<span class="jxr_string">"c"</span>));
-<a class="jxr_linenumber" name="L531" href="#L531">531</a> 	}
-<a class="jxr_linenumber" name="L532" href="#L532">532</a> 
-<a class="jxr_linenumber" name="L533" href="#L533">533</a> 	<em class="jxr_comment">// Builder</em>
-<a class="jxr_linenumber" name="L534" href="#L534">534</a> 
-<a class="jxr_linenumber" name="L535" href="#L535">535</a> 	@Test <strong class="jxr_keyword">void</strong> i01_create_nullCtxThrows() {
-<a class="jxr_linenumber" name="L536" href="#L536">536</a> 		assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; PrototextSerializerSession.create((PrototextSerializer) <strong class="jxr_keyword">null</strong>));
-<a class="jxr_linenumber" name="L537" href="#L537">537</a> 	}
-<a class="jxr_linenumber" name="L538" href="#L538">538</a> 
-<a class="jxr_linenumber" name="L539" href="#L539">539</a> 	<em class="jxr_comment">// Nested maps and collections — writeMap / writeCollection paths</em>
+<a class="jxr_linenumber" name="L489" href="#L489">489</a> 		assertTrue(proto.contains(<span class="jxr_string">"alpha"</span>) &amp;&amp; proto.contains(<span class="jxr_string">"beta"</span>), () -&gt; <span class="jxr_string">"Expected alpha+beta in: "</span> + proto);
+<a class="jxr_linenumber" name="L490" href="#L490">490</a> 	}
+<a class="jxr_linenumber" name="L491" href="#L491">491</a> 
+<a class="jxr_linenumber" name="L492" href="#L492">492</a> 	@Test <strong class="jxr_keyword">void</strong> h04b_beanWithMapArray_useListSyntax() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L493" href="#L493">493</a> 		<em class="jxr_comment">// Same as h04 but with useListSyntaxForBeans=true — covers the [{...},{...}] writer branch</em>
+<a class="jxr_linenumber" name="L494" href="#L494">494</a> 		<em class="jxr_comment">// where the dispatch fix also applies.</em>
+<a class="jxr_linenumber" name="L495" href="#L495">495</a> 		<strong class="jxr_keyword">var</strong> bean = <strong class="jxr_keyword">new</strong> BeanWithMapArray();
+<a class="jxr_linenumber" name="L496" href="#L496">496</a> 		<strong class="jxr_keyword">var</strong> c1 = <strong class="jxr_keyword">new</strong> LinkedHashMap&lt;String,Object&gt;();
+<a class="jxr_linenumber" name="L497" href="#L497">497</a> 		c1.put(<span class="jxr_string">"k"</span>, <span class="jxr_string">"alpha"</span>);
+<a class="jxr_linenumber" name="L498" href="#L498">498</a> 		<strong class="jxr_keyword">var</strong> c2 = <strong class="jxr_keyword">new</strong> LinkedHashMap&lt;String,Object&gt;();
+<a class="jxr_linenumber" name="L499" href="#L499">499</a> 		c2.put(<span class="jxr_string">"k"</span>, <span class="jxr_string">"beta"</span>);
+<a class="jxr_linenumber" name="L500" href="#L500">500</a> 		<strong class="jxr_keyword">var</strong> arr = <strong class="jxr_keyword">new</strong> Map[] { c1, c2 };
+<a class="jxr_linenumber" name="L501" href="#L501">501</a> 		bean.setItems(arr);
+<a class="jxr_linenumber" name="L502" href="#L502">502</a> 		<strong class="jxr_keyword">var</strong> ser = PrototextSerializer.create().useListSyntaxForBeans(<strong class="jxr_keyword">true</strong>).build();
+<a class="jxr_linenumber" name="L503" href="#L503">503</a> 		<strong class="jxr_keyword">var</strong> proto = ser.write(bean);
+<a class="jxr_linenumber" name="L504" href="#L504">504</a> 		assertNotNull(proto);
+<a class="jxr_linenumber" name="L505" href="#L505">505</a> 		assertTrue(proto.contains(<span class="jxr_string">"["</span>) &amp;&amp; proto.contains(<span class="jxr_string">"]"</span>), () -&gt; <span class="jxr_string">"Expected list syntax in: "</span> + proto);
+<a class="jxr_linenumber" name="L506" href="#L506">506</a> 		assertTrue(proto.contains(<span class="jxr_string">"alpha"</span>) &amp;&amp; proto.contains(<span class="jxr_string">"beta"</span>));
+<a class="jxr_linenumber" name="L507" href="#L507">507</a> 	}
+<a class="jxr_linenumber" name="L508" href="#L508">508</a> 
+<a class="jxr_linenumber" name="L509" href="#L509">509</a> 	@Test <strong class="jxr_keyword">void</strong> h05_beanWithListOfStrings() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L510" href="#L510">510</a> 		<em class="jxr_comment">// Bean with List&lt;String&gt; — exercises writeBeanMap scalar-list branch (lines 298-309).</em>
+<a class="jxr_linenumber" name="L511" href="#L511">511</a> 		<strong class="jxr_keyword">var</strong> bean = <strong class="jxr_keyword">new</strong> BeanWithListOfStrings();
+<a class="jxr_linenumber" name="L512" href="#L512">512</a> 		bean.setTags(List.of(<span class="jxr_string">"a"</span>, <span class="jxr_string">"b"</span>, <span class="jxr_string">"c"</span>));
+<a class="jxr_linenumber" name="L513" href="#L513">513</a> 		<strong class="jxr_keyword">var</strong> proto = PrototextSerializer.DEFAULT.write(bean);
+<a class="jxr_linenumber" name="L514" href="#L514">514</a> 		assertNotNull(proto);
+<a class="jxr_linenumber" name="L515" href="#L515">515</a> 		assertTrue(proto.contains(<span class="jxr_string">"a"</span>) &amp;&amp; proto.contains(<span class="jxr_string">"b"</span>) &amp;&amp; proto.contains(<span class="jxr_string">"c"</span>));
+<a class="jxr_linenumber" name="L516" href="#L516">516</a> 	}
+<a class="jxr_linenumber" name="L517" href="#L517">517</a> 
+<a class="jxr_linenumber" name="L518" href="#L518">518</a> 	@Test <strong class="jxr_keyword">void</strong> h06_beanWithIntArrayProperty() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L519" href="#L519">519</a> 		<em class="jxr_comment">// Bean with int[] — exercises writeBeanMap array→list branch with primitive elements.</em>
+<a class="jxr_linenumber" name="L520" href="#L520">520</a> 		<strong class="jxr_keyword">var</strong> bean = <strong class="jxr_keyword">new</strong> BeanWithIntArrayProp();
+<a class="jxr_linenumber" name="L521" href="#L521">521</a> 		bean.setValues(<strong class="jxr_keyword">new</strong> <strong class="jxr_keyword">int</strong>[] { 1, 2, 3 });
+<a class="jxr_linenumber" name="L522" href="#L522">522</a> 		<strong class="jxr_keyword">var</strong> proto = PrototextSerializer.DEFAULT.write(bean);
+<a class="jxr_linenumber" name="L523" href="#L523">523</a> 		assertNotNull(proto);
+<a class="jxr_linenumber" name="L524" href="#L524">524</a> 		assertTrue(proto.contains(<span class="jxr_string">"1"</span>) &amp;&amp; proto.contains(<span class="jxr_string">"2"</span>) &amp;&amp; proto.contains(<span class="jxr_string">"3"</span>));
+<a class="jxr_linenumber" name="L525" href="#L525">525</a> 	}
+<a class="jxr_linenumber" name="L526" href="#L526">526</a> 
+<a class="jxr_linenumber" name="L527" href="#L527">527</a> 	<em class="jxr_comment">// Streamable bean property — exercises writeStreamable (lines 405-425)</em>
+<a class="jxr_linenumber" name="L528" href="#L528">528</a> 
+<a class="jxr_linenumber" name="L529" href="#L529">529</a> 	@Test <strong class="jxr_keyword">void</strong> h07_topLevelStreamOfMaps() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L530" href="#L530">530</a> 		<em class="jxr_comment">// Top-level Stream&lt;Map&gt; — hits writeStreamable bean-element branch.</em>
+<a class="jxr_linenumber" name="L531" href="#L531">531</a> 		<strong class="jxr_keyword">var</strong> c1 = <strong class="jxr_keyword">new</strong> LinkedHashMap&lt;String,Object&gt;();
+<a class="jxr_linenumber" name="L532" href="#L532">532</a> 		c1.put(<span class="jxr_string">"k"</span>, <span class="jxr_string">"alpha"</span>);
+<a class="jxr_linenumber" name="L533" href="#L533">533</a> 		<strong class="jxr_keyword">var</strong> c2 = <strong class="jxr_keyword">new</strong> LinkedHashMap&lt;String,Object&gt;();
+<a class="jxr_linenumber" name="L534" href="#L534">534</a> 		c2.put(<span class="jxr_string">"k"</span>, <span class="jxr_string">"beta"</span>);
+<a class="jxr_linenumber" name="L535" href="#L535">535</a> 		<strong class="jxr_keyword">var</strong> stream = java.util.stream.Stream.of(c1, c2);
+<a class="jxr_linenumber" name="L536" href="#L536">536</a> 		<strong class="jxr_keyword">var</strong> proto = PrototextSerializer.DEFAULT.write(stream);
+<a class="jxr_linenumber" name="L537" href="#L537">537</a> 		assertNotNull(proto);
+<a class="jxr_linenumber" name="L538" href="#L538">538</a> 		assertTrue(proto.contains(<span class="jxr_string">"alpha"</span>) &amp;&amp; proto.contains(<span class="jxr_string">"beta"</span>), () -&gt; <span class="jxr_string">"Expected alpha+beta in: "</span> + proto);
+<a class="jxr_linenumber" name="L539" href="#L539">539</a> 	}
 <a class="jxr_linenumber" name="L540" href="#L540">540</a> 
-<a class="jxr_linenumber" name="L541" href="#L541">541</a> 	@Test <strong class="jxr_keyword">void</strong> j_mapWithMapValue() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L542" href="#L542">542</a> 		<em class="jxr_comment">// Map value inside a Map → writeMap: aType.isMap() branch (line 337/340 isMap=true)</em>
-<a class="jxr_linenumber" name="L543" href="#L543">543</a> 		<strong class="jxr_keyword">var</strong> <strong class="jxr_keyword">outer</strong> = <strong class="jxr_keyword">new</strong> LinkedHashMap&lt;String,Object&gt;();
-<a class="jxr_linenumber" name="L544" href="#L544">544</a> 		<strong class="jxr_keyword">var</strong> <strong class="jxr_keyword">inner</strong> = <strong class="jxr_keyword">new</strong> LinkedHashMap&lt;String,Object&gt;();
-<a class="jxr_linenumber" name="L545" href="#L545">545</a> 		<strong class="jxr_keyword">inner</strong>.put(<span class="jxr_string">"k1"</span>, <span class="jxr_string">"v1"</span>);
-<a class="jxr_linenumber" name="L546" href="#L546">546</a> 		<strong class="jxr_keyword">outer</strong>.put(<span class="jxr_string">"nested"</span>, <strong class="jxr_keyword">inner</strong>);
-<a class="jxr_linenumber" name="L547" href="#L547">547</a> 		<strong class="jxr_keyword">var</strong> proto = PrototextSerializer.DEFAULT.write(<strong class="jxr_keyword">outer</strong>);
-<a class="jxr_linenumber" name="L548" href="#L548">548</a> 		assertNotNull(proto);
-<a class="jxr_linenumber" name="L549" href="#L549">549</a> 		assertTrue(proto.contains(<span class="jxr_string">"nested"</span>), <span class="jxr_string">"Expected nested map field: "</span> + proto);
-<a class="jxr_linenumber" name="L550" href="#L550">550</a> 	}
-<a class="jxr_linenumber" name="L551" href="#L551">551</a> 
-<a class="jxr_linenumber" name="L552" href="#L552">552</a> 	@Test <strong class="jxr_keyword">void</strong> j_mapWithCollectionValue() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L553" href="#L553">553</a> 		<em class="jxr_comment">// Collection value inside a Map → writeMap: aType.isCollection() branch</em>
-<a class="jxr_linenumber" name="L554" href="#L554">554</a> 		<strong class="jxr_keyword">var</strong> m = <strong class="jxr_keyword">new</strong> LinkedHashMap&lt;String,Object&gt;();
-<a class="jxr_linenumber" name="L555" href="#L555">555</a> 		m.put(<span class="jxr_string">"items"</span>, List.of(<span class="jxr_string">"a"</span>, <span class="jxr_string">"b"</span>, <span class="jxr_string">"c"</span>));
-<a class="jxr_linenumber" name="L556" href="#L556">556</a> 		<strong class="jxr_keyword">var</strong> proto = PrototextSerializer.DEFAULT.write(m);
-<a class="jxr_linenumber" name="L557" href="#L557">557</a> 		assertNotNull(proto);
-<a class="jxr_linenumber" name="L558" href="#L558">558</a> 		assertTrue(proto.contains(<span class="jxr_string">"items"</span>), <span class="jxr_string">"Expected items field: "</span> + proto);
-<a class="jxr_linenumber" name="L559" href="#L559">559</a> 	}
-<a class="jxr_linenumber" name="L560" href="#L560">560</a> 
-<a class="jxr_linenumber" name="L561" href="#L561">561</a> 	@Test <strong class="jxr_keyword">void</strong> j_beanListProperty_noListSyntax() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L562" href="#L562">562</a> 		<em class="jxr_comment">// Bean property with List&lt;Map&gt; → writeCollection: elementIsBeanOrMap=true, useListSyntaxForBeans=false (default)</em>
-<a class="jxr_linenumber" name="L563" href="#L563">563</a> 		<em class="jxr_comment">// Exercises the non-null-field-name else-if path in writeBeanMap for collection-of-maps</em>
-<a class="jxr_linenumber" name="L564" href="#L564">564</a> 		<strong class="jxr_keyword">var</strong> root = <strong class="jxr_keyword">new</strong> BeanWithBeanListProp();
-<a class="jxr_linenumber" name="L565" href="#L565">565</a> 		<strong class="jxr_keyword">var</strong> item1 = <strong class="jxr_keyword">new</strong> LinkedHashMap&lt;String,Object&gt;();
-<a class="jxr_linenumber" name="L566" href="#L566">566</a> 		item1.put(<span class="jxr_string">"name"</span>, <span class="jxr_string">"alice"</span>);
-<a class="jxr_linenumber" name="L567" href="#L567">567</a> 		<strong class="jxr_keyword">var</strong> item2 = <strong class="jxr_keyword">new</strong> LinkedHashMap&lt;String,Object&gt;();
-<a class="jxr_linenumber" name="L568" href="#L568">568</a> 		item2.put(<span class="jxr_string">"name"</span>, <span class="jxr_string">"bob"</span>);
-<a class="jxr_linenumber" name="L569" href="#L569">569</a> 		root.setChildren(List.of(item1, item2));
-<a class="jxr_linenumber" name="L570" href="#L570">570</a> 		<strong class="jxr_keyword">var</strong> proto = PrototextSerializer.DEFAULT.write(root);
-<a class="jxr_linenumber" name="L571" href="#L571">571</a> 		assertNotNull(proto);
-<a class="jxr_linenumber" name="L572" href="#L572">572</a> 		assertTrue(proto.contains(<span class="jxr_string">"children"</span>), <span class="jxr_string">"Expected children field: "</span> + proto);
-<a class="jxr_linenumber" name="L573" href="#L573">573</a> 	}
-<a class="jxr_linenumber" name="L574" href="#L574">574</a> 
-<a class="jxr_linenumber" name="L575" href="#L575">575</a> 	@Test <strong class="jxr_keyword">void</strong> j_beanListProperty_useListSyntax() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L576" href="#L576">576</a> 		<em class="jxr_comment">// Bean property with List&lt;Map&gt; and useListSyntaxForBeans=true → list syntax path</em>
-<a class="jxr_linenumber" name="L577" href="#L577">577</a> 		<strong class="jxr_keyword">var</strong> s = PrototextSerializer.create().useListSyntaxForBeans(<strong class="jxr_keyword">true</strong>).build();
-<a class="jxr_linenumber" name="L578" href="#L578">578</a> 		<strong class="jxr_keyword">var</strong> root = <strong class="jxr_keyword">new</strong> BeanWithBeanListProp();
-<a class="jxr_linenumber" name="L579" href="#L579">579</a> 		<strong class="jxr_keyword">var</strong> item1 = <strong class="jxr_keyword">new</strong> LinkedHashMap&lt;String,Object&gt;();
-<a class="jxr_linenumber" name="L580" href="#L580">580</a> 		item1.put(<span class="jxr_string">"name"</span>, <span class="jxr_string">"alice"</span>);
-<a class="jxr_linenumber" name="L581" href="#L581">581</a> 		<strong class="jxr_keyword">var</strong> item2 = <strong class="jxr_keyword">new</strong> LinkedHashMap&lt;String,Object&gt;();
-<a class="jxr_linenumber" name="L582" href="#L582">582</a> 		item2.put(<span class="jxr_string">"name"</span>, <span class="jxr_string">"bob"</span>);
-<a class="jxr_linenumber" name="L583" href="#L583">583</a> 		root.setChildren(List.of(item1, item2));
-<a class="jxr_linenumber" name="L584" href="#L584">584</a> 		<strong class="jxr_keyword">var</strong> proto = s.write(root);
-<a class="jxr_linenumber" name="L585" href="#L585">585</a> 		assertNotNull(proto);
-<a class="jxr_linenumber" name="L586" href="#L586">586</a> 		assertTrue(proto.contains(<span class="jxr_string">"children"</span>), <span class="jxr_string">"Expected children field: "</span> + proto);
-<a class="jxr_linenumber" name="L587" href="#L587">587</a> 	}
-<a class="jxr_linenumber" name="L588" href="#L588">588</a> 
-<a class="jxr_linenumber" name="L589" href="#L589">589</a> 	@Test <strong class="jxr_keyword">void</strong> j_collectionOfMaps_asProperty() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L590" href="#L590">590</a> 		<em class="jxr_comment">// Collection items that are Maps → writeCollectionItem: aType.isMap() branch (line 361)</em>
-<a class="jxr_linenumber" name="L591" href="#L591">591</a> 		<strong class="jxr_keyword">var</strong> root = <strong class="jxr_keyword">new</strong> BeanWithMapListProp();
-<a class="jxr_linenumber" name="L592" href="#L592">592</a> 		<strong class="jxr_keyword">var</strong> m1 = <strong class="jxr_keyword">new</strong> LinkedHashMap&lt;String,Object&gt;();
-<a class="jxr_linenumber" name="L593" href="#L593">593</a> 		m1.put(<span class="jxr_string">"x"</span>, <span class="jxr_string">"1"</span>);
-<a class="jxr_linenumber" name="L594" href="#L594">594</a> 		<strong class="jxr_keyword">var</strong> m2 = <strong class="jxr_keyword">new</strong> LinkedHashMap&lt;String,Object&gt;();
-<a class="jxr_linenumber" name="L595" href="#L595">595</a> 		m2.put(<span class="jxr_string">"x"</span>, <span class="jxr_string">"2"</span>);
-<a class="jxr_linenumber" name="L596" href="#L596">596</a> 		root.setEntries(List.of(m1, m2));
-<a class="jxr_linenumber" name="L597" href="#L597">597</a> 		<strong class="jxr_keyword">var</strong> proto = PrototextSerializer.DEFAULT.write(root);
-<a class="jxr_linenumber" name="L598" href="#L598">598</a> 		assertNotNull(proto);
-<a class="jxr_linenumber" name="L599" href="#L599">599</a> 		assertTrue(proto.contains(<span class="jxr_string">"entries"</span>) || proto.contains(<span class="jxr_string">"x"</span>), <span class="jxr_string">"Expected map items: "</span> + proto);
-<a class="jxr_linenumber" name="L600" href="#L600">600</a> 	}
-<a class="jxr_linenumber" name="L601" href="#L601">601</a> 
-<a class="jxr_linenumber" name="L602" href="#L602">602</a> 	@Test <strong class="jxr_keyword">void</strong> j_mapWithBeanValue_writeMap() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L603" href="#L603">603</a> 		<em class="jxr_comment">// Map value that is a bean → writeMap: aType.isBean() branch (line 340 true)</em>
-<a class="jxr_linenumber" name="L604" href="#L604">604</a> 		<strong class="jxr_keyword">var</strong> <strong class="jxr_keyword">outer</strong> = <strong class="jxr_keyword">new</strong> LinkedHashMap&lt;String,Object&gt;();
-<a class="jxr_linenumber" name="L605" href="#L605">605</a> 		<strong class="jxr_keyword">outer</strong>.put(<span class="jxr_string">"child"</span>, <strong class="jxr_keyword">new</strong> ChildBean(<span class="jxr_string">"eve"</span>));
-<a class="jxr_linenumber" name="L606" href="#L606">606</a> 		<strong class="jxr_keyword">var</strong> proto = PrototextSerializer.DEFAULT.write(<strong class="jxr_keyword">outer</strong>);
-<a class="jxr_linenumber" name="L607" href="#L607">607</a> 		assertNotNull(proto);
-<a class="jxr_linenumber" name="L608" href="#L608">608</a> 		assertTrue(proto.contains(<span class="jxr_string">"child"</span>), <span class="jxr_string">"Expected child field: "</span> + proto);
-<a class="jxr_linenumber" name="L609" href="#L609">609</a> 		assertTrue(proto.contains(<span class="jxr_string">"eve"</span>), <span class="jxr_string">"Expected eve in: "</span> + proto);
-<a class="jxr_linenumber" name="L610" href="#L610">610</a> 	}
-<a class="jxr_linenumber" name="L611" href="#L611">611</a> 
-<a class="jxr_linenumber" name="L612" href="#L612">612</a> 	<em class="jxr_comment">// Scalar type dispatch: Date / Calendar / Temporal / Duration / Period / byte[]</em>
-<a class="jxr_linenumber" name="L613" href="#L613">613</a> 
-<a class="jxr_linenumber" name="L614" href="#L614">614</a> 	@Test <strong class="jxr_keyword">void</strong> j01_dateBeanProperty() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L615" href="#L615">615</a> 		<em class="jxr_comment">// Date bean property → writeScalarValue Date branch</em>
-<a class="jxr_linenumber" name="L616" href="#L616">616</a> 		<strong class="jxr_keyword">var</strong> bean = <strong class="jxr_keyword">new</strong> BeanWithDateProp();
-<a class="jxr_linenumber" name="L617" href="#L617">617</a> 		bean.ts = <strong class="jxr_keyword">new</strong> Date(0);
-<a class="jxr_linenumber" name="L618" href="#L618">618</a> 		bean.name = <span class="jxr_string">"dateTest"</span>;
-<a class="jxr_linenumber" name="L619" href="#L619">619</a> 		<strong class="jxr_keyword">var</strong> proto = PrototextSerializer.DEFAULT.write(bean);
-<a class="jxr_linenumber" name="L620" href="#L620">620</a> 		assertNotNull(proto);
-<a class="jxr_linenumber" name="L621" href="#L621">621</a> 		assertTrue(proto.contains(<span class="jxr_string">"ts"</span>), <span class="jxr_string">"Expected ts field: "</span> + proto);
-<a class="jxr_linenumber" name="L622" href="#L622">622</a> 	}
-<a class="jxr_linenumber" name="L623" href="#L623">623</a> 
-<a class="jxr_linenumber" name="L624" href="#L624">624</a> 	@Test <strong class="jxr_keyword">void</strong> j02_calendarBeanProperty() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L625" href="#L625">625</a> 		<em class="jxr_comment">// Calendar bean property → writeScalarValue Calendar branch</em>
-<a class="jxr_linenumber" name="L626" href="#L626">626</a> 		<strong class="jxr_keyword">var</strong> bean = <strong class="jxr_keyword">new</strong> BeanWithCalendarProp();
-<a class="jxr_linenumber" name="L627" href="#L627">627</a> 		bean.cal = Calendar.getInstance();
-<a class="jxr_linenumber" name="L628" href="#L628">628</a> 		bean.label = <span class="jxr_string">"calTest"</span>;
-<a class="jxr_linenumber" name="L629" href="#L629">629</a> 		<strong class="jxr_keyword">var</strong> proto = PrototextSerializer.DEFAULT.write(bean);
-<a class="jxr_linenumber" name="L630" href="#L630">630</a> 		assertNotNull(proto);
-<a class="jxr_linenumber" name="L631" href="#L631">631</a> 		assertTrue(proto.contains(<span class="jxr_string">"cal"</span>), <span class="jxr_string">"Expected cal field: "</span> + proto);
-<a class="jxr_linenumber" name="L632" href="#L632">632</a> 	}
-<a class="jxr_linenumber" name="L633" href="#L633">633</a> 
-<a class="jxr_linenumber" name="L634" href="#L634">634</a> 	@Test <strong class="jxr_keyword">void</strong> j03_temporalBeanProperty() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L635" href="#L635">635</a> 		<em class="jxr_comment">// Instant property → writeScalarValue Temporal branch</em>
-<a class="jxr_linenumber" name="L636" href="#L636">636</a> 		<strong class="jxr_keyword">var</strong> bean = <strong class="jxr_keyword">new</strong> BeanWithInstantProp();
-<a class="jxr_linenumber" name="L637" href="#L637">637</a> 		bean.instant = Instant.ofEpochMilli(0);
-<a class="jxr_linenumber" name="L638" href="#L638">638</a> 		bean.label = <span class="jxr_string">"temporalTest"</span>;
-<a class="jxr_linenumber" name="L639" href="#L639">639</a> 		<strong class="jxr_keyword">var</strong> proto = PrototextSerializer.DEFAULT.write(bean);
-<a class="jxr_linenumber" name="L640" href="#L640">640</a> 		assertNotNull(proto);
-<a class="jxr_linenumber" name="L641" href="#L641">641</a> 		assertTrue(proto.contains(<span class="jxr_string">"instant"</span>), <span class="jxr_string">"Expected instant field: "</span> + proto);
-<a class="jxr_linenumber" name="L642" href="#L642">642</a> 	}
-<a class="jxr_linenumber" name="L643" href="#L643">643</a> 
-<a class="jxr_linenumber" name="L644" href="#L644">644</a> 	@Test <strong class="jxr_keyword">void</strong> j04_durationBeanProperty() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L645" href="#L645">645</a> 		<em class="jxr_comment">// Duration property → writeScalarValue Duration branch</em>
-<a class="jxr_linenumber" name="L646" href="#L646">646</a> 		<strong class="jxr_keyword">var</strong> bean = <strong class="jxr_keyword">new</strong> BeanWithDurationProp();
-<a class="jxr_linenumber" name="L647" href="#L647">647</a> 		bean.dur = Duration.ofSeconds(30);
-<a class="jxr_linenumber" name="L648" href="#L648">648</a> 		bean.label = <span class="jxr_string">"durationTest"</span>;
-<a class="jxr_linenumber" name="L649" href="#L649">649</a> 		<strong class="jxr_keyword">var</strong> proto = PrototextSerializer.DEFAULT.write(bean);
-<a class="jxr_linenumber" name="L650" href="#L650">650</a> 		assertNotNull(proto);
-<a class="jxr_linenumber" name="L651" href="#L651">651</a> 		assertTrue(proto.contains(<span class="jxr_string">"dur"</span>), <span class="jxr_string">"Expected dur field: "</span> + proto);
-<a class="jxr_linenumber" name="L652" href="#L652">652</a> 	}
-<a class="jxr_linenumber" name="L653" href="#L653">653</a> 
-<a class="jxr_linenumber" name="L654" href="#L654">654</a> 	@Test <strong class="jxr_keyword">void</strong> j05_periodBeanProperty() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L655" href="#L655">655</a> 		<em class="jxr_comment">// Period property → writeScalarValue Period branch</em>
-<a class="jxr_linenumber" name="L656" href="#L656">656</a> 		<strong class="jxr_keyword">var</strong> bean = <strong class="jxr_keyword">new</strong> BeanWithPeriodProp();
-<a class="jxr_linenumber" name="L657" href="#L657">657</a> 		bean.period = Period.ofDays(7);
-<a class="jxr_linenumber" name="L658" href="#L658">658</a> 		bean.label = <span class="jxr_string">"periodTest"</span>;
-<a class="jxr_linenumber" name="L659" href="#L659">659</a> 		<strong class="jxr_keyword">var</strong> proto = PrototextSerializer.DEFAULT.write(bean);
-<a class="jxr_linenumber" name="L660" href="#L660">660</a> 		assertNotNull(proto);
-<a class="jxr_linenumber" name="L661" href="#L661">661</a> 		assertTrue(proto.contains(<span class="jxr_string">"period"</span>), <span class="jxr_string">"Expected period field: "</span> + proto);
-<a class="jxr_linenumber" name="L662" href="#L662">662</a> 	}
-<a class="jxr_linenumber" name="L663" href="#L663">663</a> 
-<a class="jxr_linenumber" name="L664" href="#L664">664</a> 	@Test <strong class="jxr_keyword">void</strong> j06_bytesBeanProperty() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L665" href="#L665">665</a> 		<em class="jxr_comment">// byte[] property → writeScalarValue byte[] branch</em>
-<a class="jxr_linenumber" name="L666" href="#L666">666</a> 		<strong class="jxr_keyword">var</strong> bean = <strong class="jxr_keyword">new</strong> BeanWithBytesProp();
-<a class="jxr_linenumber" name="L667" href="#L667">667</a> 		bean.data = <strong class="jxr_keyword">new</strong> byte[] { 1, 2, 3 };
-<a class="jxr_linenumber" name="L668" href="#L668">668</a> 		bean.label = <span class="jxr_string">"bytesTest"</span>;
-<a class="jxr_linenumber" name="L669" href="#L669">669</a> 		<strong class="jxr_keyword">var</strong> proto = PrototextSerializer.DEFAULT.write(bean);
-<a class="jxr_linenumber" name="L670" href="#L670">670</a> 		assertNotNull(proto);
-<a class="jxr_linenumber" name="L671" href="#L671">671</a> 		assertTrue(proto.contains(<span class="jxr_string">"data"</span>), <span class="jxr_string">"Expected data field: "</span> + proto);
-<a class="jxr_linenumber" name="L672" href="#L672">672</a> 	}
-<a class="jxr_linenumber" name="L673" href="#L673">673</a> 
-<a class="jxr_linenumber" name="L674" href="#L674">674</a> 	@Test <strong class="jxr_keyword">void</strong> j07_floatAndDoubleValues() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L675" href="#L675">675</a> 		<em class="jxr_comment">// Float and Double in bean property → writeScalarValue float branch</em>
-<a class="jxr_linenumber" name="L676" href="#L676">676</a> 		<strong class="jxr_keyword">var</strong> bean = <strong class="jxr_keyword">new</strong> BeanWithFloatProp();
-<a class="jxr_linenumber" name="L677" href="#L677">677</a> 		bean.f = 1.5f;
-<a class="jxr_linenumber" name="L678" href="#L678">678</a> 		bean.d = 2.5;
-<a class="jxr_linenumber" name="L679" href="#L679">679</a> 		<strong class="jxr_keyword">var</strong> proto = PrototextSerializer.DEFAULT.write(bean);
-<a class="jxr_linenumber" name="L680" href="#L680">680</a> 		assertNotNull(proto);
-<a class="jxr_linenumber" name="L681" href="#L681">681</a> 		assertTrue(proto.contains(<span class="jxr_string">"1.5"</span>) || proto.contains(<span class="jxr_string">"f"</span>), <span class="jxr_string">"Expected float: "</span> + proto);
-<a class="jxr_linenumber" name="L682" href="#L682">682</a> 		assertTrue(proto.contains(<span class="jxr_string">"2.5"</span>) || proto.contains(<span class="jxr_string">"d"</span>), <span class="jxr_string">"Expected double: "</span> + proto);
-<a class="jxr_linenumber" name="L683" href="#L683">683</a> 	}
-<a class="jxr_linenumber" name="L684" href="#L684">684</a> 
-<a class="jxr_linenumber" name="L685" href="#L685">685</a> 	@Test <strong class="jxr_keyword">void</strong> j08_writeAnything_withFieldName_collection() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L686" href="#L686">686</a> 		<em class="jxr_comment">// writeAnything called with fieldName non-null and Collection type</em>
-<a class="jxr_linenumber" name="L687" href="#L687">687</a> 		<em class="jxr_comment">// This is hit when a bean property has a collection value</em>
-<a class="jxr_linenumber" name="L688" href="#L688">688</a> 		<strong class="jxr_keyword">var</strong> root = <strong class="jxr_keyword">new</strong> BeanWithStringListField();
-<a class="jxr_linenumber" name="L689" href="#L689">689</a> 		root.setNames(List.of(<span class="jxr_string">"Alice"</span>, <span class="jxr_string">"Bob"</span>));
-<a class="jxr_linenumber" name="L690" href="#L690">690</a> 		<strong class="jxr_keyword">var</strong> proto = PrototextSerializer.DEFAULT.write(root);
-<a class="jxr_linenumber" name="L691" href="#L691">691</a> 		assertNotNull(proto);
-<a class="jxr_linenumber" name="L692" href="#L692">692</a> 		assertTrue(proto.contains(<span class="jxr_string">"names"</span>), <span class="jxr_string">"Expected names field: "</span> + proto);
-<a class="jxr_linenumber" name="L693" href="#L693">693</a> 		assertTrue(proto.contains(<span class="jxr_string">"Alice"</span>) &amp;&amp; proto.contains(<span class="jxr_string">"Bob"</span>));
-<a class="jxr_linenumber" name="L694" href="#L694">694</a> 	}
-<a class="jxr_linenumber" name="L695" href="#L695">695</a> 
-<a class="jxr_linenumber" name="L696" href="#L696">696</a> 	<em class="jxr_comment">//------------------------------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L697" href="#L697">697</a> 	<em class="jxr_comment">// k0x - writeAnything's own treatAsBean dispatch (sType.isBean()==true), only reachable via a swap:</em>
-<a class="jxr_linenumber" name="L698" href="#L698">698</a> 	<em class="jxr_comment">// a non-empty bean at root is always intercepted earlier by doWrite's own bean-shortcut (line 120-129)</em>
-<a class="jxr_linenumber" name="L699" href="#L699">699</a> 	<em class="jxr_comment">// and never reaches writeAnything at all, so the ONLY way writeAnything's own bean check (line 198)</em>
-<a class="jxr_linenumber" name="L700" href="#L700">700</a> 	<em class="jxr_comment">// can be true is when the ORIGINAL root object is not itself a bean but its swap target is.</em>
-<a class="jxr_linenumber" name="L701" href="#L701">701</a> 	<em class="jxr_comment">//------------------------------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L702" href="#L702">702</a> 
-<a class="jxr_linenumber" name="L703" href="#L703">703</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> K01_Wrapper {
-<a class="jxr_linenumber" name="L704" href="#L704">704</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> String n;
-<a class="jxr_linenumber" name="L705" href="#L705">705</a> 		<strong class="jxr_keyword">public</strong> K01_Wrapper(String n) { <strong class="jxr_keyword">this</strong>.n = n; }
-<a class="jxr_linenumber" name="L706" href="#L706">706</a> 	}
-<a class="jxr_linenumber" name="L707" href="#L707">707</a> 
-<a class="jxr_linenumber" name="L708" href="#L708">708</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> K01_Swap <strong class="jxr_keyword">extends</strong> org.apache.juneau.marshall.swap.ObjectSwap&lt;K01_Wrapper,ChildBean&gt; {
-<a class="jxr_linenumber" name="L709" href="#L709">709</a> 		@Override <strong class="jxr_keyword">public</strong> ChildBean swap(org.apache.juneau.marshall.MarshallingSession session, K01_Wrapper o) { <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> ChildBean(o.n); }
+<a class="jxr_linenumber" name="L541" href="#L541">541</a> 	@Test <strong class="jxr_keyword">void</strong> h08_topLevelStreamOfStrings() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L542" href="#L542">542</a> 		<em class="jxr_comment">// Top-level Stream&lt;String&gt; — hits writeStreamable scalar branch.</em>
+<a class="jxr_linenumber" name="L543" href="#L543">543</a> 		<strong class="jxr_keyword">var</strong> stream = java.util.stream.Stream.of(<span class="jxr_string">"a"</span>, <span class="jxr_string">"b"</span>, <span class="jxr_string">"c"</span>);
+<a class="jxr_linenumber" name="L544" href="#L544">544</a> 		<strong class="jxr_keyword">var</strong> proto = PrototextSerializer.DEFAULT.write(stream);
+<a class="jxr_linenumber" name="L545" href="#L545">545</a> 		assertNotNull(proto);
+<a class="jxr_linenumber" name="L546" href="#L546">546</a> 		assertTrue(proto.contains(<span class="jxr_string">"a"</span>) &amp;&amp; proto.contains(<span class="jxr_string">"b"</span>) &amp;&amp; proto.contains(<span class="jxr_string">"c"</span>));
+<a class="jxr_linenumber" name="L547" href="#L547">547</a> 	}
+<a class="jxr_linenumber" name="L548" href="#L548">548</a> 
+<a class="jxr_linenumber" name="L549" href="#L549">549</a> 	<em class="jxr_comment">// Builder</em>
+<a class="jxr_linenumber" name="L550" href="#L550">550</a> 
+<a class="jxr_linenumber" name="L551" href="#L551">551</a> 	@Test <strong class="jxr_keyword">void</strong> i01_create_nullCtxThrows() {
+<a class="jxr_linenumber" name="L552" href="#L552">552</a> 		assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; PrototextSerializerSession.create((PrototextSerializer) <strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L553" href="#L553">553</a> 	}
+<a class="jxr_linenumber" name="L554" href="#L554">554</a> 
+<a class="jxr_linenumber" name="L555" href="#L555">555</a> 	<em class="jxr_comment">// Nested maps and collections — writeMap / writeCollection paths</em>
+<a class="jxr_linenumber" name="L556" href="#L556">556</a> 
+<a class="jxr_linenumber" name="L557" href="#L557">557</a> 	@Test <strong class="jxr_keyword">void</strong> j_mapWithMapValue() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L558" href="#L558">558</a> 		<em class="jxr_comment">// Map value inside a Map → writeMap: aType.isMap() branch (line 337/340 isMap=true)</em>
+<a class="jxr_linenumber" name="L559" href="#L559">559</a> 		<strong class="jxr_keyword">var</strong> <strong class="jxr_keyword">outer</strong> = <strong class="jxr_keyword">new</strong> LinkedHashMap&lt;String,Object&gt;();
+<a class="jxr_linenumber" name="L560" href="#L560">560</a> 		<strong class="jxr_keyword">var</strong> <strong class="jxr_keyword">inner</strong> = <strong class="jxr_keyword">new</strong> LinkedHashMap&lt;String,Object&gt;();
+<a class="jxr_linenumber" name="L561" href="#L561">561</a> 		<strong class="jxr_keyword">inner</strong>.put(<span class="jxr_string">"k1"</span>, <span class="jxr_string">"v1"</span>);
+<a class="jxr_linenumber" name="L562" href="#L562">562</a> 		<strong class="jxr_keyword">outer</strong>.put(<span class="jxr_string">"nested"</span>, <strong class="jxr_keyword">inner</strong>);
+<a class="jxr_linenumber" name="L563" href="#L563">563</a> 		<strong class="jxr_keyword">var</strong> proto = PrototextSerializer.DEFAULT.write(<strong class="jxr_keyword">outer</strong>);
+<a class="jxr_linenumber" name="L564" href="#L564">564</a> 		assertNotNull(proto);
+<a class="jxr_linenumber" name="L565" href="#L565">565</a> 		assertTrue(proto.contains(<span class="jxr_string">"nested"</span>), <span class="jxr_string">"Expected nested map field: "</span> + proto);
+<a class="jxr_linenumber" name="L566" href="#L566">566</a> 	}
+<a class="jxr_linenumber" name="L567" href="#L567">567</a> 
+<a class="jxr_linenumber" name="L568" href="#L568">568</a> 	@Test <strong class="jxr_keyword">void</strong> j_mapWithCollectionValue() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L569" href="#L569">569</a> 		<em class="jxr_comment">// Collection value inside a Map → writeMap: aType.isCollection() branch</em>
+<a class="jxr_linenumber" name="L570" href="#L570">570</a> 		<strong class="jxr_keyword">var</strong> m = <strong class="jxr_keyword">new</strong> LinkedHashMap&lt;String,Object&gt;();
+<a class="jxr_linenumber" name="L571" href="#L571">571</a> 		m.put(<span class="jxr_string">"items"</span>, List.of(<span class="jxr_string">"a"</span>, <span class="jxr_string">"b"</span>, <span class="jxr_string">"c"</span>));
+<a class="jxr_linenumber" name="L572" href="#L572">572</a> 		<strong class="jxr_keyword">var</strong> proto = PrototextSerializer.DEFAULT.write(m);
+<a class="jxr_linenumber" name="L573" href="#L573">573</a> 		assertNotNull(proto);
+<a class="jxr_linenumber" name="L574" href="#L574">574</a> 		assertTrue(proto.contains(<span class="jxr_string">"items"</span>), <span class="jxr_string">"Expected items field: "</span> + proto);
+<a class="jxr_linenumber" name="L575" href="#L575">575</a> 	}
+<a class="jxr_linenumber" name="L576" href="#L576">576</a> 
+<a class="jxr_linenumber" name="L577" href="#L577">577</a> 	@Test <strong class="jxr_keyword">void</strong> j_beanListProperty_noListSyntax() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L578" href="#L578">578</a> 		<em class="jxr_comment">// Bean property with List&lt;Map&gt; → writeCollection: elementIsBeanOrMap=true, useListSyntaxForBeans=false (default)</em>
+<a class="jxr_linenumber" name="L579" href="#L579">579</a> 		<em class="jxr_comment">// Exercises the non-null-field-name else-if path in writeBeanMap for collection-of-maps</em>
+<a class="jxr_linenumber" name="L580" href="#L580">580</a> 		<strong class="jxr_keyword">var</strong> root = <strong class="jxr_keyword">new</strong> BeanWithBeanListProp();
+<a class="jxr_linenumber" name="L581" href="#L581">581</a> 		<strong class="jxr_keyword">var</strong> item1 = <strong class="jxr_keyword">new</strong> LinkedHashMap&lt;String,Object&gt;();
+<a class="jxr_linenumber" name="L582" href="#L582">582</a> 		item1.put(<span class="jxr_string">"name"</span>, <span class="jxr_string">"alice"</span>);
+<a class="jxr_linenumber" name="L583" href="#L583">583</a> 		<strong class="jxr_keyword">var</strong> item2 = <strong class="jxr_keyword">new</strong> LinkedHashMap&lt;String,Object&gt;();
+<a class="jxr_linenumber" name="L584" href="#L584">584</a> 		item2.put(<span class="jxr_string">"name"</span>, <span class="jxr_string">"bob"</span>);
+<a class="jxr_linenumber" name="L585" href="#L585">585</a> 		root.setChildren(List.of(item1, item2));
+<a class="jxr_linenumber" name="L586" href="#L586">586</a> 		<strong class="jxr_keyword">var</strong> proto = PrototextSerializer.DEFAULT.write(root);
+<a class="jxr_linenumber" name="L587" href="#L587">587</a> 		assertNotNull(proto);
+<a class="jxr_linenumber" name="L588" href="#L588">588</a> 		assertTrue(proto.contains(<span class="jxr_string">"children"</span>), <span class="jxr_string">"Expected children field: "</span> + proto);
+<a class="jxr_linenumber" name="L589" href="#L589">589</a> 	}
+<a class="jxr_linenumber" name="L590" href="#L590">590</a> 
+<a class="jxr_linenumber" name="L591" href="#L591">591</a> 	@Test <strong class="jxr_keyword">void</strong> j_beanListProperty_useListSyntax() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L592" href="#L592">592</a> 		<em class="jxr_comment">// Bean property with List&lt;Map&gt; and useListSyntaxForBeans=true → list syntax path</em>
+<a class="jxr_linenumber" name="L593" href="#L593">593</a> 		<strong class="jxr_keyword">var</strong> s = PrototextSerializer.create().useListSyntaxForBeans(<strong class="jxr_keyword">true</strong>).build();
+<a class="jxr_linenumber" name="L594" href="#L594">594</a> 		<strong class="jxr_keyword">var</strong> root = <strong class="jxr_keyword">new</strong> BeanWithBeanListProp();
+<a class="jxr_linenumber" name="L595" href="#L595">595</a> 		<strong class="jxr_keyword">var</strong> item1 = <strong class="jxr_keyword">new</strong> LinkedHashMap&lt;String,Object&gt;();
+<a class="jxr_linenumber" name="L596" href="#L596">596</a> 		item1.put(<span class="jxr_string">"name"</span>, <span class="jxr_string">"alice"</span>);
+<a class="jxr_linenumber" name="L597" href="#L597">597</a> 		<strong class="jxr_keyword">var</strong> item2 = <strong class="jxr_keyword">new</strong> LinkedHashMap&lt;String,Object&gt;();
+<a class="jxr_linenumber" name="L598" href="#L598">598</a> 		item2.put(<span class="jxr_string">"name"</span>, <span class="jxr_string">"bob"</span>);
+<a class="jxr_linenumber" name="L599" href="#L599">599</a> 		root.setChildren(List.of(item1, item2));
+<a class="jxr_linenumber" name="L600" href="#L600">600</a> 		<strong class="jxr_keyword">var</strong> proto = s.write(root);
+<a class="jxr_linenumber" name="L601" href="#L601">601</a> 		assertNotNull(proto);
+<a class="jxr_linenumber" name="L602" href="#L602">602</a> 		assertTrue(proto.contains(<span class="jxr_string">"children"</span>), <span class="jxr_string">"Expected children field: "</span> + proto);
+<a class="jxr_linenumber" name="L603" href="#L603">603</a> 	}
+<a class="jxr_linenumber" name="L604" href="#L604">604</a> 
+<a class="jxr_linenumber" name="L605" href="#L605">605</a> 	@Test <strong class="jxr_keyword">void</strong> j_collectionOfMaps_asProperty() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L606" href="#L606">606</a> 		<em class="jxr_comment">// Collection items that are Maps → writeCollectionItem: aType.isMap() branch (line 361)</em>
+<a class="jxr_linenumber" name="L607" href="#L607">607</a> 		<strong class="jxr_keyword">var</strong> root = <strong class="jxr_keyword">new</strong> BeanWithMapListProp();
+<a class="jxr_linenumber" name="L608" href="#L608">608</a> 		<strong class="jxr_keyword">var</strong> m1 = <strong class="jxr_keyword">new</strong> LinkedHashMap&lt;String,Object&gt;();
+<a class="jxr_linenumber" name="L609" href="#L609">609</a> 		m1.put(<span class="jxr_string">"x"</span>, <span class="jxr_string">"1"</span>);
+<a class="jxr_linenumber" name="L610" href="#L610">610</a> 		<strong class="jxr_keyword">var</strong> m2 = <strong class="jxr_keyword">new</strong> LinkedHashMap&lt;String,Object&gt;();
+<a class="jxr_linenumber" name="L611" href="#L611">611</a> 		m2.put(<span class="jxr_string">"x"</span>, <span class="jxr_string">"2"</span>);
+<a class="jxr_linenumber" name="L612" href="#L612">612</a> 		root.setEntries(List.of(m1, m2));
+<a class="jxr_linenumber" name="L613" href="#L613">613</a> 		<strong class="jxr_keyword">var</strong> proto = PrototextSerializer.DEFAULT.write(root);
+<a class="jxr_linenumber" name="L614" href="#L614">614</a> 		assertNotNull(proto);
+<a class="jxr_linenumber" name="L615" href="#L615">615</a> 		assertTrue(proto.contains(<span class="jxr_string">"entries"</span>) || proto.contains(<span class="jxr_string">"x"</span>), <span class="jxr_string">"Expected map items: "</span> + proto);
+<a class="jxr_linenumber" name="L616" href="#L616">616</a> 	}
+<a class="jxr_linenumber" name="L617" href="#L617">617</a> 
+<a class="jxr_linenumber" name="L618" href="#L618">618</a> 	@Test <strong class="jxr_keyword">void</strong> j_mapWithBeanValue_writeMap() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L619" href="#L619">619</a> 		<em class="jxr_comment">// Map value that is a bean → writeMap: aType.isBean() branch (line 340 true)</em>
+<a class="jxr_linenumber" name="L620" href="#L620">620</a> 		<strong class="jxr_keyword">var</strong> <strong class="jxr_keyword">outer</strong> = <strong class="jxr_keyword">new</strong> LinkedHashMap&lt;String,Object&gt;();
+<a class="jxr_linenumber" name="L621" href="#L621">621</a> 		<strong class="jxr_keyword">outer</strong>.put(<span class="jxr_string">"child"</span>, <strong class="jxr_keyword">new</strong> ChildBean(<span class="jxr_string">"eve"</span>));
+<a class="jxr_linenumber" name="L622" href="#L622">622</a> 		<strong class="jxr_keyword">var</strong> proto = PrototextSerializer.DEFAULT.write(<strong class="jxr_keyword">outer</strong>);
+<a class="jxr_linenumber" name="L623" href="#L623">623</a> 		assertNotNull(proto);
+<a class="jxr_linenumber" name="L624" href="#L624">624</a> 		assertTrue(proto.contains(<span class="jxr_string">"child"</span>), <span class="jxr_string">"Expected child field: "</span> + proto);
+<a class="jxr_linenumber" name="L625" href="#L625">625</a> 		assertTrue(proto.contains(<span class="jxr_string">"eve"</span>), <span class="jxr_string">"Expected eve in: "</span> + proto);
+<a class="jxr_linenumber" name="L626" href="#L626">626</a> 	}
+<a class="jxr_linenumber" name="L627" href="#L627">627</a> 
+<a class="jxr_linenumber" name="L628" href="#L628">628</a> 	<em class="jxr_comment">// Scalar type dispatch: Date / Calendar / Temporal / Duration / Period / byte[]</em>
+<a class="jxr_linenumber" name="L629" href="#L629">629</a> 
+<a class="jxr_linenumber" name="L630" href="#L630">630</a> 	@Test <strong class="jxr_keyword">void</strong> j01_dateBeanProperty() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L631" href="#L631">631</a> 		<em class="jxr_comment">// Date bean property → writeScalarValue Date branch</em>
+<a class="jxr_linenumber" name="L632" href="#L632">632</a> 		<strong class="jxr_keyword">var</strong> bean = <strong class="jxr_keyword">new</strong> BeanWithDateProp();
+<a class="jxr_linenumber" name="L633" href="#L633">633</a> 		bean.ts = <strong class="jxr_keyword">new</strong> Date(0);
+<a class="jxr_linenumber" name="L634" href="#L634">634</a> 		bean.name = <span class="jxr_string">"dateTest"</span>;
+<a class="jxr_linenumber" name="L635" href="#L635">635</a> 		<strong class="jxr_keyword">var</strong> proto = PrototextSerializer.DEFAULT.write(bean);
+<a class="jxr_linenumber" name="L636" href="#L636">636</a> 		assertNotNull(proto);
+<a class="jxr_linenumber" name="L637" href="#L637">637</a> 		assertTrue(proto.contains(<span class="jxr_string">"ts"</span>), <span class="jxr_string">"Expected ts field: "</span> + proto);
+<a class="jxr_linenumber" name="L638" href="#L638">638</a> 	}
+<a class="jxr_linenumber" name="L639" href="#L639">639</a> 
+<a class="jxr_linenumber" name="L640" href="#L640">640</a> 	@Test <strong class="jxr_keyword">void</strong> j02_calendarBeanProperty() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L641" href="#L641">641</a> 		<em class="jxr_comment">// Calendar bean property → writeScalarValue Calendar branch</em>
+<a class="jxr_linenumber" name="L642" href="#L642">642</a> 		<strong class="jxr_keyword">var</strong> bean = <strong class="jxr_keyword">new</strong> BeanWithCalendarProp();
+<a class="jxr_linenumber" name="L643" href="#L643">643</a> 		bean.cal = Calendar.getInstance();
+<a class="jxr_linenumber" name="L644" href="#L644">644</a> 		bean.label = <span class="jxr_string">"calTest"</span>;
+<a class="jxr_linenumber" name="L645" href="#L645">645</a> 		<strong class="jxr_keyword">var</strong> proto = PrototextSerializer.DEFAULT.write(bean);
+<a class="jxr_linenumber" name="L646" href="#L646">646</a> 		assertNotNull(proto);
+<a class="jxr_linenumber" name="L647" href="#L647">647</a> 		assertTrue(proto.contains(<span class="jxr_string">"cal"</span>), <span class="jxr_string">"Expected cal field: "</span> + proto);
+<a class="jxr_linenumber" name="L648" href="#L648">648</a> 	}
+<a class="jxr_linenumber" name="L649" href="#L649">649</a> 
+<a class="jxr_linenumber" name="L650" href="#L650">650</a> 	@Test <strong class="jxr_keyword">void</strong> j03_temporalBeanProperty() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L651" href="#L651">651</a> 		<em class="jxr_comment">// Instant property → writeScalarValue Temporal branch</em>
+<a class="jxr_linenumber" name="L652" href="#L652">652</a> 		<strong class="jxr_keyword">var</strong> bean = <strong class="jxr_keyword">new</strong> BeanWithInstantProp();
+<a class="jxr_linenumber" name="L653" href="#L653">653</a> 		bean.instant = Instant.ofEpochMilli(0);
+<a class="jxr_linenumber" name="L654" href="#L654">654</a> 		bean.label = <span class="jxr_string">"temporalTest"</span>;
+<a class="jxr_linenumber" name="L655" href="#L655">655</a> 		<strong class="jxr_keyword">var</strong> proto = PrototextSerializer.DEFAULT.write(bean);
+<a class="jxr_linenumber" name="L656" href="#L656">656</a> 		assertNotNull(proto);
+<a class="jxr_linenumber" name="L657" href="#L657">657</a> 		assertTrue(proto.contains(<span class="jxr_string">"instant"</span>), <span class="jxr_string">"Expected instant field: "</span> + proto);
+<a class="jxr_linenumber" name="L658" href="#L658">658</a> 	}
+<a class="jxr_linenumber" name="L659" href="#L659">659</a> 
+<a class="jxr_linenumber" name="L660" href="#L660">660</a> 	@Test <strong class="jxr_keyword">void</strong> j04_durationBeanProperty() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L661" href="#L661">661</a> 		<em class="jxr_comment">// Duration property → writeScalarValue Duration branch</em>
+<a class="jxr_linenumber" name="L662" href="#L662">662</a> 		<strong class="jxr_keyword">var</strong> bean = <strong class="jxr_keyword">new</strong> BeanWithDurationProp();
+<a class="jxr_linenumber" name="L663" href="#L663">663</a> 		bean.dur = Duration.ofSeconds(30);
+<a class="jxr_linenumber" name="L664" href="#L664">664</a> 		bean.label = <span class="jxr_string">"durationTest"</span>;
+<a class="jxr_linenumber" name="L665" href="#L665">665</a> 		<strong class="jxr_keyword">var</strong> proto = PrototextSerializer.DEFAULT.write(bean);
+<a class="jxr_linenumber" name="L666" href="#L666">666</a> 		assertNotNull(proto);
+<a class="jxr_linenumber" name="L667" href="#L667">667</a> 		assertTrue(proto.contains(<span class="jxr_string">"dur"</span>), <span class="jxr_string">"Expected dur field: "</span> + proto);
+<a class="jxr_linenumber" name="L668" href="#L668">668</a> 	}
+<a class="jxr_linenumber" name="L669" href="#L669">669</a> 
+<a class="jxr_linenumber" name="L670" href="#L670">670</a> 	@Test <strong class="jxr_keyword">void</strong> j05_periodBeanProperty() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L671" href="#L671">671</a> 		<em class="jxr_comment">// Period property → writeScalarValue Period branch</em>
+<a class="jxr_linenumber" name="L672" href="#L672">672</a> 		<strong class="jxr_keyword">var</strong> bean = <strong class="jxr_keyword">new</strong> BeanWithPeriodProp();
+<a class="jxr_linenumber" name="L673" href="#L673">673</a> 		bean.period = Period.ofDays(7);
+<a class="jxr_linenumber" name="L674" href="#L674">674</a> 		bean.label = <span class="jxr_string">"periodTest"</span>;
+<a class="jxr_linenumber" name="L675" href="#L675">675</a> 		<strong class="jxr_keyword">var</strong> proto = PrototextSerializer.DEFAULT.write(bean);
+<a class="jxr_linenumber" name="L676" href="#L676">676</a> 		assertNotNull(proto);
+<a class="jxr_linenumber" name="L677" href="#L677">677</a> 		assertTrue(proto.contains(<span class="jxr_string">"period"</span>), <span class="jxr_string">"Expected period field: "</span> + proto);
+<a class="jxr_linenumber" name="L678" href="#L678">678</a> 	}
+<a class="jxr_linenumber" name="L679" href="#L679">679</a> 
+<a class="jxr_linenumber" name="L680" href="#L680">680</a> 	@Test <strong class="jxr_keyword">void</strong> j06_bytesBeanProperty() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L681" href="#L681">681</a> 		<em class="jxr_comment">// byte[] property → writeScalarValue byte[] branch</em>
+<a class="jxr_linenumber" name="L682" href="#L682">682</a> 		<strong class="jxr_keyword">var</strong> bean = <strong class="jxr_keyword">new</strong> BeanWithBytesProp();
+<a class="jxr_linenumber" name="L683" href="#L683">683</a> 		bean.data = <strong class="jxr_keyword">new</strong> byte[] { 1, 2, 3 };
+<a class="jxr_linenumber" name="L684" href="#L684">684</a> 		bean.label = <span class="jxr_string">"bytesTest"</span>;
+<a class="jxr_linenumber" name="L685" href="#L685">685</a> 		<strong class="jxr_keyword">var</strong> proto = PrototextSerializer.DEFAULT.write(bean);
+<a class="jxr_linenumber" name="L686" href="#L686">686</a> 		assertNotNull(proto);
+<a class="jxr_linenumber" name="L687" href="#L687">687</a> 		assertTrue(proto.contains(<span class="jxr_string">"data"</span>), <span class="jxr_string">"Expected data field: "</span> + proto);
+<a class="jxr_linenumber" name="L688" href="#L688">688</a> 	}
+<a class="jxr_linenumber" name="L689" href="#L689">689</a> 
+<a class="jxr_linenumber" name="L690" href="#L690">690</a> 	@Test <strong class="jxr_keyword">void</strong> j07_floatAndDoubleValues() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L691" href="#L691">691</a> 		<em class="jxr_comment">// Float and Double in bean property → writeScalarValue float branch</em>
+<a class="jxr_linenumber" name="L692" href="#L692">692</a> 		<strong class="jxr_keyword">var</strong> bean = <strong class="jxr_keyword">new</strong> BeanWithFloatProp();
+<a class="jxr_linenumber" name="L693" href="#L693">693</a> 		bean.f = 1.5f;
+<a class="jxr_linenumber" name="L694" href="#L694">694</a> 		bean.d = 2.5;
+<a class="jxr_linenumber" name="L695" href="#L695">695</a> 		<strong class="jxr_keyword">var</strong> proto = PrototextSerializer.DEFAULT.write(bean);
+<a class="jxr_linenumber" name="L696" href="#L696">696</a> 		assertNotNull(proto);
+<a class="jxr_linenumber" name="L697" href="#L697">697</a> 		assertTrue(proto.contains(<span class="jxr_string">"1.5"</span>) || proto.contains(<span class="jxr_string">"f"</span>), <span class="jxr_string">"Expected float: "</span> + proto);
+<a class="jxr_linenumber" name="L698" href="#L698">698</a> 		assertTrue(proto.contains(<span class="jxr_string">"2.5"</span>) || proto.contains(<span class="jxr_string">"d"</span>), <span class="jxr_string">"Expected double: "</span> + proto);
+<a class="jxr_linenumber" name="L699" href="#L699">699</a> 	}
+<a class="jxr_linenumber" name="L700" href="#L700">700</a> 
+<a class="jxr_linenumber" name="L701" href="#L701">701</a> 	@Test <strong class="jxr_keyword">void</strong> j08_writeAnything_withFieldName_collection() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L702" href="#L702">702</a> 		<em class="jxr_comment">// writeAnything called with fieldName non-null and Collection type</em>
+<a class="jxr_linenumber" name="L703" href="#L703">703</a> 		<em class="jxr_comment">// This is hit when a bean property has a collection value</em>
+<a class="jxr_linenumber" name="L704" href="#L704">704</a> 		<strong class="jxr_keyword">var</strong> root = <strong class="jxr_keyword">new</strong> BeanWithStringListField();
+<a class="jxr_linenumber" name="L705" href="#L705">705</a> 		root.setNames(List.of(<span class="jxr_string">"Alice"</span>, <span class="jxr_string">"Bob"</span>));
+<a class="jxr_linenumber" name="L706" href="#L706">706</a> 		<strong class="jxr_keyword">var</strong> proto = PrototextSerializer.DEFAULT.write(root);
+<a class="jxr_linenumber" name="L707" href="#L707">707</a> 		assertNotNull(proto);
+<a class="jxr_linenumber" name="L708" href="#L708">708</a> 		assertTrue(proto.contains(<span class="jxr_string">"names"</span>), <span class="jxr_string">"Expected names field: "</span> + proto);
+<a class="jxr_linenumber" name="L709" href="#L709">709</a> 		assertTrue(proto.contains(<span class="jxr_string">"Alice"</span>) &amp;&amp; proto.contains(<span class="jxr_string">"Bob"</span>));
 <a class="jxr_linenumber" name="L710" href="#L710">710</a> 	}
 <a class="jxr_linenumber" name="L711" href="#L711">711</a> 
-<a class="jxr_linenumber" name="L712" href="#L712">712</a> 	@Test <strong class="jxr_keyword">void</strong> k01_rootLevelSwap_toBean() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L713" href="#L713">713</a> 		<strong class="jxr_keyword">var</strong> s = PrototextSerializer.create().swaps(K01_Swap.<strong class="jxr_keyword">class</strong>).build();
-<a class="jxr_linenumber" name="L714" href="#L714">714</a> 		<strong class="jxr_keyword">var</strong> proto = s.write(<strong class="jxr_keyword">new</strong> K01_Wrapper(<span class="jxr_string">"henry"</span>));
-<a class="jxr_linenumber" name="L715" href="#L715">715</a> 		assertNotNull(proto);
-<a class="jxr_linenumber" name="L716" href="#L716">716</a> 		assertTrue(proto.contains(<span class="jxr_string">"henry"</span>), () -&gt; <span class="jxr_string">"Expected henry in: "</span> + proto);
-<a class="jxr_linenumber" name="L717" href="#L717">717</a> 	}
-<a class="jxr_linenumber" name="L718" href="#L718">718</a> 
-<a class="jxr_linenumber" name="L719" href="#L719">719</a> 	@Test <strong class="jxr_keyword">void</strong> k02_getPrototextWriter_reused() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L720" href="#L720">720</a> 		<em class="jxr_comment">// Passing an already-constructed PrototextWriter as the raw output hits getPrototextWriter's</em>
-<a class="jxr_linenumber" name="L721" href="#L721">721</a> 		<em class="jxr_comment">// "output instanceof PrototextWriter" reuse arm directly (no wrapping/setWriter() call).</em>
-<a class="jxr_linenumber" name="L722" href="#L722">722</a> 		<strong class="jxr_keyword">var</strong> session = PrototextSerializer.DEFAULT.createSession().build();
-<a class="jxr_linenumber" name="L723" href="#L723">723</a> 		<strong class="jxr_keyword">var</strong> sw = <strong class="jxr_keyword">new</strong> StringWriter();
-<a class="jxr_linenumber" name="L724" href="#L724">724</a> 		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> pw = <strong class="jxr_keyword">new</strong> PrototextWriter(sw, false, 100, false, <strong class="jxr_keyword">null</strong>)) {
-<a class="jxr_linenumber" name="L725" href="#L725">725</a> 			session.write(<span class="jxr_string">"hello"</span>, pw);
-<a class="jxr_linenumber" name="L726" href="#L726">726</a> 			assertTrue(sw.toString().contains(<span class="jxr_string">"hello"</span>));
-<a class="jxr_linenumber" name="L727" href="#L727">727</a> 		}
-<a class="jxr_linenumber" name="L728" href="#L728">728</a> 	}
-<a class="jxr_linenumber" name="L729" href="#L729">729</a> 
-<a class="jxr_linenumber" name="L730" href="#L730">730</a> 	<em class="jxr_comment">//------------------------------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L731" href="#L731">731</a> 	<em class="jxr_comment">// l0x - debug trace root-level classification branches (bean/map/collection/array/scalar), and the</em>
-<a class="jxr_linenumber" name="L732" href="#L732">732</a> 	<em class="jxr_comment">// aType==null / isRecursion path via maxDepth(0) truncation on the very first push.</em>
-<a class="jxr_linenumber" name="L733" href="#L733">733</a> 	<em class="jxr_comment">//------------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L712" href="#L712">712</a> 	<em class="jxr_comment">// Test fixture beans</em>
+<a class="jxr_linenumber" name="L713" href="#L713">713</a> 
+<a class="jxr_linenumber" name="L714" href="#L714">714</a> 	enum LogLevel { DEBUG, INFO, WARN, ERROR }
+<a class="jxr_linenumber" name="L715" href="#L715">715</a> 
+<a class="jxr_linenumber" name="L716" href="#L716">716</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> BeanWithCommentedProperty {
+<a class="jxr_linenumber" name="L717" href="#L717">717</a> 		<strong class="jxr_keyword">private</strong> String name;
+<a class="jxr_linenumber" name="L718" href="#L718">718</a> 		@Prototext(comment = <span class="jxr_string">"This is the name field"</span>)
+<a class="jxr_linenumber" name="L719" href="#L719">719</a> 		<strong class="jxr_keyword">public</strong> String getName() { <strong class="jxr_keyword">return</strong> name; }
+<a class="jxr_linenumber" name="L720" href="#L720">720</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setName(String v) { name = v; }
+<a class="jxr_linenumber" name="L721" href="#L721">721</a> 	}
+<a class="jxr_linenumber" name="L722" href="#L722">722</a> 
+<a class="jxr_linenumber" name="L723" href="#L723">723</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> BeanWithListOfMaps {
+<a class="jxr_linenumber" name="L724" href="#L724">724</a> 		<strong class="jxr_keyword">private</strong> List&lt;Map&lt;String,Object&gt;&gt; items;
+<a class="jxr_linenumber" name="L725" href="#L725">725</a> 		<strong class="jxr_keyword">public</strong> List&lt;Map&lt;String,Object&gt;&gt; getItems() { <strong class="jxr_keyword">return</strong> items; }
+<a class="jxr_linenumber" name="L726" href="#L726">726</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setItems(List&lt;Map&lt;String,Object&gt;&gt; v) { items = v; }
+<a class="jxr_linenumber" name="L727" href="#L727">727</a> 	}
+<a class="jxr_linenumber" name="L728" href="#L728">728</a> 
+<a class="jxr_linenumber" name="L729" href="#L729">729</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> BeanWithListOfStrings {
+<a class="jxr_linenumber" name="L730" href="#L730">730</a> 		<strong class="jxr_keyword">private</strong> List&lt;String&gt; tags;
+<a class="jxr_linenumber" name="L731" href="#L731">731</a> 		<strong class="jxr_keyword">public</strong> List&lt;String&gt; getTags() { <strong class="jxr_keyword">return</strong> tags; }
+<a class="jxr_linenumber" name="L732" href="#L732">732</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setTags(List&lt;String&gt; v) { tags = v; }
+<a class="jxr_linenumber" name="L733" href="#L733">733</a> 	}
 <a class="jxr_linenumber" name="L734" href="#L734">734</a> 
-<a class="jxr_linenumber" name="L735" href="#L735">735</a> 	@Test <strong class="jxr_keyword">void</strong> l01_debugTrace_maxDepthZero_aTypeNull() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L736" href="#L736">736</a> 		<em class="jxr_comment">// maxDepth(0) makes the FIRST push2() call exceed the depth guard, so aType comes back null --</em>
-<a class="jxr_linenumber" name="L737" href="#L737">737</a> 		<em class="jxr_comment">// the only way writeAnything's own "aType == null -&gt; pop(); return;" short-circuit is reachable.</em>
-<a class="jxr_linenumber" name="L738" href="#L738">738</a> 		PrototextSerializerSession.setDebugTrace(<strong class="jxr_keyword">true</strong>);
-<a class="jxr_linenumber" name="L739" href="#L739">739</a> 		<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L740" href="#L740">740</a> 			PrototextSerializerSession.traceLog.clear();
-<a class="jxr_linenumber" name="L741" href="#L741">741</a> 			<strong class="jxr_keyword">var</strong> s = PrototextSerializer.create().maxDepth(0).build();
-<a class="jxr_linenumber" name="L742" href="#L742">742</a> 			<strong class="jxr_keyword">var</strong> proto = s.write(JsonMap.of(<span class="jxr_string">"k"</span>, <span class="jxr_string">"v"</span>));
-<a class="jxr_linenumber" name="L743" href="#L743">743</a> 			assertTrue(proto == <strong class="jxr_keyword">null</strong> || proto.isEmpty(), () -&gt; <span class="jxr_string">"Expected no output past the depth guard: "</span> + proto);
-<a class="jxr_linenumber" name="L744" href="#L744">744</a> 			assertFalse(PrototextSerializerSession.traceLog.isEmpty());
-<a class="jxr_linenumber" name="L745" href="#L745">745</a> 			assertTrue(PrototextSerializerSession.traceLog.stream().anyMatch(x -&gt; x.contains(<span class="jxr_string">"aType=null"</span>)),
-<a class="jxr_linenumber" name="L746" href="#L746">746</a> 				() -&gt; <span class="jxr_string">"Expected an aType=null trace entry in: "</span> + PrototextSerializerSession.traceLog);
-<a class="jxr_linenumber" name="L747" href="#L747">747</a> 		} <strong class="jxr_keyword">finally</strong> {
-<a class="jxr_linenumber" name="L748" href="#L748">748</a> 			PrototextSerializerSession.setDebugTrace(false);
-<a class="jxr_linenumber" name="L749" href="#L749">749</a> 		}
-<a class="jxr_linenumber" name="L750" href="#L750">750</a> 	}
-<a class="jxr_linenumber" name="L751" href="#L751">751</a> 
-<a class="jxr_linenumber" name="L752" href="#L752">752</a> 	@Test <strong class="jxr_keyword">void</strong> l02_debugTrace_beanPath() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L753" href="#L753">753</a> 		<em class="jxr_comment">// Swap-to-bean at root (see k01) + debug trace -&gt; hits the "path=bean" classification branch,</em>
-<a class="jxr_linenumber" name="L754" href="#L754">754</a> 		<em class="jxr_comment">// only reachable via a root-level swap since ordinary beans never reach writeAnything.</em>
-<a class="jxr_linenumber" name="L755" href="#L755">755</a> 		PrototextSerializerSession.setDebugTrace(<strong class="jxr_keyword">true</strong>);
-<a class="jxr_linenumber" name="L756" href="#L756">756</a> 		<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L757" href="#L757">757</a> 			PrototextSerializerSession.traceLog.clear();
-<a class="jxr_linenumber" name="L758" href="#L758">758</a> 			<strong class="jxr_keyword">var</strong> s = PrototextSerializer.create().swaps(K01_Swap.<strong class="jxr_keyword">class</strong>).build();
-<a class="jxr_linenumber" name="L759" href="#L759">759</a> 			s.write(<strong class="jxr_keyword">new</strong> K01_Wrapper(<span class="jxr_string">"ida"</span>));
-<a class="jxr_linenumber" name="L760" href="#L760">760</a> 			assertTrue(PrototextSerializerSession.traceLog.stream().anyMatch(x -&gt; x.contains(<span class="jxr_string">"path=bean"</span>)),
-<a class="jxr_linenumber" name="L761" href="#L761">761</a> 				() -&gt; <span class="jxr_string">"Expected path=bean trace entry in: "</span> + PrototextSerializerSession.traceLog);
-<a class="jxr_linenumber" name="L762" href="#L762">762</a> 		} <strong class="jxr_keyword">finally</strong> {
-<a class="jxr_linenumber" name="L763" href="#L763">763</a> 			PrototextSerializerSession.setDebugTrace(false);
-<a class="jxr_linenumber" name="L764" href="#L764">764</a> 		}
-<a class="jxr_linenumber" name="L765" href="#L765">765</a> 	}
-<a class="jxr_linenumber" name="L766" href="#L766">766</a> 
-<a class="jxr_linenumber" name="L767" href="#L767">767</a> 	@Test <strong class="jxr_keyword">void</strong> l03_debugTrace_arrayPath() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L768" href="#L768">768</a> 		<em class="jxr_comment">// Array at root + debug trace -&gt; hits the isArray() side of the isCollection()||isArray() check.</em>
-<a class="jxr_linenumber" name="L769" href="#L769">769</a> 		PrototextSerializerSession.setDebugTrace(<strong class="jxr_keyword">true</strong>);
-<a class="jxr_linenumber" name="L770" href="#L770">770</a> 		<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L771" href="#L771">771</a> 			PrototextSerializerSession.traceLog.clear();
-<a class="jxr_linenumber" name="L772" href="#L772">772</a> 			PrototextSerializer.DEFAULT.write(<strong class="jxr_keyword">new</strong> <strong class="jxr_keyword">int</strong>[] { 1, 2 });
-<a class="jxr_linenumber" name="L773" href="#L773">773</a> 			assertTrue(PrototextSerializerSession.traceLog.stream().anyMatch(x -&gt; x.contains(<span class="jxr_string">"path=collection"</span>)),
-<a class="jxr_linenumber" name="L774" href="#L774">774</a> 				() -&gt; <span class="jxr_string">"Expected path=collection trace entry in: "</span> + PrototextSerializerSession.traceLog);
-<a class="jxr_linenumber" name="L775" href="#L775">775</a> 		} <strong class="jxr_keyword">finally</strong> {
-<a class="jxr_linenumber" name="L776" href="#L776">776</a> 			PrototextSerializerSession.setDebugTrace(false);
-<a class="jxr_linenumber" name="L777" href="#L777">777</a> 		}
-<a class="jxr_linenumber" name="L778" href="#L778">778</a> 	}
-<a class="jxr_linenumber" name="L779" href="#L779">779</a> 
-<a class="jxr_linenumber" name="L780" href="#L780">780</a> 	@Test <strong class="jxr_keyword">void</strong> l04_debugTrace_scalarPath() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L781" href="#L781">781</a> 		<em class="jxr_comment">// Scalar at root + debug trace -&gt; hits the "path=scalar" else-arm (both isCollection() and</em>
-<a class="jxr_linenumber" name="L782" href="#L782">782</a> 		<em class="jxr_comment">// isArray() false).</em>
-<a class="jxr_linenumber" name="L783" href="#L783">783</a> 		PrototextSerializerSession.setDebugTrace(<strong class="jxr_keyword">true</strong>);
-<a class="jxr_linenumber" name="L784" href="#L784">784</a> 		<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L785" href="#L785">785</a> 			PrototextSerializerSession.traceLog.clear();
-<a class="jxr_linenumber" name="L786" href="#L786">786</a> 			PrototextSerializer.DEFAULT.write(<span class="jxr_string">"hello"</span>);
-<a class="jxr_linenumber" name="L787" href="#L787">787</a> 			assertTrue(PrototextSerializerSession.traceLog.stream().anyMatch(x -&gt; x.contains(<span class="jxr_string">"path=scalar"</span>)),
-<a class="jxr_linenumber" name="L788" href="#L788">788</a> 				() -&gt; <span class="jxr_string">"Expected path=scalar trace entry in: "</span> + PrototextSerializerSession.traceLog);
-<a class="jxr_linenumber" name="L789" href="#L789">789</a> 		} <strong class="jxr_keyword">finally</strong> {
-<a class="jxr_linenumber" name="L790" href="#L790">790</a> 			PrototextSerializerSession.setDebugTrace(false);
-<a class="jxr_linenumber" name="L791" href="#L791">791</a> 		}
-<a class="jxr_linenumber" name="L792" href="#L792">792</a> 	}
-<a class="jxr_linenumber" name="L793" href="#L793">793</a> 
-<a class="jxr_linenumber" name="L794" href="#L794">794</a> 	<em class="jxr_comment">//------------------------------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L795" href="#L795">795</a> 	<em class="jxr_comment">// m0x - root-level Optional and swap dispatch (isObject()-after-swap fallback, swap-to-null).</em>
-<a class="jxr_linenumber" name="L796" href="#L796">796</a> 	<em class="jxr_comment">//------------------------------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L797" href="#L797">797</a> 
-<a class="jxr_linenumber" name="L798" href="#L798">798</a> 	@Test <strong class="jxr_keyword">void</strong> m01_rootLevelOptionalPresent() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L799" href="#L799">799</a> 		<em class="jxr_comment">// isOptional(aType) true-branch at the root (as opposed to g01, which only exercises it via a</em>
-<a class="jxr_linenumber" name="L800" href="#L800">800</a> 		<em class="jxr_comment">// Map property value).</em>
-<a class="jxr_linenumber" name="L801" href="#L801">801</a> 		<strong class="jxr_keyword">var</strong> proto = PrototextSerializer.DEFAULT.write(Optional.of(<span class="jxr_string">"hello"</span>));
-<a class="jxr_linenumber" name="L802" href="#L802">802</a> 		assertNotNull(proto);
-<a class="jxr_linenumber" name="L803" href="#L803">803</a> 		assertTrue(proto.contains(<span class="jxr_string">"hello"</span>));
-<a class="jxr_linenumber" name="L804" href="#L804">804</a> 	}
-<a class="jxr_linenumber" name="L805" href="#L805">805</a> 
-<a class="jxr_linenumber" name="L806" href="#L806">806</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> M02_Wrapper {
-<a class="jxr_linenumber" name="L807" href="#L807">807</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> String val;
-<a class="jxr_linenumber" name="L808" href="#L808">808</a> 		<strong class="jxr_keyword">public</strong> M02_Wrapper(String val) { <strong class="jxr_keyword">this</strong>.val = val; }
-<a class="jxr_linenumber" name="L809" href="#L809">809</a> 	}
-<a class="jxr_linenumber" name="L810" href="#L810">810</a> 
-<a class="jxr_linenumber" name="L811" href="#L811">811</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> M02_Swap <strong class="jxr_keyword">extends</strong> org.apache.juneau.marshall.swap.ObjectSwap&lt;M02_Wrapper,Object&gt; {
-<a class="jxr_linenumber" name="L812" href="#L812">812</a> 		@Override <strong class="jxr_keyword">public</strong> Object swap(org.apache.juneau.marshall.MarshallingSession session, M02_Wrapper o) { <strong class="jxr_keyword">return</strong> o.val; }
-<a class="jxr_linenumber" name="L813" href="#L813">813</a> 	}
-<a class="jxr_linenumber" name="L814" href="#L814">814</a> 
-<a class="jxr_linenumber" name="L815" href="#L815">815</a> 	@Test <strong class="jxr_keyword">void</strong> m02_rootLevelSwap_toObjectClassMeta() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L816" href="#L816">816</a> 		<em class="jxr_comment">// The swap's declared target type is Object itself, so swap.getSwapClassMeta(this).isObject() is</em>
-<a class="jxr_linenumber" name="L817" href="#L817">817</a> 		<em class="jxr_comment">// true, forcing the isObject() fallback to re-resolve the swapped value's runtime type.</em>
-<a class="jxr_linenumber" name="L818" href="#L818">818</a> 		<strong class="jxr_keyword">var</strong> s = PrototextSerializer.create().swaps(M02_Swap.<strong class="jxr_keyword">class</strong>).build();
-<a class="jxr_linenumber" name="L819" href="#L819">819</a> 		<strong class="jxr_keyword">var</strong> proto = s.write(<strong class="jxr_keyword">new</strong> M02_Wrapper(<span class="jxr_string">"swapped-value"</span>));
-<a class="jxr_linenumber" name="L820" href="#L820">820</a> 		assertNotNull(proto);
-<a class="jxr_linenumber" name="L821" href="#L821">821</a> 		assertTrue(proto.contains(<span class="jxr_string">"swapped-value"</span>));
-<a class="jxr_linenumber" name="L822" href="#L822">822</a> 	}
-<a class="jxr_linenumber" name="L823" href="#L823">823</a> 
-<a class="jxr_linenumber" name="L824" href="#L824">824</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> M03_Wrapper {
-<a class="jxr_linenumber" name="L825" href="#L825">825</a> 	}
-<a class="jxr_linenumber" name="L826" href="#L826">826</a> 
-<a class="jxr_linenumber" name="L827" href="#L827">827</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> M03_Swap <strong class="jxr_keyword">extends</strong> org.apache.juneau.marshall.swap.ObjectSwap&lt;M03_Wrapper,String&gt; {
-<a class="jxr_linenumber" name="L828" href="#L828">828</a> 		@Override <strong class="jxr_keyword">public</strong> String swap(org.apache.juneau.marshall.MarshallingSession session, M03_Wrapper o) { <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>; }
-<a class="jxr_linenumber" name="L829" href="#L829">829</a> 	}
-<a class="jxr_linenumber" name="L830" href="#L830">830</a> 
-<a class="jxr_linenumber" name="L831" href="#L831">831</a> 	@Test <strong class="jxr_keyword">void</strong> m03_rootLevelSwap_toNull() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L832" href="#L832">832</a> 		<em class="jxr_comment">// Swap returns null -&gt; writeAnything's post-swap "o == null -&gt; return;" short-circuit.</em>
-<a class="jxr_linenumber" name="L833" href="#L833">833</a> 		<strong class="jxr_keyword">var</strong> s = PrototextSerializer.create().swaps(M03_Swap.<strong class="jxr_keyword">class</strong>).build();
-<a class="jxr_linenumber" name="L834" href="#L834">834</a> 		<strong class="jxr_keyword">var</strong> proto = s.write(<strong class="jxr_keyword">new</strong> M03_Wrapper());
-<a class="jxr_linenumber" name="L835" href="#L835">835</a> 		assertTrue(proto == <strong class="jxr_keyword">null</strong> || proto.isEmpty(), () -&gt; <span class="jxr_string">"Expected no output for a swap-to-null root: "</span> + proto);
-<a class="jxr_linenumber" name="L836" href="#L836">836</a> 	}
-<a class="jxr_linenumber" name="L837" href="#L837">837</a> 
-<a class="jxr_linenumber" name="L838" href="#L838">838</a> 	<em class="jxr_comment">//------------------------------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L839" href="#L839">839</a> 	<em class="jxr_comment">// n0x - writeScalarValue's own per-element swap dispatch (isObject() fallback, swap-to-null), reached</em>
-<a class="jxr_linenumber" name="L840" href="#L840">840</a> 	<em class="jxr_comment">// for collection/array elements that arrive without having gone through writeAnything's swap step.</em>
-<a class="jxr_linenumber" name="L841" href="#L841">841</a> 	<em class="jxr_comment">//------------------------------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L842" href="#L842">842</a> 
-<a class="jxr_linenumber" name="L843" href="#L843">843</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> N01_Elem {
-<a class="jxr_linenumber" name="L844" href="#L844">844</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> String v;
-<a class="jxr_linenumber" name="L845" href="#L845">845</a> 		<strong class="jxr_keyword">public</strong> N01_Elem(String v) { <strong class="jxr_keyword">this</strong>.v = v; }
-<a class="jxr_linenumber" name="L846" href="#L846">846</a> 	}
-<a class="jxr_linenumber" name="L847" href="#L847">847</a> 
-<a class="jxr_linenumber" name="L848" href="#L848">848</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> N01_Swap <strong class="jxr_keyword">extends</strong> org.apache.juneau.marshall.swap.ObjectSwap&lt;N01_Elem,Object&gt; {
-<a class="jxr_linenumber" name="L849" href="#L849">849</a> 		@Override <strong class="jxr_keyword">public</strong> Object swap(org.apache.juneau.marshall.MarshallingSession session, N01_Elem o) { <strong class="jxr_keyword">return</strong> o.v; }
-<a class="jxr_linenumber" name="L850" href="#L850">850</a> 	}
-<a class="jxr_linenumber" name="L851" href="#L851">851</a> 
-<a class="jxr_linenumber" name="L852" href="#L852">852</a> 	@Test <strong class="jxr_keyword">void</strong> n01_listElement_swapToObjectClassMeta() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L853" href="#L853">853</a> 		<strong class="jxr_keyword">var</strong> s = PrototextSerializer.create().swaps(N01_Swap.<strong class="jxr_keyword">class</strong>).build();
-<a class="jxr_linenumber" name="L854" href="#L854">854</a> 		<strong class="jxr_keyword">var</strong> root = <strong class="jxr_keyword">new</strong> LinkedHashMap&lt;String,Object&gt;();
-<a class="jxr_linenumber" name="L855" href="#L855">855</a> 		root.put(<span class="jxr_string">"items"</span>, List.of(<strong class="jxr_keyword">new</strong> N01_Elem(<span class="jxr_string">"alpha"</span>), <strong class="jxr_keyword">new</strong> N01_Elem(<span class="jxr_string">"beta"</span>)));
-<a class="jxr_linenumber" name="L856" href="#L856">856</a> 		<strong class="jxr_keyword">var</strong> proto = s.write(root);
-<a class="jxr_linenumber" name="L857" href="#L857">857</a> 		assertNotNull(proto);
-<a class="jxr_linenumber" name="L858" href="#L858">858</a> 		assertTrue(proto.contains(<span class="jxr_string">"alpha"</span>) &amp;&amp; proto.contains(<span class="jxr_string">"beta"</span>), () -&gt; <span class="jxr_string">"Expected alpha+beta in: "</span> + proto);
-<a class="jxr_linenumber" name="L859" href="#L859">859</a> 	}
-<a class="jxr_linenumber" name="L860" href="#L860">860</a> 
-<a class="jxr_linenumber" name="L861" href="#L861">861</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> N02_Elem { }
-<a class="jxr_linenumber" name="L862" href="#L862">862</a> 
-<a class="jxr_linenumber" name="L863" href="#L863">863</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> N02_Swap <strong class="jxr_keyword">extends</strong> org.apache.juneau.marshall.swap.ObjectSwap&lt;N02_Elem,String&gt; {
-<a class="jxr_linenumber" name="L864" href="#L864">864</a> 		@Override <strong class="jxr_keyword">public</strong> String swap(org.apache.juneau.marshall.MarshallingSession session, N02_Elem o) { <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>; }
-<a class="jxr_linenumber" name="L865" href="#L865">865</a> 	}
-<a class="jxr_linenumber" name="L866" href="#L866">866</a> 
-<a class="jxr_linenumber" name="L867" href="#L867">867</a> 	@Test <strong class="jxr_keyword">void</strong> n02_listElement_swapToNull() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L868" href="#L868">868</a> 		<strong class="jxr_keyword">var</strong> s = PrototextSerializer.create().swaps(N02_Swap.<strong class="jxr_keyword">class</strong>).build();
-<a class="jxr_linenumber" name="L869" href="#L869">869</a> 		<strong class="jxr_keyword">var</strong> root = <strong class="jxr_keyword">new</strong> LinkedHashMap&lt;String,Object&gt;();
-<a class="jxr_linenumber" name="L870" href="#L870">870</a> 		root.put(<span class="jxr_string">"items"</span>, List.of(<strong class="jxr_keyword">new</strong> N02_Elem()));
-<a class="jxr_linenumber" name="L871" href="#L871">871</a> 		<em class="jxr_comment">// Should not throw even though the sole element swaps to null.</em>
-<a class="jxr_linenumber" name="L872" href="#L872">872</a> 		<strong class="jxr_keyword">var</strong> proto = s.write(root);
-<a class="jxr_linenumber" name="L873" href="#L873">873</a> 		assertNotNull(proto);
-<a class="jxr_linenumber" name="L874" href="#L874">874</a> 	}
-<a class="jxr_linenumber" name="L875" href="#L875">875</a> 
-<a class="jxr_linenumber" name="L876" href="#L876">876</a> 	@Test <strong class="jxr_keyword">void</strong> n03_listElement_explicitNull() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L877" href="#L877">877</a> 		<em class="jxr_comment">// A null list element reaches writeScalarValue directly (no filtering in writeCollection's</em>
-<a class="jxr_linenumber" name="L878" href="#L878">878</a> 		<em class="jxr_comment">// scalar-list branch) -- exercises writeScalarValue's own leading "value == null -&gt; return;" guard.</em>
-<a class="jxr_linenumber" name="L879" href="#L879">879</a> 		<strong class="jxr_keyword">var</strong> root = <strong class="jxr_keyword">new</strong> LinkedHashMap&lt;String,Object&gt;();
-<a class="jxr_linenumber" name="L880" href="#L880">880</a> 		root.put(<span class="jxr_string">"items"</span>, Arrays.asList(<span class="jxr_string">"a"</span>, <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"b"</span>));
-<a class="jxr_linenumber" name="L881" href="#L881">881</a> 		<strong class="jxr_keyword">var</strong> proto = PrototextSerializer.DEFAULT.write(root);
-<a class="jxr_linenumber" name="L882" href="#L882">882</a> 		assertNotNull(proto);
-<a class="jxr_linenumber" name="L883" href="#L883">883</a> 		assertTrue(proto.contains(<span class="jxr_string">"a"</span>) &amp;&amp; proto.contains(<span class="jxr_string">"b"</span>));
-<a class="jxr_linenumber" name="L884" href="#L884">884</a> 	}
-<a class="jxr_linenumber" name="L885" href="#L885">885</a> 
-<a class="jxr_linenumber" name="L886" href="#L886">886</a> 	<em class="jxr_comment">//------------------------------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L887" href="#L887">887</a> 	<em class="jxr_comment">// o0x - writeCollectionItem / writeBeanOrMapItem dispatch: real bean elements (not maps).</em>
-<a class="jxr_linenumber" name="L888" href="#L888">888</a> 	<em class="jxr_comment">//</em>
-<a class="jxr_linenumber" name="L889" href="#L889">889</a> 	<em class="jxr_comment">// IMPORTANT (latent gap found while writing these tests): writeBeanMap's OWN inline collection</em>
-<a class="jxr_linenumber" name="L890" href="#L890">890</a> 	<em class="jxr_comment">// handling (elType = aType.getElementType() at line 283) resolves the element type from the</em>
-<a class="jxr_linenumber" name="L891" href="#L891">891</a> 	<em class="jxr_comment">// COLLECTION VALUE'S RUNTIME CLASS via getClassMetaForObject(value, cMeta) -- which, per</em>
-<a class="jxr_linenumber" name="L892" href="#L892">892</a> 	<em class="jxr_comment">// MarshallingSession#getClassMetaForObject(Object,ClassMeta), ALWAYS uses o.getClass() and never</em>
-<a class="jxr_linenumber" name="L893" href="#L893">893</a> 	<em class="jxr_comment">// consults the declared generic parameter. Generic collections (List&lt;X&gt;, Stream&lt;X&gt;) erase X at</em>
-<a class="jxr_linenumber" name="L894" href="#L894">894</a> 	<em class="jxr_comment">// runtime, so elType there is always Object -- meaning a List&lt;ChildBean&gt; or List&lt;Map&gt; BEAN PROPERTY</em>
-<a class="jxr_linenumber" name="L895" href="#L895">895</a> 	<em class="jxr_comment">// NEVER hits elType.isBean()||isMap() at line 284 and always falls through to the plain scalar-list</em>
-<a class="jxr_linenumber" name="L896" href="#L896">896</a> 	<em class="jxr_comment">// branch (toString() per element). Only ARRAYS retain element-type info in their own runtime Class</em>
-<a class="jxr_linenumber" name="L897" href="#L897">897</a> 	<em class="jxr_comment">// (arr.getClass().getComponentType()), which is why h04/h04b's Map[]-property tests correctly hit the</em>
-<a class="jxr_linenumber" name="L898" href="#L898">898</a> 	<em class="jxr_comment">// nested-message path while List&lt;Map&gt;-property tests (h02/h03/h05/j_beanListProperty_*, and this bug</em>
-<a class="jxr_linenumber" name="L899" href="#L899">899</a> 	<em class="jxr_comment">// was already latent in those) silently degrade to scalar toString() output -- their weak</em>
-<a class="jxr_linenumber" name="L900" href="#L900">900</a> 	<em class="jxr_comment">// proto.contains("alpha") assertions pass either way, masking the gap. The standalone writeCollection</em>
-<a class="jxr_linenumber" name="L901" href="#L901">901</a> 	<em class="jxr_comment">// helper (used only by writeAnything's root dispatch and writeMap's map-VALUE dispatch, never by</em>
-<a class="jxr_linenumber" name="L902" href="#L902">902</a> 	<em class="jxr_comment">// writeBeanMap) does NOT have this problem since it has an explicit first-element-sniffing fallback</em>
-<a class="jxr_linenumber" name="L903" href="#L903">903</a> 	<em class="jxr_comment">// (line 380-383) for genuinely Object-typed elements. See o01/o02 (arrays, hits line 284 directly) vs</em>
-<a class="jxr_linenumber" name="L904" href="#L904">904</a> 	<em class="jxr_comment">// o03/o04 (root-level map values, hits the sniffing fallback in the standalone writeCollection).</em>
-<a class="jxr_linenumber" name="L905" href="#L905">905</a> 	<em class="jxr_comment">//------------------------------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L906" href="#L906">906</a> 
-<a class="jxr_linenumber" name="L907" href="#L907">907</a> 	@Test <strong class="jxr_keyword">void</strong> o01_beanPropertyArrayOfRealBeans() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L908" href="#L908">908</a> 		<em class="jxr_comment">// ChildBean[] (not List&lt;ChildBean&gt;) -- arrays retain element-type info in their own runtime Class,</em>
-<a class="jxr_linenumber" name="L909" href="#L909">909</a> 		<em class="jxr_comment">// so this correctly hits writeBeanMap's elType.isBean() branch directly (line 284) and</em>
-<a class="jxr_linenumber" name="L910" href="#L910">910</a> 		<em class="jxr_comment">// writeBeanOrMapItem's else (bean) branch (line 373).</em>
-<a class="jxr_linenumber" name="L911" href="#L911">911</a> 		<strong class="jxr_keyword">var</strong> root = <strong class="jxr_keyword">new</strong> BeanWithBeanArrayProp();
-<a class="jxr_linenumber" name="L912" href="#L912">912</a> 		root.setKids(<strong class="jxr_keyword">new</strong> ChildBean[] { <strong class="jxr_keyword">new</strong> ChildBean(<span class="jxr_string">"alice"</span>), <strong class="jxr_keyword">new</strong> ChildBean(<span class="jxr_string">"bob"</span>) });
-<a class="jxr_linenumber" name="L913" href="#L913">913</a> 		<strong class="jxr_keyword">var</strong> proto = PrototextSerializer.DEFAULT.write(root);
-<a class="jxr_linenumber" name="L914" href="#L914">914</a> 		assertNotNull(proto);
-<a class="jxr_linenumber" name="L915" href="#L915">915</a> 		assertTrue(proto.contains(<span class="jxr_string">"alice"</span>) &amp;&amp; proto.contains(<span class="jxr_string">"bob"</span>), () -&gt; <span class="jxr_string">"Expected alice+bob in: "</span> + proto);
-<a class="jxr_linenumber" name="L916" href="#L916">916</a> 	}
-<a class="jxr_linenumber" name="L917" href="#L917">917</a> 
-<a class="jxr_linenumber" name="L918" href="#L918">918</a> 	@Test <strong class="jxr_keyword">void</strong> o02_beanPropertyArrayOfRealBeans_listSyntax() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L919" href="#L919">919</a> 		<em class="jxr_comment">// Same as o01 but with useListSyntaxForBeans=true -- exercises writeCollectionItem's bean branch</em>
-<a class="jxr_linenumber" name="L920" href="#L920">920</a> 		<em class="jxr_comment">// (line 360) via writeBeanMap's list-syntax path (writeCollectionItem, not writeBeanOrMapItem).</em>
-<a class="jxr_linenumber" name="L921" href="#L921">921</a> 		<strong class="jxr_keyword">var</strong> s = PrototextSerializer.create().useListSyntaxForBeans(<strong class="jxr_keyword">true</strong>).build();
-<a class="jxr_linenumber" name="L922" href="#L922">922</a> 		<strong class="jxr_keyword">var</strong> root = <strong class="jxr_keyword">new</strong> BeanWithBeanArrayProp();
-<a class="jxr_linenumber" name="L923" href="#L923">923</a> 		root.setKids(<strong class="jxr_keyword">new</strong> ChildBean[] { <strong class="jxr_keyword">new</strong> ChildBean(<span class="jxr_string">"alice"</span>), <strong class="jxr_keyword">new</strong> ChildBean(<span class="jxr_string">"bob"</span>) });
-<a class="jxr_linenumber" name="L924" href="#L924">924</a> 		<strong class="jxr_keyword">var</strong> proto = s.write(root);
-<a class="jxr_linenumber" name="L925" href="#L925">925</a> 		assertNotNull(proto);
-<a class="jxr_linenumber" name="L926" href="#L926">926</a> 		assertTrue(proto.contains(<span class="jxr_string">"["</span>) &amp;&amp; proto.contains(<span class="jxr_string">"]"</span>));
-<a class="jxr_linenumber" name="L927" href="#L927">927</a> 		assertTrue(proto.contains(<span class="jxr_string">"alice"</span>) &amp;&amp; proto.contains(<span class="jxr_string">"bob"</span>));
-<a class="jxr_linenumber" name="L928" href="#L928">928</a> 	}
-<a class="jxr_linenumber" name="L929" href="#L929">929</a> 
-<a class="jxr_linenumber" name="L930" href="#L930">930</a> 	@Test <strong class="jxr_keyword">void</strong> o03_mapValueList_firstElementSniffedAsBean() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L931" href="#L931">931</a> 		<em class="jxr_comment">// A root-level Map value with a List&lt;Object&gt; of real (non-Map) bean instances -- routed through</em>
-<a class="jxr_linenumber" name="L932" href="#L932">932</a> 		<em class="jxr_comment">// writeMap -&gt; the STANDALONE writeCollection (not writeBeanMap's inline logic), which sniffs the</em>
-<a class="jxr_linenumber" name="L933" href="#L933">933</a> 		<em class="jxr_comment">// first element's runtime type: getClassMetaForObject(first).isBean()==true (line 382), as opposed</em>
-<a class="jxr_linenumber" name="L934" href="#L934">934</a> 		<em class="jxr_comment">// to c01's isMap()==true.</em>
-<a class="jxr_linenumber" name="L935" href="#L935">935</a> 		<strong class="jxr_keyword">var</strong> root = <strong class="jxr_keyword">new</strong> LinkedHashMap&lt;String,Object&gt;();
-<a class="jxr_linenumber" name="L936" href="#L936">936</a> 		root.put(<span class="jxr_string">"children"</span>, List.of(<strong class="jxr_keyword">new</strong> ChildBean(<span class="jxr_string">"carol"</span>), <strong class="jxr_keyword">new</strong> ChildBean(<span class="jxr_string">"dave"</span>)));
-<a class="jxr_linenumber" name="L937" href="#L937">937</a> 		<strong class="jxr_keyword">var</strong> proto = PrototextSerializer.DEFAULT.write(root);
-<a class="jxr_linenumber" name="L938" href="#L938">938</a> 		assertNotNull(proto);
-<a class="jxr_linenumber" name="L939" href="#L939">939</a> 		assertTrue(proto.contains(<span class="jxr_string">"carol"</span>) &amp;&amp; proto.contains(<span class="jxr_string">"dave"</span>), () -&gt; <span class="jxr_string">"Expected carol+dave in: "</span> + proto);
-<a class="jxr_linenumber" name="L940" href="#L940">940</a> 	}
-<a class="jxr_linenumber" name="L941" href="#L941">941</a> 
-<a class="jxr_linenumber" name="L942" href="#L942">942</a> 	@Test <strong class="jxr_keyword">void</strong> o04_mapValueList_mixedMapAndScalar() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L943" href="#L943">943</a> 		<em class="jxr_comment">// Heterogeneous List&lt;Object&gt; as a root-level Map value: first element is a Map (elementIsBeanOrMap</em>
-<a class="jxr_linenumber" name="L944" href="#L944">944</a> 		<em class="jxr_comment">// sniffed true), second is a plain String -- exercises writeCollectionItem's else (scalar) branch</em>
-<a class="jxr_linenumber" name="L945" href="#L945">945</a> 		<em class="jxr_comment">// (line 366), only reachable when the collection was classified bean/map-like by its first element</em>
-<a class="jxr_linenumber" name="L946" href="#L946">946</a> 		<em class="jxr_comment">// but a LATER element isn't itself a bean or map.</em>
-<a class="jxr_linenumber" name="L947" href="#L947">947</a> 		<strong class="jxr_keyword">var</strong> m1 = <strong class="jxr_keyword">new</strong> LinkedHashMap&lt;String,Object&gt;();
-<a class="jxr_linenumber" name="L948" href="#L948">948</a> 		m1.put(<span class="jxr_string">"k"</span>, <span class="jxr_string">"v"</span>);
-<a class="jxr_linenumber" name="L949" href="#L949">949</a> 		<strong class="jxr_keyword">var</strong> root = <strong class="jxr_keyword">new</strong> LinkedHashMap&lt;String,Object&gt;();
-<a class="jxr_linenumber" name="L950" href="#L950">950</a> 		root.put(<span class="jxr_string">"children"</span>, List.of(m1, <span class="jxr_string">"plainScalar"</span>));
-<a class="jxr_linenumber" name="L951" href="#L951">951</a> 		<strong class="jxr_keyword">var</strong> proto = PrototextSerializer.DEFAULT.write(root);
-<a class="jxr_linenumber" name="L952" href="#L952">952</a> 		assertNotNull(proto);
-<a class="jxr_linenumber" name="L953" href="#L953">953</a> 		assertTrue(proto.contains(<span class="jxr_string">"plainScalar"</span>), () -&gt; <span class="jxr_string">"Expected plainScalar in: "</span> + proto);
-<a class="jxr_linenumber" name="L954" href="#L954">954</a> 	}
-<a class="jxr_linenumber" name="L955" href="#L955">955</a> 
-<a class="jxr_linenumber" name="L956" href="#L956">956</a> 	<em class="jxr_comment">//------------------------------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L957" href="#L957">957</a> 	<em class="jxr_comment">// p0x - writeStreamable's own elType.isBean()||isMap() dispatch (line 426).</em>
-<a class="jxr_linenumber" name="L958" href="#L958">958</a> 	<em class="jxr_comment">//</em>
-<a class="jxr_linenumber" name="L959" href="#L959">959</a> 	<em class="jxr_comment">// NOTE: writeBeanMap has NO isStreamable() branch at all -- a bean property of type Stream&lt;X&gt; falls</em>
-<a class="jxr_linenumber" name="L960" href="#L960">960</a> 	<em class="jxr_comment">// straight through to the plain scalar branch (line 321-324), which stringifies the Stream object</em>
-<a class="jxr_linenumber" name="L961" href="#L961">961</a> 	<em class="jxr_comment">// itself (e.g. "java.util.stream.ReferencePipeline$Head@...") rather than its elements. writeStreamable</em>
-<a class="jxr_linenumber" name="L962" href="#L962">962</a> 	<em class="jxr_comment">// is therefore ONLY reachable via writeAnything's root-level dispatch (line 239), and since Stream (like</em>
-<a class="jxr_linenumber" name="L963" href="#L963">963</a> 	<em class="jxr_comment">// List) erases its element type at runtime with no array-like fallback, elType there is always Object --</em>
-<a class="jxr_linenumber" name="L964" href="#L964">964</a> 	<em class="jxr_comment">// so elType.isBean()||isMap() at line 426 could not be driven true through the public API in the time</em>
-<a class="jxr_linenumber" name="L965" href="#L965">965</a> 	<em class="jxr_comment">// available. p01 below documents the actual (Object.toString()) behavior for a Stream bean property</em>
-<a class="jxr_linenumber" name="L966" href="#L966">966</a> 	<em class="jxr_comment">// rather than pretending it hits the streamable dispatch.</em>
-<a class="jxr_linenumber" name="L967" href="#L967">967</a> 	<em class="jxr_comment">//------------------------------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L968" href="#L968">968</a> 
-<a class="jxr_linenumber" name="L969" href="#L969">969</a> 	@Test <strong class="jxr_keyword">void</strong> p01_beanPropertyStream_fallsToScalarToString() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L970" href="#L970">970</a> 		<strong class="jxr_keyword">var</strong> root = <strong class="jxr_keyword">new</strong> BeanWithBeanStreamProp();
-<a class="jxr_linenumber" name="L971" href="#L971">971</a> 		root.setKids(java.util.stream.Stream.of(<strong class="jxr_keyword">new</strong> ChildBean(<span class="jxr_string">"erin"</span>), <strong class="jxr_keyword">new</strong> ChildBean(<span class="jxr_string">"frank"</span>)));
-<a class="jxr_linenumber" name="L972" href="#L972">972</a> 		<strong class="jxr_keyword">var</strong> proto = PrototextSerializer.DEFAULT.write(root);
-<a class="jxr_linenumber" name="L973" href="#L973">973</a> 		assertNotNull(proto);
-<a class="jxr_linenumber" name="L974" href="#L974">974</a> 		<em class="jxr_comment">// Documents current behavior: the Stream property is NOT iterated -- it's stringified as a whole.</em>
-<a class="jxr_linenumber" name="L975" href="#L975">975</a> 		assertTrue(proto.contains(<span class="jxr_string">"ReferencePipeline"</span>) || proto.contains(<span class="jxr_string">"Stream"</span>),
-<a class="jxr_linenumber" name="L976" href="#L976">976</a> 			() -&gt; <span class="jxr_string">"Expected the Stream itself to be stringified (writeBeanMap has no isStreamable() branch): "</span> + proto);
-<a class="jxr_linenumber" name="L977" href="#L977">977</a> 	}
-<a class="jxr_linenumber" name="L978" href="#L978">978</a> 
-<a class="jxr_linenumber" name="L979" href="#L979">979</a> 	<em class="jxr_comment">//------------------------------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L980" href="#L980">980</a> 	<em class="jxr_comment">// q0x - writeBeanMap's isAddBeanTypes()&amp;&amp;typeName combo (line 252): both true simultaneously requires</em>
-<a class="jxr_linenumber" name="L981" href="#L981">981</a> 	<em class="jxr_comment">// addBeanTypes() together with a resolvable, non-null type name (a registered @Marshalled(typeName)</em>
-<a class="jxr_linenumber" name="L982" href="#L982">982</a> 	<em class="jxr_comment">// plus addRootType() so eType != aType -- see SerializerSession#getBeanTypeName).</em>
-<a class="jxr_linenumber" name="L983" href="#L983">983</a> 	<em class="jxr_comment">//------------------------------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L984" href="#L984">984</a> 
-<a class="jxr_linenumber" name="L985" href="#L985">985</a> 	@Marshalled(typeName=<span class="jxr_string">"q01child"</span>)
-<a class="jxr_linenumber" name="L986" href="#L986">986</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> Q01_NamedBean {
-<a class="jxr_linenumber" name="L987" href="#L987">987</a> 		<strong class="jxr_keyword">public</strong> String name;
-<a class="jxr_linenumber" name="L988" href="#L988">988</a> 		<strong class="jxr_keyword">public</strong> Q01_NamedBean(String n) { name = n; }
-<a class="jxr_linenumber" name="L989" href="#L989">989</a> 	}
-<a class="jxr_linenumber" name="L990" href="#L990">990</a> 
-<a class="jxr_linenumber" name="L991" href="#L991">991</a> 	@Test <strong class="jxr_keyword">void</strong> q01_addBeanTypesWithRootTypeName() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L992" href="#L992">992</a> 		<strong class="jxr_keyword">var</strong> s = PrototextSerializer.create().addBeanTypes().addRootType().build();
-<a class="jxr_linenumber" name="L993" href="#L993">993</a> 		<strong class="jxr_keyword">var</strong> proto = s.write(<strong class="jxr_keyword">new</strong> Q01_NamedBean(<span class="jxr_string">"greta"</span>));
-<a class="jxr_linenumber" name="L994" href="#L994">994</a> 		assertNotNull(proto);
-<a class="jxr_linenumber" name="L995" href="#L995">995</a> 		assertTrue(proto.contains(<span class="jxr_string">"q01child"</span>), () -&gt; <span class="jxr_string">"Expected q01child discriminator in: "</span> + proto);
-<a class="jxr_linenumber" name="L996" href="#L996">996</a> 		assertTrue(proto.contains(<span class="jxr_string">"greta"</span>));
-<a class="jxr_linenumber" name="L997" href="#L997">997</a> 	}
-<a class="jxr_linenumber" name="L998" href="#L998">998</a> 
-<a class="jxr_linenumber" name="L999" href="#L999">999</a> 	@Test <strong class="jxr_keyword">void</strong> r01_writeRecordsDelegatesToRecordAdapter() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L1000" href="#L1000">1000</a> 		<em class="jxr_comment">// writeRecords(...) is a thin RecordAdapter.writer(...) delegation; the generic</em>
-<a class="jxr_linenumber" name="L1001" href="#L1001">1001</a> 		<em class="jxr_comment">// FormatStreamingCapability_Test / RecordStream_Test suites only probe isRecordStreaming() for</em>
-<a class="jxr_linenumber" name="L1002" href="#L1002">1002</a> 		<em class="jxr_comment">// Prototext (its round-trip writeRecords calls are gated behind Skip.PROTO_LIMITATIONS there,</em>
-<a class="jxr_linenumber" name="L1003" href="#L1003">1003</a> 		<em class="jxr_comment">// since Prototext requires bean-schema'd output), so exercise the delegation directly here.</em>
-<a class="jxr_linenumber" name="L1004" href="#L1004">1004</a> 		<strong class="jxr_keyword">var</strong> sw = <strong class="jxr_keyword">new</strong> StringWriter();
-<a class="jxr_linenumber" name="L1005" href="#L1005">1005</a> 		<strong class="jxr_keyword">var</strong> bean = <strong class="jxr_keyword">new</strong> BeanWithCommentedProperty();
-<a class="jxr_linenumber" name="L1006" href="#L1006">1006</a> 		bean.setName(<span class="jxr_string">"Alice"</span>);
-<a class="jxr_linenumber" name="L1007" href="#L1007">1007</a> 		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> writer = PrototextSerializer.DEFAULT.writeRecords(sw)) {
-<a class="jxr_linenumber" name="L1008" href="#L1008">1008</a> 			assertFalse(writer.isStreaming());
-<a class="jxr_linenumber" name="L1009" href="#L1009">1009</a> 			writer.write(bean);
-<a class="jxr_linenumber" name="L1010" href="#L1010">1010</a> 		}
-<a class="jxr_linenumber" name="L1011" href="#L1011">1011</a> 		assertTrue(sw.toString().contains(<span class="jxr_string">"Alice"</span>));
-<a class="jxr_linenumber" name="L1012" href="#L1012">1012</a> 	}
-<a class="jxr_linenumber" name="L1013" href="#L1013">1013</a> 
-<a class="jxr_linenumber" name="L1014" href="#L1014">1014</a> 	@Test <strong class="jxr_keyword">void</strong> r02_doWrite_beanWithNoVisibleProperties_fallsThroughToWriteAnything() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L1015" href="#L1015">1015</a> 		<em class="jxr_comment">// doWrite's "!isEmpty(bm)" check (guarding the direct writeBeanMap fast-path) is only false when</em>
-<a class="jxr_linenumber" name="L1016" href="#L1016">1016</a> 		<em class="jxr_comment">// toBeanMap(o) succeeds (o is a real bean) but produces zero visible properties -- achieved here</em>
-<a class="jxr_linenumber" name="L1017" href="#L1017">1017</a> 		<em class="jxr_comment">// via beanPropertiesExcludes() filtering out the bean's only property. In that case doWrite</em>
-<a class="jxr_linenumber" name="L1018" href="#L1018">1018</a> 		<em class="jxr_comment">// falls through to writeAnything, which re-derives the same (still-empty) BeanMap and writes it</em>
-<a class="jxr_linenumber" name="L1019" href="#L1019">1019</a> 		<em class="jxr_comment">// via the treatAsBean path instead.</em>
-<a class="jxr_linenumber" name="L1020" href="#L1020">1020</a> 		<strong class="jxr_keyword">var</strong> s = PrototextSerializer.create().beanPropertiesExcludes(R02_NoVisiblePropsBean.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"value"</span>).build();
-<a class="jxr_linenumber" name="L1021" href="#L1021">1021</a> 		<strong class="jxr_keyword">var</strong> proto = s.write(<strong class="jxr_keyword">new</strong> R02_NoVisiblePropsBean());
-<a class="jxr_linenumber" name="L1022" href="#L1022">1022</a> 		assertNotNull(proto);
-<a class="jxr_linenumber" name="L1023" href="#L1023">1023</a> 	}
-<a class="jxr_linenumber" name="L1024" href="#L1024">1024</a> 
-<a class="jxr_linenumber" name="L1025" href="#L1025">1025</a> 	<em class="jxr_comment">// Test fixture beans</em>
-<a class="jxr_linenumber" name="L1026" href="#L1026">1026</a> 
-<a class="jxr_linenumber" name="L1027" href="#L1027">1027</a> 	enum LogLevel { DEBUG, INFO, WARN, ERROR }
-<a class="jxr_linenumber" name="L1028" href="#L1028">1028</a> 
-<a class="jxr_linenumber" name="L1029" href="#L1029">1029</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> R02_NoVisiblePropsBean {
-<a class="jxr_linenumber" name="L1030" href="#L1030">1030</a> 		<strong class="jxr_keyword">public</strong> String getValue() { <strong class="jxr_keyword">return</strong> <span class="jxr_string">"hidden"</span>; }
-<a class="jxr_linenumber" name="L1031" href="#L1031">1031</a> 	}
-<a class="jxr_linenumber" name="L1032" href="#L1032">1032</a> 
-<a class="jxr_linenumber" name="L1033" href="#L1033">1033</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> BeanWithCommentedProperty {
-<a class="jxr_linenumber" name="L1034" href="#L1034">1034</a> 		<strong class="jxr_keyword">private</strong> String name;
-<a class="jxr_linenumber" name="L1035" href="#L1035">1035</a> 		@Prototext(comment = <span class="jxr_string">"This is the name field"</span>)
-<a class="jxr_linenumber" name="L1036" href="#L1036">1036</a> 		<strong class="jxr_keyword">public</strong> String getName() { <strong class="jxr_keyword">return</strong> name; }
-<a class="jxr_linenumber" name="L1037" href="#L1037">1037</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setName(String v) { name = v; }
-<a class="jxr_linenumber" name="L1038" href="#L1038">1038</a> 	}
-<a class="jxr_linenumber" name="L1039" href="#L1039">1039</a> 
-<a class="jxr_linenumber" name="L1040" href="#L1040">1040</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> BeanWithListOfMaps {
-<a class="jxr_linenumber" name="L1041" href="#L1041">1041</a> 		<strong class="jxr_keyword">private</strong> List&lt;Map&lt;String,Object&gt;&gt; items;
-<a class="jxr_linenumber" name="L1042" href="#L1042">1042</a> 		<strong class="jxr_keyword">public</strong> List&lt;Map&lt;String,Object&gt;&gt; getItems() { <strong class="jxr_keyword">return</strong> items; }
-<a class="jxr_linenumber" name="L1043" href="#L1043">1043</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setItems(List&lt;Map&lt;String,Object&gt;&gt; v) { items = v; }
-<a class="jxr_linenumber" name="L1044" href="#L1044">1044</a> 	}
-<a class="jxr_linenumber" name="L1045" href="#L1045">1045</a> 
-<a class="jxr_linenumber" name="L1046" href="#L1046">1046</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> BeanWithListOfStrings {
-<a class="jxr_linenumber" name="L1047" href="#L1047">1047</a> 		<strong class="jxr_keyword">private</strong> List&lt;String&gt; tags;
-<a class="jxr_linenumber" name="L1048" href="#L1048">1048</a> 		<strong class="jxr_keyword">public</strong> List&lt;String&gt; getTags() { <strong class="jxr_keyword">return</strong> tags; }
-<a class="jxr_linenumber" name="L1049" href="#L1049">1049</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setTags(List&lt;String&gt; v) { tags = v; }
-<a class="jxr_linenumber" name="L1050" href="#L1050">1050</a> 	}
-<a class="jxr_linenumber" name="L1051" href="#L1051">1051</a> 
-<a class="jxr_linenumber" name="L1052" href="#L1052">1052</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> BeanWithIntArrayProp {
-<a class="jxr_linenumber" name="L1053" href="#L1053">1053</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">int</strong>[] values;
-<a class="jxr_linenumber" name="L1054" href="#L1054">1054</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">int</strong>[] getValues() { <strong class="jxr_keyword">return</strong> values; }
-<a class="jxr_linenumber" name="L1055" href="#L1055">1055</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setValues(<strong class="jxr_keyword">int</strong>[] v) { values = v; }
-<a class="jxr_linenumber" name="L1056" href="#L1056">1056</a> 	}
-<a class="jxr_linenumber" name="L1057" href="#L1057">1057</a> 
-<a class="jxr_linenumber" name="L1058" href="#L1058">1058</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> BeanWithMapArray {
-<a class="jxr_linenumber" name="L1059" href="#L1059">1059</a> 		<strong class="jxr_keyword">private</strong> Map&lt;String,Object&gt;[] items;
-<a class="jxr_linenumber" name="L1060" href="#L1060">1060</a> 		<strong class="jxr_keyword">public</strong> Map&lt;String,Object&gt;[] getItems() { <strong class="jxr_keyword">return</strong> items; }
-<a class="jxr_linenumber" name="L1061" href="#L1061">1061</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setItems(Map&lt;String,Object&gt;[] v) { items = v; }
-<a class="jxr_linenumber" name="L1062" href="#L1062">1062</a> 	}
-<a class="jxr_linenumber" name="L1063" href="#L1063">1063</a> 
-<a class="jxr_linenumber" name="L1064" href="#L1064">1064</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> ChildBean {
-<a class="jxr_linenumber" name="L1065" href="#L1065">1065</a> 		<strong class="jxr_keyword">private</strong> String name;
-<a class="jxr_linenumber" name="L1066" href="#L1066">1066</a> 		<strong class="jxr_keyword">public</strong> String getName() { <strong class="jxr_keyword">return</strong> name; }
-<a class="jxr_linenumber" name="L1067" href="#L1067">1067</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setName(String v) { name = v; }
-<a class="jxr_linenumber" name="L1068" href="#L1068">1068</a> 		<strong class="jxr_keyword">public</strong> ChildBean(String n) { name = n; }
-<a class="jxr_linenumber" name="L1069" href="#L1069">1069</a> 		<strong class="jxr_keyword">public</strong> ChildBean() {}
-<a class="jxr_linenumber" name="L1070" href="#L1070">1070</a> 	}
-<a class="jxr_linenumber" name="L1071" href="#L1071">1071</a> 
-<a class="jxr_linenumber" name="L1072" href="#L1072">1072</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> BeanWithBeanListProp {
-<a class="jxr_linenumber" name="L1073" href="#L1073">1073</a> 		<strong class="jxr_keyword">private</strong> List&lt;Object&gt; children;
-<a class="jxr_linenumber" name="L1074" href="#L1074">1074</a> 		<strong class="jxr_keyword">public</strong> List&lt;Object&gt; getChildren() { <strong class="jxr_keyword">return</strong> children; }
-<a class="jxr_linenumber" name="L1075" href="#L1075">1075</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setChildren(List&lt;Object&gt; v) { children = v; }
-<a class="jxr_linenumber" name="L1076" href="#L1076">1076</a> 	}
-<a class="jxr_linenumber" name="L1077" href="#L1077">1077</a> 
-<a class="jxr_linenumber" name="L1078" href="#L1078">1078</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> BeanWithMapListProp {
-<a class="jxr_linenumber" name="L1079" href="#L1079">1079</a> 		<strong class="jxr_keyword">private</strong> List&lt;Map&lt;String,Object&gt;&gt; entries;
-<a class="jxr_linenumber" name="L1080" href="#L1080">1080</a> 		<strong class="jxr_keyword">public</strong> List&lt;Map&lt;String,Object&gt;&gt; getEntries() { <strong class="jxr_keyword">return</strong> entries; }
-<a class="jxr_linenumber" name="L1081" href="#L1081">1081</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setEntries(List&lt;Map&lt;String,Object&gt;&gt; v) { entries = v; }
-<a class="jxr_linenumber" name="L1082" href="#L1082">1082</a> 	}
-<a class="jxr_linenumber" name="L1083" href="#L1083">1083</a> 
-<a class="jxr_linenumber" name="L1084" href="#L1084">1084</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> BeanWithDateProp {
-<a class="jxr_linenumber" name="L1085" href="#L1085">1085</a> 		<strong class="jxr_keyword">public</strong> String name;
-<a class="jxr_linenumber" name="L1086" href="#L1086">1086</a> 		<strong class="jxr_keyword">public</strong> Date ts;
-<a class="jxr_linenumber" name="L1087" href="#L1087">1087</a> 	}
-<a class="jxr_linenumber" name="L1088" href="#L1088">1088</a> 
-<a class="jxr_linenumber" name="L1089" href="#L1089">1089</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> BeanWithCalendarProp {
-<a class="jxr_linenumber" name="L1090" href="#L1090">1090</a> 		<strong class="jxr_keyword">public</strong> String label;
-<a class="jxr_linenumber" name="L1091" href="#L1091">1091</a> 		<strong class="jxr_keyword">public</strong> Calendar cal;
-<a class="jxr_linenumber" name="L1092" href="#L1092">1092</a> 	}
-<a class="jxr_linenumber" name="L1093" href="#L1093">1093</a> 
-<a class="jxr_linenumber" name="L1094" href="#L1094">1094</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> BeanWithInstantProp {
-<a class="jxr_linenumber" name="L1095" href="#L1095">1095</a> 		<strong class="jxr_keyword">public</strong> String label;
-<a class="jxr_linenumber" name="L1096" href="#L1096">1096</a> 		<strong class="jxr_keyword">public</strong> Instant instant;
-<a class="jxr_linenumber" name="L1097" href="#L1097">1097</a> 	}
-<a class="jxr_linenumber" name="L1098" href="#L1098">1098</a> 
-<a class="jxr_linenumber" name="L1099" href="#L1099">1099</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> BeanWithDurationProp {
-<a class="jxr_linenumber" name="L1100" href="#L1100">1100</a> 		<strong class="jxr_keyword">public</strong> String label;
-<a class="jxr_linenumber" name="L1101" href="#L1101">1101</a> 		<strong class="jxr_keyword">public</strong> Duration dur;
-<a class="jxr_linenumber" name="L1102" href="#L1102">1102</a> 	}
-<a class="jxr_linenumber" name="L1103" href="#L1103">1103</a> 
-<a class="jxr_linenumber" name="L1104" href="#L1104">1104</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> BeanWithPeriodProp {
-<a class="jxr_linenumber" name="L1105" href="#L1105">1105</a> 		<strong class="jxr_keyword">public</strong> String label;
-<a class="jxr_linenumber" name="L1106" href="#L1106">1106</a> 		<strong class="jxr_keyword">public</strong> Period period;
-<a class="jxr_linenumber" name="L1107" href="#L1107">1107</a> 	}
-<a class="jxr_linenumber" name="L1108" href="#L1108">1108</a> 
-<a class="jxr_linenumber" name="L1109" href="#L1109">1109</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> BeanWithBytesProp {
-<a class="jxr_linenumber" name="L1110" href="#L1110">1110</a> 		<strong class="jxr_keyword">public</strong> String label;
-<a class="jxr_linenumber" name="L1111" href="#L1111">1111</a> 		<strong class="jxr_keyword">public</strong> byte[] data;
-<a class="jxr_linenumber" name="L1112" href="#L1112">1112</a> 	}
-<a class="jxr_linenumber" name="L1113" href="#L1113">1113</a> 
-<a class="jxr_linenumber" name="L1114" href="#L1114">1114</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> BeanWithFloatProp {
-<a class="jxr_linenumber" name="L1115" href="#L1115">1115</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">float</strong> f;
-<a class="jxr_linenumber" name="L1116" href="#L1116">1116</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">double</strong> d;
-<a class="jxr_linenumber" name="L1117" href="#L1117">1117</a> 	}
-<a class="jxr_linenumber" name="L1118" href="#L1118">1118</a> 
-<a class="jxr_linenumber" name="L1119" href="#L1119">1119</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> BeanWithStringListField {
-<a class="jxr_linenumber" name="L1120" href="#L1120">1120</a> 		<strong class="jxr_keyword">private</strong> List&lt;String&gt; names;
-<a class="jxr_linenumber" name="L1121" href="#L1121">1121</a> 		<strong class="jxr_keyword">public</strong> List&lt;String&gt; getNames() { <strong class="jxr_keyword">return</strong> names; }
-<a class="jxr_linenumber" name="L1122" href="#L1122">1122</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setNames(List&lt;String&gt; v) { names = v; }
-<a class="jxr_linenumber" name="L1123" href="#L1123">1123</a> 	}
-<a class="jxr_linenumber" name="L1124" href="#L1124">1124</a> 
-<a class="jxr_linenumber" name="L1125" href="#L1125">1125</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> BeanWithBeanArrayProp {
-<a class="jxr_linenumber" name="L1126" href="#L1126">1126</a> 		<strong class="jxr_keyword">private</strong> ChildBean[] kids;
-<a class="jxr_linenumber" name="L1127" href="#L1127">1127</a> 		<strong class="jxr_keyword">public</strong> ChildBean[] getKids() { <strong class="jxr_keyword">return</strong> kids; }
-<a class="jxr_linenumber" name="L1128" href="#L1128">1128</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setKids(ChildBean[] v) { kids = v; }
-<a class="jxr_linenumber" name="L1129" href="#L1129">1129</a> 	}
-<a class="jxr_linenumber" name="L1130" href="#L1130">1130</a> 
-<a class="jxr_linenumber" name="L1131" href="#L1131">1131</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> BeanWithBeanStreamProp {
-<a class="jxr_linenumber" name="L1132" href="#L1132">1132</a> 		<strong class="jxr_keyword">private</strong> java.util.stream.Stream&lt;ChildBean&gt; kids;
-<a class="jxr_linenumber" name="L1133" href="#L1133">1133</a> 		<strong class="jxr_keyword">public</strong> java.util.stream.Stream&lt;ChildBean&gt; getKids() { <strong class="jxr_keyword">return</strong> kids; }
-<a class="jxr_linenumber" name="L1134" href="#L1134">1134</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setKids(java.util.stream.Stream&lt;ChildBean&gt; v) { kids = v; }
-<a class="jxr_linenumber" name="L1135" href="#L1135">1135</a> 	}
-<a class="jxr_linenumber" name="L1136" href="#L1136">1136</a> }
+<a class="jxr_linenumber" name="L735" href="#L735">735</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> H02b_ChildBean {
+<a class="jxr_linenumber" name="L736" href="#L736">736</a> 		<strong class="jxr_keyword">public</strong> String name;
+<a class="jxr_linenumber" name="L737" href="#L737">737</a> 	}
+<a class="jxr_linenumber" name="L738" href="#L738">738</a> 
+<a class="jxr_linenumber" name="L739" href="#L739">739</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> BeanWithListOfChildBeans {
+<a class="jxr_linenumber" name="L740" href="#L740">740</a> 		<strong class="jxr_keyword">private</strong> List&lt;H02b_ChildBean&gt; items;
+<a class="jxr_linenumber" name="L741" href="#L741">741</a> 		<strong class="jxr_keyword">public</strong> List&lt;H02b_ChildBean&gt; getItems() { <strong class="jxr_keyword">return</strong> items; }
+<a class="jxr_linenumber" name="L742" href="#L742">742</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setItems(List&lt;H02b_ChildBean&gt; v) { items = v; }
+<a class="jxr_linenumber" name="L743" href="#L743">743</a> 	}
+<a class="jxr_linenumber" name="L744" href="#L744">744</a> 
+<a class="jxr_linenumber" name="L745" href="#L745">745</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> BeanWithIntArrayProp {
+<a class="jxr_linenumber" name="L746" href="#L746">746</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">int</strong>[] values;
+<a class="jxr_linenumber" name="L747" href="#L747">747</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">int</strong>[] getValues() { <strong class="jxr_keyword">return</strong> values; }
+<a class="jxr_linenumber" name="L748" href="#L748">748</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setValues(<strong class="jxr_keyword">int</strong>[] v) { values = v; }
+<a class="jxr_linenumber" name="L749" href="#L749">749</a> 	}
+<a class="jxr_linenumber" name="L750" href="#L750">750</a> 
+<a class="jxr_linenumber" name="L751" href="#L751">751</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> BeanWithMapArray {
+<a class="jxr_linenumber" name="L752" href="#L752">752</a> 		<strong class="jxr_keyword">private</strong> Map&lt;String,Object&gt;[] items;
+<a class="jxr_linenumber" name="L753" href="#L753">753</a> 		<strong class="jxr_keyword">public</strong> Map&lt;String,Object&gt;[] getItems() { <strong class="jxr_keyword">return</strong> items; }
+<a class="jxr_linenumber" name="L754" href="#L754">754</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setItems(Map&lt;String,Object&gt;[] v) { items = v; }
+<a class="jxr_linenumber" name="L755" href="#L755">755</a> 	}
+<a class="jxr_linenumber" name="L756" href="#L756">756</a> 
+<a class="jxr_linenumber" name="L757" href="#L757">757</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> ChildBean {
+<a class="jxr_linenumber" name="L758" href="#L758">758</a> 		<strong class="jxr_keyword">private</strong> String name;
+<a class="jxr_linenumber" name="L759" href="#L759">759</a> 		<strong class="jxr_keyword">public</strong> String getName() { <strong class="jxr_keyword">return</strong> name; }
+<a class="jxr_linenumber" name="L760" href="#L760">760</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setName(String v) { name = v; }
+<a class="jxr_linenumber" name="L761" href="#L761">761</a> 		<strong class="jxr_keyword">public</strong> ChildBean(String n) { name = n; }
+<a class="jxr_linenumber" name="L762" href="#L762">762</a> 		<strong class="jxr_keyword">public</strong> ChildBean() {}
+<a class="jxr_linenumber" name="L763" href="#L763">763</a> 	}
+<a class="jxr_linenumber" name="L764" href="#L764">764</a> 
+<a class="jxr_linenumber" name="L765" href="#L765">765</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> BeanWithBeanListProp {
+<a class="jxr_linenumber" name="L766" href="#L766">766</a> 		<strong class="jxr_keyword">private</strong> List&lt;Object&gt; children;
+<a class="jxr_linenumber" name="L767" href="#L767">767</a> 		<strong class="jxr_keyword">public</strong> List&lt;Object&gt; getChildren() { <strong class="jxr_keyword">return</strong> children; }
+<a class="jxr_linenumber" name="L768" href="#L768">768</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setChildren(List&lt;Object&gt; v) { children = v; }
+<a class="jxr_linenumber" name="L769" href="#L769">769</a> 	}
+<a class="jxr_linenumber" name="L770" href="#L770">770</a> 
+<a class="jxr_linenumber" name="L771" href="#L771">771</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> BeanWithMapListProp {
+<a class="jxr_linenumber" name="L772" href="#L772">772</a> 		<strong class="jxr_keyword">private</strong> List&lt;Map&lt;String,Object&gt;&gt; entries;
+<a class="jxr_linenumber" name="L773" href="#L773">773</a> 		<strong class="jxr_keyword">public</strong> List&lt;Map&lt;String,Object&gt;&gt; getEntries() { <strong class="jxr_keyword">return</strong> entries; }
+<a class="jxr_linenumber" name="L774" href="#L774">774</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setEntries(List&lt;Map&lt;String,Object&gt;&gt; v) { entries = v; }
+<a class="jxr_linenumber" name="L775" href="#L775">775</a> 	}
+<a class="jxr_linenumber" name="L776" href="#L776">776</a> 
+<a class="jxr_linenumber" name="L777" href="#L777">777</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> BeanWithDateProp {
+<a class="jxr_linenumber" name="L778" href="#L778">778</a> 		<strong class="jxr_keyword">public</strong> String name;
+<a class="jxr_linenumber" name="L779" href="#L779">779</a> 		<strong class="jxr_keyword">public</strong> Date ts;
+<a class="jxr_linenumber" name="L780" href="#L780">780</a> 	}
+<a class="jxr_linenumber" name="L781" href="#L781">781</a> 
+<a class="jxr_linenumber" name="L782" href="#L782">782</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> BeanWithCalendarProp {
+<a class="jxr_linenumber" name="L783" href="#L783">783</a> 		<strong class="jxr_keyword">public</strong> String label;
+<a class="jxr_linenumber" name="L784" href="#L784">784</a> 		<strong class="jxr_keyword">public</strong> Calendar cal;
+<a class="jxr_linenumber" name="L785" href="#L785">785</a> 	}
+<a class="jxr_linenumber" name="L786" href="#L786">786</a> 
+<a class="jxr_linenumber" name="L787" href="#L787">787</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> BeanWithInstantProp {
+<a class="jxr_linenumber" name="L788" href="#L788">788</a> 		<strong class="jxr_keyword">public</strong> String label;
+<a class="jxr_linenumber" name="L789" href="#L789">789</a> 		<strong class="jxr_keyword">public</strong> Instant instant;
+<a class="jxr_linenumber" name="L790" href="#L790">790</a> 	}
+<a class="jxr_linenumber" name="L791" href="#L791">791</a> 
+<a class="jxr_linenumber" name="L792" href="#L792">792</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> BeanWithDurationProp {
+<a class="jxr_linenumber" name="L793" href="#L793">793</a> 		<strong class="jxr_keyword">public</strong> String label;
+<a class="jxr_linenumber" name="L794" href="#L794">794</a> 		<strong class="jxr_keyword">public</strong> Duration dur;
+<a class="jxr_linenumber" name="L795" href="#L795">795</a> 	}
+<a class="jxr_linenumber" name="L796" href="#L796">796</a> 
+<a class="jxr_linenumber" name="L797" href="#L797">797</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> BeanWithPeriodProp {
+<a class="jxr_linenumber" name="L798" href="#L798">798</a> 		<strong class="jxr_keyword">public</strong> String label;
+<a class="jxr_linenumber" name="L799" href="#L799">799</a> 		<strong class="jxr_keyword">public</strong> Period period;
+<a class="jxr_linenumber" name="L800" href="#L800">800</a> 	}
+<a class="jxr_linenumber" name="L801" href="#L801">801</a> 
+<a class="jxr_linenumber" name="L802" href="#L802">802</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> BeanWithBytesProp {
+<a class="jxr_linenumber" name="L803" href="#L803">803</a> 		<strong class="jxr_keyword">public</strong> String label;
+<a class="jxr_linenumber" name="L804" href="#L804">804</a> 		<strong class="jxr_keyword">public</strong> byte[] data;
+<a class="jxr_linenumber" name="L805" href="#L805">805</a> 	}
+<a class="jxr_linenumber" name="L806" href="#L806">806</a> 
+<a class="jxr_linenumber" name="L807" href="#L807">807</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> BeanWithFloatProp {
+<a class="jxr_linenumber" name="L808" href="#L808">808</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">float</strong> f;
+<a class="jxr_linenumber" name="L809" href="#L809">809</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">double</strong> d;
+<a class="jxr_linenumber" name="L810" href="#L810">810</a> 	}
+<a class="jxr_linenumber" name="L811" href="#L811">811</a> 
+<a class="jxr_linenumber" name="L812" href="#L812">812</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> BeanWithStringListField {
+<a class="jxr_linenumber" name="L813" href="#L813">813</a> 		<strong class="jxr_keyword">private</strong> List&lt;String&gt; names;
+<a class="jxr_linenumber" name="L814" href="#L814">814</a> 		<strong class="jxr_keyword">public</strong> List&lt;String&gt; getNames() { <strong class="jxr_keyword">return</strong> names; }
+<a class="jxr_linenumber" name="L815" href="#L815">815</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setNames(List&lt;String&gt; v) { names = v; }
+<a class="jxr_linenumber" name="L816" href="#L816">816</a> 	}
+<a class="jxr_linenumber" name="L817" href="#L817">817</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

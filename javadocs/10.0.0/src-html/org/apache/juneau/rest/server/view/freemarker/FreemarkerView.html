@@ -157,7 +157,7 @@
 <span class="source-line-no">144</span><span id="line-144">         throw iaex("attribute value must not be null (attribute '%s')", key);</span>
 <span class="source-line-no">145</span><span id="line-145">      var copy = new LinkedHashMap&lt;&gt;(attributes);</span>
 <span class="source-line-no">146</span><span id="line-146">      copy.put(key, value);</span>
-<span class="source-line-no">147</span><span id="line-147">      return new FreemarkerView(templateName, Map.copyOf(copy), responseHeaders);</span>
+<span class="source-line-no">147</span><span id="line-147">      return new FreemarkerView(templateName, Collections.unmodifiableMap(copy), responseHeaders);</span>
 <span class="source-line-no">148</span><span id="line-148">   }</span>
 <span class="source-line-no">149</span><span id="line-149"></span>
 <span class="source-line-no">150</span><span id="line-150">   /**</span>
@@ -181,7 +181,7 @@
 <span class="source-line-no">168</span><span id="line-168">            throw iaex("attribute value must not be null (attribute '%s')", k);</span>
 <span class="source-line-no">169</span><span id="line-169">         copy.put(k, v);</span>
 <span class="source-line-no">170</span><span id="line-170">      });</span>
-<span class="source-line-no">171</span><span id="line-171">      return new FreemarkerView(templateName, Map.copyOf(copy), responseHeaders);</span>
+<span class="source-line-no">171</span><span id="line-171">      return new FreemarkerView(templateName, Collections.unmodifiableMap(copy), responseHeaders);</span>
 <span class="source-line-no">172</span><span id="line-172">   }</span>
 <span class="source-line-no">173</span><span id="line-173"></span>
 <span class="source-line-no">174</span><span id="line-174">   /**</span>
@@ -209,27 +209,49 @@
 <span class="source-line-no">196</span><span id="line-196">      return new FreemarkerView(templateName, attributes, Map.copyOf(copy));</span>
 <span class="source-line-no">197</span><span id="line-197">   }</span>
 <span class="source-line-no">198</span><span id="line-198"></span>
-<span class="source-line-no">199</span><span id="line-199">   @Override /* Overridden from View */</span>
-<span class="source-line-no">200</span><span id="line-200">   public String getTemplateName() {</span>
-<span class="source-line-no">201</span><span id="line-201">      return templateName;</span>
-<span class="source-line-no">202</span><span id="line-202">   }</span>
-<span class="source-line-no">203</span><span id="line-203"></span>
-<span class="source-line-no">204</span><span id="line-204">   @Override /* Overridden from View */</span>
-<span class="source-line-no">205</span><span id="line-205">   public Map&lt;String,Object&gt; getAttributes() {</span>
-<span class="source-line-no">206</span><span id="line-206">      return attributes;</span>
-<span class="source-line-no">207</span><span id="line-207">   }</span>
-<span class="source-line-no">208</span><span id="line-208"></span>
-<span class="source-line-no">209</span><span id="line-209">   @Override /* Overridden from View */</span>
-<span class="source-line-no">210</span><span id="line-210">   public Map&lt;String,String&gt; getResponseHeaders() {</span>
-<span class="source-line-no">211</span><span id="line-211">      return responseHeaders;</span>
-<span class="source-line-no">212</span><span id="line-212">   }</span>
+<span class="source-line-no">199</span><span id="line-199">   /**</span>
+<span class="source-line-no">200</span><span id="line-200">    * Marker for an attribute value that promises to be adopted during the render (unwrapped from the data model by</span>
+<span class="source-line-no">201</span><span id="line-201">    * some directive and applied to render-scoped state), and wants the render to fail if that never happens</span>
+<span class="source-line-no">202</span><span id="line-202">    * instead of silently behaving as if the attribute was absent.</span>
+<span class="source-line-no">203</span><span id="line-203">    *</span>
+<span class="source-line-no">204</span><span id="line-204">    * &lt;p&gt;</span>
+<span class="source-line-no">205</span><span id="line-205">    * {@link FreemarkerViewRenderer} checks every attribute value after a successful {@code Template.process(...)}:</span>
+<span class="source-line-no">206</span><span id="line-206">    * any value implementing this interface whose {@link #consumed()} is still {@code false} fails the render with</span>
+<span class="source-line-no">207</span><span id="line-207">    * {@link #notConsumedMessage(String)}.</span>
+<span class="source-line-no">208</span><span id="line-208">    */</span>
+<span class="source-line-no">209</span><span id="line-209">   public interface MustConsume {</span>
+<span class="source-line-no">210</span><span id="line-210"></span>
+<span class="source-line-no">211</span><span id="line-211">      /** @return Whether this attribute was adopted during the render. */</span>
+<span class="source-line-no">212</span><span id="line-212">      boolean consumed();</span>
 <span class="source-line-no">213</span><span id="line-213"></span>
-<span class="source-line-no">214</span><span id="line-214">   @Override /* Overridden from Object */</span>
-<span class="source-line-no">215</span><span id="line-215">   public String toString() {</span>
-<span class="source-line-no">216</span><span id="line-216">      return "FreemarkerView[template=" + templateName + ", attrs=" + attributes.keySet()</span>
-<span class="source-line-no">217</span><span id="line-217">         + ", headers=" + responseHeaders.keySet() + "]";</span>
-<span class="source-line-no">218</span><span id="line-218">   }</span>
-<span class="source-line-no">219</span><span id="line-219">}</span>
+<span class="source-line-no">214</span><span id="line-214">      /**</span>
+<span class="source-line-no">215</span><span id="line-215">       * @param templateName The template that was rendered.</span>
+<span class="source-line-no">216</span><span id="line-216">       * @return The message to raise when {@link #consumed()} is still {@code false} after the render.</span>
+<span class="source-line-no">217</span><span id="line-217">       */</span>
+<span class="source-line-no">218</span><span id="line-218">      String notConsumedMessage(String templateName);</span>
+<span class="source-line-no">219</span><span id="line-219">   }</span>
+<span class="source-line-no">220</span><span id="line-220"></span>
+<span class="source-line-no">221</span><span id="line-221">   @Override /* Overridden from View */</span>
+<span class="source-line-no">222</span><span id="line-222">   public String getTemplateName() {</span>
+<span class="source-line-no">223</span><span id="line-223">      return templateName;</span>
+<span class="source-line-no">224</span><span id="line-224">   }</span>
+<span class="source-line-no">225</span><span id="line-225"></span>
+<span class="source-line-no">226</span><span id="line-226">   @Override /* Overridden from View */</span>
+<span class="source-line-no">227</span><span id="line-227">   public Map&lt;String,Object&gt; getAttributes() {</span>
+<span class="source-line-no">228</span><span id="line-228">      return attributes;</span>
+<span class="source-line-no">229</span><span id="line-229">   }</span>
+<span class="source-line-no">230</span><span id="line-230"></span>
+<span class="source-line-no">231</span><span id="line-231">   @Override /* Overridden from View */</span>
+<span class="source-line-no">232</span><span id="line-232">   public Map&lt;String,String&gt; getResponseHeaders() {</span>
+<span class="source-line-no">233</span><span id="line-233">      return responseHeaders;</span>
+<span class="source-line-no">234</span><span id="line-234">   }</span>
+<span class="source-line-no">235</span><span id="line-235"></span>
+<span class="source-line-no">236</span><span id="line-236">   @Override /* Overridden from Object */</span>
+<span class="source-line-no">237</span><span id="line-237">   public String toString() {</span>
+<span class="source-line-no">238</span><span id="line-238">      return "FreemarkerView[template=" + templateName + ", attrs=" + attributes.keySet()</span>
+<span class="source-line-no">239</span><span id="line-239">         + ", headers=" + responseHeaders.keySet() + "]";</span>
+<span class="source-line-no">240</span><span id="line-240">   }</span>
+<span class="source-line-no">241</span><span id="line-241">}</span>
 
 
 

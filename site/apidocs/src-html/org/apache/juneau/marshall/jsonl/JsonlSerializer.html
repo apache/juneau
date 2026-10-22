@@ -30,14 +30,14 @@
 <span class="source-line-no">017</span><span id="line-17">package org.apache.juneau.marshall.jsonl;</span>
 <span class="source-line-no">018</span><span id="line-18"></span>
 <span class="source-line-no">019</span><span id="line-19">import org.apache.juneau.marshall.json.*;</span>
-<span class="source-line-no">020</span><span id="line-20">import org.apache.juneau.marshall.swap.*;</span>
+<span class="source-line-no">020</span><span id="line-20">import org.apache.juneau.marshall.swap.spi.*;</span>
 <span class="source-line-no">021</span><span id="line-21"></span>
 <span class="source-line-no">022</span><span id="line-22">/**</span>
 <span class="source-line-no">023</span><span id="line-23"> * Serializes POJO models to JSONL (JSON Lines).</span>
 <span class="source-line-no">024</span><span id="line-24"> *</span>
 <span class="source-line-no">025</span><span id="line-25"> * &lt;h5 class='topic'&gt;Media types&lt;/h5&gt;</span>
 <span class="source-line-no">026</span><span id="line-26"> * &lt;p&gt;</span>
-<span class="source-line-no">027</span><span id="line-27"> * Handles &lt;c&gt;Accept&lt;/c&gt; types:  &lt;bc&gt;application/jsonl, application/x-ndjson, text/jsonl&lt;/bc&gt;</span>
+<span class="source-line-no">027</span><span id="line-27"> * Handles &lt;c&gt;Accept&lt;/c&gt; types:  &lt;bc&gt;application/jsonl, application/jsonlines, application/x-ndjson, text/jsonl&lt;/bc&gt;</span>
 <span class="source-line-no">028</span><span id="line-28"> * &lt;p&gt;</span>
 <span class="source-line-no">029</span><span id="line-29"> * Produces &lt;c&gt;Content-Type&lt;/c&gt; types:  &lt;bc&gt;application/jsonl&lt;/bc&gt;</span>
 <span class="source-line-no">030</span><span id="line-30"> *</span>
@@ -106,44 +106,45 @@
 <span class="source-line-no">093</span><span id="line-93"> * &lt;/ul&gt;</span>
 <span class="source-line-no">094</span><span id="line-94"> */</span>
 <span class="source-line-no">095</span><span id="line-95">@SuppressWarnings({</span>
-<span class="source-line-no">096</span><span id="line-96">   "java:S110" // Inheritance depth acceptable</span>
-<span class="source-line-no">097</span><span id="line-97">})</span>
-<span class="source-line-no">098</span><span id="line-98">public class JsonlSerializer extends JsonSerializer {</span>
-<span class="source-line-no">099</span><span id="line-99"></span>
-<span class="source-line-no">100</span><span id="line-100">   /** Default serializer. */</span>
-<span class="source-line-no">101</span><span id="line-101">   public static final JsonlSerializer DEFAULT = new JsonlSerializer(create());</span>
-<span class="source-line-no">102</span><span id="line-102"></span>
-<span class="source-line-no">103</span><span id="line-103">   /**</span>
-<span class="source-line-no">104</span><span id="line-104">    * Creates a new builder for this object.</span>
-<span class="source-line-no">105</span><span id="line-105">    *</span>
-<span class="source-line-no">106</span><span id="line-106">    * @return A new builder.</span>
-<span class="source-line-no">107</span><span id="line-107">    */</span>
-<span class="source-line-no">108</span><span id="line-108">   @SuppressWarnings({</span>
-<span class="source-line-no">109</span><span id="line-109">      "java:S1452" // Builder&lt;?&gt; wildcard return intentional; callers chain via fluent API without needing the concrete type</span>
-<span class="source-line-no">110</span><span id="line-110">   })</span>
-<span class="source-line-no">111</span><span id="line-111">   public static JsonSerializer.Builder&lt;?&gt; create() {</span>
-<span class="source-line-no">112</span><span id="line-112">      return JsonSerializer.create()</span>
-<span class="source-line-no">113</span><span id="line-113">         .produces("application/jsonl")</span>
-<span class="source-line-no">114</span><span id="line-114">         .accept("application/jsonl,application/x-ndjson,text/jsonl")</span>
-<span class="source-line-no">115</span><span id="line-115">         .type(JsonlSerializer.class)</span>
-<span class="source-line-no">116</span><span id="line-116">         .useWhitespace(false);</span>
-<span class="source-line-no">117</span><span id="line-117">   }</span>
-<span class="source-line-no">118</span><span id="line-118"></span>
-<span class="source-line-no">119</span><span id="line-119">   /**</span>
-<span class="source-line-no">120</span><span id="line-120">    * Constructor.</span>
-<span class="source-line-no">121</span><span id="line-121">    *</span>
-<span class="source-line-no">122</span><span id="line-122">    * @param builder The builder for this object.</span>
-<span class="source-line-no">123</span><span id="line-123">    */</span>
-<span class="source-line-no">124</span><span id="line-124">   public JsonlSerializer(JsonSerializer.Builder&lt;?&gt; builder) {</span>
-<span class="source-line-no">125</span><span id="line-125">      super(builder.useWhitespace(false));</span>
-<span class="source-line-no">126</span><span id="line-126">   }</span>
-<span class="source-line-no">127</span><span id="line-127"></span>
-<span class="source-line-no">128</span><span id="line-128">   @Override /* Overridden from Context */</span>
-<span class="source-line-no">129</span><span id="line-129">   public JsonlSerializerSession.Builder createSession() {</span>
-<span class="source-line-no">130</span><span id="line-130">      return JsonlSerializerSession.create(this);</span>
-<span class="source-line-no">131</span><span id="line-131">   }</span>
-<span class="source-line-no">132</span><span id="line-132"></span>
-<span class="source-line-no">133</span><span id="line-133">}</span>
+<span class="source-line-no">096</span><span id="line-96">   "java:S110", // Inheritance depth acceptable</span>
+<span class="source-line-no">097</span><span id="line-97">   "java:S9149" // Per-format static factories intentionally shadow the parent's.</span>
+<span class="source-line-no">098</span><span id="line-98">})</span>
+<span class="source-line-no">099</span><span id="line-99">public class JsonlSerializer extends JsonSerializer {</span>
+<span class="source-line-no">100</span><span id="line-100"></span>
+<span class="source-line-no">101</span><span id="line-101">   /** Default serializer. */</span>
+<span class="source-line-no">102</span><span id="line-102">   public static final JsonlSerializer DEFAULT = new JsonlSerializer(create());</span>
+<span class="source-line-no">103</span><span id="line-103"></span>
+<span class="source-line-no">104</span><span id="line-104">   /**</span>
+<span class="source-line-no">105</span><span id="line-105">    * Creates a new builder for this object.</span>
+<span class="source-line-no">106</span><span id="line-106">    *</span>
+<span class="source-line-no">107</span><span id="line-107">    * @return A new builder.</span>
+<span class="source-line-no">108</span><span id="line-108">    */</span>
+<span class="source-line-no">109</span><span id="line-109">   @SuppressWarnings({</span>
+<span class="source-line-no">110</span><span id="line-110">      "java:S1452" // Builder&lt;?&gt; wildcard return intentional; callers chain via fluent API without needing the concrete type</span>
+<span class="source-line-no">111</span><span id="line-111">   })</span>
+<span class="source-line-no">112</span><span id="line-112">   public static JsonSerializer.Builder&lt;?&gt; create() {</span>
+<span class="source-line-no">113</span><span id="line-113">      return JsonSerializer.create()</span>
+<span class="source-line-no">114</span><span id="line-114">         .produces("application/jsonl")</span>
+<span class="source-line-no">115</span><span id="line-115">         .accept("application/jsonl,application/jsonlines,application/x-ndjson,text/jsonl")</span>
+<span class="source-line-no">116</span><span id="line-116">         .type(JsonlSerializer.class)</span>
+<span class="source-line-no">117</span><span id="line-117">         .useWhitespace(false);</span>
+<span class="source-line-no">118</span><span id="line-118">   }</span>
+<span class="source-line-no">119</span><span id="line-119"></span>
+<span class="source-line-no">120</span><span id="line-120">   /**</span>
+<span class="source-line-no">121</span><span id="line-121">    * Constructor.</span>
+<span class="source-line-no">122</span><span id="line-122">    *</span>
+<span class="source-line-no">123</span><span id="line-123">    * @param builder The builder for this object.</span>
+<span class="source-line-no">124</span><span id="line-124">    */</span>
+<span class="source-line-no">125</span><span id="line-125">   public JsonlSerializer(JsonSerializer.Builder&lt;?&gt; builder) {</span>
+<span class="source-line-no">126</span><span id="line-126">      super(builder.useWhitespace(false));</span>
+<span class="source-line-no">127</span><span id="line-127">   }</span>
+<span class="source-line-no">128</span><span id="line-128"></span>
+<span class="source-line-no">129</span><span id="line-129">   @Override /* Overridden from Context */</span>
+<span class="source-line-no">130</span><span id="line-130">   public JsonlSerializerSession.Builder createSession() {</span>
+<span class="source-line-no">131</span><span id="line-131">      return JsonlSerializerSession.create(this);</span>
+<span class="source-line-no">132</span><span id="line-132">   }</span>
+<span class="source-line-no">133</span><span id="line-133"></span>
+<span class="source-line-no">134</span><span id="line-134">}</span>
 
 
 

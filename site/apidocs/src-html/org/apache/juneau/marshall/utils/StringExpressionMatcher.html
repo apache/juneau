@@ -111,14 +111,14 @@
 <span class="source-line-no">098</span><span id="line-98"></span>
 <span class="source-line-no">099</span><span id="line-99">      @Override /* Overridden from Exp */</span>
 <span class="source-line-no">100</span><span id="line-100">      boolean matches(String input) {</span>
-<span class="source-line-no">101</span><span id="line-101">         return operand.equals(input);</span>
+<span class="source-line-no">101</span><span id="line-101">         return eq(operand, input);</span>
 <span class="source-line-no">102</span><span id="line-102">      }</span>
 <span class="source-line-no">103</span><span id="line-103">   }</span>
 <span class="source-line-no">104</span><span id="line-104"></span>
 <span class="source-line-no">105</span><span id="line-105">   abstract static class Exp {</span>
 <span class="source-line-no">106</span><span id="line-106">      @SuppressWarnings({</span>
-<span class="source-line-no">107</span><span id="line-107">         "unused",    // set unused in base no-op; subclasses that override do use it</span>
-<span class="source-line-no">108</span><span id="line-108">         "java:S1172" // Same as above</span>
+<span class="source-line-no">107</span><span id="line-107">         "java:S1172", // set unused in base no-op; subclasses that override do use it</span>
+<span class="source-line-no">108</span><span id="line-108">         "unused" // set unused in base no-op; subclasses that override do use it</span>
 <span class="source-line-no">109</span><span id="line-109">      })</span>
 <span class="source-line-no">110</span><span id="line-110">      void appendTokens(Set&lt;String&gt; set) {}</span>
 <span class="source-line-no">111</span><span id="line-111"></span>
@@ -245,9 +245,9 @@
 <span class="source-line-no">232</span><span id="line-232">   }</span>
 <span class="source-line-no">233</span><span id="line-233"></span>
 <span class="source-line-no">234</span><span id="line-234">   @SuppressWarnings({</span>
-<span class="source-line-no">235</span><span id="line-235">      "java:S125",    // Inline /*...*/ documents implicit else condition</span>
-<span class="source-line-no">236</span><span id="line-236">      "java:S135",    // Multiple break statements necessary for state machine error handling</span>
-<span class="source-line-no">237</span><span id="line-237">      "java:S3776"    // Cognitive complexity acceptable for parser state machine</span>
+<span class="source-line-no">235</span><span id="line-235">      "java:S125", // Inline /*...*/ documents implicit else condition</span>
+<span class="source-line-no">236</span><span id="line-236">      "java:S135", // Multiple break statements necessary for state machine error handling</span>
+<span class="source-line-no">237</span><span id="line-237">      "java:S3776" // Cognitive complexity acceptable for parser state machine</span>
 <span class="source-line-no">238</span><span id="line-238">   })</span>
 <span class="source-line-no">239</span><span id="line-239">   private Exp parse(String expression) throws ParseException {</span>
 <span class="source-line-no">240</span><span id="line-240">      if (ib(expression))</span>

@@ -73,7 +73,7 @@ loadScripts(document, 'script');</script>
 <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/annotation/Target.html" title="class or interface in java.lang.annotation" class="external-link">@Target</a>({<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/annotation/ElementType.html#FIELD" title="class or interface in java.lang.annotation" class="external-link">FIELD</a>,<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/annotation/ElementType.html#METHOD" title="class or interface in java.lang.annotation" class="external-link">METHOD</a>,<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/annotation/ElementType.html#PARAMETER" title="class or interface in java.lang.annotation" class="external-link">PARAMETER</a>})
 <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/annotation/Retention.html" title="class or interface in java.lang.annotation" class="external-link">@Retention</a>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/annotation/RetentionPolicy.html#RUNTIME" title="class or interface in java.lang.annotation" class="external-link">RUNTIME</a>)
 <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/annotation/Inherited.html" title="class or interface in java.lang.annotation" class="external-link">@Inherited</a>
-</span><span class="modifiers">public @interface </span><span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshalledProp.html#line-50">MarshalledProp</a></span></div>
+</span><span class="modifiers">public @interface </span><span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshalledProp.html#line-56">MarshalledProp</a></span></div>
 <div class="block">Used to tailor how bean properties get marshalled by the framework.
 
  <p>
@@ -89,6 +89,12 @@ loadScripts(document, 'script');</script>
    <li>Methods/Fields - Bean getters/setters and properties.
    <li><ja>@Rest</ja>-annotated classes and <ja>@RestOp</ja>-annotated methods when used with <a href="MarshalledPropApply.html" title="annotation interface in org.apache.juneau.marshall"><code>@MarshalledPropApply</code></a>.
  </ul>
+
+ <p>
+ This annotation does <b>not</b> support renaming a property, nor the read-only/write-only, concrete-type,
+ generic-params, element-type, or bean-factory attributes &mdash; those are bean-modeling concerns that live on
+ <a href="../commons/bean/BeanProp.html" title="annotation interface in org.apache.juneau.commons.bean"><code>@BeanProp</code></a> instead. To rename a property, use <a href="../commons/bean/BeanProp.html" title="annotation interface in org.apache.juneau.commons.bean"><code>@BeanProp</code></a>
+ (e.g. <c>@BeanProp("newName")</c>), not this annotation.
 
  <h5 class='section'>See Also:</h5><ul>
    <li class='ja'><a href="../commons/bean/BeanProp.html" title="annotation interface in org.apache.juneau.commons.bean"><code>BeanProp</code></a>
@@ -227,7 +233,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="description()">
 <h3>description</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>[]</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshalledProp.html#line-62">description</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>[]</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshalledProp.html#line-68">description</a></span></div>
 <div class="block">Optional description for the exposed API.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -244,7 +250,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="view()">
 <h3>view</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>[]</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshalledProp.html#line-107">view</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>[]</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshalledProp.html#line-113">view</a></span></div>
 <div class="block">Declares the named views this property belongs to.
 
  <p>
@@ -298,7 +304,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="dictionary()">
 <h3>dictionary</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;[]</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshalledProp.html#line-128">dictionary</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;[]</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshalledProp.html#line-134">dictionary</a></span></div>
 <div class="block">Bean dictionary.
 
  <p>
@@ -327,7 +333,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="calendarFormat()">
 <h3>calendarFormat</h3>
-<div class="member-signature"><span class="return-type"><a href="CalendarFormat.html" title="enum class in org.apache.juneau.marshall">CalendarFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshalledProp.html#line-135">calendarFormat</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="CalendarFormat.html" title="enum class in org.apache.juneau.marshall">CalendarFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshalledProp.html#line-141">calendarFormat</a></span></div>
 <div class="block">Calendar wire format override.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -342,7 +348,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="dateFormat()">
 <h3>dateFormat</h3>
-<div class="member-signature"><span class="return-type"><a href="DateFormat.html" title="enum class in org.apache.juneau.marshall">DateFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshalledProp.html#line-142">dateFormat</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="DateFormat.html" title="enum class in org.apache.juneau.marshall">DateFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshalledProp.html#line-148">dateFormat</a></span></div>
 <div class="block">Date wire format override.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -357,7 +363,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="durationFormat()">
 <h3>durationFormat</h3>
-<div class="member-signature"><span class="return-type"><a href="DurationFormat.html" title="enum class in org.apache.juneau.marshall">DurationFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshalledProp.html#line-149">durationFormat</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="DurationFormat.html" title="enum class in org.apache.juneau.marshall">DurationFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshalledProp.html#line-155">durationFormat</a></span></div>
 <div class="block">Duration wire format override.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -372,7 +378,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="format()">
 <h3>format</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshalledProp.html#line-185">format</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshalledProp.html#line-191">format</a></span></div>
 <div class="block">Specifies a String format for converting the bean property value to a formatted string.
 
  <p>
@@ -416,7 +422,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="localeFormat()">
 <h3>localeFormat</h3>
-<div class="member-signature"><span class="return-type"><a href="LocaleFormat.html" title="enum class in org.apache.juneau.marshall">LocaleFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshalledProp.html#line-192">localeFormat</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="LocaleFormat.html" title="enum class in org.apache.juneau.marshall">LocaleFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshalledProp.html#line-198">localeFormat</a></span></div>
 <div class="block">Locale wire format override.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -431,7 +437,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="periodFormat()">
 <h3>periodFormat</h3>
-<div class="member-signature"><span class="return-type"><a href="PeriodFormat.html" title="enum class in org.apache.juneau.marshall">PeriodFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshalledProp.html#line-199">periodFormat</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="PeriodFormat.html" title="enum class in org.apache.juneau.marshall">PeriodFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshalledProp.html#line-205">periodFormat</a></span></div>
 <div class="block">Period wire format override.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -446,7 +452,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="temporalFormat()">
 <h3>temporalFormat</h3>
-<div class="member-signature"><span class="return-type"><a href="TemporalFormat.html" title="enum class in org.apache.juneau.marshall">TemporalFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshalledProp.html#line-206">temporalFormat</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="TemporalFormat.html" title="enum class in org.apache.juneau.marshall">TemporalFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshalledProp.html#line-212">temporalFormat</a></span></div>
 <div class="block">Temporal wire format override.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -461,7 +467,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="timeZoneFormat()">
 <h3>timeZoneFormat</h3>
-<div class="member-signature"><span class="return-type"><a href="TimeZoneFormat.html" title="enum class in org.apache.juneau.marshall">TimeZoneFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshalledProp.html#line-213">timeZoneFormat</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="TimeZoneFormat.html" title="enum class in org.apache.juneau.marshall">TimeZoneFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshalledProp.html#line-219">timeZoneFormat</a></span></div>
 <div class="block">Time-zone wire format override.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -476,7 +482,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="binaryFormat()">
 <h3>binaryFormat</h3>
-<div class="member-signature"><span class="return-type"><a href="BinaryFormat.html" title="enum class in org.apache.juneau.marshall">BinaryFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshalledProp.html#line-220">binaryFormat</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="BinaryFormat.html" title="enum class in org.apache.juneau.marshall">BinaryFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshalledProp.html#line-226">binaryFormat</a></span></div>
 <div class="block">Binary wire format override for <code><jk>byte</jk>[]</code> property values.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -491,7 +497,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="enumFormat()">
 <h3>enumFormat</h3>
-<div class="member-signature"><span class="return-type"><a href="EnumFormat.html" title="enum class in org.apache.juneau.marshall">EnumFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshalledProp.html#line-227">enumFormat</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="EnumFormat.html" title="enum class in org.apache.juneau.marshall">EnumFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshalledProp.html#line-233">enumFormat</a></span></div>
 <div class="block">Enum wire format override for <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Enum.html" title="class or interface in java.lang" class="external-link"><code>Enum</code></a> property values.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -506,7 +512,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="uuidFormat()">
 <h3>uuidFormat</h3>
-<div class="member-signature"><span class="return-type"><a href="UuidFormat.html" title="enum class in org.apache.juneau.marshall">UuidFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshalledProp.html#line-234">uuidFormat</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="UuidFormat.html" title="enum class in org.apache.juneau.marshall">UuidFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshalledProp.html#line-240">uuidFormat</a></span></div>
 <div class="block">UUID wire format override for <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/UUID.html" title="class or interface in java.util" class="external-link"><code>UUID</code></a> property values.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -521,7 +527,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="bitSetFormat()">
 <h3>bitSetFormat</h3>
-<div class="member-signature"><span class="return-type"><a href="BitSetFormat.html" title="enum class in org.apache.juneau.marshall">BitSetFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshalledProp.html#line-241">bitSetFormat</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="BitSetFormat.html" title="enum class in org.apache.juneau.marshall">BitSetFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshalledProp.html#line-247">bitSetFormat</a></span></div>
 <div class="block">BitSet wire format override for <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/BitSet.html" title="class or interface in java.util" class="external-link"><code>BitSet</code></a> property values.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -536,7 +542,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="bigNumberFormat()">
 <h3>bigNumberFormat</h3>
-<div class="member-signature"><span class="return-type"><a href="BigNumberFormat.html" title="enum class in org.apache.juneau.marshall">BigNumberFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshalledProp.html#line-248">bigNumberFormat</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="BigNumberFormat.html" title="enum class in org.apache.juneau.marshall">BigNumberFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshalledProp.html#line-254">bigNumberFormat</a></span></div>
 <div class="block">Big-number wire format override for <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/math/BigInteger.html" title="class or interface in java.math" class="external-link"><code>BigInteger</code></a> / <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/math/BigDecimal.html" title="class or interface in java.math" class="external-link"><code>BigDecimal</code></a> property values.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -551,7 +557,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="booleanFormat()">
 <h3>booleanFormat</h3>
-<div class="member-signature"><span class="return-type"><a href="BooleanFormat.html" title="enum class in org.apache.juneau.marshall">BooleanFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshalledProp.html#line-255">booleanFormat</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="BooleanFormat.html" title="enum class in org.apache.juneau.marshall">BooleanFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshalledProp.html#line-261">booleanFormat</a></span></div>
 <div class="block">Boolean wire format override for <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Boolean.html" title="class or interface in java.lang" class="external-link"><code>Boolean</code></a> / <code><jk>boolean</jk></code> property values.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -566,7 +572,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="floatFormat()">
 <h3>floatFormat</h3>
-<div class="member-signature"><span class="return-type"><a href="FloatFormat.html" title="enum class in org.apache.juneau.marshall">FloatFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshalledProp.html#line-262">floatFormat</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="FloatFormat.html" title="enum class in org.apache.juneau.marshall">FloatFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshalledProp.html#line-268">floatFormat</a></span></div>
 <div class="block">Float / Double non-finite wire format override for <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Float.html" title="class or interface in java.lang" class="external-link"><code>Float</code></a> / <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Double.html" title="class or interface in java.lang" class="external-link"><code>Double</code></a> property values.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -581,7 +587,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="currencyFormat()">
 <h3>currencyFormat</h3>
-<div class="member-signature"><span class="return-type"><a href="CurrencyFormat.html" title="enum class in org.apache.juneau.marshall">CurrencyFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshalledProp.html#line-269">currencyFormat</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="CurrencyFormat.html" title="enum class in org.apache.juneau.marshall">CurrencyFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshalledProp.html#line-275">currencyFormat</a></span></div>
 <div class="block">Currency wire format override for <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Currency.html" title="class or interface in java.util" class="external-link"><code>Currency</code></a> property values.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -596,7 +602,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="classFormat()">
 <h3>classFormat</h3>
-<div class="member-signature"><span class="return-type"><a href="ClassFormat.html" title="enum class in org.apache.juneau.marshall">ClassFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshalledProp.html#line-276">classFormat</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="ClassFormat.html" title="enum class in org.apache.juneau.marshall">ClassFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshalledProp.html#line-282">classFormat</a></span></div>
 <div class="block">Class wire format override for <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link"><code>Class</code></a> property values.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -611,7 +617,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="nulls()">
 <h3>nulls</h3>
-<div class="member-signature"><span class="return-type"><a href="Nulls.html" title="enum class in org.apache.juneau.marshall">Nulls</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshalledProp.html#line-308">nulls</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="Nulls.html" title="enum class in org.apache.juneau.marshall">Nulls</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshalledProp.html#line-314">nulls</a></span></div>
 <div class="block">Per-property null-coercion policy applied when a <code>null</code> JSON-equivalent value reaches this property during
  parsing.
 

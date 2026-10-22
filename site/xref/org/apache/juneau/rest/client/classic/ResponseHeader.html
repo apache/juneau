@@ -56,8 +56,8 @@
 <a class="jxr_linenumber" name="L48" href="#L48">48</a>  <em class="jxr_javadoccomment"> * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L49" href="#L49">49</a>  <em class="jxr_javadoccomment"> */</em>
 <a class="jxr_linenumber" name="L50" href="#L50">50</a>  @SuppressWarnings({
-<a class="jxr_linenumber" name="L51" href="#L51">51</a>  	<span class="jxr_string">"resource"</span>,  <em class="jxr_comment">// request and response are owned by the RestCall that created this header; lifecycle managed externally</em>
-<a class="jxr_linenumber" name="L52" href="#L52">52</a>  	<span class="jxr_string">"java:S2160"</span> <em class="jxr_comment">// equals() inherited from BasicHeader compares name+value; request/response fields are contextual not identity-defining</em>
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>  	<span class="jxr_string">"java:S2160"</span>, <em class="jxr_comment">// equals() inherited from BasicHeader compares name+value; request/response fields are contextual not identity-defining</em>
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>  	<span class="jxr_string">"resource"</span> <em class="jxr_comment">// request and response are owned by the RestCall that created this header; lifecycle managed externally</em>
 <a class="jxr_linenumber" name="L53" href="#L53">53</a>  })
 <a class="jxr_linenumber" name="L54" href="#L54">54</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> ResponseHeader <strong class="jxr_keyword">extends</strong> <a name="BasicHeader" href="../../../../../../org/apache/juneau/http/classic/header/BasicHeader.html#BasicHeader">BasicHeader</a> {
 <a class="jxr_linenumber" name="L55" href="#L55">55</a>  

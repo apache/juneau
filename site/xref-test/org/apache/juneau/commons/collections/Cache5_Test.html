@@ -117,18 +117,18 @@
 <a class="jxr_linenumber" name="L109" href="#L109">109</a> 			})
 <a class="jxr_linenumber" name="L110" href="#L110">110</a> 			.build();
 <a class="jxr_linenumber" name="L111" href="#L111">111</a> 
-<a class="jxr_linenumber" name="L112" href="#L112">112</a> 		<em class="jxr_comment">// First call - cache miss</em>
-<a class="jxr_linenumber" name="L113" href="#L113">113</a> 		<strong class="jxr_keyword">var</strong> result1 = x.get(<span class="jxr_string">"en"</span>, <span class="jxr_string">"US"</span>, <span class="jxr_string">"west"</span>, <span class="jxr_string">"formal"</span>, 1);
-<a class="jxr_linenumber" name="L114" href="#L114">114</a> 
-<a class="jxr_linenumber" name="L115" href="#L115">115</a> 		<em class="jxr_comment">// Second call - cache hit</em>
+<a class="jxr_linenumber" name="L112" href="#L112">112</a> 		<em class="jxr_comment">// WEAK mode stores its composite keys in a weak map and those keys live only inside the cache, so any GC</em>
+<a class="jxr_linenumber" name="L113" href="#L113">113</a> 		<em class="jxr_comment">// can reclaim the entries - a stable size, cache-hit count, or same-instance result cannot be asserted</em>
+<a class="jxr_linenumber" name="L114" href="#L114">114</a> 		<em class="jxr_comment">// deterministically (see gcUntilEmpty). Verify value correctness, that the supplier ran, and reclamation.</em>
+<a class="jxr_linenumber" name="L115" href="#L115">115</a> 		<strong class="jxr_keyword">var</strong> result1 = x.get(<span class="jxr_string">"en"</span>, <span class="jxr_string">"US"</span>, <span class="jxr_string">"west"</span>, <span class="jxr_string">"formal"</span>, 1);
 <a class="jxr_linenumber" name="L116" href="#L116">116</a> 		<strong class="jxr_keyword">var</strong> result2 = x.get(<span class="jxr_string">"en"</span>, <span class="jxr_string">"US"</span>, <span class="jxr_string">"west"</span>, <span class="jxr_string">"formal"</span>, 1);
 <a class="jxr_linenumber" name="L117" href="#L117">117</a> 
 <a class="jxr_linenumber" name="L118" href="#L118">118</a> 		assertEquals(<span class="jxr_string">"en:US:west:formal:1"</span>, result1);
 <a class="jxr_linenumber" name="L119" href="#L119">119</a> 		assertEquals(<span class="jxr_string">"en:US:west:formal:1"</span>, result2);
-<a class="jxr_linenumber" name="L120" href="#L120">120</a> 		assertSame(result1, result2);
-<a class="jxr_linenumber" name="L121" href="#L121">121</a> 		assertEquals(1, callCount.get()); <em class="jxr_comment">// Supplier only called once</em>
-<a class="jxr_linenumber" name="L122" href="#L122">122</a> 		assertSize(1, x);
-<a class="jxr_linenumber" name="L123" href="#L123">123</a> 		assertEquals(1, x.getCacheHits());
+<a class="jxr_linenumber" name="L120" href="#L120">120</a> 		assertTrue(callCount.get() &gt;= 1);
+<a class="jxr_linenumber" name="L121" href="#L121">121</a> 
+<a class="jxr_linenumber" name="L122" href="#L122">122</a> 		gcUntilEmpty(x);
+<a class="jxr_linenumber" name="L123" href="#L123">123</a> 		assertEmpty(x);
 <a class="jxr_linenumber" name="L124" href="#L124">124</a> 	}
 <a class="jxr_linenumber" name="L125" href="#L125">125</a> 
 <a class="jxr_linenumber" name="L126" href="#L126">126</a> 	@Test
@@ -138,94 +138,94 @@
 <a class="jxr_linenumber" name="L130" href="#L130">130</a> 			.supplier((k1, k2, k3, k4, k5) -&gt; k1 + <span class="jxr_string">":"</span> + k2 + <span class="jxr_string">":"</span> + k3 + <span class="jxr_string">":"</span> + k4 + <span class="jxr_string">":"</span> + k5)
 <a class="jxr_linenumber" name="L131" href="#L131">131</a> 			.build();
 <a class="jxr_linenumber" name="L132" href="#L132">132</a> 
-<a class="jxr_linenumber" name="L133" href="#L133">133</a> 		x.get(<span class="jxr_string">"en"</span>, <span class="jxr_string">"US"</span>, <span class="jxr_string">"west"</span>, <span class="jxr_string">"formal"</span>, 1);
-<a class="jxr_linenumber" name="L134" href="#L134">134</a> 		x.get(<span class="jxr_string">"fr"</span>, <span class="jxr_string">"FR"</span>, <span class="jxr_string">"north"</span>, <span class="jxr_string">"formal"</span>, 2);
-<a class="jxr_linenumber" name="L135" href="#L135">135</a> 		x.get(<span class="jxr_string">"de"</span>, <span class="jxr_string">"DE"</span>, <span class="jxr_string">"south"</span>, <span class="jxr_string">"formal"</span>, 3);
-<a class="jxr_linenumber" name="L136" href="#L136">136</a> 
-<a class="jxr_linenumber" name="L137" href="#L137">137</a> 		assertSize(3, x);
-<a class="jxr_linenumber" name="L138" href="#L138">138</a> 		assertEquals(0, x.getCacheHits());
+<a class="jxr_linenumber" name="L133" href="#L133">133</a> 		<em class="jxr_comment">// Distinct keys map to distinct values. WEAK entries can be reclaimed by any GC (see gcUntilEmpty), so</em>
+<a class="jxr_linenumber" name="L134" href="#L134">134</a> 		<em class="jxr_comment">// verify per-key value correctness and reclamation rather than a transient size or hit count.</em>
+<a class="jxr_linenumber" name="L135" href="#L135">135</a> 		assertEquals(<span class="jxr_string">"en:US:west:formal:1"</span>, x.get(<span class="jxr_string">"en"</span>, <span class="jxr_string">"US"</span>, <span class="jxr_string">"west"</span>, <span class="jxr_string">"formal"</span>, 1));
+<a class="jxr_linenumber" name="L136" href="#L136">136</a> 		assertEquals(<span class="jxr_string">"fr:FR:north:formal:2"</span>, x.get(<span class="jxr_string">"fr"</span>, <span class="jxr_string">"FR"</span>, <span class="jxr_string">"north"</span>, <span class="jxr_string">"formal"</span>, 2));
+<a class="jxr_linenumber" name="L137" href="#L137">137</a> 		assertEquals(<span class="jxr_string">"de:DE:south:formal:3"</span>, x.get(<span class="jxr_string">"de"</span>, <span class="jxr_string">"DE"</span>, <span class="jxr_string">"south"</span>, <span class="jxr_string">"formal"</span>, 3));
+<a class="jxr_linenumber" name="L138" href="#L138">138</a> 		assertEquals(0, x.getCacheHits()); <em class="jxr_comment">// Three distinct keys - all misses, no hits yet.</em>
 <a class="jxr_linenumber" name="L139" href="#L139">139</a> 
-<a class="jxr_linenumber" name="L140" href="#L140">140</a> 		<em class="jxr_comment">// Verify all cached</em>
-<a class="jxr_linenumber" name="L141" href="#L141">141</a> 		assertEquals(<span class="jxr_string">"en:US:west:formal:1"</span>, x.get(<span class="jxr_string">"en"</span>, <span class="jxr_string">"US"</span>, <span class="jxr_string">"west"</span>, <span class="jxr_string">"formal"</span>, 1));
-<a class="jxr_linenumber" name="L142" href="#L142">142</a> 		assertEquals(<span class="jxr_string">"fr:FR:north:formal:2"</span>, x.get(<span class="jxr_string">"fr"</span>, <span class="jxr_string">"FR"</span>, <span class="jxr_string">"north"</span>, <span class="jxr_string">"formal"</span>, 2));
-<a class="jxr_linenumber" name="L143" href="#L143">143</a> 		assertEquals(<span class="jxr_string">"de:DE:south:formal:3"</span>, x.get(<span class="jxr_string">"de"</span>, <span class="jxr_string">"DE"</span>, <span class="jxr_string">"south"</span>, <span class="jxr_string">"formal"</span>, 3));
-<a class="jxr_linenumber" name="L144" href="#L144">144</a> 		assertEquals(3, x.getCacheHits());
-<a class="jxr_linenumber" name="L145" href="#L145">145</a> 	}
-<a class="jxr_linenumber" name="L146" href="#L146">146</a> 
-<a class="jxr_linenumber" name="L147" href="#L147">147</a> 	@Test
-<a class="jxr_linenumber" name="L148" href="#L148">148</a> 	<strong class="jxr_keyword">void</strong> a04d_weakMode_clear() {
-<a class="jxr_linenumber" name="L149" href="#L149">149</a> 		<strong class="jxr_keyword">var</strong> x = Cache5.of(String.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>, Integer.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>)
-<a class="jxr_linenumber" name="L150" href="#L150">150</a> 			.cacheMode(WEAK)
-<a class="jxr_linenumber" name="L151" href="#L151">151</a> 			.supplier((k1, k2, k3, k4, k5) -&gt; <span class="jxr_string">"value"</span>)
-<a class="jxr_linenumber" name="L152" href="#L152">152</a> 			.build();
-<a class="jxr_linenumber" name="L153" href="#L153">153</a> 
-<a class="jxr_linenumber" name="L154" href="#L154">154</a> 		x.get(<span class="jxr_string">"en"</span>, <span class="jxr_string">"US"</span>, <span class="jxr_string">"west"</span>, <span class="jxr_string">"formal"</span>, 1);
-<a class="jxr_linenumber" name="L155" href="#L155">155</a> 		x.get(<span class="jxr_string">"fr"</span>, <span class="jxr_string">"FR"</span>, <span class="jxr_string">"north"</span>, <span class="jxr_string">"formal"</span>, 2);
-<a class="jxr_linenumber" name="L156" href="#L156">156</a> 		assertSize(2, x);
-<a class="jxr_linenumber" name="L157" href="#L157">157</a> 
-<a class="jxr_linenumber" name="L158" href="#L158">158</a> 		x.clear();
-<a class="jxr_linenumber" name="L159" href="#L159">159</a> 		assertEmpty(x);
-<a class="jxr_linenumber" name="L160" href="#L160">160</a> 	}
-<a class="jxr_linenumber" name="L161" href="#L161">161</a> 
-<a class="jxr_linenumber" name="L162" href="#L162">162</a> 	@Test
-<a class="jxr_linenumber" name="L163" href="#L163">163</a> 	<strong class="jxr_keyword">void</strong> a04e_weakMode_maxSize() {
-<a class="jxr_linenumber" name="L164" href="#L164">164</a> 		<strong class="jxr_keyword">var</strong> x = Cache5.of(String.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>, Integer.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>)
-<a class="jxr_linenumber" name="L165" href="#L165">165</a> 			.cacheMode(WEAK)
-<a class="jxr_linenumber" name="L166" href="#L166">166</a> 			.maxSize(2)
-<a class="jxr_linenumber" name="L167" href="#L167">167</a> 			.supplier((k1, k2, k3, k4, k5) -&gt; <span class="jxr_string">"value"</span>)
-<a class="jxr_linenumber" name="L168" href="#L168">168</a> 			.build();
-<a class="jxr_linenumber" name="L169" href="#L169">169</a> 
-<a class="jxr_linenumber" name="L170" href="#L170">170</a> 		x.get(<span class="jxr_string">"en"</span>, <span class="jxr_string">"US"</span>, <span class="jxr_string">"west"</span>, <span class="jxr_string">"formal"</span>, 1);
-<a class="jxr_linenumber" name="L171" href="#L171">171</a> 		x.get(<span class="jxr_string">"fr"</span>, <span class="jxr_string">"FR"</span>, <span class="jxr_string">"north"</span>, <span class="jxr_string">"formal"</span>, 2);
-<a class="jxr_linenumber" name="L172" href="#L172">172</a> 		assertSize(2, x);
-<a class="jxr_linenumber" name="L173" href="#L173">173</a> 
-<a class="jxr_linenumber" name="L174" href="#L174">174</a> 		<em class="jxr_comment">// 3rd item doesn't trigger eviction yet</em>
-<a class="jxr_linenumber" name="L175" href="#L175">175</a> 		x.get(<span class="jxr_string">"de"</span>, <span class="jxr_string">"DE"</span>, <span class="jxr_string">"south"</span>, <span class="jxr_string">"formal"</span>, 3);
-<a class="jxr_linenumber" name="L176" href="#L176">176</a> 		assertSize(3, x);
-<a class="jxr_linenumber" name="L177" href="#L177">177</a> 
-<a class="jxr_linenumber" name="L178" href="#L178">178</a> 		<em class="jxr_comment">// 4th item triggers eviction</em>
-<a class="jxr_linenumber" name="L179" href="#L179">179</a> 		x.get(<span class="jxr_string">"es"</span>, <span class="jxr_string">"ES"</span>, <span class="jxr_string">"east"</span>, <span class="jxr_string">"formal"</span>, 4);
-<a class="jxr_linenumber" name="L180" href="#L180">180</a> 		assertSize(1, x);
-<a class="jxr_linenumber" name="L181" href="#L181">181</a> 	}
-<a class="jxr_linenumber" name="L182" href="#L182">182</a> 
-<a class="jxr_linenumber" name="L183" href="#L183">183</a> 	@Test
-<a class="jxr_linenumber" name="L184" href="#L184">184</a> 	<strong class="jxr_keyword">void</strong> a04f_weakMethod_basicCaching() {
-<a class="jxr_linenumber" name="L185" href="#L185">185</a> 		<em class="jxr_comment">// Test the weak() convenience method</em>
-<a class="jxr_linenumber" name="L186" href="#L186">186</a> 		<strong class="jxr_keyword">var</strong> callCount = <strong class="jxr_keyword">new</strong> AtomicInteger();
-<a class="jxr_linenumber" name="L187" href="#L187">187</a> 		<strong class="jxr_keyword">var</strong> x = Cache5.of(String.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>, Integer.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>)
-<a class="jxr_linenumber" name="L188" href="#L188">188</a> 			.weak()
-<a class="jxr_linenumber" name="L189" href="#L189">189</a> 			.supplier((k1, k2, k3, k4, k5) -&gt; {
-<a class="jxr_linenumber" name="L190" href="#L190">190</a> 				callCount.incrementAndGet();
-<a class="jxr_linenumber" name="L191" href="#L191">191</a> 				<strong class="jxr_keyword">return</strong> k1 + <span class="jxr_string">":"</span> + k2 + <span class="jxr_string">":"</span> + k3 + <span class="jxr_string">":"</span> + k4 + <span class="jxr_string">":"</span> + k5;
-<a class="jxr_linenumber" name="L192" href="#L192">192</a> 			})
-<a class="jxr_linenumber" name="L193" href="#L193">193</a> 			.build();
-<a class="jxr_linenumber" name="L194" href="#L194">194</a> 
-<a class="jxr_linenumber" name="L195" href="#L195">195</a> 		<em class="jxr_comment">// First call - cache miss</em>
-<a class="jxr_linenumber" name="L196" href="#L196">196</a> 		<strong class="jxr_keyword">var</strong> result1 = x.get(<span class="jxr_string">"en"</span>, <span class="jxr_string">"US"</span>, <span class="jxr_string">"west"</span>, <span class="jxr_string">"formal"</span>, 1);
-<a class="jxr_linenumber" name="L197" href="#L197">197</a> 
-<a class="jxr_linenumber" name="L198" href="#L198">198</a> 		<em class="jxr_comment">// Second call - cache hit</em>
-<a class="jxr_linenumber" name="L199" href="#L199">199</a> 		<strong class="jxr_keyword">var</strong> result2 = x.get(<span class="jxr_string">"en"</span>, <span class="jxr_string">"US"</span>, <span class="jxr_string">"west"</span>, <span class="jxr_string">"formal"</span>, 1);
+<a class="jxr_linenumber" name="L140" href="#L140">140</a> 		gcUntilEmpty(x);
+<a class="jxr_linenumber" name="L141" href="#L141">141</a> 		assertEmpty(x);
+<a class="jxr_linenumber" name="L142" href="#L142">142</a> 	}
+<a class="jxr_linenumber" name="L143" href="#L143">143</a> 
+<a class="jxr_linenumber" name="L144" href="#L144">144</a> 	@Test
+<a class="jxr_linenumber" name="L145" href="#L145">145</a> 	<strong class="jxr_keyword">void</strong> a04d_weakMode_clear() {
+<a class="jxr_linenumber" name="L146" href="#L146">146</a> 		<strong class="jxr_keyword">var</strong> x = Cache5.of(String.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>, Integer.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>)
+<a class="jxr_linenumber" name="L147" href="#L147">147</a> 			.cacheMode(WEAK)
+<a class="jxr_linenumber" name="L148" href="#L148">148</a> 			.supplier((k1, k2, k3, k4, k5) -&gt; <span class="jxr_string">"value"</span>)
+<a class="jxr_linenumber" name="L149" href="#L149">149</a> 			.build();
+<a class="jxr_linenumber" name="L150" href="#L150">150</a> 
+<a class="jxr_linenumber" name="L151" href="#L151">151</a> 		<em class="jxr_comment">// WEAK entries can be reclaimed by any GC (keys live only inside the cache and cannot be pinned from a</em>
+<a class="jxr_linenumber" name="L152" href="#L152">152</a> 		<em class="jxr_comment">// test), so assert only value correctness and that clear() deterministically empties the cache.</em>
+<a class="jxr_linenumber" name="L153" href="#L153">153</a> 		assertEquals(<span class="jxr_string">"value"</span>, x.get(<span class="jxr_string">"en"</span>, <span class="jxr_string">"US"</span>, <span class="jxr_string">"west"</span>, <span class="jxr_string">"formal"</span>, 1));
+<a class="jxr_linenumber" name="L154" href="#L154">154</a> 		assertEquals(<span class="jxr_string">"value"</span>, x.get(<span class="jxr_string">"fr"</span>, <span class="jxr_string">"FR"</span>, <span class="jxr_string">"north"</span>, <span class="jxr_string">"formal"</span>, 2));
+<a class="jxr_linenumber" name="L155" href="#L155">155</a> 
+<a class="jxr_linenumber" name="L156" href="#L156">156</a> 		x.clear();
+<a class="jxr_linenumber" name="L157" href="#L157">157</a> 		assertEmpty(x);
+<a class="jxr_linenumber" name="L158" href="#L158">158</a> 	}
+<a class="jxr_linenumber" name="L159" href="#L159">159</a> 
+<a class="jxr_linenumber" name="L160" href="#L160">160</a> 	@Test
+<a class="jxr_linenumber" name="L161" href="#L161">161</a> 	<strong class="jxr_keyword">void</strong> a04e_weakMode_maxSize() {
+<a class="jxr_linenumber" name="L162" href="#L162">162</a> 		<strong class="jxr_keyword">var</strong> x = Cache5.of(String.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>, Integer.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>)
+<a class="jxr_linenumber" name="L163" href="#L163">163</a> 			.cacheMode(WEAK)
+<a class="jxr_linenumber" name="L164" href="#L164">164</a> 			.maxSize(2)
+<a class="jxr_linenumber" name="L165" href="#L165">165</a> 			.supplier((k1, k2, k3, k4, k5) -&gt; <span class="jxr_string">"value"</span>)
+<a class="jxr_linenumber" name="L166" href="#L166">166</a> 			.build();
+<a class="jxr_linenumber" name="L167" href="#L167">167</a> 
+<a class="jxr_linenumber" name="L168" href="#L168">168</a> 		<em class="jxr_comment">// In WEAK mode entries can be reclaimed by any GC, so the size-based eviction sequence cannot be observed</em>
+<a class="jxr_linenumber" name="L169" href="#L169">169</a> 		<em class="jxr_comment">// deterministically here; that eviction behavior is covered by a05_maxSize (FULL mode). Verify only that a</em>
+<a class="jxr_linenumber" name="L170" href="#L170">170</a> 		<em class="jxr_comment">// weak cache built with maxSize computes values correctly and reclaims its entries once unreferenced.</em>
+<a class="jxr_linenumber" name="L171" href="#L171">171</a> 		assertEquals(<span class="jxr_string">"value"</span>, x.get(<span class="jxr_string">"en"</span>, <span class="jxr_string">"US"</span>, <span class="jxr_string">"west"</span>, <span class="jxr_string">"formal"</span>, 1));
+<a class="jxr_linenumber" name="L172" href="#L172">172</a> 		assertEquals(<span class="jxr_string">"value"</span>, x.get(<span class="jxr_string">"fr"</span>, <span class="jxr_string">"FR"</span>, <span class="jxr_string">"north"</span>, <span class="jxr_string">"formal"</span>, 2));
+<a class="jxr_linenumber" name="L173" href="#L173">173</a> 		assertEquals(<span class="jxr_string">"value"</span>, x.get(<span class="jxr_string">"de"</span>, <span class="jxr_string">"DE"</span>, <span class="jxr_string">"south"</span>, <span class="jxr_string">"formal"</span>, 3));
+<a class="jxr_linenumber" name="L174" href="#L174">174</a> 		assertEquals(<span class="jxr_string">"value"</span>, x.get(<span class="jxr_string">"es"</span>, <span class="jxr_string">"ES"</span>, <span class="jxr_string">"east"</span>, <span class="jxr_string">"formal"</span>, 4));
+<a class="jxr_linenumber" name="L175" href="#L175">175</a> 
+<a class="jxr_linenumber" name="L176" href="#L176">176</a> 		gcUntilEmpty(x);
+<a class="jxr_linenumber" name="L177" href="#L177">177</a> 		assertEmpty(x);
+<a class="jxr_linenumber" name="L178" href="#L178">178</a> 	}
+<a class="jxr_linenumber" name="L179" href="#L179">179</a> 
+<a class="jxr_linenumber" name="L180" href="#L180">180</a> 	@Test
+<a class="jxr_linenumber" name="L181" href="#L181">181</a> 	<strong class="jxr_keyword">void</strong> a04f_weakMethod_basicCaching() {
+<a class="jxr_linenumber" name="L182" href="#L182">182</a> 		<em class="jxr_comment">// Test the weak() convenience method</em>
+<a class="jxr_linenumber" name="L183" href="#L183">183</a> 		<strong class="jxr_keyword">var</strong> callCount = <strong class="jxr_keyword">new</strong> AtomicInteger();
+<a class="jxr_linenumber" name="L184" href="#L184">184</a> 		<strong class="jxr_keyword">var</strong> x = Cache5.of(String.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>, Integer.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>)
+<a class="jxr_linenumber" name="L185" href="#L185">185</a> 			.weak()
+<a class="jxr_linenumber" name="L186" href="#L186">186</a> 			.supplier((k1, k2, k3, k4, k5) -&gt; {
+<a class="jxr_linenumber" name="L187" href="#L187">187</a> 				callCount.incrementAndGet();
+<a class="jxr_linenumber" name="L188" href="#L188">188</a> 				<strong class="jxr_keyword">return</strong> k1 + <span class="jxr_string">":"</span> + k2 + <span class="jxr_string">":"</span> + k3 + <span class="jxr_string">":"</span> + k4 + <span class="jxr_string">":"</span> + k5;
+<a class="jxr_linenumber" name="L189" href="#L189">189</a> 			})
+<a class="jxr_linenumber" name="L190" href="#L190">190</a> 			.build();
+<a class="jxr_linenumber" name="L191" href="#L191">191</a> 
+<a class="jxr_linenumber" name="L192" href="#L192">192</a> 		<em class="jxr_comment">// weak() is a shortcut for cacheMode(WEAK); entries can be reclaimed by any GC (see gcUntilEmpty), so</em>
+<a class="jxr_linenumber" name="L193" href="#L193">193</a> 		<em class="jxr_comment">// verify value correctness, that the supplier ran, and reclamation rather than a transient size/hit count.</em>
+<a class="jxr_linenumber" name="L194" href="#L194">194</a> 		<strong class="jxr_keyword">var</strong> result1 = x.get(<span class="jxr_string">"en"</span>, <span class="jxr_string">"US"</span>, <span class="jxr_string">"west"</span>, <span class="jxr_string">"formal"</span>, 1);
+<a class="jxr_linenumber" name="L195" href="#L195">195</a> 		<strong class="jxr_keyword">var</strong> result2 = x.get(<span class="jxr_string">"en"</span>, <span class="jxr_string">"US"</span>, <span class="jxr_string">"west"</span>, <span class="jxr_string">"formal"</span>, 1);
+<a class="jxr_linenumber" name="L196" href="#L196">196</a> 
+<a class="jxr_linenumber" name="L197" href="#L197">197</a> 		assertEquals(<span class="jxr_string">"en:US:west:formal:1"</span>, result1);
+<a class="jxr_linenumber" name="L198" href="#L198">198</a> 		assertEquals(<span class="jxr_string">"en:US:west:formal:1"</span>, result2);
+<a class="jxr_linenumber" name="L199" href="#L199">199</a> 		assertTrue(callCount.get() &gt;= 1);
 <a class="jxr_linenumber" name="L200" href="#L200">200</a> 
-<a class="jxr_linenumber" name="L201" href="#L201">201</a> 		assertEquals(<span class="jxr_string">"en:US:west:formal:1"</span>, result1);
-<a class="jxr_linenumber" name="L202" href="#L202">202</a> 		assertEquals(<span class="jxr_string">"en:US:west:formal:1"</span>, result2);
-<a class="jxr_linenumber" name="L203" href="#L203">203</a> 		assertSame(result1, result2);
-<a class="jxr_linenumber" name="L204" href="#L204">204</a> 		assertEquals(1, callCount.get()); <em class="jxr_comment">// Supplier only called once</em>
-<a class="jxr_linenumber" name="L205" href="#L205">205</a> 		assertSize(1, x);
-<a class="jxr_linenumber" name="L206" href="#L206">206</a> 		assertEquals(1, x.getCacheHits());
-<a class="jxr_linenumber" name="L207" href="#L207">207</a> 	}
-<a class="jxr_linenumber" name="L208" href="#L208">208</a> 
-<a class="jxr_linenumber" name="L209" href="#L209">209</a> 	@Test
-<a class="jxr_linenumber" name="L210" href="#L210">210</a> 	<strong class="jxr_keyword">void</strong> a04g_weakMethod_chaining() {
-<a class="jxr_linenumber" name="L211" href="#L211">211</a> 		<em class="jxr_comment">// Test that weak() can be chained with other builder methods</em>
-<a class="jxr_linenumber" name="L212" href="#L212">212</a> 		<strong class="jxr_keyword">var</strong> x = Cache5.of(String.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>, Integer.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>)
-<a class="jxr_linenumber" name="L213" href="#L213">213</a> 			.weak()
-<a class="jxr_linenumber" name="L214" href="#L214">214</a> 			.maxSize(100)
-<a class="jxr_linenumber" name="L215" href="#L215">215</a> 			.supplier((k1, k2, k3, k4, k5) -&gt; k1 + <span class="jxr_string">":"</span> + k2 + <span class="jxr_string">":"</span> + k3 + <span class="jxr_string">":"</span> + k4 + <span class="jxr_string">":"</span> + k5)
-<a class="jxr_linenumber" name="L216" href="#L216">216</a> 			.build();
-<a class="jxr_linenumber" name="L217" href="#L217">217</a> 
-<a class="jxr_linenumber" name="L218" href="#L218">218</a> 		<strong class="jxr_keyword">var</strong> result = x.get(<span class="jxr_string">"en"</span>, <span class="jxr_string">"US"</span>, <span class="jxr_string">"west"</span>, <span class="jxr_string">"formal"</span>, 1);
-<a class="jxr_linenumber" name="L219" href="#L219">219</a> 		assertEquals(<span class="jxr_string">"en:US:west:formal:1"</span>, result);
-<a class="jxr_linenumber" name="L220" href="#L220">220</a> 		assertSize(1, x);
+<a class="jxr_linenumber" name="L201" href="#L201">201</a> 		gcUntilEmpty(x);
+<a class="jxr_linenumber" name="L202" href="#L202">202</a> 		assertEmpty(x);
+<a class="jxr_linenumber" name="L203" href="#L203">203</a> 	}
+<a class="jxr_linenumber" name="L204" href="#L204">204</a> 
+<a class="jxr_linenumber" name="L205" href="#L205">205</a> 	@Test
+<a class="jxr_linenumber" name="L206" href="#L206">206</a> 	<strong class="jxr_keyword">void</strong> a04g_weakMethod_chaining() {
+<a class="jxr_linenumber" name="L207" href="#L207">207</a> 		<em class="jxr_comment">// Test that weak() can be chained with other builder methods</em>
+<a class="jxr_linenumber" name="L208" href="#L208">208</a> 		<strong class="jxr_keyword">var</strong> x = Cache5.of(String.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>, Integer.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>)
+<a class="jxr_linenumber" name="L209" href="#L209">209</a> 			.weak()
+<a class="jxr_linenumber" name="L210" href="#L210">210</a> 			.maxSize(100)
+<a class="jxr_linenumber" name="L211" href="#L211">211</a> 			.supplier((k1, k2, k3, k4, k5) -&gt; k1 + <span class="jxr_string">":"</span> + k2 + <span class="jxr_string">":"</span> + k3 + <span class="jxr_string">":"</span> + k4 + <span class="jxr_string">":"</span> + k5)
+<a class="jxr_linenumber" name="L212" href="#L212">212</a> 			.build();
+<a class="jxr_linenumber" name="L213" href="#L213">213</a> 
+<a class="jxr_linenumber" name="L214" href="#L214">214</a> 		<em class="jxr_comment">// Verify the chained weak() + maxSize() builder produces a working cache. WEAK entries can be reclaimed</em>
+<a class="jxr_linenumber" name="L215" href="#L215">215</a> 		<em class="jxr_comment">// by any GC (see gcUntilEmpty), so assert value correctness and reclamation rather than a transient size.</em>
+<a class="jxr_linenumber" name="L216" href="#L216">216</a> 		<strong class="jxr_keyword">var</strong> result = x.get(<span class="jxr_string">"en"</span>, <span class="jxr_string">"US"</span>, <span class="jxr_string">"west"</span>, <span class="jxr_string">"formal"</span>, 1);
+<a class="jxr_linenumber" name="L217" href="#L217">217</a> 		assertEquals(<span class="jxr_string">"en:US:west:formal:1"</span>, result);
+<a class="jxr_linenumber" name="L218" href="#L218">218</a> 
+<a class="jxr_linenumber" name="L219" href="#L219">219</a> 		gcUntilEmpty(x);
+<a class="jxr_linenumber" name="L220" href="#L220">220</a> 		assertEmpty(x);
 <a class="jxr_linenumber" name="L221" href="#L221">221</a> 	}
 <a class="jxr_linenumber" name="L222" href="#L222">222</a> 
 <a class="jxr_linenumber" name="L223" href="#L223">223</a> 	@Test
@@ -531,18 +531,18 @@
 <a class="jxr_linenumber" name="L523" href="#L523">523</a> 			})
 <a class="jxr_linenumber" name="L524" href="#L524">524</a> 			.build();
 <a class="jxr_linenumber" name="L525" href="#L525">525</a> 
-<a class="jxr_linenumber" name="L526" href="#L526">526</a> 		<em class="jxr_comment">// First call - cache miss</em>
-<a class="jxr_linenumber" name="L527" href="#L527">527</a> 		<strong class="jxr_keyword">var</strong> result1 = x.get(<span class="jxr_string">"en"</span>, <span class="jxr_string">"US"</span>, <span class="jxr_string">"west"</span>, <span class="jxr_string">"formal"</span>, 1);
-<a class="jxr_linenumber" name="L528" href="#L528">528</a> 
-<a class="jxr_linenumber" name="L529" href="#L529">529</a> 		<em class="jxr_comment">// Second call - cache hit</em>
+<a class="jxr_linenumber" name="L526" href="#L526">526</a> 		<em class="jxr_comment">// Thread-local WEAK mode stores composite keys in a per-thread weak map; those keys live only inside the</em>
+<a class="jxr_linenumber" name="L527" href="#L527">527</a> 		<em class="jxr_comment">// cache, so any GC can reclaim the entries. Verify value correctness, that the supplier ran, and that the</em>
+<a class="jxr_linenumber" name="L528" href="#L528">528</a> 		<em class="jxr_comment">// current thread's entries are reclaimed once unreferenced (gcUntilEmpty runs on this thread).</em>
+<a class="jxr_linenumber" name="L529" href="#L529">529</a> 		<strong class="jxr_keyword">var</strong> result1 = x.get(<span class="jxr_string">"en"</span>, <span class="jxr_string">"US"</span>, <span class="jxr_string">"west"</span>, <span class="jxr_string">"formal"</span>, 1);
 <a class="jxr_linenumber" name="L530" href="#L530">530</a> 		<strong class="jxr_keyword">var</strong> result2 = x.get(<span class="jxr_string">"en"</span>, <span class="jxr_string">"US"</span>, <span class="jxr_string">"west"</span>, <span class="jxr_string">"formal"</span>, 1);
 <a class="jxr_linenumber" name="L531" href="#L531">531</a> 
 <a class="jxr_linenumber" name="L532" href="#L532">532</a> 		assertEquals(<span class="jxr_string">"en:US:west:formal:1"</span>, result1);
 <a class="jxr_linenumber" name="L533" href="#L533">533</a> 		assertEquals(<span class="jxr_string">"en:US:west:formal:1"</span>, result2);
-<a class="jxr_linenumber" name="L534" href="#L534">534</a> 		assertSame(result1, result2);
-<a class="jxr_linenumber" name="L535" href="#L535">535</a> 		assertEquals(1, callCount.get()); <em class="jxr_comment">// Supplier only called once</em>
-<a class="jxr_linenumber" name="L536" href="#L536">536</a> 		assertSize(1, x);
-<a class="jxr_linenumber" name="L537" href="#L537">537</a> 		assertEquals(1, x.getCacheHits());
+<a class="jxr_linenumber" name="L534" href="#L534">534</a> 		assertTrue(callCount.get() &gt;= 1);
+<a class="jxr_linenumber" name="L535" href="#L535">535</a> 
+<a class="jxr_linenumber" name="L536" href="#L536">536</a> 		gcUntilEmpty(x);
+<a class="jxr_linenumber" name="L537" href="#L537">537</a> 		assertEmpty(x);
 <a class="jxr_linenumber" name="L538" href="#L538">538</a> 	}
 <a class="jxr_linenumber" name="L539" href="#L539">539</a> 
 <a class="jxr_linenumber" name="L540" href="#L540">540</a> 	@Test
@@ -583,91 +583,121 @@
 <a class="jxr_linenumber" name="L575" href="#L575">575</a> 			.supplier((k1, k2, k3, k4, k5) -&gt; <span class="jxr_string">"value"</span>)
 <a class="jxr_linenumber" name="L576" href="#L576">576</a> 			.build();
 <a class="jxr_linenumber" name="L577" href="#L577">577</a> 
-<a class="jxr_linenumber" name="L578" href="#L578">578</a> 		x.get(<span class="jxr_string">"en"</span>, <span class="jxr_string">"US"</span>, <span class="jxr_string">"west"</span>, <span class="jxr_string">"formal"</span>, 1);
-<a class="jxr_linenumber" name="L579" href="#L579">579</a> 		x.get(<span class="jxr_string">"fr"</span>, <span class="jxr_string">"FR"</span>, <span class="jxr_string">"east"</span>, <span class="jxr_string">"informal"</span>, 2);
-<a class="jxr_linenumber" name="L580" href="#L580">580</a> 		assertSize(2, x);
-<a class="jxr_linenumber" name="L581" href="#L581">581</a> 
-<a class="jxr_linenumber" name="L582" href="#L582">582</a> 		x.clear();
-<a class="jxr_linenumber" name="L583" href="#L583">583</a> 		assertEmpty(x);
-<a class="jxr_linenumber" name="L584" href="#L584">584</a> 	}
-<a class="jxr_linenumber" name="L585" href="#L585">585</a> 
-<a class="jxr_linenumber" name="L586" href="#L586">586</a> 	@Test
-<a class="jxr_linenumber" name="L587" href="#L587">587</a> 	<strong class="jxr_keyword">void</strong> g04_threadLocal_weakMode_maxSize() {
-<a class="jxr_linenumber" name="L588" href="#L588">588</a> 		<strong class="jxr_keyword">var</strong> x = Cache5.of(String.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>, Integer.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>)
-<a class="jxr_linenumber" name="L589" href="#L589">589</a> 			.threadLocal()
-<a class="jxr_linenumber" name="L590" href="#L590">590</a> 			.cacheMode(WEAK)
-<a class="jxr_linenumber" name="L591" href="#L591">591</a> 			.maxSize(2)
-<a class="jxr_linenumber" name="L592" href="#L592">592</a> 			.supplier((k1, k2, k3, k4, k5) -&gt; <span class="jxr_string">"value"</span>)
-<a class="jxr_linenumber" name="L593" href="#L593">593</a> 			.build();
-<a class="jxr_linenumber" name="L594" href="#L594">594</a> 
-<a class="jxr_linenumber" name="L595" href="#L595">595</a> 		x.get(<span class="jxr_string">"en"</span>, <span class="jxr_string">"US"</span>, <span class="jxr_string">"west"</span>, <span class="jxr_string">"formal"</span>, 1);
-<a class="jxr_linenumber" name="L596" href="#L596">596</a> 		x.get(<span class="jxr_string">"fr"</span>, <span class="jxr_string">"FR"</span>, <span class="jxr_string">"east"</span>, <span class="jxr_string">"informal"</span>, 2);
-<a class="jxr_linenumber" name="L597" href="#L597">597</a> 		assertSize(2, x);
-<a class="jxr_linenumber" name="L598" href="#L598">598</a> 
-<a class="jxr_linenumber" name="L599" href="#L599">599</a> 		<em class="jxr_comment">// 3rd item doesn't trigger eviction yet</em>
-<a class="jxr_linenumber" name="L600" href="#L600">600</a> 		x.get(<span class="jxr_string">"de"</span>, <span class="jxr_string">"DE"</span>, <span class="jxr_string">"north"</span>, <span class="jxr_string">"formal"</span>, 3);
-<a class="jxr_linenumber" name="L601" href="#L601">601</a> 		assertSize(3, x);
+<a class="jxr_linenumber" name="L578" href="#L578">578</a> 		<em class="jxr_comment">// Thread-local WEAK entries can be reclaimed by any GC, so assert only value correctness and that clear()</em>
+<a class="jxr_linenumber" name="L579" href="#L579">579</a> 		<em class="jxr_comment">// deterministically empties the current thread's cache.</em>
+<a class="jxr_linenumber" name="L580" href="#L580">580</a> 		assertEquals(<span class="jxr_string">"value"</span>, x.get(<span class="jxr_string">"en"</span>, <span class="jxr_string">"US"</span>, <span class="jxr_string">"west"</span>, <span class="jxr_string">"formal"</span>, 1));
+<a class="jxr_linenumber" name="L581" href="#L581">581</a> 		assertEquals(<span class="jxr_string">"value"</span>, x.get(<span class="jxr_string">"fr"</span>, <span class="jxr_string">"FR"</span>, <span class="jxr_string">"east"</span>, <span class="jxr_string">"informal"</span>, 2));
+<a class="jxr_linenumber" name="L582" href="#L582">582</a> 
+<a class="jxr_linenumber" name="L583" href="#L583">583</a> 		x.clear();
+<a class="jxr_linenumber" name="L584" href="#L584">584</a> 		assertEmpty(x);
+<a class="jxr_linenumber" name="L585" href="#L585">585</a> 	}
+<a class="jxr_linenumber" name="L586" href="#L586">586</a> 
+<a class="jxr_linenumber" name="L587" href="#L587">587</a> 	@Test
+<a class="jxr_linenumber" name="L588" href="#L588">588</a> 	<strong class="jxr_keyword">void</strong> g04_threadLocal_weakMode_maxSize() {
+<a class="jxr_linenumber" name="L589" href="#L589">589</a> 		<strong class="jxr_keyword">var</strong> x = Cache5.of(String.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>, Integer.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>)
+<a class="jxr_linenumber" name="L590" href="#L590">590</a> 			.threadLocal()
+<a class="jxr_linenumber" name="L591" href="#L591">591</a> 			.cacheMode(WEAK)
+<a class="jxr_linenumber" name="L592" href="#L592">592</a> 			.maxSize(2)
+<a class="jxr_linenumber" name="L593" href="#L593">593</a> 			.supplier((k1, k2, k3, k4, k5) -&gt; <span class="jxr_string">"value"</span>)
+<a class="jxr_linenumber" name="L594" href="#L594">594</a> 			.build();
+<a class="jxr_linenumber" name="L595" href="#L595">595</a> 
+<a class="jxr_linenumber" name="L596" href="#L596">596</a> 		<em class="jxr_comment">// As with a04e, size-based eviction can't be observed deterministically in WEAK mode; eviction is covered</em>
+<a class="jxr_linenumber" name="L597" href="#L597">597</a> 		<em class="jxr_comment">// by f05_threadLocal_maxSize (non-weak). Verify value correctness and reclamation of the thread's entries.</em>
+<a class="jxr_linenumber" name="L598" href="#L598">598</a> 		assertEquals(<span class="jxr_string">"value"</span>, x.get(<span class="jxr_string">"en"</span>, <span class="jxr_string">"US"</span>, <span class="jxr_string">"west"</span>, <span class="jxr_string">"formal"</span>, 1));
+<a class="jxr_linenumber" name="L599" href="#L599">599</a> 		assertEquals(<span class="jxr_string">"value"</span>, x.get(<span class="jxr_string">"fr"</span>, <span class="jxr_string">"FR"</span>, <span class="jxr_string">"east"</span>, <span class="jxr_string">"informal"</span>, 2));
+<a class="jxr_linenumber" name="L600" href="#L600">600</a> 		assertEquals(<span class="jxr_string">"value"</span>, x.get(<span class="jxr_string">"de"</span>, <span class="jxr_string">"DE"</span>, <span class="jxr_string">"north"</span>, <span class="jxr_string">"formal"</span>, 3));
+<a class="jxr_linenumber" name="L601" href="#L601">601</a> 		assertEquals(<span class="jxr_string">"value"</span>, x.get(<span class="jxr_string">"es"</span>, <span class="jxr_string">"ES"</span>, <span class="jxr_string">"south"</span>, <span class="jxr_string">"informal"</span>, 4));
 <a class="jxr_linenumber" name="L602" href="#L602">602</a> 
-<a class="jxr_linenumber" name="L603" href="#L603">603</a> 		<em class="jxr_comment">// 4th item triggers eviction</em>
-<a class="jxr_linenumber" name="L604" href="#L604">604</a> 		x.get(<span class="jxr_string">"es"</span>, <span class="jxr_string">"ES"</span>, <span class="jxr_string">"south"</span>, <span class="jxr_string">"informal"</span>, 4);
-<a class="jxr_linenumber" name="L605" href="#L605">605</a> 		assertSize(1, x);
-<a class="jxr_linenumber" name="L606" href="#L606">606</a> 	}
-<a class="jxr_linenumber" name="L607" href="#L607">607</a> 
-<a class="jxr_linenumber" name="L608" href="#L608">608</a> 	<em class="jxr_comment">//====================================================================================================</em>
-<a class="jxr_linenumber" name="L609" href="#L609">609</a> 	<em class="jxr_comment">// cleanup() - Thread-local cleanup</em>
-<a class="jxr_linenumber" name="L610" href="#L610">610</a> 	<em class="jxr_comment">//====================================================================================================</em>
-<a class="jxr_linenumber" name="L611" href="#L611">611</a> 
-<a class="jxr_linenumber" name="L612" href="#L612">612</a> 	@Test
-<a class="jxr_linenumber" name="L613" href="#L613">613</a> 	<strong class="jxr_keyword">void</strong> q01_cleanup_threadLocal() {
-<a class="jxr_linenumber" name="L614" href="#L614">614</a> 		<strong class="jxr_keyword">var</strong> x = Cache5.of(String.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>, Integer.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>)
-<a class="jxr_linenumber" name="L615" href="#L615">615</a> 			.threadLocal()
-<a class="jxr_linenumber" name="L616" href="#L616">616</a> 			.supplier((k1, k2, k3, k4, k5) -&gt; k1 + <span class="jxr_string">":"</span> + k2 + <span class="jxr_string">":"</span> + k3 + <span class="jxr_string">":"</span> + k4 + <span class="jxr_string">":"</span> + k5)
-<a class="jxr_linenumber" name="L617" href="#L617">617</a> 			.build();
-<a class="jxr_linenumber" name="L618" href="#L618">618</a> 
-<a class="jxr_linenumber" name="L619" href="#L619">619</a> 		<em class="jxr_comment">// Use the cache to populate ThreadLocal</em>
-<a class="jxr_linenumber" name="L620" href="#L620">620</a> 		x.get(<span class="jxr_string">"key1"</span>, <span class="jxr_string">"key2"</span>, <span class="jxr_string">"key3"</span>, <span class="jxr_string">"key4"</span>, 1);
-<a class="jxr_linenumber" name="L621" href="#L621">621</a> 		x.get(<span class="jxr_string">"key5"</span>, <span class="jxr_string">"key6"</span>, <span class="jxr_string">"key7"</span>, <span class="jxr_string">"key8"</span>, 2);
-<a class="jxr_linenumber" name="L622" href="#L622">622</a> 		assertSize(2, x);
-<a class="jxr_linenumber" name="L623" href="#L623">623</a> 
-<a class="jxr_linenumber" name="L624" href="#L624">624</a> 		<em class="jxr_comment">// Cleanup should remove ThreadLocal values</em>
-<a class="jxr_linenumber" name="L625" href="#L625">625</a> 		x.cleanup();
-<a class="jxr_linenumber" name="L626" href="#L626">626</a> 
-<a class="jxr_linenumber" name="L627" href="#L627">627</a> 		<em class="jxr_comment">// After cleanup, cache should be empty (ThreadLocal was cleared)</em>
-<a class="jxr_linenumber" name="L628" href="#L628">628</a> 		assertEmpty(x);
-<a class="jxr_linenumber" name="L629" href="#L629">629</a> 
-<a class="jxr_linenumber" name="L630" href="#L630">630</a> 		<em class="jxr_comment">// Call cleanup again to ensure it's safe to call multiple times</em>
-<a class="jxr_linenumber" name="L631" href="#L631">631</a> 		x.cleanup();
-<a class="jxr_linenumber" name="L632" href="#L632">632</a> 		<em class="jxr_comment">// Should not throw</em>
-<a class="jxr_linenumber" name="L633" href="#L633">633</a> 	}
-<a class="jxr_linenumber" name="L634" href="#L634">634</a> 
-<a class="jxr_linenumber" name="L635" href="#L635">635</a> 	@Test
-<a class="jxr_linenumber" name="L636" href="#L636">636</a> 	<strong class="jxr_keyword">void</strong> q02_cleanup_nonThreadLocal_noEffect() {
-<a class="jxr_linenumber" name="L637" href="#L637">637</a> 		<strong class="jxr_keyword">var</strong> x = Cache5.of(String.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>, Integer.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>)
-<a class="jxr_linenumber" name="L638" href="#L638">638</a> 			.supplier((k1, k2, k3, k4, k5) -&gt; k1 + <span class="jxr_string">":"</span> + k2 + <span class="jxr_string">":"</span> + k3 + <span class="jxr_string">":"</span> + k4 + <span class="jxr_string">":"</span> + k5)
-<a class="jxr_linenumber" name="L639" href="#L639">639</a> 			.build(); <em class="jxr_comment">// Not thread-local</em>
-<a class="jxr_linenumber" name="L640" href="#L640">640</a> 
-<a class="jxr_linenumber" name="L641" href="#L641">641</a> 		x.get(<span class="jxr_string">"key1"</span>, <span class="jxr_string">"key2"</span>, <span class="jxr_string">"key3"</span>, <span class="jxr_string">"key4"</span>, 1);
-<a class="jxr_linenumber" name="L642" href="#L642">642</a> 		x.get(<span class="jxr_string">"key5"</span>, <span class="jxr_string">"key6"</span>, <span class="jxr_string">"key7"</span>, <span class="jxr_string">"key8"</span>, 2);
-<a class="jxr_linenumber" name="L643" href="#L643">643</a> 		assertSize(2, x);
-<a class="jxr_linenumber" name="L644" href="#L644">644</a> 
-<a class="jxr_linenumber" name="L645" href="#L645">645</a> 		<em class="jxr_comment">// Cleanup on non-thread-local cache should not affect the cache</em>
-<a class="jxr_linenumber" name="L646" href="#L646">646</a> 		x.cleanup();
-<a class="jxr_linenumber" name="L647" href="#L647">647</a> 
-<a class="jxr_linenumber" name="L648" href="#L648">648</a> 		<em class="jxr_comment">// Cache should still have values (cleanup only affects thread-local caches)</em>
-<a class="jxr_linenumber" name="L649" href="#L649">649</a> 		assertSize(2, x);
-<a class="jxr_linenumber" name="L650" href="#L650">650</a> 	}
-<a class="jxr_linenumber" name="L651" href="#L651">651</a> 
-<a class="jxr_linenumber" name="L652" href="#L652">652</a> 	@Test <strong class="jxr_keyword">void</strong> q03_cleanup_threadLocal_notYetPopulated() {
-<a class="jxr_linenumber" name="L653" href="#L653">653</a> 		<strong class="jxr_keyword">var</strong> x = Cache5.of(String.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>, Integer.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>)
-<a class="jxr_linenumber" name="L654" href="#L654">654</a> 			.supplier((k1, k2, k3, k4, k5) -&gt; k1 + <span class="jxr_string">":"</span> + k2 + <span class="jxr_string">":"</span> + k3 + <span class="jxr_string">":"</span> + k4 + <span class="jxr_string">":"</span> + k5)
-<a class="jxr_linenumber" name="L655" href="#L655">655</a> 			.threadLocal()
-<a class="jxr_linenumber" name="L656" href="#L656">656</a> 			.build();
-<a class="jxr_linenumber" name="L657" href="#L657">657</a> 
-<a class="jxr_linenumber" name="L658" href="#L658">658</a> 		<em class="jxr_comment">// Cleanup before any access - threadLocalMap is null; should not throw</em>
-<a class="jxr_linenumber" name="L659" href="#L659">659</a> 		assertDoesNotThrow(x::cleanup);
-<a class="jxr_linenumber" name="L660" href="#L660">660</a> 	}
-<a class="jxr_linenumber" name="L661" href="#L661">661</a> }
-<a class="jxr_linenumber" name="L662" href="#L662">662</a> 
+<a class="jxr_linenumber" name="L603" href="#L603">603</a> 		gcUntilEmpty(x);
+<a class="jxr_linenumber" name="L604" href="#L604">604</a> 		assertEmpty(x);
+<a class="jxr_linenumber" name="L605" href="#L605">605</a> 	}
+<a class="jxr_linenumber" name="L606" href="#L606">606</a> 
+<a class="jxr_linenumber" name="L607" href="#L607">607</a> 	<em class="jxr_comment">//====================================================================================================</em>
+<a class="jxr_linenumber" name="L608" href="#L608">608</a> 	<em class="jxr_comment">// cleanup() - Thread-local cleanup</em>
+<a class="jxr_linenumber" name="L609" href="#L609">609</a> 	<em class="jxr_comment">//====================================================================================================</em>
+<a class="jxr_linenumber" name="L610" href="#L610">610</a> 
+<a class="jxr_linenumber" name="L611" href="#L611">611</a> 	@Test
+<a class="jxr_linenumber" name="L612" href="#L612">612</a> 	<strong class="jxr_keyword">void</strong> q01_cleanup_threadLocal() {
+<a class="jxr_linenumber" name="L613" href="#L613">613</a> 		<strong class="jxr_keyword">var</strong> x = Cache5.of(String.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>, Integer.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>)
+<a class="jxr_linenumber" name="L614" href="#L614">614</a> 			.threadLocal()
+<a class="jxr_linenumber" name="L615" href="#L615">615</a> 			.supplier((k1, k2, k3, k4, k5) -&gt; k1 + <span class="jxr_string">":"</span> + k2 + <span class="jxr_string">":"</span> + k3 + <span class="jxr_string">":"</span> + k4 + <span class="jxr_string">":"</span> + k5)
+<a class="jxr_linenumber" name="L616" href="#L616">616</a> 			.build();
+<a class="jxr_linenumber" name="L617" href="#L617">617</a> 
+<a class="jxr_linenumber" name="L618" href="#L618">618</a> 		<em class="jxr_comment">// Use the cache to populate ThreadLocal</em>
+<a class="jxr_linenumber" name="L619" href="#L619">619</a> 		x.get(<span class="jxr_string">"key1"</span>, <span class="jxr_string">"key2"</span>, <span class="jxr_string">"key3"</span>, <span class="jxr_string">"key4"</span>, 1);
+<a class="jxr_linenumber" name="L620" href="#L620">620</a> 		x.get(<span class="jxr_string">"key5"</span>, <span class="jxr_string">"key6"</span>, <span class="jxr_string">"key7"</span>, <span class="jxr_string">"key8"</span>, 2);
+<a class="jxr_linenumber" name="L621" href="#L621">621</a> 		assertSize(2, x);
+<a class="jxr_linenumber" name="L622" href="#L622">622</a> 
+<a class="jxr_linenumber" name="L623" href="#L623">623</a> 		<em class="jxr_comment">// Cleanup should remove ThreadLocal values</em>
+<a class="jxr_linenumber" name="L624" href="#L624">624</a> 		x.cleanup();
+<a class="jxr_linenumber" name="L625" href="#L625">625</a> 
+<a class="jxr_linenumber" name="L626" href="#L626">626</a> 		<em class="jxr_comment">// After cleanup, cache should be empty (ThreadLocal was cleared)</em>
+<a class="jxr_linenumber" name="L627" href="#L627">627</a> 		assertEmpty(x);
+<a class="jxr_linenumber" name="L628" href="#L628">628</a> 
+<a class="jxr_linenumber" name="L629" href="#L629">629</a> 		<em class="jxr_comment">// Call cleanup again to ensure it's safe to call multiple times</em>
+<a class="jxr_linenumber" name="L630" href="#L630">630</a> 		x.cleanup();
+<a class="jxr_linenumber" name="L631" href="#L631">631</a> 		<em class="jxr_comment">// Should not throw</em>
+<a class="jxr_linenumber" name="L632" href="#L632">632</a> 	}
+<a class="jxr_linenumber" name="L633" href="#L633">633</a> 
+<a class="jxr_linenumber" name="L634" href="#L634">634</a> 	@Test
+<a class="jxr_linenumber" name="L635" href="#L635">635</a> 	<strong class="jxr_keyword">void</strong> q02_cleanup_nonThreadLocal_noEffect() {
+<a class="jxr_linenumber" name="L636" href="#L636">636</a> 		<strong class="jxr_keyword">var</strong> x = Cache5.of(String.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>, Integer.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>)
+<a class="jxr_linenumber" name="L637" href="#L637">637</a> 			.supplier((k1, k2, k3, k4, k5) -&gt; k1 + <span class="jxr_string">":"</span> + k2 + <span class="jxr_string">":"</span> + k3 + <span class="jxr_string">":"</span> + k4 + <span class="jxr_string">":"</span> + k5)
+<a class="jxr_linenumber" name="L638" href="#L638">638</a> 			.build(); <em class="jxr_comment">// Not thread-local</em>
+<a class="jxr_linenumber" name="L639" href="#L639">639</a> 
+<a class="jxr_linenumber" name="L640" href="#L640">640</a> 		x.get(<span class="jxr_string">"key1"</span>, <span class="jxr_string">"key2"</span>, <span class="jxr_string">"key3"</span>, <span class="jxr_string">"key4"</span>, 1);
+<a class="jxr_linenumber" name="L641" href="#L641">641</a> 		x.get(<span class="jxr_string">"key5"</span>, <span class="jxr_string">"key6"</span>, <span class="jxr_string">"key7"</span>, <span class="jxr_string">"key8"</span>, 2);
+<a class="jxr_linenumber" name="L642" href="#L642">642</a> 		assertSize(2, x);
+<a class="jxr_linenumber" name="L643" href="#L643">643</a> 
+<a class="jxr_linenumber" name="L644" href="#L644">644</a> 		<em class="jxr_comment">// Cleanup on non-thread-local cache should not affect the cache</em>
+<a class="jxr_linenumber" name="L645" href="#L645">645</a> 		x.cleanup();
+<a class="jxr_linenumber" name="L646" href="#L646">646</a> 
+<a class="jxr_linenumber" name="L647" href="#L647">647</a> 		<em class="jxr_comment">// Cache should still have values (cleanup only affects thread-local caches)</em>
+<a class="jxr_linenumber" name="L648" href="#L648">648</a> 		assertSize(2, x);
+<a class="jxr_linenumber" name="L649" href="#L649">649</a> 	}
+<a class="jxr_linenumber" name="L650" href="#L650">650</a> 
+<a class="jxr_linenumber" name="L651" href="#L651">651</a> 	@Test <strong class="jxr_keyword">void</strong> q03_cleanup_threadLocal_notYetPopulated() {
+<a class="jxr_linenumber" name="L652" href="#L652">652</a> 		<strong class="jxr_keyword">var</strong> x = Cache5.of(String.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>, Integer.<strong class="jxr_keyword">class</strong>, String.<strong class="jxr_keyword">class</strong>)
+<a class="jxr_linenumber" name="L653" href="#L653">653</a> 			.supplier((k1, k2, k3, k4, k5) -&gt; k1 + <span class="jxr_string">":"</span> + k2 + <span class="jxr_string">":"</span> + k3 + <span class="jxr_string">":"</span> + k4 + <span class="jxr_string">":"</span> + k5)
+<a class="jxr_linenumber" name="L654" href="#L654">654</a> 			.threadLocal()
+<a class="jxr_linenumber" name="L655" href="#L655">655</a> 			.build();
+<a class="jxr_linenumber" name="L656" href="#L656">656</a> 
+<a class="jxr_linenumber" name="L657" href="#L657">657</a> 		<em class="jxr_comment">// Cleanup before any access - threadLocalMap is null; should not throw</em>
+<a class="jxr_linenumber" name="L658" href="#L658">658</a> 		assertDoesNotThrow(x::cleanup);
+<a class="jxr_linenumber" name="L659" href="#L659">659</a> 	}
+<a class="jxr_linenumber" name="L660" href="#L660">660</a> 
+<a class="jxr_linenumber" name="L661" href="#L661">661</a> 	<em class="jxr_comment">//====================================================================================================</em>
+<a class="jxr_linenumber" name="L662" href="#L662">662</a> 	<em class="jxr_comment">// Helpers</em>
+<a class="jxr_linenumber" name="L663" href="#L663">663</a> 	<em class="jxr_comment">//====================================================================================================</em>
+<a class="jxr_linenumber" name="L664" href="#L664">664</a> 
+<a class="jxr_linenumber" name="L665" href="#L665">665</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L666" href="#L666">666</a> <em class="jxr_javadoccomment">	 * Forces garbage collection and waits (bounded, so a test can never hang) until the specified WEAK-mode</em>
+<a class="jxr_linenumber" name="L667" href="#L667">667</a> <em class="jxr_javadoccomment">	 * cache has been emptied by reclamation.</em>
+<a class="jxr_linenumber" name="L668" href="#L668">668</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L669" href="#L669">669</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;In WEAK mode {@code Cache5} stores its composite {@code Tuple5} keys in a weak map. Those keys are</em>
+<a class="jxr_linenumber" name="L670" href="#L670">670</a> <em class="jxr_javadoccomment">	 * created internally by the cache and are reachable only from the cache itself, so any GC can reclaim the</em>
+<a class="jxr_linenumber" name="L671" href="#L671">671</a> <em class="jxr_javadoccomment">	 * entries at any time. Crucially, they cannot be pinned from a test: a weak map retains an entry only while</em>
+<a class="jxr_linenumber" name="L672" href="#L672">672</a> <em class="jxr_javadoccomment">	 * its exact key &lt;i&gt;object&lt;/i&gt; stays strongly reachable, so holding a reconstructed equal key does not help</em>
+<a class="jxr_linenumber" name="L673" href="#L673">673</a> <em class="jxr_javadoccomment">	 * (equal != identical), and holding a cached value does not help either (values never keep their keys alive).</em>
+<a class="jxr_linenumber" name="L674" href="#L674">674</a> <em class="jxr_javadoccomment">	 * The WEAK-mode tests therefore assert WEAK mode's deterministic contract - values compute correctly and</em>
+<a class="jxr_linenumber" name="L675" href="#L675">675</a> <em class="jxr_javadoccomment">	 * entries are reclaimed once their keys are unreferenced - instead of racing an uncontrolled GC to observe a</em>
+<a class="jxr_linenumber" name="L676" href="#L676">676</a> <em class="jxr_javadoccomment">	 * transient entry count. Calling this on the current thread also covers the thread-local WEAK caches.</em>
+<a class="jxr_linenumber" name="L677" href="#L677">677</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L678" href="#L678">678</a> 	@SuppressWarnings({
+<a class="jxr_linenumber" name="L679" href="#L679">679</a> 		<span class="jxr_string">"java:S2925"</span> <em class="jxr_comment">// Polling for garbage collection of weak references has no deterministic alternative.</em>
+<a class="jxr_linenumber" name="L680" href="#L680">680</a> 	})
+<a class="jxr_linenumber" name="L681" href="#L681">681</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> gcUntilEmpty(Cache5&lt;?,?,?,?,?,?&gt; cache) {
+<a class="jxr_linenumber" name="L682" href="#L682">682</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt; 100 &amp;&amp; ! cache.isEmpty(); i++) {
+<a class="jxr_linenumber" name="L683" href="#L683">683</a> 			System.gc();
+<a class="jxr_linenumber" name="L684" href="#L684">684</a> 			<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L685" href="#L685">685</a> 				Thread.sleep(5);
+<a class="jxr_linenumber" name="L686" href="#L686">686</a> 			} <strong class="jxr_keyword">catch</strong> (InterruptedException e) {
+<a class="jxr_linenumber" name="L687" href="#L687">687</a> 				Thread.currentThread().interrupt();
+<a class="jxr_linenumber" name="L688" href="#L688">688</a> 			}
+<a class="jxr_linenumber" name="L689" href="#L689">689</a> 		}
+<a class="jxr_linenumber" name="L690" href="#L690">690</a> 	}
+<a class="jxr_linenumber" name="L691" href="#L691">691</a> }
+<a class="jxr_linenumber" name="L692" href="#L692">692</a> 
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

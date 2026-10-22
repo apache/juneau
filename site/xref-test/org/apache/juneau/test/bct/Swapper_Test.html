@@ -156,7 +156,7 @@
 <a class="jxr_linenumber" name="L148" href="#L148">148</a> 		@Test
 <a class="jxr_linenumber" name="L149" href="#L149">149</a> 		<strong class="jxr_keyword">void</strong> c02_nullOutputHandling() {
 <a class="jxr_linenumber" name="L150" href="#L150">150</a> 			Swapper&lt;String&gt; nullReturning = (converter, str) -&gt; {
-<a class="jxr_linenumber" name="L151" href="#L151">151</a> 				<strong class="jxr_keyword">if</strong> (<span class="jxr_string">"return_null"</span>.equals(str)) <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L151" href="#L151">151</a> 				<strong class="jxr_keyword">if</strong> (eq(str, <span class="jxr_string">"return_null"</span>)) <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L152" href="#L152">152</a> 				<strong class="jxr_keyword">return</strong> str;
 <a class="jxr_linenumber" name="L153" href="#L153">153</a> 			};
 <a class="jxr_linenumber" name="L154" href="#L154">154</a> 
@@ -169,7 +169,7 @@
 <a class="jxr_linenumber" name="L161" href="#L161">161</a> 		@Test
 <a class="jxr_linenumber" name="L162" href="#L162">162</a> 		<strong class="jxr_keyword">void</strong> c03_exceptionHandling() {
 <a class="jxr_linenumber" name="L163" href="#L163">163</a> 			Swapper&lt;String&gt; throwing = (converter, str) -&gt; {
-<a class="jxr_linenumber" name="L164" href="#L164">164</a> 				<strong class="jxr_keyword">if</strong> (<span class="jxr_string">"ERROR"</span>.equals(str)) {
+<a class="jxr_linenumber" name="L164" href="#L164">164</a> 				<strong class="jxr_keyword">if</strong> (eq(str, <span class="jxr_string">"ERROR"</span>)) {
 <a class="jxr_linenumber" name="L165" href="#L165">165</a> 					<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> RuntimeException(<span class="jxr_string">"Intentional test exception"</span>);
 <a class="jxr_linenumber" name="L166" href="#L166">166</a> 				}
 <a class="jxr_linenumber" name="L167" href="#L167">167</a> 				<strong class="jxr_keyword">return</strong> str;
@@ -444,39 +444,40 @@
 <a class="jxr_linenumber" name="L436" href="#L436">436</a> 	<em class="jxr_comment">// ====================================================================================================</em>
 <a class="jxr_linenumber" name="L437" href="#L437">437</a> 
 <a class="jxr_linenumber" name="L438" href="#L438">438</a> 	<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> SwapperMethods {
-<a class="jxr_linenumber" name="L439" href="#L439">439</a> 		<em class="jxr_comment">// 'converter' is required by the Swapper functional-interface signature (used as a method reference).</em>
-<a class="jxr_linenumber" name="L440" href="#L440">440</a> 		@SuppressWarnings(<span class="jxr_string">"unused"</span>)
-<a class="jxr_linenumber" name="L441" href="#L441">441</a> 		<strong class="jxr_keyword">static</strong> String addPrefix(BeanConverter converter, String str) {
-<a class="jxr_linenumber" name="L442" href="#L442">442</a> 			<strong class="jxr_keyword">return</strong> <span class="jxr_string">"PREFIX:"</span> + str;
-<a class="jxr_linenumber" name="L443" href="#L443">443</a> 		}
-<a class="jxr_linenumber" name="L444" href="#L444">444</a> 	}
-<a class="jxr_linenumber" name="L445" href="#L445">445</a> 
-<a class="jxr_linenumber" name="L446" href="#L446">446</a> 	<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> TestWrapper {
-<a class="jxr_linenumber" name="L447" href="#L447">447</a> 		<strong class="jxr_keyword">final</strong> String value;
-<a class="jxr_linenumber" name="L448" href="#L448">448</a> 
-<a class="jxr_linenumber" name="L449" href="#L449">449</a> 		TestWrapper(String value) {
-<a class="jxr_linenumber" name="L450" href="#L450">450</a> 			<strong class="jxr_keyword">this</strong>.value = value;
-<a class="jxr_linenumber" name="L451" href="#L451">451</a> 		}
-<a class="jxr_linenumber" name="L452" href="#L452">452</a> 
-<a class="jxr_linenumber" name="L453" href="#L453">453</a> 		String getValue() { <strong class="jxr_keyword">return</strong> value; }
-<a class="jxr_linenumber" name="L454" href="#L454">454</a> 	}
-<a class="jxr_linenumber" name="L455" href="#L455">455</a> 
-<a class="jxr_linenumber" name="L456" href="#L456">456</a> 	<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> TestContainer {
-<a class="jxr_linenumber" name="L457" href="#L457">457</a> 		<strong class="jxr_keyword">final</strong> String content;
-<a class="jxr_linenumber" name="L458" href="#L458">458</a> 
-<a class="jxr_linenumber" name="L459" href="#L459">459</a> 		TestContainer(String content) {
-<a class="jxr_linenumber" name="L460" href="#L460">460</a> 			<strong class="jxr_keyword">this</strong>.content = content;
-<a class="jxr_linenumber" name="L461" href="#L461">461</a> 		}
-<a class="jxr_linenumber" name="L462" href="#L462">462</a> 	}
-<a class="jxr_linenumber" name="L463" href="#L463">463</a> 
-<a class="jxr_linenumber" name="L464" href="#L464">464</a> 	<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> TestComplexObject {
-<a class="jxr_linenumber" name="L465" href="#L465">465</a> 		<strong class="jxr_keyword">final</strong> List&lt;String&gt; items;
-<a class="jxr_linenumber" name="L466" href="#L466">466</a> 
-<a class="jxr_linenumber" name="L467" href="#L467">467</a> 		TestComplexObject(List&lt;String&gt; items) {
-<a class="jxr_linenumber" name="L468" href="#L468">468</a> 			<strong class="jxr_keyword">this</strong>.items = items;
-<a class="jxr_linenumber" name="L469" href="#L469">469</a> 		}
-<a class="jxr_linenumber" name="L470" href="#L470">470</a> 	}
-<a class="jxr_linenumber" name="L471" href="#L471">471</a> }
+<a class="jxr_linenumber" name="L439" href="#L439">439</a> 		@SuppressWarnings({
+<a class="jxr_linenumber" name="L440" href="#L440">440</a> 			<span class="jxr_string">"unused"</span> <em class="jxr_comment">// 'converter' is required by the Swapper functional-interface signature (used as a method reference).</em>
+<a class="jxr_linenumber" name="L441" href="#L441">441</a> 		})
+<a class="jxr_linenumber" name="L442" href="#L442">442</a> 		<strong class="jxr_keyword">static</strong> String addPrefix(BeanConverter converter, String str) {
+<a class="jxr_linenumber" name="L443" href="#L443">443</a> 			<strong class="jxr_keyword">return</strong> <span class="jxr_string">"PREFIX:"</span> + str;
+<a class="jxr_linenumber" name="L444" href="#L444">444</a> 		}
+<a class="jxr_linenumber" name="L445" href="#L445">445</a> 	}
+<a class="jxr_linenumber" name="L446" href="#L446">446</a> 
+<a class="jxr_linenumber" name="L447" href="#L447">447</a> 	<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> TestWrapper {
+<a class="jxr_linenumber" name="L448" href="#L448">448</a> 		<strong class="jxr_keyword">final</strong> String value;
+<a class="jxr_linenumber" name="L449" href="#L449">449</a> 
+<a class="jxr_linenumber" name="L450" href="#L450">450</a> 		TestWrapper(String value) {
+<a class="jxr_linenumber" name="L451" href="#L451">451</a> 			<strong class="jxr_keyword">this</strong>.value = value;
+<a class="jxr_linenumber" name="L452" href="#L452">452</a> 		}
+<a class="jxr_linenumber" name="L453" href="#L453">453</a> 
+<a class="jxr_linenumber" name="L454" href="#L454">454</a> 		String getValue() { <strong class="jxr_keyword">return</strong> value; }
+<a class="jxr_linenumber" name="L455" href="#L455">455</a> 	}
+<a class="jxr_linenumber" name="L456" href="#L456">456</a> 
+<a class="jxr_linenumber" name="L457" href="#L457">457</a> 	<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> TestContainer {
+<a class="jxr_linenumber" name="L458" href="#L458">458</a> 		<strong class="jxr_keyword">final</strong> String content;
+<a class="jxr_linenumber" name="L459" href="#L459">459</a> 
+<a class="jxr_linenumber" name="L460" href="#L460">460</a> 		TestContainer(String content) {
+<a class="jxr_linenumber" name="L461" href="#L461">461</a> 			<strong class="jxr_keyword">this</strong>.content = content;
+<a class="jxr_linenumber" name="L462" href="#L462">462</a> 		}
+<a class="jxr_linenumber" name="L463" href="#L463">463</a> 	}
+<a class="jxr_linenumber" name="L464" href="#L464">464</a> 
+<a class="jxr_linenumber" name="L465" href="#L465">465</a> 	<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> TestComplexObject {
+<a class="jxr_linenumber" name="L466" href="#L466">466</a> 		<strong class="jxr_keyword">final</strong> List&lt;String&gt; items;
+<a class="jxr_linenumber" name="L467" href="#L467">467</a> 
+<a class="jxr_linenumber" name="L468" href="#L468">468</a> 		TestComplexObject(List&lt;String&gt; items) {
+<a class="jxr_linenumber" name="L469" href="#L469">469</a> 			<strong class="jxr_keyword">this</strong>.items = items;
+<a class="jxr_linenumber" name="L470" href="#L470">470</a> 		}
+<a class="jxr_linenumber" name="L471" href="#L471">471</a> 	}
+<a class="jxr_linenumber" name="L472" href="#L472">472</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

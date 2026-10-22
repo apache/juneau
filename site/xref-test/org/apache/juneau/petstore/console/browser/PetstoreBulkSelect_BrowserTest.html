@@ -1,0 +1,150 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="" lang="">
+<head><meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<title>PetstoreBulkSelect_BrowserTest xref</title>
+<link type="text/css" rel="stylesheet" href="../../../../../../stylesheet.css" />
+</head>
+<body>
+<div id="overview"><a href="../../../../../../../testapidocs/org/apache/juneau/petstore/console/browser/PetstoreBulkSelect_BrowserTest.html">View Javadoc</a></div><pre>
+<a class="jxr_linenumber" name="L1" href="#L1">1</a>   <em class="jxr_comment">/*</em>
+<a class="jxr_linenumber" name="L2" href="#L2">2</a>   <em class="jxr_comment"> * Licensed to the Apache Software Foundation (ASF) under one or more</em>
+<a class="jxr_linenumber" name="L3" href="#L3">3</a>   <em class="jxr_comment"> * contributor license agreements.  See the NOTICE file distributed with</em>
+<a class="jxr_linenumber" name="L4" href="#L4">4</a>   <em class="jxr_comment"> * this work for additional information regarding copyright ownership.</em>
+<a class="jxr_linenumber" name="L5" href="#L5">5</a>   <em class="jxr_comment"> * The ASF licenses this file to You under the Apache License, Version 2.0</em>
+<a class="jxr_linenumber" name="L6" href="#L6">6</a>   <em class="jxr_comment"> * (the "License"); you may not use this file except in compliance with</em>
+<a class="jxr_linenumber" name="L7" href="#L7">7</a>   <em class="jxr_comment"> * the License.  You may obtain a copy of the License at</em>
+<a class="jxr_linenumber" name="L8" href="#L8">8</a>   <em class="jxr_comment"> *</em>
+<a class="jxr_linenumber" name="L9" href="#L9">9</a>   <em class="jxr_comment"> *      <a href="http://www.apache.org/licenses/LICENSE-2.0" target="alexandria_uri">http://www.apache.org/licenses/LICENSE-2.0</a></em>
+<a class="jxr_linenumber" name="L10" href="#L10">10</a>  <em class="jxr_comment"> *</em>
+<a class="jxr_linenumber" name="L11" href="#L11">11</a>  <em class="jxr_comment"> * Unless required by applicable law or agreed to in writing, software</em>
+<a class="jxr_linenumber" name="L12" href="#L12">12</a>  <em class="jxr_comment"> * distributed under the License is distributed on an "AS IS" BASIS,</em>
+<a class="jxr_linenumber" name="L13" href="#L13">13</a>  <em class="jxr_comment"> * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</em>
+<a class="jxr_linenumber" name="L14" href="#L14">14</a>  <em class="jxr_comment"> * See the License for the specific language governing permissions and</em>
+<a class="jxr_linenumber" name="L15" href="#L15">15</a>  <em class="jxr_comment"> * limitations under the License.</em>
+<a class="jxr_linenumber" name="L16" href="#L16">16</a>  <em class="jxr_comment"> */</em>
+<a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> org.apache.juneau.petstore.console.browser;
+<a class="jxr_linenumber" name="L18" href="#L18">18</a>  
+<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.petstore.console.browser.PetstoreBrowser.*;
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.test.bct.BctAssertions.*;
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.junit.jupiter.api.Assertions.*;
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> java.util.*;
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.*;
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.microservice.*;
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> org.junit.jupiter.api.*;
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">import</strong> org.junit.jupiter.api.condition.*;
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <strong class="jxr_keyword">import</strong> org.junit.jupiter.api.extension.*;
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <em class="jxr_javadoccomment"> * Bulk selection on P2 Pets in the real browser: the selection adds up across pages and survives a search, and the</em>
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <em class="jxr_javadoccomment"> * per-row Mark sold action runs at most four writes at a time and ends in one summary toast.</em>
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>  <em class="jxr_javadoccomment"> */</em>
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>  @Covers(value=<span class="jxr_string">"bulk-select"</span>, pages=<span class="jxr_string">"/console/pets"</span>)
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>  @EnabledIfSystemProperty(named=PetstoreBrowser.GATE, matches=<span class="jxr_string">"true"</span>, disabledReason=PetstoreBrowser.DISABLED)
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>  <strong class="jxr_keyword">class</strong> <a name="PetstoreBulkSelect_BrowserTest" href="../../../../../../org/apache/juneau/petstore/console/browser/PetstoreBulkSelect_BrowserTest.html#PetstoreBulkSelect_BrowserTest">PetstoreBulkSelect_BrowserTest</a> <strong class="jxr_keyword">extends</strong> TestBase {
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>  
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>  	@RegisterExtension
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>  	<strong class="jxr_keyword">static</strong> MicroserviceTestFixture server = PetstoreTestServer.fixture();
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>  
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String READY = <span class="jxr_string">"document.querySelector('#pets tbody tr[data-juneau-row-id]')"</span>;
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String HEADER_BOX = <span class="jxr_string">"#pets thead input.juneau-view-select-all-checkbox"</span>;
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String ROW_BOX = <span class="jxr_string">"input.juneau-view-select-checkbox"</span>;
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>  
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>  	<em class="jxr_javadoccomment">/** The selected count, from the table's retained selection topic. */</em>
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String COUNT = <span class="jxr_string">"(window.JuneauViews.bus.get('selection:pets') || {}).count"</span>;
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>  
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>  	<em class="jxr_javadoccomment">/** The header checkbox state: mixed, true or false. */</em>
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String HEADER = <span class="jxr_string">"(() =&gt; { const h = document.querySelector('"</span> + HEADER_BOX + <span class="jxr_string">"'); return h.indeterminate ? 'mixed' : String(h.checked); })()"</span>;
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>  
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>  	<em class="jxr_javadoccomment">/** Wraps fetch to record the peak and total number of sell requests in flight. */</em>
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String COUNT_SELLS = <span class="jxr_string">"window.__inflight = 0; window.__peak = 0; window.__sells = 0; const f = window.fetch;"</span>
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>  		+ <span class="jxr_string">" window.fetch = async (...a) =&gt; { const sell = String(a[0]).endsWith('/sell'); if (sell) { window.__sells++; window.__inflight++;"</span>
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>  		+ <span class="jxr_string">" window.__peak = Math.max(window.__peak, window.__inflight); } try { return await f(...a); } finally { if (sell) window.__inflight--; } }"</span>;
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>  
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Map&lt;String,Map&lt;String,Object&gt;&gt; report;
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>  
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>  	@BeforeAll
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>  	<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> probe() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>  		<strong class="jxr_keyword">var</strong> base = PetstoreTestServer.awaitReady(server);
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>  		report = run(<span class="jxr_string">"bulk-select"</span>, base, List.of(
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>  			Map.of(<span class="jxr_string">"name"</span>, <span class="jxr_string">"across-pages"</span>, <span class="jxr_string">"path"</span>, <span class="jxr_string">"/console/pets"</span>, <span class="jxr_string">"capture"</span>, <span class="jxr_string">"/console/pets/query"</span>,
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>  				<span class="jxr_string">"actions"</span>, List.of(
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>  					Map.of(<span class="jxr_string">"waitFor"</span>, READY),
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>  					Map.of(<span class="jxr_string">"click"</span>, HEADER_BOX),
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>  					Map.of(<span class="jxr_string">"evaluate"</span>, <span class="jxr_string">"window.__pageOne = "</span> + COUNT + <span class="jxr_string">"; window.__rows = document.querySelectorAll('#pets tbody tr[data-juneau-row-id]').length"</span>),
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>  					Map.of(<span class="jxr_string">"click"</span>, <span class="jxr_string">"#pets-body .juneau-view-pagingpill-btn[aria-label=\&quot;Next page\&quot;]"</span>),
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>  					Map.of(<span class="jxr_string">"waitForCaptured"</span>, 2),
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>  					Map.of(<span class="jxr_string">"waitFor"</span>, <span class="jxr_string">"document.querySelector('#pets tbody "</span> + ROW_BOX + <span class="jxr_string">":not(:checked)')"</span>),
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>  					Map.of(<span class="jxr_string">"click"</span>, <span class="jxr_string">"#pets tbody tr:first-child "</span> + ROW_BOX),
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>  					Map.of(<span class="jxr_string">"evaluate"</span>, <span class="jxr_string">"window.__count = "</span> + COUNT + <span class="jxr_string">"; window.__header = "</span> + HEADER),
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>  					Map.of(<span class="jxr_string">"fill"</span>, List.of(<span class="jxr_string">"#pets-body input[type=search]"</span>, <span class="jxr_string">"a"</span>)),
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>  					Map.of(<span class="jxr_string">"waitForCaptured"</span>, 3, <span class="jxr_string">"timeoutMs"</span>, 5000),
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>  					Map.of(<span class="jxr_string">"waitFor"</span>, READY)),
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>  				<span class="jxr_string">"queries"</span>, Map.of(
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>  					<span class="jxr_string">"pageOne"</span>, <span class="jxr_string">"window.__pageOne"</span>,
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>  					<span class="jxr_string">"rows"</span>, <span class="jxr_string">"window.__rows"</span>,
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>  					<span class="jxr_string">"count"</span>, <span class="jxr_string">"window.__count"</span>,
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>  					<span class="jxr_string">"header"</span>, <span class="jxr_string">"window.__header"</span>,
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>  					<span class="jxr_string">"countAfterSearch"</span>, COUNT,
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>  					<span class="jxr_string">"toolbar"</span>, <span class="jxr_string">"document.querySelector('#pets-body .juneau-view-bulk-count').textContent"</span>)),
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>  			Map.of(<span class="jxr_string">"name"</span>, <span class="jxr_string">"mark-sold"</span>, <span class="jxr_string">"path"</span>, <span class="jxr_string">"/console/pets"</span>,
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>  				<span class="jxr_string">"actions"</span>, List.of(
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>  					Map.of(<span class="jxr_string">"waitFor"</span>, READY),
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>  					Map.of(<span class="jxr_string">"evaluate"</span>, COUNT_SELLS),
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>  					Map.of(<span class="jxr_string">"click"</span>, HEADER_BOX),
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>  					Map.of(<span class="jxr_string">"evaluate"</span>, <span class="jxr_string">"window.__selected = "</span> + COUNT),
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>  					Map.of(<span class="jxr_string">"click"</span>, <span class="jxr_string">"#pets-body .juneau-view-bulk-action-btn"</span>),
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>  					Map.of(<span class="jxr_string">"waitFor"</span>, <span class="jxr_string">"document.querySelector('[role=dialog]')"</span>),
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>  					Map.of(<span class="jxr_string">"evaluate"</span>, <span class="jxr_string">"window.__title = document.querySelector('[role=dialog] .juneau-view-dialog-title').textContent"</span>),
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>  					Map.of(<span class="jxr_string">"click"</span>, <span class="jxr_string">"[role=dialog] .juneau-view-dialog-confirm"</span>),
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>  					Map.of(<span class="jxr_string">"waitFor"</span>, <span class="jxr_string">"document.querySelector('.juneau-view-bulk-toast[role=status]')"</span>)),
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>  				<span class="jxr_string">"queries"</span>, Map.of(
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>  					<span class="jxr_string">"selected"</span>, <span class="jxr_string">"window.__selected"</span>,
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>  					<span class="jxr_string">"title"</span>, <span class="jxr_string">"window.__title"</span>,
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>  					<span class="jxr_string">"peak"</span>, <span class="jxr_string">"window.__peak"</span>,
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>  					<span class="jxr_string">"sells"</span>, <span class="jxr_string">"window.__sells"</span>,
+<a class="jxr_linenumber" name="L99" href="#L99">99</a>  					<span class="jxr_string">"toast"</span>, <span class="jxr_string">"document.querySelector('.juneau-view-bulk-toast[role=status]').textContent"</span>,
+<a class="jxr_linenumber" name="L100" href="#L100">100</a> 					<span class="jxr_string">"left"</span>, COUNT))));
+<a class="jxr_linenumber" name="L101" href="#L101">101</a> 	}
+<a class="jxr_linenumber" name="L102" href="#L102">102</a> 
+<a class="jxr_linenumber" name="L103" href="#L103">103</a> 	<em class="jxr_javadoccomment">/** Page one's rows, which the header checkbox selects, plus the one row picked on page two. */</em>
+<a class="jxr_linenumber" name="L104" href="#L104">104</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">int</strong> expected(Map&lt;String,Object&gt; c) {
+<a class="jxr_linenumber" name="L105" href="#L105">105</a> 		<strong class="jxr_keyword">var</strong> pageOne = ((Number) query(c, <span class="jxr_string">"pageOne"</span>)).intValue();
+<a class="jxr_linenumber" name="L106" href="#L106">106</a> 		assertTrue(pageOne &gt; 0, <span class="jxr_string">"the header checkbox selected nothing"</span>);
+<a class="jxr_linenumber" name="L107" href="#L107">107</a> 		assertEquals(((Number) query(c, <span class="jxr_string">"rows"</span>)).intValue(), pageOne);
+<a class="jxr_linenumber" name="L108" href="#L108">108</a> 		<strong class="jxr_keyword">return</strong> pageOne + 1;
+<a class="jxr_linenumber" name="L109" href="#L109">109</a> 	}
+<a class="jxr_linenumber" name="L110" href="#L110">110</a> 
+<a class="jxr_linenumber" name="L111" href="#L111">111</a> 	@Test <strong class="jxr_keyword">void</strong> a01_selectionAddsUpAcrossPages() {
+<a class="jxr_linenumber" name="L112" href="#L112">112</a> 		<strong class="jxr_keyword">var</strong> c = assertClean(report, <span class="jxr_string">"across-pages"</span>);
+<a class="jxr_linenumber" name="L113" href="#L113">113</a> 		assertString(<span class="jxr_string">"mixed"</span>, query(c, <span class="jxr_string">"header"</span>));
+<a class="jxr_linenumber" name="L114" href="#L114">114</a> 		assertEquals(expected(c), ((Number) query(c, <span class="jxr_string">"count"</span>)).intValue());
+<a class="jxr_linenumber" name="L115" href="#L115">115</a> 	}
+<a class="jxr_linenumber" name="L116" href="#L116">116</a> 
+<a class="jxr_linenumber" name="L117" href="#L117">117</a> 	@Test <strong class="jxr_keyword">void</strong> a02_selectionSurvivesSearch() {
+<a class="jxr_linenumber" name="L118" href="#L118">118</a> 		<strong class="jxr_keyword">var</strong> c = assertClean(report, <span class="jxr_string">"across-pages"</span>);
+<a class="jxr_linenumber" name="L119" href="#L119">119</a> 		<strong class="jxr_keyword">var</strong> n = expected(c);
+<a class="jxr_linenumber" name="L120" href="#L120">120</a> 		assertEquals(n, ((Number) query(c, <span class="jxr_string">"countAfterSearch"</span>)).intValue());
+<a class="jxr_linenumber" name="L121" href="#L121">121</a> 		assertString(n + <span class="jxr_string">" selected ·"</span>, query(c, <span class="jxr_string">"toolbar"</span>));
+<a class="jxr_linenumber" name="L122" href="#L122">122</a> 	}
+<a class="jxr_linenumber" name="L123" href="#L123">123</a> 
+<a class="jxr_linenumber" name="L124" href="#L124">124</a> 	@Test <strong class="jxr_keyword">void</strong> a03_perRowMarkSoldIsAtMostFourConcurrent() {
+<a class="jxr_linenumber" name="L125" href="#L125">125</a> 		<strong class="jxr_keyword">var</strong> c = assertClean(report, <span class="jxr_string">"mark-sold"</span>);
+<a class="jxr_linenumber" name="L126" href="#L126">126</a> 		<strong class="jxr_keyword">var</strong> peak = ((Number) query(c, <span class="jxr_string">"peak"</span>)).intValue();
+<a class="jxr_linenumber" name="L127" href="#L127">127</a> 		assertTrue(peak &gt;= 1 &amp;&amp; peak &lt;= 4, () -&gt; <span class="jxr_string">"peak "</span> + peak);
+<a class="jxr_linenumber" name="L128" href="#L128">128</a> 		assertEquals(((Number) query(c, <span class="jxr_string">"selected"</span>)).intValue(), ((Number) query(c, <span class="jxr_string">"sells"</span>)).intValue());
+<a class="jxr_linenumber" name="L129" href="#L129">129</a> 	}
+<a class="jxr_linenumber" name="L130" href="#L130">130</a> 
+<a class="jxr_linenumber" name="L131" href="#L131">131</a> 	@Test <strong class="jxr_keyword">void</strong> a04_runEndsInOneSummaryAndClearsTheSelection() {
+<a class="jxr_linenumber" name="L132" href="#L132">132</a> 		<strong class="jxr_keyword">var</strong> c = assertClean(report, <span class="jxr_string">"mark-sold"</span>);
+<a class="jxr_linenumber" name="L133" href="#L133">133</a> 		assertString(<span class="jxr_string">"Mark pets sold"</span>, query(c, <span class="jxr_string">"title"</span>));
+<a class="jxr_linenumber" name="L134" href="#L134">134</a> 		assertString(<span class="jxr_string">"Mark sold: "</span> + query(c, <span class="jxr_string">"selected"</span>) + <span class="jxr_string">" succeeded"</span>, query(c, <span class="jxr_string">"toast"</span>));
+<a class="jxr_linenumber" name="L135" href="#L135">135</a> 		assertEquals(0, ((Number) query(c, <span class="jxr_string">"left"</span>)).intValue());
+<a class="jxr_linenumber" name="L136" href="#L136">136</a> 	}
+<a class="jxr_linenumber" name="L137" href="#L137">137</a> }
+</pre>
+<hr/>
+<div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>
+</body>
+</html>

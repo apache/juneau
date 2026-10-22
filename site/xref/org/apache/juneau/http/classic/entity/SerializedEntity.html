@@ -191,7 +191,7 @@
 <a class="jxr_linenumber" name="L183" href="#L183">183</a> 	@Override <em class="jxr_comment">/* Overridden from Object */</em>
 <a class="jxr_linenumber" name="L184" href="#L184">184</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> equals(Object o) {
 <a class="jxr_linenumber" name="L185" href="#L185">185</a> 		<em class="jxr_comment">// Leaf-type gate: keeps this entity from comparing equal to a different leaf with equal base content, while</em>
-<a class="jxr_linenumber" name="L186" href="#L186">186</a> 		<em class="jxr_comment">// preserving D3 (SerializedEntity.Unmodifiable IS-A SerializedEntity, so bean.equals(bean.unmodifiable()) holds).</em>
+<a class="jxr_linenumber" name="L186" href="#L186">186</a> 		<em class="jxr_comment">// preserving content equality (SerializedEntity.Unmodifiable IS-A SerializedEntity, so bean.equals(bean.unmodifiable()) holds).</em>
 <a class="jxr_linenumber" name="L187" href="#L187">187</a> 		<em class="jxr_comment">// serializer and schema are real configuration state (not derived caches), so they participate in equality.</em>
 <a class="jxr_linenumber" name="L188" href="#L188">188</a> 		<em class="jxr_comment">// Neither Serializer nor HttpPartSchema overrides equals(), so those two are compared by reference (identity).</em>
 <a class="jxr_linenumber" name="L189" href="#L189">189</a> 		<strong class="jxr_keyword">return</strong> o instanceof <a name="SerializedEntity" href="../../../../../../org/apache/juneau/http/classic/entity/SerializedEntity.html#SerializedEntity">SerializedEntity</a> x &amp;&amp; <strong class="jxr_keyword">super</strong>.equals(o) &amp;&amp; eq(serializer, x.serializer) &amp;&amp; eq(schema, x.schema);

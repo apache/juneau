@@ -64,8 +64,36 @@ loadScripts(document, 'script');</script>
 <div class="col-last odd-row-color">
 <div class="block">Next-generation HTTP response types.</div>
 </div>
-<div class="col-first even-row-color"><a href="#org.apache.juneau.rest.server.beans">org.apache.juneau.rest.server.beans</a></div>
+<div class="col-first even-row-color"><a href="#org.apache.juneau.petstore.console">org.apache.juneau.petstore.console</a></div>
 <div class="col-last even-row-color">
+<div class="block">Petstore admin console: the <code>/console</code> page tree.</div>
+</div>
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.petstore.console.dev">org.apache.juneau.petstore.console.dev</a></div>
+<div class="col-last odd-row-color">
+<div class="block">Petstore console Developer pages: custom cards, themes, rendering flavors and the secure API demo.</div>
+</div>
+<div class="col-first even-row-color"><a href="#org.apache.juneau.petstore.console.dev.flavors">org.apache.juneau.petstore.console.dev.flavors</a></div>
+<div class="col-last even-row-color">
+<div class="block">Petstore console Rendering flavors: one console page per petstore view technology.</div>
+</div>
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.petstore.console.ops">org.apache.juneau.petstore.console.ops</a></div>
+<div class="col-last odd-row-color">
+<div class="block">Petstore console operations pages: background jobs and the audit log.</div>
+</div>
+<div class="col-first even-row-color"><a href="#org.apache.juneau.petstore.console.pets">org.apache.juneau.petstore.console.pets</a></div>
+<div class="col-last even-row-color">
+<div class="block">Petstore console pets pages and their JSON endpoints.</div>
+</div>
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.petstore.jetty">org.apache.juneau.petstore.jetty</a></div>
+<div class="col-last odd-row-color">
+<div class="block">Apache Juneau Petstore - Jetty/Microservice deployment.</div>
+</div>
+<div class="col-first even-row-color"><a href="#org.apache.juneau.petstore.springboot">org.apache.juneau.petstore.springboot</a></div>
+<div class="col-last even-row-color">
+<div class="block">Apache Juneau Petstore - Spring Boot deployment.</div>
+</div>
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.rest.server.beans">org.apache.juneau.rest.server.beans</a></div>
+<div class="col-last odd-row-color">
 <div class="block">REST Interface Helper Classes</div>
 </div>
 </div>
@@ -136,6 +164,119 @@ loadScripts(document, 'script');</script>
 <div class="col-second odd-row-color"><code><a href="../SeeOther.Unmodifiable.html#%3Cinit%3E(org.apache.juneau.http.response.SeeOther)" class="member-name-link">Unmodifiable</a><wbr>(<a href="../SeeOther.html" title="class in org.apache.juneau.http.response">SeeOther</a>&nbsp;copyFrom)</code></div>
 <div class="col-last odd-row-color">
 <div class="block">Constructor.</div>
+</div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="org.apache.juneau.petstore.console">
+<h2>Uses of <a href="../SeeOther.html" title="class in org.apache.juneau.http.response">SeeOther</a> in <a href="../../../petstore/console/package-summary.html">org.apache.juneau.petstore.console</a></h2>
+<div class="caption"><span>Methods in <a href="../../../petstore/console/package-summary.html">org.apache.juneau.petstore.console</a> that return <a href="../SeeOther.html" title="class in org.apache.juneau.http.response">SeeOther</a></span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier and Type</div>
+<div class="table-header col-second">Method</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code><a href="../SeeOther.html" title="class in org.apache.juneau.http.response">SeeOther</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">PetstoreConsoleResource.</span><code><a href="../../../petstore/console/PetstoreConsoleResource.html#index(org.apache.juneau.rest.server.RestRequest)" class="member-name-link">index</a><wbr>(<a href="../../../rest/server/RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req)</code></div>
+<div class="col-last even-row-color">
+<div class="block"><code>GET /console</code> redirects to the store dashboard.</div>
+</div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="org.apache.juneau.petstore.console.dev">
+<h2>Uses of <a href="../SeeOther.html" title="class in org.apache.juneau.http.response">SeeOther</a> in <a href="../../../petstore/console/dev/package-summary.html">org.apache.juneau.petstore.console.dev</a></h2>
+<div class="caption"><span>Methods in <a href="../../../petstore/console/dev/package-summary.html">org.apache.juneau.petstore.console.dev</a> that return <a href="../SeeOther.html" title="class in org.apache.juneau.http.response">SeeOther</a></span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier and Type</div>
+<div class="table-header col-second">Method</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code><a href="../SeeOther.html" title="class in org.apache.juneau.http.response">SeeOther</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">DevRest.</span><code><a href="../../../petstore/console/dev/DevRest.html#index(org.apache.juneau.rest.server.RestRequest)" class="member-name-link">index</a><wbr>(<a href="../../../rest/server/RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Redirects the section root to its first child.</div>
+</div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="org.apache.juneau.petstore.console.dev.flavors">
+<h2>Uses of <a href="../SeeOther.html" title="class in org.apache.juneau.http.response">SeeOther</a> in <a href="../../../petstore/console/dev/flavors/package-summary.html">org.apache.juneau.petstore.console.dev.flavors</a></h2>
+<div class="caption"><span>Methods in <a href="../../../petstore/console/dev/flavors/package-summary.html">org.apache.juneau.petstore.console.dev.flavors</a> that return <a href="../SeeOther.html" title="class in org.apache.juneau.http.response">SeeOther</a></span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier and Type</div>
+<div class="table-header col-second">Method</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code><a href="../SeeOther.html" title="class in org.apache.juneau.http.response">SeeOther</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">FlavorsRest.</span><code><a href="../../../petstore/console/dev/flavors/FlavorsRest.html#index(org.apache.juneau.rest.server.RestRequest)" class="member-name-link">index</a><wbr>(<a href="../../../rest/server/RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Redirects to the first flavor.</div>
+</div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="org.apache.juneau.petstore.console.ops">
+<h2>Uses of <a href="../SeeOther.html" title="class in org.apache.juneau.http.response">SeeOther</a> in <a href="../../../petstore/console/ops/package-summary.html">org.apache.juneau.petstore.console.ops</a></h2>
+<div class="caption"><span>Methods in <a href="../../../petstore/console/ops/package-summary.html">org.apache.juneau.petstore.console.ops</a> that return <a href="../SeeOther.html" title="class in org.apache.juneau.http.response">SeeOther</a></span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier and Type</div>
+<div class="table-header col-second">Method</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code><a href="../SeeOther.html" title="class in org.apache.juneau.http.response">SeeOther</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">OpsRest.</span><code><a href="../../../petstore/console/ops/OpsRest.html#index(org.apache.juneau.rest.server.RestRequest)" class="member-name-link">index</a><wbr>(<a href="../../../rest/server/RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req)</code></div>
+<div class="col-last even-row-color">
+<div class="block"><code>GET /console/ops</code> redirects to the Jobs page.</div>
+</div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="org.apache.juneau.petstore.console.pets">
+<h2>Uses of <a href="../SeeOther.html" title="class in org.apache.juneau.http.response">SeeOther</a> in <a href="../../../petstore/console/pets/package-summary.html">org.apache.juneau.petstore.console.pets</a></h2>
+<div class="caption"><span>Methods in <a href="../../../petstore/console/pets/package-summary.html">org.apache.juneau.petstore.console.pets</a> that return <a href="../SeeOther.html" title="class in org.apache.juneau.http.response">SeeOther</a></span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier and Type</div>
+<div class="table-header col-second">Method</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code><a href="../SeeOther.html" title="class in org.apache.juneau.http.response">SeeOther</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">PetsRest.</span><code><a href="../../../petstore/console/pets/PetsRest.html#detail(org.apache.juneau.rest.server.RestRequest,long)" class="member-name-link">detail</a><wbr>(<a href="../../../rest/server/RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req,
+ long&nbsp;id)</code></div>
+<div class="col-last even-row-color">
+<div class="block">The bare pet URL; lands on the first tab.</div>
+</div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="org.apache.juneau.petstore.jetty">
+<h2>Uses of <a href="../SeeOther.html" title="class in org.apache.juneau.http.response">SeeOther</a> in <a href="../../../petstore/jetty/package-summary.html">org.apache.juneau.petstore.jetty</a></h2>
+<div class="caption"><span>Methods in <a href="../../../petstore/jetty/package-summary.html">org.apache.juneau.petstore.jetty</a> that return <a href="../SeeOther.html" title="class in org.apache.juneau.http.response">SeeOther</a></span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier and Type</div>
+<div class="table-header col-second">Method</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code><a href="../SeeOther.html" title="class in org.apache.juneau.http.response">SeeOther</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">RootResources.</span><code><a href="../../../petstore/jetty/RootResources.html#index(org.apache.juneau.rest.server.RestRequest)" class="member-name-link">index</a><wbr>(<a href="../../../rest/server/RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req)</code></div>
+<div class="col-last even-row-color">
+<div class="block"><code>GET /</code> goes to the console store page.</div>
+</div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="org.apache.juneau.petstore.springboot">
+<h2>Uses of <a href="../SeeOther.html" title="class in org.apache.juneau.http.response">SeeOther</a> in <a href="../../../petstore/springboot/package-summary.html">org.apache.juneau.petstore.springboot</a></h2>
+<div class="caption"><span>Methods in <a href="../../../petstore/springboot/package-summary.html">org.apache.juneau.petstore.springboot</a> that return <a href="../SeeOther.html" title="class in org.apache.juneau.http.response">SeeOther</a></span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier and Type</div>
+<div class="table-header col-second">Method</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code><a href="../SeeOther.html" title="class in org.apache.juneau.http.response">SeeOther</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">RootResources.</span><code><a href="../../../petstore/springboot/RootResources.html#index(org.apache.juneau.rest.server.RestRequest)" class="member-name-link">index</a><wbr>(<a href="../../../rest/server/RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req)</code></div>
+<div class="col-last even-row-color">
+<div class="block"><code>GET /</code> goes to the console store page.</div>
 </div>
 </div>
 </section>

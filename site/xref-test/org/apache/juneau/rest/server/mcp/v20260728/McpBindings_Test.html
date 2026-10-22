@@ -274,7 +274,7 @@
 <a class="jxr_linenumber" name="L266" href="#L266">266</a> 	}
 <a class="jxr_linenumber" name="L267" href="#L267">267</a> 
 <a class="jxr_linenumber" name="L268" href="#L268">268</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L269" href="#L269">269</a> <em class="jxr_javadoccomment">	 * H2 regression: {@link McpRestServlet#getMcpOptions()} must publish exactly one {@link McpOptions} (and</em>
+<a class="jxr_linenumber" name="L269" href="#L269">269</a> <em class="jxr_javadoccomment">	 * Regression: {@link McpRestServlet#getMcpOptions()} must publish exactly one {@link McpOptions} (and</em>
 <a class="jxr_linenumber" name="L270" href="#L270">270</a> <em class="jxr_javadoccomment">	 * thus one MRTR AES key) even under a concurrent cold-start race, even though (mirroring</em>
 <a class="jxr_linenumber" name="L271" href="#L271">271</a> <em class="jxr_javadoccomment">	 * {@code AbstractMcpRestServlet#getMcpConfig()}'s lock-free {@link java.util.concurrent.atomic.AtomicReference}</em>
 <a class="jxr_linenumber" name="L272" href="#L272">272</a> <em class="jxr_javadoccomment">	 * pattern) {@link McpRestServlet#createMcpOptions()} itself MAY run more than once under that race: a</em>

@@ -1,0 +1,551 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="" lang="">
+<head><meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<title>RawContentSinkScanner xref</title>
+<link type="text/css" rel="stylesheet" href="../../../../../../stylesheet.css" />
+</head>
+<body>
+<div id="overview"><a href="../../../../../../../testapidocs/org/apache/juneau/rest/server/views/RawContentSinkScanner.html">View Javadoc</a></div><pre>
+<a class="jxr_linenumber" name="L1" href="#L1">1</a>   <em class="jxr_comment">/*</em>
+<a class="jxr_linenumber" name="L2" href="#L2">2</a>   <em class="jxr_comment"> * Licensed to the Apache Software Foundation (ASF) under one or more</em>
+<a class="jxr_linenumber" name="L3" href="#L3">3</a>   <em class="jxr_comment"> * contributor license agreements.  See the NOTICE file distributed with</em>
+<a class="jxr_linenumber" name="L4" href="#L4">4</a>   <em class="jxr_comment"> * this work for additional information regarding copyright ownership.</em>
+<a class="jxr_linenumber" name="L5" href="#L5">5</a>   <em class="jxr_comment"> * The ASF licenses this file to You under the Apache License, Version 2.0</em>
+<a class="jxr_linenumber" name="L6" href="#L6">6</a>   <em class="jxr_comment"> * (the "License"); you may not use this file except in compliance with</em>
+<a class="jxr_linenumber" name="L7" href="#L7">7</a>   <em class="jxr_comment"> * the License.  You may obtain a copy of the License at</em>
+<a class="jxr_linenumber" name="L8" href="#L8">8</a>   <em class="jxr_comment"> *</em>
+<a class="jxr_linenumber" name="L9" href="#L9">9</a>   <em class="jxr_comment"> *      <a href="http://www.apache.org/licenses/LICENSE-2.0" target="alexandria_uri">http://www.apache.org/licenses/LICENSE-2.0</a></em>
+<a class="jxr_linenumber" name="L10" href="#L10">10</a>  <em class="jxr_comment"> *</em>
+<a class="jxr_linenumber" name="L11" href="#L11">11</a>  <em class="jxr_comment"> * Unless required by applicable law or agreed to in writing, software</em>
+<a class="jxr_linenumber" name="L12" href="#L12">12</a>  <em class="jxr_comment"> * distributed under the License is distributed on an "AS IS" BASIS,</em>
+<a class="jxr_linenumber" name="L13" href="#L13">13</a>  <em class="jxr_comment"> * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</em>
+<a class="jxr_linenumber" name="L14" href="#L14">14</a>  <em class="jxr_comment"> * See the License for the specific language governing permissions and</em>
+<a class="jxr_linenumber" name="L15" href="#L15">15</a>  <em class="jxr_comment"> * limitations under the License.</em>
+<a class="jxr_linenumber" name="L16" href="#L16">16</a>  <em class="jxr_comment"> */</em>
+<a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.server.views;
+<a class="jxr_linenumber" name="L18" href="#L18">18</a>  
+<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.commons.utils.Shorts.*;
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> java.io.*;
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> java.nio.file.*;
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> java.util.*;
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> java.util.regex.*;
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <em class="jxr_javadoccomment"> * Test-only, &lt;b&gt;private&lt;/b&gt; source scanner with two jobs:</em>
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <em class="jxr_javadoccomment"> * &lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <em class="jxr_javadoccomment"> * 	&lt;li&gt;Scans the shipped {@code juneau-*.js} console assets for HTML-injection sinks (an {@code innerHTML} or</em>
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <em class="jxr_javadoccomment"> * 		{@code outerHTML} assignment, {@code insertAdjacentHTML(}, {@code document.write(}, jQuery {@code .html(}),</em>
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <em class="jxr_javadoccomment"> * 		failing on any hit that is not on the audited first-party allowlist.  See {@link #scanShippedJs}.</em>
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <em class="jxr_javadoccomment"> * 	&lt;li&gt;Classifies every {@code rawText(...)} call site in the views and widgets main sources, which</em>
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <em class="jxr_javadoccomment"> * 		{@code EmitterPurity_ScanTest} uses to prove emitters only hand the verbatim writer JSON-sidecar payloads.</em>
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>  <em class="jxr_javadoccomment"> * &lt;/ul&gt;</em>
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>  <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>  <em class="jxr_javadoccomment"> * Not shipped and deliberately not public API, mirroring the test-only guards {@code ScriptJsonSinkScanner}</em>
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>  <em class="jxr_javadoccomment"> * (juneau-commons) and {@code ChromeCssScanner} (juneau-rest-server-console-ui).  Comments are stripped before</em>
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>  <em class="jxr_javadoccomment"> * analysis (see {@link #stripComments}) so a mention of a forbidden API in a comment is not a hit, while string</em>
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>  <em class="jxr_javadoccomment"> * literal text stays inspectable.  The JS scan reaches sibling modules (console-ui, widgets, terminal, datatables)</em>
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>  <em class="jxr_javadoccomment"> * through relative paths, so a relocated module fails the read rather than silently dropping out; the accompanying</em>
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>  <em class="jxr_javadoccomment"> * test also compares the list against what is on disk.</em>
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>  <em class="jxr_javadoccomment"> */</em>
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>  <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">class</strong> <a name="RawContentSinkScanner" href="../../../../../../org/apache/juneau/rest/server/views/RawContentSinkScanner.html#RawContentSinkScanner">RawContentSinkScanner</a> {
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>  
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>  	<strong class="jxr_keyword">private</strong> <a name="RawContentSinkScanner" href="../../../../../../org/apache/juneau/rest/server/views/RawContentSinkScanner.html#RawContentSinkScanner">RawContentSinkScanner</a>() {}
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>  
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>  	<em class="jxr_javadoccomment">/** One HTML-sink hit found in a shipped JavaScript source; {@code detail} is the unique assignment snippet. */</em>
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>  	record Sink(String file, String detail) {}
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>  
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>  	<em class="jxr_javadoccomment">/** The outcome of a scan: every sink found, and the subset that are violations. */</em>
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>  	record Result(List&lt;Sink&gt; sinks, List&lt;String&gt; violations) {}
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>  
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>  	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>  <em class="jxr_javadoccomment">	 * Matches a {@code rawText(} call &amp;mdash; the html5 primitive that writes its argument &lt;b&gt;verbatim&lt;/b&gt;, bypassing</em>
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>  <em class="jxr_javadoccomment">	 * Juneau's normal XML/HTML text escaping.  This is the sink the emitter-purity scan</em>
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>  <em class="jxr_javadoccomment">	 * ({@code EmitterPurity_ScanTest}) reasons about: the question is "what does the &lt;i&gt;emitter&lt;/i&gt; hand to the</em>
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>  <em class="jxr_javadoccomment">	 * verbatim writer".</em>
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>  <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Pattern RAW_TEXT_CALL = Pattern.compile(<span class="jxr_string">"&#92;&#92;brawText&#92;&#92;s*&#92;&#92;("</span>);
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>  
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>  	<em class="jxr_javadoccomment">/** Matches an {@code innerHTML =} assignment in JavaScript (the XSS sink the chooser must never use). */</em>
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Pattern JS_INNERHTML_ASSIGN = Pattern.compile(<span class="jxr_string">"&#92;&#92;.innerHTML&#92;&#92;s*="</span>);
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>  
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>  	<em class="jxr_javadoccomment">/** Matches a jQuery {@code .html(} call in JavaScript (the other XSS sink the chooser must never use). */</em>
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Pattern JS_JQUERY_HTML = Pattern.compile(<span class="jxr_string">"&#92;&#92;.html&#92;&#92;s*&#92;&#92;("</span>);
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>  
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>  	<em class="jxr_javadoccomment">/** Matches an {@code outerHTML =} assignment. */</em>
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Pattern JS_OUTERHTML_ASSIGN = Pattern.compile(<span class="jxr_string">"&#92;&#92;.outerHTML&#92;&#92;s*="</span>);
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>  
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>  	<em class="jxr_javadoccomment">/** Matches {@code insertAdjacentHTML(}. */</em>
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Pattern JS_INSERT_ADJACENT_HTML = Pattern.compile(<span class="jxr_string">"insertAdjacentHTML&#92;&#92;s*&#92;&#92;("</span>);
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>  
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>  	<em class="jxr_javadoccomment">/** Matches {@code document.write(}. */</em>
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Pattern JS_DOCUMENT_WRITE = Pattern.compile(<span class="jxr_string">"document&#92;&#92;.write&#92;&#92;s*&#92;&#92;("</span>);
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>  
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>  	<em class="jxr_javadoccomment">/** This module's shipped-JS resource directory, relative to the module root. */</em>
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String VIEWS_JS_DIR = <span class="jxr_string">"src/main/resources/org/apache/juneau/views"</span>;
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>  
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>  	<em class="jxr_javadoccomment">/** The console-ui module's shipped-JS resource directory (the console shell), relative to THIS module's root. */</em>
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String CONSOLE_JS_DIR =
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>  		<span class="jxr_string">"../juneau-rest-server-console-ui/src/main/resources/org/apache/juneau/console"</span>;
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>  
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>  	<em class="jxr_javadoccomment">/** The terminal module's shipped-JS resource directory, relative to THIS module's root. */</em>
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String TERMINAL_JS_DIR =
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>  		<span class="jxr_string">"../juneau-rest-server-terminal/src/main/resources/org/apache/juneau/terminal"</span>;
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>  
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>  	<em class="jxr_javadoccomment">/** The datatables module's shipped-JS resource directory, relative to THIS module's root. */</em>
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String DATATABLES_JS_DIR =
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>  		<span class="jxr_string">"../juneau-rest-server-datatables/src/main/resources/org/apache/juneau/rest/server/datatables"</span>;
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>  
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>  	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>  <em class="jxr_javadoccomment">	 * The WIDGET module's shipped-JS resource directory, relative to THIS module's root.</em>
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>  <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>  <em class="jxr_javadoccomment">	 * &lt;p&gt;The card / calendar assets ship there now.  A guardrail follows the file it guards rather than the</em>
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>  <em class="jxr_javadoccomment">	 * module the test happens to live in - scanning a views path for a relocated asset would silently scan nothing.</em>
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>  <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String WIDGETS_JS_DIR =
+<a class="jxr_linenumber" name="L99" href="#L99">99</a>  		<span class="jxr_string">"../juneau-rest-server-widgets/src/main/resources/org/apache/juneau/widgets"</span>;
+<a class="jxr_linenumber" name="L100" href="#L100">100</a> 
+<a class="jxr_linenumber" name="L101" href="#L101">101</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L102" href="#L102">102</a> <em class="jxr_javadoccomment">	 * The widgets module's root, relative to this module's root &amp;mdash; the Java-source counterpart of</em>
+<a class="jxr_linenumber" name="L103" href="#L103">103</a> <em class="jxr_javadoccomment">	 * {@link #WIDGETS_JS_DIR}.  The widgets emitters live there, so</em>
+<a class="jxr_linenumber" name="L104" href="#L104">104</a> <em class="jxr_javadoccomment">	 * {@link #scanRawTextTree} follows this path rather than stopping at the module boundary the test happens to run in.</em>
+<a class="jxr_linenumber" name="L105" href="#L105">105</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L106" href="#L106">106</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String WIDGETS_MODULE_DIR = <span class="jxr_string">"../juneau-rest-server-widgets"</span>;
+<a class="jxr_linenumber" name="L107" href="#L107">107</a> 
+<a class="jxr_linenumber" name="L108" href="#L108">108</a> 	<em class="jxr_javadoccomment">/** Audited allowlist: icon-registry SVG and author-trusted page-contract markup. */</em>
+<a class="jxr_linenumber" name="L109" href="#L109">109</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> List&lt;AllowedJsSink&gt; SHIPPED_JS_ALLOWLIST = List.of(
+<a class="jxr_linenumber" name="L110" href="#L110">110</a> 		<strong class="jxr_keyword">new</strong> AllowedJsSink(VIEWS_JS_DIR + <span class="jxr_string">"/juneau-views.js"</span>, <span class="jxr_string">"b.innerHTML = markup;"</span>, 2),
+<a class="jxr_linenumber" name="L111" href="#L111">111</a> 		<strong class="jxr_keyword">new</strong> AllowedJsSink(VIEWS_JS_DIR + <span class="jxr_string">"/juneau-views.js"</span>, <span class="jxr_string">"caretEl.innerHTML = caretMarkup;"</span>),
+<a class="jxr_linenumber" name="L112" href="#L112">112</a> 		<strong class="jxr_keyword">new</strong> AllowedJsSink(VIEWS_JS_DIR + <span class="jxr_string">"/juneau-views.js"</span>, <span class="jxr_string">"slot.innerHTML = markup;"</span>),
+<a class="jxr_linenumber" name="L113" href="#L113">113</a> 		<strong class="jxr_keyword">new</strong> AllowedJsSink(VIEWS_JS_DIR + <span class="jxr_string">"/juneau-ribbon.js"</span>, <span class="jxr_string">"b.innerHTML = markup;"</span>),
+<a class="jxr_linenumber" name="L114" href="#L114">114</a> 		<strong class="jxr_keyword">new</strong> AllowedJsSink(VIEWS_JS_DIR + <span class="jxr_string">"/juneau-helpers.js"</span>, <span class="jxr_string">"span.innerHTML = markup;"</span>),
+<a class="jxr_linenumber" name="L115" href="#L115">115</a> 		<em class="jxr_comment">// First-party icon-registry SVG (resolveIcon), never request/row text: column search and sort glyphs.</em>
+<a class="jxr_linenumber" name="L116" href="#L116">116</a> 		<strong class="jxr_keyword">new</strong> AllowedJsSink(VIEWS_JS_DIR + <span class="jxr_string">"/juneau-views.js"</span>, <span class="jxr_string">"icon.innerHTML = markup;"</span>),
+<a class="jxr_linenumber" name="L117" href="#L117">117</a> 		<strong class="jxr_keyword">new</strong> AllowedJsSink(VIEWS_JS_DIR + <span class="jxr_string">"/juneau-views.js"</span>, <span class="jxr_string">"orderSpan.insertAdjacentHTML(\&quot;afterbegin\&quot;, markup);"</span>),
+<a class="jxr_linenumber" name="L118" href="#L118">118</a> 		<strong class="jxr_keyword">new</strong> AllowedJsSink(CONSOLE_JS_DIR + <span class="jxr_string">"/juneau-console.js"</span>, <span class="jxr_string">"iconSpan.innerHTML = glyph;"</span>),
+<a class="jxr_linenumber" name="L119" href="#L119">119</a> 		<em class="jxr_comment">// Author-trusted markup, NOT inert: a template element keeps scripts from running, but on* handlers fire</em>
+<a class="jxr_linenumber" name="L120" href="#L120">120</a> 		<em class="jxr_comment">// after importNode.  footer.text is trusted HTML per the page schema, and the html-card src is a same-origin</em>
+<a class="jxr_linenumber" name="L121" href="#L121">121</a> 		<em class="jxr_comment">// endpoint that must escape its own output.  The page author is the trust boundary.</em>
+<a class="jxr_linenumber" name="L122" href="#L122">122</a> 		<strong class="jxr_keyword">new</strong> AllowedJsSink(CONSOLE_JS_DIR + <span class="jxr_string">"/juneau-console.js"</span>, <span class="jxr_string">"ftpl.innerHTML = f.text;"</span>),
+<a class="jxr_linenumber" name="L123" href="#L123">123</a> 		<strong class="jxr_keyword">new</strong> AllowedJsSink(CONSOLE_JS_DIR + <span class="jxr_string">"/juneau-console.js"</span>, <span class="jxr_string">"tpl.innerHTML = text;"</span>)
+<a class="jxr_linenumber" name="L124" href="#L124">124</a> 	);
+<a class="jxr_linenumber" name="L125" href="#L125">125</a> 
+<a class="jxr_linenumber" name="L126" href="#L126">126</a> 	<em class="jxr_javadoccomment">/** Shipped JS assets scanned by {@link #scanShippedJs(Path)}, each as a reactor-root-relative path. */</em>
+<a class="jxr_linenumber" name="L127" href="#L127">127</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> List&lt;String&gt; SHIPPED_JS_FILES = List.of(
+<a class="jxr_linenumber" name="L128" href="#L128">128</a> 		VIEWS_JS_DIR + <span class="jxr_string">"/juneau-config.js"</span>,
+<a class="jxr_linenumber" name="L129" href="#L129">129</a> 		VIEWS_JS_DIR + <span class="jxr_string">"/juneau-icons.js"</span>,
+<a class="jxr_linenumber" name="L130" href="#L130">130</a> 		VIEWS_JS_DIR + <span class="jxr_string">"/juneau-renders.js"</span>,
+<a class="jxr_linenumber" name="L131" href="#L131">131</a> 		<em class="jxr_comment">// The DataRegistry runtime moves row data between cards, so it must stay sink-free.</em>
+<a class="jxr_linenumber" name="L132" href="#L132">132</a> 		VIEWS_JS_DIR + <span class="jxr_string">"/juneau-data.js"</span>,
+<a class="jxr_linenumber" name="L133" href="#L133">133</a> 		VIEWS_JS_DIR + <span class="jxr_string">"/juneau-views.js"</span>,
+<a class="jxr_linenumber" name="L134" href="#L134">134</a> 		VIEWS_JS_DIR + <span class="jxr_string">"/juneau-ribbon.js"</span>,
+<a class="jxr_linenumber" name="L135" href="#L135">135</a> 		VIEWS_JS_DIR + <span class="jxr_string">"/juneau-helpers.js"</span>,
+<a class="jxr_linenumber" name="L136" href="#L136">136</a> 		<em class="jxr_comment">// The REGION RUNTIME.  Omitted until the region emitter landed, which is backwards: this is the one shipped asset that</em>
+<a class="jxr_linenumber" name="L137" href="#L137">137</a> 		<em class="jxr_comment">// takes an author-supplied populator NAME off a DOM attribute and hands a container to author-registered</em>
+<a class="jxr_linenumber" name="L138" href="#L138">138</a> 		<em class="jxr_comment">// populate functions, so it is the file where an HTML sink would matter most.  It</em>
+<a class="jxr_linenumber" name="L139" href="#L139">139</a> 		<em class="jxr_comment">// has zero sinks today - every state message goes out through renderAsyncStatus's textContent - and listing</em>
+<a class="jxr_linenumber" name="L140" href="#L140">140</a> 		<em class="jxr_comment">// it here is what keeps that true rather than merely currently-so.</em>
+<a class="jxr_linenumber" name="L141" href="#L141">141</a> 		VIEWS_JS_DIR + <span class="jxr_string">"/juneau-regions.js"</span>,
+<a class="jxr_linenumber" name="L142" href="#L142">142</a> 		<em class="jxr_comment">// The run-view module renders untrusted report text (test names, messages, traces), so it must stay sink-free.</em>
+<a class="jxr_linenumber" name="L143" href="#L143">143</a> 		VIEWS_JS_DIR + <span class="jxr_string">"/juneau-run-view.js"</span>,
+<a class="jxr_linenumber" name="L144" href="#L144">144</a> 		WIDGETS_JS_DIR + <span class="jxr_string">"/juneau-calendar.js"</span>,
+<a class="jxr_linenumber" name="L145" href="#L145">145</a> 		CONSOLE_JS_DIR + <span class="jxr_string">"/juneau-console.js"</span>,
+<a class="jxr_linenumber" name="L146" href="#L146">146</a> 		<em class="jxr_comment">// The chart-card runtime renders row data (legend labels, table cells, aria labels), so it must stay sink-free.</em>
+<a class="jxr_linenumber" name="L147" href="#L147">147</a> 		CONSOLE_JS_DIR + <span class="jxr_string">"/juneau-charts.js"</span>,
+<a class="jxr_linenumber" name="L148" href="#L148">148</a> 		<em class="jxr_comment">// The job-log runtime renders server-supplied progress lines and outcome messages, so it must stay sink-free.</em>
+<a class="jxr_linenumber" name="L149" href="#L149">149</a> 		CONSOLE_JS_DIR + <span class="jxr_string">"/juneau-joblog.js"</span>,
+<a class="jxr_linenumber" name="L150" href="#L150">150</a> 		<em class="jxr_comment">// The badge runtime renders row/status text into badge nodes, so it must stay sink-free.</em>
+<a class="jxr_linenumber" name="L151" href="#L151">151</a> 		CONSOLE_JS_DIR + <span class="jxr_string">"/juneau-badges.js"</span>,
+<a class="jxr_linenumber" name="L152" href="#L152">152</a> 		<em class="jxr_comment">// The dashboard runtime renders share-link and saved-state values and data-source dict values, so it must stay sink-free.</em>
+<a class="jxr_linenumber" name="L153" href="#L153">153</a> 		CONSOLE_JS_DIR + <span class="jxr_string">"/juneau-dashboard.js"</span>,
+<a class="jxr_linenumber" name="L154" href="#L154">154</a> 		VIEWS_JS_DIR + <span class="jxr_string">"/juneau-bus.js"</span>,
+<a class="jxr_linenumber" name="L155" href="#L155">155</a> 		VIEWS_JS_DIR + <span class="jxr_string">"/juneau-pagestate.js"</span>,
+<a class="jxr_linenumber" name="L156" href="#L156">156</a> 		VIEWS_JS_DIR + <span class="jxr_string">"/juneau-search.js"</span>,
+<a class="jxr_linenumber" name="L157" href="#L157">157</a> 		VIEWS_JS_DIR + <span class="jxr_string">"/juneau-urlstate.js"</span>,
+<a class="jxr_linenumber" name="L158" href="#L158">158</a> 		<em class="jxr_comment">// The terminal renders untrusted process output, so it must stay sink-free.</em>
+<a class="jxr_linenumber" name="L159" href="#L159">159</a> 		TERMINAL_JS_DIR + <span class="jxr_string">"/juneau-terminal.js"</span>,
+<a class="jxr_linenumber" name="L160" href="#L160">160</a> 		DATATABLES_JS_DIR + <span class="jxr_string">"/juneau-datatables.js"</span>
+<a class="jxr_linenumber" name="L161" href="#L161">161</a> 	);
+<a class="jxr_linenumber" name="L162" href="#L162">162</a> 
+<a class="jxr_linenumber" name="L163" href="#L163">163</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L164" href="#L164">164</a> <em class="jxr_javadoccomment">	 * An audited first-party sink.</em>
+<a class="jxr_linenumber" name="L165" href="#L165">165</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L166" href="#L166">166</a> <em class="jxr_javadoccomment">	 * @param relativePath The scanned file.</em>
+<a class="jxr_linenumber" name="L167" href="#L167">167</a> <em class="jxr_javadoccomment">	 * @param snippet The unique assignment snippet.</em>
+<a class="jxr_linenumber" name="L168" href="#L168">168</a> <em class="jxr_javadoccomment">	 * @param occurrences How many times the snippet appears in the file; the test pins this so a copy-pasted extra</em>
+<a class="jxr_linenumber" name="L169" href="#L169">169</a> <em class="jxr_javadoccomment">	 * 	site cannot hide behind an existing entry.</em>
+<a class="jxr_linenumber" name="L170" href="#L170">170</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L171" href="#L171">171</a> 	record AllowedJsSink(String relativePath, String snippet, <strong class="jxr_keyword">int</strong> occurrences) {
+<a class="jxr_linenumber" name="L172" href="#L172">172</a> 		AllowedJsSink(String relativePath, String snippet) {
+<a class="jxr_linenumber" name="L173" href="#L173">173</a> 			<strong class="jxr_keyword">this</strong>(relativePath, snippet, 1);
+<a class="jxr_linenumber" name="L174" href="#L174">174</a> 		}
+<a class="jxr_linenumber" name="L175" href="#L175">175</a> 	}
+<a class="jxr_linenumber" name="L176" href="#L176">176</a> 
+<a class="jxr_linenumber" name="L177" href="#L177">177</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L178" href="#L178">178</a> <em class="jxr_javadoccomment">	 * Scans a JavaScript source string for {@code innerHTML =} / {@code .html(} sinks.  Comments are stripped</em>
+<a class="jxr_linenumber" name="L179" href="#L179">179</a> <em class="jxr_javadoccomment">	 * first so a mention of the forbidden APIs in a comment is not a hit.</em>
+<a class="jxr_linenumber" name="L180" href="#L180">180</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L181" href="#L181">181</a> <em class="jxr_javadoccomment">	 * @param file A label for the source (used in violation messages).</em>
+<a class="jxr_linenumber" name="L182" href="#L182">182</a> <em class="jxr_javadoccomment">	 * @param source The JavaScript source text.</em>
+<a class="jxr_linenumber" name="L183" href="#L183">183</a> <em class="jxr_javadoccomment">	 * @return The sinks found and any violations.  Every HTML sink here is a violation (there is no</em>
+<a class="jxr_linenumber" name="L184" href="#L184">184</a> <em class="jxr_javadoccomment">	 * 	literal-only carve-out: user-controlled strings must never reach these APIs).</em>
+<a class="jxr_linenumber" name="L185" href="#L185">185</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L186" href="#L186">186</a> 	<strong class="jxr_keyword">static</strong> Result scanJsHtmlSinks(String file, String source) {
+<a class="jxr_linenumber" name="L187" href="#L187">187</a> 		<strong class="jxr_keyword">return</strong> scanJsHtmlSinks(file, source, Set.of());
+<a class="jxr_linenumber" name="L188" href="#L188">188</a> 	}
+<a class="jxr_linenumber" name="L189" href="#L189">189</a> 
+<a class="jxr_linenumber" name="L190" href="#L190">190</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L191" href="#L191">191</a> <em class="jxr_javadoccomment">	 * Scans a JavaScript source string for HTML-injection assignments.  Comments are stripped first.</em>
+<a class="jxr_linenumber" name="L192" href="#L192">192</a> <em class="jxr_javadoccomment">	 * Hits whose unique assignment snippet is in {@code allowedSnippets} are recorded as sinks but not</em>
+<a class="jxr_linenumber" name="L193" href="#L193">193</a> <em class="jxr_javadoccomment">	 * violations.</em>
+<a class="jxr_linenumber" name="L194" href="#L194">194</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L195" href="#L195">195</a> <em class="jxr_javadoccomment">	 * @param file A label for the source (used in violation messages).</em>
+<a class="jxr_linenumber" name="L196" href="#L196">196</a> <em class="jxr_javadoccomment">	 * @param source The JavaScript source text.</em>
+<a class="jxr_linenumber" name="L197" href="#L197">197</a> <em class="jxr_javadoccomment">	 * @param allowedSnippets Unique assignment snippets that are audited first-party sites.</em>
+<a class="jxr_linenumber" name="L198" href="#L198">198</a> <em class="jxr_javadoccomment">	 * @return The sinks found and any violations.</em>
+<a class="jxr_linenumber" name="L199" href="#L199">199</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L200" href="#L200">200</a> 	<strong class="jxr_keyword">static</strong> Result scanJsHtmlSinks(String file, String source, Set&lt;String&gt; allowedSnippets) {
+<a class="jxr_linenumber" name="L201" href="#L201">201</a> 		<strong class="jxr_keyword">var</strong> sinks = <strong class="jxr_keyword">new</strong> ArrayList&lt;Sink&gt;();
+<a class="jxr_linenumber" name="L202" href="#L202">202</a> 		<strong class="jxr_keyword">var</strong> violations = <strong class="jxr_keyword">new</strong> ArrayList&lt;String&gt;();
+<a class="jxr_linenumber" name="L203" href="#L203">203</a> 		<strong class="jxr_keyword">var</strong> code = stripComments(source);
+<a class="jxr_linenumber" name="L204" href="#L204">204</a> 		addJsHits(file, code, JS_INNERHTML_ASSIGN, <span class="jxr_string">"innerHTML assignment"</span>, allowedSnippets, sinks, violations);
+<a class="jxr_linenumber" name="L205" href="#L205">205</a> 		addJsHits(file, code, JS_JQUERY_HTML, <span class="jxr_string">".html( call"</span>, allowedSnippets, sinks, violations);
+<a class="jxr_linenumber" name="L206" href="#L206">206</a> 		addJsHits(file, code, JS_OUTERHTML_ASSIGN, <span class="jxr_string">"outerHTML assignment"</span>, allowedSnippets, sinks, violations);
+<a class="jxr_linenumber" name="L207" href="#L207">207</a> 		addJsHits(file, code, JS_INSERT_ADJACENT_HTML, <span class="jxr_string">"insertAdjacentHTML( call"</span>, allowedSnippets, sinks, violations);
+<a class="jxr_linenumber" name="L208" href="#L208">208</a> 		addJsHits(file, code, JS_DOCUMENT_WRITE, <span class="jxr_string">"document.write( call"</span>, allowedSnippets, sinks, violations);
+<a class="jxr_linenumber" name="L209" href="#L209">209</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> Result(sinks, violations);
+<a class="jxr_linenumber" name="L210" href="#L210">210</a> 	}
+<a class="jxr_linenumber" name="L211" href="#L211">211</a> 
+<a class="jxr_linenumber" name="L212" href="#L212">212</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> addJsHits(String file, String code, Pattern pattern, String kind,
+<a class="jxr_linenumber" name="L213" href="#L213">213</a> 			Set&lt;String&gt; allowedSnippets, List&lt;Sink&gt; sinks, List&lt;String&gt; violations) {
+<a class="jxr_linenumber" name="L214" href="#L214">214</a> 		<strong class="jxr_keyword">var</strong> m = pattern.matcher(code);
+<a class="jxr_linenumber" name="L215" href="#L215">215</a> 		<strong class="jxr_keyword">while</strong> (m.find()) {
+<a class="jxr_linenumber" name="L216" href="#L216">216</a> 			<strong class="jxr_keyword">var</strong> snippet = jsSinkSnippet(code, m.start(), m.end());
+<a class="jxr_linenumber" name="L217" href="#L217">217</a> 			sinks.add(<strong class="jxr_keyword">new</strong> Sink(file, snippet));
+<a class="jxr_linenumber" name="L218" href="#L218">218</a> 			<strong class="jxr_keyword">if</strong> (allowedSnippets != <strong class="jxr_keyword">null</strong> &amp;&amp; allowedSnippets.contains(snippet))
+<a class="jxr_linenumber" name="L219" href="#L219">219</a> 				<strong class="jxr_keyword">continue</strong>;
+<a class="jxr_linenumber" name="L220" href="#L220">220</a> 			violations.add(file + <span class="jxr_string">": "</span> + kind + <span class="jxr_string">" ("</span> + snippet + <span class="jxr_string">") — user-controlled strings must be painted with textContent / input.value only"</span>);
+<a class="jxr_linenumber" name="L221" href="#L221">221</a> 		}
+<a class="jxr_linenumber" name="L222" href="#L222">222</a> 	}
+<a class="jxr_linenumber" name="L223" href="#L223">223</a> 
+<a class="jxr_linenumber" name="L224" href="#L224">224</a> 	<em class="jxr_javadoccomment">/** Unique assignment snippet: identifier chain through the terminating semicolon (or newline). */</em>
+<a class="jxr_linenumber" name="L225" href="#L225">225</a> 	<strong class="jxr_keyword">static</strong> String jsSinkSnippet(String code, <strong class="jxr_keyword">int</strong> matchStart, <strong class="jxr_keyword">int</strong> matchEnd) {
+<a class="jxr_linenumber" name="L226" href="#L226">226</a> 		<strong class="jxr_keyword">var</strong> from = matchStart;
+<a class="jxr_linenumber" name="L227" href="#L227">227</a> 		<strong class="jxr_keyword">while</strong> (from &gt; 0) {
+<a class="jxr_linenumber" name="L228" href="#L228">228</a> 			<strong class="jxr_keyword">var</strong> c = code.charAt(from - 1);
+<a class="jxr_linenumber" name="L229" href="#L229">229</a> 			<strong class="jxr_keyword">if</strong> (Character.isLetterOrDigit(c) || c == '_' || c == '$' || c == '.')
+<a class="jxr_linenumber" name="L230" href="#L230">230</a> 				from--;
+<a class="jxr_linenumber" name="L231" href="#L231">231</a> 			<strong class="jxr_keyword">else</strong>
+<a class="jxr_linenumber" name="L232" href="#L232">232</a> 				<strong class="jxr_keyword">break</strong>;
+<a class="jxr_linenumber" name="L233" href="#L233">233</a> 		}
+<a class="jxr_linenumber" name="L234" href="#L234">234</a> 		<strong class="jxr_keyword">var</strong> to = matchEnd;
+<a class="jxr_linenumber" name="L235" href="#L235">235</a> 		<strong class="jxr_keyword">while</strong> (to &lt; code.length() &amp;&amp; code.charAt(to) != ';' &amp;&amp; code.charAt(to) != '\n')
+<a class="jxr_linenumber" name="L236" href="#L236">236</a> 			to++;
+<a class="jxr_linenumber" name="L237" href="#L237">237</a> 		<strong class="jxr_keyword">if</strong> (to &lt; code.length() &amp;&amp; code.charAt(to) == ';')
+<a class="jxr_linenumber" name="L238" href="#L238">238</a> 			to++;
+<a class="jxr_linenumber" name="L239" href="#L239">239</a> 		<strong class="jxr_keyword">return</strong> code.substring(from, to).trim();
+<a class="jxr_linenumber" name="L240" href="#L240">240</a> 	}
+<a class="jxr_linenumber" name="L241" href="#L241">241</a> 
+<a class="jxr_linenumber" name="L242" href="#L242">242</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L243" href="#L243">243</a> <em class="jxr_javadoccomment">	 * Walks the shipped {@code juneau-*.js} assets.  Hits are violations unless the unique snippet is on</em>
+<a class="jxr_linenumber" name="L244" href="#L244">244</a> <em class="jxr_javadoccomment">	 * the first-party icon-registry allowlist.</em>
+<a class="jxr_linenumber" name="L245" href="#L245">245</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L246" href="#L246">246</a> <em class="jxr_javadoccomment">	 * @param moduleRoot The {@code juneau-rest-server-views} module root.</em>
+<a class="jxr_linenumber" name="L247" href="#L247">247</a> <em class="jxr_javadoccomment">	 * @return Aggregated sinks and violations, plus the allowlisted-hit count in {@link Result#sinks()}.</em>
+<a class="jxr_linenumber" name="L248" href="#L248">248</a> <em class="jxr_javadoccomment">	 * @throws IOException If an asset cannot be read.</em>
+<a class="jxr_linenumber" name="L249" href="#L249">249</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L250" href="#L250">250</a> 	<strong class="jxr_keyword">static</strong> Result scanShippedJs(Path moduleRoot) <strong class="jxr_keyword">throws</strong> IOException {
+<a class="jxr_linenumber" name="L251" href="#L251">251</a> 		<strong class="jxr_keyword">var</strong> sinks = <strong class="jxr_keyword">new</strong> ArrayList&lt;Sink&gt;();
+<a class="jxr_linenumber" name="L252" href="#L252">252</a> 		<strong class="jxr_keyword">var</strong> violations = <strong class="jxr_keyword">new</strong> ArrayList&lt;String&gt;();
+<a class="jxr_linenumber" name="L253" href="#L253">253</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> rel : SHIPPED_JS_FILES) {
+<a class="jxr_linenumber" name="L254" href="#L254">254</a> 			<strong class="jxr_keyword">var</strong> file = moduleRoot.resolve(rel.replace('/', File.separatorChar));
+<a class="jxr_linenumber" name="L255" href="#L255">255</a> 			<strong class="jxr_keyword">var</strong> allowed = <strong class="jxr_keyword">new</strong> HashSet&lt;String&gt;();
+<a class="jxr_linenumber" name="L256" href="#L256">256</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> a : SHIPPED_JS_ALLOWLIST)
+<a class="jxr_linenumber" name="L257" href="#L257">257</a> 				<strong class="jxr_keyword">if</strong> (a.relativePath().equals(rel))
+<a class="jxr_linenumber" name="L258" href="#L258">258</a> 					allowed.add(a.snippet());
+<a class="jxr_linenumber" name="L259" href="#L259">259</a> 			<strong class="jxr_keyword">var</strong> r = scanJsHtmlSinks(rel, Files.readString(file), allowed);
+<a class="jxr_linenumber" name="L260" href="#L260">260</a> 			sinks.addAll(r.sinks());
+<a class="jxr_linenumber" name="L261" href="#L261">261</a> 			violations.addAll(r.violations());
+<a class="jxr_linenumber" name="L262" href="#L262">262</a> 		}
+<a class="jxr_linenumber" name="L263" href="#L263">263</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> Result(sinks, violations);
+<a class="jxr_linenumber" name="L264" href="#L264">264</a> 	}
+<a class="jxr_linenumber" name="L265" href="#L265">265</a> 
+<a class="jxr_linenumber" name="L266" href="#L266">266</a> 	<em class="jxr_javadoccomment">/** Allowlisted snippets that must still exist in their files (anti-vacuous). */</em>
+<a class="jxr_linenumber" name="L267" href="#L267">267</a> 	<strong class="jxr_keyword">static</strong> List&lt;AllowedJsSink&gt; shippedJsAllowlist() {
+<a class="jxr_linenumber" name="L268" href="#L268">268</a> 		<strong class="jxr_keyword">return</strong> SHIPPED_JS_ALLOWLIST;
+<a class="jxr_linenumber" name="L269" href="#L269">269</a> 	}
+<a class="jxr_linenumber" name="L270" href="#L270">270</a> 
+<a class="jxr_linenumber" name="L271" href="#L271">271</a> 	<em class="jxr_javadoccomment">/** The shipped JS files {@link #scanShippedJs} covers, relative to this module's root. */</em>
+<a class="jxr_linenumber" name="L272" href="#L272">272</a> 	<strong class="jxr_keyword">static</strong> List&lt;String&gt; shippedJsFiles() {
+<a class="jxr_linenumber" name="L273" href="#L273">273</a> 		<strong class="jxr_keyword">return</strong> SHIPPED_JS_FILES;
+<a class="jxr_linenumber" name="L274" href="#L274">274</a> 	}
+<a class="jxr_linenumber" name="L275" href="#L275">275</a> 
+<a class="jxr_linenumber" name="L276" href="#L276">276</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L277" href="#L277">277</a> <em class="jxr_javadoccomment">	 * Finds every {@code juneau-*.js} asset under the {@code src/main/resources} of this module and its sibling</em>
+<a class="jxr_linenumber" name="L278" href="#L278">278</a> <em class="jxr_javadoccomment">	 * {@code juneau-rest-server-*} modules, as module-root-relative paths.  Compared against {@link #shippedJsFiles()}</em>
+<a class="jxr_linenumber" name="L279" href="#L279">279</a> <em class="jxr_javadoccomment">	 * so a newly shipped script cannot silently escape the scan.</em>
+<a class="jxr_linenumber" name="L280" href="#L280">280</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L281" href="#L281">281</a> <em class="jxr_javadoccomment">	 * @param moduleRoot The {@code juneau-rest-server-views} module root.</em>
+<a class="jxr_linenumber" name="L282" href="#L282">282</a> <em class="jxr_javadoccomment">	 * @return The sorted relative paths, using {@code /} separators.</em>
+<a class="jxr_linenumber" name="L283" href="#L283">283</a> <em class="jxr_javadoccomment">	 * @throws IOException If a directory cannot be walked.</em>
+<a class="jxr_linenumber" name="L284" href="#L284">284</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L285" href="#L285">285</a> 	<strong class="jxr_keyword">static</strong> List&lt;String&gt; discoverShippedJs(Path moduleRoot) <strong class="jxr_keyword">throws</strong> IOException {
+<a class="jxr_linenumber" name="L286" href="#L286">286</a> 		<strong class="jxr_keyword">var</strong> found = <strong class="jxr_keyword">new</strong> ArrayList&lt;String&gt;();
+<a class="jxr_linenumber" name="L287" href="#L287">287</a> 		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> siblings = Files.list(moduleRoot.resolveSibling(<span class="jxr_string">""</span>))) {
+<a class="jxr_linenumber" name="L288" href="#L288">288</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> module : (Iterable&lt;Path&gt;)siblings.filter(p -&gt; p.getFileName().toString().startsWith(<span class="jxr_string">"juneau-rest-server"</span>))::iterator) {
+<a class="jxr_linenumber" name="L289" href="#L289">289</a> 				<strong class="jxr_keyword">var</strong> res = module.resolve(<span class="jxr_string">"src/main/resources"</span>);
+<a class="jxr_linenumber" name="L290" href="#L290">290</a> 				<strong class="jxr_keyword">if</strong> (! Files.isDirectory(res))
+<a class="jxr_linenumber" name="L291" href="#L291">291</a> 					<strong class="jxr_keyword">continue</strong>;
+<a class="jxr_linenumber" name="L292" href="#L292">292</a> 				<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> walk = Files.walk(res)) {
+<a class="jxr_linenumber" name="L293" href="#L293">293</a> 					<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> f : (Iterable&lt;Path&gt;)walk.filter(p -&gt; p.getFileName().toString().matches(<span class="jxr_string">"juneau-.*&#92;&#92;.js"</span>))::iterator)
+<a class="jxr_linenumber" name="L294" href="#L294">294</a> 						found.add(moduleRoot.relativize(f).toString().replace(File.separatorChar, '/'));
+<a class="jxr_linenumber" name="L295" href="#L295">295</a> 				}
+<a class="jxr_linenumber" name="L296" href="#L296">296</a> 			}
+<a class="jxr_linenumber" name="L297" href="#L297">297</a> 		}
+<a class="jxr_linenumber" name="L298" href="#L298">298</a> 		Collections.sort(found);
+<a class="jxr_linenumber" name="L299" href="#L299">299</a> 		<strong class="jxr_keyword">return</strong> found;
+<a class="jxr_linenumber" name="L300" href="#L300">300</a> 	}
+<a class="jxr_linenumber" name="L301" href="#L301">301</a> 
+<a class="jxr_linenumber" name="L302" href="#L302">302</a> 	<em class="jxr_comment">//------------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L303" href="#L303">303</a> 	<em class="jxr_comment">// rawText(...) emitter-purity scanning: what an emitter may hand to the verbatim writer.</em>
+<a class="jxr_linenumber" name="L304" href="#L304">304</a> 	<em class="jxr_comment">//</em>
+<a class="jxr_linenumber" name="L305" href="#L305">305</a> 	<em class="jxr_comment">//------------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L306" href="#L306">306</a> 
+<a class="jxr_linenumber" name="L307" href="#L307">307</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L308" href="#L308">308</a> <em class="jxr_javadoccomment">	 * Argument identifiers that are provably a JSON &lt;b&gt;sidecar payload&lt;/b&gt; rather than content: the local holding a</em>
+<a class="jxr_linenumber" name="L309" href="#L309">309</a> <em class="jxr_javadoccomment">	 * serialized descriptor, immediately before it is written into a {@code &lt;script type="application/json"&gt;}.</em>
+<a class="jxr_linenumber" name="L310" href="#L310">310</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L311" href="#L311">311</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L312" href="#L312">312</a> <em class="jxr_javadoccomment">	 * The other sidecar shape is recognized structurally instead of by name &amp;mdash; any argument beginning</em>
+<a class="jxr_linenumber" name="L313" href="#L313">313</a> <em class="jxr_javadoccomment">	 * {@code escapeForScript(} is a sidecar by construction, since that helper exists only to make a JSON payload</em>
+<a class="jxr_linenumber" name="L314" href="#L314">314</a> <em class="jxr_javadoccomment">	 * safe for a {@code &lt;script&gt;} body.</em>
+<a class="jxr_linenumber" name="L315" href="#L315">315</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L316" href="#L316">316</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Set&lt;String&gt; SIDECAR_PAYLOAD_ARGS = Set.of(<span class="jxr_string">"json"</span>, <span class="jxr_string">"bulkJson"</span>);
+<a class="jxr_linenumber" name="L317" href="#L317">317</a> 
+<a class="jxr_linenumber" name="L318" href="#L318">318</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L319" href="#L319">319</a> <em class="jxr_javadoccomment">	 * One {@code rawText(...)} call site, classified.</em>
+<a class="jxr_linenumber" name="L320" href="#L320">320</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L321" href="#L321">321</a> <em class="jxr_javadoccomment">	 * @param file The simple file name (e.g. {@code ViewTable.java}).</em>
+<a class="jxr_linenumber" name="L322" href="#L322">322</a> <em class="jxr_javadoccomment">	 * @param line The 1-based line number of the call.</em>
+<a class="jxr_linenumber" name="L323" href="#L323">323</a> <em class="jxr_javadoccomment">	 * @param arg The argument source text, verbatim.</em>
+<a class="jxr_linenumber" name="L324" href="#L324">324</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L325" href="#L325">325</a> 	record RawTextSite(String file, <strong class="jxr_keyword">int</strong> line, String arg) {
+<a class="jxr_linenumber" name="L326" href="#L326">326</a> 
+<a class="jxr_linenumber" name="L327" href="#L327">327</a> 		<em class="jxr_javadoccomment">/** Stable identity of this sink for allowlisting: file plus argument shape, independent of line number. */</em>
+<a class="jxr_linenumber" name="L328" href="#L328">328</a> 		String key() {
+<a class="jxr_linenumber" name="L329" href="#L329">329</a> 			<strong class="jxr_keyword">return</strong> file + <span class="jxr_string">":"</span> + arg;
+<a class="jxr_linenumber" name="L330" href="#L330">330</a> 		}
+<a class="jxr_linenumber" name="L331" href="#L331">331</a> 
+<a class="jxr_linenumber" name="L332" href="#L332">332</a> 		<em class="jxr_javadoccomment">/** True if the argument is a serialized JSON sidecar descriptor. */</em>
+<a class="jxr_linenumber" name="L333" href="#L333">333</a> 		<strong class="jxr_keyword">boolean</strong> isSidecarPayload() {
+<a class="jxr_linenumber" name="L334" href="#L334">334</a> 			<strong class="jxr_keyword">return</strong> SIDECAR_PAYLOAD_ARGS.contains(arg) || arg.startsWith(<span class="jxr_string">"escapeForScript("</span>);
+<a class="jxr_linenumber" name="L335" href="#L335">335</a> 		}
+<a class="jxr_linenumber" name="L336" href="#L336">336</a> 
+<a class="jxr_linenumber" name="L337" href="#L337">337</a> 		<em class="jxr_javadoccomment">/** True if the argument is the empty string literal &amp;mdash; a structural placeholder carrying nothing. */</em>
+<a class="jxr_linenumber" name="L338" href="#L338">338</a> 		<strong class="jxr_keyword">boolean</strong> isEmptyLiteral() {
+<a class="jxr_linenumber" name="L339" href="#L339">339</a> 			<strong class="jxr_keyword">return</strong> eq(arg, <span class="jxr_string">"\&quot;\&quot;"</span>);
+<a class="jxr_linenumber" name="L340" href="#L340">340</a> 		}
+<a class="jxr_linenumber" name="L341" href="#L341">341</a> 
+<a class="jxr_linenumber" name="L342" href="#L342">342</a> 		<em class="jxr_javadoccomment">/** True if this site writes something that is neither a sidecar payload nor provably empty. */</em>
+<a class="jxr_linenumber" name="L343" href="#L343">343</a> 		<strong class="jxr_keyword">boolean</strong> isContentBearing() {
+<a class="jxr_linenumber" name="L344" href="#L344">344</a> 			<strong class="jxr_keyword">return</strong> !isSidecarPayload() &amp;&amp; !isEmptyLiteral();
+<a class="jxr_linenumber" name="L345" href="#L345">345</a> 		}
+<a class="jxr_linenumber" name="L346" href="#L346">346</a> 
+<a class="jxr_linenumber" name="L347" href="#L347">347</a> 		@Override
+<a class="jxr_linenumber" name="L348" href="#L348">348</a> 		<strong class="jxr_keyword">public</strong> String toString() {
+<a class="jxr_linenumber" name="L349" href="#L349">349</a> 			<strong class="jxr_keyword">return</strong> file + <span class="jxr_string">":"</span> + line + <span class="jxr_string">" -&gt; rawText("</span> + arg + <span class="jxr_string">")"</span>;
+<a class="jxr_linenumber" name="L350" href="#L350">350</a> 		}
+<a class="jxr_linenumber" name="L351" href="#L351">351</a> 	}
+<a class="jxr_linenumber" name="L352" href="#L352">352</a> 
+<a class="jxr_linenumber" name="L353" href="#L353">353</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L354" href="#L354">354</a> <em class="jxr_javadoccomment">	 * Scans a single Java source string for {@code rawText(...)} call sites.</em>
+<a class="jxr_linenumber" name="L355" href="#L355">355</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L356" href="#L356">356</a> <em class="jxr_javadoccomment">	 * @param file A label for the source (used in messages).</em>
+<a class="jxr_linenumber" name="L357" href="#L357">357</a> <em class="jxr_javadoccomment">	 * @param source The Java source text.</em>
+<a class="jxr_linenumber" name="L358" href="#L358">358</a> <em class="jxr_javadoccomment">	 * @return Every {@code rawText(...)} site found, in source order.</em>
+<a class="jxr_linenumber" name="L359" href="#L359">359</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L360" href="#L360">360</a> 	<strong class="jxr_keyword">static</strong> List&lt;RawTextSite&gt; scanRawText(String file, String source) {
+<a class="jxr_linenumber" name="L361" href="#L361">361</a> 		<strong class="jxr_keyword">var</strong> out = <strong class="jxr_keyword">new</strong> ArrayList&lt;RawTextSite&gt;();
+<a class="jxr_linenumber" name="L362" href="#L362">362</a> 		<strong class="jxr_keyword">var</strong> code = stripComments(source);
+<a class="jxr_linenumber" name="L363" href="#L363">363</a> 		<strong class="jxr_keyword">var</strong> m = RAW_TEXT_CALL.matcher(code);
+<a class="jxr_linenumber" name="L364" href="#L364">364</a> 		<strong class="jxr_keyword">while</strong> (m.find()) {
+<a class="jxr_linenumber" name="L365" href="#L365">365</a> 			<strong class="jxr_keyword">var</strong> openParen = m.end() - 1;
+<a class="jxr_linenumber" name="L366" href="#L366">366</a> 			<strong class="jxr_keyword">var</strong> arg = balancedArg(code, openParen).trim();
+<a class="jxr_linenumber" name="L367" href="#L367">367</a> 			<strong class="jxr_keyword">var</strong> line = 1 + (<strong class="jxr_keyword">int</strong>) code.substring(0, m.start()).chars().filter(c -&gt; c == '\n').count();
+<a class="jxr_linenumber" name="L368" href="#L368">368</a> 			out.add(<strong class="jxr_keyword">new</strong> RawTextSite(file, line, arg));
+<a class="jxr_linenumber" name="L369" href="#L369">369</a> 		}
+<a class="jxr_linenumber" name="L370" href="#L370">370</a> 		<strong class="jxr_keyword">return</strong> out;
+<a class="jxr_linenumber" name="L371" href="#L371">371</a> 	}
+<a class="jxr_linenumber" name="L372" href="#L372">372</a> 
+<a class="jxr_linenumber" name="L373" href="#L373">373</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L374" href="#L374">374</a> <em class="jxr_javadoccomment">	 * Walks the specified module root &lt;b&gt;and&lt;/b&gt; the sibling widgets module root, scanning every</em>
+<a class="jxr_linenumber" name="L375" href="#L375">375</a> <em class="jxr_javadoccomment">	 * {@code src/main/java} source under each for {@code rawText(...)} sites.</em>
+<a class="jxr_linenumber" name="L376" href="#L376">376</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L377" href="#L377">377</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L378" href="#L378">378</a> <em class="jxr_javadoccomment">	 * &lt;b&gt;Main sources only&lt;/b&gt;, deliberately, and the claim under test is about what the</em>
+<a class="jxr_linenumber" name="L379" href="#L379">379</a> <em class="jxr_javadoccomment">	 * shipped emitters do.  A test fixture that hands live-looking data to {@code rawText} is exercising the</em>
+<a class="jxr_linenumber" name="L380" href="#L380">380</a> <em class="jxr_javadoccomment">	 * emitter, not violating the contract.</em>
+<a class="jxr_linenumber" name="L381" href="#L381">381</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L382" href="#L382">382</a> <em class="jxr_javadoccomment">	 * @param moduleRoot The views module root.</em>
+<a class="jxr_linenumber" name="L383" href="#L383">383</a> <em class="jxr_javadoccomment">	 * @return Every site found across both modules' main trees, in stable (per-tree, sorted-by-path) order.</em>
+<a class="jxr_linenumber" name="L384" href="#L384">384</a> <em class="jxr_javadoccomment">	 * @throws IOException If either tree cannot be walked.</em>
+<a class="jxr_linenumber" name="L385" href="#L385">385</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L386" href="#L386">386</a> 	<strong class="jxr_keyword">static</strong> List&lt;RawTextSite&gt; scanRawTextTree(Path moduleRoot) <strong class="jxr_keyword">throws</strong> IOException {
+<a class="jxr_linenumber" name="L387" href="#L387">387</a> 		<strong class="jxr_keyword">var</strong> out = <strong class="jxr_keyword">new</strong> ArrayList&lt;RawTextSite&gt;();
+<a class="jxr_linenumber" name="L388" href="#L388">388</a> 		collectRawText(moduleRoot, out);
+<a class="jxr_linenumber" name="L389" href="#L389">389</a> 		collectRawText(moduleRoot.resolve(WIDGETS_MODULE_DIR), out);
+<a class="jxr_linenumber" name="L390" href="#L390">390</a> 		<strong class="jxr_keyword">return</strong> out;
+<a class="jxr_linenumber" name="L391" href="#L391">391</a> 	}
+<a class="jxr_linenumber" name="L392" href="#L392">392</a> 
+<a class="jxr_linenumber" name="L393" href="#L393">393</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> collectRawText(Path moduleRoot, List&lt;RawTextSite&gt; out) <strong class="jxr_keyword">throws</strong> IOException {
+<a class="jxr_linenumber" name="L394" href="#L394">394</a> 		<strong class="jxr_keyword">var</strong> target = File.separator + <span class="jxr_string">"target"</span> + File.separator;
+<a class="jxr_linenumber" name="L395" href="#L395">395</a> 		<strong class="jxr_keyword">var</strong> srcRoot = moduleRoot.resolve(<span class="jxr_string">"src"</span>).resolve(<span class="jxr_string">"main"</span>).resolve(<span class="jxr_string">"java"</span>);
+<a class="jxr_linenumber" name="L396" href="#L396">396</a> 		<strong class="jxr_keyword">if</strong> (!Files.isDirectory(srcRoot))
+<a class="jxr_linenumber" name="L397" href="#L397">397</a> 			<strong class="jxr_keyword">return</strong>;
+<a class="jxr_linenumber" name="L398" href="#L398">398</a> 		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> stream = Files.walk(srcRoot)) {
+<a class="jxr_linenumber" name="L399" href="#L399">399</a> 			<strong class="jxr_keyword">var</strong> files = stream
+<a class="jxr_linenumber" name="L400" href="#L400">400</a> 				.filter(p -&gt; p.toString().endsWith(<span class="jxr_string">".java"</span>))
+<a class="jxr_linenumber" name="L401" href="#L401">401</a> 				.filter(p -&gt; !p.toString().contains(target))
+<a class="jxr_linenumber" name="L402" href="#L402">402</a> 				.sorted()
+<a class="jxr_linenumber" name="L403" href="#L403">403</a> 				.toList();
+<a class="jxr_linenumber" name="L404" href="#L404">404</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> f : files)
+<a class="jxr_linenumber" name="L405" href="#L405">405</a> 				out.addAll(scanRawText(f.getFileName().toString(), Files.readString(f)));
+<a class="jxr_linenumber" name="L406" href="#L406">406</a> 		}
+<a class="jxr_linenumber" name="L407" href="#L407">407</a> 	}
+<a class="jxr_linenumber" name="L408" href="#L408">408</a> 
+<a class="jxr_linenumber" name="L409" href="#L409">409</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L410" href="#L410">410</a> <em class="jxr_javadoccomment">	 * Resolves the sibling widgets module root, so a test can assert the cross-module crossing actually happened.</em>
+<a class="jxr_linenumber" name="L411" href="#L411">411</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L412" href="#L412">412</a> <em class="jxr_javadoccomment">	 * @param moduleRoot The views module root.</em>
+<a class="jxr_linenumber" name="L413" href="#L413">413</a> <em class="jxr_javadoccomment">	 * @return The widgets module root (which may not exist &amp;mdash; that is the thing worth asserting).</em>
+<a class="jxr_linenumber" name="L414" href="#L414">414</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L415" href="#L415">415</a> 	<strong class="jxr_keyword">static</strong> Path widgetsModuleRoot(Path moduleRoot) {
+<a class="jxr_linenumber" name="L416" href="#L416">416</a> 		<strong class="jxr_keyword">return</strong> moduleRoot.resolve(WIDGETS_MODULE_DIR);
+<a class="jxr_linenumber" name="L417" href="#L417">417</a> 	}
+<a class="jxr_linenumber" name="L418" href="#L418">418</a> 
+<a class="jxr_linenumber" name="L419" href="#L419">419</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L420" href="#L420">420</a> <em class="jxr_javadoccomment">	 * Locates the {@code juneau-rest-server-views} module root by walking up from the working directory until a</em>
+<a class="jxr_linenumber" name="L421" href="#L421">421</a> <em class="jxr_javadoccomment">	 * directory holding both {@code juneau-core} and {@code juneau-rest} is found, then resolving into it.</em>
+<a class="jxr_linenumber" name="L422" href="#L422">422</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L423" href="#L423">423</a> <em class="jxr_javadoccomment">	 * @return The module root, or {@code null} if not found.</em>
+<a class="jxr_linenumber" name="L424" href="#L424">424</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L425" href="#L425">425</a> 	<strong class="jxr_keyword">static</strong> Path locateModuleRoot() {
+<a class="jxr_linenumber" name="L426" href="#L426">426</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> d = Path.of(<span class="jxr_string">""</span>).toAbsolutePath(); d != <strong class="jxr_keyword">null</strong>; d = d.getParent()) {
+<a class="jxr_linenumber" name="L427" href="#L427">427</a> 			<strong class="jxr_keyword">if</strong> (Files.isDirectory(d.resolve(<span class="jxr_string">"juneau-core"</span>)) &amp;&amp; Files.isDirectory(d.resolve(<span class="jxr_string">"juneau-rest"</span>))) {
+<a class="jxr_linenumber" name="L428" href="#L428">428</a> 				<strong class="jxr_keyword">var</strong> module = d.resolve(<span class="jxr_string">"juneau-rest"</span>).resolve(<span class="jxr_string">"juneau-rest-server-views"</span>);
+<a class="jxr_linenumber" name="L429" href="#L429">429</a> 				<strong class="jxr_keyword">return</strong> Files.isDirectory(module) ? module : <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L430" href="#L430">430</a> 			}
+<a class="jxr_linenumber" name="L431" href="#L431">431</a> 		}
+<a class="jxr_linenumber" name="L432" href="#L432">432</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L433" href="#L433">433</a> 	}
+<a class="jxr_linenumber" name="L434" href="#L434">434</a> 
+<a class="jxr_linenumber" name="L435" href="#L435">435</a> 	<em class="jxr_javadoccomment">/** Returns the (comma-and-nesting-preserving) argument text between the balanced parens starting at {@code openParen}. */</em>
+<a class="jxr_linenumber" name="L436" href="#L436">436</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String balancedArg(String s, <strong class="jxr_keyword">int</strong> openParen) {
+<a class="jxr_linenumber" name="L437" href="#L437">437</a> 		<strong class="jxr_keyword">var</strong> depth = 0;
+<a class="jxr_linenumber" name="L438" href="#L438">438</a> 		<strong class="jxr_keyword">var</strong> sb = <strong class="jxr_keyword">new</strong> StringBuilder();
+<a class="jxr_linenumber" name="L439" href="#L439">439</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = openParen; i &lt; s.length(); i++) {
+<a class="jxr_linenumber" name="L440" href="#L440">440</a> 			<strong class="jxr_keyword">var</strong> c = s.charAt(i);
+<a class="jxr_linenumber" name="L441" href="#L441">441</a> 			<strong class="jxr_keyword">if</strong> (c == '(') {
+<a class="jxr_linenumber" name="L442" href="#L442">442</a> 				depth++;
+<a class="jxr_linenumber" name="L443" href="#L443">443</a> 				<strong class="jxr_keyword">if</strong> (depth == 1)
+<a class="jxr_linenumber" name="L444" href="#L444">444</a> 					<strong class="jxr_keyword">continue</strong>;
+<a class="jxr_linenumber" name="L445" href="#L445">445</a> 			} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (c == ')') {
+<a class="jxr_linenumber" name="L446" href="#L446">446</a> 				depth--;
+<a class="jxr_linenumber" name="L447" href="#L447">447</a> 				<strong class="jxr_keyword">if</strong> (depth == 0)
+<a class="jxr_linenumber" name="L448" href="#L448">448</a> 					<strong class="jxr_keyword">break</strong>;
+<a class="jxr_linenumber" name="L449" href="#L449">449</a> 			}
+<a class="jxr_linenumber" name="L450" href="#L450">450</a> 			sb.append(c);
+<a class="jxr_linenumber" name="L451" href="#L451">451</a> 		}
+<a class="jxr_linenumber" name="L452" href="#L452">452</a> 		<strong class="jxr_keyword">return</strong> sb.toString();
+<a class="jxr_linenumber" name="L453" href="#L453">453</a> 	}
+<a class="jxr_linenumber" name="L454" href="#L454">454</a> 
+<a class="jxr_linenumber" name="L455" href="#L455">455</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L456" href="#L456">456</a> <em class="jxr_javadoccomment">	 * Blanks out comment content (keeping string/char literals fully intact, including their delimiters and</em>
+<a class="jxr_linenumber" name="L457" href="#L457">457</a> <em class="jxr_javadoccomment">	 * inner text) so that a mention of a forbidden API inside a comment cannot be mistaken for a real call, and the</em>
+<a class="jxr_linenumber" name="L458" href="#L458">458</a> <em class="jxr_javadoccomment">	 * literal text of a string argument stays inspectable. This is the one deliberate divergence from</em>
+<a class="jxr_linenumber" name="L459" href="#L459">459</a> <em class="jxr_javadoccomment">	 * {@code ScriptJsonSinkScanner}'s stripper, which blanks string content too.</em>
+<a class="jxr_linenumber" name="L460" href="#L460">460</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L461" href="#L461">461</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String stripComments(String s) {
+<a class="jxr_linenumber" name="L462" href="#L462">462</a> 		<strong class="jxr_keyword">var</strong> out = <strong class="jxr_keyword">new</strong> StringBuilder(s.length());
+<a class="jxr_linenumber" name="L463" href="#L463">463</a> 		<strong class="jxr_keyword">var</strong> n = s.length();
+<a class="jxr_linenumber" name="L464" href="#L464">464</a> 		<strong class="jxr_keyword">var</strong> i = 0;
+<a class="jxr_linenumber" name="L465" href="#L465">465</a> 		<strong class="jxr_keyword">while</strong> (i &lt; n) {
+<a class="jxr_linenumber" name="L466" href="#L466">466</a> 			<strong class="jxr_keyword">var</strong> c = s.charAt(i);
+<a class="jxr_linenumber" name="L467" href="#L467">467</a> 			<strong class="jxr_keyword">if</strong> (c == '/' &amp;&amp; i + 1 &lt; n &amp;&amp; s.charAt(i + 1) == '/') {
+<a class="jxr_linenumber" name="L468" href="#L468">468</a> 				<strong class="jxr_keyword">while</strong> (i &lt; n &amp;&amp; s.charAt(i) != '\n')
+<a class="jxr_linenumber" name="L469" href="#L469">469</a> 					i++;
+<a class="jxr_linenumber" name="L470" href="#L470">470</a> 				<strong class="jxr_keyword">continue</strong>;
+<a class="jxr_linenumber" name="L471" href="#L471">471</a> 			}
+<a class="jxr_linenumber" name="L472" href="#L472">472</a> 			<strong class="jxr_keyword">if</strong> (c == '/' &amp;&amp; i + 1 &lt; n &amp;&amp; s.charAt(i + 1) == '*') {
+<a class="jxr_linenumber" name="L473" href="#L473">473</a> 				i += 2;
+<a class="jxr_linenumber" name="L474" href="#L474">474</a> 				<strong class="jxr_keyword">while</strong> (i + 1 &lt; n &amp;&amp; !(s.charAt(i) == '*' &amp;&amp; s.charAt(i + 1) == '/')) {
+<a class="jxr_linenumber" name="L475" href="#L475">475</a> 					<strong class="jxr_keyword">if</strong> (s.charAt(i) == '\n')
+<a class="jxr_linenumber" name="L476" href="#L476">476</a> 						out.append('\n');
+<a class="jxr_linenumber" name="L477" href="#L477">477</a> 					i++;
+<a class="jxr_linenumber" name="L478" href="#L478">478</a> 				}
+<a class="jxr_linenumber" name="L479" href="#L479">479</a> 				i = Math.min(n, i + 2);
+<a class="jxr_linenumber" name="L480" href="#L480">480</a> 				<strong class="jxr_keyword">continue</strong>;
+<a class="jxr_linenumber" name="L481" href="#L481">481</a> 			}
+<a class="jxr_linenumber" name="L482" href="#L482">482</a> 			<strong class="jxr_keyword">if</strong> (c == '&quot;' &amp;&amp; i + 2 &lt; n &amp;&amp; s.charAt(i + 1) == '&quot;' &amp;&amp; s.charAt(i + 2) == '&quot;') {
+<a class="jxr_linenumber" name="L483" href="#L483">483</a> 				out.append(<span class="jxr_string">"\&quot;\&quot;\&quot;"</span>);
+<a class="jxr_linenumber" name="L484" href="#L484">484</a> 				i += 3;
+<a class="jxr_linenumber" name="L485" href="#L485">485</a> 				<strong class="jxr_keyword">while</strong> (i + 2 &lt; n &amp;&amp; !(s.charAt(i) == '&quot;' &amp;&amp; s.charAt(i + 1) == '&quot;' &amp;&amp; s.charAt(i + 2) == '&quot;')) {
+<a class="jxr_linenumber" name="L486" href="#L486">486</a> 					out.append(s.charAt(i));
+<a class="jxr_linenumber" name="L487" href="#L487">487</a> 					i++;
+<a class="jxr_linenumber" name="L488" href="#L488">488</a> 				}
+<a class="jxr_linenumber" name="L489" href="#L489">489</a> 				<strong class="jxr_keyword">if</strong> (i + 2 &lt; n) {
+<a class="jxr_linenumber" name="L490" href="#L490">490</a> 					out.append(<span class="jxr_string">"\&quot;\&quot;\&quot;"</span>);
+<a class="jxr_linenumber" name="L491" href="#L491">491</a> 					i += 3;
+<a class="jxr_linenumber" name="L492" href="#L492">492</a> 				} <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L493" href="#L493">493</a> 					i = n;
+<a class="jxr_linenumber" name="L494" href="#L494">494</a> 				}
+<a class="jxr_linenumber" name="L495" href="#L495">495</a> 				<strong class="jxr_keyword">continue</strong>;
+<a class="jxr_linenumber" name="L496" href="#L496">496</a> 			}
+<a class="jxr_linenumber" name="L497" href="#L497">497</a> 			<strong class="jxr_keyword">if</strong> (c == '&quot;') {
+<a class="jxr_linenumber" name="L498" href="#L498">498</a> 				out.append('&quot;');
+<a class="jxr_linenumber" name="L499" href="#L499">499</a> 				i++;
+<a class="jxr_linenumber" name="L500" href="#L500">500</a> 				<strong class="jxr_keyword">while</strong> (i &lt; n &amp;&amp; s.charAt(i) != '&quot;') {
+<a class="jxr_linenumber" name="L501" href="#L501">501</a> 					<strong class="jxr_keyword">if</strong> (s.charAt(i) == '&#92;&#92;' &amp;&amp; i + 1 &lt; n) {
+<a class="jxr_linenumber" name="L502" href="#L502">502</a> 						out.append(s.charAt(i)).append(s.charAt(i + 1));
+<a class="jxr_linenumber" name="L503" href="#L503">503</a> 						i += 2;
+<a class="jxr_linenumber" name="L504" href="#L504">504</a> 						<strong class="jxr_keyword">continue</strong>;
+<a class="jxr_linenumber" name="L505" href="#L505">505</a> 					}
+<a class="jxr_linenumber" name="L506" href="#L506">506</a> 					out.append(s.charAt(i));
+<a class="jxr_linenumber" name="L507" href="#L507">507</a> 					i++;
+<a class="jxr_linenumber" name="L508" href="#L508">508</a> 				}
+<a class="jxr_linenumber" name="L509" href="#L509">509</a> 				<strong class="jxr_keyword">if</strong> (i &lt; n) {
+<a class="jxr_linenumber" name="L510" href="#L510">510</a> 					out.append('&quot;');
+<a class="jxr_linenumber" name="L511" href="#L511">511</a> 					i++;
+<a class="jxr_linenumber" name="L512" href="#L512">512</a> 				}
+<a class="jxr_linenumber" name="L513" href="#L513">513</a> 				<strong class="jxr_keyword">continue</strong>;
+<a class="jxr_linenumber" name="L514" href="#L514">514</a> 			}
+<a class="jxr_linenumber" name="L515" href="#L515">515</a> 			<strong class="jxr_keyword">if</strong> (c == '\'') {
+<a class="jxr_linenumber" name="L516" href="#L516">516</a> 				out.append('\'');
+<a class="jxr_linenumber" name="L517" href="#L517">517</a> 				i++;
+<a class="jxr_linenumber" name="L518" href="#L518">518</a> 				<strong class="jxr_keyword">while</strong> (i &lt; n &amp;&amp; s.charAt(i) != '\'') {
+<a class="jxr_linenumber" name="L519" href="#L519">519</a> 					<strong class="jxr_keyword">if</strong> (s.charAt(i) == '&#92;&#92;' &amp;&amp; i + 1 &lt; n) {
+<a class="jxr_linenumber" name="L520" href="#L520">520</a> 						out.append(s.charAt(i)).append(s.charAt(i + 1));
+<a class="jxr_linenumber" name="L521" href="#L521">521</a> 						i += 2;
+<a class="jxr_linenumber" name="L522" href="#L522">522</a> 						<strong class="jxr_keyword">continue</strong>;
+<a class="jxr_linenumber" name="L523" href="#L523">523</a> 					}
+<a class="jxr_linenumber" name="L524" href="#L524">524</a> 					out.append(s.charAt(i));
+<a class="jxr_linenumber" name="L525" href="#L525">525</a> 					i++;
+<a class="jxr_linenumber" name="L526" href="#L526">526</a> 				}
+<a class="jxr_linenumber" name="L527" href="#L527">527</a> 				<strong class="jxr_keyword">if</strong> (i &lt; n) {
+<a class="jxr_linenumber" name="L528" href="#L528">528</a> 					out.append('\'');
+<a class="jxr_linenumber" name="L529" href="#L529">529</a> 					i++;
+<a class="jxr_linenumber" name="L530" href="#L530">530</a> 				}
+<a class="jxr_linenumber" name="L531" href="#L531">531</a> 				<strong class="jxr_keyword">continue</strong>;
+<a class="jxr_linenumber" name="L532" href="#L532">532</a> 			}
+<a class="jxr_linenumber" name="L533" href="#L533">533</a> 			out.append(c);
+<a class="jxr_linenumber" name="L534" href="#L534">534</a> 			i++;
+<a class="jxr_linenumber" name="L535" href="#L535">535</a> 		}
+<a class="jxr_linenumber" name="L536" href="#L536">536</a> 		<strong class="jxr_keyword">return</strong> out.toString();
+<a class="jxr_linenumber" name="L537" href="#L537">537</a> 	}
+<a class="jxr_linenumber" name="L538" href="#L538">538</a> }
+</pre>
+<hr/>
+<div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>
+</body>
+</html>

@@ -57,8 +57,8 @@
 <span class="source-line-no">044</span><span id="line-44"></span>
 <span class="source-line-no">045</span><span id="line-45">   @Override /* ConfigFormat */</span>
 <span class="source-line-no">046</span><span id="line-46">   @SuppressWarnings({</span>
-<span class="source-line-no">047</span><span id="line-47">      "java:S3776", // Cognitive complexity acceptable for YAML-to-INI format conversion logic</span>
-<span class="source-line-no">048</span><span id="line-48">      "java:S135" // Multiple continue statements are intentional in this line-by-line YAML parsing state machine.</span>
+<span class="source-line-no">047</span><span id="line-47">      "java:S135", // Multiple continue statements are intentional in this line-by-line YAML parsing state machine.</span>
+<span class="source-line-no">048</span><span id="line-48">      "java:S3776" // Cognitive complexity acceptable for YAML-to-INI format conversion logic</span>
 <span class="source-line-no">049</span><span id="line-49">   })</span>
 <span class="source-line-no">050</span><span id="line-50">   public String toInternal(String contents) throws IOException {</span>
 <span class="source-line-no">051</span><span id="line-51">      if (contents == null)</span>
@@ -73,7 +73,7 @@
 <span class="source-line-no">060</span><span id="line-60">      for (var i = 0; i &lt; lines.size(); i++) {</span>
 <span class="source-line-no">061</span><span id="line-61">         var line = lines.get(i);</span>
 <span class="source-line-no">062</span><span id="line-62">         var trim = line.trim();</span>
-<span class="source-line-no">063</span><span id="line-63">         if (trim.isEmpty() || trim.startsWith("#") || trim.equals("---")) {</span>
+<span class="source-line-no">063</span><span id="line-63">         if (trim.isEmpty() || trim.startsWith("#") || eq(trim, "---")) {</span>
 <span class="source-line-no">064</span><span id="line-64">            preLines.add(line);</span>
 <span class="source-line-no">065</span><span id="line-65">            continue;</span>
 <span class="source-line-no">066</span><span id="line-66">         }</span>
@@ -88,7 +88,7 @@
 <span class="source-line-no">075</span><span id="line-75"></span>
 <span class="source-line-no">076</span><span id="line-76">         var key = trim.substring(0, colonIndex).trim();</span>
 <span class="source-line-no">077</span><span id="line-77">         var rest = trim.substring(colonIndex + 1).trim();</span>
-<span class="source-line-no">078</span><span id="line-78">         if ("_imports".equals(key))</span>
+<span class="source-line-no">078</span><span id="line-78">         if (eq(key, "_imports"))</span>
 <span class="source-line-no">079</span><span id="line-79">            continue;</span>
 <span class="source-line-no">080</span><span id="line-80"></span>
 <span class="source-line-no">081</span><span id="line-81">         if (rest.isEmpty()) {</span>

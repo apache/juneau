@@ -78,7 +78,7 @@ loadScripts(document, 'script');</script>
 </div>
 <section class="class-description" id="class-description">
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/McpDynamicClientRegistrar.html#line-73">McpDynamicClientRegistrar</a></span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/McpDynamicClientRegistrar.html#line-72">McpDynamicClientRegistrar</a></span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
 <div class="block">Performs an RFC 7591 / OpenID Connect Dynamic Client Registration (SEP-837) round-trip against an authorization
  server's <code>registration_endpoint</code>, returning the issued credentials as a redaction-safe
@@ -93,7 +93,7 @@ loadScripts(document, 'script');</script>
  RFC 7591 &sect;3 initial access token is attached when <a href="McpDynamicClientRegistrar.Builder.html#initialAccessToken(java.lang.String)"><code>McpDynamicClientRegistrar.Builder.initialAccessToken(String)</code></a> is set.
 
  <p>
- The DCR-issued <code>client_id</code>/secret then feed F1's existing flows unchanged &mdash; DCR changes only how the
+ The DCR-issued <code>client_id</code>/secret then feed the existing flows unchanged &mdash; DCR changes only how the
  <code>client_id</code> was obtained, not the <code>resource=</code> (RFC 8707) or <code>iss</code> (RFC 9207 / SEP-2468)
  enforcement; see <a href="McpClientRegistrations.html" title="class in org.apache.juneau.rest.client.mcp.auth"><code>McpClientRegistrations</code></a> for the bridge to <a href="McpAuthorizationCodeAcquirer.html" title="class in org.apache.juneau.rest.client.mcp.auth"><code>McpAuthorizationCodeAcquirer</code></a> /
  <a href="McpTokenProvider.html" title="class in org.apache.juneau.rest.client.mcp.auth"><code>McpTokenProvider</code></a>.
@@ -198,7 +198,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.rest.client.mcp.auth.McpDynamicClientRegistrar.Builder)">
 <h3>McpDynamicClientRegistrar</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/McpDynamicClientRegistrar.html#line-333">McpDynamicClientRegistrar</a></span><wbr><span class="parameters">(<a href="McpDynamicClientRegistrar.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpDynamicClientRegistrar.Builder</a>&nbsp;b)</span></div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/McpDynamicClientRegistrar.html#line-316">McpDynamicClientRegistrar</a></span><wbr><span class="parameters">(<a href="McpDynamicClientRegistrar.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpDynamicClientRegistrar.Builder</a>&nbsp;b)</span></div>
 <div class="block">Constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -217,7 +217,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="create()">
 <h3>create</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="McpDynamicClientRegistrar.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpDynamicClientRegistrar.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/McpDynamicClientRegistrar.html#line-87">create</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="McpDynamicClientRegistrar.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpDynamicClientRegistrar.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/McpDynamicClientRegistrar.html#line-82">create</a></span>()</div>
 <div class="block">Static creator.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -228,7 +228,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="register()">
 <h3>register</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="McpClientRegistration.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpClientRegistration</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/McpDynamicClientRegistrar.html#line-414">register</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="McpClientRegistration.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpClientRegistration</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/McpDynamicClientRegistrar.html#line-397">register</a></span>()</div>
 <div class="block">Performs the live RFC 7591 registration round-trip: builds the request, applies the finite HTTP timeout and the
  caller's <code>httpRequestConfigurator</code>, sends it, and maps the response.</div>
 <dl class="notes">
@@ -242,7 +242,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="toString()">
 <h3>toString</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/McpDynamicClientRegistrar.html#line-485">toString</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/McpDynamicClientRegistrar.html#line-467">toString</a></span>()</div>
 <dl class="notes">
 <dt>Overrides:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#toString()" title="class or interface in java.lang" class="external-link">toString</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></code></dd>

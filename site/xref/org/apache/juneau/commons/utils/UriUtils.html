@@ -52,10 +52,10 @@
 <a class="jxr_linenumber" name="L44" href="#L44">44</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">boolean</strong> isSecureOrLoopback(URI uri) {
 <a class="jxr_linenumber" name="L45" href="#L45">45</a>  		<strong class="jxr_keyword">if</strong> (uri == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L46" href="#L46">46</a>  			<strong class="jxr_keyword">return</strong> false;
-<a class="jxr_linenumber" name="L47" href="#L47">47</a>  		<strong class="jxr_keyword">if</strong> (<span class="jxr_string">"https"</span>.equalsIgnoreCase(uri.getScheme()))
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>  		<strong class="jxr_keyword">if</strong> (eqic(<span class="jxr_string">"https"</span>, uri.getScheme()))
 <a class="jxr_linenumber" name="L48" href="#L48">48</a>  			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
 <a class="jxr_linenumber" name="L49" href="#L49">49</a>  		<strong class="jxr_keyword">var</strong> host = uri.getHost();
-<a class="jxr_linenumber" name="L50" href="#L50">50</a>  		<strong class="jxr_keyword">return</strong> host != <strong class="jxr_keyword">null</strong> &amp;&amp; (host.equals(<span class="jxr_string">"127.0.0.1"</span>) || host.equalsIgnoreCase(<span class="jxr_string">"localhost"</span>) || host.equals(<span class="jxr_string">"[::1]"</span>) || host.equals(<span class="jxr_string">"::1"</span>));
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>  		<strong class="jxr_keyword">return</strong> host != <strong class="jxr_keyword">null</strong> &amp;&amp; (eq(host, <span class="jxr_string">"127.0.0.1"</span>) || eqic(host, <span class="jxr_string">"localhost"</span>) || eqa(host, <span class="jxr_string">"[::1]"</span>, <span class="jxr_string">"::1"</span>));
 <a class="jxr_linenumber" name="L51" href="#L51">51</a>  	}
 <a class="jxr_linenumber" name="L52" href="#L52">52</a>  
 <a class="jxr_linenumber" name="L53" href="#L53">53</a>  	<em class="jxr_javadoccomment">/**</em>

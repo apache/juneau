@@ -29,14 +29,14 @@
 <span class="source-line-no">016</span><span id="line-16"> */</span>
 <span class="source-line-no">017</span><span id="line-17">package org.apache.juneau.marshall.json5l;</span>
 <span class="source-line-no">018</span><span id="line-18"></span>
-<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.AssertionUtils.*;</span>
-<span class="source-line-no">020</span><span id="line-20"></span>
-<span class="source-line-no">021</span><span id="line-21">import java.io.*;</span>
-<span class="source-line-no">022</span><span id="line-22"></span>
-<span class="source-line-no">023</span><span id="line-23">import org.apache.juneau.marshall.json.*;</span>
-<span class="source-line-no">024</span><span id="line-24">import org.apache.juneau.marshall.jsonl.*;</span>
-<span class="source-line-no">025</span><span id="line-25">import org.apache.juneau.marshall.serializer.*;</span>
-<span class="source-line-no">026</span><span id="line-26">import org.apache.juneau.marshall.stream.*;</span>
+<span class="source-line-no">019</span><span id="line-19"></span>
+<span class="source-line-no">020</span><span id="line-20">import java.io.*;</span>
+<span class="source-line-no">021</span><span id="line-21"></span>
+<span class="source-line-no">022</span><span id="line-22">import org.apache.juneau.marshall.json.*;</span>
+<span class="source-line-no">023</span><span id="line-23">import org.apache.juneau.marshall.jsonl.*;</span>
+<span class="source-line-no">024</span><span id="line-24">import org.apache.juneau.marshall.serializer.*;</span>
+<span class="source-line-no">025</span><span id="line-25">import org.apache.juneau.marshall.stream.*;</span>
+<span class="source-line-no">026</span><span id="line-26">import static org.apache.juneau.commons.utils.Shorts.*;</span>
 <span class="source-line-no">027</span><span id="line-27"></span>
 <span class="source-line-no">028</span><span id="line-28">/**</span>
 <span class="source-line-no">029</span><span id="line-29"> * Session object that lives for the duration of a single use of {@link Json5lSerializer}.</span>
@@ -57,99 +57,97 @@
 <span class="source-line-no">044</span><span id="line-44"> * &lt;/ul&gt;</span>
 <span class="source-line-no">045</span><span id="line-45"> */</span>
 <span class="source-line-no">046</span><span id="line-46">@SuppressWarnings({</span>
-<span class="source-line-no">047</span><span id="line-47">   "resource", // Resource management handled externally</span>
-<span class="source-line-no">048</span><span id="line-48">   "java:S110", // Inheritance depth acceptable</span>
-<span class="source-line-no">049</span><span id="line-49">   "java:S115" // Constants use UPPER_snakeCase convention</span>
+<span class="source-line-no">047</span><span id="line-47">   "java:S110", // Inheritance depth acceptable</span>
+<span class="source-line-no">048</span><span id="line-48">   "java:S1192", // Duplicated literals (argument/property names) read more clearly inline than as constants</span>
+<span class="source-line-no">049</span><span id="line-49">   "resource" // Resource management handled externally</span>
 <span class="source-line-no">050</span><span id="line-50">})</span>
 <span class="source-line-no">051</span><span id="line-51">public class Json5lSerializerSession extends JsonlSerializerSession {</span>
 <span class="source-line-no">052</span><span id="line-52"></span>
-<span class="source-line-no">053</span><span id="line-53">   private static final String ARG_ctx = "ctx";</span>
+<span class="source-line-no">053</span><span id="line-53">   private static final char SUGAR_QUOTE = '\'';</span>
 <span class="source-line-no">054</span><span id="line-54"></span>
-<span class="source-line-no">055</span><span id="line-55">   private static final char SUGAR_QUOTE = '\'';</span>
-<span class="source-line-no">056</span><span id="line-56"></span>
-<span class="source-line-no">057</span><span id="line-57">   /**</span>
-<span class="source-line-no">058</span><span id="line-58">    * Builder class.</span>
-<span class="source-line-no">059</span><span id="line-59">    */</span>
-<span class="source-line-no">060</span><span id="line-60">   public static class Builder extends JsonlSerializerSession.Builder {</span>
+<span class="source-line-no">055</span><span id="line-55">   /**</span>
+<span class="source-line-no">056</span><span id="line-56">    * Builder class.</span>
+<span class="source-line-no">057</span><span id="line-57">    */</span>
+<span class="source-line-no">058</span><span id="line-58">   public static class Builder extends JsonlSerializerSession.Builder {</span>
+<span class="source-line-no">059</span><span id="line-59"></span>
+<span class="source-line-no">060</span><span id="line-60">      final Json5lSerializer ctx;</span>
 <span class="source-line-no">061</span><span id="line-61"></span>
-<span class="source-line-no">062</span><span id="line-62">      final Json5lSerializer ctx;</span>
-<span class="source-line-no">063</span><span id="line-63"></span>
-<span class="source-line-no">064</span><span id="line-64">      /**</span>
-<span class="source-line-no">065</span><span id="line-65">       * Constructor</span>
-<span class="source-line-no">066</span><span id="line-66">       *</span>
-<span class="source-line-no">067</span><span id="line-67">       * @param ctx The context creating this session.</span>
-<span class="source-line-no">068</span><span id="line-68">       *    &lt;br&gt;Cannot be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">069</span><span id="line-69">       */</span>
-<span class="source-line-no">070</span><span id="line-70">      protected Builder(Json5lSerializer ctx) {</span>
-<span class="source-line-no">071</span><span id="line-71">         super(assertArgNotNull(ARG_ctx, ctx));</span>
-<span class="source-line-no">072</span><span id="line-72">         this.ctx = ctx;</span>
-<span class="source-line-no">073</span><span id="line-73">      }</span>
-<span class="source-line-no">074</span><span id="line-74"></span>
-<span class="source-line-no">075</span><span id="line-75">      @Override</span>
-<span class="source-line-no">076</span><span id="line-76">      public Json5lSerializerSession build() {</span>
-<span class="source-line-no">077</span><span id="line-77">         return new Json5lSerializerSession(this);</span>
-<span class="source-line-no">078</span><span id="line-78">      }</span>
-<span class="source-line-no">079</span><span id="line-79">   }</span>
-<span class="source-line-no">080</span><span id="line-80"></span>
-<span class="source-line-no">081</span><span id="line-81">   /**</span>
-<span class="source-line-no">082</span><span id="line-82">    * Creates a new builder for this object.</span>
-<span class="source-line-no">083</span><span id="line-83">    *</span>
-<span class="source-line-no">084</span><span id="line-84">    * @param ctx The context creating this session.</span>
-<span class="source-line-no">085</span><span id="line-85">    *    &lt;br&gt;Cannot be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">086</span><span id="line-86">    * @return A new builder.</span>
-<span class="source-line-no">087</span><span id="line-87">    */</span>
-<span class="source-line-no">088</span><span id="line-88">   public static Builder create(Json5lSerializer ctx) {</span>
-<span class="source-line-no">089</span><span id="line-89">      return new Builder(assertArgNotNull(ARG_ctx, ctx));</span>
-<span class="source-line-no">090</span><span id="line-90">   }</span>
+<span class="source-line-no">062</span><span id="line-62">      /**</span>
+<span class="source-line-no">063</span><span id="line-63">       * Constructor</span>
+<span class="source-line-no">064</span><span id="line-64">       *</span>
+<span class="source-line-no">065</span><span id="line-65">       * @param ctx The context creating this session.</span>
+<span class="source-line-no">066</span><span id="line-66">       *    &lt;br&gt;Cannot be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">067</span><span id="line-67">       */</span>
+<span class="source-line-no">068</span><span id="line-68">      protected Builder(Json5lSerializer ctx) {</span>
+<span class="source-line-no">069</span><span id="line-69">         super(reqnn("ctx", ctx));</span>
+<span class="source-line-no">070</span><span id="line-70">         this.ctx = ctx;</span>
+<span class="source-line-no">071</span><span id="line-71">      }</span>
+<span class="source-line-no">072</span><span id="line-72"></span>
+<span class="source-line-no">073</span><span id="line-73">      @Override</span>
+<span class="source-line-no">074</span><span id="line-74">      public Json5lSerializerSession build() {</span>
+<span class="source-line-no">075</span><span id="line-75">         return new Json5lSerializerSession(this);</span>
+<span class="source-line-no">076</span><span id="line-76">      }</span>
+<span class="source-line-no">077</span><span id="line-77">   }</span>
+<span class="source-line-no">078</span><span id="line-78"></span>
+<span class="source-line-no">079</span><span id="line-79">   /**</span>
+<span class="source-line-no">080</span><span id="line-80">    * Creates a new builder for this object.</span>
+<span class="source-line-no">081</span><span id="line-81">    *</span>
+<span class="source-line-no">082</span><span id="line-82">    * @param ctx The context creating this session.</span>
+<span class="source-line-no">083</span><span id="line-83">    *    &lt;br&gt;Cannot be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">084</span><span id="line-84">    * @return A new builder.</span>
+<span class="source-line-no">085</span><span id="line-85">    */</span>
+<span class="source-line-no">086</span><span id="line-86">   public static Builder create(Json5lSerializer ctx) {</span>
+<span class="source-line-no">087</span><span id="line-87">      return new Builder(reqnn("ctx", ctx));</span>
+<span class="source-line-no">088</span><span id="line-88">   }</span>
+<span class="source-line-no">089</span><span id="line-89"></span>
+<span class="source-line-no">090</span><span id="line-90">   private final boolean json5Sugar;</span>
 <span class="source-line-no">091</span><span id="line-91"></span>
-<span class="source-line-no">092</span><span id="line-92">   private final boolean json5Sugar;</span>
-<span class="source-line-no">093</span><span id="line-93"></span>
-<span class="source-line-no">094</span><span id="line-94">   /**</span>
-<span class="source-line-no">095</span><span id="line-95">    * Constructor.</span>
-<span class="source-line-no">096</span><span id="line-96">    *</span>
-<span class="source-line-no">097</span><span id="line-97">    * @param builder The builder for this object.</span>
-<span class="source-line-no">098</span><span id="line-98">    */</span>
-<span class="source-line-no">099</span><span id="line-99">   protected Json5lSerializerSession(Builder builder) {</span>
-<span class="source-line-no">100</span><span id="line-100">      super(builder);</span>
-<span class="source-line-no">101</span><span id="line-101">      json5Sugar = builder.ctx.isJson5Sugar();</span>
-<span class="source-line-no">102</span><span id="line-102">   }</span>
-<span class="source-line-no">103</span><span id="line-103"></span>
-<span class="source-line-no">104</span><span id="line-104">   @Override /* Overridden from JsonSerializerSession */</span>
-<span class="source-line-no">105</span><span id="line-105">   protected JsonWriter&lt;?&gt; getJsonWriter(SerializerPipe out) {</span>
-<span class="source-line-no">106</span><span id="line-106">      if (! json5Sugar)</span>
-<span class="source-line-no">107</span><span id="line-107">         return super.getJsonWriter(out);</span>
-<span class="source-line-no">108</span><span id="line-108">      var output = out.getRawOutput();</span>
-<span class="source-line-no">109</span><span id="line-109">      if (output instanceof JsonWriter&lt;?&gt; output2)</span>
-<span class="source-line-no">110</span><span id="line-110">         return output2;</span>
-<span class="source-line-no">111</span><span id="line-111">      var w = JsonWriter.create(out.getWriter(), isUseWhitespace(), getMaxIndent(), isEscapeSolidus(), SUGAR_QUOTE, true, isTrimStrings(), getUriResolver());</span>
-<span class="source-line-no">112</span><span id="line-112">      out.setWriter(w);</span>
-<span class="source-line-no">113</span><span id="line-113">      return w;</span>
-<span class="source-line-no">114</span><span id="line-114">   }</span>
-<span class="source-line-no">115</span><span id="line-115"></span>
-<span class="source-line-no">116</span><span id="line-116">   @Override /* Overridden from JsonlSerializerSession */</span>
-<span class="source-line-no">117</span><span id="line-117">   public TokenWriter writeTokens(Object output) throws IOException {</span>
-<span class="source-line-no">118</span><span id="line-118">      if (! json5Sugar)</span>
-<span class="source-line-no">119</span><span id="line-119">         return super.writeTokens(output);</span>
-<span class="source-line-no">120</span><span id="line-120">      var walk = new PojoWalker.Options(</span>
-<span class="source-line-no">121</span><span id="line-121">         isKeepNullProperties(),</span>
-<span class="source-line-no">122</span><span id="line-122">         isTrimEmptyMaps(),</span>
-<span class="source-line-no">123</span><span id="line-123">         isTrimEmptyCollections(),</span>
-<span class="source-line-no">124</span><span id="line-124">         isSortMaps(),</span>
-<span class="source-line-no">125</span><span id="line-125">         isSortCollections(),</span>
-<span class="source-line-no">126</span><span id="line-126">         isTrimStrings(),</span>
-<span class="source-line-no">127</span><span id="line-127">         getMarshallingContext());</span>
-<span class="source-line-no">128</span><span id="line-128">      var settings = new JsonTokenWriter.Settings(</span>
-<span class="source-line-no">129</span><span id="line-129">         false /* useWhitespace — JSON5L is one-record-per-line, no pretty-print */,</span>
-<span class="source-line-no">130</span><span id="line-130">         getMaxIndent(),</span>
-<span class="source-line-no">131</span><span id="line-131">         SUGAR_QUOTE,</span>
-<span class="source-line-no">132</span><span id="line-132">         isEscapeSolidus(),</span>
-<span class="source-line-no">133</span><span id="line-133">         isTrimStrings(),</span>
-<span class="source-line-no">134</span><span id="line-134">         true /* simpleAttrs — JSON5 sugar: unquoted field names where safe */,</span>
-<span class="source-line-no">135</span><span id="line-135">         walk,</span>
-<span class="source-line-no">136</span><span id="line-136">         false /* disableObject */);</span>
-<span class="source-line-no">137</span><span id="line-137">      return JsonlTokenWriter.forOutput(output, settings);</span>
-<span class="source-line-no">138</span><span id="line-138">   }</span>
-<span class="source-line-no">139</span><span id="line-139">}</span>
+<span class="source-line-no">092</span><span id="line-92">   /**</span>
+<span class="source-line-no">093</span><span id="line-93">    * Constructor.</span>
+<span class="source-line-no">094</span><span id="line-94">    *</span>
+<span class="source-line-no">095</span><span id="line-95">    * @param builder The builder for this object.</span>
+<span class="source-line-no">096</span><span id="line-96">    */</span>
+<span class="source-line-no">097</span><span id="line-97">   protected Json5lSerializerSession(Builder builder) {</span>
+<span class="source-line-no">098</span><span id="line-98">      super(builder);</span>
+<span class="source-line-no">099</span><span id="line-99">      json5Sugar = builder.ctx.isJson5Sugar();</span>
+<span class="source-line-no">100</span><span id="line-100">   }</span>
+<span class="source-line-no">101</span><span id="line-101"></span>
+<span class="source-line-no">102</span><span id="line-102">   @Override /* Overridden from JsonSerializerSession */</span>
+<span class="source-line-no">103</span><span id="line-103">   protected JsonWriter&lt;?&gt; getJsonWriter(SerializerPipe out) {</span>
+<span class="source-line-no">104</span><span id="line-104">      if (! json5Sugar)</span>
+<span class="source-line-no">105</span><span id="line-105">         return super.getJsonWriter(out);</span>
+<span class="source-line-no">106</span><span id="line-106">      var output = out.getRawOutput();</span>
+<span class="source-line-no">107</span><span id="line-107">      if (output instanceof JsonWriter&lt;?&gt; output2)</span>
+<span class="source-line-no">108</span><span id="line-108">         return output2;</span>
+<span class="source-line-no">109</span><span id="line-109">      var w = JsonWriter.create(out.getWriter(), isUseWhitespace(), getMaxIndent(), isEscapeSolidus(), SUGAR_QUOTE, true, isTrimStrings(), getUriResolver());</span>
+<span class="source-line-no">110</span><span id="line-110">      out.setWriter(w);</span>
+<span class="source-line-no">111</span><span id="line-111">      return w;</span>
+<span class="source-line-no">112</span><span id="line-112">   }</span>
+<span class="source-line-no">113</span><span id="line-113"></span>
+<span class="source-line-no">114</span><span id="line-114">   @Override /* Overridden from JsonlSerializerSession */</span>
+<span class="source-line-no">115</span><span id="line-115">   public TokenWriter writeTokens(Object output) throws IOException {</span>
+<span class="source-line-no">116</span><span id="line-116">      if (! json5Sugar)</span>
+<span class="source-line-no">117</span><span id="line-117">         return super.writeTokens(output);</span>
+<span class="source-line-no">118</span><span id="line-118">      var walk = new PojoWalker.Options(</span>
+<span class="source-line-no">119</span><span id="line-119">         isKeepNullProperties(),</span>
+<span class="source-line-no">120</span><span id="line-120">         isTrimEmptyMaps(),</span>
+<span class="source-line-no">121</span><span id="line-121">         isTrimEmptyCollections(),</span>
+<span class="source-line-no">122</span><span id="line-122">         isSortMaps(),</span>
+<span class="source-line-no">123</span><span id="line-123">         isSortCollections(),</span>
+<span class="source-line-no">124</span><span id="line-124">         isTrimStrings(),</span>
+<span class="source-line-no">125</span><span id="line-125">         getMarshallingContext());</span>
+<span class="source-line-no">126</span><span id="line-126">      var settings = new JsonTokenWriter.Settings(</span>
+<span class="source-line-no">127</span><span id="line-127">         false /* useWhitespace — JSON5L is one-record-per-line, no pretty-print */,</span>
+<span class="source-line-no">128</span><span id="line-128">         getMaxIndent(),</span>
+<span class="source-line-no">129</span><span id="line-129">         SUGAR_QUOTE,</span>
+<span class="source-line-no">130</span><span id="line-130">         isEscapeSolidus(),</span>
+<span class="source-line-no">131</span><span id="line-131">         isTrimStrings(),</span>
+<span class="source-line-no">132</span><span id="line-132">         true /* simpleAttrs — JSON5 sugar: unquoted field names where safe */,</span>
+<span class="source-line-no">133</span><span id="line-133">         walk,</span>
+<span class="source-line-no">134</span><span id="line-134">         false /* disableObject */);</span>
+<span class="source-line-no">135</span><span id="line-135">      return JsonlTokenWriter.forOutput(output, settings);</span>
+<span class="source-line-no">136</span><span id="line-136">   }</span>
+<span class="source-line-no">137</span><span id="line-137">}</span>
 
 
 

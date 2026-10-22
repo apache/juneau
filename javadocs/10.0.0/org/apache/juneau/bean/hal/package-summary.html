@@ -86,7 +86,7 @@ loadScripts(document, 'script');</script>
      the multi-link branch inside an <code>_links</code> map.
    <li><a href="HalResourceArray.html" title="class in org.apache.juneau.bean.hal"><code>HalResourceArray</code></a> - <code>LinkedList&amp;lt;HalResource&amp;gt;</code>
      used as the multi-resource branch inside an <code>_embedded</code> map.
-   <li><a href="HalLinkOrArraySwap.html" title="class in org.apache.juneau.bean.hal"><code>HalLinkOrArraySwap</code></a> - <a href="../../marshall/swap/ObjectSwap.html" title="class in org.apache.juneau.marshall.swap"><code>ObjectSwap</code></a>
+   <li><a href="HalLinkOrArraySwap.html" title="class in org.apache.juneau.bean.hal"><code>HalLinkOrArraySwap</code></a> - <a href="../../marshall/swap/spi/ObjectSwap.html" title="class in org.apache.juneau.marshall.swap.spi"><code>ObjectSwap</code></a>
      that materializes each <code>_links</code> value as either a single <a href="HalLink.html" title="class in org.apache.juneau.bean.hal"><code>HalLink</code></a>
      (JSON object) or a <a href="HalLinkArray.html" title="class in org.apache.juneau.bean.hal"><code>HalLinkArray</code></a> (JSON array) per spec.
    <li><a href="HalResourceOrArraySwap.html" title="class in org.apache.juneau.bean.hal"><code>HalResourceOrArraySwap</code></a> - The <code>_embedded</code> analogue.
@@ -144,7 +144,7 @@ loadScripts(document, 'script');</script>
 </div>
 <div class="col-first even-row-color class-summary class-summary-tab2"><a href="HalLinkOrArraySwap.html" title="class in org.apache.juneau.bean.hal">HalLinkOrArraySwap</a></div>
 <div class="col-last even-row-color class-summary class-summary-tab2">
-<div class="block">Per-property <a href="../../marshall/swap/ObjectSwap.html" title="class in org.apache.juneau.marshall.swap"><code>ObjectSwap</code></a> applied to HAL <code>_links</code> maps so that each map entry round-trips
+<div class="block">Per-property <a href="../../marshall/swap/spi/ObjectSwap.html" title="class in org.apache.juneau.marshall.swap.spi"><code>ObjectSwap</code></a> applied to HAL <code>_links</code> maps so that each map entry round-trips
  as either a single <a href="HalLink.html" title="class in org.apache.juneau.bean.hal"><code>HalLink</code></a> (JSON object) or a <a href="HalLinkArray.html" title="class in org.apache.juneau.bean.hal"><code>HalLinkArray</code></a> (JSON array) per the spec.</div>
 </div>
 <div class="col-first odd-row-color class-summary class-summary-tab2"><a href="HalResource.html" title="class in org.apache.juneau.bean.hal">HalResource</a></div>
@@ -158,7 +158,7 @@ loadScripts(document, 'script');</script>
 </div>
 <div class="col-first odd-row-color class-summary class-summary-tab2"><a href="HalResourceOrArraySwap.html" title="class in org.apache.juneau.bean.hal">HalResourceOrArraySwap</a></div>
 <div class="col-last odd-row-color class-summary class-summary-tab2">
-<div class="block">Per-property <a href="../../marshall/swap/ObjectSwap.html" title="class in org.apache.juneau.marshall.swap"><code>ObjectSwap</code></a> applied to HAL <code>_embedded</code> maps so that each map entry round-trips
+<div class="block">Per-property <a href="../../marshall/swap/spi/ObjectSwap.html" title="class in org.apache.juneau.marshall.swap.spi"><code>ObjectSwap</code></a> applied to HAL <code>_embedded</code> maps so that each map entry round-trips
  as either a single <a href="HalResource.html" title="class in org.apache.juneau.bean.hal"><code>HalResource</code></a> (JSON object) or a <a href="HalResourceArray.html" title="class in org.apache.juneau.bean.hal"><code>HalResourceArray</code></a> (JSON array) per the
  spec.</div>
 </div>

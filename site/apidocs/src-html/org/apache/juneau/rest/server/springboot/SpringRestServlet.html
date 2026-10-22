@@ -65,17 +65,23 @@
 <span class="source-line-no">052</span><span id="line-52">   /**</span>
 <span class="source-line-no">053</span><span id="line-53">    * Hook into Spring bean injection framework.</span>
 <span class="source-line-no">054</span><span id="line-54">    *</span>
-<span class="source-line-no">055</span><span id="line-55">    * @param parent Optional parent resource bean store, used as a fallback after Spring's context.</span>
-<span class="source-line-no">056</span><span id="line-56">    * @return A {@link WritableBeanStore} backed by Spring's {@link ApplicationContext}.</span>
-<span class="source-line-no">057</span><span id="line-57">    */</span>
-<span class="source-line-no">058</span><span id="line-58">   @Bean</span>
-<span class="source-line-no">059</span><span id="line-59">   @SuppressWarnings({</span>
-<span class="source-line-no">060</span><span id="line-60">      "resource" // Spring takes ownership of the returned bean and manages its lifecycle</span>
-<span class="source-line-no">061</span><span id="line-61">   })</span>
-<span class="source-line-no">062</span><span id="line-62">   public WritableBeanStore createBeanStore(Optional&lt;BeanStore&gt; parent) {</span>
-<span class="source-line-no">063</span><span id="line-63">      return new SpringBeanStore(appContext.orElse(null), parent.orElse(null));</span>
-<span class="source-line-no">064</span><span id="line-64">   }</span>
-<span class="source-line-no">065</span><span id="line-65">}</span>
+<span class="source-line-no">055</span><span id="line-55">    *</span>
+<span class="source-line-no">056</span><span id="line-56">    * &lt;p&gt;</span>
+<span class="source-line-no">057</span><span id="line-57">    * If no {@link ApplicationContext} was injected (e.g. the servlet was created with &lt;c&gt;new&lt;/c&gt; outside of Spring,</span>
+<span class="source-line-no">058</span><span id="line-58">    * or the injected {@link Optional} is empty), the returned store degrades gracefully to one with no Spring context</span>
+<span class="source-line-no">059</span><span id="line-59">    * that only resolves beans from the parent chain.</span>
+<span class="source-line-no">060</span><span id="line-60">    *</span>
+<span class="source-line-no">061</span><span id="line-61">    * @param parent Optional parent resource bean store, used as a fallback after Spring's context.</span>
+<span class="source-line-no">062</span><span id="line-62">    * @return A {@link WritableBeanStore} backed by Spring's {@link ApplicationContext}.</span>
+<span class="source-line-no">063</span><span id="line-63">    */</span>
+<span class="source-line-no">064</span><span id="line-64">   @Bean</span>
+<span class="source-line-no">065</span><span id="line-65">   @SuppressWarnings({</span>
+<span class="source-line-no">066</span><span id="line-66">      "resource" // Spring takes ownership of the returned bean and manages its lifecycle</span>
+<span class="source-line-no">067</span><span id="line-67">   })</span>
+<span class="source-line-no">068</span><span id="line-68">   public WritableBeanStore createBeanStore(Optional&lt;BeanStore&gt; parent) {</span>
+<span class="source-line-no">069</span><span id="line-69">      return new SpringBeanStore(Objects.requireNonNullElse(appContext, Optional.&lt;ApplicationContext&gt;empty()).orElse(null), parent.orElse(null));</span>
+<span class="source-line-no">070</span><span id="line-70">   }</span>
+<span class="source-line-no">071</span><span id="line-71">}</span>
 
 
 

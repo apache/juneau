@@ -1,0 +1,1233 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="" lang="">
+<head><meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<title>CsrfBoundary xref</title>
+<link type="text/css" rel="stylesheet" href="../../../../../../stylesheet.css" />
+</head>
+<body>
+<div id="overview"><a href="../../../../../../../apidocs/org/apache/juneau/rest/server/filter/CsrfBoundary.html">View Javadoc</a></div><pre>
+<a class="jxr_linenumber" name="L1" href="#L1">1</a>   <em class="jxr_comment">/*</em>
+<a class="jxr_linenumber" name="L2" href="#L2">2</a>   <em class="jxr_comment"> * Licensed to the Apache Software Foundation (ASF) under one or more</em>
+<a class="jxr_linenumber" name="L3" href="#L3">3</a>   <em class="jxr_comment"> * contributor license agreements.  See the NOTICE file distributed with</em>
+<a class="jxr_linenumber" name="L4" href="#L4">4</a>   <em class="jxr_comment"> * this work for additional information regarding copyright ownership.</em>
+<a class="jxr_linenumber" name="L5" href="#L5">5</a>   <em class="jxr_comment"> * The ASF licenses this file to You under the Apache License, Version 2.0</em>
+<a class="jxr_linenumber" name="L6" href="#L6">6</a>   <em class="jxr_comment"> * (the "License"); you may not use this file except in compliance with</em>
+<a class="jxr_linenumber" name="L7" href="#L7">7</a>   <em class="jxr_comment"> * the License.  You may obtain a copy of the License at</em>
+<a class="jxr_linenumber" name="L8" href="#L8">8</a>   <em class="jxr_comment"> *</em>
+<a class="jxr_linenumber" name="L9" href="#L9">9</a>   <em class="jxr_comment"> *      <a href="http://www.apache.org/licenses/LICENSE-2.0" target="alexandria_uri">http://www.apache.org/licenses/LICENSE-2.0</a></em>
+<a class="jxr_linenumber" name="L10" href="#L10">10</a>  <em class="jxr_comment"> *</em>
+<a class="jxr_linenumber" name="L11" href="#L11">11</a>  <em class="jxr_comment"> * Unless required by applicable law or agreed to in writing, software</em>
+<a class="jxr_linenumber" name="L12" href="#L12">12</a>  <em class="jxr_comment"> * distributed under the License is distributed on an "AS IS" BASIS,</em>
+<a class="jxr_linenumber" name="L13" href="#L13">13</a>  <em class="jxr_comment"> * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</em>
+<a class="jxr_linenumber" name="L14" href="#L14">14</a>  <em class="jxr_comment"> * See the License for the specific language governing permissions and</em>
+<a class="jxr_linenumber" name="L15" href="#L15">15</a>  <em class="jxr_comment"> * limitations under the License.</em>
+<a class="jxr_linenumber" name="L16" href="#L16">16</a>  <em class="jxr_comment"> */</em>
+<a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.server.filter;
+<a class="jxr_linenumber" name="L18" href="#L18">18</a>  
+<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.commons.utils.Shorts.*;
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> java.net.*;
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> java.util.*;
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> java.util.concurrent.atomic.*;
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> java.util.function.*;
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> java.util.logging.*;
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.server.*;
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.server.filter.BoundaryChecks.*;
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <strong class="jxr_keyword">import</strong> jakarta.servlet.http.*;
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>  
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <em class="jxr_javadoccomment"> * The cross-site request forgery boundary for an application reachable from the network: decides whether a</em>
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>  <em class="jxr_javadoccomment"> * state-changing request came from this application's own page, or from a client that is not a browser, and refuses</em>
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>  <em class="jxr_javadoccomment"> * it when it came from some other site's page.</em>
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>  <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>  <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;What this answers, and what it does not&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>  <em class="jxr_javadoccomment"> * This class answers one question:</em>
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>  <em class="jxr_javadoccomment"> * &lt;p class='bcode'&gt;</em>
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>  <em class="jxr_javadoccomment"> * 	Did this request come from this app's own page, or from a non-browser client?</em>
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>  <em class="jxr_javadoccomment"> * &lt;/p&gt;</em>
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>  <em class="jxr_javadoccomment"> * It does &lt;b&gt;not&lt;/b&gt; answer &lt;i&gt;who is the caller&lt;/i&gt; (authentication) or &lt;i&gt;did the user mean it&lt;/i&gt; (intent).  A</em>
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>  <em class="jxr_javadoccomment"> * user who has the application's own page open, and is induced to click something on it, produces a request that</em>
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>  <em class="jxr_javadoccomment"> * passes every check here.  Intent needs its own, separate gate.</em>
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>  <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>  <em class="jxr_javadoccomment"> * For an application bound only to the loopback interface, {@link LoopbackBoundary} pins a single known origin and is</em>
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>  <em class="jxr_javadoccomment"> * stricter.  This class is for applications whose own origin is whatever the request's {@code Host} says it is.</em>
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>  <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>  <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;The checks&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>  <em class="jxr_javadoccomment"> * {@link #check(HttpServletRequest)} runs these steps in order, and the first failure wins.  The method judged is the</em>
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>  <em class="jxr_javadoccomment"> * {@linkplain MethodSafety#effectiveMethod(String, String, java.util.function.UnaryOperator) effective method}, so a</em>
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>  <em class="jxr_javadoccomment"> * {@code method} query parameter or an override header cannot carry a write past them.</em>
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>  <em class="jxr_javadoccomment"> * &lt;table class='styled w800'&gt;</em>
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>  <em class="jxr_javadoccomment"> * 	&lt;tr&gt;&lt;th&gt;Step&lt;/th&gt;&lt;th&gt;Applies to&lt;/th&gt;&lt;th&gt;Refused when&lt;/th&gt;&lt;th&gt;Reason&lt;/th&gt;&lt;th&gt;Status&lt;/th&gt;&lt;/tr&gt;</em>
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>  <em class="jxr_javadoccomment"> * 	&lt;tr&gt;&lt;td&gt;Allowed hosts&lt;/td&gt;&lt;td&gt;Every request, when {@link Builder#allowedHosts(String...)} is set&lt;/td&gt;</em>
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>  <em class="jxr_javadoccomment"> * 		&lt;td&gt;The request's own host is not listed; or its {@code Host} (on HTTP/2, its {@code :authority}) is missing or</em>
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>  <em class="jxr_javadoccomment"> * 		malformed&lt;/td&gt;</em>
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>  <em class="jxr_javadoccomment"> * 		&lt;td&gt;{@code HOST_NOT_ALLOWED}; {@code HOST_MISSING}, {@code HOST_MALFORMED}&lt;/td&gt;</em>
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>  <em class="jxr_javadoccomment"> * 		&lt;td&gt;Not listed: 421; missing or malformed {@code Host}: 400&lt;/td&gt;&lt;/tr&gt;</em>
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>  <em class="jxr_javadoccomment"> * 	&lt;tr&gt;&lt;td&gt;Safe method&lt;/td&gt;&lt;td&gt;{@code GET}, {@code HEAD}, {@code OPTIONS}, {@code TRACE}&lt;/td&gt;</em>
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>  <em class="jxr_javadoccomment"> * 		&lt;td&gt;Never: allowed&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;td&gt;&lt;/td&gt;&lt;/tr&gt;</em>
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>  <em class="jxr_javadoccomment"> * 	&lt;tr&gt;&lt;td&gt;Own origin&lt;/td&gt;&lt;td&gt;Unsafe requests&lt;/td&gt;</em>
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>  <em class="jxr_javadoccomment"> * 		&lt;td&gt;{@code Host} (on HTTP/2, {@code :authority}) is absent, repeated, or not a host with an optional port&lt;/td&gt;</em>
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>  <em class="jxr_javadoccomment"> * 		&lt;td&gt;{@code HOST_MISSING}, {@code HOST_MALFORMED}&lt;/td&gt;&lt;td&gt;400&lt;/td&gt;&lt;/tr&gt;</em>
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>  <em class="jxr_javadoccomment"> * 	&lt;tr&gt;&lt;td&gt;Peer&lt;/td&gt;&lt;td&gt;Unsafe requests, and safe ones when {@code allowedHosts} is set, when</em>
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>  <em class="jxr_javadoccomment"> * 		{@link Builder#trustedProxies(String...)} is set&lt;/td&gt;</em>
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>  <em class="jxr_javadoccomment"> * 		&lt;td&gt;The peer is not in the allow-list and the request carries a forwarded host in the selected family; without</em>
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>  <em class="jxr_javadoccomment"> * 		one, the request is judged on the container's own view instead&lt;/td&gt;</em>
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>  <em class="jxr_javadoccomment"> * 		&lt;td&gt;{@code FORWARDED_PEER_NOT_TRUSTED}&lt;/td&gt;&lt;td&gt;403&lt;/td&gt;&lt;/tr&gt;</em>
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>  <em class="jxr_javadoccomment"> * 	&lt;tr&gt;&lt;td&gt;Forwarded origin&lt;/td&gt;&lt;td&gt;Unsafe requests, and safe ones when {@code allowedHosts} is set, when</em>
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>  <em class="jxr_javadoccomment"> * 		{@link Builder#trustedForwarding(ForwardedSource)} is on&lt;/td&gt;</em>
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>  <em class="jxr_javadoccomment"> * 		&lt;td&gt;The forwarded host or proto is missing, malformed, or has fewer or unequal entries than the trusted hop count;</em>
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>  <em class="jxr_javadoccomment"> * 		or the container's view disagrees with it&lt;/td&gt;</em>
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>  <em class="jxr_javadoccomment"> * 		&lt;td&gt;{@code FORWARDED_HOST_MISSING}, {@code FORWARDED_PROTO_MISSING}, {@code FORWARDED_HOST_MALFORMED},</em>
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>  <em class="jxr_javadoccomment"> * 		{@code FORWARDED_PROTO_MALFORMED}, {@code FORWARDED_HOPS_INSUFFICIENT}, {@code FORWARDED_HOPS_MISMATCH},</em>
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>  <em class="jxr_javadoccomment"> * 		{@code FORWARDED_CONTAINER_MISMATCH}&lt;/td&gt;&lt;td&gt;403&lt;/td&gt;&lt;/tr&gt;</em>
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>  <em class="jxr_javadoccomment"> * 	&lt;tr&gt;&lt;td&gt;{@code Origin} present&lt;/td&gt;&lt;td&gt;Unsafe requests&lt;/td&gt;</em>
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>  <em class="jxr_javadoccomment"> * 		&lt;td&gt;The literal {@code null}; or repeated, unparseable or not this server's own origin; or</em>
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>  <em class="jxr_javadoccomment"> * 		{@code Sec-Fetch-Site} present and not exactly {@code same-origin}&lt;/td&gt;</em>
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>  <em class="jxr_javadoccomment"> * 		&lt;td&gt;{@code ORIGIN_NULL}, {@code ORIGIN_MISMATCH}, {@code FETCH_SITE_NOT_SAME_ORIGIN}&lt;/td&gt;&lt;td&gt;403&lt;/td&gt;&lt;/tr&gt;</em>
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>  <em class="jxr_javadoccomment"> * 	&lt;tr&gt;&lt;td&gt;{@code Origin} absent&lt;/td&gt;&lt;td&gt;Unsafe requests&lt;/td&gt;</em>
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>  <em class="jxr_javadoccomment"> * 		&lt;td&gt;{@code Sec-Fetch-Site} present and not exactly {@code same-origin}; or, with no fetch metadata either, the</em>
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>  <em class="jxr_javadoccomment"> * 		{@linkplain NonBrowser non-browser policy} refuses it&lt;/td&gt;</em>
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>  <em class="jxr_javadoccomment"> * 		&lt;td&gt;{@code FETCH_SITE_NOT_SAME_ORIGIN}, {@code SIMPLE_REQUEST_WITHOUT_ORIGIN}, {@code ORIGIN_MISSING}&lt;/td&gt;</em>
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>  <em class="jxr_javadoccomment"> * 		&lt;td&gt;403&lt;/td&gt;&lt;/tr&gt;</em>
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>  <em class="jxr_javadoccomment"> * 	&lt;tr&gt;&lt;td&gt;Browser request&lt;/td&gt;&lt;td&gt;Unsafe requests from a page&lt;/td&gt;</em>
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>  <em class="jxr_javadoccomment"> * 		&lt;td&gt;{@link Builder#requireJson(boolean)} is on and the type is not JSON; or the token header is missing, or</em>
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>  <em class="jxr_javadoccomment"> * 		does not verify&lt;/td&gt;</em>
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>  <em class="jxr_javadoccomment"> * 		&lt;td&gt;{@code CONTENT_TYPE_NOT_JSON} (415), {@code CSRF_TOKEN_MISSING}, {@code CSRF_TOKEN_MISMATCH}&lt;/td&gt;</em>
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>  <em class="jxr_javadoccomment"> * 		&lt;td&gt;403&lt;/td&gt;&lt;/tr&gt;</em>
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>  <em class="jxr_javadoccomment"> * &lt;/table&gt;</em>
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>  <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>  <em class="jxr_javadoccomment"> * Origins are compared as normalized {@code (scheme, host, port)} triples, never as raw text: scheme and host are</em>
+<a class="jxr_linenumber" name="L99" href="#L99">99</a>  <em class="jxr_javadoccomment"> * lower-cased (ASCII only), an absent port means the scheme's default, and an explicit port is decimal with no sign</em>
+<a class="jxr_linenumber" name="L100" href="#L100">100</a> <em class="jxr_javadoccomment"> * and no leading zero.  Nothing else is re-canonicalized, so {@code 127.1}, {@code [::ffff:127.0.0.1]} and a trailing</em>
+<a class="jxr_linenumber" name="L101" href="#L101">101</a> <em class="jxr_javadoccomment"> * dot each fail to match any other spelling of the same address.  That is fail-closed, by design.</em>
+<a class="jxr_linenumber" name="L102" href="#L102">102</a> <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L103" href="#L103">103</a> <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;Non-browser clients&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L104" href="#L104">104</a> <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L105" href="#L105">105</a> <em class="jxr_javadoccomment"> * A request with neither {@code Origin} nor {@code Sec-Fetch-Site} is handled by {@link Builder#nonBrowser(NonBrowser)}.</em>
+<a class="jxr_linenumber" name="L106" href="#L106">106</a> <em class="jxr_javadoccomment"> * The default, {@link NonBrowser#ADMIT_NON_SIMPLE}, admits only requests a browser could not have sent cross-site</em>
+<a class="jxr_linenumber" name="L107" href="#L107">107</a> <em class="jxr_javadoccomment"> * without a CORS preflight, which this boundary never answers.  &lt;b&gt;That relies on browsers sending {@code Origin} on</em>
+<a class="jxr_linenumber" name="L108" href="#L108">108</a> <em class="jxr_javadoccomment"> * every non-simple request they issue; current browsers do, and the {@code Origin} check is the real control for</em>
+<a class="jxr_linenumber" name="L109" href="#L109">109</a> <em class="jxr_javadoccomment"> * them.&lt;/b&gt;</em>
+<a class="jxr_linenumber" name="L110" href="#L110">110</a> <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L111" href="#L111">111</a> <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;The token is accepted only in the header&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L112" href="#L112">112</a> <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L113" href="#L113">113</a> <em class="jxr_javadoccomment"> * The token is read from the {@link #csrfHeader()} request header and nowhere else: never a query parameter, never a</em>
+<a class="jxr_linenumber" name="L114" href="#L114">114</a> <em class="jxr_javadoccomment"> * form field.  A plain HTML {@code &lt;form&gt;} cannot set a header, so every HTML form POST, including the application's</em>
+<a class="jxr_linenumber" name="L115" href="#L115">115</a> <em class="jxr_javadoccomment"> * own, is refused with {@code CSRF_TOKEN_MISSING}.  This boundary is for applications whose writes go through script</em>
+<a class="jxr_linenumber" name="L116" href="#L116">116</a> <em class="jxr_javadoccomment"> * that sends the header.</em>
+<a class="jxr_linenumber" name="L117" href="#L117">117</a> <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L118" href="#L118">118</a> <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;The request's own origin, and proxies&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L119" href="#L119">119</a> <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L120" href="#L120">120</a> <em class="jxr_javadoccomment"> * By default ({@link OriginSource#HOST_HEADER}) the request's own origin is {@link HttpServletRequest#getScheme()} plus</em>
+<a class="jxr_linenumber" name="L121" href="#L121">121</a> <em class="jxr_javadoccomment"> * the {@code Host} header (on HTTP/2, the {@code :authority}; see below).  {@code X-Forwarded-*} and {@code Forwarded}</em>
+<a class="jxr_linenumber" name="L122" href="#L122">122</a> <em class="jxr_javadoccomment"> * are never read by this class unless {@link Builder#trustedForwarding(ForwardedSource)} is set (see below).  Behind a</em>
+<a class="jxr_linenumber" name="L123" href="#L123">123</a> <em class="jxr_javadoccomment"> * proxy that terminates TLS, use {@link OriginSource#CONTAINER} and configure the container's own forwarded-header</em>
+<a class="jxr_linenumber" name="L124" href="#L124">124</a> <em class="jxr_javadoccomment"> * support; the boundary then takes the origin from {@code getScheme()}, {@code getServerName()} and</em>
+<a class="jxr_linenumber" name="L125" href="#L125">125</a> <em class="jxr_javadoccomment"> * {@code getServerPort()}.</em>
+<a class="jxr_linenumber" name="L126" href="#L126">126</a> <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L127" href="#L127">127</a> <em class="jxr_javadoccomment"> * &lt;b&gt;Under {@code CONTAINER} the boundary must run after the container's forwarded-header rewrite.&lt;/b&gt;  Jetty's</em>
+<a class="jxr_linenumber" name="L128" href="#L128">128</a> <em class="jxr_javadoccomment"> * {@code ForwardedRequestCustomizer}, Tomcat's {@code RemoteIpValve} and Spring Boot's</em>
+<a class="jxr_linenumber" name="L129" href="#L129">129</a> <em class="jxr_javadoccomment"> * {@code forward-headers-strategy=native} rewrite the request before any filter runs, so order does not matter.</em>
+<a class="jxr_linenumber" name="L130" href="#L130">130</a> <em class="jxr_javadoccomment"> * Spring Boot's {@code forward-headers-strategy=framework} registers {@code ForwardedHeaderFilter} at</em>
+<a class="jxr_linenumber" name="L131" href="#L131">131</a> <em class="jxr_javadoccomment"> * {@code Ordered.HIGHEST_PRECEDENCE}, so this boundary's filter must be registered strictly later, never at</em>
+<a class="jxr_linenumber" name="L132" href="#L132">132</a> <em class="jxr_javadoccomment"> * {@code HIGHEST_PRECEDENCE} itself.  The boundary cannot see its own order; a misordered deployment shows up as</em>
+<a class="jxr_linenumber" name="L133" href="#L133">133</a> <em class="jxr_javadoccomment"> * scheme-mismatch refusals and the warning described below.</em>
+<a class="jxr_linenumber" name="L134" href="#L134">134</a> <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L135" href="#L135">135</a> <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;Trusting a forwarded origin&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L136" href="#L136">136</a> <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L137" href="#L137">137</a> <em class="jxr_javadoccomment"> * If your container cannot rewrite the request itself, or does not do so for WebSocket upgrades, use</em>
+<a class="jxr_linenumber" name="L138" href="#L138">138</a> <em class="jxr_javadoccomment"> * {@link Builder#trustedForwarding(ForwardedSource)}.  The request's own origin is then the forwarded host</em>
+<a class="jxr_linenumber" name="L139" href="#L139">139</a> <em class="jxr_javadoccomment"> * &lt;b&gt;and&lt;/b&gt; proto of the one header family named ({@code X-Forwarded-Host} plus {@code X-Forwarded-Proto}, or</em>
+<a class="jxr_linenumber" name="L140" href="#L140">140</a> <em class="jxr_javadoccomment"> * {@code host=} plus {@code proto=} in one {@code Forwarded} element), on HTTP requests and WebSocket handshakes</em>
+<a class="jxr_linenumber" name="L141" href="#L141">141</a> <em class="jxr_javadoccomment"> * alike.  The other family and {@code X-Forwarded-Port} are never read; put a non-default port in the host value.</em>
+<a class="jxr_linenumber" name="L142" href="#L142">142</a> <em class="jxr_javadoccomment"> * &lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L143" href="#L143">143</a> <em class="jxr_javadoccomment"> * 	&lt;li&gt;&lt;b&gt;Turn it on only if every request reaches the server through your proxy, and the proxy removes or appends</em>
+<a class="jxr_linenumber" name="L144" href="#L144">144</a> <em class="jxr_javadoccomment"> * 		after any client-supplied copy.&lt;/b&gt;  A server clients can reach directly lets them choose the origin, and that</em>
+<a class="jxr_linenumber" name="L145" href="#L145">145</a> <em class="jxr_javadoccomment"> * 		defeats {@link Builder#allowedHosts(String...)} for reads.</em>
+<a class="jxr_linenumber" name="L146" href="#L146">146</a> <em class="jxr_javadoccomment"> * 	&lt;li&gt;Set {@link Builder#trustedHops(int)} to exactly the number of proxies that &lt;i&gt;append&lt;/i&gt;.  A chain of</em>
+<a class="jxr_linenumber" name="L147" href="#L147">147</a> <em class="jxr_javadoccomment"> * 		overwriting proxies stays at 1.  &lt;b&gt;Never set it higher:&lt;/b&gt; an overstated count trusts a value the client wrote.</em>
+<a class="jxr_linenumber" name="L148" href="#L148">148</a> <em class="jxr_javadoccomment"> * 	&lt;li&gt;A missing, malformed, short or misaligned value is refused ({@code FORWARDED_*}, 403), never guessed at, and</em>
+<a class="jxr_linenumber" name="L149" href="#L149">149</a> <em class="jxr_javadoccomment"> * 		nothing falls back to {@code Host}.  A proxy that sets only {@code X-Forwarded-Proto} is not supported.</em>
+<a class="jxr_linenumber" name="L150" href="#L150">150</a> <em class="jxr_javadoccomment"> * 	&lt;li&gt;{@link Builder#allowedHosts(String...)} is checked against the forwarded host, so list the public names.</em>
+<a class="jxr_linenumber" name="L151" href="#L151">151</a> <em class="jxr_javadoccomment"> * 	&lt;li&gt;Under {@link OriginSource#CONTAINER} the container's rewritten origin, port included, must equal the forwarded</em>
+<a class="jxr_linenumber" name="L152" href="#L152">152</a> <em class="jxr_javadoccomment"> * 		one, or the request is refused ({@code FORWARDED_CONTAINER_MISMATCH}); configure both to read the same header</em>
+<a class="jxr_linenumber" name="L153" href="#L153">153</a> <em class="jxr_javadoccomment"> * 		family and hop.  Do not enable this where the container consumes the headers (Spring</em>
+<a class="jxr_linenumber" name="L154" href="#L154">154</a> <em class="jxr_javadoccomment"> * 		{@code forward-headers-strategy=framework}): every request is then refused as missing.  Under</em>
+<a class="jxr_linenumber" name="L155" href="#L155">155</a> <em class="jxr_javadoccomment"> * 		{@link OriginSource#HOST_HEADER} and on handshakes, a container host that equals an entry left of the selected</em>
+<a class="jxr_linenumber" name="L156" href="#L156">156</a> <em class="jxr_javadoccomment"> * 		one is refused too, because the container trusted a hop the client could have written.</em>
+<a class="jxr_linenumber" name="L157" href="#L157">157</a> <em class="jxr_javadoccomment"> * 	&lt;li&gt;A handshake is judged only through {@link #checkHandshake(String, HandshakeHosts, Map)}.</em>
+<a class="jxr_linenumber" name="L158" href="#L158">158</a> <em class="jxr_javadoccomment"> * 	&lt;li&gt;To believe the headers only from your proxy's own address, add {@link Builder#trustedProxies(String...)}.  A</em>
+<a class="jxr_linenumber" name="L159" href="#L159">159</a> <em class="jxr_javadoccomment"> * 		request from another peer that carries a forwarded host is refused ({@code FORWARDED_PEER_NOT_TRUSTED}); one</em>
+<a class="jxr_linenumber" name="L160" href="#L160">160</a> <em class="jxr_javadoccomment"> * 		that does not is judged on the container's view.  It needs a container that reports the TCP peer (no</em>
+<a class="jxr_linenumber" name="L161" href="#L161">161</a> <em class="jxr_javadoccomment"> * 		{@code RemoteIpValve}, {@code ForwardedRequestCustomizer} or PROXY protocol).  A handshake's peer comes from</em>
+<a class="jxr_linenumber" name="L162" href="#L162">162</a> <em class="jxr_javadoccomment"> * 		{@link #checkHandshake(String, HandshakeHosts, Map, java.net.InetAddress)}: Jetty supplies it, Tomcat does not,</em>
+<a class="jxr_linenumber" name="L163" href="#L163">163</a> <em class="jxr_javadoccomment"> * 		so on Tomcat a handshake that carries a forwarded host is refused while the list is set.  Only the peer is</em>
+<a class="jxr_linenumber" name="L164" href="#L164">164</a> <em class="jxr_javadoccomment"> * 		checked: the allow-list does not walk {@code X-Forwarded-For} or {@code for=}, so a trusted proxy that appends</em>
+<a class="jxr_linenumber" name="L165" href="#L165">165</a> <em class="jxr_javadoccomment"> * 		behind another untrusted tier is still believed for what it wrote.</em>
+<a class="jxr_linenumber" name="L166" href="#L166">166</a> <em class="jxr_javadoccomment"> * &lt;/ul&gt;</em>
+<a class="jxr_linenumber" name="L167" href="#L167">167</a> <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L168" href="#L168">168</a> <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;HTTP/2 and {@code :authority}&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L169" href="#L169">169</a> <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L170" href="#L170">170</a> <em class="jxr_javadoccomment"> * An HTTP/2 request has no {@code Host} header; its {@code :authority} pseudo-header plays that part, and servlet</em>
+<a class="jxr_linenumber" name="L171" href="#L171">171</a> <em class="jxr_javadoccomment"> * containers surface it only through {@link HttpServletRequest#getServerName()} and</em>
+<a class="jxr_linenumber" name="L172" href="#L172">172</a> <em class="jxr_javadoccomment"> * {@link HttpServletRequest#getServerPort()}.  So that a deployment that speaks HTTP/2 keeps working, a request with</em>
+<a class="jxr_linenumber" name="L173" href="#L173">173</a> <em class="jxr_javadoccomment"> * no {@code Host} header whose {@link HttpServletRequest#getProtocol()} is exactly {@code HTTP/2.0} is judged on its</em>
+<a class="jxr_linenumber" name="L174" href="#L174">174</a> <em class="jxr_javadoccomment"> * server name and port in {@code Host}'s place, for both {@link OriginSource}s and for</em>
+<a class="jxr_linenumber" name="L175" href="#L175">175</a> <em class="jxr_javadoccomment"> * {@link Builder#allowedHosts(String...)}.  Any other request without a {@code Host} is still refused</em>
+<a class="jxr_linenumber" name="L176" href="#L176">176</a> <em class="jxr_javadoccomment"> * ({@code HOST_MISSING}).  A request that does carry a {@code Host} header is judged on it as before.</em>
+<a class="jxr_linenumber" name="L177" href="#L177">177</a> <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L178" href="#L178">178</a> <em class="jxr_javadoccomment"> * The same holds for a WebSocket handshake carried over HTTP/2 (RFC 8441, extended {@code CONNECT}): with no</em>
+<a class="jxr_linenumber" name="L179" href="#L179">179</a> <em class="jxr_javadoccomment"> * {@code Host}, and no {@code Sec-WebSocket-Key} or {@code Upgrade} header to mark it an RFC 6455 request, the</em>
+<a class="jxr_linenumber" name="L180" href="#L180">180</a> <em class="jxr_javadoccomment"> * authority of the handshake's request URI stands in for {@code Host}.  Jetty advertises RFC 8441 by default once</em>
+<a class="jxr_linenumber" name="L181" href="#L181">181</a> <em class="jxr_javadoccomment"> * HTTP/2 is enabled; Tomcat does not support it.</em>
+<a class="jxr_linenumber" name="L182" href="#L182">182</a> <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L183" href="#L183">183</a> <em class="jxr_javadoccomment"> * Because the server name is what the container's forwarded-header support rewrites, &lt;b&gt;under</em>
+<a class="jxr_linenumber" name="L184" href="#L184">184</a> <em class="jxr_javadoccomment"> * {@link OriginSource#HOST_HEADER} an HTTP/2 request is judged on the forwarded host&lt;/b&gt; when such support is</em>
+<a class="jxr_linenumber" name="L185" href="#L185">185</a> <em class="jxr_javadoccomment"> * enabled (Tomcat's {@code RemoteIpValve} with a host header, Spring's {@code ForwardedHeaderFilter}, Jetty's</em>
+<a class="jxr_linenumber" name="L186" href="#L186">186</a> <em class="jxr_javadoccomment"> * {@code ForwardedRequestCustomizer}).  {@code HOST_HEADER} is therefore protocol-dependent: it reads the raw</em>
+<a class="jxr_linenumber" name="L187" href="#L187">187</a> <em class="jxr_javadoccomment"> * {@code Host} on HTTP/1.1 and the container's server name on HTTP/2.  Enable forwarded-header support only behind a</em>
+<a class="jxr_linenumber" name="L188" href="#L188">188</a> <em class="jxr_javadoccomment"> * proxy that overwrites {@code X-Forwarded-*}, or list the expected hosts with</em>
+<a class="jxr_linenumber" name="L189" href="#L189">189</a> <em class="jxr_javadoccomment"> * {@link Builder#allowedHosts(String...)}.</em>
+<a class="jxr_linenumber" name="L190" href="#L190">190</a> <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L191" href="#L191">191</a> <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;Non-goals&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L192" href="#L192">192</a> <em class="jxr_javadoccomment"> * &lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L193" href="#L193">193</a> <em class="jxr_javadoccomment"> * 	&lt;li&gt;&lt;b&gt;DNS rebinding&lt;/b&gt;, unless {@link Builder#allowedHosts(String...)} is set: a rebound page's {@code Origin} and</em>
+<a class="jxr_linenumber" name="L194" href="#L194">194</a> <em class="jxr_javadoccomment"> * 		{@code Host} agree.  TLS defeats rebinding; a plain-HTTP intranet application should list its host names.</em>
+<a class="jxr_linenumber" name="L195" href="#L195">195</a> <em class="jxr_javadoccomment"> * 	&lt;li&gt;&lt;b&gt;Cross-origin callers (CORS).&lt;/b&gt;  Refused.  The boundary adds no {@code Access-Control-Allow-*} header; do</em>
+<a class="jxr_linenumber" name="L196" href="#L196">196</a> <em class="jxr_javadoccomment"> * 		not put an origin-reflecting CORS layer in front of it.</em>
+<a class="jxr_linenumber" name="L197" href="#L197">197</a> <em class="jxr_javadoccomment"> * 	&lt;li&gt;&lt;b&gt;Authentication, intent, session management.&lt;/b&gt;  The boundary never changes a session id and never sets</em>
+<a class="jxr_linenumber" name="L198" href="#L198">198</a> <em class="jxr_javadoccomment"> * 		cookie attributes.</em>
+<a class="jxr_linenumber" name="L199" href="#L199">199</a> <em class="jxr_javadoccomment"> * 	&lt;li&gt;&lt;b&gt;Script running inside the page&lt;/b&gt; (XSS, a malicious extension) passes every check.</em>
+<a class="jxr_linenumber" name="L200" href="#L200">200</a> <em class="jxr_javadoccomment"> * 	&lt;li&gt;&lt;b&gt;HTML form POSTs&lt;/b&gt; and {@code Referer} checking.</em>
+<a class="jxr_linenumber" name="L201" href="#L201">201</a> <em class="jxr_javadoccomment"> * 	&lt;li&gt;&lt;b&gt;Telling a trustworthy proxy from a client by anything but its address.&lt;/b&gt;  The optional allow-list of</em>
+<a class="jxr_linenumber" name="L202" href="#L202">202</a> <em class="jxr_javadoccomment"> * 		{@link Builder#trustedProxies(String...)} checks the peer address and nothing more: it does not authenticate</em>
+<a class="jxr_linenumber" name="L203" href="#L203">203</a> <em class="jxr_javadoccomment"> * 		the proxy, and a client behind a listed address (a shared NAT, a sidecar) is believed too.</em>
+<a class="jxr_linenumber" name="L204" href="#L204">204</a> <em class="jxr_javadoccomment"> * &lt;/ul&gt;</em>
+<a class="jxr_linenumber" name="L205" href="#L205">205</a> <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L206" href="#L206">206</a> <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;What an application must do&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L207" href="#L207">207</a> <em class="jxr_javadoccomment"> * &lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L208" href="#L208">208</a> <em class="jxr_javadoccomment"> * 	&lt;li&gt;Call {@link HttpServletRequest#changeSessionId()} on login.  A per-session token follows the session id, so</em>
+<a class="jxr_linenumber" name="L209" href="#L209">209</a> <em class="jxr_javadoccomment"> * 		without that a token seen before login stays valid after it.</em>
+<a class="jxr_linenumber" name="L210" href="#L210">210</a> <em class="jxr_javadoccomment"> * 	&lt;li&gt;Mark the session cookie {@code HttpOnly} and {@code SameSite}, and do not scope it to a parent {@code Domain}.</em>
+<a class="jxr_linenumber" name="L211" href="#L211">211</a> <em class="jxr_javadoccomment"> * 	&lt;li&gt;Not use URL rewriting for session ids.</em>
+<a class="jxr_linenumber" name="L212" href="#L212">212</a> <em class="jxr_javadoccomment"> * &lt;/ul&gt;</em>
+<a class="jxr_linenumber" name="L213" href="#L213">213</a> <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L214" href="#L214">214</a> <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;Responses and logging&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L215" href="#L215">215</a> <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L216" href="#L216">216</a> <em class="jxr_javadoccomment"> * A rejection message names the header at fault and the kind of value expected.  It never echoes a value the request</em>
+<a class="jxr_linenumber" name="L217" href="#L217">217</a> <em class="jxr_javadoccomment"> * presented, never prints this server's own origin, and never reveals whether a session exists.  Each refusal is</em>
+<a class="jxr_linenumber" name="L218" href="#L218">218</a> <em class="jxr_javadoccomment"> * logged at {@code FINE} without the query string, the token header, {@code Cookie} or {@code Authorization}; the raw</em>
+<a class="jxr_linenumber" name="L219" href="#L219">219</a> <em class="jxr_javadoccomment"> * {@code Origin} and {@code Host} (and, for a {@code FORWARDED_*} refusal, the forwarded headers) appear only at</em>
+<a class="jxr_linenumber" name="L220" href="#L220">220</a> <em class="jxr_javadoccomment"> * {@code FINEST}, stripped of control characters and truncated.  Three misconfiguration patterns are logged once per process at {@code WARNING}: a scheme-only mismatch, a port-only</em>
+<a class="jxr_linenumber" name="L221" href="#L221">221</a> <em class="jxr_javadoccomment"> * mismatch, and repeated missing tokens from the application's own origin.</em>
+<a class="jxr_linenumber" name="L222" href="#L222">222</a> <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L223" href="#L223">223</a> <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L224" href="#L224">224</a> <em class="jxr_javadoccomment"> * &lt;p class='bjava'&gt;</em>
+<a class="jxr_linenumber" name="L225" href="#L225">225</a> <em class="jxr_javadoccomment"> * 	CsrfBoundary &lt;jv&gt;boundary&lt;/jv&gt; = CsrfBoundary.&lt;jsm&gt;create&lt;/jsm&gt;()</em>
+<a class="jxr_linenumber" name="L226" href="#L226">226</a> <em class="jxr_javadoccomment"> * 		.allowedHosts(&lt;js&gt;"app.example.com"&lt;/js&gt;)</em>
+<a class="jxr_linenumber" name="L227" href="#L227">227</a> <em class="jxr_javadoccomment"> * 		.build();</em>
+<a class="jxr_linenumber" name="L228" href="#L228">228</a> <em class="jxr_javadoccomment"> * 	&lt;jv&gt;servletContext&lt;/jv&gt;.addFilter(&lt;js&gt;"csrf"&lt;/js&gt;, &lt;jk&gt;new&lt;/jk&gt; RequestBoundaryFilter(&lt;jv&gt;boundary&lt;/jv&gt;))</em>
+<a class="jxr_linenumber" name="L229" href="#L229">229</a> <em class="jxr_javadoccomment"> * 		.addMappingForUrlPatterns(&lt;jk&gt;null&lt;/jk&gt;, &lt;jk&gt;false&lt;/jk&gt;, &lt;js&gt;"/*"&lt;/js&gt;);</em>
+<a class="jxr_linenumber" name="L230" href="#L230">230</a> <em class="jxr_javadoccomment"> * &lt;/p&gt;</em>
+<a class="jxr_linenumber" name="L231" href="#L231">231</a> <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L232" href="#L232">232</a> <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L233" href="#L233">233</a> <em class="jxr_javadoccomment"> * 	&lt;li class='jic'&gt;{@link RequestBoundary}</em>
+<a class="jxr_linenumber" name="L234" href="#L234">234</a> <em class="jxr_javadoccomment"> * 	&lt;li class='jc'&gt;{@link RequestBoundaryFilter}</em>
+<a class="jxr_linenumber" name="L235" href="#L235">235</a> <em class="jxr_javadoccomment"> * 	&lt;li class='jc'&gt;{@link CsrfTokens}</em>
+<a class="jxr_linenumber" name="L236" href="#L236">236</a> <em class="jxr_javadoccomment"> * 	&lt;li class='jc'&gt;{@link LoopbackBoundary}</em>
+<a class="jxr_linenumber" name="L237" href="#L237">237</a> <em class="jxr_javadoccomment"> * &lt;/ul&gt;</em>
+<a class="jxr_linenumber" name="L238" href="#L238">238</a> <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L239" href="#L239">239</a> <em class="jxr_javadoccomment"> * @since 10.0.0</em>
+<a class="jxr_linenumber" name="L240" href="#L240">240</a> <em class="jxr_javadoccomment"> */</em>
+<a class="jxr_linenumber" name="L241" href="#L241">241</a> @SuppressWarnings({
+<a class="jxr_linenumber" name="L242" href="#L242">242</a> 	<span class="jxr_string">"java:S1192"</span>, <em class="jxr_comment">// Duplicate string literals are HTTP header names (e.g. Origin); a constant per header would obscure the wire contract.</em>
+<a class="jxr_linenumber" name="L243" href="#L243">243</a> 	<span class="jxr_string">"java:S3776"</span> <em class="jxr_comment">// The request and handshake checks are ordered refusal ladders; splitting them would scatter the order that matters</em>
+<a class="jxr_linenumber" name="L244" href="#L244">244</a> })
+<a class="jxr_linenumber" name="L245" href="#L245">245</a> <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> CsrfBoundary <strong class="jxr_keyword">implements</strong> <a name="RequestBoundary" href="../../../../../../org/apache/juneau/rest/server/filter/RequestBoundary.html#RequestBoundary">RequestBoundary</a> {
+<a class="jxr_linenumber" name="L246" href="#L246">246</a> 
+<a class="jxr_linenumber" name="L247" href="#L247">247</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L248" href="#L248">248</a> <em class="jxr_javadoccomment">	 * How an unsafe request with neither {@code Origin} nor {@code Sec-Fetch-Site} is treated.</em>
+<a class="jxr_linenumber" name="L249" href="#L249">249</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L250" href="#L250">250</a> 	<strong class="jxr_keyword">public</strong> enum NonBrowser {
+<a class="jxr_linenumber" name="L251" href="#L251">251</a> 
+<a class="jxr_linenumber" name="L252" href="#L252">252</a> 		<em class="jxr_javadoccomment">/** Refuse it ({@code ORIGIN_MISSING}).  For applications with no non-browser callers. */</em>
+<a class="jxr_linenumber" name="L253" href="#L253">253</a> 		REJECT,
+<a class="jxr_linenumber" name="L254" href="#L254">254</a> 
+<a class="jxr_linenumber" name="L255" href="#L255">255</a> 		<em class="jxr_javadoccomment">/** Admit it only with a valid token, exactly as for a browser request. */</em>
+<a class="jxr_linenumber" name="L256" href="#L256">256</a> 		REQUIRE_TOKEN,
+<a class="jxr_linenumber" name="L257" href="#L257">257</a> 
+<a class="jxr_linenumber" name="L258" href="#L258">258</a> 		<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L259" href="#L259">259</a> <em class="jxr_javadoccomment">		 * The default.  Admit it, with no token, only when a browser could not have sent it cross-site without a</em>
+<a class="jxr_linenumber" name="L260" href="#L260">260</a> <em class="jxr_javadoccomment">		 * preflight: the request-line method is not {@code GET}, {@code HEAD} or {@code POST}, or there is exactly one</em>
+<a class="jxr_linenumber" name="L261" href="#L261">261</a> <em class="jxr_javadoccomment">		 * {@code Content-Type} and its base type is none of {@code application/x-www-form-urlencoded},</em>
+<a class="jxr_linenumber" name="L262" href="#L262">262</a> <em class="jxr_javadoccomment">		 * {@code multipart/form-data} and {@code text/plain}.  Everything else is refused</em>
+<a class="jxr_linenumber" name="L263" href="#L263">263</a> <em class="jxr_javadoccomment">		 * ({@code SIMPLE_REQUEST_WITHOUT_ORIGIN}).</em>
+<a class="jxr_linenumber" name="L264" href="#L264">264</a> <em class="jxr_javadoccomment">		 */</em>
+<a class="jxr_linenumber" name="L265" href="#L265">265</a> 		ADMIT_NON_SIMPLE
+<a class="jxr_linenumber" name="L266" href="#L266">266</a> 	}
+<a class="jxr_linenumber" name="L267" href="#L267">267</a> 
+<a class="jxr_linenumber" name="L268" href="#L268">268</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L269" href="#L269">269</a> <em class="jxr_javadoccomment">	 * Where the request's own origin, which {@code Origin} must equal, comes from.</em>
+<a class="jxr_linenumber" name="L270" href="#L270">270</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L271" href="#L271">271</a> 	<strong class="jxr_keyword">public</strong> enum OriginSource {
+<a class="jxr_linenumber" name="L272" href="#L272">272</a> 
+<a class="jxr_linenumber" name="L273" href="#L273">273</a> 		<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L274" href="#L274">274</a> <em class="jxr_javadoccomment">		 * The default.  {@link HttpServletRequest#getScheme()} and the {@code Host} header, or, when</em>
+<a class="jxr_linenumber" name="L275" href="#L275">275</a> <em class="jxr_javadoccomment">		 * {@link Builder#trustedForwarding(ForwardedSource)} is set, the forwarded origin in their place.</em>
+<a class="jxr_linenumber" name="L276" href="#L276">276</a> <em class="jxr_javadoccomment">		 */</em>
+<a class="jxr_linenumber" name="L277" href="#L277">277</a> 		HOST_HEADER,
+<a class="jxr_linenumber" name="L278" href="#L278">278</a> 
+<a class="jxr_linenumber" name="L279" href="#L279">279</a> 		<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L280" href="#L280">280</a> <em class="jxr_javadoccomment">		 * {@link HttpServletRequest#getScheme()}, {@link HttpServletRequest#getServerName()} and</em>
+<a class="jxr_linenumber" name="L281" href="#L281">281</a> <em class="jxr_javadoccomment">		 * {@link HttpServletRequest#getServerPort()}, as rewritten by the container's own forwarded-header support.</em>
+<a class="jxr_linenumber" name="L282" href="#L282">282</a> <em class="jxr_javadoccomment">		 * A {@code Host} header is still required (on HTTP/2, the {@code :authority} stands in for it).  See the class</em>
+<a class="jxr_linenumber" name="L283" href="#L283">283</a> <em class="jxr_javadoccomment">		 * Javadoc for the filter-ordering rule.</em>
+<a class="jxr_linenumber" name="L284" href="#L284">284</a> <em class="jxr_javadoccomment">		 */</em>
+<a class="jxr_linenumber" name="L285" href="#L285">285</a> 		CONTAINER
+<a class="jxr_linenumber" name="L286" href="#L286">286</a> 	}
+<a class="jxr_linenumber" name="L287" href="#L287">287</a> 
+<a class="jxr_linenumber" name="L288" href="#L288">288</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L289" href="#L289">289</a> <em class="jxr_javadoccomment">	 * The one header family whose forwarded origin the boundary trusts.  See</em>
+<a class="jxr_linenumber" name="L290" href="#L290">290</a> <em class="jxr_javadoccomment">	 * {@link Builder#trustedForwarding(ForwardedSource)}.</em>
+<a class="jxr_linenumber" name="L291" href="#L291">291</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L292" href="#L292">292</a> 	<strong class="jxr_keyword">public</strong> enum ForwardedSource {
+<a class="jxr_linenumber" name="L293" href="#L293">293</a> 
+<a class="jxr_linenumber" name="L294" href="#L294">294</a> 		<em class="jxr_javadoccomment">/** The default.  No forwarded header is read on any path. */</em>
+<a class="jxr_linenumber" name="L295" href="#L295">295</a> 		NONE,
+<a class="jxr_linenumber" name="L296" href="#L296">296</a> 
+<a class="jxr_linenumber" name="L297" href="#L297">297</a> 		<em class="jxr_javadoccomment">/** {@code X-Forwarded-Host} and {@code X-Forwarded-Proto}. */</em>
+<a class="jxr_linenumber" name="L298" href="#L298">298</a> 		X_FORWARDED,
+<a class="jxr_linenumber" name="L299" href="#L299">299</a> 
+<a class="jxr_linenumber" name="L300" href="#L300">300</a> 		<em class="jxr_javadoccomment">/** {@code host=} and {@code proto=} of the RFC 7239 {@code Forwarded} header. */</em>
+<a class="jxr_linenumber" name="L301" href="#L301">301</a> 		FORWARDED
+<a class="jxr_linenumber" name="L302" href="#L302">302</a> 	}
+<a class="jxr_linenumber" name="L303" href="#L303">303</a> 
+<a class="jxr_linenumber" name="L304" href="#L304">304</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Logger LOG = Logger.getLogger(CsrfBoundary.<strong class="jxr_keyword">class</strong>.getName());
+<a class="jxr_linenumber" name="L305" href="#L305">305</a> 
+<a class="jxr_linenumber" name="L306" href="#L306">306</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Set&lt;String&gt; SIMPLE_METHODS = Set.of(<span class="jxr_string">"GET"</span>, <span class="jxr_string">"HEAD"</span>, <span class="jxr_string">"POST"</span>);
+<a class="jxr_linenumber" name="L307" href="#L307">307</a> 
+<a class="jxr_linenumber" name="L308" href="#L308">308</a> 	<em class="jxr_javadoccomment">/** The number of token-missing refusals from the app's own origin after which the embed warning is logged. */</em>
+<a class="jxr_linenumber" name="L309" href="#L309">309</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> MISSING_TOKEN_WARN_AT = 10;
+<a class="jxr_linenumber" name="L310" href="#L310">310</a> 
+<a class="jxr_linenumber" name="L311" href="#L311">311</a> 	<em class="jxr_javadoccomment">/** Longest raw header value written to the {@code FINEST} log. */</em>
+<a class="jxr_linenumber" name="L312" href="#L312">312</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> MAX_LOGGED = 200;
+<a class="jxr_linenumber" name="L313" href="#L313">313</a> 
+<a class="jxr_linenumber" name="L314" href="#L314">314</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> AtomicBoolean SCHEME_WARNED = <strong class="jxr_keyword">new</strong> AtomicBoolean();
+<a class="jxr_linenumber" name="L315" href="#L315">315</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> AtomicBoolean PORT_WARNED = <strong class="jxr_keyword">new</strong> AtomicBoolean();
+<a class="jxr_linenumber" name="L316" href="#L316">316</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> AtomicInteger MISSING_FROM_OWN_ORIGIN = <strong class="jxr_keyword">new</strong> AtomicInteger();
+<a class="jxr_linenumber" name="L317" href="#L317">317</a> 
+<a class="jxr_linenumber" name="L318" href="#L318">318</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a name="CsrfTokens" href="../../../../../../org/apache/juneau/rest/server/filter/CsrfTokens.html#CsrfTokens">CsrfTokens</a> tokens;
+<a class="jxr_linenumber" name="L319" href="#L319">319</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> NonBrowser nonBrowser;
+<a class="jxr_linenumber" name="L320" href="#L320">320</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> OriginSource originSource;
+<a class="jxr_linenumber" name="L321" href="#L321">321</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">boolean</strong> requireJson;
+<a class="jxr_linenumber" name="L322" href="#L322">322</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Set&lt;String&gt; allowedHosts;
+<a class="jxr_linenumber" name="L323" href="#L323">323</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> String csrfHeader;
+<a class="jxr_linenumber" name="L324" href="#L324">324</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">boolean</strong> createSessions;
+<a class="jxr_linenumber" name="L325" href="#L325">325</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> ForwardedSource trustedForwarding;
+<a class="jxr_linenumber" name="L326" href="#L326">326</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> trustedHops;
+<a class="jxr_linenumber" name="L327" href="#L327">327</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a name="PeerRanges" href="../../../../../../org/apache/juneau/rest/server/filter/PeerRanges.html#PeerRanges">PeerRanges</a> trustedProxies;
+<a class="jxr_linenumber" name="L328" href="#L328">328</a> 
+<a class="jxr_linenumber" name="L329" href="#L329">329</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L330" href="#L330">330</a> <em class="jxr_javadoccomment">	 * Constructor.</em>
+<a class="jxr_linenumber" name="L331" href="#L331">331</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L332" href="#L332">332</a> <em class="jxr_javadoccomment">	 * @param builder The builder.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L333" href="#L333">333</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L334" href="#L334">334</a> 	<strong class="jxr_keyword">protected</strong> CsrfBoundary(Builder builder) {
+<a class="jxr_linenumber" name="L335" href="#L335">335</a> 		reqnn(<span class="jxr_string">"builder"</span>, builder);
+<a class="jxr_linenumber" name="L336" href="#L336">336</a> 		<strong class="jxr_keyword">this</strong>.tokens = builder.tokens != <strong class="jxr_keyword">null</strong> ? builder.tokens : CsrfTokens.perSession();
+<a class="jxr_linenumber" name="L337" href="#L337">337</a> 		<strong class="jxr_keyword">this</strong>.nonBrowser = builder.nonBrowser;
+<a class="jxr_linenumber" name="L338" href="#L338">338</a> 		<strong class="jxr_keyword">this</strong>.originSource = builder.originSource;
+<a class="jxr_linenumber" name="L339" href="#L339">339</a> 		<strong class="jxr_keyword">this</strong>.requireJson = builder.requireJson;
+<a class="jxr_linenumber" name="L340" href="#L340">340</a> 		<strong class="jxr_keyword">this</strong>.allowedHosts = Set.copyOf(builder.allowedHosts);
+<a class="jxr_linenumber" name="L341" href="#L341">341</a> 		<strong class="jxr_keyword">this</strong>.csrfHeader = builder.csrfHeader;
+<a class="jxr_linenumber" name="L342" href="#L342">342</a> 		<strong class="jxr_keyword">this</strong>.createSessions = builder.createSessions;
+<a class="jxr_linenumber" name="L343" href="#L343">343</a> 		<strong class="jxr_keyword">this</strong>.trustedForwarding = builder.trustedForwarding;
+<a class="jxr_linenumber" name="L344" href="#L344">344</a> 		<strong class="jxr_keyword">this</strong>.trustedHops = builder.trustedHops;
+<a class="jxr_linenumber" name="L345" href="#L345">345</a> 		<strong class="jxr_keyword">this</strong>.trustedProxies = builder.trustedProxies;
+<a class="jxr_linenumber" name="L346" href="#L346">346</a> 	}
+<a class="jxr_linenumber" name="L347" href="#L347">347</a> 
+<a class="jxr_linenumber" name="L348" href="#L348">348</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L349" href="#L349">349</a> <em class="jxr_javadoccomment">	 * Creates a new builder.</em>
+<a class="jxr_linenumber" name="L350" href="#L350">350</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L351" href="#L351">351</a> <em class="jxr_javadoccomment">	 * @return A new builder.</em>
+<a class="jxr_linenumber" name="L352" href="#L352">352</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L353" href="#L353">353</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> Builder create() {
+<a class="jxr_linenumber" name="L354" href="#L354">354</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> Builder();
+<a class="jxr_linenumber" name="L355" href="#L355">355</a> 	}
+<a class="jxr_linenumber" name="L356" href="#L356">356</a> 
+<a class="jxr_linenumber" name="L357" href="#L357">357</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L358" href="#L358">358</a> <em class="jxr_javadoccomment">	 * Applies the boundary to a request.</em>
+<a class="jxr_linenumber" name="L359" href="#L359">359</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L360" href="#L360">360</a> <em class="jxr_javadoccomment">	 * @param req The request to check.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L361" href="#L361">361</a> <em class="jxr_javadoccomment">	 * @return {@link BoundaryResult#ALLOWED} when every applicable check passed, else the first rejection encountered.</em>
+<a class="jxr_linenumber" name="L362" href="#L362">362</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L363" href="#L363">363</a> 	@Override <em class="jxr_comment">/* RequestBoundary */</em>
+<a class="jxr_linenumber" name="L364" href="#L364">364</a> 	<strong class="jxr_keyword">public</strong> <a name="BoundaryResult" href="../../../../../../org/apache/juneau/rest/server/filter/BoundaryResult.html#BoundaryResult">BoundaryResult</a> check(HttpServletRequest req) {
+<a class="jxr_linenumber" name="L365" href="#L365">365</a> 		reqnn(<span class="jxr_string">"req"</span>, req);
+<a class="jxr_linenumber" name="L366" href="#L366">366</a> 
+<a class="jxr_linenumber" name="L367" href="#L367">367</a> 		<em class="jxr_comment">// Judged on the method the request claims, so an override cannot carry a write past the checks below.</em>
+<a class="jxr_linenumber" name="L368" href="#L368">368</a> 		<strong class="jxr_keyword">var</strong> method = MethodSafety.effectiveMethod(req.getMethod(), req.getQueryString(), req::getHeader);
+<a class="jxr_linenumber" name="L369" href="#L369">369</a> 
+<a class="jxr_linenumber" name="L370" href="#L370">370</a> 		<strong class="jxr_keyword">var</strong> hosts = BoundaryChecks.hostValues(req);
+<a class="jxr_linenumber" name="L371" href="#L371">371</a> 		Origin self;
+<a class="jxr_linenumber" name="L372" href="#L372">372</a> 		<strong class="jxr_keyword">if</strong> (trustedForwarding == ForwardedSource.NONE) {
+<a class="jxr_linenumber" name="L373" href="#L373">373</a> 			self = hosts.size() == 1 ? selfOrigin(req, BoundaryChecks.parseHost(hosts.get(0))) : <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L374" href="#L374">374</a> 		} <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L375" href="#L375">375</a> 			<em class="jxr_comment">// Judged only where the own origin is needed, so a direct health probe still passes.</em>
+<a class="jxr_linenumber" name="L376" href="#L376">376</a> 			<strong class="jxr_keyword">if</strong> (MethodSafety.isSafe(method) &amp;&amp; allowedHosts.isEmpty())
+<a class="jxr_linenumber" name="L377" href="#L377">377</a> 				<strong class="jxr_keyword">return</strong> BoundaryResult.ALLOWED;
+<a class="jxr_linenumber" name="L378" href="#L378">378</a> 			<strong class="jxr_keyword">if</strong> (trustedProxies != <strong class="jxr_keyword">null</strong> &amp;&amp; ! trustedProxies.contains(req.getRemoteAddr())) {
+<a class="jxr_linenumber" name="L379" href="#L379">379</a> 				<em class="jxr_comment">// Not a proxy we trust: a forwarded host from it is refused, anything else is judged as if forwarding were off.</em>
+<a class="jxr_linenumber" name="L380" href="#L380">380</a> 				<strong class="jxr_keyword">if</strong> (ForwardedOrigin.claimsHost(trustedForwarding, name -&gt; forwardedLines(req, name)))
+<a class="jxr_linenumber" name="L381" href="#L381">381</a> 					<strong class="jxr_keyword">return</strong> refuse(req, method, BoundaryReason.FORWARDED_PEER_NOT_TRUSTED, 403,
+<a class="jxr_linenumber" name="L382" href="#L382">382</a> 						forwardedMessage(BoundaryReason.FORWARDED_PEER_NOT_TRUSTED));
+<a class="jxr_linenumber" name="L383" href="#L383">383</a> 				self = hosts.size() == 1 ? selfOrigin(req, BoundaryChecks.parseHost(hosts.get(0))) : <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L384" href="#L384">384</a> 			} <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L385" href="#L385">385</a> 				<strong class="jxr_keyword">var</strong> forwarded = forwardedSelf(req, method, hosts);
+<a class="jxr_linenumber" name="L386" href="#L386">386</a> 				<strong class="jxr_keyword">if</strong> (forwarded.refusal() != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L387" href="#L387">387</a> 					<strong class="jxr_keyword">return</strong> forwarded.refusal();
+<a class="jxr_linenumber" name="L388" href="#L388">388</a> 				self = forwarded.origin();
+<a class="jxr_linenumber" name="L389" href="#L389">389</a> 			}
+<a class="jxr_linenumber" name="L390" href="#L390">390</a> 		}
+<a class="jxr_linenumber" name="L391" href="#L391">391</a> 
+<a class="jxr_linenumber" name="L392" href="#L392">392</a> 		<em class="jxr_comment">// The rebinding control runs on every request: a read is as exfiltratable as a write.</em>
+<a class="jxr_linenumber" name="L393" href="#L393">393</a> 		<strong class="jxr_keyword">if</strong> (! allowedHosts.isEmpty()) {
+<a class="jxr_linenumber" name="L394" href="#L394">394</a> 			<strong class="jxr_keyword">if</strong> (self == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L395" href="#L395">395</a> 				<strong class="jxr_keyword">return</strong> hostFailure(req, method, hosts);
+<a class="jxr_linenumber" name="L396" href="#L396">396</a> 			<strong class="jxr_keyword">if</strong> (! allowedHosts.contains(self.host()))
+<a class="jxr_linenumber" name="L397" href="#L397">397</a> 				<strong class="jxr_keyword">return</strong> refuse(req, method, BoundaryReason.HOST_NOT_ALLOWED, 421,
+<a class="jxr_linenumber" name="L398" href="#L398">398</a> 					<span class="jxr_string">"Request 'Host' is not a host name this server answers to."</span>);
+<a class="jxr_linenumber" name="L399" href="#L399">399</a> 		}
+<a class="jxr_linenumber" name="L400" href="#L400">400</a> 
+<a class="jxr_linenumber" name="L401" href="#L401">401</a> 		<strong class="jxr_keyword">if</strong> (MethodSafety.isSafe(method))
+<a class="jxr_linenumber" name="L402" href="#L402">402</a> 			<strong class="jxr_keyword">return</strong> BoundaryResult.ALLOWED;
+<a class="jxr_linenumber" name="L403" href="#L403">403</a> 
+<a class="jxr_linenumber" name="L404" href="#L404">404</a> 		<strong class="jxr_keyword">if</strong> (self == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L405" href="#L405">405</a> 			<strong class="jxr_keyword">return</strong> hostFailure(req, method, hosts);
+<a class="jxr_linenumber" name="L406" href="#L406">406</a> 
+<a class="jxr_linenumber" name="L407" href="#L407">407</a> 		<strong class="jxr_keyword">var</strong> origins = BoundaryChecks.headerValues(req, <span class="jxr_string">"Origin"</span>);
+<a class="jxr_linenumber" name="L408" href="#L408">408</a> 		<strong class="jxr_keyword">var</strong> fetchSites = BoundaryChecks.headerValues(req, <span class="jxr_string">"Sec-Fetch-Site"</span>);
+<a class="jxr_linenumber" name="L409" href="#L409">409</a> 		<strong class="jxr_keyword">var</strong> originMatched = false;
+<a class="jxr_linenumber" name="L410" href="#L410">410</a> 
+<a class="jxr_linenumber" name="L411" href="#L411">411</a> 		<em class="jxr_comment">// A blank Origin is still an Origin: a browser sent the header, so it must not reach the non-browser branch.</em>
+<a class="jxr_linenumber" name="L412" href="#L412">412</a> 		<strong class="jxr_keyword">if</strong> (! origins.isEmpty()) {
+<a class="jxr_linenumber" name="L413" href="#L413">413</a> 			<strong class="jxr_keyword">if</strong> (origins.size() == 1 &amp;&amp; <span class="jxr_string">"null"</span>.equalsIgnoreCase(origins.get(0)))
+<a class="jxr_linenumber" name="L414" href="#L414">414</a> 				<strong class="jxr_keyword">return</strong> refuse(req, method, BoundaryReason.ORIGIN_NULL, 403,
+<a class="jxr_linenumber" name="L415" href="#L415">415</a> 					<span class="jxr_string">"A state-changing request must not carry an opaque 'null' value in 'Origin'."</span>);
+<a class="jxr_linenumber" name="L416" href="#L416">416</a> 			<strong class="jxr_keyword">var</strong> parsed = origins.size() == 1 ? BoundaryChecks.parseOrigin(origins.get(0)) : <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L417" href="#L417">417</a> 			<strong class="jxr_keyword">if</strong> (parsed == <strong class="jxr_keyword">null</strong> || ! parsed.equals(self)) {
+<a class="jxr_linenumber" name="L418" href="#L418">418</a> 				<strong class="jxr_keyword">if</strong> (parsed != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L419" href="#L419">419</a> 					warnNearMiss(parsed, self);
+<a class="jxr_linenumber" name="L420" href="#L420">420</a> 				<strong class="jxr_keyword">return</strong> refuse(req, method, BoundaryReason.ORIGIN_MISMATCH, 403,
+<a class="jxr_linenumber" name="L421" href="#L421">421</a> 					<span class="jxr_string">"Request 'Origin' must be a single header naming this server's own origin."</span>);
+<a class="jxr_linenumber" name="L422" href="#L422">422</a> 			}
+<a class="jxr_linenumber" name="L423" href="#L423">423</a> 			<strong class="jxr_keyword">if</strong> (! fetchSites.isEmpty() &amp;&amp; ! isSameOriginFetch(fetchSites))
+<a class="jxr_linenumber" name="L424" href="#L424">424</a> 				<strong class="jxr_keyword">return</strong> refuseFetchSite(req, method);
+<a class="jxr_linenumber" name="L425" href="#L425">425</a> 			originMatched = <strong class="jxr_keyword">true</strong>;
+<a class="jxr_linenumber" name="L426" href="#L426">426</a> 		} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (! fetchSites.isEmpty()) {
+<a class="jxr_linenumber" name="L427" href="#L427">427</a> 			<strong class="jxr_keyword">if</strong> (! isSameOriginFetch(fetchSites))
+<a class="jxr_linenumber" name="L428" href="#L428">428</a> 				<strong class="jxr_keyword">return</strong> refuseFetchSite(req, method);
+<a class="jxr_linenumber" name="L429" href="#L429">429</a> 		} <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L430" href="#L430">430</a> 			<strong class="jxr_keyword">switch</strong> (nonBrowser) {
+<a class="jxr_linenumber" name="L431" href="#L431">431</a> 				<strong class="jxr_keyword">case</strong> REJECT:
+<a class="jxr_linenumber" name="L432" href="#L432">432</a> 					<strong class="jxr_keyword">return</strong> refuse(req, method, BoundaryReason.ORIGIN_MISSING, 403,
+<a class="jxr_linenumber" name="L433" href="#L433">433</a> 						<span class="jxr_string">"A state-changing request must carry an 'Origin' header."</span>);
+<a class="jxr_linenumber" name="L434" href="#L434">434</a> 				<strong class="jxr_keyword">case</strong> REQUIRE_TOKEN:
+<a class="jxr_linenumber" name="L435" href="#L435">435</a> 					<strong class="jxr_keyword">break</strong>;
+<a class="jxr_linenumber" name="L436" href="#L436">436</a> 				<strong class="jxr_keyword">default</strong>:
+<a class="jxr_linenumber" name="L437" href="#L437">437</a> 					<strong class="jxr_keyword">if</strong> (! isNonSimple(req))
+<a class="jxr_linenumber" name="L438" href="#L438">438</a> 						<strong class="jxr_keyword">return</strong> refuse(req, method, BoundaryReason.SIMPLE_REQUEST_WITHOUT_ORIGIN, 403,
+<a class="jxr_linenumber" name="L439" href="#L439">439</a> 							<span class="jxr_string">"A state-changing request with no 'Origin' header must use a method other than GET, HEAD or POST, "</span>
+<a class="jxr_linenumber" name="L440" href="#L440">440</a> 							+ <span class="jxr_string">"or carry a single 'Content-Type' that is not a form type."</span>);
+<a class="jxr_linenumber" name="L441" href="#L441">441</a> 					<strong class="jxr_keyword">return</strong> requireJson &amp;&amp; ! isSingleJson(req) ? refuseNotJson(req, method) : BoundaryResult.ALLOWED;
+<a class="jxr_linenumber" name="L442" href="#L442">442</a> 			}
+<a class="jxr_linenumber" name="L443" href="#L443">443</a> 		}
+<a class="jxr_linenumber" name="L444" href="#L444">444</a> 
+<a class="jxr_linenumber" name="L445" href="#L445">445</a> 		<strong class="jxr_keyword">return</strong> checkBrowser(req, method, originMatched);
+<a class="jxr_linenumber" name="L446" href="#L446">446</a> 	}
+<a class="jxr_linenumber" name="L447" href="#L447">447</a> 
+<a class="jxr_linenumber" name="L448" href="#L448">448</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L449" href="#L449">449</a> <em class="jxr_javadoccomment">	 * Whether a WebSocket handshake's {@code Origin} value is well-formed enough to be checked later, once the</em>
+<a class="jxr_linenumber" name="L450" href="#L450">450</a> <em class="jxr_javadoccomment">	 * handshake's {@code Host} is visible.</em>
+<a class="jxr_linenumber" name="L451" href="#L451">451</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L452" href="#L452">452</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L453" href="#L453">453</a> <em class="jxr_javadoccomment">	 * For a container's {@code checkOrigin} hook, which sees the {@code Origin} value and nothing else, so it can</em>
+<a class="jxr_linenumber" name="L454" href="#L454">454</a> <em class="jxr_javadoccomment">	 * refuse the upgrade with {@code 403} before it happens.  A missing or blank value, the literal {@code null}, and</em>
+<a class="jxr_linenumber" name="L455" href="#L455">455</a> <em class="jxr_javadoccomment">	 * anything that is not exactly &lt;c&gt;scheme "://" host [":" port]&lt;/c&gt; with an {@code http} or {@code https} scheme</em>
+<a class="jxr_linenumber" name="L456" href="#L456">456</a> <em class="jxr_javadoccomment">	 * are refused.  A well-formed value says nothing yet about whether it is this server's own origin: that is</em>
+<a class="jxr_linenumber" name="L457" href="#L457">457</a> <em class="jxr_javadoccomment">	 * {@link #checkHandshake(String, List, List, List)}'s job.</em>
+<a class="jxr_linenumber" name="L458" href="#L458">458</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L459" href="#L459">459</a> <em class="jxr_javadoccomment">	 * @param origin The {@code Origin} header value.  Can be &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L460" href="#L460">460</a> <em class="jxr_javadoccomment">	 * @return &lt;jk&gt;true&lt;/jk&gt; if the value parses as an http(s) origin.</em>
+<a class="jxr_linenumber" name="L461" href="#L461">461</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L462" href="#L462">462</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> acceptsHandshakeOrigin(String origin) {
+<a class="jxr_linenumber" name="L463" href="#L463">463</a> 		<strong class="jxr_keyword">return</strong> BoundaryChecks.parseOrigin(origin) != <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L464" href="#L464">464</a> 	}
+<a class="jxr_linenumber" name="L465" href="#L465">465</a> 
+<a class="jxr_linenumber" name="L466" href="#L466">466</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L467" href="#L467">467</a> <em class="jxr_javadoccomment">	 * Applies this boundary to a WebSocket handshake.</em>
+<a class="jxr_linenumber" name="L468" href="#L468">468</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L469" href="#L469">469</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L470" href="#L470">470</a> <em class="jxr_javadoccomment">	 * A WebSocket upgrade is a {@code GET}, so {@link #check(HttpServletRequest)} lets it through untouched; this</em>
+<a class="jxr_linenumber" name="L471" href="#L471">471</a> <em class="jxr_javadoccomment">	 * method is the boundary for the upgrade instead.  No token can be sent on a handshake, so the control is</em>
+<a class="jxr_linenumber" name="L472" href="#L472">472</a> <em class="jxr_javadoccomment">	 * {@code Origin} and {@code Sec-Fetch-Site}:</em>
+<a class="jxr_linenumber" name="L473" href="#L473">473</a> <em class="jxr_javadoccomment">	 * &lt;ol&gt;</em>
+<a class="jxr_linenumber" name="L474" href="#L474">474</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;{@code Host} must be a single well-formed value ({@code HOST_MISSING}, {@code HOST_MALFORMED}).  A handshake</em>
+<a class="jxr_linenumber" name="L475" href="#L475">475</a> <em class="jxr_javadoccomment">	 * 		carried over HTTP/2 (RFC 8441) has none, and its request URI's authority stands in; see {@link HandshakeHosts}.</em>
+<a class="jxr_linenumber" name="L476" href="#L476">476</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;The handshake's own scheme comes from its request URI: {@code ws} is {@code http}, {@code wss} is</em>
+<a class="jxr_linenumber" name="L477" href="#L477">477</a> <em class="jxr_javadoccomment">	 * 		{@code https}, and {@code http} or {@code https} are used as they are.  Any other scheme, or none, means the</em>
+<a class="jxr_linenumber" name="L478" href="#L478">478</a> <em class="jxr_javadoccomment">	 * 		handshake's own origin is unknown, and it is refused ({@code ORIGIN_MISMATCH}).</em>
+<a class="jxr_linenumber" name="L479" href="#L479">479</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;When {@link Builder#allowedHosts(String...)} is set, the {@code Host} must be one of them</em>
+<a class="jxr_linenumber" name="L480" href="#L480">480</a> <em class="jxr_javadoccomment">	 * 		({@code HOST_NOT_ALLOWED}).</em>
+<a class="jxr_linenumber" name="L481" href="#L481">481</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;{@code Origin} must be a single value naming the same scheme, host and port as the handshake's own</em>
+<a class="jxr_linenumber" name="L482" href="#L482">482</a> <em class="jxr_javadoccomment">	 * 		scheme and {@code Host} ({@code ORIGIN_MISSING}, {@code ORIGIN_NULL}, {@code ORIGIN_MISMATCH}).</em>
+<a class="jxr_linenumber" name="L483" href="#L483">483</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;{@code Sec-Fetch-Site}, when present, must be a single {@code same-origin} value</em>
+<a class="jxr_linenumber" name="L484" href="#L484">484</a> <em class="jxr_javadoccomment">	 * 		({@code FETCH_SITE_NOT_SAME_ORIGIN}).</em>
+<a class="jxr_linenumber" name="L485" href="#L485">485</a> <em class="jxr_javadoccomment">	 * &lt;/ol&gt;</em>
+<a class="jxr_linenumber" name="L486" href="#L486">486</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L487" href="#L487">487</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L488" href="#L488">488</a> <em class="jxr_javadoccomment">	 * With {@link Builder#trustedForwarding(ForwardedSource)} set, the forwarded origin replaces the {@code Host} and</em>
+<a class="jxr_linenumber" name="L489" href="#L489">489</a> <em class="jxr_javadoccomment">	 * scheme in the steps above, {@code allowedHosts} is checked against the forwarded host, and a missing or malformed</em>
+<a class="jxr_linenumber" name="L490" href="#L490">490</a> <em class="jxr_javadoccomment">	 * forwarded header is refused with a {@code FORWARDED_*} reason.</em>
+<a class="jxr_linenumber" name="L491" href="#L491">491</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L492" href="#L492">492</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L493" href="#L493">493</a> <em class="jxr_javadoccomment">	 * The {@code Host} header (or, over HTTP/2, the request URI's authority) is the handshake's own host under either</em>
+<a class="jxr_linenumber" name="L494" href="#L494">494</a> <em class="jxr_javadoccomment">	 * {@link OriginSource}.  {@code X-Forwarded-*} and {@code Forwarded} are never read unless {@link Builder#trustedForwarding(ForwardedSource)}</em>
+<a class="jxr_linenumber" name="L495" href="#L495">495</a> <em class="jxr_javadoccomment">	 * is set, which only {@link #checkHandshake(String, HandshakeHosts, Map)} supports.  Behind a proxy that terminates</em>
+<a class="jxr_linenumber" name="L496" href="#L496">496</a> <em class="jxr_javadoccomment">	 * TLS, the scheme is right only if the</em>
+<a class="jxr_linenumber" name="L497" href="#L497">497</a> <em class="jxr_javadoccomment">	 * container's own forwarded-header support rewrites the request URI it hands the WebSocket layer; where it does</em>
+<a class="jxr_linenumber" name="L498" href="#L498">498</a> <em class="jxr_javadoccomment">	 * not, a {@code wss} page's handshake is refused rather than admitted on a guess.</em>
+<a class="jxr_linenumber" name="L499" href="#L499">499</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L500" href="#L500">500</a> <em class="jxr_javadoccomment">	 * @param scheme The scheme of the handshake's request URI.  Can be &lt;jk&gt;null&lt;/jk&gt;, which is refused.</em>
+<a class="jxr_linenumber" name="L501" href="#L501">501</a> <em class="jxr_javadoccomment">	 * @param hosts Every {@code Host} value of the handshake.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L502" href="#L502">502</a> <em class="jxr_javadoccomment">	 * @param origins Every {@code Origin} value of the handshake.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L503" href="#L503">503</a> <em class="jxr_javadoccomment">	 * @param fetchSites Every {@code Sec-Fetch-Site} value of the handshake.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L504" href="#L504">504</a> <em class="jxr_javadoccomment">	 * @return {@link BoundaryResult#ALLOWED}, or the first rejection.  A rejection message never echoes a value the</em>
+<a class="jxr_linenumber" name="L505" href="#L505">505</a> <em class="jxr_javadoccomment">	 * 	handshake presented.</em>
+<a class="jxr_linenumber" name="L506" href="#L506">506</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L507" href="#L507">507</a> 	<strong class="jxr_keyword">public</strong> <a name="BoundaryResult" href="../../../../../../org/apache/juneau/rest/server/filter/BoundaryResult.html#BoundaryResult">BoundaryResult</a> checkHandshake(String scheme, List&lt;String&gt; hosts, List&lt;String&gt; origins, List&lt;String&gt; fetchSites) {
+<a class="jxr_linenumber" name="L508" href="#L508">508</a> 		reqnn(<span class="jxr_string">"hosts"</span>, hosts);
+<a class="jxr_linenumber" name="L509" href="#L509">509</a> 		<strong class="jxr_keyword">return</strong> checkHandshake(scheme, <strong class="jxr_keyword">new</strong> <a name="HandshakeHosts" href="../../../../../../org/apache/juneau/rest/server/filter/HandshakeHosts.html#HandshakeHosts">HandshakeHosts</a>(hosts, false), origins, fetchSites);
+<a class="jxr_linenumber" name="L510" href="#L510">510</a> 	}
+<a class="jxr_linenumber" name="L511" href="#L511">511</a> 
+<a class="jxr_linenumber" name="L512" href="#L512">512</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L513" href="#L513">513</a> <em class="jxr_javadoccomment">	 * Applies this boundary to a WebSocket handshake whose {@code Host} values may have been synthesised.</em>
+<a class="jxr_linenumber" name="L514" href="#L514">514</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L515" href="#L515">515</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L516" href="#L516">516</a> <em class="jxr_javadoccomment">	 * As {@link #checkHandshake(String, List, List, List)}, except that {@code hosts} may carry the value built from the</em>
+<a class="jxr_linenumber" name="L517" href="#L517">517</a> <em class="jxr_javadoccomment">	 * request URI's authority when a handshake over HTTP/2 (RFC 8441) has no {@code Host} header.  The synthesised value</em>
+<a class="jxr_linenumber" name="L518" href="#L518">518</a> <em class="jxr_javadoccomment">	 * is judged exactly as a real one would be.</em>
+<a class="jxr_linenumber" name="L519" href="#L519">519</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L520" href="#L520">520</a> <em class="jxr_javadoccomment">	 * @param scheme The scheme of the handshake's request URI.  Can be &lt;jk&gt;null&lt;/jk&gt;, which is refused.</em>
+<a class="jxr_linenumber" name="L521" href="#L521">521</a> <em class="jxr_javadoccomment">	 * @param hosts The handshake's {@code Host} values.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L522" href="#L522">522</a> <em class="jxr_javadoccomment">	 * @param origins Every {@code Origin} value of the handshake.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L523" href="#L523">523</a> <em class="jxr_javadoccomment">	 * @param fetchSites Every {@code Sec-Fetch-Site} value of the handshake.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L524" href="#L524">524</a> <em class="jxr_javadoccomment">	 * @return {@link BoundaryResult#ALLOWED}, or the first rejection.  A rejection message never echoes a value the</em>
+<a class="jxr_linenumber" name="L525" href="#L525">525</a> <em class="jxr_javadoccomment">	 * 	handshake presented.</em>
+<a class="jxr_linenumber" name="L526" href="#L526">526</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L527" href="#L527">527</a> 	<strong class="jxr_keyword">public</strong> <a name="BoundaryResult" href="../../../../../../org/apache/juneau/rest/server/filter/BoundaryResult.html#BoundaryResult">BoundaryResult</a> checkHandshake(String scheme, <a name="HandshakeHosts" href="../../../../../../org/apache/juneau/rest/server/filter/HandshakeHosts.html#HandshakeHosts">HandshakeHosts</a> hosts, List&lt;String&gt; origins, List&lt;String&gt; fetchSites) {
+<a class="jxr_linenumber" name="L528" href="#L528">528</a> 		reqnn(<span class="jxr_string">"hosts"</span>, hosts);
+<a class="jxr_linenumber" name="L529" href="#L529">529</a> 		reqnn(<span class="jxr_string">"origins"</span>, origins);
+<a class="jxr_linenumber" name="L530" href="#L530">530</a> 		reqnn(<span class="jxr_string">"fetchSites"</span>, fetchSites);
+<a class="jxr_linenumber" name="L531" href="#L531">531</a> 		<strong class="jxr_keyword">return</strong> handshake(scheme, hosts, origins, fetchSites, <strong class="jxr_keyword">null</strong>, <strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L532" href="#L532">532</a> 	}
+<a class="jxr_linenumber" name="L533" href="#L533">533</a> 
+<a class="jxr_linenumber" name="L534" href="#L534">534</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L535" href="#L535">535</a> <em class="jxr_javadoccomment">	 * Applies this boundary to a WebSocket handshake, reading every header it needs from the handshake's header map.</em>
+<a class="jxr_linenumber" name="L536" href="#L536">536</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L537" href="#L537">537</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L538" href="#L538">538</a> <em class="jxr_javadoccomment">	 * As {@link #checkHandshake(String, HandshakeHosts, List, List)}, with {@code Origin} and {@code Sec-Fetch-Site}</em>
+<a class="jxr_linenumber" name="L539" href="#L539">539</a> <em class="jxr_javadoccomment">	 * taken from {@code headers} (every value, across all spellings of the name).  This is the form to use when</em>
+<a class="jxr_linenumber" name="L540" href="#L540">540</a> <em class="jxr_javadoccomment">	 * {@link Builder#trustedForwarding(ForwardedSource)} is set, because only it can see the forwarded headers; the</em>
+<a class="jxr_linenumber" name="L541" href="#L541">541</a> <em class="jxr_javadoccomment">	 * other forms always refuse such a handshake with {@code FORWARDED_HOST_MISSING}.  A forwarded header the map holds</em>
+<a class="jxr_linenumber" name="L542" href="#L542">542</a> <em class="jxr_javadoccomment">	 * under more than one spelling is refused, because the order of its values across spellings is unknowable.</em>
+<a class="jxr_linenumber" name="L543" href="#L543">543</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L544" href="#L544">544</a> <em class="jxr_javadoccomment">	 * @param scheme The scheme of the handshake's request URI.  Can be &lt;jk&gt;null&lt;/jk&gt;, which is refused.</em>
+<a class="jxr_linenumber" name="L545" href="#L545">545</a> <em class="jxr_javadoccomment">	 * @param hosts The handshake's {@code Host} values.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L546" href="#L546">546</a> <em class="jxr_javadoccomment">	 * @param headers The handshake's headers.  Can be &lt;jk&gt;null&lt;/jk&gt;, which is empty.</em>
+<a class="jxr_linenumber" name="L547" href="#L547">547</a> <em class="jxr_javadoccomment">	 * @return {@link BoundaryResult#ALLOWED}, or the first rejection.  A rejection message never echoes a value the</em>
+<a class="jxr_linenumber" name="L548" href="#L548">548</a> <em class="jxr_javadoccomment">	 * 	handshake presented.</em>
+<a class="jxr_linenumber" name="L549" href="#L549">549</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L550" href="#L550">550</a> 	<strong class="jxr_keyword">public</strong> <a name="BoundaryResult" href="../../../../../../org/apache/juneau/rest/server/filter/BoundaryResult.html#BoundaryResult">BoundaryResult</a> checkHandshake(String scheme, <a name="HandshakeHosts" href="../../../../../../org/apache/juneau/rest/server/filter/HandshakeHosts.html#HandshakeHosts">HandshakeHosts</a> hosts, Map&lt;String,List&lt;String&gt;&gt; headers) {
+<a class="jxr_linenumber" name="L551" href="#L551">551</a> 		<strong class="jxr_keyword">return</strong> checkHandshake(scheme, hosts, headers, <strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L552" href="#L552">552</a> 	}
+<a class="jxr_linenumber" name="L553" href="#L553">553</a> 
+<a class="jxr_linenumber" name="L554" href="#L554">554</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L555" href="#L555">555</a> <em class="jxr_javadoccomment">	 * Applies this boundary to a WebSocket handshake whose peer address the container reported.</em>
+<a class="jxr_linenumber" name="L556" href="#L556">556</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L557" href="#L557">557</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L558" href="#L558">558</a> <em class="jxr_javadoccomment">	 * As {@link #checkHandshake(String, HandshakeHosts, Map)}, plus the peer allow-list of</em>
+<a class="jxr_linenumber" name="L559" href="#L559">559</a> <em class="jxr_javadoccomment">	 * {@link Builder#trustedProxies(String...)}: when it is set, the forwarded headers are believed only from a peer on</em>
+<a class="jxr_linenumber" name="L560" href="#L560">560</a> <em class="jxr_javadoccomment">	 * it.  The Jakarta WebSocket API has no peer address; a container that supplies none (Tomcat) passes &lt;jk&gt;null&lt;/jk&gt;,</em>
+<a class="jxr_linenumber" name="L561" href="#L561">561</a> <em class="jxr_javadoccomment">	 * which is never on the list.  A &lt;jk&gt;null&lt;/jk&gt; peer is not looked at when the list is not set.</em>
+<a class="jxr_linenumber" name="L562" href="#L562">562</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L563" href="#L563">563</a> <em class="jxr_javadoccomment">	 * @param scheme The scheme of the handshake's request URI.  Can be &lt;jk&gt;null&lt;/jk&gt;, which is refused.</em>
+<a class="jxr_linenumber" name="L564" href="#L564">564</a> <em class="jxr_javadoccomment">	 * @param hosts The handshake's {@code Host} values.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L565" href="#L565">565</a> <em class="jxr_javadoccomment">	 * @param headers The handshake's headers.  Can be &lt;jk&gt;null&lt;/jk&gt;, which is empty.</em>
+<a class="jxr_linenumber" name="L566" href="#L566">566</a> <em class="jxr_javadoccomment">	 * @param peer The address of the TCP peer, or &lt;jk&gt;null&lt;/jk&gt; when the container did not report it.</em>
+<a class="jxr_linenumber" name="L567" href="#L567">567</a> <em class="jxr_javadoccomment">	 * @return {@link BoundaryResult#ALLOWED}, or the first rejection.  A rejection message never echoes a value the</em>
+<a class="jxr_linenumber" name="L568" href="#L568">568</a> <em class="jxr_javadoccomment">	 * 	handshake presented.</em>
+<a class="jxr_linenumber" name="L569" href="#L569">569</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L570" href="#L570">570</a> 	<strong class="jxr_keyword">public</strong> <a name="BoundaryResult" href="../../../../../../org/apache/juneau/rest/server/filter/BoundaryResult.html#BoundaryResult">BoundaryResult</a> checkHandshake(String scheme, <a name="HandshakeHosts" href="../../../../../../org/apache/juneau/rest/server/filter/HandshakeHosts.html#HandshakeHosts">HandshakeHosts</a> hosts, Map&lt;String,List&lt;String&gt;&gt; headers, InetAddress peer) {
+<a class="jxr_linenumber" name="L571" href="#L571">571</a> 		reqnn(<span class="jxr_string">"hosts"</span>, hosts);
+<a class="jxr_linenumber" name="L572" href="#L572">572</a> 		Function&lt;String,List&lt;String&gt;&gt; lookup = name -&gt; handshakeHeader(headers, name);
+<a class="jxr_linenumber" name="L573" href="#L573">573</a> 		<strong class="jxr_keyword">return</strong> handshake(scheme, hosts, handshakeHeader(headers, <span class="jxr_string">"Origin"</span>), handshakeHeader(headers, <span class="jxr_string">"Sec-Fetch-Site"</span>), lookup, peer);
+<a class="jxr_linenumber" name="L574" href="#L574">574</a> 	}
+<a class="jxr_linenumber" name="L575" href="#L575">575</a> 
+<a class="jxr_linenumber" name="L576" href="#L576">576</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L577" href="#L577">577</a> <em class="jxr_javadoccomment">	 * Every value of a handshake header in wire order, or &lt;jk&gt;null&lt;/jk&gt; when the map holds the name under more than one</em>
+<a class="jxr_linenumber" name="L578" href="#L578">578</a> <em class="jxr_javadoccomment">	 * spelling (the order across spellings is lost).  Empty when absent.</em>
+<a class="jxr_linenumber" name="L579" href="#L579">579</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L580" href="#L580">580</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> List&lt;String&gt; handshakeHeader(Map&lt;String,List&lt;String&gt;&gt; headers, String name) {
+<a class="jxr_linenumber" name="L581" href="#L581">581</a> 		<strong class="jxr_keyword">var</strong> l = <strong class="jxr_keyword">new</strong> ArrayList&lt;String&gt;();
+<a class="jxr_linenumber" name="L582" href="#L582">582</a> 		<strong class="jxr_keyword">var</strong> spellings = 0;
+<a class="jxr_linenumber" name="L583" href="#L583">583</a> 		<strong class="jxr_keyword">if</strong> (headers != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L584" href="#L584">584</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> e : headers.entrySet()) {
+<a class="jxr_linenumber" name="L585" href="#L585">585</a> 				<strong class="jxr_keyword">if</strong> (name.equalsIgnoreCase(e.getKey()) &amp;&amp; e.getValue() != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L586" href="#L586">586</a> 					spellings++;
+<a class="jxr_linenumber" name="L587" href="#L587">587</a> 					<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> v : e.getValue())
+<a class="jxr_linenumber" name="L588" href="#L588">588</a> 						<strong class="jxr_keyword">if</strong> (v != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L589" href="#L589">589</a> 							l.add(v);
+<a class="jxr_linenumber" name="L590" href="#L590">590</a> 				}
+<a class="jxr_linenumber" name="L591" href="#L591">591</a> 			}
+<a class="jxr_linenumber" name="L592" href="#L592">592</a> 		}
+<a class="jxr_linenumber" name="L593" href="#L593">593</a> 		<strong class="jxr_keyword">if</strong> (spellings &gt; 1) {
+<a class="jxr_linenumber" name="L594" href="#L594">594</a> 			<em class="jxr_comment">// Origin and Sec-Fetch-Site are counted, not ordered: they stay a plain list.  Forwarded headers are refused.</em>
+<a class="jxr_linenumber" name="L595" href="#L595">595</a> 			<strong class="jxr_keyword">return</strong> name.equalsIgnoreCase(<span class="jxr_string">"Origin"</span>) || name.equalsIgnoreCase(<span class="jxr_string">"Sec-Fetch-Site"</span>) ? l : <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L596" href="#L596">596</a> 		}
+<a class="jxr_linenumber" name="L597" href="#L597">597</a> 		<strong class="jxr_keyword">return</strong> l;
+<a class="jxr_linenumber" name="L598" href="#L598">598</a> 	}
+<a class="jxr_linenumber" name="L599" href="#L599">599</a> 
+<a class="jxr_linenumber" name="L600" href="#L600">600</a> 	<strong class="jxr_keyword">private</strong> <a name="BoundaryResult" href="../../../../../../org/apache/juneau/rest/server/filter/BoundaryResult.html#BoundaryResult">BoundaryResult</a> handshake(String scheme, <a name="HandshakeHosts" href="../../../../../../org/apache/juneau/rest/server/filter/HandshakeHosts.html#HandshakeHosts">HandshakeHosts</a> hosts, List&lt;String&gt; origins, List&lt;String&gt; fetchSites,
+<a class="jxr_linenumber" name="L601" href="#L601">601</a> 			Function&lt;String,List&lt;String&gt;&gt; forwardedHeaders, InetAddress peer) {
+<a class="jxr_linenumber" name="L602" href="#L602">602</a> 		<strong class="jxr_keyword">var</strong> values = hosts.values();
+<a class="jxr_linenumber" name="L603" href="#L603">603</a> 		<strong class="jxr_keyword">var</strong> host = values.size() == 1 ? BoundaryChecks.parseHost(values.get(0)) : <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L604" href="#L604">604</a> 		<strong class="jxr_keyword">if</strong> (host == <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L605" href="#L605">605</a> 			<strong class="jxr_keyword">if</strong> (values.isEmpty())
+<a class="jxr_linenumber" name="L606" href="#L606">606</a> 				<strong class="jxr_keyword">return</strong> refuseHandshake(BoundaryReason.HOST_MISSING, 400,
+<a class="jxr_linenumber" name="L607" href="#L607">607</a> 					<span class="jxr_string">"A WebSocket handshake must carry a 'Host' header (or, over HTTP/2, ':authority')."</span>, hosts, origins, forwardedHeaders, peer);
+<a class="jxr_linenumber" name="L608" href="#L608">608</a> 			<strong class="jxr_keyword">return</strong> refuseHandshake(BoundaryReason.HOST_MALFORMED, 400,
+<a class="jxr_linenumber" name="L609" href="#L609">609</a> 				<span class="jxr_string">"Handshake 'Host' must be a single header holding a host name, IPv4 address or bracketed IPv6 address, "</span>
+<a class="jxr_linenumber" name="L610" href="#L610">610</a> 				+ <span class="jxr_string">"with an optional port."</span>, hosts, origins, forwardedHeaders, peer);
+<a class="jxr_linenumber" name="L611" href="#L611">611</a> 		}
+<a class="jxr_linenumber" name="L612" href="#L612">612</a> 
+<a class="jxr_linenumber" name="L613" href="#L613">613</a> 		<strong class="jxr_keyword">var</strong> ownScheme = BoundaryChecks.handshakeScheme(scheme);
+<a class="jxr_linenumber" name="L614" href="#L614">614</a> 		<strong class="jxr_keyword">if</strong> (ownScheme == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L615" href="#L615">615</a> 			<strong class="jxr_keyword">return</strong> refuseHandshake(BoundaryReason.ORIGIN_MISMATCH, 403,
+<a class="jxr_linenumber" name="L616" href="#L616">616</a> 				<span class="jxr_string">"The WebSocket handshake's own scheme could not be determined, so its 'Origin' cannot be checked."</span>, hosts, origins, forwardedHeaders, peer);
+<a class="jxr_linenumber" name="L617" href="#L617">617</a> 
+<a class="jxr_linenumber" name="L618" href="#L618">618</a> 		<strong class="jxr_keyword">var</strong> self = <strong class="jxr_keyword">new</strong> Origin(ownScheme, host.host(), host.port() &gt;= 0 ? host.port() : BoundaryChecks.defaultPort(ownScheme));
+<a class="jxr_linenumber" name="L619" href="#L619">619</a> 		<strong class="jxr_keyword">if</strong> (trustedForwarding != ForwardedSource.NONE) {
+<a class="jxr_linenumber" name="L620" href="#L620">620</a> 			<em class="jxr_comment">// The list-based forms have no header access, so they refuse below before any peer logic.</em>
+<a class="jxr_linenumber" name="L621" href="#L621">621</a> 			<strong class="jxr_keyword">var</strong> untrusted = forwardedHeaders != <strong class="jxr_keyword">null</strong> &amp;&amp; trustedProxies != <strong class="jxr_keyword">null</strong> &amp;&amp; ! trustedProxies.contains(peer);
+<a class="jxr_linenumber" name="L622" href="#L622">622</a> 			<strong class="jxr_keyword">if</strong> (untrusted &amp;&amp; ForwardedOrigin.claimsHost(trustedForwarding, forwardedHeaders))
+<a class="jxr_linenumber" name="L623" href="#L623">623</a> 				<strong class="jxr_keyword">return</strong> refuseHandshake(BoundaryReason.FORWARDED_PEER_NOT_TRUSTED, 403,
+<a class="jxr_linenumber" name="L624" href="#L624">624</a> 					forwardedMessage(BoundaryReason.FORWARDED_PEER_NOT_TRUSTED), hosts, origins, forwardedHeaders, peer);
+<a class="jxr_linenumber" name="L625" href="#L625">625</a> 			<strong class="jxr_keyword">if</strong> (! untrusted) {
+<a class="jxr_linenumber" name="L626" href="#L626">626</a> 				<em class="jxr_comment">// With no header access (the list-based forms) the forwarded host is missing, never guessed.</em>
+<a class="jxr_linenumber" name="L627" href="#L627">627</a> 				<strong class="jxr_keyword">var</strong> resolved = forwardedHeaders == <strong class="jxr_keyword">null</strong>
+<a class="jxr_linenumber" name="L628" href="#L628">628</a> 					? <strong class="jxr_keyword">new</strong> ForwardedOrigin.Resolved(<strong class="jxr_keyword">null</strong>, List.of(), false, BoundaryReason.FORWARDED_HOST_MISSING)
+<a class="jxr_linenumber" name="L629" href="#L629">629</a> 					: ForwardedOrigin.resolve(trustedForwarding, trustedHops, forwardedHeaders);
+<a class="jxr_linenumber" name="L630" href="#L630">630</a> 				<strong class="jxr_keyword">if</strong> (resolved.reason() != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L631" href="#L631">631</a> 					<strong class="jxr_keyword">return</strong> refuseHandshake(resolved.reason(), 403, forwardedMessage(resolved.reason()), hosts, origins, forwardedHeaders, peer);
+<a class="jxr_linenumber" name="L632" href="#L632">632</a> 				<strong class="jxr_keyword">if</strong> (containerDisagrees(self, resolved))
+<a class="jxr_linenumber" name="L633" href="#L633">633</a> 					<strong class="jxr_keyword">return</strong> refuseHandshake(BoundaryReason.FORWARDED_CONTAINER_MISMATCH, 403,
+<a class="jxr_linenumber" name="L634" href="#L634">634</a> 						forwardedMessage(BoundaryReason.FORWARDED_CONTAINER_MISMATCH), hosts, origins, forwardedHeaders, peer);
+<a class="jxr_linenumber" name="L635" href="#L635">635</a> 				self = resolved.origin();
+<a class="jxr_linenumber" name="L636" href="#L636">636</a> 			}
+<a class="jxr_linenumber" name="L637" href="#L637">637</a> 		}
+<a class="jxr_linenumber" name="L638" href="#L638">638</a> 
+<a class="jxr_linenumber" name="L639" href="#L639">639</a> 		<strong class="jxr_keyword">if</strong> (! allowedHosts.isEmpty() &amp;&amp; ! allowedHosts.contains(self.host()))
+<a class="jxr_linenumber" name="L640" href="#L640">640</a> 			<strong class="jxr_keyword">return</strong> refuseHandshake(BoundaryReason.HOST_NOT_ALLOWED, 421,
+<a class="jxr_linenumber" name="L641" href="#L641">641</a> 				<span class="jxr_string">"Handshake 'Host' is not a host name this server answers to."</span>, hosts, origins, forwardedHeaders, peer);
+<a class="jxr_linenumber" name="L642" href="#L642">642</a> 
+<a class="jxr_linenumber" name="L643" href="#L643">643</a> 		<strong class="jxr_keyword">if</strong> (origins.isEmpty())
+<a class="jxr_linenumber" name="L644" href="#L644">644</a> 			<strong class="jxr_keyword">return</strong> refuseHandshake(BoundaryReason.ORIGIN_MISSING, 403, <span class="jxr_string">"A WebSocket handshake must carry an 'Origin' header."</span>, hosts, origins, forwardedHeaders, peer);
+<a class="jxr_linenumber" name="L645" href="#L645">645</a> 		<strong class="jxr_keyword">if</strong> (origins.size() == 1 &amp;&amp; <span class="jxr_string">"null"</span>.equalsIgnoreCase(origins.get(0)))
+<a class="jxr_linenumber" name="L646" href="#L646">646</a> 			<strong class="jxr_keyword">return</strong> refuseHandshake(BoundaryReason.ORIGIN_NULL, 403,
+<a class="jxr_linenumber" name="L647" href="#L647">647</a> 				<span class="jxr_string">"A WebSocket handshake must not carry an opaque 'null' value in 'Origin'."</span>, hosts, origins, forwardedHeaders, peer);
+<a class="jxr_linenumber" name="L648" href="#L648">648</a> 		<strong class="jxr_keyword">var</strong> parsed = origins.size() == 1 ? BoundaryChecks.parseOrigin(origins.get(0)) : <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L649" href="#L649">649</a> 		<strong class="jxr_keyword">if</strong> (parsed == <strong class="jxr_keyword">null</strong> || ! parsed.equals(self)) {
+<a class="jxr_linenumber" name="L650" href="#L650">650</a> 			<strong class="jxr_keyword">if</strong> (parsed != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L651" href="#L651">651</a> 				warnNearMiss(parsed, self);
+<a class="jxr_linenumber" name="L652" href="#L652">652</a> 			<strong class="jxr_keyword">return</strong> refuseHandshake(BoundaryReason.ORIGIN_MISMATCH, 403,
+<a class="jxr_linenumber" name="L653" href="#L653">653</a> 				<span class="jxr_string">"Handshake 'Origin' must be a single header naming this server's own origin."</span>, hosts, origins, forwardedHeaders, peer);
+<a class="jxr_linenumber" name="L654" href="#L654">654</a> 		}
+<a class="jxr_linenumber" name="L655" href="#L655">655</a> 
+<a class="jxr_linenumber" name="L656" href="#L656">656</a> 		<strong class="jxr_keyword">if</strong> (! fetchSites.isEmpty() &amp;&amp; ! isSameOriginFetch(fetchSites))
+<a class="jxr_linenumber" name="L657" href="#L657">657</a> 			<strong class="jxr_keyword">return</strong> refuseHandshake(BoundaryReason.FETCH_SITE_NOT_SAME_ORIGIN, 403,
+<a class="jxr_linenumber" name="L658" href="#L658">658</a> 				<span class="jxr_string">"Handshake 'Sec-Fetch-Site' must be a single 'same-origin' value when present."</span>, hosts, origins, forwardedHeaders, peer);
+<a class="jxr_linenumber" name="L659" href="#L659">659</a> 
+<a class="jxr_linenumber" name="L660" href="#L660">660</a> 		<strong class="jxr_keyword">return</strong> BoundaryResult.ALLOWED;
+<a class="jxr_linenumber" name="L661" href="#L661">661</a> 	}
+<a class="jxr_linenumber" name="L662" href="#L662">662</a> 
+<a class="jxr_linenumber" name="L663" href="#L663">663</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L664" href="#L664">664</a> <em class="jxr_javadoccomment">	 * The lines of a forwarded header; empty when absent; &lt;jk&gt;null&lt;/jk&gt; when the container will not enumerate them but</em>
+<a class="jxr_linenumber" name="L665" href="#L665">665</a> <em class="jxr_javadoccomment">	 * holds a value, because one line would then stand for all and could be the client's.</em>
+<a class="jxr_linenumber" name="L666" href="#L666">666</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L667" href="#L667">667</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> List&lt;String&gt; forwardedLines(HttpServletRequest req, String name) {
+<a class="jxr_linenumber" name="L668" href="#L668">668</a> 		<strong class="jxr_keyword">var</strong> e = req.getHeaders(name);
+<a class="jxr_linenumber" name="L669" href="#L669">669</a> 		<strong class="jxr_keyword">if</strong> (e == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L670" href="#L670">670</a> 			<strong class="jxr_keyword">return</strong> req.getHeader(name) == <strong class="jxr_keyword">null</strong> ? List.of() : <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L671" href="#L671">671</a> 		<strong class="jxr_keyword">var</strong> l = <strong class="jxr_keyword">new</strong> ArrayList&lt;String&gt;();
+<a class="jxr_linenumber" name="L672" href="#L672">672</a> 		<strong class="jxr_keyword">while</strong> (e.hasMoreElements())
+<a class="jxr_linenumber" name="L673" href="#L673">673</a> 			l.add(e.nextElement());
+<a class="jxr_linenumber" name="L674" href="#L674">674</a> 		<strong class="jxr_keyword">return</strong> l;
+<a class="jxr_linenumber" name="L675" href="#L675">675</a> 	}
+<a class="jxr_linenumber" name="L676" href="#L676">676</a> 
+<a class="jxr_linenumber" name="L677" href="#L677">677</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L678" href="#L678">678</a> <em class="jxr_javadoccomment">	 * Whether a container's view {@code c} of the request is one the forwarded origin must not replace.</em>
+<a class="jxr_linenumber" name="L679" href="#L679">679</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L680" href="#L680">680</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L681" href="#L681">681</a> <em class="jxr_javadoccomment">	 * Used where the container's view is the transport (a handshake, or HTTP under {@code HOST_HEADER}): equal views</em>
+<a class="jxr_linenumber" name="L682" href="#L682">682</a> <em class="jxr_javadoccomment">	 * agree, and an unequal one is replaced, except when its host is one the forwarded header carries to the left of the</em>
+<a class="jxr_linenumber" name="L683" href="#L683">683</a> <em class="jxr_javadoccomment">	 * selected entry, or when such an entry did not parse (a container may normalize it into a host of its own), which</em>
+<a class="jxr_linenumber" name="L684" href="#L684">684</a> <em class="jxr_javadoccomment">	 * means the container may have trusted a hop the client could have written.</em>
+<a class="jxr_linenumber" name="L685" href="#L685">685</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L686" href="#L686">686</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">boolean</strong> containerDisagrees(Origin c, ForwardedOrigin.Resolved f) {
+<a class="jxr_linenumber" name="L687" href="#L687">687</a> 		<strong class="jxr_keyword">return</strong> ! c.host().equals(f.origin().host()) &amp;&amp; (f.leftUnparsed() || f.leftHosts().contains(c.host()));
+<a class="jxr_linenumber" name="L688" href="#L688">688</a> 	}
+<a class="jxr_linenumber" name="L689" href="#L689">689</a> 
+<a class="jxr_linenumber" name="L690" href="#L690">690</a> 	<em class="jxr_javadoccomment">/** The fixed text for a forwarded-host refusal. Visibility relaxed for testing. */</em>
+<a class="jxr_linenumber" name="L691" href="#L691">691</a> 	<strong class="jxr_keyword">static</strong> String forwardedMessage(<a name="BoundaryReason" href="../../../../../../org/apache/juneau/rest/server/filter/BoundaryReason.html#BoundaryReason">BoundaryReason</a> reason) {
+<a class="jxr_linenumber" name="L692" href="#L692">692</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">switch</strong> (reason) {
+<a class="jxr_linenumber" name="L693" href="#L693">693</a> 			<strong class="jxr_keyword">case</strong> FORWARDED_HOST_MISSING -&gt; <span class="jxr_string">"A trusted-forwarding boundary requires the forwarded host header; none was usable."</span>;
+<a class="jxr_linenumber" name="L694" href="#L694">694</a> 			<strong class="jxr_keyword">case</strong> FORWARDED_PROTO_MISSING -&gt; <span class="jxr_string">"A trusted-forwarding boundary requires the forwarded proto alongside the forwarded host."</span>;
+<a class="jxr_linenumber" name="L695" href="#L695">695</a> 			<strong class="jxr_keyword">case</strong> FORWARDED_HOST_MALFORMED -&gt; <span class="jxr_string">"The forwarded host header is malformed."</span>;
+<a class="jxr_linenumber" name="L696" href="#L696">696</a> 			<strong class="jxr_keyword">case</strong> FORWARDED_PROTO_MALFORMED -&gt; <span class="jxr_string">"The forwarded proto must be 'http' or 'https'."</span>;
+<a class="jxr_linenumber" name="L697" href="#L697">697</a> 			<strong class="jxr_keyword">case</strong> FORWARDED_HOPS_INSUFFICIENT -&gt; <span class="jxr_string">"The forwarded header holds fewer entries than the trusted hop count."</span>;
+<a class="jxr_linenumber" name="L698" href="#L698">698</a> 			<strong class="jxr_keyword">case</strong> FORWARDED_HOPS_MISMATCH -&gt; <span class="jxr_string">"The forwarded host and proto headers hold different numbers of entries."</span>;
+<a class="jxr_linenumber" name="L699" href="#L699">699</a> 			<strong class="jxr_keyword">case</strong> FORWARDED_CONTAINER_MISMATCH -&gt; <span class="jxr_string">"The container's view of the request disagrees with the forwarded origin."</span>;
+<a class="jxr_linenumber" name="L700" href="#L700">700</a> 			<strong class="jxr_keyword">case</strong> FORWARDED_PEER_NOT_TRUSTED -&gt; <span class="jxr_string">"The forwarded header was sent by a peer that is not a trusted proxy."</span>;
+<a class="jxr_linenumber" name="L701" href="#L701">701</a> 			<strong class="jxr_keyword">default</strong> -&gt; <strong class="jxr_keyword">throw</strong> iaex(<span class="jxr_string">"Not a forwarded-host reason: %s"</span>, reason);
+<a class="jxr_linenumber" name="L702" href="#L702">702</a> 		};
+<a class="jxr_linenumber" name="L703" href="#L703">703</a> 	}
+<a class="jxr_linenumber" name="L704" href="#L704">704</a> 
+<a class="jxr_linenumber" name="L705" href="#L705">705</a> 	<em class="jxr_javadoccomment">/** The outcome of {@link #forwardedSelf}: the origin to judge against, or the refusal. */</em>
+<a class="jxr_linenumber" name="L706" href="#L706">706</a> 	<strong class="jxr_keyword">private</strong> record Self(Origin origin, <a name="BoundaryResult" href="../../../../../../org/apache/juneau/rest/server/filter/BoundaryResult.html#BoundaryResult">BoundaryResult</a> refusal) {}
+<a class="jxr_linenumber" name="L707" href="#L707">707</a> 
+<a class="jxr_linenumber" name="L708" href="#L708">708</a> 	<em class="jxr_javadoccomment">/** The own origin of an HTTP request when trusted forwarding is on. */</em>
+<a class="jxr_linenumber" name="L709" href="#L709">709</a> 	<strong class="jxr_keyword">private</strong> Self forwardedSelf(HttpServletRequest req, String method, List&lt;String&gt; hosts) {
+<a class="jxr_linenumber" name="L710" href="#L710">710</a> 		<strong class="jxr_keyword">var</strong> host = hosts.size() == 1 ? BoundaryChecks.parseHost(hosts.get(0)) : <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L711" href="#L711">711</a> 		<strong class="jxr_keyword">if</strong> (host == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L712" href="#L712">712</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> Self(<strong class="jxr_keyword">null</strong>, hostFailure(req, method, hosts));
+<a class="jxr_linenumber" name="L713" href="#L713">713</a> 		<strong class="jxr_keyword">var</strong> resolved = ForwardedOrigin.resolve(trustedForwarding, trustedHops, name -&gt; forwardedLines(req, name));
+<a class="jxr_linenumber" name="L714" href="#L714">714</a> 		<strong class="jxr_keyword">if</strong> (resolved.reason() != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L715" href="#L715">715</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> Self(<strong class="jxr_keyword">null</strong>, refuse(req, method, resolved.reason(), 403, forwardedMessage(resolved.reason())));
+<a class="jxr_linenumber" name="L716" href="#L716">716</a> 		<strong class="jxr_keyword">var</strong> c = selfOrigin(req, host);
+<a class="jxr_linenumber" name="L717" href="#L717">717</a> 		<em class="jxr_comment">// Under CONTAINER the container is declared a forwarding authority, so its view must be exactly the forwarded one.</em>
+<a class="jxr_linenumber" name="L718" href="#L718">718</a> 		<strong class="jxr_keyword">var</strong> disagrees = originSource == OriginSource.CONTAINER ? ! resolved.origin().equals(c) : containerDisagrees(c, resolved);
+<a class="jxr_linenumber" name="L719" href="#L719">719</a> 		<strong class="jxr_keyword">if</strong> (disagrees)
+<a class="jxr_linenumber" name="L720" href="#L720">720</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> Self(<strong class="jxr_keyword">null</strong>, refuse(req, method, BoundaryReason.FORWARDED_CONTAINER_MISMATCH, 403,
+<a class="jxr_linenumber" name="L721" href="#L721">721</a> 				forwardedMessage(BoundaryReason.FORWARDED_CONTAINER_MISMATCH)));
+<a class="jxr_linenumber" name="L722" href="#L722">722</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> Self(resolved.origin(), <strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L723" href="#L723">723</a> 	}
+<a class="jxr_linenumber" name="L724" href="#L724">724</a> 
+<a class="jxr_linenumber" name="L725" href="#L725">725</a> 	<em class="jxr_javadoccomment">/** Logs a refused handshake and builds its result.  {@code message} must be a fixed text, as for {@code refuse}. */</em>
+<a class="jxr_linenumber" name="L726" href="#L726">726</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <a name="BoundaryResult" href="../../../../../../org/apache/juneau/rest/server/filter/BoundaryResult.html#BoundaryResult">BoundaryResult</a> refuseHandshake(<a name="BoundaryReason" href="../../../../../../org/apache/juneau/rest/server/filter/BoundaryReason.html#BoundaryReason">BoundaryReason</a> reason, <strong class="jxr_keyword">int</strong> status, String message, <a name="HandshakeHosts" href="../../../../../../org/apache/juneau/rest/server/filter/HandshakeHosts.html#HandshakeHosts">HandshakeHosts</a> hosts, List&lt;String&gt; origins,
+<a class="jxr_linenumber" name="L727" href="#L727">727</a> 			Function&lt;String,List&lt;String&gt;&gt; forwardedHeaders, InetAddress peer) {
+<a class="jxr_linenumber" name="L728" href="#L728">728</a> 		LOG.fine(() -&gt; <span class="jxr_string">"CSRF boundary refused a WebSocket handshake: reason="</span> + reason
+<a class="jxr_linenumber" name="L729" href="#L729">729</a> 			+ <span class="jxr_string">", peer="</span> + (peer == <strong class="jxr_keyword">null</strong> ? <span class="jxr_string">"unknown"</span> : sanitize(peer.getHostAddress())));
+<a class="jxr_linenumber" name="L730" href="#L730">730</a> 		<strong class="jxr_keyword">if</strong> (LOG.isLoggable(Level.FINEST))
+<a class="jxr_linenumber" name="L731" href="#L731">731</a> 			LOG.finest(<span class="jxr_string">"CSRF boundary refused a WebSocket handshake: reason="</span> + reason
+<a class="jxr_linenumber" name="L732" href="#L732">732</a> 				+ <span class="jxr_string">", Origin="</span> + sanitize(String.join(<span class="jxr_string">", "</span>, origins))
+<a class="jxr_linenumber" name="L733" href="#L733">733</a> 				+ <span class="jxr_string">", Host="</span> + (hosts.synthesised() ? <span class="jxr_string">"(h2 :authority) "</span> : <span class="jxr_string">""</span>) + sanitize(String.join(<span class="jxr_string">", "</span>, hosts.values()))
+<a class="jxr_linenumber" name="L734" href="#L734">734</a> 				+ (forwardedHeaders == <strong class="jxr_keyword">null</strong> || ! reason.name().startsWith(<span class="jxr_string">"FORWARDED_"</span>) ? <span class="jxr_string">""</span> : <span class="jxr_string">", "</span> + forwardedValues(forwardedHeaders)));
+<a class="jxr_linenumber" name="L735" href="#L735">735</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="BoundaryResult" href="../../../../../../org/apache/juneau/rest/server/filter/BoundaryResult.html#BoundaryResult">BoundaryResult</a>(reason, status, message);
+<a class="jxr_linenumber" name="L736" href="#L736">736</a> 	}
+<a class="jxr_linenumber" name="L737" href="#L737">737</a> 
+<a class="jxr_linenumber" name="L738" href="#L738">738</a> 	<em class="jxr_javadoccomment">/** The forwarded header values of a request, as one sanitized log fragment; a name read as {@code null} is shown as such. */</em>
+<a class="jxr_linenumber" name="L739" href="#L739">739</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String forwardedValues(Function&lt;String,List&lt;String&gt;&gt; lookup) {
+<a class="jxr_linenumber" name="L740" href="#L740">740</a> 		<strong class="jxr_keyword">var</strong> sb = <strong class="jxr_keyword">new</strong> StringBuilder();
+<a class="jxr_linenumber" name="L741" href="#L741">741</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> name : <strong class="jxr_keyword">new</strong> String[] { <span class="jxr_string">"X-Forwarded-Host"</span>, <span class="jxr_string">"X-Forwarded-Proto"</span>, <span class="jxr_string">"Forwarded"</span> }) {
+<a class="jxr_linenumber" name="L742" href="#L742">742</a> 			<strong class="jxr_keyword">var</strong> lines = lookup.apply(name);
+<a class="jxr_linenumber" name="L743" href="#L743">743</a> 			<strong class="jxr_keyword">if</strong> (! sb.isEmpty())
+<a class="jxr_linenumber" name="L744" href="#L744">744</a> 				sb.append(<span class="jxr_string">", "</span>);
+<a class="jxr_linenumber" name="L745" href="#L745">745</a> 			sb.append(name).append('=').append(lines == <strong class="jxr_keyword">null</strong> ? <span class="jxr_string">"(unordered)"</span> : sanitize(String.join(<span class="jxr_string">" | "</span>, lines)));
+<a class="jxr_linenumber" name="L746" href="#L746">746</a> 		}
+<a class="jxr_linenumber" name="L747" href="#L747">747</a> 		<strong class="jxr_keyword">return</strong> sb.toString();
+<a class="jxr_linenumber" name="L748" href="#L748">748</a> 	}
+<a class="jxr_linenumber" name="L749" href="#L749">749</a> 
+<a class="jxr_linenumber" name="L750" href="#L750">750</a> 	<em class="jxr_javadoccomment">/** The token and JSON checks for a request that came from a page, or that the policy holds to a page's rules. */</em>
+<a class="jxr_linenumber" name="L751" href="#L751">751</a> 	<strong class="jxr_keyword">private</strong> <a name="BoundaryResult" href="../../../../../../org/apache/juneau/rest/server/filter/BoundaryResult.html#BoundaryResult">BoundaryResult</a> checkBrowser(HttpServletRequest req, String method, <strong class="jxr_keyword">boolean</strong> originMatched) {
+<a class="jxr_linenumber" name="L752" href="#L752">752</a> 		<strong class="jxr_keyword">if</strong> (requireJson &amp;&amp; ! isSingleJson(req))
+<a class="jxr_linenumber" name="L753" href="#L753">753</a> 			<strong class="jxr_keyword">return</strong> refuseNotJson(req, method);
+<a class="jxr_linenumber" name="L754" href="#L754">754</a> 
+<a class="jxr_linenumber" name="L755" href="#L755">755</a> 		<strong class="jxr_keyword">var</strong> presented = BoundaryChecks.headerValues(req, csrfHeader);
+<a class="jxr_linenumber" name="L756" href="#L756">756</a> 		<strong class="jxr_keyword">if</strong> (presented.isEmpty() || (presented.size() == 1 &amp;&amp; presented.get(0).isBlank())) {
+<a class="jxr_linenumber" name="L757" href="#L757">757</a> 			<strong class="jxr_keyword">if</strong> (originMatched &amp;&amp; MISSING_FROM_OWN_ORIGIN.get() &lt; MISSING_TOKEN_WARN_AT
+<a class="jxr_linenumber" name="L758" href="#L758">758</a> 					&amp;&amp; MISSING_FROM_OWN_ORIGIN.incrementAndGet() == MISSING_TOKEN_WARN_AT)
+<a class="jxr_linenumber" name="L759" href="#L759">759</a> 				LOG.log(Level.WARNING, <span class="jxr_string">"CSRF boundary: {0} requests from this server''s own origin arrived without the ''{1}'' header.  Does the page embed the token, or is this an HTML form POST?"</span>,
+<a class="jxr_linenumber" name="L760" href="#L760">760</a> 					<strong class="jxr_keyword">new</strong> Object[] { String.valueOf(MISSING_TOKEN_WARN_AT), csrfHeader });
+<a class="jxr_linenumber" name="L761" href="#L761">761</a> 			<strong class="jxr_keyword">return</strong> refuse(req, method, BoundaryReason.CSRF_TOKEN_MISSING, 403,
+<a class="jxr_linenumber" name="L762" href="#L762">762</a> 				<span class="jxr_string">"A state-changing request must carry the CSRF token in the '"</span> + csrfHeader + <span class="jxr_string">"' header."</span>);
+<a class="jxr_linenumber" name="L763" href="#L763">763</a> 		}
+<a class="jxr_linenumber" name="L764" href="#L764">764</a> 		<em class="jxr_comment">// The same answer whether or not a session exists: with none, the comparison is against a value nothing matches.</em>
+<a class="jxr_linenumber" name="L765" href="#L765">765</a> 		<strong class="jxr_keyword">if</strong> (presented.size() != 1 || ! tokens.verify(presented.get(0), tokens.expected(req, false)))
+<a class="jxr_linenumber" name="L766" href="#L766">766</a> 			<strong class="jxr_keyword">return</strong> refuse(req, method, BoundaryReason.CSRF_TOKEN_MISMATCH, 403,
+<a class="jxr_linenumber" name="L767" href="#L767">767</a> 				<span class="jxr_string">"The CSRF token in the '"</span> + csrfHeader + <span class="jxr_string">"' header is not valid for this request."</span>);
+<a class="jxr_linenumber" name="L768" href="#L768">768</a> 
+<a class="jxr_linenumber" name="L769" href="#L769">769</a> 		<strong class="jxr_keyword">return</strong> BoundaryResult.ALLOWED;
+<a class="jxr_linenumber" name="L770" href="#L770">770</a> 	}
+<a class="jxr_linenumber" name="L771" href="#L771">771</a> 
+<a class="jxr_linenumber" name="L772" href="#L772">772</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L773" href="#L773">773</a> <em class="jxr_javadoccomment">	 * The request's own origin, or &lt;jk&gt;null&lt;/jk&gt; if it cannot be derived.</em>
+<a class="jxr_linenumber" name="L774" href="#L774">774</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L775" href="#L775">775</a> <em class="jxr_javadoccomment">	 * @param host The parsed {@code Host} header, or &lt;jk&gt;null&lt;/jk&gt; if it is malformed.  Required in both modes, because</em>
+<a class="jxr_linenumber" name="L776" href="#L776">776</a> <em class="jxr_javadoccomment">	 * 	{@code getServerName()} falls back to the server's own name when the request has no {@code Host}.  On HTTP/2, which</em>
+<a class="jxr_linenumber" name="L777" href="#L777">777</a> <em class="jxr_javadoccomment">	 * 	has none, it is the server name and port the container derived from {@code :authority}.</em>
+<a class="jxr_linenumber" name="L778" href="#L778">778</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L779" href="#L779">779</a> 	<strong class="jxr_keyword">private</strong> Origin selfOrigin(HttpServletRequest req, Authority host) {
+<a class="jxr_linenumber" name="L780" href="#L780">780</a> 		<strong class="jxr_keyword">if</strong> (host == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L781" href="#L781">781</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L782" href="#L782">782</a> 		<strong class="jxr_keyword">var</strong> scheme = req.getScheme() == <strong class="jxr_keyword">null</strong> ? <strong class="jxr_keyword">null</strong> : req.getScheme().toLowerCase(Locale.ROOT);
+<a class="jxr_linenumber" name="L783" href="#L783">783</a> 		<strong class="jxr_keyword">if</strong> (originSource == OriginSource.CONTAINER) {
+<a class="jxr_linenumber" name="L784" href="#L784">784</a> 			<em class="jxr_comment">// Tomcat reports an IPv6 server name without the brackets a Host header would carry.</em>
+<a class="jxr_linenumber" name="L785" href="#L785">785</a> 			<strong class="jxr_keyword">var</strong> serverName = req.getServerName();
+<a class="jxr_linenumber" name="L786" href="#L786">786</a> 			<strong class="jxr_keyword">if</strong> (serverName != <strong class="jxr_keyword">null</strong> &amp;&amp; serverName.indexOf(':') &gt;= 0 &amp;&amp; ! serverName.startsWith(<span class="jxr_string">"["</span>))
+<a class="jxr_linenumber" name="L787" href="#L787">787</a> 				serverName = <span class="jxr_string">"["</span> + serverName + <span class="jxr_string">"]"</span>;
+<a class="jxr_linenumber" name="L788" href="#L788">788</a> 			<strong class="jxr_keyword">var</strong> name = BoundaryChecks.parseHost(serverName);
+<a class="jxr_linenumber" name="L789" href="#L789">789</a> 			<strong class="jxr_keyword">if</strong> (name == <strong class="jxr_keyword">null</strong> || name.port() &gt;= 0)
+<a class="jxr_linenumber" name="L790" href="#L790">790</a> 				<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L791" href="#L791">791</a> 			<strong class="jxr_keyword">var</strong> port = req.getServerPort();
+<a class="jxr_linenumber" name="L792" href="#L792">792</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> Origin(scheme, name.host(), port &gt; 0 ? port : BoundaryChecks.defaultPort(scheme));
+<a class="jxr_linenumber" name="L793" href="#L793">793</a> 		}
+<a class="jxr_linenumber" name="L794" href="#L794">794</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> Origin(scheme, host.host(), host.port() &gt;= 0 ? host.port() : BoundaryChecks.defaultPort(scheme));
+<a class="jxr_linenumber" name="L795" href="#L795">795</a> 	}
+<a class="jxr_linenumber" name="L796" href="#L796">796</a> 
+<a class="jxr_linenumber" name="L797" href="#L797">797</a> 	<em class="jxr_javadoccomment">/** Non-simple in the CORS sense: a browser would have preflighted it cross-site. */</em>
+<a class="jxr_linenumber" name="L798" href="#L798">798</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">boolean</strong> isNonSimple(HttpServletRequest req) {
+<a class="jxr_linenumber" name="L799" href="#L799">799</a> 		<strong class="jxr_keyword">var</strong> m = req.getMethod() == <strong class="jxr_keyword">null</strong> ? <strong class="jxr_keyword">null</strong> : req.getMethod().toUpperCase(Locale.ROOT);
+<a class="jxr_linenumber" name="L800" href="#L800">800</a> 		<strong class="jxr_keyword">if</strong> (m != <strong class="jxr_keyword">null</strong> &amp;&amp; ! SIMPLE_METHODS.contains(m))
+<a class="jxr_linenumber" name="L801" href="#L801">801</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
+<a class="jxr_linenumber" name="L802" href="#L802">802</a> 		<em class="jxr_comment">// Counted, never read through getContentType(): two headers can be reported as one non-form value.</em>
+<a class="jxr_linenumber" name="L803" href="#L803">803</a> 		<strong class="jxr_keyword">var</strong> types = BoundaryChecks.headerValues(req, <span class="jxr_string">"Content-Type"</span>);
+<a class="jxr_linenumber" name="L804" href="#L804">804</a> 		<strong class="jxr_keyword">return</strong> types.size() == 1 &amp;&amp; ! types.get(0).isBlank() &amp;&amp; types.get(0).indexOf(',') &lt; 0
+<a class="jxr_linenumber" name="L805" href="#L805">805</a> 			&amp;&amp; ! BoundaryChecks.isSafelistedType(types.get(0));
+<a class="jxr_linenumber" name="L806" href="#L806">806</a> 	}
+<a class="jxr_linenumber" name="L807" href="#L807">807</a> 
+<a class="jxr_linenumber" name="L808" href="#L808">808</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">boolean</strong> isSingleJson(HttpServletRequest req) {
+<a class="jxr_linenumber" name="L809" href="#L809">809</a> 		<strong class="jxr_keyword">var</strong> types = BoundaryChecks.headerValues(req, <span class="jxr_string">"Content-Type"</span>);
+<a class="jxr_linenumber" name="L810" href="#L810">810</a> 		<strong class="jxr_keyword">return</strong> types.size() == 1 &amp;&amp; BoundaryChecks.isJson(types.get(0));
+<a class="jxr_linenumber" name="L811" href="#L811">811</a> 	}
+<a class="jxr_linenumber" name="L812" href="#L812">812</a> 
+<a class="jxr_linenumber" name="L813" href="#L813">813</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">boolean</strong> isSameOriginFetch(List&lt;String&gt; values) {
+<a class="jxr_linenumber" name="L814" href="#L814">814</a> 		<strong class="jxr_keyword">return</strong> values.size() == 1 &amp;&amp; BoundaryChecks.isSameOriginFetch(values.get(0));
+<a class="jxr_linenumber" name="L815" href="#L815">815</a> 	}
+<a class="jxr_linenumber" name="L816" href="#L816">816</a> 
+<a class="jxr_linenumber" name="L817" href="#L817">817</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <a name="BoundaryResult" href="../../../../../../org/apache/juneau/rest/server/filter/BoundaryResult.html#BoundaryResult">BoundaryResult</a> hostFailure(HttpServletRequest req, String method, List&lt;String&gt; hosts) {
+<a class="jxr_linenumber" name="L818" href="#L818">818</a> 		<strong class="jxr_keyword">if</strong> (hosts.isEmpty())
+<a class="jxr_linenumber" name="L819" href="#L819">819</a> 			<strong class="jxr_keyword">return</strong> refuse(req, method, BoundaryReason.HOST_MISSING, 400, <span class="jxr_string">"A request must carry a 'Host' header (or, on HTTP/2, ':authority')."</span>);
+<a class="jxr_linenumber" name="L820" href="#L820">820</a> 		<strong class="jxr_keyword">return</strong> refuse(req, method, BoundaryReason.HOST_MALFORMED, 400,
+<a class="jxr_linenumber" name="L821" href="#L821">821</a> 			<span class="jxr_string">"Request 'Host' must be a single header holding a host name, IPv4 address or bracketed IPv6 address, "</span>
+<a class="jxr_linenumber" name="L822" href="#L822">822</a> 			+ <span class="jxr_string">"with an optional port."</span>);
+<a class="jxr_linenumber" name="L823" href="#L823">823</a> 	}
+<a class="jxr_linenumber" name="L824" href="#L824">824</a> 
+<a class="jxr_linenumber" name="L825" href="#L825">825</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <a name="BoundaryResult" href="../../../../../../org/apache/juneau/rest/server/filter/BoundaryResult.html#BoundaryResult">BoundaryResult</a> refuseFetchSite(HttpServletRequest req, String method) {
+<a class="jxr_linenumber" name="L826" href="#L826">826</a> 		<strong class="jxr_keyword">return</strong> refuse(req, method, BoundaryReason.FETCH_SITE_NOT_SAME_ORIGIN, 403,
+<a class="jxr_linenumber" name="L827" href="#L827">827</a> 			<span class="jxr_string">"Request 'Sec-Fetch-Site' must be a single 'same-origin' value when present on a state-changing request."</span>);
+<a class="jxr_linenumber" name="L828" href="#L828">828</a> 	}
+<a class="jxr_linenumber" name="L829" href="#L829">829</a> 
+<a class="jxr_linenumber" name="L830" href="#L830">830</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <a name="BoundaryResult" href="../../../../../../org/apache/juneau/rest/server/filter/BoundaryResult.html#BoundaryResult">BoundaryResult</a> refuseNotJson(HttpServletRequest req, String method) {
+<a class="jxr_linenumber" name="L831" href="#L831">831</a> 		<strong class="jxr_keyword">return</strong> refuse(req, method, BoundaryReason.CONTENT_TYPE_NOT_JSON, 415,
+<a class="jxr_linenumber" name="L832" href="#L832">832</a> 			<span class="jxr_string">"A state-changing request must carry a single 'Content-Type' of 'application/json'."</span>);
+<a class="jxr_linenumber" name="L833" href="#L833">833</a> 	}
+<a class="jxr_linenumber" name="L834" href="#L834">834</a> 
+<a class="jxr_linenumber" name="L835" href="#L835">835</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L836" href="#L836">836</a> <em class="jxr_javadoccomment">	 * Logs the refusal and builds its result.</em>
+<a class="jxr_linenumber" name="L837" href="#L837">837</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L838" href="#L838">838</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L839" href="#L839">839</a> <em class="jxr_javadoccomment">	 * {@code message} must be a fixed text naming only headers and the kind of value expected.</em>
+<a class="jxr_linenumber" name="L840" href="#L840">840</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L841" href="#L841">841</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <a name="BoundaryResult" href="../../../../../../org/apache/juneau/rest/server/filter/BoundaryResult.html#BoundaryResult">BoundaryResult</a> refuse(HttpServletRequest req, String method, <a name="BoundaryReason" href="../../../../../../org/apache/juneau/rest/server/filter/BoundaryReason.html#BoundaryReason">BoundaryReason</a> reason, <strong class="jxr_keyword">int</strong> status, String message) {
+<a class="jxr_linenumber" name="L842" href="#L842">842</a> 		<strong class="jxr_keyword">if</strong> (LOG.isLoggable(Level.FINE))
+<a class="jxr_linenumber" name="L843" href="#L843">843</a> 			LOG.fine(<span class="jxr_string">"CSRF boundary refused a request: reason="</span> + reason
+<a class="jxr_linenumber" name="L844" href="#L844">844</a> 				+ <span class="jxr_string">", method="</span> + sanitize(method)
+<a class="jxr_linenumber" name="L845" href="#L845">845</a> 				+ <span class="jxr_string">", requestMethod="</span> + sanitize(req.getMethod())
+<a class="jxr_linenumber" name="L846" href="#L846">846</a> 				+ <span class="jxr_string">", uri="</span> + sanitize(pathOnly(req.getRequestURI()))
+<a class="jxr_linenumber" name="L847" href="#L847">847</a> 				+ <span class="jxr_string">", remoteAddr="</span> + sanitize(req.getRemoteAddr()));
+<a class="jxr_linenumber" name="L848" href="#L848">848</a> 		<strong class="jxr_keyword">if</strong> (LOG.isLoggable(Level.FINEST))
+<a class="jxr_linenumber" name="L849" href="#L849">849</a> 			LOG.finest(<span class="jxr_string">"CSRF boundary refused a request: reason="</span> + reason
+<a class="jxr_linenumber" name="L850" href="#L850">850</a> 				+ <span class="jxr_string">", Origin="</span> + sanitize(String.join(<span class="jxr_string">", "</span>, BoundaryChecks.headerValues(req, <span class="jxr_string">"Origin"</span>)))
+<a class="jxr_linenumber" name="L851" href="#L851">851</a> 				+ <span class="jxr_string">", Host="</span> + (BoundaryChecks.isSynthesisedHost(req) ? <span class="jxr_string">"(h2 :authority) "</span> : <span class="jxr_string">""</span>)
+<a class="jxr_linenumber" name="L852" href="#L852">852</a> 				+ sanitize(String.join(<span class="jxr_string">", "</span>, BoundaryChecks.hostValues(req)))
+<a class="jxr_linenumber" name="L853" href="#L853">853</a> 				+ (reason.name().startsWith(<span class="jxr_string">"FORWARDED_"</span>) ? <span class="jxr_string">", "</span> + forwardedValues(name -&gt; forwardedLines(req, name)) : <span class="jxr_string">""</span>));
+<a class="jxr_linenumber" name="L854" href="#L854">854</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="BoundaryResult" href="../../../../../../org/apache/juneau/rest/server/filter/BoundaryResult.html#BoundaryResult">BoundaryResult</a>(reason, status, message);
+<a class="jxr_linenumber" name="L855" href="#L855">855</a> 	}
+<a class="jxr_linenumber" name="L856" href="#L856">856</a> 
+<a class="jxr_linenumber" name="L857" href="#L857">857</a> 	<em class="jxr_javadoccomment">/** One warning per process for an Origin that differs from the own origin only in the way a misconfiguration would. */</em>
+<a class="jxr_linenumber" name="L858" href="#L858">858</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> warnNearMiss(Origin presented, Origin self) {
+<a class="jxr_linenumber" name="L859" href="#L859">859</a> 		<strong class="jxr_keyword">if</strong> (! presented.host().equals(self.host()))
+<a class="jxr_linenumber" name="L860" href="#L860">860</a> 			<strong class="jxr_keyword">return</strong>;
+<a class="jxr_linenumber" name="L861" href="#L861">861</a> 		<strong class="jxr_keyword">if</strong> (! presented.scheme().equals(self.scheme())) {
+<a class="jxr_linenumber" name="L862" href="#L862">862</a> 			<strong class="jxr_keyword">if</strong> (SCHEME_WARNED.compareAndSet(false, <strong class="jxr_keyword">true</strong>))
+<a class="jxr_linenumber" name="L863" href="#L863">863</a> 				LOG.warning(<span class="jxr_string">"CSRF boundary: a request's 'Origin' differs from this server's own origin only in its scheme.  "</span>
+<a class="jxr_linenumber" name="L864" href="#L864">864</a> 					+ <span class="jxr_string">"TLS terminated upstream?  See originSource(CONTAINER) and filter ordering."</span>);
+<a class="jxr_linenumber" name="L865" href="#L865">865</a> 		} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (presented.port() != self.port() &amp;&amp; PORT_WARNED.compareAndSet(false, <strong class="jxr_keyword">true</strong>)) {
+<a class="jxr_linenumber" name="L866" href="#L866">866</a> 			LOG.warning(<span class="jxr_string">"CSRF boundary: a request's 'Origin' differs from this server's own origin only in its port.  "</span>
+<a class="jxr_linenumber" name="L867" href="#L867">867</a> 				+ <span class="jxr_string">"Is a proxy or port mapping rewriting 'Host'?"</span>);
+<a class="jxr_linenumber" name="L868" href="#L868">868</a> 		}
+<a class="jxr_linenumber" name="L869" href="#L869">869</a> 	}
+<a class="jxr_linenumber" name="L870" href="#L870">870</a> 
+<a class="jxr_linenumber" name="L871" href="#L871">871</a> 	<em class="jxr_javadoccomment">/** The URI with any query and any {@code ;} path parameters (where a container may put a session id) cut off. */</em>
+<a class="jxr_linenumber" name="L872" href="#L872">872</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String pathOnly(String uri) {
+<a class="jxr_linenumber" name="L873" href="#L873">873</a> 		<strong class="jxr_keyword">if</strong> (uri == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L874" href="#L874">874</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L875" href="#L875">875</a> 		<strong class="jxr_keyword">var</strong> end = uri.length();
+<a class="jxr_linenumber" name="L876" href="#L876">876</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> c : <strong class="jxr_keyword">new</strong> <strong class="jxr_keyword">char</strong>[] { '?', ';', '#' }) {
+<a class="jxr_linenumber" name="L877" href="#L877">877</a> 			<strong class="jxr_keyword">var</strong> i = uri.indexOf(c);
+<a class="jxr_linenumber" name="L878" href="#L878">878</a> 			<strong class="jxr_keyword">if</strong> (i &gt;= 0 &amp;&amp; i &lt; end)
+<a class="jxr_linenumber" name="L879" href="#L879">879</a> 				end = i;
+<a class="jxr_linenumber" name="L880" href="#L880">880</a> 		}
+<a class="jxr_linenumber" name="L881" href="#L881">881</a> 		<strong class="jxr_keyword">return</strong> uri.substring(0, end);
+<a class="jxr_linenumber" name="L882" href="#L882">882</a> 	}
+<a class="jxr_linenumber" name="L883" href="#L883">883</a> 
+<a class="jxr_linenumber" name="L884" href="#L884">884</a> 	<em class="jxr_javadoccomment">/** A value safe for one log line: control characters removed, at most {@value #MAX_LOGGED} characters. */</em>
+<a class="jxr_linenumber" name="L885" href="#L885">885</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String sanitize(String value) {
+<a class="jxr_linenumber" name="L886" href="#L886">886</a> 		<strong class="jxr_keyword">if</strong> (value == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L887" href="#L887">887</a> 			<strong class="jxr_keyword">return</strong> <span class="jxr_string">"null"</span>;
+<a class="jxr_linenumber" name="L888" href="#L888">888</a> 		<strong class="jxr_keyword">var</strong> sb = <strong class="jxr_keyword">new</strong> StringBuilder(Math.min(value.length(), MAX_LOGGED));
+<a class="jxr_linenumber" name="L889" href="#L889">889</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt; value.length() &amp;&amp; sb.length() &lt; MAX_LOGGED; i++) {
+<a class="jxr_linenumber" name="L890" href="#L890">890</a> 			<strong class="jxr_keyword">var</strong> c = value.charAt(i);
+<a class="jxr_linenumber" name="L891" href="#L891">891</a> 			<strong class="jxr_keyword">if</strong> (c &gt;= 0x20 &amp;&amp; c != 0x7f)
+<a class="jxr_linenumber" name="L892" href="#L892">892</a> 				sb.append(c);
+<a class="jxr_linenumber" name="L893" href="#L893">893</a> 		}
+<a class="jxr_linenumber" name="L894" href="#L894">894</a> 		<strong class="jxr_keyword">return</strong> sb.toString();
+<a class="jxr_linenumber" name="L895" href="#L895">895</a> 	}
+<a class="jxr_linenumber" name="L896" href="#L896">896</a> 
+<a class="jxr_linenumber" name="L897" href="#L897">897</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L898" href="#L898">898</a> <em class="jxr_javadoccomment">	 * Clears the once-per-process warning state, so each warning can be observed again.</em>
+<a class="jxr_linenumber" name="L899" href="#L899">899</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L900" href="#L900">900</a> 	<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> resetWarnings() {
+<a class="jxr_linenumber" name="L901" href="#L901">901</a> 		SCHEME_WARNED.set(false);
+<a class="jxr_linenumber" name="L902" href="#L902">902</a> 		PORT_WARNED.set(false);
+<a class="jxr_linenumber" name="L903" href="#L903">903</a> 		MISSING_FROM_OWN_ORIGIN.set(0);
+<a class="jxr_linenumber" name="L904" href="#L904">904</a> 	}
+<a class="jxr_linenumber" name="L905" href="#L905">905</a> 
+<a class="jxr_linenumber" name="L906" href="#L906">906</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L907" href="#L907">907</a> <em class="jxr_javadoccomment">	 * A freshly masked token for the page being served to this request.</em>
+<a class="jxr_linenumber" name="L908" href="#L908">908</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L909" href="#L909">909</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L910" href="#L910">910</a> <em class="jxr_javadoccomment">	 * Never creates a session: with a session-scoped strategy and no session, the value returned verifies against</em>
+<a class="jxr_linenumber" name="L911" href="#L911">911</a> <em class="jxr_javadoccomment">	 * nothing.  Creating the session, when that is wanted, is {@link RequestBoundaryFilter}'s job.</em>
+<a class="jxr_linenumber" name="L912" href="#L912">912</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L913" href="#L913">913</a> <em class="jxr_javadoccomment">	 * @param req The request whose response will embed the token.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L914" href="#L914">914</a> <em class="jxr_javadoccomment">	 * @return 128 lower-case hex characters, different on every call.</em>
+<a class="jxr_linenumber" name="L915" href="#L915">915</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L916" href="#L916">916</a> 	@Override <em class="jxr_comment">/* RequestBoundary */</em>
+<a class="jxr_linenumber" name="L917" href="#L917">917</a> 	<strong class="jxr_keyword">public</strong> String tokenFor(HttpServletRequest req) {
+<a class="jxr_linenumber" name="L918" href="#L918">918</a> 		reqnn(<span class="jxr_string">"req"</span>, req);
+<a class="jxr_linenumber" name="L919" href="#L919">919</a> 		<strong class="jxr_keyword">return</strong> tokens.mask(tokens.expected(req, false));
+<a class="jxr_linenumber" name="L920" href="#L920">920</a> 	}
+<a class="jxr_linenumber" name="L921" href="#L921">921</a> 
+<a class="jxr_linenumber" name="L922" href="#L922">922</a> 	@Override <em class="jxr_comment">/* RequestBoundary */</em>
+<a class="jxr_linenumber" name="L923" href="#L923">923</a> 	<strong class="jxr_keyword">public</strong> String csrfHeader() { <strong class="jxr_keyword">return</strong> csrfHeader; }
+<a class="jxr_linenumber" name="L924" href="#L924">924</a> 
+<a class="jxr_linenumber" name="L925" href="#L925">925</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L926" href="#L926">926</a> <em class="jxr_javadoccomment">	 * The token strategy.</em>
+<a class="jxr_linenumber" name="L927" href="#L927">927</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L928" href="#L928">928</a> <em class="jxr_javadoccomment">	 * @return The token strategy.  Never &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L929" href="#L929">929</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L930" href="#L930">930</a> 	<strong class="jxr_keyword">public</strong> <a name="CsrfTokens" href="../../../../../../org/apache/juneau/rest/server/filter/CsrfTokens.html#CsrfTokens">CsrfTokens</a> tokens() { <strong class="jxr_keyword">return</strong> tokens; }
+<a class="jxr_linenumber" name="L931" href="#L931">931</a> 
+<a class="jxr_linenumber" name="L932" href="#L932">932</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L933" href="#L933">933</a> <em class="jxr_javadoccomment">	 * The policy for unsafe requests with neither {@code Origin} nor {@code Sec-Fetch-Site}.</em>
+<a class="jxr_linenumber" name="L934" href="#L934">934</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L935" href="#L935">935</a> <em class="jxr_javadoccomment">	 * @return The policy.  Never &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L936" href="#L936">936</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L937" href="#L937">937</a> 	<strong class="jxr_keyword">public</strong> NonBrowser nonBrowser() { <strong class="jxr_keyword">return</strong> nonBrowser; }
+<a class="jxr_linenumber" name="L938" href="#L938">938</a> 
+<a class="jxr_linenumber" name="L939" href="#L939">939</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L940" href="#L940">940</a> <em class="jxr_javadoccomment">	 * Where the request's own origin comes from.</em>
+<a class="jxr_linenumber" name="L941" href="#L941">941</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L942" href="#L942">942</a> <em class="jxr_javadoccomment">	 * @return The origin source.  Never &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L943" href="#L943">943</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L944" href="#L944">944</a> 	<strong class="jxr_keyword">public</strong> OriginSource originSource() { <strong class="jxr_keyword">return</strong> originSource; }
+<a class="jxr_linenumber" name="L945" href="#L945">945</a> 
+<a class="jxr_linenumber" name="L946" href="#L946">946</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L947" href="#L947">947</a> <em class="jxr_javadoccomment">	 * The header family whose forwarded origin is trusted.</em>
+<a class="jxr_linenumber" name="L948" href="#L948">948</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L949" href="#L949">949</a> <em class="jxr_javadoccomment">	 * @return The source.  Never &lt;jk&gt;null&lt;/jk&gt;.  {@link ForwardedSource#NONE} when forwarding is not trusted.</em>
+<a class="jxr_linenumber" name="L950" href="#L950">950</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L951" href="#L951">951</a> 	<strong class="jxr_keyword">public</strong> ForwardedSource trustedForwarding() { <strong class="jxr_keyword">return</strong> trustedForwarding; }
+<a class="jxr_linenumber" name="L952" href="#L952">952</a> 
+<a class="jxr_linenumber" name="L953" href="#L953">953</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L954" href="#L954">954</a> <em class="jxr_javadoccomment">	 * The number of trusted proxy entries; the one this far from the right of the forwarded header is used.</em>
+<a class="jxr_linenumber" name="L955" href="#L955">955</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L956" href="#L956">956</a> <em class="jxr_javadoccomment">	 * @return The hop count, 1 to 16.</em>
+<a class="jxr_linenumber" name="L957" href="#L957">957</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L958" href="#L958">958</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">int</strong> trustedHops() { <strong class="jxr_keyword">return</strong> trustedHops; }
+<a class="jxr_linenumber" name="L959" href="#L959">959</a> 
+<a class="jxr_linenumber" name="L960" href="#L960">960</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L961" href="#L961">961</a> <em class="jxr_javadoccomment">	 * The peer address ranges whose forwarded headers are believed.</em>
+<a class="jxr_linenumber" name="L962" href="#L962">962</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L963" href="#L963">963</a> <em class="jxr_javadoccomment">	 * @return An unmodifiable list of normalized ranges (masked, {@code address/prefix}); empty when the setting is</em>
+<a class="jxr_linenumber" name="L964" href="#L964">964</a> <em class="jxr_javadoccomment">	 * 	off.</em>
+<a class="jxr_linenumber" name="L965" href="#L965">965</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L966" href="#L966">966</a> 	<strong class="jxr_keyword">public</strong> List&lt;String&gt; trustedProxies() { <strong class="jxr_keyword">return</strong> trustedProxies == <strong class="jxr_keyword">null</strong> ? List.of() : trustedProxies.texts(); }
+<a class="jxr_linenumber" name="L967" href="#L967">967</a> 
+<a class="jxr_linenumber" name="L968" href="#L968">968</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L969" href="#L969">969</a> <em class="jxr_javadoccomment">	 * Whether every admitted unsafe request must carry a single {@code application/json} content type.</em>
+<a class="jxr_linenumber" name="L970" href="#L970">970</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L971" href="#L971">971</a> <em class="jxr_javadoccomment">	 * @return &lt;jk&gt;true&lt;/jk&gt; if JSON is required.</em>
+<a class="jxr_linenumber" name="L972" href="#L972">972</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L973" href="#L973">973</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> requireJson() { <strong class="jxr_keyword">return</strong> requireJson; }
+<a class="jxr_linenumber" name="L974" href="#L974">974</a> 
+<a class="jxr_linenumber" name="L975" href="#L975">975</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L976" href="#L976">976</a> <em class="jxr_javadoccomment">	 * The host names every request's own host must be one of, lower-cased.</em>
+<a class="jxr_linenumber" name="L977" href="#L977">977</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L978" href="#L978">978</a> <em class="jxr_javadoccomment">	 * @return An unmodifiable set; empty when the check is off.</em>
+<a class="jxr_linenumber" name="L979" href="#L979">979</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L980" href="#L980">980</a> 	<strong class="jxr_keyword">public</strong> Set&lt;String&gt; allowedHosts() { <strong class="jxr_keyword">return</strong> allowedHosts; }
+<a class="jxr_linenumber" name="L981" href="#L981">981</a> 
+<a class="jxr_linenumber" name="L982" href="#L982">982</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L983" href="#L983">983</a> <em class="jxr_javadoccomment">	 * Whether {@link RequestBoundaryFilter} may create a session so that a page it serves can carry a session-scoped</em>
+<a class="jxr_linenumber" name="L984" href="#L984">984</a> <em class="jxr_javadoccomment">	 * token.</em>
+<a class="jxr_linenumber" name="L985" href="#L985">985</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L986" href="#L986">986</a> <em class="jxr_javadoccomment">	 * @return &lt;jk&gt;true&lt;/jk&gt; if sessions may be created.</em>
+<a class="jxr_linenumber" name="L987" href="#L987">987</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L988" href="#L988">988</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> createSessions() { <strong class="jxr_keyword">return</strong> createSessions; }
+<a class="jxr_linenumber" name="L989" href="#L989">989</a> 
+<a class="jxr_linenumber" name="L990" href="#L990">990</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L991" href="#L991">991</a> <em class="jxr_javadoccomment">	 * Returns a description of the configuration that does &lt;b&gt;not&lt;/b&gt; include any key or token.</em>
+<a class="jxr_linenumber" name="L992" href="#L992">992</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L993" href="#L993">993</a> <em class="jxr_javadoccomment">	 * @return A secret-free description.</em>
+<a class="jxr_linenumber" name="L994" href="#L994">994</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L995" href="#L995">995</a> 	@Override <em class="jxr_comment">/* Object */</em>
+<a class="jxr_linenumber" name="L996" href="#L996">996</a> 	<strong class="jxr_keyword">public</strong> String toString() {
+<a class="jxr_linenumber" name="L997" href="#L997">997</a> 		<strong class="jxr_keyword">return</strong> <span class="jxr_string">"CsrfBoundary(tokens="</span> + tokens + <span class="jxr_string">", nonBrowser="</span> + nonBrowser + <span class="jxr_string">", originSource="</span> + originSource
+<a class="jxr_linenumber" name="L998" href="#L998">998</a> 			+ <span class="jxr_string">", requireJson="</span> + requireJson + <span class="jxr_string">", allowedHosts="</span> + <strong class="jxr_keyword">new</strong> TreeSet&lt;&gt;(allowedHosts) + <span class="jxr_string">", csrfHeader="</span> + csrfHeader
+<a class="jxr_linenumber" name="L999" href="#L999">999</a> 			+ <span class="jxr_string">", createSessions="</span> + createSessions + <span class="jxr_string">", trustedForwarding="</span> + trustedForwarding + <span class="jxr_string">", trustedHops="</span> + trustedHops
+<a class="jxr_linenumber" name="L1000" href="#L1000">1000</a> 			+ <span class="jxr_string">", trustedProxies="</span> + trustedProxies() + <span class="jxr_string">")"</span>;
+<a class="jxr_linenumber" name="L1001" href="#L1001">1001</a> 	}
+<a class="jxr_linenumber" name="L1002" href="#L1002">1002</a> 
+<a class="jxr_linenumber" name="L1003" href="#L1003">1003</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L1004" href="#L1004">1004</a> <em class="jxr_javadoccomment">	 * Builder for {@link CsrfBoundary}.</em>
+<a class="jxr_linenumber" name="L1005" href="#L1005">1005</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L1006" href="#L1006">1006</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> Builder {
+<a class="jxr_linenumber" name="L1007" href="#L1007">1007</a> 
+<a class="jxr_linenumber" name="L1008" href="#L1008">1008</a> 		CsrfTokens tokens;
+<a class="jxr_linenumber" name="L1009" href="#L1009">1009</a> 		NonBrowser nonBrowser = NonBrowser.ADMIT_NON_SIMPLE;
+<a class="jxr_linenumber" name="L1010" href="#L1010">1010</a> 		OriginSource originSource = OriginSource.HOST_HEADER;
+<a class="jxr_linenumber" name="L1011" href="#L1011">1011</a> 		<strong class="jxr_keyword">boolean</strong> requireJson;
+<a class="jxr_linenumber" name="L1012" href="#L1012">1012</a> 		Set&lt;String&gt; allowedHosts = Set.of();
+<a class="jxr_linenumber" name="L1013" href="#L1013">1013</a> 		String csrfHeader = LoopbackBoundary.DEFAULT_CSRF_HEADER;
+<a class="jxr_linenumber" name="L1014" href="#L1014">1014</a> 		<strong class="jxr_keyword">boolean</strong> createSessions = <strong class="jxr_keyword">true</strong>;
+<a class="jxr_linenumber" name="L1015" href="#L1015">1015</a> 		ForwardedSource trustedForwarding = ForwardedSource.NONE;
+<a class="jxr_linenumber" name="L1016" href="#L1016">1016</a> 		<strong class="jxr_keyword">int</strong> trustedHops = 1;
+<a class="jxr_linenumber" name="L1017" href="#L1017">1017</a> 		PeerRanges trustedProxies;
+<a class="jxr_linenumber" name="L1018" href="#L1018">1018</a> 
+<a class="jxr_linenumber" name="L1019" href="#L1019">1019</a> 		<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L1020" href="#L1020">1020</a> <em class="jxr_javadoccomment">		 * Constructor.</em>
+<a class="jxr_linenumber" name="L1021" href="#L1021">1021</a> <em class="jxr_javadoccomment">		 */</em>
+<a class="jxr_linenumber" name="L1022" href="#L1022">1022</a> 		<strong class="jxr_keyword">protected</strong> Builder() {}
+<a class="jxr_linenumber" name="L1023" href="#L1023">1023</a> 
+<a class="jxr_linenumber" name="L1024" href="#L1024">1024</a> 		<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L1025" href="#L1025">1025</a> <em class="jxr_javadoccomment">		 * The token strategy.</em>
+<a class="jxr_linenumber" name="L1026" href="#L1026">1026</a> <em class="jxr_javadoccomment">		 *</em>
+<a class="jxr_linenumber" name="L1027" href="#L1027">1027</a> <em class="jxr_javadoccomment">		 * @param value The strategy.  Must not be &lt;jk&gt;null&lt;/jk&gt;.  Defaults to a new {@link CsrfTokens#perSession()}.</em>
+<a class="jxr_linenumber" name="L1028" href="#L1028">1028</a> <em class="jxr_javadoccomment">		 * @return This object.</em>
+<a class="jxr_linenumber" name="L1029" href="#L1029">1029</a> <em class="jxr_javadoccomment">		 */</em>
+<a class="jxr_linenumber" name="L1030" href="#L1030">1030</a> 		<strong class="jxr_keyword">public</strong> Builder tokens(<a name="CsrfTokens" href="../../../../../../org/apache/juneau/rest/server/filter/CsrfTokens.html#CsrfTokens">CsrfTokens</a> value) {
+<a class="jxr_linenumber" name="L1031" href="#L1031">1031</a> 			tokens = reqnn(<span class="jxr_string">"value"</span>, value);
+<a class="jxr_linenumber" name="L1032" href="#L1032">1032</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L1033" href="#L1033">1033</a> 		}
+<a class="jxr_linenumber" name="L1034" href="#L1034">1034</a> 
+<a class="jxr_linenumber" name="L1035" href="#L1035">1035</a> 		<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L1036" href="#L1036">1036</a> <em class="jxr_javadoccomment">		 * The policy for unsafe requests with neither {@code Origin} nor {@code Sec-Fetch-Site}.</em>
+<a class="jxr_linenumber" name="L1037" href="#L1037">1037</a> <em class="jxr_javadoccomment">		 *</em>
+<a class="jxr_linenumber" name="L1038" href="#L1038">1038</a> <em class="jxr_javadoccomment">		 * @param value The policy.  Must not be &lt;jk&gt;null&lt;/jk&gt;.  Defaults to {@link NonBrowser#ADMIT_NON_SIMPLE}.</em>
+<a class="jxr_linenumber" name="L1039" href="#L1039">1039</a> <em class="jxr_javadoccomment">		 * @return This object.</em>
+<a class="jxr_linenumber" name="L1040" href="#L1040">1040</a> <em class="jxr_javadoccomment">		 */</em>
+<a class="jxr_linenumber" name="L1041" href="#L1041">1041</a> 		<strong class="jxr_keyword">public</strong> Builder nonBrowser(NonBrowser value) {
+<a class="jxr_linenumber" name="L1042" href="#L1042">1042</a> 			nonBrowser = reqnn(<span class="jxr_string">"value"</span>, value);
+<a class="jxr_linenumber" name="L1043" href="#L1043">1043</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L1044" href="#L1044">1044</a> 		}
+<a class="jxr_linenumber" name="L1045" href="#L1045">1045</a> 
+<a class="jxr_linenumber" name="L1046" href="#L1046">1046</a> 		<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L1047" href="#L1047">1047</a> <em class="jxr_javadoccomment">		 * Where the request's own origin comes from.</em>
+<a class="jxr_linenumber" name="L1048" href="#L1048">1048</a> <em class="jxr_javadoccomment">		 *</em>
+<a class="jxr_linenumber" name="L1049" href="#L1049">1049</a> <em class="jxr_javadoccomment">		 * @param value The source.  Must not be &lt;jk&gt;null&lt;/jk&gt;.  Defaults to {@link OriginSource#HOST_HEADER}.</em>
+<a class="jxr_linenumber" name="L1050" href="#L1050">1050</a> <em class="jxr_javadoccomment">		 * @return This object.</em>
+<a class="jxr_linenumber" name="L1051" href="#L1051">1051</a> <em class="jxr_javadoccomment">		 */</em>
+<a class="jxr_linenumber" name="L1052" href="#L1052">1052</a> 		<strong class="jxr_keyword">public</strong> Builder originSource(OriginSource value) {
+<a class="jxr_linenumber" name="L1053" href="#L1053">1053</a> 			originSource = reqnn(<span class="jxr_string">"value"</span>, value);
+<a class="jxr_linenumber" name="L1054" href="#L1054">1054</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L1055" href="#L1055">1055</a> 		}
+<a class="jxr_linenumber" name="L1056" href="#L1056">1056</a> 
+<a class="jxr_linenumber" name="L1057" href="#L1057">1057</a> 		<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L1058" href="#L1058">1058</a> <em class="jxr_javadoccomment">		 * Whether every admitted unsafe request must carry a single {@code application/json} content type.</em>
+<a class="jxr_linenumber" name="L1059" href="#L1059">1059</a> <em class="jxr_javadoccomment">		 *</em>
+<a class="jxr_linenumber" name="L1060" href="#L1060">1060</a> <em class="jxr_javadoccomment">		 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L1061" href="#L1061">1061</a> <em class="jxr_javadoccomment">		 * Applies to browser and admitted non-browser requests alike.  Parameters are allowed; {@code +json} types are</em>
+<a class="jxr_linenumber" name="L1062" href="#L1062">1062</a> <em class="jxr_javadoccomment">		 * not.</em>
+<a class="jxr_linenumber" name="L1063" href="#L1063">1063</a> <em class="jxr_javadoccomment">		 *</em>
+<a class="jxr_linenumber" name="L1064" href="#L1064">1064</a> <em class="jxr_javadoccomment">		 * @param value The setting.  Defaults to &lt;jk&gt;false&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L1065" href="#L1065">1065</a> <em class="jxr_javadoccomment">		 * @return This object.</em>
+<a class="jxr_linenumber" name="L1066" href="#L1066">1066</a> <em class="jxr_javadoccomment">		 */</em>
+<a class="jxr_linenumber" name="L1067" href="#L1067">1067</a> 		<strong class="jxr_keyword">public</strong> Builder requireJson(<strong class="jxr_keyword">boolean</strong> value) {
+<a class="jxr_linenumber" name="L1068" href="#L1068">1068</a> 			requireJson = value;
+<a class="jxr_linenumber" name="L1069" href="#L1069">1069</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L1070" href="#L1070">1070</a> 		}
+<a class="jxr_linenumber" name="L1071" href="#L1071">1071</a> 
+<a class="jxr_linenumber" name="L1072" href="#L1072">1072</a> 		<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L1073" href="#L1073">1073</a> <em class="jxr_javadoccomment">		 * The host names this server answers to.  When set, every request, safe ones included, whose own host is not</em>
+<a class="jxr_linenumber" name="L1074" href="#L1074">1074</a> <em class="jxr_javadoccomment">		 * one of them is refused with {@code 421 HOST_NOT_ALLOWED}.</em>
+<a class="jxr_linenumber" name="L1075" href="#L1075">1075</a> <em class="jxr_javadoccomment">		 *</em>
+<a class="jxr_linenumber" name="L1076" href="#L1076">1076</a> <em class="jxr_javadoccomment">		 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L1077" href="#L1077">1077</a> <em class="jxr_javadoccomment">		 * Matching is case-insensitive and ignores the port.  A trailing-dot variant is a different name.  Replaces any</em>
+<a class="jxr_linenumber" name="L1078" href="#L1078">1078</a> <em class="jxr_javadoccomment">		 * earlier list.  This is the DNS-rebinding control for applications served over plain HTTP.</em>
+<a class="jxr_linenumber" name="L1079" href="#L1079">1079</a> <em class="jxr_javadoccomment">		 *</em>
+<a class="jxr_linenumber" name="L1080" href="#L1080">1080</a> <em class="jxr_javadoccomment">		 * @param values Host names with no port, e.g. {@code "app.example.com"} or {@code "[::1]"}.  Must not be</em>
+<a class="jxr_linenumber" name="L1081" href="#L1081">1081</a> <em class="jxr_javadoccomment">		 * 	&lt;jk&gt;null&lt;/jk&gt;, and no entry may be &lt;jk&gt;null&lt;/jk&gt; or blank.</em>
+<a class="jxr_linenumber" name="L1082" href="#L1082">1082</a> <em class="jxr_javadoccomment">		 * @return This object.</em>
+<a class="jxr_linenumber" name="L1083" href="#L1083">1083</a> <em class="jxr_javadoccomment">		 * @throws IllegalArgumentException If {@code values} or an entry is &lt;jk&gt;null&lt;/jk&gt;, blank, or not a bare host.</em>
+<a class="jxr_linenumber" name="L1084" href="#L1084">1084</a> <em class="jxr_javadoccomment">		 */</em>
+<a class="jxr_linenumber" name="L1085" href="#L1085">1085</a> 		<strong class="jxr_keyword">public</strong> Builder allowedHosts(String...values) {
+<a class="jxr_linenumber" name="L1086" href="#L1086">1086</a> 			reqnn(<span class="jxr_string">"values"</span>, values);
+<a class="jxr_linenumber" name="L1087" href="#L1087">1087</a> 			<strong class="jxr_keyword">var</strong> s = <strong class="jxr_keyword">new</strong> LinkedHashSet&lt;String&gt;();
+<a class="jxr_linenumber" name="L1088" href="#L1088">1088</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> v : values) {
+<a class="jxr_linenumber" name="L1089" href="#L1089">1089</a> 				reqnn(<span class="jxr_string">"values"</span>, v);
+<a class="jxr_linenumber" name="L1090" href="#L1090">1090</a> 				<strong class="jxr_keyword">if</strong> (v.isBlank())
+<a class="jxr_linenumber" name="L1091" href="#L1091">1091</a> 					<strong class="jxr_keyword">throw</strong> iaex(<span class="jxr_string">"Argument 'values' must not contain a blank entry."</span>);
+<a class="jxr_linenumber" name="L1092" href="#L1092">1092</a> 				<strong class="jxr_keyword">var</strong> a = BoundaryChecks.parseHost(v.trim());
+<a class="jxr_linenumber" name="L1093" href="#L1093">1093</a> 				<strong class="jxr_keyword">if</strong> (a == <strong class="jxr_keyword">null</strong> || a.port() &gt;= 0)
+<a class="jxr_linenumber" name="L1094" href="#L1094">1094</a> 					<strong class="jxr_keyword">throw</strong> iaex(<span class="jxr_string">"Argument 'values' must hold bare host names with no port."</span>);
+<a class="jxr_linenumber" name="L1095" href="#L1095">1095</a> 				s.add(a.host());
+<a class="jxr_linenumber" name="L1096" href="#L1096">1096</a> 			}
+<a class="jxr_linenumber" name="L1097" href="#L1097">1097</a> 			allowedHosts = s;
+<a class="jxr_linenumber" name="L1098" href="#L1098">1098</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L1099" href="#L1099">1099</a> 		}
+<a class="jxr_linenumber" name="L1100" href="#L1100">1100</a> 
+<a class="jxr_linenumber" name="L1101" href="#L1101">1101</a> 		<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L1102" href="#L1102">1102</a> <em class="jxr_javadoccomment">		 * The header an unsafe request must carry the CSRF token in.</em>
+<a class="jxr_linenumber" name="L1103" href="#L1103">1103</a> <em class="jxr_javadoccomment">		 *</em>
+<a class="jxr_linenumber" name="L1104" href="#L1104">1104</a> <em class="jxr_javadoccomment">		 * @param value The header name.  Must not be &lt;jk&gt;null&lt;/jk&gt; or blank.  Defaults to</em>
+<a class="jxr_linenumber" name="L1105" href="#L1105">1105</a> <em class="jxr_javadoccomment">		 * 	{@link LoopbackBoundary#DEFAULT_CSRF_HEADER}.</em>
+<a class="jxr_linenumber" name="L1106" href="#L1106">1106</a> <em class="jxr_javadoccomment">		 * @return This object.</em>
+<a class="jxr_linenumber" name="L1107" href="#L1107">1107</a> <em class="jxr_javadoccomment">		 */</em>
+<a class="jxr_linenumber" name="L1108" href="#L1108">1108</a> 		<strong class="jxr_keyword">public</strong> Builder csrfHeader(String value) {
+<a class="jxr_linenumber" name="L1109" href="#L1109">1109</a> 			reqnn(<span class="jxr_string">"value"</span>, value);
+<a class="jxr_linenumber" name="L1110" href="#L1110">1110</a> 			<strong class="jxr_keyword">if</strong> (value.isBlank())
+<a class="jxr_linenumber" name="L1111" href="#L1111">1111</a> 				<strong class="jxr_keyword">throw</strong> iaex(<span class="jxr_string">"Argument 'value' must not be blank."</span>);
+<a class="jxr_linenumber" name="L1112" href="#L1112">1112</a> 			csrfHeader = value.trim();
+<a class="jxr_linenumber" name="L1113" href="#L1113">1113</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L1114" href="#L1114">1114</a> 		}
+<a class="jxr_linenumber" name="L1115" href="#L1115">1115</a> 
+<a class="jxr_linenumber" name="L1116" href="#L1116">1116</a> 		<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L1117" href="#L1117">1117</a> <em class="jxr_javadoccomment">		 * Whether {@link RequestBoundaryFilter} may create a session so that a page it serves can carry a</em>
+<a class="jxr_linenumber" name="L1118" href="#L1118">1118</a> <em class="jxr_javadoccomment">		 * session-scoped token.  Has no effect with a per-process token strategy.</em>
+<a class="jxr_linenumber" name="L1119" href="#L1119">1119</a> <em class="jxr_javadoccomment">		 *</em>
+<a class="jxr_linenumber" name="L1120" href="#L1120">1120</a> <em class="jxr_javadoccomment">		 * @param value The setting.  Defaults to &lt;jk&gt;true&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L1121" href="#L1121">1121</a> <em class="jxr_javadoccomment">		 * @return This object.</em>
+<a class="jxr_linenumber" name="L1122" href="#L1122">1122</a> <em class="jxr_javadoccomment">		 */</em>
+<a class="jxr_linenumber" name="L1123" href="#L1123">1123</a> 		<strong class="jxr_keyword">public</strong> Builder createSessions(<strong class="jxr_keyword">boolean</strong> value) {
+<a class="jxr_linenumber" name="L1124" href="#L1124">1124</a> 			createSessions = value;
+<a class="jxr_linenumber" name="L1125" href="#L1125">1125</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L1126" href="#L1126">1126</a> 		}
+<a class="jxr_linenumber" name="L1127" href="#L1127">1127</a> 
+<a class="jxr_linenumber" name="L1128" href="#L1128">1128</a> 		<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L1129" href="#L1129">1129</a> <em class="jxr_javadoccomment">		 * Trusts the forwarded origin one proxy header family carries, for HTTP requests and WebSocket handshakes alike.</em>
+<a class="jxr_linenumber" name="L1130" href="#L1130">1130</a> <em class="jxr_javadoccomment">		 *</em>
+<a class="jxr_linenumber" name="L1131" href="#L1131">1131</a> <em class="jxr_javadoccomment">		 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L1132" href="#L1132">1132</a> <em class="jxr_javadoccomment">		 * With a source other than {@link ForwardedSource#NONE}, the request's own origin is the forwarded host</em>
+<a class="jxr_linenumber" name="L1133" href="#L1133">1133</a> <em class="jxr_javadoccomment">		 * &lt;b&gt;and&lt;/b&gt; proto of that one family, and nothing else: there is no fallback to {@code Host} or</em>
+<a class="jxr_linenumber" name="L1134" href="#L1134">1134</a> <em class="jxr_javadoccomment">		 * {@code getScheme()}, and {@code X-Forwarded-Port} is never read.  A request missing either value, or with a</em>
+<a class="jxr_linenumber" name="L1135" href="#L1135">1135</a> <em class="jxr_javadoccomment">		 * malformed one, is refused with a {@code FORWARDED_*} reason.  See {@link #trustedHops(int)} for how an entry</em>
+<a class="jxr_linenumber" name="L1136" href="#L1136">1136</a> <em class="jxr_javadoccomment">		 * is selected.</em>
+<a class="jxr_linenumber" name="L1137" href="#L1137">1137</a> <em class="jxr_javadoccomment">		 *</em>
+<a class="jxr_linenumber" name="L1138" href="#L1138">1138</a> <em class="jxr_javadoccomment">		 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L1139" href="#L1139">1139</a> <em class="jxr_javadoccomment">		 * &lt;b&gt;Turn this on only if every request reaches the server through a proxy that removes or appends after any</em>
+<a class="jxr_linenumber" name="L1140" href="#L1140">1140</a> <em class="jxr_javadoccomment">		 * client-supplied copy of the header.&lt;/b&gt;  A server clients can reach directly lets them choose the origin.</em>
+<a class="jxr_linenumber" name="L1141" href="#L1141">1141</a> <em class="jxr_javadoccomment">		 * See also {@link #trustedProxies(String...)} to believe only a listed peer address.</em>
+<a class="jxr_linenumber" name="L1142" href="#L1142">1142</a> <em class="jxr_javadoccomment">		 *</em>
+<a class="jxr_linenumber" name="L1143" href="#L1143">1143</a> <em class="jxr_javadoccomment">		 * @param value The source.  Must not be &lt;jk&gt;null&lt;/jk&gt;.  Defaults to {@link ForwardedSource#NONE}.</em>
+<a class="jxr_linenumber" name="L1144" href="#L1144">1144</a> <em class="jxr_javadoccomment">		 * @return This object.</em>
+<a class="jxr_linenumber" name="L1145" href="#L1145">1145</a> <em class="jxr_javadoccomment">		 */</em>
+<a class="jxr_linenumber" name="L1146" href="#L1146">1146</a> 		<strong class="jxr_keyword">public</strong> Builder trustedForwarding(ForwardedSource value) {
+<a class="jxr_linenumber" name="L1147" href="#L1147">1147</a> 			trustedForwarding = reqnn(<span class="jxr_string">"value"</span>, value);
+<a class="jxr_linenumber" name="L1148" href="#L1148">1148</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L1149" href="#L1149">1149</a> 		}
+<a class="jxr_linenumber" name="L1150" href="#L1150">1150</a> 
+<a class="jxr_linenumber" name="L1151" href="#L1151">1151</a> 		<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L1152" href="#L1152">1152</a> <em class="jxr_javadoccomment">		 * The number of proxies that &lt;i&gt;append&lt;/i&gt; to the forwarded header.</em>
+<a class="jxr_linenumber" name="L1153" href="#L1153">1153</a> <em class="jxr_javadoccomment">		 *</em>
+<a class="jxr_linenumber" name="L1154" href="#L1154">1154</a> <em class="jxr_javadoccomment">		 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L1155" href="#L1155">1155</a> <em class="jxr_javadoccomment">		 * The entries of the header are counted in wire order across all its lines and commas, and the {@code n}th from</em>
+<a class="jxr_linenumber" name="L1156" href="#L1156">1156</a> <em class="jxr_javadoccomment">		 * the right is used; entries to its left are ignored.  A chain of proxies that overwrite the header stays at 1.</em>
+<a class="jxr_linenumber" name="L1157" href="#L1157">1157</a> <em class="jxr_javadoccomment">		 * &lt;b&gt;Never set this above the number of proxies that append:&lt;/b&gt; an overstated value selects an entry the client</em>
+<a class="jxr_linenumber" name="L1158" href="#L1158">1158</a> <em class="jxr_javadoccomment">		 * wrote, and that fails open.  An understated value selects an inner hop and only causes refusals.</em>
+<a class="jxr_linenumber" name="L1159" href="#L1159">1159</a> <em class="jxr_javadoccomment">		 *</em>
+<a class="jxr_linenumber" name="L1160" href="#L1160">1160</a> <em class="jxr_javadoccomment">		 * @param value The hop count, 1 to 16.  Defaults to 1.</em>
+<a class="jxr_linenumber" name="L1161" href="#L1161">1161</a> <em class="jxr_javadoccomment">		 * @return This object.</em>
+<a class="jxr_linenumber" name="L1162" href="#L1162">1162</a> <em class="jxr_javadoccomment">		 * @throws IllegalArgumentException If {@code value} is outside 1 to 16.</em>
+<a class="jxr_linenumber" name="L1163" href="#L1163">1163</a> <em class="jxr_javadoccomment">		 */</em>
+<a class="jxr_linenumber" name="L1164" href="#L1164">1164</a> 		<strong class="jxr_keyword">public</strong> Builder trustedHops(<strong class="jxr_keyword">int</strong> value) {
+<a class="jxr_linenumber" name="L1165" href="#L1165">1165</a> 			<strong class="jxr_keyword">if</strong> (value &lt; 1 || value &gt; 16)
+<a class="jxr_linenumber" name="L1166" href="#L1166">1166</a> 				<strong class="jxr_keyword">throw</strong> iaex(<span class="jxr_string">"Argument 'value' must be between 1 and 16."</span>);
+<a class="jxr_linenumber" name="L1167" href="#L1167">1167</a> 			trustedHops = value;
+<a class="jxr_linenumber" name="L1168" href="#L1168">1168</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L1169" href="#L1169">1169</a> 		}
+<a class="jxr_linenumber" name="L1170" href="#L1170">1170</a> 
+<a class="jxr_linenumber" name="L1171" href="#L1171">1171</a> 		<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L1172" href="#L1172">1172</a> <em class="jxr_javadoccomment">		 * Believes the forwarded headers only from peers in these address ranges.</em>
+<a class="jxr_linenumber" name="L1173" href="#L1173">1173</a> <em class="jxr_javadoccomment">		 *</em>
+<a class="jxr_linenumber" name="L1174" href="#L1174">1174</a> <em class="jxr_javadoccomment">		 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L1175" href="#L1175">1175</a> <em class="jxr_javadoccomment">		 * Without this, {@link #trustedForwarding(ForwardedSource)} believes the forwarded headers from whoever sends</em>
+<a class="jxr_linenumber" name="L1176" href="#L1176">1176</a> <em class="jxr_javadoccomment">		 * them.  With it, the peer address the container reports (HTTP: {@link HttpServletRequest#getRemoteAddr()}) must</em>
+<a class="jxr_linenumber" name="L1177" href="#L1177">1177</a> <em class="jxr_javadoccomment">		 * be in a range.  A request from another peer that carries a forwarded host in the selected family is refused</em>
+<a class="jxr_linenumber" name="L1178" href="#L1178">1178</a> <em class="jxr_javadoccomment">		 * ({@code FORWARDED_PEER_NOT_TRUSTED}); one that does not is judged on the container's own view, as if forwarding</em>
+<a class="jxr_linenumber" name="L1179" href="#L1179">1179</a> <em class="jxr_javadoccomment">		 * were off.  A peer that cannot be parsed, or that the container did not report, is not trusted.</em>
+<a class="jxr_linenumber" name="L1180" href="#L1180">1180</a> <em class="jxr_javadoccomment">		 *</em>
+<a class="jxr_linenumber" name="L1181" href="#L1181">1181</a> <em class="jxr_javadoccomment">		 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L1182" href="#L1182">1182</a> <em class="jxr_javadoccomment">		 * Each entry is an IPv4 or IPv6 literal with an optional {@code /prefix}.  Host bits are masked</em>
+<a class="jxr_linenumber" name="L1183" href="#L1183">1183</a> <em class="jxr_javadoccomment">		 * ({@code 10.0.0.1/8} is {@code 10.0.0.0/8}); {@code /0} trusts every peer of its family.  Names are never</em>
+<a class="jxr_linenumber" name="L1184" href="#L1184">1184</a> <em class="jxr_javadoccomment">		 * resolved, and a bracketed form, a zone id or an IPv4-mapped IPv6 form is refused (write the IPv4 form).  An IPv4-mapped IPv6 peer</em>
+<a class="jxr_linenumber" name="L1185" href="#L1185">1185</a> <em class="jxr_javadoccomment">		 * is matched as the IPv4 address it carries.</em>
+<a class="jxr_linenumber" name="L1186" href="#L1186">1186</a> <em class="jxr_javadoccomment">		 *</em>
+<a class="jxr_linenumber" name="L1187" href="#L1187">1187</a> <em class="jxr_javadoccomment">		 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L1188" href="#L1188">1188</a> <em class="jxr_javadoccomment">		 * Use this only where the container reports the TCP peer: it is meaningless, or unsafe, where the container</em>
+<a class="jxr_linenumber" name="L1189" href="#L1189">1189</a> <em class="jxr_javadoccomment">		 * rewrites the peer from a header (Jetty's {@code ForwardedRequestCustomizer}, Tomcat's {@code RemoteIpValve},</em>
+<a class="jxr_linenumber" name="L1190" href="#L1190">1190</a> <em class="jxr_javadoccomment">		 * the PROXY protocol).  On WebSocket handshakes the peer comes from {@link #checkHandshake(String, HandshakeHosts, Map, java.net.InetAddress)};</em>
+<a class="jxr_linenumber" name="L1191" href="#L1191">1191</a> <em class="jxr_javadoccomment">		 * a container that supplies none (Tomcat) refuses every handshake that carries a forwarded host.</em>
+<a class="jxr_linenumber" name="L1192" href="#L1192">1192</a> <em class="jxr_javadoccomment">		 *</em>
+<a class="jxr_linenumber" name="L1193" href="#L1193">1193</a> <em class="jxr_javadoccomment">		 * @param cidrs The ranges.  At least one; none may be &lt;jk&gt;null&lt;/jk&gt; or invalid.  Replaces any earlier list.</em>
+<a class="jxr_linenumber" name="L1194" href="#L1194">1194</a> <em class="jxr_javadoccomment">		 * @return This object.</em>
+<a class="jxr_linenumber" name="L1195" href="#L1195">1195</a> <em class="jxr_javadoccomment">		 * @throws IllegalArgumentException If there are no ranges or one is invalid.</em>
+<a class="jxr_linenumber" name="L1196" href="#L1196">1196</a> <em class="jxr_javadoccomment">		 */</em>
+<a class="jxr_linenumber" name="L1197" href="#L1197">1197</a> 		<strong class="jxr_keyword">public</strong> Builder trustedProxies(String...cidrs) {
+<a class="jxr_linenumber" name="L1198" href="#L1198">1198</a> 			trustedProxies = <strong class="jxr_keyword">new</strong> <a name="PeerRanges" href="../../../../../../org/apache/juneau/rest/server/filter/PeerRanges.html#PeerRanges">PeerRanges</a>(cidrs);
+<a class="jxr_linenumber" name="L1199" href="#L1199">1199</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L1200" href="#L1200">1200</a> 		}
+<a class="jxr_linenumber" name="L1201" href="#L1201">1201</a> 
+<a class="jxr_linenumber" name="L1202" href="#L1202">1202</a> 		<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L1203" href="#L1203">1203</a> <em class="jxr_javadoccomment">		 * Builds the boundary.</em>
+<a class="jxr_linenumber" name="L1204" href="#L1204">1204</a> <em class="jxr_javadoccomment">		 *</em>
+<a class="jxr_linenumber" name="L1205" href="#L1205">1205</a> <em class="jxr_javadoccomment">		 * @return A new {@link CsrfBoundary}.</em>
+<a class="jxr_linenumber" name="L1206" href="#L1206">1206</a> <em class="jxr_javadoccomment">		 * @throws IllegalArgumentException If {@link #trustedHops(int)} is not 1 while no forwarded source is trusted,</em>
+<a class="jxr_linenumber" name="L1207" href="#L1207">1207</a> <em class="jxr_javadoccomment">		 * 	or if {@link #trustedProxies(String...)} is set without a forwarded source or with</em>
+<a class="jxr_linenumber" name="L1208" href="#L1208">1208</a> <em class="jxr_javadoccomment">		 * 	{@link OriginSource#CONTAINER}.</em>
+<a class="jxr_linenumber" name="L1209" href="#L1209">1209</a> <em class="jxr_javadoccomment">		 */</em>
+<a class="jxr_linenumber" name="L1210" href="#L1210">1210</a> 		<strong class="jxr_keyword">public</strong> CsrfBoundary build() {
+<a class="jxr_linenumber" name="L1211" href="#L1211">1211</a> 			<strong class="jxr_keyword">if</strong> (trustedHops != 1 &amp;&amp; trustedForwarding == ForwardedSource.NONE)
+<a class="jxr_linenumber" name="L1212" href="#L1212">1212</a> 				<strong class="jxr_keyword">throw</strong> iaex(<span class="jxr_string">"trustedHops requires trustedForwarding."</span>);
+<a class="jxr_linenumber" name="L1213" href="#L1213">1213</a> 			<strong class="jxr_keyword">if</strong> (trustedProxies != <strong class="jxr_keyword">null</strong> &amp;&amp; trustedForwarding == ForwardedSource.NONE)
+<a class="jxr_linenumber" name="L1214" href="#L1214">1214</a> 				<strong class="jxr_keyword">throw</strong> iaex(<span class="jxr_string">"trustedProxies requires trustedForwarding."</span>);
+<a class="jxr_linenumber" name="L1215" href="#L1215">1215</a> 			<strong class="jxr_keyword">if</strong> (trustedProxies != <strong class="jxr_keyword">null</strong> &amp;&amp; originSource == OriginSource.CONTAINER)
+<a class="jxr_linenumber" name="L1216" href="#L1216">1216</a> 				<strong class="jxr_keyword">throw</strong> iaex(<span class="jxr_string">"trustedProxies cannot be combined with originSource(CONTAINER): the container is then the forwarding authority."</span>);
+<a class="jxr_linenumber" name="L1217" href="#L1217">1217</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> CsrfBoundary(<strong class="jxr_keyword">this</strong>);
+<a class="jxr_linenumber" name="L1218" href="#L1218">1218</a> 		}
+<a class="jxr_linenumber" name="L1219" href="#L1219">1219</a> 	}
+<a class="jxr_linenumber" name="L1220" href="#L1220">1220</a> }
+</pre>
+<hr/>
+<div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>
+</body>
+</html>

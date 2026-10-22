@@ -29,7 +29,7 @@
 <span class="source-line-no">016</span><span id="line-16"> */</span>
 <span class="source-line-no">017</span><span id="line-17">package org.apache.juneau.commons.function;</span>
 <span class="source-line-no">018</span><span id="line-18"></span>
-<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.AssertionUtils.*;</span>
+<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.Shorts.*;</span>
 <span class="source-line-no">020</span><span id="line-20">import static org.apache.juneau.commons.utils.ThrowableUtils.*;</span>
 <span class="source-line-no">021</span><span id="line-21"></span>
 <span class="source-line-no">022</span><span id="line-22">import java.util.function.*;</span>
@@ -104,86 +104,83 @@
 <span class="source-line-no">091</span><span id="line-91">@FunctionalInterface</span>
 <span class="source-line-no">092</span><span id="line-92">@SuppressWarnings({</span>
 <span class="source-line-no">093</span><span id="line-93">   "java:S112", // throws Exception intentional - function may throw any checked exception</span>
-<span class="source-line-no">094</span><span id="line-94">   "java:S115" // Constants use UPPER_snakeCase convention</span>
+<span class="source-line-no">094</span><span id="line-94">   "java:S1192" // Duplicated literals (argument/property names) read more clearly inline than as constants</span>
 <span class="source-line-no">095</span><span id="line-95">})</span>
 <span class="source-line-no">096</span><span id="line-96">public interface ThrowingFunction2&lt;A,B,R&gt; extends Function2&lt;A,B,R&gt; {</span>
 <span class="source-line-no">097</span><span id="line-97"></span>
-<span class="source-line-no">098</span><span id="line-98">   /** Argument name constant for assertArgNotNull. */</span>
-<span class="source-line-no">099</span><span id="line-99">   static final String ARG_after = "after";</span>
-<span class="source-line-no">100</span><span id="line-100"></span>
-<span class="source-line-no">101</span><span id="line-101">   /**</span>
-<span class="source-line-no">102</span><span id="line-102">    * Applies this function to the given arguments, wrapping any checked exceptions in a {@link RuntimeException}.</span>
-<span class="source-line-no">103</span><span id="line-103">    *</span>
-<span class="source-line-no">104</span><span id="line-104">    * &lt;p&gt;</span>
-<span class="source-line-no">105</span><span id="line-105">    * This is the default implementation that makes this interface compatible with {@link Function2}.</span>
-<span class="source-line-no">106</span><span id="line-106">    * It calls {@link #applyThrows(Object, Object)} and wraps any checked exceptions.</span>
-<span class="source-line-no">107</span><span id="line-107">    *</span>
-<span class="source-line-no">108</span><span id="line-108">    * @param a The first function argument.</span>
-<span class="source-line-no">109</span><span id="line-109">    * @param b The second function argument.</span>
-<span class="source-line-no">110</span><span id="line-110">    * @return The function result.</span>
-<span class="source-line-no">111</span><span id="line-111">    * @throws RuntimeException if {@link #applyThrows(Object, Object)} throws a checked exception.</span>
-<span class="source-line-no">112</span><span id="line-112">    */</span>
-<span class="source-line-no">113</span><span id="line-113">   @Override</span>
-<span class="source-line-no">114</span><span id="line-114">   default R apply(A a, B b) {</span>
-<span class="source-line-no">115</span><span id="line-115">      try {</span>
-<span class="source-line-no">116</span><span id="line-116">         return applyThrows(a, b);</span>
-<span class="source-line-no">117</span><span id="line-117">      } catch (Exception e) {</span>
-<span class="source-line-no">118</span><span id="line-118">         throw toRex(e);</span>
-<span class="source-line-no">119</span><span id="line-119">      }</span>
-<span class="source-line-no">120</span><span id="line-120">   }</span>
-<span class="source-line-no">121</span><span id="line-121"></span>
-<span class="source-line-no">122</span><span id="line-122">   /**</span>
-<span class="source-line-no">123</span><span id="line-123">    * Returns a composed function that first applies this function to its input, and then applies</span>
-<span class="source-line-no">124</span><span id="line-124">    * the {@code after} function to the result.</span>
-<span class="source-line-no">125</span><span id="line-125">    *</span>
-<span class="source-line-no">126</span><span id="line-126">    * &lt;p&gt;</span>
-<span class="source-line-no">127</span><span id="line-127">    * This method enables function composition, allowing you to chain multiple transformations together.</span>
-<span class="source-line-no">128</span><span id="line-128">    * The composed function will throw exceptions from this function, but the {@code after} function</span>
-<span class="source-line-no">129</span><span id="line-129">    * is a standard {@link Function} that does not throw checked exceptions.</span>
-<span class="source-line-no">130</span><span id="line-130">    *</span>
-<span class="source-line-no">131</span><span id="line-131">    * @param &lt;V&gt; The type of output of the {@code after} function, and of the composed function.</span>
-<span class="source-line-no">132</span><span id="line-132">    * @param after The function to apply after this function is applied. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">133</span><span id="line-133">    * @return A composed {@link ThrowingFunction2} that first applies this function and then applies the {@code after} function.</span>
-<span class="source-line-no">134</span><span id="line-134">    * @throws NullPointerException if {@code after} is &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">135</span><span id="line-135">    */</span>
-<span class="source-line-no">136</span><span id="line-136">   @Override</span>
-<span class="source-line-no">137</span><span id="line-137">   default &lt;V&gt; ThrowingFunction2&lt;A,B,V&gt; andThen(Function&lt;? super R,? extends V&gt; after) {</span>
-<span class="source-line-no">138</span><span id="line-138">      assertArgNotNull(ARG_after, after);</span>
-<span class="source-line-no">139</span><span id="line-139">      return (A a, B b) -&gt; after.apply(applyThrows(a, b));</span>
-<span class="source-line-no">140</span><span id="line-140">   }</span>
-<span class="source-line-no">141</span><span id="line-141"></span>
-<span class="source-line-no">142</span><span id="line-142">   /**</span>
-<span class="source-line-no">143</span><span id="line-143">    * Applies this function to the given arguments, potentially throwing a checked exception.</span>
-<span class="source-line-no">144</span><span id="line-144">    *</span>
-<span class="source-line-no">145</span><span id="line-145">    * &lt;p&gt;</span>
-<span class="source-line-no">146</span><span id="line-146">    * This is the functional method that implementations must provide. It allows checked exceptions</span>
-<span class="source-line-no">147</span><span id="line-147">    * to be thrown directly, unlike the standard {@link Function2#apply(Object, Object)} method.</span>
-<span class="source-line-no">148</span><span id="line-148">    *</span>
-<span class="source-line-no">149</span><span id="line-149">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
-<span class="source-line-no">150</span><span id="line-150">    * &lt;p class='bjava'&gt;</span>
-<span class="source-line-no">151</span><span id="line-151">    *    ThrowingFunction2&amp;lt;String,Integer,Integer&amp;gt; &lt;jv&gt;parser&lt;/jv&gt; = (&lt;jv&gt;s&lt;/jv&gt;, &lt;jv&gt;base&lt;/jv&gt;) -&amp;gt; {</span>
-<span class="source-line-no">152</span><span id="line-152">    *       &lt;jk&gt;try&lt;/jk&gt; {</span>
-<span class="source-line-no">153</span><span id="line-153">    *          &lt;jk&gt;return&lt;/jk&gt; Integer.parseInt(&lt;jv&gt;s&lt;/jv&gt;, &lt;jv&gt;base&lt;/jv&gt;);</span>
-<span class="source-line-no">154</span><span id="line-154">    *       } &lt;jk&gt;catch&lt;/jk&gt; (NumberFormatException &lt;jv&gt;e&lt;/jv&gt;) {</span>
-<span class="source-line-no">155</span><span id="line-155">    *          &lt;jk&gt;throw new&lt;/jk&gt; ParseException(&lt;js&gt;"Invalid number: "&lt;/js&gt; + &lt;jv&gt;s&lt;/jv&gt; + &lt;js&gt;" in base "&lt;/js&gt; + &lt;jv&gt;base&lt;/jv&gt;, 0);</span>
-<span class="source-line-no">156</span><span id="line-156">    *       }</span>
-<span class="source-line-no">157</span><span id="line-157">    *    };</span>
-<span class="source-line-no">158</span><span id="line-158">    *</span>
-<span class="source-line-no">159</span><span id="line-159">    *    &lt;jk&gt;try&lt;/jk&gt; {</span>
-<span class="source-line-no">160</span><span id="line-160">    *       &lt;jk&gt;int&lt;/jk&gt; &lt;jv&gt;value&lt;/jv&gt; = &lt;jv&gt;parser&lt;/jv&gt;.applyThrows(&lt;js&gt;"123"&lt;/js&gt;, 10);</span>
-<span class="source-line-no">161</span><span id="line-161">    *    } &lt;jk&gt;catch&lt;/jk&gt; (ParseException &lt;jv&gt;e&lt;/jv&gt;) {</span>
-<span class="source-line-no">162</span><span id="line-162">    *       &lt;jc&gt;// Handle checked exception&lt;/jc&gt;</span>
-<span class="source-line-no">163</span><span id="line-163">    *    }</span>
-<span class="source-line-no">164</span><span id="line-164">    * &lt;/p&gt;</span>
-<span class="source-line-no">165</span><span id="line-165">    *</span>
-<span class="source-line-no">166</span><span id="line-166">    * @param a The first function argument.</span>
-<span class="source-line-no">167</span><span id="line-167">    * @param b The second function argument.</span>
-<span class="source-line-no">168</span><span id="line-168">    * @return The function result.</span>
-<span class="source-line-no">169</span><span id="line-169">    * @throws Exception If an error occurs during function execution.</span>
-<span class="source-line-no">170</span><span id="line-170">    */</span>
-<span class="source-line-no">171</span><span id="line-171">   R applyThrows(A a, B b) throws Exception;</span>
-<span class="source-line-no">172</span><span id="line-172">}</span>
-<span class="source-line-no">173</span><span id="line-173"></span>
+<span class="source-line-no">098</span><span id="line-98">   /**</span>
+<span class="source-line-no">099</span><span id="line-99">    * Applies this function to the given arguments, wrapping any checked exceptions in a {@link RuntimeException}.</span>
+<span class="source-line-no">100</span><span id="line-100">    *</span>
+<span class="source-line-no">101</span><span id="line-101">    * &lt;p&gt;</span>
+<span class="source-line-no">102</span><span id="line-102">    * This is the default implementation that makes this interface compatible with {@link Function2}.</span>
+<span class="source-line-no">103</span><span id="line-103">    * It calls {@link #applyThrows(Object, Object)} and wraps any checked exceptions.</span>
+<span class="source-line-no">104</span><span id="line-104">    *</span>
+<span class="source-line-no">105</span><span id="line-105">    * @param a The first function argument.</span>
+<span class="source-line-no">106</span><span id="line-106">    * @param b The second function argument.</span>
+<span class="source-line-no">107</span><span id="line-107">    * @return The function result.</span>
+<span class="source-line-no">108</span><span id="line-108">    * @throws RuntimeException if {@link #applyThrows(Object, Object)} throws a checked exception.</span>
+<span class="source-line-no">109</span><span id="line-109">    */</span>
+<span class="source-line-no">110</span><span id="line-110">   @Override</span>
+<span class="source-line-no">111</span><span id="line-111">   default R apply(A a, B b) {</span>
+<span class="source-line-no">112</span><span id="line-112">      try {</span>
+<span class="source-line-no">113</span><span id="line-113">         return applyThrows(a, b);</span>
+<span class="source-line-no">114</span><span id="line-114">      } catch (Exception e) {</span>
+<span class="source-line-no">115</span><span id="line-115">         throw toRex(e);</span>
+<span class="source-line-no">116</span><span id="line-116">      }</span>
+<span class="source-line-no">117</span><span id="line-117">   }</span>
+<span class="source-line-no">118</span><span id="line-118"></span>
+<span class="source-line-no">119</span><span id="line-119">   /**</span>
+<span class="source-line-no">120</span><span id="line-120">    * Returns a composed function that first applies this function to its input, and then applies</span>
+<span class="source-line-no">121</span><span id="line-121">    * the {@code after} function to the result.</span>
+<span class="source-line-no">122</span><span id="line-122">    *</span>
+<span class="source-line-no">123</span><span id="line-123">    * &lt;p&gt;</span>
+<span class="source-line-no">124</span><span id="line-124">    * This method enables function composition, allowing you to chain multiple transformations together.</span>
+<span class="source-line-no">125</span><span id="line-125">    * The composed function will throw exceptions from this function, but the {@code after} function</span>
+<span class="source-line-no">126</span><span id="line-126">    * is a standard {@link Function} that does not throw checked exceptions.</span>
+<span class="source-line-no">127</span><span id="line-127">    *</span>
+<span class="source-line-no">128</span><span id="line-128">    * @param &lt;V&gt; The type of output of the {@code after} function, and of the composed function.</span>
+<span class="source-line-no">129</span><span id="line-129">    * @param after The function to apply after this function is applied. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">130</span><span id="line-130">    * @return A composed {@link ThrowingFunction2} that first applies this function and then applies the {@code after} function.</span>
+<span class="source-line-no">131</span><span id="line-131">    * @throws NullPointerException if {@code after} is &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">132</span><span id="line-132">    */</span>
+<span class="source-line-no">133</span><span id="line-133">   @Override</span>
+<span class="source-line-no">134</span><span id="line-134">   default &lt;V&gt; ThrowingFunction2&lt;A,B,V&gt; andThen(Function&lt;? super R,? extends V&gt; after) {</span>
+<span class="source-line-no">135</span><span id="line-135">      reqnn("after", after);</span>
+<span class="source-line-no">136</span><span id="line-136">      return (A a, B b) -&gt; after.apply(applyThrows(a, b));</span>
+<span class="source-line-no">137</span><span id="line-137">   }</span>
+<span class="source-line-no">138</span><span id="line-138"></span>
+<span class="source-line-no">139</span><span id="line-139">   /**</span>
+<span class="source-line-no">140</span><span id="line-140">    * Applies this function to the given arguments, potentially throwing a checked exception.</span>
+<span class="source-line-no">141</span><span id="line-141">    *</span>
+<span class="source-line-no">142</span><span id="line-142">    * &lt;p&gt;</span>
+<span class="source-line-no">143</span><span id="line-143">    * This is the functional method that implementations must provide. It allows checked exceptions</span>
+<span class="source-line-no">144</span><span id="line-144">    * to be thrown directly, unlike the standard {@link Function2#apply(Object, Object)} method.</span>
+<span class="source-line-no">145</span><span id="line-145">    *</span>
+<span class="source-line-no">146</span><span id="line-146">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">147</span><span id="line-147">    * &lt;p class='bjava'&gt;</span>
+<span class="source-line-no">148</span><span id="line-148">    *    ThrowingFunction2&amp;lt;String,Integer,Integer&amp;gt; &lt;jv&gt;parser&lt;/jv&gt; = (&lt;jv&gt;s&lt;/jv&gt;, &lt;jv&gt;base&lt;/jv&gt;) -&amp;gt; {</span>
+<span class="source-line-no">149</span><span id="line-149">    *       &lt;jk&gt;try&lt;/jk&gt; {</span>
+<span class="source-line-no">150</span><span id="line-150">    *          &lt;jk&gt;return&lt;/jk&gt; Integer.parseInt(&lt;jv&gt;s&lt;/jv&gt;, &lt;jv&gt;base&lt;/jv&gt;);</span>
+<span class="source-line-no">151</span><span id="line-151">    *       } &lt;jk&gt;catch&lt;/jk&gt; (NumberFormatException &lt;jv&gt;e&lt;/jv&gt;) {</span>
+<span class="source-line-no">152</span><span id="line-152">    *          &lt;jk&gt;throw new&lt;/jk&gt; ParseException(&lt;js&gt;"Invalid number: "&lt;/js&gt; + &lt;jv&gt;s&lt;/jv&gt; + &lt;js&gt;" in base "&lt;/js&gt; + &lt;jv&gt;base&lt;/jv&gt;, 0);</span>
+<span class="source-line-no">153</span><span id="line-153">    *       }</span>
+<span class="source-line-no">154</span><span id="line-154">    *    };</span>
+<span class="source-line-no">155</span><span id="line-155">    *</span>
+<span class="source-line-no">156</span><span id="line-156">    *    &lt;jk&gt;try&lt;/jk&gt; {</span>
+<span class="source-line-no">157</span><span id="line-157">    *       &lt;jk&gt;int&lt;/jk&gt; &lt;jv&gt;value&lt;/jv&gt; = &lt;jv&gt;parser&lt;/jv&gt;.applyThrows(&lt;js&gt;"123"&lt;/js&gt;, 10);</span>
+<span class="source-line-no">158</span><span id="line-158">    *    } &lt;jk&gt;catch&lt;/jk&gt; (ParseException &lt;jv&gt;e&lt;/jv&gt;) {</span>
+<span class="source-line-no">159</span><span id="line-159">    *       &lt;jc&gt;// Handle checked exception&lt;/jc&gt;</span>
+<span class="source-line-no">160</span><span id="line-160">    *    }</span>
+<span class="source-line-no">161</span><span id="line-161">    * &lt;/p&gt;</span>
+<span class="source-line-no">162</span><span id="line-162">    *</span>
+<span class="source-line-no">163</span><span id="line-163">    * @param a The first function argument.</span>
+<span class="source-line-no">164</span><span id="line-164">    * @param b The second function argument.</span>
+<span class="source-line-no">165</span><span id="line-165">    * @return The function result.</span>
+<span class="source-line-no">166</span><span id="line-166">    * @throws Exception If an error occurs during function execution.</span>
+<span class="source-line-no">167</span><span id="line-167">    */</span>
+<span class="source-line-no">168</span><span id="line-168">   R applyThrows(A a, B b) throws Exception;</span>
+<span class="source-line-no">169</span><span id="line-169">}</span>
+<span class="source-line-no">170</span><span id="line-170"></span>
 
 
 

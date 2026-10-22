@@ -61,8 +61,8 @@
 <span class="source-line-no">048</span><span id="line-48"> * &lt;/ul&gt;</span>
 <span class="source-line-no">049</span><span id="line-49"> */</span>
 <span class="source-line-no">050</span><span id="line-50">@SuppressWarnings({</span>
-<span class="source-line-no">051</span><span id="line-51">   "resource",  // request and response are owned by the RestCall that created this header; lifecycle managed externally</span>
-<span class="source-line-no">052</span><span id="line-52">   "java:S2160" // equals() inherited from BasicHeader compares name+value; request/response fields are contextual not identity-defining</span>
+<span class="source-line-no">051</span><span id="line-51">   "java:S2160", // equals() inherited from BasicHeader compares name+value; request/response fields are contextual not identity-defining</span>
+<span class="source-line-no">052</span><span id="line-52">   "resource" // request and response are owned by the RestCall that created this header; lifecycle managed externally</span>
 <span class="source-line-no">053</span><span id="line-53">})</span>
 <span class="source-line-no">054</span><span id="line-54">public class ResponseHeader extends BasicHeader {</span>
 <span class="source-line-no">055</span><span id="line-55"></span>

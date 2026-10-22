@@ -1,0 +1,535 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="" lang="">
+<head><meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<title>CsrfBoundary_SpringIT xref</title>
+<link type="text/css" rel="stylesheet" href="../../../../../../stylesheet.css" />
+</head>
+<body>
+<div id="overview"><a href="../../../../../../../testapidocs/org/apache/juneau/rest/server/csrf/CsrfBoundary_SpringIT.html">View Javadoc</a></div><pre>
+<a class="jxr_linenumber" name="L1" href="#L1">1</a>   <em class="jxr_comment">/*</em>
+<a class="jxr_linenumber" name="L2" href="#L2">2</a>   <em class="jxr_comment"> * Licensed to the Apache Software Foundation (ASF) under one or more</em>
+<a class="jxr_linenumber" name="L3" href="#L3">3</a>   <em class="jxr_comment"> * contributor license agreements.  See the NOTICE file distributed with</em>
+<a class="jxr_linenumber" name="L4" href="#L4">4</a>   <em class="jxr_comment"> * this work for additional information regarding copyright ownership.</em>
+<a class="jxr_linenumber" name="L5" href="#L5">5</a>   <em class="jxr_comment"> * The ASF licenses this file to You under the Apache License, Version 2.0</em>
+<a class="jxr_linenumber" name="L6" href="#L6">6</a>   <em class="jxr_comment"> * (the "License"); you may not use this file except in compliance with</em>
+<a class="jxr_linenumber" name="L7" href="#L7">7</a>   <em class="jxr_comment"> * the License.  You may obtain a copy of the License at</em>
+<a class="jxr_linenumber" name="L8" href="#L8">8</a>   <em class="jxr_comment"> *</em>
+<a class="jxr_linenumber" name="L9" href="#L9">9</a>   <em class="jxr_comment"> *      <a href="http://www.apache.org/licenses/LICENSE-2.0" target="alexandria_uri">http://www.apache.org/licenses/LICENSE-2.0</a></em>
+<a class="jxr_linenumber" name="L10" href="#L10">10</a>  <em class="jxr_comment"> *</em>
+<a class="jxr_linenumber" name="L11" href="#L11">11</a>  <em class="jxr_comment"> * Unless required by applicable law or agreed to in writing, software</em>
+<a class="jxr_linenumber" name="L12" href="#L12">12</a>  <em class="jxr_comment"> * distributed under the License is distributed on an "AS IS" BASIS,</em>
+<a class="jxr_linenumber" name="L13" href="#L13">13</a>  <em class="jxr_comment"> * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</em>
+<a class="jxr_linenumber" name="L14" href="#L14">14</a>  <em class="jxr_comment"> * See the License for the specific language governing permissions and</em>
+<a class="jxr_linenumber" name="L15" href="#L15">15</a>  <em class="jxr_comment"> * limitations under the License.</em>
+<a class="jxr_linenumber" name="L16" href="#L16">16</a>  <em class="jxr_comment"> */</em>
+<a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.server.csrf;
+<a class="jxr_linenumber" name="L18" href="#L18">18</a>  
+<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.junit.jupiter.api.Assertions.*;
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> java.io.*;
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> java.net.*;
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> java.net.http.*;
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> java.net.http.HttpResponse.*;
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> java.nio.charset.*;
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> java.time.*;
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> java.util.*;
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">import</strong> java.util.concurrent.atomic.*;
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <strong class="jxr_keyword">import</strong> java.util.logging.*;
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.server.filter.*;
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <strong class="jxr_keyword">import</strong> org.junit.jupiter.api.*;
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <strong class="jxr_keyword">import</strong> org.junit.jupiter.api.condition.*;
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>  <strong class="jxr_keyword">import</strong> org.springframework.beans.factory.annotation.*;
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>  <strong class="jxr_keyword">import</strong> org.springframework.boot.*;
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>  <strong class="jxr_keyword">import</strong> org.springframework.boot.autoconfigure.*;
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>  <strong class="jxr_keyword">import</strong> org.springframework.boot.autoconfigure.condition.*;
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>  <strong class="jxr_keyword">import</strong> org.springframework.boot.test.context.*;
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>  <strong class="jxr_keyword">import</strong> org.springframework.boot.test.context.SpringBootTest.*;
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>  <strong class="jxr_keyword">import</strong> org.springframework.boot.test.web.server.*;
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>  <strong class="jxr_keyword">import</strong> org.springframework.boot.web.servlet.*;
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>  <strong class="jxr_keyword">import</strong> org.springframework.context.*;
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>  <strong class="jxr_keyword">import</strong> org.springframework.context.annotation.*;
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>  <strong class="jxr_keyword">import</strong> org.springframework.core.*;
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>  <strong class="jxr_keyword">import</strong> org.springframework.core.env.*;
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>  <strong class="jxr_keyword">import</strong> org.springframework.test.annotation.*;
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>  <strong class="jxr_keyword">import</strong> org.springframework.test.context.*;
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>  <strong class="jxr_keyword">import</strong> org.springframework.test.context.NestedTestConfiguration.*;
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>  <strong class="jxr_keyword">import</strong> org.springframework.web.filter.*;
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>  
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>  <strong class="jxr_keyword">import</strong> jakarta.servlet.http.*;
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>  
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>  <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>  <em class="jxr_javadoccomment"> * {@link RequestBoundaryFilter} applying a {@link CsrfBoundary} under Spring Boot's embedded Tomcat, over a real</em>
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>  <em class="jxr_javadoccomment"> * socket: how the boundary's filter order interacts with each {@code server.forward-headers-strategy}, and the</em>
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>  <em class="jxr_javadoccomment"> * container's session cookie.</em>
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>  <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>  <em class="jxr_javadoccomment"> * Every case that differs in properties or filter order runs in its own application context.  The proxied requests</em>
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>  <em class="jxr_javadoccomment"> * model a proxy that terminated TLS on the same host and port: {@code X-Forwarded-Proto: https} and</em>
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>  <em class="jxr_javadoccomment"> * {@code X-Forwarded-Port} naming the port the client connected to, so after a correct rewrite the server's own</em>
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>  <em class="jxr_javadoccomment"> * origin is {@code <a href="https://127.0.0.1:&lt;port&gt;" target="alexandria_uri">https://127.0.0.1:&lt;port&gt;</a>}.</em>
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>  <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>  <em class="jxr_javadoccomment"> * Binds a socket, so it is off by default.  Run it with {@code -Djuneau.busIt=true}, outside the sandbox.</em>
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>  <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>  <em class="jxr_javadoccomment"> * @since 10.0.0</em>
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>  <em class="jxr_javadoccomment"> */</em>
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>  @org.apache.juneau.testing.SpringbootTest
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>  @EnabledIfSystemProperty(named=<span class="jxr_string">"juneau.busIt"</span>, matches=<span class="jxr_string">"true"</span>,
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>  	disabledReason=<span class="jxr_string">"binds a socket; run with -Dtest='CsrfBoundary_SpringIT' -Djuneau.busIt=true"</span>)
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>  @SuppressWarnings({
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>  	<span class="jxr_string">"resource"</span> <em class="jxr_comment">// Raw-socket stream chains are closed with the socket and the JDK client is not a resource; the Spring context owns the server lifecycle.</em>
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>  })
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>  <strong class="jxr_keyword">class</strong> CsrfBoundary_SpringIT {
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>  
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String JSON = <span class="jxr_string">"application/json"</span>;
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String CSRF = LoopbackBoundary.DEFAULT_CSRF_HEADER;
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>  
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> HttpClient HTTP = HttpClient.newBuilder()
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>  		.connectTimeout(Duration.ofSeconds(5))
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>  		.followRedirects(HttpClient.Redirect.NEVER)
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>  		.build();
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>  
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>  	<em class="jxr_javadoccomment">/** Held strongly: the logging manager keeps loggers only weakly, and a re-created one would lose the handler. */</em>
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Logger BOUNDARY_LOG = Logger.getLogger(CsrfBoundary.<strong class="jxr_keyword">class</strong>.getName());
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>  
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>  	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>  	<em class="jxr_comment">// Application</em>
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>  	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>  
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>  	<em class="jxr_javadoccomment">/** Counts the writes that reached the application. */</em>
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">class</strong> Writes {
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>  		<strong class="jxr_keyword">final</strong> AtomicInteger count = <strong class="jxr_keyword">new</strong> AtomicInteger();
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>  	}
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>  
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>  	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>  <em class="jxr_javadoccomment">	 * The application under test.  The boundary's order and origin source, its token strategy, and whether the</em>
+<a class="jxr_linenumber" name="L99" href="#L99">99</a>  <em class="jxr_javadoccomment">	 * application registers its own {@link ForwardedHeaderFilter} (and at what order) come from properties, so each</em>
+<a class="jxr_linenumber" name="L100" href="#L100">100</a> <em class="jxr_javadoccomment">	 * context states its whole setup in its {@code @SpringBootTest}.</em>
+<a class="jxr_linenumber" name="L101" href="#L101">101</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L102" href="#L102">102</a> 	@SpringBootConfiguration
+<a class="jxr_linenumber" name="L103" href="#L103">103</a> 	@EnableAutoConfiguration
+<a class="jxr_linenumber" name="L104" href="#L104">104</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> App {
+<a class="jxr_linenumber" name="L105" href="#L105">105</a> 
+<a class="jxr_linenumber" name="L106" href="#L106">106</a> 		@Bean <strong class="jxr_keyword">public</strong> Writes writes() { <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> Writes(); }
+<a class="jxr_linenumber" name="L107" href="#L107">107</a> 
+<a class="jxr_linenumber" name="L108" href="#L108">108</a> 		@Bean <strong class="jxr_keyword">public</strong> FilterRegistrationBean&lt;RequestBoundaryFilter&gt; boundaryFilter(Environment env) {
+<a class="jxr_linenumber" name="L109" href="#L109">109</a> 			<strong class="jxr_keyword">var</strong> b = CsrfBoundary.create()
+<a class="jxr_linenumber" name="L110" href="#L110">110</a> 				.originSource(env.getProperty(<span class="jxr_string">"csrf.origin-source"</span>, CsrfBoundary.OriginSource.<strong class="jxr_keyword">class</strong>, CsrfBoundary.OriginSource.HOST_HEADER));
+<a class="jxr_linenumber" name="L111" href="#L111">111</a> 			<strong class="jxr_keyword">if</strong> (env.getProperty(<span class="jxr_string">"csrf.per-process"</span>, Boolean.<strong class="jxr_keyword">class</strong>, false))
+<a class="jxr_linenumber" name="L112" href="#L112">112</a> 				b.tokens(CsrfTokens.perProcess());
+<a class="jxr_linenumber" name="L113" href="#L113">113</a> 			<strong class="jxr_keyword">var</strong> reg = <strong class="jxr_keyword">new</strong> FilterRegistrationBean&lt;&gt;(<strong class="jxr_keyword">new</strong> RequestBoundaryFilter(b.build()));
+<a class="jxr_linenumber" name="L114" href="#L114">114</a> 			reg.addUrlPatterns(<span class="jxr_string">"/*"</span>);
+<a class="jxr_linenumber" name="L115" href="#L115">115</a> 			reg.setOrder(env.getProperty(<span class="jxr_string">"csrf.boundary-order"</span>, Integer.<strong class="jxr_keyword">class</strong>, Ordered.HIGHEST_PRECEDENCE));
+<a class="jxr_linenumber" name="L116" href="#L116">116</a> 			<strong class="jxr_keyword">return</strong> reg;
+<a class="jxr_linenumber" name="L117" href="#L117">117</a> 		}
+<a class="jxr_linenumber" name="L118" href="#L118">118</a> 
+<a class="jxr_linenumber" name="L119" href="#L119">119</a> 		@Bean
+<a class="jxr_linenumber" name="L120" href="#L120">120</a> 		@ConditionalOnProperty(<span class="jxr_string">"csrf.app-forwarded-filter-order"</span>)
+<a class="jxr_linenumber" name="L121" href="#L121">121</a> 		<strong class="jxr_keyword">public</strong> FilterRegistrationBean&lt;ForwardedHeaderFilter&gt; appForwardedHeaderFilter(Environment env) {
+<a class="jxr_linenumber" name="L122" href="#L122">122</a> 			<strong class="jxr_keyword">var</strong> reg = <strong class="jxr_keyword">new</strong> FilterRegistrationBean&lt;&gt;(<strong class="jxr_keyword">new</strong> ForwardedHeaderFilter());
+<a class="jxr_linenumber" name="L123" href="#L123">123</a> 			reg.addUrlPatterns(<span class="jxr_string">"/*"</span>);
+<a class="jxr_linenumber" name="L124" href="#L124">124</a> 			reg.setOrder(env.getRequiredProperty(<span class="jxr_string">"csrf.app-forwarded-filter-order"</span>, Integer.<strong class="jxr_keyword">class</strong>));
+<a class="jxr_linenumber" name="L125" href="#L125">125</a> 			<strong class="jxr_keyword">return</strong> reg;
+<a class="jxr_linenumber" name="L126" href="#L126">126</a> 		}
+<a class="jxr_linenumber" name="L127" href="#L127">127</a> 
+<a class="jxr_linenumber" name="L128" href="#L128">128</a> 		@Bean <strong class="jxr_keyword">public</strong> ServletRegistrationBean&lt;HttpServlet&gt; tokenServlet() {
+<a class="jxr_linenumber" name="L129" href="#L129">129</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> ServletRegistrationBean&lt;&gt;(<strong class="jxr_keyword">new</strong> HttpServlet() {
+<a class="jxr_linenumber" name="L130" href="#L130">130</a> 				<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">long</strong> serialVersionUID = 1L;
+<a class="jxr_linenumber" name="L131" href="#L131">131</a> 				@Override <strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">void</strong> doGet(HttpServletRequest req, HttpServletResponse res) <strong class="jxr_keyword">throws</strong> IOException {
+<a class="jxr_linenumber" name="L132" href="#L132">132</a> 					res.setContentType(<span class="jxr_string">"text/plain"</span>);
+<a class="jxr_linenumber" name="L133" href="#L133">133</a> 					res.getWriter().write(String.valueOf(req.getAttribute(RequestBoundaryFilter.TOKEN_ATTRIBUTE)));
+<a class="jxr_linenumber" name="L134" href="#L134">134</a> 				}
+<a class="jxr_linenumber" name="L135" href="#L135">135</a> 			}, <span class="jxr_string">"/token"</span>);
+<a class="jxr_linenumber" name="L136" href="#L136">136</a> 		}
+<a class="jxr_linenumber" name="L137" href="#L137">137</a> 
+<a class="jxr_linenumber" name="L138" href="#L138">138</a> 		<em class="jxr_javadoccomment">/** Reports what the container says about the request: protocol, server name and port, and any Host header. */</em>
+<a class="jxr_linenumber" name="L139" href="#L139">139</a> 		@Bean <strong class="jxr_keyword">public</strong> ServletRegistrationBean&lt;HttpServlet&gt; echoServlet() {
+<a class="jxr_linenumber" name="L140" href="#L140">140</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> ServletRegistrationBean&lt;&gt;(<strong class="jxr_keyword">new</strong> HttpServlet() {
+<a class="jxr_linenumber" name="L141" href="#L141">141</a> 				<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">long</strong> serialVersionUID = 1L;
+<a class="jxr_linenumber" name="L142" href="#L142">142</a> 				@Override <strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">void</strong> doGet(HttpServletRequest req, HttpServletResponse res) <strong class="jxr_keyword">throws</strong> IOException {
+<a class="jxr_linenumber" name="L143" href="#L143">143</a> 					res.setContentType(<span class="jxr_string">"text/plain"</span>);
+<a class="jxr_linenumber" name="L144" href="#L144">144</a> 					res.getWriter().write(req.getProtocol() + <span class="jxr_string">"|"</span> + req.getServerName() + <span class="jxr_string">":"</span> + req.getServerPort() + <span class="jxr_string">"|"</span>
+<a class="jxr_linenumber" name="L145" href="#L145">145</a> 						+ Collections.list(req.getHeaders(<span class="jxr_string">"Host"</span>)));
+<a class="jxr_linenumber" name="L146" href="#L146">146</a> 				}
+<a class="jxr_linenumber" name="L147" href="#L147">147</a> 			}, <span class="jxr_string">"/echo"</span>);
+<a class="jxr_linenumber" name="L148" href="#L148">148</a> 		}
+<a class="jxr_linenumber" name="L149" href="#L149">149</a> 
+<a class="jxr_linenumber" name="L150" href="#L150">150</a> 		@Bean <strong class="jxr_keyword">public</strong> ServletRegistrationBean&lt;HttpServlet&gt; writeServlet(Writes writes) {
+<a class="jxr_linenumber" name="L151" href="#L151">151</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> ServletRegistrationBean&lt;&gt;(<strong class="jxr_keyword">new</strong> HttpServlet() {
+<a class="jxr_linenumber" name="L152" href="#L152">152</a> 				<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">long</strong> serialVersionUID = 1L;
+<a class="jxr_linenumber" name="L153" href="#L153">153</a> 				@Override <strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">void</strong> doPost(HttpServletRequest req, HttpServletResponse res) <strong class="jxr_keyword">throws</strong> IOException {
+<a class="jxr_linenumber" name="L154" href="#L154">154</a> 					writes.count.incrementAndGet();
+<a class="jxr_linenumber" name="L155" href="#L155">155</a> 					res.setContentType(<span class="jxr_string">"text/plain"</span>);
+<a class="jxr_linenumber" name="L156" href="#L156">156</a> 					res.getWriter().write(<span class="jxr_string">"written"</span>);
+<a class="jxr_linenumber" name="L157" href="#L157">157</a> 				}
+<a class="jxr_linenumber" name="L158" href="#L158">158</a> 			}, <span class="jxr_string">"/write"</span>);
+<a class="jxr_linenumber" name="L159" href="#L159">159</a> 		}
+<a class="jxr_linenumber" name="L160" href="#L160">160</a> 	}
+<a class="jxr_linenumber" name="L161" href="#L161">161</a> 
+<a class="jxr_linenumber" name="L162" href="#L162">162</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L163" href="#L163">163</a> 	<em class="jxr_comment">// Shared test body</em>
+<a class="jxr_linenumber" name="L164" href="#L164">164</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L165" href="#L165">165</a> 
+<a class="jxr_linenumber" name="L166" href="#L166">166</a> 	<em class="jxr_javadoccomment">/** One context's view of the application: its port, its write counter and its filter registrations. */</em>
+<a class="jxr_linenumber" name="L167" href="#L167">167</a> 	<strong class="jxr_keyword">abstract</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> Context {
+<a class="jxr_linenumber" name="L168" href="#L168">168</a> 
+<a class="jxr_linenumber" name="L169" href="#L169">169</a> 		@LocalServerPort <strong class="jxr_keyword">int</strong> port;
+<a class="jxr_linenumber" name="L170" href="#L170">170</a> 		@Autowired Writes writes;
+<a class="jxr_linenumber" name="L171" href="#L171">171</a> 		@Autowired ApplicationContext ctx;
+<a class="jxr_linenumber" name="L172" href="#L172">172</a> 
+<a class="jxr_linenumber" name="L173" href="#L173">173</a> 		String base() { <strong class="jxr_keyword">return</strong> <span class="jxr_string">"http://127.0.0.1:"</span> + port; }
+<a class="jxr_linenumber" name="L174" href="#L174">174</a> 
+<a class="jxr_linenumber" name="L175" href="#L175">175</a> 		HttpResponse&lt;String&gt; send(String method, String path, String...headers) <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L176" href="#L176">176</a> 			<strong class="jxr_keyword">var</strong> b = HttpRequest.newBuilder(URI.create(base() + path)).timeout(Duration.ofSeconds(10));
+<a class="jxr_linenumber" name="L177" href="#L177">177</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt; headers.length; i += 2)
+<a class="jxr_linenumber" name="L178" href="#L178">178</a> 				b.header(headers[i], headers[i + 1]);
+<a class="jxr_linenumber" name="L179" href="#L179">179</a> 			b.method(method, <span class="jxr_string">"GET"</span>.equals(method) ? HttpRequest.BodyPublishers.noBody() : HttpRequest.BodyPublishers.ofString(<span class="jxr_string">"{}"</span>));
+<a class="jxr_linenumber" name="L180" href="#L180">180</a> 			<strong class="jxr_keyword">return</strong> HTTP.send(b.build(), BodyHandlers.ofString());
+<a class="jxr_linenumber" name="L181" href="#L181">181</a> 		}
+<a class="jxr_linenumber" name="L182" href="#L182">182</a> 
+<a class="jxr_linenumber" name="L183" href="#L183">183</a> 		<em class="jxr_javadoccomment">/** The forwarded headers of a proxy that terminated TLS in front of this server's own host and port. */</em>
+<a class="jxr_linenumber" name="L184" href="#L184">184</a> 		String[] tls() {
+<a class="jxr_linenumber" name="L185" href="#L185">185</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> String[] { <span class="jxr_string">"X-Forwarded-Proto"</span>, <span class="jxr_string">"https"</span>, <span class="jxr_string">"X-Forwarded-Port"</span>, String.valueOf(port) };
+<a class="jxr_linenumber" name="L186" href="#L186">186</a> 		}
+<a class="jxr_linenumber" name="L187" href="#L187">187</a> 
+<a class="jxr_linenumber" name="L188" href="#L188">188</a> 		String token(String...headers) <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L189" href="#L189">189</a> 			<strong class="jxr_keyword">var</strong> res = send(<span class="jxr_string">"GET"</span>, <span class="jxr_string">"/token"</span>, headers);
+<a class="jxr_linenumber" name="L190" href="#L190">190</a> 			assertEquals(200, res.statusCode(), res::body);
+<a class="jxr_linenumber" name="L191" href="#L191">191</a> 			assertTrue(res.body().matches(<span class="jxr_string">"[0-9a-f]{128}"</span>), res::body);
+<a class="jxr_linenumber" name="L192" href="#L192">192</a> 			<strong class="jxr_keyword">return</strong> res.body();
+<a class="jxr_linenumber" name="L193" href="#L193">193</a> 		}
+<a class="jxr_linenumber" name="L194" href="#L194">194</a> 
+<a class="jxr_linenumber" name="L195" href="#L195">195</a> 		<em class="jxr_javadoccomment">/** A same-origin JSON write from the page the proxy served over https. */</em>
+<a class="jxr_linenumber" name="L196" href="#L196">196</a> 		HttpResponse&lt;String&gt; tlsWrite(String token) <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L197" href="#L197">197</a> 			<strong class="jxr_keyword">var</strong> h = <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;(List.of(tls()));
+<a class="jxr_linenumber" name="L198" href="#L198">198</a> 			h.addAll(List.of(<span class="jxr_string">"Origin"</span>, <span class="jxr_string">"https://127.0.0.1:"</span> + port, <span class="jxr_string">"Content-Type"</span>, JSON, CSRF, token));
+<a class="jxr_linenumber" name="L199" href="#L199">199</a> 			<strong class="jxr_keyword">return</strong> send(<span class="jxr_string">"POST"</span>, <span class="jxr_string">"/write"</span>, h.toArray(String[]::<strong class="jxr_keyword">new</strong>));
+<a class="jxr_linenumber" name="L200" href="#L200">200</a> 		}
+<a class="jxr_linenumber" name="L201" href="#L201">201</a> 
+<a class="jxr_linenumber" name="L202" href="#L202">202</a> 		<em class="jxr_javadoccomment">/** How many {@link ForwardedHeaderFilter} registrations this context holds. */</em>
+<a class="jxr_linenumber" name="L203" href="#L203">203</a> 		<strong class="jxr_keyword">long</strong> forwardedFilters() {
+<a class="jxr_linenumber" name="L204" href="#L204">204</a> 			<strong class="jxr_keyword">return</strong> ctx.getBeansOfType(FilterRegistrationBean.<strong class="jxr_keyword">class</strong>).values().stream()
+<a class="jxr_linenumber" name="L205" href="#L205">205</a> 				.filter(r -&gt; r.getFilter() instanceof ForwardedHeaderFilter).count();
+<a class="jxr_linenumber" name="L206" href="#L206">206</a> 		}
+<a class="jxr_linenumber" name="L207" href="#L207">207</a> 
+<a class="jxr_linenumber" name="L208" href="#L208">208</a> 		<strong class="jxr_keyword">void</strong> assertTlsWritePasses() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L209" href="#L209">209</a> 			<strong class="jxr_keyword">var</strong> res = tlsWrite(token(tls()));
+<a class="jxr_linenumber" name="L210" href="#L210">210</a> 			assertEquals(200, res.statusCode(), res::body);
+<a class="jxr_linenumber" name="L211" href="#L211">211</a> 			assertEquals(1, writes.count.get());
+<a class="jxr_linenumber" name="L212" href="#L212">212</a> 		}
+<a class="jxr_linenumber" name="L213" href="#L213">213</a> 	}
+<a class="jxr_linenumber" name="L214" href="#L214">214</a> 
+<a class="jxr_linenumber" name="L215" href="#L215">215</a> 	<strong class="jxr_keyword">static</strong> String rejection(HttpResponse&lt;String&gt; res) {
+<a class="jxr_linenumber" name="L216" href="#L216">216</a> 		<strong class="jxr_keyword">return</strong> res.headers().firstValue(RequestBoundaryFilter.REJECTION_HEADER).orElse(<strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L217" href="#L217">217</a> 	}
+<a class="jxr_linenumber" name="L218" href="#L218">218</a> 
+<a class="jxr_linenumber" name="L219" href="#L219">219</a> 	<strong class="jxr_keyword">static</strong> String sessionCookie(HttpResponse&lt;String&gt; res) {
+<a class="jxr_linenumber" name="L220" href="#L220">220</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> c : res.headers().allValues(<span class="jxr_string">"Set-Cookie"</span>))
+<a class="jxr_linenumber" name="L221" href="#L221">221</a> 			<strong class="jxr_keyword">if</strong> (c.startsWith(<span class="jxr_string">"JSESSIONID="</span>))
+<a class="jxr_linenumber" name="L222" href="#L222">222</a> 				<strong class="jxr_keyword">return</strong> c.substring(0, c.indexOf(';') &lt; 0 ? c.length() : c.indexOf(';'));
+<a class="jxr_linenumber" name="L223" href="#L223">223</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L224" href="#L224">224</a> 	}
+<a class="jxr_linenumber" name="L225" href="#L225">225</a> 
+<a class="jxr_linenumber" name="L226" href="#L226">226</a> 	<em class="jxr_javadoccomment">/** Runs {@code r} with the boundary's warnings captured. */</em>
+<a class="jxr_linenumber" name="L227" href="#L227">227</a> 	<strong class="jxr_keyword">static</strong> List&lt;LogRecord&gt; captureWarnings(ThrowingRunnable r) <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L228" href="#L228">228</a> 		<strong class="jxr_keyword">var</strong> records = <strong class="jxr_keyword">new</strong> ArrayList&lt;LogRecord&gt;();
+<a class="jxr_linenumber" name="L229" href="#L229">229</a> 		<strong class="jxr_keyword">var</strong> h = <strong class="jxr_keyword">new</strong> Handler() {
+<a class="jxr_linenumber" name="L230" href="#L230">230</a> 			@Override <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> publish(LogRecord x) { records.add(x); }
+<a class="jxr_linenumber" name="L231" href="#L231">231</a> 			@Override <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> flush() { <em class="jxr_comment">/* Nothing buffered. */</em> }
+<a class="jxr_linenumber" name="L232" href="#L232">232</a> 			@Override <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> close() { <em class="jxr_comment">/* Nothing held. */</em> }
+<a class="jxr_linenumber" name="L233" href="#L233">233</a> 		};
+<a class="jxr_linenumber" name="L234" href="#L234">234</a> 		h.setLevel(Level.WARNING);
+<a class="jxr_linenumber" name="L235" href="#L235">235</a> 		BOUNDARY_LOG.addHandler(h);
+<a class="jxr_linenumber" name="L236" href="#L236">236</a> 		<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L237" href="#L237">237</a> 			r.run();
+<a class="jxr_linenumber" name="L238" href="#L238">238</a> 		} <strong class="jxr_keyword">finally</strong> {
+<a class="jxr_linenumber" name="L239" href="#L239">239</a> 			BOUNDARY_LOG.removeHandler(h);
+<a class="jxr_linenumber" name="L240" href="#L240">240</a> 		}
+<a class="jxr_linenumber" name="L241" href="#L241">241</a> 		<strong class="jxr_keyword">return</strong> records;
+<a class="jxr_linenumber" name="L242" href="#L242">242</a> 	}
+<a class="jxr_linenumber" name="L243" href="#L243">243</a> 
+<a class="jxr_linenumber" name="L244" href="#L244">244</a> 	<strong class="jxr_keyword">interface</strong> ThrowingRunnable {
+<a class="jxr_linenumber" name="L245" href="#L245">245</a> 		<strong class="jxr_keyword">void</strong> run() <strong class="jxr_keyword">throws</strong> Exception;
+<a class="jxr_linenumber" name="L246" href="#L246">246</a> 	}
+<a class="jxr_linenumber" name="L247" href="#L247">247</a> 
+<a class="jxr_linenumber" name="L248" href="#L248">248</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L249" href="#L249">249</a> 	<em class="jxr_comment">// b) Filter order and forwarded headers</em>
+<a class="jxr_linenumber" name="L250" href="#L250">250</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L251" href="#L251">251</a> 
+<a class="jxr_linenumber" name="L252" href="#L252">252</a> 	@Nested
+<a class="jxr_linenumber" name="L253" href="#L253">253</a> 	@NestedTestConfiguration(EnclosingConfiguration.OVERRIDE)
+<a class="jxr_linenumber" name="L254" href="#L254">254</a> 	@SpringBootTest(classes=App.<strong class="jxr_keyword">class</strong>, webEnvironment=WebEnvironment.RANDOM_PORT, properties={
+<a class="jxr_linenumber" name="L255" href="#L255">255</a> 		<span class="jxr_string">"server.address=127.0.0.1"</span>,
+<a class="jxr_linenumber" name="L256" href="#L256">256</a> 		<span class="jxr_string">"server.forward-headers-strategy=framework"</span>,
+<a class="jxr_linenumber" name="L257" href="#L257">257</a> 		<span class="jxr_string">"csrf.origin-source=CONTAINER"</span>,
+<a class="jxr_linenumber" name="L258" href="#L258">258</a> 		<span class="jxr_string">"csrf.per-process=true"</span>,
+<a class="jxr_linenumber" name="L259" href="#L259">259</a> 		<span class="jxr_string">"csrf.boundary-order="</span> + (Ordered.HIGHEST_PRECEDENCE + 10)
+<a class="jxr_linenumber" name="L260" href="#L260">260</a> 	})
+<a class="jxr_linenumber" name="L261" href="#L261">261</a> 	@DirtiesContext(classMode=DirtiesContext.ClassMode.AFTER_CLASS)
+<a class="jxr_linenumber" name="L262" href="#L262">262</a> 	<strong class="jxr_keyword">class</strong> B01 <strong class="jxr_keyword">extends</strong> Context {
+<a class="jxr_linenumber" name="L263" href="#L263">263</a> 		@Test <strong class="jxr_keyword">void</strong> b01_frameworkStrategyBoundaryOrderedAfterForwardedHeaderFilter_passes() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L264" href="#L264">264</a> 			assertEquals(1, forwardedFilters(), <span class="jxr_string">"the framework strategy registers its own ForwardedHeaderFilter"</span>);
+<a class="jxr_linenumber" name="L265" href="#L265">265</a> 			assertTlsWritePasses();
+<a class="jxr_linenumber" name="L266" href="#L266">266</a> 		}
+<a class="jxr_linenumber" name="L267" href="#L267">267</a> 	}
+<a class="jxr_linenumber" name="L268" href="#L268">268</a> 
+<a class="jxr_linenumber" name="L269" href="#L269">269</a> 	@Nested
+<a class="jxr_linenumber" name="L270" href="#L270">270</a> 	@NestedTestConfiguration(EnclosingConfiguration.OVERRIDE)
+<a class="jxr_linenumber" name="L271" href="#L271">271</a> 	@SpringBootTest(classes=App.<strong class="jxr_keyword">class</strong>, webEnvironment=WebEnvironment.RANDOM_PORT, properties={
+<a class="jxr_linenumber" name="L272" href="#L272">272</a> 		<span class="jxr_string">"server.address=127.0.0.1"</span>,
+<a class="jxr_linenumber" name="L273" href="#L273">273</a> 		<span class="jxr_string">"server.forward-headers-strategy=none"</span>,
+<a class="jxr_linenumber" name="L274" href="#L274">274</a> 		<span class="jxr_string">"csrf.origin-source=CONTAINER"</span>,
+<a class="jxr_linenumber" name="L275" href="#L275">275</a> 		<span class="jxr_string">"csrf.per-process=true"</span>,
+<a class="jxr_linenumber" name="L276" href="#L276">276</a> 		<span class="jxr_string">"csrf.app-forwarded-filter-order=0"</span>,
+<a class="jxr_linenumber" name="L277" href="#L277">277</a> 		<span class="jxr_string">"csrf.boundary-order=-10"</span>
+<a class="jxr_linenumber" name="L278" href="#L278">278</a> 	})
+<a class="jxr_linenumber" name="L279" href="#L279">279</a> 	@DirtiesContext(classMode=DirtiesContext.ClassMode.AFTER_CLASS)
+<a class="jxr_linenumber" name="L280" href="#L280">280</a> 	<strong class="jxr_keyword">class</strong> B02 <strong class="jxr_keyword">extends</strong> Context {
+<a class="jxr_linenumber" name="L281" href="#L281">281</a> 		@Test <strong class="jxr_keyword">void</strong> b02_misorderedBoundaryRefusedAndWarns() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L282" href="#L282">282</a> 			assertEquals(1, forwardedFilters(), <span class="jxr_string">"only the application's own ForwardedHeaderFilter is registered"</span>);
+<a class="jxr_linenumber" name="L283" href="#L283">283</a> 			<strong class="jxr_keyword">var</strong> tok = token(tls());
+<a class="jxr_linenumber" name="L284" href="#L284">284</a> 			<em class="jxr_comment">// The scheme warning fires once per JVM, so an earlier test in this fork may already have spent it.</em>
+<a class="jxr_linenumber" name="L285" href="#L285">285</a> 			<strong class="jxr_keyword">var</strong> reset = CsrfBoundary.<strong class="jxr_keyword">class</strong>.getDeclaredMethod(<span class="jxr_string">"resetWarnings"</span>);
+<a class="jxr_linenumber" name="L286" href="#L286">286</a> 			reset.setAccessible(<strong class="jxr_keyword">true</strong>);
+<a class="jxr_linenumber" name="L287" href="#L287">287</a> 			reset.invoke(<strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L288" href="#L288">288</a> 			<strong class="jxr_keyword">var</strong> res = <strong class="jxr_keyword">new</strong> AtomicReference&lt;HttpResponse&lt;String&gt;&gt;();
+<a class="jxr_linenumber" name="L289" href="#L289">289</a> 			<strong class="jxr_keyword">var</strong> warnings = captureWarnings(() -&gt; res.set(tlsWrite(tok)));
+<a class="jxr_linenumber" name="L290" href="#L290">290</a> 			assertEquals(403, res.get().statusCode(), res.get()::body);
+<a class="jxr_linenumber" name="L291" href="#L291">291</a> 			assertEquals(<span class="jxr_string">"ORIGIN_MISMATCH"</span>, rejection(res.get()));
+<a class="jxr_linenumber" name="L292" href="#L292">292</a> 			assertEquals(0, writes.count.get());
+<a class="jxr_linenumber" name="L293" href="#L293">293</a> 			assertTrue(warnings.stream().anyMatch(x -&gt; x.getMessage().contains(<span class="jxr_string">"only in its scheme"</span>)),
+<a class="jxr_linenumber" name="L294" href="#L294">294</a> 				() -&gt; <span class="jxr_string">"no scheme-mismatch warning: "</span> + warnings.stream().map(LogRecord::getMessage).toList());
+<a class="jxr_linenumber" name="L295" href="#L295">295</a> 		}
+<a class="jxr_linenumber" name="L296" href="#L296">296</a> 	}
+<a class="jxr_linenumber" name="L297" href="#L297">297</a> 
+<a class="jxr_linenumber" name="L298" href="#L298">298</a> 	@Nested
+<a class="jxr_linenumber" name="L299" href="#L299">299</a> 	@NestedTestConfiguration(EnclosingConfiguration.OVERRIDE)
+<a class="jxr_linenumber" name="L300" href="#L300">300</a> 	@SpringBootTest(classes=App.<strong class="jxr_keyword">class</strong>, webEnvironment=WebEnvironment.RANDOM_PORT, properties={
+<a class="jxr_linenumber" name="L301" href="#L301">301</a> 		<span class="jxr_string">"server.address=127.0.0.1"</span>,
+<a class="jxr_linenumber" name="L302" href="#L302">302</a> 		<span class="jxr_string">"server.forward-headers-strategy=none"</span>,
+<a class="jxr_linenumber" name="L303" href="#L303">303</a> 		<span class="jxr_string">"csrf.origin-source=CONTAINER"</span>,
+<a class="jxr_linenumber" name="L304" href="#L304">304</a> 		<span class="jxr_string">"csrf.per-process=true"</span>,
+<a class="jxr_linenumber" name="L305" href="#L305">305</a> 		<span class="jxr_string">"csrf.app-forwarded-filter-order=0"</span>,
+<a class="jxr_linenumber" name="L306" href="#L306">306</a> 		<span class="jxr_string">"csrf.boundary-order=10"</span>
+<a class="jxr_linenumber" name="L307" href="#L307">307</a> 	})
+<a class="jxr_linenumber" name="L308" href="#L308">308</a> 	@DirtiesContext(classMode=DirtiesContext.ClassMode.AFTER_CLASS)
+<a class="jxr_linenumber" name="L309" href="#L309">309</a> 	<strong class="jxr_keyword">class</strong> B02b <strong class="jxr_keyword">extends</strong> Context {
+<a class="jxr_linenumber" name="L310" href="#L310">310</a> 		@Test <strong class="jxr_keyword">void</strong> b02b_correctlyOrderedBoundaryPasses() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L311" href="#L311">311</a> 			assertEquals(1, forwardedFilters());
+<a class="jxr_linenumber" name="L312" href="#L312">312</a> 			assertTlsWritePasses();
+<a class="jxr_linenumber" name="L313" href="#L313">313</a> 		}
+<a class="jxr_linenumber" name="L314" href="#L314">314</a> 	}
+<a class="jxr_linenumber" name="L315" href="#L315">315</a> 
+<a class="jxr_linenumber" name="L316" href="#L316">316</a> 	@Nested
+<a class="jxr_linenumber" name="L317" href="#L317">317</a> 	@NestedTestConfiguration(EnclosingConfiguration.OVERRIDE)
+<a class="jxr_linenumber" name="L318" href="#L318">318</a> 	@SpringBootTest(classes=App.<strong class="jxr_keyword">class</strong>, webEnvironment=WebEnvironment.RANDOM_PORT, properties={
+<a class="jxr_linenumber" name="L319" href="#L319">319</a> 		<span class="jxr_string">"server.address=127.0.0.1"</span>,
+<a class="jxr_linenumber" name="L320" href="#L320">320</a> 		<span class="jxr_string">"server.forward-headers-strategy=native"</span>,
+<a class="jxr_linenumber" name="L321" href="#L321">321</a> 		<span class="jxr_string">"csrf.origin-source=CONTAINER"</span>,
+<a class="jxr_linenumber" name="L322" href="#L322">322</a> 		<span class="jxr_string">"csrf.per-process=true"</span>,
+<a class="jxr_linenumber" name="L323" href="#L323">323</a> 		<span class="jxr_string">"csrf.boundary-order="</span> + Ordered.HIGHEST_PRECEDENCE
+<a class="jxr_linenumber" name="L324" href="#L324">324</a> 	})
+<a class="jxr_linenumber" name="L325" href="#L325">325</a> 	@DirtiesContext(classMode=DirtiesContext.ClassMode.AFTER_CLASS)
+<a class="jxr_linenumber" name="L326" href="#L326">326</a> 	<strong class="jxr_keyword">class</strong> B03 <strong class="jxr_keyword">extends</strong> Context {
+<a class="jxr_linenumber" name="L327" href="#L327">327</a> 		@Test <strong class="jxr_keyword">void</strong> b03_nativeStrategyOrderIndependent() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L328" href="#L328">328</a> 			assertEquals(0, forwardedFilters(), <span class="jxr_string">"the native strategy rewrites in the container, not in a filter"</span>);
+<a class="jxr_linenumber" name="L329" href="#L329">329</a> 			assertTlsWritePasses();
+<a class="jxr_linenumber" name="L330" href="#L330">330</a> 		}
+<a class="jxr_linenumber" name="L331" href="#L331">331</a> 	}
+<a class="jxr_linenumber" name="L332" href="#L332">332</a> 
+<a class="jxr_linenumber" name="L333" href="#L333">333</a> 	@Nested
+<a class="jxr_linenumber" name="L334" href="#L334">334</a> 	@NestedTestConfiguration(EnclosingConfiguration.OVERRIDE)
+<a class="jxr_linenumber" name="L335" href="#L335">335</a> 	@SpringBootTest(classes=App.<strong class="jxr_keyword">class</strong>, webEnvironment=WebEnvironment.RANDOM_PORT, properties={
+<a class="jxr_linenumber" name="L336" href="#L336">336</a> 		<span class="jxr_string">"server.address=127.0.0.1"</span>,
+<a class="jxr_linenumber" name="L337" href="#L337">337</a> 		<span class="jxr_string">"server.forward-headers-strategy=native"</span>,
+<a class="jxr_linenumber" name="L338" href="#L338">338</a> 		<span class="jxr_string">"csrf.origin-source=CONTAINER"</span>,
+<a class="jxr_linenumber" name="L339" href="#L339">339</a> 		<span class="jxr_string">"csrf.per-process=true"</span>,
+<a class="jxr_linenumber" name="L340" href="#L340">340</a> 		<span class="jxr_string">"csrf.boundary-order="</span> + Ordered.LOWEST_PRECEDENCE
+<a class="jxr_linenumber" name="L341" href="#L341">341</a> 	})
+<a class="jxr_linenumber" name="L342" href="#L342">342</a> 	@DirtiesContext(classMode=DirtiesContext.ClassMode.AFTER_CLASS)
+<a class="jxr_linenumber" name="L343" href="#L343">343</a> 	<strong class="jxr_keyword">class</strong> B03b <strong class="jxr_keyword">extends</strong> Context {
+<a class="jxr_linenumber" name="L344" href="#L344">344</a> 		@Test <strong class="jxr_keyword">void</strong> b03b_nativeStrategyOrderIndependent_lowestPrecedence() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L345" href="#L345">345</a> 			assertTlsWritePasses();
+<a class="jxr_linenumber" name="L346" href="#L346">346</a> 		}
+<a class="jxr_linenumber" name="L347" href="#L347">347</a> 	}
+<a class="jxr_linenumber" name="L348" href="#L348">348</a> 
+<a class="jxr_linenumber" name="L349" href="#L349">349</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L350" href="#L350">350</a> 	<em class="jxr_comment">// b) No proxy, per-session tokens</em>
+<a class="jxr_linenumber" name="L351" href="#L351">351</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L352" href="#L352">352</a> 
+<a class="jxr_linenumber" name="L353" href="#L353">353</a> 	@Nested
+<a class="jxr_linenumber" name="L354" href="#L354">354</a> 	@NestedTestConfiguration(EnclosingConfiguration.OVERRIDE)
+<a class="jxr_linenumber" name="L355" href="#L355">355</a> 	@SpringBootTest(classes=App.<strong class="jxr_keyword">class</strong>, webEnvironment=WebEnvironment.RANDOM_PORT, properties={
+<a class="jxr_linenumber" name="L356" href="#L356">356</a> 		<span class="jxr_string">"server.address=127.0.0.1"</span>,
+<a class="jxr_linenumber" name="L357" href="#L357">357</a> 		<span class="jxr_string">"csrf.boundary-order="</span> + Ordered.HIGHEST_PRECEDENCE
+<a class="jxr_linenumber" name="L358" href="#L358">358</a> 	})
+<a class="jxr_linenumber" name="L359" href="#L359">359</a> 	@DirtiesContext(classMode=DirtiesContext.ClassMode.AFTER_CLASS)
+<a class="jxr_linenumber" name="L360" href="#L360">360</a> 	<strong class="jxr_keyword">class</strong> B04 <strong class="jxr_keyword">extends</strong> Context {
+<a class="jxr_linenumber" name="L361" href="#L361">361</a> 
+<a class="jxr_linenumber" name="L362" href="#L362">362</a> 		@Test <strong class="jxr_keyword">void</strong> b04_hostHeaderModeAtHighestPrecedencePasses() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L363" href="#L363">363</a> 			<strong class="jxr_keyword">var</strong> before = writes.count.get();
+<a class="jxr_linenumber" name="L364" href="#L364">364</a> 			<strong class="jxr_keyword">var</strong> page = send(<span class="jxr_string">"GET"</span>, <span class="jxr_string">"/token"</span>, <span class="jxr_string">"Accept"</span>, <span class="jxr_string">"text/html"</span>);
+<a class="jxr_linenumber" name="L365" href="#L365">365</a> 			<strong class="jxr_keyword">var</strong> cookie = sessionCookie(page);
+<a class="jxr_linenumber" name="L366" href="#L366">366</a> 			assertNotNull(cookie, () -&gt; page.headers().map().toString());
+<a class="jxr_linenumber" name="L367" href="#L367">367</a> 			<strong class="jxr_keyword">var</strong> res = send(<span class="jxr_string">"POST"</span>, <span class="jxr_string">"/write"</span>, <span class="jxr_string">"Cookie"</span>, cookie, <span class="jxr_string">"Origin"</span>, base(), <span class="jxr_string">"Content-Type"</span>, JSON, CSRF, page.body());
+<a class="jxr_linenumber" name="L368" href="#L368">368</a> 			assertEquals(200, res.statusCode(), res::body);
+<a class="jxr_linenumber" name="L369" href="#L369">369</a> 
+<a class="jxr_linenumber" name="L370" href="#L370">370</a> 			<strong class="jxr_keyword">var</strong> cross = send(<span class="jxr_string">"POST"</span>, <span class="jxr_string">"/write"</span>, <span class="jxr_string">"Cookie"</span>, cookie, <span class="jxr_string">"Origin"</span>, <span class="jxr_string">"http://evil.example"</span>, <span class="jxr_string">"Content-Type"</span>, JSON, CSRF, page.body());
+<a class="jxr_linenumber" name="L371" href="#L371">371</a> 			assertEquals(403, cross.statusCode(), cross::body);
+<a class="jxr_linenumber" name="L372" href="#L372">372</a> 			assertEquals(<span class="jxr_string">"ORIGIN_MISMATCH"</span>, rejection(cross));
+<a class="jxr_linenumber" name="L373" href="#L373">373</a> 			assertEquals(before + 1, writes.count.get());
+<a class="jxr_linenumber" name="L374" href="#L374">374</a> 		}
+<a class="jxr_linenumber" name="L375" href="#L375">375</a> 
+<a class="jxr_linenumber" name="L376" href="#L376">376</a> 		@Test <strong class="jxr_keyword">void</strong> b05_springSessionCookieDelivered() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L377" href="#L377">377</a> 			assertNull(sessionCookie(send(<span class="jxr_string">"GET"</span>, <span class="jxr_string">"/token"</span>, <span class="jxr_string">"Accept"</span>, <span class="jxr_string">"*/*"</span>)));
+<a class="jxr_linenumber" name="L378" href="#L378">378</a> 			<strong class="jxr_keyword">var</strong> page = send(<span class="jxr_string">"GET"</span>, <span class="jxr_string">"/token"</span>, <span class="jxr_string">"Accept"</span>, <span class="jxr_string">"text/html"</span>, <span class="jxr_string">"Sec-Fetch-Mode"</span>, <span class="jxr_string">"navigate"</span>, <span class="jxr_string">"Sec-Fetch-Dest"</span>, <span class="jxr_string">"document"</span>);
+<a class="jxr_linenumber" name="L379" href="#L379">379</a> 			assertEquals(200, page.statusCode(), page::body);
+<a class="jxr_linenumber" name="L380" href="#L380">380</a> 			<strong class="jxr_keyword">var</strong> cookie = sessionCookie(page);
+<a class="jxr_linenumber" name="L381" href="#L381">381</a> 			assertNotNull(cookie, () -&gt; page.headers().map().toString());
+<a class="jxr_linenumber" name="L382" href="#L382">382</a> 			<strong class="jxr_keyword">var</strong> tok = page.body();
+<a class="jxr_linenumber" name="L383" href="#L383">383</a> 			assertTrue(tok.matches(<span class="jxr_string">"[0-9a-f]{128}"</span>), tok);
+<a class="jxr_linenumber" name="L384" href="#L384">384</a> 
+<a class="jxr_linenumber" name="L385" href="#L385">385</a> 			<strong class="jxr_keyword">var</strong> before = writes.count.get();
+<a class="jxr_linenumber" name="L386" href="#L386">386</a> 			<strong class="jxr_keyword">var</strong> ok = send(<span class="jxr_string">"POST"</span>, <span class="jxr_string">"/write"</span>, <span class="jxr_string">"Cookie"</span>, cookie, <span class="jxr_string">"Origin"</span>, base(), <span class="jxr_string">"Content-Type"</span>, JSON, CSRF, tok);
+<a class="jxr_linenumber" name="L387" href="#L387">387</a> 			assertEquals(200, ok.statusCode(), ok::body);
+<a class="jxr_linenumber" name="L388" href="#L388">388</a> 
+<a class="jxr_linenumber" name="L389" href="#L389">389</a> 			<strong class="jxr_keyword">var</strong> noSession = send(<span class="jxr_string">"POST"</span>, <span class="jxr_string">"/write"</span>, <span class="jxr_string">"Origin"</span>, base(), <span class="jxr_string">"Content-Type"</span>, JSON, CSRF, tok);
+<a class="jxr_linenumber" name="L390" href="#L390">390</a> 			assertEquals(403, noSession.statusCode(), noSession::body);
+<a class="jxr_linenumber" name="L391" href="#L391">391</a> 			assertEquals(<span class="jxr_string">"CSRF_TOKEN_MISMATCH"</span>, rejection(noSession));
+<a class="jxr_linenumber" name="L392" href="#L392">392</a> 			assertEquals(before + 1, writes.count.get());
+<a class="jxr_linenumber" name="L393" href="#L393">393</a> 		}
+<a class="jxr_linenumber" name="L394" href="#L394">394</a> 	}
+<a class="jxr_linenumber" name="L395" href="#L395">395</a> 
+<a class="jxr_linenumber" name="L396" href="#L396">396</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L397" href="#L397">397</a> 	<em class="jxr_comment">// c) HTTP/2 (h2c) :authority</em>
+<a class="jxr_linenumber" name="L398" href="#L398">398</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L399" href="#L399">399</a> 
+<a class="jxr_linenumber" name="L400" href="#L400">400</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L401" href="#L401">401</a> <em class="jxr_javadoccomment">	 * Sends a hand-encoded {@code GET /echo} over prior-knowledge h2c with the given {@code :authority} (&lt;jk&gt;null&lt;/jk&gt;</em>
+<a class="jxr_linenumber" name="L402" href="#L402">402</a> <em class="jxr_javadoccomment">	 * omits it) and extra fields, and returns the response body: the echo of {@code protocol|serverName:port|Host values}</em>
+<a class="jxr_linenumber" name="L403" href="#L403">403</a> <em class="jxr_javadoccomment">	 * when the request got through the boundary, empty when it did not.</em>
+<a class="jxr_linenumber" name="L404" href="#L404">404</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L405" href="#L405">405</a> 	<strong class="jxr_keyword">static</strong> String h2cEcho(<strong class="jxr_keyword">int</strong> port, String authority, String...extra) <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L406" href="#L406">406</a> 		<strong class="jxr_keyword">var</strong> out = <strong class="jxr_keyword">new</strong> ByteArrayOutputStream();
+<a class="jxr_linenumber" name="L407" href="#L407">407</a> 		out.write(<span class="jxr_string">"PRI * HTTP/2.0\r\n\r\nSM\r\n\r\n"</span>.getBytes(StandardCharsets.US_ASCII));
+<a class="jxr_linenumber" name="L408" href="#L408">408</a> 		out.write(frame(0x4, 0, 0, <strong class="jxr_keyword">new</strong> byte[0]));
+<a class="jxr_linenumber" name="L409" href="#L409">409</a> 		<strong class="jxr_keyword">var</strong> h = <strong class="jxr_keyword">new</strong> ByteArrayOutputStream();
+<a class="jxr_linenumber" name="L410" href="#L410">410</a> 		h.write(0x82);                                 <em class="jxr_comment">// :method GET</em>
+<a class="jxr_linenumber" name="L411" href="#L411">411</a> 		h.write(0x86);                                 <em class="jxr_comment">// :scheme http</em>
+<a class="jxr_linenumber" name="L412" href="#L412">412</a> 		h.write(4);                                    <em class="jxr_comment">// :path /echo</em>
+<a class="jxr_linenumber" name="L413" href="#L413">413</a> 		str(h, <span class="jxr_string">"/echo"</span>);
+<a class="jxr_linenumber" name="L414" href="#L414">414</a> 		<strong class="jxr_keyword">if</strong> (authority != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L415" href="#L415">415</a> 			h.write(1);                                <em class="jxr_comment">// :authority</em>
+<a class="jxr_linenumber" name="L416" href="#L416">416</a> 			str(h, authority);
+<a class="jxr_linenumber" name="L417" href="#L417">417</a> 		}
+<a class="jxr_linenumber" name="L418" href="#L418">418</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt; extra.length; i += 2) {
+<a class="jxr_linenumber" name="L419" href="#L419">419</a> 			h.write(0);
+<a class="jxr_linenumber" name="L420" href="#L420">420</a> 			str(h, extra[i]);
+<a class="jxr_linenumber" name="L421" href="#L421">421</a> 			str(h, extra[i + 1]);
+<a class="jxr_linenumber" name="L422" href="#L422">422</a> 		}
+<a class="jxr_linenumber" name="L423" href="#L423">423</a> 		out.write(frame(0x1, 0x5, 1, h.toByteArray())); <em class="jxr_comment">// HEADERS: END_STREAM | END_HEADERS</em>
+<a class="jxr_linenumber" name="L424" href="#L424">424</a> 
+<a class="jxr_linenumber" name="L425" href="#L425">425</a> 		<strong class="jxr_keyword">var</strong> body = <strong class="jxr_keyword">new</strong> StringBuilder();
+<a class="jxr_linenumber" name="L426" href="#L426">426</a> 		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> socket = <strong class="jxr_keyword">new</strong> Socket(<span class="jxr_string">"127.0.0.1"</span>, port); <strong class="jxr_keyword">var</strong> in = <strong class="jxr_keyword">new</strong> DataInputStream(socket.getInputStream())) {
+<a class="jxr_linenumber" name="L427" href="#L427">427</a> 			socket.setSoTimeout(10_000);
+<a class="jxr_linenumber" name="L428" href="#L428">428</a> 			socket.getOutputStream().write(out.toByteArray());
+<a class="jxr_linenumber" name="L429" href="#L429">429</a> 			socket.getOutputStream().flush();
+<a class="jxr_linenumber" name="L430" href="#L430">430</a> 			<strong class="jxr_keyword">for</strong> (;;) {
+<a class="jxr_linenumber" name="L431" href="#L431">431</a> 				<strong class="jxr_keyword">var</strong> head = <strong class="jxr_keyword">new</strong> byte[9];
+<a class="jxr_linenumber" name="L432" href="#L432">432</a> 				in.readFully(head);
+<a class="jxr_linenumber" name="L433" href="#L433">433</a> 				<strong class="jxr_keyword">var</strong> len = ((head[0] &amp; 0xFF) &lt;&lt; 16) | ((head[1] &amp; 0xFF) &lt;&lt; 8) | (head[2] &amp; 0xFF);
+<a class="jxr_linenumber" name="L434" href="#L434">434</a> 				<strong class="jxr_keyword">var</strong> payload = <strong class="jxr_keyword">new</strong> byte[len];
+<a class="jxr_linenumber" name="L435" href="#L435">435</a> 				in.readFully(payload);
+<a class="jxr_linenumber" name="L436" href="#L436">436</a> 				<strong class="jxr_keyword">if</strong> (head[3] == 0x4 &amp;&amp; (head[4] &amp; 0x1) == 0) {
+<a class="jxr_linenumber" name="L437" href="#L437">437</a> 					socket.getOutputStream().write(frame(0x4, 0x1, 0, <strong class="jxr_keyword">new</strong> byte[0]));
+<a class="jxr_linenumber" name="L438" href="#L438">438</a> 					socket.getOutputStream().flush();
+<a class="jxr_linenumber" name="L439" href="#L439">439</a> 				} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (head[3] == 0x1) {
+<a class="jxr_linenumber" name="L440" href="#L440">440</a> 					<strong class="jxr_keyword">if</strong> ((head[4] &amp; 0x1) != 0)
+<a class="jxr_linenumber" name="L441" href="#L441">441</a> 						<strong class="jxr_keyword">break</strong>;
+<a class="jxr_linenumber" name="L442" href="#L442">442</a> 				} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (head[3] == 0x0) {
+<a class="jxr_linenumber" name="L443" href="#L443">443</a> 					body.append(<strong class="jxr_keyword">new</strong> String(payload, StandardCharsets.ISO_8859_1));
+<a class="jxr_linenumber" name="L444" href="#L444">444</a> 					<strong class="jxr_keyword">if</strong> ((head[4] &amp; 0x1) != 0)
+<a class="jxr_linenumber" name="L445" href="#L445">445</a> 						<strong class="jxr_keyword">break</strong>;
+<a class="jxr_linenumber" name="L446" href="#L446">446</a> 				} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (head[3] == 0x3 || head[3] == 0x7) {
+<a class="jxr_linenumber" name="L447" href="#L447">447</a> 					<strong class="jxr_keyword">break</strong>;
+<a class="jxr_linenumber" name="L448" href="#L448">448</a> 				}
+<a class="jxr_linenumber" name="L449" href="#L449">449</a> 			}
+<a class="jxr_linenumber" name="L450" href="#L450">450</a> 		}
+<a class="jxr_linenumber" name="L451" href="#L451">451</a> 		<strong class="jxr_keyword">return</strong> body.toString();
+<a class="jxr_linenumber" name="L452" href="#L452">452</a> 	}
+<a class="jxr_linenumber" name="L453" href="#L453">453</a> 
+<a class="jxr_linenumber" name="L454" href="#L454">454</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> str(ByteArrayOutputStream h, String value) <strong class="jxr_keyword">throws</strong> IOException {
+<a class="jxr_linenumber" name="L455" href="#L455">455</a> 		h.write(value.length());
+<a class="jxr_linenumber" name="L456" href="#L456">456</a> 		h.write(value.getBytes(StandardCharsets.US_ASCII));
+<a class="jxr_linenumber" name="L457" href="#L457">457</a> 	}
+<a class="jxr_linenumber" name="L458" href="#L458">458</a> 
+<a class="jxr_linenumber" name="L459" href="#L459">459</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> byte[] frame(<strong class="jxr_keyword">int</strong> type, <strong class="jxr_keyword">int</strong> flags, <strong class="jxr_keyword">int</strong> stream, byte[] payload) {
+<a class="jxr_linenumber" name="L460" href="#L460">460</a> 		<strong class="jxr_keyword">var</strong> b = java.nio.ByteBuffer.allocate(9 + payload.length);
+<a class="jxr_linenumber" name="L461" href="#L461">461</a> 		b.put((byte)(payload.length &gt;&gt; 16)).put((byte)(payload.length &gt;&gt; 8)).put((byte)payload.length);
+<a class="jxr_linenumber" name="L462" href="#L462">462</a> 		b.put((byte)type).put((byte)flags).putInt(stream).put(payload);
+<a class="jxr_linenumber" name="L463" href="#L463">463</a> 		<strong class="jxr_keyword">return</strong> b.array();
+<a class="jxr_linenumber" name="L464" href="#L464">464</a> 	}
+<a class="jxr_linenumber" name="L465" href="#L465">465</a> 
+<a class="jxr_linenumber" name="L466" href="#L466">466</a> 	@Nested
+<a class="jxr_linenumber" name="L467" href="#L467">467</a> 	@NestedTestConfiguration(EnclosingConfiguration.OVERRIDE)
+<a class="jxr_linenumber" name="L468" href="#L468">468</a> 	@SpringBootTest(classes=App.<strong class="jxr_keyword">class</strong>, webEnvironment=WebEnvironment.RANDOM_PORT, properties={
+<a class="jxr_linenumber" name="L469" href="#L469">469</a> 		<span class="jxr_string">"server.address=127.0.0.1"</span>,
+<a class="jxr_linenumber" name="L470" href="#L470">470</a> 		<span class="jxr_string">"server.http2.enabled=true"</span>,
+<a class="jxr_linenumber" name="L471" href="#L471">471</a> 		<span class="jxr_string">"csrf.boundary-order="</span> + Ordered.HIGHEST_PRECEDENCE
+<a class="jxr_linenumber" name="L472" href="#L472">472</a> 	})
+<a class="jxr_linenumber" name="L473" href="#L473">473</a> 	@DirtiesContext(classMode=DirtiesContext.ClassMode.AFTER_CLASS)
+<a class="jxr_linenumber" name="L474" href="#L474">474</a> 	<strong class="jxr_keyword">class</strong> C01 <strong class="jxr_keyword">extends</strong> Context {
+<a class="jxr_linenumber" name="L475" href="#L475">475</a> 		@Test <strong class="jxr_keyword">void</strong> c01_tomcatHttp2AuthorityIsServerNameWithNoHostHeader() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L476" href="#L476">476</a> 			<em class="jxr_comment">// The container surfaces :authority only as the server name (port 80 when it names none) and no Host header, so</em>
+<a class="jxr_linenumber" name="L477" href="#L477">477</a> 			<em class="jxr_comment">// the boundary takes :authority in Host's place and the request gets through.</em>
+<a class="jxr_linenumber" name="L478" href="#L478">478</a> 			assertEquals(<span class="jxr_string">"HTTP/2.0|app.example:80|[]"</span>, h2cEcho(port, <span class="jxr_string">"app.example"</span>));
+<a class="jxr_linenumber" name="L479" href="#L479">479</a> 			assertEquals(<span class="jxr_string">"HTTP/2.0|app.example:8443|[]"</span>, h2cEcho(port, <span class="jxr_string">"app.example:8443"</span>));
+<a class="jxr_linenumber" name="L480" href="#L480">480</a> 			<em class="jxr_comment">// With no :authority at all Tomcat names "localhost" and port 80, whatever it is bound to.</em>
+<a class="jxr_linenumber" name="L481" href="#L481">481</a> 			assertEquals(<span class="jxr_string">"HTTP/2.0|localhost:80|[]"</span>, h2cEcho(port, <strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L482" href="#L482">482</a> 			<em class="jxr_comment">// X-Forwarded-* are inert without a forwarded-header strategy.</em>
+<a class="jxr_linenumber" name="L483" href="#L483">483</a> 			assertEquals(<span class="jxr_string">"HTTP/2.0|app.example:80|[]"</span>, h2cEcho(port, <span class="jxr_string">"app.example"</span>, <span class="jxr_string">"x-forwarded-host"</span>, <span class="jxr_string">"evil.example"</span>, <span class="jxr_string">"x-forwarded-proto"</span>, <span class="jxr_string">"https"</span>));
+<a class="jxr_linenumber" name="L484" href="#L484">484</a> 			<em class="jxr_comment">// A Host field on HTTP/2 is refused by the container itself: the stream is reset and no response comes back.</em>
+<a class="jxr_linenumber" name="L485" href="#L485">485</a> 			assertEquals(<span class="jxr_string">""</span>, h2cEcho(port, <span class="jxr_string">"app.example"</span>, <span class="jxr_string">"host"</span>, <span class="jxr_string">"other.example"</span>));
+<a class="jxr_linenumber" name="L486" href="#L486">486</a> 		}
+<a class="jxr_linenumber" name="L487" href="#L487">487</a> 	}
+<a class="jxr_linenumber" name="L488" href="#L488">488</a> 
+<a class="jxr_linenumber" name="L489" href="#L489">489</a> 	@Nested
+<a class="jxr_linenumber" name="L490" href="#L490">490</a> 	@NestedTestConfiguration(EnclosingConfiguration.OVERRIDE)
+<a class="jxr_linenumber" name="L491" href="#L491">491</a> 	@SpringBootTest(classes=App.<strong class="jxr_keyword">class</strong>, webEnvironment=WebEnvironment.RANDOM_PORT, properties={
+<a class="jxr_linenumber" name="L492" href="#L492">492</a> 		<span class="jxr_string">"server.address=127.0.0.1"</span>,
+<a class="jxr_linenumber" name="L493" href="#L493">493</a> 		<span class="jxr_string">"server.http2.enabled=true"</span>,
+<a class="jxr_linenumber" name="L494" href="#L494">494</a> 		<span class="jxr_string">"server.forward-headers-strategy=framework"</span>,
+<a class="jxr_linenumber" name="L495" href="#L495">495</a> 		<span class="jxr_string">"csrf.boundary-order="</span> + (Ordered.HIGHEST_PRECEDENCE + 10)
+<a class="jxr_linenumber" name="L496" href="#L496">496</a> 	})
+<a class="jxr_linenumber" name="L497" href="#L497">497</a> 	@DirtiesContext(classMode=DirtiesContext.ClassMode.AFTER_CLASS)
+<a class="jxr_linenumber" name="L498" href="#L498">498</a> 	<strong class="jxr_keyword">class</strong> C02 <strong class="jxr_keyword">extends</strong> Context {
+<a class="jxr_linenumber" name="L499" href="#L499">499</a> 		@Test <strong class="jxr_keyword">void</strong> c02_forwardedHeaderFilterOverHttp2() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L500" href="#L500">500</a> 			<em class="jxr_comment">// ForwardedHeaderFilter rewrites the server name and port from the forwarded headers, as on HTTP/1.1.  Under</em>
+<a class="jxr_linenumber" name="L501" href="#L501">501</a> 			<em class="jxr_comment">// HOST_HEADER the boundary therefore judges the forwarded host (an accepted consequence; use CONTAINER or</em>
+<a class="jxr_linenumber" name="L502" href="#L502">502</a> 			<em class="jxr_comment">// allowedHosts where the proxy does not overwrite X-Forwarded-*).</em>
+<a class="jxr_linenumber" name="L503" href="#L503">503</a> 			assertEquals(<span class="jxr_string">"HTTP/2.0|evil.example:443|[]"</span>, h2cEcho(port, <span class="jxr_string">"app.example"</span>, <span class="jxr_string">"x-forwarded-host"</span>, <span class="jxr_string">"evil.example"</span>, <span class="jxr_string">"x-forwarded-proto"</span>, <span class="jxr_string">"https"</span>));
+<a class="jxr_linenumber" name="L504" href="#L504">504</a> 		}
+<a class="jxr_linenumber" name="L505" href="#L505">505</a> 	}
+<a class="jxr_linenumber" name="L506" href="#L506">506</a> 
+<a class="jxr_linenumber" name="L507" href="#L507">507</a> 	@Nested
+<a class="jxr_linenumber" name="L508" href="#L508">508</a> 	@NestedTestConfiguration(EnclosingConfiguration.OVERRIDE)
+<a class="jxr_linenumber" name="L509" href="#L509">509</a> 	@SpringBootTest(classes=App.<strong class="jxr_keyword">class</strong>, webEnvironment=WebEnvironment.RANDOM_PORT, properties={
+<a class="jxr_linenumber" name="L510" href="#L510">510</a> 		<span class="jxr_string">"server.address=127.0.0.1"</span>,
+<a class="jxr_linenumber" name="L511" href="#L511">511</a> 		<span class="jxr_string">"server.http2.enabled=true"</span>,
+<a class="jxr_linenumber" name="L512" href="#L512">512</a> 		<span class="jxr_string">"server.forward-headers-strategy=native"</span>,
+<a class="jxr_linenumber" name="L513" href="#L513">513</a> 		<span class="jxr_string">"csrf.boundary-order="</span> + Ordered.HIGHEST_PRECEDENCE
+<a class="jxr_linenumber" name="L514" href="#L514">514</a> 	})
+<a class="jxr_linenumber" name="L515" href="#L515">515</a> 	@DirtiesContext(classMode=DirtiesContext.ClassMode.AFTER_CLASS)
+<a class="jxr_linenumber" name="L516" href="#L516">516</a> 	<strong class="jxr_keyword">class</strong> C03 <strong class="jxr_keyword">extends</strong> Context {
+<a class="jxr_linenumber" name="L517" href="#L517">517</a> 		@Test <strong class="jxr_keyword">void</strong> c03_remoteIpValveOverHttp2() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L518" href="#L518">518</a> 			<em class="jxr_comment">// The native strategy's RemoteIpValve reads X-Forwarded-Host by default, with the same effect.</em>
+<a class="jxr_linenumber" name="L519" href="#L519">519</a> 			assertEquals(<span class="jxr_string">"HTTP/2.0|evil.example:443|[]"</span>, h2cEcho(port, <span class="jxr_string">"app.example"</span>, <span class="jxr_string">"x-forwarded-host"</span>, <span class="jxr_string">"evil.example"</span>, <span class="jxr_string">"x-forwarded-proto"</span>, <span class="jxr_string">"https"</span>));
+<a class="jxr_linenumber" name="L520" href="#L520">520</a> 		}
+<a class="jxr_linenumber" name="L521" href="#L521">521</a> 	}
+<a class="jxr_linenumber" name="L522" href="#L522">522</a> }
+</pre>
+<hr/>
+<div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>
+</body>
+</html>

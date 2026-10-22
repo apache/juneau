@@ -1,0 +1,831 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="" lang="">
+<head><meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<title>CsrfBoundaryForwarded_Test xref</title>
+<link type="text/css" rel="stylesheet" href="../../../../../../stylesheet.css" />
+</head>
+<body>
+<div id="overview"><a href="../../../../../../../testapidocs/org/apache/juneau/rest/server/filter/CsrfBoundaryForwarded_Test.html">View Javadoc</a></div><pre>
+<a class="jxr_linenumber" name="L1" href="#L1">1</a>   <em class="jxr_comment">/*</em>
+<a class="jxr_linenumber" name="L2" href="#L2">2</a>   <em class="jxr_comment"> * Licensed to the Apache Software Foundation (ASF) under one or more</em>
+<a class="jxr_linenumber" name="L3" href="#L3">3</a>   <em class="jxr_comment"> * contributor license agreements.  See the NOTICE file distributed with</em>
+<a class="jxr_linenumber" name="L4" href="#L4">4</a>   <em class="jxr_comment"> * this work for additional information regarding copyright ownership.</em>
+<a class="jxr_linenumber" name="L5" href="#L5">5</a>   <em class="jxr_comment"> * The ASF licenses this file to You under the Apache License, Version 2.0</em>
+<a class="jxr_linenumber" name="L6" href="#L6">6</a>   <em class="jxr_comment"> * (the "License"); you may not use this file except in compliance with</em>
+<a class="jxr_linenumber" name="L7" href="#L7">7</a>   <em class="jxr_comment"> * the License.  You may obtain a copy of the License at</em>
+<a class="jxr_linenumber" name="L8" href="#L8">8</a>   <em class="jxr_comment"> *</em>
+<a class="jxr_linenumber" name="L9" href="#L9">9</a>   <em class="jxr_comment"> *      <a href="http://www.apache.org/licenses/LICENSE-2.0" target="alexandria_uri">http://www.apache.org/licenses/LICENSE-2.0</a></em>
+<a class="jxr_linenumber" name="L10" href="#L10">10</a>  <em class="jxr_comment"> *</em>
+<a class="jxr_linenumber" name="L11" href="#L11">11</a>  <em class="jxr_comment"> * Unless required by applicable law or agreed to in writing, software</em>
+<a class="jxr_linenumber" name="L12" href="#L12">12</a>  <em class="jxr_comment"> * distributed under the License is distributed on an "AS IS" BASIS,</em>
+<a class="jxr_linenumber" name="L13" href="#L13">13</a>  <em class="jxr_comment"> * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</em>
+<a class="jxr_linenumber" name="L14" href="#L14">14</a>  <em class="jxr_comment"> * See the License for the specific language governing permissions and</em>
+<a class="jxr_linenumber" name="L15" href="#L15">15</a>  <em class="jxr_comment"> * limitations under the License.</em>
+<a class="jxr_linenumber" name="L16" href="#L16">16</a>  <em class="jxr_comment"> */</em>
+<a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.server.filter;
+<a class="jxr_linenumber" name="L18" href="#L18">18</a>  
+<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.server.filter.BoundaryReason.*;
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.junit.jupiter.api.Assertions.*;
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.mockito.Mockito.*;
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> java.net.*;
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> java.util.*;
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.*;
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.server.filter.CsrfBoundary.*;
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.server.filter.CsrfBoundary_Test.R;
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <strong class="jxr_keyword">import</strong> org.junit.jupiter.api.*;
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <strong class="jxr_keyword">import</strong> org.junit.jupiter.params.*;
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <strong class="jxr_keyword">import</strong> org.junit.jupiter.params.provider.*;
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>  
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>  <em class="jxr_javadoccomment"> * Tests for {@link CsrfBoundary.Builder#trustedForwarding(ForwardedSource)} on HTTP requests and WebSocket handshakes.</em>
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>  <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>  <em class="jxr_javadoccomment"> * Reasons are asserted by direct calls, because the bus configurator collapses every handshake refusal to 4403.</em>
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>  <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>  <em class="jxr_javadoccomment"> * @since 10.0.0</em>
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>  <em class="jxr_javadoccomment"> */</em>
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>  <strong class="jxr_keyword">class</strong> <a name="CsrfBoundaryForwarded_Test" href="../../../../../../org/apache/juneau/rest/server/filter/CsrfBoundaryForwarded_Test.html#CsrfBoundaryForwarded_Test">CsrfBoundaryForwarded_Test</a> <strong class="jxr_keyword">extends</strong> TestBase {
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>  
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String PUBLIC = <span class="jxr_string">"https://app.example"</span>;
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>  
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> CsrfBoundary.Builder xf() {
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>  		<strong class="jxr_keyword">return</strong> CsrfBoundary.create().trustedForwarding(ForwardedSource.X_FORWARDED);
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>  	}
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>  
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> CsrfBoundary.Builder fwd() {
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>  		<strong class="jxr_keyword">return</strong> CsrfBoundary.create().trustedForwarding(ForwardedSource.FORWARDED);
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>  	}
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>  
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>  	<em class="jxr_javadoccomment">/** A same-origin JSON write as seen by a backend behind a proxy that rewrites {@code Host}. */</em>
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> R post(CsrfBoundary b, String origin) {
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>  		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> R().method(<span class="jxr_string">"POST"</span>).scheme(<span class="jxr_string">"http"</span>).h(<span class="jxr_string">"Host"</span>, <span class="jxr_string">"backend:8080"</span>).h(<span class="jxr_string">"Origin"</span>, origin)
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>  			.h(<span class="jxr_string">"Content-Type"</span>, <span class="jxr_string">"application/json"</span>).h(b.csrfHeader(), b.tokenFor(<strong class="jxr_keyword">new</strong> R().build()));
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>  	}
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>  
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> R viaXf(CsrfBoundary b, String origin, String host, String proto) {
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>  		<strong class="jxr_keyword">return</strong> post(b, origin).h(<span class="jxr_string">"X-Forwarded-Host"</span>, host).h(<span class="jxr_string">"X-Forwarded-Proto"</span>, proto);
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>  	}
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>  
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> allowed(CsrfBoundary b, R r) {
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>  		<strong class="jxr_keyword">var</strong> x = b.check(r.build());
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>  		assertTrue(x.isAllowed(), () -&gt; <span class="jxr_string">"expected allowed, got: "</span> + x);
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>  	}
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>  
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> refused(CsrfBoundary b, R r, BoundaryReason reason) {
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>  		<strong class="jxr_keyword">var</strong> x = b.check(r.build());
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>  		assertFalse(x.isAllowed(), () -&gt; <span class="jxr_string">"expected "</span> + reason + <span class="jxr_string">", got allowed"</span>);
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>  		assertEquals(reason, x.reason(), x::toString);
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>  		assertEquals(reason == HOST_NOT_ALLOWED ? 421 : 403, x.status(), x::toString);
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>  	}
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>  
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Map&lt;String,List&lt;String&gt;&gt; map(String...nameValue) {
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>  		<strong class="jxr_keyword">var</strong> m = <strong class="jxr_keyword">new</strong> LinkedHashMap&lt;String,List&lt;String&gt;&gt;();
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>  		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt; nameValue.length; i += 2)
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>  			m.computeIfAbsent(nameValue[i], k -&gt; <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;()).add(nameValue[i + 1]);
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>  		<strong class="jxr_keyword">return</strong> m;
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>  	}
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>  
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> BoundaryResult hs(CsrfBoundary b, String scheme, String host, String...headers) {
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>  		<strong class="jxr_keyword">return</strong> b.checkHandshake(scheme, <strong class="jxr_keyword">new</strong> HandshakeHosts(host == <strong class="jxr_keyword">null</strong> ? List.of() : List.of(host), false), map(headers));
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>  	}
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>  
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> hsAllowed(CsrfBoundary b, String scheme, String host, String...headers) {
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>  		<strong class="jxr_keyword">var</strong> x = hs(b, scheme, host, headers);
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>  		assertTrue(x.isAllowed(), () -&gt; <span class="jxr_string">"expected allowed, got: "</span> + x);
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>  	}
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>  
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> hsRefused(CsrfBoundary b, BoundaryReason reason, String scheme, String host, String...headers) {
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>  		<strong class="jxr_keyword">var</strong> x = hs(b, scheme, host, headers);
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>  		assertFalse(x.isAllowed(), () -&gt; <span class="jxr_string">"expected "</span> + reason + <span class="jxr_string">", got allowed"</span>);
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>  		assertEquals(reason, x.reason(), x::toString);
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>  	}
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>  
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>  	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>  	<em class="jxr_comment">// HTTP, X-Forwarded-*</em>
+<a class="jxr_linenumber" name="L99" href="#L99">99</a>  	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L100" href="#L100">100</a> 
+<a class="jxr_linenumber" name="L101" href="#L101">101</a> 	@Test <strong class="jxr_keyword">void</strong> a01_httpForwardedAdmitted() {
+<a class="jxr_linenumber" name="L102" href="#L102">102</a> 		<strong class="jxr_keyword">var</strong> b = xf().build();
+<a class="jxr_linenumber" name="L103" href="#L103">103</a> 		allowed(b, viaXf(b, PUBLIC, <span class="jxr_string">"app.example"</span>, <span class="jxr_string">"https"</span>));
+<a class="jxr_linenumber" name="L104" href="#L104">104</a> 	}
+<a class="jxr_linenumber" name="L105" href="#L105">105</a> 
+<a class="jxr_linenumber" name="L106" href="#L106">106</a> 	@Test <strong class="jxr_keyword">void</strong> a02_replaceNotUnion() {
+<a class="jxr_linenumber" name="L107" href="#L107">107</a> 		<strong class="jxr_keyword">var</strong> b = xf().build();
+<a class="jxr_linenumber" name="L108" href="#L108">108</a> 		refused(b, viaXf(b, <span class="jxr_string">"http://backend:8080"</span>, <span class="jxr_string">"app.example"</span>, <span class="jxr_string">"https"</span>), ORIGIN_MISMATCH);
+<a class="jxr_linenumber" name="L109" href="#L109">109</a> 		refused(b, viaXf(b, <span class="jxr_string">"http://app.example"</span>, <span class="jxr_string">"app.example"</span>, <span class="jxr_string">"https"</span>), ORIGIN_MISMATCH);
+<a class="jxr_linenumber" name="L110" href="#L110">110</a> 	}
+<a class="jxr_linenumber" name="L111" href="#L111">111</a> 
+<a class="jxr_linenumber" name="L112" href="#L112">112</a> 	@Test <strong class="jxr_keyword">void</strong> a03_missing() {
+<a class="jxr_linenumber" name="L113" href="#L113">113</a> 		<strong class="jxr_keyword">var</strong> b = xf().build();
+<a class="jxr_linenumber" name="L114" href="#L114">114</a> 		refused(b, post(b, PUBLIC), FORWARDED_HOST_MISSING);
+<a class="jxr_linenumber" name="L115" href="#L115">115</a> 		refused(b, post(b, PUBLIC).h(<span class="jxr_string">"X-Forwarded-Proto"</span>, <span class="jxr_string">"https"</span>), FORWARDED_HOST_MISSING);
+<a class="jxr_linenumber" name="L116" href="#L116">116</a> 		refused(b, post(b, PUBLIC).h(<span class="jxr_string">"X-Forwarded-Host"</span>, <span class="jxr_string">"app.example"</span>), FORWARDED_PROTO_MISSING);
+<a class="jxr_linenumber" name="L117" href="#L117">117</a> 		refused(b, viaXf(b, PUBLIC, <span class="jxr_string">""</span>, <span class="jxr_string">"https"</span>), FORWARDED_HOST_MALFORMED);
+<a class="jxr_linenumber" name="L118" href="#L118">118</a> 		refused(b, viaXf(b, PUBLIC, <span class="jxr_string">"app.example"</span>, <span class="jxr_string">""</span>), FORWARDED_PROTO_MALFORMED);
+<a class="jxr_linenumber" name="L119" href="#L119">119</a> 	}
+<a class="jxr_linenumber" name="L120" href="#L120">120</a> 
+<a class="jxr_linenumber" name="L121" href="#L121">121</a> 	@ParameterizedTest
+<a class="jxr_linenumber" name="L122" href="#L122">122</a> 	@ValueSource(strings = {
+<a class="jxr_linenumber" name="L123" href="#L123">123</a> 		<span class="jxr_string">"app.example,"</span>, <span class="jxr_string">"u@app.example"</span>, <span class="jxr_string">"https://app.example"</span>, <span class="jxr_string">"app.example/x"</span>, <span class="jxr_string">"app.example&#92;&#92;x"</span>, <span class="jxr_string">"app.example?x"</span>, <span class="jxr_string">"app.example#x"</span>,
+<a class="jxr_linenumber" name="L124" href="#L124">124</a> 		<span class="jxr_string">"app.example:0"</span>, <span class="jxr_string">"app.example:08080"</span>, <span class="jxr_string">"app.example:+80"</span>, <span class="jxr_string">"app.example:80a"</span>, <span class="jxr_string">"app.example:"</span>, <span class="jxr_string">"app.example:65536"</span>,
+<a class="jxr_linenumber" name="L125" href="#L125">125</a> 		<span class="jxr_string">"::1"</span>, <span class="jxr_string">"[fe80::1%25eth0]"</span>, <span class="jxr_string">"[::1"</span>, <span class="jxr_string">"b\u00fccher.example"</span>, <span class="jxr_string">"app example"</span>, <span class="jxr_string">"app.example\t x"</span>, <span class="jxr_string">"[v1.x]"</span>
+<a class="jxr_linenumber" name="L126" href="#L126">126</a> 	})
+<a class="jxr_linenumber" name="L127" href="#L127">127</a> 	<strong class="jxr_keyword">void</strong> a04_malformedHost(String host) {
+<a class="jxr_linenumber" name="L128" href="#L128">128</a> 		<strong class="jxr_keyword">var</strong> b = xf().build();
+<a class="jxr_linenumber" name="L129" href="#L129">129</a> 		refused(b, viaXf(b, PUBLIC, host, host.endsWith(<span class="jxr_string">","</span>) ? <span class="jxr_string">"https,"</span> : <span class="jxr_string">"https"</span>), FORWARDED_HOST_MALFORMED);
+<a class="jxr_linenumber" name="L130" href="#L130">130</a> 	}
+<a class="jxr_linenumber" name="L131" href="#L131">131</a> 
+<a class="jxr_linenumber" name="L132" href="#L132">132</a> 	@ParameterizedTest
+<a class="jxr_linenumber" name="L133" href="#L133">133</a> 	@ValueSource(strings = { <span class="jxr_string">"ws"</span>, <span class="jxr_string">"wss"</span>, <span class="jxr_string">"ftp"</span>, <span class="jxr_string">"\&quot;https\&quot;"</span>, <span class="jxr_string">"HTTP/1.1"</span>, <span class="jxr_string">"https x"</span> })
+<a class="jxr_linenumber" name="L134" href="#L134">134</a> 	<strong class="jxr_keyword">void</strong> a05_malformedProto(String proto) {
+<a class="jxr_linenumber" name="L135" href="#L135">135</a> 		<strong class="jxr_keyword">var</strong> b = xf().build();
+<a class="jxr_linenumber" name="L136" href="#L136">136</a> 		refused(b, viaXf(b, PUBLIC, <span class="jxr_string">"app.example"</span>, proto), FORWARDED_PROTO_MALFORMED);
+<a class="jxr_linenumber" name="L137" href="#L137">137</a> 	}
+<a class="jxr_linenumber" name="L138" href="#L138">138</a> 
+<a class="jxr_linenumber" name="L139" href="#L139">139</a> 	@Test <strong class="jxr_keyword">void</strong> a06_acceptedShapes() {
+<a class="jxr_linenumber" name="L140" href="#L140">140</a> 		<strong class="jxr_keyword">var</strong> b = xf().build();
+<a class="jxr_linenumber" name="L141" href="#L141">141</a> 		allowed(b, viaXf(b, PUBLIC, <span class="jxr_string">"APP.Example"</span>, <span class="jxr_string">"HTTPS"</span>));
+<a class="jxr_linenumber" name="L142" href="#L142">142</a> 		allowed(b, viaXf(b, <span class="jxr_string">"https://[::1]:8443"</span>, <span class="jxr_string">"[::1]:8443"</span>, <span class="jxr_string">"https"</span>));
+<a class="jxr_linenumber" name="L143" href="#L143">143</a> 		allowed(b, viaXf(b, <span class="jxr_string">"https://app.example."</span>, <span class="jxr_string">"app.example."</span>, <span class="jxr_string">"https"</span>));
+<a class="jxr_linenumber" name="L144" href="#L144">144</a> 		refused(b, viaXf(b, PUBLIC, <span class="jxr_string">"app.example."</span>, <span class="jxr_string">"https"</span>), ORIGIN_MISMATCH);
+<a class="jxr_linenumber" name="L145" href="#L145">145</a> 		allowed(b, viaXf(b, <span class="jxr_string">"https://xn--bcher-kva.example"</span>, <span class="jxr_string">"xn--bcher-kva.example"</span>, <span class="jxr_string">"https"</span>));
+<a class="jxr_linenumber" name="L146" href="#L146">146</a> 	}
+<a class="jxr_linenumber" name="L147" href="#L147">147</a> 
+<a class="jxr_linenumber" name="L148" href="#L148">148</a> 	@Test <strong class="jxr_keyword">void</strong> a07_hops() {
+<a class="jxr_linenumber" name="L149" href="#L149">149</a> 		<strong class="jxr_keyword">var</strong> b = xf().build();
+<a class="jxr_linenumber" name="L150" href="#L150">150</a> 		<em class="jxr_comment">// Default n=1 takes the rightmost entry; the client's prefix is ignored.</em>
+<a class="jxr_linenumber" name="L151" href="#L151">151</a> 		allowed(b, viaXf(b, PUBLIC, <span class="jxr_string">"evil.example, app.example"</span>, <span class="jxr_string">"http, https"</span>));
+<a class="jxr_linenumber" name="L152" href="#L152">152</a> 		allowed(b, post(b, PUBLIC).h(<span class="jxr_string">"X-Forwarded-Host"</span>, <span class="jxr_string">"evil.example"</span>).h(<span class="jxr_string">"X-Forwarded-Host"</span>, <span class="jxr_string">"app.example"</span>)
+<a class="jxr_linenumber" name="L153" href="#L153">153</a> 			.h(<span class="jxr_string">"X-Forwarded-Proto"</span>, <span class="jxr_string">"http, https"</span>));
+<a class="jxr_linenumber" name="L154" href="#L154">154</a> 		<em class="jxr_comment">// Alignment: proto is taken at the same index as host.</em>
+<a class="jxr_linenumber" name="L155" href="#L155">155</a> 		allowed(b, viaXf(b, <span class="jxr_string">"https://b"</span>, <span class="jxr_string">"a, b"</span>, <span class="jxr_string">"http, https"</span>));
+<a class="jxr_linenumber" name="L156" href="#L156">156</a> 		refused(b, viaXf(b, PUBLIC, <span class="jxr_string">"a, app.example"</span>, <span class="jxr_string">"https"</span>), FORWARDED_HOPS_MISMATCH);
+<a class="jxr_linenumber" name="L157" href="#L157">157</a> 
+<a class="jxr_linenumber" name="L158" href="#L158">158</a> 		<strong class="jxr_keyword">var</strong> two = xf().trustedHops(2).build();
+<a class="jxr_linenumber" name="L159" href="#L159">159</a> 		allowed(two, viaXf(two, PUBLIC, <span class="jxr_string">"app.example, internal"</span>, <span class="jxr_string">"https, http"</span>));
+<a class="jxr_linenumber" name="L160" href="#L160">160</a> 		refused(two, viaXf(two, PUBLIC, <span class="jxr_string">"app.example"</span>, <span class="jxr_string">"https"</span>), FORWARDED_HOPS_INSUFFICIENT);
+<a class="jxr_linenumber" name="L161" href="#L161">161</a> 		<em class="jxr_comment">// An overstated n selects the client's entry: the documented fail-open.</em>
+<a class="jxr_linenumber" name="L162" href="#L162">162</a> 		allowed(two, viaXf(two, <span class="jxr_string">"http://evil.example"</span>, <span class="jxr_string">"evil.example, app.example"</span>, <span class="jxr_string">"http, https"</span>));
+<a class="jxr_linenumber" name="L163" href="#L163">163</a> 		<em class="jxr_comment">// The counted entries are all validated.</em>
+<a class="jxr_linenumber" name="L164" href="#L164">164</a> 		refused(two, viaXf(two, PUBLIC, <span class="jxr_string">"app.example, "</span>, <span class="jxr_string">"https, http"</span>), FORWARDED_HOST_MALFORMED);
+<a class="jxr_linenumber" name="L165" href="#L165">165</a> 	}
+<a class="jxr_linenumber" name="L166" href="#L166">166</a> 
+<a class="jxr_linenumber" name="L167" href="#L167">167</a> 	@Test <strong class="jxr_keyword">void</strong> a08_otherFamilyNeverRead() {
+<a class="jxr_linenumber" name="L168" href="#L168">168</a> 		<strong class="jxr_keyword">var</strong> b = xf().build();
+<a class="jxr_linenumber" name="L169" href="#L169">169</a> 		refused(b, post(b, PUBLIC).h(<span class="jxr_string">"Forwarded"</span>, <span class="jxr_string">"host=app.example;proto=https"</span>), FORWARDED_HOST_MISSING);
+<a class="jxr_linenumber" name="L170" href="#L170">170</a> 		<strong class="jxr_keyword">var</strong> r = viaXf(b, <span class="jxr_string">"https://other.example"</span>, <span class="jxr_string">"app.example"</span>, <span class="jxr_string">"https"</span>).h(<span class="jxr_string">"Forwarded"</span>, <span class="jxr_string">"host=other.example;proto=https"</span>);
+<a class="jxr_linenumber" name="L171" href="#L171">171</a> 		refused(b, r, ORIGIN_MISMATCH);
+<a class="jxr_linenumber" name="L172" href="#L172">172</a> 		<strong class="jxr_keyword">var</strong> f = fwd().build();
+<a class="jxr_linenumber" name="L173" href="#L173">173</a> 		refused(f, post(f, PUBLIC).h(<span class="jxr_string">"X-Forwarded-Host"</span>, <span class="jxr_string">"app.example"</span>).h(<span class="jxr_string">"X-Forwarded-Proto"</span>, <span class="jxr_string">"https"</span>), FORWARDED_HOST_MISSING);
+<a class="jxr_linenumber" name="L174" href="#L174">174</a> 	}
+<a class="jxr_linenumber" name="L175" href="#L175">175</a> 
+<a class="jxr_linenumber" name="L176" href="#L176">176</a> 	@Test <strong class="jxr_keyword">void</strong> a09_portComesOnlyFromTheHostValueOrTheProtoDefault() {
+<a class="jxr_linenumber" name="L177" href="#L177">177</a> 		<strong class="jxr_keyword">var</strong> b = xf().build();
+<a class="jxr_linenumber" name="L178" href="#L178">178</a> 		refused(b, viaXf(b, <span class="jxr_string">"https://app.example:8443"</span>, <span class="jxr_string">"app.example"</span>, <span class="jxr_string">"https"</span>), ORIGIN_MISMATCH);
+<a class="jxr_linenumber" name="L179" href="#L179">179</a> 		allowed(b, viaXf(b, <span class="jxr_string">"https://app.example:8443"</span>, <span class="jxr_string">"app.example:8443"</span>, <span class="jxr_string">"https"</span>));
+<a class="jxr_linenumber" name="L180" href="#L180">180</a> 		<em class="jxr_comment">// X-Forwarded-Port is never read.</em>
+<a class="jxr_linenumber" name="L181" href="#L181">181</a> 		refused(b, viaXf(b, <span class="jxr_string">"https://app.example:8443"</span>, <span class="jxr_string">"app.example"</span>, <span class="jxr_string">"https"</span>).h(<span class="jxr_string">"X-Forwarded-Port"</span>, <span class="jxr_string">"8443"</span>), ORIGIN_MISMATCH);
+<a class="jxr_linenumber" name="L182" href="#L182">182</a> 	}
+<a class="jxr_linenumber" name="L183" href="#L183">183</a> 
+<a class="jxr_linenumber" name="L184" href="#L184">184</a> 	@Test <strong class="jxr_keyword">void</strong> a10_allowedHostsAgainstTheForwardedHost() {
+<a class="jxr_linenumber" name="L185" href="#L185">185</a> 		<strong class="jxr_keyword">var</strong> b = xf().allowedHosts(<span class="jxr_string">"app.example"</span>).build();
+<a class="jxr_linenumber" name="L186" href="#L186">186</a> 		allowed(b, viaXf(b, PUBLIC, <span class="jxr_string">"app.example"</span>, <span class="jxr_string">"https"</span>));
+<a class="jxr_linenumber" name="L187" href="#L187">187</a> 		<strong class="jxr_keyword">var</strong> other = xf().allowedHosts(<span class="jxr_string">"other.example"</span>).build();
+<a class="jxr_linenumber" name="L188" href="#L188">188</a> 		refused(other, viaXf(other, PUBLIC, <span class="jxr_string">"app.example"</span>, <span class="jxr_string">"https"</span>), HOST_NOT_ALLOWED);
+<a class="jxr_linenumber" name="L189" href="#L189">189</a> 		<em class="jxr_comment">// A safe GET with no forwarded header: allowed with no list, refused with one.</em>
+<a class="jxr_linenumber" name="L190" href="#L190">190</a> 		<strong class="jxr_keyword">var</strong> plain = xf().build();
+<a class="jxr_linenumber" name="L191" href="#L191">191</a> 		allowed(plain, <strong class="jxr_keyword">new</strong> R().method(<span class="jxr_string">"GET"</span>).h(<span class="jxr_string">"Host"</span>, <span class="jxr_string">"backend:8080"</span>));
+<a class="jxr_linenumber" name="L192" href="#L192">192</a> 		refused(b, <strong class="jxr_keyword">new</strong> R().method(<span class="jxr_string">"GET"</span>).h(<span class="jxr_string">"Host"</span>, <span class="jxr_string">"backend:8080"</span>), FORWARDED_HOST_MISSING);
+<a class="jxr_linenumber" name="L193" href="#L193">193</a> 	}
+<a class="jxr_linenumber" name="L194" href="#L194">194</a> 
+<a class="jxr_linenumber" name="L195" href="#L195">195</a> 	@Test <strong class="jxr_keyword">void</strong> a11_hostStillRequired() {
+<a class="jxr_linenumber" name="L196" href="#L196">196</a> 		<strong class="jxr_keyword">var</strong> b = xf().build();
+<a class="jxr_linenumber" name="L197" href="#L197">197</a> 		<strong class="jxr_keyword">var</strong> x = b.check(<strong class="jxr_keyword">new</strong> R().method(<span class="jxr_string">"POST"</span>).h(<span class="jxr_string">"Origin"</span>, PUBLIC).h(<span class="jxr_string">"X-Forwarded-Host"</span>, <span class="jxr_string">"app.example"</span>)
+<a class="jxr_linenumber" name="L198" href="#L198">198</a> 			.h(<span class="jxr_string">"X-Forwarded-Proto"</span>, <span class="jxr_string">"https"</span>).build());
+<a class="jxr_linenumber" name="L199" href="#L199">199</a> 		assertEquals(HOST_MISSING, x.reason());
+<a class="jxr_linenumber" name="L200" href="#L200">200</a> 		assertEquals(400, x.status());
+<a class="jxr_linenumber" name="L201" href="#L201">201</a> 	}
+<a class="jxr_linenumber" name="L202" href="#L202">202</a> 
+<a class="jxr_linenumber" name="L203" href="#L203">203</a> 	@Test <strong class="jxr_keyword">void</strong> a12_offByDefaultIgnoresForwarded() {
+<a class="jxr_linenumber" name="L204" href="#L204">204</a> 		<strong class="jxr_keyword">var</strong> b = CsrfBoundary.create().build();
+<a class="jxr_linenumber" name="L205" href="#L205">205</a> 		refused(b, viaXf(b, PUBLIC, <span class="jxr_string">"app.example"</span>, <span class="jxr_string">"https"</span>), ORIGIN_MISMATCH);
+<a class="jxr_linenumber" name="L206" href="#L206">206</a> 		allowed(b, post(b, <span class="jxr_string">"http://backend:8080"</span>).h(<span class="jxr_string">"X-Forwarded-Host"</span>, <span class="jxr_string">"evil.example"</span>));
+<a class="jxr_linenumber" name="L207" href="#L207">207</a> 	}
+<a class="jxr_linenumber" name="L208" href="#L208">208</a> 
+<a class="jxr_linenumber" name="L209" href="#L209">209</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L210" href="#L210">210</a> 	<em class="jxr_comment">// HTTP, Forwarded</em>
+<a class="jxr_linenumber" name="L211" href="#L211">211</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L212" href="#L212">212</a> 
+<a class="jxr_linenumber" name="L213" href="#L213">213</a> 	@Test <strong class="jxr_keyword">void</strong> b01_forwardedAdmitted() {
+<a class="jxr_linenumber" name="L214" href="#L214">214</a> 		<strong class="jxr_keyword">var</strong> b = fwd().build();
+<a class="jxr_linenumber" name="L215" href="#L215">215</a> 		allowed(b, post(b, PUBLIC).h(<span class="jxr_string">"Forwarded"</span>, <span class="jxr_string">"for=1.2.3.4;host=app.example;proto=https"</span>));
+<a class="jxr_linenumber" name="L216" href="#L216">216</a> 		allowed(b, post(b, PUBLIC).h(<span class="jxr_string">"Forwarded"</span>, <span class="jxr_string">"Host=\&quot;app.example\&quot;; PROTO = https"</span>));
+<a class="jxr_linenumber" name="L217" href="#L217">217</a> 		allowed(b, post(b, <span class="jxr_string">"https://[::1]:8443"</span>).h(<span class="jxr_string">"Forwarded"</span>, <span class="jxr_string">"host=\&quot;[::1]:8443\&quot;;proto=https"</span>));
+<a class="jxr_linenumber" name="L218" href="#L218">218</a> 		refused(b, post(b, PUBLIC).h(<span class="jxr_string">"Forwarded"</span>, <span class="jxr_string">"host=app.example:8080;proto=https"</span>), FORWARDED_HOST_MALFORMED);
+<a class="jxr_linenumber" name="L219" href="#L219">219</a> 	}
+<a class="jxr_linenumber" name="L220" href="#L220">220</a> 
+<a class="jxr_linenumber" name="L221" href="#L221">221</a> 	@Test <strong class="jxr_keyword">void</strong> b02_forwardedMissingAndMalformed() {
+<a class="jxr_linenumber" name="L222" href="#L222">222</a> 		<strong class="jxr_keyword">var</strong> b = fwd().build();
+<a class="jxr_linenumber" name="L223" href="#L223">223</a> 		refused(b, post(b, PUBLIC), FORWARDED_HOST_MISSING);
+<a class="jxr_linenumber" name="L224" href="#L224">224</a> 		refused(b, post(b, PUBLIC).h(<span class="jxr_string">"Forwarded"</span>, <span class="jxr_string">"for=1.2.3.4;proto=https"</span>), FORWARDED_HOST_MISSING);
+<a class="jxr_linenumber" name="L225" href="#L225">225</a> 		refused(b, post(b, PUBLIC).h(<span class="jxr_string">"Forwarded"</span>, <span class="jxr_string">"host=app.example"</span>), FORWARDED_PROTO_MISSING);
+<a class="jxr_linenumber" name="L226" href="#L226">226</a> 		refused(b, post(b, PUBLIC).h(<span class="jxr_string">"Forwarded"</span>, <span class="jxr_string">"host=app.example;proto=ws"</span>), FORWARDED_PROTO_MALFORMED);
+<a class="jxr_linenumber" name="L227" href="#L227">227</a> 		refused(b, post(b, PUBLIC).h(<span class="jxr_string">"Forwarded"</span>, <span class="jxr_string">"host=\&quot;\&quot;;proto=https"</span>), FORWARDED_HOST_MALFORMED);
+<a class="jxr_linenumber" name="L228" href="#L228">228</a> 		refused(b, post(b, PUBLIC).h(<span class="jxr_string">"Forwarded"</span>, <span class="jxr_string">"host=a;host=app.example;proto=https"</span>), FORWARDED_HOST_MALFORMED);
+<a class="jxr_linenumber" name="L229" href="#L229">229</a> 		refused(b, post(b, PUBLIC).h(<span class="jxr_string">"Forwarded"</span>, <span class="jxr_string">"host=app.example;proto=https;proto=http"</span>), FORWARDED_PROTO_MALFORMED);
+<a class="jxr_linenumber" name="L230" href="#L230">230</a> 		refused(b, post(b, PUBLIC).h(<span class="jxr_string">"Forwarded"</span>, <span class="jxr_string">"host=app.example;proto=https,"</span>), FORWARDED_HOST_MALFORMED);
+<a class="jxr_linenumber" name="L231" href="#L231">231</a> 	}
+<a class="jxr_linenumber" name="L232" href="#L232">232</a> 
+<a class="jxr_linenumber" name="L233" href="#L233">233</a> 	@ParameterizedTest
+<a class="jxr_linenumber" name="L234" href="#L234">234</a> 	@ValueSource(strings = {
+<a class="jxr_linenumber" name="L235" href="#L235">235</a> 		<span class="jxr_string">"host=\&quot;app.example;proto=https"</span>, <span class="jxr_string">"host=\&quot;app&#92;&#92;.example\&quot;;proto=https"</span>, <span class="jxr_string">"host;proto=https"</span>, <span class="jxr_string">"host=;proto=https"</span>,
+<a class="jxr_linenumber" name="L236" href="#L236">236</a> 		<span class="jxr_string">"=app.example"</span>, <span class="jxr_string">"host=app.example proto=https"</span>, <span class="jxr_string">"host=\&quot;a\&quot;b;proto=https"</span>
+<a class="jxr_linenumber" name="L237" href="#L237">237</a> 	})
+<a class="jxr_linenumber" name="L238" href="#L238">238</a> 	<strong class="jxr_keyword">void</strong> b03_untokenizable(String value) {
+<a class="jxr_linenumber" name="L239" href="#L239">239</a> 		<strong class="jxr_keyword">var</strong> b = fwd().build();
+<a class="jxr_linenumber" name="L240" href="#L240">240</a> 		refused(b, post(b, PUBLIC).h(<span class="jxr_string">"Forwarded"</span>, value), FORWARDED_HOST_MALFORMED);
+<a class="jxr_linenumber" name="L241" href="#L241">241</a> 	}
+<a class="jxr_linenumber" name="L242" href="#L242">242</a> 
+<a class="jxr_linenumber" name="L243" href="#L243">243</a> 	@Test <strong class="jxr_keyword">void</strong> b04_wholeHeaderMustTokenize() {
+<a class="jxr_linenumber" name="L244" href="#L244">244</a> 		<strong class="jxr_keyword">var</strong> b = fwd().build();
+<a class="jxr_linenumber" name="L245" href="#L245">245</a> 		<em class="jxr_comment">// A client's line that does not tokenize refuses the request, even though the proxy's last line is fine.</em>
+<a class="jxr_linenumber" name="L246" href="#L246">246</a> 		refused(b, post(b, PUBLIC).h(<span class="jxr_string">"Forwarded"</span>, <span class="jxr_string">"for=\&quot;x"</span>).h(<span class="jxr_string">"Forwarded"</span>, <span class="jxr_string">"host=app.example;proto=https"</span>), FORWARDED_HOST_MALFORMED);
+<a class="jxr_linenumber" name="L247" href="#L247">247</a> 	}
+<a class="jxr_linenumber" name="L248" href="#L248">248</a> 
+<a class="jxr_linenumber" name="L249" href="#L249">249</a> 	@Test <strong class="jxr_keyword">void</strong> b05_hopsAcrossLinesAndCommas() {
+<a class="jxr_linenumber" name="L250" href="#L250">250</a> 		<strong class="jxr_keyword">var</strong> b = fwd().build();
+<a class="jxr_linenumber" name="L251" href="#L251">251</a> 		allowed(b, post(b, PUBLIC).h(<span class="jxr_string">"Forwarded"</span>, <span class="jxr_string">"host=evil.example;proto=http"</span>)
+<a class="jxr_linenumber" name="L252" href="#L252">252</a> 			.h(<span class="jxr_string">"Forwarded"</span>, <span class="jxr_string">"host=app.example;proto=https"</span>));
+<a class="jxr_linenumber" name="L253" href="#L253">253</a> 		allowed(b, post(b, PUBLIC).h(<span class="jxr_string">"Forwarded"</span>, <span class="jxr_string">"host=evil.example;proto=http, host=app.example;proto=https"</span>));
+<a class="jxr_linenumber" name="L254" href="#L254">254</a> 		allowed(b, post(b, PUBLIC).h(<span class="jxr_string">"Forwarded"</span>, <span class="jxr_string">"for=\&quot;a,b\&quot;;host=evil.example;proto=http, host=app.example;proto=https"</span>));
+<a class="jxr_linenumber" name="L255" href="#L255">255</a> 
+<a class="jxr_linenumber" name="L256" href="#L256">256</a> 		<strong class="jxr_keyword">var</strong> two = fwd().trustedHops(2).build();
+<a class="jxr_linenumber" name="L257" href="#L257">257</a> 		allowed(two, post(two, PUBLIC).h(<span class="jxr_string">"Forwarded"</span>, <span class="jxr_string">"host=app.example;proto=https, host=internal;proto=http"</span>));
+<a class="jxr_linenumber" name="L258" href="#L258">258</a> 		refused(two, post(two, PUBLIC).h(<span class="jxr_string">"Forwarded"</span>, <span class="jxr_string">"host=app.example;proto=https"</span>), FORWARDED_HOPS_INSUFFICIENT);
+<a class="jxr_linenumber" name="L259" href="#L259">259</a> 		<em class="jxr_comment">// An incomplete counted element is never skipped, and no value is borrowed from a neighbour.</em>
+<a class="jxr_linenumber" name="L260" href="#L260">260</a> 		refused(two, post(two, PUBLIC).h(<span class="jxr_string">"Forwarded"</span>, <span class="jxr_string">"host=app.example;proto=https, for=10.0.0.1"</span>), FORWARDED_HOST_MISSING);
+<a class="jxr_linenumber" name="L261" href="#L261">261</a> 		refused(two, post(two, PUBLIC).h(<span class="jxr_string">"Forwarded"</span>, <span class="jxr_string">"for=10.0.0.1, host=app.example;proto=https"</span>), FORWARDED_HOST_MISSING);
+<a class="jxr_linenumber" name="L262" href="#L262">262</a> 	}
+<a class="jxr_linenumber" name="L263" href="#L263">263</a> 
+<a class="jxr_linenumber" name="L264" href="#L264">264</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L265" href="#L265">265</a> 	<em class="jxr_comment">// The container's view</em>
+<a class="jxr_linenumber" name="L266" href="#L266">266</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L267" href="#L267">267</a> 
+<a class="jxr_linenumber" name="L268" href="#L268">268</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> R container(CsrfBoundary b, String origin, String name, <strong class="jxr_keyword">int</strong> port, String scheme) {
+<a class="jxr_linenumber" name="L269" href="#L269">269</a> 		<strong class="jxr_keyword">return</strong> viaXf(b, origin, <span class="jxr_string">"app.example"</span>, <span class="jxr_string">"https"</span>).scheme(scheme).container(name, port);
+<a class="jxr_linenumber" name="L270" href="#L270">270</a> 	}
+<a class="jxr_linenumber" name="L271" href="#L271">271</a> 
+<a class="jxr_linenumber" name="L272" href="#L272">272</a> 	@Test <strong class="jxr_keyword">void</strong> c01_containerMustAgree() {
+<a class="jxr_linenumber" name="L273" href="#L273">273</a> 		<strong class="jxr_keyword">var</strong> b = xf().originSource(OriginSource.CONTAINER).build();
+<a class="jxr_linenumber" name="L274" href="#L274">274</a> 		allowed(b, container(b, PUBLIC, <span class="jxr_string">"app.example"</span>, 443, <span class="jxr_string">"https"</span>));
+<a class="jxr_linenumber" name="L275" href="#L275">275</a> 		allowed(b, container(b, PUBLIC, <span class="jxr_string">"APP.example"</span>, 443, <span class="jxr_string">"https"</span>));
+<a class="jxr_linenumber" name="L276" href="#L276">276</a> 		refused(b, container(b, PUBLIC, <span class="jxr_string">"evil.example"</span>, 443, <span class="jxr_string">"https"</span>), FORWARDED_CONTAINER_MISMATCH);
+<a class="jxr_linenumber" name="L277" href="#L277">277</a> 		<em class="jxr_comment">// The connector port against the proto default is a mismatch, loud and fail-closed.</em>
+<a class="jxr_linenumber" name="L278" href="#L278">278</a> 		refused(b, container(b, PUBLIC, <span class="jxr_string">"app.example"</span>, 8080, <span class="jxr_string">"https"</span>), FORWARDED_CONTAINER_MISMATCH);
+<a class="jxr_linenumber" name="L279" href="#L279">279</a> 		<em class="jxr_comment">// The container did no forwarding: its view is the transport.</em>
+<a class="jxr_linenumber" name="L280" href="#L280">280</a> 		refused(b, container(b, PUBLIC, <span class="jxr_string">"backend"</span>, 8080, <span class="jxr_string">"http"</span>), FORWARDED_CONTAINER_MISMATCH);
+<a class="jxr_linenumber" name="L281" href="#L281">281</a> 		refused(b, container(b, PUBLIC, <span class="jxr_string">"app.example"</span>, 443, <span class="jxr_string">"http"</span>), FORWARDED_CONTAINER_MISMATCH);
+<a class="jxr_linenumber" name="L282" href="#L282">282</a> 		<em class="jxr_comment">// An underivable container view is refused.</em>
+<a class="jxr_linenumber" name="L283" href="#L283">283</a> 		refused(b, container(b, PUBLIC, <span class="jxr_string">"app.example:99"</span>, 443, <span class="jxr_string">"https"</span>), FORWARDED_CONTAINER_MISMATCH);
+<a class="jxr_linenumber" name="L284" href="#L284">284</a> 		refused(b, container(b, PUBLIC, <strong class="jxr_keyword">null</strong>, 443, <span class="jxr_string">"https"</span>), FORWARDED_CONTAINER_MISMATCH);
+<a class="jxr_linenumber" name="L285" href="#L285">285</a> 	}
+<a class="jxr_linenumber" name="L286" href="#L286">286</a> 
+<a class="jxr_linenumber" name="L287" href="#L287">287</a> 	@Test <strong class="jxr_keyword">void</strong> c02_containerExplicitPort() {
+<a class="jxr_linenumber" name="L288" href="#L288">288</a> 		<strong class="jxr_keyword">var</strong> b = xf().originSource(OriginSource.CONTAINER).build();
+<a class="jxr_linenumber" name="L289" href="#L289">289</a> 		<strong class="jxr_keyword">var</strong> r = viaXf(b, <span class="jxr_string">"https://app.example:443"</span>, <span class="jxr_string">"app.example:443"</span>, <span class="jxr_string">"https"</span>).scheme(<span class="jxr_string">"https"</span>).container(<span class="jxr_string">"app.example"</span>, 443);
+<a class="jxr_linenumber" name="L290" href="#L290">290</a> 		allowed(b, r);
+<a class="jxr_linenumber" name="L291" href="#L291">291</a> 		<strong class="jxr_keyword">var</strong> other = viaXf(b, <span class="jxr_string">"https://app.example:8443"</span>, <span class="jxr_string">"app.example:8443"</span>, <span class="jxr_string">"https"</span>).scheme(<span class="jxr_string">"https"</span>).container(<span class="jxr_string">"app.example"</span>, 8443);
+<a class="jxr_linenumber" name="L292" href="#L292">292</a> 		allowed(b, other);
+<a class="jxr_linenumber" name="L293" href="#L293">293</a> 	}
+<a class="jxr_linenumber" name="L294" href="#L294">294</a> 
+<a class="jxr_linenumber" name="L295" href="#L295">295</a> 	@Test <strong class="jxr_keyword">void</strong> c03_hostHeaderFingerprintLeftOfSelected() {
+<a class="jxr_linenumber" name="L296" href="#L296">296</a> 		<strong class="jxr_keyword">var</strong> b = xf().build();
+<a class="jxr_linenumber" name="L297" href="#L297">297</a> 		<em class="jxr_comment">// Host equals the client-writable left entry: the container trusted a hop it must not have.</em>
+<a class="jxr_linenumber" name="L298" href="#L298">298</a> 		refused(b, <strong class="jxr_keyword">new</strong> R().method(<span class="jxr_string">"POST"</span>).scheme(<span class="jxr_string">"http"</span>).h(<span class="jxr_string">"Host"</span>, <span class="jxr_string">"left.example"</span>).h(<span class="jxr_string">"Origin"</span>, PUBLIC)
+<a class="jxr_linenumber" name="L299" href="#L299">299</a> 			.h(<span class="jxr_string">"Content-Type"</span>, <span class="jxr_string">"application/json"</span>).h(b.csrfHeader(), b.tokenFor(<strong class="jxr_keyword">new</strong> R().build()))
+<a class="jxr_linenumber" name="L300" href="#L300">300</a> 			.h(<span class="jxr_string">"X-Forwarded-Host"</span>, <span class="jxr_string">"left.example, app.example"</span>).h(<span class="jxr_string">"X-Forwarded-Proto"</span>, <span class="jxr_string">"http, https"</span>),
+<a class="jxr_linenumber" name="L301" href="#L301">301</a> 			FORWARDED_CONTAINER_MISMATCH);
+<a class="jxr_linenumber" name="L302" href="#L302">302</a> 		<em class="jxr_comment">// The transport name is replaced.</em>
+<a class="jxr_linenumber" name="L303" href="#L303">303</a> 		allowed(b, viaXf(b, PUBLIC, <span class="jxr_string">"left.example, app.example"</span>, <span class="jxr_string">"http, https"</span>));
+<a class="jxr_linenumber" name="L304" href="#L304">304</a> 		<em class="jxr_comment">// A match to the right of the selected entry (an inner hop or the transport) is replaced, never refused.</em>
+<a class="jxr_linenumber" name="L305" href="#L305">305</a> 		<strong class="jxr_keyword">var</strong> two = xf().trustedHops(2).build();
+<a class="jxr_linenumber" name="L306" href="#L306">306</a> 		allowed(two, viaXf(two, PUBLIC, <span class="jxr_string">"app.example, backend"</span>, <span class="jxr_string">"https, http"</span>));
+<a class="jxr_linenumber" name="L307" href="#L307">307</a> 		<em class="jxr_comment">// Availability-only edge: a client can get its own request refused.</em>
+<a class="jxr_linenumber" name="L308" href="#L308">308</a> 		refused(b, viaXf(b, PUBLIC, <span class="jxr_string">"backend, app.example"</span>, <span class="jxr_string">"http, https"</span>).remove(<span class="jxr_string">"Host"</span>).h(<span class="jxr_string">"Host"</span>, <span class="jxr_string">"backend"</span>),
+<a class="jxr_linenumber" name="L309" href="#L309">309</a> 			FORWARDED_CONTAINER_MISMATCH);
+<a class="jxr_linenumber" name="L310" href="#L310">310</a> 		<em class="jxr_comment">// Same host, different port: the TLS-terminating transport, replaced.</em>
+<a class="jxr_linenumber" name="L311" href="#L311">311</a> 		allowed(b, post(b, PUBLIC).remove(<span class="jxr_string">"Host"</span>).h(<span class="jxr_string">"Host"</span>, <span class="jxr_string">"app.example:8080"</span>).h(<span class="jxr_string">"X-Forwarded-Host"</span>, <span class="jxr_string">"app.example"</span>)
+<a class="jxr_linenumber" name="L312" href="#L312">312</a> 			.h(<span class="jxr_string">"X-Forwarded-Proto"</span>, <span class="jxr_string">"https"</span>));
+<a class="jxr_linenumber" name="L313" href="#L313">313</a> 	}
+<a class="jxr_linenumber" name="L314" href="#L314">314</a> 
+<a class="jxr_linenumber" name="L315" href="#L315">315</a> 	@Test <strong class="jxr_keyword">void</strong> c04_http2SynthesisedHostIsTheContainerView() {
+<a class="jxr_linenumber" name="L316" href="#L316">316</a> 		<strong class="jxr_keyword">var</strong> b = xf().build();
+<a class="jxr_linenumber" name="L317" href="#L317">317</a> 		<em class="jxr_comment">// HTTP/2: no Host header, the server name stands in; it is the container view and is replaced.</em>
+<a class="jxr_linenumber" name="L318" href="#L318">318</a> 		<strong class="jxr_keyword">var</strong> r = <strong class="jxr_keyword">new</strong> R().method(<span class="jxr_string">"POST"</span>).scheme(<span class="jxr_string">"http"</span>).protocol(<span class="jxr_string">"HTTP/2.0"</span>).container(<span class="jxr_string">"backend"</span>, 8080).h(<span class="jxr_string">"Origin"</span>, PUBLIC)
+<a class="jxr_linenumber" name="L319" href="#L319">319</a> 			.h(<span class="jxr_string">"Content-Type"</span>, <span class="jxr_string">"application/json"</span>).h(b.csrfHeader(), b.tokenFor(<strong class="jxr_keyword">new</strong> R().build()))
+<a class="jxr_linenumber" name="L320" href="#L320">320</a> 			.h(<span class="jxr_string">"X-Forwarded-Host"</span>, <span class="jxr_string">"app.example"</span>).h(<span class="jxr_string">"X-Forwarded-Proto"</span>, <span class="jxr_string">"https"</span>);
+<a class="jxr_linenumber" name="L321" href="#L321">321</a> 		allowed(b, r);
+<a class="jxr_linenumber" name="L322" href="#L322">322</a> 		<strong class="jxr_keyword">var</strong> left = <strong class="jxr_keyword">new</strong> R().method(<span class="jxr_string">"POST"</span>).scheme(<span class="jxr_string">"http"</span>).protocol(<span class="jxr_string">"HTTP/2.0"</span>).container(<span class="jxr_string">"left.example"</span>, 8080).h(<span class="jxr_string">"Origin"</span>, PUBLIC)
+<a class="jxr_linenumber" name="L323" href="#L323">323</a> 			.h(<span class="jxr_string">"Content-Type"</span>, <span class="jxr_string">"application/json"</span>).h(b.csrfHeader(), b.tokenFor(<strong class="jxr_keyword">new</strong> R().build()))
+<a class="jxr_linenumber" name="L324" href="#L324">324</a> 			.h(<span class="jxr_string">"X-Forwarded-Host"</span>, <span class="jxr_string">"left.example, app.example"</span>).h(<span class="jxr_string">"X-Forwarded-Proto"</span>, <span class="jxr_string">"http, https"</span>);
+<a class="jxr_linenumber" name="L325" href="#L325">325</a> 		refused(b, left, FORWARDED_CONTAINER_MISMATCH);
+<a class="jxr_linenumber" name="L326" href="#L326">326</a> 	}
+<a class="jxr_linenumber" name="L327" href="#L327">327</a> 
+<a class="jxr_linenumber" name="L328" href="#L328">328</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L329" href="#L329">329</a> 	<em class="jxr_comment">// Handshakes</em>
+<a class="jxr_linenumber" name="L330" href="#L330">330</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L331" href="#L331">331</a> 
+<a class="jxr_linenumber" name="L332" href="#L332">332</a> 	@Test <strong class="jxr_keyword">void</strong> d01_handshakeAdmitted() {
+<a class="jxr_linenumber" name="L333" href="#L333">333</a> 		<strong class="jxr_keyword">var</strong> b = xf().build();
+<a class="jxr_linenumber" name="L334" href="#L334">334</a> 		hsAllowed(b, <span class="jxr_string">"ws"</span>, <span class="jxr_string">"backend:8080"</span>, <span class="jxr_string">"Origin"</span>, PUBLIC, <span class="jxr_string">"X-Forwarded-Host"</span>, <span class="jxr_string">"app.example"</span>, <span class="jxr_string">"X-Forwarded-Proto"</span>, <span class="jxr_string">"https"</span>);
+<a class="jxr_linenumber" name="L335" href="#L335">335</a> 		hsAllowed(b, <span class="jxr_string">"ws"</span>, <span class="jxr_string">"backend:8080"</span>, <span class="jxr_string">"origin"</span>, PUBLIC, <span class="jxr_string">"x-forwarded-host"</span>, <span class="jxr_string">"app.example"</span>, <span class="jxr_string">"X-FORWARDED-PROTO"</span>, <span class="jxr_string">"https"</span>,
+<a class="jxr_linenumber" name="L336" href="#L336">336</a> 			<span class="jxr_string">"Sec-Fetch-Site"</span>, <span class="jxr_string">"same-origin"</span>);
+<a class="jxr_linenumber" name="L337" href="#L337">337</a> 		hsRefused(b, ORIGIN_MISMATCH, <span class="jxr_string">"ws"</span>, <span class="jxr_string">"backend:8080"</span>, <span class="jxr_string">"Origin"</span>, <span class="jxr_string">"http://backend:8080"</span>, <span class="jxr_string">"X-Forwarded-Host"</span>, <span class="jxr_string">"app.example"</span>,
+<a class="jxr_linenumber" name="L338" href="#L338">338</a> 			<span class="jxr_string">"X-Forwarded-Proto"</span>, <span class="jxr_string">"https"</span>);
+<a class="jxr_linenumber" name="L339" href="#L339">339</a> 		hsRefused(b, FETCH_SITE_NOT_SAME_ORIGIN, <span class="jxr_string">"ws"</span>, <span class="jxr_string">"backend:8080"</span>, <span class="jxr_string">"Origin"</span>, PUBLIC, <span class="jxr_string">"Sec-Fetch-Site"</span>, <span class="jxr_string">"same-site"</span>,
+<a class="jxr_linenumber" name="L340" href="#L340">340</a> 			<span class="jxr_string">"X-Forwarded-Host"</span>, <span class="jxr_string">"app.example"</span>, <span class="jxr_string">"X-Forwarded-Proto"</span>, <span class="jxr_string">"https"</span>);
+<a class="jxr_linenumber" name="L341" href="#L341">341</a> 	}
+<a class="jxr_linenumber" name="L342" href="#L342">342</a> 
+<a class="jxr_linenumber" name="L343" href="#L343">343</a> 	@Test <strong class="jxr_keyword">void</strong> d02_handshakeMissingAndMalformed() {
+<a class="jxr_linenumber" name="L344" href="#L344">344</a> 		<strong class="jxr_keyword">var</strong> b = xf().build();
+<a class="jxr_linenumber" name="L345" href="#L345">345</a> 		hsRefused(b, FORWARDED_HOST_MISSING, <span class="jxr_string">"ws"</span>, <span class="jxr_string">"backend:8080"</span>, <span class="jxr_string">"Origin"</span>, PUBLIC);
+<a class="jxr_linenumber" name="L346" href="#L346">346</a> 		hsRefused(b, FORWARDED_HOST_MISSING, <span class="jxr_string">"ws"</span>, <span class="jxr_string">"backend:8080"</span>, <span class="jxr_string">"Origin"</span>, PUBLIC, <span class="jxr_string">"X-Forwarded-Proto"</span>, <span class="jxr_string">"https"</span>);
+<a class="jxr_linenumber" name="L347" href="#L347">347</a> 		hsRefused(b, FORWARDED_PROTO_MISSING, <span class="jxr_string">"ws"</span>, <span class="jxr_string">"backend:8080"</span>, <span class="jxr_string">"Origin"</span>, PUBLIC, <span class="jxr_string">"X-Forwarded-Host"</span>, <span class="jxr_string">"app.example"</span>);
+<a class="jxr_linenumber" name="L348" href="#L348">348</a> 		hsRefused(b, FORWARDED_PROTO_MALFORMED, <span class="jxr_string">"ws"</span>, <span class="jxr_string">"backend:8080"</span>, <span class="jxr_string">"Origin"</span>, PUBLIC, <span class="jxr_string">"X-Forwarded-Host"</span>, <span class="jxr_string">"app.example"</span>,
+<a class="jxr_linenumber" name="L349" href="#L349">349</a> 			<span class="jxr_string">"X-Forwarded-Proto"</span>, <span class="jxr_string">"wss"</span>);
+<a class="jxr_linenumber" name="L350" href="#L350">350</a> 		hsRefused(b, FORWARDED_HOST_MALFORMED, <span class="jxr_string">"ws"</span>, <span class="jxr_string">"backend:8080"</span>, <span class="jxr_string">"Origin"</span>, PUBLIC, <span class="jxr_string">"X-Forwarded-Host"</span>, <span class="jxr_string">"a@app.example"</span>,
+<a class="jxr_linenumber" name="L351" href="#L351">351</a> 			<span class="jxr_string">"X-Forwarded-Proto"</span>, <span class="jxr_string">"https"</span>);
+<a class="jxr_linenumber" name="L352" href="#L352">352</a> 		hsRefused(b, HOST_MISSING, <span class="jxr_string">"ws"</span>, <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"Origin"</span>, PUBLIC, <span class="jxr_string">"X-Forwarded-Host"</span>, <span class="jxr_string">"app.example"</span>, <span class="jxr_string">"X-Forwarded-Proto"</span>, <span class="jxr_string">"https"</span>);
+<a class="jxr_linenumber" name="L353" href="#L353">353</a> 	}
+<a class="jxr_linenumber" name="L354" href="#L354">354</a> 
+<a class="jxr_linenumber" name="L355" href="#L355">355</a> 	@Test <strong class="jxr_keyword">void</strong> d03_handshakeTwoSpellingsRefused() {
+<a class="jxr_linenumber" name="L356" href="#L356">356</a> 		<strong class="jxr_keyword">var</strong> b = xf().build();
+<a class="jxr_linenumber" name="L357" href="#L357">357</a> 		hsRefused(b, FORWARDED_HOST_MALFORMED, <span class="jxr_string">"ws"</span>, <span class="jxr_string">"backend:8080"</span>, <span class="jxr_string">"Origin"</span>, PUBLIC, <span class="jxr_string">"X-Forwarded-Host"</span>, <span class="jxr_string">"app.example"</span>,
+<a class="jxr_linenumber" name="L358" href="#L358">358</a> 			<span class="jxr_string">"x-forwarded-host"</span>, <span class="jxr_string">"app.example"</span>, <span class="jxr_string">"X-Forwarded-Proto"</span>, <span class="jxr_string">"https"</span>);
+<a class="jxr_linenumber" name="L359" href="#L359">359</a> 		hsRefused(b, FORWARDED_PROTO_MALFORMED, <span class="jxr_string">"ws"</span>, <span class="jxr_string">"backend:8080"</span>, <span class="jxr_string">"Origin"</span>, PUBLIC, <span class="jxr_string">"X-Forwarded-Host"</span>, <span class="jxr_string">"app.example"</span>,
+<a class="jxr_linenumber" name="L360" href="#L360">360</a> 			<span class="jxr_string">"X-Forwarded-Proto"</span>, <span class="jxr_string">"https"</span>, <span class="jxr_string">"x-forwarded-proto"</span>, <span class="jxr_string">"https"</span>);
+<a class="jxr_linenumber" name="L361" href="#L361">361</a> 		<em class="jxr_comment">// Origin is counted, not ordered: two spellings are two values, and a second value is a mismatch.</em>
+<a class="jxr_linenumber" name="L362" href="#L362">362</a> 		hsRefused(b, ORIGIN_MISMATCH, <span class="jxr_string">"ws"</span>, <span class="jxr_string">"backend:8080"</span>, <span class="jxr_string">"Origin"</span>, PUBLIC, <span class="jxr_string">"origin"</span>, PUBLIC, <span class="jxr_string">"X-Forwarded-Host"</span>, <span class="jxr_string">"app.example"</span>,
+<a class="jxr_linenumber" name="L363" href="#L363">363</a> 			<span class="jxr_string">"X-Forwarded-Proto"</span>, <span class="jxr_string">"https"</span>);
+<a class="jxr_linenumber" name="L364" href="#L364">364</a> 	}
+<a class="jxr_linenumber" name="L365" href="#L365">365</a> 
+<a class="jxr_linenumber" name="L366" href="#L366">366</a> 	@Test <strong class="jxr_keyword">void</strong> d04_listFormsAlwaysRefuseWhenTrusted() {
+<a class="jxr_linenumber" name="L367" href="#L367">367</a> 		<strong class="jxr_keyword">var</strong> b = xf().build();
+<a class="jxr_linenumber" name="L368" href="#L368">368</a> 		<strong class="jxr_keyword">var</strong> x = b.checkHandshake(<span class="jxr_string">"ws"</span>, List.of(<span class="jxr_string">"backend:8080"</span>), List.of(PUBLIC), List.of());
+<a class="jxr_linenumber" name="L369" href="#L369">369</a> 		assertEquals(FORWARDED_HOST_MISSING, x.reason());
+<a class="jxr_linenumber" name="L370" href="#L370">370</a> 		<strong class="jxr_keyword">var</strong> plain = CsrfBoundary.create().build();
+<a class="jxr_linenumber" name="L371" href="#L371">371</a> 		assertTrue(plain.checkHandshake(<span class="jxr_string">"ws"</span>, List.of(<span class="jxr_string">"app.example"</span>), List.of(<span class="jxr_string">"http://app.example"</span>), List.of()).isAllowed());
+<a class="jxr_linenumber" name="L372" href="#L372">372</a> 	}
+<a class="jxr_linenumber" name="L373" href="#L373">373</a> 
+<a class="jxr_linenumber" name="L374" href="#L374">374</a> 	@Test <strong class="jxr_keyword">void</strong> d05_handshakeSchemeAndUnknownTransport() {
+<a class="jxr_linenumber" name="L375" href="#L375">375</a> 		<strong class="jxr_keyword">var</strong> b = xf().build();
+<a class="jxr_linenumber" name="L376" href="#L376">376</a> 		hsAllowed(b, <span class="jxr_string">"wss"</span>, <span class="jxr_string">"backend:8080"</span>, <span class="jxr_string">"Origin"</span>, PUBLIC, <span class="jxr_string">"X-Forwarded-Host"</span>, <span class="jxr_string">"app.example"</span>, <span class="jxr_string">"X-Forwarded-Proto"</span>, <span class="jxr_string">"https"</span>);
+<a class="jxr_linenumber" name="L377" href="#L377">377</a> 		<em class="jxr_comment">// An unknown URI scheme is refused even with a well-formed forwarded origin.</em>
+<a class="jxr_linenumber" name="L378" href="#L378">378</a> 		hsRefused(b, ORIGIN_MISMATCH, <span class="jxr_string">"ftp"</span>, <span class="jxr_string">"backend:8080"</span>, <span class="jxr_string">"Origin"</span>, PUBLIC, <span class="jxr_string">"X-Forwarded-Host"</span>, <span class="jxr_string">"app.example"</span>,
+<a class="jxr_linenumber" name="L379" href="#L379">379</a> 			<span class="jxr_string">"X-Forwarded-Proto"</span>, <span class="jxr_string">"https"</span>);
+<a class="jxr_linenumber" name="L380" href="#L380">380</a> 	}
+<a class="jxr_linenumber" name="L381" href="#L381">381</a> 
+<a class="jxr_linenumber" name="L382" href="#L382">382</a> 	@Test <strong class="jxr_keyword">void</strong> d06_handshakeFingerprintAndHops() {
+<a class="jxr_linenumber" name="L383" href="#L383">383</a> 		<strong class="jxr_keyword">var</strong> b = xf().build();
+<a class="jxr_linenumber" name="L384" href="#L384">384</a> 		hsRefused(b, FORWARDED_CONTAINER_MISMATCH, <span class="jxr_string">"ws"</span>, <span class="jxr_string">"left.example"</span>, <span class="jxr_string">"Origin"</span>, PUBLIC, <span class="jxr_string">"X-Forwarded-Host"</span>, <span class="jxr_string">"left.example, app.example"</span>,
+<a class="jxr_linenumber" name="L385" href="#L385">385</a> 			<span class="jxr_string">"X-Forwarded-Proto"</span>, <span class="jxr_string">"http, https"</span>);
+<a class="jxr_linenumber" name="L386" href="#L386">386</a> 		hsAllowed(b, <span class="jxr_string">"ws"</span>, <span class="jxr_string">"backend:8080"</span>, <span class="jxr_string">"Origin"</span>, PUBLIC, <span class="jxr_string">"X-Forwarded-Host"</span>, <span class="jxr_string">"left.example, app.example"</span>,
+<a class="jxr_linenumber" name="L387" href="#L387">387</a> 			<span class="jxr_string">"X-Forwarded-Proto"</span>, <span class="jxr_string">"http, https"</span>);
+<a class="jxr_linenumber" name="L388" href="#L388">388</a> 		<em class="jxr_comment">// A real Jetty-customizer view: Host and scheme already rewritten, so they agree.</em>
+<a class="jxr_linenumber" name="L389" href="#L389">389</a> 		hsAllowed(b, <span class="jxr_string">"wss"</span>, <span class="jxr_string">"app.example"</span>, <span class="jxr_string">"Origin"</span>, PUBLIC, <span class="jxr_string">"X-Forwarded-Host"</span>, <span class="jxr_string">"app.example"</span>, <span class="jxr_string">"X-Forwarded-Proto"</span>, <span class="jxr_string">"https"</span>);
+<a class="jxr_linenumber" name="L390" href="#L390">390</a> 	}
+<a class="jxr_linenumber" name="L391" href="#L391">391</a> 
+<a class="jxr_linenumber" name="L392" href="#L392">392</a> 	@Test <strong class="jxr_keyword">void</strong> d07_handshakeForwardedFamilyAndAllowedHosts() {
+<a class="jxr_linenumber" name="L393" href="#L393">393</a> 		<strong class="jxr_keyword">var</strong> b = fwd().allowedHosts(<span class="jxr_string">"app.example"</span>).build();
+<a class="jxr_linenumber" name="L394" href="#L394">394</a> 		hsAllowed(b, <span class="jxr_string">"ws"</span>, <span class="jxr_string">"backend:8080"</span>, <span class="jxr_string">"Origin"</span>, PUBLIC, <span class="jxr_string">"Forwarded"</span>, <span class="jxr_string">"host=app.example;proto=https"</span>);
+<a class="jxr_linenumber" name="L395" href="#L395">395</a> 		hsRefused(b, FORWARDED_HOST_MISSING, <span class="jxr_string">"ws"</span>, <span class="jxr_string">"backend:8080"</span>, <span class="jxr_string">"Origin"</span>, PUBLIC, <span class="jxr_string">"X-Forwarded-Host"</span>, <span class="jxr_string">"app.example"</span>,
+<a class="jxr_linenumber" name="L396" href="#L396">396</a> 			<span class="jxr_string">"X-Forwarded-Proto"</span>, <span class="jxr_string">"https"</span>);
+<a class="jxr_linenumber" name="L397" href="#L397">397</a> 		<strong class="jxr_keyword">var</strong> other = fwd().allowedHosts(<span class="jxr_string">"other.example"</span>).build();
+<a class="jxr_linenumber" name="L398" href="#L398">398</a> 		hsRefused(other, HOST_NOT_ALLOWED, <span class="jxr_string">"ws"</span>, <span class="jxr_string">"backend:8080"</span>, <span class="jxr_string">"Origin"</span>, PUBLIC, <span class="jxr_string">"Forwarded"</span>, <span class="jxr_string">"host=app.example;proto=https"</span>);
+<a class="jxr_linenumber" name="L399" href="#L399">399</a> 	}
+<a class="jxr_linenumber" name="L400" href="#L400">400</a> 
+<a class="jxr_linenumber" name="L401" href="#L401">401</a> 	@Test <strong class="jxr_keyword">void</strong> d08_handshakeOffIgnoresForwarded() {
+<a class="jxr_linenumber" name="L402" href="#L402">402</a> 		<strong class="jxr_keyword">var</strong> b = CsrfBoundary.create().build();
+<a class="jxr_linenumber" name="L403" href="#L403">403</a> 		hsRefused(b, ORIGIN_MISMATCH, <span class="jxr_string">"ws"</span>, <span class="jxr_string">"backend:8080"</span>, <span class="jxr_string">"Origin"</span>, PUBLIC, <span class="jxr_string">"X-Forwarded-Host"</span>, <span class="jxr_string">"app.example"</span>,
+<a class="jxr_linenumber" name="L404" href="#L404">404</a> 			<span class="jxr_string">"X-Forwarded-Proto"</span>, <span class="jxr_string">"https"</span>);
+<a class="jxr_linenumber" name="L405" href="#L405">405</a> 		hsAllowed(b, <span class="jxr_string">"ws"</span>, <span class="jxr_string">"backend:8080"</span>, <span class="jxr_string">"Origin"</span>, <span class="jxr_string">"http://backend:8080"</span>);
+<a class="jxr_linenumber" name="L406" href="#L406">406</a> 	}
+<a class="jxr_linenumber" name="L407" href="#L407">407</a> 
+<a class="jxr_linenumber" name="L408" href="#L408">408</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L409" href="#L409">409</a> 	<em class="jxr_comment">// Review follow-ups</em>
+<a class="jxr_linenumber" name="L410" href="#L410">410</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L411" href="#L411">411</a> 
+<a class="jxr_linenumber" name="L412" href="#L412">412</a> 	@Test <strong class="jxr_keyword">void</strong> f01_unenumerableHeadersAreMalformedNeverTheFirstLine() {
+<a class="jxr_linenumber" name="L413" href="#L413">413</a> 		<strong class="jxr_keyword">var</strong> b = xf().build();
+<a class="jxr_linenumber" name="L414" href="#L414">414</a> 		<strong class="jxr_keyword">var</strong> req = viaXf(b, <span class="jxr_string">"http://evil.example"</span>, <span class="jxr_string">"evil.example"</span>, <span class="jxr_string">"http"</span>).build();
+<a class="jxr_linenumber" name="L415" href="#L415">415</a> 		when(req.getHeaders(<span class="jxr_string">"X-Forwarded-Host"</span>)).thenReturn(<strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L416" href="#L416">416</a> 		<strong class="jxr_keyword">var</strong> x = b.check(req);
+<a class="jxr_linenumber" name="L417" href="#L417">417</a> 		assertFalse(x.isAllowed(), x::toString);
+<a class="jxr_linenumber" name="L418" href="#L418">418</a> 		assertEquals(FORWARDED_HOST_MALFORMED, x.reason());
+<a class="jxr_linenumber" name="L419" href="#L419">419</a> 		<strong class="jxr_keyword">var</strong> req2 = viaXf(b, <span class="jxr_string">"http://evil.example"</span>, <span class="jxr_string">"evil.example"</span>, <span class="jxr_string">"http"</span>).build();
+<a class="jxr_linenumber" name="L420" href="#L420">420</a> 		when(req2.getHeaders(<span class="jxr_string">"X-Forwarded-Proto"</span>)).thenReturn(<strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L421" href="#L421">421</a> 		assertEquals(FORWARDED_PROTO_MALFORMED, b.check(req2).reason());
+<a class="jxr_linenumber" name="L422" href="#L422">422</a> 		<strong class="jxr_keyword">var</strong> f = fwd().build();
+<a class="jxr_linenumber" name="L423" href="#L423">423</a> 		<strong class="jxr_keyword">var</strong> req3 = post(f, PUBLIC).h(<span class="jxr_string">"Forwarded"</span>, <span class="jxr_string">"host=evil.example;proto=http"</span>).build();
+<a class="jxr_linenumber" name="L424" href="#L424">424</a> 		when(req3.getHeaders(<span class="jxr_string">"Forwarded"</span>)).thenReturn(<strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L425" href="#L425">425</a> 		assertEquals(FORWARDED_HOST_MALFORMED, f.check(req3).reason());
+<a class="jxr_linenumber" name="L426" href="#L426">426</a> 		<em class="jxr_comment">// Absent stays absent.</em>
+<a class="jxr_linenumber" name="L427" href="#L427">427</a> 		refused(b, post(b, PUBLIC), FORWARDED_HOST_MISSING);
+<a class="jxr_linenumber" name="L428" href="#L428">428</a> 	}
+<a class="jxr_linenumber" name="L429" href="#L429">429</a> 
+<a class="jxr_linenumber" name="L430" href="#L430">430</a> 	@Test <strong class="jxr_keyword">void</strong> f02_hostsAndProtosOfDifferentCountsMismatchBeforeTheHopCount() {
+<a class="jxr_linenumber" name="L431" href="#L431">431</a> 		<strong class="jxr_keyword">var</strong> two = xf().trustedHops(2).build();
+<a class="jxr_linenumber" name="L432" href="#L432">432</a> 		refused(two, viaXf(two, PUBLIC, <span class="jxr_string">"a, b"</span>, <span class="jxr_string">"https"</span>), FORWARDED_HOPS_MISMATCH);
+<a class="jxr_linenumber" name="L433" href="#L433">433</a> 		refused(two, viaXf(two, PUBLIC, <span class="jxr_string">"a"</span>, <span class="jxr_string">"https, http"</span>), FORWARDED_HOPS_MISMATCH);
+<a class="jxr_linenumber" name="L434" href="#L434">434</a> 		refused(two, viaXf(two, PUBLIC, <span class="jxr_string">"a"</span>, <span class="jxr_string">"https"</span>), FORWARDED_HOPS_INSUFFICIENT);
+<a class="jxr_linenumber" name="L435" href="#L435">435</a> 		refused(two, viaXf(two, PUBLIC, <span class="jxr_string">"a, b, c"</span>, <span class="jxr_string">"https, http"</span>), FORWARDED_HOPS_MISMATCH);
+<a class="jxr_linenumber" name="L436" href="#L436">436</a> 	}
+<a class="jxr_linenumber" name="L437" href="#L437">437</a> 
+<a class="jxr_linenumber" name="L438" href="#L438">438</a> 	@Test <strong class="jxr_keyword">void</strong> f03_unparseableLeftEntryIsPossiblyTheContainersHost() {
+<a class="jxr_linenumber" name="L439" href="#L439">439</a> 		<strong class="jxr_keyword">var</strong> b = xf().build();
+<a class="jxr_linenumber" name="L440" href="#L440">440</a> 		<em class="jxr_comment">// The container could normalize the quoted left entry into the Host it presents; refuse rather than guess.</em>
+<a class="jxr_linenumber" name="L441" href="#L441">441</a> 		<strong class="jxr_keyword">var</strong> r = <strong class="jxr_keyword">new</strong> R().method(<span class="jxr_string">"POST"</span>).scheme(<span class="jxr_string">"http"</span>).h(<span class="jxr_string">"Host"</span>, <span class="jxr_string">"left.example"</span>).h(<span class="jxr_string">"Origin"</span>, PUBLIC)
+<a class="jxr_linenumber" name="L442" href="#L442">442</a> 			.h(<span class="jxr_string">"Content-Type"</span>, <span class="jxr_string">"application/json"</span>).h(b.csrfHeader(), b.tokenFor(<strong class="jxr_keyword">new</strong> R().build()))
+<a class="jxr_linenumber" name="L443" href="#L443">443</a> 			.h(<span class="jxr_string">"X-Forwarded-Host"</span>, <span class="jxr_string">"\&quot;left.example\&quot;, app.example"</span>).h(<span class="jxr_string">"X-Forwarded-Proto"</span>, <span class="jxr_string">"http, https"</span>);
+<a class="jxr_linenumber" name="L444" href="#L444">444</a> 		refused(b, r, FORWARDED_CONTAINER_MISMATCH);
+<a class="jxr_linenumber" name="L445" href="#L445">445</a> 		<em class="jxr_comment">// Availability only: the client's own unparseable entry also refuses a request whose transport host is rewritten.</em>
+<a class="jxr_linenumber" name="L446" href="#L446">446</a> 		refused(b, viaXf(b, PUBLIC, <span class="jxr_string">"\&quot;left.example\&quot;, app.example"</span>, <span class="jxr_string">"http, https"</span>), FORWARDED_CONTAINER_MISMATCH);
+<a class="jxr_linenumber" name="L447" href="#L447">447</a> 		<strong class="jxr_keyword">var</strong> f = fwd().build();
+<a class="jxr_linenumber" name="L448" href="#L448">448</a> 		<strong class="jxr_keyword">var</strong> r2 = <strong class="jxr_keyword">new</strong> R().method(<span class="jxr_string">"POST"</span>).scheme(<span class="jxr_string">"http"</span>).h(<span class="jxr_string">"Host"</span>, <span class="jxr_string">"evil.example"</span>).h(<span class="jxr_string">"Origin"</span>, PUBLIC)
+<a class="jxr_linenumber" name="L449" href="#L449">449</a> 			.h(<span class="jxr_string">"Content-Type"</span>, <span class="jxr_string">"application/json"</span>).h(f.csrfHeader(), f.tokenFor(<strong class="jxr_keyword">new</strong> R().build()))
+<a class="jxr_linenumber" name="L450" href="#L450">450</a> 			.h(<span class="jxr_string">"Forwarded"</span>, <span class="jxr_string">"host=\&quot;user@evil.example\&quot;;proto=http, host=app.example;proto=https"</span>);
+<a class="jxr_linenumber" name="L451" href="#L451">451</a> 		refused(f, r2, FORWARDED_CONTAINER_MISMATCH);
+<a class="jxr_linenumber" name="L452" href="#L452">452</a> 		hsRefused(b, FORWARDED_CONTAINER_MISMATCH, <span class="jxr_string">"ws"</span>, <span class="jxr_string">"left.example"</span>, <span class="jxr_string">"Origin"</span>, PUBLIC, <span class="jxr_string">"X-Forwarded-Host"</span>, <span class="jxr_string">"\&quot;left.example\&quot;, app.example"</span>,
+<a class="jxr_linenumber" name="L453" href="#L453">453</a> 			<span class="jxr_string">"X-Forwarded-Proto"</span>, <span class="jxr_string">"http, https"</span>);
+<a class="jxr_linenumber" name="L454" href="#L454">454</a> 	}
+<a class="jxr_linenumber" name="L455" href="#L455">455</a> 
+<a class="jxr_linenumber" name="L456" href="#L456">456</a> 	@Test <strong class="jxr_keyword">void</strong> f04_forwardedEdgeShapes() {
+<a class="jxr_linenumber" name="L457" href="#L457">457</a> 		<strong class="jxr_keyword">var</strong> two = fwd().trustedHops(2).build();
+<a class="jxr_linenumber" name="L458" href="#L458">458</a> 		refused(two, post(two, PUBLIC).h(<span class="jxr_string">"Forwarded"</span>, <span class="jxr_string">"host=app.example;proto=https,,host=internal;proto=http"</span>), FORWARDED_HOST_MALFORMED);
+<a class="jxr_linenumber" name="L459" href="#L459">459</a> 		refused(two, post(two, PUBLIC).h(<span class="jxr_string">"Forwarded"</span>, <span class="jxr_string">"host=app.example;proto=https"</span>).h(<span class="jxr_string">"Forwarded"</span>, <span class="jxr_string">""</span>)
+<a class="jxr_linenumber" name="L460" href="#L460">460</a> 			.h(<span class="jxr_string">"Forwarded"</span>, <span class="jxr_string">"host=internal;proto=http"</span>), FORWARDED_HOST_MALFORMED);
+<a class="jxr_linenumber" name="L461" href="#L461">461</a> 		<strong class="jxr_keyword">var</strong> b = fwd().build();
+<a class="jxr_linenumber" name="L462" href="#L462">462</a> 		allowed(b, post(b, PUBLIC).h(<span class="jxr_string">"Forwarded"</span>, <span class="jxr_string">"host=app.example;proto=\&quot;https\&quot;"</span>));
+<a class="jxr_linenumber" name="L463" href="#L463">463</a> 		allowed(b, post(b, PUBLIC).h(<span class="jxr_string">"Forwarded"</span>, <span class="jxr_string">"host=\&quot;app.example:443\&quot;;proto=https"</span>));
+<a class="jxr_linenumber" name="L464" href="#L464">464</a> 		refused(b, post(b, PUBLIC).h(<span class="jxr_string">"Forwarded"</span>, <span class="jxr_string">"host=\&quot;app.example:444\&quot;;proto=https"</span>), ORIGIN_MISMATCH);
+<a class="jxr_linenumber" name="L465" href="#L465">465</a> 		allowed(b, post(b, PUBLIC).h(<span class="jxr_string">"Forwarded"</span>, <span class="jxr_string">"host=app.example;;proto=https"</span>));
+<a class="jxr_linenumber" name="L466" href="#L466">466</a> 	}
+<a class="jxr_linenumber" name="L467" href="#L467">467</a> 
+<a class="jxr_linenumber" name="L468" href="#L468">468</a> 	@Test <strong class="jxr_keyword">void</strong> f05_xForwardedEdgeShapes() {
+<a class="jxr_linenumber" name="L469" href="#L469">469</a> 		<strong class="jxr_keyword">var</strong> b = xf().build();
+<a class="jxr_linenumber" name="L470" href="#L470">470</a> 		allowed(b, post(b, PUBLIC).h(<span class="jxr_string">"X-Forwarded-Host"</span>, <span class="jxr_string">"x"</span>).h(<span class="jxr_string">"X-Forwarded-Host"</span>, <span class="jxr_string">"app.example"</span>).h(<span class="jxr_string">"X-Forwarded-Proto"</span>, <span class="jxr_string">"http"</span>).h(<span class="jxr_string">"X-Forwarded-Proto"</span>, <span class="jxr_string">"https"</span>));
+<a class="jxr_linenumber" name="L471" href="#L471">471</a> 		refused(b, viaXf(b, PUBLIC, <span class="jxr_string">"app.example"</span>, <span class="jxr_string">"ht\ttp"</span>), FORWARDED_PROTO_MALFORMED);
+<a class="jxr_linenumber" name="L472" href="#L472">472</a> 		<strong class="jxr_keyword">var</strong> two = xf().trustedHops(2).build();
+<a class="jxr_linenumber" name="L473" href="#L473">473</a> 		refused(two, viaXf(two, PUBLIC, <span class="jxr_string">"app.example,,internal"</span>, <span class="jxr_string">"https, https, http"</span>), FORWARDED_HOST_MALFORMED);
+<a class="jxr_linenumber" name="L474" href="#L474">474</a> 		refused(two, viaXf(two, PUBLIC, <span class="jxr_string">"app.example, internal"</span>, <span class="jxr_string">"https, ws"</span>), FORWARDED_PROTO_MALFORMED);
+<a class="jxr_linenumber" name="L475" href="#L475">475</a> 	}
+<a class="jxr_linenumber" name="L476" href="#L476">476</a> 
+<a class="jxr_linenumber" name="L477" href="#L477">477</a> 	@Test <strong class="jxr_keyword">void</strong> f09_mixedCaseAndQuotedTab() {
+<a class="jxr_linenumber" name="L478" href="#L478">478</a> 		<strong class="jxr_keyword">var</strong> b = xf().build();
+<a class="jxr_linenumber" name="L479" href="#L479">479</a> 		<strong class="jxr_keyword">var</strong> r = post(b, PUBLIC).h(<span class="jxr_string">"X-Forwarded-Host"</span>, <span class="jxr_string">"evil.example"</span>).h(<span class="jxr_string">"x-forwarded-host"</span>, <span class="jxr_string">"app.example"</span>)
+<a class="jxr_linenumber" name="L480" href="#L480">480</a> 			.h(<span class="jxr_string">"X-Forwarded-Proto"</span>, <span class="jxr_string">"http"</span>).h(<span class="jxr_string">"x-FORWARDED-proto"</span>, <span class="jxr_string">"https"</span>);
+<a class="jxr_linenumber" name="L481" href="#L481">481</a> 		allowed(b, r);
+<a class="jxr_linenumber" name="L482" href="#L482">482</a> 		<strong class="jxr_keyword">var</strong> f = fwd().build();
+<a class="jxr_linenumber" name="L483" href="#L483">483</a> 		refused(f, post(f, PUBLIC).h(<span class="jxr_string">"Forwarded"</span>, <span class="jxr_string">"host=\&quot;app.\texample\&quot;;proto=https"</span>), FORWARDED_HOST_MALFORMED);
+<a class="jxr_linenumber" name="L484" href="#L484">484</a> 	}
+<a class="jxr_linenumber" name="L485" href="#L485">485</a> 
+<a class="jxr_linenumber" name="L486" href="#L486">486</a> 	@Test <strong class="jxr_keyword">void</strong> f06_safeMethodsAndAllowedHosts() {
+<a class="jxr_linenumber" name="L487" href="#L487">487</a> 		<strong class="jxr_keyword">var</strong> open = xf().build();
+<a class="jxr_linenumber" name="L488" href="#L488">488</a> 		<em class="jxr_comment">// No allowedHosts: a safe request is not judged, forwarded headers or not, even malformed ones.</em>
+<a class="jxr_linenumber" name="L489" href="#L489">489</a> 		allowed(open, <strong class="jxr_keyword">new</strong> R().method(<span class="jxr_string">"GET"</span>).h(<span class="jxr_string">"Host"</span>, <span class="jxr_string">"backend:8080"</span>));
+<a class="jxr_linenumber" name="L490" href="#L490">490</a> 		allowed(open, <strong class="jxr_keyword">new</strong> R().method(<span class="jxr_string">"GET"</span>).h(<span class="jxr_string">"Host"</span>, <span class="jxr_string">"backend:8080"</span>).h(<span class="jxr_string">"X-Forwarded-Host"</span>, <span class="jxr_string">"\&quot;"</span>).h(<span class="jxr_string">"X-Forwarded-Proto"</span>, <span class="jxr_string">"ws"</span>));
+<a class="jxr_linenumber" name="L491" href="#L491">491</a> 		<strong class="jxr_keyword">var</strong> listed = xf().allowedHosts(<span class="jxr_string">"app.example"</span>).build();
+<a class="jxr_linenumber" name="L492" href="#L492">492</a> 		refused(listed, <strong class="jxr_keyword">new</strong> R().method(<span class="jxr_string">"GET"</span>).h(<span class="jxr_string">"Host"</span>, <span class="jxr_string">"backend:8080"</span>), FORWARDED_HOST_MISSING);
+<a class="jxr_linenumber" name="L493" href="#L493">493</a> 		allowed(listed, <strong class="jxr_keyword">new</strong> R().method(<span class="jxr_string">"GET"</span>).h(<span class="jxr_string">"Host"</span>, <span class="jxr_string">"backend:8080"</span>).h(<span class="jxr_string">"X-Forwarded-Host"</span>, <span class="jxr_string">"app.example"</span>).h(<span class="jxr_string">"X-Forwarded-Proto"</span>, <span class="jxr_string">"https"</span>));
+<a class="jxr_linenumber" name="L494" href="#L494">494</a> 	}
+<a class="jxr_linenumber" name="L495" href="#L495">495</a> 
+<a class="jxr_linenumber" name="L496" href="#L496">496</a> 	@Test <strong class="jxr_keyword">void</strong> f07_handshakeEdgeShapes() {
+<a class="jxr_linenumber" name="L497" href="#L497">497</a> 		<strong class="jxr_keyword">var</strong> two = xf().trustedHops(2).build();
+<a class="jxr_linenumber" name="L498" href="#L498">498</a> 		hsAllowed(two, <span class="jxr_string">"ws"</span>, <span class="jxr_string">"backend:8080"</span>, <span class="jxr_string">"Origin"</span>, PUBLIC, <span class="jxr_string">"X-Forwarded-Host"</span>, <span class="jxr_string">"app.example, internal"</span>, <span class="jxr_string">"X-Forwarded-Proto"</span>, <span class="jxr_string">"https, http"</span>);
+<a class="jxr_linenumber" name="L499" href="#L499">499</a> 		hsRefused(two, FORWARDED_HOPS_INSUFFICIENT, <span class="jxr_string">"ws"</span>, <span class="jxr_string">"backend:8080"</span>, <span class="jxr_string">"Origin"</span>, PUBLIC, <span class="jxr_string">"X-Forwarded-Host"</span>, <span class="jxr_string">"app.example"</span>,
+<a class="jxr_linenumber" name="L500" href="#L500">500</a> 			<span class="jxr_string">"X-Forwarded-Proto"</span>, <span class="jxr_string">"https"</span>);
+<a class="jxr_linenumber" name="L501" href="#L501">501</a> 		<strong class="jxr_keyword">var</strong> f = fwd().build();
+<a class="jxr_linenumber" name="L502" href="#L502">502</a> 		hsRefused(f, FORWARDED_HOST_MALFORMED, <span class="jxr_string">"ws"</span>, <span class="jxr_string">"backend:8080"</span>, <span class="jxr_string">"Origin"</span>, PUBLIC, <span class="jxr_string">"Forwarded"</span>, <span class="jxr_string">"host=\&quot;app.example;proto=https"</span>);
+<a class="jxr_linenumber" name="L503" href="#L503">503</a> 		hsRefused(f, FORWARDED_HOST_MALFORMED, <span class="jxr_string">"ws"</span>, <span class="jxr_string">"backend:8080"</span>, <span class="jxr_string">"Origin"</span>, PUBLIC, <span class="jxr_string">"Forwarded"</span>, <span class="jxr_string">"host=app.example;proto=https"</span>,
+<a class="jxr_linenumber" name="L504" href="#L504">504</a> 			<span class="jxr_string">"forwarded"</span>, <span class="jxr_string">"host=app.example;proto=https"</span>);
+<a class="jxr_linenumber" name="L505" href="#L505">505</a> 		hsRefused(f, FORWARDED_HOST_MISSING, <span class="jxr_string">"ws"</span>, <span class="jxr_string">"backend:8080"</span>, <span class="jxr_string">"Origin"</span>, PUBLIC);
+<a class="jxr_linenumber" name="L506" href="#L506">506</a> 		<strong class="jxr_keyword">var</strong> b = xf().build();
+<a class="jxr_linenumber" name="L507" href="#L507">507</a> 		<strong class="jxr_keyword">var</strong> empty = b.checkHandshake(<span class="jxr_string">"ws"</span>, <strong class="jxr_keyword">new</strong> HandshakeHosts(List.of(<span class="jxr_string">"backend:8080"</span>), false), <strong class="jxr_keyword">new</strong> LinkedHashMap&lt;String,List&lt;String&gt;&gt;());
+<a class="jxr_linenumber" name="L508" href="#L508">508</a> 		assertEquals(FORWARDED_HOST_MISSING, empty.reason());
+<a class="jxr_linenumber" name="L509" href="#L509">509</a> 	}
+<a class="jxr_linenumber" name="L510" href="#L510">510</a> 
+<a class="jxr_linenumber" name="L511" href="#L511">511</a> 	@Test <strong class="jxr_keyword">void</strong> f08_containerSourceOverHttp2() {
+<a class="jxr_linenumber" name="L512" href="#L512">512</a> 		<strong class="jxr_keyword">var</strong> b = xf().originSource(OriginSource.CONTAINER).build();
+<a class="jxr_linenumber" name="L513" href="#L513">513</a> 		<strong class="jxr_keyword">var</strong> r = <strong class="jxr_keyword">new</strong> R().method(<span class="jxr_string">"POST"</span>).scheme(<span class="jxr_string">"https"</span>).protocol(<span class="jxr_string">"HTTP/2.0"</span>).container(<span class="jxr_string">"app.example"</span>, 443).h(<span class="jxr_string">"Origin"</span>, PUBLIC)
+<a class="jxr_linenumber" name="L514" href="#L514">514</a> 			.h(<span class="jxr_string">"Content-Type"</span>, <span class="jxr_string">"application/json"</span>).h(b.csrfHeader(), b.tokenFor(<strong class="jxr_keyword">new</strong> R().build()))
+<a class="jxr_linenumber" name="L515" href="#L515">515</a> 			.h(<span class="jxr_string">"X-Forwarded-Host"</span>, <span class="jxr_string">"app.example"</span>).h(<span class="jxr_string">"X-Forwarded-Proto"</span>, <span class="jxr_string">"https"</span>);
+<a class="jxr_linenumber" name="L516" href="#L516">516</a> 		allowed(b, r);
+<a class="jxr_linenumber" name="L517" href="#L517">517</a> 		<strong class="jxr_keyword">var</strong> off = <strong class="jxr_keyword">new</strong> R().method(<span class="jxr_string">"POST"</span>).scheme(<span class="jxr_string">"http"</span>).protocol(<span class="jxr_string">"HTTP/2.0"</span>).container(<span class="jxr_string">"backend"</span>, 8080).h(<span class="jxr_string">"Origin"</span>, PUBLIC)
+<a class="jxr_linenumber" name="L518" href="#L518">518</a> 			.h(<span class="jxr_string">"Content-Type"</span>, <span class="jxr_string">"application/json"</span>).h(b.csrfHeader(), b.tokenFor(<strong class="jxr_keyword">new</strong> R().build()))
+<a class="jxr_linenumber" name="L519" href="#L519">519</a> 			.h(<span class="jxr_string">"X-Forwarded-Host"</span>, <span class="jxr_string">"app.example"</span>).h(<span class="jxr_string">"X-Forwarded-Proto"</span>, <span class="jxr_string">"https"</span>);
+<a class="jxr_linenumber" name="L520" href="#L520">520</a> 		refused(b, off, FORWARDED_CONTAINER_MISMATCH);
+<a class="jxr_linenumber" name="L521" href="#L521">521</a> 	}
+<a class="jxr_linenumber" name="L522" href="#L522">522</a> 
+<a class="jxr_linenumber" name="L523" href="#L523">523</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L524" href="#L524">524</a> 	<em class="jxr_comment">// Builder</em>
+<a class="jxr_linenumber" name="L525" href="#L525">525</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L526" href="#L526">526</a> 
+<a class="jxr_linenumber" name="L527" href="#L527">527</a> 	@Test <strong class="jxr_keyword">void</strong> e01_builder() {
+<a class="jxr_linenumber" name="L528" href="#L528">528</a> 		<strong class="jxr_keyword">var</strong> bld = CsrfBoundary.create();
+<a class="jxr_linenumber" name="L529" href="#L529">529</a> 		<strong class="jxr_keyword">var</strong> twoHops = CsrfBoundary.create().trustedHops(2);
+<a class="jxr_linenumber" name="L530" href="#L530">530</a> 		assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; bld.trustedHops(0));
+<a class="jxr_linenumber" name="L531" href="#L531">531</a> 		assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; bld.trustedHops(17));
+<a class="jxr_linenumber" name="L532" href="#L532">532</a> 		assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, twoHops::build);
+<a class="jxr_linenumber" name="L533" href="#L533">533</a> 		assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; bld.trustedForwarding(<strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L534" href="#L534">534</a> 		<strong class="jxr_keyword">var</strong> b = xf().trustedHops(16).build();
+<a class="jxr_linenumber" name="L535" href="#L535">535</a> 		assertEquals(ForwardedSource.X_FORWARDED, b.trustedForwarding());
+<a class="jxr_linenumber" name="L536" href="#L536">536</a> 		assertEquals(16, b.trustedHops());
+<a class="jxr_linenumber" name="L537" href="#L537">537</a> 		assertTrue(b.toString().contains(<span class="jxr_string">"trustedForwarding=X_FORWARDED"</span>) &amp;&amp; b.toString().contains(<span class="jxr_string">"trustedHops=16"</span>), b.toString());
+<a class="jxr_linenumber" name="L538" href="#L538">538</a> 		assertEquals(ForwardedSource.NONE, CsrfBoundary.create().build().trustedForwarding());
+<a class="jxr_linenumber" name="L539" href="#L539">539</a> 		assertEquals(1, CsrfBoundary.create().build().trustedHops());
+<a class="jxr_linenumber" name="L540" href="#L540">540</a> 	}
+<a class="jxr_linenumber" name="L541" href="#L541">541</a> 
+<a class="jxr_linenumber" name="L542" href="#L542">542</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L543" href="#L543">543</a> 	<em class="jxr_comment">// Peer allow-list</em>
+<a class="jxr_linenumber" name="L544" href="#L544">544</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L545" href="#L545">545</a> 
+<a class="jxr_linenumber" name="L546" href="#L546">546</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String TRUSTED = <span class="jxr_string">"10.1.2.3"</span>;
+<a class="jxr_linenumber" name="L547" href="#L547">547</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String UNTRUSTED = <span class="jxr_string">"203.0.113.7"</span>;
+<a class="jxr_linenumber" name="L548" href="#L548">548</a> 
+<a class="jxr_linenumber" name="L549" href="#L549">549</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> CsrfBoundary.Builder tp(String...cidrs) {
+<a class="jxr_linenumber" name="L550" href="#L550">550</a> 		<strong class="jxr_keyword">return</strong> xf().trustedProxies(cidrs);
+<a class="jxr_linenumber" name="L551" href="#L551">551</a> 	}
+<a class="jxr_linenumber" name="L552" href="#L552">552</a> 
+<a class="jxr_linenumber" name="L553" href="#L553">553</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> R viaXfFrom(CsrfBoundary b, String peer, String origin, String host, String proto) {
+<a class="jxr_linenumber" name="L554" href="#L554">554</a> 		<strong class="jxr_keyword">return</strong> viaXf(b, origin, host, proto).remote(peer);
+<a class="jxr_linenumber" name="L555" href="#L555">555</a> 	}
+<a class="jxr_linenumber" name="L556" href="#L556">556</a> 
+<a class="jxr_linenumber" name="L557" href="#L557">557</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> InetAddress ip(String literal) {
+<a class="jxr_linenumber" name="L558" href="#L558">558</a> 		<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L559" href="#L559">559</a> 			<strong class="jxr_keyword">return</strong> InetAddress.getByName(literal);
+<a class="jxr_linenumber" name="L560" href="#L560">560</a> 		} <strong class="jxr_keyword">catch</strong> (UnknownHostException e) {
+<a class="jxr_linenumber" name="L561" href="#L561">561</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalArgumentException(e);
+<a class="jxr_linenumber" name="L562" href="#L562">562</a> 		}
+<a class="jxr_linenumber" name="L563" href="#L563">563</a> 	}
+<a class="jxr_linenumber" name="L564" href="#L564">564</a> 
+<a class="jxr_linenumber" name="L565" href="#L565">565</a> 	<em class="jxr_javadoccomment">/** Whether a forwarded write from {@code peer} is believed under the given ranges. */</em>
+<a class="jxr_linenumber" name="L566" href="#L566">566</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">boolean</strong> trusts(String peer, String...ranges) {
+<a class="jxr_linenumber" name="L567" href="#L567">567</a> 		<strong class="jxr_keyword">var</strong> b = tp(ranges).build();
+<a class="jxr_linenumber" name="L568" href="#L568">568</a> 		<strong class="jxr_keyword">var</strong> x = b.check(viaXfFrom(b, peer, PUBLIC, <span class="jxr_string">"app.example"</span>, <span class="jxr_string">"https"</span>).build());
+<a class="jxr_linenumber" name="L569" href="#L569">569</a> 		<strong class="jxr_keyword">if</strong> (! x.isAllowed())
+<a class="jxr_linenumber" name="L570" href="#L570">570</a> 			assertEquals(FORWARDED_PEER_NOT_TRUSTED, x.reason(), x::toString);
+<a class="jxr_linenumber" name="L571" href="#L571">571</a> 		<strong class="jxr_keyword">return</strong> x.isAllowed();
+<a class="jxr_linenumber" name="L572" href="#L572">572</a> 	}
+<a class="jxr_linenumber" name="L573" href="#L573">573</a> 
+<a class="jxr_linenumber" name="L574" href="#L574">574</a> 	@Test <strong class="jxr_keyword">void</strong> g01_trustedPeerGetsPlainForwardedBehaviour() {
+<a class="jxr_linenumber" name="L575" href="#L575">575</a> 		<strong class="jxr_keyword">var</strong> b = tp(<span class="jxr_string">"10.0.0.0/8"</span>).build();
+<a class="jxr_linenumber" name="L576" href="#L576">576</a> 		allowed(b, viaXfFrom(b, TRUSTED, PUBLIC, <span class="jxr_string">"app.example"</span>, <span class="jxr_string">"https"</span>));
+<a class="jxr_linenumber" name="L577" href="#L577">577</a> 		refused(b, post(b, PUBLIC).remote(TRUSTED), FORWARDED_HOST_MISSING);
+<a class="jxr_linenumber" name="L578" href="#L578">578</a> 		refused(b, post(b, PUBLIC).h(<span class="jxr_string">"X-Forwarded-Host"</span>, <span class="jxr_string">"app.example"</span>).remote(TRUSTED), FORWARDED_PROTO_MISSING);
+<a class="jxr_linenumber" name="L579" href="#L579">579</a> 		refused(b, viaXfFrom(b, TRUSTED, PUBLIC, <span class="jxr_string">""</span>, <span class="jxr_string">"https"</span>), FORWARDED_HOST_MALFORMED);
+<a class="jxr_linenumber" name="L580" href="#L580">580</a> 		refused(b, viaXfFrom(b, TRUSTED, <span class="jxr_string">"http://evil.example"</span>, <span class="jxr_string">"app.example"</span>, <span class="jxr_string">"https"</span>), ORIGIN_MISMATCH);
+<a class="jxr_linenumber" name="L581" href="#L581">581</a> 		<strong class="jxr_keyword">var</strong> two = tp(<span class="jxr_string">"10.0.0.0/8"</span>).trustedHops(2).build();
+<a class="jxr_linenumber" name="L582" href="#L582">582</a> 		refused(two, viaXfFrom(two, TRUSTED, PUBLIC, <span class="jxr_string">"app.example"</span>, <span class="jxr_string">"https"</span>), FORWARDED_HOPS_INSUFFICIENT);
+<a class="jxr_linenumber" name="L583" href="#L583">583</a> 		<strong class="jxr_keyword">var</strong> r = <strong class="jxr_keyword">new</strong> R().method(<span class="jxr_string">"POST"</span>).scheme(<span class="jxr_string">"http"</span>).remote(TRUSTED).h(<span class="jxr_string">"Host"</span>, <span class="jxr_string">"left.example"</span>).h(<span class="jxr_string">"Origin"</span>, PUBLIC)
+<a class="jxr_linenumber" name="L584" href="#L584">584</a> 			.h(<span class="jxr_string">"Content-Type"</span>, <span class="jxr_string">"application/json"</span>).h(b.csrfHeader(), b.tokenFor(<strong class="jxr_keyword">new</strong> R().build()))
+<a class="jxr_linenumber" name="L585" href="#L585">585</a> 			.h(<span class="jxr_string">"X-Forwarded-Host"</span>, <span class="jxr_string">"\&quot;left.example\&quot;, app.example"</span>).h(<span class="jxr_string">"X-Forwarded-Proto"</span>, <span class="jxr_string">"http, https"</span>);
+<a class="jxr_linenumber" name="L586" href="#L586">586</a> 		refused(b, r, FORWARDED_CONTAINER_MISMATCH);
+<a class="jxr_linenumber" name="L587" href="#L587">587</a> 	}
+<a class="jxr_linenumber" name="L588" href="#L588">588</a> 
+<a class="jxr_linenumber" name="L589" href="#L589">589</a> 	@Test <strong class="jxr_keyword">void</strong> g02_untrustedPeerWithHeaderRefused() {
+<a class="jxr_linenumber" name="L590" href="#L590">590</a> 		<strong class="jxr_keyword">var</strong> b = tp(<span class="jxr_string">"10.0.0.0/8"</span>).build();
+<a class="jxr_linenumber" name="L591" href="#L591">591</a> 		refused(b, viaXfFrom(b, UNTRUSTED, PUBLIC, <span class="jxr_string">"app.example"</span>, <span class="jxr_string">"https"</span>), FORWARDED_PEER_NOT_TRUSTED);
+<a class="jxr_linenumber" name="L592" href="#L592">592</a> 		<em class="jxr_comment">// The rebinding forge: a page on the attacker's name choosing its own origin.</em>
+<a class="jxr_linenumber" name="L593" href="#L593">593</a> 		refused(b, viaXfFrom(b, UNTRUSTED, <span class="jxr_string">"http://evil.example"</span>, <span class="jxr_string">"evil.example"</span>, <span class="jxr_string">"http"</span>), FORWARDED_PEER_NOT_TRUSTED);
+<a class="jxr_linenumber" name="L594" href="#L594">594</a> 		<strong class="jxr_keyword">var</strong> listed = tp(<span class="jxr_string">"10.0.0.0/8"</span>).allowedHosts(<span class="jxr_string">"evil.example"</span>).build();
+<a class="jxr_linenumber" name="L595" href="#L595">595</a> 		refused(listed, viaXfFrom(listed, UNTRUSTED, <span class="jxr_string">"http://evil.example"</span>, <span class="jxr_string">"evil.example"</span>, <span class="jxr_string">"http"</span>), FORWARDED_PEER_NOT_TRUSTED);
+<a class="jxr_linenumber" name="L596" href="#L596">596</a> 	}
+<a class="jxr_linenumber" name="L597" href="#L597">597</a> 
+<a class="jxr_linenumber" name="L598" href="#L598">598</a> 	@Test <strong class="jxr_keyword">void</strong> g03_untrustedPeerWithoutHeaderJudgedOnContainerView() {
+<a class="jxr_linenumber" name="L599" href="#L599">599</a> 		<strong class="jxr_keyword">var</strong> b = tp(<span class="jxr_string">"10.0.0.0/8"</span>).build();
+<a class="jxr_linenumber" name="L600" href="#L600">600</a> 		allowed(b, post(b, <span class="jxr_string">"http://backend:8080"</span>));
+<a class="jxr_linenumber" name="L601" href="#L601">601</a> 		refused(b, post(b, PUBLIC), ORIGIN_MISMATCH);
+<a class="jxr_linenumber" name="L602" href="#L602">602</a> 		<strong class="jxr_keyword">var</strong> listed = tp(<span class="jxr_string">"10.0.0.0/8"</span>).allowedHosts(<span class="jxr_string">"app.example"</span>).build();
+<a class="jxr_linenumber" name="L603" href="#L603">603</a> 		refused(listed, post(listed, <span class="jxr_string">"http://backend:8080"</span>), HOST_NOT_ALLOWED);
+<a class="jxr_linenumber" name="L604" href="#L604">604</a> 		<strong class="jxr_keyword">var</strong> backendListed = tp(<span class="jxr_string">"10.0.0.0/8"</span>).allowedHosts(<span class="jxr_string">"app.example"</span>, <span class="jxr_string">"backend"</span>).build();
+<a class="jxr_linenumber" name="L605" href="#L605">605</a> 		allowed(backendListed, post(backendListed, <span class="jxr_string">"http://backend:8080"</span>));
+<a class="jxr_linenumber" name="L606" href="#L606">606</a> 	}
+<a class="jxr_linenumber" name="L607" href="#L607">607</a> 
+<a class="jxr_linenumber" name="L608" href="#L608">608</a> 	@Test <strong class="jxr_keyword">void</strong> g04_protoOnlyFromUntrustedPeerIsNotRefused() {
+<a class="jxr_linenumber" name="L609" href="#L609">609</a> 		<strong class="jxr_keyword">var</strong> b = tp(<span class="jxr_string">"10.0.0.0/8"</span>).build();
+<a class="jxr_linenumber" name="L610" href="#L610">610</a> 		allowed(b, post(b, <span class="jxr_string">"http://backend:8080"</span>).h(<span class="jxr_string">"X-Forwarded-Proto"</span>, <span class="jxr_string">"https"</span>));
+<a class="jxr_linenumber" name="L611" href="#L611">611</a> 		<strong class="jxr_keyword">var</strong> f = fwd().trustedProxies(<span class="jxr_string">"10.0.0.0/8"</span>).build();
+<a class="jxr_linenumber" name="L612" href="#L612">612</a> 		allowed(f, post(f, <span class="jxr_string">"http://backend:8080"</span>).h(<span class="jxr_string">"Forwarded"</span>, <span class="jxr_string">"for=1.2.3.4;proto=https"</span>));
+<a class="jxr_linenumber" name="L613" href="#L613">613</a> 	}
+<a class="jxr_linenumber" name="L614" href="#L614">614</a> 
+<a class="jxr_linenumber" name="L615" href="#L615">615</a> 	@Test <strong class="jxr_keyword">void</strong> g05_forwardedFamily() {
+<a class="jxr_linenumber" name="L616" href="#L616">616</a> 		<strong class="jxr_keyword">var</strong> f = fwd().trustedProxies(<span class="jxr_string">"10.0.0.0/8"</span>).build();
+<a class="jxr_linenumber" name="L617" href="#L617">617</a> 		refused(f, post(f, PUBLIC).h(<span class="jxr_string">"Forwarded"</span>, <span class="jxr_string">"for=1.2.3.4;host=app.example"</span>), FORWARDED_PEER_NOT_TRUSTED);
+<a class="jxr_linenumber" name="L618" href="#L618">618</a> 		<em class="jxr_comment">// Another family is not the selected one.</em>
+<a class="jxr_linenumber" name="L619" href="#L619">619</a> 		allowed(f, post(f, <span class="jxr_string">"http://backend:8080"</span>).h(<span class="jxr_string">"X-Forwarded-Host"</span>, <span class="jxr_string">"app.example"</span>).h(<span class="jxr_string">"X-Forwarded-Proto"</span>, <span class="jxr_string">"https"</span>));
+<a class="jxr_linenumber" name="L620" href="#L620">620</a> 		<em class="jxr_comment">// A header the container will not enumerate counts as a claim.</em>
+<a class="jxr_linenumber" name="L621" href="#L621">621</a> 		<strong class="jxr_keyword">var</strong> req = post(f, PUBLIC).h(<span class="jxr_string">"Forwarded"</span>, <span class="jxr_string">"host=app.example;proto=https"</span>).build();
+<a class="jxr_linenumber" name="L622" href="#L622">622</a> 		when(req.getHeaders(<span class="jxr_string">"Forwarded"</span>)).thenReturn(<strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L623" href="#L623">623</a> 		assertEquals(FORWARDED_PEER_NOT_TRUSTED, f.check(req).reason());
+<a class="jxr_linenumber" name="L624" href="#L624">624</a> 		<strong class="jxr_keyword">var</strong> b = tp(<span class="jxr_string">"10.0.0.0/8"</span>).build();
+<a class="jxr_linenumber" name="L625" href="#L625">625</a> 		<strong class="jxr_keyword">var</strong> req2 = post(b, PUBLIC).h(<span class="jxr_string">"X-Forwarded-Host"</span>, <span class="jxr_string">"app.example"</span>).build();
+<a class="jxr_linenumber" name="L626" href="#L626">626</a> 		when(req2.getHeaders(<span class="jxr_string">"X-Forwarded-Host"</span>)).thenReturn(<strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L627" href="#L627">627</a> 		assertEquals(FORWARDED_PEER_NOT_TRUSTED, b.check(req2).reason());
+<a class="jxr_linenumber" name="L628" href="#L628">628</a> 	}
+<a class="jxr_linenumber" name="L629" href="#L629">629</a> 
+<a class="jxr_linenumber" name="L630" href="#L630">630</a> 	@Test <strong class="jxr_keyword">void</strong> g06_safeMethods() {
+<a class="jxr_linenumber" name="L631" href="#L631">631</a> 		<strong class="jxr_keyword">var</strong> open = tp(<span class="jxr_string">"10.0.0.0/8"</span>).build();
+<a class="jxr_linenumber" name="L632" href="#L632">632</a> 		allowed(open, <strong class="jxr_keyword">new</strong> R().method(<span class="jxr_string">"GET"</span>).h(<span class="jxr_string">"Host"</span>, <span class="jxr_string">"backend:8080"</span>).h(<span class="jxr_string">"X-Forwarded-Host"</span>, <span class="jxr_string">"evil.example"</span>).remote(UNTRUSTED));
+<a class="jxr_linenumber" name="L633" href="#L633">633</a> 		<strong class="jxr_keyword">var</strong> listed = tp(<span class="jxr_string">"10.0.0.0/8"</span>).allowedHosts(<span class="jxr_string">"app.example"</span>).build();
+<a class="jxr_linenumber" name="L634" href="#L634">634</a> 		refused(listed, <strong class="jxr_keyword">new</strong> R().method(<span class="jxr_string">"GET"</span>).h(<span class="jxr_string">"Host"</span>, <span class="jxr_string">"backend:8080"</span>).h(<span class="jxr_string">"X-Forwarded-Host"</span>, <span class="jxr_string">"app.example"</span>)
+<a class="jxr_linenumber" name="L635" href="#L635">635</a> 			.h(<span class="jxr_string">"X-Forwarded-Proto"</span>, <span class="jxr_string">"https"</span>).remote(UNTRUSTED), FORWARDED_PEER_NOT_TRUSTED);
+<a class="jxr_linenumber" name="L636" href="#L636">636</a> 		refused(listed, <strong class="jxr_keyword">new</strong> R().method(<span class="jxr_string">"GET"</span>).h(<span class="jxr_string">"Host"</span>, <span class="jxr_string">"backend:8080"</span>).remote(UNTRUSTED), HOST_NOT_ALLOWED);
+<a class="jxr_linenumber" name="L637" href="#L637">637</a> 		allowed(listed, <strong class="jxr_keyword">new</strong> R().method(<span class="jxr_string">"GET"</span>).h(<span class="jxr_string">"Host"</span>, <span class="jxr_string">"backend:8080"</span>).h(<span class="jxr_string">"X-Forwarded-Host"</span>, <span class="jxr_string">"app.example"</span>)
+<a class="jxr_linenumber" name="L638" href="#L638">638</a> 			.h(<span class="jxr_string">"X-Forwarded-Proto"</span>, <span class="jxr_string">"https"</span>).remote(TRUSTED));
+<a class="jxr_linenumber" name="L639" href="#L639">639</a> 	}
+<a class="jxr_linenumber" name="L640" href="#L640">640</a> 
+<a class="jxr_linenumber" name="L641" href="#L641">641</a> 	@ParameterizedTest
+<a class="jxr_linenumber" name="L642" href="#L642">642</a> 	@ValueSource(strings = { <span class="jxr_string">"10.1.2.3"</span>, <span class="jxr_string">"[::1]"</span>, <span class="jxr_string">"0:0:0:0:0:0:0:1"</span>, <span class="jxr_string">"::1"</span>, <span class="jxr_string">"fe80::1%eth0"</span>, <span class="jxr_string">"fe80::1%2"</span>, <span class="jxr_string">"::ffff:10.1.2.3"</span>, <span class="jxr_string">"::ffff:127.0.0.1"</span> })
+<a class="jxr_linenumber" name="L643" href="#L643">643</a> 	<strong class="jxr_keyword">void</strong> g07a_peerTrusted(String peer) {
+<a class="jxr_linenumber" name="L644" href="#L644">644</a> 		assertTrue(trusts(peer, <span class="jxr_string">"10.0.0.0/8"</span>, <span class="jxr_string">"::1/128"</span>, <span class="jxr_string">"fe80::/10"</span>, <span class="jxr_string">"127.0.0.0/8"</span>), peer);
+<a class="jxr_linenumber" name="L645" href="#L645">645</a> 	}
+<a class="jxr_linenumber" name="L646" href="#L646">646</a> 
+<a class="jxr_linenumber" name="L647" href="#L647">647</a> 	@ParameterizedTest
+<a class="jxr_linenumber" name="L648" href="#L648">648</a> 	@ValueSource(strings = {
+<a class="jxr_linenumber" name="L649" href="#L649">649</a> 		<span class="jxr_string">"::10.1.2.3"</span>, <span class="jxr_string">"64:ff9b::a01:203"</span>, <span class="jxr_string">""</span>, <span class="jxr_string">"localhost"</span>, <span class="jxr_string">"proxy.internal"</span>, <span class="jxr_string">"/tmp/jetty.sock"</span>, <span class="jxr_string">"unknown"</span>, <span class="jxr_string">"10.1"</span>, <span class="jxr_string">"010.1.2.3"</span>,
+<a class="jxr_linenumber" name="L650" href="#L650">650</a> 		<span class="jxr_string">"10.1.2.3."</span>, <span class="jxr_string">"[10.1.2.3]x"</span>, <span class="jxr_string">"fe80::1%"</span>, <span class="jxr_string">"::1%eth0%1"</span>, <span class="jxr_string">".::1"</span>, <span class="jxr_string">".:"</span>
+<a class="jxr_linenumber" name="L651" href="#L651">651</a> 	})
+<a class="jxr_linenumber" name="L652" href="#L652">652</a> 	<strong class="jxr_keyword">void</strong> g07b_peerUntrusted(String peer) {
+<a class="jxr_linenumber" name="L653" href="#L653">653</a> 		<em class="jxr_comment">// "localhost" would be trusted if it were resolved.</em>
+<a class="jxr_linenumber" name="L654" href="#L654">654</a> 		assertFalse(trusts(peer, <span class="jxr_string">"10.0.0.0/8"</span>, <span class="jxr_string">"::1/128"</span>, <span class="jxr_string">"fe80::/10"</span>, <span class="jxr_string">"127.0.0.0/8"</span>), peer);
+<a class="jxr_linenumber" name="L655" href="#L655">655</a> 	}
+<a class="jxr_linenumber" name="L656" href="#L656">656</a> 
+<a class="jxr_linenumber" name="L657" href="#L657">657</a> 	@Test <strong class="jxr_keyword">void</strong> g07c_nullPeerUntrusted() {
+<a class="jxr_linenumber" name="L658" href="#L658">658</a> 		assertFalse(trusts(<strong class="jxr_keyword">null</strong>, <span class="jxr_string">"0.0.0.0/0"</span>, <span class="jxr_string">"::/0"</span>));
+<a class="jxr_linenumber" name="L659" href="#L659">659</a> 	}
+<a class="jxr_linenumber" name="L660" href="#L660">660</a> 
+<a class="jxr_linenumber" name="L661" href="#L661">661</a> 	@Test <strong class="jxr_keyword">void</strong> g08_prefixBoundaries() {
+<a class="jxr_linenumber" name="L662" href="#L662">662</a> 		assertTrue(trusts(<span class="jxr_string">"172.16.0.0"</span>, <span class="jxr_string">"172.16.0.0/12"</span>));
+<a class="jxr_linenumber" name="L663" href="#L663">663</a> 		assertTrue(trusts(<span class="jxr_string">"172.31.255.255"</span>, <span class="jxr_string">"172.16.0.0/12"</span>));
+<a class="jxr_linenumber" name="L664" href="#L664">664</a> 		assertFalse(trusts(<span class="jxr_string">"172.32.0.0"</span>, <span class="jxr_string">"172.16.0.0/12"</span>));
+<a class="jxr_linenumber" name="L665" href="#L665">665</a> 		assertFalse(trusts(<span class="jxr_string">"172.15.255.255"</span>, <span class="jxr_string">"172.16.0.0/12"</span>));
+<a class="jxr_linenumber" name="L666" href="#L666">666</a> 		assertTrue(trusts(<span class="jxr_string">"2001:db8::"</span>, <span class="jxr_string">"2001:db8::/127"</span>));
+<a class="jxr_linenumber" name="L667" href="#L667">667</a> 		assertTrue(trusts(<span class="jxr_string">"2001:db8::1"</span>, <span class="jxr_string">"2001:db8::/127"</span>));
+<a class="jxr_linenumber" name="L668" href="#L668">668</a> 		assertFalse(trusts(<span class="jxr_string">"2001:db8::2"</span>, <span class="jxr_string">"2001:db8::/127"</span>));
+<a class="jxr_linenumber" name="L669" href="#L669">669</a> 		assertTrue(trusts(<span class="jxr_string">"10.0.0.1"</span>, <span class="jxr_string">"10.0.0.1"</span>));
+<a class="jxr_linenumber" name="L670" href="#L670">670</a> 		assertFalse(trusts(<span class="jxr_string">"10.0.0.2"</span>, <span class="jxr_string">"10.0.0.1"</span>));
+<a class="jxr_linenumber" name="L671" href="#L671">671</a> 		assertFalse(trusts(<span class="jxr_string">"::a01:203"</span>, <span class="jxr_string">"10.0.0.0/8"</span>));
+<a class="jxr_linenumber" name="L672" href="#L672">672</a> 		assertFalse(trusts(<span class="jxr_string">"10.1.2.3"</span>, <span class="jxr_string">"::/0"</span>));
+<a class="jxr_linenumber" name="L673" href="#L673">673</a> 	}
+<a class="jxr_linenumber" name="L674" href="#L674">674</a> 
+<a class="jxr_linenumber" name="L675" href="#L675">675</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> BoundaryResult hsFrom(CsrfBoundary b, InetAddress peer, String scheme, String host, String...headers) {
+<a class="jxr_linenumber" name="L676" href="#L676">676</a> 		<strong class="jxr_keyword">return</strong> b.checkHandshake(scheme, <strong class="jxr_keyword">new</strong> HandshakeHosts(host == <strong class="jxr_keyword">null</strong> ? List.of() : List.of(host), false), map(headers), peer);
+<a class="jxr_linenumber" name="L677" href="#L677">677</a> 	}
+<a class="jxr_linenumber" name="L678" href="#L678">678</a> 
+<a class="jxr_linenumber" name="L679" href="#L679">679</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> hsFromRefused(CsrfBoundary b, BoundaryReason reason, InetAddress peer, String host, String...headers) {
+<a class="jxr_linenumber" name="L680" href="#L680">680</a> 		<strong class="jxr_keyword">var</strong> x = hsFrom(b, peer, <span class="jxr_string">"ws"</span>, host, headers);
+<a class="jxr_linenumber" name="L681" href="#L681">681</a> 		assertFalse(x.isAllowed(), () -&gt; <span class="jxr_string">"expected "</span> + reason + <span class="jxr_string">", got allowed"</span>);
+<a class="jxr_linenumber" name="L682" href="#L682">682</a> 		assertEquals(reason, x.reason(), x::toString);
+<a class="jxr_linenumber" name="L683" href="#L683">683</a> 	}
+<a class="jxr_linenumber" name="L684" href="#L684">684</a> 
+<a class="jxr_linenumber" name="L685" href="#L685">685</a> 	@Test <strong class="jxr_keyword">void</strong> g09_handshake() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L686" href="#L686">686</a> 		<strong class="jxr_keyword">var</strong> b = tp(<span class="jxr_string">"10.0.0.0/8"</span>).build();
+<a class="jxr_linenumber" name="L687" href="#L687">687</a> 		<strong class="jxr_keyword">var</strong> trusted = ip(TRUSTED);
+<a class="jxr_linenumber" name="L688" href="#L688">688</a> 		<strong class="jxr_keyword">var</strong> untrusted = ip(UNTRUSTED);
+<a class="jxr_linenumber" name="L689" href="#L689">689</a> 		<strong class="jxr_keyword">var</strong> fwdHeaders = <strong class="jxr_keyword">new</strong> String[] { <span class="jxr_string">"Origin"</span>, PUBLIC, <span class="jxr_string">"X-Forwarded-Host"</span>, <span class="jxr_string">"app.example"</span>, <span class="jxr_string">"X-Forwarded-Proto"</span>, <span class="jxr_string">"https"</span> };
+<a class="jxr_linenumber" name="L690" href="#L690">690</a> 		assertTrue(hsFrom(b, trusted, <span class="jxr_string">"ws"</span>, <span class="jxr_string">"backend:8080"</span>, fwdHeaders).isAllowed());
+<a class="jxr_linenumber" name="L691" href="#L691">691</a> 		assertEquals(FORWARDED_HOST_MISSING, hsFrom(b, trusted, <span class="jxr_string">"ws"</span>, <span class="jxr_string">"backend:8080"</span>, <span class="jxr_string">"Origin"</span>, PUBLIC).reason());
+<a class="jxr_linenumber" name="L692" href="#L692">692</a> 		hsFromRefused(b, FORWARDED_PEER_NOT_TRUSTED, untrusted, <span class="jxr_string">"backend:8080"</span>, fwdHeaders);
+<a class="jxr_linenumber" name="L693" href="#L693">693</a> 		hsFromRefused(b, FORWARDED_PEER_NOT_TRUSTED, untrusted, <span class="jxr_string">"backend:8080"</span>, <span class="jxr_string">"Origin"</span>, <span class="jxr_string">"http://evil.example"</span>,
+<a class="jxr_linenumber" name="L694" href="#L694">694</a> 			<span class="jxr_string">"X-Forwarded-Host"</span>, <span class="jxr_string">"evil.example"</span>, <span class="jxr_string">"X-Forwarded-Proto"</span>, <span class="jxr_string">"http"</span>);
+<a class="jxr_linenumber" name="L695" href="#L695">695</a> 		<em class="jxr_comment">// Without the header: the container view.</em>
+<a class="jxr_linenumber" name="L696" href="#L696">696</a> 		assertTrue(hsFrom(b, untrusted, <span class="jxr_string">"ws"</span>, <span class="jxr_string">"backend:8080"</span>, <span class="jxr_string">"Origin"</span>, <span class="jxr_string">"http://backend:8080"</span>).isAllowed());
+<a class="jxr_linenumber" name="L697" href="#L697">697</a> 		hsFromRefused(b, ORIGIN_MISMATCH, untrusted, <span class="jxr_string">"backend:8080"</span>, <span class="jxr_string">"Origin"</span>, PUBLIC);
+<a class="jxr_linenumber" name="L698" href="#L698">698</a> 		<em class="jxr_comment">// An unknown peer is untrusted.</em>
+<a class="jxr_linenumber" name="L699" href="#L699">699</a> 		hsFromRefused(b, FORWARDED_PEER_NOT_TRUSTED, <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"backend:8080"</span>, fwdHeaders);
+<a class="jxr_linenumber" name="L700" href="#L700">700</a> 		assertTrue(hsFrom(b, <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"ws"</span>, <span class="jxr_string">"backend:8080"</span>, <span class="jxr_string">"Origin"</span>, <span class="jxr_string">"http://backend:8080"</span>).isAllowed());
+<a class="jxr_linenumber" name="L701" href="#L701">701</a> 		<em class="jxr_comment">// The three-argument form has no peer.</em>
+<a class="jxr_linenumber" name="L702" href="#L702">702</a> 		<strong class="jxr_keyword">var</strong> legacy = b.checkHandshake(<span class="jxr_string">"ws"</span>, <strong class="jxr_keyword">new</strong> HandshakeHosts(List.of(<span class="jxr_string">"backend:8080"</span>), false), map(fwdHeaders));
+<a class="jxr_linenumber" name="L703" href="#L703">703</a> 		assertEquals(FORWARDED_PEER_NOT_TRUSTED, legacy.reason());
+<a class="jxr_linenumber" name="L704" href="#L704">704</a> 		<em class="jxr_comment">// Safe-method style allowedHosts applies to the container view.</em>
+<a class="jxr_linenumber" name="L705" href="#L705">705</a> 		<strong class="jxr_keyword">var</strong> listed = tp(<span class="jxr_string">"10.0.0.0/8"</span>).allowedHosts(<span class="jxr_string">"app.example"</span>).build();
+<a class="jxr_linenumber" name="L706" href="#L706">706</a> 		hsFromRefused(listed, HOST_NOT_ALLOWED, untrusted, <span class="jxr_string">"backend:8080"</span>, <span class="jxr_string">"Origin"</span>, <span class="jxr_string">"http://backend:8080"</span>);
+<a class="jxr_linenumber" name="L707" href="#L707">707</a> 		<em class="jxr_comment">// A mapped Inet6Address (which getByName would have collapsed) is unwrapped.</em>
+<a class="jxr_linenumber" name="L708" href="#L708">708</a> 		<strong class="jxr_keyword">var</strong> mapped = Inet6Address.getByAddress(<strong class="jxr_keyword">null</strong>, <strong class="jxr_keyword">new</strong> byte[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, (byte)0xff, (byte)0xff, 10, 1, 2, 3 }, -1);
+<a class="jxr_linenumber" name="L709" href="#L709">709</a> 		assertTrue(hsFrom(b, mapped, <span class="jxr_string">"ws"</span>, <span class="jxr_string">"backend:8080"</span>, fwdHeaders).isAllowed());
+<a class="jxr_linenumber" name="L710" href="#L710">710</a> 		<em class="jxr_comment">// Presence rows.</em>
+<a class="jxr_linenumber" name="L711" href="#L711">711</a> 		hsFromRefused(b, FORWARDED_PEER_NOT_TRUSTED, untrusted, <span class="jxr_string">"backend:8080"</span>, <span class="jxr_string">"Origin"</span>, PUBLIC, <span class="jxr_string">"X-Forwarded-Host"</span>, <span class="jxr_string">"a"</span>,
+<a class="jxr_linenumber" name="L712" href="#L712">712</a> 			<span class="jxr_string">"x-forwarded-host"</span>, <span class="jxr_string">"b"</span>);
+<a class="jxr_linenumber" name="L713" href="#L713">713</a> 		hsFromRefused(b, FORWARDED_PEER_NOT_TRUSTED, untrusted, <span class="jxr_string">"backend:8080"</span>, <span class="jxr_string">"Origin"</span>, PUBLIC, <span class="jxr_string">"X-Forwarded-Host"</span>, <span class="jxr_string">""</span>);
+<a class="jxr_linenumber" name="L714" href="#L714">714</a> 		<em class="jxr_comment">// Host is parsed first.</em>
+<a class="jxr_linenumber" name="L715" href="#L715">715</a> 		hsFromRefused(b, HOST_MALFORMED, untrusted, <span class="jxr_string">"bad host"</span>, fwdHeaders);
+<a class="jxr_linenumber" name="L716" href="#L716">716</a> 		<em class="jxr_comment">// The list overloads refuse before any peer logic.</em>
+<a class="jxr_linenumber" name="L717" href="#L717">717</a> 		<strong class="jxr_keyword">var</strong> list = b.checkHandshake(<span class="jxr_string">"ws"</span>, <strong class="jxr_keyword">new</strong> HandshakeHosts(List.of(<span class="jxr_string">"backend:8080"</span>), false), List.of(PUBLIC), List.of());
+<a class="jxr_linenumber" name="L718" href="#L718">718</a> 		assertEquals(FORWARDED_HOST_MISSING, list.reason());
+<a class="jxr_linenumber" name="L719" href="#L719">719</a> 		<em class="jxr_comment">// Off: the peer is never read.</em>
+<a class="jxr_linenumber" name="L720" href="#L720">720</a> 		<strong class="jxr_keyword">var</strong> plain = xf().build();
+<a class="jxr_linenumber" name="L721" href="#L721">721</a> 		assertTrue(hsFrom(plain, untrusted, <span class="jxr_string">"ws"</span>, <span class="jxr_string">"backend:8080"</span>, fwdHeaders).isAllowed());
+<a class="jxr_linenumber" name="L722" href="#L722">722</a> 	}
+<a class="jxr_linenumber" name="L723" href="#L723">723</a> 
+<a class="jxr_linenumber" name="L724" href="#L724">724</a> 	@Test <strong class="jxr_keyword">void</strong> g11_presenceAndOrder() {
+<a class="jxr_linenumber" name="L725" href="#L725">725</a> 		<strong class="jxr_keyword">var</strong> b = tp(<span class="jxr_string">"10.0.0.0/8"</span>).build();
+<a class="jxr_linenumber" name="L726" href="#L726">726</a> 		refused(b, post(b, PUBLIC).h(<span class="jxr_string">"X-Forwarded-Host"</span>, <span class="jxr_string">""</span>), FORWARDED_PEER_NOT_TRUSTED);
+<a class="jxr_linenumber" name="L727" href="#L727">727</a> 		allowed(b, post(b, <span class="jxr_string">"http://backend:8080"</span>).h(<span class="jxr_string">"Forwarded"</span>, <span class="jxr_string">"host=evil"</span>));
+<a class="jxr_linenumber" name="L728" href="#L728">728</a> 		<strong class="jxr_keyword">var</strong> f = fwd().trustedProxies(<span class="jxr_string">"10.0.0.0/8"</span>).build();
+<a class="jxr_linenumber" name="L729" href="#L729">729</a> 		allowed(f, post(f, <span class="jxr_string">"http://backend:8080"</span>).h(<span class="jxr_string">"Forwarded"</span>, <span class="jxr_string">"for=1.2.3.4;proto=https"</span>));
+<a class="jxr_linenumber" name="L730" href="#L730">730</a> 		refused(f, post(f, PUBLIC).h(<span class="jxr_string">"Forwarded"</span>, <span class="jxr_string">"for=1.2.3.4;host=app.example"</span>), FORWARDED_PEER_NOT_TRUSTED);
+<a class="jxr_linenumber" name="L731" href="#L731">731</a> 		refused(f, post(f, PUBLIC).h(<span class="jxr_string">"Forwarded"</span>, <span class="jxr_string">"HOST=app.example"</span>), FORWARDED_PEER_NOT_TRUSTED);
+<a class="jxr_linenumber" name="L732" href="#L732">732</a> 		refused(f, post(f, PUBLIC).h(<span class="jxr_string">"Forwarded"</span>, <span class="jxr_string">"host="</span>), FORWARDED_PEER_NOT_TRUSTED);
+<a class="jxr_linenumber" name="L733" href="#L733">733</a> 		refused(f, post(f, PUBLIC).h(<span class="jxr_string">"Forwarded"</span>, <span class="jxr_string">"host=\&quot;\&quot;"</span>), FORWARDED_PEER_NOT_TRUSTED);
+<a class="jxr_linenumber" name="L734" href="#L734">734</a> 		refused(f, post(f, PUBLIC).h(<span class="jxr_string">"Forwarded"</span>, <span class="jxr_string">";;="</span>), FORWARDED_PEER_NOT_TRUSTED);
+<a class="jxr_linenumber" name="L735" href="#L735">735</a> 		refused(f, post(f, PUBLIC).h(<span class="jxr_string">"Forwarded"</span>, <span class="jxr_string">"for=a"</span>).h(<span class="jxr_string">"Forwarded"</span>, <span class="jxr_string">"host=x"</span>), FORWARDED_PEER_NOT_TRUSTED);
+<a class="jxr_linenumber" name="L736" href="#L736">736</a> 		<em class="jxr_comment">// The peer comes before the Host parse.</em>
+<a class="jxr_linenumber" name="L737" href="#L737">737</a> 		<strong class="jxr_keyword">var</strong> bad = <strong class="jxr_keyword">new</strong> R().method(<span class="jxr_string">"POST"</span>).h(<span class="jxr_string">"Host"</span>, <span class="jxr_string">"bad host"</span>).h(<span class="jxr_string">"Origin"</span>, PUBLIC).h(<span class="jxr_string">"X-Forwarded-Host"</span>, <span class="jxr_string">"app.example"</span>);
+<a class="jxr_linenumber" name="L738" href="#L738">738</a> 		refused(b, bad, FORWARDED_PEER_NOT_TRUSTED);
+<a class="jxr_linenumber" name="L739" href="#L739">739</a> 		<strong class="jxr_keyword">var</strong> bad2 = <strong class="jxr_keyword">new</strong> R().method(<span class="jxr_string">"POST"</span>).h(<span class="jxr_string">"Host"</span>, <span class="jxr_string">"bad host"</span>).h(<span class="jxr_string">"Origin"</span>, PUBLIC);
+<a class="jxr_linenumber" name="L740" href="#L740">740</a> 		<strong class="jxr_keyword">var</strong> x = b.check(bad2.build());
+<a class="jxr_linenumber" name="L741" href="#L741">741</a> 		assertEquals(HOST_MALFORMED, x.reason());
+<a class="jxr_linenumber" name="L742" href="#L742">742</a> 		assertEquals(400, x.status());
+<a class="jxr_linenumber" name="L743" href="#L743">743</a> 	}
+<a class="jxr_linenumber" name="L744" href="#L744">744</a> 
+<a class="jxr_linenumber" name="L745" href="#L745">745</a> 	@Test <strong class="jxr_keyword">void</strong> g10a_builderRefusesBadEntries() {
+<a class="jxr_linenumber" name="L746" href="#L746">746</a> 		<strong class="jxr_keyword">var</strong> proxies = CsrfBoundary.create();
+<a class="jxr_linenumber" name="L747" href="#L747">747</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> bad : <strong class="jxr_keyword">new</strong> String[] {
+<a class="jxr_linenumber" name="L748" href="#L748">748</a> 			<span class="jxr_string">"10.1"</span>, <span class="jxr_string">"010.0.0.1"</span>, <span class="jxr_string">"10.0.0.256"</span>, <span class="jxr_string">"10.0.0.1."</span>, <span class="jxr_string">"[::1]"</span>, <span class="jxr_string">"fe80::1%eth0"</span>, <span class="jxr_string">"::ffff:10.0.0.0/104"</span>, <span class="jxr_string">"::ffff:10.0.0.1"</span>,
+<a class="jxr_linenumber" name="L749" href="#L749">749</a> 			<span class="jxr_string">"10.0.0.0/33"</span>, <span class="jxr_string">"::/129"</span>, <span class="jxr_string">"10.0.0.0/+8"</span>, <span class="jxr_string">"10.0.0.0/-1"</span>, <span class="jxr_string">"10.0.0.0/08"</span>, <span class="jxr_string">"10.0.0.0/a"</span>, <span class="jxr_string">"10.0.0.0/"</span>, <span class="jxr_string">"10.0.0.0/8/8"</span>,
+<a class="jxr_linenumber" name="L750" href="#L750">750</a> 			<span class="jxr_string">"localhost"</span>, <span class="jxr_string">"proxy.example"</span>, <span class="jxr_string">""</span>, <span class="jxr_string">"  "</span>, <span class="jxr_string">"g::1"</span>, <span class="jxr_string">"1:2:3:4:5:6:7:8:9"</span>, <span class="jxr_string">".::1/128"</span>, <span class="jxr_string">".:"</span>
+<a class="jxr_linenumber" name="L751" href="#L751">751</a> 		})
+<a class="jxr_linenumber" name="L752" href="#L752">752</a> 			assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; proxies.trustedProxies(bad), bad);
+<a class="jxr_linenumber" name="L753" href="#L753">753</a> 		assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, proxies::trustedProxies);
+<a class="jxr_linenumber" name="L754" href="#L754">754</a> 		assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; proxies.trustedProxies(<strong class="jxr_keyword">new</strong> String[0]));
+<a class="jxr_linenumber" name="L755" href="#L755">755</a> 		assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; proxies.trustedProxies((String)<strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L756" href="#L756">756</a> 		assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; proxies.trustedProxies((String[])<strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L757" href="#L757">757</a> 		assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; proxies.trustedProxies(<span class="jxr_string">"10.0.0.0/8"</span>, <strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L758" href="#L758">758</a> 	}
+<a class="jxr_linenumber" name="L759" href="#L759">759</a> 
+<a class="jxr_linenumber" name="L760" href="#L760">760</a> 	@Test <strong class="jxr_keyword">void</strong> g10b_builderAcceptsMaskedAndNormalized() {
+<a class="jxr_linenumber" name="L761" href="#L761">761</a> 		<em class="jxr_comment">// Accepted, masked and normalized.</em>
+<a class="jxr_linenumber" name="L762" href="#L762">762</a> 		assertEquals(List.of(<span class="jxr_string">"10.0.0.0/8"</span>), tp(<span class="jxr_string">"10.0.0.1/8"</span>).build().trustedProxies());
+<a class="jxr_linenumber" name="L763" href="#L763">763</a> 		assertEquals(List.of(<span class="jxr_string">"192.168.1.0/24"</span>), tp(<span class="jxr_string">"192.168.1.1/24"</span>, <span class="jxr_string">"192.168.1.0/24"</span>).build().trustedProxies());
+<a class="jxr_linenumber" name="L764" href="#L764">764</a> 		assertEquals(List.of(<span class="jxr_string">"10.0.0.1/32"</span>), tp(<span class="jxr_string">"10.0.0.1"</span>, <span class="jxr_string">"10.0.0.1/32"</span>).build().trustedProxies());
+<a class="jxr_linenumber" name="L765" href="#L765">765</a> 		assertEquals(List.of(<span class="jxr_string">"2001:db8:0:0:0:0:0:0/32"</span>), tp(<span class="jxr_string">"2001:db8::1/32"</span>).build().trustedProxies());
+<a class="jxr_linenumber" name="L766" href="#L766">766</a> 		assertEquals(List.of(<span class="jxr_string">"2001:db8:0:0:0:0:0:0/32"</span>), tp(<span class="jxr_string">"2001:db8::/32"</span>).build().trustedProxies());
+<a class="jxr_linenumber" name="L767" href="#L767">767</a> 		assertEquals(List.of(<span class="jxr_string">"0:0:0:0:0:0:0:1/128"</span>), tp(<span class="jxr_string">"::1"</span>).build().trustedProxies());
+<a class="jxr_linenumber" name="L768" href="#L768">768</a> 		assertEquals(List.of(<span class="jxr_string">"10.0.0.0/8"</span>, <span class="jxr_string">"fd00:0:0:0:0:0:0:0/8"</span>), tp(<span class="jxr_string">" 10.0.0.0/8 "</span>, <span class="jxr_string">"fd00::/8"</span>).build().trustedProxies());
+<a class="jxr_linenumber" name="L769" href="#L769">769</a> 		assertEquals(List.of(<span class="jxr_string">"172.16.0.0/12"</span>), tp(<span class="jxr_string">"172.31.1.1/12"</span>).build().trustedProxies());
+<a class="jxr_linenumber" name="L770" href="#L770">770</a> 		assertEquals(List.of(<span class="jxr_string">"0:0:0:0:0:0:0:0/0"</span>), tp(<span class="jxr_string">"::/0"</span>).build().trustedProxies());
+<a class="jxr_linenumber" name="L771" href="#L771">771</a> 		<em class="jxr_comment">// The last call replaces the earlier ones.</em>
+<a class="jxr_linenumber" name="L772" href="#L772">772</a> 		assertEquals(List.of(<span class="jxr_string">"10.0.0.0/8"</span>), xf().trustedProxies(<span class="jxr_string">"192.168.0.0/16"</span>).trustedProxies(<span class="jxr_string">"10.0.0.0/8"</span>).build().trustedProxies());
+<a class="jxr_linenumber" name="L773" href="#L773">773</a> 		<em class="jxr_comment">// Masked ranges match.</em>
+<a class="jxr_linenumber" name="L774" href="#L774">774</a> 		assertTrue(trusts(<span class="jxr_string">"10.255.255.255"</span>, <span class="jxr_string">"10.0.0.1/8"</span>));
+<a class="jxr_linenumber" name="L775" href="#L775">775</a> 		<em class="jxr_comment">// /0 is per family.</em>
+<a class="jxr_linenumber" name="L776" href="#L776">776</a> 		assertTrue(trusts(<span class="jxr_string">"203.0.113.7"</span>, <span class="jxr_string">"0.0.0.0/0"</span>));
+<a class="jxr_linenumber" name="L777" href="#L777">777</a> 		assertTrue(trusts(<span class="jxr_string">"::ffff:203.0.113.7"</span>, <span class="jxr_string">"0.0.0.0/0"</span>));
+<a class="jxr_linenumber" name="L778" href="#L778">778</a> 		assertFalse(trusts(<span class="jxr_string">"2001:db8::1"</span>, <span class="jxr_string">"0.0.0.0/0"</span>));
+<a class="jxr_linenumber" name="L779" href="#L779">779</a> 		assertTrue(trusts(<span class="jxr_string">"2001:db8::1"</span>, <span class="jxr_string">"::/0"</span>));
+<a class="jxr_linenumber" name="L780" href="#L780">780</a> 		assertFalse(trusts(<span class="jxr_string">"203.0.113.7"</span>, <span class="jxr_string">"::/0"</span>));
+<a class="jxr_linenumber" name="L781" href="#L781">781</a> 	}
+<a class="jxr_linenumber" name="L782" href="#L782">782</a> 
+<a class="jxr_linenumber" name="L783" href="#L783">783</a> 	@Test <strong class="jxr_keyword">void</strong> g10c_builderCrossSettingChecks() {
+<a class="jxr_linenumber" name="L784" href="#L784">784</a> 		<em class="jxr_comment">// Cross-setting checks.</em>
+<a class="jxr_linenumber" name="L785" href="#L785">785</a> 		<strong class="jxr_keyword">var</strong> plain = CsrfBoundary.create().trustedProxies(<span class="jxr_string">"10.0.0.0/8"</span>);
+<a class="jxr_linenumber" name="L786" href="#L786">786</a> 		<strong class="jxr_keyword">var</strong> xfContainer = xf().originSource(OriginSource.CONTAINER).trustedProxies(<span class="jxr_string">"10.0.0.0/8"</span>);
+<a class="jxr_linenumber" name="L787" href="#L787">787</a> 		<strong class="jxr_keyword">var</strong> fwdContainer = fwd().originSource(OriginSource.CONTAINER).trustedProxies(<span class="jxr_string">"10.0.0.0/8"</span>);
+<a class="jxr_linenumber" name="L788" href="#L788">788</a> 		assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, plain::build);
+<a class="jxr_linenumber" name="L789" href="#L789">789</a> 		assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, xfContainer::build);
+<a class="jxr_linenumber" name="L790" href="#L790">790</a> 		assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, fwdContainer::build);
+<a class="jxr_linenumber" name="L791" href="#L791">791</a> 		assertTrue(CsrfBoundary.create().build().trustedProxies().isEmpty());
+<a class="jxr_linenumber" name="L792" href="#L792">792</a> 		assertTrue(tp(<span class="jxr_string">"10.0.0.0/8"</span>).build().toString().contains(<span class="jxr_string">"trustedProxies=[10.0.0.0/8]"</span>));
+<a class="jxr_linenumber" name="L793" href="#L793">793</a> 		<strong class="jxr_keyword">var</strong> trusted = tp(<span class="jxr_string">"10.0.0.0/8"</span>).build().trustedProxies();
+<a class="jxr_linenumber" name="L794" href="#L794">794</a> 		assertThrows(UnsupportedOperationException.<strong class="jxr_keyword">class</strong>, () -&gt; trusted.add(<span class="jxr_string">"x"</span>));
+<a class="jxr_linenumber" name="L795" href="#L795">795</a> 
+<a class="jxr_linenumber" name="L796" href="#L796">796</a> 		<em class="jxr_comment">// Not set means every peer is believed, exactly as before.</em>
+<a class="jxr_linenumber" name="L797" href="#L797">797</a> 		<strong class="jxr_keyword">var</strong> off = xf().build();
+<a class="jxr_linenumber" name="L798" href="#L798">798</a> 		allowed(off, viaXfFrom(off, UNTRUSTED, PUBLIC, <span class="jxr_string">"app.example"</span>, <span class="jxr_string">"https"</span>));
+<a class="jxr_linenumber" name="L799" href="#L799">799</a> 		allowed(off, viaXfFrom(off, <strong class="jxr_keyword">null</strong>, PUBLIC, <span class="jxr_string">"app.example"</span>, <span class="jxr_string">"https"</span>));
+<a class="jxr_linenumber" name="L800" href="#L800">800</a> 	}
+<a class="jxr_linenumber" name="L801" href="#L801">801</a> 
+<a class="jxr_linenumber" name="L802" href="#L802">802</a> 	<em class="jxr_javadoccomment">/** A forwarded refusal logs the forwarded values at FINEST only, without line breaks and capped in length. */</em>
+<a class="jxr_linenumber" name="L803" href="#L803">803</a> 	@Test <strong class="jxr_keyword">void</strong> l01_forwardedRefusalLogsValuesAtFinestOnly() {
+<a class="jxr_linenumber" name="L804" href="#L804">804</a> 		<strong class="jxr_keyword">var</strong> b = xf().build();
+<a class="jxr_linenumber" name="L805" href="#L805">805</a> 		<strong class="jxr_keyword">var</strong> log = CsrfBoundary_Test.captureLog(() -&gt; hsRefused(b, FORWARDED_HOST_MALFORMED, <span class="jxr_string">"ws"</span>, <span class="jxr_string">"app.example"</span>,
+<a class="jxr_linenumber" name="L806" href="#L806">806</a> 			<span class="jxr_string">"Origin"</span>, PUBLIC, <span class="jxr_string">"X-Forwarded-Host"</span>, <span class="jxr_string">"bad host\r\nforged-line"</span> + <span class="jxr_string">"z"</span>.repeat(500), <span class="jxr_string">"X-Forwarded-Proto"</span>, <span class="jxr_string">"https"</span>));
+<a class="jxr_linenumber" name="L807" href="#L807">807</a> 		<strong class="jxr_keyword">var</strong> finest = log.stream().filter(x -&gt; x.getLevel() == java.util.logging.Level.FINEST).map(CsrfBoundary_Test::text).toList();
+<a class="jxr_linenumber" name="L808" href="#L808">808</a> 		assertEquals(1, finest.size(), log::toString);
+<a class="jxr_linenumber" name="L809" href="#L809">809</a> 		<strong class="jxr_keyword">var</strong> m = finest.get(0);
+<a class="jxr_linenumber" name="L810" href="#L810">810</a> 		assertTrue(m.contains(<span class="jxr_string">"X-Forwarded-Host=bad hostforged-line"</span>), m);
+<a class="jxr_linenumber" name="L811" href="#L811">811</a> 		assertTrue(m.contains(<span class="jxr_string">"X-Forwarded-Proto=https"</span>), m);
+<a class="jxr_linenumber" name="L812" href="#L812">812</a> 		assertTrue(m.chars().noneMatch(c -&gt; c &lt; 0x20 || c == 0x7f), m);
+<a class="jxr_linenumber" name="L813" href="#L813">813</a> 		assertFalse(m.contains(<span class="jxr_string">"z"</span>.repeat(201)), m);
+<a class="jxr_linenumber" name="L814" href="#L814">814</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> x : log)
+<a class="jxr_linenumber" name="L815" href="#L815">815</a> 			<strong class="jxr_keyword">if</strong> (x.getLevel() != java.util.logging.Level.FINEST)
+<a class="jxr_linenumber" name="L816" href="#L816">816</a> 				assertFalse(CsrfBoundary_Test.text(x).contains(<span class="jxr_string">"forged-line"</span>), CsrfBoundary_Test.text(x));
+<a class="jxr_linenumber" name="L817" href="#L817">817</a> 	}
+<a class="jxr_linenumber" name="L818" href="#L818">818</a> }
+</pre>
+<hr/>
+<div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>
+</body>
+</html>

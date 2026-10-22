@@ -228,7 +228,7 @@
 <a class="jxr_linenumber" name="L220" href="#L220">220</a> 			<strong class="jxr_keyword">var</strong> r = s.writeToString(input.in);
 <a class="jxr_linenumber" name="L221" href="#L221">221</a> 
 <a class="jxr_linenumber" name="L222" href="#L222">222</a> 			<em class="jxr_comment">// Specifying "xxx" in the expected results will spit out what we should populate the field with.</em>
-<a class="jxr_linenumber" name="L223" href="#L223">223</a> 			<strong class="jxr_keyword">if</strong> (expected.equals(<span class="jxr_string">"xxx"</span>)) {
+<a class="jxr_linenumber" name="L223" href="#L223">223</a> 			<strong class="jxr_keyword">if</strong> (eq(expected, <span class="jxr_string">"xxx"</span>)) {
 <a class="jxr_linenumber" name="L224" href="#L224">224</a> 				System.out.println(input.label + <span class="jxr_string">"/"</span> + testName + <span class="jxr_string">"=\n"</span> + r.replaceAll(<span class="jxr_string">"\n"</span>, <span class="jxr_string">"&#92;&#92;&#92;&#92;n"</span>).replaceAll(<span class="jxr_string">"\t"</span>, <span class="jxr_string">"&#92;&#92;&#92;&#92;t"</span>)); <em class="jxr_comment">// NOT DEBUG</em>
 <a class="jxr_linenumber" name="L225" href="#L225">225</a> 				System.out.println(r);
 <a class="jxr_linenumber" name="L226" href="#L226">226</a> 				<strong class="jxr_keyword">return</strong>;

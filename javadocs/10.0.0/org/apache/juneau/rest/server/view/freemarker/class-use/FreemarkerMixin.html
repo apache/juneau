@@ -56,30 +56,38 @@ loadScripts(document, 'script');</script>
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Package</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><a href="#org.apache.juneau.petstore.rest">org.apache.juneau.petstore.rest</a></div>
+<div class="col-first even-row-color"><a href="#org.apache.juneau.petstore.console">org.apache.juneau.petstore.console</a></div>
 <div class="col-last even-row-color">
-<div class="block">Petstore REST resources.</div>
+<div class="block">Petstore admin console: the <code>/console</code> page tree.</div>
 </div>
 <div class="col-first odd-row-color"><a href="#org.apache.juneau.rest.server.view.freemarker">org.apache.juneau.rest.server.view.freemarker</a></div>
 <div class="col-last odd-row-color">
 <div class="block">Apache FreeMarker view-rendering bridge &mdash; opt-in <code>juneau-rest-server-view-freemarker</code>
  module.</div>
 </div>
+<div class="col-first even-row-color"><a href="#org.apache.juneau.rest.server.view.freemarker.console">org.apache.juneau.rest.server.view.freemarker.console</a></div>
+<div class="col-last even-row-color">
+<div class="block">FreeMarker-only delivery of the admin-console chrome: the reserved-classpath <code>base.ftlh</code> template, the
+ <code>&lt;@tag&gt;</code> macro, and <a href="../console/ConsoleFreemarkerMixin.html" title="class in org.apache.juneau.rest.server.view.freemarker.console"><code>ConsoleFreemarkerMixin</code></a>
+ (registers a reserved-path <code>ClassTemplateLoader</code> on top of the host's own <code>FreemarkerMixin</code>
+ configuration).</div>
+</div>
 </div>
 <section class="class-uses">
 <ul class="block-list">
 <li>
-<section class="detail" id="org.apache.juneau.petstore.rest">
-<h2>Uses of <a href="../FreemarkerMixin.html" title="class in org.apache.juneau.rest.server.view.freemarker">FreemarkerMixin</a> in <a href="../../../../../petstore/rest/package-summary.html">org.apache.juneau.petstore.rest</a></h2>
-<div class="caption"><span>Methods in <a href="../../../../../petstore/rest/package-summary.html">org.apache.juneau.petstore.rest</a> that return <a href="../FreemarkerMixin.html" title="class in org.apache.juneau.rest.server.view.freemarker">FreemarkerMixin</a></span></div>
+<section class="detail" id="org.apache.juneau.petstore.console">
+<h2>Uses of <a href="../FreemarkerMixin.html" title="class in org.apache.juneau.rest.server.view.freemarker">FreemarkerMixin</a> in <a href="../../../../../petstore/console/package-summary.html">org.apache.juneau.petstore.console</a></h2>
+<div class="caption"><span>Methods in <a href="../../../../../petstore/console/package-summary.html">org.apache.juneau.petstore.console</a> that return <a href="../FreemarkerMixin.html" title="class in org.apache.juneau.rest.server.view.freemarker">FreemarkerMixin</a></span></div>
 <div class="summary-table three-column-summary">
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color"><code><a href="../FreemarkerMixin.html" title="class in org.apache.juneau.rest.server.view.freemarker">FreemarkerMixin</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">PetFreemarkerViewResource.</span><code><a href="../../../../../petstore/rest/PetFreemarkerViewResource.html#freemarker()" class="member-name-link">freemarker</a>()</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">PetstoreConsolePage.</span><code><a href="../../../../../petstore/console/PetstoreConsolePage.html#freemarker()" class="member-name-link">freemarker</a>()</code></div>
 <div class="col-last even-row-color">
-<div class="block">Provides a <a href="../FreemarkerMixin.html" title="class in org.apache.juneau.rest.server.view.freemarker"><code>FreemarkerMixin</code></a> configured to resolve templates under <code>petstore-templates/</code>.</div>
+<div class="block">The console FreeMarker mixin: petstore templates, <code>base.ftlh</code> chrome, <code>assetUrl(..)</code> over this
+ package's bundled scripts, and the <a href="../../../../../petstore/console/dev/InventoryGaugeCardType.html" title="class in org.apache.juneau.petstore.console.dev"><code>InventoryGaugeCardType</code></a> custom card type.</div>
 </div>
 </div>
 </section>
@@ -96,6 +104,45 @@ loadScripts(document, 'script');</script>
 <div class="col-second even-row-color"><span class="type-name-label">FreemarkerMixin.Builder.</span><code><a href="../FreemarkerMixin.Builder.html#build()" class="member-name-link">build</a>()</code></div>
 <div class="col-last even-row-color">
 <div class="block">Builds the <a href="../FreemarkerMixin.html" title="class in org.apache.juneau.rest.server.view.freemarker"><code>FreemarkerMixin</code></a>.</div>
+</div>
+</div>
+<div class="caption"><span>Methods in <a href="../package-summary.html">org.apache.juneau.rest.server.view.freemarker</a> that return types with arguments of type <a href="../FreemarkerMixin.html" title="class in org.apache.juneau.rest.server.view.freemarker">FreemarkerMixin</a></span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier and Type</div>
+<div class="table-header col-second">Method</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code>static <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;? extends <a href="../FreemarkerMixin.html" title="class in org.apache.juneau.rest.server.view.freemarker">FreemarkerMixin</a>&gt;&gt;</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">FreemarkerMixin.</span><code><a href="../FreemarkerMixin.html#registeredSubtypes()" class="member-name-link">registeredSubtypes</a>()</code></div>
+<div class="col-last even-row-color">&nbsp;</div>
+</div>
+<div class="caption"><span>Method parameters in <a href="../package-summary.html">org.apache.juneau.rest.server.view.freemarker</a> with type arguments of type <a href="../FreemarkerMixin.html" title="class in org.apache.juneau.rest.server.view.freemarker">FreemarkerMixin</a></span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier and Type</div>
+<div class="table-header col-second">Method</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code>static void</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">FreemarkerMixin.</span><code><a href="../FreemarkerMixin.html#registerSubtype(java.lang.Class)" class="member-name-link">registerSubtype</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;? extends <a href="../FreemarkerMixin.html" title="class in org.apache.juneau.rest.server.view.freemarker">FreemarkerMixin</a>&gt;&nbsp;type)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Registers a subclass so <a href="../FreemarkerViewRenderer.html" title="class in org.apache.juneau.rest.server.view.freemarker"><code>FreemarkerViewRenderer</code></a> also finds a bean declared with that subclass as its
+ <code>@Bean</code> return type.</div>
+</div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="org.apache.juneau.rest.server.view.freemarker.console">
+<h2>Uses of <a href="../FreemarkerMixin.html" title="class in org.apache.juneau.rest.server.view.freemarker">FreemarkerMixin</a> in <a href="../console/package-summary.html">org.apache.juneau.rest.server.view.freemarker.console</a></h2>
+<div class="caption"><span>Subclasses of <a href="../FreemarkerMixin.html" title="class in org.apache.juneau.rest.server.view.freemarker">FreemarkerMixin</a> in <a href="../console/package-summary.html">org.apache.juneau.rest.server.view.freemarker.console</a></span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier and Type</div>
+<div class="table-header col-second">Class</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code>class&nbsp;</code></div>
+<div class="col-second even-row-color"><code><a href="../console/ConsoleFreemarkerMixin.html" class="type-name-link" title="class in org.apache.juneau.rest.server.view.freemarker.console">ConsoleFreemarkerMixin</a></code></div>
+<div class="col-last even-row-color">
+<div class="block">A <a href="../FreemarkerMixin.html" title="class in org.apache.juneau.rest.server.view.freemarker"><code>FreemarkerMixin</code></a> that additionally makes the reserved-classpath admin-console chrome template
+ (<code>org/apache/juneau/console/base.ftlh</code>) &mdash; and the <code>&lt;@tag&gt;</code> macro it defines &mdash; resolvable
+ from any consumer template, without shadowing the consumer's own <code>basePath</code>-rooted template tree.</div>
 </div>
 </div>
 </section>

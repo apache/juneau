@@ -82,12 +82,12 @@
 <a class="jxr_linenumber" name="L74" href="#L74">74</a>  	}
 <a class="jxr_linenumber" name="L75" href="#L75">75</a>  
 <a class="jxr_linenumber" name="L76" href="#L76">76</a>  	@Test <strong class="jxr_keyword">void</strong> a02_staticFilesStillServedDespiteHiddenFromSpec() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L77" href="#L77">77</a>  		c.get(<span class="jxr_string">"/static/javadoc.css"</span>)
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>  		c.get(<span class="jxr_string">"/static/themes/devops.css"</span>)
 <a class="jxr_linenumber" name="L78" href="#L78">78</a>  			.run()
 <a class="jxr_linenumber" name="L79" href="#L79">79</a>  			.assertStatus(200);
 <a class="jxr_linenumber" name="L80" href="#L80">80</a>  		<em class="jxr_comment">// /htdocs/* is no longer a multi-path default; migration covered by</em>
 <a class="jxr_linenumber" name="L81" href="#L81">81</a>  		<em class="jxr_comment">// StaticFilesMixin_SvlPathOverride_Test#a02.</em>
-<a class="jxr_linenumber" name="L82" href="#L82">82</a>  		c.get(<span class="jxr_string">"/htdocs/javadoc.css"</span>)
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>  		c.get(<span class="jxr_string">"/htdocs/themes/devops.css"</span>)
 <a class="jxr_linenumber" name="L83" href="#L83">83</a>  			.run()
 <a class="jxr_linenumber" name="L84" href="#L84">84</a>  			.assertStatus(404);
 <a class="jxr_linenumber" name="L85" href="#L85">85</a>  	}
@@ -121,7 +121,7 @@
 <a class="jxr_linenumber" name="L113" href="#L113">113</a> 
 <a class="jxr_linenumber" name="L114" href="#L114">114</a> 	@Test <strong class="jxr_keyword">void</strong> b02_legacyHtdocStillServedDespiteHiddenFromSpec() <strong class="jxr_keyword">throws</strong> Exception {
 <a class="jxr_linenumber" name="L115" href="#L115">115</a> 		<em class="jxr_comment">// Legacy getHtdoc(...) handler still serves the file even though it's hidden from spec.</em>
-<a class="jxr_linenumber" name="L116" href="#L116">116</a> 		cb.get(<span class="jxr_string">"/htdocs/javadoc.css"</span>)
+<a class="jxr_linenumber" name="L116" href="#L116">116</a> 		cb.get(<span class="jxr_string">"/htdocs/themes/devops.css"</span>)
 <a class="jxr_linenumber" name="L117" href="#L117">117</a> 			.run()
 <a class="jxr_linenumber" name="L118" href="#L118">118</a> 			.assertStatus(200);
 <a class="jxr_linenumber" name="L119" href="#L119">119</a> 	}

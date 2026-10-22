@@ -56,26 +56,110 @@ loadScripts(document, 'script');</script>
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Package</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><a href="#org.apache.juneau.rest.server.filter">org.apache.juneau.rest.server.filter</a></div>
+<div class="col-first even-row-color"><a href="#org.apache.juneau.rest.server.bus">org.apache.juneau.rest.server.bus</a></div>
 <div class="col-last even-row-color">
+<div class="block">Server half of the console message bus.</div>
+</div>
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.rest.server.filter">org.apache.juneau.rest.server.filter</a></div>
+<div class="col-last odd-row-color">
 <div class="block">Servlet filters that augment Juneau REST server request handling.</div>
 </div>
 </div>
 <section class="package-uses">
 <ul class="block-list">
 <li>
+<section class="detail" id="org.apache.juneau.rest.server.bus">
+<div class="caption"><span>Classes in <a href="package-summary.html">org.apache.juneau.rest.server.filter</a> used by <a href="../bus/package-summary.html">org.apache.juneau.rest.server.bus</a></span></div>
+<div class="summary-table two-column-summary">
+<div class="table-header col-first">Class</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><a href="class-use/RequestBoundary.html#org.apache.juneau.rest.server.bus">RequestBoundary</a></div>
+<div class="col-last even-row-color">
+<div class="block">Decides whether a request came from a page this application served, and supplies the CSRF token such a page embeds.</div>
+</div>
+</div>
+</section>
+</li>
+<li>
 <section class="detail" id="org.apache.juneau.rest.server.filter">
 <div class="caption"><span>Classes in <a href="package-summary.html">org.apache.juneau.rest.server.filter</a> used by <a href="package-summary.html">org.apache.juneau.rest.server.filter</a></span></div>
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Class</div>
 <div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><a href="class-use/BoundaryReason.html#org.apache.juneau.rest.server.filter">BoundaryReason</a></div>
+<div class="col-last even-row-color">
+<div class="block">Why a <a href="RequestBoundary.html" title="interface in org.apache.juneau.rest.server.filter"><code>RequestBoundary</code></a> refused a request.</div>
+</div>
+<div class="col-first odd-row-color"><a href="class-use/BoundaryResult.html#org.apache.juneau.rest.server.filter">BoundaryResult</a></div>
+<div class="col-last odd-row-color">
+<div class="block">The outcome of <a href="RequestBoundary.html#check(jakarta.servlet.http.HttpServletRequest)"><code>RequestBoundary.check(jakarta.servlet.http.HttpServletRequest)</code></a>: either allowed, or a
+ rejection carrying the reason, the HTTP status to answer with, and a message safe to return to the caller.</div>
+</div>
+<div class="col-first even-row-color"><a href="class-use/CsrfBoundary.html#org.apache.juneau.rest.server.filter">CsrfBoundary</a></div>
+<div class="col-last even-row-color">
+<div class="block">The cross-site request forgery boundary for an application reachable from the network: decides whether a
+ state-changing request came from this application's own page, or from a client that is not a browser, and refuses
+ it when it came from some other site's page.</div>
+</div>
+<div class="col-first odd-row-color"><a href="class-use/CsrfBoundary.Builder.html#org.apache.juneau.rest.server.filter">CsrfBoundary.Builder</a></div>
+<div class="col-last odd-row-color">
+<div class="block">Builder for <a href="CsrfBoundary.html" title="class in org.apache.juneau.rest.server.filter"><code>CsrfBoundary</code></a>.</div>
+</div>
+<div class="col-first even-row-color"><a href="class-use/CsrfBoundary.ForwardedSource.html#org.apache.juneau.rest.server.filter">CsrfBoundary.ForwardedSource</a></div>
+<div class="col-last even-row-color">
+<div class="block">The one header family whose forwarded origin the boundary trusts.</div>
+</div>
+<div class="col-first odd-row-color"><a href="class-use/CsrfBoundary.NonBrowser.html#org.apache.juneau.rest.server.filter">CsrfBoundary.NonBrowser</a></div>
+<div class="col-last odd-row-color">
+<div class="block">How an unsafe request with neither <code>Origin</code> nor <code>Sec-Fetch-Site</code> is treated.</div>
+</div>
+<div class="col-first even-row-color"><a href="class-use/CsrfBoundary.OriginSource.html#org.apache.juneau.rest.server.filter">CsrfBoundary.OriginSource</a></div>
+<div class="col-last even-row-color">
+<div class="block">Where the request's own origin, which <code>Origin</code> must equal, comes from.</div>
+</div>
+<div class="col-first odd-row-color"><a href="class-use/CsrfTokens.html#org.apache.juneau.rest.server.filter">CsrfTokens</a></div>
+<div class="col-last odd-row-color">
+<div class="block">Where a CSRF synchronizer token comes from, and how it is masked for embedding and checked on the way back.</div>
+</div>
+<div class="col-first even-row-color"><a href="class-use/CsrfTokens.PerSession.html#org.apache.juneau.rest.server.filter">CsrfTokens.PerSession</a></div>
+<div class="col-last even-row-color">
+<div class="block">The per-session strategy: the token is <c>HMAC-SHA256(key, UTF-8(sessionId))</c>.</div>
+</div>
+<div class="col-first odd-row-color"><a href="class-use/HandshakeHosts.html#org.apache.juneau.rest.server.filter">HandshakeHosts</a></div>
+<div class="col-last odd-row-color">
+<div class="block">The <code>Host</code> values of a WebSocket handshake; over RFC 8441 with no <code>Host</code>, one value from the request
+ URI's authority.</div>
+</div>
+<div class="col-first even-row-color"><a href="class-use/LoopbackBoundary.html#org.apache.juneau.rest.server.filter">LoopbackBoundary</a></div>
+<div class="col-last even-row-color">
+<div class="block">The request-authenticity half of a loopback application's write protection: decides whether a request came from
+ the page this process served, and refuses it when it did not.</div>
+</div>
+<div class="col-first odd-row-color"><a href="class-use/LoopbackBoundary.Builder.html#org.apache.juneau.rest.server.filter">LoopbackBoundary.Builder</a></div>
+<div class="col-last odd-row-color">
+<div class="block">Builder for <a href="LoopbackBoundary.html" title="class in org.apache.juneau.rest.server.filter"><code>LoopbackBoundary</code></a>.</div>
+</div>
+<div class="col-first even-row-color"><a href="class-use/RequestBoundary.html#org.apache.juneau.rest.server.filter">RequestBoundary</a></div>
+<div class="col-last even-row-color">
+<div class="block">Decides whether a request came from a page this application served, and supplies the CSRF token such a page embeds.</div>
+</div>
+<div class="col-first odd-row-color"><a href="class-use/RequestBoundaryFilter.html#org.apache.juneau.rest.server.filter">RequestBoundaryFilter</a></div>
+<div class="col-last odd-row-color">
+<div class="block">Applies a <a href="RequestBoundary.html" title="interface in org.apache.juneau.rest.server.filter"><code>RequestBoundary</code></a> to every request reaching the servlet container, rejecting those that did not
+ come from a page this application served.</div>
+</div>
 <div class="col-first even-row-color"><a href="class-use/RequestIdFilter.html#org.apache.juneau.rest.server.filter">RequestIdFilter</a></div>
 <div class="col-last even-row-color">
-<div class="block">Per-request id mint-or-honor filter that stashes the id on the servlet request and echoes it on the response.</div>
+<div class="block">Thin configuration façade over the always-on request-id correlation resolver.</div>
 </div>
 <div class="col-first odd-row-color"><a href="class-use/RequestIdFilter.Builder.html#org.apache.juneau.rest.server.filter">RequestIdFilter.Builder</a></div>
 <div class="col-last odd-row-color">
 <div class="block">Builder for <a href="RequestIdFilter.html" title="class in org.apache.juneau.rest.server.filter"><code>RequestIdFilter</code></a>.</div>
+</div>
+<div class="col-first even-row-color"><a href="class-use/SynchronizerToken.html#org.apache.juneau.rest.server.filter">SynchronizerToken</a></div>
+<div class="col-last even-row-color">
+<div class="block">A server-held CSRF token: a secret minted in this process's memory, embedded into the pages this process
+ serves, and required back on every state-changing request.</div>
 </div>
 </div>
 </section>

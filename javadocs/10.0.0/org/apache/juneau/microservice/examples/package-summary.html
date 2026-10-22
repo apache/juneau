@@ -15,7 +15,11 @@
 <script type="text/javascript" src="../../../../../script-dir/jquery-ui.min.js"></script>
 </head>
 <body class="package-declaration-page">
-<script type="text/javascript">var pathtoroot = "../../../../../";
+<script type="text/javascript">var evenRowColor = "even-row-color";
+var oddRowColor = "odd-row-color";
+var tableTab = "table-tab";
+var activeTableTab = "active-table-tab";
+var pathtoroot = "../../../../../";
 loadScripts(document, 'script');</script>
 <noscript>
 <div>JavaScript is disabled on your browser.</div>
@@ -82,49 +86,59 @@ loadScripts(document, 'script');</script>
 </li>
 <li>
 <div id="class-summary">
-<div class="caption"><span>Classes</span></div>
+<div class="table-tabs" role="tablist" aria-orientation="horizontal"><button id="class-summary-tab0" role="tab" aria-selected="true" aria-controls="class-summary.tabpanel" tabindex="0" onkeydown="switchTab(event)" onclick="show('class-summary', 'class-summary', 2)" class="active-table-tab">All Classes and Interfaces</button><button id="class-summary-tab1" role="tab" aria-selected="false" aria-controls="class-summary.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('class-summary', 'class-summary-tab1', 2)" class="table-tab">Interfaces</button><button id="class-summary-tab2" role="tab" aria-selected="false" aria-controls="class-summary.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('class-summary', 'class-summary-tab2', 2)" class="table-tab">Classes</button></div>
+<div id="class-summary.tabpanel" role="tabpanel" aria-labelledby="class-summary-tab0">
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Class</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color class-summary class-summary-tab2"><a href="ConfigResource.html" title="class in org.apache.juneau.microservice.examples">ConfigResource</a></div>
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="AdminBoundary.html" title="class in org.apache.juneau.microservice.examples">AdminBoundary</a></div>
 <div class="col-last even-row-color class-summary class-summary-tab2">
-<div class="block">Shows contents of the microservice configuration file.</div>
+<div class="block">The CSRF boundary for the admin resources <a href="ConfigResource.html" title="class in org.apache.juneau.microservice.examples"><code>ConfigResource</code></a>, <a href="LogsResource.html" title="class in org.apache.juneau.microservice.examples"><code>LogsResource</code></a> and <a href="ShutdownResource.html" title="class in org.apache.juneau.microservice.examples"><code>ShutdownResource</code></a>.</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="DebugResource.html" title="class in org.apache.juneau.microservice.examples">DebugResource</a></div>
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="ConfigResource.html" title="class in org.apache.juneau.microservice.examples">ConfigResource</a></div>
 <div class="col-last odd-row-color class-summary class-summary-tab2">
+<div class="block">Shows contents of the microservice configuration file, and updates it.</div>
+</div>
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="DebugResource.html" title="class in org.apache.juneau.microservice.examples">DebugResource</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab2">
 <div class="block">Microservice debug utilities.</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab2"><a href="DirectoryResource.html" title="class in org.apache.juneau.microservice.examples">DirectoryResource</a></div>
-<div class="col-last even-row-color class-summary class-summary-tab2">
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="DirectoryResource.html" title="class in org.apache.juneau.microservice.examples">DirectoryResource</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">
 <div class="block">REST resource that allows access to a file system directory.</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="DirectoryResource.Action.html" title="class in org.apache.juneau.microservice.examples">DirectoryResource.Action</a></div>
-<div class="col-last odd-row-color class-summary class-summary-tab2">
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="DirectoryResource.Action.html" title="class in org.apache.juneau.microservice.examples">DirectoryResource.Action</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab2">
 <div class="block">File action link.</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab2"><a href="LogParser.html" title="class in org.apache.juneau.microservice.examples">LogParser</a></div>
-<div class="col-last even-row-color class-summary class-summary-tab2">
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="LogParser.html" title="class in org.apache.juneau.microservice.examples">LogParser</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">
 <div class="block">Utility class for reading log files.</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="LogsResource.html" title="class in org.apache.juneau.microservice.examples">LogsResource</a></div>
-<div class="col-last odd-row-color class-summary class-summary-tab2">
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="LogsResource.html" title="class in org.apache.juneau.microservice.examples">LogsResource</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab2">
 <div class="block">REST resource for viewing and accessing log files.</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab2"><a href="LogsResource.Action.html" title="class in org.apache.juneau.microservice.examples">LogsResource.Action</a></div>
-<div class="col-last even-row-color class-summary class-summary-tab2">
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="LogsResource.Action.html" title="class in org.apache.juneau.microservice.examples">LogsResource.Action</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">
 <div class="block">File action link.</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="LogsResource.FileResource.html" title="class in org.apache.juneau.microservice.examples">LogsResource.FileResource</a></div>
-<div class="col-last odd-row-color class-summary class-summary-tab2">
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="LogsResource.FileResource.html" title="class in org.apache.juneau.microservice.examples">LogsResource.FileResource</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab2">
 <div class="block">File or directory details for REST response.</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab2"><a href="SampleRootResource.html" title="class in org.apache.juneau.microservice.examples">SampleRootResource</a></div>
-<div class="col-last even-row-color class-summary class-summary-tab2">
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="SampleRootResource.html" title="class in org.apache.juneau.microservice.examples">SampleRootResource</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">
 <div class="block">Sample root REST resource.</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="ShutdownResource.html" title="class in org.apache.juneau.microservice.examples">ShutdownResource</a></div>
-<div class="col-last odd-row-color class-summary class-summary-tab2">
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="ShutdownResource.html" title="class in org.apache.juneau.microservice.examples">ShutdownResource</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab2">
 <div class="block">Provides the capability to shut down this REST microservice through a REST call.</div>
+</div>
+<div class="col-first odd-row-color class-summary class-summary-tab1"><a href="ShutdownResource.Exit.html" title="interface in org.apache.juneau.microservice.examples">ShutdownResource.Exit</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab1">
+<div class="block">How the process is stopped.</div>
+</div>
 </div>
 </div>
 </div>

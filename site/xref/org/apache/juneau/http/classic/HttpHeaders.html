@@ -104,7 +104,7 @@
 <a class="jxr_linenumber" name="L96" href="#L96">96</a>  <em class="jxr_javadoccomment"> */</em>
 <a class="jxr_linenumber" name="L97" href="#L97">97</a>  @SuppressWarnings({
 <a class="jxr_linenumber" name="L98" href="#L98">98</a>  	<span class="jxr_string">"java:S3740"</span>, <em class="jxr_comment">// Raw Supplier/Header types used in factory methods where HTTP header value type cannot be statically parameterized</em>
-<a class="jxr_linenumber" name="L99" href="#L99">99</a>  	<span class="jxr_string">"java:S6539"</span>  <em class="jxr_comment">// Monster class; HttpHeaders is intentionally a single static-factory facade, one creator method per standard HTTP header</em>
+<a class="jxr_linenumber" name="L99" href="#L99">99</a>  	<span class="jxr_string">"java:S6539"</span> <em class="jxr_comment">// Monster class; HttpHeaders is intentionally a single static-factory facade, one creator method per standard HTTP header</em>
 <a class="jxr_linenumber" name="L100" href="#L100">100</a> })
 <a class="jxr_linenumber" name="L101" href="#L101">101</a> <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> HttpHeaders {
 <a class="jxr_linenumber" name="L102" href="#L102">102</a> 
@@ -442,7 +442,7 @@
 <a class="jxr_linenumber" name="L434" href="#L434">434</a> <em class="jxr_javadoccomment">	 * 	&lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt;.</em>
 <a class="jxr_linenumber" name="L435" href="#L435">435</a> <em class="jxr_javadoccomment">	 * @return A new header bean, or &lt;jk&gt;null&lt;/jk&gt; if the value is &lt;jk&gt;null&lt;/jk&gt;.</em>
 <a class="jxr_linenumber" name="L436" href="#L436">436</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L437" href="#L437">437</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <a name="Allow" href="../../../../../org/apache/juneau/http/header/Allow.html#Allow">Allow</a> allow(String value) {
+<a class="jxr_linenumber" name="L437" href="#L437">437</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Allow allow(String value) {
 <a class="jxr_linenumber" name="L438" href="#L438">438</a> 		<strong class="jxr_keyword">return</strong> Allow.of(value);
 <a class="jxr_linenumber" name="L439" href="#L439">439</a> 	}
 <a class="jxr_linenumber" name="L440" href="#L440">440</a> 
@@ -454,7 +454,7 @@
 <a class="jxr_linenumber" name="L446" href="#L446">446</a> <em class="jxr_javadoccomment">	 * 	&lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt;.</em>
 <a class="jxr_linenumber" name="L447" href="#L447">447</a> <em class="jxr_javadoccomment">	 * @return A new header bean, or &lt;jk&gt;null&lt;/jk&gt; if the value is &lt;jk&gt;null&lt;/jk&gt;.</em>
 <a class="jxr_linenumber" name="L448" href="#L448">448</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L449" href="#L449">449</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <a name="Allow" href="../../../../../org/apache/juneau/http/header/Allow.html#Allow">Allow</a> allow(String...value) {
+<a class="jxr_linenumber" name="L449" href="#L449">449</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Allow allow(String...value) {
 <a class="jxr_linenumber" name="L450" href="#L450">450</a> 		<strong class="jxr_keyword">return</strong> Allow.of(value);
 <a class="jxr_linenumber" name="L451" href="#L451">451</a> 	}
 <a class="jxr_linenumber" name="L452" href="#L452">452</a> 
@@ -469,7 +469,7 @@
 <a class="jxr_linenumber" name="L461" href="#L461">461</a> <em class="jxr_javadoccomment">	 * 	&lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt;.</em>
 <a class="jxr_linenumber" name="L462" href="#L462">462</a> <em class="jxr_javadoccomment">	 * @return A new header bean, or &lt;jk&gt;null&lt;/jk&gt; if the value is &lt;jk&gt;null&lt;/jk&gt;.</em>
 <a class="jxr_linenumber" name="L463" href="#L463">463</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L464" href="#L464">464</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <a name="Allow" href="../../../../../org/apache/juneau/http/header/Allow.html#Allow">Allow</a> allow(Supplier&lt;String[]&gt; value) {
+<a class="jxr_linenumber" name="L464" href="#L464">464</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Allow allow(Supplier&lt;String[]&gt; value) {
 <a class="jxr_linenumber" name="L465" href="#L465">465</a> 		<strong class="jxr_keyword">return</strong> Allow.of(value);
 <a class="jxr_linenumber" name="L466" href="#L466">466</a> 	}
 <a class="jxr_linenumber" name="L467" href="#L467">467</a> 
@@ -481,7 +481,7 @@
 <a class="jxr_linenumber" name="L473" href="#L473">473</a> <em class="jxr_javadoccomment">	 * 	&lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt;.</em>
 <a class="jxr_linenumber" name="L474" href="#L474">474</a> <em class="jxr_javadoccomment">	 * @return A new header bean, or &lt;jk&gt;null&lt;/jk&gt; if the value is &lt;jk&gt;null&lt;/jk&gt;.</em>
 <a class="jxr_linenumber" name="L475" href="#L475">475</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L476" href="#L476">476</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <a name="Authorization" href="../../../../../org/apache/juneau/http/classic/header/Authorization.html#Authorization">Authorization</a> authorization(String value) {
+<a class="jxr_linenumber" name="L476" href="#L476">476</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Authorization authorization(String value) {
 <a class="jxr_linenumber" name="L477" href="#L477">477</a> 		<strong class="jxr_keyword">return</strong> Authorization.of(value);
 <a class="jxr_linenumber" name="L478" href="#L478">478</a> 	}
 <a class="jxr_linenumber" name="L479" href="#L479">479</a> 
@@ -496,7 +496,7 @@
 <a class="jxr_linenumber" name="L488" href="#L488">488</a> <em class="jxr_javadoccomment">	 * 	&lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt;.</em>
 <a class="jxr_linenumber" name="L489" href="#L489">489</a> <em class="jxr_javadoccomment">	 * @return A new header bean, or &lt;jk&gt;null&lt;/jk&gt; if the value is &lt;jk&gt;null&lt;/jk&gt;.</em>
 <a class="jxr_linenumber" name="L490" href="#L490">490</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L491" href="#L491">491</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <a name="Authorization" href="../../../../../org/apache/juneau/http/classic/header/Authorization.html#Authorization">Authorization</a> authorization(Supplier&lt;String&gt; value) {
+<a class="jxr_linenumber" name="L491" href="#L491">491</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Authorization authorization(Supplier&lt;String&gt; value) {
 <a class="jxr_linenumber" name="L492" href="#L492">492</a> 		<strong class="jxr_keyword">return</strong> Authorization.of(value);
 <a class="jxr_linenumber" name="L493" href="#L493">493</a> 	}
 <a class="jxr_linenumber" name="L494" href="#L494">494</a> 
@@ -795,7 +795,7 @@
 <a class="jxr_linenumber" name="L787" href="#L787">787</a> <em class="jxr_javadoccomment">	 * 	&lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt;.</em>
 <a class="jxr_linenumber" name="L788" href="#L788">788</a> <em class="jxr_javadoccomment">	 * @return A new header bean, or &lt;jk&gt;null&lt;/jk&gt; if the value is &lt;jk&gt;null&lt;/jk&gt;.</em>
 <a class="jxr_linenumber" name="L789" href="#L789">789</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L790" href="#L790">790</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <a name="ContentLanguage" href="../../../../../org/apache/juneau/http/header/ContentLanguage.html#ContentLanguage">ContentLanguage</a> contentLanguage(String value) {
+<a class="jxr_linenumber" name="L790" href="#L790">790</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> ContentLanguage contentLanguage(String value) {
 <a class="jxr_linenumber" name="L791" href="#L791">791</a> 		<strong class="jxr_keyword">return</strong> ContentLanguage.of(value);
 <a class="jxr_linenumber" name="L792" href="#L792">792</a> 	}
 <a class="jxr_linenumber" name="L793" href="#L793">793</a> 
@@ -807,7 +807,7 @@
 <a class="jxr_linenumber" name="L799" href="#L799">799</a> <em class="jxr_javadoccomment">	 * 	&lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt;.</em>
 <a class="jxr_linenumber" name="L800" href="#L800">800</a> <em class="jxr_javadoccomment">	 * @return A new header bean, or &lt;jk&gt;null&lt;/jk&gt; if the value is &lt;jk&gt;null&lt;/jk&gt;.</em>
 <a class="jxr_linenumber" name="L801" href="#L801">801</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L802" href="#L802">802</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <a name="ContentLanguage" href="../../../../../org/apache/juneau/http/header/ContentLanguage.html#ContentLanguage">ContentLanguage</a> contentLanguage(String...value) {
+<a class="jxr_linenumber" name="L802" href="#L802">802</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> ContentLanguage contentLanguage(String...value) {
 <a class="jxr_linenumber" name="L803" href="#L803">803</a> 		<strong class="jxr_keyword">return</strong> ContentLanguage.of(value);
 <a class="jxr_linenumber" name="L804" href="#L804">804</a> 	}
 <a class="jxr_linenumber" name="L805" href="#L805">805</a> 
@@ -822,7 +822,7 @@
 <a class="jxr_linenumber" name="L814" href="#L814">814</a> <em class="jxr_javadoccomment">	 * 	&lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt;.</em>
 <a class="jxr_linenumber" name="L815" href="#L815">815</a> <em class="jxr_javadoccomment">	 * @return A new header bean, or &lt;jk&gt;null&lt;/jk&gt; if the value is &lt;jk&gt;null&lt;/jk&gt;.</em>
 <a class="jxr_linenumber" name="L816" href="#L816">816</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L817" href="#L817">817</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <a name="ContentLanguage" href="../../../../../org/apache/juneau/http/header/ContentLanguage.html#ContentLanguage">ContentLanguage</a> contentLanguage(Supplier&lt;String[]&gt; value) {
+<a class="jxr_linenumber" name="L817" href="#L817">817</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> ContentLanguage contentLanguage(Supplier&lt;String[]&gt; value) {
 <a class="jxr_linenumber" name="L818" href="#L818">818</a> 		<strong class="jxr_keyword">return</strong> ContentLanguage.of(value);
 <a class="jxr_linenumber" name="L819" href="#L819">819</a> 	}
 <a class="jxr_linenumber" name="L820" href="#L820">820</a> 
@@ -2130,7 +2130,7 @@
 <a class="jxr_linenumber" name="L2122" href="#L2122">2122</a> <em class="jxr_javadoccomment">	 * 	&lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt;.</em>
 <a class="jxr_linenumber" name="L2123" href="#L2123">2123</a> <em class="jxr_javadoccomment">	 * @return A new header bean, or &lt;jk&gt;null&lt;/jk&gt; if the value is &lt;jk&gt;null&lt;/jk&gt;.</em>
 <a class="jxr_linenumber" name="L2124" href="#L2124">2124</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L2125" href="#L2125">2125</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <a name="ProxyAuthorization" href="../../../../../org/apache/juneau/http/classic/header/ProxyAuthorization.html#ProxyAuthorization">ProxyAuthorization</a> proxyAuthorization(String value) {
+<a class="jxr_linenumber" name="L2125" href="#L2125">2125</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> ProxyAuthorization proxyAuthorization(String value) {
 <a class="jxr_linenumber" name="L2126" href="#L2126">2126</a> 		<strong class="jxr_keyword">return</strong> ProxyAuthorization.of(value);
 <a class="jxr_linenumber" name="L2127" href="#L2127">2127</a> 	}
 <a class="jxr_linenumber" name="L2128" href="#L2128">2128</a> 
@@ -2145,7 +2145,7 @@
 <a class="jxr_linenumber" name="L2137" href="#L2137">2137</a> <em class="jxr_javadoccomment">	 * 	&lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt;.</em>
 <a class="jxr_linenumber" name="L2138" href="#L2138">2138</a> <em class="jxr_javadoccomment">	 * @return A new header bean, or &lt;jk&gt;null&lt;/jk&gt; if the value is &lt;jk&gt;null&lt;/jk&gt;.</em>
 <a class="jxr_linenumber" name="L2139" href="#L2139">2139</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L2140" href="#L2140">2140</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <a name="ProxyAuthorization" href="../../../../../org/apache/juneau/http/classic/header/ProxyAuthorization.html#ProxyAuthorization">ProxyAuthorization</a> proxyAuthorization(Supplier&lt;String&gt; value) {
+<a class="jxr_linenumber" name="L2140" href="#L2140">2140</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> ProxyAuthorization proxyAuthorization(Supplier&lt;String&gt; value) {
 <a class="jxr_linenumber" name="L2141" href="#L2141">2141</a> 		<strong class="jxr_keyword">return</strong> ProxyAuthorization.of(value);
 <a class="jxr_linenumber" name="L2142" href="#L2142">2142</a> 	}
 <a class="jxr_linenumber" name="L2143" href="#L2143">2143</a> 
@@ -2505,7 +2505,7 @@
 <a class="jxr_linenumber" name="L2497" href="#L2497">2497</a> <em class="jxr_javadoccomment">	 * 	&lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt;.</em>
 <a class="jxr_linenumber" name="L2498" href="#L2498">2498</a> <em class="jxr_javadoccomment">	 * @return A new header bean, or &lt;jk&gt;null&lt;/jk&gt; if the value is &lt;jk&gt;null&lt;/jk&gt;.</em>
 <a class="jxr_linenumber" name="L2499" href="#L2499">2499</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L2500" href="#L2500">2500</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <a name="Thrown" href="../../../../../org/apache/juneau/http/header/Thrown.html#Thrown">Thrown</a> thrown(String value) {
+<a class="jxr_linenumber" name="L2500" href="#L2500">2500</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Thrown thrown(String value) {
 <a class="jxr_linenumber" name="L2501" href="#L2501">2501</a> 		<strong class="jxr_keyword">return</strong> Thrown.of(value);
 <a class="jxr_linenumber" name="L2502" href="#L2502">2502</a> 	}
 <a class="jxr_linenumber" name="L2503" href="#L2503">2503</a> 
@@ -2517,7 +2517,7 @@
 <a class="jxr_linenumber" name="L2509" href="#L2509">2509</a> <em class="jxr_javadoccomment">	 * 	&lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt;.</em>
 <a class="jxr_linenumber" name="L2510" href="#L2510">2510</a> <em class="jxr_javadoccomment">	 * @return A new header bean, or &lt;jk&gt;null&lt;/jk&gt; if the value is &lt;jk&gt;null&lt;/jk&gt;.</em>
 <a class="jxr_linenumber" name="L2511" href="#L2511">2511</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L2512" href="#L2512">2512</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <a name="Thrown" href="../../../../../org/apache/juneau/http/header/Thrown.html#Thrown">Thrown</a> thrown(Throwable...value) {
+<a class="jxr_linenumber" name="L2512" href="#L2512">2512</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Thrown thrown(Throwable...value) {
 <a class="jxr_linenumber" name="L2513" href="#L2513">2513</a> 		<strong class="jxr_keyword">return</strong> Thrown.of(value);
 <a class="jxr_linenumber" name="L2514" href="#L2514">2514</a> 	}
 <a class="jxr_linenumber" name="L2515" href="#L2515">2515</a> 
@@ -2583,7 +2583,7 @@
 <a class="jxr_linenumber" name="L2575" href="#L2575">2575</a> <em class="jxr_javadoccomment">	 * 	&lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt;.</em>
 <a class="jxr_linenumber" name="L2576" href="#L2576">2576</a> <em class="jxr_javadoccomment">	 * @return A new header bean, or &lt;jk&gt;null&lt;/jk&gt; if the value is &lt;jk&gt;null&lt;/jk&gt;.</em>
 <a class="jxr_linenumber" name="L2577" href="#L2577">2577</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L2578" href="#L2578">2578</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <a name="Upgrade" href="../../../../../org/apache/juneau/http/header/Upgrade.html#Upgrade">Upgrade</a> upgrade(String value) {
+<a class="jxr_linenumber" name="L2578" href="#L2578">2578</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Upgrade upgrade(String value) {
 <a class="jxr_linenumber" name="L2579" href="#L2579">2579</a> 		<strong class="jxr_keyword">return</strong> Upgrade.of(value);
 <a class="jxr_linenumber" name="L2580" href="#L2580">2580</a> 	}
 <a class="jxr_linenumber" name="L2581" href="#L2581">2581</a> 
@@ -2595,7 +2595,7 @@
 <a class="jxr_linenumber" name="L2587" href="#L2587">2587</a> <em class="jxr_javadoccomment">	 * 	&lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt;.</em>
 <a class="jxr_linenumber" name="L2588" href="#L2588">2588</a> <em class="jxr_javadoccomment">	 * @return A new header bean, or &lt;jk&gt;null&lt;/jk&gt; if the value is &lt;jk&gt;null&lt;/jk&gt;.</em>
 <a class="jxr_linenumber" name="L2589" href="#L2589">2589</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L2590" href="#L2590">2590</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <a name="Upgrade" href="../../../../../org/apache/juneau/http/header/Upgrade.html#Upgrade">Upgrade</a> upgrade(String...value) {
+<a class="jxr_linenumber" name="L2590" href="#L2590">2590</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Upgrade upgrade(String...value) {
 <a class="jxr_linenumber" name="L2591" href="#L2591">2591</a> 		<strong class="jxr_keyword">return</strong> Upgrade.of(value);
 <a class="jxr_linenumber" name="L2592" href="#L2592">2592</a> 	}
 <a class="jxr_linenumber" name="L2593" href="#L2593">2593</a> 
@@ -2610,7 +2610,7 @@
 <a class="jxr_linenumber" name="L2602" href="#L2602">2602</a> <em class="jxr_javadoccomment">	 * 	&lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt;.</em>
 <a class="jxr_linenumber" name="L2603" href="#L2603">2603</a> <em class="jxr_javadoccomment">	 * @return A new header bean, or &lt;jk&gt;null&lt;/jk&gt; if the value is &lt;jk&gt;null&lt;/jk&gt;.</em>
 <a class="jxr_linenumber" name="L2604" href="#L2604">2604</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L2605" href="#L2605">2605</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <a name="Upgrade" href="../../../../../org/apache/juneau/http/header/Upgrade.html#Upgrade">Upgrade</a> upgrade(Supplier&lt;String[]&gt; value) {
+<a class="jxr_linenumber" name="L2605" href="#L2605">2605</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Upgrade upgrade(Supplier&lt;String[]&gt; value) {
 <a class="jxr_linenumber" name="L2606" href="#L2606">2606</a> 		<strong class="jxr_keyword">return</strong> Upgrade.of(value);
 <a class="jxr_linenumber" name="L2607" href="#L2607">2607</a> 	}
 <a class="jxr_linenumber" name="L2608" href="#L2608">2608</a> 
@@ -2692,7 +2692,7 @@
 <a class="jxr_linenumber" name="L2684" href="#L2684">2684</a> <em class="jxr_javadoccomment">	 * 	&lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt;.</em>
 <a class="jxr_linenumber" name="L2685" href="#L2685">2685</a> <em class="jxr_javadoccomment">	 * @return A new header bean, or &lt;jk&gt;null&lt;/jk&gt; if the value is &lt;jk&gt;null&lt;/jk&gt;.</em>
 <a class="jxr_linenumber" name="L2686" href="#L2686">2686</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L2687" href="#L2687">2687</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <a name="Vary" href="../../../../../org/apache/juneau/http/header/Vary.html#Vary">Vary</a> vary(String value) {
+<a class="jxr_linenumber" name="L2687" href="#L2687">2687</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <a name="Vary" href="../../../../../org/apache/juneau/http/classic/header/Vary.html#Vary">Vary</a> vary(String value) {
 <a class="jxr_linenumber" name="L2688" href="#L2688">2688</a> 		<strong class="jxr_keyword">return</strong> Vary.of(value);
 <a class="jxr_linenumber" name="L2689" href="#L2689">2689</a> 	}
 <a class="jxr_linenumber" name="L2690" href="#L2690">2690</a> 
@@ -2707,7 +2707,7 @@
 <a class="jxr_linenumber" name="L2699" href="#L2699">2699</a> <em class="jxr_javadoccomment">	 * 	&lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt;.</em>
 <a class="jxr_linenumber" name="L2700" href="#L2700">2700</a> <em class="jxr_javadoccomment">	 * @return A new header bean, or &lt;jk&gt;null&lt;/jk&gt; if the value is &lt;jk&gt;null&lt;/jk&gt;.</em>
 <a class="jxr_linenumber" name="L2701" href="#L2701">2701</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L2702" href="#L2702">2702</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <a name="Vary" href="../../../../../org/apache/juneau/http/header/Vary.html#Vary">Vary</a> vary(Supplier&lt;String&gt; value) {
+<a class="jxr_linenumber" name="L2702" href="#L2702">2702</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <a name="Vary" href="../../../../../org/apache/juneau/http/classic/header/Vary.html#Vary">Vary</a> vary(Supplier&lt;String&gt; value) {
 <a class="jxr_linenumber" name="L2703" href="#L2703">2703</a> 		<strong class="jxr_keyword">return</strong> Vary.of(value);
 <a class="jxr_linenumber" name="L2704" href="#L2704">2704</a> 	}
 <a class="jxr_linenumber" name="L2705" href="#L2705">2705</a> 
@@ -2719,7 +2719,7 @@
 <a class="jxr_linenumber" name="L2711" href="#L2711">2711</a> <em class="jxr_javadoccomment">	 * 	&lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt;.</em>
 <a class="jxr_linenumber" name="L2712" href="#L2712">2712</a> <em class="jxr_javadoccomment">	 * @return A new header bean, or &lt;jk&gt;null&lt;/jk&gt; if the value is &lt;jk&gt;null&lt;/jk&gt;.</em>
 <a class="jxr_linenumber" name="L2713" href="#L2713">2713</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L2714" href="#L2714">2714</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <a name="Via" href="../../../../../org/apache/juneau/http/header/Via.html#Via">Via</a> via(String value) {
+<a class="jxr_linenumber" name="L2714" href="#L2714">2714</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Via via(String value) {
 <a class="jxr_linenumber" name="L2715" href="#L2715">2715</a> 		<strong class="jxr_keyword">return</strong> Via.of(value);
 <a class="jxr_linenumber" name="L2716" href="#L2716">2716</a> 	}
 <a class="jxr_linenumber" name="L2717" href="#L2717">2717</a> 
@@ -2731,7 +2731,7 @@
 <a class="jxr_linenumber" name="L2723" href="#L2723">2723</a> <em class="jxr_javadoccomment">	 * 	&lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt;.</em>
 <a class="jxr_linenumber" name="L2724" href="#L2724">2724</a> <em class="jxr_javadoccomment">	 * @return A new header bean, or &lt;jk&gt;null&lt;/jk&gt; if the value is &lt;jk&gt;null&lt;/jk&gt;.</em>
 <a class="jxr_linenumber" name="L2725" href="#L2725">2725</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L2726" href="#L2726">2726</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <a name="Via" href="../../../../../org/apache/juneau/http/header/Via.html#Via">Via</a> via(String...value) {
+<a class="jxr_linenumber" name="L2726" href="#L2726">2726</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Via via(String...value) {
 <a class="jxr_linenumber" name="L2727" href="#L2727">2727</a> 		<strong class="jxr_keyword">return</strong> Via.of(value);
 <a class="jxr_linenumber" name="L2728" href="#L2728">2728</a> 	}
 <a class="jxr_linenumber" name="L2729" href="#L2729">2729</a> 
@@ -2746,7 +2746,7 @@
 <a class="jxr_linenumber" name="L2738" href="#L2738">2738</a> <em class="jxr_javadoccomment">	 * 	&lt;br&gt;Can be &lt;jk&gt;null&lt;/jk&gt;.</em>
 <a class="jxr_linenumber" name="L2739" href="#L2739">2739</a> <em class="jxr_javadoccomment">	 * @return A new header bean, or &lt;jk&gt;null&lt;/jk&gt; if the value is &lt;jk&gt;null&lt;/jk&gt;.</em>
 <a class="jxr_linenumber" name="L2740" href="#L2740">2740</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L2741" href="#L2741">2741</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <a name="Via" href="../../../../../org/apache/juneau/http/header/Via.html#Via">Via</a> via(Supplier&lt;String[]&gt; value) {
+<a class="jxr_linenumber" name="L2741" href="#L2741">2741</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Via via(Supplier&lt;String[]&gt; value) {
 <a class="jxr_linenumber" name="L2742" href="#L2742">2742</a> 		<strong class="jxr_keyword">return</strong> Via.of(value);
 <a class="jxr_linenumber" name="L2743" href="#L2743">2743</a> 	}
 <a class="jxr_linenumber" name="L2744" href="#L2744">2744</a> 

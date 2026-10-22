@@ -86,7 +86,7 @@ loadScripts(document, 'script');</script>
 <dd><a href="Microservice.html" title="class in org.apache.juneau.microservice">Microservice</a></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public static class </span><span class="element-name"><a href="../../../../src-html/org/apache/juneau/microservice/Microservice.html#line-109">Microservice.Builder</a></span>
+<div class="type-signature"><span class="modifiers">public static class </span><span class="element-name"><a href="../../../../src-html/org/apache/juneau/microservice/Microservice.html#line-111">Microservice.Builder</a></span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>
 implements <a href="../commons/inject/BeanStoreOverridable.html" title="interface in org.apache.juneau.commons.inject">BeanStoreOverridable</a>&lt;<a href="Microservice.Builder.html" title="class in org.apache.juneau.microservice">Microservice.Builder</a>&gt;</span></div>
 <div class="block">Builder class.</div>
@@ -277,14 +277,14 @@ implements <a href="../commons/inject/BeanStoreOverridable.html" title="interfac
 <li>
 <section class="detail" id="&lt;init&gt;()">
 <h3>Builder</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/microservice/Microservice.Builder.html#line-136">Builder</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/microservice/Microservice.Builder.html#line-135">Builder</a></span>()</div>
 <div class="block">Constructor.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.microservice.Microservice.Builder)">
 <h3>Builder</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/microservice/Microservice.Builder.html#line-158">Builder</a></span><wbr><span class="parameters">(<a href="Microservice.Builder.html" title="class in org.apache.juneau.microservice">Microservice.Builder</a>&nbsp;copyFrom)</span></div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/microservice/Microservice.Builder.html#line-157">Builder</a></span><wbr><span class="parameters">(<a href="Microservice.Builder.html" title="class in org.apache.juneau.microservice">Microservice.Builder</a>&nbsp;copyFrom)</span></div>
 <div class="block">Copy constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -304,7 +304,7 @@ implements <a href="../commons/inject/BeanStoreOverridable.html" title="interfac
 <section class="detail" id="initWorkingDirFromEnv(java.lang.String)">
 <h3>initWorkingDirFromEnv</h3>
 <div class="member-signature"><span class="annotations"><a href="../commons/inject/Inject.html" title="annotation interface in org.apache.juneau.commons.inject">@Inject</a>
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/microservice/Microservice.Builder.html#line-147">initWorkingDirFromEnv</a></span><wbr><span class="parameters">(<a href="../commons/inject/Value.html" title="annotation interface in org.apache.juneau.commons.inject">@Value</a>("${juneau.workingDir}")
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/microservice/Microservice.Builder.html#line-146">initWorkingDirFromEnv</a></span><wbr><span class="parameters">(<a href="../commons/inject/Value.html" title="annotation interface in org.apache.juneau.commons.inject">@Value</a>("${juneau.workingDir}")
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;workingDirEnv)</span></div>
 <div class="block"><a href="../commons/inject/Inject.html" title="annotation interface in org.apache.juneau.commons.inject"><code>@Inject</code></a>-annotated initializer that populates <code>workingDir</code> from the
  <code>juneau.workingDir</code> property (system property &rarr; environment variable &rarr;
@@ -320,7 +320,7 @@ implements <a href="../commons/inject/BeanStoreOverridable.html" title="interfac
 <li>
 <section class="detail" id="args(org.apache.juneau.commons.runtime.Args)">
 <h3>args</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Microservice.Builder.html" title="class in org.apache.juneau.microservice">Microservice.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/microservice/Microservice.Builder.html#line-186">args</a></span><wbr><span class="parameters">(<a href="../commons/runtime/Args.html" title="class in org.apache.juneau.commons.runtime">Args</a>&nbsp;args)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Microservice.Builder.html" title="class in org.apache.juneau.microservice">Microservice.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/microservice/Microservice.Builder.html#line-189">args</a></span><wbr><span class="parameters">(<a href="../commons/runtime/Args.html" title="class in org.apache.juneau.commons.runtime">Args</a>&nbsp;args)</span></div>
 <div class="block">Specifies the command-line arguments passed into the Java command.
 
  <p>
@@ -337,7 +337,7 @@ implements <a href="../commons/inject/BeanStoreOverridable.html" title="interfac
 <li>
 <section class="detail" id="args(java.lang.String...)">
 <h3>args</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Microservice.Builder.html" title="class in org.apache.juneau.microservice">Microservice.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/microservice/Microservice.Builder.html#line-201">args</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;args)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Microservice.Builder.html" title="class in org.apache.juneau.microservice">Microservice.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/microservice/Microservice.Builder.html#line-204">args</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;args)</span></div>
 <div class="block">Specifies the command-line arguments passed into the Java command.
 
  <p>
@@ -353,7 +353,7 @@ implements <a href="../commons/inject/BeanStoreOverridable.html" title="interfac
 <li>
 <section class="detail" id="build()">
 <h3>build</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Microservice.html" title="class in org.apache.juneau.microservice">Microservice</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/microservice/Microservice.Builder.html#line-212">build</a></span>()
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Microservice.html" title="class in org.apache.juneau.microservice">Microservice</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/microservice/Microservice.Builder.html#line-215">build</a></span>()
                    throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Exception.html" title="class or interface in java.lang" class="external-link">Exception</a></span></div>
 <div class="block">Instantiate a new microservice using the settings defined on this builder.</div>
 <dl class="notes">
@@ -482,7 +482,7 @@ implements <a href="../commons/inject/BeanStoreOverridable.html" title="interfac
 <li>
 <section class="detail" id="consoleCommands(org.apache.juneau.microservice.console.ConsoleCommand...)">
 <h3>consoleCommands</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Microservice.Builder.html" title="class in org.apache.juneau.microservice">Microservice.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/microservice/Microservice.Builder.html#line-342">consoleCommands</a></span><wbr><span class="parameters">(<a href="console/ConsoleCommand.html" title="class in org.apache.juneau.microservice.console">ConsoleCommand</a>...&nbsp;consoleCommands)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Microservice.Builder.html" title="class in org.apache.juneau.microservice">Microservice.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/microservice/Microservice.Builder.html#line-339">consoleCommands</a></span><wbr><span class="parameters">(<a href="console/ConsoleCommand.html" title="class in org.apache.juneau.microservice.console">ConsoleCommand</a>...&nbsp;consoleCommands)</span></div>
 <div class="block">Specifies console commands to make available on the Java console.
 
  <p>
@@ -501,7 +501,7 @@ implements <a href="../commons/inject/BeanStoreOverridable.html" title="interfac
 <li>
 <section class="detail" id="consoleEnabled(boolean)">
 <h3>consoleEnabled</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Microservice.Builder.html" title="class in org.apache.juneau.microservice">Microservice.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/microservice/Microservice.Builder.html#line-357">consoleEnabled</a></span><wbr><span class="parameters">(boolean&nbsp;consoleEnabled)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Microservice.Builder.html" title="class in org.apache.juneau.microservice">Microservice.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/microservice/Microservice.Builder.html#line-354">consoleEnabled</a></span><wbr><span class="parameters">(boolean&nbsp;consoleEnabled)</span></div>
 <div class="block">Specifies that the Java console is enabled for this microservice.
 
  <p>
@@ -518,7 +518,7 @@ implements <a href="../commons/inject/BeanStoreOverridable.html" title="interfac
 <li>
 <section class="detail" id="copy()">
 <h3>copy</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Microservice.Builder.html" title="class in org.apache.juneau.microservice">Microservice.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/microservice/Microservice.Builder.html#line-367">copy</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Microservice.Builder.html" title="class in org.apache.juneau.microservice">Microservice.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/microservice/Microservice.Builder.html#line-364">copy</a></span>()</div>
 <div class="block">Creates a copy of this builder.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -529,7 +529,7 @@ implements <a href="../commons/inject/BeanStoreOverridable.html" title="interfac
 <li>
 <section class="detail" id="listener(org.apache.juneau.microservice.MicroserviceListener)">
 <h3>listener</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Microservice.Builder.html" title="class in org.apache.juneau.microservice">Microservice.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/microservice/Microservice.Builder.html#line-377">listener</a></span><wbr><span class="parameters">(<a href="MicroserviceListener.html" title="interface in org.apache.juneau.microservice">MicroserviceListener</a>&nbsp;listener)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Microservice.Builder.html" title="class in org.apache.juneau.microservice">Microservice.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/microservice/Microservice.Builder.html#line-374">listener</a></span><wbr><span class="parameters">(<a href="MicroserviceListener.html" title="interface in org.apache.juneau.microservice">MicroserviceListener</a>&nbsp;listener)</span></div>
 <div class="block">Registers an event listener for this microservice.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -542,7 +542,7 @@ implements <a href="../commons/inject/BeanStoreOverridable.html" title="interfac
 <li>
 <section class="detail" id="logConfig(org.apache.juneau.microservice.LogConfig)">
 <h3>logConfig</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Microservice.Builder.html" title="class in org.apache.juneau.microservice">Microservice.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/microservice/Microservice.Builder.html#line-394">logConfig</a></span><wbr><span class="parameters">(<a href="LogConfig.html" title="class in org.apache.juneau.microservice">LogConfig</a>&nbsp;logConfig)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Microservice.Builder.html" title="class in org.apache.juneau.microservice">Microservice.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/microservice/Microservice.Builder.html#line-391">logConfig</a></span><wbr><span class="parameters">(<a href="LogConfig.html" title="class in org.apache.juneau.microservice">LogConfig</a>&nbsp;logConfig)</span></div>
 <div class="block">Specifies logging instructions for the microservice.
 
  <p>
@@ -561,7 +561,7 @@ implements <a href="../commons/inject/BeanStoreOverridable.html" title="interfac
 <li>
 <section class="detail" id="logger(java.util.logging.Logger)">
 <h3>logger</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Microservice.Builder.html" title="class in org.apache.juneau.microservice">Microservice.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/microservice/Microservice.Builder.html#line-408">logger</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/Logger.html" title="class or interface in java.util.logging" class="external-link">Logger</a>&nbsp;logger)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Microservice.Builder.html" title="class in org.apache.juneau.microservice">Microservice.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/microservice/Microservice.Builder.html#line-405">logger</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/Logger.html" title="class or interface in java.util.logging" class="external-link">Logger</a>&nbsp;logger)</span></div>
 <div class="block">Specifies the logger used by the microservice and returned by the <a href="Microservice.html#getLogger()"><code>Microservice.getLogger()</code></a> method.
 
  <p>
@@ -577,7 +577,7 @@ implements <a href="../commons/inject/BeanStoreOverridable.html" title="interfac
 <li>
 <section class="detail" id="manifest(java.lang.Object)">
 <h3>manifest</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Microservice.Builder.html" title="class in org.apache.juneau.microservice">Microservice.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/microservice/Microservice.Builder.html#line-447">manifest</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</span>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Microservice.Builder.html" title="class in org.apache.juneau.microservice">Microservice.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/microservice/Microservice.Builder.html#line-444">manifest</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</span>
                               throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">Specifies the manifest file of the jar file this microservice is contained within.
 
@@ -619,7 +619,7 @@ implements <a href="../commons/inject/BeanStoreOverridable.html" title="interfac
 <li>
 <section class="detail" id="varBean(java.lang.Class,T)">
 <h3 id="varBean(java.lang.Class,java.lang.Object)">varBean</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type"><a href="Microservice.Builder.html" title="class in org.apache.juneau.microservice">Microservice.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/microservice/Microservice.Builder.html#line-484">varBean</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;T&gt;&nbsp;c,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type"><a href="Microservice.Builder.html" title="class in org.apache.juneau.microservice">Microservice.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/microservice/Microservice.Builder.html#line-481">varBean</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;T&gt;&nbsp;c,
  T&nbsp;value)</span></div>
 <div class="block">Adds a bean for vars defined in the var resolver.
 
@@ -640,7 +640,7 @@ implements <a href="../commons/inject/BeanStoreOverridable.html" title="interfac
 <li>
 <section class="detail" id="vars(java.lang.Class...)">
 <h3>vars</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Microservice.Builder.html" title="class in org.apache.juneau.microservice">Microservice.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/microservice/Microservice.Builder.html#line-499">vars</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;? extends <a href="../commons/svl/Var.html" title="class in org.apache.juneau.commons.svl">Var</a>&gt;...&nbsp;vars)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Microservice.Builder.html" title="class in org.apache.juneau.microservice">Microservice.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/microservice/Microservice.Builder.html#line-496">vars</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;? extends <a href="../commons/svl/Var.html" title="class in org.apache.juneau.commons.svl">Var</a>&gt;...&nbsp;vars)</span></div>
 <div class="block">Augments the set of variables defined in the configuration and var resolver.
 
  <p>
@@ -657,7 +657,7 @@ implements <a href="../commons/inject/BeanStoreOverridable.html" title="interfac
 <li>
 <section class="detail" id="workingDir(java.io.File)">
 <h3>workingDir</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Microservice.Builder.html" title="class in org.apache.juneau.microservice">Microservice.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/microservice/Microservice.Builder.html#line-513">workingDir</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;workingDir)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Microservice.Builder.html" title="class in org.apache.juneau.microservice">Microservice.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/microservice/Microservice.Builder.html#line-507">workingDir</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;workingDir)</span></div>
 <div class="block">Specifies the directory to use to resolve the config file and other paths defined with the config file.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -670,7 +670,7 @@ implements <a href="../commons/inject/BeanStoreOverridable.html" title="interfac
 <li>
 <section class="detail" id="workingDir(java.lang.String)">
 <h3>workingDir</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Microservice.Builder.html" title="class in org.apache.juneau.microservice">Microservice.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/microservice/Microservice.Builder.html#line-524">workingDir</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;workingDir)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Microservice.Builder.html" title="class in org.apache.juneau.microservice">Microservice.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/microservice/Microservice.Builder.html#line-518">workingDir</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;workingDir)</span></div>
 <div class="block">Specifies the directory to use to resolve the config file and other paths defined with the config file.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -683,7 +683,7 @@ implements <a href="../commons/inject/BeanStoreOverridable.html" title="interfac
 <li>
 <section class="detail" id="configurations(java.lang.Class...)">
 <h3>configurations</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Microservice.Builder.html" title="class in org.apache.juneau.microservice">Microservice.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/microservice/Microservice.Builder.html#line-547">configurations</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;...&nbsp;configurations)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Microservice.Builder.html" title="class in org.apache.juneau.microservice">Microservice.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/microservice/Microservice.Builder.html#line-541">configurations</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;...&nbsp;configurations)</span></div>
 <div class="block">Registers one or more <c>@Configuration</c>-annotated classes whose <c>@Bean</c> methods/fields
  will be processed during microservice bootstrap.
 
@@ -709,7 +709,7 @@ implements <a href="../commons/inject/BeanStoreOverridable.html" title="interfac
 <li>
 <section class="detail" id="configurations(java.util.List)">
 <h3>configurations</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Microservice.Builder.html" title="class in org.apache.juneau.microservice">Microservice.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/microservice/Microservice.Builder.html#line-563">configurations</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;&gt;&nbsp;configurations)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Microservice.Builder.html" title="class in org.apache.juneau.microservice">Microservice.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/microservice/Microservice.Builder.html#line-554">configurations</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;&gt;&nbsp;configurations)</span></div>
 <div class="block">Registers one or more <c>@Configuration</c>-annotated classes.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -730,7 +730,7 @@ implements <a href="../commons/inject/BeanStoreOverridable.html" title="interfac
 <li>
 <section class="detail" id="beanStore(org.apache.juneau.commons.inject.WritableBeanStore)">
 <h3>beanStore</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Microservice.Builder.html" title="class in org.apache.juneau.microservice">Microservice.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/microservice/Microservice.Builder.html#line-585">beanStore</a></span><wbr><span class="parameters">(<a href="../commons/inject/WritableBeanStore.html" title="interface in org.apache.juneau.commons.inject">WritableBeanStore</a>&nbsp;beanStore)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Microservice.Builder.html" title="class in org.apache.juneau.microservice">Microservice.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/microservice/Microservice.Builder.html#line-573">beanStore</a></span><wbr><span class="parameters">(<a href="../commons/inject/WritableBeanStore.html" title="interface in org.apache.juneau.commons.inject">WritableBeanStore</a>&nbsp;beanStore)</span></div>
 <div class="block">Specifies an external <a href="../commons/inject/WritableBeanStore.html" title="interface in org.apache.juneau.commons.inject"><code>WritableBeanStore</code></a> to use instead of constructing a fresh one.
 
  <p>
@@ -752,7 +752,7 @@ implements <a href="../commons/inject/BeanStoreOverridable.html" title="interfac
 <li>
 <section class="detail" id="overridingBeanStore(org.apache.juneau.commons.inject.BeanStore)">
 <h3>overridingBeanStore</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Microservice.Builder.html" title="class in org.apache.juneau.microservice">Microservice.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/microservice/Microservice.Builder.html#line-613">overridingBeanStore</a></span><wbr><span class="parameters">(<a href="../commons/inject/BeanStore.html" title="interface in org.apache.juneau.commons.inject">BeanStore</a>&nbsp;store)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Microservice.Builder.html" title="class in org.apache.juneau.microservice">Microservice.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/microservice/Microservice.Builder.html#line-601">overridingBeanStore</a></span><wbr><span class="parameters">(<a href="../commons/inject/BeanStore.html" title="interface in org.apache.juneau.commons.inject">BeanStore</a>&nbsp;store)</span></div>
 <div class="block">Installs the supplied <a href="../commons/inject/BeanStore.html" title="interface in org.apache.juneau.commons.inject"><code>BeanStore</code></a> as the <code>overridingParent</code> of this microservice's
  bean store.
 
@@ -785,7 +785,7 @@ implements <a href="../commons/inject/BeanStoreOverridable.html" title="interfac
 <li>
 <section class="detail" id="resolveFile(java.lang.String)">
 <h3>resolveFile</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/File.html" title="class or interface in java.io" class="external-link">File</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/microservice/Microservice.Builder.html#line-628">resolveFile</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;path)</span></div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/File.html" title="class or interface in java.io" class="external-link">File</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/microservice/Microservice.Builder.html#line-616">resolveFile</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;path)</span></div>
 <div class="block">Resolves the specified path.
 
  <p>

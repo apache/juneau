@@ -78,9 +78,9 @@ loadScripts(document, 'script');</script>
 </div>
 <section class="class-description" id="class-description">
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/McpAuthorizationCodeAcquirer.html#line-66">McpAuthorizationCodeAcquirer</a></span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/McpAuthorizationCodeAcquirer.html#line-65">McpAuthorizationCodeAcquirer</a></span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
-<div class="block">Interactive authorization-code + PKCE (S256) token acquisition for headless / CLI use (F1 Phase B).
+<div class="block">Interactive authorization-code + PKCE (S256) token acquisition for headless / CLI use.
 
  <p>
  Builds on the relocated <a href="../../../auth/oauth/flow/OAuthAuthorizationCodeFlow.html" title="class in org.apache.juneau.rest.auth.oauth.flow"><code>OAuthAuthorizationCodeFlow</code></a>: opens a <a href="LoopbackRedirectReceiver.html" title="class in org.apache.juneau.rest.client.mcp.auth"><code>LoopbackRedirectReceiver</code></a>, generates the
@@ -220,7 +220,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.rest.client.mcp.auth.McpAuthorizationCodeAcquirer.Builder)">
 <h3>McpAuthorizationCodeAcquirer</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/McpAuthorizationCodeAcquirer.html#line-372">McpAuthorizationCodeAcquirer</a></span><wbr><span class="parameters">(<a href="McpAuthorizationCodeAcquirer.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpAuthorizationCodeAcquirer.Builder</a>&nbsp;b)</span></div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/McpAuthorizationCodeAcquirer.html#line-368">McpAuthorizationCodeAcquirer</a></span><wbr><span class="parameters">(<a href="McpAuthorizationCodeAcquirer.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpAuthorizationCodeAcquirer.Builder</a>&nbsp;b)</span></div>
 <div class="block">Constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -239,7 +239,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="create()">
 <h3>create</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="McpAuthorizationCodeAcquirer.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpAuthorizationCodeAcquirer.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/McpAuthorizationCodeAcquirer.html#line-79">create</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="McpAuthorizationCodeAcquirer.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpAuthorizationCodeAcquirer.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/McpAuthorizationCodeAcquirer.html#line-75">create</a></span>()</div>
 <div class="block">Static creator.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -250,7 +250,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="acquire(java.time.Duration)">
 <h3>acquire</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../../auth/oauth/flow/OAuthToken.html" title="class in org.apache.juneau.rest.auth.oauth.flow">OAuthToken</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/McpAuthorizationCodeAcquirer.html#line-416">acquire</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a>&nbsp;timeout)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../../auth/oauth/flow/OAuthToken.html" title="class in org.apache.juneau.rest.auth.oauth.flow">OAuthToken</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/McpAuthorizationCodeAcquirer.html#line-412">acquire</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a>&nbsp;timeout)</span></div>
 <div class="block">Runs the full interactive acquisition: starts the loopback listener, opens the authorization URL, waits for the
  redirect, validates it, and exchanges the code for a token.</div>
 <dl class="notes">
@@ -268,7 +268,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="buildAuthorizationUrl(org.apache.juneau.rest.auth.oauth.flow.OAuthAuthorizationCodeFlow,java.lang.String,com.nimbusds.oauth2.sdk.pkce.CodeVerifier)">
 <h3>buildAuthorizationUrl</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/McpAuthorizationCodeAcquirer.html#line-445">buildAuthorizationUrl</a></span><wbr><span class="parameters">(<a href="../../../auth/oauth/flow/OAuthAuthorizationCodeFlow.html" title="class in org.apache.juneau.rest.auth.oauth.flow">OAuthAuthorizationCodeFlow</a>&nbsp;flow,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/McpAuthorizationCodeAcquirer.html#line-441">buildAuthorizationUrl</a></span><wbr><span class="parameters">(<a href="../../../auth/oauth/flow/OAuthAuthorizationCodeFlow.html" title="class in org.apache.juneau.rest.auth.oauth.flow">OAuthAuthorizationCodeFlow</a>&nbsp;flow,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;state,
  com.nimbusds.oauth2.sdk.pkce.CodeVerifier&nbsp;verifier)</span></div>
 <div class="block">Builds the authorization URL for a given state and PKCE verifier (exposed for callers driving their own
@@ -286,7 +286,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="handleCallback(org.apache.juneau.rest.auth.oauth.flow.OAuthAuthorizationCodeFlow,java.net.URI)">
 <h3>handleCallback</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../../auth/oauth/flow/OAuthToken.html" title="class in org.apache.juneau.rest.auth.oauth.flow">OAuthToken</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/McpAuthorizationCodeAcquirer.html#line-465">handleCallback</a></span><wbr><span class="parameters">(<a href="../../../auth/oauth/flow/OAuthAuthorizationCodeFlow.html" title="class in org.apache.juneau.rest.auth.oauth.flow">OAuthAuthorizationCodeFlow</a>&nbsp;flow,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../../auth/oauth/flow/OAuthToken.html" title="class in org.apache.juneau.rest.auth.oauth.flow">OAuthToken</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/McpAuthorizationCodeAcquirer.html#line-461">handleCallback</a></span><wbr><span class="parameters">(<a href="../../../auth/oauth/flow/OAuthAuthorizationCodeFlow.html" title="class in org.apache.juneau.rest.auth.oauth.flow">OAuthAuthorizationCodeFlow</a>&nbsp;flow,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a>&nbsp;callbackUri)</span></div>
 <div class="block">Validates a loopback callback and exchanges the authorization code for a token.
 
@@ -308,7 +308,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="validateAuthorizationResponse(java.net.URI,java.lang.String,java.net.URI)">
 <h3>validateAuthorizationResponse</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/McpAuthorizationCodeAcquirer.html#line-496">validateAuthorizationResponse</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a>&nbsp;callbackUri,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/McpAuthorizationCodeAcquirer.html#line-492">validateAuthorizationResponse</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a>&nbsp;callbackUri,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;expectedState,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a>&nbsp;expectedIssuer)</span></div>
 <div class="block">Validates an authorization-code callback and returns the authorization code, without any token exchange or
@@ -336,7 +336,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="validateAuthorizationResponse(java.net.URI,java.lang.String,java.net.URI,boolean)">
 <h3>validateAuthorizationResponse</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/McpAuthorizationCodeAcquirer.html#line-512">validateAuthorizationResponse</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a>&nbsp;callbackUri,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/McpAuthorizationCodeAcquirer.html#line-508">validateAuthorizationResponse</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a>&nbsp;callbackUri,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;expectedState,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a>&nbsp;expectedIssuer,
  boolean&nbsp;requireIssuerParameter)</span></div>

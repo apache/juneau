@@ -24,7 +24,7 @@
 <a class="jxr_linenumber" name="L16" href="#L16">16</a>  <em class="jxr_comment"> */</em>
 <a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> org.apache.juneau.marshall.hjson;
 <a class="jxr_linenumber" name="L18" href="#L18">18</a>  
-<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.commons.utils.AssertionUtils.*;
+<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.commons.utils.Shorts.*;
 <a class="jxr_linenumber" name="L20" href="#L20">20</a>  
 <a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> java.io.*;
 <a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> java.util.*;
@@ -34,7 +34,7 @@
 <a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.marshall.*;
 <a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.marshall.serializer.*;
 <a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.marshall.stream.*;
-<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.marshall.swap.*;
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.marshall.swap.spi.*;
 <a class="jxr_linenumber" name="L30" href="#L30">30</a>  
 <a class="jxr_linenumber" name="L31" href="#L31">31</a>  <em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L32" href="#L32">32</a>  <em class="jxr_javadoccomment"> * Serializes POJO models to Hjson (Human JSON).</em>
@@ -122,12 +122,12 @@
 <a class="jxr_linenumber" name="L114" href="#L114">114</a> <em class="jxr_javadoccomment"> * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L115" href="#L115">115</a> <em class="jxr_javadoccomment"> */</em>
 <a class="jxr_linenumber" name="L116" href="#L116">116</a> @SuppressWarnings({
-<a class="jxr_linenumber" name="L117" href="#L117">117</a> 	<span class="jxr_string">"java:S110"</span>, <span class="jxr_string">"java:S115"</span>,
-<a class="jxr_linenumber" name="L118" href="#L118">118</a> 	<span class="jxr_string">"resource"</span> <em class="jxr_comment">// Closeable resources are owned by the caller's serializer session; Eclipse JDT @Owning warning is by design.</em>
-<a class="jxr_linenumber" name="L119" href="#L119">119</a> })
-<a class="jxr_linenumber" name="L120" href="#L120">120</a> <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> HjsonSerializer <strong class="jxr_keyword">extends</strong> WriterSerializer <strong class="jxr_keyword">implements</strong> HjsonMetaProvider, <a name="RecordWritable" href="../../../../../org/apache/juneau/marshall/stream/RecordWritable.html#RecordWritable">RecordWritable</a> {
-<a class="jxr_linenumber" name="L121" href="#L121">121</a> 
-<a class="jxr_linenumber" name="L122" href="#L122">122</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String ARG_copyFrom = <span class="jxr_string">"copyFrom"</span>;
+<a class="jxr_linenumber" name="L117" href="#L117">117</a> 	<span class="jxr_string">"java:S110"</span>, <em class="jxr_comment">// Depth comes from the Serializer -&gt; WriterSerializer base chain shared by all text-format serializers</em>
+<a class="jxr_linenumber" name="L118" href="#L118">118</a> 	<span class="jxr_string">"java:S1192"</span>, <em class="jxr_comment">// Duplicated literals (argument/property names) read more clearly inline than as constants</em>
+<a class="jxr_linenumber" name="L119" href="#L119">119</a> 	<span class="jxr_string">"java:S9149"</span>, <em class="jxr_comment">// Per-format static factories intentionally shadow the parent's.</em>
+<a class="jxr_linenumber" name="L120" href="#L120">120</a> 	<span class="jxr_string">"resource"</span> <em class="jxr_comment">// Closeable resources are owned by the caller's serializer session; Eclipse JDT @Owning warning is by design.</em>
+<a class="jxr_linenumber" name="L121" href="#L121">121</a> })
+<a class="jxr_linenumber" name="L122" href="#L122">122</a> <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> HjsonSerializer <strong class="jxr_keyword">extends</strong> WriterSerializer <strong class="jxr_keyword">implements</strong> HjsonMetaProvider, <a name="RecordWritable" href="../../../../../org/apache/juneau/marshall/stream/RecordWritable.html#RecordWritable">RecordWritable</a> {
 <a class="jxr_linenumber" name="L123" href="#L123">123</a> 
 <a class="jxr_linenumber" name="L124" href="#L124">124</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> java.util.concurrent.ConcurrentHashMap&lt;ClassMeta&lt;?&gt;,HjsonClassMeta&gt; hjsonClassMetas = <strong class="jxr_keyword">new</strong> java.util.concurrent.ConcurrentHashMap&lt;&gt;();
 <a class="jxr_linenumber" name="L125" href="#L125">125</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> java.util.concurrent.ConcurrentHashMap&lt;BeanPropertyMeta,HjsonBeanPropertyMeta&gt; hjsonBeanPropertyMetas = <strong class="jxr_keyword">new</strong> java.util.concurrent.ConcurrentHashMap&lt;&gt;();
@@ -150,7 +150,7 @@
 <a class="jxr_linenumber" name="L142" href="#L142">142</a> 	<em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L143" href="#L143">143</a> <em class="jxr_javadoccomment">	 * Builder class.</em>
 <a class="jxr_linenumber" name="L144" href="#L144">144</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L145" href="#L145">145</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> <a name="Builder" href="../../../../../org/apache/juneau/marshall/swap/Builder.html#Builder">Builder</a> <strong class="jxr_keyword">extends</strong> WriterSerializer.Builder&lt;Builder&gt; {
+<a class="jxr_linenumber" name="L145" href="#L145">145</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> Builder <strong class="jxr_keyword">extends</strong> WriterSerializer.Builder&lt;Builder&gt; {
 <a class="jxr_linenumber" name="L146" href="#L146">146</a> 
 <a class="jxr_linenumber" name="L147" href="#L147">147</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Cache&lt;HashKey,HjsonSerializer&gt; CACHE = Cache.of(HashKey.<strong class="jxr_keyword">class</strong>, HjsonSerializer.<strong class="jxr_keyword">class</strong>).build();
 <a class="jxr_linenumber" name="L148" href="#L148">148</a> 
@@ -160,13 +160,13 @@
 <a class="jxr_linenumber" name="L152" href="#L152">152</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">boolean</strong> omitRootBraces = false;
 <a class="jxr_linenumber" name="L153" href="#L153">153</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">boolean</strong> useNewlineSeparators = <strong class="jxr_keyword">true</strong>;
 <a class="jxr_linenumber" name="L154" href="#L154">154</a> 
-<a class="jxr_linenumber" name="L155" href="#L155">155</a> 		<strong class="jxr_keyword">protected</strong> <a name="Builder" href="../../../../../org/apache/juneau/marshall/swap/Builder.html#Builder">Builder</a>() {
+<a class="jxr_linenumber" name="L155" href="#L155">155</a> 		<strong class="jxr_keyword">protected</strong> Builder() {
 <a class="jxr_linenumber" name="L156" href="#L156">156</a> 			produces(<span class="jxr_string">"application/hjson"</span>);
 <a class="jxr_linenumber" name="L157" href="#L157">157</a> 			accept(<span class="jxr_string">"application/hjson,application/hjson+json"</span>);
 <a class="jxr_linenumber" name="L158" href="#L158">158</a> 		}
 <a class="jxr_linenumber" name="L159" href="#L159">159</a> 
-<a class="jxr_linenumber" name="L160" href="#L160">160</a> 		<strong class="jxr_keyword">protected</strong> <a name="Builder" href="../../../../../org/apache/juneau/marshall/swap/Builder.html#Builder">Builder</a>(<a name="Builder" href="../../../../../org/apache/juneau/marshall/swap/Builder.html#Builder">Builder</a> copyFrom) {
-<a class="jxr_linenumber" name="L161" href="#L161">161</a> 			<strong class="jxr_keyword">super</strong>(assertArgNotNull(ARG_copyFrom, copyFrom));
+<a class="jxr_linenumber" name="L160" href="#L160">160</a> 		<strong class="jxr_keyword">protected</strong> Builder(Builder copyFrom) {
+<a class="jxr_linenumber" name="L161" href="#L161">161</a> 			<strong class="jxr_keyword">super</strong>(reqnn(<span class="jxr_string">"copyFrom"</span>, copyFrom));
 <a class="jxr_linenumber" name="L162" href="#L162">162</a> 			useMultilineStrings = copyFrom.useMultilineStrings;
 <a class="jxr_linenumber" name="L163" href="#L163">163</a> 			useQuotelessStrings = copyFrom.useQuotelessStrings;
 <a class="jxr_linenumber" name="L164" href="#L164">164</a> 			useQuotelessKeys = copyFrom.useQuotelessKeys;
@@ -174,8 +174,8 @@
 <a class="jxr_linenumber" name="L166" href="#L166">166</a> 			useNewlineSeparators = copyFrom.useNewlineSeparators;
 <a class="jxr_linenumber" name="L167" href="#L167">167</a> 		}
 <a class="jxr_linenumber" name="L168" href="#L168">168</a> 
-<a class="jxr_linenumber" name="L169" href="#L169">169</a> 		<strong class="jxr_keyword">protected</strong> <a name="Builder" href="../../../../../org/apache/juneau/marshall/swap/Builder.html#Builder">Builder</a>(HjsonSerializer copyFrom) {
-<a class="jxr_linenumber" name="L170" href="#L170">170</a> 			<strong class="jxr_keyword">super</strong>(assertArgNotNull(ARG_copyFrom, copyFrom));
+<a class="jxr_linenumber" name="L169" href="#L169">169</a> 		<strong class="jxr_keyword">protected</strong> Builder(HjsonSerializer copyFrom) {
+<a class="jxr_linenumber" name="L170" href="#L170">170</a> 			<strong class="jxr_keyword">super</strong>(reqnn(<span class="jxr_string">"copyFrom"</span>, copyFrom));
 <a class="jxr_linenumber" name="L171" href="#L171">171</a> 			useMultilineStrings = copyFrom.useMultilineStrings;
 <a class="jxr_linenumber" name="L172" href="#L172">172</a> 			useQuotelessStrings = copyFrom.useQuotelessStrings;
 <a class="jxr_linenumber" name="L173" href="#L173">173</a> 			useQuotelessKeys = copyFrom.useQuotelessKeys;
@@ -189,7 +189,7 @@
 <a class="jxr_linenumber" name="L181" href="#L181">181</a> <em class="jxr_javadoccomment">		 * @param value &lt;jk&gt;true&lt;/jk&gt; to use &lt;c&gt;'''&lt;/c&gt; blocks for newline-containing strings.</em>
 <a class="jxr_linenumber" name="L182" href="#L182">182</a> <em class="jxr_javadoccomment">		 * @return This object.</em>
 <a class="jxr_linenumber" name="L183" href="#L183">183</a> <em class="jxr_javadoccomment">		 */</em>
-<a class="jxr_linenumber" name="L184" href="#L184">184</a> 		<strong class="jxr_keyword">public</strong> <a name="Builder" href="../../../../../org/apache/juneau/marshall/swap/Builder.html#Builder">Builder</a> useMultilineStrings(<strong class="jxr_keyword">boolean</strong> value) {
+<a class="jxr_linenumber" name="L184" href="#L184">184</a> 		<strong class="jxr_keyword">public</strong> Builder useMultilineStrings(<strong class="jxr_keyword">boolean</strong> value) {
 <a class="jxr_linenumber" name="L185" href="#L185">185</a> 			useMultilineStrings = value;
 <a class="jxr_linenumber" name="L186" href="#L186">186</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L187" href="#L187">187</a> 		}
@@ -200,7 +200,7 @@
 <a class="jxr_linenumber" name="L192" href="#L192">192</a> <em class="jxr_javadoccomment">		 * @param value &lt;jk&gt;true&lt;/jk&gt; to emit unquoted strings when safe.</em>
 <a class="jxr_linenumber" name="L193" href="#L193">193</a> <em class="jxr_javadoccomment">		 * @return This object.</em>
 <a class="jxr_linenumber" name="L194" href="#L194">194</a> <em class="jxr_javadoccomment">		 */</em>
-<a class="jxr_linenumber" name="L195" href="#L195">195</a> 		<strong class="jxr_keyword">public</strong> <a name="Builder" href="../../../../../org/apache/juneau/marshall/swap/Builder.html#Builder">Builder</a> useQuotelessStrings(<strong class="jxr_keyword">boolean</strong> value) {
+<a class="jxr_linenumber" name="L195" href="#L195">195</a> 		<strong class="jxr_keyword">public</strong> Builder useQuotelessStrings(<strong class="jxr_keyword">boolean</strong> value) {
 <a class="jxr_linenumber" name="L196" href="#L196">196</a> 			useQuotelessStrings = value;
 <a class="jxr_linenumber" name="L197" href="#L197">197</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L198" href="#L198">198</a> 		}
@@ -211,7 +211,7 @@
 <a class="jxr_linenumber" name="L203" href="#L203">203</a> <em class="jxr_javadoccomment">		 * @param value &lt;jk&gt;true&lt;/jk&gt; to emit unquoted keys when safe.</em>
 <a class="jxr_linenumber" name="L204" href="#L204">204</a> <em class="jxr_javadoccomment">		 * @return This object.</em>
 <a class="jxr_linenumber" name="L205" href="#L205">205</a> <em class="jxr_javadoccomment">		 */</em>
-<a class="jxr_linenumber" name="L206" href="#L206">206</a> 		<strong class="jxr_keyword">public</strong> <a name="Builder" href="../../../../../org/apache/juneau/marshall/swap/Builder.html#Builder">Builder</a> useQuotelessKeys(<strong class="jxr_keyword">boolean</strong> value) {
+<a class="jxr_linenumber" name="L206" href="#L206">206</a> 		<strong class="jxr_keyword">public</strong> Builder useQuotelessKeys(<strong class="jxr_keyword">boolean</strong> value) {
 <a class="jxr_linenumber" name="L207" href="#L207">207</a> 			useQuotelessKeys = value;
 <a class="jxr_linenumber" name="L208" href="#L208">208</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L209" href="#L209">209</a> 		}
@@ -222,7 +222,7 @@
 <a class="jxr_linenumber" name="L214" href="#L214">214</a> <em class="jxr_javadoccomment">		 * @param value &lt;jk&gt;true&lt;/jk&gt; to omit root braces.</em>
 <a class="jxr_linenumber" name="L215" href="#L215">215</a> <em class="jxr_javadoccomment">		 * @return This object.</em>
 <a class="jxr_linenumber" name="L216" href="#L216">216</a> <em class="jxr_javadoccomment">		 */</em>
-<a class="jxr_linenumber" name="L217" href="#L217">217</a> 		<strong class="jxr_keyword">public</strong> <a name="Builder" href="../../../../../org/apache/juneau/marshall/swap/Builder.html#Builder">Builder</a> omitRootBraces(<strong class="jxr_keyword">boolean</strong> value) {
+<a class="jxr_linenumber" name="L217" href="#L217">217</a> 		<strong class="jxr_keyword">public</strong> Builder omitRootBraces(<strong class="jxr_keyword">boolean</strong> value) {
 <a class="jxr_linenumber" name="L218" href="#L218">218</a> 			omitRootBraces = value;
 <a class="jxr_linenumber" name="L219" href="#L219">219</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L220" href="#L220">220</a> 		}
@@ -233,7 +233,7 @@
 <a class="jxr_linenumber" name="L225" href="#L225">225</a> <em class="jxr_javadoccomment">		 * @param value &lt;jk&gt;true&lt;/jk&gt; for newline-separated members.</em>
 <a class="jxr_linenumber" name="L226" href="#L226">226</a> <em class="jxr_javadoccomment">		 * @return This object.</em>
 <a class="jxr_linenumber" name="L227" href="#L227">227</a> <em class="jxr_javadoccomment">		 */</em>
-<a class="jxr_linenumber" name="L228" href="#L228">228</a> 		<strong class="jxr_keyword">public</strong> <a name="Builder" href="../../../../../org/apache/juneau/marshall/swap/Builder.html#Builder">Builder</a> useNewlineSeparators(<strong class="jxr_keyword">boolean</strong> value) {
+<a class="jxr_linenumber" name="L228" href="#L228">228</a> 		<strong class="jxr_keyword">public</strong> Builder useNewlineSeparators(<strong class="jxr_keyword">boolean</strong> value) {
 <a class="jxr_linenumber" name="L229" href="#L229">229</a> 			useNewlineSeparators = value;
 <a class="jxr_linenumber" name="L230" href="#L230">230</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L231" href="#L231">231</a> 		}
@@ -243,25 +243,25 @@
 <a class="jxr_linenumber" name="L235" href="#L235">235</a> <em class="jxr_javadoccomment">		 *</em>
 <a class="jxr_linenumber" name="L236" href="#L236">236</a> <em class="jxr_javadoccomment">		 * @return This object.</em>
 <a class="jxr_linenumber" name="L237" href="#L237">237</a> <em class="jxr_javadoccomment">		 */</em>
-<a class="jxr_linenumber" name="L238" href="#L238">238</a> 		<strong class="jxr_keyword">public</strong> <a name="Builder" href="../../../../../org/apache/juneau/marshall/swap/Builder.html#Builder">Builder</a> compact() {
+<a class="jxr_linenumber" name="L238" href="#L238">238</a> 		<strong class="jxr_keyword">public</strong> Builder compact() {
 <a class="jxr_linenumber" name="L239" href="#L239">239</a> 			useNewlineSeparators = false;
 <a class="jxr_linenumber" name="L240" href="#L240">240</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L241" href="#L241">241</a> 		}
 <a class="jxr_linenumber" name="L242" href="#L242">242</a> 
 <a class="jxr_linenumber" name="L243" href="#L243">243</a> 		@Override
-<a class="jxr_linenumber" name="L244" href="#L244">244</a> 		<strong class="jxr_keyword">public</strong> <a name="Builder" href="../../../../../org/apache/juneau/marshall/swap/Builder.html#Builder">Builder</a> useWhitespace() {
+<a class="jxr_linenumber" name="L244" href="#L244">244</a> 		<strong class="jxr_keyword">public</strong> Builder useWhitespace() {
 <a class="jxr_linenumber" name="L245" href="#L245">245</a> 			<strong class="jxr_keyword">super</strong>.useWhitespace();
 <a class="jxr_linenumber" name="L246" href="#L246">246</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L247" href="#L247">247</a> 		}
 <a class="jxr_linenumber" name="L248" href="#L248">248</a> 
 <a class="jxr_linenumber" name="L249" href="#L249">249</a> 		@Override
-<a class="jxr_linenumber" name="L250" href="#L250">250</a> 		<strong class="jxr_keyword">public</strong> <a name="Builder" href="../../../../../org/apache/juneau/marshall/swap/Builder.html#Builder">Builder</a> useWhitespace(<strong class="jxr_keyword">boolean</strong> value) {
+<a class="jxr_linenumber" name="L250" href="#L250">250</a> 		<strong class="jxr_keyword">public</strong> Builder useWhitespace(<strong class="jxr_keyword">boolean</strong> value) {
 <a class="jxr_linenumber" name="L251" href="#L251">251</a> 			<strong class="jxr_keyword">super</strong>.useWhitespace(value);
 <a class="jxr_linenumber" name="L252" href="#L252">252</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L253" href="#L253">253</a> 		}
 <a class="jxr_linenumber" name="L254" href="#L254">254</a> 
 <a class="jxr_linenumber" name="L255" href="#L255">255</a> 		@Override <em class="jxr_comment">/* Overridden from WriterSerializer.Builder&lt;?&gt; */</em>
-<a class="jxr_linenumber" name="L256" href="#L256">256</a> 		<strong class="jxr_keyword">public</strong> <a name="Builder" href="../../../../../org/apache/juneau/marshall/swap/Builder.html#Builder">Builder</a> ws() {
+<a class="jxr_linenumber" name="L256" href="#L256">256</a> 		<strong class="jxr_keyword">public</strong> Builder ws() {
 <a class="jxr_linenumber" name="L257" href="#L257">257</a> 			<strong class="jxr_keyword">return</strong> useWhitespace();
 <a class="jxr_linenumber" name="L258" href="#L258">258</a> 		}
 <a class="jxr_linenumber" name="L259" href="#L259">259</a> 
@@ -271,8 +271,8 @@
 <a class="jxr_linenumber" name="L263" href="#L263">263</a> 		}
 <a class="jxr_linenumber" name="L264" href="#L264">264</a> 
 <a class="jxr_linenumber" name="L265" href="#L265">265</a> 		@Override
-<a class="jxr_linenumber" name="L266" href="#L266">266</a> 		<strong class="jxr_keyword">public</strong> <a name="Builder" href="../../../../../org/apache/juneau/marshall/swap/Builder.html#Builder">Builder</a> copy() {
-<a class="jxr_linenumber" name="L267" href="#L267">267</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="Builder" href="../../../../../org/apache/juneau/marshall/swap/Builder.html#Builder">Builder</a>(<strong class="jxr_keyword">this</strong>);
+<a class="jxr_linenumber" name="L266" href="#L266">266</a> 		<strong class="jxr_keyword">public</strong> Builder copy() {
+<a class="jxr_linenumber" name="L267" href="#L267">267</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> Builder(<strong class="jxr_keyword">this</strong>);
 <a class="jxr_linenumber" name="L268" href="#L268">268</a> 		}
 <a class="jxr_linenumber" name="L269" href="#L269">269</a> 
 <a class="jxr_linenumber" name="L270" href="#L270">270</a> 		@Override
@@ -292,8 +292,8 @@
 <a class="jxr_linenumber" name="L284" href="#L284">284</a> <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L285" href="#L285">285</a> <em class="jxr_javadoccomment">	 * @return A new builder.</em>
 <a class="jxr_linenumber" name="L286" href="#L286">286</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L287" href="#L287">287</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <a name="Builder" href="../../../../../org/apache/juneau/marshall/swap/Builder.html#Builder">Builder</a> create() {
-<a class="jxr_linenumber" name="L288" href="#L288">288</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="Builder" href="../../../../../org/apache/juneau/marshall/swap/Builder.html#Builder">Builder</a>();
+<a class="jxr_linenumber" name="L287" href="#L287">287</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> Builder create() {
+<a class="jxr_linenumber" name="L288" href="#L288">288</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> Builder();
 <a class="jxr_linenumber" name="L289" href="#L289">289</a> 	}
 <a class="jxr_linenumber" name="L290" href="#L290">290</a> 
 <a class="jxr_linenumber" name="L291" href="#L291">291</a> 	<em class="jxr_javadoccomment">/**</em>
@@ -301,7 +301,7 @@
 <a class="jxr_linenumber" name="L293" href="#L293">293</a> <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L294" href="#L294">294</a> <em class="jxr_javadoccomment">	 * @param builder The builder.</em>
 <a class="jxr_linenumber" name="L295" href="#L295">295</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L296" href="#L296">296</a> 	<strong class="jxr_keyword">public</strong> HjsonSerializer(<a name="Builder" href="../../../../../org/apache/juneau/marshall/swap/Builder.html#Builder">Builder</a> builder) {
+<a class="jxr_linenumber" name="L296" href="#L296">296</a> 	<strong class="jxr_keyword">public</strong> HjsonSerializer(Builder builder) {
 <a class="jxr_linenumber" name="L297" href="#L297">297</a> 		<strong class="jxr_keyword">super</strong>(builder);
 <a class="jxr_linenumber" name="L298" href="#L298">298</a> 		useMultilineStrings = builder.useMultilineStrings;
 <a class="jxr_linenumber" name="L299" href="#L299">299</a> 		useQuotelessStrings = builder.useQuotelessStrings;
@@ -316,8 +316,8 @@
 <a class="jxr_linenumber" name="L308" href="#L308">308</a> 	}
 <a class="jxr_linenumber" name="L309" href="#L309">309</a> 
 <a class="jxr_linenumber" name="L310" href="#L310">310</a> 	@Override
-<a class="jxr_linenumber" name="L311" href="#L311">311</a> 	<strong class="jxr_keyword">public</strong> <a name="Builder" href="../../../../../org/apache/juneau/marshall/swap/Builder.html#Builder">Builder</a> copy() {
-<a class="jxr_linenumber" name="L312" href="#L312">312</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="Builder" href="../../../../../org/apache/juneau/marshall/swap/Builder.html#Builder">Builder</a>(<strong class="jxr_keyword">this</strong>);
+<a class="jxr_linenumber" name="L311" href="#L311">311</a> 	<strong class="jxr_keyword">public</strong> Builder copy() {
+<a class="jxr_linenumber" name="L312" href="#L312">312</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> Builder(<strong class="jxr_keyword">this</strong>);
 <a class="jxr_linenumber" name="L313" href="#L313">313</a> 	}
 <a class="jxr_linenumber" name="L314" href="#L314">314</a> 
 <a class="jxr_linenumber" name="L315" href="#L315">315</a> 	@Override

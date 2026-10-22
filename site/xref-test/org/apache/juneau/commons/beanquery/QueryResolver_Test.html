@@ -1,0 +1,481 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="" lang="">
+<head><meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<title>QueryResolver_Test xref</title>
+<link type="text/css" rel="stylesheet" href="../../../../../stylesheet.css" />
+</head>
+<body>
+<div id="overview"><a href="../../../../../../testapidocs/org/apache/juneau/commons/beanquery/QueryResolver_Test.html">View Javadoc</a></div><pre>
+<a class="jxr_linenumber" name="L1" href="#L1">1</a>   <em class="jxr_comment">/*</em>
+<a class="jxr_linenumber" name="L2" href="#L2">2</a>   <em class="jxr_comment"> * Licensed to the Apache Software Foundation (ASF) under one or more</em>
+<a class="jxr_linenumber" name="L3" href="#L3">3</a>   <em class="jxr_comment"> * contributor license agreements.  See the NOTICE file distributed with</em>
+<a class="jxr_linenumber" name="L4" href="#L4">4</a>   <em class="jxr_comment"> * this work for additional information regarding copyright ownership.</em>
+<a class="jxr_linenumber" name="L5" href="#L5">5</a>   <em class="jxr_comment"> * The ASF licenses this file to You under the Apache License, Version 2.0</em>
+<a class="jxr_linenumber" name="L6" href="#L6">6</a>   <em class="jxr_comment"> * (the "License"); you may not use this file except in compliance with</em>
+<a class="jxr_linenumber" name="L7" href="#L7">7</a>   <em class="jxr_comment"> * the License.  You may obtain a copy of the License at</em>
+<a class="jxr_linenumber" name="L8" href="#L8">8</a>   <em class="jxr_comment"> *</em>
+<a class="jxr_linenumber" name="L9" href="#L9">9</a>   <em class="jxr_comment"> *      <a href="http://www.apache.org/licenses/LICENSE-2.0" target="alexandria_uri">http://www.apache.org/licenses/LICENSE-2.0</a></em>
+<a class="jxr_linenumber" name="L10" href="#L10">10</a>  <em class="jxr_comment"> *</em>
+<a class="jxr_linenumber" name="L11" href="#L11">11</a>  <em class="jxr_comment"> * Unless required by applicable law or agreed to in writing, software</em>
+<a class="jxr_linenumber" name="L12" href="#L12">12</a>  <em class="jxr_comment"> * distributed under the License is distributed on an "AS IS" BASIS,</em>
+<a class="jxr_linenumber" name="L13" href="#L13">13</a>  <em class="jxr_comment"> * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</em>
+<a class="jxr_linenumber" name="L14" href="#L14">14</a>  <em class="jxr_comment"> * See the License for the specific language governing permissions and</em>
+<a class="jxr_linenumber" name="L15" href="#L15">15</a>  <em class="jxr_comment"> * limitations under the License.</em>
+<a class="jxr_linenumber" name="L16" href="#L16">16</a>  <em class="jxr_comment"> */</em>
+<a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> org.apache.juneau.commons.beanquery;
+<a class="jxr_linenumber" name="L18" href="#L18">18</a>  
+<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.commons.TestAssertions.*;
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.commons.beanquery.SearchType.*;
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.junit.jupiter.api.Assertions.*;
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> java.math.*;
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> java.time.*;
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> java.util.*;
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.commons.*;
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">import</strong> org.junit.jupiter.api.*;
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <strong class="jxr_keyword">class</strong> <a name="QueryResolver_Test" href="../../../../../org/apache/juneau/commons/beanquery/QueryResolver_Test.html#QueryResolver_Test">QueryResolver_Test</a> <strong class="jxr_keyword">extends</strong> <a name="TestBase" href="../../../../../org/apache/juneau/commons/TestBase.html#TestBase">TestBase</a> {
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>  
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>  	<em class="jxr_javadoccomment">/** name TEXT, age NUMERIC, version VERSION; all other settings at their defaults. */</em>
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> QuerySettings settings() {
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>  		<strong class="jxr_keyword">var</strong> s = <strong class="jxr_keyword">new</strong> QuerySettings();
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>  		s.columns.put(<span class="jxr_string">"name"</span>, TEXT);
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>  		s.columns.put(<span class="jxr_string">"age"</span>, NUMERIC);
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>  		s.columns.put(<span class="jxr_string">"version"</span>, VERSION);
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>  		<strong class="jxr_keyword">return</strong> s;
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>  	}
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>  
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> ResolvedQuery resolve(QuerySettings s, BeanQuery q) {
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>  		<strong class="jxr_keyword">return</strong> QueryResolver.resolve(q, s, <strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>  	}
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>  
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> ResolvedQuery search(String search) {
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>  		<strong class="jxr_keyword">return</strong> resolve(settings(), <strong class="jxr_keyword">new</strong> BeanQuery().setSearch(search));
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>  	}
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>  
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> assertSyntax(String message, QuerySettings s, BeanQuery q) {
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>  		assertThrowsWithMessage(BeanQuerySyntaxException.<strong class="jxr_keyword">class</strong>, message, () -&gt; QueryResolver.resolve(q, s, <strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>  	}
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>  
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> assertSyntax(String message, BeanQuery q) {
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>  		assertSyntax(message, settings(), q);
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>  	}
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>  
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>  	@Nested <strong class="jxr_keyword">class</strong> A_settings {
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>  
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>  		@Test <strong class="jxr_keyword">void</strong> a01_defaults() {
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>  			<strong class="jxr_keyword">var</strong> s = <strong class="jxr_keyword">new</strong> QuerySettings();
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>  			assertTrue(s.allowRegex);
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>  			assertEquals(50, s.regexTimeout.toMillis());
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>  			assertEquals(CountPolicy.IF_REQUESTED, s.countPolicy);
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>  			assertEquals(100, s.defaultLimit);
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>  			assertEquals(1000, s.maxLimit.intValue());
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>  			assertEquals(64, s.maxSearchClauses);
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>  			assertEquals(8, s.maxSortKeys);
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>  			assertEquals(4096, s.maxSearchLength);
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>  			assertEquals(16, s.maxExpressionDepth);
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>  			assertSame(SearchOperatorSet.standard(), s.defaultOperators);
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>  		}
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>  
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>  		@Test <strong class="jxr_keyword">void</strong> a02_validate() {
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>  			<strong class="jxr_keyword">var</strong> hoistedTarget1 = <strong class="jxr_keyword">new</strong> QuerySettings();
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>  			assertThrowsWithMessage(IllegalStateException.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"At least one column must be declared."</span>, hoistedTarget1::validate);
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>  			<strong class="jxr_keyword">var</strong> s = settings();
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>  			s.maxLimit = 50;
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>  			assertThrowsWithMessage(IllegalStateException.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"maxLimit (50) must not be less than defaultLimit (100)."</span>, s::validate);
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>  			s.maxLimit = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>  			assertDoesNotThrow(s::validate);
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>  		}
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>  
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>  		@Test <strong class="jxr_keyword">void</strong> a03_copyIsDeep() {
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>  			<strong class="jxr_keyword">var</strong> s = settings();
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>  			<strong class="jxr_keyword">var</strong> c = s.copy();
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>  			c.columns.remove(<span class="jxr_string">"age"</span>);
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>  			c.columnOperators.put(<span class="jxr_string">"name"</span>, SearchOperatorSet.of());
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>  			assertTrue(s.columns.containsKey(<span class="jxr_string">"age"</span>));
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>  			assertTrue(s.columnOperators.isEmpty());
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>  		}
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>  
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>  		@Test <strong class="jxr_keyword">void</strong> a04_positiveChecks() {
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>  			assertThrowsWithMessage(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"defaultLimit must be positive: 0"</span>, () -&gt; QuerySettings.positive(<span class="jxr_string">"defaultLimit"</span>, 0));
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>  			assertThrowsWithMessage(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"maxLimit must be positive or null: 0"</span>, () -&gt; QuerySettings.positiveOrNull(<span class="jxr_string">"maxLimit"</span>, 0));
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>  			assertNull(QuerySettings.positiveOrNull(<span class="jxr_string">"maxLimit"</span>, <strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>  			assertThrowsWithMessage(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"regexTimeout must be positive"</span>, () -&gt; QuerySettings.positive(<span class="jxr_string">"regexTimeout"</span>, java.time.Duration.ZERO));
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>  		}
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>  	}
+<a class="jxr_linenumber" name="L99" href="#L99">99</a>  
+<a class="jxr_linenumber" name="L100" href="#L100">100</a> 	@Nested <strong class="jxr_keyword">class</strong> B_search {
+<a class="jxr_linenumber" name="L101" href="#L101">101</a> 
+<a class="jxr_linenumber" name="L102" href="#L102">102</a> 		@Test <strong class="jxr_keyword">void</strong> b01_searchLength() {
+<a class="jxr_linenumber" name="L103" href="#L103">103</a> 			<strong class="jxr_keyword">var</strong> s = settings();
+<a class="jxr_linenumber" name="L104" href="#L104">104</a> 			s.maxSearchLength = 10;
+<a class="jxr_linenumber" name="L105" href="#L105">105</a> 			assertSyntax(<span class="jxr_string">"Search string exceeds 10 characters."</span>, s, <strong class="jxr_keyword">new</strong> BeanQuery().setSearch(<span class="jxr_string">"name="</span> + <span class="jxr_string">"x"</span>.repeat(20)));
+<a class="jxr_linenumber" name="L106" href="#L106">106</a> 		}
+<a class="jxr_linenumber" name="L107" href="#L107">107</a> 
+<a class="jxr_linenumber" name="L108" href="#L108">108</a> 		@Test <strong class="jxr_keyword">void</strong> b02_clauseCount() {
+<a class="jxr_linenumber" name="L109" href="#L109">109</a> 			<strong class="jxr_keyword">var</strong> s = settings();
+<a class="jxr_linenumber" name="L110" href="#L110">110</a> 			s.maxSearchClauses = 1;
+<a class="jxr_linenumber" name="L111" href="#L111">111</a> 			assertSyntax(<span class="jxr_string">"Too many search clauses (max 1)."</span>, s, <strong class="jxr_keyword">new</strong> BeanQuery().setSearch(<span class="jxr_string">"name=a,age=1"</span>));
+<a class="jxr_linenumber" name="L112" href="#L112">112</a> 		}
+<a class="jxr_linenumber" name="L113" href="#L113">113</a> 
+<a class="jxr_linenumber" name="L114" href="#L114">114</a> 		@Test <strong class="jxr_keyword">void</strong> b03_unknownColumn() {
+<a class="jxr_linenumber" name="L115" href="#L115">115</a> 			assertSyntax(<span class="jxr_string">"Unknown column 'pasword' in search."</span>, <strong class="jxr_keyword">new</strong> BeanQuery().setSearch(<span class="jxr_string">"pasword=x"</span>));
+<a class="jxr_linenumber" name="L116" href="#L116">116</a> 			<em class="jxr_comment">// Column validation runs on every leaf before the blank-value drop (design §7 row 3: "Applied to every</em>
+<a class="jxr_linenumber" name="L117" href="#L117">117</a> 			<em class="jxr_comment">// leaf"), so an unknown column with a blank value still throws, same as a non-blank value.</em>
+<a class="jxr_linenumber" name="L118" href="#L118">118</a> 			assertSyntax(<span class="jxr_string">"Unknown column 'pasword' in search."</span>, <strong class="jxr_keyword">new</strong> BeanQuery().setSearch(<span class="jxr_string">"pasword="</span>));
+<a class="jxr_linenumber" name="L119" href="#L119">119</a> 		}
+<a class="jxr_linenumber" name="L120" href="#L120">120</a> 
+<a class="jxr_linenumber" name="L121" href="#L121">121</a> 		@Test <strong class="jxr_keyword">void</strong> b04_blankValueSkipped() {
+<a class="jxr_linenumber" name="L122" href="#L122">122</a> 			assertEquals(<strong class="jxr_keyword">new</strong> Filter.And(List.of()), search(<span class="jxr_string">"name="</span>).filter());
+<a class="jxr_linenumber" name="L123" href="#L123">123</a> 		}
+<a class="jxr_linenumber" name="L124" href="#L124">124</a> 
+<a class="jxr_linenumber" name="L125" href="#L125">125</a> 		@Test <strong class="jxr_keyword">void</strong> b05_depth() {
+<a class="jxr_linenumber" name="L126" href="#L126">126</a> 			<strong class="jxr_keyword">var</strong> s = settings();
+<a class="jxr_linenumber" name="L127" href="#L127">127</a> 			s.maxExpressionDepth = 2;
+<a class="jxr_linenumber" name="L128" href="#L128">128</a> 			assertDoesNotThrow(() -&gt; resolve(s, <strong class="jxr_keyword">new</strong> BeanQuery().setSearch(<span class="jxr_string">"age=$not($eq(1))"</span>)));
+<a class="jxr_linenumber" name="L129" href="#L129">129</a> 			assertSyntax(<span class="jxr_string">"Search expression nested too deeply (max 2)."</span>, s, <strong class="jxr_keyword">new</strong> BeanQuery().setSearch(<span class="jxr_string">"age=$not($not($eq(1)))"</span>));
+<a class="jxr_linenumber" name="L130" href="#L130">130</a> 		}
+<a class="jxr_linenumber" name="L131" href="#L131">131</a> 
+<a class="jxr_linenumber" name="L132" href="#L132">132</a> 		@Test <strong class="jxr_keyword">void</strong> b06_regexGate() {
+<a class="jxr_linenumber" name="L133" href="#L133">133</a> 			<em class="jxr_comment">// SPEC CHANGE: $regex is enabled by default; allowRegex(false) disables it. The gate's error message is</em>
+<a class="jxr_linenumber" name="L134" href="#L134">134</a> 			<em class="jxr_comment">// exercised with allowRegex explicitly turned off.</em>
+<a class="jxr_linenumber" name="L135" href="#L135">135</a> 			<strong class="jxr_keyword">var</strong> s = settings();
+<a class="jxr_linenumber" name="L136" href="#L136">136</a> 			s.allowRegex = false;
+<a class="jxr_linenumber" name="L137" href="#L137">137</a> 			assertSyntax(<span class="jxr_string">"Regex search is not enabled for this list."</span>, s, <strong class="jxr_keyword">new</strong> BeanQuery().setSearch(<span class="jxr_string">"name=$regex(a.*)"</span>));
+<a class="jxr_linenumber" name="L138" href="#L138">138</a> 			assertSyntax(<span class="jxr_string">"Regex search is not enabled for this list."</span>, s, <strong class="jxr_keyword">new</strong> BeanQuery().setSearch(<span class="jxr_string">"name=$not($regex(a.*))"</span>));
+<a class="jxr_linenumber" name="L139" href="#L139">139</a> 			assertDoesNotThrow(() -&gt; search(<span class="jxr_string">"name=$regex(a.*)"</span>));
+<a class="jxr_linenumber" name="L140" href="#L140">140</a> 			assertSyntax(<span class="jxr_string">"Regex pattern exceeds 256 characters."</span>, <strong class="jxr_keyword">new</strong> BeanQuery().setSearch(<span class="jxr_string">"name=$regex("</span> + <span class="jxr_string">"a"</span>.repeat(257) + <span class="jxr_string">")"</span>));
+<a class="jxr_linenumber" name="L141" href="#L141">141</a> 		}
+<a class="jxr_linenumber" name="L142" href="#L142">142</a> 
+<a class="jxr_linenumber" name="L143" href="#L143">143</a> 		@Test <strong class="jxr_keyword">void</strong> b07_operatorType() {
+<a class="jxr_linenumber" name="L144" href="#L144">144</a> 			assertSyntax(<span class="jxr_string">"Operator $gt does not apply to text column 'name'."</span>, <strong class="jxr_keyword">new</strong> BeanQuery().setSearch(<span class="jxr_string">"name=$gt(5)"</span>));
+<a class="jxr_linenumber" name="L145" href="#L145">145</a> 			assertSyntax(<span class="jxr_string">"Operator $contains does not apply to numeric column 'age'."</span>, <strong class="jxr_keyword">new</strong> BeanQuery().setSearch(<span class="jxr_string">"age=$or($eq(1),$contains(x))"</span>));
+<a class="jxr_linenumber" name="L146" href="#L146">146</a> 			assertDoesNotThrow(() -&gt; search(<span class="jxr_string">"age=$or($eq(1),$gt(5))"</span>));  <em class="jxr_comment">// Combinators apply to every type.</em>
+<a class="jxr_linenumber" name="L147" href="#L147">147</a> 		}
+<a class="jxr_linenumber" name="L148" href="#L148">148</a> 
+<a class="jxr_linenumber" name="L149" href="#L149">149</a> 		@Test <strong class="jxr_keyword">void</strong> b08_filterResolved() {
+<a class="jxr_linenumber" name="L150" href="#L150">150</a> 			<strong class="jxr_keyword">var</strong> q = search(<span class="jxr_string">"name=Bob,age=$gt(1)"</span>);
+<a class="jxr_linenumber" name="L151" href="#L151">151</a> 			<strong class="jxr_keyword">var</strong> f = (Filter.And) q.filter();
+<a class="jxr_linenumber" name="L152" href="#L152">152</a> 			assertEquals(2, f.items().size());
+<a class="jxr_linenumber" name="L153" href="#L153">153</a> 			<strong class="jxr_keyword">var</strong> leaf = (Filter.Leaf) f.items().get(1);
+<a class="jxr_linenumber" name="L154" href="#L154">154</a> 			assertBean(leaf, <span class="jxr_string">"column,type"</span>, <span class="jxr_string">"age,NUMERIC"</span>);
+<a class="jxr_linenumber" name="L155" href="#L155">155</a> 			assertEquals(<span class="jxr_string">"$gt"</span>, leaf.expression().name());
+<a class="jxr_linenumber" name="L156" href="#L156">156</a> 		}
+<a class="jxr_linenumber" name="L157" href="#L157">157</a> 
+<a class="jxr_linenumber" name="L158" href="#L158">158</a> 		@Test <strong class="jxr_keyword">void</strong> b09_columnOperatorsUsed() {
+<a class="jxr_linenumber" name="L159" href="#L159">159</a> 			<strong class="jxr_keyword">var</strong> s = settings();
+<a class="jxr_linenumber" name="L160" href="#L160">160</a> 			s.columnOperators.put(<span class="jxr_string">"name"</span>, SearchOperatorSet.standard().without(<span class="jxr_string">"$eq"</span>));
+<a class="jxr_linenumber" name="L161" href="#L161">161</a> 			assertSyntax(<span class="jxr_string">"Unknown search operator"</span>, s, <strong class="jxr_keyword">new</strong> BeanQuery().setSearch(<span class="jxr_string">"name=$eq(x)"</span>));
+<a class="jxr_linenumber" name="L162" href="#L162">162</a> 			assertDoesNotThrow(() -&gt; resolve(s, <strong class="jxr_keyword">new</strong> BeanQuery().setSearch(<span class="jxr_string">"age=$eq(1)"</span>)));
+<a class="jxr_linenumber" name="L163" href="#L163">163</a> 		}
+<a class="jxr_linenumber" name="L164" href="#L164">164</a> 
+<a class="jxr_linenumber" name="L165" href="#L165">165</a> 		<em class="jxr_comment">// A leaf whose raw expression text opens a quote it never closes (SearchParser leaves this</em>
+<a class="jxr_linenumber" name="L166" href="#L166">166</a> 		<em class="jxr_comment">// unvalidated — see SearchParser.scanBalancedUntilDelimiter's Javadoc) must surface as UNTERMINATED_QUOTE once</em>
+<a class="jxr_linenumber" name="L167" href="#L167">167</a> 		<em class="jxr_comment">// the expression actually reaches SearchExpressionParser here, not be silently accepted as a literal filter.</em>
+<a class="jxr_linenumber" name="L168" href="#L168">168</a> 		@Test <strong class="jxr_keyword">void</strong> b10_unterminatedQuoteInLeaf_<strong class="jxr_keyword">throws</strong>() {
+<a class="jxr_linenumber" name="L169" href="#L169">169</a> 			<strong class="jxr_keyword">var</strong> hoistedSettings = settings();
+<a class="jxr_linenumber" name="L170" href="#L170">170</a> 			<strong class="jxr_keyword">var</strong> hoistedQuery = <strong class="jxr_keyword">new</strong> BeanQuery().setSearch(<span class="jxr_string">"name=\&quot;abc"</span>);
+<a class="jxr_linenumber" name="L171" href="#L171">171</a> 			<strong class="jxr_keyword">var</strong> e = assertThrowsWithMessage(BeanQuerySyntaxException.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"Unterminated quoted value"</span>, () -&gt; resolve(hoistedSettings, hoistedQuery));
+<a class="jxr_linenumber" name="L172" href="#L172">172</a> 			assertEquals(BeanQuerySyntaxException.Code.UNTERMINATED_QUOTE, e.code());
+<a class="jxr_linenumber" name="L173" href="#L173">173</a> 		}
+<a class="jxr_linenumber" name="L174" href="#L174">174</a> 	}
+<a class="jxr_linenumber" name="L175" href="#L175">175</a> 
+<a class="jxr_linenumber" name="L176" href="#L176">176</a> 	@Nested <strong class="jxr_keyword">class</strong> C_sortView {
+<a class="jxr_linenumber" name="L177" href="#L177">177</a> 
+<a class="jxr_linenumber" name="L178" href="#L178">178</a> 		@Test <strong class="jxr_keyword">void</strong> c01_sortKeys() {
+<a class="jxr_linenumber" name="L179" href="#L179">179</a> 			<strong class="jxr_keyword">var</strong> q = resolve(settings(), <strong class="jxr_keyword">new</strong> BeanQuery().setSort(<span class="jxr_string">"age:desc, name, version-"</span>));
+<a class="jxr_linenumber" name="L180" href="#L180">180</a> 			assertEquals(3, q.sort().size());
+<a class="jxr_linenumber" name="L181" href="#L181">181</a> 			assertBean(q.sort().get(0), <span class="jxr_string">"column,descending,type"</span>, <span class="jxr_string">"age,true,NUMERIC"</span>);
+<a class="jxr_linenumber" name="L182" href="#L182">182</a> 			assertFalse(q.sort().get(1).descending());
+<a class="jxr_linenumber" name="L183" href="#L183">183</a> 			assertTrue(q.sort().get(2).descending());
+<a class="jxr_linenumber" name="L184" href="#L184">184</a> 		}
+<a class="jxr_linenumber" name="L185" href="#L185">185</a> 
+<a class="jxr_linenumber" name="L186" href="#L186">186</a> 		@Test <strong class="jxr_keyword">void</strong> c02_sortLimits() {
+<a class="jxr_linenumber" name="L187" href="#L187">187</a> 			<strong class="jxr_keyword">var</strong> s = settings();
+<a class="jxr_linenumber" name="L188" href="#L188">188</a> 			s.maxSortKeys = 1;
+<a class="jxr_linenumber" name="L189" href="#L189">189</a> 			assertSyntax(<span class="jxr_string">"Too many sort keys (max 1)."</span>, s, <strong class="jxr_keyword">new</strong> BeanQuery().setSort(<span class="jxr_string">"name,age"</span>));
+<a class="jxr_linenumber" name="L190" href="#L190">190</a> 			assertSyntax(<span class="jxr_string">"Unknown sort column 'x'."</span>, <strong class="jxr_keyword">new</strong> BeanQuery().setSort(<span class="jxr_string">"x"</span>));
+<a class="jxr_linenumber" name="L191" href="#L191">191</a> 			assertSyntax(<span class="jxr_string">"Unknown sort column 'toString'."</span>, <strong class="jxr_keyword">new</strong> BeanQuery().setSort(<span class="jxr_string">"toString:asc"</span>));
+<a class="jxr_linenumber" name="L192" href="#L192">192</a> 		}
+<a class="jxr_linenumber" name="L193" href="#L193">193</a> 
+<a class="jxr_linenumber" name="L194" href="#L194">194</a> 		@Test <strong class="jxr_keyword">void</strong> c03_view() {
+<a class="jxr_linenumber" name="L195" href="#L195">195</a> 			assertList(resolve(settings(), <strong class="jxr_keyword">new</strong> BeanQuery()).view(), <span class="jxr_string">"name"</span>, <span class="jxr_string">"age"</span>, <span class="jxr_string">"version"</span>);
+<a class="jxr_linenumber" name="L196" href="#L196">196</a> 			assertList(resolve(settings(), <strong class="jxr_keyword">new</strong> BeanQuery().setView(<span class="jxr_string">"age, age ,name"</span>)).view(), <span class="jxr_string">"age"</span>, <span class="jxr_string">"name"</span>);
+<a class="jxr_linenumber" name="L197" href="#L197">197</a> 			assertSyntax(<span class="jxr_string">"Unknown view column 'x'."</span>, <strong class="jxr_keyword">new</strong> BeanQuery().setView(<span class="jxr_string">"name,x"</span>));
+<a class="jxr_linenumber" name="L198" href="#L198">198</a> 		}
+<a class="jxr_linenumber" name="L199" href="#L199">199</a> 
+<a class="jxr_linenumber" name="L200" href="#L200">200</a> 		@Test <strong class="jxr_keyword">void</strong> c04_otherStringLengths() {
+<a class="jxr_linenumber" name="L201" href="#L201">201</a> 			<strong class="jxr_keyword">var</strong> s = settings();
+<a class="jxr_linenumber" name="L202" href="#L202">202</a> 			s.maxSearchLength = 5;
+<a class="jxr_linenumber" name="L203" href="#L203">203</a> 			assertSyntax(<span class="jxr_string">"Sort string exceeds 5 characters."</span>, s, <strong class="jxr_keyword">new</strong> BeanQuery().setSort(<span class="jxr_string">"name,age"</span>));
+<a class="jxr_linenumber" name="L204" href="#L204">204</a> 			assertSyntax(<span class="jxr_string">"View string exceeds 5 characters."</span>, s, <strong class="jxr_keyword">new</strong> BeanQuery().setView(<span class="jxr_string">"name,age"</span>));
+<a class="jxr_linenumber" name="L205" href="#L205">205</a> 			assertSyntax(<span class="jxr_string">"Options string exceeds 5 characters."</span>, s, <strong class="jxr_keyword">new</strong> BeanQuery().setOpts(<span class="jxr_string">"counts=both"</span>));
+<a class="jxr_linenumber" name="L206" href="#L206">206</a> 		}
+<a class="jxr_linenumber" name="L207" href="#L207">207</a> 	}
+<a class="jxr_linenumber" name="L208" href="#L208">208</a> 
+<a class="jxr_linenumber" name="L209" href="#L209">209</a> 	@Nested <strong class="jxr_keyword">class</strong> D_paging {
+<a class="jxr_linenumber" name="L210" href="#L210">210</a> 
+<a class="jxr_linenumber" name="L211" href="#L211">211</a> 		@Test <strong class="jxr_keyword">void</strong> d01_position() {
+<a class="jxr_linenumber" name="L212" href="#L212">212</a> 			assertEquals(0, resolve(settings(), <strong class="jxr_keyword">new</strong> BeanQuery()).position());
+<a class="jxr_linenumber" name="L213" href="#L213">213</a> 			assertEquals(7, resolve(settings(), <strong class="jxr_keyword">new</strong> BeanQuery().setPosition(7)).position());
+<a class="jxr_linenumber" name="L214" href="#L214">214</a> 			assertSyntax(<span class="jxr_string">"Position must not be negative."</span>, <strong class="jxr_keyword">new</strong> BeanQuery().setPosition(-1));
+<a class="jxr_linenumber" name="L215" href="#L215">215</a> 		}
+<a class="jxr_linenumber" name="L216" href="#L216">216</a> 
+<a class="jxr_linenumber" name="L217" href="#L217">217</a> 		@Test <strong class="jxr_keyword">void</strong> d02_limit() {
+<a class="jxr_linenumber" name="L218" href="#L218">218</a> 			assertEquals(100, resolve(settings(), <strong class="jxr_keyword">new</strong> BeanQuery()).limit().intValue());
+<a class="jxr_linenumber" name="L219" href="#L219">219</a> 			assertEquals(7, resolve(settings(), <strong class="jxr_keyword">new</strong> BeanQuery().setLimit(7)).limit().intValue());
+<a class="jxr_linenumber" name="L220" href="#L220">220</a> 			assertEquals(0, resolve(settings(), <strong class="jxr_keyword">new</strong> BeanQuery().setLimit(0)).limit().intValue());
+<a class="jxr_linenumber" name="L221" href="#L221">221</a> 			assertEquals(1000, resolve(settings(), <strong class="jxr_keyword">new</strong> BeanQuery().setLimit(5000)).limit().intValue());
+<a class="jxr_linenumber" name="L222" href="#L222">222</a> 			assertEquals(1000, resolve(settings(), <strong class="jxr_keyword">new</strong> BeanQuery().setLimit(-1)).limit().intValue());
+<a class="jxr_linenumber" name="L223" href="#L223">223</a> 		}
+<a class="jxr_linenumber" name="L224" href="#L224">224</a> 
+<a class="jxr_linenumber" name="L225" href="#L225">225</a> 		@Test <strong class="jxr_keyword">void</strong> d03_uncapped() {
+<a class="jxr_linenumber" name="L226" href="#L226">226</a> 			<strong class="jxr_keyword">var</strong> s = settings();
+<a class="jxr_linenumber" name="L227" href="#L227">227</a> 			s.maxLimit = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L228" href="#L228">228</a> 			assertNull(resolve(s, <strong class="jxr_keyword">new</strong> BeanQuery().setLimit(-1)).limit());
+<a class="jxr_linenumber" name="L229" href="#L229">229</a> 			assertEquals(5000, resolve(s, <strong class="jxr_keyword">new</strong> BeanQuery().setLimit(5000)).limit().intValue());
+<a class="jxr_linenumber" name="L230" href="#L230">230</a> 			assertEquals(100, resolve(s, <strong class="jxr_keyword">new</strong> BeanQuery()).limit().intValue());
+<a class="jxr_linenumber" name="L231" href="#L231">231</a> 		}
+<a class="jxr_linenumber" name="L232" href="#L232">232</a> 	}
+<a class="jxr_linenumber" name="L233" href="#L233">233</a> 
+<a class="jxr_linenumber" name="L234" href="#L234">234</a> 	@Nested <strong class="jxr_keyword">class</strong> E_counts {
+<a class="jxr_linenumber" name="L235" href="#L235">235</a> 
+<a class="jxr_linenumber" name="L236" href="#L236">236</a> 		<strong class="jxr_keyword">private</strong> CountPolicy counts(String opts) {
+<a class="jxr_linenumber" name="L237" href="#L237">237</a> 			<strong class="jxr_keyword">return</strong> resolve(settings(), <strong class="jxr_keyword">new</strong> BeanQuery().setOpts(opts)).counts();
+<a class="jxr_linenumber" name="L238" href="#L238">238</a> 		}
+<a class="jxr_linenumber" name="L239" href="#L239">239</a> 
+<a class="jxr_linenumber" name="L240" href="#L240">240</a> 		@Test <strong class="jxr_keyword">void</strong> e01_ifRequested() {
+<a class="jxr_linenumber" name="L241" href="#L241">241</a> 			assertEquals(CountPolicy.NONE, counts(<strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L242" href="#L242">242</a> 			assertEquals(CountPolicy.MATCHED, counts(<span class="jxr_string">"counts=matched"</span>));
+<a class="jxr_linenumber" name="L243" href="#L243">243</a> 			assertEquals(CountPolicy.BOTH, counts(<span class="jxr_string">"counts=both"</span>));
+<a class="jxr_linenumber" name="L244" href="#L244">244</a> 			assertEquals(CountPolicy.BOTH, counts(<span class="jxr_string">"counts=TRUE"</span>));
+<a class="jxr_linenumber" name="L245" href="#L245">245</a> 			assertEquals(CountPolicy.NONE, counts(<span class="jxr_string">"counts=yes"</span>));
+<a class="jxr_linenumber" name="L246" href="#L246">246</a> 			assertEquals(CountPolicy.NONE, counts(<span class="jxr_string">"foo=bar"</span>));  <em class="jxr_comment">// Unknown opts keys are ignored.</em>
+<a class="jxr_linenumber" name="L247" href="#L247">247</a> 		}
+<a class="jxr_linenumber" name="L248" href="#L248">248</a> 
+<a class="jxr_linenumber" name="L249" href="#L249">249</a> 		@Test <strong class="jxr_keyword">void</strong> e02_fixedPolicyIgnoresOpts() {
+<a class="jxr_linenumber" name="L250" href="#L250">250</a> 			<strong class="jxr_keyword">var</strong> s = settings();
+<a class="jxr_linenumber" name="L251" href="#L251">251</a> 			s.countPolicy = CountPolicy.NONE;
+<a class="jxr_linenumber" name="L252" href="#L252">252</a> 			assertEquals(CountPolicy.NONE, resolve(s, <strong class="jxr_keyword">new</strong> BeanQuery().setOpts(<span class="jxr_string">"counts=both"</span>)).counts());
+<a class="jxr_linenumber" name="L253" href="#L253">253</a> 			s.countPolicy = CountPolicy.BOTH;
+<a class="jxr_linenumber" name="L254" href="#L254">254</a> 			assertEquals(CountPolicy.BOTH, resolve(s, <strong class="jxr_keyword">new</strong> BeanQuery()).counts());
+<a class="jxr_linenumber" name="L255" href="#L255">255</a> 		}
+<a class="jxr_linenumber" name="L256" href="#L256">256</a> 	}
+<a class="jxr_linenumber" name="L257" href="#L257">257</a> 
+<a class="jxr_linenumber" name="L258" href="#L258">258</a> 	@Nested <strong class="jxr_keyword">class</strong> G_typedValues {
+<a class="jxr_linenumber" name="L259" href="#L259">259</a> 
+<a class="jxr_linenumber" name="L260" href="#L260">260</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> QuerySettings typedSettings() {
+<a class="jxr_linenumber" name="L261" href="#L261">261</a> 			<strong class="jxr_keyword">var</strong> s = settings();
+<a class="jxr_linenumber" name="L262" href="#L262">262</a> 			s.columns.put(<span class="jxr_string">"active"</span>, BOOLEAN);
+<a class="jxr_linenumber" name="L263" href="#L263">263</a> 			s.columns.put(<span class="jxr_string">"createdAt"</span>, TIMESTAMP);
+<a class="jxr_linenumber" name="L264" href="#L264">264</a> 			<strong class="jxr_keyword">return</strong> s;
+<a class="jxr_linenumber" name="L265" href="#L265">265</a> 		}
+<a class="jxr_linenumber" name="L266" href="#L266">266</a> 
+<a class="jxr_linenumber" name="L267" href="#L267">267</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> SearchExpression expr(QuerySettings s, String search) {
+<a class="jxr_linenumber" name="L268" href="#L268">268</a> 			<strong class="jxr_keyword">var</strong> f = resolve(s, <strong class="jxr_keyword">new</strong> BeanQuery().setSearch(search)).filter();
+<a class="jxr_linenumber" name="L269" href="#L269">269</a> 			<strong class="jxr_keyword">if</strong> (f instanceof Filter.And and &amp;&amp; and.items().size() == 1)
+<a class="jxr_linenumber" name="L270" href="#L270">270</a> 				f = and.items().get(0);
+<a class="jxr_linenumber" name="L271" href="#L271">271</a> 			<strong class="jxr_keyword">return</strong> ((Filter.Leaf)f).expression();
+<a class="jxr_linenumber" name="L272" href="#L272">272</a> 		}
+<a class="jxr_linenumber" name="L273" href="#L273">273</a> 
+<a class="jxr_linenumber" name="L274" href="#L274">274</a> 		@Test <strong class="jxr_keyword">void</strong> g01_bareLiteralTyped_numeric() {
+<a class="jxr_linenumber" name="L275" href="#L275">275</a> 			assertEquals(<strong class="jxr_keyword">new</strong> java.math.BigDecimal(<span class="jxr_string">"30"</span>), expr(settings(), <span class="jxr_string">"age=30"</span>).typedValue());
+<a class="jxr_linenumber" name="L276" href="#L276">276</a> 		}
+<a class="jxr_linenumber" name="L277" href="#L277">277</a> 
+<a class="jxr_linenumber" name="L278" href="#L278">278</a> 		@Test <strong class="jxr_keyword">void</strong> g02_bareLiteralTyped_<strong class="jxr_keyword">boolean</strong>() {
+<a class="jxr_linenumber" name="L279" href="#L279">279</a> 			assertEquals(Boolean.TRUE, expr(typedSettings(), <span class="jxr_string">"active=true"</span>).typedValue());
+<a class="jxr_linenumber" name="L280" href="#L280">280</a> 		}
+<a class="jxr_linenumber" name="L281" href="#L281">281</a> 
+<a class="jxr_linenumber" name="L282" href="#L282">282</a> 		@Test <strong class="jxr_keyword">void</strong> g03_bareLiteralUntyped_textPassesThrough() {
+<a class="jxr_linenumber" name="L283" href="#L283">283</a> 			assertEquals(<span class="jxr_string">"Bob"</span>, expr(settings(), <span class="jxr_string">"name=Bob"</span>).typedValue());
+<a class="jxr_linenumber" name="L284" href="#L284">284</a> 		}
+<a class="jxr_linenumber" name="L285" href="#L285">285</a> 
+<a class="jxr_linenumber" name="L286" href="#L286">286</a> 		@Test <strong class="jxr_keyword">void</strong> g04_valueOperatorArgTyped() {
+<a class="jxr_linenumber" name="L287" href="#L287">287</a> 			assertList(expr(settings(), <span class="jxr_string">"age=$gt(5)"</span>).typedArgs(), <strong class="jxr_keyword">new</strong> java.math.BigDecimal(<span class="jxr_string">"5"</span>));
+<a class="jxr_linenumber" name="L288" href="#L288">288</a> 		}
+<a class="jxr_linenumber" name="L289" href="#L289">289</a> 
+<a class="jxr_linenumber" name="L290" href="#L290">290</a> 		@Test <strong class="jxr_keyword">void</strong> g05_betweenBothArgsTyped() {
+<a class="jxr_linenumber" name="L291" href="#L291">291</a> 			assertList(expr(settings(), <span class="jxr_string">"age=$between(1,100)"</span>).typedArgs(), <strong class="jxr_keyword">new</strong> java.math.BigDecimal(<span class="jxr_string">"1"</span>), <strong class="jxr_keyword">new</strong> java.math.BigDecimal(<span class="jxr_string">"100"</span>));
+<a class="jxr_linenumber" name="L292" href="#L292">292</a> 		}
+<a class="jxr_linenumber" name="L293" href="#L293">293</a> 
+<a class="jxr_linenumber" name="L294" href="#L294">294</a> 		@Test <strong class="jxr_keyword">void</strong> g06_combinatorChildrenTypedRecursively() {
+<a class="jxr_linenumber" name="L295" href="#L295">295</a> 			<strong class="jxr_keyword">var</strong> children = expr(settings(), <span class="jxr_string">"age=$or($eq(1),$gt(5))"</span>).args();
+<a class="jxr_linenumber" name="L296" href="#L296">296</a> 			assertList(children.get(0).typedArgs(), <strong class="jxr_keyword">new</strong> java.math.BigDecimal(<span class="jxr_string">"1"</span>));
+<a class="jxr_linenumber" name="L297" href="#L297">297</a> 			assertList(children.get(1).typedArgs(), <strong class="jxr_keyword">new</strong> java.math.BigDecimal(<span class="jxr_string">"5"</span>));
+<a class="jxr_linenumber" name="L298" href="#L298">298</a> 		}
+<a class="jxr_linenumber" name="L299" href="#L299">299</a> 
+<a class="jxr_linenumber" name="L300" href="#L300">300</a> 		@Test <strong class="jxr_keyword">void</strong> g07_nonValueOperatorArgNotTyped() {
+<a class="jxr_linenumber" name="L301" href="#L301">301</a> 			assertList(expr(settings(), <span class="jxr_string">"name=$contains(err)"</span>).typedArgs(), <span class="jxr_string">"err"</span>);
+<a class="jxr_linenumber" name="L302" href="#L302">302</a> 		}
+<a class="jxr_linenumber" name="L303" href="#L303">303</a> 
+<a class="jxr_linenumber" name="L304" href="#L304">304</a> 		@Test <strong class="jxr_keyword">void</strong> g08_badBareLiteral_columnQualifiedMessage() {
+<a class="jxr_linenumber" name="L305" href="#L305">305</a> 			assertSyntax(<span class="jxr_string">"Value 'abc' is not a valid numeric for column 'age'."</span>, <strong class="jxr_keyword">new</strong> BeanQuery().setSearch(<span class="jxr_string">"age=abc"</span>));
+<a class="jxr_linenumber" name="L306" href="#L306">306</a> 		}
+<a class="jxr_linenumber" name="L307" href="#L307">307</a> 
+<a class="jxr_linenumber" name="L308" href="#L308">308</a> 		@Test <strong class="jxr_keyword">void</strong> g09_badOperatorArg_columnQualifiedMessage() {
+<a class="jxr_linenumber" name="L309" href="#L309">309</a> 			assertSyntax(<span class="jxr_string">"Value 'xyz' is not a valid numeric for column 'age'."</span>, <strong class="jxr_keyword">new</strong> BeanQuery().setSearch(<span class="jxr_string">"age=$gt(xyz)"</span>));
+<a class="jxr_linenumber" name="L310" href="#L310">310</a> 		}
+<a class="jxr_linenumber" name="L311" href="#L311">311</a> 
+<a class="jxr_linenumber" name="L312" href="#L312">312</a> 		@Test <strong class="jxr_keyword">void</strong> g10_badTimestamp_columnQualifiedMessage() {
+<a class="jxr_linenumber" name="L313" href="#L313">313</a> 			assertSyntax(<span class="jxr_string">"Value 'not-a-date' is not a valid timestamp for column 'createdAt'."</span>, typedSettings(), <strong class="jxr_keyword">new</strong> BeanQuery().setSearch(<span class="jxr_string">"createdAt=not-a-date"</span>));
+<a class="jxr_linenumber" name="L314" href="#L314">314</a> 		}
+<a class="jxr_linenumber" name="L315" href="#L315">315</a> 
+<a class="jxr_linenumber" name="L316" href="#L316">316</a> 		@Test <strong class="jxr_keyword">void</strong> g11_badValue_hasBadValueCode() {
+<a class="jxr_linenumber" name="L317" href="#L317">317</a> 			<strong class="jxr_keyword">var</strong> hoistedSettings = settings();
+<a class="jxr_linenumber" name="L318" href="#L318">318</a> 			<strong class="jxr_keyword">var</strong> hoistedQuery = <strong class="jxr_keyword">new</strong> BeanQuery().setSearch(<span class="jxr_string">"age=abc"</span>);
+<a class="jxr_linenumber" name="L319" href="#L319">319</a> 			<strong class="jxr_keyword">var</strong> e = assertThrows(BeanQuerySyntaxException.<strong class="jxr_keyword">class</strong>, () -&gt; resolve(hoistedSettings, hoistedQuery));
+<a class="jxr_linenumber" name="L320" href="#L320">320</a> 			assertEquals(BeanQuerySyntaxException.Code.BAD_VALUE, e.code());
+<a class="jxr_linenumber" name="L321" href="#L321">321</a> 		}
+<a class="jxr_linenumber" name="L322" href="#L322">322</a> 
+<a class="jxr_linenumber" name="L323" href="#L323">323</a> 		@Test <strong class="jxr_keyword">void</strong> g12_operatorTypeWinsOverBadValue() {
+<a class="jxr_linenumber" name="L324" href="#L324">324</a> 			<em class="jxr_comment">// $contains does not apply to numeric; its (would-be-bad) argument is never typed, so OPERATOR_TYPE is reported.</em>
+<a class="jxr_linenumber" name="L325" href="#L325">325</a> 			<strong class="jxr_keyword">var</strong> hoistedSettings = settings();
+<a class="jxr_linenumber" name="L326" href="#L326">326</a> 			<strong class="jxr_keyword">var</strong> hoistedQuery = <strong class="jxr_keyword">new</strong> BeanQuery().setSearch(<span class="jxr_string">"age=$contains(abc)"</span>);
+<a class="jxr_linenumber" name="L327" href="#L327">327</a> 			<strong class="jxr_keyword">var</strong> e = assertThrows(BeanQuerySyntaxException.<strong class="jxr_keyword">class</strong>, () -&gt; resolve(hoistedSettings, hoistedQuery));
+<a class="jxr_linenumber" name="L328" href="#L328">328</a> 			assertEquals(BeanQuerySyntaxException.Code.OPERATOR_TYPE, e.code());
+<a class="jxr_linenumber" name="L329" href="#L329">329</a> 		}
+<a class="jxr_linenumber" name="L330" href="#L330">330</a> 
+<a class="jxr_linenumber" name="L331" href="#L331">331</a> 		@Test <strong class="jxr_keyword">void</strong> g12b_operatorTypeWinsOverBadValue_<strong class="jxr_keyword">boolean</strong>() {
+<a class="jxr_linenumber" name="L332" href="#L332">332</a> 			<em class="jxr_comment">// $gt does not apply to boolean; its bad argument is never typed, so OPERATOR_TYPE is reported, not BAD_VALUE.</em>
+<a class="jxr_linenumber" name="L333" href="#L333">333</a> 			<strong class="jxr_keyword">var</strong> hoistedSettings = typedSettings();
+<a class="jxr_linenumber" name="L334" href="#L334">334</a> 			<strong class="jxr_keyword">var</strong> hoistedQuery = <strong class="jxr_keyword">new</strong> BeanQuery().setSearch(<span class="jxr_string">"active=$gt(xyz)"</span>);
+<a class="jxr_linenumber" name="L335" href="#L335">335</a> 			<strong class="jxr_keyword">var</strong> e = assertThrows(BeanQuerySyntaxException.<strong class="jxr_keyword">class</strong>, () -&gt; resolve(hoistedSettings, hoistedQuery));
+<a class="jxr_linenumber" name="L336" href="#L336">336</a> 			assertEquals(BeanQuerySyntaxException.Code.OPERATOR_TYPE, e.code());
+<a class="jxr_linenumber" name="L337" href="#L337">337</a> 		}
+<a class="jxr_linenumber" name="L338" href="#L338">338</a> 
+<a class="jxr_linenumber" name="L339" href="#L339">339</a> 		@Test <strong class="jxr_keyword">void</strong> g14_bareLiteralInCombinator_typed() {
+<a class="jxr_linenumber" name="L340" href="#L340">340</a> 			<strong class="jxr_keyword">var</strong> children = expr(settings(), <span class="jxr_string">"age=$or(1,$gt(5))"</span>).args();
+<a class="jxr_linenumber" name="L341" href="#L341">341</a> 			assertEquals(<strong class="jxr_keyword">new</strong> java.math.BigDecimal(<span class="jxr_string">"1"</span>), children.get(0).typedValue());
+<a class="jxr_linenumber" name="L342" href="#L342">342</a> 			assertList(children.get(1).typedArgs(), <strong class="jxr_keyword">new</strong> java.math.BigDecimal(<span class="jxr_string">"5"</span>));
+<a class="jxr_linenumber" name="L343" href="#L343">343</a> 		}
+<a class="jxr_linenumber" name="L344" href="#L344">344</a> 
+<a class="jxr_linenumber" name="L345" href="#L345">345</a> 		@Test <strong class="jxr_keyword">void</strong> g15_badBareLiteralInCombinator_badValue() {
+<a class="jxr_linenumber" name="L346" href="#L346">346</a> 			<strong class="jxr_keyword">var</strong> hoistedSettings = settings();
+<a class="jxr_linenumber" name="L347" href="#L347">347</a> 			<strong class="jxr_keyword">var</strong> hoistedQuery = <strong class="jxr_keyword">new</strong> BeanQuery().setSearch(<span class="jxr_string">"age=$or(abc,$gt(5))"</span>);
+<a class="jxr_linenumber" name="L348" href="#L348">348</a> 			<strong class="jxr_keyword">var</strong> e = assertThrows(BeanQuerySyntaxException.<strong class="jxr_keyword">class</strong>, () -&gt; resolve(hoistedSettings, hoistedQuery));
+<a class="jxr_linenumber" name="L349" href="#L349">349</a> 			assertEquals(BeanQuerySyntaxException.Code.BAD_VALUE, e.code());
+<a class="jxr_linenumber" name="L350" href="#L350">350</a> 			assertEquals(<span class="jxr_string">"Value 'abc' is not a valid numeric for column 'age'."</span>, e.getMessage());
+<a class="jxr_linenumber" name="L351" href="#L351">351</a> 		}
+<a class="jxr_linenumber" name="L352" href="#L352">352</a> 
+<a class="jxr_linenumber" name="L353" href="#L353">353</a> 		@Test <strong class="jxr_keyword">void</strong> g16_localDateTimeInNot_typed() {
+<a class="jxr_linenumber" name="L354" href="#L354">354</a> 			assertEquals(java.time.LocalDateTime.parse(<span class="jxr_string">"2026-06-01T05:00"</span>), expr(typedSettings(), <span class="jxr_string">"createdAt=$not(2026-06-01T05:00)"</span>).args().get(0).typedValue());
+<a class="jxr_linenumber" name="L355" href="#L355">355</a> 		}
+<a class="jxr_linenumber" name="L356" href="#L356">356</a> 
+<a class="jxr_linenumber" name="L357" href="#L357">357</a> 		@Test <strong class="jxr_keyword">void</strong> g17_textColumnNotTyped() {
+<a class="jxr_linenumber" name="L358" href="#L358">358</a> 			assertEquals(<span class="jxr_string">"abc"</span>, expr(settings(), <span class="jxr_string">"name=$or(abc,$contains(x))"</span>).args().get(0).typedValue());
+<a class="jxr_linenumber" name="L359" href="#L359">359</a> 		}
+<a class="jxr_linenumber" name="L360" href="#L360">360</a> 
+<a class="jxr_linenumber" name="L361" href="#L361">361</a> 		@Test <strong class="jxr_keyword">void</strong> g13_customOperator_typedOnlyWhenOptedIn() {
+<a class="jxr_linenumber" name="L362" href="#L362">362</a> 			<strong class="jxr_keyword">var</strong> plain = SearchOperator.create(<span class="jxr_string">"$near"</span>, <span class="jxr_string">"near"</span>).minArgs(1).maxArgs(1).types(NUMERIC).predicate((c, a) -&gt; <strong class="jxr_keyword">true</strong>).build();
+<a class="jxr_linenumber" name="L363" href="#L363">363</a> 			<strong class="jxr_keyword">var</strong> typed = SearchOperator.create(<span class="jxr_string">"$near"</span>, <span class="jxr_string">"near"</span>).minArgs(1).maxArgs(1).types(NUMERIC).predicate((c, a) -&gt; <strong class="jxr_keyword">true</strong>).typedArgs(<strong class="jxr_keyword">true</strong>).build();
+<a class="jxr_linenumber" name="L364" href="#L364">364</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> op : List.of(plain, typed)) {
+<a class="jxr_linenumber" name="L365" href="#L365">365</a> 				<strong class="jxr_keyword">var</strong> s = settings();
+<a class="jxr_linenumber" name="L366" href="#L366">366</a> 				s.defaultOperators = s.defaultOperators.with(op);
+<a class="jxr_linenumber" name="L367" href="#L367">367</a> 				<strong class="jxr_keyword">if</strong> (op.typedArgs())
+<a class="jxr_linenumber" name="L368" href="#L368">368</a> 					assertSyntax(<span class="jxr_string">"Value 'x' is not a valid numeric for column 'age'."</span>, s, <strong class="jxr_keyword">new</strong> BeanQuery().setSearch(<span class="jxr_string">"age=$near(x)"</span>));
+<a class="jxr_linenumber" name="L369" href="#L369">369</a> 				<strong class="jxr_keyword">else</strong>
+<a class="jxr_linenumber" name="L370" href="#L370">370</a> 					assertList(expr(s, <span class="jxr_string">"age=$near(x)"</span>).typedArgs(), <span class="jxr_string">"x"</span>);
+<a class="jxr_linenumber" name="L371" href="#L371">371</a> 			}
+<a class="jxr_linenumber" name="L372" href="#L372">372</a> 		}
+<a class="jxr_linenumber" name="L373" href="#L373">373</a> 	}
+<a class="jxr_linenumber" name="L374" href="#L374">374</a> 
+<a class="jxr_linenumber" name="L375" href="#L375">375</a> 	@Nested <strong class="jxr_keyword">class</strong> H_relativeDuration {
+<a class="jxr_linenumber" name="L376" href="#L376">376</a> 
+<a class="jxr_linenumber" name="L377" href="#L377">377</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Clock CLOCK = Clock.fixed(Instant.parse(<span class="jxr_string">"2026-09-30T12:00:00Z"</span>), ZoneOffset.UTC);
+<a class="jxr_linenumber" name="L378" href="#L378">378</a> 
+<a class="jxr_linenumber" name="L379" href="#L379">379</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> QuerySettings timestampSettings() {
+<a class="jxr_linenumber" name="L380" href="#L380">380</a> 			<strong class="jxr_keyword">var</strong> s = settings();
+<a class="jxr_linenumber" name="L381" href="#L381">381</a> 			s.columns.put(<span class="jxr_string">"createdAt"</span>, TIMESTAMP);
+<a class="jxr_linenumber" name="L382" href="#L382">382</a> 			s.columns.put(<span class="jxr_string">"endedAt"</span>, TIMESTAMP);
+<a class="jxr_linenumber" name="L383" href="#L383">383</a> 			<strong class="jxr_keyword">return</strong> s;
+<a class="jxr_linenumber" name="L384" href="#L384">384</a> 		}
+<a class="jxr_linenumber" name="L385" href="#L385">385</a> 
+<a class="jxr_linenumber" name="L386" href="#L386">386</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> List&lt;Filter.Leaf&gt; leaves(String search, QuerySettings s, Clock clock) {
+<a class="jxr_linenumber" name="L387" href="#L387">387</a> 			<strong class="jxr_keyword">var</strong> out = <strong class="jxr_keyword">new</strong> ArrayList&lt;Filter.Leaf&gt;();
+<a class="jxr_linenumber" name="L388" href="#L388">388</a> 			collect(QueryResolver.resolve(<strong class="jxr_keyword">new</strong> BeanQuery().setSearch(search), s, <strong class="jxr_keyword">null</strong>, clock).filter(), out);
+<a class="jxr_linenumber" name="L389" href="#L389">389</a> 			<strong class="jxr_keyword">return</strong> out;
+<a class="jxr_linenumber" name="L390" href="#L390">390</a> 		}
+<a class="jxr_linenumber" name="L391" href="#L391">391</a> 
+<a class="jxr_linenumber" name="L392" href="#L392">392</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> collect(Filter f, List&lt;Filter.Leaf&gt; out) {
+<a class="jxr_linenumber" name="L393" href="#L393">393</a> 			<strong class="jxr_keyword">if</strong> (f instanceof Filter.Leaf l)
+<a class="jxr_linenumber" name="L394" href="#L394">394</a> 				out.add(l);
+<a class="jxr_linenumber" name="L395" href="#L395">395</a> 			<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (f instanceof Filter.And and)
+<a class="jxr_linenumber" name="L396" href="#L396">396</a> 				and.items().forEach(i -&gt; collect(i, out));
+<a class="jxr_linenumber" name="L397" href="#L397">397</a> 			<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (f instanceof Filter.Or or)
+<a class="jxr_linenumber" name="L398" href="#L398">398</a> 				or.items().forEach(i -&gt; collect(i, out));
+<a class="jxr_linenumber" name="L399" href="#L399">399</a> 		}
+<a class="jxr_linenumber" name="L400" href="#L400">400</a> 
+<a class="jxr_linenumber" name="L401" href="#L401">401</a> 		@Test <strong class="jxr_keyword">void</strong> h01_timestampColumn_resolvesAgainstTheSuppliedClock() {
+<a class="jxr_linenumber" name="L402" href="#L402">402</a> 			assertBean(leaves(<span class="jxr_string">"createdAt=-24h"</span>, timestampSettings(), CLOCK).get(0).expression(), <span class="jxr_string">"typedValue"</span>, <span class="jxr_string">"2026-09-29T12:00Z"</span>);
+<a class="jxr_linenumber" name="L403" href="#L403">403</a> 		}
+<a class="jxr_linenumber" name="L404" href="#L404">404</a> 
+<a class="jxr_linenumber" name="L405" href="#L405">405</a> 		@Test <strong class="jxr_keyword">void</strong> h02_numericColumn_isPlainSignedMillis() {
+<a class="jxr_linenumber" name="L406" href="#L406">406</a> 			assertList(leaves(<span class="jxr_string">"age=$gte(-24h)"</span>, settings(), CLOCK).get(0).expression().typedArgs(), <strong class="jxr_keyword">new</strong> BigDecimal(<span class="jxr_string">"-86400000"</span>));
+<a class="jxr_linenumber" name="L407" href="#L407">407</a> 		}
+<a class="jxr_linenumber" name="L408" href="#L408">408</a> 
+<a class="jxr_linenumber" name="L409" href="#L409">409</a> 		@Test <strong class="jxr_keyword">void</strong> h03_twoLeavesInOneQuery_shareOneInstant() {
+<a class="jxr_linenumber" name="L410" href="#L410">410</a> 			<strong class="jxr_keyword">var</strong> l = leaves(<span class="jxr_string">"createdAt=-1h,endedAt=+1h"</span>, timestampSettings(), CLOCK);
+<a class="jxr_linenumber" name="L411" href="#L411">411</a> 			assertBean(l.get(0).expression(), <span class="jxr_string">"typedValue"</span>, <span class="jxr_string">"2026-09-30T11:00Z"</span>);
+<a class="jxr_linenumber" name="L412" href="#L412">412</a> 			assertBean(l.get(1).expression(), <span class="jxr_string">"typedValue"</span>, <span class="jxr_string">"2026-09-30T13:00Z"</span>);
+<a class="jxr_linenumber" name="L413" href="#L413">413</a> 		}
+<a class="jxr_linenumber" name="L414" href="#L414">414</a> 
+<a class="jxr_linenumber" name="L415" href="#L415">415</a> 		@Test <strong class="jxr_keyword">void</strong> h04_clockReadExactlyOnce_perResolve() {
+<a class="jxr_linenumber" name="L416" href="#L416">416</a> 			<strong class="jxr_keyword">var</strong> reads = <strong class="jxr_keyword">new</strong> <strong class="jxr_keyword">int</strong>[] {0};
+<a class="jxr_linenumber" name="L417" href="#L417">417</a> 			<strong class="jxr_keyword">var</strong> clock = <strong class="jxr_keyword">new</strong> Clock() {
+<a class="jxr_linenumber" name="L418" href="#L418">418</a> 				@Override <strong class="jxr_keyword">public</strong> ZoneId getZone() { <strong class="jxr_keyword">return</strong> ZoneOffset.UTC; }
+<a class="jxr_linenumber" name="L419" href="#L419">419</a> 				@Override <strong class="jxr_keyword">public</strong> Clock withZone(ZoneId zone) { <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>; }
+<a class="jxr_linenumber" name="L420" href="#L420">420</a> 				@Override <strong class="jxr_keyword">public</strong> Instant instant() { <strong class="jxr_keyword">return</strong> Instant.parse(<span class="jxr_string">"2026-09-30T12:00:00Z"</span>).plusSeconds(60L * reads[0]++); }
+<a class="jxr_linenumber" name="L421" href="#L421">421</a> 			};
+<a class="jxr_linenumber" name="L422" href="#L422">422</a> 			<strong class="jxr_keyword">var</strong> l = leaves(<span class="jxr_string">"createdAt=$between(-7d,-1d),endedAt=-1d"</span>, timestampSettings(), clock);
+<a class="jxr_linenumber" name="L423" href="#L423">423</a> 			assertEquals(1, reads[0]);
+<a class="jxr_linenumber" name="L424" href="#L424">424</a> 			<strong class="jxr_keyword">var</strong> between = l.get(0).expression().typedArgs();
+<a class="jxr_linenumber" name="L425" href="#L425">425</a> 			assertEquals(OffsetDateTime.parse(<span class="jxr_string">"2026-09-23T12:00:00Z"</span>), between.get(0));
+<a class="jxr_linenumber" name="L426" href="#L426">426</a> 			assertEquals(OffsetDateTime.parse(<span class="jxr_string">"2026-09-29T12:00:00Z"</span>), between.get(1));
+<a class="jxr_linenumber" name="L427" href="#L427">427</a> 			assertEquals(OffsetDateTime.parse(<span class="jxr_string">"2026-09-29T12:00:00Z"</span>), l.get(1).expression().typedValue());
+<a class="jxr_linenumber" name="L428" href="#L428">428</a> 		}
+<a class="jxr_linenumber" name="L429" href="#L429">429</a> 
+<a class="jxr_linenumber" name="L430" href="#L430">430</a> 		@Test <strong class="jxr_keyword">void</strong> h05_quotedBuilderLiteral_resolves() {
+<a class="jxr_linenumber" name="L431" href="#L431">431</a> 			<strong class="jxr_keyword">var</strong> q = BeanQuery.create().gte(<span class="jxr_string">"createdAt"</span>, RelativeDuration.ofHours(-24)).build();
+<a class="jxr_linenumber" name="L432" href="#L432">432</a> 			<strong class="jxr_keyword">var</strong> l = QueryResolver.resolve(q, timestampSettings(), <strong class="jxr_keyword">null</strong>, CLOCK).filter();
+<a class="jxr_linenumber" name="L433" href="#L433">433</a> 			<strong class="jxr_keyword">var</strong> leaf = <strong class="jxr_keyword">new</strong> ArrayList&lt;Filter.Leaf&gt;();
+<a class="jxr_linenumber" name="L434" href="#L434">434</a> 			collect(l, leaf);
+<a class="jxr_linenumber" name="L435" href="#L435">435</a> 			assertList(leaf.get(0).expression().typedArgs(), OffsetDateTime.parse(<span class="jxr_string">"2026-09-29T12:00:00Z"</span>));
+<a class="jxr_linenumber" name="L436" href="#L436">436</a> 		}
+<a class="jxr_linenumber" name="L437" href="#L437">437</a> 
+<a class="jxr_linenumber" name="L438" href="#L438">438</a> 		@Test <strong class="jxr_keyword">void</strong> h06_defaultResolve_usesSystemClock() {
+<a class="jxr_linenumber" name="L439" href="#L439">439</a> 			<strong class="jxr_keyword">var</strong> before = Instant.now().minusSeconds(5);
+<a class="jxr_linenumber" name="L440" href="#L440">440</a> 			<strong class="jxr_keyword">var</strong> s = timestampSettings();
+<a class="jxr_linenumber" name="L441" href="#L441">441</a> 			<strong class="jxr_keyword">var</strong> leaf = <strong class="jxr_keyword">new</strong> ArrayList&lt;Filter.Leaf&gt;();
+<a class="jxr_linenumber" name="L442" href="#L442">442</a> 			collect(QueryResolver.resolve(<strong class="jxr_keyword">new</strong> BeanQuery().setSearch(<span class="jxr_string">"createdAt=+0ms"</span>), s, <strong class="jxr_keyword">null</strong>).filter(), leaf);
+<a class="jxr_linenumber" name="L443" href="#L443">443</a> 			<strong class="jxr_keyword">var</strong> v = (OffsetDateTime)leaf.get(0).expression().typedValue();
+<a class="jxr_linenumber" name="L444" href="#L444">444</a> 			assertFalse(v.toInstant().isBefore(before) || v.toInstant().isAfter(Instant.now().plusSeconds(5)));
+<a class="jxr_linenumber" name="L445" href="#L445">445</a> 		}
+<a class="jxr_linenumber" name="L446" href="#L446">446</a> 
+<a class="jxr_linenumber" name="L447" href="#L447">447</a> 		@Test <strong class="jxr_keyword">void</strong> h07_relativeOnBooleanColumn_isBadValue() {
+<a class="jxr_linenumber" name="L448" href="#L448">448</a> 			<strong class="jxr_keyword">var</strong> s = settings();
+<a class="jxr_linenumber" name="L449" href="#L449">449</a> 			s.columns.put(<span class="jxr_string">"active"</span>, BOOLEAN);
+<a class="jxr_linenumber" name="L450" href="#L450">450</a> 			assertSyntax(<span class="jxr_string">"Value '-24h' is not a valid boolean for column 'active'."</span>, s, <strong class="jxr_keyword">new</strong> BeanQuery().setSearch(<span class="jxr_string">"active=-24h"</span>));
+<a class="jxr_linenumber" name="L451" href="#L451">451</a> 		}
+<a class="jxr_linenumber" name="L452" href="#L452">452</a> 
+<a class="jxr_linenumber" name="L453" href="#L453">453</a> 		@Test <strong class="jxr_keyword">void</strong> h08_textColumn_relativeLiteralStaysText() {
+<a class="jxr_linenumber" name="L454" href="#L454">454</a> 			assertEquals(<span class="jxr_string">"-24h"</span>, leaves(<span class="jxr_string">"name=-24h"</span>, settings(), CLOCK).get(0).expression().typedValue());
+<a class="jxr_linenumber" name="L455" href="#L455">455</a> 		}
+<a class="jxr_linenumber" name="L456" href="#L456">456</a> 
+<a class="jxr_linenumber" name="L457" href="#L457">457</a> 		@Test <strong class="jxr_keyword">void</strong> h09_nullClock_rejected() {
+<a class="jxr_linenumber" name="L458" href="#L458">458</a> 			<strong class="jxr_keyword">var</strong> hoistedArg1 = <strong class="jxr_keyword">new</strong> BeanQuery();
+<a class="jxr_linenumber" name="L459" href="#L459">459</a> 			<strong class="jxr_keyword">var</strong> hoistedArg2 = settings();
+<a class="jxr_linenumber" name="L460" href="#L460">460</a> 			assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; QueryResolver.resolve(hoistedArg1, hoistedArg2, <strong class="jxr_keyword">null</strong>, <strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L461" href="#L461">461</a> 		}
+<a class="jxr_linenumber" name="L462" href="#L462">462</a> 	}
+<a class="jxr_linenumber" name="L463" href="#L463">463</a> 
+<a class="jxr_linenumber" name="L464" href="#L464">464</a> 	@Test <strong class="jxr_keyword">void</strong> f01_nullQueryRejected() {
+<a class="jxr_linenumber" name="L465" href="#L465">465</a> 		<strong class="jxr_keyword">var</strong> hoistedArg3 = settings();
+<a class="jxr_linenumber" name="L466" href="#L466">466</a> 		assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; QueryResolver.resolve(<strong class="jxr_keyword">null</strong>, hoistedArg3, <strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L467" href="#L467">467</a> 	}
+<a class="jxr_linenumber" name="L468" href="#L468">468</a> }
+</pre>
+<hr/>
+<div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>
+</body>
+</html>

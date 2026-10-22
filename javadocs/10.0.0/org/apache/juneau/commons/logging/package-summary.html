@@ -70,7 +70,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Lightweight logging utilities built on top of <code>java.util.logging</code>.
 
  <p>
- Provides an extended <a href="Logger.html" title="class in org.apache.juneau.commons.logging"><code>Logger</code></a> with formatted-message
+ Provides an extended <a href="RichLogger.html" title="class in org.apache.juneau.commons.logging"><code>RichLogger</code></a> with formatted-message
  convenience methods, a lazy-formatting <a href="LogRecord.html" title="class in org.apache.juneau.commons.logging"><code>LogRecord</code></a>, and
  facilities for <a href="LogRecordCapture.html" title="class in org.apache.juneau.commons.logging"><code>capturing</code></a> and
  <a href="LogRecordListener.html" title="interface in org.apache.juneau.commons.logging"><code>listening to</code></a> log records.</div>
@@ -97,21 +97,46 @@ loadScripts(document, 'script');</script>
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Class</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color class-summary class-summary-tab2"><a href="Logger.html" title="class in org.apache.juneau.commons.logging">Logger</a></div>
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="LogContext.html" title="class in org.apache.juneau.commons.logging">LogContext</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab2">
+<div class="block">A thread-confined, MDC-style key/value context whose entries are auto-attached to every <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/LogRecord.html" title="class or interface in java.util.logging" class="external-link"><code>LogRecord</code></a>
+ emitted by a <a href="RichLogger.html" title="class in org.apache.juneau.commons.logging"><code>RichLogger</code></a> on the same thread while a scope is open.</div>
+</div>
+<div class="col-first odd-row-color class-summary class-summary-tab1"><a href="LogContext.Scope.html" title="interface in org.apache.juneau.commons.logging">LogContext.Scope</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab1">
+<div class="block">An open context scope.</div>
+</div>
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="LogRecord.html" title="class in org.apache.juneau.commons.logging">LogRecord</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab2">
+<div class="block">LogRecord that supports lazy message formatting.</div>
+</div>
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="LogRecordCapture.html" title="class in org.apache.juneau.commons.logging">LogRecordCapture</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">
+<div class="block">Captures log records for testing purposes.</div>
+</div>
+<div class="col-first even-row-color class-summary class-summary-tab1"><a href="LogRecordCapture.Quiet.html" title="interface in org.apache.juneau.commons.logging">LogRecordCapture.Quiet</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab1">
+<div class="block">Handle returned by <a href="LogRecordCapture.html#quiet(java.lang.String)"><code>LogRecordCapture.quiet(String)</code></a>.</div>
+</div>
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="LogRecordContext.html" title="class in org.apache.juneau.commons.logging">LogRecordContext</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">
+<div class="block">Identity-keyed side table that carries a <a href="LogContext.html" title="class in org.apache.juneau.commons.logging"><code>LogContext</code></a> snapshot alongside a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/LogRecord.html" title="class or interface in java.util.logging" class="external-link"><code>LogRecord</code></a>.</div>
+</div>
+<div class="col-first even-row-color class-summary class-summary-tab1"><a href="LogRecordListener.html" title="interface in org.apache.juneau.commons.logging">LogRecordListener</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab1">
+<div class="block">Interface for listening to log records.</div>
+</div>
+<div class="col-first odd-row-color class-summary class-summary-tab1"><a href="MessageGenerator.html" title="interface in org.apache.juneau.commons.logging">MessageGenerator</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab1">
+<div class="block">Strategy interface for rendering log message patterns.</div>
+</div>
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="RichLogger.html" title="class in org.apache.juneau.commons.logging">RichLogger</a></div>
 <div class="col-last even-row-color class-summary class-summary-tab2">
 <div class="block">Extended logger that provides convenience methods for logging formatted messages.</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="LogRecord.html" title="class in org.apache.juneau.commons.logging">LogRecord</a></div>
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="RichLogger.Builder.html" title="class in org.apache.juneau.commons.logging">RichLogger.Builder</a></div>
 <div class="col-last odd-row-color class-summary class-summary-tab2">
-<div class="block">LogRecord that supports lazy message formatting.</div>
-</div>
-<div class="col-first even-row-color class-summary class-summary-tab2"><a href="LogRecordCapture.html" title="class in org.apache.juneau.commons.logging">LogRecordCapture</a></div>
-<div class="col-last even-row-color class-summary class-summary-tab2">
-<div class="block">Captures log records for testing purposes.</div>
-</div>
-<div class="col-first odd-row-color class-summary class-summary-tab1"><a href="LogRecordListener.html" title="interface in org.apache.juneau.commons.logging">LogRecordListener</a></div>
-<div class="col-last odd-row-color class-summary class-summary-tab1">
-<div class="block">Interface for listening to log records.</div>
+<div class="block">Builder for creating configured <a href="RichLogger.html" title="class in org.apache.juneau.commons.logging"><code>RichLogger</code></a> views.</div>
 </div>
 </div>
 </div>

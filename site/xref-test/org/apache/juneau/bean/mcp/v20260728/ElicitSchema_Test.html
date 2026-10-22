@@ -379,7 +379,12 @@
 <a class="jxr_linenumber" name="L371" href="#L371">371</a> 		assertEquals(Map.of(<span class="jxr_string">"type"</span>, <span class="jxr_string">"string"</span>, <span class="jxr_string">"minLength"</span>, 1, <span class="jxr_string">"maxLength"</span>, 10),
 <a class="jxr_linenumber" name="L372" href="#L372">372</a> 			schema.getMap(<span class="jxr_string">"properties"</span>).getMap(<span class="jxr_string">"name"</span>));
 <a class="jxr_linenumber" name="L373" href="#L373">373</a> 	}
-<a class="jxr_linenumber" name="L374" href="#L374">374</a> }
+<a class="jxr_linenumber" name="L374" href="#L374">374</a> 
+<a class="jxr_linenumber" name="L375" href="#L375">375</a> 	@Test <strong class="jxr_keyword">void</strong> f02_minLengthOnly_buildsWithoutMax() {
+<a class="jxr_linenumber" name="L376" href="#L376">376</a> 		<strong class="jxr_keyword">var</strong> schema = ElicitSchema.create().stringField(<span class="jxr_string">"name"</span>).minLength(2).build();
+<a class="jxr_linenumber" name="L377" href="#L377">377</a> 		assertEquals(Map.of(<span class="jxr_string">"type"</span>, <span class="jxr_string">"string"</span>, <span class="jxr_string">"minLength"</span>, 2), schema.getMap(<span class="jxr_string">"properties"</span>).getMap(<span class="jxr_string">"name"</span>));
+<a class="jxr_linenumber" name="L378" href="#L378">378</a> 	}
+<a class="jxr_linenumber" name="L379" href="#L379">379</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

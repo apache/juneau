@@ -83,10 +83,9 @@ loadScripts(document, 'script');</script>
 <div class="block">Aggregator bean for registering multiple <a href="ProblemMapper.html" title="interface in org.apache.juneau.bean.rfc7807"><code>ProblemMapper</code></a>s with a single bean-store entry.
 
  <p>
- The Juneau <code>@Bean</code> bean-store walk pairs each <code>@Bean</code> method with its declared return type
- (via the underlying <code>BeanStore.createBeanFromMethod(Class, ...)</code> lookup), which means multiple
- <code>@Bean public ProblemMapper foo()</code> factory methods on the same resource class collide on the
- <code>ProblemMapper.class</code> key. To register more than one mapper, declare a single
+ The problem-details processor resolves only the <em>unnamed</em> <a href="ProblemMapper.html" title="interface in org.apache.juneau.bean.rfc7807"><code>ProblemMapper</code></a> from the bean store, so a
+ second <code>@Bean public ProblemMapper foo()</code> factory method (even a differently named one) would register a
+ distinct bean that the processor never consults. To register more than one mapper, declare a single
  <code>@Bean public ProblemMapperList mappers()</code> factory and let the list carry the dispatch order:
 
  <p class='bjava'>
@@ -212,7 +211,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="append(org.apache.juneau.bean.rfc7807.ProblemMapper)">
 <h3>append</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ProblemMapperList.html" title="class in org.apache.juneau.bean.rfc7807">ProblemMapperList</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/rfc7807/ProblemMapperList.html#line-87">append</a></span><wbr><span class="parameters">(<a href="ProblemMapper.html" title="interface in org.apache.juneau.bean.rfc7807">ProblemMapper</a>&lt;?&gt;&nbsp;mapper)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ProblemMapperList.html" title="class in org.apache.juneau.bean.rfc7807">ProblemMapperList</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/rfc7807/ProblemMapperList.html#line-84">append</a></span><wbr><span class="parameters">(<a href="ProblemMapper.html" title="interface in org.apache.juneau.bean.rfc7807">ProblemMapper</a>&lt;?&gt;&nbsp;mapper)</span></div>
 <div class="block">Appends a mapper to the end of the list.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -225,7 +224,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="append(java.util.Collection)">
 <h3>append</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ProblemMapperList.html" title="class in org.apache.juneau.bean.rfc7807">ProblemMapperList</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/rfc7807/ProblemMapperList.html#line-99">append</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;? extends <a href="ProblemMapper.html" title="interface in org.apache.juneau.bean.rfc7807">ProblemMapper</a>&lt;?&gt;&gt;&nbsp;values)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ProblemMapperList.html" title="class in org.apache.juneau.bean.rfc7807">ProblemMapperList</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/rfc7807/ProblemMapperList.html#line-96">append</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;? extends <a href="ProblemMapper.html" title="interface in org.apache.juneau.bean.rfc7807">ProblemMapper</a>&lt;?&gt;&gt;&nbsp;values)</span></div>
 <div class="block">Appends a collection of mappers to the end of the list, in iteration order.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -238,7 +237,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="asList()">
 <h3>asList</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="ProblemMapper.html" title="interface in org.apache.juneau.bean.rfc7807">ProblemMapper</a>&lt;?&gt;&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/rfc7807/ProblemMapperList.html#line-112">asList</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="ProblemMapper.html" title="interface in org.apache.juneau.bean.rfc7807">ProblemMapper</a>&lt;?&gt;&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/rfc7807/ProblemMapperList.html#line-106">asList</a></span>()</div>
 <div class="block">Returns the registered mappers in their declared order.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -249,7 +248,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="isEmpty()">
 <h3>isEmpty</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/rfc7807/ProblemMapperList.html#line-121">isEmpty</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/rfc7807/ProblemMapperList.html#line-115">isEmpty</a></span>()</div>
 <div class="block">Returns <code>true</code> when this list contains no mappers.</div>
 <dl class="notes">
 <dt>Returns:</dt>

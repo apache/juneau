@@ -29,16 +29,16 @@
 <span class="source-line-no">016</span><span id="line-16"> */</span>
 <span class="source-line-no">017</span><span id="line-17">package org.apache.juneau.rest.server.mcp.v20260728;</span>
 <span class="source-line-no">018</span><span id="line-18"></span>
-<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.AssertionUtils.*;</span>
-<span class="source-line-no">020</span><span id="line-20"></span>
-<span class="source-line-no">021</span><span id="line-21">import java.util.Base64;</span>
-<span class="source-line-no">022</span><span id="line-22">import java.util.Collections;</span>
-<span class="source-line-no">023</span><span id="line-23">import java.util.HashMap;</span>
-<span class="source-line-no">024</span><span id="line-24">import java.util.Map;</span>
-<span class="source-line-no">025</span><span id="line-25">import java.util.Optional;</span>
-<span class="source-line-no">026</span><span id="line-26"></span>
-<span class="source-line-no">027</span><span id="line-27">import javax.crypto.SecretKey;</span>
-<span class="source-line-no">028</span><span id="line-28">import javax.crypto.spec.SecretKeySpec;</span>
+<span class="source-line-no">019</span><span id="line-19"></span>
+<span class="source-line-no">020</span><span id="line-20">import java.util.Base64;</span>
+<span class="source-line-no">021</span><span id="line-21">import java.util.Collections;</span>
+<span class="source-line-no">022</span><span id="line-22">import java.util.HashMap;</span>
+<span class="source-line-no">023</span><span id="line-23">import java.util.Map;</span>
+<span class="source-line-no">024</span><span id="line-24">import java.util.Optional;</span>
+<span class="source-line-no">025</span><span id="line-25"></span>
+<span class="source-line-no">026</span><span id="line-26">import javax.crypto.SecretKey;</span>
+<span class="source-line-no">027</span><span id="line-27">import javax.crypto.spec.SecretKeySpec;</span>
+<span class="source-line-no">028</span><span id="line-28">import static org.apache.juneau.commons.utils.Shorts.*;</span>
 <span class="source-line-no">029</span><span id="line-29"></span>
 <span class="source-line-no">030</span><span id="line-30">/**</span>
 <span class="source-line-no">031</span><span id="line-31"> * Built-in, immutable, static-at-startup {@link KeyProvider}: an operator-supplied keyring of one or more AES</span>
@@ -102,7 +102,7 @@
 <span class="source-line-no">089</span><span id="line-89">    * @return A new AES {@link SecretKey} wrapping {@code value}. Never &lt;jk&gt;null&lt;/jk&gt;.</span>
 <span class="source-line-no">090</span><span id="line-90">    */</span>
 <span class="source-line-no">091</span><span id="line-91">   public static SecretKey aesKey(byte[] value) {</span>
-<span class="source-line-no">092</span><span id="line-92">      assertArgNotNull("value", value);</span>
+<span class="source-line-no">092</span><span id="line-92">      reqnn("value", value);</span>
 <span class="source-line-no">093</span><span id="line-93">      return new SecretKeySpec(value, "AES");</span>
 <span class="source-line-no">094</span><span id="line-94">   }</span>
 <span class="source-line-no">095</span><span id="line-95"></span>
@@ -113,7 +113,7 @@
 <span class="source-line-no">100</span><span id="line-100">    * @return A new AES {@link SecretKey} wrapping the decoded bytes. Never &lt;jk&gt;null&lt;/jk&gt;.</span>
 <span class="source-line-no">101</span><span id="line-101">    */</span>
 <span class="source-line-no">102</span><span id="line-102">   public static SecretKey aesKey(String base64) {</span>
-<span class="source-line-no">103</span><span id="line-103">      assertArgNotNullOrBlank("base64", base64);</span>
+<span class="source-line-no">103</span><span id="line-103">      reqnb("base64", base64);</span>
 <span class="source-line-no">104</span><span id="line-104">      return aesKey(Base64.getDecoder().decode(base64));</span>
 <span class="source-line-no">105</span><span id="line-105">   }</span>
 <span class="source-line-no">106</span><span id="line-106"></span>
@@ -147,8 +147,8 @@
 <span class="source-line-no">134</span><span id="line-134">       *    &lt;jk&gt;null&lt;/jk&gt;.</span>
 <span class="source-line-no">135</span><span id="line-135">       */</span>
 <span class="source-line-no">136</span><span id="line-136">      public Builder addKey(String keyId, SecretKey key) {</span>
-<span class="source-line-no">137</span><span id="line-137">         assertArgNotNullOrBlank("keyId", keyId);</span>
-<span class="source-line-no">138</span><span id="line-138">         assertArgNotNull("key", key);</span>
+<span class="source-line-no">137</span><span id="line-137">         reqnb("keyId", keyId);</span>
+<span class="source-line-no">138</span><span id="line-138">         reqnn("key", key);</span>
 <span class="source-line-no">139</span><span id="line-139">         keys.put(keyId, key);</span>
 <span class="source-line-no">140</span><span id="line-140">         return this;</span>
 <span class="source-line-no">141</span><span id="line-141">      }</span>
@@ -162,7 +162,7 @@
 <span class="source-line-no">149</span><span id="line-149">       * @throws IllegalArgumentException If {@code keyId} is &lt;jk&gt;null&lt;/jk&gt; or blank.</span>
 <span class="source-line-no">150</span><span id="line-150">       */</span>
 <span class="source-line-no">151</span><span id="line-151">      public Builder current(String keyId) {</span>
-<span class="source-line-no">152</span><span id="line-152">         assertArgNotNullOrBlank("keyId", keyId);</span>
+<span class="source-line-no">152</span><span id="line-152">         reqnb("keyId", keyId);</span>
 <span class="source-line-no">153</span><span id="line-153">         currentKeyId = keyId;</span>
 <span class="source-line-no">154</span><span id="line-154">         return this;</span>
 <span class="source-line-no">155</span><span id="line-155">      }</span>
@@ -175,9 +175,9 @@
 <span class="source-line-no">162</span><span id="line-162">       *    the designated current key was never added via {@link #addKey(String, SecretKey)}.</span>
 <span class="source-line-no">163</span><span id="line-163">       */</span>
 <span class="source-line-no">164</span><span id="line-164">      public StaticKeyProvider build() {</span>
-<span class="source-line-no">165</span><span id="line-165">         assertArg(currentKeyId != null, "No current key designated; call current(keyId) before build().");</span>
+<span class="source-line-no">165</span><span id="line-165">         req(currentKeyId != null, "No current key designated; call current(keyId) before build().");</span>
 <span class="source-line-no">166</span><span id="line-166">         var key = keys.get(currentKeyId);</span>
-<span class="source-line-no">167</span><span id="line-167">         assertArg(key != null, "current(''%s'') does not name a key added via addKey(...).", currentKeyId);</span>
+<span class="source-line-no">167</span><span id="line-167">         req(key != null, "current(''%s'') does not name a key added via addKey(...).", currentKeyId);</span>
 <span class="source-line-no">168</span><span id="line-168">         return new StaticKeyProvider(new KeyedSecret(currentKeyId, key), keys);</span>
 <span class="source-line-no">169</span><span id="line-169">      }</span>
 <span class="source-line-no">170</span><span id="line-170">   }</span>

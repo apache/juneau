@@ -33,7 +33,7 @@
 <a class="jxr_linenumber" name="L25" href="#L25">25</a>  
 <a class="jxr_linenumber" name="L26" href="#L26">26</a>  <em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L27" href="#L27">27</a>  <em class="jxr_javadoccomment"> * Unit coverage for {@link McpBearerChallenge} &amp;mdash; RFC 6750 / RFC 9728 {@code WWW-Authenticate: Bearer} value</em>
-<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <em class="jxr_javadoccomment"> * construction, ordering, sanitization, and the F3 extensibility seam.</em>
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <em class="jxr_javadoccomment"> * construction, ordering, sanitization, and the extensibility seam.</em>
 <a class="jxr_linenumber" name="L29" href="#L29">29</a>  <em class="jxr_javadoccomment"> */</em>
 <a class="jxr_linenumber" name="L30" href="#L30">30</a>  <strong class="jxr_keyword">class</strong> <a name="McpBearerChallenge_Test" href="../../../../../../../org/apache/juneau/rest/server/mcp/v20260728/McpBearerChallenge_Test.html#McpBearerChallenge_Test">McpBearerChallenge_Test</a> {
 <a class="jxr_linenumber" name="L31" href="#L31">31</a>  
@@ -76,13 +76,13 @@
 <a class="jxr_linenumber" name="L68" href="#L68">68</a>  		assertEquals(<span class="jxr_string">"Bearer error=\&quot;insufficient_scope\&quot;"</span>, s);
 <a class="jxr_linenumber" name="L69" href="#L69">69</a>  	}
 <a class="jxr_linenumber" name="L70" href="#L70">70</a>  
-<a class="jxr_linenumber" name="L71" href="#L71">71</a>  	<em class="jxr_comment">// M4: quotes and backslashes are RFC 7235 backslash-escaped (not mangled to spaces) so the value round-trips.</em>
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>  	<em class="jxr_comment">// Quotes and backslashes are RFC 7235 backslash-escaped (not mangled to spaces) so the value round-trips.</em>
 <a class="jxr_linenumber" name="L72" href="#L72">72</a>  	@Test <strong class="jxr_keyword">void</strong> b03_embeddedQuotesAndBackslashEscaped() {
 <a class="jxr_linenumber" name="L73" href="#L73">73</a>  		<strong class="jxr_keyword">var</strong> s = McpBearerChallenge.create().errorDescription(<span class="jxr_string">"bad \&quot;token\&quot; a&#92;&#92;b"</span>).build();
 <a class="jxr_linenumber" name="L74" href="#L74">74</a>  		assertEquals(<span class="jxr_string">"Bearer error_description=\&quot;bad &#92;&#92;\&quot;token&#92;&#92;\&quot; a&#92;&#92;&#92;&#92;b\&quot;"</span>, s);
 <a class="jxr_linenumber" name="L75" href="#L75">75</a>  	}
 <a class="jxr_linenumber" name="L76" href="#L76">76</a>  
-<a class="jxr_linenumber" name="L77" href="#L77">77</a>  	<em class="jxr_comment">// M4: control characters (incl. CR/LF header-injection vectors and DEL) are stripped entirely.</em>
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>  	<em class="jxr_comment">// Control characters (incl. CR/LF header-injection vectors and DEL) are stripped entirely.</em>
 <a class="jxr_linenumber" name="L78" href="#L78">78</a>  	@Test <strong class="jxr_keyword">void</strong> b04_controlCharsStripped() {
 <a class="jxr_linenumber" name="L79" href="#L79">79</a>  		<strong class="jxr_keyword">var</strong> s = McpBearerChallenge.create().errorDescription(<span class="jxr_string">"a\r\nb\tc\u007fd"</span>).build();
 <a class="jxr_linenumber" name="L80" href="#L80">80</a>  		assertEquals(<span class="jxr_string">"Bearer error_description=\&quot;abcd\&quot;"</span>, s);

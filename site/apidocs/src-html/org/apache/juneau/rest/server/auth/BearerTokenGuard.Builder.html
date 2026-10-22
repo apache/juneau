@@ -29,7 +29,7 @@
 <span class="source-line-no">016</span><span id="line-16"> */</span>
 <span class="source-line-no">017</span><span id="line-17">package org.apache.juneau.rest.server.auth;</span>
 <span class="source-line-no">018</span><span id="line-18"></span>
-<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.AssertionUtils.*;</span>
+<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.Shorts.*;</span>
 <span class="source-line-no">020</span><span id="line-20">import static org.apache.juneau.commons.utils.StringUtils.*;</span>
 <span class="source-line-no">021</span><span id="line-21"></span>
 <span class="source-line-no">022</span><span id="line-22">import java.security.*;</span>
@@ -48,7 +48,7 @@
 <span class="source-line-no">035</span><span id="line-35"> *    &lt;li&gt;Confirms it starts with {@code "Bearer "} (case-insensitive) followed by a non-blank token.</span>
 <span class="source-line-no">036</span><span id="line-36"> *    &lt;li&gt;Delegates the raw token to the configured {@link TokenValidator}.</span>
 <span class="source-line-no">037</span><span id="line-37"> *    &lt;li&gt;On success, stashes the returned {@link Principal} on the request attributes under</span>
-<span class="source-line-no">038</span><span id="line-38"> *       {@link RestServerConstants#PRINCIPAL_ATTR} so downstream handlers can read it via</span>
+<span class="source-line-no">038</span><span id="line-38"> *       {@code "juneau.principal"} so downstream handlers can read it via</span>
 <span class="source-line-no">039</span><span id="line-39"> *       {@link AuthArg @Auth Principal} or {@code req.getAttributes().get(PRINCIPAL_ATTR)}.</span>
 <span class="source-line-no">040</span><span id="line-40"> *    &lt;li&gt;On any failure path (missing header, malformed scheme, validator throws), throws</span>
 <span class="source-line-no">041</span><span id="line-41"> *       {@link AuthenticationException} with a {@code WWW-Authenticate: Bearer realm="&lt;realm&gt;"} response</span>
@@ -130,7 +130,7 @@
 <span class="source-line-no">117</span><span id="line-117">       * @return This object.</span>
 <span class="source-line-no">118</span><span id="line-118">       */</span>
 <span class="source-line-no">119</span><span id="line-119">      public Builder validator(TokenValidator value) {</span>
-<span class="source-line-no">120</span><span id="line-120">         validator = assertArgNotNull("value", value);</span>
+<span class="source-line-no">120</span><span id="line-120">         validator = reqnn("value", value);</span>
 <span class="source-line-no">121</span><span id="line-121">         return this;</span>
 <span class="source-line-no">122</span><span id="line-122">      }</span>
 <span class="source-line-no">123</span><span id="line-123"></span>
@@ -145,7 +145,7 @@
 <span class="source-line-no">132</span><span id="line-132">       * @return This object.</span>
 <span class="source-line-no">133</span><span id="line-133">       */</span>
 <span class="source-line-no">134</span><span id="line-134">      public Builder realm(String value) {</span>
-<span class="source-line-no">135</span><span id="line-135">         realm = assertArgNotNullOrBlank("value", value);</span>
+<span class="source-line-no">135</span><span id="line-135">         realm = reqnb("value", value);</span>
 <span class="source-line-no">136</span><span id="line-136">         return this;</span>
 <span class="source-line-no">137</span><span id="line-137">      }</span>
 <span class="source-line-no">138</span><span id="line-138"></span>
@@ -204,7 +204,7 @@
 <span class="source-line-no">191</span><span id="line-191">      } catch (AuthenticationException e) {</span>
 <span class="source-line-no">192</span><span id="line-192">         // Preserve any richer challenge the validator already set on the exception; otherwise stamp our basic one.</span>
 <span class="source-line-no">193</span><span id="line-193">         var override = e.getHeaders().stream()</span>
-<span class="source-line-no">194</span><span id="line-194">            .filter(h -&gt; WWW_AUTHENTICATE.equalsIgnoreCase(h.getName()))</span>
+<span class="source-line-no">194</span><span id="line-194">            .filter(h -&gt; eqic(WWW_AUTHENTICATE, h.getName()))</span>
 <span class="source-line-no">195</span><span id="line-195">            .map(h -&gt; h.getValue())</span>
 <span class="source-line-no">196</span><span id="line-196">            .findFirst()</span>
 <span class="source-line-no">197</span><span id="line-197">            .orElse(challenge);</span>
@@ -218,7 +218,7 @@
 <span class="source-line-no">205</span><span id="line-205">         res.setHeader(WWW_AUTHENTICATE, challenge);</span>
 <span class="source-line-no">206</span><span id="line-206">         throw new AuthenticationException("Token validation returned no principal").wwwAuthenticate(challenge);</span>
 <span class="source-line-no">207</span><span id="line-207">      }</span>
-<span class="source-line-no">208</span><span id="line-208">      req.getAttributes().set(RestServerConstants.PRINCIPAL_ATTR, p);</span>
+<span class="source-line-no">208</span><span id="line-208">      req.getAttributes().set("juneau.principal", p);</span>
 <span class="source-line-no">209</span><span id="line-209">      return true;</span>
 <span class="source-line-no">210</span><span id="line-210">   }</span>
 <span class="source-line-no">211</span><span id="line-211"></span>

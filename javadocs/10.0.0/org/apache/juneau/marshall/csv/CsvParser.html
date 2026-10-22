@@ -90,7 +90,7 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="CsvMetaProvider.html" title="interface in org.apache.juneau.marshall.csv">CsvMetaProvider</a></code>, <code><a href="../stream/RecordReadable.html" title="interface in org.apache.juneau.marshall.stream">RecordReadable</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/csv/CsvParser.html#line-79">CsvParser</a></span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/csv/CsvParser.html#line-78">CsvParser</a></span>
 <span class="extends-implements">extends <a href="../parser/ReaderParser.html" title="class in org.apache.juneau.marshall.parser">ReaderParser</a>
 implements <a href="CsvMetaProvider.html" title="interface in org.apache.juneau.marshall.csv">CsvMetaProvider</a>, <a href="../stream/RecordReadable.html" title="interface in org.apache.juneau.marshall.stream">RecordReadable</a></span></div>
 <div class="block">Parses CSV (Comma Separated Values) input into Java objects.
@@ -302,7 +302,7 @@ implements <a href="CsvMetaProvider.html" title="interface in org.apache.juneau.
 <li>
 <section class="detail" id="DEFAULT">
 <h3>DEFAULT</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="CsvParser.html" title="class in org.apache.juneau.marshall.csv">CsvParser</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/csv/CsvParser.html#line-189">DEFAULT</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="CsvParser.html" title="class in org.apache.juneau.marshall.csv">CsvParser</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/csv/CsvParser.html#line-186">DEFAULT</a></span></div>
 <div class="block">Default parser, all default settings.</div>
 </section>
 </li>
@@ -317,7 +317,7 @@ implements <a href="CsvMetaProvider.html" title="interface in org.apache.juneau.
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.marshall.csv.CsvParser.Builder)">
 <h3>CsvParser</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/csv/CsvParser.html#line-211">CsvParser</a></span><wbr><span class="parameters">(<a href="CsvParser.Builder.html" title="class in org.apache.juneau.marshall.csv">CsvParser.Builder</a>&nbsp;builder)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/csv/CsvParser.html#line-208">CsvParser</a></span><wbr><span class="parameters">(<a href="CsvParser.Builder.html" title="class in org.apache.juneau.marshall.csv">CsvParser.Builder</a>&nbsp;builder)</span></div>
 <div class="block">Constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -336,7 +336,7 @@ implements <a href="CsvMetaProvider.html" title="interface in org.apache.juneau.
 <li>
 <section class="detail" id="create()">
 <h3>create</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="CsvParser.Builder.html" title="class in org.apache.juneau.marshall.csv">CsvParser.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/csv/CsvParser.html#line-196">create</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="CsvParser.Builder.html" title="class in org.apache.juneau.marshall.csv">CsvParser.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/csv/CsvParser.html#line-193">create</a></span>()</div>
 <div class="block">Creates a new builder for this object.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -347,7 +347,7 @@ implements <a href="CsvMetaProvider.html" title="interface in org.apache.juneau.
 <li>
 <section class="detail" id="getByteArrayFormat()">
 <h3>getByteArrayFormat</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="CsvByteArrayCellFormat.html" title="enum class in org.apache.juneau.marshall.csv">CsvByteArrayCellFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/csv/CsvParser.html#line-223">getByteArrayFormat</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="CsvByteArrayCellFormat.html" title="enum class in org.apache.juneau.marshall.csv">CsvByteArrayCellFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/csv/CsvParser.html#line-220">getByteArrayFormat</a></span>()</div>
 <div class="block">Returns the format for parsing <code>byte[]</code> arrays from CSV cells.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -358,7 +358,7 @@ implements <a href="CsvMetaProvider.html" title="interface in org.apache.juneau.
 <li>
 <section class="detail" id="isAllowNestedStructures()">
 <h3>isAllowNestedStructures</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/csv/CsvParser.html#line-232">isAllowNestedStructures</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/csv/CsvParser.html#line-229">isAllowNestedStructures</a></span>()</div>
 <div class="block">Returns whether inline <code>{key:val}</code> and <code>[val;val]</code> notation parsing is enabled.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -369,7 +369,7 @@ implements <a href="CsvMetaProvider.html" title="interface in org.apache.juneau.
 <li>
 <section class="detail" id="getNullValue()">
 <h3>getNullValue</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/csv/CsvParser.html#line-241">getNullValue</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/csv/CsvParser.html#line-238">getNullValue</a></span>()</div>
 <div class="block">Returns the string that denotes null when parsing.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -380,7 +380,7 @@ implements <a href="CsvMetaProvider.html" title="interface in org.apache.juneau.
 <li>
 <section class="detail" id="copy()">
 <h3>copy</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="CsvParser.Builder.html" title="class in org.apache.juneau.marshall.csv">CsvParser.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/csv/CsvParser.html#line-245">copy</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="CsvParser.Builder.html" title="class in org.apache.juneau.marshall.csv">CsvParser.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/csv/CsvParser.html#line-242">copy</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../Context.html#copy()">Context</a></code></span></div>
 <div class="block">Creates a builder from this context object.
 
@@ -397,7 +397,7 @@ implements <a href="CsvMetaProvider.html" title="interface in org.apache.juneau.
 <li>
 <section class="detail" id="createSession()">
 <h3>createSession</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="CsvParserSession.Builder.html" title="class in org.apache.juneau.marshall.csv">CsvParserSession.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/csv/CsvParser.html#line-250">createSession</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="CsvParserSession.Builder.html" title="class in org.apache.juneau.marshall.csv">CsvParserSession.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/csv/CsvParser.html#line-247">createSession</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../Context.html#createSession()">Context</a></code></span></div>
 <div class="block">Create a session builder based on the properties defined on this context.
 
@@ -415,7 +415,7 @@ implements <a href="CsvMetaProvider.html" title="interface in org.apache.juneau.
 <li>
 <section class="detail" id="getCsvBeanPropertyMeta(org.apache.juneau.commons.bean.BeanPropertyMeta)">
 <h3>getCsvBeanPropertyMeta</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="CsvBeanPropertyMeta.html" title="class in org.apache.juneau.marshall.csv">CsvBeanPropertyMeta</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/csv/CsvParser.html#line-255">getCsvBeanPropertyMeta</a></span><wbr><span class="parameters">(<a href="../../commons/bean/BeanPropertyMeta.html" title="class in org.apache.juneau.commons.bean">BeanPropertyMeta</a>&nbsp;bpm)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="CsvBeanPropertyMeta.html" title="class in org.apache.juneau.marshall.csv">CsvBeanPropertyMeta</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/csv/CsvParser.html#line-252">getCsvBeanPropertyMeta</a></span><wbr><span class="parameters">(<a href="../../commons/bean/BeanPropertyMeta.html" title="class in org.apache.juneau.commons.bean">BeanPropertyMeta</a>&nbsp;bpm)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="CsvMetaProvider.html#getCsvBeanPropertyMeta(org.apache.juneau.commons.bean.BeanPropertyMeta)">CsvMetaProvider</a></code></span></div>
 <div class="block">Returns the language-specific metadata on the specified bean property.</div>
 <dl class="notes">
@@ -431,7 +431,7 @@ implements <a href="CsvMetaProvider.html" title="interface in org.apache.juneau.
 <li>
 <section class="detail" id="getCsvClassMeta(org.apache.juneau.marshall.ClassMeta)">
 <h3>getCsvClassMeta</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="CsvClassMeta.html" title="class in org.apache.juneau.marshall.csv">CsvClassMeta</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/csv/CsvParser.html#line-262">getCsvClassMeta</a></span><wbr><span class="parameters">(<a href="../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;?&gt;&nbsp;cm)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="CsvClassMeta.html" title="class in org.apache.juneau.marshall.csv">CsvClassMeta</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/csv/CsvParser.html#line-259">getCsvClassMeta</a></span><wbr><span class="parameters">(<a href="../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;?&gt;&nbsp;cm)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="CsvMetaProvider.html#getCsvClassMeta(org.apache.juneau.marshall.ClassMeta)">CsvMetaProvider</a></code></span></div>
 <div class="block">Returns the language-specific metadata on the specified class.</div>
 <dl class="notes">
@@ -447,7 +447,7 @@ implements <a href="CsvMetaProvider.html" title="interface in org.apache.juneau.
 <li>
 <section class="detail" id="getSession()">
 <h3>getSession</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="CsvParserSession.html" title="class in org.apache.juneau.marshall.csv">CsvParserSession</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/csv/CsvParser.html#line-267">getSession</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="CsvParserSession.html" title="class in org.apache.juneau.marshall.csv">CsvParserSession</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/csv/CsvParser.html#line-264">getSession</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../Context.html#getSession()">Context</a></code></span></div>
 <div class="block">Returns a session to use for this context.
 
@@ -464,7 +464,7 @@ implements <a href="CsvMetaProvider.html" title="interface in org.apache.juneau.
 <li>
 <section class="detail" id="readRecords(java.lang.Object)">
 <h3>readRecords</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../stream/RecordReader.html" title="interface in org.apache.juneau.marshall.stream">RecordReader</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/csv/CsvParser.html#line-288">readRecords</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;input)</span>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../stream/RecordReader.html" title="interface in org.apache.juneau.marshall.stream">RecordReader</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/csv/CsvParser.html#line-285">readRecords</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;input)</span>
                          throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">Convenience delegator that opens a <a href="../stream/RecordReader.html" title="interface in org.apache.juneau.marshall.stream"><code>RecordReader</code></a> over the input using
  <b>default session arguments</b> (mirrors <a href="../parser/Parser.html#read(java.lang.Object,java.lang.Class)"><code>Parser.read(Object, Class)</code></a>).
@@ -493,7 +493,7 @@ implements <a href="CsvMetaProvider.html" title="interface in org.apache.juneau.
 <li>
 <section class="detail" id="isRecordStreaming()">
 <h3>isRecordStreaming</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/csv/CsvParser.html#line-293">isRecordStreaming</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/csv/CsvParser.html#line-290">isRecordStreaming</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="../stream/RecordReadable.html#isRecordStreaming()">RecordReadable</a></code></span></div>
 <div class="block">Streaming-quality signal queryable <em>before</em> opening a cursor.</div>
 <dl class="notes">

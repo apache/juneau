@@ -72,6 +72,20 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color"><code><a href="../RestClient.Builder.html" title="class in org.apache.juneau.rest.client">RestClient.Builder</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">RestClient.Builder.</span><code><a href="../RestClient.Builder.html#allowAddressRanges(java.lang.String...)" class="member-name-link">allowAddressRanges</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;value)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Re-permits, for this client only, addresses that the default SSRF guardrail denies solely because they fall in
+ one of the special-purpose ranges <c>192.0.0.0/24</c>, <c>198.18.0.0/15</c>, <c>224.0.0.0/4</c>,
+ <c>240.0.0.0/4</c> or <c>ff00::/8</c> (for example a lab or appliance network on <c>198.18.0.0/15</c>).</div>
+</div>
+<div class="col-first odd-row-color"><code><a href="../RestClient.Builder.html" title="class in org.apache.juneau.rest.client">RestClient.Builder</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">RestClient.Builder.</span><code><a href="../RestClient.Builder.html#allowPrivateUrls(boolean)" class="member-name-link">allowPrivateUrls</a><wbr>(boolean&nbsp;value)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Opts every <code>@Remote</code>/<code>@Url</code> call made through this client out of the default deny-private SSRF
+ guardrail (see <code>org.apache.juneau.http.remote.RemoteUrlPolicy</code>), for local-dev/intranet targets that
+ are intentionally private.</div>
+</div>
+<div class="col-first even-row-color"><code><a href="../RestClient.Builder.html" title="class in org.apache.juneau.rest.client">RestClient.Builder</a></code></div>
 <div class="col-second even-row-color"><span class="type-name-label">RestClient.Builder.</span><code><a href="../RestClient.Builder.html#bodyConverter(org.apache.juneau.rest.client.BodyConverter...)" class="member-name-link">bodyConverter</a><wbr>(<a href="../BodyConverter.html" title="interface in org.apache.juneau.rest.client">BodyConverter</a>&lt;?&gt;...&nbsp;value)</code></div>
 <div class="col-last even-row-color">
 <div class="block">Prepends custom body converters to the default converter list.</div>
@@ -85,6 +99,16 @@ loadScripts(document, 'script');</script>
 <div class="col-second even-row-color"><span class="type-name-label">RestClient.</span><code><a href="../RestClient.html#builder()" class="member-name-link">builder</a>()</code></div>
 <div class="col-last even-row-color">
 <div class="block">Returns a new <a href="../RestClient.Builder.html" title="class in org.apache.juneau.rest.client"><code>RestClient.Builder</code></a>.</div>
+</div>
+<div class="col-first odd-row-color"><code><a href="../RestClient.Builder.html" title="class in org.apache.juneau.rest.client">RestClient.Builder</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">RestClient.Builder.</span><code><a href="../RestClient.Builder.html#debugFormatter(org.apache.juneau.rest.client.RestClientDebugFormatter)" class="member-name-link">debugFormatter</a><wbr>(<a href="../RestClientDebugFormatter.html" title="interface in org.apache.juneau.rest.client">RestClientDebugFormatter</a>&nbsp;value)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Sets the formatter used for level-driven REST debug logging.</div>
+</div>
+<div class="col-first even-row-color"><code><a href="../RestClient.Builder.html" title="class in org.apache.juneau.rest.client">RestClient.Builder</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">RestClient.Builder.</span><code><a href="../RestClient.Builder.html#debugLoggerName(java.lang.String)" class="member-name-link">debugLoggerName</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Sets the logger name used for REST debug records.</div>
 </div>
 <div class="col-first odd-row-color"><code><a href="../RestClient.Builder.html" title="class in org.apache.juneau.rest.client">RestClient.Builder</a></code></div>
 <div class="col-second odd-row-color"><span class="type-name-label">RestClient.Builder.</span><code><a href="../RestClient.Builder.html#defaultParser(org.apache.juneau.marshall.parser.Parser)" class="member-name-link">defaultParser</a><wbr>(<a href="../../../marshall/parser/Parser.html" title="class in org.apache.juneau.marshall.parser">Parser</a>&nbsp;value)</code></div>
@@ -121,35 +145,35 @@ loadScripts(document, 'script');</script>
 <div class="block">Adds one or more lifecycle interceptors called before/after each request.</div>
 </div>
 <div class="col-first odd-row-color"><code><a href="../RestClient.Builder.html" title="class in org.apache.juneau.rest.client">RestClient.Builder</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">RestClient.Builder.</span><code><a href="../RestClient.Builder.html#logger(org.apache.juneau.rest.client.RestLogger)" class="member-name-link">logger</a><wbr>(<a href="../RestLogger.html" title="interface in org.apache.juneau.rest.client">RestLogger</a>&nbsp;value)</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">RestClient.Builder.</span><code><a href="../RestClient.Builder.html#parser(org.apache.juneau.marshall.parser.Parser...)" class="member-name-link">parser</a><wbr>(<a href="../../../marshall/parser/Parser.html" title="class in org.apache.juneau.marshall.parser">Parser</a>...&nbsp;value)</code></div>
 <div class="col-last odd-row-color">
-<div class="block">Sets the logger called at the end of every request (success or failure).</div>
-</div>
-<div class="col-first even-row-color"><code><a href="../RestClient.Builder.html" title="class in org.apache.juneau.rest.client">RestClient.Builder</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">RestClient.Builder.</span><code><a href="../RestClient.Builder.html#parser(org.apache.juneau.marshall.parser.Parser...)" class="member-name-link">parser</a><wbr>(<a href="../../../marshall/parser/Parser.html" title="class in org.apache.juneau.marshall.parser">Parser</a>...&nbsp;value)</code></div>
-<div class="col-last even-row-color">
 <div class="block">Appends parsers (built into a <a href="../../../marshall/parser/ParserSet.html" title="class in org.apache.juneau.marshall.parser"><code>ParserSet</code></a> at build time if no set was supplied).</div>
 </div>
-<div class="col-first odd-row-color"><code><a href="../RestClient.Builder.html" title="class in org.apache.juneau.rest.client">RestClient.Builder</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">RestClient.Builder.</span><code><a href="../RestClient.Builder.html#parsers(org.apache.juneau.marshall.parser.ParserSet)" class="member-name-link">parsers</a><wbr>(<a href="../../../marshall/parser/ParserSet.html" title="class in org.apache.juneau.marshall.parser">ParserSet</a>&nbsp;value)</code></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><code><a href="../RestClient.Builder.html" title="class in org.apache.juneau.rest.client">RestClient.Builder</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">RestClient.Builder.</span><code><a href="../RestClient.Builder.html#parsers(org.apache.juneau.marshall.parser.ParserSet)" class="member-name-link">parsers</a><wbr>(<a href="../../../marshall/parser/ParserSet.html" title="class in org.apache.juneau.marshall.parser">ParserSet</a>&nbsp;value)</code></div>
+<div class="col-last even-row-color">
 <div class="block">Sets the parser registry used for inbound bodies.</div>
 </div>
-<div class="col-first even-row-color"><code><a href="../RestClient.Builder.html" title="class in org.apache.juneau.rest.client">RestClient.Builder</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">RestClient.Builder.</span><code><a href="../RestClient.Builder.html#queryData(java.lang.String,java.lang.String)" class="member-name-link">queryData</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+<div class="col-first odd-row-color"><code><a href="../RestClient.Builder.html" title="class in org.apache.juneau.rest.client">RestClient.Builder</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">RestClient.Builder.</span><code><a href="../RestClient.Builder.html#queryData(java.lang.String,java.lang.String)" class="member-name-link">queryData</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</code></div>
-<div class="col-last even-row-color">
+<div class="col-last odd-row-color">
 <div class="block">Adds a default query parameter appended to every request URL.</div>
 </div>
-<div class="col-first odd-row-color"><code><a href="../RestClient.Builder.html" title="class in org.apache.juneau.rest.client">RestClient.Builder</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">RestClient.Builder.</span><code><a href="../RestClient.Builder.html#queryData(org.apache.juneau.http.HttpPart...)" class="member-name-link">queryData</a><wbr>(<a href="../../../http/HttpPart.html" title="interface in org.apache.juneau.http">HttpPart</a>...&nbsp;value)</code></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><code><a href="../RestClient.Builder.html" title="class in org.apache.juneau.rest.client">RestClient.Builder</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">RestClient.Builder.</span><code><a href="../RestClient.Builder.html#queryData(org.apache.juneau.http.HttpPart...)" class="member-name-link">queryData</a><wbr>(<a href="../../../http/HttpPart.html" title="interface in org.apache.juneau.http">HttpPart</a>...&nbsp;value)</code></div>
+<div class="col-last even-row-color">
 <div class="block">Adds default query parameters appended to every request URL.</div>
 </div>
-<div class="col-first even-row-color"><code><a href="../RestClient.Builder.html" title="class in org.apache.juneau.rest.client">RestClient.Builder</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">RestClient.Builder.</span><code><a href="../RestClient.Builder.html#rootUrl(java.lang.String)" class="member-name-link">rootUrl</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</code></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><code><a href="../RestClient.Builder.html" title="class in org.apache.juneau.rest.client">RestClient.Builder</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">RestClient.Builder.</span><code><a href="../RestClient.Builder.html#rootUrl(java.lang.String)" class="member-name-link">rootUrl</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</code></div>
+<div class="col-last odd-row-color">
 <div class="block">Sets a root URL prefix applied to all relative request URLs (those without <code>://</code>).</div>
+</div>
+<div class="col-first even-row-color"><code><a href="../RestClient.Builder.html" title="class in org.apache.juneau.rest.client">RestClient.Builder</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">RestClient.Builder.</span><code><a href="../RestClient.Builder.html#sendRequestId(boolean)" class="member-name-link">sendRequestId</a><wbr>(boolean&nbsp;value)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Controls the built-in <code>X-Request-Id</code> auto-send interceptor (enabled by default).</div>
 </div>
 <div class="col-first odd-row-color"><code><a href="../RestClient.Builder.html" title="class in org.apache.juneau.rest.client">RestClient.Builder</a></code></div>
 <div class="col-second odd-row-color"><span class="type-name-label">RestClient.Builder.</span><code><a href="../RestClient.Builder.html#serializer(org.apache.juneau.marshall.serializer.Serializer...)" class="member-name-link">serializer</a><wbr>(<a href="../../../marshall/serializer/Serializer.html" title="class in org.apache.juneau.marshall.serializer">Serializer</a>...&nbsp;value)</code></div>

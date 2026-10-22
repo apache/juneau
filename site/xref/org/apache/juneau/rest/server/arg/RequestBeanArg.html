@@ -39,7 +39,7 @@
 <a class="jxr_linenumber" name="L31" href="#L31">31</a>  <em class="jxr_javadoccomment"> * &lt;p class='bjava'&gt;</em>
 <a class="jxr_linenumber" name="L32" href="#L32">32</a>  <em class="jxr_javadoccomment"> * 	&lt;jv&gt;opSession&lt;/jv&gt;</em>
 <a class="jxr_linenumber" name="L33" href="#L33">33</a>  <em class="jxr_javadoccomment"> * 		.{@link RestOpSession#getRequest() getRequest}()</em>
-<a class="jxr_linenumber" name="L34" href="#L34">34</a>  <em class="jxr_javadoccomment"> * 		.{@link RestRequest#getRequest(RequestBeanMeta) getRequest}(&lt;jv&gt;meta&lt;/jv&gt;);</em>
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>  <em class="jxr_javadoccomment"> * 		.{@link RestRequest#getRequest(RequestBeanMeta,RequestBeanSetters) getRequest}(&lt;jv&gt;meta&lt;/jv&gt;, &lt;jv&gt;setters&lt;/jv&gt;);</em>
 <a class="jxr_linenumber" name="L35" href="#L35">35</a>  <em class="jxr_javadoccomment"> * &lt;/p&gt;</em>
 <a class="jxr_linenumber" name="L36" href="#L36">36</a>  <em class="jxr_javadoccomment"> *</em>
 <a class="jxr_linenumber" name="L37" href="#L37">37</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
@@ -75,25 +75,36 @@
 <a class="jxr_linenumber" name="L67" href="#L67">67</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">boolean</strong> validate;
 <a class="jxr_linenumber" name="L68" href="#L68">68</a>  
 <a class="jxr_linenumber" name="L69" href="#L69">69</a>  	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L70" href="#L70">70</a>  <em class="jxr_javadoccomment">	 * Constructor.</em>
-<a class="jxr_linenumber" name="L71" href="#L71">71</a>  <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L72" href="#L72">72</a>  <em class="jxr_javadoccomment">	 * @param paramInfo The Java method parameter being resolved. Must not be &lt;jk&gt;null&lt;/jk&gt;.</em>
-<a class="jxr_linenumber" name="L73" href="#L73">73</a>  <em class="jxr_javadoccomment">	 * @param annotations The annotations to apply to any new part parsers.</em>
-<a class="jxr_linenumber" name="L74" href="#L74">74</a>  <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L75" href="#L75">75</a>  	<strong class="jxr_keyword">protected</strong> <a name="RequestBeanArg" href="../../../../../../org/apache/juneau/rest/server/arg/RequestBeanArg.html#RequestBeanArg">RequestBeanArg</a>(ParameterInfo paramInfo, AnnotationWorkList annotations) {
-<a class="jxr_linenumber" name="L76" href="#L76">76</a>  		<strong class="jxr_keyword">this</strong>.meta = RequestBeanMeta.create(paramInfo, annotations);
-<a class="jxr_linenumber" name="L77" href="#L77">77</a>  		<strong class="jxr_keyword">this</strong>.validate = BeanValidator.isValidationRequested(paramInfo);
-<a class="jxr_linenumber" name="L78" href="#L78">78</a>  	}
-<a class="jxr_linenumber" name="L79" href="#L79">79</a>  
-<a class="jxr_linenumber" name="L80" href="#L80">80</a>  	@SuppressWarnings({
-<a class="jxr_linenumber" name="L81" href="#L81">81</a>  		<span class="jxr_string">"resource"</span> <em class="jxr_comment">// getRequest(meta) may back a property with a request content stream; that stream is container-managed and handed to the invoked op method, not owned/closed here.</em>
-<a class="jxr_linenumber" name="L82" href="#L82">82</a>  	})
-<a class="jxr_linenumber" name="L83" href="#L83">83</a>  	@Override <em class="jxr_comment">/* Overridden from RestOpArg */</em>
-<a class="jxr_linenumber" name="L84" href="#L84">84</a>  	<strong class="jxr_keyword">public</strong> Object resolve(RestOpSession opSession) <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L85" href="#L85">85</a>  		<strong class="jxr_keyword">var</strong> bean = opSession.getRequest().getRequest(meta);
-<a class="jxr_linenumber" name="L86" href="#L86">86</a>  		<strong class="jxr_keyword">return</strong> validate ? BeanValidator.validate(bean, opSession.getBeanStore()) : bean;
-<a class="jxr_linenumber" name="L87" href="#L87">87</a>  	}
-<a class="jxr_linenumber" name="L88" href="#L88">88</a>  }
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>  <em class="jxr_javadoccomment">	 * The resolved constructor and setters for a concrete {@link Request @Request} bean class, or {@code null} for</em>
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>  <em class="jxr_javadoccomment">	 * an interface bean (proxied; never needs a setter). Resolved eagerly here, not lazily on the first matching</em>
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>  <em class="jxr_javadoccomment">	 * request, so a bean with a missing setter or constructor fails {@code @RestOp} registration (servlet init).</em>
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>  <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <a name="RequestBeanSetters" href="../../../../../../org/apache/juneau/rest/server/arg/RequestBeanSetters.html#RequestBeanSetters">RequestBeanSetters</a> setters;
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>  
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>  	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>  <em class="jxr_javadoccomment">	 * Constructor.</em>
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>  <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>  <em class="jxr_javadoccomment">	 * @param paramInfo The Java method parameter being resolved. Must not be &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>  <em class="jxr_javadoccomment">	 * @param annotations The annotations to apply to any new part parsers.</em>
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>  <em class="jxr_javadoccomment">	 * @throws IllegalArgumentException If the bean is a concrete class with no public no-arg constructor, or with an</em>
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>  <em class="jxr_javadoccomment">	 * 	annotated getter that has no matching setter (see {@link RequestBeanSetters#resolve}).</em>
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>  <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>  	<strong class="jxr_keyword">protected</strong> <a name="RequestBeanArg" href="../../../../../../org/apache/juneau/rest/server/arg/RequestBeanArg.html#RequestBeanArg">RequestBeanArg</a>(ParameterInfo paramInfo, AnnotationWorkList annotations) {
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>  		<strong class="jxr_keyword">this</strong>.meta = RequestBeanMeta.create(paramInfo, annotations);
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>  		<strong class="jxr_keyword">this</strong>.validate = BeanValidator.isValidationRequested(paramInfo);
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>  		<strong class="jxr_keyword">var</strong> beanClass = meta.getBeanInfo().<strong class="jxr_keyword">inner</strong>();
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>  		<strong class="jxr_keyword">this</strong>.setters = beanClass.isInterface() ? <strong class="jxr_keyword">null</strong> : RequestBeanSetters.resolve(beanClass, meta);
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>  	}
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>  
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>  	@SuppressWarnings({
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>  		<span class="jxr_string">"resource"</span> <em class="jxr_comment">// getRequest(meta, setters) may back a property with a request content stream; that stream is container-managed and handed to the invoked op method, not owned/closed here.</em>
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>  	})
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>  	@Override <em class="jxr_comment">/* Overridden from RestOpArg */</em>
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>  	<strong class="jxr_keyword">public</strong> Object resolve(RestOpSession opSession) <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>  		<strong class="jxr_keyword">var</strong> bean = opSession.getRequest().getRequest(meta, setters);
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>  		<strong class="jxr_keyword">return</strong> validate ? BeanValidator.validate(bean, opSession.getBeanStore()) : bean;
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>  	}
+<a class="jxr_linenumber" name="L99" href="#L99">99</a>  }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

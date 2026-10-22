@@ -1,0 +1,404 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="" lang="">
+<head><meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<title>ConsoleFreemarkerMixin_Test xref</title>
+<link type="text/css" rel="stylesheet" href="../../../../../../../../stylesheet.css" />
+</head>
+<body>
+<div id="overview"><a href="../../../../../../../../../testapidocs/org/apache/juneau/rest/server/view/freemarker/console/ConsoleFreemarkerMixin_Test.html">View Javadoc</a></div><pre>
+<a class="jxr_linenumber" name="L1" href="#L1">1</a>   <em class="jxr_comment">/*</em>
+<a class="jxr_linenumber" name="L2" href="#L2">2</a>   <em class="jxr_comment"> * Licensed to the Apache Software Foundation (ASF) under one or more</em>
+<a class="jxr_linenumber" name="L3" href="#L3">3</a>   <em class="jxr_comment"> * contributor license agreements.  See the NOTICE file distributed with</em>
+<a class="jxr_linenumber" name="L4" href="#L4">4</a>   <em class="jxr_comment"> * this work for additional information regarding copyright ownership.</em>
+<a class="jxr_linenumber" name="L5" href="#L5">5</a>   <em class="jxr_comment"> * The ASF licenses this file to You under the Apache License, Version 2.0</em>
+<a class="jxr_linenumber" name="L6" href="#L6">6</a>   <em class="jxr_comment"> * (the "License"); you may not use this file except in compliance with</em>
+<a class="jxr_linenumber" name="L7" href="#L7">7</a>   <em class="jxr_comment"> * the License.  You may obtain a copy of the License at</em>
+<a class="jxr_linenumber" name="L8" href="#L8">8</a>   <em class="jxr_comment"> *</em>
+<a class="jxr_linenumber" name="L9" href="#L9">9</a>   <em class="jxr_comment"> *      <a href="http://www.apache.org/licenses/LICENSE-2.0" target="alexandria_uri">http://www.apache.org/licenses/LICENSE-2.0</a></em>
+<a class="jxr_linenumber" name="L10" href="#L10">10</a>  <em class="jxr_comment"> *</em>
+<a class="jxr_linenumber" name="L11" href="#L11">11</a>  <em class="jxr_comment"> * Unless required by applicable law or agreed to in writing, software</em>
+<a class="jxr_linenumber" name="L12" href="#L12">12</a>  <em class="jxr_comment"> * distributed under the License is distributed on an "AS IS" BASIS,</em>
+<a class="jxr_linenumber" name="L13" href="#L13">13</a>  <em class="jxr_comment"> * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</em>
+<a class="jxr_linenumber" name="L14" href="#L14">14</a>  <em class="jxr_comment"> * See the License for the specific language governing permissions and</em>
+<a class="jxr_linenumber" name="L15" href="#L15">15</a>  <em class="jxr_comment"> * limitations under the License.</em>
+<a class="jxr_linenumber" name="L16" href="#L16">16</a>  <em class="jxr_comment"> */</em>
+<a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.server.view.freemarker.console;
+<a class="jxr_linenumber" name="L18" href="#L18">18</a>  
+<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.commons.utils.Shorts.*;
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.test.bct.BctAssertions.*;
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.junit.jupiter.api.Assertions.*;
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> java.util.regex.*;
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.*;
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.commons.inject.*;
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.mock.classic.*;
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.server.*;
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.server.servlet.*;
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.server.view.*;
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.server.view.freemarker.*;
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <strong class="jxr_keyword">import</strong> org.junit.jupiter.api.*;
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>  
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>  <strong class="jxr_keyword">import</strong> freemarker.cache.*;
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>  <strong class="jxr_keyword">import</strong> freemarker.template.Configuration;
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>  <strong class="jxr_keyword">import</strong> freemarker.template.SimpleScalar;
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>  <strong class="jxr_keyword">import</strong> freemarker.template.TemplateModel;
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>  <strong class="jxr_keyword">import</strong> freemarker.template.TemplateNotFoundException;
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>  
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>  <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>  <em class="jxr_javadoccomment"> * Tests for {@link ConsoleFreemarkerMixin} (reserved-path template loader, {@code base.ftlh}, the</em>
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>  <em class="jxr_javadoccomment"> * {@code &lt;@tag&gt;} macro), wrap-once loader splicing, and fill-missing stamping onto a consumer</em>
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>  <em class="jxr_javadoccomment"> * {@code Configuration} bean.</em>
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>  <em class="jxr_javadoccomment"> */</em>
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>  @SuppressWarnings({
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>  	<span class="jxr_string">"resource"</span> <em class="jxr_comment">// Closeable test fixtures held in static fields; lifecycle managed by the test/framework, not a real leak.</em>
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>  })
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>  <strong class="jxr_keyword">class</strong> ConsoleFreemarkerMixin_Test <strong class="jxr_keyword">extends</strong> TestBase {
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>  
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>  	<strong class="jxr_keyword">private</strong> enum Release { RELEASED, DRAFT }
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>  
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>  	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>  	<em class="jxr_comment">// a) Classpath-location gate</em>
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>  	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>  
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>  	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>  <em class="jxr_javadoccomment">	 * RED: before any console wiring exists, a plain {@code basePath("/templates/")} bridge-default configuration</em>
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>  <em class="jxr_javadoccomment">	 * cannot resolve the reserved console template &amp;mdash; proves the gap is real, not hypothetical.</em>
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>  <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>  	@Test <strong class="jxr_keyword">void</strong> a01_plainFreemarkerMixin_cannotResolveReservedTemplate() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>  		<strong class="jxr_keyword">var</strong> plain = FreemarkerMixin.create().basePath(<span class="jxr_string">"/templates/"</span>).build();
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>  		<strong class="jxr_keyword">var</strong> cfg = plain.resolveConfiguration(dummyRequest());
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>  		assertThrows(TemplateNotFoundException.<strong class="jxr_keyword">class</strong>, () -&gt; cfg.getTemplate(ConsoleFreemarkerMixin.BASE_TEMPLATE_PATH));
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>  	}
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>  
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>  	<em class="jxr_javadoccomment">/** GREEN: the same shape of check against {@link ConsoleFreemarkerMixin} succeeds. */</em>
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>  	@Test <strong class="jxr_keyword">void</strong> a02_consoleFreemarkerMixin_resolvesReservedTemplate() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>  		<strong class="jxr_keyword">var</strong> console = ConsoleFreemarkerMixin.create().basePath(<span class="jxr_string">"/templates/"</span>).build();
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>  		<strong class="jxr_keyword">var</strong> cfg = console.resolveConfiguration(dummyRequest());
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>  		assertDoesNotThrow(() -&gt; cfg.getTemplate(ConsoleFreemarkerMixin.BASE_TEMPLATE_PATH));
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>  	}
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>  
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>  	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>  	<em class="jxr_comment">// b) Golden-HTML composition gate (through FreemarkerViewRenderer's exact-type lookup)</em>
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>  	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>  
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>  	@Rest(mixins=FreemarkerMixin.<strong class="jxr_keyword">class</strong>)
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> PlainControlHost <strong class="jxr_keyword">extends</strong> BasicRestServlet {
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>  		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">long</strong> serialVersionUID = 1L;
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>  		@Bean <strong class="jxr_keyword">public</strong> FreemarkerMixin freemarker() {
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>  			<strong class="jxr_keyword">return</strong> FreemarkerMixin.create().basePath(<span class="jxr_string">"/templates/"</span>).build();
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>  		}
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>  		@RestGet(path=<span class="jxr_string">"/mypage"</span>)
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>  		<strong class="jxr_keyword">public</strong> View mypage() {
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>  			<strong class="jxr_keyword">return</strong> FreemarkerView.of(<span class="jxr_string">"admin/mypage.ftlh"</span>).attr(<span class="jxr_string">"release"</span>, Release.RELEASED);
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>  		}
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>  	}
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>  
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>  	@Rest(mixins=FreemarkerMixin.<strong class="jxr_keyword">class</strong>)
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> ConsoleHost <strong class="jxr_keyword">extends</strong> BasicRestServlet {
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>  		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">long</strong> serialVersionUID = 1L;
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>  		@Bean <strong class="jxr_keyword">public</strong> FreemarkerMixin freemarker() {
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>  			<strong class="jxr_keyword">return</strong> ConsoleFreemarkerMixin.create().basePath(<span class="jxr_string">"/templates/"</span>).build();
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>  		}
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>  		@RestGet(path=<span class="jxr_string">"/mypage"</span>)
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>  		<strong class="jxr_keyword">public</strong> View mypage() {
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>  			<strong class="jxr_keyword">return</strong> FreemarkerView.of(<span class="jxr_string">"admin/mypage.ftlh"</span>).attr(<span class="jxr_string">"release"</span>, Release.RELEASED);
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>  		}
+<a class="jxr_linenumber" name="L99" href="#L99">99</a>  	}
+<a class="jxr_linenumber" name="L100" href="#L100">100</a> 
+<a class="jxr_linenumber" name="L101" href="#L101">101</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L102" href="#L102">102</a> <em class="jxr_javadoccomment">	 * RED / false-green trap avoidance: the vanilla {@code /templates/}-rooted loader cannot see the reserved</em>
+<a class="jxr_linenumber" name="L103" href="#L103">103</a> <em class="jxr_javadoccomment">	 * classpath-root path, so the {@code &lt;#include&gt;} in {@code admin/mypage.ftlh} fails and the render 500s.</em>
+<a class="jxr_linenumber" name="L104" href="#L104">104</a> <em class="jxr_javadoccomment">	 * {@code basePath("/templates/")} (not the accidental default {@code "/"}) is what makes this a real RED</em>
+<a class="jxr_linenumber" name="L105" href="#L105">105</a> <em class="jxr_javadoccomment">	 * &amp;mdash; under {@code "/"} the vanilla classpath-root loader would see the reserved path too and false-GREEN.</em>
+<a class="jxr_linenumber" name="L106" href="#L106">106</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L107" href="#L107">107</a> 	@Test <strong class="jxr_keyword">void</strong> b01_plainFreemarkerMixin_cannotComposeReservedInclude() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L108" href="#L108">108</a> 		<strong class="jxr_keyword">var</strong> c = MockRestClient.buildLax(PlainControlHost.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L109" href="#L109">109</a> 		c.get(<span class="jxr_string">"/mypage"</span>).run().assertStatus(500);
+<a class="jxr_linenumber" name="L110" href="#L110">110</a> 	}
+<a class="jxr_linenumber" name="L111" href="#L111">111</a> 
+<a class="jxr_linenumber" name="L112" href="#L112">112</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L113" href="#L113">113</a> <em class="jxr_javadoccomment">	 * GREEN: identical page/attrs, but the host registers {@code ConsoleFreemarkerMixin} under the</em>
+<a class="jxr_linenumber" name="L114" href="#L114">114</a> <em class="jxr_javadoccomment">	 * load-bearing {@code FreemarkerMixin} return type. Both loaders work: the consumer's own nested</em>
+<a class="jxr_linenumber" name="L115" href="#L115">115</a> <em class="jxr_javadoccomment">	 * {@code admin/mypage.ftlh} resolves AND the {@code &lt;#include&gt;}d reserved {@code base.ftlh} resolves and</em>
+<a class="jxr_linenumber" name="L116" href="#L116">116</a> <em class="jxr_javadoccomment">	 * renders the {@code &lt;@tag&gt;} macro's chrome markup.</em>
+<a class="jxr_linenumber" name="L117" href="#L117">117</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L118" href="#L118">118</a> 	@Test <strong class="jxr_keyword">void</strong> b02_consoleFreemarkerMixin_composesConsumerPageAndReservedInclude() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L119" href="#L119">119</a> 		<strong class="jxr_keyword">var</strong> c = MockRestClient.buildLax(ConsoleHost.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L120" href="#L120">120</a> 		<strong class="jxr_keyword">var</strong> body = c.get(<span class="jxr_string">"/mypage"</span>).run()
+<a class="jxr_linenumber" name="L121" href="#L121">121</a> 			.assertStatus(200)
+<a class="jxr_linenumber" name="L122" href="#L122">122</a> 			.getContent().asString();
+<a class="jxr_linenumber" name="L123" href="#L123">123</a> 		assertTrue(body.contains(<span class="jxr_string">"consumer-page-marker"</span>), () -&gt; <span class="jxr_string">"consumer's own /templates/ page did not render, body:\n"</span> + body);
+<a class="jxr_linenumber" name="L124" href="#L124">124</a> 		assertTrue(body.contains(<span class="jxr_string">"tag status released"</span>), () -&gt; <span class="jxr_string">"the &lt;#include&gt;d base.ftlh's &lt;@tag&gt; macro did not render, body:\n"</span> + body);
+<a class="jxr_linenumber" name="L125" href="#L125">125</a> 	}
+<a class="jxr_linenumber" name="L126" href="#L126">126</a> 
+<a class="jxr_linenumber" name="L127" href="#L127">127</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L128" href="#L128">128</a> 	<em class="jxr_comment">// c) Subtype bean return type</em>
+<a class="jxr_linenumber" name="L129" href="#L129">129</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L130" href="#L130">130</a> 
+<a class="jxr_linenumber" name="L131" href="#L131">131</a> 	@Rest(mixins=FreemarkerMixin.<strong class="jxr_keyword">class</strong>)
+<a class="jxr_linenumber" name="L132" href="#L132">132</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> SubtypeBeanHost <strong class="jxr_keyword">extends</strong> BasicRestServlet {
+<a class="jxr_linenumber" name="L133" href="#L133">133</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">long</strong> serialVersionUID = 1L;
+<a class="jxr_linenumber" name="L134" href="#L134">134</a> 		<em class="jxr_comment">// declared return type is the subtype; the renderer's subtype lookup makes this work.</em>
+<a class="jxr_linenumber" name="L135" href="#L135">135</a> 		@Bean <strong class="jxr_keyword">public</strong> ConsoleFreemarkerMixin freemarker() {
+<a class="jxr_linenumber" name="L136" href="#L136">136</a> 			<em class="jxr_comment">// Explicit cast is required here (not just illustrative): the inherited fluent setter basePath(...)</em>
+<a class="jxr_linenumber" name="L137" href="#L137">137</a> 			<em class="jxr_comment">// returns the PARENT FreemarkerMixin.Builder static type, so build() resolves at compile time against</em>
+<a class="jxr_linenumber" name="L138" href="#L138">138</a> 			<em class="jxr_comment">// THAT type's declared return type (FreemarkerMixin) -- see ConsoleFreemarkerMixin's class javadoc.</em>
+<a class="jxr_linenumber" name="L139" href="#L139">139</a> 			<strong class="jxr_keyword">return</strong> (ConsoleFreemarkerMixin) ConsoleFreemarkerMixin.create().basePath(<span class="jxr_string">"/templates/"</span>).build();
+<a class="jxr_linenumber" name="L140" href="#L140">140</a> 		}
+<a class="jxr_linenumber" name="L141" href="#L141">141</a> 		@RestGet(path=<span class="jxr_string">"/mypage"</span>)
+<a class="jxr_linenumber" name="L142" href="#L142">142</a> 		<strong class="jxr_keyword">public</strong> View mypage() {
+<a class="jxr_linenumber" name="L143" href="#L143">143</a> 			<strong class="jxr_keyword">return</strong> FreemarkerView.of(<span class="jxr_string">"admin/mypage.ftlh"</span>).attr(<span class="jxr_string">"release"</span>, Release.RELEASED);
+<a class="jxr_linenumber" name="L144" href="#L144">144</a> 		}
+<a class="jxr_linenumber" name="L145" href="#L145">145</a> 	}
+<a class="jxr_linenumber" name="L146" href="#L146">146</a> 
+<a class="jxr_linenumber" name="L147" href="#L147">147</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L148" href="#L148">148</a> <em class="jxr_javadoccomment">	 * A bean declared as the {@code ConsoleFreemarkerMixin} subtype is found by the renderer, so the console</em>
+<a class="jxr_linenumber" name="L149" href="#L149">149</a> <em class="jxr_javadoccomment">	 * directives compose. (Before 10.0.0 the exact-type lookup missed it and silently used a plain mixin.)</em>
+<a class="jxr_linenumber" name="L150" href="#L150">150</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L151" href="#L151">151</a> 	@Test <strong class="jxr_keyword">void</strong> c01_subtypeBeanReturnType_isFound() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L152" href="#L152">152</a> 		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> c = MockRestClient.buildLax(SubtypeBeanHost.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L153" href="#L153">153</a> 			<strong class="jxr_keyword">var</strong> res = c.get(<span class="jxr_string">"/mypage"</span>).run()) {
+<a class="jxr_linenumber" name="L154" href="#L154">154</a> 			res.assertStatus(200);
+<a class="jxr_linenumber" name="L155" href="#L155">155</a> 			<strong class="jxr_keyword">var</strong> body = res.getContent().asString();
+<a class="jxr_linenumber" name="L156" href="#L156">156</a> 			assertTrue(body.contains(<span class="jxr_string">"tag status released"</span>), () -&gt; body);
+<a class="jxr_linenumber" name="L157" href="#L157">157</a> 		}
+<a class="jxr_linenumber" name="L158" href="#L158">158</a> 	}
+<a class="jxr_linenumber" name="L159" href="#L159">159</a> 
+<a class="jxr_linenumber" name="L160" href="#L160">160</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L161" href="#L161">161</a> 	<em class="jxr_comment">// d) Trusted-HTML gate</em>
+<a class="jxr_linenumber" name="L162" href="#L162">162</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L163" href="#L163">163</a> 
+<a class="jxr_linenumber" name="L164" href="#L164">164</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L165" href="#L165">165</a> <em class="jxr_javadoccomment">	 * {@code &lt;@tag domain="status" value=release/&gt;} (a raw enum constant bound as a template attribute) produces</em>
+<a class="jxr_linenumber" name="L166" href="#L166">166</a> <em class="jxr_javadoccomment">	 * literal pill markup, not the {@code DefaultObjectWrapper} bean-dump/empty footgun a bare {@code ${...}}</em>
+<a class="jxr_linenumber" name="L167" href="#L167">167</a> <em class="jxr_javadoccomment">	 * would produce.</em>
+<a class="jxr_linenumber" name="L168" href="#L168">168</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L169" href="#L169">169</a> 	@Test <strong class="jxr_keyword">void</strong> d01_tagMacro_rendersLiteralPillMarkup_notEscaped() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L170" href="#L170">170</a> 		<strong class="jxr_keyword">var</strong> c = MockRestClient.buildLax(ConsoleHost.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L171" href="#L171">171</a> 		<strong class="jxr_keyword">var</strong> body = c.get(<span class="jxr_string">"/mypage"</span>).run().assertStatus(200).getContent().asString();
+<a class="jxr_linenumber" name="L172" href="#L172">172</a> 		assertFalse(body.contains(<span class="jxr_string">"&amp;lt;span"</span>), () -&gt; <span class="jxr_string">"macro output was HTML-escaped (double-escaped), body:\n"</span> + body);
+<a class="jxr_linenumber" name="L173" href="#L173">173</a> 		<em class="jxr_comment">// find() on an anchor-free pattern (no wrapping .*) avoids the super-linear backtracking risk of</em>
+<a class="jxr_linenumber" name="L174" href="#L174">174</a> 		<em class="jxr_comment">// String.matches() with unbounded quantifiers at both ends.</em>
+<a class="jxr_linenumber" name="L175" href="#L175">175</a> 		assertTrue(Pattern.compile(<span class="jxr_string">"&lt;span(?=[^&gt;]*class=['\&quot;]tag status released['\&quot;])[^&gt;]*&gt;"</span>).matcher(body).find(),
+<a class="jxr_linenumber" name="L176" href="#L176">176</a> 			() -&gt; <span class="jxr_string">"expected literal &lt;span class='tag status released'&gt; markup, body:\n"</span> + body);
+<a class="jxr_linenumber" name="L177" href="#L177">177</a> 	}
+<a class="jxr_linenumber" name="L178" href="#L178">178</a> 
+<a class="jxr_linenumber" name="L179" href="#L179">179</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L180" href="#L180">180</a> <em class="jxr_javadoccomment">	 * A bare {@code ${Tag.of(...)}} (never done through the macro in this codebase, but documenting the footgun</em>
+<a class="jxr_linenumber" name="L181" href="#L181">181</a> <em class="jxr_javadoccomment">	 * directly) is NOT equivalent to calling the Java factory and stringifying its result through the trusted</em>
+<a class="jxr_linenumber" name="L182" href="#L182">182</a> <em class="jxr_javadoccomment">	 * adapter: {@link org.apache.juneau.rest.server.console.Tag#of} returns an {@code HtmlElement}, and the</em>
+<a class="jxr_linenumber" name="L183" href="#L183">183</a> <em class="jxr_javadoccomment">	 * bridge-default {@code DefaultObjectWrapper} (exposeFields=true) wraps arbitrary objects as bean models, not</em>
+<a class="jxr_linenumber" name="L184" href="#L184">184</a> <em class="jxr_javadoccomment">	 * pre-rendered markup -- so the ONLY supported v1 insertion point is the {@code &lt;@tag&gt;} macro documented on</em>
+<a class="jxr_linenumber" name="L185" href="#L185">185</a> <em class="jxr_javadoccomment">	 * {@link ConsoleFreemarkerMixin}, never a direct method-model call written by hand in a template.</em>
+<a class="jxr_linenumber" name="L186" href="#L186">186</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L187" href="#L187">187</a> 	@Test <strong class="jxr_keyword">void</strong> d02_tagMethodModel_isNotExposedAsABareTemplateVariable() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L188" href="#L188">188</a> 		<strong class="jxr_keyword">var</strong> console = ConsoleFreemarkerMixin.create().basePath(<span class="jxr_string">"/templates/"</span>).build();
+<a class="jxr_linenumber" name="L189" href="#L189">189</a> 		<strong class="jxr_keyword">var</strong> cfg = console.resolveConfiguration(dummyRequest());
+<a class="jxr_linenumber" name="L190" href="#L190">190</a> 		<em class="jxr_comment">// jcTagHtml is a shared variable on the augmented Configuration -- exists ONLY so base.ftlh's &lt;#macro tag&gt;</em>
+<a class="jxr_linenumber" name="L191" href="#L191">191</a> 		<em class="jxr_comment">// can call it; it is deliberately not part of any public API surface a consumer would discover/write by</em>
+<a class="jxr_linenumber" name="L192" href="#L192">192</a> 		<em class="jxr_comment">// hand (no javadoc, package-private class). This assertion documents that the shared variable is scoped</em>
+<a class="jxr_linenumber" name="L193" href="#L193">193</a> 		<em class="jxr_comment">// to the internal macro plumbing, not a public "insertion point" a consumer should call directly.</em>
+<a class="jxr_linenumber" name="L194" href="#L194">194</a> 		assertNotNull(cfg.getSharedVariable(TagMethodModel.NAME), <span class="jxr_string">"the &lt;@tag&gt; macro's backing method must be registered"</span>);
+<a class="jxr_linenumber" name="L195" href="#L195">195</a> 	}
+<a class="jxr_linenumber" name="L196" href="#L196">196</a> 
+<a class="jxr_linenumber" name="L197" href="#L197">197</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L198" href="#L198">198</a> 	<em class="jxr_comment">// e) Double-wrap prevention</em>
+<a class="jxr_linenumber" name="L199" href="#L199">199</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L200" href="#L200">200</a> 
+<a class="jxr_linenumber" name="L201" href="#L201">201</a> 	@Rest(mixins=FreemarkerMixin.<strong class="jxr_keyword">class</strong>)
+<a class="jxr_linenumber" name="L202" href="#L202">202</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> DoubleWrapProbeHost <strong class="jxr_keyword">extends</strong> BasicRestServlet {
+<a class="jxr_linenumber" name="L203" href="#L203">203</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">long</strong> serialVersionUID = 1L;
+<a class="jxr_linenumber" name="L204" href="#L204">204</a> 		@Bean <strong class="jxr_keyword">public</strong> FreemarkerMixin freemarker() {
+<a class="jxr_linenumber" name="L205" href="#L205">205</a> 			<strong class="jxr_keyword">return</strong> ConsoleFreemarkerMixin.create().basePath(<span class="jxr_string">"/templates/"</span>).build();
+<a class="jxr_linenumber" name="L206" href="#L206">206</a> 		}
+<a class="jxr_linenumber" name="L207" href="#L207">207</a> 		@RestGet(path=<span class="jxr_string">"/probe"</span>)
+<a class="jxr_linenumber" name="L208" href="#L208">208</a> 		<strong class="jxr_keyword">public</strong> String probe(RestRequest req) {
+<a class="jxr_linenumber" name="L209" href="#L209">209</a> 			<strong class="jxr_keyword">var</strong> mixin = (ConsoleFreemarkerMixin) req.getContext().getBeanStore().getBean(FreemarkerMixin.<strong class="jxr_keyword">class</strong>).orElseThrow();
+<a class="jxr_linenumber" name="L210" href="#L210">210</a> 			<strong class="jxr_keyword">var</strong> cfg = mixin.resolveConfiguration(req);
+<a class="jxr_linenumber" name="L211" href="#L211">211</a> 			<strong class="jxr_keyword">var</strong> loader = cfg.getTemplateLoader();
+<a class="jxr_linenumber" name="L212" href="#L212">212</a> 			<strong class="jxr_keyword">if</strong> (! (loader instanceof MultiTemplateLoader multi))
+<a class="jxr_linenumber" name="L213" href="#L213">213</a> 				<strong class="jxr_keyword">return</strong> <span class="jxr_string">"not-multi"</span>;
+<a class="jxr_linenumber" name="L214" href="#L214">214</a> 			<strong class="jxr_keyword">return</strong> multi.getTemplateLoaderCount() + <span class="jxr_string">":"</span> + System.identityHashCode(multi.getTemplateLoader(0)) + <span class="jxr_string">":"</span> + System.identityHashCode(cfg);
+<a class="jxr_linenumber" name="L215" href="#L215">215</a> 		}
+<a class="jxr_linenumber" name="L216" href="#L216">216</a> 	}
+<a class="jxr_linenumber" name="L217" href="#L217">217</a> 
+<a class="jxr_linenumber" name="L218" href="#L218">218</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L219" href="#L219">219</a> <em class="jxr_javadoccomment">	 * Two successive {@code resolveConfiguration(req)} calls on the same {@code ConsoleFreemarkerMixin} (no</em>
+<a class="jxr_linenumber" name="L220" href="#L220">220</a> <em class="jxr_javadoccomment">	 * {@code Configuration} bean) must return the same cached {@code Configuration} instance whose</em>
+<a class="jxr_linenumber" name="L221" href="#L221">221</a> <em class="jxr_javadoccomment">	 * {@code getTemplateLoader()} is a {@code MultiTemplateLoader} of length 2 &lt;b&gt;both times&lt;/b&gt; &amp;mdash; not</em>
+<a class="jxr_linenumber" name="L222" href="#L222">222</a> <em class="jxr_javadoccomment">	 * {@code Multi(Multi(base, console), console)} on the second call. Two independent HTTP requests hit the same</em>
+<a class="jxr_linenumber" name="L223" href="#L223">223</a> <em class="jxr_javadoccomment">	 * mixin-bean singleton (one {@code MockRestClient}/{@code RestContext}), each triggering one</em>
+<a class="jxr_linenumber" name="L224" href="#L224">224</a> <em class="jxr_javadoccomment">	 * {@code resolveConfiguration(req)} call.</em>
+<a class="jxr_linenumber" name="L225" href="#L225">225</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L226" href="#L226">226</a> 	@Test <strong class="jxr_keyword">void</strong> e01_secondResolveConfigurationCall_doesNotNestTheLoader() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L227" href="#L227">227</a> 		<strong class="jxr_keyword">var</strong> c = MockRestClient.buildLax(DoubleWrapProbeHost.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L228" href="#L228">228</a> 		<strong class="jxr_keyword">var</strong> r1 = c.get(<span class="jxr_string">"/probe"</span>).accept(<span class="jxr_string">"text/plain"</span>).run().getContent().asString();
+<a class="jxr_linenumber" name="L229" href="#L229">229</a> 		<strong class="jxr_keyword">var</strong> r2 = c.get(<span class="jxr_string">"/probe"</span>).accept(<span class="jxr_string">"text/plain"</span>).run().getContent().asString();
+<a class="jxr_linenumber" name="L230" href="#L230">230</a> 		<strong class="jxr_keyword">var</strong> p1 = r1.split(<span class="jxr_string">":"</span>);
+<a class="jxr_linenumber" name="L231" href="#L231">231</a> 		<strong class="jxr_keyword">var</strong> p2 = r2.split(<span class="jxr_string">":"</span>);
+<a class="jxr_linenumber" name="L232" href="#L232">232</a> 		assertEquals(3, p1.length, () -&gt; <span class="jxr_string">"expected a MultiTemplateLoader on the first call, got: "</span> + r1);
+<a class="jxr_linenumber" name="L233" href="#L233">233</a> 		assertEquals(3, p2.length, () -&gt; <span class="jxr_string">"expected a MultiTemplateLoader on the second call, got: "</span> + r2);
+<a class="jxr_linenumber" name="L234" href="#L234">234</a> 		assertEquals(p1[2], p2[2], <span class="jxr_string">"both calls must return the SAME cached Configuration instance"</span>);
+<a class="jxr_linenumber" name="L235" href="#L235">235</a> 		assertEquals(<span class="jxr_string">"2"</span>, p1[0], <span class="jxr_string">"first call: expected exactly 2 loaders (base + console)"</span>);
+<a class="jxr_linenumber" name="L236" href="#L236">236</a> 		assertEquals(<span class="jxr_string">"2"</span>, p2[0], () -&gt; <span class="jxr_string">"double-wrap: second call's loader count grew past 2 (nested Multi), got "</span> + p2[0]);
+<a class="jxr_linenumber" name="L237" href="#L237">237</a> 		assertEquals(p1[1], p2[1], <span class="jxr_string">"double-wrap: index-0 loader identity changed between calls (got re-wrapped)"</span>);
+<a class="jxr_linenumber" name="L238" href="#L238">238</a> 	}
+<a class="jxr_linenumber" name="L239" href="#L239">239</a> 
+<a class="jxr_linenumber" name="L240" href="#L240">240</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L241" href="#L241">241</a> 	<em class="jxr_comment">// f) Consumer Configuration is the same instance, then fill-missing stamped</em>
+<a class="jxr_linenumber" name="L242" href="#L242">242</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L243" href="#L243">243</a> 
+<a class="jxr_linenumber" name="L244" href="#L244">244</a> 	@Rest(mixins=FreemarkerMixin.<strong class="jxr_keyword">class</strong>)
+<a class="jxr_linenumber" name="L245" href="#L245">245</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> ConsumerConfigHost <strong class="jxr_keyword">extends</strong> BasicRestServlet {
+<a class="jxr_linenumber" name="L246" href="#L246">246</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">long</strong> serialVersionUID = 1L;
+<a class="jxr_linenumber" name="L247" href="#L247">247</a> 		<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Configuration USER_CFG = <strong class="jxr_keyword">new</strong> Configuration(Configuration.VERSION_2_3_34);
+<a class="jxr_linenumber" name="L248" href="#L248">248</a> 		<strong class="jxr_keyword">static</strong> {
+<a class="jxr_linenumber" name="L249" href="#L249">249</a> 			USER_CFG.setTemplateLoader(<strong class="jxr_keyword">new</strong> StringTemplateLoader());
+<a class="jxr_linenumber" name="L250" href="#L250">250</a> 		}
+<a class="jxr_linenumber" name="L251" href="#L251">251</a> 		<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Object ORIGINAL_WRAPPER = USER_CFG.getObjectWrapper();
+<a class="jxr_linenumber" name="L252" href="#L252">252</a> 		<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String ORIGINAL_ENCODING = USER_CFG.getDefaultEncoding();
+<a class="jxr_linenumber" name="L253" href="#L253">253</a> 		<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Object ORIGINAL_OUTPUT_FORMAT = USER_CFG.getOutputFormat();
+<a class="jxr_linenumber" name="L254" href="#L254">254</a> 		<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">long</strong> ORIGINAL_UPDATE_DELAY = USER_CFG.getTemplateUpdateDelayMilliseconds();
+<a class="jxr_linenumber" name="L255" href="#L255">255</a> 		@Bean <strong class="jxr_keyword">public</strong> Configuration configuration() { <strong class="jxr_keyword">return</strong> USER_CFG; }
+<a class="jxr_linenumber" name="L256" href="#L256">256</a> 		@Bean <strong class="jxr_keyword">public</strong> FreemarkerMixin freemarker() { <strong class="jxr_keyword">return</strong> ConsoleFreemarkerMixin.create().build(); }
+<a class="jxr_linenumber" name="L257" href="#L257">257</a> 		@RestGet(path=<span class="jxr_string">"/probe"</span>)
+<a class="jxr_linenumber" name="L258" href="#L258">258</a> 		<strong class="jxr_keyword">public</strong> String probe(RestRequest req) {
+<a class="jxr_linenumber" name="L259" href="#L259">259</a> 			<strong class="jxr_keyword">var</strong> mixin = (ConsoleFreemarkerMixin) req.getContext().getBeanStore().getBean(FreemarkerMixin.<strong class="jxr_keyword">class</strong>).orElseThrow();
+<a class="jxr_linenumber" name="L260" href="#L260">260</a> 			<strong class="jxr_keyword">var</strong> cfg1 = mixin.resolveConfiguration(req);
+<a class="jxr_linenumber" name="L261" href="#L261">261</a> 			<strong class="jxr_keyword">var</strong> cfg2 = mixin.resolveConfiguration(req);
+<a class="jxr_linenumber" name="L262" href="#L262">262</a> 			<strong class="jxr_keyword">var</strong> sameInstance = cfg1 == USER_CFG &amp;&amp; cfg2 == USER_CFG;
+<a class="jxr_linenumber" name="L263" href="#L263">263</a> 			<strong class="jxr_keyword">var</strong> settingsUnchanged = cfg1.getObjectWrapper() == ORIGINAL_WRAPPER
+<a class="jxr_linenumber" name="L264" href="#L264">264</a> 				&amp;&amp; eq(cfg1.getDefaultEncoding(), ORIGINAL_ENCODING)
+<a class="jxr_linenumber" name="L265" href="#L265">265</a> 				&amp;&amp; cfg1.getOutputFormat() == ORIGINAL_OUTPUT_FORMAT
+<a class="jxr_linenumber" name="L266" href="#L266">266</a> 				&amp;&amp; cfg1.getTemplateUpdateDelayMilliseconds() == ORIGINAL_UPDATE_DELAY;
+<a class="jxr_linenumber" name="L267" href="#L267">267</a> 			<strong class="jxr_keyword">var</strong> varsFilled = cfg1.getSharedVariable(PageDirectiveModel.NAME) != <strong class="jxr_keyword">null</strong>
+<a class="jxr_linenumber" name="L268" href="#L268">268</a> 				&amp;&amp; cfg1.getSharedVariable(CardDirectiveModel.NAME) != <strong class="jxr_keyword">null</strong>
+<a class="jxr_linenumber" name="L269" href="#L269">269</a> 				&amp;&amp; cfg1.getSharedVariable(NavigationDirectiveModel.NAME) != <strong class="jxr_keyword">null</strong>
+<a class="jxr_linenumber" name="L270" href="#L270">270</a> 				&amp;&amp; cfg1.getSharedVariable(NodeDirectiveModel.NAME) != <strong class="jxr_keyword">null</strong>
+<a class="jxr_linenumber" name="L271" href="#L271">271</a> 				&amp;&amp; cfg1.getSharedVariable(ThemeDirectiveModel.NAME) != <strong class="jxr_keyword">null</strong>
+<a class="jxr_linenumber" name="L272" href="#L272">272</a> 				&amp;&amp; cfg1.getSharedVariable(TagMethodModel.NAME) != <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L273" href="#L273">273</a> 			<strong class="jxr_keyword">var</strong> reservedResolves = <strong class="jxr_keyword">true</strong>;
+<a class="jxr_linenumber" name="L274" href="#L274">274</a> 			<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L275" href="#L275">275</a> 				cfg1.getTemplate(ConsoleFreemarkerMixin.BASE_TEMPLATE_PATH);
+<a class="jxr_linenumber" name="L276" href="#L276">276</a> 			} <strong class="jxr_keyword">catch</strong> (@SuppressWarnings(<span class="jxr_string">"unused"</span>) Exception ex) {
+<a class="jxr_linenumber" name="L277" href="#L277">277</a> 				reservedResolves = false;
+<a class="jxr_linenumber" name="L278" href="#L278">278</a> 			}
+<a class="jxr_linenumber" name="L279" href="#L279">279</a> 			<strong class="jxr_keyword">return</strong> sameInstance + <span class="jxr_string">":"</span> + settingsUnchanged + <span class="jxr_string">":"</span> + varsFilled + <span class="jxr_string">":"</span> + reservedResolves
+<a class="jxr_linenumber" name="L280" href="#L280">280</a> 				+ <span class="jxr_string">":"</span> + loaderCount(cfg1) + <span class="jxr_string">":"</span> + loaderCount(cfg2);
+<a class="jxr_linenumber" name="L281" href="#L281">281</a> 		}
+<a class="jxr_linenumber" name="L282" href="#L282">282</a> 	}
+<a class="jxr_linenumber" name="L283" href="#L283">283</a> 
+<a class="jxr_linenumber" name="L284" href="#L284">284</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L285" href="#L285">285</a> <em class="jxr_javadoccomment">	 * A host that registers its own {@code @Bean Configuration} plus {@code ConsoleFreemarkerMixin}:</em>
+<a class="jxr_linenumber" name="L286" href="#L286">286</a> <em class="jxr_javadoccomment">	 * {@code resolveConfiguration} returns that SAME instance ({@code ==}), leaves wrapper/encoding/output-format/</em>
+<a class="jxr_linenumber" name="L287" href="#L287">287</a> <em class="jxr_javadoccomment">	 * update-delay alone, fill-missing-stamps the reserved console names, makes the reserved template resolve,</em>
+<a class="jxr_linenumber" name="L288" href="#L288">288</a> <em class="jxr_javadoccomment">	 * and a second call on the same mixin does not nest {@code MultiTemplateLoader}.</em>
+<a class="jxr_linenumber" name="L289" href="#L289">289</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L290" href="#L290">290</a> 	@Test <strong class="jxr_keyword">void</strong> f01_consumerSuppliedConfiguration_isAugmentedInPlace() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L291" href="#L291">291</a> 		<strong class="jxr_keyword">var</strong> c = MockRestClient.buildLax(ConsumerConfigHost.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L292" href="#L292">292</a> 		<strong class="jxr_keyword">var</strong> body = c.get(<span class="jxr_string">"/probe"</span>).accept(<span class="jxr_string">"text/plain"</span>).run().getContent().asString();
+<a class="jxr_linenumber" name="L293" href="#L293">293</a> 		assertEquals(<span class="jxr_string">"true:true:true:true:2:2"</span>, body,
+<a class="jxr_linenumber" name="L294" href="#L294">294</a> 			() -&gt; <span class="jxr_string">"expected same-instance, settings-unchanged, vars-filled, reserved-resolves, loader-count 2 then 2; got "</span> + body);
+<a class="jxr_linenumber" name="L295" href="#L295">295</a> 	}
+<a class="jxr_linenumber" name="L296" href="#L296">296</a> 
+<a class="jxr_linenumber" name="L297" href="#L297">297</a> 	@Rest(mixins=FreemarkerMixin.<strong class="jxr_keyword">class</strong>)
+<a class="jxr_linenumber" name="L298" href="#L298">298</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> CollisionConfigHost <strong class="jxr_keyword">extends</strong> BasicRestServlet {
+<a class="jxr_linenumber" name="L299" href="#L299">299</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">long</strong> serialVersionUID = 1L;
+<a class="jxr_linenumber" name="L300" href="#L300">300</a> 		<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Configuration COLLISION_CFG = <strong class="jxr_keyword">new</strong> Configuration(Configuration.VERSION_2_3_34);
+<a class="jxr_linenumber" name="L301" href="#L301">301</a> 		<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> TemplateModel PAGE_SENTINEL = <strong class="jxr_keyword">new</strong> SimpleScalar(<span class="jxr_string">"consumer-page"</span>);
+<a class="jxr_linenumber" name="L302" href="#L302">302</a> 		<strong class="jxr_keyword">static</strong> {
+<a class="jxr_linenumber" name="L303" href="#L303">303</a> 			COLLISION_CFG.setSharedVariable(PageDirectiveModel.NAME, PAGE_SENTINEL);
+<a class="jxr_linenumber" name="L304" href="#L304">304</a> 		}
+<a class="jxr_linenumber" name="L305" href="#L305">305</a> 		@Bean <strong class="jxr_keyword">public</strong> Configuration configuration() { <strong class="jxr_keyword">return</strong> COLLISION_CFG; }
+<a class="jxr_linenumber" name="L306" href="#L306">306</a> 		@Bean <strong class="jxr_keyword">public</strong> FreemarkerMixin freemarker() { <strong class="jxr_keyword">return</strong> ConsoleFreemarkerMixin.create().build(); }
+<a class="jxr_linenumber" name="L307" href="#L307">307</a> 		@RestGet(path=<span class="jxr_string">"/probe"</span>)
+<a class="jxr_linenumber" name="L308" href="#L308">308</a> 		<strong class="jxr_keyword">public</strong> String probe(RestRequest req) {
+<a class="jxr_linenumber" name="L309" href="#L309">309</a> 			<strong class="jxr_keyword">var</strong> mixin = (ConsoleFreemarkerMixin) req.getContext().getBeanStore().getBean(FreemarkerMixin.<strong class="jxr_keyword">class</strong>).orElseThrow();
+<a class="jxr_linenumber" name="L310" href="#L310">310</a> 			<strong class="jxr_keyword">var</strong> cfg = mixin.resolveConfiguration(req);
+<a class="jxr_linenumber" name="L311" href="#L311">311</a> 			<strong class="jxr_keyword">var</strong> pageKept = cfg.getSharedVariable(PageDirectiveModel.NAME) == PAGE_SENTINEL;
+<a class="jxr_linenumber" name="L312" href="#L312">312</a> 			<strong class="jxr_keyword">var</strong> othersFilled = cfg.getSharedVariable(CardDirectiveModel.NAME) != <strong class="jxr_keyword">null</strong>
+<a class="jxr_linenumber" name="L313" href="#L313">313</a> 				&amp;&amp; cfg.getSharedVariable(NavigationDirectiveModel.NAME) != <strong class="jxr_keyword">null</strong>
+<a class="jxr_linenumber" name="L314" href="#L314">314</a> 				&amp;&amp; cfg.getSharedVariable(NodeDirectiveModel.NAME) != <strong class="jxr_keyword">null</strong>
+<a class="jxr_linenumber" name="L315" href="#L315">315</a> 				&amp;&amp; cfg.getSharedVariable(ThemeDirectiveModel.NAME) != <strong class="jxr_keyword">null</strong>
+<a class="jxr_linenumber" name="L316" href="#L316">316</a> 				&amp;&amp; cfg.getSharedVariable(TagMethodModel.NAME) != <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L317" href="#L317">317</a> 			<strong class="jxr_keyword">return</strong> pageKept + <span class="jxr_string">":"</span> + othersFilled;
+<a class="jxr_linenumber" name="L318" href="#L318">318</a> 		}
+<a class="jxr_linenumber" name="L319" href="#L319">319</a> 	}
+<a class="jxr_linenumber" name="L320" href="#L320">320</a> 
+<a class="jxr_linenumber" name="L321" href="#L321">321</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L322" href="#L322">322</a> <em class="jxr_javadoccomment">	 * Consumer bean already has {@code page} set: that sentinel is kept; the other Juneau reserved names are</em>
+<a class="jxr_linenumber" name="L323" href="#L323">323</a> <em class="jxr_javadoccomment">	 * still fill-missing stamped.</em>
+<a class="jxr_linenumber" name="L324" href="#L324">324</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L325" href="#L325">325</a> 	@Test <strong class="jxr_keyword">void</strong> f02_consumerPageSentinel_isKeptAndOtherNamesFilled() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L326" href="#L326">326</a> 		<strong class="jxr_keyword">var</strong> c = MockRestClient.buildLax(CollisionConfigHost.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L327" href="#L327">327</a> 		<strong class="jxr_keyword">var</strong> body = c.get(<span class="jxr_string">"/probe"</span>).accept(<span class="jxr_string">"text/plain"</span>).run().getContent().asString();
+<a class="jxr_linenumber" name="L328" href="#L328">328</a> 		assertEquals(<span class="jxr_string">"true:true"</span>, body,
+<a class="jxr_linenumber" name="L329" href="#L329">329</a> 			() -&gt; <span class="jxr_string">"expected page-sentinel-kept=true, other-names-filled=true; got "</span> + body);
+<a class="jxr_linenumber" name="L330" href="#L330">330</a> 	}
+<a class="jxr_linenumber" name="L331" href="#L331">331</a> 
+<a class="jxr_linenumber" name="L332" href="#L332">332</a> 	@Test <strong class="jxr_keyword">void</strong> g01_requirePacks_charts_presentWebJar_builds() {
+<a class="jxr_linenumber" name="L333" href="#L333">333</a> 		assertNotNull(ConsoleFreemarkerMixin.create().requirePacks(<span class="jxr_string">"charts"</span>).build());
+<a class="jxr_linenumber" name="L334" href="#L334">334</a> 	}
+<a class="jxr_linenumber" name="L335" href="#L335">335</a> 
+<a class="jxr_linenumber" name="L336" href="#L336">336</a> 	@Test <strong class="jxr_keyword">void</strong> g02_requirePacks_unknown_failsAtBuild() {
+<a class="jxr_linenumber" name="L337" href="#L337">337</a> 		<strong class="jxr_keyword">var</strong> target = ConsoleFreemarkerMixin.create().requirePacks(<span class="jxr_string">"nope"</span>);
+<a class="jxr_linenumber" name="L338" href="#L338">338</a> 		<strong class="jxr_keyword">var</strong> e = assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, target::build);
+<a class="jxr_linenumber" name="L339" href="#L339">339</a> 		assertEquals(<span class="jxr_string">"Unknown toolkit pack 'nope' (requirePacks)."</span>, e.getMessage());
+<a class="jxr_linenumber" name="L340" href="#L340">340</a> 	}
+<a class="jxr_linenumber" name="L341" href="#L341">341</a> 
+<a class="jxr_linenumber" name="L342" href="#L342">342</a> 	@Test <strong class="jxr_keyword">void</strong> g03_noOptIn_probesNothing() {
+<a class="jxr_linenumber" name="L343" href="#L343">343</a> 		assertNotNull(ConsoleFreemarkerMixin.create().webJarProbe(a -&gt; { <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalStateException(<span class="jxr_string">"x"</span>); }).build());
+<a class="jxr_linenumber" name="L344" href="#L344">344</a> 	}
+<a class="jxr_linenumber" name="L345" href="#L345">345</a> 
+<a class="jxr_linenumber" name="L346" href="#L346">346</a> 	@Test <strong class="jxr_keyword">void</strong> g04_requirePacks_absentWebJar_isE70() {
+<a class="jxr_linenumber" name="L347" href="#L347">347</a> 		<strong class="jxr_keyword">var</strong> target2 = ConsoleFreemarkerMixin.create().requirePacks(<span class="jxr_string">"charts"</span>)
+<a class="jxr_linenumber" name="L348" href="#L348">348</a> 			.webJarProbe(a -&gt; { <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalStateException(<span class="jxr_string">"x"</span>); });
+<a class="jxr_linenumber" name="L349" href="#L349">349</a> 		<strong class="jxr_keyword">var</strong> e = assertThrows(IllegalStateException.<strong class="jxr_keyword">class</strong>, target2::build);
+<a class="jxr_linenumber" name="L350" href="#L350">350</a> 		assertContains(<span class="jxr_string">"E-70: chart cards need the ECharts WebJar"</span>, e.getMessage());
+<a class="jxr_linenumber" name="L351" href="#L351">351</a> 	}
+<a class="jxr_linenumber" name="L352" href="#L352">352</a> 
+<a class="jxr_linenumber" name="L353" href="#L353">353</a> 	@Test <strong class="jxr_keyword">void</strong> g05_appPackDependsOnEcharts_isOptIn() {
+<a class="jxr_linenumber" name="L354" href="#L354">354</a> 		<strong class="jxr_keyword">var</strong> target3 = ConsoleFreemarkerMixin.create()
+<a class="jxr_linenumber" name="L355" href="#L355">355</a> 			.registerToolkitPack(ToolkitPack.create(<span class="jxr_string">"app.charts"</span>).kind(ToolkitPack.Kind.RUNTIME).js(<span class="jxr_string">"/a.js"</span>).dependsOn(<span class="jxr_string">"charts"</span>).build())
+<a class="jxr_linenumber" name="L356" href="#L356">356</a> 			.webJarProbe(a -&gt; { <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalStateException(<span class="jxr_string">"x"</span>); });
+<a class="jxr_linenumber" name="L357" href="#L357">357</a> 		<strong class="jxr_keyword">var</strong> e = assertThrows(IllegalStateException.<strong class="jxr_keyword">class</strong>, target3::build);
+<a class="jxr_linenumber" name="L358" href="#L358">358</a> 		assertContains(<span class="jxr_string">"E-70: "</span>, e.getMessage());
+<a class="jxr_linenumber" name="L359" href="#L359">359</a> 	}
+<a class="jxr_linenumber" name="L360" href="#L360">360</a> 
+<a class="jxr_linenumber" name="L361" href="#L361">361</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L362" href="#L362">362</a> 	<em class="jxr_comment">// helpers</em>
+<a class="jxr_linenumber" name="L363" href="#L363">363</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L364" href="#L364">364</a> 
+<a class="jxr_linenumber" name="L365" href="#L365">365</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">int</strong> loaderCount(Configuration cfg) {
+<a class="jxr_linenumber" name="L366" href="#L366">366</a> 		<strong class="jxr_keyword">var</strong> loader = cfg.getTemplateLoader();
+<a class="jxr_linenumber" name="L367" href="#L367">367</a> 		<strong class="jxr_keyword">return</strong> loader instanceof MultiTemplateLoader multi ? multi.getTemplateLoaderCount() : -1;
+<a class="jxr_linenumber" name="L368" href="#L368">368</a> 	}
+<a class="jxr_linenumber" name="L369" href="#L369">369</a> 
+<a class="jxr_linenumber" name="L370" href="#L370">370</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L371" href="#L371">371</a> <em class="jxr_javadoccomment">	 * A minimal live {@link RestRequest} for in-process {@code resolveConfiguration(req)} calls (empty</em>
+<a class="jxr_linenumber" name="L372" href="#L372">372</a> <em class="jxr_javadoccomment">	 * {@code BeanStore} -- no {@code Configuration} bean registered). {@code MockRestClient}'s classic client</em>
+<a class="jxr_linenumber" name="L373" href="#L373">373</a> <em class="jxr_javadoccomment">	 * runs the server side synchronously on the calling thread, so the handler's capture into</em>
+<a class="jxr_linenumber" name="L374" href="#L374">374</a> <em class="jxr_javadoccomment">	 * {@link DummyHost#CAPTURED} is visible immediately after {@code run()} returns.</em>
+<a class="jxr_linenumber" name="L375" href="#L375">375</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L376" href="#L376">376</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> RestRequest dummyRequest() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L377" href="#L377">377</a> 		<strong class="jxr_keyword">var</strong> c = MockRestClient.buildLax(DummyHost.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L378" href="#L378">378</a> 		c.get(<span class="jxr_string">"/x"</span>).run();
+<a class="jxr_linenumber" name="L379" href="#L379">379</a> 		<strong class="jxr_keyword">return</strong> DummyHost.CAPTURED.get();
+<a class="jxr_linenumber" name="L380" href="#L380">380</a> 	}
+<a class="jxr_linenumber" name="L381" href="#L381">381</a> 
+<a class="jxr_linenumber" name="L382" href="#L382">382</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> DummyHost <strong class="jxr_keyword">extends</strong> BasicRestServlet {
+<a class="jxr_linenumber" name="L383" href="#L383">383</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">long</strong> serialVersionUID = 1L;
+<a class="jxr_linenumber" name="L384" href="#L384">384</a> 		<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> ThreadLocal&lt;RestRequest&gt; CAPTURED = <strong class="jxr_keyword">new</strong> ThreadLocal&lt;&gt;();
+<a class="jxr_linenumber" name="L385" href="#L385">385</a> 		@RestGet(path=<span class="jxr_string">"/x"</span>)
+<a class="jxr_linenumber" name="L386" href="#L386">386</a> 		<strong class="jxr_keyword">public</strong> String x(RestRequest req) {
+<a class="jxr_linenumber" name="L387" href="#L387">387</a> 			CAPTURED.set(req);
+<a class="jxr_linenumber" name="L388" href="#L388">388</a> 			<strong class="jxr_keyword">return</strong> <span class="jxr_string">"x"</span>;
+<a class="jxr_linenumber" name="L389" href="#L389">389</a> 		}
+<a class="jxr_linenumber" name="L390" href="#L390">390</a> 	}
+<a class="jxr_linenumber" name="L391" href="#L391">391</a> }
+</pre>
+<hr/>
+<div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>
+</body>
+</html>

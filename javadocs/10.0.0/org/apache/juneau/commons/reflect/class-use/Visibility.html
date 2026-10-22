@@ -69,7 +69,7 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color">
 <div class="block">Marshalling API</div>
 </div>
-<div class="col-first odd-row-color"><a href="#org.apache.juneau.marshall.swap">org.apache.juneau.marshall.swap</a></div>
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.marshall.swap.spi">org.apache.juneau.marshall.swap.spi</a></div>
 <div class="col-last odd-row-color">
 <div class="block">Swap API</div>
 </div>
@@ -284,22 +284,22 @@ the order they are declared.</div>
 </section>
 </li>
 <li>
-<section class="detail" id="org.apache.juneau.marshall.swap">
-<h2>Uses of <a href="../Visibility.html" title="enum class in org.apache.juneau.commons.reflect">Visibility</a> in <a href="../../../marshall/swap/package-summary.html">org.apache.juneau.marshall.swap</a></h2>
-<div class="caption"><span>Methods in <a href="../../../marshall/swap/package-summary.html">org.apache.juneau.marshall.swap</a> with parameters of type <a href="../Visibility.html" title="enum class in org.apache.juneau.commons.reflect">Visibility</a></span></div>
+<section class="detail" id="org.apache.juneau.marshall.swap.spi">
+<h2>Uses of <a href="../Visibility.html" title="enum class in org.apache.juneau.commons.reflect">Visibility</a> in <a href="../../../marshall/swap/spi/package-summary.html">org.apache.juneau.marshall.swap.spi</a></h2>
+<div class="caption"><span>Methods in <a href="../../../marshall/swap/spi/package-summary.html">org.apache.juneau.marshall.swap.spi</a> with parameters of type <a href="../Visibility.html" title="enum class in org.apache.juneau.commons.reflect">Visibility</a></span></div>
 <div class="summary-table three-column-summary">
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><code>static <a href="../../../marshall/swap/BuilderSwap.html" title="class in org.apache.juneau.marshall.swap">BuilderSwap</a>&lt;?,<wbr>?&gt;</code></div>
-<div class="col-second even-row-color"><span class="type-name-label">BuilderSwap.</span><code><a href="../../../marshall/swap/BuilderSwap.html#findSwapFromBuilderClass(java.lang.Class,org.apache.juneau.commons.reflect.Visibility,org.apache.juneau.commons.reflect.Visibility)" class="member-name-link">findSwapFromBuilderClass</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;&nbsp;builderClass,
+<div class="col-first even-row-color"><code>static <a href="../../../marshall/swap/spi/BuilderSwap.html" title="class in org.apache.juneau.marshall.swap.spi">BuilderSwap</a>&lt;?,<wbr>?&gt;</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">BuilderSwap.</span><code><a href="../../../marshall/swap/spi/BuilderSwap.html#findSwapFromBuilderClass(java.lang.Class,org.apache.juneau.commons.reflect.Visibility,org.apache.juneau.commons.reflect.Visibility)" class="member-name-link">findSwapFromBuilderClass</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;&nbsp;builderClass,
  <a href="../Visibility.html" title="enum class in org.apache.juneau.commons.reflect">Visibility</a>&nbsp;cVis,
  <a href="../Visibility.html" title="enum class in org.apache.juneau.commons.reflect">Visibility</a>&nbsp;mVis)</code></div>
 <div class="col-last even-row-color">
 <div class="block">Creates a BuilderSwap from the specified builder class if it qualifies as one.</div>
 </div>
-<div class="col-first odd-row-color"><code>static <a href="../../../marshall/swap/BuilderSwap.html" title="class in org.apache.juneau.marshall.swap">BuilderSwap</a>&lt;?,<wbr>?&gt;</code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">BuilderSwap.</span><code><a href="../../../marshall/swap/BuilderSwap.html#findSwapFromObjectClass(org.apache.juneau.marshall.MarshallingContext,java.lang.Class,org.apache.juneau.commons.reflect.Visibility,org.apache.juneau.commons.reflect.Visibility)" class="member-name-link">findSwapFromObjectClass</a><wbr>(<a href="../../../marshall/MarshallingContext.html" title="class in org.apache.juneau.marshall">MarshallingContext</a>&nbsp;bc,
+<div class="col-first odd-row-color"><code>static <a href="../../../marshall/swap/spi/BuilderSwap.html" title="class in org.apache.juneau.marshall.swap.spi">BuilderSwap</a>&lt;?,<wbr>?&gt;</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">BuilderSwap.</span><code><a href="../../../marshall/swap/spi/BuilderSwap.html#findSwapFromObjectClass(org.apache.juneau.marshall.MarshallingContext,java.lang.Class,org.apache.juneau.commons.reflect.Visibility,org.apache.juneau.commons.reflect.Visibility)" class="member-name-link">findSwapFromObjectClass</a><wbr>(<a href="../../../marshall/MarshallingContext.html" title="class in org.apache.juneau.marshall">MarshallingContext</a>&nbsp;bc,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;&nbsp;objectClass,
  <a href="../Visibility.html" title="enum class in org.apache.juneau.commons.reflect">Visibility</a>&nbsp;cVis,
  <a href="../Visibility.html" title="enum class in org.apache.juneau.commons.reflect">Visibility</a>&nbsp;mVis)</code></div>

@@ -51,48 +51,81 @@
 <span class="source-line-no">038</span><span id="line-38"> * caution.</span>
 <span class="source-line-no">039</span><span id="line-39"> *</span>
 <span class="source-line-no">040</span><span id="line-40"> * &lt;p&gt;</span>
-<span class="source-line-no">041</span><span id="line-41"> * Java methods are invoked by passing in the following URL parameters:</span>
-<span class="source-line-no">042</span><span id="line-42"> * &lt;ul class='spaced-list'&gt;</span>
-<span class="source-line-no">043</span><span id="line-43"> *    &lt;li&gt;</span>
-<span class="source-line-no">044</span><span id="line-44"> *       &lt;c&gt;&amp;amp;invokeMethod&lt;/c&gt; - The Java method name, optionally with arguments if necessary to</span>
-<span class="source-line-no">045</span><span id="line-45"> *       differentiate between methods.</span>
-<span class="source-line-no">046</span><span id="line-46"> *    &lt;li&gt;</span>
-<span class="source-line-no">047</span><span id="line-47"> *       &lt;c&gt;&amp;amp;invokeArgs&lt;/c&gt; - The arguments as an array.</span>
-<span class="source-line-no">048</span><span id="line-48"> * &lt;/ul&gt;</span>
-<span class="source-line-no">049</span><span id="line-49"> *</span>
-<span class="source-line-no">050</span><span id="line-50"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
-<span class="source-line-no">051</span><span id="line-51"> *    &lt;li class='jc'&gt;{@link ObjectIntrospector} - Additional information on introspection of POJO methods.</span>
-<span class="source-line-no">052</span><span id="line-52"> *    &lt;li class='ja'&gt;{@link RestOp#converters()} - Registering converters with REST resources.</span>
-<span class="source-line-no">053</span><span id="line-53"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/Converters"&gt;Converters&lt;/a&gt;</span>
-<span class="source-line-no">054</span><span id="line-54"> * &lt;/ul&gt;</span>
-<span class="source-line-no">055</span><span id="line-55"> */</span>
-<span class="source-line-no">056</span><span id="line-56">public class Introspectable implements RestConverter {</span>
-<span class="source-line-no">057</span><span id="line-57"></span>
-<span class="source-line-no">058</span><span id="line-58">   /**</span>
-<span class="source-line-no">059</span><span id="line-59">    * Swagger parameters for this converter.</span>
-<span class="source-line-no">060</span><span id="line-60">    */</span>
-<span class="source-line-no">061</span><span id="line-61">   public static final String SWAGGER_PARAMS = """</span>
-<span class="source-line-no">062</span><span id="line-62">      {in:'query',name:'invokeMethod',description:' The Java method name, optionally with arguments if necessary to differentiate between methods.',examples:{example:'toString'}},</span>
-<span class="source-line-no">063</span><span id="line-63">      {in:'query',name:'invokeArgs',description:'The arguments as an array.',examples:{example:'foo,bar'}}</span>
-<span class="source-line-no">064</span><span id="line-64">      """;</span>
-<span class="source-line-no">065</span><span id="line-65"></span>
-<span class="source-line-no">066</span><span id="line-66">   @Override /* Overridden from RestConverter */</span>
-<span class="source-line-no">067</span><span id="line-67">   public Object convert(RestRequest req, Object o) throws InternalServerError {</span>
-<span class="source-line-no">068</span><span id="line-68">      String method = req.getQueryParam("invokeMethod").orElse(null);</span>
-<span class="source-line-no">069</span><span id="line-69">      String args = req.getQueryParam("invokeArgs").orElse(null);</span>
-<span class="source-line-no">070</span><span id="line-70">      if (method == null)</span>
-<span class="source-line-no">071</span><span id="line-71">         return o;</span>
-<span class="source-line-no">072</span><span id="line-72">      try {</span>
-<span class="source-line-no">073</span><span id="line-73">         MarshallingSession bs = req.getMarshallingSession();</span>
-<span class="source-line-no">074</span><span id="line-74">         var swap = bs.getClassMetaForObject(o).getSwap(bs);</span>
-<span class="source-line-no">075</span><span id="line-75">         if (nn(swap))</span>
-<span class="source-line-no">076</span><span id="line-76">            o = swap.swap(bs, o);</span>
-<span class="source-line-no">077</span><span id="line-77">         return ObjectIntrospector.create(o, Json5Parser.DEFAULT).invokeMethod(method, args);</span>
-<span class="source-line-no">078</span><span id="line-78">      } catch (Exception e) {</span>
-<span class="source-line-no">079</span><span id="line-79">         return new InternalServerError(e, "Error occurred trying to invoke method: %s", localizedMessage(e));</span>
-<span class="source-line-no">080</span><span id="line-80">      }</span>
-<span class="source-line-no">081</span><span id="line-81">   }</span>
-<span class="source-line-no">082</span><span id="line-82">}</span>
+<span class="source-line-no">041</span><span id="line-41"> *    &lt;b&gt;Security - deny-by-default:&lt;/b&gt; As of Juneau 10.0, {@link ObjectIntrospector} is secure-by-default and</span>
+<span class="source-line-no">042</span><span id="line-42"> *    denies reflective method dispatch unless the caller has explicitly allow-listed the target method(s).  This</span>
+<span class="source-line-no">043</span><span id="line-43"> *    converter is &lt;b&gt;off by default&lt;/b&gt; as shipped &amp;mdash; with no {@link IntrospectableSettings} bean registered,</span>
+<span class="source-line-no">044</span><span id="line-44"> *    every &lt;c&gt;invokeMethod&lt;/c&gt; request is refused with an HTTP 500 ({@link MethodNotAllowlistedException} wrapped</span>
+<span class="source-line-no">045</span><span id="line-45"> *    in {@link InternalServerError}).  A resource opts specific methods in &lt;i&gt;explicitly&lt;/i&gt; by registering an</span>
+<span class="source-line-no">046</span><span id="line-46"> *    {@link IntrospectableSettings} bean in its bean store:</span>
+<span class="source-line-no">047</span><span id="line-47"> * &lt;/p&gt;</span>
+<span class="source-line-no">048</span><span id="line-48"> * &lt;p class='bjava'&gt;</span>
+<span class="source-line-no">049</span><span id="line-49"> *    &lt;ja&gt;@Rest&lt;/ja&gt;(converters=Introspectable.&lt;jk&gt;class&lt;/jk&gt;)</span>
+<span class="source-line-no">050</span><span id="line-50"> *    &lt;jk&gt;public class&lt;/jk&gt; MyResource &lt;jk&gt;extends&lt;/jk&gt; BasicRestServlet {</span>
+<span class="source-line-no">051</span><span id="line-51"> *</span>
+<span class="source-line-no">052</span><span id="line-52"> *       &lt;ja&gt;@Bean&lt;/ja&gt;</span>
+<span class="source-line-no">053</span><span id="line-53"> *       &lt;jk&gt;public&lt;/jk&gt; IntrospectableSettings introspectableSettings() {</span>
+<span class="source-line-no">054</span><span id="line-54"> *          &lt;jk&gt;return&lt;/jk&gt; IntrospectableSettings.&lt;jsm&gt;create&lt;/jsm&gt;()</span>
+<span class="source-line-no">055</span><span id="line-55"> *             .allow(MyBean.&lt;jk&gt;class&lt;/jk&gt;, &lt;js&gt;"getName"&lt;/js&gt;, &lt;js&gt;"getAge"&lt;/js&gt;)</span>
+<span class="source-line-no">056</span><span id="line-56"> *             .build();</span>
+<span class="source-line-no">057</span><span id="line-57"> *       }</span>
+<span class="source-line-no">058</span><span id="line-58"> *    }</span>
+<span class="source-line-no">059</span><span id="line-59"> * &lt;/p&gt;</span>
+<span class="source-line-no">060</span><span id="line-60"> * &lt;p&gt;</span>
+<span class="source-line-no">061</span><span id="line-61"> *    For a trusted resource that needs the pre-10.0 behavior of dispatching to any public, non-deprecated method,</span>
+<span class="source-line-no">062</span><span id="line-62"> *    call {@link IntrospectableSettings.Builder#allowAll() allowAll()} instead &amp;mdash; but never do this on a</span>
+<span class="source-line-no">063</span><span id="line-63"> *    resource whose response objects expose methods you wouldn't want an arbitrary caller to invoke, since the</span>
+<span class="source-line-no">064</span><span id="line-64"> *    method name and arguments always come from untrusted request query parameters.  See</span>
+<span class="source-line-no">065</span><span id="line-65"> *    {@link IntrospectableSettings} for the full builder API.</span>
+<span class="source-line-no">066</span><span id="line-66"> * &lt;/p&gt;</span>
+<span class="source-line-no">067</span><span id="line-67"> *</span>
+<span class="source-line-no">068</span><span id="line-68"> * &lt;p&gt;</span>
+<span class="source-line-no">069</span><span id="line-69"> * Java methods are invoked by passing in the following URL parameters:</span>
+<span class="source-line-no">070</span><span id="line-70"> * &lt;ul class='spaced-list'&gt;</span>
+<span class="source-line-no">071</span><span id="line-71"> *    &lt;li&gt;</span>
+<span class="source-line-no">072</span><span id="line-72"> *       &lt;c&gt;&amp;amp;invokeMethod&lt;/c&gt; - The Java method name, optionally with arguments if necessary to</span>
+<span class="source-line-no">073</span><span id="line-73"> *       differentiate between methods.</span>
+<span class="source-line-no">074</span><span id="line-74"> *    &lt;li&gt;</span>
+<span class="source-line-no">075</span><span id="line-75"> *       &lt;c&gt;&amp;amp;invokeArgs&lt;/c&gt; - The arguments as an array.</span>
+<span class="source-line-no">076</span><span id="line-76"> * &lt;/ul&gt;</span>
+<span class="source-line-no">077</span><span id="line-77"> *</span>
+<span class="source-line-no">078</span><span id="line-78"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">079</span><span id="line-79"> *    &lt;li class='jc'&gt;{@link ObjectIntrospector} - Additional information on introspection of POJO methods.</span>
+<span class="source-line-no">080</span><span id="line-80"> *    &lt;li class='jc'&gt;{@link IntrospectableSettings} - Per-resource allow-list configuration for this converter.</span>
+<span class="source-line-no">081</span><span id="line-81"> *    &lt;li class='ja'&gt;{@link RestOp#converters()} - Registering converters with REST resources.</span>
+<span class="source-line-no">082</span><span id="line-82"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/Converters"&gt;Converters&lt;/a&gt;</span>
+<span class="source-line-no">083</span><span id="line-83"> * &lt;/ul&gt;</span>
+<span class="source-line-no">084</span><span id="line-84"> */</span>
+<span class="source-line-no">085</span><span id="line-85">public class Introspectable implements RestConverter {</span>
+<span class="source-line-no">086</span><span id="line-86"></span>
+<span class="source-line-no">087</span><span id="line-87">   /**</span>
+<span class="source-line-no">088</span><span id="line-88">    * Swagger parameters for this converter.</span>
+<span class="source-line-no">089</span><span id="line-89">    */</span>
+<span class="source-line-no">090</span><span id="line-90">   public static final String SWAGGER_PARAMS = """</span>
+<span class="source-line-no">091</span><span id="line-91">      {in:'query',name:'invokeMethod',description:' The Java method name, optionally with arguments if necessary to differentiate between methods.',examples:{example:'toString'}},</span>
+<span class="source-line-no">092</span><span id="line-92">      {in:'query',name:'invokeArgs',description:'The arguments as an array.',examples:{example:'foo,bar'}}</span>
+<span class="source-line-no">093</span><span id="line-93">      """;</span>
+<span class="source-line-no">094</span><span id="line-94"></span>
+<span class="source-line-no">095</span><span id="line-95">   @Override /* Overridden from RestConverter */</span>
+<span class="source-line-no">096</span><span id="line-96">   @SuppressWarnings({</span>
+<span class="source-line-no">097</span><span id="line-97">      "resource" // The bean store is owned by the RestContext; this only borrows a bean and must not close it.</span>
+<span class="source-line-no">098</span><span id="line-98">   })</span>
+<span class="source-line-no">099</span><span id="line-99">   public Object convert(RestRequest req, Object o) throws InternalServerError {</span>
+<span class="source-line-no">100</span><span id="line-100">      String method = req.getQueryParam("invokeMethod").orElse(null);</span>
+<span class="source-line-no">101</span><span id="line-101">      String args = req.getQueryParam("invokeArgs").orElse(null);</span>
+<span class="source-line-no">102</span><span id="line-102">      if (method == null)</span>
+<span class="source-line-no">103</span><span id="line-103">         return o;</span>
+<span class="source-line-no">104</span><span id="line-104">      try {</span>
+<span class="source-line-no">105</span><span id="line-105">         MarshallingSession bs = req.getMarshallingSession();</span>
+<span class="source-line-no">106</span><span id="line-106">         var swap = bs.getClassMetaForObject(o).getSwap(bs);</span>
+<span class="source-line-no">107</span><span id="line-107">         if (nn(swap))</span>
+<span class="source-line-no">108</span><span id="line-108">            o = swap.swap(bs, o);</span>
+<span class="source-line-no">109</span><span id="line-109">         var settings = req.getContext().getBeanStore().getBean(IntrospectableSettings.class).orElse(IntrospectableSettings.DEFAULT);</span>
+<span class="source-line-no">110</span><span id="line-110">         return ObjectIntrospector.create(o, Json5Parser.DEFAULT).allow(settings.asFilter()).invokeMethod(method, args);</span>
+<span class="source-line-no">111</span><span id="line-111">      } catch (Exception e) {</span>
+<span class="source-line-no">112</span><span id="line-112">         return new InternalServerError(e, "Error occurred trying to invoke method: %s", localizedMessage(e));</span>
+<span class="source-line-no">113</span><span id="line-113">      }</span>
+<span class="source-line-no">114</span><span id="line-114">   }</span>
+<span class="source-line-no">115</span><span id="line-115">}</span>
 
 
 

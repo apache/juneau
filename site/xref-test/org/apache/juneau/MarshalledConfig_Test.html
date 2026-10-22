@@ -41,14 +41,14 @@
 <a class="jxr_linenumber" name="L33" href="#L33">33</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.marshall.collections.*;
 <a class="jxr_linenumber" name="L34" href="#L34">34</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.marshall.json.*;
 <a class="jxr_linenumber" name="L35" href="#L35">35</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.marshall.parser.*;
-<a class="jxr_linenumber" name="L36" href="#L36">36</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.marshall.swap.*;
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.marshall.swap.spi.*;
 <a class="jxr_linenumber" name="L37" href="#L37">37</a>  <strong class="jxr_keyword">import</strong> org.junit.jupiter.api.*;
 <a class="jxr_linenumber" name="L38" href="#L38">38</a>  
 <a class="jxr_linenumber" name="L39" href="#L39">39</a>  @SuppressWarnings({
-<a class="jxr_linenumber" name="L40" href="#L40">40</a>  	<span class="jxr_string">"rawtypes"</span>, <em class="jxr_comment">// Raw types necessary for test bean handling</em>
-<a class="jxr_linenumber" name="L41" href="#L41">41</a>  	<span class="jxr_string">"unchecked"</span>, <em class="jxr_comment">// Iterator/Iterator&lt;String&gt; unchecked conversion in tests</em>
-<a class="jxr_linenumber" name="L42" href="#L42">42</a>  	<span class="jxr_string">"java:S5961"</span>, <em class="jxr_comment">// High assertion count acceptable in comprehensive tests</em>
-<a class="jxr_linenumber" name="L43" href="#L43">43</a>  	<span class="jxr_string">"cast"</span> <em class="jxr_comment">// Explicit cast needed for type testing</em>
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>  	<span class="jxr_string">"cast"</span>, <em class="jxr_comment">// Explicit cast needed for type testing</em>
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>  	<span class="jxr_string">"java:S5961"</span>, <em class="jxr_comment">// High assertion count acceptable in comprehensive tests</em>
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>  	<span class="jxr_string">"rawtypes"</span>, <em class="jxr_comment">// Raw types necessary for test bean handling</em>
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>  	<span class="jxr_string">"unchecked"</span> <em class="jxr_comment">// Iterator/Iterator&lt;String&gt; unchecked conversion in tests</em>
 <a class="jxr_linenumber" name="L44" href="#L44">44</a>  })
 <a class="jxr_linenumber" name="L45" href="#L45">45</a>  <strong class="jxr_keyword">class</strong> MarshalledConfig_Test <strong class="jxr_keyword">extends</strong> TestBase {
 <a class="jxr_linenumber" name="L46" href="#L46">46</a>  
@@ -448,21 +448,21 @@
 <a class="jxr_linenumber" name="L440" href="#L440">440</a> 		@Override <em class="jxr_comment">/* InvocationHandler */</em>
 <a class="jxr_linenumber" name="L441" href="#L441">441</a> 		<strong class="jxr_keyword">public</strong> Object invoke(Object proxy, Method method, Object[] args) <strong class="jxr_keyword">throws</strong> Throwable {
 <a class="jxr_linenumber" name="L442" href="#L442">442</a> 			<strong class="jxr_keyword">var</strong> methodName = method.getName();
-<a class="jxr_linenumber" name="L443" href="#L443">443</a> 			<strong class="jxr_keyword">if</strong> (methodName.equals(<span class="jxr_string">"getA"</span>)) {
+<a class="jxr_linenumber" name="L443" href="#L443">443</a> 			<strong class="jxr_keyword">if</strong> (eq(methodName, <span class="jxr_string">"getA"</span>)) {
 <a class="jxr_linenumber" name="L444" href="#L444">444</a> 				<strong class="jxr_keyword">return</strong> map.get(<span class="jxr_string">"a"</span>);
 <a class="jxr_linenumber" name="L445" href="#L445">445</a> 			}
-<a class="jxr_linenumber" name="L446" href="#L446">446</a> 			<strong class="jxr_keyword">if</strong> (methodName.equals(<span class="jxr_string">"setA"</span>)) {
+<a class="jxr_linenumber" name="L446" href="#L446">446</a> 			<strong class="jxr_keyword">if</strong> (eq(methodName, <span class="jxr_string">"setA"</span>)) {
 <a class="jxr_linenumber" name="L447" href="#L447">447</a> 				map.put(<span class="jxr_string">"a"</span>, args[0]);
 <a class="jxr_linenumber" name="L448" href="#L448">448</a> 				<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L449" href="#L449">449</a> 			}
-<a class="jxr_linenumber" name="L450" href="#L450">450</a> 			<strong class="jxr_keyword">if</strong> (methodName.equals(<span class="jxr_string">"getB"</span>)) {
+<a class="jxr_linenumber" name="L450" href="#L450">450</a> 			<strong class="jxr_keyword">if</strong> (eq(methodName, <span class="jxr_string">"getB"</span>)) {
 <a class="jxr_linenumber" name="L451" href="#L451">451</a> 				<strong class="jxr_keyword">return</strong> map.get(<span class="jxr_string">"b"</span>);
 <a class="jxr_linenumber" name="L452" href="#L452">452</a> 			}
-<a class="jxr_linenumber" name="L453" href="#L453">453</a> 			<strong class="jxr_keyword">if</strong> (methodName.equals(<span class="jxr_string">"setB"</span>)) {
+<a class="jxr_linenumber" name="L453" href="#L453">453</a> 			<strong class="jxr_keyword">if</strong> (eq(methodName, <span class="jxr_string">"setB"</span>)) {
 <a class="jxr_linenumber" name="L454" href="#L454">454</a> 				map.put(<span class="jxr_string">"b"</span>, args[0]);
 <a class="jxr_linenumber" name="L455" href="#L455">455</a> 				<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L456" href="#L456">456</a> 			}
-<a class="jxr_linenumber" name="L457" href="#L457">457</a> 			<strong class="jxr_keyword">if</strong> (methodName.equals(<span class="jxr_string">"toString"</span>)) {
+<a class="jxr_linenumber" name="L457" href="#L457">457</a> 			<strong class="jxr_keyword">if</strong> (eq(methodName, <span class="jxr_string">"toString"</span>)) {
 <a class="jxr_linenumber" name="L458" href="#L458">458</a> 				<strong class="jxr_keyword">return</strong> map.toString();
 <a class="jxr_linenumber" name="L459" href="#L459">459</a> 			}
 <a class="jxr_linenumber" name="L460" href="#L460">460</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;

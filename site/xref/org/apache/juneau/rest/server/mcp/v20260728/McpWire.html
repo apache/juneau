@@ -118,10 +118,10 @@
 <a class="jxr_linenumber" name="L110" href="#L110">110</a> 
 <a class="jxr_linenumber" name="L111" href="#L111">111</a> 	<em class="jxr_comment">// --- neutral -&gt; wire -------------------------------------------------------------------</em>
 <a class="jxr_linenumber" name="L112" href="#L112">112</a> 
-<a class="jxr_linenumber" name="L113" href="#L113">113</a> 	<strong class="jxr_keyword">static</strong> <a name="Tool" href="../../../../../../../org/apache/juneau/bean/mcp/v20260728/Tool.html#Tool">Tool</a> toWire(<a name="McpToolSpec" href="../../../../../../../org/apache/juneau/rest/server/mcp/McpToolSpec.html#McpToolSpec">McpToolSpec</a> value) {
+<a class="jxr_linenumber" name="L113" href="#L113">113</a> 	<strong class="jxr_keyword">static</strong> Tool toWire(<a name="McpToolSpec" href="../../../../../../../org/apache/juneau/rest/server/mcp/McpToolSpec.html#McpToolSpec">McpToolSpec</a> value) {
 <a class="jxr_linenumber" name="L114" href="#L114">114</a> 		<strong class="jxr_keyword">if</strong> (value == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L115" href="#L115">115</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L116" href="#L116">116</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="Tool" href="../../../../../../../org/apache/juneau/bean/mcp/v20260728/Tool.html#Tool">Tool</a>()
+<a class="jxr_linenumber" name="L116" href="#L116">116</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> Tool()
 <a class="jxr_linenumber" name="L117" href="#L117">117</a> 			.setName(value.getName())
 <a class="jxr_linenumber" name="L118" href="#L118">118</a> 			.setDescription(value.getDescription())
 <a class="jxr_linenumber" name="L119" href="#L119">119</a> 			.setInputSchema(toWire(value.getInputSchema()))
@@ -281,7 +281,7 @@
 <a class="jxr_linenumber" name="L273" href="#L273">273</a> 			.setHasMore(x.hasMore()));
 <a class="jxr_linenumber" name="L274" href="#L274">274</a> 	}
 <a class="jxr_linenumber" name="L275" href="#L275">275</a> 
-<a class="jxr_linenumber" name="L276" href="#L276">276</a> 	<strong class="jxr_keyword">static</strong> <a name="Implementation" href="../../../../../../../org/apache/juneau/bean/mcp/v20260728/Implementation.html#Implementation">Implementation</a> serverInfo(<a name="McpServerConfig" href="../../../../../../../org/apache/juneau/rest/server/mcp/McpServerConfig.html#McpServerConfig">McpServerConfig</a> config) {
+<a class="jxr_linenumber" name="L276" href="#L276">276</a> 	<strong class="jxr_keyword">static</strong> <a name="Implementation" href="../../../../../../../org/apache/juneau/bean/mcp/v20260728/Implementation.html#Implementation">Implementation</a> serverInfo(McpServerConfig config) {
 <a class="jxr_linenumber" name="L277" href="#L277">277</a> 		<strong class="jxr_keyword">if</strong> (config.getName() == <strong class="jxr_keyword">null</strong> &amp;&amp; config.getVersion() == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L278" href="#L278">278</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="Implementation" href="../../../../../../../org/apache/juneau/bean/mcp/v20260728/Implementation.html#Implementation">Implementation</a>()
 <a class="jxr_linenumber" name="L279" href="#L279">279</a> 				.setName(McpRevision.DEFAULT_SERVER_NAME)

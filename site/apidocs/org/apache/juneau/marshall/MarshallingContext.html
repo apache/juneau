@@ -84,7 +84,7 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="../commons/bean/BeanTypeResolver.html" title="interface in org.apache.juneau.commons.bean">BeanTypeResolver</a></code>, <code><a href="../commons/conversion/ConversionFinder.html" title="interface in org.apache.juneau.commons.conversion">ConversionFinder</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingContext.html#line-177">MarshallingContext</a></span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingContext.html#line-176">MarshallingContext</a></span>
 <span class="extends-implements">extends <a href="Context.html" title="class in org.apache.juneau.marshall">Context</a>
 implements <a href="../commons/conversion/ConversionFinder.html" title="interface in org.apache.juneau.commons.conversion">ConversionFinder</a>, <a href="../commons/bean/BeanTypeResolver.html" title="interface in org.apache.juneau.commons.bean">BeanTypeResolver</a></span></div>
 <div class="block">Bean context.
@@ -413,7 +413,7 @@ implements <a href="../commons/conversion/ConversionFinder.html" title="interfac
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>final &lt;T&gt;&nbsp;<a href="ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;T&gt;</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getClassMetaForObject(T)" class="member-name-link">getClassMetaForObject</a><wbr>(T&nbsp;o)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Shortcut for calling <code>getClassMeta(o.getClass())</code>.</div>
+<div class="block">Returns the <a href="ClassMeta.html" title="class in org.apache.juneau.marshall"><code>ClassMeta</code></a> for the object's class, unwrapping recognized proxies first.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>protected final <a href="../commons/collections/Cache.html" title="class in org.apache.juneau.commons.collections">Cache</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>,<wbr><a href="ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&gt;</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getCmCache()" class="member-name-link">getCmCache</a>()</code></div>
@@ -510,7 +510,7 @@ implements <a href="../commons/conversion/ConversionFinder.html" title="interfac
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns a session to use for this context.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>final <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="swap/ObjectSwap.html" title="class in org.apache.juneau.marshall.swap">ObjectSwap</a>&lt;?,<wbr>?&gt;&gt;</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>final <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="swap/spi/ObjectSwap.html" title="class in org.apache.juneau.marshall.swap.spi">ObjectSwap</a>&lt;?,<wbr>?&gt;&gt;</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getSwaps()" class="member-name-link">getSwaps</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Java object swaps.</div>
@@ -610,16 +610,15 @@ implements <a href="../commons/conversion/ConversionFinder.html" title="interfac
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Ignore unknown properties with null values.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>protected final boolean</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#isNotABean(org.apache.juneau.commons.reflect.ClassInfo)" class="member-name-link">isNotABean</a><wbr>(<a href="../commons/reflect/ClassInfo.html" title="class in org.apache.juneau.commons.reflect">ClassInfo</a>&nbsp;ci)</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>final boolean</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#isRecordComponentOrder()" class="member-name-link">isRecordComponentOrder</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Determines whether the specified class is ignored as a bean class based on the various exclusion parameters
- specified on this context class.</div>
+<div class="block">Returns whether <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Record.html" title="class or interface in java.lang" class="external-link"><code>Record</code></a> beans use record component order.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>final boolean</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#isUnsortedProperties()" class="member-name-link">isUnsortedProperties</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Returns whether bean properties are unsorted (i.e. in natural JVM order rather than alphabetical).</div>
+<div class="block">Returns whether bean properties are unsorted (i.e. in declaration order rather than alphabetical).</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>final boolean</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#isUseInterfaceProxies()" class="member-name-link">isUseInterfaceProxies</a>()</code></div>
@@ -709,14 +708,14 @@ implements <a href="../commons/conversion/ConversionFinder.html" title="interfac
 <li>
 <section class="detail" id="DEFAULT">
 <h3>DEFAULT</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="MarshallingContext.html" title="class in org.apache.juneau.marshall">MarshallingContext</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingContext.html#line-4021">DEFAULT</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="MarshallingContext.html" title="class in org.apache.juneau.marshall">MarshallingContext</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingContext.html#line-4008">DEFAULT</a></span></div>
 <div class="block">Default config.  All default settings.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="DEFAULT_SESSION">
 <h3>DEFAULT_SESSION</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="MarshallingSession.html" title="class in org.apache.juneau.marshall">MarshallingSession</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingContext.html#line-4024">DEFAULT_SESSION</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="MarshallingSession.html" title="class in org.apache.juneau.marshall">MarshallingSession</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingContext.html#line-4011">DEFAULT_SESSION</a></span></div>
 <div class="block">Default reusable unmodifiable session.  Can be used to avoid overhead of creating a session (for creating BeanMaps for example).</div>
 </section>
 </li>
@@ -731,7 +730,7 @@ implements <a href="../commons/conversion/ConversionFinder.html" title="interfac
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.marshall.MarshallingContext.Builder)">
 <h3>MarshallingContext</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingContext.html#line-4121">MarshallingContext</a></span><wbr><span class="parameters">(<a href="MarshallingContext.Builder.html" title="class in org.apache.juneau.marshall">MarshallingContext.Builder</a>&nbsp;builder)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingContext.html#line-4114">MarshallingContext</a></span><wbr><span class="parameters">(<a href="MarshallingContext.Builder.html" title="class in org.apache.juneau.marshall">MarshallingContext.Builder</a>&nbsp;builder)</span></div>
 <div class="block">Constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -751,7 +750,7 @@ implements <a href="../commons/conversion/ConversionFinder.html" title="interfac
 <li>
 <section class="detail" id="create()">
 <h3>create</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="MarshallingContext.Builder.html" title="class in org.apache.juneau.marshall">MarshallingContext.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingContext.html#line-4031">create</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="MarshallingContext.Builder.html" title="class in org.apache.juneau.marshall">MarshallingContext.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingContext.html#line-4018">create</a></span>()</div>
 <div class="block">Creates a new builder for this object.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -762,7 +761,7 @@ implements <a href="../commons/conversion/ConversionFinder.html" title="interfac
 <li>
 <section class="detail" id="convertToType(java.lang.Object,java.lang.Class)">
 <h3>convertToType</h3>
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingContext.html#line-4266">convertToType</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value,
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingContext.html#line-4261">convertToType</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;T&gt;&nbsp;type)</span>
                           throws <span class="exceptions"><a href="InvalidDataConversionException.html" title="class in org.apache.juneau.marshall">InvalidDataConversionException</a></span></div>
 <div class="block">Converts the specified value to the specified class type.
@@ -793,7 +792,7 @@ implements <a href="../commons/conversion/ConversionFinder.html" title="interfac
 <li>
 <section class="detail" id="copy()">
 <h3>copy</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MarshallingContext.Builder.html" title="class in org.apache.juneau.marshall">MarshallingContext.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingContext.html#line-4270">copy</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MarshallingContext.Builder.html" title="class in org.apache.juneau.marshall">MarshallingContext.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingContext.html#line-4265">copy</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="Context.html#copy()">Context</a></code></span></div>
 <div class="block">Creates a builder from this context object.
 
@@ -810,7 +809,7 @@ implements <a href="../commons/conversion/ConversionFinder.html" title="interfac
 <li>
 <section class="detail" id="createSession()">
 <h3>createSession</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MarshallingSession.Builder.html" title="class in org.apache.juneau.marshall">MarshallingSession.Builder</a>&lt;?&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingContext.html#line-4275">createSession</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MarshallingSession.Builder.html" title="class in org.apache.juneau.marshall">MarshallingSession.Builder</a>&lt;?&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingContext.html#line-4270">createSession</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="Context.html#createSession()">Context</a></code></span></div>
 <div class="block">Create a session builder based on the properties defined on this context.
 
@@ -828,7 +827,7 @@ implements <a href="../commons/conversion/ConversionFinder.html" title="interfac
 <li>
 <section class="detail" id="getBeanClassVisibility()">
 <h3>getBeanClassVisibility</h3>
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type"><a href="../commons/reflect/Visibility.html" title="enum class in org.apache.juneau.commons.reflect">Visibility</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingContext.html#line-4287">getBeanClassVisibility</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type"><a href="../commons/reflect/Visibility.html" title="enum class in org.apache.juneau.commons.reflect">Visibility</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingContext.html#line-4282">getBeanClassVisibility</a></span>()</div>
 <div class="block">Minimum bean class visibility.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -845,7 +844,7 @@ implements <a href="../commons/conversion/ConversionFinder.html" title="interfac
 <li>
 <section class="detail" id="getBeanConstructorVisibility()">
 <h3>getBeanConstructorVisibility</h3>
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type"><a href="../commons/reflect/Visibility.html" title="enum class in org.apache.juneau.commons.reflect">Visibility</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingContext.html#line-4296">getBeanConstructorVisibility</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type"><a href="../commons/reflect/Visibility.html" title="enum class in org.apache.juneau.commons.reflect">Visibility</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingContext.html#line-4291">getBeanConstructorVisibility</a></span>()</div>
 <div class="block">Minimum bean constructor visibility.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -862,7 +861,7 @@ implements <a href="../commons/conversion/ConversionFinder.html" title="interfac
 <li>
 <section class="detail" id="getBeanStore()">
 <h3>getBeanStore</h3>
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type"><a href="../commons/inject/BeanStore.html" title="interface in org.apache.juneau.commons.inject">BeanStore</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingContext.html#line-4304">getBeanStore</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type"><a href="../commons/inject/BeanStore.html" title="interface in org.apache.juneau.commons.inject">BeanStore</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingContext.html#line-4299">getBeanStore</a></span>()</div>
 <div class="block">The bean store used for factory-based instantiation.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -879,7 +878,7 @@ implements <a href="../commons/conversion/ConversionFinder.html" title="interfac
 <li>
 <section class="detail" id="getBeanDictionary()">
 <h3>getBeanDictionary</h3>
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../commons/reflect/ClassInfo.html" title="class in org.apache.juneau.commons.reflect">ClassInfo</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingContext.html#line-4315">getBeanDictionary</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../commons/reflect/ClassInfo.html" title="class in org.apache.juneau.commons.reflect">ClassInfo</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingContext.html#line-4310">getBeanDictionary</a></span>()</div>
 <div class="block">Bean dictionary.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -898,7 +897,7 @@ implements <a href="../commons/conversion/ConversionFinder.html" title="interfac
 <li>
 <section class="detail" id="getBeanConfigContext()">
 <h3>getBeanConfigContext</h3>
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type"><a href="../commons/bean/BeanConfigContext.html" title="class in org.apache.juneau.commons.bean">BeanConfigContext</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingContext.html#line-4331">getBeanConfigContext</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type"><a href="../commons/bean/BeanConfigContext.html" title="class in org.apache.juneau.commons.bean">BeanConfigContext</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingContext.html#line-4326">getBeanConfigContext</a></span>()</div>
 <div class="block">Returns the <a href="../commons/bean/BeanConfigContext.html" title="class in org.apache.juneau.commons.bean"><code>BeanConfigContext</code></a> snapshot for this marshalling context.
 
  <p>
@@ -918,7 +917,7 @@ implements <a href="../commons/conversion/ConversionFinder.html" title="interfac
 <li>
 <section class="detail" id="getBeanFieldVisibility()">
 <h3>getBeanFieldVisibility</h3>
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type"><a href="../commons/reflect/Visibility.html" title="enum class in org.apache.juneau.commons.reflect">Visibility</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingContext.html#line-4341">getBeanFieldVisibility</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type"><a href="../commons/reflect/Visibility.html" title="enum class in org.apache.juneau.commons.reflect">Visibility</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingContext.html#line-4336">getBeanFieldVisibility</a></span>()</div>
 <div class="block">Minimum bean field visibility.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -935,7 +934,7 @@ implements <a href="../commons/conversion/ConversionFinder.html" title="interfac
 <li>
 <section class="detail" id="getConverter()">
 <h3>getConverter</h3>
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type"><a href="../commons/conversion/ConfigurableConverter.html" title="class in org.apache.juneau.commons.conversion">ConfigurableConverter</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingContext.html#line-4348">getConverter</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type"><a href="../commons/conversion/ConfigurableConverter.html" title="class in org.apache.juneau.commons.conversion">ConfigurableConverter</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingContext.html#line-4343">getConverter</a></span>()</div>
 <div class="block">Returns the converter for this context.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -946,7 +945,7 @@ implements <a href="../commons/conversion/ConversionFinder.html" title="interfac
 <li>
 <section class="detail" id="findConversion(java.lang.Class,java.lang.Class)">
 <h3>findConversion</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../commons/conversion/Conversion.html" title="interface in org.apache.juneau.commons.conversion">Conversion</a>&lt;?,<wbr>?&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingContext.html#line-4371">findConversion</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;&nbsp;inType,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../commons/conversion/Conversion.html" title="interface in org.apache.juneau.commons.conversion">Conversion</a>&lt;?,<wbr>?&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingContext.html#line-4384">findConversion</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;&nbsp;inType,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;&nbsp;outType)</span></div>
 <div class="block">Implements <a href="../commons/conversion/ConversionFinder.html" title="interface in org.apache.juneau.commons.conversion"><code>ConversionFinder</code></a> to provide all MarshallingContext-specific type conversions that cannot
  be expressed in <a href="../commons/conversion/BasicConverter.html" title="class in org.apache.juneau.commons.conversion"><code>BasicConverter</code></a> (which has no dependency on <code>juneau-marshall</code>).
@@ -977,7 +976,7 @@ implements <a href="../commons/conversion/ConversionFinder.html" title="interfac
 <li>
 <section class="detail" id="getBeanMeta(java.lang.Class)">
 <h3>getBeanMeta</h3>
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type"><a href="../commons/bean/BeanMeta.html" title="class in org.apache.juneau.commons.bean">BeanMeta</a>&lt;T&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingContext.html#line-4814">getBeanMeta</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;T&gt;&nbsp;c)</span></div>
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type"><a href="../commons/bean/BeanMeta.html" title="class in org.apache.juneau.commons.bean">BeanMeta</a>&lt;T&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingContext.html#line-4831">getBeanMeta</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;T&gt;&nbsp;c)</span></div>
 <div class="block">Returns the <a href="../commons/bean/BeanMeta.html" title="class in org.apache.juneau.commons.bean"><code>BeanMeta</code></a> class for the specified class.</div>
 <dl class="notes">
 <dt>Type Parameters:</dt>
@@ -994,7 +993,7 @@ implements <a href="../commons/conversion/ConversionFinder.html" title="interfac
 <li>
 <section class="detail" id="getBeanMethodVisibility()">
 <h3>getBeanMethodVisibility</h3>
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type"><a href="../commons/reflect/Visibility.html" title="enum class in org.apache.juneau.commons.reflect">Visibility</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingContext.html#line-4826">getBeanMethodVisibility</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type"><a href="../commons/reflect/Visibility.html" title="enum class in org.apache.juneau.commons.reflect">Visibility</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingContext.html#line-4843">getBeanMethodVisibility</a></span>()</div>
 <div class="block">Minimum bean method visibility.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -1011,7 +1010,7 @@ implements <a href="../commons/conversion/ConversionFinder.html" title="interfac
 <li>
 <section class="detail" id="getBeanTypePropertyName()">
 <h3>getBeanTypePropertyName</h3>
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingContext.html#line-4836">getBeanTypePropertyName</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingContext.html#line-4853">getBeanTypePropertyName</a></span>()</div>
 <div class="block">Bean type property name.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -1028,7 +1027,7 @@ implements <a href="../commons/conversion/ConversionFinder.html" title="interfac
 <li>
 <section class="detail" id="getClassMeta(java.lang.Class)">
 <h3>getClassMeta</h3>
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type"><a href="ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;T&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingContext.html#line-4848">getClassMeta</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;T&gt;&nbsp;type)</span></div>
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type"><a href="ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;T&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingContext.html#line-4865">getClassMeta</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;T&gt;&nbsp;type)</span></div>
 <div class="block">Construct a <code>ClassMeta</code> wrapper around a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link"><code>Class</code></a> object.</div>
 <dl class="notes">
 <dt>Type Parameters:</dt>
@@ -1045,7 +1044,7 @@ implements <a href="../commons/conversion/ConversionFinder.html" title="interfac
 <li>
 <section class="detail" id="getClassMeta(java.lang.reflect.Type,java.lang.reflect.Type...)">
 <h3>getClassMeta</h3>
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type"><a href="ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;T&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingContext.html#line-4896">getClassMeta</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Type.html" title="class or interface in java.lang.reflect" class="external-link">Type</a>&nbsp;type,
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type"><a href="ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;T&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingContext.html#line-4913">getClassMeta</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Type.html" title="class or interface in java.lang.reflect" class="external-link">Type</a>&nbsp;type,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Type.html" title="class or interface in java.lang.reflect" class="external-link">Type</a>...&nbsp;args)</span></div>
 <div class="block">Used to resolve <c>ClassMetas</c> of type <c>Collection</c> and <c>Map</c> that have
  <c>ClassMeta</c> values that themselves could be collections or maps.
@@ -1092,13 +1091,19 @@ implements <a href="../commons/conversion/ConversionFinder.html" title="interfac
 <li>
 <section class="detail" id="getClassMetaForObject(T)">
 <h3 id="getClassMetaForObject(java.lang.Object)">getClassMetaForObject</h3>
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type"><a href="ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;T&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingContext.html#line-4926">getClassMetaForObject</a></span><wbr><span class="parameters">(T&nbsp;o)</span></div>
-<div class="block">Shortcut for calling <code>getClassMeta(o.getClass())</code>.</div>
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type"><a href="ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;T&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingContext.html#line-4949">getClassMetaForObject</a></span><wbr><span class="parameters">(T&nbsp;o)</span></div>
+<div class="block">Returns the <a href="ClassMeta.html" title="class in org.apache.juneau.marshall"><code>ClassMeta</code></a> for the object's class, unwrapping recognized proxies first.
+
+ <p>
+ Same contract as <a href="MarshallingSession.html#getClassMetaForObject(java.lang.Object,org.apache.juneau.marshall.ClassMeta)"><code>MarshallingSession.getClassMetaForObject(Object, ClassMeta)</code></a>:
+ <a href="../commons/utils/ClassUtils.html#getProxyFor(java.lang.Object)"><code>ClassUtils.getProxyFor(Object)</code></a> if non-<jk>null</jk>,
+ else <code>o.getClass()</code>. Used by object-tools and other context callers; parsers do not
+ call this method.</div>
 <dl class="notes">
 <dt>Type Parameters:</dt>
 <dd><code>T</code> - The class of the object being passed in.</dd>
 <dt>Parameters:</dt>
-<dd><code>o</code> - The class to find the class type for.
+<dd><code>o</code> - The object to find the class type for.
    <br>Cannot be <jk>null</jk>.</dd>
 <dt>Returns:</dt>
 <dd>The ClassMeta object.</dd>
@@ -1108,7 +1113,7 @@ implements <a href="../commons/conversion/ConversionFinder.html" title="interfac
 <li>
 <section class="detail" id="getDefaultLocale()">
 <h3>getDefaultLocale</h3>
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Locale.html" title="class or interface in java.util" class="external-link">Locale</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingContext.html#line-4938">getDefaultLocale</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Locale.html" title="class or interface in java.util" class="external-link">Locale</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingContext.html#line-4963">getDefaultLocale</a></span>()</div>
 <div class="block">Locale.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -1125,7 +1130,7 @@ implements <a href="../commons/conversion/ConversionFinder.html" title="interfac
 <li>
 <section class="detail" id="getDefaultMediaType()">
 <h3>getDefaultMediaType</h3>
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type"><a href="../commons/http/MediaType.html" title="class in org.apache.juneau.commons.http">MediaType</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingContext.html#line-4948">getDefaultMediaType</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type"><a href="../commons/http/MediaType.html" title="class in org.apache.juneau.commons.http">MediaType</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingContext.html#line-4973">getDefaultMediaType</a></span>()</div>
 <div class="block">Media type.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -1143,7 +1148,7 @@ implements <a href="../commons/conversion/ConversionFinder.html" title="interfac
 <li>
 <section class="detail" id="getDefaultTimeZone()">
 <h3>getDefaultTimeZone</h3>
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/TimeZone.html" title="class or interface in java.util" class="external-link">TimeZone</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingContext.html#line-4958">getDefaultTimeZone</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/TimeZone.html" title="class or interface in java.util" class="external-link">TimeZone</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingContext.html#line-4983">getDefaultTimeZone</a></span>()</div>
 <div class="block">Time zone.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -1161,7 +1166,7 @@ implements <a href="../commons/conversion/ConversionFinder.html" title="interfac
 <li>
 <section class="detail" id="getNotBeanPackagesNames()">
 <h3>getNotBeanPackagesNames</h3>
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingContext.html#line-4970">getNotBeanPackagesNames</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingContext.html#line-4995">getNotBeanPackagesNames</a></span>()</div>
 <div class="block">Bean package exclusions.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -1181,7 +1186,7 @@ implements <a href="../commons/conversion/ConversionFinder.html" title="interfac
 <li>
 <section class="detail" id="getPropertyNamer()">
 <h3>getPropertyNamer</h3>
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type"><a href="../commons/bean/PropertyNamer.html" title="interface in org.apache.juneau.commons.bean">PropertyNamer</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingContext.html#line-4979">getPropertyNamer</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type"><a href="../commons/bean/PropertyNamer.html" title="interface in org.apache.juneau.commons.bean">PropertyNamer</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingContext.html#line-5004">getPropertyNamer</a></span>()</div>
 <div class="block">Bean property namer.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -1198,7 +1203,7 @@ implements <a href="../commons/conversion/ConversionFinder.html" title="interfac
 <li>
 <section class="detail" id="getSession()">
 <h3>getSession</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MarshallingSession.html" title="class in org.apache.juneau.marshall">MarshallingSession</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingContext.html#line-4981">getSession</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MarshallingSession.html" title="class in org.apache.juneau.marshall">MarshallingSession</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingContext.html#line-5006">getSession</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="Context.html#getSession()">Context</a></code></span></div>
 <div class="block">Returns a session to use for this context.
 
@@ -1215,7 +1220,7 @@ implements <a href="../commons/conversion/ConversionFinder.html" title="interfac
 <li>
 <section class="detail" id="getSwaps()">
 <h3>getSwaps</h3>
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="swap/ObjectSwap.html" title="class in org.apache.juneau.marshall.swap">ObjectSwap</a>&lt;?,<wbr>?&gt;&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingContext.html#line-4993">getSwaps</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="swap/spi/ObjectSwap.html" title="class in org.apache.juneau.marshall.swap.spi">ObjectSwap</a>&lt;?,<wbr>?&gt;&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingContext.html#line-5018">getSwaps</a></span>()</div>
 <div class="block">Java object swaps.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -1234,7 +1239,7 @@ implements <a href="../commons/conversion/ConversionFinder.html" title="interfac
 <li>
 <section class="detail" id="hasSameCache(org.apache.juneau.marshall.MarshallingContext)">
 <h3>hasSameCache</h3>
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingContext.html#line-5005">hasSameCache</a></span><wbr><span class="parameters">(<a href="MarshallingContext.html" title="class in org.apache.juneau.marshall">MarshallingContext</a>&nbsp;bc)</span></div>
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingContext.html#line-5030">hasSameCache</a></span><wbr><span class="parameters">(<a href="MarshallingContext.html" title="class in org.apache.juneau.marshall">MarshallingContext</a>&nbsp;bc)</span></div>
 <div class="block">Returns <jk>true</jk> if the specified bean context shares the same cache as this bean context.
 
  <p>
@@ -1251,7 +1256,7 @@ implements <a href="../commons/conversion/ConversionFinder.html" title="interfac
 <li>
 <section class="detail" id="isBeanMapPutReturnsOldValue()">
 <h3>isBeanMapPutReturnsOldValue</h3>
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingContext.html#line-5018">isBeanMapPutReturnsOldValue</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingContext.html#line-5043">isBeanMapPutReturnsOldValue</a></span>()</div>
 <div class="block">BeanMap.put() returns old property value.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -1269,7 +1274,7 @@ implements <a href="../commons/conversion/ConversionFinder.html" title="interfac
 <li>
 <section class="detail" id="isBeansRequireDefaultConstructor()">
 <h3>isBeansRequireDefaultConstructor</h3>
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingContext.html#line-5028">isBeansRequireDefaultConstructor</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingContext.html#line-5053">isBeansRequireDefaultConstructor</a></span>()</div>
 <div class="block">Beans require no-arg constructors.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -1287,7 +1292,7 @@ implements <a href="../commons/conversion/ConversionFinder.html" title="interfac
 <li>
 <section class="detail" id="isBeansRequireSerializable()">
 <h3>isBeansRequireSerializable</h3>
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingContext.html#line-5038">isBeansRequireSerializable</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingContext.html#line-5063">isBeansRequireSerializable</a></span>()</div>
 <div class="block">Beans require Serializable interface.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -1305,7 +1310,7 @@ implements <a href="../commons/conversion/ConversionFinder.html" title="interfac
 <li>
 <section class="detail" id="isBeansRequireSettersForGetters()">
 <h3>isBeansRequireSettersForGetters</h3>
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingContext.html#line-5048">isBeansRequireSettersForGetters</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingContext.html#line-5073">isBeansRequireSettersForGetters</a></span>()</div>
 <div class="block">Beans require setters for getters.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -1323,7 +1328,7 @@ implements <a href="../commons/conversion/ConversionFinder.html" title="interfac
 <li>
 <section class="detail" id="isBeansRequireSomeProperties()">
 <h3>isBeansRequireSomeProperties</h3>
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingContext.html#line-5058">isBeansRequireSomeProperties</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingContext.html#line-5083">isBeansRequireSomeProperties</a></span>()</div>
 <div class="block">Beans require at least one property.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -1341,7 +1346,7 @@ implements <a href="../commons/conversion/ConversionFinder.html" title="interfac
 <li>
 <section class="detail" id="isFindFluentSetters()">
 <h3>isFindFluentSetters</h3>
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingContext.html#line-5070">isFindFluentSetters</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingContext.html#line-5095">isFindFluentSetters</a></span>()</div>
 <div class="block">Find fluent setters.
 
  <h5 class='section'>Description:</h5>
@@ -1361,7 +1366,7 @@ implements <a href="../commons/conversion/ConversionFinder.html" title="interfac
 <li>
 <section class="detail" id="isIgnoreInvocationExceptionsOnGetters()">
 <h3>isIgnoreInvocationExceptionsOnGetters</h3>
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingContext.html#line-5079">isIgnoreInvocationExceptionsOnGetters</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingContext.html#line-5104">isIgnoreInvocationExceptionsOnGetters</a></span>()</div>
 <div class="block">Ignore invocation errors on getters.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -1378,7 +1383,7 @@ implements <a href="../commons/conversion/ConversionFinder.html" title="interfac
 <li>
 <section class="detail" id="isIgnoreInvocationExceptionsOnSetters()">
 <h3>isIgnoreInvocationExceptionsOnSetters</h3>
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingContext.html#line-5088">isIgnoreInvocationExceptionsOnSetters</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingContext.html#line-5113">isIgnoreInvocationExceptionsOnSetters</a></span>()</div>
 <div class="block">Ignore invocation errors on setters.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -1395,7 +1400,7 @@ implements <a href="../commons/conversion/ConversionFinder.html" title="interfac
 <li>
 <section class="detail" id="isIgnoreMissingSetters()">
 <h3>isIgnoreMissingSetters</h3>
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingContext.html#line-5097">isIgnoreMissingSetters</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingContext.html#line-5122">isIgnoreMissingSetters</a></span>()</div>
 <div class="block">Silently ignore missing setters.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -1412,7 +1417,7 @@ implements <a href="../commons/conversion/ConversionFinder.html" title="interfac
 <li>
 <section class="detail" id="isIgnoreUnknownBeanProperties()">
 <h3>isIgnoreUnknownBeanProperties</h3>
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingContext.html#line-5107">isIgnoreUnknownBeanProperties</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingContext.html#line-5132">isIgnoreUnknownBeanProperties</a></span>()</div>
 <div class="block">Ignore unknown properties.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -1430,7 +1435,7 @@ implements <a href="../commons/conversion/ConversionFinder.html" title="interfac
 <li>
 <section class="detail" id="isValidateSchema()">
 <h3>isValidateSchema</h3>
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingContext.html#line-5118">isValidateSchema</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingContext.html#line-5143">isValidateSchema</a></span>()</div>
 <div class="block">Schema validation mode.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -1450,7 +1455,7 @@ implements <a href="../commons/conversion/ConversionFinder.html" title="interfac
 <li>
 <section class="detail" id="isIgnoreUnknownEnumValues()">
 <h3>isIgnoreUnknownEnumValues</h3>
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingContext.html#line-5127">isIgnoreUnknownEnumValues</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingContext.html#line-5152">isIgnoreUnknownEnumValues</a></span>()</div>
 <div class="block">Ignore unknown enum values.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -1467,7 +1472,7 @@ implements <a href="../commons/conversion/ConversionFinder.html" title="interfac
 <li>
 <section class="detail" id="isIgnoreUnknownNullBeanProperties()">
 <h3>isIgnoreUnknownNullBeanProperties</h3>
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingContext.html#line-5136">isIgnoreUnknownNullBeanProperties</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingContext.html#line-5161">isIgnoreUnknownNullBeanProperties</a></span>()</div>
 <div class="block">Ignore unknown properties with null values.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -1484,11 +1489,11 @@ implements <a href="../commons/conversion/ConversionFinder.html" title="interfac
 <li>
 <section class="detail" id="isUnsortedProperties()">
 <h3>isUnsortedProperties</h3>
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingContext.html#line-5145">isUnsortedProperties</a></span>()</div>
-<div class="block">Returns whether bean properties are unsorted (i.e. in natural JVM order rather than alphabetical).</div>
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingContext.html#line-5170">isUnsortedProperties</a></span>()</div>
+<div class="block">Returns whether bean properties are unsorted (i.e. in declaration order rather than alphabetical).</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd><jk>true</jk> if bean properties are in natural JVM order; <jk>false</jk> (the default) means alphabetical order.</dd>
+<dd><jk>true</jk> if bean properties are in declaration order; <jk>false</jk> (the default) means alphabetical order.</dd>
 <dt>See Also:</dt>
 <dd>
 <ul class="see-list-long">
@@ -1499,9 +1504,26 @@ implements <a href="../commons/conversion/ConversionFinder.html" title="interfac
 </section>
 </li>
 <li>
+<section class="detail" id="isRecordComponentOrder()">
+<h3>isRecordComponentOrder</h3>
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingContext.html#line-5178">isRecordComponentOrder</a></span>()</div>
+<div class="block">Returns whether <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Record.html" title="class or interface in java.lang" class="external-link"><code>Record</code></a> beans use record component order.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd><jk>true</jk> if record properties are in component order regardless of <a href="#isUnsortedProperties()"><code>isUnsortedProperties()</code></a>.</dd>
+<dt>See Also:</dt>
+<dd>
+<ul class="see-list-long">
+<li><a href="MarshallingContext.Builder.html#recordComponentOrder()"><code>MarshallingContext.Builder.recordComponentOrder()</code></a></li>
+</ul>
+</dd>
+</dl>
+</section>
+</li>
+<li>
 <section class="detail" id="isUseInterfaceProxies()">
 <h3>isUseInterfaceProxies</h3>
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingContext.html#line-5155">isUseInterfaceProxies</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingContext.html#line-5188">isUseInterfaceProxies</a></span>()</div>
 <div class="block">Use interface proxies.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -1519,7 +1541,7 @@ implements <a href="../commons/conversion/ConversionFinder.html" title="interfac
 <li>
 <section class="detail" id="isUseJavaBeanIntrospector()">
 <h3>isUseJavaBeanIntrospector</h3>
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingContext.html#line-5164">isUseJavaBeanIntrospector</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingContext.html#line-5197">isUseJavaBeanIntrospector</a></span>()</div>
 <div class="block">Use Java Introspector.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -1536,7 +1558,7 @@ implements <a href="../commons/conversion/ConversionFinder.html" title="interfac
 <li>
 <section class="detail" id="newBeanMap(java.lang.Class)">
 <h3>newBeanMap</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type"><a href="../commons/bean/BeanMap.html" title="class in org.apache.juneau.commons.bean">BeanMap</a>&lt;T&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingContext.html#line-5185">newBeanMap</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;T&gt;&nbsp;c)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type"><a href="../commons/bean/BeanMap.html" title="class in org.apache.juneau.commons.bean">BeanMap</a>&lt;T&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingContext.html#line-5218">newBeanMap</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;T&gt;&nbsp;c)</span></div>
 <div class="block">Creates a new <a href="../commons/bean/BeanMap.html" title="class in org.apache.juneau.commons.bean"><code>BeanMap</code></a> object (a modifiable <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link"><code>Map</code></a>) of the given class with uninitialized
  property values.
 
@@ -1568,7 +1590,7 @@ implements <a href="../commons/conversion/ConversionFinder.html" title="interfac
 <li>
 <section class="detail" id="toBeanMap(T)">
 <h3 id="toBeanMap(java.lang.Object)">toBeanMap</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type"><a href="../commons/bean/BeanMap.html" title="class in org.apache.juneau.commons.bean">BeanMap</a>&lt;T&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingContext.html#line-5208">toBeanMap</a></span><wbr><span class="parameters">(T&nbsp;object)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type"><a href="../commons/bean/BeanMap.html" title="class in org.apache.juneau.commons.bean">BeanMap</a>&lt;T&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingContext.html#line-5241">toBeanMap</a></span><wbr><span class="parameters">(T&nbsp;object)</span></div>
 <div class="block">Wraps an object inside a <a href="../commons/bean/BeanMap.html" title="class in org.apache.juneau.commons.bean"><code>BeanMap</code></a> object (a modifiable <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link"><code>Map</code></a>).
 
  <p>
@@ -1599,7 +1621,7 @@ implements <a href="../commons/conversion/ConversionFinder.html" title="interfac
 <li>
 <section class="detail" id="getBeanRegistry()">
 <h3>getBeanRegistry</h3>
-<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type"><a href="BeanRegistry.html" title="class in org.apache.juneau.marshall">BeanRegistry</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingContext.html#line-5218">getBeanRegistry</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type"><a href="BeanRegistry.html" title="class in org.apache.juneau.marshall">BeanRegistry</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingContext.html#line-5251">getBeanRegistry</a></span>()</div>
 <div class="block">Returns the lookup table for resolving bean types by name.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -1610,7 +1632,7 @@ implements <a href="../commons/conversion/ConversionFinder.html" title="interfac
 <li>
 <section class="detail" id="getBeanToStringSerializer()">
 <h3>getBeanToStringSerializer</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="serializer/WriterSerializer.html" title="class in org.apache.juneau.marshall.serializer">WriterSerializer</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingContext.html#line-5226">getBeanToStringSerializer</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="serializer/WriterSerializer.html" title="class in org.apache.juneau.marshall.serializer">WriterSerializer</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingContext.html#line-5259">getBeanToStringSerializer</a></span>()</div>
 <div class="block">Returns the serializer to use for serializing beans when using the <a href="MarshallingSession.html#convertToType(java.lang.Object,java.lang.Object)"><code>MarshallingSession.convertToType(Object, Class)</code></a>
  and related methods.</div>
 <dl class="notes">
@@ -1622,7 +1644,7 @@ implements <a href="../commons/conversion/ConversionFinder.html" title="interfac
 <li>
 <section class="detail" id="getCmCache()">
 <h3>getCmCache</h3>
-<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type"><a href="../commons/collections/Cache.html" title="class in org.apache.juneau.commons.collections">Cache</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>,<wbr><a href="ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingContext.html#line-5235">getCmCache</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type"><a href="../commons/collections/Cache.html" title="class in org.apache.juneau.commons.collections">Cache</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>,<wbr><a href="ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingContext.html#line-5268">getCmCache</a></span>()</div>
 <div class="block">Class metadata cache.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -1633,7 +1655,7 @@ implements <a href="../commons/conversion/ConversionFinder.html" title="interfac
 <li>
 <section class="detail" id="getHashKey()">
 <h3>getHashKey</h3>
-<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type"><a href="../commons/collections/HashKey.html" title="class in org.apache.juneau.commons.collections">HashKey</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingContext.html#line-5243">getHashKey</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type"><a href="../commons/collections/HashKey.html" title="class in org.apache.juneau.commons.collections">HashKey</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingContext.html#line-5276">getHashKey</a></span>()</div>
 <div class="block">Hash key.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -1644,7 +1666,7 @@ implements <a href="../commons/conversion/ConversionFinder.html" title="interfac
 <li>
 <section class="detail" id="getLocale()">
 <h3>getLocale</h3>
-<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Locale.html" title="class or interface in java.util" class="external-link">Locale</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingContext.html#line-5250">getLocale</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Locale.html" title="class or interface in java.util" class="external-link">Locale</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingContext.html#line-5283">getLocale</a></span>()</div>
 <div class="block">Locale.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -1655,7 +1677,7 @@ implements <a href="../commons/conversion/ConversionFinder.html" title="interfac
 <li>
 <section class="detail" id="getActiveView()">
 <h3>getActiveView</h3>
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingContext.html#line-5262">getActiveView</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingContext.html#line-5295">getActiveView</a></span>()</div>
 <div class="block">The default active view for sessions created from this context.
 
  <p>
@@ -1672,7 +1694,7 @@ implements <a href="../commons/conversion/ConversionFinder.html" title="interfac
 <li>
 <section class="detail" id="isDefaultViewInclusion()">
 <h3>isDefaultViewInclusion</h3>
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingContext.html#line-5276">isDefaultViewInclusion</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingContext.html#line-5309">isDefaultViewInclusion</a></span>()</div>
 <div class="block">Default-view-inclusion policy.
 
  <p>
@@ -1691,7 +1713,7 @@ implements <a href="../commons/conversion/ConversionFinder.html" title="interfac
 <li>
 <section class="detail" id="getMediaType()">
 <h3>getMediaType</h3>
-<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type"><a href="../commons/http/MediaType.html" title="class in org.apache.juneau.commons.http">MediaType</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingContext.html#line-5283">getMediaType</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type"><a href="../commons/http/MediaType.html" title="class in org.apache.juneau.commons.http">MediaType</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingContext.html#line-5316">getMediaType</a></span>()</div>
 <div class="block">Media type.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -1702,7 +1724,7 @@ implements <a href="../commons/conversion/ConversionFinder.html" title="interfac
 <li>
 <section class="detail" id="getNotBeanClasses()">
 <h3>getNotBeanClasses</h3>
-<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../commons/reflect/ClassInfo.html" title="class in org.apache.juneau.commons.reflect">ClassInfo</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingContext.html#line-5294">getNotBeanClasses</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../commons/reflect/ClassInfo.html" title="class in org.apache.juneau.commons.reflect">ClassInfo</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingContext.html#line-5327">getNotBeanClasses</a></span>()</div>
 <div class="block">Bean class exclusions.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -1721,7 +1743,7 @@ implements <a href="../commons/conversion/ConversionFinder.html" title="interfac
 <li>
 <section class="detail" id="getTimeZone()">
 <h3>getTimeZone</h3>
-<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/TimeZone.html" title="class or interface in java.util" class="external-link">TimeZone</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingContext.html#line-5301">getTimeZone</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/TimeZone.html" title="class or interface in java.util" class="external-link">TimeZone</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingContext.html#line-5334">getTimeZone</a></span>()</div>
 <div class="block">Time zone.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -1732,7 +1754,7 @@ implements <a href="../commons/conversion/ConversionFinder.html" title="interfac
 <li>
 <section class="detail" id="getDurationFormat()">
 <h3>getDurationFormat</h3>
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type"><a href="DurationFormat.html" title="enum class in org.apache.juneau.marshall">DurationFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingContext.html#line-5308">getDurationFormat</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type"><a href="DurationFormat.html" title="enum class in org.apache.juneau.marshall">DurationFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingContext.html#line-5341">getDurationFormat</a></span>()</div>
 <div class="block">Duration wire format.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -1743,7 +1765,7 @@ implements <a href="../commons/conversion/ConversionFinder.html" title="interfac
 <li>
 <section class="detail" id="getPeriodFormat()">
 <h3>getPeriodFormat</h3>
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type"><a href="PeriodFormat.html" title="enum class in org.apache.juneau.marshall">PeriodFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingContext.html#line-5315">getPeriodFormat</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type"><a href="PeriodFormat.html" title="enum class in org.apache.juneau.marshall">PeriodFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingContext.html#line-5348">getPeriodFormat</a></span>()</div>
 <div class="block">Period wire format.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -1754,7 +1776,7 @@ implements <a href="../commons/conversion/ConversionFinder.html" title="interfac
 <li>
 <section class="detail" id="getCalendarFormat()">
 <h3>getCalendarFormat</h3>
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type"><a href="CalendarFormat.html" title="enum class in org.apache.juneau.marshall">CalendarFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingContext.html#line-5322">getCalendarFormat</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type"><a href="CalendarFormat.html" title="enum class in org.apache.juneau.marshall">CalendarFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingContext.html#line-5355">getCalendarFormat</a></span>()</div>
 <div class="block">Calendar wire format.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -1765,7 +1787,7 @@ implements <a href="../commons/conversion/ConversionFinder.html" title="interfac
 <li>
 <section class="detail" id="getDateFormat()">
 <h3>getDateFormat</h3>
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type"><a href="DateFormat.html" title="enum class in org.apache.juneau.marshall">DateFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingContext.html#line-5329">getDateFormat</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type"><a href="DateFormat.html" title="enum class in org.apache.juneau.marshall">DateFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingContext.html#line-5362">getDateFormat</a></span>()</div>
 <div class="block">Date wire format.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -1776,7 +1798,7 @@ implements <a href="../commons/conversion/ConversionFinder.html" title="interfac
 <li>
 <section class="detail" id="getTemporalFormat()">
 <h3>getTemporalFormat</h3>
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type"><a href="TemporalFormat.html" title="enum class in org.apache.juneau.marshall">TemporalFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingContext.html#line-5336">getTemporalFormat</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type"><a href="TemporalFormat.html" title="enum class in org.apache.juneau.marshall">TemporalFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingContext.html#line-5369">getTemporalFormat</a></span>()</div>
 <div class="block">Temporal wire format.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -1787,7 +1809,7 @@ implements <a href="../commons/conversion/ConversionFinder.html" title="interfac
 <li>
 <section class="detail" id="getTimeZoneFormat()">
 <h3>getTimeZoneFormat</h3>
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type"><a href="TimeZoneFormat.html" title="enum class in org.apache.juneau.marshall">TimeZoneFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingContext.html#line-5343">getTimeZoneFormat</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type"><a href="TimeZoneFormat.html" title="enum class in org.apache.juneau.marshall">TimeZoneFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingContext.html#line-5376">getTimeZoneFormat</a></span>()</div>
 <div class="block">Time-zone wire format.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -1798,7 +1820,7 @@ implements <a href="../commons/conversion/ConversionFinder.html" title="interfac
 <li>
 <section class="detail" id="getLocaleFormat()">
 <h3>getLocaleFormat</h3>
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type"><a href="LocaleFormat.html" title="enum class in org.apache.juneau.marshall">LocaleFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingContext.html#line-5350">getLocaleFormat</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type"><a href="LocaleFormat.html" title="enum class in org.apache.juneau.marshall">LocaleFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingContext.html#line-5383">getLocaleFormat</a></span>()</div>
 <div class="block">Locale wire format.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -1809,7 +1831,7 @@ implements <a href="../commons/conversion/ConversionFinder.html" title="interfac
 <li>
 <section class="detail" id="getBinaryFormat()">
 <h3>getBinaryFormat</h3>
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type"><a href="BinaryFormat.html" title="enum class in org.apache.juneau.marshall">BinaryFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingContext.html#line-5357">getBinaryFormat</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type"><a href="BinaryFormat.html" title="enum class in org.apache.juneau.marshall">BinaryFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingContext.html#line-5390">getBinaryFormat</a></span>()</div>
 <div class="block">Binary wire format.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -1820,7 +1842,7 @@ implements <a href="../commons/conversion/ConversionFinder.html" title="interfac
 <li>
 <section class="detail" id="getEnumFormat()">
 <h3>getEnumFormat</h3>
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type"><a href="EnumFormat.html" title="enum class in org.apache.juneau.marshall">EnumFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingContext.html#line-5364">getEnumFormat</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type"><a href="EnumFormat.html" title="enum class in org.apache.juneau.marshall">EnumFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingContext.html#line-5397">getEnumFormat</a></span>()</div>
 <div class="block">Enum wire format.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -1831,7 +1853,7 @@ implements <a href="../commons/conversion/ConversionFinder.html" title="interfac
 <li>
 <section class="detail" id="getUuidFormat()">
 <h3>getUuidFormat</h3>
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type"><a href="UuidFormat.html" title="enum class in org.apache.juneau.marshall">UuidFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingContext.html#line-5371">getUuidFormat</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type"><a href="UuidFormat.html" title="enum class in org.apache.juneau.marshall">UuidFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingContext.html#line-5404">getUuidFormat</a></span>()</div>
 <div class="block">UUID wire format.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -1842,7 +1864,7 @@ implements <a href="../commons/conversion/ConversionFinder.html" title="interfac
 <li>
 <section class="detail" id="getBitSetFormat()">
 <h3>getBitSetFormat</h3>
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type"><a href="BitSetFormat.html" title="enum class in org.apache.juneau.marshall">BitSetFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingContext.html#line-5378">getBitSetFormat</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type"><a href="BitSetFormat.html" title="enum class in org.apache.juneau.marshall">BitSetFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingContext.html#line-5411">getBitSetFormat</a></span>()</div>
 <div class="block">BitSet wire format.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -1853,7 +1875,7 @@ implements <a href="../commons/conversion/ConversionFinder.html" title="interfac
 <li>
 <section class="detail" id="getBigNumberFormat()">
 <h3>getBigNumberFormat</h3>
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type"><a href="BigNumberFormat.html" title="enum class in org.apache.juneau.marshall">BigNumberFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingContext.html#line-5385">getBigNumberFormat</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type"><a href="BigNumberFormat.html" title="enum class in org.apache.juneau.marshall">BigNumberFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingContext.html#line-5418">getBigNumberFormat</a></span>()</div>
 <div class="block">Big-number wire format.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -1864,7 +1886,7 @@ implements <a href="../commons/conversion/ConversionFinder.html" title="interfac
 <li>
 <section class="detail" id="getBooleanFormat()">
 <h3>getBooleanFormat</h3>
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type"><a href="BooleanFormat.html" title="enum class in org.apache.juneau.marshall">BooleanFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingContext.html#line-5392">getBooleanFormat</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type"><a href="BooleanFormat.html" title="enum class in org.apache.juneau.marshall">BooleanFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingContext.html#line-5425">getBooleanFormat</a></span>()</div>
 <div class="block">Boolean wire format.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -1875,7 +1897,7 @@ implements <a href="../commons/conversion/ConversionFinder.html" title="interfac
 <li>
 <section class="detail" id="getFloatFormat()">
 <h3>getFloatFormat</h3>
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type"><a href="FloatFormat.html" title="enum class in org.apache.juneau.marshall">FloatFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingContext.html#line-5399">getFloatFormat</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type"><a href="FloatFormat.html" title="enum class in org.apache.juneau.marshall">FloatFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingContext.html#line-5432">getFloatFormat</a></span>()</div>
 <div class="block">Float / Double non-finite wire format.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -1886,7 +1908,7 @@ implements <a href="../commons/conversion/ConversionFinder.html" title="interfac
 <li>
 <section class="detail" id="getCurrencyFormat()">
 <h3>getCurrencyFormat</h3>
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type"><a href="CurrencyFormat.html" title="enum class in org.apache.juneau.marshall">CurrencyFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingContext.html#line-5406">getCurrencyFormat</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type"><a href="CurrencyFormat.html" title="enum class in org.apache.juneau.marshall">CurrencyFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingContext.html#line-5439">getCurrencyFormat</a></span>()</div>
 <div class="block">Currency wire format.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -1897,7 +1919,7 @@ implements <a href="../commons/conversion/ConversionFinder.html" title="interfac
 <li>
 <section class="detail" id="getClassFormat()">
 <h3>getClassFormat</h3>
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type"><a href="ClassFormat.html" title="enum class in org.apache.juneau.marshall">ClassFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingContext.html#line-5413">getClassFormat</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type"><a href="ClassFormat.html" title="enum class in org.apache.juneau.marshall">ClassFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingContext.html#line-5446">getClassFormat</a></span>()</div>
 <div class="block">Class wire format.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -1908,7 +1930,7 @@ implements <a href="../commons/conversion/ConversionFinder.html" title="interfac
 <li>
 <section class="detail" id="getClassLoader()">
 <h3>getClassLoader</h3>
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/ClassLoader.html" title="class or interface in java.lang" class="external-link">ClassLoader</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingContext.html#line-5424">getClassLoader</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/ClassLoader.html" title="class or interface in java.lang" class="external-link">ClassLoader</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingContext.html#line-5457">getClassLoader</a></span>()</div>
 <div class="block">Session classloader.
 
  <p>
@@ -1923,7 +1945,7 @@ implements <a href="../commons/conversion/ConversionFinder.html" title="interfac
 <li>
 <section class="detail" id="isIgnoreTransientFields()">
 <h3>isIgnoreTransientFields</h3>
-<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingContext.html#line-5433">isIgnoreTransientFields</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingContext.html#line-5466">isIgnoreTransientFields</a></span>()</div>
 <div class="block">Ignore transient fields.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -1938,23 +1960,9 @@ implements <a href="../commons/conversion/ConversionFinder.html" title="interfac
 </section>
 </li>
 <li>
-<section class="detail" id="isNotABean(org.apache.juneau.commons.reflect.ClassInfo)">
-<h3>isNotABean</h3>
-<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingContext.html#line-5442">isNotABean</a></span><wbr><span class="parameters">(<a href="../commons/reflect/ClassInfo.html" title="class in org.apache.juneau.commons.reflect">ClassInfo</a>&nbsp;ci)</span></div>
-<div class="block">Determines whether the specified class is ignored as a bean class based on the various exclusion parameters
- specified on this context class.</div>
-<dl class="notes">
-<dt>Parameters:</dt>
-<dd><code>ci</code> - The class info being tested.</dd>
-<dt>Returns:</dt>
-<dd><jk>true</jk> if the specified class matches any of the exclusion parameters.</dd>
-</dl>
-</section>
-</li>
-<li>
 <section class="detail" id="object()">
 <h3>object</h3>
-<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type"><a href="ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingContext.html#line-5476">object</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type"><a href="ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingContext.html#line-5480">object</a></span>()</div>
 <div class="block">Returns a reusable <a href="ClassMeta.html" title="class in org.apache.juneau.marshall"><code>ClassMeta</code></a> representation for the class <c>Object</c>.
 
  <p>
@@ -1972,7 +1980,7 @@ implements <a href="../commons/conversion/ConversionFinder.html" title="interfac
 <li>
 <section class="detail" id="resolveType(org.apache.juneau.commons.reflect.AnnotationInfo,org.apache.juneau.commons.reflect.ClassInfo,org.apache.juneau.commons.reflect.TypeVariables)">
 <h3>resolveType</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../commons/bean/BeanInfo.html" title="class in org.apache.juneau.commons.bean">BeanInfo</a>&lt;?&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingContext.html#line-5485">resolveType</a></span><wbr><span class="parameters">(<a href="../commons/reflect/AnnotationInfo.html" title="class in org.apache.juneau.commons.reflect">AnnotationInfo</a>&lt;<a href="../commons/bean/BeanProp.html" title="annotation interface in org.apache.juneau.commons.bean">BeanProp</a>&gt;&nbsp;lastBeanProp,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../commons/bean/BeanInfo.html" title="class in org.apache.juneau.commons.bean">BeanInfo</a>&lt;?&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingContext.html#line-5489">resolveType</a></span><wbr><span class="parameters">(<a href="../commons/reflect/AnnotationInfo.html" title="class in org.apache.juneau.commons.reflect">AnnotationInfo</a>&lt;<a href="../commons/bean/BeanProp.html" title="annotation interface in org.apache.juneau.commons.bean">BeanProp</a>&gt;&nbsp;lastBeanProp,
  <a href="../commons/reflect/ClassInfo.html" title="class in org.apache.juneau.commons.reflect">ClassInfo</a>&nbsp;type,
  <a href="../commons/reflect/TypeVariables.html" title="class in org.apache.juneau.commons.reflect">TypeVariables</a>&nbsp;typeVarImpls)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="../commons/bean/BeanTypeResolver.html#resolveType(org.apache.juneau.commons.reflect.AnnotationInfo,org.apache.juneau.commons.reflect.ClassInfo,org.apache.juneau.commons.reflect.TypeVariables)">BeanTypeResolver</a></code></span></div>
@@ -1994,7 +2002,7 @@ implements <a href="../commons/conversion/ConversionFinder.html" title="interfac
 <li>
 <section class="detail" id="objectType()">
 <h3>objectType</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../commons/bean/BeanInfo.html" title="class in org.apache.juneau.commons.bean">BeanInfo</a>&lt;?&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingContext.html#line-5490">objectType</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../commons/bean/BeanInfo.html" title="class in org.apache.juneau.commons.bean">BeanInfo</a>&lt;?&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingContext.html#line-5494">objectType</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="../commons/bean/BeanTypeResolver.html#objectType()">BeanTypeResolver</a></code></span></div>
 <div class="block">Returns the type-info for <code>Object.class</code> (used as the fallback element/value type for
  raw/unparameterized collections and maps).</div>
@@ -2009,7 +2017,7 @@ implements <a href="../commons/conversion/ConversionFinder.html" title="interfac
 <li>
 <section class="detail" id="properties()">
 <h3>properties</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="../commons/collections/FluentMap.html" title="class in org.apache.juneau.commons.collections">FluentMap</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingContext.html#line-5495">properties</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="../commons/collections/FluentMap.html" title="class in org.apache.juneau.commons.collections">FluentMap</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingContext.html#line-5499">properties</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="Context.html#properties()">Context</a></code></span></div>
 <div class="block">Returns the properties on this bean as a map for debugging.</div>
 <dl class="notes">
@@ -2023,7 +2031,7 @@ implements <a href="../commons/conversion/ConversionFinder.html" title="interfac
 <li>
 <section class="detail" id="resolveClassMeta(org.apache.juneau.commons.reflect.AnnotationInfo,org.apache.juneau.commons.reflect.ClassInfo,org.apache.juneau.commons.reflect.TypeVariables)">
 <h3>resolveClassMeta</h3>
-<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type"><a href="ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;T&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingContext.html#line-5553">resolveClassMeta</a></span><wbr><span class="parameters">(<a href="../commons/reflect/AnnotationInfo.html" title="class in org.apache.juneau.commons.reflect">AnnotationInfo</a>&lt;<a href="../commons/bean/BeanProp.html" title="annotation interface in org.apache.juneau.commons.bean">BeanProp</a>&gt;&nbsp;p,
+<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type"><a href="ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;T&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingContext.html#line-5558">resolveClassMeta</a></span><wbr><span class="parameters">(<a href="../commons/reflect/AnnotationInfo.html" title="class in org.apache.juneau.commons.reflect">AnnotationInfo</a>&lt;<a href="../commons/bean/BeanProp.html" title="annotation interface in org.apache.juneau.commons.bean">BeanProp</a>&gt;&nbsp;p,
  <a href="../commons/reflect/ClassInfo.html" title="class in org.apache.juneau.commons.reflect">ClassInfo</a>&nbsp;ci,
  <a href="../commons/reflect/TypeVariables.html" title="class in org.apache.juneau.commons.reflect">TypeVariables</a>&nbsp;typeVarImpls)</span></div>
 <div class="block">Used for determining the class type on a method or field where a <code>@BeanProp</code> annotation may be present.</div>
@@ -2045,7 +2053,7 @@ implements <a href="../commons/conversion/ConversionFinder.html" title="interfac
 <li>
 <section class="detail" id="string()">
 <h3>string</h3>
-<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type"><a href="ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingContext.html#line-5621">string</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type"><a href="ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/MarshallingContext.html#line-5623">string</a></span>()</div>
 <div class="block">Returns a reusable <a href="ClassMeta.html" title="class in org.apache.juneau.marshall"><code>ClassMeta</code></a> representation for the class <c>String</c>.
 
  <p>

@@ -212,6 +212,14 @@ loadScripts(document, 'script');</script>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5">
 <div class="block">Convenience shortcut for instantiating a bean of the specified type using this store.</div>
 </div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code>default &lt;T&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;T&gt;</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code><a href="#invokeBeanMethod(java.lang.Class,org.apache.juneau.commons.reflect.MethodInfo,java.lang.Object,java.lang.Object...)" class="member-name-link">invokeBeanMethod</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;T&gt;&nbsp;beanType,
+ <a href="../reflect/MethodInfo.html" title="class in org.apache.juneau.commons.reflect">MethodInfo</a>&nbsp;method,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;onClassOrObject,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>...&nbsp;extraBeans)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5">
+<div class="block">Invokes one specific factory method to produce a bean of type <c>beanType</c>.</div>
+</div>
 </div>
 </div>
 </div>
@@ -382,20 +390,27 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="createBeanFromMethod(java.lang.Class,java.lang.Object,java.util.function.Predicate,java.lang.Object...)">
 <h3>createBeanFromMethod</h3>
-<div class="member-signature"><span class="modifiers">default</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;T&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/inject/BeanStore.html#line-225">createBeanFromMethod</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;T&gt;&nbsp;beanType,
+<div class="member-signature"><span class="modifiers">default</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;T&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/inject/BeanStore.html#line-232">createBeanFromMethod</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;T&gt;&nbsp;beanType,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;onClassOrObject,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Predicate.html" title="class or interface in java.util.function" class="external-link">Predicate</a>&lt;<a href="../reflect/MethodInfo.html" title="class in org.apache.juneau.commons.reflect">MethodInfo</a>&gt;&nbsp;filter,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>...&nbsp;extraBeans)</span></div>
 <div class="block">Finds and invokes a factory method that produces a bean of type <c>beanType</c>.
 
  <p>
- Scans all public methods of the resource class identified by <c>onClassOrObject</c>:
+ Scans the methods of the resource class identified by <c>onClassOrObject</c>:
  <ul>
    <li>If <c>onClassOrObject</c> is a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link"><code>Class</code></a>, only <jk>static</jk> methods are eligible and
       the instance parameter passed to the invoked method is <jk>null</jk>.
    <li>If <c>onClassOrObject</c> is any other object, both instance and static methods on its class are
       eligible, and the object itself is passed as the receiver.
  </ul>
+
+ <p>
+ The search has two passes.  The first pass considers public methods only.  If it finds nothing, a second pass
+ considers <em>non-public</em> methods (protected, package-private or private) across the class hierarchy,
+ child class first, but only those that carry <a href="Bean.html" title="annotation interface in org.apache.juneau.commons.inject"><code>@Bean</code></a> (declared directly or inherited from a method
+ they override; see <a href="BeanAnnotation.html#find(org.apache.juneau.commons.reflect.MethodInfo)"><code>BeanAnnotation.find(MethodInfo)</code></a>).  A non-public method without <a href="Bean.html" title="annotation interface in org.apache.juneau.commons.inject"><code>@Bean</code></a> is
+ never invoked, even when <c>filter</c> is <jk>null</jk>.  Non-public methods are made accessible before invocation.
 
  <p>
  The first method satisfying all of the following is invoked:
@@ -413,24 +428,24 @@ loadScripts(document, 'script');</script>
  <h5 class='section'>Example:</h5>
  <p class='bjava'>
    <jc>// Filter only</jc>
-   <jv>beanStore</jv>.createBeanFromMethod(CallLogger.<jk>class</jk>, <jv>resource</jv>,
-      RestContext::isBeanMethod)
+   <jv>beanStore</jv>.createBeanFromMethod(RichLogger.<jk>class</jk>, <jv>resource</jv>,
+      <jv>m</jv> -&gt; <jv>m</jv>.hasAnnotation(Bean.<jk>class</jk>))
       .ifPresent(<jv>creator</jv>::impl);
 
    <jc>// Filter + extra bean not yet in the store</jc>
    <jv>beanStore</jv>.createBeanFromMethod(EncoderSet.<jk>class</jk>, <jv>resource</jv>,
-      RestContext::isBeanMethod, <jv>builder</jv>)
+      <jv>m</jv> -&gt; <jv>m</jv>.hasAnnotation(Bean.<jk>class</jk>), <jv>builder</jv>)
       .ifPresent(<jv>x</jv> -&gt; <jv>builder</jv>.impl(<jv>x</jv>));
 
    <jc>// No filter, no extra beans</jc>
-   <jv>beanStore</jv>.createBeanFromMethod(CallLogger.<jk>class</jk>, <jv>resource</jv>);
+   <jv>beanStore</jv>.createBeanFromMethod(RichLogger.<jk>class</jk>, <jv>resource</jv>);
  </p></div>
 <dl class="notes">
 <dt>Type Parameters:</dt>
 <dd><code>T</code> - The bean type.</dd>
 <dt>Parameters:</dt>
 <dd><code>beanType</code> - The type of bean to create.  Must not be <jk>null</jk>.</dd>
-<dd><code>onClassOrObject</code> - The object instance or <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link"><code>Class</code></a> whose public methods are searched.
+<dd><code>onClassOrObject</code> - The object instance or <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link"><code>Class</code></a> whose methods are searched.
    Must not be <jk>null</jk>.</dd>
 <dd><code>filter</code> - Optional predicate restricting which methods are eligible.  Can be <jk>null</jk> (any method qualifies).</dd>
 <dd><code>extraBeans</code> - Optional bean instances visible to parameter resolution for this call only.
@@ -450,9 +465,57 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
+<section class="detail" id="invokeBeanMethod(java.lang.Class,org.apache.juneau.commons.reflect.MethodInfo,java.lang.Object,java.lang.Object...)">
+<h3>invokeBeanMethod</h3>
+<div class="member-signature"><span class="modifiers">default</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;T&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/inject/BeanStore.html#line-272">invokeBeanMethod</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;T&gt;&nbsp;beanType,
+ <a href="../reflect/MethodInfo.html" title="class in org.apache.juneau.commons.reflect">MethodInfo</a>&nbsp;method,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;onClassOrObject,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>...&nbsp;extraBeans)</span></div>
+<div class="block">Invokes one specific factory method to produce a bean of type <c>beanType</c>.
+
+ <p>
+ Unlike <a href="#createBeanFromMethod(java.lang.Class,java.lang.Object,java.util.function.Predicate,java.lang.Object...)"><code>createBeanFromMethod(Class, Object, Predicate, Object...)</code></a>, no search is performed:
+ the caller supplies the <a href="../reflect/MethodInfo.html" title="class in org.apache.juneau.commons.reflect"><code>MethodInfo</code></a> it has already chosen.  Visibility is not a gate:
+ public, protected, package-private and private methods are all invoked (non-public methods are made accessible first).
+ Deprecation is not checked.
+
+ <p>
+ If <c>onClassOrObject</c> is a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link"><code>Class</code></a>, only <jk>static</jk> methods can be invoked.  Otherwise the object
+ is used as the receiver for instance methods.
+
+ <p>
+ Returns <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html#empty()" title="class or interface in java.util" class="external-link"><code>Optional.empty()</code></a> when the method is not eligible: it returns <jk>void</jk>, it is a bridge or
+ synthetic method, it is an instance method and <c>onClassOrObject</c> is a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link"><code>Class</code></a>, or one of its parameters
+ cannot be resolved from this store plus <c>extraBeans</c>.
+
+ <h5 class='section'>Example:</h5>
+ <p class='bjava'>
+   <jc>// Invoke one specific @Bean factory method, instead of searching by return type.</jc>
+   MethodInfo <jv>m</jv> = ClassInfo.<jsm>of</jsm>(MyResource.<jk>class</jk>).getDeclaredMethod(<jv>x</jv> -&gt; <jv>x</jv>.hasName(<js>"cacheIndicator"</js>)).get();
+   Optional&lt;HealthIndicator&gt; <jv>cache</jv> = <jv>beanStore</jv>.invokeBeanMethod(HealthIndicator.<jk>class</jk>, <jv>m</jv>, <jv>resource</jv>);
+ </p></div>
+<dl class="notes">
+<dt>Type Parameters:</dt>
+<dd><code>T</code> - The bean type.</dd>
+<dt>Parameters:</dt>
+<dd><code>beanType</code> - The expected bean type.  Must be assignable from the method's return type.  Must not be <jk>null</jk>.</dd>
+<dd><code>method</code> - The factory method to invoke.  Must not be <jk>null</jk>.</dd>
+<dd><code>onClassOrObject</code> - The receiver object, or the <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link"><code>Class</code></a> for static methods.  Must not be <jk>null</jk>.
+   The method's declaring class must be assignable from this object's class (or this class).</dd>
+<dd><code>extraBeans</code> - Optional bean instances visible to parameter resolution for this call only.</dd>
+<dt>Returns:</dt>
+<dd>The created bean, or <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html#empty()" title="class or interface in java.util" class="external-link"><code>Optional.empty()</code></a> if the method is not eligible.</dd>
+<dt>Throws:</dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/IllegalArgumentException.html" title="class or interface in java.lang" class="external-link">IllegalArgumentException</a></code> - If an argument is <jk>null</jk>, <c>beanType</c> is not assignable from the
+   method's return type, or the method does not belong to the target's class hierarchy.</dd>
+<dd><code><a href="BeanCreationException.html" title="class in org.apache.juneau.commons.inject">BeanCreationException</a></code> - If the method cannot be made accessible or threw an exception during invocation.</dd>
+</dl>
+</section>
+</li>
+<li>
 <section class="detail" id="createBeanFromMethod(java.lang.Class,java.lang.Object)">
 <h3>createBeanFromMethod</h3>
-<div class="member-signature"><span class="modifiers">default</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;T&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/inject/BeanStore.html#line-240">createBeanFromMethod</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;T&gt;&nbsp;beanType,
+<div class="member-signature"><span class="modifiers">default</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;T&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/inject/BeanStore.html#line-303">createBeanFromMethod</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;T&gt;&nbsp;beanType,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;onClassOrObject)</span></div>
 <div class="block">Convenience overload of <a href="#createBeanFromMethod(java.lang.Class,java.lang.Object,java.util.function.Predicate,java.lang.Object...)"><code>createBeanFromMethod(Class, Object, Predicate, Object...)</code></a> with no filter and no extra beans.</div>
 <dl class="notes">
@@ -460,7 +523,7 @@ loadScripts(document, 'script');</script>
 <dd><code>T</code> - The bean type.</dd>
 <dt>Parameters:</dt>
 <dd><code>beanType</code> - The type of bean to create.  Must not be <jk>null</jk>.</dd>
-<dd><code>onClassOrObject</code> - The object instance or <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link"><code>Class</code></a> whose public methods are searched.
+<dd><code>onClassOrObject</code> - The object instance or <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link"><code>Class</code></a> whose methods are searched.
    Must not be <jk>null</jk>.</dd>
 <dt>Returns:</dt>
 <dd>The created bean wrapped in an <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link"><code>Optional</code></a>, or <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html#empty()" title="class or interface in java.util" class="external-link"><code>Optional.empty()</code></a> if no matching
@@ -473,7 +536,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getBeanType(java.lang.Class)">
 <h3>getBeanType</h3>
-<div class="member-signature"><span class="modifiers">default</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;? extends T&gt;&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/inject/BeanStore.html#line-259">getBeanType</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;T&gt;&nbsp;beanType)</span></div>
+<div class="member-signature"><span class="modifiers">default</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;? extends T&gt;&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/inject/BeanStore.html#line-322">getBeanType</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;T&gt;&nbsp;beanType)</span></div>
 <div class="block">Returns the implementation class registered for the specified bean type, if any.
 
  <p>
@@ -496,7 +559,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="hasAllParams(org.apache.juneau.commons.reflect.ExecutableInfo,java.lang.Object)">
 <h3>hasAllParams</h3>
-<div class="member-signature"><span class="modifiers">default</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/inject/BeanStore.html#line-277">hasAllParams</a></span><wbr><span class="parameters">(<a href="../reflect/ExecutableInfo.html" title="class in org.apache.juneau.commons.reflect">ExecutableInfo</a>&nbsp;executable,
+<div class="member-signature"><span class="modifiers">default</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/inject/BeanStore.html#line-340">hasAllParams</a></span><wbr><span class="parameters">(<a href="../reflect/ExecutableInfo.html" title="class in org.apache.juneau.commons.reflect">ExecutableInfo</a>&nbsp;executable,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;outer)</span></div>
 <div class="block">Returns <jk>true</jk> if this store can satisfy every parameter of the specified executable.
 
@@ -518,7 +581,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getParams(org.apache.juneau.commons.reflect.ExecutableInfo,java.lang.Object)">
 <h3>getParams</h3>
-<div class="member-signature"><span class="modifiers">default</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>[]</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/inject/BeanStore.html#line-303">getParams</a></span><wbr><span class="parameters">(<a href="../reflect/ExecutableInfo.html" title="class in org.apache.juneau.commons.reflect">ExecutableInfo</a>&nbsp;executable,
+<div class="member-signature"><span class="modifiers">default</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>[]</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/inject/BeanStore.html#line-366">getParams</a></span><wbr><span class="parameters">(<a href="../reflect/ExecutableInfo.html" title="class in org.apache.juneau.commons.reflect">ExecutableInfo</a>&nbsp;executable,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;outer)</span></div>
 <div class="block">Resolves every parameter of the specified executable from this store.
 
@@ -538,7 +601,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getMissingParams(org.apache.juneau.commons.reflect.ExecutableInfo,java.lang.Object)">
 <h3>getMissingParams</h3>
-<div class="member-signature"><span class="modifiers">default</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/inject/BeanStore.html#line-331">getMissingParams</a></span><wbr><span class="parameters">(<a href="../reflect/ExecutableInfo.html" title="class in org.apache.juneau.commons.reflect">ExecutableInfo</a>&nbsp;executable,
+<div class="member-signature"><span class="modifiers">default</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/inject/BeanStore.html#line-394">getMissingParams</a></span><wbr><span class="parameters">(<a href="../reflect/ExecutableInfo.html" title="class in org.apache.juneau.commons.reflect">ExecutableInfo</a>&nbsp;executable,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;outer)</span></div>
 <div class="block">Returns a comma-delimited list of parameter type names that cannot be resolved from this store.
 

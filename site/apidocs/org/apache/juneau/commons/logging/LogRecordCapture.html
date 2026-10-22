@@ -46,7 +46,7 @@ loadScripts(document, 'script');</script>
 <div>
 <ul class="sub-nav-list">
 <li>Summary:&nbsp;</li>
-<li>Nested&nbsp;|&nbsp;</li>
+<li><a href="#nested-class-summary">Nested</a>&nbsp;|&nbsp;</li>
 <li>Field&nbsp;|&nbsp;</li>
 <li>Constr&nbsp;|&nbsp;</li>
 <li><a href="#method-summary">Method</a></li>
@@ -82,7 +82,7 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Closeable.html" title="class or interface in java.io" class="external-link">Closeable</a></code>, <code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/AutoCloseable.html" title="class or interface in java.lang" class="external-link">AutoCloseable</a></code>, <code><a href="LogRecordListener.html" title="interface in org.apache.juneau.commons.logging">LogRecordListener</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/logging/LogRecordCapture.html#line-57">LogRecordCapture</a></span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/logging/LogRecordCapture.html#line-62">LogRecordCapture</a></span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>
 implements <a href="LogRecordListener.html" title="interface in org.apache.juneau.commons.logging">LogRecordListener</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Closeable.html" title="class or interface in java.io" class="external-link">Closeable</a></span></div>
 <div class="block">Captures log records for testing purposes.
@@ -95,7 +95,7 @@ implements <a href="LogRecordListener.html" title="interface in org.apache.junea
  <h5 class='section'>Usage:</h5>
  <p class='bjava'>
    <jc>// Capture records using try-with-resources</jc>
-   <jk>try</jk> (LogRecordCapture <jv>capture</jv> = Logger.getLogger(MyClass.<jk>class</jk>).captureEvents()) {
+   <jk>try</jk> (LogRecordCapture <jv>capture</jv> = RichLogger.getLogger(MyClass.<jk>class</jk>).captureEvents()) {
       <jv>logger</jv>.info(<js>"Test message"</js>);
       <jv>logger</jv>.warning(<js>"Warning message"</js>);
 
@@ -115,23 +115,52 @@ implements <a href="LogRecordListener.html" title="interface in org.apache.junea
  </p>
 
  <h5 class='section'>See Also:</h5><ul>
-   <li class='jc'><a href="Logger.html#captureEvents()"><code>Logger.captureEvents()</code></a>
+   <li class='jc'><a href="RichLogger.html#captureEvents()"><code>RichLogger.captureEvents()</code></a>
    <li class='jc'><a href="LogRecord.html#formatted(java.lang.String)"><code>LogRecord.formatted(String)</code></a>
  </ul></div>
 </section>
 <section class="summary">
 <ul class="summary-list">
+<!-- ======== NESTED CLASS SUMMARY ======== -->
+<li>
+<section class="nested-class-summary" id="nested-class-summary">
+<h2>Nested Class Summary</h2>
+<div class="caption"><span>Nested Classes</span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier and Type</div>
+<div class="table-header col-second">Class</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code>static interface&nbsp;</code></div>
+<div class="col-second even-row-color"><code><a href="LogRecordCapture.Quiet.html" class="type-name-link" title="interface in org.apache.juneau.commons.logging">LogRecordCapture.Quiet</a></code></div>
+<div class="col-last even-row-color">
+<div class="block">Handle returned by <a href="#quiet(java.lang.String)"><code>quiet(String)</code></a>.</div>
+</div>
+</div>
+</section>
+</li>
 <!-- ========== METHOD SUMMARY =========== -->
 <li>
 <section class="method-summary" id="method-summary">
 <h2>Method Summary</h2>
 <div id="method-summary-table">
-<div class="table-tabs" role="tablist" aria-orientation="horizontal"><button id="method-summary-table-tab0" role="tab" aria-selected="true" aria-controls="method-summary-table.tabpanel" tabindex="0" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table', 3)" class="active-table-tab">All Methods</button><button id="method-summary-table-tab2" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab2', 3)" class="table-tab">Instance Methods</button><button id="method-summary-table-tab4" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab4', 3)" class="table-tab">Concrete Methods</button></div>
+<div class="table-tabs" role="tablist" aria-orientation="horizontal"><button id="method-summary-table-tab0" role="tab" aria-selected="true" aria-controls="method-summary-table.tabpanel" tabindex="0" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table', 3)" class="active-table-tab">All Methods</button><button id="method-summary-table-tab1" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab1', 3)" class="table-tab">Static Methods</button><button id="method-summary-table-tab2" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab2', 3)" class="table-tab">Instance Methods</button><button id="method-summary-table-tab4" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab4', 3)" class="table-tab">Concrete Methods</button></div>
 <div id="method-summary-table.tabpanel" role="tabpanel" aria-labelledby="method-summary-table-tab0">
 <div class="summary-table three-column-summary">
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/Level.html" title="class or interface in java.util.logging" class="external-link">Level</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#assertLevel()" class="member-name-link">assertLevel</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#assertMessage()" class="member-name-link">assertMessage</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html" title="class or interface in java.lang" class="external-link">Throwable</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#assertThrown()" class="member-name-link">assertThrown</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/LogRecord.html" title="class or interface in java.util.logging" class="external-link">LogRecord</a>&gt;</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#byLevel(java.util.logging.Level)" class="member-name-link">byLevel</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/Level.html" title="class or interface in java.util.logging" class="external-link">Level</a>&nbsp;level)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#clear()" class="member-name-link">clear</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
@@ -142,25 +171,62 @@ implements <a href="LogRecordListener.html" title="interface in org.apache.junea
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Closes this capture and removes it from the logger's listeners.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="LogRecord.html" title="class in org.apache.juneau.commons.logging">LogRecord</a>&gt;</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getRecords()" class="member-name-link">getRecords</a>()</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#contextValue(java.util.logging.LogRecord,java.lang.String)" class="member-name-link">contextValue</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/LogRecord.html" title="class or interface in java.util.logging" class="external-link">LogRecord</a>&nbsp;rec,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Returns the value of a <a href="LogContext.html" title="class in org.apache.juneau.commons.logging"><code>LogContext</code></a> entry attached to the specified captured record.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/LogRecord.html" title="class or interface in java.util.logging" class="external-link">LogRecord</a>&gt;</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getRecords()" class="member-name-link">getRecords</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns an unmodifiable list of all captured log records.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getRecords(java.lang.String)" class="member-name-link">getRecords</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;format)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getRecords(java.lang.String)" class="member-name-link">getRecords</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;format)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns captured log records formatted as strings.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#isEmpty()" class="member-name-link">isEmpty</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#isEmpty()" class="member-name-link">isEmpty</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns <jk>true</jk> if any records have been captured.</div>
 </div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/LogRecord.html" title="class or interface in java.util.logging" class="external-link">LogRecord</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#last()" class="member-name-link">last</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/LogRecord.html" title="class or interface in java.util.logging" class="external-link">LogRecord</a>&gt;</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#matching(java.lang.String)" class="member-name-link">matching</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;regex)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#messages()" class="member-name-link">messages</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#onLogRecord(org.apache.juneau.commons.logging.LogRecord)" class="member-name-link">onLogRecord</a><wbr>(<a href="LogRecord.html" title="class in org.apache.juneau.commons.logging">LogRecord</a>&nbsp;rec)</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#onLogRecord(java.util.logging.LogRecord)" class="member-name-link">onLogRecord</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/LogRecord.html" title="class or interface in java.util.logging" class="external-link">LogRecord</a>&nbsp;rec)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Called when a log record is logged.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="LogRecordCapture.Quiet.html" title="interface in org.apache.juneau.commons.logging">LogRecordCapture.Quiet</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#quiet(java.lang.Class)" class="member-name-link">quiet</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;&nbsp;loggerClass)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="block">Same as <a href="#quiet(java.lang.String)"><code>quiet(String)</code></a>, keyed by the logger's class name.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="LogRecordCapture.Quiet.html" title="interface in org.apache.juneau.commons.logging">LogRecordCapture.Quiet</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#quiet(java.lang.String)" class="member-name-link">quiet</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;loggerName)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="block">Keeps everything logged to the named logger, and its descendants, off the console until the returned handle is closed.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/LogRecord.html" title="class or interface in java.util.logging" class="external-link">LogRecord</a>&gt;</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#quietly(java.lang.Class,org.apache.juneau.commons.function.Snippet)" class="member-name-link">quietly</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;&nbsp;loggerClass,
+ <a href="../function/Snippet.html" title="interface in org.apache.juneau.commons.function">Snippet</a>&nbsp;body)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="block">Same as <a href="#quietly(java.lang.String,org.apache.juneau.commons.function.Snippet)"><code>quietly(String, Snippet)</code></a>, keyed by the logger's class name.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/LogRecord.html" title="class or interface in java.util.logging" class="external-link">LogRecord</a>&gt;</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#quietly(java.lang.String,org.apache.juneau.commons.function.Snippet)" class="member-name-link">quietly</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;loggerName,
+ <a href="../function/Snippet.html" title="interface in org.apache.juneau.commons.function">Snippet</a>&nbsp;body)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="block">Runs a block while capturing, and keeping off the console, everything logged to the named logger or any of its descendants.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>int</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#size()" class="member-name-link">size</a>()</code></div>
@@ -185,13 +251,81 @@ implements <a href="LogRecordListener.html" title="interface in org.apache.junea
 <h2>Method Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="onLogRecord(org.apache.juneau.commons.logging.LogRecord)">
+<section class="detail" id="quietly(java.lang.String,org.apache.juneau.commons.function.Snippet)">
+<h3>quietly</h3>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/LogRecord.html" title="class or interface in java.util.logging" class="external-link">LogRecord</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/logging/LogRecordCapture.html#line-79">quietly</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;loggerName,
+ <a href="../function/Snippet.html" title="interface in org.apache.juneau.commons.function">Snippet</a>&nbsp;body)</span></div>
+<div class="block">Runs a block while capturing, and keeping off the console, everything logged to the named logger or any of its descendants.
+ <p>
+ Unlike <a href="RichLogger.html#captureEvents()"><code>RichLogger.captureEvents()</code></a>, which only observes records, this also stops the logger's records from
+ reaching the parent (console) handlers for the duration of the block.  The logger's previous parent-handler setting
+ is restored in a <c>finally</c> block.
+ <p class='bjava'>
+   List&lt;LogRecord&gt; <jv>records</jv> = LogRecordCapture.<jsm>quietly</jsm>(MyClass.<jk>class</jk>, () -&gt; <jv>obj</jv>.doSomethingThatWarns());
+   assertEquals(1, <jv>records</jv>.size());
+ </p></div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>loggerName</code> - The logger name.  Records from descendant loggers are captured too.</dd>
+<dd><code>body</code> - The code to run.  Checked exceptions are rethrown wrapped in a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/RuntimeException.html" title="class or interface in java.lang" class="external-link"><code>RuntimeException</code></a>.</dd>
+<dt>Returns:</dt>
+<dd>The captured records, in the order logged.  Never <jk>null</jk>.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="quiet(java.lang.String)">
+<h3>quiet</h3>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="LogRecordCapture.Quiet.html" title="interface in org.apache.juneau.commons.logging">LogRecordCapture.Quiet</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/logging/LogRecordCapture.html#line-117">quiet</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;loggerName)</span></div>
+<div class="block">Keeps everything logged to the named logger, and its descendants, off the console until the returned handle is closed.
+ <p>
+ Use this when a whole test class (for example from <ja>@BeforeAll</ja> / <ja>@AfterAll</ja>) expects a warning it is not
+ asserting on.  Calls nest and may overlap across threads: the logger's original parent-handler setting is restored when
+ the last outstanding handle for that logger name is closed.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>loggerName</code> - The logger name.</dd>
+<dt>Returns:</dt>
+<dd>A handle that restores the logger when closed.  Never <jk>null</jk>.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="quiet(java.lang.Class)">
+<h3>quiet</h3>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="LogRecordCapture.Quiet.html" title="interface in org.apache.juneau.commons.logging">LogRecordCapture.Quiet</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/logging/LogRecordCapture.html#line-134">quiet</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;&nbsp;loggerClass)</span></div>
+<div class="block">Same as <a href="#quiet(java.lang.String)"><code>quiet(String)</code></a>, keyed by the logger's class name.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>loggerClass</code> - The class whose logger is silenced.</dd>
+<dt>Returns:</dt>
+<dd>A handle that restores the logger when closed.  Never <jk>null</jk>.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="quietly(java.lang.Class,org.apache.juneau.commons.function.Snippet)">
+<h3>quietly</h3>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/LogRecord.html" title="class or interface in java.util.logging" class="external-link">LogRecord</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/logging/LogRecordCapture.html#line-175">quietly</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;&nbsp;loggerClass,
+ <a href="../function/Snippet.html" title="interface in org.apache.juneau.commons.function">Snippet</a>&nbsp;body)</span></div>
+<div class="block">Same as <a href="#quietly(java.lang.String,org.apache.juneau.commons.function.Snippet)"><code>quietly(String, Snippet)</code></a>, keyed by the logger's class name.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>loggerClass</code> - The class whose logger is captured.</dd>
+<dd><code>body</code> - The code to run.</dd>
+<dt>Returns:</dt>
+<dd>The captured records, in the order logged.  Never <jk>null</jk>.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="onLogRecord(java.util.logging.LogRecord)">
 <h3>onLogRecord</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/logging/LogRecordCapture.html#line-77">onLogRecord</a></span><wbr><span class="parameters">(<a href="LogRecord.html" title="class in org.apache.juneau.commons.logging">LogRecord</a>&nbsp;rec)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/logging/LogRecordCapture.html#line-206">onLogRecord</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/LogRecord.html" title="class or interface in java.util.logging" class="external-link">LogRecord</a>&nbsp;rec)</span></div>
 <div class="block">Called when a log record is logged.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code><a href="LogRecordListener.html#onLogRecord(org.apache.juneau.commons.logging.LogRecord)">onLogRecord</a></code>&nbsp;in interface&nbsp;<code><a href="LogRecordListener.html" title="interface in org.apache.juneau.commons.logging">LogRecordListener</a></code></dd>
+<dd><code><a href="LogRecordListener.html#onLogRecord(java.util.logging.LogRecord)">onLogRecord</a></code>&nbsp;in interface&nbsp;<code><a href="LogRecordListener.html" title="interface in org.apache.juneau.commons.logging">LogRecordListener</a></code></dd>
 <dt>Parameters:</dt>
 <dd><code>rec</code> - The log record that was logged.</dd>
 </dl>
@@ -200,7 +334,7 @@ implements <a href="LogRecordListener.html" title="interface in org.apache.junea
 <li>
 <section class="detail" id="getRecords()">
 <h3>getRecords</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="LogRecord.html" title="class in org.apache.juneau.commons.logging">LogRecord</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/logging/LogRecordCapture.html#line-87">getRecords</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/LogRecord.html" title="class or interface in java.util.logging" class="external-link">LogRecord</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/logging/LogRecordCapture.html#line-217">getRecords</a></span>()</div>
 <div class="block">Returns an unmodifiable list of all captured log records.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -211,7 +345,7 @@ implements <a href="LogRecordListener.html" title="interface in org.apache.junea
 <li>
 <section class="detail" id="getRecords(java.lang.String)">
 <h3>getRecords</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/logging/LogRecordCapture.html#line-102">getRecords</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;format)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/logging/LogRecordCapture.html#line-232">getRecords</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;format)</span></div>
 <div class="block">Returns captured log records formatted as strings.
 
  <p>
@@ -227,14 +361,14 @@ implements <a href="LogRecordListener.html" title="interface in org.apache.junea
 <li>
 <section class="detail" id="clear()">
 <h3>clear</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/logging/LogRecordCapture.html#line-114">clear</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/logging/LogRecordCapture.html#line-243">clear</a></span>()</div>
 <div class="block">Clears all captured records.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="size()">
 <h3>size</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/logging/LogRecordCapture.html#line-123">size</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/logging/LogRecordCapture.html#line-252">size</a></span>()</div>
 <div class="block">Returns the number of captured records.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -245,7 +379,7 @@ implements <a href="LogRecordListener.html" title="interface in org.apache.junea
 <li>
 <section class="detail" id="isEmpty()">
 <h3>isEmpty</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/logging/LogRecordCapture.html#line-132">isEmpty</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/logging/LogRecordCapture.html#line-261">isEmpty</a></span>()</div>
 <div class="block">Returns <jk>true</jk> if any records have been captured.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -254,9 +388,70 @@ implements <a href="LogRecordListener.html" title="interface in org.apache.junea
 </section>
 </li>
 <li>
+<section class="detail" id="messages()">
+<h3>messages</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/logging/LogRecordCapture.html#line-265">messages</a></span>()</div>
+</section>
+</li>
+<li>
+<section class="detail" id="last()">
+<h3>last</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/LogRecord.html" title="class or interface in java.util.logging" class="external-link">LogRecord</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/logging/LogRecordCapture.html#line-271">last</a></span>()</div>
+</section>
+</li>
+<li>
+<section class="detail" id="byLevel(java.util.logging.Level)">
+<h3>byLevel</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/LogRecord.html" title="class or interface in java.util.logging" class="external-link">LogRecord</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/logging/LogRecordCapture.html#line-277">byLevel</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/Level.html" title="class or interface in java.util.logging" class="external-link">Level</a>&nbsp;level)</span></div>
+</section>
+</li>
+<li>
+<section class="detail" id="matching(java.lang.String)">
+<h3>matching</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/LogRecord.html" title="class or interface in java.util.logging" class="external-link">LogRecord</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/logging/LogRecordCapture.html#line-283">matching</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;regex)</span></div>
+</section>
+</li>
+<li>
+<section class="detail" id="contextValue(java.util.logging.LogRecord,java.lang.String)">
+<h3>contextValue</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/logging/LogRecordCapture.html#line-301">contextValue</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/LogRecord.html" title="class or interface in java.util.logging" class="external-link">LogRecord</a>&nbsp;rec,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key)</span></div>
+<div class="block">Returns the value of a <a href="LogContext.html" title="class in org.apache.juneau.commons.logging"><code>LogContext</code></a> entry attached to the specified captured record.
+
+ <p>
+ Convenience over <a href="LogRecordContext.html#of(java.util.logging.LogRecord)"><code>LogRecordContext.of(java.util.logging.LogRecord)</code></a> so capture-based tests do not need to
+ know about the side table directly.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>rec</code> - The captured record.</dd>
+<dd><code>key</code> - The context key.</dd>
+<dt>Returns:</dt>
+<dd>The attached value for the key, or <jk>null</jk> if not present.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="assertMessage()">
+<h3>assertMessage</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/logging/LogRecordCapture.html#line-305">assertMessage</a></span>()</div>
+</section>
+</li>
+<li>
+<section class="detail" id="assertLevel()">
+<h3>assertLevel</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/Level.html" title="class or interface in java.util.logging" class="external-link">Level</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/logging/LogRecordCapture.html#line-310">assertLevel</a></span>()</div>
+</section>
+</li>
+<li>
+<section class="detail" id="assertThrown()">
+<h3>assertThrown</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html" title="class or interface in java.lang" class="external-link">Throwable</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/logging/LogRecordCapture.html#line-315">assertThrown</a></span>()</div>
+</section>
+</li>
+<li>
 <section class="detail" id="close()">
 <h3>close</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/logging/LogRecordCapture.html#line-139">close</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/logging/LogRecordCapture.html#line-323">close</a></span>()</div>
 <div class="block">Closes this capture and removes it from the logger's listeners.</div>
 <dl class="notes">
 <dt>Specified by:</dt>

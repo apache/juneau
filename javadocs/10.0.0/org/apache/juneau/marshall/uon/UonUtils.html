@@ -78,7 +78,7 @@ loadScripts(document, 'script');</script>
 </div>
 <section class="class-description" id="class-description">
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/uon/UonUtils.html#line-30">UonUtils</a></span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/uon/UonUtils.html#line-38">UonUtils</a></span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
 <div class="block">Utility methods for the UON and UrlEncoding serializers and parsers.
 
@@ -99,10 +99,26 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#mergePair(org.apache.juneau.marshall.collections.JsonMap,java.lang.String)" class="member-name-link">mergePair</a><wbr>(<a href="../collections/JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a>&nbsp;dest,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;token)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="block">Merges one MULTI <c>key=uonValue</c> token into <jv>dest</jv>.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="../collections/JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#mergePairs(java.lang.String...)" class="member-name-link">mergePairs</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;tokens)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="block">Merges MULTI <c>key=uonValue</c> tokens into a new <a href="../collections/JsonMap.html" title="class in org.apache.juneau.marshall.collections"><code>JsonMap</code></a>.</div>
+</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static boolean</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#needsQuotes(java.lang.String)" class="member-name-link">needsQuotes</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;s)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Returns <jk>true</jk> if the specified string needs to be quoted per UON notation.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#parseValue(java.lang.String)" class="member-name-link">parseValue</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;raw)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="block">Parses a UON value from the right-hand side of a <c>key=uonValue</c> pair.</div>
 </div>
 </div>
 </div>
@@ -124,7 +140,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="needsQuotes(java.lang.String)">
 <h3>needsQuotes</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/uon/UonUtils.html#line-50">needsQuotes</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;s)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/uon/UonUtils.html#line-58">needsQuotes</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;s)</span></div>
 <div class="block">Returns <jk>true</jk> if the specified string needs to be quoted per UON notation.
 
  <p>
@@ -135,6 +151,72 @@ loadScripts(document, 'script');</script>
    <br>Must not be <jk>null</jk>.</dd>
 <dt>Returns:</dt>
 <dd><jk>true</jk> if the specified string needs to be quoted per UON notation.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="mergePairs(java.lang.String...)">
+<h3>mergePairs</h3>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="../collections/JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/uon/UonUtils.html#line-93">mergePairs</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;tokens)</span>
+                          throws <span class="exceptions"><a href="../parser/ParseException.html" title="class in org.apache.juneau.marshall.parser">ParseException</a>,
+<a href="../../commons/httppart/SchemaValidationException.html" title="class in org.apache.juneau.commons.httppart">SchemaValidationException</a></span></div>
+<div class="block">Merges MULTI <c>key=uonValue</c> tokens into a new <a href="../collections/JsonMap.html" title="class in org.apache.juneau.marshall.collections"><code>JsonMap</code></a>.
+
+ <p>
+ Each token is one top-level pair (for example <c>environment=prod</c> or <c>flags=(a,b,c)</c>).
+ A parenthesized UON object as a single token (<c>(a=1,b=2)</c>) is expanded.
+ Later keys overwrite earlier ones.  Blank tokens are ignored.
+ </p></div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>tokens</code> - The raw tokens.  Can be <jk>null</jk>.</dd>
+<dt>Returns:</dt>
+<dd>A new map, never <jk>null</jk>.</dd>
+<dt>Throws:</dt>
+<dd><code><a href="../parser/ParseException.html" title="class in org.apache.juneau.marshall.parser">ParseException</a></code> - Malformed UON value.</dd>
+<dd><code><a href="../../commons/httppart/SchemaValidationException.html" title="class in org.apache.juneau.commons.httppart">SchemaValidationException</a></code> - If a UON value fails schema validation.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="mergePair(org.apache.juneau.marshall.collections.JsonMap,java.lang.String)">
+<h3>mergePair</h3>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/uon/UonUtils.html#line-109">mergePair</a></span><wbr><span class="parameters">(<a href="../collections/JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a>&nbsp;dest,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;token)</span>
+                      throws <span class="exceptions"><a href="../parser/ParseException.html" title="class in org.apache.juneau.marshall.parser">ParseException</a>,
+<a href="../../commons/httppart/SchemaValidationException.html" title="class in org.apache.juneau.commons.httppart">SchemaValidationException</a></span></div>
+<div class="block">Merges one MULTI <c>key=uonValue</c> token into <jv>dest</jv>.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>dest</code> - The destination map.  Must not be <jk>null</jk>.</dd>
+<dd><code>token</code> - The raw token.  Blank tokens are ignored.</dd>
+<dt>Throws:</dt>
+<dd><code><a href="../parser/ParseException.html" title="class in org.apache.juneau.marshall.parser">ParseException</a></code> - Malformed UON value.</dd>
+<dd><code><a href="../../commons/httppart/SchemaValidationException.html" title="class in org.apache.juneau.commons.httppart">SchemaValidationException</a></code> - If a UON value fails schema validation.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="parseValue(java.lang.String)">
+<h3>parseValue</h3>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/uon/UonUtils.html#line-140">parseValue</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;raw)</span>
+                         throws <span class="exceptions"><a href="../parser/ParseException.html" title="class in org.apache.juneau.marshall.parser">ParseException</a>,
+<a href="../../commons/httppart/SchemaValidationException.html" title="class in org.apache.juneau.commons.httppart">SchemaValidationException</a></span></div>
+<div class="block">Parses a UON value from the right-hand side of a <c>key=uonValue</c> pair.
+
+ <p>
+ List-shaped values authored as <c>(a,b,c)</c> (without the UON <c>@</c> array prefix)
+ are treated as UON arrays.  Unquoted strings that the parser would otherwise coerce to
+ a number are kept as strings unless they are a UON number literal.
+ </p></div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>raw</code> - The raw UON value.  Must not be <jk>null</jk>.</dd>
+<dt>Returns:</dt>
+<dd>The parsed value.</dd>
+<dt>Throws:</dt>
+<dd><code><a href="../parser/ParseException.html" title="class in org.apache.juneau.marshall.parser">ParseException</a></code> - Malformed UON value.</dd>
+<dd><code><a href="../../commons/httppart/SchemaValidationException.html" title="class in org.apache.juneau.commons.httppart">SchemaValidationException</a></code> - If the UON value fails schema validation.</dd>
 </dl>
 </section>
 </li>

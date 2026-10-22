@@ -128,16 +128,14 @@
 <a class="jxr_linenumber" name="L120" href="#L120">120</a> 	}
 <a class="jxr_linenumber" name="L121" href="#L121">121</a> 
 <a class="jxr_linenumber" name="L122" href="#L122">122</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String toUrlMapping(String rawPath) {
-<a class="jxr_linenumber" name="L123" href="#L123">123</a> 		<strong class="jxr_keyword">var</strong> p = rawPath == <strong class="jxr_keyword">null</strong> ? <span class="jxr_string">""</span> : rawPath;
+<a class="jxr_linenumber" name="L123" href="#L123">123</a> 		<strong class="jxr_keyword">var</strong> p = rawPath;
 <a class="jxr_linenumber" name="L124" href="#L124">124</a> 		<strong class="jxr_keyword">while</strong> (p.endsWith(<span class="jxr_string">"/"</span>) &amp;&amp; p.length() &gt; 1)
 <a class="jxr_linenumber" name="L125" href="#L125">125</a> 			p = p.substring(0, p.length() - 1);
-<a class="jxr_linenumber" name="L126" href="#L126">126</a> 		<strong class="jxr_keyword">if</strong> (p.isEmpty())
-<a class="jxr_linenumber" name="L127" href="#L127">127</a> 			<strong class="jxr_keyword">return</strong> <span class="jxr_string">"/"</span>;
-<a class="jxr_linenumber" name="L128" href="#L128">128</a> 		<strong class="jxr_keyword">if</strong> (! p.startsWith(<span class="jxr_string">"/"</span>))
-<a class="jxr_linenumber" name="L129" href="#L129">129</a> 			p = <span class="jxr_string">"/"</span> + p;
-<a class="jxr_linenumber" name="L130" href="#L130">130</a> 		<strong class="jxr_keyword">return</strong> p;
-<a class="jxr_linenumber" name="L131" href="#L131">131</a> 	}
-<a class="jxr_linenumber" name="L132" href="#L132">132</a> }
+<a class="jxr_linenumber" name="L126" href="#L126">126</a> 		<strong class="jxr_keyword">if</strong> (! p.startsWith(<span class="jxr_string">"/"</span>))
+<a class="jxr_linenumber" name="L127" href="#L127">127</a> 			p = <span class="jxr_string">"/"</span> + p;
+<a class="jxr_linenumber" name="L128" href="#L128">128</a> 		<strong class="jxr_keyword">return</strong> p;
+<a class="jxr_linenumber" name="L129" href="#L129">129</a> 	}
+<a class="jxr_linenumber" name="L130" href="#L130">130</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

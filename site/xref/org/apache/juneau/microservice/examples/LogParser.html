@@ -42,8 +42,8 @@
 <a class="jxr_linenumber" name="L34" href="#L34">34</a>  <em class="jxr_javadoccomment"> * names.</em>
 <a class="jxr_linenumber" name="L35" href="#L35">35</a>  <em class="jxr_javadoccomment"> */</em>
 <a class="jxr_linenumber" name="L36" href="#L36">36</a>  @SuppressWarnings({
-<a class="jxr_linenumber" name="L37" href="#L37">37</a>  	<span class="jxr_string">"resource"</span>,  <em class="jxr_comment">// br is closed via this class's close() method</em>
-<a class="jxr_linenumber" name="L38" href="#L38">38</a>  	<span class="jxr_string">"java:S3776"</span> <em class="jxr_comment">// Cognitive complexity acceptable for log line parsing state machine</em>
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>  	<span class="jxr_string">"java:S3776"</span>, <em class="jxr_comment">// Cognitive complexity acceptable for log line parsing state machine</em>
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>  	<span class="jxr_string">"resource"</span> <em class="jxr_comment">// br is closed via this class's close() method</em>
 <a class="jxr_linenumber" name="L39" href="#L39">39</a>  })
 <a class="jxr_linenumber" name="L40" href="#L40">40</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> LogParser <strong class="jxr_keyword">implements</strong> Iterable&lt;LogParser.Entry&gt;, Closeable {
 <a class="jxr_linenumber" name="L41" href="#L41">41</a>  
@@ -151,7 +151,7 @@
 <a class="jxr_linenumber" name="L143" href="#L143">143</a> 			<strong class="jxr_keyword">return</strong> isRecord
 <a class="jxr_linenumber" name="L144" href="#L144">144</a> 				&amp;&amp; !(nn(start) &amp;&amp; nn(date) &amp;&amp; date.before(start))
 <a class="jxr_linenumber" name="L145" href="#L145">145</a> 				&amp;&amp; !(nn(end) &amp;&amp; nn(date) &amp;&amp; date.after(end))
-<a class="jxr_linenumber" name="L146" href="#L146">146</a> 				&amp;&amp; !(nn(threadFilter) &amp;&amp; ! threadFilter.equals(thread))
+<a class="jxr_linenumber" name="L146" href="#L146">146</a> 				&amp;&amp; !(nn(threadFilter) &amp;&amp; neq(threadFilter, thread))
 <a class="jxr_linenumber" name="L147" href="#L147">147</a> 				&amp;&amp; !(nn(loggerFilter) &amp;&amp; ! loggerFilter.contains(logger))
 <a class="jxr_linenumber" name="L148" href="#L148">148</a> 				&amp;&amp; !(nn(severityFilter) &amp;&amp; ! severityFilter.contains(severity));
 <a class="jxr_linenumber" name="L149" href="#L149">149</a> 		}
@@ -251,21 +251,18 @@
 <a class="jxr_linenumber" name="L243" href="#L243">243</a> <em class="jxr_javadoccomment">	 * @param w The writer to write the log file to.</em>
 <a class="jxr_linenumber" name="L244" href="#L244">244</a> <em class="jxr_javadoccomment">	 * @throws IOException Thrown by underlying stream.</em>
 <a class="jxr_linenumber" name="L245" href="#L245">245</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L246" href="#L246">246</a> 	@SuppressWarnings({
-<a class="jxr_linenumber" name="L247" href="#L247">247</a> 		<span class="jxr_string">"resource"</span> <em class="jxr_comment">// Log file resources managed by parser</em>
-<a class="jxr_linenumber" name="L248" href="#L248">248</a> 	})
-<a class="jxr_linenumber" name="L249" href="#L249">249</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> writeTo(Writer w) <strong class="jxr_keyword">throws</strong> IOException {
-<a class="jxr_linenumber" name="L250" href="#L250">250</a> 		<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L251" href="#L251">251</a> 			<strong class="jxr_keyword">if</strong> (! hasNext())
-<a class="jxr_linenumber" name="L252" href="#L252">252</a> 				w.append(<span class="jxr_string">"[EMPTY]"</span>);
-<a class="jxr_linenumber" name="L253" href="#L253">253</a> 			<strong class="jxr_keyword">else</strong>
-<a class="jxr_linenumber" name="L254" href="#L254">254</a> 				<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> le : <strong class="jxr_keyword">this</strong>)
-<a class="jxr_linenumber" name="L255" href="#L255">255</a> 					le.append(w);
-<a class="jxr_linenumber" name="L256" href="#L256">256</a> 		} <strong class="jxr_keyword">finally</strong> {
-<a class="jxr_linenumber" name="L257" href="#L257">257</a> 			close();
-<a class="jxr_linenumber" name="L258" href="#L258">258</a> 		}
-<a class="jxr_linenumber" name="L259" href="#L259">259</a> 	}
-<a class="jxr_linenumber" name="L260" href="#L260">260</a> }
+<a class="jxr_linenumber" name="L246" href="#L246">246</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> writeTo(Writer w) <strong class="jxr_keyword">throws</strong> IOException {
+<a class="jxr_linenumber" name="L247" href="#L247">247</a> 		<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L248" href="#L248">248</a> 			<strong class="jxr_keyword">if</strong> (! hasNext())
+<a class="jxr_linenumber" name="L249" href="#L249">249</a> 				w.append(<span class="jxr_string">"[EMPTY]"</span>);
+<a class="jxr_linenumber" name="L250" href="#L250">250</a> 			<strong class="jxr_keyword">else</strong>
+<a class="jxr_linenumber" name="L251" href="#L251">251</a> 				<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> le : <strong class="jxr_keyword">this</strong>)
+<a class="jxr_linenumber" name="L252" href="#L252">252</a> 					le.append(w);
+<a class="jxr_linenumber" name="L253" href="#L253">253</a> 		} <strong class="jxr_keyword">finally</strong> {
+<a class="jxr_linenumber" name="L254" href="#L254">254</a> 			close();
+<a class="jxr_linenumber" name="L255" href="#L255">255</a> 		}
+<a class="jxr_linenumber" name="L256" href="#L256">256</a> 	}
+<a class="jxr_linenumber" name="L257" href="#L257">257</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

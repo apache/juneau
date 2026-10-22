@@ -82,7 +82,7 @@ loadScripts(document, 'script');</script>
 <dd><a href="Settings.html" title="class in org.apache.juneau.commons.settings">Settings</a></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public static class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/settings/Settings.html#line-220">Settings.Builder</a></span>
+<div class="type-signature"><span class="modifiers">public static class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/settings/Settings.html#line-208">Settings.Builder</a></span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
 <div class="block">Builder for creating Settings instances.</div>
 </section>
@@ -173,7 +173,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;()">
 <h3>Builder</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/settings/Settings.Builder.html#line-220">Builder</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/settings/Settings.Builder.html#line-208">Builder</a></span>()</div>
 </section>
 </li>
 </ul>
@@ -187,7 +187,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="globalStore(org.apache.juneau.commons.function.NullableSupplier)">
 <h3>globalStore</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Settings.Builder.html" title="class in org.apache.juneau.commons.settings">Settings.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/settings/Settings.Builder.html#line-232">globalStore</a></span><wbr><span class="parameters">(<a href="../function/NullableSupplier.html" title="interface in org.apache.juneau.commons.function">NullableSupplier</a>&lt;<a href="PropertyStore.html" title="interface in org.apache.juneau.commons.settings">PropertyStore</a>&gt;&nbsp;supplier)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Settings.Builder.html" title="class in org.apache.juneau.commons.settings">Settings.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/settings/Settings.Builder.html#line-220">globalStore</a></span><wbr><span class="parameters">(<a href="../function/NullableSupplier.html" title="interface in org.apache.juneau.commons.function">NullableSupplier</a>&lt;<a href="PropertyStore.html" title="interface in org.apache.juneau.commons.settings">PropertyStore</a>&gt;&nbsp;supplier)</span></div>
 <div class="block">Sets the supplier for the global store.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -200,7 +200,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="localStore(org.apache.juneau.commons.function.NullableSupplier)">
 <h3>localStore</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Settings.Builder.html" title="class in org.apache.juneau.commons.settings">Settings.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/settings/Settings.Builder.html#line-243">localStore</a></span><wbr><span class="parameters">(<a href="../function/NullableSupplier.html" title="interface in org.apache.juneau.commons.function">NullableSupplier</a>&lt;<a href="PropertyStore.html" title="interface in org.apache.juneau.commons.settings">PropertyStore</a>&gt;&nbsp;supplier)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Settings.Builder.html" title="class in org.apache.juneau.commons.settings">Settings.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/settings/Settings.Builder.html#line-231">localStore</a></span><wbr><span class="parameters">(<a href="../function/NullableSupplier.html" title="interface in org.apache.juneau.commons.function">NullableSupplier</a>&lt;<a href="PropertyStore.html" title="interface in org.apache.juneau.commons.settings">PropertyStore</a>&gt;&nbsp;supplier)</span></div>
 <div class="block">Sets the supplier for the local (per-thread) store.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -214,7 +214,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="setSources(org.apache.juneau.commons.settings.PropertySource...)">
 <h3>setSources</h3>
 <div class="member-signature"><span class="annotations"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/SafeVarargs.html" title="class or interface in java.lang" class="external-link">@SafeVarargs</a>
-</span><span class="modifiers">public final</span>&nbsp;<span class="return-type"><a href="Settings.Builder.html" title="class in org.apache.juneau.commons.settings">Settings.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/settings/Settings.Builder.html#line-254">setSources</a></span><wbr><span class="parameters">(<a href="PropertySource.html" title="interface in org.apache.juneau.commons.settings">PropertySource</a>...&nbsp;sources)</span></div>
+</span><span class="modifiers">public final</span>&nbsp;<span class="return-type"><a href="Settings.Builder.html" title="class in org.apache.juneau.commons.settings">Settings.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/settings/Settings.Builder.html#line-242">setSources</a></span><wbr><span class="parameters">(<a href="PropertySource.html" title="interface in org.apache.juneau.commons.settings">PropertySource</a>...&nbsp;sources)</span></div>
 <div class="block">Sets the sources list, replacing any existing sources.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -227,7 +227,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="addSource(org.apache.juneau.commons.settings.PropertySource)">
 <h3>addSource</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Settings.Builder.html" title="class in org.apache.juneau.commons.settings">Settings.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/settings/Settings.Builder.html#line-270">addSource</a></span><wbr><span class="parameters">(<a href="PropertySource.html" title="interface in org.apache.juneau.commons.settings">PropertySource</a>&nbsp;source)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Settings.Builder.html" title="class in org.apache.juneau.commons.settings">Settings.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/settings/Settings.Builder.html#line-258">addSource</a></span><wbr><span class="parameters">(<a href="PropertySource.html" title="interface in org.apache.juneau.commons.settings">PropertySource</a>&nbsp;source)</span></div>
 <div class="block">Adds a source to the sources list.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -240,7 +240,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="addSource(org.apache.juneau.commons.settings.FunctionalPropertySource)">
 <h3>addSource</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Settings.Builder.html" title="class in org.apache.juneau.commons.settings">Settings.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/settings/Settings.Builder.html#line-282">addSource</a></span><wbr><span class="parameters">(<a href="FunctionalPropertySource.html" title="interface in org.apache.juneau.commons.settings">FunctionalPropertySource</a>&nbsp;source)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Settings.Builder.html" title="class in org.apache.juneau.commons.settings">Settings.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/settings/Settings.Builder.html#line-270">addSource</a></span><wbr><span class="parameters">(<a href="FunctionalPropertySource.html" title="interface in org.apache.juneau.commons.settings">FunctionalPropertySource</a>&nbsp;source)</span></div>
 <div class="block">Adds a functional source to the sources list.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -253,7 +253,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="useServiceLoader()">
 <h3>useServiceLoader</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Settings.Builder.html" title="class in org.apache.juneau.commons.settings">Settings.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/settings/Settings.Builder.html#line-294">useServiceLoader</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Settings.Builder.html" title="class in org.apache.juneau.commons.settings">Settings.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/settings/Settings.Builder.html#line-282">useServiceLoader</a></span>()</div>
 <div class="block">Discovers and registers <a href="PropertySourceProvider.html" title="interface in org.apache.juneau.commons.settings"><code>PropertySourceProvider</code></a> instances via <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/ServiceLoader.html" title="class or interface in java.util" class="external-link"><code>ServiceLoader</code></a>.
 
  <p>
@@ -267,7 +267,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="addTypeFunction(java.lang.Class,java.util.function.Function)">
 <h3>addTypeFunction</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type"><a href="Settings.Builder.html" title="class in org.apache.juneau.commons.settings">Settings.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/settings/Settings.Builder.html#line-331">addTypeFunction</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;T&gt;&nbsp;type,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type"><a href="Settings.Builder.html" title="class in org.apache.juneau.commons.settings">Settings.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/settings/Settings.Builder.html#line-319">addTypeFunction</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;T&gt;&nbsp;type,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Function.html" title="class or interface in java.util.function" class="external-link">Function</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr>T&gt;&nbsp;function)</span></div>
 <div class="block">Registers a custom type conversion function for the specified type.
 
@@ -302,7 +302,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="build()">
 <h3>build</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Settings.html" title="class in org.apache.juneau.commons.settings">Settings</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/settings/Settings.Builder.html#line-343">build</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Settings.html" title="class in org.apache.juneau.commons.settings">Settings</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/settings/Settings.Builder.html#line-331">build</a></span>()</div>
 <div class="block">Builds a Settings instance from this builder.</div>
 <dl class="notes">
 <dt>Returns:</dt>

@@ -84,7 +84,7 @@ loadScripts(document, 'script');</script>
 <dd><a href="RestSession.html" title="class in org.apache.juneau.rest.server">RestSession</a></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public static class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestSession.html#line-64">RestSession.Builder</a></span>
+<div class="type-signature"><span class="modifiers">public static class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestSession.html#line-61">RestSession.Builder</a></span>
 <span class="extends-implements">extends <a href="../../marshall/ContextSession.Builder.html" title="class in org.apache.juneau.marshall">ContextSession.Builder</a></span></div>
 <div class="block">Builder class.</div>
 </section>
@@ -134,38 +134,33 @@ loadScripts(document, 'script');</script>
 <div class="block">Returns the request path info as a <a href="util/UrlPath.html" title="class in org.apache.juneau.rest.server.util"><code>UrlPath</code></a> bean.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="RestSession.Builder.html" title="class in org.apache.juneau.rest.server">RestSession.Builder</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#logger(org.apache.juneau.rest.server.logger.CallLogger)" class="member-name-link">logger</a><wbr>(<a href="logger/CallLogger.html" title="class in org.apache.juneau.rest.server.logger">CallLogger</a>&nbsp;value)</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#pathVars(java.util.Map)" class="member-name-link">pathVars</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;value)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Specifies the logger to use for this session.</div>
-</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="RestSession.Builder.html" title="class in org.apache.juneau.rest.server">RestSession.Builder</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#pathVars(java.util.Map)" class="member-name-link">pathVars</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;value)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Adds resolved <c><ja>@Resource</ja>(path)</c> variable values to this call.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>jakarta.servlet.http.HttpServletRequest</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#req()" class="member-name-link">req</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>jakarta.servlet.http.HttpServletRequest</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#req()" class="member-name-link">req</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns the HTTP servlet request object on this call.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="RestSession.Builder.html" title="class in org.apache.juneau.rest.server">RestSession.Builder</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#req(jakarta.servlet.http.HttpServletRequest)" class="member-name-link">req</a><wbr>(jakarta.servlet.http.HttpServletRequest&nbsp;value)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="RestSession.Builder.html" title="class in org.apache.juneau.rest.server">RestSession.Builder</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#req(jakarta.servlet.http.HttpServletRequest)" class="member-name-link">req</a><wbr>(jakarta.servlet.http.HttpServletRequest&nbsp;value)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Specifies the HTTP servlet request object on this call.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>jakarta.servlet.http.HttpServletResponse</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#res()" class="member-name-link">res</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>jakarta.servlet.http.HttpServletResponse</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#res()" class="member-name-link">res</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns the HTTP servlet response object on this call.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="RestSession.Builder.html" title="class in org.apache.juneau.rest.server">RestSession.Builder</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#res(jakarta.servlet.http.HttpServletResponse)" class="member-name-link">res</a><wbr>(jakarta.servlet.http.HttpServletResponse&nbsp;value)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="RestSession.Builder.html" title="class in org.apache.juneau.rest.server">RestSession.Builder</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#res(jakarta.servlet.http.HttpServletResponse)" class="member-name-link">res</a><wbr>(jakarta.servlet.http.HttpServletResponse&nbsp;value)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Specifies the HTTP servlet response object on this call.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="RestSession.Builder.html" title="class in org.apache.juneau.rest.server">RestSession.Builder</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#resource(java.lang.Object)" class="member-name-link">resource</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="RestSession.Builder.html" title="class in org.apache.juneau.rest.server">RestSession.Builder</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#resource(java.lang.Object)" class="member-name-link">resource</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Specifies the servlet implementation bean.</div>
 </div>
 </div>
@@ -191,7 +186,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.rest.server.RestContext)">
 <h3>Builder</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestSession.Builder.html#line-83">Builder</a></span><wbr><span class="parameters">(<a href="RestContext.html" title="class in org.apache.juneau.rest.server">RestContext</a>&nbsp;ctx)</span></div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestSession.Builder.html#line-79">Builder</a></span><wbr><span class="parameters">(<a href="RestContext.html" title="class in org.apache.juneau.rest.server">RestContext</a>&nbsp;ctx)</span></div>
 <div class="block">Constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -211,7 +206,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="build()">
 <h3>build</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RestSession.html" title="class in org.apache.juneau.rest.server">RestSession</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestSession.Builder.html#line-88">build</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RestSession.html" title="class in org.apache.juneau.rest.server">RestSession</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestSession.Builder.html#line-84">build</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../../marshall/ContextSession.Builder.html#build()">ContextSession.Builder</a></code></span></div>
 <div class="block">Build the object.</div>
 <dl class="notes">
@@ -225,7 +220,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getPathInfoUndecoded()">
 <h3>getPathInfoUndecoded</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestSession.Builder.html#line-98">getPathInfoUndecoded</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestSession.Builder.html#line-94">getPathInfoUndecoded</a></span>()</div>
 <div class="block">Returns the undecoded request servlet path info.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -236,7 +231,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getUrlPath()">
 <h3>getUrlPath</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="util/UrlPath.html" title="class in org.apache.juneau.rest.server.util">UrlPath</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestSession.Builder.html#line-109">getUrlPath</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="util/UrlPath.html" title="class in org.apache.juneau.rest.server.util">UrlPath</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestSession.Builder.html#line-105">getUrlPath</a></span>()</div>
 <div class="block">Returns the request path info as a <a href="util/UrlPath.html" title="class in org.apache.juneau.rest.server.util"><code>UrlPath</code></a> bean.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -245,23 +240,9 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
-<section class="detail" id="logger(org.apache.juneau.rest.server.logger.CallLogger)">
-<h3>logger</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RestSession.Builder.html" title="class in org.apache.juneau.rest.server">RestSession.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestSession.Builder.html#line-122">logger</a></span><wbr><span class="parameters">(<a href="logger/CallLogger.html" title="class in org.apache.juneau.rest.server.logger">CallLogger</a>&nbsp;value)</span></div>
-<div class="block">Specifies the logger to use for this session.</div>
-<dl class="notes">
-<dt>Parameters:</dt>
-<dd><code>value</code> - The value for this setting.
-   <br>Can be <jk>null</jk> (will use the default logger from the context if available).</dd>
-<dt>Returns:</dt>
-<dd>This object.</dd>
-</dl>
-</section>
-</li>
-<li>
 <section class="detail" id="pathVars(java.util.Map)">
 <h3>pathVars</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RestSession.Builder.html" title="class in org.apache.juneau.rest.server">RestSession.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestSession.Builder.html#line-134">pathVars</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RestSession.Builder.html" title="class in org.apache.juneau.rest.server">RestSession.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestSession.Builder.html#line-118">pathVars</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;value)</span></div>
 <div class="block">Adds resolved <c><ja>@Resource</ja>(path)</c> variable values to this call.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -275,7 +256,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="req()">
 <h3>req</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">jakarta.servlet.http.HttpServletRequest</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestSession.Builder.html#line-154">req</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">jakarta.servlet.http.HttpServletRequest</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestSession.Builder.html#line-135">req</a></span>()</div>
 <div class="block">Returns the HTTP servlet request object on this call.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -286,7 +267,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="req(jakarta.servlet.http.HttpServletRequest)">
 <h3>req</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RestSession.Builder.html" title="class in org.apache.juneau.rest.server">RestSession.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestSession.Builder.html#line-167">req</a></span><wbr><span class="parameters">(jakarta.servlet.http.HttpServletRequest&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RestSession.Builder.html" title="class in org.apache.juneau.rest.server">RestSession.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestSession.Builder.html#line-148">req</a></span><wbr><span class="parameters">(jakarta.servlet.http.HttpServletRequest&nbsp;value)</span></div>
 <div class="block">Specifies the HTTP servlet request object on this call.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -300,7 +281,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="res()">
 <h3>res</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">jakarta.servlet.http.HttpServletResponse</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestSession.Builder.html#line-177">res</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">jakarta.servlet.http.HttpServletResponse</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestSession.Builder.html#line-158">res</a></span>()</div>
 <div class="block">Returns the HTTP servlet response object on this call.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -311,7 +292,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="res(jakarta.servlet.http.HttpServletResponse)">
 <h3>res</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RestSession.Builder.html" title="class in org.apache.juneau.rest.server">RestSession.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestSession.Builder.html#line-188">res</a></span><wbr><span class="parameters">(jakarta.servlet.http.HttpServletResponse&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RestSession.Builder.html" title="class in org.apache.juneau.rest.server">RestSession.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestSession.Builder.html#line-169">res</a></span><wbr><span class="parameters">(jakarta.servlet.http.HttpServletResponse&nbsp;value)</span></div>
 <div class="block">Specifies the HTTP servlet response object on this call.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -325,7 +306,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="resource(java.lang.Object)">
 <h3>resource</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RestSession.Builder.html" title="class in org.apache.juneau.rest.server">RestSession.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestSession.Builder.html#line-200">resource</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RestSession.Builder.html" title="class in org.apache.juneau.rest.server">RestSession.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestSession.Builder.html#line-181">resource</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</span></div>
 <div class="block">Specifies the servlet implementation bean.</div>
 <dl class="notes">
 <dt>Parameters:</dt>

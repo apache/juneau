@@ -69,8 +69,8 @@
 <a class="jxr_linenumber" name="L61" href="#L61">61</a>  <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L62" href="#L62">62</a>  	<strong class="jxr_keyword">public</strong> <a name="LogbackLogBackend" href="../../../../../../../org/apache/juneau/rest/server/management/logging/LogbackLogBackend.html#LogbackLogBackend">LogbackLogBackend</a>() {
 <a class="jxr_linenumber" name="L63" href="#L63">63</a>  		<strong class="jxr_keyword">var</strong> factory = LoggerFactory.getILoggerFactory();
-<a class="jxr_linenumber" name="L64" href="#L64">64</a>  		<strong class="jxr_keyword">if</strong> (! (factory instanceof LoggerContext factory2))
-<a class="jxr_linenumber" name="L65" href="#L65">65</a>  			<strong class="jxr_keyword">throw</strong> isex(<span class="jxr_string">"The bound SLF4J backend is not Logback (ILoggerFactory=%s).  /loggers drives the concrete backend, not the SLF4J facade."</span>, factory.getClass().getName());
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>  		<strong class="jxr_keyword">if</strong> (! (factory instanceof LoggerContext factory2))  <em class="jxr_comment">// HTT: SLF4J binds Logback statically on this module's classpath; a seam (injectable ILoggerFactory) would make this testable</em>
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>  			<strong class="jxr_keyword">throw</strong> isex(<span class="jxr_string">"The bound SLF4J backend is not Logback (ILoggerFactory=%s).  /loggers drives the concrete backend, not the SLF4J facade."</span>, factory.getClass().getName());  <em class="jxr_comment">// HTT: only reachable when the bound SLF4J backend is not Logback; a seam would make this testable</em>
 <a class="jxr_linenumber" name="L66" href="#L66">66</a>  		<strong class="jxr_keyword">this</strong>.context = factory2;
 <a class="jxr_linenumber" name="L67" href="#L67">67</a>  	}
 <a class="jxr_linenumber" name="L68" href="#L68">68</a>  
@@ -125,7 +125,7 @@
 <a class="jxr_linenumber" name="L117" href="#L117">117</a> 	}
 <a class="jxr_linenumber" name="L118" href="#L118">118</a> 
 <a class="jxr_linenumber" name="L119" href="#L119">119</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String resolveName(String name) {
-<a class="jxr_linenumber" name="L120" href="#L120">120</a> 		<strong class="jxr_keyword">return</strong> (name == <strong class="jxr_keyword">null</strong> || name.equals(<span class="jxr_string">"ROOT"</span>)) ? Logger.ROOT_LOGGER_NAME : name;
+<a class="jxr_linenumber" name="L120" href="#L120">120</a> 		<strong class="jxr_keyword">return</strong> (name == <strong class="jxr_keyword">null</strong> || eq(name, <span class="jxr_string">"ROOT"</span>)) ? Logger.ROOT_LOGGER_NAME : name;
 <a class="jxr_linenumber" name="L121" href="#L121">121</a> 	}
 <a class="jxr_linenumber" name="L122" href="#L122">122</a> }
 </pre>

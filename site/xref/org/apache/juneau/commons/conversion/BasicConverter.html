@@ -158,13 +158,13 @@
 <a class="jxr_linenumber" name="L150" href="#L150">150</a> <em class="jxr_javadoccomment"> * This class is thread-safe. The singleton instance can be safely shared across multiple threads.</em>
 <a class="jxr_linenumber" name="L151" href="#L151">151</a> <em class="jxr_javadoccomment"> */</em>
 <a class="jxr_linenumber" name="L152" href="#L152">152</a> @SuppressWarnings({
-<a class="jxr_linenumber" name="L153" href="#L153">153</a> 	<span class="jxr_string">"rawtypes"</span>, <em class="jxr_comment">// Raw types necessary for generic conversion dispatch</em>
-<a class="jxr_linenumber" name="L154" href="#L154">154</a> 	<span class="jxr_string">"unchecked"</span>, <em class="jxr_comment">// Type erasure requires unchecked casts throughout conversion logic</em>
+<a class="jxr_linenumber" name="L153" href="#L153">153</a> 	<span class="jxr_string">"java:S1067"</span>, <em class="jxr_comment">// Complex boolean expressions in conversion checks reflect the natural type hierarchy</em>
+<a class="jxr_linenumber" name="L154" href="#L154">154</a> 	<span class="jxr_string">"java:S1192"</span>, <em class="jxr_comment">// "parse" literal is used in multiple independent Sets/arrays; extracting it would reduce clarity</em>
 <a class="jxr_linenumber" name="L155" href="#L155">155</a> 	<span class="jxr_string">"java:S3776"</span>, <em class="jxr_comment">// Cognitive complexity of conversion dispatch methods is inherent to the number of supported type pairs</em>
-<a class="jxr_linenumber" name="L156" href="#L156">156</a> 	<span class="jxr_string">"java:S1067"</span>, <em class="jxr_comment">// Complex boolean expressions in conversion checks reflect the natural type hierarchy</em>
-<a class="jxr_linenumber" name="L157" href="#L157">157</a> 	<span class="jxr_string">"java:S1192"</span> <em class="jxr_comment">// "parse" literal is used in multiple independent Sets/arrays; extracting it would reduce clarity</em>
+<a class="jxr_linenumber" name="L156" href="#L156">156</a> 	<span class="jxr_string">"rawtypes"</span>, <em class="jxr_comment">// Raw types necessary for generic conversion dispatch</em>
+<a class="jxr_linenumber" name="L157" href="#L157">157</a> 	<span class="jxr_string">"unchecked"</span> <em class="jxr_comment">// Type erasure requires unchecked casts throughout conversion logic</em>
 <a class="jxr_linenumber" name="L158" href="#L158">158</a> })
-<a class="jxr_linenumber" name="L159" href="#L159">159</a> <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> BasicConverter <strong class="jxr_keyword">extends</strong> <a name="CachingConverter" href="../../../../../org/apache/juneau/commons/conversion/CachingConverter.html#CachingConverter">CachingConverter</a> {
+<a class="jxr_linenumber" name="L159" href="#L159">159</a> <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> BasicConverter <strong class="jxr_keyword">extends</strong> CachingConverter {
 <a class="jxr_linenumber" name="L160" href="#L160">160</a> 
 <a class="jxr_linenumber" name="L161" href="#L161">161</a> 	<em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L162" href="#L162">162</a> <em class="jxr_javadoccomment">	 * Singleton instance.</em>
@@ -283,7 +283,7 @@
 <a class="jxr_linenumber" name="L275" href="#L275">275</a> 	<strong class="jxr_keyword">private</strong> &lt;O&gt; Conversion&lt;CharSequence,O&gt; findNumberFromString(Class&lt;O&gt; outType) {
 <a class="jxr_linenumber" name="L276" href="#L276">276</a> 		<strong class="jxr_keyword">return</strong> (in, memberOf, session, args) -&gt; {
 <a class="jxr_linenumber" name="L277" href="#L277">277</a> 			<strong class="jxr_keyword">var</strong> s = in.toString();
-<a class="jxr_linenumber" name="L278" href="#L278">278</a> 			<strong class="jxr_keyword">if</strong> (s.isEmpty() || <span class="jxr_string">"null"</span>.equals(s))
+<a class="jxr_linenumber" name="L278" href="#L278">278</a> 			<strong class="jxr_keyword">if</strong> (s.isEmpty() || eq(s, <span class="jxr_string">"null"</span>))
 <a class="jxr_linenumber" name="L279" href="#L279">279</a> 				<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L280" href="#L280">280</a> 			<strong class="jxr_keyword">return</strong> (O) parseNumber(s, (Class&lt;? <strong class="jxr_keyword">extends</strong> Number&gt;) outType);
 <a class="jxr_linenumber" name="L281" href="#L281">281</a> 		};
@@ -541,7 +541,7 @@
 <a class="jxr_linenumber" name="L533" href="#L533">533</a> 		<strong class="jxr_keyword">if</strong> (CharSequence.<strong class="jxr_keyword">class</strong>.isAssignableFrom(inType) &amp;&amp; outType == Boolean.<strong class="jxr_keyword">class</strong>)
 <a class="jxr_linenumber" name="L534" href="#L534">534</a> 			<strong class="jxr_keyword">return</strong> (in, memberOf, session, args) -&gt; {
 <a class="jxr_linenumber" name="L535" href="#L535">535</a> 				<strong class="jxr_keyword">var</strong> s = in.toString();
-<a class="jxr_linenumber" name="L536" href="#L536">536</a> 				<strong class="jxr_keyword">if</strong> (s.isEmpty() || <span class="jxr_string">"null"</span>.equals(s))
+<a class="jxr_linenumber" name="L536" href="#L536">536</a> 				<strong class="jxr_keyword">if</strong> (s.isEmpty() || eq(s, <span class="jxr_string">"null"</span>))
 <a class="jxr_linenumber" name="L537" href="#L537">537</a> 					<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L538" href="#L538">538</a> 				<strong class="jxr_keyword">return</strong> (O) Boolean.valueOf(s);
 <a class="jxr_linenumber" name="L539" href="#L539">539</a> 			};
@@ -658,7 +658,7 @@
 <a class="jxr_linenumber" name="L650" href="#L650">650</a> 			m.isNotStatic()
 <a class="jxr_linenumber" name="L651" href="#L651">651</a> 			&amp;&amp; m.isNotDeprecated()
 <a class="jxr_linenumber" name="L652" href="#L652">652</a> 			&amp;&amp; m.getParameterCount() == 0
-<a class="jxr_linenumber" name="L653" href="#L653">653</a> 			&amp;&amp; m.getNameSimple().equalsIgnoreCase(methodName)
+<a class="jxr_linenumber" name="L653" href="#L653">653</a> 			&amp;&amp; eqic(m.getNameSimple(), methodName)
 <a class="jxr_linenumber" name="L654" href="#L654">654</a> 			&amp;&amp; m.hasReturnTypeParent(outType)
 <a class="jxr_linenumber" name="L655" href="#L655">655</a> 		);
 <a class="jxr_linenumber" name="L656" href="#L656">656</a> 		<strong class="jxr_keyword">if</strong> (opt.isPresent()) {

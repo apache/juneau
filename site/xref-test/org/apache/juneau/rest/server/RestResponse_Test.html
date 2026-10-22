@@ -576,7 +576,7 @@
 <a class="jxr_linenumber" name="L568" href="#L568">568</a> 
 <a class="jxr_linenumber" name="L569" href="#L569">569</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
 <a class="jxr_linenumber" name="L570" href="#L570">570</a> 	<em class="jxr_comment">// J: Misc — getMediaType, getCharset null path, hasContent / setContent / getContent, attribute pass-through,</em>
-<a class="jxr_linenumber" name="L571" href="#L571">571</a> 	<em class="jxr_comment">//    setNoTrace / setDebug / setException — these touch the small accessor branches.</em>
+<a class="jxr_linenumber" name="L571" href="#L571">571</a> 	<em class="jxr_comment">//    setNoTrace / setException — these touch the small accessor branches.</em>
 <a class="jxr_linenumber" name="L572" href="#L572">572</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
 <a class="jxr_linenumber" name="L573" href="#L573">573</a> 
 <a class="jxr_linenumber" name="L574" href="#L574">574</a> 	@Rest
@@ -612,94 +612,85 @@
 <a class="jxr_linenumber" name="L604" href="#L604">604</a> 			res.setNoTrace(Boolean.TRUE);
 <a class="jxr_linenumber" name="L605" href="#L605">605</a> 			<strong class="jxr_keyword">return</strong> <span class="jxr_string">"ok"</span>;
 <a class="jxr_linenumber" name="L606" href="#L606">606</a> 		}
-<a class="jxr_linenumber" name="L607" href="#L607">607</a> 		@RestGet(<span class="jxr_string">"/debugFluent"</span>) <strong class="jxr_keyword">public</strong> String debugFluent(RestResponse res) <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L608" href="#L608">608</a> 			res.setDebug();
-<a class="jxr_linenumber" name="L609" href="#L609">609</a> 			res.setDebug(Boolean.FALSE);
+<a class="jxr_linenumber" name="L607" href="#L607">607</a> 		@RestGet(<span class="jxr_string">"/setExceptionFluent"</span>) <strong class="jxr_keyword">public</strong> String setExceptionFluent(RestResponse res) {
+<a class="jxr_linenumber" name="L608" href="#L608">608</a> 			res.setException(<strong class="jxr_keyword">new</strong> RuntimeException(<span class="jxr_string">"x"</span>));
+<a class="jxr_linenumber" name="L609" href="#L609">609</a> 			res.setException(<strong class="jxr_keyword">null</strong>);
 <a class="jxr_linenumber" name="L610" href="#L610">610</a> 			<strong class="jxr_keyword">return</strong> <span class="jxr_string">"ok"</span>;
 <a class="jxr_linenumber" name="L611" href="#L611">611</a> 		}
-<a class="jxr_linenumber" name="L612" href="#L612">612</a> 		@RestGet(<span class="jxr_string">"/setExceptionFluent"</span>) <strong class="jxr_keyword">public</strong> String setExceptionFluent(RestResponse res) {
-<a class="jxr_linenumber" name="L613" href="#L613">613</a> 			res.setException(<strong class="jxr_keyword">new</strong> RuntimeException(<span class="jxr_string">"x"</span>));
-<a class="jxr_linenumber" name="L614" href="#L614">614</a> 			res.setException(<strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L615" href="#L615">615</a> 			<strong class="jxr_keyword">return</strong> <span class="jxr_string">"ok"</span>;
-<a class="jxr_linenumber" name="L616" href="#L616">616</a> 		}
-<a class="jxr_linenumber" name="L617" href="#L617">617</a> 		@RestGet(<span class="jxr_string">"/contextAndOpContext"</span>) <strong class="jxr_keyword">public</strong> String contextAndOpContext(RestResponse res) {
-<a class="jxr_linenumber" name="L618" href="#L618">618</a> 			<strong class="jxr_keyword">return</strong> (res.getContext() != <strong class="jxr_keyword">null</strong>) + <span class="jxr_string">","</span> + (res.getOpContext() != <strong class="jxr_keyword">null</strong>) + <span class="jxr_string">","</span> + (res.getHttpServletResponse() != <strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L619" href="#L619">619</a> 		}
-<a class="jxr_linenumber" name="L620" href="#L620">620</a> 		@RestGet(<span class="jxr_string">"/setResponseBeanMeta"</span>) <strong class="jxr_keyword">public</strong> String setResponseBeanMeta(RestResponse res) {
-<a class="jxr_linenumber" name="L621" href="#L621">621</a> 			res.setResponseBeanMeta(<strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L622" href="#L622">622</a> 			<strong class="jxr_keyword">return</strong> res.getResponseBeanMeta() == <strong class="jxr_keyword">null</strong> ? <span class="jxr_string">"null-rbm"</span> : <span class="jxr_string">"non-null-rbm"</span>;
-<a class="jxr_linenumber" name="L623" href="#L623">623</a> 		}
-<a class="jxr_linenumber" name="L624" href="#L624">624</a> 		@RestGet(<span class="jxr_string">"/setContentSchemaThenGet"</span>) <strong class="jxr_keyword">public</strong> String setContentSchemaThenGet(RestResponse res) {
-<a class="jxr_linenumber" name="L625" href="#L625">625</a> 			res.setContentSchema(<strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L626" href="#L626">626</a> 			<strong class="jxr_keyword">return</strong> res.getContentSchema().isEmpty() ? <span class="jxr_string">"empty"</span> : <span class="jxr_string">"present"</span>;
-<a class="jxr_linenumber" name="L627" href="#L627">627</a> 		}
-<a class="jxr_linenumber" name="L628" href="#L628">628</a> 		@RestGet(<span class="jxr_string">"/getContentBeforeSet"</span>) <strong class="jxr_keyword">public</strong> String getContentBeforeSet(RestResponse res) {
-<a class="jxr_linenumber" name="L629" href="#L629">629</a> 			<em class="jxr_comment">// content == null branch in getRawOutput().</em>
-<a class="jxr_linenumber" name="L630" href="#L630">630</a> 			<strong class="jxr_keyword">var</strong> sb = <strong class="jxr_keyword">new</strong> StringBuilder();
-<a class="jxr_linenumber" name="L631" href="#L631">631</a> 			sb.append(<span class="jxr_string">"hasContent="</span>).append(res.hasContent());
-<a class="jxr_linenumber" name="L632" href="#L632">632</a> 			sb.append(<span class="jxr_string">",castStr="</span>).append(res.getContent(String.<strong class="jxr_keyword">class</strong>));
-<a class="jxr_linenumber" name="L633" href="#L633">633</a> 			sb.append(<span class="jxr_string">",isOfStr="</span>).append(res.isContentOfType(String.<strong class="jxr_keyword">class</strong>));
-<a class="jxr_linenumber" name="L634" href="#L634">634</a> 			<strong class="jxr_keyword">return</strong> sb.toString();
-<a class="jxr_linenumber" name="L635" href="#L635">635</a> 		}
-<a class="jxr_linenumber" name="L636" href="#L636">636</a> 	}
-<a class="jxr_linenumber" name="L637" href="#L637">637</a> 
-<a class="jxr_linenumber" name="L638" href="#L638">638</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> MockRestClient CJ = MockRestClient.buildLax(J.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L639" href="#L639">639</a> 
-<a class="jxr_linenumber" name="L640" href="#L640">640</a> 	@Test <strong class="jxr_keyword">void</strong> j01_getCharset_nonDefaultPath() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L641" href="#L641">641</a> 		CJ.get(<span class="jxr_string">"/getCharsetNonDefault"</span>).run().assertStatus(200);
-<a class="jxr_linenumber" name="L642" href="#L642">642</a> 	}
-<a class="jxr_linenumber" name="L643" href="#L643">643</a> 
-<a class="jxr_linenumber" name="L644" href="#L644">644</a> 	@Test <strong class="jxr_keyword">void</strong> j02_getMediaType() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L645" href="#L645">645</a> 		CJ.get(<span class="jxr_string">"/getMediaType"</span>).run().assertStatus(200).assertContent().isContains(<span class="jxr_string">"application/json"</span>);
-<a class="jxr_linenumber" name="L646" href="#L646">646</a> 	}
-<a class="jxr_linenumber" name="L647" href="#L647">647</a> 
-<a class="jxr_linenumber" name="L648" href="#L648">648</a> 	@Test <strong class="jxr_keyword">void</strong> j03_contentLifecycle() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L649" href="#L649">649</a> 		CJ.get(<span class="jxr_string">"/contentLifecycle"</span>).run().assertStatus(200).assertContent()
-<a class="jxr_linenumber" name="L650" href="#L650">650</a> 			.isContains(
-<a class="jxr_linenumber" name="L651" href="#L651">651</a> 				<span class="jxr_string">"hasContent.before=false"</span>,
-<a class="jxr_linenumber" name="L652" href="#L652">652</a> 				<span class="jxr_string">"hasContent.after=true"</span>,
-<a class="jxr_linenumber" name="L653" href="#L653">653</a> 				<span class="jxr_string">"contentValue=payload"</span>,
-<a class="jxr_linenumber" name="L654" href="#L654">654</a> 				<span class="jxr_string">"isOfStr=true"</span>,
-<a class="jxr_linenumber" name="L655" href="#L655">655</a> 				<span class="jxr_string">"castStr=payload"</span>,
-<a class="jxr_linenumber" name="L656" href="#L656">656</a> 				<span class="jxr_string">"castInt=null"</span>
-<a class="jxr_linenumber" name="L657" href="#L657">657</a> 			);
-<a class="jxr_linenumber" name="L658" href="#L658">658</a> 	}
-<a class="jxr_linenumber" name="L659" href="#L659">659</a> 
-<a class="jxr_linenumber" name="L660" href="#L660">660</a> 	@Test <strong class="jxr_keyword">void</strong> j04_setAttribute() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L661" href="#L661">661</a> 		CJ.get(<span class="jxr_string">"/setAttr"</span>).run().assertStatus(200).assertContent(<span class="jxr_string">"bar"</span>);
-<a class="jxr_linenumber" name="L662" href="#L662">662</a> 	}
-<a class="jxr_linenumber" name="L663" href="#L663">663</a> 
-<a class="jxr_linenumber" name="L664" href="#L664">664</a> 	@Test <strong class="jxr_keyword">void</strong> j05_setNoTraceFluent() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L665" href="#L665">665</a> 		CJ.get(<span class="jxr_string">"/noTraceFluent"</span>).run().assertStatus(200);
-<a class="jxr_linenumber" name="L666" href="#L666">666</a> 	}
-<a class="jxr_linenumber" name="L667" href="#L667">667</a> 
-<a class="jxr_linenumber" name="L668" href="#L668">668</a> 	@Test <strong class="jxr_keyword">void</strong> j06_setDebugFluent() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L669" href="#L669">669</a> 		CJ.get(<span class="jxr_string">"/debugFluent"</span>).run().assertStatus(200);
-<a class="jxr_linenumber" name="L670" href="#L670">670</a> 	}
-<a class="jxr_linenumber" name="L671" href="#L671">671</a> 
-<a class="jxr_linenumber" name="L672" href="#L672">672</a> 	@Test <strong class="jxr_keyword">void</strong> j07_setExceptionFluent() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L673" href="#L673">673</a> 		CJ.get(<span class="jxr_string">"/setExceptionFluent"</span>).run().assertStatus(200);
-<a class="jxr_linenumber" name="L674" href="#L674">674</a> 	}
-<a class="jxr_linenumber" name="L675" href="#L675">675</a> 
-<a class="jxr_linenumber" name="L676" href="#L676">676</a> 	@Test <strong class="jxr_keyword">void</strong> j08_contextAndOpContextAndHttpResponseAccessors() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L677" href="#L677">677</a> 		CJ.get(<span class="jxr_string">"/contextAndOpContext"</span>).run().assertStatus(200).assertContent(<span class="jxr_string">"true,true,true"</span>);
+<a class="jxr_linenumber" name="L612" href="#L612">612</a> 		@RestGet(<span class="jxr_string">"/contextAndOpContext"</span>) <strong class="jxr_keyword">public</strong> String contextAndOpContext(RestResponse res) {
+<a class="jxr_linenumber" name="L613" href="#L613">613</a> 			<strong class="jxr_keyword">return</strong> (res.getContext() != <strong class="jxr_keyword">null</strong>) + <span class="jxr_string">","</span> + (res.getOpContext() != <strong class="jxr_keyword">null</strong>) + <span class="jxr_string">","</span> + (res.getHttpServletResponse() != <strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L614" href="#L614">614</a> 		}
+<a class="jxr_linenumber" name="L615" href="#L615">615</a> 		@RestGet(<span class="jxr_string">"/setResponseBeanMeta"</span>) <strong class="jxr_keyword">public</strong> String setResponseBeanMeta(RestResponse res) {
+<a class="jxr_linenumber" name="L616" href="#L616">616</a> 			res.setResponseBeanMeta(<strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L617" href="#L617">617</a> 			<strong class="jxr_keyword">return</strong> res.getResponseBeanMeta() == <strong class="jxr_keyword">null</strong> ? <span class="jxr_string">"null-rbm"</span> : <span class="jxr_string">"non-null-rbm"</span>;
+<a class="jxr_linenumber" name="L618" href="#L618">618</a> 		}
+<a class="jxr_linenumber" name="L619" href="#L619">619</a> 		@RestGet(<span class="jxr_string">"/setContentSchemaThenGet"</span>) <strong class="jxr_keyword">public</strong> String setContentSchemaThenGet(RestResponse res) {
+<a class="jxr_linenumber" name="L620" href="#L620">620</a> 			res.setContentSchema(<strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L621" href="#L621">621</a> 			<strong class="jxr_keyword">return</strong> res.getContentSchema().isEmpty() ? <span class="jxr_string">"empty"</span> : <span class="jxr_string">"present"</span>;
+<a class="jxr_linenumber" name="L622" href="#L622">622</a> 		}
+<a class="jxr_linenumber" name="L623" href="#L623">623</a> 		@RestGet(<span class="jxr_string">"/getContentBeforeSet"</span>) <strong class="jxr_keyword">public</strong> String getContentBeforeSet(RestResponse res) {
+<a class="jxr_linenumber" name="L624" href="#L624">624</a> 			<em class="jxr_comment">// content == null branch in getRawOutput().</em>
+<a class="jxr_linenumber" name="L625" href="#L625">625</a> 			<strong class="jxr_keyword">var</strong> sb = <strong class="jxr_keyword">new</strong> StringBuilder();
+<a class="jxr_linenumber" name="L626" href="#L626">626</a> 			sb.append(<span class="jxr_string">"hasContent="</span>).append(res.hasContent());
+<a class="jxr_linenumber" name="L627" href="#L627">627</a> 			sb.append(<span class="jxr_string">",castStr="</span>).append(res.getContent(String.<strong class="jxr_keyword">class</strong>));
+<a class="jxr_linenumber" name="L628" href="#L628">628</a> 			sb.append(<span class="jxr_string">",isOfStr="</span>).append(res.isContentOfType(String.<strong class="jxr_keyword">class</strong>));
+<a class="jxr_linenumber" name="L629" href="#L629">629</a> 			<strong class="jxr_keyword">return</strong> sb.toString();
+<a class="jxr_linenumber" name="L630" href="#L630">630</a> 		}
+<a class="jxr_linenumber" name="L631" href="#L631">631</a> 	}
+<a class="jxr_linenumber" name="L632" href="#L632">632</a> 
+<a class="jxr_linenumber" name="L633" href="#L633">633</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> MockRestClient CJ = MockRestClient.buildLax(J.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L634" href="#L634">634</a> 
+<a class="jxr_linenumber" name="L635" href="#L635">635</a> 	@Test <strong class="jxr_keyword">void</strong> j01_getCharset_nonDefaultPath() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L636" href="#L636">636</a> 		CJ.get(<span class="jxr_string">"/getCharsetNonDefault"</span>).run().assertStatus(200);
+<a class="jxr_linenumber" name="L637" href="#L637">637</a> 	}
+<a class="jxr_linenumber" name="L638" href="#L638">638</a> 
+<a class="jxr_linenumber" name="L639" href="#L639">639</a> 	@Test <strong class="jxr_keyword">void</strong> j02_getMediaType() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L640" href="#L640">640</a> 		CJ.get(<span class="jxr_string">"/getMediaType"</span>).run().assertStatus(200).assertContent().isContains(<span class="jxr_string">"application/json"</span>);
+<a class="jxr_linenumber" name="L641" href="#L641">641</a> 	}
+<a class="jxr_linenumber" name="L642" href="#L642">642</a> 
+<a class="jxr_linenumber" name="L643" href="#L643">643</a> 	@Test <strong class="jxr_keyword">void</strong> j03_contentLifecycle() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L644" href="#L644">644</a> 		CJ.get(<span class="jxr_string">"/contentLifecycle"</span>).run().assertStatus(200).assertContent()
+<a class="jxr_linenumber" name="L645" href="#L645">645</a> 			.isContains(
+<a class="jxr_linenumber" name="L646" href="#L646">646</a> 				<span class="jxr_string">"hasContent.before=false"</span>,
+<a class="jxr_linenumber" name="L647" href="#L647">647</a> 				<span class="jxr_string">"hasContent.after=true"</span>,
+<a class="jxr_linenumber" name="L648" href="#L648">648</a> 				<span class="jxr_string">"contentValue=payload"</span>,
+<a class="jxr_linenumber" name="L649" href="#L649">649</a> 				<span class="jxr_string">"isOfStr=true"</span>,
+<a class="jxr_linenumber" name="L650" href="#L650">650</a> 				<span class="jxr_string">"castStr=payload"</span>,
+<a class="jxr_linenumber" name="L651" href="#L651">651</a> 				<span class="jxr_string">"castInt=null"</span>
+<a class="jxr_linenumber" name="L652" href="#L652">652</a> 			);
+<a class="jxr_linenumber" name="L653" href="#L653">653</a> 	}
+<a class="jxr_linenumber" name="L654" href="#L654">654</a> 
+<a class="jxr_linenumber" name="L655" href="#L655">655</a> 	@Test <strong class="jxr_keyword">void</strong> j04_setAttribute() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L656" href="#L656">656</a> 		CJ.get(<span class="jxr_string">"/setAttr"</span>).run().assertStatus(200).assertContent(<span class="jxr_string">"bar"</span>);
+<a class="jxr_linenumber" name="L657" href="#L657">657</a> 	}
+<a class="jxr_linenumber" name="L658" href="#L658">658</a> 
+<a class="jxr_linenumber" name="L659" href="#L659">659</a> 	@Test <strong class="jxr_keyword">void</strong> j05_setNoTraceFluent() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L660" href="#L660">660</a> 		CJ.get(<span class="jxr_string">"/noTraceFluent"</span>).run().assertStatus(200);
+<a class="jxr_linenumber" name="L661" href="#L661">661</a> 	}
+<a class="jxr_linenumber" name="L662" href="#L662">662</a> 
+<a class="jxr_linenumber" name="L663" href="#L663">663</a> 	@Test <strong class="jxr_keyword">void</strong> j07_setExceptionFluent() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L664" href="#L664">664</a> 		CJ.get(<span class="jxr_string">"/setExceptionFluent"</span>).run().assertStatus(200);
+<a class="jxr_linenumber" name="L665" href="#L665">665</a> 	}
+<a class="jxr_linenumber" name="L666" href="#L666">666</a> 
+<a class="jxr_linenumber" name="L667" href="#L667">667</a> 	@Test <strong class="jxr_keyword">void</strong> j08_contextAndOpContextAndHttpResponseAccessors() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L668" href="#L668">668</a> 		CJ.get(<span class="jxr_string">"/contextAndOpContext"</span>).run().assertStatus(200).assertContent(<span class="jxr_string">"true,true,true"</span>);
+<a class="jxr_linenumber" name="L669" href="#L669">669</a> 	}
+<a class="jxr_linenumber" name="L670" href="#L670">670</a> 
+<a class="jxr_linenumber" name="L671" href="#L671">671</a> 	@Test <strong class="jxr_keyword">void</strong> j09_setResponseBeanMeta() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L672" href="#L672">672</a> 		CJ.get(<span class="jxr_string">"/setResponseBeanMeta"</span>).run().assertStatus(200).assertContent(<span class="jxr_string">"null-rbm"</span>);
+<a class="jxr_linenumber" name="L673" href="#L673">673</a> 	}
+<a class="jxr_linenumber" name="L674" href="#L674">674</a> 
+<a class="jxr_linenumber" name="L675" href="#L675">675</a> 	@Test <strong class="jxr_keyword">void</strong> j10_setContentSchemaThenGet() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L676" href="#L676">676</a> 		<em class="jxr_comment">// Setting null content schema → optional empty.</em>
+<a class="jxr_linenumber" name="L677" href="#L677">677</a> 		CJ.get(<span class="jxr_string">"/setContentSchemaThenGet"</span>).run().assertStatus(200).assertContent(<span class="jxr_string">"empty"</span>);
 <a class="jxr_linenumber" name="L678" href="#L678">678</a> 	}
 <a class="jxr_linenumber" name="L679" href="#L679">679</a> 
-<a class="jxr_linenumber" name="L680" href="#L680">680</a> 	@Test <strong class="jxr_keyword">void</strong> j09_setResponseBeanMeta() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L681" href="#L681">681</a> 		CJ.get(<span class="jxr_string">"/setResponseBeanMeta"</span>).run().assertStatus(200).assertContent(<span class="jxr_string">"null-rbm"</span>);
-<a class="jxr_linenumber" name="L682" href="#L682">682</a> 	}
-<a class="jxr_linenumber" name="L683" href="#L683">683</a> 
-<a class="jxr_linenumber" name="L684" href="#L684">684</a> 	@Test <strong class="jxr_keyword">void</strong> j10_setContentSchemaThenGet() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L685" href="#L685">685</a> 		<em class="jxr_comment">// Setting null content schema → optional empty.</em>
-<a class="jxr_linenumber" name="L686" href="#L686">686</a> 		CJ.get(<span class="jxr_string">"/setContentSchemaThenGet"</span>).run().assertStatus(200).assertContent(<span class="jxr_string">"empty"</span>);
-<a class="jxr_linenumber" name="L687" href="#L687">687</a> 	}
-<a class="jxr_linenumber" name="L688" href="#L688">688</a> 
-<a class="jxr_linenumber" name="L689" href="#L689">689</a> 	@Test <strong class="jxr_keyword">void</strong> j11_getContentBeforeSet_nullContent() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L690" href="#L690">690</a> 		<em class="jxr_comment">// Exercises getRawOutput()'s content==null branch.</em>
-<a class="jxr_linenumber" name="L691" href="#L691">691</a> 		CJ.get(<span class="jxr_string">"/getContentBeforeSet"</span>).run().assertStatus(200).assertContent()
-<a class="jxr_linenumber" name="L692" href="#L692">692</a> 			.isContains(<span class="jxr_string">"hasContent=false"</span>, <span class="jxr_string">"castStr=null"</span>, <span class="jxr_string">"isOfStr=false"</span>);
-<a class="jxr_linenumber" name="L693" href="#L693">693</a> 	}
-<a class="jxr_linenumber" name="L694" href="#L694">694</a> }
+<a class="jxr_linenumber" name="L680" href="#L680">680</a> 	@Test <strong class="jxr_keyword">void</strong> j11_getContentBeforeSet_nullContent() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L681" href="#L681">681</a> 		<em class="jxr_comment">// Exercises getRawOutput()'s content==null branch.</em>
+<a class="jxr_linenumber" name="L682" href="#L682">682</a> 		CJ.get(<span class="jxr_string">"/getContentBeforeSet"</span>).run().assertStatus(200).assertContent()
+<a class="jxr_linenumber" name="L683" href="#L683">683</a> 			.isContains(<span class="jxr_string">"hasContent=false"</span>, <span class="jxr_string">"castStr=null"</span>, <span class="jxr_string">"isOfStr=false"</span>);
+<a class="jxr_linenumber" name="L684" href="#L684">684</a> 	}
+<a class="jxr_linenumber" name="L685" href="#L685">685</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

@@ -78,7 +78,7 @@ loadScripts(document, 'script');</script>
 </div>
 <section class="class-description" id="class-description">
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/classic/remote/RemoteOperationMeta.html#line-50">RemoteOperationMeta</a></span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/classic/remote/RemoteOperationMeta.html#line-51">RemoteOperationMeta</a></span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
 <div class="block">Contains the meta-data about a Java method on a REST proxy class.
 
@@ -150,15 +150,45 @@ loadScripts(document, 'script');</script>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Performs an action on the <a href="../../../../http/Request.html" title="annotation interface in org.apache.juneau.http"><code>@Request</code></a> annotated arguments on this Java method.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="RemoteOperationArg.html" title="class in org.apache.juneau.rest.client.classic.remote">RemoteOperationArg</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getContentArg()" class="member-name-link">getContentArg</a>()</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getAccept()" class="member-name-link">getAccept</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Returns the argument annotated with <a href="../../../../http/Content.html" title="annotation interface in org.apache.juneau.http"><code>@Content</code></a>.</div>
+<div class="block">Returns the method-level default <code>Accept</code> media type from the <code>accept</code> annotation member.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getContentDefault()" class="member-name-link">getContentDefault</a>()</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getBaseUrl()" class="member-name-link">getBaseUrl</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Returns the method-level base/host override from the <code>baseUrl</code> annotation member.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.Entry.html" title="class or interface in java.util" class="external-link">Map.Entry</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&gt;</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getConstantFormData()" class="member-name-link">getConstantFormData</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Returns the method-level constant form-data parameters from the <code>formData</code> annotation member.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.Entry.html" title="class or interface in java.util" class="external-link">Map.Entry</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&gt;</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getConstantHeaders()" class="member-name-link">getConstantHeaders</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Returns the method-level constant headers from the <code>headers</code> annotation member.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.Entry.html" title="class or interface in java.util" class="external-link">Map.Entry</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&gt;</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getConstantQueryData()" class="member-name-link">getConstantQueryData</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Returns the method-level constant query parameters from the <code>queryData</code> annotation member.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="RemoteOperationArg.html" title="class in org.apache.juneau.rest.client.classic.remote">RemoteOperationArg</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getContentArg()" class="member-name-link">getContentArg</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Returns the argument annotated with <a href="../../../../http/Content.html" title="annotation interface in org.apache.juneau.http"><code>@Content</code></a>.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getContentDefault()" class="member-name-link">getContentDefault</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns the default value for a <a href="../../../../http/Content.html" title="annotation interface in org.apache.juneau.http"><code>@Content</code></a> annotation on the method.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getContentType()" class="member-name-link">getContentType</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Returns the method-level default <code>Content-Type</code> media type from the <code>contentType</code> annotation member.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getFormDataDefault(java.lang.String)" class="member-name-link">getFormDataDefault</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</code></div>
@@ -190,10 +220,35 @@ loadScripts(document, 'script');</script>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns the default value for a <a href="../../../../http/Query.html" title="annotation interface in org.apache.juneau.http"><code>@Query</code></a> annotation on the method.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="RemoteOperationReturn.html" title="class in org.apache.juneau.rest.client.classic.remote">RemoteOperationReturn</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getReturns()" class="member-name-link">getReturns</a>()</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>int</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getRetries()" class="member-name-link">getRetries</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Returns the method-level maximum retry attempts from the <code>retries</code> annotation member.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="RemoteOperationReturn.html" title="class in org.apache.juneau.rest.client.classic.remote">RemoteOperationReturn</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getReturns()" class="member-name-link">getReturns</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns whether the method returns the HTTP response body or status code.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getTimeout()" class="member-name-link">getTimeout</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Returns the method-level per-call timeout duration string from the <code>timeout</code> annotation member.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>int</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getUrlParamIndex()" class="member-name-link">getUrlParamIndex</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Returns the index of the <a href="../../../../http/Url.html" title="annotation interface in org.apache.juneau.http"><code>@Url</code></a> parameter, or <code>-1</code> if none.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#isRetryNonIdempotent()" class="member-name-link">isRetryNonIdempotent</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Returns whether the method opts non-idempotent verbs into automatic retries (<code>retryNonIdempotent</code> member).</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#isThrowOnError()" class="member-name-link">isThrowOnError</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Returns whether the method throws a generic exception on an unmatched error response (<code>throwOnError</code> member).</div>
 </div>
 </div>
 </div>
@@ -215,7 +270,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;(java.lang.String,java.lang.reflect.Method,java.lang.String)">
 <h3>RemoteOperationMeta</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/classic/remote/RemoteOperationMeta.html#line-239">RemoteOperationMeta</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;parentPath,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/classic/remote/RemoteOperationMeta.html#line-291">RemoteOperationMeta</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;parentPath,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Method.html" title="class or interface in java.lang.reflect" class="external-link">Method</a>&nbsp;m,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;defaultMethod)</span></div>
 <div class="block">Constructor.</div>
@@ -238,7 +293,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="forEachException(java.util.function.Consumer)">
 <h3>forEachException</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RemoteOperationMeta.html" title="class in org.apache.juneau.rest.client.classic.remote">RemoteOperationMeta</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/classic/remote/RemoteOperationMeta.html#line-264">forEachException</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Consumer.html" title="class or interface in java.util.function" class="external-link">Consumer</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;&gt;&nbsp;action)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RemoteOperationMeta.html" title="class in org.apache.juneau.rest.client.classic.remote">RemoteOperationMeta</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/classic/remote/RemoteOperationMeta.html#line-327">forEachException</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Consumer.html" title="class or interface in java.util.function" class="external-link">Consumer</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;&gt;&nbsp;action)</span></div>
 <div class="block">Performs an action on the exceptions thrown by this method.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -251,7 +306,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="forEachFormDataArg(java.util.function.Consumer)">
 <h3>forEachFormDataArg</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RemoteOperationMeta.html" title="class in org.apache.juneau.rest.client.classic.remote">RemoteOperationMeta</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/classic/remote/RemoteOperationMeta.html#line-276">forEachFormDataArg</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Consumer.html" title="class or interface in java.util.function" class="external-link">Consumer</a>&lt;<a href="RemoteOperationArg.html" title="class in org.apache.juneau.rest.client.classic.remote">RemoteOperationArg</a>&gt;&nbsp;action)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RemoteOperationMeta.html" title="class in org.apache.juneau.rest.client.classic.remote">RemoteOperationMeta</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/classic/remote/RemoteOperationMeta.html#line-339">forEachFormDataArg</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Consumer.html" title="class or interface in java.util.function" class="external-link">Consumer</a>&lt;<a href="RemoteOperationArg.html" title="class in org.apache.juneau.rest.client.classic.remote">RemoteOperationArg</a>&gt;&nbsp;action)</span></div>
 <div class="block">Performs an action on the <a href="../../../../http/FormData.html" title="annotation interface in org.apache.juneau.http"><code>@FormData</code></a> annotated arguments on this Java method.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -264,7 +319,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="forEachHeaderArg(java.util.function.Consumer)">
 <h3>forEachHeaderArg</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RemoteOperationMeta.html" title="class in org.apache.juneau.rest.client.classic.remote">RemoteOperationMeta</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/classic/remote/RemoteOperationMeta.html#line-288">forEachHeaderArg</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Consumer.html" title="class or interface in java.util.function" class="external-link">Consumer</a>&lt;<a href="RemoteOperationArg.html" title="class in org.apache.juneau.rest.client.classic.remote">RemoteOperationArg</a>&gt;&nbsp;action)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RemoteOperationMeta.html" title="class in org.apache.juneau.rest.client.classic.remote">RemoteOperationMeta</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/classic/remote/RemoteOperationMeta.html#line-351">forEachHeaderArg</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Consumer.html" title="class or interface in java.util.function" class="external-link">Consumer</a>&lt;<a href="RemoteOperationArg.html" title="class in org.apache.juneau.rest.client.classic.remote">RemoteOperationArg</a>&gt;&nbsp;action)</span></div>
 <div class="block">Performs an action on the <a href="../../../../http/Header.html" title="annotation interface in org.apache.juneau.http"><code>@Header</code></a> annotated arguments on this Java method.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -277,7 +332,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="forEachPathArg(java.util.function.Consumer)">
 <h3>forEachPathArg</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RemoteOperationMeta.html" title="class in org.apache.juneau.rest.client.classic.remote">RemoteOperationMeta</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/classic/remote/RemoteOperationMeta.html#line-300">forEachPathArg</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Consumer.html" title="class or interface in java.util.function" class="external-link">Consumer</a>&lt;<a href="RemoteOperationArg.html" title="class in org.apache.juneau.rest.client.classic.remote">RemoteOperationArg</a>&gt;&nbsp;action)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RemoteOperationMeta.html" title="class in org.apache.juneau.rest.client.classic.remote">RemoteOperationMeta</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/classic/remote/RemoteOperationMeta.html#line-363">forEachPathArg</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Consumer.html" title="class or interface in java.util.function" class="external-link">Consumer</a>&lt;<a href="RemoteOperationArg.html" title="class in org.apache.juneau.rest.client.classic.remote">RemoteOperationArg</a>&gt;&nbsp;action)</span></div>
 <div class="block">Performs an action on the <a href="../../../../http/Path.html" title="annotation interface in org.apache.juneau.http"><code>@Path</code></a> annotated arguments on this Java method.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -290,7 +345,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="forEachQueryArg(java.util.function.Consumer)">
 <h3>forEachQueryArg</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RemoteOperationMeta.html" title="class in org.apache.juneau.rest.client.classic.remote">RemoteOperationMeta</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/classic/remote/RemoteOperationMeta.html#line-312">forEachQueryArg</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Consumer.html" title="class or interface in java.util.function" class="external-link">Consumer</a>&lt;<a href="RemoteOperationArg.html" title="class in org.apache.juneau.rest.client.classic.remote">RemoteOperationArg</a>&gt;&nbsp;action)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RemoteOperationMeta.html" title="class in org.apache.juneau.rest.client.classic.remote">RemoteOperationMeta</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/classic/remote/RemoteOperationMeta.html#line-375">forEachQueryArg</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Consumer.html" title="class or interface in java.util.function" class="external-link">Consumer</a>&lt;<a href="RemoteOperationArg.html" title="class in org.apache.juneau.rest.client.classic.remote">RemoteOperationArg</a>&gt;&nbsp;action)</span></div>
 <div class="block">Performs an action on the <a href="../../../../http/Query.html" title="annotation interface in org.apache.juneau.http"><code>@Query</code></a> annotated arguments on this Java method.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -303,7 +358,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="forEachRequestArg(java.util.function.Consumer)">
 <h3>forEachRequestArg</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RemoteOperationMeta.html" title="class in org.apache.juneau.rest.client.classic.remote">RemoteOperationMeta</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/classic/remote/RemoteOperationMeta.html#line-324">forEachRequestArg</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Consumer.html" title="class or interface in java.util.function" class="external-link">Consumer</a>&lt;<a href="RemoteOperationBeanArg.html" title="class in org.apache.juneau.rest.client.classic.remote">RemoteOperationBeanArg</a>&gt;&nbsp;action)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RemoteOperationMeta.html" title="class in org.apache.juneau.rest.client.classic.remote">RemoteOperationMeta</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/classic/remote/RemoteOperationMeta.html#line-387">forEachRequestArg</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Consumer.html" title="class or interface in java.util.function" class="external-link">Consumer</a>&lt;<a href="RemoteOperationBeanArg.html" title="class in org.apache.juneau.rest.client.classic.remote">RemoteOperationBeanArg</a>&gt;&nbsp;action)</span></div>
 <div class="block">Performs an action on the <a href="../../../../http/Request.html" title="annotation interface in org.apache.juneau.http"><code>@Request</code></a> annotated arguments on this Java method.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -316,7 +371,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getContentArg()">
 <h3>getContentArg</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RemoteOperationArg.html" title="class in org.apache.juneau.rest.client.classic.remote">RemoteOperationArg</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/classic/remote/RemoteOperationMeta.html#line-335">getContentArg</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RemoteOperationArg.html" title="class in org.apache.juneau.rest.client.classic.remote">RemoteOperationArg</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/classic/remote/RemoteOperationMeta.html#line-398">getContentArg</a></span>()</div>
 <div class="block">Returns the argument annotated with <a href="../../../../http/Content.html" title="annotation interface in org.apache.juneau.http"><code>@Content</code></a>.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -327,7 +382,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getContentDefault()">
 <h3>getContentDefault</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/classic/remote/RemoteOperationMeta.html#line-343">getContentDefault</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/classic/remote/RemoteOperationMeta.html#line-406">getContentDefault</a></span>()</div>
 <div class="block">Returns the default value for a <a href="../../../../http/Content.html" title="annotation interface in org.apache.juneau.http"><code>@Content</code></a> annotation on the method.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -340,7 +395,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getFormDataDefault(java.lang.String)">
 <h3>getFormDataDefault</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/classic/remote/RemoteOperationMeta.html#line-352">getFormDataDefault</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/classic/remote/RemoteOperationMeta.html#line-415">getFormDataDefault</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
 <div class="block">Returns the default value for a <a href="../../../../http/FormData.html" title="annotation interface in org.apache.juneau.http"><code>@FormData</code></a> annotation on the method.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -355,7 +410,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getFullPath()">
 <h3>getFullPath</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/classic/remote/RemoteOperationMeta.html#line-361">getFullPath</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/classic/remote/RemoteOperationMeta.html#line-424">getFullPath</a></span>()</div>
 <div class="block">Returns the absolute URI of the REST interface invoked by this Java method.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -366,7 +421,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getHeaderDefault(java.lang.String)">
 <h3>getHeaderDefault</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/classic/remote/RemoteOperationMeta.html#line-370">getHeaderDefault</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/classic/remote/RemoteOperationMeta.html#line-433">getHeaderDefault</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
 <div class="block">Returns the default value for a <a href="../../../../http/Header.html" title="annotation interface in org.apache.juneau.http"><code>@Header</code></a> annotation on the method.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -381,7 +436,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getHttpMethod()">
 <h3>getHttpMethod</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/classic/remote/RemoteOperationMeta.html#line-379">getHttpMethod</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/classic/remote/RemoteOperationMeta.html#line-442">getHttpMethod</a></span>()</div>
 <div class="block">Returns the value of the <a href="../../../../http/remote/RemoteOp.html#method()"><code>@RemoteOp(method)</code></a> annotation on this Java method.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -392,7 +447,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getPathDefault(java.lang.String)">
 <h3>getPathDefault</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/classic/remote/RemoteOperationMeta.html#line-388">getPathDefault</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/classic/remote/RemoteOperationMeta.html#line-451">getPathDefault</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
 <div class="block">Returns the default value for a <a href="../../../../http/Path.html" title="annotation interface in org.apache.juneau.http"><code>@Path</code></a> annotation on the method.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -407,7 +462,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getQueryDefault(java.lang.String)">
 <h3>getQueryDefault</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/classic/remote/RemoteOperationMeta.html#line-399">getQueryDefault</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/classic/remote/RemoteOperationMeta.html#line-462">getQueryDefault</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
 <div class="block">Returns the default value for a <a href="../../../../http/Query.html" title="annotation interface in org.apache.juneau.http"><code>@Query</code></a> annotation on the method.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -422,11 +477,132 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getReturns()">
 <h3>getReturns</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RemoteOperationReturn.html" title="class in org.apache.juneau.rest.client.classic.remote">RemoteOperationReturn</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/classic/remote/RemoteOperationMeta.html#line-408">getReturns</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RemoteOperationReturn.html" title="class in org.apache.juneau.rest.client.classic.remote">RemoteOperationReturn</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/classic/remote/RemoteOperationMeta.html#line-471">getReturns</a></span>()</div>
 <div class="block">Returns whether the method returns the HTTP response body or status code.</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>Whether the method returns the HTTP response body or status code.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="getBaseUrl()">
+<h3>getBaseUrl</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/classic/remote/RemoteOperationMeta.html#line-478">getBaseUrl</a></span>()</div>
+<div class="block">Returns the method-level base/host override from the <code>baseUrl</code> annotation member.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>The base/host override. Never <jk>null</jk>, but may be empty.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="getAccept()">
+<h3>getAccept</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/classic/remote/RemoteOperationMeta.html#line-485">getAccept</a></span>()</div>
+<div class="block">Returns the method-level default <code>Accept</code> media type from the <code>accept</code> annotation member.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>The accept media type. Never <jk>null</jk>, but may be empty.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="getContentType()">
+<h3>getContentType</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/classic/remote/RemoteOperationMeta.html#line-492">getContentType</a></span>()</div>
+<div class="block">Returns the method-level default <code>Content-Type</code> media type from the <code>contentType</code> annotation member.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>The content-type media type. Never <jk>null</jk>, but may be empty.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="getConstantHeaders()">
+<h3>getConstantHeaders</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.Entry.html" title="class or interface in java.util" class="external-link">Map.Entry</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/classic/remote/RemoteOperationMeta.html#line-499">getConstantHeaders</a></span>()</div>
+<div class="block">Returns the method-level constant headers from the <code>headers</code> annotation member.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>An unmodifiable list of name/value entries. Never <jk>null</jk>, but may be empty.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="getConstantQueryData()">
+<h3>getConstantQueryData</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.Entry.html" title="class or interface in java.util" class="external-link">Map.Entry</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/classic/remote/RemoteOperationMeta.html#line-506">getConstantQueryData</a></span>()</div>
+<div class="block">Returns the method-level constant query parameters from the <code>queryData</code> annotation member.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>An unmodifiable list of name/value entries. Never <jk>null</jk>, but may be empty.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="getConstantFormData()">
+<h3>getConstantFormData</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.Entry.html" title="class or interface in java.util" class="external-link">Map.Entry</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/classic/remote/RemoteOperationMeta.html#line-513">getConstantFormData</a></span>()</div>
+<div class="block">Returns the method-level constant form-data parameters from the <code>formData</code> annotation member.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>An unmodifiable list of name/value entries. Never <jk>null</jk>, but may be empty.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="getTimeout()">
+<h3>getTimeout</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/classic/remote/RemoteOperationMeta.html#line-520">getTimeout</a></span>()</div>
+<div class="block">Returns the method-level per-call timeout duration string from the <code>timeout</code> annotation member.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>The timeout duration string. Never <jk>null</jk>, but may be empty.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="getRetries()">
+<h3>getRetries</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/classic/remote/RemoteOperationMeta.html#line-527">getRetries</a></span>()</div>
+<div class="block">Returns the method-level maximum retry attempts from the <code>retries</code> annotation member.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>The retry count.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="isRetryNonIdempotent()">
+<h3>isRetryNonIdempotent</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/classic/remote/RemoteOperationMeta.html#line-534">isRetryNonIdempotent</a></span>()</div>
+<div class="block">Returns whether the method opts non-idempotent verbs into automatic retries (<code>retryNonIdempotent</code> member).</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd><jk>true</jk> if non-idempotent retries are opted in at the method level.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="isThrowOnError()">
+<h3>isThrowOnError</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/classic/remote/RemoteOperationMeta.html#line-541">isThrowOnError</a></span>()</div>
+<div class="block">Returns whether the method throws a generic exception on an unmatched error response (<code>throwOnError</code> member).</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd><jk>true</jk> if <code>throwOnError</code> is set at the method level.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="getUrlParamIndex()">
+<h3>getUrlParamIndex</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/classic/remote/RemoteOperationMeta.html#line-548">getUrlParamIndex</a></span>()</div>
+<div class="block">Returns the index of the <a href="../../../../http/Url.html" title="annotation interface in org.apache.juneau.http"><code>@Url</code></a> parameter, or <code>-1</code> if none.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>The <code>@Url</code> parameter index, or <code>-1</code>.</dd>
 </dl>
 </section>
 </li>

@@ -228,9 +228,18 @@ loadScripts(document, 'script');</script>
 <div class="col-last odd-row-color">
 <div class="block">Predefined SVL Variables</div>
 </div>
-<div class="col-first even-row-color"><a href="#org.apache.juneau.rest.server.widget">org.apache.juneau.rest.server.widget</a></div>
+<div class="col-first even-row-color"><a href="#org.apache.juneau.rest.server.views">org.apache.juneau.rest.server.views</a></div>
 <div class="col-last even-row-color">
+<div class="block">A typed, declarative "rich DataTables view" toolkit that serializes to the frozen <code>VIEW_META</code> JSON wire
+ contract consumed by the first-party client runtime.</div>
+</div>
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.rest.server.widget">org.apache.juneau.rest.server.widget</a></div>
+<div class="col-last odd-row-color">
 <div class="block">HTML Widget API</div>
+</div>
+<div class="col-first even-row-color"><a href="#org.apache.juneau.rest.server.widgets">org.apache.juneau.rest.server.widgets</a></div>
+<div class="col-last even-row-color">
+<div class="block">Reusable widget primitives for the Juneau REST server toolkit.</div>
 </div>
 </div>
 <section class="package-uses">
@@ -899,12 +908,50 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
+<section class="detail" id="org.apache.juneau.rest.server.views">
+<div class="caption"><span>Classes in <a href="package-summary.html">org.apache.juneau.commons.svl</a> used by <a href="../../rest/server/views/package-summary.html">org.apache.juneau.rest.server.views</a></span></div>
+<div class="summary-table two-column-summary">
+<div class="table-header col-first">Class</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><a href="class-use/DefaultingVar.html#org.apache.juneau.rest.server.views">DefaultingVar</a></div>
+<div class="col-last even-row-color">
+<div class="block">Interface for the resolution of vars with a default value if the <c>resolve()</c> method returns <jk>null</jk>.</div>
+</div>
+<div class="col-first odd-row-color"><a href="class-use/SimpleVar.html#org.apache.juneau.rest.server.views">SimpleVar</a></div>
+<div class="col-last odd-row-color">
+<div class="block">Abstract superclass of all Simple Var Language variables that resolve to simple returned string values.</div>
+</div>
+<div class="col-first even-row-color"><a href="class-use/Var.html#org.apache.juneau.rest.server.views">Var</a></div>
+<div class="col-last even-row-color">
+<div class="block">Abstract superclass of all Simple Var Language variables.</div>
+</div>
+<div class="col-first odd-row-color"><a href="class-use/VarResolverSession.html#org.apache.juneau.rest.server.views">VarResolverSession</a></div>
+<div class="col-last odd-row-color">
+<div class="block">A var resolver session that combines a <a href="VarResolver.html" title="class in org.apache.juneau.commons.svl"><code>VarResolver</code></a> with one or more session objects.</div>
+</div>
+</div>
+</section>
+</li>
+<li>
 <section class="detail" id="org.apache.juneau.rest.server.widget">
 <div class="caption"><span>Classes in <a href="package-summary.html">org.apache.juneau.commons.svl</a> used by <a href="../../rest/server/widget/package-summary.html">org.apache.juneau.rest.server.widget</a></span></div>
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Class</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color"><a href="class-use/VarResolverSession.html#org.apache.juneau.rest.server.widget">VarResolverSession</a></div>
+<div class="col-last even-row-color">
+<div class="block">A var resolver session that combines a <a href="VarResolver.html" title="class in org.apache.juneau.commons.svl"><code>VarResolver</code></a> with one or more session objects.</div>
+</div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="org.apache.juneau.rest.server.widgets">
+<div class="caption"><span>Classes in <a href="package-summary.html">org.apache.juneau.commons.svl</a> used by <a href="../../rest/server/widgets/package-summary.html">org.apache.juneau.rest.server.widgets</a></span></div>
+<div class="summary-table two-column-summary">
+<div class="table-header col-first">Class</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><a href="class-use/VarResolverSession.html#org.apache.juneau.rest.server.widgets">VarResolverSession</a></div>
 <div class="col-last even-row-color">
 <div class="block">A var resolver session that combines a <a href="VarResolver.html" title="class in org.apache.juneau.commons.svl"><code>VarResolver</code></a> with one or more session objects.</div>
 </div>

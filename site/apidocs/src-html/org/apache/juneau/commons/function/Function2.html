@@ -29,9 +29,9 @@
 <span class="source-line-no">016</span><span id="line-16"> */</span>
 <span class="source-line-no">017</span><span id="line-17">package org.apache.juneau.commons.function;</span>
 <span class="source-line-no">018</span><span id="line-18"></span>
-<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.AssertionUtils.*;</span>
-<span class="source-line-no">020</span><span id="line-20"></span>
-<span class="source-line-no">021</span><span id="line-21">import java.util.function.*;</span>
+<span class="source-line-no">019</span><span id="line-19"></span>
+<span class="source-line-no">020</span><span id="line-20">import java.util.function.*;</span>
+<span class="source-line-no">021</span><span id="line-21">import static org.apache.juneau.commons.utils.Shorts.*;</span>
 <span class="source-line-no">022</span><span id="line-22"></span>
 <span class="source-line-no">023</span><span id="line-23">/**</span>
 <span class="source-line-no">024</span><span id="line-24"> * A functional interface representing a function that accepts two arguments and produces a result.</span>
@@ -85,52 +85,49 @@
 <span class="source-line-no">072</span><span id="line-72"> */</span>
 <span class="source-line-no">073</span><span id="line-73">@FunctionalInterface</span>
 <span class="source-line-no">074</span><span id="line-74">@SuppressWarnings({</span>
-<span class="source-line-no">075</span><span id="line-75">   "java:S115" // Constants use UPPER_snakeCase convention</span>
+<span class="source-line-no">075</span><span id="line-75">   "java:S1192" // Duplicated literals (argument/property names) read more clearly inline than as constants</span>
 <span class="source-line-no">076</span><span id="line-76">})</span>
 <span class="source-line-no">077</span><span id="line-77">public interface Function2&lt;A,B,R&gt; {</span>
 <span class="source-line-no">078</span><span id="line-78"></span>
-<span class="source-line-no">079</span><span id="line-79">   /** Argument name constant for assertArgNotNull. */</span>
-<span class="source-line-no">080</span><span id="line-80">   static final String ARG_after = "after";</span>
-<span class="source-line-no">081</span><span id="line-81"></span>
-<span class="source-line-no">082</span><span id="line-82">   /**</span>
-<span class="source-line-no">083</span><span id="line-83">    * Returns a composed function that first applies this function to its input, and then applies</span>
-<span class="source-line-no">084</span><span id="line-84">    * the {@code after} function to the result.</span>
+<span class="source-line-no">079</span><span id="line-79">   /**</span>
+<span class="source-line-no">080</span><span id="line-80">    * Returns a composed function that first applies this function to its input, and then applies</span>
+<span class="source-line-no">081</span><span id="line-81">    * the {@code after} function to the result.</span>
+<span class="source-line-no">082</span><span id="line-82">    *</span>
+<span class="source-line-no">083</span><span id="line-83">    * &lt;p&gt;</span>
+<span class="source-line-no">084</span><span id="line-84">    * This method enables function composition, allowing you to chain multiple transformations together.</span>
 <span class="source-line-no">085</span><span id="line-85">    *</span>
-<span class="source-line-no">086</span><span id="line-86">    * &lt;p&gt;</span>
-<span class="source-line-no">087</span><span id="line-87">    * This method enables function composition, allowing you to chain multiple transformations together.</span>
-<span class="source-line-no">088</span><span id="line-88">    *</span>
-<span class="source-line-no">089</span><span id="line-89">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
-<span class="source-line-no">090</span><span id="line-90">    * &lt;p class='bjava'&gt;</span>
-<span class="source-line-no">091</span><span id="line-91">    *    Function2&amp;lt;Integer,Integer,Integer&amp;gt; &lt;jv&gt;multiply&lt;/jv&gt; = (&lt;jv&gt;a&lt;/jv&gt;, &lt;jv&gt;b&lt;/jv&gt;) -&amp;gt; &lt;jv&gt;a&lt;/jv&gt; * &lt;jv&gt;b&lt;/jv&gt;;</span>
-<span class="source-line-no">092</span><span id="line-92">    *    Function2&amp;lt;Integer,Integer,String&amp;gt; &lt;jv&gt;multiplyAndFormat&lt;/jv&gt; = &lt;jv&gt;multiply&lt;/jv&gt;.andThen(&lt;jv&gt;n&lt;/jv&gt; -&amp;gt; &lt;js&gt;"Result: "&lt;/js&gt; + &lt;jv&gt;n&lt;/jv&gt;);</span>
-<span class="source-line-no">093</span><span id="line-93">    *    String &lt;jv&gt;result&lt;/jv&gt; = &lt;jv&gt;multiplyAndFormat&lt;/jv&gt;.apply(6, 7);  &lt;jc&gt;// Returns "Result: 42"&lt;/jc&gt;</span>
-<span class="source-line-no">094</span><span id="line-94">    * &lt;/p&gt;</span>
-<span class="source-line-no">095</span><span id="line-95">    *</span>
-<span class="source-line-no">096</span><span id="line-96">    * @param &lt;V&gt; The type of output of the {@code after} function, and of the composed function.</span>
-<span class="source-line-no">097</span><span id="line-97">    * @param after The function to apply after this function is applied. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">098</span><span id="line-98">    * @return A composed function that first applies this function and then applies the {@code after} function.</span>
-<span class="source-line-no">099</span><span id="line-99">    * @throws NullPointerException if {@code after} is &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">100</span><span id="line-100">    */</span>
-<span class="source-line-no">101</span><span id="line-101">   default &lt;V&gt; Function2&lt;A,B,V&gt; andThen(Function&lt;? super R,? extends V&gt; after) {</span>
-<span class="source-line-no">102</span><span id="line-102">      assertArgNotNull(ARG_after, after);</span>
-<span class="source-line-no">103</span><span id="line-103">      return (A a, B b) -&gt; after.apply(apply(a, b));</span>
-<span class="source-line-no">104</span><span id="line-104">   }</span>
-<span class="source-line-no">105</span><span id="line-105"></span>
-<span class="source-line-no">106</span><span id="line-106">   /**</span>
-<span class="source-line-no">107</span><span id="line-107">    * Applies this function to the given arguments.</span>
-<span class="source-line-no">108</span><span id="line-108">    *</span>
-<span class="source-line-no">109</span><span id="line-109">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
-<span class="source-line-no">110</span><span id="line-110">    * &lt;p class='bjava'&gt;</span>
-<span class="source-line-no">111</span><span id="line-111">    *    Function2&amp;lt;String,Integer,String&amp;gt; &lt;jv&gt;repeat&lt;/jv&gt; = (&lt;jv&gt;s&lt;/jv&gt;, &lt;jv&gt;n&lt;/jv&gt;) -&amp;gt; &lt;jv&gt;s&lt;/jv&gt;.repeat(&lt;jv&gt;n&lt;/jv&gt;);</span>
-<span class="source-line-no">112</span><span id="line-112">    *    String &lt;jv&gt;result&lt;/jv&gt; = &lt;jv&gt;repeat&lt;/jv&gt;.apply(&lt;js&gt;"ha"&lt;/js&gt;, 3);  &lt;jc&gt;// Returns "hahaha"&lt;/jc&gt;</span>
-<span class="source-line-no">113</span><span id="line-113">    * &lt;/p&gt;</span>
-<span class="source-line-no">114</span><span id="line-114">    *</span>
-<span class="source-line-no">115</span><span id="line-115">    * @param a The first function argument.</span>
-<span class="source-line-no">116</span><span id="line-116">    * @param b The second function argument.</span>
-<span class="source-line-no">117</span><span id="line-117">    * @return The function result.</span>
-<span class="source-line-no">118</span><span id="line-118">    */</span>
-<span class="source-line-no">119</span><span id="line-119">   R apply(A a, B b);</span>
-<span class="source-line-no">120</span><span id="line-120">}</span>
+<span class="source-line-no">086</span><span id="line-86">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">087</span><span id="line-87">    * &lt;p class='bjava'&gt;</span>
+<span class="source-line-no">088</span><span id="line-88">    *    Function2&amp;lt;Integer,Integer,Integer&amp;gt; &lt;jv&gt;multiply&lt;/jv&gt; = (&lt;jv&gt;a&lt;/jv&gt;, &lt;jv&gt;b&lt;/jv&gt;) -&amp;gt; &lt;jv&gt;a&lt;/jv&gt; * &lt;jv&gt;b&lt;/jv&gt;;</span>
+<span class="source-line-no">089</span><span id="line-89">    *    Function2&amp;lt;Integer,Integer,String&amp;gt; &lt;jv&gt;multiplyAndFormat&lt;/jv&gt; = &lt;jv&gt;multiply&lt;/jv&gt;.andThen(&lt;jv&gt;n&lt;/jv&gt; -&amp;gt; &lt;js&gt;"Result: "&lt;/js&gt; + &lt;jv&gt;n&lt;/jv&gt;);</span>
+<span class="source-line-no">090</span><span id="line-90">    *    String &lt;jv&gt;result&lt;/jv&gt; = &lt;jv&gt;multiplyAndFormat&lt;/jv&gt;.apply(6, 7);  &lt;jc&gt;// Returns "Result: 42"&lt;/jc&gt;</span>
+<span class="source-line-no">091</span><span id="line-91">    * &lt;/p&gt;</span>
+<span class="source-line-no">092</span><span id="line-92">    *</span>
+<span class="source-line-no">093</span><span id="line-93">    * @param &lt;V&gt; The type of output of the {@code after} function, and of the composed function.</span>
+<span class="source-line-no">094</span><span id="line-94">    * @param after The function to apply after this function is applied. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">095</span><span id="line-95">    * @return A composed function that first applies this function and then applies the {@code after} function.</span>
+<span class="source-line-no">096</span><span id="line-96">    * @throws NullPointerException if {@code after} is &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">097</span><span id="line-97">    */</span>
+<span class="source-line-no">098</span><span id="line-98">   default &lt;V&gt; Function2&lt;A,B,V&gt; andThen(Function&lt;? super R,? extends V&gt; after) {</span>
+<span class="source-line-no">099</span><span id="line-99">      reqnn("after", after);</span>
+<span class="source-line-no">100</span><span id="line-100">      return (A a, B b) -&gt; after.apply(apply(a, b));</span>
+<span class="source-line-no">101</span><span id="line-101">   }</span>
+<span class="source-line-no">102</span><span id="line-102"></span>
+<span class="source-line-no">103</span><span id="line-103">   /**</span>
+<span class="source-line-no">104</span><span id="line-104">    * Applies this function to the given arguments.</span>
+<span class="source-line-no">105</span><span id="line-105">    *</span>
+<span class="source-line-no">106</span><span id="line-106">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">107</span><span id="line-107">    * &lt;p class='bjava'&gt;</span>
+<span class="source-line-no">108</span><span id="line-108">    *    Function2&amp;lt;String,Integer,String&amp;gt; &lt;jv&gt;repeat&lt;/jv&gt; = (&lt;jv&gt;s&lt;/jv&gt;, &lt;jv&gt;n&lt;/jv&gt;) -&amp;gt; &lt;jv&gt;s&lt;/jv&gt;.repeat(&lt;jv&gt;n&lt;/jv&gt;);</span>
+<span class="source-line-no">109</span><span id="line-109">    *    String &lt;jv&gt;result&lt;/jv&gt; = &lt;jv&gt;repeat&lt;/jv&gt;.apply(&lt;js&gt;"ha"&lt;/js&gt;, 3);  &lt;jc&gt;// Returns "hahaha"&lt;/jc&gt;</span>
+<span class="source-line-no">110</span><span id="line-110">    * &lt;/p&gt;</span>
+<span class="source-line-no">111</span><span id="line-111">    *</span>
+<span class="source-line-no">112</span><span id="line-112">    * @param a The first function argument.</span>
+<span class="source-line-no">113</span><span id="line-113">    * @param b The second function argument.</span>
+<span class="source-line-no">114</span><span id="line-114">    * @return The function result.</span>
+<span class="source-line-no">115</span><span id="line-115">    */</span>
+<span class="source-line-no">116</span><span id="line-116">   R apply(A a, B b);</span>
+<span class="source-line-no">117</span><span id="line-117">}</span>
 
 
 

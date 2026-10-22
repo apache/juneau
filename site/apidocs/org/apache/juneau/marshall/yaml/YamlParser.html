@@ -87,12 +87,12 @@ loadScripts(document, 'script');</script>
 <section class="class-description" id="class-description">
 <dl class="notes">
 <dt>All Implemented Interfaces:</dt>
-<dd><code><a href="../stream/ArrayRecordReadable.html" title="interface in org.apache.juneau.marshall.stream">ArrayRecordReadable</a></code>, <code><a href="../stream/RecordReadable.html" title="interface in org.apache.juneau.marshall.stream">RecordReadable</a></code></dd>
+<dd><code><a href="../stream/ArrayRecordReadable.html" title="interface in org.apache.juneau.marshall.stream">ArrayRecordReadable</a></code>, <code><a href="../stream/RecordReadable.html" title="interface in org.apache.juneau.marshall.stream">RecordReadable</a></code>, <code><a href="YamlMetaProvider.html" title="interface in org.apache.juneau.marshall.yaml">YamlMetaProvider</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/yaml/YamlParser.html#line-86">YamlParser</a></span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/yaml/YamlParser.html#line-88">YamlParser</a></span>
 <span class="extends-implements">extends <a href="../parser/ReaderParser.html" title="class in org.apache.juneau.marshall.parser">ReaderParser</a>
-implements <a href="../stream/RecordReadable.html" title="interface in org.apache.juneau.marshall.stream">RecordReadable</a>, <a href="../stream/ArrayRecordReadable.html" title="interface in org.apache.juneau.marshall.stream">ArrayRecordReadable</a></span></div>
+implements <a href="YamlMetaProvider.html" title="interface in org.apache.juneau.marshall.yaml">YamlMetaProvider</a>, <a href="../stream/RecordReadable.html" title="interface in org.apache.juneau.marshall.stream">RecordReadable</a>, <a href="../stream/ArrayRecordReadable.html" title="interface in org.apache.juneau.marshall.stream">ArrayRecordReadable</a></span></div>
 <div class="block">Parses YAML text into a POJO model.
 
  <h5 class='topic'>Media types</h5>
@@ -247,6 +247,16 @@ implements <a href="../stream/RecordReadable.html" title="interface in org.apach
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns a session to use for this context.</div>
 </div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="YamlBeanPropertyMeta.html" title="class in org.apache.juneau.marshall.yaml">YamlBeanPropertyMeta</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getYamlBeanPropertyMeta(org.apache.juneau.commons.bean.BeanPropertyMeta)" class="member-name-link">getYamlBeanPropertyMeta</a><wbr>(<a href="../../commons/bean/BeanPropertyMeta.html" title="class in org.apache.juneau.commons.bean">BeanPropertyMeta</a>&nbsp;bpm)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Returns the YAML-specific metadata on the specified bean property.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="YamlClassMeta.html" title="class in org.apache.juneau.marshall.yaml">YamlClassMeta</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getYamlClassMeta(org.apache.juneau.marshall.ClassMeta)" class="member-name-link">getYamlClassMeta</a><wbr>(<a href="../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;?&gt;&nbsp;cm)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Returns the YAML-specific metadata on the specified class.</div>
+</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#isArrayRecordStreaming()" class="member-name-link">isArrayRecordStreaming</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
@@ -304,7 +314,7 @@ implements <a href="../stream/RecordReadable.html" title="interface in org.apach
 <li>
 <section class="detail" id="DEFAULT">
 <h3>DEFAULT</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="YamlParser.html" title="class in org.apache.juneau.marshall.yaml">YamlParser</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/yaml/YamlParser.html#line-148">DEFAULT</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="YamlParser.html" title="class in org.apache.juneau.marshall.yaml">YamlParser</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/yaml/YamlParser.html#line-152">DEFAULT</a></span></div>
 <div class="block">Default parser, all default settings.</div>
 </section>
 </li>
@@ -319,7 +329,7 @@ implements <a href="../stream/RecordReadable.html" title="interface in org.apach
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.marshall.yaml.YamlParser.Builder)">
 <h3>YamlParser</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/yaml/YamlParser.html#line-164">YamlParser</a></span><wbr><span class="parameters">(<a href="YamlParser.Builder.html" title="class in org.apache.juneau.marshall.yaml">YamlParser.Builder</a>&nbsp;builder)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/yaml/YamlParser.html#line-168">YamlParser</a></span><wbr><span class="parameters">(<a href="YamlParser.Builder.html" title="class in org.apache.juneau.marshall.yaml">YamlParser.Builder</a>&nbsp;builder)</span></div>
 <div class="block">Constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -338,7 +348,7 @@ implements <a href="../stream/RecordReadable.html" title="interface in org.apach
 <li>
 <section class="detail" id="create()">
 <h3>create</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="YamlParser.Builder.html" title="class in org.apache.juneau.marshall.yaml">YamlParser.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/yaml/YamlParser.html#line-155">create</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="YamlParser.Builder.html" title="class in org.apache.juneau.marshall.yaml">YamlParser.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/yaml/YamlParser.html#line-159">create</a></span>()</div>
 <div class="block">Creates a new builder for this object.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -347,9 +357,41 @@ implements <a href="../stream/RecordReadable.html" title="interface in org.apach
 </section>
 </li>
 <li>
+<section class="detail" id="getYamlBeanPropertyMeta(org.apache.juneau.commons.bean.BeanPropertyMeta)">
+<h3>getYamlBeanPropertyMeta</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="YamlBeanPropertyMeta.html" title="class in org.apache.juneau.marshall.yaml">YamlBeanPropertyMeta</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/yaml/YamlParser.html#line-172">getYamlBeanPropertyMeta</a></span><wbr><span class="parameters">(<a href="../../commons/bean/BeanPropertyMeta.html" title="class in org.apache.juneau.commons.bean">BeanPropertyMeta</a>&nbsp;bpm)</span></div>
+<div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="YamlMetaProvider.html#getYamlBeanPropertyMeta(org.apache.juneau.commons.bean.BeanPropertyMeta)">YamlMetaProvider</a></code></span></div>
+<div class="block">Returns the YAML-specific metadata on the specified bean property.</div>
+<dl class="notes">
+<dt>Specified by:</dt>
+<dd><code><a href="YamlMetaProvider.html#getYamlBeanPropertyMeta(org.apache.juneau.commons.bean.BeanPropertyMeta)">getYamlBeanPropertyMeta</a></code>&nbsp;in interface&nbsp;<code><a href="YamlMetaProvider.html" title="interface in org.apache.juneau.marshall.yaml">YamlMetaProvider</a></code></dd>
+<dt>Parameters:</dt>
+<dd><code>bpm</code> - The bean property to return the metadata on.</dd>
+<dt>Returns:</dt>
+<dd>The metadata.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="getYamlClassMeta(org.apache.juneau.marshall.ClassMeta)">
+<h3>getYamlClassMeta</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="YamlClassMeta.html" title="class in org.apache.juneau.marshall.yaml">YamlClassMeta</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/yaml/YamlParser.html#line-179">getYamlClassMeta</a></span><wbr><span class="parameters">(<a href="../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;?&gt;&nbsp;cm)</span></div>
+<div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="YamlMetaProvider.html#getYamlClassMeta(org.apache.juneau.marshall.ClassMeta)">YamlMetaProvider</a></code></span></div>
+<div class="block">Returns the YAML-specific metadata on the specified class.</div>
+<dl class="notes">
+<dt>Specified by:</dt>
+<dd><code><a href="YamlMetaProvider.html#getYamlClassMeta(org.apache.juneau.marshall.ClassMeta)">getYamlClassMeta</a></code>&nbsp;in interface&nbsp;<code><a href="YamlMetaProvider.html" title="interface in org.apache.juneau.marshall.yaml">YamlMetaProvider</a></code></dd>
+<dt>Parameters:</dt>
+<dd><code>cm</code> - The class to return the metadata on.</dd>
+<dt>Returns:</dt>
+<dd>The metadata.</dd>
+</dl>
+</section>
+</li>
+<li>
 <section class="detail" id="copy()">
 <h3>copy</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="YamlParser.Builder.html" title="class in org.apache.juneau.marshall.yaml">YamlParser.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/yaml/YamlParser.html#line-168">copy</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="YamlParser.Builder.html" title="class in org.apache.juneau.marshall.yaml">YamlParser.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/yaml/YamlParser.html#line-184">copy</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../Context.html#copy()">Context</a></code></span></div>
 <div class="block">Creates a builder from this context object.
 
@@ -366,7 +408,7 @@ implements <a href="../stream/RecordReadable.html" title="interface in org.apach
 <li>
 <section class="detail" id="createSession()">
 <h3>createSession</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="YamlParserSession.Builder.html" title="class in org.apache.juneau.marshall.yaml">YamlParserSession.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/yaml/YamlParser.html#line-173">createSession</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="YamlParserSession.Builder.html" title="class in org.apache.juneau.marshall.yaml">YamlParserSession.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/yaml/YamlParser.html#line-189">createSession</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../Context.html#createSession()">Context</a></code></span></div>
 <div class="block">Create a session builder based on the properties defined on this context.
 
@@ -384,7 +426,7 @@ implements <a href="../stream/RecordReadable.html" title="interface in org.apach
 <li>
 <section class="detail" id="getSession()">
 <h3>getSession</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="YamlParserSession.html" title="class in org.apache.juneau.marshall.yaml">YamlParserSession</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/yaml/YamlParser.html#line-178">getSession</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="YamlParserSession.html" title="class in org.apache.juneau.marshall.yaml">YamlParserSession</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/yaml/YamlParser.html#line-194">getSession</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../Context.html#getSession()">Context</a></code></span></div>
 <div class="block">Returns a session to use for this context.
 
@@ -401,7 +443,7 @@ implements <a href="../stream/RecordReadable.html" title="interface in org.apach
 <li>
 <section class="detail" id="readRecords(java.lang.Object)">
 <h3>readRecords</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../stream/RecordReader.html" title="interface in org.apache.juneau.marshall.stream">RecordReader</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/yaml/YamlParser.html#line-189">readRecords</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;input)</span>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../stream/RecordReader.html" title="interface in org.apache.juneau.marshall.stream">RecordReader</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/yaml/YamlParser.html#line-205">readRecords</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;input)</span>
                          throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">Convenience delegator for the whole-value <a href="../stream/RecordReader.html" title="interface in org.apache.juneau.marshall.stream"><code>RecordReader</code></a> using <b>default session
  arguments</b>.  The real implementation lives on <a href="YamlParserSession.html#readRecords(java.lang.Object)"><code>YamlParserSession.readRecords(Object)</code></a>.</div>
@@ -420,7 +462,7 @@ implements <a href="../stream/RecordReadable.html" title="interface in org.apach
 <li>
 <section class="detail" id="readArrayRecords(java.lang.Object)">
 <h3>readArrayRecords</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../stream/RecordReader.html" title="interface in org.apache.juneau.marshall.stream">RecordReader</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/yaml/YamlParser.html#line-203">readArrayRecords</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;input)</span>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../stream/RecordReader.html" title="interface in org.apache.juneau.marshall.stream">RecordReader</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/yaml/YamlParser.html#line-219">readArrayRecords</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;input)</span>
                               throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">Convenience delegator for the buffered array-element <a href="../stream/RecordReader.html" title="interface in org.apache.juneau.marshall.stream"><code>RecordReader</code></a> using <b>default
  session arguments</b>.  The real implementation lives on
@@ -440,7 +482,7 @@ implements <a href="../stream/RecordReadable.html" title="interface in org.apach
 <li>
 <section class="detail" id="isRecordStreaming()">
 <h3>isRecordStreaming</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/yaml/YamlParser.html#line-213">isRecordStreaming</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/yaml/YamlParser.html#line-229">isRecordStreaming</a></span>()</div>
 <div class="block">The YAML record cursor is buffered/<a href="../stream/RecordAdapter.html" title="class in org.apache.juneau.marshall.stream"><code>RecordAdapter</code></a>-backed, not O(1) streaming.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
@@ -453,7 +495,7 @@ implements <a href="../stream/RecordReadable.html" title="interface in org.apach
 <li>
 <section class="detail" id="isArrayRecordStreaming()">
 <h3>isArrayRecordStreaming</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/yaml/YamlParser.html#line-221">isArrayRecordStreaming</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/yaml/YamlParser.html#line-237">isArrayRecordStreaming</a></span>()</div>
 <div class="block">The YAML array-record cursor is buffered/<a href="../stream/RecordAdapter.html" title="class in org.apache.juneau.marshall.stream"><code>RecordAdapter</code></a>-backed, not O(1) streaming.</div>
 <dl class="notes">
 <dt>Specified by:</dt>

@@ -76,7 +76,7 @@
 <a class="jxr_linenumber" name="L68" href="#L68">68</a>  		<em class="jxr_comment">// The q parameter and stuff after is part of the range.</em>
 <a class="jxr_linenumber" name="L69" href="#L69">69</a>  		List&lt;NameValuePair&gt; extensions2 = list();
 <a class="jxr_linenumber" name="L70" href="#L70">70</a>  		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> p : e.getParameters()) {
-<a class="jxr_linenumber" name="L71" href="#L71">71</a>  			<strong class="jxr_keyword">if</strong> (p.getName().equals(<span class="jxr_string">"q"</span>)) {
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>  			<strong class="jxr_keyword">if</strong> (eq(p.getName(), <span class="jxr_string">"q"</span>)) {
 <a class="jxr_linenumber" name="L72" href="#L72">72</a>  				qValue2 = Float.parseFloat(p.getValue());
 <a class="jxr_linenumber" name="L73" href="#L73">73</a>  			} <strong class="jxr_keyword">else</strong> {
 <a class="jxr_linenumber" name="L74" href="#L74">74</a>  				extensions2.add(<strong class="jxr_keyword">new</strong> <a name="BasicNameValuePair" href="../../../../../org/apache/juneau/commons/http/BasicNameValuePair.html#BasicNameValuePair">BasicNameValuePair</a>(p.getName(), p.getValue()));

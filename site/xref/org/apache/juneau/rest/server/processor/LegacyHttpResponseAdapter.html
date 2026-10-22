@@ -188,9 +188,9 @@
 <a class="jxr_linenumber" name="L180" href="#L180">180</a> 
 <a class="jxr_linenumber" name="L181" href="#L181">181</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">boolean</strong> isUriHeader(String name) {
 <a class="jxr_linenumber" name="L182" href="#L182">182</a> 			<strong class="jxr_keyword">return</strong> name != <strong class="jxr_keyword">null</strong> &amp;&amp; (
-<a class="jxr_linenumber" name="L183" href="#L183">183</a> 				name.equalsIgnoreCase(<span class="jxr_string">"Location"</span>)
-<a class="jxr_linenumber" name="L184" href="#L184">184</a> 				|| name.equalsIgnoreCase(<span class="jxr_string">"Content-Location"</span>)
-<a class="jxr_linenumber" name="L185" href="#L185">185</a> 				|| name.equalsIgnoreCase(<span class="jxr_string">"Referer"</span>));
+<a class="jxr_linenumber" name="L183" href="#L183">183</a> 				eqic(name, <span class="jxr_string">"Location"</span>)
+<a class="jxr_linenumber" name="L184" href="#L184">184</a> 				|| eqic(name, <span class="jxr_string">"Content-Location"</span>)
+<a class="jxr_linenumber" name="L185" href="#L185">185</a> 				|| eqic(name, <span class="jxr_string">"Referer"</span>));
 <a class="jxr_linenumber" name="L186" href="#L186">186</a> 		}
 <a class="jxr_linenumber" name="L187" href="#L187">187</a> 
 <a class="jxr_linenumber" name="L188" href="#L188">188</a> 		@Override

@@ -66,7 +66,7 @@
 <span class="source-line-no">053</span><span id="line-53"></span>
 <span class="source-line-no">054</span><span id="line-54">      // Serialize to human readable XML and print</span>
 <span class="source-line-no">055</span><span id="line-55">      var serial = XmlSerializer.DEFAULT_SQ_READABLE.write(pojoc);</span>
-<span class="source-line-no">056</span><span id="line-56">      Logger.getLogger(XmlComplexExample.class).info(serial);</span>
+<span class="source-line-no">056</span><span id="line-56">      RichLogger.getLogger(XmlComplexExample.class).info(serial);</span>
 <span class="source-line-no">057</span><span id="line-57"></span>
 <span class="source-line-no">058</span><span id="line-58">      // Deserialize back to PojoComplex instance</span>
 <span class="source-line-no">059</span><span id="line-59">      var obj = XmlParser.DEFAULT.read(serial, PojoComplex.class);</span>

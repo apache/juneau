@@ -35,177 +35,223 @@
 <span class="source-line-no">022</span><span id="line-22"></span>
 <span class="source-line-no">023</span><span id="line-23">import java.io.*;</span>
 <span class="source-line-no">024</span><span id="line-24">import java.net.*;</span>
-<span class="source-line-no">025</span><span id="line-25">import java.util.*;</span>
-<span class="source-line-no">026</span><span id="line-26">import java.util.stream.*;</span>
-<span class="source-line-no">027</span><span id="line-27"></span>
-<span class="source-line-no">028</span><span id="line-28">import org.apache.juneau.commons.utils.*;</span>
-<span class="source-line-no">029</span><span id="line-29">import org.junit.jupiter.api.*;</span>
+<span class="source-line-no">025</span><span id="line-25">import java.nio.file.*;</span>
+<span class="source-line-no">026</span><span id="line-26">import java.time.*;</span>
+<span class="source-line-no">027</span><span id="line-27">import java.util.*;</span>
+<span class="source-line-no">028</span><span id="line-28">import java.util.function.*;</span>
+<span class="source-line-no">029</span><span id="line-29">import java.util.stream.*;</span>
 <span class="source-line-no">030</span><span id="line-30"></span>
-<span class="source-line-no">031</span><span id="line-31">/**</span>
-<span class="source-line-no">032</span><span id="line-32"> * Shared, marshall-free test utilities common to Juneau test modules.</span>
-<span class="source-line-no">033</span><span id="line-33"> *</span>
-<span class="source-line-no">034</span><span id="line-34"> * &lt;p&gt;</span>
-<span class="source-line-no">035</span><span id="line-35"> * Provides the stable pure-JDK/commons subset of the per-module {@code TestUtils} classes: exception-message</span>
-<span class="source-line-no">036</span><span id="line-36"> * assertions, equality helpers, stream/reader factories, locale/timezone toggles, and URL construction.  Module-level</span>
-<span class="source-line-no">037</span><span id="line-37"> * {@code TestUtils} classes extend this base and add their own marshall-bound helpers (e.g. {@code assertJson},</span>
-<span class="source-line-no">038</span><span id="line-38"> * {@code json}, {@code validateXml}).</span>
-<span class="source-line-no">039</span><span id="line-39"> *</span>
-<span class="source-line-no">040</span><span id="line-40"> * &lt;p&gt;</span>
-<span class="source-line-no">041</span><span id="line-41"> * This class lives in the {@code juneau-test-utils} module, which depends only on {@code juneau-commons} and JUnit, so</span>
-<span class="source-line-no">042</span><span id="line-42"> * it never introduces a {@code juneau-marshall} dependency onto its consumers.</span>
-<span class="source-line-no">043</span><span id="line-43"> */</span>
-<span class="source-line-no">044</span><span id="line-44">@SuppressWarnings({</span>
-<span class="source-line-no">045</span><span id="line-45">   "java:S5960" // test-support utility shipped as main source; assertions are intentional</span>
-<span class="source-line-no">046</span><span id="line-46">})</span>
-<span class="source-line-no">047</span><span id="line-47">public abstract class BasicTestUtils extends Shorts {</span>
-<span class="source-line-no">048</span><span id="line-48"></span>
-<span class="source-line-no">049</span><span id="line-49">   private static final ThreadLocal&lt;TimeZone&gt; SYSTEM_TIME_ZONE = new ThreadLocal&lt;&gt;();</span>
-<span class="source-line-no">050</span><span id="line-50"></span>
-<span class="source-line-no">051</span><span id="line-51">   /** Holds the previous default locale while a test overrides it via {@link #setLocale(Locale)}. */</span>
-<span class="source-line-no">052</span><span id="line-52">   public static final ThreadLocal&lt;Locale&gt; SYSTEM_LOCALE = new ThreadLocal&lt;&gt;();</span>
-<span class="source-line-no">053</span><span id="line-53"></span>
-<span class="source-line-no">054</span><span id="line-54">   /**</span>
-<span class="source-line-no">055</span><span id="line-55">    * Asserts that all the specified values are equal to the first value.</span>
-<span class="source-line-no">056</span><span id="line-56">    *</span>
-<span class="source-line-no">057</span><span id="line-57">    * @param values The values to compare.  Element 0 is the expected value.</span>
-<span class="source-line-no">058</span><span id="line-58">    */</span>
-<span class="source-line-no">059</span><span id="line-59">   public static void assertEqualsAll(Object...values) {</span>
-<span class="source-line-no">060</span><span id="line-60">      for (var i = 1; i &lt; values.length; i++) {</span>
-<span class="source-line-no">061</span><span id="line-61">         assertEquals(values[0], values[i], fs("Elements at index %1$s and %2$s did not match. %1$s=%3$s, %2$s=%4$s", 0, i, r(values[0]), r(values[i])));</span>
-<span class="source-line-no">062</span><span id="line-62">      }</span>
-<span class="source-line-no">063</span><span id="line-63">   }</span>
-<span class="source-line-no">064</span><span id="line-64"></span>
-<span class="source-line-no">065</span><span id="line-65">   /**</span>
-<span class="source-line-no">066</span><span id="line-66">    * Asserts that the specified actual value does not equal any of the specified values.</span>
-<span class="source-line-no">067</span><span id="line-67">    *</span>
-<span class="source-line-no">068</span><span id="line-68">    * @param actual The actual value.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">069</span><span id="line-69">    * @param values The values that must not match the actual value.</span>
-<span class="source-line-no">070</span><span id="line-70">    */</span>
-<span class="source-line-no">071</span><span id="line-71">   public static void assertNotEqualsAny(Object actual, Object...values) {</span>
-<span class="source-line-no">072</span><span id="line-72">      assertNotNull(actual, "Value was null.");</span>
-<span class="source-line-no">073</span><span id="line-73">      for (var i = 0; i &lt; values.length; i++) {</span>
-<span class="source-line-no">074</span><span id="line-74">         assertNotEquals(values[i], actual, fs("Element at index %s unexpectedly matched.  expected=%s, actual=%s", i, values[i], s(actual)));</span>
-<span class="source-line-no">075</span><span id="line-75">      }</span>
-<span class="source-line-no">076</span><span id="line-76">   }</span>
-<span class="source-line-no">077</span><span id="line-77"></span>
-<span class="source-line-no">078</span><span id="line-78">   /**</span>
-<span class="source-line-no">079</span><span id="line-79">    * Asserts that the specified executable throws an exception whose chained messages contain all the specified substrings.</span>
-<span class="source-line-no">080</span><span id="line-80">    *</span>
-<span class="source-line-no">081</span><span id="line-81">    * @param &lt;T&gt; The expected exception type.</span>
-<span class="source-line-no">082</span><span id="line-82">    * @param expectedType The expected exception type.</span>
-<span class="source-line-no">083</span><span id="line-83">    * @param expectedSubstrings The substrings expected in the exception message chain.</span>
-<span class="source-line-no">084</span><span id="line-84">    * @param executable The code expected to throw.</span>
-<span class="source-line-no">085</span><span id="line-85">    * @return The thrown exception.</span>
-<span class="source-line-no">086</span><span id="line-86">    */</span>
-<span class="source-line-no">087</span><span id="line-87">   public static &lt;T extends Throwable&gt; T assertThrowsWithMessage(Class&lt;T&gt; expectedType, List&lt;String&gt; expectedSubstrings, org.junit.jupiter.api.function.Executable executable) {</span>
-<span class="source-line-no">088</span><span id="line-88">      var exception = Assertions.assertThrows(expectedType, executable);</span>
-<span class="source-line-no">089</span><span id="line-89">      var messages = getMessages(exception);</span>
-<span class="source-line-no">090</span><span id="line-90">      expectedSubstrings.forEach(x -&gt; assertTrue(messages.contains(x), fs("Expected message to contain: %s.\nActual:\n%s", x, messages)));</span>
-<span class="source-line-no">091</span><span id="line-91">      return exception;</span>
-<span class="source-line-no">092</span><span id="line-92">   }</span>
-<span class="source-line-no">093</span><span id="line-93"></span>
-<span class="source-line-no">094</span><span id="line-94">   /**</span>
-<span class="source-line-no">095</span><span id="line-95">    * Asserts that the specified executable throws an exception whose chained messages contain the specified substring.</span>
-<span class="source-line-no">096</span><span id="line-96">    *</span>
-<span class="source-line-no">097</span><span id="line-97">    * @param &lt;T&gt; The expected exception type.</span>
-<span class="source-line-no">098</span><span id="line-98">    * @param expectedType The expected exception type.</span>
-<span class="source-line-no">099</span><span id="line-99">    * @param expectedSubstring The substring expected in the exception message chain.</span>
-<span class="source-line-no">100</span><span id="line-100">    * @param executable The code expected to throw.</span>
-<span class="source-line-no">101</span><span id="line-101">    * @return The thrown exception.</span>
-<span class="source-line-no">102</span><span id="line-102">    */</span>
-<span class="source-line-no">103</span><span id="line-103">   public static &lt;T extends Throwable&gt; T assertThrowsWithMessage(Class&lt;T&gt; expectedType, String expectedSubstring, org.junit.jupiter.api.function.Executable executable) {</span>
-<span class="source-line-no">104</span><span id="line-104">      var exception = Assertions.assertThrows(expectedType, executable);</span>
-<span class="source-line-no">105</span><span id="line-105">      var messages = getMessages(exception);</span>
-<span class="source-line-no">106</span><span id="line-106">      assertTrue(messages.contains(expectedSubstring), fs("Expected message to contain: %s.\nActual:\n%s", expectedSubstring, messages));</span>
-<span class="source-line-no">107</span><span id="line-107">      return exception;</span>
-<span class="source-line-no">108</span><span id="line-108">   }</span>
-<span class="source-line-no">109</span><span id="line-109"></span>
-<span class="source-line-no">110</span><span id="line-110">   /**</span>
-<span class="source-line-no">111</span><span id="line-111">    * Collects the newline-joined message chain of the specified throwable and all its causes.</span>
-<span class="source-line-no">112</span><span id="line-112">    *</span>
-<span class="source-line-no">113</span><span id="line-113">    * @param t The throwable.</span>
-<span class="source-line-no">114</span><span id="line-114">    * @return The joined message chain.</span>
-<span class="source-line-no">115</span><span id="line-115">    */</span>
-<span class="source-line-no">116</span><span id="line-116">   protected static String getMessages(Throwable t) {</span>
-<span class="source-line-no">117</span><span id="line-117">      return Stream.iterate(t, Throwable::getCause).takeWhile(e -&gt; e != null).map(Throwable::getMessage).collect(joining("\n"));</span>
-<span class="source-line-no">118</span><span id="line-118">   }</span>
-<span class="source-line-no">119</span><span id="line-119"></span>
-<span class="source-line-no">120</span><span id="line-120">   /**</span>
-<span class="source-line-no">121</span><span id="line-121">    * Creates an input stream from the specified string.</span>
-<span class="source-line-no">122</span><span id="line-122">    *</span>
-<span class="source-line-no">123</span><span id="line-123">    * @param in The contents of the stream.</span>
-<span class="source-line-no">124</span><span id="line-124">    * @return A new input stream.</span>
-<span class="source-line-no">125</span><span id="line-125">    */</span>
-<span class="source-line-no">126</span><span id="line-126">   public static final ByteArrayInputStream inputStream(String in) {</span>
-<span class="source-line-no">127</span><span id="line-127">      return new ByteArrayInputStream(in.getBytes());</span>
-<span class="source-line-no">128</span><span id="line-128">   }</span>
-<span class="source-line-no">129</span><span id="line-129"></span>
-<span class="source-line-no">130</span><span id="line-130">   /**</span>
-<span class="source-line-no">131</span><span id="line-131">    * Creates a reader from the specified string.</span>
-<span class="source-line-no">132</span><span id="line-132">    *</span>
-<span class="source-line-no">133</span><span id="line-133">    * @param in The contents of the reader.</span>
-<span class="source-line-no">134</span><span id="line-134">    * @return A new reader.</span>
-<span class="source-line-no">135</span><span id="line-135">    */</span>
-<span class="source-line-no">136</span><span id="line-136">   public static final StringReader reader(String in) {</span>
-<span class="source-line-no">137</span><span id="line-137">      return new StringReader(in);</span>
-<span class="source-line-no">138</span><span id="line-138">   }</span>
-<span class="source-line-no">139</span><span id="line-139"></span>
-<span class="source-line-no">140</span><span id="line-140">   /**</span>
-<span class="source-line-no">141</span><span id="line-141">    * Temporarily sets the default system locale to the specified locale.</span>
-<span class="source-line-no">142</span><span id="line-142">    *</span>
-<span class="source-line-no">143</span><span id="line-143">    * @param v The new default locale.</span>
-<span class="source-line-no">144</span><span id="line-144">    */</span>
-<span class="source-line-no">145</span><span id="line-145">   public static final void setLocale(Locale v) {</span>
-<span class="source-line-no">146</span><span id="line-146">      SYSTEM_LOCALE.set(Locale.getDefault());</span>
-<span class="source-line-no">147</span><span id="line-147">      Locale.setDefault(v);</span>
-<span class="source-line-no">148</span><span id="line-148">   }</span>
-<span class="source-line-no">149</span><span id="line-149"></span>
-<span class="source-line-no">150</span><span id="line-150">   /**</span>
-<span class="source-line-no">151</span><span id="line-151">    * Temporarily sets the default system timezone to the specified timezone ID.</span>
-<span class="source-line-no">152</span><span id="line-152">    *</span>
-<span class="source-line-no">153</span><span id="line-153">    * @param v The new default timezone ID.</span>
-<span class="source-line-no">154</span><span id="line-154">    */</span>
-<span class="source-line-no">155</span><span id="line-155">   public static final synchronized void setTimeZone(String v) {</span>
-<span class="source-line-no">156</span><span id="line-156">      SYSTEM_TIME_ZONE.set(TimeZone.getDefault());</span>
-<span class="source-line-no">157</span><span id="line-157">      TimeZone.setDefault(TimeZone.getTimeZone(v));</span>
-<span class="source-line-no">158</span><span id="line-158">   }</span>
-<span class="source-line-no">159</span><span id="line-159"></span>
-<span class="source-line-no">160</span><span id="line-160">   /**</span>
-<span class="source-line-no">161</span><span id="line-161">    * Restores the default system locale saved by {@link #setLocale(Locale)}.</span>
-<span class="source-line-no">162</span><span id="line-162">    */</span>
-<span class="source-line-no">163</span><span id="line-163">   public static final void unsetLocale() {</span>
-<span class="source-line-no">164</span><span id="line-164">      Locale.setDefault(SYSTEM_LOCALE.get());</span>
-<span class="source-line-no">165</span><span id="line-165">   }</span>
-<span class="source-line-no">166</span><span id="line-166"></span>
-<span class="source-line-no">167</span><span id="line-167">   /**</span>
-<span class="source-line-no">168</span><span id="line-168">    * Restores the default system timezone saved by {@link #setTimeZone(String)}.</span>
-<span class="source-line-no">169</span><span id="line-169">    */</span>
-<span class="source-line-no">170</span><span id="line-170">   public static final synchronized void unsetTimeZone() {</span>
-<span class="source-line-no">171</span><span id="line-171">      TimeZone.setDefault(SYSTEM_TIME_ZONE.get());</span>
-<span class="source-line-no">172</span><span id="line-172">      SYSTEM_TIME_ZONE.remove();</span>
-<span class="source-line-no">173</span><span id="line-173">   }</span>
-<span class="source-line-no">174</span><span id="line-174"></span>
-<span class="source-line-no">175</span><span id="line-175">   /**</span>
-<span class="source-line-no">176</span><span id="line-176">    * Constructs a {@link URL} object from a string.</span>
-<span class="source-line-no">177</span><span id="line-177">    *</span>
-<span class="source-line-no">178</span><span id="line-178">    * @param value The URL string.</span>
-<span class="source-line-no">179</span><span id="line-179">    * @return A new {@link URL} object.</span>
-<span class="source-line-no">180</span><span id="line-180">    */</span>
-<span class="source-line-no">181</span><span id="line-181">   public static URL url(String value) {</span>
-<span class="source-line-no">182</span><span id="line-182">      return safe(()-&gt;new URI(value).toURL());</span>
-<span class="source-line-no">183</span><span id="line-183">   }</span>
-<span class="source-line-no">184</span><span id="line-184"></span>
-<span class="source-line-no">185</span><span id="line-185">   /**</span>
-<span class="source-line-no">186</span><span id="line-186">    * Returns an empty array of the specified type.</span>
-<span class="source-line-no">187</span><span id="line-187">    *</span>
-<span class="source-line-no">188</span><span id="line-188">    * @param &lt;T&gt; The component type.</span>
-<span class="source-line-no">189</span><span id="line-189">    * @param t The component type.</span>
-<span class="source-line-no">190</span><span id="line-190">    * @return A new empty array of the specified type.</span>
-<span class="source-line-no">191</span><span id="line-191">    */</span>
-<span class="source-line-no">192</span><span id="line-192">   public static &lt;T&gt; T[] ea(Class&lt;T&gt; t) {</span>
-<span class="source-line-no">193</span><span id="line-193">      return CollectionUtils.array(t, 0);</span>
-<span class="source-line-no">194</span><span id="line-194">   }</span>
-<span class="source-line-no">195</span><span id="line-195">}</span>
+<span class="source-line-no">031</span><span id="line-31">import org.apache.juneau.commons.utils.*;</span>
+<span class="source-line-no">032</span><span id="line-32">import org.junit.jupiter.api.*;</span>
+<span class="source-line-no">033</span><span id="line-33"></span>
+<span class="source-line-no">034</span><span id="line-34">/**</span>
+<span class="source-line-no">035</span><span id="line-35"> * Shared, marshall-free test utilities common to Juneau test modules.</span>
+<span class="source-line-no">036</span><span id="line-36"> *</span>
+<span class="source-line-no">037</span><span id="line-37"> * &lt;p&gt;</span>
+<span class="source-line-no">038</span><span id="line-38"> * Provides the stable pure-JDK/commons subset of the per-module {@code TestUtils} classes: exception-message</span>
+<span class="source-line-no">039</span><span id="line-39"> * assertions, equality helpers, stream/reader factories, locale/timezone toggles, and URL construction.  Module-level</span>
+<span class="source-line-no">040</span><span id="line-40"> * {@code TestUtils} classes extend this base and add their own marshall-bound helpers (e.g. {@code assertJson},</span>
+<span class="source-line-no">041</span><span id="line-41"> * {@code json}, {@code validateXml}).</span>
+<span class="source-line-no">042</span><span id="line-42"> *</span>
+<span class="source-line-no">043</span><span id="line-43"> * &lt;p&gt;</span>
+<span class="source-line-no">044</span><span id="line-44"> * This class lives in the {@code juneau-test-utils} module, which depends only on {@code juneau-commons} and JUnit, so</span>
+<span class="source-line-no">045</span><span id="line-45"> * it never introduces a {@code juneau-marshall} dependency onto its consumers.</span>
+<span class="source-line-no">046</span><span id="line-46"> */</span>
+<span class="source-line-no">047</span><span id="line-47">@SuppressWarnings({</span>
+<span class="source-line-no">048</span><span id="line-48">   "java:S5960" // test-support utility shipped as main source; assertions are intentional</span>
+<span class="source-line-no">049</span><span id="line-49">})</span>
+<span class="source-line-no">050</span><span id="line-50">public abstract class BasicTestUtils extends Shorts {</span>
+<span class="source-line-no">051</span><span id="line-51"></span>
+<span class="source-line-no">052</span><span id="line-52">   /** How long {@link #await(BooleanSupplier, Duration)} sleeps between checks of its condition. */</span>
+<span class="source-line-no">053</span><span id="line-53">   private static final long AWAIT_INTERVAL_MS = 25;</span>
+<span class="source-line-no">054</span><span id="line-54"></span>
+<span class="source-line-no">055</span><span id="line-55">   private static final ThreadLocal&lt;TimeZone&gt; SYSTEM_TIME_ZONE = new ThreadLocal&lt;&gt;();</span>
+<span class="source-line-no">056</span><span id="line-56"></span>
+<span class="source-line-no">057</span><span id="line-57">   /** Holds the previous default locale while a test overrides it via {@link #setLocale(Locale)}. */</span>
+<span class="source-line-no">058</span><span id="line-58">   public static final ThreadLocal&lt;Locale&gt; SYSTEM_LOCALE = new ThreadLocal&lt;&gt;();</span>
+<span class="source-line-no">059</span><span id="line-59"></span>
+<span class="source-line-no">060</span><span id="line-60">   /**</span>
+<span class="source-line-no">061</span><span id="line-61">    * Asserts that all the specified values are equal to the first value.</span>
+<span class="source-line-no">062</span><span id="line-62">    *</span>
+<span class="source-line-no">063</span><span id="line-63">    * @param values The values to compare.  Element 0 is the expected value.</span>
+<span class="source-line-no">064</span><span id="line-64">    */</span>
+<span class="source-line-no">065</span><span id="line-65">   public static void assertEqualsAll(Object...values) {</span>
+<span class="source-line-no">066</span><span id="line-66">      for (var i = 1; i &lt; values.length; i++) {</span>
+<span class="source-line-no">067</span><span id="line-67">         assertEquals(values[0], values[i], fs("Elements at index %1$s and %2$s did not match. %1$s=%3$s, %2$s=%4$s", 0, i, r(values[0]), r(values[i])));</span>
+<span class="source-line-no">068</span><span id="line-68">      }</span>
+<span class="source-line-no">069</span><span id="line-69">   }</span>
+<span class="source-line-no">070</span><span id="line-70"></span>
+<span class="source-line-no">071</span><span id="line-71">   /**</span>
+<span class="source-line-no">072</span><span id="line-72">    * Asserts that the specified actual value does not equal any of the specified values.</span>
+<span class="source-line-no">073</span><span id="line-73">    *</span>
+<span class="source-line-no">074</span><span id="line-74">    * @param actual The actual value.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">075</span><span id="line-75">    * @param values The values that must not match the actual value.</span>
+<span class="source-line-no">076</span><span id="line-76">    */</span>
+<span class="source-line-no">077</span><span id="line-77">   public static void assertNotEqualsAny(Object actual, Object...values) {</span>
+<span class="source-line-no">078</span><span id="line-78">      assertNotNull(actual, "Value was null.");</span>
+<span class="source-line-no">079</span><span id="line-79">      for (var i = 0; i &lt; values.length; i++) {</span>
+<span class="source-line-no">080</span><span id="line-80">         assertNotEquals(values[i], actual, fs("Element at index %s unexpectedly matched.  expected=%s, actual=%s", i, values[i], s(actual)));</span>
+<span class="source-line-no">081</span><span id="line-81">      }</span>
+<span class="source-line-no">082</span><span id="line-82">   }</span>
+<span class="source-line-no">083</span><span id="line-83"></span>
+<span class="source-line-no">084</span><span id="line-84">   /**</span>
+<span class="source-line-no">085</span><span id="line-85">    * Asserts that the specified executable throws an exception whose chained messages contain all the specified substrings.</span>
+<span class="source-line-no">086</span><span id="line-86">    *</span>
+<span class="source-line-no">087</span><span id="line-87">    * @param &lt;T&gt; The expected exception type.</span>
+<span class="source-line-no">088</span><span id="line-88">    * @param expectedType The expected exception type.</span>
+<span class="source-line-no">089</span><span id="line-89">    * @param expectedSubstrings The substrings expected in the exception message chain.</span>
+<span class="source-line-no">090</span><span id="line-90">    * @param executable The code expected to throw.</span>
+<span class="source-line-no">091</span><span id="line-91">    * @return The thrown exception.</span>
+<span class="source-line-no">092</span><span id="line-92">    */</span>
+<span class="source-line-no">093</span><span id="line-93">   public static &lt;T extends Throwable&gt; T assertThrowsWithMessage(Class&lt;T&gt; expectedType, List&lt;String&gt; expectedSubstrings, org.junit.jupiter.api.function.Executable executable) {</span>
+<span class="source-line-no">094</span><span id="line-94">      var exception = Assertions.assertThrows(expectedType, executable);</span>
+<span class="source-line-no">095</span><span id="line-95">      var messages = getMessages(exception);</span>
+<span class="source-line-no">096</span><span id="line-96">      expectedSubstrings.forEach(x -&gt; assertTrue(messages.contains(x), fs("Expected message to contain: %s.\nActual:\n%s", x, messages)));</span>
+<span class="source-line-no">097</span><span id="line-97">      return exception;</span>
+<span class="source-line-no">098</span><span id="line-98">   }</span>
+<span class="source-line-no">099</span><span id="line-99"></span>
+<span class="source-line-no">100</span><span id="line-100">   /**</span>
+<span class="source-line-no">101</span><span id="line-101">    * Asserts that the specified executable throws an exception whose chained messages contain the specified substring.</span>
+<span class="source-line-no">102</span><span id="line-102">    *</span>
+<span class="source-line-no">103</span><span id="line-103">    * @param &lt;T&gt; The expected exception type.</span>
+<span class="source-line-no">104</span><span id="line-104">    * @param expectedType The expected exception type.</span>
+<span class="source-line-no">105</span><span id="line-105">    * @param expectedSubstring The substring expected in the exception message chain.</span>
+<span class="source-line-no">106</span><span id="line-106">    * @param executable The code expected to throw.</span>
+<span class="source-line-no">107</span><span id="line-107">    * @return The thrown exception.</span>
+<span class="source-line-no">108</span><span id="line-108">    */</span>
+<span class="source-line-no">109</span><span id="line-109">   public static &lt;T extends Throwable&gt; T assertThrowsWithMessage(Class&lt;T&gt; expectedType, String expectedSubstring, org.junit.jupiter.api.function.Executable executable) {</span>
+<span class="source-line-no">110</span><span id="line-110">      var exception = Assertions.assertThrows(expectedType, executable);</span>
+<span class="source-line-no">111</span><span id="line-111">      var messages = getMessages(exception);</span>
+<span class="source-line-no">112</span><span id="line-112">      assertTrue(messages.contains(expectedSubstring), fs("Expected message to contain: %s.\nActual:\n%s", expectedSubstring, messages));</span>
+<span class="source-line-no">113</span><span id="line-113">      return exception;</span>
+<span class="source-line-no">114</span><span id="line-114">   }</span>
+<span class="source-line-no">115</span><span id="line-115"></span>
+<span class="source-line-no">116</span><span id="line-116">   /**</span>
+<span class="source-line-no">117</span><span id="line-117">    * Collects the newline-joined message chain of the specified throwable and all its causes.</span>
+<span class="source-line-no">118</span><span id="line-118">    *</span>
+<span class="source-line-no">119</span><span id="line-119">    * @param t The throwable.</span>
+<span class="source-line-no">120</span><span id="line-120">    * @return The joined message chain.</span>
+<span class="source-line-no">121</span><span id="line-121">    */</span>
+<span class="source-line-no">122</span><span id="line-122">   protected static String getMessages(Throwable t) {</span>
+<span class="source-line-no">123</span><span id="line-123">      return Stream.iterate(t, Throwable::getCause).takeWhile(e -&gt; e != null).map(Throwable::getMessage).collect(joining("\n"));</span>
+<span class="source-line-no">124</span><span id="line-124">   }</span>
+<span class="source-line-no">125</span><span id="line-125"></span>
+<span class="source-line-no">126</span><span id="line-126">   /**</span>
+<span class="source-line-no">127</span><span id="line-127">    * Creates an input stream from the specified string.</span>
+<span class="source-line-no">128</span><span id="line-128">    *</span>
+<span class="source-line-no">129</span><span id="line-129">    * @param in The contents of the stream.</span>
+<span class="source-line-no">130</span><span id="line-130">    * @return A new input stream.</span>
+<span class="source-line-no">131</span><span id="line-131">    */</span>
+<span class="source-line-no">132</span><span id="line-132">   public static final ByteArrayInputStream inputStream(String in) {</span>
+<span class="source-line-no">133</span><span id="line-133">      return new ByteArrayInputStream(in.getBytes());</span>
+<span class="source-line-no">134</span><span id="line-134">   }</span>
+<span class="source-line-no">135</span><span id="line-135"></span>
+<span class="source-line-no">136</span><span id="line-136">   /**</span>
+<span class="source-line-no">137</span><span id="line-137">    * Creates a reader from the specified string.</span>
+<span class="source-line-no">138</span><span id="line-138">    *</span>
+<span class="source-line-no">139</span><span id="line-139">    * @param in The contents of the reader.</span>
+<span class="source-line-no">140</span><span id="line-140">    * @return A new reader.</span>
+<span class="source-line-no">141</span><span id="line-141">    */</span>
+<span class="source-line-no">142</span><span id="line-142">   public static final StringReader reader(String in) {</span>
+<span class="source-line-no">143</span><span id="line-143">      return new StringReader(in);</span>
+<span class="source-line-no">144</span><span id="line-144">   }</span>
+<span class="source-line-no">145</span><span id="line-145"></span>
+<span class="source-line-no">146</span><span id="line-146">   /**</span>
+<span class="source-line-no">147</span><span id="line-147">    * Temporarily sets the default system locale to the specified locale.</span>
+<span class="source-line-no">148</span><span id="line-148">    *</span>
+<span class="source-line-no">149</span><span id="line-149">    * @param v The new default locale.</span>
+<span class="source-line-no">150</span><span id="line-150">    */</span>
+<span class="source-line-no">151</span><span id="line-151">   public static final void setLocale(Locale v) {</span>
+<span class="source-line-no">152</span><span id="line-152">      SYSTEM_LOCALE.set(Locale.getDefault());</span>
+<span class="source-line-no">153</span><span id="line-153">      Locale.setDefault(v);</span>
+<span class="source-line-no">154</span><span id="line-154">   }</span>
+<span class="source-line-no">155</span><span id="line-155"></span>
+<span class="source-line-no">156</span><span id="line-156">   /**</span>
+<span class="source-line-no">157</span><span id="line-157">    * Temporarily sets the default system timezone to the specified timezone ID.</span>
+<span class="source-line-no">158</span><span id="line-158">    *</span>
+<span class="source-line-no">159</span><span id="line-159">    * @param v The new default timezone ID.</span>
+<span class="source-line-no">160</span><span id="line-160">    */</span>
+<span class="source-line-no">161</span><span id="line-161">   public static final synchronized void setTimeZone(String v) {</span>
+<span class="source-line-no">162</span><span id="line-162">      SYSTEM_TIME_ZONE.set(TimeZone.getDefault());</span>
+<span class="source-line-no">163</span><span id="line-163">      TimeZone.setDefault(TimeZone.getTimeZone(v));</span>
+<span class="source-line-no">164</span><span id="line-164">   }</span>
+<span class="source-line-no">165</span><span id="line-165"></span>
+<span class="source-line-no">166</span><span id="line-166">   /**</span>
+<span class="source-line-no">167</span><span id="line-167">    * Restores the default system locale saved by {@link #setLocale(Locale)}.</span>
+<span class="source-line-no">168</span><span id="line-168">    */</span>
+<span class="source-line-no">169</span><span id="line-169">   public static final void unsetLocale() {</span>
+<span class="source-line-no">170</span><span id="line-170">      Locale.setDefault(SYSTEM_LOCALE.get());</span>
+<span class="source-line-no">171</span><span id="line-171">   }</span>
+<span class="source-line-no">172</span><span id="line-172"></span>
+<span class="source-line-no">173</span><span id="line-173">   /**</span>
+<span class="source-line-no">174</span><span id="line-174">    * Restores the default system timezone saved by {@link #setTimeZone(String)}.</span>
+<span class="source-line-no">175</span><span id="line-175">    */</span>
+<span class="source-line-no">176</span><span id="line-176">   public static final synchronized void unsetTimeZone() {</span>
+<span class="source-line-no">177</span><span id="line-177">      TimeZone.setDefault(SYSTEM_TIME_ZONE.get());</span>
+<span class="source-line-no">178</span><span id="line-178">      SYSTEM_TIME_ZONE.remove();</span>
+<span class="source-line-no">179</span><span id="line-179">   }</span>
+<span class="source-line-no">180</span><span id="line-180"></span>
+<span class="source-line-no">181</span><span id="line-181">   /**</span>
+<span class="source-line-no">182</span><span id="line-182">    * Constructs a {@link URL} object from a string.</span>
+<span class="source-line-no">183</span><span id="line-183">    *</span>
+<span class="source-line-no">184</span><span id="line-184">    * @param value The URL string.</span>
+<span class="source-line-no">185</span><span id="line-185">    * @return A new {@link URL} object.</span>
+<span class="source-line-no">186</span><span id="line-186">    */</span>
+<span class="source-line-no">187</span><span id="line-187">   public static URL url(String value) {</span>
+<span class="source-line-no">188</span><span id="line-188">      return safe(()-&gt;new URI(value).toURL());</span>
+<span class="source-line-no">189</span><span id="line-189">   }</span>
+<span class="source-line-no">190</span><span id="line-190"></span>
+<span class="source-line-no">191</span><span id="line-191">   /**</span>
+<span class="source-line-no">192</span><span id="line-192">    * Polls a condition until it holds or the timeout elapses.</span>
+<span class="source-line-no">193</span><span id="line-193">    *</span>
+<span class="source-line-no">194</span><span id="line-194">    * &lt;p&gt;</span>
+<span class="source-line-no">195</span><span id="line-195">    * For tests that wait on state with no signal to block on, such as a file another process writes.  Use this</span>
+<span class="source-line-no">196</span><span id="line-196">    * instead of a hand-rolled sleep loop.  The condition is checked once more after the last sleep, so one that comes</span>
+<span class="source-line-no">197</span><span id="line-197">    * true right at the deadline still counts.</span>
+<span class="source-line-no">198</span><span id="line-198">    *</span>
+<span class="source-line-no">199</span><span id="line-199">    * @param condition The condition to wait for.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">200</span><span id="line-200">    * @param timeout How long to wait.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">201</span><span id="line-201">    * @return &lt;jk&gt;true&lt;/jk&gt; once the condition holds, or &lt;jk&gt;false&lt;/jk&gt; if it still does not hold after the timeout.</span>
+<span class="source-line-no">202</span><span id="line-202">    * @throws InterruptedException If the thread is interrupted while waiting.</span>
+<span class="source-line-no">203</span><span id="line-203">    */</span>
+<span class="source-line-no">204</span><span id="line-204">   @SuppressWarnings({</span>
+<span class="source-line-no">205</span><span id="line-205">      "java:S2925" // The one shared bounded poll; the state it waits on has no signal to block on.</span>
+<span class="source-line-no">206</span><span id="line-206">   })</span>
+<span class="source-line-no">207</span><span id="line-207">   public static boolean await(BooleanSupplier condition, Duration timeout) throws InterruptedException {</span>
+<span class="source-line-no">208</span><span id="line-208">      var deadline = System.nanoTime() + timeout.toNanos();</span>
+<span class="source-line-no">209</span><span id="line-209">      while (! condition.getAsBoolean()) {</span>
+<span class="source-line-no">210</span><span id="line-210">         var left = deadline - System.nanoTime();</span>
+<span class="source-line-no">211</span><span id="line-211">         if (left &lt;= 0)</span>
+<span class="source-line-no">212</span><span id="line-212">            return false;</span>
+<span class="source-line-no">213</span><span id="line-213">         Thread.sleep(Math.min(AWAIT_INTERVAL_MS, Duration.ofNanos(left).toMillis() + 1));</span>
+<span class="source-line-no">214</span><span id="line-214">      }</span>
+<span class="source-line-no">215</span><span id="line-215">      return true;</span>
+<span class="source-line-no">216</span><span id="line-216">   }</span>
+<span class="source-line-no">217</span><span id="line-217"></span>
+<span class="source-line-no">218</span><span id="line-218">   /**</span>
+<span class="source-line-no">219</span><span id="line-219">    * Waits until a file exists or the timeout elapses.</span>
+<span class="source-line-no">220</span><span id="line-220">    *</span>
+<span class="source-line-no">221</span><span id="line-221">    * @param path The file to wait for.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">222</span><span id="line-222">    * @param timeout How long to wait.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">223</span><span id="line-223">    * @return &lt;jk&gt;true&lt;/jk&gt; once the file exists, or &lt;jk&gt;false&lt;/jk&gt; if it still does not exist after the timeout.</span>
+<span class="source-line-no">224</span><span id="line-224">    * @throws InterruptedException If the thread is interrupted while waiting.</span>
+<span class="source-line-no">225</span><span id="line-225">    * @see #await(BooleanSupplier, Duration)</span>
+<span class="source-line-no">226</span><span id="line-226">    */</span>
+<span class="source-line-no">227</span><span id="line-227">   public static boolean awaitFile(Path path, Duration timeout) throws InterruptedException {</span>
+<span class="source-line-no">228</span><span id="line-228">      return await(() -&gt; Files.exists(path), timeout);</span>
+<span class="source-line-no">229</span><span id="line-229">   }</span>
+<span class="source-line-no">230</span><span id="line-230"></span>
+<span class="source-line-no">231</span><span id="line-231">   /**</span>
+<span class="source-line-no">232</span><span id="line-232">    * Returns an empty array of the specified type.</span>
+<span class="source-line-no">233</span><span id="line-233">    *</span>
+<span class="source-line-no">234</span><span id="line-234">    * @param &lt;T&gt; The component type.</span>
+<span class="source-line-no">235</span><span id="line-235">    * @param t The component type.</span>
+<span class="source-line-no">236</span><span id="line-236">    * @return A new empty array of the specified type.</span>
+<span class="source-line-no">237</span><span id="line-237">    */</span>
+<span class="source-line-no">238</span><span id="line-238">   public static &lt;T&gt; T[] ea(Class&lt;T&gt; t) {</span>
+<span class="source-line-no">239</span><span id="line-239">      return CollectionUtils.array(t, 0);</span>
+<span class="source-line-no">240</span><span id="line-240">   }</span>
+<span class="source-line-no">241</span><span id="line-241">}</span>
 
 
 

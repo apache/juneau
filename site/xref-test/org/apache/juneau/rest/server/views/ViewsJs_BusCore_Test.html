@@ -1,0 +1,449 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="" lang="">
+<head><meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<title>ViewsJs_BusCore_Test xref</title>
+<link type="text/css" rel="stylesheet" href="../../../../../../stylesheet.css" />
+</head>
+<body>
+<div id="overview"><a href="../../../../../../../testapidocs/org/apache/juneau/rest/server/views/ViewsJs_BusCore_Test.html">View Javadoc</a></div><pre>
+<a class="jxr_linenumber" name="L1" href="#L1">1</a>   <em class="jxr_comment">/*</em>
+<a class="jxr_linenumber" name="L2" href="#L2">2</a>   <em class="jxr_comment"> * Licensed to the Apache Software Foundation (ASF) under one or more</em>
+<a class="jxr_linenumber" name="L3" href="#L3">3</a>   <em class="jxr_comment"> * contributor license agreements.  See the NOTICE file distributed with</em>
+<a class="jxr_linenumber" name="L4" href="#L4">4</a>   <em class="jxr_comment"> * this work for additional information regarding copyright ownership.</em>
+<a class="jxr_linenumber" name="L5" href="#L5">5</a>   <em class="jxr_comment"> * The ASF licenses this file to You under the Apache License, Version 2.0</em>
+<a class="jxr_linenumber" name="L6" href="#L6">6</a>   <em class="jxr_comment"> * (the "License"); you may not use this file except in compliance with</em>
+<a class="jxr_linenumber" name="L7" href="#L7">7</a>   <em class="jxr_comment"> * the License.  You may obtain a copy of the License at</em>
+<a class="jxr_linenumber" name="L8" href="#L8">8</a>   <em class="jxr_comment"> *</em>
+<a class="jxr_linenumber" name="L9" href="#L9">9</a>   <em class="jxr_comment"> *      <a href="http://www.apache.org/licenses/LICENSE-2.0" target="alexandria_uri">http://www.apache.org/licenses/LICENSE-2.0</a></em>
+<a class="jxr_linenumber" name="L10" href="#L10">10</a>  <em class="jxr_comment"> *</em>
+<a class="jxr_linenumber" name="L11" href="#L11">11</a>  <em class="jxr_comment"> * Unless required by applicable law or agreed to in writing, software</em>
+<a class="jxr_linenumber" name="L12" href="#L12">12</a>  <em class="jxr_comment"> * distributed under the License is distributed on an "AS IS" BASIS,</em>
+<a class="jxr_linenumber" name="L13" href="#L13">13</a>  <em class="jxr_comment"> * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</em>
+<a class="jxr_linenumber" name="L14" href="#L14">14</a>  <em class="jxr_comment"> * See the License for the specific language governing permissions and</em>
+<a class="jxr_linenumber" name="L15" href="#L15">15</a>  <em class="jxr_comment"> * limitations under the License.</em>
+<a class="jxr_linenumber" name="L16" href="#L16">16</a>  <em class="jxr_comment"> */</em>
+<a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.server.views;
+<a class="jxr_linenumber" name="L18" href="#L18">18</a>  
+<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.junit.jupiter.api.Assertions.*;
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.junit.jupiter.api.Assumptions.*;
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> java.util.*;
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.*;
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> org.junit.jupiter.api.*;
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <em class="jxr_javadoccomment"> * Behavioral coverage for the {@code juneau-bus.js} core.  The Node</em>
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <em class="jxr_javadoccomment"> * harness {@code bus-core.cjs} loads the bus standalone into the DOM shim and reports one section per subject; every</em>
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <em class="jxr_javadoccomment"> * assertion is here, so a failure names the subject in surefire.  Gated on {@code node} being on {@code PATH}.</em>
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <em class="jxr_javadoccomment"> */</em>
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <strong class="jxr_keyword">class</strong> <a name="ViewsJs_BusCore_Test" href="../../../../../../org/apache/juneau/rest/server/views/ViewsJs_BusCore_Test.html#ViewsJs_BusCore_Test">ViewsJs_BusCore_Test</a> <strong class="jxr_keyword">extends</strong> TestBase {
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>  
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String CORE_END = <span class="jxr_string">"// ---- stock sources: session handshake"</span>;
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>  
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Map&lt;String,Object&gt; report;
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>  
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>  	@BeforeAll
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>  	<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> runHarness() {
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>  		report = BusHarness.run(<span class="jxr_string">"bus-core.cjs"</span>, ViewsMixin.BUS_JS_RESOURCE);
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>  	}
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>  
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>  	@SuppressWarnings(<span class="jxr_string">"unchecked"</span>)
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Map&lt;String,Object&gt; section(String name) {
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>  		assumeTrue(report != <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"node not on PATH"</span>);
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>  		<strong class="jxr_keyword">var</strong> s = (Map&lt;String,Object&gt;) report.get(name);
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>  		assertNotNull(s, <span class="jxr_string">"harness section "</span> + name + <span class="jxr_string">" missing; report="</span> + report);
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>  		<strong class="jxr_keyword">return</strong> s;
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>  	}
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>  
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>  	@SuppressWarnings(<span class="jxr_string">"unchecked"</span>)
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Map&lt;String,Object&gt; map(Map&lt;String,Object&gt; m, String key) {
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>  		<strong class="jxr_keyword">return</strong> (Map&lt;String,Object&gt;) m.get(key);
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>  	}
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>  
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> List&lt;?&gt; list(Map&lt;String,Object&gt; m, String key) {
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>  		<strong class="jxr_keyword">return</strong> (List&lt;?&gt;) m.get(key);
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>  	}
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>  
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">int</strong> num(Map&lt;String,Object&gt; m, String key) {
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>  		<strong class="jxr_keyword">return</strong> ((Number) m.get(key)).intValue();
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>  	}
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>  
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String owned(String topic, String owner, String who, String key) {
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>  		<strong class="jxr_keyword">return</strong> <span class="jxr_string">"'"</span> + topic + <span class="jxr_string">"' is owned by '"</span> + owner + <span class="jxr_string">"'; '"</span> + who + <span class="jxr_string">"' may not publish or clear it (publish cmd:"</span> + key + <span class="jxr_string">" instead)"</span>;
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>  	}
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>  
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>  	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>  	<em class="jxr_comment">// Source shape (no node needed)</em>
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>  	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>  
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>  	@Test <strong class="jxr_keyword">void</strong> a00_sourceShape() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>  		<strong class="jxr_keyword">var</strong> js = BusHarness.source(ViewsMixin.BUS_JS_RESOURCE);
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>  		assertTrue(js.contains(<span class="jxr_string">"juneau-bus.js"</span>), <span class="jxr_string">"the header comment names the asset"</span>);
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>  		<strong class="jxr_keyword">var</strong> end = js.indexOf(CORE_END);
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>  		assertTrue(end &gt; 0, <span class="jxr_string">"the stock-sources section marker is present"</span>);
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>  		<strong class="jxr_keyword">var</strong> core = js.substring(0, end);
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>  		assertFalse(core.contains(<span class="jxr_string">"addEventListener("</span>), <span class="jxr_string">"the core attaches no listeners"</span>);
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>  		assertFalse(core.contains(<span class="jxr_string">"document."</span>), <span class="jxr_string">"the core, the bridge runtime and the codec never touch the DOM"</span>);
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>  		assertTrue(core.contains(<span class="jxr_string">"NS.bus = {"</span>), <span class="jxr_string">"the core defines exactly JuneauViews.bus"</span>);
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>  		assertFalse(js.toLowerCase().contains(<span class="jxr_string">"slds"</span>), <span class="jxr_string">"no SLDS anywhere"</span>);
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>  	}
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>  
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>  	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>  	<em class="jxr_comment">// Harness sections</em>
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>  	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>  
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>  	@Test <strong class="jxr_keyword">void</strong> t01_constantsAndApi() {
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>  		<strong class="jxr_keyword">var</strong> s = section(<span class="jxr_string">"t01"</span>);
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>  		assertEquals(<span class="jxr_string">"1"</span>, s.get(<span class="jxr_string">"contractVersion"</span>));
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>  		assertEquals(List.of(<span class="jxr_string">"card"</span>, <span class="jxr_string">"selection"</span>, <span class="jxr_string">"filter"</span>, <span class="jxr_string">"redraw"</span>, <span class="jxr_string">"detail"</span>, <span class="jxr_string">"bulk"</span>, <span class="jxr_string">"cmd"</span>, <span class="jxr_string">"probe"</span>, <span class="jxr_string">"job"</span>, <span class="jxr_string">"badge"</span>, <span class="jxr_string">"bridge"</span>, <span class="jxr_string">"data"</span>, <span class="jxr_string">"zoom"</span>, <span class="jxr_string">"legend"</span>), s.get(<span class="jxr_string">"families"</span>));
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>  		assertEquals(<strong class="jxr_keyword">true</strong>, s.get(<span class="jxr_string">"familiesFrozen"</span>));
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>  		assertEquals(64, num(s, <span class="jxr_string">"drainCap"</span>));
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>  		assertEquals(256, num(s, <span class="jxr_string">"historyCap"</span>));
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>  		assertEquals(256, num(s, <span class="jxr_string">"cycleTraceCap"</span>));
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>  		assertEquals(<span class="jxr_string">"juneau:framework"</span>, s.get(<span class="jxr_string">"senderKey"</span>));
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>  		assertEquals(List.of(), s.get(<span class="jxr_string">"missingFunctions"</span>));
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>  		assertEquals(List.of(<span class="jxr_string">"backoffDelay"</span>, <span class="jxr_string">"canonicalJson"</span>, <span class="jxr_string">"parseTopic"</span>, <span class="jxr_string">"resolvePath"</span>, <span class="jxr_string">"topicMatches"</span>), s.get(<span class="jxr_string">"util"</span>));
+<a class="jxr_linenumber" name="L99" href="#L99">99</a>  		assertEquals(List.of(<span class="jxr_string">"clearTimeout"</span>, <span class="jxr_string">"now"</span>, <span class="jxr_string">"random"</span>, <span class="jxr_string">"setTimeout"</span>), s.get(<span class="jxr_string">"timers"</span>));
+<a class="jxr_linenumber" name="L100" href="#L100">100</a> 		assertEquals(List.of(<span class="jxr_string">"bus"</span>), s.get(<span class="jxr_string">"namespaceKeys"</span>), <span class="jxr_string">"juneau-bus.js adds nothing but JuneauViews.bus"</span>);
+<a class="jxr_linenumber" name="L101" href="#L101">101</a> 		<strong class="jxr_keyword">var</strong> e = map(s, <span class="jxr_string">"busError"</span>);
+<a class="jxr_linenumber" name="L102" href="#L102">102</a> 		assertEquals(<span class="jxr_string">"BusError"</span>, e.get(<span class="jxr_string">"name"</span>));
+<a class="jxr_linenumber" name="L103" href="#L103">103</a> 		assertEquals(<span class="jxr_string">"E-JS-40"</span>, e.get(<span class="jxr_string">"code"</span>));
+<a class="jxr_linenumber" name="L104" href="#L104">104</a> 		assertEquals(<span class="jxr_string">"m"</span>, e.get(<span class="jxr_string">"message"</span>));
+<a class="jxr_linenumber" name="L105" href="#L105">105</a> 		assertEquals(<span class="jxr_string">"t"</span>, e.get(<span class="jxr_string">"topic"</span>));
+<a class="jxr_linenumber" name="L106" href="#L106">106</a> 		assertEquals(<strong class="jxr_keyword">true</strong>, e.get(<span class="jxr_string">"hasStack"</span>));
+<a class="jxr_linenumber" name="L107" href="#L107">107</a> 		assertEquals(<strong class="jxr_keyword">true</strong>, s.get(<span class="jxr_string">"reloadKeepsInstance"</span>), <span class="jxr_string">"a second load keeps the first instance and its retained state"</span>);
+<a class="jxr_linenumber" name="L108" href="#L108">108</a> 	}
+<a class="jxr_linenumber" name="L109" href="#L109">109</a> 
+<a class="jxr_linenumber" name="L110" href="#L110">110</a> 	@Test <strong class="jxr_keyword">void</strong> t02_topicSyntax() {
+<a class="jxr_linenumber" name="L111" href="#L111">111</a> 		<strong class="jxr_keyword">var</strong> s = section(<span class="jxr_string">"t02"</span>);
+<a class="jxr_linenumber" name="L112" href="#L112">112</a> 		assertEquals(List.of(
+<a class="jxr_linenumber" name="L113" href="#L113">113</a> 			<span class="jxr_string">"selection:changes=ok"</span>, <span class="jxr_string">"cmd:tasks=ok"</span>, <span class="jxr_string">"bridge:live=ok"</span>, <span class="jxr_string">"job:j-1.2_3=ok"</span>, <span class="jxr_string">"ssc.focus=ok"</span>, <span class="jxr_string">"ssc.focus:triage=ok"</span>,
+<a class="jxr_linenumber" name="L114" href="#L114">114</a> 			<span class="jxr_string">"app.region-picked=ok"</span>, <span class="jxr_string">"focus=E-JS-40"</span>, <span class="jxr_string">"selection=E-JS-40"</span>, <span class="jxr_string">"ssc.focus.x=E-JS-40"</span>, <span class="jxr_string">"Ssc.focus=E-JS-40"</span>,
+<a class="jxr_linenumber" name="L115" href="#L115">115</a> 			<span class="jxr_string">"ssc.focus:=E-JS-40"</span>, <span class="jxr_string">"ssc.focus:a b=E-JS-40"</span>, <span class="jxr_string">"ssc.:x=E-JS-40"</span>, <span class="jxr_string">"selection:*=E-JS-40"</span>, <span class="jxr_string">"=E-JS-40"</span>),
+<a class="jxr_linenumber" name="L116" href="#L116">116</a> 			s.get(<span class="jxr_string">"results"</span>));
+<a class="jxr_linenumber" name="L117" href="#L117">117</a> 		assertEquals(<span class="jxr_string">"{\&quot;family\&quot;:\&quot;ssc.focus\&quot;,\&quot;key\&quot;:\&quot;triage\&quot;,\&quot;framework\&quot;:false,\&quot;kind\&quot;:\&quot;custom\&quot;}"</span>, s.get(<span class="jxr_string">"parsedCustom"</span>));
+<a class="jxr_linenumber" name="L118" href="#L118">118</a> 		assertEquals(<span class="jxr_string">"{\&quot;family\&quot;:\&quot;redraw\&quot;,\&quot;key\&quot;:\&quot;runs\&quot;,\&quot;framework\&quot;:true,\&quot;kind\&quot;:\&quot;event\&quot;}"</span>, s.get(<span class="jxr_string">"parsedEvent"</span>));
+<a class="jxr_linenumber" name="L119" href="#L119">119</a> 		assertEquals(<span class="jxr_string">"command"</span>, s.get(<span class="jxr_string">"parsedCommand"</span>));
+<a class="jxr_linenumber" name="L120" href="#L120">120</a> 		assertEquals(<span class="jxr_string">"{\&quot;family\&quot;:\&quot;selection\&quot;,\&quot;key\&quot;:\&quot;*\&quot;,\&quot;framework\&quot;:true,\&quot;kind\&quot;:\&quot;state\&quot;}"</span>, s.get(<span class="jxr_string">"pattern"</span>));
+<a class="jxr_linenumber" name="L121" href="#L121">121</a> 		assertEquals(<span class="jxr_string">"invalid topic 'focus': 'focus' is not a framework family; a custom topic is 'ns.name' (did you mean 'app.focus'?)"</span>,
+<a class="jxr_linenumber" name="L122" href="#L122">122</a> 			s.get(<span class="jxr_string">"focusMessage"</span>));
+<a class="jxr_linenumber" name="L123" href="#L123">123</a> 		assertEquals(<span class="jxr_string">"E-JS-40"</span>, s.get(<span class="jxr_string">"subscribeWildcard"</span>));
+<a class="jxr_linenumber" name="L124" href="#L124">124</a> 		assertEquals(<span class="jxr_string">"E-JS-40"</span>, s.get(<span class="jxr_string">"publishWildcard"</span>));
+<a class="jxr_linenumber" name="L125" href="#L125">125</a> 		assertEquals(<span class="jxr_string">"E-JS-40"</span>, s.get(<span class="jxr_string">"declareBad"</span>));
+<a class="jxr_linenumber" name="L126" href="#L126">126</a> 		assertEquals(<span class="jxr_string">"E-JS-40"</span>, s.get(<span class="jxr_string">"getBad"</span>));
+<a class="jxr_linenumber" name="L127" href="#L127">127</a> 	}
+<a class="jxr_linenumber" name="L128" href="#L128">128</a> 
+<a class="jxr_linenumber" name="L129" href="#L129">129</a> 	@Test <strong class="jxr_keyword">void</strong> t03_publishSubscribeMeta() {
+<a class="jxr_linenumber" name="L130" href="#L130">130</a> 		<strong class="jxr_keyword">var</strong> s = section(<span class="jxr_string">"t03"</span>);
+<a class="jxr_linenumber" name="L131" href="#L131">131</a> 		assertEquals(<strong class="jxr_keyword">true</strong>, s.get(<span class="jxr_string">"r1"</span>));
+<a class="jxr_linenumber" name="L132" href="#L132">132</a> 		assertEquals(<strong class="jxr_keyword">true</strong>, s.get(<span class="jxr_string">"r2"</span>), <span class="jxr_string">"a publish with no subscribers is still accepted"</span>);
+<a class="jxr_linenumber" name="L133" href="#L133">133</a> 		assertEquals(List.of(<span class="jxr_string">"{\&quot;p\&quot;:{\&quot;n\&quot;:1},\&quot;m\&quot;:{\&quot;topic\&quot;:\&quot;app.note\&quot;,\&quot;from\&quot;:\&quot;page\&quot;,\&quot;seq\&quot;:1,\&quot;ts\&quot;:1000,\&quot;retained\&quot;:false},\&quot;frozen\&quot;:true}"</span>),
+<a class="jxr_linenumber" name="L134" href="#L134">134</a> 			s.get(<span class="jxr_string">"got"</span>), <span class="jxr_string">"exactly one delivery: the double unsubscribe is idempotent; ts comes from config.timers.now"</span>);
+<a class="jxr_linenumber" name="L135" href="#L135">135</a> 		assertEquals(List.of(<span class="jxr_string">"changes|-|3"</span>, <span class="jxr_string">"tasks|-|4"</span>, <span class="jxr_string">"server|live|5"</span>, <span class="jxr_string">"page|-|6"</span>), s.get(<span class="jxr_string">"metas"</span>),
+<a class="jxr_linenumber" name="L136" href="#L136">136</a> 			<span class="jxr_string">"from = owner id / opts.from / 'page'; meta.bridge only when from is 'server'"</span>);
+<a class="jxr_linenumber" name="L137" href="#L137">137</a> 	}
+<a class="jxr_linenumber" name="L138" href="#L138">138</a> 
+<a class="jxr_linenumber" name="L139" href="#L139">139</a> 	@Test <strong class="jxr_keyword">void</strong> t04_retainedReplay() {
+<a class="jxr_linenumber" name="L140" href="#L140">140</a> 		<strong class="jxr_keyword">var</strong> s = section(<span class="jxr_string">"t04"</span>);
+<a class="jxr_linenumber" name="L141" href="#L141">141</a> 		assertEquals(1, num(s, <span class="jxr_string">"lateSync"</span>), <span class="jxr_string">"the retained value is delivered DURING subscribe()"</span>);
+<a class="jxr_linenumber" name="L142" href="#L142">142</a> 		assertEquals(List.of(<span class="jxr_string">"c-17|true|1|changes"</span>, <span class="jxr_string">"c-18|false|3|changes"</span>), s.get(<span class="jxr_string">"late"</span>));
+<a class="jxr_linenumber" name="L143" href="#L143">143</a> 		assertEquals(1, num(s, <span class="jxr_string">"optOut"</span>), <span class="jxr_string">"{retained:false} skips the replay but gets live messages"</span>);
+<a class="jxr_linenumber" name="L144" href="#L144">144</a> 		assertEquals(List.of(<span class="jxr_string">"c-17"</span>), s.get(<span class="jxr_string">"getIds"</span>));
+<a class="jxr_linenumber" name="L145" href="#L145">145</a> 		assertEquals(<strong class="jxr_keyword">true</strong>, s.get(<span class="jxr_string">"getFrozen"</span>));
+<a class="jxr_linenumber" name="L146" href="#L146">146</a> 		assertEquals(0, num(s, <span class="jxr_string">"lateEvent"</span>), <span class="jxr_string">"event topics are never replayed"</span>);
+<a class="jxr_linenumber" name="L147" href="#L147">147</a> 		assertEquals(<strong class="jxr_keyword">true</strong>, s.get(<span class="jxr_string">"eventNotRetained"</span>));
+<a class="jxr_linenumber" name="L148" href="#L148">148</a> 	}
+<a class="jxr_linenumber" name="L149" href="#L149">149</a> 
+<a class="jxr_linenumber" name="L150" href="#L150">150</a> 	@Test <strong class="jxr_keyword">void</strong> t05_distinctUntilChanged() {
+<a class="jxr_linenumber" name="L151" href="#L151">151</a> 		<strong class="jxr_keyword">var</strong> s = section(<span class="jxr_string">"t05"</span>);
+<a class="jxr_linenumber" name="L152" href="#L152">152</a> 		assertEquals(List.of(<strong class="jxr_keyword">true</strong>, false, <strong class="jxr_keyword">true</strong>, <strong class="jxr_keyword">true</strong>, <strong class="jxr_keyword">true</strong>), s.get(<span class="jxr_string">"returns"</span>));
+<a class="jxr_linenumber" name="L153" href="#L153">153</a> 		assertEquals(List.of(1, 2), list(s, <span class="jxr_string">"seen"</span>).stream().map(o -&gt; ((Number) o).intValue()).toList());
+<a class="jxr_linenumber" name="L154" href="#L154">154</a> 		assertEquals(List.of(false, <strong class="jxr_keyword">true</strong>, false, false, false), s.get(<span class="jxr_string">"suppressed"</span>));
+<a class="jxr_linenumber" name="L155" href="#L155">155</a> 	}
+<a class="jxr_linenumber" name="L156" href="#L156">156</a> 
+<a class="jxr_linenumber" name="L157" href="#L157">157</a> 	@Test <strong class="jxr_keyword">void</strong> t06_clear() {
+<a class="jxr_linenumber" name="L158" href="#L158">158</a> 		<strong class="jxr_keyword">var</strong> s = section(<span class="jxr_string">"t06"</span>);
+<a class="jxr_linenumber" name="L159" href="#L159">159</a> 		assertEquals(<strong class="jxr_keyword">true</strong>, s.get(<span class="jxr_string">"r1"</span>));
+<a class="jxr_linenumber" name="L160" href="#L160">160</a> 		assertEquals(false, s.get(<span class="jxr_string">"r2"</span>), <span class="jxr_string">"clearing an empty topic delivers nothing"</span>);
+<a class="jxr_linenumber" name="L161" href="#L161">161</a> 		assertEquals(List.of(<span class="jxr_string">"{\&quot;a\&quot;:1}|false|true"</span>, <span class="jxr_string">"null|true|false"</span>, <span class="jxr_string">"{\&quot;a\&quot;:1}|false|false"</span>), s.get(<span class="jxr_string">"seen"</span>), <span class="jxr_string">"the republish after clear is live, not a replay"</span>);
+<a class="jxr_linenumber" name="L162" href="#L162">162</a> 		assertEquals(<strong class="jxr_keyword">true</strong>, s.get(<span class="jxr_string">"getAfter"</span>));
+<a class="jxr_linenumber" name="L163" href="#L163">163</a> 		assertEquals(0, num(s, <span class="jxr_string">"late"</span>));
+<a class="jxr_linenumber" name="L164" href="#L164">164</a> 		assertEquals(<strong class="jxr_keyword">true</strong>, s.get(<span class="jxr_string">"republish"</span>), <span class="jxr_string">"after clear, the same payload is a change again"</span>);
+<a class="jxr_linenumber" name="L165" href="#L165">165</a> 	}
+<a class="jxr_linenumber" name="L166" href="#L166">166</a> 
+<a class="jxr_linenumber" name="L167" href="#L167">167</a> 	@Test <strong class="jxr_keyword">void</strong> t07_jsonOnly() {
+<a class="jxr_linenumber" name="L168" href="#L168">168</a> 		<strong class="jxr_keyword">var</strong> s = section(<span class="jxr_string">"t07"</span>);
+<a class="jxr_linenumber" name="L169" href="#L169">169</a> 		<strong class="jxr_keyword">var</strong> r = map(s, <span class="jxr_string">"results"</span>);
+<a class="jxr_linenumber" name="L170" href="#L170">170</a> 		<strong class="jxr_keyword">var</strong> expected = <strong class="jxr_keyword">new</strong> LinkedHashMap&lt;String,String&gt;();
+<a class="jxr_linenumber" name="L171" href="#L171">171</a> 		expected.put(<span class="jxr_string">"fn"</span>, <span class="jxr_string">"payload.f is a function"</span>);
+<a class="jxr_linenumber" name="L172" href="#L172">172</a> 		expected.put(<span class="jxr_string">"undef"</span>, <span class="jxr_string">"payload.u is undefined"</span>);
+<a class="jxr_linenumber" name="L173" href="#L173">173</a> 		expected.put(<span class="jxr_string">"dom"</span>, <span class="jxr_string">"payload.el is a DOM node"</span>);
+<a class="jxr_linenumber" name="L174" href="#L174">174</a> 		expected.put(<span class="jxr_string">"cycle"</span>, <span class="jxr_string">"payload.self is a cycle"</span>);
+<a class="jxr_linenumber" name="L175" href="#L175">175</a> 		expected.put(<span class="jxr_string">"nan"</span>, <span class="jxr_string">"payload.n is NaN"</span>);
+<a class="jxr_linenumber" name="L176" href="#L176">176</a> 		expected.put(<span class="jxr_string">"inf"</span>, <span class="jxr_string">"payload[0] is Infinity"</span>);
+<a class="jxr_linenumber" name="L177" href="#L177">177</a> 		expected.put(<span class="jxr_string">"symbol"</span>, <span class="jxr_string">"payload.s is a symbol"</span>);
+<a class="jxr_linenumber" name="L178" href="#L178">178</a> 		expected.put(<span class="jxr_string">"top"</span>, <span class="jxr_string">"payload is undefined"</span>);
+<a class="jxr_linenumber" name="L179" href="#L179">179</a> 		expected.forEach((k, why) -&gt; {
+<a class="jxr_linenumber" name="L180" href="#L180">180</a> 			@SuppressWarnings(<span class="jxr_string">"unchecked"</span>)
+<a class="jxr_linenumber" name="L181" href="#L181">181</a> 			<strong class="jxr_keyword">var</strong> e = (Map&lt;String,Object&gt;) r.get(k);
+<a class="jxr_linenumber" name="L182" href="#L182">182</a> 			assertNotNull(e, k + <span class="jxr_string">" must throw"</span>);
+<a class="jxr_linenumber" name="L183" href="#L183">183</a> 			assertEquals(<span class="jxr_string">"E-JS-42"</span>, e.get(<span class="jxr_string">"code"</span>), k);
+<a class="jxr_linenumber" name="L184" href="#L184">184</a> 			assertEquals(<span class="jxr_string">"payload for 'app.x' is not JSON-serializable: "</span> + why, e.get(<span class="jxr_string">"message"</span>), k);
+<a class="jxr_linenumber" name="L185" href="#L185">185</a> 		});
+<a class="jxr_linenumber" name="L186" href="#L186">186</a> 		assertEquals(0, num(s, <span class="jxr_string">"rejectedDeliveries"</span>), <span class="jxr_string">"a rejected publish delivers nothing"</span>);
+<a class="jxr_linenumber" name="L187" href="#L187">187</a> 		assertEquals(<strong class="jxr_keyword">true</strong>, s.get(<span class="jxr_string">"sharedNotCycle"</span>), <span class="jxr_string">"a shared (acyclic) reference is fine"</span>);
+<a class="jxr_linenumber" name="L188" href="#L188">188</a> 		assertEquals(<strong class="jxr_keyword">true</strong>, s.get(<span class="jxr_string">"nullOk"</span>));
+<a class="jxr_linenumber" name="L189" href="#L189">189</a> 	}
+<a class="jxr_linenumber" name="L190" href="#L190">190</a> 
+<a class="jxr_linenumber" name="L191" href="#L191">191</a> 	@Test <strong class="jxr_keyword">void</strong> t08_deepFreeze() {
+<a class="jxr_linenumber" name="L192" href="#L192">192</a> 		<strong class="jxr_keyword">var</strong> s = section(<span class="jxr_string">"t08"</span>);
+<a class="jxr_linenumber" name="L193" href="#L193">193</a> 		assertEquals(<strong class="jxr_keyword">true</strong>, s.get(<span class="jxr_string">"deepFrozen"</span>));
+<a class="jxr_linenumber" name="L194" href="#L194">194</a> 		assertEquals(<strong class="jxr_keyword">true</strong>, s.get(<span class="jxr_string">"copied"</span>));
+<a class="jxr_linenumber" name="L195" href="#L195">195</a> 		assertEquals(false, s.get(<span class="jxr_string">"originalFrozen"</span>), <span class="jxr_string">"the caller's object is never frozen"</span>);
+<a class="jxr_linenumber" name="L196" href="#L196">196</a> 		assertEquals(<span class="jxr_string">"TypeError"</span>, s.get(<span class="jxr_string">"mutationName"</span>));
+<a class="jxr_linenumber" name="L197" href="#L197">197</a> 		assertEquals(2, num(s, <span class="jxr_string">"value"</span>));
+<a class="jxr_linenumber" name="L198" href="#L198">198</a> 		assertEquals(<strong class="jxr_keyword">true</strong>, s.get(<span class="jxr_string">"sameInstanceForAll"</span>));
+<a class="jxr_linenumber" name="L199" href="#L199">199</a> 	}
+<a class="jxr_linenumber" name="L200" href="#L200">200</a> 
+<a class="jxr_linenumber" name="L201" href="#L201">201</a> 	@Test <strong class="jxr_keyword">void</strong> t09_schemaVersion() {
+<a class="jxr_linenumber" name="L202" href="#L202">202</a> 		<strong class="jxr_keyword">var</strong> s = section(<span class="jxr_string">"t09"</span>);
+<a class="jxr_linenumber" name="L203" href="#L203">203</a> 		<strong class="jxr_keyword">var</strong> p = <span class="jxr_string">"E-JS-43 framework topic 'cmd:tasks' needs schemaVersion 1, got "</span>;
+<a class="jxr_linenumber" name="L204" href="#L204">204</a> 		assertEquals(p + <span class="jxr_string">"undefined"</span>, s.get(<span class="jxr_string">"missing"</span>));
+<a class="jxr_linenumber" name="L205" href="#L205">205</a> 		assertEquals(p + <span class="jxr_string">"2"</span>, s.get(<span class="jxr_string">"wrong"</span>));
+<a class="jxr_linenumber" name="L206" href="#L206">206</a> 		assertEquals(p + <span class="jxr_string">"\&quot;1\&quot;"</span>, s.get(<span class="jxr_string">"text"</span>));
+<a class="jxr_linenumber" name="L207" href="#L207">207</a> 		assertEquals(p + <span class="jxr_string">"a null payload"</span>, s.get(<span class="jxr_string">"nullPayload"</span>));
+<a class="jxr_linenumber" name="L208" href="#L208">208</a> 		assertEquals(<span class="jxr_string">"ok"</span>, s.get(<span class="jxr_string">"ok"</span>));
+<a class="jxr_linenumber" name="L209" href="#L209">209</a> 		assertEquals(<strong class="jxr_keyword">true</strong>, s.get(<span class="jxr_string">"customUnchecked"</span>), <span class="jxr_string">"custom topics are not checked"</span>);
+<a class="jxr_linenumber" name="L210" href="#L210">210</a> 	}
+<a class="jxr_linenumber" name="L211" href="#L211">211</a> 
+<a class="jxr_linenumber" name="L212" href="#L212">212</a> 	@Test <strong class="jxr_keyword">void</strong> t10_breadthFirst() {
+<a class="jxr_linenumber" name="L213" href="#L213">213</a> 		assertEquals(List.of(<span class="jxr_string">"A:one"</span>, <span class="jxr_string">"A:after-publish"</span>, <span class="jxr_string">"B:one"</span>, <span class="jxr_string">"C:two"</span>), section(<span class="jxr_string">"t10"</span>).get(<span class="jxr_string">"log"</span>));
+<a class="jxr_linenumber" name="L214" href="#L214">214</a> 	}
+<a class="jxr_linenumber" name="L215" href="#L215">215</a> 
+<a class="jxr_linenumber" name="L216" href="#L216">216</a> 	@Test <strong class="jxr_keyword">void</strong> t11_drainCap() {
+<a class="jxr_linenumber" name="L217" href="#L217">217</a> 		<strong class="jxr_keyword">var</strong> s = section(<span class="jxr_string">"t11"</span>);
+<a class="jxr_linenumber" name="L218" href="#L218">218</a> 		assertEquals(<strong class="jxr_keyword">true</strong>, s.get(<span class="jxr_string">"first"</span>));
+<a class="jxr_linenumber" name="L219" href="#L219">219</a> 		assertEquals(64, num(s, <span class="jxr_string">"deliveries"</span>));
+<a class="jxr_linenumber" name="L220" href="#L220">220</a> 		assertEquals(63, num(s, <span class="jxr_string">"trueReturns"</span>));
+<a class="jxr_linenumber" name="L221" href="#L221">221</a> 		assertEquals(1, num(s, <span class="jxr_string">"falseReturns"</span>));
+<a class="jxr_linenumber" name="L222" href="#L222">222</a> 		assertEquals(false, s.get(<span class="jxr_string">"lastReturn"</span>), <span class="jxr_string">"the 65th publish returns false"</span>);
+<a class="jxr_linenumber" name="L223" href="#L223">223</a> 		assertEquals(1, num(s, <span class="jxr_string">"capErrors"</span>), <span class="jxr_string">"E-JS-44 once per drain"</span>);
+<a class="jxr_linenumber" name="L224" href="#L224">224</a> 		assertEquals(<span class="jxr_string">"bus drain cap (64) exceeded; likely cycle: b -&gt; app.pong -&gt; a -&gt; app.ping -&gt; b"</span>, s.get(<span class="jxr_string">"message"</span>));
+<a class="jxr_linenumber" name="L225" href="#L225">225</a> 		assertEquals(<span class="jxr_string">"a"</span>, s.get(<span class="jxr_string">"from"</span>));
+<a class="jxr_linenumber" name="L226" href="#L226">226</a> 		assertEquals(<span class="jxr_string">"a"</span>, s.get(<span class="jxr_string">"paintOn"</span>), <span class="jxr_string">"painted on the card that published the dropped message"</span>);
+<a class="jxr_linenumber" name="L227" href="#L227">227</a> 		assertEquals(1, num(s, <span class="jxr_string">"dropped"</span>));
+<a class="jxr_linenumber" name="L228" href="#L228">228</a> 		assertEquals(1, num(s, <span class="jxr_string">"consoleLogged"</span>));
+<a class="jxr_linenumber" name="L229" href="#L229">229</a> 		assertEquals(<strong class="jxr_keyword">true</strong>, s.get(<span class="jxr_string">"nextDrainWorks"</span>), <span class="jxr_string">"the cap resets with the drain"</span>);
+<a class="jxr_linenumber" name="L230" href="#L230">230</a> 	}
+<a class="jxr_linenumber" name="L231" href="#L231">231</a> 
+<a class="jxr_linenumber" name="L232" href="#L232">232</a> 	@Test <strong class="jxr_keyword">void</strong> t12_subscriberIsolation() {
+<a class="jxr_linenumber" name="L233" href="#L233">233</a> 		<strong class="jxr_keyword">var</strong> s = section(<span class="jxr_string">"t12"</span>);
+<a class="jxr_linenumber" name="L234" href="#L234">234</a> 		assertEquals(<strong class="jxr_keyword">true</strong>, s.get(<span class="jxr_string">"returned"</span>));
+<a class="jxr_linenumber" name="L235" href="#L235">235</a> 		assertEquals(<strong class="jxr_keyword">true</strong>, s.get(<span class="jxr_string">"reached"</span>));
+<a class="jxr_linenumber" name="L236" href="#L236">236</a> 		assertEquals(List.of(<span class="jxr_string">"subscriber for 'app.x' (owner 'page') threw: boom"</span>, <span class="jxr_string">"subscriber for 'app.x' (owner 'w') threw: bang"</span>), s.get(<span class="jxr_string">"messages"</span>));
+<a class="jxr_linenumber" name="L237" href="#L237">237</a> 		assertEquals(Arrays.asList(<strong class="jxr_keyword">null</strong>, <span class="jxr_string">"w"</span>), s.get(<span class="jxr_string">"paintOn"</span>));
+<a class="jxr_linenumber" name="L238" href="#L238">238</a> 	}
+<a class="jxr_linenumber" name="L239" href="#L239">239</a> 
+<a class="jxr_linenumber" name="L240" href="#L240">240</a> 	@Test <strong class="jxr_keyword">void</strong> t13_ownerRule() {
+<a class="jxr_linenumber" name="L241" href="#L241">241</a> 		<strong class="jxr_keyword">var</strong> s = section(<span class="jxr_string">"t13"</span>);
+<a class="jxr_linenumber" name="L242" href="#L242">242</a> 		<strong class="jxr_keyword">var</strong> r = map(s, <span class="jxr_string">"returns"</span>);
+<a class="jxr_linenumber" name="L243" href="#L243">243</a> 		assertEquals(<strong class="jxr_keyword">true</strong>, r.get(<span class="jxr_string">"ownerPublish"</span>));
+<a class="jxr_linenumber" name="L244" href="#L244">244</a> 		assertEquals(false, r.get(<span class="jxr_string">"otherPublish"</span>));
+<a class="jxr_linenumber" name="L245" href="#L245">245</a> 		assertEquals(false, r.get(<span class="jxr_string">"globalPublish"</span>));
+<a class="jxr_linenumber" name="L246" href="#L246">246</a> 		assertEquals(false, r.get(<span class="jxr_string">"otherClear"</span>));
+<a class="jxr_linenumber" name="L247" href="#L247">247</a> 		assertEquals(false, r.get(<span class="jxr_string">"globalClear"</span>));
+<a class="jxr_linenumber" name="L248" href="#L248">248</a> 		assertEquals(<strong class="jxr_keyword">true</strong>, r.get(<span class="jxr_string">"otherCmd"</span>), <span class="jxr_string">"cmd: is writable by anyone"</span>);
+<a class="jxr_linenumber" name="L249" href="#L249">249</a> 		assertEquals(<strong class="jxr_keyword">true</strong>, r.get(<span class="jxr_string">"globalCmd"</span>));
+<a class="jxr_linenumber" name="L250" href="#L250">250</a> 		assertEquals(<strong class="jxr_keyword">true</strong>, r.get(<span class="jxr_string">"claimFree"</span>));
+<a class="jxr_linenumber" name="L251" href="#L251">251</a> 		assertEquals(false, r.get(<span class="jxr_string">"claimedByOther"</span>));
+<a class="jxr_linenumber" name="L252" href="#L252">252</a> 		assertEquals(false, r.get(<span class="jxr_string">"unclaimedGlobal"</span>));
+<a class="jxr_linenumber" name="L253" href="#L253">253</a> 		assertEquals(<strong class="jxr_keyword">true</strong>, s.get(<span class="jxr_string">"stillOwnersValue"</span>));
+<a class="jxr_linenumber" name="L254" href="#L254">254</a> 		<strong class="jxr_keyword">var</strong> c = map(s, <span class="jxr_string">"claimConflict"</span>);
+<a class="jxr_linenumber" name="L255" href="#L255">255</a> 		assertEquals(<span class="jxr_string">"E-JS-49"</span>, c.get(<span class="jxr_string">"code"</span>), <span class="jxr_string">"claim() throws"</span>);
+<a class="jxr_linenumber" name="L256" href="#L256">256</a> 		assertEquals(owned(<span class="jxr_string">"selection:tbl"</span>, <span class="jxr_string">"tbl"</span>, <span class="jxr_string">"other"</span>, <span class="jxr_string">"tbl"</span>), c.get(<span class="jxr_string">"message"</span>));
+<a class="jxr_linenumber" name="L257" href="#L257">257</a> 		assertEquals(<span class="jxr_string">"TypeError"</span>, map(s, <span class="jxr_string">"claimCommand"</span>).get(<span class="jxr_string">"name"</span>), <span class="jxr_string">"command topics have no owner to claim"</span>);
+<a class="jxr_linenumber" name="L258" href="#L258">258</a> 		assertEquals(List.of(
+<a class="jxr_linenumber" name="L259" href="#L259">259</a> 			owned(<span class="jxr_string">"selection:tbl"</span>, <span class="jxr_string">"tbl"</span>, <span class="jxr_string">"other"</span>, <span class="jxr_string">"tbl"</span>) + <span class="jxr_string">"|other"</span>,
+<a class="jxr_linenumber" name="L260" href="#L260">260</a> 			owned(<span class="jxr_string">"selection:tbl"</span>, <span class="jxr_string">"tbl"</span>, <span class="jxr_string">"page"</span>, <span class="jxr_string">"tbl"</span>) + <span class="jxr_string">"|null"</span>,
+<a class="jxr_linenumber" name="L261" href="#L261">261</a> 			owned(<span class="jxr_string">"selection:tbl"</span>, <span class="jxr_string">"tbl"</span>, <span class="jxr_string">"other"</span>, <span class="jxr_string">"tbl"</span>) + <span class="jxr_string">"|other"</span>,
+<a class="jxr_linenumber" name="L262" href="#L262">262</a> 			owned(<span class="jxr_string">"selection:tbl"</span>, <span class="jxr_string">"tbl"</span>, <span class="jxr_string">"page"</span>, <span class="jxr_string">"tbl"</span>) + <span class="jxr_string">"|null"</span>,
+<a class="jxr_linenumber" name="L263" href="#L263">263</a> 			owned(<span class="jxr_string">"filter:other"</span>, <span class="jxr_string">"other"</span>, <span class="jxr_string">"tbl"</span>, <span class="jxr_string">"other"</span>) + <span class="jxr_string">"|tbl"</span>,
+<a class="jxr_linenumber" name="L264" href="#L264">264</a> 			owned(<span class="jxr_string">"selection:zz"</span>, <span class="jxr_string">"zz"</span>, <span class="jxr_string">"page"</span>, <span class="jxr_string">"zz"</span>) + <span class="jxr_string">"|null"</span>),
+<a class="jxr_linenumber" name="L265" href="#L265">265</a> 			s.get(<span class="jxr_string">"messages"</span>), <span class="jxr_string">"publish/clear REPORT E-JS-49 (sinks + console) and return false"</span>);
+<a class="jxr_linenumber" name="L266" href="#L266">266</a> 	}
+<a class="jxr_linenumber" name="L267" href="#L267">267</a> 
+<a class="jxr_linenumber" name="L268" href="#L268">268</a> 	@Test <strong class="jxr_keyword">void</strong> t14_declare() {
+<a class="jxr_linenumber" name="L269" href="#L269">269</a> 		<strong class="jxr_keyword">var</strong> s = section(<span class="jxr_string">"t14"</span>);
+<a class="jxr_linenumber" name="L270" href="#L270">270</a> 		assertEquals(<span class="jxr_string">"topic 'app.x' re-declared with retain=false (was true)"</span>, map(s, <span class="jxr_string">"conflict"</span>).get(<span class="jxr_string">"message"</span>));
+<a class="jxr_linenumber" name="L271" href="#L271">271</a> 		assertEquals(<span class="jxr_string">"E-JS-50"</span>, map(s, <span class="jxr_string">"conflict"</span>).get(<span class="jxr_string">"code"</span>));
+<a class="jxr_linenumber" name="L272" href="#L272">272</a> 		assertEquals(<span class="jxr_string">"topic 'selection:*' re-declared with retain=false (was true)"</span>, map(s, <span class="jxr_string">"framework"</span>).get(<span class="jxr_string">"message"</span>));
+<a class="jxr_linenumber" name="L273" href="#L273">273</a> 		assertNull(s.get(<span class="jxr_string">"frameworkOk"</span>), <span class="jxr_string">"declaring a framework family with its own retain is allowed"</span>);
+<a class="jxr_linenumber" name="L274" href="#L274">274</a> 		assertEquals(<span class="jxr_string">"topic 'ssc.focus:triage' re-declared with retain=false (was true)"</span>, map(s, <span class="jxr_string">"patternConflict"</span>).get(<span class="jxr_string">"message"</span>));
+<a class="jxr_linenumber" name="L275" href="#L275">275</a> 		assertEquals(List.of(1), list(s, <span class="jxr_string">"patternRetained"</span>).stream().map(o -&gt; ((Number) o).intValue()).toList(), <span class="jxr_string">"'family:*' declares every key"</span>);
+<a class="jxr_linenumber" name="L276" href="#L276">276</a> 		assertEquals(<span class="jxr_string">"TypeError"</span>, s.get(<span class="jxr_string">"badOpts"</span>));
+<a class="jxr_linenumber" name="L277" href="#L277">277</a> 		assertEquals(List.of(<span class="jxr_string">"page"</span>, <span class="jxr_string">"ssc-script"</span>), s.get(<span class="jxr_string">"declaredBy"</span>));
+<a class="jxr_linenumber" name="L278" href="#L278">278</a> 		assertEquals(<strong class="jxr_keyword">true</strong>, s.get(<span class="jxr_string">"retain"</span>));
+<a class="jxr_linenumber" name="L279" href="#L279">279</a> 	}
+<a class="jxr_linenumber" name="L280" href="#L280">280</a> 
+<a class="jxr_linenumber" name="L281" href="#L281">281</a> 	@Test <strong class="jxr_keyword">void</strong> t15_undeclaredIsUnretained() {
+<a class="jxr_linenumber" name="L282" href="#L282">282</a> 		<strong class="jxr_keyword">var</strong> s = section(<span class="jxr_string">"t15"</span>);
+<a class="jxr_linenumber" name="L283" href="#L283">283</a> 		assertEquals(1, list(s, <span class="jxr_string">"live"</span>).size());
+<a class="jxr_linenumber" name="L284" href="#L284">284</a> 		assertEquals(0, num(s, <span class="jxr_string">"late"</span>));
+<a class="jxr_linenumber" name="L285" href="#L285">285</a> 		assertEquals(<span class="jxr_string">"{\&quot;topic\&quot;:\&quot;app.u\&quot;,\&quot;kind\&quot;:\&quot;custom\&quot;,\&quot;retain\&quot;:false,\&quot;declared\&quot;:false,\&quot;retained\&quot;:false,\&quot;subscribers\&quot;:2,\&quot;owner\&quot;:null,\&quot;declaredBy\&quot;:[]}"</span>,
+<a class="jxr_linenumber" name="L286" href="#L286">286</a> 			s.get(<span class="jxr_string">"entry"</span>));
+<a class="jxr_linenumber" name="L287" href="#L287">287</a> 	}
+<a class="jxr_linenumber" name="L288" href="#L288">288</a> 
+<a class="jxr_linenumber" name="L289" href="#L289">289</a> 	@Test <strong class="jxr_keyword">void</strong> t16_selfEcho() {
+<a class="jxr_linenumber" name="L290" href="#L290">290</a> 		<strong class="jxr_keyword">var</strong> s = section(<span class="jxr_string">"t16"</span>);
+<a class="jxr_linenumber" name="L291" href="#L291">291</a> 		assertEquals(<span class="jxr_string">"[2]"</span>, String.valueOf(s.get(<span class="jxr_string">"own"</span>)).replace(<span class="jxr_string">" "</span>, <span class="jxr_string">""</span>));
+<a class="jxr_linenumber" name="L292" href="#L292">292</a> 		assertEquals(<span class="jxr_string">"[1,2]"</span>, String.valueOf(s.get(<span class="jxr_string">"echo"</span>)).replace(<span class="jxr_string">" "</span>, <span class="jxr_string">""</span>));
+<a class="jxr_linenumber" name="L293" href="#L293">293</a> 		assertEquals(<span class="jxr_string">"[1,2]"</span>, String.valueOf(s.get(<span class="jxr_string">"global"</span>)).replace(<span class="jxr_string">" "</span>, <span class="jxr_string">""</span>));
+<a class="jxr_linenumber" name="L294" href="#L294">294</a> 	}
+<a class="jxr_linenumber" name="L295" href="#L295">295</a> 
+<a class="jxr_linenumber" name="L296" href="#L296">296</a> 	@Test <strong class="jxr_keyword">void</strong> t17_historyRing() {
+<a class="jxr_linenumber" name="L297" href="#L297">297</a> 		<strong class="jxr_keyword">var</strong> s = section(<span class="jxr_string">"t17"</span>);
+<a class="jxr_linenumber" name="L298" href="#L298">298</a> 		assertEquals(256, num(s, <span class="jxr_string">"length"</span>));
+<a class="jxr_linenumber" name="L299" href="#L299">299</a> 		assertEquals(45, num(s, <span class="jxr_string">"firstSeq"</span>));
+<a class="jxr_linenumber" name="L300" href="#L300">300</a> 		assertEquals(300, num(s, <span class="jxr_string">"lastSeq"</span>));
+<a class="jxr_linenumber" name="L301" href="#L301">301</a> 		assertEquals(List.of(<span class="jxr_string">"dropped"</span>, <span class="jxr_string">"from"</span>, <span class="jxr_string">"seq"</span>, <span class="jxr_string">"size"</span>, <span class="jxr_string">"subscribers"</span>, <span class="jxr_string">"suppressed"</span>, <span class="jxr_string">"topic"</span>, <span class="jxr_string">"ts"</span>), s.get(<span class="jxr_string">"keys"</span>), <span class="jxr_string">"no payload in history"</span>);
+<a class="jxr_linenumber" name="L302" href="#L302">302</a> 		assertEquals(<strong class="jxr_keyword">true</strong>, s.get(<span class="jxr_string">"frozen"</span>));
+<a class="jxr_linenumber" name="L303" href="#L303">303</a> 		assertEquals(9, num(s, <span class="jxr_string">"size"</span>), <span class="jxr_string">"size = canonical JSON length of {\&quot;i\&quot;:299}"</span>);
+<a class="jxr_linenumber" name="L304" href="#L304">304</a> 		assertEquals(<strong class="jxr_keyword">true</strong>, s.get(<span class="jxr_string">"copy"</span>));
+<a class="jxr_linenumber" name="L305" href="#L305">305</a> 		assertEquals(<strong class="jxr_keyword">true</strong>, s.get(<span class="jxr_string">"lastSuppressed"</span>));
+<a class="jxr_linenumber" name="L306" href="#L306">306</a> 		assertEquals(302, num(s, <span class="jxr_string">"lastSeqAfter"</span>), <span class="jxr_string">"suppressed publishes still take a seq"</span>);
+<a class="jxr_linenumber" name="L307" href="#L307">307</a> 	}
+<a class="jxr_linenumber" name="L308" href="#L308">308</a> 
+<a class="jxr_linenumber" name="L309" href="#L309">309</a> 	@Test <strong class="jxr_keyword">void</strong> t18_trace() {
+<a class="jxr_linenumber" name="L310" href="#L310">310</a> 		<strong class="jxr_keyword">var</strong> s = section(<span class="jxr_string">"t18"</span>);
+<a class="jxr_linenumber" name="L311" href="#L311">311</a> 		assertEquals(false, s.get(<span class="jxr_string">"prev"</span>));
+<a class="jxr_linenumber" name="L312" href="#L312">312</a> 		assertEquals(<strong class="jxr_keyword">true</strong>, s.get(<span class="jxr_string">"now"</span>));
+<a class="jxr_linenumber" name="L313" href="#L313">313</a> 		assertEquals(false, s.get(<span class="jxr_string">"query"</span>), <span class="jxr_string">"trace() with no argument only reads"</span>);
+<a class="jxr_linenumber" name="L314" href="#L314">314</a> 		<strong class="jxr_keyword">var</strong> big = (<span class="jxr_string">"{\&quot;s\&quot;:\&quot;"</span> + <span class="jxr_string">"x"</span>.repeat(500) + <span class="jxr_string">"\&quot;}"</span>).substring(0, 120) + <span class="jxr_string">"…"</span>;
+<a class="jxr_linenumber" name="L315" href="#L315">315</a> 		assertEquals(List.of(
+<a class="jxr_linenumber" name="L316" href="#L316">316</a> 			<span class="jxr_string">"[bus] #1 app.r  from=page  subs=1 retained  {\&quot;count\&quot;:3,\&quot;rows\&quot;:\&quot;&lt;3 rows&gt;\&quot;}"</span>,
+<a class="jxr_linenumber" name="L317" href="#L317">317</a> 			<span class="jxr_string">"[bus]   #2 app.nested  from=tasks  subs=0  {\&quot;op\&quot;:\&quot;reload\&quot;}"</span>,
+<a class="jxr_linenumber" name="L318" href="#L318">318</a> 			<span class="jxr_string">"[bus] #3 app.r  from=page  suppressed (unchanged)"</span>,
+<a class="jxr_linenumber" name="L319" href="#L319">319</a> 			<span class="jxr_string">"[bus] #4 app.big  from=page  subs=0  "</span> + big),
+<a class="jxr_linenumber" name="L320" href="#L320">320</a> 			s.get(<span class="jxr_string">"lines"</span>), <span class="jxr_string">"one console.debug line per publish, indented per drain depth; nothing after trace(false)"</span>);
+<a class="jxr_linenumber" name="L321" href="#L321">321</a> 	}
+<a class="jxr_linenumber" name="L322" href="#L322">322</a> 
+<a class="jxr_linenumber" name="L323" href="#L323">323</a> 	@Test <strong class="jxr_keyword">void</strong> t19_traceFlags() {
+<a class="jxr_linenumber" name="L324" href="#L324">324</a> 		<strong class="jxr_keyword">var</strong> s = section(<span class="jxr_string">"t19"</span>);
+<a class="jxr_linenumber" name="L325" href="#L325">325</a> 		assertEquals(<strong class="jxr_keyword">true</strong>, s.get(<span class="jxr_string">"viaStorage"</span>));
+<a class="jxr_linenumber" name="L326" href="#L326">326</a> 		assertEquals(<strong class="jxr_keyword">true</strong>, s.get(<span class="jxr_string">"viaUrl"</span>));
+<a class="jxr_linenumber" name="L327" href="#L327">327</a> 		assertEquals(false, s.get(<span class="jxr_string">"otherValue"</span>));
+<a class="jxr_linenumber" name="L328" href="#L328">328</a> 		assertEquals(false, s.get(<span class="jxr_string">"off"</span>));
+<a class="jxr_linenumber" name="L329" href="#L329">329</a> 		assertEquals(false, s.get(<span class="jxr_string">"blockedStorage"</span>), <span class="jxr_string">"blocked storage is not an error"</span>);
+<a class="jxr_linenumber" name="L330" href="#L330">330</a> 	}
+<a class="jxr_linenumber" name="L331" href="#L331">331</a> 
+<a class="jxr_linenumber" name="L332" href="#L332">332</a> 	@Test <strong class="jxr_keyword">void</strong> t20_errorSinks() {
+<a class="jxr_linenumber" name="L333" href="#L333">333</a> 		<strong class="jxr_keyword">var</strong> s = section(<span class="jxr_string">"t20"</span>);
+<a class="jxr_linenumber" name="L334" href="#L334">334</a> 		assertEquals(List.of(<span class="jxr_string">"E-JS-45|BusError|app.x"</span>), s.get(<span class="jxr_string">"got"</span>), <span class="jxr_string">"unregister is idempotent and effective"</span>);
+<a class="jxr_linenumber" name="L335" href="#L335">335</a> 		assertNull(s.get(<span class="jxr_string">"sinkThrow"</span>), <span class="jxr_string">"a throwing sink never reaches the publisher"</span>);
+<a class="jxr_linenumber" name="L336" href="#L336">336</a> 		assertEquals(3, num(s, <span class="jxr_string">"consoleErrors"</span>), <span class="jxr_string">"console.error logs every reported error, sinks or not"</span>);
+<a class="jxr_linenumber" name="L337" href="#L337">337</a> 		assertEquals(<strong class="jxr_keyword">true</strong>, s.get(<span class="jxr_string">"sinkLogged"</span>));
+<a class="jxr_linenumber" name="L338" href="#L338">338</a> 	}
+<a class="jxr_linenumber" name="L339" href="#L339">339</a> 
+<a class="jxr_linenumber" name="L340" href="#L340">340</a> 	@Test <strong class="jxr_keyword">void</strong> t21_ownerDispose() {
+<a class="jxr_linenumber" name="L341" href="#L341">341</a> 		<strong class="jxr_keyword">var</strong> s = section(<span class="jxr_string">"t21"</span>);
+<a class="jxr_linenumber" name="L342" href="#L342">342</a> 		assertEquals(0, num(s, <span class="jxr_string">"heard"</span>));
+<a class="jxr_linenumber" name="L343" href="#L343">343</a> 		assertEquals(List.of(<span class="jxr_string">"{\&quot;schemaVersion\&quot;:1,\&quot;ids\&quot;:[\&quot;a\&quot;]}|false"</span>, <span class="jxr_string">"null|true"</span>), s.get(<span class="jxr_string">"watcher"</span>));
+<a class="jxr_linenumber" name="L344" href="#L344">344</a> 		assertEquals(0, num(s, <span class="jxr_string">"late"</span>), <span class="jxr_string">"a late subscriber never sees a disposed owner's state"</span>);
+<a class="jxr_linenumber" name="L345" href="#L345">345</a> 		assertEquals(<strong class="jxr_keyword">true</strong>, s.get(<span class="jxr_string">"reclaim"</span>));
+<a class="jxr_linenumber" name="L346" href="#L346">346</a> 		assertEquals(<strong class="jxr_keyword">true</strong>, s.get(<span class="jxr_string">"filterReleased"</span>));
+<a class="jxr_linenumber" name="L347" href="#L347">347</a> 		assertEquals(false, s.get(<span class="jxr_string">"afterDispose"</span>));
+<a class="jxr_linenumber" name="L348" href="#L348">348</a> 		assertEquals(<strong class="jxr_keyword">true</strong>, s.get(<span class="jxr_string">"warned"</span>));
+<a class="jxr_linenumber" name="L349" href="#L349">349</a> 	}
+<a class="jxr_linenumber" name="L350" href="#L350">350</a> 
+<a class="jxr_linenumber" name="L351" href="#L351">351</a> 	@Test <strong class="jxr_keyword">void</strong> t23_util() {
+<a class="jxr_linenumber" name="L352" href="#L352">352</a> 		<strong class="jxr_keyword">var</strong> s = section(<span class="jxr_string">"t23"</span>);
+<a class="jxr_linenumber" name="L353" href="#L353">353</a> 		assertEquals(<span class="jxr_string">"[\&quot;c-17\&quot;,5,true,true,true,true]"</span>, String.valueOf(s.get(<span class="jxr_string">"path"</span>)).replace(<span class="jxr_string">" "</span>, <span class="jxr_string">""</span>));
+<a class="jxr_linenumber" name="L354" href="#L354">354</a> 		assertEquals(<span class="jxr_string">"{\&quot;a\&quot;:[{\&quot;c\&quot;:2,\&quot;d\&quot;:1}],\&quot;b\&quot;:1}"</span>, s.get(<span class="jxr_string">"canonical"</span>));
+<a class="jxr_linenumber" name="L355" href="#L355">355</a> 		assertEquals(List.of(<strong class="jxr_keyword">true</strong>, false, false, <strong class="jxr_keyword">true</strong>, <strong class="jxr_keyword">true</strong>), s.get(<span class="jxr_string">"matches"</span>));
+<a class="jxr_linenumber" name="L356" href="#L356">356</a> 	}
+<a class="jxr_linenumber" name="L357" href="#L357">357</a> 
+<a class="jxr_linenumber" name="L358" href="#L358">358</a> 	@Test <strong class="jxr_keyword">void</strong> t24_topics() {
+<a class="jxr_linenumber" name="L359" href="#L359">359</a> 		<strong class="jxr_keyword">var</strong> s = section(<span class="jxr_string">"t24"</span>);
+<a class="jxr_linenumber" name="L360" href="#L360">360</a> 		assertEquals(List.of(
+<a class="jxr_linenumber" name="L361" href="#L361">361</a> 			<span class="jxr_string">"{\&quot;topic\&quot;:\&quot;app.x\&quot;,\&quot;kind\&quot;:\&quot;custom\&quot;,\&quot;retain\&quot;:false,\&quot;declared\&quot;:true,\&quot;retained\&quot;:false,\&quot;subscribers\&quot;:0,\&quot;owner\&quot;:null,\&quot;declaredBy\&quot;:[\&quot;page\&quot;]}"</span>,
+<a class="jxr_linenumber" name="L362" href="#L362">362</a> 			<span class="jxr_string">"{\&quot;topic\&quot;:\&quot;job:*\&quot;,\&quot;kind\&quot;:\&quot;state\&quot;,\&quot;retain\&quot;:true,\&quot;declared\&quot;:true,\&quot;retained\&quot;:false,\&quot;subscribers\&quot;:0,\&quot;owner\&quot;:null,\&quot;declaredBy\&quot;:[\&quot;bridge:live\&quot;]}"</span>,
+<a class="jxr_linenumber" name="L363" href="#L363">363</a> 			<span class="jxr_string">"{\&quot;topic\&quot;:\&quot;selection:changes\&quot;,\&quot;kind\&quot;:\&quot;state\&quot;,\&quot;retain\&quot;:true,\&quot;declared\&quot;:true,\&quot;retained\&quot;:true,\&quot;subscribers\&quot;:1,\&quot;owner\&quot;:\&quot;changes\&quot;,\&quot;declaredBy\&quot;:[]}"</span>,
+<a class="jxr_linenumber" name="L364" href="#L364">364</a> 			<span class="jxr_string">"{\&quot;topic\&quot;:\&quot;ssc.u\&quot;,\&quot;kind\&quot;:\&quot;custom\&quot;,\&quot;retain\&quot;:false,\&quot;declared\&quot;:false,\&quot;retained\&quot;:false,\&quot;subscribers\&quot;:0,\&quot;owner\&quot;:null,\&quot;declaredBy\&quot;:[]}"</span>),
+<a class="jxr_linenumber" name="L365" href="#L365">365</a> 			s.get(<span class="jxr_string">"topics"</span>));
+<a class="jxr_linenumber" name="L366" href="#L366">366</a> 		assertEquals(<strong class="jxr_keyword">true</strong>, s.get(<span class="jxr_string">"frozen"</span>));
+<a class="jxr_linenumber" name="L367" href="#L367">367</a> 	}
+<a class="jxr_linenumber" name="L368" href="#L368">368</a> 
+<a class="jxr_linenumber" name="L369" href="#L369">369</a> 	@Test <strong class="jxr_keyword">void</strong> t25_subscribeDuringDrain() {
+<a class="jxr_linenumber" name="L370" href="#L370">370</a> 		<strong class="jxr_keyword">var</strong> s = section(<span class="jxr_string">"t25"</span>);
+<a class="jxr_linenumber" name="L371" href="#L371">371</a> 		assertEquals(List.of(<span class="jxr_string">"2|true|3"</span>), s.get(<span class="jxr_string">"afterDrain"</span>), <span class="jxr_string">"one replay of the newest value; the queued v=1 and v=2 copies are skipped"</span>);
+<a class="jxr_linenumber" name="L372" href="#L372">372</a> 		assertEquals(List.of(<span class="jxr_string">"2|true|3"</span>, <span class="jxr_string">"3|false|4"</span>), s.get(<span class="jxr_string">"all"</span>), <span class="jxr_string">"later publishes still arrive"</span>);
+<a class="jxr_linenumber" name="L373" href="#L373">373</a> 	}
+<a class="jxr_linenumber" name="L374" href="#L374">374</a> 
+<a class="jxr_linenumber" name="L375" href="#L375">375</a> 	@Test <strong class="jxr_keyword">void</strong> t26_overflowRollsBackRetained() {
+<a class="jxr_linenumber" name="L376" href="#L376">376</a> 		<strong class="jxr_keyword">var</strong> s = section(<span class="jxr_string">"t26"</span>);
+<a class="jxr_linenumber" name="L377" href="#L377">377</a> 		assertEquals(<span class="jxr_string">"undefined"</span>, s.get(<span class="jxr_string">"freshGet"</span>), <span class="jxr_string">"a purged first value leaves nothing retained"</span>);
+<a class="jxr_linenumber" name="L378" href="#L378">378</a> 		assertEquals(List.of(<strong class="jxr_keyword">true</strong>), s.get(<span class="jxr_string">"freshHist"</span>), <span class="jxr_string">"the purged message is recorded as dropped"</span>);
+<a class="jxr_linenumber" name="L379" href="#L379">379</a> 		assertEquals(<strong class="jxr_keyword">true</strong>, s.get(<span class="jxr_string">"republish"</span>), <span class="jxr_string">"the same value is not suppressed as unchanged after the rollback"</span>);
+<a class="jxr_linenumber" name="L380" href="#L380">380</a> 		assertEquals(5, num(s, <span class="jxr_string">"priorGet"</span>), <span class="jxr_string">"a purged update restores the previous value"</span>);
+<a class="jxr_linenumber" name="L381" href="#L381">381</a> 		assertEquals(List.of(5), list(s, <span class="jxr_string">"late"</span>).stream().map(o -&gt; ((Number) o).intValue()).toList());
+<a class="jxr_linenumber" name="L382" href="#L382">382</a> 		assertEquals(2, num(s, <span class="jxr_string">"capErrors"</span>));
+<a class="jxr_linenumber" name="L383" href="#L383">383</a> 	}
+<a class="jxr_linenumber" name="L384" href="#L384">384</a> 
+<a class="jxr_linenumber" name="L385" href="#L385">385</a> 	@Test <strong class="jxr_keyword">void</strong> t27_clearSurvivesOverflow() {
+<a class="jxr_linenumber" name="L386" href="#L386">386</a> 		<strong class="jxr_keyword">var</strong> s = section(<span class="jxr_string">"t27"</span>);
+<a class="jxr_linenumber" name="L387" href="#L387">387</a> 		assertEquals(<strong class="jxr_keyword">true</strong>, s.get(<span class="jxr_string">"get"</span>));
+<a class="jxr_linenumber" name="L388" href="#L388">388</a> 		assertEquals(0, num(s, <span class="jxr_string">"late"</span>));
+<a class="jxr_linenumber" name="L389" href="#L389">389</a> 		assertEquals(<strong class="jxr_keyword">true</strong>, s.get(<span class="jxr_string">"reclaim"</span>), <span class="jxr_string">"the disposed owner's claim is released"</span>);
+<a class="jxr_linenumber" name="L390" href="#L390">390</a> 	}
+<a class="jxr_linenumber" name="L391" href="#L391">391</a> 
+<a class="jxr_linenumber" name="L392" href="#L392">392</a> 	@Test <strong class="jxr_keyword">void</strong> t28_unsubscribeMidDrain() {
+<a class="jxr_linenumber" name="L393" href="#L393">393</a> 		assertEquals(List.of(<span class="jxr_string">"A"</span>, <span class="jxr_string">"C"</span>, <span class="jxr_string">"A"</span>), section(<span class="jxr_string">"t28"</span>).get(<span class="jxr_string">"log"</span>), <span class="jxr_string">"B is gone before its turn; C unsubscribes itself after its first call"</span>);
+<a class="jxr_linenumber" name="L394" href="#L394">394</a> 	}
+<a class="jxr_linenumber" name="L395" href="#L395">395</a> 
+<a class="jxr_linenumber" name="L396" href="#L396">396</a> 	@Test <strong class="jxr_keyword">void</strong> t29_getDuringDrain() {
+<a class="jxr_linenumber" name="L397" href="#L397">397</a> 		assertEquals(2, num(section(<span class="jxr_string">"t29"</span>), <span class="jxr_string">"during"</span>));
+<a class="jxr_linenumber" name="L398" href="#L398">398</a> 	}
+<a class="jxr_linenumber" name="L399" href="#L399">399</a> 
+<a class="jxr_linenumber" name="L400" href="#L400">400</a> 	@Test <strong class="jxr_keyword">void</strong> t30_ownerOnlyEvent() {
+<a class="jxr_linenumber" name="L401" href="#L401">401</a> 		<strong class="jxr_keyword">var</strong> s = section(<span class="jxr_string">"t30"</span>);
+<a class="jxr_linenumber" name="L402" href="#L402">402</a> 		<strong class="jxr_keyword">var</strong> r = map(s, <span class="jxr_string">"returns"</span>);
+<a class="jxr_linenumber" name="L403" href="#L403">403</a> 		assertEquals(<strong class="jxr_keyword">true</strong>, r.get(<span class="jxr_string">"owner"</span>));
+<a class="jxr_linenumber" name="L404" href="#L404">404</a> 		assertEquals(false, r.get(<span class="jxr_string">"other"</span>));
+<a class="jxr_linenumber" name="L405" href="#L405">405</a> 		assertEquals(false, r.get(<span class="jxr_string">"global"</span>));
+<a class="jxr_linenumber" name="L406" href="#L406">406</a> 		assertEquals(List.of(
+<a class="jxr_linenumber" name="L407" href="#L407">407</a> 			owned(<span class="jxr_string">"redraw:tbl"</span>, <span class="jxr_string">"tbl"</span>, <span class="jxr_string">"other"</span>, <span class="jxr_string">"tbl"</span>) + <span class="jxr_string">"|other"</span>,
+<a class="jxr_linenumber" name="L408" href="#L408">408</a> 			owned(<span class="jxr_string">"redraw:tbl"</span>, <span class="jxr_string">"tbl"</span>, <span class="jxr_string">"page"</span>, <span class="jxr_string">"tbl"</span>) + <span class="jxr_string">"|null"</span>),
+<a class="jxr_linenumber" name="L409" href="#L409">409</a> 			s.get(<span class="jxr_string">"errors"</span>));
+<a class="jxr_linenumber" name="L410" href="#L410">410</a> 	}
+<a class="jxr_linenumber" name="L411" href="#L411">411</a> 
+<a class="jxr_linenumber" name="L412" href="#L412">412</a> 	@Test <strong class="jxr_keyword">void</strong> t31_traceCleared() {
+<a class="jxr_linenumber" name="L413" href="#L413">413</a> 		assertEquals(List.of(
+<a class="jxr_linenumber" name="L414" href="#L414">414</a> 			<span class="jxr_string">"[bus] #1 selection:c  from=c  subs=0 retained  {\&quot;ids\&quot;:[\&quot;a\&quot;],\&quot;schemaVersion\&quot;:1}"</span>,
+<a class="jxr_linenumber" name="L415" href="#L415">415</a> 			<span class="jxr_string">"[bus] #2 selection:c  from=c  subs=0 retained cleared  null"</span>),
+<a class="jxr_linenumber" name="L416" href="#L416">416</a> 			section(<span class="jxr_string">"t31"</span>).get(<span class="jxr_string">"lines"</span>));
+<a class="jxr_linenumber" name="L417" href="#L417">417</a> 	}
+<a class="jxr_linenumber" name="L418" href="#L418">418</a> 
+<a class="jxr_linenumber" name="L419" href="#L419">419</a> 	@Test <strong class="jxr_keyword">void</strong> t32_overflowRollbackAroundClears() {
+<a class="jxr_linenumber" name="L420" href="#L420">420</a> 		<strong class="jxr_keyword">var</strong> s = section(<span class="jxr_string">"t32"</span>);
+<a class="jxr_linenumber" name="L421" href="#L421">421</a> 		assertEquals(<strong class="jxr_keyword">true</strong>, s.get(<span class="jxr_string">"aGet"</span>), <span class="jxr_string">"v1, clear, v2 purged: the clear wins and nothing stays stored"</span>);
+<a class="jxr_linenumber" name="L422" href="#L422">422</a> 		assertEquals(<strong class="jxr_keyword">true</strong>, s.get(<span class="jxr_string">"aRepublish"</span>), <span class="jxr_string">"so republishing v2 is a change"</span>);
+<a class="jxr_linenumber" name="L423" href="#L423">423</a> 		assertEquals(<strong class="jxr_keyword">true</strong>, s.get(<span class="jxr_string">"bGet"</span>), <span class="jxr_string">"a clear that is the overflowing message is not undone"</span>);
+<a class="jxr_linenumber" name="L424" href="#L424">424</a> 		assertEquals(<strong class="jxr_keyword">true</strong>, s.get(<span class="jxr_string">"bRepublish"</span>));
+<a class="jxr_linenumber" name="L425" href="#L425">425</a> 	}
+<a class="jxr_linenumber" name="L426" href="#L426">426</a> 
+<a class="jxr_linenumber" name="L427" href="#L427">427</a> 	@Test <strong class="jxr_keyword">void</strong> t33_chartStateFamiliesAreRetainedSingleOwner() {
+<a class="jxr_linenumber" name="L428" href="#L428">428</a> 		<strong class="jxr_keyword">var</strong> s = section(<span class="jxr_string">"t33"</span>);
+<a class="jxr_linenumber" name="L429" href="#L429">429</a> 		assertEquals(List.of(
+<a class="jxr_linenumber" name="L430" href="#L430">430</a> 			<span class="jxr_string">"zoom:t/state/true/false/1/1|true/E-JS-50"</span>,
+<a class="jxr_linenumber" name="L431" href="#L431">431</a> 			<span class="jxr_string">"legend:t/state/true/false/1/1|true/E-JS-50"</span>,
+<a class="jxr_linenumber" name="L432" href="#L432">432</a> 			<span class="jxr_string">"data:t/state/true/false/1/1|true/E-JS-50"</span>), s.get(<span class="jxr_string">"rows"</span>),
+<a class="jxr_linenumber" name="L433" href="#L433">433</a> 			<span class="jxr_string">"kind state, the owner writes, another owner is refused, late subscribers replay it, retain=false cannot be re-declared"</span>);
+<a class="jxr_linenumber" name="L434" href="#L434">434</a> 		assertEquals(3, num(s, <span class="jxr_string">"denied"</span>), <span class="jxr_string">"one E-JS-49 per refused publish"</span>);
+<a class="jxr_linenumber" name="L435" href="#L435">435</a> 	}
+<a class="jxr_linenumber" name="L436" href="#L436">436</a> }
+</pre>
+<hr/>
+<div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>
+</body>
+</html>

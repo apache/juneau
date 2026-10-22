@@ -79,7 +79,7 @@ loadScripts(document, 'script');</script>
  When a request reaches an op handler annotated with <code>@Auth</code>, the framework's
  <a href="AuthArg.html" title="class in org.apache.juneau.rest.server.auth"><code>AuthArg</code></a> resolver pulls the <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/security/Principal.html" title="class or interface in java.security" class="external-link"><code>Principal</code></a> previously stashed by an upstream AuthN guard
  (such as <a href="BearerTokenGuard.html" title="class in org.apache.juneau.rest.server.auth"><code>BearerTokenGuard</code></a> or <a href="ApiKeyGuard.html" title="class in org.apache.juneau.rest.server.auth"><code>ApiKeyGuard</code></a>) on the request attributes under the
- <a href="../RestServerConstants.html#PRINCIPAL_ATTR"><code>PRINCIPAL_ATTR</code></a> key.
+ <code>"juneau.principal"</code> key.
 
  <p>
  If an annotated parameter is reached without a principal being stashed (i.e. no guard ran, or the

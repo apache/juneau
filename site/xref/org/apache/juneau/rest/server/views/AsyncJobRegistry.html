@@ -1,0 +1,378 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="" lang="">
+<head><meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<title>AsyncJobRegistry xref</title>
+<link type="text/css" rel="stylesheet" href="../../../../../../stylesheet.css" />
+</head>
+<body>
+<div id="overview"><a href="../../../../../../../apidocs/org/apache/juneau/rest/server/views/AsyncJobRegistry.html">View Javadoc</a></div><pre>
+<a class="jxr_linenumber" name="L1" href="#L1">1</a>   <em class="jxr_comment">/*</em>
+<a class="jxr_linenumber" name="L2" href="#L2">2</a>   <em class="jxr_comment"> * Licensed to the Apache Software Foundation (ASF) under one or more</em>
+<a class="jxr_linenumber" name="L3" href="#L3">3</a>   <em class="jxr_comment"> * contributor license agreements.  See the NOTICE file distributed with</em>
+<a class="jxr_linenumber" name="L4" href="#L4">4</a>   <em class="jxr_comment"> * this work for additional information regarding copyright ownership.</em>
+<a class="jxr_linenumber" name="L5" href="#L5">5</a>   <em class="jxr_comment"> * The ASF licenses this file to You under the Apache License, Version 2.0</em>
+<a class="jxr_linenumber" name="L6" href="#L6">6</a>   <em class="jxr_comment"> * (the "License"); you may not use this file except in compliance with</em>
+<a class="jxr_linenumber" name="L7" href="#L7">7</a>   <em class="jxr_comment"> * the License.  You may obtain a copy of the License at</em>
+<a class="jxr_linenumber" name="L8" href="#L8">8</a>   <em class="jxr_comment"> *</em>
+<a class="jxr_linenumber" name="L9" href="#L9">9</a>   <em class="jxr_comment"> *      <a href="http://www.apache.org/licenses/LICENSE-2.0" target="alexandria_uri">http://www.apache.org/licenses/LICENSE-2.0</a></em>
+<a class="jxr_linenumber" name="L10" href="#L10">10</a>  <em class="jxr_comment"> *</em>
+<a class="jxr_linenumber" name="L11" href="#L11">11</a>  <em class="jxr_comment"> * Unless required by applicable law or agreed to in writing, software</em>
+<a class="jxr_linenumber" name="L12" href="#L12">12</a>  <em class="jxr_comment"> * distributed under the License is distributed on an "AS IS" BASIS,</em>
+<a class="jxr_linenumber" name="L13" href="#L13">13</a>  <em class="jxr_comment"> * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</em>
+<a class="jxr_linenumber" name="L14" href="#L14">14</a>  <em class="jxr_comment"> * See the License for the specific language governing permissions and</em>
+<a class="jxr_linenumber" name="L15" href="#L15">15</a>  <em class="jxr_comment"> * limitations under the License.</em>
+<a class="jxr_linenumber" name="L16" href="#L16">16</a>  <em class="jxr_comment"> */</em>
+<a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.server.views;
+<a class="jxr_linenumber" name="L18" href="#L18">18</a>  
+<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.commons.utils.Shorts.*;
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> java.security.*;
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> java.time.*;
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> java.util.*;
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> java.util.concurrent.*;
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <em class="jxr_javadoccomment"> * An in-memory, per-process registry of {@link AsyncJob async jobs} &amp;mdash; the single-process job store a future</em>
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <em class="jxr_javadoccomment"> * async write variant runs on.</em>
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;Single-process, by decision&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <em class="jxr_javadoccomment"> * Job state lives only in this object's heap, which is enough for a single-user loopback console and a documented</em>
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <em class="jxr_javadoccomment"> * limitation for anything else: a process restart drops every in-flight job, exactly as a restart invalidates</em>
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>  <em class="jxr_javadoccomment"> * every {@link org.apache.juneau.rest.server.filter.SynchronizerToken}.  There is deliberately no store abstraction.</em>
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>  <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>  <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;The id is the capability; the caps are load-bearing&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>  <em class="jxr_javadoccomment"> * Each job is keyed by an unguessable {@value #CAPABILITY_BITS}-bit {@link SecureRandom} id</em>
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>  <em class="jxr_javadoccomment"> * ({@value #CAPABILITY_BYTES} bytes, hex-encoded), matching</em>
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>  <em class="jxr_javadoccomment"> * {@link org.apache.juneau.rest.server.filter.SynchronizerToken}'s width &amp;mdash; the id &lt;b&gt;is&lt;/b&gt; the stream's</em>
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>  <em class="jxr_javadoccomment"> * access control.  {@link #get(String)} of an unknown id returns empty, so a miss is indistinguishable from</em>
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>  <em class="jxr_javadoccomment"> * any other and the id space cannot be enumerated.</em>
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>  <em class="jxr_javadoccomment"> * Because jobs keep running after the page navigates away and stream customer-adjacent content, the following</em>
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>  <em class="jxr_javadoccomment"> * caps are enforced server-side and are security controls, not tuning knobs (a data-egress disclosure bound):</em>
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>  <em class="jxr_javadoccomment"> * &lt;ul class='spaced-list'&gt;</em>
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>  <em class="jxr_javadoccomment"> * 	&lt;li&gt;{@link #MAX_CONCURRENT_JOBS} concurrent (non-terminal) jobs &amp;mdash; {@link #tryCreate()} refuses beyond it, and the</em>
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>  <em class="jxr_javadoccomment"> * 		check-and-insert is atomic, so concurrent callers cannot overshoot it;</em>
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>  <em class="jxr_javadoccomment"> * 	&lt;li&gt;{@link AsyncJobRegistry#HARD_TIMEOUT} hard per-job timeout &amp;mdash; scheduled here and also swept by</em>
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>  <em class="jxr_javadoccomment"> * 		{@link #sweepTimeouts()};</em>
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>  <em class="jxr_javadoccomment"> * 	&lt;li&gt;{@link AsyncJob#maxOutputBytes()} of streamed output per job &amp;mdash; enforced in {@link AsyncJob#progress};</em>
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>  <em class="jxr_javadoccomment"> * 	&lt;li&gt;{@link AsyncJob#maxSubscribers()} concurrent subscribers per job &amp;mdash; enforced in</em>
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>  <em class="jxr_javadoccomment"> * 		{@link AsyncJob#acquireSubscriber()}.</em>
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>  <em class="jxr_javadoccomment"> * &lt;/ul&gt;</em>
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>  <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>  <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;De-duplication by {@link IdempotencyKey}&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>  <em class="jxr_javadoccomment"> * {@link #tryCreate(IdempotencyKey)} / {@link #create(IdempotencyKey)} register a job under an idempotency key's</em>
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>  <em class="jxr_javadoccomment"> * {@link IdempotencyKey#value() value}; submitting again with a key that is already registered returns the</em>
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>  <em class="jxr_javadoccomment"> * &lt;b&gt;existing&lt;/b&gt; job instead of creating a second one, so a double-click, an impatient re-submit or a browser retry</em>
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>  <em class="jxr_javadoccomment"> * collapses to one job.  The lookup-or-create is atomic: concurrent submits with one key yield exactly one job.</em>
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>  <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>  <em class="jxr_javadoccomment"> * &lt;b&gt;A key whose job has finished replays that finished job&lt;/b&gt; (the same replay-on-duplicate contract as</em>
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>  <em class="jxr_javadoccomment"> * {@link IdempotencyKey}): the duplicate gets the terminal job and its {@link AsyncJob#result() result} back rather</em>
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>  <em class="jxr_javadoccomment"> * than triggering a second run.  This holds for the job's retention window; once the terminal job is reaped from the</em>
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>  <em class="jxr_javadoccomment"> * heap (see {@link #sweepTimeouts()}), its key is forgotten too, and the same key starts a fresh job.  A duplicate</em>
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>  <em class="jxr_javadoccomment"> * never counts against {@link #MAX_CONCURRENT_JOBS}, since it creates nothing.</em>
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>  <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>  <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>  <em class="jxr_javadoccomment"> * &lt;p class='bjava'&gt;</em>
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>  <em class="jxr_javadoccomment"> * 	AsyncJobRegistry &lt;jv&gt;registry&lt;/jv&gt; = &lt;jk&gt;new&lt;/jk&gt; AsyncJobRegistry();</em>
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>  <em class="jxr_javadoccomment"> * 	IdempotencyKey &lt;jv&gt;key&lt;/jv&gt; = IdempotencyKey.&lt;jsm&gt;mintSelfTargeted&lt;/jsm&gt;(&lt;js&gt;"create"&lt;/js&gt;);</em>
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>  <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>  <em class="jxr_javadoccomment"> * 	AsyncJob &lt;jv&gt;first&lt;/jv&gt; = &lt;jv&gt;registry&lt;/jv&gt;.create(&lt;jv&gt;key&lt;/jv&gt;);</em>
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>  <em class="jxr_javadoccomment"> * 	AsyncJob &lt;jv&gt;again&lt;/jv&gt; = &lt;jv&gt;registry&lt;/jv&gt;.create(&lt;jv&gt;key&lt;/jv&gt;);  &lt;jc&gt;// Double-click: same job, nothing new started.&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>  <em class="jxr_javadoccomment"> * 	&lt;jsm&gt;assert&lt;/jsm&gt; &lt;jv&gt;first&lt;/jv&gt; == &lt;jv&gt;again&lt;/jv&gt;;</em>
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>  <em class="jxr_javadoccomment"> * &lt;/p&gt;</em>
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>  <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>  <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>  <em class="jxr_javadoccomment"> * &lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>  <em class="jxr_javadoccomment"> * 	&lt;li class='jc'&gt;{@link AsyncJob}</em>
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>  <em class="jxr_javadoccomment"> * 	&lt;li class='jc'&gt;{@link AsyncJobsMixin}</em>
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>  <em class="jxr_javadoccomment"> * 	&lt;li class='jc'&gt;{@link IdempotencyKey}</em>
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>  <em class="jxr_javadoccomment"> * 	&lt;li class='jc'&gt;{@link JobKeyLedger}</em>
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>  <em class="jxr_javadoccomment"> * &lt;/ul&gt;</em>
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>  <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>  <em class="jxr_javadoccomment"> * @since 10.0.0</em>
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>  <em class="jxr_javadoccomment"> */</em>
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">class</strong> <a name="AsyncJobRegistry" href="../../../../../../org/apache/juneau/rest/server/views/AsyncJobRegistry.html#AsyncJobRegistry">AsyncJobRegistry</a> <strong class="jxr_keyword">implements</strong> AutoCloseable {
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>  
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>  	<em class="jxr_javadoccomment">/** Number of random bytes behind a capability id.  {@value #CAPABILITY_BITS} bits, matching {@code SynchronizerToken}. */</em>
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> CAPABILITY_BYTES = 32;
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>  
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>  	<em class="jxr_javadoccomment">/** Width of a capability id, in bits &amp;mdash; well beyond the &amp;ge;128-bit bar. */</em>
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> CAPABILITY_BITS = CAPABILITY_BYTES * 8;
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>  
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>  	<em class="jxr_javadoccomment">/** Maximum number of concurrent (non-terminal) jobs; {@link #tryCreate()} refuses beyond this. */</em>
+<a class="jxr_linenumber" name="L99" href="#L99">99</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> MAX_CONCURRENT_JOBS = 8;
+<a class="jxr_linenumber" name="L100" href="#L100">100</a> 
+<a class="jxr_linenumber" name="L101" href="#L101">101</a> 	<em class="jxr_javadoccomment">/** Maximum number of concurrent subscribers per job (a reload plus one straggler). */</em>
+<a class="jxr_linenumber" name="L102" href="#L102">102</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> MAX_SUBSCRIBERS_PER_JOB = 2;
+<a class="jxr_linenumber" name="L103" href="#L103">103</a> 
+<a class="jxr_linenumber" name="L104" href="#L104">104</a> 	<em class="jxr_javadoccomment">/** Maximum streamed output per job, in bytes (1 MiB); a data-egress bound, not only a heap bound. */</em>
+<a class="jxr_linenumber" name="L105" href="#L105">105</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">long</strong> MAX_OUTPUT_BYTES = 1024L * 1024L;
+<a class="jxr_linenumber" name="L106" href="#L106">106</a> 
+<a class="jxr_linenumber" name="L107" href="#L107">107</a> 	<em class="jxr_javadoccomment">/** Hard per-job timeout; caps how long triage keeps streaming customer-adjacent content. */</em>
+<a class="jxr_linenumber" name="L108" href="#L108">108</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Duration HARD_TIMEOUT = Duration.ofSeconds(120);
+<a class="jxr_linenumber" name="L109" href="#L109">109</a> 
+<a class="jxr_linenumber" name="L110" href="#L110">110</a> 	<em class="jxr_javadoccomment">/** How long a terminal job is retained (for a page-reload re-attach) before it is reaped from the heap. */</em>
+<a class="jxr_linenumber" name="L111" href="#L111">111</a> 	<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Duration RETENTION = Duration.ofSeconds(60);
+<a class="jxr_linenumber" name="L112" href="#L112">112</a> 
+<a class="jxr_linenumber" name="L113" href="#L113">113</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Map&lt;String,AsyncJob&gt; jobs = <strong class="jxr_keyword">new</strong> ConcurrentHashMap&lt;&gt;();
+<a class="jxr_linenumber" name="L114" href="#L114">114</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Map&lt;String,AsyncJob&gt; byKey = <strong class="jxr_keyword">new</strong> ConcurrentHashMap&lt;&gt;();
+<a class="jxr_linenumber" name="L115" href="#L115">115</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Object admission = <strong class="jxr_keyword">new</strong> Object();
+<a class="jxr_linenumber" name="L116" href="#L116">116</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> SecureRandom random = <strong class="jxr_keyword">new</strong> SecureRandom();
+<a class="jxr_linenumber" name="L117" href="#L117">117</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Clock clock;
+<a class="jxr_linenumber" name="L118" href="#L118">118</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Duration timeout;
+<a class="jxr_linenumber" name="L119" href="#L119">119</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">long</strong> maxOutputBytes;
+<a class="jxr_linenumber" name="L120" href="#L120">120</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> maxSubscribers;
+<a class="jxr_linenumber" name="L121" href="#L121">121</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> ScheduledExecutorService scheduler;
+<a class="jxr_linenumber" name="L122" href="#L122">122</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">boolean</strong> ownsScheduler;
+<a class="jxr_linenumber" name="L123" href="#L123">123</a> 
+<a class="jxr_linenumber" name="L124" href="#L124">124</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L125" href="#L125">125</a> <em class="jxr_javadoccomment">	 * Creates a registry with the production defaults: a system clock, the {@link #HARD_TIMEOUT} (120s) timeout,</em>
+<a class="jxr_linenumber" name="L126" href="#L126">126</a> <em class="jxr_javadoccomment">	 * {@link #MAX_OUTPUT_BYTES} / {@link #MAX_SUBSCRIBERS_PER_JOB} caps, and a private daemon scheduler that enforces</em>
+<a class="jxr_linenumber" name="L127" href="#L127">127</a> <em class="jxr_javadoccomment">	 * each job's hard timeout.</em>
+<a class="jxr_linenumber" name="L128" href="#L128">128</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L129" href="#L129">129</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L130" href="#L130">130</a> <em class="jxr_javadoccomment">	 * The 120s default is a disclosure bound for jobs that are not long-running agent dispatches.  Callers that need</em>
+<a class="jxr_linenumber" name="L131" href="#L131">131</a> <em class="jxr_javadoccomment">	 * a longer bound (for example a Claude-length create) use {@link #AsyncJobRegistry(Duration)} rather than raising</em>
+<a class="jxr_linenumber" name="L132" href="#L132">132</a> <em class="jxr_javadoccomment">	 * this global default.</em>
+<a class="jxr_linenumber" name="L133" href="#L133">133</a> <em class="jxr_javadoccomment">	 * &lt;/p&gt;</em>
+<a class="jxr_linenumber" name="L134" href="#L134">134</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L135" href="#L135">135</a> 	<strong class="jxr_keyword">public</strong> <a name="AsyncJobRegistry" href="../../../../../../org/apache/juneau/rest/server/views/AsyncJobRegistry.html#AsyncJobRegistry">AsyncJobRegistry</a>() {
+<a class="jxr_linenumber" name="L136" href="#L136">136</a> 		<strong class="jxr_keyword">this</strong>(HARD_TIMEOUT);
+<a class="jxr_linenumber" name="L137" href="#L137">137</a> 	}
+<a class="jxr_linenumber" name="L138" href="#L138">138</a> 
+<a class="jxr_linenumber" name="L139" href="#L139">139</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L140" href="#L140">140</a> <em class="jxr_javadoccomment">	 * Creates a registry with a caller-chosen hard per-job timeout and the production caps / scheduler.</em>
+<a class="jxr_linenumber" name="L141" href="#L141">141</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L142" href="#L142">142</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L143" href="#L143">143</a> <em class="jxr_javadoccomment">	 * Use this when a job may run longer than {@link #HARD_TIMEOUT} (120s).  The no-arg constructor keeps that</em>
+<a class="jxr_linenumber" name="L144" href="#L144">144</a> <em class="jxr_javadoccomment">	 * default; this overload does not change it.</em>
+<a class="jxr_linenumber" name="L145" href="#L145">145</a> <em class="jxr_javadoccomment">	 * &lt;/p&gt;</em>
+<a class="jxr_linenumber" name="L146" href="#L146">146</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L147" href="#L147">147</a> <em class="jxr_javadoccomment">	 * @param timeout The hard per-job timeout.  Must be a positive duration.</em>
+<a class="jxr_linenumber" name="L148" href="#L148">148</a> <em class="jxr_javadoccomment">	 * @throws IllegalArgumentException If {@code timeout} is &lt;jk&gt;null&lt;/jk&gt;, zero, or negative.</em>
+<a class="jxr_linenumber" name="L149" href="#L149">149</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L150" href="#L150">150</a> 	<strong class="jxr_keyword">public</strong> <a name="AsyncJobRegistry" href="../../../../../../org/apache/juneau/rest/server/views/AsyncJobRegistry.html#AsyncJobRegistry">AsyncJobRegistry</a>(Duration timeout) {
+<a class="jxr_linenumber" name="L151" href="#L151">151</a> 		<strong class="jxr_keyword">this</strong>(Clock.systemUTC(), requirePositiveTimeout(timeout), MAX_OUTPUT_BYTES, MAX_SUBSCRIBERS_PER_JOB, defaultScheduler(), <strong class="jxr_keyword">true</strong>);
+<a class="jxr_linenumber" name="L152" href="#L152">152</a> 	}
+<a class="jxr_linenumber" name="L153" href="#L153">153</a> 
+<a class="jxr_linenumber" name="L154" href="#L154">154</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L155" href="#L155">155</a> <em class="jxr_javadoccomment">	 * Test/advanced constructor allowing an injected clock, timeout, caps and scheduler.</em>
+<a class="jxr_linenumber" name="L156" href="#L156">156</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L157" href="#L157">157</a> <em class="jxr_javadoccomment">	 * @param clock The clock supplying job-creation and timeout-check instants.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L158" href="#L158">158</a> <em class="jxr_javadoccomment">	 * @param timeout The hard per-job timeout.  Must be a positive duration.</em>
+<a class="jxr_linenumber" name="L159" href="#L159">159</a> <em class="jxr_javadoccomment">	 * @param maxOutputBytes The per-job streamed-output cap, in bytes.</em>
+<a class="jxr_linenumber" name="L160" href="#L160">160</a> <em class="jxr_javadoccomment">	 * @param maxSubscribers The per-job concurrent-subscriber cap.</em>
+<a class="jxr_linenumber" name="L161" href="#L161">161</a> <em class="jxr_javadoccomment">	 * @param scheduler The scheduler that enforces each job's hard timeout, or &lt;jk&gt;null&lt;/jk&gt; to rely solely on</em>
+<a class="jxr_linenumber" name="L162" href="#L162">162</a> <em class="jxr_javadoccomment">	 * 	{@link #sweepTimeouts()} (used by deterministic tests).</em>
+<a class="jxr_linenumber" name="L163" href="#L163">163</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L164" href="#L164">164</a> 	AsyncJobRegistry(Clock clock, Duration timeout, <strong class="jxr_keyword">long</strong> maxOutputBytes, <strong class="jxr_keyword">int</strong> maxSubscribers, ScheduledExecutorService scheduler) {
+<a class="jxr_linenumber" name="L165" href="#L165">165</a> 		<strong class="jxr_keyword">this</strong>(clock, timeout, maxOutputBytes, maxSubscribers, scheduler, false);
+<a class="jxr_linenumber" name="L166" href="#L166">166</a> 	}
+<a class="jxr_linenumber" name="L167" href="#L167">167</a> 
+<a class="jxr_linenumber" name="L168" href="#L168">168</a> 	<strong class="jxr_keyword">private</strong> <a name="AsyncJobRegistry" href="../../../../../../org/apache/juneau/rest/server/views/AsyncJobRegistry.html#AsyncJobRegistry">AsyncJobRegistry</a>(Clock clock, Duration timeout, <strong class="jxr_keyword">long</strong> maxOutputBytes, <strong class="jxr_keyword">int</strong> maxSubscribers, ScheduledExecutorService scheduler, <strong class="jxr_keyword">boolean</strong> ownsScheduler) {
+<a class="jxr_linenumber" name="L169" href="#L169">169</a> 		<strong class="jxr_keyword">this</strong>.clock = reqnn(<span class="jxr_string">"clock"</span>, clock);
+<a class="jxr_linenumber" name="L170" href="#L170">170</a> 		<strong class="jxr_keyword">this</strong>.timeout = requirePositiveTimeout(timeout);
+<a class="jxr_linenumber" name="L171" href="#L171">171</a> 		<strong class="jxr_keyword">this</strong>.maxOutputBytes = maxOutputBytes;
+<a class="jxr_linenumber" name="L172" href="#L172">172</a> 		<strong class="jxr_keyword">this</strong>.maxSubscribers = maxSubscribers;
+<a class="jxr_linenumber" name="L173" href="#L173">173</a> 		<strong class="jxr_keyword">this</strong>.scheduler = scheduler;
+<a class="jxr_linenumber" name="L174" href="#L174">174</a> 		<strong class="jxr_keyword">this</strong>.ownsScheduler = ownsScheduler;
+<a class="jxr_linenumber" name="L175" href="#L175">175</a> 	}
+<a class="jxr_linenumber" name="L176" href="#L176">176</a> 
+<a class="jxr_linenumber" name="L177" href="#L177">177</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Duration requirePositiveTimeout(Duration timeout) {
+<a class="jxr_linenumber" name="L178" href="#L178">178</a> 		reqnn(<span class="jxr_string">"timeout"</span>, timeout);
+<a class="jxr_linenumber" name="L179" href="#L179">179</a> 		<strong class="jxr_keyword">if</strong> (timeout.isZero() || timeout.isNegative())
+<a class="jxr_linenumber" name="L180" href="#L180">180</a> 			<strong class="jxr_keyword">throw</strong> iaex(<span class="jxr_string">"AsyncJobRegistry timeout must be a positive duration, not %s."</span>, timeout);
+<a class="jxr_linenumber" name="L181" href="#L181">181</a> 		<strong class="jxr_keyword">return</strong> timeout;
+<a class="jxr_linenumber" name="L182" href="#L182">182</a> 	}
+<a class="jxr_linenumber" name="L183" href="#L183">183</a> 
+<a class="jxr_linenumber" name="L184" href="#L184">184</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> ScheduledExecutorService defaultScheduler() {
+<a class="jxr_linenumber" name="L185" href="#L185">185</a> 		<strong class="jxr_keyword">return</strong> Executors.newSingleThreadScheduledExecutor(r -&gt; {
+<a class="jxr_linenumber" name="L186" href="#L186">186</a> 			<strong class="jxr_keyword">var</strong> t = <strong class="jxr_keyword">new</strong> Thread(r, <span class="jxr_string">"juneau-async-jobs"</span>);
+<a class="jxr_linenumber" name="L187" href="#L187">187</a> 			t.setDaemon(<strong class="jxr_keyword">true</strong>);
+<a class="jxr_linenumber" name="L188" href="#L188">188</a> 			<strong class="jxr_keyword">return</strong> t;
+<a class="jxr_linenumber" name="L189" href="#L189">189</a> 		});
+<a class="jxr_linenumber" name="L190" href="#L190">190</a> 	}
+<a class="jxr_linenumber" name="L191" href="#L191">191</a> 
+<a class="jxr_linenumber" name="L192" href="#L192">192</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L193" href="#L193">193</a> <em class="jxr_javadoccomment">	 * Attempts to create and register a new job with a freshly-minted capability id.</em>
+<a class="jxr_linenumber" name="L194" href="#L194">194</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L195" href="#L195">195</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L196" href="#L196">196</a> <em class="jxr_javadoccomment">	 * Sweeps timeouts first (so a slot held only by an expired job is freed), then refuses when the running-job cap</em>
+<a class="jxr_linenumber" name="L197" href="#L197">197</a> <em class="jxr_javadoccomment">	 * is already reached &amp;mdash; an unbounded set of keep-running jobs would be unbounded egress of customer-adjacent</em>
+<a class="jxr_linenumber" name="L198" href="#L198">198</a> <em class="jxr_javadoccomment">	 * content, so this refusal is load-bearing.</em>
+<a class="jxr_linenumber" name="L199" href="#L199">199</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L200" href="#L200">200</a> <em class="jxr_javadoccomment">	 * @return The new job, or empty if {@link #MAX_CONCURRENT_JOBS} concurrent jobs are already running.</em>
+<a class="jxr_linenumber" name="L201" href="#L201">201</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L202" href="#L202">202</a> 	<strong class="jxr_keyword">public</strong> Optional&lt;AsyncJob&gt; tryCreate() {
+<a class="jxr_linenumber" name="L203" href="#L203">203</a> 		sweepTimeouts();
+<a class="jxr_linenumber" name="L204" href="#L204">204</a> 		<strong class="jxr_keyword">return</strong> Optional.ofNullable(newJobIfRoom());
+<a class="jxr_linenumber" name="L205" href="#L205">205</a> 	}
+<a class="jxr_linenumber" name="L206" href="#L206">206</a> 
+<a class="jxr_linenumber" name="L207" href="#L207">207</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L208" href="#L208">208</a> <em class="jxr_javadoccomment">	 * Atomically checks the running-job cap and registers a new job, or returns &lt;jk&gt;null&lt;/jk&gt; when the cap is reached.</em>
+<a class="jxr_linenumber" name="L209" href="#L209">209</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L210" href="#L210">210</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L211" href="#L211">211</a> <em class="jxr_javadoccomment">	 * The check and the insert share {@link #admission}, so concurrent callers (unkeyed, or keyed with different keys)</em>
+<a class="jxr_linenumber" name="L212" href="#L212">212</a> <em class="jxr_javadoccomment">	 * cannot all observe a free slot and overshoot {@link #MAX_CONCURRENT_JOBS}.  A slot is simply a non-terminal</em>
+<a class="jxr_linenumber" name="L213" href="#L213">213</a> <em class="jxr_javadoccomment">	 * entry in {@link #jobs}, so there is no separate counter to release when a job settles, times out or is reaped.</em>
+<a class="jxr_linenumber" name="L214" href="#L214">214</a> <em class="jxr_javadoccomment">	 * Lock order is key bucket ({@code byKey.compute}) then {@code admission}, never the reverse.</em>
+<a class="jxr_linenumber" name="L215" href="#L215">215</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L216" href="#L216">216</a> 	<strong class="jxr_keyword">private</strong> <a name="AsyncJob" href="../../../../../../org/apache/juneau/rest/server/views/AsyncJob.html#AsyncJob">AsyncJob</a> newJobIfRoom() {
+<a class="jxr_linenumber" name="L217" href="#L217">217</a> 		AsyncJob job;
+<a class="jxr_linenumber" name="L218" href="#L218">218</a> 		<strong class="jxr_keyword">synchronized</strong> (admission) {
+<a class="jxr_linenumber" name="L219" href="#L219">219</a> 			<strong class="jxr_keyword">if</strong> (runningCount() &gt;= MAX_CONCURRENT_JOBS)
+<a class="jxr_linenumber" name="L220" href="#L220">220</a> 				<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L221" href="#L221">221</a> 			job = <strong class="jxr_keyword">new</strong> <a name="AsyncJob" href="../../../../../../org/apache/juneau/rest/server/views/AsyncJob.html#AsyncJob">AsyncJob</a>(mintId(), clock.instant(), timeout, maxOutputBytes, maxSubscribers);
+<a class="jxr_linenumber" name="L222" href="#L222">222</a> 			jobs.put(job.id(), job);
+<a class="jxr_linenumber" name="L223" href="#L223">223</a> 		}
+<a class="jxr_linenumber" name="L224" href="#L224">224</a> 		scheduleTimeout(job);
+<a class="jxr_linenumber" name="L225" href="#L225">225</a> 		<strong class="jxr_keyword">return</strong> job;
+<a class="jxr_linenumber" name="L226" href="#L226">226</a> 	}
+<a class="jxr_linenumber" name="L227" href="#L227">227</a> 
+<a class="jxr_linenumber" name="L228" href="#L228">228</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L229" href="#L229">229</a> <em class="jxr_javadoccomment">	 * Creates and registers a new job, throwing when the concurrency cap is reached.</em>
+<a class="jxr_linenumber" name="L230" href="#L230">230</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L231" href="#L231">231</a> <em class="jxr_javadoccomment">	 * @return The new job.</em>
+<a class="jxr_linenumber" name="L232" href="#L232">232</a> <em class="jxr_javadoccomment">	 * @throws IllegalStateException If {@link #MAX_CONCURRENT_JOBS} concurrent jobs are already running.</em>
+<a class="jxr_linenumber" name="L233" href="#L233">233</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L234" href="#L234">234</a> 	<strong class="jxr_keyword">public</strong> <a name="AsyncJob" href="../../../../../../org/apache/juneau/rest/server/views/AsyncJob.html#AsyncJob">AsyncJob</a> create() {
+<a class="jxr_linenumber" name="L235" href="#L235">235</a> 		<strong class="jxr_keyword">return</strong> tryCreate().orElseThrow(() -&gt; <strong class="jxr_keyword">new</strong> IllegalStateException(
+<a class="jxr_linenumber" name="L236" href="#L236">236</a> 			<span class="jxr_string">"Refusing to create an async job: the "</span> + MAX_CONCURRENT_JOBS + <span class="jxr_string">"-concurrent-job cap is reached."</span>));
+<a class="jxr_linenumber" name="L237" href="#L237">237</a> 	}
+<a class="jxr_linenumber" name="L238" href="#L238">238</a> 
+<a class="jxr_linenumber" name="L239" href="#L239">239</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L240" href="#L240">240</a> <em class="jxr_javadoccomment">	 * Returns the job registered under the specified idempotency key, or atomically creates and registers one.</em>
+<a class="jxr_linenumber" name="L241" href="#L241">241</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L242" href="#L242">242</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L243" href="#L243">243</a> <em class="jxr_javadoccomment">	 * If the key's {@link IdempotencyKey#value() value} is already registered, the existing job is returned &amp;mdash;</em>
+<a class="jxr_linenumber" name="L244" href="#L244">244</a> <em class="jxr_javadoccomment">	 * running or finished (see the class Javadoc for the finished-key behavior) &amp;mdash; and nothing new is created, so</em>
+<a class="jxr_linenumber" name="L245" href="#L245">245</a> <em class="jxr_javadoccomment">	 * a duplicate is never refused by the concurrency cap.  Otherwise behaves like {@link #tryCreate()}.  Concurrent</em>
+<a class="jxr_linenumber" name="L246" href="#L246">246</a> <em class="jxr_javadoccomment">	 * callers with one key observe exactly one job.</em>
+<a class="jxr_linenumber" name="L247" href="#L247">247</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L248" href="#L248">248</a> <em class="jxr_javadoccomment">	 * @param key The idempotency key.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L249" href="#L249">249</a> <em class="jxr_javadoccomment">	 * @return The existing or new job, or empty if the key is unregistered and {@link #MAX_CONCURRENT_JOBS} concurrent</em>
+<a class="jxr_linenumber" name="L250" href="#L250">250</a> <em class="jxr_javadoccomment">	 * 	jobs are already running.</em>
+<a class="jxr_linenumber" name="L251" href="#L251">251</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L252" href="#L252">252</a> 	<strong class="jxr_keyword">public</strong> Optional&lt;AsyncJob&gt; tryCreate(IdempotencyKey key) {
+<a class="jxr_linenumber" name="L253" href="#L253">253</a> 		reqnn(<span class="jxr_string">"key"</span>, key);
+<a class="jxr_linenumber" name="L254" href="#L254">254</a> 		sweepTimeouts();
+<a class="jxr_linenumber" name="L255" href="#L255">255</a> 		<strong class="jxr_keyword">return</strong> Optional.ofNullable(byKey.compute(key.value(), (k, existing) -&gt; {
+<a class="jxr_linenumber" name="L256" href="#L256">256</a> 			<strong class="jxr_keyword">if</strong> (existing != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L257" href="#L257">257</a> 				<strong class="jxr_keyword">return</strong> existing;
+<a class="jxr_linenumber" name="L258" href="#L258">258</a> 			<strong class="jxr_keyword">return</strong> newJobIfRoom();
+<a class="jxr_linenumber" name="L259" href="#L259">259</a> 		}));
+<a class="jxr_linenumber" name="L260" href="#L260">260</a> 	}
+<a class="jxr_linenumber" name="L261" href="#L261">261</a> 
+<a class="jxr_linenumber" name="L262" href="#L262">262</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L263" href="#L263">263</a> <em class="jxr_javadoccomment">	 * Returns the job registered under the specified idempotency key, or creates and registers one, throwing when the</em>
+<a class="jxr_linenumber" name="L264" href="#L264">264</a> <em class="jxr_javadoccomment">	 * concurrency cap is reached.</em>
+<a class="jxr_linenumber" name="L265" href="#L265">265</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L266" href="#L266">266</a> <em class="jxr_javadoccomment">	 * @param key The idempotency key.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L267" href="#L267">267</a> <em class="jxr_javadoccomment">	 * @return The existing or new job.</em>
+<a class="jxr_linenumber" name="L268" href="#L268">268</a> <em class="jxr_javadoccomment">	 * @throws IllegalStateException If the key is unregistered and {@link #MAX_CONCURRENT_JOBS} concurrent jobs are already running.</em>
+<a class="jxr_linenumber" name="L269" href="#L269">269</a> <em class="jxr_javadoccomment">	 * @see #tryCreate(IdempotencyKey)</em>
+<a class="jxr_linenumber" name="L270" href="#L270">270</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L271" href="#L271">271</a> 	<strong class="jxr_keyword">public</strong> <a name="AsyncJob" href="../../../../../../org/apache/juneau/rest/server/views/AsyncJob.html#AsyncJob">AsyncJob</a> create(IdempotencyKey key) {
+<a class="jxr_linenumber" name="L272" href="#L272">272</a> 		<strong class="jxr_keyword">return</strong> tryCreate(key).orElseThrow(() -&gt; <strong class="jxr_keyword">new</strong> IllegalStateException(
+<a class="jxr_linenumber" name="L273" href="#L273">273</a> 			<span class="jxr_string">"Refusing to create an async job: the "</span> + MAX_CONCURRENT_JOBS + <span class="jxr_string">"-concurrent-job cap is reached."</span>));
+<a class="jxr_linenumber" name="L274" href="#L274">274</a> 	}
+<a class="jxr_linenumber" name="L275" href="#L275">275</a> 
+<a class="jxr_linenumber" name="L276" href="#L276">276</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L277" href="#L277">277</a> <em class="jxr_javadoccomment">	 * Looks up a job by its capability id.</em>
+<a class="jxr_linenumber" name="L278" href="#L278">278</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L279" href="#L279">279</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L280" href="#L280">280</a> <em class="jxr_javadoccomment">	 * An unknown id returns empty &amp;mdash; a miss is indistinguishable from any other, so the unguessable id space</em>
+<a class="jxr_linenumber" name="L281" href="#L281">281</a> <em class="jxr_javadoccomment">	 * cannot be enumerated.</em>
+<a class="jxr_linenumber" name="L282" href="#L282">282</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L283" href="#L283">283</a> <em class="jxr_javadoccomment">	 * @param id The capability id.  Can be &lt;jk&gt;null&lt;/jk&gt;/blank (returns empty).</em>
+<a class="jxr_linenumber" name="L284" href="#L284">284</a> <em class="jxr_javadoccomment">	 * @return The job, or empty if no such id is registered.</em>
+<a class="jxr_linenumber" name="L285" href="#L285">285</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L286" href="#L286">286</a> 	<strong class="jxr_keyword">public</strong> Optional&lt;AsyncJob&gt; get(String id) {
+<a class="jxr_linenumber" name="L287" href="#L287">287</a> 		<strong class="jxr_keyword">if</strong> (id == <strong class="jxr_keyword">null</strong> || id.isBlank())
+<a class="jxr_linenumber" name="L288" href="#L288">288</a> 			<strong class="jxr_keyword">return</strong> Optional.empty();
+<a class="jxr_linenumber" name="L289" href="#L289">289</a> 		<strong class="jxr_keyword">return</strong> Optional.ofNullable(jobs.get(id));
+<a class="jxr_linenumber" name="L290" href="#L290">290</a> 	}
+<a class="jxr_linenumber" name="L291" href="#L291">291</a> 
+<a class="jxr_linenumber" name="L292" href="#L292">292</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L293" href="#L293">293</a> <em class="jxr_javadoccomment">	 * Cancels the job with the given id (see {@link AsyncJob#cancel()}).</em>
+<a class="jxr_linenumber" name="L294" href="#L294">294</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L295" href="#L295">295</a> <em class="jxr_javadoccomment">	 * @param id The capability id.  Can be &lt;jk&gt;null&lt;/jk&gt;/blank.</em>
+<a class="jxr_linenumber" name="L296" href="#L296">296</a> <em class="jxr_javadoccomment">	 * @return The (now terminal) job, or empty if no such id is registered.</em>
+<a class="jxr_linenumber" name="L297" href="#L297">297</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L298" href="#L298">298</a> 	<strong class="jxr_keyword">public</strong> Optional&lt;AsyncJob&gt; cancel(String id) {
+<a class="jxr_linenumber" name="L299" href="#L299">299</a> 		<strong class="jxr_keyword">var</strong> job = get(id);
+<a class="jxr_linenumber" name="L300" href="#L300">300</a> 		job.ifPresent(AsyncJob::cancel);
+<a class="jxr_linenumber" name="L301" href="#L301">301</a> 		<strong class="jxr_keyword">return</strong> job;
+<a class="jxr_linenumber" name="L302" href="#L302">302</a> 	}
+<a class="jxr_linenumber" name="L303" href="#L303">303</a> 
+<a class="jxr_linenumber" name="L304" href="#L304">304</a> 	<em class="jxr_javadoccomment">/** @return The number of concurrent (non-terminal) jobs currently registered. */</em>
+<a class="jxr_linenumber" name="L305" href="#L305">305</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">int</strong> runningCount() {
+<a class="jxr_linenumber" name="L306" href="#L306">306</a> 		<strong class="jxr_keyword">var</strong> n = 0;
+<a class="jxr_linenumber" name="L307" href="#L307">307</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> job : jobs.values())
+<a class="jxr_linenumber" name="L308" href="#L308">308</a> 			<strong class="jxr_keyword">if</strong> (! job.isTerminal())
+<a class="jxr_linenumber" name="L309" href="#L309">309</a> 				n++;
+<a class="jxr_linenumber" name="L310" href="#L310">310</a> 		<strong class="jxr_keyword">return</strong> n;
+<a class="jxr_linenumber" name="L311" href="#L311">311</a> 	}
+<a class="jxr_linenumber" name="L312" href="#L312">312</a> 
+<a class="jxr_linenumber" name="L313" href="#L313">313</a> 	<em class="jxr_javadoccomment">/** @return The total number of jobs currently registered (running plus retained-terminal). */</em>
+<a class="jxr_linenumber" name="L314" href="#L314">314</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">int</strong> size() { <strong class="jxr_keyword">return</strong> jobs.size(); }
+<a class="jxr_linenumber" name="L315" href="#L315">315</a> 
+<a class="jxr_linenumber" name="L316" href="#L316">316</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L317" href="#L317">317</a> <em class="jxr_javadoccomment">	 * Enforces the hard timeout on every job at the current clock instant and reaps terminal jobs past their</em>
+<a class="jxr_linenumber" name="L318" href="#L318">318</a> <em class="jxr_javadoccomment">	 * retention window.  Called on every {@link #tryCreate()}, scheduled per-job by the private scheduler, and callable</em>
+<a class="jxr_linenumber" name="L319" href="#L319">319</a> <em class="jxr_javadoccomment">	 * directly by deterministic tests (with a mutable clock) instead of waiting on wall time.</em>
+<a class="jxr_linenumber" name="L320" href="#L320">320</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L321" href="#L321">321</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> sweepTimeouts() {
+<a class="jxr_linenumber" name="L322" href="#L322">322</a> 		<strong class="jxr_keyword">var</strong> now = clock.instant();
+<a class="jxr_linenumber" name="L323" href="#L323">323</a> 		<strong class="jxr_keyword">var</strong> reapBefore = now.minus(RETENTION);
+<a class="jxr_linenumber" name="L324" href="#L324">324</a> 		<strong class="jxr_keyword">var</strong> it = jobs.values().iterator();
+<a class="jxr_linenumber" name="L325" href="#L325">325</a> 		<strong class="jxr_keyword">while</strong> (it.hasNext()) {
+<a class="jxr_linenumber" name="L326" href="#L326">326</a> 			<strong class="jxr_keyword">var</strong> job = it.next();
+<a class="jxr_linenumber" name="L327" href="#L327">327</a> 			job.enforceTimeout(now);
+<a class="jxr_linenumber" name="L328" href="#L328">328</a> 			<strong class="jxr_keyword">if</strong> (job.isTerminal() &amp;&amp; job.createdAt().isBefore(reapBefore)) {
+<a class="jxr_linenumber" name="L329" href="#L329">329</a> 				it.remove();
+<a class="jxr_linenumber" name="L330" href="#L330">330</a> 				byKey.values().remove(job);
+<a class="jxr_linenumber" name="L331" href="#L331">331</a> 			}
+<a class="jxr_linenumber" name="L332" href="#L332">332</a> 		}
+<a class="jxr_linenumber" name="L333" href="#L333">333</a> 	}
+<a class="jxr_linenumber" name="L334" href="#L334">334</a> 
+<a class="jxr_linenumber" name="L335" href="#L335">335</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> scheduleTimeout(<a name="AsyncJob" href="../../../../../../org/apache/juneau/rest/server/views/AsyncJob.html#AsyncJob">AsyncJob</a> job) {
+<a class="jxr_linenumber" name="L336" href="#L336">336</a> 		<strong class="jxr_keyword">if</strong> (scheduler == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L337" href="#L337">337</a> 			<strong class="jxr_keyword">return</strong>;
+<a class="jxr_linenumber" name="L338" href="#L338">338</a> 		<em class="jxr_comment">// Round up to the next millisecond past the deadline.  The scheduler may still fire on or a tick before it (timer</em>
+<a class="jxr_linenumber" name="L339" href="#L339">339</a> 		<em class="jxr_comment">// and clock granularity), and enforceTimeout only settles a job strictly past its deadline, so a task that fires</em>
+<a class="jxr_linenumber" name="L340" href="#L340">340</a> 		<em class="jxr_comment">// early re-arms itself rather than letting the job run past its hard timeout.</em>
+<a class="jxr_linenumber" name="L341" href="#L341">341</a> 		<strong class="jxr_keyword">var</strong> nanos = Duration.between(clock.instant(), job.deadline()).toNanos();
+<a class="jxr_linenumber" name="L342" href="#L342">342</a> 		<strong class="jxr_keyword">var</strong> delay = Math.max(1L, nanos / 1_000_000L + 1L);
+<a class="jxr_linenumber" name="L343" href="#L343">343</a> 		<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L344" href="#L344">344</a> 			scheduler.schedule(() -&gt; {
+<a class="jxr_linenumber" name="L345" href="#L345">345</a> 				<strong class="jxr_keyword">if</strong> (! job.enforceTimeout(clock.instant()) &amp;&amp; ! job.isTerminal())
+<a class="jxr_linenumber" name="L346" href="#L346">346</a> 					scheduleTimeout(job);
+<a class="jxr_linenumber" name="L347" href="#L347">347</a> 			}, delay, TimeUnit.MILLISECONDS);
+<a class="jxr_linenumber" name="L348" href="#L348">348</a> 		} <strong class="jxr_keyword">catch</strong> (RejectedExecutionException e) {
+<a class="jxr_linenumber" name="L349" href="#L349">349</a> 			<em class="jxr_comment">// Scheduler shut down (registry closed); the sweep on the next tryCreate() still enforces the timeout.</em>
+<a class="jxr_linenumber" name="L350" href="#L350">350</a> 		}
+<a class="jxr_linenumber" name="L351" href="#L351">351</a> 	}
+<a class="jxr_linenumber" name="L352" href="#L352">352</a> 
+<a class="jxr_linenumber" name="L353" href="#L353">353</a> 	<strong class="jxr_keyword">private</strong> String mintId() {
+<a class="jxr_linenumber" name="L354" href="#L354">354</a> 		<strong class="jxr_keyword">var</strong> bytes = <strong class="jxr_keyword">new</strong> byte[CAPABILITY_BYTES];
+<a class="jxr_linenumber" name="L355" href="#L355">355</a> 		random.nextBytes(bytes);
+<a class="jxr_linenumber" name="L356" href="#L356">356</a> 		<strong class="jxr_keyword">return</strong> HexFormat.of().formatHex(bytes);
+<a class="jxr_linenumber" name="L357" href="#L357">357</a> 	}
+<a class="jxr_linenumber" name="L358" href="#L358">358</a> 
+<a class="jxr_linenumber" name="L359" href="#L359">359</a> 	<em class="jxr_javadoccomment">/** Shuts down the private scheduler (if this registry created one).  Registered jobs are left as-is. */</em>
+<a class="jxr_linenumber" name="L360" href="#L360">360</a> 	@Override <em class="jxr_comment">/* AutoCloseable */</em>
+<a class="jxr_linenumber" name="L361" href="#L361">361</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> close() {
+<a class="jxr_linenumber" name="L362" href="#L362">362</a> 		<strong class="jxr_keyword">if</strong> (ownsScheduler &amp;&amp; scheduler != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L363" href="#L363">363</a> 			scheduler.shutdownNow();
+<a class="jxr_linenumber" name="L364" href="#L364">364</a> 	}
+<a class="jxr_linenumber" name="L365" href="#L365">365</a> }
+</pre>
+<hr/>
+<div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>
+</body>
+</html>

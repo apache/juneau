@@ -44,8 +44,8 @@
 <a class="jxr_linenumber" name="L36" href="#L36">36</a>  <em class="jxr_javadoccomment"> * malformed-input error paths, and toType()'s conversion-failure wrapping.</em>
 <a class="jxr_linenumber" name="L37" href="#L37">37</a>  <em class="jxr_javadoccomment"> */</em>
 <a class="jxr_linenumber" name="L38" href="#L38">38</a>  @SuppressWarnings({
-<a class="jxr_linenumber" name="L39" href="#L39">39</a>  	<span class="jxr_string">"unchecked"</span>, <em class="jxr_comment">// Parser returns Object by default for raw target types in these tests</em>
-<a class="jxr_linenumber" name="L40" href="#L40">40</a>  	<span class="jxr_string">"java:S5976"</span>, <em class="jxr_comment">// Separate test methods preferred over parameterized for clarity and independent failure reporting.</em>
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>  	<span class="jxr_string">"java:S5976"</span>, <em class="jxr_comment">// Separate test methods preferred over parameterized for clarity and independent failure reporting.</em>
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>  	<span class="jxr_string">"unchecked"</span> <em class="jxr_comment">// Parser returns Object by default for raw target types in these tests</em>
 <a class="jxr_linenumber" name="L41" href="#L41">41</a>  })
 <a class="jxr_linenumber" name="L42" href="#L42">42</a>  <strong class="jxr_keyword">class</strong> OpenApiParserSession_Test <strong class="jxr_keyword">extends</strong> TestBase {
 <a class="jxr_linenumber" name="L43" href="#L43">43</a>  
@@ -244,7 +244,7 @@
 <a class="jxr_linenumber" name="L236" href="#L236">236</a> 
 <a class="jxr_linenumber" name="L237" href="#L237">237</a> 	@Test
 <a class="jxr_linenumber" name="L238" href="#L238">238</a> 	<strong class="jxr_keyword">void</strong> f01_decodedBytesIncompatibleWithTargetTypeWrapsAsParseException() {
-<a class="jxr_linenumber" name="L239" href="#L239">239</a> 		<em class="jxr_comment">// toType()'s catch (InvalidDataConversionException e) -&gt; throw new ParseException(e.getMessage()):</em>
+<a class="jxr_linenumber" name="L239" href="#L239">239</a> 		<em class="jxr_comment">// toType()'s InvalidDataConversionException catch arm, which rethrows as a ParseException:</em>
 <a class="jxr_linenumber" name="L240" href="#L240">240</a> 		<em class="jxr_comment">// the base64 decode itself succeeds, but converting the resulting byte[] into a bean with no</em>
 <a class="jxr_linenumber" name="L241" href="#L241">241</a> 		<em class="jxr_comment">// byte[] mutator fails at the convertToType() call.</em>
 <a class="jxr_linenumber" name="L242" href="#L242">242</a> 		assertThrowsWithMessage(ParseException.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"Invalid data conversion"</span>, () -&gt; p(T_BYTE, <span class="jxr_string">"YWJj"</span>, F01_Bean.<strong class="jxr_keyword">class</strong>));
@@ -343,7 +343,7 @@
 <a class="jxr_linenumber" name="L335" href="#L335">335</a> 
 <a class="jxr_linenumber" name="L336" href="#L336">336</a> 	@Test
 <a class="jxr_linenumber" name="L337" href="#L337">337</a> 	<strong class="jxr_keyword">void</strong> k03_mapNewInstanceThrowingWrapsAsParseException() {
-<a class="jxr_linenumber" name="L338" href="#L338">338</a> 		<em class="jxr_comment">// The "catch (ExecutableException e) -&gt; throw new ParseException(e)" arm: type.newInstance()</em>
+<a class="jxr_linenumber" name="L338" href="#L338">338</a> 		<em class="jxr_comment">// The ExecutableException catch arm (rethrown as a ParseException): type.newInstance()</em>
 <a class="jxr_linenumber" name="L339" href="#L339">339</a> 		<em class="jxr_comment">// propagates the no-arg constructor's own RuntimeException wrapped as an ExecutableException.</em>
 <a class="jxr_linenumber" name="L340" href="#L340">340</a> 		assertThrowsWithMessage(ParseException.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"boom"</span>, () -&gt; p(T_OBJECT, <span class="jxr_string">"a=1"</span>, K03_Map.<strong class="jxr_keyword">class</strong>));
 <a class="jxr_linenumber" name="L341" href="#L341">341</a> 	}

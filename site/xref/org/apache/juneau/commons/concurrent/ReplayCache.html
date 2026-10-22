@@ -24,9 +24,9 @@
 <a class="jxr_linenumber" name="L16" href="#L16">16</a>  <em class="jxr_comment"> */</em>
 <a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> org.apache.juneau.commons.concurrent;
 <a class="jxr_linenumber" name="L18" href="#L18">18</a>  
-<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.commons.utils.AssertionUtils.*;
-<a class="jxr_linenumber" name="L20" href="#L20">20</a>  
-<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> java.util.function.*;
+<a class="jxr_linenumber" name="L19" href="#L19">19</a>  
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> java.util.function.*;
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.commons.utils.Shorts.*;
 <a class="jxr_linenumber" name="L22" href="#L22">22</a>  
 <a class="jxr_linenumber" name="L23" href="#L23">23</a>  <em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L24" href="#L24">24</a>  <em class="jxr_javadoccomment"> * SPI for detecting reuse ("replay") of a one-time-use identifier.</em>
@@ -139,7 +139,7 @@
 <a class="jxr_linenumber" name="L131" href="#L131">131</a> <em class="jxr_javadoccomment">	 * @return &lt;jk&gt;true&lt;/jk&gt; if the caller should proceed; &lt;jk&gt;false&lt;/jk&gt; if the submission should be rejected.</em>
 <a class="jxr_linenumber" name="L132" href="#L132">132</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L133" href="#L133">133</a> 	<strong class="jxr_keyword">default</strong> <strong class="jxr_keyword">boolean</strong> checkAndRecord(String id, <strong class="jxr_keyword">long</strong> expiresAtMs, FailMode failMode, Consumer&lt;Exception&gt; onFailure) {
-<a class="jxr_linenumber" name="L134" href="#L134">134</a> 		assertArgNotNull(<span class="jxr_string">"failMode"</span>, failMode);
+<a class="jxr_linenumber" name="L134" href="#L134">134</a> 		reqnn(<span class="jxr_string">"failMode"</span>, failMode);
 <a class="jxr_linenumber" name="L135" href="#L135">135</a> 		<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L136" href="#L136">136</a> 			<strong class="jxr_keyword">return</strong> checkAndRecord(id, expiresAtMs);
 <a class="jxr_linenumber" name="L137" href="#L137">137</a> 		} <strong class="jxr_keyword">catch</strong> (Exception e) {

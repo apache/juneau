@@ -92,7 +92,7 @@
 <span class="source-line-no">079</span><span id="line-79">   public BeanMap&lt;?&gt; getBeanMap() { return this.beanMap; }</span>
 <span class="source-line-no">080</span><span id="line-80"></span>
 <span class="source-line-no">081</span><span id="line-81">   @Override /* Overridden from Map.Entry */</span>
-<span class="source-line-no">082</span><span id="line-82">   public String getKey() { return meta.getName(); }</span>
+<span class="source-line-no">082</span><span id="line-82">   public String getKey() { return pName != null ? pName : meta.getName(); }</span>
 <span class="source-line-no">083</span><span id="line-83"></span>
 <span class="source-line-no">084</span><span id="line-84">   /**</span>
 <span class="source-line-no">085</span><span id="line-85">    * Returns the metadata about this bean property.</span>

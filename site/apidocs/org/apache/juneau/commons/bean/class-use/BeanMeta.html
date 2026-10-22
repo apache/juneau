@@ -56,9 +56,17 @@ loadScripts(document, 'script');</script>
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Package</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><a href="#org.apache.juneau.commons.bean">org.apache.juneau.commons.bean</a></div>
+<div class="col-first even-row-color"><a href="#org.apache.juneau.beanquery.sql">org.apache.juneau.beanquery.sql</a></div>
 <div class="col-last even-row-color">
+<div class="block">Shared JDBC <a href="../../beanquery/BeanQueryContext.html" title="class in org.apache.juneau.commons.beanquery"><code>BeanQueryContext</code></a> plumbing for BeanQuery (design §5.3).</div>
+</div>
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.commons.bean">org.apache.juneau.commons.bean</a></div>
+<div class="col-last odd-row-color">
 <div class="block">Bean-modeling layer for Juneau.</div>
+</div>
+<div class="col-first even-row-color"><a href="#org.apache.juneau.commons.beanquery">org.apache.juneau.commons.beanquery</a></div>
+<div class="col-last even-row-color">
+<div class="block">A protocol-agnostic query API for filtering, sorting, and paging collections of beans (design §5).</div>
 </div>
 <div class="col-first odd-row-color"><a href="#org.apache.juneau.marshall">org.apache.juneau.marshall</a></div>
 <div class="col-last odd-row-color">
@@ -75,6 +83,23 @@ loadScripts(document, 'script');</script>
 </div>
 <section class="class-uses">
 <ul class="block-list">
+<li>
+<section class="detail" id="org.apache.juneau.beanquery.sql">
+<h2>Uses of <a href="../BeanMeta.html" title="class in org.apache.juneau.commons.bean">BeanMeta</a> in <a href="../../../beanquery/sql/package-summary.html">org.apache.juneau.beanquery.sql</a></h2>
+<div class="caption"><span>Methods in <a href="../../../beanquery/sql/package-summary.html">org.apache.juneau.beanquery.sql</a> with parameters of type <a href="../BeanMeta.html" title="class in org.apache.juneau.commons.bean">BeanMeta</a></span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier and Type</div>
+<div class="table-header col-second">Method</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code>static &lt;T&gt;&nbsp;<a href="../../../beanquery/sql/SqlRowMapper.html" title="interface in org.apache.juneau.beanquery.sql">SqlRowMapper</a>&lt;T&gt;</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">SqlRowMapper.</span><code><a href="../../../beanquery/sql/SqlRowMapper.html#bean(org.apache.juneau.commons.bean.BeanMeta)" class="member-name-link">bean</a><wbr>(<a href="../BeanMeta.html" title="class in org.apache.juneau.commons.bean">BeanMeta</a>&lt;T&gt;&nbsp;beanMeta)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Same as <a href="../../../beanquery/sql/SqlRowMapper.html#bean(java.lang.Class)"><code>SqlRowMapper.bean(Class)</code></a>, but follows the bean rules of existing bean metadata, for example the metadata of
+ the serializer that renders the rows, so column names match the property names it emits.</div>
+</div>
+</div>
+</section>
+</li>
 <li>
 <section class="detail" id="org.apache.juneau.commons.bean">
 <h2>Uses of <a href="../BeanMeta.html" title="class in org.apache.juneau.commons.bean">BeanMeta</a> in <a href="../package-summary.html">org.apache.juneau.commons.bean</a></h2>
@@ -169,6 +194,27 @@ loadScripts(document, 'script');</script>
 <div class="col-second even-row-color"><code><a href="../BeanProxyInvocationHandler.html#%3Cinit%3E(org.apache.juneau.commons.bean.BeanMeta)" class="member-name-link">BeanProxyInvocationHandler</a><wbr>(<a href="../BeanMeta.html" title="class in org.apache.juneau.commons.bean">BeanMeta</a>&lt;<a href="../BeanProxyInvocationHandler.html" title="type parameter in BeanProxyInvocationHandler">T</a>&gt;&nbsp;meta)</code></div>
 <div class="col-last even-row-color">
 <div class="block">Constructor.</div>
+</div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="org.apache.juneau.commons.beanquery">
+<h2>Uses of <a href="../BeanMeta.html" title="class in org.apache.juneau.commons.bean">BeanMeta</a> in <a href="../../beanquery/package-summary.html">org.apache.juneau.commons.beanquery</a></h2>
+<div class="caption"><span>Methods in <a href="../../beanquery/package-summary.html">org.apache.juneau.commons.beanquery</a> with parameters of type <a href="../BeanMeta.html" title="class in org.apache.juneau.commons.bean">BeanMeta</a></span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier and Type</div>
+<div class="table-header col-second">Method</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code>static &lt;T&gt;&nbsp;<a href="../../beanquery/InMemoryBeanQueryContext.Builder.html" title="class in org.apache.juneau.commons.beanquery">InMemoryBeanQueryContext.Builder</a>&lt;T&gt;</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">InMemoryBeanQueryContext.</span><code><a href="../../beanquery/InMemoryBeanQueryContext.html#create(org.apache.juneau.commons.bean.BeanMeta)" class="member-name-link">create</a><wbr>(<a href="../BeanMeta.html" title="class in org.apache.juneau.commons.bean">BeanMeta</a>&lt;T&gt;&nbsp;beanMeta)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Returns a builder whose columns are the readable properties of existing bean metadata.</div>
+</div>
+<div class="col-first odd-row-color"><code>static &lt;T&gt;&nbsp;<a href="../../beanquery/QueryModel.html" title="class in org.apache.juneau.commons.beanquery">QueryModel</a>&lt;T&gt;</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">QueryModel.</span><code><a href="../../beanquery/QueryModel.html#of(org.apache.juneau.commons.bean.BeanMeta)" class="member-name-link">of</a><wbr>(<a href="../BeanMeta.html" title="class in org.apache.juneau.commons.bean">BeanMeta</a>&lt;T&gt;&nbsp;beanMeta)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Builds a model from existing bean metadata.</div>
 </div>
 </div>
 </section>

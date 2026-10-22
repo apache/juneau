@@ -125,7 +125,7 @@ extends <a href="../McpEndpointMixin.html" title="interface in org.apache.juneau
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code><a href="#mcpProtectedResourceMetadataPathInserted(org.apache.juneau.rest.server.RestRequest)" class="member-name-link">mcpProtectedResourceMetadataPathInserted</a><wbr>(<a href="../../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5">
 <div class="block">Serves the RFC 9728 Protected Resource Metadata document at the path-inserted well-known location (SEP-2351), but
- only when the requested suffix matches this resource's expected well-known path; otherwise <code>404</code> (M5).</div>
+ only when the requested suffix matches this resource's expected well-known path; otherwise <code>404</code>.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code>default <a href="McpProtectedResourceMetadata.html" title="class in org.apache.juneau.rest.server.mcp.v20260728">McpProtectedResourceMetadata</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code><a href="#mcpProtectedResourceMetadataRoot(org.apache.juneau.rest.server.RestRequest)" class="member-name-link">mcpProtectedResourceMetadataRoot</a><wbr>(<a href="../../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req)</code></div>
@@ -137,7 +137,7 @@ extends <a href="../McpEndpointMixin.html" title="interface in org.apache.juneau
  jakarta.servlet.http.HttpServletRequest&nbsp;req,
  jakarta.servlet.http.HttpServletResponse&nbsp;res)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5">
-<div class="block">OAuth 2.1 resource-server bearer gate for the mixin's MCP <code>POST /mcp</code> endpoint (READY-312f F2).</div>
+<div class="block">OAuth 2.1 resource-server bearer gate for the mixin's MCP <code>POST /mcp</code> endpoint.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code>default <a href="../../tracing/TraceContextExtractor.html" title="interface in org.apache.juneau.rest.server.tracing">TraceContextExtractor</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code><a href="#mcpTraceContextExtractor()" class="member-name-link">mcpTraceContextExtractor</a>()</code></div>
@@ -274,7 +274,7 @@ extends <a href="../McpEndpointMixin.html" title="interface in org.apache.juneau
 <div class="member-signature"><span class="modifiers">default</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/mcp/v20260728/McpEndpoint.html#line-151">mcpResourceServerAuth</a></span><wbr><span class="parameters">(<a href="../../RestContext.html" title="class in org.apache.juneau.rest.server">RestContext</a>&nbsp;ctx,
  jakarta.servlet.http.HttpServletRequest&nbsp;req,
  jakarta.servlet.http.HttpServletResponse&nbsp;res)</span></div>
-<div class="block">OAuth 2.1 resource-server bearer gate for the mixin's MCP <code>POST /mcp</code> endpoint (READY-312f F2).
+<div class="block">OAuth 2.1 resource-server bearer gate for the mixin's MCP <code>POST /mcp</code> endpoint.
 
  <p>
  A no-op unless <a href="McpResourceServerConfig.html#isEnabled()"><code>RS auth is enabled</code></a>; when enabled, a request that
@@ -283,8 +283,8 @@ extends <a href="../McpEndpointMixin.html" title="interface in org.apache.juneau
  the MCP dispatch <i>operation</i> (identified by resolved-operation identity, or by that operation's own router
  matchers &mdash; see <code>McpResourceServerSupport.resolvesToMcpDispatch(org.apache.juneau.rest.server.RestContext, jakarta.servlet.http.HttpServletRequest)</code>) so other <code>POST</code> operations on the
  host resource are unaffected, and it cannot drift from the router: a trailing slash, percent-encoding, a
- <code>?method=</code>/<code>X-Method</code> override, or a host-chosen <code>@Mixin(path/paths)</code> re-mount cannot slip past it
- (B1/H3).  The well-known <code>GET</code> routes are left unauthenticated for PRM discovery.</div>
+ <code>POST</code> claim on any override channel (<code>?method=</code> or an override header), or a host-chosen <code>@Mixin(path/paths)</code> re-mount cannot slip past it
+.  The well-known <code>GET</code> routes are left unauthenticated for PRM discovery.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>ctx</code> - The host <a href="../../RestContext.html" title="class in org.apache.juneau.rest.server"><code>RestContext</code></a> handling this request.</dd>
@@ -302,7 +302,7 @@ extends <a href="../McpEndpointMixin.html" title="interface in org.apache.juneau
  <p>
  This route (and its path-inserted sibling) is registered unconditionally, but returns <code>404</code> whenever RS auth
  is <a href="McpResourceServerConfig.html#isEnabled()"><code>disabled</code></a> &mdash; so a non-opted-in endpoint claims the well-known
- namespace but exposes no observable metadata (READY-312f F2, M7).</div>
+ namespace but exposes no observable metadata.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>req</code> - The REST request.</dd>
@@ -316,7 +316,7 @@ extends <a href="../McpEndpointMixin.html" title="interface in org.apache.juneau
 <h3>mcpProtectedResourceMetadataPathInserted</h3>
 <div class="member-signature"><span class="modifiers">default</span>&nbsp;<span class="return-type"><a href="McpProtectedResourceMetadata.html" title="class in org.apache.juneau.rest.server.mcp.v20260728">McpProtectedResourceMetadata</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/mcp/v20260728/McpEndpoint.html#line-179">mcpProtectedResourceMetadataPathInserted</a></span><wbr><span class="parameters">(<a href="../../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req)</span></div>
 <div class="block">Serves the RFC 9728 Protected Resource Metadata document at the path-inserted well-known location (SEP-2351), but
- only when the requested suffix matches this resource's expected well-known path; otherwise <code>404</code> (M5).</div>
+ only when the requested suffix matches this resource's expected well-known path; otherwise <code>404</code>.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>req</code> - The REST request.</dd>

@@ -97,18 +97,19 @@
 <span class="source-line-no">084</span><span id="line-84">         bool(a.ignoreUnknownEnumValues()).ifPresent(b::ignoreUnknownEnumValues);</span>
 <span class="source-line-no">085</span><span id="line-85">         bool(a.disableIgnoreUnknownNullBeanProperties()).ifPresent(b::disableIgnoreUnknownNullBeanProperties);</span>
 <span class="source-line-no">086</span><span id="line-86">         bool(a.unsortedProperties()).ifPresent(b::unsortedProperties);</span>
-<span class="source-line-no">087</span><span id="line-87">         bool(a.disableInterfaceProxies()).ifPresent(b::disableInterfaceProxies);</span>
-<span class="source-line-no">088</span><span id="line-88">         bool(a.useJavaBeanIntrospector()).ifPresent(b::useJavaBeanIntrospector);</span>
-<span class="source-line-no">089</span><span id="line-89">         classes(a.notBeanClasses()).ifPresent(b::notBeanClasses);</span>
-<span class="source-line-no">090</span><span id="line-90">         classes(a.notBeanClasses_replace()).ifPresent(x -&gt; { b.notBeanClasses().clear(); b.notBeanClasses(x);});</span>
-<span class="source-line-no">091</span><span id="line-91">         type(a.propertyNamer()).ifPresent(b::propertyNamer);</span>
-<span class="source-line-no">092</span><span id="line-92">         l(a.interfaces()).stream().map(x -&gt; BeanTypeApplyAnnotation.create(x).value(BeanTypeAnnotation.create().interfaceClass(x).build()).build()).forEach(b::annotations);</span>
-<span class="source-line-no">093</span><span id="line-93">         strings(a.notBeanPackages()).ifPresent(b::notBeanPackages);</span>
-<span class="source-line-no">094</span><span id="line-94">         strings(a.notBeanPackages_replace()).ifPresent(x -&gt; {b.notBeanPackages().clear(); b.notBeanPackages(x);});</span>
-<span class="source-line-no">095</span><span id="line-95">         // @formatter:on</span>
-<span class="source-line-no">096</span><span id="line-96">      }</span>
-<span class="source-line-no">097</span><span id="line-97">   }</span>
-<span class="source-line-no">098</span><span id="line-98">}</span>
+<span class="source-line-no">087</span><span id="line-87">         bool(a.recordComponentOrder()).ifPresent(b::recordComponentOrder);</span>
+<span class="source-line-no">088</span><span id="line-88">         bool(a.disableInterfaceProxies()).ifPresent(b::disableInterfaceProxies);</span>
+<span class="source-line-no">089</span><span id="line-89">         bool(a.useJavaBeanIntrospector()).ifPresent(b::useJavaBeanIntrospector);</span>
+<span class="source-line-no">090</span><span id="line-90">         classes(a.notBeanClasses()).ifPresent(b::notBeanClasses);</span>
+<span class="source-line-no">091</span><span id="line-91">         classes(a.notBeanClasses_replace()).ifPresent(x -&gt; { b.notBeanClasses().clear(); b.notBeanClasses(x);});</span>
+<span class="source-line-no">092</span><span id="line-92">         type(a.propertyNamer()).ifPresent(b::propertyNamer);</span>
+<span class="source-line-no">093</span><span id="line-93">         l(a.interfaces()).stream().map(x -&gt; BeanTypeApplyAnnotation.create(x).value(BeanTypeAnnotation.create().interfaceClass(x).build()).build()).forEach(b::annotations);</span>
+<span class="source-line-no">094</span><span id="line-94">         strings(a.notBeanPackages()).ifPresent(b::notBeanPackages);</span>
+<span class="source-line-no">095</span><span id="line-95">         strings(a.notBeanPackages_replace()).ifPresent(x -&gt; {b.notBeanPackages().clear(); b.notBeanPackages(x);});</span>
+<span class="source-line-no">096</span><span id="line-96">         // @formatter:on</span>
+<span class="source-line-no">097</span><span id="line-97">      }</span>
+<span class="source-line-no">098</span><span id="line-98">   }</span>
+<span class="source-line-no">099</span><span id="line-99">}</span>
 
 
 

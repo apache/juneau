@@ -53,7 +53,7 @@
 <a class="jxr_linenumber" name="L45" href="#L45">45</a>  		assertTrue(c.getScopesSupported().isEmpty());
 <a class="jxr_linenumber" name="L46" href="#L46">46</a>  		assertTrue(c.getRequiredScopes().isEmpty());
 <a class="jxr_linenumber" name="L47" href="#L47">47</a>  		assertEquals(Set.of(<span class="jxr_string">"header"</span>), c.getBearerMethodsSupported());
-<a class="jxr_linenumber" name="L48" href="#L48">48</a>  		assertTrue(c.isRequireAudienceClaim());  <em class="jxr_comment">// H2: fail-closed by default.</em>
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>  		assertTrue(c.isRequireAudienceClaim());  <em class="jxr_comment">// Fail-closed by default.</em>
 <a class="jxr_linenumber" name="L49" href="#L49">49</a>  	}
 <a class="jxr_linenumber" name="L50" href="#L50">50</a>  
 <a class="jxr_linenumber" name="L51" href="#L51">51</a>  	@Test <strong class="jxr_keyword">void</strong> a05_requireAudienceClaimIsSettable() {

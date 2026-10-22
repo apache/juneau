@@ -260,7 +260,7 @@
 <a class="jxr_linenumber" name="L252" href="#L252">252</a> 	}
 <a class="jxr_linenumber" name="L253" href="#L253">253</a> 
 <a class="jxr_linenumber" name="L254" href="#L254">254</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> checkStep(<strong class="jxr_keyword">int</strong> step, String input, String output, String expectedValue) {
-<a class="jxr_linenumber" name="L255" href="#L255">255</a> 		<strong class="jxr_keyword">if</strong> (!output.equals(expectedValue)) {
+<a class="jxr_linenumber" name="L255" href="#L255">255</a> 		<strong class="jxr_keyword">if</strong> (neq(output, expectedValue)) {
 <a class="jxr_linenumber" name="L256" href="#L256">256</a> 			<strong class="jxr_keyword">var</strong> msg = <span class="jxr_string">"Step #"</span> + step + <span class="jxr_string">" failed: ["</span> + input + <span class="jxr_string">"]-&gt;["</span> + output + <span class="jxr_string">"]...Expected value=["</span> + expectedValue + <span class="jxr_string">"]"</span>;
 <a class="jxr_linenumber" name="L257" href="#L257">257</a> 			fail(msg);
 <a class="jxr_linenumber" name="L258" href="#L258">258</a> 		}

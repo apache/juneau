@@ -60,36 +60,40 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color">
 <div class="block">Foundational classes and annotations shared across the Juneau Commons libraries.</div>
 </div>
-<div class="col-first odd-row-color"><a href="#org.apache.juneau.commons.httppart">org.apache.juneau.commons.httppart</a></div>
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.commons.beanquery">org.apache.juneau.commons.beanquery</a></div>
 <div class="col-last odd-row-color">
+<div class="block">A protocol-agnostic query API for filtering, sorting, and paging collections of beans (design §5).</div>
+</div>
+<div class="col-first even-row-color"><a href="#org.apache.juneau.commons.httppart">org.apache.juneau.commons.httppart</a></div>
+<div class="col-last even-row-color">
 <div class="block">Core HTTP-part types and enumerations shared across Juneau's HTTP-part marshalling support.</div>
 </div>
-<div class="col-first even-row-color"><a href="#org.apache.juneau.commons.svl">org.apache.juneau.commons.svl</a></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.commons.svl">org.apache.juneau.commons.svl</a></div>
+<div class="col-last odd-row-color">
 <div class="block">Simple Variable Language</div>
 </div>
-<div class="col-first odd-row-color"><a href="#org.apache.juneau.http.classic.response">org.apache.juneau.http.classic.response</a></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><a href="#org.apache.juneau.http.classic.response">org.apache.juneau.http.classic.response</a></div>
+<div class="col-last even-row-color">
 <div class="block">HTTP Response Exception Beans</div>
 </div>
-<div class="col-first even-row-color"><a href="#org.apache.juneau.marshall">org.apache.juneau.marshall</a></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.marshall">org.apache.juneau.marshall</a></div>
+<div class="col-last odd-row-color">
 <div class="block">Marshalling API</div>
 </div>
-<div class="col-first odd-row-color"><a href="#org.apache.juneau.marshall.objecttools">org.apache.juneau.marshall.objecttools</a></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><a href="#org.apache.juneau.marshall.objecttools">org.apache.juneau.marshall.objecttools</a></div>
+<div class="col-last even-row-color">
 <div class="block">Java Object Tools</div>
 </div>
-<div class="col-first even-row-color"><a href="#org.apache.juneau.marshall.parser">org.apache.juneau.marshall.parser</a></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.marshall.parser">org.apache.juneau.marshall.parser</a></div>
+<div class="col-last odd-row-color">
 <div class="block">Parser API</div>
 </div>
-<div class="col-first odd-row-color"><a href="#org.apache.juneau.marshall.serializer">org.apache.juneau.marshall.serializer</a></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><a href="#org.apache.juneau.marshall.serializer">org.apache.juneau.marshall.serializer</a></div>
+<div class="col-last even-row-color">
 <div class="block">Serializer API</div>
 </div>
-<div class="col-first even-row-color"><a href="#org.apache.juneau.rest.client.classic.remote">org.apache.juneau.rest.client.classic.remote</a></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.rest.client.classic.remote">org.apache.juneau.rest.client.classic.remote</a></div>
+<div class="col-last odd-row-color">
 <div class="block">Remote REST API</div>
 </div>
 </div>
@@ -119,6 +123,31 @@ loadScripts(document, 'script');</script>
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>...&nbsp;args)</code></div>
 <div class="col-last even-row-color">
 <div class="block">Sets the detail message on this exception.</div>
+</div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="org.apache.juneau.commons.beanquery">
+<h2>Uses of <a href="../BasicRuntimeException.html" title="class in org.apache.juneau.commons">BasicRuntimeException</a> in <a href="../beanquery/package-summary.html">org.apache.juneau.commons.beanquery</a></h2>
+<div class="caption"><span>Subclasses of <a href="../BasicRuntimeException.html" title="class in org.apache.juneau.commons">BasicRuntimeException</a> in <a href="../beanquery/package-summary.html">org.apache.juneau.commons.beanquery</a></span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier and Type</div>
+<div class="table-header col-second">Class</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code>class&nbsp;</code></div>
+<div class="col-second even-row-color"><code><a href="../beanquery/BeanQueryExecutionException.html" class="type-name-link" title="class in org.apache.juneau.commons.beanquery">BeanQueryExecutionException</a></code></div>
+<div class="col-last even-row-color">
+<div class="block">A server-side failure while running a valid <a href="../beanquery/BeanQuery.html" title="class in org.apache.juneau.commons.beanquery"><code>BeanQuery</code></a>: a <code>SQLException</code>, a connection failure, or a
+ column accessor that throws.</div>
+</div>
+<div class="col-first odd-row-color"><code>class&nbsp;</code></div>
+<div class="col-second odd-row-color"><code><a href="../beanquery/BeanQuerySyntaxException.html" class="type-name-link" title="class in org.apache.juneau.commons.beanquery">BeanQuerySyntaxException</a></code></div>
+<div class="col-last odd-row-color">
+<div class="block">Thrown when a <code>$</code>-search expression names an unknown operator or is otherwise malformed (an unclosed
+ parenthesis, a wrong argument count, junk after the close paren, an empty expression, and so on), or when a
+ higher-level check (column allow-list, sort keys, paging, regex policy, operator/type mismatch, an unparseable
+ typed value) rejects a caller-supplied query.</div>
 </div>
 </div>
 </section>
@@ -551,14 +580,15 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-second">Class</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color"><code>class&nbsp;</code></div>
-<div class="col-second even-row-color"><code><a href="../../marshall/objecttools/PathTraversalException.html" class="type-name-link" title="class in org.apache.juneau.marshall.objecttools">PathTraversalException</a></code></div>
+<div class="col-second even-row-color"><code><a href="../../marshall/objecttools/MethodNotAllowlistedException.html" class="type-name-link" title="class in org.apache.juneau.marshall.objecttools">MethodNotAllowlistedException</a></code></div>
 <div class="col-last even-row-color">
-<div class="block">Generic exception thrown from the <a href="../../marshall/objecttools/PathTraversal.html" title="class in org.apache.juneau.marshall.objecttools"><code>PathTraversal</code></a> class.</div>
+<div class="block">Thrown by <a href="../../marshall/objecttools/ObjectIntrospector.html" title="class in org.apache.juneau.marshall.objecttools"><code>ObjectIntrospector</code></a> when an attempt is made to invoke a method that has not been
+ explicitly allow-listed.</div>
 </div>
 <div class="col-first odd-row-color"><code>class&nbsp;</code></div>
-<div class="col-second odd-row-color"><code><a href="../../marshall/objecttools/PatternException.html" class="type-name-link" title="class in org.apache.juneau.marshall.objecttools">PatternException</a></code></div>
+<div class="col-second odd-row-color"><code><a href="../../marshall/objecttools/PathTraversalException.html" class="type-name-link" title="class in org.apache.juneau.marshall.objecttools">PathTraversalException</a></code></div>
 <div class="col-last odd-row-color">
-<div class="block">Indicates an invalid search pattern was specified.</div>
+<div class="block">Generic exception thrown from the <a href="../../marshall/objecttools/PathTraversal.html" title="class in org.apache.juneau.marshall.objecttools"><code>PathTraversal</code></a> class.</div>
 </div>
 </div>
 </section>
@@ -572,8 +602,14 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-second">Class</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color"><code>class&nbsp;</code></div>
-<div class="col-second even-row-color"><code><a href="../../marshall/parser/ParseException.html" class="type-name-link" title="class in org.apache.juneau.marshall.parser">ParseException</a></code></div>
+<div class="col-second even-row-color"><code><a href="../../marshall/parser/MissingRequiredPropertyException.html" class="type-name-link" title="class in org.apache.juneau.marshall.parser">MissingRequiredPropertyException</a></code></div>
 <div class="col-last even-row-color">
+<div class="block">Thrown when parser input (or the source map of a <code>Map</code>-to-bean conversion) does not contain one or more
+ properties marked <a href="../bean/BeanProp.html#required()"><code>@BeanProp(required=true)</code></a>.</div>
+</div>
+<div class="col-first odd-row-color"><code>class&nbsp;</code></div>
+<div class="col-second odd-row-color"><code><a href="../../marshall/parser/ParseException.html" class="type-name-link" title="class in org.apache.juneau.marshall.parser">ParseException</a></code></div>
+<div class="col-last odd-row-color">
 <div class="block">Exception that indicates invalid syntax encountered during parsing.</div>
 </div>
 </div>

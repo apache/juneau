@@ -220,7 +220,7 @@
 <a class="jxr_linenumber" name="L212" href="#L212">212</a> 	}
 <a class="jxr_linenumber" name="L213" href="#L213">213</a> 
 <a class="jxr_linenumber" name="L214" href="#L214">214</a> 	@Test <strong class="jxr_keyword">void</strong> a32_d3_holdsBothDirections() {
-<a class="jxr_linenumber" name="L215" href="#L215">215</a> 		<em class="jxr_comment">// D3: bean.equals(bean.unmodifiable()) AND the reverse, including serializer/schema state.</em>
+<a class="jxr_linenumber" name="L215" href="#L215">215</a> 		<em class="jxr_comment">// Content equality: bean.equals(bean.unmodifiable()) AND the reverse, including serializer/schema state.</em>
 <a class="jxr_linenumber" name="L216" href="#L216">216</a> 		<strong class="jxr_keyword">var</strong> x = <strong class="jxr_keyword">new</strong> SerializedEntity().setContent(<span class="jxr_string">"hello"</span>).setSerializer(JsonSerializer.DEFAULT).setSchema(HttpPartSchema.T_INTEGER);
 <a class="jxr_linenumber" name="L217" href="#L217">217</a> 		assertEquals(x, x.unmodifiable());
 <a class="jxr_linenumber" name="L218" href="#L218">218</a> 		assertEquals(x.unmodifiable(), x);

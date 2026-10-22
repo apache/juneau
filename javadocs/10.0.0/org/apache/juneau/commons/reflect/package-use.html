@@ -185,7 +185,7 @@ loadScripts(document, 'script');</script>
 <div class="col-last odd-row-color">
 <div class="block">SOAP/XML Marshalling Support</div>
 </div>
-<div class="col-first even-row-color"><a href="#org.apache.juneau.marshall.swap">org.apache.juneau.marshall.swap</a></div>
+<div class="col-first even-row-color"><a href="#org.apache.juneau.marshall.swap.spi">org.apache.juneau.marshall.swap.spi</a></div>
 <div class="col-last even-row-color">
 <div class="block">Swap API</div>
 </div>
@@ -226,20 +226,16 @@ loadScripts(document, 'script');</script>
 <div class="block">Authentication (AuthN) guards, servlet-layer filters, SPIs, and request-time helpers for
  <code>juneau-rest-server</code>.</div>
 </div>
-<div class="col-first even-row-color"><a href="#org.apache.juneau.rest.server.debug">org.apache.juneau.rest.server.debug</a></div>
+<div class="col-first even-row-color"><a href="#org.apache.juneau.rest.server.matcher">org.apache.juneau.rest.server.matcher</a></div>
 <div class="col-last even-row-color">
-<div class="block">REST Debug APIs</div>
-</div>
-<div class="col-first odd-row-color"><a href="#org.apache.juneau.rest.server.matcher">org.apache.juneau.rest.server.matcher</a></div>
-<div class="col-last odd-row-color">
 <div class="block">Predefined Matchers</div>
 </div>
-<div class="col-first even-row-color"><a href="#org.apache.juneau.rest.server.stats">org.apache.juneau.rest.server.stats</a></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.rest.server.stats">org.apache.juneau.rest.server.stats</a></div>
+<div class="col-last odd-row-color">
 <div class="block">Method exec stats utilities</div>
 </div>
-<div class="col-first odd-row-color"><a href="#org.apache.juneau.rest.server.validation">org.apache.juneau.rest.server.validation</a></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><a href="#org.apache.juneau.rest.server.validation">org.apache.juneau.rest.server.validation</a></div>
+<div class="col-last even-row-color">
 <div class="block">Optional <a class="doclink" href="https://jakarta.ee/specifications/bean-validation/">Jakarta Bean Validation 3.x</a>
  integration for <code>juneau-rest-server</code> &mdash; declarative validation of request beans via
  <code>jakarta.validation.constraints.*</code> annotations.</div>
@@ -1150,24 +1146,24 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
-<section class="detail" id="org.apache.juneau.marshall.swap">
-<div class="caption"><span>Classes in <a href="package-summary.html">org.apache.juneau.commons.reflect</a> used by <a href="../../marshall/swap/package-summary.html">org.apache.juneau.marshall.swap</a></span></div>
+<section class="detail" id="org.apache.juneau.marshall.swap.spi">
+<div class="caption"><span>Classes in <a href="package-summary.html">org.apache.juneau.commons.reflect</a> used by <a href="../../marshall/swap/spi/package-summary.html">org.apache.juneau.marshall.swap.spi</a></span></div>
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Class</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><a href="class-use/ClassInfo.html#org.apache.juneau.marshall.swap">ClassInfo</a></div>
+<div class="col-first even-row-color"><a href="class-use/ClassInfo.html#org.apache.juneau.marshall.swap.spi">ClassInfo</a></div>
 <div class="col-last even-row-color">
 <div class="block">Lightweight utility class for introspecting information about a class.</div>
 </div>
-<div class="col-first odd-row-color"><a href="class-use/ExecutableException.html#org.apache.juneau.marshall.swap">ExecutableException</a></div>
+<div class="col-first odd-row-color"><a href="class-use/ExecutableException.html#org.apache.juneau.marshall.swap.spi">ExecutableException</a></div>
 <div class="col-last odd-row-color">
 <div class="block">General exception that occurs when trying to execute a constructor, method, or field using reflection.</div>
 </div>
-<div class="col-first even-row-color"><a href="class-use/MethodInfo.html#org.apache.juneau.marshall.swap">MethodInfo</a></div>
+<div class="col-first even-row-color"><a href="class-use/MethodInfo.html#org.apache.juneau.marshall.swap.spi">MethodInfo</a></div>
 <div class="col-last even-row-color">
 <div class="block">Lightweight utility class for introspecting information about a Java method.</div>
 </div>
-<div class="col-first odd-row-color"><a href="class-use/Visibility.html#org.apache.juneau.marshall.swap">Visibility</a></div>
+<div class="col-first odd-row-color"><a href="class-use/Visibility.html#org.apache.juneau.marshall.swap.spi">Visibility</a></div>
 <div class="col-last odd-row-color">
 <div class="block">Defines class/field/method visibilities.</div>
 </div>
@@ -1184,9 +1180,21 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color">
 <div class="block">Encapsulates information about an annotation instance and the element it's declared on.</div>
 </div>
-<div class="col-first odd-row-color"><a href="class-use/ExecutableException.html#org.apache.juneau.marshall.toml">ExecutableException</a></div>
+<div class="col-first odd-row-color"><a href="class-use/ClassInfo.html#org.apache.juneau.marshall.toml">ClassInfo</a></div>
 <div class="col-last odd-row-color">
+<div class="block">Lightweight utility class for introspecting information about a class.</div>
+</div>
+<div class="col-first even-row-color"><a href="class-use/ExecutableException.html#org.apache.juneau.marshall.toml">ExecutableException</a></div>
+<div class="col-last even-row-color">
 <div class="block">General exception that occurs when trying to execute a constructor, method, or field using reflection.</div>
+</div>
+<div class="col-first odd-row-color"><a href="class-use/FieldInfo.html#org.apache.juneau.marshall.toml">FieldInfo</a></div>
+<div class="col-last odd-row-color">
+<div class="block">Lightweight utility class for introspecting information about a Java field.</div>
+</div>
+<div class="col-first even-row-color"><a href="class-use/MethodInfo.html#org.apache.juneau.marshall.toml">MethodInfo</a></div>
+<div class="col-last even-row-color">
+<div class="block">Lightweight utility class for introspecting information about a Java method.</div>
 </div>
 </div>
 </section>
@@ -1288,9 +1296,21 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color">
 <div class="block">Encapsulates information about an annotation instance and the element it's declared on.</div>
 </div>
-<div class="col-first odd-row-color"><a href="class-use/ExecutableException.html#org.apache.juneau.marshall.yaml">ExecutableException</a></div>
+<div class="col-first odd-row-color"><a href="class-use/ClassInfo.html#org.apache.juneau.marshall.yaml">ClassInfo</a></div>
 <div class="col-last odd-row-color">
+<div class="block">Lightweight utility class for introspecting information about a class.</div>
+</div>
+<div class="col-first even-row-color"><a href="class-use/ExecutableException.html#org.apache.juneau.marshall.yaml">ExecutableException</a></div>
+<div class="col-last even-row-color">
 <div class="block">General exception that occurs when trying to execute a constructor, method, or field using reflection.</div>
+</div>
+<div class="col-first odd-row-color"><a href="class-use/FieldInfo.html#org.apache.juneau.marshall.yaml">FieldInfo</a></div>
+<div class="col-last odd-row-color">
+<div class="block">Lightweight utility class for introspecting information about a Java field.</div>
+</div>
+<div class="col-first even-row-color"><a href="class-use/MethodInfo.html#org.apache.juneau.marshall.yaml">MethodInfo</a></div>
+<div class="col-last even-row-color">
+<div class="block">Lightweight utility class for introspecting information about a Java method.</div>
 </div>
 </div>
 </section>
@@ -1347,23 +1367,6 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color"><a href="class-use/ParameterInfo.html#org.apache.juneau.rest.server.auth">ParameterInfo</a></div>
 <div class="col-last even-row-color">
 <div class="block">Lightweight utility class for introspecting information about a method or constructor parameter.</div>
-</div>
-</div>
-</section>
-</li>
-<li>
-<section class="detail" id="org.apache.juneau.rest.server.debug">
-<div class="caption"><span>Classes in <a href="package-summary.html">org.apache.juneau.commons.reflect</a> used by <a href="../../rest/server/debug/package-summary.html">org.apache.juneau.rest.server.debug</a></span></div>
-<div class="summary-table two-column-summary">
-<div class="table-header col-first">Class</div>
-<div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><a href="class-use/ReflectionMap.html#org.apache.juneau.rest.server.debug">ReflectionMap</a></div>
-<div class="col-last even-row-color">
-<div class="block">Maps arbitrary values to classes, methods, fields, and constructors based on name-based patterns.</div>
-</div>
-<div class="col-first odd-row-color"><a href="class-use/ReflectionMap.Builder.html#org.apache.juneau.rest.server.debug">ReflectionMap.Builder</a></div>
-<div class="col-last odd-row-color">
-<div class="block">Builder for creating <a href="ReflectionMap.html" title="class in org.apache.juneau.commons.reflect"><code>ReflectionMap</code></a> instances.</div>
 </div>
 </div>
 </section>

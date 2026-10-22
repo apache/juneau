@@ -93,22 +93,23 @@
 <span class="source-line-no">080</span><span id="line-80">    * @return A new builder.</span>
 <span class="source-line-no">081</span><span id="line-81">    */</span>
 <span class="source-line-no">082</span><span id="line-82">   @SuppressWarnings({</span>
-<span class="source-line-no">083</span><span id="line-83">      "java:S1452" // Builder&lt;?&gt; wildcard return intentional; callers chain via fluent API without needing the concrete type</span>
-<span class="source-line-no">084</span><span id="line-84">   })</span>
-<span class="source-line-no">085</span><span id="line-85">   public static RdfParser.Builder&lt;?&gt; create() {</span>
-<span class="source-line-no">086</span><span id="line-86">      return RdfParser.create().jsonLd();</span>
-<span class="source-line-no">087</span><span id="line-87">   }</span>
-<span class="source-line-no">088</span><span id="line-88"></span>
-<span class="source-line-no">089</span><span id="line-89">   /**</span>
-<span class="source-line-no">090</span><span id="line-90">    * Constructor.</span>
-<span class="source-line-no">091</span><span id="line-91">    *</span>
-<span class="source-line-no">092</span><span id="line-92">    * @param builder The builder for this object.</span>
-<span class="source-line-no">093</span><span id="line-93">    *    &lt;br&gt;Cannot be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">094</span><span id="line-94">    */</span>
-<span class="source-line-no">095</span><span id="line-95">   public JsonLdParser(RdfParser.Builder&lt;?&gt; builder) {</span>
-<span class="source-line-no">096</span><span id="line-96">      super(builder.jsonLd().consumes("application/ld+json"));</span>
-<span class="source-line-no">097</span><span id="line-97">   }</span>
-<span class="source-line-no">098</span><span id="line-98">}</span>
+<span class="source-line-no">083</span><span id="line-83">      "java:S1452", // Builder&lt;?&gt; wildcard return intentional; callers chain via fluent API without needing the concrete type</span>
+<span class="source-line-no">084</span><span id="line-84">      "java:S9149" // Public Juneau DSL factory; hiding parent create() is intentional.</span>
+<span class="source-line-no">085</span><span id="line-85">   })</span>
+<span class="source-line-no">086</span><span id="line-86">   public static RdfParser.Builder&lt;?&gt; create() {</span>
+<span class="source-line-no">087</span><span id="line-87">      return RdfParser.create().jsonLd();</span>
+<span class="source-line-no">088</span><span id="line-88">   }</span>
+<span class="source-line-no">089</span><span id="line-89"></span>
+<span class="source-line-no">090</span><span id="line-90">   /**</span>
+<span class="source-line-no">091</span><span id="line-91">    * Constructor.</span>
+<span class="source-line-no">092</span><span id="line-92">    *</span>
+<span class="source-line-no">093</span><span id="line-93">    * @param builder The builder for this object.</span>
+<span class="source-line-no">094</span><span id="line-94">    *    &lt;br&gt;Cannot be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">095</span><span id="line-95">    */</span>
+<span class="source-line-no">096</span><span id="line-96">   public JsonLdParser(RdfParser.Builder&lt;?&gt; builder) {</span>
+<span class="source-line-no">097</span><span id="line-97">      super(builder.jsonLd().consumes("application/ld+json"));</span>
+<span class="source-line-no">098</span><span id="line-98">   }</span>
+<span class="source-line-no">099</span><span id="line-99">}</span>
 
 
 

@@ -201,24 +201,41 @@
 <a class="jxr_linenumber" name="L193" href="#L193">193</a> 	}
 <a class="jxr_linenumber" name="L194" href="#L194">194</a> 
 <a class="jxr_linenumber" name="L195" href="#L195">195</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L196" href="#L196">196</a> <em class="jxr_javadoccomment">	 * Minimal {@link BeanStore} that resolves a single fixed bean instance for any lookup by type, used to drive</em>
-<a class="jxr_linenumber" name="L197" href="#L197">197</a> <em class="jxr_javadoccomment">	 * {@link BeanMeta}'s {@code resolveFactory} store-lookup branch.  All other members return "not found"/empty.</em>
-<a class="jxr_linenumber" name="L198" href="#L198">198</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L199" href="#L199">199</a> 	<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> FakeBeanStore <strong class="jxr_keyword">implements</strong> BeanStore {
-<a class="jxr_linenumber" name="L200" href="#L200">200</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Object bean;
-<a class="jxr_linenumber" name="L201" href="#L201">201</a> 
-<a class="jxr_linenumber" name="L202" href="#L202">202</a> 		FakeBeanStore(Object bean) { <strong class="jxr_keyword">this</strong>.bean = bean; }
-<a class="jxr_linenumber" name="L203" href="#L203">203</a> 
-<a class="jxr_linenumber" name="L204" href="#L204">204</a> 		@SuppressWarnings(<span class="jxr_string">"unchecked"</span>)
-<a class="jxr_linenumber" name="L205" href="#L205">205</a> 		@Override <strong class="jxr_keyword">public</strong> &lt;T&gt; Optional&lt;T&gt; getBean(Class&lt;T&gt; beanType) { <strong class="jxr_keyword">return</strong> beanType.isInstance(bean) ? Optional.of((T) bean) : Optional.empty(); }
-<a class="jxr_linenumber" name="L206" href="#L206">206</a> 		@Override <strong class="jxr_keyword">public</strong> &lt;T&gt; Optional&lt;T&gt; getBean(Class&lt;T&gt; beanType, String name) { <strong class="jxr_keyword">return</strong> getBean(beanType); }
-<a class="jxr_linenumber" name="L207" href="#L207">207</a> 		@Override <strong class="jxr_keyword">public</strong> &lt;T&gt; Map&lt;String,T&gt; getBeansOfType(Class&lt;T&gt; beanType) { <strong class="jxr_keyword">return</strong> Map.of(); }
-<a class="jxr_linenumber" name="L208" href="#L208">208</a> 		@Override <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> hasBean(Class&lt;?&gt; beanType) { <strong class="jxr_keyword">return</strong> beanType.isInstance(bean); }
-<a class="jxr_linenumber" name="L209" href="#L209">209</a> 		@Override <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> hasBean(Class&lt;?&gt; beanType, String name) { <strong class="jxr_keyword">return</strong> hasBean(beanType); }
-<a class="jxr_linenumber" name="L210" href="#L210">210</a> 		@Override <strong class="jxr_keyword">public</strong> &lt;T&gt; Optional&lt;Supplier&lt;T&gt;&gt; getBeanSupplier(Class&lt;T&gt; beanType) { <strong class="jxr_keyword">return</strong> Optional.empty(); }
-<a class="jxr_linenumber" name="L211" href="#L211">211</a> 		@Override <strong class="jxr_keyword">public</strong> &lt;T&gt; Optional&lt;Supplier&lt;T&gt;&gt; getBeanSupplier(Class&lt;T&gt; beanType, String name) { <strong class="jxr_keyword">return</strong> Optional.empty(); }
-<a class="jxr_linenumber" name="L212" href="#L212">212</a> 	}
-<a class="jxr_linenumber" name="L213" href="#L213">213</a> }
+<a class="jxr_linenumber" name="L196" href="#L196">196</a> <em class="jxr_javadoccomment">	 * Wraps a fixed type name in a {@link BeanMetaInitializer} whose {@code findTypeNameInParents} always returns</em>
+<a class="jxr_linenumber" name="L197" href="#L197">197</a> <em class="jxr_javadoccomment">	 * it, delegating every other SPI method to {@link BeanMetaInitializer#NOOP}.  Lets a test drive</em>
+<a class="jxr_linenumber" name="L198" href="#L198">198</a> <em class="jxr_javadoccomment">	 * {@link BeanMeta}'s {@code findDictionaryName}'s "type name found via parent-class registry lookup"</em>
+<a class="jxr_linenumber" name="L199" href="#L199">199</a> <em class="jxr_javadoccomment">	 * branch, which the commons-side {@code NOOP} implementation (always &lt;jk&gt;null&lt;/jk&gt;) can never exercise.</em>
+<a class="jxr_linenumber" name="L200" href="#L200">200</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L201" href="#L201">201</a> 	<strong class="jxr_keyword">static</strong> BeanMetaInitializer initializerWithParentTypeName(String typeName) {
+<a class="jxr_linenumber" name="L202" href="#L202">202</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> BeanMetaInitializer() {
+<a class="jxr_linenumber" name="L203" href="#L203">203</a> 			@Override <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> hasBeanRegistrationAnnotation(BeanConfigContext config, ClassInfo classInfo) { <strong class="jxr_keyword">return</strong> BeanMetaInitializer.NOOP.hasBeanRegistrationAnnotation(config, classInfo); }
+<a class="jxr_linenumber" name="L204" href="#L204">204</a> 			@Override <strong class="jxr_keyword">public</strong> String resolveTypePropertyName(BeanConfigContext config, ClassInfo classInfo) { <strong class="jxr_keyword">return</strong> BeanMetaInitializer.NOOP.resolveTypePropertyName(config, classInfo); }
+<a class="jxr_linenumber" name="L205" href="#L205">205</a> 			@Override <strong class="jxr_keyword">public</strong> String findMarshalledTypeName(BeanConfigContext config, ClassInfo classInfo) { <strong class="jxr_keyword">return</strong> BeanMetaInitializer.NOOP.findMarshalledTypeName(config, classInfo); }
+<a class="jxr_linenumber" name="L206" href="#L206">206</a> 			@Override <strong class="jxr_keyword">public</strong> BeanRegistryLookup buildBeanRegistry(Object marshallingContext, BeanFilter beanFilter, ClassInfo classInfo, BeanConfigContext config) { <strong class="jxr_keyword">return</strong> BeanMetaInitializer.NOOP.buildBeanRegistry(marshallingContext, beanFilter, classInfo, config); }
+<a class="jxr_linenumber" name="L207" href="#L207">207</a> 			@Override <strong class="jxr_keyword">public</strong> BeanRegistryLookup buildPropertyBeanRegistry(Object marshallingContext, BeanRegistryLookup parent, List&lt;ClassInfo&gt; dictionaryClasses) { <strong class="jxr_keyword">return</strong> BeanMetaInitializer.NOOP.buildPropertyBeanRegistry(marshallingContext, parent, dictionaryClasses); }
+<a class="jxr_linenumber" name="L208" href="#L208">208</a> 			@Override <strong class="jxr_keyword">public</strong> String findTypeNameInParents(Object marshallingContext, ClassInfo classInfo, Class&lt;?&gt; rawClass) { <strong class="jxr_keyword">return</strong> typeName; }
+<a class="jxr_linenumber" name="L209" href="#L209">209</a> 			@Override <strong class="jxr_keyword">public</strong> BeanFilter buildBeanFilter(BeanInfo&lt;?&gt; cm) { <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>; }
+<a class="jxr_linenumber" name="L210" href="#L210">210</a> 		};
+<a class="jxr_linenumber" name="L211" href="#L211">211</a> 	}
+<a class="jxr_linenumber" name="L212" href="#L212">212</a> 
+<a class="jxr_linenumber" name="L213" href="#L213">213</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L214" href="#L214">214</a> <em class="jxr_javadoccomment">	 * Minimal {@link BeanStore} that resolves a single fixed bean instance for any lookup by type, used to drive</em>
+<a class="jxr_linenumber" name="L215" href="#L215">215</a> <em class="jxr_javadoccomment">	 * {@link BeanMeta}'s {@code resolveFactory} store-lookup branch.  All other members return "not found"/empty.</em>
+<a class="jxr_linenumber" name="L216" href="#L216">216</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L217" href="#L217">217</a> 	<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> FakeBeanStore <strong class="jxr_keyword">implements</strong> BeanStore {
+<a class="jxr_linenumber" name="L218" href="#L218">218</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Object bean;
+<a class="jxr_linenumber" name="L219" href="#L219">219</a> 
+<a class="jxr_linenumber" name="L220" href="#L220">220</a> 		FakeBeanStore(Object bean) { <strong class="jxr_keyword">this</strong>.bean = bean; }
+<a class="jxr_linenumber" name="L221" href="#L221">221</a> 
+<a class="jxr_linenumber" name="L222" href="#L222">222</a> 		@Override <strong class="jxr_keyword">public</strong> &lt;T&gt; Optional&lt;T&gt; getBean(Class&lt;T&gt; beanType) { <strong class="jxr_keyword">return</strong> beanType.isInstance(bean) ? Optional.of(beanType.<strong class="jxr_keyword">cast</strong>(bean)) : Optional.empty(); }
+<a class="jxr_linenumber" name="L223" href="#L223">223</a> 		@Override <strong class="jxr_keyword">public</strong> &lt;T&gt; Optional&lt;T&gt; getBean(Class&lt;T&gt; beanType, String name) { <strong class="jxr_keyword">return</strong> getBean(beanType); }
+<a class="jxr_linenumber" name="L224" href="#L224">224</a> 		@Override <strong class="jxr_keyword">public</strong> &lt;T&gt; Map&lt;String,T&gt; getBeansOfType(Class&lt;T&gt; beanType) { <strong class="jxr_keyword">return</strong> Map.of(); }
+<a class="jxr_linenumber" name="L225" href="#L225">225</a> 		@Override <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> hasBean(Class&lt;?&gt; beanType) { <strong class="jxr_keyword">return</strong> beanType.isInstance(bean); }
+<a class="jxr_linenumber" name="L226" href="#L226">226</a> 		@Override <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> hasBean(Class&lt;?&gt; beanType, String name) { <strong class="jxr_keyword">return</strong> hasBean(beanType); }
+<a class="jxr_linenumber" name="L227" href="#L227">227</a> 		@Override <strong class="jxr_keyword">public</strong> &lt;T&gt; Optional&lt;Supplier&lt;T&gt;&gt; getBeanSupplier(Class&lt;T&gt; beanType) { <strong class="jxr_keyword">return</strong> Optional.empty(); }
+<a class="jxr_linenumber" name="L228" href="#L228">228</a> 		@Override <strong class="jxr_keyword">public</strong> &lt;T&gt; Optional&lt;Supplier&lt;T&gt;&gt; getBeanSupplier(Class&lt;T&gt; beanType, String name) { <strong class="jxr_keyword">return</strong> Optional.empty(); }
+<a class="jxr_linenumber" name="L229" href="#L229">229</a> 	}
+<a class="jxr_linenumber" name="L230" href="#L230">230</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

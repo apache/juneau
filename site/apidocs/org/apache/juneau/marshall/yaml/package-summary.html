@@ -86,26 +86,66 @@ loadScripts(document, 'script');</script>
 </li>
 <li>
 <div id="class-summary">
-<div class="table-tabs" role="tablist" aria-orientation="horizontal"><button id="class-summary-tab0" role="tab" aria-selected="true" aria-controls="class-summary.tabpanel" tabindex="0" onkeydown="switchTab(event)" onclick="show('class-summary', 'class-summary', 2)" class="active-table-tab">All Classes and Interfaces</button><button id="class-summary-tab2" role="tab" aria-selected="false" aria-controls="class-summary.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('class-summary', 'class-summary-tab2', 2)" class="table-tab">Classes</button><button id="class-summary-tab7" role="tab" aria-selected="false" aria-controls="class-summary.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('class-summary', 'class-summary-tab7', 2)" class="table-tab">Annotation Interfaces</button></div>
+<div class="table-tabs" role="tablist" aria-orientation="horizontal"><button id="class-summary-tab0" role="tab" aria-selected="true" aria-controls="class-summary.tabpanel" tabindex="0" onkeydown="switchTab(event)" onclick="show('class-summary', 'class-summary', 2)" class="active-table-tab">All Classes and Interfaces</button><button id="class-summary-tab1" role="tab" aria-selected="false" aria-controls="class-summary.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('class-summary', 'class-summary-tab1', 2)" class="table-tab">Interfaces</button><button id="class-summary-tab2" role="tab" aria-selected="false" aria-controls="class-summary.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('class-summary', 'class-summary-tab2', 2)" class="table-tab">Classes</button><button id="class-summary-tab7" role="tab" aria-selected="false" aria-controls="class-summary.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('class-summary', 'class-summary-tab7', 2)" class="table-tab">Annotation Interfaces</button></div>
 <div id="class-summary.tabpanel" role="tabpanel" aria-labelledby="class-summary-tab0">
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Class</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color class-summary class-summary-tab7"><a href="YamlConfig.html" title="annotation interface in org.apache.juneau.marshall.yaml">YamlConfig</a></div>
+<div class="col-first even-row-color class-summary class-summary-tab7"><a href="Yaml.html" title="annotation interface in org.apache.juneau.marshall.yaml">Yaml</a></div>
 <div class="col-last even-row-color class-summary class-summary-tab7">
+<div class="block">Annotation for customizing YAML serialization and parsing behavior on classes, methods, and fields.</div>
+</div>
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="YamlAnnotation.html" title="class in org.apache.juneau.marshall.yaml">YamlAnnotation</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">
+<div class="block">Utility classes and methods for the <a href="Yaml.html" title="annotation interface in org.apache.juneau.marshall.yaml"><code>@Yaml</code></a> annotation.</div>
+</div>
+<div class="col-first even-row-color class-summary class-summary-tab7"><a href="YamlApply.html" title="annotation interface in org.apache.juneau.marshall.yaml">YamlApply</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab7">
+<div class="block">Dynamically applies a <a href="Yaml.html" title="annotation interface in org.apache.juneau.marshall.yaml"><code>@Yaml</code></a> annotation to specified classes, methods, or fields.</div>
+</div>
+<div class="col-first odd-row-color class-summary class-summary-tab7"><a href="YamlApply.Array.html" title="annotation interface in org.apache.juneau.marshall.yaml">YamlApply.Array</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab7">
+<div class="block">A collection of <a href="YamlApply.html" title="annotation interface in org.apache.juneau.marshall.yaml"><code>@YamlApply annotations</code></a>.</div>
+</div>
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="YamlApplyAnnotation.html" title="class in org.apache.juneau.marshall.yaml">YamlApplyAnnotation</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab2">
+<div class="block">Utility classes and methods for the <a href="YamlApply.html" title="annotation interface in org.apache.juneau.marshall.yaml"><code>@YamlApply</code></a> annotation.</div>
+</div>
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="YamlApplyAnnotation.Applier.html" title="class in org.apache.juneau.marshall.yaml">YamlApplyAnnotation.Applier</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">
+<div class="block">Applies targeted <a href="YamlApply.html" title="annotation interface in org.apache.juneau.marshall.yaml"><code>YamlApply</code></a> annotations to a <a href="../Context.Builder.html" title="class in org.apache.juneau.marshall"><code>Context.Builder</code></a>.</div>
+</div>
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="YamlApplyAnnotation.Builder.html" title="class in org.apache.juneau.marshall.yaml">YamlApplyAnnotation.Builder</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab2">
+<div class="block">Builder class.</div>
+</div>
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="YamlBeanPropertyMeta.html" title="class in org.apache.juneau.marshall.yaml">YamlBeanPropertyMeta</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">
+<div class="block">Metadata on bean properties specific to YAML serializers and parsers.</div>
+</div>
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="YamlClassMeta.html" title="class in org.apache.juneau.marshall.yaml">YamlClassMeta</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab2">
+<div class="block">Metadata on classes specific to YAML serializers and parsers.</div>
+</div>
+<div class="col-first odd-row-color class-summary class-summary-tab7"><a href="YamlConfig.html" title="annotation interface in org.apache.juneau.marshall.yaml">YamlConfig</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab7">
 <div class="block">Annotation for specifying config properties defined in <a href="YamlSerializer.html" title="class in org.apache.juneau.marshall.yaml"><code>YamlSerializer</code></a> and <a href="YamlParser.html" title="class in org.apache.juneau.marshall.yaml"><code>YamlParser</code></a>.</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="YamlConfigAnnotation.html" title="class in org.apache.juneau.marshall.yaml">YamlConfigAnnotation</a></div>
-<div class="col-last odd-row-color class-summary class-summary-tab2">
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="YamlConfigAnnotation.html" title="class in org.apache.juneau.marshall.yaml">YamlConfigAnnotation</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab2">
 <div class="block">Utility classes and methods for the <a href="YamlConfig.html" title="annotation interface in org.apache.juneau.marshall.yaml"><code>@YamlConfig</code></a> annotation.</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab2"><a href="YamlConfigAnnotation.ParserApply.html" title="class in org.apache.juneau.marshall.yaml">YamlConfigAnnotation.ParserApply</a></div>
-<div class="col-last even-row-color class-summary class-summary-tab2">
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="YamlConfigAnnotation.ParserApply.html" title="class in org.apache.juneau.marshall.yaml">YamlConfigAnnotation.ParserApply</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">
 <div class="block">Applies <a href="YamlConfig.html" title="annotation interface in org.apache.juneau.marshall.yaml"><code>YamlConfig</code></a> annotations to a <a href="YamlParser.Builder.html" title="class in org.apache.juneau.marshall.yaml"><code>YamlParser.Builder</code></a>.</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="YamlConfigAnnotation.SerializerApply.html" title="class in org.apache.juneau.marshall.yaml">YamlConfigAnnotation.SerializerApply</a></div>
-<div class="col-last odd-row-color class-summary class-summary-tab2">
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="YamlConfigAnnotation.SerializerApply.html" title="class in org.apache.juneau.marshall.yaml">YamlConfigAnnotation.SerializerApply</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab2">
 <div class="block">Applies <a href="YamlConfig.html" title="annotation interface in org.apache.juneau.marshall.yaml"><code>YamlConfig</code></a> annotations to a <a href="YamlSerializer.Builder.html" title="class in org.apache.juneau.marshall.yaml"><code>YamlSerializer.Builder</code></a>.</div>
+</div>
+<div class="col-first odd-row-color class-summary class-summary-tab1"><a href="YamlMetaProvider.html" title="interface in org.apache.juneau.marshall.yaml">YamlMetaProvider</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab1">
+<div class="block">Interface for providing access to <a href="YamlClassMeta.html" title="class in org.apache.juneau.marshall.yaml"><code>YamlClassMeta</code></a> and <a href="YamlBeanPropertyMeta.html" title="class in org.apache.juneau.marshall.yaml"><code>YamlBeanPropertyMeta</code></a> objects.</div>
 </div>
 <div class="col-first even-row-color class-summary class-summary-tab2"><a href="YamlParser.html" title="class in org.apache.juneau.marshall.yaml">YamlParser</a></div>
 <div class="col-last even-row-color class-summary class-summary-tab2">

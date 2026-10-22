@@ -126,7 +126,7 @@
 <span class="source-line-no">113</span><span id="line-113">         .timeZone(req.getTimeZone().orElse(null))</span>
 <span class="source-line-no">114</span><span id="line-114">         .mediaType(match.get().getMediaType())</span>
 <span class="source-line-no">115</span><span id="line-115">         .apply(ReaderParser.Builder.class, x -&gt; x.streamCharset(req.getCharset()))</span>
-<span class="source-line-no">116</span><span id="line-116">         .debug(req.isDebug() ? true : null)</span>
+<span class="source-line-no">116</span><span id="line-116">         .debug(req.isDebugMarshalling() ? true : null)</span>
 <span class="source-line-no">117</span><span id="line-117">         .build();</span>
 <span class="source-line-no">118</span><span id="line-118">      var input = session.isReaderParser() ? content.getReader() : content.getInputStream();</span>
 <span class="source-line-no">119</span><span id="line-119">      var cursor = ((RecordReadable) session).readRecords(input);</span>

@@ -36,7 +36,7 @@
 <a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.marshall.collections.*;
 <a class="jxr_linenumber" name="L29" href="#L29">29</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.marshall.parser.*;
 <a class="jxr_linenumber" name="L30" href="#L30">30</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.marshall.stream.*;
-<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.marshall.swap.*;
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.marshall.swap.spi.*;
 <a class="jxr_linenumber" name="L32" href="#L32">32</a>  
 <a class="jxr_linenumber" name="L33" href="#L33">33</a>  <em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L34" href="#L34">34</a>  <em class="jxr_javadoccomment"> * Session object that lives for the duration of a single use of {@link CsvParser}.</em>
@@ -61,11 +61,11 @@
 <a class="jxr_linenumber" name="L53" href="#L53">53</a>  <em class="jxr_javadoccomment"> * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L54" href="#L54">54</a>  <em class="jxr_javadoccomment"> */</em>
 <a class="jxr_linenumber" name="L55" href="#L55">55</a>  @SuppressWarnings({
-<a class="jxr_linenumber" name="L56" href="#L56">56</a>  	<span class="jxr_string">"unchecked"</span>, <em class="jxr_comment">// Type erasure requires unchecked casts in parse logic</em>
-<a class="jxr_linenumber" name="L57" href="#L57">57</a>  	<span class="jxr_string">"rawtypes"</span>,  <em class="jxr_comment">// Raw types necessary for generic Map/List handling</em>
-<a class="jxr_linenumber" name="L58" href="#L58">58</a>  	<span class="jxr_string">"java:S3776"</span>, <em class="jxr_comment">// Cognitive complexity acceptable for CSV parse logic; branching is inherent to format</em>
-<a class="jxr_linenumber" name="L59" href="#L59">59</a>  	<span class="jxr_string">"java:S6541"</span>, <em class="jxr_comment">// Brain method acceptable for doRead; CSV parse flow is inherently sequential</em>
-<a class="jxr_linenumber" name="L60" href="#L60">60</a>  	<span class="jxr_string">"resource"</span>    <em class="jxr_comment">// Closeable resources are owned by the caller's parser session; Eclipse JDT @Owning warning is by design.</em>
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>  	<span class="jxr_string">"java:S3776"</span>, <em class="jxr_comment">// Cognitive complexity acceptable for CSV parse logic; branching is inherent to format</em>
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>  	<span class="jxr_string">"java:S6541"</span>, <em class="jxr_comment">// Brain method acceptable for doRead; CSV parse flow is inherently sequential</em>
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>  	<span class="jxr_string">"rawtypes"</span>, <em class="jxr_comment">// Raw types necessary for generic Map/List handling</em>
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>  	<span class="jxr_string">"resource"</span>, <em class="jxr_comment">// Closeable resources are owned by the caller's parser session; Eclipse JDT @Owning warning is by design.</em>
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>  	<span class="jxr_string">"unchecked"</span> <em class="jxr_comment">// Type erasure requires unchecked casts in parse logic</em>
 <a class="jxr_linenumber" name="L61" href="#L61">61</a>  })
 <a class="jxr_linenumber" name="L62" href="#L62">62</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> CsvParserSession <strong class="jxr_keyword">extends</strong> ReaderParserSession <strong class="jxr_keyword">implements</strong> <a name="RecordReadable" href="../../../../../org/apache/juneau/marshall/stream/RecordReadable.html#RecordReadable">RecordReadable</a> {
 <a class="jxr_linenumber" name="L63" href="#L63">63</a>  
@@ -76,7 +76,7 @@
 <a class="jxr_linenumber" name="L68" href="#L68">68</a>  	<em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L69" href="#L69">69</a>  <em class="jxr_javadoccomment">	 * Builder class.</em>
 <a class="jxr_linenumber" name="L70" href="#L70">70</a>  <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L71" href="#L71">71</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> <a name="Builder" href="../../../../../org/apache/juneau/marshall/swap/Builder.html#Builder">Builder</a> <strong class="jxr_keyword">extends</strong> ReaderParserSession.Builder&lt;Builder&gt; {
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> Builder <strong class="jxr_keyword">extends</strong> ReaderParserSession.Builder&lt;Builder&gt; {
 <a class="jxr_linenumber" name="L72" href="#L72">72</a>  
 <a class="jxr_linenumber" name="L73" href="#L73">73</a>  		<strong class="jxr_keyword">private</strong> <a name="CsvByteArrayCellFormat" href="../../../../../org/apache/juneau/marshall/csv/CsvByteArrayCellFormat.html#CsvByteArrayCellFormat">CsvByteArrayCellFormat</a> byteArrayFormat;
 <a class="jxr_linenumber" name="L74" href="#L74">74</a>  		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">boolean</strong> allowNestedStructures;
@@ -87,7 +87,7 @@
 <a class="jxr_linenumber" name="L79" href="#L79">79</a>  <em class="jxr_javadoccomment">		 *</em>
 <a class="jxr_linenumber" name="L80" href="#L80">80</a>  <em class="jxr_javadoccomment">		 * @param ctx The context creating this session.</em>
 <a class="jxr_linenumber" name="L81" href="#L81">81</a>  <em class="jxr_javadoccomment">		 */</em>
-<a class="jxr_linenumber" name="L82" href="#L82">82</a>  		<strong class="jxr_keyword">protected</strong> <a name="Builder" href="../../../../../org/apache/juneau/marshall/swap/Builder.html#Builder">Builder</a>(CsvParser ctx) {
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>  		<strong class="jxr_keyword">protected</strong> Builder(CsvParser ctx) {
 <a class="jxr_linenumber" name="L83" href="#L83">83</a>  			<strong class="jxr_keyword">super</strong>(ctx);
 <a class="jxr_linenumber" name="L84" href="#L84">84</a>  			byteArrayFormat = ctx.getByteArrayFormat();
 <a class="jxr_linenumber" name="L85" href="#L85">85</a>  			allowNestedStructures = ctx.isAllowNestedStructures();
@@ -107,8 +107,8 @@
 <a class="jxr_linenumber" name="L99" href="#L99">99</a>  <em class="jxr_javadoccomment">	 * @param ctx The context creating this session.</em>
 <a class="jxr_linenumber" name="L100" href="#L100">100</a> <em class="jxr_javadoccomment">	 * @return A new builder.</em>
 <a class="jxr_linenumber" name="L101" href="#L101">101</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L102" href="#L102">102</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <a name="Builder" href="../../../../../org/apache/juneau/marshall/swap/Builder.html#Builder">Builder</a> create(CsvParser ctx) {
-<a class="jxr_linenumber" name="L103" href="#L103">103</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="Builder" href="../../../../../org/apache/juneau/marshall/swap/Builder.html#Builder">Builder</a>(ctx);
+<a class="jxr_linenumber" name="L102" href="#L102">102</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> Builder create(CsvParser ctx) {
+<a class="jxr_linenumber" name="L103" href="#L103">103</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> Builder(ctx);
 <a class="jxr_linenumber" name="L104" href="#L104">104</a> 	}
 <a class="jxr_linenumber" name="L105" href="#L105">105</a> 
 <a class="jxr_linenumber" name="L106" href="#L106">106</a> 	<em class="jxr_javadoccomment">/**</em>
@@ -116,7 +116,7 @@
 <a class="jxr_linenumber" name="L108" href="#L108">108</a> <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L109" href="#L109">109</a> <em class="jxr_javadoccomment">	 * @param builder The builder for this object.</em>
 <a class="jxr_linenumber" name="L110" href="#L110">110</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L111" href="#L111">111</a> 	<strong class="jxr_keyword">protected</strong> CsvParserSession(<a name="Builder" href="../../../../../org/apache/juneau/marshall/swap/Builder.html#Builder">Builder</a> builder) {
+<a class="jxr_linenumber" name="L111" href="#L111">111</a> 	<strong class="jxr_keyword">protected</strong> CsvParserSession(Builder builder) {
 <a class="jxr_linenumber" name="L112" href="#L112">112</a> 		<strong class="jxr_keyword">super</strong>(builder);
 <a class="jxr_linenumber" name="L113" href="#L113">113</a> 		byteArrayFormat = builder.byteArrayFormat;
 <a class="jxr_linenumber" name="L114" href="#L114">114</a> 		allowNestedStructures = builder.allowNestedStructures;
@@ -139,7 +139,7 @@
 <a class="jxr_linenumber" name="L131" href="#L131">131</a> 			<strong class="jxr_keyword">if</strong> (r == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L132" href="#L132">132</a> 				<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L133" href="#L133">133</a> 			<strong class="jxr_keyword">return</strong> readAnything(type, r, getOuter(), <strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L134" href="#L134">134</a> 		} <em class="jxr_comment">// HTT: the compiler-generated "close() also throws while the try body is already propagating an exception" branch of this try-with-resources is unreachable in practice - it requires CsvReader.close() to itself throw while readAnything() is simultaneously throwing, which would need a custom failing Reader/InputStream; both the normal-return and body-exception close paths are already exercised by other tests in this class.</em>
+<a class="jxr_linenumber" name="L134" href="#L134">134</a> 		}
 <a class="jxr_linenumber" name="L135" href="#L135">135</a> 	}
 <a class="jxr_linenumber" name="L136" href="#L136">136</a> 
 <a class="jxr_linenumber" name="L137" href="#L137">137</a> 	<em class="jxr_javadoccomment">/**</em>
@@ -150,8 +150,8 @@
 <a class="jxr_linenumber" name="L142" href="#L142">142</a> <em class="jxr_javadoccomment">	 * target type.</em>
 <a class="jxr_linenumber" name="L143" href="#L143">143</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L144" href="#L144">144</a> 	<strong class="jxr_keyword">private</strong> &lt;T&gt; T readAnything(ClassMeta&lt;T&gt; eType, CsvReader r, Object <strong class="jxr_keyword">outer</strong>, BeanPropertyMeta pMeta) <strong class="jxr_keyword">throws</strong> IOException, ParseException {
-<a class="jxr_linenumber" name="L145" href="#L145">145</a> 		<strong class="jxr_keyword">if</strong> (eType == <strong class="jxr_keyword">null</strong>) <em class="jxr_comment">// HTT: unreachable - the top-level call from doRead() passes the "type" parameter it received from ParserSession.readInner(), which always resolves a non-null ClassMeta before invoking doRead(); recursive calls below pass eType.getElementType()/getKeyType()/getValueType(), which likewise never return null (see the readRow() HTT note for the same reasoning).</em>
-<a class="jxr_linenumber" name="L146" href="#L146">146</a> 			eType = (ClassMeta&lt;T&gt;) object(); <em class="jxr_comment">// HTT: unreachable - see the HTT note on the guard immediately above.</em>
+<a class="jxr_linenumber" name="L145" href="#L145">145</a> 		<strong class="jxr_keyword">if</strong> (eType == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L146" href="#L146">146</a> 			eType = (ClassMeta&lt;T&gt;) object();
 <a class="jxr_linenumber" name="L147" href="#L147">147</a> 
 <a class="jxr_linenumber" name="L148" href="#L148">148</a> 		<strong class="jxr_keyword">var</strong> swap = (ObjectSwap&lt;T,Object&gt;) eType.getSwap(<strong class="jxr_keyword">this</strong>);
 <a class="jxr_linenumber" name="L149" href="#L149">149</a> 		<strong class="jxr_keyword">var</strong> builder = (BuilderSwap&lt;T,Object&gt;) eType.getBuilderSwap(<strong class="jxr_keyword">this</strong>);
@@ -241,7 +241,7 @@
 <a class="jxr_linenumber" name="L233" href="#L233">233</a> <em class="jxr_javadoccomment">	 * first then use {@link #cast(JsonMap, BeanPropertyMeta, ClassMeta)} when &lt;code&gt;_type&lt;/code&gt; is present.</em>
 <a class="jxr_linenumber" name="L234" href="#L234">234</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L235" href="#L235">235</a> 	<strong class="jxr_keyword">private</strong> Object readRow(List&lt;String&gt; headers, List&lt;String&gt; row, ClassMeta&lt;?&gt; eType, Object <strong class="jxr_keyword">outer</strong>) <strong class="jxr_keyword">throws</strong> ParseException {
-<a class="jxr_linenumber" name="L236" href="#L236">236</a> 		<strong class="jxr_keyword">if</strong> (eType == <strong class="jxr_keyword">null</strong> || eType.isObject()) { <em class="jxr_comment">// HTT: "eType == null" is unreachable - eType is always sType.getElementType() from readAnything's array/collection branches, and ClassMeta.findElementType() always resolves a concrete (never-null) element ClassMeta (defaulting to Object) whenever a marshallingContext is attached, which is always true for a live parser session.</em>
+<a class="jxr_linenumber" name="L236" href="#L236">236</a> 		<strong class="jxr_keyword">if</strong> (eType == <strong class="jxr_keyword">null</strong> || eType.isObject()) {
 <a class="jxr_linenumber" name="L237" href="#L237">237</a> 			<strong class="jxr_keyword">var</strong> m = newGenericMap();
 <a class="jxr_linenumber" name="L238" href="#L238">238</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt; headers.size(); i++) {
 <a class="jxr_linenumber" name="L239" href="#L239">239</a> 				<strong class="jxr_keyword">var</strong> val = i &lt; row.size() ? row.get(i) : <strong class="jxr_keyword">null</strong>;
@@ -257,9 +257,9 @@
 <a class="jxr_linenumber" name="L249" href="#L249">249</a> 				<strong class="jxr_keyword">var</strong> val = i &lt; row.size() ? row.get(i) : <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L250" href="#L250">250</a> 				m.put(headers.get(i), readCellValue(val, object()));
 <a class="jxr_linenumber" name="L251" href="#L251">251</a> 			}
-<a class="jxr_linenumber" name="L252" href="#L252">252</a> 			<strong class="jxr_keyword">if</strong> (m.containsKey(typeColName)) <em class="jxr_comment">// HTT: the "else" (throw) below is unreachable - the loop above unconditionally puts every header (including typeColName, since headers.contains(typeColName) was just verified by the enclosing "if") into "m", so this always evaluates true.</em>
+<a class="jxr_linenumber" name="L252" href="#L252">252</a> 			<strong class="jxr_keyword">if</strong> (m.containsKey(typeColName))
 <a class="jxr_linenumber" name="L253" href="#L253">253</a> 				<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">cast</strong>(m, <strong class="jxr_keyword">null</strong>, eType);
-<a class="jxr_linenumber" name="L254" href="#L254">254</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> ParseException(<strong class="jxr_keyword">this</strong>, <span class="jxr_string">"Polymorphic type '%s' requires _type column for resolution"</span>, eType); <em class="jxr_comment">// HTT: unreachable - see the HTT note on the "if" immediately above.</em>
+<a class="jxr_linenumber" name="L254" href="#L254">254</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> ParseException(<strong class="jxr_keyword">this</strong>, <span class="jxr_string">"Polymorphic type '%s' requires _type column for resolution"</span>, eType);
 <a class="jxr_linenumber" name="L255" href="#L255">255</a> 		}
 <a class="jxr_linenumber" name="L256" href="#L256">256</a> 		<strong class="jxr_keyword">if</strong> (eType.isBean()) {
 <a class="jxr_linenumber" name="L257" href="#L257">257</a> 			<strong class="jxr_keyword">return</strong> readRowIntoBean(headers, row, eType, <strong class="jxr_keyword">outer</strong>);
@@ -268,7 +268,7 @@
 <a class="jxr_linenumber" name="L260" href="#L260">260</a> 			<strong class="jxr_keyword">return</strong> readRowIntoMap(headers, row, eType, <strong class="jxr_keyword">outer</strong>);
 <a class="jxr_linenumber" name="L261" href="#L261">261</a> 		}
 <a class="jxr_linenumber" name="L262" href="#L262">262</a> 		<em class="jxr_comment">// Simple type: use the "value" column (first column) or the only column present</em>
-<a class="jxr_linenumber" name="L263" href="#L263">263</a> 		<strong class="jxr_keyword">var</strong> val = row.isEmpty() ? <strong class="jxr_keyword">null</strong> : row.get(0); <em class="jxr_comment">// HTT: "row.isEmpty()" true-arm is unreachable - "row" always comes from CsvReader.readRow(), which never returns an empty list: readRow() always appends at least one (possibly empty-string) field via finishField() before returning, even for a blank line.</em>
+<a class="jxr_linenumber" name="L263" href="#L263">263</a> 		<strong class="jxr_keyword">var</strong> val = row.isEmpty() ? <strong class="jxr_keyword">null</strong> : row.get(0);
 <a class="jxr_linenumber" name="L264" href="#L264">264</a> 		<strong class="jxr_keyword">return</strong> readCellValue(val, eType);
 <a class="jxr_linenumber" name="L265" href="#L265">265</a> 	}
 <a class="jxr_linenumber" name="L266" href="#L266">266</a> 
@@ -285,7 +285,7 @@
 <a class="jxr_linenumber" name="L277" href="#L277">277</a> 		ClassMeta&lt;?&gt; beanType = eType;
 <a class="jxr_linenumber" name="L278" href="#L278">278</a> 		<strong class="jxr_keyword">if</strong> (typeColIdx &gt;= 0 &amp;&amp; typeColIdx &lt; row.size()) {
 <a class="jxr_linenumber" name="L279" href="#L279">279</a> 			<strong class="jxr_keyword">var</strong> typeVal = row.get(typeColIdx);
-<a class="jxr_linenumber" name="L280" href="#L280">280</a> 			<strong class="jxr_keyword">if</strong> (nn(typeVal) &amp;&amp; ! typeVal.trim().isEmpty()) { <em class="jxr_comment">// HTT: "nn(typeVal)" is always true - "typeVal" comes from CsvReader's row list, whose elements are always non-null Strings (finishField() never returns null), even for empty cells.</em>
+<a class="jxr_linenumber" name="L280" href="#L280">280</a> 			<strong class="jxr_keyword">if</strong> (nn(typeVal) &amp;&amp; ! typeVal.trim().isEmpty()) {
 <a class="jxr_linenumber" name="L281" href="#L281">281</a> 				<strong class="jxr_keyword">var</strong> resolved = getClassMeta(typeVal.trim(), <strong class="jxr_keyword">null</strong>, eType);
 <a class="jxr_linenumber" name="L282" href="#L282">282</a> 				<strong class="jxr_keyword">if</strong> (resolved != <strong class="jxr_keyword">null</strong> &amp;&amp; resolved.isBean())
 <a class="jxr_linenumber" name="L283" href="#L283">283</a> 					beanType = resolved;
@@ -307,7 +307,7 @@
 <a class="jxr_linenumber" name="L299" href="#L299">299</a> 				onUnknownProperty(header, m, val);
 <a class="jxr_linenumber" name="L300" href="#L300">300</a> 			}
 <a class="jxr_linenumber" name="L301" href="#L301">301</a> 		}
-<a class="jxr_linenumber" name="L302" href="#L302">302</a> 		<strong class="jxr_keyword">return</strong> (T) m.getBean();
+<a class="jxr_linenumber" name="L302" href="#L302">302</a> 		<strong class="jxr_keyword">return</strong> (T) checkRequired(m).getBean();
 <a class="jxr_linenumber" name="L303" href="#L303">303</a> 	}
 <a class="jxr_linenumber" name="L304" href="#L304">304</a> 
 <a class="jxr_linenumber" name="L305" href="#L305">305</a> 	<em class="jxr_javadoccomment">/**</em>
@@ -322,8 +322,8 @@
 <a class="jxr_linenumber" name="L314" href="#L314">314</a> 			m = (Map) eType.newInstance(<strong class="jxr_keyword">outer</strong>);
 <a class="jxr_linenumber" name="L315" href="#L315">315</a> 		<strong class="jxr_keyword">else</strong>
 <a class="jxr_linenumber" name="L316" href="#L316">316</a> 			m = newGenericMap();
-<a class="jxr_linenumber" name="L317" href="#L317">317</a> 		<strong class="jxr_keyword">var</strong> keyType = eType.getKeyType() != <strong class="jxr_keyword">null</strong> ? eType.getKeyType() : string(); <em class="jxr_comment">// HTT: false-arm unreachable - for any eType with isMap()==true, ClassMeta.findKeyValueTypes() always returns a non-null key/value pair (either the parameterized types or an Object/Object default), never a null pair - the null-pair case is reserved for non-Map categories, which readRowIntoMap's callers never pass in.</em>
-<a class="jxr_linenumber" name="L318" href="#L318">318</a> 		<strong class="jxr_keyword">var</strong> valueType = eType.getValueType() != <strong class="jxr_keyword">null</strong> ? eType.getValueType() : object(); <em class="jxr_comment">// HTT: false-arm unreachable - see the HTT note on the "keyType" line immediately above; the same non-null guarantee applies to getValueType().</em>
+<a class="jxr_linenumber" name="L317" href="#L317">317</a> 		<strong class="jxr_keyword">var</strong> keyType = eType.getKeyType() != <strong class="jxr_keyword">null</strong> ? eType.getKeyType() : string();
+<a class="jxr_linenumber" name="L318" href="#L318">318</a> 		<strong class="jxr_keyword">var</strong> valueType = eType.getValueType() != <strong class="jxr_keyword">null</strong> ? eType.getValueType() : object();
 <a class="jxr_linenumber" name="L319" href="#L319">319</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt; headers.size(); i++) {
 <a class="jxr_linenumber" name="L320" href="#L320">320</a> 			<strong class="jxr_keyword">var</strong> header = headers.get(i);
 <a class="jxr_linenumber" name="L321" href="#L321">321</a> 			<strong class="jxr_keyword">var</strong> val = i &lt; row.size() ? row.get(i) : <strong class="jxr_keyword">null</strong>;
@@ -348,7 +348,7 @@
 <a class="jxr_linenumber" name="L340" href="#L340">340</a> 		<em class="jxr_comment">// Apply trimStrings at the cell level (before type conversion)</em>
 <a class="jxr_linenumber" name="L341" href="#L341">341</a> 		<strong class="jxr_keyword">if</strong> (isTrimStrings())
 <a class="jxr_linenumber" name="L342" href="#L342">342</a> 			val = val.trim();
-<a class="jxr_linenumber" name="L343" href="#L343">343</a> 		<strong class="jxr_keyword">if</strong> (nullValue != <strong class="jxr_keyword">null</strong> &amp;&amp; val.equals(nullValue)) <em class="jxr_comment">// HTT: "nullValue != null" is always true - the constructor defaults it to "&lt;NULL&gt;" via or(builder.nullValue, "&lt;NULL&gt;") when the builder value is null, so the field itself is never null.</em>
+<a class="jxr_linenumber" name="L343" href="#L343">343</a> 		<strong class="jxr_keyword">if</strong> (nullValue != <strong class="jxr_keyword">null</strong> &amp;&amp; val.equals(nullValue))
 <a class="jxr_linenumber" name="L344" href="#L344">344</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L345" href="#L345">345</a> 		<strong class="jxr_keyword">if</strong> (val.isEmpty() &amp;&amp; eType.isCharSequence())
 <a class="jxr_linenumber" name="L346" href="#L346">346</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
@@ -357,7 +357,7 @@
 <a class="jxr_linenumber" name="L349" href="#L349">349</a> 				<strong class="jxr_keyword">var</strong> trimmed = isTrimStrings() ? val.trim() : val;
 <a class="jxr_linenumber" name="L350" href="#L350">350</a> 				<strong class="jxr_keyword">if</strong> (trimmed.startsWith(<span class="jxr_string">"{"</span>) || trimmed.startsWith(<span class="jxr_string">"["</span>)) {
 <a class="jxr_linenumber" name="L351" href="#L351">351</a> 					<strong class="jxr_keyword">var</strong> parsed = CsvCellParser.read(trimmed, nullValue);
-<a class="jxr_linenumber" name="L352" href="#L352">352</a> 					<strong class="jxr_keyword">if</strong> (parsed != <strong class="jxr_keyword">null</strong>) <em class="jxr_comment">// HTT: unreachable false-arm - CsvCellParser.read() only returns null for a null/empty input string, but "trimmed" is guaranteed non-empty here (it starts with '{' or '['); its readObject()/readArray() always return a (possibly empty) Map/List, never null.</em>
+<a class="jxr_linenumber" name="L352" href="#L352">352</a> 					<strong class="jxr_keyword">if</strong> (parsed != <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L353" href="#L353">353</a> 						<strong class="jxr_keyword">return</strong> convertToType(parsed, eType);
 <a class="jxr_linenumber" name="L354" href="#L354">354</a> 				}
 <a class="jxr_linenumber" name="L355" href="#L355">355</a> 			}
@@ -432,7 +432,7 @@
 <a class="jxr_linenumber" name="L424" href="#L424">424</a> 					a[i] = Boolean.parseBoolean(parts[i].trim());
 <a class="jxr_linenumber" name="L425" href="#L425">425</a> 				<strong class="jxr_keyword">return</strong> a;
 <a class="jxr_linenumber" name="L426" href="#L426">426</a> 			}
-<a class="jxr_linenumber" name="L427" href="#L427">427</a> 			<strong class="jxr_keyword">if</strong> (et.is(<strong class="jxr_keyword">char</strong>.<strong class="jxr_keyword">class</strong>)) { <em class="jxr_comment">// HTT: false-arm unreachable - byte[] is already handled by the isByteArray() check at the top of readCsvCellValue, so the only primitive element types that can reach this section are exactly {int,long,double,float,short,boolean,char}; the 6 checks above have all failed, so et must be char.</em>
+<a class="jxr_linenumber" name="L427" href="#L427">427</a> 			<strong class="jxr_keyword">if</strong> (et.is(<strong class="jxr_keyword">char</strong>.<strong class="jxr_keyword">class</strong>)) {
 <a class="jxr_linenumber" name="L428" href="#L428">428</a> 				<strong class="jxr_keyword">var</strong> a = <strong class="jxr_keyword">new</strong> <strong class="jxr_keyword">char</strong>[parts.length];
 <a class="jxr_linenumber" name="L429" href="#L429">429</a> 				<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt; parts.length; i++)
 <a class="jxr_linenumber" name="L430" href="#L430">430</a> 					a[i] = (<strong class="jxr_keyword">char</strong>) Integer.parseInt(parts[i].trim());
@@ -450,9 +450,9 @@
 <a class="jxr_linenumber" name="L442" href="#L442">442</a> 		<strong class="jxr_keyword">if</strong> (et.is(<strong class="jxr_keyword">float</strong>.<strong class="jxr_keyword">class</strong>)) <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <strong class="jxr_keyword">float</strong>[0];
 <a class="jxr_linenumber" name="L443" href="#L443">443</a> 		<strong class="jxr_keyword">if</strong> (et.is(<strong class="jxr_keyword">short</strong>.<strong class="jxr_keyword">class</strong>)) <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <strong class="jxr_keyword">short</strong>[0];
 <a class="jxr_linenumber" name="L444" href="#L444">444</a> 		<strong class="jxr_keyword">if</strong> (et.is(<strong class="jxr_keyword">boolean</strong>.<strong class="jxr_keyword">class</strong>)) <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <strong class="jxr_keyword">boolean</strong>[0];
-<a class="jxr_linenumber" name="L445" href="#L445">445</a> 		<strong class="jxr_keyword">if</strong> (et.is(<strong class="jxr_keyword">char</strong>.<strong class="jxr_keyword">class</strong>)) <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <strong class="jxr_keyword">char</strong>[0]; <em class="jxr_comment">// HTT: false-arm unreachable - same reasoning as readCsvCellValue's char check; this method is only ever invoked for the same non-byte-primitive-array types.</em>
-<a class="jxr_linenumber" name="L446" href="#L446">446</a> 		<strong class="jxr_keyword">if</strong> (et.is(byte.<strong class="jxr_keyword">class</strong>)) <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> byte[0]; <em class="jxr_comment">// HTT: unreachable - byte[] arrays are handled earlier by isByteArray() and never flow into this method.</em>
-<a class="jxr_linenumber" name="L447" href="#L447">447</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>; <em class="jxr_comment">// HTT: unreachable - one of the 7 checks above always matches given the caller's guarantees.</em>
+<a class="jxr_linenumber" name="L445" href="#L445">445</a> 		<strong class="jxr_keyword">if</strong> (et.is(<strong class="jxr_keyword">char</strong>.<strong class="jxr_keyword">class</strong>)) <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <strong class="jxr_keyword">char</strong>[0];
+<a class="jxr_linenumber" name="L446" href="#L446">446</a> 		<strong class="jxr_keyword">if</strong> (et.is(byte.<strong class="jxr_keyword">class</strong>)) <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> byte[0];
+<a class="jxr_linenumber" name="L447" href="#L447">447</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L448" href="#L448">448</a> 	}
 <a class="jxr_linenumber" name="L449" href="#L449">449</a> }
 </pre>

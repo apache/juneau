@@ -96,7 +96,7 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color"><code><a href="../McpResourceServerConfig.html" title="class in org.apache.juneau.rest.server.mcp.v20260728">McpResourceServerConfig</a></code></div>
 <div class="col-second even-row-color"><span class="type-name-label">McpOptions.</span><code><a href="../McpOptions.html#getResourceServer()" class="member-name-link">getResourceServer</a>()</code></div>
 <div class="col-last even-row-color">
-<div class="block">This binding's OAuth 2.1 resource-server (RS) configuration (READY-312f F2).</div>
+<div class="block">This binding's OAuth 2.1 resource-server (RS) configuration.</div>
 </div>
 <div class="col-first odd-row-color"><code><a href="../McpResourceServerConfig.html" title="class in org.apache.juneau.rest.server.mcp.v20260728">McpResourceServerConfig</a></code></div>
 <div class="col-second odd-row-color"><span class="type-name-label">McpResourceServerConfig.</span><code><a href="../McpResourceServerConfig.html#setAudience(java.lang.String)" class="member-name-link">setAudience</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</code></div>
@@ -121,7 +121,7 @@ loadScripts(document, 'script');</script>
 <div class="col-first odd-row-color"><code><a href="../McpResourceServerConfig.html" title="class in org.apache.juneau.rest.server.mcp.v20260728">McpResourceServerConfig</a></code></div>
 <div class="col-second odd-row-color"><span class="type-name-label">McpResourceServerConfig.</span><code><a href="../McpResourceServerConfig.html#setRequireAudienceClaim(boolean)" class="member-name-link">setRequireAudienceClaim</a><wbr>(boolean&nbsp;value)</code></div>
 <div class="col-last odd-row-color">
-<div class="block">Sets whether a validated token must expose audience claims for audience enforcement to apply (H2).</div>
+<div class="block">Sets whether a validated token must expose audience claims for audience enforcement to apply.</div>
 </div>
 <div class="col-first even-row-color"><code><a href="../McpResourceServerConfig.html" title="class in org.apache.juneau.rest.server.mcp.v20260728">McpResourceServerConfig</a></code></div>
 <div class="col-second even-row-color"><span class="type-name-label">McpResourceServerConfig.</span><code><a href="../McpResourceServerConfig.html#setResource(java.net.URI)" class="member-name-link">setResource</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a>&nbsp;value)</code></div>
@@ -164,14 +164,14 @@ loadScripts(document, 'script');</script>
  jakarta.servlet.http.HttpServletRequest&nbsp;req,
  jakarta.servlet.http.HttpServletResponse&nbsp;res)</code></div>
 <div class="col-last odd-row-color">
-<div class="block">Router-identity bearer gate for the <a href="../McpEndpoint.html" title="interface in org.apache.juneau.rest.server.mcp.v20260728"><code>McpEndpoint</code></a> mixin's MCP JSON-RPC endpoint (READY-312f F2, B1/H3).</div>
+<div class="block">Router-identity bearer gate for the <a href="../McpEndpoint.html" title="interface in org.apache.juneau.rest.server.mcp.v20260728"><code>McpEndpoint</code></a> mixin's MCP JSON-RPC endpoint.</div>
 </div>
 <div class="col-first even-row-color"><code>static void</code></div>
 <div class="col-second even-row-color"><span class="type-name-label">McpResourceServerSupport.</span><code><a href="../McpResourceServerSupport.html#gateMcpServlet(org.apache.juneau.rest.server.mcp.v20260728.McpResourceServerConfig,jakarta.servlet.http.HttpServletRequest,jakarta.servlet.http.HttpServletResponse)" class="member-name-link">gateMcpServlet</a><wbr>(<a href="../McpResourceServerConfig.html" title="class in org.apache.juneau.rest.server.mcp.v20260728">McpResourceServerConfig</a>&nbsp;cfg,
  jakarta.servlet.http.HttpServletRequest&nbsp;req,
  jakarta.servlet.http.HttpServletResponse&nbsp;res)</code></div>
 <div class="col-last even-row-color">
-<div class="block">Router-aligned bearer gate for the <a href="../McpRestServlet.html" title="class in org.apache.juneau.rest.server.mcp.v20260728"><code>McpRestServlet</code></a>'s <code>POST /</code> endpoint (READY-312f F2, H3).</div>
+<div class="block">Router-aligned bearer gate for the <a href="../McpRestServlet.html" title="class in org.apache.juneau.rest.server.mcp.v20260728"><code>McpRestServlet</code></a>'s <code>POST /</code> endpoint.</div>
 </div>
 <div class="col-first odd-row-color"><code>static <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
 <div class="col-second odd-row-color"><span class="type-name-label">McpResourceServerSupport.</span><code><a href="../McpResourceServerSupport.html#insufficientScopeChallenge(org.apache.juneau.rest.server.mcp.v20260728.McpResourceServerConfig)" class="member-name-link">insufficientScopeChallenge</a><wbr>(<a href="../McpResourceServerConfig.html" title="class in org.apache.juneau.rest.server.mcp.v20260728">McpResourceServerConfig</a>&nbsp;cfg)</code></div>
@@ -190,14 +190,14 @@ loadScripts(document, 'script');</script>
  <a href="../../../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req)</code></div>
 <div class="col-last odd-row-color">
 <div class="block">Serves this endpoint's PRM from the RFC 9728 path-inserted well-known location, but only when the requested suffix
- matches this resource's expected well-known path (M5); otherwise <code>404</code>.</div>
+ matches this resource's expected well-known path; otherwise <code>404</code>.</div>
 </div>
 <div class="col-first even-row-color"><code>static <a href="../McpProtectedResourceMetadata.html" title="class in org.apache.juneau.rest.server.mcp.v20260728">McpProtectedResourceMetadata</a></code></div>
 <div class="col-second even-row-color"><span class="type-name-label">McpResourceServerSupport.</span><code><a href="../McpResourceServerSupport.html#metadataForWellKnownRoot(org.apache.juneau.rest.server.mcp.v20260728.McpResourceServerConfig,org.apache.juneau.rest.server.RestRequest)" class="member-name-link">metadataForWellKnownRoot</a><wbr>(<a href="../McpResourceServerConfig.html" title="class in org.apache.juneau.rest.server.mcp.v20260728">McpResourceServerConfig</a>&nbsp;cfg,
  <a href="../../../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req)</code></div>
 <div class="col-last even-row-color">
 <div class="block">Serves this endpoint's PRM from the SEP-2351 root well-known location (fallback), failing fast on a non-root or
- re-mounted mount (H1); a no-op-throwing <code>404</code> when RS auth is disabled.</div>
+ re-mounted mount; a no-op-throwing <code>404</code> when RS auth is disabled.</div>
 </div>
 <div class="col-first odd-row-color"><code>static <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a></code></div>
 <div class="col-second odd-row-color"><span class="type-name-label">McpResourceServerSupport.</span><code><a href="../McpResourceServerSupport.html#metadataUri(org.apache.juneau.rest.server.mcp.v20260728.McpResourceServerConfig)" class="member-name-link">metadataUri</a><wbr>(<a href="../McpResourceServerConfig.html" title="class in org.apache.juneau.rest.server.mcp.v20260728">McpResourceServerConfig</a>&nbsp;cfg)</code></div>

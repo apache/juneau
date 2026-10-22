@@ -73,8 +73,14 @@ loadScripts(document, 'script');</script>
 <div class="col-last odd-row-color">
 <div class="block">REST Interface Helper Classes</div>
 </div>
-<div class="col-first even-row-color"><a href="#org.apache.juneau.rest.server.validation">org.apache.juneau.rest.server.validation</a></div>
+<div class="col-first even-row-color"><a href="#org.apache.juneau.rest.server.console.data">org.apache.juneau.rest.server.console.data</a></div>
 <div class="col-last even-row-color">
+<div class="block">Server helpers for console data sources: <a href="../../../rest/server/console/data/SeriesSource.html" title="class in org.apache.juneau.rest.server.console.data"><code>SeriesSource</code></a> streams
+ rows as CSV or NDJSON, and <a href="../../../rest/server/console/data/SeriesAggregator.html" title="class in org.apache.juneau.rest.server.console.data"><code>SeriesAggregator</code></a> answers the
+ aggregate request a data source sends when its result is too large to load raw.</div>
+</div>
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.rest.server.validation">org.apache.juneau.rest.server.validation</a></div>
+<div class="col-last odd-row-color">
 <div class="block">Optional <a class="doclink" href="https://jakarta.ee/specifications/bean-validation/">Jakarta Bean Validation 3.x</a>
  integration for <code>juneau-rest-server</code> &mdash; declarative validation of request beans via
  <code>jakarta.validation.constraints.*</code> annotations.</div>
@@ -723,6 +729,22 @@ loadScripts(document, 'script');</script>
 <div class="col-second even-row-color"><code><a href="../../../rest/server/beans/SeeOtherRoot.html" class="type-name-link" title="class in org.apache.juneau.rest.server.beans">SeeOtherRoot</a></code></div>
 <div class="col-last even-row-color">
 <div class="block">Convenience subclass of <a href="../SeeOther.html" title="class in org.apache.juneau.http.response"><code>SeeOther</code></a> for redirecting a response to the servlet root.</div>
+</div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="org.apache.juneau.rest.server.console.data">
+<h2>Uses of <a href="../HttpResponseMessage.html" title="interface in org.apache.juneau.http.response">HttpResponseMessage</a> in <a href="../../../rest/server/console/data/package-summary.html">org.apache.juneau.rest.server.console.data</a></h2>
+<div class="caption"><span>Classes in <a href="../../../rest/server/console/data/package-summary.html">org.apache.juneau.rest.server.console.data</a> that implement <a href="../HttpResponseMessage.html" title="interface in org.apache.juneau.http.response">HttpResponseMessage</a></span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier and Type</div>
+<div class="table-header col-second">Class</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code>static final class&nbsp;</code></div>
+<div class="col-second even-row-color"><code><a href="../../../rest/server/console/data/SeriesAggregator.RequestException.html" class="type-name-link" title="class in org.apache.juneau.rest.server.console.data">SeriesAggregator.RequestException</a></code></div>
+<div class="col-last even-row-color">
+<div class="block">A rejected aggregate request: HTTP 400 with an E-75 message.</div>
 </div>
 </div>
 </section>

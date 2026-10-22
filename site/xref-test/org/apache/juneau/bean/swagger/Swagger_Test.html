@@ -339,175 +339,196 @@
 <a class="jxr_linenumber" name="L331" href="#L331">331</a> 			assertDoesNotThrow(() -&gt; x.setResponses((Map&lt;String,ResponseInfo&gt;)<strong class="jxr_keyword">null</strong>));
 <a class="jxr_linenumber" name="L332" href="#L332">332</a> 			assertDoesNotThrow(() -&gt; x.setSecurityDefinitions((Map&lt;String,SecurityScheme&gt;)<strong class="jxr_keyword">null</strong>));
 <a class="jxr_linenumber" name="L333" href="#L333">333</a> 		}
-<a class="jxr_linenumber" name="L334" href="#L334">334</a> 	}
-<a class="jxr_linenumber" name="L335" href="#L335">335</a> 
-<a class="jxr_linenumber" name="L336" href="#L336">336</a> 	@Nested <strong class="jxr_keyword">class</strong> B_emptyTests <strong class="jxr_keyword">extends</strong> TestBase {
-<a class="jxr_linenumber" name="L337" href="#L337">337</a> 
-<a class="jxr_linenumber" name="L338" href="#L338">338</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> BeanTester&lt;Swagger&gt; TESTER =
-<a class="jxr_linenumber" name="L339" href="#L339">339</a> 			testBean(bean())
-<a class="jxr_linenumber" name="L340" href="#L340">340</a> 			.props(<span class="jxr_string">"basePath,host,swagger,info,tags,schemes,consumes,produces,paths,definitions,parameters,responses,securityDefinitions,security,externalDocs"</span>)
-<a class="jxr_linenumber" name="L341" href="#L341">341</a> 			.vals(<span class="jxr_string">"&lt;null&gt;,&lt;null&gt;,2.0,&lt;null&gt;,&lt;null&gt;,&lt;null&gt;,&lt;null&gt;,&lt;null&gt;,&lt;null&gt;,&lt;null&gt;,&lt;null&gt;,&lt;null&gt;,&lt;null&gt;,&lt;null&gt;,&lt;null&gt;"</span>)
-<a class="jxr_linenumber" name="L342" href="#L342">342</a> 			.json(<span class="jxr_string">"{swagger:'2.0'}"</span>)
-<a class="jxr_linenumber" name="L343" href="#L343">343</a> 			.string(<span class="jxr_string">"{\&quot;swagger\&quot;:\&quot;2.0\&quot;}"</span>)
-<a class="jxr_linenumber" name="L344" href="#L344">344</a> 		;
-<a class="jxr_linenumber" name="L345" href="#L345">345</a> 
-<a class="jxr_linenumber" name="L346" href="#L346">346</a> 		@Test <strong class="jxr_keyword">void</strong> b01_gettersAndSetters() {
-<a class="jxr_linenumber" name="L347" href="#L347">347</a> 			TESTER.assertGettersAndSetters();
-<a class="jxr_linenumber" name="L348" href="#L348">348</a> 		}
-<a class="jxr_linenumber" name="L349" href="#L349">349</a> 
-<a class="jxr_linenumber" name="L350" href="#L350">350</a> 		@Test <strong class="jxr_keyword">void</strong> b02_copy() {
-<a class="jxr_linenumber" name="L351" href="#L351">351</a> 			TESTER.assertCopy();
-<a class="jxr_linenumber" name="L352" href="#L352">352</a> 		}
-<a class="jxr_linenumber" name="L353" href="#L353">353</a> 
-<a class="jxr_linenumber" name="L354" href="#L354">354</a> 		@Test <strong class="jxr_keyword">void</strong> b03_toJson() {
-<a class="jxr_linenumber" name="L355" href="#L355">355</a> 			TESTER.assertToJson();
-<a class="jxr_linenumber" name="L356" href="#L356">356</a> 		}
-<a class="jxr_linenumber" name="L357" href="#L357">357</a> 
-<a class="jxr_linenumber" name="L358" href="#L358">358</a> 		@Test <strong class="jxr_keyword">void</strong> b04_fromJson() {
-<a class="jxr_linenumber" name="L359" href="#L359">359</a> 			TESTER.assertFromJson();
-<a class="jxr_linenumber" name="L360" href="#L360">360</a> 		}
-<a class="jxr_linenumber" name="L361" href="#L361">361</a> 
-<a class="jxr_linenumber" name="L362" href="#L362">362</a> 		@Test <strong class="jxr_keyword">void</strong> b05_roundTrip() {
-<a class="jxr_linenumber" name="L363" href="#L363">363</a> 			TESTER.assertRoundTrip();
-<a class="jxr_linenumber" name="L364" href="#L364">364</a> 		}
-<a class="jxr_linenumber" name="L365" href="#L365">365</a> 
-<a class="jxr_linenumber" name="L366" href="#L366">366</a> 		@Test <strong class="jxr_keyword">void</strong> b06_toString() {
-<a class="jxr_linenumber" name="L367" href="#L367">367</a> 			TESTER.assertToString();
-<a class="jxr_linenumber" name="L368" href="#L368">368</a> 		}
-<a class="jxr_linenumber" name="L369" href="#L369">369</a> 
-<a class="jxr_linenumber" name="L370" href="#L370">370</a> 		@Test <strong class="jxr_keyword">void</strong> b07_keySet() {
-<a class="jxr_linenumber" name="L371" href="#L371">371</a> 			assertList(TESTER.bean().keySet(), <span class="jxr_string">"swagger"</span>);
-<a class="jxr_linenumber" name="L372" href="#L372">372</a> 			assertList(TESTER.bean().setSwagger(<strong class="jxr_keyword">null</strong>).keySet());
+<a class="jxr_linenumber" name="L334" href="#L334">334</a> 
+<a class="jxr_linenumber" name="L335" href="#L335">335</a> 		@Test <strong class="jxr_keyword">void</strong> a23_addOperation() {
+<a class="jxr_linenumber" name="L336" href="#L336">336</a> 			<em class="jxr_comment">// addOperation() is a distinctly-named convenience that behaves identically to addPath(path,method,Operation).</em>
+<a class="jxr_linenumber" name="L337" href="#L337">337</a> 			<strong class="jxr_keyword">var</strong> x = bean()
+<a class="jxr_linenumber" name="L338" href="#L338">338</a> 				.addOperation(<span class="jxr_string">"/pets"</span>, <span class="jxr_string">"get"</span>, operation().setSummary(<span class="jxr_string">"list pets"</span>))
+<a class="jxr_linenumber" name="L339" href="#L339">339</a> 				.addOperation(<span class="jxr_string">"/pets"</span>, <span class="jxr_string">"post"</span>, operation().setSummary(<span class="jxr_string">"create pet"</span>));
+<a class="jxr_linenumber" name="L340" href="#L340">340</a> 
+<a class="jxr_linenumber" name="L341" href="#L341">341</a> 			assertBean(x.getOperation(<span class="jxr_string">"/pets"</span>, <span class="jxr_string">"get"</span>), <span class="jxr_string">"summary"</span>, <span class="jxr_string">"list pets"</span>);
+<a class="jxr_linenumber" name="L342" href="#L342">342</a> 			assertBean(x.getOperation(<span class="jxr_string">"/pets"</span>, <span class="jxr_string">"post"</span>), <span class="jxr_string">"summary"</span>, <span class="jxr_string">"create pet"</span>);
+<a class="jxr_linenumber" name="L343" href="#L343">343</a> 
+<a class="jxr_linenumber" name="L344" href="#L344">344</a> 			<strong class="jxr_keyword">var</strong> expected = bean().addPath(<span class="jxr_string">"/pets"</span>, <span class="jxr_string">"get"</span>, operation().setSummary(<span class="jxr_string">"list pets"</span>)).addPath(<span class="jxr_string">"/pets"</span>, <span class="jxr_string">"post"</span>, operation().setSummary(<span class="jxr_string">"create pet"</span>));
+<a class="jxr_linenumber" name="L345" href="#L345">345</a> 			assertEquals(expected.toString(), x.toString());
+<a class="jxr_linenumber" name="L346" href="#L346">346</a> 		}
+<a class="jxr_linenumber" name="L347" href="#L347">347</a> 
+<a class="jxr_linenumber" name="L348" href="#L348">348</a> 		@Test <strong class="jxr_keyword">void</strong> a24_addOperation_nullParameters() {
+<a class="jxr_linenumber" name="L349" href="#L349">349</a> 			<strong class="jxr_keyword">var</strong> x = bean();
+<a class="jxr_linenumber" name="L350" href="#L350">350</a> 			<strong class="jxr_keyword">var</strong> operation = operation();
+<a class="jxr_linenumber" name="L351" href="#L351">351</a> 			assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, ()-&gt;x.addOperation(<strong class="jxr_keyword">null</strong>, <span class="jxr_string">"get"</span>, operation));
+<a class="jxr_linenumber" name="L352" href="#L352">352</a> 			assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, ()-&gt;x.addOperation(<span class="jxr_string">"a"</span>, <strong class="jxr_keyword">null</strong>, operation));
+<a class="jxr_linenumber" name="L353" href="#L353">353</a> 			assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, ()-&gt;x.addOperation(<span class="jxr_string">"a"</span>, <span class="jxr_string">"get"</span>, <strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L354" href="#L354">354</a> 		}
+<a class="jxr_linenumber" name="L355" href="#L355">355</a> 	}
+<a class="jxr_linenumber" name="L356" href="#L356">356</a> 
+<a class="jxr_linenumber" name="L357" href="#L357">357</a> 	@Nested <strong class="jxr_keyword">class</strong> B_emptyTests <strong class="jxr_keyword">extends</strong> TestBase {
+<a class="jxr_linenumber" name="L358" href="#L358">358</a> 
+<a class="jxr_linenumber" name="L359" href="#L359">359</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> BeanTester&lt;Swagger&gt; TESTER =
+<a class="jxr_linenumber" name="L360" href="#L360">360</a> 			testBean(bean())
+<a class="jxr_linenumber" name="L361" href="#L361">361</a> 			.props(<span class="jxr_string">"basePath,host,swagger,info,tags,schemes,consumes,produces,paths,definitions,parameters,responses,securityDefinitions,security,externalDocs"</span>)
+<a class="jxr_linenumber" name="L362" href="#L362">362</a> 			.vals(<span class="jxr_string">"&lt;null&gt;,&lt;null&gt;,2.0,&lt;null&gt;,&lt;null&gt;,&lt;null&gt;,&lt;null&gt;,&lt;null&gt;,&lt;null&gt;,&lt;null&gt;,&lt;null&gt;,&lt;null&gt;,&lt;null&gt;,&lt;null&gt;,&lt;null&gt;"</span>)
+<a class="jxr_linenumber" name="L363" href="#L363">363</a> 			.json(<span class="jxr_string">"{swagger:'2.0'}"</span>)
+<a class="jxr_linenumber" name="L364" href="#L364">364</a> 			.string(<span class="jxr_string">"{\&quot;swagger\&quot;:\&quot;2.0\&quot;}"</span>)
+<a class="jxr_linenumber" name="L365" href="#L365">365</a> 		;
+<a class="jxr_linenumber" name="L366" href="#L366">366</a> 
+<a class="jxr_linenumber" name="L367" href="#L367">367</a> 		@Test <strong class="jxr_keyword">void</strong> b01_gettersAndSetters() {
+<a class="jxr_linenumber" name="L368" href="#L368">368</a> 			TESTER.assertGettersAndSetters();
+<a class="jxr_linenumber" name="L369" href="#L369">369</a> 		}
+<a class="jxr_linenumber" name="L370" href="#L370">370</a> 
+<a class="jxr_linenumber" name="L371" href="#L371">371</a> 		@Test <strong class="jxr_keyword">void</strong> b02_copy() {
+<a class="jxr_linenumber" name="L372" href="#L372">372</a> 			TESTER.assertCopy();
 <a class="jxr_linenumber" name="L373" href="#L373">373</a> 		}
-<a class="jxr_linenumber" name="L374" href="#L374">374</a> 	}
-<a class="jxr_linenumber" name="L375" href="#L375">375</a> 
-<a class="jxr_linenumber" name="L376" href="#L376">376</a> 	@Nested <strong class="jxr_keyword">class</strong> C_extraProperties <strong class="jxr_keyword">extends</strong> TestBase {
-<a class="jxr_linenumber" name="L377" href="#L377">377</a> 
-<a class="jxr_linenumber" name="L378" href="#L378">378</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> BeanTester&lt;Swagger&gt; TESTER =
-<a class="jxr_linenumber" name="L379" href="#L379">379</a> 			testBean(
-<a class="jxr_linenumber" name="L380" href="#L380">380</a> 				bean()
-<a class="jxr_linenumber" name="L381" href="#L381">381</a> 					.set(<span class="jxr_string">"basePath"</span>, <span class="jxr_string">"a"</span>)
-<a class="jxr_linenumber" name="L382" href="#L382">382</a> 					.set(<span class="jxr_string">"consumes"</span>, l(MediaType.of(<span class="jxr_string">"b"</span>)))
-<a class="jxr_linenumber" name="L383" href="#L383">383</a> 					.set(<span class="jxr_string">"definitions"</span>, m(<span class="jxr_string">"c1"</span>, JsonMap.of(<span class="jxr_string">"type"</span>, <span class="jxr_string">"c2"</span>)))
-<a class="jxr_linenumber" name="L384" href="#L384">384</a> 					.set(<span class="jxr_string">"externalDocs"</span>, externalDocumentation(<span class="jxr_string">"d"</span>))
-<a class="jxr_linenumber" name="L385" href="#L385">385</a> 					.set(<span class="jxr_string">"host"</span>, <span class="jxr_string">"e"</span>)
-<a class="jxr_linenumber" name="L386" href="#L386">386</a> 					.set(<span class="jxr_string">"info"</span>, info(<span class="jxr_string">"f1"</span>, <span class="jxr_string">"f2"</span>))
-<a class="jxr_linenumber" name="L387" href="#L387">387</a> 					.set(<span class="jxr_string">"parameters"</span>, m(<span class="jxr_string">"g1"</span>, parameterInfo(<span class="jxr_string">"g2"</span>, <span class="jxr_string">"g3"</span>)))
-<a class="jxr_linenumber" name="L388" href="#L388">388</a> 					.set(<span class="jxr_string">"paths"</span>, m(<span class="jxr_string">"h1"</span>, operationMap().append(<span class="jxr_string">"get"</span>, operation().setSummary(<span class="jxr_string">"h2"</span>))))
-<a class="jxr_linenumber" name="L389" href="#L389">389</a> 					.set(<span class="jxr_string">"produces"</span>, l(MediaType.of(<span class="jxr_string">"i"</span>)))
-<a class="jxr_linenumber" name="L390" href="#L390">390</a> 					.set(<span class="jxr_string">"responses"</span>, m(<span class="jxr_string">"j1"</span>, responseInfo().setDescription(<span class="jxr_string">"j2"</span>)))
-<a class="jxr_linenumber" name="L391" href="#L391">391</a> 					.set(<span class="jxr_string">"schemes"</span>, l(<span class="jxr_string">"k"</span>))
-<a class="jxr_linenumber" name="L392" href="#L392">392</a> 					.set(<span class="jxr_string">"security"</span>, l(m(<span class="jxr_string">"l1"</span>, l(<span class="jxr_string">"l2"</span>))))
-<a class="jxr_linenumber" name="L393" href="#L393">393</a> 					.set(<span class="jxr_string">"securityDefinitions"</span>, m(<span class="jxr_string">"m1"</span>, securityScheme().setType(<span class="jxr_string">"m2"</span>)))
-<a class="jxr_linenumber" name="L394" href="#L394">394</a> 					.set(<span class="jxr_string">"swagger"</span>, <span class="jxr_string">"n"</span>)
-<a class="jxr_linenumber" name="L395" href="#L395">395</a> 					.set(<span class="jxr_string">"tags"</span>, l(tag().setName(<span class="jxr_string">"o"</span>)))
-<a class="jxr_linenumber" name="L396" href="#L396">396</a> 					.set(<span class="jxr_string">"x1"</span>, <span class="jxr_string">"x1a"</span>)
-<a class="jxr_linenumber" name="L397" href="#L397">397</a> 					.set(<span class="jxr_string">"x2"</span>, <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L398" href="#L398">398</a> 			)
-<a class="jxr_linenumber" name="L399" href="#L399">399</a> 			.props(<span class="jxr_string">"basePath,consumes,definitions{c1{type}},externalDocs{url},host,info{title,version},parameters{g1{in,name}},paths{h1{get{summary}}},produces,responses{j1{description}},schemes,security{0{l1}},securityDefinitions{m1{type}},swagger,tags{0{name}},x1,x2"</span>)
-<a class="jxr_linenumber" name="L400" href="#L400">400</a> 			.vals(<span class="jxr_string">"a,[b],{{c2}},{d},e,{f1,f2},{{g2,g3}},{{{h2}}},[i],{{j2}},[k],{{[l2]}},{{m2}},n,{{o}},x1a,&lt;null&gt;"</span>)
-<a class="jxr_linenumber" name="L401" href="#L401">401</a> 			.json(<span class="jxr_string">"{basePath:'a',consumes:['b'],definitions:{c1:{type:'c2'}},externalDocs:{url:'d'},host:'e',info:{title:'f1',version:'f2'},parameters:{g1:{'in':'g2',name:'g3'}},paths:{h1:{get:{summary:'h2'}}},produces:['i'],responses:{j1:{description:'j2'}},schemes:['k'],security:[{l1:['l2']}],securityDefinitions:{m1:{type:'m2'}},swagger:'n',tags:[{name:'o'}],x1:'x1a'}"</span>)
-<a class="jxr_linenumber" name="L402" href="#L402">402</a> 			.string(<span class="jxr_string">"{'basePath':'a','consumes':['b'],'definitions':{'c1':{'type':'c2'}},'externalDocs':{'url':'d'},'host':'e','info':{'title':'f1','version':'f2'},'parameters':{'g1':{'in':'g2','name':'g3'}},'paths':{'h1':{'get':{'summary':'h2'}}},'produces':['i'],'responses':{'j1':{'description':'j2'}},'schemes':['k'],'security':[{'l1':['l2']}],'securityDefinitions':{'m1':{'type':'m2'}},'swagger':'n','tags':[{'name':'o'}],'x1':'x1a'}"</span>.replace('\'', '&quot;'))
-<a class="jxr_linenumber" name="L403" href="#L403">403</a> 		;
-<a class="jxr_linenumber" name="L404" href="#L404">404</a> 
-<a class="jxr_linenumber" name="L405" href="#L405">405</a> 		@Test <strong class="jxr_keyword">void</strong> c01_gettersAndSetters() {
-<a class="jxr_linenumber" name="L406" href="#L406">406</a> 			TESTER.assertGettersAndSetters();
-<a class="jxr_linenumber" name="L407" href="#L407">407</a> 		}
-<a class="jxr_linenumber" name="L408" href="#L408">408</a> 
-<a class="jxr_linenumber" name="L409" href="#L409">409</a> 		@Test <strong class="jxr_keyword">void</strong> c02_copy() {
-<a class="jxr_linenumber" name="L410" href="#L410">410</a> 			TESTER.assertCopy();
-<a class="jxr_linenumber" name="L411" href="#L411">411</a> 		}
-<a class="jxr_linenumber" name="L412" href="#L412">412</a> 
-<a class="jxr_linenumber" name="L413" href="#L413">413</a> 		@Test <strong class="jxr_keyword">void</strong> c03_toJson() {
-<a class="jxr_linenumber" name="L414" href="#L414">414</a> 			TESTER.assertToJson();
-<a class="jxr_linenumber" name="L415" href="#L415">415</a> 		}
-<a class="jxr_linenumber" name="L416" href="#L416">416</a> 
-<a class="jxr_linenumber" name="L417" href="#L417">417</a> 		@Test <strong class="jxr_keyword">void</strong> c04_fromJson() {
-<a class="jxr_linenumber" name="L418" href="#L418">418</a> 			TESTER.assertFromJson();
-<a class="jxr_linenumber" name="L419" href="#L419">419</a> 		}
-<a class="jxr_linenumber" name="L420" href="#L420">420</a> 
-<a class="jxr_linenumber" name="L421" href="#L421">421</a> 		@Test <strong class="jxr_keyword">void</strong> c05_roundTrip() {
-<a class="jxr_linenumber" name="L422" href="#L422">422</a> 			TESTER.assertRoundTrip();
-<a class="jxr_linenumber" name="L423" href="#L423">423</a> 		}
-<a class="jxr_linenumber" name="L424" href="#L424">424</a> 
-<a class="jxr_linenumber" name="L425" href="#L425">425</a> 		@Test <strong class="jxr_keyword">void</strong> c06_toString() {
-<a class="jxr_linenumber" name="L426" href="#L426">426</a> 			TESTER.assertToString();
-<a class="jxr_linenumber" name="L427" href="#L427">427</a> 		}
-<a class="jxr_linenumber" name="L428" href="#L428">428</a> 
-<a class="jxr_linenumber" name="L429" href="#L429">429</a> 		@Test <strong class="jxr_keyword">void</strong> c07_keySet() {
-<a class="jxr_linenumber" name="L430" href="#L430">430</a> 			assertList(TESTER.bean().keySet(), <span class="jxr_string">"basePath"</span>, <span class="jxr_string">"consumes"</span>, <span class="jxr_string">"definitions"</span>, <span class="jxr_string">"externalDocs"</span>, <span class="jxr_string">"host"</span>, <span class="jxr_string">"info"</span>, <span class="jxr_string">"parameters"</span>, <span class="jxr_string">"paths"</span>, <span class="jxr_string">"produces"</span>, <span class="jxr_string">"responses"</span>, <span class="jxr_string">"schemes"</span>, <span class="jxr_string">"security"</span>, <span class="jxr_string">"securityDefinitions"</span>, <span class="jxr_string">"swagger"</span>, <span class="jxr_string">"tags"</span>, <span class="jxr_string">"x1"</span>, <span class="jxr_string">"x2"</span>);
-<a class="jxr_linenumber" name="L431" href="#L431">431</a> 		}
-<a class="jxr_linenumber" name="L432" href="#L432">432</a> 
-<a class="jxr_linenumber" name="L433" href="#L433">433</a> 		@Test <strong class="jxr_keyword">void</strong> c08_get() {
-<a class="jxr_linenumber" name="L434" href="#L434">434</a> 			assertMapped(
-<a class="jxr_linenumber" name="L435" href="#L435">435</a> 				TESTER.bean(), (obj,prop) -&gt; obj.get(prop, Object.<strong class="jxr_keyword">class</strong>),
-<a class="jxr_linenumber" name="L436" href="#L436">436</a> 				<span class="jxr_string">"basePath,consumes,definitions{c1{type}},externalDocs{url},host,info{title,version},parameters{g1{in,name}},paths{h1{get{summary}}},produces,responses{j1{description}},schemes,security{0{l1}},securityDefinitions{m1{type}},swagger,tags{0{name}},x1,x2"</span>,
-<a class="jxr_linenumber" name="L437" href="#L437">437</a> 				<span class="jxr_string">"a,[b],{{c2}},{d},e,{f1,f2},{{g2,g3}},{{{h2}}},[i],{{j2}},[k],{{[l2]}},{{m2}},n,{{o}},x1a,&lt;null&gt;"</span>
-<a class="jxr_linenumber" name="L438" href="#L438">438</a> 			);
-<a class="jxr_linenumber" name="L439" href="#L439">439</a> 		}
-<a class="jxr_linenumber" name="L440" href="#L440">440</a> 
-<a class="jxr_linenumber" name="L441" href="#L441">441</a> 		@Test <strong class="jxr_keyword">void</strong> c09_getTypes() {
-<a class="jxr_linenumber" name="L442" href="#L442">442</a> 			<strong class="jxr_keyword">var</strong> objectClass = Object.<strong class="jxr_keyword">class</strong>;
-<a class="jxr_linenumber" name="L443" href="#L443">443</a> 			assertMapped(
-<a class="jxr_linenumber" name="L444" href="#L444">444</a> 				TESTER.bean(), (obj,prop) -&gt; cns(obj.get(prop, objectClass)),
-<a class="jxr_linenumber" name="L445" href="#L445">445</a> 				<span class="jxr_string">"basePath,consumes,definitions,externalDocs,host,info,parameters,paths,produces,responses,schemes,security,securityDefinitions,swagger,tags,x1,x2"</span>,
-<a class="jxr_linenumber" name="L446" href="#L446">446</a> 				<span class="jxr_string">"String,LinkedHashSet,LinkedHashMap,ExternalDocumentation,String,Info,LinkedHashMap,TreeMap,LinkedHashSet,LinkedHashMap,LinkedHashSet,ArrayList,LinkedHashMap,String,LinkedHashSet,String,&lt;null&gt;"</span>
-<a class="jxr_linenumber" name="L447" href="#L447">447</a> 			);
+<a class="jxr_linenumber" name="L374" href="#L374">374</a> 
+<a class="jxr_linenumber" name="L375" href="#L375">375</a> 		@Test <strong class="jxr_keyword">void</strong> b03_toJson() {
+<a class="jxr_linenumber" name="L376" href="#L376">376</a> 			TESTER.assertToJson();
+<a class="jxr_linenumber" name="L377" href="#L377">377</a> 		}
+<a class="jxr_linenumber" name="L378" href="#L378">378</a> 
+<a class="jxr_linenumber" name="L379" href="#L379">379</a> 		@Test <strong class="jxr_keyword">void</strong> b04_fromJson() {
+<a class="jxr_linenumber" name="L380" href="#L380">380</a> 			TESTER.assertFromJson();
+<a class="jxr_linenumber" name="L381" href="#L381">381</a> 		}
+<a class="jxr_linenumber" name="L382" href="#L382">382</a> 
+<a class="jxr_linenumber" name="L383" href="#L383">383</a> 		@Test <strong class="jxr_keyword">void</strong> b05_roundTrip() {
+<a class="jxr_linenumber" name="L384" href="#L384">384</a> 			TESTER.assertRoundTrip();
+<a class="jxr_linenumber" name="L385" href="#L385">385</a> 		}
+<a class="jxr_linenumber" name="L386" href="#L386">386</a> 
+<a class="jxr_linenumber" name="L387" href="#L387">387</a> 		@Test <strong class="jxr_keyword">void</strong> b06_toString() {
+<a class="jxr_linenumber" name="L388" href="#L388">388</a> 			TESTER.assertToString();
+<a class="jxr_linenumber" name="L389" href="#L389">389</a> 		}
+<a class="jxr_linenumber" name="L390" href="#L390">390</a> 
+<a class="jxr_linenumber" name="L391" href="#L391">391</a> 		@Test <strong class="jxr_keyword">void</strong> b07_keySet() {
+<a class="jxr_linenumber" name="L392" href="#L392">392</a> 			assertList(TESTER.bean().keySet(), <span class="jxr_string">"swagger"</span>);
+<a class="jxr_linenumber" name="L393" href="#L393">393</a> 			assertList(TESTER.bean().setSwagger(<strong class="jxr_keyword">null</strong>).keySet());
+<a class="jxr_linenumber" name="L394" href="#L394">394</a> 		}
+<a class="jxr_linenumber" name="L395" href="#L395">395</a> 	}
+<a class="jxr_linenumber" name="L396" href="#L396">396</a> 
+<a class="jxr_linenumber" name="L397" href="#L397">397</a> 	@Nested <strong class="jxr_keyword">class</strong> C_extraProperties <strong class="jxr_keyword">extends</strong> TestBase {
+<a class="jxr_linenumber" name="L398" href="#L398">398</a> 
+<a class="jxr_linenumber" name="L399" href="#L399">399</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> BeanTester&lt;Swagger&gt; TESTER =
+<a class="jxr_linenumber" name="L400" href="#L400">400</a> 			testBean(
+<a class="jxr_linenumber" name="L401" href="#L401">401</a> 				bean()
+<a class="jxr_linenumber" name="L402" href="#L402">402</a> 					.set(<span class="jxr_string">"basePath"</span>, <span class="jxr_string">"a"</span>)
+<a class="jxr_linenumber" name="L403" href="#L403">403</a> 					.set(<span class="jxr_string">"consumes"</span>, l(MediaType.of(<span class="jxr_string">"b"</span>)))
+<a class="jxr_linenumber" name="L404" href="#L404">404</a> 					.set(<span class="jxr_string">"definitions"</span>, m(<span class="jxr_string">"c1"</span>, JsonMap.of(<span class="jxr_string">"type"</span>, <span class="jxr_string">"c2"</span>)))
+<a class="jxr_linenumber" name="L405" href="#L405">405</a> 					.set(<span class="jxr_string">"externalDocs"</span>, externalDocumentation(<span class="jxr_string">"d"</span>))
+<a class="jxr_linenumber" name="L406" href="#L406">406</a> 					.set(<span class="jxr_string">"host"</span>, <span class="jxr_string">"e"</span>)
+<a class="jxr_linenumber" name="L407" href="#L407">407</a> 					.set(<span class="jxr_string">"info"</span>, info(<span class="jxr_string">"f1"</span>, <span class="jxr_string">"f2"</span>))
+<a class="jxr_linenumber" name="L408" href="#L408">408</a> 					.set(<span class="jxr_string">"parameters"</span>, m(<span class="jxr_string">"g1"</span>, parameterInfo(<span class="jxr_string">"g2"</span>, <span class="jxr_string">"g3"</span>)))
+<a class="jxr_linenumber" name="L409" href="#L409">409</a> 					.set(<span class="jxr_string">"paths"</span>, m(<span class="jxr_string">"h1"</span>, operationMap().append(<span class="jxr_string">"get"</span>, operation().setSummary(<span class="jxr_string">"h2"</span>))))
+<a class="jxr_linenumber" name="L410" href="#L410">410</a> 					.set(<span class="jxr_string">"produces"</span>, l(MediaType.of(<span class="jxr_string">"i"</span>)))
+<a class="jxr_linenumber" name="L411" href="#L411">411</a> 					.set(<span class="jxr_string">"responses"</span>, m(<span class="jxr_string">"j1"</span>, responseInfo().setDescription(<span class="jxr_string">"j2"</span>)))
+<a class="jxr_linenumber" name="L412" href="#L412">412</a> 					.set(<span class="jxr_string">"schemes"</span>, l(<span class="jxr_string">"k"</span>))
+<a class="jxr_linenumber" name="L413" href="#L413">413</a> 					.set(<span class="jxr_string">"security"</span>, l(m(<span class="jxr_string">"l1"</span>, l(<span class="jxr_string">"l2"</span>))))
+<a class="jxr_linenumber" name="L414" href="#L414">414</a> 					.set(<span class="jxr_string">"securityDefinitions"</span>, m(<span class="jxr_string">"m1"</span>, securityScheme().setType(<span class="jxr_string">"m2"</span>)))
+<a class="jxr_linenumber" name="L415" href="#L415">415</a> 					.set(<span class="jxr_string">"swagger"</span>, <span class="jxr_string">"n"</span>)
+<a class="jxr_linenumber" name="L416" href="#L416">416</a> 					.set(<span class="jxr_string">"tags"</span>, l(tag().setName(<span class="jxr_string">"o"</span>)))
+<a class="jxr_linenumber" name="L417" href="#L417">417</a> 					.set(<span class="jxr_string">"x1"</span>, <span class="jxr_string">"x1a"</span>)
+<a class="jxr_linenumber" name="L418" href="#L418">418</a> 					.set(<span class="jxr_string">"x2"</span>, <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L419" href="#L419">419</a> 			)
+<a class="jxr_linenumber" name="L420" href="#L420">420</a> 			.props(<span class="jxr_string">"basePath,consumes,definitions{c1{type}},externalDocs{url},host,info{title,version},parameters{g1{in,name}},paths{h1{get{summary}}},produces,responses{j1{description}},schemes,security{0{l1}},securityDefinitions{m1{type}},swagger,tags{0{name}},x1,x2"</span>)
+<a class="jxr_linenumber" name="L421" href="#L421">421</a> 			.vals(<span class="jxr_string">"a,[b],{{c2}},{d},e,{f1,f2},{{g2,g3}},{{{h2}}},[i],{{j2}},[k],{{[l2]}},{{m2}},n,{{o}},x1a,&lt;null&gt;"</span>)
+<a class="jxr_linenumber" name="L422" href="#L422">422</a> 			.json(<span class="jxr_string">"{basePath:'a',consumes:['b'],definitions:{c1:{type:'c2'}},externalDocs:{url:'d'},host:'e',info:{title:'f1',version:'f2'},parameters:{g1:{'in':'g2',name:'g3'}},paths:{h1:{get:{summary:'h2'}}},produces:['i'],responses:{j1:{description:'j2'}},schemes:['k'],security:[{l1:['l2']}],securityDefinitions:{m1:{type:'m2'}},swagger:'n',tags:[{name:'o'}],x1:'x1a'}"</span>)
+<a class="jxr_linenumber" name="L423" href="#L423">423</a> 			.string(<span class="jxr_string">"{'basePath':'a','consumes':['b'],'definitions':{'c1':{'type':'c2'}},'externalDocs':{'url':'d'},'host':'e','info':{'title':'f1','version':'f2'},'parameters':{'g1':{'in':'g2','name':'g3'}},'paths':{'h1':{'get':{'summary':'h2'}}},'produces':['i'],'responses':{'j1':{'description':'j2'}},'schemes':['k'],'security':[{'l1':['l2']}],'securityDefinitions':{'m1':{'type':'m2'}},'swagger':'n','tags':[{'name':'o'}],'x1':'x1a'}"</span>.replace('\'', '&quot;'))
+<a class="jxr_linenumber" name="L424" href="#L424">424</a> 		;
+<a class="jxr_linenumber" name="L425" href="#L425">425</a> 
+<a class="jxr_linenumber" name="L426" href="#L426">426</a> 		@Test <strong class="jxr_keyword">void</strong> c01_gettersAndSetters() {
+<a class="jxr_linenumber" name="L427" href="#L427">427</a> 			TESTER.assertGettersAndSetters();
+<a class="jxr_linenumber" name="L428" href="#L428">428</a> 		}
+<a class="jxr_linenumber" name="L429" href="#L429">429</a> 
+<a class="jxr_linenumber" name="L430" href="#L430">430</a> 		@Test <strong class="jxr_keyword">void</strong> c02_copy() {
+<a class="jxr_linenumber" name="L431" href="#L431">431</a> 			TESTER.assertCopy();
+<a class="jxr_linenumber" name="L432" href="#L432">432</a> 		}
+<a class="jxr_linenumber" name="L433" href="#L433">433</a> 
+<a class="jxr_linenumber" name="L434" href="#L434">434</a> 		@Test <strong class="jxr_keyword">void</strong> c03_toJson() {
+<a class="jxr_linenumber" name="L435" href="#L435">435</a> 			TESTER.assertToJson();
+<a class="jxr_linenumber" name="L436" href="#L436">436</a> 		}
+<a class="jxr_linenumber" name="L437" href="#L437">437</a> 
+<a class="jxr_linenumber" name="L438" href="#L438">438</a> 		@Test <strong class="jxr_keyword">void</strong> c04_fromJson() {
+<a class="jxr_linenumber" name="L439" href="#L439">439</a> 			TESTER.assertFromJson();
+<a class="jxr_linenumber" name="L440" href="#L440">440</a> 		}
+<a class="jxr_linenumber" name="L441" href="#L441">441</a> 
+<a class="jxr_linenumber" name="L442" href="#L442">442</a> 		@Test <strong class="jxr_keyword">void</strong> c05_roundTrip() {
+<a class="jxr_linenumber" name="L443" href="#L443">443</a> 			TESTER.assertRoundTrip();
+<a class="jxr_linenumber" name="L444" href="#L444">444</a> 		}
+<a class="jxr_linenumber" name="L445" href="#L445">445</a> 
+<a class="jxr_linenumber" name="L446" href="#L446">446</a> 		@Test <strong class="jxr_keyword">void</strong> c06_toString() {
+<a class="jxr_linenumber" name="L447" href="#L447">447</a> 			TESTER.assertToString();
 <a class="jxr_linenumber" name="L448" href="#L448">448</a> 		}
 <a class="jxr_linenumber" name="L449" href="#L449">449</a> 
-<a class="jxr_linenumber" name="L450" href="#L450">450</a> 		@Test <strong class="jxr_keyword">void</strong> c10_nullPropertyValue() {
-<a class="jxr_linenumber" name="L451" href="#L451">451</a> 			<strong class="jxr_keyword">var</strong> swagger = bean();
-<a class="jxr_linenumber" name="L452" href="#L452">452</a> 			assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, ()-&gt;swagger.get(<strong class="jxr_keyword">null</strong>));
-<a class="jxr_linenumber" name="L453" href="#L453">453</a> 			assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, ()-&gt;swagger.get(<strong class="jxr_keyword">null</strong>, String.<strong class="jxr_keyword">class</strong>));
-<a class="jxr_linenumber" name="L454" href="#L454">454</a> 			assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, ()-&gt;swagger.set(<strong class="jxr_keyword">null</strong>, <span class="jxr_string">"a"</span>));
-<a class="jxr_linenumber" name="L455" href="#L455">455</a> 		}
-<a class="jxr_linenumber" name="L456" href="#L456">456</a> 	}
-<a class="jxr_linenumber" name="L457" href="#L457">457</a> 
-<a class="jxr_linenumber" name="L458" href="#L458">458</a> 	@Nested <strong class="jxr_keyword">class</strong> D_refs <strong class="jxr_keyword">extends</strong> TestBase {
-<a class="jxr_linenumber" name="L459" href="#L459">459</a> 
-<a class="jxr_linenumber" name="L460" href="#L460">460</a> 		@Test <strong class="jxr_keyword">void</strong> d01_findRef() {
-<a class="jxr_linenumber" name="L461" href="#L461">461</a> 			<strong class="jxr_keyword">var</strong> x = swagger().addDefinition(<span class="jxr_string">"a1"</span>, JsonMap.of(<span class="jxr_string">"type"</span>, <span class="jxr_string">"a2"</span>));
-<a class="jxr_linenumber" name="L462" href="#L462">462</a> 			assertBean(
-<a class="jxr_linenumber" name="L463" href="#L463">463</a> 				x.findRef(<span class="jxr_string">"#/definitions/a1"</span>, JsonMap.<strong class="jxr_keyword">class</strong>),
-<a class="jxr_linenumber" name="L464" href="#L464">464</a> 				<span class="jxr_string">"type"</span>,
-<a class="jxr_linenumber" name="L465" href="#L465">465</a> 				<span class="jxr_string">"a2"</span>
-<a class="jxr_linenumber" name="L466" href="#L466">466</a> 			);
-<a class="jxr_linenumber" name="L467" href="#L467">467</a> 
-<a class="jxr_linenumber" name="L468" href="#L468">468</a> 			assertNull(x.findRef(<span class="jxr_string">"#/definitions/notfound"</span>, JsonMap.<strong class="jxr_keyword">class</strong>));
-<a class="jxr_linenumber" name="L469" href="#L469">469</a> 
-<a class="jxr_linenumber" name="L470" href="#L470">470</a> 			assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; x.findRef(<strong class="jxr_keyword">null</strong>, JsonMap.<strong class="jxr_keyword">class</strong>));
-<a class="jxr_linenumber" name="L471" href="#L471">471</a> 			assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; x.findRef(<span class="jxr_string">"a"</span>, <strong class="jxr_keyword">null</strong>));
-<a class="jxr_linenumber" name="L472" href="#L472">472</a> 			assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; x.findRef(<span class="jxr_string">""</span>, JsonMap.<strong class="jxr_keyword">class</strong>));
-<a class="jxr_linenumber" name="L473" href="#L473">473</a> 			assertThrowsWithMessage(RuntimeException.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"Unsupported reference:  'invalid'"</span>, () -&gt; x.findRef(<span class="jxr_string">"invalid"</span>, JsonMap.<strong class="jxr_keyword">class</strong>));
-<a class="jxr_linenumber" name="L474" href="#L474">474</a> 		}
-<a class="jxr_linenumber" name="L475" href="#L475">475</a> 
-<a class="jxr_linenumber" name="L476" href="#L476">476</a> 		@Test <strong class="jxr_keyword">void</strong> d02_findRefInvalidType() {
-<a class="jxr_linenumber" name="L477" href="#L477">477</a> 			<em class="jxr_comment">// Test findRef with invalid type - should throw exception</em>
-<a class="jxr_linenumber" name="L478" href="#L478">478</a> 			<strong class="jxr_keyword">var</strong> x = swagger()
-<a class="jxr_linenumber" name="L479" href="#L479">479</a> 				.addDefinition(<span class="jxr_string">"Pet"</span>, JsonMap.of(<span class="jxr_string">"type"</span>, <span class="jxr_string">"object"</span>))
-<a class="jxr_linenumber" name="L480" href="#L480">480</a> 				.addResponse(<span class="jxr_string">"Error"</span>, responseInfo().setDescription(<span class="jxr_string">"Error response"</span>))
-<a class="jxr_linenumber" name="L481" href="#L481">481</a> 				.addParameter(<span class="jxr_string">"petId"</span>, parameterInfo(<span class="jxr_string">"path"</span>, <span class="jxr_string">"id"</span>));
-<a class="jxr_linenumber" name="L482" href="#L482">482</a> 
-<a class="jxr_linenumber" name="L483" href="#L483">483</a> 			<em class="jxr_comment">// Test trying to parse a definition into an invalid type</em>
-<a class="jxr_linenumber" name="L484" href="#L484">484</a> 			assertThrows(Exception.<strong class="jxr_keyword">class</strong>, () -&gt; x.findRef(<span class="jxr_string">"#/definitions/Pet"</span>, Integer.<strong class="jxr_keyword">class</strong>));
-<a class="jxr_linenumber" name="L485" href="#L485">485</a> 
-<a class="jxr_linenumber" name="L486" href="#L486">486</a> 			<em class="jxr_comment">// Test trying to parse a response into an invalid type</em>
-<a class="jxr_linenumber" name="L487" href="#L487">487</a> 			assertThrows(Exception.<strong class="jxr_keyword">class</strong>, () -&gt; x.findRef(<span class="jxr_string">"#/responses/Error"</span>, Integer.<strong class="jxr_keyword">class</strong>));
+<a class="jxr_linenumber" name="L450" href="#L450">450</a> 		@Test <strong class="jxr_keyword">void</strong> c07_keySet() {
+<a class="jxr_linenumber" name="L451" href="#L451">451</a> 			assertList(TESTER.bean().keySet(), <span class="jxr_string">"basePath"</span>, <span class="jxr_string">"consumes"</span>, <span class="jxr_string">"definitions"</span>, <span class="jxr_string">"externalDocs"</span>, <span class="jxr_string">"host"</span>, <span class="jxr_string">"info"</span>, <span class="jxr_string">"parameters"</span>, <span class="jxr_string">"paths"</span>, <span class="jxr_string">"produces"</span>, <span class="jxr_string">"responses"</span>, <span class="jxr_string">"schemes"</span>, <span class="jxr_string">"security"</span>, <span class="jxr_string">"securityDefinitions"</span>, <span class="jxr_string">"swagger"</span>, <span class="jxr_string">"tags"</span>, <span class="jxr_string">"x1"</span>, <span class="jxr_string">"x2"</span>);
+<a class="jxr_linenumber" name="L452" href="#L452">452</a> 		}
+<a class="jxr_linenumber" name="L453" href="#L453">453</a> 
+<a class="jxr_linenumber" name="L454" href="#L454">454</a> 		@Test <strong class="jxr_keyword">void</strong> c08_get() {
+<a class="jxr_linenumber" name="L455" href="#L455">455</a> 			assertMapped(
+<a class="jxr_linenumber" name="L456" href="#L456">456</a> 				TESTER.bean(), (obj,prop) -&gt; obj.get(prop, Object.<strong class="jxr_keyword">class</strong>),
+<a class="jxr_linenumber" name="L457" href="#L457">457</a> 				<span class="jxr_string">"basePath,consumes,definitions{c1{type}},externalDocs{url},host,info{title,version},parameters{g1{in,name}},paths{h1{get{summary}}},produces,responses{j1{description}},schemes,security{0{l1}},securityDefinitions{m1{type}},swagger,tags{0{name}},x1,x2"</span>,
+<a class="jxr_linenumber" name="L458" href="#L458">458</a> 				<span class="jxr_string">"a,[b],{{c2}},{d},e,{f1,f2},{{g2,g3}},{{{h2}}},[i],{{j2}},[k],{{[l2]}},{{m2}},n,{{o}},x1a,&lt;null&gt;"</span>
+<a class="jxr_linenumber" name="L459" href="#L459">459</a> 			);
+<a class="jxr_linenumber" name="L460" href="#L460">460</a> 		}
+<a class="jxr_linenumber" name="L461" href="#L461">461</a> 
+<a class="jxr_linenumber" name="L462" href="#L462">462</a> 		@Test <strong class="jxr_keyword">void</strong> c09_getTypes() {
+<a class="jxr_linenumber" name="L463" href="#L463">463</a> 			<strong class="jxr_keyword">var</strong> objectClass = Object.<strong class="jxr_keyword">class</strong>;
+<a class="jxr_linenumber" name="L464" href="#L464">464</a> 			assertMapped(
+<a class="jxr_linenumber" name="L465" href="#L465">465</a> 				TESTER.bean(), (obj,prop) -&gt; cns(obj.get(prop, objectClass)),
+<a class="jxr_linenumber" name="L466" href="#L466">466</a> 				<span class="jxr_string">"basePath,consumes,definitions,externalDocs,host,info,parameters,paths,produces,responses,schemes,security,securityDefinitions,swagger,tags,x1,x2"</span>,
+<a class="jxr_linenumber" name="L467" href="#L467">467</a> 				<span class="jxr_string">"String,LinkedHashSet,LinkedHashMap,ExternalDocumentation,String,Info,LinkedHashMap,TreeMap,LinkedHashSet,LinkedHashMap,LinkedHashSet,ArrayList,LinkedHashMap,String,LinkedHashSet,String,&lt;null&gt;"</span>
+<a class="jxr_linenumber" name="L468" href="#L468">468</a> 			);
+<a class="jxr_linenumber" name="L469" href="#L469">469</a> 		}
+<a class="jxr_linenumber" name="L470" href="#L470">470</a> 
+<a class="jxr_linenumber" name="L471" href="#L471">471</a> 		@Test <strong class="jxr_keyword">void</strong> c10_nullPropertyValue() {
+<a class="jxr_linenumber" name="L472" href="#L472">472</a> 			<strong class="jxr_keyword">var</strong> swagger = bean();
+<a class="jxr_linenumber" name="L473" href="#L473">473</a> 			assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, ()-&gt;swagger.get(<strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L474" href="#L474">474</a> 			assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, ()-&gt;swagger.get(<strong class="jxr_keyword">null</strong>, String.<strong class="jxr_keyword">class</strong>));
+<a class="jxr_linenumber" name="L475" href="#L475">475</a> 			assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, ()-&gt;swagger.set(<strong class="jxr_keyword">null</strong>, <span class="jxr_string">"a"</span>));
+<a class="jxr_linenumber" name="L476" href="#L476">476</a> 		}
+<a class="jxr_linenumber" name="L477" href="#L477">477</a> 	}
+<a class="jxr_linenumber" name="L478" href="#L478">478</a> 
+<a class="jxr_linenumber" name="L479" href="#L479">479</a> 	@Nested <strong class="jxr_keyword">class</strong> D_refs <strong class="jxr_keyword">extends</strong> TestBase {
+<a class="jxr_linenumber" name="L480" href="#L480">480</a> 
+<a class="jxr_linenumber" name="L481" href="#L481">481</a> 		@Test <strong class="jxr_keyword">void</strong> d01_findRef() {
+<a class="jxr_linenumber" name="L482" href="#L482">482</a> 			<strong class="jxr_keyword">var</strong> x = swagger().addDefinition(<span class="jxr_string">"a1"</span>, JsonMap.of(<span class="jxr_string">"type"</span>, <span class="jxr_string">"a2"</span>));
+<a class="jxr_linenumber" name="L483" href="#L483">483</a> 			assertBean(
+<a class="jxr_linenumber" name="L484" href="#L484">484</a> 				x.findRef(<span class="jxr_string">"#/definitions/a1"</span>, JsonMap.<strong class="jxr_keyword">class</strong>),
+<a class="jxr_linenumber" name="L485" href="#L485">485</a> 				<span class="jxr_string">"type"</span>,
+<a class="jxr_linenumber" name="L486" href="#L486">486</a> 				<span class="jxr_string">"a2"</span>
+<a class="jxr_linenumber" name="L487" href="#L487">487</a> 			);
 <a class="jxr_linenumber" name="L488" href="#L488">488</a> 
-<a class="jxr_linenumber" name="L489" href="#L489">489</a> 			<em class="jxr_comment">// Test trying to parse a parameter into an invalid type</em>
-<a class="jxr_linenumber" name="L490" href="#L490">490</a> 			assertThrows(Exception.<strong class="jxr_keyword">class</strong>, () -&gt; x.findRef(<span class="jxr_string">"#/parameters/petId"</span>, Integer.<strong class="jxr_keyword">class</strong>));
-<a class="jxr_linenumber" name="L491" href="#L491">491</a> 		}
-<a class="jxr_linenumber" name="L492" href="#L492">492</a> 
-<a class="jxr_linenumber" name="L493" href="#L493">493</a> 	}
-<a class="jxr_linenumber" name="L494" href="#L494">494</a> 
-<a class="jxr_linenumber" name="L495" href="#L495">495</a> 	<em class="jxr_comment">//---------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L496" href="#L496">496</a> 	<em class="jxr_comment">// Helper methods</em>
-<a class="jxr_linenumber" name="L497" href="#L497">497</a> 	<em class="jxr_comment">//---------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L498" href="#L498">498</a> 
-<a class="jxr_linenumber" name="L499" href="#L499">499</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Swagger bean() {
-<a class="jxr_linenumber" name="L500" href="#L500">500</a> 		<strong class="jxr_keyword">return</strong> swagger();
-<a class="jxr_linenumber" name="L501" href="#L501">501</a> 	}
-<a class="jxr_linenumber" name="L502" href="#L502">502</a> }
+<a class="jxr_linenumber" name="L489" href="#L489">489</a> 			assertNull(x.findRef(<span class="jxr_string">"#/definitions/notfound"</span>, JsonMap.<strong class="jxr_keyword">class</strong>));
+<a class="jxr_linenumber" name="L490" href="#L490">490</a> 
+<a class="jxr_linenumber" name="L491" href="#L491">491</a> 			assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; x.findRef(<strong class="jxr_keyword">null</strong>, JsonMap.<strong class="jxr_keyword">class</strong>));
+<a class="jxr_linenumber" name="L492" href="#L492">492</a> 			assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; x.findRef(<span class="jxr_string">"a"</span>, <strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L493" href="#L493">493</a> 			assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; x.findRef(<span class="jxr_string">""</span>, JsonMap.<strong class="jxr_keyword">class</strong>));
+<a class="jxr_linenumber" name="L494" href="#L494">494</a> 			assertThrowsWithMessage(RuntimeException.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"Unsupported reference:  'invalid'"</span>, () -&gt; x.findRef(<span class="jxr_string">"invalid"</span>, JsonMap.<strong class="jxr_keyword">class</strong>));
+<a class="jxr_linenumber" name="L495" href="#L495">495</a> 		}
+<a class="jxr_linenumber" name="L496" href="#L496">496</a> 
+<a class="jxr_linenumber" name="L497" href="#L497">497</a> 		@Test <strong class="jxr_keyword">void</strong> d02_findRefInvalidType() {
+<a class="jxr_linenumber" name="L498" href="#L498">498</a> 			<em class="jxr_comment">// Test findRef with invalid type - should throw exception</em>
+<a class="jxr_linenumber" name="L499" href="#L499">499</a> 			<strong class="jxr_keyword">var</strong> x = swagger()
+<a class="jxr_linenumber" name="L500" href="#L500">500</a> 				.addDefinition(<span class="jxr_string">"Pet"</span>, JsonMap.of(<span class="jxr_string">"type"</span>, <span class="jxr_string">"object"</span>))
+<a class="jxr_linenumber" name="L501" href="#L501">501</a> 				.addResponse(<span class="jxr_string">"Error"</span>, responseInfo().setDescription(<span class="jxr_string">"Error response"</span>))
+<a class="jxr_linenumber" name="L502" href="#L502">502</a> 				.addParameter(<span class="jxr_string">"petId"</span>, parameterInfo(<span class="jxr_string">"path"</span>, <span class="jxr_string">"id"</span>));
+<a class="jxr_linenumber" name="L503" href="#L503">503</a> 
+<a class="jxr_linenumber" name="L504" href="#L504">504</a> 			<em class="jxr_comment">// Test trying to parse a definition into an invalid type</em>
+<a class="jxr_linenumber" name="L505" href="#L505">505</a> 			assertThrows(Exception.<strong class="jxr_keyword">class</strong>, () -&gt; x.findRef(<span class="jxr_string">"#/definitions/Pet"</span>, Integer.<strong class="jxr_keyword">class</strong>));
+<a class="jxr_linenumber" name="L506" href="#L506">506</a> 
+<a class="jxr_linenumber" name="L507" href="#L507">507</a> 			<em class="jxr_comment">// Test trying to parse a response into an invalid type</em>
+<a class="jxr_linenumber" name="L508" href="#L508">508</a> 			assertThrows(Exception.<strong class="jxr_keyword">class</strong>, () -&gt; x.findRef(<span class="jxr_string">"#/responses/Error"</span>, Integer.<strong class="jxr_keyword">class</strong>));
+<a class="jxr_linenumber" name="L509" href="#L509">509</a> 
+<a class="jxr_linenumber" name="L510" href="#L510">510</a> 			<em class="jxr_comment">// Test trying to parse a parameter into an invalid type</em>
+<a class="jxr_linenumber" name="L511" href="#L511">511</a> 			assertThrows(Exception.<strong class="jxr_keyword">class</strong>, () -&gt; x.findRef(<span class="jxr_string">"#/parameters/petId"</span>, Integer.<strong class="jxr_keyword">class</strong>));
+<a class="jxr_linenumber" name="L512" href="#L512">512</a> 		}
+<a class="jxr_linenumber" name="L513" href="#L513">513</a> 
+<a class="jxr_linenumber" name="L514" href="#L514">514</a> 	}
+<a class="jxr_linenumber" name="L515" href="#L515">515</a> 
+<a class="jxr_linenumber" name="L516" href="#L516">516</a> 	<em class="jxr_comment">//---------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L517" href="#L517">517</a> 	<em class="jxr_comment">// Helper methods</em>
+<a class="jxr_linenumber" name="L518" href="#L518">518</a> 	<em class="jxr_comment">//---------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L519" href="#L519">519</a> 
+<a class="jxr_linenumber" name="L520" href="#L520">520</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Swagger bean() {
+<a class="jxr_linenumber" name="L521" href="#L521">521</a> 		<strong class="jxr_keyword">return</strong> swagger();
+<a class="jxr_linenumber" name="L522" href="#L522">522</a> 	}
+<a class="jxr_linenumber" name="L523" href="#L523">523</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

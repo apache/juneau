@@ -82,16 +82,16 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="../RestCallInterceptor.html" title="interface in org.apache.juneau.rest.client">RestCallInterceptor</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/client/mcp/McpAuthInterceptor.html#line-47">McpAuthInterceptor</a></span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/client/mcp/McpAuthInterceptor.html#line-48">McpAuthInterceptor</a></span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>
 implements <a href="../RestCallInterceptor.html" title="interface in org.apache.juneau.rest.client">RestCallInterceptor</a></span></div>
 <div class="block">A builder-configurable auth-token seam implemented as a <a href="../RestCallInterceptor.html" title="interface in org.apache.juneau.rest.client"><code>RestCallInterceptor</code></a>.
 
  <p>
  On <a href="#onInit(org.apache.juneau.rest.client.RestRequest)"><code>onInit(RestRequest)</code></a>, sets the <code>Authorization</code> request header to <code>"Bearer " + token</code>,
- where <code>token</code> comes from a caller-supplied <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link"><code>Supplier</code></a>. Sub-project F's OAuth/OIDC flows plug into
- this seam by supplying their own token-supplier implementation (e.g. one that refreshes an expired access
- token); this class implements no OAuth/OIDC flow itself.
+ where <code>token</code> comes from a caller-supplied <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link"><code>Supplier</code></a>.
+ The OAuth/OIDC flows in juneau-rest-client-mcp-auth plug into this seam by supplying their own token-supplier
+ implementation (e.g. one that refreshes an expired access token); this class implements no OAuth/OIDC flow itself.
 
  <p>
  If the supplied token is <jk>null</jk> <b>or blank</b> (empty or all-whitespace), no <code>Authorization</code>
@@ -100,9 +100,10 @@ implements <a href="../RestCallInterceptor.html" title="interface in org.apache.
  <a href="../RestRequest.html#run()"><code>RestRequest.run()</code></a>'s documented interceptor-exception handling aborts the call before it is sent.
 
  <p>
- <b>Note:</b> when a token is set, <a href="../RestRequest.html#debug()"><code>RestRequest.debug()</code></a> logs the full outgoing request including all
- headers, so enabling debug logging on a client using this interceptor will log the <code>Authorization</code>
- header (and therefore the bearer token) in plain text.</div>
+ <b>Note:</b> when a token is set, enabling <code>FINE</code>/<code>FINEST</code>-level logging on the client's debug
+ logger (see <a href="../RestClient.Builder.html#debugLoggerName(java.lang.String)"><code>RestClient.Builder.debugLoggerName(String)</code></a>) logs the full
+ outgoing request including all headers, so enabling debug logging on a client using this interceptor will log
+ the <code>Authorization</code> header (and therefore the bearer token) in plain text.</div>
 <dl class="notes">
 <dt>Since:</dt>
 <dd>10.0.0</dd>
@@ -169,7 +170,7 @@ implements <a href="../RestCallInterceptor.html" title="interface in org.apache.
 <li>
 <section class="detail" id="&lt;init&gt;(java.util.function.Supplier)">
 <h3>McpAuthInterceptor</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/client/mcp/McpAuthInterceptor.html#line-60">McpAuthInterceptor</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;tokenSupplier)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/client/mcp/McpAuthInterceptor.html#line-57">McpAuthInterceptor</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;tokenSupplier)</span></div>
 <div class="block">Constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -188,7 +189,7 @@ implements <a href="../RestCallInterceptor.html" title="interface in org.apache.
 <li>
 <section class="detail" id="ofStaticBearer(java.lang.String)">
 <h3>ofStaticBearer</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="McpAuthInterceptor.html" title="class in org.apache.juneau.rest.client.mcp">McpAuthInterceptor</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/client/mcp/McpAuthInterceptor.html#line-70">ofStaticBearer</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;token)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="McpAuthInterceptor.html" title="class in org.apache.juneau.rest.client.mcp">McpAuthInterceptor</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/client/mcp/McpAuthInterceptor.html#line-67">ofStaticBearer</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;token)</span></div>
 <div class="block">Creates an interceptor that always sends the same static bearer token.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -201,7 +202,7 @@ implements <a href="../RestCallInterceptor.html" title="interface in org.apache.
 <li>
 <section class="detail" id="onInit(org.apache.juneau.rest.client.RestRequest)">
 <h3>onInit</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/client/mcp/McpAuthInterceptor.html#line-75">onInit</a></span><wbr><span class="parameters">(<a href="../RestRequest.html" title="class in org.apache.juneau.rest.client">RestRequest</a>&nbsp;req)</span>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/client/mcp/McpAuthInterceptor.html#line-72">onInit</a></span><wbr><span class="parameters">(<a href="../RestRequest.html" title="class in org.apache.juneau.rest.client">RestRequest</a>&nbsp;req)</span>
             throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Exception.html" title="class or interface in java.lang" class="external-link">Exception</a></span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="../RestCallInterceptor.html#onInit(org.apache.juneau.rest.client.RestRequest)">RestCallInterceptor</a></code></span></div>
 <div class="block">Called before the transport request is built and sent.

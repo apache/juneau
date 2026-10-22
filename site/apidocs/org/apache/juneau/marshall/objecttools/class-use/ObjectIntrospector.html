@@ -71,15 +71,32 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><code>static <a href="../ObjectIntrospector.html" title="class in org.apache.juneau.marshall.objecttools">ObjectIntrospector</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">ObjectIntrospector.</span><code><a href="../ObjectIntrospector.html#create(java.lang.Object)" class="member-name-link">create</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</code></div>
+<div class="col-first even-row-color"><code><a href="../ObjectIntrospector.html" title="class in org.apache.juneau.marshall.objecttools">ObjectIntrospector</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">ObjectIntrospector.</span><code><a href="../ObjectIntrospector.html#allow(java.lang.Class,java.lang.String...)" class="member-name-link">allow</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;&nbsp;declaringClass,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;signatures)</code></div>
 <div class="col-last even-row-color">
-<div class="block">Static creator.</div>
+<div class="block">Allow-lists specific method signatures declared on (or inherited by) the specified class.</div>
+</div>
+<div class="col-first odd-row-color"><code><a href="../ObjectIntrospector.html" title="class in org.apache.juneau.marshall.objecttools">ObjectIntrospector</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">ObjectIntrospector.</span><code><a href="../ObjectIntrospector.html#allow(java.util.function.Predicate)" class="member-name-link">allow</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Predicate.html" title="class or interface in java.util.function" class="external-link">Predicate</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Method.html" title="class or interface in java.lang.reflect" class="external-link">Method</a>&gt;&nbsp;filter)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Allow-lists methods matching the specified filter for invocation via <a href="../ObjectIntrospector.html#invokeMethod(java.lang.Class,java.lang.reflect.Method,java.io.Reader)"><code>invokeMethod(java.lang.Class&lt;T&gt;, java.lang.reflect.Method, java.io.Reader)</code></a>.</div>
+</div>
+<div class="col-first even-row-color"><code><a href="../ObjectIntrospector.html" title="class in org.apache.juneau.marshall.objecttools">ObjectIntrospector</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">ObjectIntrospector.</span><code><a href="../ObjectIntrospector.html#allowAll()" class="member-name-link">allowAll</a>()</code></div>
+<div class="col-last even-row-color">
+<div class="block">Disables allow-list enforcement, restoring the pre-10.0 behavior of allowing any public, non-deprecated
+ method to be invoked.</div>
 </div>
 <div class="col-first odd-row-color"><code>static <a href="../ObjectIntrospector.html" title="class in org.apache.juneau.marshall.objecttools">ObjectIntrospector</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">ObjectIntrospector.</span><code><a href="../ObjectIntrospector.html#create(java.lang.Object,org.apache.juneau.marshall.parser.ReaderParser)" class="member-name-link">create</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o,
- <a href="../../parser/ReaderParser.html" title="class in org.apache.juneau.marshall.parser">ReaderParser</a>&nbsp;parser)</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">ObjectIntrospector.</span><code><a href="../ObjectIntrospector.html#create(java.lang.Object)" class="member-name-link">create</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</code></div>
 <div class="col-last odd-row-color">
+<div class="block">Static creator.</div>
+</div>
+<div class="col-first even-row-color"><code>static <a href="../ObjectIntrospector.html" title="class in org.apache.juneau.marshall.objecttools">ObjectIntrospector</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">ObjectIntrospector.</span><code><a href="../ObjectIntrospector.html#create(java.lang.Object,org.apache.juneau.marshall.parser.ReaderParser)" class="member-name-link">create</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o,
+ <a href="../../parser/ReaderParser.html" title="class in org.apache.juneau.marshall.parser">ReaderParser</a>&nbsp;parser)</code></div>
+<div class="col-last even-row-color">
 <div class="block">Static creator.</div>
 </div>
 </div>

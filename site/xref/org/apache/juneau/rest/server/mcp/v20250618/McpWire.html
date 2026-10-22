@@ -186,7 +186,7 @@
 <a class="jxr_linenumber" name="L178" href="#L178">178</a> 			.setHasMore(x.hasMore()));
 <a class="jxr_linenumber" name="L179" href="#L179">179</a> 	}
 <a class="jxr_linenumber" name="L180" href="#L180">180</a> 
-<a class="jxr_linenumber" name="L181" href="#L181">181</a> 	<strong class="jxr_keyword">static</strong> <a name="Implementation" href="../../../../../../../org/apache/juneau/bean/mcp/v20250618/Implementation.html#Implementation">Implementation</a> serverInfo(<a name="McpServerConfig" href="../../../../../../../org/apache/juneau/rest/server/mcp/McpServerConfig.html#McpServerConfig">McpServerConfig</a> config) {
+<a class="jxr_linenumber" name="L181" href="#L181">181</a> 	<strong class="jxr_keyword">static</strong> <a name="Implementation" href="../../../../../../../org/apache/juneau/bean/mcp/v20250618/Implementation.html#Implementation">Implementation</a> serverInfo(McpServerConfig config) {
 <a class="jxr_linenumber" name="L182" href="#L182">182</a> 		<strong class="jxr_keyword">if</strong> (config.getName() == <strong class="jxr_keyword">null</strong> &amp;&amp; config.getVersion() == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L183" href="#L183">183</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a name="Implementation" href="../../../../../../../org/apache/juneau/bean/mcp/v20250618/Implementation.html#Implementation">Implementation</a>()
 <a class="jxr_linenumber" name="L184" href="#L184">184</a> 				.setName(McpRevision.DEFAULT_SERVER_NAME)
@@ -228,7 +228,7 @@
 <a class="jxr_linenumber" name="L220" href="#L220">220</a> 			<strong class="jxr_keyword">return</strong> McpContentBlock.image(x2.getData(), x2.getMimeType());
 <a class="jxr_linenumber" name="L221" href="#L221">221</a> 		<strong class="jxr_keyword">if</strong> (x instanceof <a name="EmbeddedResourceContent" href="../../../../../../../org/apache/juneau/bean/mcp/v20250618/EmbeddedResourceContent.html#EmbeddedResourceContent">EmbeddedResourceContent</a> x2)
 <a class="jxr_linenumber" name="L222" href="#L222">222</a> 			<strong class="jxr_keyword">return</strong> McpContentBlock.resource(toNeutral(x2.getResource()));
-<a class="jxr_linenumber" name="L223" href="#L223">223</a> 		<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> McpException(McpRevision.CODE_INTERNAL_ERROR, <span class="jxr_string">"Unsupported content type: "</span> + x.getClass().getName()); <em class="jxr_comment">// HTT: the Content dictionary is closed to Text/Image/EmbeddedResource; a 4th implementation cannot occur through the public API.</em>
+<a class="jxr_linenumber" name="L223" href="#L223">223</a> 		<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> McpException(McpRevision.CODE_INTERNAL_ERROR, <span class="jxr_string">"Unsupported content type: "</span> + x.getClass().getName());
 <a class="jxr_linenumber" name="L224" href="#L224">224</a> 	}
 <a class="jxr_linenumber" name="L225" href="#L225">225</a> 
 <a class="jxr_linenumber" name="L226" href="#L226">226</a> 	<strong class="jxr_keyword">static</strong> <a name="McpResourceContents" href="../../../../../../../org/apache/juneau/rest/server/mcp/McpResourceContents.html#McpResourceContents">McpResourceContents</a> toNeutral(ResourceContents x) {
@@ -238,7 +238,7 @@
 <a class="jxr_linenumber" name="L230" href="#L230">230</a> 			<strong class="jxr_keyword">return</strong> McpResourceContents.text(x2.getUri(), x2.getMimeType(), x2.getText());
 <a class="jxr_linenumber" name="L231" href="#L231">231</a> 		<strong class="jxr_keyword">if</strong> (x instanceof <a name="BlobResourceContents" href="../../../../../../../org/apache/juneau/bean/mcp/v20250618/BlobResourceContents.html#BlobResourceContents">BlobResourceContents</a> x2)
 <a class="jxr_linenumber" name="L232" href="#L232">232</a> 			<strong class="jxr_keyword">return</strong> McpResourceContents.blob(x2.getUri(), x2.getMimeType(), x2.getBlob());
-<a class="jxr_linenumber" name="L233" href="#L233">233</a> 		<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> McpException(McpRevision.CODE_INTERNAL_ERROR, <span class="jxr_string">"Unsupported resource contents type: "</span> + x.getClass().getName()); <em class="jxr_comment">// HTT: the ResourceContents dictionary is closed to Text/Blob; a 3rd implementation cannot occur through the public API.</em>
+<a class="jxr_linenumber" name="L233" href="#L233">233</a> 		<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> McpException(McpRevision.CODE_INTERNAL_ERROR, <span class="jxr_string">"Unsupported resource contents type: "</span> + x.getClass().getName());
 <a class="jxr_linenumber" name="L234" href="#L234">234</a> 	}
 <a class="jxr_linenumber" name="L235" href="#L235">235</a> 
 <a class="jxr_linenumber" name="L236" href="#L236">236</a> 	<strong class="jxr_keyword">static</strong> <a name="McpResourceTemplateSpec" href="../../../../../../../org/apache/juneau/rest/server/mcp/McpResourceTemplateSpec.html#McpResourceTemplateSpec">McpResourceTemplateSpec</a> toNeutral(<a name="ResourceTemplate" href="../../../../../../../org/apache/juneau/bean/mcp/v20250618/ResourceTemplate.html#ResourceTemplate">ResourceTemplate</a> x) {

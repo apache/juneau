@@ -48,7 +48,7 @@
 <a class="jxr_linenumber" name="L40" href="#L40">40</a>  <strong class="jxr_keyword">class</strong> ApiKeyAuthFilter_Test <strong class="jxr_keyword">extends</strong> TestBase {
 <a class="jxr_linenumber" name="L41" href="#L41">41</a>  
 <a class="jxr_linenumber" name="L42" href="#L42">42</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Principal ALICE = () -&gt; <span class="jxr_string">"alice"</span>;
-<a class="jxr_linenumber" name="L43" href="#L43">43</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> ApiKeyStore STORE = key -&gt; <span class="jxr_string">"good-key"</span>.equals(key) ? o(ALICE) : oe();
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> ApiKeyStore STORE = key -&gt; eq(key, <span class="jxr_string">"good-key"</span>) ? o(ALICE) : oe();
 <a class="jxr_linenumber" name="L44" href="#L44">44</a>  
 <a class="jxr_linenumber" name="L45" href="#L45">45</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> HttpServletRequest reqWithHeader(String headerName, String value) {
 <a class="jxr_linenumber" name="L46" href="#L46">46</a>  		<strong class="jxr_keyword">var</strong> r = mock(HttpServletRequest.<strong class="jxr_keyword">class</strong>);
@@ -146,7 +146,7 @@
 <a class="jxr_linenumber" name="L138" href="#L138">138</a> 	@Test <strong class="jxr_keyword">void</strong> a11_claimsPrincipal_rolesFlowToAuthResult() <strong class="jxr_keyword">throws</strong> Exception {
 <a class="jxr_linenumber" name="L139" href="#L139">139</a> 		<strong class="jxr_keyword">var</strong> claims = Map.&lt;String,Object&gt;of(<span class="jxr_string">"roles"</span>, List.of(<span class="jxr_string">"user"</span>), <span class="jxr_string">"sub"</span>, <span class="jxr_string">"alice"</span>);
 <a class="jxr_linenumber" name="L140" href="#L140">140</a> 		<strong class="jxr_keyword">var</strong> cp = <strong class="jxr_keyword">new</strong> ClaimsPrincipal(<span class="jxr_string">"alice"</span>, claims);
-<a class="jxr_linenumber" name="L141" href="#L141">141</a> 		ApiKeyStore store = key -&gt; <span class="jxr_string">"good-key"</span>.equals(key) ? o(cp) : oe();
+<a class="jxr_linenumber" name="L141" href="#L141">141</a> 		ApiKeyStore store = key -&gt; eq(key, <span class="jxr_string">"good-key"</span>) ? o(cp) : oe();
 <a class="jxr_linenumber" name="L142" href="#L142">142</a> 		<strong class="jxr_keyword">var</strong> f = ApiKeyAuthFilter.create().store(store).build();
 <a class="jxr_linenumber" name="L143" href="#L143">143</a> 		<strong class="jxr_keyword">var</strong> result = f.authenticate(reqWithHeader(<span class="jxr_string">"X-API-Key"</span>, <span class="jxr_string">"good-key"</span>));
 <a class="jxr_linenumber" name="L144" href="#L144">144</a> 		assertTrue(result.isPresent());

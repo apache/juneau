@@ -38,11 +38,11 @@
 <a class="jxr_linenumber" name="L30" href="#L30">30</a>  
 <a class="jxr_linenumber" name="L31" href="#L31">31</a>  <em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L32" href="#L32">32</a>  <em class="jxr_javadoccomment"> * Verifies that top-level (non-bean-property) values for types covered by the inline anonymous swaps registered in</em>
-<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <em class="jxr_javadoccomment"> * {@link org.apache.juneau.marshall.swap.DefaultSwaps} round-trip cleanly through several wire formats.</em>
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <em class="jxr_javadoccomment"> * {@link org.apache.juneau.marshall.swap.spi.DefaultSwaps} round-trip cleanly through several wire formats.</em>
 <a class="jxr_linenumber" name="L34" href="#L34">34</a>  <em class="jxr_javadoccomment"> *</em>
 <a class="jxr_linenumber" name="L35" href="#L35">35</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
 <a class="jxr_linenumber" name="L36" href="#L36">36</a>  <em class="jxr_javadoccomment"> * The three thin delegating swaps that previously lived as standalone classes (LocaleSwap, TimeZoneSwap, ZoneIdSwap)</em>
-<a class="jxr_linenumber" name="L37" href="#L37">37</a>  <em class="jxr_javadoccomment"> * were inlined into {@code DefaultSwaps} as anonymous {@link org.apache.juneau.marshall.swap.StringSwap} subclasses; this test</em>
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>  <em class="jxr_javadoccomment"> * were inlined into {@code DefaultSwaps} as anonymous {@link org.apache.juneau.marshall.swap.spi.StringSwap} subclasses; this test</em>
 <a class="jxr_linenumber" name="L38" href="#L38">38</a>  <em class="jxr_javadoccomment"> * confirms that the inlining did not regress top-level serialization or parsing for any of the three.</em>
 <a class="jxr_linenumber" name="L39" href="#L39">39</a>  <em class="jxr_javadoccomment"> */</em>
 <a class="jxr_linenumber" name="L40" href="#L40">40</a>  <strong class="jxr_keyword">class</strong> <a name="TopLevelDefaultSwapsRoundTrip_Test" href="../../../../../org/apache/juneau/marshall/transforms/TopLevelDefaultSwapsRoundTrip_Test.html#TopLevelDefaultSwapsRoundTrip_Test">TopLevelDefaultSwapsRoundTrip_Test</a> <strong class="jxr_keyword">extends</strong> TestBase {

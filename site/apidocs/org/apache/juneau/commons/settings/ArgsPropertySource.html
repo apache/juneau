@@ -82,7 +82,7 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="PropertySource.html" title="interface in org.apache.juneau.commons.settings">PropertySource</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/settings/ArgsPropertySource.html#line-28">ArgsPropertySource</a></span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/settings/ArgsPropertySource.html#line-29">ArgsPropertySource</a></span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>
 implements <a href="PropertySource.html" title="interface in org.apache.juneau.commons.settings">PropertySource</a></span></div>
 <div class="block">Property source backed by <a href="../runtime/Args.html" title="class in org.apache.juneau.commons.runtime"><code>Args</code></a>.</div>
@@ -122,11 +122,18 @@ implements <a href="PropertySource.html" title="interface in org.apache.juneau.c
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="../runtime/Args.html" title="class in org.apache.juneau.commons.runtime">Args</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#createDefaultArgs()" class="member-name-link">createDefaultArgs</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">&nbsp;</div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="block">Discovers and parses the default command-line args without caching.</div>
+</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="PropertyLookupResult.html" title="class in org.apache.juneau.commons.settings">PropertyLookupResult</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#get(java.lang.String)" class="member-name-link">get</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns a property in this property source.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="../runtime/Args.html" title="class in org.apache.juneau.commons.runtime">Args</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#getDefaultArgs()" class="member-name-link">getDefaultArgs</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="block">Returns the default command-line args, discovered and parsed once per JVM.</div>
 </div>
 </div>
 </div>
@@ -148,7 +155,7 @@ implements <a href="PropertySource.html" title="interface in org.apache.juneau.c
 <li>
 <section class="detail" id="&lt;init&gt;(java.util.function.Supplier)">
 <h3>ArgsPropertySource</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/settings/ArgsPropertySource.html#line-37">ArgsPropertySource</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;<a href="../runtime/Args.html" title="class in org.apache.juneau.commons.runtime">Args</a>&gt;&nbsp;argsSupplier)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/settings/ArgsPropertySource.html#line-38">ArgsPropertySource</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;<a href="../runtime/Args.html" title="class in org.apache.juneau.commons.runtime">Args</a>&gt;&nbsp;argsSupplier)</span></div>
 <div class="block">Constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -167,7 +174,7 @@ implements <a href="PropertySource.html" title="interface in org.apache.juneau.c
 <li>
 <section class="detail" id="createDefault()">
 <h3>createDefault</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="ArgsPropertySource.html" title="class in org.apache.juneau.commons.settings">ArgsPropertySource</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/settings/ArgsPropertySource.html#line-46">createDefault</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="ArgsPropertySource.html" title="class in org.apache.juneau.commons.settings">ArgsPropertySource</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/settings/ArgsPropertySource.html#line-47">createDefault</a></span>()</div>
 <div class="block">Creates a source using the default command-line discovery.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -176,15 +183,31 @@ implements <a href="PropertySource.html" title="interface in org.apache.juneau.c
 </section>
 </li>
 <li>
+<section class="detail" id="getDefaultArgs()">
+<h3>getDefaultArgs</h3>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="../runtime/Args.html" title="class in org.apache.juneau.commons.runtime">Args</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/settings/ArgsPropertySource.html#line-56">getDefaultArgs</a></span>()</div>
+<div class="block">Returns the default command-line args, discovered and parsed once per JVM.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>The cached default args.</dd>
+</dl>
+</section>
+</li>
+<li>
 <section class="detail" id="createDefaultArgs()">
 <h3>createDefaultArgs</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="../runtime/Args.html" title="class in org.apache.juneau.commons.runtime">Args</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/settings/ArgsPropertySource.html#line-50">createDefaultArgs</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="../runtime/Args.html" title="class in org.apache.juneau.commons.runtime">Args</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/settings/ArgsPropertySource.html#line-87">createDefaultArgs</a></span>()</div>
+<div class="block">Discovers and parses the default command-line args without caching.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>A new args object.</dd>
+</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="get(java.lang.String)">
 <h3>get</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="PropertyLookupResult.html" title="class in org.apache.juneau.commons.settings">PropertyLookupResult</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/settings/ArgsPropertySource.html#line-59">get</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="PropertyLookupResult.html" title="class in org.apache.juneau.commons.settings">PropertyLookupResult</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/settings/ArgsPropertySource.html#line-96">get</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="PropertySource.html#get(java.lang.String)">PropertySource</a></code></span></div>
 <div class="block">Returns a property in this property source.</div>
 <dl class="notes">

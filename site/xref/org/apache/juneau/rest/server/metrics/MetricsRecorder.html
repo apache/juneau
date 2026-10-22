@@ -86,69 +86,68 @@
 <a class="jxr_linenumber" name="L78" href="#L78">78</a>  <em class="jxr_javadoccomment"> * @since 10.0.0</em>
 <a class="jxr_linenumber" name="L79" href="#L79">79</a>  <em class="jxr_javadoccomment"> */</em>
 <a class="jxr_linenumber" name="L80" href="#L80">80</a>  @FunctionalInterface
-<a class="jxr_linenumber" name="L81" href="#L81">81</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">interface</strong> <a name="MetricsRecorder" href="../../../../../../org/apache/juneau/rest/server/metrics/MetricsRecorder.html#MetricsRecorder">MetricsRecorder</a> {
-<a class="jxr_linenumber" name="L82" href="#L82">82</a>  
-<a class="jxr_linenumber" name="L83" href="#L83">83</a>  	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L84" href="#L84">84</a>  <em class="jxr_javadoccomment">	 * Records one per-request metric event.</em>
-<a class="jxr_linenumber" name="L85" href="#L85">85</a>  <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L86" href="#L86">86</a>  <em class="jxr_javadoccomment">	 * @param opName The fully-qualified {@code @RestOp} method name (e.g.</em>
-<a class="jxr_linenumber" name="L87" href="#L87">87</a>  <em class="jxr_javadoccomment">	 * 	{@code "com.example.OrderResource.create(java.lang.String,com.example.Order)"}).</em>
-<a class="jxr_linenumber" name="L88" href="#L88">88</a>  <em class="jxr_javadoccomment">	 * 	Never &lt;jk&gt;null&lt;/jk&gt;; never blank.</em>
-<a class="jxr_linenumber" name="L89" href="#L89">89</a>  <em class="jxr_javadoccomment">	 * @param httpMethod The uppercased HTTP method of the request (e.g. {@code "GET"}, {@code "POST"}).</em>
-<a class="jxr_linenumber" name="L90" href="#L90">90</a>  <em class="jxr_javadoccomment">	 * 	Never &lt;jk&gt;null&lt;/jk&gt;; never blank.</em>
-<a class="jxr_linenumber" name="L91" href="#L91">91</a>  <em class="jxr_javadoccomment">	 * @param uriTemplate The {@code @RestOp} path template (e.g. {@code "/users/{id}"}), &lt;b&gt;not&lt;/b&gt; the</em>
-<a class="jxr_linenumber" name="L92" href="#L92">92</a>  <em class="jxr_javadoccomment">	 * 	raw concrete URI. Bridges should use this as the {@code uri} tag to keep cardinality bounded.</em>
-<a class="jxr_linenumber" name="L93" href="#L93">93</a>  <em class="jxr_javadoccomment">	 * 	May be empty for resource-level operations that match {@code /*}; never &lt;jk&gt;null&lt;/jk&gt;.</em>
-<a class="jxr_linenumber" name="L94" href="#L94">94</a>  <em class="jxr_javadoccomment">	 * @param statusCode The HTTP response status code (e.g. {@code 200}, {@code 404}, {@code 500}).</em>
-<a class="jxr_linenumber" name="L95" href="#L95">95</a>  <em class="jxr_javadoccomment">	 * 	If the handler threw before the status was set, this is the framework's inferred status (typically</em>
-<a class="jxr_linenumber" name="L96" href="#L96">96</a>  <em class="jxr_javadoccomment">	 * 	{@code 500} for an unmapped exception, or the exception's status for a {@code BasicHttpException}).</em>
-<a class="jxr_linenumber" name="L97" href="#L97">97</a>  <em class="jxr_javadoccomment">	 * @param elapsed Wall-clock duration of the {@code @RestOp} invocation. Never &lt;jk&gt;null&lt;/jk&gt;; never</em>
-<a class="jxr_linenumber" name="L98" href="#L98">98</a>  <em class="jxr_javadoccomment">	 * 	negative.</em>
-<a class="jxr_linenumber" name="L99" href="#L99">99</a>  <em class="jxr_javadoccomment">	 * @param error The exception thrown by the handler, or &lt;jk&gt;null&lt;/jk&gt; if the call completed normally.</em>
-<a class="jxr_linenumber" name="L100" href="#L100">100</a> <em class="jxr_javadoccomment">	 * 	Bridges typically derive an {@code exception} tag from the throwable's simple class name, or</em>
-<a class="jxr_linenumber" name="L101" href="#L101">101</a> <em class="jxr_javadoccomment">	 * 	{@code "None"} when null (mirrors Spring Boot's {@code WebMvcMetricsFilter} convention).</em>
-<a class="jxr_linenumber" name="L102" href="#L102">102</a> <em class="jxr_javadoccomment">	 * @param metricName Per-op metric name override from {@link org.apache.juneau.rest.server.RestOp#metricName()}.</em>
-<a class="jxr_linenumber" name="L103" href="#L103">103</a> <em class="jxr_javadoccomment">	 * 	Empty string (default) means the implementation should use its own default name derivation.</em>
-<a class="jxr_linenumber" name="L104" href="#L104">104</a> <em class="jxr_javadoccomment">	 * 	Never &lt;jk&gt;null&lt;/jk&gt;.</em>
-<a class="jxr_linenumber" name="L105" href="#L105">105</a> <em class="jxr_javadoccomment">	 * @param metricTags Per-op additional metric tags from {@link org.apache.juneau.rest.server.RestOp#metricTags()}.</em>
-<a class="jxr_linenumber" name="L106" href="#L106">106</a> <em class="jxr_javadoccomment">	 * 	Format: comma-separated {@code key=value} pairs (e.g. {@code "team=payments,region=us-east"}).</em>
-<a class="jxr_linenumber" name="L107" href="#L107">107</a> <em class="jxr_javadoccomment">	 * 	Empty string (default) means no additional tags. Never &lt;jk&gt;null&lt;/jk&gt;.</em>
-<a class="jxr_linenumber" name="L108" href="#L108">108</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L109" href="#L109">109</a> 	@SuppressWarnings({
-<a class="jxr_linenumber" name="L110" href="#L110">110</a> 		<span class="jxr_string">"java:S6213"</span>, <em class="jxr_comment">// 'record' is the established SPI method name; renaming would break the public observability API.</em>
-<a class="jxr_linenumber" name="L111" href="#L111">111</a> 		<span class="jxr_string">"java:S107"</span>   <em class="jxr_comment">// The 8 parameters form the stable per-request metric event contract; a holder object would obscure this SPI signature.</em>
-<a class="jxr_linenumber" name="L112" href="#L112">112</a> 	})
-<a class="jxr_linenumber" name="L113" href="#L113">113</a> 	<strong class="jxr_keyword">void</strong> record(String opName, String httpMethod, String uriTemplate, <strong class="jxr_keyword">int</strong> statusCode, Duration elapsed, Throwable error, String metricName, String metricTags);
-<a class="jxr_linenumber" name="L114" href="#L114">114</a> 
-<a class="jxr_linenumber" name="L115" href="#L115">115</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L116" href="#L116">116</a> <em class="jxr_javadoccomment">	 * Records one custom (non-request) observation event.</em>
-<a class="jxr_linenumber" name="L117" href="#L117">117</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L118" href="#L118">118</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L119" href="#L119">119</a> <em class="jxr_javadoccomment">	 * Unlike {@link #record(String, String, String, int, Duration, Throwable, String, String)}, this</em>
-<a class="jxr_linenumber" name="L120" href="#L120">120</a> <em class="jxr_javadoccomment">	 * entry point is &lt;b&gt;not&lt;/b&gt; tied to an HTTP request &amp;mdash; it is the substrate for the explicit</em>
-<a class="jxr_linenumber" name="L121" href="#L121">121</a> <em class="jxr_javadoccomment">	 * programmatic observation API ({@link org.apache.juneau.rest.server.observation.Observations}) so</em>
-<a class="jxr_linenumber" name="L122" href="#L122">122</a> <em class="jxr_javadoccomment">	 * application code can time an arbitrary block of work. Bridge implementations record a timer named</em>
-<a class="jxr_linenumber" name="L123" href="#L123">123</a> <em class="jxr_javadoccomment">	 * {@code metricName} carrying {@code metricTags} (plus an {@code exception} tag derived from</em>
-<a class="jxr_linenumber" name="L124" href="#L124">124</a> <em class="jxr_javadoccomment">	 * {@code error}).</em>
-<a class="jxr_linenumber" name="L125" href="#L125">125</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L126" href="#L126">126</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L127" href="#L127">127</a> <em class="jxr_javadoccomment">	 * The default implementation does nothing &amp;mdash; a bridge that does not override it simply does not</em>
-<a class="jxr_linenumber" name="L128" href="#L128">128</a> <em class="jxr_javadoccomment">	 * record custom observations, and the no-backend path stays zero-allocation. The shipped Micrometer</em>
-<a class="jxr_linenumber" name="L129" href="#L129">129</a> <em class="jxr_javadoccomment">	 * bridge overrides it.</em>
-<a class="jxr_linenumber" name="L130" href="#L130">130</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L131" href="#L131">131</a> <em class="jxr_javadoccomment">	 * @param metricName The timer name (e.g. {@code "order.load"}). Never &lt;jk&gt;null&lt;/jk&gt;; never blank.</em>
-<a class="jxr_linenumber" name="L132" href="#L132">132</a> <em class="jxr_javadoccomment">	 * @param metricTags Additional tags as comma-separated {@code key=value} pairs (e.g.</em>
-<a class="jxr_linenumber" name="L133" href="#L133">133</a> <em class="jxr_javadoccomment">	 * 	{@code "team=payments,region=us-east"}). Empty string means no additional tags. Never &lt;jk&gt;null&lt;/jk&gt;.</em>
-<a class="jxr_linenumber" name="L134" href="#L134">134</a> <em class="jxr_javadoccomment">	 * @param elapsed Wall-clock duration of the observed block. Never &lt;jk&gt;null&lt;/jk&gt;; never negative.</em>
-<a class="jxr_linenumber" name="L135" href="#L135">135</a> <em class="jxr_javadoccomment">	 * @param error The exception thrown by the observed block, or &lt;jk&gt;null&lt;/jk&gt; if it completed normally.</em>
-<a class="jxr_linenumber" name="L136" href="#L136">136</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L137" href="#L137">137</a> 	@SuppressWarnings({
-<a class="jxr_linenumber" name="L138" href="#L138">138</a> 		<span class="jxr_string">"java:S6213"</span> <em class="jxr_comment">// 'record' is the established SPI method name; renaming would break the public observability API.</em>
-<a class="jxr_linenumber" name="L139" href="#L139">139</a> 	})
-<a class="jxr_linenumber" name="L140" href="#L140">140</a> 	<strong class="jxr_keyword">default</strong> <strong class="jxr_keyword">void</strong> record(String metricName, String metricTags, Duration elapsed, Throwable error) {
-<a class="jxr_linenumber" name="L141" href="#L141">141</a> 		<em class="jxr_comment">// Default no-op: bridges that support custom observations override this.</em>
-<a class="jxr_linenumber" name="L142" href="#L142">142</a> 	}
-<a class="jxr_linenumber" name="L143" href="#L143">143</a> }
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>  @SuppressWarnings({
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>  	<span class="jxr_string">"java:S6213"</span> <em class="jxr_comment">// 'record' is the established SPI method name; renaming would break the public observability API.</em>
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>  })
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">interface</strong> MetricsRecorder {
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>  
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>  	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>  <em class="jxr_javadoccomment">	 * Records one per-request metric event.</em>
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>  <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>  <em class="jxr_javadoccomment">	 * @param opName The fully-qualified {@code @RestOp} method name (e.g.</em>
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>  <em class="jxr_javadoccomment">	 * 	{@code "com.example.OrderResource.create(java.lang.String,com.example.Order)"}).</em>
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>  <em class="jxr_javadoccomment">	 * 	Never &lt;jk&gt;null&lt;/jk&gt;; never blank.</em>
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>  <em class="jxr_javadoccomment">	 * @param httpMethod The uppercased HTTP method of the request (e.g. {@code "GET"}, {@code "POST"}).</em>
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>  <em class="jxr_javadoccomment">	 * 	Never &lt;jk&gt;null&lt;/jk&gt;; never blank.</em>
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>  <em class="jxr_javadoccomment">	 * @param uriTemplate The {@code @RestOp} path template (e.g. {@code "/users/{id}"}), &lt;b&gt;not&lt;/b&gt; the</em>
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>  <em class="jxr_javadoccomment">	 * 	raw concrete URI. Bridges should use this as the {@code uri} tag to keep cardinality bounded.</em>
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>  <em class="jxr_javadoccomment">	 * 	May be empty for resource-level operations that match {@code /*}; never &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>  <em class="jxr_javadoccomment">	 * @param statusCode The HTTP response status code (e.g. {@code 200}, {@code 404}, {@code 500}).</em>
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>  <em class="jxr_javadoccomment">	 * 	If the handler threw before the status was set, this is the framework's inferred status (typically</em>
+<a class="jxr_linenumber" name="L99" href="#L99">99</a>  <em class="jxr_javadoccomment">	 * 	{@code 500} for an unmapped exception, or the exception's status for a {@code BasicHttpException}).</em>
+<a class="jxr_linenumber" name="L100" href="#L100">100</a> <em class="jxr_javadoccomment">	 * @param elapsed Wall-clock duration of the {@code @RestOp} invocation. Never &lt;jk&gt;null&lt;/jk&gt;; never</em>
+<a class="jxr_linenumber" name="L101" href="#L101">101</a> <em class="jxr_javadoccomment">	 * 	negative.</em>
+<a class="jxr_linenumber" name="L102" href="#L102">102</a> <em class="jxr_javadoccomment">	 * @param error The exception thrown by the handler, or &lt;jk&gt;null&lt;/jk&gt; if the call completed normally.</em>
+<a class="jxr_linenumber" name="L103" href="#L103">103</a> <em class="jxr_javadoccomment">	 * 	Bridges typically derive an {@code exception} tag from the throwable's simple class name, or</em>
+<a class="jxr_linenumber" name="L104" href="#L104">104</a> <em class="jxr_javadoccomment">	 * 	{@code "None"} when null (mirrors Spring Boot's {@code WebMvcMetricsFilter} convention).</em>
+<a class="jxr_linenumber" name="L105" href="#L105">105</a> <em class="jxr_javadoccomment">	 * @param metricName Per-op metric name override from {@link org.apache.juneau.rest.server.RestOp#metricName()}.</em>
+<a class="jxr_linenumber" name="L106" href="#L106">106</a> <em class="jxr_javadoccomment">	 * 	Empty string (default) means the implementation should use its own default name derivation.</em>
+<a class="jxr_linenumber" name="L107" href="#L107">107</a> <em class="jxr_javadoccomment">	 * 	Never &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L108" href="#L108">108</a> <em class="jxr_javadoccomment">	 * @param metricTags Per-op additional metric tags from {@link org.apache.juneau.rest.server.RestOp#metricTags()}.</em>
+<a class="jxr_linenumber" name="L109" href="#L109">109</a> <em class="jxr_javadoccomment">	 * 	Format: comma-separated {@code key=value} pairs (e.g. {@code "team=payments,region=us-east"}).</em>
+<a class="jxr_linenumber" name="L110" href="#L110">110</a> <em class="jxr_javadoccomment">	 * 	Empty string (default) means no additional tags. Never &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L111" href="#L111">111</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L112" href="#L112">112</a> 	@SuppressWarnings({
+<a class="jxr_linenumber" name="L113" href="#L113">113</a> 		<span class="jxr_string">"java:S107"</span> <em class="jxr_comment">// The 8 parameters form the stable per-request metric event contract; a holder object would obscure this SPI signature.</em>
+<a class="jxr_linenumber" name="L114" href="#L114">114</a> 	})
+<a class="jxr_linenumber" name="L115" href="#L115">115</a> 	<strong class="jxr_keyword">void</strong> record(String opName, String httpMethod, String uriTemplate, <strong class="jxr_keyword">int</strong> statusCode, Duration elapsed, Throwable error, String metricName, String metricTags);
+<a class="jxr_linenumber" name="L116" href="#L116">116</a> 
+<a class="jxr_linenumber" name="L117" href="#L117">117</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L118" href="#L118">118</a> <em class="jxr_javadoccomment">	 * Records one custom (non-request) observation event.</em>
+<a class="jxr_linenumber" name="L119" href="#L119">119</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L120" href="#L120">120</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L121" href="#L121">121</a> <em class="jxr_javadoccomment">	 * Unlike {@link #record(String, String, String, int, Duration, Throwable, String, String)}, this</em>
+<a class="jxr_linenumber" name="L122" href="#L122">122</a> <em class="jxr_javadoccomment">	 * entry point is &lt;b&gt;not&lt;/b&gt; tied to an HTTP request &amp;mdash; it is the substrate for the explicit</em>
+<a class="jxr_linenumber" name="L123" href="#L123">123</a> <em class="jxr_javadoccomment">	 * programmatic observation API ({@link org.apache.juneau.rest.server.observation.Observations}) so</em>
+<a class="jxr_linenumber" name="L124" href="#L124">124</a> <em class="jxr_javadoccomment">	 * application code can time an arbitrary block of work. Bridge implementations record a timer named</em>
+<a class="jxr_linenumber" name="L125" href="#L125">125</a> <em class="jxr_javadoccomment">	 * {@code metricName} carrying {@code metricTags} (plus an {@code exception} tag derived from</em>
+<a class="jxr_linenumber" name="L126" href="#L126">126</a> <em class="jxr_javadoccomment">	 * {@code error}).</em>
+<a class="jxr_linenumber" name="L127" href="#L127">127</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L128" href="#L128">128</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L129" href="#L129">129</a> <em class="jxr_javadoccomment">	 * The default implementation does nothing &amp;mdash; a bridge that does not override it simply does not</em>
+<a class="jxr_linenumber" name="L130" href="#L130">130</a> <em class="jxr_javadoccomment">	 * record custom observations, and the no-backend path stays zero-allocation. The shipped Micrometer</em>
+<a class="jxr_linenumber" name="L131" href="#L131">131</a> <em class="jxr_javadoccomment">	 * bridge overrides it.</em>
+<a class="jxr_linenumber" name="L132" href="#L132">132</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L133" href="#L133">133</a> <em class="jxr_javadoccomment">	 * @param metricName The timer name (e.g. {@code "order.load"}). Never &lt;jk&gt;null&lt;/jk&gt;; never blank.</em>
+<a class="jxr_linenumber" name="L134" href="#L134">134</a> <em class="jxr_javadoccomment">	 * @param metricTags Additional tags as comma-separated {@code key=value} pairs (e.g.</em>
+<a class="jxr_linenumber" name="L135" href="#L135">135</a> <em class="jxr_javadoccomment">	 * 	{@code "team=payments,region=us-east"}). Empty string means no additional tags. Never &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L136" href="#L136">136</a> <em class="jxr_javadoccomment">	 * @param elapsed Wall-clock duration of the observed block. Never &lt;jk&gt;null&lt;/jk&gt;; never negative.</em>
+<a class="jxr_linenumber" name="L137" href="#L137">137</a> <em class="jxr_javadoccomment">	 * @param error The exception thrown by the observed block, or &lt;jk&gt;null&lt;/jk&gt; if it completed normally.</em>
+<a class="jxr_linenumber" name="L138" href="#L138">138</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L139" href="#L139">139</a> 	<strong class="jxr_keyword">default</strong> <strong class="jxr_keyword">void</strong> record(String metricName, String metricTags, Duration elapsed, Throwable error) {
+<a class="jxr_linenumber" name="L140" href="#L140">140</a> 		<em class="jxr_comment">// Default no-op: bridges that support custom observations override this.</em>
+<a class="jxr_linenumber" name="L141" href="#L141">141</a> 	}
+<a class="jxr_linenumber" name="L142" href="#L142">142</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

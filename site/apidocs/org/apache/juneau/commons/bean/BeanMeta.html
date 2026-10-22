@@ -82,7 +82,7 @@ loadScripts(document, 'script');</script>
 <dd><code>T</code> - The class type that this metadata applies to.</dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanMeta.html#line-79">BeanMeta</a>&lt;T&gt;</span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanMeta.html#line-90">BeanMeta</a>&lt;T&gt;</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
 <div class="block">Encapsulates all access to the properties of a bean class (like a souped-up <a href="BeanInfo.html" title="class in org.apache.juneau.commons.bean"><code>BeanInfo</code></a>).
 
@@ -95,19 +95,30 @@ loadScripts(document, 'script');</script>
 
  <h5 class='topic'>Bean property ordering</h5>
 
- The order of the properties are as follows:
+ The order of the properties is as follows:
  <ul class='spaced-list'>
    <li>
       If <a href="BeanType.html#properties()"><code>@BeanType(properties)</code></a> is specified on the class, the order matches the
       list of properties in the annotation.
    <li>
-      Otherwise, the order is based on the following:
+      Otherwise, by default, properties are sorted alphabetically.
+   <li>
+      When unsorted properties are enabled (<a href="BeanConfigContext.html#isUnsortedProperties()"><code>BeanConfigContext.isUnsortedProperties()</code></a>,
+      <a href="BeanType.html#unsorted()"><code>@BeanType(unsorted=true)</code></a>, or a bean filter), properties use declaration order:
       <ul>
-         <li>Public fields (same order as <code>Class.getFields()</code>).
-         <li>Properties returned by <code>BeanInfo.getPropertyDescriptors()</code>.
-         <li>Non-standard getters/setters with <a href="BeanProp.html" title="annotation interface in org.apache.juneau.commons.bean"><code>@BeanProp</code></a> annotation defined on them.
+         <li>Records: record component order.
+         <li>Other classes: field declaration order, superclass fields first.  Getter/setter properties are ranked
+            by their same-named field (even a private one), which is used as an ordering hint only.
+         <li>Method-only properties (no backing field) follow, alphabetically.
       </ul>
+   <li>
+      <a href="BeanConfigContext.html#isRecordComponentOrder()"><code>BeanConfigContext.isRecordComponentOrder()</code></a> gives records component order even when other beans are
+      sorted.
  </ul>
+
+ <p>
+ Field order comes from <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html#getDeclaredFields()" title="class or interface in java.lang" class="external-link"><code>Class.getDeclaredFields()</code></a>, which is declaration order on HotSpot and OpenJ9 but is
+ not guaranteed by the JLS.
 
  <h5 class='topic'>Thread safety</h5>
 
@@ -277,30 +288,40 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns metadata about the specified property.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>protected <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Method.html" title="class or interface in java.lang.reflect" class="external-link">Method</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getSetterProps()" class="member-name-link">getSetterProps</a>()</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getRequiredPropertyNames()" class="member-name-link">getRequiredPropertyNames</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Returns the names of the properties marked <code>@BeanProp(required=true)</code>.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>protected <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Method.html" title="class or interface in java.lang.reflect" class="external-link">Method</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getSetterProps()" class="member-name-link">getSetterProps</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns the map of setter methods to property names.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="BeanPropertyMeta.html" title="class in org.apache.juneau.commons.bean">BeanPropertyMeta</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getTypeProperty()" class="member-name-link">getTypeProperty</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="BeanPropertyMeta.html" title="class in org.apache.juneau.commons.bean">BeanPropertyMeta</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getTypeProperty()" class="member-name-link">getTypeProperty</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns a mock bean property that resolves to the name <js>"_type"</js> and whose value always resolves to the
  dictionary name of the bean.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getTypePropertyName()" class="member-name-link">getTypePropertyName</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getTypePropertyName()" class="member-name-link">getTypePropertyName</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns the type property name for this bean.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#hasConstructor()" class="member-name-link">hasConstructor</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#hasConstructor()" class="member-name-link">hasConstructor</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns whether this bean has a constructor available for instantiation.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>int</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#hashCode()" class="member-name-link">hashCode</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>int</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#hashCode()" class="member-name-link">hashCode</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#hasRequiredProperties()" class="member-name-link">hasRequiredProperties</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Returns whether any property of this bean is marked <code>@BeanProp(required=true)</code>.</div>
+</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>protected boolean</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#isUnsortedProperties()" class="member-name-link">isUnsortedProperties</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
@@ -362,7 +383,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.commons.bean.BeanInfo,org.apache.juneau.commons.bean.BeanFilter,java.lang.String[],org.apache.juneau.commons.reflect.ClassInfo)">
 <h3>BeanMeta</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanMeta.html#line-439">BeanMeta</a></span><wbr><span class="parameters">(<a href="BeanInfo.html" title="class in org.apache.juneau.commons.bean">BeanInfo</a>&lt;<a href="BeanMeta.html" title="type parameter in BeanMeta">T</a>&gt;&nbsp;cm,
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanMeta.html#line-450">BeanMeta</a></span><wbr><span class="parameters">(<a href="BeanInfo.html" title="class in org.apache.juneau.commons.bean">BeanInfo</a>&lt;<a href="BeanMeta.html" title="type parameter in BeanMeta">T</a>&gt;&nbsp;cm,
  <a href="BeanFilter.html" title="interface in org.apache.juneau.commons.bean">BeanFilter</a>&nbsp;bf,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>[]&nbsp;pNames,
  <a href="../reflect/ClassInfo.html" title="class in org.apache.juneau.commons.reflect">ClassInfo</a>&nbsp;implClass)</span></div>
@@ -394,7 +415,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.commons.bean.BeanInfo,org.apache.juneau.commons.bean.BeanFilter,java.lang.String[],org.apache.juneau.commons.reflect.ClassInfo,org.apache.juneau.commons.bean.PropertyNamer)">
 <h3>BeanMeta</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanMeta.html#line-454">BeanMeta</a></span><wbr><span class="parameters">(<a href="BeanInfo.html" title="class in org.apache.juneau.commons.bean">BeanInfo</a>&lt;<a href="BeanMeta.html" title="type parameter in BeanMeta">T</a>&gt;&nbsp;cm,
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanMeta.html#line-465">BeanMeta</a></span><wbr><span class="parameters">(<a href="BeanInfo.html" title="class in org.apache.juneau.commons.bean">BeanInfo</a>&lt;<a href="BeanMeta.html" title="type parameter in BeanMeta">T</a>&gt;&nbsp;cm,
  <a href="BeanFilter.html" title="interface in org.apache.juneau.commons.bean">BeanFilter</a>&nbsp;bf,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>[]&nbsp;pNames,
  <a href="../reflect/ClassInfo.html" title="class in org.apache.juneau.commons.reflect">ClassInfo</a>&nbsp;implClass,
@@ -415,7 +436,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;(java.lang.Class,org.apache.juneau.commons.bean.BeanConfigContext)">
 <h3>BeanMeta</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanMeta.html#line-470">BeanMeta</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;<a href="BeanMeta.html" title="type parameter in BeanMeta">T</a>&gt;&nbsp;beanClass,
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanMeta.html#line-481">BeanMeta</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;<a href="BeanMeta.html" title="type parameter in BeanMeta">T</a>&gt;&nbsp;beanClass,
  <a href="BeanConfigContext.html" title="class in org.apache.juneau.commons.bean">BeanConfigContext</a>&nbsp;config)</span></div>
 <div class="block">Bean-modeling constructor — builds a <a href="BeanMeta.html" title="class in org.apache.juneau.commons.bean"><code>BeanMeta</code></a> without marshalling context state.
 
@@ -442,7 +463,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="create(org.apache.juneau.commons.bean.BeanInfo,org.apache.juneau.commons.reflect.ClassInfo)">
 <h3>create</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type"><a href="BeanMeta.BeanMetaValue.html" title="class in org.apache.juneau.commons.bean">BeanMeta.BeanMetaValue</a>&lt;T&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanMeta.html#line-214">create</a></span><wbr><span class="parameters">(<a href="BeanInfo.html" title="class in org.apache.juneau.commons.bean">BeanInfo</a>&lt;T&gt;&nbsp;cm,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type"><a href="BeanMeta.BeanMetaValue.html" title="class in org.apache.juneau.commons.bean">BeanMeta.BeanMetaValue</a>&lt;T&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanMeta.html#line-226">create</a></span><wbr><span class="parameters">(<a href="BeanInfo.html" title="class in org.apache.juneau.commons.bean">BeanInfo</a>&lt;T&gt;&nbsp;cm,
  <a href="../reflect/ClassInfo.html" title="class in org.apache.juneau.commons.reflect">ClassInfo</a>&nbsp;implClass)</span></div>
 <div class="block">Creates a <a href="BeanMeta.html" title="class in org.apache.juneau.commons.bean"><code>BeanMeta</code></a> instance for the specified bean type info.
 
@@ -491,7 +512,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="create(org.apache.juneau.commons.bean.BeanInfo,org.apache.juneau.commons.reflect.ClassInfo,org.apache.juneau.commons.bean.PropertyNamer)">
 <h3>create</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type"><a href="BeanMeta.BeanMetaValue.html" title="class in org.apache.juneau.commons.bean">BeanMeta.BeanMetaValue</a>&lt;T&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanMeta.html#line-234">create</a></span><wbr><span class="parameters">(<a href="BeanInfo.html" title="class in org.apache.juneau.commons.bean">BeanInfo</a>&lt;T&gt;&nbsp;cm,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type"><a href="BeanMeta.BeanMetaValue.html" title="class in org.apache.juneau.commons.bean">BeanMeta.BeanMetaValue</a>&lt;T&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanMeta.html#line-246">create</a></span><wbr><span class="parameters">(<a href="BeanInfo.html" title="class in org.apache.juneau.commons.bean">BeanInfo</a>&lt;T&gt;&nbsp;cm,
  <a href="../reflect/ClassInfo.html" title="class in org.apache.juneau.commons.reflect">ClassInfo</a>&nbsp;implClass,
  <a href="PropertyNamer.html" title="interface in org.apache.juneau.commons.bean">PropertyNamer</a>&nbsp;propertyNamer)</span></div>
 <div class="block">Same as <a href="#create(org.apache.juneau.commons.bean.BeanInfo,org.apache.juneau.commons.reflect.ClassInfo)"><code>create(BeanInfo, ClassInfo)</code></a> but allows an explicit <a href="PropertyNamer.html" title="interface in org.apache.juneau.commons.bean"><code>PropertyNamer</code></a> to override the one
@@ -517,7 +538,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="of(java.lang.Class,org.apache.juneau.commons.bean.BeanConfigContext)">
 <h3>of</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type"><a href="BeanMeta.html" title="class in org.apache.juneau.commons.bean">BeanMeta</a>&lt;T&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanMeta.html#line-401">of</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;T&gt;&nbsp;beanClass,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type"><a href="BeanMeta.html" title="class in org.apache.juneau.commons.bean">BeanMeta</a>&lt;T&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanMeta.html#line-412">of</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;T&gt;&nbsp;beanClass,
  <a href="BeanConfigContext.html" title="class in org.apache.juneau.commons.bean">BeanConfigContext</a>&nbsp;config)</span></div>
 <div class="block">Creates a <a href="BeanMeta.html" title="class in org.apache.juneau.commons.bean"><code>BeanMeta</code></a> for the specified class using the supplied <a href="BeanConfigContext.html" title="class in org.apache.juneau.commons.bean"><code>BeanConfigContext</code></a>.
 
@@ -547,7 +568,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="of(java.lang.Class)">
 <h3>of</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type"><a href="BeanMeta.html" title="class in org.apache.juneau.commons.bean">BeanMeta</a>&lt;T&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanMeta.html#line-412">of</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;T&gt;&nbsp;beanClass)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type"><a href="BeanMeta.html" title="class in org.apache.juneau.commons.bean">BeanMeta</a>&lt;T&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanMeta.html#line-423">of</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;T&gt;&nbsp;beanClass)</span></div>
 <div class="block">Same as <a href="#of(java.lang.Class,org.apache.juneau.commons.bean.BeanConfigContext)"><code>of(Class, BeanConfigContext)</code></a> using <a href="BeanConfigContext.html#DEFAULT"><code>BeanConfigContext.DEFAULT</code></a>.</div>
 <dl class="notes">
 <dt>Type Parameters:</dt>
@@ -562,7 +583,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="equals(java.lang.Object)">
 <h3>equals</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanMeta.html#line-738">equals</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanMeta.html#line-804">equals</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</span></div>
 <dl class="notes">
 <dt>Overrides:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#equals(java.lang.Object)" title="class or interface in java.lang" class="external-link">equals</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></code></dd>
@@ -572,7 +593,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getBeanFilter()">
 <h3>getBeanFilter</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanFilter.html" title="interface in org.apache.juneau.commons.bean">BeanFilter</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanMeta.html#line-757">getBeanFilter</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanFilter.html" title="interface in org.apache.juneau.commons.bean">BeanFilter</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanMeta.html#line-823">getBeanFilter</a></span>()</div>
 <div class="block">Returns the bean filter associated with this bean.
 
  <p>
@@ -592,7 +613,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getBeanProxyInvocationHandler()">
 <h3>getBeanProxyInvocationHandler</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/InvocationHandler.html" title="class or interface in java.lang.reflect" class="external-link">InvocationHandler</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanMeta.html#line-768">getBeanProxyInvocationHandler</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/InvocationHandler.html" title="class or interface in java.lang.reflect" class="external-link">InvocationHandler</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanMeta.html#line-834">getBeanProxyInvocationHandler</a></span>()</div>
 <div class="block">Returns the proxy invocation handler for this bean if it's an interface.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -603,7 +624,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getBeanRegistry()">
 <h3>getBeanRegistry</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanRegistryLookup.html" title="interface in org.apache.juneau.commons.bean">BeanRegistryLookup</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanMeta.html#line-784">getBeanRegistry</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanRegistryLookup.html" title="interface in org.apache.juneau.commons.bean">BeanRegistryLookup</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanMeta.html#line-850">getBeanRegistry</a></span>()</div>
 <div class="block">Returns the bean registry for this bean.
 
  <p>
@@ -621,7 +642,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getPropertyBeanRegistry(org.apache.juneau.commons.bean.BeanPropertyMeta)">
 <h3>getPropertyBeanRegistry</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanRegistryLookup.html" title="interface in org.apache.juneau.commons.bean">BeanRegistryLookup</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanMeta.html#line-805">getPropertyBeanRegistry</a></span><wbr><span class="parameters">(<a href="BeanPropertyMeta.html" title="class in org.apache.juneau.commons.bean">BeanPropertyMeta</a>&nbsp;p)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanRegistryLookup.html" title="interface in org.apache.juneau.commons.bean">BeanRegistryLookup</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanMeta.html#line-871">getPropertyBeanRegistry</a></span><wbr><span class="parameters">(<a href="BeanPropertyMeta.html" title="class in org.apache.juneau.commons.bean">BeanPropertyMeta</a>&nbsp;p)</span></div>
 <div class="block">Returns the per-property registry lookup associated with the given <a href="BeanPropertyMeta.html" title="class in org.apache.juneau.commons.bean"><code>BeanPropertyMeta</code></a>.
 
  <p>
@@ -647,7 +668,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getBeanInfo()">
 <h3>getBeanInfo</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanInfo.html" title="class in org.apache.juneau.commons.bean">BeanInfo</a>&lt;<a href="BeanMeta.html" title="type parameter in BeanMeta">T</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanMeta.html#line-822">getBeanInfo</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanInfo.html" title="class in org.apache.juneau.commons.bean">BeanInfo</a>&lt;<a href="BeanMeta.html" title="type parameter in BeanMeta">T</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanMeta.html#line-888">getBeanInfo</a></span>()</div>
 <div class="block">Returns the <a href="BeanInfo.html" title="class in org.apache.juneau.commons.bean"><code>BeanInfo</code></a> of this bean.
 
  <p>
@@ -666,7 +687,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getClassInfo()">
 <h3>getClassInfo</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../reflect/ClassInfo.html" title="class in org.apache.juneau.commons.reflect">ClassInfo</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanMeta.html#line-834">getClassInfo</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../reflect/ClassInfo.html" title="class in org.apache.juneau.commons.reflect">ClassInfo</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanMeta.html#line-900">getClassInfo</a></span>()</div>
 <div class="block">Returns the <a href="../reflect/ClassInfo.html" title="class in org.apache.juneau.commons.reflect"><code>ClassInfo</code></a> of this bean.
 
  <p>
@@ -682,7 +703,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getConfig()">
 <h3>getConfig</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanConfigContext.html" title="class in org.apache.juneau.commons.bean">BeanConfigContext</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanMeta.html#line-846">getConfig</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanConfigContext.html" title="class in org.apache.juneau.commons.bean">BeanConfigContext</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanMeta.html#line-912">getConfig</a></span>()</div>
 <div class="block">Returns the bean-modeling configuration snapshot used to build this <a href="BeanMeta.html" title="class in org.apache.juneau.commons.bean"><code>BeanMeta</code></a>.
 
  <p>
@@ -698,7 +719,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getDictionaryName()">
 <h3>getDictionaryName</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanMeta.html#line-853">getDictionaryName</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanMeta.html#line-919">getDictionaryName</a></span>()</div>
 <div class="block">Returns the dictionary name for this bean as defined through the <code>@Marshalled(typeName)</code> annotation.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -709,7 +730,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getProperties()">
 <h3>getProperties</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="BeanPropertyMeta.html" title="class in org.apache.juneau.commons.bean">BeanPropertyMeta</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanMeta.html#line-870">getProperties</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="BeanPropertyMeta.html" title="class in org.apache.juneau.commons.bean">BeanPropertyMeta</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanMeta.html#line-936">getProperties</a></span>()</div>
 <div class="block">Returns a map of all properties on this bean.
 
  <p>
@@ -735,7 +756,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getPropertyMeta(java.lang.String)">
 <h3>getPropertyMeta</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanPropertyMeta.html" title="class in org.apache.juneau.commons.bean">BeanPropertyMeta</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanMeta.html#line-878">getPropertyMeta</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanPropertyMeta.html" title="class in org.apache.juneau.commons.bean">BeanPropertyMeta</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanMeta.html#line-954">getPropertyMeta</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
 <div class="block">Returns metadata about the specified property.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -748,7 +769,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getTypeProperty()">
 <h3>getTypeProperty</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanPropertyMeta.html" title="class in org.apache.juneau.commons.bean">BeanPropertyMeta</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanMeta.html#line-895">getTypeProperty</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanPropertyMeta.html" title="class in org.apache.juneau.commons.bean">BeanPropertyMeta</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanMeta.html#line-971">getTypeProperty</a></span>()</div>
 <div class="block">Returns a mock bean property that resolves to the name <js>"_type"</js> and whose value always resolves to the
  dictionary name of the bean.</div>
 <dl class="notes">
@@ -760,7 +781,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getTypePropertyName()">
 <h3>getTypePropertyName</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanMeta.html#line-919">getTypePropertyName</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanMeta.html#line-995">getTypePropertyName</a></span>()</div>
 <div class="block">Returns the type property name for this bean.
 
  <p>
@@ -792,7 +813,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="hashCode()">
 <h3>hashCode</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanMeta.html#line-921">hashCode</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanMeta.html#line-997">hashCode</a></span>()</div>
 <dl class="notes">
 <dt>Overrides:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#hashCode()" title="class or interface in java.lang" class="external-link">hashCode</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></code></dd>
@@ -802,7 +823,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="onReadProperty(java.lang.Object,java.lang.String,java.lang.Object)">
 <h3>onReadProperty</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanMeta.html#line-937">onReadProperty</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;bean,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanMeta.html#line-1013">onReadProperty</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;bean,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</span></div>
 <div class="block">Property read interceptor.
@@ -822,7 +843,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="onWriteProperty(java.lang.Object,java.lang.String,java.lang.Object)">
 <h3>onWriteProperty</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanMeta.html#line-952">onWriteProperty</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;bean,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanMeta.html#line-1028">onWriteProperty</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;bean,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</span></div>
 <div class="block">Property write interceptor.
@@ -842,13 +863,13 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="properties()">
 <h3>properties</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="../collections/FluentMap.html" title="class in org.apache.juneau.commons.collections">FluentMap</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanMeta.html#line-956">properties</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="../collections/FluentMap.html" title="class in org.apache.juneau.commons.collections">FluentMap</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanMeta.html#line-1032">properties</a></span>()</div>
 </section>
 </li>
 <li>
 <section class="detail" id="toString()">
 <h3>toString</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanMeta.html#line-964">toString</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanMeta.html#line-1040">toString</a></span>()</div>
 <dl class="notes">
 <dt>Overrides:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#toString()" title="class or interface in java.lang" class="external-link">toString</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></code></dd>
@@ -858,7 +879,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getBeanTypeResolver()">
 <h3>getBeanTypeResolver</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="BeanTypeResolver.html" title="interface in org.apache.juneau.commons.bean">BeanTypeResolver</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanMeta.html#line-984">getBeanTypeResolver</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="BeanTypeResolver.html" title="interface in org.apache.juneau.commons.bean">BeanTypeResolver</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanMeta.html#line-1060">getBeanTypeResolver</a></span>()</div>
 <div class="block">Returns the bean-modeling <a href="BeanTypeResolver.html" title="interface in org.apache.juneau.commons.bean"><code>BeanTypeResolver</code></a> that this metadata was constructed against.
 
  <p>
@@ -879,7 +900,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getConstructor()">
 <h3>getConstructor</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../reflect/ConstructorInfo.html" title="class in org.apache.juneau.commons.reflect">ConstructorInfo</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanMeta.html#line-1002">getConstructor</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../reflect/ConstructorInfo.html" title="class in org.apache.juneau.commons.reflect">ConstructorInfo</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanMeta.html#line-1078">getConstructor</a></span>()</div>
 <div class="block">Returns the constructor for this bean, if one was found.
 
  <p>
@@ -906,7 +927,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getConstructorArgs()">
 <h3>getConstructorArgs</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanMeta.html#line-1027">getConstructorArgs</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanMeta.html#line-1103">getConstructorArgs</a></span>()</div>
 <div class="block">Returns the list of property names that correspond to the constructor parameters.
 
  <p>
@@ -938,7 +959,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getDynaProperty()">
 <h3>getDynaProperty</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="BeanPropertyMeta.html" title="class in org.apache.juneau.commons.bean">BeanPropertyMeta</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanMeta.html#line-1036">getDynaProperty</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="BeanPropertyMeta.html" title="class in org.apache.juneau.commons.bean">BeanPropertyMeta</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanMeta.html#line-1112">getDynaProperty</a></span>()</div>
 <div class="block">Returns the "extras" property for dynamic bean properties.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -949,7 +970,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getGetterProps()">
 <h3>getGetterProps</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Method.html" title="class or interface in java.lang.reflect" class="external-link">Method</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanMeta.html#line-1043">getGetterProps</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Method.html" title="class or interface in java.lang.reflect" class="external-link">Method</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanMeta.html#line-1119">getGetterProps</a></span>()</div>
 <div class="block">Returns the map of getter methods to property names.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -960,7 +981,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getHiddenProperties()">
 <h3>getHiddenProperties</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="BeanPropertyMeta.html" title="class in org.apache.juneau.commons.bean">BeanPropertyMeta</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanMeta.html#line-1062">getHiddenProperties</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="BeanPropertyMeta.html" title="class in org.apache.juneau.commons.bean">BeanPropertyMeta</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanMeta.html#line-1138">getHiddenProperties</a></span>()</div>
 <div class="block">Returns the map of hidden properties on this bean.
 
  <p>
@@ -988,7 +1009,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getSetterProps()">
 <h3>getSetterProps</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Method.html" title="class or interface in java.lang.reflect" class="external-link">Method</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanMeta.html#line-1071">getSetterProps</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Method.html" title="class or interface in java.lang.reflect" class="external-link">Method</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanMeta.html#line-1147">getSetterProps</a></span>()</div>
 <div class="block">Returns the map of setter methods to property names.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -999,7 +1020,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="hasConstructor()">
 <h3>hasConstructor</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanMeta.html#line-1093">hasConstructor</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanMeta.html#line-1169">hasConstructor</a></span>()</div>
 <div class="block">Returns whether this bean has a constructor available for instantiation.
 
  <p>
@@ -1028,20 +1049,53 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
+<section class="detail" id="hasRequiredProperties()">
+<h3>hasRequiredProperties</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanMeta.html#line-1178">hasRequiredProperties</a></span>()</div>
+<div class="block">Returns whether any property of this bean is marked <code>@BeanProp(required=true)</code>.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd><jk>true</jk> if at least one property is required.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="getRequiredPropertyNames()">
+<h3>getRequiredPropertyNames</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanMeta.html#line-1196">getRequiredPropertyNames</a></span>()</div>
+<div class="block">Returns the names of the properties marked <code>@BeanProp(required=true)</code>.
+
+ <p>
+ Hidden and excluded properties are not included, since input can never set them.
+
+ <h5 class='section'>Example:</h5>
+ <p class='bjava'>
+   <jk>public record</jk> Person(<ja>@BeanProp</ja>(required=<jk>true</jk>) String <jv>name</jv>, Integer <jv>age</jv>) {}
+
+   <jc>// [name]</jc>
+   List&lt;String&gt; <jv>required</jv> = BeanMeta.<jsm>of</jsm>(Person.<jk>class</jk>, BeanConfigContext.<jsf>DEFAULT</jsf>).getRequiredPropertyNames();
+ </p></div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>An unmodifiable list of property names, in property order.  Never <jk>null</jk>.</dd>
+</dl>
+</section>
+</li>
+<li>
 <section class="detail" id="isUnsortedProperties()">
 <h3>isUnsortedProperties</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanMeta.html#line-1102">isUnsortedProperties</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanMeta.html#line-1203">isUnsortedProperties</a></span>()</div>
 <div class="block">Returns whether this bean has opted out of alphabetical property sorting.</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd><jk>true</jk> if properties should use natural JVM-dependent order.</dd>
+<dd><jk>true</jk> if properties use declaration order (see the class Javadoc).</dd>
 </dl>
 </section>
 </li>
 <li>
 <section class="detail" id="newBean(java.lang.Object)">
 <h3>newBean</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanMeta.html" title="type parameter in BeanMeta">T</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanMeta.html#line-1111">newBean</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;outer)</span>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BeanMeta.html" title="type parameter in BeanMeta">T</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanMeta.html#line-1212">newBean</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;outer)</span>
           throws <span class="exceptions"><a href="../reflect/ExecutableException.html" title="class in org.apache.juneau.commons.reflect">ExecutableException</a></span></div>
 <div class="block">Creates a new instance of this bean.</div>
 <dl class="notes">

@@ -80,7 +80,7 @@
 <a class="jxr_linenumber" name="L72" href="#L72">72</a>  	}
 <a class="jxr_linenumber" name="L73" href="#L73">73</a>  
 <a class="jxr_linenumber" name="L74" href="#L74">74</a>  	@Test <strong class="jxr_keyword">void</strong> a01_splitAnnotations() {
-<a class="jxr_linenumber" name="L75" href="#L75">75</a>  		<strong class="jxr_keyword">var</strong> x = MockRestClient.buildJson5(A1.<strong class="jxr_keyword">class</strong>).getRemote(A.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>  		<strong class="jxr_keyword">var</strong> x = MockRestClient.create(A1.<strong class="jxr_keyword">class</strong>).json5().allowPrivateUrls(<strong class="jxr_keyword">true</strong>).build().getRemote(A.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L76" href="#L76">76</a>  		assertEquals(<span class="jxr_string">"foo"</span>,x.putX1(<span class="jxr_string">"foo"</span>));
 <a class="jxr_linenumber" name="L77" href="#L77">77</a>  		assertEquals(<span class="jxr_string">"foo"</span>,x.getX2(<span class="jxr_string">"foo"</span>));
 <a class="jxr_linenumber" name="L78" href="#L78">78</a>  		assertEquals(<span class="jxr_string">"foo"</span>,x.getX3(<span class="jxr_string">"foo"</span>));
@@ -114,7 +114,7 @@
 <a class="jxr_linenumber" name="L106" href="#L106">106</a> 	}
 <a class="jxr_linenumber" name="L107" href="#L107">107</a> 
 <a class="jxr_linenumber" name="L108" href="#L108">108</a> 	@Test <strong class="jxr_keyword">void</strong> b01_combinedAnnotations() {
-<a class="jxr_linenumber" name="L109" href="#L109">109</a> 		<strong class="jxr_keyword">var</strong> x = MockRestClient.create(B1.<strong class="jxr_keyword">class</strong>).json5().build().getRemote(B.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L109" href="#L109">109</a> 		<strong class="jxr_keyword">var</strong> x = MockRestClient.create(B1.<strong class="jxr_keyword">class</strong>).json5().allowPrivateUrls(<strong class="jxr_keyword">true</strong>).build().getRemote(B.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L110" href="#L110">110</a> 		assertEquals(<span class="jxr_string">"foo"</span>,x.putX1(<span class="jxr_string">"foo"</span>));
 <a class="jxr_linenumber" name="L111" href="#L111">111</a> 		assertEquals(<span class="jxr_string">"foo"</span>,x.getX2(<span class="jxr_string">"foo"</span>));
 <a class="jxr_linenumber" name="L112" href="#L112">112</a> 		assertEquals(<span class="jxr_string">"foo"</span>,x.getX3(<span class="jxr_string">"foo"</span>));
@@ -172,7 +172,7 @@
 <a class="jxr_linenumber" name="L164" href="#L164">164</a> 
 <a class="jxr_linenumber" name="L165" href="#L165">165</a> 		<em class="jxr_comment">// HttpClient goes into loop if status code is less than 200 so we can't test those.</em>
 <a class="jxr_linenumber" name="L166" href="#L166">166</a> 
-<a class="jxr_linenumber" name="L167" href="#L167">167</a> 		<strong class="jxr_keyword">var</strong> x = MockRestClient.create(C1.<strong class="jxr_keyword">class</strong>).json5().disableRedirectHandling().build().getRemote(C.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L167" href="#L167">167</a> 		<strong class="jxr_keyword">var</strong> x = MockRestClient.create(C1.<strong class="jxr_keyword">class</strong>).json5().disableRedirectHandling().allowPrivateUrls(<strong class="jxr_keyword">true</strong>).build().getRemote(C.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L168" href="#L168">168</a> 		assertContains(<span class="jxr_string">"HTTP/1.1 200"</span>, x.ok());
 <a class="jxr_linenumber" name="L169" href="#L169">169</a> 		assertContains(<span class="jxr_string">"HTTP/1.1 202"</span>, x.accepted());
 <a class="jxr_linenumber" name="L170" href="#L170">170</a> 		assertContains(<span class="jxr_string">"HTTP/1.1 208"</span>, x.alreadyReported());
@@ -211,7 +211,7 @@
 <a class="jxr_linenumber" name="L203" href="#L203">203</a> 	}
 <a class="jxr_linenumber" name="L204" href="#L204">204</a> 
 <a class="jxr_linenumber" name="L205" href="#L205">205</a> 	@Test <strong class="jxr_keyword">void</strong> d01_httpResource() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L206" href="#L206">206</a> 		<strong class="jxr_keyword">var</strong> x = MockRestClient.build(D1.<strong class="jxr_keyword">class</strong>).getRemote(D.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L206" href="#L206">206</a> 		<strong class="jxr_keyword">var</strong> x = MockRestClient.create(D1.<strong class="jxr_keyword">class</strong>).allowPrivateUrls(<strong class="jxr_keyword">true</strong>).build().getRemote(D.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L207" href="#L207">207</a> 		<strong class="jxr_keyword">var</strong> sr = x.httpResource();
 <a class="jxr_linenumber" name="L208" href="#L208">208</a> 		assertEquals(<span class="jxr_string">"foo"</span>,read(sr.getContent()));
 <a class="jxr_linenumber" name="L209" href="#L209">209</a> 		assertEquals(<span class="jxr_string">"foo"</span>,sr.getHeaders().getLast(<span class="jxr_string">"Foo"</span>).orElseThrow(RuntimeException::<strong class="jxr_keyword">new</strong>).getValue());
@@ -397,7 +397,7 @@
 <a class="jxr_linenumber" name="L389" href="#L389">389</a> 	}
 <a class="jxr_linenumber" name="L390" href="#L390">390</a> 
 <a class="jxr_linenumber" name="L391" href="#L391">391</a> 	@Test <strong class="jxr_keyword">void</strong> e01_predefinedExceptions() {
-<a class="jxr_linenumber" name="L392" href="#L392">392</a> 		<strong class="jxr_keyword">var</strong> x = MockRestClient.create(E1.<strong class="jxr_keyword">class</strong>).noTrace().build().getRemote(E.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L392" href="#L392">392</a> 		<strong class="jxr_keyword">var</strong> x = MockRestClient.create(E1.<strong class="jxr_keyword">class</strong>).noTrace().allowPrivateUrls(<strong class="jxr_keyword">true</strong>).build().getRemote(E.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L393" href="#L393">393</a> 		assertThrowsWithMessage(BadRequest.<strong class="jxr_keyword">class</strong>, BadRequest.REASON_PHRASE, x::badRequest);
 <a class="jxr_linenumber" name="L394" href="#L394">394</a> 		assertThrowsWithMessage(Conflict.<strong class="jxr_keyword">class</strong>, Conflict.REASON_PHRASE, x::conflict);
 <a class="jxr_linenumber" name="L395" href="#L395">395</a> 		assertThrowsWithMessage(ExpectationFailed.<strong class="jxr_keyword">class</strong>, ExpectationFailed.REASON_PHRASE, x::expectationFailed);
@@ -569,7 +569,7 @@
 <a class="jxr_linenumber" name="L561" href="#L561">561</a> 	}
 <a class="jxr_linenumber" name="L562" href="#L562">562</a> 
 <a class="jxr_linenumber" name="L563" href="#L563">563</a> 	@Test <strong class="jxr_keyword">void</strong> e02_predefinedExceptions_customMessages() {
-<a class="jxr_linenumber" name="L564" href="#L564">564</a> 		<strong class="jxr_keyword">var</strong> x = MockRestClient.create(E2.<strong class="jxr_keyword">class</strong>).noTrace().build().getRemote(E.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L564" href="#L564">564</a> 		<strong class="jxr_keyword">var</strong> x = MockRestClient.create(E2.<strong class="jxr_keyword">class</strong>).noTrace().allowPrivateUrls(<strong class="jxr_keyword">true</strong>).build().getRemote(E.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L565" href="#L565">565</a> 		assertThrowsWithMessage(BadRequest.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"foo"</span>, x::badRequest);
 <a class="jxr_linenumber" name="L566" href="#L566">566</a> 		assertThrowsWithMessage(Conflict.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"foo"</span>, x::conflict);
 <a class="jxr_linenumber" name="L567" href="#L567">567</a> 		assertThrowsWithMessage(ExpectationFailed.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"foo"</span>, x::expectationFailed);
@@ -783,7 +783,7 @@
 <a class="jxr_linenumber" name="L775" href="#L775">775</a> 	}
 <a class="jxr_linenumber" name="L776" href="#L776">776</a> 
 <a class="jxr_linenumber" name="L777" href="#L777">777</a> 	@Test <strong class="jxr_keyword">void</strong> f01_badRequest_returnedExceptions() {
-<a class="jxr_linenumber" name="L778" href="#L778">778</a> 		<strong class="jxr_keyword">var</strong> x = MockRestClient.create(F1.<strong class="jxr_keyword">class</strong>).noTrace().json5().build().getRemote(F.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L778" href="#L778">778</a> 		<strong class="jxr_keyword">var</strong> x = MockRestClient.create(F1.<strong class="jxr_keyword">class</strong>).noTrace().json5().allowPrivateUrls(<strong class="jxr_keyword">true</strong>).build().getRemote(F.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L779" href="#L779">779</a> 		assertEquals(<span class="jxr_string">"foo"</span>,x.badRequest().getMessage());
 <a class="jxr_linenumber" name="L780" href="#L780">780</a> 		assertEquals(<span class="jxr_string">"foo"</span>,x.conflict().getMessage());
 <a class="jxr_linenumber" name="L781" href="#L781">781</a> 		assertEquals(<span class="jxr_string">"foo"</span>,x.expectationFailed().getMessage());
@@ -842,7 +842,7 @@
 <a class="jxr_linenumber" name="L834" href="#L834">834</a> 	}
 <a class="jxr_linenumber" name="L835" href="#L835">835</a> 
 <a class="jxr_linenumber" name="L836" href="#L836">836</a> 	@Test <strong class="jxr_keyword">void</strong> g01_reader_inputStream() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L837" href="#L837">837</a> 		<strong class="jxr_keyword">var</strong> x = MockRestClient.build(G1.<strong class="jxr_keyword">class</strong>).getRemote(G.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L837" href="#L837">837</a> 		<strong class="jxr_keyword">var</strong> x = MockRestClient.create(G1.<strong class="jxr_keyword">class</strong>).allowPrivateUrls(<strong class="jxr_keyword">true</strong>).build().getRemote(G.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L838" href="#L838">838</a> 		assertEquals(<span class="jxr_string">"foo"</span>,read(x.reader()));
 <a class="jxr_linenumber" name="L839" href="#L839">839</a> 		assertEquals(<span class="jxr_string">"foo"</span>,read(x.inputStream()));
 <a class="jxr_linenumber" name="L840" href="#L840">840</a> 	}
@@ -865,7 +865,7 @@
 <a class="jxr_linenumber" name="L857" href="#L857">857</a> 	}
 <a class="jxr_linenumber" name="L858" href="#L858">858</a> 
 <a class="jxr_linenumber" name="L859" href="#L859">859</a> 	@Test <strong class="jxr_keyword">void</strong> h01_seeOtherRoot() {
-<a class="jxr_linenumber" name="L860" href="#L860">860</a> 		<strong class="jxr_keyword">var</strong> x = MockRestClient.create(H.<strong class="jxr_keyword">class</strong>).json5().disableRedirectHandling().build().getRemote(IH.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L860" href="#L860">860</a> 		<strong class="jxr_keyword">var</strong> x = MockRestClient.create(H.<strong class="jxr_keyword">class</strong>).json5().disableRedirectHandling().allowPrivateUrls(<strong class="jxr_keyword">true</strong>).build().getRemote(IH.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L861" href="#L861">861</a> 		assertContains(<span class="jxr_string">"HTTP/1.1 303 See Other"</span>, x.seeOtherRoot());
 <a class="jxr_linenumber" name="L862" href="#L862">862</a> 	}
 <a class="jxr_linenumber" name="L863" href="#L863">863</a> }

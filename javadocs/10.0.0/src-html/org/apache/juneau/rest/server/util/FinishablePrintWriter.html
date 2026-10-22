@@ -52,7 +52,7 @@
 <span class="source-line-no">039</span><span id="line-39">    * @throws IOException Thrown by underlying stream.</span>
 <span class="source-line-no">040</span><span id="line-40">    */</span>
 <span class="source-line-no">041</span><span id="line-41">   public FinishablePrintWriter(OutputStream out, String characterEncoding, boolean autoFlush) throws IOException {</span>
-<span class="source-line-no">042</span><span id="line-42">      super(new OutputStreamWriter(out, characterEncoding), autoFlush);</span>
+<span class="source-line-no">042</span><span id="line-42">      super(new BufferedEncodingWriter(out, characterEncoding), autoFlush);</span>
 <span class="source-line-no">043</span><span id="line-43">      f = (out instanceof Finishable out2 ? out2 : null);</span>
 <span class="source-line-no">044</span><span id="line-44">   }</span>
 <span class="source-line-no">045</span><span id="line-45"></span>

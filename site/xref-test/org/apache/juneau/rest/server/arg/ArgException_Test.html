@@ -91,7 +91,7 @@
 <a class="jxr_linenumber" name="L83" href="#L83">83</a>  			.setHeaders(l(HttpStringHeader.of(<span class="jxr_string">"X-Chain"</span>, <span class="jxr_string">"chained"</span>)))
 <a class="jxr_linenumber" name="L84" href="#L84">84</a>  			.setContent(<span class="jxr_string">"Chained content"</span>);
 <a class="jxr_linenumber" name="L85" href="#L85">85</a>  
-<a class="jxr_linenumber" name="L86" href="#L86">86</a>  		assertEquals(<span class="jxr_string">"chained"</span>, x.getHeaders().stream().filter(h -&gt; <span class="jxr_string">"X-Chain"</span>.equalsIgnoreCase(h.getName())).findFirst().orElseThrow().getValue());
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>  		assertEquals(<span class="jxr_string">"chained"</span>, x.getHeaders().stream().filter(h -&gt; eqic(<span class="jxr_string">"X-Chain"</span>, h.getName())).findFirst().orElseThrow().getValue());
 <a class="jxr_linenumber" name="L87" href="#L87">87</a>  	}
 <a class="jxr_linenumber" name="L88" href="#L88">88</a>  }
 </pre>

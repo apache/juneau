@@ -280,7 +280,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Public low-level token-streaming API (pull parser + push generator) shared by every Juneau
  format.</div>
 </div>
-<div class="col-first even-row-color"><a href="#org.apache.juneau.marshall.swap">org.apache.juneau.marshall.swap</a></div>
+<div class="col-first even-row-color"><a href="#org.apache.juneau.marshall.swap.spi">org.apache.juneau.marshall.swap.spi</a></div>
 <div class="col-last even-row-color">
 <div class="block">Swap API</div>
 </div>
@@ -340,9 +340,11 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color">
 <div class="block">REST Interface Helper Classes</div>
 </div>
-<div class="col-first odd-row-color"><a href="#org.apache.juneau.rest.server.debug">org.apache.juneau.rest.server.debug</a></div>
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.rest.server.datatables">org.apache.juneau.rest.server.datatables</a></div>
 <div class="col-last odd-row-color">
-<div class="block">REST Debug APIs</div>
+<div class="block">The DataTables server-side-processing JSON beans implementing the
+ <a class="doclink" href="https://datatables.net/manual/server-side">DataTables server-side processing</a> wire
+ contract.</div>
 </div>
 <div class="col-first even-row-color"><a href="#org.apache.juneau.rest.server.docs">org.apache.juneau.rest.server.docs</a></div>
 <div class="col-last even-row-color">
@@ -353,23 +355,24 @@ loadScripts(document, 'script');</script>
 <div class="col-last odd-row-color">
 <div class="block">REST HTTP Parts</div>
 </div>
-<div class="col-first even-row-color"><a href="#org.apache.juneau.rest.server.logger">org.apache.juneau.rest.server.logger</a></div>
+<div class="col-first even-row-color"><a href="#org.apache.juneau.rest.server.rrpc">org.apache.juneau.rest.server.rrpc</a></div>
 <div class="col-last even-row-color">
-<div class="block">REST Logging API</div>
-</div>
-<div class="col-first odd-row-color"><a href="#org.apache.juneau.rest.server.rrpc">org.apache.juneau.rest.server.rrpc</a></div>
-<div class="col-last odd-row-color">
 <div class="block">REST Remote Procedure Call API</div>
 </div>
-<div class="col-first even-row-color"><a href="#org.apache.juneau.rest.server.stats">org.apache.juneau.rest.server.stats</a></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.rest.server.stats">org.apache.juneau.rest.server.stats</a></div>
+<div class="col-last odd-row-color">
 <div class="block">Method exec stats utilities</div>
 </div>
-<div class="col-first odd-row-color"><a href="#org.apache.juneau.rest.server.validation">org.apache.juneau.rest.server.validation</a></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><a href="#org.apache.juneau.rest.server.validation">org.apache.juneau.rest.server.validation</a></div>
+<div class="col-last even-row-color">
 <div class="block">Optional <a class="doclink" href="https://jakarta.ee/specifications/bean-validation/">Jakarta Bean Validation 3.x</a>
  integration for <code>juneau-rest-server</code> &mdash; declarative validation of request beans via
  <code>jakarta.validation.constraints.*</code> annotations.</div>
+</div>
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.rest.server.views">org.apache.juneau.rest.server.views</a></div>
+<div class="col-last odd-row-color">
+<div class="block">A typed, declarative "rich DataTables view" toolkit that serializes to the frozen <code>VIEW_META</code> JSON wire
+ contract consumed by the first-party client runtime.</div>
 </div>
 <div class="col-first even-row-color"><a href="#org.apache.juneau.rest.server.widget">org.apache.juneau.rest.server.widget</a></div>
 <div class="col-last even-row-color">
@@ -411,7 +414,7 @@ loadScripts(document, 'script');</script>
 </div>
 <div class="col-first odd-row-color"><a href="class-use/Swap.html#org.apache.juneau.bean.hal">Swap</a></div>
 <div class="col-last odd-row-color">
-<div class="block">Associates <a href="swap/ObjectSwap.html" title="class in org.apache.juneau.marshall.swap"><code>ObjectSwap</code></a> and <a href="swap/Surrogate.html" title="interface in org.apache.juneau.marshall.swap"><code>Surrogate</code></a> classes with POJOs and bean properties.</div>
+<div class="block">Associates <a href="swap/spi/ObjectSwap.html" title="class in org.apache.juneau.marshall.swap.spi"><code>ObjectSwap</code></a> and <a href="swap/spi/Surrogate.html" title="interface in org.apache.juneau.marshall.swap.spi"><code>Surrogate</code></a> classes with POJOs and bean properties.</div>
 </div>
 </div>
 </section>
@@ -457,7 +460,7 @@ loadScripts(document, 'script');</script>
 </div>
 <div class="col-first odd-row-color"><a href="class-use/Swap.html#org.apache.juneau.bean.jsonapi">Swap</a></div>
 <div class="col-last odd-row-color">
-<div class="block">Associates <a href="swap/ObjectSwap.html" title="class in org.apache.juneau.marshall.swap"><code>ObjectSwap</code></a> and <a href="swap/Surrogate.html" title="interface in org.apache.juneau.marshall.swap"><code>Surrogate</code></a> classes with POJOs and bean properties.</div>
+<div class="block">Associates <a href="swap/spi/ObjectSwap.html" title="class in org.apache.juneau.marshall.swap.spi"><code>ObjectSwap</code></a> and <a href="swap/spi/Surrogate.html" title="interface in org.apache.juneau.marshall.swap.spi"><code>Surrogate</code></a> classes with POJOs and bean properties.</div>
 </div>
 </div>
 </section>
@@ -512,7 +515,7 @@ loadScripts(document, 'script');</script>
 </div>
 <div class="col-first even-row-color"><a href="class-use/Swap.html#org.apache.juneau.bean.jsonschema">Swap</a></div>
 <div class="col-last even-row-color">
-<div class="block">Associates <a href="swap/ObjectSwap.html" title="class in org.apache.juneau.marshall.swap"><code>ObjectSwap</code></a> and <a href="swap/Surrogate.html" title="interface in org.apache.juneau.marshall.swap"><code>Surrogate</code></a> classes with POJOs and bean properties.</div>
+<div class="block">Associates <a href="swap/spi/ObjectSwap.html" title="class in org.apache.juneau.marshall.swap.spi"><code>ObjectSwap</code></a> and <a href="swap/spi/Surrogate.html" title="interface in org.apache.juneau.marshall.swap.spi"><code>Surrogate</code></a> classes with POJOs and bean properties.</div>
 </div>
 </div>
 </section>
@@ -920,279 +923,275 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color">
 <div class="block">Supported wire formats for <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link"><code>Duration</code></a> values.</div>
 </div>
-<div class="col-first odd-row-color"><a href="class-use/Enablement.html#org.apache.juneau.marshall">Enablement</a></div>
+<div class="col-first odd-row-color"><a href="class-use/EnumFormat.html#org.apache.juneau.marshall">EnumFormat</a></div>
 <div class="col-last odd-row-color">
-<div class="block">Represents the enablement settings of a feature.</div>
-</div>
-<div class="col-first even-row-color"><a href="class-use/EnumFormat.html#org.apache.juneau.marshall">EnumFormat</a></div>
-<div class="col-last even-row-color">
 <div class="block">Supported wire formats for <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Enum.html" title="class or interface in java.lang" class="external-link"><code>Enum</code></a> values.</div>
 </div>
-<div class="col-first odd-row-color"><a href="class-use/Example.html#org.apache.juneau.marshall">Example</a></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><a href="class-use/Example.html#org.apache.juneau.marshall">Example</a></div>
+<div class="col-last even-row-color">
 <div class="block">Identifies examples for POJOs.</div>
 </div>
-<div class="col-first even-row-color"><a href="class-use/ExampleAnnotation.Builder.html#org.apache.juneau.marshall">ExampleAnnotation.Builder</a></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><a href="class-use/ExampleAnnotation.Builder.html#org.apache.juneau.marshall">ExampleAnnotation.Builder</a></div>
+<div class="col-last odd-row-color">
 <div class="block">Builder class.</div>
 </div>
-<div class="col-first odd-row-color"><a href="class-use/ExampleApply.html#org.apache.juneau.marshall">ExampleApply</a></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><a href="class-use/ExampleApply.html#org.apache.juneau.marshall">ExampleApply</a></div>
+<div class="col-last even-row-color">
 <div class="block">Dynamically applies an <a href="Example.html" title="annotation interface in org.apache.juneau.marshall"><code>@Example</code></a> annotation to specified classes, methods, or fields.</div>
 </div>
-<div class="col-first even-row-color"><a href="class-use/ExampleApplyAnnotation.Builder.html#org.apache.juneau.marshall">ExampleApplyAnnotation.Builder</a></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><a href="class-use/ExampleApplyAnnotation.Builder.html#org.apache.juneau.marshall">ExampleApplyAnnotation.Builder</a></div>
+<div class="col-last odd-row-color">
 <div class="block">Builder class.</div>
 </div>
-<div class="col-first odd-row-color"><a href="class-use/ExtendedMeta.html#org.apache.juneau.marshall">ExtendedMeta</a></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><a href="class-use/ExtendedMeta.html#org.apache.juneau.marshall">ExtendedMeta</a></div>
+<div class="col-last even-row-color">
 <div class="block">Superclass of all extended metadata classes.</div>
 </div>
-<div class="col-first even-row-color"><a href="class-use/ExternalDocsAnnotation.Builder.html#org.apache.juneau.marshall">ExternalDocsAnnotation.Builder</a></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><a href="class-use/ExternalDocsAnnotation.Builder.html#org.apache.juneau.marshall">ExternalDocsAnnotation.Builder</a></div>
+<div class="col-last odd-row-color">
 <div class="block">Builder class.</div>
 </div>
-<div class="col-first odd-row-color"><a href="class-use/FloatFormat.html#org.apache.juneau.marshall">FloatFormat</a></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><a href="class-use/FloatFormat.html#org.apache.juneau.marshall">FloatFormat</a></div>
+<div class="col-last even-row-color">
 <div class="block">Supported wire formats for non-finite <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Float.html" title="class or interface in java.lang" class="external-link"><code>Float</code></a> / <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Double.html" title="class or interface in java.lang" class="external-link"><code>Double</code></a> values
  (<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Double.html#NaN" title="class or interface in java.lang" class="external-link"><code>NaN</code></a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Double.html#POSITIVE_INFINITY" title="class or interface in java.lang" class="external-link"><code>+Infinity</code></a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Double.html#NEGATIVE_INFINITY" title="class or interface in java.lang" class="external-link"><code>-Infinity</code></a>).</div>
 </div>
-<div class="col-first even-row-color"><a href="class-use/InvalidDataConversionException.html#org.apache.juneau.marshall">InvalidDataConversionException</a></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><a href="class-use/InvalidDataConversionException.html#org.apache.juneau.marshall">InvalidDataConversionException</a></div>
+<div class="col-last odd-row-color">
 <div class="block">General invalid conversion exception.</div>
 </div>
-<div class="col-first odd-row-color"><a href="class-use/ItemsAnnotation.Builder.html#org.apache.juneau.marshall">ItemsAnnotation.Builder</a></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><a href="class-use/ItemsAnnotation.Builder.html#org.apache.juneau.marshall">ItemsAnnotation.Builder</a></div>
+<div class="col-last even-row-color">
 <div class="block">Builder class.</div>
 </div>
-<div class="col-first even-row-color"><a href="class-use/ListOperation.html#org.apache.juneau.marshall">ListOperation</a></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><a href="class-use/ListOperation.html#org.apache.juneau.marshall">ListOperation</a></div>
+<div class="col-last odd-row-color">
 <div class="block">Identifies how to add elements to a list.</div>
 </div>
-<div class="col-first odd-row-color"><a href="class-use/LocaleFormat.html#org.apache.juneau.marshall">LocaleFormat</a></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><a href="class-use/LocaleFormat.html#org.apache.juneau.marshall">LocaleFormat</a></div>
+<div class="col-last even-row-color">
 <div class="block">Supported wire formats for <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Locale.html" title="class or interface in java.util" class="external-link"><code>Locale</code></a> values.</div>
 </div>
-<div class="col-first even-row-color"><a href="class-use/Marshalled.html#org.apache.juneau.marshall">Marshalled</a></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><a href="class-use/Marshalled.html#org.apache.juneau.marshall">Marshalled</a></div>
+<div class="col-last odd-row-color">
 <div class="block">Annotation that can be applied to classes to control how they are marshalled.</div>
 </div>
-<div class="col-first odd-row-color"><a href="class-use/MarshalledAnnotation.Builder.html#org.apache.juneau.marshall">MarshalledAnnotation.Builder</a></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><a href="class-use/MarshalledAnnotation.Builder.html#org.apache.juneau.marshall">MarshalledAnnotation.Builder</a></div>
+<div class="col-last even-row-color">
 <div class="block">Builder class.</div>
 </div>
-<div class="col-first even-row-color"><a href="class-use/MarshalledApply.html#org.apache.juneau.marshall">MarshalledApply</a></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><a href="class-use/MarshalledApply.html#org.apache.juneau.marshall">MarshalledApply</a></div>
+<div class="col-last odd-row-color">
 <div class="block">Dynamically applies a <a href="Marshalled.html" title="annotation interface in org.apache.juneau.marshall"><code>@Marshalled</code></a> annotation to specified classes.</div>
 </div>
-<div class="col-first odd-row-color"><a href="class-use/MarshalledApplyAnnotation.Builder.html#org.apache.juneau.marshall">MarshalledApplyAnnotation.Builder</a></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><a href="class-use/MarshalledApplyAnnotation.Builder.html#org.apache.juneau.marshall">MarshalledApplyAnnotation.Builder</a></div>
+<div class="col-last even-row-color">
 <div class="block">Builder class.</div>
 </div>
-<div class="col-first even-row-color"><a href="class-use/MarshalledAs.html#org.apache.juneau.marshall">MarshalledAs</a></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><a href="class-use/MarshalledAs.html#org.apache.juneau.marshall">MarshalledAs</a></div>
+<div class="col-last odd-row-color">
 <div class="block">Specifies the marshalling strategy for a type annotated with <a href="Marshalled.html" title="annotation interface in org.apache.juneau.marshall"><code>@Marshalled</code></a>.</div>
 </div>
-<div class="col-first odd-row-color"><a href="class-use/MarshalledConfig.html#org.apache.juneau.marshall">MarshalledConfig</a></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><a href="class-use/MarshalledConfig.html#org.apache.juneau.marshall">MarshalledConfig</a></div>
+<div class="col-last even-row-color">
 <div class="block">Annotation for specifying marshalling-only config properties defined in <a href="MarshallingContext.html" title="class in org.apache.juneau.marshall"><code>MarshallingContext</code></a> and <a href="MarshallingTraverseContext.html" title="class in org.apache.juneau.marshall"><code>MarshallingTraverseContext</code></a>.</div>
 </div>
-<div class="col-first even-row-color"><a href="class-use/MarshalledFilter.html#org.apache.juneau.marshall">MarshalledFilter</a></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><a href="class-use/MarshalledFilter.html#org.apache.juneau.marshall">MarshalledFilter</a></div>
+<div class="col-last odd-row-color">
 <div class="block">Filter for customizing how POJOs and beans are handled during serialization and parsing.</div>
 </div>
-<div class="col-first odd-row-color"><a href="class-use/MarshalledFilter.Builder.html#org.apache.juneau.marshall">MarshalledFilter.Builder</a></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><a href="class-use/MarshalledFilter.Builder.html#org.apache.juneau.marshall">MarshalledFilter.Builder</a></div>
+<div class="col-last even-row-color">
 <div class="block">Builder class.</div>
 </div>
-<div class="col-first even-row-color"><a href="class-use/MarshalledIgnore.html#org.apache.juneau.marshall">MarshalledIgnore</a></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><a href="class-use/MarshalledIgnore.html#org.apache.juneau.marshall">MarshalledIgnore</a></div>
+<div class="col-last odd-row-color">
 <div class="block">Skip a type entirely during marshalling.</div>
 </div>
-<div class="col-first odd-row-color"><a href="class-use/MarshalledIgnoreAnnotation.Builder.html#org.apache.juneau.marshall">MarshalledIgnoreAnnotation.Builder</a></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><a href="class-use/MarshalledIgnoreAnnotation.Builder.html#org.apache.juneau.marshall">MarshalledIgnoreAnnotation.Builder</a></div>
+<div class="col-last even-row-color">
 <div class="block">Builder class.</div>
 </div>
-<div class="col-first even-row-color"><a href="class-use/MarshalledIgnoreApply.html#org.apache.juneau.marshall">MarshalledIgnoreApply</a></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><a href="class-use/MarshalledIgnoreApply.html#org.apache.juneau.marshall">MarshalledIgnoreApply</a></div>
+<div class="col-last odd-row-color">
 <div class="block">Dynamically applies a <a href="MarshalledIgnore.html" title="annotation interface in org.apache.juneau.marshall"><code>@MarshalledIgnore</code></a> annotation to specified classes, methods, or fields.</div>
 </div>
-<div class="col-first odd-row-color"><a href="class-use/MarshalledIgnoreApplyAnnotation.Builder.html#org.apache.juneau.marshall">MarshalledIgnoreApplyAnnotation.Builder</a></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><a href="class-use/MarshalledIgnoreApplyAnnotation.Builder.html#org.apache.juneau.marshall">MarshalledIgnoreApplyAnnotation.Builder</a></div>
+<div class="col-last even-row-color">
 <div class="block">Builder class.</div>
 </div>
-<div class="col-first even-row-color"><a href="class-use/MarshalledProp.html#org.apache.juneau.marshall">MarshalledProp</a></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><a href="class-use/MarshalledProp.html#org.apache.juneau.marshall">MarshalledProp</a></div>
+<div class="col-last odd-row-color">
 <div class="block">Used to tailor how bean properties get marshalled by the framework.</div>
 </div>
-<div class="col-first odd-row-color"><a href="class-use/MarshalledPropAnnotation.Builder.html#org.apache.juneau.marshall">MarshalledPropAnnotation.Builder</a></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><a href="class-use/MarshalledPropAnnotation.Builder.html#org.apache.juneau.marshall">MarshalledPropAnnotation.Builder</a></div>
+<div class="col-last even-row-color">
 <div class="block">Builder class.</div>
 </div>
-<div class="col-first even-row-color"><a href="class-use/MarshalledPropApply.html#org.apache.juneau.marshall">MarshalledPropApply</a></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><a href="class-use/MarshalledPropApply.html#org.apache.juneau.marshall">MarshalledPropApply</a></div>
+<div class="col-last odd-row-color">
 <div class="block">Dynamically applies a <a href="MarshalledProp.html" title="annotation interface in org.apache.juneau.marshall"><code>@MarshalledProp</code></a> annotation to specified classes, methods, or fields.</div>
 </div>
-<div class="col-first odd-row-color"><a href="class-use/MarshalledPropApplyAnnotation.Builder.html#org.apache.juneau.marshall">MarshalledPropApplyAnnotation.Builder</a></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><a href="class-use/MarshalledPropApplyAnnotation.Builder.html#org.apache.juneau.marshall">MarshalledPropApplyAnnotation.Builder</a></div>
+<div class="col-last even-row-color">
 <div class="block">Builder class.</div>
 </div>
-<div class="col-first even-row-color"><a href="class-use/MarshallingContext.html#org.apache.juneau.marshall">MarshallingContext</a></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><a href="class-use/MarshallingContext.html#org.apache.juneau.marshall">MarshallingContext</a></div>
+<div class="col-last odd-row-color">
 <div class="block">Bean context.</div>
 </div>
-<div class="col-first odd-row-color"><a href="class-use/MarshallingContext.Builder.html#org.apache.juneau.marshall">MarshallingContext.Builder</a></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><a href="class-use/MarshallingContext.Builder.html#org.apache.juneau.marshall">MarshallingContext.Builder</a></div>
+<div class="col-last even-row-color">
 <div class="block">Builder class.</div>
 </div>
-<div class="col-first even-row-color"><a href="class-use/MarshallingContextable.html#org.apache.juneau.marshall">MarshallingContextable</a></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><a href="class-use/MarshallingContextable.html#org.apache.juneau.marshall">MarshallingContextable</a></div>
+<div class="col-last odd-row-color">
 <div class="block">Context class for classes that use <a href="MarshallingContext.html" title="class in org.apache.juneau.marshall"><code>MarshallingContext</code></a> objects.</div>
 </div>
-<div class="col-first odd-row-color"><a href="class-use/MarshallingContextable.Builder.html#org.apache.juneau.marshall">MarshallingContextable.Builder</a></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><a href="class-use/MarshallingContextable.Builder.html#org.apache.juneau.marshall">MarshallingContextable.Builder</a></div>
+<div class="col-last even-row-color">
 <div class="block">Builder class.</div>
 </div>
-<div class="col-first even-row-color"><a href="class-use/MarshallingRecursionException.html#org.apache.juneau.marshall">MarshallingRecursionException</a></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><a href="class-use/MarshallingRecursionException.html#org.apache.juneau.marshall">MarshallingRecursionException</a></div>
+<div class="col-last odd-row-color">
 <div class="block">Exception that indicates that a recursion was detected while traversing a POJO model.</div>
 </div>
-<div class="col-first odd-row-color"><a href="class-use/MarshallingSession.html#org.apache.juneau.marshall">MarshallingSession</a></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><a href="class-use/MarshallingSession.html#org.apache.juneau.marshall">MarshallingSession</a></div>
+<div class="col-last even-row-color">
 <div class="block">Session object that lives for the duration of a single use of <a href="MarshallingContext.html" title="class in org.apache.juneau.marshall"><code>MarshallingContext</code></a>.</div>
 </div>
-<div class="col-first even-row-color"><a href="class-use/MarshallingSession.Builder.html#org.apache.juneau.marshall">MarshallingSession.Builder</a></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><a href="class-use/MarshallingSession.Builder.html#org.apache.juneau.marshall">MarshallingSession.Builder</a></div>
+<div class="col-last odd-row-color">
 <div class="block">Builder class.</div>
 </div>
-<div class="col-first odd-row-color"><a href="class-use/MarshallingTraverseContext.html#org.apache.juneau.marshall">MarshallingTraverseContext</a></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><a href="class-use/MarshallingTraverseContext.html#org.apache.juneau.marshall">MarshallingTraverseContext</a></div>
+<div class="col-last even-row-color">
 <div class="block">Parent class for all classes that traverse POJOs.</div>
 </div>
-<div class="col-first even-row-color"><a href="class-use/MarshallingTraverseContext.Builder.html#org.apache.juneau.marshall">MarshallingTraverseContext.Builder</a></div>
-<div class="col-last even-row-color">
-<div class="block">Builder class.</div>
-</div>
-<div class="col-first odd-row-color"><a href="class-use/MarshallingTraverseSession.Builder.html#org.apache.juneau.marshall">MarshallingTraverseSession.Builder</a></div>
+<div class="col-first odd-row-color"><a href="class-use/MarshallingTraverseContext.Builder.html#org.apache.juneau.marshall">MarshallingTraverseContext.Builder</a></div>
 <div class="col-last odd-row-color">
 <div class="block">Builder class.</div>
 </div>
-<div class="col-first even-row-color"><a href="class-use/NameProperty.html#org.apache.juneau.marshall">NameProperty</a></div>
+<div class="col-first even-row-color"><a href="class-use/MarshallingTraverseSession.Builder.html#org.apache.juneau.marshall">MarshallingTraverseSession.Builder</a></div>
 <div class="col-last even-row-color">
+<div class="block">Builder class.</div>
+</div>
+<div class="col-first odd-row-color"><a href="class-use/NameProperty.html#org.apache.juneau.marshall">NameProperty</a></div>
+<div class="col-last odd-row-color">
 <div class="block">Identifies a setter method or field for setting the name of a POJO as it's known by its parent object.</div>
 </div>
-<div class="col-first odd-row-color"><a href="class-use/NamePropertyAnnotation.Builder.html#org.apache.juneau.marshall">NamePropertyAnnotation.Builder</a></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><a href="class-use/NamePropertyAnnotation.Builder.html#org.apache.juneau.marshall">NamePropertyAnnotation.Builder</a></div>
+<div class="col-last even-row-color">
 <div class="block">Builder class.</div>
 </div>
-<div class="col-first even-row-color"><a href="class-use/NamePropertyApply.html#org.apache.juneau.marshall">NamePropertyApply</a></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><a href="class-use/NamePropertyApply.html#org.apache.juneau.marshall">NamePropertyApply</a></div>
+<div class="col-last odd-row-color">
 <div class="block">Dynamically applies a <a href="NameProperty.html" title="annotation interface in org.apache.juneau.marshall"><code>@NameProperty</code></a> annotation to specified methods or fields.</div>
 </div>
-<div class="col-first odd-row-color"><a href="class-use/NamePropertyApplyAnnotation.Builder.html#org.apache.juneau.marshall">NamePropertyApplyAnnotation.Builder</a></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><a href="class-use/NamePropertyApplyAnnotation.Builder.html#org.apache.juneau.marshall">NamePropertyApplyAnnotation.Builder</a></div>
+<div class="col-last even-row-color">
 <div class="block">Builder class.</div>
 </div>
-<div class="col-first even-row-color"><a href="class-use/Nulls.html#org.apache.juneau.marshall">Nulls</a></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><a href="class-use/Nulls.html#org.apache.juneau.marshall">Nulls</a></div>
+<div class="col-last odd-row-color">
 <div class="block">Per-property null-coercion modes consulted by parsers when an explicit <code>null</code> (or absent
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link"><code>Optional</code></a>) is encountered on the wire.</div>
 </div>
-<div class="col-first odd-row-color"><a href="class-use/ParentProperty.html#org.apache.juneau.marshall">ParentProperty</a></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><a href="class-use/ParentProperty.html#org.apache.juneau.marshall">ParentProperty</a></div>
+<div class="col-last even-row-color">
 <div class="block">Identifies a setter method or field for adding a parent reference to a child object.</div>
 </div>
-<div class="col-first even-row-color"><a href="class-use/ParentPropertyAnnotation.Builder.html#org.apache.juneau.marshall">ParentPropertyAnnotation.Builder</a></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><a href="class-use/ParentPropertyAnnotation.Builder.html#org.apache.juneau.marshall">ParentPropertyAnnotation.Builder</a></div>
+<div class="col-last odd-row-color">
 <div class="block">Builder class.</div>
 </div>
-<div class="col-first odd-row-color"><a href="class-use/ParentPropertyApply.html#org.apache.juneau.marshall">ParentPropertyApply</a></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><a href="class-use/ParentPropertyApply.html#org.apache.juneau.marshall">ParentPropertyApply</a></div>
+<div class="col-last even-row-color">
 <div class="block">Dynamically applies a <a href="ParentProperty.html" title="annotation interface in org.apache.juneau.marshall"><code>@ParentProperty</code></a> annotation to specified methods or fields.</div>
 </div>
-<div class="col-first even-row-color"><a href="class-use/ParentPropertyApplyAnnotation.Builder.html#org.apache.juneau.marshall">ParentPropertyApplyAnnotation.Builder</a></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><a href="class-use/ParentPropertyApplyAnnotation.Builder.html#org.apache.juneau.marshall">ParentPropertyApplyAnnotation.Builder</a></div>
+<div class="col-last odd-row-color">
 <div class="block">Builder class.</div>
 </div>
-<div class="col-first odd-row-color"><a href="class-use/PeriodFormat.html#org.apache.juneau.marshall">PeriodFormat</a></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><a href="class-use/PeriodFormat.html#org.apache.juneau.marshall">PeriodFormat</a></div>
+<div class="col-last even-row-color">
 <div class="block">Supported wire formats for <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Period.html" title="class or interface in java.time" class="external-link"><code>Period</code></a> values.</div>
 </div>
-<div class="col-first even-row-color"><a href="class-use/SchemaAnnotation.Builder.html#org.apache.juneau.marshall">SchemaAnnotation.Builder</a></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><a href="class-use/SchemaAnnotation.Builder.html#org.apache.juneau.marshall">SchemaAnnotation.Builder</a></div>
+<div class="col-last odd-row-color">
 <div class="block">Builder class.</div>
 </div>
-<div class="col-first odd-row-color"><a href="class-use/SchemaApply.html#org.apache.juneau.marshall">SchemaApply</a></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><a href="class-use/SchemaApply.html#org.apache.juneau.marshall">SchemaApply</a></div>
+<div class="col-last even-row-color">
 <div class="block">Dynamically applies a <a href="../commons/Schema.html" title="annotation interface in org.apache.juneau.commons"><code>@Schema</code></a> annotation to specified classes, methods, or fields.</div>
 </div>
-<div class="col-first even-row-color"><a href="class-use/SchemaApplyAnnotation.Builder.html#org.apache.juneau.marshall">SchemaApplyAnnotation.Builder</a></div>
-<div class="col-last even-row-color">
-<div class="block">Builder class.</div>
-</div>
-<div class="col-first odd-row-color"><a href="class-use/SubItemsAnnotation.Builder.html#org.apache.juneau.marshall">SubItemsAnnotation.Builder</a></div>
+<div class="col-first odd-row-color"><a href="class-use/SchemaApplyAnnotation.Builder.html#org.apache.juneau.marshall">SchemaApplyAnnotation.Builder</a></div>
 <div class="col-last odd-row-color">
 <div class="block">Builder class.</div>
 </div>
-<div class="col-first even-row-color"><a href="class-use/Swap.html#org.apache.juneau.marshall">Swap</a></div>
+<div class="col-first even-row-color"><a href="class-use/SubItemsAnnotation.Builder.html#org.apache.juneau.marshall">SubItemsAnnotation.Builder</a></div>
 <div class="col-last even-row-color">
-<div class="block">Associates <a href="swap/ObjectSwap.html" title="class in org.apache.juneau.marshall.swap"><code>ObjectSwap</code></a> and <a href="swap/Surrogate.html" title="interface in org.apache.juneau.marshall.swap"><code>Surrogate</code></a> classes with POJOs and bean properties.</div>
-</div>
-<div class="col-first odd-row-color"><a href="class-use/SwapAnnotation.Builder.html#org.apache.juneau.marshall">SwapAnnotation.Builder</a></div>
-<div class="col-last odd-row-color">
 <div class="block">Builder class.</div>
 </div>
-<div class="col-first even-row-color"><a href="class-use/SwapApply.html#org.apache.juneau.marshall">SwapApply</a></div>
+<div class="col-first odd-row-color"><a href="class-use/Swap.html#org.apache.juneau.marshall">Swap</a></div>
+<div class="col-last odd-row-color">
+<div class="block">Associates <a href="swap/spi/ObjectSwap.html" title="class in org.apache.juneau.marshall.swap.spi"><code>ObjectSwap</code></a> and <a href="swap/spi/Surrogate.html" title="interface in org.apache.juneau.marshall.swap.spi"><code>Surrogate</code></a> classes with POJOs and bean properties.</div>
+</div>
+<div class="col-first even-row-color"><a href="class-use/SwapAnnotation.Builder.html#org.apache.juneau.marshall">SwapAnnotation.Builder</a></div>
 <div class="col-last even-row-color">
+<div class="block">Builder class.</div>
+</div>
+<div class="col-first odd-row-color"><a href="class-use/SwapApply.html#org.apache.juneau.marshall">SwapApply</a></div>
+<div class="col-last odd-row-color">
 <div class="block">Dynamically applies a <a href="Swap.html" title="annotation interface in org.apache.juneau.marshall"><code>@Swap</code></a> annotation to specified classes, methods, or fields.</div>
 </div>
-<div class="col-first odd-row-color"><a href="class-use/SwapApplyAnnotation.Builder.html#org.apache.juneau.marshall">SwapApplyAnnotation.Builder</a></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><a href="class-use/SwapApplyAnnotation.Builder.html#org.apache.juneau.marshall">SwapApplyAnnotation.Builder</a></div>
+<div class="col-last even-row-color">
 <div class="block">Builder class.</div>
 </div>
-<div class="col-first even-row-color"><a href="class-use/TemporalFormat.html#org.apache.juneau.marshall">TemporalFormat</a></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><a href="class-use/TemporalFormat.html#org.apache.juneau.marshall">TemporalFormat</a></div>
+<div class="col-last odd-row-color">
 <div class="block">Supported wire formats for <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/temporal/TemporalAccessor.html" title="class or interface in java.time.temporal" class="external-link"><code>TemporalAccessor</code></a> values.</div>
 </div>
-<div class="col-first odd-row-color"><a href="class-use/TimeZoneFormat.html#org.apache.juneau.marshall">TimeZoneFormat</a></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><a href="class-use/TimeZoneFormat.html#org.apache.juneau.marshall">TimeZoneFormat</a></div>
+<div class="col-last even-row-color">
 <div class="block">Supported wire formats for <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/TimeZone.html" title="class or interface in java.util" class="external-link"><code>TimeZone</code></a> and <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/ZoneId.html" title="class or interface in java.time" class="external-link"><code>ZoneId</code></a> values.</div>
 </div>
-<div class="col-first even-row-color"><a href="class-use/Uri.html#org.apache.juneau.marshall">Uri</a></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><a href="class-use/Uri.html#org.apache.juneau.marshall">Uri</a></div>
+<div class="col-last odd-row-color">
 <div class="block">Used to identify a class or bean property as a URI.</div>
 </div>
-<div class="col-first odd-row-color"><a href="class-use/UriAnnotation.Builder.html#org.apache.juneau.marshall">UriAnnotation.Builder</a></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><a href="class-use/UriAnnotation.Builder.html#org.apache.juneau.marshall">UriAnnotation.Builder</a></div>
+<div class="col-last even-row-color">
 <div class="block">Builder class.</div>
 </div>
-<div class="col-first even-row-color"><a href="class-use/UriApply.html#org.apache.juneau.marshall">UriApply</a></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><a href="class-use/UriApply.html#org.apache.juneau.marshall">UriApply</a></div>
+<div class="col-last odd-row-color">
 <div class="block">Dynamically applies a <a href="Uri.html" title="annotation interface in org.apache.juneau.marshall"><code>@Uri</code></a> annotation to specified classes, methods, or fields.</div>
 </div>
-<div class="col-first odd-row-color"><a href="class-use/UriApplyAnnotation.Builder.html#org.apache.juneau.marshall">UriApplyAnnotation.Builder</a></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><a href="class-use/UriApplyAnnotation.Builder.html#org.apache.juneau.marshall">UriApplyAnnotation.Builder</a></div>
+<div class="col-last even-row-color">
 <div class="block">Builder class.</div>
 </div>
-<div class="col-first even-row-color"><a href="class-use/UriContext.html#org.apache.juneau.marshall">UriContext</a></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><a href="class-use/UriContext.html#org.apache.juneau.marshall">UriContext</a></div>
+<div class="col-last odd-row-color">
 <div class="block">Represents a URL broken into authority/context-root/servlet-path/path-info parts.</div>
 </div>
-<div class="col-first odd-row-color"><a href="class-use/UriRelativity.html#org.apache.juneau.marshall">UriRelativity</a></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><a href="class-use/UriRelativity.html#org.apache.juneau.marshall">UriRelativity</a></div>
+<div class="col-last even-row-color">
 <div class="block">Identifies what relative URIs are relative to.</div>
 </div>
-<div class="col-first even-row-color"><a href="class-use/UriResolution.html#org.apache.juneau.marshall">UriResolution</a></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><a href="class-use/UriResolution.html#org.apache.juneau.marshall">UriResolution</a></div>
+<div class="col-last odd-row-color">
 <div class="block">Identifies the possible types of URL resolution.</div>
 </div>
-<div class="col-first odd-row-color"><a href="class-use/UriResolver.html#org.apache.juneau.marshall">UriResolver</a></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><a href="class-use/UriResolver.html#org.apache.juneau.marshall">UriResolver</a></div>
+<div class="col-last even-row-color">
 <div class="block">Class used to create absolute and root-relative URIs based on your current URI 'location' and rules about how to
  make such resolutions.</div>
 </div>
-<div class="col-first even-row-color"><a href="class-use/UuidFormat.html#org.apache.juneau.marshall">UuidFormat</a></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><a href="class-use/UuidFormat.html#org.apache.juneau.marshall">UuidFormat</a></div>
+<div class="col-last odd-row-color">
 <div class="block">Supported wire formats for <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/UUID.html" title="class or interface in java.util" class="external-link"><code>UUID</code></a> values.</div>
 </div>
 </div>
@@ -2661,10 +2660,6 @@ loadScripts(document, 'script');</script>
 <div class="col-last odd-row-color">
 <div class="block">A wrapper class around the <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link"><code>Class</code></a> object that provides cached information about that class.</div>
 </div>
-<div class="col-first even-row-color"><a href="class-use/MarshallingSession.html#org.apache.juneau.marshall.objecttools">MarshallingSession</a></div>
-<div class="col-last even-row-color">
-<div class="block">Session object that lives for the duration of a single use of <a href="MarshallingContext.html" title="class in org.apache.juneau.marshall"><code>MarshallingContext</code></a>.</div>
-</div>
 </div>
 </section>
 </li>
@@ -3226,20 +3221,20 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
-<section class="detail" id="org.apache.juneau.marshall.swap">
-<div class="caption"><span>Classes in <a href="package-summary.html">org.apache.juneau.marshall</a> used by <a href="swap/package-summary.html">org.apache.juneau.marshall.swap</a></span></div>
+<section class="detail" id="org.apache.juneau.marshall.swap.spi">
+<div class="caption"><span>Classes in <a href="package-summary.html">org.apache.juneau.marshall</a> used by <a href="swap/spi/package-summary.html">org.apache.juneau.marshall.swap.spi</a></span></div>
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Class</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><a href="class-use/ClassMeta.html#org.apache.juneau.marshall.swap">ClassMeta</a></div>
+<div class="col-first even-row-color"><a href="class-use/ClassMeta.html#org.apache.juneau.marshall.swap.spi">ClassMeta</a></div>
 <div class="col-last even-row-color">
 <div class="block">A wrapper class around the <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link"><code>Class</code></a> object that provides cached information about that class.</div>
 </div>
-<div class="col-first odd-row-color"><a href="class-use/MarshallingContext.html#org.apache.juneau.marshall.swap">MarshallingContext</a></div>
+<div class="col-first odd-row-color"><a href="class-use/MarshallingContext.html#org.apache.juneau.marshall.swap.spi">MarshallingContext</a></div>
 <div class="col-last odd-row-color">
 <div class="block">Bean context.</div>
 </div>
-<div class="col-first even-row-color"><a href="class-use/MarshallingSession.html#org.apache.juneau.marshall.swap">MarshallingSession</a></div>
+<div class="col-first even-row-color"><a href="class-use/MarshallingSession.html#org.apache.juneau.marshall.swap.spi">MarshallingSession</a></div>
 <div class="col-last even-row-color">
 <div class="block">Session object that lives for the duration of a single use of <a href="MarshallingContext.html" title="class in org.apache.juneau.marshall"><code>MarshallingContext</code></a>.</div>
 </div>
@@ -3297,40 +3292,52 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color">
 <div class="block">Builder class.</div>
 </div>
-<div class="col-first odd-row-color"><a href="class-use/MarshallingContextable.html#org.apache.juneau.marshall.toml">MarshallingContextable</a></div>
+<div class="col-first odd-row-color"><a href="class-use/ExtendedBeanPropertyMeta.html#org.apache.juneau.marshall.toml">ExtendedBeanPropertyMeta</a></div>
 <div class="col-last odd-row-color">
+<div class="block">Defines extended language-specific metadata associated with a bean property.</div>
+</div>
+<div class="col-first even-row-color"><a href="class-use/ExtendedClassMeta.html#org.apache.juneau.marshall.toml">ExtendedClassMeta</a></div>
+<div class="col-last even-row-color">
+<div class="block">Defines extended language-specific metadata associated with a class.</div>
+</div>
+<div class="col-first odd-row-color"><a href="class-use/ExtendedMeta.html#org.apache.juneau.marshall.toml">ExtendedMeta</a></div>
+<div class="col-last odd-row-color">
+<div class="block">Superclass of all extended metadata classes.</div>
+</div>
+<div class="col-first even-row-color"><a href="class-use/MarshallingContextable.html#org.apache.juneau.marshall.toml">MarshallingContextable</a></div>
+<div class="col-last even-row-color">
 <div class="block">Context class for classes that use <a href="MarshallingContext.html" title="class in org.apache.juneau.marshall"><code>MarshallingContext</code></a> objects.</div>
 </div>
-<div class="col-first even-row-color"><a href="class-use/MarshallingContextable.Builder.html#org.apache.juneau.marshall.toml">MarshallingContextable.Builder</a></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><a href="class-use/MarshallingContextable.Builder.html#org.apache.juneau.marshall.toml">MarshallingContextable.Builder</a></div>
+<div class="col-last odd-row-color">
 <div class="block">Builder class.</div>
 </div>
-<div class="col-first odd-row-color"><a href="class-use/MarshallingSession.html#org.apache.juneau.marshall.toml">MarshallingSession</a></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><a href="class-use/MarshallingSession.html#org.apache.juneau.marshall.toml">MarshallingSession</a></div>
+<div class="col-last even-row-color">
 <div class="block">Session object that lives for the duration of a single use of <a href="MarshallingContext.html" title="class in org.apache.juneau.marshall"><code>MarshallingContext</code></a>.</div>
 </div>
-<div class="col-first even-row-color"><a href="class-use/MarshallingSession.Builder.html#org.apache.juneau.marshall.toml">MarshallingSession.Builder</a></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><a href="class-use/MarshallingSession.Builder.html#org.apache.juneau.marshall.toml">MarshallingSession.Builder</a></div>
+<div class="col-last odd-row-color">
 <div class="block">Builder class.</div>
 </div>
-<div class="col-first odd-row-color"><a href="class-use/MarshallingTraverseContext.html#org.apache.juneau.marshall.toml">MarshallingTraverseContext</a></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><a href="class-use/MarshallingTraverseContext.html#org.apache.juneau.marshall.toml">MarshallingTraverseContext</a></div>
+<div class="col-last even-row-color">
 <div class="block">Parent class for all classes that traverse POJOs.</div>
 </div>
-<div class="col-first even-row-color"><a href="class-use/MarshallingTraverseContext.Builder.html#org.apache.juneau.marshall.toml">MarshallingTraverseContext.Builder</a></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><a href="class-use/MarshallingTraverseContext.Builder.html#org.apache.juneau.marshall.toml">MarshallingTraverseContext.Builder</a></div>
+<div class="col-last odd-row-color">
 <div class="block">Builder class.</div>
 </div>
-<div class="col-first odd-row-color"><a href="class-use/MarshallingTraverseSession.html#org.apache.juneau.marshall.toml">MarshallingTraverseSession</a></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><a href="class-use/MarshallingTraverseSession.html#org.apache.juneau.marshall.toml">MarshallingTraverseSession</a></div>
+<div class="col-last even-row-color">
 <div class="block">ContextSession that lives for the duration of a single use of <a href="MarshallingTraverseContext.html" title="class in org.apache.juneau.marshall"><code>MarshallingTraverseContext</code></a>.</div>
 </div>
-<div class="col-first even-row-color"><a href="class-use/MarshallingTraverseSession.Builder.html#org.apache.juneau.marshall.toml">MarshallingTraverseSession.Builder</a></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><a href="class-use/MarshallingTraverseSession.Builder.html#org.apache.juneau.marshall.toml">MarshallingTraverseSession.Builder</a></div>
+<div class="col-last odd-row-color">
 <div class="block">Builder class.</div>
 </div>
-<div class="col-first odd-row-color"><a href="class-use/UriResolver.html#org.apache.juneau.marshall.toml">UriResolver</a></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><a href="class-use/UriResolver.html#org.apache.juneau.marshall.toml">UriResolver</a></div>
+<div class="col-last even-row-color">
 <div class="block">Class used to create absolute and root-relative URIs based on your current URI 'location' and rules about how to
  make such resolutions.</div>
 </div>
@@ -3669,40 +3676,52 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color">
 <div class="block">Builder class.</div>
 </div>
-<div class="col-first odd-row-color"><a href="class-use/MarshallingContextable.html#org.apache.juneau.marshall.yaml">MarshallingContextable</a></div>
+<div class="col-first odd-row-color"><a href="class-use/ExtendedBeanPropertyMeta.html#org.apache.juneau.marshall.yaml">ExtendedBeanPropertyMeta</a></div>
 <div class="col-last odd-row-color">
+<div class="block">Defines extended language-specific metadata associated with a bean property.</div>
+</div>
+<div class="col-first even-row-color"><a href="class-use/ExtendedClassMeta.html#org.apache.juneau.marshall.yaml">ExtendedClassMeta</a></div>
+<div class="col-last even-row-color">
+<div class="block">Defines extended language-specific metadata associated with a class.</div>
+</div>
+<div class="col-first odd-row-color"><a href="class-use/ExtendedMeta.html#org.apache.juneau.marshall.yaml">ExtendedMeta</a></div>
+<div class="col-last odd-row-color">
+<div class="block">Superclass of all extended metadata classes.</div>
+</div>
+<div class="col-first even-row-color"><a href="class-use/MarshallingContextable.html#org.apache.juneau.marshall.yaml">MarshallingContextable</a></div>
+<div class="col-last even-row-color">
 <div class="block">Context class for classes that use <a href="MarshallingContext.html" title="class in org.apache.juneau.marshall"><code>MarshallingContext</code></a> objects.</div>
 </div>
-<div class="col-first even-row-color"><a href="class-use/MarshallingContextable.Builder.html#org.apache.juneau.marshall.yaml">MarshallingContextable.Builder</a></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><a href="class-use/MarshallingContextable.Builder.html#org.apache.juneau.marshall.yaml">MarshallingContextable.Builder</a></div>
+<div class="col-last odd-row-color">
 <div class="block">Builder class.</div>
 </div>
-<div class="col-first odd-row-color"><a href="class-use/MarshallingSession.html#org.apache.juneau.marshall.yaml">MarshallingSession</a></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><a href="class-use/MarshallingSession.html#org.apache.juneau.marshall.yaml">MarshallingSession</a></div>
+<div class="col-last even-row-color">
 <div class="block">Session object that lives for the duration of a single use of <a href="MarshallingContext.html" title="class in org.apache.juneau.marshall"><code>MarshallingContext</code></a>.</div>
 </div>
-<div class="col-first even-row-color"><a href="class-use/MarshallingSession.Builder.html#org.apache.juneau.marshall.yaml">MarshallingSession.Builder</a></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><a href="class-use/MarshallingSession.Builder.html#org.apache.juneau.marshall.yaml">MarshallingSession.Builder</a></div>
+<div class="col-last odd-row-color">
 <div class="block">Builder class.</div>
 </div>
-<div class="col-first odd-row-color"><a href="class-use/MarshallingTraverseContext.html#org.apache.juneau.marshall.yaml">MarshallingTraverseContext</a></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><a href="class-use/MarshallingTraverseContext.html#org.apache.juneau.marshall.yaml">MarshallingTraverseContext</a></div>
+<div class="col-last even-row-color">
 <div class="block">Parent class for all classes that traverse POJOs.</div>
 </div>
-<div class="col-first even-row-color"><a href="class-use/MarshallingTraverseContext.Builder.html#org.apache.juneau.marshall.yaml">MarshallingTraverseContext.Builder</a></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><a href="class-use/MarshallingTraverseContext.Builder.html#org.apache.juneau.marshall.yaml">MarshallingTraverseContext.Builder</a></div>
+<div class="col-last odd-row-color">
 <div class="block">Builder class.</div>
 </div>
-<div class="col-first odd-row-color"><a href="class-use/MarshallingTraverseSession.html#org.apache.juneau.marshall.yaml">MarshallingTraverseSession</a></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><a href="class-use/MarshallingTraverseSession.html#org.apache.juneau.marshall.yaml">MarshallingTraverseSession</a></div>
+<div class="col-last even-row-color">
 <div class="block">ContextSession that lives for the duration of a single use of <a href="MarshallingTraverseContext.html" title="class in org.apache.juneau.marshall"><code>MarshallingTraverseContext</code></a>.</div>
 </div>
-<div class="col-first even-row-color"><a href="class-use/MarshallingTraverseSession.Builder.html#org.apache.juneau.marshall.yaml">MarshallingTraverseSession.Builder</a></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><a href="class-use/MarshallingTraverseSession.Builder.html#org.apache.juneau.marshall.yaml">MarshallingTraverseSession.Builder</a></div>
+<div class="col-last odd-row-color">
 <div class="block">Builder class.</div>
 </div>
-<div class="col-first odd-row-color"><a href="class-use/UriResolver.html#org.apache.juneau.marshall.yaml">UriResolver</a></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><a href="class-use/UriResolver.html#org.apache.juneau.marshall.yaml">UriResolver</a></div>
+<div class="col-last even-row-color">
 <div class="block">Class used to create absolute and root-relative URIs based on your current URI 'location' and rules about how to
  make such resolutions.</div>
 </div>
@@ -3914,14 +3933,14 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
-<section class="detail" id="org.apache.juneau.rest.server.debug">
-<div class="caption"><span>Classes in <a href="package-summary.html">org.apache.juneau.marshall</a> used by <a href="../rest/server/debug/package-summary.html">org.apache.juneau.rest.server.debug</a></span></div>
+<section class="detail" id="org.apache.juneau.rest.server.datatables">
+<div class="caption"><span>Classes in <a href="package-summary.html">org.apache.juneau.marshall</a> used by <a href="../rest/server/datatables/package-summary.html">org.apache.juneau.rest.server.datatables</a></span></div>
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Class</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><a href="class-use/Enablement.html#org.apache.juneau.rest.server.debug">Enablement</a></div>
+<div class="col-first even-row-color"><a href="class-use/MarshallingContext.html#org.apache.juneau.rest.server.datatables">MarshallingContext</a></div>
 <div class="col-last even-row-color">
-<div class="block">Represents the enablement settings of a feature.</div>
+<div class="block">Bean context.</div>
 </div>
 </div>
 </section>
@@ -3952,19 +3971,6 @@ loadScripts(document, 'script');</script>
 <div class="col-first odd-row-color"><a href="class-use/Marshalled.html#org.apache.juneau.rest.server.httppart">Marshalled</a></div>
 <div class="col-last odd-row-color">
 <div class="block">Annotation that can be applied to classes to control how they are marshalled.</div>
-</div>
-</div>
-</section>
-</li>
-<li>
-<section class="detail" id="org.apache.juneau.rest.server.logger">
-<div class="caption"><span>Classes in <a href="package-summary.html">org.apache.juneau.marshall</a> used by <a href="../rest/server/logger/package-summary.html">org.apache.juneau.rest.server.logger</a></span></div>
-<div class="summary-table two-column-summary">
-<div class="table-header col-first">Class</div>
-<div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><a href="class-use/Enablement.html#org.apache.juneau.rest.server.logger">Enablement</a></div>
-<div class="col-last even-row-color">
-<div class="block">Represents the enablement settings of a feature.</div>
 </div>
 </div>
 </section>
@@ -4012,6 +4018,19 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color"><a href="class-use/Marshalled.html#org.apache.juneau.rest.server.validation">Marshalled</a></div>
 <div class="col-last even-row-color">
 <div class="block">Annotation that can be applied to classes to control how they are marshalled.</div>
+</div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="org.apache.juneau.rest.server.views">
+<div class="caption"><span>Classes in <a href="package-summary.html">org.apache.juneau.marshall</a> used by <a href="../rest/server/views/package-summary.html">org.apache.juneau.rest.server.views</a></span></div>
+<div class="summary-table two-column-summary">
+<div class="table-header col-first">Class</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><a href="class-use/Uri.html#org.apache.juneau.rest.server.views">Uri</a></div>
+<div class="col-last even-row-color">
+<div class="block">Used to identify a class or bean property as a URI.</div>
 </div>
 </div>
 </section>

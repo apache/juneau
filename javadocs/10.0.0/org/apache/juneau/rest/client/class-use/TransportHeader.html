@@ -72,24 +72,29 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color"><code><a href="../TransportHeader.html" title="class in org.apache.juneau.rest.client">TransportHeader</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">RestResponse.</span><code><a href="../RestResponse.html#getFirstHeader(java.lang.String)" class="member-name-link">getFirstHeader</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">RestRequest.</span><code><a href="../RestRequest.html#getFirstHeader(java.lang.String)" class="member-name-link">getFirstHeader</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</code></div>
 <div class="col-last even-row-color">
-<div class="block">Returns the first response header with the given name (case-insensitive), or <code>null</code> if absent.</div>
+<div class="block">Returns the first resolved request header with the given name (case-insensitive), or <code>null</code> if absent.</div>
 </div>
 <div class="col-first odd-row-color"><code><a href="../TransportHeader.html" title="class in org.apache.juneau.rest.client">TransportHeader</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">TransportRequest.</span><code><a href="../TransportRequest.html#getFirstHeader(java.lang.String)" class="member-name-link">getFirstHeader</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">RestResponse.</span><code><a href="../RestResponse.html#getFirstHeader(java.lang.String)" class="member-name-link">getFirstHeader</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</code></div>
 <div class="col-last odd-row-color">
-<div class="block">Returns the first header with the given name (case-insensitive), or <code>null</code> if absent.</div>
+<div class="block">Returns the first response header with the given name (case-insensitive), or <code>null</code> if absent.</div>
 </div>
 <div class="col-first even-row-color"><code><a href="../TransportHeader.html" title="class in org.apache.juneau.rest.client">TransportHeader</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">TransportResponse.</span><code><a href="../TransportResponse.html#getFirstHeader(java.lang.String)" class="member-name-link">getFirstHeader</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">TransportRequest.</span><code><a href="../TransportRequest.html#getFirstHeader(java.lang.String)" class="member-name-link">getFirstHeader</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</code></div>
 <div class="col-last even-row-color">
 <div class="block">Returns the first header with the given name (case-insensitive), or <code>null</code> if absent.</div>
 </div>
-<div class="col-first odd-row-color"><code>static <a href="../TransportHeader.html" title="class in org.apache.juneau.rest.client">TransportHeader</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">TransportHeader.</span><code><a href="../TransportHeader.html#of(java.lang.String,java.lang.String)" class="member-name-link">of</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
- <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</code></div>
+<div class="col-first odd-row-color"><code><a href="../TransportHeader.html" title="class in org.apache.juneau.rest.client">TransportHeader</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">TransportResponse.</span><code><a href="../TransportResponse.html#getFirstHeader(java.lang.String)" class="member-name-link">getFirstHeader</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</code></div>
 <div class="col-last odd-row-color">
+<div class="block">Returns the first header with the given name (case-insensitive), or <code>null</code> if absent.</div>
+</div>
+<div class="col-first even-row-color"><code>static <a href="../TransportHeader.html" title="class in org.apache.juneau.rest.client">TransportHeader</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">TransportHeader.</span><code><a href="../TransportHeader.html#of(java.lang.String,java.lang.String)" class="member-name-link">of</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</code></div>
+<div class="col-last even-row-color">
 <div class="block">Factory method.</div>
 </div>
 </div>
@@ -112,6 +117,11 @@ loadScripts(document, 'script');</script>
 <div class="col-second even-row-color"><span class="type-name-label">TransportResponse.</span><code><a href="../TransportResponse.html#getHeaders()" class="member-name-link">getHeaders</a>()</code></div>
 <div class="col-last even-row-color">
 <div class="block">Returns all response headers.</div>
+</div>
+<div class="col-first odd-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../TransportHeader.html" title="class in org.apache.juneau.rest.client">TransportHeader</a>&gt;</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">RestRequest.</span><code><a href="../RestRequest.html#getResolvedHeaders()" class="member-name-link">getResolvedHeaders</a>()</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Returns the headers resolved onto the transport request.</div>
 </div>
 </div>
 <div class="caption"><span>Method parameters in <a href="../package-summary.html">org.apache.juneau.rest.client</a> with type arguments of type <a href="../TransportHeader.html" title="class in org.apache.juneau.rest.client">TransportHeader</a></span></div>

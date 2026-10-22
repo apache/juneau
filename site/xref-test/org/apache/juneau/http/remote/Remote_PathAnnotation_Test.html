@@ -719,11 +719,11 @@
 <a class="jxr_linenumber" name="L711" href="#L711">711</a> 	}
 <a class="jxr_linenumber" name="L712" href="#L712">712</a> 
 <a class="jxr_linenumber" name="L713" href="#L713">713</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> RestClient.Builder&lt;?&gt; client(Class&lt;?&gt; c) {
-<a class="jxr_linenumber" name="L714" href="#L714">714</a> 		<strong class="jxr_keyword">return</strong> MockRestClient.create(c).defaultRequestConfig(RequestConfig.custom().setNormalizeUri(false).build());
+<a class="jxr_linenumber" name="L714" href="#L714">714</a> 		<strong class="jxr_keyword">return</strong> MockRestClient.create(c).defaultRequestConfig(RequestConfig.custom().setNormalizeUri(false).build()).allowPrivateUrls(<strong class="jxr_keyword">true</strong>);
 <a class="jxr_linenumber" name="L715" href="#L715">715</a> 	}
 <a class="jxr_linenumber" name="L716" href="#L716">716</a> 
 <a class="jxr_linenumber" name="L717" href="#L717">717</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> &lt;T&gt; T remote(Class&lt;?&gt; <strong class="jxr_keyword">rest</strong>, Class&lt;T&gt; t) {
-<a class="jxr_linenumber" name="L718" href="#L718">718</a> 		<strong class="jxr_keyword">return</strong> MockRestClient.create(<strong class="jxr_keyword">rest</strong>).defaultRequestConfig(RequestConfig.custom().setNormalizeUri(false).build()).build().getRemote(t);
+<a class="jxr_linenumber" name="L718" href="#L718">718</a> 		<strong class="jxr_keyword">return</strong> MockRestClient.create(<strong class="jxr_keyword">rest</strong>).defaultRequestConfig(RequestConfig.custom().setNormalizeUri(false).build()).allowPrivateUrls(<strong class="jxr_keyword">true</strong>).build().getRemote(t);
 <a class="jxr_linenumber" name="L719" href="#L719">719</a> 	}
 <a class="jxr_linenumber" name="L720" href="#L720">720</a> }
 </pre>

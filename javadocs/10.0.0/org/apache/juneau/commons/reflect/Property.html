@@ -83,7 +83,7 @@ loadScripts(document, 'script');</script>
 <dd><code>V</code> - The value type.</dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/reflect/Property.html#line-82">Property</a>&lt;T,<wbr>V&gt;</span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/reflect/Property.html#line-81">Property</a>&lt;T,<wbr>V&gt;</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
 <div class="block">A typed property descriptor that allows you to specify arbitrary consumers and producers
  corresponding to setters and getters.
@@ -231,7 +231,7 @@ V&gt;&nbsp;<a href="Property.Builder.html" title="class in org.apache.juneau.com
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.commons.function.ThrowingFunction,org.apache.juneau.commons.function.ThrowingConsumer2)">
 <h3>Property</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/reflect/Property.html#line-121">Property</a></span><wbr><span class="parameters">(<a href="../function/ThrowingFunction.html" title="interface in org.apache.juneau.commons.function">ThrowingFunction</a>&lt;<a href="Property.html" title="type parameter in Property">T</a>,<wbr><a href="Property.html" title="type parameter in Property">V</a>&gt;&nbsp;producer,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/reflect/Property.html#line-116">Property</a></span><wbr><span class="parameters">(<a href="../function/ThrowingFunction.html" title="interface in org.apache.juneau.commons.function">ThrowingFunction</a>&lt;<a href="Property.html" title="type parameter in Property">T</a>,<wbr><a href="Property.html" title="type parameter in Property">V</a>&gt;&nbsp;producer,
  <a href="../function/ThrowingConsumer2.html" title="interface in org.apache.juneau.commons.function">ThrowingConsumer2</a>&lt;<a href="Property.html" title="type parameter in Property">T</a>,<wbr><a href="Property.html" title="type parameter in Property">V</a>&gt;&nbsp;consumer)</span></div>
 <div class="block">Constructor.</div>
 <dl class="notes">
@@ -253,7 +253,7 @@ V&gt;&nbsp;<a href="Property.Builder.html" title="class in org.apache.juneau.com
 <section class="detail" id="create()">
 <h3>create</h3>
 <div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;T,<wbr>
-V&gt;</span>&nbsp;<span class="return-type"><a href="Property.Builder.html" title="class in org.apache.juneau.commons.reflect">Property.Builder</a>&lt;T,<wbr>V&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/reflect/Property.html#line-108">create</a></span>()</div>
+V&gt;</span>&nbsp;<span class="return-type"><a href="Property.Builder.html" title="class in org.apache.juneau.commons.reflect">Property.Builder</a>&lt;T,<wbr>V&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/reflect/Property.html#line-103">create</a></span>()</div>
 <div class="block">Creates a new builder for constructing a property.
 
  <h5 class='section'>Example:</h5>
@@ -276,7 +276,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="Property.Builder.html" titl
 <li>
 <section class="detail" id="get(T)">
 <h3 id="get(java.lang.Object)">get</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Property.html" title="type parameter in Property">V</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/reflect/Property.html#line-133">get</a></span><wbr><span class="parameters">(<a href="Property.html" title="type parameter in Property">T</a>&nbsp;object)</span>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Property.html" title="type parameter in Property">V</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/reflect/Property.html#line-128">get</a></span><wbr><span class="parameters">(<a href="Property.html" title="type parameter in Property">T</a>&nbsp;object)</span>
       throws <span class="exceptions"><a href="ExecutableException.html" title="class in org.apache.juneau.commons.reflect">ExecutableException</a></span></div>
 <div class="block">Gets the value from the specified object using the producer (getter).</div>
 <dl class="notes">
@@ -292,7 +292,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="Property.Builder.html" titl
 <li>
 <section class="detail" id="set(T,V)">
 <h3 id="set(java.lang.Object,java.lang.Object)">set</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/reflect/Property.html#line-147">set</a></span><wbr><span class="parameters">(<a href="Property.html" title="type parameter in Property">T</a>&nbsp;object,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/reflect/Property.html#line-142">set</a></span><wbr><span class="parameters">(<a href="Property.html" title="type parameter in Property">T</a>&nbsp;object,
  <a href="Property.html" title="type parameter in Property">V</a>&nbsp;value)</span>
          throws <span class="exceptions"><a href="ExecutableException.html" title="class in org.apache.juneau.commons.reflect">ExecutableException</a></span></div>
 <div class="block">Sets the value on the specified object using the consumer (setter).</div>
@@ -308,7 +308,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="Property.Builder.html" titl
 <li>
 <section class="detail" id="canRead()">
 <h3>canRead</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/reflect/Property.html#line-159">canRead</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/reflect/Property.html#line-154">canRead</a></span>()</div>
 <div class="block">Returns <jk>true</jk> if this property can be read.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -319,7 +319,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="Property.Builder.html" titl
 <li>
 <section class="detail" id="canWrite()">
 <h3>canWrite</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/reflect/Property.html#line-168">canWrite</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/reflect/Property.html#line-163">canWrite</a></span>()</div>
 <div class="block">Returns <jk>true</jk> if this property can be written.</div>
 <dl class="notes">
 <dt>Returns:</dt>

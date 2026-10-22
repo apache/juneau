@@ -54,33 +54,33 @@
 <span class="source-line-no">041</span><span id="line-41"> *</span>
 <span class="source-line-no">042</span><span id="line-42"> * @param &lt;T&gt; The concrete subclass, for fluent-setter self-typing.</span>
 <span class="source-line-no">043</span><span id="line-43"> */</span>
-<span class="source-line-no">044</span><span id="line-44">public abstract class Result&lt;T extends Result&lt;T&gt;&gt; {</span>
-<span class="source-line-no">045</span><span id="line-45"></span>
-<span class="source-line-no">046</span><span id="line-46">   private String resultType = "complete";</span>
-<span class="source-line-no">047</span><span id="line-47">   private ResultMeta meta;</span>
+<span class="source-line-no">044</span><span id="line-44">@SuppressWarnings({</span>
+<span class="source-line-no">045</span><span id="line-45">   "unchecked" // CRTP subclasses bind T to their own concrete type.</span>
+<span class="source-line-no">046</span><span id="line-46">})</span>
+<span class="source-line-no">047</span><span id="line-47">public abstract class Result&lt;T extends Result&lt;T&gt;&gt; {</span>
 <span class="source-line-no">048</span><span id="line-48"></span>
-<span class="source-line-no">049</span><span id="line-49">   /**</span>
-<span class="source-line-no">050</span><span id="line-50">    * Result-type discriminator.</span>
-<span class="source-line-no">051</span><span id="line-51">    *</span>
-<span class="source-line-no">052</span><span id="line-52">    * &lt;p&gt;</span>
-<span class="source-line-no">053</span><span id="line-53">    * Defaults to {@code "complete"}. The schema defines this as an open string union, so parsing accepts any</span>
-<span class="source-line-no">054</span><span id="line-54">    * string losslessly.</span>
-<span class="source-line-no">055</span><span id="line-55">    *</span>
-<span class="source-line-no">056</span><span id="line-56">    * @return The result type. Never &lt;jk&gt;null&lt;/jk&gt; on a server-constructed instance.</span>
-<span class="source-line-no">057</span><span id="line-57">    */</span>
-<span class="source-line-no">058</span><span id="line-58">   public String getResultType() {</span>
-<span class="source-line-no">059</span><span id="line-59">      return resultType;</span>
-<span class="source-line-no">060</span><span id="line-60">   }</span>
-<span class="source-line-no">061</span><span id="line-61"></span>
-<span class="source-line-no">062</span><span id="line-62">   /**</span>
-<span class="source-line-no">063</span><span id="line-63">    * Sets the result-type discriminator.</span>
-<span class="source-line-no">064</span><span id="line-64">    *</span>
-<span class="source-line-no">065</span><span id="line-65">    * @param value The new value.  Can be &lt;jk&gt;null&lt;/jk&gt; to unset the property.</span>
-<span class="source-line-no">066</span><span id="line-66">    * @return This object (for method chaining).</span>
-<span class="source-line-no">067</span><span id="line-67">    */</span>
-<span class="source-line-no">068</span><span id="line-68">   @SuppressWarnings({</span>
-<span class="source-line-no">069</span><span id="line-69">      "unchecked" // CRTP subclasses bind T to their own concrete type.</span>
-<span class="source-line-no">070</span><span id="line-70">   })</span>
+<span class="source-line-no">049</span><span id="line-49">   private String resultType = "complete";</span>
+<span class="source-line-no">050</span><span id="line-50">   private ResultMeta meta;</span>
+<span class="source-line-no">051</span><span id="line-51"></span>
+<span class="source-line-no">052</span><span id="line-52">   /**</span>
+<span class="source-line-no">053</span><span id="line-53">    * Result-type discriminator.</span>
+<span class="source-line-no">054</span><span id="line-54">    *</span>
+<span class="source-line-no">055</span><span id="line-55">    * &lt;p&gt;</span>
+<span class="source-line-no">056</span><span id="line-56">    * Defaults to {@code "complete"}. The schema defines this as an open string union, so parsing accepts any</span>
+<span class="source-line-no">057</span><span id="line-57">    * string losslessly.</span>
+<span class="source-line-no">058</span><span id="line-58">    *</span>
+<span class="source-line-no">059</span><span id="line-59">    * @return The result type. Never &lt;jk&gt;null&lt;/jk&gt; on a server-constructed instance.</span>
+<span class="source-line-no">060</span><span id="line-60">    */</span>
+<span class="source-line-no">061</span><span id="line-61">   public String getResultType() {</span>
+<span class="source-line-no">062</span><span id="line-62">      return resultType;</span>
+<span class="source-line-no">063</span><span id="line-63">   }</span>
+<span class="source-line-no">064</span><span id="line-64"></span>
+<span class="source-line-no">065</span><span id="line-65">   /**</span>
+<span class="source-line-no">066</span><span id="line-66">    * Sets the result-type discriminator.</span>
+<span class="source-line-no">067</span><span id="line-67">    *</span>
+<span class="source-line-no">068</span><span id="line-68">    * @param value The new value.  Can be &lt;jk&gt;null&lt;/jk&gt; to unset the property.</span>
+<span class="source-line-no">069</span><span id="line-69">    * @return This object (for method chaining).</span>
+<span class="source-line-no">070</span><span id="line-70">    */</span>
 <span class="source-line-no">071</span><span id="line-71">   public T setResultType(String value) {</span>
 <span class="source-line-no">072</span><span id="line-72">      resultType = value;</span>
 <span class="source-line-no">073</span><span id="line-73">      return (T)this;</span>
@@ -103,14 +103,11 @@
 <span class="source-line-no">090</span><span id="line-90">    * @return This object (for method chaining).</span>
 <span class="source-line-no">091</span><span id="line-91">    */</span>
 <span class="source-line-no">092</span><span id="line-92">   @BeanProp("_meta")</span>
-<span class="source-line-no">093</span><span id="line-93">   @SuppressWarnings({</span>
-<span class="source-line-no">094</span><span id="line-94">      "unchecked" // CRTP subclasses bind T to their own concrete type.</span>
-<span class="source-line-no">095</span><span id="line-95">   })</span>
-<span class="source-line-no">096</span><span id="line-96">   public T setMeta(ResultMeta value) {</span>
-<span class="source-line-no">097</span><span id="line-97">      meta = value;</span>
-<span class="source-line-no">098</span><span id="line-98">      return (T)this;</span>
-<span class="source-line-no">099</span><span id="line-99">   }</span>
-<span class="source-line-no">100</span><span id="line-100">}</span>
+<span class="source-line-no">093</span><span id="line-93">   public T setMeta(ResultMeta value) {</span>
+<span class="source-line-no">094</span><span id="line-94">      meta = value;</span>
+<span class="source-line-no">095</span><span id="line-95">      return (T)this;</span>
+<span class="source-line-no">096</span><span id="line-96">   }</span>
+<span class="source-line-no">097</span><span id="line-97">}</span>
 
 
 

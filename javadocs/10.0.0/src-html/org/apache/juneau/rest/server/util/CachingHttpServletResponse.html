@@ -30,84 +30,169 @@
 <span class="source-line-no">017</span><span id="line-17">package org.apache.juneau.rest.server.util;</span>
 <span class="source-line-no">018</span><span id="line-18"></span>
 <span class="source-line-no">019</span><span id="line-19">import java.io.*;</span>
-<span class="source-line-no">020</span><span id="line-20"></span>
-<span class="source-line-no">021</span><span id="line-21">import jakarta.servlet.*;</span>
-<span class="source-line-no">022</span><span id="line-22">import jakarta.servlet.http.*;</span>
-<span class="source-line-no">023</span><span id="line-23"></span>
-<span class="source-line-no">024</span><span id="line-24">/**</span>
-<span class="source-line-no">025</span><span id="line-25"> * Wraps an {@link HttpServletResponse} and caches the output stream in a separate buffer for debugging purposes.</span>
-<span class="source-line-no">026</span><span id="line-26"> *</span>
-<span class="source-line-no">027</span><span id="line-27"> */</span>
-<span class="source-line-no">028</span><span id="line-28">@SuppressWarnings({</span>
-<span class="source-line-no">029</span><span id="line-29">   "resource" // os is a servlet-container-managed stream obtained from the wrapped response; closed by the container</span>
-<span class="source-line-no">030</span><span id="line-30">})</span>
-<span class="source-line-no">031</span><span id="line-31">public class CachingHttpServletResponse extends HttpServletResponseWrapper {</span>
-<span class="source-line-no">032</span><span id="line-32"></span>
-<span class="source-line-no">033</span><span id="line-33">   /**</span>
-<span class="source-line-no">034</span><span id="line-34">    * Wraps the specified response inside a {@link CachingHttpServletResponse} if it isn't already.</span>
-<span class="source-line-no">035</span><span id="line-35">    *</span>
-<span class="source-line-no">036</span><span id="line-36">    * @param res The response to wrap. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">037</span><span id="line-37">    * @return The wrapped response.</span>
-<span class="source-line-no">038</span><span id="line-38">    * @throws IOException Thrown by underlying content stream.</span>
-<span class="source-line-no">039</span><span id="line-39">    */</span>
-<span class="source-line-no">040</span><span id="line-40">   public static CachingHttpServletResponse wrap(HttpServletResponse res) throws IOException {</span>
-<span class="source-line-no">041</span><span id="line-41">      if (res instanceof CachingHttpServletResponse res2)</span>
-<span class="source-line-no">042</span><span id="line-42">         return res2;</span>
-<span class="source-line-no">043</span><span id="line-43">      return new CachingHttpServletResponse(res);</span>
-<span class="source-line-no">044</span><span id="line-44">   }</span>
-<span class="source-line-no">045</span><span id="line-45"></span>
-<span class="source-line-no">046</span><span id="line-46">   final ByteArrayOutputStream baos = new ByteArrayOutputStream();</span>
+<span class="source-line-no">020</span><span id="line-20">import java.nio.charset.*;</span>
+<span class="source-line-no">021</span><span id="line-21"></span>
+<span class="source-line-no">022</span><span id="line-22">import jakarta.servlet.*;</span>
+<span class="source-line-no">023</span><span id="line-23">import jakarta.servlet.http.*;</span>
+<span class="source-line-no">024</span><span id="line-24"></span>
+<span class="source-line-no">025</span><span id="line-25">/**</span>
+<span class="source-line-no">026</span><span id="line-26"> * Wraps an {@link HttpServletResponse} and tees a &lt;b&gt;bounded&lt;/b&gt; copy of the output stream into memory for debug logging.</span>
+<span class="source-line-no">027</span><span id="line-27"> *</span>
+<span class="source-line-no">028</span><span id="line-28"> * &lt;p&gt;</span>
+<span class="source-line-no">029</span><span id="line-29"> * At most a configured cap (default 8&amp;nbsp;KB) of the response body is captured while all bytes are still written through</span>
+<span class="source-line-no">030</span><span id="line-30"> * to the real client. The total number of bytes written is tracked so a truncation marker can be rendered.</span>
+<span class="source-line-no">031</span><span id="line-31"> *</span>
+<span class="source-line-no">032</span><span id="line-32"> * &lt;p&gt;</span>
+<span class="source-line-no">033</span><span id="line-33"> * The underlying {@link HttpServletResponse#getOutputStream()} is not acquired until the first</span>
+<span class="source-line-no">034</span><span id="line-34"> * {@link #getOutputStream()} or {@link #getWriter()} call &amp;mdash; acquiring it eagerly in the constructor would</span>
+<span class="source-line-no">035</span><span id="line-35"> * permanently lock the response into stream mode, making a subsequent direct {@code getWriter()} call on this</span>
+<span class="source-line-no">036</span><span id="line-36"> * wrapper (or on the underlying response) throw {@link IllegalStateException} per the servlet spec, even for</span>
+<span class="source-line-no">037</span><span id="line-37"> * calls that never write anything.</span>
+<span class="source-line-no">038</span><span id="line-38"> *</span>
+<span class="source-line-no">039</span><span id="line-39"> */</span>
+<span class="source-line-no">040</span><span id="line-40">@SuppressWarnings({</span>
+<span class="source-line-no">041</span><span id="line-41">   "resource" // The tee'd response stream is owned by the underlying response/servlet container, which closes it when the response completes; closing it here would break response body caching. Eclipse JDT @Owning warning is by design.</span>
+<span class="source-line-no">042</span><span id="line-42">})</span>
+<span class="source-line-no">043</span><span id="line-43">public class CachingHttpServletResponse extends HttpServletResponseWrapper {</span>
+<span class="source-line-no">044</span><span id="line-44"></span>
+<span class="source-line-no">045</span><span id="line-45">   /** Default body capture cap, in bytes (8&amp;nbsp;KB). */</span>
+<span class="source-line-no">046</span><span id="line-46">   public static final int DEFAULT_CAP = 8 * 1024;</span>
 <span class="source-line-no">047</span><span id="line-47"></span>
-<span class="source-line-no">048</span><span id="line-48">   final ServletOutputStream os;</span>
-<span class="source-line-no">049</span><span id="line-49"></span>
-<span class="source-line-no">050</span><span id="line-50">   /**</span>
-<span class="source-line-no">051</span><span id="line-51">    * Constructor.</span>
-<span class="source-line-no">052</span><span id="line-52">    *</span>
-<span class="source-line-no">053</span><span id="line-53">    * @param res The wrapped servlet response. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">054</span><span id="line-54">    * @throws IOException Thrown by underlying stream.</span>
-<span class="source-line-no">055</span><span id="line-55">    */</span>
-<span class="source-line-no">056</span><span id="line-56">   protected CachingHttpServletResponse(HttpServletResponse res) throws IOException {</span>
-<span class="source-line-no">057</span><span id="line-57">      super(res);</span>
-<span class="source-line-no">058</span><span id="line-58">      os = res.getOutputStream();</span>
-<span class="source-line-no">059</span><span id="line-59">   }</span>
-<span class="source-line-no">060</span><span id="line-60"></span>
-<span class="source-line-no">061</span><span id="line-61">   /**</span>
-<span class="source-line-no">062</span><span id="line-62">    * Returns the content of the servlet response without consuming the stream.</span>
-<span class="source-line-no">063</span><span id="line-63">    *</span>
-<span class="source-line-no">064</span><span id="line-64">    * @return The content of the response.</span>
-<span class="source-line-no">065</span><span id="line-65">    */</span>
-<span class="source-line-no">066</span><span id="line-66">   public byte[] getContent() { return baos.toByteArray(); }</span>
-<span class="source-line-no">067</span><span id="line-67"></span>
-<span class="source-line-no">068</span><span id="line-68">   @Override</span>
-<span class="source-line-no">069</span><span id="line-69">   public ServletOutputStream getOutputStream() throws IOException {</span>
-<span class="source-line-no">070</span><span id="line-70">      return new ServletOutputStream() {</span>
-<span class="source-line-no">071</span><span id="line-71"></span>
-<span class="source-line-no">072</span><span id="line-72">         @Override</span>
-<span class="source-line-no">073</span><span id="line-73">         public void close() throws IOException {</span>
-<span class="source-line-no">074</span><span id="line-74">            os.close();</span>
-<span class="source-line-no">075</span><span id="line-75">         }</span>
+<span class="source-line-no">048</span><span id="line-48">   /**</span>
+<span class="source-line-no">049</span><span id="line-49">    * Wraps the specified response inside a {@link CachingHttpServletResponse} if it isn't already, using the default cap.</span>
+<span class="source-line-no">050</span><span id="line-50">    *</span>
+<span class="source-line-no">051</span><span id="line-51">    * @param res The response to wrap. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">052</span><span id="line-52">    * @return The wrapped response.</span>
+<span class="source-line-no">053</span><span id="line-53">    */</span>
+<span class="source-line-no">054</span><span id="line-54">   public static CachingHttpServletResponse wrap(HttpServletResponse res) {</span>
+<span class="source-line-no">055</span><span id="line-55">      return wrap(res, DEFAULT_CAP);</span>
+<span class="source-line-no">056</span><span id="line-56">   }</span>
+<span class="source-line-no">057</span><span id="line-57"></span>
+<span class="source-line-no">058</span><span id="line-58">   /**</span>
+<span class="source-line-no">059</span><span id="line-59">    * Wraps the specified response inside a {@link CachingHttpServletResponse} if it isn't already.</span>
+<span class="source-line-no">060</span><span id="line-60">    *</span>
+<span class="source-line-no">061</span><span id="line-61">    * @param res The response to wrap. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">062</span><span id="line-62">    * @param cap The maximum number of body bytes to capture.</span>
+<span class="source-line-no">063</span><span id="line-63">    * @return The wrapped response.</span>
+<span class="source-line-no">064</span><span id="line-64">    */</span>
+<span class="source-line-no">065</span><span id="line-65">   public static CachingHttpServletResponse wrap(HttpServletResponse res, int cap) {</span>
+<span class="source-line-no">066</span><span id="line-66">      if (res instanceof CachingHttpServletResponse res2)</span>
+<span class="source-line-no">067</span><span id="line-67">         return res2;</span>
+<span class="source-line-no">068</span><span id="line-68">      return new CachingHttpServletResponse(res, cap);</span>
+<span class="source-line-no">069</span><span id="line-69">   }</span>
+<span class="source-line-no">070</span><span id="line-70"></span>
+<span class="source-line-no">071</span><span id="line-71">   private final int cap;</span>
+<span class="source-line-no">072</span><span id="line-72">   private final ByteArrayOutputStream buffer = new ByteArrayOutputStream();</span>
+<span class="source-line-no">073</span><span id="line-73">   private long totalLength = 0;</span>
+<span class="source-line-no">074</span><span id="line-74">   private TeeServletOutputStream stream;</span>
+<span class="source-line-no">075</span><span id="line-75">   private PrintWriter writer;</span>
 <span class="source-line-no">076</span><span id="line-76"></span>
-<span class="source-line-no">077</span><span id="line-77">         @Override</span>
-<span class="source-line-no">078</span><span id="line-78">         public void flush() throws IOException {</span>
-<span class="source-line-no">079</span><span id="line-79">            os.flush();</span>
-<span class="source-line-no">080</span><span id="line-80">         }</span>
-<span class="source-line-no">081</span><span id="line-81"></span>
-<span class="source-line-no">082</span><span id="line-82">         @Override</span>
-<span class="source-line-no">083</span><span id="line-83">         public boolean isReady() { return os.isReady(); }</span>
-<span class="source-line-no">084</span><span id="line-84"></span>
-<span class="source-line-no">085</span><span id="line-85">         @Override</span>
-<span class="source-line-no">086</span><span id="line-86">         public void setWriteListener(WriteListener writeListener) {</span>
-<span class="source-line-no">087</span><span id="line-87">            os.setWriteListener(writeListener);</span>
-<span class="source-line-no">088</span><span id="line-88">         }</span>
-<span class="source-line-no">089</span><span id="line-89"></span>
-<span class="source-line-no">090</span><span id="line-90">         @Override</span>
-<span class="source-line-no">091</span><span id="line-91">         public void write(int b) throws IOException {</span>
-<span class="source-line-no">092</span><span id="line-92">            baos.write(b);</span>
-<span class="source-line-no">093</span><span id="line-93">            os.write(b);</span>
-<span class="source-line-no">094</span><span id="line-94">         }</span>
-<span class="source-line-no">095</span><span id="line-95">      };</span>
-<span class="source-line-no">096</span><span id="line-96">   }</span>
-<span class="source-line-no">097</span><span id="line-97">}</span>
+<span class="source-line-no">077</span><span id="line-77">   /**</span>
+<span class="source-line-no">078</span><span id="line-78">    * Constructor.</span>
+<span class="source-line-no">079</span><span id="line-79">    *</span>
+<span class="source-line-no">080</span><span id="line-80">    * @param res The wrapped servlet response. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">081</span><span id="line-81">    * @param cap The maximum number of body bytes to capture.</span>
+<span class="source-line-no">082</span><span id="line-82">    */</span>
+<span class="source-line-no">083</span><span id="line-83">   protected CachingHttpServletResponse(HttpServletResponse res, int cap) {</span>
+<span class="source-line-no">084</span><span id="line-84">      super(res);</span>
+<span class="source-line-no">085</span><span id="line-85">      this.cap = cap;</span>
+<span class="source-line-no">086</span><span id="line-86">   }</span>
+<span class="source-line-no">087</span><span id="line-87"></span>
+<span class="source-line-no">088</span><span id="line-88">   /**</span>
+<span class="source-line-no">089</span><span id="line-89">    * Returns the captured (possibly truncated) response body bytes.</span>
+<span class="source-line-no">090</span><span id="line-90">    *</span>
+<span class="source-line-no">091</span><span id="line-91">    * @return The captured body bytes (at most the configured cap). Never &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">092</span><span id="line-92">    */</span>
+<span class="source-line-no">093</span><span id="line-93">   public byte[] getContent() { return buffer.toByteArray(); }</span>
+<span class="source-line-no">094</span><span id="line-94"></span>
+<span class="source-line-no">095</span><span id="line-95">   /**</span>
+<span class="source-line-no">096</span><span id="line-96">    * Returns the total number of body bytes written so far, including any bytes beyond the capture cap.</span>
+<span class="source-line-no">097</span><span id="line-97">    *</span>
+<span class="source-line-no">098</span><span id="line-98">    * @return The total body length in bytes.</span>
+<span class="source-line-no">099</span><span id="line-99">    */</span>
+<span class="source-line-no">100</span><span id="line-100">   public long getTotalLength() { return totalLength; }</span>
+<span class="source-line-no">101</span><span id="line-101"></span>
+<span class="source-line-no">102</span><span id="line-102">   @Override</span>
+<span class="source-line-no">103</span><span id="line-103">   public ServletOutputStream getOutputStream() throws IOException {</span>
+<span class="source-line-no">104</span><span id="line-104">      if (stream == null)</span>
+<span class="source-line-no">105</span><span id="line-105">         stream = new TeeServletOutputStream(getResponse().getOutputStream());</span>
+<span class="source-line-no">106</span><span id="line-106">      return stream;</span>
+<span class="source-line-no">107</span><span id="line-107">   }</span>
+<span class="source-line-no">108</span><span id="line-108"></span>
+<span class="source-line-no">109</span><span id="line-109">   /**</span>
+<span class="source-line-no">110</span><span id="line-110">    * Returns a character-stream tee that writes through {@link #getOutputStream()}.</span>
+<span class="source-line-no">111</span><span id="line-111">    *</span>
+<span class="source-line-no">112</span><span id="line-112">    * &lt;p&gt;</span>
+<span class="source-line-no">113</span><span id="line-113">    * Juneau's own {@link org.apache.juneau.rest.server.RestResponse#getWriter()} always negotiates its writer over</span>
+<span class="source-line-no">114</span><span id="line-114">    * {@link #getOutputStream()}, so this override chiefly protects direct/raw consumers (filters, non-Juneau</span>
+<span class="source-line-no">115</span><span id="line-115">    * servlets in the same chain) that call {@code HttpServletResponse.getWriter()} on the wrapped response after</span>
+<span class="source-line-no">116</span><span id="line-116">    * capture has been installed &amp;mdash; without it, that call would either bypass the tee entirely or throw</span>
+<span class="source-line-no">117</span><span id="line-117">    * {@link IllegalStateException} because {@link #getOutputStream()} may have already been called.</span>
+<span class="source-line-no">118</span><span id="line-118">    */</span>
+<span class="source-line-no">119</span><span id="line-119">   @Override</span>
+<span class="source-line-no">120</span><span id="line-120">   public PrintWriter getWriter() throws IOException {</span>
+<span class="source-line-no">121</span><span id="line-121">      if (writer == null) {</span>
+<span class="source-line-no">122</span><span id="line-122">         var enc = getCharacterEncoding();</span>
+<span class="source-line-no">123</span><span id="line-123">         var cs = enc == null ? StandardCharsets.ISO_8859_1 : Charset.forName(enc);</span>
+<span class="source-line-no">124</span><span id="line-124">         writer = new PrintWriter(new OutputStreamWriter(getOutputStream(), cs));</span>
+<span class="source-line-no">125</span><span id="line-125">      }</span>
+<span class="source-line-no">126</span><span id="line-126">      return writer;</span>
+<span class="source-line-no">127</span><span id="line-127">   }</span>
+<span class="source-line-no">128</span><span id="line-128"></span>
+<span class="source-line-no">129</span><span id="line-129">   private final class TeeServletOutputStream extends ServletOutputStream {</span>
+<span class="source-line-no">130</span><span id="line-130"></span>
+<span class="source-line-no">131</span><span id="line-131">      private final ServletOutputStream delegate;</span>
+<span class="source-line-no">132</span><span id="line-132"></span>
+<span class="source-line-no">133</span><span id="line-133">      TeeServletOutputStream(ServletOutputStream delegate) {</span>
+<span class="source-line-no">134</span><span id="line-134">         this.delegate = delegate;</span>
+<span class="source-line-no">135</span><span id="line-135">      }</span>
+<span class="source-line-no">136</span><span id="line-136"></span>
+<span class="source-line-no">137</span><span id="line-137">      @Override</span>
+<span class="source-line-no">138</span><span id="line-138">      public void close() throws IOException {</span>
+<span class="source-line-no">139</span><span id="line-139">         delegate.close();</span>
+<span class="source-line-no">140</span><span id="line-140">      }</span>
+<span class="source-line-no">141</span><span id="line-141"></span>
+<span class="source-line-no">142</span><span id="line-142">      @Override</span>
+<span class="source-line-no">143</span><span id="line-143">      public void flush() throws IOException {</span>
+<span class="source-line-no">144</span><span id="line-144">         delegate.flush();</span>
+<span class="source-line-no">145</span><span id="line-145">      }</span>
+<span class="source-line-no">146</span><span id="line-146"></span>
+<span class="source-line-no">147</span><span id="line-147">      @Override</span>
+<span class="source-line-no">148</span><span id="line-148">      public boolean isReady() { return delegate.isReady(); }</span>
+<span class="source-line-no">149</span><span id="line-149"></span>
+<span class="source-line-no">150</span><span id="line-150">      @Override</span>
+<span class="source-line-no">151</span><span id="line-151">      public void setWriteListener(WriteListener writeListener) {</span>
+<span class="source-line-no">152</span><span id="line-152">         delegate.setWriteListener(writeListener);</span>
+<span class="source-line-no">153</span><span id="line-153">      }</span>
+<span class="source-line-no">154</span><span id="line-154"></span>
+<span class="source-line-no">155</span><span id="line-155">      @Override</span>
+<span class="source-line-no">156</span><span id="line-156">      public void write(int b) throws IOException {</span>
+<span class="source-line-no">157</span><span id="line-157">         capture(b);</span>
+<span class="source-line-no">158</span><span id="line-158">         delegate.write(b);</span>
+<span class="source-line-no">159</span><span id="line-159">      }</span>
+<span class="source-line-no">160</span><span id="line-160"></span>
+<span class="source-line-no">161</span><span id="line-161">      @Override</span>
+<span class="source-line-no">162</span><span id="line-162">      public void write(byte[] b, int off, int len) throws IOException {</span>
+<span class="source-line-no">163</span><span id="line-163">         capture(b, off, len);</span>
+<span class="source-line-no">164</span><span id="line-164">         delegate.write(b, off, len);</span>
+<span class="source-line-no">165</span><span id="line-165">      }</span>
+<span class="source-line-no">166</span><span id="line-166"></span>
+<span class="source-line-no">167</span><span id="line-167">      // Only this tee touches the outer response's capture buffer, so these helpers live here rather than on the</span>
+<span class="source-line-no">168</span><span id="line-168">      // outer class.</span>
+<span class="source-line-no">169</span><span id="line-169">      private void capture(int b) {</span>
+<span class="source-line-no">170</span><span id="line-170">         totalLength++;</span>
+<span class="source-line-no">171</span><span id="line-171">         if (buffer.size() &lt; cap)</span>
+<span class="source-line-no">172</span><span id="line-172">            buffer.write(b);</span>
+<span class="source-line-no">173</span><span id="line-173">      }</span>
+<span class="source-line-no">174</span><span id="line-174"></span>
+<span class="source-line-no">175</span><span id="line-175">      private void capture(byte[] b, int off, int len) {</span>
+<span class="source-line-no">176</span><span id="line-176">         totalLength += len;</span>
+<span class="source-line-no">177</span><span id="line-177">         var room = cap - buffer.size();</span>
+<span class="source-line-no">178</span><span id="line-178">         if (room &gt; 0)</span>
+<span class="source-line-no">179</span><span id="line-179">            buffer.write(b, off, Math.min(room, len));</span>
+<span class="source-line-no">180</span><span id="line-180">      }</span>
+<span class="source-line-no">181</span><span id="line-181">   }</span>
+<span class="source-line-no">182</span><span id="line-182">}</span>
 
 
 

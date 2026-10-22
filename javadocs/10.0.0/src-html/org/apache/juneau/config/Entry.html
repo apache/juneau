@@ -120,8 +120,8 @@
 <span class="source-line-no">107</span><span id="line-107">    * @return The value, or {@link Optional#empty()} if the section or key does not exist.</span>
 <span class="source-line-no">108</span><span id="line-108">    */</span>
 <span class="source-line-no">109</span><span id="line-109">   @SuppressWarnings({</span>
-<span class="source-line-no">110</span><span id="line-110">      "unchecked", // Type erasure requires unchecked casts</span>
-<span class="source-line-no">111</span><span id="line-111">      "java:S3776", // Cognitive complexity acceptable for this specific logic</span>
+<span class="source-line-no">110</span><span id="line-110">      "java:S3776", // Cognitive complexity acceptable for this specific logic</span>
+<span class="source-line-no">111</span><span id="line-111">      "unchecked" // Type erasure requires unchecked casts</span>
 <span class="source-line-no">112</span><span id="line-112">   })</span>
 <span class="source-line-no">113</span><span id="line-113">   public &lt;T&gt; Optional&lt;T&gt; as(Parser parser, Type type, Type...args) {</span>
 <span class="source-line-no">114</span><span id="line-114">      if (isNull())</span>
@@ -152,7 +152,7 @@
 <span class="source-line-no">139</span><span id="line-139">            var s1 = firstNonWhitespaceChar(v);</span>
 <span class="source-line-no">140</span><span id="line-140">            if (isArray(type) &amp;&amp; s1 != '[')</span>
 <span class="source-line-no">141</span><span id="line-141">               v = '[' + v + ']';</span>
-<span class="source-line-no">142</span><span id="line-142">            else if (s1 != '[' &amp;&amp; s1 != '{' &amp;&amp; ! "null".equals(v))</span>
+<span class="source-line-no">142</span><span id="line-142">            else if (s1 != '[' &amp;&amp; s1 != '{' &amp;&amp; neq(v, "null"))</span>
 <span class="source-line-no">143</span><span id="line-143">               v = '\'' + v + '\'';</span>
 <span class="source-line-no">144</span><span id="line-144">         }</span>
 <span class="source-line-no">145</span><span id="line-145">         return o(parser.read(v, type, args));</span>
@@ -362,7 +362,7 @@
 <span class="source-line-no">349</span><span id="line-349">      var s = toString();</span>
 <span class="source-line-no">350</span><span id="line-350">      if (parser instanceof JsonParser) {</span>
 <span class="source-line-no">351</span><span id="line-351">         var s1 = firstNonWhitespaceChar(s);</span>
-<span class="source-line-no">352</span><span id="line-352">         if (s1 != '[' &amp;&amp; ! "null".equals(s))</span>
+<span class="source-line-no">352</span><span id="line-352">         if (s1 != '[' &amp;&amp; neq(s, "null"))</span>
 <span class="source-line-no">353</span><span id="line-353">            s = '[' + s + ']';</span>
 <span class="source-line-no">354</span><span id="line-354">      }</span>
 <span class="source-line-no">355</span><span id="line-355">      return o(JsonList.ofString(s, parser));</span>
@@ -438,7 +438,7 @@
 <span class="source-line-no">425</span><span id="line-425">      var s = toString();</span>
 <span class="source-line-no">426</span><span id="line-426">      if (parser instanceof JsonParser) {</span>
 <span class="source-line-no">427</span><span id="line-427">         var s1 = firstNonWhitespaceChar(s);</span>
-<span class="source-line-no">428</span><span id="line-428">         if (s1 != '{' &amp;&amp; ! "null".equals(s))</span>
+<span class="source-line-no">428</span><span id="line-428">         if (s1 != '{' &amp;&amp; neq(s, "null"))</span>
 <span class="source-line-no">429</span><span id="line-429">            s = '{' + s + '}';</span>
 <span class="source-line-no">430</span><span id="line-430">      }</span>
 <span class="source-line-no">431</span><span id="line-431">      return o(JsonMap.ofString(s, parser));</span>

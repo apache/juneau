@@ -68,26 +68,60 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color">
 <div class="block">Next-generation HTTP response types.</div>
 </div>
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.petstore.console">org.apache.juneau.petstore.console</a></div>
+<div class="col-last odd-row-color">
+<div class="block">Petstore admin console: the <code>/console</code> page tree.</div>
+</div>
+<div class="col-first even-row-color"><a href="#org.apache.juneau.petstore.console.dev">org.apache.juneau.petstore.console.dev</a></div>
+<div class="col-last even-row-color">
+<div class="block">Petstore console Developer pages: custom cards, themes, rendering flavors and the secure API demo.</div>
+</div>
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.petstore.console.dev.flavors">org.apache.juneau.petstore.console.dev.flavors</a></div>
+<div class="col-last odd-row-color">
+<div class="block">Petstore console Rendering flavors: one console page per petstore view technology.</div>
+</div>
+<div class="col-first even-row-color"><a href="#org.apache.juneau.petstore.console.ops">org.apache.juneau.petstore.console.ops</a></div>
+<div class="col-last even-row-color">
+<div class="block">Petstore console operations pages: background jobs and the audit log.</div>
+</div>
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.petstore.console.pets">org.apache.juneau.petstore.console.pets</a></div>
+<div class="col-last odd-row-color">
+<div class="block">Petstore console pets pages and their JSON endpoints.</div>
+</div>
+<div class="col-first even-row-color"><a href="#org.apache.juneau.petstore.jetty">org.apache.juneau.petstore.jetty</a></div>
+<div class="col-last even-row-color">
+<div class="block">Apache Juneau Petstore - Jetty/Microservice deployment.</div>
+</div>
 <div class="col-first odd-row-color"><a href="#org.apache.juneau.petstore.rest">org.apache.juneau.petstore.rest</a></div>
 <div class="col-last odd-row-color">
 <div class="block">Petstore REST resources.</div>
 </div>
-<div class="col-first even-row-color"><a href="#org.apache.juneau.rest.server">org.apache.juneau.rest.server</a></div>
+<div class="col-first even-row-color"><a href="#org.apache.juneau.petstore.springboot">org.apache.juneau.petstore.springboot</a></div>
 <div class="col-last even-row-color">
+<div class="block">Apache Juneau Petstore - Spring Boot deployment.</div>
+</div>
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.rest.server">org.apache.juneau.rest.server</a></div>
+<div class="col-last odd-row-color">
 <div class="block">REST Server API</div>
 </div>
-<div class="col-first odd-row-color"><a href="#org.apache.juneau.rest.server.arg">org.apache.juneau.rest.server.arg</a></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><a href="#org.apache.juneau.rest.server.arg">org.apache.juneau.rest.server.arg</a></div>
+<div class="col-last even-row-color">
 <div class="block">REST Method Argument Beans</div>
 </div>
-<div class="col-first even-row-color"><a href="#org.apache.juneau.rest.server.auth">org.apache.juneau.rest.server.auth</a></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.rest.server.auth">org.apache.juneau.rest.server.auth</a></div>
+<div class="col-last odd-row-color">
 <div class="block">Authentication (AuthN) guards, servlet-layer filters, SPIs, and request-time helpers for
  <code>juneau-rest-server</code>.</div>
 </div>
-<div class="col-first odd-row-color"><a href="#org.apache.juneau.rest.server.beans">org.apache.juneau.rest.server.beans</a></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><a href="#org.apache.juneau.rest.server.beans">org.apache.juneau.rest.server.beans</a></div>
+<div class="col-last even-row-color">
 <div class="block">REST Interface Helper Classes</div>
+</div>
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.rest.server.console.data">org.apache.juneau.rest.server.console.data</a></div>
+<div class="col-last odd-row-color">
+<div class="block">Server helpers for console data sources: <a href="../../rest/server/console/data/SeriesSource.html" title="class in org.apache.juneau.rest.server.console.data"><code>SeriesSource</code></a> streams
+ rows as CSV or NDJSON, and <a href="../../rest/server/console/data/SeriesAggregator.html" title="class in org.apache.juneau.rest.server.console.data"><code>SeriesAggregator</code></a> answers the
+ aggregate request a data source sends when its result is too large to load raw.</div>
 </div>
 <div class="col-first even-row-color"><a href="#org.apache.juneau.rest.server.converter">org.apache.juneau.rest.server.converter</a></div>
 <div class="col-last even-row-color">
@@ -123,36 +157,40 @@ loadScripts(document, 'script');</script>
 <div class="col-last odd-row-color">
 <div class="block">REST Servlets</div>
 </div>
-<div class="col-first even-row-color"><a href="#org.apache.juneau.rest.server.tracing">org.apache.juneau.rest.server.tracing</a></div>
+<div class="col-first even-row-color"><a href="#org.apache.juneau.rest.server.staticfile">org.apache.juneau.rest.server.staticfile</a></div>
 <div class="col-last even-row-color">
+<div class="block">REST Static Files Support</div>
+</div>
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.rest.server.tracing">org.apache.juneau.rest.server.tracing</a></div>
+<div class="col-last odd-row-color">
 <div class="block">Tracing SPI for <code>juneau-rest-server</code> &mdash; per-request span hook backed by a
  caller-supplied <a href="../../rest/server/tracing/TracerHook.html" title="interface in org.apache.juneau.rest.server.tracing"><code>TracerHook</code></a> bean.</div>
 </div>
-<div class="col-first odd-row-color"><a href="#org.apache.juneau.rest.server.validation">org.apache.juneau.rest.server.validation</a></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><a href="#org.apache.juneau.rest.server.validation">org.apache.juneau.rest.server.validation</a></div>
+<div class="col-last even-row-color">
 <div class="block">Optional <a class="doclink" href="https://jakarta.ee/specifications/bean-validation/">Jakarta Bean Validation 3.x</a>
  integration for <code>juneau-rest-server</code> &mdash; declarative validation of request beans via
  <code>jakarta.validation.constraints.*</code> annotations.</div>
 </div>
-<div class="col-first even-row-color"><a href="#org.apache.juneau.rest.server.vars">org.apache.juneau.rest.server.vars</a></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.rest.server.vars">org.apache.juneau.rest.server.vars</a></div>
+<div class="col-last odd-row-color">
 <div class="block">Predefined SVL Variables</div>
 </div>
-<div class="col-first odd-row-color"><a href="#org.apache.juneau.rest.server.view.freemarker">org.apache.juneau.rest.server.view.freemarker</a></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><a href="#org.apache.juneau.rest.server.view.freemarker">org.apache.juneau.rest.server.view.freemarker</a></div>
+<div class="col-last even-row-color">
 <div class="block">Apache FreeMarker view-rendering bridge &mdash; opt-in <code>juneau-rest-server-view-freemarker</code>
  module.</div>
 </div>
-<div class="col-first even-row-color"><a href="#org.apache.juneau.rest.server.view.jsp">org.apache.juneau.rest.server.view.jsp</a></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.rest.server.view.jsp">org.apache.juneau.rest.server.view.jsp</a></div>
+<div class="col-last odd-row-color">
 <div class="block">JSP view-rendering bridge &mdash; opt-in <code>juneau-rest-server-view-jsp</code> module.</div>
 </div>
-<div class="col-first odd-row-color"><a href="#org.apache.juneau.rest.server.view.mustache">org.apache.juneau.rest.server.view.mustache</a></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><a href="#org.apache.juneau.rest.server.view.mustache">org.apache.juneau.rest.server.view.mustache</a></div>
+<div class="col-last even-row-color">
 <div class="block">Mustache view-rendering bridge &mdash; opt-in <code>juneau-rest-server-view-mustache</code> module.</div>
 </div>
-<div class="col-first even-row-color"><a href="#org.apache.juneau.rest.server.view.thymeleaf">org.apache.juneau.rest.server.view.thymeleaf</a></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.rest.server.view.thymeleaf">org.apache.juneau.rest.server.view.thymeleaf</a></div>
+<div class="col-last odd-row-color">
 <div class="block">Thymeleaf view-rendering bridge &mdash; opt-in <code>juneau-rest-server-view-thymeleaf</code> module.</div>
 </div>
 </div>
@@ -542,6 +580,84 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
+<section class="detail" id="org.apache.juneau.petstore.console">
+<div class="caption"><span>Classes in <a href="package-summary.html">org.apache.juneau.http.response</a> used by <a href="../../petstore/console/package-summary.html">org.apache.juneau.petstore.console</a></span></div>
+<div class="summary-table two-column-summary">
+<div class="table-header col-first">Class</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><a href="class-use/SeeOther.html#org.apache.juneau.petstore.console">SeeOther</a></div>
+<div class="col-last even-row-color">
+<div class="block">Represents an <c>HTTP 303 See Other</c> response.</div>
+</div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="org.apache.juneau.petstore.console.dev">
+<div class="caption"><span>Classes in <a href="package-summary.html">org.apache.juneau.http.response</a> used by <a href="../../petstore/console/dev/package-summary.html">org.apache.juneau.petstore.console.dev</a></span></div>
+<div class="summary-table two-column-summary">
+<div class="table-header col-first">Class</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><a href="class-use/SeeOther.html#org.apache.juneau.petstore.console.dev">SeeOther</a></div>
+<div class="col-last even-row-color">
+<div class="block">Represents an <c>HTTP 303 See Other</c> response.</div>
+</div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="org.apache.juneau.petstore.console.dev.flavors">
+<div class="caption"><span>Classes in <a href="package-summary.html">org.apache.juneau.http.response</a> used by <a href="../../petstore/console/dev/flavors/package-summary.html">org.apache.juneau.petstore.console.dev.flavors</a></span></div>
+<div class="summary-table two-column-summary">
+<div class="table-header col-first">Class</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><a href="class-use/SeeOther.html#org.apache.juneau.petstore.console.dev.flavors">SeeOther</a></div>
+<div class="col-last even-row-color">
+<div class="block">Represents an <c>HTTP 303 See Other</c> response.</div>
+</div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="org.apache.juneau.petstore.console.ops">
+<div class="caption"><span>Classes in <a href="package-summary.html">org.apache.juneau.http.response</a> used by <a href="../../petstore/console/ops/package-summary.html">org.apache.juneau.petstore.console.ops</a></span></div>
+<div class="summary-table two-column-summary">
+<div class="table-header col-first">Class</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><a href="class-use/SeeOther.html#org.apache.juneau.petstore.console.ops">SeeOther</a></div>
+<div class="col-last even-row-color">
+<div class="block">Represents an <c>HTTP 303 See Other</c> response.</div>
+</div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="org.apache.juneau.petstore.console.pets">
+<div class="caption"><span>Classes in <a href="package-summary.html">org.apache.juneau.http.response</a> used by <a href="../../petstore/console/pets/package-summary.html">org.apache.juneau.petstore.console.pets</a></span></div>
+<div class="summary-table two-column-summary">
+<div class="table-header col-first">Class</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><a href="class-use/SeeOther.html#org.apache.juneau.petstore.console.pets">SeeOther</a></div>
+<div class="col-last even-row-color">
+<div class="block">Represents an <c>HTTP 303 See Other</c> response.</div>
+</div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="org.apache.juneau.petstore.jetty">
+<div class="caption"><span>Classes in <a href="package-summary.html">org.apache.juneau.http.response</a> used by <a href="../../petstore/jetty/package-summary.html">org.apache.juneau.petstore.jetty</a></span></div>
+<div class="summary-table two-column-summary">
+<div class="table-header col-first">Class</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><a href="class-use/SeeOther.html#org.apache.juneau.petstore.jetty">SeeOther</a></div>
+<div class="col-last even-row-color">
+<div class="block">Represents an <c>HTTP 303 See Other</c> response.</div>
+</div>
+</div>
+</section>
+</li>
+<li>
 <section class="detail" id="org.apache.juneau.petstore.rest">
 <div class="caption"><span>Classes in <a href="package-summary.html">org.apache.juneau.http.response</a> used by <a href="../../petstore/rest/package-summary.html">org.apache.juneau.petstore.rest</a></span></div>
 <div class="summary-table two-column-summary">
@@ -555,37 +671,54 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
+<section class="detail" id="org.apache.juneau.petstore.springboot">
+<div class="caption"><span>Classes in <a href="package-summary.html">org.apache.juneau.http.response</a> used by <a href="../../petstore/springboot/package-summary.html">org.apache.juneau.petstore.springboot</a></span></div>
+<div class="summary-table two-column-summary">
+<div class="table-header col-first">Class</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><a href="class-use/SeeOther.html#org.apache.juneau.petstore.springboot">SeeOther</a></div>
+<div class="col-last even-row-color">
+<div class="block">Represents an <c>HTTP 303 See Other</c> response.</div>
+</div>
+</div>
+</section>
+</li>
+<li>
 <section class="detail" id="org.apache.juneau.rest.server">
 <div class="caption"><span>Classes in <a href="package-summary.html">org.apache.juneau.http.response</a> used by <a href="../../rest/server/package-summary.html">org.apache.juneau.rest.server</a></span></div>
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Class</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><a href="class-use/BasicHttpException.html#org.apache.juneau.rest.server">BasicHttpException</a></div>
+<div class="col-first even-row-color"><a href="class-use/BadRequest.html#org.apache.juneau.rest.server">BadRequest</a></div>
 <div class="col-last even-row-color">
+<div class="block">Represents an <c>HTTP 400 Bad Request</c> error response.</div>
+</div>
+<div class="col-first odd-row-color"><a href="class-use/BasicHttpException.html#org.apache.juneau.rest.server">BasicHttpException</a></div>
+<div class="col-last odd-row-color">
 <div class="block">Base class for HTTP error response exceptions (4xx and 5xx) in the <code>org.apache.juneau.http</code> stack.</div>
 </div>
-<div class="col-first odd-row-color"><a href="class-use/InternalServerError.html#org.apache.juneau.rest.server">InternalServerError</a></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><a href="class-use/InternalServerError.html#org.apache.juneau.rest.server">InternalServerError</a></div>
+<div class="col-last even-row-color">
 <div class="block">Represents an <c>HTTP 500 Internal Server Error</c> error response.</div>
 </div>
-<div class="col-first even-row-color"><a href="class-use/MethodNotAllowed.html#org.apache.juneau.rest.server">MethodNotAllowed</a></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><a href="class-use/MethodNotAllowed.html#org.apache.juneau.rest.server">MethodNotAllowed</a></div>
+<div class="col-last odd-row-color">
 <div class="block">Represents an <c>HTTP 405 Method Not Allowed</c> error response.</div>
 </div>
-<div class="col-first odd-row-color"><a href="class-use/NotAcceptable.html#org.apache.juneau.rest.server">NotAcceptable</a></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><a href="class-use/NotAcceptable.html#org.apache.juneau.rest.server">NotAcceptable</a></div>
+<div class="col-last even-row-color">
 <div class="block">Represents an <c>HTTP 406 Not Acceptable</c> error response.</div>
 </div>
-<div class="col-first even-row-color"><a href="class-use/NotFound.html#org.apache.juneau.rest.server">NotFound</a></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><a href="class-use/NotFound.html#org.apache.juneau.rest.server">NotFound</a></div>
+<div class="col-last odd-row-color">
 <div class="block">Represents an <c>HTTP 404 Not Found</c> error response.</div>
 </div>
-<div class="col-first odd-row-color"><a href="class-use/NotImplemented.html#org.apache.juneau.rest.server">NotImplemented</a></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><a href="class-use/NotImplemented.html#org.apache.juneau.rest.server">NotImplemented</a></div>
+<div class="col-last even-row-color">
 <div class="block">Represents an <c>HTTP 501 Not Implemented</c> error response.</div>
 </div>
-<div class="col-first even-row-color"><a href="class-use/PreconditionFailed.html#org.apache.juneau.rest.server">PreconditionFailed</a></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><a href="class-use/PreconditionFailed.html#org.apache.juneau.rest.server">PreconditionFailed</a></div>
+<div class="col-last odd-row-color">
 <div class="block">Represents an <c>HTTP 412 Precondition Failed</c> error response.</div>
 </div>
 </div>
@@ -650,6 +783,27 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color"><a href="class-use/SeeOther.html#org.apache.juneau.rest.server.beans">SeeOther</a></div>
 <div class="col-last even-row-color">
 <div class="block">Represents an <c>HTTP 303 See Other</c> response.</div>
+</div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="org.apache.juneau.rest.server.console.data">
+<div class="caption"><span>Classes in <a href="package-summary.html">org.apache.juneau.http.response</a> used by <a href="../../rest/server/console/data/package-summary.html">org.apache.juneau.rest.server.console.data</a></span></div>
+<div class="summary-table two-column-summary">
+<div class="table-header col-first">Class</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><a href="class-use/BadRequest.html#org.apache.juneau.rest.server.console.data">BadRequest</a></div>
+<div class="col-last even-row-color">
+<div class="block">Represents an <c>HTTP 400 Bad Request</c> error response.</div>
+</div>
+<div class="col-first odd-row-color"><a href="class-use/BasicHttpException.html#org.apache.juneau.rest.server.console.data">BasicHttpException</a></div>
+<div class="col-last odd-row-color">
+<div class="block">Base class for HTTP error response exceptions (4xx and 5xx) in the <code>org.apache.juneau.http</code> stack.</div>
+</div>
+<div class="col-first even-row-color"><a href="class-use/HttpResponseMessage.html#org.apache.juneau.rest.server.console.data">HttpResponseMessage</a></div>
+<div class="col-last even-row-color">
+<div class="block">A complete HTTP response message: status line, headers, and optional body.</div>
 </div>
 </div>
 </section>
@@ -778,6 +932,19 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color"><a href="class-use/InternalServerError.html#org.apache.juneau.rest.server.servlet">InternalServerError</a></div>
 <div class="col-last even-row-color">
 <div class="block">Represents an <c>HTTP 500 Internal Server Error</c> error response.</div>
+</div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="org.apache.juneau.rest.server.staticfile">
+<div class="caption"><span>Classes in <a href="package-summary.html">org.apache.juneau.http.response</a> used by <a href="../../rest/server/staticfile/package-summary.html">org.apache.juneau.rest.server.staticfile</a></span></div>
+<div class="summary-table two-column-summary">
+<div class="table-header col-first">Class</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><a href="class-use/NotFound.html#org.apache.juneau.rest.server.staticfile">NotFound</a></div>
+<div class="col-last even-row-color">
+<div class="block">Represents an <c>HTTP 404 Not Found</c> error response.</div>
 </div>
 </div>
 </section>

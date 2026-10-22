@@ -82,7 +82,7 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="SessionStore.html" title="interface in org.apache.juneau.rest.server.auth.oidc.rp">SessionStore</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/auth/oidc/rp/InMemorySessionStore.html#line-43">InMemorySessionStore</a></span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/auth/oidc/rp/InMemorySessionStore.html#line-42">InMemorySessionStore</a></span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>
 implements <a href="SessionStore.html" title="interface in org.apache.juneau.rest.server.auth.oidc.rp">SessionStore</a></span></div>
 <div class="block">In-memory <a href="SessionStore.html" title="interface in org.apache.juneau.rest.server.auth.oidc.rp"><code>SessionStore</code></a> backed by a bounded-LRU map, indexed by <code>sub</code> and <code>sid</code> so
@@ -216,7 +216,7 @@ implements <a href="SessionStore.html" title="interface in org.apache.juneau.res
 <li>
 <section class="detail" id="DEFAULT_MAX_ENTRIES">
 <h3>DEFAULT_MAX_ENTRIES</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/auth/oidc/rp/InMemorySessionStore.html#line-46">DEFAULT_MAX_ENTRIES</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/auth/oidc/rp/InMemorySessionStore.html#line-45">DEFAULT_MAX_ENTRIES</a></span></div>
 <div class="block">Default maximum number of live sessions retained.</div>
 <dl class="notes">
 <dt>See Also:</dt>
@@ -239,7 +239,7 @@ implements <a href="SessionStore.html" title="interface in org.apache.juneau.res
 <li>
 <section class="detail" id="&lt;init&gt;(int,java.time.Clock)">
 <h3>InMemorySessionStore</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/auth/oidc/rp/InMemorySessionStore.html#line-80">InMemorySessionStore</a></span><wbr><span class="parameters">(int&nbsp;maxEntries,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/auth/oidc/rp/InMemorySessionStore.html#line-79">InMemorySessionStore</a></span><wbr><span class="parameters">(int&nbsp;maxEntries,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Clock.html" title="class or interface in java.time" class="external-link">Clock</a>&nbsp;clock)</span></div>
 <div class="block">Constructor.</div>
 <dl class="notes">
@@ -260,7 +260,7 @@ implements <a href="SessionStore.html" title="interface in org.apache.juneau.res
 <li>
 <section class="detail" id="create()">
 <h3>create</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="InMemorySessionStore.html" title="class in org.apache.juneau.rest.server.auth.oidc.rp">InMemorySessionStore</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/auth/oidc/rp/InMemorySessionStore.html#line-53">create</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="InMemorySessionStore.html" title="class in org.apache.juneau.rest.server.auth.oidc.rp">InMemorySessionStore</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/auth/oidc/rp/InMemorySessionStore.html#line-52">create</a></span>()</div>
 <div class="block">Static creator with the default size cap.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -271,7 +271,7 @@ implements <a href="SessionStore.html" title="interface in org.apache.juneau.res
 <li>
 <section class="detail" id="create(int)">
 <h3>create</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="InMemorySessionStore.html" title="class in org.apache.juneau.rest.server.auth.oidc.rp">InMemorySessionStore</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/auth/oidc/rp/InMemorySessionStore.html#line-63">create</a></span><wbr><span class="parameters">(int&nbsp;maxEntries)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="InMemorySessionStore.html" title="class in org.apache.juneau.rest.server.auth.oidc.rp">InMemorySessionStore</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/auth/oidc/rp/InMemorySessionStore.html#line-62">create</a></span><wbr><span class="parameters">(int&nbsp;maxEntries)</span></div>
 <div class="block">Static creator with a custom size cap.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -284,7 +284,7 @@ implements <a href="SessionStore.html" title="interface in org.apache.juneau.res
 <li>
 <section class="detail" id="createSessionCookieValue(org.apache.juneau.rest.server.auth.oidc.rp.OidcSession)">
 <h3>createSessionCookieValue</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/auth/oidc/rp/InMemorySessionStore.html#line-97">createSessionCookieValue</a></span><wbr><span class="parameters">(<a href="OidcSession.html" title="class in org.apache.juneau.rest.server.auth.oidc.rp">OidcSession</a>&nbsp;session)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/auth/oidc/rp/InMemorySessionStore.html#line-96">createSessionCookieValue</a></span><wbr><span class="parameters">(<a href="OidcSession.html" title="class in org.apache.juneau.rest.server.auth.oidc.rp">OidcSession</a>&nbsp;session)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="SessionStore.html#createSessionCookieValue(org.apache.juneau.rest.server.auth.oidc.rp.OidcSession)">SessionStore</a></code></span></div>
 <div class="block">Persists the supplied session and returns the opaque value to set as the session cookie.
 
@@ -304,7 +304,7 @@ implements <a href="SessionStore.html" title="interface in org.apache.juneau.res
 <li>
 <section class="detail" id="lookup(java.lang.String)">
 <h3>lookup</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="OidcSession.html" title="class in org.apache.juneau.rest.server.auth.oidc.rp">OidcSession</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/auth/oidc/rp/InMemorySessionStore.html#line-108">lookup</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;cookieValue)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="OidcSession.html" title="class in org.apache.juneau.rest.server.auth.oidc.rp">OidcSession</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/auth/oidc/rp/InMemorySessionStore.html#line-107">lookup</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;cookieValue)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="SessionStore.html#lookup(java.lang.String)">SessionStore</a></code></span></div>
 <div class="block">Resolves a session from a cookie value.</div>
 <dl class="notes">
@@ -322,7 +322,7 @@ implements <a href="SessionStore.html" title="interface in org.apache.juneau.res
 <li>
 <section class="detail" id="invalidate(java.lang.String)">
 <h3>invalidate</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/auth/oidc/rp/InMemorySessionStore.html#line-123">invalidate</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;cookieValue)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/auth/oidc/rp/InMemorySessionStore.html#line-122">invalidate</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;cookieValue)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="SessionStore.html#invalidate(java.lang.String)">SessionStore</a></code></span></div>
 <div class="block">Invalidates the session identified by the supplied cookie value.  No-op if absent.</div>
 <dl class="notes">
@@ -336,7 +336,7 @@ implements <a href="SessionStore.html" title="interface in org.apache.juneau.res
 <li>
 <section class="detail" id="supportsServerSideRevocation()">
 <h3>supportsServerSideRevocation</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/auth/oidc/rp/InMemorySessionStore.html#line-131">supportsServerSideRevocation</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/auth/oidc/rp/InMemorySessionStore.html#line-130">supportsServerSideRevocation</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="SessionStore.html#supportsServerSideRevocation()">SessionStore</a></code></span></div>
 <div class="block">Returns whether this store can revoke sessions server-side (a prerequisite for back-channel
  logout).
@@ -356,7 +356,7 @@ implements <a href="SessionStore.html" title="interface in org.apache.juneau.res
 <li>
 <section class="detail" id="invalidateBySubject(java.lang.String)">
 <h3>invalidateBySubject</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/auth/oidc/rp/InMemorySessionStore.html#line-136">invalidateBySubject</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;subject)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/auth/oidc/rp/InMemorySessionStore.html#line-135">invalidateBySubject</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;subject)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="SessionStore.html#invalidateBySubject(java.lang.String)">SessionStore</a></code></span></div>
 <div class="block">Invalidates every session belonging to the supplied subject (<code>sub</code>).
 
@@ -376,7 +376,7 @@ implements <a href="SessionStore.html" title="interface in org.apache.juneau.res
 <li>
 <section class="detail" id="invalidateBySessionId(java.lang.String)">
 <h3>invalidateBySessionId</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/auth/oidc/rp/InMemorySessionStore.html#line-150">invalidateBySessionId</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;sid)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/auth/oidc/rp/InMemorySessionStore.html#line-149">invalidateBySessionId</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;sid)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="SessionStore.html#invalidateBySessionId(java.lang.String)">SessionStore</a></code></span></div>
 <div class="block">Invalidates the session(s) bound to the supplied IdP session id (<code>sid</code>).
 
@@ -396,7 +396,7 @@ implements <a href="SessionStore.html" title="interface in org.apache.juneau.res
 <li>
 <section class="detail" id="size()">
 <h3>size</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/auth/oidc/rp/InMemorySessionStore.html#line-169">size</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../../../../src-html/org/apache/juneau/rest/server/auth/oidc/rp/InMemorySessionStore.html#line-168">size</a></span>()</div>
 <div class="block">Returns the current live-session count.  Primarily for tests and metrics.</div>
 <dl class="notes">
 <dt>Returns:</dt>

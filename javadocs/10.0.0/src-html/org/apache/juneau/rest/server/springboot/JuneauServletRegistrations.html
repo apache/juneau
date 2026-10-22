@@ -112,16 +112,14 @@
 <span class="source-line-no">099</span><span id="line-99">    * {@code /healthz} stays exact) &amp;mdash; cross-runtime parity with the Jetty mount path.</span>
 <span class="source-line-no">100</span><span id="line-100">    */</span>
 <span class="source-line-no">101</span><span id="line-101">   private static String toUrlMapping(String rawPath) {</span>
-<span class="source-line-no">102</span><span id="line-102">      var p = rawPath == null ? "" : rawPath;</span>
+<span class="source-line-no">102</span><span id="line-102">      var p = rawPath;</span>
 <span class="source-line-no">103</span><span id="line-103">      while (p.endsWith("/") &amp;&amp; p.length() &gt; 1)</span>
 <span class="source-line-no">104</span><span id="line-104">         p = p.substring(0, p.length() - 1);</span>
-<span class="source-line-no">105</span><span id="line-105">      if (p.isEmpty())</span>
-<span class="source-line-no">106</span><span id="line-106">         return "/";</span>
-<span class="source-line-no">107</span><span id="line-107">      if (! p.startsWith("/"))</span>
-<span class="source-line-no">108</span><span id="line-108">         p = "/" + p;</span>
-<span class="source-line-no">109</span><span id="line-109">      return p;</span>
-<span class="source-line-no">110</span><span id="line-110">   }</span>
-<span class="source-line-no">111</span><span id="line-111">}</span>
+<span class="source-line-no">105</span><span id="line-105">      if (! p.startsWith("/"))</span>
+<span class="source-line-no">106</span><span id="line-106">         p = "/" + p;</span>
+<span class="source-line-no">107</span><span id="line-107">      return p;</span>
+<span class="source-line-no">108</span><span id="line-108">   }</span>
+<span class="source-line-no">109</span><span id="line-109">}</span>
 
 
 

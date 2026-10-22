@@ -81,22 +81,20 @@
 <a class="jxr_linenumber" name="L73" href="#L73">73</a>  		<em class="jxr_comment">// Resolve each arg template to a String, then dispatch to the function. TypedFunction</em>
 <a class="jxr_linenumber" name="L74" href="#L74">74</a>  		<em class="jxr_comment">// handles ArgCoercer.coerce(...) internally; direct VarFunction implementations get the</em>
 <a class="jxr_linenumber" name="L75" href="#L75">75</a>  		<em class="jxr_comment">// raw String args via the args list.</em>
-<a class="jxr_linenumber" name="L76" href="#L76">76</a>  		<strong class="jxr_keyword">var</strong> args = <strong class="jxr_keyword">new</strong> ArrayList&lt;Object&gt;(argTemplates.length);
-<a class="jxr_linenumber" name="L77" href="#L77">77</a>  		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> t : argTemplates)
-<a class="jxr_linenumber" name="L78" href="#L78">78</a>  			args.add(t.resolve(session));
-<a class="jxr_linenumber" name="L79" href="#L79">79</a>  
-<a class="jxr_linenumber" name="L80" href="#L80">80</a>  		<strong class="jxr_keyword">var</strong> n = args.size();
-<a class="jxr_linenumber" name="L81" href="#L81">81</a>  		<strong class="jxr_keyword">if</strong> (n &lt; cachedFn.minArity() || n &gt; cachedFn.maxArity()) {
-<a class="jxr_linenumber" name="L82" href="#L82">82</a>  			<strong class="jxr_keyword">var</strong> maxStr = cachedFn.maxArity() == Integer.MAX_VALUE ? <span class="jxr_string">"any"</span> : String.valueOf(cachedFn.maxArity());
-<a class="jxr_linenumber" name="L83" href="#L83">83</a>  			<strong class="jxr_keyword">throw</strong> iaex(<span class="jxr_string">"Function '%s' expected %s..%s arg(s), got %s"</span>,
-<a class="jxr_linenumber" name="L84" href="#L84">84</a>  				name, cachedFn.minArity(), maxStr, n);
-<a class="jxr_linenumber" name="L85" href="#L85">85</a>  		}
-<a class="jxr_linenumber" name="L86" href="#L86">86</a>  
-<a class="jxr_linenumber" name="L87" href="#L87">87</a>  		<strong class="jxr_keyword">var</strong> result = cachedFn.invoke(session, args);
-<a class="jxr_linenumber" name="L88" href="#L88">88</a>  		<strong class="jxr_keyword">if</strong> (result != <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L89" href="#L89">89</a>  			out.append(result);
-<a class="jxr_linenumber" name="L90" href="#L90">90</a>  	}
-<a class="jxr_linenumber" name="L91" href="#L91">91</a>  }
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>  		List&lt;Object&gt; args = Arrays.stream(argTemplates).&lt;Object&gt;map(t -&gt; t.resolve(session)).toList();
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>  
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>  		<strong class="jxr_keyword">var</strong> n = args.size();
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>  		<strong class="jxr_keyword">if</strong> (n &lt; cachedFn.minArity() || n &gt; cachedFn.maxArity()) {
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>  			<strong class="jxr_keyword">var</strong> maxStr = cachedFn.maxArity() == Integer.MAX_VALUE ? <span class="jxr_string">"any"</span> : String.valueOf(cachedFn.maxArity());
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>  			<strong class="jxr_keyword">throw</strong> iaex(<span class="jxr_string">"Function '%s' expected %s..%s arg(s), got %s"</span>,
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>  				name, cachedFn.minArity(), maxStr, n);
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>  		}
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>  
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>  		<strong class="jxr_keyword">var</strong> result = cachedFn.invoke(session, args);
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>  		<strong class="jxr_keyword">if</strong> (result != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>  			out.append(result);
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>  	}
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>  }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

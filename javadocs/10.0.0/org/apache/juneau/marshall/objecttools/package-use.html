@@ -60,10 +60,6 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color">
 <div class="block">Java Object Tools</div>
 </div>
-<div class="col-first odd-row-color"><a href="#org.apache.juneau.rest.server.httppart">org.apache.juneau.rest.server.httppart</a></div>
-<div class="col-last odd-row-color">
-<div class="block">REST HTTP Parts</div>
-</div>
 </div>
 <section class="package-uses">
 <ul class="block-list">
@@ -73,106 +69,22 @@ loadScripts(document, 'script');</script>
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Class</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><a href="class-use/AbstractMatcher.html#org.apache.juneau.marshall.objecttools">AbstractMatcher</a></div>
+<div class="col-first even-row-color"><a href="class-use/MethodNotAllowlistedException.html#org.apache.juneau.marshall.objecttools">MethodNotAllowlistedException</a></div>
 <div class="col-last even-row-color">
-<div class="block">Common interface for matchers used by the <a href="ObjectSearcher.html" title="class in org.apache.juneau.marshall.objecttools"><code>ObjectSearcher</code></a> class.</div>
+<div class="block">Thrown by <a href="ObjectIntrospector.html" title="class in org.apache.juneau.marshall.objecttools"><code>ObjectIntrospector</code></a> when an attempt is made to invoke a method that has not been
+ explicitly allow-listed.</div>
 </div>
-<div class="col-first odd-row-color"><a href="class-use/Equality.html#org.apache.juneau.marshall.objecttools">Equality</a></div>
+<div class="col-first odd-row-color"><a href="class-use/ObjectIntrospector.html#org.apache.juneau.marshall.objecttools">ObjectIntrospector</a></div>
 <div class="col-last odd-row-color">
-<div class="block">Represents possible values for number and date comparisons.</div>
-</div>
-<div class="col-first even-row-color"><a href="class-use/MatcherFactory.html#org.apache.juneau.marshall.objecttools">MatcherFactory</a></div>
-<div class="col-last even-row-color">
-<div class="block">Common interface for matchers used by the <a href="ObjectSearcher.html" title="class in org.apache.juneau.marshall.objecttools"><code>ObjectSearcher</code></a> class.</div>
-</div>
-<div class="col-first odd-row-color"><a href="class-use/NumberMatcherFactory.html#org.apache.juneau.marshall.objecttools">NumberMatcherFactory</a></div>
-<div class="col-last odd-row-color">
-<div class="block">Number matcher factory for the <a href="ObjectSearcher.html" title="class in org.apache.juneau.marshall.objecttools"><code>ObjectSearcher</code></a> class.</div>
-</div>
-<div class="col-first even-row-color"><a href="class-use/ObjectIntrospector.html#org.apache.juneau.marshall.objecttools">ObjectIntrospector</a></div>
-<div class="col-last even-row-color">
 <div class="block">POJO method introspector.</div>
 </div>
-<div class="col-first odd-row-color"><a href="class-use/ObjectPaginator.html#org.apache.juneau.marshall.objecttools">ObjectPaginator</a></div>
-<div class="col-last odd-row-color">
-<div class="block">POJO model paginator.</div>
-</div>
-<div class="col-first even-row-color"><a href="class-use/ObjectSearcher.html#org.apache.juneau.marshall.objecttools">ObjectSearcher</a></div>
+<div class="col-first even-row-color"><a href="class-use/PathTraversal.html#org.apache.juneau.marshall.objecttools">PathTraversal</a></div>
 <div class="col-last even-row-color">
-<div class="block">POJO model searcher.</div>
-</div>
-<div class="col-first odd-row-color"><a href="class-use/ObjectSorter.html#org.apache.juneau.marshall.objecttools">ObjectSorter</a></div>
-<div class="col-last odd-row-color">
-<div class="block">POJO model sorter.</div>
-</div>
-<div class="col-first even-row-color"><a href="class-use/ObjectTool.html#org.apache.juneau.marshall.objecttools">ObjectTool</a></div>
-<div class="col-last even-row-color">
-<div class="block">Interface for classes that convert POJOs in some way using some predefined arguments object.</div>
-</div>
-<div class="col-first odd-row-color"><a href="class-use/ObjectViewer.html#org.apache.juneau.marshall.objecttools">ObjectViewer</a></div>
-<div class="col-last odd-row-color">
-<div class="block">POJO model viewer.</div>
-</div>
-<div class="col-first even-row-color"><a href="class-use/PageArgs.html#org.apache.juneau.marshall.objecttools">PageArgs</a></div>
-<div class="col-last even-row-color">
-<div class="block">Arguments passed to <a href="ObjectPaginator.html" title="class in org.apache.juneau.marshall.objecttools"><code>ObjectPaginator</code></a>.</div>
-</div>
-<div class="col-first odd-row-color"><a href="class-use/PathTraversal.html#org.apache.juneau.marshall.objecttools">PathTraversal</a></div>
-<div class="col-last odd-row-color">
 <div class="block">Traversal engine for performing standard REST operations (GET, PUT, POST, DELETE) against nodes in a POJO model.</div>
 </div>
-<div class="col-first even-row-color"><a href="class-use/PathTraversalException.html#org.apache.juneau.marshall.objecttools">PathTraversalException</a></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><a href="class-use/PathTraversalException.html#org.apache.juneau.marshall.objecttools">PathTraversalException</a></div>
+<div class="col-last odd-row-color">
 <div class="block">Generic exception thrown from the <a href="PathTraversal.html" title="class in org.apache.juneau.marshall.objecttools"><code>PathTraversal</code></a> class.</div>
-</div>
-<div class="col-first odd-row-color"><a href="class-use/PatternException.html#org.apache.juneau.marshall.objecttools">PatternException</a></div>
-<div class="col-last odd-row-color">
-<div class="block">Indicates an invalid search pattern was specified.</div>
-</div>
-<div class="col-first even-row-color"><a href="class-use/SearchArgs.html#org.apache.juneau.marshall.objecttools">SearchArgs</a></div>
-<div class="col-last even-row-color">
-<div class="block">Arguments passed to <a href="ObjectSearcher.html" title="class in org.apache.juneau.marshall.objecttools"><code>ObjectSearcher</code></a>.</div>
-</div>
-<div class="col-first odd-row-color"><a href="class-use/SortArgs.html#org.apache.juneau.marshall.objecttools">SortArgs</a></div>
-<div class="col-last odd-row-color">
-<div class="block">Arguments passed to <a href="ObjectSorter.html" title="class in org.apache.juneau.marshall.objecttools"><code>ObjectSorter</code></a>.</div>
-</div>
-<div class="col-first even-row-color"><a href="class-use/StringMatcherFactory.html#org.apache.juneau.marshall.objecttools">StringMatcherFactory</a></div>
-<div class="col-last even-row-color">
-<div class="block">String matcher factory for the <a href="ObjectSearcher.html" title="class in org.apache.juneau.marshall.objecttools"><code>ObjectSearcher</code></a> class.</div>
-</div>
-<div class="col-first odd-row-color"><a href="class-use/TimeMatcherFactory.html#org.apache.juneau.marshall.objecttools">TimeMatcherFactory</a></div>
-<div class="col-last odd-row-color">
-<div class="block">Date/time matcher factory for the <a href="ObjectSearcher.html" title="class in org.apache.juneau.marshall.objecttools"><code>ObjectSearcher</code></a> class.</div>
-</div>
-<div class="col-first even-row-color"><a href="class-use/ViewArgs.html#org.apache.juneau.marshall.objecttools">ViewArgs</a></div>
-<div class="col-last even-row-color">
-<div class="block">Arguments passed to <a href="ObjectViewer.html" title="class in org.apache.juneau.marshall.objecttools"><code>ObjectViewer</code></a>.</div>
-</div>
-</div>
-</section>
-</li>
-<li>
-<section class="detail" id="org.apache.juneau.rest.server.httppart">
-<div class="caption"><span>Classes in <a href="package-summary.html">org.apache.juneau.marshall.objecttools</a> used by <a href="../../rest/server/httppart/package-summary.html">org.apache.juneau.rest.server.httppart</a></span></div>
-<div class="summary-table two-column-summary">
-<div class="table-header col-first">Class</div>
-<div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><a href="class-use/PageArgs.html#org.apache.juneau.rest.server.httppart">PageArgs</a></div>
-<div class="col-last even-row-color">
-<div class="block">Arguments passed to <a href="ObjectPaginator.html" title="class in org.apache.juneau.marshall.objecttools"><code>ObjectPaginator</code></a>.</div>
-</div>
-<div class="col-first odd-row-color"><a href="class-use/SearchArgs.html#org.apache.juneau.rest.server.httppart">SearchArgs</a></div>
-<div class="col-last odd-row-color">
-<div class="block">Arguments passed to <a href="ObjectSearcher.html" title="class in org.apache.juneau.marshall.objecttools"><code>ObjectSearcher</code></a>.</div>
-</div>
-<div class="col-first even-row-color"><a href="class-use/SortArgs.html#org.apache.juneau.rest.server.httppart">SortArgs</a></div>
-<div class="col-last even-row-color">
-<div class="block">Arguments passed to <a href="ObjectSorter.html" title="class in org.apache.juneau.marshall.objecttools"><code>ObjectSorter</code></a>.</div>
-</div>
-<div class="col-first odd-row-color"><a href="class-use/ViewArgs.html#org.apache.juneau.rest.server.httppart">ViewArgs</a></div>
-<div class="col-last odd-row-color">
-<div class="block">Arguments passed to <a href="ObjectViewer.html" title="class in org.apache.juneau.marshall.objecttools"><code>ObjectViewer</code></a>.</div>
 </div>
 </div>
 </section>

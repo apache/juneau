@@ -111,7 +111,7 @@
 <a class="jxr_linenumber" name="L103" href="#L103">103</a> 			.timeZone(req.getTimeZone().orElse(<strong class="jxr_keyword">null</strong>))
 <a class="jxr_linenumber" name="L104" href="#L104">104</a> 			.mediaType(mediaType)
 <a class="jxr_linenumber" name="L105" href="#L105">105</a> 			.apply(WriterSerializerSession.Builder.<strong class="jxr_keyword">class</strong>, x -&gt; x.streamCharset(res.getCharset()))
-<a class="jxr_linenumber" name="L106" href="#L106">106</a> 			.debug(req.isDebug() ? <strong class="jxr_keyword">true</strong> : <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L106" href="#L106">106</a> 			.debug(req.isDebugMarshalling() ? <strong class="jxr_keyword">true</strong> : <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L107" href="#L107">107</a> 			.build();
 <a class="jxr_linenumber" name="L108" href="#L108">108</a> 		Object output = session.isWriterSerializer()
 <a class="jxr_linenumber" name="L109" href="#L109">109</a> 			? res.getNegotiatedWriter()

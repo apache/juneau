@@ -80,25 +80,26 @@
 <span class="source-line-no">067</span><span id="line-67">    * @return A new builder.</span>
 <span class="source-line-no">068</span><span id="line-68">    */</span>
 <span class="source-line-no">069</span><span id="line-69">   @SuppressWarnings({</span>
-<span class="source-line-no">070</span><span id="line-70">      "java:S1452" // Builder&lt;?&gt; wildcard return intentional; callers chain via fluent API without needing the concrete type</span>
-<span class="source-line-no">071</span><span id="line-71">   })</span>
-<span class="source-line-no">072</span><span id="line-72">   public static RdfStreamSerializer.Builder&lt;?&gt; create() {</span>
-<span class="source-line-no">073</span><span id="line-73">      return RdfStreamSerializer.create()</span>
-<span class="source-line-no">074</span><span id="line-74">         .language(Constants.LANG_RDFPROTO)</span>
-<span class="source-line-no">075</span><span id="line-75">         .produces("application/vnd.apache.protobuf")</span>
-<span class="source-line-no">076</span><span id="line-76">         .accept("application/vnd.apache.protobuf");</span>
-<span class="source-line-no">077</span><span id="line-77">   }</span>
-<span class="source-line-no">078</span><span id="line-78"></span>
-<span class="source-line-no">079</span><span id="line-79">   /**</span>
-<span class="source-line-no">080</span><span id="line-80">    * Constructor.</span>
-<span class="source-line-no">081</span><span id="line-81">    *</span>
-<span class="source-line-no">082</span><span id="line-82">    * @param builder The builder.</span>
-<span class="source-line-no">083</span><span id="line-83">    *    &lt;br&gt;Cannot be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">084</span><span id="line-84">    */</span>
-<span class="source-line-no">085</span><span id="line-85">   public RdfProtoSerializer(RdfStreamSerializer.Builder&lt;?&gt; builder) {</span>
-<span class="source-line-no">086</span><span id="line-86">      super(builder);</span>
-<span class="source-line-no">087</span><span id="line-87">   }</span>
-<span class="source-line-no">088</span><span id="line-88">}</span>
+<span class="source-line-no">070</span><span id="line-70">      "java:S1452", // Builder&lt;?&gt; wildcard return intentional; callers chain via fluent API without needing the concrete type</span>
+<span class="source-line-no">071</span><span id="line-71">      "java:S9149" // Public Juneau DSL factory; hiding parent create() is intentional.</span>
+<span class="source-line-no">072</span><span id="line-72">   })</span>
+<span class="source-line-no">073</span><span id="line-73">   public static RdfStreamSerializer.Builder&lt;?&gt; create() {</span>
+<span class="source-line-no">074</span><span id="line-74">      return RdfStreamSerializer.create()</span>
+<span class="source-line-no">075</span><span id="line-75">         .language(Constants.LANG_RDFPROTO)</span>
+<span class="source-line-no">076</span><span id="line-76">         .produces("application/vnd.apache.protobuf")</span>
+<span class="source-line-no">077</span><span id="line-77">         .accept("application/vnd.apache.protobuf");</span>
+<span class="source-line-no">078</span><span id="line-78">   }</span>
+<span class="source-line-no">079</span><span id="line-79"></span>
+<span class="source-line-no">080</span><span id="line-80">   /**</span>
+<span class="source-line-no">081</span><span id="line-81">    * Constructor.</span>
+<span class="source-line-no">082</span><span id="line-82">    *</span>
+<span class="source-line-no">083</span><span id="line-83">    * @param builder The builder.</span>
+<span class="source-line-no">084</span><span id="line-84">    *    &lt;br&gt;Cannot be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">085</span><span id="line-85">    */</span>
+<span class="source-line-no">086</span><span id="line-86">   public RdfProtoSerializer(RdfStreamSerializer.Builder&lt;?&gt; builder) {</span>
+<span class="source-line-no">087</span><span id="line-87">      super(builder);</span>
+<span class="source-line-no">088</span><span id="line-88">   }</span>
+<span class="source-line-no">089</span><span id="line-89">}</span>
 
 
 

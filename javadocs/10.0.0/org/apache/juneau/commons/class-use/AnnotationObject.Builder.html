@@ -136,17 +136,25 @@ loadScripts(document, 'script');</script>
 <div class="col-last odd-row-color">
 <div class="block">SOAP/XML Marshalling Support</div>
 </div>
-<div class="col-first even-row-color"><a href="#org.apache.juneau.marshall.uon">org.apache.juneau.marshall.uon</a></div>
+<div class="col-first even-row-color"><a href="#org.apache.juneau.marshall.toml">org.apache.juneau.marshall.toml</a></div>
 <div class="col-last even-row-color">
+<div class="block">TOML v1.0.0 serializer and parser for Apache Juneau.</div>
+</div>
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.marshall.uon">org.apache.juneau.marshall.uon</a></div>
+<div class="col-last odd-row-color">
 <div class="block">UON Marshalling Support</div>
 </div>
-<div class="col-first odd-row-color"><a href="#org.apache.juneau.marshall.urlencoding">org.apache.juneau.marshall.urlencoding</a></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><a href="#org.apache.juneau.marshall.urlencoding">org.apache.juneau.marshall.urlencoding</a></div>
+<div class="col-last even-row-color">
 <div class="block">URL-Encoding Marshalling Support</div>
 </div>
-<div class="col-first even-row-color"><a href="#org.apache.juneau.marshall.xml">org.apache.juneau.marshall.xml</a></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.marshall.xml">org.apache.juneau.marshall.xml</a></div>
+<div class="col-last odd-row-color">
 <div class="block">XML Marshalling Support</div>
+</div>
+<div class="col-first even-row-color"><a href="#org.apache.juneau.marshall.yaml">org.apache.juneau.marshall.yaml</a></div>
+<div class="col-last even-row-color">
+<div class="block">YAML Marshalling Support</div>
 </div>
 <div class="col-first odd-row-color"><a href="#org.apache.juneau.rest.server">org.apache.juneau.rest.server</a></div>
 <div class="col-last odd-row-color">
@@ -730,6 +738,22 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
+<section class="detail" id="org.apache.juneau.marshall.toml">
+<h2>Uses of <a href="../AnnotationObject.Builder.html" title="class in org.apache.juneau.commons">AnnotationObject.Builder</a> in <a href="../../marshall/toml/package-summary.html">org.apache.juneau.marshall.toml</a></h2>
+<div class="caption"><span>Subclasses of <a href="../AnnotationObject.Builder.html" title="class in org.apache.juneau.commons">AnnotationObject.Builder</a> in <a href="../../marshall/toml/package-summary.html">org.apache.juneau.marshall.toml</a></span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier and Type</div>
+<div class="table-header col-second">Class</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code>static class&nbsp;</code></div>
+<div class="col-second even-row-color"><code><a href="../../marshall/toml/TomlApplyAnnotation.Builder.html" class="type-name-link" title="class in org.apache.juneau.marshall.toml">TomlApplyAnnotation.Builder</a></code></div>
+<div class="col-last even-row-color">
+<div class="block">Builder class.</div>
+</div>
+</div>
+</section>
+</li>
+<li>
 <section class="detail" id="org.apache.juneau.marshall.uon">
 <h2>Uses of <a href="../AnnotationObject.Builder.html" title="class in org.apache.juneau.commons">AnnotationObject.Builder</a> in <a href="../../marshall/uon/package-summary.html">org.apache.juneau.marshall.uon</a></h2>
 <div class="caption"><span>Subclasses of <a href="../AnnotationObject.Builder.html" title="class in org.apache.juneau.commons">AnnotationObject.Builder</a> in <a href="../../marshall/uon/package-summary.html">org.apache.juneau.marshall.uon</a></span></div>
@@ -793,6 +817,22 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
+<section class="detail" id="org.apache.juneau.marshall.yaml">
+<h2>Uses of <a href="../AnnotationObject.Builder.html" title="class in org.apache.juneau.commons">AnnotationObject.Builder</a> in <a href="../../marshall/yaml/package-summary.html">org.apache.juneau.marshall.yaml</a></h2>
+<div class="caption"><span>Subclasses of <a href="../AnnotationObject.Builder.html" title="class in org.apache.juneau.commons">AnnotationObject.Builder</a> in <a href="../../marshall/yaml/package-summary.html">org.apache.juneau.marshall.yaml</a></span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier and Type</div>
+<div class="table-header col-second">Class</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code>static class&nbsp;</code></div>
+<div class="col-second even-row-color"><code><a href="../../marshall/yaml/YamlApplyAnnotation.Builder.html" class="type-name-link" title="class in org.apache.juneau.marshall.yaml">YamlApplyAnnotation.Builder</a></code></div>
+<div class="col-last even-row-color">
+<div class="block">Builder class.</div>
+</div>
+</div>
+</section>
+</li>
+<li>
 <section class="detail" id="org.apache.juneau.rest.server">
 <h2>Uses of <a href="../AnnotationObject.Builder.html" title="class in org.apache.juneau.commons">AnnotationObject.Builder</a> in <a href="../../rest/server/package-summary.html">org.apache.juneau.rest.server</a></h2>
 <div class="caption"><span>Subclasses of <a href="../AnnotationObject.Builder.html" title="class in org.apache.juneau.commons">AnnotationObject.Builder</a> in <a href="../../rest/server/package-summary.html">org.apache.juneau.rest.server</a></span></div>
@@ -806,96 +846,93 @@ loadScripts(document, 'script');</script>
 <div class="block">Builder class.</div>
 </div>
 <div class="col-first odd-row-color"><code>static class&nbsp;</code></div>
-<div class="col-second odd-row-color"><code><a href="../../rest/server/DebugAnnotation.Builder.html" class="type-name-link" title="class in org.apache.juneau.rest.server">DebugAnnotation.Builder</a></code></div>
-<div class="col-last odd-row-color">&nbsp;</div>
-<div class="col-first even-row-color"><code>static class&nbsp;</code></div>
-<div class="col-second even-row-color"><code><a href="../../rest/server/MixinAnnotation.Builder.html" class="type-name-link" title="class in org.apache.juneau.rest.server">MixinAnnotation.Builder</a></code></div>
-<div class="col-last even-row-color">
-<div class="block">Builder class.</div>
-</div>
-<div class="col-first odd-row-color"><code>static class&nbsp;</code></div>
-<div class="col-second odd-row-color"><code><a href="../../rest/server/OpSwaggerAnnotation.Builder.html" class="type-name-link" title="class in org.apache.juneau.rest.server">OpSwaggerAnnotation.Builder</a></code></div>
+<div class="col-second odd-row-color"><code><a href="../../rest/server/MixinAnnotation.Builder.html" class="type-name-link" title="class in org.apache.juneau.rest.server">MixinAnnotation.Builder</a></code></div>
 <div class="col-last odd-row-color">
 <div class="block">Builder class.</div>
 </div>
 <div class="col-first even-row-color"><code>static class&nbsp;</code></div>
-<div class="col-second even-row-color"><code><a href="../../rest/server/RestAnnotation.Builder.html" class="type-name-link" title="class in org.apache.juneau.rest.server">RestAnnotation.Builder</a></code></div>
+<div class="col-second even-row-color"><code><a href="../../rest/server/OpSwaggerAnnotation.Builder.html" class="type-name-link" title="class in org.apache.juneau.rest.server">OpSwaggerAnnotation.Builder</a></code></div>
 <div class="col-last even-row-color">
 <div class="block">Builder class.</div>
 </div>
 <div class="col-first odd-row-color"><code>static class&nbsp;</code></div>
-<div class="col-second odd-row-color"><code><a href="../../rest/server/RestDeleteAnnotation.Builder.html" class="type-name-link" title="class in org.apache.juneau.rest.server">RestDeleteAnnotation.Builder</a></code></div>
+<div class="col-second odd-row-color"><code><a href="../../rest/server/RestAnnotation.Builder.html" class="type-name-link" title="class in org.apache.juneau.rest.server">RestAnnotation.Builder</a></code></div>
 <div class="col-last odd-row-color">
 <div class="block">Builder class.</div>
 </div>
 <div class="col-first even-row-color"><code>static class&nbsp;</code></div>
-<div class="col-second even-row-color"><code><a href="../../rest/server/RestDestroyAnnotation.Builder.html" class="type-name-link" title="class in org.apache.juneau.rest.server">RestDestroyAnnotation.Builder</a></code></div>
+<div class="col-second even-row-color"><code><a href="../../rest/server/RestDeleteAnnotation.Builder.html" class="type-name-link" title="class in org.apache.juneau.rest.server">RestDeleteAnnotation.Builder</a></code></div>
 <div class="col-last even-row-color">
 <div class="block">Builder class.</div>
 </div>
 <div class="col-first odd-row-color"><code>static class&nbsp;</code></div>
-<div class="col-second odd-row-color"><code><a href="../../rest/server/RestEndCallAnnotation.Builder.html" class="type-name-link" title="class in org.apache.juneau.rest.server">RestEndCallAnnotation.Builder</a></code></div>
+<div class="col-second odd-row-color"><code><a href="../../rest/server/RestDestroyAnnotation.Builder.html" class="type-name-link" title="class in org.apache.juneau.rest.server">RestDestroyAnnotation.Builder</a></code></div>
 <div class="col-last odd-row-color">
 <div class="block">Builder class.</div>
 </div>
 <div class="col-first even-row-color"><code>static class&nbsp;</code></div>
-<div class="col-second even-row-color"><code><a href="../../rest/server/RestGetAnnotation.Builder.html" class="type-name-link" title="class in org.apache.juneau.rest.server">RestGetAnnotation.Builder</a></code></div>
+<div class="col-second even-row-color"><code><a href="../../rest/server/RestEndCallAnnotation.Builder.html" class="type-name-link" title="class in org.apache.juneau.rest.server">RestEndCallAnnotation.Builder</a></code></div>
 <div class="col-last even-row-color">
 <div class="block">Builder class.</div>
 </div>
 <div class="col-first odd-row-color"><code>static class&nbsp;</code></div>
-<div class="col-second odd-row-color"><code><a href="../../rest/server/RestInitAnnotation.Builder.html" class="type-name-link" title="class in org.apache.juneau.rest.server">RestInitAnnotation.Builder</a></code></div>
+<div class="col-second odd-row-color"><code><a href="../../rest/server/RestGetAnnotation.Builder.html" class="type-name-link" title="class in org.apache.juneau.rest.server">RestGetAnnotation.Builder</a></code></div>
 <div class="col-last odd-row-color">
 <div class="block">Builder class.</div>
 </div>
 <div class="col-first even-row-color"><code>static class&nbsp;</code></div>
-<div class="col-second even-row-color"><code><a href="../../rest/server/RestOpAnnotation.Builder.html" class="type-name-link" title="class in org.apache.juneau.rest.server">RestOpAnnotation.Builder</a></code></div>
+<div class="col-second even-row-color"><code><a href="../../rest/server/RestInitAnnotation.Builder.html" class="type-name-link" title="class in org.apache.juneau.rest.server">RestInitAnnotation.Builder</a></code></div>
 <div class="col-last even-row-color">
 <div class="block">Builder class.</div>
 </div>
 <div class="col-first odd-row-color"><code>static class&nbsp;</code></div>
-<div class="col-second odd-row-color"><code><a href="../../rest/server/RestOptionsAnnotation.Builder.html" class="type-name-link" title="class in org.apache.juneau.rest.server">RestOptionsAnnotation.Builder</a></code></div>
+<div class="col-second odd-row-color"><code><a href="../../rest/server/RestOpAnnotation.Builder.html" class="type-name-link" title="class in org.apache.juneau.rest.server">RestOpAnnotation.Builder</a></code></div>
 <div class="col-last odd-row-color">
 <div class="block">Builder class.</div>
 </div>
 <div class="col-first even-row-color"><code>static class&nbsp;</code></div>
-<div class="col-second even-row-color"><code><a href="../../rest/server/RestPatchAnnotation.Builder.html" class="type-name-link" title="class in org.apache.juneau.rest.server">RestPatchAnnotation.Builder</a></code></div>
+<div class="col-second even-row-color"><code><a href="../../rest/server/RestOptionsAnnotation.Builder.html" class="type-name-link" title="class in org.apache.juneau.rest.server">RestOptionsAnnotation.Builder</a></code></div>
 <div class="col-last even-row-color">
 <div class="block">Builder class.</div>
 </div>
 <div class="col-first odd-row-color"><code>static class&nbsp;</code></div>
-<div class="col-second odd-row-color"><code><a href="../../rest/server/RestPostAnnotation.Builder.html" class="type-name-link" title="class in org.apache.juneau.rest.server">RestPostAnnotation.Builder</a></code></div>
+<div class="col-second odd-row-color"><code><a href="../../rest/server/RestPatchAnnotation.Builder.html" class="type-name-link" title="class in org.apache.juneau.rest.server">RestPatchAnnotation.Builder</a></code></div>
 <div class="col-last odd-row-color">
 <div class="block">Builder class.</div>
 </div>
 <div class="col-first even-row-color"><code>static class&nbsp;</code></div>
-<div class="col-second even-row-color"><code><a href="../../rest/server/RestPostCallAnnotation.Builder.html" class="type-name-link" title="class in org.apache.juneau.rest.server">RestPostCallAnnotation.Builder</a></code></div>
+<div class="col-second even-row-color"><code><a href="../../rest/server/RestPostAnnotation.Builder.html" class="type-name-link" title="class in org.apache.juneau.rest.server">RestPostAnnotation.Builder</a></code></div>
 <div class="col-last even-row-color">
 <div class="block">Builder class.</div>
 </div>
 <div class="col-first odd-row-color"><code>static class&nbsp;</code></div>
-<div class="col-second odd-row-color"><code><a href="../../rest/server/RestPostInitAnnotation.Builder.html" class="type-name-link" title="class in org.apache.juneau.rest.server">RestPostInitAnnotation.Builder</a></code></div>
+<div class="col-second odd-row-color"><code><a href="../../rest/server/RestPostCallAnnotation.Builder.html" class="type-name-link" title="class in org.apache.juneau.rest.server">RestPostCallAnnotation.Builder</a></code></div>
 <div class="col-last odd-row-color">
 <div class="block">Builder class.</div>
 </div>
 <div class="col-first even-row-color"><code>static class&nbsp;</code></div>
-<div class="col-second even-row-color"><code><a href="../../rest/server/RestPreCallAnnotation.Builder.html" class="type-name-link" title="class in org.apache.juneau.rest.server">RestPreCallAnnotation.Builder</a></code></div>
+<div class="col-second even-row-color"><code><a href="../../rest/server/RestPostInitAnnotation.Builder.html" class="type-name-link" title="class in org.apache.juneau.rest.server">RestPostInitAnnotation.Builder</a></code></div>
 <div class="col-last even-row-color">
 <div class="block">Builder class.</div>
 </div>
 <div class="col-first odd-row-color"><code>static class&nbsp;</code></div>
-<div class="col-second odd-row-color"><code><a href="../../rest/server/RestPutAnnotation.Builder.html" class="type-name-link" title="class in org.apache.juneau.rest.server">RestPutAnnotation.Builder</a></code></div>
+<div class="col-second odd-row-color"><code><a href="../../rest/server/RestPreCallAnnotation.Builder.html" class="type-name-link" title="class in org.apache.juneau.rest.server">RestPreCallAnnotation.Builder</a></code></div>
 <div class="col-last odd-row-color">
 <div class="block">Builder class.</div>
 </div>
 <div class="col-first even-row-color"><code>static class&nbsp;</code></div>
-<div class="col-second even-row-color"><code><a href="../../rest/server/RestStartCallAnnotation.Builder.html" class="type-name-link" title="class in org.apache.juneau.rest.server">RestStartCallAnnotation.Builder</a></code></div>
+<div class="col-second even-row-color"><code><a href="../../rest/server/RestPutAnnotation.Builder.html" class="type-name-link" title="class in org.apache.juneau.rest.server">RestPutAnnotation.Builder</a></code></div>
 <div class="col-last even-row-color">
 <div class="block">Builder class.</div>
 </div>
 <div class="col-first odd-row-color"><code>static class&nbsp;</code></div>
-<div class="col-second odd-row-color"><code><a href="../../rest/server/SwaggerAnnotation.Builder.html" class="type-name-link" title="class in org.apache.juneau.rest.server">SwaggerAnnotation.Builder</a></code></div>
+<div class="col-second odd-row-color"><code><a href="../../rest/server/RestStartCallAnnotation.Builder.html" class="type-name-link" title="class in org.apache.juneau.rest.server">RestStartCallAnnotation.Builder</a></code></div>
 <div class="col-last odd-row-color">
+<div class="block">Builder class.</div>
+</div>
+<div class="col-first even-row-color"><code>static class&nbsp;</code></div>
+<div class="col-second even-row-color"><code><a href="../../rest/server/SwaggerAnnotation.Builder.html" class="type-name-link" title="class in org.apache.juneau.rest.server">SwaggerAnnotation.Builder</a></code></div>
+<div class="col-last even-row-color">
 <div class="block">Builder class.</div>
 </div>
 </div>

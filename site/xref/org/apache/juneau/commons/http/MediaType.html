@@ -46,7 +46,7 @@
 <a class="jxr_linenumber" name="L38" href="#L38">38</a>  @BeanIgnore
 <a class="jxr_linenumber" name="L39" href="#L39">39</a>  @SuppressWarnings({
 <a class="jxr_linenumber" name="L40" href="#L40">40</a>  	<span class="jxr_string">"java:S1700"</span>, <em class="jxr_comment">// Field 'mediaType' intentionally shares the class name; it holds the canonical string form of this MediaType instance</em>
-<a class="jxr_linenumber" name="L41" href="#L41">41</a>  	<span class="jxr_string">"java:S1845"</span>  <em class="jxr_comment">// Field name intentionally matches method name</em>
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>  	<span class="jxr_string">"java:S1845"</span> <em class="jxr_comment">// Field name intentionally matches method name</em>
 <a class="jxr_linenumber" name="L42" href="#L42">42</a>  })
 <a class="jxr_linenumber" name="L43" href="#L43">43</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> MediaType <strong class="jxr_keyword">implements</strong> Comparable&lt;MediaType&gt; {
 <a class="jxr_linenumber" name="L44" href="#L44">44</a>  
@@ -183,7 +183,7 @@
 <a class="jxr_linenumber" name="L175" href="#L175">175</a> 		<strong class="jxr_keyword">if</strong> (parameters == <strong class="jxr_keyword">null</strong>) {
 <a class="jxr_linenumber" name="L176" href="#L176">176</a> 			parameters = e.getParameters();
 <a class="jxr_linenumber" name="L177" href="#L177">177</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt; parameters.length; i++) {
-<a class="jxr_linenumber" name="L178" href="#L178">178</a> 				<strong class="jxr_keyword">if</strong> (parameters[i].getName().equals(<span class="jxr_string">"q"</span>)) {
+<a class="jxr_linenumber" name="L178" href="#L178">178</a> 				<strong class="jxr_keyword">if</strong> (eq(parameters[i].getName(), <span class="jxr_string">"q"</span>)) {
 <a class="jxr_linenumber" name="L179" href="#L179">179</a> 					parameters = Arrays.copyOfRange(parameters, 0, i);
 <a class="jxr_linenumber" name="L180" href="#L180">180</a> 					<strong class="jxr_keyword">break</strong>;
 <a class="jxr_linenumber" name="L181" href="#L181">181</a> 				}
@@ -421,14 +421,14 @@
 <a class="jxr_linenumber" name="L413" href="#L413">413</a> 			<strong class="jxr_keyword">return</strong> -1;
 <a class="jxr_linenumber" name="L414" href="#L414">414</a> 
 <a class="jxr_linenumber" name="L415" href="#L415">415</a> 		<em class="jxr_comment">// Perfect match</em>
-<a class="jxr_linenumber" name="L416" href="#L416">416</a> 		<strong class="jxr_keyword">if</strong> (<strong class="jxr_keyword">this</strong> == o || (type.equals(o.type) &amp;&amp; subType.equals(o.subType)))
+<a class="jxr_linenumber" name="L416" href="#L416">416</a> 		<strong class="jxr_keyword">if</strong> (<strong class="jxr_keyword">this</strong> == o || (eq(type, o.type) &amp;&amp; eq(subType, o.subType)))
 <a class="jxr_linenumber" name="L417" href="#L417">417</a> 			<strong class="jxr_keyword">return</strong> 100000;
 <a class="jxr_linenumber" name="L418" href="#L418">418</a> 
 <a class="jxr_linenumber" name="L419" href="#L419">419</a> 		<strong class="jxr_keyword">var</strong> c = 0;
 <a class="jxr_linenumber" name="L420" href="#L420">420</a> 
-<a class="jxr_linenumber" name="L421" href="#L421">421</a> 		<strong class="jxr_keyword">if</strong> (type.equals(o.type))
+<a class="jxr_linenumber" name="L421" href="#L421">421</a> 		<strong class="jxr_keyword">if</strong> (eq(type, o.type))
 <a class="jxr_linenumber" name="L422" href="#L422">422</a> 			c += 10000;
-<a class="jxr_linenumber" name="L423" href="#L423">423</a> 		<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (<span class="jxr_string">"*"</span>.equals(type) || <span class="jxr_string">"*"</span>.equals(o.type))
+<a class="jxr_linenumber" name="L423" href="#L423">423</a> 		<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (eq(type, <span class="jxr_string">"*"</span>) || eq(o.type, <span class="jxr_string">"*"</span>))
 <a class="jxr_linenumber" name="L424" href="#L424">424</a> 			c += 5000;
 <a class="jxr_linenumber" name="L425" href="#L425">425</a> 
 <a class="jxr_linenumber" name="L426" href="#L426">426</a> 		<strong class="jxr_keyword">if</strong> (c == 0)
@@ -439,7 +439,7 @@
 <a class="jxr_linenumber" name="L431" href="#L431">431</a> 			<strong class="jxr_keyword">return</strong> c + 7500;
 <a class="jxr_linenumber" name="L432" href="#L432">432</a> 
 <a class="jxr_linenumber" name="L433" href="#L433">433</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> st1 : subTypes) {
-<a class="jxr_linenumber" name="L434" href="#L434">434</a> 			<strong class="jxr_keyword">if</strong> (<span class="jxr_string">"*"</span>.equals(st1))
+<a class="jxr_linenumber" name="L434" href="#L434">434</a> 			<strong class="jxr_keyword">if</strong> (eq(st1, <span class="jxr_string">"*"</span>))
 <a class="jxr_linenumber" name="L435" href="#L435">435</a> 				c += 0;
 <a class="jxr_linenumber" name="L436" href="#L436">436</a> 			<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (CollectionUtils.contains(st1, o.subTypes))
 <a class="jxr_linenumber" name="L437" href="#L437">437</a> 				c += 100;
@@ -449,7 +449,7 @@
 <a class="jxr_linenumber" name="L441" href="#L441">441</a> 				<strong class="jxr_keyword">return</strong> 0;
 <a class="jxr_linenumber" name="L442" href="#L442">442</a> 		}
 <a class="jxr_linenumber" name="L443" href="#L443">443</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> st2 : o.subTypes) {
-<a class="jxr_linenumber" name="L444" href="#L444">444</a> 			<strong class="jxr_keyword">if</strong> (<span class="jxr_string">"*"</span>.equals(st2))
+<a class="jxr_linenumber" name="L444" href="#L444">444</a> 			<strong class="jxr_keyword">if</strong> (eq(st2, <span class="jxr_string">"*"</span>))
 <a class="jxr_linenumber" name="L445" href="#L445">445</a> 				c += 0;
 <a class="jxr_linenumber" name="L446" href="#L446">446</a> 			<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (CollectionUtils.contains(st2, subTypes))
 <a class="jxr_linenumber" name="L447" href="#L447">447</a> 				c += 100;

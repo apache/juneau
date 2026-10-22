@@ -212,11 +212,11 @@
 <span class="source-line-no">199</span><span id="line-199">      var id = readIdentifier();</span>
 <span class="source-line-no">200</span><span id="line-200">      if (id.isEmpty())</span>
 <span class="source-line-no">201</span><span id="line-201">         throw new ParseException("Expected value at position " + pos);</span>
-<span class="source-line-no">202</span><span id="line-202">      if (id.equalsIgnoreCase(nullMarker))</span>
+<span class="source-line-no">202</span><span id="line-202">      if (eqic(id, nullMarker))</span>
 <span class="source-line-no">203</span><span id="line-203">         return null;</span>
-<span class="source-line-no">204</span><span id="line-204">      if (id.equals("true"))</span>
+<span class="source-line-no">204</span><span id="line-204">      if (eq(id, "true"))</span>
 <span class="source-line-no">205</span><span id="line-205">         return Boolean.TRUE;</span>
-<span class="source-line-no">206</span><span id="line-206">      if (id.equals("false"))</span>
+<span class="source-line-no">206</span><span id="line-206">      if (eq(id, "false"))</span>
 <span class="source-line-no">207</span><span id="line-207">         return Boolean.FALSE;</span>
 <span class="source-line-no">208</span><span id="line-208">      // Try number</span>
 <span class="source-line-no">209</span><span id="line-209">      try {</span>

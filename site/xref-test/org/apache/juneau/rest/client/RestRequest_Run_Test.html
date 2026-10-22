@@ -35,51 +35,53 @@
 <a class="jxr_linenumber" name="L27" href="#L27">27</a>  <em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L28" href="#L28">28</a>  <em class="jxr_javadoccomment"> * Unit tests for {@link RestRequest#run()}.</em>
 <a class="jxr_linenumber" name="L29" href="#L29">29</a>  <em class="jxr_javadoccomment"> */</em>
-<a class="jxr_linenumber" name="L30" href="#L30">30</a>  @SuppressWarnings(<span class="jxr_string">"resource"</span>) <em class="jxr_comment">// 'transport' lambdas build a TransportResponse per call; the built response is handed to (and closed by) the enclosing RestResponse/RestClient under test.</em>
-<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <strong class="jxr_keyword">class</strong> <a name="RestRequest_Run_Test" href="../../../../../org/apache/juneau/rest/client/RestRequest_Run_Test.html#RestRequest_Run_Test">RestRequest_Run_Test</a> <strong class="jxr_keyword">extends</strong> TestBase {
-<a class="jxr_linenumber" name="L32" href="#L32">32</a>  
-<a class="jxr_linenumber" name="L33" href="#L33">33</a>  	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L34" href="#L34">34</a>  <em class="jxr_javadoccomment">	 * Ensures a thrown {@code onConnect} interceptor does not leave the already-assigned {@link RestResponse}</em>
-<a class="jxr_linenumber" name="L35" href="#L35">35</a>  <em class="jxr_javadoccomment">	 * unclosed — since it never reaches the caller (who would otherwise be responsible for closing it),</em>
-<a class="jxr_linenumber" name="L36" href="#L36">36</a>  <em class="jxr_javadoccomment">	 * {@link RestRequest#run()} itself must close it before the exception propagates.</em>
-<a class="jxr_linenumber" name="L37" href="#L37">37</a>  <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L38" href="#L38">38</a>  	@Test
-<a class="jxr_linenumber" name="L39" href="#L39">39</a>  	<strong class="jxr_keyword">void</strong> a01_throwingOnConnectInterceptor_closesTheAssignedResponse() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L40" href="#L40">40</a>  		<strong class="jxr_keyword">var</strong> closed = Flag.create();
-<a class="jxr_linenumber" name="L41" href="#L41">41</a>  		HttpTransport transport = tReq -&gt; TransportResponse.builder()
-<a class="jxr_linenumber" name="L42" href="#L42">42</a>  			.statusCode(200)
-<a class="jxr_linenumber" name="L43" href="#L43">43</a>  			.closeCallback(closed::set)
-<a class="jxr_linenumber" name="L44" href="#L44">44</a>  			.build();
-<a class="jxr_linenumber" name="L45" href="#L45">45</a>  		RestCallInterceptor faulty = <strong class="jxr_keyword">new</strong> RestCallInterceptor() {
-<a class="jxr_linenumber" name="L46" href="#L46">46</a>  			@Override <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> onConnect(RestRequest req, RestResponse res) <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L47" href="#L47">47</a>  				<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IOException(<span class="jxr_string">"boom"</span>);
-<a class="jxr_linenumber" name="L48" href="#L48">48</a>  			}
-<a class="jxr_linenumber" name="L49" href="#L49">49</a>  		};
-<a class="jxr_linenumber" name="L50" href="#L50">50</a>  		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> client = RestClient.builder().transport(transport).interceptors(faulty).build()) {
-<a class="jxr_linenumber" name="L51" href="#L51">51</a>  			assertThrows(TransportException.<strong class="jxr_keyword">class</strong>, () -&gt; client.get(<span class="jxr_string">"http://x/"</span>).run());
-<a class="jxr_linenumber" name="L52" href="#L52">52</a>  			assertTrue(closed.isSet(), <span class="jxr_string">"a throwing onConnect interceptor must not leak the assigned response"</span>);
-<a class="jxr_linenumber" name="L53" href="#L53">53</a>  		}
-<a class="jxr_linenumber" name="L54" href="#L54">54</a>  	}
-<a class="jxr_linenumber" name="L55" href="#L55">55</a>  
-<a class="jxr_linenumber" name="L56" href="#L56">56</a>  	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L57" href="#L57">57</a>  <em class="jxr_javadoccomment">	 * Contrast case: a well-behaved {@code onConnect} interceptor lets the response reach the caller</em>
-<a class="jxr_linenumber" name="L58" href="#L58">58</a>  <em class="jxr_javadoccomment">	 * unclosed, exactly per {@link RestRequest#run()}'s "caller is responsible for closing" contract.</em>
-<a class="jxr_linenumber" name="L59" href="#L59">59</a>  <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L60" href="#L60">60</a>  	@Test
-<a class="jxr_linenumber" name="L61" href="#L61">61</a>  	<strong class="jxr_keyword">void</strong> a02_successfulRun_leavesTheResponseOpenForTheCaller() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L62" href="#L62">62</a>  		<strong class="jxr_keyword">var</strong> closed = Flag.create();
-<a class="jxr_linenumber" name="L63" href="#L63">63</a>  		HttpTransport transport = tReq -&gt; TransportResponse.builder()
-<a class="jxr_linenumber" name="L64" href="#L64">64</a>  			.statusCode(200)
-<a class="jxr_linenumber" name="L65" href="#L65">65</a>  			.closeCallback(closed::set)
-<a class="jxr_linenumber" name="L66" href="#L66">66</a>  			.build();
-<a class="jxr_linenumber" name="L67" href="#L67">67</a>  		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> client = RestClient.builder().transport(transport).build()) {
-<a class="jxr_linenumber" name="L68" href="#L68">68</a>  			<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> res = client.get(<span class="jxr_string">"http://x/"</span>).run()) {
-<a class="jxr_linenumber" name="L69" href="#L69">69</a>  				assertFalse(closed.isSet(), <span class="jxr_string">"run() must not close a response it successfully returns to the caller"</span>);
-<a class="jxr_linenumber" name="L70" href="#L70">70</a>  			}
-<a class="jxr_linenumber" name="L71" href="#L71">71</a>  		}
-<a class="jxr_linenumber" name="L72" href="#L72">72</a>  		assertTrue(closed.isSet(), <span class="jxr_string">"the caller's own try-with-resources close must still work as normal"</span>);
-<a class="jxr_linenumber" name="L73" href="#L73">73</a>  	}
-<a class="jxr_linenumber" name="L74" href="#L74">74</a>  }
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  @SuppressWarnings({
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>  	<span class="jxr_string">"resource"</span> <em class="jxr_comment">// 'transport' lambdas build a TransportResponse per call; the built response is handed to (and closed by) the enclosing RestResponse/RestClient under test.</em>
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>  })
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <strong class="jxr_keyword">class</strong> RestRequest_Run_Test <strong class="jxr_keyword">extends</strong> TestBase {
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>  
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>  	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>  <em class="jxr_javadoccomment">	 * Ensures a thrown {@code onConnect} interceptor does not leave the already-assigned {@link RestResponse}</em>
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>  <em class="jxr_javadoccomment">	 * unclosed — since it never reaches the caller (who would otherwise be responsible for closing it),</em>
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>  <em class="jxr_javadoccomment">	 * {@link RestRequest#run()} itself must close it before the exception propagates.</em>
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>  <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>  	@Test
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>  	<strong class="jxr_keyword">void</strong> a01_throwingOnConnectInterceptor_closesTheAssignedResponse() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>  		<strong class="jxr_keyword">var</strong> closed = Flag.create();
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>  		HttpTransport transport = tReq -&gt; TransportResponse.builder()
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>  			.statusCode(200)
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>  			.closeCallback(closed::set)
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>  			.build();
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>  		RestCallInterceptor faulty = <strong class="jxr_keyword">new</strong> RestCallInterceptor() {
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>  			@Override <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> onConnect(RestRequest req, RestResponse res) <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>  				<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IOException(<span class="jxr_string">"boom"</span>);
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>  			}
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>  		};
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>  		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> client = RestClient.builder().transport(transport).interceptors(faulty).build()) {
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>  			assertThrows(TransportException.<strong class="jxr_keyword">class</strong>, () -&gt; client.get(<span class="jxr_string">"http://x/"</span>).run());
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>  			assertTrue(closed.isSet(), <span class="jxr_string">"a throwing onConnect interceptor must not leak the assigned response"</span>);
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>  		}
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>  	}
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>  
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>  	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>  <em class="jxr_javadoccomment">	 * Contrast case: a well-behaved {@code onConnect} interceptor lets the response reach the caller</em>
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>  <em class="jxr_javadoccomment">	 * unclosed, exactly per {@link RestRequest#run()}'s "caller is responsible for closing" contract.</em>
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>  <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>  	@Test
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>  	<strong class="jxr_keyword">void</strong> a02_successfulRun_leavesTheResponseOpenForTheCaller() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>  		<strong class="jxr_keyword">var</strong> closed = Flag.create();
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>  		HttpTransport transport = tReq -&gt; TransportResponse.builder()
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>  			.statusCode(200)
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>  			.closeCallback(closed::set)
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>  			.build();
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>  		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> client = RestClient.builder().transport(transport).build()) {
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>  			<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> res = client.get(<span class="jxr_string">"http://x/"</span>).run()) {
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>  				assertFalse(closed.isSet(), <span class="jxr_string">"run() must not close a response it successfully returns to the caller"</span>);
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>  			}
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>  		}
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>  		assertTrue(closed.isSet(), <span class="jxr_string">"the caller's own try-with-resources close must still work as normal"</span>);
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>  	}
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>  }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

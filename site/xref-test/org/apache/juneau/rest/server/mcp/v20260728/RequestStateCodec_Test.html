@@ -98,7 +98,7 @@
 <a class="jxr_linenumber" name="L90" href="#L90">90</a>  		assertTrue(c.isEmpty());
 <a class="jxr_linenumber" name="L91" href="#L91">91</a>  	}
 <a class="jxr_linenumber" name="L92" href="#L92">92</a>  
-<a class="jxr_linenumber" name="L93" href="#L93">93</a>  	<em class="jxr_comment">// F4 (READY-312f): the principal-bearing 3-arg methods are the canonical SPI; the 2-arg convenience overloads</em>
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>  	<em class="jxr_comment">// The principal-bearing 3-arg methods are the canonical SPI; the 2-arg convenience overloads</em>
 <a class="jxr_linenumber" name="L94" href="#L94">94</a>  	<em class="jxr_comment">// delegate to them with a null (no-principal) identity, and an explicit principal is passed through verbatim.</em>
 <a class="jxr_linenumber" name="L95" href="#L95">95</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">class</strong> B_CapturingCodec <strong class="jxr_keyword">implements</strong> RequestStateCodec {
 <a class="jxr_linenumber" name="L96" href="#L96">96</a>  		Principal sealPrincipal = () -&gt; <span class="jxr_string">"&lt;unset&gt;"</span>;

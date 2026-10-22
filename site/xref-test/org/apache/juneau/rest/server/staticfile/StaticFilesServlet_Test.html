@@ -35,7 +35,7 @@
 <a class="jxr_linenumber" name="L27" href="#L27">27</a>  <em class="jxr_javadoccomment"> * The servlet pins its ops at {@code /*} and delegates to a shared {@link StaticFilesMixin} worker</em>
 <a class="jxr_linenumber" name="L28" href="#L28">28</a>  <em class="jxr_javadoccomment"> * (which reads the active {@link StaticFiles} bean at request time), so this mirrors</em>
 <a class="jxr_linenumber" name="L29" href="#L29">29</a>  <em class="jxr_javadoccomment"> * {@link StaticFilesMixin_AsMixin_Test} but exercises the standalone-servlet deployment. The</em>
-<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <em class="jxr_javadoccomment"> * classpath resource {@code htdocs/javadoc.css} ships with {@code juneau-rest-server} and is visible</em>
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <em class="jxr_javadoccomment"> * classpath resource {@code htdocs/themes/devops.css} ships with {@code juneau-rest-server} and is visible</em>
 <a class="jxr_linenumber" name="L31" href="#L31">31</a>  <em class="jxr_javadoccomment"> * via the default {@link BasicStaticFiles} recursive classpath walk.</em>
 <a class="jxr_linenumber" name="L32" href="#L32">32</a>  <em class="jxr_javadoccomment"> * Cases:</em>
 <a class="jxr_linenumber" name="L33" href="#L33">33</a>  <em class="jxr_javadoccomment"> * &lt;ul&gt;</em>
@@ -51,7 +51,7 @@
 <a class="jxr_linenumber" name="L43" href="#L43">43</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> MockRestClient c = MockRestClient.buildLax(StaticFilesServlet.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L44" href="#L44">44</a>  
 <a class="jxr_linenumber" name="L45" href="#L45">45</a>  	@Test <strong class="jxr_keyword">void</strong> a01_servesClasspathFile() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L46" href="#L46">46</a>  		c.get(<span class="jxr_string">"/javadoc.css"</span>)
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>  		c.get(<span class="jxr_string">"/themes/devops.css"</span>)
 <a class="jxr_linenumber" name="L47" href="#L47">47</a>  			.run()
 <a class="jxr_linenumber" name="L48" href="#L48">48</a>  			.assertStatus(200)
 <a class="jxr_linenumber" name="L49" href="#L49">49</a>  			.assertContent().asString().isContains(<span class="jxr_string">"Licensed to the Apache Software Foundation"</span>);
@@ -64,14 +64,14 @@
 <a class="jxr_linenumber" name="L56" href="#L56">56</a>  	}
 <a class="jxr_linenumber" name="L57" href="#L57">57</a>  
 <a class="jxr_linenumber" name="L58" href="#L58">58</a>  	@Test <strong class="jxr_keyword">void</strong> a03_cacheControl() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L59" href="#L59">59</a>  		c.get(<span class="jxr_string">"/javadoc.css"</span>)
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>  		c.get(<span class="jxr_string">"/themes/devops.css"</span>)
 <a class="jxr_linenumber" name="L60" href="#L60">60</a>  			.run()
 <a class="jxr_linenumber" name="L61" href="#L61">61</a>  			.assertStatus(200)
 <a class="jxr_linenumber" name="L62" href="#L62">62</a>  			.assertHeader(<span class="jxr_string">"Cache-Control"</span>).is(<span class="jxr_string">"max-age=86400, public"</span>);
 <a class="jxr_linenumber" name="L63" href="#L63">63</a>  	}
 <a class="jxr_linenumber" name="L64" href="#L64">64</a>  
 <a class="jxr_linenumber" name="L65" href="#L65">65</a>  	@Test <strong class="jxr_keyword">void</strong> a04_headReturnsHeadersWithEmptyBody() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L66" href="#L66">66</a>  		c.head(<span class="jxr_string">"/javadoc.css"</span>)
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>  		c.head(<span class="jxr_string">"/themes/devops.css"</span>)
 <a class="jxr_linenumber" name="L67" href="#L67">67</a>  			.run()
 <a class="jxr_linenumber" name="L68" href="#L68">68</a>  			.assertStatus(200)
 <a class="jxr_linenumber" name="L69" href="#L69">69</a>  			.assertContent().is(<span class="jxr_string">""</span>);

@@ -61,6 +61,13 @@ loadScripts(document, 'script');</script>
 <div class="block">Apache FreeMarker view-rendering bridge &mdash; opt-in <code>juneau-rest-server-view-freemarker</code>
  module.</div>
 </div>
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.rest.server.view.freemarker.console">org.apache.juneau.rest.server.view.freemarker.console</a></div>
+<div class="col-last odd-row-color">
+<div class="block">FreeMarker-only delivery of the admin-console chrome: the reserved-classpath <code>base.ftlh</code> template, the
+ <code>&lt;@tag&gt;</code> macro, and <a href="../console/ConsoleFreemarkerMixin.html" title="class in org.apache.juneau.rest.server.view.freemarker.console"><code>ConsoleFreemarkerMixin</code></a>
+ (registers a reserved-path <code>ClassTemplateLoader</code> on top of the host's own <code>FreemarkerMixin</code>
+ configuration).</div>
+</div>
 </div>
 <section class="class-uses">
 <ul class="block-list">
@@ -95,6 +102,22 @@ loadScripts(document, 'script');</script>
 <div class="col-second odd-row-color"><span class="type-name-label">FreemarkerView.</span><code><a href="../FreemarkerView.html#of(java.lang.String)" class="member-name-link">of</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;templateName)</code></div>
 <div class="col-last odd-row-color">
 <div class="block">Creates a new <code>FreemarkerView</code> carrying the given template name and no attributes.</div>
+</div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="org.apache.juneau.rest.server.view.freemarker.console">
+<h2>Uses of <a href="../FreemarkerView.html" title="class in org.apache.juneau.rest.server.view.freemarker">FreemarkerView</a> in <a href="../console/package-summary.html">org.apache.juneau.rest.server.view.freemarker.console</a></h2>
+<div class="caption"><span>Methods in <a href="../console/package-summary.html">org.apache.juneau.rest.server.view.freemarker.console</a> that return <a href="../FreemarkerView.html" title="class in org.apache.juneau.rest.server.view.freemarker">FreemarkerView</a></span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier and Type</div>
+<div class="table-header col-second">Method</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code><a href="../FreemarkerView.html" title="class in org.apache.juneau.rest.server.view.freemarker">FreemarkerView</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">PageSpec.</span><code><a href="../console/PageSpec.html#view(org.apache.juneau.rest.server.RestRequest)" class="member-name-link">view</a><wbr>(<a href="../../../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Builds the view for this spec.</div>
 </div>
 </div>
 </section>

@@ -493,7 +493,31 @@
 <a class="jxr_linenumber" name="L485" href="#L485">485</a> 		assertEquals(<span class="jxr_string">"image/png"</span>, detector.getContentType(<span class="jxr_string">"test.png"</span>));
 <a class="jxr_linenumber" name="L486" href="#L486">486</a> 		assertEquals(<span class="jxr_string">"application/json"</span>, detector.getContentType(<span class="jxr_string">"test.json"</span>));
 <a class="jxr_linenumber" name="L487" href="#L487">487</a> 	}
-<a class="jxr_linenumber" name="L488" href="#L488">488</a> }
+<a class="jxr_linenumber" name="L488" href="#L488">488</a> 
+<a class="jxr_linenumber" name="L489" href="#L489">489</a> 	@Test
+<a class="jxr_linenumber" name="L490" href="#L490">490</a> 	<strong class="jxr_keyword">void</strong> a32_addNioContentBasedDetection_zeroArg() <strong class="jxr_keyword">throws</strong> IOException {
+<a class="jxr_linenumber" name="L491" href="#L491">491</a> 		Path testFile = tempDir.resolve(<span class="jxr_string">"test.txt"</span>);
+<a class="jxr_linenumber" name="L492" href="#L492">492</a> 		Files.write(testFile, <span class="jxr_string">"Hello World"</span>.getBytes());
+<a class="jxr_linenumber" name="L493" href="#L493">493</a> 
+<a class="jxr_linenumber" name="L494" href="#L494">494</a> 		<strong class="jxr_keyword">var</strong> detector = MimeTypeDetector.builder()
+<a class="jxr_linenumber" name="L495" href="#L495">495</a> 			.addNioContentBasedDetection()
+<a class="jxr_linenumber" name="L496" href="#L496">496</a> 			.build();
+<a class="jxr_linenumber" name="L497" href="#L497">497</a> 
+<a class="jxr_linenumber" name="L498" href="#L498">498</a> 		String mimeType = detector.getContentType(testFile.toString());
+<a class="jxr_linenumber" name="L499" href="#L499">499</a> 		assertNotNull(mimeType);
+<a class="jxr_linenumber" name="L500" href="#L500">500</a> 		assertTrue(mimeType.startsWith(<span class="jxr_string">"text/"</span>));
+<a class="jxr_linenumber" name="L501" href="#L501">501</a> 	}
+<a class="jxr_linenumber" name="L502" href="#L502">502</a> 
+<a class="jxr_linenumber" name="L503" href="#L503">503</a> 	@Test
+<a class="jxr_linenumber" name="L504" href="#L504">504</a> 	<strong class="jxr_keyword">void</strong> a33_setCacheLogOnExit_zeroArg() {
+<a class="jxr_linenumber" name="L505" href="#L505">505</a> 		<strong class="jxr_keyword">var</strong> detector = MimeTypeDetector.builder()
+<a class="jxr_linenumber" name="L506" href="#L506">506</a> 			.setCacheLogOnExit()
+<a class="jxr_linenumber" name="L507" href="#L507">507</a> 			.build();
+<a class="jxr_linenumber" name="L508" href="#L508">508</a> 
+<a class="jxr_linenumber" name="L509" href="#L509">509</a> 		<em class="jxr_comment">// This should not throw an exception</em>
+<a class="jxr_linenumber" name="L510" href="#L510">510</a> 		assertNotNull(detector);
+<a class="jxr_linenumber" name="L511" href="#L511">511</a> 	}
+<a class="jxr_linenumber" name="L512" href="#L512">512</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

@@ -53,7 +53,7 @@ loadScripts(document, 'script');</script>
 </ul>
 <ul class="sub-nav-list">
 <li>Detail:&nbsp;</li>
-<li>Field&nbsp;|&nbsp;</li>
+<li><a href="#field-detail">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor-detail">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method-detail">Method</a></li>
 </ul>
@@ -86,9 +86,14 @@ loadScripts(document, 'script');</script>
 <dd><code>jakarta.servlet.http.HttpServletRequest</code>, <code>jakarta.servlet.ServletRequest</code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/util/CachingHttpServletRequest.html#line-31">CachingHttpServletRequest</a></span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/util/CachingHttpServletRequest.html#line-34">CachingHttpServletRequest</a></span>
 <span class="extends-implements">extends jakarta.servlet.http.HttpServletRequestWrapper</span></div>
-<div class="block">Wraps an <code>HttpServletRequest</code> and preloads the content into memory for debugging purposes.</div>
+<div class="block">Wraps an <code>HttpServletRequest</code> and tees a <b>bounded</b> copy of the request body into memory for debug logging.
+
+ <p>
+ Unlike a fully-buffering wrapper, this captures at most a configured cap (default 8&nbsp;KB) of the body while passing
+ the full stream through to the handler untouched. The total number of bytes read is tracked so a truncation marker can
+ be rendered. Memory stays bounded even for large uploads.</div>
 </section>
 <section class="summary">
 <ul class="summary-list">
@@ -96,6 +101,17 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="field-summary" id="field-summary">
 <h2>Field Summary</h2>
+<div class="caption"><span>Fields</span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier and Type</div>
+<div class="table-header col-second">Field</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code>static final int</code></div>
+<div class="col-second even-row-color"><code><a href="#DEFAULT_CAP" class="member-name-link">DEFAULT_CAP</a></code></div>
+<div class="col-last even-row-color">
+<div class="block">Default body capture cap, in bytes (8&nbsp;KB).</div>
+</div>
+</div>
 <div class="inherited-list">
 <h3 id="fields-inherited-from-class-jakarta.servlet.http.HttpServletRequest">Fields inherited from interface&nbsp;jakarta.servlet.http.HttpServletRequest</h3>
 <code>BASIC_AUTH, CLIENT_CERT_AUTH, DIGEST_AUTH, FORM_AUTH</code></div>
@@ -111,7 +127,8 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-second">Constructor</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color"><code>protected </code></div>
-<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(jakarta.servlet.http.HttpServletRequest)" class="member-name-link">CachingHttpServletRequest</a><wbr>(jakarta.servlet.http.HttpServletRequest&nbsp;req)</code></div>
+<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(jakarta.servlet.http.HttpServletRequest,int)" class="member-name-link">CachingHttpServletRequest</a><wbr>(jakarta.servlet.http.HttpServletRequest&nbsp;req,
+ int&nbsp;cap)</code></div>
 <div class="col-last even-row-color">
 <div class="block">Constructor.</div>
 </div>
@@ -132,14 +149,30 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>byte[]</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getContent()" class="member-name-link">getContent</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Returns the content of the servlet request without consuming the stream.</div>
+<div class="block">Returns the captured (possibly truncated) request body bytes.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>jakarta.servlet.ServletInputStream</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getInputStream()" class="member-name-link">getInputStream</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/BufferedReader.html" title="class or interface in java.io" class="external-link">BufferedReader</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getReader()" class="member-name-link">getReader</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Returns a character-stream tee over the same underlying byte stream captured by <a href="#getInputStream()"><code>getInputStream()</code></a>.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>long</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getTotalLength()" class="member-name-link">getTotalLength</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Returns the total number of body bytes read so far, including any bytes beyond the capture cap.</div>
+</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="CachingHttpServletRequest.html" title="class in org.apache.juneau.rest.server.util">CachingHttpServletRequest</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#wrap(jakarta.servlet.http.HttpServletRequest)" class="member-name-link">wrap</a><wbr>(jakarta.servlet.http.HttpServletRequest&nbsp;req)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="block">Wraps the specified request inside a <a href="CachingHttpServletRequest.html" title="class in org.apache.juneau.rest.server.util"><code>CachingHttpServletRequest</code></a> if it isn't already, using the default cap.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="CachingHttpServletRequest.html" title="class in org.apache.juneau.rest.server.util">CachingHttpServletRequest</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#wrap(jakarta.servlet.http.HttpServletRequest,int)" class="member-name-link">wrap</a><wbr>(jakarta.servlet.http.HttpServletRequest&nbsp;req,
+ int&nbsp;cap)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Wraps the specified request inside a <a href="CachingHttpServletRequest.html" title="class in org.apache.juneau.rest.server.util"><code>CachingHttpServletRequest</code></a> if it isn't already.</div>
 </div>
 </div>
@@ -150,35 +183,57 @@ loadScripts(document, 'script');</script>
 <code>authenticate, changeSessionId, getAuthType, getContextPath, getCookies, getDateHeader, getHeader, getHeaderNames, getHeaders, getHttpServletMapping, getIntHeader, getMethod, getPart, getParts, getPathInfo, getPathTranslated, getQueryString, getRemoteUser, getRequestedSessionId, getRequestURI, getRequestURL, getServletPath, getSession, getSession, getTrailerFields, getUserPrincipal, isRequestedSessionIdFromCookie, isRequestedSessionIdFromURL, isRequestedSessionIdValid, isTrailerFieldsReady, isUserInRole, login, logout, newPushBuilder, upgrade</code></div>
 <div class="inherited-list">
 <h3 id="methods-inherited-from-class-jakarta.servlet.ServletRequestWrapper">Methods inherited from class&nbsp;jakarta.servlet.ServletRequestWrapper</h3>
-<code>getAsyncContext, getAttribute, getAttributeNames, getCharacterEncoding, getContentLength, getContentLengthLong, getContentType, getDispatcherType, getLocalAddr, getLocale, getLocales, getLocalName, getLocalPort, getParameter, getParameterMap, getParameterNames, getParameterValues, getProtocol, getProtocolRequestId, getReader, getRemoteAddr, getRemoteHost, getRemotePort, getRequest, getRequestDispatcher, getRequestId, getScheme, getServerName, getServerPort, getServletConnection, getServletContext, isAsyncStarted, isAsyncSupported, isSecure, isWrapperFor, isWrapperFor, removeAttribute, setAttribute, setCharacterEncoding, setCharacterEncoding, setRequest, startAsync, startAsync</code></div>
+<code>getAsyncContext, getAttribute, getAttributeNames, getCharacterEncoding, getContentLength, getContentLengthLong, getContentType, getDispatcherType, getLocalAddr, getLocale, getLocales, getLocalName, getLocalPort, getParameter, getParameterMap, getParameterNames, getParameterValues, getProtocol, getProtocolRequestId, getRemoteAddr, getRemoteHost, getRemotePort, getRequest, getRequestDispatcher, getRequestId, getScheme, getServerName, getServerPort, getServletConnection, getServletContext, isAsyncStarted, isAsyncSupported, isSecure, isWrapperFor, isWrapperFor, removeAttribute, setAttribute, setCharacterEncoding, setCharacterEncoding, setRequest, startAsync, startAsync</code></div>
 <div class="inherited-list">
 <h3 id="methods-inherited-from-class-java.lang.Object">Methods inherited from class&nbsp;java.lang.<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></h3>
 <code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#clone()" title="class or interface in java.lang" class="external-link">clone</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#equals(java.lang.Object)" title="class or interface in java.lang" class="external-link">equals</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#finalize()" title="class or interface in java.lang" class="external-link">finalize</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#getClass()" title="class or interface in java.lang" class="external-link">getClass</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#hashCode()" title="class or interface in java.lang" class="external-link">hashCode</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#notify()" title="class or interface in java.lang" class="external-link">notify</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#notifyAll()" title="class or interface in java.lang" class="external-link">notifyAll</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#toString()" title="class or interface in java.lang" class="external-link">toString</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#wait()" title="class or interface in java.lang" class="external-link">wait</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#wait(long)" title="class or interface in java.lang" class="external-link">wait</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#wait(long,int)" title="class or interface in java.lang" class="external-link">wait</a></code></div>
 <div class="inherited-list">
 <h3 id="methods-inherited-from-class-jakarta.servlet.ServletRequest">Methods inherited from interface&nbsp;jakarta.servlet.ServletRequest</h3>
-<code>getAsyncContext, getAttribute, getAttributeNames, getCharacterEncoding, getContentLength, getContentLengthLong, getContentType, getDispatcherType, getLocalAddr, getLocale, getLocales, getLocalName, getLocalPort, getParameter, getParameterMap, getParameterNames, getParameterValues, getProtocol, getProtocolRequestId, getReader, getRemoteAddr, getRemoteHost, getRemotePort, getRequestDispatcher, getRequestId, getScheme, getServerName, getServerPort, getServletConnection, getServletContext, isAsyncStarted, isAsyncSupported, isSecure, removeAttribute, setAttribute, setCharacterEncoding, setCharacterEncoding, startAsync, startAsync</code></div>
+<code>getAsyncContext, getAttribute, getAttributeNames, getCharacterEncoding, getContentLength, getContentLengthLong, getContentType, getDispatcherType, getLocalAddr, getLocale, getLocales, getLocalName, getLocalPort, getParameter, getParameterMap, getParameterNames, getParameterValues, getProtocol, getProtocolRequestId, getRemoteAddr, getRemoteHost, getRemotePort, getRequestDispatcher, getRequestId, getScheme, getServerName, getServerPort, getServletConnection, getServletContext, isAsyncStarted, isAsyncSupported, isSecure, removeAttribute, setAttribute, setCharacterEncoding, setCharacterEncoding, startAsync, startAsync</code></div>
 </section>
 </li>
 </ul>
 </section>
 <section class="details">
 <ul class="details-list">
+<!-- ============ FIELD DETAIL =========== -->
+<li>
+<section class="field-details" id="field-detail">
+<h2>Field Details</h2>
+<ul class="member-list">
+<li>
+<section class="detail" id="DEFAULT_CAP">
+<h3>DEFAULT_CAP</h3>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/util/CachingHttpServletRequest.html#line-40">DEFAULT_CAP</a></span></div>
+<div class="block">Default body capture cap, in bytes (8&nbsp;KB).</div>
+<dl class="notes">
+<dt>See Also:</dt>
+<dd>
+<ul class="see-list">
+<li><a href="../../../../../../constant-values.html#org.apache.juneau.rest.server.util.CachingHttpServletRequest.DEFAULT_CAP">Constant Field Values</a></li>
+</ul>
+</dd>
+</dl>
+</section>
+</li>
+</ul>
+</section>
+</li>
 <!-- ========= CONSTRUCTOR DETAIL ======== -->
 <li>
 <section class="constructor-details" id="constructor-detail">
 <h2>Constructor Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="&lt;init&gt;(jakarta.servlet.http.HttpServletRequest)">
+<section class="detail" id="&lt;init&gt;(jakarta.servlet.http.HttpServletRequest,int)">
 <h3>CachingHttpServletRequest</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/util/CachingHttpServletRequest.html#line-57">CachingHttpServletRequest</a></span><wbr><span class="parameters">(jakarta.servlet.http.HttpServletRequest&nbsp;req)</span>
-                             throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/util/CachingHttpServletRequest.html#line-77">CachingHttpServletRequest</a></span><wbr><span class="parameters">(jakarta.servlet.http.HttpServletRequest&nbsp;req,
+ int&nbsp;cap)</span></div>
 <div class="block">Constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>req</code> - The request being wrapped. Must not be <jk>null</jk>.</dd>
-<dt>Throws:</dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></code> - If content could not be loaded into memory.</dd>
+<dd><code>cap</code> - The maximum number of body bytes to capture.</dd>
 </dl>
 </section>
 </li>
@@ -193,39 +248,87 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="wrap(jakarta.servlet.http.HttpServletRequest)">
 <h3>wrap</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="CachingHttpServletRequest.html" title="class in org.apache.juneau.rest.server.util">CachingHttpServletRequest</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/util/CachingHttpServletRequest.html#line-43">wrap</a></span><wbr><span class="parameters">(jakarta.servlet.http.HttpServletRequest&nbsp;req)</span>
-                                      throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
-<div class="block">Wraps the specified request inside a <a href="CachingHttpServletRequest.html" title="class in org.apache.juneau.rest.server.util"><code>CachingHttpServletRequest</code></a> if it isn't already.</div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="CachingHttpServletRequest.html" title="class in org.apache.juneau.rest.server.util">CachingHttpServletRequest</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/util/CachingHttpServletRequest.html#line-48">wrap</a></span><wbr><span class="parameters">(jakarta.servlet.http.HttpServletRequest&nbsp;req)</span></div>
+<div class="block">Wraps the specified request inside a <a href="CachingHttpServletRequest.html" title="class in org.apache.juneau.rest.server.util"><code>CachingHttpServletRequest</code></a> if it isn't already, using the default cap.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>req</code> - The request to wrap. Must not be <jk>null</jk>.</dd>
 <dt>Returns:</dt>
 <dd>The wrapped request.</dd>
-<dt>Throws:</dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></code> - Thrown by underlying content stream.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="wrap(jakarta.servlet.http.HttpServletRequest,int)">
+<h3>wrap</h3>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="CachingHttpServletRequest.html" title="class in org.apache.juneau.rest.server.util">CachingHttpServletRequest</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/util/CachingHttpServletRequest.html#line-59">wrap</a></span><wbr><span class="parameters">(jakarta.servlet.http.HttpServletRequest&nbsp;req,
+ int&nbsp;cap)</span></div>
+<div class="block">Wraps the specified request inside a <a href="CachingHttpServletRequest.html" title="class in org.apache.juneau.rest.server.util"><code>CachingHttpServletRequest</code></a> if it isn't already.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>req</code> - The request to wrap. Must not be <jk>null</jk>.</dd>
+<dd><code>cap</code> - The maximum number of body bytes to capture.</dd>
+<dt>Returns:</dt>
+<dd>The wrapped request.</dd>
 </dl>
 </section>
 </li>
 <li>
 <section class="detail" id="getContent()">
 <h3>getContent</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">byte[]</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/util/CachingHttpServletRequest.html#line-67">getContent</a></span>()</div>
-<div class="block">Returns the content of the servlet request without consuming the stream.</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">byte[]</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/util/CachingHttpServletRequest.html#line-87">getContent</a></span>()</div>
+<div class="block">Returns the captured (possibly truncated) request body bytes.</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>The content of the request.  This is a defensive copy; modifying it does not affect the cached request body.</dd>
+<dd>The captured body bytes (at most the configured cap). Never <jk>null</jk>; empty if the body was not read.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="getTotalLength()">
+<h3>getTotalLength</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">long</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/util/CachingHttpServletRequest.html#line-94">getTotalLength</a></span>()</div>
+<div class="block">Returns the total number of body bytes read so far, including any bytes beyond the capture cap.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>The total body length in bytes.</dd>
 </dl>
 </section>
 </li>
 <li>
 <section class="detail" id="getInputStream()">
 <h3>getInputStream</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">jakarta.servlet.ServletInputStream</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/util/CachingHttpServletRequest.html#line-69">getInputStream</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">jakarta.servlet.ServletInputStream</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/util/CachingHttpServletRequest.html#line-96">getInputStream</a></span>()
+                                                  throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code>getInputStream</code>&nbsp;in interface&nbsp;<code>jakarta.servlet.ServletRequest</code></dd>
 <dt>Overrides:</dt>
 <dd><code>getInputStream</code>&nbsp;in class&nbsp;<code>jakarta.servlet.ServletRequestWrapper</code></dd>
+<dt>Throws:</dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></code></dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="getReader()">
+<h3>getReader</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/BufferedReader.html" title="class or interface in java.io" class="external-link">BufferedReader</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/util/CachingHttpServletRequest.html#line-112">getReader</a></span>()
+                         throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
+<div class="block">Returns a character-stream tee over the same underlying byte stream captured by <a href="#getInputStream()"><code>getInputStream()</code></a>.
+
+ <p>
+ A handler that reads the request body through <code>getReader()</code> instead of <code>getInputStream()</code> would
+ otherwise bypass capture entirely &mdash; the default <code>ServletRequestWrapper.getReader()</code> delegates
+ straight to the wrapped request. This override routes the reader through the tee'd stream so both access
+ styles are captured identically.</div>
+<dl class="notes">
+<dt>Specified by:</dt>
+<dd><code>getReader</code>&nbsp;in interface&nbsp;<code>jakarta.servlet.ServletRequest</code></dd>
+<dt>Overrides:</dt>
+<dd><code>getReader</code>&nbsp;in class&nbsp;<code>jakarta.servlet.ServletRequestWrapper</code></dd>
+<dt>Throws:</dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></code></dd>
 </dl>
 </section>
 </li>

@@ -29,258 +29,343 @@
 <span class="source-line-no">016</span><span id="line-16"> */</span>
 <span class="source-line-no">017</span><span id="line-17">package org.apache.juneau.rest.client;</span>
 <span class="source-line-no">018</span><span id="line-18"></span>
-<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.AssertionUtils.*;</span>
-<span class="source-line-no">020</span><span id="line-20">import static org.apache.juneau.commons.utils.Shorts.*;</span>
-<span class="source-line-no">021</span><span id="line-21"></span>
-<span class="source-line-no">022</span><span id="line-22">import java.net.*;</span>
-<span class="source-line-no">023</span><span id="line-23">import java.time.*;</span>
-<span class="source-line-no">024</span><span id="line-24">import java.util.*;</span>
-<span class="source-line-no">025</span><span id="line-25"></span>
-<span class="source-line-no">026</span><span id="line-26">/**</span>
-<span class="source-line-no">027</span><span id="line-27"> * A fully-resolved, transport-layer HTTP request.</span>
-<span class="source-line-no">028</span><span id="line-28"> *</span>
-<span class="source-line-no">029</span><span id="line-29"> * &lt;p&gt;</span>
-<span class="source-line-no">030</span><span id="line-30"> * All values (URIs, headers, bodies) are evaluated before this object is constructed — suppliers have been</span>
-<span class="source-line-no">031</span><span id="line-31"> * invoked, {@code null}-valued parts have been filtered, and the final URI has been assembled with query</span>
-<span class="source-line-no">032</span><span id="line-32"> * parameters and path substitutions applied.</span>
-<span class="source-line-no">033</span><span id="line-33"> *</span>
-<span class="source-line-no">034</span><span id="line-34"> * &lt;p&gt;</span>
-<span class="source-line-no">035</span><span id="line-35"> * Transport implementations receive a {@link TransportRequest} and are responsible for executing it against</span>
-<span class="source-line-no">036</span><span id="line-36"> * the remote server, returning a {@link TransportResponse}.</span>
-<span class="source-line-no">037</span><span id="line-37"> *</span>
-<span class="source-line-no">038</span><span id="line-38"> * &lt;p&gt;</span>
-<span class="source-line-no">039</span><span id="line-39"> * &lt;b&gt;Beta — API subject to change.&lt;/b&gt;</span>
-<span class="source-line-no">040</span><span id="line-40"> *</span>
-<span class="source-line-no">041</span><span id="line-41"> * @since 9.2.1</span>
-<span class="source-line-no">042</span><span id="line-42"> */</span>
-<span class="source-line-no">043</span><span id="line-43">public final class TransportRequest {</span>
-<span class="source-line-no">044</span><span id="line-44"></span>
-<span class="source-line-no">045</span><span id="line-45">   // Methods defined as idempotent by RFC 7231 §4.2.2 — replaying them cannot change server state beyond a</span>
-<span class="source-line-no">046</span><span id="line-46">   // single application of the request, so a transport may safely re-send them once on a fresh connection.</span>
-<span class="source-line-no">047</span><span id="line-47">   private static final Set&lt;String&gt; IDEMPOTENT_METHODS = Set.of("GET", "HEAD", "PUT", "DELETE", "OPTIONS", "TRACE");</span>
-<span class="source-line-no">048</span><span id="line-48"></span>
-<span class="source-line-no">049</span><span id="line-49">   private final String method;</span>
-<span class="source-line-no">050</span><span id="line-50">   private final URI uri;</span>
-<span class="source-line-no">051</span><span id="line-51">   private final List&lt;TransportHeader&gt; headers;</span>
-<span class="source-line-no">052</span><span id="line-52">   private final TransportBody body;</span>
-<span class="source-line-no">053</span><span id="line-53">   private final Duration timeout;</span>
-<span class="source-line-no">054</span><span id="line-54"></span>
-<span class="source-line-no">055</span><span id="line-55">   private TransportRequest(Builder builder) {</span>
-<span class="source-line-no">056</span><span id="line-56">      this.method = assertArgNotNull("method", builder.method);</span>
-<span class="source-line-no">057</span><span id="line-57">      this.uri = assertArgNotNull("uri", builder.uri);</span>
-<span class="source-line-no">058</span><span id="line-58">      this.headers = List.copyOf(builder.headers);</span>
-<span class="source-line-no">059</span><span id="line-59">      this.body = builder.body;</span>
-<span class="source-line-no">060</span><span id="line-60">      this.timeout = builder.timeout;</span>
-<span class="source-line-no">061</span><span id="line-61">   }</span>
-<span class="source-line-no">062</span><span id="line-62"></span>
-<span class="source-line-no">063</span><span id="line-63">   /** Returns a new {@link Builder}. */</span>
-<span class="source-line-no">064</span><span id="line-64">   public static Builder builder() {</span>
-<span class="source-line-no">065</span><span id="line-65">      return new Builder();</span>
-<span class="source-line-no">066</span><span id="line-66">   }</span>
-<span class="source-line-no">067</span><span id="line-67"></span>
-<span class="source-line-no">068</span><span id="line-68">   /**</span>
-<span class="source-line-no">069</span><span id="line-69">    * Returns the HTTP method (e.g. {@code "GET"}, {@code "POST"}).</span>
-<span class="source-line-no">070</span><span id="line-70">    *</span>
-<span class="source-line-no">071</span><span id="line-71">    * @return The method. Never &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">072</span><span id="line-72">    */</span>
-<span class="source-line-no">073</span><span id="line-73">   public String getMethod() {</span>
-<span class="source-line-no">074</span><span id="line-74">      return method;</span>
-<span class="source-line-no">075</span><span id="line-75">   }</span>
-<span class="source-line-no">076</span><span id="line-76"></span>
-<span class="source-line-no">077</span><span id="line-77">   /**</span>
-<span class="source-line-no">078</span><span id="line-78">    * Returns the fully-resolved request URI, including query string.</span>
-<span class="source-line-no">079</span><span id="line-79">    *</span>
-<span class="source-line-no">080</span><span id="line-80">    * @return The URI. Never &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">081</span><span id="line-81">    */</span>
-<span class="source-line-no">082</span><span id="line-82">   public URI getUri() {</span>
-<span class="source-line-no">083</span><span id="line-83">      return uri;</span>
-<span class="source-line-no">084</span><span id="line-84">   }</span>
-<span class="source-line-no">085</span><span id="line-85"></span>
-<span class="source-line-no">086</span><span id="line-86">   /**</span>
-<span class="source-line-no">087</span><span id="line-87">    * Returns all request headers in the order they should be sent.</span>
-<span class="source-line-no">088</span><span id="line-88">    *</span>
-<span class="source-line-no">089</span><span id="line-89">    * @return An unmodifiable list. Never &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">090</span><span id="line-90">    */</span>
-<span class="source-line-no">091</span><span id="line-91">   public List&lt;TransportHeader&gt; getHeaders() {</span>
-<span class="source-line-no">092</span><span id="line-92">      return headers;</span>
-<span class="source-line-no">093</span><span id="line-93">   }</span>
-<span class="source-line-no">094</span><span id="line-94"></span>
-<span class="source-line-no">095</span><span id="line-95">   /**</span>
-<span class="source-line-no">096</span><span id="line-96">    * Returns the first header with the given name (case-insensitive), or {@code null} if absent.</span>
-<span class="source-line-no">097</span><span id="line-97">    *</span>
-<span class="source-line-no">098</span><span id="line-98">    * @param name The header name. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">099</span><span id="line-99">    * @return The first matching header, or &lt;jk&gt;null&lt;/jk&gt; if absent.</span>
-<span class="source-line-no">100</span><span id="line-100">    */</span>
-<span class="source-line-no">101</span><span id="line-101">   public TransportHeader getFirstHeader(String name) {</span>
-<span class="source-line-no">102</span><span id="line-102">      return headers.stream()</span>
-<span class="source-line-no">103</span><span id="line-103">         .filter(h -&gt; eqic(h.name(), name))</span>
-<span class="source-line-no">104</span><span id="line-104">         .findFirst()</span>
-<span class="source-line-no">105</span><span id="line-105">         .orElse(null);</span>
-<span class="source-line-no">106</span><span id="line-106">   }</span>
-<span class="source-line-no">107</span><span id="line-107"></span>
-<span class="source-line-no">108</span><span id="line-108">   /**</span>
-<span class="source-line-no">109</span><span id="line-109">    * Returns the request body, or {@code null} if this is a body-less request (e.g. GET, HEAD).</span>
-<span class="source-line-no">110</span><span id="line-110">    *</span>
-<span class="source-line-no">111</span><span id="line-111">    * @return The body, possibly &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">112</span><span id="line-112">    */</span>
-<span class="source-line-no">113</span><span id="line-113">   public TransportBody getBody() {</span>
-<span class="source-line-no">114</span><span id="line-114">      return body;</span>
-<span class="source-line-no">115</span><span id="line-115">   }</span>
-<span class="source-line-no">116</span><span id="line-116"></span>
-<span class="source-line-no">117</span><span id="line-117">   /**</span>
-<span class="source-line-no">118</span><span id="line-118">    * Returns {@code true} if this request can be transparently re-sent once after a stale-connection failure.</span>
-<span class="source-line-no">119</span><span id="line-119">    *</span>
-<span class="source-line-no">120</span><span id="line-120">    * &lt;p&gt;</span>
-<span class="source-line-no">121</span><span id="line-121">    * A pooled keep-alive socket can be torn down by the server between requests; when a transport then reuses</span>
-<span class="source-line-no">122</span><span id="line-122">    * that socket the first write fails before any response is received (e.g. an early {@code EOF} or a</span>
-<span class="source-line-no">123</span><span id="line-123">    * {@code NoHttpResponseException}).  Such a failure is safe to retry on a fresh connection &lt;b&gt;only&lt;/b&gt; when</span>
-<span class="source-line-no">124</span><span id="line-124">    * replaying the request cannot cause a duplicate side effect, which requires both of:</span>
-<span class="source-line-no">125</span><span id="line-125">    * &lt;ul&gt;</span>
-<span class="source-line-no">126</span><span id="line-126">    *    &lt;li&gt;an &lt;a class="doclink" href="https://datatracker.ietf.org/doc/html/rfc7231#section-4.2.2"&gt;idempotent&lt;/a&gt;</span>
-<span class="source-line-no">127</span><span id="line-127">    *       HTTP method ({@code GET}, {@code HEAD}, {@code PUT}, {@code DELETE}, {@code OPTIONS}, {@code TRACE}) — never</span>
-<span class="source-line-no">128</span><span id="line-128">    *       {@code POST} or any other non-idempotent method, and</span>
-<span class="source-line-no">129</span><span id="line-129">    *    &lt;li&gt;a body that is either absent or {@link TransportBody#isRepeatable() repeatable}, so the exact same bytes</span>
-<span class="source-line-no">130</span><span id="line-130">    *       can be written again.</span>
-<span class="source-line-no">131</span><span id="line-131">    * &lt;/ul&gt;</span>
-<span class="source-line-no">132</span><span id="line-132">    *</span>
-<span class="source-line-no">133</span><span id="line-133">    * &lt;p&gt;</span>
-<span class="source-line-no">134</span><span id="line-134">    * When in doubt this returns {@code false} — the caller must fail closed rather than risk double-executing a</span>
-<span class="source-line-no">135</span><span id="line-135">    * request.</span>
-<span class="source-line-no">136</span><span id="line-136">    *</span>
-<span class="source-line-no">137</span><span id="line-137">    * @return {@code true} if the request is provably safe to replay once.</span>
-<span class="source-line-no">138</span><span id="line-138">    */</span>
-<span class="source-line-no">139</span><span id="line-139">   public boolean isSafeToReplay() {</span>
-<span class="source-line-no">140</span><span id="line-140">      return IDEMPOTENT_METHODS.contains(method.toUpperCase(Locale.ROOT)) &amp;&amp; (body == null || body.isRepeatable());</span>
-<span class="source-line-no">141</span><span id="line-141">   }</span>
-<span class="source-line-no">142</span><span id="line-142"></span>
-<span class="source-line-no">143</span><span id="line-143">   /**</span>
-<span class="source-line-no">144</span><span id="line-144">    * Returns the per-call response timeout, or {@code null} if none was set.</span>
-<span class="source-line-no">145</span><span id="line-145">    *</span>
-<span class="source-line-no">146</span><span id="line-146">    * &lt;p&gt;</span>
-<span class="source-line-no">147</span><span id="line-147">    * Transports apply this as the response/read timeout for the request; a {@code null} value means the</span>
-<span class="source-line-no">148</span><span id="line-148">    * transport's own default applies.  Connect timeouts remain a client-level concern.</span>
-<span class="source-line-no">149</span><span id="line-149">    *</span>
-<span class="source-line-no">150</span><span id="line-150">    * @return The response timeout, possibly &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">151</span><span id="line-151">    */</span>
-<span class="source-line-no">152</span><span id="line-152">   public Duration getTimeout() {</span>
-<span class="source-line-no">153</span><span id="line-153">      return timeout;</span>
-<span class="source-line-no">154</span><span id="line-154">   }</span>
-<span class="source-line-no">155</span><span id="line-155"></span>
-<span class="source-line-no">156</span><span id="line-156">   // -----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">157</span><span id="line-157">   // Builder</span>
-<span class="source-line-no">158</span><span id="line-158">   // -----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">159</span><span id="line-159"></span>
-<span class="source-line-no">160</span><span id="line-160">   /**</span>
-<span class="source-line-no">161</span><span id="line-161">    * Fluent builder for {@link TransportRequest}.</span>
-<span class="source-line-no">162</span><span id="line-162">    *</span>
-<span class="source-line-no">163</span><span id="line-163">    * &lt;p&gt;</span>
-<span class="source-line-no">164</span><span id="line-164">    * &lt;b&gt;Beta — API subject to change.&lt;/b&gt;</span>
-<span class="source-line-no">165</span><span id="line-165">    *</span>
-<span class="source-line-no">166</span><span id="line-166">    * @since 9.2.1</span>
-<span class="source-line-no">167</span><span id="line-167">    */</span>
-<span class="source-line-no">168</span><span id="line-168">   public static final class Builder {</span>
-<span class="source-line-no">169</span><span id="line-169"></span>
-<span class="source-line-no">170</span><span id="line-170">      String method;</span>
-<span class="source-line-no">171</span><span id="line-171">      URI uri;</span>
-<span class="source-line-no">172</span><span id="line-172">      final List&lt;TransportHeader&gt; headers = l();</span>
-<span class="source-line-no">173</span><span id="line-173">      TransportBody body;</span>
-<span class="source-line-no">174</span><span id="line-174">      Duration timeout;</span>
-<span class="source-line-no">175</span><span id="line-175"></span>
-<span class="source-line-no">176</span><span id="line-176">      private Builder() {}</span>
-<span class="source-line-no">177</span><span id="line-177"></span>
-<span class="source-line-no">178</span><span id="line-178">      /**</span>
-<span class="source-line-no">179</span><span id="line-179">       * Sets the HTTP method.</span>
-<span class="source-line-no">180</span><span id="line-180">       *</span>
-<span class="source-line-no">181</span><span id="line-181">       * @param value The method (e.g. {@code "GET"}). Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">182</span><span id="line-182">       * @return This object.</span>
-<span class="source-line-no">183</span><span id="line-183">       */</span>
-<span class="source-line-no">184</span><span id="line-184">      public Builder method(String value) {</span>
-<span class="source-line-no">185</span><span id="line-185">         method = value;</span>
-<span class="source-line-no">186</span><span id="line-186">         return this;</span>
-<span class="source-line-no">187</span><span id="line-187">      }</span>
-<span class="source-line-no">188</span><span id="line-188"></span>
-<span class="source-line-no">189</span><span id="line-189">      /**</span>
-<span class="source-line-no">190</span><span id="line-190">       * Sets the request URI.</span>
-<span class="source-line-no">191</span><span id="line-191">       *</span>
-<span class="source-line-no">192</span><span id="line-192">       * @param value The URI. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">193</span><span id="line-193">       * @return This object.</span>
-<span class="source-line-no">194</span><span id="line-194">       */</span>
-<span class="source-line-no">195</span><span id="line-195">      public Builder uri(URI value) {</span>
-<span class="source-line-no">196</span><span id="line-196">         uri = value;</span>
-<span class="source-line-no">197</span><span id="line-197">         return this;</span>
-<span class="source-line-no">198</span><span id="line-198">      }</span>
-<span class="source-line-no">199</span><span id="line-199"></span>
-<span class="source-line-no">200</span><span id="line-200">      /**</span>
-<span class="source-line-no">201</span><span id="line-201">       * Sets the request URI from a string.</span>
-<span class="source-line-no">202</span><span id="line-202">       *</span>
-<span class="source-line-no">203</span><span id="line-203">       * @param value The URI string. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">204</span><span id="line-204">       * @return This object.</span>
-<span class="source-line-no">205</span><span id="line-205">       * @throws IllegalArgumentException If the string is not a valid URI.</span>
-<span class="source-line-no">206</span><span id="line-206">       */</span>
-<span class="source-line-no">207</span><span id="line-207">      public Builder uri(String value) {</span>
-<span class="source-line-no">208</span><span id="line-208">         try {</span>
-<span class="source-line-no">209</span><span id="line-209">            uri = new URI(value);</span>
-<span class="source-line-no">210</span><span id="line-210">         } catch (URISyntaxException e) {</span>
-<span class="source-line-no">211</span><span id="line-211">            throw iaex(e, "Invalid URI: %s", value);</span>
-<span class="source-line-no">212</span><span id="line-212">         }</span>
-<span class="source-line-no">213</span><span id="line-213">         return this;</span>
-<span class="source-line-no">214</span><span id="line-214">      }</span>
-<span class="source-line-no">215</span><span id="line-215"></span>
-<span class="source-line-no">216</span><span id="line-216">      /**</span>
-<span class="source-line-no">217</span><span id="line-217">       * Appends a request header.</span>
-<span class="source-line-no">218</span><span id="line-218">       *</span>
-<span class="source-line-no">219</span><span id="line-219">       * @param name The header name. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">220</span><span id="line-220">       * @param value The header value. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">221</span><span id="line-221">       * @return This object.</span>
-<span class="source-line-no">222</span><span id="line-222">       */</span>
-<span class="source-line-no">223</span><span id="line-223">      public Builder header(String name, String value) {</span>
-<span class="source-line-no">224</span><span id="line-224">         headers.add(TransportHeader.of(name, value));</span>
-<span class="source-line-no">225</span><span id="line-225">         return this;</span>
-<span class="source-line-no">226</span><span id="line-226">      }</span>
-<span class="source-line-no">227</span><span id="line-227"></span>
-<span class="source-line-no">228</span><span id="line-228">      /**</span>
-<span class="source-line-no">229</span><span id="line-229">       * Appends multiple request headers.</span>
-<span class="source-line-no">230</span><span id="line-230">       *</span>
-<span class="source-line-no">231</span><span id="line-231">       * @param value The headers to add. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">232</span><span id="line-232">       * @return This object.</span>
-<span class="source-line-no">233</span><span id="line-233">       */</span>
-<span class="source-line-no">234</span><span id="line-234">      public Builder headers(Collection&lt;TransportHeader&gt; value) {</span>
-<span class="source-line-no">235</span><span id="line-235">         headers.addAll(value);</span>
-<span class="source-line-no">236</span><span id="line-236">         return this;</span>
-<span class="source-line-no">237</span><span id="line-237">      }</span>
-<span class="source-line-no">238</span><span id="line-238"></span>
-<span class="source-line-no">239</span><span id="line-239">      /**</span>
-<span class="source-line-no">240</span><span id="line-240">       * Sets the request body.</span>
-<span class="source-line-no">241</span><span id="line-241">       *</span>
-<span class="source-line-no">242</span><span id="line-242">       * @param value The body. May be &lt;jk&gt;null&lt;/jk&gt; for body-less requests.</span>
-<span class="source-line-no">243</span><span id="line-243">       * @return This object.</span>
-<span class="source-line-no">244</span><span id="line-244">       */</span>
-<span class="source-line-no">245</span><span id="line-245">      public Builder body(TransportBody value) {</span>
-<span class="source-line-no">246</span><span id="line-246">         body = value;</span>
-<span class="source-line-no">247</span><span id="line-247">         return this;</span>
-<span class="source-line-no">248</span><span id="line-248">      }</span>
-<span class="source-line-no">249</span><span id="line-249"></span>
-<span class="source-line-no">250</span><span id="line-250">      /**</span>
-<span class="source-line-no">251</span><span id="line-251">       * Sets the per-call response timeout.</span>
-<span class="source-line-no">252</span><span id="line-252">       *</span>
-<span class="source-line-no">253</span><span id="line-253">       * @param value The response timeout. May be &lt;jk&gt;null&lt;/jk&gt; to use the transport default.</span>
-<span class="source-line-no">254</span><span id="line-254">       * @return This object.</span>
-<span class="source-line-no">255</span><span id="line-255">       */</span>
-<span class="source-line-no">256</span><span id="line-256">      public Builder timeout(Duration value) {</span>
-<span class="source-line-no">257</span><span id="line-257">         timeout = value;</span>
-<span class="source-line-no">258</span><span id="line-258">         return this;</span>
-<span class="source-line-no">259</span><span id="line-259">      }</span>
-<span class="source-line-no">260</span><span id="line-260"></span>
-<span class="source-line-no">261</span><span id="line-261">      /**</span>
-<span class="source-line-no">262</span><span id="line-262">       * Builds and returns the {@link TransportRequest}.</span>
-<span class="source-line-no">263</span><span id="line-263">       *</span>
-<span class="source-line-no">264</span><span id="line-264">       * @return A new instance. Never &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">265</span><span id="line-265">       */</span>
-<span class="source-line-no">266</span><span id="line-266">      public TransportRequest build() {</span>
-<span class="source-line-no">267</span><span id="line-267">         return new TransportRequest(this);</span>
-<span class="source-line-no">268</span><span id="line-268">      }</span>
-<span class="source-line-no">269</span><span id="line-269">   }</span>
-<span class="source-line-no">270</span><span id="line-270">}</span>
+<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.Shorts.*;</span>
+<span class="source-line-no">020</span><span id="line-20"></span>
+<span class="source-line-no">021</span><span id="line-21">import java.net.*;</span>
+<span class="source-line-no">022</span><span id="line-22">import java.time.*;</span>
+<span class="source-line-no">023</span><span id="line-23">import java.util.*;</span>
+<span class="source-line-no">024</span><span id="line-24"></span>
+<span class="source-line-no">025</span><span id="line-25">import org.apache.juneau.http.remote.*;</span>
+<span class="source-line-no">026</span><span id="line-26"></span>
+<span class="source-line-no">027</span><span id="line-27">/**</span>
+<span class="source-line-no">028</span><span id="line-28"> * A fully-resolved, transport-layer HTTP request.</span>
+<span class="source-line-no">029</span><span id="line-29"> *</span>
+<span class="source-line-no">030</span><span id="line-30"> * &lt;p&gt;</span>
+<span class="source-line-no">031</span><span id="line-31"> * All values (URIs, headers, bodies) are evaluated before this object is constructed — suppliers have been</span>
+<span class="source-line-no">032</span><span id="line-32"> * invoked, {@code null}-valued parts have been filtered, and the final URI has been assembled with query</span>
+<span class="source-line-no">033</span><span id="line-33"> * parameters and path substitutions applied.</span>
+<span class="source-line-no">034</span><span id="line-34"> *</span>
+<span class="source-line-no">035</span><span id="line-35"> * &lt;p&gt;</span>
+<span class="source-line-no">036</span><span id="line-36"> * Transport implementations receive a {@link TransportRequest} and are responsible for executing it against</span>
+<span class="source-line-no">037</span><span id="line-37"> * the remote server, returning a {@link TransportResponse}.</span>
+<span class="source-line-no">038</span><span id="line-38"> *</span>
+<span class="source-line-no">039</span><span id="line-39"> * &lt;p&gt;</span>
+<span class="source-line-no">040</span><span id="line-40"> * &lt;b&gt;Beta — API subject to change.&lt;/b&gt;</span>
+<span class="source-line-no">041</span><span id="line-41"> *</span>
+<span class="source-line-no">042</span><span id="line-42"> * @since 9.2.1</span>
+<span class="source-line-no">043</span><span id="line-43"> */</span>
+<span class="source-line-no">044</span><span id="line-44">public final class TransportRequest {</span>
+<span class="source-line-no">045</span><span id="line-45"></span>
+<span class="source-line-no">046</span><span id="line-46">   // Methods defined as idempotent by RFC 7231 §4.2.2 — replaying them cannot change server state beyond a</span>
+<span class="source-line-no">047</span><span id="line-47">   // single application of the request, so a transport may safely re-send them once on a fresh connection.</span>
+<span class="source-line-no">048</span><span id="line-48">   private static final Set&lt;String&gt; IDEMPOTENT_METHODS = Set.of("GET", "HEAD", "PUT", "DELETE", "OPTIONS", "TRACE");</span>
+<span class="source-line-no">049</span><span id="line-49"></span>
+<span class="source-line-no">050</span><span id="line-50">   private final String method;</span>
+<span class="source-line-no">051</span><span id="line-51">   private final URI uri;</span>
+<span class="source-line-no">052</span><span id="line-52">   private final List&lt;TransportHeader&gt; headers;</span>
+<span class="source-line-no">053</span><span id="line-53">   private final TransportBody body;</span>
+<span class="source-line-no">054</span><span id="line-54">   private final Duration timeout;</span>
+<span class="source-line-no">055</span><span id="line-55">   private final boolean policyEnforced;</span>
+<span class="source-line-no">056</span><span id="line-56">   private final boolean allowPrivateUrls;</span>
+<span class="source-line-no">057</span><span id="line-57">   private final RemoteUrlPolicy.AllowedRanges allowedAddressRanges;</span>
+<span class="source-line-no">058</span><span id="line-58"></span>
+<span class="source-line-no">059</span><span id="line-59">   private TransportRequest(Builder builder) {</span>
+<span class="source-line-no">060</span><span id="line-60">      this.method = reqnn("method", builder.method);</span>
+<span class="source-line-no">061</span><span id="line-61">      this.uri = reqnn("uri", builder.uri);</span>
+<span class="source-line-no">062</span><span id="line-62">      this.headers = List.copyOf(builder.headers);</span>
+<span class="source-line-no">063</span><span id="line-63">      this.body = builder.body;</span>
+<span class="source-line-no">064</span><span id="line-64">      this.timeout = builder.timeout;</span>
+<span class="source-line-no">065</span><span id="line-65">      this.policyEnforced = builder.policyEnforced;</span>
+<span class="source-line-no">066</span><span id="line-66">      this.allowPrivateUrls = builder.allowPrivateUrls;</span>
+<span class="source-line-no">067</span><span id="line-67">      this.allowedAddressRanges = builder.allowedAddressRanges;</span>
+<span class="source-line-no">068</span><span id="line-68">   }</span>
+<span class="source-line-no">069</span><span id="line-69"></span>
+<span class="source-line-no">070</span><span id="line-70">   /** Returns a new {@link Builder}. */</span>
+<span class="source-line-no">071</span><span id="line-71">   public static Builder builder() {</span>
+<span class="source-line-no">072</span><span id="line-72">      return new Builder();</span>
+<span class="source-line-no">073</span><span id="line-73">   }</span>
+<span class="source-line-no">074</span><span id="line-74"></span>
+<span class="source-line-no">075</span><span id="line-75">   /**</span>
+<span class="source-line-no">076</span><span id="line-76">    * Returns the HTTP method (e.g. {@code "GET"}, {@code "POST"}).</span>
+<span class="source-line-no">077</span><span id="line-77">    *</span>
+<span class="source-line-no">078</span><span id="line-78">    * @return The method. Never &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">079</span><span id="line-79">    */</span>
+<span class="source-line-no">080</span><span id="line-80">   public String getMethod() {</span>
+<span class="source-line-no">081</span><span id="line-81">      return method;</span>
+<span class="source-line-no">082</span><span id="line-82">   }</span>
+<span class="source-line-no">083</span><span id="line-83"></span>
+<span class="source-line-no">084</span><span id="line-84">   /**</span>
+<span class="source-line-no">085</span><span id="line-85">    * Returns the fully-resolved request URI, including query string.</span>
+<span class="source-line-no">086</span><span id="line-86">    *</span>
+<span class="source-line-no">087</span><span id="line-87">    * @return The URI. Never &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">088</span><span id="line-88">    */</span>
+<span class="source-line-no">089</span><span id="line-89">   public URI getUri() {</span>
+<span class="source-line-no">090</span><span id="line-90">      return uri;</span>
+<span class="source-line-no">091</span><span id="line-91">   }</span>
+<span class="source-line-no">092</span><span id="line-92"></span>
+<span class="source-line-no">093</span><span id="line-93">   /**</span>
+<span class="source-line-no">094</span><span id="line-94">    * Returns all request headers in the order they should be sent.</span>
+<span class="source-line-no">095</span><span id="line-95">    *</span>
+<span class="source-line-no">096</span><span id="line-96">    * @return An unmodifiable list. Never &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">097</span><span id="line-97">    */</span>
+<span class="source-line-no">098</span><span id="line-98">   public List&lt;TransportHeader&gt; getHeaders() {</span>
+<span class="source-line-no">099</span><span id="line-99">      return headers;</span>
+<span class="source-line-no">100</span><span id="line-100">   }</span>
+<span class="source-line-no">101</span><span id="line-101"></span>
+<span class="source-line-no">102</span><span id="line-102">   /**</span>
+<span class="source-line-no">103</span><span id="line-103">    * Returns the first header with the given name (case-insensitive), or {@code null} if absent.</span>
+<span class="source-line-no">104</span><span id="line-104">    *</span>
+<span class="source-line-no">105</span><span id="line-105">    * @param name The header name. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">106</span><span id="line-106">    * @return The first matching header, or &lt;jk&gt;null&lt;/jk&gt; if absent.</span>
+<span class="source-line-no">107</span><span id="line-107">    */</span>
+<span class="source-line-no">108</span><span id="line-108">   public TransportHeader getFirstHeader(String name) {</span>
+<span class="source-line-no">109</span><span id="line-109">      return headers.stream()</span>
+<span class="source-line-no">110</span><span id="line-110">         .filter(h -&gt; eqic(h.name(), name))</span>
+<span class="source-line-no">111</span><span id="line-111">         .findFirst()</span>
+<span class="source-line-no">112</span><span id="line-112">         .orElse(null);</span>
+<span class="source-line-no">113</span><span id="line-113">   }</span>
+<span class="source-line-no">114</span><span id="line-114"></span>
+<span class="source-line-no">115</span><span id="line-115">   /**</span>
+<span class="source-line-no">116</span><span id="line-116">    * Returns the request body, or {@code null} if this is a body-less request (e.g. GET, HEAD).</span>
+<span class="source-line-no">117</span><span id="line-117">    *</span>
+<span class="source-line-no">118</span><span id="line-118">    * @return The body, possibly &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">119</span><span id="line-119">    */</span>
+<span class="source-line-no">120</span><span id="line-120">   public TransportBody getBody() {</span>
+<span class="source-line-no">121</span><span id="line-121">      return body;</span>
+<span class="source-line-no">122</span><span id="line-122">   }</span>
+<span class="source-line-no">123</span><span id="line-123"></span>
+<span class="source-line-no">124</span><span id="line-124">   /**</span>
+<span class="source-line-no">125</span><span id="line-125">    * Returns {@code true} if this request can be transparently re-sent once after a stale-connection failure.</span>
+<span class="source-line-no">126</span><span id="line-126">    *</span>
+<span class="source-line-no">127</span><span id="line-127">    * &lt;p&gt;</span>
+<span class="source-line-no">128</span><span id="line-128">    * A pooled keep-alive socket can be torn down by the server between requests; when a transport then reuses</span>
+<span class="source-line-no">129</span><span id="line-129">    * that socket the first write fails before any response is received (e.g. an early {@code EOF} or a</span>
+<span class="source-line-no">130</span><span id="line-130">    * {@code NoHttpResponseException}).  Such a failure is safe to retry on a fresh connection &lt;b&gt;only&lt;/b&gt; when</span>
+<span class="source-line-no">131</span><span id="line-131">    * replaying the request cannot cause a duplicate side effect, which requires both of:</span>
+<span class="source-line-no">132</span><span id="line-132">    * &lt;ul&gt;</span>
+<span class="source-line-no">133</span><span id="line-133">    *    &lt;li&gt;an &lt;a class="doclink" href="https://datatracker.ietf.org/doc/html/rfc7231#section-4.2.2"&gt;idempotent&lt;/a&gt;</span>
+<span class="source-line-no">134</span><span id="line-134">    *       HTTP method ({@code GET}, {@code HEAD}, {@code PUT}, {@code DELETE}, {@code OPTIONS}, {@code TRACE}) — never</span>
+<span class="source-line-no">135</span><span id="line-135">    *       {@code POST} or any other non-idempotent method, and</span>
+<span class="source-line-no">136</span><span id="line-136">    *    &lt;li&gt;a body that is either absent or {@link TransportBody#isRepeatable() repeatable}, so the exact same bytes</span>
+<span class="source-line-no">137</span><span id="line-137">    *       can be written again.</span>
+<span class="source-line-no">138</span><span id="line-138">    * &lt;/ul&gt;</span>
+<span class="source-line-no">139</span><span id="line-139">    *</span>
+<span class="source-line-no">140</span><span id="line-140">    * &lt;p&gt;</span>
+<span class="source-line-no">141</span><span id="line-141">    * When in doubt this returns {@code false} — the caller must fail closed rather than risk double-executing a</span>
+<span class="source-line-no">142</span><span id="line-142">    * request.</span>
+<span class="source-line-no">143</span><span id="line-143">    *</span>
+<span class="source-line-no">144</span><span id="line-144">    * @return {@code true} if the request is provably safe to replay once.</span>
+<span class="source-line-no">145</span><span id="line-145">    */</span>
+<span class="source-line-no">146</span><span id="line-146">   public boolean isSafeToReplay() {</span>
+<span class="source-line-no">147</span><span id="line-147">      return IDEMPOTENT_METHODS.contains(method.toUpperCase(Locale.ROOT)) &amp;&amp; (body == null || body.isRepeatable());</span>
+<span class="source-line-no">148</span><span id="line-148">   }</span>
+<span class="source-line-no">149</span><span id="line-149"></span>
+<span class="source-line-no">150</span><span id="line-150">   /**</span>
+<span class="source-line-no">151</span><span id="line-151">    * Returns the per-call response timeout, or {@code null} if none was set.</span>
+<span class="source-line-no">152</span><span id="line-152">    *</span>
+<span class="source-line-no">153</span><span id="line-153">    * &lt;p&gt;</span>
+<span class="source-line-no">154</span><span id="line-154">    * A {@code null} value means the transport's own default applies.  Connect timeouts remain a client-level</span>
+<span class="source-line-no">155</span><span id="line-155">    * concern.  All built-in transports honor this value (JDK, Apache HttpClient 4.5/5, OkHttp, Jetty and the mock transport).</span>
+<span class="source-line-no">156</span><span id="line-156">    *</span>
+<span class="source-line-no">157</span><span id="line-157">    * @return The response timeout, possibly &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">158</span><span id="line-158">    */</span>
+<span class="source-line-no">159</span><span id="line-159">   public Duration getTimeout() {</span>
+<span class="source-line-no">160</span><span id="line-160">      return timeout;</span>
+<span class="source-line-no">161</span><span id="line-161">   }</span>
+<span class="source-line-no">162</span><span id="line-162"></span>
+<span class="source-line-no">163</span><span id="line-163">   /**</span>
+<span class="source-line-no">164</span><span id="line-164">    * Returns {@code true} if this request originated from a {@code @Remote}/{@code @Url} call and is subject to</span>
+<span class="source-line-no">165</span><span id="line-165">    * the SSRF guardrail (see {@code org.apache.juneau.http.remote.RemoteUrlPolicy}).</span>
+<span class="source-line-no">166</span><span id="line-166">    *</span>
+<span class="source-line-no">167</span><span id="line-167">    * &lt;p&gt;</span>
+<span class="source-line-no">168</span><span id="line-168">    * Ordinary (non-{@code @Remote}) requests built directly via {@code RestClient.get(url)} etc. are never</span>
+<span class="source-line-no">169</span><span id="line-169">    * policy-covered.</span>
+<span class="source-line-no">170</span><span id="line-170">    *</span>
+<span class="source-line-no">171</span><span id="line-171">    * @return {@code true} if the SSRF guardrail applies to this request.</span>
+<span class="source-line-no">172</span><span id="line-172">    */</span>
+<span class="source-line-no">173</span><span id="line-173">   public boolean isPolicyEnforced() {</span>
+<span class="source-line-no">174</span><span id="line-174">      return policyEnforced;</span>
+<span class="source-line-no">175</span><span id="line-175">   }</span>
+<span class="source-line-no">176</span><span id="line-176"></span>
+<span class="source-line-no">177</span><span id="line-177">   /**</span>
+<span class="source-line-no">178</span><span id="line-178">    * Returns {@code true} if the {@code allowPrivateUrls} opt-in is in effect for this request, disabling the</span>
+<span class="source-line-no">179</span><span id="line-179">    * deny-private / pin-on-connect / redirect-revalidation checks (the {@code http}/{@code https} scheme</span>
+<span class="source-line-no">180</span><span id="line-180">    * requirement still applies upstream).</span>
+<span class="source-line-no">181</span><span id="line-181">    *</span>
+<span class="source-line-no">182</span><span id="line-182">    * @return {@code true} if private/loopback/link-local/metadata targets are allowed for this request.</span>
+<span class="source-line-no">183</span><span id="line-183">    */</span>
+<span class="source-line-no">184</span><span id="line-184">   public boolean isAllowPrivateUrls() {</span>
+<span class="source-line-no">185</span><span id="line-185">      return allowPrivateUrls;</span>
+<span class="source-line-no">186</span><span id="line-186">   }</span>
+<span class="source-line-no">187</span><span id="line-187"></span>
+<span class="source-line-no">188</span><span id="line-188">   /**</span>
+<span class="source-line-no">189</span><span id="line-189">    * Returns the per-client special-purpose address ranges that the SSRF guardrail re-permits for this request (see</span>
+<span class="source-line-no">190</span><span id="line-190">    * {@link RestClient.Builder#allowAddressRanges(String...)}); they are unioned with the</span>
+<span class="source-line-no">191</span><span id="line-191">    * {@value RemoteUrlPolicy#ALLOW_ADDRESS_RANGES_PROPERTY} system property.</span>
+<span class="source-line-no">192</span><span id="line-192">    *</span>
+<span class="source-line-no">193</span><span id="line-193">    * @return The allowed ranges. Never &lt;jk&gt;null&lt;/jk&gt;; {@link org.apache.juneau.http.remote.RemoteUrlPolicy.AllowedRanges#NONE} by default.</span>
+<span class="source-line-no">194</span><span id="line-194">    */</span>
+<span class="source-line-no">195</span><span id="line-195">   public RemoteUrlPolicy.AllowedRanges getAllowedAddressRanges() {</span>
+<span class="source-line-no">196</span><span id="line-196">      return allowedAddressRanges;</span>
+<span class="source-line-no">197</span><span id="line-197">   }</span>
+<span class="source-line-no">198</span><span id="line-198"></span>
+<span class="source-line-no">199</span><span id="line-199">   /**</span>
+<span class="source-line-no">200</span><span id="line-200">    * Returns {@code true} if the SSRF guardrail's connect-time machinery (pin-on-connect + Juneau-controlled</span>
+<span class="source-line-no">201</span><span id="line-201">    * redirect revalidation) must be applied by the transport for this request: {@link #isPolicyEnforced()} is set</span>
+<span class="source-line-no">202</span><span id="line-202">    * and {@link #isAllowPrivateUrls()} is not.</span>
+<span class="source-line-no">203</span><span id="line-203">    *</span>
+<span class="source-line-no">204</span><span id="line-204">    * @return {@code true} if the transport must pin-on-connect and manually revalidate redirects for this request.</span>
+<span class="source-line-no">205</span><span id="line-205">    */</span>
+<span class="source-line-no">206</span><span id="line-206">   public boolean isSsrfGuardActive() {</span>
+<span class="source-line-no">207</span><span id="line-207">      return policyEnforced &amp;&amp; ! allowPrivateUrls;</span>
+<span class="source-line-no">208</span><span id="line-208">   }</span>
+<span class="source-line-no">209</span><span id="line-209"></span>
+<span class="source-line-no">210</span><span id="line-210">   // -----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">211</span><span id="line-211">   // Builder</span>
+<span class="source-line-no">212</span><span id="line-212">   // -----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">213</span><span id="line-213"></span>
+<span class="source-line-no">214</span><span id="line-214">   /**</span>
+<span class="source-line-no">215</span><span id="line-215">    * Fluent builder for {@link TransportRequest}.</span>
+<span class="source-line-no">216</span><span id="line-216">    *</span>
+<span class="source-line-no">217</span><span id="line-217">    * &lt;p&gt;</span>
+<span class="source-line-no">218</span><span id="line-218">    * &lt;b&gt;Beta — API subject to change.&lt;/b&gt;</span>
+<span class="source-line-no">219</span><span id="line-219">    *</span>
+<span class="source-line-no">220</span><span id="line-220">    * @since 9.2.1</span>
+<span class="source-line-no">221</span><span id="line-221">    */</span>
+<span class="source-line-no">222</span><span id="line-222">   public static final class Builder {</span>
+<span class="source-line-no">223</span><span id="line-223"></span>
+<span class="source-line-no">224</span><span id="line-224">      String method;</span>
+<span class="source-line-no">225</span><span id="line-225">      URI uri;</span>
+<span class="source-line-no">226</span><span id="line-226">      final List&lt;TransportHeader&gt; headers = l();</span>
+<span class="source-line-no">227</span><span id="line-227">      TransportBody body;</span>
+<span class="source-line-no">228</span><span id="line-228">      Duration timeout;</span>
+<span class="source-line-no">229</span><span id="line-229">      boolean policyEnforced;</span>
+<span class="source-line-no">230</span><span id="line-230">      boolean allowPrivateUrls;</span>
+<span class="source-line-no">231</span><span id="line-231">      RemoteUrlPolicy.AllowedRanges allowedAddressRanges = RemoteUrlPolicy.AllowedRanges.NONE;</span>
+<span class="source-line-no">232</span><span id="line-232"></span>
+<span class="source-line-no">233</span><span id="line-233">      private Builder() {}</span>
+<span class="source-line-no">234</span><span id="line-234"></span>
+<span class="source-line-no">235</span><span id="line-235">      /**</span>
+<span class="source-line-no">236</span><span id="line-236">       * Sets the HTTP method.</span>
+<span class="source-line-no">237</span><span id="line-237">       *</span>
+<span class="source-line-no">238</span><span id="line-238">       * @param value The method (e.g. {@code "GET"}). Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">239</span><span id="line-239">       * @return This object.</span>
+<span class="source-line-no">240</span><span id="line-240">       */</span>
+<span class="source-line-no">241</span><span id="line-241">      public Builder method(String value) {</span>
+<span class="source-line-no">242</span><span id="line-242">         method = value;</span>
+<span class="source-line-no">243</span><span id="line-243">         return this;</span>
+<span class="source-line-no">244</span><span id="line-244">      }</span>
+<span class="source-line-no">245</span><span id="line-245"></span>
+<span class="source-line-no">246</span><span id="line-246">      /**</span>
+<span class="source-line-no">247</span><span id="line-247">       * Sets the request URI.</span>
+<span class="source-line-no">248</span><span id="line-248">       *</span>
+<span class="source-line-no">249</span><span id="line-249">       * @param value The URI. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">250</span><span id="line-250">       * @return This object.</span>
+<span class="source-line-no">251</span><span id="line-251">       */</span>
+<span class="source-line-no">252</span><span id="line-252">      public Builder uri(URI value) {</span>
+<span class="source-line-no">253</span><span id="line-253">         uri = value;</span>
+<span class="source-line-no">254</span><span id="line-254">         return this;</span>
+<span class="source-line-no">255</span><span id="line-255">      }</span>
+<span class="source-line-no">256</span><span id="line-256"></span>
+<span class="source-line-no">257</span><span id="line-257">      /**</span>
+<span class="source-line-no">258</span><span id="line-258">       * Sets the request URI from a string.</span>
+<span class="source-line-no">259</span><span id="line-259">       *</span>
+<span class="source-line-no">260</span><span id="line-260">       * @param value The URI string. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">261</span><span id="line-261">       * @return This object.</span>
+<span class="source-line-no">262</span><span id="line-262">       * @throws IllegalArgumentException If the string is not a valid URI.</span>
+<span class="source-line-no">263</span><span id="line-263">       */</span>
+<span class="source-line-no">264</span><span id="line-264">      public Builder uri(String value) {</span>
+<span class="source-line-no">265</span><span id="line-265">         try {</span>
+<span class="source-line-no">266</span><span id="line-266">            uri = new URI(value);</span>
+<span class="source-line-no">267</span><span id="line-267">         } catch (URISyntaxException e) {</span>
+<span class="source-line-no">268</span><span id="line-268">            throw iaex(e, "Invalid URI: %s", value);</span>
+<span class="source-line-no">269</span><span id="line-269">         }</span>
+<span class="source-line-no">270</span><span id="line-270">         return this;</span>
+<span class="source-line-no">271</span><span id="line-271">      }</span>
+<span class="source-line-no">272</span><span id="line-272"></span>
+<span class="source-line-no">273</span><span id="line-273">      /**</span>
+<span class="source-line-no">274</span><span id="line-274">       * Appends a request header.</span>
+<span class="source-line-no">275</span><span id="line-275">       *</span>
+<span class="source-line-no">276</span><span id="line-276">       * @param name The header name. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">277</span><span id="line-277">       * @param value The header value. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">278</span><span id="line-278">       * @return This object.</span>
+<span class="source-line-no">279</span><span id="line-279">       */</span>
+<span class="source-line-no">280</span><span id="line-280">      public Builder header(String name, String value) {</span>
+<span class="source-line-no">281</span><span id="line-281">         headers.add(TransportHeader.of(name, value));</span>
+<span class="source-line-no">282</span><span id="line-282">         return this;</span>
+<span class="source-line-no">283</span><span id="line-283">      }</span>
+<span class="source-line-no">284</span><span id="line-284"></span>
+<span class="source-line-no">285</span><span id="line-285">      /**</span>
+<span class="source-line-no">286</span><span id="line-286">       * Appends multiple request headers.</span>
+<span class="source-line-no">287</span><span id="line-287">       *</span>
+<span class="source-line-no">288</span><span id="line-288">       * @param value The headers to add. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">289</span><span id="line-289">       * @return This object.</span>
+<span class="source-line-no">290</span><span id="line-290">       */</span>
+<span class="source-line-no">291</span><span id="line-291">      public Builder headers(Collection&lt;TransportHeader&gt; value) {</span>
+<span class="source-line-no">292</span><span id="line-292">         headers.addAll(value);</span>
+<span class="source-line-no">293</span><span id="line-293">         return this;</span>
+<span class="source-line-no">294</span><span id="line-294">      }</span>
+<span class="source-line-no">295</span><span id="line-295"></span>
+<span class="source-line-no">296</span><span id="line-296">      /**</span>
+<span class="source-line-no">297</span><span id="line-297">       * Sets the request body.</span>
+<span class="source-line-no">298</span><span id="line-298">       *</span>
+<span class="source-line-no">299</span><span id="line-299">       * @param value The body. May be &lt;jk&gt;null&lt;/jk&gt; for body-less requests.</span>
+<span class="source-line-no">300</span><span id="line-300">       * @return This object.</span>
+<span class="source-line-no">301</span><span id="line-301">       */</span>
+<span class="source-line-no">302</span><span id="line-302">      public Builder body(TransportBody value) {</span>
+<span class="source-line-no">303</span><span id="line-303">         body = value;</span>
+<span class="source-line-no">304</span><span id="line-304">         return this;</span>
+<span class="source-line-no">305</span><span id="line-305">      }</span>
+<span class="source-line-no">306</span><span id="line-306"></span>
+<span class="source-line-no">307</span><span id="line-307">      /**</span>
+<span class="source-line-no">308</span><span id="line-308">       * Sets the per-call response timeout.</span>
+<span class="source-line-no">309</span><span id="line-309">       *</span>
+<span class="source-line-no">310</span><span id="line-310">       * @param value The response timeout. May be &lt;jk&gt;null&lt;/jk&gt; to use the transport default.  Must otherwise be positive.</span>
+<span class="source-line-no">311</span><span id="line-311">       * @return This object.</span>
+<span class="source-line-no">312</span><span id="line-312">       * @throws IllegalArgumentException If &lt;c&gt;value&lt;/c&gt; is zero or negative.</span>
+<span class="source-line-no">313</span><span id="line-313">       */</span>
+<span class="source-line-no">314</span><span id="line-314">      public Builder timeout(Duration value) {</span>
+<span class="source-line-no">315</span><span id="line-315">         if (value != null &amp;&amp; (value.isZero() || value.isNegative()))</span>
+<span class="source-line-no">316</span><span id="line-316">            throw new IllegalArgumentException("Request timeout must be positive: " + value);</span>
+<span class="source-line-no">317</span><span id="line-317">         timeout = value;</span>
+<span class="source-line-no">318</span><span id="line-318">         return this;</span>
+<span class="source-line-no">319</span><span id="line-319">      }</span>
+<span class="source-line-no">320</span><span id="line-320"></span>
+<span class="source-line-no">321</span><span id="line-321">      /**</span>
+<span class="source-line-no">322</span><span id="line-322">       * Marks this request as originating from a {@code @Remote}/{@code @Url} call, subject to the SSRF guardrail,</span>
+<span class="source-line-no">323</span><span id="line-323">       * and records whether the {@code allowPrivateUrls} opt-in is in effect.</span>
+<span class="source-line-no">324</span><span id="line-324">       *</span>
+<span class="source-line-no">325</span><span id="line-325">       * @param policyEnforced {@code true} if this request is policy-covered.</span>
+<span class="source-line-no">326</span><span id="line-326">       * @param allowPrivateUrls {@code true} if the {@code allowPrivateUrls} opt-in disables the deny-private checks.</span>
+<span class="source-line-no">327</span><span id="line-327">       * @return This object.</span>
+<span class="source-line-no">328</span><span id="line-328">       */</span>
+<span class="source-line-no">329</span><span id="line-329">      public Builder remoteUrlPolicy(boolean policyEnforced, boolean allowPrivateUrls) {</span>
+<span class="source-line-no">330</span><span id="line-330">         this.policyEnforced = policyEnforced;</span>
+<span class="source-line-no">331</span><span id="line-331">         this.allowPrivateUrls = allowPrivateUrls;</span>
+<span class="source-line-no">332</span><span id="line-332">         return this;</span>
+<span class="source-line-no">333</span><span id="line-333">      }</span>
+<span class="source-line-no">334</span><span id="line-334"></span>
+<span class="source-line-no">335</span><span id="line-335">      /**</span>
+<span class="source-line-no">336</span><span id="line-336">       * Sets the per-client special-purpose address ranges the SSRF guardrail re-permits for this request.</span>
+<span class="source-line-no">337</span><span id="line-337">       *</span>
+<span class="source-line-no">338</span><span id="line-338">       * @param value The allowed ranges. &lt;jk&gt;null&lt;/jk&gt; means none.</span>
+<span class="source-line-no">339</span><span id="line-339">       * @return This object.</span>
+<span class="source-line-no">340</span><span id="line-340">       */</span>
+<span class="source-line-no">341</span><span id="line-341">      public Builder allowedAddressRanges(RemoteUrlPolicy.AllowedRanges value) {</span>
+<span class="source-line-no">342</span><span id="line-342">         this.allowedAddressRanges = value == null ? RemoteUrlPolicy.AllowedRanges.NONE : value;</span>
+<span class="source-line-no">343</span><span id="line-343">         return this;</span>
+<span class="source-line-no">344</span><span id="line-344">      }</span>
+<span class="source-line-no">345</span><span id="line-345"></span>
+<span class="source-line-no">346</span><span id="line-346">      /**</span>
+<span class="source-line-no">347</span><span id="line-347">       * Builds and returns the {@link TransportRequest}.</span>
+<span class="source-line-no">348</span><span id="line-348">       *</span>
+<span class="source-line-no">349</span><span id="line-349">       * @return A new instance. Never &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">350</span><span id="line-350">       */</span>
+<span class="source-line-no">351</span><span id="line-351">      public TransportRequest build() {</span>
+<span class="source-line-no">352</span><span id="line-352">         return new TransportRequest(this);</span>
+<span class="source-line-no">353</span><span id="line-353">      }</span>
+<span class="source-line-no">354</span><span id="line-354">   }</span>
+<span class="source-line-no">355</span><span id="line-355">}</span>
 
 
 

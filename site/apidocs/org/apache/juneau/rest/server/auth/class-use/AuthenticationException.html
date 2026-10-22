@@ -263,6 +263,13 @@ loadScripts(document, 'script');</script>
 <div class="col-last odd-row-color">
 <div class="block">Validates the supplied SAML 2.0 <code>&lt;samlp:Response&gt;</code> XML and returns the resolved principal.</div>
 </div>
+<div class="col-first even-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/security/Principal.html" title="class or interface in java.security" class="external-link">Principal</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">SamlAssertionValidator.</span><code><a href="../saml/SamlAssertionValidator.html#validate(java.lang.String,java.lang.String)" class="member-name-link">validate</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;xml,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;recipient)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Validates the supplied SAML 2.0 <code>&lt;samlp:Response&gt;</code> XML, enforcing bearer
+ <code>&lt;SubjectConfirmation&gt;</code> against the given <code>recipient</code> for this call.</div>
+</div>
 </div>
 </section>
 </li>

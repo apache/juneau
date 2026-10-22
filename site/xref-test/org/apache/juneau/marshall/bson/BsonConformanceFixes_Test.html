@@ -55,8 +55,8 @@
 <a class="jxr_linenumber" name="L47" href="#L47">47</a>  <em class="jxr_javadoccomment"> * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L48" href="#L48">48</a>  <em class="jxr_javadoccomment"> */</em>
 <a class="jxr_linenumber" name="L49" href="#L49">49</a>  @SuppressWarnings({
-<a class="jxr_linenumber" name="L50" href="#L50">50</a>  	<span class="jxr_string">"resource"</span>,  <em class="jxr_comment">// BsonInputStream instances in tests are closed by the test infrastructure / GC; not leak-relevant.</em>
-<a class="jxr_linenumber" name="L51" href="#L51">51</a>  	<span class="jxr_string">"unchecked"</span>  <em class="jxr_comment">// Parser returns Object; cast to Map in tests.</em>
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>  	<span class="jxr_string">"resource"</span>, <em class="jxr_comment">// BsonInputStream instances in tests are closed by the test infrastructure / GC; not leak-relevant.</em>
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>  	<span class="jxr_string">"unchecked"</span> <em class="jxr_comment">// Parser returns Object; cast to Map in tests.</em>
 <a class="jxr_linenumber" name="L52" href="#L52">52</a>  })
 <a class="jxr_linenumber" name="L53" href="#L53">53</a>  <strong class="jxr_keyword">class</strong> BsonConformanceFixes_Test <strong class="jxr_keyword">extends</strong> TestBase {
 <a class="jxr_linenumber" name="L54" href="#L54">54</a>  

@@ -1,0 +1,505 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="" lang="">
+<head><meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<title>SeriesAggregator xref</title>
+<link type="text/css" rel="stylesheet" href="../../../../../../../stylesheet.css" />
+</head>
+<body>
+<div id="overview"><a href="../../../../../../../../apidocs/org/apache/juneau/rest/server/console/data/SeriesAggregator.html">View Javadoc</a></div><pre>
+<a class="jxr_linenumber" name="L1" href="#L1">1</a>   <em class="jxr_comment">/*</em>
+<a class="jxr_linenumber" name="L2" href="#L2">2</a>   <em class="jxr_comment"> * Licensed to the Apache Software Foundation (ASF) under one or more</em>
+<a class="jxr_linenumber" name="L3" href="#L3">3</a>   <em class="jxr_comment"> * contributor license agreements.  See the NOTICE file distributed with</em>
+<a class="jxr_linenumber" name="L4" href="#L4">4</a>   <em class="jxr_comment"> * this work for additional information regarding copyright ownership.</em>
+<a class="jxr_linenumber" name="L5" href="#L5">5</a>   <em class="jxr_comment"> * The ASF licenses this file to You under the Apache License, Version 2.0</em>
+<a class="jxr_linenumber" name="L6" href="#L6">6</a>   <em class="jxr_comment"> * (the "License"); you may not use this file except in compliance with</em>
+<a class="jxr_linenumber" name="L7" href="#L7">7</a>   <em class="jxr_comment"> * the License.  You may obtain a copy of the License at</em>
+<a class="jxr_linenumber" name="L8" href="#L8">8</a>   <em class="jxr_comment"> *</em>
+<a class="jxr_linenumber" name="L9" href="#L9">9</a>   <em class="jxr_comment"> *      <a href="http://www.apache.org/licenses/LICENSE-2.0" target="alexandria_uri">http://www.apache.org/licenses/LICENSE-2.0</a></em>
+<a class="jxr_linenumber" name="L10" href="#L10">10</a>  <em class="jxr_comment"> *</em>
+<a class="jxr_linenumber" name="L11" href="#L11">11</a>  <em class="jxr_comment"> * Unless required by applicable law or agreed to in writing, software</em>
+<a class="jxr_linenumber" name="L12" href="#L12">12</a>  <em class="jxr_comment"> * distributed under the License is distributed on an "AS IS" BASIS,</em>
+<a class="jxr_linenumber" name="L13" href="#L13">13</a>  <em class="jxr_comment"> * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</em>
+<a class="jxr_linenumber" name="L14" href="#L14">14</a>  <em class="jxr_comment"> * See the License for the specific language governing permissions and</em>
+<a class="jxr_linenumber" name="L15" href="#L15">15</a>  <em class="jxr_comment"> * limitations under the License.</em>
+<a class="jxr_linenumber" name="L16" href="#L16">16</a>  <em class="jxr_comment"> */</em>
+<a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.server.console.data;
+<a class="jxr_linenumber" name="L18" href="#L18">18</a>  
+<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.commons.utils.Shorts.*;
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> java.io.*;
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> java.time.*;
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> java.time.temporal.*;
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> java.util.*;
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> java.util.regex.*;
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> java.util.stream.*;
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.http.response.*;
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.marshall.collections.*;
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.marshall.marshaller.*;
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.server.*;
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>  
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>  <em class="jxr_javadoccomment"> * Answers a console data source's aggregate request in one pass over a row stream.</em>
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>  <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>  <em class="jxr_javadoccomment"> * The request names a window, a bucket unit, up to three &lt;c&gt;groupBy&lt;/c&gt; fields and the measures to compute.  Any other</em>
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>  <em class="jxr_javadoccomment"> * query parameter is an app filter, returned untouched by {@link Request#filters()} for the app's own row query.</em>
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>  <em class="jxr_javadoccomment"> * Fields used by &lt;c&gt;groupBy&lt;/c&gt; or a measure must be allowed with {@link #allowFields(String...)}.  A bad request</em>
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>  <em class="jxr_javadoccomment"> * throws {@link RequestException} (HTTP 400, E-75).  At most {@link #maxBuckets(int)} result cells are kept; rows that</em>
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>  <em class="jxr_javadoccomment"> * would open another cell are dropped and the result is marked truncated.</em>
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>  <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>  <em class="jxr_javadoccomment"> * A group value is the text of the row's value, or null (JSON &lt;jk&gt;null&lt;/jk&gt;) when the row has none, so a missing</em>
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>  <em class="jxr_javadoccomment"> * value and the text &lt;js&gt;"null"&lt;/js&gt; are different groups.  The null group sorts first within its bucket.</em>
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>  <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>  <em class="jxr_javadoccomment"> * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</em>
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>  <em class="jxr_javadoccomment"> * &lt;p class='bjava'&gt;</em>
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>  <em class="jxr_javadoccomment"> * 	&lt;ja&gt;@RestGet&lt;/ja&gt;(path=&lt;js&gt;"/series/aggregate"&lt;/js&gt;)</em>
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>  <em class="jxr_javadoccomment"> * 	&lt;jk&gt;public void&lt;/jk&gt; aggregate(RestRequest &lt;jv&gt;req&lt;/jv&gt;, RestResponse &lt;jv&gt;res&lt;/jv&gt;) &lt;jk&gt;throws&lt;/jk&gt; Exception {</em>
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>  <em class="jxr_javadoccomment"> * 		&lt;jk&gt;var&lt;/jk&gt; &lt;jv&gt;q&lt;/jv&gt; = SeriesAggregator.Request.&lt;jsm&gt;from&lt;/jsm&gt;(&lt;jv&gt;req&lt;/jv&gt;);</em>
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>  <em class="jxr_javadoccomment"> * 		&lt;jk&gt;try&lt;/jk&gt; (&lt;jk&gt;var&lt;/jk&gt; &lt;jv&gt;rows&lt;/jv&gt; =</em>
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>  <em class="jxr_javadoccomment"> * 				&lt;jv&gt;svc&lt;/jv&gt;.rows(&lt;jv&gt;q&lt;/jv&gt;.start(), &lt;jv&gt;q&lt;/jv&gt;.end(), &lt;jv&gt;q&lt;/jv&gt;.filters())) {</em>
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>  <em class="jxr_javadoccomment"> * 			SeriesAggregator.&lt;jsm&gt;create&lt;/jsm&gt;().timeField(&lt;js&gt;"start"&lt;/js&gt;)</em>
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>  <em class="jxr_javadoccomment"> * 				.allowFields(&lt;js&gt;"status"&lt;/js&gt;, &lt;js&gt;"ms"&lt;/js&gt;)</em>
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>  <em class="jxr_javadoccomment"> * 				.maxBuckets(10_000).aggregate(&lt;jv&gt;q&lt;/jv&gt;, &lt;jv&gt;rows&lt;/jv&gt;).writeTo(&lt;jv&gt;res&lt;/jv&gt;);</em>
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>  <em class="jxr_javadoccomment"> * 		}</em>
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>  <em class="jxr_javadoccomment"> * 	}</em>
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>  <em class="jxr_javadoccomment"> * &lt;/p&gt;</em>
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>  <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>  <em class="jxr_javadoccomment"> * @since 10.0.0</em>
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>  <em class="jxr_javadoccomment"> */</em>
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>  @SuppressWarnings({
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>  	<span class="jxr_string">"java:S1192"</span>, <em class="jxr_comment">// Repeated literals are contract wire keys; named constants would obscure the contract shape.</em>
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>  	<span class="jxr_string">"java:S3776"</span> <em class="jxr_comment">// Validation and rendering chains many independent guards; splitting them adds no clarity.</em>
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>  })
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">class</strong> SeriesAggregator {
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>  
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>  	<em class="jxr_javadoccomment">/** The bucket units, finest first. */</em>
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>  	<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> List&lt;String&gt; UNITS = List.of(<span class="jxr_string">"hour"</span>, <span class="jxr_string">"day"</span>, <span class="jxr_string">"week"</span>, <span class="jxr_string">"month"</span>);
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>  
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>  	<em class="jxr_javadoccomment">/** The most buckets &lt;c&gt;bucket=auto&lt;/c&gt; aims for. */</em>
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>  	<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> AUTO_BUCKETS = 1000;
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>  
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>  	<em class="jxr_javadoccomment">/** Query parameters that are part of the contract and never app filters. */</em>
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>  	<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Set&lt;String&gt; RESERVED = Set.of(<span class="jxr_string">"start"</span>, <span class="jxr_string">"end"</span>, <span class="jxr_string">"bucket"</span>, <span class="jxr_string">"tz"</span>, <span class="jxr_string">"groupBy"</span>, <span class="jxr_string">"measure"</span>);
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>  
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Pattern MEASURE = Pattern.compile(<span class="jxr_string">"^(sum|avg|min|max)&#92;&#92;(([^()]+)&#92;&#92;)$"</span>);
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>  
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>  	<strong class="jxr_keyword">private</strong> String timeField = <span class="jxr_string">"time"</span>;
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>  	<strong class="jxr_keyword">private</strong> DayOfWeek weekStart = DayOfWeek.MONDAY;
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">int</strong> maxBuckets = 10_000;
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Set&lt;String&gt; allowed = <strong class="jxr_keyword">new</strong> LinkedHashSet&lt;&gt;();
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>  
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>  	<strong class="jxr_keyword">private</strong> SeriesAggregator() {}
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>  
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>  	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>  <em class="jxr_javadoccomment">	 * A new aggregator.  Defaults: time field &lt;c&gt;time&lt;/c&gt;, weeks start on Monday, at most 10,000 cells, no fields</em>
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>  <em class="jxr_javadoccomment">	 * allowed.</em>
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>  <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>  <em class="jxr_javadoccomment">	 * @return A new aggregator.</em>
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>  <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> SeriesAggregator create() {
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>  		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> SeriesAggregator();
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>  	}
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>  
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>  	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>  <em class="jxr_javadoccomment">	 * The column holding each row's time.</em>
+<a class="jxr_linenumber" name="L99" href="#L99">99</a>  <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L100" href="#L100">100</a> <em class="jxr_javadoccomment">	 * @param value The column name.</em>
+<a class="jxr_linenumber" name="L101" href="#L101">101</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
+<a class="jxr_linenumber" name="L102" href="#L102">102</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L103" href="#L103">103</a> 	<strong class="jxr_keyword">public</strong> SeriesAggregator timeField(String value) {
+<a class="jxr_linenumber" name="L104" href="#L104">104</a> 		timeField = value;
+<a class="jxr_linenumber" name="L105" href="#L105">105</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L106" href="#L106">106</a> 	}
+<a class="jxr_linenumber" name="L107" href="#L107">107</a> 
+<a class="jxr_linenumber" name="L108" href="#L108">108</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L109" href="#L109">109</a> <em class="jxr_javadoccomment">	 * The first day of a &lt;c&gt;week&lt;/c&gt; bucket.</em>
+<a class="jxr_linenumber" name="L110" href="#L110">110</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L111" href="#L111">111</a> <em class="jxr_javadoccomment">	 * @param value The day.</em>
+<a class="jxr_linenumber" name="L112" href="#L112">112</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
+<a class="jxr_linenumber" name="L113" href="#L113">113</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L114" href="#L114">114</a> 	<strong class="jxr_keyword">public</strong> SeriesAggregator weekStart(DayOfWeek value) {
+<a class="jxr_linenumber" name="L115" href="#L115">115</a> 		weekStart = value;
+<a class="jxr_linenumber" name="L116" href="#L116">116</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L117" href="#L117">117</a> 	}
+<a class="jxr_linenumber" name="L118" href="#L118">118</a> 
+<a class="jxr_linenumber" name="L119" href="#L119">119</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L120" href="#L120">120</a> <em class="jxr_javadoccomment">	 * The most result cells (bucket and group combinations).</em>
+<a class="jxr_linenumber" name="L121" href="#L121">121</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L122" href="#L122">122</a> <em class="jxr_javadoccomment">	 * @param value The cap.  At least 1.</em>
+<a class="jxr_linenumber" name="L123" href="#L123">123</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
+<a class="jxr_linenumber" name="L124" href="#L124">124</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L125" href="#L125">125</a> 	<strong class="jxr_keyword">public</strong> SeriesAggregator maxBuckets(<strong class="jxr_keyword">int</strong> value) {
+<a class="jxr_linenumber" name="L126" href="#L126">126</a> 		<strong class="jxr_keyword">if</strong> (value &lt; 1)
+<a class="jxr_linenumber" name="L127" href="#L127">127</a> 			<strong class="jxr_keyword">throw</strong> iaex(<span class="jxr_string">"SeriesAggregator.maxBuckets: '%s' is not a positive count"</span>, value);
+<a class="jxr_linenumber" name="L128" href="#L128">128</a> 		maxBuckets = value;
+<a class="jxr_linenumber" name="L129" href="#L129">129</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L130" href="#L130">130</a> 	}
+<a class="jxr_linenumber" name="L131" href="#L131">131</a> 
+<a class="jxr_linenumber" name="L132" href="#L132">132</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L133" href="#L133">133</a> <em class="jxr_javadoccomment">	 * The fields a request may group by or measure.  With none, every such field is rejected.</em>
+<a class="jxr_linenumber" name="L134" href="#L134">134</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L135" href="#L135">135</a> <em class="jxr_javadoccomment">	 * @param names The field names.</em>
+<a class="jxr_linenumber" name="L136" href="#L136">136</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
+<a class="jxr_linenumber" name="L137" href="#L137">137</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L138" href="#L138">138</a> 	<strong class="jxr_keyword">public</strong> SeriesAggregator allowFields(String...names) {
+<a class="jxr_linenumber" name="L139" href="#L139">139</a> 		allowed.addAll(List.of(names));
+<a class="jxr_linenumber" name="L140" href="#L140">140</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L141" href="#L141">141</a> 	}
+<a class="jxr_linenumber" name="L142" href="#L142">142</a> 
+<a class="jxr_linenumber" name="L143" href="#L143">143</a> 	<em class="jxr_javadoccomment">/** A rejected aggregate request: HTTP 400 with an E-75 message. */</em>
+<a class="jxr_linenumber" name="L144" href="#L144">144</a> 	@SuppressWarnings({
+<a class="jxr_linenumber" name="L145" href="#L145">145</a> 		<span class="jxr_string">"java:S110"</span> <em class="jxr_comment">// The deep hierarchy comes from the REST framework's BadRequest exception chain, not from this class.</em>
+<a class="jxr_linenumber" name="L146" href="#L146">146</a> 	})
+<a class="jxr_linenumber" name="L147" href="#L147">147</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">class</strong> RequestException <strong class="jxr_keyword">extends</strong> BadRequest {
+<a class="jxr_linenumber" name="L148" href="#L148">148</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">long</strong> serialVersionUID = 1L;
+<a class="jxr_linenumber" name="L149" href="#L149">149</a> 
+<a class="jxr_linenumber" name="L150" href="#L150">150</a> 		<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L151" href="#L151">151</a> <em class="jxr_javadoccomment">		 * Constructor.</em>
+<a class="jxr_linenumber" name="L152" href="#L152">152</a> <em class="jxr_javadoccomment">		 *</em>
+<a class="jxr_linenumber" name="L153" href="#L153">153</a> <em class="jxr_javadoccomment">		 * @param reason Why the request was rejected.</em>
+<a class="jxr_linenumber" name="L154" href="#L154">154</a> <em class="jxr_javadoccomment">		 */</em>
+<a class="jxr_linenumber" name="L155" href="#L155">155</a> 		<strong class="jxr_keyword">public</strong> RequestException(String reason) {
+<a class="jxr_linenumber" name="L156" href="#L156">156</a> 			<strong class="jxr_keyword">super</strong>(<span class="jxr_string">"E-75: aggregate request rejected: %s"</span>, reason);
+<a class="jxr_linenumber" name="L157" href="#L157">157</a> 		}
+<a class="jxr_linenumber" name="L158" href="#L158">158</a> 	}
+<a class="jxr_linenumber" name="L159" href="#L159">159</a> 
+<a class="jxr_linenumber" name="L160" href="#L160">160</a> 	<em class="jxr_javadoccomment">/** One measure: &lt;c&gt;count&lt;/c&gt;, or an op over a field. */</em>
+<a class="jxr_linenumber" name="L161" href="#L161">161</a> 	record Measure(String text, String op, String field) {
+<a class="jxr_linenumber" name="L162" href="#L162">162</a> 		<strong class="jxr_keyword">static</strong> Measure parse(String s) {
+<a class="jxr_linenumber" name="L163" href="#L163">163</a> 			<strong class="jxr_keyword">if</strong> (<span class="jxr_string">"count"</span>.equals(s))
+<a class="jxr_linenumber" name="L164" href="#L164">164</a> 				<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> Measure(s, <span class="jxr_string">"count"</span>, <strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L165" href="#L165">165</a> 			<strong class="jxr_keyword">var</strong> m = MEASURE.matcher(s);
+<a class="jxr_linenumber" name="L166" href="#L166">166</a> 			<strong class="jxr_keyword">if</strong> (! m.matches())
+<a class="jxr_linenumber" name="L167" href="#L167">167</a> 				<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> RequestException(<span class="jxr_string">"unknown measure '"</span> + s + <span class="jxr_string">"'"</span>);
+<a class="jxr_linenumber" name="L168" href="#L168">168</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> Measure(s, m.group(1), m.group(2));
+<a class="jxr_linenumber" name="L169" href="#L169">169</a> 		}
+<a class="jxr_linenumber" name="L170" href="#L170">170</a> 	}
+<a class="jxr_linenumber" name="L171" href="#L171">171</a> 
+<a class="jxr_linenumber" name="L172" href="#L172">172</a> 	<em class="jxr_javadoccomment">/** A parsed aggregate request. */</em>
+<a class="jxr_linenumber" name="L173" href="#L173">173</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">class</strong> Request {
+<a class="jxr_linenumber" name="L174" href="#L174">174</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Instant start;
+<a class="jxr_linenumber" name="L175" href="#L175">175</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Instant end;
+<a class="jxr_linenumber" name="L176" href="#L176">176</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> String bucket;
+<a class="jxr_linenumber" name="L177" href="#L177">177</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> List&lt;String&gt; groupBy;
+<a class="jxr_linenumber" name="L178" href="#L178">178</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> List&lt;Measure&gt; measures;
+<a class="jxr_linenumber" name="L179" href="#L179">179</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Map&lt;String,List&lt;String&gt;&gt; filters;
+<a class="jxr_linenumber" name="L180" href="#L180">180</a> 
+<a class="jxr_linenumber" name="L181" href="#L181">181</a> 		<strong class="jxr_keyword">private</strong> Request(Instant start, Instant end, String bucket, List&lt;String&gt; groupBy, List&lt;Measure&gt; measures,
+<a class="jxr_linenumber" name="L182" href="#L182">182</a> 				Map&lt;String,List&lt;String&gt;&gt; filters) {
+<a class="jxr_linenumber" name="L183" href="#L183">183</a> 			<strong class="jxr_keyword">this</strong>.start = start;
+<a class="jxr_linenumber" name="L184" href="#L184">184</a> 			<strong class="jxr_keyword">this</strong>.end = end;
+<a class="jxr_linenumber" name="L185" href="#L185">185</a> 			<strong class="jxr_keyword">this</strong>.bucket = bucket;
+<a class="jxr_linenumber" name="L186" href="#L186">186</a> 			<strong class="jxr_keyword">this</strong>.groupBy = groupBy;
+<a class="jxr_linenumber" name="L187" href="#L187">187</a> 			<strong class="jxr_keyword">this</strong>.measures = measures;
+<a class="jxr_linenumber" name="L188" href="#L188">188</a> 			<strong class="jxr_keyword">this</strong>.filters = filters;
+<a class="jxr_linenumber" name="L189" href="#L189">189</a> 		}
+<a class="jxr_linenumber" name="L190" href="#L190">190</a> 
+<a class="jxr_linenumber" name="L191" href="#L191">191</a> 		<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L192" href="#L192">192</a> <em class="jxr_javadoccomment">		 * Parses the request's query parameters.</em>
+<a class="jxr_linenumber" name="L193" href="#L193">193</a> <em class="jxr_javadoccomment">		 *</em>
+<a class="jxr_linenumber" name="L194" href="#L194">194</a> <em class="jxr_javadoccomment">		 * @param req The request.</em>
+<a class="jxr_linenumber" name="L195" href="#L195">195</a> <em class="jxr_javadoccomment">		 * @return The parsed request.</em>
+<a class="jxr_linenumber" name="L196" href="#L196">196</a> <em class="jxr_javadoccomment">		 * @throws RequestException If the request breaks the contract.</em>
+<a class="jxr_linenumber" name="L197" href="#L197">197</a> <em class="jxr_javadoccomment">		 */</em>
+<a class="jxr_linenumber" name="L198" href="#L198">198</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> Request from(RestRequest req) {
+<a class="jxr_linenumber" name="L199" href="#L199">199</a> 			<strong class="jxr_keyword">var</strong> m = <strong class="jxr_keyword">new</strong> LinkedHashMap&lt;String,List&lt;String&gt;&gt;();
+<a class="jxr_linenumber" name="L200" href="#L200">200</a> 			req.getQueryParams().forEach(p -&gt; m.computeIfAbsent(p.getName(), k -&gt; <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;()).add(p.getValue()));
+<a class="jxr_linenumber" name="L201" href="#L201">201</a> 			<strong class="jxr_keyword">return</strong> of(m);
+<a class="jxr_linenumber" name="L202" href="#L202">202</a> 		}
+<a class="jxr_linenumber" name="L203" href="#L203">203</a> 
+<a class="jxr_linenumber" name="L204" href="#L204">204</a> 		<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L205" href="#L205">205</a> <em class="jxr_javadoccomment">		 * Parses query parameters given as a map.</em>
+<a class="jxr_linenumber" name="L206" href="#L206">206</a> <em class="jxr_javadoccomment">		 *</em>
+<a class="jxr_linenumber" name="L207" href="#L207">207</a> <em class="jxr_javadoccomment">		 * @param query Each parameter name and its values, in order.</em>
+<a class="jxr_linenumber" name="L208" href="#L208">208</a> <em class="jxr_javadoccomment">		 * @return The parsed request.</em>
+<a class="jxr_linenumber" name="L209" href="#L209">209</a> <em class="jxr_javadoccomment">		 * @throws RequestException If the request breaks the contract.</em>
+<a class="jxr_linenumber" name="L210" href="#L210">210</a> <em class="jxr_javadoccomment">		 */</em>
+<a class="jxr_linenumber" name="L211" href="#L211">211</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> Request of(Map&lt;String,? <strong class="jxr_keyword">extends</strong> List&lt;String&gt;&gt; query) {
+<a class="jxr_linenumber" name="L212" href="#L212">212</a> 			<strong class="jxr_keyword">var</strong> start = instant(query, <span class="jxr_string">"start"</span>);
+<a class="jxr_linenumber" name="L213" href="#L213">213</a> 			<strong class="jxr_keyword">var</strong> end = instant(query, <span class="jxr_string">"end"</span>);
+<a class="jxr_linenumber" name="L214" href="#L214">214</a> 			<strong class="jxr_keyword">if</strong> (! end.isAfter(start))
+<a class="jxr_linenumber" name="L215" href="#L215">215</a> 				<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> RequestException(<span class="jxr_string">"'end' must be after 'start'"</span>);
+<a class="jxr_linenumber" name="L216" href="#L216">216</a> 			<strong class="jxr_keyword">var</strong> bucket = one(query, <span class="jxr_string">"bucket"</span>, <span class="jxr_string">"auto"</span>);
+<a class="jxr_linenumber" name="L217" href="#L217">217</a> 			<strong class="jxr_keyword">if</strong> (! <span class="jxr_string">"auto"</span>.equals(bucket) &amp;&amp; ! UNITS.contains(bucket))
+<a class="jxr_linenumber" name="L218" href="#L218">218</a> 				<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> RequestException(<span class="jxr_string">"unknown bucket '"</span> + bucket + <span class="jxr_string">"'"</span>);
+<a class="jxr_linenumber" name="L219" href="#L219">219</a> 			<strong class="jxr_keyword">var</strong> tz = one(query, <span class="jxr_string">"tz"</span>, <span class="jxr_string">"UTC"</span>);
+<a class="jxr_linenumber" name="L220" href="#L220">220</a> 			<strong class="jxr_keyword">if</strong> (! <span class="jxr_string">"UTC"</span>.equals(tz))
+<a class="jxr_linenumber" name="L221" href="#L221">221</a> 				<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> RequestException(<span class="jxr_string">"only tz 'UTC' is supported, not '"</span> + tz + <span class="jxr_string">"'"</span>);
+<a class="jxr_linenumber" name="L222" href="#L222">222</a> 			<strong class="jxr_keyword">var</strong> groupBy = split(query.get(<span class="jxr_string">"groupBy"</span>));
+<a class="jxr_linenumber" name="L223" href="#L223">223</a> 			<strong class="jxr_keyword">if</strong> (groupBy.size() &gt; 3)
+<a class="jxr_linenumber" name="L224" href="#L224">224</a> 				<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> RequestException(<span class="jxr_string">"at most 3 groupBy fields, not "</span> + groupBy.size());
+<a class="jxr_linenumber" name="L225" href="#L225">225</a> 			<strong class="jxr_keyword">var</strong> ms = split(query.get(<span class="jxr_string">"measure"</span>));
+<a class="jxr_linenumber" name="L226" href="#L226">226</a> 			<strong class="jxr_keyword">var</strong> measures = (ms.isEmpty() ? List.of(<span class="jxr_string">"count"</span>) : ms).stream().map(Measure::parse).toList();
+<a class="jxr_linenumber" name="L227" href="#L227">227</a> 			<strong class="jxr_keyword">var</strong> seen = <strong class="jxr_keyword">new</strong> HashSet&lt;String&gt;();
+<a class="jxr_linenumber" name="L228" href="#L228">228</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> g : groupBy) {
+<a class="jxr_linenumber" name="L229" href="#L229">229</a> 				<strong class="jxr_keyword">if</strong> (<span class="jxr_string">"bucket"</span>.equals(g))
+<a class="jxr_linenumber" name="L230" href="#L230">230</a> 					<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> RequestException(<span class="jxr_string">"groupBy field 'bucket' is reserved"</span>);
+<a class="jxr_linenumber" name="L231" href="#L231">231</a> 				<strong class="jxr_keyword">if</strong> (! seen.add(g))
+<a class="jxr_linenumber" name="L232" href="#L232">232</a> 					<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> RequestException(<span class="jxr_string">"duplicate groupBy field '"</span> + g + <span class="jxr_string">"'"</span>);
+<a class="jxr_linenumber" name="L233" href="#L233">233</a> 			}
+<a class="jxr_linenumber" name="L234" href="#L234">234</a> 			<strong class="jxr_keyword">var</strong> texts = <strong class="jxr_keyword">new</strong> HashSet&lt;String&gt;();
+<a class="jxr_linenumber" name="L235" href="#L235">235</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> m : measures) {
+<a class="jxr_linenumber" name="L236" href="#L236">236</a> 				<strong class="jxr_keyword">if</strong> (! texts.add(m.text()))
+<a class="jxr_linenumber" name="L237" href="#L237">237</a> 					<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> RequestException(<span class="jxr_string">"duplicate measure '"</span> + m.text() + <span class="jxr_string">"'"</span>);
+<a class="jxr_linenumber" name="L238" href="#L238">238</a> 				<strong class="jxr_keyword">if</strong> (seen.contains(m.text()))
+<a class="jxr_linenumber" name="L239" href="#L239">239</a> 					<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> RequestException(<span class="jxr_string">"groupBy field '"</span> + m.text() + <span class="jxr_string">"' collides with a measure"</span>);
+<a class="jxr_linenumber" name="L240" href="#L240">240</a> 			}
+<a class="jxr_linenumber" name="L241" href="#L241">241</a> 			<strong class="jxr_keyword">var</strong> filters = <strong class="jxr_keyword">new</strong> TreeMap&lt;String,List&lt;String&gt;&gt;();
+<a class="jxr_linenumber" name="L242" href="#L242">242</a> 			query.forEach((k, v) -&gt; {
+<a class="jxr_linenumber" name="L243" href="#L243">243</a> 				<strong class="jxr_keyword">if</strong> (! RESERVED.contains(k) &amp;&amp; v != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L244" href="#L244">244</a> 					filters.put(k, v.stream().map(x -&gt; x == <strong class="jxr_keyword">null</strong> ? <span class="jxr_string">""</span> : x).toList());
+<a class="jxr_linenumber" name="L245" href="#L245">245</a> 			});
+<a class="jxr_linenumber" name="L246" href="#L246">246</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> Request(start, end, bucket, groupBy, measures, Collections.unmodifiableMap(filters));
+<a class="jxr_linenumber" name="L247" href="#L247">247</a> 		}
+<a class="jxr_linenumber" name="L248" href="#L248">248</a> 
+<a class="jxr_linenumber" name="L249" href="#L249">249</a> 		<em class="jxr_javadoccomment">/** @return The window start (inclusive). */</em>
+<a class="jxr_linenumber" name="L250" href="#L250">250</a> 		<strong class="jxr_keyword">public</strong> Instant start() { <strong class="jxr_keyword">return</strong> start; }
+<a class="jxr_linenumber" name="L251" href="#L251">251</a> 
+<a class="jxr_linenumber" name="L252" href="#L252">252</a> 		<em class="jxr_javadoccomment">/** @return The window end (exclusive). */</em>
+<a class="jxr_linenumber" name="L253" href="#L253">253</a> 		<strong class="jxr_keyword">public</strong> Instant end() { <strong class="jxr_keyword">return</strong> end; }
+<a class="jxr_linenumber" name="L254" href="#L254">254</a> 
+<a class="jxr_linenumber" name="L255" href="#L255">255</a> 		<em class="jxr_javadoccomment">/** @return The bucket unit, or &lt;c&gt;auto&lt;/c&gt;. */</em>
+<a class="jxr_linenumber" name="L256" href="#L256">256</a> 		<strong class="jxr_keyword">public</strong> String bucket() { <strong class="jxr_keyword">return</strong> bucket; }
+<a class="jxr_linenumber" name="L257" href="#L257">257</a> 
+<a class="jxr_linenumber" name="L258" href="#L258">258</a> 		<em class="jxr_javadoccomment">/** @return The groupBy fields, in order. */</em>
+<a class="jxr_linenumber" name="L259" href="#L259">259</a> 		<strong class="jxr_keyword">public</strong> List&lt;String&gt; groupBy() { <strong class="jxr_keyword">return</strong> groupBy; }
+<a class="jxr_linenumber" name="L260" href="#L260">260</a> 
+<a class="jxr_linenumber" name="L261" href="#L261">261</a> 		<em class="jxr_javadoccomment">/** @return The app filters: every non-contract parameter and its values, untouched. */</em>
+<a class="jxr_linenumber" name="L262" href="#L262">262</a> 		<strong class="jxr_keyword">public</strong> Map&lt;String,List&lt;String&gt;&gt; filters() { <strong class="jxr_keyword">return</strong> filters; }
+<a class="jxr_linenumber" name="L263" href="#L263">263</a> 
+<a class="jxr_linenumber" name="L264" href="#L264">264</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String one(Map&lt;String,? <strong class="jxr_keyword">extends</strong> List&lt;String&gt;&gt; q, String name, String def) {
+<a class="jxr_linenumber" name="L265" href="#L265">265</a> 			<strong class="jxr_keyword">var</strong> v = q.get(name);
+<a class="jxr_linenumber" name="L266" href="#L266">266</a> 			<strong class="jxr_keyword">return</strong> v == <strong class="jxr_keyword">null</strong> || v.isEmpty() || v.get(0) == <strong class="jxr_keyword">null</strong> || v.get(0).isEmpty() ? def : v.get(0);
+<a class="jxr_linenumber" name="L267" href="#L267">267</a> 		}
+<a class="jxr_linenumber" name="L268" href="#L268">268</a> 
+<a class="jxr_linenumber" name="L269" href="#L269">269</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Instant instant(Map&lt;String,? <strong class="jxr_keyword">extends</strong> List&lt;String&gt;&gt; q, String name) {
+<a class="jxr_linenumber" name="L270" href="#L270">270</a> 			<strong class="jxr_keyword">var</strong> s = one(q, name, <strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L271" href="#L271">271</a> 			<strong class="jxr_keyword">if</strong> (s == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L272" href="#L272">272</a> 				<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> RequestException(<span class="jxr_string">"'"</span> + name + <span class="jxr_string">"' is required"</span>);
+<a class="jxr_linenumber" name="L273" href="#L273">273</a> 			<strong class="jxr_keyword">var</strong> i = Values.parseInstant(s);
+<a class="jxr_linenumber" name="L274" href="#L274">274</a> 			<strong class="jxr_keyword">if</strong> (i == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L275" href="#L275">275</a> 				<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> RequestException(
+<a class="jxr_linenumber" name="L276" href="#L276">276</a> 					<span class="jxr_string">"'"</span> + name + <span class="jxr_string">"' is not an ISO-8601 instant or epoch milliseconds: '"</span> + s + <span class="jxr_string">"'"</span>);
+<a class="jxr_linenumber" name="L277" href="#L277">277</a> 			<strong class="jxr_keyword">return</strong> i;
+<a class="jxr_linenumber" name="L278" href="#L278">278</a> 		}
+<a class="jxr_linenumber" name="L279" href="#L279">279</a> 
+<a class="jxr_linenumber" name="L280" href="#L280">280</a> 		<em class="jxr_comment">// groupBy is comma-separated or repeated; measure takes the same forms (sum(a,b) is not a valid measure</em>
+<a class="jxr_linenumber" name="L281" href="#L281">281</a> 		<em class="jxr_comment">// anyway).</em>
+<a class="jxr_linenumber" name="L282" href="#L282">282</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> List&lt;String&gt; split(List&lt;String&gt; values) {
+<a class="jxr_linenumber" name="L283" href="#L283">283</a> 			<strong class="jxr_keyword">if</strong> (values == <strong class="jxr_keyword">null</strong>) <strong class="jxr_keyword">return</strong> List.of();
+<a class="jxr_linenumber" name="L284" href="#L284">284</a> 			<strong class="jxr_keyword">return</strong> values.stream().filter(Objects::nonNull).flatMap(v -&gt; Arrays.stream(v.split(<span class="jxr_string">","</span>)))
+<a class="jxr_linenumber" name="L285" href="#L285">285</a> 				.map(String::trim).filter(s -&gt; ! s.isEmpty()).toList();
+<a class="jxr_linenumber" name="L286" href="#L286">286</a> 		}
+<a class="jxr_linenumber" name="L287" href="#L287">287</a> 	}
+<a class="jxr_linenumber" name="L288" href="#L288">288</a> 
+<a class="jxr_linenumber" name="L289" href="#L289">289</a> 	<em class="jxr_javadoccomment">/** An aggregate result in columnar form: the dims, their types, and one value list per dim. */</em>
+<a class="jxr_linenumber" name="L290" href="#L290">290</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">class</strong> Result {
+<a class="jxr_linenumber" name="L291" href="#L291">291</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> List&lt;String&gt; dims;
+<a class="jxr_linenumber" name="L292" href="#L292">292</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> List&lt;String&gt; types;
+<a class="jxr_linenumber" name="L293" href="#L293">293</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Map&lt;String,List&lt;Object&gt;&gt; columns;
+<a class="jxr_linenumber" name="L294" href="#L294">294</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">boolean</strong> truncated;
+<a class="jxr_linenumber" name="L295" href="#L295">295</a> 
+<a class="jxr_linenumber" name="L296" href="#L296">296</a> 		Result(List&lt;String&gt; dims, List&lt;String&gt; types, Map&lt;String,List&lt;Object&gt;&gt; columns, <strong class="jxr_keyword">boolean</strong> truncated) {
+<a class="jxr_linenumber" name="L297" href="#L297">297</a> 			<strong class="jxr_keyword">this</strong>.dims = dims;
+<a class="jxr_linenumber" name="L298" href="#L298">298</a> 			<strong class="jxr_keyword">this</strong>.types = types;
+<a class="jxr_linenumber" name="L299" href="#L299">299</a> 			<strong class="jxr_keyword">this</strong>.columns = columns;
+<a class="jxr_linenumber" name="L300" href="#L300">300</a> 			<strong class="jxr_keyword">this</strong>.truncated = truncated;
+<a class="jxr_linenumber" name="L301" href="#L301">301</a> 		}
+<a class="jxr_linenumber" name="L302" href="#L302">302</a> 
+<a class="jxr_linenumber" name="L303" href="#L303">303</a> 		<em class="jxr_javadoccomment">/** @return The dim names: &lt;c&gt;bucket&lt;/c&gt;, the groupBy fields, then the measures. */</em>
+<a class="jxr_linenumber" name="L304" href="#L304">304</a> 		<strong class="jxr_keyword">public</strong> List&lt;String&gt; dims() { <strong class="jxr_keyword">return</strong> dims; }
+<a class="jxr_linenumber" name="L305" href="#L305">305</a> 
+<a class="jxr_linenumber" name="L306" href="#L306">306</a> 		<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L307" href="#L307">307</a> <em class="jxr_javadoccomment">		 * @return Each dim's values, in row order; &lt;c&gt;bucket&lt;/c&gt; is epoch milliseconds UTC and a group value may be</em>
+<a class="jxr_linenumber" name="L308" href="#L308">308</a> <em class="jxr_javadoccomment">		 * 	null.</em>
+<a class="jxr_linenumber" name="L309" href="#L309">309</a> <em class="jxr_javadoccomment">		 */</em>
+<a class="jxr_linenumber" name="L310" href="#L310">310</a> 		<strong class="jxr_keyword">public</strong> Map&lt;String,List&lt;Object&gt;&gt; columns() { <strong class="jxr_keyword">return</strong> columns; }
+<a class="jxr_linenumber" name="L311" href="#L311">311</a> 
+<a class="jxr_linenumber" name="L312" href="#L312">312</a> 		<em class="jxr_javadoccomment">/** @return True when the cell cap dropped rows. */</em>
+<a class="jxr_linenumber" name="L313" href="#L313">313</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> truncated() { <strong class="jxr_keyword">return</strong> truncated; }
+<a class="jxr_linenumber" name="L314" href="#L314">314</a> 
+<a class="jxr_linenumber" name="L315" href="#L315">315</a> 		<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L316" href="#L316">316</a> <em class="jxr_javadoccomment">		 * The response body: &lt;c&gt;{schemaVersion, dims:[{name,type}], columns, truncated}&lt;/c&gt;.</em>
+<a class="jxr_linenumber" name="L317" href="#L317">317</a> <em class="jxr_javadoccomment">		 *</em>
+<a class="jxr_linenumber" name="L318" href="#L318">318</a> <em class="jxr_javadoccomment">		 * @return A new map.</em>
+<a class="jxr_linenumber" name="L319" href="#L319">319</a> <em class="jxr_javadoccomment">		 */</em>
+<a class="jxr_linenumber" name="L320" href="#L320">320</a> 		<strong class="jxr_keyword">public</strong> JsonMap toMap() {
+<a class="jxr_linenumber" name="L321" href="#L321">321</a> 			<strong class="jxr_keyword">var</strong> d = <strong class="jxr_keyword">new</strong> ArrayList&lt;Object&gt;();
+<a class="jxr_linenumber" name="L322" href="#L322">322</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt; dims.size(); i++)
+<a class="jxr_linenumber" name="L323" href="#L323">323</a> 				d.add(JsonMap.of(<span class="jxr_string">"name"</span>, dims.get(i), <span class="jxr_string">"type"</span>, types.get(i)));
+<a class="jxr_linenumber" name="L324" href="#L324">324</a> 			<strong class="jxr_keyword">var</strong> c = <strong class="jxr_keyword">new</strong> JsonMap();
+<a class="jxr_linenumber" name="L325" href="#L325">325</a> 			c.putAll(columns);
+<a class="jxr_linenumber" name="L326" href="#L326">326</a> 			<strong class="jxr_keyword">return</strong> JsonMap.of(<span class="jxr_string">"schemaVersion"</span>, 1, <span class="jxr_string">"dims"</span>, d, <span class="jxr_string">"columns"</span>, c, <span class="jxr_string">"truncated"</span>, truncated);
+<a class="jxr_linenumber" name="L327" href="#L327">327</a> 		}
+<a class="jxr_linenumber" name="L328" href="#L328">328</a> 
+<a class="jxr_linenumber" name="L329" href="#L329">329</a> 		<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L330" href="#L330">330</a> <em class="jxr_javadoccomment">		 * Writes the body as &lt;c&gt;application/json&lt;/c&gt; with &lt;c&gt;nosniff&lt;/c&gt;.</em>
+<a class="jxr_linenumber" name="L331" href="#L331">331</a> <em class="jxr_javadoccomment">		 *</em>
+<a class="jxr_linenumber" name="L332" href="#L332">332</a> <em class="jxr_javadoccomment">		 * @param res The response.</em>
+<a class="jxr_linenumber" name="L333" href="#L333">333</a> <em class="jxr_javadoccomment">		 * @throws IOException If the writer fails.</em>
+<a class="jxr_linenumber" name="L334" href="#L334">334</a> <em class="jxr_javadoccomment">		 */</em>
+<a class="jxr_linenumber" name="L335" href="#L335">335</a> 		@SuppressWarnings({
+<a class="jxr_linenumber" name="L336" href="#L336">336</a> 			<span class="jxr_string">"resource"</span> <em class="jxr_comment">// The response writer is owned and closed by the container.</em>
+<a class="jxr_linenumber" name="L337" href="#L337">337</a> 		})
+<a class="jxr_linenumber" name="L338" href="#L338">338</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> writeTo(RestResponse res) <strong class="jxr_keyword">throws</strong> IOException {
+<a class="jxr_linenumber" name="L339" href="#L339">339</a> 			res.setContentType(<span class="jxr_string">"application/json;charset=utf-8"</span>);
+<a class="jxr_linenumber" name="L340" href="#L340">340</a> 			res.setHeader(<span class="jxr_string">"X-Content-Type-Options"</span>, <span class="jxr_string">"nosniff"</span>);
+<a class="jxr_linenumber" name="L341" href="#L341">341</a> 			res.getWriter().write(Json.of(toMap()));
+<a class="jxr_linenumber" name="L342" href="#L342">342</a> 		}
+<a class="jxr_linenumber" name="L343" href="#L343">343</a> 	}
+<a class="jxr_linenumber" name="L344" href="#L344">344</a> 
+<a class="jxr_linenumber" name="L345" href="#L345">345</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L346" href="#L346">346</a> <em class="jxr_javadoccomment">	 * Aggregates the rows in one pass.  Rows with a null or out-of-window time are skipped.</em>
+<a class="jxr_linenumber" name="L347" href="#L347">347</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L348" href="#L348">348</a> <em class="jxr_javadoccomment">	 * @param req The request.</em>
+<a class="jxr_linenumber" name="L349" href="#L349">349</a> <em class="jxr_javadoccomment">	 * @param rows The rows, already filtered by the app.</em>
+<a class="jxr_linenumber" name="L350" href="#L350">350</a> <em class="jxr_javadoccomment">	 * @return The result.</em>
+<a class="jxr_linenumber" name="L351" href="#L351">351</a> <em class="jxr_javadoccomment">	 * @throws RequestException If the request names a field that is not allowed.</em>
+<a class="jxr_linenumber" name="L352" href="#L352">352</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L353" href="#L353">353</a> 	@SuppressWarnings({
+<a class="jxr_linenumber" name="L354" href="#L354">354</a> 		<span class="jxr_string">"java:S135"</span> <em class="jxr_comment">// Guard clauses keep the row loop readable</em>
+<a class="jxr_linenumber" name="L355" href="#L355">355</a> 	})
+<a class="jxr_linenumber" name="L356" href="#L356">356</a> 	<strong class="jxr_keyword">public</strong> Result aggregate(Request req, Stream&lt;? <strong class="jxr_keyword">extends</strong> SeriesSource.Row&gt; rows) {
+<a class="jxr_linenumber" name="L357" href="#L357">357</a> 		<strong class="jxr_keyword">var</strong> fields = <strong class="jxr_keyword">new</strong> ArrayList&lt;String&gt;(req.groupBy);
+<a class="jxr_linenumber" name="L358" href="#L358">358</a> 		req.measures.stream().map(Measure::field).filter(Objects::nonNull).forEach(fields::add);
+<a class="jxr_linenumber" name="L359" href="#L359">359</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> f : fields)
+<a class="jxr_linenumber" name="L360" href="#L360">360</a> 			<strong class="jxr_keyword">if</strong> (! allowed.contains(f))
+<a class="jxr_linenumber" name="L361" href="#L361">361</a> 				<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> RequestException(<span class="jxr_string">"field '"</span> + f + <span class="jxr_string">"' is not allowed"</span>);
+<a class="jxr_linenumber" name="L362" href="#L362">362</a> 		<strong class="jxr_keyword">var</strong> unit = <span class="jxr_string">"auto"</span>.equals(req.bucket) ? autoUnit(req.start, req.end) : req.bucket;
+<a class="jxr_linenumber" name="L363" href="#L363">363</a> 		<strong class="jxr_keyword">var</strong> cells = <strong class="jxr_keyword">new</strong> TreeMap&lt;List&lt;Object&gt;,<strong class="jxr_keyword">double</strong>[][]&gt;(SeriesAggregator::compareKeys);
+<a class="jxr_linenumber" name="L364" href="#L364">364</a> 		<strong class="jxr_keyword">var</strong> truncated = false;
+<a class="jxr_linenumber" name="L365" href="#L365">365</a> 		<strong class="jxr_keyword">var</strong> it = rows.iterator();
+<a class="jxr_linenumber" name="L366" href="#L366">366</a> 		<strong class="jxr_keyword">while</strong> (it.hasNext()) {
+<a class="jxr_linenumber" name="L367" href="#L367">367</a> 			<strong class="jxr_keyword">var</strong> r = it.next();
+<a class="jxr_linenumber" name="L368" href="#L368">368</a> 			<strong class="jxr_keyword">var</strong> t = Values.toInstant(r.get(timeField));
+<a class="jxr_linenumber" name="L369" href="#L369">369</a> 			<strong class="jxr_keyword">if</strong> (t == <strong class="jxr_keyword">null</strong> || t.isBefore(req.start) || ! t.isBefore(req.end))
+<a class="jxr_linenumber" name="L370" href="#L370">370</a> 				<strong class="jxr_keyword">continue</strong>;
+<a class="jxr_linenumber" name="L371" href="#L371">371</a> 			<strong class="jxr_keyword">var</strong> key = <strong class="jxr_keyword">new</strong> ArrayList&lt;Object&gt;(req.groupBy.size() + 1);
+<a class="jxr_linenumber" name="L372" href="#L372">372</a> 			key.add(floor(t, unit).toEpochMilli());
+<a class="jxr_linenumber" name="L373" href="#L373">373</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> g : req.groupBy)
+<a class="jxr_linenumber" name="L374" href="#L374">374</a> 				key.add(r.get(g) == <strong class="jxr_keyword">null</strong> ? <strong class="jxr_keyword">null</strong> : String.valueOf(r.get(g)));
+<a class="jxr_linenumber" name="L375" href="#L375">375</a> 			<strong class="jxr_keyword">var</strong> acc = cells.get(key);
+<a class="jxr_linenumber" name="L376" href="#L376">376</a> 			<strong class="jxr_keyword">if</strong> (acc == <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L377" href="#L377">377</a> 				<strong class="jxr_keyword">if</strong> (cells.size() == maxBuckets) {
+<a class="jxr_linenumber" name="L378" href="#L378">378</a> 					truncated = <strong class="jxr_keyword">true</strong>;
+<a class="jxr_linenumber" name="L379" href="#L379">379</a> 					<strong class="jxr_keyword">continue</strong>;
+<a class="jxr_linenumber" name="L380" href="#L380">380</a> 				}
+<a class="jxr_linenumber" name="L381" href="#L381">381</a> 				acc = newAccumulators(req.measures.size());
+<a class="jxr_linenumber" name="L382" href="#L382">382</a> 				cells.put(key, acc);
+<a class="jxr_linenumber" name="L383" href="#L383">383</a> 			}
+<a class="jxr_linenumber" name="L384" href="#L384">384</a> 			accumulate(req.measures, acc, r);
+<a class="jxr_linenumber" name="L385" href="#L385">385</a> 		}
+<a class="jxr_linenumber" name="L386" href="#L386">386</a> 		<strong class="jxr_keyword">var</strong> dims = <strong class="jxr_keyword">new</strong> ArrayList&lt;String&gt;(List.of(<span class="jxr_string">"bucket"</span>));
+<a class="jxr_linenumber" name="L387" href="#L387">387</a> 		<strong class="jxr_keyword">var</strong> types = <strong class="jxr_keyword">new</strong> ArrayList&lt;String&gt;(List.of(<span class="jxr_string">"time"</span>));
+<a class="jxr_linenumber" name="L388" href="#L388">388</a> 		dims.addAll(req.groupBy);
+<a class="jxr_linenumber" name="L389" href="#L389">389</a> 		req.groupBy.forEach(g -&gt; types.add(<span class="jxr_string">"string"</span>));
+<a class="jxr_linenumber" name="L390" href="#L390">390</a> 		req.measures.forEach(m -&gt; { dims.add(m.text()); types.add(<span class="jxr_string">"number"</span>); });
+<a class="jxr_linenumber" name="L391" href="#L391">391</a> 		<strong class="jxr_keyword">var</strong> columns = <strong class="jxr_keyword">new</strong> LinkedHashMap&lt;String,List&lt;Object&gt;&gt;();
+<a class="jxr_linenumber" name="L392" href="#L392">392</a> 		dims.forEach(d -&gt; columns.put(d, <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;(cells.size())));
+<a class="jxr_linenumber" name="L393" href="#L393">393</a> 		cells.forEach((k, acc) -&gt; {
+<a class="jxr_linenumber" name="L394" href="#L394">394</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt; k.size(); i++)
+<a class="jxr_linenumber" name="L395" href="#L395">395</a> 				columns.get(dims.get(i)).add(k.get(i));
+<a class="jxr_linenumber" name="L396" href="#L396">396</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt; req.measures.size(); i++)
+<a class="jxr_linenumber" name="L397" href="#L397">397</a> 				columns.get(req.measures.get(i).text()).add(result(req.measures.get(i).op(), acc[i]));
+<a class="jxr_linenumber" name="L398" href="#L398">398</a> 		});
+<a class="jxr_linenumber" name="L399" href="#L399">399</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> Result(List.copyOf(dims), List.copyOf(types), columns, truncated);
+<a class="jxr_linenumber" name="L400" href="#L400">400</a> 	}
+<a class="jxr_linenumber" name="L401" href="#L401">401</a> 
+<a class="jxr_linenumber" name="L402" href="#L402">402</a> 	<em class="jxr_comment">// Each acc[i] holds four slots in order: count, sum, min, max.</em>
+<a class="jxr_linenumber" name="L403" href="#L403">403</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">double</strong>[][] newAccumulators(<strong class="jxr_keyword">int</strong> n) {
+<a class="jxr_linenumber" name="L404" href="#L404">404</a> 		<strong class="jxr_keyword">var</strong> a = <strong class="jxr_keyword">new</strong> <strong class="jxr_keyword">double</strong>[n][];
+<a class="jxr_linenumber" name="L405" href="#L405">405</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt; n; i++)
+<a class="jxr_linenumber" name="L406" href="#L406">406</a> 			a[i] = <strong class="jxr_keyword">new</strong> <strong class="jxr_keyword">double</strong>[] { 0, 0, Double.POSITIVE_INFINITY, Double.NEGATIVE_INFINITY };
+<a class="jxr_linenumber" name="L407" href="#L407">407</a> 		<strong class="jxr_keyword">return</strong> a;
+<a class="jxr_linenumber" name="L408" href="#L408">408</a> 	}
+<a class="jxr_linenumber" name="L409" href="#L409">409</a> 
+<a class="jxr_linenumber" name="L410" href="#L410">410</a> 	@SuppressWarnings({
+<a class="jxr_linenumber" name="L411" href="#L411">411</a> 		<span class="jxr_string">"java:S135"</span> <em class="jxr_comment">// Guard clauses keep the accumulation readable</em>
+<a class="jxr_linenumber" name="L412" href="#L412">412</a> 	})
+<a class="jxr_linenumber" name="L413" href="#L413">413</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> accumulate(List&lt;Measure&gt; measures, <strong class="jxr_keyword">double</strong>[][] acc, SeriesSource.Row r) {
+<a class="jxr_linenumber" name="L414" href="#L414">414</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt; measures.size(); i++) {
+<a class="jxr_linenumber" name="L415" href="#L415">415</a> 			<strong class="jxr_keyword">var</strong> m = measures.get(i);
+<a class="jxr_linenumber" name="L416" href="#L416">416</a> 			<strong class="jxr_keyword">if</strong> (m.field() == <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L417" href="#L417">417</a> 				acc[i][0]++;
+<a class="jxr_linenumber" name="L418" href="#L418">418</a> 				<strong class="jxr_keyword">continue</strong>;
+<a class="jxr_linenumber" name="L419" href="#L419">419</a> 			}
+<a class="jxr_linenumber" name="L420" href="#L420">420</a> 			<strong class="jxr_keyword">if</strong> (! (r.get(m.field()) instanceof Number n) || Values.nonFinite(n))
+<a class="jxr_linenumber" name="L421" href="#L421">421</a> 				<strong class="jxr_keyword">continue</strong>;
+<a class="jxr_linenumber" name="L422" href="#L422">422</a> 			<strong class="jxr_keyword">var</strong> d = n.doubleValue();
+<a class="jxr_linenumber" name="L423" href="#L423">423</a> 			acc[i][0]++;
+<a class="jxr_linenumber" name="L424" href="#L424">424</a> 			acc[i][1] += d;
+<a class="jxr_linenumber" name="L425" href="#L425">425</a> 			acc[i][2] = Math.min(acc[i][2], d);
+<a class="jxr_linenumber" name="L426" href="#L426">426</a> 			acc[i][3] = Math.max(acc[i][3], d);
+<a class="jxr_linenumber" name="L427" href="#L427">427</a> 		}
+<a class="jxr_linenumber" name="L428" href="#L428">428</a> 	}
+<a class="jxr_linenumber" name="L429" href="#L429">429</a> 
+<a class="jxr_linenumber" name="L430" href="#L430">430</a> 	<em class="jxr_comment">// Overflow gives Infinity, which is not valid JSON; write null instead.</em>
+<a class="jxr_linenumber" name="L431" href="#L431">431</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Double finite(<strong class="jxr_keyword">double</strong> d) {
+<a class="jxr_linenumber" name="L432" href="#L432">432</a> 		<strong class="jxr_keyword">return</strong> Double.isFinite(d) ? d : <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L433" href="#L433">433</a> 	}
+<a class="jxr_linenumber" name="L434" href="#L434">434</a> 
+<a class="jxr_linenumber" name="L435" href="#L435">435</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Object result(String op, <strong class="jxr_keyword">double</strong>[] a) {
+<a class="jxr_linenumber" name="L436" href="#L436">436</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">switch</strong> (op) {
+<a class="jxr_linenumber" name="L437" href="#L437">437</a> 			<strong class="jxr_keyword">case</strong> <span class="jxr_string">"count"</span> -&gt; (<strong class="jxr_keyword">long</strong>)a[0];
+<a class="jxr_linenumber" name="L438" href="#L438">438</a> 			<strong class="jxr_keyword">case</strong> <span class="jxr_string">"sum"</span> -&gt; finite(a[1]);
+<a class="jxr_linenumber" name="L439" href="#L439">439</a> 			<strong class="jxr_keyword">case</strong> <span class="jxr_string">"avg"</span> -&gt; a[0] == 0 ? <strong class="jxr_keyword">null</strong> : finite(a[1] / a[0]);
+<a class="jxr_linenumber" name="L440" href="#L440">440</a> 			<strong class="jxr_keyword">case</strong> <span class="jxr_string">"min"</span> -&gt; a[0] == 0 ? <strong class="jxr_keyword">null</strong> : a[2];
+<a class="jxr_linenumber" name="L441" href="#L441">441</a> 			<strong class="jxr_keyword">default</strong> -&gt; a[0] == 0 ? <strong class="jxr_keyword">null</strong> : a[3];
+<a class="jxr_linenumber" name="L442" href="#L442">442</a> 		};
+<a class="jxr_linenumber" name="L443" href="#L443">443</a> 	}
+<a class="jxr_linenumber" name="L444" href="#L444">444</a> 
+<a class="jxr_linenumber" name="L445" href="#L445">445</a> 	<em class="jxr_comment">// The bucket first, then each group value; a null group (a row with no value) sorts before any text.</em>
+<a class="jxr_linenumber" name="L446" href="#L446">446</a> 	@SuppressWarnings(<span class="jxr_string">"unchecked"</span>)
+<a class="jxr_linenumber" name="L447" href="#L447">447</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">int</strong> compareKeys(List&lt;Object&gt; a, List&lt;Object&gt; b) {
+<a class="jxr_linenumber" name="L448" href="#L448">448</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt; a.size(); i++) {
+<a class="jxr_linenumber" name="L449" href="#L449">449</a> 			<strong class="jxr_keyword">var</strong> x = a.get(i);
+<a class="jxr_linenumber" name="L450" href="#L450">450</a> 			<strong class="jxr_keyword">var</strong> y = b.get(i);
+<a class="jxr_linenumber" name="L451" href="#L451">451</a> 			<strong class="jxr_keyword">if</strong> (x == <strong class="jxr_keyword">null</strong> || y == <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L452" href="#L452">452</a> 				<strong class="jxr_keyword">if</strong> (x == y) <strong class="jxr_keyword">continue</strong>;
+<a class="jxr_linenumber" name="L453" href="#L453">453</a> 				<strong class="jxr_keyword">return</strong> x == <strong class="jxr_keyword">null</strong> ? -1 : 1;
+<a class="jxr_linenumber" name="L454" href="#L454">454</a> 			}
+<a class="jxr_linenumber" name="L455" href="#L455">455</a> 			<strong class="jxr_keyword">var</strong> c = ((Comparable&lt;Object&gt;)x).compareTo(y);
+<a class="jxr_linenumber" name="L456" href="#L456">456</a> 			<strong class="jxr_keyword">if</strong> (c != 0) <strong class="jxr_keyword">return</strong> c;
+<a class="jxr_linenumber" name="L457" href="#L457">457</a> 		}
+<a class="jxr_linenumber" name="L458" href="#L458">458</a> 		<strong class="jxr_keyword">return</strong> 0;
+<a class="jxr_linenumber" name="L459" href="#L459">459</a> 	}
+<a class="jxr_linenumber" name="L460" href="#L460">460</a> 
+<a class="jxr_linenumber" name="L461" href="#L461">461</a> 	<em class="jxr_comment">// The smallest unit giving at most AUTO_BUCKETS buckets over the window; month when none does.  Counting stops at</em>
+<a class="jxr_linenumber" name="L462" href="#L462">462</a> 	<em class="jxr_comment">// AUTO_BUCKETS + 1, so a long window never walks every hour.</em>
+<a class="jxr_linenumber" name="L463" href="#L463">463</a> 	String autoUnit(Instant start, Instant end) {
+<a class="jxr_linenumber" name="L464" href="#L464">464</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> u : UNITS) {
+<a class="jxr_linenumber" name="L465" href="#L465">465</a> 			<strong class="jxr_keyword">var</strong> n = 0;
+<a class="jxr_linenumber" name="L466" href="#L466">466</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> t = floor(start, u); t.isBefore(end) &amp;&amp; n &lt;= AUTO_BUCKETS; t = next(t, u))
+<a class="jxr_linenumber" name="L467" href="#L467">467</a> 				n++;
+<a class="jxr_linenumber" name="L468" href="#L468">468</a> 			<strong class="jxr_keyword">if</strong> (n &lt;= AUTO_BUCKETS) <strong class="jxr_keyword">return</strong> u;
+<a class="jxr_linenumber" name="L469" href="#L469">469</a> 		}
+<a class="jxr_linenumber" name="L470" href="#L470">470</a> 		<strong class="jxr_keyword">return</strong> <span class="jxr_string">"month"</span>;
+<a class="jxr_linenumber" name="L471" href="#L471">471</a> 	}
+<a class="jxr_linenumber" name="L472" href="#L472">472</a> 
+<a class="jxr_linenumber" name="L473" href="#L473">473</a> 	Instant floor(Instant t, String unit) {
+<a class="jxr_linenumber" name="L474" href="#L474">474</a> 		<strong class="jxr_keyword">var</strong> d = t.atZone(ZoneOffset.UTC);
+<a class="jxr_linenumber" name="L475" href="#L475">475</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">switch</strong> (unit) {
+<a class="jxr_linenumber" name="L476" href="#L476">476</a> 			<strong class="jxr_keyword">case</strong> <span class="jxr_string">"hour"</span> -&gt; d.truncatedTo(ChronoUnit.HOURS).toInstant();
+<a class="jxr_linenumber" name="L477" href="#L477">477</a> 			<strong class="jxr_keyword">case</strong> <span class="jxr_string">"day"</span> -&gt; d.truncatedTo(ChronoUnit.DAYS).toInstant();
+<a class="jxr_linenumber" name="L478" href="#L478">478</a> 			<strong class="jxr_keyword">case</strong> <span class="jxr_string">"week"</span> -&gt; d.truncatedTo(ChronoUnit.DAYS).with(TemporalAdjusters.previousOrSame(weekStart)).toInstant();
+<a class="jxr_linenumber" name="L479" href="#L479">479</a> 			<strong class="jxr_keyword">default</strong> -&gt; d.truncatedTo(ChronoUnit.DAYS).withDayOfMonth(1).toInstant();
+<a class="jxr_linenumber" name="L480" href="#L480">480</a> 		};
+<a class="jxr_linenumber" name="L481" href="#L481">481</a> 	}
+<a class="jxr_linenumber" name="L482" href="#L482">482</a> 
+<a class="jxr_linenumber" name="L483" href="#L483">483</a> 	<strong class="jxr_keyword">static</strong> Instant next(Instant t, String unit) {
+<a class="jxr_linenumber" name="L484" href="#L484">484</a> 		<strong class="jxr_keyword">var</strong> d = t.atZone(ZoneOffset.UTC);
+<a class="jxr_linenumber" name="L485" href="#L485">485</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">switch</strong> (unit) {
+<a class="jxr_linenumber" name="L486" href="#L486">486</a> 			<strong class="jxr_keyword">case</strong> <span class="jxr_string">"hour"</span> -&gt; d.plusHours(1).toInstant();
+<a class="jxr_linenumber" name="L487" href="#L487">487</a> 			<strong class="jxr_keyword">case</strong> <span class="jxr_string">"day"</span> -&gt; d.plusDays(1).toInstant();
+<a class="jxr_linenumber" name="L488" href="#L488">488</a> 			<strong class="jxr_keyword">case</strong> <span class="jxr_string">"week"</span> -&gt; d.plusWeeks(1).toInstant();
+<a class="jxr_linenumber" name="L489" href="#L489">489</a> 			<strong class="jxr_keyword">default</strong> -&gt; d.plusMonths(1).toInstant();
+<a class="jxr_linenumber" name="L490" href="#L490">490</a> 		};
+<a class="jxr_linenumber" name="L491" href="#L491">491</a> 	}
+<a class="jxr_linenumber" name="L492" href="#L492">492</a> }
+</pre>
+<hr/>
+<div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>
+</body>
+</html>

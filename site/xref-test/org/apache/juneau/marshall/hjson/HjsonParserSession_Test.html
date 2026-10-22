@@ -43,8 +43,8 @@
 <a class="jxr_linenumber" name="L35" href="#L35">35</a>  <em class="jxr_javadoccomment"> * existing {@code Hjson*_Test} suite ({@link HjsonParser_Test}, {@link HjsonEdgeCases_Test}, etc.).</em>
 <a class="jxr_linenumber" name="L36" href="#L36">36</a>  <em class="jxr_javadoccomment"> */</em>
 <a class="jxr_linenumber" name="L37" href="#L37">37</a>  @SuppressWarnings({
-<a class="jxr_linenumber" name="L38" href="#L38">38</a>  	<span class="jxr_string">"unchecked"</span>, <em class="jxr_comment">// Parser returns Object; cast to Map/List in tests</em>
-<a class="jxr_linenumber" name="L39" href="#L39">39</a>  	<span class="jxr_string">"resource"</span>   <em class="jxr_comment">// Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.</em>
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>  	<span class="jxr_string">"resource"</span>, <em class="jxr_comment">// Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.</em>
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>  	<span class="jxr_string">"unchecked"</span> <em class="jxr_comment">// Parser returns Object; cast to Map/List in tests</em>
 <a class="jxr_linenumber" name="L40" href="#L40">40</a>  })
 <a class="jxr_linenumber" name="L41" href="#L41">41</a>  <strong class="jxr_keyword">class</strong> HjsonParserSession_Test <strong class="jxr_keyword">extends</strong> TestBase {
 <a class="jxr_linenumber" name="L42" href="#L42">42</a>  
@@ -293,7 +293,7 @@
 <a class="jxr_linenumber" name="L285" href="#L285">285</a> 
 <a class="jxr_linenumber" name="L286" href="#L286">286</a> 	@Test
 <a class="jxr_linenumber" name="L287" href="#L287">287</a> 	<strong class="jxr_keyword">void</strong> e04_swapPathOnBeanBytesProperty() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L288" href="#L288">288</a> 		<em class="jxr_comment">// convertToBean's "if (nn(swap))" branch via a scalar byte[] bean property (not inside a List).</em>
+<a class="jxr_linenumber" name="L288" href="#L288">288</a> 		<em class="jxr_comment">// convertToBean's swap-is-not-null branch via a scalar byte[] bean property (not inside a List).</em>
 <a class="jxr_linenumber" name="L289" href="#L289">289</a> 		<strong class="jxr_keyword">var</strong> p = HjsonParser.create().binaryFormat(BinaryFormat.HEX).build();
 <a class="jxr_linenumber" name="L290" href="#L290">290</a> 		<strong class="jxr_keyword">var</strong> bean = p.read(<span class="jxr_string">"{data: \&quot;010203\&quot;}"</span>, BeanWithBytes.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L291" href="#L291">291</a> 		assertNotNull(bean);

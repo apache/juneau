@@ -216,7 +216,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;(java.io.Writer,boolean,int,boolean,char,boolean,boolean,org.apache.juneau.marshall.UriResolver)">
 <h3>JsonWriter</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonWriter.html#line-85">JsonWriter</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Writer.html" title="class or interface in java.io" class="external-link">Writer</a>&nbsp;out,
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonWriter.html#line-90">JsonWriter</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Writer.html" title="class or interface in java.io" class="external-link">Writer</a>&nbsp;out,
  boolean&nbsp;useWhitespace,
  int&nbsp;maxIndent,
  boolean&nbsp;escapeSolidus,
@@ -249,7 +249,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="create(java.io.Writer,boolean,int,boolean,char,boolean,boolean,org.apache.juneau.marshall.UriResolver)">
 <h3>create</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="BasicJsonWriter.html" title="class in org.apache.juneau.marshall.json">BasicJsonWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonWriter.html#line-110">create</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Writer.html" title="class or interface in java.io" class="external-link">Writer</a>&nbsp;out,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="BasicJsonWriter.html" title="class in org.apache.juneau.marshall.json">BasicJsonWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonWriter.html#line-112">create</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Writer.html" title="class or interface in java.io" class="external-link">Writer</a>&nbsp;out,
  boolean&nbsp;useWhitespace,
  int&nbsp;maxIndent,
  boolean&nbsp;escapeSolidus,
@@ -278,7 +278,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="attr(java.lang.String)">
 <h3>attr</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JsonWriter.html" title="type parameter in JsonWriter">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonWriter.html#line-124">attr</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;s)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JsonWriter.html" title="type parameter in JsonWriter">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonWriter.html#line-123">attr</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;s)</span></div>
 <div class="block">Serializes the specified object as a JSON attribute name.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -292,7 +292,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="s(int)">
 <h3>s</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JsonWriter.html" title="type parameter in JsonWriter">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonWriter.html#line-174">s</a></span><wbr><span class="parameters">(int&nbsp;indent)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JsonWriter.html" title="type parameter in JsonWriter">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonWriter.html#line-170">s</a></span><wbr><span class="parameters">(int&nbsp;indent)</span></div>
 <div class="block">Adds a space only if the current indentation level is below maxIndent.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -305,7 +305,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="smi(int)">
 <h3>smi</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JsonWriter.html" title="type parameter in JsonWriter">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonWriter.html#line-186">smi</a></span><wbr><span class="parameters">(int&nbsp;depth)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JsonWriter.html" title="type parameter in JsonWriter">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonWriter.html#line-182">smi</a></span><wbr><span class="parameters">(int&nbsp;depth)</span></div>
 <div class="block">Performs an indentation only if we're currently past max indentation.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -318,7 +318,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="stringValue(java.lang.String)">
 <h3>stringValue</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JsonWriter.html" title="type parameter in JsonWriter">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonWriter.html#line-199">stringValue</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;s)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JsonWriter.html" title="type parameter in JsonWriter">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonWriter.html#line-195">stringValue</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;s)</span></div>
 <div class="block">Serializes the specified object as a JSON string value.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -332,7 +332,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="uriValue(java.lang.Object)">
 <h3>uriValue</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JsonWriter.html" title="type parameter in JsonWriter">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonWriter.html#line-248">uriValue</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;uri)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JsonWriter.html" title="type parameter in JsonWriter">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonWriter.html#line-245">uriValue</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;uri)</span></div>
 <div class="block">Appends a URI to the output.</div>
 <dl class="notes">
 <dt>Parameters:</dt>

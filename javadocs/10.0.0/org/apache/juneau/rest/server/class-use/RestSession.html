@@ -68,8 +68,12 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color">
 <div class="block">REST HTTP Parts</div>
 </div>
-<div class="col-first odd-row-color"><a href="#org.apache.juneau.rest.server.rrpc">org.apache.juneau.rest.server.rrpc</a></div>
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.rest.server.logging">org.apache.juneau.rest.server.logging</a></div>
 <div class="col-last odd-row-color">
+<div class="block">JUL-level-driven REST debug logging API.</div>
+</div>
+<div class="col-first even-row-color"><a href="#org.apache.juneau.rest.server.rrpc">org.apache.juneau.rest.server.rrpc</a></div>
+<div class="col-last even-row-color">
 <div class="block">REST Remote Procedure Call API</div>
 </div>
 </div>
@@ -105,19 +109,20 @@ loadScripts(document, 'script');</script>
 <div class="col-second even-row-color"><span class="type-name-label">RestSession.Builder.</span><code><a href="../RestSession.Builder.html#build()" class="member-name-link">build</a>()</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
 <div class="col-first odd-row-color"><code><a href="../RestSession.html" title="class in org.apache.juneau.rest.server">RestSession</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">RestSession.</span><code><a href="../RestSession.html#debug(boolean)" class="member-name-link">debug</a><wbr>(boolean&nbsp;value)</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">RestSession.</span><code><a href="../RestSession.html#exception(java.lang.Throwable)" class="member-name-link">exception</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html" title="class or interface in java.lang" class="external-link">Throwable</a>&nbsp;value)</code></div>
 <div class="col-last odd-row-color">
-<div class="block">Enables or disabled debug mode on this call.</div>
-</div>
-<div class="col-first even-row-color"><code><a href="../RestSession.html" title="class in org.apache.juneau.rest.server">RestSession</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">RestSession.</span><code><a href="../RestSession.html#exception(java.lang.Throwable)" class="member-name-link">exception</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html" title="class or interface in java.lang" class="external-link">Throwable</a>&nbsp;value)</code></div>
-<div class="col-last even-row-color">
 <div class="block">Identifies that an exception occurred during this call.</div>
 </div>
-<div class="col-first odd-row-color"><code><a href="../RestSession.html" title="class in org.apache.juneau.rest.server">RestSession</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">RestSession.</span><code><a href="../RestSession.html#finish()" class="member-name-link">finish</a>()</code></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><code><a href="../RestSession.html" title="class in org.apache.juneau.rest.server">RestSession</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">RestSession.</span><code><a href="../RestSession.html#finish()" class="member-name-link">finish</a>()</code></div>
+<div class="col-last even-row-color">
 <div class="block">Called at the end of a call to finish any remaining tasks such as flushing buffers and logging the response.</div>
+</div>
+<div class="col-first odd-row-color"><code>static <a href="../RestSession.html" title="class in org.apache.juneau.rest.server">RestSession</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">RestSession.</span><code><a href="../RestSession.html#fromRequest(jakarta.servlet.http.HttpServletRequest)" class="member-name-link">fromRequest</a><wbr>(jakarta.servlet.http.HttpServletRequest&nbsp;req)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Returns the <a href="../RestSession.html" title="class in org.apache.juneau.rest.server"><code>RestSession</code></a> published on the given servlet request via the <a href="../RestSession.html#REQUEST_SESSION_ATTR"><code>REQUEST_SESSION_ATTR</code></a>
+ session-handle seam, or <jk>null</jk> if none is present.</div>
 </div>
 <div class="col-first even-row-color"><code><a href="../RestSession.html" title="class in org.apache.juneau.rest.server">RestSession</a></code></div>
 <div class="col-second even-row-color"><span class="type-name-label">RestContext.</span><code><a href="../RestContext.html#getLocalSession()" class="member-name-link">getLocalSession</a>()</code></div>
@@ -130,9 +135,9 @@ loadScripts(document, 'script');</script>
 <div class="block">Returns the session of the parent class of this Java method.</div>
 </div>
 <div class="col-first even-row-color"><code><a href="../RestSession.html" title="class in org.apache.juneau.rest.server">RestSession</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">RestSession.</span><code><a href="../RestSession.html#logger(org.apache.juneau.rest.server.logger.CallLogger)" class="member-name-link">logger</a><wbr>(<a href="../logger/CallLogger.html" title="class in org.apache.juneau.rest.server.logger">CallLogger</a>&nbsp;value)</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">RestSession.</span><code><a href="../RestSession.html#installCapture()" class="member-name-link">installCapture</a>()</code></div>
 <div class="col-last even-row-color">
-<div class="block">Sets the logger to use when logging this call.</div>
+<div class="block">Installs bounded body-caching wrappers on this call's request/response for debug capture.</div>
 </div>
 <div class="col-first odd-row-color"><code><a href="../RestSession.html" title="class in org.apache.juneau.rest.server">RestSession</a></code></div>
 <div class="col-second odd-row-color"><span class="type-name-label">RestSession.</span><code><a href="../RestSession.html#status(int)" class="member-name-link">status</a><wbr>(int&nbsp;value)</code></div>
@@ -155,56 +160,61 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><code>static <a href="../RestOpSession.Builder.html" title="class in org.apache.juneau.rest.server">RestOpSession.Builder</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">RestOpSession.</span><code><a href="../RestOpSession.html#create(org.apache.juneau.rest.server.RestOpContext,org.apache.juneau.rest.server.RestSession)" class="member-name-link">create</a><wbr>(<a href="../RestOpContext.html" title="class in org.apache.juneau.rest.server">RestOpContext</a>&nbsp;ctx,
- <a href="../RestSession.html" title="class in org.apache.juneau.rest.server">RestSession</a>&nbsp;session)</code></div>
+<div class="col-first even-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">RestOperations.</span><code><a href="../RestOperations.html#allowedMethods(org.apache.juneau.rest.server.RestSession)" class="member-name-link">allowedMethods</a><wbr>(<a href="../RestSession.html" title="class in org.apache.juneau.rest.server">RestSession</a>&nbsp;session)</code></div>
 <div class="col-last even-row-color">
+<div class="block">Returns the value of the <c>Allow</c> header for a <c>405 Method Not Allowed</c> response to the specified call.</div>
+</div>
+<div class="col-first odd-row-color"><code>static <a href="../RestOpSession.Builder.html" title="class in org.apache.juneau.rest.server">RestOpSession.Builder</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">RestOpSession.</span><code><a href="../RestOpSession.html#create(org.apache.juneau.rest.server.RestOpContext,org.apache.juneau.rest.server.RestSession)" class="member-name-link">create</a><wbr>(<a href="../RestOpContext.html" title="class in org.apache.juneau.rest.server">RestOpContext</a>&nbsp;ctx,
+ <a href="../RestSession.html" title="class in org.apache.juneau.rest.server">RestSession</a>&nbsp;session)</code></div>
+<div class="col-last odd-row-color">
 <div class="block">Static creator.</div>
 </div>
-<div class="col-first odd-row-color"><code><a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">RestOpContext.</span><code><a href="../RestOpContext.html#createRequest(org.apache.juneau.rest.server.RestSession)" class="member-name-link">createRequest</a><wbr>(<a href="../RestSession.html" title="class in org.apache.juneau.rest.server">RestSession</a>&nbsp;session)</code></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><code><a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">RestOpContext.</span><code><a href="../RestOpContext.html#createRequest(org.apache.juneau.rest.server.RestSession)" class="member-name-link">createRequest</a><wbr>(<a href="../RestSession.html" title="class in org.apache.juneau.rest.server">RestSession</a>&nbsp;session)</code></div>
+<div class="col-last even-row-color">
 <div class="block">Creates a <a href="../RestRequest.html" title="class in org.apache.juneau.rest.server"><code>RestRequest</code></a> object based on the specified incoming <code>HttpServletRequest</code> object.</div>
 </div>
-<div class="col-first even-row-color"><code><a href="../RestResponse.html" title="class in org.apache.juneau.rest.server">RestResponse</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">RestOpContext.</span><code><a href="../RestOpContext.html#createResponse(org.apache.juneau.rest.server.RestSession,org.apache.juneau.rest.server.RestRequest)" class="member-name-link">createResponse</a><wbr>(<a href="../RestSession.html" title="class in org.apache.juneau.rest.server">RestSession</a>&nbsp;session,
+<div class="col-first odd-row-color"><code><a href="../RestResponse.html" title="class in org.apache.juneau.rest.server">RestResponse</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">RestOpContext.</span><code><a href="../RestOpContext.html#createResponse(org.apache.juneau.rest.server.RestSession,org.apache.juneau.rest.server.RestRequest)" class="member-name-link">createResponse</a><wbr>(<a href="../RestSession.html" title="class in org.apache.juneau.rest.server">RestSession</a>&nbsp;session,
  <a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req)</code></div>
-<div class="col-last even-row-color">
+<div class="col-last odd-row-color">
 <div class="block">Creates a <a href="../RestResponse.html" title="class in org.apache.juneau.rest.server"><code>RestResponse</code></a> object based on the specified incoming <code>HttpServletResponse</code> object
  and the request returned by <a href="../RestOpContext.html#createRequest(org.apache.juneau.rest.server.RestSession)"><code>RestOpContext.createRequest(RestSession)</code></a>.</div>
 </div>
-<div class="col-first odd-row-color"><code><a href="../RestOpSession.Builder.html" title="class in org.apache.juneau.rest.server">RestOpSession.Builder</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">RestOpContext.</span><code><a href="../RestOpContext.html#createSession(org.apache.juneau.rest.server.RestSession)" class="member-name-link">createSession</a><wbr>(<a href="../RestSession.html" title="class in org.apache.juneau.rest.server">RestSession</a>&nbsp;session)</code></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><code><a href="../RestOpSession.Builder.html" title="class in org.apache.juneau.rest.server">RestOpSession.Builder</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">RestOpContext.</span><code><a href="../RestOpContext.html#createSession(org.apache.juneau.rest.server.RestSession)" class="member-name-link">createSession</a><wbr>(<a href="../RestSession.html" title="class in org.apache.juneau.rest.server">RestSession</a>&nbsp;session)</code></div>
+<div class="col-last even-row-color">
 <div class="block">Creates a new REST operation session.</div>
 </div>
-<div class="col-first even-row-color"><code>protected void</code></div>
-<div class="col-second even-row-color"><span class="type-name-label">RestContext.</span><code><a href="../RestContext.html#endCall(org.apache.juneau.rest.server.RestSession)" class="member-name-link">endCall</a><wbr>(<a href="../RestSession.html" title="class in org.apache.juneau.rest.server">RestSession</a>&nbsp;session)</code></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><code>protected void</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">RestContext.</span><code><a href="../RestContext.html#endCall(org.apache.juneau.rest.server.RestSession)" class="member-name-link">endCall</a><wbr>(<a href="../RestSession.html" title="class in org.apache.juneau.rest.server">RestSession</a>&nbsp;session)</code></div>
+<div class="col-last odd-row-color">
 <div class="block">Called at the end of a request to invoke all <a href="../RestEndCall.html" title="annotation interface in org.apache.juneau.rest.server"><code>RestEndCall</code></a> methods on this context.</div>
 </div>
-<div class="col-first odd-row-color"><code><a href="../RestOpContext.html" title="class in org.apache.juneau.rest.server">RestOpContext</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">RestOperations.</span><code><a href="../RestOperations.html#findOperation(org.apache.juneau.rest.server.RestSession)" class="member-name-link">findOperation</a><wbr>(<a href="../RestSession.html" title="class in org.apache.juneau.rest.server">RestSession</a>&nbsp;session)</code></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><code><a href="../RestOpContext.html" title="class in org.apache.juneau.rest.server">RestOpContext</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">RestOperations.</span><code><a href="../RestOperations.html#findOperation(org.apache.juneau.rest.server.RestSession)" class="member-name-link">findOperation</a><wbr>(<a href="../RestSession.html" title="class in org.apache.juneau.rest.server">RestSession</a>&nbsp;session)</code></div>
+<div class="col-last even-row-color">
 <div class="block">Finds the method that should handle the specified call.</div>
 </div>
-<div class="col-first even-row-color"><code>protected void</code></div>
-<div class="col-second even-row-color"><span class="type-name-label">RestContext.</span><code><a href="../RestContext.html#handleError(org.apache.juneau.rest.server.RestSession,java.lang.Throwable)" class="member-name-link">handleError</a><wbr>(<a href="../RestSession.html" title="class in org.apache.juneau.rest.server">RestSession</a>&nbsp;session,
+<div class="col-first odd-row-color"><code>protected void</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">RestContext.</span><code><a href="../RestContext.html#handleError(org.apache.juneau.rest.server.RestSession,java.lang.Throwable)" class="member-name-link">handleError</a><wbr>(<a href="../RestSession.html" title="class in org.apache.juneau.rest.server">RestSession</a>&nbsp;session,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html" title="class or interface in java.lang" class="external-link">Throwable</a>&nbsp;e)</code></div>
-<div class="col-last even-row-color">
+<div class="col-last odd-row-color">
 <div class="block">Method for handling response errors.</div>
 </div>
-<div class="col-first odd-row-color"><code>protected void</code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">RestContext.</span><code><a href="../RestContext.html#handleNotFound(org.apache.juneau.rest.server.RestSession)" class="member-name-link">handleNotFound</a><wbr>(<a href="../RestSession.html" title="class in org.apache.juneau.rest.server">RestSession</a>&nbsp;session)</code></div>
-<div class="col-last odd-row-color">&nbsp;</div>
-<div class="col-first even-row-color"><code>protected int</code></div>
-<div class="col-second even-row-color"><span class="type-name-label">RestOpContext.</span><code><a href="../RestOpContext.html#match(org.apache.juneau.rest.server.RestSession)" class="member-name-link">match</a><wbr>(<a href="../RestSession.html" title="class in org.apache.juneau.rest.server">RestSession</a>&nbsp;session)</code></div>
-<div class="col-last even-row-color">
+<div class="col-first even-row-color"><code>protected void</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">RestContext.</span><code><a href="../RestContext.html#handleNotFound(org.apache.juneau.rest.server.RestSession)" class="member-name-link">handleNotFound</a><wbr>(<a href="../RestSession.html" title="class in org.apache.juneau.rest.server">RestSession</a>&nbsp;session)</code></div>
+<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-first odd-row-color"><code>protected int</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">RestOpContext.</span><code><a href="../RestOpContext.html#match(org.apache.juneau.rest.server.RestSession)" class="member-name-link">match</a><wbr>(<a href="../RestSession.html" title="class in org.apache.juneau.rest.server">RestSession</a>&nbsp;session)</code></div>
+<div class="col-last odd-row-color">
 <div class="block">Identifies if this method can process the specified call.</div>
 </div>
-<div class="col-first odd-row-color"><code>protected void</code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">RestContext.</span><code><a href="../RestContext.html#startCall(org.apache.juneau.rest.server.RestSession)" class="member-name-link">startCall</a><wbr>(<a href="../RestSession.html" title="class in org.apache.juneau.rest.server">RestSession</a>&nbsp;session)</code></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><code>protected void</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">RestContext.</span><code><a href="../RestContext.html#startCall(org.apache.juneau.rest.server.RestSession)" class="member-name-link">startCall</a><wbr>(<a href="../RestSession.html" title="class in org.apache.juneau.rest.server">RestSession</a>&nbsp;session)</code></div>
+<div class="col-last even-row-color">
 <div class="block">Called at the start of a request to invoke all <a href="../RestStartCall.html" title="annotation interface in org.apache.juneau.rest.server"><code>RestStartCall</code></a> methods on this context.</div>
 </div>
 </div>
@@ -252,6 +262,34 @@ loadScripts(document, 'script');</script>
  boolean&nbsp;caseSensitive)</code></div>
 <div class="col-last even-row-color">
 <div class="block">Constructor.</div>
+</div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="org.apache.juneau.rest.server.logging">
+<h2>Uses of <a href="../RestSession.html" title="class in org.apache.juneau.rest.server">RestSession</a> in <a href="../logging/package-summary.html">org.apache.juneau.rest.server.logging</a></h2>
+<div class="caption"><span>Methods in <a href="../logging/package-summary.html">org.apache.juneau.rest.server.logging</a> with parameters of type <a href="../RestSession.html" title="class in org.apache.juneau.rest.server">RestSession</a></span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier and Type</div>
+<div class="table-header col-second">Method</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code>static void</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">RestDebugPipeline.</span><code><a href="../logging/RestDebugPipeline.html#captureAsyncSnapshot(org.apache.juneau.rest.server.RestSession)" class="member-name-link">captureAsyncSnapshot</a><wbr>(<a href="../RestSession.html" title="class in org.apache.juneau.rest.server">RestSession</a>&nbsp;session)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Resolves the logger/formatter/detail-tier snapshot for the given session and stashes it on the session for
+ later completion-path emission.</div>
+</div>
+<div class="col-first odd-row-color"><code>static void</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">RestDebugPipeline.</span><code><a href="../logging/RestDebugPipeline.html#emit(org.apache.juneau.rest.server.RestSession)" class="member-name-link">emit</a><wbr>(<a href="../RestSession.html" title="class in org.apache.juneau.rest.server">RestSession</a>&nbsp;session)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Emits one debug record for the completed call on the synchronous request thread, if the resolved logger's
+ effective level warrants it.</div>
+</div>
+<div class="col-first even-row-color"><code>static void</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">RestDebugPipeline.</span><code><a href="../logging/RestDebugPipeline.html#emitOnCompletion(org.apache.juneau.rest.server.RestSession)" class="member-name-link">emitOnCompletion</a><wbr>(<a href="../RestSession.html" title="class in org.apache.juneau.rest.server">RestSession</a>&nbsp;session)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Emits one debug record for a completed asynchronous call on the response-completion thread.</div>
 </div>
 </div>
 </section>

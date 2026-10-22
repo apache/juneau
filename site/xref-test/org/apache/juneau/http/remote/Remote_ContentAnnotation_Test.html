@@ -156,7 +156,7 @@
 <a class="jxr_linenumber" name="L148" href="#L148">148</a> 	}
 <a class="jxr_linenumber" name="L149" href="#L149">149</a> 
 <a class="jxr_linenumber" name="L150" href="#L150">150</a> 	@Test <strong class="jxr_keyword">void</strong> a01_objectTypes_json() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L151" href="#L151">151</a> 		<strong class="jxr_keyword">var</strong> x = MockRestClient.create(A.<strong class="jxr_keyword">class</strong>).serializer(JsonSerializer.<strong class="jxr_keyword">class</strong>).build().getRemote(A1.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L151" href="#L151">151</a> 		<strong class="jxr_keyword">var</strong> x = MockRestClient.create(A.<strong class="jxr_keyword">class</strong>).serializer(JsonSerializer.<strong class="jxr_keyword">class</strong>).allowPrivateUrls(<strong class="jxr_keyword">true</strong>).build().getRemote(A1.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L152" href="#L152">152</a> 		assertEquals(<span class="jxr_string">"1"</span>,x.postX1(1));
 <a class="jxr_linenumber" name="L153" href="#L153">153</a> 		assertEquals(<span class="jxr_string">"1.0"</span>,x.postX2(1f));
 <a class="jxr_linenumber" name="L154" href="#L154">154</a> 		assertEquals(<span class="jxr_string">"{f:1}"</span>,x.postX3(Bean.create()));
@@ -250,7 +250,7 @@
 <a class="jxr_linenumber" name="L242" href="#L242">242</a> 	}
 <a class="jxr_linenumber" name="L243" href="#L243">243</a> 
 <a class="jxr_linenumber" name="L244" href="#L244">244</a> 	@Test <strong class="jxr_keyword">void</strong> b01_objectTypes_openApi() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L245" href="#L245">245</a> 		<strong class="jxr_keyword">var</strong> x = MockRestClient.create(B.<strong class="jxr_keyword">class</strong>).openApi().contentType(<strong class="jxr_keyword">null</strong>).build().getRemote(B1.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L245" href="#L245">245</a> 		<strong class="jxr_keyword">var</strong> x = MockRestClient.create(B.<strong class="jxr_keyword">class</strong>).openApi().contentType(<strong class="jxr_keyword">null</strong>).allowPrivateUrls(<strong class="jxr_keyword">true</strong>).build().getRemote(B1.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L246" href="#L246">246</a> 		assertEquals(<span class="jxr_string">"1"</span>,x.postX1(1));
 <a class="jxr_linenumber" name="L247" href="#L247">247</a> 		assertEquals(<span class="jxr_string">"1.0"</span>,x.postX2(1f));
 <a class="jxr_linenumber" name="L248" href="#L248">248</a> 		assertEquals(<span class="jxr_string">"{f:1}"</span>,x.postX3(Bean.create()));
@@ -330,7 +330,7 @@
 <a class="jxr_linenumber" name="L322" href="#L322">322</a> 	}
 <a class="jxr_linenumber" name="L323" href="#L323">323</a> 
 <a class="jxr_linenumber" name="L324" href="#L324">324</a> 	@Test <strong class="jxr_keyword">void</strong> c01_openApi_overriddenContentType() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L325" href="#L325">325</a> 		<strong class="jxr_keyword">var</strong> x = MockRestClient.create(C.<strong class="jxr_keyword">class</strong>).parser(JsonParser.<strong class="jxr_keyword">class</strong>).contentType(<span class="jxr_string">"text/foo"</span>).build().getRemote(C1.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L325" href="#L325">325</a> 		<strong class="jxr_keyword">var</strong> x = MockRestClient.create(C.<strong class="jxr_keyword">class</strong>).parser(JsonParser.<strong class="jxr_keyword">class</strong>).contentType(<span class="jxr_string">"text/foo"</span>).allowPrivateUrls(<strong class="jxr_keyword">true</strong>).build().getRemote(C1.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L326" href="#L326">326</a> 		assertEquals(<span class="jxr_string">"1"</span>,x.postX1(1));
 <a class="jxr_linenumber" name="L327" href="#L327">327</a> 		assertEquals(<span class="jxr_string">"1.0"</span>,x.postX2(1f));
 <a class="jxr_linenumber" name="L328" href="#L328">328</a> 		assertEquals(<span class="jxr_string">"{f:1}"</span>,x.postX3(Bean.create()));

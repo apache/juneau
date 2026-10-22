@@ -63,7 +63,7 @@
 <a class="jxr_linenumber" name="L55" href="#L55">55</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> MockRestClient c = MockRestClient.buildLax(A.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L56" href="#L56">56</a>  
 <a class="jxr_linenumber" name="L57" href="#L57">57</a>  	@Test <strong class="jxr_keyword">void</strong> a01_overrideTakesEffect() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L58" href="#L58">58</a>  		c.get(<span class="jxr_string">"/static/javadoc.css"</span>)
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>  		c.get(<span class="jxr_string">"/static/themes/devops.css"</span>)
 <a class="jxr_linenumber" name="L59" href="#L59">59</a>  			.run()
 <a class="jxr_linenumber" name="L60" href="#L60">60</a>  			.assertStatus(200)
 <a class="jxr_linenumber" name="L61" href="#L61">61</a>  			.assertHeader(<span class="jxr_string">"Cache-Control"</span>).is(<span class="jxr_string">"no-store"</span>);
@@ -74,7 +74,7 @@
 <a class="jxr_linenumber" name="L66" href="#L66">66</a>  		<em class="jxr_comment">// BasicRestServlet still owns the legacy /htdocs/* via BasicRestOperations#getHtdoc.</em>
 <a class="jxr_linenumber" name="L67" href="#L67">67</a>  		<em class="jxr_comment">// That handler also reads from BeanStore.getBean(StaticFiles.class), so the importer's</em>
 <a class="jxr_linenumber" name="L68" href="#L68">68</a>  		<em class="jxr_comment">// override still applies.</em>
-<a class="jxr_linenumber" name="L69" href="#L69">69</a>  		c.get(<span class="jxr_string">"/htdocs/javadoc.css"</span>)
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>  		c.get(<span class="jxr_string">"/htdocs/themes/devops.css"</span>)
 <a class="jxr_linenumber" name="L70" href="#L70">70</a>  			.run()
 <a class="jxr_linenumber" name="L71" href="#L71">71</a>  			.assertStatus(200)
 <a class="jxr_linenumber" name="L72" href="#L72">72</a>  			.assertHeader(<span class="jxr_string">"Cache-Control"</span>).is(<span class="jxr_string">"no-store"</span>);

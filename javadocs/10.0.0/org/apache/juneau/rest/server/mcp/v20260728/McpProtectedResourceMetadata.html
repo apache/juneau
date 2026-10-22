@@ -93,12 +93,12 @@ loadScripts(document, 'script');</script>
  via <code>org.apache.juneau.rest.client.mcp.auth.McpProtectedResourceMetadata</code> /
  <code>McpProtectedResourceMetadataClient</code>.
 
- <h5 class='section'>Q5 client/server split:</h5>
+ <h5 class='section'>Client/server split:</h5>
  <p>
  This intentionally duplicates the shape of the client-side
- <code>org.apache.juneau.rest.client.mcp.auth.McpProtectedResourceMetadata</code> record (accepted per READY-312f Q5); the
+ <code>org.apache.juneau.rest.client.mcp.auth.McpProtectedResourceMetadata</code> record; the
  two live in different modules with different dependency footprints (the client parses via Nimbus; the server emits via
- Juneau marshalling).  Sub-project D later rationalizes a shared, dependency-neutral bean.</div>
+ Juneau marshalling).  A shared, dependency-neutral bean may replace both later.</div>
 <dl class="notes">
 <dt>Since:</dt>
 <dd>10.0.0</dd>

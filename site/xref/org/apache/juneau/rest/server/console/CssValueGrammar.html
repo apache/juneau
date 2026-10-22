@@ -1,0 +1,255 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="" lang="">
+<head><meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<title>CssValueGrammar xref</title>
+<link type="text/css" rel="stylesheet" href="../../../../../../stylesheet.css" />
+</head>
+<body>
+<div id="overview"><a href="../../../../../../../apidocs/org/apache/juneau/rest/server/console/CssValueGrammar.html">View Javadoc</a></div><pre>
+<a class="jxr_linenumber" name="L1" href="#L1">1</a>   <em class="jxr_comment">/*</em>
+<a class="jxr_linenumber" name="L2" href="#L2">2</a>   <em class="jxr_comment"> * Licensed to the Apache Software Foundation (ASF) under one or more</em>
+<a class="jxr_linenumber" name="L3" href="#L3">3</a>   <em class="jxr_comment"> * contributor license agreements.  See the NOTICE file distributed with</em>
+<a class="jxr_linenumber" name="L4" href="#L4">4</a>   <em class="jxr_comment"> * this work for additional information regarding copyright ownership.</em>
+<a class="jxr_linenumber" name="L5" href="#L5">5</a>   <em class="jxr_comment"> * The ASF licenses this file to You under the Apache License, Version 2.0</em>
+<a class="jxr_linenumber" name="L6" href="#L6">6</a>   <em class="jxr_comment"> * (the "License"); you may not use this file except in compliance with</em>
+<a class="jxr_linenumber" name="L7" href="#L7">7</a>   <em class="jxr_comment"> * the License.  You may obtain a copy of the License at</em>
+<a class="jxr_linenumber" name="L8" href="#L8">8</a>   <em class="jxr_comment"> *</em>
+<a class="jxr_linenumber" name="L9" href="#L9">9</a>   <em class="jxr_comment"> *      <a href="http://www.apache.org/licenses/LICENSE-2.0" target="alexandria_uri">http://www.apache.org/licenses/LICENSE-2.0</a></em>
+<a class="jxr_linenumber" name="L10" href="#L10">10</a>  <em class="jxr_comment"> *</em>
+<a class="jxr_linenumber" name="L11" href="#L11">11</a>  <em class="jxr_comment"> * Unless required by applicable law or agreed to in writing, software</em>
+<a class="jxr_linenumber" name="L12" href="#L12">12</a>  <em class="jxr_comment"> * distributed under the License is distributed on an "AS IS" BASIS,</em>
+<a class="jxr_linenumber" name="L13" href="#L13">13</a>  <em class="jxr_comment"> * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</em>
+<a class="jxr_linenumber" name="L14" href="#L14">14</a>  <em class="jxr_comment"> * See the License for the specific language governing permissions and</em>
+<a class="jxr_linenumber" name="L15" href="#L15">15</a>  <em class="jxr_comment"> * limitations under the License.</em>
+<a class="jxr_linenumber" name="L16" href="#L16">16</a>  <em class="jxr_comment"> */</em>
+<a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.server.console;
+<a class="jxr_linenumber" name="L18" href="#L18">18</a>  
+<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.commons.utils.Shorts.*;
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> java.util.*;
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> java.util.regex.*;
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <em class="jxr_javadoccomment"> * Normalizes and validates {@link Theme.Builder#token(String, String) Theme token} values against an</em>
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <em class="jxr_javadoccomment"> * accept-known-safe allowlist grammar &amp;mdash; the opposite of a {@code url(} blocklist.</em>
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <em class="jxr_javadoccomment"> * {@code url()} is deliberately not a production in any of the seven allowed value shapes (hex color, functional</em>
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <em class="jxr_javadoccomment"> * color, named/global keyword color, length/number list, font-family list, gradient function, box-shadow): every spelling of</em>
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <em class="jxr_javadoccomment"> * {@code url(...)} REJECTs by construction, not by pattern-matching the threat.  Two ordered stages:</em>
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <em class="jxr_javadoccomment"> * &lt;ol&gt;</em>
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>  <em class="jxr_javadoccomment"> * 	&lt;li&gt;&lt;b&gt;Normalize (belt, runs first):&lt;/b&gt; trim; REJECT any C0 (&lt;code&gt;\x00\u2013\x1F&lt;/code&gt;) or C1/DEL</em>
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>  <em class="jxr_javadoccomment"> * 		(&lt;code&gt;\x7F\u2013\x9F&lt;/code&gt;) control character (this is what actually kills the {@code url\t(} /</em>
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>  <em class="jxr_javadoccomment"> * 		{@code url\n(} CSS-hex reconstruction vector &amp;mdash; a control character can never survive to be hex-escaped</em>
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>  <em class="jxr_javadoccomment"> * 		by {@link CssValueEscaper} and decoded back into live whitespace); strip CSS comments</em>
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>  <em class="jxr_javadoccomment"> * 		(&lt;code&gt;/&amp;#42; &amp;#42;/&lt;/code&gt;, dotall &amp;mdash; kills the {@code url/**&amp;#47;(} vector); REJECT if the</em>
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>  <em class="jxr_javadoccomment"> * 		comment-stripped remainder matches &lt;code&gt;(?i)url\s*\(&lt;/code&gt; anywhere (belt-and-suspenders for {@code url (}</em>
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>  <em class="jxr_javadoccomment"> * 		and any residual whitespace-before-paren form).</em>
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>  <em class="jxr_javadoccomment"> * 	&lt;li&gt;&lt;b&gt;Allowlist grammar (accept-known-safe):&lt;/b&gt; the normalized value must match exactly one of the seven shapes</em>
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>  <em class="jxr_javadoccomment"> * 		below. Every production is a full-string {@code Pattern.matches(...)}-equivalent (anchored {@code ^...$}),</em>
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>  <em class="jxr_javadoccomment"> * 		never {@code find(...)}.</em>
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>  <em class="jxr_javadoccomment"> * &lt;/ol&gt;</em>
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>  <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>  <em class="jxr_javadoccomment"> * The gradient production is deliberately tighter than "anything shaped like a function call": nested function</em>
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>  <em class="jxr_javadoccomment"> * calls are restricted to exactly {@code rgb()}/{@code rgba()}/{@code hsl()}/{@code hsla()}/{@code calc()}</em>
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>  <em class="jxr_javadoccomment"> * (case-insensitive) &amp;mdash; there is no general {@code ident(} production, so {@code linear-gradient(url(evil))}</em>
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>  <em class="jxr_javadoccomment"> * REJECTs at the grammar layer itself (a distinct, independent check from the normalization-stage {@code url(}</em>
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>  <em class="jxr_javadoccomment"> * reject above), not merely because the top-level belt happened to catch it first.</em>
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>  <em class="jxr_javadoccomment"> */</em>
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>  @SuppressWarnings({
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>  	<span class="jxr_string">"java:S5843"</span>, <em class="jxr_comment">// Pattern is one allowlist grammar production; splitting it would scatter the validated set.</em>
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>  	<span class="jxr_string">"java:S5998"</span>, <em class="jxr_comment">// Patterns are matched against short, author-set theme-token values, so backtracking depth is bounded.</em>
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>  	<span class="jxr_string">"java:S8786"</span> <em class="jxr_comment">// Input is a short, author-set theme-token value, not attacker-controlled request data; rewriting this allowlist regex risks altering the validated set.</em>
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>  })
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>  <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">class</strong> CssValueGrammar {
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>  
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>  	<strong class="jxr_keyword">private</strong> CssValueGrammar() {}
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>  
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>  	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>  	<em class="jxr_comment">// Normalization</em>
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>  	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>  
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Pattern COMMENT = Pattern.compile(<span class="jxr_string">"/&#92;&#92;*.*?&#92;&#92;*/"</span>, Pattern.DOTALL);
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Pattern URL_REJECT = Pattern.compile(<span class="jxr_string">"(?i)url&#92;&#92;s*&#92;&#92;("</span>);
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>  
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>  	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>  <em class="jxr_javadoccomment">	 * Runs the normalization belt on a token value and returns the normalized (comment-stripped, trimmed) value,</em>
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>  <em class="jxr_javadoccomment">	 * &lt;b&gt;without&lt;/b&gt; the allowlist-grammar shape check.</em>
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>  <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>  <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>  <em class="jxr_javadoccomment">	 * This is the shared belt that both {@link #normalizeAndValidate(String)} and the {@code Theme}-layer</em>
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>  <em class="jxr_javadoccomment">	 * {@code var(--jc-name)} reference recognizer (see {@link Theme.Builder#token(String, String)}) run on, so the</em>
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>  <em class="jxr_javadoccomment">	 * reference recognizer sees exactly the same control-character-rejected, comment-stripped, {@code url(}-rejected</em>
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>  <em class="jxr_javadoccomment">	 * string as the grammar does &amp;mdash; there is no second, reference-specific normalization pass to keep in sync.</em>
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>  <em class="jxr_javadoccomment">	 * The belt does &lt;b&gt;not&lt;/b&gt; recognize or accept {@code var()}: that is Theme-layer syntax handled one layer above</em>
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>  <em class="jxr_javadoccomment">	 * this class.</em>
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>  <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>  <em class="jxr_javadoccomment">	 * @param value The raw candidate value.</em>
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>  <em class="jxr_javadoccomment">	 * @return The normalized (comment-stripped, trimmed) value.</em>
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>  <em class="jxr_javadoccomment">	 * @throws IllegalArgumentException If the value is &lt;jk&gt;null&lt;/jk&gt;, contains a control character, or contains a</em>
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>  <em class="jxr_javadoccomment">	 * 	{@code url(} production in any spelling.</em>
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>  <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>  	<strong class="jxr_keyword">static</strong> String normalize(String value) {
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>  		<strong class="jxr_keyword">if</strong> (value == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>  			<strong class="jxr_keyword">throw</strong> iaex(<span class="jxr_string">"Theme token value must not be null."</span>);
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>  
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>  		<em class="jxr_comment">// Scan the RAW (pre-trim) value for control characters first - String.trim() strips any character</em>
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>  		<em class="jxr_comment">// &lt;= U+0020 (which covers all of C0) from the boundaries, so trimming first would silently swallow a</em>
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>  		<em class="jxr_comment">// leading/trailing C0 control character before this check ever saw it.</em>
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>  		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt; value.length(); i++) {
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>  			<strong class="jxr_keyword">var</strong> c = value.charAt(i);
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>  			<strong class="jxr_keyword">if</strong> (c &lt;= 0x1F || (c &gt;= 0x7F &amp;&amp; c &lt;= 0x9F))
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>  				<strong class="jxr_keyword">throw</strong> iaex(<span class="jxr_string">"Theme token value contains an illegal control character at index %d."</span>, i);
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>  		}
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>  
+<a class="jxr_linenumber" name="L99" href="#L99">99</a>  		<strong class="jxr_keyword">var</strong> trimmed = value.trim();
+<a class="jxr_linenumber" name="L100" href="#L100">100</a> 		<strong class="jxr_keyword">var</strong> stripped = COMMENT.matcher(trimmed).replaceAll(<span class="jxr_string">""</span>);
+<a class="jxr_linenumber" name="L101" href="#L101">101</a> 
+<a class="jxr_linenumber" name="L102" href="#L102">102</a> 		<strong class="jxr_keyword">if</strong> (URL_REJECT.matcher(stripped).find())
+<a class="jxr_linenumber" name="L103" href="#L103">103</a> 			<strong class="jxr_keyword">throw</strong> iaex(<span class="jxr_string">"Theme token value must not contain a url() production."</span>);
+<a class="jxr_linenumber" name="L104" href="#L104">104</a> 
+<a class="jxr_linenumber" name="L105" href="#L105">105</a> 		<strong class="jxr_keyword">return</strong> stripped;
+<a class="jxr_linenumber" name="L106" href="#L106">106</a> 	}
+<a class="jxr_linenumber" name="L107" href="#L107">107</a> 
+<a class="jxr_linenumber" name="L108" href="#L108">108</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L109" href="#L109">109</a> <em class="jxr_javadoccomment">	 * Normalizes and validates a token value, returning the normalized (comment-stripped, trimmed) value if it is</em>
+<a class="jxr_linenumber" name="L110" href="#L110">110</a> <em class="jxr_javadoccomment">	 * accepted.</em>
+<a class="jxr_linenumber" name="L111" href="#L111">111</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L112" href="#L112">112</a> <em class="jxr_javadoccomment">	 * @param value The raw candidate value.</em>
+<a class="jxr_linenumber" name="L113" href="#L113">113</a> <em class="jxr_javadoccomment">	 * @return The normalized value.</em>
+<a class="jxr_linenumber" name="L114" href="#L114">114</a> <em class="jxr_javadoccomment">	 * @throws IllegalArgumentException If the value is &lt;jk&gt;null&lt;/jk&gt;, contains a control character, contains a</em>
+<a class="jxr_linenumber" name="L115" href="#L115">115</a> <em class="jxr_javadoccomment">	 * 	{@code url(} production in any spelling, or does not match one of the allowed CSS value shapes.</em>
+<a class="jxr_linenumber" name="L116" href="#L116">116</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L117" href="#L117">117</a> 	<strong class="jxr_keyword">static</strong> String normalizeAndValidate(String value) {
+<a class="jxr_linenumber" name="L118" href="#L118">118</a> 		<strong class="jxr_keyword">var</strong> stripped = normalize(value);
+<a class="jxr_linenumber" name="L119" href="#L119">119</a> 
+<a class="jxr_linenumber" name="L120" href="#L120">120</a> 		<strong class="jxr_keyword">if</strong> (isAllowedShape(stripped))
+<a class="jxr_linenumber" name="L121" href="#L121">121</a> 			<strong class="jxr_keyword">return</strong> stripped;
+<a class="jxr_linenumber" name="L122" href="#L122">122</a> 
+<a class="jxr_linenumber" name="L123" href="#L123">123</a> 		<strong class="jxr_keyword">throw</strong> iaex(<span class="jxr_string">"Theme token value is not one of the allowed CSS value shapes: '%s'."</span>, value);
+<a class="jxr_linenumber" name="L124" href="#L124">124</a> 	}
+<a class="jxr_linenumber" name="L125" href="#L125">125</a> 
+<a class="jxr_linenumber" name="L126" href="#L126">126</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L127" href="#L127">127</a> 	<em class="jxr_comment">// Allowlist grammar</em>
+<a class="jxr_linenumber" name="L128" href="#L128">128</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L129" href="#L129">129</a> 
+<a class="jxr_linenumber" name="L130" href="#L130">130</a> 	<em class="jxr_comment">// 3/4/6/8-digit hex color.  (Not 5 or 7 - those are not legal CSS hex-color lengths.)</em>
+<a class="jxr_linenumber" name="L131" href="#L131">131</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Pattern HEX_COLOR =
+<a class="jxr_linenumber" name="L132" href="#L132">132</a> 		Pattern.compile(<span class="jxr_string">"^#(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{4}|[0-9a-fA-F]{6}|[0-9a-fA-F]{8})$"</span>);
+<a class="jxr_linenumber" name="L133" href="#L133">133</a> 
+<a class="jxr_linenumber" name="L134" href="#L134">134</a> 	<em class="jxr_comment">// rgb()/rgba()/hsl()/hsla() with a numeric/%/,//whitespace/- argument charset only.</em>
+<a class="jxr_linenumber" name="L135" href="#L135">135</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Pattern FUNCTIONAL_COLOR =
+<a class="jxr_linenumber" name="L136" href="#L136">136</a> 		Pattern.compile(<span class="jxr_string">"^(?i:rgb|rgba|hsl|hsla)&#92;&#92;([0-9.,%&#92;&#92;s-]+&#92;&#92;)$"</span>);
+<a class="jxr_linenumber" name="L137" href="#L137">137</a> 
+<a class="jxr_linenumber" name="L138" href="#L138">138</a> 	<em class="jxr_comment">// &lt;number&gt; + allowlisted unit, one or more space-separated (unit optional, e.g. bare "0").</em>
+<a class="jxr_linenumber" name="L139" href="#L139">139</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String UNIT = <span class="jxr_string">"px|em|rem|%|vh|vw|vmin|vmax|pt|ch|fr|deg|turn|rad|s|ms"</span>;
+<a class="jxr_linenumber" name="L140" href="#L140">140</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Pattern LENGTH_LIST = Pattern.compile(
+<a class="jxr_linenumber" name="L141" href="#L141">141</a> 		<span class="jxr_string">"^-?&#92;&#92;d+(?:&#92;&#92;.&#92;&#92;d+)?(?:"</span> + UNIT + <span class="jxr_string">")?(?:&#92;&#92;s+-?&#92;&#92;d+(?:&#92;&#92;.&#92;&#92;d+)?(?:"</span> + UNIT + <span class="jxr_string">")?)*$"</span>);
+<a class="jxr_linenumber" name="L142" href="#L142">142</a> 
+<a class="jxr_linenumber" name="L143" href="#L143">143</a> 	<em class="jxr_comment">// Optional inset, 2-4 lengths, then a color.  Color is checked against hex / functional / named-color</em>
+<a class="jxr_linenumber" name="L144" href="#L144">144</a> 	<em class="jxr_comment">// productions (not CSS-wide keywords), so this cannot smuggle url() or an arbitrary ident(.</em>
+<a class="jxr_linenumber" name="L145" href="#L145">145</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Pattern BOX_SHADOW = Pattern.compile(
+<a class="jxr_linenumber" name="L146" href="#L146">146</a> 		<span class="jxr_string">"^(?:inset&#92;&#92;s+)?-?&#92;&#92;d+(?:&#92;&#92;.&#92;&#92;d+)?(?:"</span> + UNIT + <span class="jxr_string">")?(?:&#92;&#92;s+-?&#92;&#92;d+(?:&#92;&#92;.&#92;&#92;d+)?(?:"</span> + UNIT + <span class="jxr_string">")?){1,3}&#92;&#92;s+(.+)$"</span>);
+<a class="jxr_linenumber" name="L147" href="#L147">147</a> 
+<a class="jxr_linenumber" name="L148" href="#L148">148</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Set&lt;String&gt; NOT_SHADOW_COLORS = Set.of(<span class="jxr_string">"none"</span>, <span class="jxr_string">"inherit"</span>, <span class="jxr_string">"initial"</span>, <span class="jxr_string">"unset"</span>);
+<a class="jxr_linenumber" name="L149" href="#L149">149</a> 
+<a class="jxr_linenumber" name="L150" href="#L150">150</a> 	<em class="jxr_comment">// Comma-separated font-family list: each item a quoted string (no control/quote breakout) or a bare identifier.</em>
+<a class="jxr_linenumber" name="L151" href="#L151">151</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Pattern FONT_FAMILY_ITEM_SQ = Pattern.compile(<span class="jxr_string">"^'[^'&#92;&#92;&#92;&#92;]*'$"</span>);
+<a class="jxr_linenumber" name="L152" href="#L152">152</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Pattern FONT_FAMILY_ITEM_DQ = Pattern.compile(<span class="jxr_string">"^\&quot;[^\&quot;&#92;&#92;&#92;&#92;]*\&quot;$"</span>);
+<a class="jxr_linenumber" name="L153" href="#L153">153</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Pattern FONT_FAMILY_ITEM_BARE = Pattern.compile(<span class="jxr_string">"^[a-zA-Z][a-zA-Z0-9 -]*$"</span>);
+<a class="jxr_linenumber" name="L154" href="#L154">154</a> 
+<a class="jxr_linenumber" name="L155" href="#L155">155</a> 	<em class="jxr_comment">// Gradient function: name, then a nested-function-call allowlist scan, then a strict argument charset.</em>
+<a class="jxr_linenumber" name="L156" href="#L156">156</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Pattern GRADIENT_OUTER =
+<a class="jxr_linenumber" name="L157" href="#L157">157</a> 		Pattern.compile(<span class="jxr_string">"^(?i:repeating-)?(?i:linear|radial|conic)-gradient&#92;&#92;(.*&#92;&#92;)$"</span>, Pattern.DOTALL);
+<a class="jxr_linenumber" name="L158" href="#L158">158</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Pattern FUNCTION_CALL_TOKEN = Pattern.compile(<span class="jxr_string">"([a-zA-Z][a-zA-Z-]*)&#92;&#92;("</span>);
+<a class="jxr_linenumber" name="L159" href="#L159">159</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Set&lt;String&gt; GRADIENT_ALLOWED_NESTED_FUNCTIONS = Set.of(<span class="jxr_string">"rgb"</span>, <span class="jxr_string">"rgba"</span>, <span class="jxr_string">"hsl"</span>, <span class="jxr_string">"hsla"</span>, <span class="jxr_string">"calc"</span>);
+<a class="jxr_linenumber" name="L160" href="#L160">160</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Pattern GRADIENT_ARG_CHARSET = Pattern.compile(<span class="jxr_string">"^[0-9a-zA-Z%#.,&#92;&#92;s()-]*$"</span>);
+<a class="jxr_linenumber" name="L161" href="#L161">161</a> 
+<a class="jxr_linenumber" name="L162" href="#L162">162</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Set&lt;String&gt; NAMED_COLORS_AND_KEYWORDS = namedColorsAndKeywords();
+<a class="jxr_linenumber" name="L163" href="#L163">163</a> 
+<a class="jxr_linenumber" name="L164" href="#L164">164</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">boolean</strong> isAllowedShape(String v) {
+<a class="jxr_linenumber" name="L165" href="#L165">165</a> 		<strong class="jxr_keyword">return</strong> HEX_COLOR.matcher(v).matches()
+<a class="jxr_linenumber" name="L166" href="#L166">166</a> 			|| FUNCTIONAL_COLOR.matcher(v).matches()
+<a class="jxr_linenumber" name="L167" href="#L167">167</a> 			|| NAMED_COLORS_AND_KEYWORDS.contains(v.toLowerCase(Locale.ROOT))
+<a class="jxr_linenumber" name="L168" href="#L168">168</a> 			|| LENGTH_LIST.matcher(v).matches()
+<a class="jxr_linenumber" name="L169" href="#L169">169</a> 			|| isFontFamilyList(v)
+<a class="jxr_linenumber" name="L170" href="#L170">170</a> 			|| isGradient(v)
+<a class="jxr_linenumber" name="L171" href="#L171">171</a> 			|| isBoxShadow(v);
+<a class="jxr_linenumber" name="L172" href="#L172">172</a> 	}
+<a class="jxr_linenumber" name="L173" href="#L173">173</a> 
+<a class="jxr_linenumber" name="L174" href="#L174">174</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">boolean</strong> isBoxShadow(String v) {
+<a class="jxr_linenumber" name="L175" href="#L175">175</a> 		<strong class="jxr_keyword">var</strong> m = BOX_SHADOW.matcher(v);
+<a class="jxr_linenumber" name="L176" href="#L176">176</a> 		<strong class="jxr_keyword">if</strong> (! m.matches())
+<a class="jxr_linenumber" name="L177" href="#L177">177</a> 			<strong class="jxr_keyword">return</strong> false;
+<a class="jxr_linenumber" name="L178" href="#L178">178</a> 		<strong class="jxr_keyword">var</strong> color = m.group(1);
+<a class="jxr_linenumber" name="L179" href="#L179">179</a> 		<strong class="jxr_keyword">if</strong> (HEX_COLOR.matcher(color).matches() || FUNCTIONAL_COLOR.matcher(color).matches())
+<a class="jxr_linenumber" name="L180" href="#L180">180</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
+<a class="jxr_linenumber" name="L181" href="#L181">181</a> 		<strong class="jxr_keyword">var</strong> lower = color.toLowerCase(Locale.ROOT);
+<a class="jxr_linenumber" name="L182" href="#L182">182</a> 		<strong class="jxr_keyword">return</strong> NAMED_COLORS_AND_KEYWORDS.contains(lower) &amp;&amp; ! NOT_SHADOW_COLORS.contains(lower);
+<a class="jxr_linenumber" name="L183" href="#L183">183</a> 	}
+<a class="jxr_linenumber" name="L184" href="#L184">184</a> 
+<a class="jxr_linenumber" name="L185" href="#L185">185</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">boolean</strong> isFontFamilyList(String v) {
+<a class="jxr_linenumber" name="L186" href="#L186">186</a> 		<strong class="jxr_keyword">var</strong> items = v.split(<span class="jxr_string">","</span>, -1);
+<a class="jxr_linenumber" name="L187" href="#L187">187</a> 		<strong class="jxr_keyword">if</strong> (items.length == 0)
+<a class="jxr_linenumber" name="L188" href="#L188">188</a> 			<strong class="jxr_keyword">return</strong> false;
+<a class="jxr_linenumber" name="L189" href="#L189">189</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> item : items) {
+<a class="jxr_linenumber" name="L190" href="#L190">190</a> 			<strong class="jxr_keyword">var</strong> t = item.trim();
+<a class="jxr_linenumber" name="L191" href="#L191">191</a> 			<strong class="jxr_keyword">if</strong> (t.isEmpty())
+<a class="jxr_linenumber" name="L192" href="#L192">192</a> 				<strong class="jxr_keyword">return</strong> false;
+<a class="jxr_linenumber" name="L193" href="#L193">193</a> 			<strong class="jxr_keyword">if</strong> (! (FONT_FAMILY_ITEM_SQ.matcher(t).matches() || FONT_FAMILY_ITEM_DQ.matcher(t).matches() || FONT_FAMILY_ITEM_BARE.matcher(t).matches()))
+<a class="jxr_linenumber" name="L194" href="#L194">194</a> 				<strong class="jxr_keyword">return</strong> false;
+<a class="jxr_linenumber" name="L195" href="#L195">195</a> 		}
+<a class="jxr_linenumber" name="L196" href="#L196">196</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
+<a class="jxr_linenumber" name="L197" href="#L197">197</a> 	}
+<a class="jxr_linenumber" name="L198" href="#L198">198</a> 
+<a class="jxr_linenumber" name="L199" href="#L199">199</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">boolean</strong> isGradient(String v) {
+<a class="jxr_linenumber" name="L200" href="#L200">200</a> 		<strong class="jxr_keyword">if</strong> (! GRADIENT_OUTER.matcher(v).matches())
+<a class="jxr_linenumber" name="L201" href="#L201">201</a> 			<strong class="jxr_keyword">return</strong> false;
+<a class="jxr_linenumber" name="L202" href="#L202">202</a> 		<strong class="jxr_keyword">var</strong> <strong class="jxr_keyword">inner</strong> = v.substring(v.indexOf('(') + 1, v.length() - 1);
+<a class="jxr_linenumber" name="L203" href="#L203">203</a> 		<strong class="jxr_keyword">var</strong> m = FUNCTION_CALL_TOKEN.matcher(<strong class="jxr_keyword">inner</strong>);
+<a class="jxr_linenumber" name="L204" href="#L204">204</a> 		<strong class="jxr_keyword">while</strong> (m.find()) {
+<a class="jxr_linenumber" name="L205" href="#L205">205</a> 			<strong class="jxr_keyword">var</strong> fn = m.group(1).toLowerCase(Locale.ROOT);
+<a class="jxr_linenumber" name="L206" href="#L206">206</a> 			<strong class="jxr_keyword">if</strong> (! GRADIENT_ALLOWED_NESTED_FUNCTIONS.contains(fn))
+<a class="jxr_linenumber" name="L207" href="#L207">207</a> 				<strong class="jxr_keyword">return</strong> false;
+<a class="jxr_linenumber" name="L208" href="#L208">208</a> 		}
+<a class="jxr_linenumber" name="L209" href="#L209">209</a> 		<strong class="jxr_keyword">return</strong> GRADIENT_ARG_CHARSET.matcher(<strong class="jxr_keyword">inner</strong>).matches();
+<a class="jxr_linenumber" name="L210" href="#L210">210</a> 	}
+<a class="jxr_linenumber" name="L211" href="#L211">211</a> 
+<a class="jxr_linenumber" name="L212" href="#L212">212</a> 	<em class="jxr_javadoccomment">/** CSS Color Module named colors + CSS-wide/global keywords, lowercased. */</em>
+<a class="jxr_linenumber" name="L213" href="#L213">213</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Set&lt;String&gt; namedColorsAndKeywords() {
+<a class="jxr_linenumber" name="L214" href="#L214">214</a> 		<strong class="jxr_keyword">var</strong> s = <strong class="jxr_keyword">new</strong> HashSet&lt;&gt;(Set.of(
+<a class="jxr_linenumber" name="L215" href="#L215">215</a> 			<span class="jxr_string">"aliceblue"</span>, <span class="jxr_string">"antiquewhite"</span>, <span class="jxr_string">"aqua"</span>, <span class="jxr_string">"aquamarine"</span>, <span class="jxr_string">"azure"</span>, <span class="jxr_string">"beige"</span>, <span class="jxr_string">"bisque"</span>, <span class="jxr_string">"black"</span>, <span class="jxr_string">"blanchedalmond"</span>,
+<a class="jxr_linenumber" name="L216" href="#L216">216</a> 			<span class="jxr_string">"blue"</span>, <span class="jxr_string">"blueviolet"</span>, <span class="jxr_string">"brown"</span>, <span class="jxr_string">"burlywood"</span>, <span class="jxr_string">"cadetblue"</span>, <span class="jxr_string">"chartreuse"</span>, <span class="jxr_string">"chocolate"</span>, <span class="jxr_string">"coral"</span>,
+<a class="jxr_linenumber" name="L217" href="#L217">217</a> 			<span class="jxr_string">"cornflowerblue"</span>, <span class="jxr_string">"cornsilk"</span>, <span class="jxr_string">"crimson"</span>, <span class="jxr_string">"cyan"</span>, <span class="jxr_string">"darkblue"</span>, <span class="jxr_string">"darkcyan"</span>, <span class="jxr_string">"darkgoldenrod"</span>, <span class="jxr_string">"darkgray"</span>,
+<a class="jxr_linenumber" name="L218" href="#L218">218</a> 			<span class="jxr_string">"darkgreen"</span>, <span class="jxr_string">"darkgrey"</span>, <span class="jxr_string">"darkkhaki"</span>, <span class="jxr_string">"darkmagenta"</span>, <span class="jxr_string">"darkolivegreen"</span>, <span class="jxr_string">"darkorange"</span>, <span class="jxr_string">"darkorchid"</span>,
+<a class="jxr_linenumber" name="L219" href="#L219">219</a> 			<span class="jxr_string">"darkred"</span>, <span class="jxr_string">"darksalmon"</span>, <span class="jxr_string">"darkseagreen"</span>, <span class="jxr_string">"darkslateblue"</span>, <span class="jxr_string">"darkslategray"</span>, <span class="jxr_string">"darkslategrey"</span>,
+<a class="jxr_linenumber" name="L220" href="#L220">220</a> 			<span class="jxr_string">"darkturquoise"</span>, <span class="jxr_string">"darkviolet"</span>, <span class="jxr_string">"deeppink"</span>, <span class="jxr_string">"deepskyblue"</span>, <span class="jxr_string">"dimgray"</span>, <span class="jxr_string">"dimgrey"</span>, <span class="jxr_string">"dodgerblue"</span>,
+<a class="jxr_linenumber" name="L221" href="#L221">221</a> 			<span class="jxr_string">"firebrick"</span>, <span class="jxr_string">"floralwhite"</span>, <span class="jxr_string">"forestgreen"</span>, <span class="jxr_string">"fuchsia"</span>, <span class="jxr_string">"gainsboro"</span>, <span class="jxr_string">"ghostwhite"</span>, <span class="jxr_string">"gold"</span>, <span class="jxr_string">"goldenrod"</span>,
+<a class="jxr_linenumber" name="L222" href="#L222">222</a> 			<span class="jxr_string">"gray"</span>, <span class="jxr_string">"green"</span>, <span class="jxr_string">"greenyellow"</span>, <span class="jxr_string">"grey"</span>, <span class="jxr_string">"honeydew"</span>, <span class="jxr_string">"hotpink"</span>, <span class="jxr_string">"indianred"</span>, <span class="jxr_string">"indigo"</span>, <span class="jxr_string">"ivory"</span>, <span class="jxr_string">"khaki"</span>,
+<a class="jxr_linenumber" name="L223" href="#L223">223</a> 			<span class="jxr_string">"lavender"</span>, <span class="jxr_string">"lavenderblush"</span>, <span class="jxr_string">"lawngreen"</span>, <span class="jxr_string">"lemonchiffon"</span>, <span class="jxr_string">"lightblue"</span>, <span class="jxr_string">"lightcoral"</span>, <span class="jxr_string">"lightcyan"</span>,
+<a class="jxr_linenumber" name="L224" href="#L224">224</a> 			<span class="jxr_string">"lightgoldenrodyellow"</span>, <span class="jxr_string">"lightgray"</span>, <span class="jxr_string">"lightgreen"</span>, <span class="jxr_string">"lightgrey"</span>, <span class="jxr_string">"lightpink"</span>, <span class="jxr_string">"lightsalmon"</span>,
+<a class="jxr_linenumber" name="L225" href="#L225">225</a> 			<span class="jxr_string">"lightseagreen"</span>, <span class="jxr_string">"lightskyblue"</span>, <span class="jxr_string">"lightslategray"</span>, <span class="jxr_string">"lightslategrey"</span>, <span class="jxr_string">"lightsteelblue"</span>, <span class="jxr_string">"lightyellow"</span>,
+<a class="jxr_linenumber" name="L226" href="#L226">226</a> 			<span class="jxr_string">"lime"</span>, <span class="jxr_string">"limegreen"</span>, <span class="jxr_string">"linen"</span>, <span class="jxr_string">"magenta"</span>, <span class="jxr_string">"maroon"</span>, <span class="jxr_string">"mediumaquamarine"</span>, <span class="jxr_string">"mediumblue"</span>, <span class="jxr_string">"mediumorchid"</span>,
+<a class="jxr_linenumber" name="L227" href="#L227">227</a> 			<span class="jxr_string">"mediumpurple"</span>, <span class="jxr_string">"mediumseagreen"</span>, <span class="jxr_string">"mediumslateblue"</span>, <span class="jxr_string">"mediumspringgreen"</span>, <span class="jxr_string">"mediumturquoise"</span>,
+<a class="jxr_linenumber" name="L228" href="#L228">228</a> 			<span class="jxr_string">"mediumvioletred"</span>, <span class="jxr_string">"midnightblue"</span>, <span class="jxr_string">"mintcream"</span>, <span class="jxr_string">"mistyrose"</span>, <span class="jxr_string">"moccasin"</span>, <span class="jxr_string">"navajowhite"</span>, <span class="jxr_string">"navy"</span>,
+<a class="jxr_linenumber" name="L229" href="#L229">229</a> 			<span class="jxr_string">"oldlace"</span>, <span class="jxr_string">"olive"</span>, <span class="jxr_string">"olivedrab"</span>, <span class="jxr_string">"orange"</span>, <span class="jxr_string">"orangered"</span>, <span class="jxr_string">"orchid"</span>, <span class="jxr_string">"palegoldenrod"</span>, <span class="jxr_string">"palegreen"</span>,
+<a class="jxr_linenumber" name="L230" href="#L230">230</a> 			<span class="jxr_string">"paleturquoise"</span>, <span class="jxr_string">"palevioletred"</span>, <span class="jxr_string">"papayawhip"</span>, <span class="jxr_string">"peachpuff"</span>, <span class="jxr_string">"peru"</span>, <span class="jxr_string">"pink"</span>, <span class="jxr_string">"plum"</span>, <span class="jxr_string">"powderblue"</span>,
+<a class="jxr_linenumber" name="L231" href="#L231">231</a> 			<span class="jxr_string">"purple"</span>, <span class="jxr_string">"rebeccapurple"</span>, <span class="jxr_string">"red"</span>, <span class="jxr_string">"rosybrown"</span>, <span class="jxr_string">"royalblue"</span>, <span class="jxr_string">"saddlebrown"</span>, <span class="jxr_string">"salmon"</span>, <span class="jxr_string">"sandybrown"</span>,
+<a class="jxr_linenumber" name="L232" href="#L232">232</a> 			<span class="jxr_string">"seagreen"</span>, <span class="jxr_string">"seashell"</span>, <span class="jxr_string">"sienna"</span>, <span class="jxr_string">"silver"</span>, <span class="jxr_string">"skyblue"</span>, <span class="jxr_string">"slateblue"</span>, <span class="jxr_string">"slategray"</span>, <span class="jxr_string">"slategrey"</span>, <span class="jxr_string">"snow"</span>,
+<a class="jxr_linenumber" name="L233" href="#L233">233</a> 			<span class="jxr_string">"springgreen"</span>, <span class="jxr_string">"steelblue"</span>, <span class="jxr_string">"tan"</span>, <span class="jxr_string">"teal"</span>, <span class="jxr_string">"thistle"</span>, <span class="jxr_string">"tomato"</span>, <span class="jxr_string">"turquoise"</span>, <span class="jxr_string">"violet"</span>, <span class="jxr_string">"wheat"</span>, <span class="jxr_string">"white"</span>,
+<a class="jxr_linenumber" name="L234" href="#L234">234</a> 			<span class="jxr_string">"whitesmoke"</span>, <span class="jxr_string">"yellow"</span>, <span class="jxr_string">"yellowgreen"</span>));
+<a class="jxr_linenumber" name="L235" href="#L235">235</a> 		<em class="jxr_comment">// "none": lets a theme express a flat, ungradiated page background (background-image: none),</em>
+<a class="jxr_linenumber" name="L236" href="#L236">236</a> 		<em class="jxr_comment">// letting html,body's own background-color show through.  "none" has no nested-function or url() capability,</em>
+<a class="jxr_linenumber" name="L237" href="#L237">237</a> 		<em class="jxr_comment">// so admitting it as a bare keyword does not reopen anything URL_REJECT or the gradient nested-function</em>
+<a class="jxr_linenumber" name="L238" href="#L238">238</a> 		<em class="jxr_comment">// allowlist exist to close - it is an orthogonal branch of isAllowedShape, not a loosening of the url() ban.</em>
+<a class="jxr_linenumber" name="L239" href="#L239">239</a> 		s.addAll(Set.of(<span class="jxr_string">"transparent"</span>, <span class="jxr_string">"currentcolor"</span>, <span class="jxr_string">"inherit"</span>, <span class="jxr_string">"initial"</span>, <span class="jxr_string">"unset"</span>, <span class="jxr_string">"none"</span>));
+<a class="jxr_linenumber" name="L240" href="#L240">240</a> 		<strong class="jxr_keyword">return</strong> Set.copyOf(s);
+<a class="jxr_linenumber" name="L241" href="#L241">241</a> 	}
+<a class="jxr_linenumber" name="L242" href="#L242">242</a> }
+</pre>
+<hr/>
+<div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>
+</body>
+</html>

@@ -119,41 +119,65 @@
 <span class="source-line-no">106</span><span id="line-106">      this.thriftValue = thriftValue;</span>
 <span class="source-line-no">107</span><span id="line-107">   }</span>
 <span class="source-line-no">108</span><span id="line-108"></span>
-<span class="source-line-no">109</span><span id="line-109">   abstract byte[] compress(byte[] data) throws IOException;</span>
-<span class="source-line-no">110</span><span id="line-110"></span>
-<span class="source-line-no">111</span><span id="line-111">   abstract byte[] decompress(byte[] data, int uncompressedSize) throws IOException;</span>
-<span class="source-line-no">112</span><span id="line-112"></span>
-<span class="source-line-no">113</span><span id="line-113">   /**</span>
-<span class="source-line-no">114</span><span id="line-114">    * Resolves a Thrift {@code CompressionCodec} enum value to a supported codec.</span>
-<span class="source-line-no">115</span><span id="line-115">    *</span>
-<span class="source-line-no">116</span><span id="line-116">    * &lt;p&gt;</span>
-<span class="source-line-no">117</span><span id="line-117">    * {@code UNCOMPRESSED} (0) and {@code GZIP} (2) support both directions; {@code SNAPPY} (1) is</span>
-<span class="source-line-no">118</span><span id="line-118">    * decode-only.  Any other value — a known-but-unsupported codec (LZO/BROTLI/LZ4/ZSTD/LZ4_RAW) or an</span>
-<span class="source-line-no">119</span><span id="line-119">    * unrecognized id — is a hard error rather than a silent fallback to {@code UNCOMPRESSED}, which would</span>
-<span class="source-line-no">120</span><span id="line-120">    * otherwise treat still-compressed bytes as raw page data and surface silent garbage (GAP-5).</span>
-<span class="source-line-no">121</span><span id="line-121">    *</span>
-<span class="source-line-no">122</span><span id="line-122">    * @param value The Thrift codec enum value.</span>
-<span class="source-line-no">123</span><span id="line-123">    * @return The matching supported codec.</span>
-<span class="source-line-no">124</span><span id="line-124">    * @throws IOException If the codec is not supported by this implementation.</span>
-<span class="source-line-no">125</span><span id="line-125">    */</span>
-<span class="source-line-no">126</span><span id="line-126">   static CompressionCodec fromThrift(int value) throws IOException {</span>
-<span class="source-line-no">127</span><span id="line-127">      for (var c : values())</span>
-<span class="source-line-no">128</span><span id="line-128">         if (c.thriftValue == value)</span>
-<span class="source-line-no">129</span><span id="line-129">            return c;</span>
-<span class="source-line-no">130</span><span id="line-130">      throw ioex("Unsupported Parquet compression codec: %s. Only UNCOMPRESSED, GZIP, and SNAPPY (decode-only) are supported.", codecName(value));</span>
+<span class="source-line-no">109</span><span id="line-109">   /**</span>
+<span class="source-line-no">110</span><span id="line-110">    * Resolves a codec name for &lt;b&gt;writing&lt;/b&gt;.</span>
+<span class="source-line-no">111</span><span id="line-111">    *</span>
+<span class="source-line-no">112</span><span id="line-112">    * @param name The codec name (case-insensitive).  Only &lt;c&gt;UNCOMPRESSED&lt;/c&gt; and &lt;c&gt;GZIP&lt;/c&gt; are writable.</span>
+<span class="source-line-no">113</span><span id="line-113">    * @return The matching codec.</span>
+<span class="source-line-no">114</span><span id="line-114">    * @throws IllegalArgumentException If the name is unknown or names a decode-only codec such as &lt;c&gt;SNAPPY&lt;/c&gt;.</span>
+<span class="source-line-no">115</span><span id="line-115">    */</span>
+<span class="source-line-no">116</span><span id="line-116">   static CompressionCodec forWrite(String name) {</span>
+<span class="source-line-no">117</span><span id="line-117">      for (var c : values())</span>
+<span class="source-line-no">118</span><span id="line-118">         if (c.writable() &amp;&amp; c.name().equalsIgnoreCase(name))</span>
+<span class="source-line-no">119</span><span id="line-119">            return c;</span>
+<span class="source-line-no">120</span><span id="line-120">      throw forWriteError(name);</span>
+<span class="source-line-no">121</span><span id="line-121">   }</span>
+<span class="source-line-no">122</span><span id="line-122"></span>
+<span class="source-line-no">123</span><span id="line-123">   static IllegalArgumentException forWriteError(String name) {</span>
+<span class="source-line-no">124</span><span id="line-124">      return new IllegalArgumentException("Unsupported Parquet compression codec for writing: '" + name</span>
+<span class="source-line-no">125</span><span id="line-125">         + "'. Valid write codecs: UNCOMPRESSED, GZIP."</span>
+<span class="source-line-no">126</span><span id="line-126">         + (SNAPPY.name().equalsIgnoreCase(name) ? " SNAPPY is decode-only and cannot be written." : ""));</span>
+<span class="source-line-no">127</span><span id="line-127">   }</span>
+<span class="source-line-no">128</span><span id="line-128"></span>
+<span class="source-line-no">129</span><span id="line-129">   boolean writable() {</span>
+<span class="source-line-no">130</span><span id="line-130">      return this != SNAPPY;</span>
 <span class="source-line-no">131</span><span id="line-131">   }</span>
 <span class="source-line-no">132</span><span id="line-132"></span>
-<span class="source-line-no">133</span><span id="line-133">   private static String codecName(int value) {</span>
-<span class="source-line-no">134</span><span id="line-134">      return switch (value) {</span>
-<span class="source-line-no">135</span><span id="line-135">         case 3 -&gt; "LZO (3)";</span>
-<span class="source-line-no">136</span><span id="line-136">         case 4 -&gt; "BROTLI (4)";</span>
-<span class="source-line-no">137</span><span id="line-137">         case 5 -&gt; "LZ4 (5)";</span>
-<span class="source-line-no">138</span><span id="line-138">         case 6 -&gt; "ZSTD (6)";</span>
-<span class="source-line-no">139</span><span id="line-139">         case 7 -&gt; "LZ4_RAW (7)";</span>
-<span class="source-line-no">140</span><span id="line-140">         default -&gt; Integer.toString(value);</span>
-<span class="source-line-no">141</span><span id="line-141">      };</span>
-<span class="source-line-no">142</span><span id="line-142">   }</span>
-<span class="source-line-no">143</span><span id="line-143">}</span>
+<span class="source-line-no">133</span><span id="line-133">   abstract byte[] compress(byte[] data) throws IOException;</span>
+<span class="source-line-no">134</span><span id="line-134"></span>
+<span class="source-line-no">135</span><span id="line-135">   abstract byte[] decompress(byte[] data, int uncompressedSize) throws IOException;</span>
+<span class="source-line-no">136</span><span id="line-136"></span>
+<span class="source-line-no">137</span><span id="line-137">   /**</span>
+<span class="source-line-no">138</span><span id="line-138">    * Resolves a Thrift {@code CompressionCodec} enum value to a supported codec.</span>
+<span class="source-line-no">139</span><span id="line-139">    *</span>
+<span class="source-line-no">140</span><span id="line-140">    * &lt;p&gt;</span>
+<span class="source-line-no">141</span><span id="line-141">    * {@code UNCOMPRESSED} (0) and {@code GZIP} (2) support both directions; {@code SNAPPY} (1) is</span>
+<span class="source-line-no">142</span><span id="line-142">    * decode-only.  Any other value — a known-but-unsupported codec (LZO/BROTLI/LZ4/ZSTD/LZ4_RAW) or an</span>
+<span class="source-line-no">143</span><span id="line-143">    * unrecognized id — is a hard error rather than a silent fallback to {@code UNCOMPRESSED}, which would</span>
+<span class="source-line-no">144</span><span id="line-144">    * otherwise treat still-compressed bytes as raw page data and surface silent garbage (GAP-5).</span>
+<span class="source-line-no">145</span><span id="line-145">    *</span>
+<span class="source-line-no">146</span><span id="line-146">    * @param value The Thrift codec enum value.</span>
+<span class="source-line-no">147</span><span id="line-147">    * @return The matching supported codec.</span>
+<span class="source-line-no">148</span><span id="line-148">    * @throws IOException If the codec is not supported by this implementation.</span>
+<span class="source-line-no">149</span><span id="line-149">    */</span>
+<span class="source-line-no">150</span><span id="line-150">   static CompressionCodec fromThrift(int value) throws IOException {</span>
+<span class="source-line-no">151</span><span id="line-151">      for (var c : values())</span>
+<span class="source-line-no">152</span><span id="line-152">         if (c.thriftValue == value)</span>
+<span class="source-line-no">153</span><span id="line-153">            return c;</span>
+<span class="source-line-no">154</span><span id="line-154">      throw ioex("Unsupported Parquet compression codec: %s. Only UNCOMPRESSED, GZIP, and SNAPPY (decode-only) are supported.", codecName(value));</span>
+<span class="source-line-no">155</span><span id="line-155">   }</span>
+<span class="source-line-no">156</span><span id="line-156"></span>
+<span class="source-line-no">157</span><span id="line-157">   private static String codecName(int value) {</span>
+<span class="source-line-no">158</span><span id="line-158">      return switch (value) {</span>
+<span class="source-line-no">159</span><span id="line-159">         case 3 -&gt; "LZO (3)";</span>
+<span class="source-line-no">160</span><span id="line-160">         case 4 -&gt; "BROTLI (4)";</span>
+<span class="source-line-no">161</span><span id="line-161">         case 5 -&gt; "LZ4 (5)";</span>
+<span class="source-line-no">162</span><span id="line-162">         case 6 -&gt; "ZSTD (6)";</span>
+<span class="source-line-no">163</span><span id="line-163">         case 7 -&gt; "LZ4_RAW (7)";</span>
+<span class="source-line-no">164</span><span id="line-164">         default -&gt; Integer.toString(value);</span>
+<span class="source-line-no">165</span><span id="line-165">      };</span>
+<span class="source-line-no">166</span><span id="line-166">   }</span>
+<span class="source-line-no">167</span><span id="line-167">}</span>
 
 
 

@@ -33,8 +33,8 @@
 <a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.server.auth.oauth.OAuthFilter;
 <a class="jxr_linenumber" name="L26" href="#L26">26</a>  
 <a class="jxr_linenumber" name="L27" href="#L27">27</a>  <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <em class="jxr_javadoccomment"> * Binding-owned OAuth 2.1 resource-server (RS) configuration for a {@code 2026-07-28} MCP endpoint &amp;mdash; the F2</em>
-<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <em class="jxr_javadoccomment"> * authorization-hardening baseline (READY-312f).</em>
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <em class="jxr_javadoccomment"> * Binding-owned OAuth 2.1 resource-server (RS) configuration for a {@code 2026-07-28} MCP endpoint &amp;mdash; the</em>
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <em class="jxr_javadoccomment"> * authorization-hardening baseline.</em>
 <a class="jxr_linenumber" name="L30" href="#L30">30</a>  <em class="jxr_javadoccomment"> *</em>
 <a class="jxr_linenumber" name="L31" href="#L31">31</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
 <a class="jxr_linenumber" name="L32" href="#L32">32</a>  <em class="jxr_javadoccomment"> * &lt;b&gt;Off by default.&lt;/b&gt; {@link #isEnabled()} is &lt;jk&gt;false&lt;/jk&gt; unless {@link #setEnabled(boolean) enabled}, so an</em>
@@ -64,37 +64,37 @@
 <a class="jxr_linenumber" name="L56" href="#L56">56</a>  <em class="jxr_javadoccomment"> * @since 10.0.0</em>
 <a class="jxr_linenumber" name="L57" href="#L57">57</a>  <em class="jxr_javadoccomment"> */</em>
 <a class="jxr_linenumber" name="L58" href="#L58">58</a>  @SuppressWarnings({
-<a class="jxr_linenumber" name="L59" href="#L59">59</a>  	<span class="jxr_string">"java:S115"</span> <em class="jxr_comment">// Constants use UPPER_snakeCase convention (e.g., MSG_scopeMustNotBeNullOrBlank)</em>
-<a class="jxr_linenumber" name="L60" href="#L60">60</a>  })
-<a class="jxr_linenumber" name="L61" href="#L61">61</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> McpResourceServerConfig {
-<a class="jxr_linenumber" name="L62" href="#L62">62</a>  
-<a class="jxr_linenumber" name="L63" href="#L63">63</a>  	<em class="jxr_javadoccomment">/** Default challenge realm. */</em>
-<a class="jxr_linenumber" name="L64" href="#L64">64</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String DEFAULT_REALM = <span class="jxr_string">"mcp"</span>;
-<a class="jxr_linenumber" name="L65" href="#L65">65</a>  
-<a class="jxr_linenumber" name="L66" href="#L66">66</a>  	<em class="jxr_javadoccomment">/** Default advertised/accepted bearer method. */</em>
-<a class="jxr_linenumber" name="L67" href="#L67">67</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String DEFAULT_BEARER_METHOD = <span class="jxr_string">"header"</span>;
-<a class="jxr_linenumber" name="L68" href="#L68">68</a>  
-<a class="jxr_linenumber" name="L69" href="#L69">69</a>  	<em class="jxr_comment">// Error message constant (reused by every scope-mutation entry point below).</em>
-<a class="jxr_linenumber" name="L70" href="#L70">70</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String MSG_scopeMustNotBeNullOrBlank = <span class="jxr_string">"scope must not be null or blank"</span>;
-<a class="jxr_linenumber" name="L71" href="#L71">71</a>  
-<a class="jxr_linenumber" name="L72" href="#L72">72</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">boolean</strong> enabled;
-<a class="jxr_linenumber" name="L73" href="#L73">73</a>  	<strong class="jxr_keyword">private</strong> URI resource;
-<a class="jxr_linenumber" name="L74" href="#L74">74</a>  	<strong class="jxr_keyword">private</strong> String audience;
-<a class="jxr_linenumber" name="L75" href="#L75">75</a>  	<strong class="jxr_keyword">private</strong> String realm = DEFAULT_REALM;
-<a class="jxr_linenumber" name="L76" href="#L76">76</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">boolean</strong> requireAudienceClaim = <strong class="jxr_keyword">true</strong>;
-<a class="jxr_linenumber" name="L77" href="#L77">77</a>  	<strong class="jxr_keyword">private</strong> <a name="TokenValidator" href="../../../../../../../org/apache/juneau/rest/server/auth/TokenValidator.html#TokenValidator">TokenValidator</a> tokenValidator;
-<a class="jxr_linenumber" name="L78" href="#L78">78</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> List&lt;URI&gt; authorizationServers = <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;();
-<a class="jxr_linenumber" name="L79" href="#L79">79</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Set&lt;String&gt; scopesSupported = <strong class="jxr_keyword">new</strong> LinkedHashSet&lt;&gt;();
-<a class="jxr_linenumber" name="L80" href="#L80">80</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Set&lt;String&gt; requiredScopes = <strong class="jxr_keyword">new</strong> LinkedHashSet&lt;&gt;();
-<a class="jxr_linenumber" name="L81" href="#L81">81</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Set&lt;String&gt; bearerMethodsSupported = <strong class="jxr_keyword">new</strong> LinkedHashSet&lt;&gt;(List.of(DEFAULT_BEARER_METHOD));
-<a class="jxr_linenumber" name="L82" href="#L82">82</a>  
-<a class="jxr_linenumber" name="L83" href="#L83">83</a>  	<em class="jxr_javadoccomment">/** Wildcard operation-name key: an entry keyed on this applies to every operation of a given JSON-RPC method. */</em>
-<a class="jxr_linenumber" name="L84" href="#L84">84</a>  	<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String OPERATION_WILDCARD = <span class="jxr_string">"*"</span>;
-<a class="jxr_linenumber" name="L85" href="#L85">85</a>  
-<a class="jxr_linenumber" name="L86" href="#L86">86</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Map&lt;String,Set&lt;String&gt;&gt; operationScopes = <strong class="jxr_keyword">new</strong> LinkedHashMap&lt;&gt;();
-<a class="jxr_linenumber" name="L87" href="#L87">87</a>  	<strong class="jxr_keyword">private</strong> <a name="McpOperationScopeResolver" href="../../../../../../../org/apache/juneau/rest/server/mcp/v20260728/McpOperationScopeResolver.html#McpOperationScopeResolver">McpOperationScopeResolver</a> operationScopeResolver;
-<a class="jxr_linenumber" name="L88" href="#L88">88</a>  
-<a class="jxr_linenumber" name="L89" href="#L89">89</a>  	@SuppressWarnings(<span class="jxr_string">"java:S3077"</span>) <em class="jxr_comment">// OAuthFilter is an effectively-immutable, thread-safe holder; volatile publication of the memoized instance is sufficient.</em>
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>  	<span class="jxr_string">"java:S115"</span>, <em class="jxr_comment">// Constants use UPPER_snakeCase convention (e.g., MSG_scopeMustNotBeNullOrBlank)</em>
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>  	<span class="jxr_string">"java:S1192"</span> <em class="jxr_comment">// Duplicated validation-message literals read more clearly inline than as constants.</em>
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>  })
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> McpResourceServerConfig {
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>  
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>  	<em class="jxr_javadoccomment">/** Default challenge realm. */</em>
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String DEFAULT_REALM = <span class="jxr_string">"mcp"</span>;
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>  
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>  	<em class="jxr_javadoccomment">/** Default advertised/accepted bearer method. */</em>
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String DEFAULT_BEARER_METHOD = <span class="jxr_string">"header"</span>;
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>  
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">boolean</strong> enabled;
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>  	<strong class="jxr_keyword">private</strong> URI resource;
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>  	<strong class="jxr_keyword">private</strong> String audience;
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>  	<strong class="jxr_keyword">private</strong> String realm = DEFAULT_REALM;
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">boolean</strong> requireAudienceClaim = <strong class="jxr_keyword">true</strong>;
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>  	<strong class="jxr_keyword">private</strong> <a name="TokenValidator" href="../../../../../../../org/apache/juneau/rest/server/auth/TokenValidator.html#TokenValidator">TokenValidator</a> tokenValidator;
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> List&lt;URI&gt; authorizationServers = <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;();
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Set&lt;String&gt; scopesSupported = <strong class="jxr_keyword">new</strong> LinkedHashSet&lt;&gt;();
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Set&lt;String&gt; requiredScopes = <strong class="jxr_keyword">new</strong> LinkedHashSet&lt;&gt;();
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Set&lt;String&gt; bearerMethodsSupported = <strong class="jxr_keyword">new</strong> LinkedHashSet&lt;&gt;(List.of(DEFAULT_BEARER_METHOD));
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>  
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>  	<em class="jxr_javadoccomment">/** Wildcard operation-name key: an entry keyed on this applies to every operation of a given JSON-RPC method. */</em>
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>  	<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String OPERATION_WILDCARD = <span class="jxr_string">"*"</span>;
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>  
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Map&lt;String,Set&lt;String&gt;&gt; operationScopes = <strong class="jxr_keyword">new</strong> LinkedHashMap&lt;&gt;();
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>  	<strong class="jxr_keyword">private</strong> <a name="McpOperationScopeResolver" href="../../../../../../../org/apache/juneau/rest/server/mcp/v20260728/McpOperationScopeResolver.html#McpOperationScopeResolver">McpOperationScopeResolver</a> operationScopeResolver;
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>  
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>  	@SuppressWarnings({
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>  		<span class="jxr_string">"java:S3077"</span> <em class="jxr_comment">// OAuthFilter is an effectively-immutable, thread-safe holder; volatile publication of the memoized instance is sufficient.</em>
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>  	})
 <a class="jxr_linenumber" name="L90" href="#L90">90</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">volatile</strong> OAuthFilter oauthFilter;
 <a class="jxr_linenumber" name="L91" href="#L91">91</a>  
 <a class="jxr_linenumber" name="L92" href="#L92">92</a>  	<em class="jxr_javadoccomment">/**</em>
@@ -184,7 +184,7 @@
 <a class="jxr_linenumber" name="L176" href="#L176">176</a> 	}
 <a class="jxr_linenumber" name="L177" href="#L177">177</a> 
 <a class="jxr_linenumber" name="L178" href="#L178">178</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L179" href="#L179">179</a> <em class="jxr_javadoccomment">	 * Whether a validated token must expose audience claims for RFC 8707 audience enforcement to apply (READY-312f F2, H2).</em>
+<a class="jxr_linenumber" name="L179" href="#L179">179</a> <em class="jxr_javadoccomment">	 * Whether a validated token must expose audience claims for RFC 8707 audience enforcement to apply.</em>
 <a class="jxr_linenumber" name="L180" href="#L180">180</a> <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L181" href="#L181">181</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
 <a class="jxr_linenumber" name="L182" href="#L182">182</a> <em class="jxr_javadoccomment">	 * When &lt;jk&gt;true&lt;/jk&gt; (the default), a validator that returns a bare {@link java.security.Principal} carrying no</em>
@@ -200,7 +200,7 @@
 <a class="jxr_linenumber" name="L192" href="#L192">192</a> 	}
 <a class="jxr_linenumber" name="L193" href="#L193">193</a> 
 <a class="jxr_linenumber" name="L194" href="#L194">194</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L195" href="#L195">195</a> <em class="jxr_javadoccomment">	 * Sets whether a validated token must expose audience claims for audience enforcement to apply (H2).</em>
+<a class="jxr_linenumber" name="L195" href="#L195">195</a> <em class="jxr_javadoccomment">	 * Sets whether a validated token must expose audience claims for audience enforcement to apply.</em>
 <a class="jxr_linenumber" name="L196" href="#L196">196</a> <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L197" href="#L197">197</a> <em class="jxr_javadoccomment">	 * @param value The new value.  Defaults to &lt;jk&gt;true&lt;/jk&gt; (fail-closed).</em>
 <a class="jxr_linenumber" name="L198" href="#L198">198</a> <em class="jxr_javadoccomment">	 * @return This object (for method chaining).</em>
@@ -271,7 +271,7 @@
 <a class="jxr_linenumber" name="L263" href="#L263">263</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L264" href="#L264">264</a> 	<strong class="jxr_keyword">public</strong> McpResourceServerConfig addScopeSupported(String value) {
 <a class="jxr_linenumber" name="L265" href="#L265">265</a> 		<strong class="jxr_keyword">if</strong> (value == <strong class="jxr_keyword">null</strong> || value.isBlank())
-<a class="jxr_linenumber" name="L266" href="#L266">266</a> 			<strong class="jxr_keyword">throw</strong> iaex(MSG_scopeMustNotBeNullOrBlank);
+<a class="jxr_linenumber" name="L266" href="#L266">266</a> 			<strong class="jxr_keyword">throw</strong> iaex(<span class="jxr_string">"scope must not be null or blank"</span>);
 <a class="jxr_linenumber" name="L267" href="#L267">267</a> 		scopesSupported.add(value);
 <a class="jxr_linenumber" name="L268" href="#L268">268</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
 <a class="jxr_linenumber" name="L269" href="#L269">269</a> 	}
@@ -294,7 +294,7 @@
 <a class="jxr_linenumber" name="L286" href="#L286">286</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L287" href="#L287">287</a> 	<strong class="jxr_keyword">public</strong> McpResourceServerConfig addRequiredScope(String value) {
 <a class="jxr_linenumber" name="L288" href="#L288">288</a> 		<strong class="jxr_keyword">if</strong> (value == <strong class="jxr_keyword">null</strong> || value.isBlank())
-<a class="jxr_linenumber" name="L289" href="#L289">289</a> 			<strong class="jxr_keyword">throw</strong> iaex(MSG_scopeMustNotBeNullOrBlank);
+<a class="jxr_linenumber" name="L289" href="#L289">289</a> 			<strong class="jxr_keyword">throw</strong> iaex(<span class="jxr_string">"scope must not be null or blank"</span>);
 <a class="jxr_linenumber" name="L290" href="#L290">290</a> 		requiredScopes.add(value);
 <a class="jxr_linenumber" name="L291" href="#L291">291</a> 		scopesSupported.add(value);
 <a class="jxr_linenumber" name="L292" href="#L292">292</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
@@ -336,7 +336,7 @@
 <a class="jxr_linenumber" name="L328" href="#L328">328</a> 		<strong class="jxr_keyword">var</strong> set = <strong class="jxr_keyword">new</strong> LinkedHashSet&lt;String&gt;();
 <a class="jxr_linenumber" name="L329" href="#L329">329</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> s : scopes) {
 <a class="jxr_linenumber" name="L330" href="#L330">330</a> 			<strong class="jxr_keyword">if</strong> (s == <strong class="jxr_keyword">null</strong> || s.isBlank())
-<a class="jxr_linenumber" name="L331" href="#L331">331</a> 				<strong class="jxr_keyword">throw</strong> iaex(MSG_scopeMustNotBeNullOrBlank);
+<a class="jxr_linenumber" name="L331" href="#L331">331</a> 				<strong class="jxr_keyword">throw</strong> iaex(<span class="jxr_string">"scope must not be null or blank"</span>);
 <a class="jxr_linenumber" name="L332" href="#L332">332</a> 			set.add(s);
 <a class="jxr_linenumber" name="L333" href="#L333">333</a> 		}
 <a class="jxr_linenumber" name="L334" href="#L334">334</a> 		scopesSupported.addAll(set);
@@ -357,7 +357,7 @@
 <a class="jxr_linenumber" name="L349" href="#L349">349</a> <em class="jxr_javadoccomment">	 * Installs a dynamic per-operation scope resolver, overriding the default static {@link #addOperationScope map}.</em>
 <a class="jxr_linenumber" name="L350" href="#L350">350</a> <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L351" href="#L351">351</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L352" href="#L352">352</a> <em class="jxr_javadoccomment">	 * The seam for a future dynamic resolver (READY-312f Q-c); not built for 10.0.  When set, it fully replaces the</em>
+<a class="jxr_linenumber" name="L352" href="#L352">352</a> <em class="jxr_javadoccomment">	 * The seam for a future dynamic resolver; not built for 10.0.  When set, it fully replaces the</em>
 <a class="jxr_linenumber" name="L353" href="#L353">353</a> <em class="jxr_javadoccomment">	 * static map for {@link #requiredScopesFor(McpOperationContext)}.</em>
 <a class="jxr_linenumber" name="L354" href="#L354">354</a> <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L355" href="#L355">355</a> <em class="jxr_javadoccomment">	 * @param value The resolver, or &lt;jk&gt;null&lt;/jk&gt; to revert to the static map.</em>
@@ -369,7 +369,7 @@
 <a class="jxr_linenumber" name="L361" href="#L361">361</a> 	}
 <a class="jxr_linenumber" name="L362" href="#L362">362</a> 
 <a class="jxr_linenumber" name="L363" href="#L363">363</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L364" href="#L364">364</a> <em class="jxr_javadoccomment">	 * Resolves the scopes required to invoke the given operation (SEP-2350).</em>
+<a class="jxr_linenumber" name="L364" href="#L364">364</a> <em class="jxr_javadoccomment">	 * Resolves the scopes required to invoke the given operation.</em>
 <a class="jxr_linenumber" name="L365" href="#L365">365</a> <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L366" href="#L366">366</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
 <a class="jxr_linenumber" name="L367" href="#L367">367</a> <em class="jxr_javadoccomment">	 * Consults the {@link #setOperationScopeResolver(McpOperationScopeResolver) resolver} when installed; otherwise the</em>
@@ -422,7 +422,7 @@
 <a class="jxr_linenumber" name="L414" href="#L414">414</a> 	}
 <a class="jxr_linenumber" name="L415" href="#L415">415</a> 
 <a class="jxr_linenumber" name="L416" href="#L416">416</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L417" href="#L417">417</a> <em class="jxr_javadoccomment">	 * Returns this config's memoized {@link OAuthFilter} (READY-312f F2, M3).</em>
+<a class="jxr_linenumber" name="L417" href="#L417">417</a> <em class="jxr_javadoccomment">	 * Returns this config's memoized {@link OAuthFilter}.</em>
 <a class="jxr_linenumber" name="L418" href="#L418">418</a> <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L419" href="#L419">419</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
 <a class="jxr_linenumber" name="L420" href="#L420">420</a> <em class="jxr_javadoccomment">	 * The filter (RFC 6750 bearer extraction + delegated token validation) is built once from the</em>

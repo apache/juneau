@@ -29,59 +29,158 @@
 <span class="source-line-no">016</span><span id="line-16"> */</span>
 <span class="source-line-no">017</span><span id="line-17">package org.apache.juneau.rest.server.util;</span>
 <span class="source-line-no">018</span><span id="line-18"></span>
-<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.IoUtils.*;</span>
-<span class="source-line-no">020</span><span id="line-20">import static org.apache.juneau.commons.utils.Shorts.*;</span>
+<span class="source-line-no">019</span><span id="line-19">import java.io.*;</span>
+<span class="source-line-no">020</span><span id="line-20">import java.nio.charset.*;</span>
 <span class="source-line-no">021</span><span id="line-21"></span>
-<span class="source-line-no">022</span><span id="line-22">import java.io.*;</span>
-<span class="source-line-no">023</span><span id="line-23"></span>
-<span class="source-line-no">024</span><span id="line-24">import jakarta.servlet.*;</span>
-<span class="source-line-no">025</span><span id="line-25">import jakarta.servlet.http.*;</span>
-<span class="source-line-no">026</span><span id="line-26"></span>
-<span class="source-line-no">027</span><span id="line-27">/**</span>
-<span class="source-line-no">028</span><span id="line-28"> * Wraps an {@link HttpServletRequest} and preloads the content into memory for debugging purposes.</span>
-<span class="source-line-no">029</span><span id="line-29"> *</span>
-<span class="source-line-no">030</span><span id="line-30"> */</span>
-<span class="source-line-no">031</span><span id="line-31">@SuppressWarnings({</span>
-<span class="source-line-no">032</span><span id="line-32">   "resource" // CachingHttpServletRequest manages Closeable resources</span>
-<span class="source-line-no">033</span><span id="line-33">})</span>
-<span class="source-line-no">034</span><span id="line-34">public class CachingHttpServletRequest extends HttpServletRequestWrapper {</span>
-<span class="source-line-no">035</span><span id="line-35"></span>
-<span class="source-line-no">036</span><span id="line-36">   /**</span>
-<span class="source-line-no">037</span><span id="line-37">    * Wraps the specified request inside a {@link CachingHttpServletRequest} if it isn't already.</span>
-<span class="source-line-no">038</span><span id="line-38">    *</span>
-<span class="source-line-no">039</span><span id="line-39">    * @param req The request to wrap. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">040</span><span id="line-40">    * @return The wrapped request.</span>
-<span class="source-line-no">041</span><span id="line-41">    * @throws IOException Thrown by underlying content stream.</span>
-<span class="source-line-no">042</span><span id="line-42">    */</span>
-<span class="source-line-no">043</span><span id="line-43">   public static CachingHttpServletRequest wrap(HttpServletRequest req) throws IOException {</span>
-<span class="source-line-no">044</span><span id="line-44">      if (req instanceof CachingHttpServletRequest req2)</span>
-<span class="source-line-no">045</span><span id="line-45">         return req2;</span>
-<span class="source-line-no">046</span><span id="line-46">      return new CachingHttpServletRequest(req);</span>
-<span class="source-line-no">047</span><span id="line-47">   }</span>
-<span class="source-line-no">048</span><span id="line-48"></span>
-<span class="source-line-no">049</span><span id="line-49">   private final byte[] content;</span>
-<span class="source-line-no">050</span><span id="line-50"></span>
-<span class="source-line-no">051</span><span id="line-51">   /**</span>
-<span class="source-line-no">052</span><span id="line-52">    * Constructor.</span>
-<span class="source-line-no">053</span><span id="line-53">    *</span>
-<span class="source-line-no">054</span><span id="line-54">    * @param req The request being wrapped. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">055</span><span id="line-55">    * @throws IOException If content could not be loaded into memory.</span>
-<span class="source-line-no">056</span><span id="line-56">    */</span>
-<span class="source-line-no">057</span><span id="line-57">   protected CachingHttpServletRequest(HttpServletRequest req) throws IOException {</span>
-<span class="source-line-no">058</span><span id="line-58">      super(req);</span>
-<span class="source-line-no">059</span><span id="line-59">      this.content = readBytes(req.getInputStream());</span>
-<span class="source-line-no">060</span><span id="line-60">   }</span>
-<span class="source-line-no">061</span><span id="line-61"></span>
-<span class="source-line-no">062</span><span id="line-62">   /**</span>
-<span class="source-line-no">063</span><span id="line-63">    * Returns the content of the servlet request without consuming the stream.</span>
-<span class="source-line-no">064</span><span id="line-64">    *</span>
-<span class="source-line-no">065</span><span id="line-65">    * @return The content of the request.  This is a defensive copy; modifying it does not affect the cached request body.</span>
-<span class="source-line-no">066</span><span id="line-66">    */</span>
-<span class="source-line-no">067</span><span id="line-67">   public byte[] getContent() { return cp(content); }</span>
-<span class="source-line-no">068</span><span id="line-68"></span>
-<span class="source-line-no">069</span><span id="line-69">   @Override</span>
-<span class="source-line-no">070</span><span id="line-70">   public ServletInputStream getInputStream() { return new BoundedServletInputStream(content); }</span>
-<span class="source-line-no">071</span><span id="line-71">}</span>
+<span class="source-line-no">022</span><span id="line-22">import jakarta.servlet.*;</span>
+<span class="source-line-no">023</span><span id="line-23">import jakarta.servlet.http.*;</span>
+<span class="source-line-no">024</span><span id="line-24"></span>
+<span class="source-line-no">025</span><span id="line-25">/**</span>
+<span class="source-line-no">026</span><span id="line-26"> * Wraps an {@link HttpServletRequest} and tees a &lt;b&gt;bounded&lt;/b&gt; copy of the request body into memory for debug logging.</span>
+<span class="source-line-no">027</span><span id="line-27"> *</span>
+<span class="source-line-no">028</span><span id="line-28"> * &lt;p&gt;</span>
+<span class="source-line-no">029</span><span id="line-29"> * Unlike a fully-buffering wrapper, this captures at most a configured cap (default 8&amp;nbsp;KB) of the body while passing</span>
+<span class="source-line-no">030</span><span id="line-30"> * the full stream through to the handler untouched. The total number of bytes read is tracked so a truncation marker can</span>
+<span class="source-line-no">031</span><span id="line-31"> * be rendered. Memory stays bounded even for large uploads.</span>
+<span class="source-line-no">032</span><span id="line-32"> *</span>
+<span class="source-line-no">033</span><span id="line-33"> */</span>
+<span class="source-line-no">034</span><span id="line-34">@SuppressWarnings({</span>
+<span class="source-line-no">035</span><span id="line-35">   "resource" // The tee'd request stream is owned by the underlying request/servlet container, which closes it when the request completes; closing it here would break body-caching. Eclipse JDT @Owning warning is by design.</span>
+<span class="source-line-no">036</span><span id="line-36">})</span>
+<span class="source-line-no">037</span><span id="line-37">public class CachingHttpServletRequest extends HttpServletRequestWrapper {</span>
+<span class="source-line-no">038</span><span id="line-38"></span>
+<span class="source-line-no">039</span><span id="line-39">   /** Default body capture cap, in bytes (8&amp;nbsp;KB). */</span>
+<span class="source-line-no">040</span><span id="line-40">   public static final int DEFAULT_CAP = 8 * 1024;</span>
+<span class="source-line-no">041</span><span id="line-41"></span>
+<span class="source-line-no">042</span><span id="line-42">   /**</span>
+<span class="source-line-no">043</span><span id="line-43">    * Wraps the specified request inside a {@link CachingHttpServletRequest} if it isn't already, using the default cap.</span>
+<span class="source-line-no">044</span><span id="line-44">    *</span>
+<span class="source-line-no">045</span><span id="line-45">    * @param req The request to wrap. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">046</span><span id="line-46">    * @return The wrapped request.</span>
+<span class="source-line-no">047</span><span id="line-47">    */</span>
+<span class="source-line-no">048</span><span id="line-48">   public static CachingHttpServletRequest wrap(HttpServletRequest req) {</span>
+<span class="source-line-no">049</span><span id="line-49">      return wrap(req, DEFAULT_CAP);</span>
+<span class="source-line-no">050</span><span id="line-50">   }</span>
+<span class="source-line-no">051</span><span id="line-51"></span>
+<span class="source-line-no">052</span><span id="line-52">   /**</span>
+<span class="source-line-no">053</span><span id="line-53">    * Wraps the specified request inside a {@link CachingHttpServletRequest} if it isn't already.</span>
+<span class="source-line-no">054</span><span id="line-54">    *</span>
+<span class="source-line-no">055</span><span id="line-55">    * @param req The request to wrap. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">056</span><span id="line-56">    * @param cap The maximum number of body bytes to capture.</span>
+<span class="source-line-no">057</span><span id="line-57">    * @return The wrapped request.</span>
+<span class="source-line-no">058</span><span id="line-58">    */</span>
+<span class="source-line-no">059</span><span id="line-59">   public static CachingHttpServletRequest wrap(HttpServletRequest req, int cap) {</span>
+<span class="source-line-no">060</span><span id="line-60">      if (req instanceof CachingHttpServletRequest req2)</span>
+<span class="source-line-no">061</span><span id="line-61">         return req2;</span>
+<span class="source-line-no">062</span><span id="line-62">      return new CachingHttpServletRequest(req, cap);</span>
+<span class="source-line-no">063</span><span id="line-63">   }</span>
+<span class="source-line-no">064</span><span id="line-64"></span>
+<span class="source-line-no">065</span><span id="line-65">   private final int cap;</span>
+<span class="source-line-no">066</span><span id="line-66">   private final ByteArrayOutputStream buffer = new ByteArrayOutputStream();</span>
+<span class="source-line-no">067</span><span id="line-67">   private long totalLength = 0;</span>
+<span class="source-line-no">068</span><span id="line-68">   private TeeServletInputStream stream;</span>
+<span class="source-line-no">069</span><span id="line-69">   private BufferedReader reader;</span>
+<span class="source-line-no">070</span><span id="line-70"></span>
+<span class="source-line-no">071</span><span id="line-71">   /**</span>
+<span class="source-line-no">072</span><span id="line-72">    * Constructor.</span>
+<span class="source-line-no">073</span><span id="line-73">    *</span>
+<span class="source-line-no">074</span><span id="line-74">    * @param req The request being wrapped. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">075</span><span id="line-75">    * @param cap The maximum number of body bytes to capture.</span>
+<span class="source-line-no">076</span><span id="line-76">    */</span>
+<span class="source-line-no">077</span><span id="line-77">   protected CachingHttpServletRequest(HttpServletRequest req, int cap) {</span>
+<span class="source-line-no">078</span><span id="line-78">      super(req);</span>
+<span class="source-line-no">079</span><span id="line-79">      this.cap = cap;</span>
+<span class="source-line-no">080</span><span id="line-80">   }</span>
+<span class="source-line-no">081</span><span id="line-81"></span>
+<span class="source-line-no">082</span><span id="line-82">   /**</span>
+<span class="source-line-no">083</span><span id="line-83">    * Returns the captured (possibly truncated) request body bytes.</span>
+<span class="source-line-no">084</span><span id="line-84">    *</span>
+<span class="source-line-no">085</span><span id="line-85">    * @return The captured body bytes (at most the configured cap). Never &lt;jk&gt;null&lt;/jk&gt;; empty if the body was not read.</span>
+<span class="source-line-no">086</span><span id="line-86">    */</span>
+<span class="source-line-no">087</span><span id="line-87">   public byte[] getContent() { return buffer.toByteArray(); }</span>
+<span class="source-line-no">088</span><span id="line-88"></span>
+<span class="source-line-no">089</span><span id="line-89">   /**</span>
+<span class="source-line-no">090</span><span id="line-90">    * Returns the total number of body bytes read so far, including any bytes beyond the capture cap.</span>
+<span class="source-line-no">091</span><span id="line-91">    *</span>
+<span class="source-line-no">092</span><span id="line-92">    * @return The total body length in bytes.</span>
+<span class="source-line-no">093</span><span id="line-93">    */</span>
+<span class="source-line-no">094</span><span id="line-94">   public long getTotalLength() { return totalLength; }</span>
+<span class="source-line-no">095</span><span id="line-95"></span>
+<span class="source-line-no">096</span><span id="line-96">   @Override</span>
+<span class="source-line-no">097</span><span id="line-97">   public ServletInputStream getInputStream() throws IOException {</span>
+<span class="source-line-no">098</span><span id="line-98">      if (stream == null)</span>
+<span class="source-line-no">099</span><span id="line-99">         stream = new TeeServletInputStream(getRequest().getInputStream());</span>
+<span class="source-line-no">100</span><span id="line-100">      return stream;</span>
+<span class="source-line-no">101</span><span id="line-101">   }</span>
+<span class="source-line-no">102</span><span id="line-102"></span>
+<span class="source-line-no">103</span><span id="line-103">   /**</span>
+<span class="source-line-no">104</span><span id="line-104">    * Returns a character-stream tee over the same underlying byte stream captured by {@link #getInputStream()}.</span>
+<span class="source-line-no">105</span><span id="line-105">    *</span>
+<span class="source-line-no">106</span><span id="line-106">    * &lt;p&gt;</span>
+<span class="source-line-no">107</span><span id="line-107">    * A handler that reads the request body through {@code getReader()} instead of {@code getInputStream()} would</span>
+<span class="source-line-no">108</span><span id="line-108">    * otherwise bypass capture entirely &amp;mdash; the default {@link HttpServletRequestWrapper#getReader()} delegates</span>
+<span class="source-line-no">109</span><span id="line-109">    * straight to the wrapped request. This override routes the reader through the tee'd stream so both access</span>
+<span class="source-line-no">110</span><span id="line-110">    * styles are captured identically.</span>
+<span class="source-line-no">111</span><span id="line-111">    */</span>
+<span class="source-line-no">112</span><span id="line-112">   @Override</span>
+<span class="source-line-no">113</span><span id="line-113">   public BufferedReader getReader() throws IOException {</span>
+<span class="source-line-no">114</span><span id="line-114">      if (reader == null) {</span>
+<span class="source-line-no">115</span><span id="line-115">         var enc = getCharacterEncoding();</span>
+<span class="source-line-no">116</span><span id="line-116">         var cs = enc == null ? StandardCharsets.ISO_8859_1 : Charset.forName(enc);</span>
+<span class="source-line-no">117</span><span id="line-117">         reader = new BufferedReader(new InputStreamReader(getInputStream(), cs));</span>
+<span class="source-line-no">118</span><span id="line-118">      }</span>
+<span class="source-line-no">119</span><span id="line-119">      return reader;</span>
+<span class="source-line-no">120</span><span id="line-120">   }</span>
+<span class="source-line-no">121</span><span id="line-121"></span>
+<span class="source-line-no">122</span><span id="line-122">   private final class TeeServletInputStream extends ServletInputStream {</span>
+<span class="source-line-no">123</span><span id="line-123"></span>
+<span class="source-line-no">124</span><span id="line-124">      private final ServletInputStream delegate;</span>
+<span class="source-line-no">125</span><span id="line-125"></span>
+<span class="source-line-no">126</span><span id="line-126">      TeeServletInputStream(ServletInputStream delegate) {</span>
+<span class="source-line-no">127</span><span id="line-127">         this.delegate = delegate;</span>
+<span class="source-line-no">128</span><span id="line-128">      }</span>
+<span class="source-line-no">129</span><span id="line-129"></span>
+<span class="source-line-no">130</span><span id="line-130">      @Override</span>
+<span class="source-line-no">131</span><span id="line-131">      public int read() throws IOException {</span>
+<span class="source-line-no">132</span><span id="line-132">         var b = delegate.read();</span>
+<span class="source-line-no">133</span><span id="line-133">         if (b != -1)</span>
+<span class="source-line-no">134</span><span id="line-134">            capture(b);</span>
+<span class="source-line-no">135</span><span id="line-135">         return b;</span>
+<span class="source-line-no">136</span><span id="line-136">      }</span>
+<span class="source-line-no">137</span><span id="line-137"></span>
+<span class="source-line-no">138</span><span id="line-138">      @Override</span>
+<span class="source-line-no">139</span><span id="line-139">      public int read(byte[] b, int off, int len) throws IOException {</span>
+<span class="source-line-no">140</span><span id="line-140">         var n = delegate.read(b, off, len);</span>
+<span class="source-line-no">141</span><span id="line-141">         if (n &gt; 0)</span>
+<span class="source-line-no">142</span><span id="line-142">            capture(b, off, n);</span>
+<span class="source-line-no">143</span><span id="line-143">         return n;</span>
+<span class="source-line-no">144</span><span id="line-144">      }</span>
+<span class="source-line-no">145</span><span id="line-145"></span>
+<span class="source-line-no">146</span><span id="line-146">      @Override</span>
+<span class="source-line-no">147</span><span id="line-147">      public boolean isFinished() { return delegate.isFinished(); }</span>
+<span class="source-line-no">148</span><span id="line-148"></span>
+<span class="source-line-no">149</span><span id="line-149">      @Override</span>
+<span class="source-line-no">150</span><span id="line-150">      public boolean isReady() { return delegate.isReady(); }</span>
+<span class="source-line-no">151</span><span id="line-151"></span>
+<span class="source-line-no">152</span><span id="line-152">      @Override</span>
+<span class="source-line-no">153</span><span id="line-153">      public void setReadListener(ReadListener readListener) { delegate.setReadListener(readListener); }</span>
+<span class="source-line-no">154</span><span id="line-154"></span>
+<span class="source-line-no">155</span><span id="line-155">      // Only this tee touches the outer request's capture buffer, so these helpers live here rather than on the</span>
+<span class="source-line-no">156</span><span id="line-156">      // outer class.</span>
+<span class="source-line-no">157</span><span id="line-157">      private void capture(int b) {</span>
+<span class="source-line-no">158</span><span id="line-158">         totalLength++;</span>
+<span class="source-line-no">159</span><span id="line-159">         if (buffer.size() &lt; cap)</span>
+<span class="source-line-no">160</span><span id="line-160">            buffer.write(b);</span>
+<span class="source-line-no">161</span><span id="line-161">      }</span>
+<span class="source-line-no">162</span><span id="line-162"></span>
+<span class="source-line-no">163</span><span id="line-163">      private void capture(byte[] b, int off, int len) {</span>
+<span class="source-line-no">164</span><span id="line-164">         totalLength += len;</span>
+<span class="source-line-no">165</span><span id="line-165">         var room = cap - buffer.size();</span>
+<span class="source-line-no">166</span><span id="line-166">         if (room &gt; 0)</span>
+<span class="source-line-no">167</span><span id="line-167">            buffer.write(b, off, Math.min(room, len));</span>
+<span class="source-line-no">168</span><span id="line-168">      }</span>
+<span class="source-line-no">169</span><span id="line-169">   }</span>
+<span class="source-line-no">170</span><span id="line-170">}</span>
 
 
 

@@ -60,10 +60,6 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color">
 <div class="block">Microservice API</div>
 </div>
-<div class="col-first odd-row-color"><a href="#org.apache.juneau.rest.server.logger">org.apache.juneau.rest.server.logger</a></div>
-<div class="col-last odd-row-color">
-<div class="block">REST Logging API</div>
-</div>
 </div>
 <section class="class-uses">
 <ul class="block-list">
@@ -81,24 +77,6 @@ loadScripts(document, 'script');</script>
 <div class="block"><a href="../Inject.html" title="annotation interface in org.apache.juneau.commons.inject"><code>@Inject</code></a>-annotated initializer that populates <code>Microservice.Builder.workingDir</code> from the
  <code>juneau.workingDir</code> property (system property &rarr; environment variable &rarr;
  registered property sources) when the property is set.</div>
-</div>
-</div>
-</section>
-</li>
-<li>
-<section class="detail" id="org.apache.juneau.rest.server.logger">
-<h2>Uses of <a href="../Inject.html" title="annotation interface in org.apache.juneau.commons.inject">Inject</a> in <a href="../../../rest/server/logger/package-summary.html">org.apache.juneau.rest.server.logger</a></h2>
-<div class="caption"><span>Methods in <a href="../../../rest/server/logger/package-summary.html">org.apache.juneau.rest.server.logger</a> with annotations of type <a href="../Inject.html" title="annotation interface in org.apache.juneau.commons.inject">Inject</a></span></div>
-<div class="summary-table three-column-summary">
-<div class="table-header col-first">Modifier and Type</div>
-<div class="table-header col-second">Method</div>
-<div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><code>void</code></div>
-<div class="col-second even-row-color"><span class="type-name-label">CallLogger.Builder.</span><code><a href="../../../rest/server/logger/CallLogger.Builder.html#initLoggerFromName(java.lang.String)" class="member-name-link">initLoggerFromName</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;loggerName)</code></div>
-<div class="col-last even-row-color">
-<div class="block">Init method invoked by <a href="../BeanInstantiator.html" title="class in org.apache.juneau.commons.inject"><code>BeanInstantiator</code></a> after construction; resolves the default
- logger from the <code>juneau.restLogger.logger</code> property (defaulting to <code>"global"</code>)
- and installs it as this builder's logger.</div>
 </div>
 </div>
 </section>

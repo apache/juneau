@@ -86,7 +86,7 @@ loadScripts(document, 'script');</script>
 <dd><code>jakarta.servlet.http.HttpServletRequest</code>, <code>jakarta.servlet.ServletRequest</code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/auth/AuthenticatedRequestWrapper.html#line-53">AuthenticatedRequestWrapper</a></span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/auth/AuthenticatedRequestWrapper.html#line-52">AuthenticatedRequestWrapper</a></span>
 <span class="extends-implements">extends jakarta.servlet.http.HttpServletRequestWrapper</span></div>
 <div class="block">An <code>HttpServletRequestWrapper</code> that surfaces the filter-resolved <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/security/Principal.html" title="class or interface in java.security" class="external-link"><code>Principal</code></a> and aggregated roles via the
  standard servlet API surface.
@@ -100,7 +100,7 @@ loadScripts(document, 'script');</script>
    <li><a href="#getUserPrincipal()"><code>getUserPrincipal()</code></a> &mdash; returns the authenticated principal.
    <li><a href="#isUserInRole(java.lang.String)"><code>isUserInRole(String)</code></a> &mdash; checks the aggregated role set.
    <li><a href="#getRemoteUser()"><code>getRemoteUser()</code></a> &mdash; returns <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/security/Principal.html#getName()" title="class or interface in java.security" class="external-link"><code>Principal.getName()</code></a>.
-   <li><a href="#getAttribute(java.lang.String)"><code>getAttribute(String)</code></a> &mdash; for the key <a href="../RestServerConstants.html#PRINCIPAL_ATTR"><code>RestServerConstants.PRINCIPAL_ATTR</code></a>, returns the
+   <li><a href="#getAttribute(java.lang.String)"><code>getAttribute(String)</code></a> &mdash; for the key <code>"juneau.principal"</code>, returns the
       principal so the <code>@Auth</code> arg-resolver can find it.
  </ul>
 
@@ -155,7 +155,7 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getAttribute(java.lang.String)" class="member-name-link">getAttribute</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Intercepts <a href="../RestServerConstants.html#PRINCIPAL_ATTR"><code>RestServerConstants.PRINCIPAL_ATTR</code></a> so the <code>@Auth</code> arg-resolver can pick up the
+<div class="block">Intercepts <code>"juneau.principal"</code> so the <code>@Auth</code> arg-resolver can pick up the
  filter-stashed principal without any extra wiring.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
@@ -196,7 +196,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;(jakarta.servlet.http.HttpServletRequest,org.apache.juneau.rest.server.auth.AuthResult)">
 <h3>AuthenticatedRequestWrapper</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/auth/AuthenticatedRequestWrapper.html#line-71">AuthenticatedRequestWrapper</a></span><wbr><span class="parameters">(jakarta.servlet.http.HttpServletRequest&nbsp;req,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/auth/AuthenticatedRequestWrapper.html#line-66">AuthenticatedRequestWrapper</a></span><wbr><span class="parameters">(jakarta.servlet.http.HttpServletRequest&nbsp;req,
  <a href="AuthResult.html" title="class in org.apache.juneau.rest.server.auth">AuthResult</a>&nbsp;result)</span></div>
 <div class="block">Constructor.</div>
 <dl class="notes">
@@ -217,7 +217,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getUserPrincipal()">
 <h3>getUserPrincipal</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/security/Principal.html" title="class or interface in java.security" class="external-link">Principal</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/auth/AuthenticatedRequestWrapper.html#line-92">getUserPrincipal</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/security/Principal.html" title="class or interface in java.security" class="external-link">Principal</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/auth/AuthenticatedRequestWrapper.html#line-87">getUserPrincipal</a></span>()</div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code>getUserPrincipal</code>&nbsp;in interface&nbsp;<code>jakarta.servlet.http.HttpServletRequest</code></dd>
@@ -229,7 +229,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="isUserInRole(java.lang.String)">
 <h3>isUserInRole</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/auth/AuthenticatedRequestWrapper.html#line-97">isUserInRole</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;role)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/auth/AuthenticatedRequestWrapper.html#line-92">isUserInRole</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;role)</span></div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code>isUserInRole</code>&nbsp;in interface&nbsp;<code>jakarta.servlet.http.HttpServletRequest</code></dd>
@@ -241,7 +241,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getRemoteUser()">
 <h3>getRemoteUser</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/auth/AuthenticatedRequestWrapper.html#line-102">getRemoteUser</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/auth/AuthenticatedRequestWrapper.html#line-97">getRemoteUser</a></span>()</div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code>getRemoteUser</code>&nbsp;in interface&nbsp;<code>jakarta.servlet.http.HttpServletRequest</code></dd>
@@ -253,8 +253,8 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getAttribute(java.lang.String)">
 <h3>getAttribute</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/auth/AuthenticatedRequestWrapper.html#line-114">getAttribute</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
-<div class="block">Intercepts <a href="../RestServerConstants.html#PRINCIPAL_ATTR"><code>RestServerConstants.PRINCIPAL_ATTR</code></a> so the <code>@Auth</code> arg-resolver can pick up the
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/auth/AuthenticatedRequestWrapper.html#line-109">getAttribute</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
+<div class="block">Intercepts <code>"juneau.principal"</code> so the <code>@Auth</code> arg-resolver can pick up the
  filter-stashed principal without any extra wiring.
 
  <p>

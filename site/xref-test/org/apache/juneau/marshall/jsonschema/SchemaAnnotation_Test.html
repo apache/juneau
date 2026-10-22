@@ -534,7 +534,7 @@
 <a class="jxr_linenumber" name="L526" href="#L526">526</a> 	<em class="jxr_comment">//------------------------------------------------------------------------------------------------------------------</em>
 <a class="jxr_linenumber" name="L527" href="#L527">527</a> 	<em class="jxr_comment">// asMap() with non-default Items.</em>
 <a class="jxr_linenumber" name="L528" href="#L528">528</a> 	<em class="jxr_comment">//</em>
-<a class="jxr_linenumber" name="L529" href="#L529">529</a> 	<em class="jxr_comment">// SchemaAnnotation.asMap(...) calls merge(m.getMap(PROP_items), a.items()).  When the result</em>
+<a class="jxr_linenumber" name="L529" href="#L529">529</a> 	<em class="jxr_comment">// SchemaAnnotation.asMap(...) calls merge(m.getMap("items"), a.items()).  When the result</em>
 <a class="jxr_linenumber" name="L530" href="#L530">530</a> 	<em class="jxr_comment">// map has no prior "items" entry, getMap(...) returns null and the private merge(JsonMap,Items)</em>
 <a class="jxr_linenumber" name="L531" href="#L531">531</a> 	<em class="jxr_comment">// lazy-creates the inner map. Same lazy-create pattern lives in ExternalDocsAnnotation.merge</em>
 <a class="jxr_linenumber" name="L532" href="#L532">532</a> 	<em class="jxr_comment">// and SubItemsAnnotation.merge.</em>

@@ -87,15 +87,16 @@ loadScripts(document, 'script');</script>
 <section class="class-description" id="class-description">
 <dl class="notes">
 <dt>All Implemented Interfaces:</dt>
-<dd><code>jakarta.servlet.Servlet</code>, <code>jakarta.servlet.ServletConfig</code>, <code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a></code>, <code><a href="../config/BasicUniversalConfig.html" title="interface in org.apache.juneau.rest.server.config">BasicUniversalConfig</a></code>, <code><a href="../config/DefaultConfig.html" title="interface in org.apache.juneau.rest.server.config">DefaultConfig</a></code>, <code><a href="../config/DefaultHtmlConfig.html" title="interface in org.apache.juneau.rest.server.config">DefaultHtmlConfig</a></code></dd>
+<dd><code>jakarta.servlet.Servlet</code>, <code>jakarta.servlet.ServletConfig</code>, <code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a></code>, <code><a href="../config/BasicUniversalConfig.html" title="interface in org.apache.juneau.rest.server.config">BasicUniversalConfig</a></code>, <code><a href="../config/DefaultConfig.html" title="interface in org.apache.juneau.rest.server.config">DefaultConfig</a></code>, <code><a href="../config/DefaultHtmlConfig.html" title="interface in org.apache.juneau.rest.server.config">DefaultHtmlConfig</a></code>, <code><a href="../health/ReadinessStateAware.html" title="interface in org.apache.juneau.rest.server.health">ReadinessStateAware</a></code></dd>
 </dl>
 <dl class="notes">
 <dt>Direct Known Subclasses:</dt>
 <dd><code><a href="v20250618/McpRestServlet.html" title="class in org.apache.juneau.rest.server.mcp.v20250618">McpRestServlet</a></code>, <code><a href="v20260728/McpRestServlet.html" title="class in org.apache.juneau.rest.server.mcp.v20260728">McpRestServlet</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public abstract class </span><span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/mcp/AbstractMcpRestServlet.html#line-58">AbstractMcpRestServlet</a></span>
-<span class="extends-implements">extends <a href="../servlet/BasicRestServlet.html" title="class in org.apache.juneau.rest.server.servlet">BasicRestServlet</a></span></div>
+<div class="type-signature"><span class="modifiers">public abstract class </span><span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/mcp/AbstractMcpRestServlet.html#line-59">AbstractMcpRestServlet</a></span>
+<span class="extends-implements">extends <a href="../servlet/BasicRestServlet.html" title="class in org.apache.juneau.rest.server.servlet">BasicRestServlet</a>
+implements <a href="../health/ReadinessStateAware.html" title="interface in org.apache.juneau.rest.server.health">ReadinessStateAware</a></span></div>
 <div class="block">Drop-in <a href="../servlet/BasicRestServlet.html" title="class in org.apache.juneau.rest.server.servlet"><code>BasicRestServlet</code></a> subclass that exposes a single MCP JSON-RPC endpoint at <code>POST /</code>.
 
  <p>
@@ -150,30 +151,35 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>protected abstract <a href="McpServerConfig.html" title="class in org.apache.juneau.rest.server.mcp">McpServerConfig</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#createMcpConfig()" class="member-name-link">createMcpConfig</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#acceptReadinessState(org.apache.juneau.rest.server.health.ReadinessState)" class="member-name-link">acceptReadinessState</a><wbr>(<a href="../health/ReadinessState.html" title="class in org.apache.juneau.rest.server.health">ReadinessState</a>&nbsp;state)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Closes this servlet's open subscription streams as soon as the embedded server begins shutting down.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>protected abstract <a href="McpServerConfig.html" title="class in org.apache.juneau.rest.server.mcp">McpServerConfig</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#createMcpConfig()" class="member-name-link">createMcpConfig</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
 <div class="block">Factory method for the <a href="McpServerConfig.html" title="class in org.apache.juneau.rest.server.mcp"><code>McpServerConfig</code></a> backing this servlet.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="McpServerConfig.html" title="class in org.apache.juneau.rest.server.mcp">McpServerConfig</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getMcpConfig()" class="member-name-link">getMcpConfig</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="McpServerConfig.html" title="class in org.apache.juneau.rest.server.mcp">McpServerConfig</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getMcpConfig()" class="member-name-link">getMcpConfig</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns the <a href="McpServerConfig.html" title="class in org.apache.juneau.rest.server.mcp"><code>McpServerConfig</code></a> backing this servlet.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>protected <a href="McpSubscriptionBroker.html" title="interface in org.apache.juneau.rest.server.mcp">McpSubscriptionBroker</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getSubscriptionBroker()" class="member-name-link">getSubscriptionBroker</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>protected <a href="McpSubscriptionBroker.html" title="interface in org.apache.juneau.rest.server.mcp">McpSubscriptionBroker</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getSubscriptionBroker()" class="member-name-link">getSubscriptionBroker</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Optional subscription broker backing this servlet's <code>subscriptions/listen</code> support.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#handleMcp(org.apache.juneau.bean.jsonrpc.JsonRpcRequest,org.apache.juneau.rest.server.RestRequest)" class="member-name-link">handleMcp</a><wbr>(<a href="../../../bean/jsonrpc/JsonRpcRequest.html" title="class in org.apache.juneau.bean.jsonrpc">JsonRpcRequest</a>&nbsp;req,
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#handleMcp(org.apache.juneau.bean.jsonrpc.JsonRpcRequest,org.apache.juneau.rest.server.RestRequest)" class="member-name-link">handleMcp</a><wbr>(<a href="../../../bean/jsonrpc/JsonRpcRequest.html" title="class in org.apache.juneau.bean.jsonrpc">JsonRpcRequest</a>&nbsp;req,
  <a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;restReq)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">MCP JSON-RPC endpoint.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>protected abstract <a href="McpRevision.html" title="interface in org.apache.juneau.rest.server.mcp">McpRevision</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#revision()" class="member-name-link">revision</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>protected abstract <a href="McpRevision.html" title="interface in org.apache.juneau.rest.server.mcp">McpRevision</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#revision()" class="member-name-link">revision</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
 <div class="block">The MCP protocol revision this servlet speaks.</div>
 </div>
 </div>
@@ -205,7 +211,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;()">
 <h3>AbstractMcpRestServlet</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/mcp/AbstractMcpRestServlet.html#line-60">AbstractMcpRestServlet</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/mcp/AbstractMcpRestServlet.html#line-61">AbstractMcpRestServlet</a></span>()</div>
 </section>
 </li>
 </ul>
@@ -219,7 +225,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getMcpConfig()">
 <h3>getMcpConfig</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="McpServerConfig.html" title="class in org.apache.juneau.rest.server.mcp">McpServerConfig</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/mcp/AbstractMcpRestServlet.html#line-82">getMcpConfig</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="McpServerConfig.html" title="class in org.apache.juneau.rest.server.mcp">McpServerConfig</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/mcp/AbstractMcpRestServlet.html#line-83">getMcpConfig</a></span>()</div>
 <div class="block">Returns the <a href="McpServerConfig.html" title="class in org.apache.juneau.rest.server.mcp"><code>McpServerConfig</code></a> backing this servlet.
 
  <p>
@@ -242,7 +248,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="createMcpConfig()">
 <h3>createMcpConfig</h3>
-<div class="member-signature"><span class="modifiers">protected abstract</span>&nbsp;<span class="return-type"><a href="McpServerConfig.html" title="class in org.apache.juneau.rest.server.mcp">McpServerConfig</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/mcp/AbstractMcpRestServlet.html#line-101">createMcpConfig</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected abstract</span>&nbsp;<span class="return-type"><a href="McpServerConfig.html" title="class in org.apache.juneau.rest.server.mcp">McpServerConfig</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/mcp/AbstractMcpRestServlet.html#line-102">createMcpConfig</a></span>()</div>
 <div class="block">Factory method for the <a href="McpServerConfig.html" title="class in org.apache.juneau.rest.server.mcp"><code>McpServerConfig</code></a> backing this servlet.
 
  <p>
@@ -256,7 +262,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="revision()">
 <h3>revision</h3>
-<div class="member-signature"><span class="modifiers">protected abstract</span>&nbsp;<span class="return-type"><a href="McpRevision.html" title="interface in org.apache.juneau.rest.server.mcp">McpRevision</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/mcp/AbstractMcpRestServlet.html#line-112">revision</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected abstract</span>&nbsp;<span class="return-type"><a href="McpRevision.html" title="interface in org.apache.juneau.rest.server.mcp">McpRevision</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/mcp/AbstractMcpRestServlet.html#line-113">revision</a></span>()</div>
 <div class="block">The MCP protocol revision this servlet speaks.
 
  <p>
@@ -271,7 +277,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getSubscriptionBroker()">
 <h3>getSubscriptionBroker</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="McpSubscriptionBroker.html" title="interface in org.apache.juneau.rest.server.mcp">McpSubscriptionBroker</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/mcp/AbstractMcpRestServlet.html#line-130">getSubscriptionBroker</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="McpSubscriptionBroker.html" title="interface in org.apache.juneau.rest.server.mcp">McpSubscriptionBroker</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/mcp/AbstractMcpRestServlet.html#line-131">getSubscriptionBroker</a></span>()</div>
 <div class="block">Optional subscription broker backing this servlet's <code>subscriptions/listen</code> support.
 
  <p>
@@ -291,9 +297,28 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
+<section class="detail" id="acceptReadinessState(org.apache.juneau.rest.server.health.ReadinessState)">
+<h3>acceptReadinessState</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/mcp/AbstractMcpRestServlet.html#line-146">acceptReadinessState</a></span><wbr><span class="parameters">(<a href="../health/ReadinessState.html" title="class in org.apache.juneau.rest.server.health">ReadinessState</a>&nbsp;state)</span></div>
+<div class="block">Closes this servlet's open subscription streams as soon as the embedded server begins shutting down.
+
+ <p>
+ A <code>subscriptions/listen</code> stream never finishes on its own, so without this the server's graceful
+ drain would wait out its entire stop timeout (30s by default) for every connected subscriber before it
+ could stop.  Closing the subscriptions makes each stream send its terminal frame and complete, letting
+ the drain finish immediately.</div>
+<dl class="notes">
+<dt>Specified by:</dt>
+<dd><code><a href="../health/ReadinessStateAware.html#acceptReadinessState(org.apache.juneau.rest.server.health.ReadinessState)">acceptReadinessState</a></code>&nbsp;in interface&nbsp;<code><a href="../health/ReadinessStateAware.html" title="interface in org.apache.juneau.rest.server.health">ReadinessStateAware</a></code></dd>
+<dt>Parameters:</dt>
+<dd><code>state</code> - The per-service readiness state published by the embedded-server lifecycle component.</dd>
+</dl>
+</section>
+</li>
+<li>
 <section class="detail" id="handleMcp(org.apache.juneau.bean.jsonrpc.JsonRpcRequest,org.apache.juneau.rest.server.RestRequest)">
 <h3>handleMcp</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/mcp/AbstractMcpRestServlet.html#line-142">handleMcp</a></span><wbr><span class="parameters">(<a href="../../../http/Content.html" title="annotation interface in org.apache.juneau.http">@Content</a>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/mcp/AbstractMcpRestServlet.html#line-166">handleMcp</a></span><wbr><span class="parameters">(<a href="../../../http/Content.html" title="annotation interface in org.apache.juneau.http">@Content</a>
  <a href="../../../bean/jsonrpc/JsonRpcRequest.html" title="class in org.apache.juneau.bean.jsonrpc">JsonRpcRequest</a>&nbsp;req,
  <a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;restReq)</span></div>
 <div class="block">MCP JSON-RPC endpoint.</div>

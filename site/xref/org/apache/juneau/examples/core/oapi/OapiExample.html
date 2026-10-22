@@ -82,7 +82,7 @@
 <a class="jxr_linenumber" name="L74" href="#L74">74</a>  		<em class="jxr_comment">// Convert POJO to BASE64-encoded string.</em>
 <a class="jxr_linenumber" name="L75" href="#L75">75</a>  		<strong class="jxr_keyword">var</strong> s = OpenApiSerializer.DEFAULT;
 <a class="jxr_linenumber" name="L76" href="#L76">76</a>  		<strong class="jxr_keyword">var</strong> httpPart = s.getPartSession().write(HEADER, schemab, pojo);
-<a class="jxr_linenumber" name="L77" href="#L77">77</a>  		Logger.getLogger(OapiExample.<strong class="jxr_keyword">class</strong>).info(httpPart);
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>  		RichLogger.getLogger(OapiExample.<strong class="jxr_keyword">class</strong>).info(httpPart);
 <a class="jxr_linenumber" name="L78" href="#L78">78</a>  
 <a class="jxr_linenumber" name="L79" href="#L79">79</a>  		<em class="jxr_comment">// Convert BASE64-encoded string back into a POJO.</em>
 <a class="jxr_linenumber" name="L80" href="#L80">80</a>  		<strong class="jxr_keyword">var</strong> p = OpenApiParser.DEFAULT;

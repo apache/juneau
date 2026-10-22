@@ -132,32 +132,36 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color">
 <div class="block">Render property as an element instead of an attribute.</div>
 </div>
-<div class="col-first odd-row-color"><code><a href="#ELEMENTS" class="member-name-link">ELEMENTS</a></code></div>
+<div class="col-first odd-row-color"><code><a href="#FREEFORM" class="member-name-link">FREEFORM</a></code></div>
 <div class="col-last odd-row-color">
 <div class="block">Render property value directly as the contents of the element.</div>
 </div>
 <div class="col-first even-row-color"><code><a href="#MIXED" class="member-name-link">MIXED</a></code></div>
 <div class="col-last even-row-color">
-<div class="block">Same as <a href="#ELEMENTS"><code>ELEMENTS</code></a> except primitive types (string/boolean/number/null for example) are not wrapped in elements.</div>
+<div class="block">Same as <a href="#FREEFORM"><code>FREEFORM</code></a> except primitive types (string/boolean/number/null for example) are not wrapped in elements.</div>
 </div>
 <div class="col-first odd-row-color"><code><a href="#MIXED_PWS" class="member-name-link">MIXED_PWS</a></code></div>
 <div class="col-last odd-row-color">
 <div class="block">Same as <a href="#MIXED"><code>MIXED</code></a>, but whitespace in text nodes are not trimmed during parsing.</div>
 </div>
-<div class="col-first even-row-color"><code><a href="#TEXT" class="member-name-link">TEXT</a></code></div>
+<div class="col-first even-row-color"><code><a href="#RAWTEXT" class="member-name-link">RAWTEXT</a></code></div>
 <div class="col-last even-row-color">
+<div class="block">Render property value as the raw, verbatim text content of the element.</div>
+</div>
+<div class="col-first odd-row-color"><code><a href="#TEXT" class="member-name-link">TEXT</a></code></div>
+<div class="col-last odd-row-color">
 <div class="block">Render property value as the text content of the element.</div>
 </div>
-<div class="col-first odd-row-color"><code><a href="#TEXT_PWS" class="member-name-link">TEXT_PWS</a></code></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><code><a href="#TEXT_PWS" class="member-name-link">TEXT_PWS</a></code></div>
+<div class="col-last even-row-color">
 <div class="block">Same as <a href="#TEXT"><code>TEXT</code></a>, but whitespace in text node is not trimmed during parsing.</div>
 </div>
-<div class="col-first even-row-color"><code><a href="#VOID" class="member-name-link">VOID</a></code></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><code><a href="#VOID" class="member-name-link">VOID</a></code></div>
+<div class="col-last odd-row-color">
 <div class="block">Identifies a void element.</div>
 </div>
-<div class="col-first odd-row-color"><code><a href="#XMLTEXT" class="member-name-link">XMLTEXT</a></code></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><code><a href="#XMLTEXT" class="member-name-link">XMLTEXT</a></code></div>
+<div class="col-last even-row-color">
 <div class="block">Same as <a href="#TEXT"><code>TEXT</code></a> except the content is expected to be fully-formed XML that will get serialized as-is.</div>
 </div>
 </div>
@@ -217,7 +221,7 @@ the order they are declared.</div>
 <div class="block">Normal formatting (default).
 
  <p>
- On a bean class, implies <a href="#ELEMENTS"><code>ELEMENTS</code></a> meaning bean properties will be serialized as child elements by default.
+ On a bean class, implies <a href="#FREEFORM"><code>FREEFORM</code></a> meaning bean properties will be serialized as child elements by default.
 
  <p>
  On a bean property, implies <a href="#ELEMENT"><code>ELEMENT</code></a> meaning the bean property will be serialized as a child element.</div>
@@ -266,9 +270,9 @@ the order they are declared.</div>
 </section>
 </li>
 <li>
-<section class="detail" id="ELEMENTS">
-<h3>ELEMENTS</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="XmlFormat.html" title="enum class in org.apache.juneau.marshall.xml">XmlFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlFormat.html#line-90">ELEMENTS</a></span></div>
+<section class="detail" id="FREEFORM">
+<h3>FREEFORM</h3>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="XmlFormat.html" title="enum class in org.apache.juneau.marshall.xml">XmlFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlFormat.html#line-90">FREEFORM</a></span></div>
 <div class="block">Render property value directly as the contents of the element.
 
  <p>
@@ -287,7 +291,7 @@ the order they are declared.</div>
 <section class="detail" id="MIXED">
 <h3>MIXED</h3>
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="XmlFormat.html" title="enum class in org.apache.juneau.marshall.xml">XmlFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlFormat.html#line-104">MIXED</a></span></div>
-<div class="block">Same as <a href="#ELEMENTS"><code>ELEMENTS</code></a> except primitive types (string/boolean/number/null for example) are not wrapped in elements.
+<div class="block">Same as <a href="#FREEFORM"><code>FREEFORM</code></a> except primitive types (string/boolean/number/null for example) are not wrapped in elements.
 
  <p>
  Only applicable for bean properties, not bean classes.
@@ -349,9 +353,36 @@ the order they are declared.</div>
 </section>
 </li>
 <li>
+<section class="detail" id="RAWTEXT">
+<h3>RAWTEXT</h3>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="XmlFormat.html" title="enum class in org.apache.juneau.marshall.xml">XmlFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlFormat.html#line-170">RAWTEXT</a></span></div>
+<div class="block">Render property value as the raw, verbatim text content of the element.
+
+ <p>
+ Similar to <a href="#TEXT_PWS"><code>TEXT_PWS</code></a> (single, whitespace-preserving value), but the value is emitted with NO XML entity
+ escaping (no <c>&amp;amp;</c>/<c>&amp;lt;</c>/<c>&amp;gt;</c> substitution) and NO <c>_x####_</c>
+ whitespace/invalid-char encoding.
+ This matches HTML5 "raw text" element semantics (<xt>&lt;script&gt;</xt>/<xt>&lt;style&gt;</xt>) where browsers do
+ not decode character references.
+
+ <p>
+ Unlike <a href="#XMLTEXT"><code>XMLTEXT</code></a>, the content is NOT re-parsed as XML on parse; it is read back verbatim as a text node
+ (no <c>_x####_</c> decoding, no trimming).
+
+ <p>
+ Only applicable for scalar (non-collection) bean properties.
+
+ <p>
+ <b>Round-trip caveat:</b> because Juneau parses via a StAX <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.xml/javax/xml/stream/XMLStreamReader.html" title="class or interface in javax.xml.stream" class="external-link"><code>XMLStreamReader</code></a>, a value
+ containing a raw <js>'&lt;'</js> or a bare <js>'&amp;'</js> will NOT be parseable back.
+ Callers embedding markup-bearing content are responsible for escaping <js>'&lt;'</js> (e.g. to the JS/CSS unicode
+ escape <js>"\\u003c"</js>) before use, exactly as required for browser-safe raw-text content.</div>
+</section>
+</li>
+<li>
 <section class="detail" id="COLLAPSED">
 <h3>COLLAPSED</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="XmlFormat.html" title="enum class in org.apache.juneau.marshall.xml">XmlFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlFormat.html#line-153">COLLAPSED</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="XmlFormat.html" title="enum class in org.apache.juneau.marshall.xml">XmlFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlFormat.html#line-178">COLLAPSED</a></span></div>
 <div class="block">Prevents collections and arrays from being enclosed in <xt>&lt;array&gt;</xt> elements.
 
  <p>
@@ -361,7 +392,7 @@ the order they are declared.</div>
 <li>
 <section class="detail" id="VOID">
 <h3>VOID</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="XmlFormat.html" title="enum class in org.apache.juneau.marshall.xml">XmlFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlFormat.html#line-169">VOID</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="XmlFormat.html" title="enum class in org.apache.juneau.marshall.xml">XmlFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlFormat.html#line-194">VOID</a></span></div>
 <div class="block">Identifies a void element.
 
  <p>
@@ -418,7 +449,7 @@ not permitted.)</div>
 <li>
 <section class="detail" id="isOneOf(org.apache.juneau.marshall.xml.XmlFormat...)">
 <h3>isOneOf</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlFormat.html#line-177">isOneOf</a></span><wbr><span class="parameters">(<a href="XmlFormat.html" title="enum class in org.apache.juneau.marshall.xml">XmlFormat</a>...&nbsp;formats)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlFormat.html#line-202">isOneOf</a></span><wbr><span class="parameters">(<a href="XmlFormat.html" title="enum class in org.apache.juneau.marshall.xml">XmlFormat</a>...&nbsp;formats)</span></div>
 <div class="block">Returns <jk>true</jk> if this format is one of those specified.</div>
 <dl class="notes">
 <dt>Parameters:</dt>

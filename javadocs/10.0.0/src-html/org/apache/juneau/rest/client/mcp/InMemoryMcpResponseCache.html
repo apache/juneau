@@ -29,10 +29,10 @@
 <span class="source-line-no">016</span><span id="line-16"> */</span>
 <span class="source-line-no">017</span><span id="line-17">package org.apache.juneau.rest.client.mcp;</span>
 <span class="source-line-no">018</span><span id="line-18"></span>
-<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.AssertionUtils.*;</span>
-<span class="source-line-no">020</span><span id="line-20"></span>
-<span class="source-line-no">021</span><span id="line-21">import java.util.*;</span>
-<span class="source-line-no">022</span><span id="line-22">import java.util.function.*;</span>
+<span class="source-line-no">019</span><span id="line-19"></span>
+<span class="source-line-no">020</span><span id="line-20">import java.util.*;</span>
+<span class="source-line-no">021</span><span id="line-21">import java.util.function.*;</span>
+<span class="source-line-no">022</span><span id="line-22">import static org.apache.juneau.commons.utils.Shorts.*;</span>
 <span class="source-line-no">023</span><span id="line-23"></span>
 <span class="source-line-no">024</span><span id="line-24">/**</span>
 <span class="source-line-no">025</span><span id="line-25"> * Built-in, process-local, in-memory default implementation of {@link McpResponseCache}.</span>
@@ -56,7 +56,7 @@
 <span class="source-line-no">043</span><span id="line-43"> * @since 10.0.0</span>
 <span class="source-line-no">044</span><span id="line-44"> */</span>
 <span class="source-line-no">045</span><span id="line-45">@SuppressWarnings({</span>
-<span class="source-line-no">046</span><span id="line-46">   "java:S115" // ARG_-prefixed assertion-param constants use the project's UPPER_camelCase convention (ARG_&lt;param&gt;).</span>
+<span class="source-line-no">046</span><span id="line-46">   "java:S1192" // Duplicated literals (argument/property names) read more clearly inline than as constants</span>
 <span class="source-line-no">047</span><span id="line-47">})</span>
 <span class="source-line-no">048</span><span id="line-48">public class InMemoryMcpResponseCache implements McpResponseCache {</span>
 <span class="source-line-no">049</span><span id="line-49"></span>
@@ -66,100 +66,94 @@
 <span class="source-line-no">053</span><span id="line-53">    */</span>
 <span class="source-line-no">054</span><span id="line-54">   public static final int DEFAULT_MAX_ENTRIES = 10_000;</span>
 <span class="source-line-no">055</span><span id="line-55"></span>
-<span class="source-line-no">056</span><span id="line-56">   // Argument name constants for assertArgNotNull</span>
-<span class="source-line-no">057</span><span id="line-57">   private static final String ARG_scope = "scope";</span>
-<span class="source-line-no">058</span><span id="line-58">   private static final String ARG_key = "key";</span>
-<span class="source-line-no">059</span><span id="line-59">   private static final String ARG_value = "value";</span>
-<span class="source-line-no">060</span><span id="line-60">   private static final String ARG_clock = "clock";</span>
-<span class="source-line-no">061</span><span id="line-61"></span>
-<span class="source-line-no">062</span><span id="line-62">   private record CacheEntry(Object value, long expiresAtMs) {}</span>
-<span class="source-line-no">063</span><span id="line-63"></span>
-<span class="source-line-no">064</span><span id="line-64">   private final Map&lt;String,CacheEntry&gt; entries;</span>
-<span class="source-line-no">065</span><span id="line-65">   private final LongSupplier clock;</span>
-<span class="source-line-no">066</span><span id="line-66"></span>
-<span class="source-line-no">067</span><span id="line-67">   /**</span>
-<span class="source-line-no">068</span><span id="line-68">    * Constructor. Uses the system clock ({@link System#currentTimeMillis()}) for TTL expiry and</span>
-<span class="source-line-no">069</span><span id="line-69">    * {@link #DEFAULT_MAX_ENTRIES} as the size cap.</span>
-<span class="source-line-no">070</span><span id="line-70">    */</span>
-<span class="source-line-no">071</span><span id="line-71">   public InMemoryMcpResponseCache() {</span>
-<span class="source-line-no">072</span><span id="line-72">      this(System::currentTimeMillis, DEFAULT_MAX_ENTRIES);</span>
-<span class="source-line-no">073</span><span id="line-73">   }</span>
-<span class="source-line-no">074</span><span id="line-74"></span>
-<span class="source-line-no">075</span><span id="line-75">   /**</span>
-<span class="source-line-no">076</span><span id="line-76">    * Constructor with an explicit size cap. Uses the system clock ({@link System#currentTimeMillis()}) for TTL</span>
-<span class="source-line-no">077</span><span id="line-77">    * expiry.</span>
-<span class="source-line-no">078</span><span id="line-78">    *</span>
-<span class="source-line-no">079</span><span id="line-79">    * @param maxEntries The maximum number of entries (across all scopes combined) retained before the</span>
-<span class="source-line-no">080</span><span id="line-80">    *    least-recently-used entry is evicted. Must be positive.</span>
-<span class="source-line-no">081</span><span id="line-81">    */</span>
-<span class="source-line-no">082</span><span id="line-82">   public InMemoryMcpResponseCache(int maxEntries) {</span>
-<span class="source-line-no">083</span><span id="line-83">      this(System::currentTimeMillis, maxEntries);</span>
-<span class="source-line-no">084</span><span id="line-84">   }</span>
-<span class="source-line-no">085</span><span id="line-85"></span>
-<span class="source-line-no">086</span><span id="line-86">   /**</span>
-<span class="source-line-no">087</span><span id="line-87">    * Constructor with an injectable clock, for deterministic TTL-expiry testing. Uses {@link #DEFAULT_MAX_ENTRIES}</span>
-<span class="source-line-no">088</span><span id="line-88">    * as the size cap.</span>
-<span class="source-line-no">089</span><span id="line-89">    *</span>
-<span class="source-line-no">090</span><span id="line-90">    * @param clock Supplies the current time in milliseconds. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">091</span><span id="line-91">    */</span>
-<span class="source-line-no">092</span><span id="line-92">   InMemoryMcpResponseCache(LongSupplier clock) {</span>
-<span class="source-line-no">093</span><span id="line-93">      this(clock, DEFAULT_MAX_ENTRIES);</span>
-<span class="source-line-no">094</span><span id="line-94">   }</span>
-<span class="source-line-no">095</span><span id="line-95"></span>
-<span class="source-line-no">096</span><span id="line-96">   /**</span>
-<span class="source-line-no">097</span><span id="line-97">    * Constructor with both an injectable clock and an explicit size cap, for deterministic testing of the</span>
-<span class="source-line-no">098</span><span id="line-98">    * eviction policy.</span>
-<span class="source-line-no">099</span><span id="line-99">    *</span>
-<span class="source-line-no">100</span><span id="line-100">    * @param clock Supplies the current time in milliseconds. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">101</span><span id="line-101">    * @param maxEntries The maximum number of entries (across all scopes combined) retained before the</span>
-<span class="source-line-no">102</span><span id="line-102">    *    least-recently-used entry is evicted. Must be positive.</span>
-<span class="source-line-no">103</span><span id="line-103">    */</span>
-<span class="source-line-no">104</span><span id="line-104">   InMemoryMcpResponseCache(LongSupplier clock, int maxEntries) {</span>
-<span class="source-line-no">105</span><span id="line-105">      this.clock = assertArgNotNull(ARG_clock, clock);</span>
-<span class="source-line-no">106</span><span id="line-106">      if (maxEntries &lt;= 0)</span>
-<span class="source-line-no">107</span><span id="line-107">         throw new IllegalArgumentException("maxEntries must be positive: " + maxEntries);</span>
-<span class="source-line-no">108</span><span id="line-108">      this.entries = Collections.synchronizedMap(new LinkedHashMap&lt;String,CacheEntry&gt;(16, 0.75f, true) {</span>
-<span class="source-line-no">109</span><span id="line-109">         @Override protected boolean removeEldestEntry(Map.Entry&lt;String,CacheEntry&gt; eldest) {</span>
-<span class="source-line-no">110</span><span id="line-110">            return size() &gt; maxEntries;</span>
-<span class="source-line-no">111</span><span id="line-111">         }</span>
-<span class="source-line-no">112</span><span id="line-112">      });</span>
-<span class="source-line-no">113</span><span id="line-113">   }</span>
-<span class="source-line-no">114</span><span id="line-114"></span>
-<span class="source-line-no">115</span><span id="line-115">   @Override /* Overridden from McpResponseCache */</span>
-<span class="source-line-no">116</span><span id="line-116">   public Optional&lt;Object&gt; get(String scope, String key) {</span>
-<span class="source-line-no">117</span><span id="line-117">      assertArgNotNull(ARG_scope, scope);</span>
-<span class="source-line-no">118</span><span id="line-118">      assertArgNotNull(ARG_key, key);</span>
-<span class="source-line-no">119</span><span id="line-119">      var partitionKey = partitionKey(scope, key);</span>
-<span class="source-line-no">120</span><span id="line-120">      synchronized (entries) {</span>
-<span class="source-line-no">121</span><span id="line-121">         var entry = entries.get(partitionKey);</span>
-<span class="source-line-no">122</span><span id="line-122">         if (entry == null)</span>
-<span class="source-line-no">123</span><span id="line-123">            return Optional.empty();</span>
-<span class="source-line-no">124</span><span id="line-124">         if (entry.expiresAtMs() &gt; 0 &amp;&amp; entry.expiresAtMs() &lt;= clock.getAsLong()) {</span>
-<span class="source-line-no">125</span><span id="line-125">            entries.remove(partitionKey);</span>
-<span class="source-line-no">126</span><span id="line-126">            return Optional.empty();</span>
-<span class="source-line-no">127</span><span id="line-127">         }</span>
-<span class="source-line-no">128</span><span id="line-128">         return Optional.of(entry.value());</span>
-<span class="source-line-no">129</span><span id="line-129">      }</span>
-<span class="source-line-no">130</span><span id="line-130">   }</span>
-<span class="source-line-no">131</span><span id="line-131"></span>
-<span class="source-line-no">132</span><span id="line-132">   @Override /* Overridden from McpResponseCache */</span>
-<span class="source-line-no">133</span><span id="line-133">   public void put(String scope, String key, Object value, long ttlMs) {</span>
-<span class="source-line-no">134</span><span id="line-134">      assertArgNotNull(ARG_scope, scope);</span>
-<span class="source-line-no">135</span><span id="line-135">      assertArgNotNull(ARG_key, key);</span>
-<span class="source-line-no">136</span><span id="line-136">      assertArgNotNull(ARG_value, value);</span>
-<span class="source-line-no">137</span><span id="line-137">      var expiresAtMs = ttlMs &gt; 0 ? clock.getAsLong() + ttlMs : 0L;</span>
-<span class="source-line-no">138</span><span id="line-138">      entries.put(partitionKey(scope, key), new CacheEntry(value, expiresAtMs));</span>
-<span class="source-line-no">139</span><span id="line-139">   }</span>
-<span class="source-line-no">140</span><span id="line-140"></span>
-<span class="source-line-no">141</span><span id="line-141">   @Override /* Overridden from McpResponseCache */</span>
-<span class="source-line-no">142</span><span id="line-142">   public void clear() {</span>
-<span class="source-line-no">143</span><span id="line-143">      entries.clear();</span>
-<span class="source-line-no">144</span><span id="line-144">   }</span>
-<span class="source-line-no">145</span><span id="line-145"></span>
-<span class="source-line-no">146</span><span id="line-146">   private static String partitionKey(String scope, String key) {</span>
-<span class="source-line-no">147</span><span id="line-147">      return scope + "\u0000" + key;</span>
-<span class="source-line-no">148</span><span id="line-148">   }</span>
-<span class="source-line-no">149</span><span id="line-149">}</span>
+<span class="source-line-no">056</span><span id="line-56">   private record CacheEntry(Object value, long expiresAtMs) {}</span>
+<span class="source-line-no">057</span><span id="line-57"></span>
+<span class="source-line-no">058</span><span id="line-58">   private final Map&lt;String,CacheEntry&gt; entries;</span>
+<span class="source-line-no">059</span><span id="line-59">   private final LongSupplier clock;</span>
+<span class="source-line-no">060</span><span id="line-60"></span>
+<span class="source-line-no">061</span><span id="line-61">   /**</span>
+<span class="source-line-no">062</span><span id="line-62">    * Constructor. Uses the system clock ({@link System#currentTimeMillis()}) for TTL expiry and</span>
+<span class="source-line-no">063</span><span id="line-63">    * {@link #DEFAULT_MAX_ENTRIES} as the size cap.</span>
+<span class="source-line-no">064</span><span id="line-64">    */</span>
+<span class="source-line-no">065</span><span id="line-65">   public InMemoryMcpResponseCache() {</span>
+<span class="source-line-no">066</span><span id="line-66">      this(System::currentTimeMillis, DEFAULT_MAX_ENTRIES);</span>
+<span class="source-line-no">067</span><span id="line-67">   }</span>
+<span class="source-line-no">068</span><span id="line-68"></span>
+<span class="source-line-no">069</span><span id="line-69">   /**</span>
+<span class="source-line-no">070</span><span id="line-70">    * Constructor with an explicit size cap. Uses the system clock ({@link System#currentTimeMillis()}) for TTL</span>
+<span class="source-line-no">071</span><span id="line-71">    * expiry.</span>
+<span class="source-line-no">072</span><span id="line-72">    *</span>
+<span class="source-line-no">073</span><span id="line-73">    * @param maxEntries The maximum number of entries (across all scopes combined) retained before the</span>
+<span class="source-line-no">074</span><span id="line-74">    *    least-recently-used entry is evicted. Must be positive.</span>
+<span class="source-line-no">075</span><span id="line-75">    */</span>
+<span class="source-line-no">076</span><span id="line-76">   public InMemoryMcpResponseCache(int maxEntries) {</span>
+<span class="source-line-no">077</span><span id="line-77">      this(System::currentTimeMillis, maxEntries);</span>
+<span class="source-line-no">078</span><span id="line-78">   }</span>
+<span class="source-line-no">079</span><span id="line-79"></span>
+<span class="source-line-no">080</span><span id="line-80">   /**</span>
+<span class="source-line-no">081</span><span id="line-81">    * Constructor with an injectable clock, for deterministic TTL-expiry testing. Uses {@link #DEFAULT_MAX_ENTRIES}</span>
+<span class="source-line-no">082</span><span id="line-82">    * as the size cap.</span>
+<span class="source-line-no">083</span><span id="line-83">    *</span>
+<span class="source-line-no">084</span><span id="line-84">    * @param clock Supplies the current time in milliseconds. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">085</span><span id="line-85">    */</span>
+<span class="source-line-no">086</span><span id="line-86">   InMemoryMcpResponseCache(LongSupplier clock) {</span>
+<span class="source-line-no">087</span><span id="line-87">      this(clock, DEFAULT_MAX_ENTRIES);</span>
+<span class="source-line-no">088</span><span id="line-88">   }</span>
+<span class="source-line-no">089</span><span id="line-89"></span>
+<span class="source-line-no">090</span><span id="line-90">   /**</span>
+<span class="source-line-no">091</span><span id="line-91">    * Constructor with both an injectable clock and an explicit size cap, for deterministic testing of the</span>
+<span class="source-line-no">092</span><span id="line-92">    * eviction policy.</span>
+<span class="source-line-no">093</span><span id="line-93">    *</span>
+<span class="source-line-no">094</span><span id="line-94">    * @param clock Supplies the current time in milliseconds. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">095</span><span id="line-95">    * @param maxEntries The maximum number of entries (across all scopes combined) retained before the</span>
+<span class="source-line-no">096</span><span id="line-96">    *    least-recently-used entry is evicted. Must be positive.</span>
+<span class="source-line-no">097</span><span id="line-97">    */</span>
+<span class="source-line-no">098</span><span id="line-98">   InMemoryMcpResponseCache(LongSupplier clock, int maxEntries) {</span>
+<span class="source-line-no">099</span><span id="line-99">      this.clock = reqnn("clock", clock);</span>
+<span class="source-line-no">100</span><span id="line-100">      if (maxEntries &lt;= 0)</span>
+<span class="source-line-no">101</span><span id="line-101">         throw new IllegalArgumentException("maxEntries must be positive: " + maxEntries);</span>
+<span class="source-line-no">102</span><span id="line-102">      this.entries = Collections.synchronizedMap(new LinkedHashMap&lt;String,CacheEntry&gt;(16, 0.75f, true) {</span>
+<span class="source-line-no">103</span><span id="line-103">         @Override protected boolean removeEldestEntry(Map.Entry&lt;String,CacheEntry&gt; eldest) {</span>
+<span class="source-line-no">104</span><span id="line-104">            return size() &gt; maxEntries;</span>
+<span class="source-line-no">105</span><span id="line-105">         }</span>
+<span class="source-line-no">106</span><span id="line-106">      });</span>
+<span class="source-line-no">107</span><span id="line-107">   }</span>
+<span class="source-line-no">108</span><span id="line-108"></span>
+<span class="source-line-no">109</span><span id="line-109">   @Override /* Overridden from McpResponseCache */</span>
+<span class="source-line-no">110</span><span id="line-110">   public Optional&lt;Object&gt; get(String scope, String key) {</span>
+<span class="source-line-no">111</span><span id="line-111">      reqnn("scope", scope);</span>
+<span class="source-line-no">112</span><span id="line-112">      reqnn("key", key);</span>
+<span class="source-line-no">113</span><span id="line-113">      var partitionKey = partitionKey(scope, key);</span>
+<span class="source-line-no">114</span><span id="line-114">      synchronized (entries) {</span>
+<span class="source-line-no">115</span><span id="line-115">         var entry = entries.get(partitionKey);</span>
+<span class="source-line-no">116</span><span id="line-116">         if (entry == null)</span>
+<span class="source-line-no">117</span><span id="line-117">            return Optional.empty();</span>
+<span class="source-line-no">118</span><span id="line-118">         if (entry.expiresAtMs() &gt; 0 &amp;&amp; entry.expiresAtMs() &lt;= clock.getAsLong()) {</span>
+<span class="source-line-no">119</span><span id="line-119">            entries.remove(partitionKey);</span>
+<span class="source-line-no">120</span><span id="line-120">            return Optional.empty();</span>
+<span class="source-line-no">121</span><span id="line-121">         }</span>
+<span class="source-line-no">122</span><span id="line-122">         return Optional.of(entry.value());</span>
+<span class="source-line-no">123</span><span id="line-123">      }</span>
+<span class="source-line-no">124</span><span id="line-124">   }</span>
+<span class="source-line-no">125</span><span id="line-125"></span>
+<span class="source-line-no">126</span><span id="line-126">   @Override /* Overridden from McpResponseCache */</span>
+<span class="source-line-no">127</span><span id="line-127">   public void put(String scope, String key, Object value, long ttlMs) {</span>
+<span class="source-line-no">128</span><span id="line-128">      reqnn("scope", scope);</span>
+<span class="source-line-no">129</span><span id="line-129">      reqnn("key", key);</span>
+<span class="source-line-no">130</span><span id="line-130">      reqnn("value", value);</span>
+<span class="source-line-no">131</span><span id="line-131">      var expiresAtMs = ttlMs &gt; 0 ? clock.getAsLong() + ttlMs : 0L;</span>
+<span class="source-line-no">132</span><span id="line-132">      entries.put(partitionKey(scope, key), new CacheEntry(value, expiresAtMs));</span>
+<span class="source-line-no">133</span><span id="line-133">   }</span>
+<span class="source-line-no">134</span><span id="line-134"></span>
+<span class="source-line-no">135</span><span id="line-135">   @Override /* Overridden from McpResponseCache */</span>
+<span class="source-line-no">136</span><span id="line-136">   public void clear() {</span>
+<span class="source-line-no">137</span><span id="line-137">      entries.clear();</span>
+<span class="source-line-no">138</span><span id="line-138">   }</span>
+<span class="source-line-no">139</span><span id="line-139"></span>
+<span class="source-line-no">140</span><span id="line-140">   private static String partitionKey(String scope, String key) {</span>
+<span class="source-line-no">141</span><span id="line-141">      return scope + "\u0000" + key;</span>
+<span class="source-line-no">142</span><span id="line-142">   }</span>
+<span class="source-line-no">143</span><span id="line-143">}</span>
 
 
 

@@ -121,7 +121,7 @@
 <a class="jxr_linenumber" name="L113" href="#L113">113</a> 			.timeZone(req.getTimeZone().orElse(<strong class="jxr_keyword">null</strong>))
 <a class="jxr_linenumber" name="L114" href="#L114">114</a> 			.mediaType(match.get().getMediaType())
 <a class="jxr_linenumber" name="L115" href="#L115">115</a> 			.apply(ReaderParser.Builder.<strong class="jxr_keyword">class</strong>, x -&gt; x.streamCharset(req.getCharset()))
-<a class="jxr_linenumber" name="L116" href="#L116">116</a> 			.debug(req.isDebug() ? <strong class="jxr_keyword">true</strong> : <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L116" href="#L116">116</a> 			.debug(req.isDebugMarshalling() ? <strong class="jxr_keyword">true</strong> : <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L117" href="#L117">117</a> 			.build();
 <a class="jxr_linenumber" name="L118" href="#L118">118</a> 		<strong class="jxr_keyword">var</strong> input = session.isReaderParser() ? content.getReader() : content.getInputStream();
 <a class="jxr_linenumber" name="L119" href="#L119">119</a> 		<strong class="jxr_keyword">var</strong> cursor = ((<a name="RecordReadable" href="../../../../../../org/apache/juneau/marshall/stream/RecordReadable.html#RecordReadable">RecordReadable</a>) session).readRecords(input);

@@ -1,0 +1,420 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="" lang="">
+<head><meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<title>BusWiringValidator_Test xref</title>
+<link type="text/css" rel="stylesheet" href="../../../../../../stylesheet.css" />
+</head>
+<body>
+<div id="overview"><a href="../../../../../../../testapidocs/org/apache/juneau/rest/server/console/BusWiringValidator_Test.html">View Javadoc</a></div><pre>
+<a class="jxr_linenumber" name="L1" href="#L1">1</a>   <em class="jxr_comment">/*</em>
+<a class="jxr_linenumber" name="L2" href="#L2">2</a>   <em class="jxr_comment"> * Licensed to the Apache Software Foundation (ASF) under one or more</em>
+<a class="jxr_linenumber" name="L3" href="#L3">3</a>   <em class="jxr_comment"> * contributor license agreements.  See the NOTICE file distributed with</em>
+<a class="jxr_linenumber" name="L4" href="#L4">4</a>   <em class="jxr_comment"> * this work for additional information regarding copyright ownership.</em>
+<a class="jxr_linenumber" name="L5" href="#L5">5</a>   <em class="jxr_comment"> * The ASF licenses this file to You under the Apache License, Version 2.0</em>
+<a class="jxr_linenumber" name="L6" href="#L6">6</a>   <em class="jxr_comment"> * (the "License"); you may not use this file except in compliance with</em>
+<a class="jxr_linenumber" name="L7" href="#L7">7</a>   <em class="jxr_comment"> * the License.  You may obtain a copy of the License at</em>
+<a class="jxr_linenumber" name="L8" href="#L8">8</a>   <em class="jxr_comment"> *</em>
+<a class="jxr_linenumber" name="L9" href="#L9">9</a>   <em class="jxr_comment"> *      <a href="http://www.apache.org/licenses/LICENSE-2.0" target="alexandria_uri">http://www.apache.org/licenses/LICENSE-2.0</a></em>
+<a class="jxr_linenumber" name="L10" href="#L10">10</a>  <em class="jxr_comment"> *</em>
+<a class="jxr_linenumber" name="L11" href="#L11">11</a>  <em class="jxr_comment"> * Unless required by applicable law or agreed to in writing, software</em>
+<a class="jxr_linenumber" name="L12" href="#L12">12</a>  <em class="jxr_comment"> * distributed under the License is distributed on an "AS IS" BASIS,</em>
+<a class="jxr_linenumber" name="L13" href="#L13">13</a>  <em class="jxr_comment"> * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</em>
+<a class="jxr_linenumber" name="L14" href="#L14">14</a>  <em class="jxr_comment"> * See the License for the specific language governing permissions and</em>
+<a class="jxr_linenumber" name="L15" href="#L15">15</a>  <em class="jxr_comment"> * limitations under the License.</em>
+<a class="jxr_linenumber" name="L16" href="#L16">16</a>  <em class="jxr_comment"> */</em>
+<a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.server.console;
+<a class="jxr_linenumber" name="L18" href="#L18">18</a>  
+<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> java.nio.charset.StandardCharsets.*;
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> java.util.stream.Collectors.*;
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.test.bct.BctAssertions.*;
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.junit.jupiter.api.Assertions.*;
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> java.util.*;
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> java.util.stream.*;
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.*;
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.marshall.collections.*;
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <strong class="jxr_keyword">import</strong> org.junit.jupiter.api.*;
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <em class="jxr_javadoccomment"> * Unit coverage for {@link BusWiringValidator} and the {@link CardTypeHandler} bus defaults</em>
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <em class="jxr_javadoccomment"> *.  The full rule matrix, with the real {@code datatables} handler, is the shared</em>
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>  <em class="jxr_javadoccomment"> * {@code bus-wiring-corpus.json}, run by {@code $CUIF}'s {@code BusWiring_Corpus_Test}.  This class pins what the</em>
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>  <em class="jxr_javadoccomment"> * corpus cannot: the defaults, {@code Problem}, the helpers, and the registry hooks driven by stub types.</em>
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>  <em class="jxr_javadoccomment"> */</em>
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>  <strong class="jxr_keyword">class</strong> <a name="BusWiringValidator_Test" href="../../../../../../org/apache/juneau/rest/server/console/BusWiringValidator_Test.html#BusWiringValidator_Test">BusWiringValidator_Test</a> <strong class="jxr_keyword">extends</strong> TestBase {
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>  
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>  	<em class="jxr_javadoccomment">/** A stub adopter type: {@code roles}/{@code ops} of null mean "unknown to Java". */</em>
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>  	<strong class="jxr_keyword">private</strong> record Stub(String type, Set&lt;String&gt; roles, Set&lt;String&gt; ops, List&lt;String&gt; publishes) <strong class="jxr_keyword">implements</strong> CardTypeHandler {
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>  		@Override <strong class="jxr_keyword">public</strong> JsonMap toFragment(CardSource source) { <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> JsonMap(); }
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>  		@Override <strong class="jxr_keyword">public</strong> List&lt;String&gt; implicitTopics(JsonMap card) { <strong class="jxr_keyword">return</strong> publishes; }
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>  		@Override <strong class="jxr_keyword">public</strong> Set&lt;String&gt; acceptedRoles() { <strong class="jxr_keyword">return</strong> roles; }
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>  		@Override <strong class="jxr_keyword">public</strong> Set&lt;String&gt; acceptedOps() { <strong class="jxr_keyword">return</strong> ops; }
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>  	}
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>  
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> CardTypeRegistry REGISTRY = CardTypeRegistry.standard().copy()
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>  		.add(<strong class="jxr_keyword">new</strong> Stub(<span class="jxr_string">"grid"</span>, Set.of(<span class="jxr_string">"highlight"</span>), Set.of(<span class="jxr_string">"reload"</span>), List.of(<span class="jxr_string">"grid.picked"</span>)))
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>  		.add(<strong class="jxr_keyword">new</strong> Stub(<span class="jxr_string">"meter"</span>, <strong class="jxr_keyword">null</strong>, <strong class="jxr_keyword">null</strong>, List.of()))
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>  		.build();
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>  
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> List&lt;String&gt; problems(String contract) <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>  		<strong class="jxr_keyword">return</strong> BusWiringValidator.validate(JsonMap.ofString(contract), REGISTRY).stream().map(Object::toString).toList();
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>  	}
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>  
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String page(String <strong class="jxr_keyword">rest</strong>) {
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>  		<strong class="jxr_keyword">return</strong> <span class="jxr_string">"{\&quot;version\&quot;:\&quot;1\&quot;,\&quot;title\&quot;:\&quot;T\&quot;,\&quot;nav\&quot;:[],\&quot;activeNav\&quot;:[],"</span> + <strong class="jxr_keyword">rest</strong> + <span class="jxr_string">"}"</span>;
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>  	}
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>  
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>  	@Test <strong class="jxr_keyword">void</strong> a01_defaults() {
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>  		<strong class="jxr_keyword">var</strong> bare = <strong class="jxr_keyword">new</strong> CardTypeHandler() {
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>  			@Override <strong class="jxr_keyword">public</strong> String type() { <strong class="jxr_keyword">return</strong> <span class="jxr_string">"bare"</span>; }
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>  			@Override <strong class="jxr_keyword">public</strong> JsonMap toFragment(CardSource source) { <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> JsonMap(); }
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>  		};
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>  		assertEquals(List.of(), bare.implicitTopics(<strong class="jxr_keyword">new</strong> JsonMap()));
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>  		assertNull(bare.acceptedRoles());
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>  		assertNull(bare.acceptedOps());
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>  		<strong class="jxr_keyword">var</strong> html = <strong class="jxr_keyword">new</strong> HtmlCardType();
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>  		assertEquals(List.of(), html.implicitTopics(JsonMap.of(<span class="jxr_string">"id"</span>, <span class="jxr_string">"a"</span>, <span class="jxr_string">"type"</span>, <span class="jxr_string">"html"</span>)));
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>  		assertEquals(Set.of(), html.acceptedRoles());
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>  		assertEquals(Set.of(), html.acceptedOps());
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>  	}
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>  
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>  	@Test <strong class="jxr_keyword">void</strong> a02_validFixtureHasNoProblems() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>  		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> in = getClass().getResourceAsStream(<span class="jxr_string">"/contracts/valid-bus-wiring.json"</span>)) {
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>  			<strong class="jxr_keyword">var</strong> json = <strong class="jxr_keyword">new</strong> String(in.readAllBytes(), UTF_8);
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>  			assertEquals(List.of(), BusWiringValidator.validate(JsonMap.ofString(json), CardTypeRegistry.standard()));
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>  		}
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>  	}
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>  
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>  	@Test <strong class="jxr_keyword">void</strong> a03_problemToString() {
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>  		<strong class="jxr_keyword">var</strong> p = <strong class="jxr_keyword">new</strong> BusWiringValidator.Problem(<span class="jxr_string">"E-52"</span>, <span class="jxr_string">"topic 'ops.jobs' is declared publisher=server but no bridge carries it downstream"</span>);
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>  		assertEquals(<span class="jxr_string">"E-52 topic 'ops.jobs' is declared publisher=server but no bridge carries it downstream"</span>, p.toString());
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>  	}
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>  
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>  	@Test <strong class="jxr_keyword">void</strong> a04_stubTypePublishesAndRoles() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>  		assertEquals(List.of(
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>  			<span class="jxr_string">"E-44 card 'b' (type 'grid') has no role 'sparkle'; accepted: highlight, params, refresh"</span>,
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>  			<span class="jxr_string">"E-41 card 'b' subscribes to 'grid.pick' but nothing publishes it; did you mean 'grid.picked'?"</span>
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>  		), problems(page(<span class="jxr_string">"\&quot;cards\&quot;:["</span>
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>  			+ <span class="jxr_string">"{\&quot;id\&quot;:\&quot;a\&quot;,\&quot;type\&quot;:\&quot;grid\&quot;},"</span>
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>  			+ <span class="jxr_string">"{\&quot;id\&quot;:\&quot;b\&quot;,\&quot;type\&quot;:\&quot;grid\&quot;,\&quot;subscribes\&quot;:["</span>
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>  			+ <span class="jxr_string">"{\&quot;topic\&quot;:\&quot;grid.picked\&quot;,\&quot;as\&quot;:\&quot;highlight\&quot;},"</span>
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>  			+ <span class="jxr_string">"{\&quot;topic\&quot;:\&quot;card:a\&quot;,\&quot;as\&quot;:\&quot;sparkle\&quot;},"</span>
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>  			+ <span class="jxr_string">"{\&quot;topic\&quot;:\&quot;grid.pick\&quot;,\&quot;as\&quot;:\&quot;refresh\&quot;}]},"</span>
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>  			+ <span class="jxr_string">"{\&quot;id\&quot;:\&quot;m\&quot;,\&quot;type\&quot;:\&quot;meter\&quot;,\&quot;subscribes\&quot;:[{\&quot;topic\&quot;:\&quot;card:a\&quot;,\&quot;as\&quot;:\&quot;anything\&quot;}]}]"</span>)));
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>  	}
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>  
+<a class="jxr_linenumber" name="L99" href="#L99">99</a>  	@Test <strong class="jxr_keyword">void</strong> a05_ribbonTargetUsesAcceptedOps() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L100" href="#L100">100</a> 		assertEquals(List.of(
+<a class="jxr_linenumber" name="L101" href="#L101">101</a> 			<span class="jxr_string">"E-43 card 'g' (type 'grid') does not handle op 'collapse-all'"</span>
+<a class="jxr_linenumber" name="L102" href="#L102">102</a> 		), problems(page(<span class="jxr_string">"\&quot;cards\&quot;:["</span>
+<a class="jxr_linenumber" name="L103" href="#L103">103</a> 			+ <span class="jxr_string">"{\&quot;id\&quot;:\&quot;g\&quot;,\&quot;type\&quot;:\&quot;grid\&quot;},"</span>
+<a class="jxr_linenumber" name="L104" href="#L104">104</a> 			+ <span class="jxr_string">"{\&quot;id\&quot;:\&quot;m\&quot;,\&quot;type\&quot;:\&quot;meter\&quot;},"</span>
+<a class="jxr_linenumber" name="L105" href="#L105">105</a> 			+ <span class="jxr_string">"{\&quot;id\&quot;:\&quot;t\&quot;,\&quot;type\&quot;:\&quot;x-table\&quot;,\&quot;ribbon\&quot;:["</span>
+<a class="jxr_linenumber" name="L106" href="#L106">106</a> 			+ <span class="jxr_string">"{\&quot;type\&quot;:\&quot;refresh\&quot;,\&quot;target\&quot;:\&quot;g\&quot;},"</span>
+<a class="jxr_linenumber" name="L107" href="#L107">107</a> 			+ <span class="jxr_string">"{\&quot;type\&quot;:\&quot;collapseAll\&quot;,\&quot;target\&quot;:\&quot;g\&quot;},"</span>
+<a class="jxr_linenumber" name="L108" href="#L108">108</a> 			+ <span class="jxr_string">"{\&quot;type\&quot;:\&quot;collapseAll\&quot;,\&quot;target\&quot;:\&quot;m\&quot;}]}]"</span>)));
+<a class="jxr_linenumber" name="L109" href="#L109">109</a> 	}
+<a class="jxr_linenumber" name="L110" href="#L110">110</a> 
+<a class="jxr_linenumber" name="L111" href="#L111">111</a> 	@Test <strong class="jxr_keyword">void</strong> a06_unregisteredTypeIsSkipped() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L112" href="#L112">112</a> 		assertEquals(List.of(), problems(page(<span class="jxr_string">"\&quot;cards\&quot;:["</span>
+<a class="jxr_linenumber" name="L113" href="#L113">113</a> 			+ <span class="jxr_string">"{\&quot;id\&quot;:\&quot;a\&quot;,\&quot;type\&quot;:\&quot;chart\&quot;},"</span>
+<a class="jxr_linenumber" name="L114" href="#L114">114</a> 			+ <span class="jxr_string">"{\&quot;id\&quot;:\&quot;b\&quot;,\&quot;type\&quot;:\&quot;chart\&quot;,\&quot;subscribes\&quot;:[{\&quot;topic\&quot;:\&quot;filter:a\&quot;,\&quot;as\&quot;:\&quot;filter\&quot;}]}]"</span>)));
+<a class="jxr_linenumber" name="L115" href="#L115">115</a> 	}
+<a class="jxr_linenumber" name="L116" href="#L116">116</a> 
+<a class="jxr_linenumber" name="L117" href="#L117">117</a> 	@Test <strong class="jxr_keyword">void</strong> a07_helpers() {
+<a class="jxr_linenumber" name="L118" href="#L118">118</a> 		assertEquals(0, BusWiringValidator.distance(<span class="jxr_string">"app.a"</span>, <span class="jxr_string">"app.a"</span>));
+<a class="jxr_linenumber" name="L119" href="#L119">119</a> 		assertEquals(2, BusWiringValidator.distance(<span class="jxr_string">"app.region-pick"</span>, <span class="jxr_string">"app.region-picked"</span>));
+<a class="jxr_linenumber" name="L120" href="#L120">120</a> 		assertTrue(BusWiringValidator.topicMatches(<span class="jxr_string">"ssc.alert:*"</span>, <span class="jxr_string">"ssc.alert:disk"</span>));
+<a class="jxr_linenumber" name="L121" href="#L121">121</a> 		assertFalse(BusWiringValidator.topicMatches(<span class="jxr_string">"ssc.alert:*"</span>, <span class="jxr_string">"ssc.alert"</span>));
+<a class="jxr_linenumber" name="L122" href="#L122">122</a> 		assertFalse(BusWiringValidator.topicMatches(<span class="jxr_string">"ssc.alert:disk"</span>, <span class="jxr_string">"ssc.alert:*"</span>));
+<a class="jxr_linenumber" name="L123" href="#L123">123</a> 	}
+<a class="jxr_linenumber" name="L124" href="#L124">124</a> 
+<a class="jxr_linenumber" name="L125" href="#L125">125</a> 	@Test <strong class="jxr_keyword">void</strong> a08_everyProblemIsCollected() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L126" href="#L126">126</a> 		<strong class="jxr_keyword">var</strong> ps = problems(page(<span class="jxr_string">"\&quot;topics\&quot;:[{\&quot;topic\&quot;:\&quot;ops.jobs\&quot;,\&quot;retain\&quot;:true,\&quot;publisher\&quot;:\&quot;server\&quot;}],"</span>
+<a class="jxr_linenumber" name="L127" href="#L127">127</a> 			+ <span class="jxr_string">"\&quot;cards\&quot;:[{\&quot;id\&quot;:\&quot;h\&quot;,\&quot;type\&quot;:\&quot;html\&quot;,\&quot;template\&quot;:\&quot;h\&quot;,\&quot;src\&quot;:\&quot;/x/{id}\&quot;,\&quot;subscribes\&quot;:["</span>
+<a class="jxr_linenumber" name="L128" href="#L128">128</a> 			+ <span class="jxr_string">"{\&quot;topic\&quot;:\&quot;card:h\&quot;,\&quot;as\&quot;:\&quot;refresh\&quot;},"</span>
+<a class="jxr_linenumber" name="L129" href="#L129">129</a> 			+ <span class="jxr_string">"{\&quot;topic\&quot;:\&quot;card:gone\&quot;,\&quot;as\&quot;:\&quot;params\&quot;}]}]"</span>));
+<a class="jxr_linenumber" name="L130" href="#L130">130</a> 		assertEquals(List.of(
+<a class="jxr_linenumber" name="L131" href="#L131">131</a> 			<span class="jxr_string">"E-49 card 'h' subscribes to its own topic 'card:h'; use ctx.subscribe with {echo:true} in JS if this is intended"</span>,
+<a class="jxr_linenumber" name="L132" href="#L132">132</a> 			<span class="jxr_string">"E-42 topic 'card:gone' names card 'gone', which is not on this page"</span>,
+<a class="jxr_linenumber" name="L133" href="#L133">133</a> 			<span class="jxr_string">"E-47 card 'h': params subscription needs map"</span>,
+<a class="jxr_linenumber" name="L134" href="#L134">134</a> 			<span class="jxr_string">"E-47 card 'h': token '{id}' in src is not mapped by any params subscription"</span>,
+<a class="jxr_linenumber" name="L135" href="#L135">135</a> 			<span class="jxr_string">"E-52 topic 'ops.jobs' is declared publisher=server but no bridge carries it downstream"</span>
+<a class="jxr_linenumber" name="L136" href="#L136">136</a> 		), ps);
+<a class="jxr_linenumber" name="L137" href="#L137">137</a> 	}
+<a class="jxr_linenumber" name="L138" href="#L138">138</a> 
+<a class="jxr_linenumber" name="L139" href="#L139">139</a> 	@Test <strong class="jxr_keyword">void</strong> a08b_misspelledSelectionTopicIsE42() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L140" href="#L140">140</a> 		<em class="jxr_comment">// The browser defers this check to the server on purpose (juneau-bus.js), so it is pinned here.</em>
+<a class="jxr_linenumber" name="L141" href="#L141">141</a> 		<strong class="jxr_keyword">var</strong> ps = problems(page(<span class="jxr_string">"\&quot;cards\&quot;:["</span>
+<a class="jxr_linenumber" name="L142" href="#L142">142</a> 			+ <span class="jxr_string">"{\&quot;id\&quot;:\&quot;changes\&quot;,\&quot;type\&quot;:\&quot;html\&quot;,\&quot;template\&quot;:\&quot;c\&quot;},"</span>
+<a class="jxr_linenumber" name="L143" href="#L143">143</a> 			+ <span class="jxr_string">"{\&quot;id\&quot;:\&quot;tasks\&quot;,\&quot;type\&quot;:\&quot;html\&quot;,\&quot;template\&quot;:\&quot;t\&quot;,\&quot;src\&quot;:\&quot;/t/{changeId}\&quot;,\&quot;subscribes\&quot;:["</span>
+<a class="jxr_linenumber" name="L144" href="#L144">144</a> 			+ <span class="jxr_string">"{\&quot;topic\&quot;:\&quot;selection:chanegs\&quot;,\&quot;as\&quot;:\&quot;params\&quot;,\&quot;map\&quot;:{\&quot;changeId\&quot;:\&quot;ids.0\&quot;}}]}]"</span>));
+<a class="jxr_linenumber" name="L145" href="#L145">145</a> 		assertEquals(List.of(<span class="jxr_string">"E-42 topic 'selection:chanegs' names card 'chanegs', which is not on this page"</span>), ps.stream().map(x -&gt; x.split(<span class="jxr_string">"; "</span>)[0]).filter(x -&gt; x.startsWith(<span class="jxr_string">"E-42"</span>)).toList());
+<a class="jxr_linenumber" name="L146" href="#L146">146</a> 	}
+<a class="jxr_linenumber" name="L147" href="#L147">147</a> 
+<a class="jxr_linenumber" name="L148" href="#L148">148</a> 	@Test <strong class="jxr_keyword">void</strong> a09_schemaInvalidWiringDoesNotThrow() {
+<a class="jxr_linenumber" name="L149" href="#L149">149</a> 		<em class="jxr_comment">// A topics entry with no publisher, carried by a bridge and a ribbon publish item.</em>
+<a class="jxr_linenumber" name="L150" href="#L150">150</a> 		assertDoesNotThrow(() -&gt; problems(page(<span class="jxr_string">"\&quot;topics\&quot;:[{\&quot;topic\&quot;:\&quot;app.a\&quot;,\&quot;retain\&quot;:true}],"</span>
+<a class="jxr_linenumber" name="L151" href="#L151">151</a> 			+ <span class="jxr_string">"\&quot;bridges\&quot;:[{\&quot;id\&quot;:\&quot;b\&quot;,\&quot;transport\&quot;:\&quot;websocket\&quot;,\&quot;session\&quot;:\&quot;/s\&quot;,\&quot;downstream\&quot;:[\&quot;app.a\&quot;],\&quot;upstream\&quot;:[\&quot;app.a\&quot;]}],"</span>
+<a class="jxr_linenumber" name="L152" href="#L152">152</a> 			+ <span class="jxr_string">"\&quot;cards\&quot;:[{\&quot;id\&quot;:\&quot;t\&quot;,\&quot;type\&quot;:\&quot;x-table\&quot;,\&quot;ribbon\&quot;:[{\&quot;type\&quot;:\&quot;publish\&quot;,\&quot;title\&quot;:\&quot;Go\&quot;,\&quot;topic\&quot;:\&quot;app.a\&quot;}]}]"</span>)));
+<a class="jxr_linenumber" name="L153" href="#L153">153</a> 		<em class="jxr_comment">// A ribbon item with a target but no type.</em>
+<a class="jxr_linenumber" name="L154" href="#L154">154</a> 		assertDoesNotThrow(() -&gt; problems(page(<span class="jxr_string">"\&quot;cards\&quot;:[{\&quot;id\&quot;:\&quot;t\&quot;,\&quot;type\&quot;:\&quot;x-table\&quot;,\&quot;ribbon\&quot;:[{\&quot;target\&quot;:\&quot;t\&quot;}]}]"</span>)));
+<a class="jxr_linenumber" name="L155" href="#L155">155</a> 	}
+<a class="jxr_linenumber" name="L156" href="#L156">156</a> 
+<a class="jxr_linenumber" name="L157" href="#L157">157</a> 	@Test <strong class="jxr_keyword">void</strong> a10_retainConflictBetweenCards() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L158" href="#L158">158</a> 		assertEquals(List.of(
+<a class="jxr_linenumber" name="L159" href="#L159">159</a> 			<span class="jxr_string">"E-46 topic 'app.focus' is declared with retain=true here and retain=false at card 'a'"</span>
+<a class="jxr_linenumber" name="L160" href="#L160">160</a> 		), problems(page(<span class="jxr_string">"\&quot;cards\&quot;:["</span>
+<a class="jxr_linenumber" name="L161" href="#L161">161</a> 			+ <span class="jxr_string">"{\&quot;id\&quot;:\&quot;a\&quot;,\&quot;type\&quot;:\&quot;html\&quot;,\&quot;template\&quot;:\&quot;a\&quot;,\&quot;publishes\&quot;:[{\&quot;topic\&quot;:\&quot;app.focus\&quot;,\&quot;retain\&quot;:false}]},"</span>
+<a class="jxr_linenumber" name="L162" href="#L162">162</a> 			+ <span class="jxr_string">"{\&quot;id\&quot;:\&quot;b\&quot;,\&quot;type\&quot;:\&quot;html\&quot;,\&quot;template\&quot;:\&quot;b\&quot;,\&quot;publishes\&quot;:[{\&quot;topic\&quot;:\&quot;app.focus\&quot;,\&quot;retain\&quot;:true}]}]"</span>)));
+<a class="jxr_linenumber" name="L163" href="#L163">163</a> 	}
+<a class="jxr_linenumber" name="L164" href="#L164">164</a> 
+<a class="jxr_linenumber" name="L165" href="#L165">165</a> 	@Test <strong class="jxr_keyword">void</strong> a11_bridgeSessionAndMaxAttemptsEdges() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L166" href="#L166">166</a> 		assertEquals(List.of(
+<a class="jxr_linenumber" name="L167" href="#L167">167</a> 			<span class="jxr_string">"E-51 bridge 'b': session must be a same-origin path, got '/&#92;&#92;x'"</span>,
+<a class="jxr_linenumber" name="L168" href="#L168">168</a> 			<span class="jxr_string">"E-51 bridge 'b': maxAttempts must be an integer of at least 1"</span>
+<a class="jxr_linenumber" name="L169" href="#L169">169</a> 		), problems(page(<span class="jxr_string">"\&quot;bridges\&quot;:[{\&quot;id\&quot;:\&quot;b\&quot;,\&quot;transport\&quot;:\&quot;sse\&quot;,\&quot;session\&quot;:\&quot;/&#92;&#92;&#92;&#92;x\&quot;,\&quot;downstream\&quot;:[],\&quot;maxAttempts\&quot;:2.5}],\&quot;cards\&quot;:[]"</span>)));
+<a class="jxr_linenumber" name="L170" href="#L170">170</a> 	}
+<a class="jxr_linenumber" name="L171" href="#L171">171</a> 
+<a class="jxr_linenumber" name="L172" href="#L172">172</a> 	@Test <strong class="jxr_keyword">void</strong> a12_jobTopicWithoutBridge() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L173" href="#L173">173</a> 		assertEquals(List.of(
+<a class="jxr_linenumber" name="L174" href="#L174">174</a> 			<span class="jxr_string">"E-52 topic 'job:*' is declared publisher=server but no bridge carries it downstream"</span>
+<a class="jxr_linenumber" name="L175" href="#L175">175</a> 		), problems(page(<span class="jxr_string">"\&quot;topics\&quot;:[{\&quot;topic\&quot;:\&quot;job:*\&quot;,\&quot;retain\&quot;:true,\&quot;publisher\&quot;:\&quot;server\&quot;}],\&quot;cards\&quot;:[]"</span>)));
+<a class="jxr_linenumber" name="L176" href="#L176">176</a> 	}
+<a class="jxr_linenumber" name="L177" href="#L177">177</a> 
+<a class="jxr_linenumber" name="L178" href="#L178">178</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String TERM_TOPICS = <span class="jxr_string">"\&quot;topics\&quot;:[{\&quot;topic\&quot;:\&quot;term.input-status\&quot;,\&quot;retain\&quot;:false,\&quot;publisher\&quot;:\&quot;server\&quot;}]"</span>;
+<a class="jxr_linenumber" name="L179" href="#L179">179</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String TERM_BRIDGES = <span class="jxr_string">"\&quot;bridges\&quot;:[{\&quot;id\&quot;:\&quot;term\&quot;,\&quot;transport\&quot;:\&quot;websocket\&quot;,\&quot;session\&quot;:\&quot;/c/juneau-bus/session\&quot;,"</span>
+<a class="jxr_linenumber" name="L180" href="#L180">180</a> 		+ <span class="jxr_string">"\&quot;downstream\&quot;:[\&quot;term.input-status\&quot;],\&quot;upstream\&quot;:[\&quot;term.input\&quot;]}]"</span>;
+<a class="jxr_linenumber" name="L181" href="#L181">181</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String TERM_PUBLISHES = <span class="jxr_string">"\&quot;publishes\&quot;:[{\&quot;topic\&quot;:\&quot;term.input\&quot;,\&quot;retain\&quot;:false}]"</span>;
+<a class="jxr_linenumber" name="L182" href="#L182">182</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String TERM_SUBSCRIBES = <span class="jxr_string">"\&quot;subscribes\&quot;:[{\&quot;topic\&quot;:\&quot;term.input-status\&quot;,\&quot;as\&quot;:\&quot;input-status\&quot;}]"</span>;
+<a class="jxr_linenumber" name="L183" href="#L183">183</a> 
+<a class="jxr_linenumber" name="L184" href="#L184">184</a> 	<em class="jxr_javadoccomment">/** A page with one terminal card with input on; each argument is the wiring fragment to include (null to omit). */</em>
+<a class="jxr_linenumber" name="L185" href="#L185">185</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String terminalPage(String topics, String bridges, String publishes, String subscribes) {
+<a class="jxr_linenumber" name="L186" href="#L186">186</a> 		<strong class="jxr_keyword">var</strong> card = Stream.of(<span class="jxr_string">"\&quot;id\&quot;:\&quot;term\&quot;,\&quot;type\&quot;:\&quot;terminal\&quot;,\&quot;terminal\&quot;:{\&quot;bytesUrl\&quot;:\&quot;/t/juneau-terminal/t1/bytes\&quot;,\&quot;input\&quot;:true,\&quot;inputId\&quot;:\&quot;t1\&quot;}"</span>, publishes, subscribes)
+<a class="jxr_linenumber" name="L187" href="#L187">187</a> 			.filter(Objects::nonNull).collect(joining(<span class="jxr_string">","</span>));
+<a class="jxr_linenumber" name="L188" href="#L188">188</a> 		<strong class="jxr_keyword">return</strong> page(Stream.of(topics, bridges, <span class="jxr_string">"\&quot;cards\&quot;:[{"</span> + card + <span class="jxr_string">"}]"</span>).filter(Objects::nonNull).collect(joining(<span class="jxr_string">","</span>)));
+<a class="jxr_linenumber" name="L189" href="#L189">189</a> 	}
+<a class="jxr_linenumber" name="L190" href="#L190">190</a> 
+<a class="jxr_linenumber" name="L191" href="#L191">191</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> List&lt;String&gt; e58(List&lt;String&gt; problems) {
+<a class="jxr_linenumber" name="L192" href="#L192">192</a> 		<strong class="jxr_keyword">return</strong> problems.stream().filter(x -&gt; x.startsWith(<span class="jxr_string">"E-58"</span>)).toList();
+<a class="jxr_linenumber" name="L193" href="#L193">193</a> 	}
+<a class="jxr_linenumber" name="L194" href="#L194">194</a> 
+<a class="jxr_linenumber" name="L195" href="#L195">195</a> 	@Test <strong class="jxr_keyword">void</strong> a13_terminalInputFullyWiredHasNoProblems() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L196" href="#L196">196</a> 		assertEquals(List.of(), problems(terminalPage(TERM_TOPICS, TERM_BRIDGES, TERM_PUBLISHES, TERM_SUBSCRIBES)));
+<a class="jxr_linenumber" name="L197" href="#L197">197</a> 	}
+<a class="jxr_linenumber" name="L198" href="#L198">198</a> 
+<a class="jxr_linenumber" name="L199" href="#L199">199</a> 	@Test <strong class="jxr_keyword">void</strong> a14_terminalInputMissingPublish() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L200" href="#L200">200</a> 		assertEquals(List.of(<span class="jxr_string">"E-58 terminal card 'term' has input: true but its publishes lacks 'term.input'"</span>),
+<a class="jxr_linenumber" name="L201" href="#L201">201</a> 			e58(problems(terminalPage(TERM_TOPICS, TERM_BRIDGES, <strong class="jxr_keyword">null</strong>, TERM_SUBSCRIBES))));
+<a class="jxr_linenumber" name="L202" href="#L202">202</a> 	}
+<a class="jxr_linenumber" name="L203" href="#L203">203</a> 
+<a class="jxr_linenumber" name="L204" href="#L204">204</a> 	@Test <strong class="jxr_keyword">void</strong> a15_terminalInputMissingSubscribe() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L205" href="#L205">205</a> 		assertEquals(List.of(<span class="jxr_string">"E-58 terminal card 'term' has input: true but its subscribes lacks 'term.input-status' as 'input-status'"</span>),
+<a class="jxr_linenumber" name="L206" href="#L206">206</a> 			e58(problems(terminalPage(TERM_TOPICS, TERM_BRIDGES, TERM_PUBLISHES, <strong class="jxr_keyword">null</strong>))));
+<a class="jxr_linenumber" name="L207" href="#L207">207</a> 	}
+<a class="jxr_linenumber" name="L208" href="#L208">208</a> 
+<a class="jxr_linenumber" name="L209" href="#L209">209</a> 	@Test <strong class="jxr_keyword">void</strong> a16_terminalInputMissingServerTopic() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L210" href="#L210">210</a> 		assertEquals(List.of(<span class="jxr_string">"E-58 terminal card 'term' has input: true but no topics entry declares 'term.input-status' with publisher=server"</span>),
+<a class="jxr_linenumber" name="L211" href="#L211">211</a> 			e58(problems(terminalPage(<strong class="jxr_keyword">null</strong>, TERM_BRIDGES, TERM_PUBLISHES, TERM_SUBSCRIBES))));
+<a class="jxr_linenumber" name="L212" href="#L212">212</a> 	}
+<a class="jxr_linenumber" name="L213" href="#L213">213</a> 
+<a class="jxr_linenumber" name="L214" href="#L214">214</a> 	@Test <strong class="jxr_keyword">void</strong> a17_terminalInputMissingBridge() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L215" href="#L215">215</a> 		assertEquals(List.of(<span class="jxr_string">"E-58 terminal card 'term' has input: true but no websocket bridge carries 'term.input' upstream and 'term.input-status' downstream"</span>),
+<a class="jxr_linenumber" name="L216" href="#L216">216</a> 			e58(problems(terminalPage(TERM_TOPICS, <strong class="jxr_keyword">null</strong>, TERM_PUBLISHES, TERM_SUBSCRIBES))));
+<a class="jxr_linenumber" name="L217" href="#L217">217</a> 	}
+<a class="jxr_linenumber" name="L218" href="#L218">218</a> 
+<a class="jxr_linenumber" name="L219" href="#L219">219</a> 	@Test <strong class="jxr_keyword">void</strong> a18_terminalInputOffIsNotChecked() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L220" href="#L220">220</a> 		assertEquals(List.of(), problems(page(<span class="jxr_string">"\&quot;cards\&quot;:["</span>
+<a class="jxr_linenumber" name="L221" href="#L221">221</a> 			+ <span class="jxr_string">"{\&quot;id\&quot;:\&quot;a\&quot;,\&quot;type\&quot;:\&quot;terminal\&quot;,\&quot;terminal\&quot;:{\&quot;bytesUrl\&quot;:\&quot;/b\&quot;}},"</span>
+<a class="jxr_linenumber" name="L222" href="#L222">222</a> 			+ <span class="jxr_string">"{\&quot;id\&quot;:\&quot;b\&quot;,\&quot;type\&quot;:\&quot;terminal\&quot;,\&quot;terminal\&quot;:{\&quot;bytesUrl\&quot;:\&quot;/b\&quot;,\&quot;input\&quot;:false}}]"</span>)));
+<a class="jxr_linenumber" name="L223" href="#L223">223</a> 	}
+<a class="jxr_linenumber" name="L224" href="#L224">224</a> 
+<a class="jxr_linenumber" name="L225" href="#L225">225</a> 	@Test <strong class="jxr_keyword">void</strong> a19_nonTerminalCardWithTerminalMapIsNotChecked() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L226" href="#L226">226</a> 		assertEquals(List.of(), problems(page(<span class="jxr_string">"\&quot;cards\&quot;:["</span>
+<a class="jxr_linenumber" name="L227" href="#L227">227</a> 			+ <span class="jxr_string">"{\&quot;id\&quot;:\&quot;h\&quot;,\&quot;type\&quot;:\&quot;html\&quot;,\&quot;template\&quot;:\&quot;h\&quot;,\&quot;terminal\&quot;:{\&quot;input\&quot;:true}}]"</span>)));
+<a class="jxr_linenumber" name="L228" href="#L228">228</a> 	}
+<a class="jxr_linenumber" name="L229" href="#L229">229</a> 
+<a class="jxr_linenumber" name="L230" href="#L230">230</a> 	<em class="jxr_comment">// ---- chart wiring rules (E-72..E-77), target lookups ---------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L231" href="#L231">231</a> 
+<a class="jxr_linenumber" name="L232" href="#L232">232</a> 	<em class="jxr_comment">// juneau-charts.js ships from this module, so the path below is relative to the console-ui module root.</em>
+<a class="jxr_linenumber" name="L233" href="#L233">233</a> 	@Test <strong class="jxr_keyword">void</strong> e01_extensionNamePattern_matchesJs() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L234" href="#L234">234</a> 		<strong class="jxr_keyword">var</strong> js = java.nio.file.Files.readString(java.nio.file.Path.of(System.getProperty(<span class="jxr_string">"basedir"</span>, <span class="jxr_string">"."</span>),
+<a class="jxr_linenumber" name="L235" href="#L235">235</a> 			<span class="jxr_string">"src/main/resources/org/apache/juneau/console/juneau-charts.js"</span>), UTF_8);
+<a class="jxr_linenumber" name="L236" href="#L236">236</a> 		assertContains(<span class="jxr_string">"const EXTENSION_NAME_RE = /"</span> + BusWiringValidator.EXTENSION_NAME.pattern() + <span class="jxr_string">"/;"</span>, js);
+<a class="jxr_linenumber" name="L237" href="#L237">237</a> 	}
+<a class="jxr_linenumber" name="L238" href="#L238">238</a> 
+<a class="jxr_linenumber" name="L239" href="#L239">239</a> 	@Test <strong class="jxr_keyword">void</strong> e02_filterSectionOwnsFilterTopic() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L240" href="#L240">240</a> 		assertEquals(List.of(), problems(page(<span class="jxr_string">"\&quot;dashboard\&quot;:{\&quot;rail\&quot;:{\&quot;sections\&quot;:[{\&quot;id\&quot;:\&quot;range\&quot;}]}},\&quot;cards\&quot;:["</span>
+<a class="jxr_linenumber" name="L241" href="#L241">241</a> 			+ <span class="jxr_string">"{\&quot;id\&quot;:\&quot;h\&quot;,\&quot;type\&quot;:\&quot;html\&quot;,\&quot;template\&quot;:\&quot;h\&quot;,\&quot;subscribes\&quot;:[{\&quot;topic\&quot;:\&quot;filter:range\&quot;,\&quot;as\&quot;:\&quot;refresh\&quot;}]}]"</span>)));
+<a class="jxr_linenumber" name="L242" href="#L242">242</a> 		assertEquals(List.of(<span class="jxr_string">"E-42 topic 'filter:gone' names card 'gone', which is not on this page"</span>),
+<a class="jxr_linenumber" name="L243" href="#L243">243</a> 			problems(page(<span class="jxr_string">"\&quot;cards\&quot;:[{\&quot;id\&quot;:\&quot;h\&quot;,\&quot;type\&quot;:\&quot;html\&quot;,\&quot;template\&quot;:\&quot;h\&quot;,\&quot;subscribes\&quot;:[{\&quot;topic\&quot;:\&quot;filter:gone\&quot;,\&quot;as\&quot;:\&quot;refresh\&quot;}]}]"</span>)));
+<a class="jxr_linenumber" name="L244" href="#L244">244</a> 	}
+<a class="jxr_linenumber" name="L245" href="#L245">245</a> 
+<a class="jxr_linenumber" name="L246" href="#L246">246</a> 	@Test <strong class="jxr_keyword">void</strong> e03_cmdRibbonTargetsDataSource() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L247" href="#L247">247</a> 		<strong class="jxr_keyword">var</strong> ribbon = <span class="jxr_string">"\&quot;ribbon\&quot;:[{\&quot;type\&quot;:\&quot;publish\&quot;,\&quot;title\&quot;:\&quot;R\&quot;,\&quot;topic\&quot;:\&quot;cmd:%s\&quot;}]"</span>;
+<a class="jxr_linenumber" name="L248" href="#L248">248</a> 		assertEquals(List.of(), problems(page(<span class="jxr_string">"\&quot;dataSources\&quot;:[{\&quot;id\&quot;:\&quot;orders\&quot;}],\&quot;cards\&quot;:["</span>
+<a class="jxr_linenumber" name="L249" href="#L249">249</a> 			+ <span class="jxr_string">"{\&quot;id\&quot;:\&quot;h\&quot;,\&quot;type\&quot;:\&quot;html\&quot;,\&quot;template\&quot;:\&quot;h\&quot;,"</span> + ribbon.formatted(<span class="jxr_string">"orders"</span>) + <span class="jxr_string">"}]"</span>)));
+<a class="jxr_linenumber" name="L250" href="#L250">250</a> 		assertEquals(List.of(<span class="jxr_string">"E-42 topic 'cmd:gone' names card 'gone', which is not on this page"</span>),
+<a class="jxr_linenumber" name="L251" href="#L251">251</a> 			problems(page(<span class="jxr_string">"\&quot;dataSources\&quot;:[{\&quot;id\&quot;:\&quot;orders\&quot;}],\&quot;cards\&quot;:["</span>
+<a class="jxr_linenumber" name="L252" href="#L252">252</a> 				+ <span class="jxr_string">"{\&quot;id\&quot;:\&quot;h\&quot;,\&quot;type\&quot;:\&quot;html\&quot;,\&quot;template\&quot;:\&quot;h\&quot;,"</span> + ribbon.formatted(<span class="jxr_string">"gone"</span>) + <span class="jxr_string">"}]"</span>)));
+<a class="jxr_linenumber" name="L253" href="#L253">253</a> 		<em class="jxr_comment">// the ribbon "target" path (R-E3a) consults the same set</em>
+<a class="jxr_linenumber" name="L254" href="#L254">254</a> 		assertEquals(List.of(), problems(page(<span class="jxr_string">"\&quot;dataSources\&quot;:[{\&quot;id\&quot;:\&quot;orders\&quot;}],\&quot;cards\&quot;:["</span>
+<a class="jxr_linenumber" name="L255" href="#L255">255</a> 			+ <span class="jxr_string">"{\&quot;id\&quot;:\&quot;h\&quot;,\&quot;type\&quot;:\&quot;html\&quot;,\&quot;template\&quot;:\&quot;h\&quot;,\&quot;ribbon\&quot;:[{\&quot;type\&quot;:\&quot;refresh\&quot;,\&quot;target\&quot;:\&quot;orders\&quot;}]}]"</span>)));
+<a class="jxr_linenumber" name="L256" href="#L256">256</a> 	}
+<a class="jxr_linenumber" name="L257" href="#L257">257</a> 
+<a class="jxr_linenumber" name="L258" href="#L258">258</a> 	@Test <strong class="jxr_keyword">void</strong> e04_fnNestedInOption_isCheckedForName() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L259" href="#L259">259</a> 		assertEquals(List.of(<span class="jxr_string">"E-74 'Bad' is not a valid $fn name"</span>),
+<a class="jxr_linenumber" name="L260" href="#L260">260</a> 			problems(page(<span class="jxr_string">"\&quot;cards\&quot;:[{\&quot;id\&quot;:\&quot;t\&quot;,\&quot;type\&quot;:\&quot;chart\&quot;,\&quot;option\&quot;:{\&quot;series\&quot;:[{\&quot;label\&quot;:{\&quot;formatter\&quot;:{\&quot;$fn\&quot;:\&quot;Bad\&quot;}}}]}}]"</span>)));
+<a class="jxr_linenumber" name="L261" href="#L261">261</a> 		assertEquals(List.of(), problems(page(<span class="jxr_string">"\&quot;cards\&quot;:[{\&quot;id\&quot;:\&quot;t\&quot;,\&quot;type\&quot;:\&quot;chart\&quot;,"</span>
+<a class="jxr_linenumber" name="L262" href="#L262">262</a> 			+ <span class="jxr_string">"\&quot;option\&quot;:{\&quot;series\&quot;:[{\&quot;label\&quot;:{\&quot;formatter\&quot;:{\&quot;$fn\&quot;:\&quot;compact\&quot;}}}]}}]"</span>)));
+<a class="jxr_linenumber" name="L263" href="#L263">263</a> 	}
+<a class="jxr_linenumber" name="L264" href="#L264">264</a> 
+<a class="jxr_linenumber" name="L265" href="#L265">265</a> 	@Test <strong class="jxr_keyword">void</strong> e05_fnInHelper_isCheckedForName() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L266" href="#L266">266</a> 		assertEquals(List.of(<span class="jxr_string">"E-74 'Bad' is not a valid $fn name"</span>),
+<a class="jxr_linenumber" name="L267" href="#L267">267</a> 			problems(page(<span class="jxr_string">"\&quot;cards\&quot;:[{\&quot;id\&quot;:\&quot;t\&quot;,\&quot;type\&quot;:\&quot;chart\&quot;,\&quot;helper\&quot;:{\&quot;kind\&quot;:\&quot;scatter\&quot;,\&quot;symbolSize\&quot;:{\&quot;$fn\&quot;:\&quot;Bad\&quot;}}}]"</span>)));
+<a class="jxr_linenumber" name="L268" href="#L268">268</a> 		assertEquals(List.of(), problems(page(<span class="jxr_string">"\&quot;cards\&quot;:[{\&quot;id\&quot;:\&quot;t\&quot;,\&quot;type\&quot;:\&quot;chart\&quot;,"</span>
+<a class="jxr_linenumber" name="L269" href="#L269">269</a> 			+ <span class="jxr_string">"\&quot;helper\&quot;:{\&quot;kind\&quot;:\&quot;scatter\&quot;,\&quot;symbolSize\&quot;:{\&quot;$fn\&quot;:\&quot;symbolSizeBy\&quot;}}}]"</span>)));
+<a class="jxr_linenumber" name="L270" href="#L270">270</a> 		<em class="jxr_comment">// a legacy flat card carries the helper keys at top level</em>
+<a class="jxr_linenumber" name="L271" href="#L271">271</a> 		assertEquals(List.of(<span class="jxr_string">"E-74 'Bad' is not a valid $fn name"</span>),
+<a class="jxr_linenumber" name="L272" href="#L272">272</a> 			problems(page(<span class="jxr_string">"\&quot;cards\&quot;:[{\&quot;id\&quot;:\&quot;t\&quot;,\&quot;type\&quot;:\&quot;chart\&quot;,\&quot;kind\&quot;:\&quot;line\&quot;,\&quot;symbolSize\&quot;:{\&quot;$fn\&quot;:\&quot;Bad\&quot;}}]"</span>)));
+<a class="jxr_linenumber" name="L273" href="#L273">273</a> 	}
+<a class="jxr_linenumber" name="L274" href="#L274">274</a> 
+<a class="jxr_linenumber" name="L275" href="#L275">275</a> 	<em class="jxr_comment">// The legacy flat walk matches ChartCardType: the helper keys are walked as one map (so series[*].data is skipped), and only</em>
+<a class="jxr_linenumber" name="L276" href="#L276">276</a> 	<em class="jxr_comment">// when the card names a kind (an option-only card's top-level keys are not helper keys).</em>
+<a class="jxr_linenumber" name="L277" href="#L277">277</a> 	@Test <strong class="jxr_keyword">void</strong> e07_legacyFlatWalk_skipsSeriesData_andNeedsKind() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L278" href="#L278">278</a> 		assertEquals(List.of(), problems(page(<span class="jxr_string">"\&quot;cards\&quot;:[{\&quot;id\&quot;:\&quot;t\&quot;,\&quot;type\&quot;:\&quot;chart\&quot;,\&quot;kind\&quot;:\&quot;line\&quot;,"</span>
+<a class="jxr_linenumber" name="L279" href="#L279">279</a> 			+ <span class="jxr_string">"\&quot;series\&quot;:[{\&quot;field\&quot;:\&quot;a\&quot;,\&quot;data\&quot;:[{\&quot;$fn\&quot;:\&quot;Bad\&quot;}]}]}]"</span>)));
+<a class="jxr_linenumber" name="L280" href="#L280">280</a> 		assertEquals(List.of(<span class="jxr_string">"E-74 'Bad' is not a valid $fn name"</span>), problems(page(<span class="jxr_string">"\&quot;cards\&quot;:[{\&quot;id\&quot;:\&quot;t\&quot;,\&quot;type\&quot;:\&quot;chart\&quot;,\&quot;kind\&quot;:\&quot;line\&quot;,"</span>
+<a class="jxr_linenumber" name="L281" href="#L281">281</a> 			+ <span class="jxr_string">"\&quot;series\&quot;:[{\&quot;field\&quot;:\&quot;a\&quot;,\&quot;label\&quot;:{\&quot;$fn\&quot;:\&quot;Bad\&quot;}}]}]"</span>)));
+<a class="jxr_linenumber" name="L282" href="#L282">282</a> 		assertEquals(List.of(), problems(page(<span class="jxr_string">"\&quot;cards\&quot;:[{\&quot;id\&quot;:\&quot;t\&quot;,\&quot;type\&quot;:\&quot;chart\&quot;,\&quot;option\&quot;:{\&quot;series\&quot;:[]},"</span>
+<a class="jxr_linenumber" name="L283" href="#L283">283</a> 			+ <span class="jxr_string">"\&quot;x\&quot;:{\&quot;$fn\&quot;:\&quot;Bad\&quot;}}]"</span>)));
+<a class="jxr_linenumber" name="L284" href="#L284">284</a> 	}
+<a class="jxr_linenumber" name="L285" href="#L285">285</a> 
+<a class="jxr_linenumber" name="L286" href="#L286">286</a> 	<em class="jxr_comment">// A chart's zoom publish is only legal when it is the retained implicit one (the chart handler lists it); with retain:false</em>
+<a class="jxr_linenumber" name="L287" href="#L287">287</a> 	<em class="jxr_comment">// it is an ordinary declared publish of a framework family, so E-45, whatever subscribes to it.</em>
+<a class="jxr_linenumber" name="L288" href="#L288">288</a> 	@Test <strong class="jxr_keyword">void</strong> e06_chartZoomPublishedWithoutRetain_withSubscriber() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L289" href="#L289">289</a> 		assertEquals(List.of(<span class="jxr_string">"E-45 'zoom' is a framework family; framework topics are implicit and may not be declared"</span>), problems(page(<span class="jxr_string">"\&quot;cards\&quot;:[{\&quot;id\&quot;:\&quot;t\&quot;,\&quot;type\&quot;:\&quot;chart\&quot;,\&quot;publishes\&quot;:[{\&quot;topic\&quot;:\&quot;zoom:t\&quot;,\&quot;retain\&quot;:false}]},"</span>
+<a class="jxr_linenumber" name="L290" href="#L290">290</a> 			+ <span class="jxr_string">"{\&quot;id\&quot;:\&quot;u\&quot;,\&quot;type\&quot;:\&quot;html\&quot;,\&quot;template\&quot;:\&quot;h\&quot;,\&quot;subscribes\&quot;:[{\&quot;topic\&quot;:\&quot;zoom:t\&quot;,\&quot;as\&quot;:\&quot;refresh\&quot;}]}]"</span>)));
+<a class="jxr_linenumber" name="L291" href="#L291">291</a> 	}
+<a class="jxr_linenumber" name="L292" href="#L292">292</a> 
+<a class="jxr_linenumber" name="L293" href="#L293">293</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String READER = <span class="jxr_string">"{\&quot;id\&quot;:\&quot;h\&quot;,\&quot;type\&quot;:\&quot;html\&quot;,\&quot;template\&quot;:\&quot;h\&quot;,\&quot;subscribes\&quot;:[{\&quot;topic\&quot;:\&quot;data:orders\&quot;,\&quot;as\&quot;:\&quot;refresh\&quot;}]}"</span>;
+<a class="jxr_linenumber" name="L294" href="#L294">294</a> 
+<a class="jxr_linenumber" name="L295" href="#L295">295</a> 	@Test <strong class="jxr_keyword">void</strong> g01_dataSource_isTheOnePublisher() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L296" href="#L296">296</a> 		assertEquals(List.of(), problems(page(<span class="jxr_string">"\&quot;dataSources\&quot;:[{\&quot;id\&quot;:\&quot;orders\&quot;,\&quot;kind\&quot;:\&quot;source\&quot;,\&quot;url\&quot;:\&quot;/x\&quot;}],\&quot;cards\&quot;:["</span> + READER + <span class="jxr_string">"]"</span>)));
+<a class="jxr_linenumber" name="L297" href="#L297">297</a> 	}
+<a class="jxr_linenumber" name="L298" href="#L298">298</a> 
+<a class="jxr_linenumber" name="L299" href="#L299">299</a> 	@Test <strong class="jxr_keyword">void</strong> g02_noPublisher_isE71NotE41() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L300" href="#L300">300</a> 		assertEquals(List.of(<span class="jxr_string">"E-71 topic 'data:orders' needs exactly one source publisher; found 0"</span>), problems(page(<span class="jxr_string">"\&quot;cards\&quot;:["</span> + READER + <span class="jxr_string">"]"</span>)));
+<a class="jxr_linenumber" name="L301" href="#L301">301</a> 	}
+<a class="jxr_linenumber" name="L302" href="#L302">302</a> 
+<a class="jxr_linenumber" name="L303" href="#L303">303</a> 	@Test <strong class="jxr_keyword">void</strong> g03_sourceAndScriptTopic_isE71() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L304" href="#L304">304</a> 		assertEquals(List.of(<span class="jxr_string">"E-71 topic 'data:orders' needs exactly one source publisher; found 2"</span>), problems(page(
+<a class="jxr_linenumber" name="L305" href="#L305">305</a> 			<span class="jxr_string">"\&quot;topics\&quot;:[{\&quot;topic\&quot;:\&quot;data:orders\&quot;,\&quot;retain\&quot;:true,\&quot;publisher\&quot;:\&quot;script\&quot;}],"</span>
+<a class="jxr_linenumber" name="L306" href="#L306">306</a> 			+ <span class="jxr_string">"\&quot;dataSources\&quot;:[{\&quot;id\&quot;:\&quot;orders\&quot;,\&quot;kind\&quot;:\&quot;source\&quot;,\&quot;url\&quot;:\&quot;/x\&quot;}],\&quot;cards\&quot;:[]"</span>)));
+<a class="jxr_linenumber" name="L307" href="#L307">307</a> 	}
+<a class="jxr_linenumber" name="L308" href="#L308">308</a> 
+<a class="jxr_linenumber" name="L309" href="#L309">309</a> 	@Test <strong class="jxr_keyword">void</strong> g04_derivedFromMissingSource_isE71() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L310" href="#L310">310</a> 		assertEquals(List.of(<span class="jxr_string">"E-71 topic 'data:nope' needs exactly one source publisher; found 0"</span>), problems(page(
+<a class="jxr_linenumber" name="L311" href="#L311">311</a> 			<span class="jxr_string">"\&quot;dataSources\&quot;:[{\&quot;id\&quot;:\&quot;orders\&quot;,\&quot;kind\&quot;:\&quot;derived\&quot;,\&quot;from\&quot;:\&quot;nope\&quot;,\&quot;transforms\&quot;:[]}],\&quot;cards\&quot;:["</span> + READER + <span class="jxr_string">"]"</span>)));
+<a class="jxr_linenumber" name="L312" href="#L312">312</a> 	}
+<a class="jxr_linenumber" name="L313" href="#L313">313</a> 
+<a class="jxr_linenumber" name="L314" href="#L314">314</a> 	<em class="jxr_comment">// Regression check: the source-op rules still hold once sources publish data: topics.</em>
+<a class="jxr_linenumber" name="L315" href="#L315">315</a> 	@Test <strong class="jxr_keyword">void</strong> g05_sourceOps() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L316" href="#L316">316</a> 		<strong class="jxr_keyword">var</strong> src = <span class="jxr_string">"\&quot;dataSources\&quot;:[{\&quot;id\&quot;:\&quot;orders\&quot;,\&quot;kind\&quot;:\&quot;source\&quot;,\&quot;url\&quot;:\&quot;/x\&quot;}],"</span>;
+<a class="jxr_linenumber" name="L317" href="#L317">317</a> 		assertEquals(List.of(), problems(page(src + <span class="jxr_string">"\&quot;cards\&quot;:[{\&quot;id\&quot;:\&quot;h\&quot;,\&quot;type\&quot;:\&quot;html\&quot;,\&quot;template\&quot;:\&quot;h\&quot;,\&quot;ribbon\&quot;:["</span>
+<a class="jxr_linenumber" name="L318" href="#L318">318</a> 			+ <span class="jxr_string">"{\&quot;type\&quot;:\&quot;refresh\&quot;,\&quot;title\&quot;:\&quot;R\&quot;,\&quot;target\&quot;:\&quot;orders\&quot;},"</span>
+<a class="jxr_linenumber" name="L319" href="#L319">319</a> 			+ <span class="jxr_string">"{\&quot;type\&quot;:\&quot;publish\&quot;,\&quot;title\&quot;:\&quot;C\&quot;,\&quot;topic\&quot;:\&quot;cmd:orders\&quot;,\&quot;payload\&quot;:{\&quot;schemaVersion\&quot;:1,\&quot;op\&quot;:\&quot;refresh\&quot;,\&quot;options\&quot;:{\&quot;clearCache\&quot;:true}}}]}]"</span>)));
+<a class="jxr_linenumber" name="L320" href="#L320">320</a> 		assertEquals(List.of(<span class="jxr_string">"E-43 card 'orders' (type 'dataSource') does not handle op 'zoomTo'"</span>), problems(page(src
+<a class="jxr_linenumber" name="L321" href="#L321">321</a> 			+ <span class="jxr_string">"\&quot;cards\&quot;:[{\&quot;id\&quot;:\&quot;h\&quot;,\&quot;type\&quot;:\&quot;html\&quot;,\&quot;template\&quot;:\&quot;h\&quot;,\&quot;ribbon\&quot;:["</span>
+<a class="jxr_linenumber" name="L322" href="#L322">322</a> 			+ <span class="jxr_string">"{\&quot;type\&quot;:\&quot;publish\&quot;,\&quot;title\&quot;:\&quot;Z\&quot;,\&quot;topic\&quot;:\&quot;cmd:orders\&quot;,\&quot;payload\&quot;:{\&quot;schemaVersion\&quot;:1,\&quot;op\&quot;:\&quot;zoomTo\&quot;}}]}]"</span>)));
+<a class="jxr_linenumber" name="L323" href="#L323">323</a> 		assertEquals(List.of(<span class="jxr_string">"E-43 card 'orders' (type 'dataSource') does not handle op 'pause-polling'"</span>), problems(page(src
+<a class="jxr_linenumber" name="L324" href="#L324">324</a> 			+ <span class="jxr_string">"\&quot;cards\&quot;:[{\&quot;id\&quot;:\&quot;h\&quot;,\&quot;type\&quot;:\&quot;html\&quot;,\&quot;template\&quot;:\&quot;h\&quot;,\&quot;ribbon\&quot;:[{\&quot;type\&quot;:\&quot;pausePolling\&quot;,\&quot;target\&quot;:\&quot;orders\&quot;}]}]"</span>)));
+<a class="jxr_linenumber" name="L325" href="#L325">325</a> 	}
+<a class="jxr_linenumber" name="L326" href="#L326">326</a> 
+<a class="jxr_linenumber" name="L327" href="#L327">327</a> 	@Test <strong class="jxr_keyword">void</strong> g06_extensionNames() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L328" href="#L328">328</a> 		assertEquals(List.of(<span class="jxr_string">"E-74 'Bad' is not a valid parser name"</span>, <span class="jxr_string">"E-74 'x..y' is not a valid builder name"</span>, <span class="jxr_string">"E-74 'Top N' is not a valid transform name"</span>),
+<a class="jxr_linenumber" name="L329" href="#L329">329</a> 			problems(page(<span class="jxr_string">"\&quot;dataSources\&quot;:[{\&quot;id\&quot;:\&quot;a\&quot;,\&quot;kind\&quot;:\&quot;source\&quot;,\&quot;url\&quot;:\&quot;/x\&quot;,\&quot;parser\&quot;:\&quot;Bad\&quot;,\&quot;builder\&quot;:\&quot;x..y\&quot;},"</span>
+<a class="jxr_linenumber" name="L330" href="#L330">330</a> 				+ <span class="jxr_string">"{\&quot;id\&quot;:\&quot;b\&quot;,\&quot;kind\&quot;:\&quot;derived\&quot;,\&quot;from\&quot;:\&quot;a\&quot;,\&quot;transforms\&quot;:[{\&quot;use\&quot;:\&quot;Top N\&quot;}]}],\&quot;cards\&quot;:[]"</span>)));
+<a class="jxr_linenumber" name="L331" href="#L331">331</a> 	}
+<a class="jxr_linenumber" name="L332" href="#L332">332</a> 
+<a class="jxr_linenumber" name="L333" href="#L333">333</a> 	@Test <strong class="jxr_keyword">void</strong> g07_unreadSource_isFine() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L334" href="#L334">334</a> 		assertEquals(List.of(), problems(page(<span class="jxr_string">"\&quot;dataSources\&quot;:[{\&quot;id\&quot;:\&quot;orders\&quot;,\&quot;kind\&quot;:\&quot;source\&quot;,\&quot;url\&quot;:\&quot;/x\&quot;}],\&quot;cards\&quot;:[]"</span>)));
+<a class="jxr_linenumber" name="L335" href="#L335">335</a> 	}
+<a class="jxr_linenumber" name="L336" href="#L336">336</a> 
+<a class="jxr_linenumber" name="L337" href="#L337">337</a> 	@Test <strong class="jxr_keyword">void</strong> g08_twoReaders_oneE71() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L338" href="#L338">338</a> 		<strong class="jxr_keyword">var</strong> other = READER.replace(<span class="jxr_string">"\&quot;id\&quot;:\&quot;h\&quot;"</span>, <span class="jxr_string">"\&quot;id\&quot;:\&quot;h2\&quot;"</span>);
+<a class="jxr_linenumber" name="L339" href="#L339">339</a> 		assertEquals(List.of(<span class="jxr_string">"E-71 topic 'data:orders' needs exactly one source publisher; found 0"</span>), problems(page(<span class="jxr_string">"\&quot;cards\&quot;:["</span> + READER + <span class="jxr_string">","</span> + other + <span class="jxr_string">"]"</span>)));
+<a class="jxr_linenumber" name="L340" href="#L340">340</a> 	}
+<a class="jxr_linenumber" name="L341" href="#L341">341</a> 
+<a class="jxr_linenumber" name="L342" href="#L342">342</a> 	@Test <strong class="jxr_keyword">void</strong> g09_duplicateSourceId_isE76Only() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L343" href="#L343">343</a> 		assertEquals(List.of(<span class="jxr_string">"E-76 data source 'orders': id duplicates data source 'orders'"</span>), problems(page(
+<a class="jxr_linenumber" name="L344" href="#L344">344</a> 			<span class="jxr_string">"\&quot;dataSources\&quot;:[{\&quot;id\&quot;:\&quot;orders\&quot;,\&quot;kind\&quot;:\&quot;source\&quot;,\&quot;url\&quot;:\&quot;/x\&quot;},{\&quot;id\&quot;:\&quot;orders\&quot;,\&quot;kind\&quot;:\&quot;source\&quot;,\&quot;url\&quot;:\&quot;/y\&quot;}],\&quot;cards\&quot;:["</span> + READER + <span class="jxr_string">"]"</span>)));
+<a class="jxr_linenumber" name="L345" href="#L345">345</a> 	}
+<a class="jxr_linenumber" name="L346" href="#L346">346</a> 
+<a class="jxr_linenumber" name="L347" href="#L347">347</a> 	@Test <strong class="jxr_keyword">void</strong> g10_derivedChain_isFine() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L348" href="#L348">348</a> 		assertEquals(List.of(), problems(page(<span class="jxr_string">"\&quot;dataSources\&quot;:[{\&quot;id\&quot;:\&quot;raw\&quot;,\&quot;kind\&quot;:\&quot;source\&quot;,\&quot;url\&quot;:\&quot;/x\&quot;},"</span>
+<a class="jxr_linenumber" name="L349" href="#L349">349</a> 			+ <span class="jxr_string">"{\&quot;id\&quot;:\&quot;mid\&quot;,\&quot;kind\&quot;:\&quot;derived\&quot;,\&quot;from\&quot;:\&quot;raw\&quot;,\&quot;transforms\&quot;:[]},"</span>
+<a class="jxr_linenumber" name="L350" href="#L350">350</a> 			+ <span class="jxr_string">"{\&quot;id\&quot;:\&quot;orders\&quot;,\&quot;kind\&quot;:\&quot;derived\&quot;,\&quot;from\&quot;:\&quot;mid\&quot;,\&quot;transforms\&quot;:[]}],\&quot;cards\&quot;:["</span> + READER + <span class="jxr_string">"]"</span>)));
+<a class="jxr_linenumber" name="L351" href="#L351">351</a> 	}
+<a class="jxr_linenumber" name="L352" href="#L352">352</a> 
+<a class="jxr_linenumber" name="L353" href="#L353">353</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String derived(String... idFrom) {
+<a class="jxr_linenumber" name="L354" href="#L354">354</a> 		<strong class="jxr_keyword">var</strong> sb = <strong class="jxr_keyword">new</strong> StringBuilder(<span class="jxr_string">"\&quot;dataSources\&quot;:[{\&quot;id\&quot;:\&quot;src\&quot;,\&quot;kind\&quot;:\&quot;source\&quot;,\&quot;url\&quot;:\&quot;/x\&quot;}"</span>);
+<a class="jxr_linenumber" name="L355" href="#L355">355</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt; idFrom.length; i += 2)
+<a class="jxr_linenumber" name="L356" href="#L356">356</a> 			sb.append(<span class="jxr_string">",{\&quot;id\&quot;:\&quot;"</span>).append(idFrom[i]).append(<span class="jxr_string">"\&quot;,\&quot;kind\&quot;:\&quot;derived\&quot;,\&quot;from\&quot;:\&quot;"</span>).append(idFrom[i + 1]).append(<span class="jxr_string">"\&quot;,\&quot;transforms\&quot;:[]}"</span>);
+<a class="jxr_linenumber" name="L357" href="#L357">357</a> 		<strong class="jxr_keyword">return</strong> sb.append(<span class="jxr_string">"],\&quot;cards\&quot;:[]"</span>).toString();
+<a class="jxr_linenumber" name="L358" href="#L358">358</a> 	}
+<a class="jxr_linenumber" name="L359" href="#L359">359</a> 
+<a class="jxr_linenumber" name="L360" href="#L360">360</a> 	@Test <strong class="jxr_keyword">void</strong> g11_derivedSelfReference_isE76() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L361" href="#L361">361</a> 		assertEquals(List.of(<span class="jxr_string">"E-76 data source 'a': derived source 'a' references itself"</span>), problems(page(derived(<span class="jxr_string">"a"</span>, <span class="jxr_string">"a"</span>))));
+<a class="jxr_linenumber" name="L362" href="#L362">362</a> 	}
+<a class="jxr_linenumber" name="L363" href="#L363">363</a> 
+<a class="jxr_linenumber" name="L364" href="#L364">364</a> 	@Test <strong class="jxr_keyword">void</strong> g12_derivedTwoCycle_isE76() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L365" href="#L365">365</a> 		assertEquals(List.of(<span class="jxr_string">"E-76 data source 'a': derived source cycle: a -&gt; b -&gt; a"</span>), problems(page(derived(<span class="jxr_string">"b"</span>, <span class="jxr_string">"a"</span>, <span class="jxr_string">"a"</span>, <span class="jxr_string">"b"</span>))));
+<a class="jxr_linenumber" name="L366" href="#L366">366</a> 	}
+<a class="jxr_linenumber" name="L367" href="#L367">367</a> 
+<a class="jxr_linenumber" name="L368" href="#L368">368</a> 	@Test <strong class="jxr_keyword">void</strong> g13_derivedThreeCycle_isE76_fromSmallestId() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L369" href="#L369">369</a> 		assertEquals(List.of(<span class="jxr_string">"E-76 data source 'a': derived source cycle: a -&gt; b -&gt; c -&gt; a"</span>), problems(page(derived(<span class="jxr_string">"c"</span>, <span class="jxr_string">"a"</span>, <span class="jxr_string">"b"</span>, <span class="jxr_string">"c"</span>, <span class="jxr_string">"a"</span>, <span class="jxr_string">"b"</span>))));
+<a class="jxr_linenumber" name="L370" href="#L370">370</a> 	}
+<a class="jxr_linenumber" name="L371" href="#L371">371</a> 
+<a class="jxr_linenumber" name="L372" href="#L372">372</a> 	@Test <strong class="jxr_keyword">void</strong> g14_leadInToCycle_reportsTheCycleOnce() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L373" href="#L373">373</a> 		assertEquals(List.of(<span class="jxr_string">"E-76 data source 'b': derived source cycle: b -&gt; c -&gt; b"</span>), problems(page(derived(<span class="jxr_string">"a"</span>, <span class="jxr_string">"b"</span>, <span class="jxr_string">"b"</span>, <span class="jxr_string">"c"</span>, <span class="jxr_string">"c"</span>, <span class="jxr_string">"b"</span>, <span class="jxr_string">"z"</span>, <span class="jxr_string">"c"</span>))));
+<a class="jxr_linenumber" name="L374" href="#L374">374</a> 	}
+<a class="jxr_linenumber" name="L375" href="#L375">375</a> 
+<a class="jxr_linenumber" name="L376" href="#L376">376</a> 	@Test <strong class="jxr_keyword">void</strong> g15_derivedOfDerivedChain_isFine() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L377" href="#L377">377</a> 		assertEquals(List.of(), problems(page(derived(<span class="jxr_string">"a"</span>, <span class="jxr_string">"src"</span>, <span class="jxr_string">"b"</span>, <span class="jxr_string">"a"</span>, <span class="jxr_string">"c"</span>, <span class="jxr_string">"b"</span>))));
+<a class="jxr_linenumber" name="L378" href="#L378">378</a> 	}
+<a class="jxr_linenumber" name="L379" href="#L379">379</a> 
+<a class="jxr_linenumber" name="L380" href="#L380">380</a> 	@Test <strong class="jxr_keyword">void</strong> g16_twoDisjointCycles_eachReportedOnce_sortedBySmallestId() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L381" href="#L381">381</a> 		assertEquals(List.of(
+<a class="jxr_linenumber" name="L382" href="#L382">382</a> 			<span class="jxr_string">"E-76 data source 'a': derived source cycle: a -&gt; b -&gt; a"</span>,
+<a class="jxr_linenumber" name="L383" href="#L383">383</a> 			<span class="jxr_string">"E-76 data source 'd': derived source cycle: d -&gt; e -&gt; d"</span>
+<a class="jxr_linenumber" name="L384" href="#L384">384</a> 		), problems(page(derived(<span class="jxr_string">"d"</span>, <span class="jxr_string">"e"</span>, <span class="jxr_string">"e"</span>, <span class="jxr_string">"d"</span>, <span class="jxr_string">"a"</span>, <span class="jxr_string">"b"</span>, <span class="jxr_string">"b"</span>, <span class="jxr_string">"a"</span>))));
+<a class="jxr_linenumber" name="L385" href="#L385">385</a> 	}
+<a class="jxr_linenumber" name="L386" href="#L386">386</a> 
+<a class="jxr_linenumber" name="L387" href="#L387">387</a> 	@Test <strong class="jxr_keyword">void</strong> g17_derivedFromMissingSource_isE71Only() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L388" href="#L388">388</a> 		assertEquals(List.of(<span class="jxr_string">"E-71 topic 'data:nope' needs exactly one source publisher; found 0"</span>), problems(page(derived(<span class="jxr_string">"a"</span>, <span class="jxr_string">"nope"</span>))));
+<a class="jxr_linenumber" name="L389" href="#L389">389</a> 	}
+<a class="jxr_linenumber" name="L390" href="#L390">390</a> 
+<a class="jxr_linenumber" name="L391" href="#L391">391</a> 	@Test <strong class="jxr_keyword">void</strong> g18_cycleEnteredAtLargerId_isRotatedToSmallest() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L392" href="#L392">392</a> 		assertEquals(List.of(<span class="jxr_string">"E-76 data source 'b': derived source cycle: b -&gt; c -&gt; b"</span>), problems(page(derived(<span class="jxr_string">"a"</span>, <span class="jxr_string">"c"</span>, <span class="jxr_string">"c"</span>, <span class="jxr_string">"b"</span>, <span class="jxr_string">"b"</span>, <span class="jxr_string">"c"</span>))));
+<a class="jxr_linenumber" name="L393" href="#L393">393</a> 	}
+<a class="jxr_linenumber" name="L394" href="#L394">394</a> 
+<a class="jxr_linenumber" name="L395" href="#L395">395</a> 	@Test <strong class="jxr_keyword">void</strong> g19_dashboardStatus_declaredByTopicOrSource() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L396" href="#L396">396</a> 		assertEquals(List.of(), problems(<span class="jxr_string">"{\&quot;contractVersion\&quot;:\&quot;1\&quot;,\&quot;title\&quot;:\&quot;T\&quot;,\&quot;nav\&quot;:[],\&quot;activeNav\&quot;:[],\&quot;cards\&quot;:[],"</span>
+<a class="jxr_linenumber" name="L397" href="#L397">397</a> 			+ <span class="jxr_string">"\&quot;topics\&quot;:[{\&quot;topic\&quot;:\&quot;data:orders\&quot;,\&quot;retain\&quot;:true,\&quot;publisher\&quot;:\&quot;script\&quot;}],"</span>
+<a class="jxr_linenumber" name="L398" href="#L398">398</a> 			+ <span class="jxr_string">"\&quot;dashboard\&quot;:{\&quot;id\&quot;:\&quot;d\&quot;,\&quot;grid\&quot;:1,\&quot;panels\&quot;:[],\&quot;status\&quot;:[\&quot;data:orders\&quot;]}}"</span>));
+<a class="jxr_linenumber" name="L399" href="#L399">399</a> 		assertEquals(List.of(), problems(<span class="jxr_string">"{\&quot;contractVersion\&quot;:\&quot;1\&quot;,\&quot;title\&quot;:\&quot;T\&quot;,\&quot;nav\&quot;:[],\&quot;activeNav\&quot;:[],\&quot;cards\&quot;:[],"</span>
+<a class="jxr_linenumber" name="L400" href="#L400">400</a> 			+ <span class="jxr_string">"\&quot;dataSources\&quot;:[{\&quot;id\&quot;:\&quot;orders\&quot;,\&quot;kind\&quot;:\&quot;source\&quot;}],"</span>
+<a class="jxr_linenumber" name="L401" href="#L401">401</a> 			+ <span class="jxr_string">"\&quot;dashboard\&quot;:{\&quot;id\&quot;:\&quot;d\&quot;,\&quot;grid\&quot;:1,\&quot;panels\&quot;:[],\&quot;status\&quot;:[\&quot;data:orders\&quot;]}}"</span>));
+<a class="jxr_linenumber" name="L402" href="#L402">402</a> 	}
+<a class="jxr_linenumber" name="L403" href="#L403">403</a> 
+<a class="jxr_linenumber" name="L404" href="#L404">404</a> 	@Test <strong class="jxr_keyword">void</strong> g20_noDashboard_noE77() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L405" href="#L405">405</a> 		assertEquals(List.of(), problems(<span class="jxr_string">"{\&quot;contractVersion\&quot;:\&quot;1\&quot;,\&quot;title\&quot;:\&quot;T\&quot;,\&quot;nav\&quot;:[],\&quot;activeNav\&quot;:[],\&quot;cards\&quot;:[]}"</span>));
+<a class="jxr_linenumber" name="L406" href="#L406">406</a> 	}
+<a class="jxr_linenumber" name="L407" href="#L407">407</a> }
+</pre>
+<hr/>
+<div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>
+</body>
+</html>

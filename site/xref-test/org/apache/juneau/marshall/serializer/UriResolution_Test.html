@@ -46,7 +46,7 @@
 <a class="jxr_linenumber" name="L38" href="#L38">38</a>  <em class="jxr_javadoccomment"> */</em>
 <a class="jxr_linenumber" name="L39" href="#L39">39</a>  @SuppressWarnings({
 <a class="jxr_linenumber" name="L40" href="#L40">40</a>  	<span class="jxr_string">"java:S1172"</span>, <em class="jxr_comment">// Unused parameters in tests are intentional</em>
-<a class="jxr_linenumber" name="L41" href="#L41">41</a>  	<span class="jxr_string">"unused"</span>      <em class="jxr_comment">// Unused parameters/variables kept for consistent method signatures across test utilities.</em>
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>  	<span class="jxr_string">"unused"</span> <em class="jxr_comment">// Unused parameters/variables kept for consistent method signatures across test utilities.</em>
 <a class="jxr_linenumber" name="L42" href="#L42">42</a>  })
 <a class="jxr_linenumber" name="L43" href="#L43">43</a>  <strong class="jxr_keyword">class</strong> UriResolution_Test <strong class="jxr_keyword">extends</strong> TestBase {
 <a class="jxr_linenumber" name="L44" href="#L44">44</a>  
@@ -66,7 +66,7 @@
 <a class="jxr_linenumber" name="L58" href="#L58">58</a>  				<strong class="jxr_keyword">var</strong> r = s.writeToString(testBean);
 <a class="jxr_linenumber" name="L59" href="#L59">59</a>  
 <a class="jxr_linenumber" name="L60" href="#L60">60</a>  				<em class="jxr_comment">// Specifying "xxx" in the expected results will spit out what we should populate the field with.</em>
-<a class="jxr_linenumber" name="L61" href="#L61">61</a>  				<strong class="jxr_keyword">if</strong> (expected.equals(<span class="jxr_string">"xxx"</span>)) {
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>  				<strong class="jxr_keyword">if</strong> (eq(expected, <span class="jxr_string">"xxx"</span>)) {
 <a class="jxr_linenumber" name="L62" href="#L62">62</a>  					System.out.println(label + <span class="jxr_string">"/"</span> + cns(s) + <span class="jxr_string">"=\n"</span> + r.replaceAll(<span class="jxr_string">"\t"</span>, <span class="jxr_string">"&#92;&#92;&#92;&#92;t"</span>).replaceAll(<span class="jxr_string">"&#92;&#92;&#92;&#92;"</span>, <span class="jxr_string">"&#92;&#92;&#92;&#92;&#92;&#92;&#92;&#92;"</span>).replaceAll(<span class="jxr_string">"&#92;&#92;\&quot;"</span>, <span class="jxr_string">"&#92;&#92;&#92;&#92;&#92;&#92;\&quot;"</span>).replaceAll(<span class="jxr_string">"\n"</span>, <span class="jxr_string">"&#92;&#92;&#92;&#92;n"</span>)); <em class="jxr_comment">// NOT DEBUG</em>
 <a class="jxr_linenumber" name="L63" href="#L63">63</a>  					System.out.println(r);
 <a class="jxr_linenumber" name="L64" href="#L64">64</a>  				}

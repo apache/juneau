@@ -133,17 +133,25 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color">
 <div class="block">SOAP/XML Marshalling Support</div>
 </div>
-<div class="col-first odd-row-color"><a href="#org.apache.juneau.marshall.uon">org.apache.juneau.marshall.uon</a></div>
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.marshall.toml">org.apache.juneau.marshall.toml</a></div>
 <div class="col-last odd-row-color">
+<div class="block">TOML v1.0.0 serializer and parser for Apache Juneau.</div>
+</div>
+<div class="col-first even-row-color"><a href="#org.apache.juneau.marshall.uon">org.apache.juneau.marshall.uon</a></div>
+<div class="col-last even-row-color">
 <div class="block">UON Marshalling Support</div>
 </div>
-<div class="col-first even-row-color"><a href="#org.apache.juneau.marshall.urlencoding">org.apache.juneau.marshall.urlencoding</a></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.marshall.urlencoding">org.apache.juneau.marshall.urlencoding</a></div>
+<div class="col-last odd-row-color">
 <div class="block">URL-Encoding Marshalling Support</div>
 </div>
-<div class="col-first odd-row-color"><a href="#org.apache.juneau.marshall.xml">org.apache.juneau.marshall.xml</a></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><a href="#org.apache.juneau.marshall.xml">org.apache.juneau.marshall.xml</a></div>
+<div class="col-last even-row-color">
 <div class="block">XML Marshalling Support</div>
+</div>
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.marshall.yaml">org.apache.juneau.marshall.yaml</a></div>
+<div class="col-last odd-row-color">
+<div class="block">YAML Marshalling Support</div>
 </div>
 </div>
 <section class="class-uses">
@@ -265,14 +273,19 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color">
 <div class="block">Returns all declared fields on this class.</div>
 </div>
-<div class="col-first odd-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="../FieldInfo.html" title="class in org.apache.juneau.commons.reflect">FieldInfo</a>&gt;</code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">ClassInfo.</span><code><a href="../ClassInfo.html#getPublicField(java.util.function.Predicate)" class="member-name-link">getPublicField</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Predicate.html" title="class or interface in java.util.function" class="external-link">Predicate</a>&lt;<a href="../FieldInfo.html" title="class in org.apache.juneau.commons.reflect">FieldInfo</a>&gt;&nbsp;filter)</code></div>
+<div class="col-first odd-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../FieldInfo.html" title="class in org.apache.juneau.commons.reflect">FieldInfo</a>&gt;</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">ClassInfo.</span><code><a href="../ClassInfo.html#getDeclaredFieldsInDeclarationOrder()" class="member-name-link">getDeclaredFieldsInDeclarationOrder</a>()</code></div>
 <div class="col-last odd-row-color">
+<div class="block">Returns all fields declared directly on this class, in the order reported by <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html#getDeclaredFields()" title="class or interface in java.lang" class="external-link"><code>Class.getDeclaredFields()</code></a>.</div>
+</div>
+<div class="col-first even-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="../FieldInfo.html" title="class in org.apache.juneau.commons.reflect">FieldInfo</a>&gt;</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">ClassInfo.</span><code><a href="../ClassInfo.html#getPublicField(java.util.function.Predicate)" class="member-name-link">getPublicField</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Predicate.html" title="class or interface in java.util.function" class="external-link">Predicate</a>&lt;<a href="../FieldInfo.html" title="class in org.apache.juneau.commons.reflect">FieldInfo</a>&gt;&nbsp;filter)</code></div>
+<div class="col-last even-row-color">
 <div class="block">Returns the first matching public field on this class.</div>
 </div>
-<div class="col-first even-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../FieldInfo.html" title="class in org.apache.juneau.commons.reflect">FieldInfo</a>&gt;</code></div>
-<div class="col-second even-row-color"><span class="type-name-label">ClassInfo.</span><code><a href="../ClassInfo.html#getPublicFields()" class="member-name-link">getPublicFields</a>()</code></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../FieldInfo.html" title="class in org.apache.juneau.commons.reflect">FieldInfo</a>&gt;</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">ClassInfo.</span><code><a href="../ClassInfo.html#getPublicFields()" class="member-name-link">getPublicFields</a>()</code></div>
+<div class="col-last odd-row-color">
 <div class="block">Returns all public fields on this class.</div>
 </div>
 </div>
@@ -589,6 +602,20 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
+<section class="detail" id="org.apache.juneau.marshall.toml">
+<h2>Uses of <a href="../FieldInfo.html" title="class in org.apache.juneau.commons.reflect">FieldInfo</a> in <a href="../../../marshall/toml/package-summary.html">org.apache.juneau.marshall.toml</a></h2>
+<div class="caption"><span>Methods in <a href="../../../marshall/toml/package-summary.html">org.apache.juneau.marshall.toml</a> with parameters of type <a href="../FieldInfo.html" title="class in org.apache.juneau.commons.reflect">FieldInfo</a></span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier and Type</div>
+<div class="table-header col-second">Method</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code><a href="../../../marshall/toml/TomlApplyAnnotation.Builder.html" title="class in org.apache.juneau.marshall.toml">TomlApplyAnnotation.Builder</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">TomlApplyAnnotation.Builder.</span><code><a href="../../../marshall/toml/TomlApplyAnnotation.Builder.html#on(org.apache.juneau.commons.reflect.FieldInfo...)" class="member-name-link">on</a><wbr>(<a href="../FieldInfo.html" title="class in org.apache.juneau.commons.reflect">FieldInfo</a>...&nbsp;value)</code></div>
+<div class="col-last even-row-color">&nbsp;</div>
+</div>
+</section>
+</li>
+<li>
 <section class="detail" id="org.apache.juneau.marshall.uon">
 <h2>Uses of <a href="../FieldInfo.html" title="class in org.apache.juneau.commons.reflect">FieldInfo</a> in <a href="../../../marshall/uon/package-summary.html">org.apache.juneau.marshall.uon</a></h2>
 <div class="caption"><span>Methods in <a href="../../../marshall/uon/package-summary.html">org.apache.juneau.marshall.uon</a> with parameters of type <a href="../FieldInfo.html" title="class in org.apache.juneau.commons.reflect">FieldInfo</a></span></div>
@@ -626,6 +653,20 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color"><code><a href="../../../marshall/xml/XmlApplyAnnotation.Builder.html" title="class in org.apache.juneau.marshall.xml">XmlApplyAnnotation.Builder</a></code></div>
 <div class="col-second even-row-color"><span class="type-name-label">XmlApplyAnnotation.Builder.</span><code><a href="../../../marshall/xml/XmlApplyAnnotation.Builder.html#on(org.apache.juneau.commons.reflect.FieldInfo...)" class="member-name-link">on</a><wbr>(<a href="../FieldInfo.html" title="class in org.apache.juneau.commons.reflect">FieldInfo</a>...&nbsp;value)</code></div>
+<div class="col-last even-row-color">&nbsp;</div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="org.apache.juneau.marshall.yaml">
+<h2>Uses of <a href="../FieldInfo.html" title="class in org.apache.juneau.commons.reflect">FieldInfo</a> in <a href="../../../marshall/yaml/package-summary.html">org.apache.juneau.marshall.yaml</a></h2>
+<div class="caption"><span>Methods in <a href="../../../marshall/yaml/package-summary.html">org.apache.juneau.marshall.yaml</a> with parameters of type <a href="../FieldInfo.html" title="class in org.apache.juneau.commons.reflect">FieldInfo</a></span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier and Type</div>
+<div class="table-header col-second">Method</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code><a href="../../../marshall/yaml/YamlApplyAnnotation.Builder.html" title="class in org.apache.juneau.marshall.yaml">YamlApplyAnnotation.Builder</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">YamlApplyAnnotation.Builder.</span><code><a href="../../../marshall/yaml/YamlApplyAnnotation.Builder.html#on(org.apache.juneau.commons.reflect.FieldInfo...)" class="member-name-link">on</a><wbr>(<a href="../FieldInfo.html" title="class in org.apache.juneau.commons.reflect">FieldInfo</a>...&nbsp;value)</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
 </div>
 </section>

@@ -68,6 +68,10 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color">
 <div class="block">REST Server API</div>
 </div>
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.rest.server.arg">org.apache.juneau.rest.server.arg</a></div>
+<div class="col-last odd-row-color">
+<div class="block">REST Method Argument Beans</div>
+</div>
 </div>
 <section class="class-uses">
 <ul class="block-list">
@@ -122,6 +126,30 @@ loadScripts(document, 'script');</script>
 <div class="col-second even-row-color"><span class="type-name-label">RestRequest.</span><code><a href="../../../rest/server/RestRequest.html#getRequest(org.apache.juneau.httppart.bean.RequestBeanMeta)" class="member-name-link">getRequest</a><wbr>(<a href="../RequestBeanMeta.html" title="class in org.apache.juneau.httppart.bean">RequestBeanMeta</a>&nbsp;rbm)</code></div>
 <div class="col-last even-row-color">
 <div class="block">Same as <a href="../../../rest/server/RestRequest.html#getRequest(java.lang.Class)"><code>RestRequest.getRequest(Class)</code></a> but used on pre-instantiated <a href="../RequestBeanMeta.html" title="class in org.apache.juneau.httppart.bean"><code>RequestBeanMeta</code></a> objects.</div>
+</div>
+<div class="col-first odd-row-color"><code>&lt;T&gt;&nbsp;T</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">RestRequest.</span><code><a href="../../../rest/server/RestRequest.html#getRequest(org.apache.juneau.httppart.bean.RequestBeanMeta,org.apache.juneau.rest.server.arg.RequestBeanSetters)" class="member-name-link">getRequest</a><wbr>(<a href="../RequestBeanMeta.html" title="class in org.apache.juneau.httppart.bean">RequestBeanMeta</a>&nbsp;rbm,
+ <a href="../../../rest/server/arg/RequestBeanSetters.html" title="class in org.apache.juneau.rest.server.arg">RequestBeanSetters</a>&nbsp;setters)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Same as <a href="../../../rest/server/RestRequest.html#getRequest(org.apache.juneau.httppart.bean.RequestBeanMeta)"><code>RestRequest.getRequest(RequestBeanMeta)</code></a>, but reuses setters already resolved when the <code>@RestOp</code>'s
+ arguments were built instead of resolving them on this call.</div>
+</div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="org.apache.juneau.rest.server.arg">
+<h2>Uses of <a href="../RequestBeanMeta.html" title="class in org.apache.juneau.httppart.bean">RequestBeanMeta</a> in <a href="../../../rest/server/arg/package-summary.html">org.apache.juneau.rest.server.arg</a></h2>
+<div class="caption"><span>Methods in <a href="../../../rest/server/arg/package-summary.html">org.apache.juneau.rest.server.arg</a> with parameters of type <a href="../RequestBeanMeta.html" title="class in org.apache.juneau.httppart.bean">RequestBeanMeta</a></span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier and Type</div>
+<div class="table-header col-second">Method</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code>static <a href="../../../rest/server/arg/RequestBeanSetters.html" title="class in org.apache.juneau.rest.server.arg">RequestBeanSetters</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">RequestBeanSetters.</span><code><a href="../../../rest/server/arg/RequestBeanSetters.html#resolve(java.lang.Class,org.apache.juneau.httppart.bean.RequestBeanMeta)" class="member-name-link">resolve</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;&nbsp;beanClass,
+ <a href="../RequestBeanMeta.html" title="class in org.apache.juneau.httppart.bean">RequestBeanMeta</a>&nbsp;meta)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Resolves the constructor and setters for a concrete <a href="../../../http/Request.html" title="annotation interface in org.apache.juneau.http"><code>@Request</code></a> bean class.</div>
 </div>
 </div>
 </section>

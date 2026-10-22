@@ -82,7 +82,7 @@ loadScripts(document, 'script');</script>
 <dd><a href="Authorization.html" title="class in org.apache.juneau.http.header">Authorization</a></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public static class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/Authorization.html#line-166">Authorization.Builder</a></span>
+<div class="type-signature"><span class="modifiers">public static class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/Authorization.html#line-164">Authorization.Builder</a></span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
 <div class="block">Fluent builder for assembling an HTTP <c>Authorization</c> credentials value.
 
@@ -259,7 +259,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;()">
 <h3>Builder</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/Authorization.Builder.html#line-166">Builder</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/Authorization.Builder.html#line-164">Builder</a></span>()</div>
 </section>
 </li>
 </ul>
@@ -273,7 +273,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="scheme(java.lang.String)">
 <h3>scheme</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Authorization.Builder.html" title="class in org.apache.juneau.http.header">Authorization.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/Authorization.Builder.html#line-179">scheme</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Authorization.Builder.html" title="class in org.apache.juneau.http.header">Authorization.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/Authorization.Builder.html#line-177">scheme</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block">Sets the authentication scheme (e.g. <js>"Basic"</js>, <js>"Bearer"</js>, <js>"Digest"</js>).</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -288,7 +288,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="basic(java.lang.String,java.lang.String)">
 <h3>basic</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Authorization.Builder.html" title="class in org.apache.juneau.http.header">Authorization.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/Authorization.Builder.html#line-195">basic</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;user,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Authorization.Builder.html" title="class in org.apache.juneau.http.header">Authorization.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/Authorization.Builder.html#line-193">basic</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;user,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;password)</span></div>
 <div class="block">Sets <c>Basic</c> credentials by base64-encoding <c>user:password</c> as the token68 form.</div>
 <dl class="notes">
@@ -303,7 +303,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="bearer(java.lang.String)">
 <h3>bearer</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Authorization.Builder.html" title="class in org.apache.juneau.http.header">Authorization.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/Authorization.Builder.html#line-208">bearer</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;token)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Authorization.Builder.html" title="class in org.apache.juneau.http.header">Authorization.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/Authorization.Builder.html#line-206">bearer</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;token)</span></div>
 <div class="block">Sets <c>Bearer</c> credentials with the supplied token as the token68 form.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -316,7 +316,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="digest()">
 <h3>digest</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Authorization.Builder.html" title="class in org.apache.juneau.http.header">Authorization.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/Authorization.Builder.html#line-217">digest</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Authorization.Builder.html" title="class in org.apache.juneau.http.header">Authorization.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/Authorization.Builder.html#line-215">digest</a></span>()</div>
 <div class="block">Sets the scheme to <c>Digest</c> (typed Digest auth-params can then be chained).</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -327,7 +327,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="token(java.lang.String)">
 <h3>token</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Authorization.Builder.html" title="class in org.apache.juneau.http.header">Authorization.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/Authorization.Builder.html#line-227">token</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Authorization.Builder.html" title="class in org.apache.juneau.http.header">Authorization.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/Authorization.Builder.html#line-225">token</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block">Sets the opaque <c>token68</c> credentials form, clearing any auth-params.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -340,7 +340,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="username(java.lang.String)">
 <h3>username</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Authorization.Builder.html" title="class in org.apache.juneau.http.header">Authorization.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/Authorization.Builder.html#line-240">username</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Authorization.Builder.html" title="class in org.apache.juneau.http.header">Authorization.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/Authorization.Builder.html#line-238">username</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block">Sets the <c>username</c> auth-param (rendered as a quoted-string).</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -353,7 +353,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="realm(java.lang.String)">
 <h3>realm</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Authorization.Builder.html" title="class in org.apache.juneau.http.header">Authorization.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/Authorization.Builder.html#line-250">realm</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Authorization.Builder.html" title="class in org.apache.juneau.http.header">Authorization.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/Authorization.Builder.html#line-248">realm</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block">Sets the <c>realm</c> auth-param (rendered as a quoted-string).</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -366,7 +366,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="nonce(java.lang.String)">
 <h3>nonce</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Authorization.Builder.html" title="class in org.apache.juneau.http.header">Authorization.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/Authorization.Builder.html#line-260">nonce</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Authorization.Builder.html" title="class in org.apache.juneau.http.header">Authorization.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/Authorization.Builder.html#line-258">nonce</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block">Sets the <c>nonce</c> auth-param (rendered as a quoted-string).</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -379,7 +379,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="uri(java.lang.String)">
 <h3>uri</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Authorization.Builder.html" title="class in org.apache.juneau.http.header">Authorization.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/Authorization.Builder.html#line-270">uri</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Authorization.Builder.html" title="class in org.apache.juneau.http.header">Authorization.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/Authorization.Builder.html#line-268">uri</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block">Sets the <c>uri</c> auth-param (rendered as a quoted-string).</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -392,7 +392,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="response(java.lang.String)">
 <h3>response</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Authorization.Builder.html" title="class in org.apache.juneau.http.header">Authorization.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/Authorization.Builder.html#line-280">response</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Authorization.Builder.html" title="class in org.apache.juneau.http.header">Authorization.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/Authorization.Builder.html#line-278">response</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block">Sets the <c>response</c> auth-param (rendered as a quoted-string).</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -405,7 +405,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="cnonce(java.lang.String)">
 <h3>cnonce</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Authorization.Builder.html" title="class in org.apache.juneau.http.header">Authorization.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/Authorization.Builder.html#line-290">cnonce</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Authorization.Builder.html" title="class in org.apache.juneau.http.header">Authorization.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/Authorization.Builder.html#line-288">cnonce</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block">Sets the <c>cnonce</c> auth-param (rendered as a quoted-string).</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -418,7 +418,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="opaque(java.lang.String)">
 <h3>opaque</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Authorization.Builder.html" title="class in org.apache.juneau.http.header">Authorization.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/Authorization.Builder.html#line-300">opaque</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Authorization.Builder.html" title="class in org.apache.juneau.http.header">Authorization.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/Authorization.Builder.html#line-298">opaque</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block">Sets the <c>opaque</c> auth-param (rendered as a quoted-string).</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -431,7 +431,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="algorithm(java.lang.String)">
 <h3>algorithm</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Authorization.Builder.html" title="class in org.apache.juneau.http.header">Authorization.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/Authorization.Builder.html#line-310">algorithm</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Authorization.Builder.html" title="class in org.apache.juneau.http.header">Authorization.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/Authorization.Builder.html#line-308">algorithm</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block">Sets the <c>algorithm</c> auth-param (rendered as a bare token, unquoted).</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -444,7 +444,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="qop(java.lang.String)">
 <h3>qop</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Authorization.Builder.html" title="class in org.apache.juneau.http.header">Authorization.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/Authorization.Builder.html#line-320">qop</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Authorization.Builder.html" title="class in org.apache.juneau.http.header">Authorization.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/Authorization.Builder.html#line-318">qop</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block">Sets the <c>qop</c> auth-param (rendered as a bare token, unquoted; a single value in credentials).</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -457,7 +457,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="nc(java.lang.String)">
 <h3>nc</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Authorization.Builder.html" title="class in org.apache.juneau.http.header">Authorization.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/Authorization.Builder.html#line-330">nc</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Authorization.Builder.html" title="class in org.apache.juneau.http.header">Authorization.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/Authorization.Builder.html#line-328">nc</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block">Sets the <c>nc</c> (nonce-count) auth-param (rendered as a bare token, unquoted).</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -470,7 +470,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="param(java.lang.String,java.lang.String)">
 <h3>param</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Authorization.Builder.html" title="class in org.apache.juneau.http.header">Authorization.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/Authorization.Builder.html#line-346">param</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Authorization.Builder.html" title="class in org.apache.juneau.http.header">Authorization.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/Authorization.Builder.html#line-344">param</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block">Generic escape hatch for setting any auth-param by name, rendered as a quoted-string.
 
@@ -491,7 +491,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="build()">
 <h3>build</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/Authorization.Builder.html#line-393">build</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/Authorization.Builder.html#line-391">build</a></span>()</div>
 <div class="block">Builds the rendered <c>Authorization</c> credentials value.
 
  <p>
@@ -505,7 +505,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="toHeader()">
 <h3>toHeader</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Authorization.html" title="class in org.apache.juneau.http.header">Authorization</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/Authorization.Builder.html#line-413">toHeader</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Authorization.html" title="class in org.apache.juneau.http.header">Authorization</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/Authorization.Builder.html#line-411">toHeader</a></span>()</div>
 <div class="block">Builds an <a href="Authorization.html" title="class in org.apache.juneau.http.header"><code>Authorization</code></a> header bean directly from this builder.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -516,7 +516,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="toString()">
 <h3>toString</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/Authorization.Builder.html#line-417">toString</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/header/Authorization.Builder.html#line-415">toString</a></span>()</div>
 <dl class="notes">
 <dt>Overrides:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#toString()" title="class or interface in java.lang" class="external-link">toString</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></code></dd>

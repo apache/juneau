@@ -192,7 +192,7 @@
 <span class="source-line-no">179</span><span id="line-179">         // base64url(ciphertext+tag); reject any token with the wrong segment count, an unrecognized version,</span>
 <span class="source-line-no">180</span><span id="line-180">         // an empty/oversized keyId segment, or a nonce segment that isn't the expected length before any</span>
 <span class="source-line-no">181</span><span id="line-181">         // base64 decode.</span>
-<span class="source-line-no">182</span><span id="line-182">         if (parts.length != 4 || !VERSION.equals(parts[0]) || parts[1].isEmpty() || parts[1].length() &gt; MAX_KEY_ID_B64_CHARS</span>
+<span class="source-line-no">182</span><span id="line-182">         if (parts.length != 4 || neq(VERSION, parts[0]) || parts[1].isEmpty() || parts[1].length() &gt; MAX_KEY_ID_B64_CHARS</span>
 <span class="source-line-no">183</span><span id="line-183">               || parts[2].length() != NONCE_B64_CHARS)</span>
 <span class="source-line-no">184</span><span id="line-184">            return Optional.empty();</span>
 <span class="source-line-no">185</span><span id="line-185">         var keyId = new String(Base64.getUrlDecoder().decode(parts[1]), StandardCharsets.UTF_8);</span>
@@ -223,7 +223,7 @@
 <span class="source-line-no">210</span><span id="line-210">    *</span>
 <span class="source-line-no">211</span><span id="line-211">    * &lt;p&gt;</span>
 <span class="source-line-no">212</span><span id="line-212">    * &lt;b&gt;Bound identity (settled decision 1): {@code iss|sub}.&lt;/b&gt; When {@code principal} is a {@link ClaimsPrincipal}</span>
-<span class="source-line-no">213</span><span id="line-213">    * (the type the F2 resource-server layer produces &amp;mdash; {@code JwtTokenValidator}, OAuth introspection, OIDC, and</span>
+<span class="source-line-no">213</span><span id="line-213">    * (the type the resource-server layer produces &amp;mdash; {@code JwtTokenValidator}, OAuth introspection, OIDC, and</span>
 <span class="source-line-no">214</span><span id="line-214">    * SAML all return one), the {@code iss} and {@code sub} claims are read from its claim set; the issuer scopes the</span>
 <span class="source-line-no">215</span><span id="line-215">    * subject so a bare {@code sub} cannot collide across IdPs. When {@code sub} is absent or empty (or the principal</span>
 <span class="source-line-no">216</span><span id="line-216">    * is a bare {@link Principal} that exposes only {@link Principal#getName() getName()}), {@link Principal#getName()</span>

@@ -76,16 +76,16 @@
 <span class="source-line-no">063</span><span id="line-63">      private Class&lt;?&gt;[] parsers = {};</span>
 <span class="source-line-no">064</span><span id="line-64">      private OpSwagger swagger = OpSwaggerAnnotation.DEFAULT;</span>
 <span class="source-line-no">065</span><span id="line-65">      private String clientVersion = "";</span>
-<span class="source-line-no">066</span><span id="line-66">      private String debug = "";</span>
-<span class="source-line-no">067</span><span id="line-67">      private String defaultAccept = "";</span>
-<span class="source-line-no">068</span><span id="line-68">      private String defaultCharset = "";</span>
-<span class="source-line-no">069</span><span id="line-69">      private String defaultContentType = "";</span>
-<span class="source-line-no">070</span><span id="line-70">      private String maxInput = "";</span>
-<span class="source-line-no">071</span><span id="line-71">      private String observability = "";</span>
-<span class="source-line-no">072</span><span id="line-72">      private String asyncCompletionExecutor = "";</span>
-<span class="source-line-no">073</span><span id="line-73">      private String metricName = "";</span>
-<span class="source-line-no">074</span><span id="line-74">      private String metricTags = "";</span>
-<span class="source-line-no">075</span><span id="line-75">      private String problemDetails = "";</span>
+<span class="source-line-no">066</span><span id="line-66">      private String defaultAccept = "";</span>
+<span class="source-line-no">067</span><span id="line-67">      private String defaultCharset = "";</span>
+<span class="source-line-no">068</span><span id="line-68">      private String defaultContentType = "";</span>
+<span class="source-line-no">069</span><span id="line-69">      private String maxInput = "";</span>
+<span class="source-line-no">070</span><span id="line-70">      private String observability = "";</span>
+<span class="source-line-no">071</span><span id="line-71">      private String asyncCompletionExecutor = "";</span>
+<span class="source-line-no">072</span><span id="line-72">      private String metricName = "";</span>
+<span class="source-line-no">073</span><span id="line-73">      private String metricTags = "";</span>
+<span class="source-line-no">074</span><span id="line-74">      private String problemDetails = "";</span>
+<span class="source-line-no">075</span><span id="line-75">      private String debugMarshalling = "";</span>
 <span class="source-line-no">076</span><span id="line-76">      private String rolesDeclared = "";</span>
 <span class="source-line-no">077</span><span id="line-77">      private String roleGuard = "";</span>
 <span class="source-line-no">078</span><span id="line-78">      private String summary = "";</span>
@@ -165,181 +165,181 @@
 <span class="source-line-no">152</span><span id="line-152">      }</span>
 <span class="source-line-no">153</span><span id="line-153"></span>
 <span class="source-line-no">154</span><span id="line-154">      /**</span>
-<span class="source-line-no">155</span><span id="line-155">       * Sets the {@link RestPatch#debug()} property on this annotation.</span>
+<span class="source-line-no">155</span><span id="line-155">       * Sets the {@link RestPatch#defaultAccept()} property on this annotation.</span>
 <span class="source-line-no">156</span><span id="line-156">       *</span>
 <span class="source-line-no">157</span><span id="line-157">       * @param value The new value for this property.</span>
 <span class="source-line-no">158</span><span id="line-158">       * @return This object.</span>
 <span class="source-line-no">159</span><span id="line-159">       */</span>
-<span class="source-line-no">160</span><span id="line-160">      public Builder debug(String value) {</span>
-<span class="source-line-no">161</span><span id="line-161">         debug = value;</span>
+<span class="source-line-no">160</span><span id="line-160">      public Builder defaultAccept(String value) {</span>
+<span class="source-line-no">161</span><span id="line-161">         defaultAccept = value;</span>
 <span class="source-line-no">162</span><span id="line-162">         return this;</span>
 <span class="source-line-no">163</span><span id="line-163">      }</span>
 <span class="source-line-no">164</span><span id="line-164"></span>
 <span class="source-line-no">165</span><span id="line-165">      /**</span>
-<span class="source-line-no">166</span><span id="line-166">       * Sets the {@link RestPatch#defaultAccept()} property on this annotation.</span>
+<span class="source-line-no">166</span><span id="line-166">       * Sets the {@link RestPatch#defaultCharset()} property on this annotation.</span>
 <span class="source-line-no">167</span><span id="line-167">       *</span>
 <span class="source-line-no">168</span><span id="line-168">       * @param value The new value for this property.</span>
 <span class="source-line-no">169</span><span id="line-169">       * @return This object.</span>
 <span class="source-line-no">170</span><span id="line-170">       */</span>
-<span class="source-line-no">171</span><span id="line-171">      public Builder defaultAccept(String value) {</span>
-<span class="source-line-no">172</span><span id="line-172">         defaultAccept = value;</span>
+<span class="source-line-no">171</span><span id="line-171">      public Builder defaultCharset(String value) {</span>
+<span class="source-line-no">172</span><span id="line-172">         defaultCharset = value;</span>
 <span class="source-line-no">173</span><span id="line-173">         return this;</span>
 <span class="source-line-no">174</span><span id="line-174">      }</span>
 <span class="source-line-no">175</span><span id="line-175"></span>
 <span class="source-line-no">176</span><span id="line-176">      /**</span>
-<span class="source-line-no">177</span><span id="line-177">       * Sets the {@link RestPatch#defaultCharset()} property on this annotation.</span>
+<span class="source-line-no">177</span><span id="line-177">       * Sets the {@link RestPatch#defaultContentType()} property on this annotation.</span>
 <span class="source-line-no">178</span><span id="line-178">       *</span>
 <span class="source-line-no">179</span><span id="line-179">       * @param value The new value for this property.</span>
 <span class="source-line-no">180</span><span id="line-180">       * @return This object.</span>
 <span class="source-line-no">181</span><span id="line-181">       */</span>
-<span class="source-line-no">182</span><span id="line-182">      public Builder defaultCharset(String value) {</span>
-<span class="source-line-no">183</span><span id="line-183">         defaultCharset = value;</span>
+<span class="source-line-no">182</span><span id="line-182">      public Builder defaultContentType(String value) {</span>
+<span class="source-line-no">183</span><span id="line-183">         defaultContentType = value;</span>
 <span class="source-line-no">184</span><span id="line-184">         return this;</span>
 <span class="source-line-no">185</span><span id="line-185">      }</span>
 <span class="source-line-no">186</span><span id="line-186"></span>
 <span class="source-line-no">187</span><span id="line-187">      /**</span>
-<span class="source-line-no">188</span><span id="line-188">       * Sets the {@link RestPatch#defaultContentType()} property on this annotation.</span>
+<span class="source-line-no">188</span><span id="line-188">       * Sets the {@link RestPatch#defaultRequestAttributes()} property on this annotation.</span>
 <span class="source-line-no">189</span><span id="line-189">       *</span>
 <span class="source-line-no">190</span><span id="line-190">       * @param value The new value for this property.</span>
 <span class="source-line-no">191</span><span id="line-191">       * @return This object.</span>
 <span class="source-line-no">192</span><span id="line-192">       */</span>
-<span class="source-line-no">193</span><span id="line-193">      public Builder defaultContentType(String value) {</span>
-<span class="source-line-no">194</span><span id="line-194">         defaultContentType = value;</span>
+<span class="source-line-no">193</span><span id="line-193">      public Builder defaultRequestAttributes(String...value) {</span>
+<span class="source-line-no">194</span><span id="line-194">         defaultRequestAttributes = value;</span>
 <span class="source-line-no">195</span><span id="line-195">         return this;</span>
 <span class="source-line-no">196</span><span id="line-196">      }</span>
 <span class="source-line-no">197</span><span id="line-197"></span>
 <span class="source-line-no">198</span><span id="line-198">      /**</span>
-<span class="source-line-no">199</span><span id="line-199">       * Sets the {@link RestPatch#defaultRequestAttributes()} property on this annotation.</span>
+<span class="source-line-no">199</span><span id="line-199">       * Sets the {@link RestPatch#defaultRequestFormData()} property on this annotation.</span>
 <span class="source-line-no">200</span><span id="line-200">       *</span>
 <span class="source-line-no">201</span><span id="line-201">       * @param value The new value for this property.</span>
 <span class="source-line-no">202</span><span id="line-202">       * @return This object.</span>
 <span class="source-line-no">203</span><span id="line-203">       */</span>
-<span class="source-line-no">204</span><span id="line-204">      public Builder defaultRequestAttributes(String...value) {</span>
-<span class="source-line-no">205</span><span id="line-205">         defaultRequestAttributes = value;</span>
+<span class="source-line-no">204</span><span id="line-204">      public Builder defaultRequestFormData(String...value) {</span>
+<span class="source-line-no">205</span><span id="line-205">         defaultRequestFormData = value;</span>
 <span class="source-line-no">206</span><span id="line-206">         return this;</span>
 <span class="source-line-no">207</span><span id="line-207">      }</span>
 <span class="source-line-no">208</span><span id="line-208"></span>
 <span class="source-line-no">209</span><span id="line-209">      /**</span>
-<span class="source-line-no">210</span><span id="line-210">       * Sets the {@link RestPatch#defaultRequestFormData()} property on this annotation.</span>
+<span class="source-line-no">210</span><span id="line-210">       * Sets the {@link RestPatch#defaultRequestHeaders()} property on this annotation.</span>
 <span class="source-line-no">211</span><span id="line-211">       *</span>
 <span class="source-line-no">212</span><span id="line-212">       * @param value The new value for this property.</span>
 <span class="source-line-no">213</span><span id="line-213">       * @return This object.</span>
 <span class="source-line-no">214</span><span id="line-214">       */</span>
-<span class="source-line-no">215</span><span id="line-215">      public Builder defaultRequestFormData(String...value) {</span>
-<span class="source-line-no">216</span><span id="line-216">         defaultRequestFormData = value;</span>
+<span class="source-line-no">215</span><span id="line-215">      public Builder defaultRequestHeaders(String...value) {</span>
+<span class="source-line-no">216</span><span id="line-216">         defaultRequestHeaders = value;</span>
 <span class="source-line-no">217</span><span id="line-217">         return this;</span>
 <span class="source-line-no">218</span><span id="line-218">      }</span>
 <span class="source-line-no">219</span><span id="line-219"></span>
 <span class="source-line-no">220</span><span id="line-220">      /**</span>
-<span class="source-line-no">221</span><span id="line-221">       * Sets the {@link RestPatch#defaultRequestHeaders()} property on this annotation.</span>
+<span class="source-line-no">221</span><span id="line-221">       * Sets the {@link RestPatch#defaultRequestQueryData()} property on this annotation.</span>
 <span class="source-line-no">222</span><span id="line-222">       *</span>
 <span class="source-line-no">223</span><span id="line-223">       * @param value The new value for this property.</span>
 <span class="source-line-no">224</span><span id="line-224">       * @return This object.</span>
 <span class="source-line-no">225</span><span id="line-225">       */</span>
-<span class="source-line-no">226</span><span id="line-226">      public Builder defaultRequestHeaders(String...value) {</span>
-<span class="source-line-no">227</span><span id="line-227">         defaultRequestHeaders = value;</span>
+<span class="source-line-no">226</span><span id="line-226">      public Builder defaultRequestQueryData(String...value) {</span>
+<span class="source-line-no">227</span><span id="line-227">         defaultRequestQueryData = value;</span>
 <span class="source-line-no">228</span><span id="line-228">         return this;</span>
 <span class="source-line-no">229</span><span id="line-229">      }</span>
 <span class="source-line-no">230</span><span id="line-230"></span>
 <span class="source-line-no">231</span><span id="line-231">      /**</span>
-<span class="source-line-no">232</span><span id="line-232">       * Sets the {@link RestPatch#defaultRequestQueryData()} property on this annotation.</span>
+<span class="source-line-no">232</span><span id="line-232">       * Sets the {@link RestPatch#defaultResponseHeaders()} property on this annotation.</span>
 <span class="source-line-no">233</span><span id="line-233">       *</span>
 <span class="source-line-no">234</span><span id="line-234">       * @param value The new value for this property.</span>
 <span class="source-line-no">235</span><span id="line-235">       * @return This object.</span>
 <span class="source-line-no">236</span><span id="line-236">       */</span>
-<span class="source-line-no">237</span><span id="line-237">      public Builder defaultRequestQueryData(String...value) {</span>
-<span class="source-line-no">238</span><span id="line-238">         defaultRequestQueryData = value;</span>
+<span class="source-line-no">237</span><span id="line-237">      public Builder defaultResponseHeaders(String...value) {</span>
+<span class="source-line-no">238</span><span id="line-238">         defaultResponseHeaders = value;</span>
 <span class="source-line-no">239</span><span id="line-239">         return this;</span>
 <span class="source-line-no">240</span><span id="line-240">      }</span>
 <span class="source-line-no">241</span><span id="line-241"></span>
 <span class="source-line-no">242</span><span id="line-242">      /**</span>
-<span class="source-line-no">243</span><span id="line-243">       * Sets the {@link RestPatch#defaultResponseHeaders()} property on this annotation.</span>
+<span class="source-line-no">243</span><span id="line-243">       * Sets the {@link RestPatch#encoders()} property on this annotation.</span>
 <span class="source-line-no">244</span><span id="line-244">       *</span>
 <span class="source-line-no">245</span><span id="line-245">       * @param value The new value for this property.</span>
 <span class="source-line-no">246</span><span id="line-246">       * @return This object.</span>
 <span class="source-line-no">247</span><span id="line-247">       */</span>
-<span class="source-line-no">248</span><span id="line-248">      public Builder defaultResponseHeaders(String...value) {</span>
-<span class="source-line-no">249</span><span id="line-249">         defaultResponseHeaders = value;</span>
-<span class="source-line-no">250</span><span id="line-250">         return this;</span>
-<span class="source-line-no">251</span><span id="line-251">      }</span>
-<span class="source-line-no">252</span><span id="line-252"></span>
-<span class="source-line-no">253</span><span id="line-253">      /**</span>
-<span class="source-line-no">254</span><span id="line-254">       * Sets the {@link RestPatch#encoders()} property on this annotation.</span>
-<span class="source-line-no">255</span><span id="line-255">       *</span>
-<span class="source-line-no">256</span><span id="line-256">       * @param value The new value for this property.</span>
-<span class="source-line-no">257</span><span id="line-257">       * @return This object.</span>
-<span class="source-line-no">258</span><span id="line-258">       */</span>
-<span class="source-line-no">259</span><span id="line-259">      @SafeVarargs</span>
-<span class="source-line-no">260</span><span id="line-260">      public final Builder encoders(Class&lt;? extends Encoder&gt;...value) {</span>
-<span class="source-line-no">261</span><span id="line-261">         encoders = value;</span>
-<span class="source-line-no">262</span><span id="line-262">         return this;</span>
-<span class="source-line-no">263</span><span id="line-263">      }</span>
-<span class="source-line-no">264</span><span id="line-264"></span>
-<span class="source-line-no">265</span><span id="line-265">      /**</span>
-<span class="source-line-no">266</span><span id="line-266">       * Sets the {@link RestPatch#guards()} property on this annotation.</span>
-<span class="source-line-no">267</span><span id="line-267">       *</span>
-<span class="source-line-no">268</span><span id="line-268">       * @param value The new value for this property.</span>
-<span class="source-line-no">269</span><span id="line-269">       * @return This object.</span>
-<span class="source-line-no">270</span><span id="line-270">       */</span>
-<span class="source-line-no">271</span><span id="line-271">      @SafeVarargs</span>
-<span class="source-line-no">272</span><span id="line-272">      public final Builder guards(Class&lt;? extends RestGuard&gt;...value) {</span>
-<span class="source-line-no">273</span><span id="line-273">         guards = value;</span>
-<span class="source-line-no">274</span><span id="line-274">         return this;</span>
-<span class="source-line-no">275</span><span id="line-275">      }</span>
-<span class="source-line-no">276</span><span id="line-276"></span>
-<span class="source-line-no">277</span><span id="line-277">      /**</span>
-<span class="source-line-no">278</span><span id="line-278">       * Sets the {@link RestPatch#matchers()} property on this annotation.</span>
-<span class="source-line-no">279</span><span id="line-279">       *</span>
-<span class="source-line-no">280</span><span id="line-280">       * @param value The new value for this property.</span>
-<span class="source-line-no">281</span><span id="line-281">       * @return This object.</span>
-<span class="source-line-no">282</span><span id="line-282">       */</span>
-<span class="source-line-no">283</span><span id="line-283">      @SafeVarargs</span>
-<span class="source-line-no">284</span><span id="line-284">      public final Builder matchers(Class&lt;? extends RestMatcher&gt;...value) {</span>
-<span class="source-line-no">285</span><span id="line-285">         matchers = value;</span>
+<span class="source-line-no">248</span><span id="line-248">      @SafeVarargs</span>
+<span class="source-line-no">249</span><span id="line-249">      public final Builder encoders(Class&lt;? extends Encoder&gt;...value) {</span>
+<span class="source-line-no">250</span><span id="line-250">         encoders = value;</span>
+<span class="source-line-no">251</span><span id="line-251">         return this;</span>
+<span class="source-line-no">252</span><span id="line-252">      }</span>
+<span class="source-line-no">253</span><span id="line-253"></span>
+<span class="source-line-no">254</span><span id="line-254">      /**</span>
+<span class="source-line-no">255</span><span id="line-255">       * Sets the {@link RestPatch#guards()} property on this annotation.</span>
+<span class="source-line-no">256</span><span id="line-256">       *</span>
+<span class="source-line-no">257</span><span id="line-257">       * @param value The new value for this property.</span>
+<span class="source-line-no">258</span><span id="line-258">       * @return This object.</span>
+<span class="source-line-no">259</span><span id="line-259">       */</span>
+<span class="source-line-no">260</span><span id="line-260">      @SafeVarargs</span>
+<span class="source-line-no">261</span><span id="line-261">      public final Builder guards(Class&lt;? extends RestGuard&gt;...value) {</span>
+<span class="source-line-no">262</span><span id="line-262">         guards = value;</span>
+<span class="source-line-no">263</span><span id="line-263">         return this;</span>
+<span class="source-line-no">264</span><span id="line-264">      }</span>
+<span class="source-line-no">265</span><span id="line-265"></span>
+<span class="source-line-no">266</span><span id="line-266">      /**</span>
+<span class="source-line-no">267</span><span id="line-267">       * Sets the {@link RestPatch#matchers()} property on this annotation.</span>
+<span class="source-line-no">268</span><span id="line-268">       *</span>
+<span class="source-line-no">269</span><span id="line-269">       * @param value The new value for this property.</span>
+<span class="source-line-no">270</span><span id="line-270">       * @return This object.</span>
+<span class="source-line-no">271</span><span id="line-271">       */</span>
+<span class="source-line-no">272</span><span id="line-272">      @SafeVarargs</span>
+<span class="source-line-no">273</span><span id="line-273">      public final Builder matchers(Class&lt;? extends RestMatcher&gt;...value) {</span>
+<span class="source-line-no">274</span><span id="line-274">         matchers = value;</span>
+<span class="source-line-no">275</span><span id="line-275">         return this;</span>
+<span class="source-line-no">276</span><span id="line-276">      }</span>
+<span class="source-line-no">277</span><span id="line-277"></span>
+<span class="source-line-no">278</span><span id="line-278">      /**</span>
+<span class="source-line-no">279</span><span id="line-279">       * Sets the {@link RestPatch#maxInput()} property on this annotation.</span>
+<span class="source-line-no">280</span><span id="line-280">       *</span>
+<span class="source-line-no">281</span><span id="line-281">       * @param value The new value for this property.</span>
+<span class="source-line-no">282</span><span id="line-282">       * @return This object.</span>
+<span class="source-line-no">283</span><span id="line-283">       */</span>
+<span class="source-line-no">284</span><span id="line-284">      public Builder maxInput(String value) {</span>
+<span class="source-line-no">285</span><span id="line-285">         maxInput = value;</span>
 <span class="source-line-no">286</span><span id="line-286">         return this;</span>
 <span class="source-line-no">287</span><span id="line-287">      }</span>
 <span class="source-line-no">288</span><span id="line-288"></span>
 <span class="source-line-no">289</span><span id="line-289">      /**</span>
-<span class="source-line-no">290</span><span id="line-290">       * Sets the {@link RestPatch#maxInput()} property on this annotation.</span>
+<span class="source-line-no">290</span><span id="line-290">       * Sets the {@link RestPatch#parsers()} property on this annotation.</span>
 <span class="source-line-no">291</span><span id="line-291">       *</span>
 <span class="source-line-no">292</span><span id="line-292">       * @param value The new value for this property.</span>
 <span class="source-line-no">293</span><span id="line-293">       * @return This object.</span>
 <span class="source-line-no">294</span><span id="line-294">       */</span>
-<span class="source-line-no">295</span><span id="line-295">      public Builder maxInput(String value) {</span>
-<span class="source-line-no">296</span><span id="line-296">         maxInput = value;</span>
+<span class="source-line-no">295</span><span id="line-295">      public Builder parsers(Class&lt;?&gt;...value) {</span>
+<span class="source-line-no">296</span><span id="line-296">         parsers = value;</span>
 <span class="source-line-no">297</span><span id="line-297">         return this;</span>
 <span class="source-line-no">298</span><span id="line-298">      }</span>
 <span class="source-line-no">299</span><span id="line-299"></span>
 <span class="source-line-no">300</span><span id="line-300">      /**</span>
-<span class="source-line-no">301</span><span id="line-301">       * Sets the {@link RestPatch#parsers()} property on this annotation.</span>
+<span class="source-line-no">301</span><span id="line-301">       * Sets the {@link RestPatch#path()} property on this annotation.</span>
 <span class="source-line-no">302</span><span id="line-302">       *</span>
 <span class="source-line-no">303</span><span id="line-303">       * @param value The new value for this property.</span>
 <span class="source-line-no">304</span><span id="line-304">       * @return This object.</span>
 <span class="source-line-no">305</span><span id="line-305">       */</span>
-<span class="source-line-no">306</span><span id="line-306">      public Builder parsers(Class&lt;?&gt;...value) {</span>
-<span class="source-line-no">307</span><span id="line-307">         parsers = value;</span>
+<span class="source-line-no">306</span><span id="line-306">      public Builder path(String...value) {</span>
+<span class="source-line-no">307</span><span id="line-307">         path = value;</span>
 <span class="source-line-no">308</span><span id="line-308">         return this;</span>
 <span class="source-line-no">309</span><span id="line-309">      }</span>
 <span class="source-line-no">310</span><span id="line-310"></span>
 <span class="source-line-no">311</span><span id="line-311">      /**</span>
-<span class="source-line-no">312</span><span id="line-312">       * Sets the {@link RestPatch#path()} property on this annotation.</span>
+<span class="source-line-no">312</span><span id="line-312">       * Sets the {@link RestPatch#problemDetails()} property on this annotation.</span>
 <span class="source-line-no">313</span><span id="line-313">       *</span>
 <span class="source-line-no">314</span><span id="line-314">       * @param value The new value for this property.</span>
 <span class="source-line-no">315</span><span id="line-315">       * @return This object.</span>
 <span class="source-line-no">316</span><span id="line-316">       */</span>
-<span class="source-line-no">317</span><span id="line-317">      public Builder path(String...value) {</span>
-<span class="source-line-no">318</span><span id="line-318">         path = value;</span>
+<span class="source-line-no">317</span><span id="line-317">      public Builder problemDetails(String value) {</span>
+<span class="source-line-no">318</span><span id="line-318">         problemDetails = value;</span>
 <span class="source-line-no">319</span><span id="line-319">         return this;</span>
 <span class="source-line-no">320</span><span id="line-320">      }</span>
 <span class="source-line-no">321</span><span id="line-321"></span>
 <span class="source-line-no">322</span><span id="line-322">      /**</span>
-<span class="source-line-no">323</span><span id="line-323">       * Sets the {@link RestPatch#problemDetails()} property on this annotation.</span>
+<span class="source-line-no">323</span><span id="line-323">       * Sets the {@link RestPatch#debugMarshalling()} property on this annotation.</span>
 <span class="source-line-no">324</span><span id="line-324">       *</span>
 <span class="source-line-no">325</span><span id="line-325">       * @param value The new value for this property.</span>
 <span class="source-line-no">326</span><span id="line-326">       * @return This object.</span>
 <span class="source-line-no">327</span><span id="line-327">       */</span>
-<span class="source-line-no">328</span><span id="line-328">      public Builder problemDetails(String value) {</span>
-<span class="source-line-no">329</span><span id="line-329">         problemDetails = value;</span>
+<span class="source-line-no">328</span><span id="line-328">      public Builder debugMarshalling(String value) {</span>
+<span class="source-line-no">329</span><span id="line-329">         debugMarshalling = value;</span>
 <span class="source-line-no">330</span><span id="line-330">         return this;</span>
 <span class="source-line-no">331</span><span id="line-331">      }</span>
 <span class="source-line-no">332</span><span id="line-332"></span>
@@ -513,16 +513,16 @@
 <span class="source-line-no">500</span><span id="line-500">      private final Class&lt;?&gt;[] parsers;</span>
 <span class="source-line-no">501</span><span id="line-501">      private final OpSwagger swagger;</span>
 <span class="source-line-no">502</span><span id="line-502">      private final String clientVersion;</span>
-<span class="source-line-no">503</span><span id="line-503">      private final String debug;</span>
-<span class="source-line-no">504</span><span id="line-504">      private final String defaultAccept;</span>
-<span class="source-line-no">505</span><span id="line-505">      private final String defaultCharset;</span>
-<span class="source-line-no">506</span><span id="line-506">      private final String defaultContentType;</span>
-<span class="source-line-no">507</span><span id="line-507">      private final String maxInput;</span>
-<span class="source-line-no">508</span><span id="line-508">      private final String observability;</span>
-<span class="source-line-no">509</span><span id="line-509">      private final String asyncCompletionExecutor;</span>
-<span class="source-line-no">510</span><span id="line-510">      private final String metricName;</span>
-<span class="source-line-no">511</span><span id="line-511">      private final String metricTags;</span>
-<span class="source-line-no">512</span><span id="line-512">      private final String problemDetails;</span>
+<span class="source-line-no">503</span><span id="line-503">      private final String defaultAccept;</span>
+<span class="source-line-no">504</span><span id="line-504">      private final String defaultCharset;</span>
+<span class="source-line-no">505</span><span id="line-505">      private final String defaultContentType;</span>
+<span class="source-line-no">506</span><span id="line-506">      private final String maxInput;</span>
+<span class="source-line-no">507</span><span id="line-507">      private final String observability;</span>
+<span class="source-line-no">508</span><span id="line-508">      private final String asyncCompletionExecutor;</span>
+<span class="source-line-no">509</span><span id="line-509">      private final String metricName;</span>
+<span class="source-line-no">510</span><span id="line-510">      private final String metricTags;</span>
+<span class="source-line-no">511</span><span id="line-511">      private final String problemDetails;</span>
+<span class="source-line-no">512</span><span id="line-512">      private final String debugMarshalling;</span>
 <span class="source-line-no">513</span><span id="line-513">      private final String rolesDeclared;</span>
 <span class="source-line-no">514</span><span id="line-514">      private final String roleGuard;</span>
 <span class="source-line-no">515</span><span id="line-515">      private final String summary;</span>
@@ -545,29 +545,29 @@
 <span class="source-line-no">532</span><span id="line-532">         clientVersion = b.clientVersion;</span>
 <span class="source-line-no">533</span><span id="line-533">         consumes = cp(b.consumes);</span>
 <span class="source-line-no">534</span><span id="line-534">         converters = cp(b.converters);</span>
-<span class="source-line-no">535</span><span id="line-535">         debug = b.debug;</span>
-<span class="source-line-no">536</span><span id="line-536">         defaultAccept = b.defaultAccept;</span>
-<span class="source-line-no">537</span><span id="line-537">         defaultCharset = b.defaultCharset;</span>
-<span class="source-line-no">538</span><span id="line-538">         defaultContentType = b.defaultContentType;</span>
-<span class="source-line-no">539</span><span id="line-539">         defaultRequestFormData = cp(b.defaultRequestFormData);</span>
-<span class="source-line-no">540</span><span id="line-540">         defaultRequestQueryData = cp(b.defaultRequestQueryData);</span>
-<span class="source-line-no">541</span><span id="line-541">         defaultRequestAttributes = cp(b.defaultRequestAttributes);</span>
-<span class="source-line-no">542</span><span id="line-542">         defaultRequestHeaders = cp(b.defaultRequestHeaders);</span>
-<span class="source-line-no">543</span><span id="line-543">         defaultResponseHeaders = cp(b.defaultResponseHeaders);</span>
-<span class="source-line-no">544</span><span id="line-544">         encoders = cp(b.encoders);</span>
-<span class="source-line-no">545</span><span id="line-545">         guards = cp(b.guards);</span>
-<span class="source-line-no">546</span><span id="line-546">         matchers = cp(b.matchers);</span>
-<span class="source-line-no">547</span><span id="line-547">         maxInput = b.maxInput;</span>
-<span class="source-line-no">548</span><span id="line-548">         parsers = cp(b.parsers);</span>
-<span class="source-line-no">549</span><span id="line-549">         allowedParserOptions = cp(b.allowedParserOptions);</span>
-<span class="source-line-no">550</span><span id="line-550">         allowedSerializerOptions = cp(b.allowedSerializerOptions);</span>
-<span class="source-line-no">551</span><span id="line-551">         noInherit = cp(b.noInherit);</span>
-<span class="source-line-no">552</span><span id="line-552">         path = cp(b.path);</span>
-<span class="source-line-no">553</span><span id="line-553">         observability = b.observability;</span>
-<span class="source-line-no">554</span><span id="line-554">         asyncCompletionExecutor = b.asyncCompletionExecutor;</span>
-<span class="source-line-no">555</span><span id="line-555">         metricName = b.metricName;</span>
-<span class="source-line-no">556</span><span id="line-556">         metricTags = b.metricTags;</span>
-<span class="source-line-no">557</span><span id="line-557">         problemDetails = b.problemDetails;</span>
+<span class="source-line-no">535</span><span id="line-535">         defaultAccept = b.defaultAccept;</span>
+<span class="source-line-no">536</span><span id="line-536">         defaultCharset = b.defaultCharset;</span>
+<span class="source-line-no">537</span><span id="line-537">         defaultContentType = b.defaultContentType;</span>
+<span class="source-line-no">538</span><span id="line-538">         defaultRequestFormData = cp(b.defaultRequestFormData);</span>
+<span class="source-line-no">539</span><span id="line-539">         defaultRequestQueryData = cp(b.defaultRequestQueryData);</span>
+<span class="source-line-no">540</span><span id="line-540">         defaultRequestAttributes = cp(b.defaultRequestAttributes);</span>
+<span class="source-line-no">541</span><span id="line-541">         defaultRequestHeaders = cp(b.defaultRequestHeaders);</span>
+<span class="source-line-no">542</span><span id="line-542">         defaultResponseHeaders = cp(b.defaultResponseHeaders);</span>
+<span class="source-line-no">543</span><span id="line-543">         encoders = cp(b.encoders);</span>
+<span class="source-line-no">544</span><span id="line-544">         guards = cp(b.guards);</span>
+<span class="source-line-no">545</span><span id="line-545">         matchers = cp(b.matchers);</span>
+<span class="source-line-no">546</span><span id="line-546">         maxInput = b.maxInput;</span>
+<span class="source-line-no">547</span><span id="line-547">         parsers = cp(b.parsers);</span>
+<span class="source-line-no">548</span><span id="line-548">         allowedParserOptions = cp(b.allowedParserOptions);</span>
+<span class="source-line-no">549</span><span id="line-549">         allowedSerializerOptions = cp(b.allowedSerializerOptions);</span>
+<span class="source-line-no">550</span><span id="line-550">         noInherit = cp(b.noInherit);</span>
+<span class="source-line-no">551</span><span id="line-551">         path = cp(b.path);</span>
+<span class="source-line-no">552</span><span id="line-552">         observability = b.observability;</span>
+<span class="source-line-no">553</span><span id="line-553">         asyncCompletionExecutor = b.asyncCompletionExecutor;</span>
+<span class="source-line-no">554</span><span id="line-554">         metricName = b.metricName;</span>
+<span class="source-line-no">555</span><span id="line-555">         metricTags = b.metricTags;</span>
+<span class="source-line-no">556</span><span id="line-556">         problemDetails = b.problemDetails;</span>
+<span class="source-line-no">557</span><span id="line-557">         debugMarshalling = b.debugMarshalling;</span>
 <span class="source-line-no">558</span><span id="line-558">         produces = cp(b.produces);</span>
 <span class="source-line-no">559</span><span id="line-559">         roleGuard = b.roleGuard;</span>
 <span class="source-line-no">560</span><span id="line-560">         rolesDeclared = b.rolesDeclared;</span>
@@ -593,118 +593,118 @@
 <span class="source-line-no">580</span><span id="line-580">      }</span>
 <span class="source-line-no">581</span><span id="line-581"></span>
 <span class="source-line-no">582</span><span id="line-582">      @Override /* Overridden from RestPatch */</span>
-<span class="source-line-no">583</span><span id="line-583">      public String debug() {</span>
-<span class="source-line-no">584</span><span id="line-584">         return debug;</span>
+<span class="source-line-no">583</span><span id="line-583">      public String defaultAccept() {</span>
+<span class="source-line-no">584</span><span id="line-584">         return defaultAccept;</span>
 <span class="source-line-no">585</span><span id="line-585">      }</span>
 <span class="source-line-no">586</span><span id="line-586"></span>
 <span class="source-line-no">587</span><span id="line-587">      @Override /* Overridden from RestPatch */</span>
-<span class="source-line-no">588</span><span id="line-588">      public String defaultAccept() {</span>
-<span class="source-line-no">589</span><span id="line-589">         return defaultAccept;</span>
+<span class="source-line-no">588</span><span id="line-588">      public String defaultCharset() {</span>
+<span class="source-line-no">589</span><span id="line-589">         return defaultCharset;</span>
 <span class="source-line-no">590</span><span id="line-590">      }</span>
 <span class="source-line-no">591</span><span id="line-591"></span>
 <span class="source-line-no">592</span><span id="line-592">      @Override /* Overridden from RestPatch */</span>
-<span class="source-line-no">593</span><span id="line-593">      public String defaultCharset() {</span>
-<span class="source-line-no">594</span><span id="line-594">         return defaultCharset;</span>
+<span class="source-line-no">593</span><span id="line-593">      public String defaultContentType() {</span>
+<span class="source-line-no">594</span><span id="line-594">         return defaultContentType;</span>
 <span class="source-line-no">595</span><span id="line-595">      }</span>
 <span class="source-line-no">596</span><span id="line-596"></span>
 <span class="source-line-no">597</span><span id="line-597">      @Override /* Overridden from RestPatch */</span>
-<span class="source-line-no">598</span><span id="line-598">      public String defaultContentType() {</span>
-<span class="source-line-no">599</span><span id="line-599">         return defaultContentType;</span>
+<span class="source-line-no">598</span><span id="line-598">      public String[] defaultRequestAttributes() {</span>
+<span class="source-line-no">599</span><span id="line-599">         return defaultRequestAttributes;</span>
 <span class="source-line-no">600</span><span id="line-600">      }</span>
 <span class="source-line-no">601</span><span id="line-601"></span>
 <span class="source-line-no">602</span><span id="line-602">      @Override /* Overridden from RestPatch */</span>
-<span class="source-line-no">603</span><span id="line-603">      public String[] defaultRequestAttributes() {</span>
-<span class="source-line-no">604</span><span id="line-604">         return defaultRequestAttributes;</span>
+<span class="source-line-no">603</span><span id="line-603">      public String[] defaultRequestFormData() {</span>
+<span class="source-line-no">604</span><span id="line-604">         return defaultRequestFormData;</span>
 <span class="source-line-no">605</span><span id="line-605">      }</span>
 <span class="source-line-no">606</span><span id="line-606"></span>
 <span class="source-line-no">607</span><span id="line-607">      @Override /* Overridden from RestPatch */</span>
-<span class="source-line-no">608</span><span id="line-608">      public String[] defaultRequestFormData() {</span>
-<span class="source-line-no">609</span><span id="line-609">         return defaultRequestFormData;</span>
+<span class="source-line-no">608</span><span id="line-608">      public String[] defaultRequestHeaders() {</span>
+<span class="source-line-no">609</span><span id="line-609">         return defaultRequestHeaders;</span>
 <span class="source-line-no">610</span><span id="line-610">      }</span>
 <span class="source-line-no">611</span><span id="line-611"></span>
 <span class="source-line-no">612</span><span id="line-612">      @Override /* Overridden from RestPatch */</span>
-<span class="source-line-no">613</span><span id="line-613">      public String[] defaultRequestHeaders() {</span>
-<span class="source-line-no">614</span><span id="line-614">         return defaultRequestHeaders;</span>
+<span class="source-line-no">613</span><span id="line-613">      public String[] defaultRequestQueryData() {</span>
+<span class="source-line-no">614</span><span id="line-614">         return defaultRequestQueryData;</span>
 <span class="source-line-no">615</span><span id="line-615">      }</span>
 <span class="source-line-no">616</span><span id="line-616"></span>
 <span class="source-line-no">617</span><span id="line-617">      @Override /* Overridden from RestPatch */</span>
-<span class="source-line-no">618</span><span id="line-618">      public String[] defaultRequestQueryData() {</span>
-<span class="source-line-no">619</span><span id="line-619">         return defaultRequestQueryData;</span>
+<span class="source-line-no">618</span><span id="line-618">      public String[] defaultResponseHeaders() {</span>
+<span class="source-line-no">619</span><span id="line-619">         return defaultResponseHeaders;</span>
 <span class="source-line-no">620</span><span id="line-620">      }</span>
 <span class="source-line-no">621</span><span id="line-621"></span>
 <span class="source-line-no">622</span><span id="line-622">      @Override /* Overridden from RestPatch */</span>
-<span class="source-line-no">623</span><span id="line-623">      public String[] defaultResponseHeaders() {</span>
-<span class="source-line-no">624</span><span id="line-624">         return defaultResponseHeaders;</span>
+<span class="source-line-no">623</span><span id="line-623">      public Class&lt;? extends Encoder&gt;[] encoders() {</span>
+<span class="source-line-no">624</span><span id="line-624">         return encoders;</span>
 <span class="source-line-no">625</span><span id="line-625">      }</span>
 <span class="source-line-no">626</span><span id="line-626"></span>
 <span class="source-line-no">627</span><span id="line-627">      @Override /* Overridden from RestPatch */</span>
-<span class="source-line-no">628</span><span id="line-628">      public Class&lt;? extends Encoder&gt;[] encoders() {</span>
-<span class="source-line-no">629</span><span id="line-629">         return encoders;</span>
+<span class="source-line-no">628</span><span id="line-628">      public Class&lt;? extends RestGuard&gt;[] guards() {</span>
+<span class="source-line-no">629</span><span id="line-629">         return guards;</span>
 <span class="source-line-no">630</span><span id="line-630">      }</span>
 <span class="source-line-no">631</span><span id="line-631"></span>
 <span class="source-line-no">632</span><span id="line-632">      @Override /* Overridden from RestPatch */</span>
-<span class="source-line-no">633</span><span id="line-633">      public Class&lt;? extends RestGuard&gt;[] guards() {</span>
-<span class="source-line-no">634</span><span id="line-634">         return guards;</span>
+<span class="source-line-no">633</span><span id="line-633">      public Class&lt;? extends RestMatcher&gt;[] matchers() {</span>
+<span class="source-line-no">634</span><span id="line-634">         return matchers;</span>
 <span class="source-line-no">635</span><span id="line-635">      }</span>
 <span class="source-line-no">636</span><span id="line-636"></span>
 <span class="source-line-no">637</span><span id="line-637">      @Override /* Overridden from RestPatch */</span>
-<span class="source-line-no">638</span><span id="line-638">      public Class&lt;? extends RestMatcher&gt;[] matchers() {</span>
-<span class="source-line-no">639</span><span id="line-639">         return matchers;</span>
+<span class="source-line-no">638</span><span id="line-638">      public String maxInput() {</span>
+<span class="source-line-no">639</span><span id="line-639">         return maxInput;</span>
 <span class="source-line-no">640</span><span id="line-640">      }</span>
 <span class="source-line-no">641</span><span id="line-641"></span>
 <span class="source-line-no">642</span><span id="line-642">      @Override /* Overridden from RestPatch */</span>
-<span class="source-line-no">643</span><span id="line-643">      public String maxInput() {</span>
-<span class="source-line-no">644</span><span id="line-644">         return maxInput;</span>
+<span class="source-line-no">643</span><span id="line-643">      public Class&lt;?&gt;[] parsers() {</span>
+<span class="source-line-no">644</span><span id="line-644">         return parsers;</span>
 <span class="source-line-no">645</span><span id="line-645">      }</span>
 <span class="source-line-no">646</span><span id="line-646"></span>
 <span class="source-line-no">647</span><span id="line-647">      @Override /* Overridden from RestPatch */</span>
-<span class="source-line-no">648</span><span id="line-648">      public Class&lt;?&gt;[] parsers() {</span>
-<span class="source-line-no">649</span><span id="line-649">         return parsers;</span>
+<span class="source-line-no">648</span><span id="line-648">      public String[] allowedParserOptions() {</span>
+<span class="source-line-no">649</span><span id="line-649">         return allowedParserOptions;</span>
 <span class="source-line-no">650</span><span id="line-650">      }</span>
 <span class="source-line-no">651</span><span id="line-651"></span>
 <span class="source-line-no">652</span><span id="line-652">      @Override /* Overridden from RestPatch */</span>
-<span class="source-line-no">653</span><span id="line-653">      public String[] allowedParserOptions() {</span>
-<span class="source-line-no">654</span><span id="line-654">         return allowedParserOptions;</span>
+<span class="source-line-no">653</span><span id="line-653">      public String[] allowedSerializerOptions() {</span>
+<span class="source-line-no">654</span><span id="line-654">         return allowedSerializerOptions;</span>
 <span class="source-line-no">655</span><span id="line-655">      }</span>
 <span class="source-line-no">656</span><span id="line-656"></span>
 <span class="source-line-no">657</span><span id="line-657">      @Override /* Overridden from RestPatch */</span>
-<span class="source-line-no">658</span><span id="line-658">      public String[] allowedSerializerOptions() {</span>
-<span class="source-line-no">659</span><span id="line-659">         return allowedSerializerOptions;</span>
+<span class="source-line-no">658</span><span id="line-658">      public String[] noInherit() {</span>
+<span class="source-line-no">659</span><span id="line-659">         return noInherit;</span>
 <span class="source-line-no">660</span><span id="line-660">      }</span>
 <span class="source-line-no">661</span><span id="line-661"></span>
 <span class="source-line-no">662</span><span id="line-662">      @Override /* Overridden from RestPatch */</span>
-<span class="source-line-no">663</span><span id="line-663">      public String[] noInherit() {</span>
-<span class="source-line-no">664</span><span id="line-664">         return noInherit;</span>
+<span class="source-line-no">663</span><span id="line-663">      public String[] path() {</span>
+<span class="source-line-no">664</span><span id="line-664">         return path;</span>
 <span class="source-line-no">665</span><span id="line-665">      }</span>
 <span class="source-line-no">666</span><span id="line-666"></span>
 <span class="source-line-no">667</span><span id="line-667">      @Override /* Overridden from RestPatch */</span>
-<span class="source-line-no">668</span><span id="line-668">      public String[] path() {</span>
-<span class="source-line-no">669</span><span id="line-669">         return path;</span>
+<span class="source-line-no">668</span><span id="line-668">      public String observability() {</span>
+<span class="source-line-no">669</span><span id="line-669">         return observability;</span>
 <span class="source-line-no">670</span><span id="line-670">      }</span>
 <span class="source-line-no">671</span><span id="line-671"></span>
 <span class="source-line-no">672</span><span id="line-672">      @Override /* Overridden from RestPatch */</span>
-<span class="source-line-no">673</span><span id="line-673">      public String observability() {</span>
-<span class="source-line-no">674</span><span id="line-674">         return observability;</span>
+<span class="source-line-no">673</span><span id="line-673">      public String asyncCompletionExecutor() {</span>
+<span class="source-line-no">674</span><span id="line-674">         return asyncCompletionExecutor;</span>
 <span class="source-line-no">675</span><span id="line-675">      }</span>
 <span class="source-line-no">676</span><span id="line-676"></span>
 <span class="source-line-no">677</span><span id="line-677">      @Override /* Overridden from RestPatch */</span>
-<span class="source-line-no">678</span><span id="line-678">      public String asyncCompletionExecutor() {</span>
-<span class="source-line-no">679</span><span id="line-679">         return asyncCompletionExecutor;</span>
+<span class="source-line-no">678</span><span id="line-678">      public String metricName() {</span>
+<span class="source-line-no">679</span><span id="line-679">         return metricName;</span>
 <span class="source-line-no">680</span><span id="line-680">      }</span>
 <span class="source-line-no">681</span><span id="line-681"></span>
 <span class="source-line-no">682</span><span id="line-682">      @Override /* Overridden from RestPatch */</span>
-<span class="source-line-no">683</span><span id="line-683">      public String metricName() {</span>
-<span class="source-line-no">684</span><span id="line-684">         return metricName;</span>
+<span class="source-line-no">683</span><span id="line-683">      public String metricTags() {</span>
+<span class="source-line-no">684</span><span id="line-684">         return metricTags;</span>
 <span class="source-line-no">685</span><span id="line-685">      }</span>
 <span class="source-line-no">686</span><span id="line-686"></span>
 <span class="source-line-no">687</span><span id="line-687">      @Override /* Overridden from RestPatch */</span>
-<span class="source-line-no">688</span><span id="line-688">      public String metricTags() {</span>
-<span class="source-line-no">689</span><span id="line-689">         return metricTags;</span>
+<span class="source-line-no">688</span><span id="line-688">      public String problemDetails() {</span>
+<span class="source-line-no">689</span><span id="line-689">         return problemDetails;</span>
 <span class="source-line-no">690</span><span id="line-690">      }</span>
 <span class="source-line-no">691</span><span id="line-691"></span>
 <span class="source-line-no">692</span><span id="line-692">      @Override /* Overridden from RestPatch */</span>
-<span class="source-line-no">693</span><span id="line-693">      public String problemDetails() {</span>
-<span class="source-line-no">694</span><span id="line-694">         return problemDetails;</span>
+<span class="source-line-no">693</span><span id="line-693">      public String debugMarshalling() {</span>
+<span class="source-line-no">694</span><span id="line-694">         return debugMarshalling;</span>
 <span class="source-line-no">695</span><span id="line-695">      }</span>
 <span class="source-line-no">696</span><span id="line-696"></span>
 <span class="source-line-no">697</span><span id="line-697">      @Override /* Overridden from RestPatch */</span>

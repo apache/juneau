@@ -92,7 +92,7 @@ loadScripts(document, 'script');</script>
 <dd><a href="ReaderParserSession.html" title="class in org.apache.juneau.marshall.parser">ReaderParserSession</a></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public abstract static class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parser/ReaderParserSession.html#line-52">ReaderParserSession.Builder</a>&lt;SELF extends ReaderParserSession.Builder&lt;SELF&gt;&gt;</span>
+<div class="type-signature"><span class="modifiers">public abstract static class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parser/ReaderParserSession.html#line-45">ReaderParserSession.Builder</a>&lt;SELF extends ReaderParserSession.Builder&lt;SELF&gt;&gt;</span>
 <span class="extends-implements">extends <a href="ParserSession.Builder.html" title="class in org.apache.juneau.marshall.parser">ParserSession.Builder</a>&lt;SELF&gt;</span></div>
 <div class="block">Builder class.</div>
 </section>
@@ -147,7 +147,7 @@ loadScripts(document, 'script');</script>
 </div>
 <div class="inherited-list">
 <h3 id="methods-inherited-from-class-org.apache.juneau.marshall.parser.ParserSession.Builder">Methods inherited from class&nbsp;org.apache.juneau.marshall.parser.<a href="ParserSession.Builder.html" title="class in org.apache.juneau.marshall.parser">ParserSession.Builder</a></h3>
-<code><a href="ParserSession.Builder.html#javaMethod(java.lang.reflect.Method)">javaMethod</a>, <a href="ParserSession.Builder.html#nulls(org.apache.juneau.marshall.Nulls)">nulls</a>, <a href="ParserSession.Builder.html#outer(java.lang.Object)">outer</a>, <a href="ParserSession.Builder.html#schema(org.apache.juneau.marshall.httppart.HttpPartSchema)">schema</a>, <a href="ParserSession.Builder.html#schemaDefault(org.apache.juneau.marshall.httppart.HttpPartSchema)">schemaDefault</a>, <a href="ParserSession.Builder.html#trimStrings(boolean)">trimStrings</a></code></div>
+<code><a href="ParserSession.Builder.html#javaMethod(java.lang.reflect.Method)">javaMethod</a>, <a href="ParserSession.Builder.html#maxParseDepth(int)">maxParseDepth</a>, <a href="ParserSession.Builder.html#nulls(org.apache.juneau.marshall.Nulls)">nulls</a>, <a href="ParserSession.Builder.html#outer(java.lang.Object)">outer</a>, <a href="ParserSession.Builder.html#schema(org.apache.juneau.marshall.httppart.HttpPartSchema)">schema</a>, <a href="ParserSession.Builder.html#schemaDefault(org.apache.juneau.marshall.httppart.HttpPartSchema)">schemaDefault</a>, <a href="ParserSession.Builder.html#trimStrings(boolean)">trimStrings</a></code></div>
 <div class="inherited-list">
 <h3 id="methods-inherited-from-class-org.apache.juneau.marshall.MarshallingSession.Builder">Methods inherited from class&nbsp;org.apache.juneau.marshall.<a href="../MarshallingSession.Builder.html" title="class in org.apache.juneau.marshall">MarshallingSession.Builder</a></h3>
 <code><a href="../MarshallingSession.Builder.html#activeView(java.lang.String)">activeView</a>, <a href="../MarshallingSession.Builder.html#locale(java.util.Locale)">locale</a>, <a href="../MarshallingSession.Builder.html#mediaType(org.apache.juneau.commons.http.MediaType)">mediaType</a>, <a href="../MarshallingSession.Builder.html#mediaTypeDefault(org.apache.juneau.commons.http.MediaType)">mediaTypeDefault</a>, <a href="../MarshallingSession.Builder.html#timeZone(java.util.TimeZone)">timeZone</a>, <a href="../MarshallingSession.Builder.html#timeZoneDefault(java.util.TimeZone)">timeZoneDefault</a></code></div>
@@ -171,7 +171,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.marshall.parser.ReaderParser)">
 <h3>Builder</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parser/ReaderParserSession.Builder.html#line-66">Builder</a></span><wbr><span class="parameters">(<a href="ReaderParser.html" title="class in org.apache.juneau.marshall.parser">ReaderParser</a>&nbsp;ctx)</span></div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parser/ReaderParserSession.Builder.html#line-59">Builder</a></span><wbr><span class="parameters">(<a href="ReaderParser.html" title="class in org.apache.juneau.marshall.parser">ReaderParser</a>&nbsp;ctx)</span></div>
 <div class="block">Constructor</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -191,7 +191,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="build()">
 <h3>build</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ReaderParserSession.html" title="class in org.apache.juneau.marshall.parser">ReaderParserSession</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parser/ReaderParserSession.Builder.html#line-72">build</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ReaderParserSession.html" title="class in org.apache.juneau.marshall.parser">ReaderParserSession</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parser/ReaderParserSession.Builder.html#line-65">build</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../MarshallingSession.Builder.html#build()">MarshallingSession.Builder</a></code></span></div>
 <div class="block">Build the object.</div>
 <dl class="notes">
@@ -205,7 +205,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="property(java.lang.String,java.lang.Object)">
 <h3>property</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ReaderParserSession.Builder.html" title="type parameter in ReaderParserSession.Builder">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parser/ReaderParserSession.Builder.html#line-77">property</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ReaderParserSession.Builder.html" title="type parameter in ReaderParserSession.Builder">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parser/ReaderParserSession.Builder.html#line-70">property</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../ContextSession.Builder.html#property(java.lang.String,java.lang.Object)">ContextSession.Builder</a></code></span></div>
 <div class="block">Adds a property to this session.
@@ -230,7 +230,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="streamCharset(java.nio.charset.Charset)">
 <h3>streamCharset</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ReaderParserSession.Builder.html" title="type parameter in ReaderParserSession.Builder">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parser/ReaderParserSession.Builder.html#line-109">streamCharset</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/nio/charset/Charset.html" title="class or interface in java.nio.charset" class="external-link">Charset</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ReaderParserSession.Builder.html" title="type parameter in ReaderParserSession.Builder">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parser/ReaderParserSession.Builder.html#line-102">streamCharset</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/nio/charset/Charset.html" title="class or interface in java.nio.charset" class="external-link">Charset</a>&nbsp;value)</span></div>
 <div class="block">Input stream charset.
 
  <p>

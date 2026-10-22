@@ -106,7 +106,7 @@ loadScripts(document, 'script');</script>
 <div class="col-first odd-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
 <div class="col-second odd-row-color"><code><a href="#compressionCodec()" class="member-name-link">compressionCodec</a></code></div>
 <div class="col-last odd-row-color">
-<div class="block">Compression codec (UNCOMPRESSED, GZIP).</div>
+<div class="block">Compression codec used when <b>writing</b> (<js>"UNCOMPRESSED"</js> or <js>"GZIP"</js>, case-insensitive).</div>
 </div>
 <div class="col-first even-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
 <div class="col-second even-row-color"><code><a href="#maxCount()" class="member-name-link">maxCount</a></code></div>
@@ -115,29 +115,35 @@ loadScripts(document, 'script');</script>
  when parsing.</div>
 </div>
 <div class="col-first odd-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second odd-row-color"><code><a href="#maxInputLength()" class="member-name-link">maxInputLength</a></code></div>
+<div class="col-second odd-row-color"><code><a href="#maxDecompressedBytes()" class="member-name-link">maxDecompressedBytes</a></code></div>
 <div class="col-last odd-row-color">
-<div class="block">Maximum allowed size (in bytes) of the whole Parquet input buffered into memory before parsing.</div>
+<div class="block">Maximum allowed aggregate decompressed-byte total across every Parquet page read during a single
+ parse.</div>
 </div>
 <div class="col-first even-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second even-row-color"><code><a href="#maxLength()" class="member-name-link">maxLength</a></code></div>
+<div class="col-second even-row-color"><code><a href="#maxInputLength()" class="member-name-link">maxInputLength</a></code></div>
 <div class="col-last even-row-color">
+<div class="block">Maximum allowed size (in bytes) of the whole Parquet input buffered into memory before parsing.</div>
+</div>
+<div class="col-first odd-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second odd-row-color"><code><a href="#maxLength()" class="member-name-link">maxLength</a></code></div>
+<div class="col-last odd-row-color">
 <div class="block">Maximum allowed wire-declared length (in bytes) for a single Parquet page (compressed or
  uncompressed) when parsing.</div>
 </div>
-<div class="col-first odd-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second odd-row-color"><code><a href="#pageSize()" class="member-name-link">pageSize</a></code></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second even-row-color"><code><a href="#pageSize()" class="member-name-link">pageSize</a></code></div>
+<div class="col-last even-row-color">
 <div class="block">Page size in bytes.</div>
 </div>
-<div class="col-first even-row-color"><code>int</code></div>
-<div class="col-second even-row-color"><code><a href="#rank()" class="member-name-link">rank</a></code></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><code>int</code></div>
+<div class="col-second odd-row-color"><code><a href="#rank()" class="member-name-link">rank</a></code></div>
+<div class="col-last odd-row-color">
 <div class="block">Rank for application order.</div>
 </div>
-<div class="col-first odd-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second odd-row-color"><code><a href="#rowGroupSize()" class="member-name-link">rowGroupSize</a></code></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second even-row-color"><code><a href="#rowGroupSize()" class="member-name-link">rowGroupSize</a></code></div>
+<div class="col-last even-row-color">
 <div class="block">Row group size in bytes.</div>
 </div>
 </div>
@@ -155,8 +161,13 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="compressionCodec()">
 <h3>compressionCodec</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parquet/ParquetConfig.html#line-41">compressionCodec</a></span></div>
-<div class="block">Compression codec (UNCOMPRESSED, GZIP).</div>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parquet/ParquetConfig.html#line-48">compressionCodec</a></span></div>
+<div class="block">Compression codec used when <b>writing</b> (<js>"UNCOMPRESSED"</js> or <js>"GZIP"</js>, case-insensitive).
+
+ <p>
+ Any other value fails fast with an <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/IllegalArgumentException.html" title="class or interface in java.lang" class="external-link"><code>IllegalArgumentException</code></a> naming the bad value and the valid write
+ codecs.  This includes unknown names (typos) and <js>"SNAPPY"</js>, which the parser can decode but the
+ serializer cannot write.  The parser detects the codec from the file and ignores this setting.</div>
 <dl class="notes">
 <dt>Default:</dt>
 <dd>""</dd>
@@ -166,7 +177,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="rowGroupSize()">
 <h3>rowGroupSize</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parquet/ParquetConfig.html#line-44">rowGroupSize</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parquet/ParquetConfig.html#line-51">rowGroupSize</a></span></div>
 <div class="block">Row group size in bytes.</div>
 <dl class="notes">
 <dt>Default:</dt>
@@ -177,7 +188,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="pageSize()">
 <h3>pageSize</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parquet/ParquetConfig.html#line-47">pageSize</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parquet/ParquetConfig.html#line-54">pageSize</a></span></div>
 <div class="block">Page size in bytes.</div>
 <dl class="notes">
 <dt>Default:</dt>
@@ -188,7 +199,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="addBeanTypes()">
 <h3>addBeanTypes</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parquet/ParquetConfig.html#line-50">addBeanTypes</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parquet/ParquetConfig.html#line-57">addBeanTypes</a></span></div>
 <div class="block">Add bean types column.</div>
 <dl class="notes">
 <dt>Default:</dt>
@@ -199,7 +210,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="maxLength()">
 <h3>maxLength</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parquet/ParquetConfig.html#line-62">maxLength</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parquet/ParquetConfig.html#line-69">maxLength</a></span></div>
 <div class="block">Maximum allowed wire-declared length (in bytes) for a single Parquet page (compressed or
  uncompressed) when parsing.
 
@@ -219,7 +230,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="maxCount()">
 <h3>maxCount</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parquet/ParquetConfig.html#line-74">maxCount</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parquet/ParquetConfig.html#line-81">maxCount</a></span></div>
 <div class="block">Maximum allowed wire-declared element count (file/row-group row counts, column-chunk value counts)
  when parsing.
 
@@ -239,7 +250,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="maxInputLength()">
 <h3>maxInputLength</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parquet/ParquetConfig.html#line-85">maxInputLength</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parquet/ParquetConfig.html#line-92">maxInputLength</a></span></div>
 <div class="block">Maximum allowed size (in bytes) of the whole Parquet input buffered into memory before parsing.
 
  <p>
@@ -256,9 +267,30 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
+<section class="detail" id="maxDecompressedBytes()">
+<h3>maxDecompressedBytes</h3>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parquet/ParquetConfig.html#line-105">maxDecompressedBytes</a></span></div>
+<div class="block">Maximum allowed aggregate decompressed-byte total across every Parquet page read during a single
+ parse.
+
+ <p>
+ Guards against a decompression bomb assembled from many pages that each individually pass the
+ per-page <a href="#maxLength()"><code>maxLength()</code></a> cap. Default is <js>"67108864"</js> (64 MiB). A value of
+ <js>"0"</js> or less disables the cap.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>The annotation value.</dd>
+</dl>
+<dl class="notes">
+<dt>Default:</dt>
+<dd>""</dd>
+</dl>
+</section>
+</li>
+<li>
 <section class="detail" id="rank()">
 <h3>rank</h3>
-<div class="member-signature"><span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parquet/ParquetConfig.html#line-88">rank</a></span></div>
+<div class="member-signature"><span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parquet/ParquetConfig.html#line-108">rank</a></span></div>
 <div class="block">Rank for application order.</div>
 <dl class="notes">
 <dt>Default:</dt>

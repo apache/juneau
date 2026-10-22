@@ -84,7 +84,7 @@ loadScripts(document, 'script');</script>
 <dd><code>jakarta.servlet.Filter</code>, <code><a href="../Authenticator.html" title="interface in org.apache.juneau.rest.server.auth">Authenticator</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/oauth/OAuthFilter.html#line-68">OAuthFilter</a></span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/oauth/OAuthFilter.html#line-67">OAuthFilter</a></span>
 <span class="extends-implements">extends <a href="../AuthFilter.html" title="class in org.apache.juneau.rest.server.auth">AuthFilter</a></span></div>
 <div class="block"><a href="../AuthFilter.html" title="class in org.apache.juneau.rest.server.auth"><code>AuthFilter</code></a> that authenticates requests carrying an OAuth 2.0 / OIDC access token via the
  standard <a class="doclink" href="https://datatracker.ietf.org/doc/html/rfc6750">RFC 6750 Bearer Token</a>
@@ -206,7 +206,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.rest.server.auth.oauth.OAuthFilter.Builder)">
 <h3>OAuthFilter</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/oauth/OAuthFilter.html#line-152">OAuthFilter</a></span><wbr><span class="parameters">(<a href="OAuthFilter.Builder.html" title="class in org.apache.juneau.rest.server.auth.oauth">OAuthFilter.Builder</a>&nbsp;b)</span></div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/oauth/OAuthFilter.html#line-151">OAuthFilter</a></span><wbr><span class="parameters">(<a href="OAuthFilter.Builder.html" title="class in org.apache.juneau.rest.server.auth.oauth">OAuthFilter.Builder</a>&nbsp;b)</span></div>
 <div class="block">Constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -225,7 +225,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="create()">
 <h3>create</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="OAuthFilter.Builder.html" title="class in org.apache.juneau.rest.server.auth.oauth">OAuthFilter.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/oauth/OAuthFilter.html#line-82">create</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="OAuthFilter.Builder.html" title="class in org.apache.juneau.rest.server.auth.oauth">OAuthFilter.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/oauth/OAuthFilter.html#line-81">create</a></span>()</div>
 <div class="block">Static creator.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -236,7 +236,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="authenticate(jakarta.servlet.http.HttpServletRequest)">
 <h3>authenticate</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="../AuthResult.html" title="class in org.apache.juneau.rest.server.auth">AuthResult</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/oauth/OAuthFilter.html#line-158">authenticate</a></span><wbr><span class="parameters">(jakarta.servlet.http.HttpServletRequest&nbsp;req)</span>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="../AuthResult.html" title="class in org.apache.juneau.rest.server.auth">AuthResult</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/oauth/OAuthFilter.html#line-157">authenticate</a></span><wbr><span class="parameters">(jakarta.servlet.http.HttpServletRequest&nbsp;req)</span>
                                   throws <span class="exceptions"><a href="../AuthenticationException.html" title="class in org.apache.juneau.rest.server.auth">AuthenticationException</a></span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="../Authenticator.html#authenticate(jakarta.servlet.http.HttpServletRequest)">Authenticator</a></code></span></div>
 <div class="block">Inspects the request and returns the authentication result.</div>

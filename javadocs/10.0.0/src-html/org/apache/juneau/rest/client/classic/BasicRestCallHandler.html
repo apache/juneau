@@ -60,11 +60,16 @@
 <span class="source-line-no">047</span><span id="line-47">      this.client = client;</span>
 <span class="source-line-no">048</span><span id="line-48">   }</span>
 <span class="source-line-no">049</span><span id="line-49"></span>
-<span class="source-line-no">050</span><span id="line-50">   @Override /* Overridden from RestCallHandler */</span>
-<span class="source-line-no">051</span><span id="line-51">   public HttpResponse run(HttpHost target, HttpRequest request, HttpContext context) throws IOException {</span>
-<span class="source-line-no">052</span><span id="line-52">      return target == null ? client.execute((HttpUriRequest)request, context) : client.execute(target, request, context);</span>
+<span class="source-line-no">050</span><span id="line-50">   // The client this handler sends requests through.</span>
+<span class="source-line-no">051</span><span id="line-51">   RestClient client() {</span>
+<span class="source-line-no">052</span><span id="line-52">      return client;</span>
 <span class="source-line-no">053</span><span id="line-53">   }</span>
-<span class="source-line-no">054</span><span id="line-54">}</span>
+<span class="source-line-no">054</span><span id="line-54"></span>
+<span class="source-line-no">055</span><span id="line-55">   @Override /* Overridden from RestCallHandler */</span>
+<span class="source-line-no">056</span><span id="line-56">   public HttpResponse run(HttpHost target, HttpRequest request, HttpContext context) throws IOException {</span>
+<span class="source-line-no">057</span><span id="line-57">      return target == null ? client.execute((HttpUriRequest)request, context) : client.execute(target, request, context);</span>
+<span class="source-line-no">058</span><span id="line-58">   }</span>
+<span class="source-line-no">059</span><span id="line-59">}</span>
 
 
 

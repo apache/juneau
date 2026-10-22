@@ -67,75 +67,75 @@
 <a class="jxr_linenumber" name="L59" href="#L59">59</a>  <em class="jxr_javadoccomment"> * implementations of {@link VarFunction} bypass the typed table; their {@code invoke(...)}</em>
 <a class="jxr_linenumber" name="L60" href="#L60">60</a>  <em class="jxr_javadoccomment"> * receives raw {@link String} args via {@link #passthrough(List)}.</em>
 <a class="jxr_linenumber" name="L61" href="#L61">61</a>  <em class="jxr_javadoccomment"> */</em>
-<a class="jxr_linenumber" name="L62" href="#L62">62</a>  <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">class</strong> <a name="ArgCoercer" href="../../../../../org/apache/juneau/commons/svl/ArgCoercer.html#ArgCoercer">ArgCoercer</a> {
-<a class="jxr_linenumber" name="L63" href="#L63">63</a>  
-<a class="jxr_linenumber" name="L64" href="#L64">64</a>  	<strong class="jxr_keyword">private</strong> <a name="ArgCoercer" href="../../../../../org/apache/juneau/commons/svl/ArgCoercer.html#ArgCoercer">ArgCoercer</a>() {}
-<a class="jxr_linenumber" name="L65" href="#L65">65</a>  
-<a class="jxr_linenumber" name="L66" href="#L66">66</a>  	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L67" href="#L67">67</a>  <em class="jxr_javadoccomment">	 * Returns {@code args} as-is, unwrapped — used by direct {@link VarFunction} implementations</em>
-<a class="jxr_linenumber" name="L68" href="#L68">68</a>  <em class="jxr_javadoccomment">	 * that don't go through {@link TypedFunction}'s typed-arg coercion.</em>
-<a class="jxr_linenumber" name="L69" href="#L69">69</a>  <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L70" href="#L70">70</a>  	<strong class="jxr_keyword">static</strong> List&lt;Object&gt; passthrough(List&lt;Object&gt; args) {
-<a class="jxr_linenumber" name="L71" href="#L71">71</a>  		<strong class="jxr_keyword">return</strong> args;
-<a class="jxr_linenumber" name="L72" href="#L72">72</a>  	}
-<a class="jxr_linenumber" name="L73" href="#L73">73</a>  
-<a class="jxr_linenumber" name="L74" href="#L74">74</a>  	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L75" href="#L75">75</a>  <em class="jxr_javadoccomment">	 * Coerce a list of raw arguments to the target types declared by {@code paramTypes}.</em>
-<a class="jxr_linenumber" name="L76" href="#L76">76</a>  <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L77" href="#L77">77</a>  <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L78" href="#L78">78</a>  <em class="jxr_javadoccomment">	 * Used by {@link TypedFunction#invoke(VarResolverSession, List)}. The args are resolved</em>
-<a class="jxr_linenumber" name="L79" href="#L79">79</a>  <em class="jxr_javadoccomment">	 * strings produced by {@link VarTemplate#resolve(VarResolverSession)} per</em>
-<a class="jxr_linenumber" name="L80" href="#L80">80</a>  <em class="jxr_javadoccomment">	 * {@link ScriptSegment} arg template.</em>
-<a class="jxr_linenumber" name="L81" href="#L81">81</a>  <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L82" href="#L82">82</a>  <em class="jxr_javadoccomment">	 * @param fnName The function name (for diagnostic messages).</em>
-<a class="jxr_linenumber" name="L83" href="#L83">83</a>  <em class="jxr_javadoccomment">	 * @param paramTypes The target Java types — one per arg slot. Last slot may be</em>
-<a class="jxr_linenumber" name="L84" href="#L84">84</a>  <em class="jxr_javadoccomment">	 *	 {@code String[]} for variadic functions; in that case all args from that index onward</em>
-<a class="jxr_linenumber" name="L85" href="#L85">85</a>  <em class="jxr_javadoccomment">	 *	 are collected into a {@code String[]}.</em>
-<a class="jxr_linenumber" name="L86" href="#L86">86</a>  <em class="jxr_javadoccomment">	 * @param args The raw resolved string arguments (one per declared arg, with extras for</em>
-<a class="jxr_linenumber" name="L87" href="#L87">87</a>  <em class="jxr_javadoccomment">	 *	 variadic).</em>
-<a class="jxr_linenumber" name="L88" href="#L88">88</a>  <em class="jxr_javadoccomment">	 * @return A list of coerced values, length equal to {@code paramTypes.length}.</em>
-<a class="jxr_linenumber" name="L89" href="#L89">89</a>  <em class="jxr_javadoccomment">	 * @throws IllegalArgumentException If the number of args is wrong or coercion fails.</em>
-<a class="jxr_linenumber" name="L90" href="#L90">90</a>  <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L91" href="#L91">91</a>  	<strong class="jxr_keyword">static</strong> Object[] coerce(String fnName, Class&lt;?&gt;[] paramTypes, List&lt;Object&gt; args) {
-<a class="jxr_linenumber" name="L92" href="#L92">92</a>  		<strong class="jxr_keyword">var</strong> n = paramTypes.length;
-<a class="jxr_linenumber" name="L93" href="#L93">93</a>  		<strong class="jxr_keyword">var</strong> variadic = n &gt; 0 &amp;&amp; paramTypes[n - 1] == String[].<strong class="jxr_keyword">class</strong>;
-<a class="jxr_linenumber" name="L94" href="#L94">94</a>  		<strong class="jxr_keyword">var</strong> fixedCount = variadic ? n - 1 : n;
-<a class="jxr_linenumber" name="L95" href="#L95">95</a>  		<strong class="jxr_keyword">if</strong> (args.size() &lt; fixedCount)
-<a class="jxr_linenumber" name="L96" href="#L96">96</a>  			<strong class="jxr_keyword">throw</strong> iaex(<span class="jxr_string">"Function '%s' expected at least %s arg(s), got %s"</span>,
-<a class="jxr_linenumber" name="L97" href="#L97">97</a>  				fnName, fixedCount, args.size());
-<a class="jxr_linenumber" name="L98" href="#L98">98</a>  		<strong class="jxr_keyword">if</strong> (!variadic &amp;&amp; args.size() &gt; n)
-<a class="jxr_linenumber" name="L99" href="#L99">99</a>  			<strong class="jxr_keyword">throw</strong> iaex(<span class="jxr_string">"Function '%s' expected at most %s arg(s), got %s"</span>,
-<a class="jxr_linenumber" name="L100" href="#L100">100</a> 				fnName, n, args.size());
-<a class="jxr_linenumber" name="L101" href="#L101">101</a> 
-<a class="jxr_linenumber" name="L102" href="#L102">102</a> 		<strong class="jxr_keyword">var</strong> out = <strong class="jxr_keyword">new</strong> Object[n];
-<a class="jxr_linenumber" name="L103" href="#L103">103</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt; fixedCount; i++)
-<a class="jxr_linenumber" name="L104" href="#L104">104</a> 			out[i] = coerceOne(fnName, i, paramTypes[i], args.get(i));
-<a class="jxr_linenumber" name="L105" href="#L105">105</a> 
-<a class="jxr_linenumber" name="L106" href="#L106">106</a> 		<strong class="jxr_keyword">if</strong> (variadic) {
-<a class="jxr_linenumber" name="L107" href="#L107">107</a> 			<strong class="jxr_keyword">var</strong> <strong class="jxr_keyword">rest</strong> = <strong class="jxr_keyword">new</strong> String[args.size() - fixedCount];
-<a class="jxr_linenumber" name="L108" href="#L108">108</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt; <strong class="jxr_keyword">rest</strong>.length; i++) {
-<a class="jxr_linenumber" name="L109" href="#L109">109</a> 				<strong class="jxr_keyword">var</strong> raw = args.get(fixedCount + i);
-<a class="jxr_linenumber" name="L110" href="#L110">110</a> 				<strong class="jxr_keyword">rest</strong>[i] = raw == <strong class="jxr_keyword">null</strong> ? <span class="jxr_string">""</span> : raw.toString();
-<a class="jxr_linenumber" name="L111" href="#L111">111</a> 			}
-<a class="jxr_linenumber" name="L112" href="#L112">112</a> 			out[n - 1] = <strong class="jxr_keyword">rest</strong>;
-<a class="jxr_linenumber" name="L113" href="#L113">113</a> 		}
-<a class="jxr_linenumber" name="L114" href="#L114">114</a> 
-<a class="jxr_linenumber" name="L115" href="#L115">115</a> 		<strong class="jxr_keyword">return</strong> out;
-<a class="jxr_linenumber" name="L116" href="#L116">116</a> 	}
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>  @SuppressWarnings({
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>  	<span class="jxr_string">"java:S3776"</span> <em class="jxr_comment">// parseStringArray() and coerceOne() dispatch over the full target-type coercion table and array-literal syntax in one place</em>
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>  })
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>  <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">class</strong> ArgCoercer {
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>  
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>  	<strong class="jxr_keyword">private</strong> ArgCoercer() {}
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>  
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>  	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>  <em class="jxr_javadoccomment">	 * Returns {@code args} as-is, unwrapped — used by direct {@link VarFunction} implementations</em>
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>  <em class="jxr_javadoccomment">	 * that don't go through {@link TypedFunction}'s typed-arg coercion.</em>
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>  <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>  	<strong class="jxr_keyword">static</strong> List&lt;Object&gt; passthrough(List&lt;Object&gt; args) {
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>  		<strong class="jxr_keyword">return</strong> args;
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>  	}
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>  
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>  	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>  <em class="jxr_javadoccomment">	 * Coerce a list of raw arguments to the target types declared by {@code paramTypes}.</em>
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>  <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>  <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>  <em class="jxr_javadoccomment">	 * Used by {@link TypedFunction#invoke(VarResolverSession, List)}. The args are resolved</em>
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>  <em class="jxr_javadoccomment">	 * strings produced by {@link VarTemplate#resolve(VarResolverSession)} per</em>
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>  <em class="jxr_javadoccomment">	 * {@link ScriptSegment} arg template.</em>
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>  <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>  <em class="jxr_javadoccomment">	 * @param fnName The function name (for diagnostic messages).</em>
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>  <em class="jxr_javadoccomment">	 * @param paramTypes The target Java types — one per arg slot. Last slot may be</em>
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>  <em class="jxr_javadoccomment">	 *	 {@code String[]} for variadic functions; in that case all args from that index onward</em>
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>  <em class="jxr_javadoccomment">	 *	 are collected into a {@code String[]}.</em>
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>  <em class="jxr_javadoccomment">	 * @param args The raw resolved string arguments (one per declared arg, with extras for</em>
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>  <em class="jxr_javadoccomment">	 *	 variadic).</em>
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>  <em class="jxr_javadoccomment">	 * @return A list of coerced values, length equal to {@code paramTypes.length}.</em>
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>  <em class="jxr_javadoccomment">	 * @throws IllegalArgumentException If the number of args is wrong or coercion fails.</em>
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>  <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>  	<strong class="jxr_keyword">static</strong> Object[] coerce(String fnName, Class&lt;?&gt;[] paramTypes, List&lt;Object&gt; args) {
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>  		<strong class="jxr_keyword">var</strong> n = paramTypes.length;
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>  		<strong class="jxr_keyword">var</strong> variadic = n &gt; 0 &amp;&amp; paramTypes[n - 1] == String[].<strong class="jxr_keyword">class</strong>;
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>  		<strong class="jxr_keyword">var</strong> fixedCount = variadic ? n - 1 : n;
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>  		<strong class="jxr_keyword">if</strong> (args.size() &lt; fixedCount)
+<a class="jxr_linenumber" name="L99" href="#L99">99</a>  			<strong class="jxr_keyword">throw</strong> iaex(<span class="jxr_string">"Function '%s' expected at least %s arg(s), got %s"</span>,
+<a class="jxr_linenumber" name="L100" href="#L100">100</a> 				fnName, fixedCount, args.size());
+<a class="jxr_linenumber" name="L101" href="#L101">101</a> 		<strong class="jxr_keyword">if</strong> (!variadic &amp;&amp; args.size() &gt; n)
+<a class="jxr_linenumber" name="L102" href="#L102">102</a> 			<strong class="jxr_keyword">throw</strong> iaex(<span class="jxr_string">"Function '%s' expected at most %s arg(s), got %s"</span>,
+<a class="jxr_linenumber" name="L103" href="#L103">103</a> 				fnName, n, args.size());
+<a class="jxr_linenumber" name="L104" href="#L104">104</a> 
+<a class="jxr_linenumber" name="L105" href="#L105">105</a> 		<strong class="jxr_keyword">var</strong> out = <strong class="jxr_keyword">new</strong> Object[n];
+<a class="jxr_linenumber" name="L106" href="#L106">106</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt; fixedCount; i++)
+<a class="jxr_linenumber" name="L107" href="#L107">107</a> 			out[i] = coerceOne(fnName, i, paramTypes[i], args.get(i));
+<a class="jxr_linenumber" name="L108" href="#L108">108</a> 
+<a class="jxr_linenumber" name="L109" href="#L109">109</a> 		<strong class="jxr_keyword">if</strong> (variadic) {
+<a class="jxr_linenumber" name="L110" href="#L110">110</a> 			<strong class="jxr_keyword">var</strong> <strong class="jxr_keyword">rest</strong> = <strong class="jxr_keyword">new</strong> String[args.size() - fixedCount];
+<a class="jxr_linenumber" name="L111" href="#L111">111</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt; <strong class="jxr_keyword">rest</strong>.length; i++) {
+<a class="jxr_linenumber" name="L112" href="#L112">112</a> 				<strong class="jxr_keyword">var</strong> raw = args.get(fixedCount + i);
+<a class="jxr_linenumber" name="L113" href="#L113">113</a> 				<strong class="jxr_keyword">rest</strong>[i] = raw == <strong class="jxr_keyword">null</strong> ? <span class="jxr_string">""</span> : raw.toString();
+<a class="jxr_linenumber" name="L114" href="#L114">114</a> 			}
+<a class="jxr_linenumber" name="L115" href="#L115">115</a> 			out[n - 1] = <strong class="jxr_keyword">rest</strong>;
+<a class="jxr_linenumber" name="L116" href="#L116">116</a> 		}
 <a class="jxr_linenumber" name="L117" href="#L117">117</a> 
-<a class="jxr_linenumber" name="L118" href="#L118">118</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L119" href="#L119">119</a> <em class="jxr_javadoccomment">	 * Coerce a single raw argument to the requested type. Public-static so tests</em>
-<a class="jxr_linenumber" name="L120" href="#L120">120</a> <em class="jxr_javadoccomment">	 * and function impls can exercise the coercion table directly.</em>
-<a class="jxr_linenumber" name="L121" href="#L121">121</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L122" href="#L122">122</a> <em class="jxr_javadoccomment">	 * @param fnName Function name (for diagnostic messages).</em>
-<a class="jxr_linenumber" name="L123" href="#L123">123</a> <em class="jxr_javadoccomment">	 * @param argIndex Zero-based arg position (for diagnostic messages).</em>
-<a class="jxr_linenumber" name="L124" href="#L124">124</a> <em class="jxr_javadoccomment">	 * @param target Target Java type.</em>
-<a class="jxr_linenumber" name="L125" href="#L125">125</a> <em class="jxr_javadoccomment">	 * @param raw The raw value (typically a {@link String} produced by template resolution).</em>
-<a class="jxr_linenumber" name="L126" href="#L126">126</a> <em class="jxr_javadoccomment">	 * @return The coerced value.</em>
-<a class="jxr_linenumber" name="L127" href="#L127">127</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L128" href="#L128">128</a> 	@SuppressWarnings({
-<a class="jxr_linenumber" name="L129" href="#L129">129</a> 		<span class="jxr_string">"java:S3776"</span>, <em class="jxr_comment">// Cognitive complexity: the type-dispatch chain is intentional.</em>
-<a class="jxr_linenumber" name="L130" href="#L130">130</a> 	})
+<a class="jxr_linenumber" name="L118" href="#L118">118</a> 		<strong class="jxr_keyword">return</strong> out;
+<a class="jxr_linenumber" name="L119" href="#L119">119</a> 	}
+<a class="jxr_linenumber" name="L120" href="#L120">120</a> 
+<a class="jxr_linenumber" name="L121" href="#L121">121</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L122" href="#L122">122</a> <em class="jxr_javadoccomment">	 * Coerce a single raw argument to the requested type. Public-static so tests</em>
+<a class="jxr_linenumber" name="L123" href="#L123">123</a> <em class="jxr_javadoccomment">	 * and function impls can exercise the coercion table directly.</em>
+<a class="jxr_linenumber" name="L124" href="#L124">124</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L125" href="#L125">125</a> <em class="jxr_javadoccomment">	 * @param fnName Function name (for diagnostic messages).</em>
+<a class="jxr_linenumber" name="L126" href="#L126">126</a> <em class="jxr_javadoccomment">	 * @param argIndex Zero-based arg position (for diagnostic messages).</em>
+<a class="jxr_linenumber" name="L127" href="#L127">127</a> <em class="jxr_javadoccomment">	 * @param target Target Java type.</em>
+<a class="jxr_linenumber" name="L128" href="#L128">128</a> <em class="jxr_javadoccomment">	 * @param raw The raw value (typically a {@link String} produced by template resolution).</em>
+<a class="jxr_linenumber" name="L129" href="#L129">129</a> <em class="jxr_javadoccomment">	 * @return The coerced value.</em>
+<a class="jxr_linenumber" name="L130" href="#L130">130</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L131" href="#L131">131</a> 	<strong class="jxr_keyword">static</strong> Object coerceOne(String fnName, <strong class="jxr_keyword">int</strong> argIndex, Class&lt;?&gt; target, Object raw) {
 <a class="jxr_linenumber" name="L132" href="#L132">132</a> 		<strong class="jxr_keyword">if</strong> (target == String.<strong class="jxr_keyword">class</strong>)
 <a class="jxr_linenumber" name="L133" href="#L133">133</a> 			<strong class="jxr_keyword">return</strong> raw == <strong class="jxr_keyword">null</strong> ? <span class="jxr_string">""</span> : raw.toString();
@@ -167,9 +167,9 @@
 <a class="jxr_linenumber" name="L159" href="#L159">159</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L160" href="#L160">160</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">boolean</strong> parseBoolean(String fnName, <strong class="jxr_keyword">int</strong> argIndex, String s) {
 <a class="jxr_linenumber" name="L161" href="#L161">161</a> 		<strong class="jxr_keyword">var</strong> t = s.trim();
-<a class="jxr_linenumber" name="L162" href="#L162">162</a> 		<strong class="jxr_keyword">if</strong> (t.equalsIgnoreCase(<span class="jxr_string">"true"</span>) || t.equals(<span class="jxr_string">"1"</span>) || t.equalsIgnoreCase(<span class="jxr_string">"yes"</span>) || t.equalsIgnoreCase(<span class="jxr_string">"on"</span>))
+<a class="jxr_linenumber" name="L162" href="#L162">162</a> 		<strong class="jxr_keyword">if</strong> (eqic(t, <span class="jxr_string">"true"</span>) || eq(t, <span class="jxr_string">"1"</span>) || eqic(t, <span class="jxr_string">"yes"</span>) || eqic(t, <span class="jxr_string">"on"</span>))
 <a class="jxr_linenumber" name="L163" href="#L163">163</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
-<a class="jxr_linenumber" name="L164" href="#L164">164</a> 		<strong class="jxr_keyword">if</strong> (t.isEmpty() || t.equalsIgnoreCase(<span class="jxr_string">"false"</span>) || t.equals(<span class="jxr_string">"0"</span>) || t.equalsIgnoreCase(<span class="jxr_string">"no"</span>) || t.equalsIgnoreCase(<span class="jxr_string">"off"</span>))
+<a class="jxr_linenumber" name="L164" href="#L164">164</a> 		<strong class="jxr_keyword">if</strong> (t.isEmpty() || eqic(t, <span class="jxr_string">"false"</span>) || eq(t, <span class="jxr_string">"0"</span>) || eqic(t, <span class="jxr_string">"no"</span>) || eqic(t, <span class="jxr_string">"off"</span>))
 <a class="jxr_linenumber" name="L165" href="#L165">165</a> 			<strong class="jxr_keyword">return</strong> false;
 <a class="jxr_linenumber" name="L166" href="#L166">166</a> 		<strong class="jxr_keyword">throw</strong> iaex(<span class="jxr_string">"Function '%s' arg %s: cannot coerce '%s' to boolean (accepted: true/1/yes/on, false/0/no/off, empty)"</span>,
 <a class="jxr_linenumber" name="L167" href="#L167">167</a> 			fnName, argIndex, s);
@@ -189,64 +189,61 @@
 <a class="jxr_linenumber" name="L181" href="#L181">181</a> <em class="jxr_javadoccomment">	 * This is intentionally a small inline parser — depending on the full Juneau JSON parser</em>
 <a class="jxr_linenumber" name="L182" href="#L182">182</a> <em class="jxr_javadoccomment">	 * here would create a circular module dependency (juneau-commons → juneau-marshall).</em>
 <a class="jxr_linenumber" name="L183" href="#L183">183</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L184" href="#L184">184</a> 	@SuppressWarnings({
-<a class="jxr_linenumber" name="L185" href="#L185">185</a> 		<span class="jxr_string">"java:S3776"</span>, <em class="jxr_comment">// Cognitive complexity: simple inline JSON array parser.</em>
-<a class="jxr_linenumber" name="L186" href="#L186">186</a> 	})
-<a class="jxr_linenumber" name="L187" href="#L187">187</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String[] parseStringArray(String fnName, <strong class="jxr_keyword">int</strong> argIndex, String s) {
-<a class="jxr_linenumber" name="L188" href="#L188">188</a> 		<strong class="jxr_keyword">var</strong> t = s.trim();
-<a class="jxr_linenumber" name="L189" href="#L189">189</a> 		<strong class="jxr_keyword">if</strong> (t.isEmpty())
-<a class="jxr_linenumber" name="L190" href="#L190">190</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> String[0];
-<a class="jxr_linenumber" name="L191" href="#L191">191</a> 		<em class="jxr_comment">// Single-element wrap if not in array form.</em>
-<a class="jxr_linenumber" name="L192" href="#L192">192</a> 		<strong class="jxr_keyword">if</strong> (!(t.startsWith(<span class="jxr_string">"["</span>) &amp;&amp; t.endsWith(<span class="jxr_string">"]"</span>)))
-<a class="jxr_linenumber" name="L193" href="#L193">193</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> String[]{s};
-<a class="jxr_linenumber" name="L194" href="#L194">194</a> 		<strong class="jxr_keyword">var</strong> body = t.substring(1, t.length() - 1).trim();
-<a class="jxr_linenumber" name="L195" href="#L195">195</a> 		<strong class="jxr_keyword">if</strong> (body.isEmpty())
-<a class="jxr_linenumber" name="L196" href="#L196">196</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> String[0];
-<a class="jxr_linenumber" name="L197" href="#L197">197</a> 		<strong class="jxr_keyword">var</strong> out = <strong class="jxr_keyword">new</strong> ArrayList&lt;String&gt;();
-<a class="jxr_linenumber" name="L198" href="#L198">198</a> 		<strong class="jxr_keyword">var</strong> i = 0;
-<a class="jxr_linenumber" name="L199" href="#L199">199</a> 		<strong class="jxr_keyword">var</strong> len = body.length();
-<a class="jxr_linenumber" name="L200" href="#L200">200</a> 		<strong class="jxr_keyword">while</strong> (i &lt; len) {
-<a class="jxr_linenumber" name="L201" href="#L201">201</a> 			<strong class="jxr_keyword">while</strong> (i &lt; len &amp;&amp; Character.isWhitespace(body.charAt(i)))
-<a class="jxr_linenumber" name="L202" href="#L202">202</a> 				i++;
-<a class="jxr_linenumber" name="L203" href="#L203">203</a> 			<strong class="jxr_keyword">if</strong> (i &gt;= len)
-<a class="jxr_linenumber" name="L204" href="#L204">204</a> 				<strong class="jxr_keyword">break</strong>;
-<a class="jxr_linenumber" name="L205" href="#L205">205</a> 			<strong class="jxr_keyword">var</strong> c = body.charAt(i);
-<a class="jxr_linenumber" name="L206" href="#L206">206</a> 			<strong class="jxr_keyword">if</strong> (c == '&quot;' || c == '\'') {
-<a class="jxr_linenumber" name="L207" href="#L207">207</a> 				<strong class="jxr_keyword">var</strong> quote = c;
-<a class="jxr_linenumber" name="L208" href="#L208">208</a> 				i++;
-<a class="jxr_linenumber" name="L209" href="#L209">209</a> 				<strong class="jxr_keyword">var</strong> sb = <strong class="jxr_keyword">new</strong> StringBuilder();
-<a class="jxr_linenumber" name="L210" href="#L210">210</a> 				<strong class="jxr_keyword">while</strong> (i &lt; len) {
-<a class="jxr_linenumber" name="L211" href="#L211">211</a> 					<strong class="jxr_keyword">var</strong> c2 = body.charAt(i);
-<a class="jxr_linenumber" name="L212" href="#L212">212</a> 					<strong class="jxr_keyword">if</strong> (c2 == '&#92;&#92;' &amp;&amp; i + 1 &lt; len) {
-<a class="jxr_linenumber" name="L213" href="#L213">213</a> 						sb.append(body.charAt(i + 1));
-<a class="jxr_linenumber" name="L214" href="#L214">214</a> 						i += 2;
-<a class="jxr_linenumber" name="L215" href="#L215">215</a> 					} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (c2 == quote) {
-<a class="jxr_linenumber" name="L216" href="#L216">216</a> 						i++;
-<a class="jxr_linenumber" name="L217" href="#L217">217</a> 						<strong class="jxr_keyword">break</strong>;
-<a class="jxr_linenumber" name="L218" href="#L218">218</a> 					} <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L219" href="#L219">219</a> 						sb.append(c2);
-<a class="jxr_linenumber" name="L220" href="#L220">220</a> 						i++;
-<a class="jxr_linenumber" name="L221" href="#L221">221</a> 					}
-<a class="jxr_linenumber" name="L222" href="#L222">222</a> 				}
-<a class="jxr_linenumber" name="L223" href="#L223">223</a> 				out.add(sb.toString());
-<a class="jxr_linenumber" name="L224" href="#L224">224</a> 			} <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L225" href="#L225">225</a> 				<strong class="jxr_keyword">var</strong> start = i;
-<a class="jxr_linenumber" name="L226" href="#L226">226</a> 				<strong class="jxr_keyword">while</strong> (i &lt; len &amp;&amp; body.charAt(i) != ',')
-<a class="jxr_linenumber" name="L227" href="#L227">227</a> 					i++;
-<a class="jxr_linenumber" name="L228" href="#L228">228</a> 				out.add(body.substring(start, i).trim());
-<a class="jxr_linenumber" name="L229" href="#L229">229</a> 			}
-<a class="jxr_linenumber" name="L230" href="#L230">230</a> 			<strong class="jxr_keyword">while</strong> (i &lt; len &amp;&amp; Character.isWhitespace(body.charAt(i)))
-<a class="jxr_linenumber" name="L231" href="#L231">231</a> 				i++;
-<a class="jxr_linenumber" name="L232" href="#L232">232</a> 			<strong class="jxr_keyword">if</strong> (i &lt; len) {
-<a class="jxr_linenumber" name="L233" href="#L233">233</a> 				<strong class="jxr_keyword">if</strong> (body.charAt(i) != ',')
-<a class="jxr_linenumber" name="L234" href="#L234">234</a> 					<strong class="jxr_keyword">throw</strong> iaex(<span class="jxr_string">"Function '%s' arg %s: malformed JSON array near offset %s"</span>,
-<a class="jxr_linenumber" name="L235" href="#L235">235</a> 						fnName, argIndex, i);
-<a class="jxr_linenumber" name="L236" href="#L236">236</a> 				i++;
-<a class="jxr_linenumber" name="L237" href="#L237">237</a> 			}
-<a class="jxr_linenumber" name="L238" href="#L238">238</a> 		}
-<a class="jxr_linenumber" name="L239" href="#L239">239</a> 		<strong class="jxr_keyword">return</strong> out.toArray(<strong class="jxr_keyword">new</strong> String[0]);
-<a class="jxr_linenumber" name="L240" href="#L240">240</a> 	}
-<a class="jxr_linenumber" name="L241" href="#L241">241</a> }
+<a class="jxr_linenumber" name="L184" href="#L184">184</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String[] parseStringArray(String fnName, <strong class="jxr_keyword">int</strong> argIndex, String s) {
+<a class="jxr_linenumber" name="L185" href="#L185">185</a> 		<strong class="jxr_keyword">var</strong> t = s.trim();
+<a class="jxr_linenumber" name="L186" href="#L186">186</a> 		<strong class="jxr_keyword">if</strong> (t.isEmpty())
+<a class="jxr_linenumber" name="L187" href="#L187">187</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> String[0];
+<a class="jxr_linenumber" name="L188" href="#L188">188</a> 		<em class="jxr_comment">// Single-element wrap if not in array form.</em>
+<a class="jxr_linenumber" name="L189" href="#L189">189</a> 		<strong class="jxr_keyword">if</strong> (!(t.startsWith(<span class="jxr_string">"["</span>) &amp;&amp; t.endsWith(<span class="jxr_string">"]"</span>)))
+<a class="jxr_linenumber" name="L190" href="#L190">190</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> String[]{s};
+<a class="jxr_linenumber" name="L191" href="#L191">191</a> 		<strong class="jxr_keyword">var</strong> body = t.substring(1, t.length() - 1).trim();
+<a class="jxr_linenumber" name="L192" href="#L192">192</a> 		<strong class="jxr_keyword">if</strong> (body.isEmpty())
+<a class="jxr_linenumber" name="L193" href="#L193">193</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> String[0];
+<a class="jxr_linenumber" name="L194" href="#L194">194</a> 		<strong class="jxr_keyword">var</strong> out = <strong class="jxr_keyword">new</strong> ArrayList&lt;String&gt;();
+<a class="jxr_linenumber" name="L195" href="#L195">195</a> 		<strong class="jxr_keyword">var</strong> i = 0;
+<a class="jxr_linenumber" name="L196" href="#L196">196</a> 		<strong class="jxr_keyword">var</strong> len = body.length();
+<a class="jxr_linenumber" name="L197" href="#L197">197</a> 		<strong class="jxr_keyword">while</strong> (i &lt; len) {
+<a class="jxr_linenumber" name="L198" href="#L198">198</a> 			<strong class="jxr_keyword">while</strong> (i &lt; len &amp;&amp; Character.isWhitespace(body.charAt(i)))
+<a class="jxr_linenumber" name="L199" href="#L199">199</a> 				i++;
+<a class="jxr_linenumber" name="L200" href="#L200">200</a> 			<strong class="jxr_keyword">if</strong> (i &gt;= len)
+<a class="jxr_linenumber" name="L201" href="#L201">201</a> 				<strong class="jxr_keyword">break</strong>;
+<a class="jxr_linenumber" name="L202" href="#L202">202</a> 			<strong class="jxr_keyword">var</strong> c = body.charAt(i);
+<a class="jxr_linenumber" name="L203" href="#L203">203</a> 			<strong class="jxr_keyword">if</strong> (c == '&quot;' || c == '\'') {
+<a class="jxr_linenumber" name="L204" href="#L204">204</a> 				<strong class="jxr_keyword">var</strong> quote = c;
+<a class="jxr_linenumber" name="L205" href="#L205">205</a> 				i++;
+<a class="jxr_linenumber" name="L206" href="#L206">206</a> 				<strong class="jxr_keyword">var</strong> sb = <strong class="jxr_keyword">new</strong> StringBuilder();
+<a class="jxr_linenumber" name="L207" href="#L207">207</a> 				<strong class="jxr_keyword">while</strong> (i &lt; len) {
+<a class="jxr_linenumber" name="L208" href="#L208">208</a> 					<strong class="jxr_keyword">var</strong> c2 = body.charAt(i);
+<a class="jxr_linenumber" name="L209" href="#L209">209</a> 					<strong class="jxr_keyword">if</strong> (c2 == '&#92;&#92;' &amp;&amp; i + 1 &lt; len) {
+<a class="jxr_linenumber" name="L210" href="#L210">210</a> 						sb.append(body.charAt(i + 1));
+<a class="jxr_linenumber" name="L211" href="#L211">211</a> 						i += 2;
+<a class="jxr_linenumber" name="L212" href="#L212">212</a> 					} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (c2 == quote) {
+<a class="jxr_linenumber" name="L213" href="#L213">213</a> 						i++;
+<a class="jxr_linenumber" name="L214" href="#L214">214</a> 						<strong class="jxr_keyword">break</strong>;
+<a class="jxr_linenumber" name="L215" href="#L215">215</a> 					} <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L216" href="#L216">216</a> 						sb.append(c2);
+<a class="jxr_linenumber" name="L217" href="#L217">217</a> 						i++;
+<a class="jxr_linenumber" name="L218" href="#L218">218</a> 					}
+<a class="jxr_linenumber" name="L219" href="#L219">219</a> 				}
+<a class="jxr_linenumber" name="L220" href="#L220">220</a> 				out.add(sb.toString());
+<a class="jxr_linenumber" name="L221" href="#L221">221</a> 			} <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L222" href="#L222">222</a> 				<strong class="jxr_keyword">var</strong> start = i;
+<a class="jxr_linenumber" name="L223" href="#L223">223</a> 				<strong class="jxr_keyword">while</strong> (i &lt; len &amp;&amp; body.charAt(i) != ',')
+<a class="jxr_linenumber" name="L224" href="#L224">224</a> 					i++;
+<a class="jxr_linenumber" name="L225" href="#L225">225</a> 				out.add(body.substring(start, i).trim());
+<a class="jxr_linenumber" name="L226" href="#L226">226</a> 			}
+<a class="jxr_linenumber" name="L227" href="#L227">227</a> 			<strong class="jxr_keyword">while</strong> (i &lt; len &amp;&amp; Character.isWhitespace(body.charAt(i)))
+<a class="jxr_linenumber" name="L228" href="#L228">228</a> 				i++;
+<a class="jxr_linenumber" name="L229" href="#L229">229</a> 			<strong class="jxr_keyword">if</strong> (i &lt; len) {
+<a class="jxr_linenumber" name="L230" href="#L230">230</a> 				<strong class="jxr_keyword">if</strong> (body.charAt(i) != ',')
+<a class="jxr_linenumber" name="L231" href="#L231">231</a> 					<strong class="jxr_keyword">throw</strong> iaex(<span class="jxr_string">"Function '%s' arg %s: malformed JSON array near offset %s"</span>,
+<a class="jxr_linenumber" name="L232" href="#L232">232</a> 						fnName, argIndex, i);
+<a class="jxr_linenumber" name="L233" href="#L233">233</a> 				i++;
+<a class="jxr_linenumber" name="L234" href="#L234">234</a> 			}
+<a class="jxr_linenumber" name="L235" href="#L235">235</a> 		}
+<a class="jxr_linenumber" name="L236" href="#L236">236</a> 		<strong class="jxr_keyword">return</strong> out.toArray(<strong class="jxr_keyword">new</strong> String[0]);
+<a class="jxr_linenumber" name="L237" href="#L237">237</a> 	}
+<a class="jxr_linenumber" name="L238" href="#L238">238</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

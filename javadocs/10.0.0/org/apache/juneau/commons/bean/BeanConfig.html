@@ -232,18 +232,23 @@ loadScripts(document, 'script');</script>
 <div class="block">Optional rank for this config.</div>
 </div>
 <div class="col-first odd-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second odd-row-color"><code><a href="#unsortedProperties()" class="member-name-link">unsortedProperties</a></code></div>
+<div class="col-second odd-row-color"><code><a href="#recordComponentOrder()" class="member-name-link">recordComponentOrder</a></code></div>
 <div class="col-last odd-row-color">
-<div class="block">Disable sorted bean properties.</div>
+<div class="block">Record component order.</div>
 </div>
 <div class="col-first even-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second even-row-color"><code><a href="#useJavaBeanIntrospector()" class="member-name-link">useJavaBeanIntrospector</a></code></div>
+<div class="col-second even-row-color"><code><a href="#unsortedProperties()" class="member-name-link">unsortedProperties</a></code></div>
 <div class="col-last even-row-color">
-<div class="block">Use Java Introspector.</div>
+<div class="block">Disable sorted bean properties.</div>
 </div>
 <div class="col-first odd-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second odd-row-color"><code><a href="#validateSchema()" class="member-name-link">validateSchema</a></code></div>
+<div class="col-second odd-row-color"><code><a href="#useJavaBeanIntrospector()" class="member-name-link">useJavaBeanIntrospector</a></code></div>
 <div class="col-last odd-row-color">
+<div class="block">Use Java Introspector.</div>
+</div>
+<div class="col-first even-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second even-row-color"><code><a href="#validateSchema()" class="member-name-link">validateSchema</a></code></div>
+<div class="col-last even-row-color">
 <div class="block">Schema validation mode.</div>
 </div>
 </div>
@@ -1050,11 +1055,13 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="unsortedProperties()">
 <h3>unsortedProperties</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanConfig.html#line-655">unsortedProperties</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanConfig.html#line-657">unsortedProperties</a></span></div>
 <div class="block">Disable sorted bean properties.
 
  <p>
- When <jk>true</jk>, bean properties are serialized and accessed in natural JVM order instead of the default alphabetical order.
+ When <jk>true</jk>, bean properties are serialized and accessed in declaration order instead of the default
+ alphabetical order: record component order for records, field declaration order (superclass first) for other
+ classes, then method-only properties alphabetically.
 
  <ul class='values'>
    <li><js>"true"</js>
@@ -1076,9 +1083,47 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
+<section class="detail" id="recordComponentOrder()">
+<h3>recordComponentOrder</h3>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanConfig.html#line-687">recordComponentOrder</a></span></div>
+<div class="block">Record component order.
+
+ <p>
+ When <jk>true</jk>, the properties of <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Record.html" title="class or interface in java.lang" class="external-link"><code>Record</code></a> beans use record component (declaration) order even when
+ other beans are sorted alphabetically.  Non-record beans are unaffected.
+
+ <h5 class='section'>Example:</h5>
+ <p class='bjava'>
+   <ja>@BeanConfig</ja>(recordComponentOrder=<js>"true"</js>)
+   <jk>public class</jk> MyRestResource { ... }
+
+   <jk>public record</jk> Person(String <jv>name</jv>, <jk>int</jk> <jv>age</jv>) {}
+   <jc>// Serialized as {"name":"Alice","age":30} instead of {"age":30,"name":"Alice"}</jc>
+ </p>
+
+ <ul class='values'>
+   <li><js>"true"</js>
+   <li><js>"false"</js> (default: record properties are sorted alphabetically like other beans)
+ </ul>
+
+ <h5 class='section'>Notes:</h5><ul>
+   <li>
+      Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
+ </ul></div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>The annotation value.</dd>
+</dl>
+<dl class="notes">
+<dt>Default:</dt>
+<dd>""</dd>
+</dl>
+</section>
+</li>
+<li>
 <section class="detail" id="useJavaBeanIntrospector()">
 <h3>useJavaBeanIntrospector</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanConfig.html#line-676">useJavaBeanIntrospector</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanConfig.html#line-708">useJavaBeanIntrospector</a></span></div>
 <div class="block">Use Java Introspector.
 
  <p>

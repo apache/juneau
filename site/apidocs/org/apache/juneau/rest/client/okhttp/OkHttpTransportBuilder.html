@@ -78,7 +78,7 @@ loadScripts(document, 'script');</script>
 </div>
 <section class="class-description" id="class-description">
 <hr>
-<div class="type-signature"><span class="modifiers">public final class </span><span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/client/okhttp/OkHttpTransportBuilder.html#line-41">OkHttpTransportBuilder</a></span>
+<div class="type-signature"><span class="modifiers">public final class </span><span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/client/okhttp/OkHttpTransportBuilder.html#line-42">OkHttpTransportBuilder</a></span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
 <div class="block">Fluent builder for <a href="OkHttpTransport.html" title="class in org.apache.juneau.rest.client.okhttp"><code>OkHttpTransport</code></a>.
 
@@ -86,8 +86,7 @@ loadScripts(document, 'script');</script>
  Obtain an instance via <a href="OkHttpTransport.html#builder()"><code>OkHttpTransport.builder()</code></a>.
 
  <p>
- <b>Beta — API subject to change:</b> This type is part of the next-generation REST client and HTTP stack
- (<code>org.apache.juneau.marshall.ng.*</code>).
+ <b>Beta — API subject to change:</b> This type is part of the next-generation REST client and HTTP stack.
  It is not API-frozen: binary- and source-incompatible changes may appear in the <b>next major</b> Juneau release
  (and possibly earlier).
 
@@ -142,11 +141,29 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="httpClient(okhttp3.OkHttpClient)">
 <h3>httpClient</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="OkHttpTransportBuilder.html" title="class in org.apache.juneau.rest.client.okhttp">OkHttpTransportBuilder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/client/okhttp/OkHttpTransportBuilder.html#line-64">httpClient</a></span><wbr><span class="parameters">(okhttp3.OkHttpClient&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="OkHttpTransportBuilder.html" title="class in org.apache.juneau.rest.client.okhttp">OkHttpTransportBuilder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/client/okhttp/OkHttpTransportBuilder.html#line-83">httpClient</a></span><wbr><span class="parameters">(okhttp3.OkHttpClient&nbsp;value)</span></div>
 <div class="block">Sets the underlying <code>OkHttpClient</code> to use.
 
  <p>
  If not set, a default client is created via <code>new OkHttpClient()</code>.
+
+ <p>
+ A client with an explicit proxy makes <a href="OkHttpTransport.html#supportsUrlPolicy()"><code>OkHttpTransport.supportsUrlPolicy()</code></a>
+ report <jk>false</jk> (the proxy resolves the target host itself, bypassing the SSRF guard's address pinning), so
+ <code>RestRequest</code> refuses to send an SSRF-guard-active request through it.  A client whose
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/ProxySelector.html" title="class or interface in java.net" class="external-link"><code>ProxySelector</code></a> routes a guarded request through a proxy is refused at send time.
+
+ <p>
+ The transport sends through a client derived from this one with <code>OkHttpClient.newBuilder()</code> (it shares the
+ connection pool, dispatcher and settings), adding a network interceptor that strips caller-set credential headers
+ (<code>Authorization</code>, <code>Cookie</code> and the rest of <a href="../RedirectSecurity.html#stripOnCrossOrigin()"><code>RedirectSecurity.stripOnCrossOrigin()</code></a>)
+ when OkHttp follows a redirect to a different origin.  The client passed in is not modified.
+
+ <p>
+ Once a hop has been stripped, later hops of the same call stay stripped, including one back to the first origin.  That
+ state travels on a tag of the request, so a network interceptor or an <code>Authenticator</code> on the client
+ that builds a request from scratch (rather than from <code>request.newBuilder()</code>) must preserve the request's tags,
+ or the sticky strip is lost.
 
  <p>
  OkHttp recommends sharing a single <code>OkHttpClient</code> instance across the application.
@@ -163,7 +180,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="build()">
 <h3>build</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="OkHttpTransport.html" title="class in org.apache.juneau.rest.client.okhttp">OkHttpTransport</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/client/okhttp/OkHttpTransportBuilder.html#line-74">build</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="OkHttpTransport.html" title="class in org.apache.juneau.rest.client.okhttp">OkHttpTransport</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/client/okhttp/OkHttpTransportBuilder.html#line-93">build</a></span>()</div>
 <div class="block">Builds and returns the <a href="OkHttpTransport.html" title="class in org.apache.juneau.rest.client.okhttp"><code>OkHttpTransport</code></a>.</div>
 <dl class="notes">
 <dt>Returns:</dt>

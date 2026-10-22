@@ -64,7 +64,19 @@
 <a class="jxr_linenumber" name="L56" href="#L56">56</a>  			assertTrue(b.isClosed());
 <a class="jxr_linenumber" name="L57" href="#L57">57</a>  		}
 <a class="jxr_linenumber" name="L58" href="#L58">58</a>  	}
-<a class="jxr_linenumber" name="L59" href="#L59">59</a>  }
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>  
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>  	@Test
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>  	<strong class="jxr_keyword">void</strong> a04_resubscribingAnIdClosesOnlyThePreviousSubscription() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>  		<strong class="jxr_keyword">var</strong> a = SseBroadcaster.create();
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>  		<strong class="jxr_keyword">var</strong> first = a.subscribe(<span class="jxr_string">"k"</span>);
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>  		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> second = a.subscribe(<span class="jxr_string">"k"</span>)) {
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>  			assertTrue(first.isClosed(), <span class="jxr_string">"the previous subscription is closed"</span>);
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>  			assertFalse(second.isClosed(), <span class="jxr_string">"the replacement must stay open"</span>);
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>  			a.publish(<strong class="jxr_keyword">new</strong> SseEvent(<span class="jxr_string">"e"</span>, <span class="jxr_string">"d1"</span>));
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>  			assertEquals(<span class="jxr_string">"d1"</span>, second.take().getData());
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>  		}
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>  	}
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>  }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

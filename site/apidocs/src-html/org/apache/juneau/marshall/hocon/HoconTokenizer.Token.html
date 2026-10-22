@@ -47,7 +47,7 @@
 <span class="source-line-no">034</span><span id="line-34"> * &lt;/ul&gt;</span>
 <span class="source-line-no">035</span><span id="line-35"> */</span>
 <span class="source-line-no">036</span><span id="line-36">@SuppressWarnings({</span>
-<span class="source-line-no">037</span><span id="line-37">   "java:S135",  // Multiple break/continue necessary for tokenizer state machine loops</span>
+<span class="source-line-no">037</span><span id="line-37">   "java:S135", // Multiple break/continue necessary for tokenizer state machine loops</span>
 <span class="source-line-no">038</span><span id="line-38">   "java:S3776", // Cognitive complexity acceptable for HOCON grammar</span>
 <span class="source-line-no">039</span><span id="line-39">   "resource" // Reader field wraps the caller's reader (BufferedReader/PushbackReader hold only in-memory buffers); the underlying reader is caller-owned.</span>
 <span class="source-line-no">040</span><span id="line-40">})</span>
@@ -448,9 +448,9 @@
 <span class="source-line-no">435</span><span id="line-435">         return Token.of(TokenType.EOF);</span>
 <span class="source-line-no">436</span><span id="line-436">      }</span>
 <span class="source-line-no">437</span><span id="line-437"></span>
-<span class="source-line-no">438</span><span id="line-438">      if (raw.equals("true")) return Token.of(TokenType.TRUE);</span>
-<span class="source-line-no">439</span><span id="line-439">      if (raw.equals("false")) return Token.of(TokenType.FALSE);</span>
-<span class="source-line-no">440</span><span id="line-440">      if (raw.equals("null")) return Token.of(TokenType.NULL);</span>
+<span class="source-line-no">438</span><span id="line-438">      if (eq(raw, "true")) return Token.of(TokenType.TRUE);</span>
+<span class="source-line-no">439</span><span id="line-439">      if (eq(raw, "false")) return Token.of(TokenType.FALSE);</span>
+<span class="source-line-no">440</span><span id="line-440">      if (eq(raw, "null")) return Token.of(TokenType.NULL);</span>
 <span class="source-line-no">441</span><span id="line-441"></span>
 <span class="source-line-no">442</span><span id="line-442">      // Whole-string JSON-number match (leading-zero-restricted grammar); span equals the full token on a match.</span>
 <span class="source-line-no">443</span><span id="line-443">      if (matchNumberPrefix(raw, false) == raw.length()) {</span>

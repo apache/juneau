@@ -246,24 +246,26 @@
 <a class="jxr_linenumber" name="L238" href="#L238">238</a> 	}
 <a class="jxr_linenumber" name="L239" href="#L239">239</a> 
 <a class="jxr_linenumber" name="L240" href="#L240">240</a> 	@Test
-<a class="jxr_linenumber" name="L241" href="#L241">241</a> 	@SuppressWarnings(<span class="jxr_string">"resource"</span>) <em class="jxr_comment">// writeSimple returns the stream (fluent this); the discarded value is os, closed by the try-with-resources.</em>
-<a class="jxr_linenumber" name="L242" href="#L242">242</a> 	<strong class="jxr_keyword">void</strong> a32_writeSimple() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L243" href="#L243">243</a> 		<em class="jxr_comment">// Major type 7 with the additional info encoding the simple value.</em>
-<a class="jxr_linenumber" name="L244" href="#L244">244</a> 		<em class="jxr_comment">// Inline (0..23): one byte, 0xE0 | value.</em>
-<a class="jxr_linenumber" name="L245" href="#L245">245</a> 		<strong class="jxr_keyword">var</strong> bos = <strong class="jxr_keyword">new</strong> java.io.ByteArrayOutputStream();
-<a class="jxr_linenumber" name="L246" href="#L246">246</a> 		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> os = <strong class="jxr_keyword">new</strong> CborOutputStream(bos)) {
-<a class="jxr_linenumber" name="L247" href="#L247">247</a> 			os.writeSimple(0);
-<a class="jxr_linenumber" name="L248" href="#L248">248</a> 		}
-<a class="jxr_linenumber" name="L249" href="#L249">249</a> 		assertEquals(<span class="jxr_string">"E0"</span>, toSpacedHex(bos.toByteArray()));
-<a class="jxr_linenumber" name="L250" href="#L250">250</a> 
-<a class="jxr_linenumber" name="L251" href="#L251">251</a> 		<em class="jxr_comment">// Two-byte encoding (24..255): 0xF8 then the value.</em>
-<a class="jxr_linenumber" name="L252" href="#L252">252</a> 		bos = <strong class="jxr_keyword">new</strong> java.io.ByteArrayOutputStream();
-<a class="jxr_linenumber" name="L253" href="#L253">253</a> 		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> os = <strong class="jxr_keyword">new</strong> CborOutputStream(bos)) {
-<a class="jxr_linenumber" name="L254" href="#L254">254</a> 			os.writeSimple(255);
-<a class="jxr_linenumber" name="L255" href="#L255">255</a> 		}
-<a class="jxr_linenumber" name="L256" href="#L256">256</a> 		assertEquals(<span class="jxr_string">"F8 FF"</span>, toSpacedHex(bos.toByteArray()));
-<a class="jxr_linenumber" name="L257" href="#L257">257</a> 	}
-<a class="jxr_linenumber" name="L258" href="#L258">258</a> }
+<a class="jxr_linenumber" name="L241" href="#L241">241</a> 	@SuppressWarnings({
+<a class="jxr_linenumber" name="L242" href="#L242">242</a> 		<span class="jxr_string">"resource"</span> <em class="jxr_comment">// writeSimple returns the stream (fluent this); the discarded value is os, closed by the try-with-resources.</em>
+<a class="jxr_linenumber" name="L243" href="#L243">243</a> 	})
+<a class="jxr_linenumber" name="L244" href="#L244">244</a> 	<strong class="jxr_keyword">void</strong> a32_writeSimple() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L245" href="#L245">245</a> 		<em class="jxr_comment">// Major type 7 with the additional info encoding the simple value.</em>
+<a class="jxr_linenumber" name="L246" href="#L246">246</a> 		<em class="jxr_comment">// Inline (0..23): one byte, 0xE0 | value.</em>
+<a class="jxr_linenumber" name="L247" href="#L247">247</a> 		<strong class="jxr_keyword">var</strong> bos = <strong class="jxr_keyword">new</strong> java.io.ByteArrayOutputStream();
+<a class="jxr_linenumber" name="L248" href="#L248">248</a> 		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> os = <strong class="jxr_keyword">new</strong> CborOutputStream(bos)) {
+<a class="jxr_linenumber" name="L249" href="#L249">249</a> 			os.writeSimple(0);
+<a class="jxr_linenumber" name="L250" href="#L250">250</a> 		}
+<a class="jxr_linenumber" name="L251" href="#L251">251</a> 		assertEquals(<span class="jxr_string">"E0"</span>, toSpacedHex(bos.toByteArray()));
+<a class="jxr_linenumber" name="L252" href="#L252">252</a> 
+<a class="jxr_linenumber" name="L253" href="#L253">253</a> 		<em class="jxr_comment">// Two-byte encoding (24..255): 0xF8 then the value.</em>
+<a class="jxr_linenumber" name="L254" href="#L254">254</a> 		bos = <strong class="jxr_keyword">new</strong> java.io.ByteArrayOutputStream();
+<a class="jxr_linenumber" name="L255" href="#L255">255</a> 		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> os = <strong class="jxr_keyword">new</strong> CborOutputStream(bos)) {
+<a class="jxr_linenumber" name="L256" href="#L256">256</a> 			os.writeSimple(255);
+<a class="jxr_linenumber" name="L257" href="#L257">257</a> 		}
+<a class="jxr_linenumber" name="L258" href="#L258">258</a> 		assertEquals(<span class="jxr_string">"F8 FF"</span>, toSpacedHex(bos.toByteArray()));
+<a class="jxr_linenumber" name="L259" href="#L259">259</a> 	}
+<a class="jxr_linenumber" name="L260" href="#L260">260</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

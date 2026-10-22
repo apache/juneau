@@ -191,8 +191,8 @@
 <a class="jxr_linenumber" name="L183" href="#L183">183</a> 		@RemoteOp(path=<span class="jxr_string">"/b"</span>) String getX8(@Query(<span class="jxr_string">"x"</span>) @Schema(cf=<span class="jxr_string">"tsv"</span>) String...b);
 <a class="jxr_linenumber" name="L184" href="#L184">184</a> 		@RemoteOp(path=<span class="jxr_string">"/a"</span>) String getX9(@Query(<span class="jxr_string">"x"</span>) @Schema(cf=<span class="jxr_string">"pipes"</span>) String...b);
 <a class="jxr_linenumber" name="L185" href="#L185">185</a> 		@RemoteOp(path=<span class="jxr_string">"/b"</span>) String getX10(@Query(<span class="jxr_string">"x"</span>) @Schema(cf=<span class="jxr_string">"pipes"</span>) String...b);
-<a class="jxr_linenumber" name="L186" href="#L186">186</a> 		@RemoteOp(path=<span class="jxr_string">"/a"</span>) String getX11(@Query(<span class="jxr_string">"x"</span>) @Schema(cf=<span class="jxr_string">"multi"</span>) String...b); <em class="jxr_comment">// Not supported,but should be treated as csv.</em>
-<a class="jxr_linenumber" name="L187" href="#L187">187</a> 		@RemoteOp(path=<span class="jxr_string">"/b"</span>) String getX12(@Query(<span class="jxr_string">"x"</span>) @Schema(cf=<span class="jxr_string">"multi"</span>) String...b); <em class="jxr_comment">// Not supported,but should be treated as csv.</em>
+<a class="jxr_linenumber" name="L186" href="#L186">186</a> 		@RemoteOp(path=<span class="jxr_string">"/a"</span>) String getX11(@Query(<span class="jxr_string">"x"</span>) @Schema(cf=<span class="jxr_string">"multi"</span>) String...b); <em class="jxr_comment">// MULTI is x=foo&amp;x=bar; @Query("*") last-wins on duplicate keys.</em>
+<a class="jxr_linenumber" name="L187" href="#L187">187</a> 		@RemoteOp(path=<span class="jxr_string">"/b"</span>) String getX12(@Query(<span class="jxr_string">"x"</span>) @Schema(cf=<span class="jxr_string">"multi"</span>) String...b); <em class="jxr_comment">// MULTI is x=foo&amp;x=bar (raw query string).</em>
 <a class="jxr_linenumber" name="L188" href="#L188">188</a> 		@RemoteOp(path=<span class="jxr_string">"/a"</span>) String getX13(@Query(<span class="jxr_string">"x"</span>) @Schema(cf=<span class="jxr_string">"uon"</span>) String...b);
 <a class="jxr_linenumber" name="L189" href="#L189">189</a> 		@RemoteOp(path=<span class="jxr_string">"/b"</span>) String getX14(@Query(<span class="jxr_string">"x"</span>) @Schema(cf=<span class="jxr_string">"uon"</span>) String...b);
 <a class="jxr_linenumber" name="L190" href="#L190">190</a> 	}
@@ -209,8 +209,8 @@
 <a class="jxr_linenumber" name="L201" href="#L201">201</a> 		assertEquals(<span class="jxr_string">"x=foo%09bar"</span>,x.getX8(<span class="jxr_string">"foo"</span>,<span class="jxr_string">"bar"</span>));
 <a class="jxr_linenumber" name="L202" href="#L202">202</a> 		assertEquals(<span class="jxr_string">"{x:'foo|bar'}"</span>,x.getX9(<span class="jxr_string">"foo"</span>,<span class="jxr_string">"bar"</span>));
 <a class="jxr_linenumber" name="L203" href="#L203">203</a> 		assertEquals(<span class="jxr_string">"x=foo%7Cbar"</span>,x.getX10(<span class="jxr_string">"foo"</span>,<span class="jxr_string">"bar"</span>));
-<a class="jxr_linenumber" name="L204" href="#L204">204</a> 		assertEquals(<span class="jxr_string">"{x:'foo,bar'}"</span>,x.getX11(<span class="jxr_string">"foo"</span>,<span class="jxr_string">"bar"</span>));
-<a class="jxr_linenumber" name="L205" href="#L205">205</a> 		assertEquals(<span class="jxr_string">"x=foo%2Cbar"</span>,x.getX12(<span class="jxr_string">"foo"</span>,<span class="jxr_string">"bar"</span>));
+<a class="jxr_linenumber" name="L204" href="#L204">204</a> 		assertEquals(<span class="jxr_string">"{x:'bar'}"</span>,x.getX11(<span class="jxr_string">"foo"</span>,<span class="jxr_string">"bar"</span>));
+<a class="jxr_linenumber" name="L205" href="#L205">205</a> 		assertEquals(<span class="jxr_string">"x=foo&amp;x=bar"</span>,x.getX12(<span class="jxr_string">"foo"</span>,<span class="jxr_string">"bar"</span>));
 <a class="jxr_linenumber" name="L206" href="#L206">206</a> 		assertEquals(<span class="jxr_string">"{x:'@(foo,bar)'}"</span>,x.getX13(<span class="jxr_string">"foo"</span>,<span class="jxr_string">"bar"</span>));
 <a class="jxr_linenumber" name="L207" href="#L207">207</a> 		assertEquals(<span class="jxr_string">"x=%40%28foo%2Cbar%29"</span>,x.getX14(<span class="jxr_string">"foo"</span>,<span class="jxr_string">"bar"</span>));
 <a class="jxr_linenumber" name="L208" href="#L208">208</a> 	}
@@ -877,11 +877,11 @@
 <a class="jxr_linenumber" name="L869" href="#L869">869</a> 	}
 <a class="jxr_linenumber" name="L870" href="#L870">870</a> 
 <a class="jxr_linenumber" name="L871" href="#L871">871</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> RestClient.Builder&lt;?&gt; client(Class&lt;?&gt; c) {
-<a class="jxr_linenumber" name="L872" href="#L872">872</a> 		<strong class="jxr_keyword">return</strong> MockRestClient.create(c);
+<a class="jxr_linenumber" name="L872" href="#L872">872</a> 		<strong class="jxr_keyword">return</strong> MockRestClient.create(c).allowPrivateUrls(<strong class="jxr_keyword">true</strong>);
 <a class="jxr_linenumber" name="L873" href="#L873">873</a> 	}
 <a class="jxr_linenumber" name="L874" href="#L874">874</a> 
 <a class="jxr_linenumber" name="L875" href="#L875">875</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> &lt;T&gt; T remote(Class&lt;?&gt; <strong class="jxr_keyword">rest</strong>,Class&lt;T&gt; t) {
-<a class="jxr_linenumber" name="L876" href="#L876">876</a> 		<strong class="jxr_keyword">return</strong> MockRestClient.build(<strong class="jxr_keyword">rest</strong>).getRemote(t);
+<a class="jxr_linenumber" name="L876" href="#L876">876</a> 		<strong class="jxr_keyword">return</strong> MockRestClient.create(<strong class="jxr_keyword">rest</strong>).allowPrivateUrls(<strong class="jxr_keyword">true</strong>).build().getRemote(t);
 <a class="jxr_linenumber" name="L877" href="#L877">877</a> 	}
 <a class="jxr_linenumber" name="L878" href="#L878">878</a> }
 </pre>

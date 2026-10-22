@@ -71,7 +71,7 @@
 <a class="jxr_linenumber" name="L63" href="#L63">63</a>  <em class="jxr_javadoccomment">	 * 	&lt;jk&gt;public&lt;/jk&gt; String getBeforeShowScript(RestRequest &lt;jv&gt;req&lt;/jv&gt;, RestResponse &lt;jv&gt;res&lt;/jv&gt;) {</em>
 <a class="jxr_linenumber" name="L64" href="#L64">64</a>  <em class="jxr_javadoccomment">	 * 		&lt;jk&gt;return&lt;/jk&gt; &lt;js&gt;""&lt;/js&gt;</em>
 <a class="jxr_linenumber" name="L65" href="#L65">65</a>  <em class="jxr_javadoccomment">	 * 			+ &lt;js&gt;"\n	var xhr = new XMLHttpRequest();"&lt;/js&gt;</em>
-<a class="jxr_linenumber" name="L66" href="#L66">66</a>  <em class="jxr_javadoccomment">	 * 			+ &lt;js&gt;"\n	xhr.open('GET', '/petstore/pet?s=status=AVAILABLE&amp;amp;v=id,name', true);"&lt;/js&gt;</em>
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>  <em class="jxr_javadoccomment">	 * 			+ &lt;js&gt;"\n	xhr.open('GET', '/petstore/pet?search=status=AVAILABLE&amp;amp;view=id,name', true);"&lt;/js&gt;</em>
 <a class="jxr_linenumber" name="L67" href="#L67">67</a>  <em class="jxr_javadoccomment">	 * 			+ &lt;js&gt;"\n	xhr.setRequestHeader('Accept', 'application/json');"&lt;/js&gt;</em>
 <a class="jxr_linenumber" name="L68" href="#L68">68</a>  <em class="jxr_javadoccomment">	 * 			+ &lt;js&gt;"\n	xhr.onload = function() {"&lt;/js&gt;</em>
 <a class="jxr_linenumber" name="L69" href="#L69">69</a>  <em class="jxr_javadoccomment">	 * 			+ &lt;js&gt;"\n       var pets = JSON.parse(xhr.responseText);"&lt;/js&gt;</em>
@@ -178,7 +178,7 @@
 <a class="jxr_linenumber" name="L170" href="#L170">170</a> 			<strong class="jxr_keyword">var</strong> session = HtmlSerializer.DEFAULT
 <a class="jxr_linenumber" name="L171" href="#L171">171</a> 				.createSession()
 <a class="jxr_linenumber" name="L172" href="#L172">172</a> 				.properties(req.getAttributes().asMap())
-<a class="jxr_linenumber" name="L173" href="#L173">173</a> 				.debug(req.isDebug() ? <strong class="jxr_keyword">true</strong> : <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L173" href="#L173">173</a> 				.debug(req.isDebugMarshalling() ? <strong class="jxr_keyword">true</strong> : <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L174" href="#L174">174</a> 				.uriContext(req.getUriContext())
 <a class="jxr_linenumber" name="L175" href="#L175">175</a> 				.useWhitespace(req.isPlainText() ? <strong class="jxr_keyword">true</strong> : <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L176" href="#L176">176</a> 				.resolver(req.getVarResolverSession())

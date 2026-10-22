@@ -47,13 +47,13 @@ loadScripts(document, 'script');</script>
 <ul class="sub-nav-list">
 <li>Summary:&nbsp;</li>
 <li><a href="#nested-class-summary">Nested</a>&nbsp;|&nbsp;</li>
-<li>Field&nbsp;|&nbsp;</li>
+<li><a href="#field-summary">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor-summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method-summary">Method</a></li>
 </ul>
 <ul class="sub-nav-list">
 <li>Detail:&nbsp;</li>
-<li>Field&nbsp;|&nbsp;</li>
+<li><a href="#field-detail">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor-detail">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method-detail">Method</a></li>
 </ul>
@@ -80,7 +80,7 @@ loadScripts(document, 'script');</script>
 </div>
 <section class="class-description" id="class-description">
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestSession.html#line-47">RestSession</a></span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestSession.html#line-48">RestSession</a></span>
 <span class="extends-implements">extends <a href="../../marshall/ContextSession.html" title="class in org.apache.juneau.marshall">ContextSession</a></span></div>
 <div class="block">Represents a single HTTP request.
 
@@ -103,6 +103,23 @@ loadScripts(document, 'script');</script>
 <div class="col-second even-row-color"><code><a href="RestSession.Builder.html" class="type-name-link" title="class in org.apache.juneau.rest.server">RestSession.Builder</a></code></div>
 <div class="col-last even-row-color">
 <div class="block">Builder class.</div>
+</div>
+</div>
+</section>
+</li>
+<!-- =========== FIELD SUMMARY =========== -->
+<li>
+<section class="field-summary" id="field-summary">
+<h2>Field Summary</h2>
+<div class="caption"><span>Fields</span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier and Type</div>
+<div class="table-header col-second">Field</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code>static final <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second even-row-color"><code><a href="#REQUEST_SESSION_ATTR" class="member-name-link">REQUEST_SESSION_ATTR</a></code></div>
+<div class="col-last even-row-color">
+<div class="block">Public-internal servlet-request attribute key under which the active <a href="RestSession.html" title="class in org.apache.juneau.rest.server"><code>RestSession</code></a> publishes itself.</div>
 </div>
 </div>
 </section>
@@ -133,15 +150,15 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="RestSession.Builder.html" title="class in org.apache.juneau.rest.server">RestSession.Builder</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#create(org.apache.juneau.rest.server.RestContext)" class="member-name-link">create</a><wbr>(<a href="RestContext.html" title="class in org.apache.juneau.rest.server">RestContext</a>&nbsp;ctx)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
-<div class="block">Creates a builder of this object.</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#closeRequestIdScope()" class="member-name-link">closeRequestIdScope</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Closes this call's <code>requestId</code> <a href="../../commons/logging/LogContext.html" title="class in org.apache.juneau.commons.logging"><code>LogContext</code></a> scope, if open.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="RestSession.html" title="class in org.apache.juneau.rest.server">RestSession</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#debug(boolean)" class="member-name-link">debug</a><wbr>(boolean&nbsp;value)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Enables or disabled debug mode on this call.</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="RestSession.Builder.html" title="class in org.apache.juneau.rest.server">RestSession.Builder</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#create(org.apache.juneau.rest.server.RestContext)" class="member-name-link">create</a><wbr>(<a href="RestContext.html" title="class in org.apache.juneau.rest.server">RestContext</a>&nbsp;ctx)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="block">Creates a builder of this object.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="RestSession.html" title="class in org.apache.juneau.rest.server">RestSession</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#exception(java.lang.Throwable)" class="member-name-link">exception</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html" title="class or interface in java.lang" class="external-link">Throwable</a>&nbsp;value)</code></div>
@@ -153,15 +170,26 @@ loadScripts(document, 'script');</script>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Called at the end of a call to finish any remaining tasks such as flushing buffers and logging the response.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../../commons/inject/WritableBeanStore.html" title="interface in org.apache.juneau.commons.inject">WritableBeanStore</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getBeanStore()" class="member-name-link">getBeanStore</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="RestSession.html" title="class in org.apache.juneau.rest.server">RestSession</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#fromRequest(jakarta.servlet.http.HttpServletRequest)" class="member-name-link">fromRequest</a><wbr>(jakarta.servlet.http.HttpServletRequest&nbsp;req)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="block">Returns the <a href="RestSession.html" title="class in org.apache.juneau.rest.server"><code>RestSession</code></a> published on the given servlet request via the <a href="#REQUEST_SESSION_ATTR"><code>REQUEST_SESSION_ATTR</code></a>
+ session-handle seam, or <jk>null</jk> if none is present.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../../commons/inject/WritableBeanStore.html" title="interface in org.apache.juneau.commons.inject">WritableBeanStore</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getBeanStore()" class="member-name-link">getBeanStore</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns the bean store of this call.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="RestContext.html" title="class in org.apache.juneau.rest.server">RestContext</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getContext()" class="member-name-link">getContext</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="RestContext.html" title="class in org.apache.juneau.rest.server">RestContext</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getContext()" class="member-name-link">getContext</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns the context that created this call.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getDebugSnapshot()" class="member-name-link">getDebugSnapshot</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Returns the opaque debug-resolution snapshot stashed at the async-dispatch handoff.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html" title="class or interface in java.lang" class="external-link">Throwable</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getException()" class="member-name-link">getException</a>()</code></div>
@@ -208,64 +236,79 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns the HTTP servlet request of this REST call.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getResource()" class="member-name-link">getResource</a>()</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getRequestId()" class="member-name-link">getRequestId</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Returns the correlation id resolved for this call (mint-or-honor), cached at build time.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getResource()" class="member-name-link">getResource</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns the REST object.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>jakarta.servlet.http.HttpServletResponse</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getResponse()" class="member-name-link">getResponse</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>jakarta.servlet.http.HttpServletResponse</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getResponse()" class="member-name-link">getResponse</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns the HTTP servlet response of this REST call.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getServletPath()" class="member-name-link">getServletPath</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getServletPath()" class="member-name-link">getServletPath</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Shortcut for calling <c>getRequest().getServletPath()</c>.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>int</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getStatus()" class="member-name-link">getStatus</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>int</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getStatus()" class="member-name-link">getStatus</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Shortcut for calling <c>getRequest().getStatus()</c>.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="util/UrlPath.html" title="class in org.apache.juneau.rest.server.util">UrlPath</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getUrlPath()" class="member-name-link">getUrlPath</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="util/UrlPath.html" title="class in org.apache.juneau.rest.server.util">UrlPath</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getUrlPath()" class="member-name-link">getUrlPath</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns the request path info as a <a href="util/UrlPath.html" title="class in org.apache.juneau.rest.server.util"><code>UrlPath</code></a> bean.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="util/UrlPathMatch.html" title="class in org.apache.juneau.rest.server.util">UrlPathMatch</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getUrlPathMatch()" class="member-name-link">getUrlPathMatch</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="util/UrlPathMatch.html" title="class in org.apache.juneau.rest.server.util">UrlPathMatch</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getUrlPathMatch()" class="member-name-link">getUrlPathMatch</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns the URL path pattern match on this call.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="RestSession.html" title="class in org.apache.juneau.rest.server">RestSession</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#logger(org.apache.juneau.rest.server.logger.CallLogger)" class="member-name-link">logger</a><wbr>(<a href="logger/CallLogger.html" title="class in org.apache.juneau.rest.server.logger">CallLogger</a>&nbsp;value)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Sets the logger to use when logging this call.</div>
-</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>protected <a href="../../commons/collections/FluentMap.html" title="class in org.apache.juneau.commons.collections">FluentMap</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#properties()" class="member-name-link">properties</a>()</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="RestSession.html" title="class in org.apache.juneau.rest.server">RestSession</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#installCapture()" class="member-name-link">installCapture</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Installs bounded body-caching wrappers on this call's request/response for debug capture.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>protected <a href="../../commons/collections/FluentMap.html" title="class in org.apache.juneau.commons.collections">FluentMap</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#properties()" class="member-name-link">properties</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns the properties on this bean as a map for debugging.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#run()" class="member-name-link">run</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#run()" class="member-name-link">run</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Runs this session.</div>
 </div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setFinishTimeAttributes()" class="member-name-link">setFinishTimeAttributes</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Records the finish-time request attributes consumed by the debug formatter (currently <code>ExecTime</code>).</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#stashDebugSnapshot(java.lang.Object)" class="member-name-link">stashDebugSnapshot</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Stashes the opaque debug-resolution snapshot on the request thread at the async-dispatch handoff.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="RestSession.html" title="class in org.apache.juneau.rest.server">RestSession</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#status(int)" class="member-name-link">status</a><wbr>(int&nbsp;value)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Sets the HTTP status on this call.</div>
+</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="RestSession.html" title="class in org.apache.juneau.rest.server">RestSession</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#status(int)" class="member-name-link">status</a><wbr>(int&nbsp;value)</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#status(org.apache.juneau.http.HttpStatusLine)" class="member-name-link">status</a><wbr>(<a href="../../http/HttpStatusLine.html" title="interface in org.apache.juneau.http">HttpStatusLine</a>&nbsp;value)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Sets the HTTP status on this call.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="RestSession.html" title="class in org.apache.juneau.rest.server">RestSession</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#status(org.apache.juneau.http.HttpStatusLine)" class="member-name-link">status</a><wbr>(<a href="../../http/HttpStatusLine.html" title="interface in org.apache.juneau.http">HttpStatusLine</a>&nbsp;value)</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#urlPathMatch(org.apache.juneau.rest.server.util.UrlPathMatch)" class="member-name-link">urlPathMatch</a><wbr>(<a href="util/UrlPathMatch.html" title="class in org.apache.juneau.rest.server.util">UrlPathMatch</a>&nbsp;value)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Sets the HTTP status on this call.</div>
-</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="RestSession.html" title="class in org.apache.juneau.rest.server">RestSession</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#urlPathMatch(org.apache.juneau.rest.server.util.UrlPathMatch)" class="member-name-link">urlPathMatch</a><wbr>(<a href="util/UrlPathMatch.html" title="class in org.apache.juneau.rest.server.util">UrlPathMatch</a>&nbsp;value)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Sets the URL path pattern match on this call.</div>
 </div>
 </div>
@@ -283,6 +326,35 @@ loadScripts(document, 'script');</script>
 </section>
 <section class="details">
 <ul class="details-list">
+<!-- ============ FIELD DETAIL =========== -->
+<li>
+<section class="field-details" id="field-detail">
+<h2>Field Details</h2>
+<ul class="member-list">
+<li>
+<section class="detail" id="REQUEST_SESSION_ATTR">
+<h3>REQUEST_SESSION_ATTR</h3>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestSession.html#line-201">REQUEST_SESSION_ATTR</a></span></div>
+<div class="block">Public-internal servlet-request attribute key under which the active <a href="RestSession.html" title="class in org.apache.juneau.rest.server"><code>RestSession</code></a> publishes itself.
+
+ <p>
+ The session-handle seam that lets code in other packages resolve the call's cached correlation id without a live
+ public/custom-key attribute read: the debug formatter's <code>statusLine</code> (in the <code>logging</code> package) and
+ <code>RequestIdFilter</code> (in the <code>filter</code> package) both read the session via <a href="#fromRequest(jakarta.servlet.http.HttpServletRequest)"><code>fromRequest(jakarta.servlet.http.HttpServletRequest)</code></a> and call
+ <a href="#getRequestId()"><code>getRequestId()</code></a>.  Not part of the public REST contract &mdash; the attribute name is an internal detail.</div>
+<dl class="notes">
+<dt>See Also:</dt>
+<dd>
+<ul class="see-list">
+<li><a href="../../../../../constant-values.html#org.apache.juneau.rest.server.RestSession.REQUEST_SESSION_ATTR">Constant Field Values</a></li>
+</ul>
+</dd>
+</dl>
+</section>
+</li>
+</ul>
+</section>
+</li>
 <!-- ========= CONSTRUCTOR DETAIL ======== -->
 <li>
 <section class="constructor-details" id="constructor-detail">
@@ -291,7 +363,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.rest.server.RestSession.Builder)">
 <h3>RestSession</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestSession.html#line-242">RestSession</a></span><wbr><span class="parameters">(<a href="RestSession.Builder.html" title="class in org.apache.juneau.rest.server">RestSession.Builder</a>&nbsp;builder)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestSession.html#line-275">RestSession</a></span><wbr><span class="parameters">(<a href="RestSession.Builder.html" title="class in org.apache.juneau.rest.server">RestSession.Builder</a>&nbsp;builder)</span></div>
 <div class="block">Constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -311,7 +383,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="create(org.apache.juneau.rest.server.RestContext)">
 <h3>create</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="RestSession.Builder.html" title="class in org.apache.juneau.rest.server">RestSession.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestSession.html#line-218">create</a></span><wbr><span class="parameters">(<a href="RestContext.html" title="class in org.apache.juneau.rest.server">RestContext</a>&nbsp;ctx)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="RestSession.Builder.html" title="class in org.apache.juneau.rest.server">RestSession.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestSession.html#line-210">create</a></span><wbr><span class="parameters">(<a href="RestContext.html" title="class in org.apache.juneau.rest.server">RestContext</a>&nbsp;ctx)</span></div>
 <div class="block">Creates a builder of this object.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -323,25 +395,46 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
-<section class="detail" id="debug(boolean)">
-<h3>debug</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RestSession.html" title="class in org.apache.juneau.rest.server">RestSession</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestSession.html#line-262">debug</a></span><wbr><span class="parameters">(boolean&nbsp;value)</span>
-                  throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
-<div class="block">Enables or disabled debug mode on this call.</div>
+<section class="detail" id="fromRequest(jakarta.servlet.http.HttpServletRequest)">
+<h3>fromRequest</h3>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="RestSession.html" title="class in org.apache.juneau.rest.server">RestSession</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestSession.html#line-221">fromRequest</a></span><wbr><span class="parameters">(jakarta.servlet.http.HttpServletRequest&nbsp;req)</span></div>
+<div class="block">Returns the <a href="RestSession.html" title="class in org.apache.juneau.rest.server"><code>RestSession</code></a> published on the given servlet request via the <a href="#REQUEST_SESSION_ATTR"><code>REQUEST_SESSION_ATTR</code></a>
+ session-handle seam, or <jk>null</jk> if none is present.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>value</code> - The new value for this setting.</dd>
+<dd><code>req</code> - The servlet request.  Can be <jk>null</jk> (returns <jk>null</jk>).</dd>
+<dt>Returns:</dt>
+<dd>The active session, or <jk>null</jk>.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="installCapture()">
+<h3>installCapture</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RestSession.html" title="class in org.apache.juneau.rest.server">RestSession</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestSession.html#line-337">installCapture</a></span>()
+                           throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
+<div class="block">Installs bounded body-caching wrappers on this call's request/response for debug capture.
+
+ <p>
+ Called by the two-phase debug pipeline when the resolved logger is loggable at
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/Level.html#FINEST" title="class or interface in java.util.logging" class="external-link"><code>FINEST</code></a>. Idempotent — the wrappers no-op if already installed.
+
+ <p>
+ The capture cap is snapshotted from <a href="RestContext.html#getRestDebugFormatter()"><code>RestContext.getRestDebugFormatter()</code></a><c>.bodyCap()</c> at install
+ time, so a formatter override actually raises, lowers, or (via <code>bodyCap(0)</code>) disables the number of
+ bytes retained &mdash; not just the wrapper's own 8&nbsp;KB default.</div>
+<dl class="notes">
 <dt>Returns:</dt>
 <dd>This object.</dd>
 <dt>Throws:</dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></code> - Occurs if request content could not be cached into memory.</dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></code> - Occurs if the request/response streams could not be wrapped.</dd>
 </dl>
 </section>
 </li>
 <li>
 <section class="detail" id="exception(java.lang.Throwable)">
 <h3>exception</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RestSession.html" title="class in org.apache.juneau.rest.server">RestSession</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestSession.html#line-280">exception</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html" title="class or interface in java.lang" class="external-link">Throwable</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RestSession.html" title="class in org.apache.juneau.rest.server">RestSession</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestSession.html#line-366">exception</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html" title="class or interface in java.lang" class="external-link">Throwable</a>&nbsp;value)</span></div>
 <div class="block">Identifies that an exception occurred during this call.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -355,8 +448,15 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="finish()">
 <h3>finish</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RestSession.html" title="class in org.apache.juneau.rest.server">RestSession</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestSession.html#line-291">finish</a></span>()</div>
-<div class="block">Called at the end of a call to finish any remaining tasks such as flushing buffers and logging the response.</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RestSession.html" title="class in org.apache.juneau.rest.server">RestSession</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestSession.html#line-413">finish</a></span>()</div>
+<div class="block">Called at the end of a call to finish any remaining tasks such as flushing buffers and logging the response.
+
+ <p>
+ When the request has been handed off to a real <code>AsyncContext</code>, the response body/headers are written later
+ on the response-completion thread. In that case this method neither flushes nor emits nor writes formatter-visible
+ finish-time attributes — the completion hook owns all of that after the async body exists. The synchronous and
+ synchronous-fallback (e.g. MockRestClient) paths are unchanged: they set finish-time attributes, flush, and emit
+ here.</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>This object.</dd>
@@ -364,9 +464,79 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
+<section class="detail" id="closeRequestIdScope()">
+<h3>closeRequestIdScope</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestSession.html#line-458">closeRequestIdScope</a></span>()</div>
+<div class="block">Closes this call's <code>requestId</code> <a href="../../commons/logging/LogContext.html" title="class in org.apache.juneau.commons.logging"><code>LogContext</code></a> scope, if open.
+
+ <p>
+ Idempotent: safe to call more than once (and from a build path that never reaches <a href="#finish()"><code>finish()</code></a>, such as a
+ throwaway error session).  Must run on the request thread that opened the scope so a pooled thread does not carry
+ the scope into the next request.</div>
+</section>
+</li>
+<li>
+<section class="detail" id="setFinishTimeAttributes()">
+<h3>setFinishTimeAttributes</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestSession.html#line-472">setFinishTimeAttributes</a></span>()</div>
+<div class="block">Records the finish-time request attributes consumed by the debug formatter (currently <code>ExecTime</code>).
+
+ <p>
+ On the synchronous path this is called from <a href="#finish()"><code>finish()</code></a>. On the asynchronous path it is called by the
+ completion hook immediately before rendering — never by <a href="#finish()"><code>finish()</code></a> after the async handoff — so the record
+ always reflects the true request duration and the completion thread never races the request thread over
+ formatter-visible response state. Idempotent: recomputing the value on repeat calls is harmless.</div>
+</section>
+</li>
+<li>
+<section class="detail" id="stashDebugSnapshot(java.lang.Object)">
+<h3>stashDebugSnapshot</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestSession.html#line-485">stashDebugSnapshot</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</span></div>
+<div class="block">Stashes the opaque debug-resolution snapshot on the request thread at the async-dispatch handoff.
+
+ <p>
+ Internal plumbing for the two-thread async debug pipeline; not part of the public REST contract. The value is a
+ package-private <code>RestDebugSnapshot</code> passed as <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link"><code>Object</code></a> so this class does not expose the type.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>value</code> - The snapshot, or <jk>null</jk> when access logging is off.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="getDebugSnapshot()">
+<h3>getDebugSnapshot</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestSession.html#line-495">getDebugSnapshot</a></span>()</div>
+<div class="block">Returns the opaque debug-resolution snapshot stashed at the async-dispatch handoff.
+
+ <p>
+ Internal plumbing for the two-thread async debug pipeline; not part of the public REST contract.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>The stashed snapshot, or <jk>null</jk> if none was stashed (synchronous path or access logging off).</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="getRequestId()">
+<h3>getRequestId</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestSession.html#line-507">getRequestId</a></span>()</div>
+<div class="block">Returns the correlation id resolved for this call (mint-or-honor), cached at build time.
+
+ <p>
+ This is the synchronous, session-cached value the debug formatter and <code>RequestIdFilter</code> read through the
+ <a href="#fromRequest(jakarta.servlet.http.HttpServletRequest)"><code>session-handle seam</code></a> &mdash; never a live public/custom-key attribute
+ read.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>The resolved request id.  Never <jk>null</jk> (unless a custom id supplier returned <jk>null</jk>).</dd>
+</dl>
+</section>
+</li>
+<li>
 <section class="detail" id="getBeanStore()">
 <h3>getBeanStore</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../commons/inject/WritableBeanStore.html" title="interface in org.apache.juneau.commons.inject">WritableBeanStore</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestSession.html#line-315">getBeanStore</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../commons/inject/WritableBeanStore.html" title="interface in org.apache.juneau.commons.inject">WritableBeanStore</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestSession.html#line-514">getBeanStore</a></span>()</div>
 <div class="block">Returns the bean store of this call.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -377,7 +547,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getContext()">
 <h3>getContext</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RestContext.html" title="class in org.apache.juneau.rest.server">RestContext</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestSession.html#line-322">getContext</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RestContext.html" title="class in org.apache.juneau.rest.server">RestContext</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestSession.html#line-521">getContext</a></span>()</div>
 <div class="block">Returns the context that created this call.</div>
 <dl class="notes">
 <dt>Overrides:</dt>
@@ -390,7 +560,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getException()">
 <h3>getException</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html" title="class or interface in java.lang" class="external-link">Throwable</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestSession.html#line-330">getException</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html" title="class or interface in java.lang" class="external-link">Throwable</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestSession.html#line-529">getException</a></span>()</div>
 <div class="block">Returns the exception that occurred during this call.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -401,22 +571,32 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getMethod()">
 <h3>getMethod</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestSession.html#line-340">getMethod</a></span>()
-                 throws <span class="exceptions"><a href="../../http/response/NotFound.html" title="class in org.apache.juneau.http.response">NotFound</a></span></div>
-<div class="block">Returns the HTTP method name.</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestSession.html#line-549">getMethod</a></span>()
+                 throws <span class="exceptions"><a href="../../http/response/MethodNotAllowed.html" title="class in org.apache.juneau.http.response">MethodNotAllowed</a>,
+<a href="../../http/response/BadRequest.html" title="class in org.apache.juneau.http.response">BadRequest</a></span></div>
+<div class="block">Returns the HTTP method name.
+
+ <p>
+ The request-line method, unless it is overridden by a <code>method</code> query parameter admitted by
+ <code>allowedMethodParams</code>, or by one of the <a href="MethodSafety.html#overrideHeaders()"><code>override headers</code></a> admitted by
+ <code>allowedMethodHeaders</code> (the query parameter wins, then the headers in that order).
+
+ <p>
+ Override claims on an enabled channel (an allow-list that admits at least one method) must agree: more than one
+ distinct claim, whether on one channel or across channels, is refused.</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>The HTTP method name, always uppercased.</dd>
 <dt>Throws:</dt>
 <dd><code><a href="../../http/response/MethodNotAllowed.html" title="class in org.apache.juneau.http.response">MethodNotAllowed</a></code> - If the method parameter contains invalid/malformed characters.</dd>
-<dd><code><a href="../../http/response/NotFound.html" title="class in org.apache.juneau.http.response">NotFound</a></code></dd>
+<dd><code><a href="../../http/response/BadRequest.html" title="class in org.apache.juneau.http.response">BadRequest</a></code> - If the request carries conflicting method overrides.</dd>
 </dl>
 </section>
 </li>
 <li>
 <section class="detail" id="getOpSession()">
 <h3>getOpSession</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RestOpSession.html" title="class in org.apache.juneau.rest.server">RestOpSession</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestSession.html#line-385">getOpSession</a></span>()
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RestOpSession.html" title="class in org.apache.juneau.rest.server">RestOpSession</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestSession.html#line-629">getOpSession</a></span>()
                            throws <span class="exceptions"><a href="../../http/response/InternalServerError.html" title="class in org.apache.juneau.http.response">InternalServerError</a></span></div>
 <div class="block">Returns the operation session of this REST session.
 
@@ -433,7 +613,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getOpSessionOrNull()">
 <h3>getOpSessionOrNull</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RestOpSession.html" title="class in org.apache.juneau.rest.server">RestOpSession</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestSession.html#line-403">getOpSessionOrNull</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RestOpSession.html" title="class in org.apache.juneau.rest.server">RestOpSession</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestSession.html#line-647">getOpSessionOrNull</a></span>()</div>
 <div class="block">Returns the <a href="RestOpSession.html" title="class in org.apache.juneau.rest.server"><code>RestOpSession</code></a> created during <a href="#run()"><code>run()</code></a> if one has been built, or <code>null</code> otherwise.
 
  <p>
@@ -451,7 +631,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getPathInfo()">
 <h3>getPathInfo</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestSession.html#line-410">getPathInfo</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestSession.html#line-654">getPathInfo</a></span>()</div>
 <div class="block">Shortcut for calling <c>getRequest().getPathInfo()</c>.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -462,7 +642,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getPathInfoUndecoded()">
 <h3>getPathInfoUndecoded</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestSession.html#line-417">getPathInfoUndecoded</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestSession.html#line-661">getPathInfoUndecoded</a></span>()</div>
 <div class="block">Same as <a href="#getPathInfo()"><code>getPathInfo()</code></a> but doesn't decode encoded characters.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -473,7 +653,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getPathVars()">
 <h3>getPathVars</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestSession.html#line-428">getPathVars</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestSession.html#line-672">getPathVars</a></span>()</div>
 <div class="block">Returns resolved <c><ja>@Resource</ja>(path)</c> variable values on this call.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -484,7 +664,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getQueryParams()">
 <h3>getQueryParams</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>[]&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestSession.html#line-444">getQueryParams</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>[]&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestSession.html#line-685">getQueryParams</a></span>()</div>
 <div class="block">Returns the query parameters on the request.
 
  <p>
@@ -498,7 +678,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getRequest()">
 <h3>getRequest</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">jakarta.servlet.http.HttpServletRequest</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestSession.html#line-466">getRequest</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">jakarta.servlet.http.HttpServletRequest</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestSession.html#line-707">getRequest</a></span>()</div>
 <div class="block">Returns the HTTP servlet request of this REST call.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -509,7 +689,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getResource()">
 <h3>getResource</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestSession.html#line-473">getResource</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestSession.html#line-714">getResource</a></span>()</div>
 <div class="block">Returns the REST object.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -520,7 +700,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getResponse()">
 <h3>getResponse</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">jakarta.servlet.http.HttpServletResponse</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestSession.html#line-480">getResponse</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">jakarta.servlet.http.HttpServletResponse</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestSession.html#line-721">getResponse</a></span>()</div>
 <div class="block">Returns the HTTP servlet response of this REST call.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -531,7 +711,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getServletPath()">
 <h3>getServletPath</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestSession.html#line-487">getServletPath</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestSession.html#line-728">getServletPath</a></span>()</div>
 <div class="block">Shortcut for calling <c>getRequest().getServletPath()</c>.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -542,7 +722,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getStatus()">
 <h3>getStatus</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestSession.html#line-494">getStatus</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestSession.html#line-735">getStatus</a></span>()</div>
 <div class="block">Shortcut for calling <c>getRequest().getStatus()</c>.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -553,7 +733,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getUrlPath()">
 <h3>getUrlPath</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="util/UrlPath.html" title="class in org.apache.juneau.rest.server.util">UrlPath</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestSession.html#line-501">getUrlPath</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="util/UrlPath.html" title="class in org.apache.juneau.rest.server.util">UrlPath</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestSession.html#line-742">getUrlPath</a></span>()</div>
 <div class="block">Returns the request path info as a <a href="util/UrlPath.html" title="class in org.apache.juneau.rest.server.util"><code>UrlPath</code></a> bean.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -564,7 +744,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getUrlPathMatch()">
 <h3>getUrlPathMatch</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="util/UrlPathMatch.html" title="class in org.apache.juneau.rest.server.util">UrlPathMatch</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestSession.html#line-512">getUrlPathMatch</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="util/UrlPathMatch.html" title="class in org.apache.juneau.rest.server.util">UrlPathMatch</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestSession.html#line-753">getUrlPathMatch</a></span>()</div>
 <div class="block">Returns the URL path pattern match on this call.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -573,30 +753,17 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
-<section class="detail" id="logger(org.apache.juneau.rest.server.logger.CallLogger)">
-<h3>logger</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RestSession.html" title="class in org.apache.juneau.rest.server">RestSession</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestSession.html#line-521">logger</a></span><wbr><span class="parameters">(<a href="logger/CallLogger.html" title="class in org.apache.juneau.rest.server.logger">CallLogger</a>&nbsp;value)</span></div>
-<div class="block">Sets the logger to use when logging this call.</div>
-<dl class="notes">
-<dt>Parameters:</dt>
-<dd><code>value</code> - The new value for this setting.
-   <br>Can be <jk>null</jk> (will use the default logger from the context if available).</dd>
-<dt>Returns:</dt>
-<dd>This object.</dd>
-</dl>
-</section>
-</li>
-<li>
 <section class="detail" id="run()">
 <h3>run</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestSession.html#line-542">run</a></span>()
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestSession.html#line-772">run</a></span>()
          throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Exception.html" title="class or interface in java.lang" class="external-link">Exception</a></span></div>
 <div class="block">Runs this session.
 
  <p>
  Does the following:
  <ol>
-   <li>Finds the Java method to invoke and creates a <a href="RestOpSession.html" title="class in org.apache.juneau.rest.server"><code>RestOpSession</code></a> for it.
+   <li>Finds the Java method to invoke, refuses a safe request overridden to a method that is not a read (see
+      <a href="RestOp.html#read()"><code>RestOp.read()</code></a>), and creates a <a href="RestOpSession.html" title="class in org.apache.juneau.rest.server"><code>RestOpSession</code></a> for it.
    <li>Invokes <a href="RestPreCall.html" title="annotation interface in org.apache.juneau.rest.server"><code>RestPreCall</code></a> methods by calling <a href="RestContext.html#preCall(org.apache.juneau.rest.server.RestOpSession)"><code>RestContext.preCall(RestOpSession)</code></a>.
    <li>Invokes Java method by calling <a href="RestOpSession.html#run()"><code>RestOpSession.run()</code></a>.
    <li>Invokes <a href="RestPostCall.html" title="annotation interface in org.apache.juneau.rest.server"><code>RestPostCall</code></a> methods by calling <a href="RestContext.html#postCall(org.apache.juneau.rest.server.RestOpSession)"><code>RestContext.postCall(RestOpSession)</code></a>.
@@ -612,7 +779,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="status(int)">
 <h3>status</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RestSession.html" title="class in org.apache.juneau.rest.server">RestSession</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestSession.html#line-599">status</a></span><wbr><span class="parameters">(int&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RestSession.html" title="class in org.apache.juneau.rest.server">RestSession</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestSession.html#line-856">status</a></span><wbr><span class="parameters">(int&nbsp;value)</span></div>
 <div class="block">Sets the HTTP status on this call.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -625,7 +792,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="status(org.apache.juneau.http.HttpStatusLine)">
 <h3>status</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RestSession.html" title="class in org.apache.juneau.rest.server">RestSession</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestSession.html#line-611">status</a></span><wbr><span class="parameters">(<a href="../../http/HttpStatusLine.html" title="interface in org.apache.juneau.http">HttpStatusLine</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RestSession.html" title="class in org.apache.juneau.rest.server">RestSession</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestSession.html#line-869">status</a></span><wbr><span class="parameters">(<a href="../../http/HttpStatusLine.html" title="interface in org.apache.juneau.http">HttpStatusLine</a>&nbsp;value)</span></div>
 <div class="block">Sets the HTTP status on this call.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -639,7 +806,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="urlPathMatch(org.apache.juneau.rest.server.util.UrlPathMatch)">
 <h3>urlPathMatch</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RestSession.html" title="class in org.apache.juneau.rest.server">RestSession</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestSession.html#line-624">urlPathMatch</a></span><wbr><span class="parameters">(<a href="util/UrlPathMatch.html" title="class in org.apache.juneau.rest.server.util">UrlPathMatch</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RestSession.html" title="class in org.apache.juneau.rest.server">RestSession</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestSession.html#line-884">urlPathMatch</a></span><wbr><span class="parameters">(<a href="util/UrlPathMatch.html" title="class in org.apache.juneau.rest.server.util">UrlPathMatch</a>&nbsp;value)</span></div>
 <div class="block">Sets the URL path pattern match on this call.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -653,7 +820,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="properties()">
 <h3>properties</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="../../commons/collections/FluentMap.html" title="class in org.apache.juneau.commons.collections">FluentMap</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestSession.html#line-629">properties</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="../../commons/collections/FluentMap.html" title="class in org.apache.juneau.commons.collections">FluentMap</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/RestSession.html#line-889">properties</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../../marshall/ContextSession.html#properties()">ContextSession</a></code></span></div>
 <div class="block">Returns the properties on this bean as a map for debugging.</div>
 <dl class="notes">

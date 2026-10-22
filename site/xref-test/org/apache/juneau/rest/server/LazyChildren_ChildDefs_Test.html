@@ -28,8 +28,8 @@
 <a class="jxr_linenumber" name="L20" href="#L20">20</a>  
 <a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.*;
 <a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.mock.classic.*;
-<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.server.logger.*;
-<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.server.servlet.*;
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.<strong class="jxr_keyword">rest</strong>.server.servlet.*;
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.utest.utils.*;
 <a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> org.junit.jupiter.api.*;
 <a class="jxr_linenumber" name="L26" href="#L26">26</a>  
 <a class="jxr_linenumber" name="L27" href="#L27">27</a>  <em class="jxr_javadoccomment">/**</em>
@@ -39,8 +39,8 @@
 <a class="jxr_linenumber" name="L31" href="#L31">31</a>  <em class="jxr_javadoccomment"> */</em>
 <a class="jxr_linenumber" name="L32" href="#L32">32</a>  <strong class="jxr_keyword">class</strong> <a name="LazyChildren_ChildDefs_Test" href="../../../../../org/apache/juneau/rest/server/LazyChildren_ChildDefs_Test.html#LazyChildren_ChildDefs_Test">LazyChildren_ChildDefs_Test</a> <strong class="jxr_keyword">extends</strong> TestBase {
 <a class="jxr_linenumber" name="L33" href="#L33">33</a>  
-<a class="jxr_linenumber" name="L34" href="#L34">34</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> SeedLogger <strong class="jxr_keyword">extends</strong> CallLogger {
-<a class="jxr_linenumber" name="L35" href="#L35">35</a>  		<strong class="jxr_keyword">public</strong> SeedLogger(org.apache.juneau.commons.inject.BeanStore bs) { <strong class="jxr_keyword">super</strong>(bs); }
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> SeedPS <strong class="jxr_keyword">extends</strong> <a name="FakeWriterSerializer" href="../../../../../org/apache/juneau/utest/utils/FakeWriterSerializer.html#FakeWriterSerializer">FakeWriterSerializer</a> {
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>  		<strong class="jxr_keyword">public</strong> SeedPS(FakeWriterSerializer.Builder b) { <strong class="jxr_keyword">super</strong>(b); }
 <a class="jxr_linenumber" name="L36" href="#L36">36</a>  	}
 <a class="jxr_linenumber" name="L37" href="#L37">37</a>  
 <a class="jxr_linenumber" name="L38" href="#L38">38</a>  	@Rest(path=<span class="jxr_string">"/lazychild"</span>)
@@ -51,7 +51,7 @@
 <a class="jxr_linenumber" name="L43" href="#L43">43</a>  	@Rest(
 <a class="jxr_linenumber" name="L44" href="#L44">44</a>  		path=<span class="jxr_string">"/root"</span>,
 <a class="jxr_linenumber" name="L45" href="#L45">45</a>  		lazyChildren=<span class="jxr_string">"true"</span>,
-<a class="jxr_linenumber" name="L46" href="#L46">46</a>  		childrenDefs=@Child(type=LazyChildResource.<strong class="jxr_keyword">class</strong>, callLogger=SeedLogger.<strong class="jxr_keyword">class</strong>)
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>  		childrenDefs=@Child(type=LazyChildResource.<strong class="jxr_keyword">class</strong>, partSerializer=SeedPS.<strong class="jxr_keyword">class</strong>)
 <a class="jxr_linenumber" name="L47" href="#L47">47</a>  	)
 <a class="jxr_linenumber" name="L48" href="#L48">48</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> LazySeedParent <strong class="jxr_keyword">extends</strong> BasicRestServletGroup {
 <a class="jxr_linenumber" name="L49" href="#L49">49</a>  		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">long</strong> serialVersionUID = 1L;
@@ -74,14 +74,14 @@
 <a class="jxr_linenumber" name="L66" href="#L66">66</a>  		client.get(<span class="jxr_string">"/lazychild/ping"</span>).run().assertStatus(200).assertContent(<span class="jxr_string">"lazy-pong"</span>);
 <a class="jxr_linenumber" name="L67" href="#L67">67</a>  		assertTrue(entry.isMaterialized(), <span class="jxr_string">"Should be materialized after first request"</span>);
 <a class="jxr_linenumber" name="L68" href="#L68">68</a>  
-<a class="jxr_linenumber" name="L69" href="#L69">69</a>  		<em class="jxr_comment">// The materialized context must carry the host's seeded callLogger -- proving the ResolvedChild</em>
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>  		<em class="jxr_comment">// The materialized context must carry the host's seeded partSerializer -- proving the ResolvedChild</em>
 <a class="jxr_linenumber" name="L70" href="#L70">70</a>  		<em class="jxr_comment">// (including its @Child seed) survived deferred construction, not just eager construction.</em>
 <a class="jxr_linenumber" name="L71" href="#L71">71</a>  		<em class="jxr_comment">// (Materialized lazy children live on the LazyChildEntry itself, not in RestChildren.asMap() --</em>
 <a class="jxr_linenumber" name="L72" href="#L72">72</a>  		<em class="jxr_comment">// that map holds only eagerly-built children.)</em>
 <a class="jxr_linenumber" name="L73" href="#L73">73</a>  		<strong class="jxr_keyword">var</strong> childCtx = entry.materialized;
 <a class="jxr_linenumber" name="L74" href="#L74">74</a>  		assertNotNull(childCtx);
-<a class="jxr_linenumber" name="L75" href="#L75">75</a>  		assertInstanceOf(SeedLogger.<strong class="jxr_keyword">class</strong>, childCtx.getCallLogger(),
-<a class="jxr_linenumber" name="L76" href="#L76">76</a>  			<span class="jxr_string">"Lazily-materialized child must receive the host's seeded SeedLogger, same as an eager child would"</span>);
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>  		assertInstanceOf(SeedPS.<strong class="jxr_keyword">class</strong>, childCtx.getPartSerializer(),
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>  			<span class="jxr_string">"Lazily-materialized child must receive the host's seeded SeedPS, same as an eager child would"</span>);
 <a class="jxr_linenumber" name="L77" href="#L77">77</a>  	}
 <a class="jxr_linenumber" name="L78" href="#L78">78</a>  }
 </pre>

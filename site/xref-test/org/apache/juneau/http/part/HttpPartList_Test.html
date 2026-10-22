@@ -262,7 +262,7 @@
 <a class="jxr_linenumber" name="L254" href="#L254">254</a> 	}
 <a class="jxr_linenumber" name="L255" href="#L255">255</a> 
 <a class="jxr_linenumber" name="L256" href="#L256">256</a> 	<em class="jxr_comment">//------------------------------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L257" href="#L257">257</a> 	<em class="jxr_comment">// Unmodifiable (D4 collection-mutator-override variant)</em>
+<a class="jxr_linenumber" name="L257" href="#L257">257</a> 	<em class="jxr_comment">// Unmodifiable (collection-mutator-override variant)</em>
 <a class="jxr_linenumber" name="L258" href="#L258">258</a> 	<em class="jxr_comment">//------------------------------------------------------------------------------------------------------------------</em>
 <a class="jxr_linenumber" name="L259" href="#L259">259</a> 
 <a class="jxr_linenumber" name="L260" href="#L260">260</a> 	@Test <strong class="jxr_keyword">void</strong> f01_unmodifiable_isUnmodifiable() {
@@ -273,7 +273,7 @@
 <a class="jxr_linenumber" name="L265" href="#L265">265</a> 
 <a class="jxr_linenumber" name="L266" href="#L266">266</a> 	@Test <strong class="jxr_keyword">void</strong> f02_unmodifiable_idempotent() {
 <a class="jxr_linenumber" name="L267" href="#L267">267</a> 		<strong class="jxr_keyword">var</strong> u = HttpPartList.create().append(<span class="jxr_string">"a"</span>, <span class="jxr_string">"1"</span>).unmodifiable();
-<a class="jxr_linenumber" name="L268" href="#L268">268</a> 		assertSame(u, u.unmodifiable()); <em class="jxr_comment">// D1: already unmodifiable -&gt; returned as-is.</em>
+<a class="jxr_linenumber" name="L268" href="#L268">268</a> 		assertSame(u, u.unmodifiable()); <em class="jxr_comment">// Already unmodifiable -&gt; returned as-is.</em>
 <a class="jxr_linenumber" name="L269" href="#L269">269</a> 	}
 <a class="jxr_linenumber" name="L270" href="#L270">270</a> 
 <a class="jxr_linenumber" name="L271" href="#L271">271</a> 	@Test <strong class="jxr_keyword">void</strong> f03_unmodifiable_readsStillWork() {
@@ -351,7 +351,7 @@
 <a class="jxr_linenumber" name="L343" href="#L343">343</a> 	@Test <strong class="jxr_keyword">void</strong> f07_unmodifiable_contentEquality() {
 <a class="jxr_linenumber" name="L344" href="#L344">344</a> 		<strong class="jxr_keyword">var</strong> x = HttpPartList.create().append(<span class="jxr_string">"a"</span>, <span class="jxr_string">"1"</span>).append(<span class="jxr_string">"b"</span>, <span class="jxr_string">"2"</span>);
 <a class="jxr_linenumber" name="L345" href="#L345">345</a> 		<strong class="jxr_keyword">var</strong> u = x.unmodifiable();
-<a class="jxr_linenumber" name="L346" href="#L346">346</a> 		<em class="jxr_comment">// D3 content-only equality: a modifiable list equals its frozen snapshot (and vice versa).</em>
+<a class="jxr_linenumber" name="L346" href="#L346">346</a> 		<em class="jxr_comment">// Content-only equality: a modifiable list equals its frozen snapshot (and vice versa).</em>
 <a class="jxr_linenumber" name="L347" href="#L347">347</a> 		assertEquals(x, u);
 <a class="jxr_linenumber" name="L348" href="#L348">348</a> 		assertEquals(u, x);
 <a class="jxr_linenumber" name="L349" href="#L349">349</a> 		assertEquals(x.hashCode(), u.hashCode());
