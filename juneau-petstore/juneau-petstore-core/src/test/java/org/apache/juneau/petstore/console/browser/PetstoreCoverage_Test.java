@@ -45,7 +45,7 @@ class PetstoreCoverage_Test extends TestBase {
 
 	/** Every browser test class; a01 proves the list is complete. */
 	static final List<Class<?>> BROWSER_TESTS = List.of(
-		Harness_BrowserTest.class,
+		PetstoreHarness_BrowserTest.class,
 		PetstoreNav_BrowserTest.class,
 		PetstoreFlavors_BrowserTest.class,
 		PetstoreSecure_BrowserTest.class,

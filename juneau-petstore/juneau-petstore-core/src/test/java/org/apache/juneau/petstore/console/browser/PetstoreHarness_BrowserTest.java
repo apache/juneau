@@ -32,7 +32,7 @@ import org.junit.jupiter.api.extension.*;
  * script errors.
  */
 @EnabledIfSystemProperty(named=PetstoreBrowser.GATE, matches="true", disabledReason=PetstoreBrowser.DISABLED)
-class Harness_BrowserTest extends TestBase {
+class PetstoreHarness_BrowserTest extends TestBase {
 
 	@RegisterExtension
 	static MicroserviceTestFixture server = PetstoreTestServer.fixture();

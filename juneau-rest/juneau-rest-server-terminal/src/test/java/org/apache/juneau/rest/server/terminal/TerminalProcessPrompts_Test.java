@@ -146,15 +146,16 @@ class TerminalProcessPrompts_Test extends TestBase {
 
 	@Test void a05_closeEndsRunnerCancelled() throws Exception {
 		var sink = new Sink();
-		var p = startReal(List.of("python3", "-c", "import time; time.sleep(60)"), sink);
-		awaitFile(p.log(), Duration.ofSeconds(60));
-		var t0 = System.nanoTime();
-		p.close();
-		assertTrue(System.nanoTime() - t0 < TimeUnit.SECONDS.toNanos(10), "close() took too long");
-		assertTrue(p.isDone());
-		var lines = Files.readAllLines(p.eventsFile());
-		assertEquals("{\"ev\":\"done\",\"status\":\"cancelled\"}", lines.get(lines.size() - 1));
-		assertTrue(sink.ended.await(10, TimeUnit.SECONDS));
+		try (var p = startReal(List.of("python3", "-c", "import time; time.sleep(60)"), sink)) {
+			assertTrue(awaitFile(p.log(), Duration.ofSeconds(60)), "the runner never wrote its log");
+			var t0 = System.nanoTime();
+			p.close();
+			assertTrue(System.nanoTime() - t0 < TimeUnit.SECONDS.toNanos(10), "close() took too long");
+			assertTrue(p.isDone());
+			var lines = Files.readAllLines(p.eventsFile());
+			assertEquals("{\"ev\":\"done\",\"status\":\"cancelled\"}", lines.get(lines.size() - 1));
+			assertTrue(sink.ended.await(10, TimeUnit.SECONDS));
+		}
 	}
 
 	@Test void a06_answerAfterEndReturnsFalse() throws Exception {

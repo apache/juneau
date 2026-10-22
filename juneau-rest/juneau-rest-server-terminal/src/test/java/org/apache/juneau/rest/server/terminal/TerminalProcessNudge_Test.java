@@ -60,6 +60,11 @@ class TerminalProcessNudge_Test extends TestBase {
 		return TerminalProcess.start("maven", List.of("mvn", "-q", "test"), 100, 30, run, new Host("Mac OS X", "/x/juneau_run.py", null, bin.toString()), false);
 	}
 
+	/** The live nudge watcher thread, if there is one. */
+	private static Optional<Thread> nudgeThread() {
+		return Thread.getAllStackTraces().keySet().stream().filter(x -> x.getName().startsWith("juneau-terminal-nudge-") && x.isAlive()).findFirst();
+	}
+
 	private static void awaitDead(Thread t, long millis) throws Exception {
 		t.join(millis);
 		assertFalse(t.isAlive(), "the watcher thread is still alive");
@@ -86,8 +91,7 @@ class TerminalProcessNudge_Test extends TestBase {
 		fakePython("exec sleep 30");
 		try (var p = start()) {
 			p.nudges("t1", (id, end, done) -> {});
-			var t = Thread.getAllStackTraces().keySet().stream().filter(x -> x.getName().startsWith("juneau-terminal-nudge-")
-				&& x.isAlive()).findFirst().orElse(null);
+			var t = nudgeThread().orElse(null);
 			assertNotNull(t);
 			assertTrue(t.isDaemon());
 			assertTrue(t.getName().matches("juneau-terminal-nudge-\\d+"));
@@ -98,8 +102,7 @@ class TerminalProcessNudge_Test extends TestBase {
 		fakePython("exec sleep 30");
 		var p = start();
 		p.nudges("t1", (id, end, done) -> {});
-		var t = Thread.getAllStackTraces().keySet().stream().filter(x -> x.getName().startsWith("juneau-terminal-nudge-")
-			&& x.isAlive()).findFirst().orElseThrow();
+		var t = nudgeThread().orElseThrow();
 		p.close();
 		awaitDead(t, 2000);
 	}
@@ -119,8 +122,7 @@ class TerminalProcessNudge_Test extends TestBase {
 		};
 		var p = TerminalProcess.start("maven", List.of("mvn", "-q", "test"), 100, 30, run, new Host("Mac OS X", "/x/juneau_run.py", null, bin.toString()), slow);
 		p.nudges("t1", (id, end, done) -> {});
-		var t = Thread.getAllStackTraces().keySet().stream().filter(x -> x.getName().startsWith("juneau-terminal-nudge-")
-			&& x.isAlive()).findFirst().orElseThrow();
+		var t = nudgeThread().orElseThrow();
 		var closer = new Thread(p::close);
 		closer.start();
 		awaitDead(t, 500);
@@ -156,8 +158,7 @@ class TerminalProcessNudge_Test extends TestBase {
 				});
 				try {
 					assertEquals(0, p.waitFor(30, TimeUnit.SECONDS));
-					assertTrue(await(() -> Thread.getAllStackTraces().keySet().stream().noneMatch(x -> x.getName().startsWith("juneau-terminal-nudge-")
-						&& x.isAlive()), Duration.ofSeconds(5)), "the watcher thread did not exit");
+					assertTrue(await(() -> nudgeThread().isEmpty(), Duration.ofSeconds(5)), "the watcher thread did not exit");
 				} catch (Exception e) {
 					throw new AssertionError(e);
 				}
