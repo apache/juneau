@@ -352,7 +352,7 @@ python3 scripts/build-docs.py --staging             # set SITE_URL to juneau.sta
 python3 scripts/build-docs.py --console full        # live view with every tool's output
 ```
 
-When the Juneau checkout has `juneau-run`, the build and release scripts show a live view, one row per stage (`--console full|condensed|none`, default condensed); otherwise they print plain output.
+When the Juneau checkout has `juneau-run`, the build and release scripts show a live view, one row per stage (`--console full|board|none`, default board); otherwise they print plain output.
 
 Output lands in `build/`. On a successful full build the script prints a publish reminder.
 

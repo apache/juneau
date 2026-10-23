@@ -32,7 +32,7 @@ Run from the docs checkout root.
 | `--dry-run` | none | off | Print every command and copy that would run; do no work. Output is plain, never the live view. |
 | `--verbose` | none | off | Print the full banner for each stage instead of one line. |
 | `--juneau-root` | directory | `$JUNEAU_ROOT`, then `../master`, then `../juneau` | Juneau source checkout to build against. Must contain `pom.xml`. |
-| `--console` | `full`, `condensed`, `none` | `condensed` | Console output when the Juneau checkout provides `juneau-run`; also `JUNEAU_RUN_CONSOLE` (the flag wins). |
+| `--console` | `full`, `board`, `none` | `board` | Console output when the Juneau checkout provides `juneau-run`; also `JUNEAU_RUN_CONSOLE` (the flag wins). |
 
 ## What it does
 

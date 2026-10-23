@@ -25,7 +25,7 @@ Run from the docs checkout.
 | `--no-push` | none | off | Build and commit in the staging checkout but do not push, and do not open the browser. |
 | `--commit-message` | text | `Deploy documentation staging` | Commit message for the staging commit. |
 | `--juneau-root` | directory | `$JUNEAU_ROOT`, then `../master`, then `../juneau` | Juneau source checkout; passed on to `build-docs.py`. |
-| `--console` | `full`, `condensed`, `none` | `condensed` | Console output when the Juneau checkout provides `juneau-run`; also `JUNEAU_RUN_CONSOLE` (the flag wins). Passed on to `build-docs.py`. |
+| `--console` | `full`, `board`, `none` | `board` | Console output when the Juneau checkout provides `juneau-run`; also `JUNEAU_RUN_CONSOLE` (the flag wins). Passed on to `build-docs.py`. |
 
 ## What it does
 

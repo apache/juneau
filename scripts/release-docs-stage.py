@@ -42,14 +42,14 @@ This script:
 
 Usage:
     python3 scripts/release-docs-stage.py [--no-push] [--commit-message MESSAGE]
-                                          [--juneau-root DIR] [--console full|condensed|none]
+                                          [--juneau-root DIR] [--console full|board|none]
 
 Options:
     --no-push          Build and commit but don't push to remote
     --commit-message   Custom commit message (default: "Deploy documentation staging")
     --juneau-root      Juneau source checkout (default: $JUNEAU_ROOT, then sibling ../master,
                        then sibling ../juneau); passed on to build-docs.py
-    --console          Console output when the Juneau checkout has juneau-run: full, condensed
+    --console          Console output when the Juneau checkout has juneau-run: full, board
                        (default) or none (also $JUNEAU_RUN_CONSOLE)
 
 With juneau-run available, the run is one live view: Prechecks, build-docs.py's rows, Stage push

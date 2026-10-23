@@ -16,8 +16,8 @@ Optional juneau-run live view for build-docs.py, release-docs-stage.py and relea
 
 The scripts load juneau-run's toolkit from the Juneau checkout they resolve
 (<juneau-root>/juneau-run/src/main/python).  With it, each stage is a row of the console view
-(--console full|condensed|none, default condensed, or JUNEAU_RUN_CONSOLE), with the full and
-condensed logs under ~/.cache/juneau-run/.  When it can't be found or imported, View is plain:
+(--console full|board|none, default board, or JUNEAU_RUN_CONSOLE), with the full and
+board logs under ~/.cache/juneau-run/.  When it can't be found or imported, View is plain:
 banners and the tools' own output on the terminal, as the scripts printed before.  juneau-docs
 never depends on juneau-run.
 """
@@ -30,7 +30,7 @@ import subprocess
 import sys
 from pathlib import Path
 
-CONSOLE_MODES = ('full', 'condensed', 'none')
+CONSOLE_MODES = ('full', 'board', 'none')
 
 #: Every row build-docs.py draws, in order, as (id, label).  Skipped stages still draw, as skipped rows.
 BUILD_ROWS = (
@@ -87,7 +87,7 @@ def load_toolkit(juneau_root):
 def open_view(juneau_root, console=None, *, verbose=False, plain=False):
     """
     The View for a script run.  console is the --console value (None: JUNEAU_RUN_CONSOLE, else
-    condensed).  plain=True (e.g. --dry-run) skips juneau-run altogether.
+    board).  plain=True (e.g. --dry-run) skips juneau-run altogether.
     """
     run = None if plain else load_toolkit(juneau_root)
     if run is not None:
@@ -102,7 +102,7 @@ def open_view(juneau_root, console=None, *, verbose=False, plain=False):
 def add_console_argument(parser):
     """--console, for the docs scripts.  Validated here, since the toolkit may not be loaded."""
     parser.add_argument('--console', choices=CONSOLE_MODES, default=None,
-                        help='Console output when juneau-run is available: full, condensed (default) or none '
+                        help='Console output when juneau-run is available: full, board (default) or none '
                              '(also JUNEAU_RUN_CONSOLE; the flag wins)')
 
 

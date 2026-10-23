@@ -43,14 +43,14 @@ The script:
 
 Usage:
     python3 scripts/release-docs.py [--no-push] [--commit-message MESSAGE]
-                                    [--juneau-root DIR] [--console full|condensed|none]
+                                    [--juneau-root DIR] [--console full|board|none]
 
 Options:
     --no-push          Perform all steps except the final git push
     --commit-message   Not used (kept for consistency with release-docs-stage.py)
     --juneau-root      Juneau source checkout whose juneau-run draws the live view (default:
                        $JUNEAU_ROOT, then sibling ../master, then sibling ../juneau)
-    --console          Console output when juneau-run is available: full, condensed (default)
+    --console          Console output when juneau-run is available: full, board (default)
                        or none (also $JUNEAU_RUN_CONSOLE)
 
 With juneau-run available, the run is one live view: Prechecks, then Promote (Fetch, Switch,

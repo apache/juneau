@@ -112,7 +112,7 @@ def test_complete_toolkit_loads(tmp_path, capsys, clean_modules):
 
 def test_plain_never_loads(tmp_path, clean_modules):
     fake_toolkit(tmp_path, 'raise AssertionError("loaded")\n')
-    view = run_view.open_view(tmp_path, 'condensed', plain=True)
+    view = run_view.open_view(tmp_path, 'board', plain=True)
     assert not view.live
 
 

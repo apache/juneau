@@ -28,7 +28,7 @@ Juneau excels in the following scenarios:
 * **Declarative widgets and server-side views** - Describe a dialog, form, calendar, row of stat tiles or badge as data-only beans with [Declarative Widgets](/docs/topics/DeclarativeWidgets), and render Markdown to HTML with [Markdown View Rendering](/docs/topics/MarkdownViewRendering). Template-based views remain available for [JSP](/docs/topics/JspViewSupport), [Thymeleaf](/docs/topics/ThymeleafViewSupport), [Mustache](/docs/topics/MustacheViewSupport) and [FreeMarker](/docs/topics/FreemarkerViewSupport).
 * **Model Context Protocol (MCP) servers and clients** - Expose tools, prompts and resources to AI assistants from a `juneau-rest-server` resource with [juneau-rest-server-mcp](/docs/topics/JuneauRestServerMcp), backed by the [MCP wire beans](/docs/topics/JuneauBeanMcp) for revisions `2025-06-18` and `2026-07-28`. New to MCP in Juneau? Start with the [MCP Quickstart](/docs/topics/JuneauMcpQuickstart).
 * **A worked example you can run** - The [juneau-petstore](/docs/topics/JuneauPetstore) sample deploys on Jetty and Spring Boot with the same REST surface and an admin console that exercises the pieces above, page by page.
-* **Condensed build output** - [juneau-run](/docs/topics/JuneauRun) wraps Maven, pytest, Playwright, Gradle, npm and Bazel runs, parses their output into steps and test counts, and writes the run-view events the console regions read.
+* **Board build output** - [juneau-run](/docs/topics/JuneauRun) wraps Maven, pytest, Playwright, Gradle, npm and Bazel runs, parses their output into steps and test counts, and writes the run-view events the console regions read.
 
 ## When to Choose Juneau
 
@@ -123,7 +123,7 @@ The Juneau ecosystem consists of the following parts. A few rows are **grouped f
 | **juneau-secret-macos-keychain** | |
 | [juneau-secret-macos-keychain](/docs/topics/JuneauCommonsSettings#os-keychain-backed-store) | Opt-in module providing a macOS `security`-CLI-backed `KeychainSecretStore` implementation of the `SecretStore` SPI. |
 | **juneau-run** | |
-| [juneau-run](/docs/topics/JuneauRun) | Build tooling: the `juneau_run.py` wrapper that adds run markers and condensed output to Maven, pytest, Playwright, Gradle, and npm runs. Attached as `.py` and `.zip` artifacts; not a library dependency. |
+| [juneau-run](/docs/topics/JuneauRun) | Build tooling: the `juneau_run.py` wrapper that adds run markers and board output to Maven, pytest, Playwright, Gradle, and npm runs. Attached as `.py` and `.zip` artifacts; not a library dependency. |
 | **juneau-shaded** | |
 | [juneau-shaded-core](/docs/topics/JuneauShadedCore) | Shaded uber-jar of the juneau-core modules for zero-conflict dependency management. |
 | [juneau-shaded-rest-client](/docs/topics/JuneauShadedRestClient) | Shaded uber-jar of juneau-rest-client and its dependencies. |

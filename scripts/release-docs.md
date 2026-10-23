@@ -24,7 +24,7 @@ Run from the docs checkout. The second form makes the staged site live.
 | `--no-push` | none | off | Do everything except the final `git push`. |
 | `--commit-message` | text | none | Accepted for consistency with `release-docs-stage.py`; not used. |
 | `--juneau-root` | directory | `$JUNEAU_ROOT`, then `../master`, then `../juneau` | Juneau checkout whose `juneau-run` draws the live view. Not validated. |
-| `--console` | `full`, `condensed`, `none` | `condensed` | Console output when `juneau-run` is available; also `JUNEAU_RUN_CONSOLE` (the flag wins). |
+| `--console` | `full`, `board`, `none` | `board` | Console output when `juneau-run` is available; also `JUNEAU_RUN_CONSOLE` (the flag wins). |
 
 ## What it does
 
