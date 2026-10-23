@@ -12,6 +12,12 @@
 # * specific language governing permissions and limitations under the License.
 # ***************************************************************************************************************************
 """
+Builds Juneau, runs the Maven tests, then checks timings, runs the scripts' own pytest suite, and optionally the browser tests.
+
+Full docs: test.md
+"""
+
+USAGE = """
 Build and test helper script for Apache Juneau.
 
 Usage:
@@ -76,6 +82,7 @@ import argparse
 import math
 import os
 import re
+import shlex
 import shutil
 import statistics
 import subprocess
@@ -645,10 +652,12 @@ def script_tests(launcher=None, runner=None):
 	"""The scripts/tests pytest suite as its own row.  Returns 0 on pass or skip, non-zero on failure."""
 	if os.environ.get(SCRIPT_TESTS_ACTIVE):
 		say("\n⚠️  Skipping Python Tests: already running inside them (no recursion).", "warn")
+		skip_py_tests_row("already running inside them")
 		return 0
 	launcher = launcher or script_tests_launcher()
 	if launcher is None:
 		say("\n⚠️  Skipping Python Tests: neither pytest nor uv found (python3 -m pytest / uv run --native-tls --with pytest).", "warn")
+		skip_py_tests_row("neither pytest nor uv found")
 		return 0
 	cmd = script_tests_command(launcher)
 	say("\n🐍 Running Python Tests (scripts/tests)...")
@@ -723,9 +732,59 @@ def js_tests_command():
 		f"-Dtest='{patterns}' -Dsurefire.failIfNoSpecifiedTests=false")
 
 
-def js_tests(installed=False):  # NOSONAR python:S1172 -- kept so callers need not change; the scope no longer depends on it
-	"""The JS harness: the views and petstore browser suites in one run."""
-	return run_command(js_tests_command(), "js-tests", "Browser Tests", label="Browser Tests")
+# Forks per module while the modules overlap; a lone petstore run takes the pom's default of 3.
+JS_CONCURRENT_FORKS = 2
+
+
+def js_tests_concurrent_command():
+	"""The same suites as js_tests_command, as one mvn per module so they overlap (one reactor runs them in dependency
+	order).  Each `mvn -f` resolves its upstream modules from ~/.m2 (hence -o), so this is valid only straight after the
+	install step.  Output streams live with a [module] prefix; the shell waits for every module and fails if any did,
+	and a module that left no exit status counts as a failure.  Needs bash (PIPESTATUS)."""
+	runs = []
+	for i, (module, pattern) in enumerate(JS_TEST_MODULES):
+		runs.append(f"(mvn -o -Pjs-tests -f {module}/pom.xml test -Drat.skip=true -Dtest='{pattern}' "
+			f"-Dsurefire.failIfNoSpecifiedTests=false -Djuneau.jsTests.forks={JS_CONCURRENT_FORKS} 2>&1 "
+			f"| sed -u 's|^|[{module}] |' | tee target/js-tests-{i}.log; echo ${{PIPESTATUS[0]}} > target/js-tests-{i}.exit) &")
+	codes = " ".join(f"$(cat target/js-tests-{i}.exit 2>/dev/null || echo 1)" for i in range(len(JS_TEST_MODULES)))
+	return ("mkdir -p target && rm -f target/js-tests-*.exit && " + " ".join(runs)
+		+ f" wait ; for c in {codes}; do [ \"$c\" = 0 ] || exit 1; done")
+
+
+def js_tests(installed=False):
+	"""The JS harness: the views, petstore and terminal browser suites.  Straight after the install step the three
+	modules run at once (js_tests_concurrent_command); otherwise one sequential reactor run (js_tests_command), since
+	the upstream modules are then built from the working tree rather than read from ~/.m2."""
+	if not installed:
+		return run_command(js_tests_command(), "js-tests", "Browser Tests", label="Browser Tests")
+	cmd = f"/bin/bash -c {shlex.quote(js_tests_concurrent_command())}"
+	# Wraps the whole compound: run_command only prefixes commands that start with "mvn ".
+	wrapper = os.environ.get("JUNEAU_MVN_WRAPPER", "").strip()
+	if wrapper:
+		cmd = f"{wrapper} {cmd}"
+	return run_command(cmd, "js-tests", "Browser Tests", label="Browser Tests")
+
+
+#: test.py's top-level steps in run order, as (id, label).  The labels are push.py's PLAN_LABELS for the same ids:
+#: under push.py this script's pending rows stand in for the parent's.
+PLAN = (("build", "Compile"), ("tests", "Java Tests"), ("perf", "Perf"), ("py-tests", "Python Tests"),
+	("js-tests", "Browser Tests"))
+
+
+def planned_steps(build_only, test_only, full, no_js_tests):
+	"""The steps this run will take, in order, as (id, label) pairs, for the console's pending rows and Overall
+	figure.  --no-js-tests leaves Browser Tests out; a run-time skip (no JS changes) stays in the plan, and its skip
+	row is left out of the count."""
+	ids = {"build"} if build_only or full else set()
+	if test_only or full:
+		ids |= {"tests", "perf", "py-tests"} | (set() if no_js_tests else {"js-tests"})
+	return [(step_id, label) for step_id, label in PLAN if step_id in ids]
+
+
+def skip_py_tests_row(reason):
+	"""Draw the Python Tests row as skipped, with the reason as its text."""
+	with _juneau.load()[0].row("py-tests", "Python Tests", label="Python Tests") as row:
+		row.skip(reason)
 
 
 def skip_js_tests_row(reason):
@@ -793,11 +852,11 @@ def _main():  # NOSONAR python:S3776 -- Cognitive complexity is acceptable for t
 	parser.add_argument("--help", "-h", action="store_true")
 	args, unknown = parser.parse_known_args()
 	if args.help:
-		print(__doc__)
+		print(USAGE)
 		return 0
 	if unknown:
 		print(f"Unknown option(s): {' '.join(unknown)}")
-		print(__doc__)
+		print(USAGE)
 		return 1
 	if args.timing_log:
 		say("⚠ --timing-log is ignored: timings are in the run history now (scripts/push-timings.py reads it). "
@@ -829,6 +888,7 @@ def _main():  # NOSONAR python:S3776 -- Cognitive complexity is acceptable for t
 	if args.js_tests and args.no_js_tests:
 		print("Cannot combine --js-tests and --no-js-tests")
 		return 1
+	_juneau.load()[0].plan(planned_steps(build_only, test_only, full, args.no_js_tests))
 
 	exit_code = 0
 	last_test_output = ""

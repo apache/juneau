@@ -16,6 +16,12 @@
 # limitations under the License.
 
 """
+Rewrites generic type arguments such as `Map<K, V>` to `Map<K,V>` in Java source, in code and inside comments and Javadoc.
+
+Full docs: normalize-generic-commas.md
+"""
+
+USAGE = """
 Normalize generic type-argument comma spacing.
 
 Rewrites `Foo<A, B>` -> `Foo<A,B>` (at every nesting level, e.g.
@@ -358,7 +364,7 @@ def main():
         check_only = True
         args = args[1:]
     if not args:
-        print(__doc__)
+        print(USAGE)
         return 1
 
     all_files = []

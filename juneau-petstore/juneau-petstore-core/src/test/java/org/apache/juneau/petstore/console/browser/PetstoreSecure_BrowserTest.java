@@ -39,7 +39,7 @@ class PetstoreSecure_BrowserTest extends TestBase {
 	private static Map<String,Map<String,Object>> report;
 
 	private static Map<String,Object> click(String token) {
-		return Map.of("name", token, "path", "/console/dev/secure", "allowFailedLoads", true,
+		return Map.of("name", token, "waitUntil", "networkidle", "path", "/console/dev/secure", "allowFailedLoads", true,
 			"actions", List.of(
 				Map.of("click", "[data-secure-call=\"" + token + "\"]"),
 				Map.of("waitFor", "document.getElementById('secure-result').getAttribute('data-status')")),

@@ -16,15 +16,12 @@
 # limitations under the License.
 
 """
-Create Maven Site Script
+Builds the Maven site, including the Javadocs, and copies it into the documentation tree's static directory so it can be previewed locally.
 
-Generates the Maven site with javadocs and copies it to the Docusaurus static directory
-for local testing and broken link validation.
-
-Usage:
-    python3 create-mvn-site.py
+Full docs: create-mvn-site.md
 """
 
+import argparse
 import shutil
 import subprocess
 import sys
@@ -97,13 +94,28 @@ def get_project_version(juneau_root):
         return "unknown"
 
 
-def main():
+def parse_args(argv):
+    """Parse the command line; runs before anything is removed or built, so --help is side-effect free."""
+    parser = argparse.ArgumentParser(prog="create-mvn-site.py", description=__doc__.strip().split("\n\n")[0])
+    parser.add_argument("--dry-run", action="store_true", help="Print what would be removed and run, then exit without doing it.")
+    return parser.parse_args(argv)
+
+
+def main(argv=None):
+    args = parse_args(sys.argv[1:] if argv is None else argv)
+
     # Get directories
     script_dir = Path(__file__).parent
     juneau_root = script_dir.parent
     docs_dir = juneau_root / "docs"
     site_dir = juneau_root / "target" / "site"
     static_site_dir = docs_dir / "static" / "site"
+
+    if args.dry_run:
+        print(f"Would remove: {site_dir}")
+        print(f"Would run in {juneau_root}: mvn clean compile site")
+        print(f"Would replace {static_site_dir} with a copy of {site_dir}")
+        return 0
     
     print("Creating Maven site with javadocs for local testing...")
     print(f"Working from: {juneau_root}")

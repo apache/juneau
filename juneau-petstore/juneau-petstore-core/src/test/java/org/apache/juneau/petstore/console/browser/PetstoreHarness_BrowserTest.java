@@ -18,6 +18,7 @@ package org.apache.juneau.petstore.console.browser;
 
 import static org.apache.juneau.petstore.console.browser.PetstoreBrowser.*;
 import static org.apache.juneau.test.bct.BctAssertions.*;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.*;
 
@@ -43,7 +44,7 @@ class PetstoreHarness_BrowserTest extends TestBase {
 	static void probe() throws Exception {
 		var base = PetstoreTestServer.awaitReady(server);
 		report = run("harness", base, List.of(
-			Map.of("name", "store", "path", "/console/store",
+			Map.of("name", "store", "waitUntil", "networkidle", "path", "/console/store",
 				"queries", Map.of("title", "document.title", "pages", "document.querySelectorAll('#juneau-page').length")),
 			Map.of("name", "actions", "path", "/console/about", "viewport", List.of(800, 600), "waitUntil", "load",
 				"initScript", "window.__init = (window.__init || 0) + 1;",
@@ -71,5 +72,9 @@ class PetstoreHarness_BrowserTest extends TestBase {
 		assertString("1", String.valueOf(query(c, "init")));   // the init script ran again in the new document
 		assertString("?y=2", query(c, "search"));
 		assertString("1", query(c, "kept"));   // reload, goto and follow stay in the case's one context
+	}
+
+	@Test void a03_everyCaseReportsItsWallTime() {
+		assertTrue(((Number) assertClean(report, "store").get("ms")).longValue() > 0);
 	}
 }

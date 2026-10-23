@@ -896,7 +896,7 @@ public final class McpRevision implements org.apache.juneau.rest.server.mcp.McpR
 			.orElseThrow(() -> new McpException(CODE_INVALID_PARAMS, "Invalid or tampered requestState"));
 		if (! method.equals(sealed.method()))
 			throw new McpException(CODE_INVALID_PARAMS, "requestState method mismatch");
-		if (sealed.expiresAtMs() <= System.currentTimeMillis())
+		if (sealed.expiresAtMs() <= mrtrConfig.getClock().millis())
 			throw new McpException(CODE_REQUEST_STATE_EXPIRED, "requestState has expired");
 		if (sealed.round() >= mrtrConfig.getMaxRounds())
 			// Client-facing message deliberately omits the configured cap value so server config is not leaked.
@@ -958,7 +958,7 @@ public final class McpRevision implements org.apache.juneau.rest.server.mcp.McpR
 		if (! clientElicitationSupported(params))
 			throw new McpException(CODE_MISSING_REQUIRED_CLIENT_CAPABILITY,
 				"Client does not advertise the elicitation capability required for input_required");
-		var state = new McpRequestState(signal.getContinuation(), method, currentRound + 1, System.currentTimeMillis() + mrtrConfig.getTtlMs(),
+		var state = new McpRequestState(signal.getContinuation(), method, currentRound + 1, mrtrConfig.getClock().millis() + mrtrConfig.getTtlMs(),
 			mintJti(), argumentsHash);
 		var result = new InputRequiredResult().setRequestState(mrtrConfig.getCodec().seal(state, aad(method, target), principal(ctx)));
 		// Each inputRequests value is carried to the wire byte-for-byte as a raw sub-request object (see

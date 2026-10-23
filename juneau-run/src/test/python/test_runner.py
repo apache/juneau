@@ -1251,7 +1251,7 @@ class ScriptApiTest(unittest.TestCase):
         reset_run_state()
         self.addCleanup(reset_run_state)
         self.bus = jr.subscribe(Events())
-        self.console = mock.Mock(mode="live")
+        self.console = mock.Mock(mode="live", header_blocks=[], sticky=[])
         self.console.board.width.return_value = 9
         self.console.board.detail = "modules"
         self.console.board.pending.return_value = []
@@ -1404,8 +1404,11 @@ class ScriptApiTest(unittest.TestCase):
 
     def test_handoff_pauses_and_exports_the_label_width_and_detail(self):
         with jr.handoff() as env:
+            handback = env.pop("JUNEAU_RUN_HANDBACK")
             self.assertEqual(env, {"JUNEAU_RUN_LABEL_WIDTH": "9", "JUNEAU_RUN_DETAIL": "modules"})
+            self.assertTrue(os.path.exists(handback))
             self.assertEqual(self.calls(), ["pause"])
+        self.assertFalse(os.path.exists(handback))
         self.assertEqual(self.calls(), ["pause", "resume"])
 
     def test_handoff_exports_the_pending_rows(self):

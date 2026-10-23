@@ -12,13 +12,9 @@
 # * specific language governing permissions and limitations under the License.                                              *
 # ***************************************************************************************************************************
 """
-Script to check for correct topic links in the Juneau source tree.
+Checks that links to topic pages of the Juneau documentation site, found in the source tree, use the slug and title the topic pages define.
 
-This script:
-1. Scans /docs/pages/topics for all markdown files
-2. Extracts slug names and titles from the frontmatter
-3. Scans the entire source tree for links to https://juneau.apache.org/docs/topics/SLUG">TITLE</a>
-4. Reports any mismatches between expected and actual slug/title combinations
+Full docs: check-topic-links.md
 """
 
 import os

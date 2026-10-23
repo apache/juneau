@@ -13,23 +13,9 @@
 # ***************************************************************************************************************************
 
 """
-Start Juneau Petstore (Jetty) Application
+Starts the Juneau petstore sample application on the embedded Jetty microservice, with plain `java` and a cached Maven classpath.
 
-This script starts the Juneau petstore sample application using the embedded Jetty/Microservice server.
-It runs the org.apache.juneau.petstore.jetty.App main class with plain java.  The classpath is resolved once with
-Maven's dependency:build-classpath (cached in target/petstore-classpath.txt); exec:java is not used because its
-class loader fails to load some of the petstore's classes (NoClassDefFoundError on ConfigResource$SectionNotFound).
-
-The port is strict: if it is already bound the script exits non-zero before building or launching anything, naming
-the port and, where it can be found, the holder.  A busy port is never skipped past or silently shared, so a request
-to the port can never be answered by some other (possibly stale) server.
-
-Usage:
-    python3 scripts/start-petstore-jetty.py [--port N]
-
-Options:
-    --port N    Port to listen on (default 10000).  Passed to Jetty as the petstore.port system property,
-                which juneau-petstore-jetty.cfg reads; the checked-in cfg is not modified.
+Full docs: start-petstore-jetty.md
 """
 
 import argparse

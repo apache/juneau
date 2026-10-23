@@ -12,64 +12,44 @@
 # * specific language governing permissions and limitations under the License.
 # ***************************************************************************************************************************
 """
-Revert staged changes back to HEAD (last commit).
+Discards the changes to one git-tracked file by restoring it from `HEAD`, the last commit.
 
-This script reverts both staged AND unstaged changes back to the last committed version.
-⚠️  WARNING: This will discard all changes (staged and unstaged) for the specified file.
-
-Usage:
-    ./scripts/revert-staged.py <file_path>
-
-Example:
-    ./scripts/revert-staged.py juneau-core/juneau-marshall/src/main/java/org/apache/juneau/ClassMeta.java
+Full docs: revert-staged.md
 """
 
-import sys
+import argparse
 import subprocess
-from pathlib import Path
+import sys
 
-def main():
-    if len(sys.argv) != 2:
-        print("Error: Exactly one file path argument required")
-        print()
-        print("Usage: ./scripts/revert-staged.py <file_path>")
-        print()
-        print("Example:")
-        print("    ./scripts/revert-staged.py juneau-core/juneau-marshall/src/main/java/org/apache/juneau/ClassMeta.java")
-        sys.exit(1)
-    
-    file_path = sys.argv[1]
-    
-    # Verify file exists or is tracked by git
-    try:
-        subprocess.run(
-            ["git", "ls-files", "--error-unmatch", file_path],
-            check=True,
-            capture_output=True,
-            text=True
-        )
-    except subprocess.CalledProcessError:
+
+def git(*args):
+    return subprocess.run(["git", *args], capture_output=True, text=True)
+
+
+def main(argv=None):
+    parser = argparse.ArgumentParser(
+        description="Discard the changes to one tracked file by restoring it from HEAD.",
+        epilog="Example: ./scripts/revert-staged.py juneau-core/juneau-marshall/src/main/java/org/apache/juneau/ClassMeta.java"
+    )
+    parser.add_argument("file_path", help="the file to restore (use -- before a path that starts with -)")
+    file_path = parser.parse_args(argv).file_path
+
+    if git("ls-files", "--error-unmatch", "--", file_path).returncode != 0:
         print(f"Error: File not tracked by git: {file_path}")
-        sys.exit(1)
-    
-    print(f"⚠️  WARNING: This will discard ALL changes (staged and unstaged) for: {file_path}")
-    print(f"Command: git restore --source=HEAD {file_path}")
-    print()
-    
-    try:
-        subprocess.run(
-            ["git", "restore", "--source=HEAD", file_path],
-            check=True,
-            capture_output=True,
-            text=True
-        )
-        print(f"✅ Successfully reverted to HEAD for: {file_path}")
-        print("   (All staged and unstaged changes discarded)")
-        return 0
-    except subprocess.CalledProcessError as e:
-        print(f"❌ Error reverting file: {e.stderr}")
         return 1
+
+    print(f"WARNING: This will discard ALL changes (staged and unstaged) for: {file_path}")
+    print(f"Command: git restore --source=HEAD -- {file_path}")
+    print()
+
+    result = git("restore", "--source=HEAD", "--", file_path)
+    if result.returncode != 0:
+        print(f"Error reverting file: {result.stderr}")
+        return 1
+    print(f"Successfully reverted to HEAD for: {file_path}")
+    print("   (All staged and unstaged changes discarded)")
+    return 0
+
 
 if __name__ == "__main__":
     sys.exit(main())
-

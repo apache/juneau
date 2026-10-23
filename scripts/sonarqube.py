@@ -12,6 +12,14 @@
 # * specific language governing permissions and limitations under the License.
 # ***************************************************************************************************************************
 """
+Shows SonarCloud findings (rule, severity, line, message) for a source file, a package directory, a Maven module, or the whole repository.
+
+Full docs: sonarqube.md
+"""
+
+from __future__ import annotations
+
+USAGE = """
 SonarQube/SonarCloud findings reporter for Apache Juneau.
 
 Shows per-file SonarCloud findings (rule id, severity, line, message) for a
@@ -90,8 +98,6 @@ Examples:
     ./scripts/sonarqube.py --all --branch my-feature-branch --run
     ./scripts/sonarqube.py --all --pr 1234 --run --fail-on-issues
 """
-
-from __future__ import annotations
 
 import json
 import os
@@ -687,7 +693,7 @@ def parse_csv_arg(raw: str, valid: list, label: str) -> set:
 def parse_args(argv):  # NOSONAR java:S3776 -- argparse-by-hand mirror of coverage.py; complexity acceptable
     args = argv[1:]
     if not args or "--help" in args or "-h" in args:
-        print(__doc__)
+        print(USAGE)
         sys.exit(0)
 
     path_arg = None

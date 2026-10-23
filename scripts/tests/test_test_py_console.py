@@ -15,6 +15,7 @@
 from __future__ import annotations
 
 import importlib.util
+import json
 import os
 import signal
 import sys
@@ -156,17 +157,21 @@ def test_js_tests_cover_the_views_and_petstore_modules(test_mod, monkeypatch):
     assert modules["juneau-petstore/juneau-petstore-core"] == "org.apache.juneau.petstore.**.*_BrowserTest"
     assert modules["juneau-rest/juneau-rest-server-terminal"] == "org.apache.juneau.rest.server.terminal.*_BrowserTest"
     calls = []
+    monkeypatch.delenv("JUNEAU_MVN_WRAPPER", raising=False)
     monkeypatch.setattr(test_mod, "run_command", lambda cmd, *a, **k: calls.append(cmd) or (0, ""))
-    test_mod.js_tests(installed=True)
     test_mod.js_tests(installed=False)
+    test_mod.js_tests(installed=True)
     cmd = calls[0]
-    assert calls[0] == calls[1]
+    # Not just installed: one reactor run (upstream modules built from the working tree by --also-make).
+    assert calls[0] != calls[1]
     assert cmd.startswith("mvn -Pjs-tests -pl juneau-rest/juneau-rest-server-views,juneau-petstore/juneau-petstore-core,"
                               "juneau-rest/juneau-rest-server-terminal test ")
     assert "-f " not in cmd
     assert ("-Dtest='org.apache.juneau.rest.server.views.*_BrowserTest,"
             "org.apache.juneau.petstore.**.*_BrowserTest,org.apache.juneau.rest.server.terminal.*_BrowserTest'") in cmd
     assert "-Dsurefire.failIfNoSpecifiedTests=false" in cmd
+    # Just installed: one mvn -f per module, all at once.
+    assert all(f"-f {module}/pom.xml" in calls[1] for module in modules)
 
 
 @pytest.mark.parametrize("argv,installed", [([], True), (["--test-only"], False)])
@@ -266,3 +271,72 @@ def test_test_py_plain_ctrl_c_is_a_cancel(test_mod, monkeypatch, capsys):
     captured = capsys.readouterr()
     assert "❌ Cancelled." in captured.out
     assert "##run" not in captured.out
+
+
+# ---- the plan ----------------------------------------------------------------------------------------------------------
+def _stub_steps(test_mod, monkeypatch):
+    monkeypatch.setattr(test_mod, "build", lambda: (0, ""))
+    monkeypatch.setattr(test_mod, "test", lambda no_container=False: (0, ""))
+    monkeypatch.setattr(test_mod, "run_perf_guard", lambda *a, **k: 0)
+    monkeypatch.setattr(test_mod, "script_tests", lambda *a, **k: 0)
+    monkeypatch.setattr(test_mod, "changed_files_vs_origin", lambda: [])
+    monkeypatch.setattr(test_mod, "maybe_run_js_tests", lambda *a, **k: 0)
+
+
+@pytest.mark.parametrize("argv,ids", [
+    ([], ["build", "tests", "perf", "py-tests", "js-tests"]),
+    (["--full"], ["build", "tests", "perf", "py-tests", "js-tests"]),
+    (["--build-only"], ["build"]),
+    (["--test-only"], ["tests", "perf", "py-tests", "js-tests"]),
+    (["--test-only", "--no-js-tests"], ["tests", "perf", "py-tests"]),
+    (["--no-js-tests"], ["build", "tests", "perf", "py-tests"]),
+    (["--js-tests"], ["build", "tests", "perf", "py-tests", "js-tests"]),
+])
+def test_main_declares_the_steps_its_own_flags_will_run(test_mod, bus, monkeypatch, argv, ids):
+    _stub_steps(test_mod, monkeypatch)
+    monkeypatch.setattr(sys, "argv", ["test.py", *argv])
+    assert test_mod._main() == 0
+    plans = bus.of("plan")
+    assert [p["ids"] for p in plans] == [ids]
+    assert set(plans[0]["labels"]) == set(ids)          # every step is labelled, so each draws a pending row
+
+
+@pytest.mark.parametrize("argv", [["--build-only", "--test-only"], ["--js-tests", "--no-js-tests"], ["--profile", "m"]])
+def test_a_refused_combination_or_a_profile_run_declares_no_plan(test_mod, bus, monkeypatch, argv):
+    _stub_steps(test_mod, monkeypatch)
+    monkeypatch.setattr(test_mod, "profile", lambda module: (0, ""))
+    monkeypatch.setattr(sys, "argv", ["test.py", *argv])
+    test_mod._main()
+    assert bus.of("plan") == []
+
+
+def test_the_plan_labels_are_push_pys(test_mod):
+    """Under push.py the child's pending rows replace the parent's, so a label must read the same in both."""
+    spec = importlib.util.spec_from_file_location("_push_labels", SCRIPTS_DIR / "push.py")
+    push = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(push)
+    assert {i: label for i, label in test_mod.PLAN} == {i: push.PLAN_LABELS[i] for i, _ in test_mod.PLAN}
+
+
+def test_a_nested_run_under_a_parents_overall_has_an_overall_figure(test_mod, monkeypatch):
+    run = test_mod._juneau.load()[0]
+    monkeypatch.setenv("JUNEAU_RUN_OVERALL", json.dumps({"elapsed": 60, "done": 2, "pending": [
+        ["tests", 120], ["perf", None], ["py-tests", 20], ["js-tests", 40], ["install", 10]]}))
+    board = run.Board(nested=True)
+    feed = run.subscribe(lambda kind, fields: board.apply(kind, fields))
+    try:
+        _stub_steps(test_mod, monkeypatch)
+        monkeypatch.setattr(sys, "argv", ["test.py", "--test-only"])
+        assert board.overall() is None                    # no plan yet: no Overall (today's nested test.py)
+        assert test_mod._main() == 0
+        assert board.plan == ["tests", "perf", "py-tests", "js-tests"]
+        assert board.overall() is not None                # the view's region now ends with ▶ Overall
+    finally:
+        run.unsubscribe(feed)
+
+
+def test_skipped_python_tests_still_get_their_row(test_mod, bus, monkeypatch):
+    monkeypatch.setenv(test_mod.SCRIPT_TESTS_ACTIVE, "1")
+    assert test_mod.script_tests() == 0
+    ends = [f for f in bus.of("step_end") if f["id"] == "py-tests"]
+    assert [e["status"] for e in ends] == ["skip"]

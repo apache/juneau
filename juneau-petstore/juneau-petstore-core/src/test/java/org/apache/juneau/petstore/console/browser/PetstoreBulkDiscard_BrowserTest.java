@@ -114,7 +114,7 @@ class PetstoreBulkDiscard_BrowserTest extends TestBase {
 					"states", "Array.from(document.querySelectorAll('#changes tbody input.juneau-view-select-checkbox:disabled'))"
 						+ ".map(b => b.closest('tr').textContent.includes('APPLIED') ? 'APPLIED' : b.closest('tr').textContent.includes('FAILED') ? 'FAILED' : '?')")),
 			// Runs before 'discard', which changes the store; this one is refused and changes nothing.
-			Map.of("name", "discard-fail", "path", "/console/pets/changes", "allowFailedLoads", true,
+			Map.of("name", "discard-fail", "waitUntil", "networkidle", "path", "/console/pets/changes", "allowFailedLoads", true,
 				"actions", concat(List.of(Map.of("evaluate", FAIL_DISCARDS)), confirm, submit,
 					List.of(Map.of("waitFor", "document.querySelector('" + TOAST + "[role=alert]')"))),
 				"queries", Map.of(

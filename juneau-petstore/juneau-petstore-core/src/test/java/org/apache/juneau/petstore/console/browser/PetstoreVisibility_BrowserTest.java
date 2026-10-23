@@ -84,7 +84,7 @@ class PetstoreVisibility_BrowserTest extends TestBase {
 					wait("document.querySelector('#pet-body tbody')?.textContent.toUpperCase().includes('SOLD')")),
 				"queries", Map.of("before", "window.__before", "pencils", PENCILS,
 					"trigger", "(() => { const t = document.querySelector('" + TRIGGER + "'); return !!t && !t.hidden && !t.disabled; })()")),
-			Map.of("name", "photo", "path", "/console/pets/1/photo", "allowFailedLoads", true,
+			Map.of("name", "photo", "waitUntil", "networkidle", "path", "/console/pets/1/photo", "allowFailedLoads", true,
 				"queries", Map.of("viewer", "!!document.querySelector('" + UPLOAD + "')",
 					"admin", UPLOAD_FOR + "('petstore-admin')", "user", UPLOAD_FOR + "('petstore-user')"))));
 	}

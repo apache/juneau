@@ -12,30 +12,9 @@
 # * specific language governing permissions and limitations under the License.
 # ***************************************************************************************************************************
 """
-Drift guard for the published juneau-bom.
+Checks that `juneau-bom/pom.xml` lists every consumer-facing reactor module, and nothing that is not one.
 
-Every consumer-facing reactor module must be enumerated in juneau-bom/pom.xml's
-<dependencyManagement>.  This catches the common failure mode where a new
-publishable module is added to the reactor but the maintainer forgets to add it
-to the BOM, so downstreams importing the BOM silently can't omit its version.
-
-A module is "consumer-facing publishable" when it is a leaf artifact
-(packaging jar/bundle, or a leaf packaging=pom dependency bundle with no
-<modules>) AND it is not one of the documented non-published modules:
-
-  - reactor aggregators (packaging=pom WITH <modules>) - not artifacts
-  - juneau-bom itself
-  - juneau-test-utils                    (test-only support)
-  - juneau-test-marshall-utils           (test-only support, marshall-level fixtures)
-  - juneau-shaded/*                      (uber-jars, not BOM-managed)
-  - juneau-examples/*, juneau-petstore/* (sample apps, not published)
-  - juneau-microservice-examples         (sample/demo REST resources, not shipped)
-  - juneau-integration-tests             (test-only)
-  - juneau-rest-server-console-ui-freemarker-tests  (test-only)
-  - juneau-run                           (build tooling, ships a .py script)
-  - juneau-distrib                       (assembly only)
-
-Exit 0 when the BOM is complete (and free of stale entries); exit 1 otherwise.
+Full docs: check-bom-completeness.md
 """
 
 from __future__ import annotations

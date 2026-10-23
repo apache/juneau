@@ -42,7 +42,10 @@ class RateLimitGuard_Snapshot_Test extends TestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Test void a01_inMemorySnapshotReportsTokensAndRemainingAfterPartialDrain() {
-		var s = RateLimitGuard.Storage.inMemory();
+		// Both time sources pinned: a frozen nanosecond source means no refill between calls, and a fixed wall clock
+		// makes lastRequest an exact instant rather than a "close to now" tolerance check.
+		var now = Instant.parse("2026-01-01T00:00:00Z");
+		var s = new RateLimitGuard.InMemoryStorage(100_000, () -> 0L, Clock.fixed(now, ZoneOffset.UTC));
 		s.tryAcquire("k", 5, 1.0);
 		s.tryAcquire("k", 5, 1.0);
 		s.tryAcquire("k", 5, 1.0);
@@ -51,16 +54,11 @@ class RateLimitGuard_Snapshot_Test extends TestBase {
 		var b = snapshot.get("k");
 		assertNotNull(b);
 		assertEquals("k", b.key());
-		// Started full (5), three tokens consumed → at-most ~2 left, refill barely measurable in the test
-		// window so the actual fraction sits in (2.0, 2.0 + ε].
-		assertTrue(b.tokens() >= 2.0 && b.tokens() < 3.0,
-			"expected tokens in [2.0, 3.0), got " + b.tokens());
-		assertEquals((int) Math.floor(b.tokens()), b.remaining());
-		assertFalse(b.throttled(), "bucket should not be throttled with 2+ tokens left");
-		assertNotNull(b.lastRequest());
-		// Wall-clock instant should be within a few seconds of now.
-		var skewMillis = Math.abs(System.currentTimeMillis() - b.lastRequest().toEpochMilli());
-		assertTrue(skewMillis < 5_000L, "lastRequest drift too large: " + skewMillis + "ms");
+		// Started full (5), three tokens consumed, no time elapsed on the nanosecond source.
+		assertEquals(2.0, b.tokens());
+		assertEquals(2, b.remaining());
+		assertFalse(b.throttled(), "bucket should not be throttled with 2 tokens left");
+		assertEquals(now, b.lastRequest());
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

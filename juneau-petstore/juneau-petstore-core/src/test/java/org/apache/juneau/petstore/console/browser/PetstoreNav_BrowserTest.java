@@ -45,9 +45,9 @@ class PetstoreNav_BrowserTest extends TestBase {
 	static void probe() throws Exception {
 		var base = PetstoreTestServer.awaitReady(server);
 		report = run("nav", base, List.of(
-			Map.of("name", "flavor-html", "path", "/console/dev/flavors/html", "queries", Map.of("current", CURRENT, "rows", CHILD_ROWS)),
-			Map.of("name", "about", "path", "/console/about", "queries", Map.of("current", CURRENT, "rows", CHILD_ROWS)),
-			Map.of("name", "click-dev", "path", "/console/store",
+			Map.of("name", "flavor-html", "waitUntil", "networkidle", "path", "/console/dev/flavors/html", "queries", Map.of("current", CURRENT, "rows", CHILD_ROWS)),
+			Map.of("name", "about", "waitUntil", "networkidle", "path", "/console/about", "queries", Map.of("current", CURRENT, "rows", CHILD_ROWS)),
+			Map.of("name", "click-dev", "waitUntil", "networkidle", "path", "/console/store",
 				"actions", List.of(
 					Map.of("click", "[data-juneau-nav-id=\"dev\"]"),
 					Map.of("waitFor", "location.pathname.startsWith('/console/dev/')")),

@@ -16,28 +16,9 @@
 # limitations under the License.
 
 """
-Build and Push Script for Juneau
+Builds, tests, commits and pushes Juneau (and, when present, the sibling juneau-docs repository) in one command.
 
-This script automates the build, test, and deployment workflow:
-0. Prechecks: refuses up front unless git has the ASF committer identity, the tree has no unreviewed
-   (unstaged/untracked) changes and the branch isn't behind its upstream -- for juneau and, when it exists, the
-   sibling juneau-docs -- before any build or test work (commit_and_push() repeats the last two at the end)
-1. Runs all tests
-2. Builds and installs the project
-3. Commits changes to Git
-4. Pushes to remote repository
-
-Usage: python3 push.py "commit message"
-       python3 push.py "commit message" --skip-tests
-       python3 push.py "commit message" --sonarqube
-       python3 push.py "commit message" --tracker-audit
-       python3 push.py "commit message" --docs-only
-       python3 push.py "commit message" --js-tests      (force the headless-browser JS harness)
-       python3 push.py "commit message" --no-js-tests   (never run it)
-       python3 push.py --test-only                      (build and test gates only; no commit or push)
-
-JS harness (-Pjs-tests): with neither flag, test.py runs it automatically when a .js/.css/.ftl file
-under a src/ tree differs from origin/master, and skips it with a notice if Node/npm are missing.
+Full docs: push.md
 """
 
 import argparse
@@ -986,7 +967,8 @@ def run_docs_only(args, juneau_root):
 
     repo = docs_root if docs_root.exists() else juneau_root
     return _in_session("Push", lambda s: _docs_only_steps(s, args, console, docs_root, missing),
-                       header=session_header("Juneau Docs", current_branch(repo), args.message), mode="push", repo=repo,
+                       header=session_header("Juneau Docs", current_branch(repo)), lines=session_lines(args.message),
+                       mode="push", repo=repo,
                        plan=[("prechecks", "Prechecks"), ("docs-smoke", DOCS_BUILD_LABEL), ("commit", "Commit"),
                              ("push", "Push")])
 
@@ -1103,16 +1085,21 @@ def push_plan(args, script_dir, juneau_root, console):
     return [(step_id, PLAN_LABELS[step_id]) for step_id in ids]
 
 
-def session_header(project, branch, message):
-    """The session header's items after the title: the project, the branch, then the commit message when there is one
-    (none with --test-only)."""
-    return [project, branch] + ([message] if message else [])
+def session_header(project, branch):
+    """The session header's items after the title: the project and the branch."""
+    return [project, branch]
 
 
-def _in_session(title, body, *, header, mode, repo, plan):
+def session_lines(message):
+    """The session's header lines under the title: the commit message when there is one (none with --test-only)."""
+    return [f"Commit Message: {message}"] if message else []
+
+
+def _in_session(title, body, *, header, lines=(), mode, repo, plan):
     """Run body(session) -- which returns an exit code -- inside the run session; returns the session's exit code."""
-    with toolkit("run").session(title, header=header, bell=True, sound=True, silence_env=(PUSH_NO_SOUND_ENV,),
-                                mode=mode, project=repo.name, repo=repo, exit=False, plan=plan) as session:
+    with toolkit("run").session(title, header=header, lines=lines, bell=True, sound=True,
+                                silence_env=(PUSH_NO_SOUND_ENV,), mode=mode, project=repo.name, repo=repo, exit=False,
+                                plan=plan) as session:
         code = body(session)
         if code:
             raise SystemExit(code)
@@ -1331,7 +1318,8 @@ def _main():  # NOSONAR python:S3776 -- Cognitive complexity is acceptable for t
 
     return _in_session("Test" if args.test_only else "Push",
                        lambda s: _push_steps(s, args, run, console, script_dir, juneau_root),
-                       header=session_header("Juneau", current_branch(juneau_root), None if args.test_only else args.message),
+                       header=session_header("Juneau", current_branch(juneau_root)),
+                       lines=session_lines(None if args.test_only else args.message),
                        mode="test" if args.test_only else "push", repo=juneau_root,
                        plan=push_plan(args, script_dir, juneau_root, console))
 

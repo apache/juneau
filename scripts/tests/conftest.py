@@ -60,11 +60,22 @@ def _full_console(monkeypatch):
     monkeypatch.setenv("JUNEAU_RUN_CONSOLE", "full")
 
 
+# Every JUNEAU_RUN_* variable that points a session at a live parent run (its logs, cancel command, markers, result,
+# header and pending/overall rows, or the fact that one is active).  JUNEAU_RUN_CONSOLE, _DETAIL and _HISTORY* are
+# settings, not pointers, and are handled by their own fixtures.
+LIVE_RUN_ENV = (
+    "JUNEAU_RUN_ACTIVE", "JUNEAU_RUN_SESSION", "JUNEAU_RUN_LIVE", "JUNEAU_RUN_N_BASE", "JUNEAU_RUN_LABEL_WIDTH",
+    "JUNEAU_RUN_FULL_LOG", "JUNEAU_RUN_CONDENSED_LOG", "JUNEAU_RUN_CANCEL", "JUNEAU_RUN_HEADER",
+    "JUNEAU_RUN_PENDING", "JUNEAU_RUN_OVERALL", "JUNEAU_RUN_HANDBACK",
+    "JUNEAU_RUN_MARKERS_FILE", "JUNEAU_RUN_RESULT", "JUNEAU_RUN_RESULT_PARTS",
+)
+
+
 @pytest.fixture(autouse=True)
 def _no_outer_run_files(monkeypatch):
-    """A run under JUNEAU_RUN_MARKERS_FILE / JUNEAU_RUN_RESULT exports them to this suite; drop them so the tests see
-    the same run state as under a plain run (and don't write the outer run's files)."""
-    for name in ("JUNEAU_RUN_MARKERS_FILE", "JUNEAU_RUN_RESULT", "JUNEAU_RUN_RESULT_PARTS"):
+    """A run under watch-run.sh or push.py exports its live-run variables (see LIVE_RUN_ENV) to this suite; drop them so
+    the tests see the same run state as under a plain run (and don't write the outer run's logs or files)."""
+    for name in LIVE_RUN_ENV:
         monkeypatch.delenv(name, raising=False)
 
 

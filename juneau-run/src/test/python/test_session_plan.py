@@ -206,6 +206,25 @@ class BoardPlanTest(unittest.TestCase):
         b.estimator = lambda *a: 1 / 0
         self.assertIsNone(b.overall())
 
+    def test_step_counts_count_ok_and_warn_steps_of_all_counted(self):
+        b = self.board(plan=("a", "b", "c"))
+        b.apply(*start("a")); b.apply(*end("a"))
+        b.apply(*start("b")); b.apply("step_end", dict(id="b", status="fail", ms=0, exit=1, summary=None, totals=None))
+        self.assertEqual(b.step_counts(), (1, 3))
+
+    def test_step_counts_leave_out_skips_and_are_none_without_a_plan(self):
+        b = self.board(plan=("a", "b"))
+        b.apply(*start("a")); b.apply("step_end", dict(id="a", status="skip", ms=0, exit=None, summary=None, totals=None))
+        self.assertEqual(b.step_counts(), (0, 1))
+        self.assertIsNone(self.board(plan=()).step_counts())
+        self.assertIsNone(self.board(plan=None).step_counts())
+
+    def test_the_final_block_carries_the_counts(self):
+        b = self.board(plan=("a",))
+        b.apply(*start("a")); b.apply(*end("a"))
+        final = b.apply("done", dict(status="ok", commit=None))[0]
+        self.assertEqual(final[0:2] + final[5:], ("final", "ok", 1, 1))
+
 
 class PlanApiTest(unittest.TestCase):
     def setUp(self):

@@ -151,6 +151,7 @@ jobs:
         -pl juneau-petstore/juneau-petstore-core -am
         test
         -Dtest='org.apache.juneau.petstore.**.*_BrowserTest' -Dsurefire.failIfNoSpecifiedTests=false
+        -Djuneau.jsTests.forks=2
         -Djuneau.jsTests.browsers="${HOME}/.cache/ms-playwright"
     # The terminal module's browser tests (Terminal_BrowserTest; TerminalSmoke_BrowserTest also matches but
     # skips itself unless its own opt-in property is set): same pinned Playwright and

@@ -20,6 +20,7 @@ import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.test.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.time.*;
 import java.util.*;
 
 import org.apache.juneau.*;
@@ -306,6 +307,48 @@ class ThrownStore_Test extends TestBase {
 		assertEquals("foo", stats.getFirstMessage());
 		assertContains("org.apache.juneau.rest.server.stats", r(stats.getStackTrace()));
 		assertContains("foo", stats);
+	}
+
+	/** A test clock the test can advance manually. */
+	static final class MutableClock extends Clock {
+		private Instant now;
+		MutableClock(Instant start) { now = start; }
+		void advance(Duration d) { now = now.plus(d); }
+		@Override public ZoneId getZone() { return ZoneOffset.UTC; }
+		@Override public Clock withZone(ZoneId zone) { return this; }
+		@Override public Instant instant() { return now; }
+	}
+
+	@Test void c02_thrownStats_occurrenceTimesReadFromInjectedClock() {
+		var t0 = Instant.parse("2026-01-01T00:00:00Z");
+		var clock = new MutableClock(t0);
+		var store = ThrownStore.create().clock(clock).build();
+		var t = new Throwable("foo");
+		t.fillInStackTrace();
+
+		var stats = store.add(t);
+		assertEquals(t0.toEpochMilli(), stats.getFirstOccurrence());
+		assertEquals(t0.toEpochMilli(), stats.getLastOccurrence());
+
+		clock.advance(Duration.ofSeconds(5));
+		stats = store.add(t);
+		assertEquals(t0.toEpochMilli(), stats.getFirstOccurrence());
+		assertEquals(t0.plusSeconds(5).toEpochMilli(), stats.getLastOccurrence());
+		assertEquals(t0.plusSeconds(5).toEpochMilli(), ThrownStats.copyOrNull(stats).getLastOccurrence());
+	}
+
+	@Test void c03_thrownStats_childStoreInheritsParentClock() {
+		var t0 = Instant.parse("2026-01-01T00:00:00Z");
+		var parent = ThrownStore.create().clock(Clock.fixed(t0, ZoneOffset.UTC)).build();
+		var child = ThrownStore.create().parent(parent).build();
+		var t = new Throwable("foo");
+		t.fillInStackTrace();
+		assertEquals(t0.toEpochMilli(), child.add(t).getFirstOccurrence());
+	}
+
+	@Test void c04_thrownStats_nullClockRejected() {
+		var b = ThrownStats.create(BasicBeanStore.INSTANCE);
+		assertThrows(IllegalArgumentException.class, () -> b.clock(null));
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

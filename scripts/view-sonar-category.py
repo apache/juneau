@@ -12,8 +12,9 @@
 # * specific language governing permissions and limitations under the License.                                              *
 # ***************************************************************************************************************************
 """
-Helper script to view SonarQube issue categories without interactive input.
-Usage: view-sonar-category.py <category-name> [--limit N]
+Legacy viewer for a locally saved, categorized SonarQube issue export; it does not talk to SonarCloud.
+
+Full docs: view-sonar-category.md
 """
 
 import json

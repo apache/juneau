@@ -12,6 +12,14 @@
 # * specific language governing permissions and limitations under the License.
 # ***************************************************************************************************************************
 """
+Reports JaCoCo branch and instruction coverage for a source file or folder, merged across every module's test data.
+
+Full docs: coverage.md
+"""
+
+from __future__ import annotations
+
+USAGE = """
 Coverage reporter for Apache Juneau.
 
 Shows JaCoCo branch and instruction coverage for a source file or folder.
@@ -71,8 +79,6 @@ Examples:
     ./scripts/coverage.py juneau-core/juneau-marshall/src/main/java/org/apache/juneau/marshall/BitSetFormat.java --run
     ./scripts/coverage.py --by-module
 """
-
-from __future__ import annotations
 
 import os
 import re
@@ -624,7 +630,7 @@ def by_module_report(xml_path: Path):  # NOSONAR python:S3776 -- Cognitive compl
 def main():  # NOSONAR: always returns 0 by design — standard POSIX exit code for success
     args = sys.argv[1:]
     if not args or "--help" in args or "-h" in args:
-        print(__doc__)
+        print(USAGE)
         return 0
 
     path_arg = None

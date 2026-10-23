@@ -16,13 +16,9 @@
 # limitations under the License.
 
 """
-Prompt for PGP Passphrase Script
+Makes a throwaway `gpg --clearsign` call so the PGP passphrase is asked for (and cached by the agent) at the start of a long run, not at the end when signing is needed.
 
-This script makes a dummy PGP call to prompt for passphrase early in the execution.
-This ensures the user is prompted for their PGP passphrase at the beginning
-rather than waiting until signing is needed near the end of the process.
-
-Usage: python3 scripts/prompt-pgp-passphrase.py
+Full docs: prompt-pgp-passphrase.md
 """
 
 import os

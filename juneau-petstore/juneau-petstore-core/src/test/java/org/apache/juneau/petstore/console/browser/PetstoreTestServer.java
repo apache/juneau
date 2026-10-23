@@ -67,17 +67,50 @@ public final class PetstoreTestServer {
 			return PetstoreSeed.create().populate(new PetStore(PetstoreSeed.DEFAULT_CLOCK));
 		}
 
+		/** @return A 150 ms groom step, so a full groom run takes about 8 s. */
+		@Bean public JobsRest.GroomPeriod groomPeriod() {
+			return new JobsRest.GroomPeriod(Duration.ofMillis(150));
+		}
+
 		/**
-		 * @return A 12 s jobs hard timeout, so a browser test can watch a slow restock time out.  It leaves room on both
-		 * 	sides of the async-job cases: a 6 s hold after the effect ends well before it, and a 10 s wait plus a 10 s
-		 * 	hold runs well past it.
+		 * @return A 5 s jobs hard timeout, so a browser test can watch a slow restock time out.  A species hold must
+		 * 	end well before it (see {@link ShortHoldHost}), or the job is reaped as a hard timeout.
 		 */
 		@Bean public JobsRest.HardTimeout jobsHardTimeout() {
+			return new JobsRest.HardTimeout(Duration.ofSeconds(5));
+		}
+	}
+
+	/** {@link BrowserHost} plus a 2 s species-row hold: long enough to see a hold, short enough to wait out. */
+	public static class ShortHoldHost extends BrowserHost {
+		private static final long serialVersionUID = 1L;
+
+		/** @return The species-row hold. */
+		@Bean public JobsRest.SpeciesHold speciesHold() {
+			return new JobsRest.SpeciesHold(Duration.ofSeconds(2));
+		}
+	}
+
+	/**
+	 * {@link BrowserHost} plus a 7 s species-row hold, so a cancel in any scenario lands in it, and a 12 s hard timeout:
+	 * a hold must end well before the timeout, or the job is reaped as a hard timeout instead of being cancelled after
+	 * its effect.
+	 */
+	public static class CancelHoldHost extends BrowserHost {
+		private static final long serialVersionUID = 1L;
+
+		/** @return The species-row hold. */
+		@Bean public JobsRest.SpeciesHold speciesHold() {
+			return new JobsRest.SpeciesHold(Duration.ofSeconds(7));
+		}
+
+		/** @return A 12 s jobs hard timeout, longer than the hold. */
+		@Override @Bean public JobsRest.HardTimeout jobsHardTimeout() {
 			return new JobsRest.HardTimeout(Duration.ofSeconds(12));
 		}
 	}
 
-	/** Contributes {@link BrowserHost} and the console and API CSRF boundaries the runners install to the fixture's Jetty. */
+	/** Contributes the console and API CSRF boundaries the runners install to the fixture's Jetty; a timings class adds the host. */
 	@Configuration
 	public static class BrowserConfig {
 		// Shared by both boundary beans, as in the runners.
@@ -100,18 +133,52 @@ public final class PetstoreTestServer {
 				.order(ServletFilterRegistration.HIGHEST_PRECEDENCE + 10)
 				.build();
 		}
+	}
 
-		/** @return The root servlet. */
+	private PetstoreTestServer() {}
+
+	/**
+	 * The root servlet of a variant; the variants differ only in the host's job timings.  A fixture takes configuration
+	 * classes, not parameters, and the timing beans must sit on the host (a bean on a configuration class does not reach
+	 * the console resources), so each variant is a class that mounts its own host.
+	 */
+	@Configuration
+	public static class DefaultTimings {
+		/** @return The root servlet, with {@link BrowserHost}'s timings. */
 		@Bean public Servlet root() {
 			return new BrowserHost();
 		}
 	}
 
-	private PetstoreTestServer() {}
+	/** The variant whose species rows hold 2 s after their effect. */
+	@Configuration
+	public static class ShortHoldTimings {
+		/** @return The root servlet, a {@link ShortHoldHost}. */
+		@Bean public Servlet root() {
+			return new ShortHoldHost();
+		}
+	}
 
-	/** @return A new fixture; register it with {@code @RegisterExtension} on a static field. */
+	/** The variant whose species rows hold 7 s after their effect, for the cancel cases. */
+	@Configuration
+	public static class CancelHoldTimings {
+		/** @return The root servlet, a {@link CancelHoldHost}. */
+		@Bean public Servlet root() {
+			return new CancelHoldHost();
+		}
+	}
+
+	/** @return A new fixture with {@link DefaultTimings}; register it with {@code @RegisterExtension} on a static field. */
 	public static MicroserviceTestFixture fixture() {
-		return MicroserviceTestFixture.create().configurations(BrowserConfig.class);
+		return fixture(DefaultTimings.class);
+	}
+
+	/**
+	 * @param timings A timings configuration class, e.g. {@link ShortHoldTimings}.
+	 * @return A new fixture; register it with {@code @RegisterExtension} on a static field.
+	 */
+	public static MicroserviceTestFixture fixture(Class<?> timings) {
+		return MicroserviceTestFixture.create().configurations(BrowserConfig.class, timings);
 	}
 
 	/**

@@ -13,13 +13,9 @@
 # ***************************************************************************************************************************
 
 """
-Start Juneau Petstore (Spring Boot) Application
+Starts the Juneau petstore sample application on Spring Boot, through the Spring Boot Maven plugin.
 
-This script starts the Juneau petstore sample application using Spring Boot.
-It runs the org.apache.juneau.petstore.springboot.App main class via the Spring Boot Maven plugin.
-
-Usage:
-    python3 scripts/start-petstore-springboot.py
+Full docs: start-petstore-springboot.md
 """
 
 import sys

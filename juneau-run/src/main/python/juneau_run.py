@@ -592,6 +592,8 @@ _MARK_RE = re.compile("(?<!m)[✓✗]")   # not one already coloured (right afte
 _NOTE_PREFIX = {"info": "ℹ", "warn": "⚠", "error": "✗"}
 PENDING_ENV = "JUNEAU_RUN_PENDING"     # a parent session's labelled pending rows, [[id, label], ...], for a nested one
 OVERALL_ENV = "JUNEAU_RUN_OVERALL"     # a parent session's {elapsed, done, pending: [[id, hist_wall_s], ...]}, for a nested one
+HEADER_ENV = "JUNEAU_RUN_HEADER"       # a parent session's header, [[head|more, text, cut], ...], drawn atop a nested view
+HANDBACK_ENV = "JUNEAU_RUN_HANDBACK"   # a file a nested session writes its rows' outcomes to, [[id, status], ...]
 # A row's icon (spec 5.2): a spinner while it runs, then its outcome: a coloured ● for ok, warn and fail, or ✔ ⚠ ✗
 # when colour is off.  No VS16 after ⚠: it must stay one column.
 SPINNER = "⠋⠙⠹⠸⠼⠴⠦⠧⠇⠏"
@@ -850,12 +852,21 @@ def fmt_totals(totals, tests_mode=False, expected=None):
     return f"{total:,}{of} tests" + (f", {fail + err} failed" if fail + err else "")
 
 
-def format_final(status, ms, failed_title, full_log):
+def format_final(status, ms, failed_title, full_log, done=None, total=None):
+    """The final row's text (after its ▶): the outcome, the steps that finished ok or warned of all the run counted
+    (none without a plan), then the full log on a failure."""
+    steps = f"  · {done} of {total} steps" if total else ""
     if status == "ok":
-        return f"✅ Done in {fmt_elapsed(ms)}"
+        return f"Overall  ✅ Done in {fmt_elapsed(ms)}{steps}"
     if status == "cancelled":
-        return f"⚠ Cancelled after {fmt_elapsed(ms)}"
-    return "❌ Failed" + (f" at {failed_title}" if failed_title else "") + (f" · full log: {full_log}" if full_log else "")
+        return f"Overall  ⚠ Cancelled after {fmt_elapsed(ms)}{steps}"
+    return ("Overall  ❌ Failed" + (f" at {failed_title}" if failed_title else "") + steps
+            + (f"  · full log: {full_log}" if full_log else ""))
+
+
+def final_line(block, color=False):
+    """A final block as the run's last row: ▶ (cyan under colour, like the title row) and format_final's text."""
+    return f"{head_mark(HEAD_MARK, color)} {format_final(*block[1:])}"
 
 
 BAR_SRCS = ("sub", "row")     # unit sources that keep Maven module-bar and Setup bookkeeping (boxes, cells, poms)
@@ -1041,6 +1052,21 @@ def _parent_overall():
         return None
 
 
+def _parent_header():
+    """JUNEAU_RUN_HEADER as header blocks, or [] when it is unset or malformed."""
+    try:
+        value = json.loads(os.environ.get(HEADER_ENV) or "[]")
+        return [("header", str(text), HEAD_MARK if mark == "head" else MORE_MARK) + (("cut",) if cut else ())
+                for mark, text, cut in value]
+    except (ValueError, TypeError):
+        return []
+
+
+def _first_line(text):
+    """text's first line, followed by " …" when it has more (a multi-line commit message)."""
+    return (text.split("\n", 1)[0].rstrip() + " …") if "\n" in text else text
+
+
 class Board:
     """The run's state for the console view.  apply(kind, fields) returns the blocks that event produces."""
 
@@ -1059,6 +1085,7 @@ class Board:
         self.setup = None           # the run's one Setup row (pom modules), owned by the first Maven row that has poms
         self.plan = None            # the planned top-level step ids, in order (spec 6), or None
         self.plan_labels = {}       # planned step id -> label, for the ones that draw a pending row
+        self.handed_back = {}       # a handoff child's step id -> its status (JUNEAU_RUN_HANDBACK): counted, never drawn
         self.parent_pending = _parent_pending() if nested else []     # a parent session's pending rows, (id, label)
         self.parent_overall = _parent_overall() if nested else None   # a parent session's Overall inputs (OVERALL_ENV)
         self.finished = False       # the done event arrived: nothing is pending any more
@@ -1080,10 +1107,11 @@ class Board:
             return []
         out = []
         if self.plan:
-            last = max((i for i, sid in enumerate(self.plan) if sid in self.rows), default=-1)
+            started = set(self.rows) | set(self.handed_back)
+            last = max((i for i, sid in enumerate(self.plan) if sid in started), default=-1)
             out = [(sid, self.plan_labels[sid]) for i, sid in enumerate(self.plan)
-                   if i > last and sid in self.plan_labels and sid not in self.rows]
-        have = set(self.rows) | {i for i, _ in out}
+                   if i > last and sid in self.plan_labels and sid not in started]
+        have = set(self.rows) | set(self.handed_back) | {i for i, _ in out}
         return out + [(i, label) for i, label in self.parent_pending if i not in have]
 
     def setup_failed(self):
@@ -1182,11 +1210,11 @@ class Board:
         self.session_t0 = self.clock()
         if self.nested:
             return []
-        # "<title>: <item>, <item>", or the bare title
-        # an item with a newline (a multi-line commit message) shows its first line and an ellipsis
-        items = [(t.split("\n", 1)[0].rstrip() + " …") if "\n" in t else t for t in map(str, f["header"])]
-        head = f["title"] + (": " + ", ".join(items) if items else "")
-        return [("header", head, HEAD_MARK)] + [("header", t, MORE_MARK) for t in f.get("header_more", ())]
+        # "<title>: <item> · <item>", or the bare title; then a cut line per `lines` entry, then the log lines
+        head = f["title"] + (": " + " · ".join(_first_line(str(t)) for t in f["header"]) if f["header"] else "")
+        return ([("header", head, HEAD_MARK)]
+                + [("header", _first_line(str(t)), MORE_MARK, "cut") for t in f.get("lines", ())]
+                + [("header", t, MORE_MARK) for t in f.get("header_more", ())])
 
     def _on_plan(self, f):
         self.plan = list(f["ids"])
@@ -1209,15 +1237,20 @@ class Board:
     def _overall_steps(self, now):
         """The plan's steps as overall_figures() takes them, after a parent session's (OVERALL_ENV): its done steps,
         and its pending ones that this plan and these rows do not already cover."""
+        started = set(self.rows) | set(self.handed_back)
         steps = []
         if self.parent_overall is not None:
             _, done, pending = self.parent_overall
             steps = [("", "done", None, None)] * done
             steps += [(sid, "pending", hist, None) for sid, hist in pending
-                      if sid not in (self.plan or ()) and sid not in self.rows]
-        last_started = max((i for i, sid in enumerate(self.plan) if sid in self.rows), default=-1)
+                      if sid not in (self.plan or ()) and sid not in started]
+        last_started = max((i for i, sid in enumerate(self.plan) if sid in started), default=-1)
         for i, sid in enumerate(self.plan):
             r = self.rows.get(sid)
+            if r is None and sid in self.handed_back:
+                if self.handed_back[sid] != "skip":
+                    steps.append((sid, "done", None, None))
+                continue
             if r is None:
                 if i < last_started:
                     continue                    # passed over by a later planned step
@@ -1262,6 +1295,27 @@ class Board:
         steps = self._overall_steps(now)
         return {"elapsed": self._overall_elapsed(now), "done": sum(1 for _, state, _, _ in steps if state == "done"),
                 "pending": [[sid, hist] for sid, state, hist, _ in steps if state == "pending"]}
+
+    def hand_back(self, outcomes):
+        """Record a handoff child's outcomes, [(id, status, label)] (JUNEAU_RUN_HANDBACK): Overall and the final counts
+        take them, nothing draws them (the child printed its rows).  An id this Board has a row for keeps its row; the
+        first failed one names the run's failure, by this Board's label for it, else the child's (never the bare id)."""
+        for sid, status, label in outcomes:
+            if sid in self.rows:
+                continue
+            self.handed_back[sid] = status
+            if status == "fail" and self.failed_title is None:
+                self.failed_title = self.plan_labels.get(sid) or label
+
+    def step_counts(self):
+        """(done, total) for the final row, or None with no plan: the counted steps (a parent's too) that finished ok
+        or warned, and all the steps Overall counts (skips are left out)."""
+        if not self.plan:
+            return None
+        failed = {sid for sid, r in self.rows.items() if r.status == "fail"}
+        failed |= {sid for sid, status in self.handed_back.items() if status == "fail"}
+        steps = self._overall_steps(self.clock())
+        return sum(1 for sid, state, _, _ in steps if state == "done" and sid not in failed), len(steps)
 
     def _on_step_start(self, f):
         parent = self.rows.get(f.get("parent"))
@@ -1652,13 +1706,13 @@ class Board:
         return [("logonly", f["text"])]
 
     def _on_prompt(self, f):
-        return [("raw", f["text"])]
+        return [("raw", f["text"], "prompt")]
 
     def _on_prompt_echo(self, f):
-        return [("raw", f["text"])]
+        return [("raw", f["text"], "echo")]
 
     def _on_prompt_end(self, f):
-        return [("raw", "\n")]
+        return [("raw", "\n", "end")]
 
     def _on_quiet(self, f):
         r = self._target(f["step"])
@@ -1670,7 +1724,8 @@ class Board:
         self.finished = True
         if self.nested:
             return []
-        return [("final", f["status"], int((self.clock() - self.t0) * 1000), self.failed_title, self.full_log)]
+        return [("final", f["status"], int((self.clock() - self.t0) * 1000), self.failed_title, self.full_log,
+                 *(self.step_counts() or (None, None)))]
 
 
 def row_state(row):
@@ -1806,14 +1861,19 @@ def head_mark(mark, color=False):
     return mark
 
 
-def header_lines(block, cols, color=False):
+def header_lines(block, cols, color=False, live=False):
     """A header block's lines.  ("header", text) is the text as is; ("header", text, mark) puts mark in the icon
-    column, dim when it is MORE_MARK.  The title row (HEAD_MARK) word-wraps at cols with a two-space hanging indent;
-    the others don't wrap, so a log path stays on its `tail -f` line."""
+    column, dim when it is MORE_MARK.  A fourth field ("cut") marks a `lines` entry.  On the live screen (live) the
+    title row and the cut rows are cut to cols with an ellipsis, so each costs one line; elsewhere the title row
+    word-wraps at cols with a two-space hanging indent.  The log rows never wrap or cut, so a path stays on its
+    `tail -f` line."""
     if len(block) < 3:
         return [block[1]]
     text, mark = block[1], block[2]
     shown = head_mark(mark, color)
+    if live and (mark == HEAD_MARK or len(block) > 3):
+        room = cols - 2
+        return [f"{shown} {text if _vlen(text) <= room else _vcut(text, max(0, room - 1)) + '…'}"]
     if mark != HEAD_MARK:
         return [f"{shown} {text}"]
     lines = [""]
@@ -1903,7 +1963,7 @@ class PlainRenderer:
             elif kind == "logonly" and self.log:
                 self._write(block[1] + "\n")
             elif kind == "final":
-                self._write(format_final(*block[1:]) + "\n")
+                self._write(final_line(block) + "\n")
 
     def tick(self, board):
         now = self.clock()
@@ -2009,6 +2069,182 @@ def collapse_names(names, cols):
     return line if _vlen(line) <= budget else _vcut(line, budget)
 
 
+def label_list(head, labels, cols):
+    """head, then the labels comma-joined, cut at a label boundary with ", …" to fit cols (the folded pending, done
+    and failed lines)."""
+    line = head + ", ".join(labels)
+    if _vlen(line) <= cols:
+        return line
+    for keep in range(len(labels) - 1, 0, -1):
+        line = head + ", ".join(labels[:keep]) + ", …"
+        if _vlen(line) <= cols:
+            return line
+    return _vcut(head, max(0, cols - 1)) + "…"
+
+
+class _Group:
+    """One finished row of the transcript with what belongs to it: state (ok, warn or fail), label (None for text
+    before any row), head (its Setup and row lines) and body (its notes, hints and module lines)."""
+
+    def __init__(self, state, label, head, body):
+        self.state, self.label, self.head, self.body = state, label, head, body
+
+
+_Run = collections.namedtuple("_Run", "head units")             # a running row: its Setup, row and progress lines, then _Units
+_Unit = collections.namedtuple("_Unit", "t0 i lines name")      # a running unit's lines, and its name on a packed names line
+
+
+class _Fold:
+    """The live frame's parts and how far each is folded.  lines() draws them at the current fold; steps() folds one
+    notch at a time, in the spec's order (3, Stage A then Stage B), yielding after each."""
+
+    def __init__(self, header, groups, running, pending, overall, cols, color):
+        self.title, self.head = header
+        self.groups, self.running, self.pending, self.overall = groups, running, pending, overall
+        self.cols, self.color = cols, color
+        self.kept = len(pending)    # pending rows kept whole; the rest fold into one "N more" line
+        self.done = []              # indexes of the folded done groups, oldest first
+        self.units = set()          # (run index, unit index) folded onto a names line
+        self.bodies = set()         # indexes of failed groups whose body is cut to one line
+        self.no_names = set()       # run indexes whose names line is dropped
+        self.drop = set()           # "done", "more", "failed": a folded line that is dropped
+        self.failed = False         # every failed group folded into one "N failed" line
+        self.head_gone = set()      # indexes into head that are dropped
+        self.runs_gone = 0          # running rows dropped, oldest first
+
+    def _summary(self, state, head, labels):
+        text = label_list(head, labels, self.cols - 2)
+        return f"{icon(state, color=self.color)} " + (f"\x1b[2m{text}\x1b[0m" if self.color else text)
+
+    def lines(self):
+        """(text, wraps) pairs: wraps is True for a log line, which is never cut and the terminal wraps."""
+        out = [] if self.title is None else [(self.title, False)]
+        out += [(text, wraps) for i, (text, wraps, _) in enumerate(self.head) if i not in self.head_gone]
+        fails = [i for i, g in enumerate(self.groups) if g.state == "fail"]
+        done = set(self.done)
+        for i, g in enumerate(self.groups):
+            if i in done:
+                if i == self.done[0] and "done" not in self.drop:
+                    folded = [self.groups[j] for j in self.done]
+                    state = "warn" if any(f.state == "warn" for f in folded) else "ok"
+                    labels = [f.label for f in folded if f.label]
+                    out.append((self._summary(state, f"{len(labels)} done: ", labels), False))
+            elif g.state == "fail" and self.failed:
+                if i == fails[0] and "failed" not in self.drop:
+                    labels = [self.groups[j].label for j in fails if self.groups[j].label]
+                    out.append((self._summary("fail", f"{len(labels)} failed: ", labels), False))
+            else:
+                out += [(t, False) for t in g.head]
+                if i in self.bodies:
+                    out.append((f"    … {len(g.body)} more lines (condensed log)", False))
+                else:
+                    out += [(t, False) for t in g.body]
+        for j, run in enumerate(self.running):
+            if j < self.runs_gone:
+                continue
+            out += [(t, False) for t in run.head]
+            out += [(t, False) for k, u in enumerate(run.units) if (j, k) not in self.units for t in u.lines]
+            folded = sorted((u for k, u in enumerate(run.units) if (j, k) in self.units), key=lambda u: (u.t0, u.i))
+            if folded and j not in self.no_names:
+                out.append(("    " + collapse_names([u.name for u in folded], self.cols - 2), False))
+        out += [(_vcut(pending_line(label, self.color), self.cols), False) for label in self.pending[:self.kept]]
+        rest = self.pending[self.kept:]
+        if rest and "more" not in self.drop:
+            out.append((pending_line(label_list(f"{len(rest)} more: ", rest, self.cols - 2), self.color), False))
+        if self.overall is not None:
+            out.append((self.overall, False))
+        return out
+
+    def height(self, columns):
+        """The physical height of lines() without building them (a tick folds a long transcript a notch at a time):
+        a log line costs ceil(width / columns), every other line one."""
+        n = 0 if self.title is None else 1
+        n += sum(max(1, -(-_vlen(t) // columns)) if wraps else 1
+                 for i, (t, wraps, _) in enumerate(self.head) if i not in self.head_gone)
+        done = set(self.done)
+        n += 1 if done and "done" not in self.drop else 0
+        if self.failed and "failed" not in self.drop and any(g.state == "fail" for g in self.groups):
+            n += 1
+        for i, g in enumerate(self.groups):
+            if i not in done and not (g.state == "fail" and self.failed):
+                n += len(g.head) + (1 if i in self.bodies else len(g.body))
+        for j in range(self.runs_gone, len(self.running)):
+            units = self.running[j].units
+            n += len(self.running[j].head) + sum(len(u.lines) for k, u in enumerate(units) if (j, k) not in self.units)
+            n += 1 if j not in self.no_names and any((j, k) in self.units for k in range(len(units))) else 0
+        n += min(self.kept, len(self.pending)) + (1 if self.kept < len(self.pending) and "more" not in self.drop else 0)
+        return n + (1 if self.overall is not None else 0)
+
+    def steps(self):
+        # A1: pending rows, keeping the first k (never folding just one of several); a lone one folds too, so B3 can drop it
+        n = len(self.pending)
+        for k in range(max(n - 2, 0), -1, -1) if n else ():
+            self.kept = k
+            yield
+        # A2: done groups, oldest first
+        for i, g in enumerate(self.groups):
+            if g.state != "fail":
+                self.done.append(i)
+                yield
+        # A3: unit lines, newest first (of units started at the same instant, the one listed later folds first)
+        units = [(u.t0, u.i, j, k) for j, run in enumerate(self.running) for k, u in enumerate(run.units)]
+        for _, _, j, k in sorted(units, reverse=True):
+            self.units.add((j, k))
+            yield
+        # A4: failed groups' bodies, oldest first
+        for i, g in enumerate(self.groups):
+            if g.state == "fail" and len(g.body) > 1:
+                self.bodies.add(i)
+                yield
+        yield from self._stage_b()
+
+    def _stage_b(self):
+        # B1: the packed names lines, oldest row first
+        for j in range(len(self.running)):
+            if any(jj == j for jj, _ in self.units):
+                self.no_names.add(j)
+                yield
+        # B2, B3: the done line, the more line
+        for name, present in (("done", bool(self.done)), ("more", self.kept < len(self.pending))):
+            if present:
+                self.drop.add(name)
+                yield
+        # B4: the failed groups, into one "N failed" line
+        if any(g.state == "fail" for g in self.groups):
+            self.failed = True
+            yield
+        # B5: the header's lines and log lines (the cut lines in order, then Condensed, Output, Cancel)
+        for i in sorted(range(len(self.head)), key=lambda i: (self.head[i][2], i)):
+            self.head_gone.add(i)
+            yield
+        # B6: running rows, oldest first, with their Setup and progress lines (the newest stays)
+        while self.runs_gone < len(self.running) - 1:
+            self.runs_gone += 1
+            yield
+        # B7: the failed line; B8: the newest running row
+        if self.failed:
+            self.drop.add("failed")
+            yield
+        if self.runs_gone < len(self.running):
+            self.runs_gone += 1
+            yield
+
+
+def fit_view(header, groups, running, pending, overall, budget, cols, columns, color=False):
+    """The live frame's lines, folded until their physical height is at most budget (spec 3).  header is (title line
+    or None, [(text, wraps, drop rank)]); a wrapping (log) line costs ceil(width / columns) lines, every other line is
+    cut to cols and costs one.  The title and Overall lines are pinned; with budget 1 only the first of them stays."""
+    fold = _Fold(header, groups, running, pending, overall, cols, color)
+    if fold.height(columns) > budget:
+        for _ in fold.steps():
+            if fold.height(columns) <= budget:
+                break
+    lines = [t for t, _ in fold.lines()]
+    if fold.height(columns) > budget:
+        lines = lines[:max(0, budget)]
+    return lines
+
+
 def _fit(left, right, cols):
     """left, then right flush with column cols; left is cut with an ellipsis when both don't fit."""
     room = cols - (len(right) + 2 if right else 0)
@@ -2049,63 +2285,149 @@ def terminal_size():
     return os.terminal_size((size.columns or 80, size.lines or 24))
 
 
-# Known limitations: narrowing a reflowing terminal can leave stale fragments above the region, because the cursor-up
-# count is the number of lines drawn at the old width and the terminal has rewrapped them into more.
+# Known limitations: (1) a terminal that does not reflow on resize keeps the old lines' wrapping, so after a narrowing
+# the cursor-up count (which assumes rewrapping at the new width) can overshoot into scrollback or leave a fragment; the
+# next frame repaints from wherever the cursor lands.  (2) Output that bypasses this renderer (a stray print or a child
+# writing to the tty) moves the cursor without updating widths, so the whole frame above it goes stale until close():
+# every frame line is redrawn from a wrong origin, not just the last one.  Child output goes through the event pipe or
+# the pause()/passthrough paths for this reason.
 class LiveRenderer:
-    """Finished blocks print permanently; running rows and their modules redraw in place below them, at most once per
-    REDRAW_SECONDS, and never taller than the terminal's rows minus 2."""
+    """The live view: one frame — the session header, the transcript of finished blocks, then the running rows,
+    pending rows and Overall — redrawn in place at most once per REDRAW_SECONDS and folded by fit_view to the
+    terminal's rows minus 2.  Nothing reaches scrollback while the frame is live; pause() and close() print the header
+    and the whole transcript there, uncut."""
 
     REDRAW_SECONDS = 0.1
 
-    def __init__(self, write, size=terminal_size, clock=time.monotonic, color=True):
+    def __init__(self, write, size=terminal_size, clock=time.monotonic, color=True, sticky=()):
         self.write = write
         self.size = size
         self.clock = clock
         self.color = color
         self.glyphs = COLOR_GLYPHS if color else NO_COLOR_GLYPHS
         self.dots = COLOR_DOT_GLYPHS if color else DOT_GLYPHS     # one per test class on a module's sub-lines
-        self.height = 0             # lines of the region now on screen
+        self.header = []            # this session's header blocks
+        self.sticky = list(sticky)  # a parent session's header blocks, shown while this one has none (nested)
+        self.header_printed = False
+        self.transcript = []        # (kind, block, lines): finished blocks, rendered once when they arrive
+        self.cut = None             # (cols, [lines cut to cols, one list per transcript entry]); None after an insert
+        self.widths = []            # display width of each frame line on screen, for the cursor-up count
+        self.partial = 0            # display width of a prompt's partial line under the frame
+        self.height = 0             # lines of the frame now on screen (kept for callers and tests)
+        self.last_frame = None
+        self.last_size = None
         self.last_draw = None
         self.paused = False
         self.prompting = False      # a watchdog prompt's partial line is on screen
         self.cursor_hidden = False
-        self.closed = False         # after close() permanent blocks still print, but nothing redraws
+        self.closed = False         # after close() blocks print at once, and nothing redraws
         self.board = None
-        self.flushed = 0            # blocks of the last render() call already printed (Console._fallback)
+        self.flushed = 0            # blocks of the last render() call already taken (Console._fallback)
+        self.prompt_at = 0          # the transcript position a prompt joins when its line ends
+        self.prompt_text = ""       # the prompt and its echo, as written under the frame
 
     def render(self, board, blocks):
         self.board = board
         self.flushed = 0
-        lines = []
         for i, block in enumerate(blocks):
             kind = block[0]
             if kind == "raw":
-                self._flush(lines)
-                lines = []
-                self.flushed = i
-                self._clear()
-                self.write(block[1])
-                self.flushed = i + 1
-                self.prompting = not block[1].endswith("\n")
-                if self.prompting:
-                    self._show_cursor()     # the user types at the prompt; the next _draw hides it again
+                self._raw(block)                    # Task 10
+            elif self.closed:
+                self.write("".join(self._tint(line) + "\n" for line in self._block_lines(block, self._cols())))
             elif kind == "header":
-                lines += header_lines(block, self.size().columns - 1, self.color)
-            elif kind == "text":
-                lines.append(block[1])
-            elif kind == "row":
-                lines.append(self._row(board, block[1], self.size().columns - 1))
-            elif kind == "setup":
-                lines.append(setup_line(board, self.glyphs, self.size().columns - 1, self.clock(), self.color))
-            elif kind == "hint":
-                lines += hint_lines(block)
-            elif kind == "module":
-                lines.append(module_line(block[2], self.glyphs, self.clock()))
-            elif kind == "final":
-                lines.append(format_final(*block[1:]))
-        self._flush(lines)
-        self.flushed = len(blocks)
+                self.header.append(block)
+            else:
+                # rendered now, once: setup and module lines read the clock and board.setup, which move on, and a row
+                # keeps the label column it finished with when a longer label starts later
+                self.transcript.append((kind, block, self._block_lines(block, self._cols())))
+            self.flushed = i + 1
         self._draw(force=bool(blocks))
+
+    def _cols(self):
+        return self.size().columns - 1
+
+    def _block_lines(self, block, cols, live=False):
+        """A finished block's lines, as scrollback prints them (live cuts the header's title and cut lines)."""
+        kind = block[0]
+        if kind == "header":
+            return header_lines(block, cols, self.color, live=live)
+        if kind == "text":
+            return block[1].split("\n")
+        if kind == "row":
+            return self._row(self.board, block[1], cols).split("\n")
+        if kind == "setup":
+            return [setup_line(self.board, self.glyphs, cols, self.clock(), self.color)]
+        if kind == "hint":
+            return hint_lines(block)
+        if kind == "module":
+            return [module_line(block[2], self.glyphs, self.clock())]
+        if kind == "final":
+            return [final_line(block, self.color)]
+        return []
+
+    def _raw(self, block):
+        """A watchdog prompt: the frame stays above it (or clears when the prompt would not leave it a line), the
+        prompt and its echo are written under it, and nothing redraws until the line ends; then the prompt joins the
+        transcript where it started, ahead of the rows that finished while it was up.  A block without a role (an older
+        sender) is a prompt; an echo with no prompt up starts one, and an end with no prompt up is dropped, so neither
+        writes under the frame unaccounted.
+
+        Not handled: an echo that scrolls the terminal (a prompt on the bottom row) pushes the frame's top lines into
+        scrollback, where the next redraw cannot reach them, so a stale copy of them stays there; the cursor-up cap
+        (rows - 1) keeps the redraw itself on screen."""
+        text = block[1]
+        role = block[2] if len(block) > 2 else "prompt"
+        if not self.prompting:
+            if role == "end":
+                return
+            self._start_prompt(text)
+        else:
+            self.write(text)
+            self.prompt_text += text
+            self._advance(text)
+        if role == "end" or text.endswith("\n"):
+            self._end_prompt()
+            self.flushed += 1       # the text is on screen: a failing redraw must not make _fallback write it again
+            self._draw(force=True)
+
+    def _start_prompt(self, text):
+        self.prompt_at, self.prompt_text = len(self.transcript), ""
+        size = self.size()
+        k = sum(max(1, -(-_vlen(line) // size.columns)) for line in text.split("\n"))
+        if k >= size.lines - 3:
+            self._clear()
+        else:
+            self._draw(force=True, reserve=k)
+        self.prompting = True
+        self._show_cursor()         # the user types at the prompt; the next _draw hides it again
+        self.write(text)
+        self.prompt_text = text
+        self._advance(text)
+
+    def _advance(self, text):
+        """Account for text written under the frame: each newline closes a line of the partial's width."""
+        for ch in text:
+            if ch == "\n":
+                self.widths.append(self.partial)
+                self.partial = 0
+            elif ch != "\r":
+                self.partial += _cw(ch)
+
+    def _end_prompt(self):
+        """The prompt's line is over: end it with a newline if nothing has (close() and dump() reach here mid-line,
+        as on Ctrl-C at the prompt), count it, and record the prompt in the transcript where it started.
+        Counting an unended partial as a whole line would move the next cursor-up one line too far, erasing the line
+        above the frame."""
+        if not self.prompt_text.endswith("\n"):
+            self.write("\n")
+            self._advance("\n")
+        self.prompting = False
+        text = self.prompt_text.rstrip("\n")
+        if text:
+            self.transcript.insert(self.prompt_at, ("text", ("text", text), text.split("\n")))
+            self.cut = None         # the cut cache is by position; an insert shifts it
+        self.prompt_text = ""
 
     def _row(self, board, r, cols, pending=False):
         now = self.clock()
@@ -2121,72 +2443,99 @@ class LiveRenderer:
             rest = f"{rest} · {r.progress}" if rest else r.progress
         return _fit_row(label, cells, rest, elapsed, cols, wrap=bool(r.unit_kind))
 
-    def _flush(self, lines):
-        if lines:
-            self._clear()
-            if self.prompting:
-                self.write("\n")           # end the prompt's partial line first; the prompt is no longer on it
-                self.prompting = False
-            self.write("".join(self._tint(line) + "\n" for line in lines))
+    def frame(self, cols, columns, budget):
+        """The frame's lines for a cols-wide pane of budget lines (columns is the terminal width a log line wraps
+        at)."""
+        runs, pending, overall = self.region_parts(self.board, cols)
+        return fit_view(self._header_parts(cols), self._groups(cols), runs, pending, overall, budget, cols, columns,
+                        self.color)
+
+    _LOG_RANK = {"Condensed": 0, "Output": 1, "Cancel": 2}     # Stage B5 drops the header's log lines in this order
+
+    def _header_parts(self, cols):
+        """(title line or None, [(text, wraps, drop rank)]): a cut line ranks -1, so it drops before any log line."""
+        title, head = None, []
+        for block in self.header or self.sticky:
+            text = header_lines(block, cols, self.color, live=True)[0]
+            if len(block) > 2 and block[2] == HEAD_MARK and title is None:
+                title = text
+            elif len(block) > 3:
+                head.append((text, False, -1))
+            else:
+                head.append((text, True, self._LOG_RANK.get(str(block[1]).split(":", 1)[0], 0)))
+        return title, head
+
+    def _groups(self, cols):
+        """The transcript as _Groups: a Setup line joins the row after it, a row opens a group (fail, warn or ok, by
+        row_state), and text, hints and module lines join the open group (text before any row opens an ok group).
+        The final block is not part of the frame.  Every line is cut to cols with an ellipsis, once per entry and width
+        (self.cut), so a tick costs a pass over cached lists, not a re-render of the transcript."""
+        def cut(line):
+            return line if _vlen(line) <= cols else _vcut(line, max(0, cols - 1)) + "…"
+
+        if self.cut is None or self.cut[0] != cols:
+            self.cut = (cols, [])
+        done = self.cut[1]
+        for kind, block, lines in self.transcript[len(done):]:
+            done.append([cut(line) for line in lines])
+        groups, setup = [], []
+        for (kind, block, _), lines in zip(self.transcript, done):
+            if kind == "final":
+                continue
+            if kind == "setup":
+                setup += lines
+            elif kind == "row":
+                state = row_state(block[1])
+                groups.append(_Group(state if state in ("fail", "warn") else "ok", block[1].label, setup + lines, []))
+                setup = []
+            else:
+                if not groups:
+                    groups.append(_Group("ok", None, [], []))
+                groups[-1].body = groups[-1].body + lines      # never extend a cached list in place
+        if setup:
+            groups.append(_Group("ok", None, setup, []))
+        return groups
 
     def tick(self, board):
         self.board = board
         self._draw()
 
-    def region(self, board, cols, max_lines):
-        """The running rows in start order (each with its Setup row and a line per running unit), then the pending
-        rows in plan order, then Overall.  When it is taller than max_lines the pending rows fold first (into
-        "○ +N more pending", kept while anything is pending), then the unit lines, newest first, onto one packed
-        names line per row, then the lines above Overall are cut: Overall itself is never dropped."""
+    def region_parts(self, board, cols):
+        """The region unfolded, as fit_view takes it: a _Run per running row in start order (its Setup row when it
+        owns the running Setup, its row, its current-file line, and a _Unit per running unit), the pending rows'
+        labels in plan order, and the Overall line or None."""
         running = board.running()
         now = self.clock()
-        subs = [(r, m) for r in running for m in r.units.values() if m.in_progress and m.id not in r.unbarred]
         current = {r.id: "    " + _vcut(r.progress, max(1, cols - 4)) for r in running
                    if r.progress and r.unit_kind in ("tests", "files") and not r.units_running}   # no unit line to show
         setup_running = (board.setup is not None and not board.setup.ended
                          and any(r.id == board.setup.row for r in running))
-        overall = board.overall()
-        row_text_ = {r.id: self._row(board, r, cols, pending=True) for r in running}
-        row_lines = sum(t.count("\n") + 1 for t in row_text_.values())     # a wrapped unit bar spans several lines
-        fixed = row_lines + len(current) + (1 if setup_running else 0) + (1 if overall else 0)
-        pending = board.pending()
-        shown = len(pending)
-        if pending and fixed + len(subs) + shown > max_lines:
-            shown = max(0, max_lines - fixed - len(subs) - 1)
-            if shown + 1 >= len(pending):
-                shown = len(pending)
-        pending_lines = [_vcut(pending_line(label, self.color), cols) for _, label in pending[:shown]]
-        if shown < len(pending):
-            pending_lines.append(pending_line(f"+{len(pending) - shown} more pending", self.color))
-        budget = max_lines - fixed - len(pending_lines)
-        folded = {}     # row id -> its folded units: the newest started go first, so the slow ones stay in view
-        gone = set()
-        # newest first; of units started at the same instant the one listed later (started later) folds first
-        for i in sorted(range(len(subs)), key=lambda i: (subs[i][1].t0, i), reverse=True):
-            if len(subs) - len(gone) + len(folded) <= budget:
-                break
-            gone.add(i)
-            folded.setdefault(subs[i][0].id, []).append(subs[i][1])
-        subs = [rm for i, rm in enumerate(subs) if i not in gone]
-        lines = []
+        runs, i = [], 0
         for r in running:
-            if setup_running and board.setup.row == r.id:
-                lines.append(setup_line(board, self.glyphs, cols, self.clock(), self.color))
-            lines.append(row_text_[r.id])
+            head = [setup_line(board, self.glyphs, cols, now, self.color)] if setup_running and board.setup.row == r.id else []
+            head += self._row(board, r, cols, pending=True).split("\n")    # a wrapped unit bar spans several lines
             if r.id in current:
-                lines.append(current[r.id])
-            mine = [m for owner, m in subs if owner is r]
-            width = max((_vlen(m.title) for m in mine), default=1)     # _sub_lines caps it
-            lines += [line for m in mine for line in self._sub_lines(m, cols, width, now)]
-            if r.id in folded:
-                names = [m.title for m in reversed(folded[r.id])]     # folded newest first: listed oldest first
-                prefix = common_prefix([m.title for m in r.units.values() if m.id not in r.unbarred])
-                lines.append("    " + collapse_names([t[len(prefix):] or t for t in names], cols - 2))
-        lines += pending_lines
-        lines = [part for line in lines for part in line.split("\n")]
-        if not overall:
-            return lines[:max(1, max_lines)]
-        return lines[:max(0, max_lines - 1)] + [_vcut(f"{head_mark(HEAD_MARK, self.color)} {overall_text(overall)}", cols)]
+                head.append(current[r.id])
+            mine = [m for m in r.units.values() if m.in_progress and m.id not in r.unbarred]
+            width = max((_vlen(m.title) for m in mine), default=1)        # _sub_lines caps it
+            prefix = common_prefix([m.title for m in r.units.values() if m.id not in r.unbarred])
+            units = []
+            for m in mine:
+                units.append(_Unit(m.t0, i, self._sub_lines(m, cols, width, now), m.title[len(prefix):] or m.title))
+                i += 1
+            runs.append(_Run(head, units))
+        overall = board.overall()
+        line = _vcut(f"{head_mark(HEAD_MARK, self.color)} {overall_text(overall)}", cols) if overall else None
+        return runs, [label for _, label in board.pending()], line
+
+    def region(self, board, cols, max_lines=None):
+        """A test-facing shim, not used by the renderer: the running rows, pending rows and Overall, unfolded, or with
+        max_lines folded by fit_view alone (no header, no transcript), as the region tests that size it themselves
+        expect.  The live frame is built by frame()."""
+        runs, pending, overall = self.region_parts(board, cols)
+        if max_lines is None:
+            return [t for t, _ in _Fold((None, []), [], runs, pending, overall, cols, self.color).lines()]
+        return fit_view((None, []), [], runs, pending, overall, max_lines, cols, cols + 1, self.color)
 
     def _sub_lines(self, m, cols, width=None, now=None):
         """A unit's line: its title padded to width (its row's longest shown title, at most half the line and room for
@@ -2214,42 +2563,88 @@ class LiveRenderer:
         line = prefix + strip + " " * max(2, cols - _vlen(prefix) - _vlen(strip) - len(elapsed)) + elapsed
         return [line if _vlen(line) <= cols else _vcut(line, cols)]     # a terminal too narrow for even one dot
 
-    def _draw(self, force=False):
+    def _draw(self, force=False, reserve=0):
+        """Redraw the frame in place.  reserve keeps that many lines free under it (a prompt about to be written)."""
         if self.closed or self.paused or self.prompting or self.board is None:
             return
         now = self.clock()
         if not force and self.last_draw is not None and now - self.last_draw < self.REDRAW_SECONDS:
             return
         size = self.size()
-        lines = self.region(self.board, size.columns - 1, size.lines - 2)
+        budget = size.lines - 2 - reserve
+        if budget < 1:
+            self._clear()       # not even one line fits: draw nothing until the pane grows
+            return
+        lines = self.frame(size.columns - 1, size.columns, budget)
+        if lines == self.last_frame and size == self.last_size:
+            return
         out = []
         if not self.cursor_hidden:
             out.append("\x1b[?25l")
             self.cursor_hidden = True
-        if self.height:
-            out.append(f"\x1b[{self.height}A")
+        up = self._up(size)
+        if up:
+            out.append(f"\r\x1b[{up}A")
         out += [self._tint(line) + "\x1b[K\n" for line in lines]
         out.append("\x1b[J")
         self.write("".join(out))
-        self.height = len(lines)
-        self.last_draw = now
+        self.widths, self.partial, self.height = [_vlen(line) for line in lines], 0, len(lines)
+        self.last_frame, self.last_size, self.last_draw = lines, size, now     # only a written frame moves the throttle
+
+    def _up(self, size):
+        """Lines from the cursor back to the frame's first line at the terminal's current width (a reflowing terminal
+        rewraps a line that no longer fits), capped at rows - 1, where the cursor stops.  A line exactly as wide as
+        the terminal takes one line: the cursor waits at its end (pending wrap), and the newline after it moves down
+        once.  The partial line under the frame is on the cursor's own line, so only its wrapped lines above count."""
+        cols = size.columns
+        rows = sum(max(1, -(-w // cols)) for w in self.widths) + (max(0, self.partial - 1) // cols)
+        return min(rows, max(0, size.lines - 1))
 
     def _tint(self, line):
         return tint(line) if self.color else line
 
     def _clear(self):
-        if self.height:
-            self.write(f"\x1b[{self.height}A\x1b[J")
-            self.height = 0
+        if self.widths or self.partial:
+            up = self._up(self.size())
+            self.write("\r" + (f"\x1b[{up}A" if up else "") + "\x1b[J")
+        self.widths, self.partial, self.height, self.last_frame = [], 0, 0, None
 
     def _show_cursor(self):
         if self.cursor_hidden:
             self.write("\x1b[?25h")
             self.cursor_hidden = False
 
+    def _scrollback_lines(self):
+        """The header (once per session, wrapped, never the sticky one) and the whole transcript uncut, taken: the
+        transcript is emptied, so the frame goes on with only the live part."""
+        cols = self._cols()
+        out = []
+        if self.header and not self.header_printed:
+            for block in self.header:
+                out += self._block_lines(block, cols)
+            self.header_printed = True
+        transcript, self.transcript, self.cut = self.transcript, [], None
+        for kind, block, lines in transcript:
+            out += lines
+        return out
+
+    def _print_scrollback(self):
+        lines = self._scrollback_lines()
+        if lines:
+            self.write("".join(self._tint(line) + "\n" for line in lines))
+
+    def dump(self):
+        """The record the frame held (as _scrollback_lines), untinted and taken, ending a prompt first, for
+        Console._fallback to print plainly."""
+        if self.prompting:
+            self._end_prompt()
+        return [_ANSI.sub("", line) for line in self._scrollback_lines()]
+
     def pause(self):
-        """Clear the region and give the terminal back (ask, show, passthrough, handoff)."""
+        """Clear the frame, print the record into scrollback and give the terminal back (ask, show, passthrough,
+        handoff)."""
         self._clear()
+        self._print_scrollback()
         self._show_cursor()
         self.paused = True
 
@@ -2260,7 +2655,10 @@ class LiveRenderer:
     def close(self):
         if self.closed:
             return
+        if self.prompting:
+            self._end_prompt()      # ends the prompt's line with a newline first if nothing has (Task 10)
         self._clear()
+        self._print_scrollback()
         self._show_cursor()
         self.closed = True
 
@@ -2277,6 +2675,9 @@ class Console:
         self.size = size
         self.board = Board(resolve_detail(detail), nested=nested, full_log=self.sinks.full_path, clock=clock,
                            estimator=make_estimator(repo, script_name(), history_key=history_key))
+        self.handback = os.environ.pop(HANDBACK_ENV, None) if self.board.nested else None   # a grandchild must not write it
+        self.sticky = _parent_header() if nested else []     # drawn by the live screen only, never by the Board
+        self.header_blocks = []     # this session's header blocks, for a handoff child (HEADER_ENV)
         self.mode = self.screen_mode()
         self.screen = self._make_screen()
         self._log = None
@@ -2309,7 +2710,7 @@ class Console:
             return None
         if self.mode == "live":
             return LiveRenderer(self._screen_write, size=self.size, clock=self.clock,
-                                color=not os.environ.get("NO_COLOR"))
+                                color=not os.environ.get("NO_COLOR"), sticky=self.sticky)
         return PlainRenderer(self._screen_write, heartbeat=True, clock=self.clock)
 
     def _screen_write(self, text):
@@ -2328,6 +2729,8 @@ class Console:
             self._append_full(kind, fields)
         if self.board_failed:
             self._plain(kind, fields, self._final_blocks(kind, fields), owned)
+            if kind == "done":
+                self._done_nested()
             return
         try:
             blocks = self.board.apply(kind, fields)
@@ -2335,7 +2738,11 @@ class Console:
             self.board_failed = True    # view and the log stop for the rest of the run (the full log has everything)
             self._stop(e, log=True)
             self._plain(kind, fields, self._final_blocks(kind, fields), owned)
+            if kind == "done":
+                self._done_nested()
             return
+        if kind == "session":
+            self.header_blocks = [b for b in blocks if b[0] == "header"]
         unshown = blocks
         if self.screen is not None:
             try:
@@ -2350,6 +2757,8 @@ class Console:
             except Exception as e:  # the condensed log is a convenience; the full log still has everything
                 self.log = None
                 self._note(f"⚠ condensed log stopped ({e!r})")
+        if kind == "done":
+            self._done_nested()
         self._plain(kind, fields, unshown, owned)
 
     # The script text each event carries, as the full log gets it: every level, whatever the view shows (spec 5.1).
@@ -2388,6 +2797,31 @@ class Console:
         elif self.stopped:
             self._plain_write(text)
 
+    def log_only(self, text):
+        """One line in the condensed log and nowhere else (a note about the view itself), best-effort."""
+        if self.log is not None:
+            try:
+                self.log.render(self.board, [("text", text)])
+            except Exception:  # the condensed log is a convenience
+                pass
+
+    def _done_nested(self):
+        """At a nested session's done: hand its rows' outcomes back to the session that handed off to it
+        (self.handback), and note in the condensed log when it declared no plan under a parent's Overall, which then
+        has no row on screen.  Best-effort: the Board may be the thing that failed."""
+        if not self.board.nested:
+            return
+        try:
+            if self.handback:
+                # a sub-row is a unit on its parent's row, never a row, so every row here is top-level
+                rows = [[r.id, "fail" if r.running else "warn" if r.status == "ok" and r.warned else r.status, r.label]
+                        for r in self.board.rows.values()]
+                _write_atomic(Path(self.handback), json.dumps(rows))
+            if self.board.parent_overall is not None and not self.board.plan:
+                self.log_only("ℹ this script declared no plan, so its view has no Overall row")
+        except Exception:  # never a reason to fail the run; the parent notes that nothing came back
+            pass
+
     def _final_blocks(self, kind, fields):
         """The final line's block for a done event, from what the failed Board still knows, best-effort."""
         if kind != "done":
@@ -2406,7 +2840,7 @@ class Console:
             self._plain_write(fields["text"])
         for block in unshown:
             if block[0] == "final":
-                self._plain_write(format_final(*block[1:]))
+                self._plain_write(final_line(block))
 
     def _plain_write(self, text):
         try:
@@ -2415,18 +2849,22 @@ class Console:
             pass
 
     def _fallback(self, error, blocks):
-        """Swap the screen renderer for a plain one, say so, and re-render the blocks it had not printed.  A plain
-        screen that fails, or a plain re-render that fails too (the bug is in code both renderers share), stops the
-        view instead; the condensed log goes on."""
+        """Swap the screen renderer for a plain one: take what the live frame held, close it, then print that
+        record, the warning and the blocks it had not taken.  A plain screen that fails, or a plain re-render that
+        fails too (the bug is in code both renderers share), stops the view instead; the condensed log goes on."""
         if self.mode != "live":
             self._stop(error)
             return
+        try:
+            held = self.screen.dump()
+        except Exception:  # the record is lost with the broken renderer; the full log still has it
+            held = []
         self._close_screen()
         self.mode = "plain"
         self.screen = PlainRenderer(self._screen_write, heartbeat=True, clock=self.clock)
         try:
-            self.screen.render(self.board, [("text", f"⚠ console view failed ({error!r}); using plain output")]
-                               + blocks)
+            self.screen.render(self.board, [("text", line) for line in held]
+                               + [("text", f"⚠ console view failed ({error!r}); using plain output")] + blocks)
         except Exception as e:
             self._stop(e)
 
@@ -2456,8 +2894,8 @@ class Console:
     def _close_screen(self):
         """Close the screen renderer as best it can, ending a watchdog prompt's partial line first."""
         try:
-            if getattr(self.screen, "prompting", False):
-                self._screen_write("\n")
+            if isinstance(self.screen, PlainRenderer) and self.screen.prompting:
+                self._screen_write("\n")    # LiveRenderer.close() ends its own prompt line (_end_prompt)
             self.screen.close()
         except Exception:  # the broken renderer may not close cleanly either; at least show the cursor again
             try:
@@ -2497,9 +2935,10 @@ def _sigterm(signum, frame):
     raise KeyboardInterrupt
 
 
-def session(title, header=(), *, detail=None, sinks=None, repo=".", history_key=None):
+def session(title, header=(), *, lines=(), detail=None, sinks=None, repo=".", history_key=None):
     """Start this process's console view and return its Console.  Inside another session (JUNEAU_RUN_SESSION set)
-    it is nested: no header and no final line, so a child script's rows join its parent's view."""
+    it is nested: no header and no final line, so a child script's rows join its parent's view.  `lines` are header
+    lines under the title, one each, cut to the width on the live screen (a commit message, a path)."""
     global _console
     if _console is not None:
         return _console
@@ -2524,7 +2963,7 @@ def session(title, header=(), *, detail=None, sinks=None, repo=".", history_key=
         more.append(f"Condensed: tail -f {shlex.quote(str(sinks.condensed_path))}")
     if os.environ.get(CANCEL_ENV):
         more.append(f"Cancel: {os.environ[CANCEL_ENV]}")
-    publish("session", title=title, header=list(header), header_more=more, nested=nested)
+    publish("session", title=title, header=list(header), lines=[str(t) for t in lines], header_more=more, nested=nested)
     return _console
 
 
@@ -2801,8 +3240,10 @@ def passthrough(cmd, step_id, title, *, n=None, parent=None, cwd=None, env=None,
 @contextmanager
 def handoff():
     """Give the terminal to a child session (push.py running test.py) for the block.  Yields the env the child needs
-    so its rows line up with ours (label width, detail level) and our pending rows stay visible under its own
-    (JUNEAU_RUN_PENDING) and its Overall line carries on (JUNEAU_RUN_OVERALL); empty with no session."""
+    so its rows line up with ours (label width, detail level), our pending rows stay visible under its own
+    (JUNEAU_RUN_PENDING), its Overall line carries on (JUNEAU_RUN_OVERALL), our header stays on top of its view
+    (JUNEAU_RUN_HEADER), and it hands back its rows' outcomes for our Overall and final counts (JUNEAU_RUN_HANDBACK);
+    empty with no session."""
     if _console is None:
         yield {}
         return
@@ -2813,8 +3254,38 @@ def handoff():
     overall = _console.board.overall_handoff()
     if overall:
         env[OVERALL_ENV] = json.dumps(overall)
-    with _paused():
-        yield env
+    header = _console.header_blocks or _console.sticky     # a nested session passes its parent's on
+    if header:
+        env[HEADER_ENV] = json.dumps([["head" if b[2] == HEAD_MARK else "more", b[1], len(b) > 3]
+                                      for b in header if len(b) > 2])
+    fd, handback = tempfile.mkstemp(prefix="juneau-run-handback-", suffix=".json")
+    os.close(fd)
+    env[HANDBACK_ENV] = handback
+    try:
+        with _paused():
+            try:
+                yield env
+            except BaseException:
+                _take_handback(handback, note=False)    # Ctrl-C or a failure: count what came back, but say nothing
+                raise
+            _take_handback(handback)    # before resume, so the redrawn view already counts the child's steps
+    finally:
+        with suppress(OSError):
+            os.unlink(handback)
+
+
+def _take_handback(handback, note=True):
+    """Record a handoff child's outcomes on this session's Board, or (note) say once in the condensed log that it
+    sent none (it crashed, or runs an older juneau-run): its steps are then not counted, as before.  The note is
+    left out when the handoff ended in an exception, which has its own report."""
+    try:
+        outcomes = [(str(i), str(status), str(label))
+                    for i, status, label in json.loads(Path(handback).read_text(encoding="utf-8"))]
+    except (OSError, ValueError, TypeError):
+        if note:
+            _console.log_only("ℹ the handed-off script reported no step outcomes; Overall does not count its steps")
+        return
+    _console.board.hand_back(outcomes)
 
 
 # ---------------------------------------------------------------------------------------------------------------------
@@ -3218,19 +3689,58 @@ def history_series(name, values):
 def make_estimator(repo, script, store=None, history_key=None):
     """The Board's estimator: fn(step, tool, sig) -> Estimate or None, from this script's history in `repo` (spec 5.3).
     The store is read afresh for each lookup.  A `tool` of None takes the tool of the newest record for the step that
-    matches `sig` (else the newest record's).  Like-for-like records are those with the same `sig` (spec 5.1).  Off
-    when history is disabled."""
+    matches `sig` (else the newest record's).  Like-for-like records are those with the same `sig` (spec 5.1).  When
+    this script's records give no estimate for the step, the other scripts' histories in the same directory are asked
+    (push.py's pending rows for the steps test.py records): the one whose newest record for the step is the latest
+    wins.  Step ids are assumed unique across one repo's scripts.  Off when history is disabled."""
     if not history_enabled():
         return lambda step, tool, sig=None: None
     store = store or HistoryStore(repo, script, history_key)
 
-    def estimator(step, tool, sig=None):
-        records = [r for r in store.read() if r["step"] == step]
+    def lookup(records, tool, sig):
         if tool is None and records:
             same = [r for r in records if sig and r.get("sig") == sig]
             tool = (same or records)[-1]["tool"]
-        records = [r for r in records if r["tool"] == tool]
-        return estimate_from(records, sig)
+        return estimate_from([r for r in records if r["tool"] == tool], sig)
+
+    cache = {}      # sibling path -> ((mtime_ns, size), records): the Board asks per pending row, per redraw
+
+    def sibling_read(sibling):
+        try:
+            st = sibling.stat()
+        except OSError:
+            return []
+        key = (st.st_mtime_ns, st.st_size)
+        hit = cache.get(sibling)
+        if hit is None or hit[0] != key:
+            hit = cache[sibling] = (key, HistoryStore(repo, sibling.stem, history_key).read())
+        return hit[1]
+
+    def sibling_records(step):
+        """The records for step from the sibling whose newest one is the latest.  A sibling file is re-read only when
+        its size or mtime changed (a sibling script appending while this one runs)."""
+        path = getattr(store, "path", None)
+        best = None
+        if path is None:
+            return best
+        try:
+            siblings = sorted(path.parent.glob("*.jsonl"))
+        except OSError:
+            return best
+        for sibling in siblings:
+            if sibling == path:
+                continue
+            records = [r for r in sibling_read(sibling) if r["step"] == step]
+            if records and (best is None or records[-1].get("ts", "") > best[-1].get("ts", "")):
+                best = records
+        return best
+
+    def estimator(step, tool, sig=None):
+        own = lookup([r for r in store.read() if r["step"] == step], tool, sig)
+        if own is not None:
+            return own
+        records = sibling_records(step)
+        return lookup(records, tool, sig) if records else None
 
     return estimator
 

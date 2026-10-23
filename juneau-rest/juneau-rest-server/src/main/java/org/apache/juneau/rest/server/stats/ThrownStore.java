@@ -22,6 +22,7 @@ import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.ObjectUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
+import java.time.*;
 import java.util.*;
 import java.util.concurrent.*;
 
@@ -48,6 +49,7 @@ public class ThrownStore {
 		ThrownStore parent;
 		Class<? extends ThrownStats> statsImplClass;
 		Set<Class<?>> ignoreClasses;
+		Clock clock;
 
 		private ThrownStore impl;
 		private Class<? extends ThrownStore> type;
@@ -68,6 +70,21 @@ public class ThrownStore {
 		 */
 		public BeanStore beanStore() {
 			return beanStore;
+		}
+
+		/**
+		 * Specifies the clock used to stamp the first and last occurrence times of recorded exceptions.
+		 *
+		 * <p>
+		 * Defaults to the parent store's clock, or {@link Clock#systemUTC()} if there is no parent.  Tests can pass
+		 * {@link Clock#fixed(Instant, ZoneId)} to make the occurrence times reported by {@link ThrownStats} deterministic.
+		 *
+		 * @param value The new value for this setting.  Can be <jk>null</jk> (inherits the default).
+		 * @return This object.
+		 */
+		public Builder clock(Clock value) {
+			clock = value;
+			return this;
 		}
 
 		/**
@@ -180,6 +197,7 @@ public class ThrownStore {
 	private final BeanStore beanStore;
 	private final Class<? extends ThrownStats> statsImplClass;
 	private final Set<String> ignoreClasses;
+	private final Clock clock;
 
 	/**
 	 * Constructor.
@@ -198,6 +216,7 @@ public class ThrownStore {
 		this.beanStore = builder.beanStore();
 
 		this.statsImplClass = coalesce(builder.statsImplClass, parent.isPresent() ? parent.get().statsImplClass : null, null);
+		this.clock = coalesce(builder.clock, parent.isPresent() ? parent.get().clock : null, Clock.systemUTC());
 
 		Set<String> s = null;
 		if (nn(builder.ignoreClasses))
@@ -270,6 +289,7 @@ public class ThrownStore {
 			stc = ThrownStats
 				.create(beanStore)
 				.type(statsImplClass)
+				.clock(clock)
 				.throwable(t)
 				.hash(hash)
 				.stackTrace(createStackTrace(t))

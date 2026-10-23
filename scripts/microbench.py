@@ -12,6 +12,12 @@
 # * specific language governing permissions and limitations under the License.
 # ***************************************************************************************************************************
 """
+Runs the JMH micro-benchmarks in `juneau-integration-tests` through Maven and checks or reports the results.
+
+Full docs: microbench.md
+"""
+
+USAGE = """
 JMH micro-benchmark runner for Apache Juneau.
 
 Usage:
@@ -300,7 +306,7 @@ def main() -> int:
     parser = argparse.ArgumentParser(
         description="JMH micro-benchmark runner for Apache Juneau.",
         formatter_class=argparse.RawDescriptionHelpFormatter,
-        epilog=__doc__,
+        epilog=USAGE,
     )
     parser.add_argument(
         "--verbose", "-v",

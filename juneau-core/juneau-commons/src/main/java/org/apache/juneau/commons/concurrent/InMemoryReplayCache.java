@@ -16,10 +16,11 @@
  */
 package org.apache.juneau.commons.concurrent;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
 
+import java.time.*;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.*;
-import static org.apache.juneau.commons.utils.Shorts.*;
 
 /**
  * Built-in default {@link ReplayCache}: a per-process, {@link ConcurrentHashMap}-backed seen-identifier set with
@@ -61,6 +62,7 @@ public class InMemoryReplayCache implements ReplayCache {
 	public static final long DEFAULT_SWEEP_INTERVAL_MS = 1000L;
 
 	private final ConcurrentHashMap<String,Long> seen = new ConcurrentHashMap<>();
+	private final Clock clock;
 	private final long sweepIntervalMs;
 	private final AtomicLong nextSweepAtMs = new AtomicLong();
 
@@ -78,8 +80,24 @@ public class InMemoryReplayCache implements ReplayCache {
 	 * 	{@code 0} sweeps on every call (useful in tests that assert eviction behavior). Must be {@code >= 0}.
 	 */
 	InMemoryReplayCache(long sweepIntervalMs) {
+		this(Clock.systemUTC(), sweepIntervalMs);
+	}
+
+	/**
+	 * Constructor allowing the wall-clock time source to be overridden.
+	 *
+	 * <p>
+	 * Tests that need deterministic expiry pass a {@link Clock#fixed fixed} or {@link Clock#offset offset} clock
+	 * here instead of racing real time.
+	 *
+	 * @param clock The clock read for the current time when deciding which records have expired. Must not be <jk>null</jk>.
+	 * @param sweepIntervalMs The minimum interval, in milliseconds, between opportunistic expired-record sweeps.
+	 * 	{@code 0} sweeps on every call. Must be {@code >= 0}.
+	 */
+	InMemoryReplayCache(Clock clock, long sweepIntervalMs) {
 		if (sweepIntervalMs < 0)
 			throw new IllegalArgumentException("sweepIntervalMs " + sweepIntervalMs + " must be >= 0");
+		this.clock = reqnn("clock", clock);
 		this.sweepIntervalMs = sweepIntervalMs;
 	}
 
@@ -96,7 +114,7 @@ public class InMemoryReplayCache implements ReplayCache {
 	 * simply skips the sweep (its own {@code putIfAbsent} still runs, so no identifier is ever missed).
 	 */
 	private void maybeEvictExpired() {
-		var now = System.currentTimeMillis();
+		var now = clock.millis();
 		var next = nextSweepAtMs.get();
 		if (now < next)
 			return;

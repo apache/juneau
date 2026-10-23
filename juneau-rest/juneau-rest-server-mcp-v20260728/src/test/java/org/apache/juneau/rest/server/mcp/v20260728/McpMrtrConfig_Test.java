@@ -18,6 +18,9 @@ package org.apache.juneau.rest.server.mcp.v20260728;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.time.Clock;
+import java.time.Instant;
+import java.time.ZoneOffset;
 import java.util.Map;
 
 import org.apache.juneau.bean.jsonrpc.JsonRpcRequest;
@@ -46,6 +49,19 @@ class McpMrtrConfig_Test {
 		assertEquals(5 * 60 * 1000L, a.getTtlMs());
 		assertEquals(McpMrtrConfig.DEFAULT_MAX_ROUNDS, a.getMaxRounds());
 		assertEquals(10, a.getMaxRounds());
+	}
+
+	@Test void a01b_defaultClockIsSystemUtcAndSetClockRoundTrips() {
+		var a = new McpMrtrConfig();
+		assertEquals(Clock.systemUTC(), a.getClock());
+		var fixed = Clock.fixed(Instant.parse("2026-01-01T00:00:00Z"), ZoneOffset.UTC);
+		assertSame(fixed, a.setClock(fixed).getClock());
+	}
+
+	@Test void a01c_setClockNullThrows() {
+		var config = new McpMrtrConfig();
+		var e = assertThrows(IllegalArgumentException.class, () -> config.setClock(null));
+		assertEquals("clock must not be null", e.getMessage());
 	}
 
 	@Test void a02_setCodecNullThrows() {

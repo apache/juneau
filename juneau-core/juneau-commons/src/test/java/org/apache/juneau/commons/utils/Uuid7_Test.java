@@ -18,6 +18,7 @@ package org.apache.juneau.commons.utils;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.time.*;
 import java.util.*;
 
 import org.apache.juneau.commons.*;
@@ -61,6 +62,16 @@ class Uuid7_Test extends TestBase {
 		var t = Uuid7.timestamp(Uuid7.create());
 		var after = System.currentTimeMillis();
 		assertTrue(t >= before && t <= after, "encoded timestamp must be the current wall-clock ms");
+	}
+
+	@Test void a06_timestampReadFromInjectedClock() {
+		var clock = Clock.fixed(Instant.parse("2026-01-01T00:00:00Z"), ZoneOffset.UTC);
+		var u1 = Uuid7.create(clock);
+		var u2 = Uuid7.create(clock);
+		assertEquals(clock.millis(), Uuid7.timestamp(u1));
+		assertEquals(clock.millis(), Uuid7.timestamp(u2));
+		assertNotEquals(u1, u2, "random bits must still differ under a fixed clock");
+		assertEquals(7, u1.version());
 	}
 
 	//====================================================================================================

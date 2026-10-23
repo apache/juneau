@@ -89,7 +89,9 @@ import org.apache.juneau.rest.server.*;
  * map to a calendar instant, which slightly complicates debugging when the bucket is in an unexpected state.  The
  * nanosecond source is pluggable on {@link InMemoryStorage} (package-private constructor overload) so tests can
  * pin the refill window with a deterministic clock instead of racing real wall-clock time; production code always
- * goes through the single-arg constructor, which defaults to {@code System::nanoTime}.
+ * goes through the single-arg constructor, which defaults to {@code System::nanoTime}.  The wall-clock
+ * {@link BucketState#lastRequest()} instant reported by {@link Storage#snapshot()} is read from a separate
+ * {@link Clock} (default {@link Clock#systemUTC()}), likewise overridable through a package-private constructor.
  *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerRateLimitAndRequestId">REST Server — Rate-Limiting and Request-Id Propagation</a>
@@ -576,6 +578,7 @@ public class RateLimitGuard extends RestGuard {
 		private final ConcurrentHashMap<String,Bucket> buckets = new ConcurrentHashMap<>();
 		private final int maxKeys;
 		private final LongSupplier nanoClock;
+		private final Clock clock;
 
 		InMemoryStorage(int maxKeys) {
 			this(maxKeys, System::nanoTime);
@@ -594,16 +597,33 @@ public class RateLimitGuard extends RestGuard {
 		 * @param nanoClock Supplies the current time in nanoseconds for refill math and idle-eviction bookkeeping.  Must not be <jk>null</jk>.
 		 */
 		InMemoryStorage(int maxKeys, LongSupplier nanoClock) {
-			reqnn("nanoClock", nanoClock);
+			this(maxKeys, nanoClock, Clock.systemUTC());
+		}
+
+		/**
+		 * Constructor allowing both the nanosecond and the wall-clock time sources to be overridden.
+		 *
+		 * <p>
+		 * Test-only seam, like {@link #InMemoryStorage(int, LongSupplier)}.  The {@link Clock} only stamps the
+		 * {@link BucketState#lastRequest()} instant reported by {@link #snapshot()}; refill and eviction math stay on
+		 * {@code nanoClock}.
+		 *
+		 * @param maxKeys The maximum number of keys held before LRU-style eviction kicks in.  Must be {@code > 0}.
+		 * @param nanoClock Supplies the current time in nanoseconds for refill math and idle-eviction bookkeeping.  Must not be <jk>null</jk>.
+		 * @param clock Supplies the wall-clock time recorded as each bucket's last-request instant.  Must not be <jk>null</jk>.
+		 */
+		InMemoryStorage(int maxKeys, LongSupplier nanoClock, Clock clock) {
+			reqnn("nanoClock", nanoClock, "clock", clock);
 			if (maxKeys <= 0)
 				throw new IllegalArgumentException("Argument 'maxKeys' must be > 0.");
 			this.maxKeys = maxKeys;
 			this.nanoClock = nanoClock;
+			this.clock = clock;
 		}
 
 		@Override
 		public AcquireResult tryAcquire(String key, int capacity, double permitsPerSecond) {
-			var bucket = buckets.computeIfAbsent(key, k -> new Bucket(capacity, nanoClock));
+			var bucket = buckets.computeIfAbsent(key, k -> new Bucket(capacity, nanoClock, clock));
 			var result = bucket.tryAcquire(capacity, permitsPerSecond);
 			if (buckets.size() > maxKeys)
 				evictOldest();
@@ -659,25 +679,28 @@ public class RateLimitGuard extends RestGuard {
 		private long lastNanos;
 		private long lastWallMillis;
 		private final LongSupplier nanoClock;
+		private final Clock clock;
 
 		Bucket(int capacity) {
-			this(capacity, System::nanoTime);
+			this(capacity, System::nanoTime, Clock.systemUTC());
 		}
 
 		/**
-		 * Constructor allowing the nanosecond time source to be overridden.
+		 * Constructor allowing the time sources to be overridden.
 		 *
 		 * <p>
-		 * Test-only seam — see {@link InMemoryStorage#InMemoryStorage(int, LongSupplier)}.
+		 * Test-only seam — see {@link InMemoryStorage#InMemoryStorage(int, LongSupplier, Clock)}.
 		 *
 		 * @param capacity The initial (full) token count.
 		 * @param nanoClock Supplies the current time in nanoseconds for refill math.  Must not be <jk>null</jk>.
+		 * @param clock Supplies the wall-clock time recorded as the last-request instant.  Must not be <jk>null</jk>.
 		 */
-		Bucket(int capacity, LongSupplier nanoClock) {
+		Bucket(int capacity, LongSupplier nanoClock, Clock clock) {
 			this.nanoClock = nanoClock;
+			this.clock = clock;
 			this.tokens = capacity;
 			this.lastNanos = nanoClock.getAsLong();
-			this.lastWallMillis = System.currentTimeMillis();
+			this.lastWallMillis = clock.millis();
 		}
 
 		synchronized Storage.AcquireResult tryAcquire(int capacity, double permitsPerSecond) {
@@ -685,7 +708,7 @@ public class RateLimitGuard extends RestGuard {
 			var elapsedSeconds = (now - lastNanos) / 1_000_000_000.0;
 			tokens = Math.min(capacity, tokens + elapsedSeconds * permitsPerSecond);
 			lastNanos = now;
-			lastWallMillis = System.currentTimeMillis();
+			lastWallMillis = clock.millis();
 			if (tokens >= 1.0) {
 				tokens -= 1.0;
 				return new Storage.AcquireResult(true, (int) Math.floor(tokens), secondsUntilFull(capacity, permitsPerSecond));

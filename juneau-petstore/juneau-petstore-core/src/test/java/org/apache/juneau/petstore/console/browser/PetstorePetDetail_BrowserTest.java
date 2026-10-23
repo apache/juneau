@@ -93,8 +93,8 @@ class PetstorePetDetail_BrowserTest extends TestBase {
 					Map.of("click", "#pet-body .juneau-view-action-trigger"),
 					Map.of("waitFor", "document.querySelector('.juneau-view-action-item')")),
 				"queries", Map.of("items", MENU_ITEMS)),
-			Map.of("name", "order", "path", "/console/pets/" + petId + "/orders/" + orderId, "queries", Map.of("current", CURRENT, "rows", CHILD_ROWS)),
-			Map.of("name", "upload-error", "path", "/console/pets/1/photo", "allowFailedLoads", true,
+			Map.of("name", "order", "waitUntil", "networkidle", "path", "/console/pets/" + petId + "/orders/" + orderId, "queries", Map.of("current", CURRENT, "rows", CHILD_ROWS)),
+			Map.of("name", "upload-error", "waitUntil", "networkidle", "path", "/console/pets/1/photo", "allowFailedLoads", true,
 				"actions", List.of(
 					Map.of("evaluate", UPLOAD_TEXT),
 					Map.of("waitFor", "(" + UPLOAD_STATUS + " || '').startsWith('Upload failed')")),

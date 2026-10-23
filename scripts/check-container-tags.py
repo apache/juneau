@@ -16,10 +16,9 @@
 # limitations under the License.
 #
 """
-Guardrail for container-backed tests.
+Fails when a test class that boots a Spring Boot, Jetty or similar container is missing its container marker annotation.
 
-Fails when a container-booting test class is missing @SpringbootTest,
-@JettyMicroserviceTest, or @TomcatMicroserviceTest.
+Full docs: check-container-tags.md
 """
 
 from __future__ import annotations

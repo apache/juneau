@@ -20,6 +20,7 @@ import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.security.*;
+import java.time.*;
 import java.util.*;
 import java.util.concurrent.atomic.*;
 import java.util.function.*;
@@ -410,6 +411,47 @@ class McpMrtrDispatch_Test {
 		var resp = send(rev, config, req(1, "tools/call", params, true), hdrs("tools/call", "ask"));
 		assertEquals(-32026, resp.getError().getCode());
 		assertEquals(0, calls.get());
+	}
+
+	/** A test clock the test can advance manually. */
+	static final class MutableClock extends Clock {
+		private Instant now;
+		MutableClock(Instant start) { now = start; }
+		void advance(Duration d) { now = now.plus(d); }
+		@Override public ZoneId getZone() { return ZoneOffset.UTC; }
+		@Override public Clock withZone(ZoneId zone) { return this; }
+		@Override public Instant instant() { return now; }
+	}
+
+	@Test void c09b_pauseStampsExpiryFromConfiguredClockAndResumeExpiresOnIt() {
+		// Clock-driven expiry: the pause seals now + TTL from the configured clock, a resume just inside the TTL
+		// succeeds, and once the clock reaches the sealed expiry the same token is rejected as expired -- no
+		// sleeping past a real TTL.
+		var t0 = Instant.parse("2026-01-01T00:00:00Z");
+		var clock = new MutableClock(t0);
+		var codec = new AeadRequestStateCodec();
+		var rev = revision(mrtr(codec).setTtlMs(60_000L).setClock(clock));
+		var completions = new AtomicInteger();
+		var config = new McpServerConfig().addTool(tool("ask", (args, c) -> {
+			if (c.getBean(McpMrtrResumeContext.class).isEmpty())
+				throw new McpInputRequiredSignal(Map.of("q1", reqEntry("elicitation")), "cont-1");
+			completions.incrementAndGet();
+			return text("done");
+		}));
+		var paused = (InputRequiredResult) send(rev, config, req(1, "tools/call", JsonMap.of("name", "ask"), true), hdrs("tools/call", "ask")).getResult();
+		var token = paused.getRequestState();
+		assertEquals(t0.plusSeconds(60).toEpochMilli(), codec.unseal(token, aad("tools/call", "ask")).orElseThrow().expiresAtMs());
+
+		var params = JsonMap.of("name", "ask", "requestState", token, "inputResponses", JsonMap.of("q1", "answer"));
+		clock.advance(Duration.ofMillis(59_999));
+		var resumed = (CallToolResult) send(rev, config, req(2, "tools/call", params, true), hdrs("tools/call", "ask")).getResult();
+		assertEquals("done", ((TextContent) resumed.getContent().get(0)).getText());
+		assertEquals(1, completions.get());
+
+		clock.advance(Duration.ofMillis(1));
+		var resp = send(rev, config, req(3, "tools/call", params, true), hdrs("tools/call", "ask"));
+		assertEquals(-32022, resp.getError().getCode());
+		assertEquals(1, completions.get());
 	}
 
 	@Test void c10_promptsGet_resumeToComplete_reInvokesHandlerWithResumeContext() {

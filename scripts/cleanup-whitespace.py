@@ -16,12 +16,9 @@
 # limitations under the License.
 
 """
-Cleans up whitespace inconsistencies in Java files:
-- Converts leading 4-spaces to tabs
-- Removes consecutive blank lines (max 1 blank line allowed)
-- Removes trailing whitespace from lines
-- Removes blank lines before the final closing brace
-- Ensures file ends with "}" with no trailing newline
+Rewrites Java files in place to normalize whitespace: leading spaces to tabs, no trailing spaces, no repeated blank lines, and no final newline.
+
+Full docs: cleanup-whitespace.md
 """
 
 import os

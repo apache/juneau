@@ -16,15 +16,9 @@
 # limitations under the License.
 
 """
-Get the Maven version.
+Prints the major version number of the Maven tool installed on this machine (for example `3`).
 
-This script runs 'mvn -version' and extracts the major version number.
-
-Usage:
-    python3 scripts/maven-version.py
-
-Output:
-    Prints the major version number (e.g., "3") to stdout.
+Full docs: maven-version.md
 """
 
 import re

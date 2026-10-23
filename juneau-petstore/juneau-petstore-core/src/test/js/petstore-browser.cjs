@@ -20,7 +20,7 @@
  *
  * Input:  {baseUrl, snapshots, deviceScaleFactor?, cases:[{name, path, viewport?, deviceScaleFactor?, waitUntil?,
  *          initScript?, actions?, queries?, fetches?, capture?, allowFailedLoads?}]}
- * Output (stdout): {cases:{<name>:{status, jsFailures, deprecations, queries, fetches, requests, downloads, timeouts}}}
+ * Output (stdout): {cases:{<name>:{status, jsFailures, deprecations, queries, fetches, requests, downloads, timeouts, ms}}}
  *
  * Each action is one of:
  *   {click: selector} {fill: [selector, text]} {press: [selector, key]}
@@ -37,8 +37,9 @@
  * reload waits for the case's waitUntil, as the first load does.  back and forward wait only for the navigation to
  * commit: follow them with a waitFor on what the page should then show.
  *
- * waitUntil is the navigation's Playwright wait state, networkidle by default.  A case on a page that polls can pass
- * 'load' and start its actions with a waitFor, so it never depends on the poll leaving a quiet gap.
+ * waitUntil is the navigation's Playwright wait state, load by default: a case starts its actions with a waitFor on what
+ * the page should show, so it never depends on the network going quiet (a page that polls never does).  A case that
+ * asserts straight after the navigation, with no waitFor, passes 'networkidle' so the page has settled first.
  *
  * viewport is [width, height] (default [1280, 900]).  deviceScaleFactor (case, else input, else 1) is the device pixel
  * ratio, so 2 gives screenshots at twice the viewport's pixel size.  Screenshots are taken with animations disabled
@@ -51,6 +52,8 @@
 const fs = require('node:fs');
 const path = require('node:path');
 const { chromium } = require('playwright');
+
+const DEFAULT_WAIT_UNTIL = 'load';
 
 (async () => {
 	const input = JSON.parse(fs.readFileSync(process.argv[2], 'utf8'));
@@ -70,6 +73,7 @@ const { chromium } = require('playwright');
 });
 
 async function runCase(browser, input, c) {
+	const t0 = Date.now();
 	const vp = Array.isArray(c.viewport) ? c.viewport : [1280, 900];
 	const context = await browser.newContext({ viewport: { width: vp[0], height: vp[1] }, acceptDownloads: true,
 		deviceScaleFactor: c.deviceScaleFactor || input.deviceScaleFactor || 1 });
@@ -90,7 +94,7 @@ async function runCase(browser, input, c) {
 		});
 	}
 	try {
-		const resp = await page.goto(input.baseUrl + c.path, { waitUntil: c.waitUntil || 'networkidle' });
+		const resp = await page.goto(input.baseUrl + c.path, { waitUntil: c.waitUntil || DEFAULT_WAIT_UNTIL });
 		r.status = resp ? resp.status() : 0;
 		for (const a of c.actions || []) await act(page, input, c, a, r);
 		for (const [k, expr] of Object.entries(c.queries || {})) {
@@ -106,6 +110,7 @@ async function runCase(browser, input, c) {
 		r.jsFailures.push('harness: ' + String(e?.message || e));
 	} finally {
 		await context.close();
+		r.ms = Date.now() - t0;
 	}
 	return r;
 }
@@ -114,7 +119,7 @@ async function act(page, input, c, a, r) { // NOSONAR javascript:S3776 - one fla
 	if (a.click) return page.click(a.click);
 	if (a.fill) return page.fill(a.fill[0], a.fill[1]);
 	if (a.press) return page.press(a.press[0], a.press[1]);
-	const until = { waitUntil: c.waitUntil || 'networkidle' };
+	const until = { waitUntil: c.waitUntil || DEFAULT_WAIT_UNTIL };
 	if (a.reload) return page.reload(until);
 	if (a.goto) return page.goto(input.baseUrl + a.goto, until);
 	if (a.follow) return page.goto(String(await page.evaluate(a.follow)), until);

@@ -247,19 +247,19 @@ class PetstoreConsoleWrites_BrowserTest extends TestBase {
 				"queries", Map.of("writes", "window.__writes", "sold", "window.__sold",
 					"toast", "document.querySelector('.juneau-view-bulk-toast')?.textContent")),
 			// The tab's <object> asks for the photo before there is one, so its 404 load is expected.
-			Map.of("name", "upload", "path", "/console/pets/1/photo", "allowFailedLoads", true,
+			Map.of("name", "upload", "waitUntil", "networkidle", "path", "/console/pets/1/photo", "allowFailedLoads", true,
 				"actions", List.of(
 					eval(UPLOAD_PNG),
 					wait("performance.getEntriesByType('navigation')[0].type === 'reload'")),
 				"queries", Map.of("status", "document.querySelector('form[data-petstore-upload] [role=status]')?.textContent ?? null",
 					"marker", "sessionStorage.getItem('uploaded')")),
-			Map.of("name", "uploadNoToken", "path", "/console/pets/1/photo", "allowFailedLoads", true,
+			Map.of("name", "uploadNoToken", "waitUntil", "networkidle", "path", "/console/pets/1/photo", "allowFailedLoads", true,
 				"actions", List.of(
 					eval(UPLOAD_NO_TOKEN),
 					wait("document.querySelector('form[data-petstore-upload] [role=status]')")),
 				"queries", Map.of("status", "document.querySelector('form[data-petstore-upload] [role=status]')?.textContent ?? null",
 					"navigation", "performance.getEntriesByType('navigation')[0].type")),
-			Map.of("name", "uploadFails", "path", "/console/pets/1/photo", "allowFailedLoads", true,
+			Map.of("name", "uploadFails", "waitUntil", "networkidle", "path", "/console/pets/1/photo", "allowFailedLoads", true,
 				"actions", List.of(
 					eval(UPLOAD_BAD),
 					wait("document.querySelector('form[data-petstore-upload] [role=status]')")),

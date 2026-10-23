@@ -16,7 +16,9 @@
 # limitations under the License.
 #
 """
-Roll up Surefire XML results into timing buckets.
+Totals the test counts and run times from a module's Surefire XML reports into core and container buckets.
+
+Full docs: surefire-rollup.md
 """
 
 from __future__ import annotations

@@ -24,6 +24,7 @@ import java.io.*;
 import java.nio.file.*;
 import java.util.*;
 import java.util.concurrent.*;
+import java.util.stream.*;
 
 import org.apache.juneau.marshall.marshaller.*;
 
@@ -32,8 +33,8 @@ import org.apache.juneau.marshall.marshaller.*;
  *
  * <p>
  * A case is a JSON object: {@code name}, {@code path} (appended to the base URL), optional {@code waitUntil} (the
- * navigation's Playwright wait state, {@code networkidle} by default; a polling page can pass {@code load} and start
- * with a {@code waitFor}), optional {@code actions}
+ * navigation's Playwright wait state, {@code load} by default, so start with a {@code waitFor}; a case that asserts
+ * straight after the navigation passes {@code networkidle}), optional {@code actions}
  * (each {@code {click|fill|press|waitFor|waitForCaptured|evaluate|screenshot|download: ...}}, or {@code {reload|back|forward: true}};
  * {@code reload} waits for the case's {@code waitUntil} and {@code back}/{@code forward} only for the navigation to
  * commit, so follow them with a {@code waitFor}), {@code queries} (name to a JS expression
@@ -50,7 +51,8 @@ import org.apache.juneau.marshall.marshaller.*;
  * The report for each case has {@code status} (the navigation's HTTP status), {@code jsFailures} (page errors
  * and {@code console.error} lines), {@code deprecations} ({@code console.warn} lines matching
  * {@code is deprecated}), {@code queries}, {@code fetches}, {@code requests}, {@code downloads} (by the {@code download} action's
- * {@code as} name: {@code {name, bytes, head}}) and {@code timeouts}.
+ * {@code as} name: {@code {name, bytes, head}}), {@code timeouts} and {@code ms} (the case's wall time in
+ * milliseconds, including its browser context).
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bjava'>
@@ -102,7 +104,29 @@ public final class PetstoreBrowser {
 		})
 		var r = (Map<String,Map<String,Object>>) Json.to(Files.readString(out), Map.class).get("cases");
 		assertNotNull(r, () -> "Harness '" + suite + "' wrote no 'cases' object; stdout:\n" + quietRead(out));
+		printSlowest(suite, r);
 		return r;
+	}
+
+	@SuppressWarnings({
+		"java:S106" // The slowest cases are the measurement this class exists to report.
+	})
+	private static void printSlowest(String suite, Map<String,Map<String,Object>> report) {
+		System.out.println("[petstore-browser] " + suite + ": " + report.size() + " cases, slowest: " + slowest(report, 5));
+	}
+
+	/**
+	 * @param report The {@link #run} result.
+	 * @param n How many cases to list.
+	 * @return The {@code n} slowest cases as {@code "name 1234 ms"}, longest first, comma separated.
+	 */
+	static String slowest(Map<String,Map<String,Object>> report, int n) {
+		return report.entrySet().stream()
+			.filter(e -> e.getValue().get("ms") instanceof Number)
+			.sorted((a, b) -> Long.compare(((Number) b.getValue().get("ms")).longValue(), ((Number) a.getValue().get("ms")).longValue()))
+			.limit(n)
+			.map(e -> e.getKey() + " " + ((Number) e.getValue().get("ms")).longValue() + " ms")
+			.collect(Collectors.joining(", "));
 	}
 
 	/**

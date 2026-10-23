@@ -19,6 +19,7 @@ package org.apache.juneau.rest.server.stats;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
+import java.time.*;
 import java.util.*;
 import java.util.concurrent.atomic.*;
 
@@ -47,6 +48,7 @@ public class ThrownStats {
 		long hash;
 		List<String> stackTrace;
 		ThrownStats causedBy;
+		Clock clock = Clock.systemUTC();
 
 		private Class<? extends ThrownStats> implType;
 
@@ -81,6 +83,21 @@ public class ThrownStats {
 		 */
 		public Builder causedBy(ThrownStats value) {
 			causedBy = value;
+			return this;
+		}
+
+		/**
+		 * Specifies the clock used to stamp the first and last occurrence times.
+		 *
+		 * <p>
+		 * Defaults to {@link Clock#systemUTC()}.  Tests can pass {@link Clock#fixed(Instant, ZoneId)} to make the
+		 * reported occurrence times deterministic.
+		 *
+		 * @param value The new value for this setting.  Must not be <jk>null</jk>.
+		 * @return This object.
+		 */
+		public Builder clock(Clock value) {
+			clock = reqnn("value", value);
 			return this;
 		}
 
@@ -146,6 +163,7 @@ public class ThrownStats {
 	private final List<String> stackTrace;
 	private final Optional<ThrownStats> causedBy;
 
+	private final Clock clock;
 	private final AtomicInteger count;
 	private final AtomicLong firstOccurrence;
 	private final AtomicLong lastOccurrence;
@@ -160,6 +178,7 @@ public class ThrownStats {
 		this.stackTrace = u(cp(x.stackTrace));
 		this.causedBy = o(ThrownStats.copyOrNull(x.causedBy.orElse(null)));
 		this.hash = x.hash;
+		this.clock = x.clock;
 		this.count = new AtomicInteger(x.count.get());
 		this.firstOccurrence = new AtomicLong(x.firstOccurrence.get());
 		this.lastOccurrence = new AtomicLong(x.lastOccurrence.get());
@@ -187,8 +206,9 @@ public class ThrownStats {
 		this.stackTrace = u(cp(builder.stackTrace));
 		this.causedBy = o(builder.causedBy);
 		this.hash = builder.hash;
+		this.clock = builder.clock;
 		this.count = new AtomicInteger(0);
-		long ct = System.currentTimeMillis();
+		long ct = clock.millis();
 		this.firstOccurrence = new AtomicLong(ct);
 		this.lastOccurrence = new AtomicLong(ct);
 	}
@@ -269,7 +289,7 @@ public class ThrownStats {
 	 */
 	public ThrownStats increment() {
 		count.incrementAndGet();
-		lastOccurrence.set(System.currentTimeMillis());
+		lastOccurrence.set(clock.millis());
 		causedBy.ifPresent(ThrownStats::increment);
 		return this;
 	}

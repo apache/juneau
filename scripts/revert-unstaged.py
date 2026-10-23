@@ -12,57 +12,53 @@
 # * specific language governing permissions and limitations under the License.
 # ***************************************************************************************************************************
 """
-Revert unstaged changes back to the staged (INDEX) version.
+Restores one git-tracked file's working-tree edits to the staged (index) version, keeping what is already staged.
 
-This script safely reverts working directory changes back to what's in the staging area,
-preserving any staged changes that have been tested.
-
-Usage:
-    ./scripts/revert-unstaged.py <file_path>
-
-Example:
-    ./scripts/revert-unstaged.py juneau-core/juneau-marshall/src/main/java/org/apache/juneau/ClassMeta.java
+Full docs: revert-unstaged.md
 """
 
-import sys
+import argparse
 import subprocess
+import sys
 from pathlib import Path
 
-def main():
-    if len(sys.argv) != 2:
-        print("Error: Exactly one file path argument required")
-        print()
-        print("Usage: ./scripts/revert-unstaged.py <file_path>")
-        print()
-        print("Example:")
-        print("    ./scripts/revert-unstaged.py juneau-core/juneau-marshall/src/main/java/org/apache/juneau/ClassMeta.java")
-        sys.exit(1)
-    
-    file_path = sys.argv[1]
-    
-    # Verify file exists
+
+def git(*args):
+    return subprocess.run(["git", *args], capture_output=True, text=True)
+
+
+def main(argv=None):
+    parser = argparse.ArgumentParser(
+        description="Restore one tracked file's working-tree edits to the staged (index) version; staged changes are kept.",
+        epilog="Example: ./scripts/revert-unstaged.py juneau-core/juneau-marshall/src/main/java/org/apache/juneau/ClassMeta.java"
+    )
+    parser.add_argument("file_path", help="the file to restore (use -- before a path that starts with -)")
+    file_path = parser.parse_args(argv).file_path
+
     if not Path(file_path).exists():
         print(f"Error: File not found: {file_path}")
-        sys.exit(1)
-    
-    print(f"Reverting unstaged changes for: {file_path}")
-    print(f"Command: git restore --source=INDEX {file_path}")
-    print()
-    
-    try:
-        subprocess.run(
-            ["git", "restore", "--source=INDEX", file_path],
-            check=True,
-            capture_output=True,
-            text=True
-        )
-        print(f"✅ Successfully reverted unstaged changes for: {file_path}")
-        print("   (Staged changes preserved)")
-        return 0
-    except subprocess.CalledProcessError as e:
-        print(f"❌ Error reverting file: {e.stderr}")
         return 1
+
+    if git("ls-files", "--error-unmatch", "--", file_path).returncode != 0:
+        print(f"Error: File not tracked by git, so it has no staged version: {file_path}")
+        return 1
+
+    if git("diff", "--quiet", "--", file_path).returncode == 0:
+        print(f"Nothing to revert: {file_path} already matches the staged version")
+        return 0
+
+    print(f"Reverting unstaged changes for: {file_path}")
+    print(f"Command: git restore --worktree -- {file_path}")
+    print()
+
+    result = git("restore", "--worktree", "--", file_path)
+    if result.returncode != 0:
+        print(f"Error reverting file: {result.stderr}")
+        return 1
+    print(f"Successfully reverted unstaged changes for: {file_path}")
+    print("   (Staged changes preserved)")
+    return 0
+
 
 if __name__ == "__main__":
     sys.exit(main())
-

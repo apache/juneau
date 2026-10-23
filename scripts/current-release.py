@@ -16,16 +16,9 @@
 # limitations under the License.
 
 """
-Get the current release version from pom.xml.
+Prints the current Juneau release version taken from the root `pom.xml`, with any `-SNAPSHOT` suffix removed (for example `9.2.0`).
 
-This script parses the root pom.xml file and returns the version number
-with the -SNAPSHOT suffix removed (if present).
-
-Usage:
-    python3 scripts/current-release.py
-
-Output:
-    Prints the version number (e.g., "9.2.0") to stdout.
+Full docs: current-release.md
 """
 
 import subprocess

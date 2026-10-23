@@ -12,6 +12,12 @@
 # * specific language governing permissions and limitations under the License.                                              *
 # ***************************************************************************************************************************
 """
+Walks through the Apache Juneau release steps: checks, build, `release:prepare` and `release:perform`, binary artifacts, SVN upload and distribution check.
+
+Full docs: release.md
+"""
+
+USAGE = """
 Apache Juneau Release Script
 
 This script automates the release process for Apache Juneau, including:
@@ -1229,7 +1235,7 @@ def main(argv=None):
     parser = argparse.ArgumentParser(
         description='Apache Juneau Release Script',
         formatter_class=argparse.RawDescriptionHelpFormatter,
-        epilog=__doc__
+        epilog=USAGE
     )
     # --list-steps, --start-step, --skip-step and --resume, validated against the step names
     registry = build_registry(RELEASE_STEPS, lambda name: lambda ctx: None)   # only parses; never runs a step

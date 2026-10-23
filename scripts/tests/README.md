@@ -11,7 +11,7 @@ remains here is a juneau-only script with no counterpart elsewhere.
 
 ## Running
 
-The suite must also pass under a push-like environment (`JUNEAU_RUN_SESSION`, `JUNEAU_PUSH_ACTIVE`, `JUNEAU_RUN_ACTIVE`, `JUNEAU_RUN_N_BASE` set), because `push.py`'s Python Tests step runs it that way; any test that depends on those variables being unset must clear them itself.
+The suite must also pass under a push-like environment (`JUNEAU_RUN_SESSION`, `JUNEAU_PUSH_ACTIVE`, `JUNEAU_RUN_ACTIVE`, `JUNEAU_RUN_N_BASE` set), because `push.py`'s Python Tests step runs it that way. `conftest.py` strips every live-run `JUNEAU_RUN_*` variable (`LIVE_RUN_ENV`: logs, cancel, header, markers, result, session and pending/overall rows) before each test, so a test never writes into the real run's logs (`test_env_isolation.py`); a test that needs one sets it itself.
 
 `pytest` is not vendored anywhere in this repo (it's pure-stdlib elsewhere in `scripts/` on
 purpose). Two easy ways to run this suite without installing anything globally:
@@ -86,3 +86,18 @@ with `argv[0]` set so the writer's script name is `test`; `fake_reports` (F2) bu
   repositories for the same reason that one is: the guard's entire risk is real `git status
   --porcelain` behavior, which a mocked subprocess would let pass while proving nothing. Never
   runs a real `mvn` command.
+
+- `test_script_docs.py` -- the script-docs checker. Every runnable script under `scripts/` (a `.py`
+  file with a `__main__` guard, a `.sh` file, or an extensionless file with a shell or Python
+  shebang) needs a `<name>.md` beside it with the seven standard sections (When to use, Usage,
+  Options, What it does, Output and exit codes, Gotchas, See also), and every flag the script
+  declares must appear in backticks in the doc's Options section. It reads source with `ast` and
+  text matching and never runs a script. Flags come from literal `add_argument` and `add_parser`
+  calls, or from the option `case` block of a shell script; an argparse script with no literal
+  calls fails as `FLAGS-UNVERIFIABLE` unless excluded. A doc listing a flag the script does not
+  declare only warns. Exceptions go in `scripts/script-docs-exclude.txt`, one per line as
+  `pattern  # reason` (reason required), with a `flags:` prefix to skip only the flag check and a
+  `packages:` prefix for library directories that need a `README.md` instead; a pattern that
+  matches nothing fails. Tests, vendor, node_modules, `__pycache__` and fixtures directories are
+  never scanned. The checker also unit-tests its own parsers and proves each check fails when
+  broken.

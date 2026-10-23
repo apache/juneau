@@ -52,7 +52,7 @@ class PetstoreCoverage_Test extends TestBase {
 		PetstoreSecure_BrowserTest.class,
 		PetstoreThemes_BrowserTest.class,
 		PetstoreAsyncJob_BrowserTest.class,
-		PetstoreRowJob_BrowserTest.class,
+		PetstoreRowJob_BrowserTest.class, PetstoreRowJobCancel_BrowserTest.class,
 		PetstoreDatatable_BrowserTest.class,
 		PetstoreTerminal_BrowserTest.class,
 		PetstorePetDetail_BrowserTest.class,

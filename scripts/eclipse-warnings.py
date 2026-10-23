@@ -16,6 +16,12 @@
 # limitations under the License.
 
 """
+Reproduces Eclipse's compiler warnings for a module without a running Eclipse, by compiling its sources with the `ecj` compiler under the module's own preferences.
+
+Full docs: eclipse-warnings.md
+"""
+
+USAGE = """
 Headless reproduction of Eclipse JDT compiler warnings via `ecj`.
 
 `ecj` is the exact JDT compiler Eclipse embeds. Driven by a module's own
@@ -171,7 +177,7 @@ def main():
     root_dir = script_dir.parent
 
     if len(sys.argv) != 2:
-        print(__doc__)
+        print(USAGE)
         sys.exit(1)
 
     ecj_jar = find_ecj_jar()

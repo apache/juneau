@@ -17,6 +17,7 @@
 package org.apache.juneau.commons.utils;
 
 import java.security.*;
+import java.time.*;
 import java.util.*;
 
 /**
@@ -43,6 +44,8 @@ public final class Uuid7 {
 	})
 	private static final ThreadLocal<SecureRandom> RANDOM = ThreadLocal.withInitial(SecureRandom::new);
 
+	private static final Clock SYSTEM_CLOCK = Clock.systemUTC();
+
 	private static final long VERSION_7 = 0x7000L;      // version nibble in the low 16 bits of the MSB long
 	private static final long RAND_A_MASK = 0x0FFFL;    // 12 random bits alongside the version nibble
 	private static final long VARIANT_IETF = 0x2L << 62;// binary 10 in the top 2 bits of the LSB long
@@ -56,8 +59,22 @@ public final class Uuid7 {
 	 * @return A new v7 UUID.  Never <jk>null</jk>.
 	 */
 	public static UUID create() {
+		return create(SYSTEM_CLOCK);
+	}
+
+	/**
+	 * Generates a new version-7 UUID whose timestamp is read from the specified clock.
+	 *
+	 * <p>
+	 * Lets tests pin the encoded timestamp with {@link Clock#fixed(Instant, ZoneId)}.  The random bits are still
+	 * {@link SecureRandom}-filled, so two UUIDs minted against the same fixed clock differ.
+	 *
+	 * @param clock The clock supplying the Unix-milliseconds timestamp.  Must not be <jk>null</jk>.
+	 * @return A new v7 UUID.  Never <jk>null</jk>.
+	 */
+	public static UUID create(Clock clock) {
 		var random = RANDOM.get();
-		var ts = System.currentTimeMillis() & 0xFFFFFFFFFFFFL;
+		var ts = clock.millis() & 0xFFFFFFFFFFFFL;
 		var randA = random.nextInt() & RAND_A_MASK;
 		var msb = (ts << 16) | VERSION_7 | randA;
 		var randB = random.nextLong() & RAND_B_MASK;

@@ -77,7 +77,7 @@ class PetstoreAsyncJob_BrowserTest extends TestBase {
 
 	// Holds the stream's two subscriber slots open on a slow job, then asks for a third.
 	private static final String OVER_THE_CAP = "(async () => {"
-		+ " const ref = await " + start(4000) + ";"
+		+ " const ref = await " + start(2500) + ";"
 		+ " window.__refs = [ref];"
 		+ " const open = () => new Promise((res, rej) => { const es = new EventSource(ref.streamUrl);"
 		+ "   es.onopen = () => res(es); setTimeout(() => { es.close(); rej(new Error('stream did not open')); }, 8000); });"
@@ -143,33 +143,33 @@ class PetstoreAsyncJob_BrowserTest extends TestBase {
 			Map.of("name", "cancel-early", "path", "/console/ops/jobs",
 				"actions", List.of(phase("idle", 8000),
 					Map.of("evaluate", PET_COUNT + ".then(n => { window.__before = n; })"), wait("window.__before != null", 8000),
-					slowMs(3000), Map.of("evaluate", "window.__posted = Date.now()"), SUBMIT, line("Waiting", 8000),
+					slowMs(2000), Map.of("evaluate", "window.__posted = Date.now()"), SUBMIT, line("Waiting", 8000),
 					wait("!document.querySelector('" + J + " .jc-joblog-submit').disabled", 8000), SUBMIT,
 					phase("done", 10000),
 					// A worker that ignored the cancel would restock once its wait ran out, so count only after that.
-					wait("Date.now() - window.__posted > 3500", 8000),
+					wait("Date.now() - window.__posted > 2500", 8000),
 					Map.of("evaluate", PET_COUNT + ".then(n => { window.__after = n; })"), wait("window.__after != null", 8000)),
 				"queries", Map.of("lines", CARD_QUERIES.get("lines"), "banner", CARD_QUERIES.get("banner"),
 					"pets", "[window.__before, window.__after]")),
 			Map.of("name", "cancel-late", "path", "/console/ops/jobs",
-				// The 6 s hold keeps the job cancellable well past the Added line and ends 6 s short of the 12 s hard
+				// The 2.5 s hold keeps the job cancellable past the Added line and ends 2.5 s short of the 5 s hard
 				// timeout, so the cancel always lands in the hold.
-				"actions", List.of(phase("idle", 8000), holdMs(6000), SUBMIT, line("Added", 8000), SUBMIT, phase("done", 10000)),
+				"actions", List.of(phase("idle", 8000), holdMs(2500), SUBMIT, line("Added", 8000), SUBMIT, phase("done", 10000)),
 				"queries", CARD_QUERIES),
 			// The third subscriber's 429 is expected.
 			Map.of("name", "subscriber-cap", "path", "/console/ops/jobs", "allowFailedLoads", true,
 				"actions", List.of(phase("idle", 8000), Map.of("evaluate", "window.__cap = " + OVER_THE_CAP)),
 				"queries", Map.of("cap", "window.__cap")),
-			// The job would run 20 s; the 12 s timeout lands in its hold.  This passes even against a scheduler that fires
+			// The job would run 8 s; the 5 s timeout lands in its hold.  This passes even against a scheduler that fires
 			// its timeout task a little late; the early- and on-the-deadline firing it once hung on is pinned
 			// deterministically by AsyncJobRegistry_Test's k group.
 			Map.of("name", "timeout", "path", "/console/ops/jobs",
-				"actions", List.of(phase("idle", 8000), slowMs(10000), holdMs(10000), SUBMIT, phase("done", 25000)),
+				"actions", List.of(phase("idle", 8000), slowMs(3000), holdMs(5000), SUBMIT, phase("done", 12000)),
 				"queries", CARD_QUERIES),
 			// The two fetched jobs fill the limit, so the card's own submit is refused with 429.
 			Map.of("name", "limit", "path", "/console/ops/jobs", "allowFailedLoads", true,
 				"actions", List.of(phase("idle", 8000),
-					Map.of("evaluate", "window.__started = Promise.all([" + start(4000) + ", " + start(4000) + "]).then(r => { window.__refs = r; })"),
+					Map.of("evaluate", "window.__started = Promise.all([" + start(2500) + ", " + start(2500) + "]).then(r => { window.__refs = r; })"),
 					wait("window.__refs && window.__refs.length === 2", 8000),
 					SUBMIT,
 					wait("document.querySelector('" + J + " .jc-joblog-banner.jc-joblog-error:not([hidden])')", 8000),

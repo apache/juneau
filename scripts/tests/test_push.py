@@ -1300,6 +1300,24 @@ def flow(push_module, repo, monkeypatch):
     return go
 
 
+def test_the_session_header_has_no_message_and_the_message_is_a_line(push_module):
+    assert push_module.session_header("Juneau", "master") == ["Juneau", "master"]
+    assert push_module.session_lines("Fix the cap") == ["Commit Message: Fix the cap"]
+    assert push_module.session_lines(None) == []
+    assert push_module.session_lines("") == []
+
+
+@pytest.mark.parametrize("argv,title,lines", [
+    (["Fix the cap"], "Push", ["Commit Message: Fix the cap"]),
+    (["--test-only"], "Test", []),
+])
+def test_the_session_gets_the_message_as_a_header_line(flow, push_module, monkeypatch, argv, title, lines):
+    seen = []
+    monkeypatch.setattr(push_module, "_in_session", lambda t, body, **kw: seen.append((t, kw)) or 0)
+    assert flow(*argv) == 0
+    assert [(t, kw["header"], kw["lines"]) for t, kw in seen] == [(title, ["Juneau", "master"], lines)]
+
+
 def _push_from_elsewhere(tmp_path: Path, remote_repo: Path) -> None:
     other = tmp_path / "other-clone"
     _run(tmp_path, "git", "clone", str(remote_repo), str(other))

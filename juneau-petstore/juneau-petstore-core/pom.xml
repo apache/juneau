@@ -174,7 +174,8 @@
 			    mvn -Pjs-tests -pl juneau-petstore/juneau-petstore-core -am test -Dtest='org.apache.juneau.petstore.**.*_BrowserTest' -Dsurefire.failIfNoSpecifiedTests=false
 
 			A copy of juneau-rest-server-views' js-tests profile (see the notes there on target/js, the browser cache
-			and the -Djuneau.jsTests.* overrides), with only the harness path and the npm packages changed: the
+			and the -Djuneau.jsTests.* overrides; -Djuneau.jsTests.forks=N sets how many classes run at once, 3 by
+			default), with only the harness path and the npm packages changed: the
 			petstore pages load jQuery and DataTables from the WebJars the console serves (WebJarsMixin).
 		-->
 		<profile>
@@ -186,6 +187,8 @@
 				<juneau.jsTests.npm>npm</juneau.jsTests.npm>
 				<js.tests.dir>${project.build.directory}/js</js.tests.dir>
 				<juneau.jsTests.browsers>${js.tests.dir}/browsers</juneau.jsTests.browsers>
+				<!-- Surefire forks the *_BrowserTest classes run in at once; override with -Djuneau.jsTests.forks=N (1 is serial). -->
+				<juneau.jsTests.forks>3</juneau.jsTests.forks>
 			</properties>
 			<build>
 				<plugins>
@@ -201,13 +204,11 @@
 									<goal>exec</goal>
 								</goals>
 								<configuration>
-									<executable>${juneau.jsTests.npm}</executable>
+									<executable>${juneau.jsTests.node}</executable>
 									<arguments>
-										<argument>install</argument>
-										<argument>--no-fund</argument>
-										<argument>--no-audit</argument>
-										<argument>--prefix</argument>
+										<argument>${maven.multiModuleProjectDirectory}/scripts/ensure-playwright.cjs</argument>
 										<argument>${js.tests.dir}</argument>
+										<argument>${juneau.jsTests.npm}</argument>
 										<argument>playwright@${playwright.version}</argument>
 									</arguments>
 								</configuration>
@@ -238,6 +239,10 @@
 						<configuration>
 							<!-- Run the *_BrowserTest classes the default build excludes. -->
 							<excludes combine.self="override"/>
+							<!-- Each *_BrowserTest class owns its server, port, store and target/js files (suite names are unique),
+							     so classes can run side by side.  Override with -Djuneau.jsTests.forks=N. -->
+							<forkCount>${juneau.jsTests.forks}</forkCount>
+							<reuseForks>true</reuseForks>
 							<systemPropertyVariables>
 								<juneau.jsTests>true</juneau.jsTests>
 								<juneau.jsTests.dir>${js.tests.dir}</juneau.jsTests.dir>

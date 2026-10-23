@@ -12,19 +12,9 @@
 # * specific language governing permissions and limitations under the License.                                              *
 # ***************************************************************************************************************************
 """
-Script to check for missing fluent setter overrides in the Juneau codebase.
+Reports subclasses that do not override an inherited fluent setter, so the narrowed return type is lost in method chains.
 
-This script:
-1. Scans all Java files in the source tree
-2. Identifies classes and their parent classes
-3. Finds fluent setter methods (methods that return 'this')
-4. Checks if subclasses override these setters with the correct return type
-5. Reports any missing overrides
-
-A fluent setter is a method that:
-- Starts with 'set' or is a builder-style method
-- Returns the class type (for method chaining)
-- Is public
+Full docs: check-fluent-setter-overrides.md
 """
 
 import os

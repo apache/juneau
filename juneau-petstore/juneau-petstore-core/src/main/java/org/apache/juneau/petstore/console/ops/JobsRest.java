@@ -53,7 +53,12 @@ import org.apache.juneau.rest.server.widgets.*;
  * with {@code slowMs} waits that long before it touches the store (cancel it then and nothing changes), and every
  * restock holds for {@code holdMs} (a second by default) after it has added its pets (cancel it then and the result
  * says the change was made).
- * The registry's hard timeout is 30 s, or whatever a {@link HardTimeout} bean on the host says.
+ * The registry's hard timeout is 30 s, or whatever a {@link HardTimeout} bean on the host says; a {@link GroomPeriod}
+ * bean sets the groom step and a {@link SpeciesHold} bean the species-row hold.
+ *
+ * <p>
+ * The seeded groom run is created on the first groom request rather than at construction, so a {@link GroomPeriod} bean
+ * (injected after construction) can set its pace; every groom endpoint goes through it, so the page sees the same data.
  *
  * <p>
  * The page also hosts the terminal demo: a "groom pet" job ({@link GroomRuns}) whose output is served by
@@ -113,8 +118,8 @@ public class JobsRest extends PetstoreConsolePage implements AsyncJobsMixin, Ter
 	/** When each species was last restocked from its row, for the row's detail panel. */
 	private final transient Map<Species,Instant> lastRestock = new ConcurrentHashMap<>();
 
-	/** The groom-pet demo runs; one verbose run is seeded so the page always has a log. */
-	private final transient GroomRuns groom = GroomRuns.seeded(Long.getLong(GroomRuns.PERIOD_PROPERTY, GroomRuns.DEFAULT_PERIOD_MS));
+	/** The groom-pet demo runs, created on first use; one verbose run is seeded so the page always has a log. */
+	private final transient AtomicReference<GroomRuns> groomRef = new AtomicReference<>();
 
 	/** The default hard timeout of a restock job. */
 	public static final Duration DEFAULT_HARD_TIMEOUT = Duration.ofSeconds(30);
@@ -159,11 +164,38 @@ public class JobsRest extends PetstoreConsolePage implements AsyncJobsMixin, Ter
 	@Bean
 	private transient HardTimeout hardTimeout;
 
+	/**
+	 * A per-host groom step period.  Declare it as a {@code @Bean} on the host, as {@link HardTimeout}.
+	 *
+	 * @param value Time between steps, at least 1 ms.
+	 */
+	public record GroomPeriod(Duration value) {}
+
+	/**
+	 * A per-host species-row hold: how long a species row's restock holds after its effect.  Declare it as a
+	 * {@code @Bean} on the host, as {@link HardTimeout}.
+	 *
+	 * @param value The post-effect hold, 0 to {@value #MAX_HOLD_MS} ms.
+	 */
+	public record SpeciesHold(Duration value) {}
+
 	@SuppressWarnings({
 		"java:S2226" // the field is set by the framework's @Bean injection after construction, so it cannot be final.
 	})
 	@Bean
 	private transient KeyClock keyClock;
+
+	@SuppressWarnings({
+		"java:S2226" // the field is set by the framework's @Bean injection after construction, so it cannot be final.
+	})
+	@Bean
+	private transient GroomPeriod groomPeriod;
+
+	@SuppressWarnings({
+		"java:S2226" // the field is set by the framework's @Bean injection after construction, so it cannot be final.
+	})
+	@Bean
+	private transient SpeciesHold speciesHold;
 
 	private final transient AtomicReference<AsyncJobRegistry> jobs = new AtomicReference<>();
 	private final transient ExecutorService pool = Executors.newCachedThreadPool(r -> {
@@ -248,6 +280,21 @@ public class JobsRest extends PetstoreConsolePage implements AsyncJobsMixin, Ter
 		}
 	}
 
+	/** @return The groom runs, created (with their seeded run) on first use. */
+	private GroomRuns groomRuns() {
+		var g = groomRef.get();
+		if (g == null) {
+			var n = GroomRuns.seeded(groomPeriod != null ? groomPeriod.value().toMillis() : Long.getLong(GroomRuns.PERIOD_PROPERTY, GroomRuns.DEFAULT_PERIOD_MS));
+			if (groomRef.compareAndSet(null, n)) {
+				g = n;
+			} else {
+				n.close();
+				g = groomRef.get();
+			}
+		}
+		return g;
+	}
+
 	/** @return The row-key ledger, on the host's {@link KeyClock} if it declares one. */
 	private JobKeyLedger jobKeys() {
 		var c = keyClock;
@@ -278,7 +325,9 @@ public class JobsRest extends PetstoreConsolePage implements AsyncJobsMixin, Ter
 		var j = jobs.get();
 		if (j != null)
 			j.close();
-		groom.close();
+		var g = groomRef.get();
+		if (g != null)
+			g.close();
 	}
 
 	/**
@@ -291,7 +340,7 @@ public class JobsRest extends PetstoreConsolePage implements AsyncJobsMixin, Ter
 	 */
 	@RestGet(path="/")
 	public View page(RestRequest req, @Query("run") String run) {
-		var r = groom.get(run).orElseGet(groom::latest);
+		var r = groomRuns().get(run).orElseGet(groomRuns()::latest);
 		if (r == null)
 			throw new NotFound("No groom run to show");
 		var main = terminal("groom-output", r.id(), "Groom log");
@@ -471,7 +520,7 @@ public class JobsRest extends PetstoreConsolePage implements AsyncJobsMixin, Ter
 
 	@Override /* TerminalMixin */
 	public Optional<TerminalSource> terminalSource(String id, RestRequest req) {
-		return groom.source(id); // The run id is an unguessable 128-bit secret; knowing it is the access rule.
+		return groomRuns().source(id); // The run id is an unguessable 128-bit secret; knowing it is the access rule.
 	}
 
 	/**
@@ -503,7 +552,7 @@ public class JobsRest extends PetstoreConsolePage implements AsyncJobsMixin, Ter
 	public ActionResult groom(@Content JsonMap json) throws IOException {
 		var fields = json.getMap("fields");
 		var src = fields != null ? fields : json;
-		var run = groom.start(src.getString("pet"), isOn(src.get("verbose")), json.getString("idempotencyKey"));
+		var run = groomRuns().start(src.getString("pet"), isOn(src.get("verbose")), json.getString("idempotencyKey"));
 		return ActionResult.success(run.row()).message(f("Grooming %s", run.pet()));
 	}
 
@@ -517,7 +566,7 @@ public class JobsRest extends PetstoreConsolePage implements AsyncJobsMixin, Ter
 	 */
 	@RestGet(path="/groom-rows")
 	public List<JsonMap> groomRows() {
-		return groom.list().stream().map(GroomRuns.Run::row).toList();
+		return groomRuns().list().stream().map(GroomRuns.Run::row).toList();
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -606,7 +655,7 @@ public class JobsRest extends PetstoreConsolePage implements AsyncJobsMixin, Ter
 			}
 			// After the replay check: a replay answers its job even if this resubmit's fields have changed.
 			var body = new Restock(Map.of(s, count(submit.fields())), grant.key().value(), 0,
-				Math.max(0, Math.min(Integer.getInteger(SPECIES_HOLD_PROPERTY, DEFAULT_HOLD_MS), MAX_HOLD_MS)));
+				Math.max(0, Math.min(speciesHold != null ? (int) speciesHold.value().toMillis() : Integer.getInteger(SPECIES_HOLD_PROPERTY, DEFAULT_HOLD_MS), MAX_HOLD_MS)));
 			var created = registry.runningCount() >= Integer.getInteger(LIMIT_PROPERTY, 2) ? null : registry.tryCreate(grant.key()).orElse(null);
 			if (created == null)
 				return limitReached(res, registry.runningCount());
@@ -696,9 +745,9 @@ public class JobsRest extends PetstoreConsolePage implements AsyncJobsMixin, Ter
 				return refused(res, RowJobSubmit.bindingRefusal());
 			var claimed = grant.jobId().orElse(null);
 			if (claimed != null)
-				return groom.get(claimed).map(x -> ActionResult.success(x.row()).message(f("Grooming %s again", x.pet())))
+				return groomRuns().get(claimed).map(x -> ActionResult.success(x.row()).message(f("Grooming %s again", x.pet())))
 					.orElseGet(() -> refused(res, ActionResult.refusal(JobKeyLedger.SPENT_CODE).message("This key's run has aged out; fetch a new key")));
-			var again = groom.start(groomRun(id).pet(), false, grant.key().value());
+			var again = groomRuns().start(groomRun(id).pet(), false, grant.key().value());
 			ledger.claim(grant.key(), again.id());
 			return ActionResult.success(again.row()).message(f("Grooming %s again", again.pet()));
 		}
@@ -733,7 +782,7 @@ public class JobsRest extends PetstoreConsolePage implements AsyncJobsMixin, Ter
 	}
 
 	private GroomRuns.Run groomRun(String id) {
-		return groom.get(id).orElseThrow(() -> new NotFound("Unknown groom run '%s'", id));
+		return groomRuns().get(id).orElseThrow(() -> new NotFound("Unknown groom run '%s'", id));
 	}
 
 	private static int count(JsonMap fields) {

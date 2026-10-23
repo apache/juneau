@@ -56,7 +56,7 @@ class PetstoreThemes_BrowserTest extends TestBase {
 		var base = PetstoreTestServer.awaitReady(server);
 		var cases = new ArrayList<Map<String,Object>>();
 		for (var t : concat(STOCK, "custom"))
-			cases.add(Map.of("name", t, "path", "/console/dev/themes?theme=" + t,
+			cases.add(Map.of("name", t, "waitUntil", "networkidle", "path", "/console/dev/themes?theme=" + t,
 				"actions", List.of(Map.of("screenshot", "theme-" + t + ".png")),
 				"queries", Map.of("tokens", "custom".equals(t) ? CUSTOM_TOKENS : TOKENS)));
 		cases.add(Map.of("name", "scheme-dark", "path", "/console/store",

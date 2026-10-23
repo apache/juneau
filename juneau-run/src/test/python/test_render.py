@@ -272,16 +272,27 @@ class BoardTest(unittest.TestCase):
     def test_header_and_final_line(self):
         b = self.board(full_log="/tmp/push-full.log")
         blocks = feed(b, ("session", {"title": "Push", "header": ["Juneau", "master", "PGP ✓"], "nested": False}))
-        self.assertEqual(plain(b, blocks, self.clock), "▶ Push: Juneau, master, PGP ✓\n")
+        self.assertEqual(plain(b, blocks, self.clock), "▶ Push: Juneau · master · PGP ✓\n")
         self.clock.advance(348)
         self.assertEqual(plain(b, feed(b, ("done", {"status": "ok", "commit": None})), self.clock),
-                         "✅ Done in 5:48\n")
+                         "▶ Overall  ✅ Done in 5:48\n")
 
     def test_final_line_forms(self):
-        self.assertEqual(jr.format_final("fail", 0, "Tests", "/tmp/f.log"), "❌ Failed at Tests · full log: /tmp/f.log")
-        self.assertEqual(jr.format_final("fail", 0, None, None), "❌ Failed")
-        self.assertEqual(jr.format_final("cancelled", 61000, None, None), "⚠ Cancelled after 1:01")
+        f = jr.format_final
+        self.assertEqual(f("ok", 243000, None, None), "Overall  ✅ Done in 4:03")
+        self.assertEqual(f("ok", 243000, None, None, 5, 5), "Overall  ✅ Done in 4:03  · 5 of 5 steps")
+        self.assertEqual(f("fail", 0, "Tests", "/tmp/f.log"), "Overall  ❌ Failed at Tests  · full log: /tmp/f.log")
+        self.assertEqual(f("fail", 0, "Docs build", "/tmp/f.log", 9, 13),
+                         "Overall  ❌ Failed at Docs build  · 9 of 13 steps  · full log: /tmp/f.log")
+        self.assertEqual(f("fail", 0, None, None), "Overall  ❌ Failed")
+        self.assertEqual(f("cancelled", 62000, None, None, 4, 13), "Overall  ⚠ Cancelled after 1:02  · 4 of 13 steps")
+        self.assertEqual(f("ok", 0, None, None, 0, 0), "Overall  ✅ Done in 0:00")     # no counted steps: no counts
         self.assertEqual(jr.fmt_elapsed(3723000), "1:02:03")
+
+    def test_final_line_marks_the_row_cyan_under_colour(self):
+        block = ("final", "ok", 1000, None, None, 1, 1)
+        self.assertEqual(jr.final_line(block), "▶ Overall  ✅ Done in 0:01  · 1 of 1 steps")
+        self.assertTrue(jr.final_line(block, color=True).startswith("\x1b[36m▶"))
 
     def test_a_nested_board_has_no_header_and_no_final_line(self):
         b = self.board(nested=True)
@@ -464,7 +475,7 @@ class OverallDisplayTest(unittest.TestCase):
         for cap in range(1, len(full)):
             with self.subTest(cap=cap):
                 lines = self.live().region(b, 79, cap)
-                self.assertEqual(len(lines), cap)
+                self.assertLessEqual(len(lines), cap)         # a running row drops with its Setup line
                 self.assertTrue(lines[-1].startswith("▶ Overall"), lines)
 
     def test_overall_sits_below_the_pending_rows(self):
@@ -528,7 +539,7 @@ class SessionTest(unittest.TestCase):
             c = jr.session("Test", ["Juneau", "master", "a message"])
         self.assertIs(jr._console, c)
         self.assertEqual(os.environ["JUNEAU_RUN_SESSION"], "1")
-        self.assertRegex(out.getvalue(), r'^▶ Test: Juneau, master, a message\n▶ Output: tail -f \S+/test-\d{8}-\d{6}(-\d+)?\.log\n'
+        self.assertRegex(out.getvalue(), r'^▶ Test: Juneau · master · a message\n▶ Output: tail -f \S+/test-\d{8}-\d{6}(-\d+)?\.log\n'
                                          r'▶ Condensed: tail -f \S+\.condensed\.log\n$')
 
     def test_a_console_that_fails_to_start_leaves_the_env_unset(self):
@@ -554,7 +565,7 @@ class SessionTest(unittest.TestCase):
             with contextlib.redirect_stdout(out):
                 jr.session("Push", ["Juneau", "master", "Fix it"], sinks=jr.Sinks(full_log=f"{tmp}/push-full.log"))
             self.assertEqual(out.getvalue(),
-                             f'▶ Push: Juneau, master, Fix it\n▶ Output: tail -f {shlex.quote(tmp + "/push-full.log")}\n')
+                             f'▶ Push: Juneau · master · Fix it\n▶ Output: tail -f {shlex.quote(tmp + "/push-full.log")}\n')
 
     def test_the_condensed_tail_command_takes_its_own_line_after_the_full_logs(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -566,12 +577,12 @@ class SessionTest(unittest.TestCase):
 
     def test_each_scripts_header_shape(self):
         shapes = [  # push.py, push.py --test-only, test.py, release.py
-            ("Push", ["Juneau", "master", "Fix it"], "▶ Push: Juneau, master, Fix it"),
-            ("Test", ["Juneau", "master"], "▶ Test: Juneau, master"),
-            ("Test", ["Juneau", "master"], "▶ Test: Juneau, master"),
-            ("Release", ["Juneau", "9.9.9", "Java 17", "Maven 3.9.9"], "▶ Release: Juneau, 9.9.9, Java 17, Maven 3.9.9"),
-            ("Push", ["Juneau", "master", "Fix it  \n\nlong body\nmore"], "▶ Push: Juneau, master, Fix it …"),   # multi-line item: first line, trimmed, then " …"
-            ("Push", ["Juneau", "one\ntwo", "master"], "▶ Push: Juneau, one …, master"),
+            ("Push", ["Juneau", "master", "Fix it"], "▶ Push: Juneau · master · Fix it"),
+            ("Test", ["Juneau", "master"], "▶ Test: Juneau · master"),
+            ("Test", ["Juneau", "master"], "▶ Test: Juneau · master"),
+            ("Release", ["Juneau", "9.9.9", "Java 17", "Maven 3.9.9"], "▶ Release: Juneau · 9.9.9 · Java 17 · Maven 3.9.9"),
+            ("Push", ["Juneau", "master", "Fix it  \n\nlong body\nmore"], "▶ Push: Juneau · master · Fix it …"),   # multi-line item: first line, trimmed, then " …"
+            ("Push", ["Juneau", "one\ntwo", "master"], "▶ Push: Juneau · one … · master"),
         ]
         for title, header, first in shapes:
             with self.subTest(title=title, header=header), tempfile.TemporaryDirectory() as tmp:
@@ -592,7 +603,7 @@ class SessionTest(unittest.TestCase):
                                                                     return_value=os.terminal_size((32, 24))):
                 jr.session("Push", ["Juneau", "master", "one two three four five six seven"], sinks=jr.Sinks(full_log=log))
             self.assertEqual(out.getvalue().splitlines(),
-                             ["▶ Push: Juneau, master, one two", "  three four five six seven", f"▶ Output: tail -f {log}"])
+                             ["▶ Push: Juneau · master · one", "  two three four five six seven", f"▶ Output: tail -f {log}"])
 
     def test_the_cancel_row_follows_the_log_rows_when_the_variable_is_set(self):
         os.environ["JUNEAU_RUN_CANCEL"] = "stop-it %3"
@@ -1010,6 +1021,103 @@ class LiveTest(unittest.TestCase):
     def spin(self):
         return jr.icon("running", self.clock()) + " "
 
+    def session(self, title="Push", header=("Juneau", "master"), lines=("Commit Message: m",), more=()):
+        self.push(("session", {"title": title, "header": list(header), "lines": list(lines),
+                               "header_more": list(more), "nested": False}))
+
+    def test_finished_rows_stay_in_the_frame_under_the_header(self):
+        self.screen = Screen(rows=10, cols=60)
+        self.live.write = self.screen.feed
+        self.session()
+        self.push(*start())
+        self.push(("step_end", {"id": "tests", "status": "ok", "ms": 4000, "exit": None, "summary": "done",
+                                "totals": None}))
+        self.assertEqual(self.screen.lines[:2], ["▶ Push: Juneau · master", "▶ Commit Message: m"])
+        self.assertTrue(self.screen.lines[2].startswith("✔ " + "Tests".ljust(10) + "  done"), self.screen.lines)
+        self.assertEqual(self.screen.scrollback, [])            # nothing reached scrollback yet
+        self.assertEqual(self.live.height, 3)
+
+    def test_the_frame_never_exceeds_rows_minus_two_and_the_title_stays_on_top(self):
+        self.dims = (60, 8)
+        self.screen = Screen(rows=8, cols=60)
+        self.live.write = self.screen.feed
+        self.session()
+        for n in "abcdefgh":
+            self.push(("step_start", {"id": n, "n": 1, "title": f"Step {n}", "parent": None}),
+                      ("step_end", {"id": n, "status": "ok", "ms": 1, "exit": None, "summary": None, "totals": None}))
+        self.push(("step_start", {"id": "z", "n": 1, "title": "Last", "parent": None}))
+        shown = [line for line in self.screen.lines if line.strip()]
+        self.assertLessEqual(len(shown), 6)
+        self.assertEqual(shown[0], "▶ Push: Juneau · master")
+        self.assertTrue(any(line.startswith("✔ ") and " done: " in line for line in shown), shown)
+        self.assertTrue(shown[-1].startswith(self.spin() + "Last"), shown)
+        self.assertFalse(self.screen.clamped)
+
+    def test_a_transcript_line_wider_than_the_pane_is_cut_with_an_ellipsis(self):
+        self.live.render(self.board, [("text", "x" * 200)])
+        self.assertTrue(all(jr._vlen(line) <= 59 for line in self.screen.lines), self.screen.lines)
+        self.assertIn("…", self.screen.text())
+
+    def test_an_identical_frame_is_not_rewritten(self):
+        writes = []
+        live = jr.LiveRenderer(writes.append, size=lambda: os.terminal_size(self.dims), clock=self.clock, color=False)
+        live.render(self.board, [("text", "hello")])
+        drawn = len(writes)
+        self.clock.advance(1)
+        live.tick(self.board)                                   # no running row: nothing on screen moves
+        self.assertEqual(len(writes), drawn)
+
+    def test_a_pane_too_short_for_one_line_draws_nothing(self):
+        self.dims = (60, 2)
+        self.push(*start())
+        self.assertEqual(self.screen.text(), "")
+        self.dims = (60, 10)
+        self.clock.advance(1)
+        self.live.tick(self.board)
+        self.assertTrue(self.screen.text().startswith(self.spin() + "Tests"))
+
+    def test_a_tick_does_not_re_render_the_transcript(self):
+        for n in range(200):
+            self.push(("step_start", {"id": f"s{n}", "n": 1, "title": f"Step {n}", "parent": None}),
+                      ("step_end", {"id": f"s{n}", "status": "ok", "ms": 1, "exit": None, "summary": None,
+                                    "totals": None}))
+        self.push(*start())
+        calls = []
+        real = self.live._block_lines
+        self.live._block_lines = lambda *a, **k: calls.append(a) or real(*a, **k)
+        for _ in range(10):
+            self.clock.advance(0.1)
+            self.live.tick(self.board)
+        self.assertEqual(calls, [])                 # transcript lines are rendered once, cut once per width
+        self.dims = (50, 10)
+        self.clock.advance(0.1)
+        self.live.tick(self.board)
+        self.assertEqual(calls, [])                 # a new width re-cuts the cached lines; it does not re-render
+
+    def test_last_draw_moves_only_when_a_frame_is_written(self):
+        self.push(*start())
+        t0 = self.clock()
+        self.assertEqual(self.live.last_draw, t0)
+        self.clock.advance(0.06)
+        self.live.tick(self.board)                  # throttled
+        self.assertEqual(self.live.last_draw, t0)
+        self.live.last_frame = None                 # force the next frame to differ
+        self.clock.advance(0.06)
+        self.live.tick(self.board)                  # 0.12 s after the last frame written: draws
+        self.assertAlmostEqual(self.live.last_draw, t0 + 0.12)
+        self.clock.advance(0.2)
+        cols, rows = self.dims
+        self.live.last_frame = self.live.frame(cols - 1, cols, rows - 2)    # the frame this tick would draw
+        self.live.tick(self.board)                  # identical frame: nothing written, last_draw stays
+        self.assertAlmostEqual(self.live.last_draw, t0 + 0.12)
+
+    def test_finished_rows_keep_the_label_column_they_finished_with(self):
+        self.push(("step_start", {"id": "a", "n": 1, "title": "Alpha", "parent": None}),
+                  ("step_end", {"id": "a", "status": "ok", "ms": 1, "exit": None, "summary": "done", "totals": None}))
+        before = self.screen.text().splitlines()[0]
+        self.push(("step_start", {"id": "b", "n": 1, "title": "A much longer label", "parent": None}))
+        self.assertEqual(self.screen.text().splitlines()[0], before)     # a longer running label does not shift it
+
     def test_a_running_row_and_its_module_redraw_in_place(self):
         self.push(*start(), mod_start("a"))
         self.push(cls("a"), cls("a", "fail"))
@@ -1120,8 +1228,12 @@ class LiveTest(unittest.TestCase):
         self.assertFalse(self.screen.clamped)
         self.push(("step_end", {"id": "s", "status": "ok", "ms": 5000, "exit": None, "summary": None,
                                 "totals": None}))
-        lines = self.screen.text().splitlines()                               # finished block prints wrapped too
-        self.assertEqual((len(lines), self.live.height), (2, 0))
+        lines = self.screen.text().splitlines()                               # the finished row stays in the frame, wrapped
+        self.assertEqual((len(lines), self.live.height), (2, 2))
+        self.assertEqual(self.screen.text().count("\u2588"), 84)
+        self.live.close()                                                     # close prints it into scrollback
+        self.assertEqual(self.live.height, 0)
+        self.assertEqual(len(self.screen.text().splitlines()), 2)
         self.assertEqual(self.screen.text().count("\u2588"), 84)
 
     def test_the_height_cap_holds_with_a_wrapped_bar(self):
@@ -1140,6 +1252,16 @@ class LiveTest(unittest.TestCase):
         self.clock.advance(0.06)
         live.tick(self.board)
         self.assertEqual(len(writes), drawn + 1)
+
+    def test_a_fold_keeps_the_padding_of_the_unit_lines_that_stay(self):
+        self.push(*start(size=3),
+                  ("unit_start", {"step": "tests", "id": "tests/a", "title": "Short"}),
+                  ("unit_start", {"step": "tests", "id": "tests/b", "title": "A much longer module"}),
+                  ("unit_start", {"step": "tests", "id": "tests/c", "title": "Mid length"}))
+        full = self.live.region(self.board, 59)
+        folded = self.live.region(self.board, 59, max_lines=3)       # A3 packs b and c, newest first; a stays
+        line = lambda lines: next(x for x in lines if "Short" in x and "," not in x)
+        self.assertEqual(line(folded), line(full))                    # padded to the longest running unit both times
 
     def test_the_region_never_exceeds_rows_minus_two(self):
         self.dims = (60, 6)
@@ -1282,15 +1404,18 @@ class LiveTest(unittest.TestCase):
     def test_header_rows_mark_the_icon_column_and_the_title_wraps_with_a_hanging_indent(self):
         for color in (True, False):
             with self.subTest(color=color):
-                writes = []
-                live = jr.LiveRenderer(writes.append, size=lambda: os.terminal_size((21, 10)), clock=self.clock,
-                                       color=color)
-                live.render(jr.Board(clock=self.clock), [("header", "Push: Juneau, master, a b c d", jr.HEAD_MARK),
+                writes, screen = [], Screen()
+                live = jr.LiveRenderer(lambda s: writes.append(s) or screen.feed(s),
+                                       size=lambda: os.terminal_size((21, 10)), clock=self.clock, color=color)
+                live.render(jr.Board(clock=self.clock), [("header", "Push: Juneau · master · a b c d", jr.HEAD_MARK),
                                                          ("header", "Output: tail -f /a/very/long/path.log", jr.MORE_MARK)])
-                lines = jr._ANSI.sub("", "".join(writes)).splitlines()
-                self.assertEqual(lines[:3], ["▶ Push: Juneau,", "  master, a b c d", "▶ Output: tail -f /a/very/long/path.log"])
+                self.assertEqual(screen.text().splitlines(),                  # the frame cuts the title to one line
+                                 ["▶ Push: Juneau · ma…", "▶ Output: tail -f /a/very/long/path.log"])
                 self.assertEqual("\x1b[2m▶\x1b[0m" in "".join(writes), color)     # the rows under the title are dim
                 self.assertEqual("\x1b[36m▶\x1b[0m Push:" in "".join(writes), color)   # the title marker is cyan, like the spinner
+                live.close()                                                    # scrollback wraps it, hanging indent
+                self.assertEqual(screen.text().splitlines(),
+                                 ["▶ Push: Juneau ·", "  master · a b c d", "▶ Output: tail -f /a/very/long/path.log"])
 
     def test_hides_the_cursor_while_drawing_and_shows_it_on_close(self):
         writes = []
@@ -1300,34 +1425,250 @@ class LiveTest(unittest.TestCase):
         live.close()
         self.assertTrue(writes[-1].endswith("\x1b[?25h"))
 
+    def test_close_prints_the_header_wrapped_then_the_transcript_uncut_then_the_final_row(self):
+        self.dims = (30, 10)
+        self.session(header=("Juneau", "master", "a b c d e f"))
+        self.push(("step_start", {"id": "a", "n": 1, "title": "Alpha", "parent": None}),
+                  ("step_end", {"id": "a", "status": "ok", "ms": 1, "exit": None, "summary": None, "totals": None}))
+        self.live.render(self.board, [("text", "y" * 80)])
+        self.live.render(self.board, [("final", "ok", 4000, None, None, None, None)])
+        self.assertNotIn("Overall", self.screen.text())             # the final row is not part of the frame
+        self.live.close()
+        lines = self.screen.text().splitlines()
+        self.assertEqual(lines[:2], ["▶ Push: Juneau · master · a b", "  c d e f"])
+        self.assertIn("y" * 80, lines)                               # uncut in scrollback
+        self.assertEqual(lines[-1], "▶ Overall  ✅ Done in 0:04")
+        self.assertTrue(self.screen.cursor_visible)
+
+    def test_the_header_reaches_scrollback_exactly_once(self):
+        self.session()
+        self.push(*start())
+        for _ in range(3):
+            self.live.pause()
+            self.live.resume()
+        self.live.close()
+        self.assertEqual(self.screen.text().count("Push: Juneau · master"), 1)
+        self.assertEqual(self.screen.text().count("Commit Message: m"), 1)
+
+    def test_pause_prints_the_transcript_and_resume_draws_only_the_live_part(self):
+        self.session()
+        self.push(("step_start", {"id": "a", "n": 1, "title": "Alpha", "parent": None}),
+                  ("step_end", {"id": "a", "status": "ok", "ms": 1, "exit": None, "summary": None, "totals": None}))
+        self.push(*start())
+        self.live.pause()
+        self.assertTrue(self.screen.text().splitlines()[-1].startswith("✔ Alpha"))
+        self.assertEqual(self.live.transcript, [])
+        self.live.resume()
+        lines = self.screen.text().splitlines()
+        self.assertEqual(lines.count("▶ Push: Juneau · master"), 2)      # scrollback's copy and the frame's title
+        self.assertEqual(sum(line.startswith("✔ Alpha") for line in lines), 1)
+
+    def test_after_close_a_block_prints_at_once(self):
+        self.live.close()
+        self.live.render(self.board, [("text", "late")])
+        self.assertEqual(self.screen.text(), "late")
+
+    def test_a_nested_renderer_never_prints_the_sticky_header(self):
+        live = jr.LiveRenderer(self.screen.feed, size=lambda: os.terminal_size(self.dims), clock=self.clock,
+                               color=False, sticky=[("header", "Push: Juneau · master", jr.HEAD_MARK)])
+        live.render(self.board, feed(self.board, *start()))
+        self.assertTrue(self.screen.text().startswith("▶ Push: Juneau · master"))
+        live.pause()
+        live.close()
+        self.assertNotIn("Push:", self.screen.text())
+
+    def test_the_up_count_follows_a_narrower_terminal_and_caps_at_rows_minus_one(self):
+        self.live.widths, self.live.partial = [59, 59, 10], 0
+        self.assertEqual(self.live._up(os.terminal_size((60, 20))), 3)
+        self.assertEqual(self.live._up(os.terminal_size((30, 20))), 5)          # 2 + 2 + 1 after a reflow
+        self.assertEqual(self.live._up(os.terminal_size((30, 4))), 3)           # the cursor stops at the top row
+        self.live.partial = 45
+        self.assertEqual(self.live._up(os.terminal_size((30, 20))), 6)          # a wrapped prompt line under it
+
+    def test_a_run_started_on_the_bottom_line_redraws_without_climbing_past_its_frame(self):
+        self.screen = Screen(rows=10, cols=60, start_row=9)
+        self.live.write = self.screen.feed
+        self.session(more=("Output: tail -f /" + "o" * 80,))                    # a log line that wraps to 2 lines
+        self.push(*start(), mod_start("a"))
+        for _ in range(5):
+            self.push(cls("a"))
+        self.assertFalse(self.screen.clamped)
+        shown = [line for line in self.screen.lines if line.strip()]
+        self.assertEqual(shown.count("▶ Push: Juneau · master"), 1)             # no stale copy of the frame
+        self.assertEqual(sum("Mod A" in line for line in shown), 1)
+
+    def test_a_log_line_longer_than_the_terminal_costs_its_wrapped_height(self):
+        self.dims = (40, 8)
+        self.screen = Screen(rows=8, cols=40)
+        self.live.write = self.screen.feed
+        self.session(lines=(), more=("Output: tail -f /" + "o" * 60,))
+        self.push(*start())
+        self.assertLessEqual(len([line for line in self.screen.lines if line.strip()]), 6)
+        self.assertFalse(self.screen.clamped)
+
     def test_pause_clears_the_region_and_resume_redraws_it(self):
         self.push(*start(), mod_start("a"))
         self.live.pause()
-        self.assertEqual(self.screen.text(), "")
+        self.assertNotIn(self.spin() + "Tests", self.screen.text())
         self.clock.advance(1)
         self.live.tick(self.board)
         self.assertEqual(self.screen.text(), "")
         self.live.resume()
         self.assertTrue(self.screen.text().startswith(self.spin() + "Tests"))
 
-    def test_a_watchdog_prompt_stops_redraws_until_the_line_ends(self):
+    def test_a_watchdog_prompt_writes_under_the_frame_and_stops_redraws_until_the_line_ends(self):
         self.push(*start())
         self.push(("prompt", {"step": "tests", "text": "Passphrase: "}))
-        self.assertEqual(self.screen.text(), "Passphrase:")
+        lines = self.screen.text().splitlines()
+        self.assertTrue(lines[0].startswith(self.spin() + "Tests"), lines)
+        self.assertEqual(lines[1], "Passphrase:")
         self.assertTrue(self.screen.cursor_visible)
         self.clock.advance(1)
         self.live.tick(self.board)
-        self.assertEqual(self.screen.text(), "Passphrase:")
+        self.assertEqual(self.screen.text().splitlines()[1], "Passphrase:")
+        self.push(("prompt_echo", {"step": "tests", "text": "***"}))
         self.push(("prompt_end", {"step": "tests"}))
-        self.assertTrue(self.screen.text().splitlines()[1].startswith(self.spin() + "Tests"))
+        lines = self.screen.text().splitlines()
+        self.assertEqual(lines[0], "Passphrase: ***")                  # the prompt joined the transcript
+        self.assertTrue(lines[1].startswith(self.spin() + "Tests"), lines)
+        self.assertEqual(len(lines), 2)                                  # no stale copy of the old frame
         self.assertFalse(self.screen.cursor_visible)
 
-    def test_a_line_printed_during_a_prompt_starts_on_its_own_line(self):
+    def test_rows_that_finish_during_a_prompt_are_held_until_it_ends(self):
         self.push(*start())
         self.push(("prompt", {"step": "tests", "text": "Passphrase: "}))
         self.push(("step_end", {"id": "tests", "status": "ok", "ms": 0, "exit": None, "summary": "done",
                                 "totals": None}))
+        self.assertEqual(self.screen.text().splitlines()[1], "Passphrase:")      # the frame is not redrawn
+        self.push(("prompt_end", {"step": "tests"}))
         self.assertEqual(self.screen.text().splitlines()[:2], ["Passphrase:", "✔ " + "Tests".ljust(10) + "  done"])
+
+    def viewport(self, cols, rows):
+        """A Screen of the renderer's size, with a shell line above where the run starts."""
+        self.dims = (cols, rows)
+        self.screen = Screen(rows=rows, cols=cols)
+        self.screen.feed("$ push\n")
+        self.live.write = self.screen.feed
+
+    def test_a_shrink_folds_to_the_new_height_and_a_grow_unfolds(self):
+        self.dims = (60, 40)
+        self.screen = Screen(rows=40, cols=60)
+        self.live.write = self.screen.feed
+        self.session()
+        for n in "abcdef":
+            self.push(("step_start", {"id": n, "n": 1, "title": f"Step {n}", "parent": None}),
+                      ("step_end", {"id": n, "status": "ok", "ms": 1, "exit": None, "summary": None, "totals": None}))
+        self.push(*start())
+        self.assertTrue(any(line.startswith("✔ Step a") for line in self.screen.lines))
+        self.dims = (60, 10)
+        self.screen.resize(rows=10, cols=60)        # Task 1's viewport: keeps the bottom rows, as a terminal does
+        self.clock.advance(1)
+        self.live.tick(self.board)
+        shown = [line for line in self.screen.lines if line.strip()]
+        self.assertLessEqual(len(shown), 8)
+        self.assertEqual(shown[0], "▶ Push: Juneau · master")
+        self.dims = (60, 40)
+        self.screen.resize(rows=40, cols=60)
+        self.clock.advance(1)
+        self.live.tick(self.board)
+        self.assertTrue(any(line.startswith("✔ Step a") for line in self.screen.lines))   # unfolded again
+
+    def test_the_spinner_still_turns_when_nothing_else_changes(self):
+        self.push(*start())
+        first = self.screen.text()
+        self.clock.advance(0.15)        # past the next frame: 101.1 / 0.1 rounds down to the same one
+        self.live.tick(self.board)
+        self.assertNotEqual(self.screen.text(), first)
+
+    def test_close_leaves_the_plain_renderers_record_apart_from_alignment(self):
+        events = [("session", {"title": "Push", "header": ["Juneau", "master"], "lines": ["Commit Message: m"],
+                               "header_more": [], "nested": False}),
+                  ("step_start", {"id": "a", "n": 1, "title": "Alpha", "parent": None}),
+                  ("step_end", {"id": "a", "status": "ok", "ms": 1000, "exit": None, "summary": "fine", "totals": None}),
+                  ("step_start", {"id": "b", "n": 2, "title": "Beta", "parent": None}),
+                  ("note", {"step": "b", "level": "warn", "text": "careful"}),
+                  ("step_end", {"id": "b", "status": "warn", "ms": 2000, "exit": None, "summary": None, "totals": None}),
+                  ("done", {"status": "ok"})]
+        self.dims = (120, 40)
+        self.screen = Screen(rows=40, cols=120)
+        self.live.write = self.screen.feed
+        board = jr.Board(clock=self.clock)      # started with the live one, so both finals read the same elapsed
+        self.push(*events)
+        self.live.close()
+        live = [line.rstrip() for line in self.screen.text().splitlines() if line.strip()]
+        expected = [line.rstrip() for line in plain(board, feed(board, *events), self.clock).splitlines()
+                    if line.strip()]
+        squash = lambda lines: [" ".join(line.split()) for line in lines]     # label-width padding may differ
+        self.assertEqual(squash(live), squash(expected))
+
+    def test_a_dump_at_a_prompt_keeps_the_line_above_the_frame(self):
+        self.viewport(60, 10)
+        self.push(*start())
+        self.push(("prompt", {"step": "tests", "text": "Passphrase: "}))
+        held = self.live.dump()              # Console._fallback's path
+        self.live.close()
+        self.assertEqual(self.screen.history().splitlines()[0], "$ push")
+        self.assertIn("Passphrase:", [line.rstrip() for line in held])
+
+    def test_a_prompt_and_echo_that_wrap_are_counted_at_the_width(self):
+        self.viewport(30, 10)
+        self.push(*start())
+        self.push(("prompt", {"step": "tests", "text": "Enter the signing key passphrase: "}))   # 34 columns: wraps
+        self.push(("prompt_echo", {"step": "tests", "text": "*" * 30}))                         # and wraps again
+        self.push(("prompt_end", {"step": "tests"}))
+        lines = self.screen.history().splitlines()
+        self.assertFalse(self.screen.clamped)
+        self.assertEqual(lines[0], "$ push")                             # the cursor-up did not overshoot
+        self.assertEqual(sum(line.startswith("Enter the") for line in lines), 1)     # nor leave a stale copy
+        self.assertTrue(lines[-1].startswith(self.spin() + "Tests"), lines)
+
+    def test_a_prompt_line_exactly_as_wide_as_the_terminal_counts_once(self):
+        self.viewport(30, 10)
+        self.push(*start())
+        self.push(("prompt", {"step": "tests", "text": "P" * 29 + " "}))  # 30 columns: the cursor waits at its end
+        self.live._clear()                                               # what pause() or a resize does mid-prompt
+        self.assertEqual(self.screen.history().splitlines()[0], "$ push")
+        self.assertFalse(self.screen.clamped)
+
+    def test_a_prompt_too_tall_for_the_frame_clears_it(self):
+        self.viewport(20, 5)                                             # B = 3; a prompt wrapping to 2 lines is too tall
+        self.push(*start())
+        self.push(("prompt", {"step": "tests", "text": "Type the full passphrase for the key: "}))
+        self.assertEqual(self.screen.text(), "$ push\nType the full passph\nrase for the key:")
+        self.push(("prompt_end", {"step": "tests"}))
+        self.assertTrue(self.screen.text().splitlines()[-1].startswith(self.spin() + "Tests"))
+
+    def test_closing_at_a_prompt_keeps_the_line_above_the_frame(self):
+        self.viewport(60, 10)
+        self.push(*start())
+        self.push(("prompt", {"step": "tests", "text": "Passphrase: "}))
+        self.live.close()                    # Ctrl-C at the prompt: _end_session -> Console.close -> close()
+        lines = self.screen.history().splitlines()
+        self.assertEqual(lines[0], "$ push")
+        self.assertEqual(lines.count("Passphrase:"), 1)
+        self.assertFalse(self.screen.clamped)
+
+    def test_a_legacy_raw_block_without_a_role_is_a_prompt(self):
+        self.push(*start())
+        self.live.render(self.board, [("raw", "Old: ")])
+        self.assertTrue(self.live.prompting)
+        self.live.render(self.board, [("raw", "\n")])
+        self.assertFalse(self.live.prompting)
+        self.assertEqual(self.screen.text().splitlines()[0], "Old:")
+
+    def test_an_echo_or_end_without_a_prompt_does_not_misplace_the_frame(self):
+        self.viewport(60, 10)
+        self.push(*start())
+        self.live.render(self.board, [("raw", "\n", "end")])            # an end with no prompt up: ignored
+        self.assertEqual(self.screen.history().splitlines()[0], "$ push")
+        self.live.render(self.board, [("raw", "x", "echo")])            # an echo with no prompt starts one
+        self.assertTrue(self.live.prompting)
+
+    def test_board_raw_blocks_carry_their_role(self):
+        b = jr.Board(clock=self.clock)
+        self.assertEqual(b.apply("prompt", {"step": None, "text": "P: "}), [("raw", "P: ", "prompt")])
+        self.assertEqual(b.apply("prompt_echo", {"step": None, "text": "x"}), [("raw", "x", "echo")])
+        self.assertEqual(b.apply("prompt_end", {"step": None}), [("raw", "\n", "end")])
 
     def test_a_large_reactor_keeps_its_count_and_totals_and_wraps_the_bar(self):
         self.dims = (64, 10)            # 8 region lines of 10 cells hold the 80 modules
@@ -1698,13 +2039,48 @@ class RobustnessTest(unittest.TestCase):
         self.assertEqual(out.getvalue().count("hello-once"), 1)
 
     def test_a_fallback_re_renders_only_the_blocks_after_a_raw_one_that_printed(self):
+        for case in ("after", "raw"):
+            with self.subTest(case):
+                out = TTY()
+                console = self.live_console(out)
+                console.board.apply = mock.Mock(return_value=[("raw", "raw-once\n"), ("text", "after")])
+                real, written = console.screen.frame, []
+                console.screen.write = lambda text, write=console.screen.write: (written.append(text), write(text))
+
+                def frame(*args):
+                    if case == "after" and any(block[1] == "after" for _, block, _ in console.screen.transcript):
+                        raise RuntimeError("frame")
+                    if case == "raw" and "raw-once\n" in written:     # the raw block's closing redraw
+                        raise RuntimeError("frame")
+                    return real(*args)
+
+                console.screen.frame = frame
+                console("say", {"text": "x", "level": "warn", "step": None})
+                self.assertIsInstance(console.screen, jr.PlainRenderer)
+                screen = Screen(rows=40, cols=80)
+                screen.feed(out.getvalue())
+                self.assertEqual(screen.history().count("raw-once"), 1)
+                self.assertEqual(screen.history().count("after"), 1)
+
+    def test_a_fallback_prints_what_the_frame_held_untinted_then_the_warning_then_the_rest(self):
         out = TTY()
         console = self.live_console(out)
-        console.screen._flush = mock.Mock(side_effect=[None, RuntimeError("flush")])
-        console.board.apply = mock.Mock(return_value=[("raw", "raw-once\n"), ("text", "after")])
-        console("say", {"text": "x", "level": "warn", "step": None})
-        self.assertEqual(out.getvalue().count("raw-once"), 1)
-        self.assertEqual(out.getvalue().count("after"), 1)
+        console("step_start", {"id": "a", "n": 1, "title": "Alpha", "parent": None})
+        console("step_end", {"id": "a", "status": "ok", "ms": 0, "exit": None, "summary": "held-once",
+                             "totals": None})
+        with mock.patch.object(jr.LiveRenderer, "frame", side_effect=RuntimeError("frame")):
+            console("step_start", {"id": "b", "n": 2, "title": "Beta", "parent": None})
+            console("step_end", {"id": "b", "status": "ok", "ms": 0, "exit": None, "summary": "after-once",
+                                 "totals": None})
+        self.assertIsInstance(console.screen, jr.PlainRenderer)
+        screen = Screen(rows=40, cols=80)
+        screen.feed(out.getvalue())
+        history = screen.history()
+        self.assertEqual(history.count("held-once"), 1)
+        self.assertEqual(history.count("after-once"), 1)
+        self.assertLess(history.index("held-once"), history.index("⚠ console view failed"))
+        tail = out.getvalue()[out.getvalue().index("⚠ console view failed"):]
+        self.assertNotIn("\x1b[3", tail)                               # the plain part is untinted
 
     def test_a_fallback_during_a_prompt_starts_the_warning_on_its_own_line(self):
         out = TTY()
@@ -1821,23 +2197,24 @@ class RobustnessTest(unittest.TestCase):
         self.assertTrue(console.stopped)
         self.assertIn("⚠ console view stopped (RuntimeError('pause'))", out.getvalue())
 
-    def test_a_fallback_re_renders_a_raw_block_whose_clear_failed(self):
+    def test_a_fallback_after_a_prompt_keeps_it_once(self):
         out = TTY()
         console = self.live_console(out)
         console.board.apply = mock.Mock(return_value=[("text", "before"), ("raw", "raw-once\n")])
-        clear, calls = console.screen._clear, []
+        real = console.screen.frame
 
-        def failing_clear():
-            calls.append(None)
-            if len(calls) == 2:     # the raw block's, after the text block's in _flush
-                raise RuntimeError("clear")
-            clear()
+        def frame(*args):
+            if any(block[1] == "before" for _, block, _ in console.screen.transcript):
+                raise RuntimeError("frame")
+            return real(*args)
 
-        console.screen._clear = failing_clear
+        console.screen.frame = frame
         console("say", {"text": "x", "level": "warn", "step": None})
         self.assertIsInstance(console.screen, jr.PlainRenderer)
-        self.assertEqual(out.getvalue().count("before"), 1)
-        self.assertEqual(out.getvalue().count("raw-once"), 1)
+        screen = Screen(rows=40, cols=80)
+        screen.feed(out.getvalue())
+        self.assertEqual(screen.history().count("before"), 1)
+        self.assertEqual(screen.history().count("raw-once"), 1)
 
     def test_a_plain_stop_during_a_prompt_starts_the_warning_on_its_own_line(self):
         out = io.StringIO()
@@ -2247,6 +2624,11 @@ class PendingTest(PendingCase):
 
 
 class FoldTest(PendingCase):
+    MORE = "○ {} more: {}"
+
+    def more(self, *indexes):
+        return self.MORE.format(len(indexes), ", ".join(f"Pending {i}" for i in indexes))
+
     def busy(self):
         b = self.planned([("tests", "Tests")] + [(f"p{i}", f"Pending {i}") for i in range(6)])
         feed(b, *start(size=4), *[mod_start(n) for n in "abcd"], *[cls(n) for n in "abcd"])
@@ -2256,18 +2638,18 @@ class FoldTest(PendingCase):
         region = self.live().region(self.busy(), 79, 8)
         self.assertEqual(len(region), 8)
         self.assertEqual(sum(line.startswith("    Mod ") for line in region), 4)     # every module line kept
-        self.assertEqual(region[-1], "○ +4 more pending")
+        self.assertEqual(region[-1], self.more(2, 3, 4, 5))
         self.assertEqual(region[-3:-1], ["○ Pending 0", "○ Pending 1"])
 
     def test_more_pending_line_always_kept(self):
         region = self.live().region(self.busy(), 79, 4)
-        self.assertEqual(region[-1], "○ +6 more pending")
+        self.assertEqual(region[-1], self.more(*range(6)))
 
     def test_then_module_lines_fold(self):
         region = self.live().region(self.busy(), 79, 5)
         self.assertEqual(len(region), 5)
         self.assertIn("    C, D", region)
-        self.assertEqual(region[-1], "○ +6 more pending")
+        self.assertEqual(region[-1], self.more(*range(6)))
 
     def test_folding_across_two_rows_takes_the_newest_first_wherever_it_runs(self):
         b = self.planned([("one", "One"), ("two", "Two")])
@@ -2340,12 +2722,111 @@ class SetupRowTest(RowCase):
         self.assertEqual(feed(b, step_start("next")), [])               # a later row does not reopen it
 
 
+class StickyHeaderTest(unittest.TestCase):
+    HEADER = [["head", "Push: Juneau · master", False], ["more", "Commit Message: m", True],
+              ["more", "Output: tail -f /o", False]]
+
+    def setUp(self):
+        reset_run_state()
+        self.addCleanup(reset_run_state)
+
+    def nested_console(self, out, value, color=False):
+        env = {"TERM": "xterm", "RUN_MARKERS": "", "JUNEAU_RUN_HEADER": value}
+        if not color:
+            env["NO_COLOR"] = "1"
+        with mock.patch.dict(os.environ, env):
+            if color:
+                os.environ.pop("NO_COLOR", None)
+            console = jr.Console(jr.Sinks(console="condensed"), stream=out, size=lambda: os.terminal_size((80, 24)),
+                                 nested=True)
+        self.addCleanup(console.close)
+        return console
+
+    def test_the_parent_header_parses_into_header_blocks(self):
+        with mock.patch.dict(os.environ, {"JUNEAU_RUN_HEADER": json.dumps(self.HEADER)}):
+            self.assertEqual(jr._parent_header(), [("header", "Push: Juneau · master", jr.HEAD_MARK),
+                                                   ("header", "Commit Message: m", jr.MORE_MARK, "cut"),
+                                                   ("header", "Output: tail -f /o", jr.MORE_MARK)])
+
+    def test_a_missing_or_malformed_value_is_no_sticky_header_silently(self):
+        for value in ("", "{", "[[1]]", '"x"', "[[\"head\"]]"):
+            with self.subTest(value=value), mock.patch.dict(os.environ, {"JUNEAU_RUN_HEADER": value}):
+                self.assertEqual(jr._parent_header(), [])
+
+    def test_a_nested_live_console_draws_it_on_top_and_never_prints_it(self):
+        out = TTY()
+        console = self.nested_console(out, json.dumps(self.HEADER))
+        console("step_start", {"id": "t", "n": 1, "title": "Tests", "parent": None})
+        self.assertTrue(jr._ANSI.sub("", out.getvalue()).lstrip("\r").startswith("▶ Push: Juneau · master"))
+        console.pause()
+        console.resume()
+        console("step_end", {"id": "t", "status": "ok", "ms": 0, "exit": None, "summary": None, "totals": None})
+        console.close()
+        screen = Screen(rows=24, cols=80)
+        screen.feed(out.getvalue())
+        self.assertNotIn("Push: Juneau", screen.history())      # drawn live only: not in scrollback after close
+
+    def test_under_colour_the_sticky_title_is_cyan(self):
+        out = TTY()
+        console = self.nested_console(out, json.dumps(self.HEADER), color=True)
+        console("step_start", {"id": "t", "n": 1, "title": "Tests", "parent": None})
+        self.assertIn("\x1b[36m▶\x1b[0m Push: Juneau · master", out.getvalue())
+
+    def test_handoff_exports_this_sessions_header_or_its_own_sticky_one(self):
+        console = mock.Mock(mode="live", header_blocks=[("header", "Push: Juneau · master", jr.HEAD_MARK),
+                                                        ("header", "Commit Message: m", jr.MORE_MARK, "cut")],
+                            sticky=[])
+        console.board.pending.return_value = []
+        console.board.overall_handoff.return_value = None
+        with mock.patch.object(jr, "_console", console), jr.handoff() as env:
+            self.assertEqual(json.loads(env["JUNEAU_RUN_HEADER"]), [["head", "Push: Juneau · master", False],
+                                                                   ["more", "Commit Message: m", True]])
+        console.header_blocks, console.sticky = [], [("header", "Push: Juneau", jr.HEAD_MARK)]
+        with mock.patch.object(jr, "_console", console), jr.handoff() as env:
+            self.assertEqual(json.loads(env["JUNEAU_RUN_HEADER"]), [["head", "Push: Juneau", False]])
+
+    def test_handoff_reads_the_child_outcomes_and_removes_the_file(self):
+        board = jr.Board(clock=Clock())
+        board.apply("plan", {"ids": ["build", "install"], "labels": {"build": "Compile", "install": "Install"}})
+        console = mock.Mock(mode="live", board=board, header_blocks=[], sticky=[])
+        with mock.patch.object(jr, "_console", console), jr.handoff() as env:
+            path = Path(env["JUNEAU_RUN_HANDBACK"])
+            path.write_text(json.dumps([["build", "ok", "Compile"]]))
+        self.assertEqual(board.handed_back, {"build": "ok"})
+        self.assertFalse(path.exists())
+        console.log_only.assert_not_called()
+
+    def test_a_handoff_ended_by_an_exception_still_counts_but_never_notes(self):
+        for error in (KeyboardInterrupt, RuntimeError):
+            with self.subTest(error=error.__name__):
+                board = jr.Board(clock=Clock())
+                board.apply("plan", {"ids": ["build"], "labels": {"build": "Compile"}})
+                console = mock.Mock(mode="live", board=board, header_blocks=[], sticky=[])
+                with self.assertRaises(error), mock.patch.object(jr, "_console", console), jr.handoff() as env:
+                    Path(env["JUNEAU_RUN_HANDBACK"]).write_text(json.dumps([["build", "fail", "Compile"]]))
+                    raise error()
+                self.assertEqual(board.handed_back, {"build": "fail"})
+                with self.assertRaises(error), mock.patch.object(jr, "_console", console), jr.handoff():
+                    raise error()                                       # Ctrl-C before the child wrote anything
+                console.log_only.assert_not_called()
+
+    def test_a_missing_or_malformed_handback_counts_nothing_and_notes_once(self):
+        for text in ("", "{", '[["build", "ok"]]'):
+            with self.subTest(text=text):
+                board = jr.Board(clock=Clock())
+                console = mock.Mock(mode="live", board=board, header_blocks=[], sticky=[])
+                with mock.patch.object(jr, "_console", console), jr.handoff() as env:
+                    Path(env["JUNEAU_RUN_HANDBACK"]).write_text(text)
+                self.assertEqual(board.handed_back, {})
+                console.log_only.assert_called_once()
+
+
 class NestedPendingTest(PendingCase):
     def test_handoff_exports_pending(self):
         b = self.planned([("pre", "Prechecks"), ("tests", "Tests"), ("install", "Install")])
         feed(b, step_start("pre", "Prechecks"), step_end("pre"), step_start("tests", "Tests"))
         self.assertEqual(b.pending(), [("install", "Install")])
-        console = mock.Mock(mode="live", board=b)
+        console = mock.Mock(mode="live", board=b, header_blocks=[], sticky=[])
         with mock.patch.object(jr, "_console", console), jr.handoff() as env:
             self.assertEqual(json.loads(env["JUNEAU_RUN_PENDING"]), [["install", "Install"]])
 
@@ -2359,6 +2840,95 @@ class NestedPendingTest(PendingCase):
                          ["○ Install", "○ Commit"])
         feed(b, step_end("compile"), ("done", {"status": "ok", "commit": None}))
         self.assertEqual(b.pending(), [])
+
+
+class HandBackTest(unittest.TestCase):
+    PLAN = [("pre", "Prechecks"), ("build", "Compile"), ("tests", "Java Tests"), ("js-tests", "Browser Tests"),
+            ("install", "Install")]
+
+    def setUp(self):
+        reset_run_state()
+        self.addCleanup(reset_run_state)
+        self.clock = Clock()
+
+    def parent(self):
+        b = jr.Board(clock=self.clock)
+        b.apply("plan", {"ids": [i for i, _ in self.PLAN], "labels": dict(self.PLAN)})
+        feed(b, step_start("pre", "Prechecks"), step_end("pre"))
+        return b
+
+    def test_handed_back_ids_count_as_done_skips_are_left_out_and_no_row_is_drawn(self):
+        b = self.parent()
+        b.hand_back([("build", "ok", "Compile"), ("tests", "warn", "Java Tests"), ("js-tests", "skip", "Browser Tests")])
+        feed(b, step_start("install", "Install"))
+        self.assertEqual(set(b.rows), {"pre", "install"})
+        self.assertEqual(b.pending(), [])
+        feed(b, step_end("install"))
+        self.assertEqual(b.step_counts(), (4, 4))
+
+    def test_a_handed_back_fail_sets_the_failed_title_and_is_not_counted_done(self):
+        b = self.parent()
+        b.hand_back([("build", "ok", "Compile"), ("tests", "fail", "Tests")])
+        self.assertEqual(b.failed_title, "Java Tests")                  # the parent's own label wins
+        self.assertEqual(b.step_counts(), (2, 5))
+
+    def test_a_fail_the_parent_has_no_label_for_takes_the_childs_label_not_the_id(self):
+        b = self.parent()
+        b.hand_back([("py-x", "fail", "Python Tests")])
+        self.assertEqual(b.failed_title, "Python Tests")
+
+    def test_an_id_with_a_row_keeps_its_row(self):
+        b = self.parent()
+        b.hand_back([("pre", "fail", "Prechecks")])
+        self.assertIsNone(b.failed_title)
+        self.assertEqual(b.handed_back, {})
+
+    def nested(self, path):
+        return mock.patch.dict(os.environ, {"JUNEAU_RUN_HANDBACK": str(path), "RUN_MARKERS": ""})
+
+    def test_a_nested_console_writes_its_top_level_rows_outcomes_at_done(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "hb.json"
+            with self.nested(path):
+                console = jr.Console(jr.Sinks(console="none"), nested=True)
+                for kind, fields in (step_start("build", "Compile"), step_end("build"),
+                                     step_start("js-tests", "Browser Tests"), step_end("js-tests", "skip"),
+                                     step_start("tests", "Java Tests"),
+                                     ("step_start", {"id": "tests/core", "n": 1, "title": "core", "parent": "tests"})):
+                    console(kind, fields)
+                console("done", {"status": "fail", "commit": None})
+            self.assertEqual(json.loads(path.read_text()), [["build", "ok", "Compile"], ["js-tests", "skip", "Browser Tests"],
+                                                            ["tests", "fail", "Java Tests"]])     # no sub-row
+
+    def test_a_nested_console_takes_the_handback_path_out_of_the_environment(self):
+        with tempfile.TemporaryDirectory() as tmp, self.nested(Path(tmp) / "hb.json"):
+            jr.Console(jr.Sinks(console="none"), nested=True)
+            self.assertNotIn("JUNEAU_RUN_HANDBACK", os.environ)     # a grandchild session must not write our file
+
+    def test_a_nested_console_hands_back_after_its_board_failed(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "hb.json"
+            with self.nested(path):
+                console = jr.Console(jr.Sinks(console="none"), nested=True)
+                for kind, fields in (step_start("build", "Compile"), step_end("build")):
+                    console(kind, fields)
+                with mock.patch.object(console.board, "apply", side_effect=RuntimeError("board")):
+                    console(*step_start("tests", "Java Tests"))
+                console("done", {"status": "fail", "commit": None})
+            self.assertEqual(json.loads(path.read_text()), [["build", "ok", "Compile"]])
+
+    def test_a_planless_nested_session_under_a_parent_overall_notes_it_in_the_condensed_log_only(self):
+        overall = json.dumps({"elapsed": 5.0, "done": 1, "pending": [["install", 30.0]]})
+        with tempfile.TemporaryDirectory() as tmp:
+            log = Path(tmp) / "c.log"
+            out = io.StringIO()
+            with mock.patch.dict(os.environ, {"JUNEAU_RUN_OVERALL": overall, "RUN_MARKERS": ""}):
+                console = jr.Console(jr.Sinks(console="condensed", condensed_log=str(log)), stream=out, nested=True)
+                self.assertIsNone(console.board.overall())                  # pinned: no plan draws no Overall
+                console("done", {"status": "ok", "commit": None})
+                console.close()
+            self.assertEqual(log.read_text().count("declared no plan"), 1)
+            self.assertNotIn("declared no plan", out.getvalue())
 
 
 class LogTest(RowCase):
@@ -2423,6 +2993,231 @@ class CompileOnlyMavenRowTest(unittest.TestCase):
         row = self.build(["-pl", "mod-a,mod-b,mod-c", "clean", "compile"])
         self.assertEqual((row.units_total, row.units_done), (3, 3))
         self.assertNotIn("no tests run", jr.row_text(row, jr.PLAIN_GLYPHS, 100.0)[2])
+
+
+class ScreenTest(unittest.TestCase):
+    """The viewport mode of support.Screen, which the fit tests rely on."""
+
+    def test_a_newline_on_the_last_row_scrolls_into_scrollback(self):
+        s = Screen(rows=3, cols=10)
+        s.feed("a\nb\nc\nd")
+        self.assertEqual((s.scrollback, s.lines), (["a"], ["b", "c", "d"]))
+
+    def test_cursor_up_clamps_at_the_top_row(self):
+        s = Screen(rows=3, cols=10, start_row=2)
+        s.feed("\x1b[3A")
+        self.assertEqual((s.row, s.clamped), (0, True))
+
+    def test_a_long_line_autowraps_at_cols(self):
+        s = Screen(rows=5, cols=4)
+        s.feed("abcdef\n")
+        self.assertEqual(s.lines[:2], ["abcd", "ef"])
+
+    def test_a_wide_character_takes_two_columns(self):
+        s = Screen(rows=5, cols=4)
+        s.feed("🧱🧱x")
+        self.assertEqual(s.lines[:2], ["🧱🧱", "x"])
+
+    def test_without_a_viewport_it_behaves_as_before(self):
+        s = Screen()
+        s.feed("ab\ncd\x1b[1A\rX\x1b[K")
+        self.assertEqual(s.text(), "X\ncd")
+        self.assertEqual(s.scrollback, [])
+
+    def test_history_is_scrollback_then_the_screen(self):
+        s = Screen(rows=2, cols=10)
+        s.feed("a\nb\nc")
+        self.assertEqual(s.history(), "a\nb\nc")
+
+    def test_a_newline_after_a_full_width_line_does_not_add_a_blank_line(self):
+        s = Screen(rows=5, cols=4)
+        s.feed("abcd\nef")
+        self.assertEqual(s.lines[:2], ["abcd", "ef"])
+
+    def test_resize_changes_the_viewport_without_reflowing(self):
+        s = Screen(rows=5, cols=10)
+        s.feed("abcdefgh\nx")
+        s.resize(rows=3, cols=4)
+        self.assertEqual((s.rows, s.cols, s.lines[0]), (3, 4, "abcdefgh"))     # a non-reflowing terminal
+
+
+class HeaderTest(unittest.TestCase):
+    def setUp(self):
+        reset_run_state()
+        self.addCleanup(reset_run_state)
+        self.clock = Clock()
+
+    def blocks(self, title, header=(), lines=(), more=()):
+        return jr.Board(clock=self.clock).apply("session", {"title": title, "header": list(header), "lines": list(lines),
+                                                            "header_more": list(more), "nested": False})
+
+    def test_items_join_with_a_middle_dot_and_lines_are_cut_blocks(self):
+        self.assertEqual(self.blocks("Push", ["Juneau", "master"], ["Commit Message: Fix it"], ["Output: tail -f /l"]), [
+            ("header", "Push: Juneau · master", jr.HEAD_MARK),
+            ("header", "Commit Message: Fix it", jr.MORE_MARK, "cut"),
+            ("header", "Output: tail -f /l", jr.MORE_MARK)])
+
+    def test_a_multi_line_entry_shows_its_first_line_and_an_ellipsis(self):
+        self.assertEqual(self.blocks("Push", ["Juneau"], ["Commit Message: Fix it\n\nBody"])[1][1],
+                         "Commit Message: Fix it …")
+
+    def test_no_items_is_the_bare_title_and_no_lines_is_no_line_two(self):
+        self.assertEqual(self.blocks("Test"), [("header", "Test", jr.HEAD_MARK)])
+
+    def test_the_live_screen_cuts_the_title_and_the_cut_lines(self):
+        title = ("header", "Push: Juneau · master · " + "x" * 80, jr.HEAD_MARK)
+        line = ("header", "Commit Message: " + "y" * 80, jr.MORE_MARK, "cut")
+        log = ("header", "Output: tail -f /" + "z" * 80, jr.MORE_MARK)
+        for cols in (40, 60, 120):
+            with self.subTest(cols=cols):
+                for block in (title, line):
+                    shown = jr.header_lines(block, cols, live=True)
+                    self.assertEqual(len(shown), 1)
+                    self.assertLessEqual(jr._vlen(shown[0]), cols)
+                    self.assertTrue(shown[0].endswith("…") or jr._vlen(block[1]) + 2 <= cols)
+                self.assertEqual(jr.header_lines(log, cols, live=True), ["▶ " + log[1]])   # a log line is never cut
+
+    def test_the_plain_screen_never_cuts_and_still_wraps_the_title(self):
+        line = ("header", "Commit Message: " + "y" * 80, jr.MORE_MARK, "cut")
+        self.assertEqual(jr.header_lines(line, 40), ["▶ " + line[1]])
+        self.assertGreater(len(jr.header_lines(("header", "Push: " + "w " * 40, jr.HEAD_MARK), 40)), 1)
+
+    def test_an_emoji_title_is_cut_by_display_width(self):
+        shown = jr.header_lines(("header", "Push: SSC · future · 🧱 Sandbox mode", jr.HEAD_MARK), 21, live=True)[0]
+        self.assertLessEqual(jr._vlen(shown), 21)
+
+    def test_session_publishes_lines(self):
+        seen = []
+        jr.subscribe(lambda kind, fields: seen.append((kind, fields)))
+        with mock.patch.object(jr, "Console", side_effect=lambda *a, **k: mock.MagicMock()):
+            jr.session("Push", ["Juneau"], lines=["Commit Message: m"], sinks=jr.Sinks(console="none"))
+        fields = [f for k, f in seen if k == "session"][0]
+        self.assertEqual(fields["lines"], ["Commit Message: m"])
+
+
+def _g(state, label, body=0):
+    """A transcript group: its row line, then body lines."""
+    return jr._Group(state, label, [f"{'✗' if state == 'fail' else '✔'} {label}"], [f"  note {i}" for i in range(body)])
+
+
+def _run(label, units=0, t0=0.0):
+    return jr._Run([f"⠋ {label}"], [jr._Unit(t0 + i, i, [f"    Mod {i}"], f"Mod {i}") for i in range(units)])
+
+
+class FitTest(unittest.TestCase):
+    TITLE = ("▶ Push: Juneau · master", [("▶ Commit Message: m", False, -1), ("▶ Output: tail -f /o", True, 1),
+                                          ("▶ Condensed: tail -f /c", True, 0)])
+    OVERALL = "▶ Overall  38%  ~7:40 left  · 4 of 13 steps"
+
+    def fit(self, budget, groups=(), running=(), pending=(), header=None, overall=OVERALL, cols=59):
+        return jr.fit_view(header or self.TITLE, list(groups), list(running), list(pending), overall, budget, cols,
+                           cols + 1)
+
+    def full(self):
+        return dict(groups=[_g("ok", "Prechecks"), _g("ok", "Setup"), _g("ok", "Compile")],
+                    running=[_run("Java Tests", units=4)], pending=["Python Tests", "Browser Tests", "Commit"])
+
+    def test_everything_fits_unfolded(self):
+        lines = self.fit(30, **self.full())
+        self.assertEqual(len(lines), 16)
+        self.assertEqual((lines[0], lines[-1]), (self.TITLE[0], self.OVERALL))
+
+    def test_a1_folds_pending_rows_partially_then_all(self):
+        lines = self.fit(15, **self.full())
+        self.assertIn("○ Python Tests", lines)
+        self.assertIn("○ 2 more: Browser Tests, Commit", lines)
+        lines = self.fit(14, **self.full())
+        self.assertIn("○ 3 more: Python Tests, Browser Tests, Commit", lines)
+        self.assertNotIn("○ Python Tests", lines)
+
+    def test_a2_folds_done_groups_oldest_first_where_the_first_stood(self):
+        lines = self.fit(12, **self.full())
+        self.assertEqual(lines[4], "✔ 3 done: Prechecks, Setup, Compile")
+        self.assertEqual(len(lines), 12)
+
+    def test_a2_a_warn_row_folds_with_the_warn_icon_and_its_notes_fold_with_it(self):
+        lines = self.fit(8, groups=[_g("ok", "A", body=2), _g("warn", "B", body=1)], running=[_run("C")])
+        self.assertIn("⚠ 2 done: A, B", lines)
+        self.assertFalse(any("note" in line for line in lines))
+
+    def test_a3_packs_unit_lines_newest_first(self):
+        lines = self.fit(10, **self.full())
+        self.assertIn("    Mod 0", lines)
+        self.assertIn("    Mod 1, Mod 2, Mod 3", lines)      # folded newest first, listed oldest first
+
+    def test_a4_cuts_failed_bodies_oldest_first_and_keeps_the_failed_row(self):
+        groups = [_g("fail", "A", body=5), _g("fail", "B", body=5)]
+        lines = self.fit(12, groups=groups, header=("▶ T", []), overall=None)     # 13 lines unfolded
+        self.assertEqual(lines[1:3], ["✗ A", "    … 5 more lines (condensed log)"])
+        self.assertIn("  note 4", lines)                       # B's body is still whole
+
+    def test_the_worked_example_ten_line_pane(self):
+        lines = self.fit(8, **self.full())
+        self.assertEqual(lines, [
+            "▶ Push: Juneau · master", "▶ Commit Message: m", "▶ Output: tail -f /o", "▶ Condensed: tail -f /c",
+            "✔ 3 done: Prechecks, Setup, Compile", "⠋ Java Tests", "○ 3 more: Python Tests, Browser Tests, Commit",
+            self.OVERALL])
+
+    def test_the_more_line_is_cut_at_a_label_boundary(self):
+        lines = self.fit(4, running=[_run("X")], pending=[f"Step {i}" for i in range(20)], header=("▶ T", []), cols=40)
+        more = [line for line in lines if "more:" in line][0]
+        self.assertTrue(more.endswith(", …") and jr._vlen(more) <= 40, more)
+
+    def test_a_log_line_costs_its_wrapped_height(self):
+        header = ("▶ T", [("▶ Output: tail -f /" + "o" * 30, True, 1)])           # 49 columns: 2 lines at 30
+        self.assertEqual(jr.fit_view(header, [], [_run("X")], [], None, 4, 29, 30), ["▶ T", header[1][0][0], "⠋ X"])
+        self.assertEqual(jr.fit_view(header, [], [_run("X")], [], None, 3, 29, 30), ["▶ T", "⠋ X"])     # B5 drops it
+
+    def test_b1_drops_the_names_lines_then_b2_the_done_line_then_b3_the_more_line(self):
+        full = self.full()
+        self.assertNotIn("    Mod 1, Mod 2, Mod 3", self.fit(8, **full))
+        self.assertNotIn("✔ 3 done: Prechecks, Setup, Compile", self.fit(7, **full))
+        lines = self.fit(6, **full)
+        self.assertFalse(any("more:" in line for line in lines))
+
+    def test_failures_stay_visible_until_b4(self):
+        groups = [_g("fail", "A", body=3), _g("ok", "B"), _g("fail", "C", body=3)]
+        self.assertTrue({"✗ A", "✗ C"} <= set(self.fit(10, groups=groups, running=[_run("X")])))
+        lines = self.fit(7, groups=groups, running=[_run("X")])
+        self.assertIn("✗ 2 failed: A, C", lines)
+
+    def test_b5_drops_the_commit_message_then_condensed_then_output(self):
+        lines = self.fit(5, groups=[_g("fail", "A")], running=[_run("X")])
+        self.assertNotIn("▶ Commit Message: m", lines)
+        self.assertIn("▶ Output: tail -f /o", lines)
+        self.assertNotIn("▶ Condensed: tail -f /c", lines)
+
+    def test_a_six_line_pane_keeps_the_title_overall_and_the_newest_running_row(self):
+        lines = self.fit(4, groups=[_g("ok", "A")], running=[_run("Old"), _run("New")], pending=["P"])
+        self.assertEqual(lines, ["▶ Push: Juneau · master", "⠋ Old", "⠋ New", self.OVERALL])    # B5 before B6
+        self.assertEqual(self.fit(3, running=[_run("Old"), _run("New")]), ["▶ Push: Juneau · master", "⠋ New",
+                                                                             self.OVERALL])
+
+    def test_b7_drops_the_failed_line_then_b8_the_newest_row(self):
+        groups = [_g("fail", "A")]
+        self.assertEqual(self.fit(2, groups=groups, running=[_run("X")]), ["▶ Push: Juneau · master", self.OVERALL])
+
+    def test_three_and_two_line_panes(self):
+        self.assertEqual(self.fit(1, **self.full()), ["▶ Push: Juneau · master"])      # B = 1: the title only
+        self.assertEqual(self.fit(0, **self.full()), [])
+
+    def test_no_title_pins_overall_alone(self):
+        self.assertEqual(self.fit(1, running=[_run("X")], header=(None, [])), [self.OVERALL])
+
+    def test_the_counted_height_matches_the_lines_at_every_fold(self):
+        header = ("▶ T", [("▶ Commit Message: m", False, -1), ("▶ Output: tail -f /" + "o" * 70, True, 1)])
+        groups = [_g("ok", "A", body=2), _g("fail", "B", body=3), _g("warn", "C", body=1), _g("fail", "D", body=2)]
+        fold = jr._Fold(header, groups, [_run("X", units=3), _run("Y", units=2)], ["P", "Q", "R"], "▶ Overall", 59,
+                        False)
+        drawn = lambda: sum(max(1, -(-jr._vlen(t) // 60)) if wraps else 1 for t, wraps in fold.lines())
+        self.assertEqual(fold.height(60), drawn())
+        for _ in fold.steps():
+            self.assertEqual(fold.height(60), drawn())
+
+    def test_the_height_is_never_over_budget(self):
+        for budget in range(0, 20):
+            with self.subTest(budget=budget):
+                self.assertLessEqual(len(self.fit(budget, **self.full())), max(budget, 0))
 
 
 if __name__ == "__main__":

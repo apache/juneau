@@ -150,13 +150,11 @@
 									<goal>exec</goal>
 								</goals>
 								<configuration>
-									<executable>${juneau.jsTests.npm}</executable>
+									<executable>${juneau.jsTests.node}</executable>
 									<arguments>
-										<argument>install</argument>
-										<argument>--no-fund</argument>
-										<argument>--no-audit</argument>
-										<argument>--prefix</argument>
+										<argument>${maven.multiModuleProjectDirectory}/scripts/ensure-playwright.cjs</argument>
 										<argument>${js.tests.dir}</argument>
+										<argument>${juneau.jsTests.npm}</argument>
 										<argument>playwright@${playwright.version}</argument>
 									</arguments>
 								</configuration>

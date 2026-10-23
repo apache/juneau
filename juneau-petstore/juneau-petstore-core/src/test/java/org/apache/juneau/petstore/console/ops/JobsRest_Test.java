@@ -549,4 +549,95 @@ class JobsRest_Test extends TestBase {
 		status = c.get("/console/ops/jobs/groom-runs/x/key").run().getStatusCode();
 		assertTrue(status == 404 || status == 405, "GET on the key endpoint must not be served; got " + status);
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// h - per-host timing beans: the groom step period and the species-row hold
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/** A host whose groom runs step every millisecond. */
+	public static class FastGroomHost extends Host {
+		private static final long serialVersionUID = 1L;
+
+		/** @return A 1 ms groom step. */
+		@Bean public JobsRest.GroomPeriod groomPeriod() {
+			return new JobsRest.GroomPeriod(Duration.ofMillis(1));
+		}
+	}
+
+	/** A host whose species rows hold nothing after their effect. */
+	public static class NoHoldHost extends Host {
+		private static final long serialVersionUID = 1L;
+
+		/** @return A zero hold. */
+		@Bean public JobsRest.SpeciesHold speciesHold() {
+			return new JobsRest.SpeciesHold(Duration.ZERO);
+		}
+	}
+
+	/** A host no other test has touched, so its groom runs are created after a test sets {@link GroomRuns#PERIOD_PROPERTY}. */
+	public static class UntouchedHost extends Host {
+		private static final long serialVersionUID = 1L;
+	}
+
+	private static MockRestClient client(Class<?> host) {
+		return MockRestClient.create(host).noTrace().ignoreErrors().header("Accept", "application/json").build();
+	}
+
+	private static String groomState(MockRestClient c, String id) throws Exception {
+		return new JsonMap(c.get("/console/ops/jobs/groom-runs/" + id).run().assertStatus(200).getContent().asString()).getMap("fields").getString("state");
+	}
+
+	private static void awaitGroomDone(MockRestClient c) throws Exception {
+		var id = groom(c, "{\"pet\":\"Rex\"}").getMap("row").getString("id");
+		var deadline = System.nanoTime() + Duration.ofSeconds(5).toNanos();
+		while (! "DONE".equals(groomState(c, id)) && System.nanoTime() < deadline)
+			Thread.sleep(20);
+		assertString("DONE", groomState(c, id));
+	}
+
+	/** Milliseconds from submitting a DOG row restock until its job settles. */
+	private static long speciesRestockMillis(MockRestClient c) throws Exception {
+		var k = key(c, "/console/ops/jobs/species/DOG/key").getString("idempotencyKey");
+		var t0 = System.nanoTime();
+		var ref = new JsonMap(restockSpecies(c, "DOG", envelope("restock-species", "DOG", k, "{\"count\":1}"), 202));
+		assertString("DONE", await(c, ref.getString("jobId")).getString("state"));
+		return TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - t0);
+	}
+
+	@Test void h01_aGroomPeriodBeanSpeedsTheRun() throws Exception {
+		awaitGroomDone(client(FastGroomHost.class));
+	}
+
+	@Test void h02_aSpeciesHoldBeanOfZeroSkipsTheHold() throws Exception {
+		assertTrue(speciesRestockMillis(client(NoHoldHost.class)) < 900);
+	}
+
+	@Test void h03_withoutAGroomPeriodBeanTheRunKeepsItsDefaultPace() throws Exception {
+		var c = client();
+		var id = groom(c, "{\"pet\":\"Rex\"}").getMap("row").getString("id");
+		Thread.sleep(1200);
+		assertString("RUNNING", groomState(c, id));
+	}
+
+	@Test void h04_theGroomPeriodPropertyIsStillHonoredWithoutABean() throws Exception {
+		System.setProperty(GroomRuns.PERIOD_PROPERTY, "1");
+		try {
+			awaitGroomDone(client(UntouchedHost.class));
+		} finally {
+			System.clearProperty(GroomRuns.PERIOD_PROPERTY);
+		}
+	}
+
+	@Test void h05_withoutASpeciesHoldBeanTheDefaultHoldApplies() throws Exception {
+		assertTrue(speciesRestockMillis(client()) >= JobsRest.DEFAULT_HOLD_MS - 100);
+	}
+
+	@Test void h06_theSpeciesHoldPropertyIsStillHonoredWithoutABean() throws Exception {
+		System.setProperty(JobsRest.SPECIES_HOLD_PROPERTY, "0");
+		try {
+			assertTrue(speciesRestockMillis(client()) < 900);
+		} finally {
+			System.clearProperty(JobsRest.SPECIES_HOLD_PROPERTY);
+		}
+	}
 }

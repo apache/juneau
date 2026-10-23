@@ -16,30 +16,9 @@
 # limitations under the License.
 
 """
-Applies Eclipse IDE preference files to every Juneau Maven module.
+Copies the tracked Eclipse JDT preference files from `scripts/eclipse-preferences/` into the `.settings/` directory of every Maven module.
 
-Walks the reactor under each REACTOR_GROUPS entry plus STANDALONE_PROJECTS,
-finds every leaf directory with a pom.xml that is NOT a packaging=pom aggregator,
-classifies each as source or test (test = name == 'juneau-integration-tests' or
-*-ftest suffix), and copies the matching .prefs files into each module's
-.settings/ directory.
-
-Two sets of preferences live under scripts/eclipse-preferences/:
-- source-prefs/ — main source modules (warnings on resource leaks, unused params, etc.)
-- test-prefs/  — test modules (those warnings relaxed to ignore)
-
-Each set contains:
-- org.eclipse.jdt.core.prefs — JDT compiler problem severities + warning-token settings
-- org.eclipse.jdt.ui.prefs   — JDT UI cleanup-on-save settings
-
-Run this whenever a new Maven module is added to the reactor, or whenever the
-canonical preference baseline is updated. Module discovery is automatic — the
-script does not need to be edited when modules are added or removed (only when
-a new top-level reactor group is introduced).
-
-The .settings/ directories are gitignored locally; this script's output is a
-developer-machine-only convenience and never enters version control. The
-canonical preference files under scripts/eclipse-preferences/ ARE tracked.
+Full docs: apply-eclipse-prefs.md
 """
 
 import os

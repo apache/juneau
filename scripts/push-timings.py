@@ -16,20 +16,9 @@
 # limitations under the License.
 #
 """
-Report timing deltas from the repo's run history: test.py's `tests` records (juneau_run's HistoryStore, script
-"test"), shared by every branch and worktree of the repo.
+Compares the latest test run's timings against the repository's recorded history and reports modules that got slower or faster.
 
-Each record becomes today's rows: one per (module, bucket) of its surefire_s.<bucket> series, and a reactor/suite row
-from its wall_s.  Only records with the newest record's sig (its command shape) count toward the baseline; a shape with
-fewer than two runs gets a "no baseline for this command shape" line, not a verdict.  An entry (one module and bucket
-of the latest run) is flagged slower only when it is both more than JUNEAU_PUSH_TIMING_THRESHOLD (default 0.20) and
-more than JUNEAU_PUSH_TIMING_MIN_SECONDS (default 5) slower than its rolling median, and faster when it beats the
-median by both margins.  The full table goes to test-timings.txt beside test.jsonl in the store directory; the console
-gets one summary line and the slower entries.
-push.py's Timing row loads this file as a module and uses load_history(), report_path(), latest_run(), analyse(),
-write_report() and counts().
-
-    push-timings.py [--repo DIR | --history FILE] [--window N] [--report FILE]
+Full docs: push-timings.md
 """
 
 from __future__ import annotations

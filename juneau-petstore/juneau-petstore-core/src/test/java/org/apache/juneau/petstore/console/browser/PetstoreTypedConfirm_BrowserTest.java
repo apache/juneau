@@ -114,7 +114,7 @@ class PetstoreTypedConfirm_BrowserTest extends TestBase {
 			theCase("escape", "{rows: [{id: 7}]}", List.of(
 				wait("document.querySelector('" + DLG + "')"),
 				Map.of("press", List.of(INPUT, "Escape")), wait(RES_FALSE))),
-			Map.of("name", "ordersDelete", "path", "/console/orders", "capture", "/console/orders/",
+			Map.of("name", "ordersDelete", "waitUntil", "networkidle", "path", "/console/orders", "capture", "/console/orders/",
 				"actions", List.of(
 					Map.of("evaluate", SNAP),
 					wait("document.querySelector('#orders-body .juneau-view-action-trigger')"),

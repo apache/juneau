@@ -18,6 +18,7 @@ package org.apache.juneau.commons.concurrent;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.time.*;
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.*;
@@ -30,6 +31,18 @@ import org.junit.jupiter.api.*;
  * the same identifier, and self-eviction of already-expired records.
  */
 class InMemoryReplayCache_Test extends TestBase {
+
+	private static final Instant T0 = Instant.parse("2026-01-01T00:00:00Z");
+
+	/** A test clock the test can advance manually. */
+	static final class MutableClock extends Clock {
+		private Instant now;
+		MutableClock(Instant start) { now = start; }
+		void advance(Duration d) { now = now.plus(d); }
+		@Override public ZoneId getZone() { return ZoneOffset.UTC; }
+		@Override public Clock withZone(ZoneId zone) { return this; }
+		@Override public Instant instant() { return now; }
+	}
 
 	@Test void a01_firstSeenIdReturnsTrue() {
 		var cache = new InMemoryReplayCache();
@@ -83,8 +96,8 @@ class InMemoryReplayCache_Test extends TestBase {
 		// A record's own expiresAtMs bounds its retention: once expired it is swept out by a later call, and an
 		// id resubmitted after that sweep is observed as first-seen again rather than as a replay. Uses a
 		// sweep-every-call cache (interval 0) so the eviction is deterministic in-test.
-		var cache = new InMemoryReplayCache(0);
-		var now = System.currentTimeMillis();
+		var cache = new InMemoryReplayCache(Clock.fixed(T0, ZoneOffset.UTC), 0);
+		var now = T0.toEpochMilli();
 		assertTrue(cache.checkAndRecord("id-1", now - 1_000L));  // recorded already-expired
 		// With interval 0 every later call sweeps expired records before recording its own.
 		assertTrue(cache.checkAndRecord("id-2", now + 60_000L));
@@ -103,13 +116,43 @@ class InMemoryReplayCache_Test extends TestBase {
 		// The sweep is throttled: with a large interval, an expired record is NOT swept on the immediately
 		// following call, so a still-recorded (though expired) id is observed as a replay until the window
 		// elapses. This documents the throttle honestly -- eviction bounds memory opportunistically.
-		var cache = new InMemoryReplayCache(600_000L);  // 10-minute sweep window: no sweep will fire during this test
-		var now = System.currentTimeMillis();
+		var cache = new InMemoryReplayCache(Clock.fixed(T0, ZoneOffset.UTC), 600_000L);  // time never reaches the next sweep
+		var now = T0.toEpochMilli();
 		assertTrue(cache.checkAndRecord("id-1", now - 1_000L));  // first call arms the window (sweeps an empty map)
 		assertFalse(cache.checkAndRecord("id-1", now - 1_000L));  // still present: throttle suppressed the sweep
 	}
 
 	@Test void a08_negativeSweepIntervalRejected() {
 		assertThrows(IllegalArgumentException.class, () -> new InMemoryReplayCache(-1L));
+	}
+
+	@Test void a09_nullClockRejected() {
+		assertThrows(IllegalArgumentException.class, () -> new InMemoryReplayCache(null, 0L));
+	}
+
+	@Test void a10_recordIsEvictedOnceClockPassesItsExpiry() {
+		// Clock-driven: an unexpired record is a replay until the clock reaches its expiresAtMs, after which the next
+		// call sweeps it and the same id is first-seen again. No sleeping, so the outcome never depends on machine speed.
+		var clock = new MutableClock(T0);
+		var cache = new InMemoryReplayCache(clock, 0);
+		var expiresAtMs = T0.plusSeconds(60).toEpochMilli();
+		assertTrue(cache.checkAndRecord("id-1", expiresAtMs));
+		clock.advance(Duration.ofSeconds(59));
+		assertFalse(cache.checkAndRecord("id-1", expiresAtMs));  // still unexpired: replay
+		clock.advance(Duration.ofSeconds(1));
+		assertTrue(cache.checkAndRecord("id-1", expiresAtMs));  // expiresAtMs <= now: swept, so first-seen again
+	}
+
+	@Test void a11_throttledSweepRunsOnceTheIntervalElapses() {
+		// The throttle window is measured on the injected clock: an expired record survives calls made inside the
+		// window and is swept by the first call at or after it.
+		var clock = new MutableClock(T0);
+		var cache = new InMemoryReplayCache(clock, 1_000L);
+		var expiredAtMs = T0.toEpochMilli() - 1L;
+		assertTrue(cache.checkAndRecord("id-1", expiredAtMs));  // arms the window at T0 + 1s
+		clock.advance(Duration.ofMillis(999));
+		assertFalse(cache.checkAndRecord("id-1", expiredAtMs));  // inside the window: no sweep yet
+		clock.advance(Duration.ofMillis(1));
+		assertTrue(cache.checkAndRecord("id-1", expiredAtMs));  // window elapsed: swept, so first-seen again
 	}
 }

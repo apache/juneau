@@ -340,5 +340,17 @@ class CondensedTest(SessionCase):
             self.assertFalse(jr.session_open())
 
 
+class HeaderLinesTest(SessionCase):
+    def test_lines_are_forwarded_to_the_console_session(self):
+        seen = []
+        sys.modules["juneau_run"] = jr
+        with mock.patch.object(run, "console_requested", return_value=True), \
+                mock.patch.object(jr, "session", side_effect=lambda *a, **k: seen.append((a, k))):
+            with run.session("Push", header=("Juneau", "master"), lines=("Commit Message: m",), exit=False):
+                pass
+        self.assertEqual(seen[0][0][:2], ("Push", ("Juneau", "master")))
+        self.assertEqual(seen[0][1]["lines"], ("Commit Message: m",))
+
+
 if __name__ == "__main__":
     unittest.main()

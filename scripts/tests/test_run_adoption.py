@@ -667,7 +667,8 @@ def test_push_identity_is_a_row_not_a_header_mark(push_mod, gates, monkeypatch, 
     assert push_mod.main() == 0
     [session] = events.of("session")
     assert session["title"] == "Push"
-    assert session["header"] == ["Juneau", "main", "Quick fix"]
+    assert session["header"] == ["Juneau", "main"]
+    assert session["lines"] == ["Commit Message: Quick fix"]
     assert not [line for line in session["header"] if "✓" in line]
     assert [f["id"] for f in events.of("step_start")][:1] == ["prechecks"]
     out = capsys.readouterr().out
@@ -783,7 +784,8 @@ def test_docs_only_under_a_console_has_one_session_and_one_done(push_mod, docs_t
     assert push_mod.main() == 0
     [session] = events.of("session")
     assert session["title"] == "Push"
-    assert session["header"] == ["Juneau Docs", "main", "Docs fix"]
+    assert session["header"] == ["Juneau Docs", "main"]
+    assert session["lines"] == ["Commit Message: Docs fix"]
     assert [f["status"] for f in events.of("done")] == ["ok"]
     assert [p["ids"] for p in events.of("plan")] == [["prechecks", "docs-smoke", "commit", "push"]]
 

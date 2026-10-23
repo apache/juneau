@@ -217,6 +217,78 @@ class MakeEstimatorTest(unittest.TestCase):
                 self.assertEqual(est("mvn", "maven", "cur").wall_s, 100.0)
                 self.assertEqual(est("mvn", "maven", "other").runs, 4)     # fewer than 3 like: falls back to all
 
+    def stores(self, hist, repo, *scripts):
+        import subprocess
+        subprocess.run(["git", "init", "-q", repo], check=True)
+        return [jr.HistoryStore(repo, s) for s in scripts]
+
+    @staticmethod
+    def add(store, step, wall, ts, ok=True, tool="maven"):
+        store.append({"v": 1, "ts": ts, "step": step, "tool": tool, "ok": ok, "complete": ok, "wall_s": wall})
+
+    def test_a_step_with_no_history_of_its_own_takes_a_sibling_scripts(self):
+        import os, tempfile
+        from unittest import mock
+        with tempfile.TemporaryDirectory() as hist, tempfile.TemporaryDirectory() as repo:
+            with mock.patch.dict(os.environ, {"JUNEAU_RUN_HISTORY": "1", "JUNEAU_RUN_HISTORY_DIR": hist}):
+                push, test = self.stores(hist, repo, "push", "test")
+                self.add(push, "install", 10.0, "2026-10-01T00:00:00Z")
+                for _ in range(3):
+                    self.add(test, "tests", 120.0, "2026-10-01T00:00:00Z")
+                est = jr.make_estimator(repo, "push")
+                self.assertEqual(est("tests", "maven").wall_s, 120.0)
+                self.assertEqual(est("tests", None).wall_s, 120.0)        # tool left open: the sibling's newest
+                self.assertEqual(est("install", "maven").wall_s, 10.0)
+
+    def test_own_records_with_no_estimate_fall_back_too(self):
+        import os, tempfile
+        from unittest import mock
+        with tempfile.TemporaryDirectory() as hist, tempfile.TemporaryDirectory() as repo:
+            with mock.patch.dict(os.environ, {"JUNEAU_RUN_HISTORY": "1", "JUNEAU_RUN_HISTORY_DIR": hist}):
+                push, test = self.stores(hist, repo, "push", "test")
+                self.add(push, "tests", 5.0, "2026-10-02T00:00:00Z", ok=False)   # only a failed run: no estimate
+                self.add(test, "tests", 120.0, "2026-10-01T00:00:00Z")
+                self.assertEqual(jr.make_estimator(repo, "push")("tests", "maven").wall_s, 120.0)
+
+    def test_own_usable_records_win_over_a_newer_sibling(self):
+        import os, tempfile
+        from unittest import mock
+        with tempfile.TemporaryDirectory() as hist, tempfile.TemporaryDirectory() as repo:
+            with mock.patch.dict(os.environ, {"JUNEAU_RUN_HISTORY": "1", "JUNEAU_RUN_HISTORY_DIR": hist}):
+                push, test = self.stores(hist, repo, "push", "test")
+                self.add(push, "tests", 50.0, "2026-10-01T00:00:00Z")
+                self.add(test, "tests", 120.0, "2026-10-09T00:00:00Z")
+                self.assertEqual(jr.make_estimator(repo, "push")("tests", "maven").wall_s, 50.0)
+
+    def test_the_sibling_with_the_latest_record_timestamp_wins(self):
+        import os, tempfile
+        from unittest import mock
+        with tempfile.TemporaryDirectory() as hist, tempfile.TemporaryDirectory() as repo:
+            with mock.patch.dict(os.environ, {"JUNEAU_RUN_HISTORY": "1", "JUNEAU_RUN_HISTORY_DIR": hist}):
+                old, new = self.stores(hist, repo, "aaa", "zzz")
+                self.add(new, "tests", 120.0, "2026-10-01T00:00:00Z")
+                self.add(old, "tests", 90.0, "2026-10-05T00:00:00Z")     # written later, though its name sorts first
+                self.assertEqual(jr.make_estimator(repo, "push")("tests", "maven").wall_s, 90.0)
+                self.add(new, "tests", 120.0, "2026-10-07T00:00:00Z")
+                self.assertEqual(jr.make_estimator(repo, "push")("tests", "maven").wall_s, 120.0)
+
+    def test_a_sibling_file_is_read_again_only_when_it_changes(self):
+        import os, tempfile
+        from unittest import mock
+        with tempfile.TemporaryDirectory() as hist, tempfile.TemporaryDirectory() as repo:
+            with mock.patch.dict(os.environ, {"JUNEAU_RUN_HISTORY": "1", "JUNEAU_RUN_HISTORY_DIR": hist}):
+                push, test = self.stores(hist, repo, "push", "test")
+                self.add(test, "tests", 120.0, "2026-10-01T00:00:00Z")
+                est = jr.make_estimator(repo, "push")
+                real = jr.HistoryStore.read
+                with mock.patch.object(jr.HistoryStore, "read", autospec=True, side_effect=real) as read:
+                    est("tests", "maven")
+                    est("tests", "maven")
+                    self.assertEqual(read.call_count, 3)            # own store twice, the sibling once
+                    self.add(test, "tests", 60.0, "2026-10-02T00:00:00Z")
+                    est("tests", "maven")
+                    self.assertEqual(read.call_count, 5)            # the sibling grew: read again
+
 
 class ExpectedTestsTest(unittest.TestCase):
     def rec(self, tests, **kw):

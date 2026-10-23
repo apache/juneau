@@ -12,6 +12,14 @@
 # * specific language governing permissions and limitations under the License.
 # ***************************************************************************************************************************
 """
+Rebuilds Juneau's `HEAD` and installs it into the shared `~/.m2` repository, so downstream projects that resolve the floating `10.0.0-SNAPSHOT` version pick up the new build.
+
+Full docs: repin-consumers.md
+"""
+
+from __future__ import annotations
+
+USAGE = """
 Re-pin the downstream consumers (Release Manager, Support Console) to a fresh local Apache
 Juneau build.
 
@@ -80,8 +88,6 @@ Exit status:
     4   The install succeeded but at least one --verify-consumers check failed to compile.
         The install already happened; this is reported, not treated as an install failure.
 """
-
-from __future__ import annotations
 
 import argparse
 import os
@@ -206,7 +212,7 @@ def main() -> int:
             "build. Refuses to run if the Juneau tree is not completely clean -- see this "
             "script's module docstring for why there is no override flag."
         ),
-        epilog=__doc__,
+        epilog=USAGE,
         formatter_class=argparse.RawDescriptionHelpFormatter,
     )
     parser.add_argument(

@@ -55,7 +55,8 @@ def reset_run_state():
         jr._console = None
     for key in (jr.ACTIVE_ENV, "JUNEAU_RUN_FULL_LOG", "JUNEAU_RUN_SESSION", "JUNEAU_RUN_DETAIL", "JUNEAU_RUN_LABEL_WIDTH",
                 "JUNEAU_RUN_LIVE", "JUNEAU_RUN_CONSOLE", "RUN_MARKERS", "JUNEAU_RUN_CONDENSED_LOG",
-                "JUNEAU_RUN_PENDING", "JUNEAU_RUN_OVERALL", jr.CANCEL_ENV, jr.MARKERS_FILE_ENV, jr.RESULT_ENV, jr.RESULT_PARTS_ENV):
+                "JUNEAU_RUN_PENDING", "JUNEAU_RUN_OVERALL", "JUNEAU_RUN_HEADER", "JUNEAU_RUN_HANDBACK",
+                jr.CANCEL_ENV, jr.MARKERS_FILE_ENV, jr.RESULT_ENV, jr.RESULT_PARTS_ENV):
         os.environ.pop(key, None)
 
 
@@ -79,16 +80,24 @@ def isolate_run_env(case):
 class Screen:
     """A minimal VT100 model, enough for what LiveRenderer writes: text, \\r, \\n, ESC[nA, ESC[K and ESC[J.
     SGR colour is ignored; cursor show/hide sets cursor_visible.  clamped is set if a cursor-up ever went above the first
-    line."""
+    line.  With rows (and cols) it is a viewport: a \\n on the last row scrolls the top line into scrollback, a line
+    autowraps at cols, and a wide or emoji code point takes two columns (jr._cw), as the renderer assumes.  start_row
+    puts the cursor that far down first, as a run started near the bottom of the window."""
 
     _CSI = re.compile(r"\x1b\[(\??)(\d*)([A-Za-z])")
 
-    def __init__(self):
-        self.lines = [""]
-        self.row = 0
+    def __init__(self, rows=None, cols=None, start_row=0):
+        self.rows, self.cols = rows, cols
+        self.cells = [[] for _ in range(start_row + 1)]     # "" marks a wide character's second column
+        self.row = start_row
         self.col = 0
+        self.scrollback = []
         self.clamped = False
         self.cursor_visible = True
+
+    @property
+    def lines(self):
+        return ["".join(self.cells[i]) for i in range(len(self.cells))]
 
     def feed(self, data):
         i = 0
@@ -102,15 +111,26 @@ class Screen:
             if ch == "\r":
                 self.col = 0
             elif ch == "\n":
-                self.row += 1
-                self.col = 0
-                if self.row == len(self.lines):
-                    self.lines.append("")
+                self._newline()
             else:
-                line = self.lines[self.row].ljust(self.col)
-                self.lines[self.row] = line[:self.col] + ch + line[self.col + 1:]
-                self.col += 1
+                w = jr._cw(ch) if self.rows else 1
+                if self.cols and self.col + w > self.cols:
+                    self._newline()
+                line = self.cells[self.row]
+                line.extend([" "] * (self.col - len(line)))
+                line[self.col:self.col + w] = [ch] + [""] * (w - 1)
+                self.col += w
             i += 1
+
+    def _newline(self):
+        self.col = 0
+        if self.rows and self.row == self.rows - 1:
+            self.scrollback.append("".join(self.cells.pop(0)).rstrip())
+            self.cells.append([])
+            return
+        self.row += 1
+        if self.row == len(self.cells):
+            self.cells.append([])
 
     def _csi(self, private, n, cmd):
         if private:
@@ -123,10 +143,23 @@ class Screen:
             self.clamped = self.clamped or n > self.row
             self.row = max(0, self.row - n)
         elif cmd == "K":
-            self.lines[self.row] = self.lines[self.row][:self.col]
+            del self.cells[self.row][self.col:]
         elif cmd == "J":
-            self.lines[self.row] = self.lines[self.row][:self.col]
-            del self.lines[self.row + 1:]
+            del self.cells[self.row][self.col:]
+            del self.cells[self.row + 1:]
+
+    def resize(self, rows=None, cols=None):
+        """Change the viewport as a terminal that does not reflow would: lines already written keep their cells, and
+        only later writes wrap and scroll at the new size.  Rows that no longer fit go to scrollback."""
+        self.rows, self.cols = rows, cols
+        while self.rows and len(self.cells) > self.rows:
+            self.scrollback.append("".join(self.cells.pop(0)).rstrip())
+            self.row -= 1
+        self.row = max(0, self.row)
 
     def text(self):
         return "\n".join(line.rstrip() for line in self.lines).rstrip("\n")
+
+    def history(self):
+        """Everything the terminal holds: the scrollback, then the screen."""
+        return "\n".join(self.scrollback + [self.text()]).strip("\n")

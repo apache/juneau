@@ -114,7 +114,7 @@ class FakeRun:
     def warn(self, text):
         self._record("warn", text)
 
-    def session(self, title, header=(), *, detail=None, sinks=None, repo="."):
+    def session(self, title, header=(), *, lines=(), detail=None, sinks=None, repo="."):
         self._record("session", title, list(header))
         self.console = True
 

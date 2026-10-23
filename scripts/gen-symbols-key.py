@@ -12,32 +12,9 @@
 # * specific language governing permissions and limitations under the License.                                              *
 # ***************************************************************************************************************************
 """
-Generates juneau-symbols-key.svg from juneau-symbols.svg.
+Regenerates `juneau-symbols-key.svg`, the labelled review sheet of every icon glyph, from the icon sprite `juneau-symbols.svg`.
 
-The key file is the human-facing authoring sheet for the icon sprite: it inlines every <symbol> definition from
-the sprite into a <defs> block, then lays the glyphs out in a labelled grid so a reviewer can see the whole set
-at once.  It is never served (only juneau-symbols.svg is a registered servable resource) - it ships so that the
-artwork can be reviewed and hand-authored.
-
-Why this exists rather than hand-editing the key file:
-
-  The key file carries each glyph's viewBox TWICE - once on the inlined <symbol> and again on the per-cell
-  wrapper <svg> that <use>s it - so touching one glyph's artwork means four coordinated hand-edits across two
-  files, and adding or removing a glyph resizes the whole sheet.  Every one of those is a chance for the two
-  files to drift apart silently, because nothing in the build reads the key file at all.
-
-  Everything in the key file except the layout arithmetic is copied verbatim from the sprite, so the sprite is
-  the single source of truth and this script is the copy.
-
-Usage:
-
-    python3 scripts/gen-symbols-key.py            # rewrite the key file from the sprite
-    python3 scripts/gen-symbols-key.py --check    # exit 1 if the key file is not what this script would write
-
---check is the staleness gate.  It is strictly stronger than the accompanying JUnit test
-(SymbolsKey_Staleness_Test), which asserts only that the two files' <symbol> bodies and their per-cell wrapper
-viewBoxes agree: --check additionally pins the generated layout, so a hand-edit to the grid arithmetic or the
-sheet size fails here while passing there.
+Full docs: gen-symbols-key.md
 """
 
 import argparse

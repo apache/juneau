@@ -126,8 +126,11 @@
 			standard ASF header.
 
 			Prerequisites when you DO opt in: Node and npm on the PATH (override the launcher with
-			-Djuneau.jsTests.node=/path/to/node), plus network access on the first run.  Both steps below are
-			idempotent and cost roughly a second once target/js is warm.  On Windows the npm launcher is npm.cmd,
+			-Djuneau.jsTests.node=/path/to/node), plus network access on the first run.  The first step below
+			(scripts/ensure-playwright.cjs) skips npm when the pinned packages are already in target/js/node_modules, and
+			otherwise restores them from a per-user cache (~/.cache/juneau-js-tests, override with the
+			JUNEAU_JS_TESTS_CACHE environment variable) before falling back to npm; the second is idempotent.  Both cost
+			roughly a second once warm.  On Windows the npm launcher is npm.cmd,
 			so pass -Djuneau.jsTests.npm=npm.cmd there.
 
 			The browser download is the one thing whose location is separately overridable, via
@@ -162,13 +165,11 @@
 									<goal>exec</goal>
 								</goals>
 								<configuration>
-									<executable>${juneau.jsTests.npm}</executable>
+									<executable>${juneau.jsTests.node}</executable>
 									<arguments>
-										<argument>install</argument>
-										<argument>--no-fund</argument>
-										<argument>--no-audit</argument>
-										<argument>--prefix</argument>
+										<argument>${maven.multiModuleProjectDirectory}/scripts/ensure-playwright.cjs</argument>
 										<argument>${js.tests.dir}</argument>
+										<argument>${juneau.jsTests.npm}</argument>
 										<argument>playwright@${playwright.version}</argument>
 										<argument>jquery@3.7.1</argument>
 										<argument>datatables.net@2.1.8</argument>

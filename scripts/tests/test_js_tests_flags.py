@@ -21,6 +21,7 @@ from __future__ import annotations
 
 import argparse
 import importlib.util
+import shlex
 import sys
 from pathlib import Path
 
@@ -141,7 +142,7 @@ def test_test_py_rejects_conflicting_flags(test_mod, monkeypatch, capsys):
 
 
 def test_test_py_help_documents_flags(test_mod):
-    assert "--js-tests" in test_mod.__doc__ and "--no-js-tests" in test_mod.__doc__
+    assert "--js-tests" in test_mod.USAGE and "--no-js-tests" in test_mod.USAGE
 
 
 def test_test_py_accepts_flags(test_mod, monkeypatch):
@@ -151,8 +152,9 @@ def test_test_py_accepts_flags(test_mod, monkeypatch):
     assert test_mod.main() == 0
 
 
-def test_push_py_doc_documents_flags(push_mod):
-    assert "--js-tests" in push_mod.__doc__ and "--no-js-tests" in push_mod.__doc__
+def test_push_py_doc_documents_flags():
+    doc = (SCRIPTS_DIR / "push.md").read_text()
+    assert "`--js-tests`" in doc and "`--no-js-tests`" in doc
 
 
 def test_push_build_test_command_forwards_flags(push_mod):
@@ -230,3 +232,40 @@ def test_push_always_plans_the_browser_tests_row(push_mod, js_tests):
     args = argparse.Namespace(test_only=True, sonarqube=False, tracker_audit=False, skip_tests=False, js_tests=js_tests)
     ids = [step_id for step_id, _ in push_mod.push_plan(args, SCRIPTS_DIR, SCRIPTS_DIR.parent, False)]
     assert ids.index("js-tests") == ids.index("py-tests") + 1
+
+
+# ---- concurrent module runs --------------------------------------------------------------------------------------------
+def test_concurrent_command_runs_one_f_process_per_module(test_mod):
+    cmd = test_mod.js_tests_concurrent_command()
+    for module, pattern in test_mod.JS_TEST_MODULES:
+        assert f"-f {module}/pom.xml" in cmd and f"-Dtest='{pattern}'" in cmd
+        assert f"[{module}] " in cmd                       # live output is labelled per module
+    assert cmd.count("mvn -o -Pjs-tests") == len(test_mod.JS_TEST_MODULES)   # offline: upstream modules come from ~/.m2
+    assert "-Djuneau.jsTests.forks=2" in cmd
+    assert " wait " in cmd
+
+
+def test_concurrent_command_fails_when_a_module_leaves_no_exit_status(test_mod):
+    cmd = test_mod.js_tests_concurrent_command()
+    # A killed subshell writes no status file; reading none must count as a failure, not a pass.
+    assert cmd.count("|| echo 1") == len(test_mod.JS_TEST_MODULES)
+    assert cmd.rstrip().endswith("do [ \"$c\" = 0 ] || exit 1; done")
+
+
+def test_js_tests_uses_the_reactor_command_unless_just_installed(test_mod, monkeypatch):
+    monkeypatch.delenv("JUNEAU_MVN_WRAPPER", raising=False)
+    seen = []
+    monkeypatch.setattr(test_mod, "run_command", lambda cmd, *a, **k: seen.append(cmd) or (0, ""))
+    test_mod.js_tests(installed=False)
+    test_mod.js_tests(installed=True)
+    assert seen[0] == test_mod.js_tests_command()
+    # The concurrent form needs bash (PIPESTATUS), so it always runs under an explicit bash -c.
+    assert seen[1] == f"/bin/bash -c {shlex.quote(test_mod.js_tests_concurrent_command())}"
+
+
+def test_concurrent_form_keeps_the_mvn_wrapper_around_the_whole_compound(test_mod, monkeypatch):
+    monkeypatch.setenv("JUNEAU_MVN_WRAPPER", "/x/lock.sh")
+    seen = []
+    monkeypatch.setattr(test_mod, "run_command", lambda cmd, *a, **k: seen.append(cmd) or (0, ""))
+    test_mod.js_tests(installed=True)
+    assert seen[0] == f"/x/lock.sh /bin/bash -c {shlex.quote(test_mod.js_tests_concurrent_command())}"

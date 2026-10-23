@@ -14,79 +14,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 """
-Slack notification helper for Apache Juneau.
+Posts a text message to a Slack Workflow Builder webhook so it arrives as a real push notification, and prints the send time so a caller can find the post.
 
-Posts a text payload to the Slack Workflow Builder webhook configured in
-``.cursor/slack.local.yml`` (key ``notify_webhook_url``). The workflow then
-posts the message into your personal notifications channel (the channel
-configured as the "Send a message" recipient in the workflow — by
-convention the same channel you set as ``default_channel_id``).
-
-Why this exists
-===============
-
-Messages sent through the ``user-slack`` MCP are authored as *you*, and
-Slack deliberately suppresses pushes for messages the recipient sent
-themselves. A Slack Workflow Builder webhook posts from the workflow app's
-identity instead, which does push on iOS/Android — same code path as a
-message from any other human or app you share a channel with.
-
-Because the workflow posts to a real channel (not a DM), the message has a
-``message_ts`` you can thread-reply to. That's what makes "ask me on Slack
-and wait" round-trips work: the push wakes your phone, you tap to open
-Slack, reply in the thread, and Cursor polls that same thread for the
-reply — one message, one thread, one conversation.
-
-This is the backing script for:
-
-- ``/slack notify <message>`` in ``.cursor/commands/slack.md`` (fire-and-
-  forget push).
-- The "Notify me on Slack when done" / "Ask me on Slack and wait" trigger
-  phrases in ``AGENTS.md``. The wait-loop path combines this script with a
-  subsequent ``slack_read_channel`` lookup to resolve the posted message's
-  ``message_ts``.
-
-Matching the posted message
-===========================
-
-The Workflow Builder webhook response doesn't include a ``message_ts`` for
-the message the workflow ends up posting, so callers that need the
-timestamp (``/slack notify``, ``/slack ask``, the AGENTS.md wait loop)
-have to locate the post in the channel after the fact. This script prints
-the *pre-send* Unix timestamp on stdout as ``T0=<float>`` on success.
-Callers should:
-
-1. Sleep ~3–5 seconds to let Slack's workflow engine run.
-2. ``slack_read_channel`` on ``default_channel_id`` (limit 5).
-3. Pick the newest message authored by a bot (author id starts with ``B``)
-   whose ``message_ts`` is ``>= T0 - 5`` (small jitter tolerance). That's
-   the workflow-posted message.
-
-No token is appended to the message body — the post goes out clean.
-
-Usage
-=====
-
-::
-
-    python3 scripts/slack-notify.py "Build finished."
-    echo "Some message" | python3 scripts/slack-notify.py -
-
-Exit codes
-==========
-
-:0: webhook accepted the payload (HTTP 200); ``T0=<float>`` printed on stdout.
-:1: webhook URL not configured in ``slack.local.yml``.
-:2: HTTP error posting to the webhook.
-:3: missing message argument.
-
-Setup
-=====
-
-See ``.cursor/slack.local.example.yml`` for the full Slack Workflow
-Builder setup (trigger type **must** be "From a webhook"; the "Send a
-message" step recipient **must** be your ``default_channel_id``
-notifications channel, not yourself).
+Full docs: slack-notify.md
 """
 
 from __future__ import annotations

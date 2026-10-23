@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.rest.server.mcp.v20260728;
 
+import java.time.*;
+
 import org.apache.juneau.commons.concurrent.*;
 
 /**
@@ -35,8 +37,9 @@ import org.apache.juneau.commons.concurrent.*;
  *
  * <p>
  * Defaults: {@link AeadRequestStateCodec} (a fresh instance per {@link McpMrtrConfig}), a 5-minute
- * {@code requestState} TTL, a max-rounds cap of 10, and no {@link ReplayCache} (replay rejection is opt-in; see
- * {@link #setReplayCache(ReplayCache)}). Operators inject a shared/rotating-key {@link RequestStateCodec} here
+ * {@code requestState} TTL, a max-rounds cap of 10, no {@link ReplayCache} (replay rejection is opt-in; see
+ * {@link #setReplayCache(ReplayCache)}), and a {@link Clock#systemUTC()} clock for stamping and checking token
+ * expiry (see {@link #setClock(Clock)}). Operators inject a shared/rotating-key {@link RequestStateCodec} here
  * for multi-instance or restart-durable resumption.
  *
  * <h5 class='section'>Trust model:</h5>
@@ -66,6 +69,7 @@ public class McpMrtrConfig {
 	private long ttlMs = DEFAULT_TTL_MS;
 	private int maxRounds = DEFAULT_MAX_ROUNDS;
 	private ReplayCache replayCache;
+	private Clock clock = Clock.systemUTC();
 
 	/**
 	 * The codec used to seal/unseal {@code requestState} tokens.
@@ -189,6 +193,34 @@ public class McpMrtrConfig {
 	 */
 	public McpMrtrConfig setReplayCache(ReplayCache value) {
 		replayCache = value;
+		return this;
+	}
+
+	/**
+	 * The clock used to stamp a new {@code requestState}'s expiry and to check an echoed one against it.
+	 *
+	 * @return The clock. Never {@code null}.
+	 */
+	public Clock getClock() {
+		return clock;
+	}
+
+	/**
+	 * Sets the clock.
+	 *
+	 * <p>
+	 * Defaults to {@link Clock#systemUTC()}. Tests can supply a {@link Clock#fixed(Instant, ZoneId) fixed} or
+	 * manually-advanced clock to drive {@code requestState} expiry deterministically instead of sleeping past the
+	 * {@link #getTtlMs() TTL}.
+	 *
+	 * @param value The new value. Must not be {@code null}.
+	 * @return This object.
+	 * @throws IllegalArgumentException If {@code value} is {@code null}.
+	 */
+	public McpMrtrConfig setClock(Clock value) {
+		if (value == null)
+			throw new IllegalArgumentException("clock must not be null");
+		clock = value;
 		return this;
 	}
 }

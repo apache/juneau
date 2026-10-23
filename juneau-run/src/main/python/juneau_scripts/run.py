@@ -516,7 +516,7 @@ def _n_base():
 
 
 @contextlib.contextmanager
-def session(title, *, header=(), bell=False, sound=False, silence_env=(), mode=None, project=None, repo=".",
+def session(title, *, header=(), lines=(), bell=False, sound=False, silence_env=(), mode=None, project=None, repo=".",
             exit=True, plan=None, history_key=None):
     """
     One script run: the run marker, the console view when requested, a SIGTERM handler, and on every path the summary,
@@ -524,7 +524,8 @@ def session(title, *, header=(), bell=False, sound=False, silence_env=(), mode=N
     other exception 1 (reported as "❌ ERROR: <Type>: <msg>").  With exit=True it raises SystemExit(code) at the end;
     with exit=False the code is left in s.code.  plan is the list of top-level step ids for the Overall figure; the run's
     history is recorded for repo (JUNEAU_RUN_HISTORY=0 turns it off).  history_key names that history instead of
-    the repo's, so separate clones can share one; JUNEAU_RUN_HISTORY_KEY is the fallback.
+    the repo's, so separate clones can share one; JUNEAU_RUN_HISTORY_KEY is the fallback.  lines are header lines under
+    the title (juneau_run.session).
     """
     global _session, _n
     if _session is not None:
@@ -550,7 +551,7 @@ def session(title, *, header=(), bell=False, sound=False, silence_env=(), mode=N
                 jr.run(mode, project, git.current_branch(repo) or "HEAD", git.short_head(repo))
             if console_requested():
                 opened_view = not jr.session_open() if hasattr(jr, "session_open") else False
-                jr.session(title, header, repo=repo, **keyed)
+                jr.session(title, header, lines=tuple(lines), repo=repo, **keyed)
             if plan is not None:
                 s.plan(plan)
             yield s
