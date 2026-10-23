@@ -182,7 +182,7 @@ public class ReleaseProcessService {
 			throw new BusyException(live.attemptId());
 		try {
 			var dir = AttemptDirs.create(home);
-			var cmd = new ArrayList<>(List.of("python3", scriptsDir.resolve("release.py").toString(), "--console", "condensed",
+			var cmd = new ArrayList<>(List.of("python3", scriptsDir.resolve("release.py").toString(), "--console", "board",
 				"--home", home.toString(), "--attempt-dir", dir.toString()));
 			if (dryRun)
 				cmd.add("--dry-run");

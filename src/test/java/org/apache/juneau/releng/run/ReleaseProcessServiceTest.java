@@ -53,7 +53,7 @@ class ReleaseProcessServiceTest {
 		assertTrue(live.dir().startsWith(home.resolve("attempts")));
 		var argv = Files.readString(live.dir().resolve("fake-argv.json"));
 		assertTrue(argv.contains("\"--attempt-dir\", \"" + live.dir() + "\""), argv);
-		assertTrue(argv.contains("--dry-run") && argv.contains("condensed"), argv);
+		assertTrue(argv.contains("--dry-run") && argv.contains("board"), argv);
 		assertTrue(Files.size(live.dir().resolve("terminal.log")) > 0);
 		await(() -> Files.exists(live.dir().resolve(RunFiles.SIDECAR)) && read(live.dir()).contains("\"exit\":0"), 10);
 		assertEquals("attempt-" + live.dir().getFileName(), live.attemptId());

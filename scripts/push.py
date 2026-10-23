@@ -509,8 +509,8 @@ playwright test in e2e/), Commit, Push.  A failing gate refuses the push; nothin
     parser.add_argument("--skip-pytest", action="store_true", help="Skip Python Tests (the scripts/tests suite).")
     parser.add_argument(
         "--console",
-        choices=("full", "condensed", "none"),
-        help="Console view of the steps: full, condensed (default) or none (also JUNEAU_RUN_CONSOLE).",
+        choices=("full", "board", "none"),
+        help="Console view of the steps: full, board (default) or none (also JUNEAU_RUN_CONSOLE).",
     )
     return parser
 
@@ -520,7 +520,7 @@ def main(argv=None, repo_dir=REPO_DIR):
     args = build_parser().parse_args(argv)
     try:
         toolkit()
-        # Before juneau_run loads: the flag beats JUNEAU_RUN_CONSOLE, which beats the condensed default.
+        # Before juneau_run loads: the flag beats JUNEAU_RUN_CONSOLE, which beats the board default.
         run.export_console(args.console)
         jr, _ = bootstrap.load(REPO_DIR / "pom.xml")
     except bootstrap.BootstrapError as e:

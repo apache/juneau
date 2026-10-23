@@ -48,7 +48,7 @@ def build_parser():
     p.add_argument("--version", help="x.y.z: with --list-steps, which run's marks to show; on a new release, prefill the details")
     p.add_argument("--revert", action="store_true", help="undo the current release candidate")
     p.add_argument("--dry-run", action="store_true", help="run read-only commands; print every mutation")
-    p.add_argument("--console", choices=("full", "condensed", "none"))
+    p.add_argument("--console", choices=("full", "board", "none"))
     p.add_argument("--home", type=Path, default=None, help="state directory (default: $JUNEAU_RELEASE_HOME)")
     p.add_argument("--attempt-dir", type=Path, help=argparse.SUPPRESS)
     return p

@@ -32,7 +32,7 @@ Run it from the repository root. The commit message is prompted for when omitted
 | `--skip-tests` | none | off | Skip Compile and Java Tests (the Maven build). |
 | `--skip-e2e` | none | off | Skip Browser Tests (the Playwright suite). |
 | `--skip-pytest` | none | off | Skip Python Tests (the `scripts/tests` suite). |
-| `--console` | `full`, `condensed`, `none` | `condensed` | Console view of the steps; also `JUNEAU_RUN_CONSOLE`. The flag wins over the environment. |
+| `--console` | `full`, `board`, `none` | `board` | Console view of the steps; also `JUNEAU_RUN_CONSOLE`. The flag wins over the environment. |
 
 ## What it does
 
@@ -46,7 +46,7 @@ Run it from the repository root. The commit message is prompted for when omitted
 
 ## Output and exit codes
 
-Progress is a condensed run view (rows: Prechecks, Compile, Java Tests, Python Tests, Browser Tests, Commit, Push). The full log path is printed in the session header. On success it prints the branch, short commit and remote URL. When a run ends on a terminal it rings the bell.
+Progress is a board view (rows: Prechecks, Compile, Java Tests, Python Tests, Browser Tests, Commit, Push). The full log path is printed in the session header. On success it prints the branch, short commit and remote URL. When a run ends on a terminal it rings the bell.
 
 | Code | Meaning |
 |---|---|

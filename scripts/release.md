@@ -33,7 +33,7 @@ python3 scripts/release.py --dry-run
 | `--version` | `x.y.z` | none | With `--list-steps`, which run's marks to show; on a new release, prefills the details. Must look like `x.y.z`. |
 | `--revert` | none | off | Undo the current release candidate. Cannot be combined with `--resume`, `--start-step` or `--skip-step`. |
 | `--dry-run` | none | off | Run read-only commands; print every mutation instead of running it. State is kept in memory, and `run.json` is never written. |
-| `--console` | `full`, `condensed`, `none` | toolkit default | Console view; the flag beats `JUNEAU_RUN_CONSOLE`. |
+| `--console` | `full`, `board`, `none` | toolkit default | Console view; the flag beats `JUNEAU_RUN_CONSOLE`. |
 | `--home` | `DIR` | `$JUNEAU_RELEASE_HOME`, else `~/.juneau-release-manager` | State directory. |
 
 `--attempt-dir` also exists but is hidden from the help (used by tests).
@@ -52,7 +52,7 @@ python3 scripts/release.py --dry-run
 
 ## Output and exit codes
 
-A condensed run view with one row per step. State lives under the home directory: `runs/<version>/run.json` (the checkpoint) and `attempts/<stamp>-<NNN>/full.log` (the full log, whose `tail -f` line the banner prints). Secrets are masked in output and never put on a command line or in `run.json`.
+A board view with one row per step. State lives under the home directory: `runs/<version>/run.json` (the checkpoint) and `attempts/<stamp>-<NNN>/full.log` (the full log, whose `tail -f` line the banner prints). Secrets are masked in output and never put on a command line or in `run.json`.
 
 | Code | Meaning |
 |---|---|

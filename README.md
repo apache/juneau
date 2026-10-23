@@ -77,7 +77,7 @@ JUNEAU_RUN_PY=~/git/apache/juneau/juneau-run/src/main/python/juneau_run.py \
 ## Release page
 
 The **Release** page (`/rest/runs`) runs `scripts/release.py` for you and streams its terminal. It starts
-`python3 scripts/release.py --console condensed --home <rm.home> --attempt-dir ...`, answers the script's prompts
+`python3 scripts/release.py --console board --home <rm.home> --attempt-dir ...`, answers the script's prompts
 through dialogs, and lists past attempts (real runs and dry runs) under **History**, where each can be replayed.
 
 - **Properties.** `rm.home` (default `~/.juneau-release-manager`) is where `runs/` and attempt directories live.

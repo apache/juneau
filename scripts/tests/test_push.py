@@ -58,7 +58,7 @@ def _load_push_module():
 
 @pytest.fixture(autouse=True)
 def clean_run_env(monkeypatch):
-    """Keep the developer's shell (e.g. JUNEAU_RUN_CONSOLE=condensed) out of every push test, and forget any
+    """Keep the developer's shell (e.g. JUNEAU_RUN_CONSOLE=board) out of every push test, and forget any
     juneau_run a previous test loaded.  JUNEAU_RUN_PY / JUNEAU_SCRIPTS_ZIP stay: they locate the toolkit."""
     keep = {"JUNEAU_RUN_PY", "JUNEAU_RUN_HISTORY", "JUNEAU_RUN_HISTORY_DIR"}  # the history pair is the conftest's guard
     for key in [k for k in os.environ if k.startswith("JUNEAU_RUN_") and k not in keep]:
@@ -66,7 +66,7 @@ def clean_run_env(monkeypatch):
     monkeypatch.delenv("RUN_MARKERS", raising=False)
     monkeypatch.delenv("RUN_ARTIFACTS", raising=False)
     monkeypatch.delitem(sys.modules, "juneau_run", raising=False)
-    # Pin the plain view: push.py itself now defaults to condensed; the tests below that want the default unset this.
+    # Pin the plain view: push.py itself now defaults to board; the tests below that want the default unset this.
     monkeypatch.setenv("JUNEAU_RUN_CONSOLE", "full")
     monkeypatch.setenv("JRM_SCRIPT_TESTS_ACTIVE", "1")  # second line of defence against a nested suite run
     monkeypatch.setenv("JRM_PUSH_NO_BELL", "1")  # keep the main()-calling tests quiet under `pytest -s`
@@ -581,7 +581,7 @@ class TestEndOfRunBell:
 
 
 class TestConsoleFlag:
-    """--console full|condensed|none sets JUNEAU_RUN_CONSOLE before the toolkit is loaded."""
+    """--console full|board|none sets JUNEAU_RUN_CONSOLE before the toolkit is loaded."""
 
     @pytest.fixture(autouse=True)
     def clean_env(self, monkeypatch):
@@ -599,7 +599,7 @@ class TestConsoleFlag:
         assert os.environ["JUNEAU_RUN_CONSOLE"] == mode
 
     def test_flag_beats_the_env_var(self, push_module, monkeypatch):
-        monkeypatch.setenv("JUNEAU_RUN_CONSOLE", "condensed")
+        monkeypatch.setenv("JUNEAU_RUN_CONSOLE", "board")
         assert self._main(push_module, monkeypatch, "--console", "none") == 0
         assert os.environ["JUNEAU_RUN_CONSOLE"] == "none"
 
@@ -608,9 +608,9 @@ class TestConsoleFlag:
         assert self._main(push_module, monkeypatch) == 0
         assert os.environ["JUNEAU_RUN_CONSOLE"] == "full"
 
-    def test_no_flag_and_no_env_var_defaults_to_condensed(self, push_module, monkeypatch):
+    def test_no_flag_and_no_env_var_defaults_to_board(self, push_module, monkeypatch):
         assert self._main(push_module, monkeypatch) == 0
-        assert os.environ["JUNEAU_RUN_CONSOLE"] == "condensed"
+        assert os.environ["JUNEAU_RUN_CONSOLE"] == "board"
 
     def test_unknown_mode_in_the_environment_is_an_error(self, push_module, monkeypatch):
         monkeypatch.setenv("JUNEAU_RUN_CONSOLE", "loud")
@@ -622,12 +622,12 @@ class TestConsoleFlag:
         assert exc.value.code == 2
 
 
-class TestCondensedConsole:
-    def test_a_push_under_condensed_succeeds_and_the_remote_moves(self, push_module, repo, remote_repo, capfd):
+class TestBoardConsole:
+    def test_a_push_under_board_succeeds_and_the_remote_moves(self, push_module, repo, remote_repo, capfd):
         (repo / "README.md").write_text("new content\n", encoding="utf-8")
         _run(repo, "git", "add", "README.md")
 
-        assert push_module.main(["--console", "condensed", "msg"], repo_dir=repo) == 0
+        assert push_module.main(["--console", "board", "msg"], repo_dir=repo) == 0
         assert _run(remote_repo, "git", "rev-parse", "master") == _run(repo, "git", "rev-parse", "HEAD")
 
     def test_a_plain_run_loads_no_juneau_run(self, push_module, repo):
@@ -638,7 +638,7 @@ class TestCondensedConsole:
                                                                              capfd):
         (repo / "README.md").write_text("new content\n", encoding="utf-8")
         _run(repo, "git", "add", "README.md")
-        assert push_module.main(["--console", "condensed", "msg"], repo_dir=repo) == 0
+        assert push_module.main(["--console", "board", "msg"], repo_dir=repo) == 0
         out = capfd.readouterr().out
         assert "Push: JRM · " in out and "Commit Message: msg" in out
         assert " · msg" not in out

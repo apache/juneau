@@ -42,7 +42,7 @@ class Runner:
 
     def gate(self, describe, mutating=True):
         """True when the caller should really do it.  Under --dry-run a mutation is recorded and printed and returns False.
-        (Not at warn: the condensed console would then show the note as the row's reason in place of its result;
+        (Not at warn: the board console would then show the note as the row's reason in place of its result;
         the step reports the skipped commands in its result instead, see skipped_note.)"""
         if self.dry_run and mutating:
             self.skipped.append(self.mask(describe))
