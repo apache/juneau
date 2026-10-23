@@ -11,15 +11,7 @@
 # * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
 # * specific language governing permissions and limitations under the License.
 # ***************************************************************************************************************************
-"""
-Apache Juneau release, from a terminal: release candidate, vote, promote.
-
-    release.py [--resume | --start-step NAME] [--skip-step NAME ...] [--list-steps] [--revert] [--dry-run]
-               [--console full|condensed|none] [--home DIR]
-
-Exit codes: 0 ok or paused, 1 failed, 2 usage, 130 cancelled.  State: $JUNEAU_RELEASE_HOME or
-~/.juneau-release-manager (runs/<version>/run.json, attempts/<stamp>-<NNN>/full.log).
-"""
+"""Apache Juneau release, from a terminal: release candidate, vote, promote.  Full docs: release.md"""
 import argparse
 import os
 import sys
@@ -36,7 +28,7 @@ from jrm_release import inventory  # noqa: E402
 from jrm_release.ctx import Ctx  # noqa: E402
 from jrm_release.runfile import RunFile, RunFileError, new_attempt_dir  # noqa: E402
 
-TITLE = "🚀 juneau-release-manager release"
+TITLE = "Release"
 FINISHED = ("released",)
 
 
@@ -45,7 +37,7 @@ def default_home():
 
 
 def build_parser():
-    p = argparse.ArgumentParser(prog="release.py", description=__doc__.strip().splitlines()[0])
+    p = argparse.ArgumentParser(prog="release.py", description="Apache Juneau release, from a terminal: release candidate, vote, promote.")
     g = p.add_mutually_exclusive_group()
     g.add_argument("--resume", action="store_true", help="continue the active run after its last finished step")
     g.add_argument("--start-step", choices=inventory.NAMES, metavar="NAME",
@@ -351,8 +343,8 @@ def run_release(args, deps, path, active):
     attempt.mkdir(parents=True, exist_ok=True)
     (attempt / "full.log").touch()   # the banner's `tail -f` target; a dry run writes logs but never runs/
     version = (active.get("details") or {}).get("version")
-    header = (f"drop RC{(active.get('details') or {}).get('rc')} of {version}" if args.revert
-              else version or "new release",)
+    header = ("JRM", f"drop RC{(active.get('details') or {}).get('rc')} of {version}" if args.revert
+              else version or "new release")
     plan = ([(n, t) for n, t, _ in __import__("jrm_release.revert", fromlist=["ROWS"]).ROWS] if args.revert
             else [(s.name, s.title) for s in inventory.STEPS])
     saved = os.environ.get("JUNEAU_RUN_FULL_LOG")

@@ -27,6 +27,7 @@ import org.junit.jupiter.api.io.TempDir;
 
 class RunFileWatcherTest {
 
+	@SuppressWarnings("resource") // The watcher is never start()ed, so it holds no scheduler; subscriptions are in-memory.
 	@Test
 	void a01_publishesRunOnMtimeChangeOnly(@TempDir Path home) throws Exception {
 		var bus = new EventBroadcaster();

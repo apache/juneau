@@ -11,12 +11,7 @@
 # * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
 # * specific language governing permissions and limitations under the License.
 # ***************************************************************************************************************************
-"""
-Per-package Java coverage report for the Juneau Release Manager.  The implementation is Juneau's
-juneau_scripts.coverage, loaded by the vendored scripts/bootstrap.py; this file only supplies this repository's settings.
-
-    ./scripts/coverage.py --help
-"""
+"""Per-package Java coverage report for the Release Manager.  Full docs: coverage.md"""
 
 import sys
 from pathlib import Path

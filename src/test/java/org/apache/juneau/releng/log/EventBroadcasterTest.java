@@ -36,6 +36,7 @@ class EventBroadcasterTest {
 		assertEquals("{\"type\":\"run\",\"version\":\"9.2.1\"}", got.get(0).replace(" ", ""));
 	}
 
+	@SuppressWarnings("resource") // Subscriptions to the in-memory broadcaster hold no external resource; they die with the test.
 	@Test
 	void a03_throwingSinkDoesNotStopOthers() {
 		var bc = new EventBroadcaster();
@@ -46,6 +47,7 @@ class EventBroadcasterTest {
 		assertEquals(1, got.size());
 	}
 
+	@SuppressWarnings("resource") // Subscriptions to the in-memory broadcaster hold no external resource; they die with the test.
 	@Test
 	void a02_payloadTypeFieldNeverOverridesTheEventType() {
 		var bc = new EventBroadcaster();

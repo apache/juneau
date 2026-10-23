@@ -2,13 +2,13 @@
 
 This repo's `scripts/todo-next-id.py` and `scripts/todo-status-audit.py` (and their tests,
 `conftest.py` / `test_todo_next_id.py` / `test_todo_status_audit.py`) were consolidated
-2026-08-30 into a single parameterized copy at `~/Project Work/scripts/` (`--project
-release-manager`), with tests alongside at `~/Project Work/scripts/tests/`. See
-`@todo-and-waves` and `~/agents/AGENTS.md`.
+2026-08-30 into a single parameterized copy (`--project
+release-manager`) in the shared tracker scripts, which live outside this repo, with tests alongside them. See
+`@todo-and-waves` and the operator's agent instructions.
 
 This repo's `scripts/push.py` (moved here from the repo root, matching `apache/juneau` and
-`sandbox-support-console`) runs the build and test gates before it commits: Prechecks, Compile (`mvn clean test-compile`), Java tests (`mvn verify`), Python tests
-(this suite), E2E (`npx playwright test` in `e2e/`), Commit, Push. The suite never writes the real run history:
+`sandbox-support-console`) runs the build and test gates before it commits: Prechecks, Compile (`mvn clean test-compile`), Java Tests (`mvn verify`), Python Tests
+(this suite), Browser Tests (`npx playwright test` in `e2e/`), Commit, Push. The suite never writes the real run history:
 `conftest.py` points `JUNEAU_RUN_HISTORY_DIR` at a temp dir and sets `JUNEAU_RUN_HISTORY=0`. Its review gate refuses to commit or push **anything** when the working tree has
 any unstaged modification to a tracked file, or any untracked file that isn't gitignored (`_prechecks()` /
 `commit_and_push()`, built on the `juneau_scripts` toolkit's `git`, `run` and `tools` modules, loaded through
@@ -30,6 +30,12 @@ shapes) plus their own repo-specific machinery (SSC's rebase and push lock, June
 this repo's does not need; this repo also has no `reset-side-clones.py` or `repin-consumers.py` of its own
 (juneau's `test_reset_side_clones.py` / `test_repin_consumers.py` cover those, and stay in
 juneau since the scripts they test do too).
+
+## Script docs checker
+
+`test_script_docs.py` keeps `scripts/` documented. It is read-only: it parses files and never runs a script. It fails when an entry point (a `*.sh`, an extensionless file with a shell or Python shebang, or a `*.py` with a top-level `if __name__ == "__main__":`) has no `<name>.md` beside it; when a script doc (H1 `# <name>.py`) has no script beside it; when a script doc lacks the seven headings in order (When to use, Usage, Options, What it does, Output and exit codes, Gotchas, See also); and when a flag the script declares (found with `ast`, or the option `case` in shell) is not in backticks in the doc's Options section. An Options row for a flag the code no longer declares is only a warning. `tests/`, `vendor/`, `node_modules/`, `fixtures/`, `__pycache__/` and dot-directories are skipped.
+
+`scripts/script-docs-exclude.txt` holds the exceptions, one per line: `<pattern>  # reason` skips an entry point (fnmatch, relative to `scripts/`), `flags: <pattern>  # reason` skips only the flag check (needed when argparse flags are added dynamically, reported as `FLAGS-UNVERIFIABLE`), and `packages: a, b` lists library directories that must have a `README.md` (here `jrm_release`). Every path and `flags:` line needs a reason, and a pattern that matches nothing fails the test.
 
 ## Running
 

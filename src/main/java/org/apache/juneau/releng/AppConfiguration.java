@@ -321,6 +321,7 @@ public class AppConfiguration {
 	/**
 	 * Publishes a {@code run} event when any {@code run.json} changes, CLI runs included.
 	 */
+	@SuppressWarnings("resource") // Spring owns the bean and closes it via destroyMethod.
 	@Bean(initMethod = "start", destroyMethod = "close")
 	public RunFileWatcher runFileWatcher(@Value("${rm.home}") String home, EventBroadcaster runEvents) {
 		return new RunFileWatcher(Path.of(home), runEvents);

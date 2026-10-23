@@ -45,6 +45,7 @@ class ReleaseProcessServiceTest {
 		return svc;
 	}
 
+	@SuppressWarnings("resource") // Processes started by the service are closed by the test's cleanup (svc.cancel()).
 	@Test
 	void a01_startSpawnsWithAttemptDir(@TempDir Path home) throws Exception {
 		var live = service(home, "{\"sleep\":0,\"exit\":0}").start(true);
@@ -58,6 +59,7 @@ class ReleaseProcessServiceTest {
 		assertEquals("attempt-" + live.dir().getFileName(), live.attemptId());
 	}
 
+	@SuppressWarnings("resource") // Processes started by the service are closed by the test's cleanup (svc.cancel()).
 	@Test
 	void a02_secondStart409(@TempDir Path home) throws Exception {
 		var s = service(home, "{\"sleep\":30}");
@@ -66,6 +68,7 @@ class ReleaseProcessServiceTest {
 		assertTrue(e.getMessage().contains("already running"), e.getMessage());
 	}
 
+	@SuppressWarnings("resource") // Processes started by the service are closed by the test's cleanup (svc.cancel()).
 	@Test
 	void a03_cancelRecordsCancelled(@TempDir Path home) throws Exception {
 		var s = service(home, "{\"sleep\":30}");
@@ -79,6 +82,7 @@ class ReleaseProcessServiceTest {
 		assertTrue(readRun(runJson).contains("\"cancelled\""), readRun(runJson));
 	}
 
+	@SuppressWarnings("resource") // Processes started by the service are closed by the test's cleanup (svc.cancel()).
 	@Test
 	void a04_shutdownHookMarksJrmStopped(@TempDir Path home) throws Exception {
 		var s = service(home, "{\"sleep\":30}");
@@ -91,6 +95,7 @@ class ReleaseProcessServiceTest {
 		assertEquals("interrupted (JRM stopped)", outcome);
 	}
 
+	@SuppressWarnings("resource") // Processes started by the service are closed by the test's cleanup (svc.cancel()).
 	@Test
 	void a05_dropRcAnswersTheTypedConfirm(@TempDir Path home) throws Exception {
 		var s = service(home, "{\"prompts\":[{\"kind\":\"confirm\",\"key\":\"confirm.revert\",\"message\":\"Type RC2\",\"expect\":\"RC2\"}]}");

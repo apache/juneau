@@ -31,6 +31,7 @@ import jakarta.servlet.http.HttpServletResponse;
 
 class RunEventsSseServletTest {
 
+	@SuppressWarnings("resource") // Subscriptions to the in-memory broadcaster hold no external resource; they die with the test.
 	@Test
 	void a01_streamsPublishedEventsAsSseData() throws Exception {
 		var subscribed = new CountDownLatch(1);

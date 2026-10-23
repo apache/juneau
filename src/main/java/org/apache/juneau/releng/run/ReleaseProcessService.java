@@ -130,6 +130,7 @@ public class ReleaseProcessService {
 	}
 
 	/** Cancels the live process, if any: stdin closes, the runner SIGTERMs, release.py records {@code cancelled}. */
+	@SuppressWarnings("resource") // The live process is owned by the Live record and closed by cancel()/shutdown()/awaitExit, not by this method.
 	public void cancel() {
 		Live l;
 		synchronized (this) {
@@ -159,6 +160,7 @@ public class ReleaseProcessService {
 	}
 
 	/** Spring destroy method (run from the JVM shutdown hook): marks the live attempt {@code jrm-stopped}, then closes. */
+	@SuppressWarnings("resource") // The live process is owned by the Live record and closed by cancel()/shutdown()/awaitExit, not by this method.
 	public void shutdown() {
 		Live l;
 		synchronized (this) {
@@ -174,6 +176,7 @@ public class ReleaseProcessService {
 		l.process().close();
 	}
 
+	@SuppressWarnings("resource") // The live process is owned by the Live record and closed by cancel()/shutdown()/awaitExit, not by this method.
 	private Live launch(String command, List<String> extra, boolean dryRun, Map<String, String> autoAnswers) {
 		if (live != null)
 			throw new BusyException(live.attemptId());
@@ -207,6 +210,7 @@ public class ReleaseProcessService {
 		}
 	}
 
+	@SuppressWarnings("resource") // Ownership of the started process transfers to the caller.
 	private TerminalProcess startProcess(List<String> cmd, Path dir, PromptBroker broker, String attemptId) throws IOException {
 		try {
 			return TerminalProcess.start("generic", cmd, 120, 40, dir, broker);
@@ -232,6 +236,7 @@ public class ReleaseProcessService {
 		}
 	}
 
+	@SuppressWarnings("resource") // The live process is owned by the Live record and closed by cancel()/shutdown()/awaitExit, not by this method.
 	private void awaitExit(Live l, Map<String, Object> sidecar) {
 		Integer exit = null;
 		try {

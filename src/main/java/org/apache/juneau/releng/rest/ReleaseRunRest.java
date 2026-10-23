@@ -236,6 +236,7 @@ public class ReleaseRunRest extends BasicRestResource implements TerminalMixin {
 	 * An attempt's terminal. The id is {@code attempt-<attempt dir name>}: the live process's own source while it
 	 * runs, then the dir's {@code terminal.log}, then (for a CLI attempt run without one) its {@code full.log}.
 	 */
+	@SuppressWarnings("resource") // The terminal source is handed to the framework, which closes it when the stream ends.
 	@Override /* TerminalMixin */
 	public Optional<TerminalSource> terminalSource(String id, RestRequest req) {
 		var live = processes.live();

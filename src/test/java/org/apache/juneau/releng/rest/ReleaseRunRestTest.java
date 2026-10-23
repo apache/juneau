@@ -59,6 +59,7 @@ class ReleaseRunRestTest {
 	static final String HELLO = "{\"v\":1,\"type\":\"hello\",\"pid\":4242}";
 	static final String PROMPT = "{\"v\":1,\"type\":\"prompt\",\"id\":\"p1\",\"kind\":\"text\",\"key\":\"release.branch\",\"message\":\"m\"}";
 
+	@SuppressWarnings("resource") // Mocked process and source hold no real resource; ownership passes to the returned Live.
 	static ReleaseProcessService.Live live(String attemptId, boolean hello, boolean prompt) {
 		var broker = new PromptBroker(k -> Optional.empty(), new EventBroadcaster(), java.util.Map.of());
 		broker.attach(line -> true);
@@ -72,6 +73,7 @@ class ReleaseRunRestTest {
 		return new ReleaseProcessService.Live(attemptId, java.nio.file.Path.of("x"), "start", true, proc, broker);
 	}
 
+	@SuppressWarnings("resource") // Mocked process and source hold no real resource.
 	@Test
 	void a01_terminalSourceLiveThenFile(@TempDir Path home) throws Exception {
 		var dir = Files.createDirectories(home.resolve("attempts/20261020-100000-001"));

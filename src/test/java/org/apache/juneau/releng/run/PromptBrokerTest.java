@@ -50,6 +50,7 @@ class PromptBrokerTest {
 	final List<String> written = new ArrayList<>();
 	final List<String> events = new ArrayList<>();
 
+	@SuppressWarnings("resource") // Subscriptions to the in-memory broadcaster hold no external resource; they die with the test.
 	PromptBroker broker(Map<String, String> stored, Map<String, String> auto) {
 		var bus = new EventBroadcaster();
 		bus.subscribe(events::add);
@@ -97,6 +98,7 @@ class PromptBrokerTest {
 		assertTrue(b.pending().isPresent(), "the real prompt stays pending");
 	}
 
+	@SuppressWarnings("resource") // Subscriptions to the in-memory broadcaster hold no external resource; they die with the test.
 	@Test
 	void a04_secretNeverLogged() {
 		var records = new ArrayList<LogRecord>();
@@ -151,6 +153,7 @@ class PromptBrokerTest {
 		assertTrue(b.pending().isEmpty());
 	}
 
+	@SuppressWarnings("resource") // Subscriptions to the in-memory broadcaster hold no external resource; they die with the test.
 	@Test
 	void a08_throwingStoredLookupFallsThroughToDialogWithoutLeaking() {
 		var bus = new EventBroadcaster();
