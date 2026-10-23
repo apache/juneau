@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.server.views;
 
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
@@ -90,7 +91,7 @@ class QuickStat_Test extends TestBase {
 		assertEquals("segmented", m.get("type"));
 		assertFalse(m.containsKey("tone"));
 		var segs = (List<?>)m.get("segments");
-		assertEquals(3, segs.size());
+		assertSize(3, segs);
 		var s0 = (Map<?,?>)segs.get(0);
 		assertEquals("Placed", s0.get("label"));
 		assertEquals(3L, s0.get("count"));
@@ -175,7 +176,7 @@ class QuickStat_Test extends TestBase {
 		var q = QuickStat.segmented("s", "S");
 		for (var i = 0; i < QuickStat.MAX_SEGMENTS; i++)
 			q.segment("S" + i, i);
-		assertEquals(8, ((List<?>)q.toMap().get("segments")).size());
+		assertSize(8, ((List<?>)q.toMap().get("segments")));
 		assertEquals("QuickStat 's': a segmented item takes at most 8 segments.",
 			assertThrows(IllegalArgumentException.class, () -> q.segment("S9", 1)).getMessage());
 	}

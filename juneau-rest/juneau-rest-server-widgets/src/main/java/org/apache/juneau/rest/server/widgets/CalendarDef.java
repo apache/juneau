@@ -287,7 +287,7 @@ public class CalendarDef implements Widget {
 	 * @throws IllegalArgumentException If this definition is not well-formed.
 	 */
 	public void validate(Integer effectiveYear, Integer effectiveMonth) {
-		if (id == null || id.isBlank())
+		if (ib(id))
 			throw iaex("CalendarDef id must not be null or blank.");
 		if (!ID_PATTERN.matcher(id).matches())
 			throw iaex("CalendarDef id '%s' must match [A-Za-z][A-Za-z0-9_-]*.", id);

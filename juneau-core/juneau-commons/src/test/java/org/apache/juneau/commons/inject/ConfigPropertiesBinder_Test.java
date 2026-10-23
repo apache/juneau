@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.commons.inject;
 
+import static org.apache.juneau.commons.TestAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.time.*;
@@ -301,7 +302,7 @@ class ConfigPropertiesBinder_Test extends TestBase {
 		var calls = new ArrayList<Object>();
 		ConfigPropertiesValidator spy = calls::add;
 		var target = ConfigPropertiesBinder.of(new C_Target(), "app").settings(settings).validator(spy).run();
-		assertEquals(1, calls.size());
+		assertSize(1, calls);
 		assertSame(target, calls.get(0));
 	}
 

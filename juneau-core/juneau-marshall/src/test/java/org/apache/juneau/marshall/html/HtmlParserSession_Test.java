@@ -16,7 +16,9 @@
  */
 package org.apache.juneau.marshall.html;
 
+import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 
 import java.time.*;
 import java.util.*;
@@ -77,7 +79,7 @@ class HtmlParserSession_Test extends TestBase {
 		var list = List.of(new AB("x", "y"), new AB("p", "q"));
 		var html = SER.write(list);
 		var result = (List<AB>) PAR.read(html, List.class, AB.class);
-		assertEquals(2, result.size());
+		assertSize(2, result);
 		assertEquals("x", result.get(0).a);
 	}
 
@@ -118,7 +120,7 @@ class HtmlParserSession_Test extends TestBase {
 		var list = List.of("alpha", "beta", "gamma");
 		var html = SER.write(list);
 		var result = (List) PAR.read(html, List.class, String.class);
-		assertEquals(3, result.size());
+		assertSize(3, result);
 		assertEquals("alpha", result.get(0));
 	}
 
@@ -135,7 +137,7 @@ class HtmlParserSession_Test extends TestBase {
 		var list = List.of("x", "y");
 		var html = SER.write(list);
 		LinkedList<String> result = PAR.read(html, LinkedList.class, String.class);
-		assertEquals(2, result.size());
+		assertSize(2, result);
 	}
 
 	//====================================================================================================
@@ -188,13 +190,10 @@ class HtmlParserSession_Test extends TestBase {
 
 	@Test void f01_nullTagInList() throws Exception {
 		// tag == NULL at line 317 in readAnything → null element in list
-		var list = new ArrayList<>();
-		list.add("hello");
-		list.add(null);
-		list.add("world");
+		List<String> list = list("hello", null, "world");
 		var html = SER.write(list);
 		var result = (List) PAR.read(html, List.class, String.class);
-		assertEquals(3, result.size());
+		assertSize(3, result);
 		assertNull(result.get(1));
 	}
 
@@ -204,13 +203,10 @@ class HtmlParserSession_Test extends TestBase {
 
 	@Test void g01_tableWithNullRow() throws Exception {
 		// In readTableIntoCollection, a NULL tag in a row → m = null at line 558
-		var list = new ArrayList<AB>();
-		list.add(new AB("x", "y"));
-		list.add(null);
-		list.add(new AB("a", "b"));
+		List<AB> list = list(new AB("x", "y"), null, new AB("a", "b"));
 		var html = SER.write(list);
 		var result = (List<AB>) PAR.read(html, List.class, AB.class);
-		assertEquals(3, result.size());
+		assertSize(3, result);
 		assertNull(result.get(1));
 	}
 
@@ -267,7 +263,7 @@ class HtmlParserSession_Test extends TestBase {
 		var html = SER.write(list);
 		var p = HtmlParser.create().ignoreUnknownBeanProperties().build();
 		var result = (List<BeanWithKnownProps>) p.read(html, List.class, BeanWithKnownProps.class);
-		assertEquals(1, result.size());
+		assertSize(1, result);
 	}
 
 	//====================================================================================================
@@ -278,7 +274,7 @@ class HtmlParserSession_Test extends TestBase {
 		// tag == A at line 321 in readAnything → calls readAnchor
 		var html = "<html><body><div id='data'><ul _type='array'><li><a href='http://example.com'>Link</a></li></ul></div></body></html>";
 		var result = (List) PAR.read(html, List.class, String.class);
-		assertEquals(1, result.size());
+		assertSize(1, result);
 		assertEquals("http://example.com", result.get(0));
 	}
 }

@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.server.bus;
 
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.lang.reflect.*;
@@ -196,7 +197,7 @@ class ServerBus_Test extends TestBase {
 		assertEquals("ops.jobs", sink.last().get("topic"));
 
 		bus.clear("ops.jobs");
-		assertEquals(1, sink.frames.size(), "clearing an absent value sends nothing");
+		assertSize(() -> "clearing an absent value sends nothing", 1, sink.frames);
 
 		var e = assertThrows(IllegalArgumentException.class, () -> bus.clear("ops.alert:east"));
 		assertEquals("E-56: ServerBus.clear('ops.alert:east'): the policy does not retain it", e.getMessage());
@@ -225,7 +226,7 @@ class ServerBus_Test extends TestBase {
 		assertFalse(s.toString().contains(id), "toString redacts the capability");
 		assertTrue(s.toString().contains("id=<redacted>"), s.toString());
 		assertNotEquals(id, ServerBus.idOf(openSse(bus, "ops.jobs")));
-		assertEquals(2, bus.sessions().size());
+		assertSize(2, bus.sessions());
 	}
 
 	@Test void b02_versionAndTransportDefault() throws Exception {
@@ -363,7 +364,7 @@ class ServerBus_Test extends TestBase {
 
 		bus.publish("ops.alert:east", JsonMap.of("msg", "disk"));
 		bus.publish("cmd:jobs", JsonMap.of("schemaVersion", 1, "op", "reload"));
-		assertEquals(6, sink.frames.size(), "cmd:jobs is not granted to this session");
+		assertSize(() -> "cmd:jobs is not granted to this session", 6, sink.frames);
 		assertEquals("ops.alert:east", sink.last().get("topic"));
 		assertEquals(false, sink.last().get("retained"));
 		assertEquals(OptionalLong.of(6), BusFrames.seq(sink.frames.get(5)));
@@ -513,7 +514,7 @@ class ServerBus_Test extends TestBase {
 		bus.tick();
 		assertEquals(List.of("ping"), sink.types());
 		bus.tick();
-		assertEquals(1, sink.frames.size(), "the idle timer restarts after every frame");
+		assertSize(() -> "the idle timer restarts after every frame", 1, sink.frames);
 
 		clock.advance(Duration.ofSeconds(10));
 		bus.publish("ops.jobs", JsonMap.of("n", 1));
@@ -566,7 +567,7 @@ class ServerBus_Test extends TestBase {
 		var bus = bus(policy().build());
 		var sink = connectWs(bus, List.of("ops.explode"));
 		var records = LogRecordCapture.quietly(ServerBus.class, () -> bus.receive(only(bus), up("ops.explode", "{}")));
-		assertEquals(1, records.size(), records::toString);
+		assertSize(records::toString, 1, records);
 		assertEquals(JsonMap.of("v", 1, "type", "error", "code", "bus:upstream-failed", "message", "handler failed",
 			"topic", "ops.explode"), sink.last());
 		assertFalse(sink.frames.get(0).contains("secret detail"), "no exception text crosses the wire");
@@ -577,11 +578,11 @@ class ServerBus_Test extends TestBase {
 		var sink = connectWs(bus, List.of("ops.cancel-all"));
 		for (var i = 0; i < 4; i++)
 			bus.receive(only(bus), up("ops.cancel-all", "{\"reason\":\"r" + i + "\"}"));
-		assertEquals(3, handled.size());
+		assertSize(3, handled);
 		assertEquals("bus:rate-limited", sink.last().get("code"));
 		clock.advance(Duration.ofSeconds(1));
 		bus.receive(only(bus), up("ops.cancel-all", "{\"reason\":\"later\"}"));
-		assertEquals(4, handled.size());
+		assertSize(4, handled);
 	}
 
 	@Test void f05_badFramesAreAnsweredAndDropped() throws Exception {
@@ -593,7 +594,7 @@ class ServerBus_Test extends TestBase {
 		bus.receive(only(bus), up("ops.cancel-all", "\"" + "x".repeat(70_000) + "\""));
 		assertTrue(handled.isEmpty());
 		var f = sink.decoded();
-		assertEquals(4, f.size());
+		assertSize(4, f);
 		f.forEach(x -> assertEquals("bus:bad-frame", x.get("code")));
 		assertEquals("frame too large", f.get(3).get("message"));
 		assertEquals(0, sink.closeCode);
@@ -685,9 +686,9 @@ class ServerBus_Test extends TestBase {
 		var ws = bus(policy().maxFrameBytes(BusFrames.utf8Length(frame)).build());
 		var sink = connectWs(ws, List.of("ops.cancel-all"));
 		ws.receive(only(ws), frame);
-		assertEquals(1, handled.size(), "exactly maxFrameBytes is accepted");
+		assertSize(() -> "exactly maxFrameBytes is accepted", 1, handled);
 		ws.receive(only(ws), frame + " ");
-		assertEquals(1, handled.size());
+		assertSize(1, handled);
 		assertEquals("frame too large", sink.last().get("message"));
 	}
 

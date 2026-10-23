@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.commons.inject;
 
+import static org.apache.juneau.commons.TestAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.commons.*;
@@ -25,7 +26,7 @@ import org.junit.jupiter.api.*;
  * Tests for {@link BasicBeanStore#pushOverlay(BeanStore)} / {@link BasicBeanStore#popOverlay(Snapshot)}.
  *
  * <p>
- * Validates the Phase 6 (Mode OVERLAY) push/pop overlay primitive on {@link BasicBeanStore}:
+ * Validates the (Mode OVERLAY) push/pop overlay primitive on {@link BasicBeanStore}:
  * overlay precedence over local entries and the construction-time {@code overridingParent} slot, LIFO
  * discipline, foreign-snapshot rejection, null-overlay rejection, empty-stack pop rejection, and the
  * happy-path lookup-shadow-then-restore semantics that the {@code JuneauBeanStoreExtension} Mode OVERLAY
@@ -240,7 +241,7 @@ class BasicBeanStore_PushPopOverlay_Test extends TestBase {
 		var snap = store.pushOverlay(new BasicBeanStore().addBean(Svc.class, overlayA, "a"));
 
 		var all = store.getBeansOfType(Svc.class);
-		assertEquals(2, all.size(), "Map should have two entries (one shadowed, one local-only)");
+		assertSize(() -> "Map should have two entries (one shadowed, one local-only)", 2, all);
 		assertSame(overlayA, all.get("a"), "Overlay's 'a' should shadow local 'a'");
 		assertSame(localB, all.get("b"), "Local 'b' should still be visible (no overlay entry shadows it)");
 

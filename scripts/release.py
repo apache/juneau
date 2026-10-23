@@ -1141,7 +1141,7 @@ Anyone can participate in testing and voting, not just committers, please feel f
             else:
                 full_log_note()
 
-        with toolkit('run').session(f"🚀 {title}", header=header, repo=REPO_ROOT, exit=False, plan=plan,
+        with toolkit('run').session(title, header=header, repo=REPO_ROOT, exit=False, plan=plan,
                                     bell=False) as session:
             guarded()
         if session.code:
@@ -1179,13 +1179,13 @@ Anyone can participate in testing and voting, not just committers, please feel f
     def run(self):
         """Run the release steps in one console session."""
         registry, selection = self.registry(), self.selection()
-        self._in_session('Juneau release', lambda: self._run_steps(registry, selection), self.header_lines(),
+        self._in_session('Release', lambda: self._run_steps(registry, selection), ['Juneau'] + self.header_lines(),
                          plan=registry.plan(selection, self.state))
 
     def run_revert(self):
         """Run revert_release in its own console session."""
         release = os.environ.get('X_RELEASE') or self.state.get('X_RELEASE') or '?'
-        self._in_session('Juneau release revert', self.revert_release, [release],
+        self._in_session('Revert', self.revert_release, ['Juneau', release],
                          plan=['revert_pull', 'revert_tag', 'revert_versions', 'revert_svn'])
 
     def _prompt_pgp(self):
@@ -1254,6 +1254,8 @@ def main(argv=None):
     if args.console:
         os.environ['JUNEAU_RUN_CONSOLE'] = args.console   # an argument beats a value already in the environment
     run = _juneau.load()[0]
+    run.warn("scripts/release.py is deprecated: Juneau releases run from juneau-release-manager "
+             "(scripts/release.py there, or its Release page). This script will be removed after the next release.")
     if os.environ.pop('RUN_MARKERS', None):
         run.warn("release.py does not emit run markers; RUN_MARKERS is ignored")
     try:

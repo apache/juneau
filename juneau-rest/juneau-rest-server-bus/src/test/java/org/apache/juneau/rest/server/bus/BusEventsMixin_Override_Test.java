@@ -105,7 +105,9 @@ class BusEventsMixin_Override_Test extends TestBase {
 		CALLS.set(0);
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Casts a parsed JSON value to its known Map/List shape.
+	})
 	private static List<String> sessionOps(MockRestClient c) throws Exception {
 		var text = c.get("/ops").header("Accept", "application/json").run().assertStatus(200).getContent().asString();
 		return ((List<String>) Json.to(text, List.class)).stream().filter(x -> x.endsWith(".openBusSession")).toList();

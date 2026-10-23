@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.microservice;
 
+import static org.apache.juneau.test.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
@@ -38,7 +39,7 @@ import org.junit.jupiter.api.*;
 @SuppressWarnings({
 	"resource" // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.
 })
-class Microservice_Listener_Fanout_Test extends TestBase {
+class Microservice_Listener_Fanout_JettyMicroservice_Test extends TestBase {
 
 	/**
 	 * Recording listener that captures invocation order across instances.
@@ -93,7 +94,7 @@ class Microservice_Listener_Fanout_Test extends TestBase {
 			ms.stop();
 		}
 		// All three listeners must fire once for start and once for stop.
-		assertEquals(6, A_LOG.size(), () -> "log=" + A_LOG);
+		assertSize(() -> "log=" + A_LOG, 6, A_LOG);
 		var startLog = A_LOG.subList(0, 3);
 		var stopLog = A_LOG.subList(3, 6);
 		assertTrue(startLog.stream().allMatch(s -> s.startsWith("start:")));
@@ -119,7 +120,7 @@ class Microservice_Listener_Fanout_Test extends TestBase {
 		var ms = Microservice.create().build();
 		try {
 			var listeners = ms.getBeanStore().getBeansOfType(MicroserviceListener.class).values();
-			assertEquals(1, listeners.size());
+			assertSize(1, listeners);
 			assertInstanceOf(BasicMicroserviceListener.class, listeners.iterator().next());
 		} finally {
 			ms.stop();
@@ -136,7 +137,7 @@ class Microservice_Listener_Fanout_Test extends TestBase {
 		try {
 			// Only the named listener should be present; no unnamed default added.
 			var listeners = ms.getBeanStore().getBeansOfType(MicroserviceListener.class);
-			assertEquals(1, listeners.size());
+			assertSize(1, listeners);
 			assertEquals("only", listeners.keySet().iterator().next());
 		} finally {
 			ms.stop();

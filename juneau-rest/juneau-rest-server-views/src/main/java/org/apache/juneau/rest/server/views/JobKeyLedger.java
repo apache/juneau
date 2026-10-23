@@ -184,7 +184,7 @@ public final class JobKeyLedger {
 	 * @throws IllegalArgumentException If an argument is <jk>null</jk> or blank.
 	 */
 	public IdempotencyKey issue(String action, String targetId, String principal) {
-		if (principal == null || principal.isBlank())
+		if (ib(principal))
 			throw iaex("Argument 'principal' must not be blank.");
 		return recordKey(action, targetId, principal);
 	}
@@ -205,7 +205,7 @@ public final class JobKeyLedger {
 		var mine = new ArrayList<String>();
 		for (var e : entries.entrySet()) {
 			var v = e.getValue();
-			if (v.jobId() == null && action.equals(v.action()) && Objects.equals(principal, v.principal()))
+			if (v.jobId() == null && action.equals(v.action()) && eq(principal, v.principal()))
 				mine.add(e.getKey());
 		}
 		// Access order puts the least-recently-used first.
@@ -256,13 +256,13 @@ public final class JobKeyLedger {
 		if (e == null)
 			return Optional.empty();
 		var key = IdempotencyKey.of(value, e.action(), e.targetId());
-		if (! key.matches(action, targetId) || ! Objects.equals(e.principal(), principal))
+		if (! key.matches(action, targetId) || neq(e.principal(), principal))
 			return Optional.empty();
 		return Optional.of(new Grant(key, Optional.ofNullable(e.jobId())));
 	}
 
 	private static boolean isBlank(String s) {
-		return s == null || s.isBlank();
+		return ib(s);
 	}
 
 	/**
@@ -306,11 +306,12 @@ public final class JobKeyLedger {
 	 */
 	public static Map<String,Object> response(IdempotencyKey key) {
 		reqnn("key", key);
-		var m = new LinkedHashMap<String,Object>();
-		m.put("contractVersion", CONTRACT_VERSION);
-		m.put("action", key.action());
-		m.put("targetId", key.targetId());
-		m.put("idempotencyKey", key.value());
+		Map<String,Object> m = m(
+			"contractVersion", CONTRACT_VERSION,
+			"action", key.action(),
+			"targetId", key.targetId(),
+			"idempotencyKey", key.value()
+		);
 		return m;
 	}
 

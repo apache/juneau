@@ -1238,7 +1238,7 @@ body::after {
    "what this surface means" explainers) so prose reads as the console rather
    than as the browser default.  Vertical rhythm consumes the --jc-space-*
    scale, so a themed density change flows through here too.
-   NOTE: `table.jc-table` is the DATA-GRID rule; a `.jc-prose table` is a
+   `table.jc-table` is the DATA-GRID rule; a `.jc-prose table` is a
    static in-document table, styled separately below via a descendant rule
    (not a new class) since the distinction that matters is
    data-grid-versus-prose.
@@ -1341,7 +1341,7 @@ body::after {
 /* ==========================================================================
    Dialog chrome (ModalDef / .juneau-view-dialog)
    Palette only — shape lives in juneau-views.css. Light gray header/footer bars,
-   green toggle-on, Cancel outline / Confirm primary. Original tokens, no slds-*.
+   green toggle-on, Cancel outline / Confirm primary. Original tokens.
    ========================================================================== */
 
 .juneau-view-dialog-header,

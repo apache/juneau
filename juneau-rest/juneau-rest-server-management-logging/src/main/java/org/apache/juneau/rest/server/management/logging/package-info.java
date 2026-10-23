@@ -21,8 +21,8 @@
  * <p>
  * {@code juneau-rest-server} ships only the {@code java.util.logging} backend, keeping the core management
  * surface dependency-free. This add-on supplies the Logback
- * ({@link org.apache.juneau.rest.server.management.logging.LogbackLogBackend}) and Log4j2
- * ({@link org.apache.juneau.rest.server.management.logging.Log4j2LogBackend}) adapters, with the backends
+ * ({@link org.apache.juneau.rest.server.management.logging.LogbackLogBackend LogbackLogBackend}) and Log4j2
+ * ({@link org.apache.juneau.rest.server.management.logging.Log4j2LogBackend Log4j2LogBackend}) adapters, with the backends
  * declared {@code provided} so they never leak transitively. A consumer drives one by declaring it explicitly via
  * {@code LoggersSettings.create().backend(new LogbackLogBackend())} &mdash; the endpoint never auto-detects.
  *

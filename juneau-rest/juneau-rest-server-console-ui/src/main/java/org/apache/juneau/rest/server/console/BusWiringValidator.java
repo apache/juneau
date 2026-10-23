@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.rest.server.console;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
+
 import java.util.*;
 import java.util.regex.*;
 import java.util.stream.*;
@@ -244,7 +246,7 @@ public final class BusWiringValidator {
 		}
 
 		void add(String code, String format, Object... args) {
-			problems.add(new Problem(code, String.format(format, args)));
+			problems.add(new Problem(code, f(format, args)));
 		}
 
 		// ---- R-10 publishers --------------------------------------------------------------------------------------
@@ -314,7 +316,7 @@ public final class BusWiringValidator {
 					bestDistance = d;
 				}
 			}
-			return best == null ? "" : String.format(E41_SUGGEST, best);
+			return best == null ? "" : f(E41_SUGGEST, best);
 		}
 
 		// ---- declarations (E-40, E-45, E-46) ----------------------------------------------------------------------
@@ -348,7 +350,7 @@ public final class BusWiringValidator {
 			}
 			if (topic != null && CUSTOM_DECL.matcher(topic).matches()) {
 				var first = retains.putIfAbsent(topic, new Object[] { retain, where });
-				if (first != null && ! Objects.equals(first[0], retain))
+				if (first != null && neq(first[0], retain))
 					add("E-46", E46, topic, retain, first[0], first[1]);
 				return;
 			}
@@ -634,7 +636,7 @@ public final class BusWiringValidator {
 					if (type == null || ! registry.isRegistered(type) || published.contains(topic))
 						return;
 					if ("datatables".equals(type) && DATATABLES_OPT_IN.contains(family))
-						add("E-41", E41, id, topic, String.format(E41_NOT_ENABLED, key, family));
+						add("E-41", E41, id, topic, f(E41_NOT_ENABLED, key, family));
 					else
 						add("E-43", E43_PUBLISH, key, type, topic);
 					return;
@@ -946,7 +948,9 @@ public final class BusWiringValidator {
 		return maps(view(card).get("ribbon"));
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Narrows a JSON-shaped Map<?,?> to Map<String,Object>; its keys are always strings.
+	})
 	static JsonMap json(Map<?,?> m) {
 		if (m instanceof JsonMap j)
 			return j;

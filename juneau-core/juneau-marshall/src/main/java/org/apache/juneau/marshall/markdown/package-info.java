@@ -19,10 +19,10 @@
  * Markdown serializer and parser support for Apache Juneau.
  *
  * <p>
- * Contains the {@link org.apache.juneau.marshall.markdown.MarkdownSerializer} and
- * {@link org.apache.juneau.marshall.markdown.MarkdownParser} for reading and writing POJOs
- * as Markdown tables and lists, and the {@link org.apache.juneau.marshall.markdown.MarkdownDocSerializer} and
- * {@link org.apache.juneau.marshall.markdown.MarkdownDocParser} for reading and writing POJOs
+ * Contains the {@link org.apache.juneau.marshall.markdown.MarkdownSerializer MarkdownSerializer} and
+ * {@link org.apache.juneau.marshall.markdown.MarkdownParser MarkdownParser} for reading and writing POJOs
+ * as Markdown tables and lists, and the {@link org.apache.juneau.marshall.markdown.MarkdownDocSerializer MarkdownDocSerializer} and
+ * {@link org.apache.juneau.marshall.markdown.MarkdownDocParser MarkdownDocParser} for reading and writing POJOs
  * as Markdown documents with heading-based structure.
  *
  * <h5 class='section'>See Also:</h5><ul>

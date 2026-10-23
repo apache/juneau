@@ -102,7 +102,7 @@ public final class WebJarResolver {
 		var version = version(a[0], a[1]);
 		var path = a[2].replace(VERSION_TOKEN, version);
 		if (! b(PRESENT.computeIfAbsent(path, k -> LOADER.getResource(WEBJARS_ROOT + k) != null)))
-			throw new IllegalStateException(String.format("needs WebJar file '%s' (%s:%s:%s), which is not on the classpath.", path, a[0], a[1], version));
+			throw new IllegalStateException(f("needs WebJar file '%s' (%s:%s:%s), which is not on the classpath.", path, a[0], a[1], version));
 		return path;
 	}
 
@@ -123,12 +123,12 @@ public final class WebJarResolver {
 		var props = "META-INF/maven/" + groupId + "/" + artifactId + "/pom.properties";
 		try (var in = LOADER.getResourceAsStream(props)) {
 			if (in == null)
-				throw new IllegalStateException(String.format("needs %s:%s on the classpath (no %s).", groupId, artifactId, props));
+				throw new IllegalStateException(f("needs %s:%s on the classpath (no %s).", groupId, artifactId, props));
 			var p = new Properties();
 			p.load(in);
 			var v = p.getProperty("version", "").trim();
 			if (v.isEmpty())
-				throw new IllegalStateException(String.format("needs %s:%s on the classpath (%s has no version).", groupId, artifactId, props));
+				throw new IllegalStateException(f("needs %s:%s on the classpath (%s has no version).", groupId, artifactId, props));
 			return v;
 		} catch (IOException e) {
 			throw new UncheckedIOException(e);
@@ -138,7 +138,7 @@ public final class WebJarResolver {
 	private static String[] parse(String asset) {
 		var a = asset == null ? new String[0] : asset.split(":", 3);
 		if (a.length != 3 || a[0].isBlank() || a[1].isBlank() || a[2].isBlank())
-			throw new IllegalArgumentException(String.format("WebJar asset must be 'groupId:artifactId:path'; got '%s'.", asset));
+			throw new IllegalArgumentException(f("WebJar asset must be 'groupId:artifactId:path'; got '%s'.", asset));
 		return a;
 	}
 }

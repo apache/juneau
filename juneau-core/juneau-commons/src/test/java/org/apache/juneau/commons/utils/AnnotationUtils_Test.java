@@ -18,6 +18,7 @@ package org.apache.juneau.commons.utils;
 
 import static org.apache.juneau.commons.utils.AnnotationUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
+import static org.apache.juneau.commons.TestAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.lang.annotation.*;
@@ -488,19 +489,19 @@ class AnnotationUtils_Test {
 		// Non-repeatable annotation - should return singleton stream
 		var a1 = TestClass1.class.getAnnotation(SimpleAnnotation.class);
 		List<Annotation> result1 = streamRepeated(a1).toList();
-		assertEquals(1, result1.size());
+		assertSize(1, result1);
 		assertSame(a1, result1.get(0));
 
 		// Test with empty annotation
 		var a26 = TestClass26.class.getAnnotation(EmptyAnnotation.class);
 		List<Annotation> result2 = streamRepeated(a26).toList();
-		assertEquals(1, result2.size());
+		assertSize(1, result2);
 		assertSame(a26, result2.get(0));
 
 		// Test with multi-member annotation
 		var a5 = TestClass5.class.getAnnotation(MultiMemberAnnotation.class);
 		List<Annotation> result3 = streamRepeated(a5).toList();
-		assertEquals(1, result3.size());
+		assertSize(1, result3);
 		assertSame(a5, result3.get(0));
 	}
 }

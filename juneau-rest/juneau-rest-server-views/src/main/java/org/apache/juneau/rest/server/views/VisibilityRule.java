@@ -70,7 +70,7 @@ public final class VisibilityRule {
 	 * @throws IllegalArgumentException If {@code field} is <jk>null</jk> or blank.
 	 */
 	public static Builder when(String field) {
-		if (field == null || field.isBlank())
+		if (ib(field))
 			throw iaex("VisibilityRule field must not be null or blank.");
 		return new Builder(field);
 	}
@@ -89,7 +89,7 @@ public final class VisibilityRule {
 	 * @throws IllegalArgumentException If a rule's {@code op} is not one of the known tokens.
 	 */
 	public static boolean test(List<VisibilityRule> rules, Map<String,Object> map) {
-		if (rules == null || rules.isEmpty())
+		if (ie(rules))
 			return true;
 		for (var r : rules)
 			if (! r.matches(map))
@@ -121,8 +121,8 @@ public final class VisibilityRule {
 		var actual = resolve(map, field);
 		var missing = actual == MISSING;
 		return switch (op) {
-			case "eq" -> ! missing && Objects.equals(actual, value);
-			case "ne" -> ! missing && ! Objects.equals(actual, value);
+			case "eq" -> ! missing && eq(actual, value);
+			case "ne" -> ! missing && neq(actual, value);
 			case "present" -> ! missing && actual != null && ! (actual instanceof String s && s.isBlank());
 			case "absent" -> missing || actual == null || (actual instanceof String s && s.isBlank());
 			case "in" -> ! missing && value instanceof Collection<?> c && c.contains(actual);

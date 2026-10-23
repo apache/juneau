@@ -166,7 +166,7 @@ class JsonlTokenStream_Test extends TestBase {
 				while (r.canRead())
 					records.add(r.read(Record.class));
 			}
-			assertEquals(2, records.size());
+			assertSize(2, records);
 			assertEquals("alice", records.get(0).name);
 			assertEquals(30, records.get(0).age);
 			assertEquals("bob", records.get(1).name);
@@ -330,7 +330,7 @@ class JsonlTokenStream_Test extends TestBase {
 				while (r.canRead())
 					records.add(r.read(java.util.Map.class));
 			}
-			assertEquals(3, records.size());
+			assertSize(3, records);
 			assertBean(records.get(0), "x", "1");
 			assertBean(records.get(1), "x", "2");
 			assertBean(records.get(2), "x", "3");

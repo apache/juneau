@@ -62,7 +62,9 @@ class TableSpecColumnConfig_BrowserTest extends TestBase {
 		return page(table, shellFirst, viewsPack());
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Casts a parsed JSON value to its known Map/List shape.
+	})
 	private static String page(TableSpec table, boolean shellFirst, String pack) throws Exception {
 		var corpus = (Map<String,Object>)Json.to(resource("/pagespec-corpus/03-table-every-feature.json"), Map.class);
 		var contract = (Map<String,Object>)corpus.get("contract");

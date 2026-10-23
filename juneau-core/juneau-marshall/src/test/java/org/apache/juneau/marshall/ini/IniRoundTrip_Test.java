@@ -93,10 +93,7 @@ class IniRoundTrip_Test extends TestBase {
 
 	@Test
 	void a03_mapRoundTrip() throws Exception {
-		var a = new LinkedHashMap<String,Object>();
-		a.put("name", "test");
-		a.put("count", 42);
-		a.put("flag", true);
+		Map<String,Object> a = map("name", "test", "count", 42, "flag", true);
 		var ini = IniSerializer.DEFAULT.write(a);
 		var b = (Map<String,Object>) IniParser.DEFAULT.read(ini, Map.class, String.class, Object.class);
 		assertBean(b, "name,count,flag", "test,42,true");
@@ -128,10 +125,7 @@ class IniRoundTrip_Test extends TestBase {
 
 	@Test
 	void a06_collectionsRoundTrip() throws Exception {
-		var a = new LinkedHashMap<String,Object>();
-		a.put("name", "x");
-		a.put("tags", list("a", "b", "c"));
-		a.put("counts", list(1, 2, 3));
+		Map<String,Object> a = map("name", "x", "tags", list("a", "b", "c"), "counts", list(1, 2, 3));
 		var ini = IniSerializer.DEFAULT.write(a);
 		var b = (Map<String,Object>) IniParser.DEFAULT.read(ini, Map.class, String.class, Object.class);
 		assertBean(b, "name,tags,counts", "x,[a,b,c],[1,2,3]");
@@ -165,10 +159,7 @@ class IniRoundTrip_Test extends TestBase {
 
 	@Test
 	void a09_stringEdgeCases() throws Exception {
-		var a = new LinkedHashMap<String,Object>();
-		a.put("empty", "");
-		a.put("numeric", "123");
-		a.put("boolean", "true");
+		Map<String,Object> a = map("empty", "", "numeric", "123", "boolean", "true");
 		var ini = IniSerializer.DEFAULT.write(a);
 		var b = (Map<String,Object>) IniParser.DEFAULT.read(ini, Map.class, String.class, Object.class);
 		assertBean(b, "empty,numeric,boolean", ",123,true");

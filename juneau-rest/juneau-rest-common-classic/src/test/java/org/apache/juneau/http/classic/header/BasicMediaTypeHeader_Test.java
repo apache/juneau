@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.http.classic.header;
 
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
@@ -94,7 +95,7 @@ class BasicMediaTypeHeader_Test extends TestBase {
 
 	@Test void c04_getParameters() {
 		var h = new BasicMediaTypeHeader(NAME, "text/html;level=1");
-		assertEquals(1, h.getParameters().size());
+		assertSize(1, h.getParameters());
 	}
 
 	@Test void c05_getSubType() {

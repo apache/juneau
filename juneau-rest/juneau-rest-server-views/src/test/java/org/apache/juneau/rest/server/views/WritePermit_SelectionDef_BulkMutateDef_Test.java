@@ -17,6 +17,7 @@
 package org.apache.juneau.rest.server.views;
 
 import static org.apache.juneau.commons.utils.Shorts.*;
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.lang.reflect.*;
@@ -149,7 +150,7 @@ class WritePermit_SelectionDef_BulkMutateDef_Test extends TestBase {
 	@Test void c04_actions_roundTrips() {
 		var ack = RowAction.create("ack").label("Acknowledge").endpoint("servlet:/bulk/ack").method(RowAction.Method.POST);
 		var b = BulkMutateDef.create(WritePermit.forCapability("cap"), SelectionDef.create("id")).actions(ack);
-		assertEquals(1, b.actions.size());
+		assertSize(1, b.actions);
 		assertSame(ack, b.actions.get(0));
 	}
 
@@ -165,7 +166,7 @@ class WritePermit_SelectionDef_BulkMutateDef_Test extends TestBase {
 		var createMethods = Arrays.stream(BulkMutateDef.class.getMethods())
 			.filter(m -> eq(m.getName(), "create"))
 			.toList();
-		assertEquals(1, createMethods.size(), () -> "expected exactly one create(...) overload: " + createMethods);
+		assertSize(() -> "expected exactly one create(...) overload: " + createMethods, 1, createMethods);
 		var m = createMethods.get(0);
 		assertArrayEquals(new Class<?>[] { WritePermit.class, SelectionDef.class }, m.getParameterTypes(),
 			() -> "BulkMutateDef.create(...) must require (WritePermit, SelectionDef), in that order: " + m);

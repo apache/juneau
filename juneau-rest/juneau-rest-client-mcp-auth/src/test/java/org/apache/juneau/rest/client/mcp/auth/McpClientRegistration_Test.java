@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.client.mcp.auth;
 
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.net.*;
@@ -54,7 +55,7 @@ class McpClientRegistration_Test extends TestBase {
 		assertEquals("s3cr3t", r.clientSecret().orElseThrow());
 		assertEquals(McpApplicationType.NATIVE, r.applicationType());
 		assertTrue(r.isConfidential());
-		assertEquals(2, r.redirectUris().size());
+		assertSize(2, r.redirectUris());
 	}
 
 	@Test void a02_publicClientHasNoSecret() {
@@ -86,7 +87,7 @@ class McpClientRegistration_Test extends TestBase {
 		var r = new McpClientRegistration("c", Optional.empty(), Optional.empty(), Optional.empty(),
 			Optional.empty(), ISSUER, src, McpApplicationType.NATIVE, Map.of());
 		src.add(URI.create("http://evil/callback"));
-		assertEquals(1, r.redirectUris().size(), "mutating the source list must not affect the record");
+		assertSize(() -> "mutating the source list must not affect the record", 1, r.redirectUris());
 		var uris = r.redirectUris();
 		var extra = URI.create("http://x/y");
 		assertThrows(UnsupportedOperationException.class, () -> uris.add(extra));
@@ -98,7 +99,7 @@ class McpClientRegistration_Test extends TestBase {
 		var r = new McpClientRegistration("c", Optional.empty(), Optional.empty(), Optional.empty(),
 			Optional.empty(), ISSUER, List.of(), McpApplicationType.NATIVE, src);
 		src.put("b", 2);
-		assertEquals(1, r.extras().size());
+		assertSize(1, r.extras());
 		var extras = r.extras();
 		assertThrows(UnsupportedOperationException.class, () -> extras.put("c", 3));
 	}

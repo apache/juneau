@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.server.bus;
 
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.security.*;
@@ -103,7 +104,7 @@ class BusEventsMixin_Session_Test extends TestBase {
 		assertEquals(JsonMap.of("sse", "/juneau-bus/stream/" + id), g.get("paths"), "no websocket path until enableWebSocket");
 
 		var s = R.bus.sessions();
-		assertEquals(1, s.size());
+		assertSize(1, s);
 		assertEquals("jb", s.get(0).principalName());
 		assertEquals(id, ServerBus.idOf(s.get(0)));
 	}
@@ -350,7 +351,7 @@ class BusEventsMixin_Session_Test extends TestBase {
 		assertEquals("bus:refused", refused.getString("code"));
 		assertEquals(Set.of("code", "message"), refused.keySet(), "the reason name is not part of the bus refusal");
 		assertFalse(refused.getString("message").contains("evil.example"), "the presented Origin is never echoed");
-		assertEquals(1, R.bus.sessions().size());
+		assertSize(1, R.bus.sessions());
 	}
 
 	@Test void c05b_sameOriginPostWithoutTokenRefused() throws Exception {

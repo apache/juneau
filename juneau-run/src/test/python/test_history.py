@@ -17,6 +17,7 @@ import subprocess
 import sys
 import shutil
 import tempfile
+import fcntl
 import unittest
 from pathlib import Path
 from unittest import mock
@@ -220,6 +221,51 @@ class RepoArgumentTest(HistoryEnv, unittest.TestCase):
         self.assertEqual(a.path, b.path)
         del os.environ["JUNEAU_RUN_HISTORY_KEY"]
         self.assertNotEqual(jr.HistoryStore(self.repo, "push").path, jr.HistoryStore(other, "push").path)
+
+    def test_history_key_argument_beats_the_variable_and_leaves_the_environment_alone(self):
+        os.environ["JUNEAU_RUN_HISTORY_KEY"] = "from-env"
+        h = jr.HistoryStore(self.repo, "push", "acme app/2")
+        self.assertEqual(h.path, Path(self.dir) / "acme-app-2" / "push.jsonl")
+        self.assertEqual(os.environ["JUNEAU_RUN_HISTORY_KEY"], "from-env")
+        del os.environ["JUNEAU_RUN_HISTORY_KEY"]
+        jr.HistoryStore(self.repo, "push", "k").append({"v": 1, "step": "s", "tool": "t", "wall_s": 1})
+        self.assertNotIn("JUNEAU_RUN_HISTORY_KEY", os.environ)
+
+    def test_history_start_and_session_pass_the_key_through(self):
+        with mock.patch.object(jr, "_history", None), mock.patch.object(jr, "subscribe", side_effect=lambda f: f):
+            h = jr.history_start(self.repo, history_key="shared")
+            self.assertIsNone(h)       # history_start returns nothing; the subscriber is held in _history
+            self.assertEqual(jr._history.store.path.parent, Path(self.dir) / "shared")
+        with mock.patch.object(jr, "make_estimator") as me:
+            jr.Console(jr.Sinks(console="none"), repo=self.repo, history_key="shared").close()
+        self.assertEqual(me.call_args.kwargs["history_key"], "shared")
+
+    def test_a_skipped_write_reports_through_on_skip(self):
+        told = []
+        h = jr.HistoryStore(self.repo, "push", on_skip=told.append)
+        h.LOCK_WAIT = 0.05
+        h.path.parent.mkdir(parents=True, exist_ok=True)
+        with open(str(h.path) + ".lock", "a") as holder:
+            fcntl.flock(holder, fcntl.LOCK_EX)
+            h.append({"v": 1, "step": "s", "tool": "t", "wall_s": 1})
+        self.assertEqual(len(told), 1)
+        self.assertIn("run history not recorded", told[0])
+        self.assertEqual(h.read(), [])
+
+    def test_a_raising_on_skip_never_fails_the_write(self):
+        def boom(text):
+            raise RuntimeError(text)
+        h = jr.HistoryStore(self.repo, "push", on_skip=boom)
+        h.LOCK_WAIT = 0.05
+        h.path.parent.mkdir(parents=True, exist_ok=True)
+        with open(str(h.path) + ".lock", "a") as holder:
+            fcntl.flock(holder, fcntl.LOCK_EX)
+            h.append({"v": 1, "step": "s", "tool": "t", "wall_s": 1})
+
+    def test_the_default_skip_handler_emits_an_info_note(self):
+        with mock.patch.object(jr, "note") as n:
+            jr._skip_note("run history not recorded: x")
+        n.assert_called_once_with("info", "run history not recorded: x")
 
 
 class FakeClock:

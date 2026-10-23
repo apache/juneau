@@ -30,7 +30,7 @@ RUN_MODULE_PATH = Path(__file__).resolve().parent.parent.parent / "juneau-run" /
 
 @pytest.fixture(autouse=True)
 def _no_nested_script_tests(monkeypatch):
-    """test.py's Python tests step runs this suite; a test that drives test.py's _main() must not launch it again."""
+    """test.py's Python Tests step runs this suite; a test that drives test.py's _main() must not launch it again."""
     monkeypatch.setenv("JUNEAU_SCRIPT_TESTS_ACTIVE", "1")
 
 
@@ -58,6 +58,14 @@ def _full_console(monkeypatch):
     not unset, so teardown restores it) so that export cannot leak into later tests.  Tests of the default or of
     the flag/env precedence set JUNEAU_RUN_CONSOLE themselves."""
     monkeypatch.setenv("JUNEAU_RUN_CONSOLE", "full")
+
+
+@pytest.fixture(autouse=True)
+def _no_outer_run_files(monkeypatch):
+    """A run under JUNEAU_RUN_MARKERS_FILE / JUNEAU_RUN_RESULT exports them to this suite; drop them so the tests see
+    the same run state as under a plain run (and don't write the outer run's files)."""
+    for name in ("JUNEAU_RUN_MARKERS_FILE", "JUNEAU_RUN_RESULT", "JUNEAU_RUN_RESULT_PARTS"):
+        monkeypatch.delenv(name, raising=False)
 
 
 @pytest.fixture(autouse=True)

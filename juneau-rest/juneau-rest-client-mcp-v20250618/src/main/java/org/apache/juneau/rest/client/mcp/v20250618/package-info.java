@@ -25,7 +25,7 @@
  * <p>
  * Key types:
  * <ul>
- * 	<li>{@link org.apache.juneau.rest.client.mcp.v20250618.McpClient} — the typed <c>2025-06-18</c> client facade,
+ * 	<li>{@link org.apache.juneau.rest.client.mcp.v20250618.McpClient McpClient} — the typed <c>2025-06-18</c> client facade,
  * 		extending {@link org.apache.juneau.rest.client.mcp.AbstractMcpClient}
  * </ul>
  */

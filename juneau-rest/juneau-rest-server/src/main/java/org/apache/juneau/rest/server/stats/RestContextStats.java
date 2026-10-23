@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.rest.server.stats;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
+
 import java.time.*;
 import java.util.*;
 
@@ -68,6 +70,6 @@ public class RestContextStats {
 	 */
 	public String getUpTime() {
 		long s = Duration.between(startTime, Instant.now()).getSeconds();
-		return String.format("%dh:%02dm:%02ds", s / 3600, (s % 3600) / 60, (s % 60));
+		return f("%dh:%02dm:%02ds", s / 3600, (s % 3600) / 60, (s % 60));
 	}
 }

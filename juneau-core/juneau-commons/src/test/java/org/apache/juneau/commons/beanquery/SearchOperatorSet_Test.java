@@ -95,7 +95,7 @@ class SearchOperatorSet_Test extends TestBase {
 		var set = SearchOperatorSet.of(a);
 		var b = SearchOperator.create("$Near", "help2").predicate((cell, args) -> true).build();
 		var replaced = set.with(b);
-		assertEquals(1, replaced.operators().size());
+		assertSize(1, replaced.operators());
 		assertEquals("$Near", replaced.get("$near").name());
 	}
 
@@ -143,7 +143,7 @@ class SearchOperatorSet_Test extends TestBase {
 	void e01_ofBuildsExactSetNoBuiltinsImplied() {
 		var eq = SearchOperatorSet.standard().get("$eq");
 		var s = SearchOperatorSet.of(eq);
-		assertEquals(1, s.operators().size());
+		assertSize(1, s.operators());
 		assertFalse(s.contains("$ne"));
 	}
 

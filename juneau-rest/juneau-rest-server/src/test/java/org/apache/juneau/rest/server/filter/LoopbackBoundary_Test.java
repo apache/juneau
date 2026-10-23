@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.server.filter;
 
+import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.rest.server.filter.BoundaryReason.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -55,11 +56,7 @@ class LoopbackBoundary_Test extends TestBase {
 	 * header spoiled, so a failure isolates the rule that broke.
 	 */
 	private static Map<String,String> goodWriteHeaders() {
-		var m = new LinkedHashMap<String,String>();
-		m.put("Host", AUTHORITY);
-		m.put("Origin", ORIGIN);
-		m.put("Sec-Fetch-Site", "same-origin");
-		m.put("X-Csrf-Token", TOKEN.value());
+		Map<String,String> m = map("Host", AUTHORITY, "Origin", ORIGIN, "Sec-Fetch-Site", "same-origin", "X-Csrf-Token", TOKEN.value());
 		return m;
 	}
 

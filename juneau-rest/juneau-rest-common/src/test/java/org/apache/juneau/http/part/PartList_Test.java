@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.http.part;
 
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
@@ -32,23 +33,23 @@ class PartList_Test extends TestBase {
 	@Test void a01_empty() {
 		var l = PartList.empty();
 		assertTrue(l.isEmpty());
-		assertEquals(0, l.size());
+		assertSize(0, l);
 	}
 
 	@Test void a02_of_varargs() {
 		var l = PartList.of(HttpPartBean.of("a", "1"), HttpPartBean.of("b", "2"));
-		assertEquals(2, l.size());
+		assertSize(2, l);
 	}
 
 	@Test void a03_of_list() {
 		var l = PartList.of(List.of(HttpPartBean.of("a", "1"), HttpPartBean.of("b", "2")));
-		assertEquals(2, l.size());
+		assertSize(2, l);
 		assertEquals("a", l.getParts().get(0).getName());
 	}
 
 	@Test void a04_ofPairs() {
 		var l = PartList.ofPairs("a", "1", "b", "2");
-		assertEquals(2, l.size());
+		assertSize(2, l);
 		assertEquals("1", l.getFirst("a").getValue());
 	}
 

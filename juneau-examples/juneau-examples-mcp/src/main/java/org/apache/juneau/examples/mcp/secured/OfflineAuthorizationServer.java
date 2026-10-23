@@ -269,7 +269,7 @@ public final class OfflineAuthorizationServer implements AutoCloseable {
 				return;
 			}
 			var resource = form.get("resource");
-			if (resource == null || resource.isBlank()) {
+			if (ib(resource)) {
 				sendJson(exchange, 400, error("invalid_target", "a resource indicator (RFC 8707) is required"));
 				return;
 			}

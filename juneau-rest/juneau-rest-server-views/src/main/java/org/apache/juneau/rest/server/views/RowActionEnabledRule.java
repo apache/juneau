@@ -79,7 +79,7 @@ public class RowActionEnabledRule {
 	 * 	not value-based, or {@code value} is <jk>null</jk>.
 	 */
 	public static RowActionEnabledRule of(String field, Op op, Object value, String reason) {
-		if (field == null || field.isBlank())
+		if (ib(field))
 			throw iaex("RowActionEnabledRule field must not be null or blank.");
 		if (op != null && op.isCollectionOp())
 			throw iaex("RowActionEnabledRule op '%s' is a visibility-rule operator; use eq or ne.", op.wire());
@@ -88,7 +88,7 @@ public class RowActionEnabledRule {
 				op == null ? "null" : op.wire());
 		if (value == null)
 			throw iaex("RowActionEnabledRule op '%s' requires a non-null value.", op.wire());
-		if (reason == null || reason.isBlank())
+		if (ib(reason))
 			throw iaex("RowActionEnabledRule reason must not be null or blank.");
 		var r = new RowActionEnabledRule();
 		r.field = field;
@@ -110,12 +110,12 @@ public class RowActionEnabledRule {
 	 * 	is value-based.
 	 */
 	public static RowActionEnabledRule of(String field, Op op, String reason) {
-		if (field == null || field.isBlank())
+		if (ib(field))
 			throw iaex("RowActionEnabledRule field must not be null or blank.");
 		if (op == null || op.requiresValue())
 			throw iaex("RowActionEnabledRule op '%s' requires a value; use the (field, op, value, reason) form.",
 				op == null ? "null" : op.wire());
-		if (reason == null || reason.isBlank())
+		if (ib(reason))
 			throw iaex("RowActionEnabledRule reason must not be null or blank.");
 		var r = new RowActionEnabledRule();
 		r.field = field;

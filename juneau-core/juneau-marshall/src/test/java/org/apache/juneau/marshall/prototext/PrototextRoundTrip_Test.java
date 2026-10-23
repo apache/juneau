@@ -16,7 +16,9 @@
  */
 package org.apache.juneau.marshall.prototext;
 
+import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 
 import java.util.*;
 
@@ -72,7 +74,7 @@ class PrototextRoundTrip_Test {
 		var b = fromPrototext(proto, JsonMap.class);
 		var list = b.getList("servers");
 		assertNotNull(list);
-		assertEquals(2, list.size());
+		assertSize(2, list);
 		assertEquals("alpha", ((Map<?,?>) list.get(0)).get("host"));
 		assertEquals("beta", ((Map<?,?>) list.get(1)).get("host"));
 	}
@@ -171,11 +173,7 @@ class PrototextRoundTrip_Test {
 
 	@Test
 	void a13_nullableReferenceRoundTrip() {
-		var a = new LinkedHashMap<String,Object>();
-		a.put("s", "x");
-		a.put("n", 1);
-		a.put("nullStr", null);
-		a.put("nullInt", null);
+		Map<String,Object> a = map("s", "x", "n", 1, "nullStr", null, "nullInt", null);
 
 		var proto = toPrototext(a);
 		var b = fromPrototext(proto, JsonMap.class);
@@ -209,7 +207,7 @@ class PrototextRoundTrip_Test {
 		assertEquals(42L, b.get("n"));
 		assertEquals(true, b.get("b"));
 		assertEquals("v", b.getMap("nest").get("k"));
-		assertEquals(3, b.getList("list").size());
+		assertSize(3, b.getList("list"));
 	}
 
 	@Test

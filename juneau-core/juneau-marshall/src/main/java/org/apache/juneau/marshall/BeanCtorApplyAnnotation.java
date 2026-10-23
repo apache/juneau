@@ -42,7 +42,7 @@ public class BeanCtorApplyAnnotation {
 	 *
 	 * <p>
 	 * Passes the {@link BeanCtorApply @BeanCtorApply} annotation through to the builder's annotation list.
-	 * The {@link org.apache.juneau.commons.reflect.AnnotationProvider.Builder#addRuntimeAnnotations(java.util.List)}
+	 * The {@link org.apache.juneau.commons.reflect.AnnotationProvider.Builder#addRuntimeAnnotations(java.util.List) AnnotationProvider.Builder#addRuntimeAnnotations(java.util.List)}
 	 * method handles unwrapping the nested {@link BeanCtor @BeanCtor} from {@link BeanCtorApply#value()} and registering it
 	 * under the targets specified by {@link BeanCtorApply#on()} and {@link BeanCtorApply#onClass()}.
 	 */

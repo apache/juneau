@@ -27,12 +27,12 @@
  *
  * <h5 class='section'>Key types:</h5>
  * <ul>
- * 	<li>{@link org.apache.juneau.commons.secret.SecretStore} &mdash; the SPI (store / find / exists / delete).
- * 	<li>{@link org.apache.juneau.commons.secret.InMemorySecretStore} &mdash; the zero-config, process-local default.
- * 	<li>{@link org.apache.juneau.commons.secret.EnvVarSecretStore} &mdash; a read-only, environment-variable-backed source.
- * 	<li>{@link org.apache.juneau.commons.secret.SecretStoreProvider} &mdash; {@code ServiceLoader} discovery.
- * 	<li>{@link org.apache.juneau.commons.secret.SecretStores} &mdash; {@code BeanStore} resolution (default {@code InMemorySecretStore}).
- * 	<li>{@link org.apache.juneau.commons.secret.SecretStorePropertySource} &mdash; an opt-in bridge exposing a store as a redacting {@code PropertySource}.
+ * 	<li>{@link org.apache.juneau.commons.secret.SecretStore SecretStore} &mdash; the SPI (store / find / exists / delete).
+ * 	<li>{@link org.apache.juneau.commons.secret.InMemorySecretStore InMemorySecretStore} &mdash; the zero-config, process-local default.
+ * 	<li>{@link org.apache.juneau.commons.secret.EnvVarSecretStore EnvVarSecretStore} &mdash; a read-only, environment-variable-backed source.
+ * 	<li>{@link org.apache.juneau.commons.secret.SecretStoreProvider SecretStoreProvider} &mdash; {@code ServiceLoader} discovery.
+ * 	<li>{@link org.apache.juneau.commons.secret.SecretStores SecretStores} &mdash; {@code BeanStore} resolution (default {@code InMemorySecretStore}).
+ * 	<li>{@link org.apache.juneau.commons.secret.SecretStorePropertySource SecretStorePropertySource} &mdash; an opt-in bridge exposing a store as a redacting {@code PropertySource}.
  * </ul>
  *
  * @since 10.0.0

@@ -19,6 +19,7 @@ package org.apache.juneau.marshall.msgpack;
 import static org.apache.juneau.BasicTestUtils.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 
 import java.io.*;
 import java.math.*;
@@ -72,7 +73,7 @@ class MsgPackConformance_Test extends TestBase {
 	@Test void a03_ext_nestedDoesNotDesyncFollowingElement() throws Exception {
 		// [ext(type=5, 0x01), 7] -> the ext payload must be consumed so the trailing 7 is read correctly.
 		var a = (List<?>) parse("92 D4 05 01 07", Object.class);
-		assertEquals(2, a.size());
+		assertSize(2, a);
 		assertArrayEquals(new byte[]{0x01}, (byte[])a.get(0));
 		assertEquals(7, ((Number)a.get(1)).intValue());
 	}
@@ -80,7 +81,7 @@ class MsgPackConformance_Test extends TestBase {
 	@Test void a04_ext8_multiBytePayloadConsumed() throws Exception {
 		// ext8, len=3, type=9, payload=0x0A0B0C followed by int 0x07.
 		var a = (List<?>) parse("92 C7 03 09 0A 0B 0C 07", Object.class);
-		assertEquals(2, a.size());
+		assertSize(2, a);
 		assertArrayEquals(new byte[]{0x0A, 0x0B, 0x0C}, (byte[])a.get(0));
 		assertEquals(7, ((Number)a.get(1)).intValue());
 	}

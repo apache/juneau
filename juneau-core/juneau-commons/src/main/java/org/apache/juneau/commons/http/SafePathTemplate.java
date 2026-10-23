@@ -75,7 +75,7 @@ public final class SafePathTemplate {
 		"java:S3776" // Flat sequence of independent rejection checks; splitting it would obscure the security rules.
 	})
 	public static boolean isSameOriginPath(String path) {
-		if (path == null || path.isBlank())
+		if (ib(path))
 			return false;
 		if (path.charAt(0) <= ' ' || path.charAt(path.length() - 1) <= ' ')
 			return false;

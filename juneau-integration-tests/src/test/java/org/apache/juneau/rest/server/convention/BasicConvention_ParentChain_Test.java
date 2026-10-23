@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.server.convention;
 
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
@@ -91,8 +92,7 @@ class BasicConvention_ParentChain_Test extends TestBase {
 		assertNotNull(ctxs.get(SeoMixin.class), "SEO mixin context registered");
 		assertNotNull(ctxs.get(VersionMixin.class), "Version mixin context registered");
 		assertNotNull(ctxs.get(WellKnownMixin.class), "Well-known mixin context registered");
-		assertEquals(4, ctxs.size(),
-			"Expected exactly four mixin contexts; got: " + ctxs.keySet());
+		assertSize(() -> "Expected exactly four mixin contexts; got: " + ctxs.keySet(), 4, ctxs);
 	}
 
 	@Test void a02_faviconResolves() throws Exception {

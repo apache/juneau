@@ -16,19 +16,19 @@
  */
 
 /**
- * Raw command output in the browser: a byte-offset endpoint over a {@link org.apache.juneau.rest.server.terminal.TerminalSource}
+ * Raw command output in the browser: a byte-offset endpoint over a {@link org.apache.juneau.rest.server.terminal.TerminalSource TerminalSource}
  * and an xterm.js panel that renders it the way a terminal would.
  *
  * <p>
- * {@link org.apache.juneau.rest.server.terminal.TerminalMixin} serves {@code /juneau-terminal/{id}/bytes} and
+ * {@link org.apache.juneau.rest.server.terminal.TerminalMixin TerminalMixin} serves {@code /juneau-terminal/{id}/bytes} and
  * {@code /raw}, plus this module's {@code juneau-terminal.js} and {@code .css}.  Sources:
- * {@link org.apache.juneau.rest.server.terminal.FileTerminalSource} tails a log with a {@code .size} sidecar;
- * {@link org.apache.juneau.rest.server.terminal.MemoryTerminalSource} is a ring buffer for in-process producers.
- * {@link org.apache.juneau.rest.server.terminal.TerminalProcess} runs a tool under a pseudo-terminal through
+ * {@link org.apache.juneau.rest.server.terminal.FileTerminalSource FileTerminalSource} tails a log with a {@code .size} sidecar;
+ * {@link org.apache.juneau.rest.server.terminal.MemoryTerminalSource MemoryTerminalSource} is a ring buffer for in-process producers.
+ * {@link org.apache.juneau.rest.server.terminal.TerminalProcess TerminalProcess} runs a tool under a pseudo-terminal through
  * {@code juneau_run.py --pty} and exposes both its bytes and its run-view step events.
  *
  * <p>
- * On a console page, {@code <@card type="terminal">} (see {@link org.apache.juneau.rest.server.terminal.TerminalDef})
+ * On a console page, {@code <@card type="terminal">} (see {@link org.apache.juneau.rest.server.terminal.TerminalDef TerminalDef})
  * mounts the panel; the {@code terminal} toolkit pack loads xterm.js from the {@code org.webjars.npm:xterm__xterm} WebJar.
  */
 package org.apache.juneau.rest.server.terminal;

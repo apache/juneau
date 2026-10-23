@@ -29,7 +29,7 @@ import org.apache.juneau.rest.server.servlet.*;
 import org.junit.jupiter.api.*;
 
 /**
- * Phase 2 regression matrix &mdash; verifies that {@code @Rest(restOpArgs=...)} on a mixin class inherits the
+ * Verifies that {@code @Rest(restOpArgs=...)} on a mixin class inherits the
  * host's REST-op-arg chain via the {@link RestContext#getRestAnnotationsForProperty(String) annotation-property
  * walk}.
  */

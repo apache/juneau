@@ -74,7 +74,7 @@ class LogRecordCapture_Test extends TestBase {
 		var logger = getLogger("a03");
 		try (var capture = logger.captureEvents()) {
 			assertTrue(capture.isEmpty());
-			assertEquals(0, capture.size());
+			assertSize(0, capture);
 		}
 	}
 
@@ -165,7 +165,7 @@ class LogRecordCapture_Test extends TestBase {
 			assertSize(2, capture.getRecords());
 			capture.clear();
 			assertTrue(capture.isEmpty());
-			assertEquals(0, capture.size());
+			assertSize(0, capture);
 		}
 	}
 
@@ -189,11 +189,11 @@ class LogRecordCapture_Test extends TestBase {
 	@Test void e01_size_returnsCorrectCount() {
 		var logger = getLogger("e01");
 		try (var capture = logger.captureEvents()) {
-			assertEquals(0, capture.size());
+			assertSize(0, capture);
 			logger.info("Message 1");
-			assertEquals(1, capture.size());
+			assertSize(1, capture);
 			logger.info("Message 2");
-			assertEquals(2, capture.size());
+			assertSize(2, capture);
 		}
 	}
 
@@ -272,7 +272,7 @@ class LogRecordCapture_Test extends TestBase {
 
 			// All messages should be captured
 			var records = capture.getRecords();
-			assertEquals(3, records.size());
+			assertSize(3, records);
 		}
 	}
 
@@ -376,7 +376,7 @@ class LogRecordCapture_Test extends TestBase {
 			logger.info("keep-2");
 
 			assertEquals(List.of("keep-1", "keep-2"), capture.messages());
-			assertEquals(2, capture.size());
+			assertSize(2, capture);
 		}
 	}
 
@@ -410,8 +410,8 @@ class LogRecordCapture_Test extends TestBase {
 			logger.warning("abc-2");
 			logger.warning("xyz");
 
-			assertEquals(2, capture.byLevel(Level.WARNING).size());
-			assertEquals(2, capture.matching("abc").size());
+			assertSize(2, capture.byLevel(Level.WARNING));
+			assertSize(2, capture.matching("abc"));
 		}
 	}
 

@@ -17,6 +17,7 @@
 package org.apache.juneau.rest.server.auth.oidc.rp;
 
 import static org.apache.juneau.commons.utils.Shorts.*;
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.time.*;
@@ -108,7 +109,7 @@ class InMemorySessionStore_Test extends TestBase {
 		store.createSessionCookieValue(session("id-1", "alice", "sess-1", base));
 		clock.advance(Duration.ofHours(9));
 		assertTrue(store.lookup("id-1").isEmpty());
-		assertEquals(0, store.size());
+		assertSize(0, store);
 	}
 
 	@Test void d01_sizeCap_evictsEldestAndUnindexes() {
@@ -116,7 +117,7 @@ class InMemorySessionStore_Test extends TestBase {
 		store.createSessionCookieValue(session("id-1", "alice", "sess-1"));
 		store.createSessionCookieValue(session("id-2", "bob", "sess-2"));
 		store.createSessionCookieValue(session("id-3", "carol", "sess-3"));  // evicts id-1
-		assertEquals(2, store.size());
+		assertSize(2, store);
 		assertTrue(store.lookup("id-1").isEmpty());
 		assertEquals(0, store.invalidateBySubject("alice"), "evicted session must also be unindexed");
 	}

@@ -22,6 +22,7 @@ import static org.apache.juneau.commons.reflect.ElementFlag.*;
 import static org.apache.juneau.commons.utils.ClassUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
+import static org.apache.juneau.commons.TestAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
@@ -268,7 +269,7 @@ class ExecutableInfo_Test extends TestBase {
 		// Constructor with annotation
 		var annotations2 = c_c3.getDeclaredAnnotations();
 		assertNotNull(annotations2);
-		assertEquals(1, annotations2.size());
+		assertSize(1, annotations2);
 		assertTrue(annotations2.get(0).isType(CA.class));
 	}
 

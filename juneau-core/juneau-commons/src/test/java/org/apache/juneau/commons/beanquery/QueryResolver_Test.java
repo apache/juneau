@@ -149,7 +149,7 @@ class QueryResolver_Test extends TestBase {
 		@Test void b08_filterResolved() {
 			var q = search("name=Bob,age=$gt(1)");
 			var f = (Filter.And) q.filter();
-			assertEquals(2, f.items().size());
+			assertSize(2, f.items());
 			var leaf = (Filter.Leaf) f.items().get(1);
 			assertBean(leaf, "column,type", "age,NUMERIC");
 			assertEquals("$gt", leaf.expression().name());
@@ -177,7 +177,7 @@ class QueryResolver_Test extends TestBase {
 
 		@Test void c01_sortKeys() {
 			var q = resolve(settings(), new BeanQuery().setSort("age:desc, name, version-"));
-			assertEquals(3, q.sort().size());
+			assertSize(3, q.sort());
 			assertBean(q.sort().get(0), "column,descending,type", "age,true,NUMERIC");
 			assertFalse(q.sort().get(1).descending());
 			assertTrue(q.sort().get(2).descending());

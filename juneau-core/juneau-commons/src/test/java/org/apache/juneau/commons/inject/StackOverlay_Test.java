@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.commons.inject;
 
+import static org.apache.juneau.commons.TestAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.concurrent.*;
@@ -198,7 +199,7 @@ class StackOverlay_Test extends TestBase {
 			.addBean(Svc.class, topA, "a"));
 
 		var all = overlay.getBeansOfType(Svc.class);
-		assertEquals(2, all.size(), "Should have entries for both names");
+		assertSize(() -> "Should have entries for both names", 2, all);
 		assertSame(topA, all.get("a"), "Top frame should shadow bottom for name 'a'");
 		assertSame(bottomB, all.get("b"), "Bottom frame's 'b' should still be visible");
 	}

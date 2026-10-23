@@ -107,7 +107,9 @@ class PetstoreDatatable_BrowserTest extends TestBase {
 					"buttons", "[...document.querySelectorAll('#pets-body .juneau-view-ribbon-btn')].map(b => b.getAttribute('aria-label'))"))));
 	}
 
-	@SuppressWarnings("unchecked") // requests is a JSON array of {url, method, postData}.
+	@SuppressWarnings({
+		"unchecked" // requests is a JSON array of {url, method, postData}.
+	})
 	private static List<Map<String,Object>> requests() {
 		return (List<Map<String,Object>>) assertClean(report, "audit").get("requests");
 	}
@@ -157,7 +159,9 @@ class PetstoreDatatable_BrowserTest extends TestBase {
 	}
 
 	/** The gear opens View Settings; page size 50 on the Options tab is applied, and survives a reload (localStorage). */
-	@SuppressWarnings("unchecked") // requests is a JSON array of {url, method, postData}.
+	@SuppressWarnings({
+		"unchecked" // requests is a JSON array of {url, method, postData}.
+	})
 	@Test void b04_viewSettingsPageSizePersistsAcrossReload() throws Exception {
 		var c = assertClean(report, "pets-settings");
 		var first = Json.to((String) ((List<Map<String,Object>>) c.get("requests")).get(0).get("postData"), Map.class);
@@ -176,7 +180,9 @@ class PetstoreDatatable_BrowserTest extends TestBase {
 		assertNotContains(() -> buttons, "excel", buttons);
 	}
 
-	@SuppressWarnings("unchecked") // downloads values are {name, bytes, head}.
+	@SuppressWarnings({
+		"unchecked" // downloads values are {name, bytes, head}.
+	})
 	@Test void c02_csvExportDownloadsTheShownRows() {
 		var c = assertClean(report, "pets-export");
 		var d = (Map<String,Object>) ((Map<String,Object>) c.get("downloads")).get("csv");

@@ -38,23 +38,23 @@
  * The bean classes that make up the model are as follows:
  * </p>
  * <ul class='spaced-list'>
- * 	<li>{@link org.apache.juneau.bean.jsonschema.JsonSchema} - Top level schema object.
- * 	<li>{@link org.apache.juneau.bean.jsonschema.JsonSchemaProperty} - A subclass of <c>JsonSchema</c> for
+ * 	<li>{@link org.apache.juneau.bean.jsonschema.JsonSchema JsonSchema} - Top level schema object.
+ * 	<li>{@link org.apache.juneau.bean.jsonschema.JsonSchemaProperty JsonSchemaProperty} - A subclass of <c>JsonSchema</c> for
  * 		representing properties.
- * 	<li>{@link org.apache.juneau.bean.jsonschema.JsonSchemaPropertySimpleArray} - A convenience subclass of
+ * 	<li>{@link org.apache.juneau.bean.jsonschema.JsonSchemaPropertySimpleArray JsonSchemaPropertySimpleArray} - A convenience subclass of
  * 		<c>JsonSchemaProperty</c> for representing properties of simple array types.
- * 	<li>{@link org.apache.juneau.bean.jsonschema.JsonSchemaRef} - Represents a URI reference to another schema.
- * 	<li>{@link org.apache.juneau.bean.jsonschema.JsonSchemaArray} - An array of <c>JsonSchema</c> objects.
- * 	<li>{@link org.apache.juneau.bean.jsonschema.JsonType} - An enum of possible JSON data types.
- * 	<li>{@link org.apache.juneau.bean.jsonschema.JsonTypeArray} - An array of <c>JsonType</c> objects.
- * 	<li>{@link org.apache.juneau.bean.jsonschema.JsonSchemaBeanGenerator} - Generates typed
+ * 	<li>{@link org.apache.juneau.bean.jsonschema.JsonSchemaRef JsonSchemaRef} - Represents a URI reference to another schema.
+ * 	<li>{@link org.apache.juneau.bean.jsonschema.JsonSchemaArray JsonSchemaArray} - An array of <c>JsonSchema</c> objects.
+ * 	<li>{@link org.apache.juneau.bean.jsonschema.JsonType JsonType} - An enum of possible JSON data types.
+ * 	<li>{@link org.apache.juneau.bean.jsonschema.JsonTypeArray JsonTypeArray} - An array of <c>JsonType</c> objects.
+ * 	<li>{@link org.apache.juneau.bean.jsonschema.JsonSchemaBeanGenerator JsonSchemaBeanGenerator} - Generates typed
  * 		<c>JsonSchema</c> beans from Java types via {@link org.apache.juneau.marshall.jsonschema.JsonSchemaGenerator}.
  * </ul>
 
  * <h5 class='topic'>Automatic Schema Generation</h5>
  *
  * <p>
- * Use {@link org.apache.juneau.bean.jsonschema.JsonSchemaBeanGenerator} when you want typed DTO output from POJOs
+ * Use {@link org.apache.juneau.bean.jsonschema.JsonSchemaBeanGenerator JsonSchemaBeanGenerator} when you want typed DTO output from POJOs
  * without manually building schema trees.  It bridges the map-based output of
  * {@link org.apache.juneau.marshall.jsonschema.JsonSchemaGenerator} into <c>JsonSchema</c> beans.
  * </p>

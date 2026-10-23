@@ -297,7 +297,7 @@ class Rest_ProblemDetails_PerOp_Test extends TestBase {
 
 	// -----------------------------------------------------------------------------------------------------------------
 	// H: ProblemException thrown from a NOT opted-in op → success-path Accept-honoring semantics retained
-	//    (Phase 1 Accept-honoring fallback for non-opted-in ProblemException return values).
+	//    (Accept-honoring fallback for non-opted-in ProblemException return values).
 	// -----------------------------------------------------------------------------------------------------------------
 
 	@Rest

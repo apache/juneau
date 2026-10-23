@@ -179,7 +179,7 @@ public @interface Rest {
 	 * 	<li class='note'>
 	 * 		The implementation is instantiated through the resource's bean store (constructor injection).
 	 * 	<li class='note'>
-	 * 		The default {@link org.apache.juneau.rest.server.auth.RestAuthenticator.Null} sentinel means &quot;not specified.&quot;
+	 * 		The default {@link org.apache.juneau.rest.server.auth.RestAuthenticator.Null RestAuthenticator.Null} sentinel means &quot;not specified.&quot;
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
@@ -1065,7 +1065,7 @@ public @interface Rest {
 	 * <p>
 	 * Encoders are automatically inherited from {@link Rest#encoders()} annotations on parent classes with the encoders on child classes
 	 * prepended to the encoder group.
-	 * The {@link org.apache.juneau.marshall.encoders.EncoderSet.NoInherit} class can be used to prevent inheriting from the parent class.
+	 * The {@link org.apache.juneau.marshall.encoders.EncoderSet.NoInherit EncoderSet.NoInherit} class can be used to prevent inheriting from the parent class.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
@@ -1238,7 +1238,7 @@ public @interface Rest {
 	 * <p>
 	 * Parsers are automatically inherited from {@link Rest#parsers()} annotations on parent classes with the parsers on child classes
 	 * prepended to the parser group.
-	 * The {@link org.apache.juneau.marshall.parser.ParserSet.NoInherit} class can be used to prevent inheriting from the parent class.
+	 * The {@link org.apache.juneau.marshall.parser.ParserSet.NoInherit ParserSet.NoInherit} class can be used to prevent inheriting from the parent class.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
@@ -1264,8 +1264,8 @@ public @interface Rest {
 	 * <h5 class='section'>Inheritance Rules</h5>
 	 * <ul>
 	 * 	<li>Parsers on child override those on parent class.
-	 * 	<li>{@link org.apache.juneau.marshall.parser.ParserSet.Inherit} class can be used to inherit and augment values from parent.
-	 * 	<li>{@link org.apache.juneau.marshall.parser.ParserSet.NoInherit} class can be used to suppress inheriting from parent.
+	 * 	<li>{@link org.apache.juneau.marshall.parser.ParserSet.Inherit ParserSet.Inherit} class can be used to inherit and augment values from parent.
+	 * 	<li>{@link org.apache.juneau.marshall.parser.ParserSet.NoInherit ParserSet.NoInherit} class can be used to suppress inheriting from parent.
 	 * 	<li>Parsers on methods take precedence over those on classes.
 	 * </ul>
 	 *
@@ -1697,7 +1697,7 @@ public @interface Rest {
 	 * <p>
 	 * Serializers are automatically inherited from {@link Rest#serializers()} annotations on parent classes with the serializers on child classes
 	 * prepended to the serializer group.
-	 * The {@link org.apache.juneau.marshall.serializer.SerializerSet.NoInherit} class can be used to prevent inheriting from the parent class.
+	 * The {@link org.apache.juneau.marshall.serializer.SerializerSet.NoInherit SerializerSet.NoInherit} class can be used to prevent inheriting from the parent class.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
@@ -1723,8 +1723,8 @@ public @interface Rest {
 	 * <h5 class='section'>Inheritance Rules</h5>
 	 * <ul>
 	 * 	<li>Serializers on child override those on parent class.
-	 * 	<li>{@link org.apache.juneau.marshall.serializer.SerializerSet.Inherit} class can be used to inherit and augment values from parent.
-	 * 	<li>{@link org.apache.juneau.marshall.serializer.SerializerSet.NoInherit} class can be used to suppress inheriting from parent.
+	 * 	<li>{@link org.apache.juneau.marshall.serializer.SerializerSet.Inherit SerializerSet.Inherit} class can be used to inherit and augment values from parent.
+	 * 	<li>{@link org.apache.juneau.marshall.serializer.SerializerSet.NoInherit SerializerSet.NoInherit} class can be used to suppress inheriting from parent.
 	 * 	<li>Serializers on methods take precedence over those on classes.
 	 * </ul>
 	 *

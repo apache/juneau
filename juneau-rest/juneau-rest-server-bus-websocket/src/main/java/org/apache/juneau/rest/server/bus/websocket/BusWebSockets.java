@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.rest.server.bus.websocket;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
+
 import org.apache.juneau.rest.server.bus.*;
 import org.apache.juneau.rest.server.filter.*;
 
@@ -107,7 +109,7 @@ public final class BusWebSockets {
 		try {
 			container.addEndpoint(config);
 		} catch (DeploymentException e) {
-			throw new IllegalStateException(String.format("BusWebSockets.register: could not add endpoint '%s': %s", PATH, e.getMessage()), e);
+			throw new IllegalStateException(f("BusWebSockets.register: could not add endpoint '%s': %s", PATH, e.getMessage()), e);
 		}
 		bus.enableWebSocket(PREFIX);
 	}

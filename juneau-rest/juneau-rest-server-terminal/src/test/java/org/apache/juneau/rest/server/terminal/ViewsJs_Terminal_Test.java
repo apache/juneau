@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.server.terminal;
 
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assumptions.*;
 
@@ -135,7 +136,7 @@ class ViewsJs_Terminal_Test extends TestBase {
 
 	@Test void z01_everyCasePasses() {
 		var r = r();
-		assertEquals(88, r.size(), () -> "case count changed; add a method per new case: " + r.keySet());
+		assertSize(() -> "case count changed; add a method per new case: " + r.keySet(), 88, r);
 		for (var e : r.entrySet())
 			assertEquals(true, e.getValue(), () -> e.getKey() + " -> " + e.getValue());
 	}

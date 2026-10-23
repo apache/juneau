@@ -93,9 +93,9 @@ public class BarSlot implements Widget {
 	public void validate() {
 		if (neq(contractVersion, CONTRACT_VERSION))
 			throw iaex("BarSlot contractVersion must be '%s': %s", CONTRACT_VERSION, contractVersion);
-		if (id == null || id.isBlank())
+		if (ib(id))
 			throw iaex("BarSlot id must not be null or blank.");
-		if (widgets == null || widgets.isEmpty())
+		if (ie(widgets))
 			throw iaex("BarSlot '%s' must declare at least one widget.", id);
 		var ids = new HashSet<String>();
 		for (var w : widgets) {

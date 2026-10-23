@@ -17,6 +17,7 @@
 package org.apache.juneau.marshall.csv;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 
 import java.util.*;
 
@@ -193,7 +194,7 @@ class CsvCellParser_Test extends TestBase {
 
 	@Test void e03_multiple_elements() throws ParseException {
 		var r = (List<Object>) CsvCellParser.read("[1;2;3]", null);
-		assertEquals(3, r.size());
+		assertSize(3, r);
 		assertEquals(1L, r.get(0));
 		assertEquals(2L, r.get(1));
 		assertEquals(3L, r.get(2));
@@ -219,7 +220,7 @@ class CsvCellParser_Test extends TestBase {
 
 	@Test void e07_array_with_objects() throws ParseException {
 		var r = (List<Object>) CsvCellParser.read("[{a:1};{b:2}]", null);
-		assertEquals(2, r.size());
+		assertSize(2, r);
 		assertInstanceOf(Map.class, r.get(0));
 	}
 
@@ -235,7 +236,7 @@ class CsvCellParser_Test extends TestBase {
 
 	@Test void f02_array_with_spaces() throws ParseException {
 		var r = (List<Object>) CsvCellParser.read("[ 1 ; 2 ; 3 ]", null);
-		assertEquals(3, r.size());
+		assertSize(3, r);
 	}
 
 	@Test void f03_leading_trailing_spaces() throws ParseException {

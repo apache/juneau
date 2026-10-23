@@ -573,7 +573,7 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 	}
 
 	/**
-	 * Creates a new {@link org.apache.juneau.rest.client.classic.RestClient.Builder}configured with the specified REST implementation bean or bean class.
+	 * Creates a new {@link org.apache.juneau.rest.client.classic.RestClient.Builder RestClient.Builder}configured with the specified REST implementation bean or bean class.
 	 *
 	 * @param impl
 	 * 	The REST bean or bean class annotated with {@link Rest @Rest}.
@@ -585,7 +585,7 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 	}
 
 	/**
-	 * Creates a new {@link org.apache.juneau.rest.client.classic.RestClient.Builder}configured with the specified REST implementation bean or bean class.
+	 * Creates a new {@link org.apache.juneau.rest.client.classic.RestClient.Builder RestClient.Builder}configured with the specified REST implementation bean or bean class.
 	 *
 	 * <p>
 	 * Same as {@link #create(Object)} but HTTP 400+ codes don't trigger {@link RestCallException RestCallExceptions}.

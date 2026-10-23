@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.rest.server.tracing.otel;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
+
 import java.util.*;
 
 import org.apache.juneau.http.tracing.TraceContextCarrier;
@@ -60,6 +62,6 @@ public final class TraceContextCarrierTextMapGetter implements TextMapGetter<Tra
 		if (carrier == null || key == null)
 			return null;
 		var value = carrier.get(key);
-		return (value == null || value.isEmpty()) ? null : value;
+		return ie(value) ? null : value;
 	}
 }

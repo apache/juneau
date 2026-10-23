@@ -443,7 +443,9 @@ public final class SeriesAggregator {
 	}
 
 	// The bucket first, then each group value; a null group (a row with no value) sorts before any text.
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Non-null group values within a series are mutually Comparable.
+	})
 	private static int compareKeys(List<Object> a, List<Object> b) {
 		for (var i = 0; i < a.size(); i++) {
 			var x = a.get(i);

@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.rest.server.bus;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
+
 import java.security.*;
 import java.time.*;
 import java.util.*;
@@ -327,7 +329,7 @@ public final class ServerBus implements AutoCloseable {
 				expire(s);
 				return Optional.empty();
 			}
-			if (! Objects.equals(s.principalName, principal == null ? null : principal.getName()))
+			if (neq(s.principalName, principal == null ? null : principal.getName()))
 				return Optional.empty();
 			return Optional.of(s);
 		}
@@ -445,7 +447,7 @@ public final class ServerBus implements AutoCloseable {
 		} catch (Exception e) {
 			if (e instanceof InterruptedException)
 				Thread.currentThread().interrupt();
-			LOGGER.log(Level.WARNING, e, () -> String.format("bus upstream handler for topic '%s' failed", topic));
+			LOGGER.log(Level.WARNING, e, () -> f("bus upstream handler for topic '%s' failed", topic));
 			reply(s, BusFrames.error("bus:upstream-failed", "handler failed", topic));
 		}
 	}
@@ -459,7 +461,7 @@ public final class ServerBus implements AutoCloseable {
 	 */
 	public void enableWebSocket(String contextRelativePathPrefix) {
 		if (contextRelativePathPrefix == null || ! contextRelativePathPrefix.startsWith("/") || contextRelativePathPrefix.endsWith("/"))
-			throw new IllegalArgumentException(String.format(
+			throw new IllegalArgumentException(f(
 				"ServerBus.enableWebSocket: '%s' must start with '/' and must not end with '/'", contextRelativePathPrefix));
 		webSocketPrefix = contextRelativePathPrefix;
 	}
@@ -552,7 +554,7 @@ public final class ServerBus implements AutoCloseable {
 	/** Serializes a payload and checks the worst-case frame size (a {@code false} flag and the longest {@code seq}). */
 	private String encode(String method, String topic, Object payload) {
 		if (payload == null)
-			throw new IllegalArgumentException(String.format("ServerBus.%s('%s'): payload must not be null; use clear(topic)", method, topic));
+			throw new IllegalArgumentException(f("ServerBus.%s('%s'): payload must not be null; use clear(topic)", method, topic));
 		var json = Json.of(payload);
 		var size = BusFrames.utf8Length(BusFrames.pub(topic, json, false, Long.MAX_VALUE));
 		if (size > policy.maxFrameBytes())
@@ -591,11 +593,11 @@ public final class ServerBus implements AutoCloseable {
 		if (o == null)
 			return List.of();
 		if (! (o instanceof List<?> list) || list.size() > MAX_TOPICS)
-			throw BusRefusal.badRequest(String.format("%s must be a list of at most %s topics", key, MAX_TOPICS));
+			throw BusRefusal.badRequest(f("%s must be a list of at most %s topics", key, MAX_TOPICS));
 		var out = new LinkedHashSet<String>();
 		for (var x : list) {
 			if (! (x instanceof String s) || s.isEmpty())
-				throw BusRefusal.badRequest(String.format("%s must be a list of at most %s topics", key, MAX_TOPICS));
+				throw BusRefusal.badRequest(f("%s must be a list of at most %s topics", key, MAX_TOPICS));
 			out.add(s);
 		}
 		return List.copyOf(out);
@@ -614,7 +616,7 @@ public final class ServerBus implements AutoCloseable {
 	}
 
 	private static IllegalArgumentException e56(String format, Object...args) {
-		return new IllegalArgumentException("E-56: " + String.format(format, args));
+		return new IllegalArgumentException("E-56: " + f(format, args));
 	}
 
 	/** A session.  Every mutable field is guarded by the bus lock; {@code sink} is also atomic for {@link #isConnected()}. */
@@ -715,7 +717,7 @@ public final class ServerBus implements AutoCloseable {
 
 		@Override /* Object */
 		public String toString() {
-			return String.format("BusSession[bridge=%s, transport=%s, principal=%s, connected=%s, id=<redacted>]",
+			return f("BusSession[bridge=%s, transport=%s, principal=%s, connected=%s, id=<redacted>]",
 				bridgeId, transport, principalName, isConnected());
 		}
 	}

@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.http.resource;
 
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
@@ -43,7 +44,7 @@ class HttpResourceBean_Test extends TestBase {
 	@Test void a03_withHeader_typed_addsHeader() {
 		var r = HttpResourceBean.of(StringBody.of("body"))
 			.withHeader(HttpHeaderBean.of("Cache-Control", "no-cache"));
-		assertEquals(1, r.getHeaders().size());
+		assertSize(1, r.getHeaders());
 		assertEquals("Cache-Control", r.getHeaders().get(0).getName());
 		assertEquals("no-cache", r.getHeaders().get(0).getValue());
 	}
@@ -59,26 +60,26 @@ class HttpResourceBean_Test extends TestBase {
 		var r2 = r1.withHeader("X-Trace", "1");
 		assertNotSame(r1, r2);
 		assertTrue(r1.getHeaders().isEmpty());
-		assertEquals(1, r2.getHeaders().size());
+		assertSize(1, r2.getHeaders());
 	}
 
 	@Test void a06_withHeaders_array() {
 		var r = HttpResourceBean.of(StringBody.of("x"))
 			.withHeaders(HttpHeaderBean.of("A", "1"), HttpHeaderBean.of("B", "2"));
-		assertEquals(2, r.getHeaders().size());
+		assertSize(2, r.getHeaders());
 	}
 
 	@Test void a07_withHeaders_array_ignoresNulls() {
 		var r = HttpResourceBean.of(StringBody.of("x"))
 			.withHeaders((HttpHeader)null, HttpHeaderBean.of("A", "1"), (HttpHeader)null);
-		assertEquals(1, r.getHeaders().size());
+		assertSize(1, r.getHeaders());
 		assertEquals("A", r.getHeaders().get(0).getName());
 	}
 
 	@Test void a08_withHeaders_list() {
 		var r = HttpResourceBean.of(StringBody.of("x"))
 			.withHeaders(List.of(HttpHeaderBean.of("A", "1"), HttpHeaderBean.of("B", "2")));
-		assertEquals(2, r.getHeaders().size());
+		assertSize(2, r.getHeaders());
 	}
 
 	@Test void a09_withHeaders_emptyArrayIsNoop() {

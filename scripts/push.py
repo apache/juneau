@@ -245,7 +245,7 @@ def run_sonarqube_gate(juneau_root, step_num):
     it's a ratchet against that branch's overall issue count. Honors SONAR_TOKEN
     from the environment if set (sonarqube.py reads it directly).
 
-    Branch wiring (TODO-340): the gate resolves the current git branch and passes
+    Branch wiring: the gate resolves the current git branch and passes
     it through as `--branch <current-branch>` so the gate reflects the branch
     actually being pushed rather than always `master`. On `master` (or when the
     branch can't be resolved) it runs exactly as before — no `--branch` argument.
@@ -296,7 +296,7 @@ def run_sonarqube_gate(juneau_root, step_num):
 def run_tracker_audit_gate(juneau_root, step_num):
     """
     Run ~/Project Work/scripts/todo-status-audit.py --project juneau against this repo's
-    TODO tracker (~/Project Work/todos/juneau/) and block the push if it flags any plan
+    TODO tracker (~/Project Work/work/juneau/) and block the push if it flags any plan
     file as inconsistent — a stale/misplaced status header, or a declared `Counts:` claim
     that no longer re-derives from committed (HEAD) content.
 
@@ -360,6 +360,9 @@ def maybe_run_tracker_audit_gate(args, juneau_root, step_num):
 # same-named constant/function in juneau-docs/scripts/release-docs.py (and
 # release-docs-stage.py) so the two repos enforce this check identically.
 REQUIRED_GIT_EMAIL = "jamesbognar@apache.org"
+DOCS_IDENTITY_CHECK = "docs identity"
+DOCS_BUILD_LABEL = "Docs build"
+PUSH_TIMINGS_SCRIPT = "push-timings.py"
 
 #: How the hints reach the juneau-docs sibling from the juneau checkout.
 DOCS_GIT = "git -C ../juneau-docs"
@@ -489,7 +492,7 @@ def docs_prechecks(docs_root, *, dry_run=False):
     upstream", with hints that reach it from the juneau checkout."""
     checks = toolkit("checks")
     outcome = "Nothing would be built, committed or pushed." if dry_run else "Nothing was built, committed or pushed."
-    return [checks.identity(docs_root, required=REQUIRED_GIT_EMAIL, label="docs identity"),
+    return [checks.identity(docs_root, required=REQUIRED_GIT_EMAIL, label=DOCS_IDENTITY_CHECK),
             checks.unreviewed(docs_root, git_cmd=DOCS_GIT, label="docs unreviewed", outcome=outcome),
             checks.upstream(docs_root, git_cmd=DOCS_GIT, label="docs upstream")]
 
@@ -516,7 +519,7 @@ def run_test_script(cmd, cwd, run, env=None):
 
 def load_timings_module(script_dir):
     """push-timings.py as a module (its name has a hyphen, so it can't be imported by name)."""
-    spec = importlib.util.spec_from_file_location("push_timings", script_dir / "push-timings.py")
+    spec = importlib.util.spec_from_file_location("push_timings", script_dir / PUSH_TIMINGS_SCRIPT)
     module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(module)
     return module
@@ -646,7 +649,10 @@ def commit_summary(text):
     if len(subject) > COMMIT_SUBJECT_WIDTH:
         subject = subject[:COMMIT_SUBJECT_WIDTH - 1] + "…"
     files = FILES_CHANGED.search(text)
-    count = f"  ({files.group(1)} file{'' if files.group(1) == '1' else 's'})" if files else ""
+    count = ""
+    if files:
+        plural = "" if files.group(1) == "1" else "s"
+        count = f"  ({files.group(1)} file{plural})"
     return f'{sha}  "{subject}"{count}'
 
 
@@ -655,6 +661,61 @@ def upstream_name(repo_dir):
     result = subprocess.run(["git", "rev-parse", "--abbrev-ref", "--symbolic-full-name", "@{upstream}"],
                             cwd=repo_dir, capture_output=True, text=True, check=False)
     return result.stdout.strip() if result.returncode == 0 else ""
+
+
+def check_upstream_state(git, repo_dir, git_cmd, label):
+    """The upstream verdict for the branch, or None (after printing why) when it must not be pushed."""
+    upstream = git.upstream_verdict(repo_dir, git_cmd=git_cmd)
+    if upstream.status == "error":
+        # Fails closed like the Prechecks: a branch nobody could compare with its upstream is not pushed.
+        say(f"\n❌ ERROR: {upstream.reason}{label}. Nothing was committed or pushed.", "error")
+        say(f"   Re-run the push once `{git_cmd} fetch` works.", "error")
+        return None
+    if not upstream.ok:
+        say(f"\n❌ ERROR: Local branch{label} is {upstream.reason}. Nothing was committed or pushed.", "error")
+        for line in upstream.hint:
+            say(f"   {line}", "error")
+        return None
+    return upstream
+
+
+def commit_index(repo_dir, message, step_num, label, step_prefix, row_labels):
+    """Commits the index as-is (no `git add`); False when the commit failed."""
+    say(f"\n📝 Step {step_num}: Committing changes to Git{label}...")
+    if not run_command(
+        ["git", "commit", "-m", message],
+        f"  Creating commit{label}...",
+        repo_dir,
+        step_id=f"{step_prefix}commit", title=f"Commit{label}", label=row_labels[0],
+        capture=True, tty=True, summarize=commit_summary,
+    ):
+        aborted(f"\n❌ git commit failed{label} -- aborting.")
+        return False
+    say(f"✅ Step {step_num}: Git commit completed{label}.")
+    return True
+
+
+def push_to_upstream(git, repo_dir, step_num, label, step_prefix, row_labels):
+    """Pushes to the tracked upstream (never a guessed remote); False when it could not be pushed."""
+    try:
+        push_cmd = git.push_command(repo_dir)
+    except git.GitError as e:
+        say(f"\n❌ ERROR: Could not work out where to push{label}: {e}", "error")
+        say(f"⚠ Local commits exist but were not pushed{label}.", "warn")
+        return False
+    upstream = upstream_name(repo_dir) if console_active() else ""
+    if not run_command(
+        push_cmd,
+        f"🚀 Step {step_num}: Pushing changes to remote repository{label}...",
+        repo_dir,
+        step_id=f"{step_prefix}push", title=f"Push{label}", label=row_labels[1],
+        tty=True, summarize=lambda _text: f"{upstream} ✓" if upstream else None,
+    ):
+        aborted(f"\n❌ git push failed{label}.")
+        say(f"⚠ Local commits exist but were not pushed{label}.", "warn")
+        return False
+    say(f"✅ Step {step_num}: Changes pushed to remote{label}.")
+    return True
 
 
 def commit_and_push(
@@ -740,18 +801,10 @@ def commit_and_push(
     """
     git = toolkit("git")
     say(f"\n🔍 Checking for upstream changes{label}...")
-    upstream = git.upstream_verdict(repo_dir, git_cmd=git_cmd)
+    upstream = check_upstream_state(git, repo_dir, git_cmd, label)
+    if upstream is None:
+        return ("error", step_num)
     commits_ahead = upstream.ahead
-    if upstream.status == "error":
-        # Fails closed like the Prechecks: a branch nobody could compare with its upstream is not pushed.
-        say(f"\n❌ ERROR: {upstream.reason}{label}. Nothing was committed or pushed.", "error")
-        say(f"   Re-run the push once `{git_cmd} fetch` works.", "error")
-        return ("error", step_num)
-    if not upstream.ok:
-        say(f"\n❌ ERROR: Local branch{label} is {upstream.reason}. Nothing was committed or pushed.", "error")
-        for line in upstream.hint:
-            say(f"   {line}", "error")
-        return ("error", step_num)
 
     try:
         has_staged = bool(get_staged_paths(repo_dir))
@@ -785,41 +838,16 @@ def commit_and_push(
             return ("error", step_num)
 
         # Step N: Commit the index as-is -- see docstring above for why there is no `git add .`.
-        say(f"\n📝 Step {step_num}: Committing changes to Git{label}...")
-        if not run_command(
-            ["git", "commit", "-m", message],
-            f"  Creating commit{label}...",
-            repo_dir,
-            step_id=f"{step_prefix}commit", title=f"Commit{label}", label=row_labels[0],
-            capture=True, tty=True, summarize=commit_summary,
-        ):
-            aborted(f"\n❌ git commit failed{label} -- aborting.")
+        if not commit_index(repo_dir, message, step_num, label, step_prefix, row_labels):
             return ("error", step_num)
-        say(f"✅ Step {step_num}: Git commit completed{label}.")
         step_num += 1
     else:
         say(f"\nℹ Nothing staged to commit{label} -- {commits_ahead} unpushed commit(s) "
             "already on this branch will be pushed now.")
 
     # Step N (or N+1): Push to remote -- to the tracked upstream (git.push_command), never a guessed remote.
-    try:
-        push_cmd = git.push_command(repo_dir)
-    except git.GitError as e:
-        say(f"\n❌ ERROR: Could not work out where to push{label}: {e}", "error")
-        say(f"⚠ Local commits exist but were not pushed{label}.", "warn")
+    if not push_to_upstream(git, repo_dir, step_num, label, step_prefix, row_labels):
         return ("error", step_num)
-    upstream = upstream_name(repo_dir) if console_active() else ""
-    if not run_command(
-        push_cmd,
-        f"🚀 Step {step_num}: Pushing changes to remote repository{label}...",
-        repo_dir,
-        step_id=f"{step_prefix}push", title=f"Push{label}", label=row_labels[1],
-        tty=True, summarize=lambda _text: f"{upstream} ✓" if upstream else None,
-    ):
-        aborted(f"\n❌ git push failed{label}.")
-        say(f"⚠ Local commits exist but were not pushed{label}.", "warn")
-        return ("error", step_num)
-    say(f"✅ Step {step_num}: Changes pushed to remote{label}.")
     step_num += 1
 
     return ("ok", step_num)
@@ -864,7 +892,7 @@ def run_docs_followup(juneau_root, message, step_num, *, docs_prechecked=False):
 
     if not docs_prechecked and docs_active(docs_root):
         checks = toolkit("checks")
-        verdict = checks.evaluate(checks.identity(docs_root, required=REQUIRED_GIT_EMAIL, label="docs identity"))
+        verdict = checks.evaluate(checks.identity(docs_root, required=REQUIRED_GIT_EMAIL, label=DOCS_IDENTITY_CHECK))
         if verdict.status != "pass":
             aborted(f"\n❌ juneau-docs became active during the build and its identity check failed: "
                     f"{verdict.reason}  Nothing was committed or pushed in juneau-docs.", *verdict.hint)
@@ -877,7 +905,7 @@ def run_docs_followup(juneau_root, message, step_num, *, docs_prechecked=False):
         try:
             returncode = run_gate(
                 [sys.executable, str(docs_build_script), "--skip-maven"],
-                docs_root, "docs-smoke", "Docs smoke check", "Docs build"
+                docs_root, "docs-smoke", "Docs smoke check", DOCS_BUILD_LABEL
             )
             docs_smoke_elapsed = time.time() - docs_smoke_start
             if returncode != 0:
@@ -957,10 +985,9 @@ def run_docs_only(args, juneau_root):
         return 0
 
     repo = docs_root if docs_root.exists() else juneau_root
-    return _in_session(f"📚 Juneau docs push · {current_branch(repo)}",
-                       lambda s: _docs_only_steps(s, args, console, docs_root, missing),
-                       mode="push", repo=repo,
-                       plan=[("prechecks", "Prechecks"), ("docs-smoke", "Docs build"), ("commit", "Commit"),
+    return _in_session("Push", lambda s: _docs_only_steps(s, args, console, docs_root, missing),
+                       header=session_header("Juneau Docs", current_branch(repo), args.message), mode="push", repo=repo,
+                       plan=[("prechecks", "Prechecks"), ("docs-smoke", DOCS_BUILD_LABEL), ("commit", "Commit"),
                              ("push", "Push")])
 
 
@@ -981,7 +1008,7 @@ def _docs_only_steps(s, args, console, docs_root, missing):
         try:
             returncode = run_gate(
                 [sys.executable, str(docs_build_script), "--skip-maven"],
-                docs_root, "docs-smoke", "Docs smoke check", "Docs build"
+                docs_root, "docs-smoke", "Docs smoke check", DOCS_BUILD_LABEL
             )
             if returncode != 0:
                 aborted("\n❌ Docs smoke check failed — fix the Docusaurus build before pushing juneau-docs.")
@@ -1039,10 +1066,14 @@ def main():
 #: are test.py's rows; the others are this script's.
 PLAN_LABELS = {
     "prechecks": "Prechecks", "sonar": "Sonar", "tracker": "Tracker", "container-tags": "Tags",
-    "bom": "BOM", "build": "Compile", "tests": "Java tests", "py-tests": "Python tests", "js-tests": "Browser tests", "timing": "Timing",
-    "install": "Install", "commit": "Commit", "push": "Push", "docs-smoke": "Docs build",
+    "bom": "BOM", "build": "Compile", "tests": "Java Tests", "perf": "Perf", "py-tests": "Python Tests",
+    "js-tests": "Browser Tests", "timing": "Timing",
+    "install": "Install", "commit": "Commit", "push": "Push", "docs-smoke": DOCS_BUILD_LABEL,
     "docs-commit": "Docs", "docs-push": "Docs push",
 }
+
+#: test.py's rows that take a step number, in order.  Perf is a row without a number, so it is not here.
+TEST_PY_NUMBERED_STEPS = ("build", "tests", "py-tests", "js-tests")
 
 
 def push_plan(args, script_dir, juneau_root, console):
@@ -1059,10 +1090,10 @@ def push_plan(args, script_dir, juneau_root, console):
         ids += [step_id for step_id, name in (("container-tags", "check-container-tags.py"),
                                              ("bom", "check-bom-completeness.py")) if (script_dir / name).exists()]
         if (script_dir / "test.py").exists():
-            ids += ["build", "tests", "py-tests", "js-tests"]
+            ids += ["build", "tests", "perf", "py-tests", "js-tests"]
         else:
             ids.append("tests")
-        if console and (script_dir / "push-timings.py").exists():
+        if console and (script_dir / PUSH_TIMINGS_SCRIPT).exists():
             ids.append("timing")
     ids.append("install")
     if not args.test_only:
@@ -1072,9 +1103,15 @@ def push_plan(args, script_dir, juneau_root, console):
     return [(step_id, PLAN_LABELS[step_id]) for step_id in ids]
 
 
-def _in_session(title, body, *, mode, repo, plan):
+def session_header(project, branch, message):
+    """The session header's items after the title: the project, the branch, then the commit message when there is one
+    (none with --test-only)."""
+    return [project, branch] + ([message] if message else [])
+
+
+def _in_session(title, body, *, header, mode, repo, plan):
     """Run body(session) -- which returns an exit code -- inside the run session; returns the session's exit code."""
-    with toolkit("run").session(title, bell=True, sound=True, silence_env=(PUSH_NO_SOUND_ENV,),
+    with toolkit("run").session(title, header=header, bell=True, sound=True, silence_env=(PUSH_NO_SOUND_ENV,),
                                 mode=mode, project=repo.name, repo=repo, exit=False, plan=plan) as session:
         code = body(session)
         if code:
@@ -1163,7 +1200,7 @@ Examples:
         dest="tracker_audit",
         help=(
             "Opt-in gate: run ~/Project Work/scripts/todo-status-audit.py --project juneau "
-            "against ~/Project Work/todos/juneau/ and block the push if it flags any plan file "
+            "against ~/Project Work/work/juneau/ and block the push if it flags any plan file "
             "(stale/misplaced status header, or a declared Counts: claim that no longer "
             "re-derives from committed HEAD content)."
         )
@@ -1245,9 +1282,9 @@ def _main():  # NOSONAR python:S3776 -- Cognitive complexity is acceptable for t
         if args.tracker_audit:
             print("📋 Tracker audit gate ENABLED (--tracker-audit)")
         if args.js_tests:
-            print("🌐 Browser tests FORCED (--js-tests)")
+            print("🌐 Browser Tests FORCED (--js-tests)")
         if args.no_js_tests:
-            print("🌐 Browser tests DISABLED (--no-js-tests)")
+            print("🌐 Browser Tests DISABLED (--no-js-tests)")
         if args.dry_run:
             print("🔍 DRY RUN MODE - No actual changes will be made")
         print("=" * 70)
@@ -1292,8 +1329,9 @@ def _main():  # NOSONAR python:S3776 -- Cognitive complexity is acceptable for t
         print("\nDry run complete. Use without --dry-run to execute.")
         return 0
 
-    return _in_session(f"🚀 Juneau push · {current_branch(juneau_root)}",
+    return _in_session("Test" if args.test_only else "Push",
                        lambda s: _push_steps(s, args, run, console, script_dir, juneau_root),
+                       header=session_header("Juneau", current_branch(juneau_root), None if args.test_only else args.message),
                        mode="test" if args.test_only else "push", repo=juneau_root,
                        plan=push_plan(args, script_dir, juneau_root, console))
 
@@ -1306,7 +1344,7 @@ def _push_steps(s, args, run, console, script_dir, juneau_root):  # NOSONAR pyth
     docs_prechecked = False
     if not args.test_only:
         listed = prechecks(juneau_root)
-        docs_prechecked = any(c.name == "docs identity" for c in listed)
+        docs_prechecked = any(c.name == DOCS_IDENTITY_CHECK for c in listed)
         s.checks("prechecks", "Prechecks", listed)
     if console and args.skip_tests:
         say("⚠ Tests will be SKIPPED (--skip-tests)", "warn")
@@ -1336,7 +1374,7 @@ def _push_steps(s, args, run, console, script_dir, juneau_root):  # NOSONAR pyth
     if tracker_gate_status is not None:
         if tracker_gate_status == "fail":
             return aborted("\n❌ Push aborted: the tracker audit flagged at least one plan file "
-                           "under ~/Project Work/todos/juneau/.",
+                           "under ~/Project Work/work/juneau/.",
                            "   Run `python3 ~/Project\\ Work/scripts/todo-status-audit.py --project juneau` for "
                            "details, or omit --tracker-audit to push without this gate.")
         if tracker_gate_status == "error":
@@ -1382,16 +1420,16 @@ def _push_steps(s, args, run, console, script_dir, juneau_root):  # NOSONAR pyth
                 _test_start = time.time()
                 test_cmd = build_test_command(test_script, args)
                 installed_by_tests = "--full" in test_cmd
-                # The child draws its own Compile/Java tests/Browser tests/Perf rows; ours closes until it exits.  Its
+                # The child draws its own Compile/Java Tests/Perf/Python Tests/Browser Tests rows; ours closes until it exits.  Its
                 # environment carries JUNEAU_PUSH_ACTIVE (test.py then leaves the end-of-run bell to us) and, with
                 # markers on, JUNEAU_RUN_N_BASE reserving the numbers of the steps it contributes so the whole run
                 # stays in order.  Neither is set in our own environment, so later children don't inherit them.
-                with toolkit("run").handoff(reserve=3) as extra:
+                with toolkit("run").handoff(reserve=len(TEST_PY_NUMBERED_STEPS)) as extra:
                     result = run_test_script(test_cmd, juneau_root, run, env={**os.environ, **extra})
                 _test_wall_sec = int(time.time() - _test_start)
                 if result.returncode != 0:
                     return aborted("\n❌ Build process aborted due to test failures.")
-                say(f"✅ Step {step_num}: Java tests passed")
+                say(f"✅ Step {step_num}: Java Tests passed")
                 _append_test_run_history(juneau_root, _test_wall_sec)
             except Exception as e:
                 say(f"\n❌ Error running tests: {e}", "error")
@@ -1400,7 +1438,7 @@ def _push_steps(s, args, run, console, script_dir, juneau_root):  # NOSONAR pyth
             # Fallback to direct mvn test if test.py doesn't exist
             _test_start = time.time()
             _mvn_ok = run_marked(
-                "tests", "Java tests",
+                "tests", "Java Tests",
                 ["mvn", "test"],
                 f"🧪 Step {step_num}: Running tests...",
                 juneau_root,
@@ -1410,7 +1448,7 @@ def _push_steps(s, args, run, console, script_dir, juneau_root):  # NOSONAR pyth
             if not _mvn_ok:
                 return aborted("\n❌ Build process aborted due to test failures.")
             _append_test_run_history(juneau_root, _test_wall_sec)
-        timing_report = script_dir / "push-timings.py"
+        timing_report = script_dir / PUSH_TIMINGS_SCRIPT
         if timing_report.exists():
             if run.console_active():
                 run_timing_report(script_dir, juneau_root)
@@ -1423,7 +1461,7 @@ def _push_steps(s, args, run, console, script_dir, juneau_root):  # NOSONAR pyth
         step_num += 1
     else:
         say(f"\n⏭️  Step {step_num}: Skipping tests (--skip-tests flag)")
-        with run.row("tests", "Java tests", label="Java tests") as tests_row:
+        with run.row("tests", "Java Tests", label="Java Tests") as tests_row:
             tests_row.skip("--skip-tests")
         step_num += 1
     
@@ -1432,7 +1470,7 @@ def _push_steps(s, args, run, console, script_dir, juneau_root):  # NOSONAR pyth
     if installed_by_tests:
         # Still the protocol step `install` (end status skip), so the release manager's step list doesn't change.
         with marked_step("install", "Build and install", label="Install") as install_step:
-            install_step.skip("done by Java tests")
+            install_step.skip("done by Java Tests")
         if not console:
             say(f"\n⏭️  Step {step_num}: Build and install already done by test.py --full")
     elif not run_marked(
@@ -1461,8 +1499,8 @@ def _push_steps(s, args, run, console, script_dir, juneau_root):  # NOSONAR pyth
     push_status, step_num = commit_and_push(juneau_root, args.message, step_num)
     if push_status == "error":
         return 1
-    if push_status == "nothing_to_do":
-        return 0
+    # Nothing to do in juneau does not end the run: juneau-docs may still have something staged or
+    # unpushed, and run_docs_followup() decides that (and is a no-op when it is idle too).
 
     # Step 6 (optional): juneau-docs follow-up — see run_docs_followup() for why the guard is
     # "does juneau-docs exist" rather than "does it have local changes".

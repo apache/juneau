@@ -99,7 +99,7 @@ class ParserSet_Test extends TestBase {
 
 	@Test void b02_builder_clear_removesAllEntries() {
 		var sb = ParserSet.create().add(P1.class, P2.class);
-		assertEquals(2, sb.inner().size());
+		assertSize(2, sb.inner());
 		sb.clear();
 		assertTrue(sb.inner().isEmpty());
 	}

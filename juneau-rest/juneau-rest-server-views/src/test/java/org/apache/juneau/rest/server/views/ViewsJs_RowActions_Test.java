@@ -450,7 +450,7 @@ class ViewsJs_RowActions_Test extends TestBase {
 		// what happens to a TEMPLATED endpoint: it now REFUSES (reason "unresolved-endpoint", no `url`) instead
 		// of firing the literal-token URL `servlet:/incidents/{id}/ack`, which is a URL the action's author
 		// demonstrably did not write.  The valuable, UNCHANGED half is the real point of this test: a
-		// non-templated (literal) endpoint still fires byte-identical - shipping juneau-views.js alone remains
+		// non-templated (literal) endpoint still fires as declared - shipping juneau-views.js alone remains
 		// fully backward compatible for every endpoint that has no `{property}` token at all.
 		var r = reportNoRendersJs();
 		assertBean(r, "hasInterpolateHref,literal_withRowData", "false,servlet:/incidents/ack");

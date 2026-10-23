@@ -17,6 +17,7 @@
 package org.apache.juneau.rest.server.metrics;
 
 import static org.apache.juneau.commons.utils.Shorts.*;
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.time.*;
@@ -95,7 +96,7 @@ class MetricsRecorder_Contract_Test extends TestBase {
 	@Test void a01_happyPath_oneEventCaptured() throws Exception {
 		A_REC.events.clear();
 		CA.get("/users/42").run().assertStatus(200).assertContent("user:42");
-		assertEquals(1, A_REC.events.size(), "exactly one event per @RestOp call");
+		assertSize(() -> "exactly one event per @RestOp call", 1, A_REC.events);
 		var e = A_REC.last();
 		assertEquals("GET", e.httpMethod);
 		assertEquals(200, e.statusCode);
@@ -110,7 +111,7 @@ class MetricsRecorder_Contract_Test extends TestBase {
 		A_REC.events.clear();
 		CA.get("/users/abc").run().assertStatus(200);
 		CA.get("/users/xyz").run().assertStatus(200);
-		assertEquals(2, A_REC.events.size());
+		assertSize(2, A_REC.events);
 		assertEquals(A_REC.events.get(0).uriTemplate, A_REC.events.get(1).uriTemplate, "different concrete URIs must share the same template tag");
 	}
 
@@ -138,7 +139,7 @@ class MetricsRecorder_Contract_Test extends TestBase {
 	@Test void b01_exceptionPath_eventFiredWithError() throws Exception {
 		B_REC.events.clear();
 		CB.get("/boom").run().assertStatus(500);
-		assertEquals(1, B_REC.events.size());
+		assertSize(1, B_REC.events);
 		var e = B_REC.last();
 		assertEquals(500, e.statusCode);
 		assertNotNull(e.error);
@@ -167,7 +168,7 @@ class MetricsRecorder_Contract_Test extends TestBase {
 	@Test void c01_noRecorderBean_noEventsFanOut() throws Exception {
 		C_CANARY.events.clear();
 		CC.get("/ping").run().assertStatus(200);
-		assertEquals(0, C_CANARY.events.size(), "without a @Bean MetricsRecorder, no events reach external recorders");
+		assertSize(() -> "without a @Bean MetricsRecorder, no events reach external recorders", 0, C_CANARY.events);
 	}
 
 	// -----------------------------------------------------------------------------------------------------------------

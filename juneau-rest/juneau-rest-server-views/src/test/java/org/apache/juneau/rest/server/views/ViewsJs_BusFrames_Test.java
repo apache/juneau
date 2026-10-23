@@ -40,7 +40,9 @@ class ViewsJs_BusFrames_Test extends TestBase {
 	private static Map<String,Object> corpus;
 
 	@BeforeAll
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Casts a parsed JSON value to its known Map/List shape.
+	})
 	static void runHarness() throws Exception {
 		var file = Path.of(System.getProperty("basedir"), "../juneau-rest-server-bus/src/test/resources/bus-frames-corpus.json");
 		corpus = Json.to(Files.readString(file, UTF_8), Map.class);
@@ -52,7 +54,9 @@ class ViewsJs_BusFrames_Test extends TestBase {
 		return report;
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Casts a parsed JSON value to its known Map/List shape.
+	})
 	private static List<Map<String,Object>> list(Map<String,Object> m, String key) {
 		var l = (List<Map<String,Object>>) m.get(key);
 		assertNotNull(l, () -> "no '" + key + "' in " + m);
@@ -126,7 +130,10 @@ class ViewsJs_BusFrames_Test extends TestBase {
 		assertEquals("bad frame (bad-field): clear.seq", got.get(12).get("message"));
 	}
 
-	@Test @SuppressWarnings("unchecked")
+	@Test
+	@SuppressWarnings({
+		"unchecked" // Casts a parsed JSON value to its known Map/List shape.
+	})
 	void a06_maxFrameBytesIsInclusiveAndCountsUtf8() {
 		var t = (Map<String,Object>) report().get("tooLarge");
 		assertJson("65536", t.get("atLimitBytes"));
@@ -160,7 +167,10 @@ class ViewsJs_BusFrames_Test extends TestBase {
 			]""", report().get("sseCap"));
 	}
 
-	@Test @SuppressWarnings("unchecked")
+	@Test
+	@SuppressWarnings({
+		"unchecked" // Casts a parsed JSON value to its known Map/List shape.
+	})
 	void a09_sseParserDoesNotBufferAnEndlessLine() {
 		var r = (Map<String,Object>) report().get("sseEndlessLine");
 		assertTrue(((Number) r.get("buffered")).intValue() <= 65536, () -> "buffered " + r.get("buffered"));

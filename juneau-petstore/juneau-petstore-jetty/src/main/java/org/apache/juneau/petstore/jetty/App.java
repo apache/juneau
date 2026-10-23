@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.petstore.jetty;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
+
 import java.util.*;
 
 import org.apache.juneau.commons.inject.*;
@@ -147,7 +149,7 @@ public class App {
 
 		// The comma-separated entries, trimmed, blank ones kept so the boundary refuses them; none when unset.
 		private static String[] hosts(String setting) {
-			if (setting == null || setting.isBlank())
+			if (ib(setting))
 				return new String[0];
 			return Arrays.stream(setting.split(",", -1)).map(String::trim).toArray(String[]::new);
 		}

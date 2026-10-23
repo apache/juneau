@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.server.springboot;
 
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
@@ -33,10 +34,9 @@ import org.springframework.context.*;
  */
 @org.apache.juneau.testing.SpringbootTest
 @SuppressWarnings({
-	"resource", // Named resource variables in tests are intentionally not closed; lifecycle is managed by test infrastructure.
 	"unchecked" // getBean(String, Class) invocation in test
 })
-class SpringBeanStore_Test extends TestBase {
+class SpringBeanStore_Springboot_Test extends TestBase {
 
 	private ApplicationContext mockAppContext;
 	private SpringBeanStore beanStore;
@@ -316,7 +316,7 @@ class SpringBeanStore_Test extends TestBase {
 
 		var result = beanStore.getBeansOfType(TestService.class);
 
-		assertEquals(2, result.size());
+		assertSize(2, result);
 		assertSame(service1, result.get("bean1"));
 		assertSame(service2, result.get("bean2"));
 	}
@@ -330,7 +330,7 @@ class SpringBeanStore_Test extends TestBase {
 
 		var result = beanStore.getBeansOfType(TestService.class);
 
-		assertEquals(2, result.size());
+		assertSize(2, result);
 		assertSame(springService1, result.get("bean1"));
 		assertSame(springService2, result.get("bean2"));
 	}
@@ -347,7 +347,7 @@ class SpringBeanStore_Test extends TestBase {
 
 		var result = beanStore.getBeansOfType(TestService.class);
 
-		assertEquals(2, result.size());
+		assertSize(2, result);
 		assertSame(localService, result.get("bean1")); // Local overrides Spring
 		assertSame(springService2, result.get("bean2"));
 	}
@@ -363,7 +363,7 @@ class SpringBeanStore_Test extends TestBase {
 
 		var result = beanStore.getBeansOfType(TestService.class);
 
-		assertEquals(2, result.size());
+		assertSize(2, result);
 		assertSame(localService, result.get("local"));
 		assertSame(springService, result.get("spring"));
 	}
@@ -380,7 +380,7 @@ class SpringBeanStore_Test extends TestBase {
 
 		var result = store.getBeansOfType(TestService.class);
 
-		assertEquals(2, result.size());
+		assertSize(2, result);
 		assertSame(parentService, result.get("parent"));
 		assertSame(localService, result.get("local"));
 	}
@@ -757,7 +757,7 @@ class SpringBeanStore_Test extends TestBase {
 		// Test: child can see all three levels
 		var result = child.getBeansOfType(TestService.class);
 
-		assertEquals(3, result.size());
+		assertSize(3, result);
 		assertSame(service1, result.get("bean1"));
 		assertSame(service2, result.get("bean2"));
 		assertSame(service3, result.get("bean3"));

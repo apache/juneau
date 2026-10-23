@@ -151,7 +151,9 @@ class PetstoreHooks_BrowserTest extends TestBase {
 		return HTTP.send(HttpRequest.newBuilder(URI.create(base + path)).header("Accept", "application/json").GET().build(), BodyHandlers.ofString());
 	}
 
-	@SuppressWarnings("unchecked") // writes is a JSON array of {url, method, status, sent, body}.
+	@SuppressWarnings({
+		"unchecked" // writes is a JSON array of {url, method, status, sent, body}.
+	})
 	private static Map<String,Object> theWrite(Map<String,Object> c, String method) {
 		var w = ((List<Map<String,Object>>) query(c, "writes")).stream().filter(x -> method.equals(x.get("method"))).toList();
 		assertSize(1, w);

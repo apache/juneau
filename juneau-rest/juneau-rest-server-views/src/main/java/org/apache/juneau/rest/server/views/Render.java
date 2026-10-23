@@ -83,7 +83,7 @@ public class Render {
 	 * @return A new {@link Render}.
 	 */
 	public static Render parse(String s) {
-		if (s == null || s.isBlank())
+		if (ib(s))
 			throw iaex("Render id must not be null or blank.");
 		var i = s.indexOf(':');
 		if (i < 0)
@@ -200,7 +200,7 @@ public class Render {
 	 */
 	public static Render pill(String tone) {
 		var r = pill();
-		if (tone != null && ! tone.isBlank())
+		if (inb(tone))
 			r.meta("tone", tone);
 		return r;
 	}

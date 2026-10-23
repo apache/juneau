@@ -17,6 +17,7 @@
 package org.apache.juneau.rest.server.views;
 
 import static org.apache.juneau.BasicTestUtils.*;
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
@@ -37,7 +38,7 @@ class RunViewPage_Test extends TestBase {
 		assertEquals(List.of("contractVersion", "events", "next", "more", "terminal"), new ArrayList<>(p.toContractMap().keySet()));
 		assertEquals("1", p.toContractMap().get("contractVersion"));
 		assertEquals("k3x9ab.1", p.next());
-		assertEquals(1, p.events().size());
+		assertSize(1, p.events());
 		assertFalse(p.more());
 		assertFalse(p.terminal());
 	}
@@ -85,6 +86,6 @@ class RunViewPage_Test extends TestBase {
 		var l = new ArrayList<>(List.of(ev(1)));
 		var p = RunViewPage.of(l, "a.1", false, false);
 		l.clear();
-		assertEquals(1, p.events().size());
+		assertSize(1, p.events());
 	}
 }

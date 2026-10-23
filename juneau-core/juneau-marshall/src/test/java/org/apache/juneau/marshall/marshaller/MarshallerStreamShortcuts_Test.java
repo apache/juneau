@@ -102,7 +102,7 @@ class MarshallerStreamShortcuts_Test extends TestBase {
 			while (r.canRead())
 				seen.add(r.read(Map.class));
 		}
-		assertEquals(2, seen.size());
+		assertSize(2, seen);
 		assertBean(seen.get(0), "x", "1");
 		assertBean(seen.get(1), "x", "2");
 	}

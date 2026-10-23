@@ -141,7 +141,7 @@ class Rest_DefaultRequestAttributes_Test extends TestBase {
 			attrs.set("p3", "pp3");
 			attrs.set("p4", "pp4");
 			var accept = req.getHeaderParam("Accept").orElse(null);
-			if (accept == null || accept.isEmpty())
+			if (ie(accept))
 				req.getHeaders().set("Accept", "text/s2");
 			return null;
 		}

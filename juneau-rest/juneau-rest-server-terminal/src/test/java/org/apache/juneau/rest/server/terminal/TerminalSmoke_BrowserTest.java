@@ -17,6 +17,8 @@
 package org.apache.juneau.rest.server.terminal;
 
 import static java.nio.charset.StandardCharsets.*;
+import static org.apache.juneau.commons.utils.Shorts.f;
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assumptions.*;
 
@@ -110,7 +112,7 @@ class TerminalSmoke_BrowserTest extends TestBase {
 		// while following.
 		var feed = new StringBuilder();
 		for (var i = 0; i < 150; i++)
-			feed.append("filler ").append(String.format("%03d", i)).append('\n');
+			feed.append("filler ").append(f("%03d", i)).append('\n');
 		feed.append(Files.readString(script.getParent().getParent().getParent().resolve("test/python/fixtures/maven-serial-success.log"), UTF_8));
 		feed.append("progress 10%\rprogress 100%\n");
 		feed.append("\u001b[31mred tail\u001b[0m\n");
@@ -249,6 +251,6 @@ class TerminalSmoke_BrowserTest extends TestBase {
 
 	@Test void z01_everyCaseHasAMethod() {
 		var cases = (Map<?,?>)report.get("cases");
-		assertEquals(3, cases.size(), () -> "case count changed; add a method per new case: " + cases.keySet());
+		assertSize(() -> "case count changed; add a method per new case: " + cases.keySet(), 3, cases);
 	}
 }

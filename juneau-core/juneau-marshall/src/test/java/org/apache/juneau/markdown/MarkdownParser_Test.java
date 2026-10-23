@@ -17,6 +17,7 @@
 package org.apache.juneau.markdown;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 
 import java.util.*;
 
@@ -71,7 +72,7 @@ class MarkdownParser_Test {
 	void b01_readMultiColumnTable_toBeanList() {
 		var md = "| name | age |\n|---|---|\n| Alice | 30 |\n| Bob | 25 |";
 		var r = (List<B>) MarkdownParser.DEFAULT.read(md, List.class, B.class);
-		assertEquals(2, r.size());
+		assertSize(2, r);
 		assertEquals("Alice", r.get(0).name);
 		assertEquals(30, r.get(0).age);
 		assertEquals("Bob", r.get(1).name);
@@ -82,7 +83,7 @@ class MarkdownParser_Test {
 	void b02_readMultiColumnTable_toMapList() {
 		var md = "| key1 | key2 |\n|---|---|\n| v1 | v2 |";
 		var r = (List<Map<?,?>>) MarkdownParser.DEFAULT.read(md, List.class, Map.class);
-		assertEquals(1, r.size());
+		assertSize(1, r);
 		assertEquals("v1", r.get(0).get("key1"));
 		assertEquals("v2", r.get(0).get("key2"));
 	}
@@ -204,7 +205,7 @@ class MarkdownParser_Test {
 	void g01_readEnumValues() {
 		var md = "| name | status |\n|---|---|\n| Task1 | PENDING |\n| Task2 | COMPLETED |";
 		var r = (List<E>) MarkdownParser.DEFAULT.read(md, List.class, E.class);
-		assertEquals(2, r.size());
+		assertSize(2, r);
 		assertEquals("Task1", r.get(0).name);
 		assertEquals(Status.PENDING, r.get(0).status);
 		assertEquals("Task2", r.get(1).name);
@@ -265,7 +266,7 @@ class MarkdownParser_Test {
 		var original = List.of(new G("Alice", 30, true), new G("Bob", 25, false));
 		var md = MarkdownSerializer.DEFAULT.write(original);
 		var parsed = (List<G>) MarkdownParser.DEFAULT.read(md, List.class, G.class);
-		assertEquals(2, parsed.size());
+		assertSize(2, parsed);
 		assertEquals("Alice", parsed.get(0).name);
 		assertEquals(30, parsed.get(0).age);
 		assertTrue(parsed.get(0).active);
@@ -333,7 +334,7 @@ class MarkdownParser_Test {
 	void m01_fewerCellsThanHeaders() {
 		var md = "| name | age |\n|---|---|\n| Alice |";
 		var r = (List<B>) MarkdownParser.DEFAULT.read(md, List.class, B.class);
-		assertEquals(1, r.size());
+		assertSize(1, r);
 		assertEquals("Alice", r.get(0).name);
 		assertEquals(0, r.get(0).age);
 	}

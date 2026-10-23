@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.commons.utils;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
+
 import java.util.zip.*;
 
 /**
@@ -40,6 +42,6 @@ public class ChecksumUtils {
 	public static String hash8(byte[] bytes) {
 		var crc = new CRC32();
 		crc.update(bytes);
-		return String.format("%08x", crc.getValue());
+		return f("%08x", crc.getValue());
 	}
 }

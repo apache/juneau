@@ -76,7 +76,7 @@ class AssetResolutionAssert_Test extends TestBase {
 
 	@Test void a01_chromePageAssetsAllResolve() throws Exception {
 		var page = html("/page");
-		assertEquals(4, AssetResolutionAssert.assetUrls(page).size());
+		assertSize(4, AssetResolutionAssert.assetUrls(page));
 		AssetResolutionAssert.assertAssetsResolve("/page", page, AssetResolutionAssert_Test::status);
 	}
 

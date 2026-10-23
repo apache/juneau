@@ -20,6 +20,7 @@ import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.*;
 import static org.apache.juneau.commons.reflect.AnnotationTraversal.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
+import static org.apache.juneau.commons.TestAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.lang.annotation.*;
@@ -135,7 +136,7 @@ class AnnotationProvider_Test extends TestBase {
 		var annotations = provider.find(TestAnnotation.class, ci, SELF);
 
 		assertNotNull(annotations);
-		assertEquals(1, annotations.size());
+		assertSize(1, annotations);
 		assertEquals("class", annotations.get(0).getValue().orElse(null));
 	}
 
@@ -213,7 +214,7 @@ class AnnotationProvider_Test extends TestBase {
 		var annotations = provider.find(MultiTargetAnnotation.class, field, SELF);
 
 		assertNotNull(annotations);
-		assertEquals(1, annotations.size());
+		assertSize(1, annotations);
 		assertEquals(1, annotations.get(0).getInt("value").orElse(0));
 	}
 
@@ -287,7 +288,7 @@ class AnnotationProvider_Test extends TestBase {
 		var annotations = provider.find(MultiTargetAnnotation.class, constructor, SELF);
 
 		assertNotNull(annotations);
-		assertEquals(1, annotations.size());
+		assertSize(1, annotations);
 		assertEquals(2, annotations.get(0).getInt("value").orElse(0));
 	}
 
@@ -323,7 +324,7 @@ class AnnotationProvider_Test extends TestBase {
 		var annotations = provider.find(MultiTargetAnnotation.class, method, SELF);
 
 		assertNotNull(annotations);
-		assertEquals(1, annotations.size());
+		assertSize(1, annotations);
 		assertEquals(3, annotations.get(0).getInt("value").orElse(0));
 	}
 
@@ -361,7 +362,7 @@ class AnnotationProvider_Test extends TestBase {
 		var annotations = provider.find(MultiTargetAnnotation.class, param, SELF);
 
 		assertNotNull(annotations);
-		assertEquals(1, annotations.size());
+		assertSize(1, annotations);
 		assertEquals(4, annotations.get(0).getInt("value").orElse(0));
 	}
 
@@ -550,7 +551,7 @@ class AnnotationProvider_Test extends TestBase {
 		var annotations = provider.find(MultiTargetAnnotation.class, field);
 
 		assertNotNull(annotations);
-		assertEquals(1, annotations.size());
+		assertSize(1, annotations);
 	}
 
 	@Test
@@ -565,7 +566,7 @@ class AnnotationProvider_Test extends TestBase {
 		var annotations = provider.find(MultiTargetAnnotation.class, constructor);
 
 		assertNotNull(annotations);
-		assertEquals(1, annotations.size());
+		assertSize(1, annotations);
 	}
 
 	@Test
@@ -600,7 +601,7 @@ class AnnotationProvider_Test extends TestBase {
 
 		// Should not throw exception, just return empty list
 		assertNotNull(annotations);
-		assertEquals(0, annotations.size());
+		assertSize(0, annotations);
 	}
 
 	@Test

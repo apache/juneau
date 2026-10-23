@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.rest.server.reactive;
 
+import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
@@ -311,7 +313,7 @@ class ReactiveResponseProcessor_Test extends TestBase {
 		var c = CD.get("/ndjsonWithNull").run().assertStatus(200).getContent().asString();
 		var lines = Arrays.stream(c.strip().split("\n"))
 			.filter(l -> !l.isBlank()).toList();
-		assertEquals(2, lines.size(), "Expected 2 non-null frames; got: " + c);
+		assertSize(() -> "Expected 2 non-null frames; got: " + c, 2, lines);
 		assertTrue(lines.get(0).contains("\"name\":\"first\""), c);
 		assertTrue(lines.get(1).contains("\"name\":\"last\""), c);
 	}
@@ -602,10 +604,7 @@ class ReactiveResponseProcessor_Test extends TestBase {
 		@RestGet("/maps")
 		public Flow.Publisher<Map<String,Object>> maps(RestResponse res) {
 			res.setContentType("application/jsonl");
-			var a = new LinkedHashMap<String,Object>();
-			a.put("n", 1);
-			a.put("text", "two\nlines");
-			a.put("ui", Map.of("style", "error"));
+			Map<String,Object> a = map("n", 1, "text", "two\nlines", "ui", Map.of("style", "error"));
 			var b = new LinkedHashMap<String,Object>();
 			b.put("n", 2);
 			b.put("text", "plain");

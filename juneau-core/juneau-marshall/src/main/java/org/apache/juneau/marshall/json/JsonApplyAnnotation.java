@@ -38,11 +38,11 @@ public class JsonApplyAnnotation {
 	private JsonApplyAnnotation() {}
 
 	/**
-	 * Applies targeted {@link JsonApply} annotations to a {@link org.apache.juneau.marshall.Context.Builder}.
+	 * Applies targeted {@link JsonApply} annotations to a {@link org.apache.juneau.marshall.Context.Builder Context.Builder}.
 	 *
 	 * <p>
 	 * Passes the {@link JsonApply @JsonApply} annotation through to the builder's annotation list.
-	 * The {@link org.apache.juneau.commons.reflect.AnnotationProvider.Builder#addRuntimeAnnotations(java.util.List)}
+	 * The {@link org.apache.juneau.commons.reflect.AnnotationProvider.Builder#addRuntimeAnnotations(java.util.List) AnnotationProvider.Builder#addRuntimeAnnotations(java.util.List)}
 	 * method handles unwrapping the nested {@link Json @Json} from {@link JsonApply#value()} and registering it
 	 * under the targets specified by {@link JsonApply#on()} and {@link JsonApply#onClass()}.
 	 */
@@ -74,7 +74,7 @@ public class JsonApplyAnnotation {
 	 * Builder class.
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.marshall.MarshallingContext.Builder#annotations(Annotation...)}
+	 * 	<li class='jm'>{@link org.apache.juneau.marshall.MarshallingContext.Builder#annotations(Annotation...) MarshallingContext.Builder#annotations(Annotation...)}
 	 * </ul>
 	 */
 	public static class Builder extends AppliedAnnotationObject.BuilderTMF {

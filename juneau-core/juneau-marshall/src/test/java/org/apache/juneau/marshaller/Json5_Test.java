@@ -60,20 +60,20 @@ class Json5_Test extends TestBase {
 	@Test void a03_trailingCommas() throws Exception {
 		var obj = Json5.to("{a:1,}", JsonMap.class);
 		assertEquals(1, obj.getInt("a"));
-		assertEquals(1, obj.size());
+		assertSize(1, obj);
 
 		var nested = Json5.to("{a:{b:2,},c:[3,],}", JsonMap.class);
 		assertEquals(2, nested.getMap("a").getInt("b"));
 		assertEquals(3, nested.getList("c").getInt(0));
-		assertEquals(1, nested.getList("c").size());
+		assertSize(1, nested.getList("c"));
 
 		var arr = Json5.to("[1,2,]", JsonList.class);
-		assertEquals(2, arr.size());
+		assertSize(2, arr);
 		assertEquals(1, arr.getInt(0));
 		assertEquals(2, arr.getInt(1));
 
 		var emptyish = Json5.to("[1,]", JsonList.class);
-		assertEquals(1, emptyish.size());
+		assertSize(1, emptyish);
 		assertEquals(1, emptyish.getInt(0));
 	}
 

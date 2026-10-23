@@ -94,7 +94,7 @@ public final class McpBearerChallenge {
 	 * @return This object (for method chaining).
 	 */
 	public McpBearerChallenge scope(Collection<String> scopes) {
-		if (scopes == null || scopes.isEmpty())
+		if (ie(scopes))
 			return this;
 		return param("scope", String.join(" ", scopes));
 	}

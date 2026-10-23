@@ -24,7 +24,7 @@ import org.apache.juneau.commons.svl.*;
 import org.junit.jupiter.api.*;
 
 /**
- * Phase G regression: verifies that {@code @Value("${...}")} expressions are tokenized
+ * Regression test: verifies that {@code @Value("${...}")} expressions are tokenized
  * <i>once</i> per distinct expression and cached as {@link VarTemplate} instances on
  * {@link ValueResolver}'s internal cache.
  *

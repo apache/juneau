@@ -20,8 +20,8 @@
  *
  * <p>
  * Lean, {@link java.util.Optional}-returning value types for inputs supplied to a running process from outside the
- * application: command-line arguments ({@link org.apache.juneau.commons.runtime.Args}) and Jar manifest contents
- * ({@link org.apache.juneau.commons.runtime.ManifestFile}).
+ * application: command-line arguments ({@link org.apache.juneau.commons.runtime.Args Args}) and Jar manifest contents
+ * ({@link org.apache.juneau.commons.runtime.ManifestFile ManifestFile}).
  *
  * <p>
  * These classes intentionally avoid extending {@code JsonMap} or any marshall-side type so they can be consumed from

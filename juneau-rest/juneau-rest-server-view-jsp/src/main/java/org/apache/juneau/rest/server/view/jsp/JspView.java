@@ -123,7 +123,7 @@ public final class JspView implements View {
 	 * @return A new {@code JspView} carrying the additional attributes.
 	 */
 	public JspView attrs(Map<String,?> values) {
-		if (values == null || values.isEmpty())
+		if (ie(values))
 			return this;
 		var copy = new LinkedHashMap<>(attributes);
 		values.forEach((k, v) -> {

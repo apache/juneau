@@ -18,6 +18,7 @@ package org.apache.juneau.marshall.cbor;
 
 import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 
 import java.util.*;
 
@@ -232,7 +233,7 @@ class CborParserSession_Test extends TestBase {
 		// 0x83 0x01 0x02 0x03 = array of length 3 [1,2,3]
 		var b = fromHex("83010203");
 		var list = CborParser.DEFAULT.read(b, ArrayList.class);
-		assertEquals(3, list.size());
+		assertSize(3, list);
 		assertEquals(1L, list.get(0));
 	}
 
@@ -335,8 +336,8 @@ class CborParserSession_Test extends TestBase {
 		// 0x82 [0x82 0x01 0x02] [0x82 0x03 0x04] = [[1,2],[3,4]]
 		var b = fromHex("82" + "820102" + "820304");
 		var list = CborParser.DEFAULT.read(b, JsonList.class);
-		assertEquals(2, list.size());
-		assertEquals(2, list.getList(0).size());
+		assertSize(2, list);
+		assertSize(2, list.getList(0));
 	}
 
 	@Test
@@ -366,7 +367,7 @@ class CborParserSession_Test extends TestBase {
 		// CborParserSession.shouldContinueContainer (added with the public token-streaming surface).
 		var b = fromHex("9F0102FF");
 		var list = CborParser.DEFAULT.read(b, JsonList.class);
-		assertEquals(2, list.size());
+		assertSize(2, list);
 		assertEquals(1L, ((Number) list.get(0)).longValue());
 		assertEquals(2L, ((Number) list.get(1)).longValue());
 	}

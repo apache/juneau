@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.client;
 
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.net.*;
@@ -76,7 +77,7 @@ class TransportRequest_Test extends TestBase {
 		var req = TransportRequest.builder().method("GET").uri("https://example.com")
 			.headers(List.of(TransportHeader.of("A", "1"), TransportHeader.of("B", "2")))
 			.build();
-		assertEquals(2, req.getHeaders().size());
+		assertSize(2, req.getHeaders());
 	}
 
 	@Test void a05_getFirstHeader_missingReturnsNull() {

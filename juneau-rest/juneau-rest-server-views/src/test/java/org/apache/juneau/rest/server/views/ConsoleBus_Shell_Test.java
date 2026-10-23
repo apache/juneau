@@ -45,7 +45,9 @@ class ConsoleBus_Shell_Test extends TestBase {
 		report = BusHarness.run("console-shell-bus.cjs", ViewsMixin.BUS_JS_RESOURCE, CONSOLE_JS);
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Casts a parsed JSON value to its known Map/List shape.
+	})
 	private static Map<String,Object> scenario(String name) {
 		assumeTrue(report != null, "node not on PATH");
 		assertNull(report.get("harnessError"), () -> String.valueOf(report.get("harnessError")));
@@ -54,7 +56,9 @@ class ConsoleBus_Shell_Test extends TestBase {
 		return s;
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Casts a parsed JSON value to its known Map/List shape.
+	})
 	private static Map<String,Object> map(Map<String,Object> m, String key) {
 		return (Map<String,Object>) m.get(key);
 	}

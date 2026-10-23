@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.server.swagger;
 
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.TestBase;
@@ -373,7 +374,7 @@ class BasicSwaggerProviderSession_Coverage_Test extends TestBase {
 		var tags = s.getTags();
 		assertNotNull(tags);
 		// tagB should have been created as a new tag entry from the op-level tag.
-		assertEquals(2, tags.size());
+		assertSize(2, tags);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -538,7 +539,7 @@ class BasicSwaggerProviderSession_Coverage_Test extends TestBase {
 		var op = getSwagger(new AA1()).getPaths().get("/aa").get("get");
 		assertNotNull(op.getParameters());
 		// All five swagger-only parameter types should be present.
-		assertEquals(5, op.getParameters().size());
+		assertSize(5, op.getParameters());
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

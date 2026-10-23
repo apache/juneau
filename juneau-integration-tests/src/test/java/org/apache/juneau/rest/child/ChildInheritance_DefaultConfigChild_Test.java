@@ -26,15 +26,15 @@ import org.apache.juneau.utest.utils.*;
 import org.junit.jupiter.api.*;
 
 /**
- * Phase 4 hardening &mdash; regression test for an edge case not called out explicitly by name in spec &sect;6.6:
+ * Regression test for an edge case not called out explicitly by name in spec &sect;6.6:
  * a CHILD CLASS that itself transitively implements {@code DefaultConfig} (e.g. by extending
  * {@code BasicRestServlet}/{@code BasicRestServletGroup}, which implement {@code BasicUniversalConfig extends
  * DefaultConfig}), rather than being a plain POJO with no framework-default mixin.
  *
  * <p>
- * <b>Bug found and fixed by this test (Phase 4 hardening):</b> {@code computeRawRestAnnotations()}'s
+ * <b>Bug found and fixed by this test:</b> {@code computeRawRestAnnotations()}'s
  * {@code hasDefaultConfig}-true branch originally appended the seed annotation after the ENTIRE {@code raw}
- * chain unconditionally. For a plain child class (the common case exercised by every other Phase 2-4 test),
+ * chain unconditionally. For a plain child class (the common case exercised by every other child-inheritance test),
  * {@code raw} never embeds {@code DefaultConfig} itself, so appending after {@code raw} correctly placed the
  * seed above the framework's separately-synthesized {@code DefaultConfig} fallback. But when the child class
  * itself transitively implements {@code DefaultConfig}, that interface's own {@code @Rest} entry is already

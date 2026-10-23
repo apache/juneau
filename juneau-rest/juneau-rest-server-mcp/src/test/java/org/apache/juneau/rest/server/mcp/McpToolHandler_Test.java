@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.server.mcp;
 
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.lang.reflect.*;
@@ -58,7 +59,7 @@ class McpToolHandler_Test {
 		var config = new McpServerConfig().addTool(McpToolHandler.of(
 			new McpToolSpec().setName("echo"),
 			(arguments, ctx) -> McpToolOutcome.text("ok")));
-		assertEquals(1, config.getTools().size());
+		assertSize(1, config.getTools());
 		assertEquals("echo", config.getTools().get(0).descriptor().getName());
 	}
 

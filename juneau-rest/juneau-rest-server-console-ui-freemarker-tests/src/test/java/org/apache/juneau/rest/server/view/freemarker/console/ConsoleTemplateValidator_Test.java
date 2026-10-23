@@ -39,7 +39,7 @@ class ConsoleTemplateValidator_Test extends TestBase {
 
 	private static void assertOne(String source, int line, int column, String rule, String message) {
 		var f = lint(source);
-		assertEquals(1, f.size(), () -> "findings: " + f);
+		assertSize(() -> "findings: " + f, 1, f);
 		assertEquals(new ConsoleTemplateValidator.Finding("t.ftlh", line, column, rule, message), f.get(0));
 	}
 

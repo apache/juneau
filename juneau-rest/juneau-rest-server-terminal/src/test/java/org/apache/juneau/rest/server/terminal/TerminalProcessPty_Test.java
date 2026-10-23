@@ -17,6 +17,7 @@
 package org.apache.juneau.rest.server.terminal;
 
 import static java.nio.charset.StandardCharsets.*;
+import static org.apache.juneau.commons.utils.Shorts.eq;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assumptions.*;
 
@@ -66,7 +67,7 @@ class TerminalProcessPty_Test extends TestBase {
 			var kinds = events.stream().map(e -> e.get("ev")).toList();
 			assertEquals("step", kinds.get(0), events::toString);
 			assertEquals(0L, ((Number)events.get(0).get("rawOffset")).longValue(), events::toString);
-			assertTrue(events.stream().anyMatch(e -> "end".equals(e.get("ev")) && Objects.equals(3L, ((Number)e.getOrDefault("exit", -1L)).longValue())), events::toString);
+			assertTrue(events.stream().anyMatch(e -> "end".equals(e.get("ev")) && eq(3L, ((Number)e.getOrDefault("exit", -1L)).longValue())), events::toString);
 			var last = events.get(events.size() - 1);
 			assertEquals(List.of("done", "fail"), List.of(last.get("ev"), last.get("status")), events::toString);
 		}

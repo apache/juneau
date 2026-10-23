@@ -445,7 +445,7 @@ class ConsoleChromeMixin_Test extends TestBase {
 		expected.put("--jc-chart-band", "rgba(0, 0, 0, 0.06)");
 		expected.put("--jc-chart-heat-low", "#e8f1fb");
 		expected.put("--jc-chart-heat-high", "#1b6ac9");
-		assertEquals(18, expected.size());
+		assertSize(18, expected);
 		var tokens = Theme.OPEN.getTokens();
 		expected.forEach((k, v) -> assertEquals(v, tokens.get(k), k));
 		assertEquals(18, tokens.keySet().stream().filter(k -> k.startsWith("--jc-chart-")).count());
@@ -606,8 +606,7 @@ class ConsoleChromeMixin_Test extends TestBase {
 			() -> "children spend --jc-page-nav-child-font-size, block:\n" + childTypeBlock);
 		assertFalse(childTypeBlock.contains("--jc-chrome-font-size-2"),
 			() -> "children must not share --jc-chrome-font-size-2, block:\n" + childTypeBlock);
-		assertFalse(navRules.contains("slds-"), () -> "chrome page-nav rules must not introduce slds-* classes:\n" + navRules);
-		assertFalse(navRules.toLowerCase().contains("salesforce sans"), navRules);
+		DualHatGuard.assertClean(navRules);
 	}
 
 	@Test void j07b_htmlSlotPageNav_chromeCarriesShapeSoToolkitLessPagesDoNotConcatenateLabels() throws Exception {
@@ -963,13 +962,13 @@ class ConsoleChromeMixin_Test extends TestBase {
 			assertNotNull(fill, () -> "no fill for the '" + colour + "' family");
 			fills.add(fill);
 		}
-		assertEquals(4, fills.size(), () -> "pass/warn/fail/unknown collapse onto fewer than four fills: " + fills);
+		assertSize(() -> "pass/warn/fail/unknown collapse onto fewer than four fills: " + fills, 4, fills);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// n') Pill palette: --jc-pill-* is the CANONICAL status-chip colour family the client `pill` catalog
 	//     renderer paints from; the legacy --jc-tag-* triads are retained as var(--jc-pill-*) aliases (badges/avatars/
-	//     frozen calendar), so no cross-module rename is needed and every value stays pixel-identical.
+	//     frozen calendar), so no cross-module rename is needed.
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Test void n07_everyPillColourFamily_isACompleteTriad_ofLiteralHex() {

@@ -107,7 +107,7 @@ class ThemeDirective_Test extends TestBase {
 		}
 		assertEquals(1, count(body, "juneau-theme-light-red.css"), () -> body);
 		assertFalse(body.contains("juneau-theme-open.css"), () -> body);  // named pack wins; no second block
-		assertFalse(body.contains("slds-"), () -> body);
+		DualHatGuard.assertClean(body);
 		assertPage(body).isValid().hasTheme("light-red");
 		assertFalse(body.contains("<style>"), () -> body);  // no tokens means no override block
 	}

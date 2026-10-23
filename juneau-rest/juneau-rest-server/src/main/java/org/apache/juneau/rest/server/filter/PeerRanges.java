@@ -125,6 +125,8 @@ final class PeerRanges {
 	// An IPv4-mapped IPv6 address is the IPv4 address it carries.  InetAddress.getByName and getByAddress(byte[]) collapse
 	// it already; Inet6Address.getByAddress(host, bytes, scope) does not.
 	private static byte[] unwrap(byte[] a) {
+		if (a == null)
+			return null;
 		if (a.length != 16)
 			return a;
 		for (var i = 0; i < 10; i++)
@@ -212,6 +214,6 @@ final class PeerRanges {
 			s = s.substring(0, pct);
 		}
 		var a = s.indexOf(':') < 0 ? parseIpv4(s) : parseIpv6(s);
-		return a == null ? null : unwrap(a);
+		return unwrap(a);
 	}
 }

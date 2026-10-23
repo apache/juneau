@@ -68,7 +68,7 @@ public final class SinkRenderAllowlist {
 	 * @throws IllegalArgumentException If the id is not a built-in.
 	 */
 	public static void assertAllowed(String renderId) {
-		if (renderId == null || renderId.isBlank())
+		if (ib(renderId))
 			throw iaex("Render id must not be null or blank.");
 		if (BUILTIN_IDS.contains(renderId))
 			return;
@@ -82,7 +82,7 @@ public final class SinkRenderAllowlist {
 	 * @throws IllegalArgumentException If the id is not in {@link #POPOVER_TEXT_IDS}.
 	 */
 	public static void assertPopoverAllowed(String renderId) {
-		if (renderId == null || renderId.isBlank())
+		if (ib(renderId))
 			throw iaex("PopoverField render id must not be null or blank.");
 		if (!POPOVER_TEXT_IDS.contains(renderId))
 			throw iaex("PopoverField render id '%s' is not a text-shaped built-in.", renderId);

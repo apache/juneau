@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.server.openapi;
 
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
@@ -30,7 +31,7 @@ import org.apache.juneau.rest.server.servlet.*;
 import org.junit.jupiter.api.*;
 
 /**
- * Phase 4 coverage for {@link BasicOpenApiProviderSession}: verifies that schemas referenced from
+ * Coverage for {@link BasicOpenApiProviderSession}: verifies that schemas referenced from
  * two or more operations end up as a single entry in {@code components.schemas} with each
  * operation slot rewritten to a {@code $ref} pointer.
  *
@@ -98,7 +99,7 @@ class OpenApiSchemaReuse_Test extends TestBase {
 		var deduped = BasicOpenApiProviderSession.deduplicateInlineSchemas(doc);
 		var components = (Map<?,?>) deduped.get("components");
 		var schemas = (Map<?,?>) components.get("schemas");
-		assertEquals(1, schemas.size(), () -> "Expected one lifted schema, got: " + schemas);
+		assertSize(() -> "Expected one lifted schema, got: " + schemas, 1, schemas);
 
 		// Both operation responses now hold a $ref pointing at the lifted schema.
 		var aRef = refOf(deduped, "/a");

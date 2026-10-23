@@ -17,6 +17,7 @@
 package org.apache.juneau.rest.server.filter;
 
 import static org.apache.juneau.rest.server.filter.BoundaryReason.*;
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -805,7 +806,7 @@ class CsrfBoundaryForwarded_Test extends TestBase {
 		var log = CsrfBoundary_Test.captureLog(() -> hsRefused(b, FORWARDED_HOST_MALFORMED, "ws", "app.example",
 			"Origin", PUBLIC, "X-Forwarded-Host", "bad host\r\nforged-line" + "z".repeat(500), "X-Forwarded-Proto", "https"));
 		var finest = log.stream().filter(x -> x.getLevel() == java.util.logging.Level.FINEST).map(CsrfBoundary_Test::text).toList();
-		assertEquals(1, finest.size(), log::toString);
+		assertSize(log::toString, 1, finest);
 		var m = finest.get(0);
 		assertTrue(m.contains("X-Forwarded-Host=bad hostforged-line"), m);
 		assertTrue(m.contains("X-Forwarded-Proto=https"), m);

@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.marshall.hjson;
 
+import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
@@ -29,10 +30,7 @@ class HjsonSerializer_Test {
 
 	@Test
 	void a01_simpleBean() {
-		var m = new LinkedHashMap<String,Object>();
-		m.put("name", "Alice");
-		m.put("age", 30);
-		m.put("active", true);
+		Map<String,Object> m = map("name", "Alice", "age", 30, "active", true);
 		var hjson = HjsonSerializer.DEFAULT.write(m);
 		assertNotNull(hjson);
 		assertTrue(hjson.contains("name") && hjson.contains("Alice"));

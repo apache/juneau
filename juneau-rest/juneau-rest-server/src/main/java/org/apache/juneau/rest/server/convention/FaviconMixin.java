@@ -190,7 +190,7 @@ public class FaviconMixin extends RestMixin {
 	 * the mixin delegates to.
 	 *
 	 * <p>
-	 * Extends {@link org.apache.juneau.rest.server.servlet.RestMixin.Builder} so the mixin's bespoke worker-config setters
+	 * Extends {@link org.apache.juneau.rest.server.servlet.RestMixin.Builder RestMixin.Builder} so the mixin's bespoke worker-config setters
 	 * ({@link #bytes(byte[])}, {@link #classpath(String)}, {@link #cacheControl(String)}) chain with true
 	 * covariant returns alongside the inherited {@link RestBuilder}surface (e.g. {@code path}, {@code roleGuard}).
 	 * This is how a multi-flavor capability avoids triplicating its REST-level config: the worker config is

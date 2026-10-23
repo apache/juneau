@@ -179,10 +179,7 @@ class Shorts_Req_Test extends TestBase {
 
 	@Test
 	void e006_reqnns_collectionNullElement() {
-		var c = new ArrayList<String>();
-		c.add("x");
-		c.add("y");
-		c.add(null);
+		var c = l("x", "y", null);
 		var e = assertThrows(IllegalArgumentException.class, () -> reqnns("c", c));
 		assertBean(e, "message", "Argument 'c' element at index 2 cannot be null.");
 	}

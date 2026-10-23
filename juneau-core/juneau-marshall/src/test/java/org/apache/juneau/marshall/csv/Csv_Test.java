@@ -17,6 +17,7 @@
 package org.apache.juneau.marshall.csv;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 
 import java.text.*;
 import java.util.*;
@@ -365,7 +366,7 @@ class Csv_Test extends TestBase {
 		var parsed = (List<Circle>) p.read(csv, List.class, Circle.class);
 
 		assertNotNull(parsed);
-		assertEquals(2, parsed.size());
+		assertSize(2, parsed);
 		assertEquals("c1", parsed.get(0).name);
 		assertEquals(10, parsed.get(0).radius);
 		assertEquals("c2", parsed.get(1).name);
@@ -437,7 +438,7 @@ class Csv_Test extends TestBase {
 
 		var parsed = (List<I>) p.read(csv, List.class, I.class);
 		assertNotNull(parsed);
-		assertEquals(2, parsed.size());
+		assertSize(2, parsed);
 		assertArrayEquals(bytes, parsed.get(0).data);
 		assertArrayEquals(new byte[]{1, 2, 3}, parsed.get(1).data);
 	}
@@ -489,7 +490,7 @@ class Csv_Test extends TestBase {
 
 		var parsed = (List<H>) p.read(csv, List.class, H.class);
 		assertNotNull(parsed);
-		assertEquals(2, parsed.size());
+		assertSize(2, parsed);
 		assertArrayEquals(new int[]{1, 2, 3}, parsed.get(0).ints);
 		assertArrayEquals(new double[]{1.5, 2.5, 3.5}, parsed.get(0).doubles);
 		assertArrayEquals(new int[0], parsed.get(1).ints);
@@ -526,9 +527,9 @@ class Csv_Test extends TestBase {
 
 		var parsed = (List<J>) p.read(csv, List.class, J.class);
 		assertNotNull(parsed);
-		assertEquals(2, parsed.size());
+		assertSize(2, parsed);
 		assertEquals(List.of("a", "b", "c"), parsed.get(0).tags);
-		assertEquals(2, parsed.get(0).meta.size());
+		assertSize(2, parsed.get(0).meta);
 		assertEquals(1, ((Number) parsed.get(0).meta.get("x")).intValue());
 		assertEquals(2, ((Number) parsed.get(0).meta.get("y")).intValue());
 		assertEquals(List.of(), parsed.get(1).tags);
@@ -563,7 +564,7 @@ class Csv_Test extends TestBase {
 
 		var parsed = (List<G>) p.read(csv, List.class, G.class);
 		assertNotNull(parsed);
-		assertEquals(1, parsed.size());
+		assertSize(1, parsed);
 		assertNull(parsed.get(0).a);
 		assertEquals("x", parsed.get(0).b);
 	}

@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.server.ops;
 
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
@@ -76,8 +77,7 @@ class BasicOps_ParentChain_Test extends TestBase {
 		assertNotNull(ctxs.get(EchoMixin.class), "Echo mixin context registered");
 		assertNotNull(ctxs.get(AdminMixin.class), "Admin mixin context registered");
 		assertNotNull(ctxs.get(RouteIndexMixin.class), "RouteIndex mixin context registered");
-		assertEquals(3, ctxs.size(),
-			"Expected exactly three mixin contexts; got: " + ctxs.keySet());
+		assertSize(() -> "Expected exactly three mixin contexts; got: " + ctxs.keySet(), 3, ctxs);
 	}
 
 	@Test void a02_echoServesAtPrimaryMount() throws Exception {

@@ -17,6 +17,7 @@
 package org.apache.juneau.marshall.uon;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 
 import java.time.*;
 import java.util.*;
@@ -243,7 +244,7 @@ class UonParserSession_Test extends TestBase {
 		assertNotNull(m);
 		// Implementation detail: non-encoded attr name includes the trailing ')' since ')' isn't
 		// in the readAttrName end-set.  Either way, we just check we get a map back.
-		assertEquals(1, m.size());
+		assertSize(1, m);
 	}
 
 	@Test void e05_map_emptyParens() throws Exception {
@@ -304,7 +305,7 @@ class UonParserSession_Test extends TestBase {
 		// "(x=1)" parsed as List<Map> - takes the "serialized as map" branch and adds the map
 		// cast as a single element.
 		var l = (LinkedList<Map>) P.read("(x=1)", LinkedList.class, Map.class);
-		assertEquals(1, l.size());
+		assertSize(1, l);
 		assertEquals(1, l.get(0).get("x"));
 	}
 
@@ -318,7 +319,7 @@ class UonParserSession_Test extends TestBase {
 		var ses = P.getSession();
 		var cm = ses.getClassMeta(List.class);
 		var l = ses.read((HttpPartType)null, (HttpPartSchema)null, "1,2,3", cm);
-		assertEquals(3, l.size());
+		assertSize(3, l);
 	}
 
 	@Test void f07_collection_emptyArray() throws Exception {
@@ -441,7 +442,7 @@ class UonParserSession_Test extends TestBase {
 	@Test void i02_doParseIntoCollection() throws Exception {
 		var dest = new ArrayList<>();
 		P.readIntoCollection("@(1,2,3)", dest, Integer.class);
-		assertEquals(3, dest.size());
+		assertSize(3, dest);
 		assertEquals(1, dest.get(0));
 		assertEquals(2, dest.get(1));
 		assertEquals(3, dest.get(2));
@@ -495,7 +496,7 @@ class UonParserSession_Test extends TestBase {
 		// %00 decodes to a NUL char. The decoded key is the single NUL char (stored literally).
 		var m = PE.read("(%00=v)", Map.class);
 		assertNotNull(m);
-		assertEquals(1, m.size());
+		assertSize(1, m);
 		assertTrue(m.containsValue("v"));
 	}
 
@@ -607,7 +608,7 @@ class UonParserSession_Test extends TestBase {
 
 	@Test void m02_typedCollection() throws Exception {
 		var l = (LinkedList<Integer>) P.read("@(1,2,3)", LinkedList.class, Integer.class);
-		assertEquals(3, l.size());
+		assertSize(3, l);
 	}
 
 	@Test void m03_arrayOfInts() throws Exception {
@@ -769,7 +770,7 @@ class UonParserSession_Test extends TestBase {
 		// "@(1,)" is actually valid in lenient mode: second element is parsed from ')' unread.
 		// Actually "@(1,2)" exercises S2->S3->comma->S2->paren path. Test with trailing item:
 		var l = P.read("@(1,2)", List.class);
-		assertEquals(2, l.size());
+		assertSize(2, l);
 	}
 
 	@Test void t02_collection_whitespace_in_noParens_path() throws Exception {
@@ -930,7 +931,7 @@ class UonParserSession_Test extends TestBase {
 		// "@(1,  2)" — whitespace before 2nd element in S2/S1 state triggers skipSpace.
 		var l = P.read("@(1,  2)", List.class);
 		assertNotNull(l);
-		assertEquals(2, l.size());
+		assertSize(2, l);
 	}
 
 	@Test void aa03_readArgs_isArgsType() throws Exception {
@@ -1349,7 +1350,7 @@ class UonParserSession_Test extends TestBase {
 		// "1,2,3" has no '@' so isInParens=false -> enters the non-parens while loop (line 641).
 		var l = P.read("1,2,3", List.class);
 		assertNotNull(l);
-		assertEquals(3, l.size());
+		assertSize(3, l);
 	}
 
 	@Test void at02_collection_urlParam_withWhitespace_afterEntry() throws Exception {
@@ -1387,7 +1388,7 @@ class UonParserSession_Test extends TestBase {
 		// Exercises the c==AMP branch in line 646 of the non-parens S2 state.
 		var l = PE.read("1&2", List.class);
 		assertNotNull(l);
-		assertEquals(1, l.size());
+		assertSize(1, l);
 		assertEquals("1", l.get(0).toString());
 	}
 }

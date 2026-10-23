@@ -17,13 +17,13 @@
 
 /**
  * Metrics SPI for {@code juneau-rest-server} &mdash; per-request observability hook backed by a
- * caller-supplied {@link org.apache.juneau.rest.server.metrics.MetricsRecorder} bean.
+ * caller-supplied {@link org.apache.juneau.rest.server.metrics.MetricsRecorder MetricsRecorder} bean.
  *
  * <h5 class='topic'>Opt-in</h5>
  *
  * <p>
  * The SPI is off by default. A fresh {@code RestContext} built without any
- * {@code @Bean MetricsRecorder} entry uses {@link org.apache.juneau.rest.server.metrics.NoOpMetricsRecorder}
+ * {@code @Bean MetricsRecorder} entry uses {@link org.apache.juneau.rest.server.metrics.NoOpMetricsRecorder NoOpMetricsRecorder}
  * &mdash; no downstream registry is touched, no per-request allocation is made. Consumers opt in by
  * supplying a bridge implementation:
  *
@@ -31,7 +31,7 @@
  * 	<li>{@code juneau-rest-server-metrics-micrometer} ships {@code MicrometerMetricsRecorder} backed by an
  * 		{@code io.micrometer.core.instrument.MeterRegistry}.
  * 	<li>Custom backends (Dropwizard {@code MetricRegistry}, application-specific stat counters, etc.)
- * 		can implement {@link org.apache.juneau.rest.server.metrics.MetricsRecorder} directly &mdash; the SPI
+ * 		can implement {@link org.apache.juneau.rest.server.metrics.MetricsRecorder MetricsRecorder} directly &mdash; the SPI
  * 		intentionally has no Micrometer / OpenTelemetry dependency on the core surface.
  * </ul>
  *
@@ -46,8 +46,8 @@
  *
  * <h5 class='section'>See Also:</h5>
  * <ul>
- * 	<li class='jc'>{@link org.apache.juneau.rest.server.metrics.MetricsRecorder}
- * 	<li class='jc'>{@link org.apache.juneau.rest.server.metrics.NoOpMetricsRecorder}
+ * 	<li class='jc'>{@link org.apache.juneau.rest.server.metrics.MetricsRecorder MetricsRecorder}
+ * 	<li class='jc'>{@link org.apache.juneau.rest.server.metrics.NoOpMetricsRecorder NoOpMetricsRecorder}
  * 	<li class='jp'>{@link org.apache.juneau.rest.server.tracing.TracerHook}
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerObservability">REST Server &mdash; Observability (Micrometer + OpenTelemetry)</a>
  * </ul>

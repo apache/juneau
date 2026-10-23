@@ -32,13 +32,13 @@ import freemarker.template.*;
  *
  * <p>
  * Exactly one of {@code value=} / {@code alias=} is required, and they are mutually exclusive &mdash; they are the
- * two disjoint {@link org.apache.juneau.rest.server.console.Theme} channels:
+ * two disjoint {@link Theme} channels:
  * <ul class='spaced-list'>
  * 	<li>{@code value=} is a <b>leaf</b>: a CSS literal, or a {@code var(--jc-name)} reference that
- * 		{@link org.apache.juneau.rest.server.console.Theme.Builder#token(String, String)} <b>resolves to a literal</b>
+ * 		{@link org.apache.juneau.rest.server.console.Theme.Builder#token(String, String) Theme.Builder#token(String, String)} <b>resolves to a literal</b>
  * 		at build time (the substring {@code var(} does not reach the served leaf map).
  * 	<li>{@code alias=} is a <b>derived reference</b>: a {@code var(--jc-name)} that
- * 		{@link org.apache.juneau.rest.server.console.Theme.Builder#alias(String, String)} keeps as a reference
+ * 		{@link org.apache.juneau.rest.server.console.Theme.Builder#alias(String, String) Theme.Builder#alias(String, String)} keeps as a reference
  * 		<b>surviving to the wire</b>. A literal cannot express a live alias &mdash; that is why the attr exists.
  * </ul>
  *

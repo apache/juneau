@@ -22,7 +22,7 @@ import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.parallel.*;
 
 /**
- * Phase G regression: verifies that the {@link RestOpContext#pathMatchers} Memoizer
+ * Regression test: verifies that the {@link RestOpContext#pathMatchers} Memoizer
  * exercises the compiled-template seam — every op-path string goes through
  * {@code vr.compile(p).resolve(session)} (not the legacy one-shot
  * {@code vr.resolve(p)} call). Production behavior must remain unchanged.

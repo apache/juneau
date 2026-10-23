@@ -17,6 +17,7 @@
 package org.apache.juneau.rest.server;
 
 import static org.apache.juneau.commons.utils.Shorts.*;
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
@@ -166,14 +167,14 @@ class RestOpInvoker_Test extends TestBase {
 		A_REC.events.clear();
 		A_TRACE.scopes.clear();
 		CA.get("/ok").run().assertStatus(200).assertContent("ok");
-		assertEquals(1, A_REC.events.size());
+		assertSize(1, A_REC.events);
 		var e = A_REC.last();
 		assertEquals(200, e.statusCode);
 		assertNull(e.error);
 		assertEquals("GET", e.httpMethod);
 		assertNotNull(e.elapsed);
 		assertFalse(e.elapsed.isNegative());
-		assertEquals(1, A_TRACE.scopes.size());
+		assertSize(1, A_TRACE.scopes);
 		var s = A_TRACE.last();
 		assertEquals(Integer.valueOf(200), s.status);
 		assertNull(s.error);
@@ -416,7 +417,7 @@ class RestOpInvoker_Test extends TestBase {
 		D_REC.events.clear();
 		D_TRACE.scopes.clear();
 		CD.get("/async/ok").run().assertStatus(200).assertContent().isContains("async-ok");
-		assertEquals(1, D_REC.events.size());
+		assertSize(1, D_REC.events);
 		var e = D_REC.last();
 		assertEquals(200, e.statusCode);
 		assertNull(e.error);
@@ -466,8 +467,8 @@ class RestOpInvoker_Test extends TestBase {
 		E_REC.events.clear();
 		E_TRACE.scopes.clear();
 		CE.get("/silent").run().assertStatus(200).assertContent("silent");
-		assertEquals(0, E_REC.events.size(), "observability=\"false\" must short-circuit the recorder block");
-		assertEquals(0, E_TRACE.scopes.size(), "observability=\"false\" must short-circuit the tracer block");
+		assertSize(() -> "observability=\"false\" must short-circuit the recorder block", 0, E_REC.events);
+		assertSize(() -> "observability=\"false\" must short-circuit the tracer block", 0, E_TRACE.scopes);
 	}
 
 	// -----------------------------------------------------------------------------------------------------------------
@@ -492,9 +493,9 @@ class RestOpInvoker_Test extends TestBase {
 	@Test void f01_perOpObservabilityFalse_quietOpHasNoEvent() throws Exception {
 		F_REC.events.clear();
 		CF.get("/loud").run().assertStatus(200);
-		assertEquals(1, F_REC.events.size(), "loud op records normally");
+		assertSize(() -> "loud op records normally", 1, F_REC.events);
 		CF.get("/quiet").run().assertStatus(200);
-		assertEquals(1, F_REC.events.size(), "quiet op short-circuits — count unchanged");
+		assertSize(() -> "quiet op short-circuits — count unchanged", 1, F_REC.events);
 	}
 
 	// -----------------------------------------------------------------------------------------------------------------

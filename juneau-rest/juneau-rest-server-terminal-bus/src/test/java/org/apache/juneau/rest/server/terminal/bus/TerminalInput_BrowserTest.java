@@ -17,6 +17,7 @@
 package org.apache.juneau.rest.server.terminal.bus;
 
 import static java.nio.charset.StandardCharsets.*;
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assumptions.*;
 
@@ -297,6 +298,6 @@ class TerminalInput_BrowserTest extends TestBase {
 
 	@Test void z01_everyCaseHasAMethod() {
 		var cases = (Map<?,?>)report.get("cases");
-		assertEquals(4, cases.size(), () -> "case count changed; add a method per new case: " + cases.keySet());
+		assertSize(() -> "case count changed; add a method per new case: " + cases.keySet(), 4, cases);
 	}
 }

@@ -158,7 +158,9 @@ public final class SeriesSource {
 	 *
 	 * @param rows The rows.
 	 */
-	@SuppressWarnings("java:S2095") // The writer wraps the response stream, which the container closes.
+	@SuppressWarnings({
+		"java:S2095" // The writer wraps the response stream, which the container closes.
+	})
 	public void write(Stream<? extends Row> rows) {
 		if (columns == null)
 			throw isex("SeriesSource.write: columns(...) not set");
@@ -253,7 +255,7 @@ public final class SeriesSource {
 				case '\r' -> sb.append("\\r");
 				case '\t' -> sb.append("\\t");
 				default -> {
-					if (c < 0x20 || c == 0x2028 || c == 0x2029) sb.append(String.format("\\u%04x", (int)c));
+					if (c < 0x20 || c == 0x2028 || c == 0x2029) sb.append(f("\\u%04x", (int)c));
 					else sb.append(c);
 				}
 			}

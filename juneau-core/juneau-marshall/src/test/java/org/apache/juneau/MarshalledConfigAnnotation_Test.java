@@ -40,7 +40,7 @@ import org.junit.jupiter.api.*;
  * Tests the marshalling-only attributes of the @MarshalledConfig annotation.
  *
  * <p>
- * The bean-modeling attributes were moved to {@code @BeanConfig} in Phase 3 of the bean-layer split.
+ * The bean-modeling attributes were moved to {@code @BeanConfig} in the bean-layer split.
  * See {@code BeanConfigAnnotation_Test} for tests on those attributes.
  */
 @SuppressWarnings({

@@ -18,6 +18,7 @@ package org.apache.juneau.rest.mock;
 
 import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.rest.server.logging.RestDebugDumpGateTestSupport.*;
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
@@ -293,8 +294,7 @@ class RestDebugCapture_Test {
 			// Renderable Content-Type so the opted-in body can actually be dumped (absent CT ⇒ non-renderable placeholder).
 			client.post("/echo", "real-handler-secret").header("Content-Type", "text/plain").run().assertContent("real-handler-secret");
 
-			assertEquals(1, handler.records().size(),
-				"effective logger FINEST with INFO handler should publish one INFO-stamped debug record");
+			assertSize(() -> "effective logger FINEST with INFO handler should publish one INFO-stamped debug record", 1, handler.records());
 			var finestRecord = handler.records().get(0);
 			assertEquals(Level.INFO, finestRecord.getLevel());
 			assertTrue(finestRecord.getMessage().contains("real-handler-secret"),
@@ -310,8 +310,7 @@ class RestDebugCapture_Test {
 			logger.setLevel(Level.INFO);
 			client.post("/echo", "real-handler-secret").header("Content-Type", "text/plain").run().assertContent("real-handler-secret");
 
-			assertEquals(1, handler.records().size(),
-				"logger INFO + handler INFO should preserve the prior single visible basic-line behavior");
+			assertSize(() -> "logger INFO + handler INFO should preserve the prior single visible basic-line behavior", 1, handler.records());
 			var infoRecord = handler.records().get(0);
 			assertEquals(Level.INFO, infoRecord.getLevel());
 			assertTrue(infoRecord.getMessage().contains("[200] HTTP POST /twophase/echo"), infoRecord.getMessage());
@@ -653,14 +652,14 @@ class RestDebugCapture_Test {
 
 	@Test void e02_explicitInfo_emitsBasicLineOnly() throws Exception {
 		var records = e_run(Level.INFO);
-		assertEquals(1, records.size());
+		assertSize(1, records);
 		assertTrue(records.get(0).getMessage().contains("[200] HTTP GET /defaultoff/who"), records.get(0).getMessage());
 		assertFalse(records.get(0).getMessage().contains("---Request Headers---"));
 	}
 
 	@Test void e03_fine_emitsHeaders() throws Exception {
 		var records = e_run(Level.FINE);
-		assertEquals(1, records.size());
+		assertSize(1, records);
 		assertTrue(records.get(0).getMessage().contains("---Request Headers---"), records.get(0).getMessage());
 	}
 

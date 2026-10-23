@@ -18,7 +18,7 @@
  * Petstore service layer (in-memory store).
  *
  * <p>
- * The service is HTTP-agnostic: it throws {@link org.apache.juneau.petstore.service.PetstoreNotFoundException}
+ * The service is HTTP-agnostic: it throws {@link org.apache.juneau.petstore.service.PetstoreNotFoundException PetstoreNotFoundException}
  * which the REST layer translates to a {@code 404 Not Found}.
  */
 package org.apache.juneau.petstore.service;

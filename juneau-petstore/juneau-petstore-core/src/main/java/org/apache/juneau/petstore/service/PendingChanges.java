@@ -222,7 +222,7 @@ public class PendingChanges {
 	}
 
 	private static void validateName(String value) {
-		if (value == null || value.isBlank())
+		if (ib(value))
 			throw iaex("Name must not be blank");
 	}
 

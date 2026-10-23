@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.commons.svl.functions;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 
 import java.time.*;
@@ -108,7 +109,7 @@ public final class DateFunctions {
 		}
 
 		public String invoke(long epoch, String format) {
-			if (format == null || format.isEmpty()) return invoke(epoch);
+			if (ie(format)) return invoke(epoch);
 			var fmt = DateTimeFormatter.ofPattern(format).withZone(ZoneOffset.UTC);
 			return fmt.format(Instant.ofEpochMilli(epoch));
 		}

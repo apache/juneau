@@ -16,8 +16,8 @@
  */
 
 /**
- * Server helpers for console data sources: {@link org.apache.juneau.rest.server.console.data.SeriesSource} streams
- * rows as CSV or NDJSON, and {@link org.apache.juneau.rest.server.console.data.SeriesAggregator} answers the
+ * Server helpers for console data sources: {@link org.apache.juneau.rest.server.console.data.SeriesSource SeriesSource} streams
+ * rows as CSV or NDJSON, and {@link org.apache.juneau.rest.server.console.data.SeriesAggregator SeriesAggregator} answers the
  * aggregate request a data source sends when its result is too large to load raw.
  */
 package org.apache.juneau.rest.server.console.data;

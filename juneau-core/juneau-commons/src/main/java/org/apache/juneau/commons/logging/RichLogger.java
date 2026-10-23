@@ -221,7 +221,7 @@ public class RichLogger extends java.util.logging.Logger {
 	}
 
 	private static String parentName(String name) {
-		if (name == null || name.isEmpty())
+		if (ie(name))
 			return null;
 		var i = name.lastIndexOf('.');
 		return i == -1 ? "" : name.substring(0, i);

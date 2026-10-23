@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.rest.server.bus;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
+
 import java.util.*;
 import java.util.regex.*;
 
@@ -265,12 +267,12 @@ public final class BusFrames {
 				case '\f' -> sb.append("\\f");
 				default -> {
 					if (c < 0x20)
-						sb.append(String.format("\\u%04x", (int) c));
+						sb.append(f("\\u%04x", (int) c));
 					else if (Character.isHighSurrogate(c) && i + 1 < s.length() && Character.isLowSurrogate(s.charAt(i + 1))) {
 						sb.append(c).append(s.charAt(i + 1));
 						i++;
 					} else if (Character.isSurrogate(c))
-						sb.append(String.format("\\u%04x", (int) c));
+						sb.append(f("\\u%04x", (int) c));
 					else
 						sb.append(c);
 				}

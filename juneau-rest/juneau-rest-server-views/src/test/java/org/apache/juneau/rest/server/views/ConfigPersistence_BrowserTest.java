@@ -216,8 +216,7 @@ class ConfigPersistence_BrowserTest extends TestBase {
 
 	@Test void d01_watchExternalChanges_seesOnlyItsOwnScopesKeyAndOnlyWhileWatching() {
 		var seen = list("c_storageEventsSeen");
-		assertEquals(1, seen.size(),
-			() -> "expected exactly one in-scope, pre-unwatch storage event to be observed: " + report);
+		assertSize(() -> "expected exactly one in-scope, pre-unwatch storage event to be observed: " + report, 1, seen);
 		var key = (String) seen.get(0);
 		assertTrue(key.endsWith(".columns.views.someKey"), () -> "wrong key observed: " + key);
 		assertFalse(key.contains("SOME-OTHER-SCOPE"), () -> "an out-of-scope key leaked through: " + key);

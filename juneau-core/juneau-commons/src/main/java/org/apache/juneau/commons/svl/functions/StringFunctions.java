@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.commons.svl.functions;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 
 import java.util.*;
@@ -175,7 +176,7 @@ public final class StringFunctions {
 		public String invoke(String s) { return s == null ? "0" : String.valueOf(s.length()); }
 		public String invoke(String s, String delimiter) {
 			if (s == null) return "0";
-			if (delimiter == null || delimiter.isEmpty()) return String.valueOf(s.length());
+			if (ie(delimiter)) return String.valueOf(s.length());
 			return String.valueOf(s.trim().split(java.util.regex.Pattern.quote(delimiter)).length);
 		}
 	}

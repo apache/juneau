@@ -18,6 +18,7 @@ package org.apache.juneau.rest.server.views;
 
 import static java.nio.charset.StandardCharsets.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
@@ -91,7 +92,7 @@ class RelatedList_BrowserTest extends TestBase {
 	private static List<Event> allEvents() {
 		var l = new ArrayList<Event>();
 		for (var i = 1; i <= 30; i++)
-			l.add(new Event(1, String.format("evt-%02d", i)));
+			l.add(new Event(1, f("evt-%02d", i)));
 		l.add(new Event(2, "detail for 2"));
 		return l;
 	}
@@ -312,7 +313,7 @@ class RelatedList_BrowserTest extends TestBase {
 	@Test void a03_nestedRowActionRunsAgainstTheServer() throws Exception {
 		var report = (Map<?,?>)runHarness().get("action");
 		assertEquals(Boolean.TRUE, report.get("menuOpened"), report::toString);
-		assertEquals(1, acks.size(), acks::toString);
+		assertSize(acks::toString, 1, acks);
 		assertTrue(acks.get(0).startsWith("POST /ack/evt-"), acks.get(0));
 		assertTrue(acks.get(0).contains("csrf=tok-9"), acks.get(0));
 	}

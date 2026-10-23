@@ -477,7 +477,7 @@ class PetstoreSpringboot_Test {
 		// The live registrations: exactly one PetstoreApiBoundary, on /petstore/* alone (no auto-registered /* copy).
 		var live = servletContext.getFilterRegistrations().values().stream()
 			.filter(r -> PetstoreApiBoundary.class.getName().equals(r.getClassName())).toList();
-		assertEquals(1, live.size(), "PetstoreApiBoundary registrations: " + live);
+		assertSize(() -> "PetstoreApiBoundary registrations: " + live, 1, live);
 		assertEquals(List.of(PetstoreApiBoundary.URL_PATTERN), List.copyOf(live.get(0).getUrlPatternMappings()));
 		assertTrue(live.get(0).getServletNameMappings().isEmpty(), "mapped by servlet name: " + live.get(0).getServletNameMappings());
 		// The servlet API cannot read a live registration's dispatcher types or order, so those come from the beans.

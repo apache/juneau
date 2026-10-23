@@ -16,7 +16,9 @@
  */
 package org.apache.juneau.marshall.json;
 
+import static org.apache.juneau.commons.utils.Shorts.f;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 
 import java.util.*;
 
@@ -36,7 +38,7 @@ class JsonControlCharEscape_Test extends TestBase {
 			case '\n' -> "\\n";
 			case '\f' -> "\\f";
 			case '\r' -> "\\r";
-			default -> String.format("\\u%04x", c);
+			default -> f("\\u%04x", c);
 		};
 	}
 
@@ -82,7 +84,7 @@ class JsonControlCharEscape_Test extends TestBase {
 			var out = JsonSerializer.DEFAULT.write(m);
 			assertEquals("{\"k" + expectedEscape(c) + "\":1}", out, "char 0x" + Integer.toHexString(c));
 			var m2 = JsonParser.DEFAULT.read(out, Map.class);
-			assertEquals(1, m2.size());
+			assertSize(1, m2);
 			if (roundTrips(c))
 				assertTrue(m2.containsKey(k), "roundtrip key 0x" + Integer.toHexString(c));
 		}
@@ -96,7 +98,7 @@ class JsonControlCharEscape_Test extends TestBase {
 			var out = Json5Serializer.DEFAULT.write(m);
 			assertEquals("{'k" + expectedEscape(c) + "':1}", out, "char 0x" + Integer.toHexString(c));
 			var m2 = Json5Parser.DEFAULT.read(out, Map.class);
-			assertEquals(1, m2.size());
+			assertSize(1, m2);
 			if (roundTrips(c))
 				assertTrue(m2.containsKey(k), "roundtrip key 0x" + Integer.toHexString(c));
 		}

@@ -17,6 +17,7 @@
 package org.apache.juneau.marshall.parquet;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 
 import java.util.*;
 
@@ -68,7 +69,7 @@ class ParquetExternalRead_Test extends TestBase {
 		var ser = ParquetSerializer.create().pageSize(1024).build();
 		var bytes = ser.write(in);
 		var out = (List<Rec>) ParquetParser.DEFAULT.read(bytes, List.class, Rec.class);
-		assertEquals(200, out.size());
+		assertSize(200, out);
 		assertEquals(0, out.get(0).id);
 		assertEquals("name-0", out.get(0).name);
 		assertEquals(199, out.get(199).id);
@@ -85,7 +86,7 @@ class ParquetExternalRead_Test extends TestBase {
 		var ser = ParquetSerializer.create().rowGroupSize(2048).build();
 		var bytes = ser.write(in);
 		var out = (List<Rec>) ParquetParser.DEFAULT.read(bytes, List.class, Rec.class);
-		assertEquals(300, out.size());
+		assertSize(300, out);
 		for (var i = 0; i < 300; i++) {
 			assertEquals(i, out.get(i).id);
 			assertEquals("name-" + i, out.get(i).name);
@@ -98,7 +99,7 @@ class ParquetExternalRead_Test extends TestBase {
 		var ser = ParquetSerializer.create().pageSize(1024).rowGroupSize(4096).build();
 		var bytes = ser.write(in);
 		var out = (List<Rec>) ParquetParser.DEFAULT.read(bytes, List.class, Rec.class);
-		assertEquals(500, out.size());
+		assertSize(500, out);
 		assertEquals(250, out.get(250).id);
 		assertEquals("name-499", out.get(499).name);
 	}

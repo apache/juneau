@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.marshall.yaml;
 
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
@@ -139,7 +140,7 @@ class YamlBufferUnderflow_Test extends TestBase {
 		String yaml = YamlSerializer.DEFAULT_READABLE.toString(top);
 		Map<?,?> parsed = YamlParser.DEFAULT.read(yaml, Map.class);
 
-		assertEquals(40, parsed.size());
+		assertSize(40, parsed);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

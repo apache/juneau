@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.server.view.freemarker.console;
 
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
@@ -27,7 +28,7 @@ class CardBusAttrs_Test {
 
 	@Test void a01_publishes_commaList_retainSuffix() {
 		var l = CardBusAttrs.publications("c", "ssc.focus!retain, ssc.hot ,");
-		assertEquals(2, l.size());
+		assertSize(2, l);
 		assertEquals("ssc.focus", l.get(0).get("topic"));
 		assertEquals(true, l.get(0).get("retain"));
 		assertEquals("ssc.hot", l.get(1).get("topic"));

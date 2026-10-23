@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.http.response;
 
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
@@ -57,26 +58,26 @@ class BasicHttpResponse_FluentSetters_Test extends TestBase {
 
 	@Test void a05_addHeader_appends() {
 		var r = newOk().addHeader("X-Trace", "1").addHeader("X-Trace", "2");
-		assertEquals(2, r.getHeaders().size());
+		assertSize(2, r.getHeaders());
 	}
 
 	@Test void a06_setHeader_replacesByName() {
 		var r = newOk().addHeader("X-Trace", "1").setHeader("X-Trace", "2");
-		assertEquals(1, r.getHeaders().size());
+		assertSize(1, r.getHeaders());
 		assertEquals("2", r.getHeaders().get(0).getValue());
 	}
 
 	@Test void a07_setHeaders_listReplacesAll() {
 		var r = newOk().addHeader("A", "1")
 			.setHeaders(List.of(HttpHeaderBean.of("B", "2"), HttpHeaderBean.of("C", "3")));
-		assertEquals(2, r.getHeaders().size());
+		assertSize(2, r.getHeaders());
 		assertEquals("B", r.getHeaders().get(0).getName());
 	}
 
 	@Test void a08_setHeaders_varargsReplacesAll() {
 		var r = newOk().addHeader("A", "1")
 			.setHeaders(HttpHeaderBean.of("B", "2"));
-		assertEquals(1, r.getHeaders().size());
+		assertSize(1, r.getHeaders());
 		assertEquals("B", r.getHeaders().get(0).getName());
 	}
 
@@ -112,7 +113,7 @@ class BasicHttpResponse_FluentSetters_Test extends TestBase {
 
 	@Test void a14_unmodifiable_doesNotBlockReread() {
 		var r = newOk().addHeader("X-Trace", "1").unmodifiable();
-		assertEquals(1, r.getHeaders().size());
+		assertSize(1, r.getHeaders());
 		assertEquals(200, r.getStatusCode());
 	}
 

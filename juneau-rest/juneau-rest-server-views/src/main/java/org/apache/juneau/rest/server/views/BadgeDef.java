@@ -128,7 +128,7 @@ public final class BadgeDef {
 	 * @throws IllegalArgumentException If {@code id} is <jk>null</jk> or blank.
 	 */
 	public static BadgeDef create(String id) {
-		if (id == null || id.isBlank())
+		if (ib(id))
 			throw iaex("BadgeDef id must not be null or blank.");
 		var b = new BadgeDef();
 		b.id = id;
@@ -328,7 +328,7 @@ public final class BadgeDef {
 	 * @throws IllegalArgumentException If this definition is not well-formed.
 	 */
 	public void validate() {
-		if (src == null || src.isBlank())
+		if (ib(src))
 			throw iaex("<@badge id='%s'> requires src=.", id);
 		if (! SafePathTemplate.isSameOriginPath(src))
 			throw iaex("<@badge id='%s'> src must be a same-origin path; got '%s'.", id, src);
@@ -336,9 +336,9 @@ public final class BadgeDef {
 			throw iaex("<@badge id='%s'> href must be a same-origin path; got '%s'.", id, href);
 		if (refreshMs != null && refreshMs < MIN_REFRESH_MS)
 			throw iaex("'%s' refreshMs='%s' is below the minimum '%s'.", id, refreshMs, MIN_REFRESH_MS);
-		if (placement == Placement.TOOLBAR && (table == null || table.isBlank()))
+		if (placement == Placement.TOOLBAR && (ib(table)))
 			throw iaex("<@badge id='%s'> placement='toolbar' requires table=.", id);
-		if (scopeBy == ScopeBy.VIEW && (table == null || table.isBlank()))
+		if (scopeBy == ScopeBy.VIEW && (ib(table)))
 			throw iaex("BadgeDef '%s' scope.by='view' requires table=.", id);
 	}
 

@@ -20,6 +20,7 @@ import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 
 import java.util.*;
 
@@ -115,7 +116,7 @@ class CborSerializer_Test extends TestBase {
 		var list = list(new Bean1("a", 1, true), new Bean1("b", 2, false));
 		var bytes = CborSerializer.DEFAULT.write(list);
 		var parsed = CborParser.DEFAULT.read(bytes, JsonList.class);
-		assertEquals(2, parsed.size());
+		assertSize(2, parsed);
 		assertEquals("a", parsed.getMap(0).getString("s"));
 		assertEquals("b", parsed.getMap(1).getString("s"));
 	}
@@ -238,7 +239,7 @@ class CborSerializer_Test extends TestBase {
 		var list = list(1, 2.5, 3);
 		var bytes = CborSerializer.DEFAULT.write(list);
 		var parsed = CborParser.DEFAULT.read(bytes, JsonList.class);
-		assertEquals(3, parsed.size());
+		assertSize(3, parsed);
 		assertEquals(1, parsed.getInt(0));
 		assertEquals(2.5, ((Number)parsed.get(1)).doubleValue(), 0.001);
 		assertEquals(3, parsed.getInt(2));

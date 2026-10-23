@@ -64,7 +64,7 @@ public final class McpTypedHandlers {
 	}
 
 	private static <T> T bindPromptArguments(Map<String,Object> arguments, Class<T> type) {
-		if (arguments == null || arguments.isEmpty())
+		if (ie(arguments))
 			return null;
 		try {
 			var json = Json.of(arguments);

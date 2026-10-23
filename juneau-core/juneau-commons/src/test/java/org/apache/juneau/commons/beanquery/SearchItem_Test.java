@@ -41,7 +41,7 @@ class SearchItem_Test extends TestBase {
 		items.add(new SearchItem.Leaf("b", "$eq(\"2\")"));
 		var and = new SearchItem.And(items);
 		items.add(new SearchItem.Leaf("c", "$eq(\"3\")"));
-		assertEquals(2, and.items().size());
+		assertSize(2, and.items());
 		var hoistedTarget1 = and.items();
 		var hoistedArg1 = new SearchItem.Leaf("d", "$eq(\"4\")");
 		assertThrows(UnsupportedOperationException.class, () -> hoistedTarget1.add(hoistedArg1));

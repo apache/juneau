@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.server.view.freemarker.console;
 
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
@@ -36,9 +37,11 @@ class CardSpec_VisibleWhen_Test {
 
 	@Test void a02_serializesEachRule() {
 		var m = CardSpec.html("c1").visibleWhen(VisibilityRule.when("role").in("admin", "owner")).toMap();
-		@SuppressWarnings("unchecked")
+		@SuppressWarnings({
+			"unchecked" // Casts a parsed JSON value to its known Map/List shape.
+		})
 		var rules = (List<Map<String,Object>>)m.get("visibleWhen");
-		assertEquals(1, rules.size());
+		assertSize(1, rules);
 		assertEquals("role", rules.get(0).get("field"));
 		assertEquals("in", rules.get(0).get("op"));
 		assertEquals(List.of("admin", "owner"), rules.get(0).get("value"));

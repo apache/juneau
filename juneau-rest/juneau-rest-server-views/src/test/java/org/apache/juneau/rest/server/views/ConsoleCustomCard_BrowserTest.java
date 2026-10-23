@@ -82,7 +82,9 @@ class ConsoleCustomCard_BrowserTest extends TestBase {
 		assertFailure(report.get("never"), "E-JS-4", "card 'n1' has unknown type 'nope'; registered types: 'html, run-view'");
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Casts a parsed JSON value to its known Map/List shape.
+	})
 	private static List<String> eventIds(Map<String,Object> r, String kind) {
 		var events = (List<Map<String,Object>>)ConsoleBrowserFixture.probe(r).get("events");
 		return events.stream().filter(e -> kind.equals(e.get("kind"))).map(e -> String.valueOf(e.get("id"))).toList();

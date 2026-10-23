@@ -87,9 +87,9 @@ class Json5lParser_Test extends TestBase {
 	void b04_trailingCommaArrayLines() throws Exception {
 		var in = "[1,]\n[2,3,]";
 		var list = (List<JsonList>) Json5l.to(in, List.class, JsonList.class);
-		assertEquals(1, list.get(0).size());
+		assertSize(1, list.get(0));
 		assertEquals(1, list.get(0).getInt(0));
-		assertEquals(2, list.get(1).size());
+		assertSize(2, list.get(1));
 		assertEquals(2, list.get(1).getInt(0));
 		assertEquals(3, list.get(1).getInt(1));
 	}

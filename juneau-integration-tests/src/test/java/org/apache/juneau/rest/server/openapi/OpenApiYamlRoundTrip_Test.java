@@ -123,7 +123,7 @@ class OpenApiYamlRoundTrip_Test extends TestBase {
 		var getNew = parsed.getPaths().get("/pet").getGet();
 		assertEquals(getOrig.getOperationId(), getNew.getOperationId());
 
-		// components.schemas preserved including the Pet entry lifted in Phase 4.
+		// components.schemas preserved including the lifted Pet entry.
 		var origSchemas = original.getComponents().getSchemas();
 		var newSchemas = parsed.getComponents().getSchemas();
 		assertEquals(origSchemas.keySet(), newSchemas.keySet());

@@ -17,6 +17,7 @@
 package org.apache.juneau.marshall.xml;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 
 import java.util.*;
 
@@ -131,7 +132,7 @@ class XmlParserSession_Test extends TestBase {
 		var m = (Map) P.read("<A><x>1</x><x>2</x><x>3</x></A>", Object.class);
 		var v = m.get("x");
 		assertTrue(v instanceof List);
-		assertEquals(3, ((List) v).size());
+		assertSize(3, ((List) v));
 	}
 
 	@Test void c07_unknown_namedNestedElements() {
@@ -189,7 +190,7 @@ class XmlParserSession_Test extends TestBase {
 		assertEquals("1", m1.get("a"));
 		assertEquals("2", m1.get("b"));
 		var m2 = (Map) P.read("<object><x>1</x><x>2</x><x>3</x></object>", Map.class);
-		assertEquals(3, ((List) m2.get("x")).size());
+		assertSize(3, ((List) m2.get("x")));
 	}
 
 	@Test void e03_emptyMap() {
@@ -205,14 +206,14 @@ class XmlParserSession_Test extends TestBase {
 	@Test void f01_collection_strings() {
 		var xml = "<array><string>a</string><string>b</string><string>c</string></array>";
 		var l = P.read(xml, List.class);
-		assertEquals(3, l.size());
+		assertSize(3, l);
 		assertEquals("a", l.get(0));
 	}
 
 	@Test void f02_collection_typedList() {
 		var xml = "<array><number>1</number><number>2</number></array>";
 		var l = (LinkedList<Integer>) P.read(xml, LinkedList.class, Integer.class);
-		assertEquals(2, l.size());
+		assertSize(2, l);
 		assertEquals(Integer.valueOf(1), l.get(0));
 	}
 
@@ -243,7 +244,7 @@ class XmlParserSession_Test extends TestBase {
 		assertEquals(Boolean.TRUE, P.read("<x _type='boolean'>true</x>", Object.class));
 		assertEquals("hi", P.read("<x _type='string'>hi</x>", Object.class));
 		var l = (List) P.read("<x _type='array'><string>a</string></x>", Object.class);
-		assertEquals(1, l.size());
+		assertSize(1, l);
 		var m = (Map) P.read("<x _type='object'><a>1</a></x>", Object.class);
 		assertEquals("1", m.get("a"));
 	}
@@ -290,7 +291,7 @@ class XmlParserSession_Test extends TestBase {
 	@Test void i02_collapsedFormat() {
 		var x = "<object><x>a</x><x>b</x><x>c</x></object>";
 		var bean = P.read(x, CollapsedBean.class);
-		assertEquals(3, bean.items.size());
+		assertSize(3, bean.items);
 		assertEquals("a", bean.items.get(0));
 	}
 
@@ -425,7 +426,7 @@ class XmlParserSession_Test extends TestBase {
 		var dest = new ArrayList<String>();
 		var x = "<array><string>x</string><string>y</string></array>";
 		P.readIntoCollection(x, dest, String.class);
-		assertEquals(2, dest.size());
+		assertSize(2, dest);
 		assertEquals("x", dest.get(0));
 		assertEquals("y", dest.get(1));
 	}

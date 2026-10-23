@@ -19,7 +19,7 @@
  * Remote-proxy support for the next-generation REST client.
  *
  * <p>
- * Provides {@link org.apache.juneau.rest.client.remote.RemoteClient}, which creates Java proxy
+ * Provides {@link org.apache.juneau.rest.client.remote.RemoteClient RemoteClient}, which creates Java proxy
  * instances for {@code @Remote}-annotated interfaces backed by a {@code RestClient}.
  */
 package org.apache.juneau.rest.client.remote;

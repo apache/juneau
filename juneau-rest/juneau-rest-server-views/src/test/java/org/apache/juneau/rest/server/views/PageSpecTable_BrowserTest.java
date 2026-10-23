@@ -61,7 +61,9 @@ class PageSpecTable_BrowserTest extends TestBase {
 			.run();
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Casts a parsed JSON value to its known Map/List shape.
+	})
 	private static List<String> probeList(String key) {
 		return (List<String>)ConsoleBrowserFixture.probe(report.get("table")).get(key);
 	}

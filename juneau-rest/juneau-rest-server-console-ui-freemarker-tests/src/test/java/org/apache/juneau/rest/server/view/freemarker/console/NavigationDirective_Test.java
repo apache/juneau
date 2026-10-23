@@ -17,6 +17,7 @@
 package org.apache.juneau.rest.server.view.freemarker.console;
 
 import static org.apache.juneau.rest.server.console.test.PageContractAssert.*;
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
@@ -104,7 +105,7 @@ class NavigationDirective_Test extends TestBase {
 			.hasNavHref("home/skill-repos", "/home/skill-repos")
 			.hasActiveNav("home", "skill-repos");
 		// visible=isAdmin with isAdmin=false: Setup and its subtree are not in the contract at all.
-		assertEquals(1, a.contract().getList("nav").size(), () -> body);
+		assertSize(() -> body, 1, a.contract().getList("nav"));
 		assertFalse(a.contract().toString().contains("users"), () -> body);
 		// No server-rendered nav and no aria-current: the shell sets it.
 		assertFalse(body.contains("juneau-page-nav"), () -> body);

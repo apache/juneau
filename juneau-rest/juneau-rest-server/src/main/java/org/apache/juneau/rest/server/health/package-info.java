@@ -19,11 +19,11 @@
  * Built-in health, readiness, and liveness probe support for Juneau REST servers.
  *
  * <p>
- * Provides the {@link org.apache.juneau.rest.server.health.HealthIndicator} SPI for reporting
- * per-component health, an {@link org.apache.juneau.rest.server.health.HealthAggregator} that combines
+ * Provides the {@link org.apache.juneau.rest.server.health.HealthIndicator HealthIndicator} SPI for reporting
+ * per-component health, an {@link org.apache.juneau.rest.server.health.HealthAggregator HealthAggregator} that combines
  * results, and servlet, child-resource, and mixin flavors 
- * ({@link org.apache.juneau.rest.server.health.HealthServlet},
- * {@link org.apache.juneau.rest.server.health.HealthResource},
- * {@link org.apache.juneau.rest.server.health.HealthMixin}) that expose the probe endpoints.
+ * ({@link org.apache.juneau.rest.server.health.HealthServlet HealthServlet},
+ * {@link org.apache.juneau.rest.server.health.HealthResource HealthResource},
+ * {@link org.apache.juneau.rest.server.health.HealthMixin HealthMixin}) that expose the probe endpoints.
  */
 package org.apache.juneau.rest.server.health;

@@ -27,7 +27,7 @@ import org.apache.juneau.marshall.json5.*;
 import org.junit.jupiter.api.*;
 
 /**
- * Precedence chain tests for the new Phase 1 format settings:
+ * Precedence chain tests for the format settings:
  * {@code @MarshalledProp} &gt; {@code @Marshalled} &gt; {@code MarshallingContext} &gt; default.
  */
 class DateTimeLocaleFormatPlacement_Test {

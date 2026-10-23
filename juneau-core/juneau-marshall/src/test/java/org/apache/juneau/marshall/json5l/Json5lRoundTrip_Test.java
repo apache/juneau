@@ -71,7 +71,7 @@ class Json5lRoundTrip_Test extends TestBase {
 		var in = list(JsonMap.of("x", 1), JsonMap.of("y", 2));
 		var out = Json5lSerializer.DEFAULT.write(in);
 		var back = (List<JsonMap>) Json5lParser.DEFAULT.read(out, List.class, JsonMap.class);
-		assertEquals(2, back.size());
+		assertSize(2, back);
 		assertEquals(1, back.get(0).getInt("x"));
 		assertEquals(2, back.get(1).getInt("y"));
 	}

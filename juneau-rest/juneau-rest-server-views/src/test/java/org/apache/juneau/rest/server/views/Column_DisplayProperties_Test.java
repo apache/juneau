@@ -140,7 +140,9 @@ class Column_DisplayProperties_Test extends TestBase {
 		var mine = SearchOperator.create("$mine", "Assigned to me").types(SearchType.ID).build();
 		var c = Column.create("owner").searchType(SearchType.ID).operators(SearchOperatorSet.of(SearchOperatorSet.standard().get("$eq"), mine));
 		var m = c.toCatalogMap();
-		@SuppressWarnings("unchecked")
+		@SuppressWarnings({
+			"unchecked" // Casts a parsed JSON value to its known Map/List shape.
+		})
 		var round = Column.searchMeta("owner", (String)m.get("searchType"), (List<String>)m.get("searchOperators"), (List<Map<String,String>>)m.get("customOperators"));
 		assertEquals(c.searchMeta(), round);
 	}

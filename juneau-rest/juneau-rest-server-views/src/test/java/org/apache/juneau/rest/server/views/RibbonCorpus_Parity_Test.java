@@ -43,7 +43,9 @@ class RibbonCorpus_Parity_Test extends TestBase {
 	private static final String HARNESS = "ribbon-corpus.cjs";
 	private static Map<String,Map<?,?>> cached;
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Casts a parsed JSON value to its known Map/List shape.
+	})
 	private static Map<String,Map<?,?>> report() {
 		assumeTrue(nodeAvailable() && locate() != null, "node not available or " + HARNESS + " not found - JS ribbon parity layer skipped");
 		if (cached == null) {

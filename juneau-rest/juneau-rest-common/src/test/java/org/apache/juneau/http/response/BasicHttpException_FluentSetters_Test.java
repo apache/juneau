@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.http.response;
 
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
@@ -37,14 +38,14 @@ class BasicHttpException_FluentSetters_Test extends TestBase {
 		var e = new BasicHttpException(500, "x")
 			.addHeader("A", "1")
 			.setHeader("A", "2");
-		assertEquals(1, e.getHeaders().size());
+		assertSize(1, e.getHeaders());
 		assertEquals("2", e.getHeaders().get(0).getValue());
 	}
 
 	@Test void a03_setHeaders_list() {
 		var e = new BasicHttpException(500, "x")
 			.setHeaders(List.of(HttpHeaderBean.of("A", "1"), HttpHeaderBean.of("B", "2")));
-		assertEquals(2, e.getHeaders().size());
+		assertSize(2, e.getHeaders());
 	}
 
 	@Test void a04_setProtocolVersion() {

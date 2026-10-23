@@ -17,6 +17,7 @@
 package org.apache.juneau.rest.server.tracing.otel;
 
 import static org.apache.juneau.commons.utils.Shorts.*;
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
@@ -142,7 +143,7 @@ class OtelTracerHook_Test extends TestBase {
 			scope.setStatusCode(200);
 		}
 		var spans = EXPORTER.getFinishedSpanItems();
-		assertEquals(1, spans.size(), "A05 registers no TracerHook bean, so this is the only span — from the direct call below");
+		assertSize(() -> "A05 registers no TracerHook bean, so this is the only span — from the direct call below", 1, spans);
 		assertEquals("GET", spans.get(0).getName(), "startSpan(request) must still name the span after the HTTP method (TraceOperation.DEFAULT has no override)");
 	}
 
@@ -166,7 +167,7 @@ class OtelTracerHook_Test extends TestBase {
 	@Test void b01_happyPath_serverSpanWithHttpSemconvAttributes() throws Exception {
 		CB.get("/users/42").run().assertStatus(200);
 		var spans = EXPORTER.getFinishedSpanItems();
-		assertEquals(1, spans.size());
+		assertSize(1, spans);
 		var s = spans.get(0);
 		assertEquals(SpanKind.SERVER, s.getKind());
 		assertEquals("GET", s.getName());
@@ -180,7 +181,7 @@ class OtelTracerHook_Test extends TestBase {
 		CB.get("/users/aaa").run().assertStatus(200);
 		CB.get("/users/bbb").run().assertStatus(200);
 		var spans = EXPORTER.getFinishedSpanItems();
-		assertEquals(2, spans.size());
+		assertSize(2, spans);
 		assertEquals(spans.get(0).getAttributes().get(OtelTracerHook.ATTR_HTTP_ROUTE),
 			spans.get(1).getAttributes().get(OtelTracerHook.ATTR_HTTP_ROUTE),
 			"different concrete URIs share the same http.route attribute");
@@ -206,7 +207,7 @@ class OtelTracerHook_Test extends TestBase {
 	@Test void c01_exceptionPath_spanCarriesErrorStatusAndExceptionType() throws Exception {
 		CC.get("/boom").run().assertStatus(500);
 		var spans = EXPORTER.getFinishedSpanItems();
-		assertEquals(1, spans.size());
+		assertSize(1, spans);
 		var s = spans.get(0);
 		assertEquals(Long.valueOf(500), s.getAttributes().get(OtelTracerHook.ATTR_HTTP_RESPONSE_STATUS_CODE));
 		assertEquals(StatusCode.ERROR, s.getStatus().getStatusCode());
@@ -227,7 +228,7 @@ class OtelTracerHook_Test extends TestBase {
 		CB.get("/users/9").header("traceparent", traceparent).run().assertStatus(200);
 
 		var spans = EXPORTER.getFinishedSpanItems();
-		assertEquals(1, spans.size());
+		assertSize(1, spans);
 		var s = spans.get(0);
 		assertEquals(traceId, s.getTraceId(), "server span should inherit the incoming trace id");
 		assertEquals(parentSpanId, s.getParentSpanId(), "server span should be a child of the incoming span");
@@ -249,7 +250,7 @@ class OtelTracerHook_Test extends TestBase {
 
 	@Test void e01_noTracerBean_noSpansEmitted() throws Exception {
 		CE.get("/ping").run().assertStatus(200);
-		assertEquals(0, EXPORTER.getFinishedSpanItems().size(), "without a @Bean TracerHook, no spans reach the SDK exporter");
+		assertSize(() -> "without a @Bean TracerHook, no spans reach the SDK exporter", 0, EXPORTER.getFinishedSpanItems());
 	}
 
 	// -----------------------------------------------------------------------------------------------------------------
@@ -296,7 +297,7 @@ class OtelTracerHook_Test extends TestBase {
 		CH.get("/op").header("traceparent", HTTP_TRACEPARENT).run().assertStatus(200);
 
 		var spans = EXPORTER.getFinishedSpanItems();
-		assertEquals(1, spans.size());
+		assertSize(1, spans);
 		assertEquals(META_TRACE_ID, spans.get(0).getTraceId(), "params._meta traceparent must win over the HTTP header");
 		assertEquals(META_SPAN_ID, spans.get(0).getParentSpanId());
 	}
@@ -308,7 +309,7 @@ class OtelTracerHook_Test extends TestBase {
 		CH.get("/op").header("traceparent", HTTP_TRACEPARENT).run().assertStatus(200);
 
 		var spans = EXPORTER.getFinishedSpanItems();
-		assertEquals(1, spans.size());
+		assertSize(1, spans);
 		assertEquals(HTTP_TRACE_ID, spans.get(0).getTraceId(), "absent metadata traceparent must fall back to the HTTP header");
 		assertEquals(HTTP_SPAN_ID, spans.get(0).getParentSpanId());
 	}
@@ -319,7 +320,7 @@ class OtelTracerHook_Test extends TestBase {
 		CH.get("/op").header("traceparent", HTTP_TRACEPARENT).run().assertStatus(200);
 
 		var spans = EXPORTER.getFinishedSpanItems();
-		assertEquals(1, spans.size());
+		assertSize(1, spans);
 		assertEquals(HTTP_TRACE_ID, spans.get(0).getTraceId(), "no recognized carrier must extract HTTP headers only");
 	}
 
@@ -334,7 +335,7 @@ class OtelTracerHook_Test extends TestBase {
 			.run().assertStatus(200);
 
 		var spans = EXPORTER.getFinishedSpanItems();
-		assertEquals(1, spans.size());
+		assertSize(1, spans);
 		var traceState = spans.get(0).getSpanContext().getTraceState();
 		assertEquals("1", traceState.get("meta"), "metadata tracestate must win alongside its winning traceparent");
 		assertNull(traceState.get("http"), "the HTTP header's tracestate must not leak through when metadata wins");
@@ -365,7 +366,7 @@ class OtelTracerHook_Test extends TestBase {
 		CH.get("/op").header("traceparent", HTTP_TRACEPARENT).run().assertStatus(200);
 
 		var spans = EXPORTER.getFinishedSpanItems();
-		assertEquals(1, spans.size());
+		assertSize(1, spans);
 		assertEquals(HTTP_TRACE_ID, spans.get(0).getTraceId(), "an invalid metadata value must fall back to the valid HTTP header per propagator contract");
 	}
 
@@ -436,18 +437,19 @@ class OtelTracerHook_Test extends TestBase {
 	private static final MockRestClient CI = MockRestClient.buildLax(I.class);
 
 	@Test void i01_operationSpanNameAndAttributes_appliedToSpan() throws Exception {
-		var attrs = new LinkedHashMap<String,String>();
-		attrs.put(TraceOperation.ATTR_MCP_METHOD_NAME, "tools/call");
-		attrs.put(TraceOperation.ATTR_MCP_PROTOCOL_VERSION, "2026-07-28");
-		attrs.put(TraceOperation.ATTR_JSONRPC_REQUEST_ID, "7");
-		attrs.put(TraceOperation.ATTR_GEN_AI_TOOL_NAME, "echo");
-		attrs.put(TraceOperation.ATTR_GEN_AI_OPERATION_NAME, "execute_tool");
+		Map<String,String> attrs = m(
+			TraceOperation.ATTR_MCP_METHOD_NAME, "tools/call",
+			TraceOperation.ATTR_MCP_PROTOCOL_VERSION, "2026-07-28",
+			TraceOperation.ATTR_JSONRPC_REQUEST_ID, "7",
+			TraceOperation.ATTR_GEN_AI_TOOL_NAME, "echo",
+			TraceOperation.ATTR_GEN_AI_OPERATION_NAME, "execute_tool"
+		);
 		I_OPERATION.set(TraceOperation.of("tools/call echo", attrs));
 
 		CI.get("/rpc").run().assertStatus(200);
 
 		var spans = EXPORTER.getFinishedSpanItems();
-		assertEquals(1, spans.size());
+		assertSize(1, spans);
 		var s = spans.get(0);
 		assertEquals("tools/call echo", s.getName());
 		assertEquals("tools/call", s.getAttributes().get(AttributeKey.stringKey(TraceOperation.ATTR_MCP_METHOD_NAME)));
@@ -465,7 +467,7 @@ class OtelTracerHook_Test extends TestBase {
 		CI.get("/rpc").run().assertStatus(200);
 
 		var spans = EXPORTER.getFinishedSpanItems();
-		assertEquals(1, spans.size());
+		assertSize(1, spans);
 		var s = spans.get(0);
 		assertEquals("GET", s.getName(), "TraceOperation.DEFAULT must not override the HTTP-derived span name");
 		assertNull(s.getAttributes().get(AttributeKey.stringKey(TraceOperation.ATTR_MCP_METHOD_NAME)));
@@ -511,7 +513,7 @@ class OtelTracerHook_Test extends TestBase {
 		CJ.get("/op").run().assertStatus(200);
 
 		var spans = EXPORTER.getFinishedSpanItems();
-		assertEquals(2, spans.size(), "server span + downstream child span");
+		assertSize(() -> "server span + downstream child span", 2, spans);
 		var server = spans.stream().filter(x -> neq(x.getName(), "child")).findFirst().orElseThrow();
 		var child = spans.stream().filter(x -> eq(x.getName(), "child")).findFirst().orElseThrow();
 		assertEquals(META_TRACE_ID, server.getTraceId(), "server span must be parented by the extracted carrier context");

@@ -19,6 +19,7 @@ package org.apache.juneau.commons.reflect;
 import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.*;
 import static org.apache.juneau.commons.reflect.ElementFlag.*;
+import static org.apache.juneau.commons.TestAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.lang.annotation.*;
@@ -279,16 +280,16 @@ class FieldInfo_Test extends TestBase {
 	@Test
 	void a006_getAnnotations() {
 		var annotations1 = f_field1.getAnnotations();
-		assertEquals(2, annotations1.size());
+		assertSize(2, annotations1);
 		assertTrue(annotations1.stream().anyMatch(a -> a.hasNameSimple("TestAnnotation1")));
 		assertTrue(annotations1.stream().anyMatch(a -> a.hasNameSimple("TestAnnotation2")));
 
 		var annotations2 = f_field2.getAnnotations();
-		assertEquals(1, annotations2.size());
+		assertSize(1, annotations2);
 		assertTrue(annotations2.stream().anyMatch(a -> a.hasNameSimple("TestAnnotation1")));
 
 		var annotations3 = f_field3.getAnnotations();
-		assertEquals(0, annotations3.size());
+		assertSize(0, annotations3);
 
 		// Test memoization - should return same instance
 		var annotations1_2 = f_field1.getAnnotations();
@@ -301,22 +302,22 @@ class FieldInfo_Test extends TestBase {
 	@Test
 	void a007_getAnnotations_typed() {
 		var ann1_type1 = f_field1.getAnnotations(TestAnnotation1.class).toList();
-		assertEquals(1, ann1_type1.size());
+		assertSize(1, ann1_type1);
 		assertEquals("test1", ann1_type1.get(0).getValue().get());
 
 		var ann1_type2 = f_field1.getAnnotations(TestAnnotation2.class).toList();
-		assertEquals(1, ann1_type2.size());
+		assertSize(1, ann1_type2);
 		assertEquals(42, ann1_type2.get(0).getInt("value").get());
 
 		var ann1_type3 = f_field1.getAnnotations(TestAnnotation3.class).toList();
-		assertEquals(0, ann1_type3.size());
+		assertSize(0, ann1_type3);
 
 		var ann2_type1 = f_field2.getAnnotations(TestAnnotation1.class).toList();
-		assertEquals(1, ann2_type1.size());
+		assertSize(1, ann2_type1);
 		assertEquals("test2", ann2_type1.get(0).getValue().get());
 
 		var ann2_type2 = f_field2.getAnnotations(TestAnnotation2.class).toList();
-		assertEquals(0, ann2_type2.size());
+		assertSize(0, ann2_type2);
 	}
 
 	//====================================================================================================

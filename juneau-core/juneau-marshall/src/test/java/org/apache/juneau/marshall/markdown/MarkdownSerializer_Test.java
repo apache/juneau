@@ -18,6 +18,7 @@ package org.apache.juneau.marshall.markdown;
 
 import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 
 import java.lang.reflect.*;
 import java.time.*;
@@ -209,7 +210,7 @@ class MarkdownSerializer_Test {
 		var original = List.of(new B("Alice", 30), new B("Bob", 25));
 		var md = toMarkdown(original);
 		var parsed = (List<B>) fromMarkdown(md, List.class, B.class);
-		assertEquals(2, parsed.size());
+		assertSize(2, parsed);
 		assertEquals("Alice", parsed.get(0).name);
 		assertEquals(30, parsed.get(0).age);
 		assertEquals("Bob", parsed.get(1).name);

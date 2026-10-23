@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.server.views;
 
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assumptions.*;
 
@@ -210,7 +211,7 @@ class ViewsJs_TableBus_Test extends TestBase {
 	@Test void j02_invalidDslColumnFilterIsRefusedAndKeepsTheOldOne() {
 		var m = map(report.get("dslBad"));
 		var errs = list(m.get("errors"));
-		assertEquals(1, errs.size(), errs::toString);
+		assertSize(errs::toString, 1, errs);
 		assertTrue(errs.get(0).toString().contains("column 'stage'"), errs::toString);
 		assertEquals("$eq(open)", m.get("store"));
 		assertEquals(0, m.get("newFixed"));
@@ -238,7 +239,7 @@ class ViewsJs_TableBus_Test extends TestBase {
 	}
 
 	@Test void j06_dslSectionLogsOnlyTheRefusal() {
-		assertEquals(1, list(report.get("dslErrors")).size(), () -> report.get("dslErrors").toString());
+		assertSize(() -> report.get("dslErrors").toString(), 1, list(report.get("dslErrors")));
 	}
 
 	@Test void k01_roleSkipsForeignOptionsAndColumnsQuietly() {
@@ -304,10 +305,12 @@ class ViewsJs_TableBus_Test extends TestBase {
 
 	@Test void z_noUnexpectedConsoleErrors() {
 		var errs = list(report.get("errors"));
-		assertEquals(3, errs.size(), () -> "only the three deliberate refusals may log: " + errs);
+		assertSize(() -> "only the three deliberate refusals may log: " + errs, 3, errs);
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Casts a parsed JSON value to its known Map/List shape.
+	})
 	static Map<String,Object> map(Object o) { return (Map<String,Object>)o; }
 
 	static List<?> list(Object o) { return (List<?>)o; }

@@ -20,7 +20,7 @@
  *
  * <p>
  * Holds the reflected metadata about a remote proxy interface
- * ({@link org.apache.juneau.http.classic.remote.RrpcInterfaceMeta}) and its individual methods
- * ({@link org.apache.juneau.http.classic.remote.RrpcInterfaceMethodMeta}).
+ * ({@link org.apache.juneau.http.classic.remote.RrpcInterfaceMeta RrpcInterfaceMeta}) and its individual methods
+ * ({@link org.apache.juneau.http.classic.remote.RrpcInterfaceMethodMeta RrpcInterfaceMethodMeta}).
  */
 package org.apache.juneau.http.classic.remote;

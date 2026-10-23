@@ -200,7 +200,7 @@ public class ProfileConfigStore extends ConfigStore {
 
 	@Override /* Overridden from ConfigStore */
 	public String read(String name) throws IOException {
-		if (! eq(name, baseName))
+		if (neq(name, baseName))
 			return delegate.read(name);
 		return mergedContents();
 	}
@@ -212,7 +212,7 @@ public class ProfileConfigStore extends ConfigStore {
 
 	@Override /* Overridden from ConfigStore */
 	public String getNotifiedContents(String name, String written) throws IOException {
-		if (! eq(name, baseName))
+		if (neq(name, baseName))
 			return written;
 		return mergeWithOverlays(written);
 	}

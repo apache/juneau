@@ -30,6 +30,7 @@ import org.apache.juneau.http.*;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.marshall.collections.*;
 import org.apache.juneau.petstore.console.*;
+import org.apache.juneau.petstore.console.data.*;
 import org.apache.juneau.petstore.console.pages.*;
 import org.apache.juneau.petstore.dto.*;
 import org.apache.juneau.rest.server.*;
@@ -355,7 +356,7 @@ public class JobsRest extends PetstoreConsolePage implements AsyncJobsMixin, Ter
 		var actor = ConsoleWrites.actor(req);
 		var body = Restock.of(json);
 		var k = body.idempotencyKey();
-		if (k == null || k.isBlank())
+		if (ib(k))
 			throw new BadRequest("Missing 'idempotencyKey'");
 		var key = IdempotencyKey.of(k, ACTION, k.equals(json.getString("targetId")) ? k : ACTION);
 		if (body.perSpecies().isEmpty())
@@ -633,7 +634,7 @@ public class JobsRest extends PetstoreConsolePage implements AsyncJobsMixin, Ter
 
 	private List<Pet> restocked(Species s, Restock body, String actor) {
 		var pets = store().restock(body.perSpecies(), "job:restock-species:" + actor);
-		lastRestock.put(s, Instant.now());
+		lastRestock.put(s, PetstoreSeed.now());
 		return pets;
 	}
 

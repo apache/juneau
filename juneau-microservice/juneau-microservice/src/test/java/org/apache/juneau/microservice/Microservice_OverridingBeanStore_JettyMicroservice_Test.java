@@ -32,7 +32,7 @@ import org.junit.jupiter.api.*;
 @SuppressWarnings({
 	"resource" // Test-only Microservice/BeanStore overlay instances are stopped via ms.stop() in try/finally; JDT's local closeable analysis does not recognize stop() as closing them.
 })
-class Microservice_OverridingBeanStore_Test extends TestBase {
+class Microservice_OverridingBeanStore_JettyMicroservice_Test extends TestBase {
 
 	interface ExternalApi {
 		String describe();

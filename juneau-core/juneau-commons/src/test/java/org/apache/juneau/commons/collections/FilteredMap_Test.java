@@ -254,13 +254,13 @@ class FilteredMap_Test extends TestBase {
 			.filter((k, v) -> v != null)
 			.build();
 
-		assertEquals(0, map.size());
+		assertSize(0, map);
 		map.put("key1", "value1");
-		assertEquals(1, map.size());
+		assertSize(1, map);
 		map.put("key2", null);  // Filtered out
-		assertEquals(1, map.size());
+		assertSize(1, map);
 		map.put("key3", "value3");
-		assertEquals(2, map.size());
+		assertSize(2, map);
 	}
 
 	@Test

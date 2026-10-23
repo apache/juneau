@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.bean.jsonschema;
 
+import static org.apache.juneau.test.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.net.*;
@@ -302,7 +303,7 @@ public class JsonSchema_Test extends TestBase {
 		x.addAdditionalItems(new JsonSchemaProperty("a", JsonType.STRING));
 		x.addAdditionalItems(new JsonSchemaProperty("b", JsonType.NUMBER)); // non-null path
 		var items = x.getAdditionalItemsAsSchemaArray();
-		assertEquals(2, items.size());
+		assertSize(2, items);
 		assertEquals("a", ((JsonSchemaProperty<?>) items.get(0)).getName());
 		assertEquals("b", ((JsonSchemaProperty<?>) items.get(1)).getName());
 	}
@@ -312,7 +313,7 @@ public class JsonSchema_Test extends TestBase {
 		x.addAnyOf(new JsonSchemaRef("http://a"));
 		x.addAnyOf(new JsonSchemaRef("http://b")); // non-null path
 		var anyOf = x.getAnyOf();
-		assertEquals(2, anyOf.size());
+		assertSize(2, anyOf);
 		assertEquals(URI.create("http://a"), ((JsonSchema) anyOf.get(0)).getRef());
 		assertEquals(URI.create("http://b"), ((JsonSchema) anyOf.get(1)).getRef());
 	}
@@ -324,7 +325,7 @@ public class JsonSchema_Test extends TestBase {
 		x.addDef("k1", d1);
 		x.addDef("k2", d2); // non-null path
 		var defs = x.getDefs();
-		assertEquals(2, defs.size());
+		assertSize(2, defs);
 		assertSame(d1, defs.get("k1"));
 		assertSame(d2, defs.get("k2"));
 	}
@@ -336,7 +337,7 @@ public class JsonSchema_Test extends TestBase {
 		x.addDefinition("d1", d1);
 		x.addDefinition("d2", d2); // non-null path
 		var definitions = x.getDefinitions();
-		assertEquals(2, definitions.size());
+		assertSize(2, definitions);
 		assertSame(d1, definitions.get("d1"));
 		assertSame(d2, definitions.get("d2"));
 	}
@@ -348,7 +349,7 @@ public class JsonSchema_Test extends TestBase {
 		x.addDependency("d1", d1);
 		x.addDependency("d2", d2); // non-null path
 		var dependencies = x.getDependencies();
-		assertEquals(2, dependencies.size());
+		assertSize(2, dependencies);
 		assertSame(d1, dependencies.get("d1"));
 		assertSame(d2, dependencies.get("d2"));
 	}
@@ -358,7 +359,7 @@ public class JsonSchema_Test extends TestBase {
 		x.addDependentRequired("k1", java.util.Arrays.asList("f1"));
 		x.addDependentRequired("k2", java.util.Arrays.asList("f2")); // non-null path
 		var dependentRequired = x.getDependentRequired();
-		assertEquals(2, dependentRequired.size());
+		assertSize(2, dependentRequired);
 		assertEquals(java.util.Arrays.asList("f1"), dependentRequired.get("k1"));
 		assertEquals(java.util.Arrays.asList("f2"), dependentRequired.get("k2"));
 	}
@@ -370,7 +371,7 @@ public class JsonSchema_Test extends TestBase {
 		x.addDependentSchema("k1", d1);
 		x.addDependentSchema("k2", d2); // non-null path
 		var dependentSchemas = x.getDependentSchemas();
-		assertEquals(2, dependentSchemas.size());
+		assertSize(2, dependentSchemas);
 		assertSame(d1, dependentSchemas.get("k1"));
 		assertSame(d2, dependentSchemas.get("k2"));
 	}
@@ -380,7 +381,7 @@ public class JsonSchema_Test extends TestBase {
 		x.addEnum("a");
 		x.addEnum("b"); // non-null path
 		var enum_ = x.getEnum();
-		assertEquals(2, enum_.size());
+		assertSize(2, enum_);
 		assertEquals("a", enum_.get(0));
 		assertEquals("b", enum_.get(1));
 	}
@@ -390,7 +391,7 @@ public class JsonSchema_Test extends TestBase {
 		x.addExamples("ex1");
 		x.addExamples("ex2"); // non-null path
 		var examples = x.getExamples();
-		assertEquals(2, examples.size());
+		assertSize(2, examples);
 		assertEquals("ex1", examples.get(0));
 		assertEquals("ex2", examples.get(1));
 	}
@@ -400,7 +401,7 @@ public class JsonSchema_Test extends TestBase {
 		x.addItems(new JsonSchema().setType(JsonType.STRING));
 		x.addItems(new JsonSchema().setType(JsonType.NUMBER)); // non-null path
 		var items = x.getItemsAsSchemaArray();
-		assertEquals(2, items.size());
+		assertSize(2, items);
 		assertEquals(JsonType.STRING, items.get(0).getType());
 		assertEquals(JsonType.NUMBER, items.get(1).getType());
 	}
@@ -410,7 +411,7 @@ public class JsonSchema_Test extends TestBase {
 		x.addOneOf(new JsonSchemaRef("http://a"));
 		x.addOneOf(new JsonSchemaRef("http://b")); // non-null path
 		var oneOf = x.getOneOf();
-		assertEquals(2, oneOf.size());
+		assertSize(2, oneOf);
 		assertEquals(URI.create("http://a"), ((JsonSchema) oneOf.get(0)).getRef());
 		assertEquals(URI.create("http://b"), ((JsonSchema) oneOf.get(1)).getRef());
 	}
@@ -420,7 +421,7 @@ public class JsonSchema_Test extends TestBase {
 		x.addPatternProperties(new JsonSchemaProperty("/pat1/", JsonType.STRING));
 		x.addPatternProperties(new JsonSchemaProperty("/pat2/", JsonType.NUMBER)); // non-null path
 		var patternProperties = x.getPatternProperties();
-		assertEquals(2, patternProperties.size());
+		assertSize(2, patternProperties);
 		assertEquals(JsonType.STRING, ((JsonSchema) patternProperties.get("/pat1/")).getType());
 		assertEquals(JsonType.NUMBER, ((JsonSchema) patternProperties.get("/pat2/")).getType());
 	}
@@ -436,7 +437,7 @@ public class JsonSchema_Test extends TestBase {
 		x.addPrefixItems(new JsonSchema().setType(JsonType.STRING));
 		x.addPrefixItems(new JsonSchema().setType(JsonType.NUMBER)); // non-null path
 		var prefixItems = x.getPrefixItems();
-		assertEquals(2, prefixItems.size());
+		assertSize(2, prefixItems);
 		assertEquals(JsonType.STRING, prefixItems.get(0).getType());
 		assertEquals(JsonType.NUMBER, prefixItems.get(1).getType());
 	}
@@ -446,7 +447,7 @@ public class JsonSchema_Test extends TestBase {
 		x.addProperties(new JsonSchemaProperty("f1", JsonType.STRING));
 		x.addProperties(new JsonSchemaProperty("f2", JsonType.NUMBER)); // non-null path
 		var properties = x.getProperties();
-		assertEquals(2, properties.size());
+		assertSize(2, properties);
 		assertEquals(JsonType.STRING, ((JsonSchema) properties.get("f1")).getType());
 		assertEquals(JsonType.NUMBER, ((JsonSchema) properties.get("f2")).getType());
 	}
@@ -473,7 +474,7 @@ public class JsonSchema_Test extends TestBase {
 
 	@Test void b19_jsonTypeArray_constructor() {
 		var arr = new JsonTypeArray(JsonType.STRING, JsonType.NUMBER);
-		assertEquals(2, arr.size());
+		assertSize(2, arr);
 		assertEquals(JsonType.STRING, arr.get(0));
 		assertEquals(JsonType.NUMBER, arr.get(1));
 	}
@@ -490,7 +491,7 @@ public class JsonSchema_Test extends TestBase {
 		x.addTypes(JsonType.STRING);
 		x.addTypes(JsonType.NUMBER); // non-null path
 		var types = x.getTypeAsJsonTypeArray();
-		assertEquals(2, types.size());
+		assertSize(2, types);
 		assertEquals(JsonType.STRING, types.get(0));
 		assertEquals(JsonType.NUMBER, types.get(1));
 	}

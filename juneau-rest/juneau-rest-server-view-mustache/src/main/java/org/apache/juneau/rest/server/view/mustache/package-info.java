@@ -22,14 +22,14 @@
  * templates via <a href="https://github.com/spullara/mustache.java">mustache.java</a>:
  *
  * <ul class='javatreec'>
- * 	<li class='jc'>{@link org.apache.juneau.rest.server.view.mustache.MustacheMixin} &mdash;
+ * 	<li class='jc'>{@link org.apache.juneau.rest.server.view.mustache.MustacheMixin MustacheMixin} &mdash;
  * 		mixin that renders raw Mustache templates from the importer's classpath under
  * 		{@code /mustache/*} and auto-registers
- * 		{@link org.apache.juneau.rest.server.view.mustache.MustacheViewRenderer}.
- * 	<li class='jc'>{@link org.apache.juneau.rest.server.view.mustache.MustacheView} &mdash; immutable
+ * 		{@link org.apache.juneau.rest.server.view.mustache.MustacheViewRenderer MustacheViewRenderer}.
+ * 	<li class='jc'>{@link org.apache.juneau.rest.server.view.mustache.MustacheView MustacheView} &mdash; immutable
  * 		value class (implements the core {@link org.apache.juneau.rest.server.view.View View} interface)
  * 		returned from {@code @RestOp} methods to ask the framework to render a Mustache template.
- * 	<li class='jc'>{@link org.apache.juneau.rest.server.view.mustache.MustacheViewRenderer} &mdash;
+ * 	<li class='jc'>{@link org.apache.juneau.rest.server.view.mustache.MustacheViewRenderer MustacheViewRenderer} &mdash;
  * 		{@link org.apache.juneau.rest.server.processor.ResponseProcessor ResponseProcessor} that detects
  * 		{@link org.apache.juneau.rest.server.view.mustache.MustacheView MustacheView} returns and
  * 		dispatches them to the configured

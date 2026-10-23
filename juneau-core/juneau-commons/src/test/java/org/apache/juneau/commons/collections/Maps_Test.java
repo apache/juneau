@@ -478,10 +478,11 @@ class Maps_Test extends TestBase {
 
 	@Test
 	void i05_addAll_withFilter() {
-		var existing = new LinkedHashMap<String,String>();
-		existing.put("x", "longvalue");
-		existing.put("y", "ab");  // Will be filtered out
-		existing.put("z", "another");
+		var existing = m(
+			"x", "longvalue",
+			"y", "ab",  // Will be filtered out
+			"z", "another"
+		);
 
 		var map = Maps.create(String.class, String.class)
 			.filtered((k, v) -> v != null && v.length() > 2)

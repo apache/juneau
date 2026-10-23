@@ -96,7 +96,7 @@ class ViewsJs_CursorTip_Test extends TestBase {
 		assertTrue(css.contains("--jc-tip-border: #cccccc"), css);
 		assertTrue(css.contains("padding: 6px 9px"), css);
 		assertTrue(css.contains("font-size: 0.78em"), css);
-		assertFalse(css.contains("slds-"), css);
+		DualHatGuard.assertClean(css);
 		assertFalse(css.contains("sbx-cursor-tip"), css);
 		assertFalse(css.contains("data-sbx-tip"), css);
 	}
@@ -106,7 +106,7 @@ class ViewsJs_CursorTip_Test extends TestBase {
 		assertFalse(body.contains("sbx-cursor-tip"), body);
 		assertFalse(body.contains("data-sbx-tip"), body);
 		assertFalse(body.contains("u_sbxTip"), body);
-		assertFalse(body.contains("slds-"), body);
+		DualHatGuard.assertClean(body);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

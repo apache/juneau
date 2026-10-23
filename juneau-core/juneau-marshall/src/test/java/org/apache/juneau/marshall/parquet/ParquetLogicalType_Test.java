@@ -92,8 +92,7 @@ class ParquetLogicalType_Test extends TestBase {
 
 	@Test
 	void b01_forwardCompat_preChangeFileReadByNewParser() throws Exception {
-		// Default-mode output is byte-identical to the pre-change writer (the knob is purely additive),
-		// so a DEFAULT-serialized file is an equivalent, drift-free stand-in for a committed golden fixture.
+		// The knob is purely additive, so default-mode output does not depend on it and a DEFAULT-serialized file is an equivalent, drift-free stand-in for a committed golden fixture.
 		var a = uuidBean("alice", UUID_A);
 		var preChangeBytes = ParquetSerializer.DEFAULT.write(a);
 		var parsed = (List<UuidBean>) ParquetParser.DEFAULT.read(preChangeBytes, List.class, UuidBean.class);

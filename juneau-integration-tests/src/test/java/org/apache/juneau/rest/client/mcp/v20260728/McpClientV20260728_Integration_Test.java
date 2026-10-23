@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.client.mcp.v20260728;
 
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
@@ -88,7 +89,7 @@ class McpClientV20260728_Integration_Test extends TestBase {
 			var call = client.callTool("echo", Map.of("text", "hello"));
 			assertNotNull(call);
 			assertNotEquals(Boolean.TRUE, call.getIsError());
-			assertEquals(1, call.getContent().size());
+			assertSize(1, call.getContent());
 			assertEquals("hello", ((TextContent)call.getContent().get(0)).getText());
 		}
 	}

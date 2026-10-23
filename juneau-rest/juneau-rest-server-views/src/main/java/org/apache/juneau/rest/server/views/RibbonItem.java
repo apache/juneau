@@ -177,7 +177,7 @@ public final class RibbonItem {
 	 * @throws IllegalArgumentException If {@code actionId} is <jk>null</jk> or blank.
 	 */
 	public static RibbonItem dialog(String actionId) {
-		if (actionId == null || actionId.isBlank())
+		if (ib(actionId))
 			throw iaex("RibbonItem dialog action id must not be null or blank.");
 		var r = new RibbonItem("dialog");
 		r.id = actionId;
@@ -196,7 +196,7 @@ public final class RibbonItem {
 	 * @throws IllegalArgumentException If {@code id} is <jk>null</jk> or blank.
 	 */
 	public static RibbonItem option(String id) {
-		if (id == null || id.isBlank())
+		if (ib(id))
 			throw iaex("RibbonItem option id must not be null or blank.");
 		var r = new RibbonItem("option");
 		r.id = id;
@@ -217,7 +217,7 @@ public final class RibbonItem {
 	 * 	holds anything other than an {@code option}.
 	 */
 	public static RibbonItem optionGroup(String id, RibbonItem...members) {
-		if (id == null || id.isBlank())
+		if (ib(id))
 			throw iaex("RibbonItem optionGroup id must not be null or blank.");
 		if (members.length == 0)
 			throw iaex("RibbonItem optionGroup '%s' requires at least one option.", id);
@@ -242,9 +242,9 @@ public final class RibbonItem {
 	 * @throws IllegalArgumentException If {@code title} or {@code topic} is <jk>null</jk> or blank.
 	 */
 	public static RibbonItem publish(String title, String topic, Map<String,Object> payload) {
-		if (title == null || title.isBlank())
+		if (ib(title))
 			throw iaex("RibbonItem publish requires a title.");
-		if (topic == null || topic.isBlank())
+		if (ib(topic))
 			throw iaex("RibbonItem publish '%s' requires a topic.", title);
 		var i = new RibbonItem("publish");
 		i.title = title;
@@ -296,7 +296,7 @@ public final class RibbonItem {
 	 * @throws IllegalArgumentException If {@code v} is <jk>null</jk> or blank.
 	 */
 	public RibbonItem id(String v) {
-		if (v == null || v.isBlank())
+		if (ib(v))
 			throw iaex("RibbonItem %s id must not be null or blank.", type);
 		id = v;
 		return this;

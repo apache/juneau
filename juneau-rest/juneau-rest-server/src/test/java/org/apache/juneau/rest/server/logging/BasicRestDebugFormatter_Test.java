@@ -17,9 +17,12 @@
 package org.apache.juneau.rest.server.logging;
 
 import static java.util.Collections.*;
+import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.IoUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.f;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.apache.juneau.rest.server.logging.BasicRestDebugFormatter.*;
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -77,7 +80,7 @@ class BasicRestDebugFormatter_Test {
 		assertFalse(out.contains(Base64.getEncoder().encodeToString(bytes)), () -> "base64 secret present in: " + out);
 		var esc = new StringBuilder();
 		for (var i = 0; i < secret.length(); i++)
-			esc.append(String.format("\\u%04X", (int) secret.charAt(i)));
+			esc.append(f("\\u%04X", (int) secret.charAt(i)));
 		assertFalse(out.contains(esc.toString()), () -> "escaped-code-unit secret present in: " + out);
 	}
 
@@ -92,12 +95,12 @@ class BasicRestDebugFormatter_Test {
 			assertEquals(-1, out.indexOf(c), "raw bidi control present");
 	}
 
-	private void stubRequestHeaders(LinkedHashMap<String,List<String>> h) {
+	private void stubRequestHeaders(Map<String,List<String>> h) {
 		when(sreq.getHeaderNames()).thenReturn(enumeration(new ArrayList<>(h.keySet())));
 		h.forEach((k, v) -> when(sreq.getHeaders(k)).thenReturn(enumeration(v)));
 	}
 
-	private void stubResponseHeaders(LinkedHashMap<String,List<String>> h) {
+	private void stubResponseHeaders(Map<String,List<String>> h) {
 		when(sres.getHeaderNames()).thenReturn(new ArrayList<>(h.keySet()));
 		h.forEach((k, v) -> when(sres.getHeaders(k)).thenReturn(new ArrayList<>(v)));
 	}
@@ -197,10 +200,7 @@ class BasicRestDebugFormatter_Test {
 		when(req.getCachedContentLength()).thenReturn(-1L);
 		when(res.getCachedContentLength()).thenReturn(-1L);
 		f.redactedHeaders(List.of("X-Auth-Token"));
-		var reqH = new LinkedHashMap<String,List<String>>();
-		reqH.put("X-Auth-Token", List.of("v1"));
-		reqH.put("X_Auth_Token", List.of("v2"));
-		reqH.put("XAuthToken", List.of("v3"));
+		Map<String,List<String>> reqH = map("X-Auth-Token", List.of("v1"), "X_Auth_Token", List.of("v2"), "XAuthToken", List.of("v3"));
 		stubRequestHeaders(reqH);
 		when(sres.getHeaderNames()).thenReturn(emptyList());
 
@@ -214,11 +214,13 @@ class BasicRestDebugFormatter_Test {
 	@Test void b05_formatHeaders_builtinWidenedSet() {
 		when(req.getCachedContentLength()).thenReturn(-1L);
 		when(res.getCachedContentLength()).thenReturn(-1L);
-		var reqH = new LinkedHashMap<String,List<String>>();
-		reqH.put("X-Authorization", List.of("secretA"));
-		reqH.put("WWW-Authenticate", List.of("secretB"));
-		reqH.put("Referer", List.of("http://secretC"));
-		reqH.put("Authorization\t", List.of("Bearer secretD"));  // trailing tab must not dodge the match
+		// The trailing tab on the last key must not dodge the match.
+		Map<String,List<String>> reqH = map(
+			"X-Authorization", List.of("secretA"),
+			"WWW-Authenticate", List.of("secretB"),
+			"Referer", List.of("http://secretC"),
+			"Authorization\t", List.of("Bearer secretD")
+		);
 		stubRequestHeaders(reqH);
 		var resH = new LinkedHashMap<String,List<String>>();
 		resH.put("Location", List.of("http://secretE"));
@@ -307,7 +309,7 @@ class BasicRestDebugFormatter_Test {
 
 	@Test void b10_redactedHeadersDefault_unchangedRegressionGuard() {
 		// Formatter-local widening must NOT mutate the shared default.
-		assertEquals(5, RedactedHeaders.DEFAULT.size());
+		assertSize(5, RedactedHeaders.DEFAULT);
 		assertTrue(RedactedHeaders.DEFAULT.containsAll(
 			List.of("Authorization", "Cookie", "Set-Cookie", "Proxy-Authorization", "X-API-Key")));
 		// The formatter-local set is wider and still includes the inherited defaults.

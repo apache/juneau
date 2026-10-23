@@ -35,7 +35,12 @@ class DelegateList_Test extends TestBase {
 		assertFalse(dl.getBeanInfo().isArray());
 	}
 
-	@Test @SuppressWarnings({"unchecked","rawtypes"}) void a02_array_convertsToListClassMeta() {
+	@Test
+	@SuppressWarnings({
+		"rawtypes", // ClassMeta and DelegateList are used raw to exercise the array-to-list conversion.
+		"unchecked" // The raw DelegateList constructor call is unchecked.
+	})
+	void a02_array_convertsToListClassMeta() {
 		var cm = (ClassMeta) BC.getClassMeta(String[].class);
 		assertTrue(cm.isArray());
 		var dl = new DelegateList(cm);

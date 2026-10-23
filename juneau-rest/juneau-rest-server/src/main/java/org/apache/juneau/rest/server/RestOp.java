@@ -369,7 +369,7 @@ public @interface RestOp {
 	 *
 	 * <p>
 	 * This value overrides encoders specified at the class level using {@link Rest#encoders()}.
-	 * The {@link org.apache.juneau.marshall.encoders.EncoderSet.Inherit} class can be used to include values from the parent class.
+	 * The {@link org.apache.juneau.marshall.encoders.EncoderSet.Inherit EncoderSet.Inherit} class can be used to include values from the parent class.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
@@ -529,7 +529,7 @@ public @interface RestOp {
 	 *
 	 * <p>
 	 * This value overrides parsers specified at the class level using {@link Rest#parsers()}.
-	 * The {@link org.apache.juneau.marshall.parser.ParserSet.Inherit} class can be used to include values from the parent class.
+	 * The {@link org.apache.juneau.marshall.parser.ParserSet.Inherit ParserSet.Inherit} class can be used to include values from the parent class.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
@@ -1047,7 +1047,7 @@ public @interface RestOp {
 	 *
 	 * <p>
 	 * This value overrides serializers specified at the class level using {@link Rest#serializers()}.
-	 * The {@link org.apache.juneau.marshall.serializer.SerializerSet.Inherit} class can be used to include values from the parent class.
+	 * The {@link org.apache.juneau.marshall.serializer.SerializerSet.Inherit SerializerSet.Inherit} class can be used to include values from the parent class.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>

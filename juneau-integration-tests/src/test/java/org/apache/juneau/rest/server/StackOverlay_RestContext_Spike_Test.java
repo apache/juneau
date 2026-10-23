@@ -28,16 +28,15 @@ import org.junit.jupiter.api.*;
  * resolution semantics that {@code RestContext_Precedence_Test} exercises.
  *
  * <p>
- * The framework {@link RestContext} integration of {@link StackOverlay} happens in later
- * phases.  This spike exercises the composition shape directly: a {@link BasicBeanStore}
+ * This spike exercises the {@link StackOverlay} composition shape directly: a {@link BasicBeanStore}
  * whose {@code overridingParent} is a {@link StackOverlay} should behave identically to
  * one whose {@code overridingParent} is a single {@link BasicBeanStore} (as in the existing
  * Spring bridge), while supporting push/pop layering on top.
  *
  * <p>
  * <b>Go/no-go gate:</b> if any of the assertions below fail, the composition path is
- * non-trivial and the design should fall back to OQ4 option (a) — replace the slot with
- * a stack — per the plan's Phase 0 fallback gate.
+ * non-trivial and the design should fall back to replacing the slot with
+ * a stack.
  */
 class StackOverlay_RestContext_Spike_Test extends TestBase {
 

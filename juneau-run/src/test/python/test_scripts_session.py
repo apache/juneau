@@ -216,10 +216,10 @@ class SigtermTest(SessionCase):
         seen = []
         real_done = run._done
 
-        def done_with_second_term(status, commit):
+        def done_with_second_term(status, commit, code):
             seen.append(signal.getsignal(signal.SIGTERM))
             os.kill(os.getpid(), signal.SIGTERM)    # ignored: the handler set SIG_IGN
-            real_done(status, commit)
+            real_done(status, commit, code)
         with mock.patch.object(run, "_done", done_with_second_term):
             s, _ = self.go(body)
         self.assertEqual(s.code, 130)

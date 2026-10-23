@@ -17,6 +17,7 @@
 package org.apache.juneau.rest.server.views;
 
 import static java.nio.charset.StandardCharsets.*;
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
@@ -110,7 +111,7 @@ class ExportLoud_BrowserTest extends TestBase {
 
 	@Test void b01_missingLibraryRendersADisabledVisibleButtonWithATip() {
 		var buttons = (List<?>)report.get("buttons");
-		assertEquals(2, buttons.size(), () -> report.toString());
+		assertSize(() -> report.toString(), 2, buttons);
 		// Declared order is kept: copy first, then the disabled excel.
 		assertEquals(Boolean.FALSE, ((Map<?,?>)buttons.get(0)).get("disabled"), () -> report.toString());
 		assertEquals(Boolean.TRUE, ((Map<?,?>)buttons.get(1)).get("disabled"), () -> report.toString());

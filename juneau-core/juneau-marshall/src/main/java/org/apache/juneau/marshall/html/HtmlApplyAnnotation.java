@@ -38,7 +38,7 @@ public class HtmlApplyAnnotation {
 	private HtmlApplyAnnotation() {}
 
 	/**
-	 * Applies targeted {@link HtmlApply} annotations to a {@link org.apache.juneau.marshall.Context.Builder}.
+	 * Applies targeted {@link HtmlApply} annotations to a {@link org.apache.juneau.marshall.Context.Builder Context.Builder}.
 	 */
 	@SuppressWarnings({
 		"rawtypes" // Raw types required for reflective annotation application.
@@ -68,7 +68,7 @@ public class HtmlApplyAnnotation {
 	 * Builder class.
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.marshall.MarshallingContext.Builder#annotations(Annotation...)}
+	 * 	<li class='jm'>{@link org.apache.juneau.marshall.MarshallingContext.Builder#annotations(Annotation...) MarshallingContext.Builder#annotations(Annotation...)}
 	 * </ul>
 	 */
 	public static class Builder extends AppliedAnnotationObject.BuilderTMF {

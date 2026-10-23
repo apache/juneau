@@ -168,7 +168,7 @@ class ConfigPropertySourceProvider_Test extends TestBase {
 
 	@Test
 	void c01_spiServiceFile_isOnClasspath() {
-		// The Phase 3 META-INF/services entry must ship with juneau-config so Settings.useServiceLoader()
+		// The META-INF/services entry must ship with juneau-config so Settings.useServiceLoader()
 		// picks up the provider at startup.  This guards against accidental deletion of the resource.
 		var url = ConfigPropertySourceProvider.class.getClassLoader()
 			.getResource("META-INF/services/org.apache.juneau.commons.settings.PropertySourceProvider");

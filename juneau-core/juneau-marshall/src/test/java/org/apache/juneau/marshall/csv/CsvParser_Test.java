@@ -17,6 +17,7 @@
 package org.apache.juneau.marshall.csv;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 
 import java.util.*;
 import java.util.stream.*;
@@ -48,7 +49,7 @@ class CsvParser_Test extends TestBase {
 	@Test void a01_readBeanCollection() {
 		var csv = "b,c\nb1,1\nb2,2\n";
 		var r = readList(csv, A.class);
-		assertEquals(2, r.size());
+		assertSize(2, r);
 		assertEquals("b1", r.get(0).b);
 		assertEquals(1, r.get(0).c);
 		assertEquals("b2", r.get(1).b);
@@ -84,7 +85,7 @@ class CsvParser_Test extends TestBase {
 	@Test void b01_readMapCollection() {
 		var csv = "name,value\nfoo,1\nbar,2\n";
 		var r = readList(csv, Map.class);
-		assertEquals(2, r.size());
+		assertSize(2, r);
 		assertEquals("foo", r.get(0).get("name"));
 		assertEquals("1", r.get(0).get("value"));
 		assertEquals("bar", r.get(1).get("name"));
@@ -127,7 +128,7 @@ class CsvParser_Test extends TestBase {
 	@Test void d01_readNullValues() {
 		var csv = "b,c\n<NULL>,1\nb2,<NULL>\n";
 		var r = readList(csv, B.class);
-		assertEquals(2, r.size());
+		assertSize(2, r);
 		assertNull(r.get(0).b);
 		assertEquals(1, (int) r.get(0).c);
 		assertEquals("b2", r.get(1).b);
@@ -176,7 +177,7 @@ class CsvParser_Test extends TestBase {
 	@Test void f01_readEnumValues() {
 		var csv = "name,status\nTask1,PENDING\nTask2,COMPLETED\n";
 		var r = readList(csv, C.class);
-		assertEquals(2, r.size());
+		assertSize(2, r);
 		assertEquals("Task1", r.get(0).name);
 		assertEquals(Status.PENDING, r.get(0).status);
 		assertEquals("Task2", r.get(1).name);
@@ -198,7 +199,7 @@ class CsvParser_Test extends TestBase {
 		var csv = "a,b\n1,2\n3,4\n";
 		var r = CsvParser.DEFAULT.read(csv, Object.class);
 		assertInstanceOf(MarshalledList.class, r);
-		assertEquals(2, ((MarshalledList) r).size());
+		assertSize(2, ((MarshalledList) r));
 	}
 
 	@Test void g02_readAsObject_singleRow() {
@@ -218,7 +219,7 @@ class CsvParser_Test extends TestBase {
 		// Row has fewer columns than header; missing fields are treated as null/default.
 		var csv = "b,c\nhello\n";
 		var r = readList(csv, A.class);
-		assertEquals(1, r.size());
+		assertSize(1, r);
 		assertEquals("hello", r.get(0).b);
 		assertEquals(0, r.get(0).c);
 	}
@@ -231,7 +232,7 @@ class CsvParser_Test extends TestBase {
 		var original = List.of(new D("alice", 30), new D("bob", 25));
 		var csv = CsvSerializer.DEFAULT.write(original);
 		var parsed = readList(csv, D.class);
-		assertEquals(2, parsed.size());
+		assertSize(2, parsed);
 		assertEquals("alice", parsed.get(0).name);
 		assertEquals(30, parsed.get(0).age);
 		assertEquals("bob", parsed.get(1).name);
@@ -266,7 +267,7 @@ class CsvParser_Test extends TestBase {
 	@Test void j01_readWithMarshalledAnnotations() {
 		var csv = "full_name,years\nJohn,35\n";
 		var r = readList(csv, E.class);
-		assertEquals(1, r.size());
+		assertSize(1, r);
 		assertEquals("John", r.get(0).name);
 		assertEquals(35, r.get(0).age);
 	}
@@ -286,7 +287,7 @@ class CsvParser_Test extends TestBase {
 	@Test void k01_readCrlfLineEndings() {
 		var csv = "b,c\r\nhello,1\r\nworld,2\r\n";
 		var r = readList(csv, A.class);
-		assertEquals(2, r.size());
+		assertSize(2, r);
 		assertEquals("hello", r.get(0).b);
 		assertEquals("world", r.get(1).b);
 	}

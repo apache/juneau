@@ -17,6 +17,7 @@
 package org.apache.juneau.commons.bean;
 
 import static org.apache.juneau.commons.utils.Shorts.*;
+import static org.apache.juneau.commons.TestAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
@@ -212,7 +213,7 @@ class BeanMap_Coverage_Test extends TestBase {
 		var ks = bm.keySet();
 		assertTrue(ks.contains("x"));
 		assertTrue(ks.contains("y"));
-		assertEquals(2, ks.size());
+		assertSize(2, ks);
 	}
 
 	@Test
@@ -222,7 +223,7 @@ class BeanMap_Coverage_Test extends TestBase {
 		p.setY(42);
 		var bm = BeanMap.of(p);
 		var es = bm.entrySet();
-		assertEquals(2, es.size());
+		assertSize(2, es);
 		var names = new HashSet<String>();
 		var values = new HashSet<Object>();
 		for (var e : es) {
@@ -392,7 +393,7 @@ class BeanMap_Coverage_Test extends TestBase {
 		var bm = BeanMap.of(p);
 		var sub = bm.getProperties("x", "nonExistent");
 		// Only known fields included.
-		assertEquals(1, sub.entrySet().size());
+		assertSize(1, sub.entrySet());
 		assertEquals("foo", sub.entrySet().iterator().next().getValue());
 	}
 

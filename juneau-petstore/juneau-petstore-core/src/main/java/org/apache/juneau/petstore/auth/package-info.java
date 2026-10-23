@@ -19,7 +19,7 @@
  * {@code AuthFilterChain} configurations.
  *
  * <p>
- * The core ships only deployment-agnostic validators (e.g. {@link org.apache.juneau.petstore.auth.StubBearerTokenValidator}).
+ * The core ships only deployment-agnostic validators (e.g. {@link org.apache.juneau.petstore.auth.StubBearerTokenValidator StubBearerTokenValidator}).
  * Each deployment ({@code juneau-petstore-jetty}, {@code juneau-petstore-springboot}) wires its own
  * {@code AuthFilterChain} bean composing these validators with the appropriate filter mounts.
  */

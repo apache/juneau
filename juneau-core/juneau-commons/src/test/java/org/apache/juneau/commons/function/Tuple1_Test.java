@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.commons.function;
 
+import static org.apache.juneau.commons.TestAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
@@ -96,7 +97,7 @@ class Tuple1_Test extends TestBase {
 		map.put(key2, 2);  // Should replace first entry
 		map.put(key3, 3);
 
-		assertEquals(2, map.size());
+		assertSize(2, map);
 		assertEquals(2, map.get(key1));  // Should get the replaced value
 		assertEquals(2, map.get(key2));  // Same key
 		assertEquals(3, map.get(key3));

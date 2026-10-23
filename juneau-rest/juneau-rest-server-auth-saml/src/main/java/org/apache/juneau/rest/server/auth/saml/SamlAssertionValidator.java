@@ -722,10 +722,7 @@ public class SamlAssertionValidator {
 		validateConditions(assertion);
 		validateIssuer(response, assertion);
 
-		var claims = new LinkedHashMap<String,Object>();
-		claims.put(ISSUER_TYPE_CLAIM, ISSUER_TYPE_SAML);
-		claims.put("iss", expectedIssuer);
-		claims.put("aud", spEntityId);
+		Map<String,Object> claims = m(ISSUER_TYPE_CLAIM, ISSUER_TYPE_SAML, "iss", expectedIssuer, "aud", spEntityId);
 
 		for (var stmt : assertion.getAttributeStatements()) {
 			for (var attr : stmt.getAttributes()) {

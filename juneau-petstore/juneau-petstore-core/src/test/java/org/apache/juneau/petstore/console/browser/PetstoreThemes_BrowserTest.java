@@ -29,7 +29,7 @@ import org.junit.jupiter.api.extension.*;
 
 /**
  * P9 in the real browser: each stock theme resolves to a distinct set of token values, the custom theme's leaf and
- * alias resolve, and every theme is screenshotted to {@code target/js/snapshots} (CI artifacts only, OQ9).
+ * alias resolve, and every theme is screenshotted to {@code target/js/snapshots} (CI artifacts only).
  */
 @EnabledIfSystemProperty(named=PetstoreBrowser.GATE, matches="true", disabledReason=PetstoreBrowser.DISABLED)
 class PetstoreThemes_BrowserTest extends TestBase {
@@ -74,7 +74,9 @@ class PetstoreThemes_BrowserTest extends TestBase {
 		return out;
 	}
 
-	@SuppressWarnings("unchecked") // tokens is a JSON array of strings.
+	@SuppressWarnings({
+		"unchecked" // tokens is a JSON array of strings.
+	})
 	private static List<String> tokens(String theme) {
 		return (List<String>) query(assertClean(report, theme), "tokens");
 	}
@@ -98,7 +100,9 @@ class PetstoreThemes_BrowserTest extends TestBase {
 		assertString(c.get(2), c.get(1));   // --jc-tab-bar-bg follows --jc-card-bg
 	}
 
-	@SuppressWarnings("unchecked") // state is a JSON object of strings.
+	@SuppressWarnings({
+		"unchecked" // state is a JSON object of strings.
+	})
 	@Test void a04_headerToggleSwitchesToDark() {
 		var state = (Map<String,Object>) query(assertClean(report, "scheme-dark"), "state");
 		assertString("dark", state.get("scheme"));

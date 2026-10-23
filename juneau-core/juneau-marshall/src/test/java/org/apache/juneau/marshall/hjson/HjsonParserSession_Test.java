@@ -165,7 +165,7 @@ class HjsonParserSession_Test extends TestBase {
 		// readArray's separator check: NEWLINE arm (b07 in HjsonParser_Test only exercises COMMA).
 		var m = (Map<String,Object>) HjsonParser.DEFAULT.read("{\"arr\":[1\n2\n3]}", Map.class, String.class, Object.class);
 		var arr = (List<?>) m.get("arr");
-		assertEquals(3, arr.size());
+		assertSize(3, arr);
 	}
 
 	@Test
@@ -180,7 +180,7 @@ class HjsonParserSession_Test extends TestBase {
 	void c03_arrayOfObjects() throws Exception {
 		var m = (Map<String,Object>) HjsonParser.DEFAULT.read("{\"arr\":[{a:1},{a:2}]}", Map.class, String.class, Object.class);
 		var arr = (List<Map<String,Object>>) m.get("arr");
-		assertEquals(2, arr.size());
+		assertSize(2, arr);
 		assertEquals(1, arr.get(0).get("a"));
 	}
 
@@ -190,7 +190,7 @@ class HjsonParserSession_Test extends TestBase {
 		var hjson = "items: [ {name: A, age: 1}, {name: B, age: 2} ]";
 		var bean = HjsonParser.DEFAULT.read(hjson, BeanWithList.class);
 		assertNotNull(bean);
-		assertEquals(2, bean.items.size());
+		assertSize(2, bean.items);
 		assertEquals("A", bean.items.get(0).name);
 		assertEquals(2, bean.items.get(1).age);
 	}
@@ -238,7 +238,7 @@ class HjsonParserSession_Test extends TestBase {
 		var hjson = "{data: [\"abc\"]}";
 		var bean = HjsonParser.DEFAULT.read(hjson, BeanWithByteList.class);
 		assertNotNull(bean);
-		assertEquals(1, bean.data.size());
+		assertSize(1, bean.data);
 		assertArrayEquals("abc".getBytes(java.nio.charset.StandardCharsets.UTF_8), bean.data.get(0));
 	}
 
@@ -349,7 +349,7 @@ class HjsonParserSession_Test extends TestBase {
 		// injectParentAnnotations' collection branch: List<Child> elements get @ParentProperty back-filled.
 		var bean = HjsonParser.DEFAULT.read("{children: [{name: a}, {name: b}]}", BeanWithParent.class);
 		assertNotNull(bean);
-		assertEquals(2, bean.children.size());
+		assertSize(2, bean.children);
 		assertSame(bean, bean.children.get(0).parent);
 		assertSame(bean, bean.children.get(1).parent);
 	}
@@ -359,7 +359,7 @@ class HjsonParserSession_Test extends TestBase {
 		// injectParentAnnotations' "val == null" true-arm, reached via per-element recursion.
 		var bean = HjsonParser.DEFAULT.read("{children: [null, {name: a}]}", BeanWithParent.class);
 		assertNotNull(bean);
-		assertEquals(2, bean.children.size());
+		assertSize(2, bean.children);
 		assertNull(bean.children.get(0));
 		assertSame(bean, bean.children.get(1).parent);
 	}
@@ -369,7 +369,7 @@ class HjsonParserSession_Test extends TestBase {
 		// injectParentAnnotations' collection branch: et.isObject() == true short-circuits before recursing.
 		var bean = HjsonParser.DEFAULT.read("{items: [1, \"a\"]}", BeanWithObjectList.class);
 		assertNotNull(bean);
-		assertEquals(2, bean.items.size());
+		assertSize(2, bean.items);
 	}
 
 	@Test
@@ -405,7 +405,7 @@ class HjsonParserSession_Test extends TestBase {
 		// injectParentAnnotations' map branch: vt.isObject() == true short-circuits before recursing.
 		var bean = HjsonParser.DEFAULT.read("{items: {a: 1, b: hi}}", BeanWithObjectMap.class);
 		assertNotNull(bean);
-		assertEquals(2, bean.items.size());
+		assertSize(2, bean.items);
 	}
 
 	@Test

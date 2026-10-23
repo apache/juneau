@@ -171,7 +171,7 @@ public class WellKnownMixin extends RestMixin {
 	 * Builder for {@link WellKnownMixin} instances.
 	 *
 	 * <p>
-	 * Extends {@link org.apache.juneau.rest.server.servlet.RestMixin.Builder} so the mixin's bespoke {@link #securityTxt(String)}
+	 * Extends {@link org.apache.juneau.rest.server.servlet.RestMixin.Builder RestMixin.Builder} so the mixin's bespoke {@link #securityTxt(String)}
 	 * setter chains with true covariant returns alongside the inherited {@link RestBuilder}surface (e.g.
 	 * {@code path}, {@code roleGuard}).
 	 */

@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.server.views;
 
+import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assumptions.*;
 
@@ -232,11 +233,7 @@ class ConsoleDashboard_Test extends TestBase {
 	}
 
 	private static Map<String,Object> row(String value, String count, boolean checked, boolean missing) {
-		var m = new LinkedHashMap<String,Object>();
-		m.put("value", value);
-		m.put("count", count);
-		m.put("checked", checked);
-		m.put("missing", missing);
+		Map<String,Object> m = map("value", value, "count", count, "checked", checked, "missing", missing);
 		return m;
 	}
 
@@ -266,13 +263,14 @@ class ConsoleDashboard_Test extends TestBase {
 		assertEquals("alert", r.get("role"));
 		assertEquals("jc-card-error", r.get("cls"));
 		assertEquals(List.of("[juneau-dashboard] " + msg), r.get("log"));
-		var seen = new LinkedHashMap<String,Object>();
-		seen.put("id", "n");
-		seen.put("topic", "filter:n");
-		seen.put("viewId", "d");
-		seen.put("args", Map.of("a", 1));
-		seen.put("initial", null);
-		seen.put("frozen", true);
+		Map<String,Object> seen = map(
+			"id", "n",
+			"topic", "filter:n",
+			"viewId", "d",
+			"args", Map.of("a", 1),
+			"initial", null,
+			"frozen", true
+		);
 		assertEquals(seen, r.get("seen"));
 		assertEquals(List.of(Map.of("from", "n", "topic", "filter:n", "payload", filter("search", "n"))), r.get("published"));
 	}
@@ -280,10 +278,7 @@ class ConsoleDashboard_Test extends TestBase {
 	private static final String NOT_CACHED = "The browser would not store this data, so it is held in memory and reloads with the page.";
 
 	private static Map<String,Object> st(String text, String tone, String title) {
-		var m = new LinkedHashMap<String,Object>();
-		m.put("text", text);
-		m.put("tone", tone);
-		m.put("title", title);
+		Map<String,Object> m = map("text", text, "tone", tone, "title", title);
 		return m;
 	}
 
@@ -306,10 +301,7 @@ class ConsoleDashboard_Test extends TestBase {
 	}
 
 	private static Map<String,Object> cmd(String source, boolean clearCache) {
-		var p = new LinkedHashMap<String,Object>();
-		p.put("schemaVersion", 1);
-		p.put("op", "refresh");
-		p.put("options", Map.of("clearCache", clearCache));
+		Map<String,Object> p = map("schemaVersion", 1, "op", "refresh", "options", Map.of("clearCache", clearCache));
 		return Map.of("topic", "cmd:" + source, "payload", p);
 	}
 
@@ -338,12 +330,13 @@ class ConsoleDashboard_Test extends TestBase {
 		assertEquals(true, r.get("urlStart"));
 		assertEquals(Map.of("t", Map.of("filter:q", q)), r.get("decoded"));
 		assertEquals(Map.of("readOnly", true, "sameUrl", true, "label", "Share link", "selected", true, "focused", true, "hint", "Press Ctrl+C / Cmd+C"), r.get("field"));
-		var tooLong = new LinkedHashMap<String,Object>();
-		tooLong.put("buttons", List.of("Link too long"));
-		tooLong.put("warns", List.of("[juneau-dashboard] the share link is over 8192 characters; it was not copied"));
-		tooLong.put("statusLines", 0);
-		tooLong.put("clipped", null);
-		tooLong.put("header", List.of("jc-dash-actions"));
+		Map<String,Object> tooLong = map(
+			"buttons", List.of("Link too long"),
+			"warns", List.of("[juneau-dashboard] the share link is over 8192 characters; it was not copied"),
+			"statusLines", 0,
+			"clipped", null,
+			"header", List.of("jc-dash-actions")
+		);
 		assertEquals(tooLong, r.get("tooLong"));
 	}
 

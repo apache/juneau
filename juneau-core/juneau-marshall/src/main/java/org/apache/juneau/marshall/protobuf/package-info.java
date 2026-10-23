@@ -22,7 +22,7 @@
  * parses the compact, non-self-describing protobuf <b>binary</b> wire format (<c>application/protobuf</c>).  Because the
  * binary wire carries neither field names nor specific scalar types, both serialization and parsing consult a per-bean
  * <b>field-number &hArr; property + wire-scalar-type</b> table derived from Juneau bean metadata and cached on
- * {@link org.apache.juneau.marshall.protobuf.ProtobufClassMeta}.
+ * {@link org.apache.juneau.marshall.protobuf.ProtobufClassMeta ProtobufClassMeta}.
  *
  * <p>
  * The codec is lossless for Juneau&hArr;Juneau round-trips out of the box, and upgrades field-by-field to true external

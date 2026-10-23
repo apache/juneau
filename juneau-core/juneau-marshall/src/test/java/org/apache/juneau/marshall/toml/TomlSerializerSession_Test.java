@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.marshall.toml;
 
+import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.time.*;
@@ -566,10 +567,7 @@ class TomlSerializerSession_Test extends TestBase {
 	void f03_nullElementInArray() throws Exception {
 		var s = TomlSerializer.create().keepNullProperties().build();
 		var m = new LinkedHashMap<String,Object>();
-		var list = new ArrayList<String>();
-		list.add("a");
-		list.add(null);
-		list.add("b");
+		List<String> list = list("a", null, "b");
 		m.put("items", list);
 		var toml = s.write(m);
 		// Null element within array should appear as nullValue

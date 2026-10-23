@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.server.views;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
@@ -59,7 +60,9 @@ final class ConsoleBusBrowserSupport {
 	 * @return The driver's JSON report.
 	 * @throws Exception On any failure to build or run the page.
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Casts a parsed JSON value to its known Map/List shape.
+	})
 	static Map<String,Object> run(String scenario, String contractResource, boolean withBus, String configJson, String query) throws Exception {
 		var dir = Path.of(required("juneau.jsTests.dir"));
 		var harness = Path.of(required("juneau.jsTests.harness")).getParent().resolve("console-bus.cjs");
@@ -71,11 +74,12 @@ final class ConsoleBusBrowserSupport {
 	}
 
 	private static Map<String,Map<String,String>> assets() throws IOException {
-		var m = new LinkedHashMap<String,Map<String,String>>();
-		m.put(ConsoleBrowserFixture.SHELL, Map.of("type", "text/javascript", "body", ConsoleBrowserFixture.resource(ConsoleChromeMixin.CONSOLE_JS_RESOURCE)));
-		m.put(ConsoleBrowserFixture.CHROME_CSS, Map.of("type", "text/css", "body", ConsoleBrowserFixture.resource("/org/apache/juneau/console/chrome.css")));
-		m.put(ConsoleBrowserFixture.THEME_CSS, Map.of("type", "text/css", "body", ConsoleBrowserFixture.resource("/org/apache/juneau/console/juneau-theme-open.css")));
-		m.put(ConsoleBrowserFixture.VIEWS_CSS, Map.of("type", "text/css", "body", ConsoleBrowserFixture.resource(ViewsMixin.VIEWS_CSS_RESOURCE)));
+		Map<String,Map<String,String>> m = m(
+			ConsoleBrowserFixture.SHELL, Map.of("type", "text/javascript", "body", ConsoleBrowserFixture.resource(ConsoleChromeMixin.CONSOLE_JS_RESOURCE)),
+			ConsoleBrowserFixture.CHROME_CSS, Map.of("type", "text/css", "body", ConsoleBrowserFixture.resource("/org/apache/juneau/console/chrome.css")),
+			ConsoleBrowserFixture.THEME_CSS, Map.of("type", "text/css", "body", ConsoleBrowserFixture.resource("/org/apache/juneau/console/juneau-theme-open.css")),
+			ConsoleBrowserFixture.VIEWS_CSS, Map.of("type", "text/css", "body", ConsoleBrowserFixture.resource(ViewsMixin.VIEWS_CSS_RESOURCE))
+		);
 		return m;
 	}
 
@@ -128,13 +132,17 @@ final class ConsoleBusBrowserSupport {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Casts a parsed JSON value to its known Map/List shape.
+	})
 	static Map<String,Object> map(Object o) {
 		assertInstanceOf(Map.class, o);
 		return (Map<String,Object>)o;
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Casts a parsed JSON value to its known Map/List shape.
+	})
 	static List<Object> list(Object o) {
 		assertInstanceOf(List.class, o);
 		return (List<Object>)o;

@@ -19,12 +19,12 @@
  *
  * <h5 class='section'>Type hierarchy:</h5>
  * <ul>
- * 	<li>{@link org.apache.juneau.marshall.collections.MarshalledMap} / {@link org.apache.juneau.marshall.collections.MarshalledList}
+ * 	<li>{@link org.apache.juneau.marshall.collections.MarshalledMap MarshalledMap} / {@link org.apache.juneau.marshall.collections.MarshalledList MarshalledList}
  * 		&mdash; neutral, marshaller-agnostic base classes carrying typed accessors, fluent setters,
  * 		bean integration, and {@link org.apache.juneau.marshall.objecttools.PathTraversal}-based path navigation.
  * 		Their default {@link java.lang.Object#toString()} is the inherited {@link java.util.LinkedHashMap}
  * 		/ {@link java.util.LinkedList} form.
- * 	<li>{@link org.apache.juneau.marshall.collections.JsonMap} / {@link org.apache.juneau.marshall.collections.JsonList}
+ * 	<li>{@link org.apache.juneau.marshall.collections.JsonMap JsonMap} / {@link org.apache.juneau.marshall.collections.JsonList JsonList}
  * 		&mdash; strict-JSON-flavored subclasses. Their {@code toString()} renders as strict
  * 		<a href="https://www.rfc-editor.org/rfc/rfc8259" target="_blank">RFC&nbsp;8259</a> JSON via
  * 		{@link org.apache.juneau.marshall.marshaller.Json#of(Object)}, and their {@code (CharSequence)} /
@@ -38,7 +38,7 @@
  * 		{@link org.apache.juneau.marshall.json5.Json5Parser#DEFAULT}. These are the drop-in replacement
  * 		for callers that previously relied on {@code JsonMap.toString()} producing JSON5 or on
  * 		{@code new JsonMap("{unquoted:'json5'}")} parsing JSON5.
- * 	<li>{@link org.apache.juneau.marshall.collections.ResolvingMarshalledMap}
+ * 	<li>{@link org.apache.juneau.marshall.collections.ResolvingMarshalledMap ResolvingMarshalledMap}
  * 		&mdash; a {@code MarshalledMap} subclass that resolves SVL variables on every value lookup.
  * 		Renamed from {@code ResolvingJsonMap} and re-parented from {@code JsonMap} in 10.0 since
  * 		SVL resolution is language-agnostic.
@@ -48,7 +48,7 @@
  * {@code UonMap}) for the remaining languages are planned as a follow-on and are not delivered in 10.0;
  * parser sessions other than {@link org.apache.juneau.marshall.json.JsonParserSession} and
  * {@link org.apache.juneau.marshall.json5.Json5ParserSession} currently produce the neutral
- * {@link org.apache.juneau.marshall.collections.MarshalledMap} / {@link org.apache.juneau.marshall.collections.MarshalledList}
+ * {@link org.apache.juneau.marshall.collections.MarshalledMap MarshalledMap} / {@link org.apache.juneau.marshall.collections.MarshalledList MarshalledList}
  * when parsing into unbound {@code Object} / {@code Map<String,Object>} / {@code Collection<Object>}
  * targets.
  */

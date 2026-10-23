@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.server.mcp;
 
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.lang.reflect.*;
@@ -62,7 +63,7 @@ class McpPromptHandler_Test {
 		var config = new McpServerConfig().addPrompt(McpPromptHandler.of(
 			new McpPromptSpec().setName("greet"),
 			(arguments, ctx) -> new McpPromptOutcome()));
-		assertEquals(1, config.getPrompts().size());
+		assertSize(1, config.getPrompts());
 		assertEquals("greet", config.getPrompts().get(0).descriptor().getName());
 	}
 

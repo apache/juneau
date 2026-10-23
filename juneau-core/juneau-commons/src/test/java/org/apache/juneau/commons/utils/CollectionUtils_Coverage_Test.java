@@ -97,24 +97,12 @@ class CollectionUtils_Coverage_Test extends TestBase {
 		//   "-"    -> length one, fails the length-over-one check
 		//   "ab"   -> length over one but doesn't start with a dash
 		//   "-a"   -> the one genuine negation token, present to force the second loop to run
-		var input = new ArrayList<String>();
-		input.add(null);
-		input.add("-");
-		input.add("ab");
-		input.add("a");
-		input.add("b");
-		input.add("-a");
-		input.add("c");
+		var input = list(null, "-", "ab", "a", "b", "-a", "c");
 
 		var result = removeNegations(input);
 
 		// null, "-", and "ab" are passed through as literals; "-a" removes the earlier "a".
-		var expected = new ArrayList<String>();
-		expected.add(null);
-		expected.add("-");
-		expected.add("ab");
-		expected.add("b");
-		expected.add("c");
+		var expected = list(null, "-", "ab", "b", "c");
 		assertEquals(expected, result);
 	}
 
@@ -142,10 +130,7 @@ class CollectionUtils_Coverage_Test extends TestBase {
 
 	@Test
 	void c02_treeSet_elementsContainingNulls_skipsNulls() {
-		var elements = new ArrayList<String>();
-		elements.add("b");
-		elements.add(null);
-		elements.add("a");
+		var elements = list("b", null, "a");
 		SortedSet<String> result = treeSet(Comparator.naturalOrder(), elements);
 		assertEquals(list("a", "b"), new ArrayList<>(result));
 	}

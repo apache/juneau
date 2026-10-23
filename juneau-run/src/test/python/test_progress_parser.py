@@ -47,16 +47,16 @@ class PluginMarkersTest(unittest.TestCase):
 
     def test_one_dot_per_test_and_error_is_fail(self):
         events = ev(new_parser(), ['##pytest {"ev":"hello","v":1}', '##pytest {"ev":"file","f":"a.py"}',
-                                   test_mark("passed", "a.py::t1"), test_mark("error", "a.py::t2"),
-                                   test_mark("skipped", "a.py::t3"), test_mark("xfailed", "a.py::t4")])
+                                   _mark("passed", "a.py::t1"), _mark("error", "a.py::t2"),
+                                   _mark("skipped", "a.py::t3"), _mark("xfailed", "a.py::t4")])
         self.assertEqual(unit_events(events)[1:-1], [("unit_dot", "a.py", "pass"), ("unit_dot", "a.py", "fail"),
                                                      ("unit_dot", "a.py", "skip"), ("unit_dot", "a.py", "skip")])
 
     def test_a_file_closes_with_its_last_test(self):
         events = ev(new_parser(), ['##pytest {"ev":"hello","v":1}', total_mark({"a.py": 2, "b.py": 1}),
-                                   '##pytest {"ev":"file","f":"a.py"}', test_mark("passed", "a.py::t1"),
-                                   test_mark("failed", "a.py::t2"), '##pytest {"ev":"file","f":"b.py"}',
-                                   test_mark("passed", "b.py::t1")])
+                                   '##pytest {"ev":"file","f":"a.py"}', _mark("passed", "a.py::t1"),
+                                   _mark("failed", "a.py::t2"), '##pytest {"ev":"file","f":"b.py"}',
+                                   _mark("passed", "b.py::t1")])
         self.assertEqual(unit_events(events), [
             ("unit_start", "a.py", "a.py", "file"), ("unit_dot", "a.py", "pass"), ("unit_dot", "a.py", "fail"),
             ("unit_end", "a.py", "fail", "file"),
@@ -64,10 +64,10 @@ class PluginMarkersTest(unittest.TestCase):
 
     def test_a_late_error_after_close_is_a_fail_dot_and_before_close_fails_the_file(self):
         events = ev(new_parser(), ['##pytest {"ev":"hello","v":1}', total_mark({"a.py": 1, "b.py": 2}),
-                                   '##pytest {"ev":"file","f":"a.py"}', test_mark("passed", "a.py::t1"),
-                                   test_mark("error", "a.py::t1", late=True),
-                                   '##pytest {"ev":"file","f":"b.py"}', test_mark("passed", "b.py::t1"),
-                                   test_mark("error", "b.py::t1", late=True), test_mark("passed", "b.py::t2")])
+                                   '##pytest {"ev":"file","f":"a.py"}', _mark("passed", "a.py::t1"),
+                                   _mark("error", "a.py::t1", late=True),
+                                   '##pytest {"ev":"file","f":"b.py"}', _mark("passed", "b.py::t1"),
+                                   _mark("error", "b.py::t1", late=True), _mark("passed", "b.py::t2")])
         self.assertEqual(unit_events(events), [
             ("unit_start", "a.py", "a.py", "file"), ("unit_dot", "a.py", "pass"), ("unit_end", "a.py", "ok", "file"),
             ("unit_dot", "a.py", "fail"),
@@ -78,8 +78,8 @@ class PluginMarkersTest(unittest.TestCase):
         p = new_parser()
         events = []
         for line in ['##pytest {"ev":"hello","v":1}', '##pytest {"ev":"total","n":2}',
-                     '##pytest {"ev":"file","f":"a.py"}', test_mark("failed", "a.py::t1"),
-                     '##pytest {"ev":"file","f":"b.py"}', test_mark("passed", "b.py::t1")]:
+                     '##pytest {"ev":"file","f":"a.py"}', _mark("failed", "a.py::t1"),
+                     '##pytest {"ev":"file","f":"b.py"}', _mark("passed", "b.py::t1")]:
             events += p.on_line(line)
         self.assertNotIn("unit_end", [e[0] for e in events])
         self.assertEqual(unit_events(p.finish(1)), [("unit_end", "a.py", "fail", "file"), ("unit_end", "b.py", "ok", "file")])
@@ -87,10 +87,10 @@ class PluginMarkersTest(unittest.TestCase):
 
     def test_xdist_interleaved_files_and_an_orphan_test(self):
         events = ev(new_parser(), ['##pytest {"ev":"hello","v":1}', total_mark({"a.py": 2, "b.py": 2}),
-                                   '##pytest {"ev":"file","f":"a.py"}', test_mark("passed", "b.py::t1"),
-                                   '##pytest {"ev":"file","f":"b.py"}', test_mark("passed", "a.py::t1"),
-                                   '##pytest {"ev":"file","f":"a.py"}', test_mark("passed", "a.py::t2"),
-                                   test_mark("passed", "b.py::t2")])
+                                   '##pytest {"ev":"file","f":"a.py"}', _mark("passed", "b.py::t1"),
+                                   '##pytest {"ev":"file","f":"b.py"}', _mark("passed", "a.py::t1"),
+                                   '##pytest {"ev":"file","f":"a.py"}', _mark("passed", "a.py::t2"),
+                                   _mark("passed", "b.py::t2")])
         self.assertEqual(unit_events(events), [
             ("unit_start", "a.py", "a.py", "file"),
             ("unit_start", "b.py", "b.py", "file"), ("unit_dot", "b.py", "pass"),     # the orphan test opens b.py
@@ -208,7 +208,7 @@ def total_mark(files):
     return '##pytest ' + json.dumps({"ev": "total", "n": sum(files.values()), "f": files})
 
 
-def test_mark(outcome, nid, late=False):
+def _mark(outcome, nid, late=False):
     return '##pytest ' + json.dumps({"ev": "test", "o": outcome, "id": nid, "s": 0.0, **({"late": 1} if late else {})})
 
 
@@ -221,39 +221,39 @@ class FileGrainTest(unittest.TestCase):
 
     def test_a_file_finishes_with_its_last_test(self):
         p = new_parser()
-        events = ev(p, [total_mark({"a.py": 2, "b.py": 1}), test_mark("passed", "a.py::t1"), test_mark("passed", "b.py::t1"),
-                        test_mark("passed", "a.py::t2")])
+        events = ev(p, [total_mark({"a.py": 2, "b.py": 1}), _mark("passed", "a.py::t1"), _mark("passed", "b.py::t1"),
+                        _mark("passed", "a.py::t2")])
         self.assertEqual(units(events), [("units", "p", 2, "files"), ("unit", "p", 1, "pass"), ("unit", "p", 2, "pass")])
         self.assertEqual([e for e in events if e[0] == "tests"][-1], ("tests", "p", 3, 0, 0, 0))   # still counted per test
 
     def test_a_failed_or_errored_test_fails_its_file(self):
         events = ev(new_parser(), [total_mark({"a.py": 2, "b.py": 2}),
-                                   test_mark("passed", "a.py::t1"), test_mark("failed", "a.py::t2"),
-                                   test_mark("error", "b.py::t1"), test_mark("passed", "b.py::t2")])
+                                   _mark("passed", "a.py::t1"), _mark("failed", "a.py::t2"),
+                                   _mark("error", "b.py::t1"), _mark("passed", "b.py::t2")])
         self.assertEqual([e for e in events if e[0] == "unit"], [("unit", "p", 1, "fail"), ("unit", "p", 2, "fail")])
 
     def test_a_file_is_skipped_only_when_every_test_skipped(self):
         events = ev(new_parser(), [total_mark({"a.py": 2, "b.py": 2}),
-                                   test_mark("skipped", "a.py::t1"), test_mark("xfailed", "a.py::t2"),
-                                   test_mark("skipped", "b.py::t1"), test_mark("passed", "b.py::t2")])
+                                   _mark("skipped", "a.py::t1"), _mark("xfailed", "a.py::t2"),
+                                   _mark("skipped", "b.py::t1"), _mark("passed", "b.py::t2")])
         self.assertEqual([e for e in events if e[0] == "unit"], [("unit", "p", 1, "skip"), ("unit", "p", 2, "pass")])
 
     def test_interleaved_files_finish_in_completion_order(self):    # xdist: tests of different files mix
         events = ev(new_parser(), [total_mark({"a.py": 2, "b.py": 2}),
-                                   test_mark("passed", "a.py::t1"), test_mark("passed", "b.py::t1"),
-                                   test_mark("failed", "b.py::t2"), test_mark("passed", "a.py::t2")])
+                                   _mark("passed", "a.py::t1"), _mark("passed", "b.py::t1"),
+                                   _mark("failed", "b.py::t2"), _mark("passed", "a.py::t2")])
         self.assertEqual([e for e in events if e[0] == "unit"], [("unit", "p", 1, "fail"), ("unit", "p", 2, "pass")])
 
     def test_a_late_error_fixes_a_finished_file_and_fails_an_open_one(self):
-        events = ev(new_parser(), [total_mark({"a.py": 1, "b.py": 2}), test_mark("passed", "a.py::t1"),
-                                   test_mark("error", "a.py::t1", late=True),
-                                   test_mark("passed", "b.py::t1"), test_mark("error", "b.py::t1", late=True),
-                                   test_mark("passed", "b.py::t2")])
+        events = ev(new_parser(), [total_mark({"a.py": 1, "b.py": 2}), _mark("passed", "a.py::t1"),
+                                   _mark("error", "a.py::t1", late=True),
+                                   _mark("passed", "b.py::t1"), _mark("error", "b.py::t1", late=True),
+                                   _mark("passed", "b.py::t2")])
         self.assertIn(("unit_fix", "p", 0, "fail"), events)
         self.assertEqual([e for e in events if e[0] == "unit"][-1], ("unit", "p", 2, "fail"))
 
     def test_total_without_file_counts_stays_per_test(self):         # an older plugin, or the fallback
-        events = ev(new_parser(), ['##pytest {"ev":"total","n":3}', test_mark("passed", "a.py::t1")])
+        events = ev(new_parser(), ['##pytest {"ev":"total","n":3}', _mark("passed", "a.py::t1")])
         self.assertEqual(units(events), [("units", "p", 3, "tests"), ("unit", "p", 1, "pass")])
 
     def test_scraped_xdist_progress_has_no_file_names_and_stays_per_test(self):
@@ -271,26 +271,26 @@ class BarTestsTest(unittest.TestCase):
 
     def test_a_file_map_still_announces_and_counts_tests(self):
         events = ev(self.parser(), ['##pytest {"ev":"hello","v":1}', total_mark({"a.py": 2, "b.py": 1}),
-                                    test_mark("passed", "a.py::t1"), test_mark("failed", "b.py::t1"),
-                                    test_mark("passed", "a.py::t2")])
+                                    _mark("passed", "a.py::t1"), _mark("failed", "b.py::t1"),
+                                    _mark("passed", "a.py::t2")])
         self.assertEqual(units(events), [("units", "p", 3, "tests"), ("unit", "p", 1, "pass"), ("unit", "p", 2, "fail"),
                                          ("unit", "p", 3, "pass")])
 
     def test_each_file_line_still_closes_with_its_last_test(self):
-        events = ev(self.parser(), [total_mark({"a.py": 2, "b.py": 1}), test_mark("passed", "a.py::t1"),
-                                    test_mark("passed", "b.py::t1"), test_mark("failed", "a.py::t2")])
+        events = ev(self.parser(), [total_mark({"a.py": 2, "b.py": 1}), _mark("passed", "a.py::t1"),
+                                    _mark("passed", "b.py::t1"), _mark("failed", "a.py::t2")])
         ends = [e for e in unit_events(events) if e[0] == "unit_end"]
         self.assertEqual(ends, [("unit_end", "b.py", "ok", "file"), ("unit_end", "a.py", "fail", "file")])
 
     def test_a_late_error_corrects_its_tests_cell(self):
-        events = ev(self.parser(), [total_mark({"a.py": 2}), test_mark("passed", "a.py::t1"),
-                                    test_mark("passed", "a.py::t2"), test_mark("error", "a.py::t1", late=True)])
+        events = ev(self.parser(), [total_mark({"a.py": 2}), _mark("passed", "a.py::t1"),
+                                    _mark("passed", "a.py::t2"), _mark("error", "a.py::t1", late=True)])
         self.assertIn(("unit_fix", "p", 0, "fail"), events)
 
     def test_bar_files_without_a_file_map_falls_back_to_tests(self):
         p = new_parser()
         p.bar = "files"
-        events = ev(p, ['##pytest {"ev":"total","n":3}', test_mark("passed", "a.py::t1")])
+        events = ev(p, ['##pytest {"ev":"total","n":3}', _mark("passed", "a.py::t1")])
         self.assertEqual(units(events), [("units", "p", 3, "tests"), ("unit", "p", 1, "pass")])
 
 

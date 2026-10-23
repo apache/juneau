@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.server;
 
+import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
@@ -139,10 +140,7 @@ class Rest_MethodOverrideAgreement_Test extends TestBase {
 	static Stream<Arguments> agreementRows() {
 		var configs = List.of(Star.class, OnlyPut.class, OnlyDelete.class, OnlyPatch.class, OnlyPost.class, OnlyFrob.class);
 		var lines = List.of("GET", "HEAD", "OPTIONS", "TRACE");
-		var channels = new ArrayList<String>();
-		channels.add("q:method");
-		channels.add("q:METHOD");
-		channels.add("q:%6Dethod");
+		List<String> channels = list("q:method", "q:METHOD", "q:%6Dethod");
 		MethodSafety.overrideHeaders().forEach(h -> channels.add("h:" + h));
 		var values = List.of("DELETE", "PUT", "PATCH", "POST", "FROB", "delete", "VIEW", "view", "PARSE");
 		var rows = new ArrayList<Arguments>();

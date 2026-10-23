@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.server.mcp.v20260728;
 
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
@@ -67,7 +68,7 @@ class ElicitationResponses_Test {
 		responses.put("q2", JsonMap.of("action", "decline"));
 		var ctx = new McpMrtrResumeContext(null, responses);
 		var all = ElicitationResponses.all(ctx);
-		assertEquals(2, all.size());
+		assertSize(2, all);
 		assertEquals(ElicitAction.ACCEPT, all.get("q1").getAction());
 		assertEquals("red", all.get("q1").getContent().get("choice"));
 		assertEquals(ElicitAction.DECLINE, all.get("q2").getAction());

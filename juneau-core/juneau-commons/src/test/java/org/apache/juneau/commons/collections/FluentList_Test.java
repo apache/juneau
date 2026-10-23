@@ -17,6 +17,7 @@
 package org.apache.juneau.commons.collections;
 
 import static org.apache.juneau.commons.TestAssertions.*;
+import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
@@ -211,13 +212,13 @@ class FluentList_Test extends TestBase {
 	@Test
 	void e02_listInterface_size() {
 		var list = new FluentList<>(new ArrayList<String>());
-		assertEquals(0, list.size());
+		assertSize(0, list);
 
 		list.a("item1");
-		assertEquals(1, list.size());
+		assertSize(1, list);
 
 		list.a("item2");
-		assertEquals(2, list.size());
+		assertSize(2, list);
 	}
 
 	@Test
@@ -483,10 +484,7 @@ class FluentList_Test extends TestBase {
 		var list = new FluentList<>(new ArrayList<String>());
 		list.a("item1").a("item2").a("item3");
 
-		var underlyingList = new ArrayList<String>();
-		underlyingList.add("item1");
-		underlyingList.add("item2");
-		underlyingList.add("item3");
+		var underlyingList = list("item1", "item2", "item3");
 
 		assertEquals(underlyingList.toString(), list.toString());
 	}
@@ -496,10 +494,7 @@ class FluentList_Test extends TestBase {
 		var list1 = new FluentList<>(new ArrayList<String>());
 		list1.a("item1").a("item2").a("item3");
 
-		var list2 = new ArrayList<String>();
-		list2.add("item1");
-		list2.add("item2");
-		list2.add("item3");
+		var list2 = list("item1", "item2", "item3");
 
 		assertEquals(list1.size(), list2.size());
 		assertEquals(new ArrayList<>(list1), list2);
@@ -524,10 +519,7 @@ class FluentList_Test extends TestBase {
 		var list = new FluentList<>(new ArrayList<String>());
 		list.a("item1").a("item2").a("item3");
 
-		var underlyingList = new ArrayList<String>();
-		underlyingList.add("item1");
-		underlyingList.add("item2");
-		underlyingList.add("item3");
+		var underlyingList = list("item1", "item2", "item3");
 
 		assertEquals(underlyingList.hashCode(), list.hashCode());
 	}

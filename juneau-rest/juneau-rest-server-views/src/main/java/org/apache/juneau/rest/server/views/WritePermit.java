@@ -83,7 +83,7 @@ public final class WritePermit {
 	 * @throws IllegalArgumentException If {@code capability} is <jk>null</jk> or blank.
 	 */
 	public static WritePermit forCapability(String capability) {
-		if (capability == null || capability.isBlank())
+		if (ib(capability))
 			throw iaex("WritePermit capability must not be null or blank.");
 		return new WritePermit(capability);
 	}

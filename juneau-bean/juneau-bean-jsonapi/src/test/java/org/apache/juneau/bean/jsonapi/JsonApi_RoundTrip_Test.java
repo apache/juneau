@@ -17,6 +17,7 @@
 package org.apache.juneau.bean.jsonapi;
 
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.test.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
@@ -351,10 +352,10 @@ class JsonApi_RoundTrip_Test {
 			var doc = new JsonApiDocument()
 				.setIncluded(list(new JsonApiResource("a", "1")))
 				.setErrors(list(new JsonApiError().setTitle("x")));
-			assertEquals(1, doc.getIncluded().size());
+			assertSize(1, doc.getIncluded());
 			assertEquals("a", doc.getIncluded().get(0).getType());
 			assertEquals("1", doc.getIncluded().get(0).getId());
-			assertEquals(1, doc.getErrors().size());
+			assertSize(1, doc.getErrors());
 			assertEquals("x", doc.getErrors().get(0).getTitle());
 		}
 
@@ -395,11 +396,11 @@ class JsonApi_RoundTrip_Test {
 			var doc = new JsonApiDocument()
 				.addErrors(new JsonApiError().setTitle("a"))
 				.addErrors(new JsonApiError().setTitle("b"));
-			assertEquals(2, doc.getErrors().size());
+			assertSize(2, doc.getErrors());
 			assertEquals("a", doc.getErrors().get(0).getTitle());
 			assertEquals("b", doc.getErrors().get(1).getTitle());
 			doc.addIncluded(new JsonApiResource("a", "1")).addIncluded(new JsonApiResource("a", "2"));
-			assertEquals(2, doc.getIncluded().size());
+			assertSize(2, doc.getIncluded());
 			assertEquals("1", doc.getIncluded().get(0).getId());
 			assertEquals("2", doc.getIncluded().get(1).getId());
 		}

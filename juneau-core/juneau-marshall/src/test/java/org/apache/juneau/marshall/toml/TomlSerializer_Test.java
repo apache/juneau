@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.marshall.toml;
 
+import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
@@ -26,10 +27,7 @@ class TomlSerializer_Test {
 
 	@Test
 	void a01_simpleBean() {
-		var m = new LinkedHashMap<String,Object>();
-		m.put("host", "localhost");
-		m.put("port", 8080);
-		m.put("debug", true);
+		Map<String,Object> m = map("host", "localhost", "port", 8080, "debug", true);
 
 		String toml = TomlSerializer.DEFAULT.write(m);
 		assertNotNull(toml);

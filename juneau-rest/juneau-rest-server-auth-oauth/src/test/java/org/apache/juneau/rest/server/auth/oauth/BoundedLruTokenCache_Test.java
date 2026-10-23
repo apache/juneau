@@ -17,6 +17,7 @@
 package org.apache.juneau.rest.server.auth.oauth;
 
 import static org.apache.juneau.commons.utils.Shorts.*;
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.security.*;
@@ -88,7 +89,7 @@ class BoundedLruTokenCache_Test extends TestBase {
 		c.getPrincipal("a");
 		c.getPrincipal("b");
 		c.putPrincipal("d", BOB, Duration.ofMinutes(5));
-		assertEquals(3, c.size());
+		assertSize(3, c);
 		assertTrue(c.getPrincipal("c").isEmpty());
 	}
 
@@ -107,7 +108,7 @@ class BoundedLruTokenCache_Test extends TestBase {
 		c.putToken("k", token);
 		var got = c.getToken("k", NOW, Duration.ZERO);
 		assertTrue(got.isEmpty());
-		assertEquals(0, c.size());
+		assertSize(0, c);
 	}
 
 	@Test void d03_getToken_skewSubtractedFromExpiry() {
@@ -124,7 +125,7 @@ class BoundedLruTokenCache_Test extends TestBase {
 		c.putPrincipal("t-exp", ALICE, Duration.ofMillis(1));
 		Thread.sleep(5);
 		assertTrue(c.getPrincipal("t-exp").isEmpty());
-		assertEquals(0, c.size());
+		assertSize(0, c);
 	}
 
 	@Test void d04_getToken_negativeSkew_throws() {

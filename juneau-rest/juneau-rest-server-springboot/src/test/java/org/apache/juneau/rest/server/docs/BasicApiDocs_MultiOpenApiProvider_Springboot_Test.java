@@ -72,7 +72,7 @@ import org.springframework.context.annotation.*;
 	"java:S5778", // assertThrows lambdas with chained calls; intermediate invocations do not throw in practice
 	"resource" // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.
 })
-class BasicApiDocs_Springboot_MultiOpenApiProvider_Test {
+class BasicApiDocs_MultiOpenApiProvider_Springboot_Test {
 
 	/** Spring Boot app config with two {@link OpenApiProvider} beans, one {@code @Primary}. */
 	@SpringBootConfiguration

@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.http.part;
 
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
@@ -34,19 +35,19 @@ class HttpPartList_Test extends TestBase {
 	@Test void a01_create_emptyList() {
 		var list = HttpPartList.create();
 		assertTrue(list.isEmpty());
-		assertEquals(0, list.size());
+		assertSize(0, list);
 	}
 
 	@Test void a02_of_varargs() {
 		var list = HttpPartList.of(HttpPartBean.of("a", "1"), HttpPartBean.of("b", "2"));
-		assertEquals(2, list.size());
+		assertSize(2, list);
 		assertEquals("1", list.getFirst("a").getValue());
 		assertEquals("2", list.getFirst("b").getValue());
 	}
 
 	@Test void a03_of_list() {
 		var list = HttpPartList.of(List.of(HttpPartBean.of("a", "1"), HttpPartBean.of("b", "2")));
-		assertEquals(2, list.size());
+		assertSize(2, list);
 	}
 
 	@Test void a04_of_nullList_ignored() {
@@ -56,12 +57,12 @@ class HttpPartList_Test extends TestBase {
 
 	@Test void a05_of_varargs_nullsIgnored() {
 		var list = HttpPartList.of((HttpPart)null, HttpPartBean.of("a", "1"), null);
-		assertEquals(1, list.size());
+		assertSize(1, list);
 	}
 
 	@Test void a06_ofPairs() {
 		var list = HttpPartList.ofPairs("foo", "1", "bar", "2");
-		assertEquals(2, list.size());
+		assertSize(2, list);
 		assertEquals("1", list.getFirst("foo").getValue());
 	}
 
@@ -82,7 +83,7 @@ class HttpPartList_Test extends TestBase {
 		var list = HttpPartList.create()
 			.append(HttpPartBean.of("a", "1"))
 			.append("b", "2");
-		assertEquals(2, list.size());
+		assertSize(2, list);
 		assertEquals("1", list.getFirst("a").getValue());
 		assertEquals("2", list.getFirst("b").getValue());
 	}
@@ -124,7 +125,7 @@ class HttpPartList_Test extends TestBase {
 		var list = HttpPartList.create()
 			.setDefault("foo", "first")
 			.setDefault("foo", "second");
-		assertEquals(1, list.size());
+		assertSize(1, list);
 		assertEquals("first", list.getFirst("foo").getValue());
 	}
 
@@ -139,7 +140,7 @@ class HttpPartList_Test extends TestBase {
 			HttpPartBean.of("b", "2"),
 			HttpPartBean.of("a", "ignored")  // duplicate name, skipped
 		);
-		assertEquals(2, list.size());
+		assertSize(2, list);
 		assertEquals("1", list.getFirst("a").getValue());
 	}
 
@@ -152,27 +153,27 @@ class HttpPartList_Test extends TestBase {
 		var list = HttpPartList.create()
 			.append("foo", "first")
 			.set("foo", "second");
-		assertEquals(1, list.size());
+		assertSize(1, list);
 		assertEquals("second", list.getFirst("foo").getValue());
 	}
 
 	@Test void c06_set_nullIgnored() {
 		var list = HttpPartList.create().append("a", "1").set((HttpPart)null);
-		assertEquals(1, list.size());
+		assertSize(1, list);
 	}
 
 	@Test void c07_set_varargs() {
 		var list = HttpPartList.create()
 			.append("a", "old")
 			.set(HttpPartBean.of("a", "new"), HttpPartBean.of("b", "1"));
-		assertEquals(2, list.size());
+		assertSize(2, list);
 		assertEquals("new", list.getFirst("a").getValue());
 		assertEquals("1", list.getFirst("b").getValue());
 	}
 
 	@Test void c08_set_varargs_nullArrayIgnored() {
 		var list = HttpPartList.create().append("a", "1").set((HttpPart[])null);
-		assertEquals(1, list.size());
+		assertSize(1, list);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -185,7 +186,7 @@ class HttpPartList_Test extends TestBase {
 			.append("trace", "b")
 			.append("foo", "1")
 			.removeAll("trace");
-		assertEquals(1, list.size());
+		assertSize(1, list);
 		assertNull(list.getFirst("trace"));
 	}
 
@@ -195,7 +196,7 @@ class HttpPartList_Test extends TestBase {
 			.append("trace", "b")
 			.append("foo", "1");
 		var traces = list.getAll("trace");
-		assertEquals(2, traces.size());
+		assertSize(2, traces);
 		assertEquals("a", traces.get(0).getValue());
 		assertEquals("b", traces.get(1).getValue());
 	}
@@ -232,8 +233,8 @@ class HttpPartList_Test extends TestBase {
 		var original = HttpPartList.create().append("a", "1");
 		var copy = original.copy();
 		copy.append("b", "2");
-		assertEquals(1, original.size());
-		assertEquals(2, copy.size());
+		assertSize(1, original);
+		assertSize(2, copy);
 	}
 
 	@Test void e02_copy_preservesCaseInsensitive() {
@@ -270,7 +271,7 @@ class HttpPartList_Test extends TestBase {
 
 	@Test void f03_unmodifiable_readsStillWork() {
 		var u = HttpPartList.create().append("a", "1").append("b", "2").unmodifiable();
-		assertEquals(2, u.size());
+		assertSize(2, u);
 		assertEquals("1", u.getFirst("a").getValue());
 		assertEquals("2", u.getFirst("b").getValue());
 		var count = new AtomicInteger();
@@ -353,7 +354,7 @@ class HttpPartList_Test extends TestBase {
 		var x = HttpPartList.create().append("a", "1");
 		var u = x.unmodifiable();
 		x.append("b", "2"); // Mutate original after snapshotting.
-		assertEquals(1, u.size());
+		assertSize(1, u);
 		assertEquals("a", u.get(0).getName());
 	}
 }

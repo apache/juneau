@@ -60,7 +60,7 @@ import org.apache.juneau.http.remote.*;
  * <p>
  * For SSRF-guard-active ({@code @Remote}) requests (see {@link TransportRequest#isSsrfGuardActive()}), this
  * transport pin-on-connects: it resolves the request host, selects an address that passes
- * {@link org.apache.juneau.http.remote.RemoteUrlPolicy}, and rewrites the request URI to that literal address
+ * {@link RemoteUrlPolicy}, and rewrites the request URI to that literal address
  * (preserving the original host via an explicit {@code Host} header) so the socket connects only to the
  * validated address &mdash; and re-runs the same check on every {@code Location} hop via
  * {@link PolicyEnforcedRedirects}. The JDK {@link HttpClient} has no connect-time/DNS SPI, so an IP-literal
@@ -94,7 +94,7 @@ public final class JavaHttpTransport implements HttpTransport {
 		// already forced that first touch, this has no effect and sendOncePinned() below fails closed instead of
 		// silently sending the wrong Host.
 		var existing = System.getProperty(RESTRICTED_HEADERS_PROPERTY);
-		if (existing == null || existing.isBlank())
+		if (ib(existing))
 			System.setProperty(RESTRICTED_HEADERS_PROPERTY, "host");
 		else if (! existing.toLowerCase(Locale.ROOT).contains("host"))
 			System.setProperty(RESTRICTED_HEADERS_PROPERTY, existing + ",host");

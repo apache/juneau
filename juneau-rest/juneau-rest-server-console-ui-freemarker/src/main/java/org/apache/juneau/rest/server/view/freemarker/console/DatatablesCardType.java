@@ -117,7 +117,9 @@ public final class DatatablesCardType implements CardTypeHandler {
 	}
 
 	@Override
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Narrows a JSON-shaped Map<?,?> to Map<String,Object>; its keys are always strings.
+	})
 	public JsonMap toFragment(CardSource source) {
 		var hasSrc = nn(source.src()) && ! source.src().isEmpty();
 		var hasBody = source.hasJsonBody() || (nn(source.body()) && ! source.body().isEmpty());
@@ -214,7 +216,9 @@ public final class DatatablesCardType implements CardTypeHandler {
 	 * per-type value ({@link RegionDef#effectiveLazy()}), which the builder always emits.  Explicit values are kept,
 	 * and the authored (possibly immutable) maps are copied rather than written to.
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Narrows a JSON-shaped Map<?,?> to Map<String,Object>; its keys are always strings.
+	})
 	private static void projectDetailRegion(CardSource source, JsonMap catalog) {
 		if (! (catalog.get("detail") instanceof Map<?,?> detail) || ! (detail.get("region") instanceof Map<?,?> region)
 				|| ! (detail.get("endpoint") instanceof String endpoint))
@@ -234,7 +238,9 @@ public final class DatatablesCardType implements CardTypeHandler {
 	 * Validates a job-log region's {@code config} through {@link JobLogRegion}, the same rules as the builder path,
 	 * and returns it in the builder's canonical key order so the two paths emit the same sidecar.
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Narrows a JSON-shaped Map<?,?> to Map<String,Object>; its keys are always strings.
+	})
 	private static Map<String,Object> jobLogConfig(CardSource source, Map<String,Object> region) {
 		var id = region.get("id") instanceof String s ? s : "";
 		var config = region.get("config");
@@ -378,7 +384,9 @@ public final class DatatablesCardType implements CardTypeHandler {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Narrows a JSON-shaped Map<?,?> to Map<String,Object>; its keys are always strings.
+	})
 	private static void resolveSearch(CardSource source, Map<String,Object> col, String ident) {
 		var searchType = str(col.get("searchType"));
 		if (ib(searchType))
@@ -437,7 +445,9 @@ public final class DatatablesCardType implements CardTypeHandler {
 	 * endpoints receive {@code {ids}} in the body). No {@code <@card id='%s'>} prefix — {@code BulkMutateDef}
 	 * raises the identical message with no card in scope.
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Narrows a JSON-shaped Map<?,?> to Map<String,Object>; its keys are always strings.
+	})
 	private static void checkAggregateEndpoints(JsonMap catalog) {
 		if (! (catalog.get("bulk") instanceof Map<?,?> bulk))
 			return;
@@ -446,7 +456,7 @@ public final class DatatablesCardType implements CardTypeHandler {
 		for (var raw : actions) {
 			var action = (Map<String,Object>) raw;
 			var mode = action.get(nn(action.get("mode")) ? "mode" : "bulkMode");
-			if (! eq("aggregate", mode))
+			if (neq("aggregate", mode))
 				continue;
 			var endpoint = str(action.get("endpoint"));
 			if (nn(endpoint) && PLACEHOLDER.matcher(endpoint).find())

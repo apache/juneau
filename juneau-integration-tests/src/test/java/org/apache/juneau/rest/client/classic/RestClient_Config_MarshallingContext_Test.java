@@ -18,6 +18,7 @@ package org.apache.juneau.rest.client.classic;
 
 import static org.apache.juneau.BasicTestUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
@@ -514,7 +515,7 @@ class RestClient_Config_MarshallingContext_Test extends TestBase {
 		var x = new A14();
 		x.f = x;
 		var records = LogRecordCapture.quietly(MarshallingSession.class, () -> assertThrowsWithMessage(Exception.class, "Recursion occurred", ()->client().debug().build().post("/echo",x).run()));
-		assertEquals(1, records.size());
+		assertSize(1, records);
 	}
 
 	@Marshalled(typeName="foo")

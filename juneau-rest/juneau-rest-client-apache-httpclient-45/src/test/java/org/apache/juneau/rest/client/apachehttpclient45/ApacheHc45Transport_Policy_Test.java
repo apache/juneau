@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.client.apachehttpclient45;
 
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
@@ -120,7 +121,7 @@ class ApacheHc45Transport_Policy_Test {
 
 	@Test
 	void a03b_guardedRequest_allHopsShareOneGuardingContext() throws Exception {
-		// J0824: Juneau follows these redirects itself, one execute per hop.  The credential guard remembers the first origin in
+		// Juneau follows these redirects itself, one execute per hop.  The credential guard remembers the first origin in
 		// the context, so every hop must be sent with the same one or a cookie-store Cookie would follow the redirect.
 		var contexts = new ArrayList<HttpContext>();
 		var httpClient = new FakeHttpClient(req -> null) {
@@ -139,11 +140,11 @@ class ApacheHc45Transport_Policy_Test {
 				assertEquals(200, resp.getStatusCode());
 			}
 		}
-		assertEquals(2, contexts.size());
+		assertSize(2, contexts);
 		assertSame(contexts.get(0), contexts.get(1));
 	}
 
-	// J0824: the guarded path must not forward a cookie-store Cookie across origins.  Loopback cannot be re-permitted for a guarded
+	// the guarded path must not forward a cookie-store Cookie across origins.  Loopback cannot be re-permitted for a guarded
 	// request, so the wire is simulated: for each hop the fake drives the context exactly as HttpClient does (protocol stage,
 	// the client's own interceptors adding a store Cookie, then the wire-send stage) and records the Cookie that would be sent.
 	private static List<String> guardedCookies(String firstUri, String... locations) throws Exception {

@@ -181,7 +181,7 @@ class BeanPropertyMeta_Marshalling_Coverage_Test extends TestBase {
 	}
 
 	/** Bean type with no zero-arg constructor - {@link FakeBeanInfo#newInstance()} fails with an
-	 *  {@link org.apache.juneau.commons.reflect.ExecutableException}, which is not a {@link BeanRuntimeException}. */
+	 *  {@link ExecutableException}, which is not a {@link BeanRuntimeException}. */
 	public static class NoZeroArgCtorNested {
 		public final String name;
 		public NoZeroArgCtorNested(String name) { this.name = name; }

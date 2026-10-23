@@ -662,7 +662,7 @@ class JsonTokenReaderCoverage_Test extends TestBase {
 					seen.add(r.read(Bean.class));
 				assertEquals(TokenType.END_ARRAY, r.next());
 			}
-			assertEquals(2, seen.size());
+			assertSize(2, seen);
 			assertBean(seen.get(0), "name,age", "a,1");
 			assertBean(seen.get(1), "name,age", "b,2");
 		}

@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.server.views;
 
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assumptions.*;
 
@@ -110,7 +111,7 @@ class ViewsJs_DialogHandle_Test extends TestBase {
 		assertEquals(true, ch.get("depthUnchangedByUnknown"));
 		assertEquals(true, ch.get("opened"));
 		var seen = (List<?>)ch.get("seen");
-		assertEquals(1, seen.size());
+		assertSize(1, seen);
 		assertEquals(List.of("actions", "cancelBtn", "confirmBtn", "dialog", "dismissBtn", "header"), ((Map<?,?>)seen.get(0)).get("keys"));
 	}
 

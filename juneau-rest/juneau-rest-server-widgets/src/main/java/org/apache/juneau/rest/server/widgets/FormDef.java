@@ -127,7 +127,7 @@ public class FormDef implements Widget {
 			public static Option of(String value, String label) {
 				if (value == null)
 					throw iaex("FormDef.Input.Option value must not be null.");
-				if (label == null || label.isBlank())
+				if (ib(label))
 					throw iaex("FormDef.Input.Option label must not be null or blank.");
 				var o = new Option();
 				o.value = value;
@@ -182,11 +182,11 @@ public class FormDef implements Widget {
 		 * 	allowed token.
 		 */
 		public static Input of(String name, String label, String type) {
-			if (name == null || name.isBlank())
+			if (ib(name))
 				throw iaex("FormDef.Input name must not be null or blank.");
-			if (label == null || label.isBlank())
+			if (ib(label))
 				throw iaex("FormDef.Input label must not be null or blank.");
-			var t = (type == null || type.isBlank()) ? "text" : type;
+			var t = (ib(type)) ? "text" : type;
 			if (! INPUT_TYPES.contains(t))
 				throw iaex("FormDef.Input type must be one of text, textarea, password, checkbox, toggle, select, action, not '%s'.", t);
 			var i = new Input();
@@ -327,7 +327,7 @@ public class FormDef implements Widget {
 		 * @throws IllegalArgumentException If this input is not well-formed.
 		 */
 		void validate() {
-			if (name == null || name.isBlank())
+			if (ib(name))
 				throw iaex("FormDef.Input name must not be null or blank.");
 			var t = resolveType();
 			var isAction = eq(t, "action");
@@ -342,7 +342,7 @@ public class FormDef implements Widget {
 
 		/** Resolves and validates {@link #type} (blank defaults to {@code text}). */
 		private String resolveType() {
-			var t = (type == null || type.isBlank()) ? "text" : type;
+			var t = (ib(type)) ? "text" : type;
 			if (! INPUT_TYPES.contains(t))
 				throw iaex("FormDef.Input '%s' type must be one of text, textarea, password, checkbox, toggle, select, action, not '%s'.", name, t);
 			return t;
@@ -355,7 +355,7 @@ public class FormDef implements Widget {
 					throw iaex("FormDef.Input '%s' options are only allowed on a select field.", name);
 				return;
 			}
-			if (options == null || options.isEmpty())
+			if (ie(options))
 				throw iaex("FormDef.Input '%s' select must declare at least one option.", name);
 			var values = new HashSet<String>();
 			for (var o : options) {
@@ -404,7 +404,7 @@ public class FormDef implements Widget {
 
 		/** Validates the {@code action}-only {@link #actionId}. */
 		private void validateActionField(boolean isAction) {
-			if (isAction && (actionId == null || actionId.isBlank()))
+			if (isAction && (ib(actionId)))
 				throw iaex("FormDef.Input '%s' action must declare an actionId.", name);
 			if (! isAction && actionId != null)
 				throw iaex("FormDef.Input '%s' actionId is only allowed on an action field.", name);
@@ -447,9 +447,9 @@ public class FormDef implements Widget {
 		 * @throws IllegalArgumentException If {@code id} or {@code label} is <jk>null</jk> or blank.
 		 */
 		public static Section of(String id, String label) {
-			if (id == null || id.isBlank())
+			if (ib(id))
 				throw iaex("FormDef.Section id must not be null or blank.");
-			if (label == null || label.isBlank())
+			if (ib(label))
 				throw iaex("FormDef.Section label must not be null or blank.");
 			var s = new Section();
 			s.id = id;
@@ -479,11 +479,11 @@ public class FormDef implements Widget {
 		 * @throws IllegalArgumentException If this section is not well-formed.
 		 */
 		void validate() {
-			if (id == null || id.isBlank())
+			if (ib(id))
 				throw iaex("FormDef.Section id must not be null or blank.");
-			if (label == null || label.isBlank())
+			if (ib(label))
 				throw iaex("FormDef.Section '%s' label must not be null or blank.", id);
-			if (fields == null || fields.isEmpty())
+			if (ie(fields))
 				throw iaex("FormDef.Section '%s' must declare at least one field.", id);
 			for (var f : fields) {
 				if (f == null)
@@ -552,7 +552,7 @@ public class FormDef implements Widget {
 	 * @throws IllegalArgumentException If {@code value} is <jk>null</jk> or blank.
 	 */
 	public FormDef template(String value) {
-		if (value == null || value.isBlank())
+		if (ib(value))
 			throw iaex("FormDef template must not be null or blank.");
 		template = value;
 		return this;
@@ -657,7 +657,7 @@ public class FormDef implements Widget {
 	 * {@link #contractVersion} no longer depends on this being called. Structural validation
 	 * no longer depends on it either for a form served over REST: nested inside a returned {@link ModalDef},
 	 * this form is reached by
-	 * {@link org.apache.juneau.rest.server.widgets.WidgetsMixin.WidgetValidationProcessor
+	 * {@link WidgetsMixin.WidgetValidationProcessor
 	 * WidgetsMixin.WidgetValidationProcessor}'s call to {@link ModalDef#validate()}, which recurses into this
 	 * bean's own {@link #validate()}, fail-closed with a 500, whether or not the producing endpoint called
 	 * {@link ModalDef#checked()}. This method (via {@link ModalDef#checked()}) remains the only fail-closed

@@ -18,15 +18,16 @@
 /*
  * Petstore browser harness: node petstore-browser.cjs <cases.json>
  *
- * Input:  {baseUrl, snapshots, cases:[{name, path, viewport?, waitUntil?, initScript?, actions?, queries?, fetches?,
- *          capture?, allowFailedLoads?}]}
+ * Input:  {baseUrl, snapshots, deviceScaleFactor?, cases:[{name, path, viewport?, deviceScaleFactor?, waitUntil?,
+ *          initScript?, actions?, queries?, fetches?, capture?, allowFailedLoads?}]}
  * Output (stdout): {cases:{<name>:{status, jsFailures, deprecations, queries, fetches, requests, downloads, timeouts}}}
  *
  * Each action is one of:
  *   {click: selector} {fill: [selector, text]} {press: [selector, key]}
  *   {waitFor: jsExpression, timeoutMs?}  (records the expression in timeouts if it never becomes truthy)
  *   {waitForCaptured: n, timeoutMs?}  (waits until n requests matching the case's capture were recorded)
- *   {evaluate: jsExpression}  {screenshot: fileName}
+ *   {evaluate: jsExpression}  {screenshot: fileName, selector?}  (the whole page, or only the first element matching
+ *     selector; written to the input's snapshots directory)
  *   {reload: true}  (reloads the page in the same context, so IndexedDB and the captured requests carry over; a
  *     reload through evaluate would destroy the execution context mid-call)
  *   {back: true} {forward: true}  (the browser's own back and forward buttons)
@@ -39,7 +40,9 @@
  * waitUntil is the navigation's Playwright wait state, networkidle by default.  A case on a page that polls can pass
  * 'load' and start its actions with a waitFor, so it never depends on the poll leaving a quiet gap.
  *
- * viewport is [width, height] (default [1280, 900]).  initScript is JS source run at the start of every document the
+ * viewport is [width, height] (default [1280, 900]).  deviceScaleFactor (case, else input, else 1) is the device pixel
+ * ratio, so 2 gives screenshots at twice the viewport's pixel size.  Screenshots are taken with animations disabled
+ * and the caret hidden.  initScript is JS source run at the start of every document the
  * case opens, reloads included.
  *
  * allowFailedLoads drops Chromium's own "Failed to load resource" console errors, which a deliberate 401/404
@@ -68,7 +71,8 @@ const { chromium } = require('playwright');
 
 async function runCase(browser, input, c) {
 	const vp = Array.isArray(c.viewport) ? c.viewport : [1280, 900];
-	const context = await browser.newContext({ viewport: { width: vp[0], height: vp[1] }, acceptDownloads: true });
+	const context = await browser.newContext({ viewport: { width: vp[0], height: vp[1] }, acceptDownloads: true,
+		deviceScaleFactor: c.deviceScaleFactor || input.deviceScaleFactor || 1 });
 	if (c.initScript) await context.addInitScript(c.initScript);
 	const page = await context.newPage();
 	const r = { status: 0, jsFailures: [], deprecations: [], queries: {}, fetches: {}, requests: [], downloads: {}, timeouts: [] };
@@ -126,7 +130,11 @@ async function act(page, input, c, a, r) { // NOSONAR javascript:S3776 - one fla
 	if (a.back) return page.goBack({ waitUntil: 'commit' });
 	if (a.forward) return page.goForward({ waitUntil: 'commit' });
 	if (a.evaluate) return page.evaluate(a.evaluate);
-	if (a.screenshot) return page.screenshot({ path: path.join(input.snapshots, a.screenshot), fullPage: true });
+	if (a.screenshot) {
+		const shot = { path: path.join(input.snapshots, a.screenshot), animations: 'disabled', caret: 'hide' };
+		if (a.selector) return page.locator(a.selector).first().screenshot(shot);
+		return page.screenshot({ ...shot, fullPage: true });
+	}
 	if (a.waitFor) {
 		try {
 			await page.waitForFunction(a.waitFor, null, { timeout: a.timeoutMs || 10000 });

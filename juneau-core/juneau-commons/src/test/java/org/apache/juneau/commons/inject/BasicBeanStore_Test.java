@@ -17,6 +17,7 @@
 package org.apache.juneau.commons.inject;
 
 import static org.apache.juneau.commons.utils.Shorts.*;
+import static org.apache.juneau.commons.TestAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
@@ -417,7 +418,7 @@ class BasicBeanStore_Test extends TestBase {
 		store.addBean(TestBean.class, bean);
 
 		var result = store.getBeansOfType(TestBean.class);
-		assertEquals(1, result.size());
+		assertSize(1, result);
 		assertSame(bean, result.get(""));
 	}
 
@@ -428,7 +429,7 @@ class BasicBeanStore_Test extends TestBase {
 		store.addBean(TestBean.class, bean, "name1");
 
 		var result = store.getBeansOfType(TestBean.class);
-		assertEquals(1, result.size());
+		assertSize(1, result);
 		assertSame(bean, result.get("name1"));
 	}
 
@@ -443,7 +444,7 @@ class BasicBeanStore_Test extends TestBase {
 		store.addBean(TestBean.class, bean3, null);
 
 		var result = store.getBeansOfType(TestBean.class);
-		assertEquals(3, result.size());
+		assertSize(3, result);
 		assertSame(bean1, result.get("name1"));
 		assertSame(bean2, result.get("name2"));
 		assertSame(bean3, result.get(""));
@@ -459,7 +460,7 @@ class BasicBeanStore_Test extends TestBase {
 
 		var store = new BasicBeanStore(parent);
 		var result = store.getBeansOfType(TestBean.class);
-		assertEquals(2, result.size());
+		assertSize(2, result);
 		assertSame(parentBean1, result.get("name1"));
 		assertSame(parentBean2, result.get("name2"));
 	}
@@ -475,7 +476,7 @@ class BasicBeanStore_Test extends TestBase {
 		store.addBean(TestBean.class, childBean, "name1");
 
 		var result = store.getBeansOfType(TestBean.class);
-		assertEquals(1, result.size());
+		assertSize(1, result);
 		assertSame(childBean, result.get("name1"));
 	}
 
@@ -492,7 +493,7 @@ class BasicBeanStore_Test extends TestBase {
 		store.addBean(TestBean.class, childBean, "name3");
 
 		var result = store.getBeansOfType(TestBean.class);
-		assertEquals(3, result.size());
+		assertSize(3, result);
 		assertSame(parentBean1, result.get("name1"));
 		assertSame(parentBean2, result.get("name2"));
 		assertSame(childBean, result.get("name3"));
@@ -507,11 +508,11 @@ class BasicBeanStore_Test extends TestBase {
 		store.addBean(AnotherBean.class, anotherBean);
 
 		var testResult = store.getBeansOfType(TestBean.class);
-		assertEquals(1, testResult.size());
+		assertSize(1, testResult);
 		assertSame(testBean, testResult.get(""));
 
 		var anotherResult = store.getBeansOfType(AnotherBean.class);
-		assertEquals(1, anotherResult.size());
+		assertSize(1, anotherResult);
 		assertSame(anotherBean, anotherResult.get(""));
 	}
 
@@ -1539,7 +1540,7 @@ class BasicBeanStore_Test extends TestBase {
 		store.addSupplier(TestBean.class, () -> new TestBean("ok"), "concrete");
 
 		var all = store.getBeansOfType(TestBean.class);
-		assertEquals(2, all.size(), "Both entries must appear, even when one resolves to null");
+		assertSize(() -> "Both entries must appear, even when one resolves to null", 2, all);
 		assertNull(all.get("nullSupplier"), "Null supplier result must be preserved in the map");
 		assertEquals(new TestBean("ok"), all.get("concrete"));
 

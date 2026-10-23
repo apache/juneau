@@ -254,7 +254,7 @@ public class Http_Test {
 
 		@Test void c05_partList_ofPairs() {
 			var list = PartList.ofPairs("user", "alice", "pass", "secret");
-			assertEquals(2, list.size());
+			assertSize(2, list);
 			assertEquals("alice", list.getFirst("user").getValue());
 			assertEquals("secret", list.getFirst("pass").getValue());
 		}
@@ -265,7 +265,7 @@ public class Http_Test {
 
 		@Test void c07_partList_empty() {
 			var list = PartList.empty();
-			assertEquals(0, list.size());
+			assertSize(0, list);
 			assertTrue(list.isEmpty());
 		}
 

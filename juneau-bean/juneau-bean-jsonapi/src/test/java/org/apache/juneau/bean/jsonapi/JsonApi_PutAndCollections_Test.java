@@ -39,7 +39,7 @@ class JsonApi_PutAndCollections_Test extends TestBase {
 	@Test
 	void a02_documentPutLink() {
 		var d = new JsonApiDocument().putLink("self", "/x").putLink("next", new JsonApiLink("/y"));
-		assertEquals(2, d.getLinks().size());
+		assertSize(2, d.getLinks());
 		assertEquals("/x", d.getLinks().get("self"));
 		assertEquals("/y", ((JsonApiLink)d.getLinks().get("next")).getHref());
 	}
@@ -47,32 +47,32 @@ class JsonApi_PutAndCollections_Test extends TestBase {
 	@Test
 	void a03_documentSetErrorsVarargs() {
 		var d = new JsonApiDocument().setErrors(new JsonApiError().setTitle("x"), new JsonApiError().setTitle("y"));
-		assertEquals(2, d.getErrors().size());
+		assertSize(2, d.getErrors());
 		assertBean(d.getErrors().get(1), "title", "y");
 	}
 
 	@Test
 	void a04_documentSetIncludedVarargs() {
 		var d = new JsonApiDocument().setIncluded(new JsonApiResource("a", "1"), new JsonApiResource("a", "2"));
-		assertEquals(2, d.getIncluded().size());
+		assertSize(2, d.getIncluded());
 		assertBean(d.getIncluded().get(1), "type,id", "a,2");
 	}
 
 	@Test
 	void a05_documentAddErrorsCollectionInitializesAndAppends() {
 		var d = new JsonApiDocument().addErrors(List.of(new JsonApiError().setTitle("a")));
-		assertEquals(1, d.getErrors().size());
+		assertSize(1, d.getErrors());
 		d.addErrors(List.of(new JsonApiError().setTitle("b")));
-		assertEquals(2, d.getErrors().size());
+		assertSize(2, d.getErrors());
 		assertEquals("b", d.getErrors().get(1).getTitle());
 	}
 
 	@Test
 	void a06_documentAddIncludedCollectionInitializesAndAppends() {
 		var d = new JsonApiDocument().addIncluded(List.of(new JsonApiResource("a", "1")));
-		assertEquals(1, d.getIncluded().size());
+		assertSize(1, d.getIncluded());
 		d.addIncluded(List.of(new JsonApiResource("a", "2")));
-		assertEquals(2, d.getIncluded().size());
+		assertSize(2, d.getIncluded());
 		assertEquals("2", d.getIncluded().get(1).getId());
 	}
 

@@ -70,7 +70,7 @@ class SymbolSprite_Material_Test extends TestBase {
 
 	@Test void a04_notThirdPartyConsoleOrSldsArt() throws Exception {
 		var body = svg();
-		assertFalse(body.contains("slds-"), body);
+		DualHatGuard.assertClean(body);
 		assertFalse(body.contains("icon-overrides"), body);
 	}
 }

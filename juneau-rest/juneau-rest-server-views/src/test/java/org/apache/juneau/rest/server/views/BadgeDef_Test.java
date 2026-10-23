@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.server.views;
 
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
@@ -47,11 +48,15 @@ class BadgeDef_Test {
 		assertEquals("/ui/changes", m.get("href"));
 		assertEquals(60_000L, m.get("refreshMs"));
 		assertEquals(List.of("rules-table"), m.get("refreshes"));
-		@SuppressWarnings("unchecked")
+		@SuppressWarnings({
+			"unchecked" // Casts a parsed JSON value to its known Map/List shape.
+		})
 		var scope = (Map<String,Object>) m.get("scope");
 		assertEquals("beanType", scope.get("param"));
 		assertEquals("nav", scope.get("by"));
-		@SuppressWarnings("unchecked")
+		@SuppressWarnings({
+			"unchecked" // Casts a parsed JSON value to its known Map/List shape.
+		})
 		var stateFilter = (Map<String,Object>) m.get("stateFilter");
 		assertEquals("beanType", stateFilter.get("column"));
 	}
@@ -115,7 +120,9 @@ class BadgeDef_Test {
 			.tone(BadgeDef.Tone.DANGER)
 			.tooltipMax(5)
 			.toContractMap();
-		@SuppressWarnings("unchecked")
+		@SuppressWarnings({
+			"unchecked" // Casts a parsed JSON value to its known Map/List shape.
+		})
 		var label = (Map<String,Object>) m.get("label");
 		assertEquals("{total} item", label.get("one"));
 		assertEquals("danger", m.get("tone"));
@@ -126,9 +133,11 @@ class BadgeDef_Test {
 		var m = BadgeDef.create("pending").src("/x")
 			.visibleWhen(VisibilityRule.when("facts.viewer.roles").contains("oncall"))
 			.toContractMap();
-		@SuppressWarnings("unchecked")
+		@SuppressWarnings({
+			"unchecked" // Casts a parsed JSON value to its known Map/List shape.
+		})
 		var vw = (List<Map<String,Object>>) m.get("visibleWhen");
-		assertEquals(1, vw.size());
+		assertSize(1, vw);
 		assertEquals("facts.viewer.roles", vw.get(0).get("field"));
 		assertEquals("contains", vw.get(0).get("op"));
 		assertEquals("oncall", vw.get(0).get("value"));

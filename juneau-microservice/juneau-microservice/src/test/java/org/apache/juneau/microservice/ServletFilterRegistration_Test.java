@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.microservice;
 
+import static org.apache.juneau.test.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
@@ -184,7 +185,7 @@ class ServletFilterRegistration_Test extends TestBase {
 		var auth = auth(store);
 		store.addBean(AuthFilterChain.class, auth);
 		var l = ServletFilterRegistration.collect(store);
-		assertEquals(1, l.size());
+		assertSize(1, l);
 		var r = l.get(0);
 		assertSame(auth, r.getFilter());
 		assertEquals(ServletFilterRegistration.AUTH_ORDER, r.getOrder());
@@ -239,7 +240,7 @@ class ServletFilterRegistration_Test extends TestBase {
 		var other = ServletFilterRegistration.create(auth(store)).urlPatterns("/x/*").build();
 		store.addBean(ServletFilterRegistration.class, other, "other");
 		var l = ServletFilterRegistration.collect(store);
-		assertEquals(2, l.size());
+		assertSize(2, l);
 		assertSame(auth, l.get(0).getFilter());  // the automatic mount, at AUTH_ORDER, is still there
 		assertSame(other, l.get(1));
 	}
@@ -265,7 +266,7 @@ class ServletFilterRegistration_Test extends TestBase {
 		var store = new BasicBeanStore();
 		store.addBean(ServletFilterRegistration.class, reg(0, "/a/*"), "one");
 		store.addBean(ServletFilterRegistration.class, reg(0, "/a/*", "/*"), "two");
-		assertEquals(2, ServletFilterRegistration.collect(store).size());
+		assertSize(2, ServletFilterRegistration.collect(store));
 	}
 
 	@Test void d06_duplicateExplicitName_fails() {

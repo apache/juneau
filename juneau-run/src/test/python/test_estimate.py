@@ -127,6 +127,78 @@ class EstimateForKindTest(unittest.TestCase):
         self.assertIs(jr.estimate_for_kind(self.est, None), self.est)     # a unit before any units: no kind yet
 
 
+class WeightedEtaTest(unittest.TestCase):
+    """A modules row with uneven module costs: 'api' about 1s, 'server' about 300s, plus an aggregator that takes none."""
+
+    @staticmethod
+    def rec(api, server, tests=8000):
+        return {"ok": True, "complete": True, "wall_s": api + server + 2, "tests": tests, "sig": "a",
+                "units": {"kind": "modules", "total": 3, "done": 3},
+                "subs": {"api": api, "server": server, "parent": 0.0}}
+
+    def est(self):
+        return jr.estimate_from([self.rec(1.0, 290.0), self.rec(1.1, 300.0), self.rec(1.2, 310.0)], "a")
+
+    def test_estimate_from_takes_the_median_seconds_per_sub(self):
+        self.assertEqual(self.est().subs, {"api": 1.1, "server": 300.0, "parent": 0.0})
+
+    def test_estimate_from_skips_malformed_sub_seconds(self):
+        rec = self.rec(1.0, 300.0)
+        rec["subs"]["bad"] = "x"
+        self.assertNotIn("bad", jr.estimate_from([rec], "a").subs)
+
+    def test_a_skewed_first_module_does_not_make_the_estimate_a_half_way_one(self):
+        # 2 live modules, 3 in history; 1 done at 23s: the equal split said 1:15
+        pct, total, approx = jr.eta_figures(23.0, 1, 2, self.est(), done_subs={"api": 1.0})
+        self.assertEqual(pct, 0)
+        self.assertAlmostEqual(total, self.est().wall_s, delta=1)
+        self.assertTrue(approx)
+        self.assertGreater(total, 295)
+
+    def test_finished_subs_covering_enough_history_scale_the_total_by_their_pace(self):
+        est = Est(wall_s=100, units=2, rate=50, runs=3, subs={"a": 40.0, "b": 60.0})
+        pct, total, _ = jr.eta_figures(60.0, 1, 2, est, done_subs={"a": 80.0})      # ran twice as slow as history
+        self.assertEqual(pct, 40)
+        self.assertAlmostEqual(total, 200.0)
+
+    def test_the_pace_ratio_is_clamped(self):
+        est = Est(wall_s=100, units=2, rate=50, runs=3, subs={"a": 40.0, "b": 60.0})
+        _, total, _ = jr.eta_figures(300.0, 1, 2, est, done_subs={"a": 1000.0})
+        self.assertAlmostEqual(total, 400.0)
+
+    def test_an_overrun_shows_elapsed_only(self):
+        pct, total, _ = jr.eta_figures(400.0, 1, 2, self.est(), done_subs={"api": 1.0})
+        self.assertIsNone(total)
+        self.assertEqual(pct, 0)
+
+    def test_percent_follows_the_weights(self):
+        est = Est(wall_s=100, units=2, rate=50, runs=3, subs={"a": 70.0, "b": 30.0})
+        self.assertEqual(jr.eta_figures(70.0, 1, 2, est, done_subs={"a": 70.0})[0], 70)
+
+    def test_finished_subs_unknown_to_history_fall_back(self):
+        est = Est(wall_s=100, units=2, rate=50, runs=3, subs={"a": 70.0, "b": 30.0})
+        self.assertEqual(jr.eta_figures(20.0, 1, 2, est, done_subs={"zzz": 20.0}),
+                         jr.eta_figures(20.0, 1, 2, est))
+
+    def test_tests_fallback_without_subs(self):
+        est = Est(wall_s=300, units=3, rate=100, runs=3, tests=8000)
+        pct, total, approx = jr.eta_figures(23.0, 1, 2, est, done_subs={"api": 1.0}, tests_done=800)
+        self.assertEqual(pct, 10)
+        self.assertAlmostEqual(total, 23.0 + 0.9 * 300)
+        self.assertTrue(approx)
+
+    def test_tests_fallback_past_history_count_shows_elapsed_only(self):
+        est = Est(wall_s=300, units=3, rate=100, runs=3, tests=8000)
+        pct, total, _ = jr.eta_figures(310.0, 1, 2, est, tests_done=9000)
+        self.assertEqual(pct, 99)
+        self.assertIsNone(total)
+
+    def test_equal_split_is_unchanged_without_subs_or_tests(self):
+        est = Est(wall_s=100, units=100, rate=1.0, runs=5)
+        self.assertEqual(jr.eta_figures(20.0, 50, 100, est, done_subs={}, tests_done=None),
+                         jr.eta_figures(20.0, 50, 100, est))
+
+
 class MakeEstimatorTest(unittest.TestCase):
     def test_prefers_records_matching_the_current_commands_sig(self):
         import os, tempfile, subprocess

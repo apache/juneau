@@ -333,7 +333,7 @@ public class BasicRestDebugFormatter implements RestDebugFormatter {
 
 	private void appendResponseHeaders(StringBuilder sb, HttpServletResponse sres, Set<String> normalizedRedacted) {
 		var names = sres.getHeaderNames();
-		if (names == null || names.isEmpty())
+		if (ie(names))
 			return;
 		sb.append("\n---Response Headers---");
 		var state = new HeaderScanState();
@@ -448,7 +448,7 @@ public class BasicRestDebugFormatter implements RestDebugFormatter {
 	}
 
 	private String contentTypeToken(String contentType) {
-		if (contentType == null || contentType.isBlank())
+		if (ib(contentType))
 			return "unknown";
 		return DebugTextSanitizer.sanitize(contentType, maxFieldLength);
 	}

@@ -932,7 +932,7 @@ public class RestRequest extends HttpServletRequestWrapper {
 	 * 	<li class='jc'>{@link ContentLength}
 	 * 	<li class='jc'>{@link ContentType}
 	 * 	<li class='jc'>{@link Date}
-	 * 	<li class='jc'>{@link org.apache.juneau.http.header.Debug}
+	 * 	<li class='jc'>{@link Debug}
 	 * 	<li class='jc'>{@link Expect}
 	 * 	<li class='jc'>{@link Forwarded}
 	 * 	<li class='jc'>{@link From}
@@ -1565,7 +1565,7 @@ public class RestRequest extends HttpServletRequestWrapper {
 	 * <p>
 	 * Only safe to call once the REST call has reached the point of invoking the matched Java method, e.g. from inside
 	 * a {@link org.apache.juneau.rest.server.converter.RestConverter}, which only ever runs after method invocation.
-	 * Calling it any earlier throws {@link org.apache.juneau.http.response.InternalServerError}.
+	 * Calling it any earlier throws {@link InternalServerError}.
 	 *
 	 * @return The response associated with this request.
 	 */
@@ -2135,7 +2135,7 @@ public class RestRequest extends HttpServletRequestWrapper {
 		Map<String,Object> m2 = null;
 
 		var q = getQueryParams().get(QUERY_juneauSerializerOptions).asString().orElse(null);
-		if (q != null && !q.isBlank()) {
+		if (inb(q)) {
 			m1 = parseUonMap(q, e -> badRequest(e, "Could not parse UON session options from query parameter '%s'.", QUERY_juneauSerializerOptions));
 			var invalid = m1.keySet().stream().filter(k -> !allowlist.contains(k)).collect(Collectors.joining(","));
 			if (!invalid.isEmpty())
@@ -2143,7 +2143,7 @@ public class RestRequest extends HttpServletRequestWrapper {
 		}
 
 		var h = getHeaderParam(HEADER_JuneauSerializerOptions).asString().orElse(null);
-		if (h != null && !h.isBlank()) {
+		if (inb(h)) {
 			m2 = parseJsonMap(h, e -> badRequest(e, "Could not parse JSON5 session options from header '%s'.", HEADER_JuneauSerializerOptions));
 			var invalid = m2.keySet().stream().filter(k -> !allowlist.contains(k)).collect(Collectors.joining(","));
 			if (!invalid.isEmpty())
@@ -2177,7 +2177,7 @@ public class RestRequest extends HttpServletRequestWrapper {
 		Map<String,Object> m2 = null;
 
 		var q = getQueryParams().get(QUERY_juneauParserOptions).asString().orElse(null);
-		if (q != null && !q.isBlank()) {
+		if (inb(q)) {
 			m1 = parseUonMap(q, e -> badRequest(e, "Could not parse UON session options from query parameter '%s'.", QUERY_juneauParserOptions));
 			var invalid = m1.keySet().stream().filter(k -> !allowlist.contains(k)).collect(Collectors.joining(","));
 			if (!invalid.isEmpty())
@@ -2185,7 +2185,7 @@ public class RestRequest extends HttpServletRequestWrapper {
 		}
 
 		var h = getHeaderParam(HEADER_JuneauParserOptions).asString().orElse(null);
-		if (h != null && !h.isBlank()) {
+		if (inb(h)) {
 			m2 = parseJsonMap(h, e -> badRequest(e, "Could not parse JSON5 session options from header '%s'.", HEADER_JuneauParserOptions));
 			var invalid = m2.keySet().stream().filter(k -> !allowlist.contains(k)).collect(Collectors.joining(","));
 			if (!invalid.isEmpty())

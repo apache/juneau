@@ -613,7 +613,7 @@ public class RestSession extends ContextSession {
 	/** Adds the claims, trimmed and upper-cased as {@link MethodSafety} judges them, skipping blanks. */
 	private static void addClaims(Set<String> into, List<String> claims) {
 		for (var c : claims)
-			if (c != null && ! c.isBlank())
+			if (inb(c))
 				into.add(c.trim().toUpperCase(Locale.ROOT));
 	}
 

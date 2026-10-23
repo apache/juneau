@@ -18,6 +18,7 @@ package org.apache.juneau;
 
 import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 
 import java.io.*;
 import java.util.*;
@@ -41,7 +42,7 @@ import org.junit.jupiter.params.*;
 import org.junit.jupiter.params.provider.*;
 
 /**
- * Regression tests for FINISHED-291.
+ * Regression tests for {@link ParentProperty} on beans nested inside collections and maps.
  *
  * <p>
  * Verifies that a bean annotated with {@link ParentProperty} that is nested inside a collection or
@@ -131,7 +132,7 @@ class ParentPropertyContainer_Test extends TestBase {
 		var ab = newAddressBook();
 		var ab2 = f.p.read(write(f.s, ab), AddressBook.class);
 
-		assertEquals(2, ab2.people.size(), f.name);
+		assertSize(() -> f.name, 2, ab2.people);
 		for (var p : ab2.people)
 			assertSame(ab2, p.addressBook, () -> f.name + ": List<Person> element parent should be the enclosing AddressBook");
 	}
@@ -142,9 +143,9 @@ class ParentPropertyContainer_Test extends TestBase {
 		var ab = newAddressBook();
 		var ab2 = f.p.read(write(f.s, ab), AddressBook.class);
 
-		assertEquals(1, ab2.groups.size(), f.name);
+		assertSize(() -> f.name, 1, ab2.groups);
 		var group = ab2.groups.get(0);
-		assertEquals(2, group.size(), f.name);
+		assertSize(() -> f.name, 2, group);
 		for (var p : group)
 			assertSame(ab2, p.addressBook, () -> f.name + ": List<List<Person>> element parent should skip both lists");
 	}
@@ -206,7 +207,7 @@ class ParentPropertyContainer_Test extends TestBase {
 		var out = write(f.s, l);
 		List<Person> l2 = (List<Person>) f.p.read((String) out, List.class, Person.class);
 
-		assertEquals(2, l2.size(), f.name);
+		assertSize(() -> f.name, 2, l2);
 		for (var p : l2)
 			assertNull(p.addressBook, () -> f.name + ": top-level list element should have a null parent (no enclosing bean)");
 	}
@@ -221,7 +222,7 @@ class ParentPropertyContainer_Test extends TestBase {
 			? (List<Person>) f.p.read(new ByteArrayInputStream(b), List.class, Person.class)
 			: (List<Person>) f.p.read((String) out, List.class, Person.class);
 
-		assertEquals(1, l2.size(), f.name);
+		assertSize(() -> f.name, 1, l2);
 		assertNull(l2.get(0).addressBook, () -> f.name + ": top-level list element should have a null parent");
 	}
 }

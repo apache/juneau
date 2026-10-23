@@ -18,6 +18,7 @@ package org.apache.juneau.marshall.collections;
 
 import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 
 import java.util.*;
 
@@ -56,14 +57,14 @@ class MarshalledMap_Test extends TestBase {
 
 	@Test void a03_factoryOf() {
 		var m = MarshalledMap.of("k1", "v1", "k2", 2);
-		assertEquals(2, m.size());
+		assertSize(2, m);
 		assertEquals("v1", m.getString("k1"));
 		assertEquals(2, m.getInt("k2"));
 	}
 
 	@Test void a04_factoryCreateAndAppend() {
 		var m = MarshalledMap.create().append("a", 1).append("b", 2);
-		assertEquals(2, m.size());
+		assertSize(2, m);
 		assertEquals(1, m.getInt("a"));
 	}
 
@@ -80,7 +81,7 @@ class MarshalledMap_Test extends TestBase {
 		assertTrue(m.isEmpty());
 		assertEquals(MarshalledMap.class, m.getClass());
 		m.put("x", 1);
-		assertEquals(1, m.size());
+		assertSize(1, m);
 	}
 
 	@Test void a06c_parseViaOfStringNullReader() throws Exception {
@@ -89,7 +90,7 @@ class MarshalledMap_Test extends TestBase {
 		assertTrue(m.isEmpty());
 		assertEquals(MarshalledMap.class, m.getClass());
 		m.put("x", 1);
-		assertEquals(1, m.size());
+		assertSize(1, m);
 	}
 
 	@Test void a06b_ofTextAliasStillWorks() throws Exception {
@@ -111,7 +112,7 @@ class MarshalledMap_Test extends TestBase {
 		var m = new MarshalledMap("arr", list);
 		var got = m.getList("arr");
 		assertFalse(got instanceof JsonList, "Stored MarshalledList should not be returned as a JsonList");
-		assertEquals(3, got.size());
+		assertSize(3, got);
 	}
 
 	@Test void a08b_parseProducesJson5MapInternally() throws Exception {
@@ -146,14 +147,14 @@ class MarshalledMap_Test extends TestBase {
 	@Test void a12_filterAndExclude() {
 		var m = MarshalledMap.of("a", 1, "b", 2, "c", 3);
 		var excluded = m.exclude("b");
-		assertEquals(2, excluded.size());
+		assertSize(2, excluded);
 		assertFalse(excluded.containsKey("b"));
 	}
 
 	@Test void a13_includeReturnsNeutralType() {
 		var m = MarshalledMap.of("a", 1, "b", 2, "c", 3);
 		var included = m.include("a", "c");
-		assertEquals(2, included.size());
+		assertSize(2, included);
 		assertTrue(included.containsKey("a"));
 		assertTrue(included.containsKey("c"));
 	}
@@ -183,7 +184,7 @@ class MarshalledMap_Test extends TestBase {
 		var valIt = m.values().iterator();
 		valIt.next();
 		assertThrows(UnsupportedOperationException.class, valIt::remove);
-		assertEquals(1, m.size());
+		assertSize(1, m);
 	}
 
 	@Test void a15_innerMap() {
@@ -234,14 +235,14 @@ class MarshalledMap_Test extends TestBase {
 		m.put("b", false);
 		m.put("c", -1);
 		m.put("d", "kept");
-		assertEquals(1, m.size());
+		assertSize(1, m);
 		assertTrue(m.containsKey("d"));
 	}
 
 	@Test void b02_factoryFilteredMap_withPairs() {
 		// filteredMap(pairs) loads pairs first, then enables filtering for further puts.
 		var m = MarshalledMap.filteredMap("a", "v1", "b", "v2");
-		assertEquals(2, m.size());
+		assertSize(2, m);
 		// Subsequent puts respect the filter.
 		m.put("c", null);
 		assertFalse(m.containsKey("c"));
@@ -252,7 +253,7 @@ class MarshalledMap_Test extends TestBase {
 		src.put("a", 1);
 		src.put("b", 2);
 		var m = MarshalledMap.of(src);
-		assertEquals(2, m.size());
+		assertSize(2, m);
 		assertEquals(1, m.getInt("a"));
 	}
 
@@ -281,7 +282,7 @@ class MarshalledMap_Test extends TestBase {
 		src.put("x", 1);
 		src.put("y", 2);
 		m.append(src);
-		assertEquals(2, m.size());
+		assertSize(2, m);
 	}
 
 	@Test void b08_appendMap_null() {
@@ -382,7 +383,7 @@ class MarshalledMap_Test extends TestBase {
 		es.forEach(e -> keys.add(e.getKey()));
 		assertTrue(keys.contains("x"));
 		assertTrue(keys.contains("y"));
-		assertEquals(2, es.size());
+		assertSize(2, es);
 	}
 
 	@Test void b23_entrySetWithInner_setValue() {
@@ -443,7 +444,7 @@ class MarshalledMap_Test extends TestBase {
 		var m = MarshalledMap.of("k", inner);
 		var got = m.findList("k");
 		assertNotNull(got);
-		assertEquals(2, got.size());
+		assertSize(2, got);
 	}
 
 	@Test void b32_findMap() {
@@ -550,7 +551,7 @@ class MarshalledMap_Test extends TestBase {
 		var m = MarshalledMap.of("k", List.of("1", "2", "3"));
 		var def = new ArrayList<Integer>();
 		var got = m.getList("k", Integer.class, def);
-		assertEquals(3, got.size());
+		assertSize(3, got);
 		assertEquals(Integer.valueOf(1), got.get(0));
 	}
 
@@ -592,7 +593,7 @@ class MarshalledMap_Test extends TestBase {
 		var existing = MarshalledList.of(1, 2, 3);
 		var m = MarshalledMap.of("k", existing);
 		var got = m.getList("k", true);
-		assertEquals(3, got.size());
+		assertSize(3, got);
 	}
 
 	@Test void b55_get_typeArgs() {
@@ -605,7 +606,7 @@ class MarshalledMap_Test extends TestBase {
 		var m = MarshalledMap.of("k", List.of("1", "2"));
 		List<Integer> val = m.get("k", List.class, Integer.class);
 		assertNotNull(val);
-		assertEquals(2, val.size());
+		assertSize(2, val);
 	}
 
 	@Test void b57_isShortcut() {
@@ -622,7 +623,7 @@ class MarshalledMap_Test extends TestBase {
 	@Test void b59_keepAll() {
 		var m = MarshalledMap.of("a", 1, "b", 2, "c", 3);
 		m.keepAll("a", "c");
-		assertEquals(2, m.size());
+		assertSize(2, m);
 		assertTrue(m.containsKey("a"));
 		assertTrue(m.containsKey("c"));
 		assertFalse(m.containsKey("b"));
@@ -646,7 +647,7 @@ class MarshalledMap_Test extends TestBase {
 		var mod = m.modifiable();
 		assertNotSame(m, mod);
 		mod.put("b", 2); // should succeed
-		assertEquals(2, mod.size());
+		assertSize(2, mod);
 	}
 
 	@Test void b63_unmodifiable_idempotent() {
@@ -657,14 +658,14 @@ class MarshalledMap_Test extends TestBase {
 	@Test void b64_removeAllCollection() {
 		var m = MarshalledMap.of("a", 1, "b", 2, "c", 3);
 		m.removeAll(List.of("a", "c"));
-		assertEquals(1, m.size());
+		assertSize(1, m);
 		assertTrue(m.containsKey("b"));
 	}
 
 	@Test void b65_removeAllVarargs() {
 		var m = MarshalledMap.of("a", 1, "b", 2, "c", 3);
 		m.removeAll("a", "c");
-		assertEquals(1, m.size());
+		assertSize(1, m);
 	}
 
 	@Test void b66_removeBoolean() {
@@ -725,7 +726,7 @@ class MarshalledMap_Test extends TestBase {
 		var m = MarshalledMap.create().filtered(v -> v instanceof String s && s.startsWith("k"));
 		m.put("a", "kept");
 		m.put("b", "skipped");
-		assertEquals(1, m.size());
+		assertSize(1, m);
 	}
 
 	@Test void b76_castToBean() {
@@ -751,7 +752,7 @@ class MarshalledMap_Test extends TestBase {
 		m.put("list", new ArrayList<>());
 		m.postAt("list", "x");
 		var list = (List<?>) m.get("list");
-		assertEquals(1, list.size());
+		assertSize(1, list);
 		assertEquals("x", list.get(0));
 	}
 
@@ -773,6 +774,6 @@ class MarshalledMap_Test extends TestBase {
 		// Construct from a null source by going through the public API.
 		var m = MarshalledMap.create().unmodifiable();
 		assertTrue(m.isUnmodifiable());
-		assertEquals(0, m.size());
+		assertSize(0, m);
 	}
 }

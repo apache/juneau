@@ -24,7 +24,7 @@ import org.apache.juneau.commons.*;
 import org.junit.jupiter.api.*;
 
 /**
- * Phase G regression: verifies that {@code #{name(args)}} script dispatch caches
+ * Regression test: verifies that {@code #{name(args)}} script dispatch caches
  * function references at compile time and reuses them on every subsequent resolve.
  *
  * <p>

@@ -21,6 +21,6 @@
  * <p>
  * A resource's own {@link java.util.logging.Logger} level is the sole control for request/response debug capture.
  * Verbosity tiers are cumulative: {@code INFO} = basic status line, {@code FINE} = + headers, {@code FINEST} = + bodies.
- * The single public extension point is the {@link org.apache.juneau.rest.server.logging.RestDebugFormatter} interface.
+ * The single public extension point is the {@link org.apache.juneau.rest.server.logging.RestDebugFormatter RestDebugFormatter} interface.
  */
 package org.apache.juneau.rest.server.logging;

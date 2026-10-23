@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.bean.rfc7807;
 
+import static org.apache.juneau.test.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
@@ -60,7 +61,7 @@ class ProblemMapperList_Test extends TestBase {
 	@Test void b03_of_nullElementsSkipped() {
 		var m = noOp();
 		var list = ProblemMapperList.of(null, m, null);
-		assertEquals(1, list.asList().size());
+		assertSize(1, list.asList());
 		assertSame(m, list.asList().get(0));
 	}
 
@@ -68,7 +69,7 @@ class ProblemMapperList_Test extends TestBase {
 		var m1 = noOp();
 		var m2 = noOp();
 		var list = ProblemMapperList.of(m1, m2);
-		assertEquals(2, list.asList().size());
+		assertSize(2, list.asList());
 		assertSame(m1, list.asList().get(0));
 		assertSame(m2, list.asList().get(1));
 	}
@@ -86,7 +87,7 @@ class ProblemMapperList_Test extends TestBase {
 	@Test void c02_appendSingle_addsMapper() {
 		var m = noOp();
 		var list = new ProblemMapperList().append(m);
-		assertEquals(1, list.asList().size());
+		assertSize(1, list.asList());
 		assertSame(m, list.asList().get(0));
 	}
 
@@ -109,7 +110,7 @@ class ProblemMapperList_Test extends TestBase {
 		var m = noOp();
 		var list = new ProblemMapperList();
 		list.append(Arrays.asList(null, m, null));
-		assertEquals(1, list.asList().size());
+		assertSize(1, list.asList());
 		assertSame(m, list.asList().get(0));
 	}
 
@@ -118,7 +119,7 @@ class ProblemMapperList_Test extends TestBase {
 		var m2 = noOp();
 		var list = new ProblemMapperList();
 		list.append(List.of(m1, m2));
-		assertEquals(2, list.asList().size());
+		assertSize(2, list.asList());
 		assertSame(m1, list.asList().get(0));
 		assertSame(m2, list.asList().get(1));
 	}

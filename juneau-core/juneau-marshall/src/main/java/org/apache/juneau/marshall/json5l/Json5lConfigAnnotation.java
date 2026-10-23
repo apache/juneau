@@ -32,7 +32,7 @@ public class Json5lConfigAnnotation {
 	private Json5lConfigAnnotation() {}
 
 	/**
-	 * Applies {@link Json5lConfig} annotations to a {@link org.apache.juneau.marshall.json.JsonParser.Builder}.
+	 * Applies {@link Json5lConfig} annotations to a {@link org.apache.juneau.marshall.json.JsonParser.Builder JsonParser.Builder}.
 	 */
 	public static class ParserApply extends AnnotationApplier<Json5lConfig,JsonParser.Builder> {
 
@@ -53,7 +53,7 @@ public class Json5lConfigAnnotation {
 	}
 
 	/**
-	 * Applies {@link Json5lConfig} annotations to a {@link org.apache.juneau.marshall.json.JsonSerializer.Builder}.
+	 * Applies {@link Json5lConfig} annotations to a {@link org.apache.juneau.marshall.json.JsonSerializer.Builder JsonSerializer.Builder}.
 	 */
 	public static class SerializerApply extends AnnotationApplier<Json5lConfig,JsonSerializer.Builder> {
 

@@ -17,6 +17,7 @@
 package org.apache.juneau.rest.server.terminal;
 
 import static org.apache.juneau.BasicTestUtils.*;
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.nio.file.*;
@@ -113,12 +114,12 @@ class TerminalProcess_Test extends TestBase {
 		assertEquals(5, p.waitFor(30, TimeUnit.SECONDS));
 		assertTrue(p.isDone());
 		var lines = events(p.eventsFile());
-		assertEquals(4, lines.size(), lines.toString());
+		assertSize(() -> lines.toString(), 4, lines);
 		assertEquals("{\"ev\":\"note\",\"level\":\"warn\",\"text\":\"runner exited without done, exit 5\"}", lines.get(2));
 		assertEquals("{\"ev\":\"done\",\"status\":\"fail\"}", lines.get(3));
 		var page = new RunViewPage[1];
 		var records = LogRecordCapture.quietly(FileRunViewSource.class, () -> page[0] = p.events().page(null, 100));
-		assertEquals(1, records.size(), records::toString);
+		assertSize(records::toString, 1, records);
 		assertTrue(records.get(0).getMessage().contains("skipped malformed line 2"), records.get(0).getMessage());
 		assertTrue(page[0].terminal());
 		assertEquals(RunEvent.Kind.DONE, page[0].events().get(page[0].events().size() - 1).kind());
@@ -241,7 +242,7 @@ class TerminalProcess_Test extends TestBase {
 			p[0] = TerminalProcess.start("generic", List.of("true"), 80, 24, run, host("/x.py", null), boom);
 			assertEquals(3, p[0].waitFor(30, TimeUnit.SECONDS));
 		});
-		assertEquals(1, records.size(), records::toString);
+		assertSize(records::toString, 1, records);
 		assertTrue(records.get(0).getMessage().contains("Could not append the done event"), records.get(0).getMessage());
 		assertTrue(p[0].isDone());
 		assertTrue(p[0].executor().isShutdown());

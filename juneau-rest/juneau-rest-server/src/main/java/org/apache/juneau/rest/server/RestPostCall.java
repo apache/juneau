@@ -65,7 +65,7 @@ import jakarta.servlet.http.*;
  * 			<li>{@link Connection}
  * 			<li>{@link ContentLength}
  * 			<li>{@link ContentType}
- * 			<li>{@link org.apache.juneau.http.header.Date}
+ * 			<li>{@link java.util.Date}
  * 			<li>{@link Expect}
  * 			<li>{@link From}
  * 			<li>{@link Host}

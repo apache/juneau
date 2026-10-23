@@ -17,6 +17,7 @@
 package org.apache.juneau.secret.macos.keychain;
 
 import static java.nio.charset.StandardCharsets.*;
+import static org.apache.juneau.commons.utils.Shorts.f;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assumptions.*;
 
@@ -136,7 +137,7 @@ class KeychainSecretStore_Test {
 				return "password: \"" + new String(bytes, UTF_8) + "\"\n";
 			var hex = new StringBuilder("password: 0x");
 			for (var b : bytes)
-				hex.append(String.format("%02X", b));
+				hex.append(f("%02X", b));
 			return hex + "  \"<escaped>\"\n";
 		}
 

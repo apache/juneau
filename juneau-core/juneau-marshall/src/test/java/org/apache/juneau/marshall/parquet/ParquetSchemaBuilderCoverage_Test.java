@@ -19,6 +19,7 @@ package org.apache.juneau.marshall.parquet;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 
 import java.math.*;
 import java.time.*;
@@ -87,7 +88,7 @@ class ParquetSchemaBuilderCoverage_Test extends TestBase {
 	void a01_allScalarsDefault() throws Exception {
 		var bytes = ParquetSerializer.DEFAULT.write(list(AllScalars.sample()));
 		var out = (List<AllScalars>) ParquetParser.DEFAULT.read(bytes, List.class, AllScalars.class);
-		assertEquals(1, out.size());
+		assertSize(1, out);
 		assertEquals(3, out.get(0).i);
 	}
 

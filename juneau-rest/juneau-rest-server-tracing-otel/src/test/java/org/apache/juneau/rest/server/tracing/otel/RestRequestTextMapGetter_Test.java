@@ -17,6 +17,7 @@
 package org.apache.juneau.rest.server.tracing.otel;
 
 import static org.apache.juneau.commons.utils.Shorts.*;
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.concurrent.atomic.*;
@@ -143,7 +144,7 @@ class RestRequestTextMapGetter_Test extends TestBase {
 		CB.get("/op").header("traceparent", "00-" + traceId + "-" + spanId + "-01").run().assertStatus(200);
 
 		var spans = B_EXPORTER.getFinishedSpanItems();
-		assertEquals(1, spans.size());
+		assertSize(1, spans);
 		assertEquals(traceId, spans.get(0).getTraceId(), "with no TraceContextExtractor registered, the HTTP header read through this getter is the only trace-context source");
 	}
 }

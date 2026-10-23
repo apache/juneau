@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.client;
 
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
@@ -68,7 +69,7 @@ class RemoteClient_Test {
 
 	@Test void a02_rpcInterfaceMeta_methodMetas() {
 		var meta = RrpcInterfaceMeta.of(A01_UserService.class);
-		assertEquals(5, meta.getMethodMetas().size());
+		assertSize(5, meta.getMethodMetas());
 	}
 
 	@Test void a03_rpcInterfaceMethodMeta_getUser() throws Exception {
@@ -152,7 +153,7 @@ class RemoteClient_Test {
 			var svc = client.remote(B01_ItemService.class);
 			var result = svc.getItem("42");
 			assertEquals("result", result);
-			assertEquals(1, captured.size());
+			assertSize(1, captured);
 			assertEquals("GET", captured.get(0).getMethod());
 			assertTrue(captured.get(0).getUri().getPath().endsWith("/items/42"));
 		}
@@ -409,7 +410,7 @@ class RemoteClient_Test {
 
 	@Test void l1_01_path_attr_coverage() {
 		var meta = RrpcInterfaceMeta.of(L1_PathAttrService.class);
-		assertEquals(5, meta.getMethodMetas().size());
+		assertSize(5, meta.getMethodMetas());
 		meta.getMethodMetas().forEach((m, mm) -> {
 			assertTrue(mm.getPath().endsWith("-path"), "Expected path to end with -path: " + mm.getPath());
 		});

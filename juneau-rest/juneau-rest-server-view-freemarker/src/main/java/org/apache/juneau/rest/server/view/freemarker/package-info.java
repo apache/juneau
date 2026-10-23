@@ -23,15 +23,15 @@
  * <a href="https://freemarker.apache.org/">Apache FreeMarker</a> templates:
  *
  * <ul class='javatreec'>
- * 	<li class='jc'>{@link org.apache.juneau.rest.server.view.freemarker.FreemarkerMixin} &mdash;
+ * 	<li class='jc'>{@link org.apache.juneau.rest.server.view.freemarker.FreemarkerMixin FreemarkerMixin} &mdash;
  * 		mixin that renders raw FreeMarker templates from the importer's classpath under
  * 		{@code /freemarker/*} and auto-registers
- * 		{@link org.apache.juneau.rest.server.view.freemarker.FreemarkerViewRenderer}.
- * 	<li class='jc'>{@link org.apache.juneau.rest.server.view.freemarker.FreemarkerView} &mdash; immutable
+ * 		{@link org.apache.juneau.rest.server.view.freemarker.FreemarkerViewRenderer FreemarkerViewRenderer}.
+ * 	<li class='jc'>{@link org.apache.juneau.rest.server.view.freemarker.FreemarkerView FreemarkerView} &mdash; immutable
  * 		value class (implements the core {@link org.apache.juneau.rest.server.view.View View} interface)
  * 		returned from {@code @RestOp} methods to ask the framework to render a FreeMarker
  * 		template.
- * 	<li class='jc'>{@link org.apache.juneau.rest.server.view.freemarker.FreemarkerViewRenderer} &mdash;
+ * 	<li class='jc'>{@link org.apache.juneau.rest.server.view.freemarker.FreemarkerViewRenderer FreemarkerViewRenderer} &mdash;
  * 		{@link org.apache.juneau.rest.server.processor.ResponseProcessor ResponseProcessor} that detects
  * 		{@link org.apache.juneau.rest.server.view.freemarker.FreemarkerView FreemarkerView} returns and
  * 		dispatches them to the configured

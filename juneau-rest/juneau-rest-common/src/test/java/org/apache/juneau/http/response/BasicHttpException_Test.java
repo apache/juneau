@@ -17,6 +17,7 @@
 package org.apache.juneau.http.response;
 
 import static org.apache.juneau.BasicTestUtils.*;
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.lang.reflect.*;
@@ -83,7 +84,7 @@ class BasicHttpException_Test extends TestBase {
 		var e = new BasicHttpException(500, "x")
 			.addHeader("A", "old")
 			.setHeaders(HttpHeaderBean.of("B", "1"), HttpHeaderBean.of("C", "2"));
-		assertEquals(2, e.getHeaders().size());
+		assertSize(2, e.getHeaders());
 	}
 
 	@Test void a07_setHeaders_varargs_null() {

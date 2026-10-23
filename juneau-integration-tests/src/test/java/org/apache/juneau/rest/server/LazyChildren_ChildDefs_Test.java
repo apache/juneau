@@ -25,7 +25,7 @@ import org.apache.juneau.utest.utils.*;
 import org.junit.jupiter.api.*;
 
 /**
- * Phase 6 &mdash; proves a {@code @Rest(lazyChildren="true", childrenDefs=@Child(...))} child receives its
+ * Proves a {@code @Rest(lazyChildren="true", childrenDefs=@Child(...))} child receives its
  * host-seeded settings on first-request materialization, not just when eagerly built. Mirrors
  * {@link LazyChildren_Test}'s style/package (same package so it lives alongside the base lazy-children suite).
  */

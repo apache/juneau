@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.server.mcp.v20260728;
 
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
@@ -96,7 +97,7 @@ class McpTools_Test {
 			.addTool(tool("a", args -> new McpToolOutcome()))
 			.addTool(tool("b", args -> new McpToolOutcome()));
 		var result = (ListToolsResult) send(config, req(1, "tools/list", null), hdrs("tools/list", "")).getResult();
-		assertEquals(2, result.getTools().size());
+		assertSize(2, result.getTools());
 		assertNull(result.getNextCursor());
 	}
 
@@ -106,10 +107,10 @@ class McpTools_Test {
 			.addTool(tool("a", args -> new McpToolOutcome()))
 			.addTool(tool("b", args -> new McpToolOutcome()));
 		var first = (ListToolsResult) send(config, req(1, "tools/list", null), hdrs("tools/list", "")).getResult();
-		assertEquals(1, first.getTools().size());
+		assertSize(1, first.getTools());
 		assertEquals("1", first.getNextCursor());
 		var second = (ListToolsResult) send(config, req(2, "tools/list", JsonMap.of("cursor", "1")), hdrs("tools/list", "")).getResult();
-		assertEquals(1, second.getTools().size());
+		assertSize(1, second.getTools());
 		assertNull(second.getNextCursor());
 	}
 

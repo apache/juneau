@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.marshall.stream;
 
+import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.BasicTestUtils.*;
 import static org.apache.juneau.test.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -109,16 +110,7 @@ class StreamInternals_Test extends TestBase {
 		@Test void a09_allNumberSubtypes() throws Exception {
 			// Long / Integer / Short / Byte / Double / Float / BigDecimal / BigInteger + an
 			// unrecognized Number subtype (AtomicInteger) that falls through to number(Number).
-			var nums = new ArrayList<Number>();
-			nums.add(7L);
-			nums.add(7);
-			nums.add((short) 7);
-			nums.add((byte) 7);
-			nums.add(2.5d);
-			nums.add(1.5f);
-			nums.add(new BigDecimal("3.3"));
-			nums.add(new BigInteger("9"));
-			nums.add(new AtomicInteger(99));
+			List<Number> nums = list(7L, 7, (short) 7, (byte) 7, 2.5d, 1.5f, new BigDecimal("3.3"), new BigInteger("9"), new AtomicInteger(99));
 			assertEquals("[7,7,7,7,2.5,1.5,3.3,9,99]", emit(nums));
 		}
 
@@ -163,10 +155,7 @@ class StreamInternals_Test extends TestBase {
 		}
 
 		@Test void a15_trimEmptyCollectionsAndArrays() throws Exception {
-			var m = new LinkedHashMap<String,Object>();
-			m.put("a", 1);
-			m.put("emptyList", List.of());
-			m.put("emptyArray", new int[0]);
+			Map<String,Object> m = map("a", 1, "emptyList", List.of(), "emptyArray", new int[0]);
 			var trim = new PojoWalker.Options(true, false, true, false, false, false, null);
 			assertEquals("{\"a\":1}", emit(m, trim));
 		}

@@ -417,7 +417,7 @@ class HttpParts_Test extends TestBase {
 	@Test void b24_partList_noArgs() {
 		var pl = partList();
 		assertNotNull(pl);
-		assertEquals(0, pl.size());
+		assertSize(0, pl);
 	}
 
 	@Test void b25_partList_list() {

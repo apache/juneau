@@ -17,6 +17,7 @@
 package org.apache.juneau.rest.server.views;
 
 import static java.nio.charset.StandardCharsets.*;
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assumptions.*;
 
@@ -358,7 +359,7 @@ class ViewsJs_Reinit_Test extends TestBase {
 	@Test void d05_defaultOrderFromSort_mapsColumnToData_emptySafe() {
 		var r = report();
 		var order = (List<?>)r.get("defaultOrderFromSort");
-		assertEquals(2, order.size());
+		assertSize(2, order);
 		assertEquals("C", ((Map<?,?>)order.get(0)).get("data"));
 		assertEquals("desc", ((Map<?,?>)order.get(0)).get("dir"));
 		assertEquals(List.of(), r.get("defaultOrderFromSortEmpty"));
@@ -377,7 +378,7 @@ class ViewsJs_Reinit_Test extends TestBase {
 	@Test void d08_applyView_overridesDefaultOrder_viaNsInitBuildTable() {
 		var r = report();
 		var order = (List<?>)r.get("applyViewOverridesDefaultOrder");
-		assertEquals(1, order.size());
+		assertSize(1, order);
 		assertEquals("B", ((Map<?,?>)order.get(0)).get("data"));
 		assertEquals("desc", ((Map<?,?>)order.get(0)).get("dir"));
 	}

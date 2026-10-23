@@ -17,6 +17,7 @@
 package org.apache.juneau.marshall;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 
 import java.time.*;
 import java.util.*;
@@ -132,15 +133,15 @@ class MarshallingSession_Coverage_Test extends TestBase {
 	@Test void c01_addWarning_debugNoArgs() {
 		var s = MarshallingSession.create(ctx).debug(true).build();
 		var records = LogRecordCapture.quietly(MarshallingSession.class, () -> s.addWarning("plain message with no args"));
-		assertEquals(1, s.getWarnings().size());
-		assertEquals(1, records.size());
+		assertSize(1, s.getWarnings());
+		assertSize(1, records);
 	}
 
 	@Test void c02_addWarning_debugWithArgs() {
 		var s = MarshallingSession.create(ctx).debug(true).build();
 		var records = LogRecordCapture.quietly(MarshallingSession.class, () -> s.addWarning("formatted %s message", "warning"));
-		assertEquals(1, s.getWarnings().size());
-		assertEquals(1, records.size());
+		assertSize(1, s.getWarnings());
+		assertSize(1, records);
 		assertTrue(s.getWarnings().get(0).contains("formatted warning message"));
 	}
 

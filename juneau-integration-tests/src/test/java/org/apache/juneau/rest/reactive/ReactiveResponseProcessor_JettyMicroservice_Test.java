@@ -18,6 +18,7 @@ package org.apache.juneau.rest.reactive;
 
 import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.rest.server.logging.RestDebugDumpGateTestSupport.*;
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.net.*;
@@ -302,8 +303,7 @@ class ReactiveResponseProcessor_JettyMicroservice_Test extends TestBase {
 
 			// RED on synchronous-finish emit: finish() would already have emitted here.
 			// GREEN on completion-path emit: nothing is emitted until the stream terminates below.
-			assertEquals(0, handler.forLogger(opLogger.getName()).size(),
-				"no debug record may be emitted between synchronous finish() and stream termination");
+			assertSize(() -> "no debug record may be emitted between synchronous finish() and stream termination", 0, handler.forLogger(opLogger.getName()));
 
 			ReactiveCaptureServlet.gate.complete(null);  // fire the stream off the request thread
 
@@ -312,7 +312,7 @@ class ReactiveResponseProcessor_JettyMicroservice_Test extends TestBase {
 			assertTrue(resp.body().contains("late-frame"), "body: " + resp.body());
 
 			var recs = handler.forLogger(opLogger.getName());
-			assertEquals(1, recs.size(), "exactly one termination-path record expected");
+			assertSize(() -> "exactly one termination-path record expected", 1, recs);
 			assertEquals(Level.INFO, recs.get(0).getLevel());
 			assertTrue(recs.get(0).getMessage().contains("[200]"), recs.get(0).getMessage());
 		} finally {
@@ -336,7 +336,7 @@ class ReactiveResponseProcessor_JettyMicroservice_Test extends TestBase {
 			assertTrue(resp.body().contains("data: two"), resp.body());
 
 			var recs = handler.forLogger(opLogger.getName());
-			assertEquals(1, recs.size(), "exactly one termination-path record expected");
+			assertSize(() -> "exactly one termination-path record expected", 1, recs);
 			assertEquals(Level.INFO, recs.get(0).getLevel());
 			assertTrue(recs.get(0).getMessage().contains("[200]"), recs.get(0).getMessage());
 		} finally {
@@ -355,7 +355,7 @@ class ReactiveResponseProcessor_JettyMicroservice_Test extends TestBase {
 			assertTrue(resp.body().contains("before-error"), resp.body());
 
 			var recs = handler.forLogger(opLogger.getName());
-			assertEquals(1, recs.size(), "stream error must still emit exactly one termination-path record");
+			assertSize(() -> "stream error must still emit exactly one termination-path record", 1, recs);
 			assertEquals(Level.INFO, recs.get(0).getLevel());
 			assertNotNull(recs.get(0).getThrown(), "stream-error record must carry the terminal cause as thrown");
 		} finally {
@@ -373,7 +373,7 @@ class ReactiveResponseProcessor_JettyMicroservice_Test extends TestBase {
 			assertEquals(200, resp.statusCode());
 
 			var recs = handler.forLogger(opLogger.getName());
-			assertEquals(1, recs.size(), "exactly one termination-path record expected");
+			assertSize(() -> "exactly one termination-path record expected", 1, recs);
 			var msg = recs.get(0).getMessage();
 			assertEquals(Level.INFO, recs.get(0).getLevel());
 			assertTrue(msg.contains("BBBB"), "FINEST tier must render the captured stream prefix: " + msg.substring(0, Math.min(msg.length(), 200)));

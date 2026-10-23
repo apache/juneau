@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.marshall.json;
 
+import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.BasicTestUtils.*;
 import static org.apache.juneau.marshall.stream.TokenStreamAssertions.*;
 import static org.apache.juneau.test.bct.BctAssertions.*;
@@ -796,7 +797,7 @@ class JsonTokenStream_Test extends TestBase {
 				assertEquals(TokenType.END_ARRAY, r.next());
 				assertEquals(TokenType.END_OF_STREAM, r.next());
 			}
-			assertEquals(2, seen.size());
+			assertSize(2, seen);
 			assertEquals("alice", seen.get(0).name);
 			assertEquals(30, seen.get(0).age);
 			assertEquals("bob", seen.get(1).name);
@@ -919,11 +920,7 @@ class JsonTokenStream_Test extends TestBase {
 		}
 
 		@Test void h05_compositeWithMapsAndArrays() throws Exception {
-			var m = new LinkedHashMap<String,Object>();
-			m.put("a", 1);
-			m.put("b", List.of("x", "y"));
-			m.put("c", new int[]{10, 20});
-			m.put("d", Map.of("nested", true));
+			Map<String,Object> m = map("a", 1, "b", List.of("x", "y"), "c", new int[]{10, 20}, "d", Map.of("nested", true));
 			var sb = new StringWriter();
 			try (var w = JsonSerializer.DEFAULT.writeTokens(sb)) {
 				w.object(m);
@@ -960,10 +957,7 @@ class JsonTokenStream_Test extends TestBase {
 		}
 
 		@Test void h08_sortMapsHonored() throws Exception {
-			var m = new LinkedHashMap<String,Integer>();
-			m.put("z", 1);
-			m.put("a", 2);
-			m.put("m", 3);
+			Map<String,Integer> m = map("z", 1, "a", 2, "m", 3);
 			// With sortMaps, keys come out in alphabetical order.
 			var ser = JsonSerializer.create().sortMaps().build();
 			var sb = new StringWriter();
@@ -986,10 +980,7 @@ class JsonTokenStream_Test extends TestBase {
 		}
 
 		@Test void h10_keepNullPropertiesOff() throws Exception {
-			var m = new LinkedHashMap<String,Object>();
-			m.put("a", 1);
-			m.put("b", null);
-			m.put("c", 3);
+			Map<String,Object> m = map("a", 1, "b", null, "c", 3);
 			// Default keepNullProperties=true would produce {"a":1,"b":null,"c":3}.
 			// But the actual default on JsonSerializer.DEFAULT is to skip nulls during a databind
 			// emit; verify that the walker honors the configured setting.

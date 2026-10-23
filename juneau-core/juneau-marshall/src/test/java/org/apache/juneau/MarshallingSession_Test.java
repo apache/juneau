@@ -17,6 +17,7 @@
 package org.apache.juneau;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 
 import org.apache.juneau.marshall.*;
 import org.apache.juneau.marshall.json5.*;
@@ -50,7 +51,7 @@ class MarshallingSession_Test extends TestBase {
 	@Test void a03_parseToMapPopulatedInputParsesNormally() {
 		var session = MarshallingContext.DEFAULT.getSession();
 		var m = session.parseToMap("{a:1,b:'two'}");
-		assertEquals(2, m.size());
+		assertSize(2, m);
 		assertEquals(1, ((Json5Map)m).getInt("a"));
 		assertEquals("two", ((Json5Map)m).getString("b"));
 	}

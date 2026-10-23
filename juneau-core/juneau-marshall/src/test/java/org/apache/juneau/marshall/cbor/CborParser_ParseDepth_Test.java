@@ -18,6 +18,7 @@ package org.apache.juneau.marshall.cbor;
 
 import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 
 import java.util.*;
 
@@ -66,7 +67,7 @@ class CborParser_ParseDepth_Test extends TestBase {
 		Object o = CborParser.DEFAULT.read(fromSpacedHex(sb.toString()), Object.class);
 		for (var i = 0; i < 10; i++) {
 			var l = (List<?>) o;
-			assertEquals(1, l.size());
+			assertSize(1, l);
 			o = l.get(0);
 		}
 		assertEquals(5L, o);

@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.http;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
+
 /**
  * Neutralizes log-forging (log-injection) in client-controlled strings before they are written to a log line.
  *
@@ -154,6 +156,6 @@ public final class DebugTextSanitizer {
 			return "\\r";
 		if (c == '\n')
 			return "\\n";
-		return String.format("\\u%04X", (int) c);
+		return f("\\u%04X", (int) c);
 	}
 }

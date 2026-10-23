@@ -76,7 +76,7 @@ class PlaywrightJsonReportReader_Test extends TestBase {
 
 	@Test void b03_maxTests() {
 		var r = new PlaywrightJsonReportReader().read(resource("playwright-mixed.json"), new ReportLimits(1 << 20, 2, 512, 2000, 8000));
-		assertEquals(2, r.tests().size());
+		assertSize(2, r.tests());
 		assertTrue(r.truncated());
 	}
 

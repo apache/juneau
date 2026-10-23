@@ -180,7 +180,7 @@ public class OrdersRest extends PetstoreConsolePage {
 	 */
 	@RestGet(path="/review-form")
 	public ModalDef reviewForm(@Query("juneauDrafts") String drafts) {
-		if (drafts == null || drafts.isBlank())
+		if (ib(drafts))
 			throw new BadRequest("Missing order draft");
 		JsonMap m;
 		try {
@@ -229,7 +229,7 @@ public class OrdersRest extends PetstoreConsolePage {
 	}
 
 	private Pet pet(String id) {
-		if (id == null || id.isBlank())
+		if (ib(id))
 			throw new BadRequest("Missing pet");
 		Pet p = null;
 		try {
@@ -245,7 +245,7 @@ public class OrdersRest extends PetstoreConsolePage {
 	}
 
 	private static String shipDate(String value) {
-		if (value == null || value.isBlank())
+		if (ib(value))
 			return null;
 		try {
 			return LocalDate.parse(value.trim()).toString();
@@ -320,7 +320,7 @@ public class OrdersRest extends PetstoreConsolePage {
 	private static String reason(RestRequest req) {
 		try {
 			var text = req.getContent().asString();
-			if (text == null || text.isBlank())
+			if (ib(text))
 				return null;
 			var body = new JsonMap(text);
 			var fields = body.getMap("fields");

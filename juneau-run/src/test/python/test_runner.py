@@ -1081,6 +1081,49 @@ class RunnerTest(unittest.TestCase):
     def test_default_grace_is_five_seconds(self):
         self.assertEqual(jr.GRACE_SECONDS, 5.0)
 
+    def test_default_grace_stays_five_seconds_without_the_env_variable(self):
+        with mock.patch.dict(os.environ):
+            os.environ.pop("JUNEAU_RUN_TERM_GRACE", None)
+            self.assertEqual(jr._term_grace(), 5.0)
+
+    def test_env_grace_applies_and_a_bad_value_is_ignored(self):
+        for value, expected in (("12", 12.0), ("bad", 5.0), ("-1", 5.0), ("", 5.0)):
+            with mock.patch.dict(os.environ, {"JUNEAU_RUN_TERM_GRACE": value}):
+                self.assertEqual(jr._term_grace(), expected)
+
+    def term_trap_run(self, grace, delay=1.0):
+        """Cancel a run whose child traps SIGTERM and exits after `delay` seconds; True if it got to finish."""
+        done, ready = self.tmp / "done", self.tmp / "ready"
+        code = (
+            "import signal, sys, time\n"
+            "def on_term(*a):\n"
+            f"    time.sleep({delay})\n"
+            f"    open({str(done)!r}, 'w').write('x')\n"
+            "    sys.exit(0)\n"
+            "signal.signal(signal.SIGTERM, on_term)\n"
+            f"open({str(ready)!r}, 'w').write('x')\n"
+            "time.sleep(60)\n")
+
+        def killer():
+            for _ in range(200):
+                if ready.exists():
+                    break
+                time.sleep(0.05)
+            time.sleep(0.2)
+            os.kill(os.getpid(), signal.SIGTERM)
+
+        threading.Thread(target=killer, daemon=True).start()
+        with contextlib.redirect_stdout(io.StringIO()), contextlib.redirect_stderr(io.StringIO()):
+            with self.assertRaises(KeyboardInterrupt):
+                jr.run_tool(child(code), Recording(), "t", "Tool", grace=grace)
+        return done.exists()
+
+    def test_grace_longer_than_the_childs_teardown_lets_it_finish(self):
+        self.assertTrue(self.term_trap_run(grace=10))
+
+    def test_grace_shorter_than_the_childs_teardown_kills_it(self):
+        self.assertFalse(self.term_trap_run(grace=0.2))
+
     def test_signal_handlers_are_restored(self):
         before = (signal.getsignal(signal.SIGINT), signal.getsignal(signal.SIGTERM))
         self.go(child("pass"), Recording())

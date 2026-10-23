@@ -148,61 +148,61 @@ public final class JsonSchemaBeanGenerator {
 
 		private Builder() {}
 
-		/** Mirrors {@link org.apache.juneau.marshall.jsonschema.JsonSchemaGenerator.Builder#addDescriptionsTo(TypeCategory...)}. */
+		/** Mirrors {@link org.apache.juneau.marshall.jsonschema.JsonSchemaGenerator.Builder#addDescriptionsTo(TypeCategory...) JsonSchemaGenerator.Builder#addDescriptionsTo(TypeCategory...)}. */
 		public Builder addDescriptionsTo(TypeCategory...values) {
 			generatorBuilder.addDescriptionsTo(values);
 			return this;
 		}
 
-		/** Mirrors {@link org.apache.juneau.marshall.jsonschema.JsonSchemaGenerator.Builder#addExamplesTo(TypeCategory...)}. */
+		/** Mirrors {@link org.apache.juneau.marshall.jsonschema.JsonSchemaGenerator.Builder#addExamplesTo(TypeCategory...) JsonSchemaGenerator.Builder#addExamplesTo(TypeCategory...)}. */
 		public Builder addExamplesTo(TypeCategory...values) {
 			generatorBuilder.addExamplesTo(values);
 			return this;
 		}
 
-		/** Mirrors {@link org.apache.juneau.marshall.jsonschema.JsonSchemaGenerator.Builder#allowNestedDescriptions()}. */
+		/** Mirrors {@link org.apache.juneau.marshall.jsonschema.JsonSchemaGenerator.Builder#allowNestedDescriptions() JsonSchemaGenerator.Builder#allowNestedDescriptions()}. */
 		public Builder allowNestedDescriptions() {
 			generatorBuilder.allowNestedDescriptions();
 			return this;
 		}
 
-		/** Mirrors {@link org.apache.juneau.marshall.jsonschema.JsonSchemaGenerator.Builder#allowNestedDescriptions(boolean)}. */
+		/** Mirrors {@link org.apache.juneau.marshall.jsonschema.JsonSchemaGenerator.Builder#allowNestedDescriptions(boolean) JsonSchemaGenerator.Builder#allowNestedDescriptions(boolean)}. */
 		public Builder allowNestedDescriptions(boolean value) {
 			generatorBuilder.allowNestedDescriptions(value);
 			return this;
 		}
 
-		/** Mirrors {@link org.apache.juneau.marshall.jsonschema.JsonSchemaGenerator.Builder#allowNestedExamples()}. */
+		/** Mirrors {@link org.apache.juneau.marshall.jsonschema.JsonSchemaGenerator.Builder#allowNestedExamples() JsonSchemaGenerator.Builder#allowNestedExamples()}. */
 		public Builder allowNestedExamples() {
 			generatorBuilder.allowNestedExamples();
 			return this;
 		}
 
-		/** Mirrors {@link org.apache.juneau.marshall.jsonschema.JsonSchemaGenerator.Builder#allowNestedExamples(boolean)}. */
+		/** Mirrors {@link org.apache.juneau.marshall.jsonschema.JsonSchemaGenerator.Builder#allowNestedExamples(boolean) JsonSchemaGenerator.Builder#allowNestedExamples(boolean)}. */
 		public Builder allowNestedExamples(boolean value) {
 			generatorBuilder.allowNestedExamples(value);
 			return this;
 		}
 
-		/** Mirrors {@link org.apache.juneau.marshall.jsonschema.JsonSchemaGenerator.Builder#beanDefMapper(Class)}. */
+		/** Mirrors {@link org.apache.juneau.marshall.jsonschema.JsonSchemaGenerator.Builder#beanDefMapper(Class) JsonSchemaGenerator.Builder#beanDefMapper(Class)}. */
 		public Builder beanDefMapper(Class<? extends MarshallingDefMapper> value) {
 			generatorBuilder.beanDefMapper(value);
 			return this;
 		}
 
-		/** Mirrors {@link org.apache.juneau.marshall.jsonschema.JsonSchemaGenerator.Builder#ignoreTypes(String...)}. */
+		/** Mirrors {@link org.apache.juneau.marshall.jsonschema.JsonSchemaGenerator.Builder#ignoreTypes(String...) JsonSchemaGenerator.Builder#ignoreTypes(String...)}. */
 		public Builder ignoreTypes(String...values) {
 			generatorBuilder.ignoreTypes(values);
 			return this;
 		}
 
-		/** Mirrors {@link org.apache.juneau.marshall.jsonschema.JsonSchemaGenerator.Builder#useBeanDefs()}. */
+		/** Mirrors {@link org.apache.juneau.marshall.jsonschema.JsonSchemaGenerator.Builder#useBeanDefs() JsonSchemaGenerator.Builder#useBeanDefs()}. */
 		public Builder useBeanDefs() {
 			generatorBuilder.useBeanDefs();
 			return this;
 		}
 
-		/** Mirrors {@link org.apache.juneau.marshall.jsonschema.JsonSchemaGenerator.Builder#useBeanDefs(boolean)}. */
+		/** Mirrors {@link org.apache.juneau.marshall.jsonschema.JsonSchemaGenerator.Builder#useBeanDefs(boolean) JsonSchemaGenerator.Builder#useBeanDefs(boolean)}. */
 		public Builder useBeanDefs(boolean value) {
 			generatorBuilder.useBeanDefs(value);
 			return this;

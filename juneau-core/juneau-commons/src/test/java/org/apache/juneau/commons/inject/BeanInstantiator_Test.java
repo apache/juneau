@@ -437,7 +437,7 @@ class BeanInstantiator_Test extends TestBase {
 
 			var bean = bc(A07_BeanWithMap.class).run();
 
-			assertEquals(2, bean.getServices().size());
+			assertSize(2, bean.getServices());
 			assertSame(service1, bean.getServices().get("")); // Unnamed bean uses empty string as key
 			assertSame(service2, bean.getServices().get("service2"));
 		}
@@ -493,7 +493,7 @@ class BeanInstantiator_Test extends TestBase {
 				.addBean(TestService.class, service2, "service2")
 				.run();
 
-			assertEquals(2, bean.getServices().size());
+			assertSize(2, bean.getServices());
 			assertSame(service1, bean.getServices().get("")); // Unnamed bean uses empty string as key
 			assertSame(service2, bean.getServices().get("service2"));
 		}
@@ -3605,7 +3605,7 @@ class BeanInstantiator_Test extends TestBase {
 			var creator = bc(SimpleBean.class);
 			var beanSubTypes = creator.getBeanSubTypes();
 
-			assertEquals(1, beanSubTypes.size());
+			assertSize(1, beanSubTypes);
 			assertEquals(SimpleBean.class.getName(), beanSubTypes.get(0).getName());
 		}
 
@@ -3708,7 +3708,7 @@ class BeanInstantiator_Test extends TestBase {
 			creator.getBuilder(); // Trigger builder detection
 			var builderTypes = creator.getBuilderTypes();
 
-			assertEquals(1, builderTypes.size());
+			assertSize(1, builderTypes);
 			assertEquals(BeanWithBuilder.Builder.class.getName(), builderTypes.get(0).getName());
 		}
 
@@ -3971,10 +3971,10 @@ class BeanInstantiator_Test extends TestBase {
 	}
 
 	//====================================================================================================
-	// R - Phase 4 general-purpose API: silent, description, wrap, validate, copy, scope, or
+	// R - general-purpose API: silent, description, wrap, validate, copy, scope, or
 	//====================================================================================================
 	@Nested
-	@DisplayName("R - Phase 4 general-purpose API")
+	@DisplayName("R - General-purpose API")
 	class R_phase4Api {
 
 		public static class R_SimpleBean {
@@ -4104,10 +4104,10 @@ class BeanInstantiator_Test extends TestBase {
 	}
 
 	//====================================================================================================
-	// S - Phase 5: pre-registered builder in bean store wins over static factory
+	// S - pre-registered builder in bean store wins over static factory
 	//====================================================================================================
 	@Nested
-	@DisplayName("S - Phase 5 builder bean store lookup")
+	@DisplayName("S - Builder bean store lookup")
 	class S_phase5BuilderInStore {
 
 		public static class S_Bean {
@@ -4141,10 +4141,10 @@ class BeanInstantiator_Test extends TestBase {
 	}
 
 	//====================================================================================================
-	// T - Phase 6: builderInitializer / injectBuilder / autoWireBuilder
+	// T - builderInitializer / injectBuilder / autoWireBuilder
 	//====================================================================================================
 	@Nested
-	@DisplayName("T - Phase 6 builder hooks and auto-wire")
+	@DisplayName("T - Builder hooks and auto-wire")
 	class T_phase6BuilderHooks {
 
 		public static class T_Bean {

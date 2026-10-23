@@ -194,7 +194,7 @@ class ViewsJs_DialogForm_Test extends TestBase {
 
 	/**
 	 * The trailing {@code childCatalog} parameter is additive at the CALL SITE, not just in the
-	 * signature: the six-argument calls above are byte-identical to their earlier form and still paint today's
+	 * signature: the six-argument calls above still paint the
 	 * fail-closed control, while the same field resolves once a catalog is supplied.
 	 */
 	@Test void b04a_theTrailingChildCatalogParameterIsOptional() {

@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.server.views;
 
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.nio.charset.*;
@@ -69,7 +70,7 @@ class SinkRenderAllowlist_Test extends TestBase {
 		// The JS array is not sorted the same way as Set.of iteration; pin membership via the snapshot list.
 		assertTrue(body.contains("\"progress\""), body);
 		// Lockstep count: 12 built-in fill-sink ids, the eleventh being "pill" and the twelfth "code".
-		assertEquals(12, SinkRenderAllowlist.BUILTIN_IDS.size());
+		assertSize(12, SinkRenderAllowlist.BUILTIN_IDS);
 		assertTrue(expected.contains("progress"));
 		assertTrue(expected.contains("tag"));
 		// Bidirectional lockstep against the two source arrays that together drive frozenBuiltinIds: the snapshot
@@ -95,7 +96,7 @@ class SinkRenderAllowlist_Test extends TestBase {
 
 	@Test void a08_pillIsABuiltinFillSink_withADisplayOnlySinkRenderer() {
 		// "pill" is now a fill-sink built-in; the count moved 10 -> 11 with this addition and nothing else.
-		assertEquals(12, SinkRenderAllowlist.BUILTIN_IDS.size());
+		assertSize(12, SinkRenderAllowlist.BUILTIN_IDS);
 		assertTrue(SinkRenderAllowlist.BUILTIN_IDS.contains("pill"), "pill must be a fill-sink built-in");
 		SinkRenderAllowlist.assertAllowed("pill");
 		// Still not popover text - a pill is a chip, not a text-shaped built-in.
@@ -106,7 +107,7 @@ class SinkRenderAllowlist_Test extends TestBase {
 	@Test void a09_codeIsABuiltinFillSink_minimalMonospaceSourceRenderer() {
 		// "code" is a fill-sink built-in; the count
 		// moved 11 -> 12 with this addition and nothing else.
-		assertEquals(12, SinkRenderAllowlist.BUILTIN_IDS.size());
+		assertSize(12, SinkRenderAllowlist.BUILTIN_IDS);
 		assertTrue(SinkRenderAllowlist.BUILTIN_IDS.contains("code"), "code must be a fill-sink built-in");
 		SinkRenderAllowlist.assertAllowed("code");
 		// Not popover text - the popover surface is a small text-shaped bubble, not a place for a source block.

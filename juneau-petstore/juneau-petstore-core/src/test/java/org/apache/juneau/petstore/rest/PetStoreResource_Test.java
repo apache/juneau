@@ -26,6 +26,8 @@ import java.nio.charset.*;
 import javax.imageio.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.bean.swagger.*;
+import org.apache.juneau.bean.swagger.Tag;
 import org.apache.juneau.petstore.dto.*;
 import org.apache.juneau.petstore.dto.Order;
 import org.apache.juneau.rest.mock.classic.*;
@@ -202,5 +204,24 @@ class PetStoreResource_Test extends TestBase {
 	@Test void d06_putPetPhoto_undecodableBytes_400() throws Exception {
 		client().put("/pets/1/photo", new ByteArrayInputStream("not an image".getBytes(StandardCharsets.UTF_8))).contentType("image/png")
 			.run().assertStatus(400);
+	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// e — swagger
+	//------------------------------------------------------------------------------------------------------------------
+
+	private static Swagger swagger() throws Exception {
+		return client().get("/api").run().assertStatus(200).getContent().as(Swagger.class);
+	}
+
+	@Test void e01_swagger_declaresTags() throws Exception {
+		assertList(swagger().getTags().stream().map(Tag::getName).toList(), "pet", "store", "user");
+	}
+
+	@Test void e02_swagger_operationsAreTagged() throws Exception {
+		var s = swagger();
+		assertList(s.getOperation("/pets/{id}/photo", "put").getTags(), "pet");
+		assertList(s.getOperation("/orders", "post").getTags(), "store");
+		assertList(s.getOperation("/users/{username}", "delete").getTags(), "user");
 	}
 }

@@ -224,9 +224,10 @@ class CmdConsoleNoneTest(ConsoleNoneCase):
         with redirect_stdout(out):
             run.cmd([PY, "-c", "print('child-line')"], title="Child")
         self.assertEqual(out.getvalue(), "")
-        logs = list(self.log.parent.glob("*.log"))
+        logs = [p for p in self.log.parent.glob("*.log") if not p.name.endswith(".condensed.log")]
         self.assertEqual(len(logs), 1)
         self.assertIn(b"child-line", logs[0].read_bytes())
+        self.assertEqual(len(list(self.log.parent.glob("*.condensed.log"))), 1)
 
     def test_no_markers_under_none(self):
         out = io.StringIO()
@@ -273,6 +274,16 @@ class CmdMarkersTest(MarkerCase):
         with mock.patch.object(jr, "run_tool", return_value=jr.Result(0, 1)) as rt:
             self.capture(run.cmd, ["pytest"], title="t", tool="pytest")
         self.assertNotIn("bar", rt.call_args.kwargs)
+
+    def test_grace_reaches_run_tool(self):
+        with mock.patch.object(jr, "run_tool", return_value=jr.Result(0, 1)) as rt:
+            self.capture(run.cmd, [PY, "-c", "pass"], title="t", grace=35)
+        self.assertEqual(rt.call_args.kwargs["grace"], 35)
+
+    def test_no_grace_is_not_passed_so_an_older_juneau_run_still_works(self):
+        with mock.patch.object(jr, "run_tool", return_value=jr.Result(0, 1)) as rt:
+            self.capture(run.cmd, [PY, "-c", "pass"], title="t")
+        self.assertNotIn("grace", rt.call_args.kwargs)
 
     def test_a_bar_the_detected_parser_does_not_offer_raises_before_the_command_runs(self):
         with mock.patch.object(jr.subprocess, "Popen") as popen, self.assertRaises(ValueError):
@@ -444,6 +455,14 @@ class SessionHistoryAndPlanTest(MarkerCase):
                 run.session("t", repo="/some/repo", exit=False):
             pass
         hs.assert_called_once_with("/some/repo")
+
+    def test_session_history_key_goes_to_history_start_and_not_the_environment(self):
+        os.environ.pop("JUNEAU_RUN_HISTORY_KEY", None)
+        with redirect_stdout(io.StringIO()), mock.patch.object(jr, "history_start") as hs, \
+                run.session("t", repo="/some/repo", history_key="shared", exit=False):
+            pass
+        hs.assert_called_once_with("/some/repo", history_key="shared")
+        self.assertNotIn("JUNEAU_RUN_HISTORY_KEY", os.environ)
 
     def test_session_records_history_in_the_given_dir(self):
         with tempfile.TemporaryDirectory() as tmp:

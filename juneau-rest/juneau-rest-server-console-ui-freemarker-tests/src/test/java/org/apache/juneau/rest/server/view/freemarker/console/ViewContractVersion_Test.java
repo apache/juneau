@@ -75,7 +75,7 @@ class ViewContractVersion_Test extends TestBase {
 
 	@Test void c01_validator_flagsStalePin() {
 		var f = lint("<@page>\n<@card type=\"datatables\" id=\"t\">\n{ contractVersion:'1', quickStats:{contractVersion:'1'}, view:{ contractVersion:'4', id:'t' } }\n</@card>\n</@page>");
-		assertEquals(1, f.size(), f::toString);
+		assertSize(f::toString, 1, f);
 		assertEquals("view-contract-version", f.get(0).rule());
 		assertEquals(3, f.get(0).line(), "anchored on the stale pin inside the card body");
 	}

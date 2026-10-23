@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.server;
 
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.condition.JRE.*;
 
@@ -137,7 +138,7 @@ class VirtualThreadDispatch_Test extends TestBase {
 	void b02_java17_logsWarningOnce() {
 		// Capture the WARNING emitted by RestContext when @Rest(virtualThreads=true) is configured on Java < 21.
 		var records = LogRecordCapture.quietly(RestContext.class, () -> MockRestClient.buildLax(BWarning.class).get("/x").run().assertStatus(200));
-		assertEquals(1, records.size(), records::toString);
+		assertSize(records::toString, 1, records);
 		assertEquals(java.util.logging.Level.WARNING, records.get(0).getLevel());
 		assertTrue(records.get(0).getMessage().contains("virtualThreads"), records.get(0).getMessage());
 	}

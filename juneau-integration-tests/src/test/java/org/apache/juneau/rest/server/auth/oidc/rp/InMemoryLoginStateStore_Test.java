@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.server.auth.oidc.rp;
 
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.time.*;
@@ -110,7 +111,7 @@ class InMemoryLoginStateStore_Test extends TestBase {
 		s.store("s2", pending(CLOCK, "n", "v", null));
 		s.store("s3", pending(CLOCK, "n", "v", null));
 		s.store("s4", pending(CLOCK, "n", "v", null));  // evicts s1
-		assertEquals(3, s.size());
+		assertSize(3, s);
 		assertTrue(s.consume("s1").isEmpty());
 		assertTrue(s.consume("s4").isPresent());
 	}

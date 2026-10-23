@@ -18,6 +18,7 @@ package org.apache.juneau.commons.utils;
 
 import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
+import static org.apache.juneau.commons.TestAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
@@ -249,7 +250,7 @@ class Shorts_Test extends TestBase {
 	@Test
 	void c014_ist_immutableSet() {
 		Set<String> s = ist("a", null, "b");
-		assertEquals(3, s.size());
+		assertSize(3, s);
 		assertTrue(s.contains(null));
 		assertThrows(UnsupportedOperationException.class, () -> s.add("c"));
 	}

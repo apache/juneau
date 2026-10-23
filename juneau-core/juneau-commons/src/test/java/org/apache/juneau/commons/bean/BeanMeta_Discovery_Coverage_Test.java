@@ -17,6 +17,7 @@
 package org.apache.juneau.commons.bean;
 
 import static org.apache.juneau.commons.utils.Shorts.*;
+import static org.apache.juneau.commons.TestAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
@@ -878,7 +879,7 @@ class BeanMeta_Discovery_Coverage_Test extends TestBase {
 		var bm = BeanMeta.of(SelectivelyDroppedFieldBean.class, cfg);
 		assertTrue(bm.getProperties().containsKey("kept"));
 		assertFalse(bm.getProperties().containsKey("skipMe"));
-		assertEquals(1, bm.getProperties().size());
+		assertSize(1, bm.getProperties());
 	}
 
 	// Same null-property-namer scenario as f01 above, but for the parallel @BeanIgnore(ignoreAccessors=true)

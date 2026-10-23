@@ -21,12 +21,12 @@
  * Provides three sibling pieces that together let a Juneau REST resource render JSP templates:
  *
  * <ul class='javatreec'>
- * 	<li class='jc'>{@link org.apache.juneau.rest.server.view.jsp.JspMixin} &mdash; mixin that
+ * 	<li class='jc'>{@link org.apache.juneau.rest.server.view.jsp.JspMixin JspMixin} &mdash; mixin that
  * 		serves raw {@code .jsp} resources from the importer's classpath under {@code /jsp/*}.
- * 	<li class='jc'>{@link org.apache.juneau.rest.server.view.jsp.JspView} &mdash; immutable value class
+ * 	<li class='jc'>{@link org.apache.juneau.rest.server.view.jsp.JspView JspView} &mdash; immutable value class
  * 		(implements the core {@link org.apache.juneau.rest.server.view.View View} interface) returned
  * 		from {@code @RestOp} methods to ask the framework to render a JSP.
- * 	<li class='jc'>{@link org.apache.juneau.rest.server.view.jsp.JspViewRenderer} &mdash;
+ * 	<li class='jc'>{@link org.apache.juneau.rest.server.view.jsp.JspViewRenderer JspViewRenderer} &mdash;
  * 		{@link org.apache.juneau.rest.server.processor.ResponseProcessor ResponseProcessor} that detects
  * 		{@link org.apache.juneau.rest.server.view.jsp.JspView JspView} returns and dispatches via
  * 		{@link jakarta.servlet.RequestDispatcher#forward

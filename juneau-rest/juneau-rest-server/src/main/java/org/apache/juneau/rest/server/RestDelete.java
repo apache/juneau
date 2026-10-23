@@ -289,7 +289,7 @@ public @interface RestDelete {
 	 *
 	 * <p>
 	 * This value overrides encoders specified at the class level using {@link Rest#encoders()}.
-	 * The {@link org.apache.juneau.marshall.encoders.EncoderSet.Inherit} class can be used to include values from the parent class.
+	 * The {@link org.apache.juneau.marshall.encoders.EncoderSet.Inherit EncoderSet.Inherit} class can be used to include values from the parent class.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>

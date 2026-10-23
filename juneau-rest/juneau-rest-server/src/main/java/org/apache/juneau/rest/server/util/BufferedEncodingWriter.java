@@ -40,6 +40,7 @@ class BufferedEncodingWriter extends Writer {
 	private static final int INITIAL_CAPACITY = 256;
 	private static final int MAX_CAPACITY = 8192;
 
+	@SuppressWarnings("resource") // Supplied by the caller; this writer closes it in close().
 	private final OutputStream out;
 	private final Charset charset;
 	private CharsetEncoder encoder;

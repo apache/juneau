@@ -82,7 +82,7 @@ public class WebJarsMixin {
 	@RestGet(path=PATH + "/*", summary="WebJar files", swagger=@OpSwagger(ignore=true))
 	public HttpResource getWebJarFile(RestRequest req) {
 		var path = checkedPath(req.getPathParams().getRemainderUndecoded().asString().orElse(null));
-		var type = path == null ? null : contentType(path);
+		var type = contentType(path);
 		if (type == null || WebJarsMixin.class.getResource("/" + WebJarResolver.WEBJARS_ROOT + path) == null)
 			throw new NotFound();
 		return ASSETS.serve("/" + WebJarResolver.WEBJARS_ROOT + path, type, CACHE_CONTROL);
@@ -121,10 +121,12 @@ public class WebJarsMixin {
 	/**
 	 * Returns the content type for a path's extension, compared case-insensitively.
 	 *
-	 * @param path The path.
-	 * @return The content type, or <jk>null</jk> if the extension isn't served.
+	 * @param path The path.  Can be <jk>null</jk>.
+	 * @return The content type, or <jk>null</jk> if the path is <jk>null</jk> or the extension isn't served.
 	 */
 	static String contentType(String path) {
+		if (path == null)
+			return null;
 		var name = path.substring(path.lastIndexOf('/') + 1);
 		var dot = name.lastIndexOf('.');
 		return dot < 0 ? null : CONTENT_TYPES.get(name.substring(dot + 1).toLowerCase(Locale.ROOT));

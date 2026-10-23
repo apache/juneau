@@ -18,6 +18,7 @@ package org.apache.juneau.marshall.stream;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assumptions.*;
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 
 import java.io.*;
 import java.util.*;
@@ -110,7 +111,7 @@ class MultiRecordStream_Test extends TestBase {
 				got.add(r.read(Bean.class));
 		}
 
-		assertEquals(3, got.size(), "format=" + fmt);
+		assertSize(() -> "format=" + fmt, 3, got);
 		assertEquals("a", got.get(0).name);
 		assertEquals(1, got.get(0).age);
 		assertEquals("c", got.get(2).name);

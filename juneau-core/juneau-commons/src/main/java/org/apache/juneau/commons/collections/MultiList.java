@@ -516,7 +516,7 @@ public class MultiList<E> extends AbstractList<E> {
 			while (e1.hasNext() && e2.hasNext()) {
 				var o1 = e1.next();
 				var o2 = e2.next();
-				if (!eq(o1, o2))
+				if (neq(o1, o2))
 					return false;
 			}
 			return !(e1.hasNext() || e2.hasNext());

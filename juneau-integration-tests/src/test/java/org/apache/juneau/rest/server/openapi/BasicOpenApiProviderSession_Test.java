@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.server.openapi;
 
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
@@ -92,7 +93,7 @@ class BasicOpenApiProviderSession_Test extends TestBase {
 		swagger.put("schemes", List.of("https", "http"));
 		var out = BasicOpenApiProviderSession.transform(swagger);
 		var servers = (List<?>) out.get("servers");
-		assertEquals(2, servers.size());
+		assertSize(2, servers);
 		assertEquals("https://api.example.com/v1", ((Map<?,?>)servers.get(0)).get("url"));
 		assertEquals("http://api.example.com/v1", ((Map<?,?>)servers.get(1)).get("url"));
 	}
@@ -103,7 +104,7 @@ class BasicOpenApiProviderSession_Test extends TestBase {
 		swagger.put("basePath", "/x");
 		var out = BasicOpenApiProviderSession.transform(swagger);
 		var servers = (List<?>) out.get("servers");
-		assertEquals(1, servers.size());
+		assertSize(1, servers);
 		assertEquals("http://h/x", ((Map<?,?>)servers.get(0)).get("url"));
 	}
 
@@ -260,7 +261,7 @@ class BasicOpenApiProviderSession_Test extends TestBase {
 		assertTrue(props.containsKey("f2"));
 		// f1 is required, f2 is not.
 		var required = (List<?>) schema.get("required");
-		assertEquals(1, required.size());
+		assertSize(1, required);
 		assertEquals("f1", required.get(0));
 	}
 
@@ -371,7 +372,7 @@ class BasicOpenApiProviderSession_Test extends TestBase {
 		var out = BasicOpenApiProviderSession.transform(swagger);
 		var newOp = (Map<?,?>) ((Map<?,?>) ((Map<?,?>)out.get("paths")).get("/p")).get("get");
 		var newParams = (List<?>) newOp.get("parameters");
-		assertEquals(1, newParams.size());
+		assertSize(1, newParams);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -567,7 +568,7 @@ class BasicOpenApiProviderSession_Test extends TestBase {
 
 		var out = BasicOpenApiProviderSession.deduplicateInlineSchemas(doc);
 		var schemas = (Map<?,?>) ((Map<?,?>) out.get("components")).get("schemas");
-		assertEquals(1, schemas.size());
+		assertSize(1, schemas);
 		// Parameter schema and requestBody schema both rewritten.
 		var paramSchema = (Map<?,?>) ((Map<?,?>)((List<?>)((Map<?,?>)((Map<?,?>)((Map<?,?>)out.get("paths")).get("/a")).get("get")).get("parameters")).get(0)).get("schema");
 		assertTrue(((String)paramSchema.get("$ref")).startsWith("#/components/schemas/"));
@@ -654,7 +655,7 @@ class BasicOpenApiProviderSession_Test extends TestBase {
 		var op = doc.getPaths().get("/q").getGet();
 		var params = op.getParameters();
 		assertNotNull(params);
-		assertEquals(1, params.size());
+		assertSize(1, params);
 		// Schema slot should be present (with type=string, format=uuid lifted into it).
 		assertNotNull(params.get(0).getSchema());
 	}

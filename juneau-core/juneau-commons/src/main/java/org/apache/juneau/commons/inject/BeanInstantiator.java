@@ -2455,7 +2455,7 @@ public class BeanInstantiator<T> {
 			return;
 		var prefix = description != null ? (description + " (" + beanType.getName() + ")") : beanType.getName();
 		logger.fine(prefix + ": " + message, args);
-		debug.ifPresent(x -> x.add(args.length == 0 ? message : String.format(message, args)));
+		debug.ifPresent(x -> x.add(args.length == 0 ? message : f(message, args)));
 	}
 
 	T runPostCreateHooks(T bean) {

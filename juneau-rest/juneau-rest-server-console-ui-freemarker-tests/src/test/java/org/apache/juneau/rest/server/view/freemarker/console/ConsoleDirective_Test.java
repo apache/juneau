@@ -402,7 +402,7 @@ class ConsoleDirective_Test extends TestBase {
 		assertTrue(body.indexOf("juneau-console.js") < body.indexOf("src=\"one.js\""), () -> body);
 		assertTrue(body.indexOf("src=\"one.js\"") < body.indexOf("src=\"two.js\""), () -> body);
 		assertTrue(body.indexOf("src=\"two.js\"") < body.indexOf("extra-tail.js"), () -> body);
-		assertFalse(body.contains("slds-"), () -> body);
+		DualHatGuard.assertClean(body);
 	}
 
 	@Test void c02_noCsrf_omitsMetaAndBodyAttrs() throws Exception {

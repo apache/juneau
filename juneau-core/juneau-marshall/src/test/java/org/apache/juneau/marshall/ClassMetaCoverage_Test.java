@@ -17,6 +17,7 @@
 package org.apache.juneau.marshall;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 
 import java.lang.reflect.*;
 import java.util.*;
@@ -57,7 +58,7 @@ class ClassMetaCoverage_Test extends TestBase {
 		var args = bs.getArgsClassMeta(new Type[]{String.class, int.class});
 		assertEquals(String.class, args.getArg(0).inner());
 		assertEquals(int.class, args.getArg(1).inner());
-		assertEquals(2, args.getArgs().size());
+		assertSize(2, args.getArgs());
 	}
 
 	@Test void a04_getArgs_nonArgsClassMeta_returnsNull() {

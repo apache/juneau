@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.http.classic.remote;
 
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
@@ -81,7 +82,7 @@ class RrpcInterfaceMeta_Test extends TestBase {
 
 	@Test void c04_getMethodMetaByPath_found() {
 		var m = new RrpcInterfaceMeta(PlainIface.class, "http://x");
-		assertEquals(1, m.getMethodsByPath().size());
+		assertSize(1, m.getMethodsByPath());
 		var path = m.getMethodsByPath().keySet().iterator().next();
 		assertNotNull(m.getMethodMetaByPath(path));
 	}

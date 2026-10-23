@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.microservice.tomcat;
 
+import static org.apache.juneau.commons.utils.Shorts.f;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
@@ -561,7 +562,7 @@ class BusWebSocketCsrf_TomcatIT extends TestBase {
 					var len = ((head[0] & 0xFF) << 16) | ((head[1] & 0xFF) << 8) | (head[2] & 0xFF);
 					var payload = new byte[len];
 					in.readFully(payload);
-					seen.append(String.format("%02x ", head[3]));
+					seen.append(f("%02x ", head[3]));
 					if (head[3] == 0x4 && (head[4] & 0x1) == 0) {
 						settings = true;
 						for (var i = 0; i + 6 <= len; i += 6)

@@ -6,18 +6,12 @@ wave-survey scripts and their tests live in the board repo's `scripts/`.) Everyt
 real temporary git repositories built in fixtures -- and never touches the real
 `~/Project Work` trackers, the real `repos.md`, or the real side clones.
 
-**Consolidated 2026-08-30**: `todo-next-id.py`, `todo-status-audit.py`, and their shared tests
-(`conftest.py`, `test_todo_next_id.py`, `test_todo_status_audit.py`) used to be carried
-byte-for-byte-identical in this repo, `apache/release-manager`, and `sandbox-support-console`.
-They have moved to a single parameterized copy at `~/Project Work/scripts/` (`--project
-{juneau,release-manager,sandbox-support-console,irs}`), with their tests alongside at
-`~/Project Work/scripts/tests/`. See `@todo-and-waves` and `~/agents/AGENTS.md`. Nothing in
-*this* directory needs to stay in sync with the other two repos anymore -- every file that
+The shared todo tracker scripts and their tests no longer live in this directory. Every file that
 remains here is a juneau-only script with no counterpart elsewhere.
 
 ## Running
 
-The suite must also pass under a push-like environment (`JUNEAU_RUN_SESSION`, `JUNEAU_PUSH_ACTIVE`, `JUNEAU_RUN_ACTIVE`, `JUNEAU_RUN_N_BASE` set), because `push.py`'s Python tests step runs it that way; any test that depends on those variables being unset must clear them itself.
+The suite must also pass under a push-like environment (`JUNEAU_RUN_SESSION`, `JUNEAU_PUSH_ACTIVE`, `JUNEAU_RUN_ACTIVE`, `JUNEAU_RUN_N_BASE` set), because `push.py`'s Python Tests step runs it that way; any test that depends on those variables being unset must clear them itself.
 
 `pytest` is not vendored anywhere in this repo (it's pure-stdlib elsewhere in `scripts/` on
 purpose). Two easy ways to run this suite without installing anything globally:

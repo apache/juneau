@@ -19,7 +19,7 @@
  * Mocked REST client and supporting classes for in-JVM testing built on the classic Apache HttpClient API.
  *
  * <p>
- * Provides {@link org.apache.juneau.rest.mock.classic.MockRestClient} and its associated
+ * Provides {@link org.apache.juneau.rest.mock.classic.MockRestClient MockRestClient} and its associated
  * {@link org.apache.juneau.rest.mock.classic.MockRestRequest request}/{@link org.apache.juneau.rest.mock.classic.MockRestResponse response}
  * wrappers, along with helpers for capturing console output and log messages, allowing REST resources to be
  * exercised without starting a server.

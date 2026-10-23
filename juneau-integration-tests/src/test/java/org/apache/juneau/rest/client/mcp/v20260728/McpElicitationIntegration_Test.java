@@ -45,7 +45,7 @@ import jakarta.servlet.*;
  * against a live embedded-Jetty server whose tools pause/resume via the server-side (same-named)
  * {@code ElicitationRequests}/{@code ElicitationResponses} &mdash; proving the full typed path works across a
  * real wire boundary, complementing {@link McpMrtrIntegration_Test}'s generic (untyped) PAUSE/RESUME coverage
- * and Phase 7's {@code Characterization_Test} in-process replay fixtures.
+ * and {@code Characterization_Test}'s in-process replay fixtures.
  */
 @org.apache.juneau.testing.JettyMicroserviceTest
 class McpElicitationIntegration_Test extends TestBase {
@@ -176,7 +176,7 @@ class McpElicitationIntegration_Test extends TestBase {
 		try (var client = clientBuilder(true).build()) {
 			var paused = client.callRaw(McpMethods.TOOLS_CALL, new CallToolRequest().setName("confirmTwo").setArguments(Map.of()));
 			var requests = ElicitationRequests.requests(paused);
-			assertEquals(2, requests.size());
+			assertSize(2, requests);
 			assertTrue(requests.containsKey("confirm"));
 			assertTrue(requests.containsKey("reason"));
 

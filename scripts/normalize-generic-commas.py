@@ -16,7 +16,7 @@
 # limitations under the License.
 
 """
-TODO-288: Normalize generic type-argument comma spacing.
+Normalize generic type-argument comma spacing.
 
 Rewrites `Foo<A, B>` -> `Foo<A,B>` (at every nesting level, e.g.
 `Map<K, List<V>>` -> `Map<K,List<V>>`) everywhere a "generic-shaped"

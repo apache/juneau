@@ -22,8 +22,8 @@
  * commas, relaxed numbers) with JSONL's newline-delimited framing (one document per line).
  *
  * <p>
- * This package provides {@link org.apache.juneau.marshall.json5l.Json5lSerializer} and
- * {@link org.apache.juneau.marshall.json5l.Json5lParser}.  The serializer emits strict
+ * This package provides {@link org.apache.juneau.marshall.json5l.Json5lSerializer Json5lSerializer} and
+ * {@link org.apache.juneau.marshall.json5l.Json5lParser Json5lParser}.  The serializer emits strict
  * RFC-8259 JSON per line by default (byte-identical to {@link org.apache.juneau.marshall.jsonl.JsonlSerializer}),
  * with an opt-in for JSON5 sugar.  The parser accepts the full JSON5 dialect per line — and,
  * because JSON5 is a strict superset of JSON, plain JSONL input as well.

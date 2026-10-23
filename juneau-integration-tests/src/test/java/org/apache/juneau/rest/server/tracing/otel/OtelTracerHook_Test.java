@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.server.tracing.otel;
 
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
@@ -103,7 +104,7 @@ class OtelTracerHook_Test extends TestBase {
 	@Test void b01_happyPath_serverSpanWithHttpSemconvAttributes() throws Exception {
 		CB.get("/users/42").run().assertStatus(200);
 		var spans = EXPORTER.getFinishedSpanItems();
-		assertEquals(1, spans.size());
+		assertSize(1, spans);
 		var s = spans.get(0);
 		assertEquals(SpanKind.SERVER, s.getKind());
 		assertEquals("GET", s.getName());
@@ -117,7 +118,7 @@ class OtelTracerHook_Test extends TestBase {
 		CB.get("/users/aaa").run().assertStatus(200);
 		CB.get("/users/bbb").run().assertStatus(200);
 		var spans = EXPORTER.getFinishedSpanItems();
-		assertEquals(2, spans.size());
+		assertSize(2, spans);
 		assertEquals(spans.get(0).getAttributes().get(OtelTracerHook.ATTR_HTTP_ROUTE),
 			spans.get(1).getAttributes().get(OtelTracerHook.ATTR_HTTP_ROUTE),
 			"different concrete URIs share the same http.route attribute");
@@ -143,7 +144,7 @@ class OtelTracerHook_Test extends TestBase {
 	@Test void c01_exceptionPath_spanCarriesErrorStatusAndExceptionType() throws Exception {
 		CC.get("/boom").run().assertStatus(500);
 		var spans = EXPORTER.getFinishedSpanItems();
-		assertEquals(1, spans.size());
+		assertSize(1, spans);
 		var s = spans.get(0);
 		assertEquals(Long.valueOf(500), s.getAttributes().get(OtelTracerHook.ATTR_HTTP_RESPONSE_STATUS_CODE));
 		assertEquals(StatusCode.ERROR, s.getStatus().getStatusCode());
@@ -164,7 +165,7 @@ class OtelTracerHook_Test extends TestBase {
 		CB.get("/users/9").header("traceparent", traceparent).run().assertStatus(200);
 
 		var spans = EXPORTER.getFinishedSpanItems();
-		assertEquals(1, spans.size());
+		assertSize(1, spans);
 		var s = spans.get(0);
 		assertEquals(traceId, s.getTraceId(), "server span should inherit the incoming trace id");
 		assertEquals(parentSpanId, s.getParentSpanId(), "server span should be a child of the incoming span");
@@ -186,6 +187,6 @@ class OtelTracerHook_Test extends TestBase {
 
 	@Test void e01_noTracerBean_noSpansEmitted() throws Exception {
 		CE.get("/ping").run().assertStatus(200);
-		assertEquals(0, EXPORTER.getFinishedSpanItems().size(), "without a @Bean TracerHook, no spans reach the SDK exporter");
+		assertSize(() -> "without a @Bean TracerHook, no spans reach the SDK exporter", 0, EXPORTER.getFinishedSpanItems());
 	}
 }

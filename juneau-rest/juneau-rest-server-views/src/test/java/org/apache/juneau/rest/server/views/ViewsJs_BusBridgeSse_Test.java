@@ -43,7 +43,9 @@ class ViewsJs_BusBridgeSse_Test extends TestBase {
 		report = BusHarness.run("bus-bridge-sse.cjs", "/org/apache/juneau/views/juneau-bus.js");
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Casts a parsed JSON value to its known Map/List shape.
+	})
 	private static Map<String,Object> section(String... path) {
 		assumeTrue(report != null, "node not on PATH");
 		Map<String,Object> m = report;
@@ -177,7 +179,10 @@ class ViewsJs_BusBridgeSse_Test extends TestBase {
 		assertEquals("open", r.get("fedByComment"));
 	}
 
-	@Test @SuppressWarnings("unchecked")
+	@Test
+	@SuppressWarnings({
+		"unchecked" // Casts a parsed JSON value to its known Map/List shape.
+	})
 	void a11_perMessageProblemsKeepTheStreamUp() {
 		var r = section("perMessage");
 		assertJson("[\"E-JS-58\",\"E-JS-55\",\"E-JS-59\",\"E-JS-54\"]", r.get("codes"));

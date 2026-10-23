@@ -152,7 +152,7 @@ public final class MustacheView implements View {
 	 * 	value.
 	 */
 	public MustacheView attrs(Map<String,?> values) {
-		if (values == null || values.isEmpty())
+		if (ie(values))
 			return this;
 		var copy = new LinkedHashMap<>(attributes);
 		values.forEach((k, v) -> {

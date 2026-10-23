@@ -17,6 +17,7 @@
 package org.apache.juneau.rest.server.mcp.v20260728;
 
 import static org.apache.juneau.commons.utils.Shorts.*;
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
@@ -370,7 +371,7 @@ class McpCompletion_Test {
 		var config = new McpServerConfig().addPrompt(promptWithCompleter("greet", "style",
 			(r, c) -> new McpCompletionResult().setValues(values).setHasMore(false)));
 		var completion = complete(config, JsonMap.of("ref", promptRef("greet"), "argument", argument("style", "v")));
-		assertEquals(100, completion.getValues().size());
+		assertSize(100, completion.getValues());
 		assertEquals("v0", completion.getValues().get(0));
 		assertEquals("v99", completion.getValues().get(99));
 		assertEquals(Boolean.TRUE, completion.getHasMore());

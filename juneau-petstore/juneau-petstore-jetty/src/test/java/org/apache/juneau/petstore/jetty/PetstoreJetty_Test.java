@@ -141,7 +141,7 @@ class PetstoreJetty_Test extends TestBase {
 		root.getContext().getRestChildren().addChild(SHUTDOWN, true);
 		var mounted = root.getContext().getRestChildren().asMap().values().stream()
 			.filter(c -> c.getResource() instanceof ShutdownResource).toList();
-		assertEquals(1, mounted.size());
+		assertSize(1, mounted);
 		assertSame(SHUTDOWN, mounted.get(0).getResource(), "The test's shutdown resource must be the mounted one");
 		assertEquals(405, get("/shutdown", "application/json").statusCode());
 	}
@@ -537,7 +537,7 @@ class PetstoreJetty_Test extends TestBase {
 		assertTrue(console >= 0 && console < api, "console boundary must be ahead of the API boundary");
 		var registrations = ServletFilterRegistration.collect(fixture.getMicroservice().getBeanStore()).stream()
 			.filter(r -> r.getFilter() instanceof PetstoreApiBoundary).toList();
-		assertEquals(1, registrations.size());
+		assertSize(1, registrations);
 		assertEquals(ServletFilterRegistration.HIGHEST_PRECEDENCE + 10, registrations.get(0).getOrder());
 	}
 
@@ -724,7 +724,7 @@ class PetstoreJetty_Test extends TestBase {
 		assertTrue(api >= 0 && api < admin, "API boundary must be ahead of the admin boundary");
 		var registrations = ServletFilterRegistration.collect(fixture.getMicroservice().getBeanStore()).stream()
 			.filter(r -> r.getUrlPatterns().contains("/shutdown")).toList();
-		assertEquals(1, registrations.size());
+		assertSize(1, registrations);
 		assertEquals(AdminBoundary.ORDER, registrations.get(0).getOrder());
 	}
 

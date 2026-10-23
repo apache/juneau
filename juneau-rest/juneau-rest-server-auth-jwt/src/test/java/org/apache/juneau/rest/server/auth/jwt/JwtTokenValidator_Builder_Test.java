@@ -17,6 +17,7 @@
 package org.apache.juneau.rest.server.auth.jwt;
 
 import static org.apache.juneau.rest.server.auth.jwt.JwtTestSupport.*;
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.net.*;
@@ -163,7 +164,7 @@ class JwtTokenValidator_Builder_Test extends TestBase {
 			.build();
 		assertEquals(DEFAULT_ISSUER, v.getIssuer());
 		assertEquals(DEFAULT_AUDIENCE, v.getAudience());
-		assertEquals(1, v.getAlgorithms().size());
+		assertSize(1, v.getAlgorithms());
 		assertTrue(v.getAlgorithms().contains(JWSAlgorithm.RS256));
 		assertEquals(skew, v.getClockSkew());
 	}

@@ -19,7 +19,6 @@ package org.apache.juneau.rest.server.views;
 import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.rest.server.views.ConsoleBrowserFixture.*;
 import static org.apache.juneau.test.bct.BctAssertions.*;
-import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
 
@@ -74,7 +73,7 @@ class ConsoleVisual_BrowserTest extends TestBase {
 				if (neq(want.get(prop), got.get(prop)))
 					diffs.add(sel + " " + prop + ": expected '" + want.get(prop) + "' but was '" + got.get(prop) + "'");
 		}
-		assertEquals(7, baseline.size(), "the baseline has 7 selectors");
+		assertSize(() -> "the baseline has 7 selectors", 7, baseline);
 		assertEmpty(() -> caseName + " differs from the pre-C1 baseline:\n" + String.join("\n", diffs), diffs);
 	}
 

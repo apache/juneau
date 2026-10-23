@@ -26,7 +26,7 @@ import org.apache.juneau.utest.utils.*;
 import org.junit.jupiter.api.*;
 
 /**
- * Phase 2 — exercises {@code @Rest(noInherit={"serializers"})} on a mixin class to verify it blocks the
+ * Exercises {@code @Rest(noInherit={"serializers"})} on a mixin class to verify it blocks the
  * parent-context walk for that property.
  *
  * <p>

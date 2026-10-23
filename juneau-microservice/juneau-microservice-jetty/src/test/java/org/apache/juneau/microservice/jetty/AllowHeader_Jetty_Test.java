@@ -63,7 +63,9 @@ class AllowHeader_Jetty_Test extends TestBase {
 	private static URI base;
 	private static final HttpClient CLIENT = HttpClient.newHttpClient();
 
-	@SuppressWarnings("resource") // The connector is added to the server, which closes it in stop().
+	@SuppressWarnings({
+		"resource" // The connector is added to the server, which closes it in stop().
+	})
 	@BeforeAll
 	static void start() throws Exception {
 		server = new Server();

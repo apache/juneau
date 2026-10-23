@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.observability;
 
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.time.*;
@@ -96,7 +97,7 @@ class RestObservabilityAttributes_Test extends TestBase {
 	@Test void a01_resourceLevelOptOut_suppressesMetrics() throws Exception {
 		A_REC.clear();
 		CA.get("/ping").run().assertStatus(200);
-		assertEquals(0, A_REC.events.size(), "@Rest(observability='false') must suppress the observability block");
+		assertSize(() -> "@Rest(observability='false') must suppress the observability block", 0, A_REC.events);
 	}
 
 	// -----------------------------------------------------------------------------------------------------------------
@@ -125,13 +126,13 @@ class RestObservabilityAttributes_Test extends TestBase {
 	@Test void b01_opLevelOptOut_suppressesMetricsForThatOp() throws Exception {
 		B_REC.clear();
 		CB.get("/silent").run().assertStatus(200);
-		assertEquals(0, B_REC.events.size(), "@RestGet(observability='false') must suppress that op's metrics");
+		assertSize(() -> "@RestGet(observability='false') must suppress that op's metrics", 0, B_REC.events);
 	}
 
 	@Test void b02_opLevelOptOut_doesNotAffectSiblingOps() throws Exception {
 		B_REC.clear();
 		CB.get("/loud").run().assertStatus(200);
-		assertEquals(1, B_REC.events.size(), "sibling op without observability opt-out must still record metrics");
+		assertSize(() -> "sibling op without observability opt-out must still record metrics", 1, B_REC.events);
 	}
 
 	// -----------------------------------------------------------------------------------------------------------------
@@ -156,7 +157,7 @@ class RestObservabilityAttributes_Test extends TestBase {
 	@Test void c01_defaultBehavior_metricsFireWhenBackendWired() throws Exception {
 		C_REC.clear();
 		CC.get("/check").run().assertStatus(200);
-		assertEquals(1, C_REC.events.size(), "default (no observability attribute) must fire metrics when backend wired");
+		assertSize(() -> "default (no observability attribute) must fire metrics when backend wired", 1, C_REC.events);
 	}
 
 	// -----------------------------------------------------------------------------------------------------------------
@@ -185,13 +186,13 @@ class RestObservabilityAttributes_Test extends TestBase {
 	@Test void d01_opLevelOptIn_overridesResourceLevelOptOut() throws Exception {
 		D_REC.clear();
 		CD.get("/loud").run().assertStatus(200);
-		assertEquals(1, D_REC.events.size(), "@RestGet(observability='true') must re-enable metrics even when resource says false");
+		assertSize(() -> "@RestGet(observability='true') must re-enable metrics even when resource says false", 1, D_REC.events);
 	}
 
 	@Test void d02_opLevelOptOut_still_suppressesWhenResourceAlreadySilent() throws Exception {
 		D_REC.clear();
 		CD.get("/silent").run().assertStatus(200);
-		assertEquals(0, D_REC.events.size(), "@RestGet(observability='false') on resource with observability='false' must suppress");
+		assertSize(() -> "@RestGet(observability='false') on resource with observability='false' must suppress", 0, D_REC.events);
 	}
 
 	// -----------------------------------------------------------------------------------------------------------------
@@ -233,21 +234,21 @@ class RestObservabilityAttributes_Test extends TestBase {
 	@Test void f01_metricName_reachesRecord() throws Exception {
 		F_REC.clear();
 		CF.get("/tagged").run().assertStatus(200);
-		assertEquals(1, F_REC.events.size());
+		assertSize(1, F_REC.events);
 		assertEquals("custom.timer", F_REC.last().metricName, "metricName must reach MetricsRecorder.record()");
 	}
 
 	@Test void f02_metricTags_reachesRecord() throws Exception {
 		F_REC.clear();
 		CF.get("/tagged").run().assertStatus(200);
-		assertEquals(1, F_REC.events.size());
+		assertSize(1, F_REC.events);
 		assertEquals("team=payments,region=us-east", F_REC.last().metricTags, "metricTags must reach MetricsRecorder.record()");
 	}
 
 	@Test void f03_plainOp_emptyMetricNameAndTags() throws Exception {
 		F_REC.clear();
 		CF.get("/plain").run().assertStatus(200);
-		assertEquals(1, F_REC.events.size());
+		assertSize(1, F_REC.events);
 		assertEquals("", F_REC.last().metricName, "metricName must be empty when not set");
 		assertEquals("", F_REC.last().metricTags, "metricTags must be empty when not set");
 	}

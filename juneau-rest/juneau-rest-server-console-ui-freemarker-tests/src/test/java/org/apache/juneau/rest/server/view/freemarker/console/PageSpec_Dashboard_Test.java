@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.server.view.freemarker.console;
 
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
@@ -47,7 +48,7 @@ class PageSpec_Dashboard_Test extends TestBase {
 		spec.applyTo(cap, MODEL);
 		var c = JsonMap.ofString(cap.toContractJson());
 		assertEquals("orders", c.getMap("dashboard").getString("id"));
-		assertEquals(2, c.getMap("dashboard").getList("panels").size());
+		assertSize(2, c.getMap("dashboard").getList("panels"));
 	}
 
 	@Test void a02_packOrder_beforeCharts() {

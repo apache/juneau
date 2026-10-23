@@ -888,7 +888,7 @@ class Sets_Test extends TestBase {
 			.filtered()
 			.add("a", new String[]{"x", "y"}, "b")
 			.build();
-		assertEquals(3, set.size());
+		assertSize(3, set);
 	}
 
 	@Test
@@ -897,7 +897,7 @@ class Sets_Test extends TestBase {
 			.filtered()
 			.add("a", m("k", "v"), "b")
 			.build();
-		assertEquals(3, set.size());
+		assertSize(3, set);
 	}
 
 	@Test
@@ -906,7 +906,7 @@ class Sets_Test extends TestBase {
 			.filtered()
 			.add("a", l("x"), "b")
 			.build();
-		assertEquals(3, set.size());
+		assertSize(3, set);
 	}
 
 	@Test
@@ -926,7 +926,7 @@ class Sets_Test extends TestBase {
 			.addAll(l("a", "b", "c"))
 			.build();
 		assertNotNull(set);
-		assertEquals(3, set.size());
+		assertSize(3, set);
 	}
 
 	@Test

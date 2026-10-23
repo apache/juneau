@@ -27,7 +27,7 @@ import org.apache.juneau.commons.settings.*;
 import org.junit.jupiter.api.*;
 
 /**
- * Phase G regression: verifies the field-type autodetect contract for {@code @Value} —
+ * Regression test: verifies the field-type autodetect contract for {@code @Value} —
  *
  * <ul>
  * 	<li>Bare {@code String} field: resolves once at bean construction. Subsequent reads

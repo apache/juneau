@@ -17,6 +17,7 @@
 package org.apache.juneau.marshall.hocon;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 
 import java.util.*;
 
@@ -151,7 +152,7 @@ class HoconParser_Test {
 		var hocon = "arr = [1, 2, 3,]";
 		var m = (Map<String,Object>) HoconParser.DEFAULT.read(hocon, Map.class, String.class, Object.class);
 		var arr = (List<?>) m.get("arr");
-		assertEquals(3, arr.size());
+		assertSize(3, arr);
 		assertEquals(1, ((Number) arr.get(0)).intValue());
 		assertEquals(2, ((Number) arr.get(1)).intValue());
 		assertEquals(3, ((Number) arr.get(2)).intValue());
@@ -180,7 +181,7 @@ class HoconParser_Test {
 		var hocon = "nums = [1, 2, 3]";
 		var m = (Map<String,Object>) HoconParser.DEFAULT.read(hocon, Map.class, String.class, Object.class);
 		var arr = (List<?>) m.get("nums");
-		assertEquals(3, arr.size());
+		assertSize(3, arr);
 		assertEquals(1, ((Number) arr.get(0)).intValue());
 		assertEquals(2, ((Number) arr.get(1)).intValue());
 		assertEquals(3, ((Number) arr.get(2)).intValue());
@@ -217,7 +218,7 @@ class HoconParser_Test {
 		var m = (Map<String,Object>) HoconParser.DEFAULT.read(hocon, Map.class, String.class, Object.class);
 		var list = (List<?>) m.get("list");
 		assertNotNull(list);
-		assertEquals(3, list.size());
+		assertSize(3, list);
 		assertEquals("a", list.get(0));
 		assertEquals("b", list.get(1));
 		assertEquals("c", list.get(2));
@@ -243,7 +244,7 @@ class HoconParser_Test {
 		var m = (Map<String,Object>) HoconParser.DEFAULT.read(hocon, Map.class, String.class, Object.class);
 		var arr = (List<?>) m.get("nums");
 		assertNotNull(arr);
-		assertEquals(4, arr.size());
+		assertSize(4, arr);
 		assertEquals(1, ((Number) arr.get(0)).intValue());
 		assertEquals(2, ((Number) arr.get(1)).intValue());
 		assertEquals(3, ((Number) arr.get(2)).intValue());
@@ -271,11 +272,11 @@ class HoconParser_Test {
 		var m = (Map<String,Object>) HoconParser.DEFAULT.read(hocon, Map.class, String.class, Object.class);
 		var outer = (List<?>) m.get("outer");
 		assertNotNull(outer);
-		assertEquals(2, outer.size());
+		assertSize(2, outer);
 		var first = (List<?>) outer.get(0);
 		var second = (List<?>) outer.get(1);
-		assertEquals(2, first.size());
-		assertEquals(2, second.size());
+		assertSize(2, first);
+		assertSize(2, second);
 		assertEquals(1, ((Number) first.get(0)).intValue());
 		assertEquals(2, ((Number) first.get(1)).intValue());
 		assertEquals(3, ((Number) second.get(0)).intValue());
@@ -290,9 +291,9 @@ class HoconParser_Test {
 		var m = (Map<String,Object>) HoconParser.DEFAULT.read(hocon, Map.class, String.class, Object.class);
 		var outer = (List<?>) m.get("outer");
 		assertNotNull(outer);
-		assertEquals(1, outer.size());
+		assertSize(1, outer);
 		var inner = (List<?>) outer.get(0);
-		assertEquals(4, inner.size());
+		assertSize(4, inner);
 		assertEquals(1, ((Number) inner.get(0)).intValue());
 		assertEquals(4, ((Number) inner.get(3)).intValue());
 	}
@@ -318,7 +319,7 @@ class HoconParser_Test {
 		var m = (Map<String,Object>) HoconParser.DEFAULT.read(hocon, Map.class, String.class, Object.class);
 		var items = (List<?>) m.get("items");
 		assertNotNull(items);
-		assertEquals(2, items.size());
+		assertSize(2, items);
 		assertEquals(1, ((Number) ((Map<String,Object>) items.get(0)).get("id")).intValue());
 		assertEquals(2, ((Number) ((Map<String,Object>) items.get(1)).get("id")).intValue());
 	}

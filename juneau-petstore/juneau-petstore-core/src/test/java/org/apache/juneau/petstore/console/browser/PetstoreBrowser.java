@@ -17,6 +17,7 @@
 package org.apache.juneau.petstore.console.browser;
 
 import static java.nio.charset.StandardCharsets.*;
+import static org.apache.juneau.commons.utils.Shorts.f;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
@@ -39,9 +40,11 @@ import org.apache.juneau.marshall.marshaller.*;
  * evaluated in the page after the actions), {@code fetches} (name to a URL fetched from the page),
  * {@code capture} (a URL substring whose requests are recorded with their POST bodies) and
  * {@code allowFailedLoads} (ignore Chromium's "Failed to load resource" line for a deliberate 401/404).
- * A case may also set {@code viewport} ({@code [width, height]}) and {@code initScript} (JS run at the start of every
- * document).  The extra actions are {@code {goto:path}} and {@code {follow:jsExpression}}, which wait for the case's
- * {@code waitUntil} as {@code reload} does, and {@code {drag:[selector, dx]}}.
+ * A case may also set {@code viewport} ({@code [width, height]}), {@code deviceScaleFactor} (default 1) and
+ * {@code initScript} (JS run at the start of every document).  A {@code screenshot} action may carry a {@code selector}
+ * to capture one element instead of the whole page.  The extra actions are {@code {goto:path}} and
+ * {@code {follow:jsExpression}}, which wait for the case's {@code waitUntil} as {@code reload} does, and
+ * {@code {drag:[selector, dx]}}.
  *
  * <p>
  * The report for each case has {@code status} (the navigation's HTTP status), {@code jsFailures} (page errors
@@ -94,7 +97,9 @@ public final class PetstoreBrowser {
 		}
 		assertEquals(0, p.exitValue(), () -> "Harness '" + suite + "' exited non-zero; stderr:\n" + quietRead(err));
 
-		@SuppressWarnings("unchecked") // The harness writes {cases:{name:{...}}}.
+		@SuppressWarnings({
+			"unchecked" // The harness writes {cases:{name:{...}}}.
+		})
 		var r = (Map<String,Map<String,Object>>) Json.to(Files.readString(out), Map.class).get("cases");
 		assertNotNull(r, () -> "Harness '" + suite + "' wrote no 'cases' object; stdout:\n" + quietRead(out));
 		return r;
@@ -122,7 +127,9 @@ public final class PetstoreBrowser {
 	 * @param key The query name.
 	 * @return The query's value as returned by the page.
 	 */
-	@SuppressWarnings("unchecked") // queries is always a JSON object.
+	@SuppressWarnings({
+		"unchecked" // queries is always a JSON object.
+	})
 	public static Object query(Map<String,Object> c, String key) {
 		return ((Map<String,Object>) c.get("queries")).get(key);
 	}
@@ -135,11 +142,13 @@ public final class PetstoreBrowser {
 	 * @return The parsed POST body.
 	 * @throws Exception If the body is not JSON.
 	 */
-	@SuppressWarnings("unchecked") // requests is a JSON array of {url, method, postData}.
+	@SuppressWarnings({
+		"unchecked" // requests is a JSON array of {url, method, postData}.
+	})
 	public static Map<String,Object> lastCaptured(Map<String,Object> c, String urlPart) throws Exception {
 		var reqs = ((List<Map<String,Object>>) c.get("requests")).stream()
 			.filter(r -> "POST".equals(r.get("method")) && String.valueOf(r.get("url")).contains(urlPart)).toList();
-		assertFalse(reqs.isEmpty(), () -> String.format("No captured POST matching '%s'", urlPart));
+		assertFalse(reqs.isEmpty(), () -> f("No captured POST matching '%s'", urlPart));
 		return Json.to((String) reqs.get(reqs.size() - 1).get("postData"), Map.class);
 	}
 

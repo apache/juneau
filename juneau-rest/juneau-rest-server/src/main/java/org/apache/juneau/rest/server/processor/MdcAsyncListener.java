@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.rest.server.processor;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
+
 import java.lang.reflect.*;
 import java.util.*;
 import java.util.function.*;
@@ -185,7 +187,7 @@ public final class MdcAsyncListener {
 			// appender keys) so log correlation survives the async-completion hop even when the
 			// completion thread has lost the OTel context. Only when an OTel span is actually active.
 			map = enrichWithTraceContext(map);
-			return (map == null || map.isEmpty()) ? null : map;
+			return ie(map) ? null : map;
 		} catch (Exception e) {
 			LOG.fine(() -> "MDC.getCopyOfContextMap() failed: " + e.getMessage());
 			return null;

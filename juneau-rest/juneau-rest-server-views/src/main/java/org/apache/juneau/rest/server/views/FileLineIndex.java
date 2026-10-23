@@ -213,7 +213,7 @@ public final class FileLineIndex {
 			var key = attrs.fileKey();
 			var size = attrs.size();
 			try (var ch = FileChannel.open(file, StandardOpenOption.READ)) {
-				if (! Objects.equals(key, fileKey) || size < indexedBytes || headChanged(ch, size))
+				if (neq(key, fileKey) || size < indexedBytes || headChanged(ch, size))
 					reset(key);
 				readHead(ch, size);
 				scan(ch, size);

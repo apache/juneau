@@ -271,8 +271,8 @@ class BoardTest(unittest.TestCase):
 
     def test_header_and_final_line(self):
         b = self.board(full_log="/tmp/push-full.log")
-        blocks = feed(b, ("session", {"title": "🚀 Juneau push", "header": ["master", "PGP ✓"], "nested": False}))
-        self.assertEqual(plain(b, blocks, self.clock), "🚀 Juneau push · master · PGP ✓\n")
+        blocks = feed(b, ("session", {"title": "Push", "header": ["Juneau", "master", "PGP ✓"], "nested": False}))
+        self.assertEqual(plain(b, blocks, self.clock), "▶ Push: Juneau, master, PGP ✓\n")
         self.clock.advance(348)
         self.assertEqual(plain(b, feed(b, ("done", {"status": "ok", "commit": None})), self.clock),
                          "✅ Done in 5:48\n")
@@ -441,10 +441,18 @@ class OverallDisplayTest(unittest.TestCase):
         feed(b, ("step_end", {"id": "a", "status": "ok", "ms": 1, "summary": None, "totals": None}))
         self.assertFalse(any("test_x.py" in line for line in self.live().region(b, 79, 18)))
 
+    def test_overall_marker_is_cyan_in_colour_only(self):
+        for color in (True, False):
+            with self.subTest(color=color):
+                live = jr.LiveRenderer(lambda text: None, size=lambda: os.terminal_size((80, 20)), clock=self.clock, color=color)
+                last = live.region(self.board(), 79, 18)[-1]
+                self.assertEqual(last.startswith("\x1b[36m▶\x1b[0m Overall"), color)
+                self.assertEqual(jr._ANSI.sub("", last)[:9], "▶ Overall")
+
     def test_last_line_is_overall_and_counts_in_max_lines(self):
         b = self.board()
         lines = self.live().region(b, 79, 18)
-        self.assertEqual(lines[-1], "Overall  25%  ~1:30 left  · 0 of 2 steps")       # 30 / (30 + 30 + 60)
+        self.assertEqual(lines[-1], "▶ Overall  25%  ~1:30 left  · 0 of 2 steps")       # 30 / (30 + 30 + 60)
         self.assertTrue(lines[0][2:].startswith("A"))
         self.assertEqual(len(self.live().region(b, 79, 1)), 1)                          # the budget still holds
 
@@ -457,13 +465,13 @@ class OverallDisplayTest(unittest.TestCase):
             with self.subTest(cap=cap):
                 lines = self.live().region(b, 79, cap)
                 self.assertEqual(len(lines), cap)
-                self.assertTrue(lines[-1].startswith("Overall"), lines)
+                self.assertTrue(lines[-1].startswith("▶ Overall"), lines)
 
     def test_overall_sits_below_the_pending_rows(self):
         b = self.board()
         b.apply("plan", dict(ids=["a", "b"]))
         lines = self.live().region(b, 79, 18)
-        self.assertTrue(lines[-1].startswith("Overall"), lines)
+        self.assertTrue(lines[-1].startswith("▶ Overall"), lines)
 
     def test_absent_without_a_plan_without_history_and_when_nested(self):
         for b in (self.board(plan=None), self.board(hist={}), self.board(nested=True)):
@@ -474,13 +482,13 @@ class OverallDisplayTest(unittest.TestCase):
         with mock.patch.dict(os.environ, env):
             b = self.board(nested=True)
         lines = self.live().region(b, 79, 18)
-        self.assertEqual(lines[-1], "Overall  28%  ~2:30 left  · 1 of 4 steps")      # 60 / (60 + 150): a and b + install, 30s + 30s of parent time
+        self.assertEqual(lines[-1], "▶ Overall  28%  ~2:30 left  · 1 of 4 steps")      # 60 / (60 + 150): a and b + install, 30s + 30s of parent time
 
     def test_setup_row_sits_above_the_overall_line(self):
         b = self.board()
         b.apply("reactor", dict(step="a", size=5, poms=["p0", "p1"], tests=False))
         lines = self.live().region(b, 79, 18)
-        self.assertTrue(lines[-1].startswith("Overall"))
+        self.assertTrue(lines[-1].startswith("▶ Overall"))
         self.assertEqual(lines[0].split()[1], "Setup")
 
     def test_plain_heartbeat_gains_percent_and_remaining(self):
@@ -517,10 +525,11 @@ class SessionTest(unittest.TestCase):
     def test_session_prints_the_header_and_marks_the_env(self):
         out = io.StringIO()
         with contextlib.redirect_stdout(out), mock.patch.object(jr.sys, "argv", ["/x/scripts/test.py"]):
-            c = jr.session("🧪 Juneau test", ["master"])
+            c = jr.session("Test", ["Juneau", "master", "a message"])
         self.assertIs(jr._console, c)
         self.assertEqual(os.environ["JUNEAU_RUN_SESSION"], "1")
-        self.assertRegex(out.getvalue(), r"^🧪 Juneau test · master · tail -f \S+/test-\d{8}-\d{6}(-\d+)?\.log\n$")
+        self.assertRegex(out.getvalue(), r'^▶ Test: Juneau, master, a message\n▶ Output: tail -f \S+/test-\d{8}-\d{6}(-\d+)?\.log\n'
+                                         r'▶ Condensed: tail -f \S+\.condensed\.log\n$')
 
     def test_a_console_that_fails_to_start_leaves_the_env_unset(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -539,19 +548,96 @@ class SessionTest(unittest.TestCase):
             jr.done("ok")
         self.assertEqual(out.getvalue(), "")
 
-    def test_the_header_prints_a_tail_command_for_the_full_log(self):
+    def test_the_header_prints_the_title_and_items_then_a_tail_command_for_the_full_log(self):
         with tempfile.TemporaryDirectory() as tmp:
             out = io.StringIO()
             with contextlib.redirect_stdout(out):
-                jr.session("🚀 Juneau push", ["master"], sinks=jr.Sinks(full_log=f"{tmp}/push-full.log"))
-            self.assertEqual(out.getvalue(), f"🚀 Juneau push · master · tail -f {shlex.quote(tmp + '/push-full.log')}\n")
+                jr.session("Push", ["Juneau", "master", "Fix it"], sinks=jr.Sinks(full_log=f"{tmp}/push-full.log"))
+            self.assertEqual(out.getvalue(),
+                             f'▶ Push: Juneau, master, Fix it\n▶ Output: tail -f {shlex.quote(tmp + "/push-full.log")}\n')
+
+    def test_the_condensed_tail_command_takes_its_own_line_after_the_full_logs(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            out = io.StringIO()
+            with contextlib.redirect_stdout(out), mock.patch.object(jr.shutil, "get_terminal_size",
+                                                                    return_value=os.terminal_size((300, 24))):
+                jr.session("T", ["b"], sinks=jr.Sinks(full_log=f"{tmp}/a.log", condensed_log=f"{tmp}/a.condensed.log"))
+            self.assertEqual(out.getvalue(), f"▶ T: b\n▶ Output: tail -f {tmp}/a.log\n▶ Condensed: tail -f {tmp}/a.condensed.log\n")
+
+    def test_each_scripts_header_shape(self):
+        shapes = [  # push.py, push.py --test-only, test.py, release.py
+            ("Push", ["Juneau", "master", "Fix it"], "▶ Push: Juneau, master, Fix it"),
+            ("Test", ["Juneau", "master"], "▶ Test: Juneau, master"),
+            ("Test", ["Juneau", "master"], "▶ Test: Juneau, master"),
+            ("Release", ["Juneau", "9.9.9", "Java 17", "Maven 3.9.9"], "▶ Release: Juneau, 9.9.9, Java 17, Maven 3.9.9"),
+            ("Push", ["Juneau", "master", "Fix it  \n\nlong body\nmore"], "▶ Push: Juneau, master, Fix it …"),   # multi-line item: first line, trimmed, then " …"
+            ("Push", ["Juneau", "one\ntwo", "master"], "▶ Push: Juneau, one …, master"),
+        ]
+        for title, header, first in shapes:
+            with self.subTest(title=title, header=header), tempfile.TemporaryDirectory() as tmp:
+                reset_run_state()
+                os.environ["JUNEAU_RUN_CONSOLE"] = "condensed"     # reset_run_state drops it
+                out = io.StringIO()
+                with contextlib.redirect_stdout(out):
+                    jr.session(title, header, sinks=jr.Sinks(full_log=f"{tmp}/a.log", condensed_log=f"{tmp}/a.condensed.log"))
+                    jr._end_session()
+                self.assertEqual(out.getvalue().splitlines()[:3],
+                                 [first, f"▶ Output: tail -f {tmp}/a.log", f"▶ Condensed: tail -f {tmp}/a.condensed.log"])
+
+    def test_a_long_title_wraps_with_a_hanging_indent_and_the_log_rows_do_not(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            out = io.StringIO()
+            log = f"{tmp}/{'x' * 40}.log"
+            with contextlib.redirect_stdout(out), mock.patch.object(jr.shutil, "get_terminal_size",
+                                                                    return_value=os.terminal_size((32, 24))):
+                jr.session("Push", ["Juneau", "master", "one two three four five six seven"], sinks=jr.Sinks(full_log=log))
+            self.assertEqual(out.getvalue().splitlines(),
+                             ["▶ Push: Juneau, master, one two", "  three four five six seven", f"▶ Output: tail -f {log}"])
+
+    def test_the_cancel_row_follows_the_log_rows_when_the_variable_is_set(self):
+        os.environ["JUNEAU_RUN_CANCEL"] = "stop-it %3"
+        self.addCleanup(os.environ.pop, "JUNEAU_RUN_CANCEL", None)
+        with tempfile.TemporaryDirectory() as tmp:
+            out = io.StringIO()
+            with contextlib.redirect_stdout(out):
+                jr.session("T", sinks=jr.Sinks(full_log=f"{tmp}/a.log", condensed_log=f"{tmp}/a.condensed.log"))
+                jr._end_session()
+            self.assertEqual(out.getvalue().splitlines()[:4], ["▶ T", f"▶ Output: tail -f {tmp}/a.log",
+                                                               f"▶ Condensed: tail -f {tmp}/a.condensed.log",
+                                                               "▶ Cancel: stop-it %3"])
+
+    def test_no_cancel_row_without_the_variable(self):
+        os.environ.pop("JUNEAU_RUN_CANCEL", None)
+        out = io.StringIO()
+        with contextlib.redirect_stdout(out):
+            jr.session("T")
+            jr._end_session()
+        self.assertNotIn("Cancel:", out.getvalue())
+
+    def test_a_nested_session_prints_no_cancel_row(self):
+        os.environ["JUNEAU_RUN_SESSION"] = "1"
+        os.environ["JUNEAU_RUN_CANCEL"] = "stop-it %3"
+        self.addCleanup(os.environ.pop, "JUNEAU_RUN_CANCEL", None)
+        out = io.StringIO()
+        with contextlib.redirect_stdout(out):
+            jr.session("T", ["b"])
+            jr.done("ok")
+        self.assertEqual(out.getvalue(), "")
+
+    def test_a_default_condensed_session_prints_both_tails_and_writes_the_condensed_log(self):
+        out = io.StringIO()
+        with contextlib.redirect_stdout(out):
+            jr.session("T", sinks=jr.Sinks("condensed"))
+            jr.end_session()
+        self.assertRegex(out.getvalue(), r"^▶ T\n▶ Output: tail -f \S+\.log\n▶ Condensed: tail -f \S+\.condensed\.log\n")
+        self.assertTrue(Path(os.environ["JUNEAU_RUN_CONDENSED_LOG"]).exists())
 
     def test_the_tail_command_quotes_a_path_with_spaces(self):
         with tempfile.TemporaryDirectory() as tmp:
             out = io.StringIO()
             with contextlib.redirect_stdout(out):
                 jr.session("t", sinks=jr.Sinks(full_log=f"{tmp}/a b/push.log"))
-            self.assertEqual(out.getvalue(), f"t · tail -f '{tmp}/a b/push.log'\n")
+            self.assertEqual(out.getvalue(), f"▶ t\n▶ Output: tail -f '{tmp}/a b/push.log'\n")
 
     def test_a_top_level_session_prunes_the_default_log_dir(self):
         directory = Path(os.environ["JUNEAU_RUN_LOG_DIR"])
@@ -561,7 +647,7 @@ class SessionTest(unittest.TestCase):
             os.utime(directory / f"old-{i:02d}.log", (1000 + i, 1000 + i))
         with contextlib.redirect_stdout(io.StringIO()):
             jr.session("t")
-        self.assertEqual(len(list(directory.glob("*.log"))), 20)
+        self.assertEqual(len([p for p in directory.glob("*.log") if not p.name.endswith(".condensed.log")]), 20)
 
     def test_say_goes_through_the_console_once_a_session_owns_the_screen(self):
         out = io.StringIO()
@@ -569,7 +655,7 @@ class SessionTest(unittest.TestCase):
             jr.session("t")
             jr.say("Running: mvn")          # info: hidden at actionable
             jr.say("⚠ dirty tree", level="warn")
-        self.assertRegex(out.getvalue(), r"^t · tail -f \S+\.log\n⚠ dirty tree\n$")
+        self.assertRegex(out.getvalue(), r"^▶ t\n▶ Output: tail -f \S+\.log\n▶ Condensed: tail -f \S+\.condensed\.log\n⚠ dirty tree\n$")
 
     def test_say_inside_a_paused_block_prints_as_is_once(self):
         out = io.StringIO()
@@ -579,7 +665,7 @@ class SessionTest(unittest.TestCase):
                 jr.say("Running: mvn")          # info: hidden at actionable, but the screen is the plain terminal now
                 jr.say("⚠ dirty tree", level="warn")
             jr.say("⚠ after", level="warn")
-        self.assertRegex(out.getvalue(), r"^t · tail -f \S+\.log\nRunning: mvn\n⚠ dirty tree\n⚠ after\n$")
+        self.assertRegex(out.getvalue(), r"^▶ t\n▶ Output: tail -f \S+\.log\n▶ Condensed: tail -f \S+\.condensed\.log\nRunning: mvn\n⚠ dirty tree\n⚠ after\n$")
 
     def test_with_markers_on_stdout_stays_the_marker_stream(self):
         os.environ["RUN_MARKERS"] = "1"
@@ -868,10 +954,10 @@ class FileBarTest(unittest.TestCase):
         self.run_files(b, 1000, 1000)
         self.assertTrue(self.rest(b)[0].startswith("1000/4000  25%"), self.rest(b)[0])
 
-    def test_a_module_bar_keeps_its_own_figures(self):
+    def test_a_module_bar_follows_the_tests_run_when_history_has_no_sub_times(self):
         b = self.board(kind="modules")
         self.run_files(b, 7, 1000)
-        self.assertTrue(self.rest(b)[0].startswith("7/32  21%"), self.rest(b)[0])
+        self.assertTrue(self.rest(b)[0].startswith("7/32  ~25%"), self.rest(b)[0])
 
     def start(self, b, *names):
         for name in names:
@@ -1192,6 +1278,19 @@ class LiveTest(unittest.TestCase):
                 else:
                     self.assertIn("a@b ✓ · PGP ✗", text)
                     self.assertNotIn("\x1b[3", text)
+
+    def test_header_rows_mark_the_icon_column_and_the_title_wraps_with_a_hanging_indent(self):
+        for color in (True, False):
+            with self.subTest(color=color):
+                writes = []
+                live = jr.LiveRenderer(writes.append, size=lambda: os.terminal_size((21, 10)), clock=self.clock,
+                                       color=color)
+                live.render(jr.Board(clock=self.clock), [("header", "Push: Juneau, master, a b c d", jr.HEAD_MARK),
+                                                         ("header", "Output: tail -f /a/very/long/path.log", jr.MORE_MARK)])
+                lines = jr._ANSI.sub("", "".join(writes)).splitlines()
+                self.assertEqual(lines[:3], ["▶ Push: Juneau,", "  master, a b c d", "▶ Output: tail -f /a/very/long/path.log"])
+                self.assertEqual("\x1b[2m▶\x1b[0m" in "".join(writes), color)     # the rows under the title are dim
+                self.assertEqual("\x1b[36m▶\x1b[0m Push:" in "".join(writes), color)   # the title marker is cyan, like the spinner
 
     def test_hides_the_cursor_while_drawing_and_shows_it_on_close(self):
         writes = []

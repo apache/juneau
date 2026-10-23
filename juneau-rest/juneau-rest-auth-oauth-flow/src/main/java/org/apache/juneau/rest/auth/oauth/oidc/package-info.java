@@ -19,8 +19,8 @@
  *
  * <p>
  * Fetches and parses authorization-server metadata into a Juneau-native
- * {@link org.apache.juneau.rest.auth.oauth.oidc.OidcMetadata} record via
- * {@link org.apache.juneau.rest.auth.oauth.oidc.OidcDiscoveryClient}.  These primitives are role-neutral and are
+ * {@link org.apache.juneau.rest.auth.oauth.oidc.OidcMetadata OidcMetadata} record via
+ * {@link org.apache.juneau.rest.auth.oauth.oidc.OidcDiscoveryClient OidcDiscoveryClient}.  These primitives are role-neutral and are
  * consumed by both the REST server OAuth/OIDC modules and the MCP client-side token-acquisition layer.
  *
  * @since 10.0.0

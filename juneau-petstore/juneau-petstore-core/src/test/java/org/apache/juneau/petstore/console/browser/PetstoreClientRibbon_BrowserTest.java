@@ -85,7 +85,9 @@ class PetstoreClientRibbon_BrowserTest extends TestBase {
 
 	@Test void a03_totalIsTheSoldDogs() throws Exception {
 		var c = assertClean(report, "sold");
-		@SuppressWarnings("unchecked") // fetches are {status, body} objects.
+		@SuppressWarnings({
+			"unchecked" // fetches are {status, body} objects.
+		})
 		var f = (Map<String,Object>)((Map<String,Object>)c.get("fetches")).get("pets");
 		assertEquals(200, ((Number) f.get("status")).intValue(), () -> String.valueOf(f));
 		var dogs = 0;

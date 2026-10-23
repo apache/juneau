@@ -56,7 +56,7 @@ import org.springframework.test.context.*;
  * class so subsequent tests don't see the bridge.
  */
 @org.apache.juneau.testing.SpringbootTest
-@SpringBootTest(classes = SpringEnvironmentPropertySource_SpringbootIntegration_Test.TestApp.class,
+@SpringBootTest(classes = SpringEnvironmentPropertySource_Integration_Springboot_Test.TestApp.class,
 	webEnvironment = SpringBootTest.WebEnvironment.NONE)
 @TestPropertySource(properties = {
 	"spring.boot.demo.key=from-application-yaml",
@@ -66,7 +66,7 @@ import org.springframework.test.context.*;
 @SuppressWarnings({
 	"java:S2093" // Cleanup calls clear() (Settings-bridge deregistration), not close() (PreDestroy lifecycle); try-with-resources would invoke the wrong method and change semantics.
 })
-class SpringEnvironmentPropertySource_SpringbootIntegration_Test extends TestBase {
+class SpringEnvironmentPropertySource_Integration_Springboot_Test extends TestBase {
 
 	/**
 	 * Minimal Spring Boot application — no servlets, no MVC, just enough to give us a populated

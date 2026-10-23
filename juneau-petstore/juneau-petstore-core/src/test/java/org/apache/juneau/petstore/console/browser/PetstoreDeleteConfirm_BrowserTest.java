@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.petstore.console.browser;
 
+import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.petstore.console.browser.PetstoreBrowser.*;
 import static org.apache.juneau.test.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -60,11 +61,12 @@ class PetstoreDeleteConfirm_BrowserTest extends TestBase {
 	 */
 	private static Map<String,Object> theCase(String name, String page, String button) {
 		var body = "#" + page + "-body";
-		var actions = new ArrayList<Map<String,Object>>();
-		actions.add(wait("document.querySelector('" + body + " .juneau-view-action-trigger')"));
-		actions.add(Map.of("click", body + " .juneau-view-action-trigger"));
-		actions.add(Map.of("click", ".juneau-view-action-item[data-action-id=delete]"));
-		actions.add(wait("document.querySelector('" + TITLE + "')"));
+		List<Map<String,Object>> actions = list(
+			wait("document.querySelector('" + body + " .juneau-view-action-trigger')"),
+			Map.of("click", body + " .juneau-view-action-trigger"),
+			Map.of("click", ".juneau-view-action-item[data-action-id=delete]"),
+			wait("document.querySelector('" + TITLE + "')")
+		);
 		actions.add(Map.of("evaluate", "(() => { const t = document.querySelector('" + TITLE + "').textContent; window.__title = t;"
 			+ " const m = /'([^']+)'/.exec(t); window.__name = m && m[1]; })()"));
 		actions.add(Map.of("click", DLG + " .juneau-view-dialog-" + button));
@@ -86,7 +88,9 @@ class PetstoreDeleteConfirm_BrowserTest extends TestBase {
 			theCase("petsConfirm", "pets", "confirm")));
 	}
 
-	@SuppressWarnings("unchecked") // requests is a JSON array of {url, method, postData}.
+	@SuppressWarnings({
+		"unchecked" // requests is a JSON array of {url, method, postData}.
+	})
 	private static List<String> deletes(Map<String,Object> c) {
 		return ((List<Map<String,Object>>) c.get("requests")).stream()
 			.filter(r -> "DELETE".equals(r.get("method")))

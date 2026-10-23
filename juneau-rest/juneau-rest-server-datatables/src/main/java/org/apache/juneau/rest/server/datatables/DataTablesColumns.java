@@ -105,11 +105,7 @@ public class DataTablesColumns {
 			// can't be read back from a row is useless to DataTables (and DataTablesTable would fail reading it).
 			if (! pm.canRead())
 				continue;
-			var col = new LinkedHashMap<String,Object>();
-			col.put("data", pm.getName());
-			col.put("title", title(pm));
-			col.put("orderable", Boolean.TRUE);
-			col.put("searchable", Boolean.TRUE);
+			Map<String,Object> col = m("data", pm.getName(), "title", title(pm), "orderable", Boolean.TRUE, "searchable", Boolean.TRUE);
 			out.add(col);
 		}
 		return out;

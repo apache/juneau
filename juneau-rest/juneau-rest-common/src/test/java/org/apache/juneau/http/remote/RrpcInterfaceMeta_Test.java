@@ -17,6 +17,7 @@
 package org.apache.juneau.http.remote;
 
 import static org.apache.juneau.BasicTestUtils.*;
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
@@ -40,7 +41,7 @@ class RrpcInterfaceMeta_Test extends TestBase {
 
 	@Test void a02_compatCtor_includesUnannotatedMethods() {
 		var m = new RrpcInterfaceMeta(PlainIface.class, "http://x");
-		assertEquals(1, m.getMethodMetas().size());
+		assertSize(1, m.getMethodMetas());
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -69,7 +70,7 @@ class RrpcInterfaceMeta_Test extends TestBase {
 	@Test void b04_of_headerEntry_noDelimiter_isSkipped() {
 		var m = RrpcInterfaceMeta.of(MalformedHeaderIface.class);
 		// "NoColonHere" has no ':' delimiter and is silently dropped; only the well-formed entry survives.
-		assertEquals(1, m.getHeaders().size());
+		assertSize(1, m.getHeaders());
 		assertEquals("Good", m.getHeaders().get(0).getKey());
 	}
 
@@ -84,7 +85,7 @@ class RrpcInterfaceMeta_Test extends TestBase {
 
 	@Test void c02_getMethodMetaByPath_found() {
 		var m = RrpcInterfaceMeta.of(PlainRemoteIface.class);
-		assertEquals(1, m.getMethodsByPath().size());
+		assertSize(1, m.getMethodsByPath());
 		var path = m.getMethodsByPath().keySet().iterator().next();
 		assertNotNull(m.getMethodMetaByPath(path));
 	}

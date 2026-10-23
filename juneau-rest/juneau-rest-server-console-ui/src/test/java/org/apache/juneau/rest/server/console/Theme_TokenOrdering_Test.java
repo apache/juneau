@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.server.console;
 
+import static org.apache.juneau.commons.utils.Shorts.f;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
@@ -45,7 +46,7 @@ class Theme_TokenOrdering_Test extends TestBase {
 	private static Theme themeWithNames() {
 		var b = Theme.create("ordering");
 		for (var i = 0; i < NAMES.size(); i++)
-			b.token(NAMES.get(i), String.format("#%06x", i));
+			b.token(NAMES.get(i), f("#%06x", i));
 		return b.build();
 	}
 

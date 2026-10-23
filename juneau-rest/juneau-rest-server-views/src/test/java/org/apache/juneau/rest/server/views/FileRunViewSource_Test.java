@@ -17,6 +17,7 @@
 package org.apache.juneau.rest.server.views;
 
 import static java.nio.file.StandardOpenOption.*;
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.nio.file.*;
@@ -76,7 +77,7 @@ class FileRunViewSource_Test extends TestBase {
 		var s = src();
 		assertTrue(s.page(null, 10).events().isEmpty());
 		Files.writeString(f, "\n", APPEND);
-		assertEquals(1, s.page(null, 10).events().size());
+		assertSize(1, s.page(null, 10).events());
 	}
 
 	@Test void b02_badLinesAreSkippedWithSeqGap() throws Exception {
@@ -86,7 +87,7 @@ class FileRunViewSource_Test extends TestBase {
 		var p = page[0];
 		assertEquals(List.of(3L), seqs(p));
 		assertTrue(p.next().endsWith(".3"));
-		assertEquals(1, msgs.size(), msgs::toString);
+		assertSize(msgs::toString, 1, msgs);
 	}
 
 	private static final class Capture extends Handler {
@@ -118,9 +119,9 @@ class FileRunViewSource_Test extends TestBase {
 			s.page(null, 10);
 			s.page(null, 10);
 		});
-		assertEquals(1, msgs.size(), msgs::toString);
+		assertSize(msgs::toString, 1, msgs);
 		assertTrue(msgs.get(0).startsWith("WARNING: FileRunViewSource '" + f + "' skipped malformed line 1 ("), msgs.get(0));
-		assertEquals(1, warnings(() -> src().page(null, 10)).size(), "a new source warns again");
+		assertSize(() -> "a new source warns again", 1, warnings(() -> src().page(null, 10)));
 	}
 
 	@Test void b06_blankAndGoodLinesDoNotWarn() throws Exception {
@@ -133,7 +134,7 @@ class FileRunViewSource_Test extends TestBase {
 		var page = new RunViewPage[1];
 		var msgs = warnings(() -> page[0] = src().page(null, 10));
 		assertEquals(List.of(2L), seqs(page[0]));
-		assertEquals(1, msgs.size(), msgs::toString);
+		assertSize(msgs::toString, 1, msgs);
 	}
 
 	@Test void b04_blankLineAndBomAndCr() throws Exception {

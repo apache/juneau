@@ -53,12 +53,12 @@ class Csv_Test extends TestBase{
 
 		// Parse a single-column list of strings
 		var r1 = (List<String>) Csv.to(csv1, List.class, String.class);
-		assertEquals(1, r1.size());
+		assertSize(1, r1);
 		assertEquals("foo", r1.get(0));
 
 		// Parse from Reader
 		var r2 = (List<String>) Csv.DEFAULT.read(stringReader(csv1), List.class, String.class);
-		assertEquals(1, r2.size());
+		assertSize(1, r2);
 
 		// Parse into a map
 		var r3 = Csv.to(csv2, Map.class);

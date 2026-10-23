@@ -17,6 +17,7 @@
 package org.apache.juneau.rest.server.mcp.v20260728;
 
 import static org.apache.juneau.commons.utils.Shorts.*;
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
@@ -135,7 +136,7 @@ class McpPromptResource_Test {
 			.addPrompt(prompt("p", args -> new McpPromptOutcome()))
 			.addPrompt(prompt("q", args -> new McpPromptOutcome()));
 		var result = (ListPromptsResult) send(config, req(1, "prompts/list", null), hdrs("prompts/list", "")).getResult();
-		assertEquals(2, result.getPrompts().size());
+		assertSize(2, result.getPrompts());
 		assertNull(result.getNextCursor());
 	}
 
@@ -145,10 +146,10 @@ class McpPromptResource_Test {
 			.addPrompt(prompt("p", args -> new McpPromptOutcome()))
 			.addPrompt(prompt("q", args -> new McpPromptOutcome()));
 		var first = (ListPromptsResult) send(config, req(1, "prompts/list", null), hdrs("prompts/list", "")).getResult();
-		assertEquals(1, first.getPrompts().size());
+		assertSize(1, first.getPrompts());
 		assertEquals("1", first.getNextCursor());
 		var second = (ListPromptsResult) send(config, req(2, "prompts/list", JsonMap.of("cursor", "1")), hdrs("prompts/list", "")).getResult();
-		assertEquals(1, second.getPrompts().size());
+		assertSize(1, second.getPrompts());
 		assertNull(second.getNextCursor());
 	}
 
@@ -194,7 +195,7 @@ class McpPromptResource_Test {
 			.addResource(resource("file:///a", u -> new McpResourceOutcome()))
 			.addResource(resource("file:///b", u -> new McpResourceOutcome()));
 		var result = (ListResourcesResult) send(config, req(1, "resources/list", null), hdrs("resources/list", "")).getResult();
-		assertEquals(2, result.getResources().size());
+		assertSize(2, result.getResources());
 		assertNull(result.getNextCursor());
 	}
 
@@ -204,10 +205,10 @@ class McpPromptResource_Test {
 			.addResource(resource("file:///a", u -> new McpResourceOutcome()))
 			.addResource(resource("file:///b", u -> new McpResourceOutcome()));
 		var first = (ListResourcesResult) send(config, req(1, "resources/list", null), hdrs("resources/list", "")).getResult();
-		assertEquals(1, first.getResources().size());
+		assertSize(1, first.getResources());
 		assertEquals("1", first.getNextCursor());
 		var second = (ListResourcesResult) send(config, req(2, "resources/list", JsonMap.of("cursor", "1")), hdrs("resources/list", "")).getResult();
-		assertEquals(1, second.getResources().size());
+		assertSize(1, second.getResources());
 		assertNull(second.getNextCursor());
 	}
 
@@ -216,7 +217,7 @@ class McpPromptResource_Test {
 		var config = new McpServerConfig().addResource(resource("file:///a", u -> new McpResourceOutcome()
 			.setContents(List.of(McpResourceContents.text(u, "text/plain", "body")))));
 		var result = (ReadResourceResult) send(config, req(1, "resources/read", JsonMap.of("uri", "file:///a")), hdrs("resources/read", "file:///a")).getResult();
-		assertEquals(1, result.getContents().size());
+		assertSize(1, result.getContents());
 		var contents = (TextResourceContents) result.getContents().get(0);
 		assertEquals("body", contents.getText());
 		assertEquals("file:///a", contents.getUri());

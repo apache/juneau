@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.server.views;
 
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
@@ -71,7 +72,7 @@ class BulkResult_Test extends TestBase {
 		assertEquals(List.of("c-1"), m.get("succeeded"));
 		assertEquals(List.of("c-9"), m.get("notFound"));
 		var failed = (List<?>)m.get("failed");
-		assertEquals(1, failed.size());
+		assertSize(1, failed);
 		var f0 = (Map<?,?>)failed.get(0);
 		assertEquals("c-3", f0.get("id"));
 		assertEquals("Change is already merged.", f0.get("message"));

@@ -19,6 +19,7 @@ package org.apache.juneau.marshall.stream;
 import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assumptions.*;
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 
 import java.io.*;
 import java.util.*;
@@ -386,7 +387,7 @@ class RecordStream_Test extends TestBase {
 		var matrix = new Flat[][]{ {new Flat("x", 10)}, {new Flat("y", 20), new Flat("z", 30)} };
 		var bean = new Deep2D(grid, matrix);
 		var got = roundTrip(fmt, bean, Deep2D.class);
-		assertEquals(2, got.grid.size());
+		assertSize(2, got.grid);
 		assertEquals("a", got.grid.get(0).get(0).name);
 		assertEquals(2, got.matrix.length);
 		assertEquals("z", got.matrix[1][1].name);
@@ -481,7 +482,7 @@ class RecordStream_Test extends TestBase {
 		// Use List.class with element type to satisfy parsers like CSV that need element type.
 		var wire = serialize(fmt, beans);
 		var got = (List<Flat>) parseWithElement(fmt, wire, List.class, Flat.class);
-		assertEquals(2, got.size());
+		assertSize(2, got);
 		assertEquals("alice", got.get(0).name);
 		assertEquals("bob", got.get(1).name);
 	}
@@ -535,7 +536,7 @@ class RecordStream_Test extends TestBase {
 		var wire = serialize(fmt, List.of());
 		var got = (List<Flat>) parseWithElement(fmt, wire, List.class, Flat.class);
 		assertNotNull(got);
-		assertEquals(0, got.size());
+		assertSize(0, got);
 	}
 
 	// =====================================================================================

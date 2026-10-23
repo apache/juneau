@@ -20,6 +20,7 @@ import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.*;
 import static org.apache.juneau.commons.reflect.ConstructorInfo.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
+import static org.apache.juneau.commons.TestAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.lang.annotation.*;
@@ -254,7 +255,7 @@ class ConstructorInfo_Test extends TestBase {
 		var ctor = ci.getPublicConstructor(x -> x.getParameterCount() == 0).get();
 		var exceptions = ctor.getExceptionTypes();
 		assertNotNull(exceptions);
-		assertEquals(1, exceptions.size());
+		assertSize(1, exceptions);
 		assertEquals(Exception.class, exceptions.get(0).inner());
 	}
 
@@ -311,7 +312,7 @@ class ConstructorInfo_Test extends TestBase {
 	void a016_getParameters() {
 		var params = bc2.getParameters();
 		assertNotNull(params);
-		assertEquals(1, params.size());
+		assertSize(1, params);
 		assertEquals(String.class, params.get(0).getParameterType().inner());
 
 		// Test stream operations
@@ -1070,7 +1071,7 @@ class ConstructorInfo_Test extends TestBase {
 		assertEquals(1, params.length);
 		assertTrue(params[0] instanceof List);
 		var list = (List<TestService>) params[0];
-		assertEquals(2, list.size());
+		assertSize(2, list);
 		assertTrue(list.contains(service1));
 		assertTrue(list.contains(service2));
 	}
@@ -1086,7 +1087,7 @@ class ConstructorInfo_Test extends TestBase {
 		assertEquals(1, params.length);
 		assertTrue(params[0] instanceof Set);
 		var set = (Set<TestService>) params[0];
-		assertEquals(2, set.size());
+		assertSize(2, set);
 		assertTrue(set.contains(service1));
 		assertTrue(set.contains(service2));
 	}
@@ -1102,7 +1103,7 @@ class ConstructorInfo_Test extends TestBase {
 		assertEquals(1, params.length);
 		assertTrue(params[0] instanceof Map);
 		var map = (Map<String,TestService>) params[0];
-		assertEquals(2, map.size());
+		assertSize(2, map);
 		assertSame(service1, map.get("service1"));
 		assertSame(service2, map.get("service2"));
 	}
@@ -1118,7 +1119,7 @@ class ConstructorInfo_Test extends TestBase {
 		assertEquals(1, params.length);
 		assertTrue(params[0] instanceof Map);
 		var map = (Map<String,TestService>) params[0];
-		assertEquals(2, map.size());
+		assertSize(2, map);
 		assertSame(service1, map.get("")); // Unnamed beans use empty string as key
 		assertSame(service2, map.get("service2"));
 	}
@@ -1141,7 +1142,7 @@ class ConstructorInfo_Test extends TestBase {
 		assertSame(another, opt.get());
 		assertTrue(params[2] instanceof List); // List
 		var list = (List<TestService>) params[2];
-		assertEquals(2, list.size());
+		assertSize(2, list);
 	}
 
 	@Test

@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.server.util;
 
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
@@ -83,13 +84,13 @@ class BufferedEncodingWriter_Test {
 
 	@Test void a03_surrogatePairSplitAcrossWritesAndFlush() throws IOException {
 		var bos = new ByteArrayOutputStream();
-		var w = new BufferedEncodingWriter(bos, "UTF-8");
 		var pair = "😀";
-		w.write(pair.charAt(0));
-		w.flush();
-		assertEquals(0, bos.size());
-		w.write(pair.charAt(1));
-		w.close();
+		try (var w = new BufferedEncodingWriter(bos, "UTF-8")) {
+			w.write(pair.charAt(0));
+			w.flush();
+			assertSize(0, bos);
+			w.write(pair.charAt(1));
+		}
 		assertArrayEquals(pair.getBytes(StandardCharsets.UTF_8), bos.toByteArray());
 	}
 
@@ -102,12 +103,13 @@ class BufferedEncodingWriter_Test {
 		var bos = new ByteArrayOutputStream() {
 			@Override public void flush() { flushed[0] = true; }
 		};
-		var w = new BufferedEncodingWriter(bos, "UTF-8");
-		w.write("hi");
-		assertEquals(0, bos.size());
-		w.flush();
-		assertEquals("hi", bos.toString(StandardCharsets.UTF_8));
-		assertTrue(flushed[0]);
+		try (var w = new BufferedEncodingWriter(bos, "UTF-8")) {
+			w.write("hi");
+			assertSize(0, bos);
+			w.flush();
+			assertEquals("hi", bos.toString(StandardCharsets.UTF_8));
+			assertTrue(flushed[0]);
+		}
 	}
 
 	@Test void a06_unsupportedEncoding() {
@@ -118,11 +120,12 @@ class BufferedEncodingWriter_Test {
 	}
 
 	@Test void a07_writeAfterCloseThrows() throws IOException {
-		var w = new BufferedEncodingWriter(new ByteArrayOutputStream(), "UTF-8");
-		w.close();
-		w.close();
-		assertThrows(IOException.class, () -> w.write("x"));
-		assertThrows(IOException.class, w::flush);
+		try (var w = new BufferedEncodingWriter(new ByteArrayOutputStream(), "UTF-8")) {
+			w.close();
+			w.close();
+			assertThrows(IOException.class, () -> w.write("x"));
+			assertThrows(IOException.class, w::flush);
+		}
 	}
 
 	@Test void a08_closeClosesStream() throws IOException {
@@ -135,9 +138,10 @@ class BufferedEncodingWriter_Test {
 	}
 
 	@Test void a09_badBounds() throws IOException {
-		var w = new BufferedEncodingWriter(new ByteArrayOutputStream(), "UTF-8");
-		assertThrows(IndexOutOfBoundsException.class, () -> w.write(new char[2], 1, 5));
-		assertThrows(IndexOutOfBoundsException.class, () -> w.write("ab", -1, 1));
+		try (var w = new BufferedEncodingWriter(new ByteArrayOutputStream(), "UTF-8")) {
+			assertThrows(IndexOutOfBoundsException.class, () -> w.write(new char[2], 1, 5));
+			assertThrows(IndexOutOfBoundsException.class, () -> w.write("ab", -1, 1));
+		}
 	}
 
 	@Test void a10_printWriterWrapper() throws IOException {

@@ -18,6 +18,7 @@ package org.apache.juneau.marshall.cbor;
 
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 
 import org.apache.juneau.*;
 import org.apache.juneau.marshall.collections.*;
@@ -52,7 +53,7 @@ class CborRoundTrip_Test extends TestBase {
 		var list = list(new CborSerializer_Test.Bean1("a", 1, true), new CborSerializer_Test.Bean1("b", 2, false));
 		var bytes = CborSerializer.DEFAULT.write(list);
 		var parsed = CborParser.DEFAULT.read(bytes, JsonList.class);
-		assertEquals(2, parsed.size());
+		assertSize(2, parsed);
 		assertEquals("a", parsed.getMap(0).getString("s"));
 		assertEquals("b", parsed.getMap(1).getString("s"));
 	}
@@ -64,7 +65,7 @@ class CborRoundTrip_Test extends TestBase {
 		var parsed = CborParser.DEFAULT.read(bytes, JsonMap.class);
 		assertEquals(1, parsed.getInt("a"));
 		assertEquals("x", parsed.getString("b"));
-		assertEquals(3, parsed.getList("c").size());
+		assertSize(3, parsed.getList("c"));
 	}
 
 	@Test
@@ -122,7 +123,7 @@ class CborRoundTrip_Test extends TestBase {
 		var bytes = CborSerializer.DEFAULT.write(m);
 		var p = CborParser.DEFAULT.read(bytes, JsonMap.class);
 		assertEquals("test", p.getString("name"));
-		assertEquals(2, p.getList("tags").size());
+		assertSize(2, p.getList("tags"));
 		assertEquals(1, p.getMap("meta").getInt("x"));
 	}
 

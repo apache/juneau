@@ -20,8 +20,8 @@
  * <p>
  * Includes support for:
  * <ul>
- * 	<li>{@link org.apache.juneau.marshall.json5.Json5Serializer} - JSON5 (simplified) serialization
- * 	<li>{@link org.apache.juneau.marshall.json5.Json5Parser} - JSON5 parsing with relaxed syntax
+ * 	<li>{@link org.apache.juneau.marshall.json5.Json5Serializer Json5Serializer} - JSON5 (simplified) serialization
+ * 	<li>{@link org.apache.juneau.marshall.json5.Json5Parser Json5Parser} - JSON5 parsing with relaxed syntax
  * </ul>
  * </p>
  */

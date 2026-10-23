@@ -351,7 +351,7 @@ class ConsoleJs_Shell_Test extends TestBase {
 		var c = map(r().get("runView"));
 		assertBean(c, "threw,errors,callsBeforeReady,cardTitle,resultCards,duplicateIds", "<null>,[],0,Run,[rv1,rv2],[]");
 		var calls = list(c.get("calls"));
-		assertEquals(2, calls.size(), c::toString);
+		assertSize(c::toString, 2, calls);
 		assertBean(calls.get(0), "elId,elClass,hostId,ctx", "rv1-body,jc-card-body,rv1,{}");
 		assertBean(calls.get(1), "elId,elClass,hostId,ctx", "rv2-body,jc-card-body,rv2,{}");
 		assertEquals(Json5.to("{eventsUrl:'/runs/1/events',compact:true}", Map.class),

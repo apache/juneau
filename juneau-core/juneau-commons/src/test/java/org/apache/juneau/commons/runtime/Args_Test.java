@@ -17,6 +17,7 @@
 package org.apache.juneau.commons.runtime;
 
 import static org.apache.juneau.commons.utils.Shorts.*;
+import static org.apache.juneau.commons.TestAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.commons.*;
@@ -61,7 +62,7 @@ class Args_Test extends TestBase {
 		assertEquals("foo", x.get(0).orElse(null));
 		assertEquals("bar bar", x.get(1).orElse(null));
 		assertEquals(2, x.argCount());
-		assertEquals(2, x.positional().size());
+		assertSize(2, x.positional());
 	}
 
 	@Test void a04_flagWithoutValue() {
@@ -78,7 +79,7 @@ class Args_Test extends TestBase {
 		assertEquals("foo", x.get(0).orElse(null));
 		assertEquals("bar bar", x.get(1).orElse(null));
 		assertEquals("bar bar", x.get("foo").orElse(null));
-		assertEquals(1, x.getAll("foo").size());
+		assertSize(1, x.getAll("foo"));
 		assertTrue(x.has("foo"));
 	}
 
@@ -213,7 +214,7 @@ class Args_Test extends TestBase {
 	@Test void d01_asMapNamedOnly() {
 		var x = new Args(a("p0", "p1", "-k", "v"));
 		var map = x.asMap();
-		assertEquals(1, map.size());
+		assertSize(1, map);
 		assertTrue(map.containsKey("k"));
 		assertEquals(l("v"), map.get("k"));
 	}

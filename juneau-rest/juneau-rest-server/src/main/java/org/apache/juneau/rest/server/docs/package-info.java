@@ -25,14 +25,14 @@
  * </p>
  *
  * <ul class='javatreec'>
- * 	<li class='jc'>{@link org.apache.juneau.rest.server.docs.SwaggerMixin} —
+ * 	<li class='jc'>{@link org.apache.juneau.rest.server.docs.SwaggerMixin SwaggerMixin} —
  * 		spec endpoint at {@code /api}, Swagger v2 + Swagger-UI swap.
- * 	<li class='jc'>{@link org.apache.juneau.rest.server.docs.SwaggerUiMixin} —
+ * 	<li class='jc'>{@link org.apache.juneau.rest.server.docs.SwaggerUiMixin SwaggerUiMixin} —
  * 		HTML-first mount at {@code /swagger}, transitively pulls in {@code SwaggerMixin}.
- * 	<li class='jc'>{@link org.apache.juneau.rest.server.docs.OpenApiMixin} —
+ * 	<li class='jc'>{@link org.apache.juneau.rest.server.docs.OpenApiMixin OpenApiMixin} —
  * 		spec endpoints at {@code /openapi}, {@code /openapi.json}, and {@code /openapi.yaml};
  * 		OpenAPI 3.1 + Redoc swap on the content-negotiated {@code /openapi} mount.
- * 	<li class='jc'>{@link org.apache.juneau.rest.server.docs.RedocMixin} —
+ * 	<li class='jc'>{@link org.apache.juneau.rest.server.docs.RedocMixin RedocMixin} —
  * 		HTML-first mount at {@code /redoc}, transitively pulls in {@code OpenApiMixin}.
  * </ul>
  *
@@ -55,8 +55,8 @@
  * </p>
  *
  * <p>
- * The two UI mixins ({@link org.apache.juneau.rest.server.docs.SwaggerUiMixin} and
- * {@link org.apache.juneau.rest.server.docs.RedocMixin}) declare {@code @Rest(defaultAccept="text/html")}
+ * The two UI mixins ({@link org.apache.juneau.rest.server.docs.SwaggerUiMixin SwaggerUiMixin} and
+ * {@link org.apache.juneau.rest.server.docs.RedocMixin RedocMixin}) declare {@code @Rest(defaultAccept="text/html")}
  * so that bare browser requests (no {@code Accept} header, or {@code Accept: *}{@code /*}) render the
  * HTML view rather than the serializer-default media type. The two spec mixins use Juneau's standard
  * content negotiation unchanged.

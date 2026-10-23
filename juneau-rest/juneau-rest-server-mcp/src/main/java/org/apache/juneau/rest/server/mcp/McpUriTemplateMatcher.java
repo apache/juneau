@@ -118,7 +118,7 @@ public final class McpUriTemplateMatcher {
 	 * 	invalid UTF-8 percent-escape sequence, or declares the same variable name more than once.
 	 */
 	public static McpUriTemplateMatcher compile(String uriTemplate) {
-		if (uriTemplate == null || uriTemplate.isBlank())
+		if (ib(uriTemplate))
 			throw iaex("Malformed URI template ''%s'': template must not be null or blank", uriTemplate);
 
 		var tokens = tokenize(uriTemplate);

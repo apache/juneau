@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.client.mcp.v20260728;
 
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
@@ -64,7 +65,7 @@ class McpClient_Methods_Test extends TestBase {
 		var wire = "{\"jsonrpc\":\"2.0\",\"id\":\"1\",\"result\":{\"tools\":[{\"name\":\"echo\",\"description\":\"Echoes\"}]}}";
 		try (var c = client(ok(wire))) {
 			var result = c.listTools();
-			assertEquals(1, result.getTools().size());
+			assertSize(1, result.getTools());
 			assertEquals("echo", result.getTools().get(0).getName());
 		}
 	}
@@ -74,7 +75,7 @@ class McpClient_Methods_Test extends TestBase {
 		var wire = "{\"jsonrpc\":\"2.0\",\"id\":\"1\",\"result\":{\"content\":[{\"type\":\"text\",\"text\":\"hello\"}]}}";
 		try (var c = McpClient.builder().endpoint("http://x/mcp").transport(ok(wire)).build()) {
 			var result = c.callTool("echo", Map.of("text", "hello"));
-			assertEquals(1, result.getContent().size());
+			assertSize(1, result.getContent());
 			assertEquals("hello", ((TextContent)result.getContent().get(0)).getText());
 		}
 	}
@@ -120,7 +121,7 @@ class McpClient_Methods_Test extends TestBase {
 		var wire = "{\"jsonrpc\":\"2.0\",\"id\":\"1\",\"result\":{\"prompts\":[{\"name\":\"greet\",\"description\":\"Greets\"}]}}";
 		try (var c = client(ok(wire))) {
 			var result = c.listPrompts();
-			assertEquals(1, result.getPrompts().size());
+			assertSize(1, result.getPrompts());
 			assertEquals("greet", result.getPrompts().get(0).getName());
 		}
 	}
@@ -141,7 +142,7 @@ class McpClient_Methods_Test extends TestBase {
 		var wire = "{\"jsonrpc\":\"2.0\",\"id\":\"1\",\"result\":{\"resources\":[{\"uri\":\"file:///a.txt\",\"name\":\"a.txt\"}]}}";
 		try (var c = client(ok(wire))) {
 			var result = c.listResources();
-			assertEquals(1, result.getResources().size());
+			assertSize(1, result.getResources());
 			assertEquals("file:///a.txt", result.getResources().get(0).getUri());
 		}
 	}
@@ -151,7 +152,7 @@ class McpClient_Methods_Test extends TestBase {
 		var wire = "{\"jsonrpc\":\"2.0\",\"id\":\"1\",\"result\":{\"resourceTemplates\":[{\"uriTemplate\":\"file:///{path}\",\"name\":\"files\"}]}}";
 		try (var c = client(ok(wire))) {
 			var result = c.listResourceTemplates();
-			assertEquals(1, result.getResourceTemplates().size());
+			assertSize(1, result.getResourceTemplates());
 			assertEquals("file:///{path}", result.getResourceTemplates().get(0).getUriTemplate());
 		}
 	}

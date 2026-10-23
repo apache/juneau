@@ -44,12 +44,12 @@ Environment:
     JUNEAU_MVN_WRAPPER       Optional prefix for every mvn command (e.g. a lock script that serializes
                              concurrent runs on one checkout).
 
-Python tests:
+Python Tests:
     After the Maven tests pass, scripts/tests (the tooling's own pytest suite) runs as its own row.  The launcher is
     `python3 -m pytest` when pytest is importable, else `uv run --native-tls --with pytest` when uv is on the PATH; with neither,
     the step prints a notice and skips.  Nothing is installed.
 
-Browser tests:
+Browser Tests:
     The *_BrowserTest classes (juneau-rest-server-views, juneau-petstore-core, juneau-rest-server-terminal) are excluded from the main test
     pass, so it reports no skips for them; this step runs them with -Pjs-tests, as CI's js-tests and
     js-tests-petstore and js-tests-terminal jobs do.  When neither
@@ -158,9 +158,9 @@ def parse_test_results(output):
 	return None, None, None
 
 
-# ─── Per-module timing/perf subsystem (TODO-160) ────────────────────────────────
+# ─── Per-module timing/perf subsystem ────────────────────────────────
 #
-# After the TODO-160 migration, tests live in each module's own src/test/java and
+# Tests live in each module's own src/test/java and
 # report into that module's target/surefire-reports/.  The helpers below discover
 # ALL such report dirs under the reactor (not just juneau-integration-tests's), attribute each
 # Surefire XML to its OWNING module (the parent of target/surefire-reports), and
@@ -615,7 +615,7 @@ def test(no_container=False):
 	cmd = f"mvn test {PARALLELISM} -Drat.skip=true"
 	if no_container:
 		cmd += " -DexcludedGroups=container"
-	return run_command(cmd, "tests", "Java tests", label="Java tests", summarize=_record_buckets)
+	return run_command(cmd, "tests", "Java Tests", label="Java Tests", summarize=_record_buckets)
 
 
 # Set in the pytest child so a test that reaches script_tests() again cannot launch the suite recursively.
@@ -644,14 +644,14 @@ def script_tests_command(launcher):
 def script_tests(launcher=None, runner=None):
 	"""The scripts/tests pytest suite as its own row.  Returns 0 on pass or skip, non-zero on failure."""
 	if os.environ.get(SCRIPT_TESTS_ACTIVE):
-		say("\n⚠️  Skipping Python tests: already running inside them (no recursion).", "warn")
+		say("\n⚠️  Skipping Python Tests: already running inside them (no recursion).", "warn")
 		return 0
 	launcher = launcher or script_tests_launcher()
 	if launcher is None:
-		say("\n⚠️  Skipping Python tests: neither pytest nor uv found (python3 -m pytest / uv run --native-tls --with pytest).", "warn")
+		say("\n⚠️  Skipping Python Tests: neither pytest nor uv found (python3 -m pytest / uv run --native-tls --with pytest).", "warn")
 		return 0
 	cmd = script_tests_command(launcher)
-	say("\n🐍 Running Python tests (scripts/tests)...")
+	say("\n🐍 Running Python Tests (scripts/tests)...")
 	say(f"Running: {' '.join(cmd)}")
 	say("-" * 80)  # NOSONAR python:S1192 - the same banner rule as run_command
 	env = dict(os.environ, PYTHONDONTWRITEBYTECODE="1", **{SCRIPT_TESTS_ACTIVE: "1"})
@@ -659,9 +659,9 @@ def script_tests(launcher=None, runner=None):
 		code = runner(cmd, env)
 	else:
 		run = _juneau.load()[0]
-		code = run.run_tool(cmd, "pytest", "py-tests", "Python tests", n=next_step_number(), cwd=str(REPO_ROOT),
-			env=env, capture=True, label="Python tests").exit
-	say("\n✅ Python tests passed!" if code == 0 else "\n❌ Python tests failed!", "info" if code == 0 else "error")
+		code = run.run_tool(cmd, "pytest", "py-tests", "Python Tests", n=next_step_number(), cwd=str(REPO_ROOT),
+			env=env, capture=True, label="Python Tests").exit
+	say("\n✅ Python Tests passed!" if code == 0 else "\n❌ Python Tests failed!", "info" if code == 0 else "error")
 	return code
 
 
@@ -725,12 +725,12 @@ def js_tests_command():
 
 def js_tests(installed=False):  # NOSONAR python:S1172 -- kept so callers need not change; the scope no longer depends on it
 	"""The JS harness: the views and petstore browser suites in one run."""
-	return run_command(js_tests_command(), "js-tests", "Browser tests", label="Browser tests")
+	return run_command(js_tests_command(), "js-tests", "Browser Tests", label="Browser Tests")
 
 
 def skip_js_tests_row(reason):
-	"""Draw the Browser tests row as skipped, with the reason as its text."""
-	with _juneau.load()[0].row("js-tests", "Browser tests", label="Browser tests") as row:
+	"""Draw the Browser Tests row as skipped, with the reason as its text."""
+	with _juneau.load()[0].row("js-tests", "Browser Tests", label="Browser Tests") as row:
 		row.skip(reason)
 
 
@@ -747,12 +747,12 @@ def maybe_run_js_tests(js_flag, no_js_flag, changed_files, runner=None, installe
 		if explicit:
 			say(f"\n❌ --js-tests requested but cannot run: {problem}.", "error")
 			return 1
-		say(f"\n⚠️  JS files changed, but skipping Browser tests: {problem}. (CI will still run them.)", "warn")
+		say(f"\n⚠️  JS files changed, but skipping Browser Tests: {problem}. (CI will still run them.)", "warn")
 		skip_js_tests_row(problem.split(" (")[0])
 		return 0
-	say("\n🌐 Running Browser tests (-Pjs-tests)..." + ("" if explicit else " (auto: JS/CSS/FTL files changed)"))
+	say("\n🌐 Running Browser Tests (-Pjs-tests)..." + ("" if explicit else " (auto: JS/CSS/FTL files changed)"))
 	code, _ = (runner or (lambda: js_tests(installed)))()
-	say("\n✅ Browser tests passed!" if code == 0 else "\n❌ Browser tests failed!", "info" if code == 0 else "error")
+	say("\n✅ Browser Tests passed!" if code == 0 else "\n❌ Browser Tests failed!", "info" if code == 0 else "error")
 	return code
 
 
@@ -851,11 +851,11 @@ def _main():  # NOSONAR python:S3776 -- Cognitive complexity is acceptable for t
 		if exit_code != 0:
 			_, failures, errors = parse_test_results(last_test_output)
 			if failures is not None and errors is not None:
-				say(f"\n❌ Java tests failed! ({failures + errors} failed: {failures} failures, {errors} errors)", "error")
+				say(f"\n❌ Java Tests failed! ({failures + errors} failed: {failures} failures, {errors} errors)", "error")
 			else:
-				say("\n❌ Java tests failed!", "error")
+				say("\n❌ Java Tests failed!", "error")
 		else:
-			say("\n✅ Java tests passed!")
+			say("\n✅ Java Tests passed!")
 		if exit_code != 0:
 			return exit_code
 		perf_exit = run_perf_guard(test_elapsed, PERF_BASELINE, module_times_, enforce=args.enforce_perf, unmapped=unmapped)
@@ -916,8 +916,7 @@ def main():
 	_prepare_output(sys.argv[1:])
 	_juneau.load()
 	from juneau_scripts import run as toolkit
-	title = f"🧪 Juneau test · {git_value(['rev-parse', '--abbrev-ref', 'HEAD'])}"
-	with toolkit.session(title, bell=True, silence_env=("JUNEAU_PUSH_NO_SOUND",), repo=root, mode="test",
+	with toolkit.session("Test", header=["Juneau", git_value(['rev-parse', '--abbrev-ref', 'HEAD'])], bell=True, silence_env=("JUNEAU_PUSH_NO_SOUND",), repo=root, mode="test",
 			project=root.name, exit=False) as s:
 		code = _main()
 		if code:

@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.server.reactive;
 
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
@@ -303,7 +304,7 @@ class ReactiveResponseProcessor_Async_Test extends TestBase {
 
 		assertEquals("event: tick\ndata: one\n\nevent: tick\ndata: two\n\n", body(res));
 		assertEquals(0L, req.async.timeout, "stream must not use a container timeout");
-		assertEquals(1, req.async.listeners.size());
+		assertSize(1, req.async.listeners);
 		assertEquals(1, req.async.completes.get());
 		assertEquals(0, res.sendErrors);
 
@@ -414,7 +415,7 @@ class ReactiveResponseProcessor_Async_Test extends TestBase {
 		run(req, res);
 
 		assertEquals(1, req.async.completes.get());
-		assertEquals(1, req.async.listeners.size());
+		assertSize(1, req.async.listeners);
 	}
 
 	// -----------------------------------------------------------------------------------------------------------------

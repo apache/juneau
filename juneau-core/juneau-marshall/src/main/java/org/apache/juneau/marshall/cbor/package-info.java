@@ -24,7 +24,7 @@
  *
  * <p>
  * CBOR shares the same data model as JSON: maps, arrays, strings, numbers, booleans, and null.
- * The {@link org.apache.juneau.marshall.cbor.CborSerializer} and {@link org.apache.juneau.marshall.cbor.CborParser}
+ * The {@link org.apache.juneau.marshall.cbor.CborSerializer CborSerializer} and {@link org.apache.juneau.marshall.cbor.CborParser CborParser}
  * provide binary encoding/decoding with compact integer representation and native byte strings.
  *
  * <p>

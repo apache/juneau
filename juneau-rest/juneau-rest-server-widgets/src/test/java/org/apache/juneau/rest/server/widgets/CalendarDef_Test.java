@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.server.widgets;
 
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
@@ -231,7 +232,7 @@ class CalendarDef_Test extends TestBase {
 			CalendarEvent.create().id("b").title("Offset").start("2026-08-15T09:00:00Z").end("2026-08-15T10:00:00Z")
 				.categoryId("team"));
 		assertDoesNotThrow((Executable) d::validate);
-		assertEquals(2, d.wellFormedEvents().size());
+		assertSize(2, d.wellFormedEvents());
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

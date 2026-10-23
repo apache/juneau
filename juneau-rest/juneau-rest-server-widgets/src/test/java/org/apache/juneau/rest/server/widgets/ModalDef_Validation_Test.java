@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.server.widgets;
 
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
@@ -68,7 +69,7 @@ class ModalDef_Validation_Test extends TestBase {
 
 	@Test void a04_codeField_appendsToExistingFields() {
 		var m = ModalDef.create("T").field("A", "1").codeField("B", "2");
-		assertEquals(2, m.fields.size());
+		assertSize(2, m.fields);
 		assertEquals(ModalDef.FIELD_KIND_CODE, m.fields.get(1).kind);
 	}
 
@@ -86,7 +87,7 @@ class ModalDef_Validation_Test extends TestBase {
 		var m = ModalDef.create("T")
 			.childAction(ModalDef.ChildAction.of("a", "A"))
 			.childAction(ModalDef.ChildAction.of("b", "B"));
-		assertEquals(2, m.childActions.size());
+		assertSize(2, m.childActions);
 		m.validate();
 		m.childAction(ModalDef.ChildAction.of("a", "Again"));
 		assertRejected(m::validate, "more than once");

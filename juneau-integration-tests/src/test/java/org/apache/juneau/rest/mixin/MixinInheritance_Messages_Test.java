@@ -26,7 +26,7 @@ import org.apache.juneau.rest.server.servlet.*;
 import org.junit.jupiter.api.*;
 
 /**
- * Phase 2 &mdash; exercises mixin-sub-context inheritance for the {@code @Rest(messages=...)} property.
+ * Exercises mixin-sub-context inheritance for the {@code @Rest(messages=...)} property.
  *
  * <p>
  * Messages don't ride the standard {@code getRestAnnotationsForProperty(...)} walk &mdash; they use

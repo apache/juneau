@@ -16,12 +16,25 @@
 Start Juneau Petstore (Jetty) Application
 
 This script starts the Juneau petstore sample application using the embedded Jetty/Microservice server.
-It runs the org.apache.juneau.petstore.jetty.App main class using Maven's exec plugin.
+It runs the org.apache.juneau.petstore.jetty.App main class with plain java.  The classpath is resolved once with
+Maven's dependency:build-classpath (cached in target/petstore-classpath.txt); exec:java is not used because its
+class loader fails to load some of the petstore's classes (NoClassDefFoundError on ConfigResource$SectionNotFound).
+
+The port is strict: if it is already bound the script exits non-zero before building or launching anything, naming
+the port and, where it can be found, the holder.  A busy port is never skipped past or silently shared, so a request
+to the port can never be answered by some other (possibly stale) server.
 
 Usage:
-    python3 scripts/start-petstore-jetty.py
+    python3 scripts/start-petstore-jetty.py [--port N]
+
+Options:
+    --port N    Port to listen on (default 10000).  Passed to Jetty as the petstore.port system property,
+                which juneau-petstore-jetty.cfg reads; the checked-in cfg is not modified.
 """
 
+import argparse
+import os
+import socket
 import sys
 import subprocess
 from pathlib import Path
@@ -34,6 +47,61 @@ RED = '\033[91m'
 RESET = '\033[0m'
 BOLD = '\033[1m'
 
+DEFAULT_PORT = 10000
+
+CLASSPATH_FILE = 'petstore-classpath.txt'
+MAIN_CLASS = 'org.apache.juneau.petstore.jetty.App'
+
+def port_in_use(port):
+    """True if something is already listening on localhost:port."""
+    try:
+        with socket.create_connection(('localhost', port), timeout=2):
+            return True
+    except OSError:
+        return False
+
+def port_holder(port):
+    """A description of the process listening on port ('PID 123 (java)'), or None if it can't be found."""
+    try:
+        r = subprocess.run(['lsof', '-nP', f'-iTCP:{port}', '-sTCP:LISTEN', '-Fpc'],
+                           capture_output=True, text=True, timeout=10)
+    except (OSError, subprocess.SubprocessError):
+        return None
+    pid = cmd = None
+    for line in r.stdout.splitlines():
+        if line.startswith('p') and pid is None:
+            pid = line[1:]
+        elif line.startswith('c') and cmd is None:
+            cmd = line[1:]
+    if pid is None:
+        return None
+    return f'PID {pid}' + (f' ({cmd})' if cmd else '')
+
+def port_busy_message(port, holder):
+    """The message printed when the requested port is already bound."""
+    by = f' by {holder}' if holder else ' (holder not found; try: lsof -nP -iTCP:%d -sTCP:LISTEN)' % port
+    return f'Port {port} is already in use{by}.  Stop it or choose another port with --port N.'
+
+def classpath_command(output_file):
+    """The Maven command that writes the module's runtime classpath to output_file."""
+    return ['mvn', '-q', 'dependency:build-classpath', f'-Dmdep.outputFile={output_file}']
+
+def launch_command(classpath, classes_dir, port):
+    """The java command that runs the petstore on port."""
+    java = str(Path(os.environ['JAVA_HOME']) / 'bin' / 'java') if os.environ.get('JAVA_HOME') else 'java'
+    return [java, f'-Dpetstore.port={port}', '-cp', f'{classes_dir}{os.pathsep}{classpath}', MAIN_CLASS]
+
+def resolve_classpath(petstore_dir):
+    """Returns the module's dependency classpath, running dependency:build-classpath when the cached copy is stale."""
+    cache = petstore_dir / 'target' / CLASSPATH_FILE
+    pom = petstore_dir / 'pom.xml'
+    if not cache.exists() or cache.stat().st_mtime < pom.stat().st_mtime:
+        result = subprocess.run(classpath_command(cache), cwd=str(petstore_dir),
+                                stdout=sys.stdout, stderr=sys.stderr)
+        if result.returncode != 0 or not cache.exists():
+            return None
+    return cache.read_text(encoding='utf-8').strip()
+
 def find_project_root():
     """Find the Juneau project root directory."""
     current = Path(__file__).resolve().parent
@@ -43,8 +111,21 @@ def find_project_root():
         current = current.parent
     return None
 
+def parse_args(argv=None):
+    p = argparse.ArgumentParser(description='Start the Juneau petstore (Jetty).')
+    p.add_argument('--port', type=int, default=DEFAULT_PORT, metavar='N',
+                   help=f'port to listen on (default {DEFAULT_PORT})')
+    args = p.parse_args(argv)
+    if not 1 <= args.port <= 65535:
+        p.error('--port must be between 1 and 65535')
+    return args
+
 def main():
     """Start the petstore Jetty application."""
+    args = parse_args()
+    if port_in_use(args.port):
+        print(f"{RED}[ERROR] {port_busy_message(args.port, port_holder(args.port))}{RESET}", file=sys.stderr)
+        sys.exit(2)
     print(f"{BLUE}🚀 Starting Juneau Petstore (Jetty)...{RESET}")
 
     project_root = find_project_root()
@@ -78,18 +159,19 @@ def main():
 
         print(f"\n{GREEN}✓ Build completed successfully{RESET}\n")
 
+    classpath = resolve_classpath(petstore_dir)
+    if classpath is None:
+        print(f"{RED}[ERROR] Could not resolve the petstore classpath (dependency:build-classpath failed){RESET}")
+        sys.exit(1)
+
     print(f"{BLUE}🚀 Starting Jetty/Microservice...{RESET}")
-    print(f"{BLUE}Main class: org.apache.juneau.petstore.jetty.App{RESET}")
-    print(f"{BLUE}Default URL: http://localhost:10000{RESET}")
+    print(f"{BLUE}Main class: {MAIN_CLASS}{RESET}")
+    print(f"{BLUE}URL: http://localhost:{args.port}{RESET}")
     print(f"\n{YELLOW}Press Ctrl+C to stop the server{RESET}\n")
     print("=" * 80)
 
     try:
-        cmd = [
-            'mvn',
-            'exec:java',
-            '-Dexec.mainClass=org.apache.juneau.petstore.jetty.App'
-        ]
+        cmd = launch_command(classpath, target_dir, args.port)
 
         process = subprocess.run(
             cmd,

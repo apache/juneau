@@ -19,6 +19,7 @@ package org.apache.juneau.rest.server.terminal;
 import static java.nio.charset.StandardCharsets.*;
 import static java.nio.file.StandardOpenOption.*;
 import static org.apache.juneau.BasicTestUtils.*;
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
@@ -107,7 +108,7 @@ class FileTerminalSource_Test extends TestBase {
 			size("{\"cols\":0,\"rows\":24}");
 			assertEquals(120, s.read(0, 10).cols());
 		});
-		assertEquals(1, records.size());
+		assertSize(1, records);
 		assertEquals(Level.WARNING, records.get(0).getLevel());
 		assertTrue(records.get(0).getMessage().contains("120x40"), records.get(0).getMessage());
 		size("{\"cols\":100,\"rows\":30}");

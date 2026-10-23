@@ -128,7 +128,7 @@ class YamlParserSession_Test extends TestBase {
 	@Test void c03_flowMappingIntoRawMap() {
 		// readFlowMapping: keyType == null -> defaults to string() (raw, ungenerified Map target).
 		JsonMap m = YamlParser.DEFAULT.read("{a: 1, b: 2}", JsonMap.class);
-		assertEquals(2, m.size());
+		assertSize(2, m);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -200,7 +200,7 @@ class YamlParserSession_Test extends TestBase {
 	@Test void e05_flowMapping_typedMapTarget_notMap() {
 		// sType.isMap() arm of readAnything's '{' dispatch, target is a concrete (non-generic-JsonMap) Map subtype.
 		Map<String,Integer> m = YamlParser.DEFAULT.read("{a: 1, b: 2}", TreeMap.class, String.class, Integer.class);
-		assertEquals(2, m.size());
+		assertSize(2, m);
 		assertInstanceOf(TreeMap.class, m);
 	}
 

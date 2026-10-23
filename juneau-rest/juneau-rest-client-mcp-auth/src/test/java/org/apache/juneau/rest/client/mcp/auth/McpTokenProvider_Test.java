@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.client.mcp.auth;
 
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
@@ -126,7 +127,7 @@ class McpTokenProvider_Test extends TestBase {
 		assertEquals("cc-at", p.get());
 		// Second call should be served from cache without a second token-endpoint request.
 		assertEquals("cc-at", p.get());
-		assertEquals(1, requestBodies.size());
+		assertSize(1, requestBodies);
 	}
 
 	@Test void b04_reacquiresWhenExpired() {
@@ -138,7 +139,7 @@ class McpTokenProvider_Test extends TestBase {
 			.expirySkew(Duration.ofHours(2)).build();
 		assertEquals("cc-at-1", p.get());
 		assertEquals("cc-at-2", p.get());
-		assertEquals(2, requestBodies.size());
+		assertSize(2, requestBodies);
 	}
 
 	@Test void b05_errorResponsePropagates() {

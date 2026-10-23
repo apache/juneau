@@ -17,6 +17,7 @@
 package org.apache.juneau.marshall.transforms;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 
 import java.util.*;
 import java.util.stream.*;
@@ -333,7 +334,7 @@ class BooleanFormat_RoundTrip_Test extends TestBase {
 
 		x = t.roundTrip(x);
 		assertNotNull(x.list, "fmt=" + fmt);
-		assertEquals(3, x.list.size(), "fmt=" + fmt);
+		assertSize(() -> "fmt=" + fmt, 3, x.list);
 		assertEquals(BOXED_TRUE, x.list.get(0), "fmt=" + fmt + " index=0");
 		assertEquals(BOXED_FALSE, x.list.get(1), "fmt=" + fmt + " index=1");
 		assertEquals(BOXED_TRUE, x.list.get(2), "fmt=" + fmt + " index=2");

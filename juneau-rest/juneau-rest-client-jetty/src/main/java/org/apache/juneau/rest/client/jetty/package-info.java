@@ -19,7 +19,7 @@
  * {@code HttpTransport} implementation for the next-generation REST client backed by the Jetty 12 HTTP client.
  *
  * <p>
- * Provides the transport ({@link org.apache.juneau.rest.client.jetty.JettyHttpTransport}),
+ * Provides the transport ({@link org.apache.juneau.rest.client.jetty.JettyHttpTransport JettyHttpTransport}),
  * its fluent builder, and an auto-discoverable
  * {@link org.apache.juneau.rest.client.jetty.JettyHttpTransportProvider provider}.
  */

@@ -107,7 +107,7 @@ public class Config extends Context implements ConfigEventListener {
 		 */
 		private static List<String> defaultProfiles() {
 			var s = env("juneau.profiles.active", "");
-			if (s == null || s.isBlank())
+			if (ib(s))
 				return list();
 			return Arrays.stream(s.split(",")).filter(p -> ! p.isBlank()).map(String::trim).collect(Collectors.toCollection(ArrayList::new));
 		}

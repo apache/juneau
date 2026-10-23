@@ -284,7 +284,7 @@ public final class AsyncJobRegistry implements AutoCloseable {
 	 * @return The job, or empty if no such id is registered.
 	 */
 	public Optional<AsyncJob> get(String id) {
-		if (id == null || id.isBlank())
+		if (ib(id))
 			return Optional.empty();
 		return Optional.ofNullable(jobs.get(id));
 	}

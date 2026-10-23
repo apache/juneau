@@ -43,7 +43,9 @@ class VisibilityRule_Corpus_Test extends TestBase {
 		throw new IllegalStateException("visibility-corpus.json not found");
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Casts a parsed JSON value to its known Map/List shape.
+	})
 	@Test void a01_everyCorpusCaseMatchesItsExpectation() throws IOException {
 		var cases = (List<Map<String,Object>>)Json.to(Files.readString(locateCorpus()), List.class);
 		assertFalse(cases.isEmpty());

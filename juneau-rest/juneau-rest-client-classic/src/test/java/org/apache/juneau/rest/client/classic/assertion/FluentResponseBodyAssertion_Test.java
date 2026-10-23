@@ -38,7 +38,7 @@ import com.sun.net.httpserver.*;
  * Content-Length that overstates the bytes actually written triggers a connection-closed IOException when
  * the client tries to read out to the declared length). The wrapped exception is a {@link BadRequest}, not an
  * {@link AssertionError}, because the class's constructor configures {@code BadRequest} as its default
- * {@code throwable} (see {@link org.apache.juneau.test.assertions.Assertion#setThrowable(Class)}).
+ * {@code throwable} (see {@link Assertion#setThrowable(Class)}).
  */
 @SuppressWarnings({
 	"resource" // okResponse()/brokenResponse() return a RestResponse whose ownership is transferred to the caller, who is responsible for closing it; the underlying client is a short-lived test fixture and Eclipse JDT's @Owning warning is by design.

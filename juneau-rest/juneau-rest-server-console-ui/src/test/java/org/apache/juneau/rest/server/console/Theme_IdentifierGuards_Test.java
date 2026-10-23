@@ -52,7 +52,7 @@ class Theme_IdentifierGuards_Test extends TestBase {
 		"--jc-foo;--bar",    // anchoring proof (see javadoc)
 	})
 	void a01_tokenName_invalidNames_rejects(String name) {
-		var b = Theme.create("salesforce");
+		var b = Theme.create("acme");
 		assertThrows(IllegalArgumentException.class, () -> b.token(name, "red"));
 	}
 
@@ -61,7 +61,7 @@ class Theme_IdentifierGuards_Test extends TestBase {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Test void a02_themeName_uppercase_rejects() {
-		assertThrows(IllegalArgumentException.class, () -> Theme.create("Salesforce"));
+		assertThrows(IllegalArgumentException.class, () -> Theme.create("Acme"));
 	}
 
 	/** Path-shaped names are rejected here so a later fast-follow that interpolates the name into an asset path doesn't need to re-gate. */
@@ -78,7 +78,7 @@ class Theme_IdentifierGuards_Test extends TestBase {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Test void a05_positiveControl_roundTrips() {
-		var theme = Theme.create("salesforce").token("--jc-accent", "#1589EE").build();
-		assertBean(theme, "name,tokens{--jc-accent}", "salesforce,{#1589EE}");
+		var theme = Theme.create("acme").token("--jc-accent", "#1589EE").build();
+		assertBean(theme, "name,tokens{--jc-accent}", "acme,{#1589EE}");
 	}
 }

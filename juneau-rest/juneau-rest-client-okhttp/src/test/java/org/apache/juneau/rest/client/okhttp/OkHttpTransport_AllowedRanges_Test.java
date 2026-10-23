@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.client.okhttp;
 
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.lang.reflect.*;
@@ -53,7 +54,9 @@ class OkHttpTransport_AllowedRanges_Test {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // The reflectively read field is declared as this map type.
+	})
 	private static Map<RemoteUrlPolicy.AllowedRanges,OkHttpClient> rangedClients(OkHttpTransport t) throws Exception {
 		return (Map<RemoteUrlPolicy.AllowedRanges,OkHttpClient>)field(t, "rangedPolicyHttpClients");
 	}
@@ -72,7 +75,7 @@ class OkHttpTransport_AllowedRanges_Test {
 			send(transport, LAB);
 			send(transport, RemoteUrlPolicy.AllowedRanges.of("224.0.0.0/4"));
 			var map = rangedClients(transport);
-			assertEquals(1, map.size(), "one client per distinct ranges");
+			assertSize(() -> "one client per distinct ranges", 1, map);
 			var ranged = map.get(LAB);
 			assertNotNull(ranged);
 			var dns = assertInstanceOf(PolicyPinningDns.class, ranged.dns());

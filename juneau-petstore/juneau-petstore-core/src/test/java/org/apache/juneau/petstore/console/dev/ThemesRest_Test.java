@@ -75,7 +75,7 @@ class ThemesRest_Test extends TestBase {
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
-	// d - nameless <@theme> inherits the page theme (J0795)
+	// d - nameless <@theme> inherits the page theme
 	//-----------------------------------------------------------------------------------------------------------------
 
 	private static void assertCustomThemeInherited(String html) {

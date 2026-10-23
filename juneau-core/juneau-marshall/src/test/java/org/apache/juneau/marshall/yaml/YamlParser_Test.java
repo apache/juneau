@@ -17,6 +17,7 @@
 package org.apache.juneau.marshall.yaml;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 
 import java.util.stream.*;
 
@@ -71,7 +72,7 @@ class YamlParser_Test extends TestBase {
 	@Test void a07_readFlowSequence() throws Exception {
 		var p = YamlParser.DEFAULT;
 		JsonList l = p.read("[1, 2, 3]", JsonList.class);
-		assertEquals(3, l.size());
+		assertSize(3, l);
 	}
 
 	@Test void a08_readBlockMapping() throws Exception {
@@ -84,7 +85,7 @@ class YamlParser_Test extends TestBase {
 	@Test void a09_readBlockSequence() throws Exception {
 		var p = YamlParser.DEFAULT;
 		JsonList l = p.read("- a\n- b\n- c", JsonList.class);
-		assertEquals(3, l.size());
+		assertSize(3, l);
 		assertEquals("a", l.getString(0));
 	}
 

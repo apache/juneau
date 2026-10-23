@@ -30,7 +30,9 @@ import org.junit.jupiter.api.*;
 /**
  * Tests {@code @BeanProp(required)} enforcement in the JSON parser.
  */
-@SuppressWarnings("unused") // Fixture fields are read reflectively.
+@SuppressWarnings({
+	"unused" // Fixture fields are read reflectively.
+})
 class MissingRequiredProperty_Json_Test extends TestBase {
 
 	public static class A {

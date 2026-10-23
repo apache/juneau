@@ -21,44 +21,44 @@
  * <h5 class='topic'>Guard-level authentication ({@link org.apache.juneau.rest.server.guard.RestGuard})</h5>
  *
  * <p>
- * {@link org.apache.juneau.rest.server.auth.BearerTokenGuard} and {@link org.apache.juneau.rest.server.auth.ApiKeyGuard} are
+ * {@link org.apache.juneau.rest.server.auth.BearerTokenGuard BearerTokenGuard} and {@link org.apache.juneau.rest.server.auth.ApiKeyGuard ApiKeyGuard} are
  * framework-level guard implementations that run inside the Juneau request pipeline (after servlet routing).
  * They stash the resolved {@link java.security.Principal} on the request under
  * {@code "juneau.principal"} so downstream handlers can read it via
  * {@link org.apache.juneau.rest.server.auth.AuthArg @Auth Principal} or
  * {@code req.getAttributes().get(PRINCIPAL_ATTR)}.
  *
- * <h5 class='topic'>Servlet-layer authentication ({@link org.apache.juneau.rest.server.auth.AuthFilter})</h5>
+ * <h5 class='topic'>Servlet-layer authentication ({@link org.apache.juneau.rest.server.auth.AuthFilter AuthFilter})</h5>
  *
  * <p>
  * This package also ships a two-layer pluggable servlet-filter authentication framework that runs <b>at the
  * servlet container layer</b> — before Juneau's request routing:
  *
  * <p>
- * <b>Layer 1 &mdash; Standalone filters</b>: each concrete {@link org.apache.juneau.rest.server.auth.AuthFilter}
- * subclass ({@link org.apache.juneau.rest.server.auth.BearerTokenAuthFilter},
- * {@link org.apache.juneau.rest.server.auth.ApiKeyAuthFilter}) is also a {@code jakarta.servlet.Filter} and can be
+ * <b>Layer 1 &mdash; Standalone filters</b>: each concrete {@link org.apache.juneau.rest.server.auth.AuthFilter AuthFilter}
+ * subclass ({@link org.apache.juneau.rest.server.auth.BearerTokenAuthFilter BearerTokenAuthFilter},
+ * {@link org.apache.juneau.rest.server.auth.ApiKeyAuthFilter ApiKeyAuthFilter}) is also a {@code jakarta.servlet.Filter} and can be
  * registered directly with a servlet container or Spring Boot's {@code FilterRegistrationBean}.
  *
  * <p>
- * <b>Layer 2 &mdash; {@link org.apache.juneau.rest.server.auth.AuthFilterChain} orchestrator</b>: composes multiple
+ * <b>Layer 2 &mdash; {@link org.apache.juneau.rest.server.auth.AuthFilterChain AuthFilterChain} orchestrator</b>: composes multiple
  * {@code AuthFilter} instances with first-success principal resolution, role aggregation across all successful
  * filters, and all-failure aggregation into a single {@code 401} response.
  *
  * <h5 class='topic'>Optional&lt;AuthResult&gt; three-state contract</h5>
  *
  * <p>
- * {@link org.apache.juneau.rest.server.auth.AuthFilter#authenticate authenticate(HttpServletRequest)} returns:
+ * {@link AuthFilter#authenticate authenticate(HttpServletRequest)} returns:
  * <ul>
  * 	<li>{@link java.util.Optional#empty()} &mdash; filter does not apply (no recognizable credentials).
- * 	<li>throw {@link org.apache.juneau.rest.server.auth.AuthenticationException} &mdash; credentials present but invalid.
+ * 	<li>throw {@link org.apache.juneau.rest.server.auth.AuthenticationException AuthenticationException} &mdash; credentials present but invalid.
  * 	<li>{@link java.util.Optional#of(Object) Optional.of(AuthResult)} &mdash; authentication succeeded.
  * </ul>
  *
  * <h5 class='topic'>Principal and role surface</h5>
  *
  * <p>
- * On success the chain wraps the request in {@link org.apache.juneau.rest.server.auth.AuthenticatedRequestWrapper},
+ * On success the chain wraps the request in {@link org.apache.juneau.rest.server.auth.AuthenticatedRequestWrapper AuthenticatedRequestWrapper},
  * which overrides {@link jakarta.servlet.http.HttpServletRequest#getUserPrincipal()},
  * {@link jakarta.servlet.http.HttpServletRequest#isUserInRole(String)},
  * {@link jakarta.servlet.http.HttpServletRequest#getRemoteUser()}, and
@@ -70,11 +70,11 @@
  * <h5 class='topic'>SPIs</h5>
  *
  * <p>
- * {@link org.apache.juneau.rest.server.auth.TokenValidator} and {@link org.apache.juneau.rest.server.auth.ApiKeyStore} are the
+ * {@link org.apache.juneau.rest.server.auth.TokenValidator TokenValidator} and {@link org.apache.juneau.rest.server.auth.ApiKeyStore ApiKeyStore} are the
  * backing SPIs for both the guard-level and filter-level authentication classes.
  * No third-party crypto / JOSE dependency is pulled in by this package — users who want JWT verification add the
  * optional {@code juneau-rest-server-auth-jwt} sub-module (which plugs into the
- * {@link org.apache.juneau.rest.server.auth.TokenValidator} SPI from this package).
+ * {@link org.apache.juneau.rest.server.auth.TokenValidator TokenValidator} SPI from this package).
  *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerAuthGuards">AuthN Guards</a>

@@ -145,7 +145,7 @@ public final class CardDirectiveModel implements TemplateDirectiveModel {
 		var src = FtlAttrLists.scalar(p, "src");
 		var template = FtlAttrLists.scalar(p, "template");
 		var cardType = type.isEmpty() ? "html" : type;
-		if (sanitize && (! eq(cardType, "html") || src.isEmpty()))
+		if (sanitize && (neq(cardType, "html") || src.isEmpty()))
 			throw FtlAttrLists.reject(f("<@card id='%s'> sanitize= applies only to an html card with src=.", authoredId));
 		var id = authoredId.isEmpty() && eq(cardType, "html") ? cap.nextCardId() : authoredId;
 		Map<String,Object> cardBody = Map.of();
@@ -413,7 +413,7 @@ public final class CardDirectiveModel implements TemplateDirectiveModel {
 				throw FtlAttrLists.reject(f(
 					"<@card id='%s'> type='run-view' unknown key '%s'; allowed: contractVersion, runView, subscribes, publishes.", id, k));
 		var version = envelope.get("contractVersion");
-		if (! eq("1", version))
+		if (neq("1", version))
 			throw FtlAttrLists.reject(f(
 				"<@card id='%s'> type='run-view' requires contractVersion: '1'; got '%s'.", id, version));
 		if (! (envelope.get("runView") instanceof Map<?,?> runView))

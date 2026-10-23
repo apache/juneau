@@ -34,9 +34,6 @@ import org.apache.juneau.marshall.json.*;
  * 	<li class='link'><a class="doclink" href="https://www.rfc-editor.org/rfc/rfc8785">RFC 8785 — JSON Canonicalization Scheme</a>
  * </ul>
  */
-@SuppressWarnings({
-	"resource" // Writer resource managed by calling code
-})
 public class JcsWriter extends JsonWriter<JcsWriter> {
 
 	/**
@@ -58,6 +55,9 @@ public class JcsWriter extends JsonWriter<JcsWriter> {
 		super(out, useWhitespace, maxIndent, escapeSolidus, quoteChar, simpleAttrs, trimStrings, uriResolver);
 	}
 
+	@SuppressWarnings({
+		"resource" // Fluent writer methods return this; the writer is closed by its owner
+	})
 	@Override /* Overridden from SerializerWriter */
 	public JcsWriter append(Object value) {
 		if (value == null) {
@@ -71,6 +71,9 @@ public class JcsWriter extends JsonWriter<JcsWriter> {
 		return this;
 	}
 
+	@SuppressWarnings({
+		"resource" // Fluent writer methods return this; the writer is closed by its owner
+	})
 	@Override /* Overridden from JsonWriter */
 	public JcsWriter stringValue(String s) {
 		if (s == null)
@@ -94,7 +97,7 @@ public class JcsWriter extends JsonWriter<JcsWriter> {
 			else if (c == '\r')
 				w('\\').w('r');
 			else if (c <= 0x1F)
-				w(String.format("\\u%04x", (int) c));
+				w(f("\\u%04x", (int) c));
 			else
 				w(c);
 		}

@@ -95,7 +95,7 @@ class TomlArrays_Test {
 		var toml = S.write(b);
 		assertTrue(toml.contains("[[ms]]\nk = \"v\"\n\n[[ms]]\nk = \"w\""), toml);
 		var r = P.read(toml, Maps.class);
-		assertEquals(2, r.ms.size());
+		assertSize(2, r.ms);
 		assertEquals("v", r.ms.get(0).get("k"));
 		assertEquals("w", r.ms.get(1).get("k"));
 	}
@@ -140,7 +140,7 @@ class TomlArrays_Test {
 		var toml = S.write(b);
 		assertEquals("items = [1, \"two\", [3]]\n", toml);
 		var r = P.read(toml, Mixed.class);
-		assertEquals(3, r.items.size());
+		assertSize(3, r.items);
 		assertEquals(1, ((Number)r.items.get(0)).intValue());
 		assertEquals("two", r.items.get(1));
 		assertEquals(List.of(3L), r.items.get(2));
@@ -161,12 +161,12 @@ class TomlArrays_Test {
 		var toml = S.write(m);
 		assertTrue(toml.contains("[[ins]]\nn = 1\n\n[[ins]]\nn = 2"), toml);
 		var r = P.read(toml, JsonMap.class);
-		assertEquals(2, r.getList("ins").size());
+		assertSize(2, r.getList("ins"));
 	}
 
 	@Test void a10_beanArray() throws Exception {
 		var toml = S.write(Map.of("ins", new Inner[]{new Inner("a", 1)}));
 		var r = P.read(toml, JsonMap.class);
-		assertEquals(1, r.getList("ins").size());
+		assertSize(1, r.getList("ins"));
 	}
 }

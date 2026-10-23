@@ -28,7 +28,7 @@ import org.junit.jupiter.api.*;
 
 /**
  * HTML-slot pages first-landing pins after the page-only Java types were deleted: those types are gone, dual-use
- * methods stay unannotated, and views CSS/JS introduce no {@code slds-*} or Salesforce Sans.
+ * methods stay unannotated, and views CSS/JS introduce no denied vendor terms.
  */
 @SuppressWarnings({
 	"java:S5961" // Contract test is intentionally dense; splitting would hide landing-page pins.
@@ -80,8 +80,7 @@ class HtmlSlotPages_FirstLanding_Test extends TestBase {
 		// and the console visual browser test pins the computed styles.
 		var views = resource(ViewsMixin.VIEWS_CSS_RESOURCE);
 		assertFalse(views.contains(".juneau-page-nav"), views);
-		assertFalse(views.contains("slds-"), views);
-		assertFalse(views.toLowerCase().contains("salesforce sans"), views);
+		DualHatGuard.assertClean(views);
 		assertFalse(views.contains("#1589EE"), views);
 		assertFalse(views.contains("url("), () -> "page-nav cloud SVG was the last url() in views CSS:\n" + views);
 		var css = resource("/org/apache/juneau/console/chrome.css");
@@ -92,14 +91,13 @@ class HtmlSlotPages_FirstLanding_Test extends TestBase {
 		assertTrue(css.contains(".juneau-page-nav-child[aria-current=\"page\"]"), css);
 		assertFalse(css.contains("juneau-page-nav-section-selected"), css);
 		assertFalse(css.contains("juneau-page-nav-child-selected"), css);
-		assertFalse(css.toLowerCase().contains("salesforce sans"), css);
+		DualHatGuard.assertClean(css);
 		assertFalse(css.contains("#1589EE"), css);
 	}
 
 	@Test void b02_regionsJsDoesNotIntroduceSlds() throws Exception {
 		var js = RegionsHarness.regionsJs();
-		assertFalse(js.contains("slds-"), js);
-		assertFalse(js.toLowerCase().contains("salesforce sans"), js);
+		DualHatGuard.assertClean(js);
 	}
 
 	@Test void b03_viewsJsDoesNotDerivePageNavSelectionFromUrl() throws Exception {

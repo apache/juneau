@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.server.views;
 
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assumptions.*;
 
@@ -46,12 +47,16 @@ class ViewsJs_BusWiring_Test extends TestBase {
 		return report;
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Casts a parsed JSON value to its known Map/List shape.
+	})
 	private static List<Map<String,Object>> cases() {
 		return (List<Map<String,Object>>) report().get("cases");
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Casts a parsed JSON value to its known Map/List shape.
+	})
 	private static List<Map<String,Object>> problems(Map<String,Object> c, String key) {
 		return (List<Map<String,Object>>) c.get(key);
 	}
@@ -68,7 +73,7 @@ class ViewsJs_BusWiring_Test extends TestBase {
 	@Test void a00_surface() {
 		assertEquals(true, report().get("hasValidate"), "JuneauViews.bus.wiring.validate exists");
 		assertEquals(List.of(), report().get("emptyContract"));
-		assertEquals(86, cases().size(), "every corpus case ran");
+		assertSize(() -> "every corpus case ran", 86, cases());
 	}
 
 	@TestFactory Stream<DynamicTest> a01_corpus() {

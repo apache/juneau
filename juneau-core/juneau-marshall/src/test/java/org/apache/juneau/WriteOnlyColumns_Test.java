@@ -121,7 +121,9 @@ class WriteOnlyColumns_Test extends TestBase {
 	}
 
 	@Test void b02_csvParserStillSetsWriteOnly() throws Exception {
-		@SuppressWarnings("unchecked")
+		@SuppressWarnings({
+			"unchecked" // Parser returns a raw List; element type is fixed by the User class argument.
+		})
 		var l = (List<User>)CsvParser.DEFAULT.read("name,secretword\nbob,pw\n", List.class, User.class);
 		assertEquals("pw", l.get(0).secretword);
 	}

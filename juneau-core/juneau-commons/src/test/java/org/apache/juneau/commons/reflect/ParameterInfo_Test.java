@@ -21,6 +21,7 @@ import static java.lang.annotation.RetentionPolicy.*;
 import static org.apache.juneau.commons.utils.ClassUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
+import static org.apache.juneau.commons.TestAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.lang.annotation.*;
@@ -469,7 +470,7 @@ class ParameterInfo_Test extends TestBase {
 		var mi = MethodInfo.of(PM3.class.getMethod("foo", String.class));
 		var pi = mi.getParameter(0);
 		var matching = pi.getMatchingParameters();
-		assertEquals(3, matching.size());
+		assertSize(3, matching);
 		check("PM3", matching.get(0).getDeclaringExecutable().getDeclaringClass());
 		check("PM2", matching.get(1).getDeclaringExecutable().getDeclaringClass());
 		check("PM1", matching.get(2).getDeclaringExecutable().getDeclaringClass());
@@ -478,7 +479,7 @@ class ParameterInfo_Test extends TestBase {
 		var mi2 = MethodInfo.of(PM6.class.getMethod("bar", int.class, String.class));
 		var pi0 = mi2.getParameter(0);
 		var matching0 = pi0.getMatchingParameters();
-		assertEquals(3, matching0.size());
+		assertSize(3, matching0);
 		check("PM6", matching0.get(0).getDeclaringExecutable().getDeclaringClass());
 		check("PM4", matching0.get(1).getDeclaringExecutable().getDeclaringClass());
 		check("PM5", matching0.get(2).getDeclaringExecutable().getDeclaringClass());
@@ -487,7 +488,7 @@ class ParameterInfo_Test extends TestBase {
 		var ci = ConstructorInfo.of(PC3.class.getConstructor(String.class));
 		var pi2 = ci.getParameter(0);
 		var matching2 = pi2.getMatchingParameters();
-		assertEquals(3, matching2.size());
+		assertSize(3, matching2);
 		check("PC3", matching2.get(0).getDeclaringExecutable().getDeclaringClass());
 		check("PC2", matching2.get(1).getDeclaringExecutable().getDeclaringClass());
 		check("PC1", matching2.get(2).getDeclaringExecutable().getDeclaringClass());
@@ -496,7 +497,7 @@ class ParameterInfo_Test extends TestBase {
 		var ci2 = ConstructorInfo.of(PC5.class.getConstructor(String.class));
 		var pi3 = ci2.getParameter(0);
 		var matching3 = pi3.getMatchingParameters();
-		assertEquals(2, matching3.size());
+		assertSize(2, matching3);
 		check("PC5", matching3.get(0).getDeclaringExecutable().getDeclaringClass());
 		check("PC4", matching3.get(1).getDeclaringExecutable().getDeclaringClass());
 
@@ -504,7 +505,7 @@ class ParameterInfo_Test extends TestBase {
 		var ci3 = ConstructorInfo.of(PC7.class.getConstructor(String.class));
 		var pi4 = ci3.getParameter(0);
 		var matching4 = pi4.getMatchingParameters();
-		assertEquals(3, matching4.size());
+		assertSize(3, matching4);
 		check("PC7", matching4.get(0).getDeclaringExecutable().getDeclaringClass());
 		check("PC6", matching4.get(1).getDeclaringExecutable().getDeclaringClass());
 		check("PC6", matching4.get(2).getDeclaringExecutable().getDeclaringClass());
@@ -513,28 +514,28 @@ class ParameterInfo_Test extends TestBase {
 		var mi3 = MethodInfo.of(PM8.class.getMethod("foo", String.class));
 		var pi5 = mi3.getParameter(0);
 		var matching5 = pi5.getMatchingParameters();
-		assertEquals(1, matching5.size());
+		assertSize(1, matching5);
 		check("PM8", matching5.get(0).getDeclaringExecutable().getDeclaringClass());
 
 		// Method different parameter type
 		var mi4 = MethodInfo.of(PM11.class.getMethod("qux", String.class));
 		var pi6 = mi4.getParameter(0);
 		var matching6 = pi6.getMatchingParameters();
-		assertEquals(1, matching6.size());
+		assertSize(1, matching6);
 		check("PM11", matching6.get(0).getDeclaringExecutable().getDeclaringClass());
 
 		// Constructor different parameter type
 		var ci4 = ConstructorInfo.of(PC9.class.getConstructor(String.class));
 		var pi7 = ci4.getParameter(0);
 		var matching7 = pi7.getMatchingParameters();
-		assertEquals(1, matching7.size());
+		assertSize(1, matching7);
 		check("PC9", matching7.get(0).getDeclaringExecutable().getDeclaringClass());
 
 		// Constructor different parameter name
 		var ci5 = ConstructorInfo.of(PC11.class.getConstructor(String.class));
 		var pi8 = ci5.getParameter(0);
 		var matching8 = pi8.getMatchingParameters();
-		assertEquals(2, matching8.size());
+		assertSize(2, matching8);
 		check("PC11", matching8.get(0).getDeclaringExecutable().getDeclaringClass());
 		check("PC10", matching8.get(1).getDeclaringExecutable().getDeclaringClass());
 
@@ -542,7 +543,7 @@ class ParameterInfo_Test extends TestBase {
 		var ci6 = ConstructorInfo.of(PC13.class.getConstructor(String.class));
 		var pi9 = ci6.getParameter(0);
 		var matching9 = pi9.getMatchingParameters();
-		assertEquals(3, matching9.size());
+		assertSize(3, matching9);
 		check("PC13", matching9.get(0).getDeclaringExecutable().getDeclaringClass());
 		check("PC12", matching9.get(1).getDeclaringExecutable().getDeclaringClass());
 		check("PC12", matching9.get(2).getDeclaringExecutable().getDeclaringClass());
@@ -553,7 +554,7 @@ class ParameterInfo_Test extends TestBase {
 		var ci7 = ConstructorInfo.of(PC15.class.getConstructor(String.class));
 		var pi10 = ci7.getParameter(0);
 		var matching10 = pi10.getMatchingParameters();
-		assertEquals(2, matching10.size());
+		assertSize(2, matching10);
 		check("PC15", matching10.get(0).getDeclaringExecutable().getDeclaringClass());
 		check("PC14", matching10.get(1).getDeclaringExecutable().getDeclaringClass());
 		assertEquals("foo", matching10.get(0).getName());
@@ -563,7 +564,7 @@ class ParameterInfo_Test extends TestBase {
 		var mi5 = MethodInfo.of(PM13.class.getMethod("test", String.class));
 		var pi11 = mi5.getParameter(0);
 		var matching11 = pi11.getMatchingParameters();
-		assertEquals(2, matching11.size());
+		assertSize(2, matching11);
 		check("PM13", matching11.get(0).getDeclaringExecutable().getDeclaringClass());
 		check("PM12", matching11.get(1).getDeclaringExecutable().getDeclaringClass());
 		assertEquals("param1", matching11.get(0).getName());

@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.rest.server.view.freemarker.console;
 
+import static org.apache.juneau.commons.utils.CollectionUtils.*;
+
 import java.util.*;
 import java.util.regex.*;
 
@@ -150,12 +152,13 @@ public final class PersistSpec {
 
 	/** @return The persist JSON. */
 	Map<String,Object> toMap() {
-		var m = new LinkedHashMap<String,Object>();
-		m.put("ns", ns);
-		m.put("version", version);
-		m.put("topics", List.copyOf(topics));
-		m.put("shareLink", shareLink);
-		m.put("decoders", List.copyOf(decoders));
+		Map<String,Object> m = map(
+			"ns", ns,
+			"version", version,
+			"topics", List.copyOf(topics),
+			"shareLink", shareLink,
+			"decoders", List.copyOf(decoders)
+		);
 		return m;
 	}
 }

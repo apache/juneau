@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.server.docs;
 
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
@@ -75,8 +76,7 @@ class BasicApiDocs_ParentChain_Test extends TestBase {
 		assertNotNull(contexts.get(StatsMixin.class));
 		assertNotNull(contexts.get(FaviconMixin.class));
 
-		assertEquals(8, contexts.size(),
-			"Expected exactly eight mixin contexts; got: " + contexts.keySet());
+		assertSize(() -> "Expected exactly eight mixin contexts; got: " + contexts.keySet(), 8, contexts);
 	}
 
 	@Test void a02_apiFromParentChain() throws Exception {

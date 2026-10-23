@@ -226,13 +226,13 @@ class FilteredList_Test extends TestBase {
 			.filter(v -> v != null)
 			.build();
 
-		assertEquals(0, list.size());
+		assertSize(0, list);
 		list.add("value1");
-		assertEquals(1, list.size());
+		assertSize(1, list);
 		list.add(null);  // Filtered out
-		assertEquals(1, list.size());
+		assertSize(1, list);
 		list.add("value3");
-		assertEquals(2, list.size());
+		assertSize(2, list);
 	}
 
 	@Test

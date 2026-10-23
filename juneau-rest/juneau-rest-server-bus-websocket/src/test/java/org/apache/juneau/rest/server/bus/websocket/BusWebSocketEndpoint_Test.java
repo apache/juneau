@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.server.bus.websocket;
 
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
@@ -114,7 +115,9 @@ class BusWebSocketEndpoint_Test extends TestBase {
 		e.onOpen(ws, config);
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // ArgumentCaptor.forClass yields a raw MessageHandler.Whole; the handler registered for String.class is a Whole<String>.
+	})
 	private MessageHandler.Whole<String> textHandler() {
 		var h = ArgumentCaptor.forClass(MessageHandler.Whole.class);
 		verify(ws).addMessageHandler(eq(String.class), h.capture());
@@ -193,7 +196,7 @@ class BusWebSocketEndpoint_Test extends TestBase {
 		var pad = MAX_BYTES - CANCEL.replace("r1", "").length();
 		textHandler().onMessage(CANCEL.replace("r1", "x".repeat(pad)));
 		verify(ws, never()).close(any(CloseReason.class));
-		assertEquals(1, handled.size());
+		assertSize(1, handled);
 	}
 
 	@Test void b05_aNonObjectPayloadNeverReachesTheHandler() {
@@ -337,7 +340,7 @@ class BusWebSocketEndpoint_Test extends TestBase {
 			log.removeHandler(handler);
 			log.setUseParentHandlers(useParent);
 		}
-		assertEquals(1, records.size());
+		assertSize(1, records);
 		assertEquals(java.util.logging.Level.WARNING, records.get(0).getLevel());
 		var r = closedWith();
 		assertEquals(1011, r.getCloseCode().getCode());

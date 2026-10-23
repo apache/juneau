@@ -39,10 +39,7 @@ class HjsonRoundTrip_Test extends TestBase {
 
 	@Test
 	void c01_simpleBeanRoundTrip() throws Exception {
-		var a = new LinkedHashMap<String,Object>();
-		a.put("name", "Alice");
-		a.put("age", 30);
-		a.put("active", true);
+		Map<String,Object> a = map("name", "Alice", "age", 30, "active", true);
 		var hjson = HjsonSerializer.DEFAULT.write(a);
 		var b = (Map<String,Object>) HjsonParser.DEFAULT.read(hjson, Map.class, String.class, Object.class);
 		assertBean(b, "name,age,active", "Alice,30,true");
@@ -155,13 +152,7 @@ class HjsonRoundTrip_Test extends TestBase {
 	void c12_complexBeanRoundTrip() throws Exception {
 		var nested = new LinkedHashMap<String,Object>();
 		nested.put("city", "NYC");
-		var a = new LinkedHashMap<String,Object>();
-		a.put("name", "Bob");
-		a.put("age", 25);
-		a.put("active", true);
-		a.put("tags", list("x", "y"));
-		a.put("address", nested);
-		a.put("empty", "");
+		Map<String,Object> a = map("name", "Bob", "age", 25, "active", true, "tags", list("x", "y"), "address", nested, "empty", "");
 		var hjson = HjsonSerializer.DEFAULT.write(a);
 		var b = (Map<String,Object>) HjsonParser.DEFAULT.read(hjson, Map.class, String.class, Object.class);
 		assertBean(b, "name,age,active,tags,address{city},empty", "Bob,25,true,[x,y],{NYC},");

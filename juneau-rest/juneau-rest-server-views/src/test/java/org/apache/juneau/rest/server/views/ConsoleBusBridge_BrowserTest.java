@@ -17,6 +17,7 @@
 package org.apache.juneau.rest.server.views;
 
 import static org.apache.juneau.rest.server.views.ConsoleBusBrowserSupport.*;
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
@@ -70,7 +71,7 @@ class ConsoleBusBridge_BrowserTest extends TestBase {
 	@Test void a04_aLiveFrameRepaintsTheSubscribingCard() {
 		var l = map(r.get("live"));
 		var running = list(map(l.get("opsJobs")).get("running"));
-		assertEquals(1, running.size());
+		assertSize(1, running);
 		assertEquals("j-1", map(running.get(0)).get("jobId"));
 		assertTrue(num(l.get("jobsRendersAfter")) > num(l.get("jobsRendersBefore")));
 	}
@@ -92,7 +93,7 @@ class ConsoleBusBridge_BrowserTest extends TestBase {
 		assertEquals("open", b.get("state"));
 		assertEquals(Boolean.TRUE, b.get("gap"));
 		assertEquals(List.of(), list(map(rec.get("opsJobs")).get("running")), "j-1 finished while the stream was down");
-		assertEquals(2, list(rec.get("streamPaths")).size());
+		assertSize(2, list(rec.get("streamPaths")));
 	}
 
 	@Test void a07_reconnectReusesTheSession() {

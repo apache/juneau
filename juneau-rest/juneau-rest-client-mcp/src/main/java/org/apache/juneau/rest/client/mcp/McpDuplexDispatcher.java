@@ -74,7 +74,7 @@ public class McpDuplexDispatcher {
 		if (h == null) {
 			if (JsonRpcResponse.notification(request.getId()))
 				return null;
-			throw new McpException(-32601, String.format("No server-request handler registered for method '%s'", request.getMethod()));
+			throw new McpException(-32601, f("No server-request handler registered for method '%s'", request.getMethod()));
 		}
 		try {
 			return h.handle(request, ctx == null ? BasicBeanStore.INSTANCE : ctx);

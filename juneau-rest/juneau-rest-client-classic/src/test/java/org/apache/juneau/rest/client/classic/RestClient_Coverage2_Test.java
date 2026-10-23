@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.client.classic;
 
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
@@ -263,7 +264,7 @@ class RestClient_Coverage2_Test {
 		var c = RestClient.create().detectLeaks().build();
 		// Manually invoked (in-package access); not relying on actual GC timing.
 		var records = LogRecordCapture.quietly(RestClient.class, () -> assertDoesNotThrow(c::finalize));
-		assertEquals(1, records.size(), records::toString);
+		assertSize(records::toString, 1, records);
 		assertTrue(records.get(0).getMessage().contains("garbage collected"), records.get(0).getMessage());
 		c.close();  // So the real GC finalizer later does not log a second warning.
 	}
@@ -273,7 +274,7 @@ class RestClient_Coverage2_Test {
 		var c = RestClient.create().detectLeaks().debug().console(new PrintStream(out)).build();
 		// Enabling debug populates the creation stack trace that finalize then walks and logs.
 		var records = LogRecordCapture.quietly(RestClient.class, () -> assertDoesNotThrow(c::finalize));
-		assertEquals(1, records.size(), records::toString);
+		assertSize(records::toString, 1, records);
 		assertTrue(records.get(0).getMessage().contains("Creation Stack:"), records.get(0).getMessage());
 		assertTrue(out.toString().contains("garbage collected"), out::toString);
 		c.close();
@@ -299,7 +300,7 @@ class RestClient_Coverage2_Test {
 		try (var out = new ByteArrayOutputStream();
 				var c = RestClient.create().logger(alwaysLoggableLogger()).logToConsole().console(new PrintStream(out)).build()) {
 			var records = LogRecordCapture.quietly("RestClient_Coverage2_Test.alwaysLoggable", () -> c.log(Level.SEVERE, "hello %s", "world"));
-			assertEquals(1, records.size(), records::toString);
+			assertSize(records::toString, 1, records);
 			assertTrue(out.toString().contains("hello world"), "Actual console output: " + out);
 		}
 	}
@@ -316,7 +317,7 @@ class RestClient_Coverage2_Test {
 		try (var out = new ByteArrayOutputStream();
 				var c = RestClient.create().logger(alwaysLoggableLogger()).logToConsole().console(new PrintStream(out)).build()) {
 			var records = LogRecordCapture.quietly("RestClient_Coverage2_Test.alwaysLoggable", () -> c.log(Level.SEVERE, new Exception("boom"), "hello %s", "world"));
-			assertEquals(1, records.size(), records::toString);
+			assertSize(records::toString, 1, records);
 			var s = out.toString();
 			assertTrue(s.contains("hello world"), "Actual console output: " + s);
 			assertTrue(s.contains("boom"), "Expected stack trace in console output: " + s);
@@ -381,7 +382,7 @@ class RestClient_Coverage2_Test {
 				var req = c.get(url() + "/echo");
 				var res = req.run()) {
 			var records = LogRecordCapture.quietly(RestClient.class, () -> assertDoesNotThrow(res::close));
-			assertEquals(1, records.size(), records::toString);
+			assertSize(records::toString, 1, records);
 			var s = out.toString();
 			assertTrue(s.contains("Error during RestResponse close"), "Actual console output: " + s);
 			assertTrue(s.contains("Interceptor threw an exception on close"), "Actual console output: " + s);

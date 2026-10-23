@@ -175,7 +175,7 @@ class ApacheHc45Transport_CallerClientRedirectCredentials_Test {
 
 	@Test
 	void a03_crossOrigin_callerClient_cookieStoreCookieStripped() throws Exception {
-		// J0824: the cookie A sets lives in the caller's cookie store, which would send it on to B (a cookie's domain ignores
+		// the cookie A sets lives in the caller's cookie store, which would send it on to B (a cookie's domain ignores
 		// the port).  The guard strips every credential header on a cross-origin hop, so the store's Cookie goes too.
 		var callerClient = HttpClients.custom().setDefaultCookieStore(new BasicCookieStore()).build();
 		assertEquals("auth=none|cookie=none|key=none|trace=t-1", get(callerClient, "/redirect-cross-set-cookie"));
@@ -183,7 +183,7 @@ class ApacheHc45Transport_CallerClientRedirectCredentials_Test {
 
 	@Test
 	void a04_crossOrigin_callerClient_credentialsProviderAuthorizationStripped() throws Exception {
-		// J0824: the credentials provider would answer B's challenge.  The answer is an Authorization header, so it is stripped;
+		// the credentials provider would answer B's challenge.  The answer is an Authorization header, so it is stripped;
 		// B keeps challenging and the caller sees the 401.
 		var callerClient = HttpClients.custom().setDefaultCredentialsProvider(provider(portB)).build();
 		assertEquals("401:challenge", getAnyStatus(callerClient, "/redirect-cross-challenge"));
@@ -201,7 +201,7 @@ class ApacheHc45Transport_CallerClientRedirectCredentials_Test {
 
 	@Test
 	void a07_originBackToFirstOrigin_callerClient_credentialsRestored() throws Exception {
-		// J0824 follow-up: the hop that returns to the first origin gets the caller's own headers back.
+		// the hop that returns to the first origin gets the caller's own headers back.
 		firstHopAuth.set(null);
 		assertEquals("auth=Bearer secret-token|cookie=session=abc123|key=k-1|trace=t-1", get(HttpClients.createDefault(), "/redirect-a-b-a"));
 		assertEquals("Bearer secret-token", firstHopAuth.get());
@@ -226,7 +226,7 @@ class ApacheHc45Transport_CallerClientRedirectCredentials_Test {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	// J0824 matrix: caller header, cookie store, credentials provider and preemptive auth, each cross-origin (stripped)
+	// Matrix: caller header, cookie store, credentials provider and preemptive auth, each cross-origin (stripped)
 	// and same-origin (kept), on both caller-supplied and transport-built clients.
 	//------------------------------------------------------------------------------------------------------------------
 
@@ -312,7 +312,9 @@ class ApacheHc45Transport_CallerClientRedirectCredentials_Test {
 	}
 
 	@Test
-	@SuppressWarnings("deprecation") // The legacy AbstractHttpClient family is exactly what is refused.
+	@SuppressWarnings({
+		"deprecation" // The legacy AbstractHttpClient family is exactly what is refused.
+	})
 	void e01_legacyDefaultHttpClient_isRefused() {
 		// Reproduced before the refusal: a legacy client never re-sets the request before the wire, so the store cookie followed a cross-origin redirect.
 		var builder = ApacheHc45Transport.builder();

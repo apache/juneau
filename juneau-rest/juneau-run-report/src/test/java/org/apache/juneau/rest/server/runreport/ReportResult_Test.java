@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.server.runreport;
 
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
@@ -45,7 +46,7 @@ class ReportResult_Test extends TestBase {
 
 	@Test void b02_noTestsAndWarningsKeepsPlaceholders() {
 		var ev = new ReportResult("jest", List.of(), List.of("w"), false, 0).toEvents("tests");
-		assertEquals(1, ev.size());
+		assertSize(1, ev);
 		assertEquals("note", ev.get(0).toContractMap().get("ev"));
 	}
 

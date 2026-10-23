@@ -73,7 +73,7 @@ class AssetUrl_Test extends TestBase {
 		var out = new String[1];
 		var records = LogRecordCapture.quietly(AssetUrlMethodModel.class, () -> out[0] = render(m, "${assetUrl('/js/missing.js')}"));
 		assertEquals("/js/missing.js", out[0]);
-		assertEquals(1, records.size(), records::toString);
+		assertSize(records::toString, 1, records);
 		assertTrue(records.get(0).getMessage().contains("no bundled resource"), records.get(0).getMessage());
 	}
 

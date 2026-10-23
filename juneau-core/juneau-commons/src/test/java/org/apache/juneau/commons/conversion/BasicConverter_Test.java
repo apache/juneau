@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.commons.conversion;
 
+import static org.apache.juneau.commons.TestAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.lang.reflect.*;
@@ -193,14 +194,14 @@ class BasicConverter_Test extends TestBase {
 	@Test void f01_listToList() {
 		var a = C.to(List.of("a", "b", "c"), List.class);
 		assertNotNull(a);
-		assertEquals(3, a.size());
+		assertSize(3, a);
 		assertEquals("a", a.get(0));
 	}
 
 	@Test void f02_listToListTyped() {
 		var a = C.to(List.of("1", "2", "3"), (Type) List.class, new Type[]{Integer.class});
 		assertNotNull(a);
-		assertEquals(3, ((List<?>) a).size());
+		assertSize(3, ((List<?>) a));
 		assertEquals(1, ((List<?>) a).get(0));
 		assertInstanceOf(Integer.class, ((List<?>) a).get(0));
 	}
@@ -208,7 +209,7 @@ class BasicConverter_Test extends TestBase {
 	@Test void f03_arrayToList() {
 		var a = C.to(new String[]{"x", "y"}, List.class);
 		assertNotNull(a);
-		assertEquals(2, ((List<?>) a).size());
+		assertSize(2, ((List<?>) a));
 		assertEquals("x", ((List<?>) a).get(0));
 	}
 
@@ -223,7 +224,7 @@ class BasicConverter_Test extends TestBase {
 		var a = C.to(List.of("a", "b", "a"), Set.class);
 		assertNotNull(a);
 		assertInstanceOf(Set.class, a);
-		assertEquals(2, ((Set<?>) a).size());
+		assertSize(2, ((Set<?>) a));
 	}
 
 	@Test void f05_listToSortedSet() {
@@ -236,7 +237,7 @@ class BasicConverter_Test extends TestBase {
 	@Test void f06_primitiveArrayToList() {
 		var a = C.to(new int[]{1, 2, 3}, List.class);
 		assertNotNull(a);
-		assertEquals(3, ((List<?>) a).size());
+		assertSize(3, ((List<?>) a));
 		assertEquals(1, ((List<?>) a).get(0));
 	}
 
@@ -255,14 +256,14 @@ class BasicConverter_Test extends TestBase {
 		var a = C.to(List.of("a", "b"), Queue.class);
 		assertNotNull(a);
 		assertInstanceOf(Queue.class, a);
-		assertEquals(2, ((Queue<?>) a).size());
+		assertSize(2, ((Queue<?>) a));
 	}
 
 	@Test void f10_listToConcreteCollection() {
 		var a = C.to(List.of("a", "b"), ArrayDeque.class);
 		assertNotNull(a);
 		assertInstanceOf(ArrayDeque.class, a);
-		assertEquals(2, ((ArrayDeque<?>) a).size());
+		assertSize(2, ((ArrayDeque<?>) a));
 	}
 
 	public static class F11_NoDefaultCtorCollection extends ArrayList<Object> {
@@ -274,7 +275,7 @@ class BasicConverter_Test extends TestBase {
 		var a = (Collection<?>) C.to(List.of("a", "b"), F11_NoDefaultCtorCollection.class);
 		assertNotNull(a);
 		assertInstanceOf(ArrayList.class, a);
-		assertEquals(2, a.size());
+		assertSize(2, a);
 	}
 
 	@Test void f12_arrayToCollectionInterface() {
@@ -282,7 +283,7 @@ class BasicConverter_Test extends TestBase {
 		var a = C.to(new String[]{"a", "b"}, Collection.class);
 		assertNotNull(a);
 		assertInstanceOf(Collection.class, a);
-		assertEquals(2, ((Collection<?>) a).size());
+		assertSize(2, ((Collection<?>) a));
 	}
 
 	@Test void f13_arrayToAbstractList() {
@@ -290,7 +291,7 @@ class BasicConverter_Test extends TestBase {
 		var a = C.to(new String[]{"a", "b"}, AbstractList.class);
 		assertNotNull(a);
 		assertInstanceOf(AbstractList.class, a);
-		assertEquals(2, ((AbstractList<?>) a).size());
+		assertSize(2, ((AbstractList<?>) a));
 	}
 
 	@Test void f14_listToDeque() {
@@ -298,7 +299,7 @@ class BasicConverter_Test extends TestBase {
 		var a = C.to(List.of("a", "b"), Deque.class);
 		assertNotNull(a);
 		assertInstanceOf(Deque.class, a);
-		assertEquals(2, ((Deque<?>) a).size());
+		assertSize(2, ((Deque<?>) a));
 	}
 
 	@Test void f15_listToLinkedList() {
@@ -306,7 +307,7 @@ class BasicConverter_Test extends TestBase {
 		var a = C.to(List.of("a", "b"), LinkedList.class);
 		assertNotNull(a);
 		assertInstanceOf(LinkedList.class, a);
-		assertEquals(2, ((LinkedList<?>) a).size());
+		assertSize(2, ((LinkedList<?>) a));
 	}
 
 	//====================================================================================================
@@ -359,7 +360,7 @@ class BasicConverter_Test extends TestBase {
 		var a = (Map<?,?>) C.to(Map.of("a", 1), G06_NoDefaultCtorMap.class);
 		assertNotNull(a);
 		assertInstanceOf(LinkedHashMap.class, a);
-		assertEquals(1, a.size());
+		assertSize(1, a);
 	}
 
 	@Test void g07_mapToLinkedHashMap() {
@@ -367,7 +368,7 @@ class BasicConverter_Test extends TestBase {
 		var a = (Map<?,?>) C.to(Map.of("a", 1), LinkedHashMap.class);
 		assertNotNull(a);
 		assertInstanceOf(LinkedHashMap.class, a);
-		assertEquals(1, a.size());
+		assertSize(1, a);
 	}
 
 	@Test void g08_mapToAbstractMap() {
@@ -375,7 +376,7 @@ class BasicConverter_Test extends TestBase {
 		var a = (Map<?,?>) C.to(Map.of("a", 1), (Type) AbstractMap.class, new Type[]{String.class, Integer.class});
 		assertNotNull(a);
 		assertInstanceOf(AbstractMap.class, a);
-		assertEquals(1, a.size());
+		assertSize(1, a);
 	}
 
 	@Test void g09_mapToNavigableMap() {
@@ -383,7 +384,7 @@ class BasicConverter_Test extends TestBase {
 		var a = (Map<?,?>) C.to(Map.of("a", 1), NavigableMap.class);
 		assertNotNull(a);
 		assertInstanceOf(NavigableMap.class, a);
-		assertEquals(1, a.size());
+		assertSize(1, a);
 	}
 
 	@Test void g10_mapToTreeMap() {
@@ -391,7 +392,7 @@ class BasicConverter_Test extends TestBase {
 		var a = (Map<?,?>) C.to(Map.of("a", 1), TreeMap.class);
 		assertNotNull(a);
 		assertInstanceOf(TreeMap.class, a);
-		assertEquals(1, a.size());
+		assertSize(1, a);
 	}
 
 	@Test void g11_unconvertibleToMap() {
@@ -812,6 +813,6 @@ class BasicConverter_Test extends TestBase {
 		var result = C.to(List.of("a", "b"), (Type) AbstractList.class);
 		assertNotNull(result);
 		assertInstanceOf(List.class, result);
-		assertEquals(2, ((List<?>) result).size());
+		assertSize(2, ((List<?>) result));
 	}
 }

@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.petstore.console.browser;
 
+import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.petstore.console.browser.PetstoreBrowser.*;
 import static org.apache.juneau.test.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -59,10 +60,11 @@ class PetstoreTypedConfirm_BrowserTest extends TestBase {
 	}
 
 	private static Map<String,Object> theCase(String name, String request, List<Map<String,Object>> steps) {
-		var actions = new ArrayList<Map<String,Object>>();
-		actions.add(Map.of("waitFor", "window.JuneauViews && JuneauViews.dialogs"));
-		actions.add(Map.of("evaluate", SNAP));
-		actions.add(Map.of("evaluate", open(request)));
+		List<Map<String,Object>> actions = list(
+			Map.of("waitFor", "window.JuneauViews && JuneauViews.dialogs"),
+			Map.of("evaluate", SNAP),
+			Map.of("evaluate", open(request))
+		);
 		actions.addAll(steps);
 		return Map.of("name", name, "path", "/console/orders", "actions", actions,
 			"queries", Map.of("log", "window.__log", "res", "window.__res", "warns", "window.__warns", "open", "!!document.querySelector('" + DLG + "')"));
@@ -128,7 +130,9 @@ class PetstoreTypedConfirm_BrowserTest extends TestBase {
 				"queries", Map.of("log", "window.__log", "id", "window.__id"))));
 	}
 
-	@SuppressWarnings("unchecked") // log is a JSON object of {label, disabled} snapshots.
+	@SuppressWarnings({
+		"unchecked" // log is a JSON object of {label, disabled} snapshots.
+	})
 	private static Map<String,Object> log(String name, String key) {
 		var log = (Map<String,Object>) query(assertClean(report, name), "log");
 		return (Map<String,Object>) log.get(key);
@@ -179,7 +183,9 @@ class PetstoreTypedConfirm_BrowserTest extends TestBase {
 		assertEquals(false, query(assertClean(report, "escape"), "res"));
 	}
 
-	@SuppressWarnings("unchecked") // requests is a JSON array of {url, method, postData}.
+	@SuppressWarnings({
+		"unchecked" // requests is a JSON array of {url, method, postData}.
+	})
 	@Test void a07_ordersDeleteNeedsTheExactId() {
 		var c = assertClean(report, "ordersDelete");
 		var id = (String) query(c, "id");

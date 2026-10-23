@@ -17,6 +17,7 @@
 package org.apache.juneau.rest.server.views;
 
 import static org.apache.juneau.rest.server.views.ConsoleBrowserFixture.*;
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
@@ -161,7 +162,7 @@ class JobLogCard_BrowserTest extends TestBase {
 		assertEquals("/jobs/j1/stream?lastEventId=0", p.get("stream"));
 		assertEquals("?job=j1", p.get("search"));
 		var posts = (List<?>)p.get("posts");
-		assertEquals(1, posts.size());
+		assertSize(1, posts);
 		var post = (Map<?,?>)posts.get(0);
 		assertEquals("/jobs/rebuild", post.get("url"));
 		var body = (Map<?,?>)post.get("body");
@@ -205,7 +206,7 @@ class JobLogCard_BrowserTest extends TestBase {
 		var p = probe(r);
 		assertEquals("step 1", ((List<?>)p.get("lines")).get(0));
 		var posts = (List<?>)p.get("posts");
-		assertEquals(2, posts.size(), () -> String.valueOf(posts));
+		assertSize(() -> String.valueOf(posts), 2, posts);
 		assertEquals("/jobs/j1/cancel", ((Map<?,?>)posts.get(1)).get("url"));
 	}
 }

@@ -225,7 +225,7 @@ public class SeoMixin extends RestMixin {
 	 * Builder for {@link SeoMixin} instances.
 	 *
 	 * <p>
-	 * Extends {@link org.apache.juneau.rest.server.servlet.RestMixin.Builder} so the mixin's bespoke robots/sitemap setters chain
+	 * Extends {@link org.apache.juneau.rest.server.servlet.RestMixin.Builder RestMixin.Builder} so the mixin's bespoke robots/sitemap setters chain
 	 * with true covariant returns alongside the inherited {@link RestBuilder}surface (e.g. {@code path},
 	 * {@code roleGuard}).
 	 */

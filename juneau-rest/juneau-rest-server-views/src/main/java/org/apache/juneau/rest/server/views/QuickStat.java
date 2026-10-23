@@ -89,7 +89,7 @@ public final class QuickStat {
 	}
 
 	private static String checkId(String id) {
-		if (id == null || id.isBlank())
+		if (ib(id))
 			throw iaex("QuickStat id must not be null or blank.");
 		return id;
 	}
@@ -162,7 +162,7 @@ public final class QuickStat {
 	}
 
 	private void checkLabel() {
-		if (label == null || label.isBlank())
+		if (ib(label))
 			throw fail("label must not be null or blank.");
 	}
 
@@ -191,7 +191,7 @@ public final class QuickStat {
 	 */
 	public QuickStat segment(String label, long count, StatusTone tone) {
 		requireKind(Kind.SEGMENTED, "segment");
-		if (label == null || label.isBlank())
+		if (ib(label))
 			throw fail("segment label must not be null or blank.");
 		if (count < 0)
 			throw fail("segment count must be >= 0.");
@@ -270,7 +270,7 @@ public final class QuickStat {
 		if (kind == Kind.METER) {
 			m.put("value", value);
 			m.put("max", max);
-			if (text != null && ! text.isBlank())
+			if (inb(text))
 				m.put("text", text);
 			if (tone != null)
 				m.put("tone", tone);

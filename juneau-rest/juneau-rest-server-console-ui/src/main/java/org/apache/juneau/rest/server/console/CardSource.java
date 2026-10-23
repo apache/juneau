@@ -142,7 +142,7 @@ public final class CardSource {
 	 * @throws IllegalArgumentException If the body is absent/blank, or no template sink was registered.
 	 */
 	public String captureTemplate() {
-		if (body == null || body.isEmpty())
+		if (ie(body))
 			throw error("type='%s' requires a markup body; got none.", type);
 		if (templateSink == null)
 			throw error("type='%s' requires a markup body, but this CardSource has no template sink.", type);
@@ -182,9 +182,9 @@ public final class CardSource {
 		private BiConsumer<String,String> templateSink;
 
 		private Builder(String type, String id) {
-			if (type == null || type.isBlank())
+			if (ib(type))
 				throw iaex("CardSource type must not be null or blank.");
-			if (id == null || id.isBlank())
+			if (ib(id))
 				throw iaex("CardSource id must not be null or blank.");
 			this.type = type;
 			this.id = id;

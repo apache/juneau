@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.server.mcp.v20250618;
 
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
@@ -203,7 +204,7 @@ class McpResourceTemplate_Test {
 	@Test void d03_validNonMatchableTemplateListsButNeverReadMatches() {
 		var config = new McpServerConfig().addResourceTemplate(template("file:///{x,y}", (u, v) -> text("should-not-run")));
 		var list = (ListResourceTemplatesResult) send(config, req(1, McpMethods.RESOURCES_TEMPLATES_LIST, null)).getResult();
-		assertEquals(1, list.getResourceTemplates().size());
+		assertSize(1, list.getResourceTemplates());
 		var resp = readResponse(config, "file:///a,b");
 		assertEquals(McpRevision.CODE_RESOURCE_NOT_FOUND, resp.getError().getCode());
 	}
@@ -226,7 +227,7 @@ class McpResourceTemplate_Test {
 	@Test void e02_listMapsAllFiveFieldsInHandlerOrder() {
 		var config = new McpServerConfig().addResourceTemplate(spec("a"), spec("b"));
 		var list = (ListResourceTemplatesResult) send(config, req(1, McpMethods.RESOURCES_TEMPLATES_LIST, null)).getResult();
-		assertEquals(2, list.getResourceTemplates().size());
+		assertSize(2, list.getResourceTemplates());
 		var first = list.getResourceTemplates().get(0);
 		assertEquals("file:///a/{x}", first.getUriTemplate());
 		assertEquals("a", first.getName());

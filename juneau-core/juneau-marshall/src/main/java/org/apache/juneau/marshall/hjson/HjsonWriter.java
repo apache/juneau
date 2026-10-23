@@ -17,6 +17,8 @@
 package org.apache.juneau.marshall.hjson;
 
 
+import static org.apache.juneau.commons.utils.StringUtils.isEmpty;
+
 import java.io.*;
 
 import org.apache.juneau.commons.lang.*;
@@ -175,7 +177,7 @@ public class HjsonWriter extends SerializerWriter<HjsonWriter> {
 	 * @return <jk>true</jk> if the key must be quoted.
 	 */
 	public boolean needsQuoting(String key) {
-		if (key == null || key.isEmpty())
+		if (isEmpty(key))
 			return true;
 		if (!useQuotelessKeys)
 			return true;
@@ -194,7 +196,7 @@ public class HjsonWriter extends SerializerWriter<HjsonWriter> {
 	 * @return <jk>true</jk> if the value can be quoteless.
 	 */
 	public boolean isSimpleValue(String value) {
-		if (value == null || value.isEmpty())
+		if (isEmpty(value))
 			return false;
 		if (!useQuotelessStrings)
 			return false;
@@ -214,7 +216,7 @@ public class HjsonWriter extends SerializerWriter<HjsonWriter> {
 	}
 
 	private static boolean isNumber(String s) {
-		if (s == null || s.isEmpty())
+		if (isEmpty(s))
 			return false;
 		var i = s.startsWith("-") ? 1 : 0;
 		if (i >= s.length())

@@ -26,8 +26,8 @@
  * Key types:
  * <ul>
  * 	<li>{@link org.apache.juneau.http.HttpStatusLine} — parsed HTTP status line (interface; lives in {@code org.apache.juneau.http})
- * 	<li>{@link org.apache.juneau.http.response.HttpResponseMessage} — a full HTTP response message
- * 	<li>{@link org.apache.juneau.http.response.HttpStatusLineBean} — default {@link org.apache.juneau.http.HttpStatusLine} implementation
+ * 	<li>{@link org.apache.juneau.http.response.HttpResponseMessage HttpResponseMessage} — a full HTTP response message
+ * 	<li>{@link org.apache.juneau.http.response.HttpStatusLineBean HttpStatusLineBean} — default {@link org.apache.juneau.http.HttpStatusLine} implementation
  * </ul>
  */
 package org.apache.juneau.http.response;

@@ -36,7 +36,7 @@ import org.junit.jupiter.api.*;
 	"java:S5778", // assertThrows lambdas with chained calls; intermediate invocations do not throw in practice
 	"resource" // Test-only Scanner/PrintWriter/Microservice instances are never dispatched against; not a leak.
 })
-class Microservice_Builder_Test extends TestBase {
+class Microservice_Builder_JettyMicroservice_Test extends TestBase {
 
 	@Test void a01_create() {
 		var b = Microservice.create();

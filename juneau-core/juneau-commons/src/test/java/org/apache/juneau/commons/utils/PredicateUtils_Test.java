@@ -18,6 +18,7 @@ package org.apache.juneau.commons.utils;
 
 import static org.apache.juneau.commons.utils.PredicateUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
+import static org.apache.juneau.commons.TestAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
@@ -41,14 +42,14 @@ class PredicateUtils_Test {
 
 		// When predicate is null, should consume
 		consumeIf(null, consumer, "test");
-		assertEquals(1, consumed.size());
+		assertSize(1, consumed);
 		assertEquals("test", consumed.get(0));
 
 		// When predicate matches, should consume
 		consumed.clear();
 		Predicate<String> matches = s -> eq(s, "match");
 		consumeIf(matches, consumer, "match");
-		assertEquals(1, consumed.size());
+		assertSize(1, consumed);
 		assertEquals("match", consumed.get(0));
 
 		// When predicate doesn't match, should not consume
@@ -62,11 +63,11 @@ class PredicateUtils_Test {
 		Consumer<Integer> intConsumer = intConsumed::add;
 		Predicate<Integer> even = i -> i % 2 == 0;
 		consumeIf(even, intConsumer, 2);
-		assertEquals(1, intConsumed.size());
+		assertSize(1, intConsumed);
 		assertEquals(2, intConsumed.get(0));
 
 		consumeIf(even, intConsumer, 3);
-		assertEquals(1, intConsumed.size()); // Should not add 3
+		assertSize(1, intConsumed); // Should not add 3
 	}
 
 	//====================================================================================================

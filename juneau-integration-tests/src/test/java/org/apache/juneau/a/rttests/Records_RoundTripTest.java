@@ -18,6 +18,7 @@ package org.apache.juneau.a.rttests;
 
 import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.marshall.marshaller.MarshallUtils.*;
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
@@ -130,7 +131,7 @@ class Records_RoundTripTest extends RoundTripTest_Base {
 		var in = new Team("devs", members);
 		var out = t.roundTrip(in, Team.class);
 		assertEquals("devs", out.name());
-		assertEquals(2, out.members().size());
+		assertSize(2, out.members());
 		assertEquals("Alice", out.members().get(0).name());
 		assertEquals("Bob", out.members().get(1).name());
 	}

@@ -1849,7 +1849,7 @@ class BeanMap_Test extends TestBase {
 		a.put("s", list("ONE","TWO"));
 
 		var b = a.getBean();
-		assertEquals(2, b.s.size());
+		assertSize(2, b.s);
 		assertTrue(b.s.stream().allMatch(HEnum.class::isInstance));
 		assertTrue(b.s.contains(HEnum.ONE));
 		assertTrue(b.s.contains(HEnum.TWO));
@@ -1865,7 +1865,7 @@ class BeanMap_Test extends TestBase {
 		a.put("s", list("ONE","TWO"));
 
 		var b = a.getBean();
-		assertEquals(2, b.getS().size());
+		assertSize(2, b.getS());
 		assertTrue(b.getS().stream().allMatch(HEnum.class::isInstance));
 		assertTrue(b.getS().contains(HEnum.ONE));
 		assertTrue(b.getS().contains(HEnum.TWO));
@@ -1898,7 +1898,7 @@ class BeanMap_Test extends TestBase {
 		a.put("s", set("ONE","TWO"));
 
 		var b = a.getBean();
-		assertEquals(2, b.s.size());
+		assertSize(2, b.s);
 		assertTrue(b.s.stream().allMatch(HEnum.class::isInstance));
 		assertTrue(b.s.contains(HEnum.ONE));
 		assertTrue(b.s.contains(HEnum.TWO));
@@ -1923,7 +1923,7 @@ class BeanMap_Test extends TestBase {
 		a.put("s", List.of("ONE","TWO"));
 
 		var b = a.getBean();
-		assertEquals(2, b.s.size());
+		assertSize(2, b.s);
 		assertTrue(b.s.stream().allMatch(HEnum.class::isInstance));
 		assertTrue(b.s.contains(HEnum.ONE));
 		assertTrue(b.s.contains(HEnum.TWO));
@@ -1940,7 +1940,7 @@ class BeanMap_Test extends TestBase {
 
 		var b = a.getBean();
 		assertTrue(b.s instanceof LinkedHashSet);
-		assertEquals(2, b.s.size());
+		assertSize(2, b.s);
 		assertTrue(b.s.stream().allMatch(HEnum.class::isInstance));
 		assertEquals(list(HEnum.ONE, HEnum.TWO), new ArrayList<>(b.s));
 	}
@@ -1955,7 +1955,7 @@ class BeanMap_Test extends TestBase {
 
 		var b = a.getBean();
 		assertTrue(b.s instanceof TreeSet);
-		assertEquals(2, b.s.size());
+		assertSize(2, b.s);
 		assertTrue(b.s.stream().allMatch(HEnum.class::isInstance));
 		assertEquals(list(HEnum.ONE, HEnum.TWO), new ArrayList<>(b.s));
 	}
@@ -1970,7 +1970,7 @@ class BeanMap_Test extends TestBase {
 
 		var b = a.getBean();
 		assertTrue(b.q instanceof ArrayDeque);
-		assertEquals(2, b.q.size());
+		assertSize(2, b.q);
 		assertTrue(b.q.stream().allMatch(HEnum.class::isInstance));
 		assertEquals(list(HEnum.ONE, HEnum.TWO), new ArrayList<>(b.q));
 	}
@@ -1985,7 +1985,7 @@ class BeanMap_Test extends TestBase {
 
 		var b = a.getBean();
 		assertTrue(b.d instanceof ArrayDeque);
-		assertEquals(2, b.d.size());
+		assertSize(2, b.d);
 		assertTrue(b.d.stream().allMatch(HEnum.class::isInstance));
 		assertEquals(list(HEnum.ONE, HEnum.TWO), new ArrayList<>(b.d));
 	}
@@ -2000,7 +2000,7 @@ class BeanMap_Test extends TestBase {
 
 		var b = a.getBean();
 		assertTrue(b.getS() instanceof LinkedHashSet);
-		assertEquals(2, b.getS().size());
+		assertSize(2, b.getS());
 		assertTrue(b.getS().stream().allMatch(HEnum.class::isInstance));
 		assertEquals(list(HEnum.ONE, HEnum.TWO), new ArrayList<>(b.getS()));
 	}

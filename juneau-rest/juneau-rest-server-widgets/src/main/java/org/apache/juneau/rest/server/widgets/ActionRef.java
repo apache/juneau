@@ -58,7 +58,7 @@ public class ActionRef implements ActionBarItem {
 	 * @return A new {@link ActionRef}.
 	 */
 	public static ActionRef of(String id) {
-		if (id == null || id.isBlank())
+		if (ib(id))
 			throw iaex("ActionRef id must not be null or blank.");
 		var a = new ActionRef();
 		a.id = id;
@@ -162,9 +162,9 @@ public class ActionRef implements ActionBarItem {
 	}
 
 	private ActionRef addEnabledRule(String field, Op op, Object value, String reason) {
-		if (field == null || field.isBlank())
+		if (ib(field))
 			throw iaex("enabledWhen field must not be null or blank.");
-		if (reason == null || reason.isBlank())
+		if (ib(reason))
 			throw iaex("enabledWhen reason must not be null or blank.");
 		var r = new EnabledRule();
 		r.field = field;

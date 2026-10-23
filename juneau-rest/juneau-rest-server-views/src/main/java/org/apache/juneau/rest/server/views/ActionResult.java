@@ -261,7 +261,7 @@ public class ActionResult {
 	 * @throws IllegalArgumentException If {@code refusalCode} is <jk>null</jk> or blank.
 	 */
 	public static ActionResult refusal(String refusalCode) {
-		if (refusalCode == null || refusalCode.isBlank())
+		if (ib(refusalCode))
 			throw iaex("ActionResult refusalCode must not be null or blank.");
 		var r = new ActionResult();
 		r.outcome = Outcome.REFUSAL.wire();

@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.rest.server.console.data;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
+
 import java.time.*;
 import java.time.format.*;
 import java.time.temporal.*;
@@ -49,7 +51,7 @@ final class Values {
 
 	/** Parses an ISO-8601 instant or a digits-only epoch-millisecond string; null when neither. */
 	static Instant parseInstant(String s) {
-		if (s == null || s.isEmpty()) return null;
+		if (ie(s)) return null;
 		try {
 			if (s.chars().allMatch(Character::isDigit)) return Instant.ofEpochMilli(Long.parseLong(s));
 			return Instant.parse(s);

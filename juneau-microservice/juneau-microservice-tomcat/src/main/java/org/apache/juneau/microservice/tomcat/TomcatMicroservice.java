@@ -70,7 +70,7 @@ public final class TomcatMicroservice {
 	 * <p>
 	 * Equivalent to calling {@link #run(String[], Servlet, boolean) run(args, rootServlet, true)}.
 	 *
-	 * @param args         The {@code main(String[])} arguments.  Forwarded to {@link org.apache.juneau.microservice.Microservice.Builder#args(String...)}.
+	 * @param args         The {@code main(String[])} arguments.  Forwarded to {@link org.apache.juneau.microservice.Microservice.Builder#args(String...) Microservice.Builder#args(String...)}.
 	 * @param rootServlet  The root REST servlet (typically annotated with
 	 *                     {@link org.apache.juneau.rest.server.Rest @Rest}).
 	 * @return The started {@link Microservice} instance.  Callers typically chain {@link Microservice#join()}.
@@ -90,7 +90,7 @@ public final class TomcatMicroservice {
 	 * returned microservice has not yet been {@link Microservice#join() joined}; callers wanting the
 	 * standard "start and block forever" loop should chain {@code .join()}.
 	 *
-	 * @param args          The {@code main(String[])} arguments.  Forwarded to {@link org.apache.juneau.microservice.Microservice.Builder#args(String...)}.
+	 * @param args          The {@code main(String[])} arguments.  Forwarded to {@link org.apache.juneau.microservice.Microservice.Builder#args(String...) Microservice.Builder#args(String...)}.
 	 * @param rootServlet   The root REST servlet (typically annotated with
 	 *                      {@link org.apache.juneau.rest.server.Rest @Rest}).
 	 * @param startConsole  If <jk>true</jk>, also starts the interactive console thread via
@@ -114,7 +114,7 @@ public final class TomcatMicroservice {
 	 * restrictive &mdash; e.g. multiple {@code @Bean Servlet} contributions, custom
 	 * {@code MicroserviceListener}s, or a parent bean store.
 	 *
-	 * @param args            The {@code main(String[])} arguments.  Forwarded to {@link org.apache.juneau.microservice.Microservice.Builder#args(String...)}.
+	 * @param args            The {@code main(String[])} arguments.  Forwarded to {@link org.apache.juneau.microservice.Microservice.Builder#args(String...) Microservice.Builder#args(String...)}.
 	 * @param beanStore       The bean store to use for dependency injection.  Pre-populated bean entries
 	 *                        ({@code @Bean Servlet}, {@code MicroserviceListener}, etc.) are picked up by
 	 *                        {@link TomcatConfiguration} and the microservice runtime.

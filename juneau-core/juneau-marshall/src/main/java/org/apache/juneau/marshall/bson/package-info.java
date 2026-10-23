@@ -22,7 +22,7 @@
  * (datetime, binary, 32-bit/64-bit integers, decimal128) and uses little-endian byte order.
  *
  * <p>
- * Juneau provides {@link org.apache.juneau.marshall.bson.BsonSerializer} and {@link org.apache.juneau.marshall.bson.BsonParser} for
+ * Juneau provides {@link org.apache.juneau.marshall.bson.BsonSerializer BsonSerializer} and {@link org.apache.juneau.marshall.bson.BsonParser BsonParser} for
  * serialization and parsing, plus {@link org.apache.juneau.marshall.marshaller.Bson} for a combined API.
  *
  * <h5 class='section'>Type mapping (summary)</h5>

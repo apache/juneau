@@ -33,9 +33,9 @@
  *
  * <h5 class='section'>Core Classes:</h5>
  * <ul>
- *    <li><b>{@link org.apache.juneau.test.bct.BctAssertions}:</b> Main assertion methods for BCT</li>
- *    <li><b>{@link org.apache.juneau.test.bct.BeanConverter}:</b> Interface for object conversion and property access</li>
- *    <li><b>{@link org.apache.juneau.test.bct.BasicBeanConverter}:</b> Default implementation with extensible type handlers</li>
+ *    <li><b>{@link org.apache.juneau.test.bct.BctAssertions BctAssertions}:</b> Main assertion methods for BCT</li>
+ *    <li><b>{@link org.apache.juneau.test.bct.BeanConverter BeanConverter}:</b> Interface for object conversion and property access</li>
+ *    <li><b>{@link org.apache.juneau.test.bct.BasicBeanConverter BasicBeanConverter}:</b> Default implementation with extensible type handlers</li>
  * </ul>
  *
  * <h5 class='section'>Quick Start:</h5>

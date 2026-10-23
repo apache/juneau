@@ -40,7 +40,7 @@ import org.junit.jupiter.api.*;
 @SuppressWarnings({
 	"resource" // Test-only Microservice/BeanStore instances are stopped via ms.stop() in try/finally; JDT's local closeable analysis does not recognize stop() as closing them.
 })
-class Microservice_Inject_Test extends TestBase {
+class Microservice_Inject_JettyMicroservice_Test extends TestBase {
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// A.  Bean store presence and self-registration.

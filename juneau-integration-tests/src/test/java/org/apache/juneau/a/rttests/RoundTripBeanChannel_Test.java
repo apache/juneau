@@ -17,6 +17,7 @@
 package org.apache.juneau.a.rttests;
 
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assumptions.*;
 
@@ -64,7 +65,7 @@ class RoundTripBeanChannel_Test extends RoundTripTest_Base {
 		var serialized = t.serialize(list(), t.getSerializer());
 		var parsed = new ListBeanChannel<Item>();
 		t.getParser().getSession().readToBeanConsumer(serialized, parsed, Item.class);
-		assertEquals(0, parsed.getList().size());
+		assertSize(0, parsed.getList());
 	}
 
 	@ParameterizedTest
@@ -74,7 +75,7 @@ class RoundTripBeanChannel_Test extends RoundTripTest_Base {
 		var serialized = t.serialize(list(new Item("alpha", 1)), t.getSerializer());
 		var parsed = new ListBeanChannel<Item>();
 		t.getParser().getSession().readToBeanConsumer(serialized, parsed, Item.class);
-		assertEquals(1, parsed.getList().size());
+		assertSize(1, parsed.getList());
 		assertEquals("alpha", parsed.getList().get(0).name);
 		assertEquals(1, parsed.getList().get(0).value);
 	}
@@ -86,7 +87,7 @@ class RoundTripBeanChannel_Test extends RoundTripTest_Base {
 		var serialized = t.serialize(list(new Item("alpha", 1), new Item("beta", 2), new Item("gamma", 3)), t.getSerializer());
 		var parsed = new ListBeanChannel<Item>();
 		t.getParser().getSession().readToBeanConsumer(serialized, parsed, Item.class);
-		assertEquals(3, parsed.getList().size());
+		assertSize(3, parsed.getList());
 		assertEquals("alpha", parsed.getList().get(0).name);
 		assertEquals("beta",  parsed.getList().get(1).name);
 		assertEquals("gamma", parsed.getList().get(2).name);

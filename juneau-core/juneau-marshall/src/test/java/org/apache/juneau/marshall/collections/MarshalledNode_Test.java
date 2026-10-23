@@ -17,6 +17,7 @@
 package org.apache.juneau.marshall.collections;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 
 import org.apache.juneau.*;
 import org.apache.juneau.marshall.marshaller.*;
@@ -72,14 +73,14 @@ class MarshalledNode_Test extends TestBase {
 		var n = MarshalledNode.objectNode();
 		assertTrue(n.isObject());
 		assertInstanceOf(JsonMap.class, n.value());
-		assertEquals(0, n.size());
+		assertSize(0, n);
 	}
 
 	@Test void a06_arrayNodeFactory() {
 		var n = MarshalledNode.arrayNode();
 		assertTrue(n.isArray());
 		assertInstanceOf(JsonList.class, n.value());
-		assertEquals(0, n.size());
+		assertSize(0, n);
 	}
 
 	// -----------------------------------------------------------------------------------------------------------------
@@ -190,10 +191,10 @@ class MarshalledNode_Test extends TestBase {
 	}
 
 	@Test void c07_size() {
-		assertEquals(2, MarshalledNode.of(JsonMap.of("a", 1, "b", 2)).size());
-		assertEquals(3, MarshalledNode.of(JsonList.of(1, 2, 3)).size());
-		assertEquals(0, MarshalledNode.of("scalar").size());
-		assertEquals(0, MarshalledNode.of(null).size());
+		assertSize(2, MarshalledNode.of(JsonMap.of("a", 1, "b", 2)));
+		assertSize(3, MarshalledNode.of(JsonList.of(1, 2, 3)));
+		assertSize(0, MarshalledNode.of("scalar"));
+		assertSize(0, MarshalledNode.of(null));
 	}
 
 	// -----------------------------------------------------------------------------------------------------------------
@@ -248,7 +249,7 @@ class MarshalledNode_Test extends TestBase {
 	@Test void e02_addMutatesBackingList() {
 		var list = JsonList.of("x");
 		MarshalledNode.of(list).add("y");
-		assertEquals(2, list.size());
+		assertSize(2, list);
 		assertEquals("y", list.getString(1));
 	}
 
@@ -266,7 +267,7 @@ class MarshalledNode_Test extends TestBase {
 
 		// Original is unchanged.
 		assertEquals(1, original.getInt("a"));
-		assertEquals(2, original.getList("nested").size());
+		assertSize(2, original.getList("nested"));
 	}
 
 	@Test void f02_copyMutateOriginalLeavesCopy() {
@@ -278,7 +279,7 @@ class MarshalledNode_Test extends TestBase {
 
 		// Copy is unchanged.
 		assertEquals(1, copy.get("a").asInt());
-		assertEquals(2, copy.get("nested").size());
+		assertSize(2, copy.get("nested"));
 	}
 
 	@Test void f03_copyScalarAndNull() {

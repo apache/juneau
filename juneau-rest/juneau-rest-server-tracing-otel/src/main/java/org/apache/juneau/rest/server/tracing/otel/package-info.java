@@ -21,7 +21,7 @@
  *
  * <p>
  * This module is opt-in and ships
- * {@link org.apache.juneau.rest.server.tracing.otel.OtelTracerHook} &mdash; a bridge that creates one
+ * {@link org.apache.juneau.rest.server.tracing.otel.OtelTracerHook OtelTracerHook} &mdash; a bridge that creates one
  * OpenTelemetry {@link io.opentelemetry.api.trace.Span Span} per {@code @RestOp} call, populates the
  * canonical HTTP semantic-convention attributes ({@code http.request.method},
  * {@code http.response.status_code}, {@code http.route}), and continues an inbound W3C trace context
@@ -43,7 +43,7 @@
  *
  * <h5 class='section'>See Also:</h5>
  * <ul>
- * 	<li class='jc'>{@link org.apache.juneau.rest.server.tracing.otel.OtelTracerHook}
+ * 	<li class='jc'>{@link org.apache.juneau.rest.server.tracing.otel.OtelTracerHook OtelTracerHook}
  * 	<li class='jc'>{@link org.apache.juneau.rest.server.tracing.TracerHook}
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerObservability">REST Server &mdash; Observability (Micrometer + OpenTelemetry)</a>
  * 	<li class='link'><a class="doclink" href="https://opentelemetry.io/docs/specs/semconv/http/http-spans/">OpenTelemetry HTTP semantic conventions</a>

@@ -540,7 +540,7 @@ class PartList_Test extends TestBase {
 
 	@Test void e03_unmodifiable_readsStillWork() {
 		var u = PartList.create().append("a", "1").append("b", "2").unmodifiable();
-		assertEquals(2, u.size());
+		assertSize(2, u);
 		assertEquals("1", u.get(0).getValue());
 		assertEquals("b", u.get(1).getName());
 		var count = new AtomicInteger();
@@ -612,7 +612,7 @@ class PartList_Test extends TestBase {
 		var x = PartList.create().append("a", "1");
 		var u = x.unmodifiable();
 		x.append("b", "2"); // Mutate original after snapshotting.
-		assertEquals(1, u.size());
+		assertSize(1, u);
 		assertEquals("a", u.get(0).getName());
 	}
 

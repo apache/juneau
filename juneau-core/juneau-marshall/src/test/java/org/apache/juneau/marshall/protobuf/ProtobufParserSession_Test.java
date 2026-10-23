@@ -18,6 +18,7 @@ package org.apache.juneau.marshall.protobuf;
 
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 
 import java.io.*;
 import java.util.*;
@@ -64,7 +65,7 @@ class ProtobufParserSession_Test extends TestBase {
 		var a = new MapList(list(map("a", 1)));
 		var bytes = ProtobufSerializer.DEFAULT.write(a);
 		var b = ProtobufParser.DEFAULT.read(bytes, MapList.class);
-		assertEquals(1, b.items.size());
+		assertSize(1, b.items);
 		assertEquals(Integer.valueOf(1), b.items.get(0).get("a"));
 	}
 

@@ -68,7 +68,9 @@ class PetstoreData_BrowserTest extends TestBase {
 					"echarts", "document.querySelectorAll('canvas').length > 0"))));
 	}
 
-	@SuppressWarnings("unchecked") // requests is a list of {url, method, postData}.
+	@SuppressWarnings({
+		"unchecked" // requests is a list of {url, method, postData}.
+	})
 	private static List<String> urls(Map<String,Object> c) {
 		return ((List<Map<String,Object>>) c.get("requests")).stream().map(r -> (String) r.get("url")).toList();
 	}
@@ -91,7 +93,7 @@ class PetstoreData_BrowserTest extends TestBase {
 
 	@Test void a02_reloadRequestsNoClosedDay() {
 		var u = urls(assertClean(report, "data"));
-		assertEquals(4, u.size(), () -> "requests: " + u);
+		assertSize(() -> "requests: " + u, 4, u);
 	}
 
 	@Test void a03_reloadDrawsTheSameRowsFromTheCache() {

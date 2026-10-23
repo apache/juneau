@@ -491,7 +491,7 @@ public class ConsoleFreemarkerMixin extends FreemarkerMixin {
 		 * Builds the {@link ConsoleFreemarkerMixin}.
 		 *
 		 * <p>
-		 * Overrides {@link org.apache.juneau.rest.server.view.freemarker.FreemarkerMixin.Builder#build()} &mdash;
+		 * Overrides {@link org.apache.juneau.rest.server.view.freemarker.FreemarkerMixin.Builder#build() FreemarkerMixin.Builder#build()} &mdash;
 		 * without this override, the inherited method would silently return a plain {@link FreemarkerMixin}, not
 		 * a {@link ConsoleFreemarkerMixin}.
 		 *

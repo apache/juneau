@@ -73,7 +73,7 @@ class PrototextSerializerSession_Test extends TestBase {
 	@Test void a03_doSerialize_nullObject() throws Exception {
 		// null root must produce empty output without error.
 		var proto = PrototextSerializer.DEFAULT.write(null);
-		assertTrue(proto == null || proto.isEmpty());
+		assertTrue(ie(proto));
 	}
 
 	// Top-level scalar / collection / array / streamable

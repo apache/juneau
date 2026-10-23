@@ -955,9 +955,9 @@ public abstract sealed class ExecutableInfo extends AccessibleInfo permits Const
 	private void checkIndex(int index) {
 		int pc = getParameterCount();
 		if (pc == 0)
-			throw new IndexOutOfBoundsException(String.format("Invalid index '%d'.  No parameters.", index));
+			throw new IndexOutOfBoundsException(f("Invalid index '%d'.  No parameters.", index));
 		if (index < 0 || index >= pc)
-			throw new IndexOutOfBoundsException(String.format("Invalid index '%d'.  Parameter count: %d", index, pc));
+			throw new IndexOutOfBoundsException(f("Invalid index '%d'.  Parameter count: %d", index, pc));
 	}
 
 	private String findNameFull() {

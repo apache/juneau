@@ -35,6 +35,46 @@ results and notable events. Markers are additive: they never replace human-reada
 | `tests` | `step`, `total`, `fail`, `err`, `skip` | Cumulative test totals for a step (see Extensions). |
 | `done` | `status` (`ok`\|`fail`\|`cancelled`), `commit`? | Last marker. |
 
+## Markers file and result file (still `v: 1`; additive)
+
+Two ways for a tool that launches a script to follow the run while a person watches the console view. Neither changes
+what stdout carries: with `RUN_MARKERS` unset the console view draws as usual.
+
+### Markers file
+
+`JUNEAU_RUN_MARKERS_FILE=<path>` sends every marker to that file as well, in the wire format above: one `##run {...}`
+line each, the same 65536-byte limit (an oversized marker goes to neither), the same nesting rules.
+- With `RUN_MARKERS=1` too, stdout and the file get the same markers.
+- The process that owns the run empties the file when its `run()` starts, then writes `run` and, at the end, `done`.
+  It exports the path made absolute, so nested scripts write the same file wherever they run.
+- A nested script (one that inherits `JUNEAU_RUN_ACTIVE`) appends its `step`, `end`, `report`, `note` and `tests`
+  markers. Each line is one append, so lines from several processes never interleave.
+- The file replays through the consumer rules above. A reader that follows it while it grows treats a last line
+  without its `\n` as not yet written.
+- A file that can't be written is reported once on stderr; the run goes on without it.
+- Under `--pty` (see "PTY mode") the markers file isn't written, and the job doesn't get the variable.
+
+### Result file
+
+`JUNEAU_RUN_RESULT=<path>`: when `done` ends the run (ok, failed, or cancelled by Ctrl-C or SIGTERM), the owner writes
+one JSON object there, through a temp file in the same directory and a rename, so a reader never sees half of it.
+The owner removes an older file at that path when its `run()` starts. Fields whose value would be null are omitted.
+
+| Field | Meaning |
+|---|---|
+| `v` | Always `1`. |
+| `status` | `ok`, `fail` or `cancelled`, as in `done`. |
+| `exit` | The script's exit code (`130` when cancelled). |
+| `ms` | The run's duration, from `run` to `done`. |
+| `project`, `branch`, `head` | As in `run`. |
+| `commit`? | As in `done`. |
+| `rows` | The console view's rows, in the order they started, nested scripts' included: the top-level steps (child steps are not rows) and any rows a script draws without a marker (`row()`, such as Perf or Timing). Each: `id`, `label`, `status` (`ok`\|`fail`\|`skip`; a row with no `end` takes the `done` consumer rule's status), `ms`, `summary` (the row's text in the condensed log: its count and summary, totals or reason, possibly empty) and `tests`? `{total, fail, err, skip}` (the step's last totals). |
+| `notes` | The run's `note` markers, in order: `level`, `text`, `href`?. |
+| `logs` | `full`? and `condensed`?: absolute paths of the session's logs, when it has them. |
+
+Nested scripts don't write the file. Each one leaves its rows and notes in a directory the owner names in
+`JUNEAU_RUN_RESULT_PARTS` (made by the owner, removed when it has written the result); the owner merges them in.
+
 ## `--test-only`
 
 An adopting `push.py` accepts `--test-only`:

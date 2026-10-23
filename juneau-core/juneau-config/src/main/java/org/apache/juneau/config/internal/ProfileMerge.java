@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.config.internal;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
+
 import java.io.*;
 import java.util.*;
 
@@ -69,7 +71,7 @@ public final class ProfileMerge {
 		// Parse the base into a throwaway map; this becomes the accumulator we overlay onto.
 		var merged = new ConfigMap(store, baseName, baseContents == null ? "" : baseContents, f);
 		for (var p : profiles) {
-			if (p == null || p.isBlank())
+			if (ib(p))
 				continue;
 			var overlay = new ConfigMap(store, baseName, p, f);
 			applyOverlay(merged, overlay);

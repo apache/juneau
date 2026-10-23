@@ -217,7 +217,7 @@ public class UonSerializer extends WriterSerializer implements HttpPartSerialize
 		 * through reflection.
 		 *
 		 * <p>
-		 * When present, this value overrides the {@link org.apache.juneau.marshall.serializer.Serializer.Builder#addBeanTypes()} setting and is
+		 * When present, this value overrides the {@link org.apache.juneau.marshall.serializer.Serializer.Builder#addBeanTypes() Serializer.Builder#addBeanTypes()} setting and is
 		 * provided to customize the behavior of specific serializers in a {@link SerializerSet}.
 		 *
 		 * @return This object.

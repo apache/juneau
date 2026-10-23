@@ -18,6 +18,7 @@
 package org.apache.juneau.commons.utils;
 
 import static org.apache.juneau.commons.utils.IoUtils.*;
+import static org.apache.juneau.commons.TestAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
@@ -357,7 +358,7 @@ class IoUtils_Test extends TestBase {
 		os = new ByteArrayOutputStream();
 		count = pipe(emptyIs, os, 100);
 		assertEquals(0, count);
-		assertEquals(0, os.size());
+		assertSize(0, os);
 	}
 
 	//====================================================================================================

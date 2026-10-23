@@ -40,7 +40,7 @@ import jakarta.servlet.*;
 /**
  * End-to-end coverage for the {@code 2026-07-28} Multi-Round-Trip Request (SEP-2322 {@code input_required}) loop,
  * driven through the first-party {@link McpClient} against a live embedded-Jetty v2
- * {@link org.apache.juneau.rest.server.mcp.v20260728.McpRestServlet} fixture &mdash; proving PAUSE&rarr;RESUME&rarr;
+ * {@link McpRestServlet} fixture &mdash; proving PAUSE&rarr;RESUME&rarr;
  * complete works across a real client/server wire boundary, not just the in-process dispatcher assertions the
  * module-local {@code McpMrtrDispatch_Test} already covers.
  *

@@ -18,8 +18,8 @@
  * Apache Juneau Petstore - Jetty/Microservice deployment.
  *
  * <p>
- * Provides {@link org.apache.juneau.petstore.jetty.App} (the {@link org.apache.juneau.microservice.Microservice}
- * bootstrap) and {@link org.apache.juneau.petstore.jetty.RootResources} (the root router that mounts
+ * Provides {@link org.apache.juneau.petstore.jetty.App App} (the {@link org.apache.juneau.microservice.Microservice}
+ * bootstrap) and {@link org.apache.juneau.petstore.jetty.RootResources RootResources} (the root router that mounts
  * {@link org.apache.juneau.petstore.rest.PetStoreResource} from {@code juneau-petstore-core} alongside the
  * Jetty/Microservice admin resources).
  */

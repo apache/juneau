@@ -224,7 +224,7 @@ class McpV2Beans_Test {
 		var b = new ResourceTemplate().setUriTemplate("b").setName("b");
 		var result = new ListResourceTemplatesResult().setResourceTemplates(a).addResourceTemplates(b)
 			.setNextCursor("2").setTtlMs(0).setCacheScope(McpCacheScope.PUBLIC);
-		assertEquals(2, result.getResourceTemplates().size());
+		assertSize(2, result.getResourceTemplates());
 		var resourceTemplates = result.getResourceTemplates();
 		assertThrows(UnsupportedOperationException.class, () -> resourceTemplates.add(a));
 		assertEquals("2", result.getNextCursor());
@@ -300,7 +300,7 @@ class McpV2Beans_Test {
 		var completion = new Completion().setValues(values).setTotal(150).setHasMore(true);
 		var result = new CompleteResult().setCompletion(completion);
 		var copy = JsonParser.DEFAULT.read(JsonSerializer.DEFAULT.write(result), CompleteResult.class);
-		assertEquals(100, copy.getCompletion().getValues().size());
+		assertSize(100, copy.getCompletion().getValues());
 		assertEquals(150, copy.getCompletion().getTotal());
 		assertEquals(true, copy.getCompletion().getHasMore());
 	}
@@ -555,7 +555,7 @@ class McpV2Beans_Test {
 		var impl = new Implementation().setName("n").setVersion("1").setTitle("t").setDescription("d")
 			.setIcons(new Icon().setSrc("https://example.com/a.png"))
 			.addIcons(new Icon().setSrc("https://example.com/b.png"));
-		assertEquals(2, impl.getIcons().size());
+		assertSize(2, impl.getIcons());
 		var icons = impl.getIcons();
 		var extraIcon = new Icon().setSrc("x");
 		assertThrows(UnsupportedOperationException.class, () -> icons.add(extraIcon));
@@ -620,7 +620,7 @@ class McpV2Beans_Test {
 	}
 
 	@Test void f02b_inputRequiredResult_wireShapeIsLosslessLiteral() {
-		// Pins the exact wire bytes (before Phase 4 freezes fixtures): the sub-request object reaches the wire
+		// Pins the exact wire bytes (independent of any frozen fixtures): the sub-request object reaches the wire
 		// intact, with no synthetic {type, payload} envelope. Nested keys are chosen so alphabetical and insertion
 		// order coincide, making this literal deterministic regardless of map-sorting policy.
 		var result = new InputRequiredResult()

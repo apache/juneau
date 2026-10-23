@@ -30,11 +30,11 @@
  * 	</p>
  *
  * 	<ul class='javatree'>
- * 		<li class='jic'>{@link org.apache.juneau.commons.function.BeanSupplier} - Serialize-side lifecycle interface; extends {@link java.lang.Iterable}
- * 		<li class='jic'>{@link org.apache.juneau.commons.function.BeanConsumer} - Parse-side lifecycle interface; extends {@link org.apache.juneau.commons.function.ThrowingConsumer}
- * 		<li class='jic'>{@link org.apache.juneau.commons.function.BeanChannel} - Round-trip interface; extends both {@link org.apache.juneau.commons.function.BeanSupplier} and {@link org.apache.juneau.commons.function.BeanConsumer}
- * 		<li class='jc'>{@link org.apache.juneau.commons.function.ListBeanChannel} - Built-in in-memory {@link org.apache.juneau.commons.function.BeanChannel} backed by an {@link java.util.ArrayList}
- * 		<li class='jic'>{@link org.apache.juneau.commons.function.BeanFactory} - Universal factory interface for DI-framework-managed instantiation
+ * 		<li class='jic'>{@link org.apache.juneau.commons.function.BeanSupplier BeanSupplier} - Serialize-side lifecycle interface; extends {@link java.lang.Iterable}
+ * 		<li class='jic'>{@link org.apache.juneau.commons.function.BeanConsumer BeanConsumer} - Parse-side lifecycle interface; extends {@link org.apache.juneau.commons.function.ThrowingConsumer ThrowingConsumer}
+ * 		<li class='jic'>{@link org.apache.juneau.commons.function.BeanChannel BeanChannel} - Round-trip interface; extends both {@link org.apache.juneau.commons.function.BeanSupplier BeanSupplier} and {@link org.apache.juneau.commons.function.BeanConsumer BeanConsumer}
+ * 		<li class='jc'>{@link org.apache.juneau.commons.function.ListBeanChannel ListBeanChannel} - Built-in in-memory {@link org.apache.juneau.commons.function.BeanChannel BeanChannel} backed by an {@link java.util.ArrayList}
+ * 		<li class='jic'>{@link org.apache.juneau.commons.function.BeanFactory BeanFactory} - Universal factory interface for DI-framework-managed instantiation
  * 	</ul>
  *
  * 	<!-- ============================================================================================================ -->
@@ -48,10 +48,10 @@
  *
  * 	<table class='styled'>
  * 		<tr><th>Phase</th><th>BeanSupplier (serialization)</th><th>BeanConsumer (parsing)</th></tr>
- * 		<tr><td><b>Setup</b></td><td>{@link org.apache.juneau.commons.function.BeanSupplier#begin()} — open cursor, execute query</td><td>{@link org.apache.juneau.commons.function.BeanConsumer#begin()} — open connection, prepare statement</td></tr>
- * 		<tr><td><b>Transfer</b></td><td>{@link org.apache.juneau.commons.function.BeanSupplier#iterator()} — yield one bean per call</td><td>{@link org.apache.juneau.commons.function.BeanConsumer#acceptThrows(Object)} — receive one bean per call</td></tr>
- * 		<tr><td><b>Error</b></td><td>{@link org.apache.juneau.commons.function.BeanSupplier#onError(Exception)} — rollback / log; rethrow to stop</td><td>{@link org.apache.juneau.commons.function.BeanConsumer#onError(Exception)} — rollback / log; absorb to skip-and-continue</td></tr>
- * 		<tr><td><b>Cleanup</b></td><td>{@link org.apache.juneau.commons.function.BeanSupplier#complete()} — close cursor, connection</td><td>{@link org.apache.juneau.commons.function.BeanConsumer#complete()} — final commit, close statement</td></tr>
+ * 		<tr><td><b>Setup</b></td><td>{@link org.apache.juneau.commons.function.BeanSupplier#begin() BeanSupplier#begin()} — open cursor, execute query</td><td>{@link org.apache.juneau.commons.function.BeanConsumer#begin() BeanConsumer#begin()} — open connection, prepare statement</td></tr>
+ * 		<tr><td><b>Transfer</b></td><td>{@link org.apache.juneau.commons.function.BeanSupplier#iterator() BeanSupplier#iterator()} — yield one bean per call</td><td>{@link org.apache.juneau.commons.function.BeanConsumer#acceptThrows(Object) BeanConsumer#acceptThrows(Object)} — receive one bean per call</td></tr>
+ * 		<tr><td><b>Error</b></td><td>{@link org.apache.juneau.commons.function.BeanSupplier#onError(Exception) BeanSupplier#onError(Exception)} — rollback / log; rethrow to stop</td><td>{@link org.apache.juneau.commons.function.BeanConsumer#onError(Exception) BeanConsumer#onError(Exception)} — rollback / log; absorb to skip-and-continue</td></tr>
+ * 		<tr><td><b>Cleanup</b></td><td>{@link org.apache.juneau.commons.function.BeanSupplier#complete() BeanSupplier#complete()} — close cursor, connection</td><td>{@link org.apache.juneau.commons.function.BeanConsumer#complete() BeanConsumer#complete()} — final commit, close statement</td></tr>
  * 	</table>
  *
  * 	<p>
@@ -69,7 +69,7 @@
  * 	<p>
  * 	The following example streams a large {@code Employee} table directly from the database to the
  * 	HTTP response as a JSON array, without loading any rows into memory. A Spring-injected
- * 	{@code DataSource} is supplied via a factory registered with {@link org.apache.juneau.commons.function.BeanFactory}.
+ * 	{@code DataSource} is supplied via a factory registered with {@link org.apache.juneau.commons.function.BeanFactory BeanFactory}.
  * 	</p>
  *
  * 	<h5 class='figure'>Bean class with factory annotation</h5>
@@ -274,9 +274,9 @@
  * 	<div class='topic'>
  *
  * 	<p>
- * 	{@link org.apache.juneau.commons.function.BeanChannel} extends both
- * 	{@link org.apache.juneau.commons.function.BeanSupplier} and
- * 	{@link org.apache.juneau.commons.function.BeanConsumer}, allowing the same property to drive
+ * 	{@link org.apache.juneau.commons.function.BeanChannel BeanChannel} extends both
+ * 	{@link org.apache.juneau.commons.function.BeanSupplier BeanSupplier} and
+ * 	{@link org.apache.juneau.commons.function.BeanConsumer BeanConsumer}, allowing the same property to drive
  * 	both serialization and parsing. The implementation itself determines direction at runtime.
  * 	</p>
  *
@@ -427,7 +427,7 @@
  * 	With this wiring in place, any class annotated with
  * 	{@code @BeanType(factory=EmployeeSupplier.Factory.class)} is automatically instantiated by
  * 	retrieving the factory from the Spring {@code ApplicationContext} and calling
- * 	{@link org.apache.juneau.commons.function.BeanFactory#create()}. No manual construction or
+ * 	{@link org.apache.juneau.commons.function.BeanFactory#create() BeanFactory#create()}. No manual construction or
  * 	injection is needed in individual REST methods.
  * 	</p>
  *
@@ -445,7 +445,7 @@
  * 		<tr>
  * 			<td>{@code @BeanType(factory=X.class)}</td>
  * 			<td>Class</td>
- * 			<td>Specifies the {@link org.apache.juneau.commons.function.BeanFactory} class used to instantiate this type during parsing. The factory is resolved from the {@code BeanStore}.</td>
+ * 			<td>Specifies the {@link org.apache.juneau.commons.function.BeanFactory BeanFactory} class used to instantiate this type during parsing. The factory is resolved from the {@code BeanStore}.</td>
  * 		</tr>
  * 		<tr>
  * 			<td>{@code @BeanProp(factory=X.class)}</td>
@@ -475,7 +475,7 @@
  * 	</p>
  *
  * 	<p>
- * 	Note: {@link org.apache.juneau.commons.function.BeanSupplier} is <em>not</em> unwrapped — it
+ * 	Note: {@link org.apache.juneau.commons.function.BeanSupplier BeanSupplier} is <em>not</em> unwrapped — it
  * 	is treated as an {@link java.lang.Iterable} sequence, not a single-value wrapper.
  * 	</p>
  *

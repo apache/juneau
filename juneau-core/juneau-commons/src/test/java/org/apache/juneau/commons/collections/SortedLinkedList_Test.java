@@ -17,6 +17,7 @@
 package org.apache.juneau.commons.collections;
 
 import static org.apache.juneau.commons.TestAssertions.*;
+import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
@@ -249,13 +250,13 @@ class SortedLinkedList_Test extends TestBase {
 	@Test
 	void g04_size() {
 		var list = new SortedLinkedList<String>();
-		assertEquals(0, list.size());
+		assertSize(0, list);
 
 		list.add("a");
-		assertEquals(1, list.size());
+		assertSize(1, list);
 
 		list.add("b");
-		assertEquals(2, list.size());
+		assertSize(2, list);
 	}
 
 	@Test
@@ -652,10 +653,7 @@ class SortedLinkedList_Test extends TestBase {
 		sortedList.add("b");
 		sortedList.add("c");
 
-		var arrayList = new ArrayList<String>();
-		arrayList.add("a");
-		arrayList.add("b");
-		arrayList.add("c");
+		var arrayList = list("a", "b", "c");
 
 		// Should be equal if they contain the same elements in the same order
 		assertEquals(sortedList.size(), arrayList.size());

@@ -25,6 +25,7 @@ import static org.apache.juneau.commons.reflect.ClassNameFormat.*;
 import static org.apache.juneau.commons.reflect.ElementFlag.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
@@ -2161,7 +2162,7 @@ public class ClassInfo_Test extends TestBase {
 		var params = mc.getTypeParameters();
 		assertNotNull(params);
 		// MC<K,E> should have 2 type parameters
-		assertEquals(2, params.size());
+		assertSize(2, params);
 	}
 
 	//====================================================================================================
@@ -3840,7 +3841,7 @@ public class ClassInfo_Test extends TestBase {
 		ClassInfo.of(bean).inject(bean, beanStore);
 		assertNotNull(bean.serviceList);
 		// getBeansOfType returns all TestService beans (named and unnamed), so we get 3: service1, service2, and service1Named
-		assertEquals(3, bean.serviceList.size());
+		assertSize(3, bean.serviceList);
 		assertTrue(bean.serviceList.contains(service1));
 		assertTrue(bean.serviceList.contains(service2));
 		assertTrue(bean.serviceList.contains(service1Named));
@@ -3860,7 +3861,7 @@ public class ClassInfo_Test extends TestBase {
 		ClassInfo.of(bean).inject(bean, beanStore);
 		assertNotNull(bean.serviceSet);
 		// getBeansOfType returns all TestService beans (named and unnamed), so we get 3: service1, service2, and service1Named
-		assertEquals(3, bean.serviceSet.size());
+		assertSize(3, bean.serviceSet);
 		assertTrue(bean.serviceSet.contains(service1));
 		assertTrue(bean.serviceSet.contains(service2));
 		assertTrue(bean.serviceSet.contains(service1Named));
@@ -3880,7 +3881,7 @@ public class ClassInfo_Test extends TestBase {
 		ClassInfo.of(bean).inject(bean, beanStore);
 		assertNotNull(bean.serviceMap);
 		// getBeansOfType returns all TestService beans (named and unnamed), so we get 3: unnamedService, service1, and service2
-		assertEquals(3, bean.serviceMap.size());
+		assertSize(3, bean.serviceMap);
 		assertSame(unnamedService, bean.serviceMap.get("")); // Unnamed bean has empty string as key
 		assertSame(service1, bean.serviceMap.get("service1"));
 		assertSame(service2, bean.serviceMap.get("service2"));
@@ -4226,7 +4227,7 @@ public class ClassInfo_Test extends TestBase {
 		var bean = new ChildWithPostConstruct();
 		ClassInfo.of(bean).inject(bean, beanStore);
 		// Parent PostConstruct should be called before child PostConstruct
-		assertEquals(2, bean.callOrder.size());
+		assertSize(2, bean.callOrder);
 		assertEquals("parent", bean.callOrder.get(0), "Parent PostConstruct should be called first");
 		assertEquals("child", bean.callOrder.get(1), "Child PostConstruct should be called second");
 	}

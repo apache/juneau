@@ -18,6 +18,7 @@ package org.apache.juneau.commons.utils;
 
 import static org.apache.juneau.commons.utils.Exceptions.*;
 import static org.apache.juneau.commons.utils.ObjectUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.f;
 import static org.apache.juneau.commons.utils.Shorts.eq;
 import static org.apache.juneau.commons.utils.Shorts.ioex;
 import static org.apache.juneau.commons.utils.SystemUtils.*;
@@ -1042,7 +1043,7 @@ public class IoUtils {
 	public static final void printLines(String[] lines) {
 		RichLogger log = RichLogger.getLogger(IoUtils.class);
 		for (var i = 0; i < lines.length; i++)
-			log.info(String.format("%4s:%s", i + 1, lines[i]));
+			log.info(f("%4s:%s", i + 1, lines[i]));
 	}
 
 	/**

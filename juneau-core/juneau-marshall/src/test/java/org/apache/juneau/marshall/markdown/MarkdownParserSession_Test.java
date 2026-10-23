@@ -17,6 +17,7 @@
 package org.apache.juneau.marshall.markdown;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 
 import java.util.*;
 import java.util.stream.*;
@@ -61,7 +62,7 @@ class MarkdownParserSession_Test extends TestBase {
 		// Bare "-", "*", "+" markers should produce empty-string entries.
 		var md = "- a\n-\n- b";
 		var r = (List<String>) MarkdownParser.DEFAULT.read(md, List.class, String.class);
-		assertEquals(3, r.size());
+		assertSize(3, r);
 		assertEquals("a", r.get(0));
 		assertEquals("", r.get(1));
 		assertEquals("b", r.get(2));
@@ -76,7 +77,7 @@ class MarkdownParserSession_Test extends TestBase {
 	@Test void a05_bulletListToCustomCollection() {
 		// Exercise the canCreateNewInstance(outer) branch in readBulletList for a concrete List type.
 		var r = (LinkedList<String>) MarkdownParser.DEFAULT.read("- a\n- b", LinkedList.class, String.class);
-		assertEquals(2, r.size());
+		assertSize(2, r);
 		assertEquals("a", r.getFirst());
 	}
 
@@ -84,7 +85,7 @@ class MarkdownParserSession_Test extends TestBase {
 	void a06_bulletListNullValues() {
 		var md = "- foo\n- *null*\n- bar";
 		var r = (List<String>) MarkdownParser.DEFAULT.read(md, List.class, String.class);
-		assertEquals(3, r.size());
+		assertSize(3, r);
 		assertEquals("foo", r.get(0));
 		assertNull(r.get(1));
 		assertEquals("bar", r.get(2));
@@ -194,7 +195,7 @@ class MarkdownParserSession_Test extends TestBase {
 		// A row of all *null*/empty cells should yield a null entry in the list.
 		var md = "| name | age |\n|---|---|\n| *null* | *null* |\n| Alice | 30 |";
 		var r = (List<MarkdownParser_Test.B>) MarkdownParser.DEFAULT.read(md, List.class, MarkdownParser_Test.B.class);
-		assertEquals(2, r.size());
+		assertSize(2, r);
 		assertNull(r.get(0));
 		assertEquals("Alice", r.get(1).name);
 	}
@@ -204,7 +205,7 @@ class MarkdownParserSession_Test extends TestBase {
 		// Multi-column with isObject() target → ArrayList of MarshalledMaps.
 		var md = "| name | age |\n|---|---|\n| Alice | 30 |";
 		var r = (List<Map<String,Object>>) MarkdownParser.DEFAULT.read(md, Object.class);
-		assertEquals(1, r.size());
+		assertSize(1, r);
 		assertEquals("Alice", r.get(0).get("name"));
 		assertEquals(30, r.get(0).get("age"));
 	}
@@ -251,7 +252,7 @@ class MarkdownParserSession_Test extends TestBase {
 		// Empty cell to a String-typed property → empty string.
 		var md = "| name | age |\n|---|---|\n|  | 1 |";
 		var r = (List<MarkdownParser_Test.B>) MarkdownParser.DEFAULT.read(md, List.class, MarkdownParser_Test.B.class);
-		assertEquals(1, r.size());
+		assertSize(1, r);
 		assertEquals("", r.get(0).name);
 	}
 
@@ -295,7 +296,7 @@ class MarkdownParserSession_Test extends TestBase {
 		// Concrete Map type that canCreateNewInstance — exercises eType.newInstance() branch.
 		var md = "| Property | Value |\n|---|---|\n| b | 2 |\n| a | 1 |";
 		var r = (TreeMap<String,Integer>) MarkdownParser.DEFAULT.read(md, TreeMap.class, String.class, Integer.class);
-		assertEquals(2, r.size());
+		assertSize(2, r);
 		assertEquals(1, r.get("a"));
 		assertEquals(2, r.get("b"));
 		// TreeMap is sorted — first key should be "a".
@@ -307,7 +308,7 @@ class MarkdownParserSession_Test extends TestBase {
 		// Single-row multi-column → Map element. Exercises readRow's isMap() branch.
 		var md = "| k1 | k2 |\n|---|---|\n| v1 | v2 |";
 		var r = (List<Map<String,String>>) MarkdownParser.DEFAULT.read(md, List.class, TreeMap.class, String.class, String.class);
-		assertEquals(1, r.size());
+		assertSize(1, r);
 		assertEquals("v1", r.get(0).get("k1"));
 		assertEquals("v2", r.get(0).get("k2"));
 		assertInstanceOf(TreeMap.class, r.get(0));
@@ -365,7 +366,7 @@ class MarkdownParserSession_Test extends TestBase {
 		var p = MarkdownParser.create().beanDictionary(HA.class, HB.class).build();
 		var md = "| _type | name | age |\n|---|---|---|\n| ha | Alice | 30 |";
 		var r = (List<Map<String,Object>>) p.read(md, List.class, Object.class);
-		assertEquals(1, r.size());
+		assertSize(1, r);
 		// _type column should be filtered out of the resulting map keys.
 		assertFalse(r.get(0).containsKey("_type"));
 		assertEquals("Alice", r.get(0).get("name"));
@@ -445,7 +446,7 @@ class MarkdownParserSession_Test extends TestBase {
 		var p = MarkdownParser.create().swaps(IBeanMapSwap.class).build();
 		var md = "| name | count |\n|---|---|\n| Alice | 3 |\n| Bob | 5 |";
 		var r = (List<IBeanWithSwap>) p.read(md, List.class, IBeanWithSwap.class);
-		assertEquals(2, r.size());
+		assertSize(2, r);
 		assertEquals("Alice", r.get(0).name);
 		assertEquals(3, r.get(0).count);
 		assertEquals("Bob", r.get(1).name);
@@ -567,7 +568,7 @@ class MarkdownParserSession_Test extends TestBase {
 		var p = MarkdownParser.create().nullValue("NIL").build();
 		var md = "- a\n- NIL\n- b";
 		var r = (List<String>) p.read(md, List.class, String.class);
-		assertEquals(3, r.size());
+		assertSize(3, r);
 		assertEquals("a", r.get(0));
 		assertNull(r.get(1));
 		assertEquals("b", r.get(2));
@@ -593,7 +594,7 @@ class MarkdownParserSession_Test extends TestBase {
 		// List<String> as multi-column target → readRow's "simple type" fall-through is hit.
 		var md = "| col1 | col2 |\n|---|---|\n| value-a | ignored |\n| value-b | ignored |";
 		var r = (List<String>) MarkdownParser.DEFAULT.read(md, List.class, String.class);
-		assertEquals(2, r.size());
+		assertSize(2, r);
 		assertEquals("value-a", r.get(0));
 		assertEquals("value-b", r.get(1));
 	}
@@ -723,7 +724,7 @@ class MarkdownParserSession_Test extends TestBase {
 		var md = "| name | age |\n|---|---|\n| *null* | *null* |";
 		var r = (List<MarkdownParser_Test.A>) MarkdownParser.DEFAULT.read(md, List.class, MarkdownParser_Test.A.class);
 		assertNotNull(r);
-		assertEquals(1, r.size());
+		assertSize(1, r);
 		assertNull(r.get(0));
 	}
 
@@ -734,7 +735,7 @@ class MarkdownParserSession_Test extends TestBase {
 		var md = "| _type | name | extra |\n|---|---|---|\n| pchild | Alice | bonus |";
 		var r = (List<PBase>) p.read(md, List.class, PBase.class);
 		assertNotNull(r);
-		assertEquals(1, r.size());
+		assertSize(1, r);
 		assertInstanceOf(PChild.class, r.get(0));
 		assertEquals("Alice", r.get(0).name);
 	}

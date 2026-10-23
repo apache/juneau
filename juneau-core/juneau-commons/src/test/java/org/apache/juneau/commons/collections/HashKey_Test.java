@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.commons.collections;
 
+import static org.apache.juneau.commons.TestAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
@@ -299,7 +300,7 @@ class HashKey_Test extends TestBase {
 		map.put(HashKey.of("a"), 1);
 		map.put(HashKey.of("b"), 2);
 		map.put(HashKey.of("c"), 3);
-		assertEquals(3, map.size());
+		assertSize(3, map);
 		assertEquals(1, map.get(HashKey.of("a")));
 		assertEquals(2, map.get(HashKey.of("b")));
 		assertEquals(3, map.get(HashKey.of("c")));
@@ -340,7 +341,7 @@ class HashKey_Test extends TestBase {
 		HashKey key2 = HashKey.of("a", "b", 42);
 		assertTrue(set.add(key1));
 		assertFalse(set.add(key2)); // Should not add duplicate
-		assertEquals(1, set.size());
+		assertSize(1, set);
 		assertTrue(set.contains(key2));
 	}
 
@@ -351,7 +352,7 @@ class HashKey_Test extends TestBase {
 		HashKey key2 = HashKey.of("a", "b", 43);
 		assertTrue(set.add(key1));
 		assertTrue(set.add(key2));
-		assertEquals(2, set.size());
+		assertSize(2, set);
 	}
 
 	//====================================================================================================

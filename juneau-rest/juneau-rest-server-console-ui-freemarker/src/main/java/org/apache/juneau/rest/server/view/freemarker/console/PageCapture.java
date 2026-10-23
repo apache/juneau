@@ -369,7 +369,7 @@ public final class PageCapture {
 		if (nn(src) && ! SafePathTemplate.isSameOriginPath(src))
 			throw FtlAttrLists.reject(f("<@card id='%s'> type='%s' src must be a same-origin path (no scheme, '//', backslash, control character, edge space or '..' segment); got '%s'.",
 				card.id(), card.type(), src));
-		if (card.sanitize() && (! eq(card.type(), "html") || ! nn(src)))
+		if (card.sanitize() && (neq(card.type(), "html") || ! nn(src)))
 			throw FtlAttrLists.reject(f("<@card id='%s'> sanitize= applies only to an html card with src=.", card.id()));
 	}
 
@@ -543,7 +543,7 @@ public final class PageCapture {
 	 */
 	void dashboard(Map<String,Object> v) {
 		if (dashboard != null)
-			throw new IllegalArgumentException("E-77: " + String.format(BusWiringValidator.E77, v.get("id"), "a page has at most one dashboard"));
+			throw new IllegalArgumentException("E-77: " + f(BusWiringValidator.E77, v.get("id"), "a page has at most one dashboard"));
 		dashboard = v;
 	}
 
@@ -572,7 +572,9 @@ public final class PageCapture {
 		facts = deepMergeFacts("", javaFacts, chromeFacts);
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Narrows a JSON-shaped Map<?,?> to Map<String,Object>; its keys are always strings.
+	})
 	private static Map<String,Object> deepMergeFacts(String prefix, Map<String,Object> a, Map<String,Object> b) throws TemplateModelException {
 		var out = new LinkedHashMap<String,Object>(a);
 		for (var e : b.entrySet()) {
@@ -597,7 +599,9 @@ public final class PageCapture {
 	 *
 	 * @throws TemplateModelException On an unknown card id or nav node.
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Narrows a JSON-shaped Map<?,?> to Map<String,Object>; its keys are always strings.
+	})
 	void checkBadges() throws TemplateModelException {
 		var cardIds = new HashSet<String>(builtCardIds);
 		for (var c : cards)

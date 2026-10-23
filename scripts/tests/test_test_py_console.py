@@ -201,13 +201,13 @@ def test_a_console_session_opens_only_when_the_sinks_are_not_default(test_mod, m
     monkeypatch.setattr(test_mod, "profile", lambda module: (0, ""))
     monkeypatch.setattr(test_mod, "git_value", lambda args: "b1")
     opened = []
-    monkeypatch.setattr(test_mod._juneau.load()[0], "session", lambda title, header=(), **kw: opened.append(title))
+    monkeypatch.setattr(test_mod._juneau.load()[0], "session", lambda title, header=(), **kw: opened.append((title, header)))
     monkeypatch.setattr(sys, "argv", ["test.py", "--profile", "m"])
     assert test_mod.main() == 0
     assert opened == []
     monkeypatch.setattr(sys, "argv", ["test.py", "--console", "none", "--profile", "m"])
     assert test_mod.main() == 0
-    assert opened == ["🧪 Juneau test · b1"]
+    assert opened == [("Test", ["Juneau", "b1"])]
 
 
 def test_test_py_opens_one_toolkit_session_and_one_done(test_mod, monkeypatch, capsys):
@@ -230,8 +230,8 @@ def test_test_py_opens_one_toolkit_session_and_one_done(test_mod, monkeypatch, c
     assert len(entered) == 1
     title, kw = entered[0]
     root = SCRIPTS_DIR.parent
-    assert (title, kw["mode"], kw["project"], Path(kw["repo"]), kw["bell"], kw["exit"]) == \
-        ("🧪 Juneau test · b1", "test", root.name, root, True, False)
+    assert (title, kw["header"], kw["mode"], kw["project"], Path(kw["repo"]), kw["bell"], kw["exit"]) == \
+        ("Test", ["Juneau", "b1"], "test", root.name, root, True, False)
     assert tuple(kw["silence_env"]) == ("JUNEAU_PUSH_NO_SOUND",)
     out = capsys.readouterr().out
     events = [line for line in out.splitlines() if line.startswith("##run ")]

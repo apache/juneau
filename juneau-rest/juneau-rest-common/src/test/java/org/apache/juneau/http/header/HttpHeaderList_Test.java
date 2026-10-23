@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.http.header;
 
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
@@ -30,19 +31,19 @@ class HttpHeaderList_Test extends TestBase {
 	@Test void a01_create_emptyList() {
 		var list = HttpHeaderList.create();
 		assertTrue(list.isEmpty());
-		assertEquals(0, list.size());
+		assertSize(0, list);
 	}
 
 	@Test void a02_of_varargs() {
 		var list = HttpHeaderList.of(HttpHeaderBean.of("A", "1"), HttpHeaderBean.of("B", "2"));
-		assertEquals(2, list.size());
+		assertSize(2, list);
 		assertEquals("1", list.getFirst("A").getValue());
 		assertEquals("2", list.getFirst("B").getValue());
 	}
 
 	@Test void a03_ofPairs() {
 		var list = HttpHeaderList.ofPairs("Accept", "text/xml", "Content-Type", "text/json");
-		assertEquals(2, list.size());
+		assertSize(2, list);
 		assertEquals("text/xml", list.getFirst("Accept").getValue());
 	}
 
@@ -54,7 +55,7 @@ class HttpHeaderList_Test extends TestBase {
 		var list = HttpHeaderList.create()
 			.append(HttpHeaderBean.of("A", "1"))
 			.append("B", "2");
-		assertEquals(2, list.size());
+		assertSize(2, list);
 		assertEquals("1", list.getFirst("A").getValue());
 		assertEquals("2", list.getFirst("B").getValue());
 	}
@@ -76,7 +77,7 @@ class HttpHeaderList_Test extends TestBase {
 		var list = HttpHeaderList.create()
 			.setDefault("Accept", "first")
 			.setDefault("Accept", "second");
-		assertEquals(1, list.size());
+		assertSize(1, list);
 		assertEquals("first", list.getFirst("Accept").getValue());
 	}
 
@@ -84,7 +85,7 @@ class HttpHeaderList_Test extends TestBase {
 		var list = HttpHeaderList.create()
 			.append("Accept", "first")
 			.set("Accept", "second");
-		assertEquals(1, list.size());
+		assertSize(1, list);
 		assertEquals("second", list.getFirst("Accept").getValue());
 	}
 
@@ -92,7 +93,7 @@ class HttpHeaderList_Test extends TestBase {
 		var list = HttpHeaderList.create()
 			.append("Accept", "first")
 			.set("ACCEPT", "second");
-		assertEquals(1, list.size());
+		assertSize(1, list);
 		assertEquals("second", list.getFirst("Accept").getValue());
 	}
 
@@ -102,7 +103,7 @@ class HttpHeaderList_Test extends TestBase {
 			.append("X-Trace", "b")
 			.append("Accept", "text/xml")
 			.removeAll("X-Trace");
-		assertEquals(1, list.size());
+		assertSize(1, list);
 		assertNull(list.getFirst("X-Trace"));
 	}
 
@@ -112,7 +113,7 @@ class HttpHeaderList_Test extends TestBase {
 			.append("X-Trace", "b")
 			.append("Accept", "text/xml");
 		var traces = list.getAll("X-Trace");
-		assertEquals(2, traces.size());
+		assertSize(2, traces);
 		assertEquals("a", traces.get(0).getValue());
 		assertEquals("b", traces.get(1).getValue());
 	}
@@ -129,8 +130,8 @@ class HttpHeaderList_Test extends TestBase {
 		var original = HttpHeaderList.create().append("A", "1");
 		var copy = original.copy();
 		copy.append("B", "2");
-		assertEquals(1, original.size());
-		assertEquals(2, copy.size());
+		assertSize(1, original);
+		assertSize(2, copy);
 	}
 
 	@Test void a15_voidSentinel() {
@@ -144,7 +145,7 @@ class HttpHeaderList_Test extends TestBase {
 
 	@Test void b01_of_list() {
 		var list = HttpHeaderList.of(List.of(HttpHeaderBean.of("A", "1"), HttpHeaderBean.of("B", "2")));
-		assertEquals(2, list.size());
+		assertSize(2, list);
 	}
 
 	@Test void b02_of_nullList_ignored() {
@@ -154,7 +155,7 @@ class HttpHeaderList_Test extends TestBase {
 
 	@Test void b03_of_varargs_nullsIgnored() {
 		var list = HttpHeaderList.of((HttpHeader)null, HttpHeaderBean.of("A", "1"), null);
-		assertEquals(1, list.size());
+		assertSize(1, list);
 	}
 
 	@Test void b04_ofPairs_nullArrayTreatedAsEmpty() {
@@ -188,7 +189,7 @@ class HttpHeaderList_Test extends TestBase {
 			HttpHeaderBean.of("B", "2"),
 			HttpHeaderBean.of("A", "ignored")  // duplicate name, skipped
 		);
-		assertEquals(2, list.size());
+		assertSize(2, list);
 		assertEquals("1", list.getFirst("A").getValue());
 	}
 
@@ -199,21 +200,21 @@ class HttpHeaderList_Test extends TestBase {
 
 	@Test void b11_set_nullIgnored() {
 		var list = HttpHeaderList.create().append("A", "1").set((HttpHeader)null);
-		assertEquals(1, list.size());
+		assertSize(1, list);
 	}
 
 	@Test void b12_set_varargs() {
 		var list = HttpHeaderList.create()
 			.append("A", "old")
 			.set(HttpHeaderBean.of("A", "new"), HttpHeaderBean.of("B", "1"));
-		assertEquals(2, list.size());
+		assertSize(2, list);
 		assertEquals("new", list.getFirst("A").getValue());
 		assertEquals("1", list.getFirst("B").getValue());
 	}
 
 	@Test void b13_set_varargs_nullArrayIgnored() {
 		var list = HttpHeaderList.create().append("A", "1").set((HttpHeader[])null);
-		assertEquals(1, list.size());
+		assertSize(1, list);
 	}
 
 	@Test void b14_getAll_asArray() {

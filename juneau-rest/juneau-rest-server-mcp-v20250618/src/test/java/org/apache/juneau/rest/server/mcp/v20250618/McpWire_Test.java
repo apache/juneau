@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.server.mcp.v20250618;
 
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
@@ -57,7 +58,7 @@ class McpWire_Test {
 			.setContent(List.of(McpContentBlock.text("{\"x\":1}"))));
 		assertSame(a, b.getStructuredContent());
 		assertEquals(Boolean.TRUE, b.getIsError());
-		assertEquals(1, b.getContent().size());
+		assertSize(1, b.getContent());
 	}
 
 	@Test void b02_outcomeWireToNeutralMapsStructuredIdentity() {
@@ -66,7 +67,7 @@ class McpWire_Test {
 			.setContent(new TextContent().setText("{\"x\":1}")));
 		assertSame(a, b.getStructuredContent());
 		assertEquals(Boolean.TRUE, b.getError());
-		assertEquals(1, b.getContent().size());
+		assertSize(1, b.getContent());
 	}
 
 	@Test void c01_resourceTemplate_mapsAllFieldsBothWaysAndNull() {
@@ -193,7 +194,7 @@ class McpWire_Test {
 		assertEquals(7L, spec.getSize());
 
 		var outcome = McpWire.toWire(new McpResourceOutcome().setContents(List.of(McpResourceContents.text("u:1", "text/plain", "body"))));
-		assertEquals(1, outcome.getContents().size());
+		assertSize(1, outcome.getContents());
 		assertNull(McpWire.toWire(new McpResourceOutcome()).getContents());
 	}
 
@@ -202,7 +203,7 @@ class McpWire_Test {
 		assertNull(bare.getArguments());
 		var full = McpWire.toWire(new McpPromptSpec().setName("p").setDescription("d")
 			.setArguments(List.of(new McpPromptArgument().setName("a").setRequired(true))));
-		assertEquals(1, full.getArguments().size());
+		assertSize(1, full.getArguments());
 		assertEquals("a", full.getArguments().get(0).getName());
 
 		assertNull(McpWire.toNeutral(new Prompt().setName("p")).getArguments());

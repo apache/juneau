@@ -19,21 +19,21 @@
  * Reusable widget primitives for the Juneau REST server toolkit.
  *
  * <p>
- * This optional module holds the shared {@link org.apache.juneau.rest.server.widgets.Widget} marker and the
- * bean-only definitions for the reusable calendar widget ({@link org.apache.juneau.rest.server.widgets.CalendarDef},
- * {@link org.apache.juneau.rest.server.widgets.EventCategory},
- * {@link org.apache.juneau.rest.server.widgets.CalendarEvent}).  Table-specific types (row actions, bulk mutate)
+ * This optional module holds the shared {@link org.apache.juneau.rest.server.widgets.Widget Widget} marker and the
+ * bean-only definitions for the reusable calendar widget ({@link org.apache.juneau.rest.server.widgets.CalendarDef CalendarDef},
+ * {@link org.apache.juneau.rest.server.widgets.EventCategory EventCategory},
+ * {@link org.apache.juneau.rest.server.widgets.CalendarEvent CalendarEvent}).  Table-specific types (row actions, bulk mutate)
  * stay in {@code juneau-rest-server-views}; this module has
  * <b>no</b> dependency on views, so a widget bean can never import a views-module type.  A
- * {@link org.apache.juneau.rest.server.widgets.CalendarDef} carries no HTML-emitter code &mdash; pages mount an
+ * {@link org.apache.juneau.rest.server.widgets.CalendarDef CalendarDef} carries no HTML-emitter code &mdash; pages mount an
  * empty {@code data-juneau-calendar} marker and {@code juneau-calendar.js} hydrates it.
  *
  * <h5 class='section'>See Also:</h5>
  * <ul>
- * 	<li class='jc'>{@link org.apache.juneau.rest.server.widgets.Widget}
- * 	<li class='jc'>{@link org.apache.juneau.rest.server.widgets.BarSlot}
- * 	<li class='jc'>{@link org.apache.juneau.rest.server.widgets.CalendarDef}
- * 	<li class='jc'>{@link org.apache.juneau.rest.server.widgets.ServerValues}
+ * 	<li class='jc'>{@link org.apache.juneau.rest.server.widgets.Widget Widget}
+ * 	<li class='jc'>{@link org.apache.juneau.rest.server.widgets.BarSlot BarSlot}
+ * 	<li class='jc'>{@link org.apache.juneau.rest.server.widgets.CalendarDef CalendarDef}
+ * 	<li class='jc'>{@link org.apache.juneau.rest.server.widgets.ServerValues ServerValues}
  * </ul>
  *
  * @since 10.0.0

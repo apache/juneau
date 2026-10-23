@@ -343,12 +343,12 @@ def test_the_session_ends_with_done(release, monkeypatch, body, status, code):
     fake = FakeRun()
     script = make(release, monkeypatch, fake)
     if code is None:
-        script._in_session("Juneau release", body, [RELEASE])
+        script._in_session("Release", body, [RELEASE])
     else:
         with pytest.raises(SystemExit) as exit_info:
-            script._in_session("Juneau release", body, [RELEASE])
+            script._in_session("Release", body, [RELEASE])
         assert exit_info.value.code == code
-    assert fake.of("session") == [(("🚀 Juneau release", [RELEASE]), {})]
+    assert fake.of("session") == [(("Release", [RELEASE]), {})]
     assert fake.of("done") == [((status,), {})]
     log = Path(os.environ["JUNEAU_RUN_FULL_LOG"])
     assert log.parent == Path.home() / ".juneau-release-logs" and log.name.startswith(f"{RELEASE}-")
@@ -368,7 +368,7 @@ def test_ctrl_d_at_a_prompt_is_cancelled_like_ctrl_c(release, monkeypatch):
         raise EOFError
 
     with pytest.raises(SystemExit) as exit_info:
-        script._in_session("Juneau release", eof, [RELEASE])
+        script._in_session("Release", eof, [RELEASE])
     assert exit_info.value.code == 130
     assert fake.of("done") == [(("cancelled",), {})]
 
@@ -427,13 +427,25 @@ def test_console_flag_sets_the_env_var_and_beats_it(release, monkeypatch, capsys
     assert exit_info.value.code == 2
 
 
+DEPRECATION = ("scripts/release.py is deprecated: Juneau releases run from juneau-release-manager "
+               "(scripts/release.py there, or its Release page). This script will be removed after the next release.")
+
+
 def test_run_markers_is_ignored_with_a_warning(release, monkeypatch):
     monkeypatch.setenv("RUN_MARKERS", "1")
     fake = FakeRun()
     install(monkeypatch, fake)
     release.main(["--list-steps"])
-    assert fake.of("warn") == [(("release.py does not emit run markers; RUN_MARKERS is ignored",), {})]
+    assert fake.of("warn") == [((DEPRECATION,), {}),
+                               (("release.py does not emit run markers; RUN_MARKERS is ignored",), {})]
     assert "RUN_MARKERS" not in os.environ
+
+
+def test_deprecation_notice_first(release, monkeypatch):
+    fake = FakeRun()
+    install(monkeypatch, fake)
+    release.main(["--list-steps"])
+    assert fake.of("warn")[0] == ((DEPRECATION,), {})
 
 
 # ---- steps ---------------------------------------------------------------------------------------------------------
@@ -472,6 +484,8 @@ def test_every_step_runs_in_a_labelled_row(release, monkeypatch):
                                               for name in RELEASE_STEPS]
     assert all(len(label) <= 10 for label, _ in release.STEP_TITLES.values())
     assert set(release.STEP_TITLES) == set(RELEASE_STEPS)
+    [((title, header), _)] = fake.of("session")
+    assert (title, header[0]) == ("Release", "Juneau")
     assert fake.of("done") == [(("ok",), {})]
 
 
@@ -677,6 +691,7 @@ def test_revert_is_four_rows_and_skips_what_is_not_there(release, monkeypatch, t
     assert [row[1:4] for row in fake.rows] == [("revert_pull", "Pull", "skip"), ("revert_tag", "Tag", "skip"),
                                                ("revert_versions", "Versions", "skip"), ("revert_svn", "SVN", "skip")]
     assert fake.rows[3][4] == f"no checkout at {tmp_path / 'staging' / 'dist'}"
+    assert fake.of("session") == [(("Revert", ["Juneau", RELEASE]), {})]
     assert fake.of("done") == [(("ok",), {})]
 
 

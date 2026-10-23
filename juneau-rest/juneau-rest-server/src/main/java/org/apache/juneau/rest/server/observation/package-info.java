@@ -24,7 +24,7 @@
  * Juneau has no method-interception / AOP substrate (no dynamic proxying of arbitrary beans, no
  * bytecode weaving, no annotation-processor agent). Rather than introduce one to support an
  * {@code @Observed}-style annotation, custom observations are <b>explicit</b>: application code wraps a
- * block in a try-with-resources over {@link org.apache.juneau.rest.server.observation.Observations#observe(String, String)}.
+ * block in a try-with-resources over {@link org.apache.juneau.rest.server.observation.Observations#observe(String, String) Observations#observe(String, String)}.
  * This is consistent with the framework's explicit-over-magic philosophy &mdash; the same reason the
  * curated dependency bundles register nothing automatically.
  *
@@ -42,8 +42,8 @@
  * <h5 class='topic'>No-backend contract</h5>
  *
  * <p>
- * When no backend is installed, {@link org.apache.juneau.rest.server.observation.Observations#observe(String, String)}
- * returns {@link org.apache.juneau.rest.server.observation.Observation#NOOP} &mdash; no timestamp taken,
+ * When no backend is installed, {@link org.apache.juneau.rest.server.observation.Observations#observe(String, String) Observations#observe(String, String)}
+ * returns {@link org.apache.juneau.rest.server.observation.Observation#NOOP Observation#NOOP} &mdash; no timestamp taken,
  * no span opened, zero allocation beyond the try-with-resources scaffolding.
  *
  * @since 10.0.0

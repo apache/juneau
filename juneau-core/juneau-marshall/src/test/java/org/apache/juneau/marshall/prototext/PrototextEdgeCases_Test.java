@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.marshall.prototext;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
@@ -31,13 +32,13 @@ class PrototextEdgeCases_Test {
 	@Test
 	void g01_emptyInput() {
 		var b = fromPrototext("", JsonMap.class);
-		assertTrue(b == null || b.isEmpty());
+		assertTrue(ie(b));
 	}
 
 	@Test
 	void g02_onlyComments() {
 		var b = fromPrototext("# comment one\n# comment two\n", JsonMap.class);
-		assertTrue(b == null || b.isEmpty());
+		assertTrue(ie(b));
 	}
 
 	@Test

@@ -136,7 +136,7 @@ public final class SynchronizerToken {
 	 * @return <jk>true</jk> if {@code candidate} equals this token's value.
 	 */
 	public boolean matches(String candidate) {
-		if (candidate == null || candidate.isEmpty())
+		if (ie(candidate))
 			return false;
 		return MessageDigest.isEqual(value.getBytes(StandardCharsets.UTF_8), candidate.getBytes(StandardCharsets.UTF_8));
 	}

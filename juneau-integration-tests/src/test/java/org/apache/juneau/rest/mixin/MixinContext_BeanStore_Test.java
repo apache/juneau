@@ -26,7 +26,7 @@ import org.apache.juneau.rest.server.servlet.*;
 import org.junit.jupiter.api.*;
 
 /**
- * Phase 1 — verifies that a mixin sub-context's {@code beanStore} is parent-linked to the host's
+ * Verifies that a mixin sub-context's {@code beanStore} is parent-linked to the host's
  * {@code beanStore} so that host-declared {@code @Bean} factories resolve through the mixin's lookup chain
  * (resolved decision: bean-store layering).
  *

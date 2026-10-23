@@ -443,7 +443,7 @@ class Cache5_Test extends TestBase {
 		java.util.concurrent.CompletableFuture.allOf(future1, future2).get(5, java.util.concurrent.TimeUnit.SECONDS);
 
 		// Verify both threads cached their own values
-		assertEquals(2, threadValues.size());
+		assertSize(2, threadValues);
 		assertTrue(threadValues.containsValue("thread1-value"));
 		assertTrue(threadValues.containsValue("thread2-value"));
 
@@ -560,7 +560,7 @@ class Cache5_Test extends TestBase {
 		java.util.concurrent.CompletableFuture.allOf(future1, future2).get(5, java.util.concurrent.TimeUnit.SECONDS);
 
 		// Verify both threads cached their own values
-		assertEquals(2, threadValues.size());
+		assertSize(2, threadValues);
 		assertTrue(threadValues.containsValue("thread1-value"));
 		assertTrue(threadValues.containsValue("thread2-value"));
 

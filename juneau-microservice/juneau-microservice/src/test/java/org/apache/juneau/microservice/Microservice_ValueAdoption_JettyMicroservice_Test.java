@@ -35,7 +35,7 @@ import org.junit.jupiter.api.parallel.*;
  */
 @JettyMicroserviceTest
 @ResourceLock(Resources.SYSTEM_PROPERTIES)
-class Microservice_ValueAdoption_Test {
+class Microservice_ValueAdoption_JettyMicroservice_Test {
 
 	private static final String SP = "juneau.workingDir";
 

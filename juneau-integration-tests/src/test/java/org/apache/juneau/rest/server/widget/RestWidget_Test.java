@@ -130,30 +130,6 @@ class RestWidget_Test extends TestBase {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	// e - ThemeMenuItem via MockRestClient
-	//------------------------------------------------------------------------------------------------------------------
-
-	@Rest
-	@HtmlDocConfig(
-		widgets={ThemeMenuItem.class},
-		navlinks={"$W{ThemeMenuItem}"}
-	)
-	public static class E extends BasicRestServlet implements BasicJsonHtmlConfig {
-		@RestGet("/")
-		public String get() { return "OK"; }
-	}
-
-	@Test void e01_themeMenuItem_rendersLabel() throws Exception {
-		var c = MockRestClient.build(E.class);
-		var html = c.get("/").accept("text/html").run().assertStatus(200).getContent().asString();
-		assertContains(html, "themes");
-		assertContains(html, "devops");
-		assertContains(html, "light");
-		assertContains(html, "original");
-		assertContains(html, "dark");
-	}
-
-	//------------------------------------------------------------------------------------------------------------------
 	// f - ContentTypeMenuItem via MockRestClient
 	//------------------------------------------------------------------------------------------------------------------
 
@@ -211,7 +187,6 @@ class RestWidget_Test extends TestBase {
 	@Test void h01_menuItemWidget_getLabel() {
 		assertEquals("query", new QueryMenuItem().getLabel(null, null));
 		assertEquals("content-type", new ContentTypeMenuItem().getLabel(null, null));
-		assertEquals("themes", new ThemeMenuItem().getLabel(null, null));
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

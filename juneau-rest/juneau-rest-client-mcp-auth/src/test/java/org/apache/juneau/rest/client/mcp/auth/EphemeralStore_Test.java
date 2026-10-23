@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.client.mcp.auth;
 
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.net.*;
@@ -111,7 +112,7 @@ class EphemeralStore_Test extends TestBase {
 		s.store("s2", "v", ISS);
 		s.store("s3", "v", ISS);
 		s.store("s4", "v", ISS);  // evicts s1
-		assertEquals(3, s.size());
+		assertSize(3, s);
 		assertTrue(s.consume("s1").isEmpty());
 		assertTrue(s.consume("s4").isPresent());
 	}

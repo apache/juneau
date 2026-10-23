@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.child;
 
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
@@ -52,7 +53,7 @@ class ChildDefs_Discovery_Test extends TestBase {
 		var c = MockRestClient.buildLax(DedupHost.class);
 		c.get("/plain/ping").accept("text/plain").run().assertStatus(200).assertContent("pong");
 		var hostCtx = RestContext.getGlobalRegistry().get(DedupHost.class);
-		assertEquals(1, hostCtx.getRestChildren().asMap().size());
+		assertSize(1, hostCtx.getRestChildren().asMap());
 	}
 
 	// Bare children= entries are discovered before childrenDefs= entries.

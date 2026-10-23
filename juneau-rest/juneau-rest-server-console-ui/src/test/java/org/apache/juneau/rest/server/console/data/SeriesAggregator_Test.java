@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.server.console.data;
 
+import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.time.*;
@@ -39,10 +40,7 @@ class SeriesAggregator_Test extends TestBase {
 	}
 
 	static SeriesSource.Row row(Instant t, String org, double ms) {
-		var m = new HashMap<String,Object>();
-		m.put("time", t);
-		m.put("org", org);
-		m.put("ms", ms);
+		Map<String,Object> m = map("time", t, "org", org, "ms", ms);
 		return SeriesSource.Row.of(m);
 	}
 

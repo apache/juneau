@@ -187,7 +187,7 @@ public class RateLimitGuard extends RestGuard {
 	private String resolveKey(RestRequest req) {
 		if (xForwardedForAware) {
 			var xff = req.getHeader("X-Forwarded-For");
-			if (xff != null && ! xff.isBlank()) {
+			if (inb(xff)) {
 				var comma = xff.indexOf(',');
 				return (comma < 0 ? xff : xff.substring(0, comma)).trim();
 			}

@@ -477,7 +477,7 @@ class HeaderList_Test extends TestBase {
 
 	@Test void e03_unmodifiable_readsStillWork() {
 		var u = HeaderList.create().append("X-A", "a").append("X-B", "b").unmodifiable();
-		assertEquals(2, u.size());
+		assertSize(2, u);
 		assertList(u, "X-A: a", "X-B: b");
 		assertEquals("a", u.get(0).getValue());
 		var count = new AtomicInteger();
@@ -550,7 +550,7 @@ class HeaderList_Test extends TestBase {
 		var x = HeaderList.create().append("X-A", "a");
 		var u = x.unmodifiable();
 		x.append("X-B", "b"); // Mutate original after snapshotting.
-		assertEquals(1, u.size());
+		assertSize(1, u);
 		assertList(u, "X-A: a");
 	}
 

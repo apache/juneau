@@ -52,7 +52,9 @@ final class BusHarness {
 	 * report, or null when this machine cannot run it (no Node, or the script is not on any path a Maven or IDE
 	 * working directory produces).  A harness that RAN and failed is an assertion failure, never a null.
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Casts a parsed JSON value to its known Map/List shape.
+	})
 	static Map<String,Object> run(String cjsFileName, String... classpathResources) {
 		var key = cjsFileName + ":" + String.join(",", classpathResources);
 		if (UNAVAILABLE.contains(key))

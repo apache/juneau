@@ -83,7 +83,7 @@ class PetstoreUrlState_BrowserTest extends TestBase {
 		var res = HttpClient.newHttpClient().send(PetstoreTestServer.consolePost(base, PETS_QUERY, body), BodyHandlers.ofString());
 		assertEquals(200, res.statusCode(), res::body);
 		var rows = new JsonMap(res.body()).getList("data");
-		assertEquals(3, rows.size());
+		assertSize(3, rows);
 		petA = rows.getMap(0).getLong("id");
 		petB = rows.getMap(1).getLong("id");
 		petC = rows.getMap(2).getLong("id");
@@ -218,7 +218,9 @@ class PetstoreUrlState_BrowserTest extends TestBase {
 	// b - the pets table's ids directive
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@SuppressWarnings("unchecked") // requests is a JSON array of {url, method, postData}.
+	@SuppressWarnings({
+		"unchecked" // requests is a JSON array of {url, method, postData}.
+	})
 	private static List<String> idParams(Map<String,Object> c) {
 		return ((List<Map<String,Object>>) c.get("requests")).stream().map(r -> URLDecoder.decode(String.valueOf(r.get("url")), java.nio.charset.StandardCharsets.UTF_8)).toList();
 	}

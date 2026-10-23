@@ -17,7 +17,7 @@
 
 /**
  * FreeMarker-only delivery of the admin-console chrome: the reserved-classpath {@code base.ftlh} template, the
- * {@code <@tag>} macro, and {@link org.apache.juneau.rest.server.view.freemarker.console.ConsoleFreemarkerMixin}
+ * {@code <@tag>} macro, and {@link org.apache.juneau.rest.server.view.freemarker.console.ConsoleFreemarkerMixin ConsoleFreemarkerMixin}
  * (registers a reserved-path {@code ClassTemplateLoader} on top of the host's own {@code FreemarkerMixin}
  * configuration).
  *

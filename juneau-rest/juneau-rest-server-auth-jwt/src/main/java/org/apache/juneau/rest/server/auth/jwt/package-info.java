@@ -21,7 +21,7 @@
  * <p>
  * This is the optional companion to {@link org.apache.juneau.rest.server.auth.BearerTokenGuard} in
  * {@code juneau-rest-server}. Adding this module to a service's classpath lets the bearer guard
- * delegate to {@link org.apache.juneau.rest.server.auth.jwt.JwtTokenValidator} for full JWT validation
+ * delegate to {@link org.apache.juneau.rest.server.auth.jwt.JwtTokenValidator JwtTokenValidator} for full JWT validation
  * (signature, {@code iss}, {@code aud}, {@code exp}, {@code nbf}) without bringing the
  * nimbus library into the core {@code juneau-rest-server} jar.
  *
@@ -41,11 +41,11 @@
  * <h5 class='topic'>Security defaults</h5>
  *
  * <p>
- * {@link org.apache.juneau.rest.server.auth.jwt.JwtTokenValidator} ships with secure defaults:
+ * {@link org.apache.juneau.rest.server.auth.jwt.JwtTokenValidator JwtTokenValidator} ships with secure defaults:
  * <ul>
  * 	<li>{@code alg: none} is permanently rejected — there is no opt-in.
  * 	<li>{@code HS256} is rejected unless explicitly allowlisted via
- * 		{@link org.apache.juneau.rest.server.auth.jwt.JwtTokenValidator.Builder#algorithms algorithms(...)}.
+ * 		{@link JwtTokenValidator.Builder#algorithms algorithms(...)}.
  * 		Mixing HMAC and asymmetric keys in the same validator is intentionally prevented.
  * 	<li>{@code iss}, {@code aud}, {@code exp}, {@code nbf} are mandatory by default. A token missing
  * 		any of these is rejected.

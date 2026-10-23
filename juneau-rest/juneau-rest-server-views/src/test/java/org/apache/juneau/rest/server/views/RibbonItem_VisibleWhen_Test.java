@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.server.views;
 
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
@@ -37,9 +38,11 @@ class RibbonItem_VisibleWhen_Test {
 		var m = RibbonItem.refresh()
 			.visibleWhen(VisibilityRule.when("status").eq("active"), VisibilityRule.when("owner").present())
 			.toMap();
-		@SuppressWarnings("unchecked")
+		@SuppressWarnings({
+			"unchecked" // Casts a parsed JSON value to its known Map/List shape.
+		})
 		var rules = (List<Map<String,Object>>)m.get("visibleWhen");
-		assertEquals(2, rules.size());
+		assertSize(2, rules);
 		assertEquals(Map.of("field", "status", "op", "eq", "value", "active"), rules.get(0));
 		assertEquals(Map.of("field", "owner", "op", "present"), rules.get(1));
 	}

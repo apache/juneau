@@ -196,7 +196,7 @@ public class WwwAuthenticateChallenge implements Serializable {
 	 */
 	public Optional<URI> resourceMetadata() {
 		var v = parameters.get("resource_metadata");
-		if (v == null || v.isBlank())
+		if (ib(v))
 			return oe();
 		try {
 			return o(URI.create(v));
@@ -221,7 +221,7 @@ public class WwwAuthenticateChallenge implements Serializable {
 	 */
 	public Set<String> scopes() {
 		var v = parameters.get("scope");
-		if (v == null || v.isBlank())
+		if (ib(v))
 			return Set.of();
 		var out = Arrays.stream(v.strip().split("\\s+"))
 			.collect(Collectors.toCollection(LinkedHashSet<String>::new));

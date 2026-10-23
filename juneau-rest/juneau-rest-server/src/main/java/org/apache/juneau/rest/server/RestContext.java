@@ -1487,7 +1487,7 @@ public class RestContext extends Context {
 	 * <p>
 	 * Materialized through {@link BeanInstantiator}, which runs the {@code @ConfigProperties} resolution hook and
 	 * auto-registers the bound instance into {@link #beanStore()}. The bind resolves each {@code RestContext.*} key
-	 * against the resource's per-resource {@link org.apache.juneau.commons.settings.PropertySource PropertySource}s
+	 * against the resource's per-resource {@link PropertySource PropertySource}s
 	 * (including a {@code @Rest(config=...)} file) ahead of the global settings chain, so a config-file key takes
 	 * effect in the resolved defaults. This memoizer is forced exactly once during construction (after the
 	 * PropertySources are registered) so the single bound instance is the same one held in the bean store; see the
@@ -2907,7 +2907,7 @@ public class RestContext extends Context {
 				.orElseGet(Collections::emptyList));
 		// Dual noInherit source: when this is a mixin sub-context built from a host @Mixin(noInherit=...),
 		// the host-declared cutoff tokens union with the mixin class's own @Rest(noInherit=...).  A token from
-		// EITHER source cuts the host→mixin inheritance walk for that property (OQ2/OQ3).
+		// EITHER source cuts the host→mixin inheritance walk for that property.
 		var rmNoInherit = resolvedMixinField();
 		if (rmNoInherit != null)
 			resolveCdl(rmNoInherit.overrides().noInherit()).forEach(out::add);
@@ -2923,7 +2923,7 @@ public class RestContext extends Context {
 	 * Built once at memoizer-init time (zero per-request cost).  The synthetic annotation is injected at the
 	 * most-derived position of {@link #getRestAnnotationsForProperty(String)} so the host override resolves as if
 	 * declared on the mixin class itself — list-shaped props append after the inherited host chain, replace-shaped
-	 * props win — but ahead of the mixin class's own {@code @Rest}, so the host override is authoritative (OQ3).
+	 * props win — but ahead of the mixin class's own {@code @Rest}, so the host override is authoritative.
 	 */
 	private final Memoizer<AnnotationInfo<Rest>> mixinOverrideAnnotation = memoizer(() -> {
 		var rm = resolvedMixinField();
@@ -3822,7 +3822,7 @@ public class RestContext extends Context {
 			try {
 				x.invoke(beanStore, getResource());
 			} catch (Exception e) {
-				getLogger().log(Level.WARNING, unwrap(e), () -> String.format("Error occurred invoking servlet-destroy method '%s'.", x.getFullName()));
+				getLogger().log(Level.WARNING, unwrap(e), () -> f("Error occurred invoking servlet-destroy method '%s'.", x.getFullName()));
 			}
 		}
 		if (!isMixinContext) {
@@ -3830,7 +3830,7 @@ public class RestContext extends Context {
 				try {
 					mctx.destroy();
 				} catch (Exception e) {
-					getLogger().log(Level.WARNING, unwrap(e), () -> String.format("Error occurred destroying mixin sub-context '%s'.", mctx.getResourceClass().getName()));
+					getLogger().log(Level.WARNING, unwrap(e), () -> f("Error occurred destroying mixin sub-context '%s'.", mctx.getResourceClass().getName()));
 				}
 			}
 		}
@@ -4730,7 +4730,7 @@ public class RestContext extends Context {
 	 * <p>
 	 * Besides the full stack trace, this setting also gates the {@code Thrown} error-response header and the
 	 * message text of any error-body exception that wasn't itself deliberately thrown by application code as a
-	 * {@link org.apache.juneau.http.response.BasicHttpException BasicHttpException} (see
+	 * {@link BasicHttpException BasicHttpException} (see
 	 * {@link #handleError(RestSession, Throwable)}). Leave this off (the default) outside of local debugging so
 	 * that unplanned exception types (a database driver error, a file-system exception, and the like) don't
 	 * incidentally echo their class name or message back to the caller.
@@ -5043,7 +5043,7 @@ public class RestContext extends Context {
 		var name = builder.asyncCompletionExecutorName != null
 			? builder.asyncCompletionExecutorName
 			: mergeReplacedStringAttribute("asyncCompletionExecutor", null);
-		if (name != null && !name.isBlank())
+		if (inb(name))
 			asyncCompletionExecutor.get(); // throws IllegalStateException if bean is missing
 	}
 
@@ -5171,7 +5171,7 @@ public class RestContext extends Context {
 			try {
 				x.invoke(session.getBeanStore(), getResource());
 			} catch (Exception e) {
-				getLogger().log(Level.WARNING, unwrap(e), () -> String.format("Error occurred invoking finish-call method '%s'.", x.getFullName()));
+				getLogger().log(Level.WARNING, unwrap(e), () -> f("Error occurred invoking finish-call method '%s'.", x.getFullName()));
 			}
 		}
 	}

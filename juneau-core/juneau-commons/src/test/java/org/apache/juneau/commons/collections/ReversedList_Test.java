@@ -17,6 +17,7 @@
 package org.apache.juneau.commons.collections;
 
 import static org.apache.juneau.commons.TestAssertions.*;
+import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
@@ -117,7 +118,7 @@ class ReversedList_Test extends TestBase {
 
 	@Test
 	void d01_reflectsUnderlyingChanges() {
-		var original = new ArrayList<>(Arrays.asList("A", "B", "C"));
+		var original = list("A", "B", "C");
 		var reversed = new ReversedList<>(original);
 
 		assertEquals("C", reversed.get(0));
@@ -131,7 +132,7 @@ class ReversedList_Test extends TestBase {
 
 	@Test
 	void d02_reflectsUnderlyingRemoval() {
-		var original = new ArrayList<>(Arrays.asList("A", "B", "C"));
+		var original = list("A", "B", "C");
 		var reversed = new ReversedList<>(original);
 
 		original.remove(2); // Remove "C"
@@ -339,7 +340,7 @@ class ReversedList_Test extends TestBase {
 
 	@Test
 	void g05_subList_reflectsChanges() {
-		var original = new ArrayList<>(Arrays.asList("A", "B", "C", "D", "E"));
+		var original = list("A", "B", "C", "D", "E");
 		var reversed = new ReversedList<>(original);
 		var subList = reversed.subList(1, 4);
 
@@ -627,7 +628,7 @@ class ReversedList_Test extends TestBase {
 	@Test
 	void l03_hashCode_withNullElements() {
 		// Test hashCode with null elements
-		var original = new ArrayList<>(Arrays.asList("a", null, "c"));
+		var original = list("a", null, "c");
 		var reversed = new ReversedList<>(original);
 
 		// Calculate expected hashCode manually (null contributes 0)

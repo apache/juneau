@@ -301,7 +301,7 @@ public final class Iso8601Utils {
 	 * @return The parsed {@link Duration}, or <jk>null</jk> if {@code iso8601} is <jk>null</jk> or empty.
 	 */
 	public static Duration parseDuration(String iso8601, DurationFormat formatHint) {
-		if (iso8601 == null || iso8601.isEmpty())
+		if (ie(iso8601))
 			return null;
 		String s = iso8601.trim();
 		// Strip optional surrounding quotes
@@ -341,7 +341,7 @@ public final class Iso8601Utils {
 	 * @return The parsed {@link Period}, or <jk>null</jk> if {@code value} is <jk>null</jk> or empty.
 	 */
 	public static Period parsePeriod(String value, PeriodFormat formatHint) {
-		if (value == null || value.isEmpty())
+		if (ie(value))
 			return null;
 		String s = value.trim();
 		if (isIntegerLiteral(s))

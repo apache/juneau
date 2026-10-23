@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.server.auth;
 
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.security.*;
@@ -39,7 +40,7 @@ class AuthResultAccumulator_Test extends TestBase {
 		var acc = new AuthResultAccumulator();
 		acc.add(AuthResult.of(ALICE, "r1"));
 		var records = LogRecordCapture.quietly(AuthResultAccumulator.class, () -> acc.add(AuthResult.of(BOB, "r2")));  // ADD: principal stays alice; bob's roles are NOT unioned (different subject)
-		assertEquals(1, records.size(), records::toString);
+		assertSize(records::toString, 1, records);
 		var r = acc.result().orElseThrow();
 		assertSame(ALICE, r.getPrincipal());
 		assertEquals(Set.of("r1"), r.getRoles());

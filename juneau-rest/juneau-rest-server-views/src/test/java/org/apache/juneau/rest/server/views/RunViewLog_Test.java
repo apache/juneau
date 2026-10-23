@@ -17,6 +17,7 @@
 package org.apache.juneau.rest.server.views;
 
 import static org.apache.juneau.BasicTestUtils.*;
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.nio.file.*;
@@ -139,8 +140,8 @@ class RunViewLog_Test extends TestBase {
 	@Test void c06_maxClamped() {
 		var log = RunViewLog.create();
 		log.append(note("a"));
-		assertEquals(1, log.page(null, 0).events().size());
-		assertEquals(1, log.page(null, Integer.MAX_VALUE).events().size());
+		assertSize(1, log.page(null, 0).events());
+		assertSize(1, log.page(null, Integer.MAX_VALUE).events());
 	}
 
 	@Test void e01_concurrentAppendsAreGapFree() throws Exception {
@@ -165,7 +166,7 @@ class RunViewLog_Test extends TestBase {
 		ReportReaders.forKind("surefire").read(d).toEvents("tests").forEach(log::append);
 		var page = log.page(null, 100);
 		assertEquals("replace", page.events().get(0).toContractMap().get("ev"));
-		assertEquals(3, page.events().size());
+		assertSize(3, page.events());
 		assertDoesNotThrow(page::validate);
 	}
 }

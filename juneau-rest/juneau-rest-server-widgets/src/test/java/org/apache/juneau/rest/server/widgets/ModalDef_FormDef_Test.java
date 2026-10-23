@@ -93,7 +93,7 @@ class ModalDef_FormDef_Test extends TestBase {
 		assertFalse(Json.of(unset).contains("selfTargeted"), () -> Json.of(unset));
 
 		// Explicit false CLEARS rather than serializing a false: an un-opted-in dialog's payload stays byte-identical
-		// to what it was before this property existed, which is why adding it doesn't bump the contract version.
+		// to one that never set this property, so the property doesn't bump the contract version.
 		var off = ModalDef.create("t").idempotencyKey("k").selfTargeted(false);
 		assertNull(off.selfTargeted);
 		assertFalse(Json.of(off).contains("selfTargeted"), () -> Json.of(off));

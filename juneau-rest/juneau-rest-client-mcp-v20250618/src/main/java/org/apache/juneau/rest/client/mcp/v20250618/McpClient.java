@@ -201,6 +201,8 @@ public class McpClient extends AbstractMcpClient {
 	}
 
 	private static Object toWireParams(Object params) {
+		if (params == null)
+			return null;
 		return JsonParser.DEFAULT.read(REQUEST_SERIALIZER.write(params), Object.class);
 	}
 
@@ -229,7 +231,7 @@ public class McpClient extends AbstractMcpClient {
 			.setJsonrpc(McpProtocol.JSON_RPC_2_0)
 			.setId(nextId.getAndIncrement())
 			.setMethod(method)
-			.setParams(params == null ? null : toWireParams(params));
+			.setParams(toWireParams(params));
 		var response = send(request);
 		var error = response.getError();
 		if (error != null)

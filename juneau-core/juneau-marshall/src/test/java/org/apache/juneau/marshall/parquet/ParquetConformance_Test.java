@@ -18,6 +18,7 @@ package org.apache.juneau.marshall.parquet;
 
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 
 import java.io.*;
 import java.util.*;
@@ -49,7 +50,7 @@ class ParquetConformance_Test extends TestBase {
 		var bytes = ParquetSerializer.DEFAULT.write(big);
 		var parsed = (List<NumBean>) ParquetParser.DEFAULT.read(bytes, List.class, NumBean.class);
 
-		assertEquals(1, parsed.size());
+		assertSize(1, parsed);
 		assertNotNull(parsed.get(0).n);
 		assertEquals(5_000_000_000L, parsed.get(0).n.longValue());
 	}
@@ -86,7 +87,7 @@ class ParquetConformance_Test extends TestBase {
 		var bytes = ParquetSerializer.DEFAULT.write(a);
 		var parsed = (List<Node>) ParquetParser.DEFAULT.read(bytes, List.class, Node.class);
 
-		assertEquals(1, parsed.size());
+		assertSize(1, parsed);
 		var n = parsed.get(0);
 		assertEquals("a", n.val);
 		assertNotNull(n.next);
@@ -142,7 +143,7 @@ class ParquetConformance_Test extends TestBase {
 		var bytes = ParquetSerializer.DEFAULT.write(list(nullGroup, nullLeaf, present));
 		var parsed = (List<A>) ParquetParser.DEFAULT.read(bytes, List.class, A.class);
 
-		assertEquals(3, parsed.size());
+		assertSize(3, parsed);
 		assertNull(parsed.get(0).b, "null intermediate group must reconstruct as null");
 		assertNotNull(parsed.get(1).b, "present group with null leaf must not collapse to null group");
 		assertNull(parsed.get(1).b.v);

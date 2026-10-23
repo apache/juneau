@@ -17,6 +17,7 @@
 package org.apache.juneau.rest.server.auth;
 
 import static org.apache.juneau.commons.utils.Shorts.*;
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -102,7 +103,7 @@ class BearerTokenAuthFilter_Test extends TestBase {
 			.filter(h -> eqic("WWW-Authenticate", h.getName()))
 			.map(h -> h.getValue())
 			.toList();
-		assertEquals(1, challenges.size());
+		assertSize(1, challenges);
 		assertTrue(challenges.get(0).contains("error=\"invalid_token\""));
 	}
 

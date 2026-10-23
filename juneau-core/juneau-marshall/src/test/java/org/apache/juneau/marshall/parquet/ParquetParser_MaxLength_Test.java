@@ -18,6 +18,7 @@ package org.apache.juneau.marshall.parquet;
 
 import static org.apache.juneau.BasicTestUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 
 import java.util.*;
 
@@ -151,7 +152,7 @@ class ParquetParser_MaxLength_Test extends TestBase {
 		// A generous cap parses fine.
 		var lenient = ParquetParser.create().maxLength(1_000_000).build();
 		var parsed = (List<SimpleBean>) lenient.read(bytes, List.class, SimpleBean.class);
-		assertEquals(3, parsed.size());
+		assertSize(3, parsed);
 
 		// A 1-byte cap rejects every page in the file.
 		var strict = ParquetParser.create().maxLength(1).build();
@@ -177,7 +178,7 @@ class ParquetParser_MaxLength_Test extends TestBase {
 		var bytes = ParquetSerializer.DEFAULT.write(beans(3));
 		var p = ParquetParser.create().maxLength(0).build();
 		var parsed = (List<SimpleBean>) p.read(bytes, List.class, SimpleBean.class);
-		assertEquals(3, parsed.size());
+		assertSize(3, parsed);
 	}
 
 	// ================================================================
@@ -191,7 +192,7 @@ class ParquetParser_MaxLength_Test extends TestBase {
 		// A generous cap parses fine.
 		var lenient = ParquetParser.create().maxCount(1_000).build();
 		var parsed = (List<SimpleBean>) lenient.read(bytes, List.class, SimpleBean.class);
-		assertEquals(5, parsed.size());
+		assertSize(5, parsed);
 
 		// A cap below the actual row count rejects the file up front.
 		var strict = ParquetParser.create().maxCount(2).build();
@@ -217,7 +218,7 @@ class ParquetParser_MaxLength_Test extends TestBase {
 		var bytes = ParquetSerializer.DEFAULT.write(beans(5));
 		var p = ParquetParser.create().maxCount(0).build();
 		var parsed = (List<SimpleBean>) p.read(bytes, List.class, SimpleBean.class);
-		assertEquals(5, parsed.size());
+		assertSize(5, parsed);
 	}
 
 	// ================================================================
@@ -231,7 +232,7 @@ class ParquetParser_MaxLength_Test extends TestBase {
 		// A generous cap parses fine.
 		var lenient = ParquetParser.create().maxInputLength(1_000_000).build();
 		var parsed = (List<SimpleBean>) lenient.read(bytes, List.class, SimpleBean.class);
-		assertEquals(3, parsed.size());
+		assertSize(3, parsed);
 
 		// A cap smaller than the actual input rejects it before the whole body is buffered.
 		var strict = ParquetParser.create().maxInputLength(bytes.length - 1).build();
@@ -257,7 +258,7 @@ class ParquetParser_MaxLength_Test extends TestBase {
 		var bytes = ParquetSerializer.DEFAULT.write(beans(3));
 		var p = ParquetParser.create().maxInputLength(0).build();
 		var parsed = (List<SimpleBean>) p.read(bytes, List.class, SimpleBean.class);
-		assertEquals(3, parsed.size());
+		assertSize(3, parsed);
 	}
 
 	// ================================================================
@@ -296,7 +297,7 @@ class ParquetParser_MaxLength_Test extends TestBase {
 		var bytes = ParquetSerializer.DEFAULT.write(beans(3));
 		var p = ParquetParser.create().maxDecompressedBytes(1_024).build();
 		var parsed = (List<SimpleBean>) p.read(bytes, List.class, SimpleBean.class);
-		assertEquals(3, parsed.size());
+		assertSize(3, parsed);
 	}
 
 	@Test

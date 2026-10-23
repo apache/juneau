@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.server.beans;
 
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
@@ -46,6 +47,6 @@ class ResourceDescription_Test extends TestBase {
 		var set = new java.util.TreeSet<ResourceDescription>();
 		set.add(empty);
 		set.add(named);
-		assertEquals(2, set.size());
+		assertSize(2, set);
 	}
 }

@@ -19,7 +19,7 @@
  * JSON-RPC 2.0 envelope beans.
  *
  * <p>
- * Revision-neutral request/response/error framing plus the {@link org.apache.juneau.bean.jsonrpc.McpException}
+ * Revision-neutral request/response/error framing plus the {@link org.apache.juneau.bean.jsonrpc.McpException McpException}
  * error carrier. This module carries no protocol-specific knowledge of any kind: it is the shared
  * envelope layer beneath protocol-specific bean modules such as {@code juneau-bean-mcp-v20250618}.
  *

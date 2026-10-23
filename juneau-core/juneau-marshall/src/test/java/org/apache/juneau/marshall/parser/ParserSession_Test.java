@@ -18,6 +18,7 @@ package org.apache.juneau.marshall.parser;
 
 import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 
 import java.io.*;
 import java.lang.reflect.*;
@@ -122,14 +123,14 @@ class ParserSession_Test extends TestBase {
 
 	@Test void a06_read_typeWithArgs_string() {
 		var l = (List<Integer>) P.read("[1,2,3]", List.class, Integer.class);
-		assertEquals(3, l.size());
+		assertSize(3, l);
 	}
 
 	@Test void a07_read_typeWithArgs_nestedMap() {
 		var m = (Map<String,List<Bean>>) P.read(
 			"{\"a\":[{\"f1\":\"x\",\"f2\":1}]}",
 			Map.class, String.class, List.class, Bean.class);
-		assertEquals(1, m.size());
+		assertSize(1, m);
 		assertEquals("x", m.get("a").get(0).f1);
 	}
 
@@ -230,7 +231,7 @@ class ParserSession_Test extends TestBase {
 		// matching the doc claim that null defaults "to whatever is being parsed".
 		var dest = new ArrayList<>();
 		P.readIntoCollection("[1,2,3]", dest, null);
-		assertEquals(3, dest.size());
+		assertSize(3, dest);
 		assertEquals(1, dest.get(0));
 		assertEquals(2, dest.get(1));
 		assertEquals(3, dest.get(2));
@@ -747,7 +748,7 @@ class ParserSession_Test extends TestBase {
 		BeanConsumer<Bean> a = beans::add;
 		P.getSession().readToBeanConsumer(
 			"[{\"f1\":\"a\",\"f2\":1},{\"f1\":\"b\",\"f2\":2}]", a, Bean.class);
-		assertEquals(2, beans.size());
+		assertSize(2, beans);
 		assertEquals("a", beans.get(0).f1);
 		assertEquals(2, beans.get(1).f2);
 	}
@@ -771,7 +772,7 @@ class ParserSession_Test extends TestBase {
 		// Use java.time.LocalDate as a map key — exercises sType.isTemporal() branch.
 		var m = (Map<java.time.LocalDate,String>) P.read(
 			"{\"2020-01-02\":\"v\"}", HashMap.class, java.time.LocalDate.class, String.class);
-		assertEquals(1, m.size());
+		assertSize(1, m);
 		assertEquals("v", m.values().iterator().next());
 	}
 
@@ -779,28 +780,28 @@ class ParserSession_Test extends TestBase {
 		// Duration as a map key — exercises sType.isDuration() branch.
 		var m = (Map<java.time.Duration,String>) P.read(
 			"{\"PT1H\":\"v\"}", HashMap.class, java.time.Duration.class, String.class);
-		assertEquals(1, m.size());
+		assertSize(1, m);
 	}
 
 	@Test void p03_convertAttr_periodKey() {
 		// Period as a map key — exercises sType.isPeriod() branch.
 		var m = (Map<java.time.Period,String>) P.read(
 			"{\"P1D\":\"v\"}", HashMap.class, java.time.Period.class, String.class);
-		assertEquals(1, m.size());
+		assertSize(1, m);
 	}
 
 	@Test void p04_convertAttr_dateKey() {
 		// Date as a map key — exercises sType.isDate() branch.
 		var m = (Map<Date,String>) P.read(
 			"{\"2020-01-02T00:00:00Z\":\"v\"}", HashMap.class, Date.class, String.class);
-		assertEquals(1, m.size());
+		assertSize(1, m);
 	}
 
 	@Test void p05_convertAttr_calendarKey() {
 		// Calendar as a map key — exercises sType.isCalendar() branch.
 		var m = (Map<Calendar,String>) P.read(
 			"{\"2020-01-02T00:00:00Z\":\"v\"}", HashMap.class, Calendar.class, String.class);
-		assertEquals(1, m.size());
+		assertSize(1, m);
 	}
 
 	@Test void p06_convertAttr_numberKey() {

@@ -17,6 +17,7 @@
 package org.apache.juneau.marshall.collections;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 
 import java.io.*;
 import java.util.*;
@@ -36,7 +37,7 @@ class JsonList_Test extends TestBase {
 
 	@Test void a02_ofValues() {
 		var l = JsonList.of("a", 1, true);
-		assertEquals(3, l.size());
+		assertSize(3, l);
 		assertEquals("a", l.getString(0));
 		assertEquals(1, l.getInt(1));
 		assertTrue(l.getBoolean(2));
@@ -45,7 +46,7 @@ class JsonList_Test extends TestBase {
 	@Test void a03_ofCollection() {
 		var src = Arrays.asList(1, 2, 3);
 		var l = JsonList.of(src);
-		assertEquals(3, l.size());
+		assertSize(3, l);
 		assertEquals(1, l.getInt(0));
 	}
 
@@ -55,7 +56,7 @@ class JsonList_Test extends TestBase {
 
 	@Test void a05_ofStringCharSequence() throws Exception {
 		var l = JsonList.ofString("[1,2,3]");
-		assertEquals(3, l.size());
+		assertSize(3, l);
 		assertEquals(1, l.getInt(0));
 		assertEquals(2, l.getInt(1));
 		assertEquals(3, l.getInt(2));
@@ -69,7 +70,7 @@ class JsonList_Test extends TestBase {
 
 	@Test void a07_ofStringReader() throws Exception {
 		var l = JsonList.ofString(new StringReader("[10,20]"));
-		assertEquals(2, l.size());
+		assertSize(2, l);
 		assertEquals(10, l.getInt(0));
 	}
 
@@ -81,7 +82,7 @@ class JsonList_Test extends TestBase {
 
 	@Test void a09_ofStringWithParser() throws Exception {
 		var l = JsonList.ofString("[1,2]", JsonParser.DEFAULT);
-		assertEquals(2, l.size());
+		assertSize(2, l);
 	}
 
 	@Test void a10_toStringProducesJson() {
@@ -101,7 +102,7 @@ class JsonList_Test extends TestBase {
 
 	@Test void a13_appendFluent() {
 		var l = JsonList.create().append("a").append(1).append(true);
-		assertEquals(3, l.size());
+		assertSize(3, l);
 		assertEquals("a", l.getString(0));
 		assertEquals(1, l.getInt(1));
 		assertTrue(l.getBoolean(2));
@@ -109,18 +110,18 @@ class JsonList_Test extends TestBase {
 
 	@Test void a14_appendVarargs() {
 		var l = JsonList.create().append("a", "b", "c");
-		assertEquals(3, l.size());
+		assertSize(3, l);
 	}
 
 	@Test void a15_appendIfTrue() {
 		var l = JsonList.create().appendIf(true, "yes").appendIf(false, "no");
-		assertEquals(1, l.size());
+		assertSize(1, l);
 		assertEquals("yes", l.getString(0));
 	}
 
 	@Test void a16_appendReverse() {
 		var l = JsonList.create().appendReverse("a", "b", "c");
-		assertEquals(3, l.size());
+		assertSize(3, l);
 		assertEquals("c", l.getString(0));
 		assertEquals("b", l.getString(1));
 		assertEquals("a", l.getString(2));
@@ -128,14 +129,14 @@ class JsonList_Test extends TestBase {
 
 	@Test void a17_appendReverseList() {
 		var l = JsonList.create().appendReverse(Arrays.asList("x", "y"));
-		assertEquals(2, l.size());
+		assertSize(2, l);
 		assertEquals("y", l.getString(0));
 		assertEquals("x", l.getString(1));
 	}
 
 	@Test void a18_appendCollection() {
 		var l = JsonList.create().append(Arrays.asList(1, 2, 3));
-		assertEquals(3, l.size());
+		assertSize(3, l);
 	}
 
 	@Test void a19_typedAccessors() {
@@ -157,7 +158,7 @@ class JsonList_Test extends TestBase {
 		var inner = JsonList.of(1, 2);
 		var l = JsonList.create().append((Object) inner);
 		var got = l.getList(0);
-		assertEquals(2, got.size());
+		assertSize(2, got);
 	}
 
 	@SuppressWarnings({
@@ -214,14 +215,14 @@ class JsonList_Test extends TestBase {
 			it.next();
 			it.set(99);
 		});
-		assertEquals(3, l.size());
+		assertSize(3, l);
 	}
 
 	@Test void a23_modifiable() {
 		var l = JsonList.of(1, 2).unmodifiable().modifiable();
 		assertFalse(l.isUnmodifiable());
 		l.add(3);
-		assertEquals(3, l.size());
+		assertSize(3, l);
 	}
 
 	@Test void a24_emptyListConstant() {
@@ -231,23 +232,23 @@ class JsonList_Test extends TestBase {
 
 	@Test void a25_ofArrays() {
 		var l = JsonList.ofArrays(new Object[]{1, 2}, new Object[]{3, 4});
-		assertEquals(2, l.size());
+		assertSize(2, l);
 	}
 
 	@Test void a26_ofCollections() {
 		var l = JsonList.ofCollections(Arrays.asList(1, 2), Arrays.asList(3, 4));
-		assertEquals(2, l.size());
+		assertSize(2, l);
 	}
 
 	@Test void a27_ofJsonOrCdl_json() throws Exception {
 		var l = JsonList.ofJsonOrCdl("[1,2,3]");
-		assertEquals(3, l.size());
+		assertSize(3, l);
 		assertEquals(1, l.getInt(0));
 	}
 
 	@Test void a28_ofJsonOrCdl_cdl() throws Exception {
 		var l = JsonList.ofJsonOrCdl("a,b,c");
-		assertEquals(3, l.size());
+		assertSize(3, l);
 		assertEquals("a", l.getString(0));
 		assertEquals("b", l.getString(1));
 		assertEquals("c", l.getString(2));

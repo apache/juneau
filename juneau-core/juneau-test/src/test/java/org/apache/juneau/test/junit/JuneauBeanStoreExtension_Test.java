@@ -26,9 +26,9 @@ import org.junit.jupiter.api.extension.*;
  * Tests for {@link JuneauBeanStoreExtension} discovery and per-test isolation.
  *
  * <p>
- * Phase 2 covers {@code @TestBean} field/method discovery, per-test overlay isolation, parameter resolution,
+ * Covers {@code @TestBean} field/method discovery, per-test overlay isolation, parameter resolution,
  * named-bean qualifiers, and explicit-type overrides.  Class-scope behavior is exercised by
- * {@code JuneauBeanStoreExtension_ClassScope_Test} (Phase 3).
+ * {@code JuneauBeanStoreExtension_ClassScope_Test}.
  *
  * <p>
  * The host class itself is wired via {@code @ExtendWith(JuneauBeanStoreExtension.class)} so the lifecycle

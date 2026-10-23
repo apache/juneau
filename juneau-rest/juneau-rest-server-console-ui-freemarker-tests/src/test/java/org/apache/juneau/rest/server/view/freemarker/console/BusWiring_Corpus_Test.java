@@ -47,12 +47,16 @@ class BusWiring_Corpus_Test extends TestBase {
 		@Override public Set<String> acceptedOps() { return ops; }
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Casts a parsed JSON value to its known Map/List shape.
+	})
 	private static Set<String> set(Object list) {
 		return list == null ? null : Set.copyOf((List<String>)list);
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Casts a parsed JSON value to its known Map/List shape.
+	})
 	@TestFactory Stream<DynamicTest> a01_corpus() throws Exception {
 		var corpus = JsonMap.ofString(Files.readString(CORPUS, UTF_8));
 		assertTrue(CardTypeRegistry.standard().isRegistered("datatables"), "DatatablesCardType is ServiceLoader-registered");

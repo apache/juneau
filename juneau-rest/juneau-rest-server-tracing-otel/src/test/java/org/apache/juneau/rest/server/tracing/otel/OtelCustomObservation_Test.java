@@ -17,6 +17,7 @@
 package org.apache.juneau.rest.server.tracing.otel;
 
 import static org.apache.juneau.commons.utils.Shorts.*;
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
@@ -64,7 +65,7 @@ class OtelCustomObservation_Test extends TestBase {
 			scope.setStatusCode(200);
 		}
 		var spans = EXPORTER.getFinishedSpanItems();
-		assertEquals(1, spans.size());
+		assertSize(1, spans);
 		var s = spans.get(0);
 		assertEquals("loadOrder", s.getName());
 		assertEquals(SpanKind.INTERNAL, s.getKind());
@@ -90,7 +91,7 @@ class OtelCustomObservation_Test extends TestBase {
 			assertNotSame(Observation.NOOP, o);
 		}
 		var spans = EXPORTER.getFinishedSpanItems();
-		assertEquals(1, spans.size());
+		assertSize(1, spans);
 		assertEquals("svc.call", spans.get(0).getName());
 		assertEquals(SpanKind.INTERNAL, spans.get(0).getKind());
 	}
@@ -105,7 +106,7 @@ class OtelCustomObservation_Test extends TestBase {
 			}
 		}
 		var spans = EXPORTER.getFinishedSpanItems();
-		assertEquals(2, spans.size());
+		assertSize(2, spans);
 		// Inner finishes first; both share one trace id (inner is parented to outer).
 		var inner = spans.stream().filter(x -> eq(x.getName(), "inner")).findFirst().orElseThrow();
 		var outer = spans.stream().filter(x -> eq(x.getName(), "outer")).findFirst().orElseThrow();

@@ -26,7 +26,7 @@ import org.apache.juneau.rest.server.servlet.*;
 import org.junit.jupiter.api.*;
 
 /**
- * Phase 3 &mdash; proves the additive-security PREPEND shape for {@code @Child(converters=...)}: the
+ * Proves the additive-security PREPEND shape for {@code @Child(converters=...)}: the
  * host-seeded converter applies when the child declares none of its own, and runs BEFORE the child's own
  * declared converter when both are present (prepend order, verified via string-append ordering).
  */

@@ -18,6 +18,7 @@ package org.apache.juneau.marshall.jena;
 
 import static org.apache.juneau.BasicTestUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 
 import java.time.*;
 import java.util.*;
@@ -1153,7 +1154,7 @@ class RdfParser_Test extends TestBase {
 			// An unrelated, unmarked resource must NOT be picked up once a marker match exists.
 			m.createResource("http://ex.org/unmarked").addProperty(m.createProperty("http://ex.org/p"), "v");
 			var roots = session.getRoots(m);
-			assertEquals(1, roots.size());
+			assertSize(1, roots);
 			assertEquals("http://ex.org/marked", roots.get(0).getURI());
 		}
 

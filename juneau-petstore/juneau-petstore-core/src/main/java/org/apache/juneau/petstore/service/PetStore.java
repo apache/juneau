@@ -504,7 +504,7 @@ public class PetStore {
 		if (! users.containsKey(user.getUsername()))
 			throw new PetstoreNotFoundException("User not found: username=" + user.getUsername());
 		var pw = user.getPassword();
-		if (pw == null || pw.isBlank())
+		if (ib(pw))
 			user.setPassword(users.get(user.getUsername()).getPassword());
 		users.put(user.getUsername(), user);
 		recordAudit(actor, "User", user.getUsername(), ACTION_UPDATE, user.getUsername());

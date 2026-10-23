@@ -206,7 +206,9 @@ class PetstoreRowJob_BrowserTest extends TestBase {
 	@Test void a04_groomAgainStartsANewRun() {
 		var c = assertClean(report, "regroom");
 		assertString("Groom again", query(c, "label"));
-		@SuppressWarnings("unchecked")
+		@SuppressWarnings({
+			"unchecked" // The query returns a list of numbers parsed from JSON.
+		})
 		var runs = (List<Number>)query(c, "runs");
 		assertTrue(runs.get(1).intValue() > runs.get(0).intValue(), runs::toString);
 	}

@@ -92,7 +92,9 @@ class ViewsJs_Hooks_Test extends TestBase {
 		return r;
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Casts a parsed JSON value to its known Map/List shape.
+	})
 	private static Map<String,Object> ns(String name) {
 		return (Map<String,Object>)report().get(name);
 	}

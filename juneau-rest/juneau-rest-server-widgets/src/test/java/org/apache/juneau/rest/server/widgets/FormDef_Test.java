@@ -60,7 +60,7 @@ class FormDef_Test extends TestBase {
 	@Test void a04_options_replacesExistingAndRejectsNulls() {
 		var i = Input.of("n", "N", "select").option("a", "A");
 		i.options(Option.of("b", "B"), Option.of("c", "C"));
-		assertEquals(2, i.options.size());
+		assertSize(2, i.options);
 		assertEquals("b", i.options.get(0).value);
 		assertRejected(() -> i.options((Option[]) null), "options must not be null");
 		assertRejected(() -> i.options(Option.of("x", "X"), null), "option must not be null");
@@ -70,7 +70,7 @@ class FormDef_Test extends TestBase {
 		var i = Input.of("n", "N", "select");
 		assertNull(i.options);
 		i.option("a", "A").option("b", "B");
-		assertEquals(2, i.options.size());
+		assertSize(2, i.options);
 	}
 
 	@Test void a06_action_nullRef_rejected() {
@@ -184,7 +184,7 @@ class FormDef_Test extends TestBase {
 		assertNull(s.fields);
 		assertRejected(() -> s.field(null), "field must not be null");
 		s.field(Input.of("a", "A", "text")).field(Input.of("b", "B", "text"));
-		assertEquals(2, s.fields.size());
+		assertSize(2, s.fields);
 	}
 
 	@Test void c02_section_validate_rejections() {

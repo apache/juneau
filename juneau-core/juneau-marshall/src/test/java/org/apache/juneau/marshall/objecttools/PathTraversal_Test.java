@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.marshall.objecttools;
 
+import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.BasicTestUtils.*;
 import static org.apache.juneau.test.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -147,11 +148,7 @@ class PathTraversal_Test extends TestBase {
 		assertEquals(expectedValue, s);
 
 		// Try adding an address as a map (should be automatically converted to an Address)
-		var m = new HashMap<String,Object>();
-		m.put("street","street D");
-		m.put("city","city D");
-		m.put("state","state D");
-		m.put("zip",Integer.valueOf(12345));
+		Map<String,Object> m = map("street", "street D", "city", "city D", "state", "state D", "zip", Integer.valueOf(12345));
 
 		// Try the same for an address in an array.
 		model.put("addresses/1", m);
@@ -751,7 +748,7 @@ class PathTraversal_Test extends TestBase {
 	@Test void g01_getParameterized_listOfStrings() {
 		var model = PathTraversal.create(Json5Map.ofString("{a:['x','y','z']}"));
 		List<String> v = model.get("a", LinkedList.class, String.class);
-		assertEquals(3, v.size());
+		assertSize(3, v);
 		assertEquals("x", v.get(0));
 		assertEquals("z", v.get(2));
 	}
@@ -759,7 +756,7 @@ class PathTraversal_Test extends TestBase {
 	@Test void g02_getParameterized_mapOfStrings() {
 		var model = PathTraversal.create(Json5Map.ofString("{a:{x:'1',y:'2'}}"));
 		Map<String,Integer> v = model.get("a", TreeMap.class, String.class, Integer.class);
-		assertEquals(2, v.size());
+		assertSize(2, v);
 		assertEquals(Integer.valueOf(1), v.get("x"));
 	}
 
@@ -781,7 +778,7 @@ class PathTraversal_Test extends TestBase {
 		var model = PathTraversal.create(Json5Map.ofString("{a:['x','y']}"));
 		var def = new LinkedList<String>();
 		List<String> v = model.getWithDefault("a", def, LinkedList.class, String.class);
-		assertEquals(2, v.size());
+		assertSize(2, v);
 		assertEquals("x", v.get(0));
 	}
 
@@ -1015,7 +1012,7 @@ class PathTraversal_Test extends TestBase {
 		var prev = model.delete("l/1");
 		assertEquals("b", prev);
 		var l = (List<?>)model.get("l");
-		assertEquals(2, l.size());
+		assertSize(2, l);
 		assertEquals("a", l.get(0));
 		assertEquals("c", l.get(1));
 	}
@@ -1207,7 +1204,7 @@ class PathTraversal_Test extends TestBase {
 		model.post(null, "x");
 		model.post("/", "y");
 		var l = (List<?>)model.getRootObject();
-		assertEquals(2, l.size());
+		assertSize(2, l);
 		assertEquals("x", l.get(0));
 		assertEquals("y", l.get(1));
 	}
@@ -1222,7 +1219,7 @@ class PathTraversal_Test extends TestBase {
 		model.post("user/roles", "viewer");
 		assertEquals("Bob", model.get("user/name"));
 		var roles = (List<?>)model.get("user/roles");
-		assertEquals(2, roles.size());
+		assertSize(2, roles);
 		assertEquals("editor", roles.get(0));
 		assertEquals("viewer", roles.get(1));
 	}

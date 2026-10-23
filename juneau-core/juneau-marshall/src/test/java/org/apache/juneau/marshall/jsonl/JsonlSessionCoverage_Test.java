@@ -73,7 +73,7 @@ class JsonlSessionCoverage_Test extends TestBase {
 
 		@Test void a05_collectionOfRecords() throws Exception {
 			List<?> l = JsonlParser.DEFAULT.read("{\"x\":1}\n{\"x\":2}", List.class, Bean.class);
-			assertEquals(2, l.size());
+			assertSize(2, l);
 			assertBean(l.get(0), "x", "1");
 			assertBean(l.get(1), "x", "2");
 		}
@@ -87,7 +87,7 @@ class JsonlSessionCoverage_Test extends TestBase {
 
 		@Test void a07_collectionSkipsEmbeddedBlankLines() throws Exception {
 			List<?> l = JsonlParser.DEFAULT.read("{\"x\":1}\n\n   \n{\"x\":2}\n", List.class, Bean.class);
-			assertEquals(2, l.size());
+			assertSize(2, l);
 			assertBean(l.get(0), "x", "1");
 			assertBean(l.get(1), "x", "2");
 		}

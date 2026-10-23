@@ -271,7 +271,7 @@ class CardAssetDependencies_Test extends TestBase {
 	@Test void e01_initJquery_skipsPackJquery() {
 		var holder = new String[1];
 		var records = LogRecordCapture.quietly(ToolkitPackRegistry.class, () -> holder[0] = get(Host.class, "dup-init"));
-		assertEquals(1, records.size(), records::toString);
+		assertSize(records::toString, 1, records);
 		var body = holder[0];
 		assertEquals(1, count(body, "jquery.min.js"), () -> body);
 		assertTrue(body.contains("/app/static/jquery.min.js"), () -> body);

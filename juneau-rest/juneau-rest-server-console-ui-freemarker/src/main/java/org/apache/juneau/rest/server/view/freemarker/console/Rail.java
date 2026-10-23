@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.rest.server.view.freemarker.console;
 
+import static org.apache.juneau.commons.utils.CollectionUtils.*;
+
 import java.util.*;
 
 /**
@@ -96,10 +98,7 @@ public final class Rail {
 	/** @return The rail JSON. */
 	Map<String,Object> toMap() {
 		var list = sections.stream().map(Section::toMap).toList();
-		var m = new LinkedHashMap<String,Object>();
-		m.put("side", side);
-		m.put("width", width);
-		m.put("sections", list);
+		Map<String,Object> m = map("side", side, "width", width, "sections", list);
 		return m;
 	}
 }

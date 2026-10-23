@@ -154,7 +154,7 @@ public class UsersRest extends PetstoreConsolePage {
 		var actor = ConsoleWrites.actor(req);
 		var f = fields(body);
 		var username = f.getString("username");
-		if (username == null || username.isBlank())
+		if (ib(username))
 			throw new BadRequest("Username must not be blank");
 		if (store().getUser(username) != null)
 			throw new Conflict("User '%s' already exists", username);
@@ -222,7 +222,7 @@ public class UsersRest extends PetstoreConsolePage {
 
 	private static UserStatus status(JsonMap f, UserStatus dflt) {
 		var s = f.getString("userStatus");
-		if (s == null || s.isBlank())
+		if (ib(s))
 			return dflt;
 		try {
 			return UserStatus.valueOf(s);

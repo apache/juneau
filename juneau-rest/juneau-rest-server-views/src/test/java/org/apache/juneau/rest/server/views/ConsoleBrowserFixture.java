@@ -17,6 +17,7 @@
 package org.apache.juneau.rest.server.views;
 
 import static java.nio.charset.StandardCharsets.*;
+import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
@@ -248,10 +249,11 @@ final class ConsoleBrowserFixture {
 		assertEquals(0, queries.length % 2, "queries are key/selector pairs");
 		var path = url.substring(ORIGIN.length());
 		var q = path.indexOf('?');
-		var c = new LinkedHashMap<String,Object>();
-		c.put("name", caseName);
-		c.put("url", url);
-		c.put("pages", Map.of(q < 0 ? path : path.substring(0, q), Map.of("type", "text/html", "body", html)));
+		Map<String,Object> c = map(
+			"name", caseName,
+			"url", url,
+			"pages", Map.of(q < 0 ? path : path.substring(0, q), Map.of("type", "text/html", "body", html))
+		);
 		var qm = new LinkedHashMap<String,String>();
 		for (var i = 0; i < queries.length; i += 2)
 			qm.put(queries[i], queries[i + 1]);
@@ -265,10 +267,7 @@ final class ConsoleBrowserFixture {
 	Map<String,Map<String,Object>> run() throws Exception {
 		var dir = Path.of(requiredProperty("juneau.jsTests.dir"));
 		var harness = Path.of(requiredProperty("juneau.jsTests.harness")).getParent().resolve("console-shell.cjs");
-		var spec = new LinkedHashMap<String,Object>();
-		spec.put("assets", assets);
-		spec.put("sequences", sequences);
-		spec.put("cases", cases);
+		Map<String,Object> spec = map("assets", assets, "sequences", sequences, "cases", cases);
 		var file = Files.createDirectories(dir.resolve("fixtures")).resolve("console-" + name + ".json");
 		Files.writeString(file, Json.of(spec), UTF_8);
 

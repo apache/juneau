@@ -15,9 +15,9 @@
  * limitations under the License.
  */
 /**
- * Test helpers for console pages: {@link org.apache.juneau.rest.server.console.test.PageContractAssert} asserts on the
+ * Test helpers for console pages: {@link org.apache.juneau.rest.server.console.test.PageContractAssert PageContractAssert} asserts on the
  * {@code #juneau-page} contract of a rendered page instead of on rendered chrome HTML, and
- * {@link org.apache.juneau.rest.server.console.test.AssetResolutionAssert} asserts that every asset a page links resolves.
+ * {@link org.apache.juneau.rest.server.console.test.AssetResolutionAssert AssetResolutionAssert} asserts that every asset a page links resolves.
  *
  * <p>
  * Main scope on purpose: adopters already depend on {@code juneau-rest-server-console-ui}. The package has no

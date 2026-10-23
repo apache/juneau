@@ -52,7 +52,7 @@ public class PopoverField {
 	 * @return A new {@link PopoverField}.
 	 */
 	public static PopoverField of(String data) {
-		if (data == null || data.isBlank())
+		if (ib(data))
 			throw iaex("PopoverField data must not be null or blank.");
 		var f = new PopoverField();
 		f.data = data;

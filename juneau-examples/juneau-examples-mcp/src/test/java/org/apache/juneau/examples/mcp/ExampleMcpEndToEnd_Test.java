@@ -118,7 +118,7 @@ class ExampleMcpEndToEnd_Test extends TestBase {
 	@Test
 	void b04_listResourceTemplates_exposesRegisteredTemplate() throws Exception {
 		var templates = client.listResourceTemplates().getResourceTemplates();
-		assertEquals(1, templates.size());
+		assertSize(1, templates);
 		assertBean(templates.get(0), "name,uriTemplate", "note,note:///{title}");
 	}
 
@@ -131,7 +131,7 @@ class ExampleMcpEndToEnd_Test extends TestBase {
 
 		var read = client.readResource(NoteStore.uriFor("groceries"));
 		var contents = read.getContents();
-		assertEquals(1, contents.size());
+		assertSize(1, contents);
 		assertEquals("Milk, eggs, bread", ((TextResourceContents)contents.get(0)).getText());
 	}
 
@@ -139,7 +139,7 @@ class ExampleMcpEndToEnd_Test extends TestBase {
 	void c02_readIndex_listsPublishedNoteTitle() throws Exception {
 		client.callTool("publishNote", Map.of("title", "index-check", "body", "x"));
 		var contents = client.readResource(NoteStore.SCHEME + "index").getContents();
-		assertEquals(1, contents.size());
+		assertSize(1, contents);
 		assertTrue(((TextResourceContents)contents.get(0)).getText().contains("index-check"));
 	}
 
@@ -160,7 +160,7 @@ class ExampleMcpEndToEnd_Test extends TestBase {
 		client.callTool("publishNote", Map.of("title", "prompt-note", "body", "Milk, eggs, bread"));
 		var prompt = client.getPrompt("summarize", Map.of("title", "prompt-note"));
 		var messages = prompt.getMessages();
-		assertEquals(1, messages.size());
+		assertSize(1, messages);
 		assertEquals(Role.USER, messages.get(0).getRole());
 		assertTrue(((TextContent)messages.get(0).getContent()).getText().contains("Milk, eggs, bread"));
 	}

@@ -17,6 +17,7 @@
 package org.apache.juneau.marshall.prototext;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 
 import java.util.*;
 
@@ -68,7 +69,7 @@ class PrototextParser_Test {
 		var a = PrototextParser.DEFAULT.read("ports: [8080, 8443, 9090]", JsonMap.class);
 		var list = a.getList("ports");
 		assertNotNull(list);
-		assertEquals(3, list.size());
+		assertSize(3, list);
 		assertEquals(8080L, list.get(0));
 		assertEquals(8443L, list.get(1));
 		assertEquals(9090L, list.get(2));
@@ -81,7 +82,7 @@ class PrototextParser_Test {
 			JsonMap.class);
 		var list = a.getList("servers");
 		assertNotNull(list);
-		assertEquals(2, list.size());
+		assertSize(2, list);
 		assertEquals("alpha", ((Map<?,?>) list.get(0)).get("host"));
 		assertEquals("beta", ((Map<?,?>) list.get(1)).get("host"));
 	}

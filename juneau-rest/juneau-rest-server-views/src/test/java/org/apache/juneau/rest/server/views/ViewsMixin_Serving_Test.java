@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.server.views;
 
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
@@ -300,7 +301,7 @@ class ViewsMixin_Serving_Test extends TestBase {
 			assertNull(ViewsMixin.class.getResourceAsStream("/org/apache/juneau/views/" + name),
 				() -> name + ": still present at the old views coordinates - the move left a copy behind");
 			var found = java.util.Collections.list(ViewsMixin.class.getClassLoader().getResources("org/apache/juneau/widgets/" + name));
-			assertEquals(1, found.size(), () -> name + ": expected exactly one classpath entry, found " + found);
+			assertSize(() -> name + ": expected exactly one classpath entry, found " + found, 1, found);
 		}
 	}
 
@@ -654,7 +655,7 @@ class ViewsMixin_Serving_Test extends TestBase {
 			.getContent().asString();
 		assertTrue(body.contains("juneau-sym-copy"), body);
 		assertTrue(body.contains("viewBox=\"0 -960 960 960\""), body);
-		assertFalse(body.contains("slds-"), body);
+		DualHatGuard.assertClean(body);
 		assertFalse(body.contains("icon-overrides"), body);
 	}
 
@@ -1199,7 +1200,6 @@ class ViewsMixin_Serving_Test extends TestBase {
 		assertTrue(focusRegion.contains("box-shadow: none"), focusRegion);
 		assertTrue(body.contains("--jc-chrome-control-focus-border: var(--jc-accent);"), body);
 		assertTrue(focusRegion.contains("border-color: var(--jc-chrome-control-focus-border)"), focusRegion);
-		assertFalse(focusRegion.contains("#1589EE"), focusRegion);
 		assertFalse(focusRegion.contains("outline-offset"), focusRegion);
 		assertFalse(focusRegion.contains("2px"), focusRegion);
 	}

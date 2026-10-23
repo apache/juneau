@@ -17,6 +17,7 @@
 package org.apache.juneau.rest.server.auth;
 
 import static org.apache.juneau.commons.utils.Shorts.*;
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
@@ -71,7 +72,7 @@ class AuthenticationException_Test extends TestBase {
 		var matches = ex.getHeaders().stream()
 			.filter(h -> eqic("WWW-Authenticate", h.getName()))
 			.toList();
-		Assertions.assertEquals(1, matches.size(), "expected one WWW-Authenticate header");
+		assertSize(() -> "expected one WWW-Authenticate header", 1, matches);
 		Assertions.assertEquals("Bearer realm=\"two\"", matches.get(0).getValue());
 	}
 }

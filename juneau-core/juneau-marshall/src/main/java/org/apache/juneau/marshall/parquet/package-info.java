@@ -20,7 +20,7 @@
  *
  * <p>
  * Parquet is a columnar binary format for analytics and data pipelines. This package provides
- * {@link org.apache.juneau.marshall.parquet.ParquetSerializer} and {@link org.apache.juneau.marshall.parquet.ParquetParser}
+ * {@link org.apache.juneau.marshall.parquet.ParquetSerializer ParquetSerializer} and {@link org.apache.juneau.marshall.parquet.ParquetParser ParquetParser}
  * for reading and writing Parquet files, and {@link org.apache.juneau.marshall.marshaller.Parquet} as a
  * convenience marshaller.
  *

@@ -29,7 +29,7 @@ import org.apache.juneau.rest.server.servlet.*;
 import org.junit.jupiter.api.*;
 
 /**
- * Phase 2 regression matrix &mdash; verifies that {@code @Rest(encoders=...)} on a mixin class inherits the host's
+ * Verifies that {@code @Rest(encoders=...)} on a mixin class inherits the host's
  * encoder set via the {@link RestContext#getRestAnnotationsForProperty(String) annotation-property walk}.
  *
  * <p>

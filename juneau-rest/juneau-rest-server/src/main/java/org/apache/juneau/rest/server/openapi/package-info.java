@@ -15,8 +15,8 @@
  * limitations under the License.
  */
 /**
- * Server-side OpenAPI 3.1 emission — the {@link org.apache.juneau.rest.server.openapi.OpenApiProvider} SPI
- * and the {@link org.apache.juneau.rest.server.openapi.BasicOpenApiProvider} default implementation that
+ * Server-side OpenAPI 3.1 emission — the {@link org.apache.juneau.rest.server.openapi.OpenApiProvider OpenApiProvider} SPI
+ * and the {@link org.apache.juneau.rest.server.openapi.BasicOpenApiProvider BasicOpenApiProvider} default implementation that
  * walks an {@link org.apache.juneau.rest.server.RestContext} and produces an
  * {@link org.apache.juneau.bean.openapi3.OpenApi} document.
  *

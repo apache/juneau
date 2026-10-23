@@ -40,7 +40,7 @@ import org.junit.jupiter.api.*;
  * 	<li>A {@link ProblemMapper} for {@code BasicHttpException} replaces the default
  * 		{@code ProblemAdapters.fromException(...)} adaptation.
  * 	<li>When no mapper matches, the default {@code ProblemAdapters.fromException(BasicHttpException)} fallback is
- * 		still used (Phase 1 regression bar).
+ * 		still used (regression bar).
  * 	<li>The localization seam: a registered {@link ProblemLocalizationStrategy} is consulted, and a no-op default
  * 		passes the {@link Problem} through unchanged.
  * </ul>
@@ -151,7 +151,7 @@ class ProblemMapper_Test extends TestBase {
 
 	// -----------------------------------------------------------------------------------------------------------------
 	// C: Default fallback path — with no registered mapper, ProblemAdapters.fromException is still used.
-	//    (Phase 1 regression bar: the new mapper-discovery path doesn't displace the default adapter.)
+	//    (regression bar: the new mapper-discovery path doesn't displace the default adapter.)
 	// -----------------------------------------------------------------------------------------------------------------
 
 	@Rest(problemDetails="true")

@@ -26,7 +26,7 @@ import org.apache.juneau.rest.server.servlet.*;
 import org.junit.jupiter.api.*;
 
 /**
- * Phase 2 regression matrix &mdash; verifies that {@code @Rest(guards=...)} on a mixin class inherits the host's
+ * Verifies that {@code @Rest(guards=...)} on a mixin class inherits the host's
  * guard chain by default (security-conservative default: surprises around security err on "too strict") and that
  * {@code noInherit="guards"} removes host guards from the mixin context.
  *

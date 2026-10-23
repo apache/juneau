@@ -17,6 +17,7 @@
 package org.apache.juneau.marshall.prototext;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 
 import java.util.*;
 
@@ -82,7 +83,7 @@ class PrototextParserSession_Test extends TestBase {
 		var r = PrototextParser.DEFAULT.read("items: [{name: \"a\"}, {name: \"b\"}]", JsonMap.class);
 		var items = (List<?>) r.get("items");
 		assertNotNull(items);
-		assertEquals(2, items.size());
+		assertSize(2, items);
 	}
 
 	@Test void b05_readFieldNameAsInteger() throws Exception {
@@ -96,7 +97,7 @@ class PrototextParserSession_Test extends TestBase {
 		var r = PrototextParser.DEFAULT.read("tag: \"a\"\ntag: \"b\"\ntag: \"c\"", JsonMap.class);
 		var v = r.get("tag");
 		assertInstanceOf(List.class, v);
-		assertEquals(3, ((List<?>) v).size());
+		assertSize(3, ((List<?>) v));
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -195,7 +196,7 @@ class PrototextParserSession_Test extends TestBase {
 		// convertValue: val instanceof List → isCollectionOrArray → result list
 		var r = PrototextParser.DEFAULT.read("tags: [\"a\", \"b\", \"c\"]", BeanWithTagsProp.class);
 		assertNotNull(r.tags);
-		assertEquals(3, r.tags.size());
+		assertSize(3, r.tags);
 	}
 
 	@Test void d06_readListAsArrayProperty() throws Exception {

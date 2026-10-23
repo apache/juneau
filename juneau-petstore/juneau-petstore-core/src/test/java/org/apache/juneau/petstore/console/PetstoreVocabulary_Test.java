@@ -17,6 +17,7 @@
 package org.apache.juneau.petstore.console;
 
 import static java.nio.charset.StandardCharsets.*;
+import static org.apache.juneau.commons.utils.Shorts.f;
 import static org.apache.juneau.petstore.console.PetstoreConsoleFixture.*;
 import static org.apache.juneau.test.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -81,7 +82,7 @@ class PetstoreVocabulary_Test extends TestBase {
 		var bad = new ArrayList<String>();
 		for (var f : scannedFiles())
 			for (var h : hits(Files.readString(f, UTF_8)))
-				bad.add(String.format("Petstore vocabulary gate: '%s' contains disallowed term '%s'", f, h));
+				bad.add(f("Petstore vocabulary gate: '%s' contains disallowed term '%s'", f, h));
 		assertEmpty(bad);
 	}
 

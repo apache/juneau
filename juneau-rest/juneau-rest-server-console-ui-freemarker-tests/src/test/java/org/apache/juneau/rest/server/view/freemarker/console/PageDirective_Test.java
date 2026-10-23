@@ -144,7 +144,7 @@ class PageDirective_Test extends TestBase {
 		assertPage(body).isValid().hasCardOrder("jc-seg-1")
 			.templateContains("jc-seg-1", "<p class=\"naked-html\">hello</p>");
 		assertFalse(body.contains("<main"), () -> body);
-		assertFalse(body.contains("slds-"), "dual-hat: no slds-* in page output");
+		DualHatGuard.assertClean(body);
 	}
 
 	@Test void a02_tab_init_css_areEmittedGenerically() throws Exception {
@@ -207,7 +207,7 @@ class PageDirective_Test extends TestBase {
 		// No table card: no glue, no DataTables, no jQuery.
 		assertFalse(body.toLowerCase().contains("datatables"), () -> body);
 		assertFalse(body.contains("/webjars/jquery/"), () -> body);
-		assertFalse(body.contains("slds-"), () -> body);
+		DualHatGuard.assertClean(body);
 	}
 
 	@Test void a05d_toolkitViews_emitsBusFirst_beforeEveryBusConsumer() throws Exception {

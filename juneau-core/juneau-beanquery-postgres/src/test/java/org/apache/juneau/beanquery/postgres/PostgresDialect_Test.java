@@ -640,7 +640,7 @@ class PostgresDialect_Test {
 		var f = compile(ctx, new BeanQuery().setSearch("createdAt=$gt(-24h)"));
 		assertTrue(f.sql().endsWith(" > ?"), f.sql());
 		assertFalse(f.sql().toLowerCase().contains("interval") || f.sql().toLowerCase().contains("now()"), f.sql());
-		assertEquals(1, f.binds().size());
+		assertSize(1, f.binds());
 		assertInstanceOf(java.time.OffsetDateTime.class, f.binds().get(0));
 	}
 
@@ -651,7 +651,7 @@ class PostgresDialect_Test {
 		var rel = compile(ctx, new BeanQuery().setSearch("createdAt=$gt(-24h)"));
 		assertEquals(rel.sql(), iso.sql());
 		assertFalse(iso.sql().toLowerCase().contains("interval") || iso.sql().toLowerCase().contains("now()"), iso.sql());
-		assertEquals(1, iso.binds().size());
+		assertSize(1, iso.binds());
 		assertInstanceOf(java.time.OffsetDateTime.class, iso.binds().get(0));
 	}
 }

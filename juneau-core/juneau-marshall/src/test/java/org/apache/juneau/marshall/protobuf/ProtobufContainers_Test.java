@@ -19,6 +19,7 @@ package org.apache.juneau.marshall.protobuf;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 
 import java.util.*;
 
@@ -124,7 +125,7 @@ class ProtobufContainers_Test extends TestBase {
 	void a05_repeatedBeanRoundTrip() throws Exception {
 		var bytes = ProtobufSerializer.DEFAULT.write(new BeanList(list(new Inner(1), new Inner(2))));
 		var p = ProtobufParser.DEFAULT.read(bytes, BeanList.class);
-		assertEquals(2, p.items.size());
+		assertSize(2, p.items);
 		assertEquals(1, p.items.get(0).id);
 		assertEquals(2, p.items.get(1).id);
 	}

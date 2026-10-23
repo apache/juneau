@@ -16,7 +16,9 @@
  */
 package org.apache.juneau.marshall.xml;
 
+import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 
 import java.util.*;
 
@@ -81,12 +83,12 @@ class XmlSerializerSession_BranchCoverage_Test extends TestBase {
 
 	/** List serializes to XML and round-trips via JsonList. */
 	@Test void a04_list() {
-		var list = new ArrayList<>(Arrays.asList("alpha", "beta", "gamma"));
+		var list = list("alpha", "beta", "gamma");
 		var xml = SER.write(list);
 		assertNotNull(xml);
 		assertTrue(xml.contains("alpha"), "Expected alpha in: " + xml);
 		var parsed = PAR.read(xml, JsonList.class);
-		assertEquals(3, parsed.size());
+		assertSize(3, parsed);
 	}
 
 	/** Empty bean serializes to an element with no children and round-trips. */
@@ -118,7 +120,7 @@ class XmlSerializerSession_BranchCoverage_Test extends TestBase {
 		var xml = SER.write(arr);
 		assertNotNull(xml);
 		var parsed = PAR.read(xml, JsonList.class);
-		assertEquals(3, parsed.size());
+		assertSize(3, parsed);
 	}
 
 	/** trimStrings=true strips whitespace around string values during serialization. */
@@ -291,7 +293,12 @@ class XmlSerializerSession_BranchCoverage_Test extends TestBase {
 	// f - DelegateList serialization (lines 693-709)
 	// ------------------------------------------------------------------------------------------------------------------
 
-	@Test @SuppressWarnings({"unchecked","rawtypes"}) void f01_delegateList() {
+	@Test
+	@SuppressWarnings({
+		"rawtypes", // ClassMeta is cast to its raw type to build the DelegateList.
+		"unchecked" // The raw ClassMeta is passed to the generic DelegateList constructor.
+	})
+	void f01_delegateList() {
 		var ctx = XmlSerializer.DEFAULT.getMarshallingContext();
 		var cm = (org.apache.juneau.marshall.ClassMeta) ctx.getClassMeta(List.class, String.class);
 		var dl = new org.apache.juneau.marshall.internal.DelegateList<>(cm);

@@ -18,7 +18,7 @@
  * PostgreSQL support for the Juneau {@code BeanQuery} SQL engine.
  *
  * <p>
- * This package holds exactly one type, {@link org.apache.juneau.beanquery.postgres.PostgresDialect}, the
+ * This package holds exactly one type, {@link org.apache.juneau.beanquery.postgres.PostgresDialect PostgresDialect}, the
  * {@code SqlDialect} Juneau ships out of the box.  It lives in its own package (and its own artifact,
  * {@code juneau-beanquery-postgres}) rather than inside {@code org.apache.juneau.commons.beanquery} - the dialect-
  * agnostic engine and the commons search-expression model must never depend on a specific dialect.

@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.rest.server.console;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
+
 import java.util.*;
 import java.util.regex.*;
 
@@ -101,7 +103,7 @@ public final class Topics {
 	 * @throws IllegalArgumentException E-45 when {@code ns} is blank; E-40 when a part is malformed.
 	 */
 	public static String custom(String ns, String name) {
-		if (ns == null || ns.isBlank())
+		if (ib(ns))
 			throw iae(E45_NAMESPACE, name, name);
 		var t = ns + "." + name;
 		if (! TOPIC_DECL.matcher(t).matches())
@@ -153,6 +155,6 @@ public final class Topics {
 	}
 
 	static IllegalArgumentException iae(String format, Object... args) {
-		return new IllegalArgumentException(String.format(format, args));
+		return new IllegalArgumentException(f(format, args));
 	}
 }

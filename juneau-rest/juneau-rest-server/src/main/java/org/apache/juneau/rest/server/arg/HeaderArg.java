@@ -53,8 +53,8 @@ import org.apache.juneau.rest.server.*;
  * 	<li class='jc'>{@link ContentEncoding}
  * 	<li class='jc'>{@link ContentLength}
  * 	<li class='jc'>{@link ContentType}
- * 	<li class='jc'>{@link org.apache.juneau.http.header.Date}
- * 	<li class='jc'>{@link org.apache.juneau.http.header.Debug}
+ * 	<li class='jc'>{@link java.util.Date}
+ * 	<li class='jc'>{@link Debug}
  * 	<li class='jc'>{@link Expect}
  * 	<li class='jc'>{@link Forwarded}
  * 	<li class='jc'>{@link From}

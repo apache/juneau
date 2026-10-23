@@ -18,16 +18,16 @@
  * Run-view events and the readers that produce them from test-report files.
  *
  * <p>
- * A {@link org.apache.juneau.rest.server.runreport.RunEvent} is one event of a run-view stream (a step, a suite
- * summary, a test, a note, ...).  Each {@link org.apache.juneau.rest.server.runreport.ReportReader} reads one report
+ * A {@link org.apache.juneau.rest.server.runreport.RunEvent RunEvent} is one event of a run-view stream (a step, a suite
+ * summary, a test, a note, ...).  Each {@link org.apache.juneau.rest.server.runreport.ReportReader ReportReader} reads one report
  * format (Surefire and JUnit XML, Jest JSON, Playwright JSON) into a
- * {@link org.apache.juneau.rest.server.runreport.ReportResult}, whose {@code toEvents(step)} yields the
+ * {@link org.apache.juneau.rest.server.runreport.ReportResult ReportResult}, whose {@code toEvents(step)} yields the
  * {@code replace}, {@code test} and {@code note} events a producer appends to a run view when a step ends.  A reader
  * never throws for bad input: a missing, oversize, malformed or truncated file yields the tests that could be
  * recovered plus a warning.
  *
  * <p>
- * Use {@link org.apache.juneau.rest.server.runreport.ReportReaders#forKind(java.lang.String)} to pick a reader by
+ * Use {@link org.apache.juneau.rest.server.runreport.ReportReaders#forKind(java.lang.String) ReportReaders#forKind(java.lang.String)} to pick a reader by
  * its report kind.
  *
  * <p>

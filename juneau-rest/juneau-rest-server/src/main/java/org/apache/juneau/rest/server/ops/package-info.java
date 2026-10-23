@@ -27,15 +27,15 @@
  * </p>
  *
  * <ul class='javatreec'>
- * 	<li class='jc'>{@link org.apache.juneau.rest.server.ops.EchoMixin} —
+ * 	<li class='jc'>{@link org.apache.juneau.rest.server.ops.EchoMixin EchoMixin} —
  * 		{@code /echo/*} request echo (SVL-configurable mount); sensitive headers
  * 		({@code Authorization}, {@code Cookie}, etc.) are redacted by default.
- * 	<li class='jc'>{@link org.apache.juneau.rest.server.ops.AdminMixin} —
+ * 	<li class='jc'>{@link org.apache.juneau.rest.server.ops.AdminMixin AdminMixin} —
  * 		{@code /admin/threads}, {@code /admin/heap}, {@code /admin/cache/flush} (POST), and
  * 		{@code /admin/ratelimit}; default-deny via
  * 		{@link org.apache.juneau.rest.server.guard.DenyAllGuard} until the importer registers an
  * 		{@code @Bean RestGuardList} factory.
- * 	<li class='jc'>{@link org.apache.juneau.rest.server.ops.RouteIndexMixin} —
+ * 	<li class='jc'>{@link org.apache.juneau.rest.server.ops.RouteIndexMixin RouteIndexMixin} —
  * 		{@code /options} (SVL-configurable mount) returning a JSON list of every
  * 		{@code @RestOp}-annotated method on the host (plus mixins), excluding
  * 		{@code @OpSwagger(ignore=true)} ops.

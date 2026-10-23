@@ -18,6 +18,7 @@ package org.apache.juneau.marshall;
 
 import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 
 import java.math.*;
 import java.time.*;
@@ -424,7 +425,7 @@ class MarshalledPropertyPostProcessor_Test {
 		assertNotNull(wire);
 		var p = Json5Parser.create().binaryFormat(BinaryFormat.HEX).build();
 		var back = p.read(wire, J_ListOfBytes.class);
-		assertEquals(2, back.f.size());
+		assertSize(2, back.f);
 		assertArrayEquals(new byte[] { 1, 2, 3 }, back.f.get(0));
 		assertArrayEquals(new byte[] { 4, 5, 6 }, back.f.get(1));
 	}

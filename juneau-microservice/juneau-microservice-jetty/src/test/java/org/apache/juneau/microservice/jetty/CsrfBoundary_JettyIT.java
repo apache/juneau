@@ -329,7 +329,7 @@ class CsrfBoundary_JettyIT extends TestBase {
 	}
 
 	/**
-	 * Lock for J0802: with the container's {@link ForwardedRequestCustomizer} and the default {@code HOST_HEADER}, the
+	 * Locks in that, with the container's {@link ForwardedRequestCustomizer} and the default {@code HOST_HEADER}, the
 	 * customizer, not the boundary, decides.  A forwarded host makes the request's own origin, and the boundary reads no
 	 * forwarded header itself.
 	 */

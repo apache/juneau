@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.commons.reflect;
 
+import static org.apache.juneau.commons.TestAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
@@ -224,7 +225,7 @@ class TypeVariables_Test extends TestBase {
 
 	@Test
 	void b12_size_reflectsMapSize() {
-		assertEquals(0, TypeVariables.empty().size());
+		assertSize(0, TypeVariables.empty());
 		assertTrue(TypeVariables.of(BeanB.class).size() >= 1);
 	}
 

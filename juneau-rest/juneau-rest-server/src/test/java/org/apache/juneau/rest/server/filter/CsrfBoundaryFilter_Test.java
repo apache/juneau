@@ -336,7 +336,9 @@ class CsrfBoundaryFilter_Test extends TestBase {
 		verify(req, never()).setAttribute(eq(RequestBoundaryFilter.TOKEN_SUPPLIER_ATTRIBUTE), any());
 	}
 
-	@SuppressWarnings("resource") // verify(...).getWriter() only checks that the mock was never asked for a writer; nothing is opened.
+	@SuppressWarnings({
+		"resource" // verify(...).getWriter() only checks that the mock was never asked for a writer; nothing is opened.
+	})
 	@Test void a12_rejectionProducedWithBrokenSerializers() throws Exception {
 		// No REST context, serializer or writer exists here: the refusal is built and written as bytes by the filter.
 		var c = run(filter(), build(r("POST", "http", HOST, EVIL, "Content-Type", JSON)), mock(FilterChain.class));

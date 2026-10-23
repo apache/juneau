@@ -58,7 +58,7 @@ public final class PopulatorAllowlist {
 	 * @throws IllegalArgumentException If the name is neither a built-in nor an opted-in name.
 	 */
 	public static void assertAllowed(String populatorName, Collection<String> allowedNames) {
-		if (populatorName == null || populatorName.isBlank())
+		if (ib(populatorName))
 			throw iaex("Populator name must not be null or blank.");
 		if (BUILTIN_IDS.contains(populatorName))
 			return;

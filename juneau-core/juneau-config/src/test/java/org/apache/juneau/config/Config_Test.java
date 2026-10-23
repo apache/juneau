@@ -1773,7 +1773,7 @@ class Config_Test extends TestBase {
 		assertEquals("a", entry.getKey());
 		assertEquals("my comment", entry.getComment());
 		assertEquals("*", entry.getModifiers());
-		assertEquals(1, entry.getPreLines().size());
+		assertSize(1, entry.getPreLines());
 		assertEquals("#preline", entry.getPreLines().get(0));
 		assertNotNull(entry.getValue());
 	}

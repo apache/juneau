@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.server.view.freemarker.console;
 
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
@@ -73,7 +74,7 @@ class ChartDef_Action_Test extends TestBase {
 	@Test void a04_onTopicAction_declaredTopic_writesTopicActions() {
 		var m = body(chart().on("markclick", "pet.selected").onTopicAction("pet.selected", requeue()));
 		var ta = (List<?>)m.get("topicActions");
-		assertEquals(1, ta.size());
+		assertSize(1, ta);
 		assertEquals("pet.selected", ((Map<?,?>)ta.get(0)).get("topic"));
 		assertEquals("requeue", ((Map<?,?>)((Map<?,?>)ta.get(0)).get("action")).get("id"));
 	}
@@ -141,7 +142,7 @@ class ChartDef_Action_Test extends TestBase {
 	@Test void a15_actions_roundTrip_andAccumulateAcrossCalls() {
 		var m = body(chart().actions(dlg("a")).actions(dlg("b"), dlg("c")));
 		var l = (List<?>)m.get("actions");
-		assertEquals(3, l.size());
+		assertSize(3, l);
 		assertEquals("a", ((Map<?,?>)l.get(0)).get("id"));
 		assertEquals("c", ((Map<?,?>)l.get(2)).get("id"));
 	}

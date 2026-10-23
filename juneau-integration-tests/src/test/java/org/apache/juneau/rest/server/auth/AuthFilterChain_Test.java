@@ -17,6 +17,7 @@
 package org.apache.juneau.rest.server.auth;
 
 import static org.apache.juneau.commons.utils.Shorts.*;
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
@@ -161,7 +162,7 @@ class AuthFilterChain_Test extends TestBase {
 			.build();
 		var capturing = new CapturingChain();
 		var records = LogRecordCapture.quietly(AuthResultAccumulator.class, () -> doFilter(chain, capturing));
-		assertEquals(1, records.size());
+		assertSize(1, records);
 		var w = (AuthenticatedRequestWrapper) capturing.captured;
 		// ALICE registered first — her principal must win
 		assertSame(ALICE, w.getUserPrincipal());
@@ -174,7 +175,7 @@ class AuthFilterChain_Test extends TestBase {
 			.build();
 		var capturing = new CapturingChain();
 		var records = LogRecordCapture.quietly(AuthResultAccumulator.class, () -> doFilter(chain, capturing));
-		assertEquals(1, records.size());
+		assertSize(1, records);
 		var w = (AuthenticatedRequestWrapper) capturing.captured;
 		// Bob is a distinct principal from alice — his roles must NOT be unioned onto alice's identity.
 		assertTrue(w.isUserInRole("user"));

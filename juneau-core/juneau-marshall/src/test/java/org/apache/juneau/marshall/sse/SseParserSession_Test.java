@@ -62,7 +62,7 @@ class SseParserSession_Test {
 		// "type.isCollectionOrArray()" branch (not the dedicated "List.class.isAssignableFrom(...)"
 		// check further down, which is unreachable dead code -- see the HTT marker at that line).
 		List<SseEvent> v = (List<SseEvent>) SseParser.DEFAULT.read(WIRE, List.class, SseEvent.class);
-		assertEquals(1, v.size());
+		assertSize(1, v);
 		assertBean(v.get(0), "event,data,id,retry", "progress,step 1,42,1000");
 	}
 

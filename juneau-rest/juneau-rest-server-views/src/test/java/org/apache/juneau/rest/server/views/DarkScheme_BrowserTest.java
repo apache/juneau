@@ -16,7 +16,9 @@
  */
 package org.apache.juneau.rest.server.views;
 
+import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.rest.server.views.ConsoleBrowserFixture.*;
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
@@ -109,11 +111,12 @@ class DarkScheme_BrowserTest extends TestBase {
 		cards.add(new LinkedHashMap<>(Map.of("id", "kit", "type", "html", "template", "kit", "title", "Kit")));
 		if (chart)
 			cards.add((Map<String,Object>)Json.to(CHART_CARD, Map.class));
-		var c = new LinkedHashMap<String,Object>();
-		c.put("contractVersion", "1");
-		c.put("title", "Surfaces");
-		c.put("header", Map.of("title", "Console", "links", List.of(Map.of("id", "docs", "label", "Docs", "href", "/docs"))));
-		c.put("cards", cards);
+		Map<String,Object> c = map(
+			"contractVersion", "1",
+			"title", "Surfaces",
+			"header", Map.of("title", "Console", "links", List.of(Map.of("id", "docs", "label", "Docs", "href", "/docs"))),
+			"cards", cards
+		);
 		return Json.of(c);
 	}
 
@@ -633,7 +636,7 @@ class DarkScheme_BrowserTest extends TestBase {
 		for (var s : UNPARSEABLE_SURFACES) {
 			var errors = (List<String>)c.get(s[0]).get("errors");
 			assertNotNull(errors, () -> s[0] + ": no error reported: " + c.get(s[0]));
-			assertEquals(1, errors.size(), () -> s[0] + ": " + errors);
+			assertSize(() -> s[0] + ": " + errors, 1, errors);
 		}
 		assertTrue(((List<String>)c.get("p3Background").get("errors")).get(0).contains("background"), c::toString);
 		assertTrue(((List<String>)c.get("labStop").get("errors")).get(0).contains("background"), c::toString);

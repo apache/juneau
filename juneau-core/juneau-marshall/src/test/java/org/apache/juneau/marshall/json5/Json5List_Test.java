@@ -18,6 +18,7 @@ package org.apache.juneau.marshall.json5;
 
 import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 
 import java.io.*;
 import java.util.*;
@@ -49,7 +50,7 @@ class Json5List_Test extends TestBase {
 	@Test void a03_factoryOfString() throws Exception {
 		var l = Json5List.ofString("[1,'two',true]");
 		assertNotNull(l);
-		assertEquals(3, l.size());
+		assertSize(3, l);
 		assertEquals(1, l.getInt(0));
 		assertEquals("two", l.getString(1));
 		assertTrue(l.getBoolean(2));
@@ -61,7 +62,7 @@ class Json5List_Test extends TestBase {
 		assertTrue(l.isEmpty());
 		assertEquals(Json5List.class, l.getClass());
 		l.add("x");
-		assertEquals(1, l.size());
+		assertSize(1, l);
 	}
 
 	@Test void a04c_factoryOfStringNullReader() throws Exception {
@@ -70,7 +71,7 @@ class Json5List_Test extends TestBase {
 		assertTrue(l.isEmpty());
 		assertEquals(Json5List.class, l.getClass());
 		l.add("x");
-		assertEquals(1, l.size());
+		assertSize(1, l);
 	}
 
 	@Test void a04d_factoryOfStringNullCharSequenceWithParser() throws Exception {
@@ -79,7 +80,7 @@ class Json5List_Test extends TestBase {
 		assertTrue(l.isEmpty());
 		assertEquals(Json5List.class, l.getClass());
 		l.add("x");
-		assertEquals(1, l.size());
+		assertSize(1, l);
 	}
 
 	@Test void a04e_factoryOfStringNullReaderWithParser() throws Exception {
@@ -88,7 +89,7 @@ class Json5List_Test extends TestBase {
 		assertTrue(l.isEmpty());
 		assertEquals(Json5List.class, l.getClass());
 		l.add("x");
-		assertEquals(1, l.size());
+		assertSize(1, l);
 	}
 
 	@Test void a04f_factoryOfJson5OrCdlNullInput() throws Exception {
@@ -97,7 +98,7 @@ class Json5List_Test extends TestBase {
 		assertTrue(l.isEmpty());
 		assertEquals(Json5List.class, l.getClass());
 		l.add("x");
-		assertEquals(1, l.size());
+		assertSize(1, l);
 	}
 
 	@Test void a04g_factoryOfJson5OrCdlEmptyInput() throws Exception {
@@ -106,25 +107,25 @@ class Json5List_Test extends TestBase {
 		assertTrue(l.isEmpty());
 		assertEquals(Json5List.class, l.getClass());
 		l.add("x");
-		assertEquals(1, l.size());
+		assertSize(1, l);
 	}
 
 	@Test void a04b_ofTextAliasStillWorks() throws Exception {
 		var l = Json5List.ofString("[1,2,3]");
 		assertNotNull(l);
-		assertEquals(3, l.size());
+		assertSize(3, l);
 	}
 
 	@Test void a05_factoryCreateAndAppend() {
 		var l = Json5List.create().append("a").append("b");
-		assertEquals(2, l.size());
+		assertSize(2, l);
 		assertTrue(l instanceof Json5List);
 		assertEquals("a", l.getString(0));
 	}
 
 	@Test void a06_ctorCharSequenceUsesJson5Parser() throws Exception {
 		var l = new Json5List("[1,2,3]");
-		assertEquals(3, l.size());
+		assertSize(3, l);
 	}
 
 	@Test void a07b_ofStringReaderHonorsParser() throws Exception {
@@ -132,7 +133,7 @@ class Json5List_Test extends TestBase {
 		// Json5Parser allows JS comments; the strict JsonParser rejects them ("Javascript comment detected"),
 		// so honoring p makes the strict parser throw where the ignored-parser path silently succeeded.
 		var json5WithComment = "[1,/*c*/2,3]";
-		assertEquals(3, Json5List.ofString(new StringReader(json5WithComment), Json5Parser.DEFAULT).size());
+		assertSize(3, Json5List.ofString(new StringReader(json5WithComment), Json5Parser.DEFAULT));
 		var strictReader = new StringReader(json5WithComment);
 		assertThrows(ParseException.class, () -> Json5List.ofString(strictReader, JsonParser.DEFAULT));
 		// The CharSequence overload already honored p — the Reader overload now matches it.
@@ -141,7 +142,7 @@ class Json5List_Test extends TestBase {
 
 	@Test void a07_ctorReaderUsesJson5Parser() throws Exception {
 		var l = new Json5List(new StringReader("[1,2,3]"));
-		assertEquals(3, l.size());
+		assertSize(3, l);
 	}
 
 	@Test void a08_getMapReturnsJson5Map() {
@@ -170,7 +171,7 @@ class Json5List_Test extends TestBase {
 		var nested = l.getList(0);
 		assertNotNull(nested);
 		assertTrue(nested instanceof Json5List, "Expected Json5List, got " + cn(nested));
-		assertEquals(2, nested.size());
+		assertSize(2, nested);
 	}
 
 	@Test void a11_unmodifiableReturnsJson5List() {
@@ -223,13 +224,13 @@ class Json5List_Test extends TestBase {
 	@Test void a18_ofJson5OrCdl_array() throws Exception {
 		var l = Json5List.ofJson5OrCdl("[1,2,3]");
 		assertNotNull(l);
-		assertEquals(3, l.size());
+		assertSize(3, l);
 	}
 
 	@Test void a19_ofJson5OrCdl_cdl() throws Exception {
 		var l = Json5List.ofJson5OrCdl("a, b, c");
 		assertNotNull(l);
-		assertEquals(3, l.size());
+		assertSize(3, l);
 		assertEquals("a", l.getString(0));
 	}
 
@@ -276,6 +277,6 @@ class Json5List_Test extends TestBase {
 		assertThrows(UnsupportedOperationException.class, lit::remove);
 		assertThrows(UnsupportedOperationException.class, () -> lit.add("x"));
 		assertThrows(UnsupportedOperationException.class, () -> lit.set("x"));
-		assertEquals(3, l.size());
+		assertSize(3, l);
 	}
 }

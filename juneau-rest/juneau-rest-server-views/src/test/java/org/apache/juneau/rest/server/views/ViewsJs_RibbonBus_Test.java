@@ -137,7 +137,9 @@ class ViewsJs_RibbonBus_Test extends TestBase {
 		assertEquals("[[2,\"open\"],[3,\"^yes$\"]]", m.get("request"));
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Casts a parsed JSON value to its known Map/List shape.
+	})
 	static Map<String,Object> map(Object o) { return (Map<String,Object>)o; }
 
 	private static String resource(String name) throws IOException {

@@ -19,7 +19,7 @@
  * Pluggable persistence formats for the Juneau configuration store.
  *
  * <p>
- * Defines the {@link org.apache.juneau.config.format.ConfigFormat} strategy for reading and writing
+ * Defines the {@link org.apache.juneau.config.format.ConfigFormat ConfigFormat} strategy for reading and writing
  * config maps, with built-in {@link org.apache.juneau.config.format.IniConfigFormat INI} and
  * {@link org.apache.juneau.config.format.YamlConfigFormat YAML} implementations.
  */

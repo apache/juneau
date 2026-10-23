@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.rest.server.views;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
+
 import java.util.*;
 
 import org.apache.juneau.http.response.*;
@@ -98,7 +100,7 @@ public record RowJobSubmit(String action, String targetId, String idempotencyKey
 	 * @return The grant, or empty when the action differs or the key does not verify.
 	 */
 	public Optional<JobKeyLedger.Grant> verify(JobKeyLedger ledger, String expectedAction) {
-		if (! Objects.equals(action, expectedAction))
+		if (neq(action, expectedAction))
 			return Optional.empty();
 		return ledger.verify(idempotencyKey, action, targetId);
 	}
@@ -112,7 +114,7 @@ public record RowJobSubmit(String action, String targetId, String idempotencyKey
 	 * @return The grant, or empty when the action differs or the key does not verify.
 	 */
 	public Optional<JobKeyLedger.Grant> verify(JobKeyLedger ledger, String expectedAction, String principal) {
-		if (! Objects.equals(action, expectedAction))
+		if (neq(action, expectedAction))
 			return Optional.empty();
 		return ledger.verify(idempotencyKey, action, targetId, principal);
 	}

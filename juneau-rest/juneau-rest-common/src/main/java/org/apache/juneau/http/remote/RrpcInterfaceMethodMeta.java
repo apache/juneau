@@ -55,7 +55,7 @@ public final class RrpcInterfaceMethodMeta {
 
 	/**
 	 * Resolves an {@link HttpPartSerializer} class declared on an {@link HttpPartMarshalling} annotation to a cached
-	 * instance, or returns <jk>null</jk> for the {@link org.apache.juneau.marshall.httppart.HttpPartSerializer.Void} sentinel (or a <jk>null</jk> class).
+	 * instance, or returns <jk>null</jk> for the {@link org.apache.juneau.marshall.httppart.HttpPartSerializer.Void HttpPartSerializer.Void} sentinel (or a <jk>null</jk> class).
 	 *
 	 * <p>
 	 * Instances are created through {@link BeanInstantiator} (bean-store-less in the next-gen engine) and cached per

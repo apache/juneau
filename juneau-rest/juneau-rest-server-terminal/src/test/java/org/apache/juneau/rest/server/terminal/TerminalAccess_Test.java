@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.server.terminal;
 
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
@@ -49,7 +50,7 @@ class TerminalAccess_Test extends TestBase {
 			}
 		};
 		assertTrue(a.inputSink(CALLER, "t1").orElseThrow().write(new byte[]{'x'}));
-		assertEquals(1, written.size());
+		assertSize(1, written);
 		assertTrue(a.inputSink(CALLER, "t2").isEmpty());
 		assertFalse(a.canWatch(CALLER, "t2"));
 	}

@@ -61,7 +61,7 @@ public final class CsvCellParser {
 	 * @throws ParseException If the input is invalid.
 	 */
 	public static Object read(String cell, String nullMarker) throws ParseException {
-		if (cell == null || cell.isEmpty())
+		if (ie(cell))
 			return null;
 		var p = new CsvCellParser(cell, nullMarker);
 		try {

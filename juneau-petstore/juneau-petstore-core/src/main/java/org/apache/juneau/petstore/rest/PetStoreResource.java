@@ -65,7 +65,14 @@ import org.apache.juneau.rest.server.servlet.*;
 @Rest(
 	path="/petstore",
 	title="Petstore",
-	description="Apache Juneau petstore sample resource."
+	description="Apache Juneau petstore sample resource.",
+	swagger=@Swagger(
+		tags={
+			@Tag(name="pet", description="Everything about your pets"),
+			@Tag(name="store", description="Access to petstore orders"),
+			@Tag(name="user", description="Operations about users")
+		}
+	)
 )
 @SuppressWarnings({
 	"java:S110" // Inheritance depth acceptable for example/demo code
@@ -105,7 +112,7 @@ public class PetStoreResource extends BasicRestServlet {
 	 *
 	 * @return All pets.
 	 */
-	@RestGet("/pets")
+	@RestGet(path="/pets", swagger=@OpSwagger(tags="pet"))
 	public Collection<Pet> getPets() {
 		return store().getPets();
 	}
@@ -117,7 +124,7 @@ public class PetStoreResource extends BasicRestServlet {
 	 * @return The pet.
 	 * @throws NotFound If no pet with the given ID exists.
 	 */
-	@RestGet("/pets/{id}")
+	@RestGet(path="/pets/{id}", swagger=@OpSwagger(tags="pet"))
 	public Pet getPet(@Path("id") long id) {
 		var pet = store().getPet(id);
 		if (pet == null)
@@ -131,7 +138,7 @@ public class PetStoreResource extends BasicRestServlet {
 	 * @param pet The pet to create.
 	 * @return The created pet (with assigned ID).
 	 */
-	@RestPost("/pets")
+	@RestPost(path="/pets", swagger=@OpSwagger(tags="pet"))
 	public Pet createPet(@Content Pet pet) {
 		return store().createPet(pet);
 	}
@@ -144,7 +151,7 @@ public class PetStoreResource extends BasicRestServlet {
 	 * @return The updated pet.
 	 * @throws NotFound If no pet with the given ID exists.
 	 */
-	@RestPut("/pets/{id}")
+	@RestPut(path="/pets/{id}", swagger=@OpSwagger(tags="pet"))
 	public Pet updatePet(@Path("id") long id, @Content Pet pet) {
 		pet.setId(id);
 		try {
@@ -160,7 +167,7 @@ public class PetStoreResource extends BasicRestServlet {
 	 * @param id The pet ID.
 	 * @throws NotFound If no pet with the given ID exists.
 	 */
-	@RestDelete("/pets/{id}")
+	@RestDelete(path="/pets/{id}", swagger=@OpSwagger(tags="pet"))
 	public void deletePet(@Path("id") long id) {
 		try {
 			store().deletePet(id);
@@ -176,7 +183,7 @@ public class PetStoreResource extends BasicRestServlet {
 	 * @return The photo image.
 	 * @throws NotFound If no pet with the given ID exists, or no photo has been uploaded for it.
 	 */
-	@RestGet(path="/pets/{id}/photo", serializers=PetPhotoSerializer.class)
+	@RestGet(path="/pets/{id}/photo", serializers=PetPhotoSerializer.class, swagger=@OpSwagger(tags="pet"))
 	public BufferedImage getPetPhoto(@Path("id") long id) {
 		if (store().getPet(id) == null)
 			throw new NotFound("Pet not found: id=%s", id);
@@ -197,7 +204,7 @@ public class PetStoreResource extends BasicRestServlet {
 	 * @return OK.
 	 * @throws NotFound If no pet with the given ID exists.
 	 */
-	@RestPut(path="/pets/{id}/photo", parsers=PetPhotoParser.class)
+	@RestPut(path="/pets/{id}/photo", parsers=PetPhotoParser.class, swagger=@OpSwagger(tags="pet"))
 	public Ok putPetPhoto(@Path("id") long id, @Content BufferedImage image) {
 		var pet = store().getPet(id);
 		if (pet == null)
@@ -216,7 +223,7 @@ public class PetStoreResource extends BasicRestServlet {
 	 *
 	 * @return All orders.
 	 */
-	@RestGet("/orders")
+	@RestGet(path="/orders", swagger=@OpSwagger(tags="store"))
 	public Collection<Order> getOrders() {
 		return store().getOrders();
 	}
@@ -228,7 +235,7 @@ public class PetStoreResource extends BasicRestServlet {
 	 * @return The order.
 	 * @throws NotFound If no order with the given ID exists.
 	 */
-	@RestGet("/orders/{id}")
+	@RestGet(path="/orders/{id}", swagger=@OpSwagger(tags="store"))
 	public Order getOrder(@Path("id") long id) {
 		var order = store().getOrder(id);
 		if (order == null)
@@ -242,7 +249,7 @@ public class PetStoreResource extends BasicRestServlet {
 	 * @param order The order to create.
 	 * @return The created order (with assigned ID).
 	 */
-	@RestPost("/orders")
+	@RestPost(path="/orders", swagger=@OpSwagger(tags="store"))
 	public Order createOrder(@Content Order order) {
 		return store().createOrder(order);
 	}
@@ -255,7 +262,7 @@ public class PetStoreResource extends BasicRestServlet {
 	 * @return The updated order.
 	 * @throws NotFound If no order with the given ID exists.
 	 */
-	@RestPut("/orders/{id}")
+	@RestPut(path="/orders/{id}", swagger=@OpSwagger(tags="store"))
 	public Order updateOrder(@Path("id") long id, @Content Order order) {
 		order.setId(id);
 		try {
@@ -271,7 +278,7 @@ public class PetStoreResource extends BasicRestServlet {
 	 * @param id The order ID.
 	 * @throws NotFound If no order with the given ID exists.
 	 */
-	@RestDelete("/orders/{id}")
+	@RestDelete(path="/orders/{id}", swagger=@OpSwagger(tags="store"))
 	public void deleteOrder(@Path("id") long id) {
 		try {
 			store().deleteOrder(id);
@@ -289,7 +296,7 @@ public class PetStoreResource extends BasicRestServlet {
 	 *
 	 * @return All users.
 	 */
-	@RestGet("/users")
+	@RestGet(path="/users", swagger=@OpSwagger(tags="user"))
 	public Collection<User> getUsers() {
 		return store().getUsers();
 	}
@@ -301,7 +308,7 @@ public class PetStoreResource extends BasicRestServlet {
 	 * @return The user.
 	 * @throws NotFound If no user with the given username exists.
 	 */
-	@RestGet("/users/{username}")
+	@RestGet(path="/users/{username}", swagger=@OpSwagger(tags="user"))
 	public User getUser(@Path("username") String username) {
 		var user = store().getUser(username);
 		if (user == null)
@@ -315,7 +322,7 @@ public class PetStoreResource extends BasicRestServlet {
 	 * @param user The user to create.  Must carry a non-null username not already in use.
 	 * @return The created user.
 	 */
-	@RestPost("/users")
+	@RestPost(path="/users", swagger=@OpSwagger(tags="user"))
 	public User createUser(@Content User user) {
 		return store().createUser(user);
 	}
@@ -332,7 +339,7 @@ public class PetStoreResource extends BasicRestServlet {
 	 * @return The updated user.
 	 * @throws NotFound If no user with the given username exists.
 	 */
-	@RestPut("/users/{username}")
+	@RestPut(path="/users/{username}", swagger=@OpSwagger(tags="user"))
 	public User updateUser(@Path("username") String username, @Content User user) {
 		user.setUsername(username);
 		try {
@@ -348,7 +355,7 @@ public class PetStoreResource extends BasicRestServlet {
 	 * @param username The username.
 	 * @throws NotFound If no user with the given username exists.
 	 */
-	@RestDelete("/users/{username}")
+	@RestDelete(path="/users/{username}", swagger=@OpSwagger(tags="user"))
 	public void deleteUser(@Path("username") String username) {
 		try {
 			store().deleteUser(username);

@@ -17,6 +17,7 @@
 package org.apache.juneau.marshall.csv;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 
 import java.util.*;
 import java.util.stream.*;
@@ -47,7 +48,7 @@ class CsvParserSession_Test extends TestBase {
 		var p = CsvParser.create().nullValue(null).build();
 		var csv = "b,c\n<NULL>,1\nx,2\n";
 		var r = (List<A>) p.read(csv, List.class, A.class);
-		assertEquals(2, r.size());
+		assertSize(2, r);
 		assertNull(r.get(0).b);
 		assertEquals(1, r.get(0).c);
 		assertEquals("x", r.get(1).b);
@@ -69,7 +70,7 @@ class CsvParserSession_Test extends TestBase {
 		var p = CsvParser.create().byteArrayFormat(CsvByteArrayCellFormat.SEMICOLON_DELIMITED).build();
 		var csv = "name,data\nrow1,\n";
 		var r = (List<I>) p.read(csv, List.class, I.class);
-		assertEquals(1, r.size());
+		assertSize(1, r);
 		assertNotNull(r.get(0).data);
 		assertEquals(0, r.get(0).data.length);
 	}
@@ -156,7 +157,7 @@ class CsvParserSession_Test extends TestBase {
 		// readRow takes the BeanRegistry/_type branch, parses to map then casts to Circle.
 		var csv = "name,radius,_type\nc1,9,Circle\n";
 		var r = (List<Shape>) CsvParser.DEFAULT.read(csv, List.class, Shape.class);
-		assertEquals(1, r.size());
+		assertSize(1, r);
 		assertInstanceOf(Circle.class, r.get(0));
 		assertEquals("c1", r.get(0).getName());
 		assertEquals(9, ((Circle) r.get(0)).radius);
@@ -202,7 +203,7 @@ class CsvParserSession_Test extends TestBase {
 		var p = CsvParser.create().ignoreUnknownBeanProperties().build();
 		var csv = "b,c,extra\nfoo,7,ignored\n";
 		var r = (List<A>) p.read(csv, List.class, A.class);
-		assertEquals(1, r.size());
+		assertSize(1, r);
 		assertEquals("foo", r.get(0).b);
 		assertEquals(7, r.get(0).c);
 	}
@@ -212,7 +213,7 @@ class CsvParserSession_Test extends TestBase {
 		// readCellValue invoked with null val.
 		var csv = "b,c\nonly_b\n";
 		var r = (List<B>) CsvParser.DEFAULT.read(csv, List.class, B.class);
-		assertEquals(1, r.size());
+		assertSize(1, r);
 		assertEquals("only_b", r.get(0).b);
 		assertNull(r.get(0).c);
 	}
@@ -226,7 +227,7 @@ class CsvParserSession_Test extends TestBase {
 		// returning a generic map per row.
 		var csv = "a,b\n1,2\n3,4\n";
 		var r = (List<Map>) CsvParser.DEFAULT.read(csv, List.class, Object.class);
-		assertEquals(2, r.size());
+		assertSize(2, r);
 		assertEquals("1", r.get(0).get("a"));
 		assertEquals("2", r.get(0).get("b"));
 		assertEquals("3", r.get(1).get("a"));
@@ -237,7 +238,7 @@ class CsvParserSession_Test extends TestBase {
 		// In readRow Object branch, i < row.size() false case -> map gets null for missing cell.
 		var csv = "a,b\n1\n";
 		var r = (List<Map>) CsvParser.DEFAULT.read(csv, List.class, Object.class);
-		assertEquals(1, r.size());
+		assertSize(1, r);
 		assertEquals("1", r.get(0).get("a"));
 		assertNull(r.get(0).get("b"));
 	}
@@ -251,7 +252,7 @@ class CsvParserSession_Test extends TestBase {
 		// reads row.get(0), which is an empty cell; readCellValue("",String) -> null.
 		var csv = "value,other\n,x\n";
 		var r = (List<String>) CsvParser.DEFAULT.read(csv, List.class, String.class);
-		assertEquals(1, r.size());
+		assertSize(1, r);
 		assertNull(r.get(0));
 	}
 
@@ -288,7 +289,7 @@ class CsvParserSession_Test extends TestBase {
 			row1,[1;2;3],[1.5;2.5],[10;20],[true;false],[65;66;67]
 			""";
 		var r = (List<P>) CsvParser.DEFAULT.read(csv, List.class, P.class);
-		assertEquals(1, r.size());
+		assertSize(1, r);
 		assertArrayEquals(new long[]{1L, 2L, 3L}, r.get(0).longs);
 		assertArrayEquals(new float[]{1.5f, 2.5f}, r.get(0).floats);
 		assertArrayEquals(new short[]{10, 20}, r.get(0).shorts);
@@ -343,7 +344,7 @@ class CsvParserSession_Test extends TestBase {
 		// "val.isEmpty() && eType.isCharSequence()" branch when target is String.
 		var csv = "b,c\n,5\n";
 		var r = (List<B>) CsvParser.DEFAULT.read(csv, List.class, B.class);
-		assertEquals(1, r.size());
+		assertSize(1, r);
 		assertNull(r.get(0).b);
 		assertEquals(5, r.get(0).c);
 	}
@@ -357,7 +358,7 @@ class CsvParserSession_Test extends TestBase {
 		var p = CsvParser.create().trimStrings().build();
 		var csv = "b,c\n  hi  ,  3  \n";
 		var r = (List<A>) p.read(csv, List.class, A.class);
-		assertEquals(1, r.size());
+		assertSize(1, r);
 		assertEquals("hi", r.get(0).b);
 		assertEquals(3, r.get(0).c);
 	}
@@ -378,7 +379,7 @@ class CsvParserSession_Test extends TestBase {
 		var p = CsvParser.create().allowNestedStructures(true).trimStrings().build();
 		var csv = "name,tags\nrow1,  [a;b;c]  \n";
 		var r = (List<J>) p.read(csv, List.class, J.class);
-		assertEquals(1, r.size());
+		assertSize(1, r);
 		assertEquals(List.of("a", "b", "c"), r.get(0).tags);
 	}
 
@@ -391,7 +392,7 @@ class CsvParserSession_Test extends TestBase {
 		var csv = "a,b\n1,2\n3,4\n";
 		var r = (List<Map<String,Integer>>) CsvParser.DEFAULT.read(csv,
 				List.class, Map.class, String.class, Integer.class);
-		assertEquals(2, r.size());
+		assertSize(2, r);
 		assertEquals(Integer.valueOf(1), r.get(0).get("a"));
 		assertEquals(Integer.valueOf(2), r.get(0).get("b"));
 		assertEquals(Integer.valueOf(3), r.get(1).get("a"));

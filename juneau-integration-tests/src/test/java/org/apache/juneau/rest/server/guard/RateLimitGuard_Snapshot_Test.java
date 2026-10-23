@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.server.guard;
 
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.time.*;
@@ -46,7 +47,7 @@ class RateLimitGuard_Snapshot_Test extends TestBase {
 		s.tryAcquire("k", 5, 1.0);
 		s.tryAcquire("k", 5, 1.0);
 		var snapshot = s.snapshot();
-		assertEquals(1, snapshot.size());
+		assertSize(1, snapshot);
 		var b = snapshot.get("k");
 		assertNotNull(b);
 		assertEquals("k", b.key());
@@ -88,7 +89,7 @@ class RateLimitGuard_Snapshot_Test extends TestBase {
 		s.tryAcquire("beta", 3, 1.0);
 		s.tryAcquire("gamma", 3, 1.0);
 		var snapshot = s.snapshot();
-		assertEquals(3, snapshot.size());
+		assertSize(3, snapshot);
 		assertEquals(Set.of("alpha", "beta", "gamma"), snapshot.keySet());
 		for (var e : snapshot.entrySet())
 			assertEquals(e.getKey(), e.getValue().key());
@@ -153,7 +154,7 @@ class RateLimitGuard_Snapshot_Test extends TestBase {
 		g.getStorage().tryAcquire("k1", 3, 1.0);
 		g.getStorage().tryAcquire("k2", 3, 1.0);
 		var snapshot = g.snapshot();
-		assertEquals(2, snapshot.size());
+		assertSize(2, snapshot);
 		assertEquals(Set.of("k1", "k2"), snapshot.keySet());
 	}
 

@@ -105,7 +105,7 @@
 	--jc-tip-border: #cccccc;
 	--jc-tip-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
 	/*
-	 * The base z-index of the shared popup layer stack (TODO-445h) and the per-layer step.  juneau-views.js stamps
+	 * The base z-index of the shared popup layer stack and the per-layer step.  juneau-views.js stamps
 	 * each registered layer an INLINE z-index of (--jc-dialog-z + rawStackIndex * --jc-layer-step); these tokens are
 	 * the single source of truth the runtime reads (with the same numeric fallbacks baked into the script for the
 	 * token-less / Node-shim case).  Keep --jc-dialog-z below --jc-popover-z so a cell popover's own chrome layers
@@ -1167,7 +1167,7 @@ table.dataTable thead .sorting_desc_disabled:after {
 .dt-container > .dt-layout-row:not(.dt-layout-table) { display: none; }
 
 /*
- * TODO-445n table overflow discipline — table-only horizontal scroll (Goal 2).
+ * Table overflow discipline — table-only horizontal scroll.
  *
  * A table wider than its region scrolls INSIDE its own region; the page/<html>/<body> never grow a horizontal
  * scrollbar and the surrounding chrome (toolbar, header, nav, card padding) stays put.  Two mechanisms, no palette
@@ -1790,7 +1790,7 @@ div.dataTables_wrapper div.dataTables_filter input:focus-visible {
 }
 
 /*
- * TODO-445m page chrome (app-header / avatar / bar-slot) base SHAPE - NEUTRAL, no palette color; console-ui's
+ * Page chrome (app-header / avatar / bar-slot) base SHAPE - NEUTRAL, no palette color; console-ui's
  * chrome.css themes these same classes (and anchors the badge overlay) when present.  This module takes NO
  * dependency on console-ui: dependency-free, the count/dot badge simply reads inline next to its action, and the
  * bar-slot region reads as a flex row trailing the .jc-subtab-bar.  The app-header and bar-slot markup is painted
@@ -2396,7 +2396,7 @@ input[type="checkbox"].jc-editable-field-input {
 
 /*
  * Declarative row-action modal (present=dialog) + settled-outcome banner (juneau-views.js openActionDialog/
- * buildDialogOverlay/renderActionOutcome, TODO-416/417).  NEUTRAL - shape/layout only, no palette color; a host's
+ * buildDialogOverlay/renderActionOutcome).  NEUTRAL - shape/layout only, no palette color; a host's
  * chrome.css MAY theme these same classes.  The confirmation body is typed fields painted with textContent (never
  * innerHTML), so there is no markup styling here to get wrong.
  */
@@ -2691,7 +2691,7 @@ input[type="checkbox"].jc-editable-field-input {
 }
 
 /*
- * The row-action menu (TODO-445h): portalled to document.body as a light-dismiss layer and positioned under its
+ * The row-action menu: portalled to document.body as a light-dismiss layer and positioned under its
  * trigger, so it needs its own opaque box + a fallback z-index (the runtime stamps an inline per-layer z-index).
  * NEUTRAL - shape only; a host's chrome.css MAY theme these classes.
  */
@@ -2764,7 +2764,7 @@ input[type="checkbox"].jc-editable-field-input {
 }
 
 /*
- * The LIVE async-job progress banner (TODO-425) - shown while a long job streams over SSE.  Deliberately a
+ * The LIVE async-job progress banner - shown while a long job streams over SSE.  Deliberately a
  * DISTINCT class from .juneau-view-action-outcome: a running job and a settled outcome are never the same visual
  * state.  The row it sits in carries `data-juneau-job` (never `data-juneau-inflight`), so table polling keeps
  * running for the whole job.
@@ -2786,7 +2786,7 @@ input[type="checkbox"].jc-editable-field-input {
 }
 
 /*
- * Row selection + bulk mutation (TODO-428) - two INDEPENDENT opt-ins.  NEUTRAL - shape only, no palette color; a
+ * Row selection + bulk mutation - two INDEPENDENT opt-ins.  NEUTRAL - shape only, no palette color; a
  * host's chrome.css MAY theme these same classes.  The selection column itself (`.juneau-view-select-th`/
  * `.juneau-view-select-cell`) is rendered whenever a `SelectionDef` was declared, WITH or WITHOUT bulk mutation;
  * the bulk toolbar (`.juneau-view-bulk-toolbar`) only ever exists when a `BulkMutateDef` was ALSO declared - so a

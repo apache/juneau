@@ -100,7 +100,7 @@ public class HtmlSchemaDocSerializer extends HtmlDocSerializer {
 		 * The description is the result of calling {@link ClassMeta#getName()}.
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='jm'>{@link org.apache.juneau.marshall.jsonschema.JsonSchemaGenerator.Builder#addDescriptionsTo(TypeCategory...)}
+		 * 	<li class='jm'>{@link org.apache.juneau.marshall.jsonschema.JsonSchemaGenerator.Builder#addDescriptionsTo(TypeCategory...) JsonSchemaGenerator.Builder#addDescriptionsTo(TypeCategory...)}
 		 * </ul>
 		 *
 		 * @param values
@@ -127,7 +127,7 @@ public class HtmlSchemaDocSerializer extends HtmlDocSerializer {
 		 * </ul>
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='jm'>{@link org.apache.juneau.marshall.jsonschema.JsonSchemaGenerator.Builder#addExamplesTo(TypeCategory...)}
+		 * 	<li class='jm'>{@link org.apache.juneau.marshall.jsonschema.JsonSchemaGenerator.Builder#addExamplesTo(TypeCategory...) JsonSchemaGenerator.Builder#addExamplesTo(TypeCategory...)}
 		 * </ul>
 		 *
 		 * @param values
@@ -147,7 +147,7 @@ public class HtmlSchemaDocSerializer extends HtmlDocSerializer {
 		 * Identifies whether nested descriptions are allowed in schema definitions.
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='jm'>{@link org.apache.juneau.marshall.jsonschema.JsonSchemaGenerator.Builder#allowNestedDescriptions()}
+		 * 	<li class='jm'>{@link org.apache.juneau.marshall.jsonschema.JsonSchemaGenerator.Builder#allowNestedDescriptions() JsonSchemaGenerator.Builder#allowNestedDescriptions()}
 		 * </ul>
 		 *
 		 * @return This object.
@@ -164,7 +164,7 @@ public class HtmlSchemaDocSerializer extends HtmlDocSerializer {
 		 * Identifies whether nested examples are allowed in schema definitions.
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='jm'>{@link org.apache.juneau.marshall.jsonschema.JsonSchemaGenerator.Builder#allowNestedExamples()}
+		 * 	<li class='jm'>{@link org.apache.juneau.marshall.jsonschema.JsonSchemaGenerator.Builder#allowNestedExamples() JsonSchemaGenerator.Builder#allowNestedExamples()}
 		 * </ul>
 		 *
 		 * @return This object.
@@ -182,10 +182,10 @@ public class HtmlSchemaDocSerializer extends HtmlDocSerializer {
 		 * <p>
 		 * Used primarily for defining common definition sections for beans in Swagger JSON.
 		 * <p>
-		 * This setting is ignored if {@link org.apache.juneau.marshall.jsonschema.JsonSchemaGenerator.Builder#useBeanDefs()} is not enabled.
+		 * This setting is ignored if {@link org.apache.juneau.marshall.jsonschema.JsonSchemaGenerator.Builder#useBeanDefs() JsonSchemaGenerator.Builder#useBeanDefs()} is not enabled.
 		 *
 		 * <h5 class='section'>See Also:</h5><ul>
-		 * 	<li class='jm'>{@link org.apache.juneau.marshall.jsonschema.JsonSchemaGenerator.Builder#beanDefMapper(Class)}
+		 * 	<li class='jm'>{@link org.apache.juneau.marshall.jsonschema.JsonSchemaGenerator.Builder#beanDefMapper(Class) JsonSchemaGenerator.Builder#beanDefMapper(Class)}
 		 * </ul>
 		 *
 		 * @param value

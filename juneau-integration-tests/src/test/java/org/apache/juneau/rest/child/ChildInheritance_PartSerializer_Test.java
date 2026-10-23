@@ -26,7 +26,7 @@ import org.apache.juneau.utest.utils.*;
 import org.junit.jupiter.api.*;
 
 /**
- * Phase 4 &mdash; proves the CHILD-WINS scalar shape for {@code @Child(partSerializer=...)}: the host-seeded
+ * Proves the CHILD-WINS scalar shape for {@code @Child(partSerializer=...)}: the host-seeded
  * part serializer applies when the child declares none of its own, but the child's own explicit
  * {@code @Rest(partSerializer=...)} wins over the seed when present.
  */

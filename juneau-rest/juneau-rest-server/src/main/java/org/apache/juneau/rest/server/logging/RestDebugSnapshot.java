@@ -36,7 +36,7 @@ import org.apache.juneau.commons.logging.*;
  * {@link Level#INFO}.
  *
  * <p>
- * The {@code context} component carries the request thread's {@link org.apache.juneau.commons.logging.LogContext}
+ * The {@code context} component carries the request thread's {@link LogContext}
  * snapshot taken at the async-dispatch handoff. For an async response the completion thread's live {@code LogContext} is
  * empty (v1 is thread-confined; there is no general async propagation), so {@code RestDebugPipeline.emit(...)} pre-seeds
  * the completion-thread record from this carried map &mdash; the only way the async debug record retains its structured

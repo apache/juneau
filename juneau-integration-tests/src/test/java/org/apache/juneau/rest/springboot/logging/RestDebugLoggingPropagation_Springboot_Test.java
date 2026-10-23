@@ -107,11 +107,12 @@ class RestDebugLoggingPropagation_Springboot_Test extends TestBase {
 	}
 
 	private ConfigurableApplicationContext start(String...extraProperties) {
-		var props = new ArrayList<String>();
-		props.add("spring.main.banner-mode=off");
-		props.add("server.port=0");
-		props.add("logging.level.root=WARN");
-		props.add("juneau.rest.logging.propagate-levels=true");
+		List<String> props = l(
+			"spring.main.banner-mode=off",
+			"server.port=0",
+			"logging.level.root=WARN",
+			"juneau.rest.logging.propagate-levels=true"
+		);
 		props.addAll(Arrays.asList(extraProperties));
 		return new SpringApplicationBuilder(App.class)
 			.web(WebApplicationType.SERVLET)

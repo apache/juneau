@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.server.views;
 
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
@@ -156,7 +157,7 @@ class RibbonItem_Test extends TestBase {
 		assertEquals("pending", m.get("default"));
 		assertEquals(true, m.get("deselectable"));
 		var options = (List<?>)m.get("options");
-		assertEquals(2, options.size());
+		assertSize(2, options);
 		assertEquals(Map.of("id", "all", "title", "All"), options.get(0));
 		assertFalse(((Map<?,?>)options.get(1)).containsKey("type"));
 	}

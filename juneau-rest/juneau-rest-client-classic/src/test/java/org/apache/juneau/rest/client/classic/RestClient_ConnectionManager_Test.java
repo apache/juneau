@@ -1176,27 +1176,27 @@ class RestClient_ConnectionManager_Test {
 
 	@Test void k19_guardedRedirect_crossOrigin_credentialsStripped() throws Exception {
 		var hops = guardedRedirect("http://93.184.216.35/end");
-		assertEquals(2, hops.size());
+		assertSize(2, hops);
 		assertEquals("Bearer secret|session=abc|key|Basic proxy", hops.get(0).credentials);
 		assertEquals("null|null|null|null", hops.get(1).credentials);
 	}
 
 	@Test void k20_guardedRedirect_sameOrigin_credentialsKept() throws Exception {
 		var hops = guardedRedirect("http://93.184.216.34/end");
-		assertEquals(2, hops.size());
+		assertSize(2, hops);
 		assertEquals("Bearer secret|session=abc|key|Basic proxy", hops.get(1).credentials);
 	}
 
 	@Test void k21_guardedRedirect_crossOriginThenBack_credentialsStayStripped() throws Exception {
 		var hops = guardedRedirect("http://93.184.216.35/back");
-		assertEquals(3, hops.size());
+		assertSize(3, hops);
 		assertEquals("null|null|null|null", hops.get(1).credentials);
 		assertEquals("null|null|null|null", hops.get(2).credentials);
 	}
 
 	@Test void k22_guardedRedirect_everyHopMarked() throws Exception {
 		var hops = guardedRedirect("http://93.184.216.35/back");
-		assertEquals(3, hops.size());
+		assertSize(3, hops);
 		for (var h : hops)
 			assertEquals(Boolean.TRUE, h.marker);
 		// Each hop has its own context, so no authentication state is carried from one host to the next.

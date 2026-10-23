@@ -17,6 +17,7 @@
 package org.apache.juneau.rest.server.terminal.bus;
 
 import static java.nio.charset.StandardCharsets.*;
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
@@ -234,7 +235,7 @@ class TerminalInput_Test extends TestBase {
 
 	@Test void a04_writeAcceptedNoAnswer() {
 		send(alice, "t1", "y\r");
-		assertEquals(1, fake.writes.size());
+		assertSize(1, fake.writes);
 		assertArrayEquals("y\r".getBytes(UTF_8), fake.writes.get(0));
 		assertEquals(List.of(), aliceWs.frames, "an accepted data frame gets no answer");
 	}
@@ -287,7 +288,7 @@ class TerminalInput_Test extends TestBase {
 		assertEquals(List.of("principal=alice terminal=- state=bad"), messages(records, Level.FINE),
 			"an invalid id is logged as '-', never raw");
 		var f = aliceWs.status();
-		assertEquals(1, f.size());
+		assertSize(1, f);
 		assertNull(f.get(0).get("id"));
 		assertFalse(f.get(0).containsKey("id"), "an invalid id is not echoed: the answer has no id key");
 		assertEquals("bad", f.get(0).get("state"));
@@ -379,7 +380,7 @@ class TerminalInput_Test extends TestBase {
 	@Test void a14_sinkThrows() {
 		fake.throwOnWrite = true;
 		var records = LogRecordCapture.quietly(ServerBus.class, () -> send(alice, "t1", "x"));
-		assertEquals(1, records.size(), records::toString);
+		assertSize(records::toString, 1, records);
 		assertEquals(Level.WARNING, records.get(0).getLevel());
 		assertInstanceOf(IOException.class, records.get(0).getThrown());
 		assertEquals(JsonMap.of("v", 1, "type", "error", "code", "bus:upstream-failed", "message", "handler failed",
@@ -393,7 +394,7 @@ class TerminalInput_Test extends TestBase {
 			var s = open(b2, "alice");
 			var ws = connect(b2, s);
 			var records = LogRecordCapture.quietly(ServerBus.class, () -> b2.receive(s, frame("t1", "")));
-			assertEquals(1, records.size(), records::toString);
+			assertSize(records::toString, 1, records);
 			assertInstanceOf(IllegalStateException.class, records.get(0).getThrown());
 			assertEquals(JsonMap.of("v", 1, "type", "error", "code", "bus:upstream-failed", "message", "handler failed",
 				"topic", TerminalInput.TOPIC), ws.last());

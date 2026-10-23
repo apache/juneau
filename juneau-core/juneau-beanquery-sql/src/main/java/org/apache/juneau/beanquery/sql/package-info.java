@@ -20,10 +20,10 @@
  *
  * <p>
  * This package is the public API of the {@code juneau-beanquery-sql} module:
- * {@link org.apache.juneau.beanquery.sql.SqlBeanQueryContext} (built once: dialect, table, columns, guard, connection
- * source), {@link org.apache.juneau.beanquery.sql.SqlBeanQuerySession} (one connection per request, streaming
+ * {@link org.apache.juneau.beanquery.sql.SqlBeanQueryContext SqlBeanQueryContext} (built once: dialect, table, columns, guard, connection
+ * source), {@link org.apache.juneau.beanquery.sql.SqlBeanQuerySession SqlBeanQuerySession} (one connection per request, streaming
  * cursors), dialect-agnostic WHERE assembly, parameter binding, and the
- * {@link org.apache.juneau.beanquery.sql.SqlDialect} hook.  Dialects (for example the Postgres dialect in
+ * {@link org.apache.juneau.beanquery.sql.SqlDialect SqlDialect} hook.  Dialects (for example the Postgres dialect in
  * {@code juneau-beanquery-postgres}) live in their own modules.  The query carrier and operator API stay in
  * {@code org.apache.juneau.commons.beanquery}.
  */

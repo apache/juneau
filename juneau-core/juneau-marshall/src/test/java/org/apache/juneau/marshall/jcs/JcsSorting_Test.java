@@ -18,6 +18,7 @@ package org.apache.juneau.marshall.jcs;
 
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 
 import java.util.*;
 
@@ -61,18 +62,20 @@ class JcsSorting_Test extends TestBase {
 	@Test
 	void c05_utf16SortOrder() throws Exception {
 		// RFC 8785: keys sorted by UTF-16 code unit order
-		var m = new LinkedHashMap<String,Integer>();
-		m.put(Character.toString((char) 0x00F6), 1);   // ö
-		m.put("1", 2);
-		m.put("\r", 3);  // carriage return
-		m.put(Character.toString((char) 0x20AC), 4);   // €
-		m.put(Character.toString((char) 0x80), 5);    // C1 control
-		m.put(Character.toString((char) 0xFB33), 6);  // Hebrew letter
+		// ö, 1, carriage return, euro sign, C1 control, Hebrew letter
+		Map<String,Integer> m = map(
+			Character.toString((char) 0x00F6), 1,
+			"1", 2,
+			"\r", 3,
+			Character.toString((char) 0x20AC), 4,
+			Character.toString((char) 0x80), 5,
+			Character.toString((char) 0xFB33), 6
+		);
 		var s = JcsSerializer.DEFAULT.write(m);
 		// Parse and verify key order: \r < 1 < U+0080 < ö < € < Hebrew
 		var parsed = JsonParser.DEFAULT.read(s, JsonMap.class);
 		var keys = parsed.keySet().stream().toList();
-		assertEquals(6, keys.size());
+		assertSize(6, keys);
 		assertEquals("\r", keys.get(0));
 		assertEquals("1", keys.get(1));
 		assertEquals(Character.toString((char) 0x80), keys.get(2));
@@ -83,10 +86,7 @@ class JcsSorting_Test extends TestBase {
 
 	@Test
 	void c06_mapKeysSorted() throws Exception {
-		var m = new HashMap<String,Object>();
-		m.put("z", 1);
-		m.put("a", 2);
-		m.put("m", 3);
+		Map<String,Object> m = map("z", 1, "a", 2, "m", 3);
 		assertEquals("{\"a\":2,\"m\":3,\"z\":1}", JcsSerializer.DEFAULT.write(m));
 	}
 

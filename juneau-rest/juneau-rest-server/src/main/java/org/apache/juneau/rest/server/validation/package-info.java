@@ -21,7 +21,7 @@
  *
  * <h5 class='topic'>Off by default &mdash; opt in per parameter</h5>
  * <p>
- * Validation is <b>off by default and never runs automatically</b>. A {@link org.apache.juneau.rest.server.validation.BeanValidator}
+ * Validation is <b>off by default and never runs automatically</b>. A {@link org.apache.juneau.rest.server.validation.BeanValidator BeanValidator}
  * is only constructed when an arg resolver sees a {@code @jakarta.validation.Valid} (or Spring
  * {@code @org.springframework.validation.annotation.Validated}) annotation on a {@code @Content}, {@code @FormData},
  * or {@code @Request}-bound parameter. Without that annotation:
@@ -46,8 +46,8 @@
  *
  * <h5 class='topic'>Failure handling</h5>
  * <p>
- * A constraint violation throws {@link org.apache.juneau.rest.server.validation.ValidationException} (a 400 Bad Request
- * subclass) carrying the list of {@link org.apache.juneau.rest.server.validation.ValidationViolation} details. The
+ * A constraint violation throws {@link org.apache.juneau.rest.server.validation.ValidationException ValidationException} (a 400 Bad Request
+ * subclass) carrying the list of {@link org.apache.juneau.rest.server.validation.ValidationViolation ValidationViolation} details. The
  * response body shape depends on whether RFC 7807 problem-details mode is enabled on the resource:
  * <ul class='spaced-list'>
  * 	<li><b>Problem-details ON</b> &mdash; {@code application/problem+json} with the standard {@code status} /

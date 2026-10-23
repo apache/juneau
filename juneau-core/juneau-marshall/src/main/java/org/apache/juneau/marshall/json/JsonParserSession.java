@@ -611,7 +611,7 @@ public class JsonParserSession extends ReaderParserSession implements TokenReada
 		while (c != -1) {
 			c = r.read();
 			if (c <= 0x1F)
-				throw new ParseException(this, "Unescaped control character encountered: '0x%s'", String.format("%04X", c));
+				throw new ParseException(this, "Unescaped control character encountered: '0x%s'", f("%04X", c));
 			if (isInEscape) {
 				// @formatter:off
 				switch (c) {

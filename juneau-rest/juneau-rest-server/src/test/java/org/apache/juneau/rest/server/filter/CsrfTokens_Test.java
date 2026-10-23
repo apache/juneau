@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.server.filter;
 
+import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -153,19 +154,20 @@ class CsrfTokens_Test extends TestBase {
 		var expected = t.expected(req("s1"), false);
 		var good = t.mask(expected);
 		assertTrue(t.verify(good, expected));
-		var bad = new ArrayList<String>();
-		bad.add(null);
-		bad.add("");
-		bad.add(HEX.formatHex(expected));
-		bad.add(good.substring(1));
-		bad.add(good + "0");
-		bad.add(good.toUpperCase());
-		bad.add("g" + good.substring(1));
-		bad.add(good.substring(0, 127) + "g");
-		bad.add(" " + good.substring(1));
-		bad.add(good.substring(0, 127) + " ");
-		bad.add(" " + good);
-		bad.add(good + " ");
+		List<String> bad = list(
+			null,
+			"",
+			HEX.formatHex(expected),
+			good.substring(1),
+			good + "0",
+			good.toUpperCase(),
+			"g" + good.substring(1),
+			good.substring(0, 127) + "g",
+			" " + good.substring(1),
+			good.substring(0, 127) + " ",
+			" " + good,
+			good + " "
+		);
 		for (var b : bad)
 			assertFalse(assertDoesNotThrow(() -> t.verify(b, expected)), () -> "accepted: '" + b + "'");
 	}

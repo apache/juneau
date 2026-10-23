@@ -19,6 +19,7 @@ package org.apache.juneau.marshall.msgpack;
 import static org.apache.juneau.BasicTestUtils.*;
 import static org.apache.juneau.marshall.stream.TokenStreamAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 
 import java.io.*;
 
@@ -249,7 +250,7 @@ class MsgPackTokenStream_Test extends TestBase {
 					seen.add(r.read(Bean.class));
 				assertEquals(TokenType.END_ARRAY, r.next());
 			}
-			assertEquals(2, seen.size());
+			assertSize(2, seen);
 			assertEquals("alice", seen.get(0).name);
 			assertEquals("bob", seen.get(1).name);
 		}

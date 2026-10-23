@@ -17,6 +17,7 @@
 package org.apache.juneau.commons.collections;
 
 import static org.apache.juneau.commons.TestAssertions.*;
+import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
@@ -212,13 +213,13 @@ class FluentSet_Test extends TestBase {
 	@Test
 	void e01_setInterface_size() {
 		var set = new FluentSet<>(new LinkedHashSet<String>());
-		assertEquals(0, set.size());
+		assertSize(0, set);
 
 		set.a("item1");
-		assertEquals(1, set.size());
+		assertSize(1, set);
 
 		set.a("item2");
-		assertEquals(2, set.size());
+		assertSize(2, set);
 	}
 
 	@Test
@@ -422,10 +423,7 @@ class FluentSet_Test extends TestBase {
 		var set = new FluentSet<>(new LinkedHashSet<String>());
 		set.a("item1").a("item2").a("item3");
 
-		var underlyingSet = new LinkedHashSet<String>();
-		underlyingSet.add("item1");
-		underlyingSet.add("item2");
-		underlyingSet.add("item3");
+		var underlyingSet = set("item1", "item2", "item3");
 
 		assertEquals(underlyingSet.toString(), set.toString());
 	}
@@ -435,10 +433,7 @@ class FluentSet_Test extends TestBase {
 		var set1 = new FluentSet<>(new LinkedHashSet<String>());
 		set1.a("item1").a("item2").a("item3");
 
-		var set2 = new LinkedHashSet<String>();
-		set2.add("item1");
-		set2.add("item2");
-		set2.add("item3");
+		var set2 = set("item1", "item2", "item3");
 
 		assertEquals(set1.size(), set2.size());
 		assertEquals(new LinkedHashSet<>(set1), set2);
@@ -463,10 +458,7 @@ class FluentSet_Test extends TestBase {
 		var set = new FluentSet<>(new LinkedHashSet<String>());
 		set.a("item1").a("item2").a("item3");
 
-		var underlyingSet = new LinkedHashSet<String>();
-		underlyingSet.add("item1");
-		underlyingSet.add("item2");
-		underlyingSet.add("item3");
+		var underlyingSet = set("item1", "item2", "item3");
 
 		assertEquals(underlyingSet.hashCode(), set.hashCode());
 	}

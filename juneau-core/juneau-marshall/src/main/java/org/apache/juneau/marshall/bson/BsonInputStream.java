@@ -359,7 +359,7 @@ public class BsonInputStream extends ParserInputStream {
 		}
 		var sb = new StringBuilder(24);
 		for (var b : bytes)
-			sb.append(String.format("%02x", b & 0xFF));
+			sb.append(f("%02x", b & 0xFF));
 		return sb.toString();
 	}
 

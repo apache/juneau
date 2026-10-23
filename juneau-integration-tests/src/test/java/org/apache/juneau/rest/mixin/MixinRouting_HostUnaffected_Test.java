@@ -24,7 +24,7 @@ import org.apache.juneau.utest.utils.*;
 import org.junit.jupiter.api.*;
 
 /**
- * Phase 3 — exercises end-to-end routing through mixin-specific {@link org.apache.juneau.rest.server.server.RestContext}
+ * Exercises end-to-end routing through mixin-specific {@link org.apache.juneau.rest.server.server.RestContext}
  * sub-contexts.  Verifies that a mixin's appended serializer is visible on mixin endpoints but does NOT leak
  * onto host endpoints.
  *

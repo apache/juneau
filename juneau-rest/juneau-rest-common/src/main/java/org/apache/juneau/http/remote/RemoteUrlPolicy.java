@@ -154,7 +154,7 @@ public final class RemoteUrlPolicy {
 			throw iaex(e, "Invalid @Remote URL override: %s", url);
 		}
 		var host = uri.getHost();
-		if (host == null || host.isEmpty())
+		if (ie(host))
 			throw iaex("@Remote URL override has no host (non-canonical or opaque form is not allowed): %s", url);
 
 		if (! allowPrivateUrls && isDeniedHost(host, allowedRanges))
@@ -434,7 +434,7 @@ public final class RemoteUrlPolicy {
 	private static final AtomicReference<ParsedAllow> PARSED_ALLOW = new AtomicReference<>(new ParsedAllow("", List.of(), null));
 
 	private static List<Cidr> parseAllowedRanges(String spec) {
-		if (spec == null || spec.isBlank())
+		if (ib(spec))
 			return List.of();
 		var cached = PARSED_ALLOW.get();
 		if (! cached.spec().equals(spec)) {
@@ -650,7 +650,7 @@ public final class RemoteUrlPolicy {
 	 * @throws IllegalArgumentException If {@code location} is blank or does not resolve to an absolute URI.
 	 */
 	public static URI resolveRedirectLocation(URI from, String location) {
-		if (location == null || location.isBlank())
+		if (ib(location))
 			throw iaex("Redirect response is missing a Location header");
 		URI target;
 		try {

@@ -121,7 +121,7 @@ public class InputRequiredResult extends Result<InputRequiredResult> {
 	 * @throws IllegalStateException If both are absent/empty.
 	 */
 	public void validate() {
-		if ((inputRequests == null || inputRequests.isEmpty()) && ie(requestState))
+		if (ie(inputRequests) && ie(requestState))
 			throw isex("InputRequiredResult requires at least one of inputRequests or requestState");
 	}
 }

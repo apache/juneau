@@ -18,10 +18,10 @@
  * Server-Sent Events (SSE) marshalling support — {@code text/event-stream}.
  *
  * <p>
- * Provides {@link org.apache.juneau.marshall.sse.SseSerializer} and {@link org.apache.juneau.marshall.sse.SseParser}
+ * Provides {@link org.apache.juneau.marshall.sse.SseSerializer SseSerializer} and {@link org.apache.juneau.marshall.sse.SseParser SseParser}
  * for the
  * <a class="doclink" href="https://html.spec.whatwg.org/multipage/server-sent-events.html">WHATWG Server-Sent Events</a>
- * wire format. The serializer accepts a single {@link org.apache.juneau.marshall.sse.SseEvent}, an
+ * wire format. The serializer accepts a single {@link org.apache.juneau.marshall.sse.SseEvent SseEvent}, an
  * {@link java.lang.Iterable Iterable}, a {@link java.util.stream.Stream Stream}, or an
  * {@code SseEvent[]} array and emits one event per element with a {@link java.io.Writer#flush()
  * flush()} after each one — that is what makes server push actually work behind
@@ -29,7 +29,7 @@
  *
  * <p>
  * SSE streams are typically long-lived. For true line-driven streaming over a {@link java.io.Reader}
- * that the caller owns, use the {@link org.apache.juneau.marshall.sse.SseEventReader} iterator.
+ * that the caller owns, use the {@link org.apache.juneau.marshall.sse.SseEventReader SseEventReader} iterator.
  *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://html.spec.whatwg.org/multipage/server-sent-events.html">WHATWG HTML §9.2 — Server-sent events</a>

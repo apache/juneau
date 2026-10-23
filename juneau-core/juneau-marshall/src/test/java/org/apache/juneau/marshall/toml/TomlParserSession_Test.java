@@ -16,7 +16,9 @@
  */
 package org.apache.juneau.marshall.toml;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 
 import java.time.*;
 import java.util.*;
@@ -83,13 +85,13 @@ class TomlParserSession_Test extends TestBase {
 	@Test void b02_arrayOfTablesFirstOccurrence() {
 		var r = TomlParser.DEFAULT.read("[[fruits]]\nname = \"apple\"", JsonMap.class);
 		var list = r.getList("fruits");
-		assertEquals(1, list.size());
+		assertSize(1, list);
 	}
 
 	@Test void b02b_arrayOfTablesSecondOccurrenceAppends() {
 		var r = TomlParser.DEFAULT.read("[[fruits]]\nname = \"apple\"\n[[fruits]]\nname = \"pear\"", JsonMap.class);
 		var list = r.getList("fruits");
-		assertEquals(2, list.size());
+		assertSize(2, list);
 	}
 
 	@Test void b03_arrayOfTablesRedefinedAsScalarThrows() {
@@ -116,7 +118,7 @@ class TomlParserSession_Test extends TestBase {
 		// '}' at document top level matches none of the dispatch conditions ('[', key-start chars),
 		// so the main loop's else-branch breaks immediately, yielding an empty document.
 		var r = TomlParser.DEFAULT.read("}", JsonMap.class);
-		assertTrue(r == null || r.isEmpty());
+		assertTrue(ie(r));
 	}
 
 	@Test void b08_keyStartingWithUnderscoreOrDash() {
@@ -138,7 +140,7 @@ class TomlParserSession_Test extends TestBase {
 		var r = TomlParser.DEFAULT.read("[[fruits.varieties]]\nname = \"red\"", JsonMap.class);
 		var fruits = r.getMap("fruits");
 		var varieties = fruits.getList("varieties");
-		assertEquals(1, varieties.size());
+		assertSize(1, varieties);
 	}
 
 	@Test void b11_valueTerminatedByTabOrHash() {
@@ -204,7 +206,7 @@ class TomlParserSession_Test extends TestBase {
 	@Test void c05_inlineArrayWithTrailingComma() {
 		var r = TomlParser.DEFAULT.read("a = [1, 2, 3,]", JsonMap.class);
 		var list = r.getList("a");
-		assertEquals(3, list.size());
+		assertSize(3, list);
 	}
 
 	@Test void c06_inlineTable() {

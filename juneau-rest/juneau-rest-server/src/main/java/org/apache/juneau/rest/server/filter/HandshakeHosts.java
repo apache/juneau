@@ -95,7 +95,7 @@ public record HandshakeHosts(List<String> values, boolean synthesised) {
 			return new HandshakeHosts(List.of(), false);
 		// getHost(), never getAuthority(): the authority would carry userinfo into the host parser.
 		var host = requestUri.getHost();
-		if (host == null || host.isBlank())
+		if (ib(host))
 			return new HandshakeHosts(List.of(), false);
 		var port = requestUri.getPort();
 		return new HandshakeHosts(List.of(port > 0 ? host + ":" + port : host), true);

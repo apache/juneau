@@ -50,7 +50,9 @@ class PetstoreHookRegistry_BrowserTest extends TestBase {
 				"queries", Map.of("names", "Array.from(JuneauViews.HOOK_NAMESPACES)", "frozen", "Object.isFrozen(JuneauViews.HOOK_NAMESPACES)"))));
 	}
 
-	@SuppressWarnings("unchecked") // names is a JSON array of strings.
+	@SuppressWarnings({
+		"unchecked" // names is a JSON array of strings.
+	})
 	private static List<String> registry() {
 		return (List<String>)query(assertClean(report, "registry"), "names");
 	}

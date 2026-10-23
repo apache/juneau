@@ -17,6 +17,7 @@
 package org.apache.juneau.rest.server.views;
 
 import static org.apache.juneau.rest.server.views.ConsoleBrowserFixture.*;
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
@@ -127,7 +128,9 @@ class QuickStats_BrowserTest extends TestBase {
 		return ((Number)o).doubleValue();
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Casts a parsed JSON value to its known Map/List shape.
+	})
 	private static List<Object> list(Object o) {
 		return (List<Object>)o;
 	}
@@ -139,7 +142,7 @@ class QuickStats_BrowserTest extends TestBase {
 
 	private static void assertOrderedWidths(Map<String,Object> p) {
 		var w = list(p.get("segWidths"));
-		assertEquals(3, w.size(), p::toString);
+		assertSize(p::toString, 3, w);
 		assertTrue(num(w.get(0)) < num(w.get(1)) && num(w.get(1)) < num(w.get(2)), () -> "3:5:9 widths: " + w);
 	}
 
@@ -157,12 +160,12 @@ class QuickStats_BrowserTest extends TestBase {
 		assertEquals(p.get("tokenBg"), p.get("segbarBg"), p::toString);
 		assertFillRatio(p);
 		var bgs = list(p.get("segBgs"));
-		assertEquals(3, bgs.size());
+		assertSize(3, bgs);
 		for (var bg : bgs) {
 			assertNotEquals("rgba(0, 0, 0, 0)", bg, p::toString);
 			assertNotEquals(p.get("segbarBg"), bg, p::toString);
 		}
-		assertEquals(3, new HashSet<>(bgs).size(), () -> "segment colours must be pairwise distinct: " + bgs);
+		assertSize(() -> "segment colours must be pairwise distinct: " + bgs, 3, new HashSet<>(bgs));
 		assertOrderedWidths(p);
 		assertTrue(String.valueOf(p.get("stripe")).contains("repeating-linear-gradient"), p::toString);
 		assertTrue(String.valueOf(p.get("warnStripe")).contains("repeating-linear-gradient"), p::toString);
@@ -173,7 +176,7 @@ class QuickStats_BrowserTest extends TestBase {
 		assertEquals("solid", p.get("errOutline"), p::toString);
 		assertEquals("none", p.get("okOutline"), p::toString);
 		var swatches = list(p.get("swatchBgs"));
-		assertEquals(3, swatches.size(), p::toString);
+		assertSize(p::toString, 3, swatches);
 		for (var bg : swatches)
 			assertNotEquals("rgba(0, 0, 0, 0)", bg, () -> "swatch must be filled: " + p);
 	}

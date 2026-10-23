@@ -19,7 +19,7 @@
  * Predefined REST resource configuration interfaces that add RDF (Jena) marshalling support.
  *
  * <p>
- * Provides {@link org.apache.juneau.rest.server.rdf.config.BasicUniversalJenaConfig}, a drop-in
+ * Provides {@link org.apache.juneau.rest.server.rdf.config.BasicUniversalJenaConfig BasicUniversalJenaConfig}, a drop-in
  * configuration identical to the standard universal config but with RDF serializers and parsers enabled.
  */
 package org.apache.juneau.rest.server.rdf.config;

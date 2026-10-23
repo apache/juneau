@@ -409,7 +409,7 @@ public class TomlSerializerSession extends WriterSerializerSession implements Re
 		if (value instanceof Collection<?> c)
 			l = new ArrayList<>(c);
 		else if (value != null && value.getClass().isArray() && !value.getClass().getComponentType().isPrimitive())
-			l = new ArrayList<>(Arrays.asList((Object[])value));
+			l = l((Object[])value);
 		else
 			return Collections.emptyList();
 		if (l.isEmpty())

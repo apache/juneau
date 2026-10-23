@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.petstore.console.browser;
 
+import static org.apache.juneau.commons.utils.Shorts.f;
 import static org.apache.juneau.petstore.console.PetstoreConsoleFixture.*;
 import static org.apache.juneau.rest.server.console.test.PageContractAssert.*;
 import static org.apache.juneau.test.bct.BctAssertions.*;
@@ -73,7 +74,8 @@ class PetstoreCoverage_Test extends TestBase {
 		PetstoreHooks_BrowserTest.class,
 		PetstoreVisibility_BrowserTest.class,
 		PetstoreTwins_BrowserTest.class,
-		PetstoreHookRegistry_BrowserTest.class);
+		PetstoreHookRegistry_BrowserTest.class,
+		PetstoreSwaggerUi_BrowserTest.class);
 
 	/** Parity ids not yet covered, each with what it waits on.  Remove a row when its browser test lands. */
 	static final Map<String,String> PENDING = Map.of();
@@ -106,9 +108,9 @@ class PetstoreCoverage_Test extends TestBase {
 			var c = covered.containsKey(id);
 			var p = PENDING.containsKey(id);
 			if (! (c || p))
-				problems.add(String.format("Parity item '%s' has no petstore page or browser test", id));
+				problems.add(f("Parity item '%s' has no petstore page or browser test", id));
 			if (c && p)
-				problems.add(String.format("Parity item '%s' is covered by %s but still listed as pending ('%s'); remove the PENDING row", id, covered.get(id), PENDING.get(id)));
+				problems.add(f("Parity item '%s' is covered by %s but still listed as pending ('%s'); remove the PENDING row", id, covered.get(id), PENDING.get(id)));
 		}
 		assertString("", String.join("\n", problems));
 	}
@@ -156,7 +158,7 @@ class PetstoreCoverage_Test extends TestBase {
 	@Test void b01_everyRegisteredCardTypeIsUsed() throws Exception {
 		var unused = registeredCardTypes();
 		unused.removeAll(usedCardTypes());
-		assertString("", unused.stream().map(x -> String.format("Card type '%s' is registered but no petstore page uses it", x)).collect(Collectors.joining("\n")));
+		assertString("", unused.stream().map(x -> f("Card type '%s' is registered but no petstore page uses it", x)).collect(Collectors.joining("\n")));
 	}
 
 	@Test void b02_jsonOnlyCardTypeIsUsed() throws Exception {
@@ -197,16 +199,16 @@ class PetstoreCoverage_Test extends TestBase {
 		var problems = new TreeSet<String>();
 		for (var e : exempt.keySet()) {
 			if (! registry.contains(e))
-				problems.add(String.format("Exempt hook '%s' is not in JuneauViews.HOOK_NAMESPACES", e));
+				problems.add(f("Exempt hook '%s' is not in JuneauViews.HOOK_NAMESPACES", e));
 			if (claims.containsKey(e))
-				problems.add(String.format("Hook '%s' is exempt but also claimed by a @HookCovers test; remove the exemption", e));
+				problems.add(f("Hook '%s' is exempt but also claimed by a @HookCovers test; remove the exemption", e));
 		}
 		for (var c : claims.keySet())
 			if (! registry.contains(c))
-				problems.add(String.format("@HookCovers names '%s', which is not in JuneauViews.HOOK_NAMESPACES", c));
+				problems.add(f("@HookCovers names '%s', which is not in JuneauViews.HOOK_NAMESPACES", c));
 		for (var r : registry)
 			if (! (claims.containsKey(r) || exempt.containsKey(r)))
-				problems.add(String.format("Hook '%s' is not claimed by any @HookCovers test and is not exempt", r));
+				problems.add(f("Hook '%s' is not claimed by any @HookCovers test and is not exempt", r));
 		return new ArrayList<>(problems);
 	}
 

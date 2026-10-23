@@ -37,7 +37,7 @@ class ClaimsPrincipal_Test extends TestBase {
 	@Test void a01_nameAndClaims() {
 		var p = new ClaimsPrincipal("alice", Map.of("scope", "read", "iat", 1700000000L));
 		Assertions.assertEquals("alice", p.getName());
-		Assertions.assertEquals(2, p.getClaims().size());
+		assertSize(2, p.getClaims());
 		Assertions.assertTrue(p.hasClaim("scope"));
 		Assertions.assertFalse(p.hasClaim("missing"));
 	}

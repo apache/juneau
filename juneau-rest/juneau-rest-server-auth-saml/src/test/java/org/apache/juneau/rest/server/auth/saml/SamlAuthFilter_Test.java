@@ -210,10 +210,7 @@ class SamlAuthFilter_Test extends TestBase {
 
 	@Test void h03_rolesClaim_listWithNonStringItem_skipped() throws Exception {
 		// List contains a non-String element → item instanceof String is false → item skipped
-		var roles = new ArrayList<>();
-		roles.add("admin");
-		roles.add(42);  // non-String item
-		roles.add("user");
+		List<Object> roles = l("admin", 42 /* non-String item */, "user");
 		var cp = new ClaimsPrincipal("alice", Map.of("roles", roles));
 		var v = validator(x -> cp);
 		var f = SamlAuthFilter.create().validator(v).build();

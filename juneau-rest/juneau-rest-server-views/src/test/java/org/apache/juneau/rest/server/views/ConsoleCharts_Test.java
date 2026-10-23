@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.rest.server.views;
 
+import static org.apache.juneau.commons.utils.Shorts.f;
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assumptions.*;
 
@@ -118,7 +120,9 @@ class ConsoleCharts_Test extends TestBase {
 		assertEquals(List.of(), r.get("errors"));
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Casts a parsed JSON value to its known Map/List shape.
+	})
 	@Test void a04b_pieDonut_legendLeavesRoomForLabels() {
 		var r = part("pieLegend");
 		var donut = (Map<String,Object>)r.get("donut");
@@ -132,7 +136,7 @@ class ConsoleCharts_Test extends TestBase {
 		assertEquals("raw", group.get("bounding"));
 		assertEquals(true, group.get("silent"));
 		var kids = (List<List<Object>>)group.get("text");
-		assertEquals(1, kids.size());
+		assertSize(1, kids);
 		assertEquals(List.of("text", "center", "middle"), kids.get(0).subList(0, 3));
 		assertNull(kids.get(0).get(3));
 		assertNull(kids.get(0).get(4));
@@ -175,21 +179,21 @@ class ConsoleCharts_Test extends TestBase {
 	@Test void a08_lateRegistration_healsCycleAndSourceCards() {
 		var r = part("lateRegistration");
 		var e90 = "E-JS-90: '%s' references unknown $fn '%s'; registered: 'bytes, compact, datetime, duration, number, percent, symbolSizeBy, template'";
-		var w1 = String.format(e90, "w1", "app.money");
-		var sw = String.format(e90, "sw", "app.money");
+		var w1 = f(e90, "w1", "app.money");
+		var sw = f(e90, "sw", "app.money");
 		// Unregistered at DOMContentLoaded: E-JS-90 on the card, nothing drawn, for the cycle card and the source card alike.
 		assertJson("{\"w1\":{\"error\":" + Json.of(w1) + ",\"drawn\":false},\"sw\":{\"error\":" + Json.of(sw) + ",\"drawn\":false}}", r.get("before"));
 		// Registering it afterwards heals both (the source card re-draws from its current handle), with the fn resolved.
 		assertJson("{\"w1\":{\"error\":null,\"drawn\":true},\"sw\":{\"error\":null,\"drawn\":true}}", r.get("after"));
 		assertJson("{\"w1\":\"function\",\"sw\":\"function\"}", r.get("fns"));
 		// A name nobody registers stays an error; a card destroyed while waiting never draws.
-		assertJson("{\"error\":" + Json.of(String.format(e90, "w2", "app.never")) + ",\"drawn\":false}", r.get("w2"));
+		assertJson("{\"error\":" + Json.of(f(e90, "w2", "app.never")) + ",\"drawn\":false}", r.get("w2"));
 		assertEquals(false, ((Map<?,?>)r.get("w3")).get("drawn"));
 		// Each card is reported exactly once (the source card draws nothing while it waits).
 		assertEquals(List.of(
 			"[juneau-charts] " + w1,
-			"[juneau-charts] " + String.format(e90, "w2", "app.never"),
-			"[juneau-charts] " + String.format(e90, "w3", "app.money"),
+			"[juneau-charts] " + f(e90, "w2", "app.never"),
+			"[juneau-charts] " + f(e90, "w3", "app.money"),
 			"[juneau-charts] " + sw), r.get("log"));
 	}
 
@@ -787,7 +791,7 @@ class ConsoleCharts_Test extends TestBase {
 		var r = part("treemapMissingField");
 		assertEquals("E-JS-63: chart card 'bad' series field 'cluster' is not in the data rows", r.get("error"));
 		assertEquals(false, r.get("drawn"));
-		assertEquals(1, ((List<?>)r.get("log")).size());
+		assertSize(1, ((List<?>)r.get("log")));
 	}
 
 	@Test void a51_treemap_refreshRebuildsTree() {
@@ -842,7 +846,7 @@ class ConsoleCharts_Test extends TestBase {
 		assertEquals(List.of(), r.get("afterReset"));
 		// Enter on the walked leaf (h2) publishes its tileFields as meta and no row.
 		var p = (List<?>)r.get("published");
-		assertEquals(1, p.size());
+		assertSize(1, p);
 		var pub = (Map<?,?>)p.get(0);
 		assertEquals(Map.of("host", "h2", "health", "down", "cpu", 9), pub.get("meta"));
 		assertNull(pub.get("row"));

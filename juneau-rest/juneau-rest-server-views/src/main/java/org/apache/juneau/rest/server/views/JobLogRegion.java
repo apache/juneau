@@ -123,7 +123,7 @@ public final class JobLogRegion {
 	 * @throws IllegalArgumentException If a rule is broken.
 	 */
 	public JobLogRegion validate() {
-		if (id == null || id.isBlank())
+		if (ib(id))
 			throw iaex("JobLogRegion id must not be blank.");
 		try {
 			if (! (config.get("submit") instanceof Map<?,?> submit))
@@ -226,7 +226,9 @@ public final class JobLogRegion {
 		 * @param value The field.
 		 * @return This object.
 		 */
-		@SuppressWarnings("unchecked")
+		@SuppressWarnings({
+			"unchecked" // The "fields" entry is always created here as a List<Object>.
+		})
 		public Submit field(Field value) {
 			((List<Object>)map.computeIfAbsent("fields", k -> new ArrayList<>())).add(value.map);
 			return this;

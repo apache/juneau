@@ -22,25 +22,25 @@
  * This package is the JDK-native spine that lets {@code @RestOp} handlers return reactive values. It
  * ships in the opt-in {@code juneau-rest-server-reactive} module &mdash; a bare {@code juneau-rest-server}
  * has <b>no</b> reactive behavior and {@code DefaultConfig} does not wire any reactive processor. Merely
- * placing this module on the classpath auto-registers {@link org.apache.juneau.rest.server.reactive.ReactiveResponseProcessor}
+ * placing this module on the classpath auto-registers {@link org.apache.juneau.rest.server.reactive.ReactiveResponseProcessor ReactiveResponseProcessor}
  * via a {@code META-INF/services/org.apache.juneau.rest.server.processor.ResponseProcessor} provider file, which
  * {@code RestContext} discovers through {@link java.util.ServiceLoader} and front-loads ahead of
  * {@code AsyncResponseProcessor}.
  *
  * <p>
  * The processor handles {@link java.util.concurrent.Flow.Publisher Flow.Publisher&lt;T&gt;} directly (no
- * external dependency) and exposes the {@link org.apache.juneau.rest.server.reactive.ReactiveStreamsAdapter} SPI
+ * external dependency) and exposes the {@link org.apache.juneau.rest.server.reactive.ReactiveStreamsAdapter ReactiveStreamsAdapter} SPI
  * so the further opt-in {@code juneau-rest-server-reactive-reactor} module can plug in Project Reactor, RxJava 3,
  * and Reactive-Streams {@code Publisher} support without duplicating any of the streaming / buffering /
  * SSE / NDJSON plumbing.
  *
  * <h5 class='topic'>Key types</h5>
  * <ul>
- * 	<li>{@link org.apache.juneau.rest.server.reactive.ReactiveResponseProcessor} &mdash; the response processor
+ * 	<li>{@link org.apache.juneau.rest.server.reactive.ReactiveResponseProcessor ReactiveResponseProcessor} &mdash; the response processor
  * 		(auto-registered via {@code ServiceLoader}, front-loaded ahead of {@code AsyncResponseProcessor}).
- * 	<li>{@link org.apache.juneau.rest.server.reactive.ReactiveStreamsAdapter} &mdash; the {@link java.util.ServiceLoader}
+ * 	<li>{@link org.apache.juneau.rest.server.reactive.ReactiveStreamsAdapter ReactiveStreamsAdapter} &mdash; the {@link java.util.ServiceLoader}
  * 		SPI bridge modules implement.
- * 	<li>{@link org.apache.juneau.rest.server.reactive.Adaptation} &mdash; the single-value / streaming result of an adapter.
+ * 	<li>{@link org.apache.juneau.rest.server.reactive.Adaptation Adaptation} &mdash; the single-value / streaming result of an adapter.
  * </ul>
  *
  * <h5 class='section'>See Also:</h5>

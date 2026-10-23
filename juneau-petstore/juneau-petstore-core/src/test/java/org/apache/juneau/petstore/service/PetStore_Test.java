@@ -35,17 +35,17 @@ class PetStore_Test extends TestBase {
 
 	@Test void a01_seededPetsLoaded() {
 		var s = new PetStore();
-		assertEquals(9, s.getPets().size());
+		assertSize(9, s.getPets());
 	}
 
 	@Test void a02_seededOrdersLoaded() {
 		var s = new PetStore();
-		assertEquals(3, s.getOrders().size());
+		assertSize(3, s.getOrders());
 	}
 
 	@Test void a03_seededUsersLoaded() {
 		var s = new PetStore();
-		assertEquals(3, s.getUsers().size());
+		assertSize(3, s.getUsers());
 	}
 
 	@Test void a04_seededPetByIdHasCorrectShape() {

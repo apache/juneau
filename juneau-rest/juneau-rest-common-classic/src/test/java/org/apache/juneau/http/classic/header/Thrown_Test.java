@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.http.classic.header;
 
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
@@ -37,7 +38,7 @@ class Thrown_Test extends TestBase {
 		assertEquals("Thrown", x.getName());
 		assertEquals("java.lang.RuntimeException;boom", x.getValue());
 		var parts = x.asParts().get();
-		assertEquals(1, parts.size());
+		assertSize(1, parts);
 		assertEquals("java.lang.RuntimeException", parts.get(0).getClassName());
 		assertEquals("boom", parts.get(0).getMessage());
 		assertEquals("java.lang.RuntimeException;boom", parts.get(0).toString());
@@ -53,7 +54,7 @@ class Thrown_Test extends TestBase {
 	@Test void a03_ctor_string_multipleEntries() {
 		var x = new Thrown("RuntimeException;a, IllegalArgumentException;b");
 		var parts = x.asParts().get();
-		assertEquals(2, parts.size());
+		assertSize(2, parts);
 		assertEquals("RuntimeException", parts.get(0).getClassName());
 		assertEquals("IllegalArgumentException", parts.get(1).getClassName());
 	}
@@ -120,7 +121,7 @@ class Thrown_Test extends TestBase {
 		var x = new Thrown(List.of(part));
 		assertEquals("Thrown", x.getName());
 		assertEquals("RuntimeException;boom", x.getValue());
-		assertEquals(1, x.asParts().get().size());
+		assertSize(1, x.asParts().get());
 	}
 
 	@Test void c02_ctor_listOfParts_multiple() {

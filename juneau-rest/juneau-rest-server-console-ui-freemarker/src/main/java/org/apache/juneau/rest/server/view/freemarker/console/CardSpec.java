@@ -191,7 +191,9 @@ public final class CardSpec {
 		return this;
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Narrows the validated Map to Map<String,Object>; its keys are always strings.
+	})
 	private static Map<String,Object> asMap(Object o) {
 		if (! (o instanceof Map))
 			throw new IllegalArgumentException("card wiring entries must be objects; got " + (o == null ? "null" : o.getClass().getSimpleName()) + ".");
@@ -223,7 +225,7 @@ public final class CardSpec {
 		if (nn(template)) m.put("template", template);
 		if (bare) m.put("bare", true);
 		if (sanitize) {
-			if (! eq(type, "html") || ! nn(src))
+			if (neq(type, "html") || ! nn(src))
 				throw iaex("card '%s': sanitize applies only to an html card with src.", id);
 			m.put("sanitize", true);
 		}

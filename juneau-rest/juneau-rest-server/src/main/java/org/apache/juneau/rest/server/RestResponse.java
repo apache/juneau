@@ -612,7 +612,7 @@ public class RestResponse extends HttpServletResponseWrapper {
 	 * @return <jk>true</jk> if the URI is safe to redirect to.
 	 */
 	static boolean isSafeRedirectUri(String uri, String...allowedHosts) {
-		if (uri == null || uri.isEmpty())
+		if (ie(uri))
 			return true;
 		if (uri.charAt(0) == '/' && ! uri.startsWith("//"))
 			return true;
@@ -904,7 +904,7 @@ public class RestResponse extends HttpServletResponseWrapper {
 	}
 
 	/**
-	 * Sets the <c>Cache-Control</c> response header from a {@link org.apache.juneau.http.header.CacheControl.Builder}.
+	 * Sets the <c>Cache-Control</c> response header from a {@link org.apache.juneau.http.header.CacheControl.Builder CacheControl.Builder}.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>

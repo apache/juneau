@@ -115,7 +115,9 @@ class PetstoreOrderWizard_BrowserTest extends TestBase {
 	}
 
 	/** The order this places is left in the throwaway test server's store; nothing else reads it. */
-	@SuppressWarnings("unchecked") // requests is a JSON array of {url, method, postData}.
+	@SuppressWarnings({
+		"unchecked" // requests is a JSON array of {url, method, postData}.
+	})
 	private static void verify(String name, String shipDate, String shown) {
 		var c = assertClean(report, name);
 		assertContains("New order", String.valueOf(query(c, "step1")));
@@ -139,7 +141,7 @@ class PetstoreOrderWizard_BrowserTest extends TestBase {
 			assertEquals(((Number)query(c, "innerWidth")).doubleValue() - 3 * em, width, 2.0, "narrow: the compact step fills the viewport less the 3em slack");
 		var posted = ((List<Map<String,Object>>)c.get("requests")).stream()
 			.filter(r -> "POST".equals(r.get("method")) && String.valueOf(r.get("url")).endsWith("/console/orders")).toList();
-		assertEquals(1, posted.size());
+		assertSize(1, posted);
 		// A successful submit redraws the table, which re-queries it after the order was posted.
 		var urls = ((List<Map<String,Object>>)c.get("requests")).stream().filter(r -> "POST".equals(r.get("method"))).map(r -> String.valueOf(r.get("url"))).toList();
 		assertTrue(urls.lastIndexOf(posted.get(0).get("url").toString() + "/query") > urls.indexOf(posted.get(0).get("url").toString()));

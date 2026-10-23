@@ -25,6 +25,7 @@ import java.util.*;
 import java.util.regex.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.commons.utils.Shorts;
 import org.junit.jupiter.api.*;
 
 /**
@@ -209,19 +210,20 @@ class DarkThemeCss_Test extends TestBase {
 
 	@Test void a08_valuesMatchSpec() throws Exception {
 		var d = darkDecls();
-		var expected = new LinkedHashMap<String,String>();
-		expected.put("--jc-main-bg", "#16181d");
-		expected.put("--jc-surface", "#24272e");
-		expected.put("--jc-text", "#e6e8eb");
-		expected.put("--jc-text-muted", "#a3a9b3");
-		expected.put("--jc-control-border", "#7a818c");
-		expected.put("--jc-placeholder", "#7d838d");
-		expected.put("--jc-danger-text", "#f07a75");
-		expected.put("--jc-success-text", "#5cc275");
-		expected.put("--jc-warn", "#e8a33d");
-		expected.put("--jc-chart-1", "#5b9cf0");
-		expected.put("--jc-term-bg", "#0d0f12");
-		expected.put("--jc-on-tone", "#16181d");
+		Map<String,String> expected = Shorts.<String,String>mb()
+			.add("--jc-main-bg", "#16181d")
+			.add("--jc-surface", "#24272e")
+			.add("--jc-text", "#e6e8eb")
+			.add("--jc-text-muted", "#a3a9b3")
+			.add("--jc-control-border", "#7a818c")
+			.add("--jc-placeholder", "#7d838d")
+			.add("--jc-danger-text", "#f07a75")
+			.add("--jc-success-text", "#5cc275")
+			.add("--jc-warn", "#e8a33d")
+			.add("--jc-chart-1", "#5b9cf0")
+			.add("--jc-term-bg", "#0d0f12")
+			.add("--jc-on-tone", "#16181d")
+			.build();
 		expected.forEach((k, v) -> assertEquals(v, d.get(k), k));
 	}
 }

@@ -54,7 +54,7 @@ public enum DurationFormat {
 			case SECONDS -> {
 				long seconds = value.getSeconds();
 				int nanos = value.getNano();
-				yield seconds + "." + String.format("%09d", nanos);
+				yield seconds + "." + f("%09d", nanos);
 			}
 			case HOCON -> formatHocon(value);
 		};
@@ -133,7 +133,7 @@ public enum DurationFormat {
 			if (minutes > 0)
 				sb.append(minutes).append('M');
 			if (seconds > 0 || nanos > 0 || (hours == 0 && minutes == 0))
-				sb.append(seconds).append(nanos == 0 ? "" : "." + trimTrailingZeros(String.format("%09d", nanos))).append('S');
+				sb.append(seconds).append(nanos == 0 ? "" : "." + trimTrailingZeros(f("%09d", nanos))).append('S');
 		}
 		return sb.toString();
 	}

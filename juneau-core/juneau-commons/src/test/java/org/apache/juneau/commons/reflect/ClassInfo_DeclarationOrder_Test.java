@@ -27,7 +27,9 @@ import org.junit.jupiter.api.*;
  */
 class ClassInfo_DeclarationOrder_Test extends TestBase {
 
-	@SuppressWarnings("unused")
+	@SuppressWarnings({
+		"unused" // Fixture fields are read reflectively.
+	})
 	public static class A {
 		public String zeta;
 		public int alpha;

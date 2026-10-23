@@ -21,6 +21,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.lang.reflect.*;
 import java.util.*;
+import java.util.function.*;
 import java.util.stream.*;
 
 /**
@@ -110,6 +111,17 @@ public class TestAssertions {
 		assertNotNull(actual, "assertSize: value was null");
 		int size = sizeOf(actual);
 		assertEquals(expected, size, "assertSize: expected size " + expected + " but got " + size);
+	}
+
+	/**
+	 * Same as {@link #assertSize(int, Object)} but with a custom failure message.
+	 *
+	 * <p>The supplied message is prepended to the standard failure message.</p>
+	 */
+	public static void assertSize(Supplier<String> message, int expected, Object actual) {
+		assertNotNull(actual, message);
+		int size = sizeOf(actual);
+		assertEquals(expected, size, () -> message.get() + " ==> assertSize: expected size " + expected + " but got " + size);
 	}
 
 	/**

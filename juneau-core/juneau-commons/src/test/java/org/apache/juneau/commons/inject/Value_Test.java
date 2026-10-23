@@ -76,7 +76,7 @@ class Value_Test extends TestBase {
 	 * the test fixture package, so {@code isValueAnnotation} alone cannot tell them apart.  We
 	 * instead exercise both Juneau {@code @Value} and {@code @Value}+{@code @Inject} conflict paths
 	 * directly — the Spring FQN match is exercised in the actual Spring Boot integration test
-	 * fixture (Phase 4).
+	 * fixture.
 	 */
 	@Retention(RetentionPolicy.RUNTIME)
 	@Target({ElementType.FIELD, ElementType.PARAMETER, ElementType.METHOD, ElementType.CONSTRUCTOR})

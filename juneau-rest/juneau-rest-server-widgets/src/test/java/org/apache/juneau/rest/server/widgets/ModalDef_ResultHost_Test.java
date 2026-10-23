@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.server.widgets;
 
+import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
@@ -34,8 +35,8 @@ import org.junit.jupiter.api.*;
  * make that claim true rather than merely intended:
  * <ul class='spaced-list'>
  * 	<li><b>Appended, never interleaved.</b> The new keys land after the frozen prefix, in {@code @BeanType} order.
- * 	<li><b>Omitted when unset.</b> An un-opted-in modal's payload is byte-identical to one served before any of
- * 		this existed &mdash; which is what lets an older runtime keep reading it, and lets the golden fixtures in
+ * 	<li><b>Omitted when unset.</b> An un-opted-in modal's payload is byte-identical to one that never set these
+ * 		keys &mdash; which is what lets an older runtime keep reading it, and lets the golden fixtures in
  * 		{@code ModalDef_FormDef_Test} / {@code ModalDef_BarSlot_Test} stay untouched.
  * 	<li><b>No {@link ModalDef#CONTRACT_VERSION} bump.</b> Additive means the version does not move.
  * </ul>
@@ -213,7 +214,7 @@ class ModalDef_ResultHost_Test extends TestBase {
 	// A raw list, bypassing the factory - the shape a bean-deserialized payload can actually arrive in.
 	private static ModalDef withRawChildren(ModalDef.ChildAction... children) {
 		var m = ModalDef.create("Step 1");
-		m.childActions = new ArrayList<>(Arrays.asList(children));
+		m.childActions = list(children);
 		return m;
 	}
 

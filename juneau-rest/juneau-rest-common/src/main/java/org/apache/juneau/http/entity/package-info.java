@@ -25,12 +25,12 @@
  * <p>
  * Concrete body types:
  * <ul>
- * 	<li>{@link org.apache.juneau.http.entity.StringBody} — UTF-8 string content
- * 	<li>{@link org.apache.juneau.http.entity.ByteArrayBody} — raw byte array content
- * 	<li>{@link org.apache.juneau.http.entity.StreamBody} — wraps a one-shot {@link java.io.InputStream}
- * 	<li>{@link org.apache.juneau.http.entity.FileBody} — streams a {@link java.io.File}
- * 	<li>{@link org.apache.juneau.http.entity.MultipartBody} — {@code multipart/form-data} with file uploads
- * 	<li>{@link org.apache.juneau.http.entity.HttpBodyBean} — wraps an existing body with an overridden content type
+ * 	<li>{@link org.apache.juneau.http.entity.StringBody StringBody} — UTF-8 string content
+ * 	<li>{@link org.apache.juneau.http.entity.ByteArrayBody ByteArrayBody} — raw byte array content
+ * 	<li>{@link org.apache.juneau.http.entity.StreamBody StreamBody} — wraps a one-shot {@link java.io.InputStream}
+ * 	<li>{@link org.apache.juneau.http.entity.FileBody FileBody} — streams a {@link java.io.File}
+ * 	<li>{@link org.apache.juneau.http.entity.MultipartBody MultipartBody} — {@code multipart/form-data} with file uploads
+ * 	<li>{@link org.apache.juneau.http.entity.HttpBodyBean HttpBodyBean} — wraps an existing body with an overridden content type
  * </ul>
  */
 package org.apache.juneau.http.entity;

@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.client;
 
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
@@ -99,7 +100,7 @@ class RestClient_Test {
 			}
 		}
 		var recorded = transport.getRecordedRequests();
-		assertEquals(1, recorded.size());
+		assertSize(1, recorded);
 		var uri = recorded.get(0).getUri();
 		assertTrue(uri.toString().contains("q=juneau"), "Expected q=juneau in: " + uri);
 	}
@@ -331,7 +332,7 @@ class RestClient_Test {
 			client.post("/b").run().close();
 			client.delete("/c").run().close();
 		}
-		assertEquals(3, transport.getRecordedRequests().size());
+		assertSize(3, transport.getRecordedRequests());
 		assertEquals("GET", transport.getRecordedRequests().get(0).getMethod());
 		assertEquals("POST", transport.getRecordedRequests().get(1).getMethod());
 		assertEquals("DELETE", transport.getRecordedRequests().get(2).getMethod());
@@ -345,11 +346,11 @@ class RestClient_Test {
 			.build();
 		try (var client = RestClient.builder().transport(transport).rootUrl("http://example.com").build()) {
 			client.get("/a").run().close();
-			assertEquals(1, transport.getRecordedRequests().size());
+			assertSize(1, transport.getRecordedRequests());
 			transport.clearRecordedRequests();
-			assertEquals(0, transport.getRecordedRequests().size());
+			assertSize(0, transport.getRecordedRequests());
 			client.get("/b").run().close();
-			assertEquals(1, transport.getRecordedRequests().size());
+			assertSize(1, transport.getRecordedRequests());
 		}
 	}
 
@@ -736,7 +737,7 @@ class RestClient_Test {
 				assertEquals(200, r.getStatusCode());
 			}
 		}
-		assertEquals(0, transport.getRecordedRequests().size());
+		assertSize(0, transport.getRecordedRequests());
 	}
 
 	@Test
@@ -746,7 +747,7 @@ class RestClient_Test {
 			.fallback(req -> TransportResponse.builder().statusCode(200).build())
 			.build();
 		assertDoesNotThrow(transport::clearRecordedRequests);
-		assertEquals(0, transport.getRecordedRequests().size());
+		assertSize(0, transport.getRecordedRequests());
 	}
 
 	@Test

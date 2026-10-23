@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.commons.svl.functions;
 
+import static org.apache.juneau.commons.TestAssertions.*;
+import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
@@ -184,12 +186,12 @@ class MiniJson_Test extends TestBase {
 	@Test void d03_parse_simpleObject() {
 		var m = (Map<String,Object>) MiniJson.parse("{\"a\":1}");
 		assertEquals(1L, m.get("a"));
-		assertEquals(1, m.size());
+		assertSize(1, m);
 	}
 
 	@Test void d04_parse_multipleEntries() {
 		var m = (Map<String,Object>) MiniJson.parse("{\"a\":1,\"b\":2,\"c\":3}");
-		assertEquals(3, m.size());
+		assertSize(3, m);
 		assertEquals(1L, m.get("a"));
 		assertEquals(2L, m.get("b"));
 		assertEquals(3L, m.get("c"));
@@ -232,7 +234,7 @@ class MiniJson_Test extends TestBase {
 
 	@Test void e04_parse_arrayMixedTypes() {
 		var l = (List<Object>) MiniJson.parse("[1,\"two\",true,null]");
-		assertEquals(4, l.size());
+		assertSize(4, l);
 		assertEquals(1L, l.get(0));
 		assertEquals("two", l.get(1));
 		assertEquals(Boolean.TRUE, l.get(2));
@@ -371,10 +373,7 @@ class MiniJson_Test extends TestBase {
 	}
 
 	@Test void i04_render_listWithNull() {
-		var l = new ArrayList<>();
-		l.add("a");
-		l.add(null);
-		l.add("b");
+		var l = list("a", null, "b");
 		assertEquals("[\"a\",null,\"b\"]", MiniJson.render(l));
 	}
 

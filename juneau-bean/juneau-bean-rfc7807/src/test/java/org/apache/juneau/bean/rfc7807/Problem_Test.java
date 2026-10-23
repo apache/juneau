@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.bean.rfc7807;
 
+import static org.apache.juneau.test.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.net.*;
@@ -78,7 +79,7 @@ class Problem_Test extends TestBase {
 		var p = new Problem();
 		p.set("balance", 30);
 		assertEquals(30, p.get("balance"));
-		assertEquals(1, p.extraKeys().size());
+		assertSize(1, p.extraKeys());
 		assertTrue(p.extraKeys().contains("balance"));
 	}
 
@@ -86,7 +87,7 @@ class Problem_Test extends TestBase {
 		var p = new Problem()
 			.set("balance", 30)
 			.set("accounts", "/account/12345");
-		assertEquals(2, p.extraKeys().size());
+		assertSize(2, p.extraKeys());
 		assertEquals(30, p.get("balance"));
 		assertEquals("/account/12345", p.get("accounts"));
 	}

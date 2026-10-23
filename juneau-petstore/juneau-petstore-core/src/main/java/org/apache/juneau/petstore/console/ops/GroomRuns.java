@@ -27,6 +27,7 @@ import java.util.concurrent.*;
 import java.util.concurrent.atomic.*;
 
 import org.apache.juneau.marshall.collections.*;
+import org.apache.juneau.petstore.console.data.*;
 import org.apache.juneau.rest.server.terminal.*;
 
 /**
@@ -115,7 +116,7 @@ public final class GroomRuns implements AutoCloseable {
 		final String id;
 		final String pet;
 		final boolean verbose;
-		final Instant submitted = Instant.now();
+		final Instant submitted = PetstoreSeed.now();
 		final MemoryTerminalSource terminal = MemoryTerminalSource.create(RING_BYTES, COLS, ROWS);
 		final Path file;
 		final Path sizeFile;

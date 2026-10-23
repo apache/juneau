@@ -49,14 +49,14 @@ class ActionRef_Test extends TestBase {
 		var a = ActionRef.of("x")
 			.enabledWhen("status", Op.EQ, "OPEN", "Must be open")
 			.enabledWhen("kind", Op.NE, "legacy", "Not for legacy");
-		assertEquals(2, a.enabledWhen.size());
+		assertSize(2, a.enabledWhen);
 		assertBean(a.enabledWhen.get(0), "field,op,value,reason", "status,EQ,OPEN,Must be open");
 		assertBean(a.enabledWhen.get(1), "field,op,value,reason", "kind,NE,legacy,Not for legacy");
 	}
 
 	@Test void a05_enabledWhen_presenceForm_recordsRuleWithNullValue() {
 		var a = ActionRef.of("x").enabledWhen("owner", Op.PRESENT, "Needs an owner");
-		assertEquals(1, a.enabledWhen.size());
+		assertSize(1, a.enabledWhen);
 		assertBean(a.enabledWhen.get(0), "field,op,reason", "owner,PRESENT,Needs an owner");
 		assertNull(a.enabledWhen.get(0).value);
 		a.enabledWhen("owner", Op.ABSENT, "Must be unowned");

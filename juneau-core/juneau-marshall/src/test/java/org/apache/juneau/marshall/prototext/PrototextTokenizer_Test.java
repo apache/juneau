@@ -17,6 +17,7 @@
 package org.apache.juneau.marshall.prototext;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 
 import org.apache.juneau.marshall.collections.*;
 import org.apache.juneau.marshall.parser.*;
@@ -136,7 +137,7 @@ class PrototextTokenizer_Test {
 		var b = PrototextParser.DEFAULT.read("arr: [1, 2]", JsonMap.class);
 		var arr = b.getList("arr");
 		assertNotNull(arr);
-		assertEquals(2, arr.size());
+		assertSize(2, arr);
 
 		var c = PrototextParser.DEFAULT.read("a: 1; b: 2", JsonMap.class);
 		assertEquals(1L, c.get("a"));

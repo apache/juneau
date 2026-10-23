@@ -83,7 +83,7 @@ public class CellPopover {
 	 * @throws IllegalArgumentException If this popover is not well-formed.
 	 */
 	public void validate() {
-		if (fields == null || fields.isEmpty())
+		if (ie(fields))
 			throw iaex("CellPopover must declare at least one field.");
 		var keys = new HashSet<String>();
 		for (var f : fields)

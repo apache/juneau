@@ -484,7 +484,7 @@ public class JwtTokenValidator implements TokenValidator {
 			throw reject("\"iss\" claim does not match expected issuer");
 
 		var aud = claims.getAudience();
-		if (aud == null || aud.isEmpty())
+		if (ie(aud))
 			throw reject("\"aud\" claim is required");
 		if (! aud.contains(audience))
 			throw reject("\"aud\" claim does not include expected audience");

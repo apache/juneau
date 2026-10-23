@@ -74,7 +74,7 @@ class ConsoleChromeMixin_OverrideBlock_Test extends TestBase {
 	/** Every declaration is a --jc- name; the digit-admitting class makes sure names like --evil-1 are inspected. */
 	@Test void a04_block_declaresOnlyJcNames() {
 		var names = declaredNames(ConsoleChromeMixin.overrideBlock(EMISSION));
-		assertEquals(4, names.size(), names::toString);
+		assertSize(names::toString, 4, names);
 		for (var n : names)
 			assertTrue(n.startsWith("--jc-"), n);
 	}

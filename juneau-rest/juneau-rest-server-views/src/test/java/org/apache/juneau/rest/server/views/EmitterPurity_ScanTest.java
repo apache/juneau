@@ -17,6 +17,7 @@
 package org.apache.juneau.rest.server.views;
 
 import static org.apache.juneau.commons.utils.Shorts.*;
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.nio.file.*;
@@ -127,7 +128,7 @@ class EmitterPurity_ScanTest extends TestBase {
 		// "escapeForScript(nestedJson(v" and gets silently RECLASSIFIED as content-bearing.
 		var found = RawContentSinkScanner.scanRawText("X.java",
 			"class X { void f() { q.text(rawText(escapeForScript(nestedJson(v, tokenless)))); } }");
-		assertEquals(1, found.size(), found::toString);
+		assertSize(found::toString, 1, found);
 		assertEquals("escapeForScript(nestedJson(v, tokenless))", found.get(0).arg());
 		assertTrue(found.get(0).isSidecarPayload());
 	}
@@ -230,9 +231,8 @@ class EmitterPurity_ScanTest extends TestBase {
 		var sites = RawContentSinkScanner.scanRawText("RegionTable.java", mutated);
 		var offenders = sites.stream().filter(RawContentSinkScanner.RawTextSite::isContentBearing).toList();
 
-		assertEquals(1, offenders.size(),
-			() -> "turning one real sidecar write into a live-data field read must produce exactly one content-bearing "
-				+ "site; if it produces none, b01/b02 are passing for free: " + sites);
+		assertSize(() -> "turning one real sidecar write into a live-data field read must produce exactly one content-bearing "
+				+ "site; if it produces none, b01/b02 are passing for free: " + sites, 1, offenders);
 		assertFalse(KNOWN_CONTENT_SINKS.contains(offenders.get(0).key()),
 			"the mutated site must NOT be absorbed by the allowlist - otherwise the allowlist is a hole");
 	}
@@ -242,7 +242,7 @@ class EmitterPurity_ScanTest extends TestBase {
 		// that a violation IN it is actually classified as one.
 		var sites = RawContentSinkScanner.scanRawText("CardContent.java",
 			"class CardContent { Object f() { return div(rawText(this.userSuppliedBody)); } }");
-		assertEquals(1, sites.size(), sites::toString);
+		assertSize(sites::toString, 1, sites);
 		assertTrue(sites.get(0).isContentBearing(), () -> "not classified as content: " + sites.get(0));
 		assertFalse(KNOWN_CONTENT_SINKS.contains(sites.get(0).key()), "must not be pre-absorbed by the allowlist");
 	}

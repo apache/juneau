@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.server.view.thymeleaf;
 
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
@@ -89,7 +90,7 @@ class ThymeleafView_Test extends TestBase {
 		assertEquals("Bob", v.getAttributes().get("name"));
 		assertEquals(42, v.getAttributes().get("age"));
 		assertEquals(Boolean.TRUE, v.getAttributes().get("active"));
-		assertEquals(3, v.getAttributes().size());
+		assertSize(3, v.getAttributes());
 	}
 
 	@Test void b03_attrReplacesExistingBinding() {
@@ -98,7 +99,7 @@ class ThymeleafView_Test extends TestBase {
 			.attr("name", "Alice");
 
 		assertEquals("Alice", v.getAttributes().get("name"));
-		assertEquals(1, v.getAttributes().size());
+		assertSize(1, v.getAttributes());
 	}
 
 	@Test void b04_attrRejectsNullValue() {
@@ -187,7 +188,7 @@ class ThymeleafView_Test extends TestBase {
 		var v = ThymeleafView.of("hello")
 			.header("Content-Type", "text/html; charset=UTF-8")
 			.header("Cache-Control", "no-store");
-		assertEquals(2, v.getResponseHeaders().size());
+		assertSize(2, v.getResponseHeaders());
 	}
 
 	@Test void d03_headerRejectsBlankName() {

@@ -30,12 +30,10 @@ import java.util.*;
 import org.apache.juneau.bean.html5.*;
 import org.apache.juneau.bean.swagger.*;
 import org.apache.juneau.commons.http.*;
-import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.commons.logging.*;
 import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.marshall.*;
 import org.apache.juneau.marshall.collections.*;
-import org.apache.juneau.marshall.cp.*;
 import org.apache.juneau.marshall.html.*;
 import org.apache.juneau.marshall.swap.spi.*;
 
@@ -63,14 +61,18 @@ public class SwaggerUI extends ObjectSwap<Swagger,Div> {
 		}
 	}
 
-	// @formatter:off
-	static final FileFinder RESOURCES = FileFinder
-		.create(BasicBeanStore.INSTANCE)
-		.cp(SwaggerUI.class, null, true)
-		.dir(",")
-		.caching(Boolean.getBoolean("RestContext.disableClasspathResourceCaching.b") ? -1 : 1_000_000) // HTT - system property branch only triggers when property is set
-		.build();
-	// @formatter:on
+	private static final String CSS = readResource("SwaggerUI.css");
+	private static final String JS = readResource("SwaggerUI.js");
+
+	private static String readResource(String name) {
+		try (var is = SwaggerUI.class.getResourceAsStream(name)) {
+			if (is == null)
+				throw new IllegalStateException("Swagger UI resource not found on classpath: " + SwaggerUI.class.getPackageName().replace('.', '/') + "/" + name);
+			return new String(is.readAllBytes(), java.nio.charset.StandardCharsets.UTF_8);
+		} catch (java.io.IOException e) {
+			throw new IllegalStateException("Could not read Swagger UI resource: " + name, e);
+		}
+	}
 
 	private static final Set<String> STANDARD_METHODS = set("get", "put", "post", "delete", "options");
 
@@ -412,16 +414,12 @@ public class SwaggerUI extends ObjectSwap<Swagger,Div> {
 		// @formatter:off
 		var s = new Session(swagger);
 
-		var css = RESOURCES.getString("files/htdocs/styles/SwaggerUI.css", null).orElse(null);
-		if (css == null) // HTT - primary CSS file path succeeds in normal test environments
-			css = RESOURCES.getString("SwaggerUI.css", null).orElse(null);
-
 		// Stamp the per-response Content-Security-Policy nonce onto the inline <style>/<script> when present so the UI
 		// satisfies a nonce-based CSP (the same nonce the REST layer emits in the Content-Security-Policy header).
 		var nonce = (marshallingSession instanceof HtmlDocSerializerSession marshallingSession2) ? marshallingSession2.getNonce() : null;
 
-		var style = style(css);
-		var script = script("text/javascript", RESOURCES.getString("SwaggerUI.js", null).orElse(null));
+		var style = style(CSS);
+		var script = script("text/javascript", JS);
 		if (nonce != null) {
 			style.attr("nonce", nonce);
 			script.attr("nonce", nonce);
@@ -447,7 +445,7 @@ public class SwaggerUI extends ObjectSwap<Swagger,Div> {
 		}
 
 		if (nn(s.swagger.getDefinitions())) {
-			var modelBlock = div().class_("tag-block").children(
+			var modelBlock = div().class_("tag-block tag-block-open").children(
 				modelsBlockSummary(),
 				modelsBlockContents(s)
 			);

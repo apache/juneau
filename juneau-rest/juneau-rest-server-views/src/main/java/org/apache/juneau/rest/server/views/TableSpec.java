@@ -147,7 +147,7 @@ public final class TableSpec {
 	 * @throws IllegalArgumentException If {@code id} is <jk>null</jk>, blank, or malformed.
 	 */
 	public static TableSpec create(String id) {
-		if (id == null || id.isBlank())
+		if (ib(id))
 			throw iaex("TableSpec id must not be null or blank.");
 		if (! ID_PATTERN.matcher(id).matches())
 			throw iaex("TableSpec id '%s' must match ^[A-Za-z][A-Za-z0-9_-]{0,63}$.", id);
@@ -209,7 +209,7 @@ public final class TableSpec {
 	 * @throws IllegalArgumentException If {@code column} is <jk>null</jk>/blank, or {@code dir} is <jk>null</jk>.
 	 */
 	public TableSpec defaultOrder(String column, Sort dir) {
-		if (column == null || column.isBlank())
+		if (ib(column))
 			throw iaex("TableSpec defaultOrder column must not be null or blank.");
 		if (dir == null)
 			throw iaex("TableSpec defaultOrder direction must not be null.");
@@ -313,13 +313,13 @@ public final class TableSpec {
 	}
 
 	private void checkRowClassCommon(String field, Op op, String cssClass) {
-		if (field == null || field.isBlank())
+		if (ib(field))
 			throw iaex("TableSpec '%s' rowClass field must not be null or blank.", id);
 		if (op == null)
 			throw iaex("TableSpec '%s' rowClass op must not be null.", id);
 		if (op.isCollectionOp())
 			throw iaex("TableSpec '%s' rowClass on '%s': op '%s' is not supported; use eq, ne, present or absent.", id, field, op.wire());
-		if (cssClass == null || cssClass.isBlank())
+		if (ib(cssClass))
 			throw iaex("TableSpec '%s' rowClass cssClass must not be null or blank.", id);
 	}
 
@@ -401,7 +401,7 @@ public final class TableSpec {
 	 * @throws IllegalArgumentException If {@code id} is <jk>null</jk>/blank, or {@code items} is empty.
 	 */
 	public TableSpec quickStats(String id, QuickStat...items) {
-		if (id == null || id.isBlank())
+		if (ib(id))
 			throw iaex("TableSpec quickStats id must not be null or blank.");
 		if (items.length == 0)
 			throw iaex("TableSpec quickStats requires at least one item.");
@@ -446,7 +446,7 @@ public final class TableSpec {
 	 * @throws IllegalArgumentException If {@code param} is null, blank, or malformed.
 	 */
 	public TableSpec urlStateDayParam(String param) {
-		if (param == null || param.isBlank())
+		if (ib(param))
 			throw iaex("urlState day param must not be null or blank.");
 		checkUrlStateParam("day param", param);
 		urlState.computeIfAbsent("day", k -> new LinkedHashMap<>()).put("param", param);
@@ -491,7 +491,9 @@ public final class TableSpec {
 	 * 	built-in directive, mistyped, or out of range (a parameter name that is malformed, a {@code max} that is not a
 	 * 	positive integer, a {@code window.params} key other than {@code start}/{@code end}).
 	 */
-	@SuppressWarnings("unchecked") // the only nested values are the Map<String,Object> copies checkUrlStateOption builds for window.params
+	@SuppressWarnings({
+		"unchecked" // the only nested values are the Map<String,Object> copies checkUrlStateOption builds for window.params
+	})
 	public TableSpec urlState(String name, Map<String,Object> config) {
 		checkUrlStateName(name);
 		if (config == null)
@@ -499,7 +501,7 @@ public final class TableSpec {
 		var checked = new LinkedHashMap<String,Object>();
 		for (var e : config.entrySet()) {
 			var key = e.getKey();
-			if (key == null || key.isBlank())
+			if (ib(key))
 				throw iaex("urlState '%s' option name must not be blank.", name);
 			checked.put(key, checkUrlStateOption(name, key, e.getValue()));
 		}
@@ -518,7 +520,7 @@ public final class TableSpec {
 	}
 
 	private static void checkUrlStateName(String name) {
-		if (name == null || name.isBlank())
+		if (ib(name))
 			throw iaex("urlState name must not be blank.");
 		if (! URL_STATE_BUILTINS.contains(name))
 			throw iaex("urlState '%s' is not a built-in directive; expected day, ids or window.", name);
@@ -681,7 +683,7 @@ public final class TableSpec {
 	 * @throws IllegalStateException If any check fails.
 	 */
 	public void validate() {
-		if (dataUrl == null || dataUrl.isBlank())
+		if (ib(dataUrl))
 			throw isex("TableSpec '%s' requires dataUrl.", id);
 		if (columns.isEmpty())
 			throw isex("TableSpec '%s' requires at least one column.", id);

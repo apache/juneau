@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.server.views;
 
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.time.*;
@@ -117,7 +118,7 @@ class JobKeyLedger_Test extends TestBase {
 	@Test void c03_claim_unknownKey_isIgnored() {
 		var l = JobKeyLedger.create();
 		l.claim(IdempotencyKey.mint("restock", "dog"), "job-1");
-		assertEquals(0, l.size());
+		assertSize(0, l);
 	}
 
 	@Test void c04_claim_blankJobIdThrows() {
@@ -139,7 +140,7 @@ class JobKeyLedger_Test extends TestBase {
 		assertTrue(l.verify(k.value(), "restock", "dog").isPresent());
 		c.now = c.now.plus(Duration.ofMinutes(1));
 		assertTrue(l.verify(k.value(), "restock", "dog").isEmpty());
-		assertEquals(0, l.size());
+		assertSize(0, l);
 	}
 
 	@Test void d02_maxPerPrincipal_evictsThatPrincipalsOldest() {
@@ -171,7 +172,7 @@ class JobKeyLedger_Test extends TestBase {
 		var k2 = l.issue("restock", "b");
 		l.verify(k1.value(), "restock", "a");
 		var k3 = l.issue("restock", "c");
-		assertEquals(2, l.size());
+		assertSize(2, l);
 		assertTrue(l.verify(k1.value(), "restock", "a").isPresent());
 		assertTrue(l.verify(k2.value(), "restock", "b").isEmpty());
 		assertTrue(l.verify(k3.value(), "restock", "c").isPresent());

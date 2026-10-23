@@ -17,6 +17,7 @@
 package org.apache.juneau.rest.server.auth;
 
 import static org.apache.juneau.commons.utils.Shorts.*;
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
@@ -167,7 +168,7 @@ class AuthFilterChain_GuardIntegration_Test extends TestBase {
 				throw rex(e);
 			}
 		});
-		assertEquals(1, records.size());
+		assertSize(1, records);
 		assertTrue(records.get(0).getMessage().contains("Ignoring roles from a distinct authenticated principal"));
 		var r = holder[0];
 		assertNotNull(r.captured);

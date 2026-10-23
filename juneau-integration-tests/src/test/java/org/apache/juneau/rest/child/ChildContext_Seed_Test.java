@@ -27,7 +27,7 @@ import org.apache.juneau.utest.utils.*;
 import org.junit.jupiter.api.*;
 
 /**
- * Phase 2 canary &mdash; proves the {@code @Child} seed-injection mechanism end-to-end using {@code partSerializer}
+ * Proves the {@code @Child} seed-injection mechanism end-to-end using {@code partSerializer}
  * (a single child-wins scalar) as a witness.
  *
  * <p>

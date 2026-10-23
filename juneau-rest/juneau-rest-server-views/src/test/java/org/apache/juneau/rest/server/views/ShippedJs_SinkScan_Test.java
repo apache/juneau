@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.server.views;
 
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.nio.file.*;
@@ -133,8 +134,8 @@ class ShippedJs_SinkScan_Test extends TestBase {
 	})
 	void b01_eachSinkPattern_isFlagged(String src) {
 		var r = RawContentSinkScanner.scanJsHtmlSinks("x.js", src);
-		assertEquals(1, r.violations().size(), () -> "violations: " + r.violations());
-		assertEquals(1, r.sinks().size());
+		assertSize(() -> "violations: " + r.violations(), 1, r.violations());
+		assertSize(1, r.sinks());
 	}
 
 	@ParameterizedTest
@@ -154,11 +155,11 @@ class ShippedJs_SinkScan_Test extends TestBase {
 		var allowed = Set.of("el.innerHTML = markup;");
 		var ok = RawContentSinkScanner.scanJsHtmlSinks("x.js", "el.innerHTML = markup;", allowed);
 		assertEquals(List.of(), ok.violations());
-		assertEquals(1, ok.sinks().size());
+		assertSize(1, ok.sinks());
 		var other = RawContentSinkScanner.scanJsHtmlSinks("x.js", "el.innerHTML = rowText;", allowed);
-		assertEquals(1, other.violations().size(), () -> "violations: " + other.violations());
+		assertSize(() -> "violations: " + other.violations(), 1, other.violations());
 		var otherTarget = RawContentSinkScanner.scanJsHtmlSinks("x.js", "other.innerHTML = markup;", allowed);
-		assertEquals(1, otherTarget.violations().size(), () -> "violations: " + otherTarget.violations());
+		assertSize(() -> "violations: " + otherTarget.violations(), 1, otherTarget.violations());
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

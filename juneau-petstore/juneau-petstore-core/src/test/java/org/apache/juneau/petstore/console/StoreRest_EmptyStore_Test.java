@@ -17,6 +17,7 @@
 package org.apache.juneau.petstore.console;
 
 import static org.apache.juneau.rest.server.console.test.PageContractAssert.*;
+import static org.apache.juneau.test.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
@@ -74,7 +75,7 @@ class StoreRest_EmptyStore_Test extends TestBase {
 		assertEquals("orders", orders.get("id"));
 		assertEquals("segmented", orders.get("type"));
 		var segs = (List<?>)orders.get("segments");
-		assertEquals(3, segs.size());
+		assertSize(3, segs);
 		var labels = new ArrayList<String>();
 		for (var o : segs) {
 			var seg = (Map<?,?>)o;
@@ -89,8 +90,8 @@ class StoreRest_EmptyStore_Test extends TestBase {
 
 	@Test void a00_hostStoreIsReallyEmpty() throws Exception {
 		var c = client();
-		assertEquals(0, new JsonList(c.get("/petstore/pets").accept("application/json").run().assertStatus(200).getContent().asString()).size());
-		assertEquals(0, new JsonList(c.get("/petstore/orders").accept("application/json").run().assertStatus(200).getContent().asString()).size());
+		assertSize(0, new JsonList(c.get("/petstore/pets").accept("application/json").run().assertStatus(200).getContent().asString()));
+		assertSize(0, new JsonList(c.get("/petstore/orders").accept("application/json").run().assertStatus(200).getContent().asString()));
 	}
 
 	@Test void a01_emptyStore_ftlRendersInventoryAsTile() throws Exception {

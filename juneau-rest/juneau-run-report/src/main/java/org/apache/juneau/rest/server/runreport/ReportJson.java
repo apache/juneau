@@ -39,7 +39,9 @@ final class ReportJson {
 	private ReportJson() {}
 
 	/** Returns the parsed root object, or <jk>null</jk> after adding a warning to {@code out}. */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Json.to(..., Map.class) returns a raw Map; JSON object keys are always strings.
+	})
 	static Map<String,Object> readRoot(Path file, ReportLimits lim, ReportBuilder out) {
 		var name = fileName(file);
 		try {
@@ -68,7 +70,9 @@ final class ReportJson {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Json.to(..., Map.class) returns a raw Map; JSON object keys are always strings.
+	})
 	static Map<String,Object> map(Object o) {
 		return o instanceof Map ? (Map<String,Object>)o : null;
 	}

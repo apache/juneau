@@ -16,6 +16,7 @@
  */
 package org.apache.juneau;
 
+import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.nio.charset.*;
@@ -364,10 +365,7 @@ class ContextSession_Test extends TestBase {
 			var session = (WriterSerializerSession) JsonSerializer.DEFAULT.createSession()
 				.property("SerializerSession.sortMaps", "true")
 				.build();
-			var m = new LinkedHashMap<String,Integer>();
-			m.put("c", 3);
-			m.put("a", 1);
-			m.put("b", 2);
+			Map<String,Integer> m = map("c", 3, "a", 1, "b", 2);
 			var result = session.write(m);
 			assertEquals("{\"a\":1,\"b\":2,\"c\":3}", result);
 		}

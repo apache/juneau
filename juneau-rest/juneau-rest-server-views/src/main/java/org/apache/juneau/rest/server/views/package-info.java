@@ -22,9 +22,9 @@
  * <p>
  * This optional module builds on {@code juneau-rest-server-datatables} (the server-side query protocol).
  * Table authoring now lives in FTL {@code <@card type="datatables">} catalogs; this module keeps the
- * {@code VIEW_META} JSON contract constants ({@link org.apache.juneau.rest.server.views.ViewsMixin},
- * {@link org.apache.juneau.rest.server.views.ViewTable}), region mounting
- * ({@link org.apache.juneau.rest.server.views.RegionDef}, {@link org.apache.juneau.rest.server.views.RegionTable}),
+ * {@code VIEW_META} JSON contract constants ({@link org.apache.juneau.rest.server.views.ViewsMixin ViewsMixin},
+ * {@link org.apache.juneau.rest.server.views.ViewTable ViewTable}), region mounting
+ * ({@link org.apache.juneau.rest.server.views.RegionDef RegionDef}, {@link org.apache.juneau.rest.server.views.RegionTable RegionTable}),
  * bulk-mutate / row-action types, and the first-party
  * {@code juneau-views.js}/{@code juneau-ribbon.js}/{@code juneau-renders.js} runtime.
  *
@@ -43,7 +43,7 @@
  *
  * <h5 class='section'>Complex dialogs and nested popups (v1):</h5>
  * <p>
- * A {@link org.apache.juneau.rest.server.views.RowAction} whose presentation is {@code DIALOG} opens a declarative
+ * A {@link org.apache.juneau.rest.server.views.RowAction RowAction} whose presentation is {@code DIALOG} opens a declarative
  * popup dialog described by {@link org.apache.juneau.rest.server.widgets.ModalDef}.  The dialog may carry a
  * {@link org.apache.juneau.rest.server.widgets.FormDef} whose
  * {@link org.apache.juneau.rest.server.widgets.FormDef.Input}
@@ -78,10 +78,10 @@
  * moved from this package to {@code org.apache.juneau.rest.server.widgets}.  This is a <b>breaking package
  * relocation with no shim</b>: a deprecated forwarding class left behind here would re-create the views&rarr;widgets
  * dependency in reverse, so applications update their imports instead.  Only the dialog beans moved &mdash; the
- * table/row-action types they are used with ({@link org.apache.juneau.rest.server.views.RowAction},
- * {@link org.apache.juneau.rest.server.views.IdempotencyKey},
- * {@link org.apache.juneau.rest.server.views.ActionResult},
- * {@link org.apache.juneau.rest.server.views.WritePermit}) stay here.  The dialog/form <b>runtime</b> also stays
+ * table/row-action types they are used with ({@link org.apache.juneau.rest.server.views.RowAction RowAction},
+ * {@link org.apache.juneau.rest.server.views.IdempotencyKey IdempotencyKey},
+ * {@link org.apache.juneau.rest.server.views.ActionResult ActionResult},
+ * {@link org.apache.juneau.rest.server.views.WritePermit WritePermit}) stay here.  The dialog/form <b>runtime</b> also stays
  * here, inside {@code juneau-views.js}: after the move a widgets-module bean is driven by a views-module script,
  * which is deliberate rather than accidental (splitting that monolith is a separate concern).
  *

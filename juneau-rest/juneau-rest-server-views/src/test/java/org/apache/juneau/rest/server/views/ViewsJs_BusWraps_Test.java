@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.server.views;
 
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assumptions.*;
 
@@ -145,7 +146,7 @@ class ViewsJs_BusWraps_Test extends TestBase {
 
 	@Test void c01_job_startProgressResult() {
 		var p = (List<?>)r("job_j1");
-		assertEquals(3, p.size(), p::toString);
+		assertSize(p::toString, 3, p);
 		assertEquals(Map.of("schemaVersion", 1, "jobId", "j-1", "state", "running"), normalize(p.get(0)));
 		assertEquals(Map.of("schemaVersion", 1, "jobId", "j-1", "state", "running", "message", "Copying 3/10"), normalize(p.get(1)));
 		assertEquals(Map.of("schemaVersion", 1, "jobId", "j-1", "state", "succeeded",

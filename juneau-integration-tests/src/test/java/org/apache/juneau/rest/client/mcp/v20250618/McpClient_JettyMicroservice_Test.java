@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.client.mcp.v20250618;
 
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
@@ -93,7 +94,7 @@ class McpClient_JettyMicroservice_Test extends TestBase {
 	@Test void b01_listTools_returnsRegisteredToolOverRealHttp() throws Exception {
 		try (var client = clientBuilder().build()) {
 			var result = client.listTools();
-			assertEquals(1, result.getTools().size());
+			assertSize(1, result.getTools());
 			assertEquals("echo", result.getTools().get(0).getName());
 		}
 	}
@@ -101,7 +102,7 @@ class McpClient_JettyMicroservice_Test extends TestBase {
 	@Test void b02_callTool_invokesHandlerOverRealHttp() throws Exception {
 		try (var client = clientBuilder().build()) {
 			var result = client.callTool("echo", Map.of("text", "hello"));
-			assertEquals(1, result.getContent().size());
+			assertSize(1, result.getContent());
 			assertEquals("hello", ((org.apache.juneau.bean.mcp.v20250618.TextContent) result.getContent().get(0)).getText());
 		}
 	}

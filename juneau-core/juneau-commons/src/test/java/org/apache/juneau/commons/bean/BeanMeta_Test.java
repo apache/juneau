@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.commons.bean;
 
+import static org.apache.juneau.commons.TestAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
@@ -85,7 +86,7 @@ class BeanMeta_Test extends TestBase {
 		assertNotNull(props);
 		assertTrue(props.containsKey("x"));
 		assertTrue(props.containsKey("y"));
-		assertEquals(2, props.size());
+		assertSize(2, props);
 	}
 
 	@Test

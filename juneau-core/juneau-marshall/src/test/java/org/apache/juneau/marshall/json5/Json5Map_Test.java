@@ -18,6 +18,7 @@ package org.apache.juneau.marshall.json5;
 
 import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 
 import java.io.*;
 import java.util.*;
@@ -68,7 +69,7 @@ class Json5Map_Test extends TestBase {
 		assertTrue(m.isEmpty());
 		assertEquals(Json5Map.class, m.getClass());
 		m.put("x", 1);
-		assertEquals(1, m.size());
+		assertSize(1, m);
 	}
 
 	@Test void a04c_factoryOfStringNullReader() throws Exception {
@@ -77,7 +78,7 @@ class Json5Map_Test extends TestBase {
 		assertTrue(m.isEmpty());
 		assertEquals(Json5Map.class, m.getClass());
 		m.put("x", 1);
-		assertEquals(1, m.size());
+		assertSize(1, m);
 	}
 
 	@Test void a04d_factoryOfStringNullCharSequenceWithParser() throws Exception {
@@ -86,7 +87,7 @@ class Json5Map_Test extends TestBase {
 		assertTrue(m.isEmpty());
 		assertEquals(Json5Map.class, m.getClass());
 		m.put("x", 1);
-		assertEquals(1, m.size());
+		assertSize(1, m);
 	}
 
 	@Test void a04e_factoryOfStringNullReaderWithParser() throws Exception {
@@ -95,7 +96,7 @@ class Json5Map_Test extends TestBase {
 		assertTrue(m.isEmpty());
 		assertEquals(Json5Map.class, m.getClass());
 		m.put("x", 1);
-		assertEquals(1, m.size());
+		assertSize(1, m);
 	}
 
 	@Test void a04b_ofTextAliasStillWorks() throws Exception {
@@ -106,7 +107,7 @@ class Json5Map_Test extends TestBase {
 
 	@Test void a05_factoryOfCreateAppend() {
 		var m = Json5Map.create().append("a", 1).append("b", 2);
-		assertEquals(2, m.size());
+		assertSize(2, m);
 		assertEquals(1, m.getInt("a"));
 		assertTrue(m instanceof Json5Map);
 	}
@@ -146,7 +147,7 @@ class Json5Map_Test extends TestBase {
 		var got = m.getList("arr");
 		assertNotNull(got);
 		assertTrue(got instanceof Json5List, "Expected Json5List, got " + cn(got));
-		assertEquals(2, got.size());
+		assertSize(2, got);
 	}
 
 	@Test void a11_getMapCreateIfNotExistsReturnsJson5Map() {
@@ -169,7 +170,7 @@ class Json5Map_Test extends TestBase {
 		var m = Json5Map.of("a", 1, "b", 2, "c", 3);
 		var excluded = m.exclude("b");
 		assertTrue(excluded instanceof Json5Map);
-		assertEquals(2, excluded.size());
+		assertSize(2, excluded);
 		assertFalse(excluded.containsKey("b"));
 	}
 
@@ -177,7 +178,7 @@ class Json5Map_Test extends TestBase {
 		var m = Json5Map.of("a", 1, "b", 2, "c", 3);
 		var included = m.include("a", "c");
 		assertTrue(included instanceof Json5Map);
-		assertEquals(2, included.size());
+		assertSize(2, included);
 		assertTrue(included.containsKey("a"));
 		assertTrue(included.containsKey("c"));
 	}
@@ -266,6 +267,6 @@ class Json5Map_Test extends TestBase {
 		var valIt = m.values().iterator();
 		valIt.next();
 		assertThrows(UnsupportedOperationException.class, valIt::remove);
-		assertEquals(1, m.size());
+		assertSize(1, m);
 	}
 }

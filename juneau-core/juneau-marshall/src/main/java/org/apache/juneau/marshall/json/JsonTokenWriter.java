@@ -529,7 +529,7 @@ public class JsonTokenWriter implements TokenWriter {
 					break;
 				default:
 					if (c < 0x20 || c == 0x7f)
-						out.write(String.format("\\u%04x", (int) c));
+						out.write(f("\\u%04x", (int) c));
 					else
 						out.write(c);
 			}

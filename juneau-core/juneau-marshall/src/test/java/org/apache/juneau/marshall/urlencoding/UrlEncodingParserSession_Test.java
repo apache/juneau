@@ -18,6 +18,7 @@ package org.apache.juneau.marshall.urlencoding;
 
 import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 
 import java.util.*;
 
@@ -286,7 +287,7 @@ class UrlEncodingParserSession_Test extends TestBase {
 		var m = (Map) P.read("?a=1&a=2&a=3", Map.class);
 		Object v = m.get("a");
 		assertTrue(v instanceof List, "Expected list, got: " + v.getClass());
-		assertEquals(3, ((List)v).size());
+		assertSize(3, ((List)v));
 	}
 
 	@Test void f05_repeatedKey_stringValue_overwrites() throws Exception {
@@ -502,7 +503,7 @@ class UrlEncodingParserSession_Test extends TestBase {
 		var m = (Map) P.read("?a=1&a=2&a=3&a=4", Map.class);
 		Object v = m.get("a");
 		assertTrue(v instanceof List);
-		assertEquals(4, ((List)v).size());
+		assertSize(4, ((List)v));
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -512,7 +513,7 @@ class UrlEncodingParserSession_Test extends TestBase {
 	@Test void r01_collectionWithCtor() throws Exception {
 		// LinkedList has a no-arg ctor; readAnything line 195 ternary uses sType.newInstance().
 		List<String> v = P.read("?0=a&1=b", LinkedList.class, String.class);
-		assertEquals(2, v.size());
+		assertSize(2, v);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -522,7 +523,7 @@ class UrlEncodingParserSession_Test extends TestBase {
 	@Test void s01_typedMap_strings() throws Exception {
 		Map<String,String> m = new TreeMap<>();
 		P.readIntoMap("?b=2&a=1&c=3", m, String.class, String.class);
-		assertEquals(3, m.size());
+		assertSize(3, m);
 		assertEquals("1", m.get("a"));
 	}
 

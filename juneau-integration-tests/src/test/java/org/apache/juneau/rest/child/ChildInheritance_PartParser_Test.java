@@ -26,7 +26,7 @@ import org.apache.juneau.utest.utils.*;
 import org.junit.jupiter.api.*;
 
 /**
- * Phase 4 &mdash; proves the CHILD-WINS scalar shape for {@code @Child(partParser=...)}: the host-seeded
+ * Proves the CHILD-WINS scalar shape for {@code @Child(partParser=...)}: the host-seeded
  * part parser applies when the child declares none of its own, but the child's own explicit
  * {@code @Rest(partParser=...)} wins over the seed when present.
  */

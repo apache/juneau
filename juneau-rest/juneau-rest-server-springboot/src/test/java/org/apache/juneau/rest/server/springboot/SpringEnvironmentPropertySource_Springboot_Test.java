@@ -28,7 +28,7 @@ import org.springframework.core.env.*;
 import org.springframework.mock.env.*;
 
 /**
- * Tests for {@link SpringEnvironmentPropertySource} — the Phase 4 bridge from a Spring
+ * Tests for {@link SpringEnvironmentPropertySource} — the bridge from a Spring
  * {@link Environment} into the Juneau {@link Settings} singleton.
  *
  * <p>
@@ -52,9 +52,10 @@ import org.springframework.mock.env.*;
 @org.apache.juneau.testing.SpringbootTest
 @SuppressWarnings({
 	"java:S2093", // SpringBeanStore teardown uses clear() (which removes the installed Settings source); try-with-resources would call close() instead, which does not remove the source and would leak the bridge into later tests.
-	"java:S2094" // Test fixture / data class, no methods required.
+	"java:S2094", // Test fixture / data class, no methods required.
+	"resource" // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.
 })
-class SpringEnvironmentPropertySource_Test extends TestBase {
+class SpringEnvironmentPropertySource_Springboot_Test extends TestBase {
 
 	public static class ValueBean {
 		@Value("${spring.demo.key}")
@@ -235,5 +236,32 @@ class SpringEnvironmentPropertySource_Test extends TestBase {
 		} finally {
 			store.clear();
 		}
+	}
+
+	// =================================================================================
+	// D. Config-profile piggyback — juneau.profiles.active resolves to Spring's active profiles.
+	// =================================================================================
+
+	@Test void d01_profilesActiveResolvesToSpringActiveProfiles() {
+		var env = new MockEnvironment();
+		env.setActiveProfiles("stage", "cloud");
+		var src = new SpringEnvironmentPropertySource(env);
+		var r = src.get("juneau.profiles.active");
+		assertTrue(r.isPresent());
+		assertEquals("stage,cloud", r.value().orElse(null));
+	}
+
+	@Test void d02_noActiveProfilesMissing() {
+		var env = new MockEnvironment();  // no active profiles
+		var src = new SpringEnvironmentPropertySource(env);
+		assertFalse(src.get("juneau.profiles.active").isPresent());
+	}
+
+	@Test void d03_explicitPropertyWinsOverActiveProfiles() {
+		// An explicit juneau.profiles.active property takes precedence over getActiveProfiles().
+		var env = new MockEnvironment().withProperty("juneau.profiles.active", "explicit");
+		env.setActiveProfiles("stage");
+		var src = new SpringEnvironmentPropertySource(env);
+		assertEquals("explicit", src.get("juneau.profiles.active").value().orElse(null));
 	}
 }

@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.rest.server.ops;
 
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
+
 import java.util.*;
 
 import org.apache.juneau.*;
@@ -307,7 +309,7 @@ class EchoMixin_AsMixin_Test extends TestBase {
 			.redactedHeaders("X-Keep", null, "", "  ", "X-Also")
 			.build();
 		var s = r.getRedactedHeadersLower();
-		Assertions.assertEquals(2, s.size(), "expected 2 entries; got: " + s);
+		assertSize(() -> "expected 2 entries; got: " + s, 2, s);
 		Assertions.assertTrue(s.contains("x-keep"));
 		Assertions.assertTrue(s.contains("x-also"));
 	}

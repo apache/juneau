@@ -495,7 +495,7 @@ public class ContentSecurityPolicy extends HttpStringHeader {
 			var n = name.trim();
 			if (n.isEmpty())
 				throw iaex("directive name must not be blank");
-			directives.put(n, sources == null ? l() : new ArrayList<>(Arrays.asList(sources)));
+			directives.put(n, sources == null ? l() : l(sources));
 			return this;
 		}
 

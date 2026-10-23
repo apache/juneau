@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.petstore.console.browser;
 
+import static org.apache.juneau.commons.utils.Shorts.f;
 import static org.apache.juneau.petstore.console.browser.PetstoreBrowser.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -89,6 +90,6 @@ class PetstoreTwins_BrowserTest extends TestBase {
 		var ftl = query(assertClean(report, "ftl " + path), "state");
 		var builder = query(assertClean(report, "builder " + path), "state");
 		assertNotNull(ftl);
-		assertEquals(ftl, builder, () -> String.format("Twin DOM differs on '%s'", path));
+		assertEquals(ftl, builder, () -> f("Twin DOM differs on '%s'", path));
 	}
 }

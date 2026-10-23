@@ -17,6 +17,7 @@
 package org.apache.juneau.rest.server.console;
 
 import static java.nio.charset.StandardCharsets.*;
+import static org.apache.juneau.commons.utils.Shorts.f;
 import static org.apache.juneau.test.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -51,12 +52,12 @@ class Topics_Test extends TestBase {
 
 	@Test void a02_badKey_isE40() {
 		var e = assertThrows(IllegalArgumentException.class, () -> Topics.selection("a b"));
-		assertEquals(String.format(E40, "selection:a b"), e.getMessage());
+		assertEquals(f(E40, "selection:a b"), e.getMessage());
 		e = assertThrows(IllegalArgumentException.class, () -> Topics.job(null));
-		assertEquals(String.format(E40, "job:null"), e.getMessage());
+		assertEquals(f(E40, "job:null"), e.getMessage());
 		var arg = "x".repeat(129);
 		e = assertThrows(IllegalArgumentException.class, () -> Topics.cmd(arg));
-		assertEquals(String.format(E40, "cmd:" + "x".repeat(129)), e.getMessage());
+		assertEquals(f(E40, "cmd:" + "x".repeat(129)), e.getMessage());
 	}
 
 	@Test void a03_custom() {
@@ -66,9 +67,9 @@ class Topics_Test extends TestBase {
 		var e = assertThrows(IllegalArgumentException.class, () -> Topics.custom("", "focus"));
 		assertEquals("custom topic family 'focus' must be namespaced (e.g. 'app.focus')", e.getMessage());
 		e = assertThrows(IllegalArgumentException.class, () -> Topics.custom("SSC", "focus"));
-		assertEquals(String.format(E40, "SSC.focus"), e.getMessage());
+		assertEquals(f(E40, "SSC.focus"), e.getMessage());
 		e = assertThrows(IllegalArgumentException.class, () -> Topics.custom("ssc", "alert", "a b"));
-		assertEquals(String.format(E40, "ssc.alert:a b"), e.getMessage());
+		assertEquals(f(E40, "ssc.alert:a b"), e.getMessage());
 	}
 
 	@Test void a04_frameworkFamilies() {

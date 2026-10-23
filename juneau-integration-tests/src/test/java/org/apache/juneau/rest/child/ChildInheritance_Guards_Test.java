@@ -30,7 +30,7 @@ import org.apache.juneau.rest.server.servlet.*;
 import org.junit.jupiter.api.*;
 
 /**
- * Phase 3 &mdash; proves the additive-security PREPEND shape for {@code @Child(guards=...)}: the host-seeded
+ * Proves the additive-security PREPEND shape for {@code @Child(guards=...)}: the host-seeded
  * guard applies when the child declares none of its own (degrades to a plain "set"), the seeded guard runs
  * outermost (first) when the child also declares its own guard, and the child's own guard is never dropped.
  */

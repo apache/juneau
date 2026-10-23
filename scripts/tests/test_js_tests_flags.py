@@ -97,12 +97,12 @@ def test_auto_enabled_skips_with_notice_when_prereqs_missing(test_mod, monkeypat
     calls = []
     rc = test_mod.maybe_run_js_tests(False, False, ["a/src/x.js"], runner=lambda: calls.append(1) or (0, ""))
     assert rc == 0 and calls == []
-    assert "skipping Browser tests" in capsys.readouterr().out
+    assert "skipping Browser Tests" in capsys.readouterr().out
 
 
 def test_console_label_says_browser_tests():
     src = (SCRIPTS_DIR / "test.py").read_text()
-    assert 'label="Browser tests"' in src
+    assert 'label="Browser Tests"' in src
     assert 'label="JS tests"' not in src
     assert '"js-tests"' in src   # the step id is unchanged
 
@@ -170,7 +170,7 @@ def test_push_py_rejects_conflicting_flags(push_mod, monkeypatch, capsys):
     assert "mutually exclusive" in capsys.readouterr().err
 
 
-# ---- the Browser tests row is always shown ---------------------------------------------------------------------------
+# ---- the Browser Tests row is always shown ---------------------------------------------------------------------------
 @pytest.fixture
 def skipped_rows(test_mod, monkeypatch):
     rows = []
@@ -222,7 +222,7 @@ def test_skip_row_is_a_skipped_browser_tests_row(test_mod, monkeypatch):
             return FakeRow()
     monkeypatch.setattr(test_mod._juneau, "load", lambda: (FakeRun(),))
     test_mod.skip_js_tests_row("why")
-    assert seen == [("row", "js-tests", "Browser tests", "Browser tests"), ("skip", "why")]
+    assert seen == [("row", "js-tests", "Browser Tests", "Browser Tests"), ("skip", "why")]
 
 
 @pytest.mark.parametrize("js_tests", [False, True])

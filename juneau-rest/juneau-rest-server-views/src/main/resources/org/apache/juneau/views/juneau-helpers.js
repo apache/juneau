@@ -738,7 +738,7 @@
 	 * the identical never-innerHTML sanitize-and-copy discipline as a globally-registered one, rather than
 	 * a second, helper-local implementation of it.
 	 *
-	 * IMPLEMENTATION NOTE (a judgment call, not a specified rule):
+	 * Implementation detail (a judgment call, not a specified rule):
 	 * `fillRenderSlot` always resolves against the GLOBAL renderer registry and takes no resolver
 	 * parameter, so a per-call override is applied by temporarily registering it under the same id via the
 	 * existing public `NS.registerRenderer`/`NS.resolveRenderer` pair, then restoring whatever was there
@@ -909,7 +909,7 @@
 	// ================================================================================================
 	// recordTable(catalog, rows, opts) - STATIC, READ-ONLY.  Not a DataTable.
 	//
-	// NOTE ON SCOPE: the design flags a per-row `actions` extension ("routed to
+	// Scope: the design flags a per-row `actions` extension ("routed to
 	// opts.onAction") as an OPEN fork - "that fork is open and should be confirmed before build."  This
 	// build does NOT implement it: doing so would mean presuming an answer to a question the design
 	// itself says is still open, rather than a documented, test-normative call.  v1 ships catalog+rows

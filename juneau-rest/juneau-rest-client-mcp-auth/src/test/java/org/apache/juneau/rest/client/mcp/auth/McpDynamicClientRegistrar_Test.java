@@ -18,6 +18,7 @@ package org.apache.juneau.rest.client.mcp.auth;
 
 import static org.apache.juneau.BasicTestUtils.assertThrowsWithMessage;
 import static org.apache.juneau.commons.utils.Shorts.*;
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.net.*;
@@ -213,15 +214,15 @@ class McpDynamicClientRegistrar_Test extends TestBase {
 		var md = req.getOIDCClientMetadata();
 		assertEquals("Demo Client", md.getName());
 		assertEquals("mcp:read mcp:write", md.getScope().toString());
-		assertEquals(1, md.getGrantTypes().size());
-		assertEquals(1, md.getResponseTypes().size());
+		assertSize(1, md.getGrantTypes());
+		assertSize(1, md.getResponseTypes());
 		assertTrue(md.getRedirectionURIs().contains(URI.create("http://127.0.0.1:3001/other")));
 	}
 
 	@Test void e03_defaultGrantAndResponseTypes() {
 		var md = base().build().buildRegistrationRequest().getOIDCClientMetadata();
-		assertEquals(2, md.getGrantTypes().size(), "authorization_code + refresh_token");
-		assertEquals(1, md.getResponseTypes().size(), "code");
+		assertSize(() -> "authorization_code + refresh_token", 2, md.getGrantTypes());
+		assertSize(() -> "code", 1, md.getResponseTypes());
 	}
 
 	@Test void e04_builderArgumentValidation() {

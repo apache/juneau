@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.server.mcp;
 
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.lang.reflect.*;
@@ -62,7 +63,7 @@ class McpResourceHandler_Test {
 		var config = new McpServerConfig().addResource(McpResourceHandler.of(
 			new McpResourceSpec().setUri("file:///a"),
 			(uri, ctx) -> new McpResourceOutcome()));
-		assertEquals(1, config.getResources().size());
+		assertSize(1, config.getResources());
 		assertEquals("file:///a", config.getResources().get(0).descriptor().getUri());
 	}
 

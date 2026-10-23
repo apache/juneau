@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.server.auth.saml;
 
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
@@ -148,7 +149,7 @@ class SamlAssertionValidator_Branches_Test extends TestBase {
 		var principal = (ClaimsPrincipal) validator(cred).validate(xml);
 		var groups = principal.getClaim("groups", Object.class).orElse(null);
 		assertInstanceOf(List.class, groups);
-		assertEquals(3, ((List<?>) groups).size());
+		assertSize(3, ((List<?>) groups));
 	}
 
 	@Test void e02_nullAttributeName_skipped() throws Exception {

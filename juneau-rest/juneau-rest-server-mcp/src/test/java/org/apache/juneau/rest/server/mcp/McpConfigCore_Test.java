@@ -155,7 +155,7 @@ class McpConfigCore_Test {
 		config.setResourceTemplateSpecs(null);
 		assertTrue(config.getResourceTemplates().isEmpty());
 		config.getResourceTemplates().add(listingHandler(a));
-		assertEquals(1, config.getResourceTemplates().size());
+		assertSize(1, config.getResourceTemplates());
 	}
 
 	private static McpResourceTemplateHandler listingHandler(McpResourceTemplateSpec spec) {

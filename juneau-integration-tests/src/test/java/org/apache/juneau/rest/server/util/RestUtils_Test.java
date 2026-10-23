@@ -202,7 +202,7 @@ class RestUtils_Test extends TestBase {
 		var result = parseIfJson("[1,2,3]");
 		assertTrue(result instanceof List);
 		var list = (List<Object>) result;
-		assertEquals(3, list.size());
+		assertSize(3, list);
 		assertEquals(1, list.get(0));
 		assertEquals(2, list.get(1));
 		assertEquals(3, list.get(2));

@@ -23,7 +23,7 @@
  * Binary- and source-incompatible changes may appear in the <b>next major</b> Juneau release (and possibly earlier).
  *
  * <ul>
- * 	<li>{@link org.apache.juneau.http.resource.HttpResource} — an {@link org.apache.juneau.http.HttpBody} paired with additional headers
+ * 	<li>{@link HttpResource} — an {@link org.apache.juneau.http.HttpBody} paired with additional headers
  * </ul>
  */
 package org.apache.juneau.http.resource;

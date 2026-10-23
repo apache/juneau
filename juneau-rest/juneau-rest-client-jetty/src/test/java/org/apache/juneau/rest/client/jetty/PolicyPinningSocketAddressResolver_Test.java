@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.client.jetty;
 
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.net.*;
@@ -81,7 +82,7 @@ class PolicyPinningSocketAddressResolver_Test {
 		resolver.resolve("8.8.8.8", 8443, contextFor(PolicyPinningSocketAddressResolver.PINNED_TAG), c);
 		assertNull(c.failure.get());
 		var addrs = c.result.get();
-		assertEquals(1, addrs.size());
+		assertSize(1, addrs);
 		assertEquals("8.8.8.8", addrs.get(0).getAddress().getHostAddress());
 		assertEquals(8443, addrs.get(0).getPort());
 	}

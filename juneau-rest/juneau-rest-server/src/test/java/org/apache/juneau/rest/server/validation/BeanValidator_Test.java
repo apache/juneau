@@ -120,7 +120,7 @@ class BeanValidator_Test extends TestBase {
 		var ex = new ValidationException(List.of(new ValidationViolation("x", "msg", "NotNull")));
 		var copy = ex.copyViolations();
 		copy.clear();
-		assertEquals(1, ex.getViolations().size());
+		assertSize(1, ex.getViolations());
 	}
 
 	// -----------------------------------------------------------------------------------------------------------------

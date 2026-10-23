@@ -18,6 +18,7 @@ package org.apache.juneau.commons.collections;
 
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
+import static org.apache.juneau.commons.TestAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
@@ -138,7 +139,7 @@ class MultiMap_Test extends TestBase {
 		var map2 = map("key3", "value3");
 		var multiMap = new MultiMap<>(map1, map2);
 
-		assertEquals(3, multiMap.size());
+		assertSize(3, multiMap);
 	}
 
 	@Test
@@ -147,7 +148,7 @@ class MultiMap_Test extends TestBase {
 		var map2 = map("key2", "value2b", "key3", "value3");
 		var multiMap = new MultiMap<>(map1, map2);
 
-		assertEquals(3, multiMap.size()); // key1, key2, key3 (key2 counted once)
+		assertSize(3, multiMap); // key1, key2, key3 (key2 counted once)
 	}
 
 	@Test
@@ -156,7 +157,7 @@ class MultiMap_Test extends TestBase {
 		var map2 = map();
 		var multiMap = new MultiMap<>(map1, map2);
 
-		assertEquals(0, multiMap.size());
+		assertSize(0, multiMap);
 	}
 
 	@Test
@@ -164,7 +165,7 @@ class MultiMap_Test extends TestBase {
 		var map1 = map("key1", "value1", "key2", "value2");
 		var multiMap = new MultiMap<>(map1);
 
-		assertEquals(2, multiMap.size());
+		assertSize(2, multiMap);
 	}
 
 	//====================================================================================================
@@ -202,7 +203,7 @@ class MultiMap_Test extends TestBase {
 		var entries = new ArrayList<Map.Entry<String,String>>();
 		multiMap.entrySet().forEach(entries::add);
 
-		assertEquals(3, entries.size());
+		assertSize(3, entries);
 		assertTrue(entries.stream().anyMatch(e -> eq(e.getKey(), "key1") && eq(e.getValue(), "value1")));
 		assertTrue(entries.stream().anyMatch(e -> eq(e.getKey(), "key2") && eq(e.getValue(), "value2")));
 		assertTrue(entries.stream().anyMatch(e -> eq(e.getKey(), "key3") && eq(e.getValue(), "value3")));
@@ -218,7 +219,7 @@ class MultiMap_Test extends TestBase {
 		var entries = new ArrayList<Map.Entry<String,String>>();
 		multiMap.entrySet().forEach(entries::add);
 
-		assertEquals(2, entries.size());
+		assertSize(2, entries);
 		// key1 should have value1 (from first map)
 		var key1Entry = entries.stream().filter(e -> eq(e.getKey(), "key1")).findFirst().orElse(null);
 		assertNotNull(key1Entry);
@@ -240,7 +241,7 @@ class MultiMap_Test extends TestBase {
 		}
 
 		assertFalse(map1.containsKey("key2"));
-		assertEquals(2, multiMap.size());
+		assertSize(2, multiMap);
 	}
 
 	@Test
@@ -249,7 +250,7 @@ class MultiMap_Test extends TestBase {
 		var map2 = map("key2", "value2b", "key3", "value3");
 		var multiMap = new MultiMap<>(map1, map2);
 
-		assertEquals(3, multiMap.entrySet().size()); // key1, key2, key3
+		assertSize(3, multiMap.entrySet()); // key1, key2, key3
 	}
 
 	//====================================================================================================
@@ -267,7 +268,7 @@ class MultiMap_Test extends TestBase {
 		assertTrue(keySet.contains("key2"));
 		assertTrue(keySet.contains("key3"));
 		assertFalse(keySet.contains("key4"));
-		assertEquals(3, keySet.size());
+		assertSize(3, keySet);
 	}
 
 	@Test
@@ -277,7 +278,7 @@ class MultiMap_Test extends TestBase {
 		var multiMap = new MultiMap<>(map1, map2);
 
 		var keySet = multiMap.keySet();
-		assertEquals(3, keySet.size()); // key1, key2, key3
+		assertSize(3, keySet); // key1, key2, key3
 		assertTrue(keySet.contains("key1"));
 		assertTrue(keySet.contains("key2"));
 		assertTrue(keySet.contains("key3"));
@@ -297,7 +298,7 @@ class MultiMap_Test extends TestBase {
 		assertTrue(values.contains("value1"));
 		assertTrue(values.contains("value2"));
 		assertTrue(values.contains("value3"));
-		assertEquals(3, values.size());
+		assertSize(3, values);
 	}
 
 	@Test
@@ -309,7 +310,7 @@ class MultiMap_Test extends TestBase {
 		var values = multiMap.values();
 		assertTrue(values.contains("value1"));
 		assertFalse(values.contains("value2")); // value2 is not returned because key1 is in first map
-		assertEquals(1, values.size());
+		assertSize(1, values);
 	}
 
 	//====================================================================================================
@@ -358,7 +359,7 @@ class MultiMap_Test extends TestBase {
 		var map1 = map("key1", "value1", "key2", "value2");
 		var multiMap = new MultiMap<>(map1);
 
-		assertEquals(2, multiMap.size());
+		assertSize(2, multiMap);
 		assertEquals("value1", multiMap.get("key1"));
 		assertEquals("value2", multiMap.get("key2"));
 	}
@@ -370,7 +371,7 @@ class MultiMap_Test extends TestBase {
 		var map3 = map("key3", "value3");
 		var multiMap = new MultiMap<>(map1, map2, map3);
 
-		assertEquals(3, multiMap.size());
+		assertSize(3, multiMap);
 		assertEquals("value1", multiMap.get("key1"));
 		assertEquals("value2", multiMap.get("key2"));
 		assertEquals("value3", multiMap.get("key3"));

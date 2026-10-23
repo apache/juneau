@@ -17,6 +17,7 @@
 package org.apache.juneau.rest.server.ops;
 
 import static org.apache.juneau.commons.utils.Shorts.*;
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 
 import java.time.*;
 import java.util.*;
@@ -83,7 +84,7 @@ class AdminMixin_RateLimitSnapshot_Test extends TestBase {
 		var body = ca.get("/admin/ratelimit").run().assertStatus(200).getContent().asString();
 		var parsed = JsonParser.DEFAULT.read(body, Map.class);
 		var guards = (Map<?,?>) parsed.get("guards");
-		Assertions.assertEquals(1, guards.size(), "expected exactly one guard entry");
+		assertSize(() -> "expected exactly one guard entry", 1, guards);
 		var entry = (Map<?,?>) guards.values().iterator().next();
 
 		var config = (Map<?,?>) entry.get("config");

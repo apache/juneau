@@ -176,7 +176,7 @@ public class RunViewDef {
 	 * @throws IllegalArgumentException If a rule is broken.
 	 */
 	public RunViewDef validate() {
-		if (id == null || id.isBlank())
+		if (ib(id))
 			throw iaex("RunViewDef id must not be blank.");
 		if (! TYPES.contains(type))
 			throw iaex("RunViewDef '%s' type must be one of card-body|tab-body|row-detail; got '%s'.", id, clip(type));

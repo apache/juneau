@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.commons.svl;
 
+import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
@@ -230,14 +231,14 @@ class VarResolverSession_Test extends TestBase {
 
 	@Test void f01_resolveList_withVars() {
 		var s = session();
-		var in = new ArrayList<>(Arrays.asList("$E{a}", "$E{b}"));
+		var in = list("$E{a}", "$E{b}");
 		var out = (List<?>) s.resolve((Object) in);
 		assertEquals(Arrays.asList("[a]", "[b]"), out);
 	}
 
 	@Test void f02_resolveList_noVars_returnsSame() {
 		var s = session();
-		var in = new ArrayList<>(Arrays.asList("abc", "def"));
+		var in = list("abc", "def");
 		var out = s.resolve((Object) in);
 		assertSame(in, out);
 	}

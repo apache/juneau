@@ -24,7 +24,7 @@ import org.apache.juneau.rest.server.springboot.*;
  *
  * <p>
  * Combines {@link BasicSpringRestServlet} (Spring Boot bean-store integration via
- * {@link org.apache.juneau.rest.server.springboot.SpringBeanStore}) with the {@link McpEndpoint} mixin
+ * {@link SpringBeanStore}) with the {@link McpEndpoint} mixin
  * (the {@code 2026-07-28} MCP handler). This is the recommended way to expose MCP from a Spring Boot
  * resource: subclassing {@link McpRestServlet} instead does <b>not</b> work, since
  * {@link McpRestServlet} and {@link BasicSpringRestServlet} are sibling

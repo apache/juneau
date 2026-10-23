@@ -22,9 +22,9 @@
  * <b>Beta — API subject to change:</b> This package is part of the next-generation REST client and HTTP stack.
  *
  * <ul>
- * 	<li>{@link org.apache.juneau.rest.client.assertion.ResponseAssertion} — root assertion for status, headers, body
- * 	<li>{@link org.apache.juneau.rest.client.assertion.ResponseHeaderAssertion} — header-level assertions
- * 	<li>{@link org.apache.juneau.rest.client.assertion.ResponseBodyAssertion} — body-level assertions
+ * 	<li>{@link org.apache.juneau.rest.client.assertion.ResponseAssertion ResponseAssertion} — root assertion for status, headers, body
+ * 	<li>{@link org.apache.juneau.rest.client.assertion.ResponseHeaderAssertion ResponseHeaderAssertion} — header-level assertions
+ * 	<li>{@link org.apache.juneau.rest.client.assertion.ResponseBodyAssertion ResponseBodyAssertion} — body-level assertions
  * </ul>
  */
 package org.apache.juneau.rest.client.assertion;

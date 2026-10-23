@@ -541,7 +541,7 @@ public class RemoteOperationMeta {
 	public boolean isThrowOnError() { return throwOnError; }
 
 	/**
-	 * Returns the index of the {@link org.apache.juneau.http.Url @Url} parameter, or {@code -1} if none.
+	 * Returns the index of the {@link Url @Url} parameter, or {@code -1} if none.
 	 *
 	 * @return The {@code @Url} parameter index, or {@code -1}.
 	 */

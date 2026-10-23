@@ -156,7 +156,9 @@ class PetstoreOrdersDay_BrowserTest extends TestBase {
 		return out;
 	}
 
-	@SuppressWarnings("unchecked") // Every action is a Map<String,Object>.
+	@SuppressWarnings({
+		"unchecked" // Every action is a Map<String,Object>.
+	})
 	private static Map<String,Object> cast(Map<?,?> m) {
 		return (Map<String,Object>) m;
 	}
@@ -472,7 +474,9 @@ class PetstoreOrdersDay_BrowserTest extends TestBase {
 		assertTrue(String.valueOf(search).contains("day(" + day + ")"), () -> String.valueOf(search));
 	}
 
-	@SuppressWarnings("unchecked") // requests is a JSON array of {url, method, postData}.
+	@SuppressWarnings({
+		"unchecked" // requests is a JSON array of {url, method, postData}.
+	})
 	private static List<String> urls(Map<String,Object> c) {
 		return ((List<Map<String,Object>>) c.get("requests")).stream().map(r -> String.valueOf(r.get("url"))).toList();
 	}

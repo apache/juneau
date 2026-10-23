@@ -66,7 +66,10 @@ class NodeFloorScan_Test {
 	private static void logNodeVersion() {
 		try {
 			var p = new ProcessBuilder("node", "--version").redirectErrorStream(true).start();
-			var out = new String(p.getInputStream().readAllBytes(), UTF_8).trim();
+			String out;
+			try (var in = p.getInputStream()) {
+				out = new String(in.readAllBytes(), UTF_8).trim();
+			}
 			p.waitFor(10, java.util.concurrent.TimeUnit.SECONDS);
 			System.out.println("[NodeFloorScan] node --version: " + out);
 		} catch (Exception e) {

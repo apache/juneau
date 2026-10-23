@@ -31,11 +31,7 @@ class PrototextSerializer_Test {
 
 	@Test
 	void a01_simpleBean() {
-		var m = new LinkedHashMap<String,Object>();
-		m.put("host", "localhost");
-		m.put("port", 8080);
-		m.put("debug", true);
-		m.put("ratio", 3.14);
+		Map<String,Object> m = m("host", "localhost", "port", 8080, "debug", true, "ratio", 3.14);
 
 		String proto = PrototextSerializer.DEFAULT.write(m);
 		assertNotNull(proto);
@@ -135,10 +131,7 @@ class PrototextSerializer_Test {
 
 	@Test
 	void a08_nullValues() {
-		var m = new LinkedHashMap<String,Object>();
-		m.put("a", "x");
-		m.put("b", null);
-		m.put("c", 1);
+		Map<String,Object> m = m("a", "x", "b", null, "c", 1);
 
 		String proto = PrototextSerializer.DEFAULT.write(m);
 		assertNotNull(proto);
@@ -160,10 +153,7 @@ class PrototextSerializer_Test {
 
 	@Test
 	void a10_floatValues() {
-		var m = new LinkedHashMap<String,Object>();
-		m.put("x", 3.14);
-		m.put("inf", Double.POSITIVE_INFINITY);
-		m.put("nan", Double.NaN);
+		Map<String,Object> m = m("x", 3.14, "inf", Double.POSITIVE_INFINITY, "nan", Double.NaN);
 
 		String proto = PrototextSerializer.DEFAULT.write(m);
 		assertNotNull(proto);

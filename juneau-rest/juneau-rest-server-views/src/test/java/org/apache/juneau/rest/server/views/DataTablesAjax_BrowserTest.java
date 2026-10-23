@@ -17,6 +17,7 @@
 package org.apache.juneau.rest.server.views;
 
 import static java.nio.charset.StandardCharsets.*;
+import static org.apache.juneau.commons.utils.Shorts.f;
 import static org.apache.juneau.test.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -82,7 +83,7 @@ class DataTablesAjax_BrowserTest extends TestBase {
 	private static List<Row> rows() {
 		var l = new ArrayList<Row>();
 		for (var i = 1; i <= 50; i++)
-			l.add(new Row(i, String.format("Row %02d", i)));
+			l.add(new Row(i, f("Row %02d", i)));
 		return l;
 	}
 

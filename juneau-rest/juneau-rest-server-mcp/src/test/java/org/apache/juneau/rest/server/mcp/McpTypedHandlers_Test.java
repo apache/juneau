@@ -135,7 +135,7 @@ class McpTypedHandlers_Test {
 
 	@Test void a03_singularConfigOverloadStoresRawAdapter() {
 		var a = new McpServerConfig().addTool(handler(Args.class, Result.class, x -> new Result()));
-		assertEquals(1, a.getTools().size());
+		assertSize(1, a.getTools());
 		assertInstanceOf(McpToolHandler.class, a.getTools().get(0));
 	}
 

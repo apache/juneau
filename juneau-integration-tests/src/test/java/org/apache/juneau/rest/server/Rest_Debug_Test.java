@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.rest.server;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 
 import org.apache.juneau.*;
 import org.apache.juneau.commons.logging.LogRecordCapture;
@@ -58,6 +58,6 @@ class Rest_Debug_Test extends TestBase {
 				throw new RuntimeException(e);
 			}
 		});
-		assertEquals(1, records.size());
+		assertSize(1, records);
 	}
 }

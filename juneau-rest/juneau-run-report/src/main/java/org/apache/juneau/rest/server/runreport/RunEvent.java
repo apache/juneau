@@ -178,14 +178,12 @@ public final class RunEvent {
 	 * @return A new event.
 	 */
 	public static RunEvent suite(String step, String fw, String suite, int pass, int fail, int skip) {
-		var m = new HashMap<String,Object>();
-		m.put("step", stepId("suite", "step", step));
-		m.put("fw", fw("suite", fw));
-		m.put("suite", text("suite", "suite", suite, 1, MAX_NAME));
-		var counts = new LinkedHashMap<String,Object>();
-		counts.put("pass", count("pass", pass));
-		counts.put("fail", count("fail", fail));
-		counts.put("skip", count("skip", skip));
+		Map<String,Object> m = m(
+			"step", stepId("suite", "step", step),
+			"fw", fw("suite", fw),
+			"suite", text("suite", "suite", suite, 1, MAX_NAME)
+		);
+		Map<String,Object> counts = m("pass", count("pass", pass), "fail", count("fail", fail), "skip", count("skip", skip));
 		m.put("counts", counts);
 		return new RunEvent(Kind.SUITE, 0, m);
 	}
@@ -201,12 +199,13 @@ public final class RunEvent {
 	 * @return A new event.
 	 */
 	public static RunEvent test(String step, String fw, String suite, String name, TestStatus status) {
-		var m = new HashMap<String,Object>();
-		m.put("step", stepId("test", "step", step));
-		m.put("fw", fw("test", fw));
-		m.put("suite", text("test", "suite", suite, 1, MAX_NAME));
-		m.put("name", text("test", "name", name, 1, MAX_NAME));
-		m.put("status", wire("test", "status", status));
+		Map<String,Object> m = m(
+			"step", stepId("test", "step", step),
+			"fw", fw("test", fw),
+			"suite", text("test", "suite", suite, 1, MAX_NAME),
+			"name", text("test", "name", name, 1, MAX_NAME),
+			"status", wire("test", "status", status)
+		);
 		return new RunEvent(Kind.TEST, 0, m);
 	}
 

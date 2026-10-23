@@ -16,7 +16,9 @@
  */
 package org.apache.juneau.marshall.parquet;
 
+import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 
 import java.util.*;
 
@@ -88,13 +90,10 @@ class ParquetParserSessionMapTarget_Test extends TestBase {
 	@Test void d01_intKeyMap_multipleRows_keyValuePairFormat_valueTypeExplicit() throws Exception {
 		// Sanity check that the key/value-pair branch (valueType != null) still round-trips correctly
 		// alongside the valueType==null variant above.
-		var in = new LinkedHashMap<Integer,String>();
-		in.put(5, "five");
-		in.put(6, "six");
-		in.put(7, "seven");
+		Map<Integer,String> in = map(5, "five", 6, "six", 7, "seven");
 		var bytes = ParquetSerializer.DEFAULT.write(in);
 		var out = (Map<Integer,String>) ParquetParser.DEFAULT.read(bytes, Map.class, Integer.class, String.class);
-		assertEquals(3, out.size());
+		assertSize(3, out);
 		assertEquals("seven", out.get(7));
 	}
 }

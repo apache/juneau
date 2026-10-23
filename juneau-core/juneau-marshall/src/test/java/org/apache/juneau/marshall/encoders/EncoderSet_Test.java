@@ -132,7 +132,7 @@ class EncoderSet_Test extends TestBase {
 
 	@Test void b02_builder_addNoInheritClearsEntries() {
 		var sb = EncoderSet.create().add(E1.class, E2.class);
-		assertEquals(2, sb.inner().size());
+		assertSize(2, sb.inner());
 		// Adding NoInherit triggers clear() on the first pass; E1 and E2 are gone
 		sb.add(EncoderSet.NoInherit.class, E3.class);
 		assertTrue(sb.inner().stream().noneMatch(x -> x.equals(E1.class)));

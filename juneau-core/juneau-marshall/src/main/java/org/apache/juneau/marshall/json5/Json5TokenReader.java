@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.marshall.json5;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
+
 import java.io.*;
 
 import org.apache.juneau.marshall.json.*;
@@ -278,7 +280,7 @@ public class Json5TokenReader extends JsonTokenReader {
 				inEscape = false;
 			} else {
 				if (c <= 0x1F && c != -1)
-					throw parseException("Unescaped control character encountered: '0x%s'", String.format("%04X", c));
+					throw parseException("Unescaped control character encountered: '0x%s'", f("%04X", c));
 				if (c == '\\') {
 					inEscape = true;
 					r.delete();

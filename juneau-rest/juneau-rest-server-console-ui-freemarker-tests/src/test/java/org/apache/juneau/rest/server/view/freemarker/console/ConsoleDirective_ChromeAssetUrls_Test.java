@@ -17,6 +17,7 @@
 package org.apache.juneau.rest.server.view.freemarker.console;
 
 import static org.apache.juneau.rest.server.console.test.PageContractAssert.*;
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.net.*;
@@ -114,8 +115,8 @@ class ConsoleDirective_ChromeAssetUrls_Test extends TestBase {
 
 			// Home, Items and Admin are three top-level nav entries in the contract.
 			assertPage(html).isValid().hasNavHref("home", "/home").hasNavHref("items", "/items").hasNavHref("admin", "/admin");
-			assertEquals(3, assertPage(html).contract().getList("nav").size(), () -> html);
-			assertFalse(html.contains("slds-"), () -> html);
+			assertSize(() -> html, 3, assertPage(html).contract().getList("nav"));
+			DualHatGuard.assertClean(html);
 		}
 	}
 

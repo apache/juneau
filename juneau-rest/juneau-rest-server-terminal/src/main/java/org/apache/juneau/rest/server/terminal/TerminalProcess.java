@@ -416,12 +416,12 @@ public final class TerminalProcess implements AutoCloseable, TerminalSink {
 			throw new UnsupportedOperationException("TerminalProcess needs a POSIX pseudo-terminal; Windows is not supported.");
 		if (! TOOLS.contains(tool))
 			throw iaex("TerminalProcess tool must be one of %s; got '%s'.", new TreeSet<>(TOOLS), tool);
-		if (cmd == null || cmd.isEmpty())
+		if (ie(cmd))
 			throw iaex("TerminalProcess cmd must have at least one element.");
 		if (cols < 1 || cols > 9999 || rows < 1 || rows > 9999)
 			throw iaex("TerminalProcess size must be 1-9999 x 1-9999; got '%sx%s'.", cols, rows);
 		var script = host.scriptProperty() != null && ! host.scriptProperty().isBlank() ? host.scriptProperty() : host.scriptEnv();
-		if (script == null || script.isBlank())
+		if (ib(script))
 			throw new IllegalStateException("TerminalProcess cannot find juneau_run.py: set the system property " + SCRIPT_PROPERTY + " or the environment variable " + SCRIPT_ENV + ".");
 		var python = findOnPath("python3", host.path());
 		if (python == null)

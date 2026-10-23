@@ -41,7 +41,7 @@ public class ExampleApplyAnnotation {
 	 *
 	 * <p>
 	 * Passes the {@link ExampleApply @ExampleApply} annotation through to the builder's annotation list.
-	 * The {@link org.apache.juneau.commons.reflect.AnnotationProvider.Builder#addRuntimeAnnotations(java.util.List)}
+	 * The {@link org.apache.juneau.commons.reflect.AnnotationProvider.Builder#addRuntimeAnnotations(java.util.List) AnnotationProvider.Builder#addRuntimeAnnotations(java.util.List)}
 	 * method handles unwrapping the nested {@link Example @Example} from {@link ExampleApply#value()} and registering it
 	 * under the targets specified by {@link ExampleApply#on()} and {@link ExampleApply#onClass()}.
 	 */

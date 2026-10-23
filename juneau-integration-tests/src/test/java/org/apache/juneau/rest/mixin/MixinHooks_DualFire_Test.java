@@ -28,7 +28,7 @@ import org.apache.juneau.rest.server.servlet.*;
 import org.junit.jupiter.api.*;
 
 /**
- * Phase 4 — exercises dual-firing of lifecycle hooks ({@code @RestStartCall}, {@code @RestPreCall},
+ * Exercises dual-firing of lifecycle hooks ({@code @RestStartCall}, {@code @RestPreCall},
  * {@code @RestPostCall}, {@code @RestEndCall}) on mixin-endpoint requests.
  *
  * <p>

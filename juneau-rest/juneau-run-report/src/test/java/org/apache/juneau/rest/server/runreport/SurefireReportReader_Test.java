@@ -52,13 +52,13 @@ class SurefireReportReader_Test extends TestBase {
 
 	@Test void a04_singleFileAndFw() {
 		var r = new SurefireReportReader().read(resource("surefire-ok/TEST-com.example.AlphaTest.xml"));
-		assertEquals(1, r.tests().size());
+		assertSize(1, r.tests());
 		assertEquals("surefire", r.fw());
 	}
 
 	@Test void b01_truncatedKeepsClosedTestcases() {
 		var r = new JUnitXmlReportReader().read(resource("junit-truncated.xml"));
-		assertEquals(2, r.tests().size());
+		assertSize(2, r.tests());
 		assertTrue(r.truncated());
 		assertTrue(r.warnings().get(0).startsWith("report truncated: unexpected end of file after 2 tests (junit-truncated.xml)"), r.warnings().get(0));
 	}
@@ -82,7 +82,7 @@ class SurefireReportReader_Test extends TestBase {
 		var f = d.resolve("big.xml");
 		Files.writeString(f, cases(500));
 		var r = new JUnitXmlReportReader().read(f, new ReportLimits(1 << 25, 100, 512, 2000, 8000));
-		assertEquals(100, r.tests().size());
+		assertSize(100, r.tests());
 		assertTrue(r.truncated());
 		assertEquals(List.of("report truncated at 100 tests"), r.warnings());
 	}
@@ -91,7 +91,7 @@ class SurefireReportReader_Test extends TestBase {
 		var f = d.resolve("t.xml");
 		Files.writeString(f, "<testsuite name=\"s\"><testcase name=\"n\"><failure>" + "x".repeat(5_000_000) + "</failure></testcase><testcase name=\"m\"/></testsuite>");
 		var r = new JUnitXmlReportReader().read(f, new ReportLimits(1 << 26, 100, 512, 2000, 8000));
-		assertEquals(2, r.tests().size());
+		assertSize(2, r.tests());
 		assertTrue(r.tests().get(0).trace().length() <= 8000);
 		assertTrue(r.tests().get(0).msg().length() <= 2000);
 	}
@@ -105,7 +105,7 @@ class SurefireReportReader_Test extends TestBase {
 	@Test void b07_missingFile(@TempDir Path d) {
 		var r = new JUnitXmlReportReader().read(d.resolve("nope.xml"));
 		assertTrue(r.tests().isEmpty());
-		assertEquals(1, r.warnings().size());
+		assertSize(1, r.warnings());
 		assertTrue(r.warnings().get(0).contains("nope.xml"));
 	}
 

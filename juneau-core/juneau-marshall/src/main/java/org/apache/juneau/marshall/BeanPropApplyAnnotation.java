@@ -42,7 +42,7 @@ public class BeanPropApplyAnnotation {
 	 *
 	 * <p>
 	 * Passes the {@link BeanPropApply @BeanPropApply} annotation through to the builder's annotation list.
-	 * The {@link org.apache.juneau.commons.reflect.AnnotationProvider.Builder#addRuntimeAnnotations(java.util.List)}
+	 * The {@link org.apache.juneau.commons.reflect.AnnotationProvider.Builder#addRuntimeAnnotations(java.util.List) AnnotationProvider.Builder#addRuntimeAnnotations(java.util.List)}
 	 * method handles unwrapping the nested {@link BeanProp @BeanProp} from {@link BeanPropApply#value()} and registering it
 	 * under the targets specified by {@link BeanPropApply#on()} and {@link BeanPropApply#onClass()}.
 	 */

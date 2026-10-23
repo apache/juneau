@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.http.part;
 
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
@@ -79,7 +80,7 @@ class HttpParts_Test extends TestBase {
 		var pl = PartList.of(HttpPartBean.of("a", "1"), HttpPartBean.of("b", "2"));
 		assertEquals("1", pl.getFirst("a").getValue());
 		assertNull(pl.getFirst("missing"));
-		assertEquals(2, pl.size());
+		assertSize(2, pl);
 		assertFalse(pl.isEmpty());
 	}
 

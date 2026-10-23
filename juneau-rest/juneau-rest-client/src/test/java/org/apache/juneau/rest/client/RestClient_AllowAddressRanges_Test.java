@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.client;
 
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
@@ -89,7 +90,7 @@ class RestClient_AllowAddressRanges_Test extends TestBase {
 		var transport = new Recording();
 		try (var client = RestClient.builder().transport(transport).allowAddressRanges("198.18.0.0/15").build()) {
 			client.remote(Api.class).get("http://198.18.0.5/x");
-			assertEquals(1, transport.requests.size());
+			assertSize(1, transport.requests);
 			assertEquals(RemoteUrlPolicy.AllowedRanges.of("198.18.0.0/15"), transport.requests.get(0).getAllowedAddressRanges());
 		}
 	}
@@ -104,7 +105,7 @@ class RestClient_AllowAddressRanges_Test extends TestBase {
 			var ex = assertThrows(IllegalArgumentException.class, () -> api.get("http://198.18.0.5/x"));
 			assertTrue(ex.getMessage().contains("denied by default"), ex.getMessage());
 			assertTrue(without.requests.isEmpty());
-			assertEquals(1, withOption.requests.size());
+			assertSize(1, withOption.requests);
 		}
 	}
 
@@ -128,7 +129,7 @@ class RestClient_AllowAddressRanges_Test extends TestBase {
 			try (var client = RestClient.builder().transport(transport).allowAddressRanges("198.18.0.0/15").build()) {
 				client.remote(Api.class).get("http://192.0.0.5/x");
 				client.remote(Api.class).get("http://198.18.0.5/x");
-				assertEquals(2, transport.requests.size());
+				assertSize(2, transport.requests);
 				var api = client.remote(Api.class);
 				assertThrows(IllegalArgumentException.class, () -> api.get("http://224.0.0.5/x"));
 			}
@@ -170,7 +171,7 @@ class RestClient_AllowAddressRanges_Test extends TestBase {
 		var ranges = RemoteUrlPolicy.AllowedRanges.of("198.18.0.0/15");
 		var hops = new Hops("http://198.18.0.9/a", "http://198.18.0.10/b");
 		PolicyEnforcedRedirects.execute(guarded("http://example.com/start", ranges), hops);
-		assertEquals(3, hops.hops.size());
+		assertSize(3, hops.hops);
 		for (var h : hops.hops)
 			assertEquals(ranges, h.getAllowedAddressRanges());
 	}

@@ -19,6 +19,7 @@ package org.apache.juneau.commons.reflect;
 import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
+import static org.apache.juneau.commons.TestAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.lang.annotation.*;
@@ -381,7 +382,7 @@ class MethodInfo_Test extends TestBase {
 
 		// Should not find non-existent annotations
 		var axAnnotations = c_a1.getAnnotations(AX.class).toList();
-		assertEquals(0, axAnnotations.size());
+		assertSize(0, axAnnotations);
 	}
 
 	//====================================================================================================
@@ -867,9 +868,9 @@ class MethodInfo_Test extends TestBase {
 	//====================================================================================================
 	@Test
 	void a037_getParameters() {
-		assertEquals(0, e_a3.getParameters().size());
-		assertEquals(1, e_a1.getParameters().size());
-		assertEquals(2, e_a2.getParameters().size());
+		assertSize(0, e_a3.getParameters());
+		assertSize(1, e_a1.getParameters());
+		assertSize(2, e_a2.getParameters());
 
 		// Test stream operations
 		int[] count = {0};

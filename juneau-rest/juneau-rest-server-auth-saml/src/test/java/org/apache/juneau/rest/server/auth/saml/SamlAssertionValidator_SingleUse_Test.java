@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.server.auth.saml;
 
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.time.*;
@@ -88,7 +89,7 @@ class SamlAssertionValidator_SingleUse_Test extends TestBase {
 		ReplayCache throwing = (id, expiresAtMs) -> { throw new IllegalStateException("store down"); };
 		var validator = base(cred).replayCache(throwing).build();
 		var records = LogRecordCapture.quietly(SamlAssertionValidator.class, () -> assertThrows(AuthenticationException.class, () -> validator.validate(xml)));
-		assertEquals(1, records.size(), records::toString);
+		assertSize(records::toString, 1, records);
 		assertTrue(records.get(0).getMessage().contains("fail-closed"), records.get(0).getMessage());
 	}
 

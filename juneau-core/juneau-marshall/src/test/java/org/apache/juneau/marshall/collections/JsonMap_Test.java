@@ -17,6 +17,7 @@
 package org.apache.juneau.marshall.collections;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 
 import java.io.*;
 import java.util.*;
@@ -35,7 +36,7 @@ class JsonMap_Test extends TestBase {
 
 	@Test void a02_ofKeyValuePairs() {
 		var m = JsonMap.of("a", 1, "b", "two");
-		assertEquals(2, m.size());
+		assertSize(2, m);
 		assertEquals(1, m.getInt("a"));
 		assertEquals("two", m.getString("b"));
 	}
@@ -96,14 +97,14 @@ class JsonMap_Test extends TestBase {
 
 	@Test void a13_appendFluent() {
 		var m = JsonMap.create().append("a", 1).append("b", 2);
-		assertEquals(2, m.size());
+		assertSize(2, m);
 		assertEquals(1, m.getInt("a"));
 		assertEquals(2, m.getInt("b"));
 	}
 
 	@Test void a14_appendIfTrue() {
 		var m = JsonMap.create().appendIf(true, "a", 1).appendIf(false, "b", 2);
-		assertEquals(1, m.size());
+		assertSize(1, m);
 		assertTrue(m.containsKey("a"));
 		assertFalse(m.containsKey("b"));
 	}
@@ -158,7 +159,7 @@ class JsonMap_Test extends TestBase {
 		var inner = JsonList.of(1, 2, 3);
 		var m = JsonMap.of("arr", inner);
 		var got = m.getList("arr");
-		assertEquals(3, got.size());
+		assertSize(3, got);
 	}
 
 	@Test void a23_getListCreateIfNotExists() {
@@ -171,14 +172,14 @@ class JsonMap_Test extends TestBase {
 	@Test void a24_exclude() {
 		var m = JsonMap.of("a", 1, "b", 2, "c", 3);
 		var excluded = m.exclude("b");
-		assertEquals(2, excluded.size());
+		assertSize(2, excluded);
 		assertFalse(excluded.containsKey("b"));
 	}
 
 	@Test void a25_include() {
 		var m = JsonMap.of("a", 1, "b", 2, "c", 3);
 		var included = m.include("a", "c");
-		assertEquals(2, included.size());
+		assertSize(2, included);
 		assertTrue(included.containsKey("a"));
 		assertTrue(included.containsKey("c"));
 	}
@@ -217,14 +218,14 @@ class JsonMap_Test extends TestBase {
 			it.next();
 			it.remove();
 		});
-		assertEquals(1, m.size());
+		assertSize(1, m);
 	}
 
 	@Test void a27_modifiable() {
 		var m = JsonMap.of("a", 1).unmodifiable().modifiable();
 		assertFalse(m.isUnmodifiable());
 		m.put("b", 2);
-		assertEquals(2, m.size());
+		assertSize(2, m);
 	}
 
 	@Test void a28_inner() {
@@ -236,7 +237,7 @@ class JsonMap_Test extends TestBase {
 
 	@Test void a29_filtered() {
 		var m = JsonMap.create().filtered().append("a", null).append("b", 2);
-		assertEquals(1, m.size());
+		assertSize(1, m);
 		assertFalse(m.containsKey("a"));
 		assertTrue(m.containsKey("b"));
 	}
@@ -257,7 +258,7 @@ class JsonMap_Test extends TestBase {
 		var list = JsonList.of(1, 2);
 		var m = JsonMap.of("arr", list);
 		var found = m.findList("missing", "arr");
-		assertEquals(2, found.size());
+		assertSize(2, found);
 	}
 
 	@Test void a33_emptyMapConstant() {
@@ -276,7 +277,7 @@ class JsonMap_Test extends TestBase {
 	@Test void a35_filteredMap() {
 		var m = JsonMap.filteredMap("a", 1, "b", 2);
 		m.append("c", null);
-		assertEquals(2, m.size());
+		assertSize(2, m);
 		assertFalse(m.containsKey("c"));
 		assertEquals(1, m.getInt("a"));
 		assertEquals(2, m.getInt("b"));
@@ -284,7 +285,7 @@ class JsonMap_Test extends TestBase {
 
 	@Test void a36_keepAll() {
 		var m = JsonMap.of("a", 1, "b", 2, "c", 3).keepAll("a", "c");
-		assertEquals(2, m.size());
+		assertSize(2, m);
 		assertTrue(m.containsKey("a"));
 		assertFalse(m.containsKey("b"));
 		assertTrue(m.containsKey("c"));
@@ -307,7 +308,7 @@ class JsonMap_Test extends TestBase {
 		extra.put("c", 3);
 		extra.put("d", 4);
 		var m = JsonMap.of("a", 1).append(extra);
-		assertEquals(3, m.size());
+		assertSize(3, m);
 		assertEquals(3, m.getInt("c"));
 	}
 

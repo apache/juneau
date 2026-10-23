@@ -43,7 +43,7 @@ class CborOutputStream_Test extends TestBase {
 	@Test
 	void a01_positiveFixint() throws Exception {
 		for (int i = 0; i <= 23; i++)
-			enc(i, String.format("%02X", i));
+			enc(i, f("%02X", i));
 	}
 
 	@Test
@@ -158,7 +158,7 @@ class CborOutputStream_Test extends TestBase {
 		var s = "a".repeat(24);
 		var b = CborSerializer.DEFAULT.write(s);
 		assertEquals(26, b.length);
-		assertEquals("78", String.format("%02X", b[0] & 0xFF));
+		assertEquals("78", f("%02X", b[0] & 0xFF));
 		assertEquals(24, b[1] & 0xFF);
 	}
 

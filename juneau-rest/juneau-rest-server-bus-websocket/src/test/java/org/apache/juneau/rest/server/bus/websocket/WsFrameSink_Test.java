@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.server.bus.websocket;
 
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
@@ -99,7 +100,7 @@ class WsFrameSink_Test extends TestBase {
 	@Test void b01_closeIsHandedOff_notRunInline() throws Exception {
 		sink.close(4429, "bus:slow-consumer");
 		verify(ws, never()).close(any(CloseReason.class));
-		assertEquals(1, closer.size(), "close must not block the caller: the bus holds its lock");
+		assertSize(() -> "close must not block the caller: the bus holds its lock", 1, closer);
 		runCloser();
 		var r = closedWith();
 		assertEquals(4429, r.getCloseCode().getCode());
@@ -186,7 +187,7 @@ class WsFrameSink_Test extends TestBase {
 		inline[0] = true;
 		inFlight[0]--;
 		assertDoesNotThrow(() -> first[0].onResult(new SendResult(ws)));
-		assertEquals(1001, order.size());
+		assertSize(1001, order);
 		for (var n = 0; n <= 1000; n++)
 			assertEquals("f" + n, order.get(n));
 		assertEquals(1, inFlight[1], "exactly one send was ever in flight");
@@ -199,7 +200,7 @@ class WsFrameSink_Test extends TestBase {
 		var h = sentHandler("f1");
 		sink.close(1001, "bus:closed");
 		h.onResult(new SendResult(ws, new IOException("gone")));
-		assertEquals(1, closer.size(), "only the close that was asked for");
+		assertSize(() -> "only the close that was asked for", 1, closer);
 	}
 
 	@Test void e03_theDefaultCloserRunsOnABoundedDaemonThreadWithNoContextClassLoader() throws Exception {

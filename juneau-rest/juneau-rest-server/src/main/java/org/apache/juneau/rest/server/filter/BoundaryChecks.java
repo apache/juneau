@@ -104,7 +104,7 @@ final class BoundaryChecks {
 		"java:S3776" // Strict header grammar: the bracketed and plain host branches read best as one sequence
 	})
 	static Authority parseHost(String value) {
-		if (value == null || value.isEmpty())
+		if (ie(value))
 			return null;
 		String host;
 		String rest;
@@ -260,7 +260,7 @@ final class BoundaryChecks {
 		if (! "HTTP/2.0".equals(req.getProtocol()))
 			return null;
 		var name = req.getServerName();
-		if (name == null || name.isBlank())
+		if (ib(name))
 			return null;
 		// Tomcat reports an IPv6 server name without the brackets a Host header would carry.
 		if (name.indexOf(':') >= 0 && ! name.startsWith("["))

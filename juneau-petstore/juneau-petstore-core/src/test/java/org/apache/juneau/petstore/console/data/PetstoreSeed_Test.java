@@ -19,6 +19,7 @@ package org.apache.juneau.petstore.console.data;
 import static org.apache.juneau.test.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.time.*;
 import java.util.*;
 
 import org.apache.juneau.*;
@@ -113,5 +114,20 @@ class PetstoreSeed_Test extends TestBase {
 		var seed = PetstoreSeed.create();
 		var e = assertThrows(IllegalArgumentException.class, () -> seed.populate(s));
 		assertString("PetstoreSeed.populate expects a store holding only the classic rows; found '500' pets", e.getMessage());
+	}
+
+	@Test void b01_fixedNowUnsetOrBlankIsTheSystemClock() {
+		assertNull(PetstoreSeed.fixedNowClock(null));
+		assertNull(PetstoreSeed.fixedNowClock("  "));
+	}
+
+	@Test void b02_fixedNowInstantPinsNow() {
+		var c = PetstoreSeed.fixedNowClock(" 2026-10-01T12:00:00Z ");
+		assertEquals(Instant.parse("2026-10-01T12:00:00Z"), c.instant());
+		assertEquals(c.instant(), c.instant());
+	}
+
+	@Test void b03_fixedNowSeedIsTheSeedClock() {
+		assertSame(PetstoreSeed.DEFAULT_CLOCK, PetstoreSeed.fixedNowClock("seed"));
 	}
 }

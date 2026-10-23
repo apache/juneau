@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.petstore.console;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
+
 import java.io.*;
 import java.util.*;
 
@@ -142,7 +144,7 @@ public class PetstoreApiBoundary implements Filter {
 	 * 	setting is not set.
 	 */
 	private static String[] allowedHosts(String setting) {
-		if (setting == null || setting.isBlank())
+		if (ib(setting))
 			return new String[0];
 		return Arrays.stream(setting.split(",", -1)).map(String::trim).toArray(String[]::new);
 	}

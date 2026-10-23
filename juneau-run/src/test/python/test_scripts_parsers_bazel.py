@@ -74,11 +74,11 @@ def action_failed(label, stderr=None, message=None):
     return {"id": {"actionCompleted": {"primaryOutput": "bazel-out/x", "label": label}}, "action": a}
 
 
-def test_result(label, status="PASSED"):
+def _result(label, status="PASSED"):
     return {"id": {"testResult": {"label": label, "run": 1, "shard": 1, "attempt": 1}}, "testResult": {"status": status}}
 
 
-def test_summary(label, status, log=None):
+def _summary(label, status, log=None):
     s = {"overallStatus": status, "totalRunCount": 1}
     if log is not None:
         s["failed"] = [{"uri": Path(log).as_uri()}]
@@ -140,7 +140,7 @@ class BazelParserTest(unittest.TestCase):
         b = Bep(self, ("bazel", "test", "//..."))
         events = b.poll(started("test"), progress("INFO: Analyzed 2 targets.\n"), configured("//a:gen"),
                         configured("//a:t", "sh_test rule", "SMALL"), completed("//a:gen"), completed("//a:t"),
-                        test_result("//a:t"), test_summary("//a:t", "PASSED"), finished())
+                        _result("//a:t"), _summary("//a:t", "PASSED"), finished())
         events += b.finish(0)
         self.assertEqual(events[3:], [
             ("sub_start", "t/build", 2, "Build"),
@@ -157,7 +157,7 @@ class BazelParserTest(unittest.TestCase):
         log = b.dir / "test.log"
         log.write_text("".join(f"line {i}\n" for i in range(50)), encoding="utf-8")
         events = b.poll(started("test"), configured("//a:t", "sh_test rule", "SMALL"), completed("//a:t"),
-                        test_result("//a:t", "FAILED"), test_summary("//a:t", "FAILED", log), finished(3))
+                        _result("//a:t", "FAILED"), _summary("//a:t", "FAILED", log), finished(3))
         events += b.finish(3)
         text = "//a:t FAILED\n" + "\n".join(f"line {i}" for i in range(10, 50))
         self.assertIn(("unit", "t", 1, "fail"), events)
@@ -199,9 +199,9 @@ class BazelParserTest(unittest.TestCase):
         # Bazel 7 interleaves phases: a test row is open when a compile failure for another target arrives.
         b = Bep(self, ("bazel", "test", "//..."))
         events = b.poll(started("test"), configured("//a:t", "sh_test rule", "SMALL"), completed("//a:t"),
-                        test_result("//a:t"), configured("//b:bad"),
+                        _result("//a:t"), configured("//b:bad"),
                         action_failed("//b:bad", message="compile failed"), completed("//b:bad", success=False),
-                        test_summary("//a:t", "PASSED"), finished(1))
+                        _summary("//a:t", "PASSED"), finished(1))
         events += b.finish(1)
         self.assertIn(("sub_end", "t/test", "fail", 500), events)
 
@@ -228,8 +228,8 @@ class BazelParserTest(unittest.TestCase):
     def test_a_failed_test_without_a_readable_log_is_named_in_the_excerpt(self):
         b = Bep(self, ("bazel", "test", "//a:t"))
         events = b.poll(started("test"), configured("//a:t", "sh_test rule", "SMALL"), completed("//a:t"),
-                        test_result("//a:t", "FAILED"),
-                        test_summary("//a:t", "FAILED", "/no/such/dir/test.log"), finished(3))
+                        _result("//a:t", "FAILED"),
+                        _summary("//a:t", "FAILED", "/no/such/dir/test.log"), finished(3))
         events += b.finish(3)
         self.assertEqual(events[-2:], [("cond", "//a:t FAILED"), ("failure", "//a:t FAILED", "t")])
 

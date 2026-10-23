@@ -41,7 +41,7 @@ import org.apache.juneau.rest.server.datatables.*;
  * 		search, an {@code order[]} entry, or global-search eligibility), so a render-only column with an unresolvable
  * 		{@code data} never errors.
  * 	<li>Each searchable column's non-blank {@code search.value} becomes one raw {@code column=expression} condition
- * 		({@link org.apache.juneau.commons.beanquery.BeanQuery.Builder#search(String, String)}); two DataTables columns resolving to the same key merge
+ * 		({@link org.apache.juneau.commons.beanquery.BeanQuery.Builder#search(String, String) BeanQuery.Builder#search(String, String)}); two DataTables columns resolving to the same key merge
  * 		into one {@code $and}.
  * 	<li>A non-blank global {@code search.value} becomes a top-level {@code $or} of one leaf per eligible column
  * 		(searchable, resolvable), the leaf chosen by that column's {@link SearchType}:

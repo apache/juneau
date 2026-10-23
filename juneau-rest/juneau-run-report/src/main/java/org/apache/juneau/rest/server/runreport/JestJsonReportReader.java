@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.server.runreport;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.rest.server.runreport.ReportJson.*;
 import static org.apache.juneau.rest.server.runreport.ReportText.*;
 
@@ -65,7 +66,7 @@ public final class JestJsonReportReader implements ReportReader {
 				files.add(raw);
 			var assertions = list(file.get("assertionResults"));
 			var fileMsg = str(file.get("message"));
-			if (assertions.isEmpty() && "failed".equals(str(file.get("status"))) && fileMsg != null && ! fileMsg.isBlank()) {
+			if (assertions.isEmpty() && "failed".equals(str(file.get("status"))) && inb(fileMsg)) {
 				if (rows.size() >= lim.maxTests()) {
 					out.truncated = true;
 					out.warnings.add("report truncated at " + lim.maxTests() + " tests");
@@ -107,7 +108,7 @@ public final class JestJsonReportReader implements ReportReader {
 
 	private static ReportTest assertion(Map<String,Object> a, ReportLimits lim) {
 		var name = str(a.get("fullName"));
-		if (name == null || name.isEmpty()) {
+		if (ie(name)) {
 			var parts = list(a.get("ancestorTitles")).stream().filter(String.class::isInstance).map(String.class::cast)
 				.collect(Collectors.toCollection(ArrayList::new));
 			var title = str(a.get("title"));

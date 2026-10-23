@@ -117,7 +117,7 @@ public final class McpWellKnownRouting {
 	}
 
 	private static String normalizePath(String rawPath) {
-		if (rawPath == null || rawPath.isEmpty())
+		if (ie(rawPath))
 			return "";
 		var p = rawPath;
 		while (p.endsWith("/"))

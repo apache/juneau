@@ -73,8 +73,8 @@ import org.apache.juneau.rest.server.widgets.Op;
  * <p>
  * {@code enabledWhen} was added after this schema was first frozen; like {@code ModalDef#barSlot}, it is
  * additive-only (<jk>null</jk> when unset, omitted from the serialized form) and its presence does not bump
- * {@code VIEW_META} &mdash; a {@link RowAction} declared before this field existed is
- * byte-identical on the wire, and old {@code juneau-views.js} ignores the unknown key.
+ * {@code VIEW_META} &mdash; a {@link RowAction} that leaves it unset serializes
+ * unchanged, and old {@code juneau-views.js} ignores the unknown key.
  *
  * <h5 class='section'>Why {@link #method} cannot be a safe method</h5>
  * <p>
@@ -93,7 +93,7 @@ import org.apache.juneau.rest.server.widgets.Op;
  * {@code href} interpolation.  Unlike a rendered {@code href}, these URLs are <i>fetched</i> (form: confirmation GET) or
  * <i>submitted</i> (endpoint: mutating write), so an unresolved substitution <b>refuses</b> instead of issuing a
  * malformed request; see each setter's javadoc for the full contract.  A value with no token is unaffected and
- * is used byte-identical to how it always was.  A blank/absent {@code form} is the confirm-only local path (no
+ * is used as declared.  A blank/absent {@code form} is the confirm-only local path (no
  * GET), not a refusal.
  *
  * <h5 class='section'>Example:</h5>
@@ -364,7 +364,7 @@ public class RowAction {
 	 * @throws IllegalArgumentException If {@code id} is <jk>null</jk> or blank.
 	 */
 	public static RowAction create(String id) {
-		if (id == null || id.isBlank())
+		if (ib(id))
 			throw iaex("RowAction id must not be null or blank.");
 		var a = new RowAction();
 		a.id = id;
@@ -421,7 +421,7 @@ public class RowAction {
 	 *
 	 * <p>
 	 * <b>Backward compatible, narrowed:</b> an {@code endpoint} with no {@code {...}} token is still
-	 * issued byte-identical to how it always was (three of the four guards above cannot fire on it; the fourth,
+	 * issued as declared (three of the four guards above cannot fire on it; the fourth,
 	 * the {@code ..} check, only fires on an author-declared {@code ..}).  An {@code endpoint} WITH a token now
 	 * refuses in cases that previously submitted a malformed URL (e.g. {@code "servlet:/incidents//ack"} for a
 	 * row with no {@code id}) rather than issuing it.
@@ -534,7 +534,7 @@ public class RowAction {
 	 * <p>
 	 * <b>Divergence from {@link #endpoint(String) endpoint}:</b> a blank/absent {@code form} is still the
 	 * confirm-only local path (no GET), not a {@code no-endpoint} refusal.  A token-less {@code form} is fetched
-	 * byte-identical to how it always was.
+	 * as declared.
 	 *
 	 * @param value The new value.  Can be <jk>null</jk> or blank for a confirm-only dialog.
 	 * @return This object.

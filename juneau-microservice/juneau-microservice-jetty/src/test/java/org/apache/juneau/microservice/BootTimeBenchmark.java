@@ -146,7 +146,7 @@ public class BootTimeBenchmark {
 		// Linearity check — how much does the 10-servlet warm median exceed 1-servlet warm median?
 		var w1 = warmMedian(oneServlet);
 		var w10 = warmMedian(tenServlets);
-		println(String.format("BOOTBENCH: scaling: warm median 1-servlet=%.1fms, 10-servlets=%.1fms, delta=%.1fms (~%.2f ms/servlet)",
+		println(f("BOOTBENCH: scaling: warm median 1-servlet=%.1fms, 10-servlets=%.1fms, delta=%.1fms (~%.2f ms/servlet)",
 			w1, w10, w10 - w1, (w10 - w1) / 9.0));
 	}
 
@@ -157,17 +157,14 @@ public class BootTimeBenchmark {
 			var s = oneBoot(userConfig);
 			samples[i] = s;
 			var tag = (i == 0) ? "COLD" : "warm#" + i;
-			println(String.format("BOOTBENCH: [%s] %s  build=%.1fms  start=%.1fms  total=%.1fms",
+			println(f("BOOTBENCH: [%s] %s  build=%.1fms  start=%.1fms  total=%.1fms",
 				label, tag, s.buildMs(), s.startMs(), s.totalMs()));
 		}
 		return samples;
 	}
 
 	private static Sample oneBoot(Class<?> userConfig) throws Exception {
-		var classes = new ArrayList<Class<?>>();
-		classes.add(userConfig);
-		classes.add(MicroserviceTestFixture.EphemeralJettyServerConfig.class);
-		classes.add(JettyConfiguration.class);
+		List<Class<?>> classes = l(userConfig, MicroserviceTestFixture.EphemeralJettyServerConfig.class, JettyConfiguration.class);
 
 		var t0 = System.nanoTime();
 		var ms = Microservice.create()
@@ -195,7 +192,7 @@ public class BootTimeBenchmark {
 		var warmBuild = warmMedian(s, true /*build*/);
 		var warmStart = warmMedian(s, false /*start*/);
 		var warmTotal = warmMedian(s);
-		println(String.format("BOOTBENCH: %s : cold total=%.1fms (build=%.1fms, start=%.1fms) | warm-median total=%.1fms (build=%.1fms, start=%.1fms)",
+		println(f("BOOTBENCH: %s : cold total=%.1fms (build=%.1fms, start=%.1fms) | warm-median total=%.1fms (build=%.1fms, start=%.1fms)",
 			label, cold.totalMs(), cold.buildMs(), cold.startMs(),
 			warmTotal, warmBuild, warmStart));
 	}

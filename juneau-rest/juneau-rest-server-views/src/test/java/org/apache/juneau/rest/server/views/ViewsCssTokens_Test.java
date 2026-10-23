@@ -17,6 +17,7 @@
 package org.apache.juneau.rest.server.views;
 
 import static java.nio.charset.StandardCharsets.*;
+import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
@@ -122,14 +123,15 @@ class ViewsCssTokens_Test extends TestBase {
 
 	@Test void a01_newLightTokens() throws Exception {
 		var root = rootDecls(views());
-		var expected = new LinkedHashMap<String,String>();
-		expected.put("--jc-label-text", "#555555");
-		expected.put("--jc-placeholder", "#b4b5b6");
-		expected.put("--jc-on-tone", "#ffffff");
-		expected.put("--jc-term-bg", "#000000");
-		expected.put("--jc-term-fg", "#e5e5e5");
-		expected.put("--jc-term-cursor", "#e5e5e5");
-		expected.put("--jc-term-selection", "rgba(255,255,255,0.3)");
+		Map<String,String> expected = map(
+			"--jc-label-text", "#555555",
+			"--jc-placeholder", "#b4b5b6",
+			"--jc-on-tone", "#ffffff",
+			"--jc-term-bg", "#000000",
+			"--jc-term-fg", "#e5e5e5",
+			"--jc-term-cursor", "#e5e5e5",
+			"--jc-term-selection", "rgba(255,255,255,0.3)"
+		);
 		for (var e : expected.entrySet())
 			assertEquals(e.getValue(), root.get(e.getKey()), e.getKey());
 	}

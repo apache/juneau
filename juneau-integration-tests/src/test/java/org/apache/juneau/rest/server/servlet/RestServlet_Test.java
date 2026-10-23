@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.server.servlet;
 
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
@@ -157,7 +158,7 @@ class RestServlet_Test extends TestBase {
 		// catch(ServletException) branch (line 260-263) which sets initException AND re-throws. // NOSONAR
 		var s = new E_PostInitThrows();
 		var records = LogRecordCapture.quietly(E_PostInitThrows.class, () -> assertThrows(ServletException.class, () -> s.init(mockServletConfig())));
-		assertEquals(1, records.size(), records::toString);
+		assertSize(records::toString, 1, records);
 		assertEquals(java.util.logging.Level.SEVERE, records.get(0).getLevel());
 		// initException is now set; subsequent service() should re-throw it through the catch-and-sendError.
 		var req = mock(HttpServletRequest.class);
@@ -179,7 +180,7 @@ class RestServlet_Test extends TestBase {
 				// Falls into ServletException catch — also acceptable; both branches exercised across the suite.
 			}
 		});
-		assertEquals(1, records.size(), records::toString);
+		assertSize(records::toString, 1, records);
 		// Subsequent service() should also report 500.
 		var req = mock(HttpServletRequest.class);
 		var resp = mock(HttpServletResponse.class);

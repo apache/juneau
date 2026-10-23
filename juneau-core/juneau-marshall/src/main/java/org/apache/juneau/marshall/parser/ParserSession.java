@@ -357,7 +357,7 @@ public class ParserSession extends MarshallingSession {
 	 *
 	 * <p>
 	 * This always returns a value for input of type {@link CharSequence}.
-	 * <br>For other input types, use {@link org.apache.juneau.marshall.Context.Builder#debug()} setting to enable caching to a string
+	 * <br>For other input types, use {@link org.apache.juneau.marshall.Context.Builder#debug() Context.Builder#debug()} setting to enable caching to a string
 	 * before parsing so that this method returns the input.
 	 *
 	 * @return The input as a string, or <jk>null</jk> if no pipe has been created or we're reading from an uncached reader or input stream source.

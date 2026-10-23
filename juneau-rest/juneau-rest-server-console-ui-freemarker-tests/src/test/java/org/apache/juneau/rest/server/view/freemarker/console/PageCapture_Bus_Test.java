@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.server.view.freemarker.console;
 
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
@@ -61,7 +62,7 @@ class PageCapture_Bus_Test extends TestBase {
 		var cap = new PageCapture();
 		cap.addTopic(TopicDecl.of("ops.jobs").retain(true).publisher(Publisher.SERVER).toMap(), "PageSpec.topic");
 		cap.addTopic(TopicDecl.of("ops.jobs").retain(true).publisher(Publisher.SERVER).toMap(), "<@topic>");
-		assertEquals(1, contract(cap).getList("topics").size());
+		assertSize(1, contract(cap).getList("topics"));
 	}
 
 	@Test void b01_retainConflict_isE46() {

@@ -415,7 +415,7 @@ class MultiList_Test extends TestBase {
 		var l2 = l(a("3", "4", "5"));
 		var ml = new MultiList<>(l1, l2);
 
-		assertEquals(5, ml.size());
+		assertSize(5, ml);
 	}
 
 	@Test
@@ -425,13 +425,13 @@ class MultiList_Test extends TestBase {
 		var l3 = l(new String[0]);
 		var ml = new MultiList<>(l1, l2, l3);
 
-		assertEquals(1, ml.size());
+		assertSize(1, ml);
 	}
 
 	@Test
 	void d03_size_emptyMultiList() {
 		var ml = new MultiList<String>();
-		assertEquals(0, ml.size());
+		assertSize(0, ml);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

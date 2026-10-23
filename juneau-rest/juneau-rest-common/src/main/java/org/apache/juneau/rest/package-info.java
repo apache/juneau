@@ -19,7 +19,7 @@
  * Constants shared across the Juneau REST modules.
  *
  * <p>
- * Provides {@link org.apache.juneau.rest.RestSharedConstants}, a set of static wire-name constants
+ * Provides {@link org.apache.juneau.rest.RestSharedConstants RestSharedConstants}, a set of static wire-name constants
  * common to the {@code juneau-rest-server}, {@code juneau-rest-client}, and {@code juneau-rest-mock} modules.
  */
 package org.apache.juneau.rest;

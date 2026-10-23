@@ -18,6 +18,7 @@ package org.apache.juneau.marshall.stream;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assumptions.*;
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 
 import java.io.*;
 import java.util.*;
@@ -139,7 +140,7 @@ class ArrayRecordStream_Test extends TestBase {
 		// Read
 		var got = readAll(fmt, bytes, Bean.class);
 
-		assertEquals(3, got.size(), "format=" + fmt);
+		assertSize(() -> "format=" + fmt, 3, got);
 		assertEquals("a", got.get(0).name);
 		assertEquals(1, got.get(0).age);
 		assertEquals("c", got.get(2).name);
@@ -173,7 +174,7 @@ class ArrayRecordStream_Test extends TestBase {
 
 		var bytes = writeAll(fmt, List.of(new Bean("solo", 42)));
 		var got = readAll(fmt, bytes, Bean.class);
-		assertEquals(1, got.size());
+		assertSize(1, got);
 		assertEquals("solo", got.get(0).name);
 		assertEquals(42, got.get(0).age);
 	}
@@ -194,7 +195,7 @@ class ArrayRecordStream_Test extends TestBase {
 			var iter = r.iterator(Bean.class);
 			var out = new ArrayList<Bean>();
 			iter.forEachRemaining(out::add);
-			assertEquals(2, out.size());
+			assertSize(2, out);
 			assertEquals("a", out.get(0).name);
 			assertEquals(2, out.get(1).age);
 		}
@@ -227,7 +228,7 @@ class ArrayRecordStream_Test extends TestBase {
 			while (r.canRead())
 				got.add(r.read(Bean.class));
 		}
-		assertEquals(2, got.size());
+		assertSize(2, got);
 		assertEquals("alice", got.get(0).name);
 		assertEquals(25, got.get(1).age);
 	}
@@ -241,7 +242,7 @@ class ArrayRecordStream_Test extends TestBase {
 			while (r.canRead())
 				got.add(r.read(Bean.class));
 		}
-		assertEquals(2, got.size());
+		assertSize(2, got);
 		assertEquals("alice", got.get(0).name);
 		assertEquals(25, got.get(1).age);
 	}
@@ -264,7 +265,7 @@ class ArrayRecordStream_Test extends TestBase {
 			while (r.canRead())
 				got.add(r.read(Bean.class));
 		}
-		assertEquals(2, got.size());
+		assertSize(2, got);
 		assertEquals("alice", got.get(0).name);
 		assertEquals(30, got.get(0).age);
 		assertEquals("bob", got.get(1).name);
@@ -283,7 +284,7 @@ class ArrayRecordStream_Test extends TestBase {
 			while (r.canRead())
 				got.add(r.read(Bean.class));
 		}
-		assertEquals(1, got.size());
+		assertSize(1, got);
 		assertEquals("solo", got.get(0).name);
 		assertEquals(42, got.get(0).age);
 	}
@@ -325,7 +326,7 @@ class ArrayRecordStream_Test extends TestBase {
 			"unchecked" // The (List<Bean>) cast of MsgPackParser.read(..., List.class, Bean.class) is safe because the element type is passed to the parse call.
 		})
 		var got = (List<Bean>) MsgPackParser.DEFAULT.read(baos.toByteArray(), List.class, Bean.class);
-		assertEquals(3, got.size());
+		assertSize(3, got);
 		assertEquals("a", got.get(0).name);
 		assertEquals(3, got.get(2).age);
 	}
@@ -361,7 +362,7 @@ class ArrayRecordStream_Test extends TestBase {
 		var beans = List.of(chain(5), chain(6));
 		var bytes = writeAll(fmt, beans);
 		var got = readAll(fmt, bytes, Node.class);
-		assertEquals(2, got.size());
+		assertSize(2, got);
 		assertEquals("n1", got.get(0).id);
 		assertEquals("n5", got.get(0).child.child.child.child.id);
 		assertNull(got.get(0).child.child.child.child.child);

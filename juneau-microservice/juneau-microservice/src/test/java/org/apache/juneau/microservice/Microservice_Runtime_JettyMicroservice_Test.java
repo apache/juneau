@@ -17,6 +17,7 @@
 package org.apache.juneau.microservice;
 
 import static org.apache.juneau.commons.utils.Shorts.*;
+import static org.apache.juneau.test.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
@@ -44,15 +45,15 @@ import org.junit.jupiter.api.*;
  *
  * <p>
  * This focuses on Phase-1's gap surface area: the runtime methods (the constructor / builder is covered
- * by {@code Microservice_Builder_Test} and {@code Microservice_Inject_Test}; the listener fan-out by
- * {@code Microservice_Listener_Fanout_Test}; the bean-store overlay/inject by
- * {@code Microservice_OverridingBeanStore_Test} / {@code Microservice_PushPopOverlay_Test}).
+ * by {@code Microservice_Builder_JettyMicroservice_Test} and {@code Microservice_Inject_JettyMicroservice_Test}; the listener fan-out by
+ * {@code Microservice_Listener_Fanout_JettyMicroservice_Test}; the bean-store overlay/inject by
+ * {@code Microservice_OverridingBeanStore_JettyMicroservice_Test} / {@code Microservice_PushPopOverlay_JettyMicroservice_Test}).
  */
 @org.apache.juneau.testing.JettyMicroserviceTest
 @SuppressWarnings({
 	"resource" // Test-only Microservice/Scanner instances are stopped/closed in try/finally; JDT's local closeable analysis does not recognize ms.stop() as closing them.
 })
-class Microservice_Runtime_Test extends TestBase {
+class Microservice_Runtime_JettyMicroservice_Test extends TestBase {
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// A. Accessors return the resolved values registered into the bean store during construction.
@@ -505,7 +506,7 @@ class Microservice_Runtime_Test extends TestBase {
 
 	@Test void k03_builder_configurations_acceptsList() {
 		var b = Microservice.create().configurations(List.of(String.class));
-		assertEquals(1, b.configurations.size());
+		assertSize(1, b.configurations);
 		assertSame(String.class, b.configurations.get(0));
 	}
 

@@ -391,7 +391,7 @@ class JsonMap_Test extends TestBase {
 		assertTrue(m.isEmpty());
 		assertEquals(JsonMap.class, m.getClass());
 		m.put("x", 1);
-		assertEquals(1, m.size());
+		assertSize(1, m);
 	}
 
 	@Test void a11_factoryOfStringNullReader() throws Exception {
@@ -400,7 +400,7 @@ class JsonMap_Test extends TestBase {
 		assertTrue(m.isEmpty());
 		assertEquals(JsonMap.class, m.getClass());
 		m.put("x", 1);
-		assertEquals(1, m.size());
+		assertSize(1, m);
 	}
 
 	@Test void a12_factoryOfStringNullCharSequenceWithParser() throws Exception {
@@ -409,7 +409,7 @@ class JsonMap_Test extends TestBase {
 		assertTrue(m.isEmpty());
 		assertEquals(JsonMap.class, m.getClass());
 		m.put("x", 1);
-		assertEquals(1, m.size());
+		assertSize(1, m);
 	}
 
 	@Test void a13_factoryOfStringNullReaderWithParser() throws Exception {
@@ -418,6 +418,6 @@ class JsonMap_Test extends TestBase {
 		assertTrue(m.isEmpty());
 		assertEquals(JsonMap.class, m.getClass());
 		m.put("x", 1);
-		assertEquals(1, m.size());
+		assertSize(1, m);
 	}
 }

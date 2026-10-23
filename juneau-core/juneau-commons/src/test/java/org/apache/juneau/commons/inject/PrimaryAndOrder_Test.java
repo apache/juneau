@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.commons.inject;
 
+import static org.apache.juneau.commons.TestAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.commons.*;
@@ -120,7 +121,7 @@ class PrimaryAndOrder_Test extends TestBase {
 		var store = new BasicBeanStore(null);
 		store.registerConfiguration(OrderedConfig.class);
 		var beans = store.getBeansOfType(Plugin.class);
-		assertEquals(3, beans.size());
+		assertSize(3, beans);
 		var keys = beans.keySet().toArray(new String[0]);
 		assertEquals("high", keys[0]);
 		assertEquals("mid", keys[1]);

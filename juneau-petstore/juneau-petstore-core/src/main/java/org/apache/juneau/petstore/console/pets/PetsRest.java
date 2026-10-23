@@ -284,7 +284,7 @@ public class PetsRest extends PetstoreConsolePage {
 			field = body.getString("field");
 			value = body.getString("value");
 		}
-		if (field == null || field.isBlank())
+		if (ib(field))
 			throw new BadRequest("Missing field to stage");
 		try {
 			var c = store().pendingChanges().stage(id, field, value, ConsoleWrites.author(actor));

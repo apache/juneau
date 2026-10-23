@@ -17,6 +17,7 @@
 package org.apache.juneau.bean.mcp.v20250618;
 
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.test.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
@@ -350,7 +351,7 @@ class McpBeans_RoundTrip_Test {
 		var result = new CompleteResult().setCompletion(completion);
 		assertJsonRoundTripPlain(result, CompleteResult.class);
 		var copy = JsonParser.DEFAULT.read(JsonSerializer.DEFAULT.write(result), CompleteResult.class);
-		assertEquals(100, copy.getCompletion().getValues().size());
+		assertSize(100, copy.getCompletion().getValues());
 		assertEquals(150, copy.getCompletion().getTotal());
 		assertEquals(true, copy.getCompletion().getHasMore());
 	}

@@ -25,7 +25,9 @@ import org.junit.jupiter.api.*;
 /**
  * Tests declaration-order property seeding in {@link BeanMeta}.
  */
-@SuppressWarnings("unused")
+@SuppressWarnings({
+	"unused" // Fixture members are read reflectively.
+})
 class BeanMeta_DeclarationOrder_Test extends TestBase {
 
 	private static final BeanConfigContext SORTED = BeanConfigContext.DEFAULT;

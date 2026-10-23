@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.marshall.ini;
 
+import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.BasicTestUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -304,10 +305,7 @@ class IniSerializerSession_Test extends TestBase {
 	}
 
 	@Test void i06_needsQuoting_literalNullTrueFalseStrings() {
-		var m = new LinkedHashMap<String,Object>();
-		m.put("a", "null");
-		m.put("b", "true");
-		m.put("c", "FALSE");
+		Map<String,Object> m = map("a", "null", "b", "true", "c", "FALSE");
 		var ini = IniSerializer.DEFAULT.write(m);
 		assertTrue(ini.contains("'null'"), ini);
 		assertTrue(ini.contains("'true'"), ini);

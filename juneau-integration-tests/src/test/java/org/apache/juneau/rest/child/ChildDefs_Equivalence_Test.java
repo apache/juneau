@@ -26,7 +26,7 @@ import org.junit.jupiter.api.*;
  * Feature test for the {@link Rest#childrenDefs() @Rest(childrenDefs=@Child(...))} bare-equivalence rule.
  *
  * <p>
- * Verifies the Phase 1 motivating capability &mdash; {@code @Child(type=X)} with zero overrides routes
+ * Verifies the motivating capability &mdash; {@code @Child(type=X)} with zero overrides routes
  * identically to a bare {@code @Rest(children=X)} entry &mdash; mirroring
  * {@code MixinDefs_Overrides_Test.f01_bareEqualsEmptyDef}.
  */

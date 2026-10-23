@@ -17,6 +17,7 @@
 package org.apache.juneau.rest.server.views;
 
 import static java.nio.charset.StandardCharsets.*;
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
@@ -414,7 +415,7 @@ class CsrfBoundary_BrowserTest extends TestBase {
 	/** The one request the application received for a method and path. */
 	private static Seen seenOnce(String method, String path) {
 		var l = seen(method, path);
-		assertEquals(1, l.size(), () -> method + " " + path + " arrived " + l.size() + " times: " + SEEN);
+		assertSize(() -> method + " " + path + " arrived " + l.size() + " times: " + SEEN, 1, l);
 		return l.get(0);
 	}
 

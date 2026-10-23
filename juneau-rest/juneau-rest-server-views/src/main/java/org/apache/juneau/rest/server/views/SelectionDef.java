@@ -126,7 +126,7 @@ public final class SelectionDef {
 	 * @throws IllegalArgumentException If {@code rowIdField} is <jk>null</jk> or blank.
 	 */
 	public static SelectionDef create(String rowIdField) {
-		if (rowIdField == null || rowIdField.isBlank())
+		if (ib(rowIdField))
 			throw iaex("SelectionDef rowIdField must not be null or blank.");
 		return new SelectionDef(rowIdField);
 	}

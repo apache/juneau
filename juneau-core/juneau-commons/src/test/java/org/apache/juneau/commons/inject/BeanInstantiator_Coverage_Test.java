@@ -203,7 +203,7 @@ class BeanInstantiator_Coverage_Test extends TestBase {
 	void b01_findBeanSubTypesTraversesMultiLevelHierarchy() {
 		var creator = bc(B01_GrandParent.class).type(B01_Child.class);
 		var subTypes = creator.getBeanSubTypes();
-		assertEquals(3, subTypes.size());
+		assertSize(3, subTypes);
 		assertEquals(B01_Child.class.getName(), subTypes.get(0).getName());
 		assertEquals(B01_Parent.class.getName(), subTypes.get(1).getName());
 		assertEquals(B01_GrandParent.class.getName(), subTypes.get(2).getName());

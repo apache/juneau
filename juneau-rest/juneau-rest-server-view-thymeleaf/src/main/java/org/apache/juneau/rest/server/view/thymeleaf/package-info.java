@@ -22,14 +22,14 @@
  * templates:
  *
  * <ul class='javatreec'>
- * 	<li class='jc'>{@link org.apache.juneau.rest.server.view.thymeleaf.ThymeleafMixin} &mdash;
+ * 	<li class='jc'>{@link org.apache.juneau.rest.server.view.thymeleaf.ThymeleafMixin ThymeleafMixin} &mdash;
  * 		mixin that renders raw {@code .html} templates from the importer's classpath under
  * 		{@code /thymeleaf/*} and auto-registers
- * 		{@link org.apache.juneau.rest.server.view.thymeleaf.ThymeleafViewRenderer}.
- * 	<li class='jc'>{@link org.apache.juneau.rest.server.view.thymeleaf.ThymeleafView} &mdash; immutable
+ * 		{@link org.apache.juneau.rest.server.view.thymeleaf.ThymeleafViewRenderer ThymeleafViewRenderer}.
+ * 	<li class='jc'>{@link org.apache.juneau.rest.server.view.thymeleaf.ThymeleafView ThymeleafView} &mdash; immutable
  * 		value class (implements the core {@link org.apache.juneau.rest.server.view.View View} interface)
  * 		returned from {@code @RestOp} methods to ask the framework to render a Thymeleaf template.
- * 	<li class='jc'>{@link org.apache.juneau.rest.server.view.thymeleaf.ThymeleafViewRenderer} &mdash;
+ * 	<li class='jc'>{@link org.apache.juneau.rest.server.view.thymeleaf.ThymeleafViewRenderer ThymeleafViewRenderer} &mdash;
  * 		{@link org.apache.juneau.rest.server.processor.ResponseProcessor ResponseProcessor} that detects
  * 		{@link org.apache.juneau.rest.server.view.thymeleaf.ThymeleafView ThymeleafView} returns and
  * 		dispatches them to the configured

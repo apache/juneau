@@ -26,15 +26,15 @@
  *
  * <h5 class='topic'>What's here</h5>
  * <ul>
- * 	<li>{@link org.apache.juneau.rest.client.mcp.auth.McpTokenProvider} &mdash; a {@code Supplier<String>} token
+ * 	<li>{@link org.apache.juneau.rest.client.mcp.auth.McpTokenProvider McpTokenProvider} &mdash; a {@code Supplier<String>} token
  * 		manager for pre-provisioned (static) tokens, the client-credentials grant, and the refresh-token grant
  * 		(SEP-2207, with rotated-refresh-token capture); all requests carry the RFC 8707 {@code resource} indicator.
- * 	<li>{@link org.apache.juneau.rest.client.mcp.auth.McpProtectedResourceMetadataClient} and
- * 		{@link org.apache.juneau.rest.client.mcp.auth.WwwAuthenticateChallenge} &mdash; the client half of the OAuth
+ * 	<li>{@link org.apache.juneau.rest.client.mcp.auth.McpProtectedResourceMetadataClient McpProtectedResourceMetadataClient} and
+ * 		{@link org.apache.juneau.rest.client.mcp.auth.WwwAuthenticateChallenge WwwAuthenticateChallenge} &mdash; the client half of the OAuth
  * 		2.1 baseline: consume a {@code 401 WWW-Authenticate resource_metadata} pointer, fetch the RFC 9728 PRM
  * 		document, select an authorization server, and validate its issuer via RFC 8414 / OIDC discovery.
- * 	<li>{@link org.apache.juneau.rest.client.mcp.auth.McpAuthorizationCodeAcquirer} and
- * 		{@link org.apache.juneau.rest.client.mcp.auth.LoopbackRedirectReceiver} &mdash; interactive
+ * 	<li>{@link org.apache.juneau.rest.client.mcp.auth.McpAuthorizationCodeAcquirer McpAuthorizationCodeAcquirer} and
+ * 		{@link org.apache.juneau.rest.client.mcp.auth.LoopbackRedirectReceiver LoopbackRedirectReceiver} &mdash; interactive
  * 		authorization-code + PKCE (S256) acquisition over a loopback redirect for headless/CLI use, including the
  * 		SEP-2468 {@code iss} check on the callback.
  * </ul>

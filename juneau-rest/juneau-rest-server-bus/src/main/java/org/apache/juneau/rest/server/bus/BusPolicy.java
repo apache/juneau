@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.rest.server.bus;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
+
 import java.time.*;
 import java.util.*;
 import java.util.function.*;
@@ -176,7 +178,7 @@ public final class BusPolicy {
 	}
 
 	private static String e55(String direction, String topic, String bridge) {
-		return "E-55: " + String.format("BusPolicy denies %s topic '%s' that bridge '%s' requests", direction, topic, bridge);
+		return "E-55: " + f("BusPolicy denies %s topic '%s' that bridge '%s' requests", direction, topic, bridge);
 	}
 
 	private static List<String> strings(Object o) {
@@ -316,7 +318,7 @@ public final class BusPolicy {
 		 */
 		public Builder allowedOrigins(String...values) {
 			for (var v : Objects.requireNonNull(values, "allowedOrigins"))
-				if (v == null || v.isBlank())
+				if (ib(v))
 					throw new IllegalArgumentException("BusPolicy: allowedOrigins entries must not be blank");
 			allowedOrigins = List.of(values);
 			return this;
@@ -365,18 +367,18 @@ public final class BusPolicy {
 
 		private static Duration positive(String name, Duration v) {
 			if (v == null || v.isZero() || v.isNegative())
-				throw new IllegalArgumentException(String.format("BusPolicy: %s must be positive", name));
+				throw new IllegalArgumentException(f("BusPolicy: %s must be positive", name));
 			return v;
 		}
 
 		private static int positive(String name, int v) {
 			if (v <= 0)
-				throw new IllegalArgumentException(String.format("BusPolicy: %s must be positive", name));
+				throw new IllegalArgumentException(f("BusPolicy: %s must be positive", name));
 			return v;
 		}
 
 		private static IllegalArgumentException e57(String format, Object...args) {
-			return new IllegalArgumentException("E-57: " + String.format(format, args));
+			return new IllegalArgumentException("E-57: " + f(format, args));
 		}
 	}
 }

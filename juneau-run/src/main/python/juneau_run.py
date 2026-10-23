@@ -15,8 +15,9 @@
 Run wrapper: run-protocol v1 markers, output routing and tool-output parsers for Maven, pytest, Playwright, Gradle and npm.
 
 Stdlib-only and standalone, so it can be copied or loaded from anywhere.  Every marker function is a no-op
-unless the environment has RUN_MARKERS=1; the open-line helpers (open_line, append, dot, set_tail, close_line)
-always write.  A marker always starts on a fresh line.  Sections, in order: markers, sinks, parsers, runner, CLI.
+unless the environment has RUN_MARKERS=1 (markers on stdout) or JUNEAU_RUN_MARKERS_FILE (markers in that file); the
+open-line helpers (open_line, append, dot, set_tail, close_line) always write.  A marker always starts on a fresh line.
+Sections, in order: markers, sinks, parsers, runner, CLI.
 
 CLI:  python3 juneau_run.py [--console full|condensed|none] [--full-log PATH] [--condensed-log PATH]
                             [--step ID] [--title T] [--pty --events PATH [--size CxR] [--input stdin]]
@@ -62,6 +63,9 @@ from pathlib import Path
 PREFIX = "##run "
 MAX_BYTES = 65536
 ACTIVE_ENV = "JUNEAU_RUN_ACTIVE"
+MARKERS_FILE_ENV = "JUNEAU_RUN_MARKERS_FILE"     # a file that gets the markers too, while the console view draws
+RESULT_ENV = "JUNEAU_RUN_RESULT"                 # where the owner writes the run's result JSON at its end
+RESULT_PARTS_ENV = "JUNEAU_RUN_RESULT_PARTS"     # set by the owner: where nested processes leave their rows for it
 GRACE_SECONDS = 5.0
 PROMPTS_GRACE_SECONDS = 10.0   # --prompts stdio: SIGTERM to SIGKILL once the host has gone
 MAX_PROMPT_LINE = 1 << 20
@@ -80,28 +84,61 @@ _subscribers = []       # bus subscribers, called as fn(kind, fields)
 _console = None         # the session's Console, when run.session() has been called
 _pause_depth = 0        # nested _paused() blocks (an ask inside a handoff); only the outermost one resumes
 _history = None         # the run's History subscriber, once history_start() has installed it
+_markers_file_failed = False    # writing JUNEAU_RUN_MARKERS_FILE failed once (and said so): not tried again
+_result = None          # the run's _ResultRecorder, once run() has installed it (JUNEAU_RUN_RESULT)
 
 
 def enabled():
-    """True only when RUN_MARKERS is exactly "1"."""
+    """True only when RUN_MARKERS is exactly "1": markers on stdout, so no console view draws there."""
     return os.environ.get("RUN_MARKERS") == "1"
+
+
+def reporting():
+    """True when anything reads the run's progress: RUN_MARKERS=1, JUNEAU_RUN_MARKERS_FILE or JUNEAU_RUN_RESULT.  Unlike
+    enabled(), the last two leave the console view as it is."""
+    return enabled() or bool(os.environ.get(MARKERS_FILE_ENV)) or bool(os.environ.get(RESULT_ENV))
 
 
 def emit(ev, **fields):
     """Print one marker line: `##run {"ev":...}`.  None-valued fields are omitted; oversized markers are dropped.
+    With JUNEAU_RUN_MARKERS_FILE set the line is appended to that file too (instead, with markers off stdout).
 
     In PTY mode the marker is translated into a run-view event and written to the --events file instead.
     """
     if _events is not None:
         _events.write(ev, {k: v for k, v in fields.items() if v is not None})
         return
-    if not enabled():
+    path = os.environ.get(MARKERS_FILE_ENV)
+    if not enabled() and not path:
         return
     obj = {"ev": ev, **{k: v for k, v in fields.items() if v is not None}}
     line = PREFIX + json.dumps(obj, ensure_ascii=False, separators=(",", ":"))
     if len(line.encode("utf-8")) > MAX_BYTES:
         return
-    _out(line + "\n" if _at_line_start else "\n" + line + "\n")
+    if path:
+        _append_marker(path, line)
+    if enabled():
+        _out(line + "\n" if _at_line_start else "\n" + line + "\n")
+
+
+def _append_marker(path, line, truncate=False):
+    """Append one marker line (None: nothing) to the markers file in a single write, so nested processes' lines never
+    interleave; truncate empties it first.  Best-effort: the first failure is reported on stderr and the file is not
+    tried again."""
+    global _markers_file_failed
+    if _markers_file_failed:
+        return
+    try:
+        Path(path).parent.mkdir(parents=True, exist_ok=True)
+        fd = os.open(path, os.O_WRONLY | os.O_CREAT | os.O_APPEND | (os.O_TRUNC if truncate else 0), 0o644)
+        try:
+            if line is not None:
+                os.write(fd, (line + "\n").encode("utf-8"))
+        finally:
+            os.close(fd)
+    except OSError as e:
+        _markers_file_failed = True
+        print(f"warning: cannot write the markers file {path} ({e}); no more markers go to it", file=sys.stderr)
 
 
 def _out(text):
@@ -162,10 +199,25 @@ def _nested():
 
 
 def run(mode, project, branch, head):
-    """First marker of a run.  mode is "push" or "test".  A no-op inside a process that inherited an active run."""
-    global _owns_run
-    if _nested() or not enabled():
+    """First marker of a run.  mode is "push" or "test".  A no-op inside a process that inherited an active run, but
+    for its rows' share of the result file (JUNEAU_RUN_RESULT).  The owner empties the markers file first, and removes
+    a result file left by an earlier run."""
+    global _owns_run, _result
+    if _nested():
+        if os.environ.get(RESULT_ENV) and os.environ.get(RESULT_PARTS_ENV) and _result is None:
+            _result = subscribe(_ResultRecorder(nested=True))
         return
+    if not reporting():
+        return
+    for key in (MARKERS_FILE_ENV, RESULT_ENV):    # absolute, so a nested process elsewhere finds the same file
+        if os.environ.get(key):
+            os.environ[key] = os.path.abspath(os.environ[key])
+    if os.environ.get(MARKERS_FILE_ENV):
+        _append_marker(os.environ[MARKERS_FILE_ENV], None, truncate=True)
+    if os.environ.get(RESULT_ENV) and _result is None:
+        with suppress(OSError):
+            os.unlink(os.environ[RESULT_ENV])
+        _result = subscribe(_ResultRecorder(project=project, branch=branch, head=head))
     emit("run", v=1, mode=mode, project=project, branch=branch, head=head)
     _owns_run = True
     os.environ[ACTIVE_ENV] = "1"
@@ -299,7 +351,7 @@ def report(step, kind, path, *, cwd=None):
     on and $RUN_ARTIFACTS set, results outside it are copied under it and the copy is announced, so a later `clean`
     cannot take them away.  A relative path is taken from cwd (default the current directory)."""
     path = str(path)
-    if enabled() and _events is None and artifacts_dir() is not None:
+    if reporting() and _events is None and artifacts_dir() is not None:
         path = _keep_report(step, kind, path, cwd)
     emit("report", step=step, kind=kind, path=path)
 
@@ -358,13 +410,19 @@ def tests(step, total, fail, err, skip):
     publish("tests", step=step, total=total, fail=fail, err=err, skip=skip)
 
 
-def done(status, commit=None):
+def done(status, commit=None, exit=None):  # NOSONAR python:S5806 - parameter names mirror protocol field names
     """Last marker of a run (status: ok, fail, cancelled).  The marker is a no-op inside a process that inherited an
-    active run; the bus event is always published, so a console view can end."""
+    active run; the bus event is always published, so a console view can end.  Then the result file, when
+    JUNEAU_RUN_RESULT asked for one: the owner writes it, with exit (default 0 for ok, 130 for cancelled, else 1), and a
+    nested process leaves its rows for the owner."""
+    global _result
     publish("done", status=status, commit=commit)
-    if _nested():
-        return
-    emit("done", status=status, commit=commit)
+    if not _nested():
+        emit("done", status=status, commit=commit)
+    if _result is not None:
+        recorder, _result = _result, None
+        unsubscribe(recorder)
+        recorder.finish(status, commit, {"ok": 0, "cancelled": 130}.get(status, 1) if exit is None else exit)
 
 
 def artifacts_dir():
@@ -518,6 +576,7 @@ def shows_module(detail, failed, has_tests):
 SESSION_ENV = "JUNEAU_RUN_SESSION"
 LABEL_WIDTH_ENV = "JUNEAU_RUN_LABEL_WIDTH"
 LIVE_ENV = "JUNEAU_RUN_LIVE"
+CANCEL_ENV = "JUNEAU_RUN_CANCEL"     # a command that cancels this run, shown as the header's Cancel: row
 HEARTBEAT_SECONDS = 15.0
 # "run" is a unit that has started but not ended (distinct from PENDING, which has not started)
 # "warn" is a checks unit that would refuse or only warns; a checks bar never shows "run", so the two yellows can't meet
@@ -538,6 +597,11 @@ OVERALL_ENV = "JUNEAU_RUN_OVERALL"     # a parent session's {elapsed, done, pend
 SPINNER = "⠋⠙⠹⠸⠼⠴⠦⠧⠇⠏"
 ICONS = {"ok": "✔", "warn": "⚠", "skip": "⊘", "fail": "✗", "pending": "○", "paused": "⏸"}
 COLOR_ICONS = {**ICONS, "ok": "●", "warn": "●", "fail": "●"}   # with colour on, the hue carries the outcome
+# The header's marks in the same column: the title row (and Overall, which closes the run) and, dim, the rows under it.
+# Not a status, so none of the icons above.  Both draw as ▶; MORE_MARK is only the internal role token for the rows
+# under the title (so they neither wrap nor turn cyan) and is mapped to MORE_GLYPH when drawn.
+HEAD_MARK, MORE_MARK = "▶", "more"
+MORE_GLYPH = "▶"
 _ICON_COLORS = {"running": "\x1b[36m", "ok": "\x1b[32m", "warn": "\x1b[33m", "skip": "\x1b[2m", "fail": "\x1b[31m",
                 "pending": "\x1b[2m", "paused": "\x1b[36m"}
 
@@ -555,7 +619,8 @@ def fmt_elapsed(ms):
 
 
 # kinds: {unit kind: (median units total, median wall_s per unit)} over the records of that kind, or None
-Estimate = collections.namedtuple("Estimate", "wall_s units rate runs tests kinds", defaults=(None, None))
+# subs: {sub name: median seconds} over the records that timed that sub (a Maven module, say), or None
+Estimate = collections.namedtuple("Estimate", "wall_s units rate runs tests kinds subs", defaults=(None, None, None))
 
 
 def _median(xs):
@@ -580,12 +645,18 @@ def estimate_from(records, sig):
             bykind.setdefault(r["units"]["kind"], []).append(r)
     kinds = {kind: (_median([r["units"]["total"] for r in rs]), _median([r["wall_s"] / r["units"]["total"] for r in rs]))
              for kind, rs in bykind.items()}
+    timed = {}
+    for r in use:
+        for name, secs in (r.get("subs") or {}).items():
+            if isinstance(secs, (int, float)) and not isinstance(secs, bool) and secs >= 0:
+                timed.setdefault(name, []).append(secs)
     return Estimate(_median([r["wall_s"] for r in use]),
                     _median([r["units"]["total"] for r in withunits]) if withunits else None,
                     _median([r["wall_s"] / r["units"]["total"] for r in withunits]) if withunits else None,
                     len(use),
                     _median([r["tests"] for r in withtests]) if withtests else None,
-                    kinds or None)
+                    kinds or None,
+                    {name: _median(xs) for name, xs in timed.items()} or None)
 
 
 def estimate_for_kind(est, kind):
@@ -598,9 +669,52 @@ def estimate_for_kind(est, kind):
     return est._replace(units=units, rate=rate)
 
 
-def eta_figures(e, k, n, est):
+WEIGHT_MIN_SHARE = 0.10     # finished subs must cover this share of history's time before their pace scales the rest
+WEIGHT_RATIO_BOUNDS = (0.25, 4.0)
+
+
+def _weighted_figures(e, done_subs, est):
+    """(percent, total) from history's per-sub seconds: progress is the share of history's time the finished subs
+    account for, and the total is history's wall time scaled by how the finished subs ran against their history.
+    None when the subs cannot say (no history for them, or none of the finished ones is in it)."""
+    if not est or not est.subs or not done_subs:
+        return None
+    hist_total = sum(est.subs.values())
+    known = {name: secs for name, secs in done_subs.items() if name in est.subs}
+    if hist_total <= 0 or not known:
+        return None
+    hist_done = sum(est.subs[name] for name in known)
+    share = hist_done / hist_total
+    ratio = 1.0
+    if share >= WEIGHT_MIN_SHARE:
+        lo, hi = WEIGHT_RATIO_BOUNDS
+        ratio = min(hi, max(lo, sum(known.values()) / hist_done))
+    base = est.wall_s or hist_total
+    return min(99, int(100 * share)), base * ratio
+
+
+def _tests_figures(e, tests_done, est):
+    """(percent, total) from the tests run so far against history's test count, the total blended with history's wall
+    time by that progress; None without both counts, or once the count is past history's."""
+    if not est or not est.tests or not tests_done or tests_done <= 0:
+        return None
+    frac = tests_done / est.tests
+    if frac >= 1:
+        return 99, None
+    total = e + (1 - frac) * est.wall_s if est.wall_s else e / frac
+    return min(99, int(100 * frac)), total
+
+
+def eta_figures(e, k, n, est, done_subs=None, tests_done=None):
     """(percent, estimated total seconds, approx) for a running row (spec 5.2); None where nothing can be said.
-    The total is None once the row has overrun it, so only elapsed shows."""
+    The total is None once the row has overrun it, so only elapsed shows.
+    `done_subs` ({name: seconds}, the finished subs of a row whose units have uneven costs) weights the figures by
+    history's per-sub seconds; failing that, `tests_done` against history's test count does; failing that, every unit
+    is taken to cost the same."""
+    weighted = _weighted_figures(e, done_subs, est) or _tests_figures(e, tests_done, est)
+    if weighted:
+        pct, total = weighted
+        return pct, (total if total is not None and total > e else None), True
     hist_units = est.units if est else None
     if n:
         units, approx = n, False
@@ -874,6 +988,17 @@ class _Row:
     def boxes(self):
         return [self.units[m].box for m in self.order]
 
+    def eta_inputs(self):
+        """The keyword arguments eta_figures() weights a Maven row by: its finished modules' seconds, by the name
+        history keys them under, and the tests run so far.  None for a row whose units are not modules."""
+        if self.unit_kind != "modules":
+            return {}
+        prefix = f"{self.id}/"
+        done = {(m.id[len(prefix):] if m.id.startswith(prefix) else m.id): m.ms / 1000
+                for m in self.units.values()
+                if m.src == "sub" and m.status not in (None, "skip") and m.ms is not None}
+        return {"done_subs": done, "tests_done": self.totals[0] if self.totals else None}
+
     def unit_view(self):
         """unit_cells for drawing: the units that have started but not ended fill the cells right after the finished
         ones as UNIT_RUN, Maven modules on a module bar and test files on a file bar.  Both bars fill in finish order,
@@ -1057,7 +1182,11 @@ class Board:
         self.session_t0 = self.clock()
         if self.nested:
             return []
-        return [("header", " · ".join([f["title"]] + list(f["header"])))]   # the title carries its own emoji
+        # "<title>: <item>, <item>", or the bare title
+        # an item with a newline (a multi-line commit message) shows its first line and an ellipsis
+        items = [(t.split("\n", 1)[0].rstrip() + " …") if "\n" in t else t for t in map(str, f["header"])]
+        head = f["title"] + (": " + ", ".join(items) if items else "")
+        return [("header", head, HEAD_MARK)] + [("header", t, MORE_MARK) for t in f.get("header_more", ())]
 
     def _on_plan(self, f):
         self.plan = list(f["ids"])
@@ -1095,7 +1224,7 @@ class Board:
                 steps.append((sid, "pending", self._hist_wall(sid), None))
             elif r.running:
                 e = now - r.t0
-                _, total, _ = eta_figures(e, r.units_done, r.units_total, r.estimate)
+                _, total, _ = eta_figures(e, r.units_done, r.units_total, r.estimate, **r.eta_inputs())
                 total = r.shown_total = damp_total(r.shown_total, total, e)
                 if total is None and r.estimate is not None:
                     total = max(r.estimate.wall_s, e)      # overran its history: nothing left to add
@@ -1621,7 +1750,8 @@ def row_text(row, glyphs, now, pending=False):
             pct, total, _ = eta_figures(ms / 1000, row.units_done, row.units_total, row.estimate)
             pct, approx = max(pct or 0, 99), True
         else:
-            pct, total, approx = eta_figures(ms / 1000, row.units_done, row.units_total, row.estimate)
+            pct, total, approx = eta_figures(ms / 1000, row.units_done, row.units_total, row.estimate,
+                                             **row.eta_inputs())
         if single:
             total, approx = (row.estimate.wall_s if row.estimate.wall_s and row.estimate.wall_s > ms / 1000
                              else None), True
@@ -1665,6 +1795,34 @@ def row_parts(row, glyphs, now, pending=False):
 def row_label(row, width, now, color=False):
     """The row's label column: its icon, a space and the label padded to width."""
     return f"{row_icon(row, now, color)} {row.label.ljust(width)}"
+
+
+def head_mark(mark, color=False):
+    """mark as drawn in the icon column: HEAD_MARK cyan (the running spinner's colour) and MORE_MARK dim when colour is on."""
+    if color and mark == HEAD_MARK:
+        return f"{_ICON_COLORS['running']}{mark}\x1b[0m"
+    if mark == MORE_MARK:
+        return f"\x1b[2m{MORE_GLYPH}\x1b[0m" if color else MORE_GLYPH
+    return mark
+
+
+def header_lines(block, cols, color=False):
+    """A header block's lines.  ("header", text) is the text as is; ("header", text, mark) puts mark in the icon
+    column, dim when it is MORE_MARK.  The title row (HEAD_MARK) word-wraps at cols with a two-space hanging indent;
+    the others don't wrap, so a log path stays on its `tail -f` line."""
+    if len(block) < 3:
+        return [block[1]]
+    text, mark = block[1], block[2]
+    shown = head_mark(mark, color)
+    if mark != HEAD_MARK:
+        return [f"{shown} {text}"]
+    lines = [""]
+    for word in text.split(" "):
+        if lines[-1] and _vlen(lines[-1]) + 1 + _vlen(word) > cols - 2:
+            lines.append(word)
+        else:
+            lines[-1] = f"{lines[-1]} {word}" if lines[-1] else word
+    return [f"{shown} {lines[0]}"] + ["  " + line for line in lines[1:]]
 
 
 def pending_line(label, color=False):
@@ -1725,7 +1883,10 @@ class PlainRenderer:
     def render(self, board, blocks):
         for block in blocks:
             kind = block[0]
-            if kind in ("header", "text"):
+            if kind == "header":
+                cols = shutil.get_terminal_size((120, 24)).columns - 1
+                self._write("".join(line + "\n" for line in header_lines(block, cols)))
+            elif kind == "text":
                 self._write(block[1] + "\n")
             elif kind == "row":
                 text, elapsed = row_parts(block[1], self.glyphs, self.clock())
@@ -1928,7 +2089,9 @@ class LiveRenderer:
                 self.prompting = not block[1].endswith("\n")
                 if self.prompting:
                     self._show_cursor()     # the user types at the prompt; the next _draw hides it again
-            elif kind in ("header", "text"):
+            elif kind == "header":
+                lines += header_lines(block, self.size().columns - 1, self.color)
+            elif kind == "text":
                 lines.append(block[1])
             elif kind == "row":
                 lines.append(self._row(board, block[1], self.size().columns - 1))
@@ -2023,7 +2186,7 @@ class LiveRenderer:
         lines = [part for line in lines for part in line.split("\n")]
         if not overall:
             return lines[:max(1, max_lines)]
-        return lines[:max(0, max_lines - 1)] + [_vcut(overall_text(overall), cols)]
+        return lines[:max(0, max_lines - 1)] + [_vcut(f"{head_mark(HEAD_MARK, self.color)} {overall_text(overall)}", cols)]
 
     def _sub_lines(self, m, cols, width=None, now=None):
         """A unit's line: its title padded to width (its row's longest shown title, at most half the line and room for
@@ -2106,14 +2269,14 @@ class Console:
     """The bus subscriber for a session: one Board, a screen renderer (live, plain or none) and the condensed log."""
 
     def __init__(self, sinks=None, detail=None, stream=None, clock=time.monotonic, size=terminal_size,
-                 nested=False, repo="."):
+                 nested=False, repo=".", history_key=None):
         self.sinks = sinks or Sinks()
         self._stdout = sys.stdout       # bound once: a caller that swaps sys.stdout later must not capture the view
         self._stream = stream if stream is not None else self._stdout
         self.clock = clock
         self.size = size
         self.board = Board(resolve_detail(detail), nested=nested, full_log=self.sinks.full_path, clock=clock,
-                           estimator=make_estimator(repo, script_name()))
+                           estimator=make_estimator(repo, script_name(), history_key=history_key))
         self.mode = self.screen_mode()
         self.screen = self._make_screen()
         self._log = None
@@ -2334,16 +2497,16 @@ def _sigterm(signum, frame):
     raise KeyboardInterrupt
 
 
-def session(title, header=(), *, detail=None, sinks=None, repo="."):
+def session(title, header=(), *, detail=None, sinks=None, repo=".", history_key=None):
     """Start this process's console view and return its Console.  Inside another session (JUNEAU_RUN_SESSION set)
     it is nested: no header and no final line, so a child script's rows join its parent's view."""
     global _console
     if _console is not None:
         return _console
-    history_start(repo)
+    history_start(repo, history_key=history_key)
     nested = os.environ.get(SESSION_ENV) == "1"
     sinks = sinks or Sinks()
-    _console = subscribe(Console(sinks, detail, nested=nested, repo=repo))
+    _console = subscribe(Console(sinks, detail, nested=nested, repo=repo, history_key=history_key))
     os.environ[SESSION_ENV] = "1"   # only once the console is up, so a failed start leaves children un-nested
     atexit.register(_end_session)
     if not nested and sinks.full_path is not None and sinks.full_path.parent == full_log_dir():
@@ -2353,8 +2516,15 @@ def session(title, header=(), *, detail=None, sinks=None, repo="."):
             signal.signal(signal.SIGTERM, _sigterm)
     except ValueError:  # not the main thread
         pass
-    lines = list(header) + ([f"tail -f {shlex.quote(str(sinks.full_path))}"] if sinks.full_path is not None else [])
-    publish("session", title=title, header=lines, nested=nested)
+    # each log on a row of its own, the full log's first: the first `tail -f ` on screen is the full log's
+    more = []
+    if sinks.full_path is not None:
+        more.append(f"Output: tail -f {shlex.quote(str(sinks.full_path))}")
+    if sinks.condensed_path is not None:
+        more.append(f"Condensed: tail -f {shlex.quote(str(sinks.condensed_path))}")
+    if os.environ.get(CANCEL_ENV):
+        more.append(f"Cancel: {os.environ[CANCEL_ENV]}")
+    publish("session", title=title, header=list(header), header_more=more, nested=nested)
     return _console
 
 
@@ -2393,6 +2563,139 @@ def _end_session():
                 signal.signal(signal.SIGTERM, signal.SIG_DFL)
         except ValueError:  # not the main thread
             pass
+
+
+# ---------------------------------------------------------------------------------------------------------------------
+# Result file
+#
+# JUNEAU_RUN_RESULT: the run's outcome as one JSON object, written by the owner when done() ends the run.  Its rows come
+# from a Board, the state the condensed view draws, fed from the bus whatever the console.  A nested process (a script
+# the owner runs) keeps a Board of its own and, at its done(), leaves its rows and notes in JUNEAU_RUN_RESULT_PARTS, a
+# directory the owner made, for the owner to merge in.
+# ---------------------------------------------------------------------------------------------------------------------
+
+_RESULT_NOTE_LEVELS = ("info", "warn", "error")     # the protocol's note levels; pause and detail are view-only
+
+
+class _ResultRecorder:
+    """The bus subscriber behind JUNEAU_RUN_RESULT.  It never fails the run: a Board error stops the rows where they
+    are, and a file that can't be written is a warning on stderr."""
+
+    def __init__(self, *, project=None, branch=None, head=None, nested=False):
+        self.nested = nested
+        self.info = {"project": project, "branch": branch, "head": head}
+        self.t0 = time.monotonic()
+        self.board = Board(nested=nested)
+        self.broken = False
+        self.started = {}       # row id -> wall time it started, to order the rows of several processes
+        self.notes = []         # (wall time, note)
+        self.path = os.environ.get(RESULT_ENV)
+        self.parts = None
+        if not nested:
+            try:
+                self.parts = tempfile.mkdtemp(prefix="juneau-run-result-")
+            except OSError as e:
+                print(f"warning: no directory for nested rows ({e}); the result file has only this process's rows",
+                      file=sys.stderr)
+            else:
+                os.environ[RESULT_PARTS_ENV] = self.parts
+                atexit.register(shutil.rmtree, self.parts, True)    # if done() never comes
+
+    def __call__(self, kind, fields):
+        if kind == "note" and fields.get("level") in _RESULT_NOTE_LEVELS:
+            self.notes.append((time.time(), _drop_none({"level": fields["level"], "text": fields["text"],
+                                                        "href": fields.get("href")})))
+        if self.broken:
+            return
+        try:
+            self.board.apply(kind, fields)
+        except Exception:  # a Board bug must never fail the run; the rows so far still go out
+            self.broken = True
+        if kind == "step_start":
+            for row_id in self.board.rows:
+                self.started.setdefault(row_id, time.time())
+
+    def rows(self, status):
+        """The Board's rows as (start time, result row).  A row still running ends as the protocol's done rule says:
+        fail when the run failed, else skip."""
+        now = self.board.clock()
+        out = []
+        for r in self.board.rows.values():
+            try:
+                summary = row_cells(r, PLAIN_GLYPHS, now)[1]
+            except Exception:  # a drawing bug must not lose the row
+                summary = r.summary or ""
+            row = {"id": r.id, "label": r.label, "status": r.status or ("fail" if status == "fail" else "skip"),
+                   "ms": r.ms if r.ms is not None else int((now - r.t0) * 1000), "summary": summary}
+            if r.totals:
+                row["tests"] = dict(zip(("total", "fail", "err", "skip"), r.totals))
+            out.append((self.started.get(r.id, 0.0), row))
+        return out
+
+    def finish(self, status, commit, exit):  # NOSONAR python:S5806 - parameter names mirror protocol field names
+        rows, notes = self.rows(status), list(self.notes)
+        try:
+            if self.nested:
+                part = {"rows": [{"t": t, **row} for t, row in rows], "notes": [{"t": t, **n} for t, n in notes]}
+                _write_atomic(Path(os.environ[RESULT_PARTS_ENV]) / f"{time.time_ns()}-{os.getpid()}.json",
+                              json.dumps(part, ensure_ascii=False))
+                return
+            for t_rows, t_notes in self._parts():
+                rows += t_rows
+                notes += t_notes
+            rows.sort(key=lambda x: x[0])
+            notes.sort(key=lambda x: x[0])
+            result = _drop_none({"v": 1, "status": status, "exit": exit, "ms": int((time.monotonic() - self.t0) * 1000),
+                                 **self.info, "commit": commit})
+            result.update(rows=[row for _, row in rows], notes=[n for _, n in notes], logs=_result_logs())
+            _write_atomic(Path(self.path), json.dumps(result, ensure_ascii=False, indent=2) + "\n")
+        except (OSError, ValueError, KeyError) as e:
+            print(f"warning: cannot write the result file {self.path} ({e})", file=sys.stderr)
+        finally:
+            if self.parts is not None:
+                shutil.rmtree(self.parts, ignore_errors=True)
+                if os.environ.get(RESULT_PARTS_ENV) == self.parts:
+                    os.environ.pop(RESULT_PARTS_ENV)
+
+    def _parts(self):
+        """Each nested process's (rows, notes), as (start time, item) lists; a part that can't be read is skipped."""
+        if self.parts is None:
+            return
+        for part in sorted(Path(self.parts).glob("*.json")):
+            try:
+                data = json.loads(part.read_text(encoding="utf-8"))
+                yield ([(row.pop("t"), row) for row in data["rows"]], [(n.pop("t"), n) for n in data["notes"]])
+            except (OSError, ValueError, KeyError, TypeError, AttributeError):
+                continue
+
+
+def _drop_none(obj):
+    return {k: v for k, v in obj.items() if v is not None}
+
+
+def _result_logs():
+    """The result's logs: the session's full and condensed logs (or, with no session, JUNEAU_RUN_FULL_LOG and
+    JUNEAU_RUN_CONDENSED_LOG), as absolute paths.  Either is left out when there is none."""
+    if _console is not None:
+        full, condensed = _console.sinks.full_path, _console.sinks.condensed_path
+    else:
+        full = Sinks._resolve(os.environ.get("JUNEAU_RUN_FULL_LOG"))
+        condensed = Sinks._resolve(os.environ.get("JUNEAU_RUN_CONDENSED_LOG"))
+    return _drop_none({"full": full and os.path.abspath(full), "condensed": condensed and os.path.abspath(condensed)})
+
+
+def _write_atomic(path, text):
+    """Write text to path through a temp file in the same directory and a rename, so a reader never sees half of it."""
+    path.parent.mkdir(parents=True, exist_ok=True)
+    fd, tmp = tempfile.mkstemp(prefix=f".{path.name}.", suffix=".tmp", dir=path.parent)
+    try:
+        with os.fdopen(fd, "w", encoding="utf-8") as f:
+            f.write(text)
+        os.replace(tmp, path)
+    except BaseException:
+        with suppress(OSError):
+            os.unlink(tmp)
+        raise
 
 
 # ---------------------------------------------------------------------------------------------------------------------
@@ -2534,6 +2837,15 @@ def full_log_dir():
     return Path(os.environ.get("JUNEAU_RUN_LOG_DIR") or Path.home() / ".cache" / "juneau-run")
 
 
+CONDENSED_SUFFIX = ".condensed.log"
+
+
+def default_condensed_log(full_log):
+    """The condensed log beside a default full log: <tool>-<YYYYMMDD-HHMMSS>[-n].condensed.log."""
+    full = str(full_log)
+    return (full[:-4] if full.endswith(".log") else full) + CONDENSED_SUFFIX
+
+
 def safe_name(text, fallback="run"):
     """A file-name-safe form of `text`: every run of whitespace or punctuation (anything but a word character or a dot)
     becomes one `-`, leading and trailing `-` and `.` are trimmed, and an empty result is `fallback`."""
@@ -2603,15 +2915,17 @@ class HistoryStore:
     KEEP_SLACK = 25             # a key may exceed HISTORY_KEEP by this many records before it forces a compaction
     LOCK_WAIT = 2.0             # seconds to wait for the write lock before skipping the write
 
-    def __init__(self, repo, script):
-        self._repo, self._script = repo, script
+    def __init__(self, repo, script, key=None, on_skip=None):
+        """`key` names the history under history_root() in place of the repo's key (JUNEAU_RUN_HISTORY_KEY is the
+        fallback), so separate clones of one repo can share a history.  `on_skip(text)` is told when a write is skipped."""
+        self._repo, self._script, self._key, self._on_skip = repo, script, key, on_skip
         self._path = None
         self._floor = 0         # the file size after the last compaction
 
     @property
     def path(self):
         if self._path is None:
-            key = os.environ.get("JUNEAU_RUN_HISTORY_KEY")     # lets separate clones of one repo share a history
+            key = self._key or os.environ.get("JUNEAU_RUN_HISTORY_KEY")   # lets separate clones of one repo share a history
             self._path = history_root() / (safe_name(key) if key else repo_key(self._repo)) / f"{self._script}.jsonl"
         return self._path
 
@@ -2639,6 +2953,8 @@ class HistoryStore:
             self.path.parent.mkdir(parents=True, exist_ok=True)
             with open(str(self.path) + ".lock", "a") as lock:
                 if not self._lock(lock):
+                    self._skipped(f"run history not recorded: the write lock for {self.path.name} stayed busy for "
+                                  f"{self.LOCK_WAIT:g}s")
                     return
                 fd = os.open(self.path, os.O_WRONLY | os.O_APPEND | os.O_CREAT, 0o644)
                 try:
@@ -2652,6 +2968,14 @@ class HistoryStore:
                     self._compact()
         except Exception:
             pass
+
+    def _skipped(self, text):
+        """Tell on_skip, if given, that a write was skipped.  Never raises."""
+        if self._on_skip is not None:
+            try:
+                self._on_skip(text)
+            except Exception:
+                pass
 
     def _crowded(self):
         counts = collections.Counter((r["step"], r["tool"]) for r in self.read())
@@ -2858,13 +3182,20 @@ class History:
         self.store.append(record)
 
 
-def history_start(repo=".", history=None):
+def _skip_note(text):
+    """A skipped history write: an info note, so it is in the full log and the markers but not on the condensed
+    console (which shows info notes only at the `all` detail level)."""
+    note("info", text)
+
+
+def history_start(repo=".", history=None, history_key=None):
     """Subscribe this process's History to the bus (once).  Does nothing when history is disabled.  `history` is a
-    prebuilt History, for tests."""
+    prebuilt History, for tests.  `history_key` names the history instead of JUNEAU_RUN_HISTORY_KEY, without touching
+    the environment."""
     global _history
     if _history is not None or not history_enabled():
         return
-    _history = subscribe(history or History(HistoryStore(repo, script_name())))
+    _history = subscribe(history or History(HistoryStore(repo, script_name(), history_key, _skip_note)))
 
 
 def history_series(name, values):
@@ -2884,14 +3215,14 @@ def history_series(name, values):
         pass
 
 
-def make_estimator(repo, script, store=None):
+def make_estimator(repo, script, store=None, history_key=None):
     """The Board's estimator: fn(step, tool, sig) -> Estimate or None, from this script's history in `repo` (spec 5.3).
     The store is read afresh for each lookup.  A `tool` of None takes the tool of the newest record for the step that
     matches `sig` (else the newest record's).  Like-for-like records are those with the same `sig` (spec 5.1).  Off
     when history is disabled."""
     if not history_enabled():
         return lambda step, tool, sig=None: None
-    store = store or HistoryStore(repo, script)
+    store = store or HistoryStore(repo, script, history_key)
 
     def estimator(step, tool, sig=None):
         records = [r for r in store.read() if r["step"] == step]
@@ -2905,21 +3236,27 @@ def make_estimator(repo, script, store=None):
 
 
 def prune_full_logs(keep=FULL_LOG_KEEP):
-    """Delete all but the newest `keep` *.log files in full_log_dir(), best-effort."""
+    """Delete all but the newest `keep` full logs (*.log) and, separately, the newest `keep` condensed logs
+    (*.condensed.log) in full_log_dir(), best-effort."""
     try:
-        logs = sorted(full_log_dir().glob("*.log"), key=lambda p: p.stat().st_mtime, reverse=True)
+        logs = list(full_log_dir().glob("*.log"))
+        stats = {p: p.stat().st_mtime for p in logs}
     except OSError:
         return
-    for old in logs[keep:]:
-        try:
-            old.unlink()
-        except OSError:
-            pass
+    condensed = [p for p in logs if p.name.endswith(CONDENSED_SUFFIX)]
+    full = [p for p in logs if not p.name.endswith(CONDENSED_SUFFIX)]
+    for group in (full, condensed):
+        for old in sorted(group, key=lambda p: stats[p], reverse=True)[keep:]:
+            try:
+                old.unlink()
+            except OSError:
+                pass
 
 
 class Sinks:
     """Where the full and condensed streams go.  Arguments beat JUNEAU_RUN_* environment variables.
-    A condensed or none console with no full log gets default_full_log()."""
+    A condensed or none console with no full log gets default_full_log(), and with no condensed log either, the
+    default_condensed_log() beside it.  Both are exported, so child scripts share them."""
 
     def __init__(self, console=None, full_log=None, condensed_log=None):
         self.console = console or os.environ.get("JUNEAU_RUN_CONSOLE") or "full"
@@ -2930,6 +3267,9 @@ class Sinks:
             # Condensed and none always have a log: to tail, and to recover the output nothing else shows.  Exported, so later Sinks() and child scripts write the same one.
             full = str(default_full_log())
             os.environ["JUNEAU_RUN_FULL_LOG"] = full
+            if not (condensed_log or os.environ.get("JUNEAU_RUN_CONDENSED_LOG")):
+                condensed_log = default_condensed_log(full)
+                os.environ["JUNEAU_RUN_CONDENSED_LOG"] = condensed_log
         self.full_path = self._resolve(full)
         self.condensed_path = self._resolve(condensed_log or os.environ.get("JUNEAU_RUN_CONDENSED_LOG"))
         self._full = None
@@ -3844,7 +4184,7 @@ class PytestParser(Parser):
                 env = dict(os.environ if env is None else env)
                 old = env.get("PYTHONPATH")
                 env["PYTHONPATH"] = where + (os.pathsep + old if old else "")
-        if existing is None and enabled():
+        if existing is None and reporting():
             if at == 0:         # not recognisably pytest (a wrapper): keep appending, before any `--`
                 at = cmd.index("--") if "--" in cmd else len(cmd)
             directory = artifacts_dir() or Path(tempfile.mkdtemp(prefix="juneau-run-"))
@@ -4101,8 +4441,8 @@ class PlaywrightParser(Parser):
         reporter never opens its report: with stdin a terminal it would serve it and wait."""
         env = dict(env if env is not None else os.environ)
         named = "PW_TEST_REPORTER" in env or any(a == "--reporter" or a.startswith("--reporter=") for a in cmd)
-        directory = artifacts_dir() if enabled() else None
-        wanted = directory is not None if self.interactive else enabled() or _console is not None
+        directory = artifacts_dir() if reporting() else None
+        wanted = directory is not None if self.interactive else reporting() or _console is not None
         opt_out = env.get("JUNEAU_RUN_PLAYWRIGHT_REPORTER", os.environ.get("JUNEAU_RUN_PLAYWRIGHT_REPORTER")) == "0"
         where = find_playwright_reporter() if wanted and not named and not opt_out else None
         if where:
@@ -4124,7 +4464,7 @@ class PlaywrightParser(Parser):
                 except OSError:
                     pass
         else:
-            self.report_path = env.get("PLAYWRIGHT_JSON_OUTPUT_NAME") if enabled() else None   # the caller's own json
+            self.report_path = env.get("PLAYWRIGHT_JSON_OUTPUT_NAME") if reporting() else None   # the caller's own json
         return cmd, env
 
     def handle(self, line):
@@ -4406,9 +4746,19 @@ def _group_alive(pgid):
         return True
 
 
+def _term_grace():
+    """The default SIGTERM-to-SIGKILL wait: $JUNEAU_RUN_TERM_GRACE (seconds, not negative) when it is set and valid,
+    else GRACE_SECONDS."""
+    try:
+        value = float(os.environ.get("JUNEAU_RUN_TERM_GRACE", ""))
+    except ValueError:
+        return GRACE_SECONDS
+    return value if value >= 0 else GRACE_SECONDS
+
+
 def _terminate_group(proc, grace=None):
     """SIGTERM the child's process group, wait up to `grace` seconds, then SIGKILL whatever is left and reap."""
-    grace = GRACE_SECONDS if grace is None else grace
+    grace = _term_grace() if grace is None else grace
     pgid = proc.pid
     try:
         os.killpg(pgid, signal.SIGTERM)
@@ -4848,7 +5198,7 @@ def _wait_in_foreground(proc, fd):
         os.killpg(proc.pid, signal.SIGCONT)
 
 
-def _run_in_foreground(cmd, cwd, env, input):
+def _run_in_foreground(cmd, cwd, env, input, grace=None):
     """Pass-through run_tool's child (see run_tool) and its exit code.  SIGINT and SIGTERM unwind as a
     KeyboardInterrupt once the child's group is taken down."""
     fd = _foreground_tty()
@@ -4878,7 +5228,7 @@ def _run_in_foreground(cmd, cwd, env, input):
             for sig in previous:   # no re-entry while the child's group is taken down
                 signal.signal(sig, signal.SIG_IGN)
             if proc.poll() is None or _group_alive(proc.pid):    # what the child started may outlive it
-                _terminate_group(proc)
+                _terminate_group(proc, grace)
             raise
     finally:
         if fd is not None and proc is not None:
@@ -4891,7 +5241,8 @@ def _run_in_foreground(cmd, cwd, env, input):
 
 
 def run_tool(cmd, parser, step_id, title, *, n=None, parent=None, cwd=None, env=None, sinks=None, capture=False,
-             tty=False, watchdog=None, summarize=None, label=None, statuses=None, input=None, reports=True, bar=None):
+             tty=False, watchdog=None, summarize=None, label=None, statuses=None, input=None, reports=True, bar=None,
+             grace=None):
     """Run one tool as one step and return Result(exit, ms, summary).
 
     Pass-through mode (markers off, default sinks, no capture or summarize) hands the child the real terminal and no
@@ -4914,17 +5265,19 @@ def run_tool(cmd, parser, step_id, title, *, n=None, parent=None, cwd=None, env=
     bar picks the unit a block of the row's bar stands for: "files" or "tests" for pytest and Playwright (files by
     default), "modules" for Maven (its only one); None is the parser's default.  A value the parser does not offer
     raises ValueError before the command starts, in pass-through mode too.
+    grace is the seconds a cancelled child's process group gets between SIGTERM and SIGKILL; None is
+    $JUNEAU_RUN_TERM_GRACE when set, else GRACE_SECONDS (5).
     """
     _check_bar(parser, bar)
     sinks = sinks or Sinks()
     t0 = time.monotonic()
     labelled = {"label": label} if label else {}
     labelled.update(tool=_parser_name(parser), sig=hashlib.sha1(" ".join(map(str, cmd)).encode()).hexdigest()[:8])
-    if not enabled() and sinks.is_default and not capture and summarize is None:
+    if not reporting() and sinks.is_default and not capture and summarize is None:
         publish("step_start", id=step_id, n=n if n is not None else 1, title=title, parent=parent, **labelled)
         rc = 130
         try:
-            rc = _run_in_foreground(cmd, cwd, env, input)
+            rc = _run_in_foreground(cmd, cwd, env, input, grace)
         except OSError:
             rc = 127   # cannot start: as run_pty reports it, not as a Ctrl-C
             raise
@@ -5095,7 +5448,7 @@ def run_tool(cmd, parser, step_id, title, *, n=None, parent=None, cwd=None, env=
                 signal.signal(sig, signal.SIG_IGN)
             if _console is not None:
                 _console.pause()    # clear the live region and show the cursor before anything else prints
-            _terminate_group(proc)
+            _terminate_group(proc, grace)
     except Exception:
         failed = True
         raise
@@ -5108,7 +5461,7 @@ def run_tool(cmd, parser, step_id, title, *, n=None, parent=None, cwd=None, env=
                     termios.tcsetattr(saved_fd, termios.TCSADRAIN, saved_mode)
             finally:
                 if proc.poll() is None:     # an error before the child was reaped (e.g. terminal setup) must not
-                    _terminate_group(proc)  # orphan it; as above, no re-entry while its group is taken down
+                    _terminate_group(proc, grace)  # orphan it; as above, no re-entry while its group is taken down
                 guard.close()
                 if master is not None:
                     os.close(master)
@@ -5414,8 +5767,8 @@ def run_pty(cmd, parser, step_id, title, *, cols, rows, sinks, cwd=None, env=Non
     parser.interactive = True
     guard = _Isolated(parser)
     env = dict(os.environ if env is None else env)
-    env.pop("RUN_MARKERS", None)
-    env.pop(ACTIVE_ENV, None)
+    for key in ("RUN_MARKERS", ACTIVE_ENV, MARKERS_FILE_ENV, RESULT_ENV, RESULT_PARTS_ENV):
+        env.pop(key, None)
     env["TERM"] = "xterm-256color"
     if prompts is not None:
         env.update(prompts.env())
@@ -5734,8 +6087,9 @@ def main(argv=None):
         return _main_pty(ap, ns, cmd)
     history_start()
     sinks = Sinks(ns.console, ns.full_log, ns.condensed_log)
-    owner = enabled() and not _nested()
-    if owner:
+    owner = reporting() and not _nested()
+    nested = reporting() and _nested()     # still runs run() and done(): its row joins the owner's result file
+    if owner or nested:
         run(mode="test", project=Path.cwd().name, branch=_git("rev-parse", "--abbrev-ref", "HEAD"),
             head=_git("rev-parse", "--short", "HEAD"))
     title = ns.title or " ".join(cmd[:2])
@@ -5746,11 +6100,11 @@ def main(argv=None):
         try:
             result = run_tool(cmd, ns.tool, ns.step or ns.tool, title, sinks=sinks)
         except KeyboardInterrupt:
-            if owner or view:
-                done("cancelled")       # with a view, its final line
+            if owner or nested or view:
+                done("cancelled", exit=130)     # with a view, its final line
             return 130
-        if owner or view:
-            done("ok" if result.exit == 0 else "fail")
+        if owner or nested or view:
+            done("ok" if result.exit == 0 else "fail", exit=result.exit)
         return result.exit
     finally:
         if view:

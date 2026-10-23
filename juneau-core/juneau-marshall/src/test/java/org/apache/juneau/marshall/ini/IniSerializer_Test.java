@@ -38,10 +38,7 @@ class IniSerializer_Test {
 
 	@Test
 	void a01_simpleBean() {
-		var m = new LinkedHashMap<String,Object>();
-		m.put("host", "localhost");
-		m.put("port", 8080);
-		m.put("debug", true);
+		Map<String,Object> m = m("host", "localhost", "port", 8080, "debug", true);
 		var ini = IniSerializer.DEFAULT.write(m);
 		assertNotNull(ini);
 		assertTrue(ini.contains("host = localhost") || ini.contains("host=localhost"));
@@ -146,10 +143,7 @@ class IniSerializer_Test {
 		addr1.put("city", "Boston");
 		var addr2 = new LinkedHashMap<String,Object>();
 		addr2.put("city", "NYC");
-		var m = new LinkedHashMap<String,Object>();
-		m.put("name", "x");
-		m.put("home", addr1);
-		m.put("work", addr2);
+		Map<String,Object> m = m("name", "x", "home", addr1, "work", addr2);
 		var ini = IniSerializer.DEFAULT.write(m);
 		assertNotNull(ini);
 		assertTrue(ini.contains("[home]"));

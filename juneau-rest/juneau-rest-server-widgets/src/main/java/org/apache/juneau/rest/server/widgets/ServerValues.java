@@ -24,7 +24,7 @@ import java.util.function.*;
 import org.apache.juneau.commons.svl.*;
 
 /**
- * A {@link org.apache.juneau.rest.server.widgets.Widget}-marked declaration of named server-side scalar values.
+ * A {@link Widget}-marked declaration of named server-side scalar values.
  *
  * <p>
  * This is a thin, typed facade over the existing {@link VarResolver} engine &mdash; <b>not</b> a second
@@ -88,7 +88,7 @@ public class ServerValues implements Widget {
 	 * @return This object.
 	 */
 	public ServerValues value(String name, Function<VarResolverSession,?> provider) {
-		if (name == null || name.isBlank())
+		if (ib(name))
 			throw iaex("ServerValues name must not be null or blank.");
 		if (provider == null)
 			throw iaex("ServerValues provider for ''{0}'' must not be null.", name);
@@ -115,7 +115,7 @@ public class ServerValues implements Widget {
 			return;
 		for (var e : values.entrySet()) {
 			var name = e.getKey();
-			if (name == null || name.isBlank())
+			if (ib(name))
 				throw iaex("ServerValues name must not be null or blank.");
 			var v = e.getValue();
 			if (v == null)

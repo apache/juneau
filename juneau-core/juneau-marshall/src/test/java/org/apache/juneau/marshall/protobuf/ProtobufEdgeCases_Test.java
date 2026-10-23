@@ -161,7 +161,7 @@ class ProtobufEdgeCases_Test extends TestBase {
 	@Test
 	void a10_nullInsideCollectionSkipped() throws Exception {
 		var a = new Lists();
-		a.strs = new ArrayList<>(Arrays.asList("a", null, "b"));
+		a.strs = list("a", null, "b");
 		// nulls skipped -> two tagged strings.
 		assertEquals("12 01 61 12 01 62", ser(a));
 	}

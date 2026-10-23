@@ -273,15 +273,16 @@ public class EchoMixin {
 
 		var capture = readBoundedBody(sreq.getInputStream(), bodyLimit);
 
-		var out = new LinkedHashMap<String,Object>();
-		out.put("method", req.getMethod());
-		out.put("path", sreq.getRequestURI());
-		out.put("queryString", sreq.getQueryString());
-		out.put("pathRemainder", remainder == null ? "" : remainder);
-		out.put("headers", headers);
-		out.put("queryParams", queryParams);
-		out.put("attributes", attributes);
-		out.put("contentLength", capture.bytesRead);
+		Map<String,Object> out = m(
+			"method", req.getMethod(),
+			"path", sreq.getRequestURI(),
+			"queryString", sreq.getQueryString(),
+			"pathRemainder", remainder == null ? "" : remainder,
+			"headers", headers,
+			"queryParams", queryParams,
+			"attributes", attributes,
+			"contentLength", capture.bytesRead
+		);
 		if (capture.bytesRead > 0)
 			out.put("content", new String(capture.bytes, StandardCharsets.UTF_8));
 		out.put("truncated", capture.truncated);
@@ -433,7 +434,7 @@ public class EchoMixin {
 			redactedHeaders.clear();
 			if (values != null)
 				for (var v : values)
-					if (v != null && ! v.isBlank())
+					if (inb(v))
 						redactedHeaders.add(v);
 			return this;
 		}

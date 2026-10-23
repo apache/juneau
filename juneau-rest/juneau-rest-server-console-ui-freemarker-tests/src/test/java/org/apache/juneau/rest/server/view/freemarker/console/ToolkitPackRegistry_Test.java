@@ -423,7 +423,7 @@ class ToolkitPackRegistry_Test extends TestBase {
 		var req = dummyRequest();
 		var msgs = warnings(() -> out[0] = new ToolkitPackRegistry().resolve(List.of(ToolkitPackRegistry.PACK_DATATABLES), req, List.of("https://cdn.example/dataTables.dataTables.min.css"), "t.ftlh"));
 		assertEmpty(((ToolkitPackRegistry.Resolved)out[0]).vendorCss());
-		assertEquals(1, msgs.size(), msgs::toString);
+		assertSize(msgs::toString, 1, msgs);
 	}
 
 	@Test void c03_fileName_lastSegment_noQueryOrFragment_lowerCase() {

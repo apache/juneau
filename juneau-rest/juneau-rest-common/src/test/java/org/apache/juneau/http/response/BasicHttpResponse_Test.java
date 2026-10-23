@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.http.response;
 
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
@@ -73,11 +74,11 @@ class BasicHttpResponse_Test extends TestBase {
 	@Test void a07_copyCtor_copiesState() {
 		var orig = new Ok().addHeader("X-Trace", "1").setLocale(java.util.Locale.GERMAN);
 		var copy = new Ok(orig);
-		assertEquals(1, copy.getHeaders().size());
+		assertSize(1, copy.getHeaders());
 		assertEquals(java.util.Locale.GERMAN, copy.getLocale());
 		// Headers list is a defensive copy -- mutating the original doesn't affect the copy.
 		orig.addHeader("X-More", "2");
-		assertEquals(1, copy.getHeaders().size());
+		assertSize(1, copy.getHeaders());
 	}
 
 	@Test void a08_equals_sameInstance() {

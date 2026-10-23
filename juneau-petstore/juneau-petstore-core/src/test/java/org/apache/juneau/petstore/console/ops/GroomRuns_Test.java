@@ -131,7 +131,7 @@ class GroomRuns_Test extends TestBase {
 			var a = g.start("Rex", false, "k-a07");
 			var b = g.start("Max", true, "k-a07");
 			assertSame(a, b);
-			assertEquals(1, g.list().size());
+			assertSize(1, g.list());
 		}
 	}
 

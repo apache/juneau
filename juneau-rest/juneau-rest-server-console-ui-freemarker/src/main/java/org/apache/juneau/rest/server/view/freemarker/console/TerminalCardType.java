@@ -80,7 +80,7 @@ public final class TerminalCardType implements CardTypeHandler {
 			if (! BODY_KEYS.contains(k))
 				throw source.error("type='terminal' unknown key '%s'; allowed: contractVersion, terminal.", k);
 		var version = envelope.get("contractVersion");
-		if (! eq("1", version))
+		if (neq("1", version))
 			throw source.error("type='terminal' requires contractVersion: '1'; got '%s'.", version);
 		if (! (envelope.get("terminal") instanceof Map<?,?> terminal))
 			throw source.error("type='terminal' requires a terminal object.");

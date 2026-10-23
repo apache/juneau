@@ -30,7 +30,7 @@ public interface MessageGenerator {
 	MessageGenerator PRINTF = StringUtils::format;
 
 	/**
-	 * MessageFormat-style message generator backed by {@link org.apache.juneau.commons.utils.StringUtils#mformat(String, Object...)}.
+	 * MessageFormat-style message generator backed by {@link StringUtils#mformat(String, Object...)}.
 	 */
 	MessageGenerator MESSAGE_FORMAT = StringUtils::mformat;
 

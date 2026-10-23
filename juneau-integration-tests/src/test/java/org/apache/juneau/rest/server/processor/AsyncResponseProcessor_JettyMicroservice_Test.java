@@ -18,6 +18,7 @@ package org.apache.juneau.rest.server.processor;
 
 import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.rest.server.logging.RestDebugDumpGateTestSupport.*;
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.net.*;
@@ -259,7 +260,7 @@ class AsyncResponseProcessor_JettyMicroservice_Test extends TestBase {
 		/** Test-controlled gate future for the delayed endpoint; completed by the test to trigger completion-path emit. */
 		static volatile CompletableFuture<String> gate;
 
-		/** Test-controlled gate future for the ad-hoc-log endpoint (async-carry Phase 6 tripwire). */
+		/** Test-controlled gate future for the ad-hoc-log endpoint (async-carry tripwire). */
 		static volatile CompletableFuture<String> adhocGate;
 
 		/** Counted down by {@code @RestEndCall} on the request thread — i.e. AFTER {@code RestSession.finish()} returns. */
@@ -322,7 +323,7 @@ class AsyncResponseProcessor_JettyMicroservice_Test extends TestBase {
 			var g = new CompletableFuture<String>();
 			adhocGate = g;
 			// The ad-hoc app log runs inside the completion callback (the COMPLETION thread), where the request-thread
-			// LogContext scope has already closed — documented Phase 6 async-carry v1 edge.
+			// LogContext scope has already closed — documented async-carry edge.
 			return g.thenApply(body -> {
 				res.setContentType("text/plain");
 				req.fine("adhoc-completion-log");
@@ -478,8 +479,7 @@ class AsyncResponseProcessor_JettyMicroservice_Test extends TestBase {
 
 			// RED on synchronous-finish emit: finish() would already have emitted an incomplete record here.
 			// GREEN on completion-path emit: nothing is emitted until the future completes below.
-			assertEquals(0, handler.forLogger(opLogger.getName()).size(),
-				"no debug record may be emitted between synchronous finish() and async completion");
+			assertSize(() -> "no debug record may be emitted between synchronous finish() and async completion", 0, handler.forLogger(opLogger.getName()));
 
 			// Complete on the completion thread with a non-empty body; the endpoint sets a late header there too.
 			assertNotNull(AsyncCaptureServlet.gate, "gate future should have been published by the handler");
@@ -491,7 +491,7 @@ class AsyncResponseProcessor_JettyMicroservice_Test extends TestBase {
 
 			// Exactly one INFO record, emitted only after completion, carrying the late header AND the late body.
 			var recs = handler.forLogger(opLogger.getName());
-			assertEquals(1, recs.size(), "exactly one completion-path record expected");
+			assertSize(() -> "exactly one completion-path record expected", 1, recs);
 			var rec = recs.get(0);
 			assertEquals(Level.INFO, rec.getLevel(), "records remain INFO-stamped; tier controls detail only");
 			assertTrue(rec.getMessage().contains("X-Late-Header"), rec.getMessage());
@@ -519,7 +519,7 @@ class AsyncResponseProcessor_JettyMicroservice_Test extends TestBase {
 			assertTrue(resp.body().contains("completed-body-value"), resp.body());
 
 			var recs = handler.forLogger(opLogger.getName());
-			assertEquals(1, recs.size(), "exactly one completion-path record expected");
+			assertSize(() -> "exactly one completion-path record expected", 1, recs);
 			var rec = recs.get(0);
 			assertEquals(Level.INFO, rec.getLevel());
 			assertTrue(rec.getMessage().contains("Exec time:"),
@@ -539,7 +539,7 @@ class AsyncResponseProcessor_JettyMicroservice_Test extends TestBase {
 			assertEquals(500, resp.statusCode(), resp.body());
 
 			var recs = handler.forLogger(opLogger.getName());
-			assertEquals(1, recs.size(), "error path must still emit exactly one completion-path record");
+			assertSize(() -> "error path must still emit exactly one completion-path record", 1, recs);
 			var rec = recs.get(0);
 			assertEquals(Level.INFO, rec.getLevel());
 			assertNotNull(rec.getThrown(), "error record must carry the terminal cause as thrown");
@@ -562,7 +562,7 @@ class AsyncResponseProcessor_JettyMicroservice_Test extends TestBase {
 			// The timeout path emits on the container's async-timeout dispatch thread, AFTER the 504 has already been
 			// flushed to this client — poll instead of asserting immediately (see awaitRecords javadoc).
 			var recs = awaitRecords(handler, opLogger.getName(), 1);
-			assertEquals(1, recs.size(), "timeout path must still emit exactly one completion-path record");
+			assertSize(() -> "timeout path must still emit exactly one completion-path record", 1, recs);
 			var rec = recs.get(0);
 			assertEquals(Level.INFO, rec.getLevel());
 			assertNotNull(rec.getThrown(), "timeout record must carry the GatewayTimeout as thrown");
@@ -574,7 +574,7 @@ class AsyncResponseProcessor_JettyMicroservice_Test extends TestBase {
 	}
 
 	// -----------------------------------------------------------------------------------------------------------------
-	// H05/H06 (async-carry Phase 6): the async-completion debug record carries the request-thread's LogContext across the
+	// H05/H06 (async-carry): the async-completion debug record carries the request-thread's LogContext across the
 	// async hop (RestDebugSnapshot carry + emit pre-seed), while ad-hoc app logging on the completion thread does NOT
 	// (the documented v1 thread-confined boundary).
 	//
@@ -612,7 +612,7 @@ class AsyncResponseProcessor_JettyMicroservice_Test extends TestBase {
 			assertEquals(200, resp.statusCode(), "body: " + resp.body());
 
 			var recs = handler.forLogger(opLogger.getName());
-			assertEquals(1, recs.size(), "exactly one completion-path record expected");
+			assertSize(() -> "exactly one completion-path record expected", 1, recs);
 			var rec = recs.get(0);
 			assertEquals("async-corr-1", LogRecordContext.of(rec).get("corrId"),
 				"the async completion record must carry the LogContext captured on the request thread (design §8.2 carry)");
@@ -672,13 +672,13 @@ class AsyncResponseProcessor_JettyMicroservice_Test extends TestBase {
 			assertNull(LogRecordContext.of(adhocRec).get("corrId"),
 				"documented v1 edge: ad-hoc completion-thread logging must NOT carry the request-thread context");
 
-			// Contrast: the debug-pipeline completion record on the SAME logger DOES carry it (the Phase 6 carry).
+			// Contrast: the debug-pipeline completion record on the SAME logger DOES carry it (the async carry).
 			var debugRec = handler.forLogger(opLogger.getName()).stream()
 				.filter(r -> r.getLevel() == Level.INFO)
 				.findFirst().orElse(null);
 			assertNotNull(debugRec, "expected the INFO debug completion record");
 			assertEquals("async-corr-adhoc", LogRecordContext.of(debugRec).get("corrId"),
-				"the debug-pipeline completion record must still carry the context via the Phase 6 carry");
+				"the debug-pipeline completion record must still carry the context via the async carry");
 		} finally {
 			AsyncCaptureServlet.carryValue = null;
 			AsyncCaptureServlet.finishLatch = null;

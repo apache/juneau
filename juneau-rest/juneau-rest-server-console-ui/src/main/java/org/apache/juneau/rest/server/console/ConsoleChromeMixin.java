@@ -198,12 +198,13 @@ public class ConsoleChromeMixin {
 		.collect(Collectors.toUnmodifiableSet());
 
 	private static Map<String,Theme> stockThemes() {
-		var m = new LinkedHashMap<String,Theme>();
-		m.put("open", Theme.OPEN);
-		m.put("light-red", Theme.LIGHT_RED);
-		m.put("light-brown", Theme.LIGHT_BROWN);
-		m.put("red", Theme.RED);
-		m.put("gray", Theme.GRAY);
+		Map<String,Theme> m = m(
+			"open", Theme.OPEN,
+			"light-red", Theme.LIGHT_RED,
+			"light-brown", Theme.LIGHT_BROWN,
+			"red", Theme.RED,
+			"gray", Theme.GRAY
+		);
 		return u(m);
 	}
 

@@ -42,7 +42,7 @@ public class BeanIgnoreApplyAnnotation {
 	 *
 	 * <p>
 	 * Passes the {@link BeanIgnoreApply @BeanIgnoreApply} annotation through to the builder's annotation list.
-	 * The {@link org.apache.juneau.commons.reflect.AnnotationProvider.Builder#addRuntimeAnnotations(java.util.List)}
+	 * The {@link org.apache.juneau.commons.reflect.AnnotationProvider.Builder#addRuntimeAnnotations(java.util.List) AnnotationProvider.Builder#addRuntimeAnnotations(java.util.List)}
 	 * method handles unwrapping the nested {@link BeanIgnore @BeanIgnore} from {@link BeanIgnoreApply#value()} and
 	 * registering it under the targets specified by {@link BeanIgnoreApply#on()} and {@link BeanIgnoreApply#onClass()}.
 	 */

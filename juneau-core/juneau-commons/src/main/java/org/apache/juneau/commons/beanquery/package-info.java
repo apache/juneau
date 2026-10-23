@@ -19,28 +19,28 @@
  * A protocol-agnostic query API for filtering, sorting, and paging collections of beans (design §5).
  *
  * <p>
- * A {@link org.apache.juneau.commons.beanquery.BeanQuery} carries only raw strings: one {@code search} string of
+ * A {@link org.apache.juneau.commons.beanquery.BeanQuery BeanQuery} carries only raw strings: one {@code search} string of
  * {@code column=expression} clauses in the {@code $}-language, plus raw view/sort directives, {@code position}/
  * {@code limit}, and an open {@code opts} bag.  The clause grammar shared by {@code search} and {@code opts} is decoded
- * by {@link org.apache.juneau.commons.beanquery.ClauseParser}; the single public
- * {@link org.apache.juneau.commons.beanquery.SearchExpressionParser} then parses each clause's expression against a
- * {@link org.apache.juneau.commons.beanquery.SearchOperatorSet}, throwing
- * {@link org.apache.juneau.commons.beanquery.BeanQuerySyntaxException} on an unknown operator or a malformed
+ * by {@link org.apache.juneau.commons.beanquery.ClauseParser ClauseParser}; the single public
+ * {@link org.apache.juneau.commons.beanquery.SearchExpressionParser SearchExpressionParser} then parses each clause's expression against a
+ * {@link org.apache.juneau.commons.beanquery.SearchOperatorSet SearchOperatorSet}, throwing
+ * {@link org.apache.juneau.commons.beanquery.BeanQuerySyntaxException BeanQuerySyntaxException} on an unknown operator or a malformed
  * expression.
  *
  * <p>
- * A {@link org.apache.juneau.commons.beanquery.BeanQueryContext} is the immutable, thread-safe half: its columns,
+ * A {@link org.apache.juneau.commons.beanquery.BeanQueryContext BeanQueryContext} is the immutable, thread-safe half: its columns,
  * operators and limits are fixed by a builder ({@code create()...build()}; {@code copy()} derives a variant).  Per
- * request it opens a {@link org.apache.juneau.commons.beanquery.BeanQuerySession}, which may narrow the columns,
+ * request it opens a {@link org.apache.juneau.commons.beanquery.BeanQuerySession BeanQuerySession}, which may narrow the columns,
  * override the limits and add a guard.  Every query is validated into a
- * {@link org.apache.juneau.commons.beanquery.ResolvedQuery} before any engine runs it; rule violations throw
- * {@link org.apache.juneau.commons.beanquery.BeanQuerySyntaxException} (client error) and engine failures throw
- * {@link org.apache.juneau.commons.beanquery.BeanQueryExecutionException} (server error).  Results come back as
- * {@link org.apache.juneau.commons.beanquery.Page}s with the counts the
- * {@link org.apache.juneau.commons.beanquery.CountPolicy} selects.
+ * {@link org.apache.juneau.commons.beanquery.ResolvedQuery ResolvedQuery} before any engine runs it; rule violations throw
+ * {@link org.apache.juneau.commons.beanquery.BeanQuerySyntaxException BeanQuerySyntaxException} (client error) and engine failures throw
+ * {@link org.apache.juneau.commons.beanquery.BeanQueryExecutionException BeanQueryExecutionException} (server error).  Results come back as
+ * {@link org.apache.juneau.commons.beanquery.Page Page}s with the counts the
+ * {@link org.apache.juneau.commons.beanquery.CountPolicy CountPolicy} selects.
  *
  * <p>
- * The {@link org.apache.juneau.commons.beanquery.InMemoryBeanQueryContext} runs against an in-JVM collection.  SQL
+ * The {@link org.apache.juneau.commons.beanquery.InMemoryBeanQueryContext InMemoryBeanQueryContext} runs against an in-JVM collection.  SQL
  * engines live in separate modules: {@code juneau-beanquery-sql} supplies the shared JDBC context and the
  * {@code SqlDialect} hook under {@code org.apache.juneau.beanquery.sql}.  Commons
  * carries the query API only, not the SQL dialect types.

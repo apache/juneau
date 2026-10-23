@@ -22,7 +22,7 @@
  * Includes programmatically-buildable runtime annotation implementations, a common base
  * {@link org.apache.juneau.commons.BasicRuntimeException runtime exception}, global framework
  * {@link org.apache.juneau.commons.Constants constants}, and reusable schema-description
- * annotations such as {@link org.apache.juneau.commons.Schema}, {@link org.apache.juneau.commons.Items},
- * {@link org.apache.juneau.commons.SubItems}, and {@link org.apache.juneau.commons.ExternalDocs}.
+ * annotations such as {@link org.apache.juneau.commons.Schema Schema}, {@link org.apache.juneau.commons.Items Items},
+ * {@link org.apache.juneau.commons.SubItems SubItems}, and {@link org.apache.juneau.commons.ExternalDocs ExternalDocs}.
  */
 package org.apache.juneau.commons;

@@ -721,7 +721,7 @@ class Cache2_Test extends TestBase {
 		CompletableFuture.allOf(future1, future2).get(5, TimeUnit.SECONDS);
 
 		// Verify both threads cached their own values
-		assertEquals(2, threadValues.size());
+		assertSize(2, threadValues);
 		assertTrue(threadValues.containsValue("thread1-value"));
 		assertTrue(threadValues.containsValue("thread2-value"));
 
@@ -862,7 +862,7 @@ class Cache2_Test extends TestBase {
 		CompletableFuture.allOf(future1, future2).get(5, TimeUnit.SECONDS);
 
 		// Verify both threads cached their own values
-		assertEquals(2, threadValues.size());
+		assertSize(2, threadValues);
 		assertTrue(threadValues.containsValue("thread1-value"));
 		assertTrue(threadValues.containsValue("thread2-value"));
 

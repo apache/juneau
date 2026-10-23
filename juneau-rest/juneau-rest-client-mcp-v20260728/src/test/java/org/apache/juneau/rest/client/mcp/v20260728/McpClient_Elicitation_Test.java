@@ -17,6 +17,7 @@
 package org.apache.juneau.rest.client.mcp.v20260728;
 
 import static org.apache.juneau.BasicTestUtils.assertThrowsWithMessage;
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
@@ -130,7 +131,7 @@ class McpClient_Elicitation_Test extends TestBase {
 		// Handler saw the one pending request; the resume call carried the answer + echoed the requestState.
 		assertTrue(seen.get().containsKey("q1"));
 		assertEquals("Pick q1", seen.get().get("q1").getMessage());
-		assertEquals(2, t.requests.size());
+		assertSize(2, t.requests);
 		var resume = paramsOf(t, 1);
 		assertEquals("tok1", resume.get("requestState"));
 		assertTrue(((Map<?,?>) resume.get("inputResponses")).containsKey("q1"));
@@ -142,7 +143,7 @@ class McpClient_Elicitation_Test extends TestBase {
 		try (var c = client(t)) {
 			var result = c.callToolWithElicitation("ask", null, requests -> {
 				count.incrementAndGet();
-				assertEquals(2, requests.size());
+				assertSize(2, requests);
 				return acceptAll().elicit(requests);
 			});
 			assertEquals("done", ((TextContent) result.getContent().get(0)).getText());
@@ -164,7 +165,7 @@ class McpClient_Elicitation_Test extends TestBase {
 			assertEquals("done", ((TextContent) result.getContent().get(0)).getText());
 		}
 		assertEquals(2, rounds.get());
-		assertEquals(3, t.requests.size());
+		assertSize(3, t.requests);
 		// Each resume carried the requestState the immediately-preceding pause echoed.
 		assertEquals("tok1", paramsOf(t, 1).get("requestState"));
 		assertEquals("tok2", paramsOf(t, 2).get("requestState"));
@@ -177,7 +178,7 @@ class McpClient_Elicitation_Test extends TestBase {
 			var result = c.getPromptWithElicitation("greet", null, acceptAll());
 			assertEquals("done", result.getDescription());
 		}
-		assertEquals(2, t.requests.size());
+		assertSize(2, t.requests);
 	}
 
 	@Test void a05_readResource_singleRound_terminalResultReturned() throws Exception {
@@ -185,9 +186,9 @@ class McpClient_Elicitation_Test extends TestBase {
 		var t = new Recorder(inputRequired("tok1", "q1"), complete);
 		try (var c = client(t)) {
 			var result = c.readResourceWithElicitation("file:///a", acceptAll());
-			assertEquals(1, result.getContents().size());
+			assertSize(1, result.getContents());
 		}
-		assertEquals(2, t.requests.size());
+		assertSize(2, t.requests);
 	}
 
 	@Test void a06_callTool_noPause_terminalResultReturnedWithoutInvokingHandler() throws Exception {
@@ -201,7 +202,7 @@ class McpClient_Elicitation_Test extends TestBase {
 			assertEquals("done", ((TextContent) result.getContent().get(0)).getText());
 		}
 		assertFalse(invoked.isSet());
-		assertEquals(1, t.requests.size());
+		assertSize(1, t.requests);
 	}
 
 	@Test void a07_callTool_incompleteAnswerInRound_onlyProvidedIdEchoedAndLoopProceeds() throws Exception {
@@ -210,16 +211,16 @@ class McpClient_Elicitation_Test extends TestBase {
 		var t = new Recorder(inputRequired("tok1", "q1", "q2"), completeTool("done"));
 		try (var c = client(t)) {
 			var result = c.callToolWithElicitation("ask", null, requests -> {
-				assertEquals(2, requests.size());
+				assertSize(2, requests);
 				var out = new LinkedHashMap<String,ElicitResult>();
 				out.put("q1", new ElicitResult().setAction(ElicitAction.ACCEPT).putContent("choice", "q1-answer"));
 				return out;
 			});
 			assertEquals("done", ((TextContent) result.getContent().get(0)).getText());
 		}
-		assertEquals(2, t.requests.size());
+		assertSize(2, t.requests);
 		var responses = (Map<?,?>) paramsOf(t, 1).get("inputResponses");
-		assertEquals(1, responses.size());
+		assertSize(1, responses);
 		assertTrue(responses.containsKey("q1"));
 		assertFalse(responses.containsKey("q2"));
 	}
@@ -268,7 +269,7 @@ class McpClient_Elicitation_Test extends TestBase {
 			assertEquals(2, e.getMaxRounds());
 		}
 		// 1 initial call + exactly maxRounds resume attempts, then the guard trips before a further re-issue.
-		assertEquals(3, t.requests.size());
+		assertSize(3, t.requests);
 	}
 
 	@Test void c02_callTool_defaultMaxRoundsGuardsRunawayServer() throws Exception {

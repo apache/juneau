@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.commons.function;
 
+import static org.apache.juneau.commons.TestAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.concurrent.atomic.*;
@@ -137,7 +138,7 @@ class ThrowingConsumer2_Test extends TestBase {
 
 		consumer.apply("key1", 1);
 		consumer.apply("key2", 2);
-		assertEquals(2, map.size());
+		assertSize(2, map);
 		assertEquals(1, map.get("key1"));
 		assertEquals(2, map.get("key2"));
 	}

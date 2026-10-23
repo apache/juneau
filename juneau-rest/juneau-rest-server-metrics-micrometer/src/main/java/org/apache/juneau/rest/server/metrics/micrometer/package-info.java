@@ -21,7 +21,7 @@
  *
  * <p>
  * This module is opt-in and ships a single class &mdash;
- * {@link org.apache.juneau.rest.server.metrics.micrometer.MicrometerMetricsRecorder} &mdash; that bridges
+ * {@link org.apache.juneau.rest.server.metrics.micrometer.MicrometerMetricsRecorder MicrometerMetricsRecorder} &mdash; that bridges
  * per-request metric events from {@code juneau-rest-server} to a Micrometer
  * {@link io.micrometer.core.instrument.MeterRegistry MeterRegistry}. Consumers wire one as a
  * {@code @Bean MetricsRecorder} on their resource and pick the Micrometer registry that matches
@@ -43,7 +43,7 @@
  *
  * <h5 class='section'>See Also:</h5>
  * <ul>
- * 	<li class='jc'>{@link org.apache.juneau.rest.server.metrics.micrometer.MicrometerMetricsRecorder}
+ * 	<li class='jc'>{@link org.apache.juneau.rest.server.metrics.micrometer.MicrometerMetricsRecorder MicrometerMetricsRecorder}
  * 	<li class='jc'>{@link org.apache.juneau.rest.server.metrics.MetricsRecorder}
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerObservability">REST Server &mdash; Observability (Micrometer + OpenTelemetry)</a>
  * 	<li class='link'><a class="doclink" href="https://micrometer.io/">Micrometer</a>

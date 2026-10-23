@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.http.entity;
 
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
@@ -174,7 +175,7 @@ class HttpBodies_Test extends TestBase {
 		assertEquals(-1, body.getContentLength());
 		assertTrue(body.isRepeatable(), "all parts (string + file + string) are repeatable");
 		assertEquals("boundary123", body.getBoundary());
-		assertEquals(3, body.getParts().size());
+		assertSize(3, body.getParts());
 
 		var out = new ByteArrayOutputStream();
 		body.writeTo(out);

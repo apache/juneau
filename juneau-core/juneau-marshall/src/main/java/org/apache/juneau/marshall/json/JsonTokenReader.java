@@ -689,7 +689,7 @@ public class JsonTokenReader implements TokenReader {
 		while (c != -1) {
 			c = r.read();
 			if (c <= 0x1F && c != -1)
-				throw parseException("Unescaped control character encountered: '0x%s'", String.format("%04X", c));
+				throw parseException("Unescaped control character encountered: '0x%s'", f("%04X", c));
 			if (inEscape) {
 				switch (c) {
 					case 'n': r.replace('\n'); break;

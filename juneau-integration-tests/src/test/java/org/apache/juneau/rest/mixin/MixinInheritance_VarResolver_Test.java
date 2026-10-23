@@ -25,7 +25,7 @@ import org.apache.juneau.rest.server.servlet.*;
 import org.junit.jupiter.api.*;
 
 /**
- * Phase 2 smoke &mdash; verifies that a mixin sub-context's var resolver reaches the host's Messages bundle
+ * Verifies that a mixin sub-context's var resolver reaches the host's Messages bundle
  * for {@code $L{key}}-style lookups.
  *
  * <p>

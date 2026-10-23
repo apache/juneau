@@ -85,12 +85,12 @@ class HttpParts_Test extends TestBase {
 
 	@Test void b02_partList_empty() {
 		var pl = partList();
-		assertEquals(0, pl.size());
+		assertSize(0, pl);
 	}
 
 	@Test void b03_partListOfPairs() {
 		var pl = partListOfPairs("a", "1", "b", "2");
-		assertEquals(2, pl.size());
+		assertSize(2, pl);
 	}
 
 	@Test void b04_partListOfPairs_oddThrows() {
@@ -99,7 +99,7 @@ class HttpParts_Test extends TestBase {
 
 	@Test void b05_partListOfPairs_empty() {
 		var pl = partListOfPairs();
-		assertEquals(0, pl.size());
+		assertSize(0, pl);
 	}
 
 	// ------------------------------------------------------------------------------------------------------------------

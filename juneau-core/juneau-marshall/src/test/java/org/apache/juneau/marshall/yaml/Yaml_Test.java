@@ -18,6 +18,7 @@ package org.apache.juneau.marshall.yaml;
 
 import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 
 import java.util.*;
 
@@ -34,7 +35,7 @@ import org.junit.jupiter.api.*;
 class Yaml_Test extends TestBase {
 
 	//------------------------------------------------------------------------------------------------------------------
-	// Existing serializer-side smoke tests (Phase 1).
+	// Existing serializer-side smoke tests.
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Test void a01_basicString() throws Exception {
@@ -285,7 +286,7 @@ class Yaml_Test extends TestBase {
 
 	@Test void d01_parseFlowMappingEmpty() throws Exception {
 		JsonMap m = YamlParser.DEFAULT.read("{}", JsonMap.class);
-		assertEquals(0, m.size());
+		assertSize(0, m);
 	}
 
 	@Test void d02_parseFlowMappingSingle() throws Exception {
@@ -328,7 +329,7 @@ class Yaml_Test extends TestBase {
 	@Test void d08_parseFlowMappingTrailingExtraSpaces() throws Exception {
 		// Multiple spaces between value and ',' — exercises S5 whitespace branch.
 		JsonMap m = YamlParser.DEFAULT.read("{a: 1   ,   b: 2}", JsonMap.class);
-		assertEquals(2, m.size());
+		assertSize(2, m);
 	}
 
 	@Test void d09_parseFlowMappingWithSpaces() throws Exception {
@@ -349,23 +350,23 @@ class Yaml_Test extends TestBase {
 
 	@Test void e01_parseFlowSequenceEmpty() throws Exception {
 		JsonList l = YamlParser.DEFAULT.read("[]", JsonList.class);
-		assertEquals(0, l.size());
+		assertSize(0, l);
 	}
 
 	@Test void e02_parseFlowSequenceSingle() throws Exception {
 		JsonList l = YamlParser.DEFAULT.read("[a]", JsonList.class);
-		assertEquals(1, l.size());
+		assertSize(1, l);
 		assertEquals("a", l.getString(0));
 	}
 
 	@Test void e03_parseFlowSequenceWithSpaces() throws Exception {
 		JsonList l = YamlParser.DEFAULT.read("  [  a , b , c  ]  ", JsonList.class);
-		assertEquals(3, l.size());
+		assertSize(3, l);
 	}
 
 	@Test void e04_parseFlowSequenceNested() throws Exception {
 		JsonList l = YamlParser.DEFAULT.read("[[1,2],[3,4]]", JsonList.class);
-		assertEquals(2, l.size());
+		assertSize(2, l);
 	}
 
 	@Test void e05_parseFlowSequenceUnterminated() {
@@ -397,19 +398,19 @@ class Yaml_Test extends TestBase {
 
 	@Test void f01_parseBlockSequenceSingle() throws Exception {
 		JsonList l = YamlParser.DEFAULT.read("- a", JsonList.class);
-		assertEquals(1, l.size());
+		assertSize(1, l);
 		assertEquals("a", l.getString(0));
 	}
 
 	@Test void f02_parseBlockSequenceWithComments() throws Exception {
 		JsonList l = YamlParser.DEFAULT.read("# top\n- a\n# middle\n- b\n- c", JsonList.class);
-		assertEquals(3, l.size());
+		assertSize(3, l);
 	}
 
 	@Test void f03_parseBlockSequenceNested() throws Exception {
 		String yaml = "- a\n- - b1\n  - b2\n- c";
 		JsonList l = YamlParser.DEFAULT.read(yaml, JsonList.class);
-		assertEquals(3, l.size());
+		assertSize(3, l);
 	}
 
 	@Test void f04_parseBlockSequenceArray() throws Exception {
@@ -426,14 +427,14 @@ class Yaml_Test extends TestBase {
 	@Test void f06_parseBlockSequenceIntoCollection() throws Exception {
 		var l = new ArrayList<String>();
 		YamlParser.DEFAULT.readIntoCollection("- one\n- two", l, String.class);
-		assertEquals(2, l.size());
+		assertSize(2, l);
 		assertEquals("one", l.get(0));
 	}
 
 	@Test void f07_parseFlowSequenceIntoCollection() throws Exception {
 		var l = new ArrayList<String>();
 		YamlParser.DEFAULT.readIntoCollection("[one, two, three]", l, String.class);
-		assertEquals(3, l.size());
+		assertSize(3, l);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -476,13 +477,13 @@ class Yaml_Test extends TestBase {
 	@Test void g06_parseBlockMappingIntoMap() throws Exception {
 		var m = new LinkedHashMap<String,Object>();
 		YamlParser.DEFAULT.readIntoMap("a: 1\nb: 2", m, String.class, Object.class);
-		assertEquals(2, m.size());
+		assertSize(2, m);
 	}
 
 	@Test void g07_parseFlowMappingIntoMap() throws Exception {
 		var m = new LinkedHashMap<String,Object>();
 		YamlParser.DEFAULT.readIntoMap("{a: 1, b: 2}", m, String.class, Object.class);
-		assertEquals(2, m.size());
+		assertSize(2, m);
 	}
 
 	@Test void g08_parseBlockMappingQuotedKey() throws Exception {
@@ -773,7 +774,7 @@ class Yaml_Test extends TestBase {
 	@Test void k02_parseTypedList() throws Exception {
 		var p = YamlParser.DEFAULT;
 		List<Integer> l = p.read("- 1\n- 2\n- 3", List.class, Integer.class);
-		assertEquals(3, l.size());
+		assertSize(3, l);
 		assertEquals(Integer.valueOf(1), l.get(0));
 	}
 
@@ -781,14 +782,14 @@ class Yaml_Test extends TestBase {
 		var p = YamlParser.DEFAULT;
 		String yaml = "- a: 1\n- a: 2";
 		JsonList l = p.read(yaml, JsonList.class);
-		assertEquals(2, l.size());
+		assertSize(2, l);
 	}
 
 	@Test void k04_parseMapOfList() throws Exception {
 		var p = YamlParser.DEFAULT;
 		String yaml = "list:\n  - a\n  - b";
 		JsonMap m = p.read(yaml, JsonMap.class);
-		assertEquals(2, m.getList("list").size());
+		assertSize(2, m.getList("list"));
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -868,16 +869,9 @@ class Yaml_Test extends TestBase {
 		var s = YamlSerializer.DEFAULT_READABLE;
 		var p = YamlParser.DEFAULT;
 
-		var inner = new LinkedHashMap<String,Object>();
-		inner.put("x", 1);
-		inner.put("y", "hello");
-		inner.put("z", List.of("a","b"));
+		Map<String,Object> inner = m("x", 1, "y", "hello", "z", List.of("a","b"));
 
-		var outer = new LinkedHashMap<String,Object>();
-		outer.put("flag", true);
-		outer.put("count", 42);
-		outer.put("nested", inner);
-		outer.put("nullVal", null);
+		Map<String,Object> outer = m("flag", true, "count", 42, "nested", inner, "nullVal", null);
 
 		String yaml = s.write(outer);
 		JsonMap parsed = p.read(yaml, JsonMap.class);
@@ -914,14 +908,14 @@ class Yaml_Test extends TestBase {
 		// Block sequence followed by mapping at lower indent.
 		String yaml = "- 1\n- 2";
 		JsonList l = YamlParser.DEFAULT.read(yaml, JsonList.class);
-		assertEquals(2, l.size());
+		assertSize(2, l);
 	}
 
 	@Test void n07_intoCollectionWithBlock() throws Exception {
 		// doReadIntoCollection block branch (no '[').
 		var l = new ArrayList<Integer>();
 		YamlParser.DEFAULT.readIntoCollection("- 1\n- 2\n- 3", l, Integer.class);
-		assertEquals(3, l.size());
+		assertSize(3, l);
 		assertEquals(Integer.valueOf(1), l.get(0));
 	}
 
@@ -929,7 +923,7 @@ class Yaml_Test extends TestBase {
 		// doReadIntoCollection flow branch ('[').
 		var l = new ArrayList<Integer>();
 		YamlParser.DEFAULT.readIntoCollection("[1, 2, 3]", l, Integer.class);
-		assertEquals(3, l.size());
+		assertSize(3, l);
 	}
 
 	@Test void n09_intoMapWithBlock() throws Exception {
@@ -965,19 +959,19 @@ class Yaml_Test extends TestBase {
 		// sType.isMap() with concrete map class; canCreateNewInstance true.
 		// With Object value type, plain scalar resolves to Integer (not String).
 		LinkedHashMap<String,Object> m = YamlParser.DEFAULT.read("{a: 1, b: 2}", LinkedHashMap.class, String.class, Object.class);
-		assertEquals(2, m.size());
+		assertSize(2, m);
 		assertNotNull(m.get("a"));
 	}
 
 	@Test void o02_parseFlowSequenceIntoLinkedList() throws Exception {
 		// sType.isCollection() with concrete class.
 		LinkedList<String> l = YamlParser.DEFAULT.read("[a, b]", LinkedList.class, String.class);
-		assertEquals(2, l.size());
+		assertSize(2, l);
 	}
 
 	@Test void o03_parseBlockSequenceIntoLinkedList() throws Exception {
 		LinkedList<String> l = YamlParser.DEFAULT.read("- a\n- b", LinkedList.class, String.class);
-		assertEquals(2, l.size());
+		assertSize(2, l);
 	}
 
 	@Test void o04_parseFlowMappingAsObject() throws Exception {
@@ -1013,27 +1007,27 @@ class Yaml_Test extends TestBase {
 	@Test void p01_flowMappingMultilineKey() throws Exception {
 		String yaml = "{\n  a: 1,\n  b: 2\n}";
 		JsonMap m = YamlParser.DEFAULT.read(yaml, JsonMap.class);
-		assertEquals(2, m.size());
+		assertSize(2, m);
 	}
 
 	@Test void p02_flowSequenceMultiline() throws Exception {
 		String yaml = "[\n  a,\n  b,\n  c\n]";
 		JsonList l = YamlParser.DEFAULT.read(yaml, JsonList.class);
-		assertEquals(3, l.size());
+		assertSize(3, l);
 	}
 
 	@Test void p03_blockMappingExitOnLowerIndent() throws Exception {
 		// Test that block mapping correctly stops at lower indent (parent break path).
 		String yaml = "a:\n  x: 1\n  y: 2\nb: 3";
 		JsonMap m = YamlParser.DEFAULT.read(yaml, JsonMap.class);
-		assertEquals(2, m.getMap("a").size());
+		assertSize(2, m.getMap("a"));
 		assertEquals("3", m.getString("b"));
 	}
 
 	@Test void p04_blockSequenceExitOnLowerIndent() throws Exception {
 		String yaml = "outer:\n  - a\n  - b\nnext: 1";
 		JsonMap m = YamlParser.DEFAULT.read(yaml, JsonMap.class);
-		assertEquals(2, m.getList("outer").size());
+		assertSize(2, m.getList("outer"));
 		assertEquals("1", m.getString("next"));
 	}
 
@@ -1196,13 +1190,13 @@ class Yaml_Test extends TestBase {
 	@Test void u01_flowMapInsideBlockSequence() throws Exception {
 		String yaml = "- {a: 1}\n- {b: 2}";
 		JsonList l = YamlParser.DEFAULT.read(yaml, JsonList.class);
-		assertEquals(2, l.size());
+		assertSize(2, l);
 	}
 
 	@Test void u02_flowSeqInsideBlockMapping() throws Exception {
 		String yaml = "k: [1, 2, 3]";
 		JsonMap m = YamlParser.DEFAULT.read(yaml, JsonMap.class);
-		assertEquals(3, m.getList("k").size());
+		assertSize(3, m.getList("k"));
 	}
 
 	@Test void u03_blockSeqInsideFlowMap() {
@@ -1313,13 +1307,13 @@ class Yaml_Test extends TestBase {
 		String yaml = "name: foo\ntags:\n  - a\n  - b";
 		var b = YamlParser.DEFAULT.read(yaml, BeanWithList.class);
 		assertEquals("foo", b.name);
-		assertEquals(2, b.tags.size());
+		assertSize(2, b.tags);
 	}
 
 	@Test void x04_parseBeanWithFlowList() throws Exception {
 		String yaml = "name: foo\ntags: [a, b, c]";
 		var b = YamlParser.DEFAULT.read(yaml, BeanWithList.class);
-		assertEquals(3, b.tags.size());
+		assertSize(3, b.tags);
 	}
 
 	public static class BeanWithMap {
@@ -1387,7 +1381,7 @@ class Yaml_Test extends TestBase {
 		// '#' as first char of line in block sequence — triggers skipToEndOfLine.
 		String yaml = "- a\n# inline comment\n- b\n# another\n- c";
 		JsonList l = YamlParser.DEFAULT.read(yaml, JsonList.class);
-		assertEquals(3, l.size());
+		assertSize(3, l);
 	}
 
 	@Test void z02_commentsAtStart() throws Exception {
@@ -1399,7 +1393,7 @@ class Yaml_Test extends TestBase {
 	@Test void z03_listWithEmbeddedCommentLines() throws Exception {
 		String yaml = "list:\n  - a\n  # comment\n  - b";
 		JsonMap m = YamlParser.DEFAULT.read(yaml, JsonMap.class);
-		assertEquals(2, m.getList("list").size());
+		assertSize(2, m.getList("list"));
 	}
 
 	@Test void z04_emptyDocumentAfterMarker() throws Exception {
@@ -1465,20 +1459,20 @@ class Yaml_Test extends TestBase {
 	@Test void cc01_blockListOfFlowLists() throws Exception {
 		String yaml = "- [a, b]\n- [c, d]";
 		JsonList l = YamlParser.DEFAULT.read(yaml, JsonList.class);
-		assertEquals(2, l.size());
+		assertSize(2, l);
 	}
 
 	@Test void cc02_flowListOfBlockMaps() throws Exception {
 		// Flow list with map inline.
 		String yaml = "[{a: 1}, {b: 2}]";
 		JsonList l = YamlParser.DEFAULT.read(yaml, JsonList.class);
-		assertEquals(2, l.size());
+		assertSize(2, l);
 	}
 
 	@Test void cc03_deeplyNestedBlockSequence() throws Exception {
 		String yaml = "- - - leaf";
 		JsonList l = YamlParser.DEFAULT.read(yaml, JsonList.class);
-		assertEquals(1, l.size());
+		assertSize(1, l);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

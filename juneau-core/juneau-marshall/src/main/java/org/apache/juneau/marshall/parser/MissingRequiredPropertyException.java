@@ -50,7 +50,9 @@ import org.apache.juneau.commons.bean.*;
  *
  * @serial exclude
  */
-@SuppressWarnings("java:S110") // Inherited hierarchy depth from ParseException; acceptable for a specific parse failure.
+@SuppressWarnings({
+	"java:S110" // Inherited hierarchy depth from ParseException; acceptable for a specific parse failure.
+})
 public class MissingRequiredPropertyException extends ParseException {
 
 	private static final long serialVersionUID = 1L;

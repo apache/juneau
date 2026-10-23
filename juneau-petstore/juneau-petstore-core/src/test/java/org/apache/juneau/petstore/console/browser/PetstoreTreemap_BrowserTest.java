@@ -205,7 +205,9 @@ class PetstoreTreemap_BrowserTest extends TestBase {
 		for (var p : pets.elements(JsonMap.class))
 			leaves.add(p.getString("name"));
 		assertEquals(leaves, new TreeSet<>(asStrings(query(c, "leaves"))));
-		@SuppressWarnings("unchecked") // placed is a JSON array of {name, status, species}.
+		@SuppressWarnings({
+			"unchecked" // placed is a JSON array of {name, status, species}.
+		})
 		var placed = (List<Map<String,Object>>)query(c, "placed");
 		for (var p : pets.elements(JsonMap.class))
 			assertTrue(placed.stream().anyMatch(x -> p.getString("name").equals(x.get("name"))
@@ -233,7 +235,9 @@ class PetstoreTreemap_BrowserTest extends TestBase {
 
 	private void assertSaved(String name, String species) {
 		var c = assertClean(report, name);
-		@SuppressWarnings("unchecked") // writes is a JSON array of {url, method, status, csrf, body}.
+		@SuppressWarnings({
+			"unchecked" // writes is a JSON array of {url, method, status, csrf, body}.
+		})
 		var w = (List<Map<String,Object>>)query(c, "writes");
 		assertSize(1, w);
 		assertString("PUT", w.get(0).get("method"));
@@ -263,7 +267,9 @@ class PetstoreTreemap_BrowserTest extends TestBase {
 		assertContains("Edit '" + query(c, "first") + "'", String.valueOf(query(c, "dialog")));
 	}
 
-	@SuppressWarnings("unchecked") // a JSON array of strings.
+	@SuppressWarnings({
+		"unchecked" // a JSON array of strings.
+	})
 	private static List<String> asStrings(Object o) {
 		return (List<String>)o;
 	}

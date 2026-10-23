@@ -25,9 +25,9 @@
  *
  * <p>
  * <b>Exposure policy (deny-by-default for mutating/sensitive ops):</b> the {@code /loggers} read endpoints are
- * always on, but the set-level writes are deny-by-default via {@link org.apache.juneau.rest.server.management.LoggersSettings};
+ * always on, but the set-level writes are deny-by-default via {@link org.apache.juneau.rest.server.management.LoggersSettings LoggersSettings};
  * the {@code /threaddump} and {@code /heapdump} diagnostics are deny-by-default via
- * {@link org.apache.juneau.rest.server.management.DumpsSettings}.  No auth provider is auto-wired &mdash; a
+ * {@link org.apache.juneau.rest.server.management.DumpsSettings DumpsSettings}.  No auth provider is auto-wired &mdash; a
  * consumer opts each sensitive op in explicitly by registering the corresponding settings bean.
  *
  * <p>

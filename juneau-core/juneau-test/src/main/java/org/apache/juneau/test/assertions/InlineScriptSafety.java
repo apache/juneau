@@ -17,6 +17,7 @@
 package org.apache.juneau.test.assertions;
 
 import static java.nio.charset.StandardCharsets.*;
+import static org.apache.juneau.commons.utils.Shorts.f;
 
 import java.io.*;
 import java.net.*;
@@ -61,12 +62,12 @@ public final class InlineScriptSafety {
 	public static void assertNoScriptCloseTag(Class<?> anchor, String resource, String... extensions) throws IOException {
 		var files = listResources(anchor, resource, extensions);
 		if (files.isEmpty())
-			throw new AssertionFailedError(String.format("No resources matching '%s' found beside '%s'", String.join("', '", extensions), resource));
+			throw new AssertionFailedError(f("No resources matching '%s' found beside '%s'", String.join("', '", extensions), resource));
 		var found = new ArrayList<String>();
 		for (var p : files)
 			found.addAll(findCloseTags(p.getFileName().toString(), new String(Files.readAllBytes(p), UTF_8)));
 		if (! found.isEmpty())
-			throw new AssertionFailedError(String.format("Closing script tag found at '%s'", String.join("', '", found)));
+			throw new AssertionFailedError(f("Closing script tag found at '%s'", String.join("', '", found)));
 	}
 
 	/**
@@ -81,12 +82,12 @@ public final class InlineScriptSafety {
 	public static List<Path> listResources(Class<?> anchor, String resource, String... extensions) throws IOException {
 		var url = anchor.getResource(resource);
 		if (url == null)
-			throw new FileNotFoundException(String.format("Resource not found: '%s'", resource));
+			throw new FileNotFoundException(f("Resource not found: '%s'", resource));
 		Path dir;
 		try {
 			dir = Path.of(url.toURI()).getParent();
 		} catch (URISyntaxException | FileSystemNotFoundException e) {
-			throw new IOException(String.format("Resource is not on the file system: '%s'", url), e);
+			throw new IOException(f("Resource is not on the file system: '%s'", url), e);
 		}
 		try (var s = Files.list(dir)) {
 			return s.filter(p -> {

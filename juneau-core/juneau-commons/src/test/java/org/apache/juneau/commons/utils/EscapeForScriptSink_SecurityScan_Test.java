@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.commons.utils;
 
+import static org.apache.juneau.commons.TestAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.nio.file.*;
@@ -51,8 +52,8 @@ class EscapeForScriptSink_SecurityScan_Test extends TestBase {
 			}
 			""";
 		var r = ScriptJsonSinkScanner.scan(src);
-		assertEquals(1, r.sinks().size(), () -> "sinks: " + r.sinks());
-		assertEquals(1, r.violations().size(), () -> "violations: " + r.violations());
+		assertSize(() -> "sinks: " + r.sinks(), 1, r.sinks());
+		assertSize(() -> "violations: " + r.violations(), 1, r.violations());
 		assertFalse(r.sinks().get(0).escaped());
 	}
 
@@ -67,7 +68,7 @@ class EscapeForScriptSink_SecurityScan_Test extends TestBase {
 			}
 			""";
 		var r = ScriptJsonSinkScanner.scan(src);
-		assertEquals(1, r.sinks().size(), () -> "sinks: " + r.sinks());
+		assertSize(() -> "sinks: " + r.sinks(), 1, r.sinks());
 		assertEquals(java.util.List.of(), r.violations());
 		assertTrue(r.sinks().get(0).escaped());
 	}
@@ -82,7 +83,7 @@ class EscapeForScriptSink_SecurityScan_Test extends TestBase {
 			}
 			""";
 		var r = ScriptJsonSinkScanner.scan(src);
-		assertEquals(1, r.sinks().size(), () -> "sinks: " + r.sinks());
+		assertSize(() -> "sinks: " + r.sinks(), 1, r.sinks());
 		assertEquals(java.util.List.of(), r.violations());
 	}
 
@@ -115,8 +116,8 @@ class EscapeForScriptSink_SecurityScan_Test extends TestBase {
 			}
 			""";
 		var r = ScriptJsonSinkScanner.scan(src);
-		assertEquals(1, r.sinks().size(), () -> "sinks: " + r.sinks());
-		assertEquals(1, r.violations().size(), () -> "comment mention must not satisfy the guard: " + r.violations());
+		assertSize(() -> "sinks: " + r.sinks(), 1, r.sinks());
+		assertSize(() -> "comment mention must not satisfy the guard: " + r.violations(), 1, r.violations());
 	}
 
 	/** {@code new RawText(...)} is recognized as the same raw-text primitive as {@code rawText(...)}. */
@@ -124,14 +125,14 @@ class EscapeForScriptSink_SecurityScan_Test extends TestBase {
 		var escaped = ScriptJsonSinkScanner.scan("""
 			class X { Object of(Object b) { return script().text(new RawText(escapeForScript(Json.of(b)))); } }
 			""");
-		assertEquals(1, escaped.sinks().size());
+		assertSize(1, escaped.sinks());
 		assertEquals(java.util.List.of(), escaped.violations());
 
 		var unescaped = ScriptJsonSinkScanner.scan("""
 			class X { Object of(Object b) { return script().text(new RawText(Json.of(b))); } }
 			""");
-		assertEquals(1, unescaped.sinks().size());
-		assertEquals(1, unescaped.violations().size());
+		assertSize(1, unescaped.sinks());
+		assertSize(1, unescaped.violations());
 	}
 
 	// -----------------------------------------------------------------------------------------------------------
@@ -174,13 +175,12 @@ class EscapeForScriptSink_SecurityScan_Test extends TestBase {
 		var source = Files.readString(root.resolve(REGION_TABLE));
 
 		var clean = ScriptJsonSinkScanner.scan(REGION_TABLE, source);
-		assertEquals(1, clean.sinks().size(), () -> "sinks: " + clean.sinks());
+		assertSize(() -> "sinks: " + clean.sinks(), 1, clean.sinks());
 		assertEquals(java.util.List.of(), clean.violations());
 
 		var mutated = ScriptJsonSinkScanner.scan(REGION_TABLE, source.replace("escapeForScript", "noEscape"));
-		assertEquals(1, mutated.sinks().size(), () -> "sinks: " + mutated.sinks());
-		assertEquals(1, mutated.violations().size(),
-			() -> "removing escapeForScript from RegionTable should be flagged: " + mutated.violations());
+		assertSize(() -> "sinks: " + mutated.sinks(), 1, mutated.sinks());
+		assertSize(() -> "removing escapeForScript from RegionTable should be flagged: " + mutated.violations(), 1, mutated.violations());
 	}
 
 	private static Path requireRepoRoot() {

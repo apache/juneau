@@ -249,7 +249,7 @@ public class VersionMixin extends RestMixin {
 	 * the mixin delegates to.
 	 *
 	 * <p>
-	 * Extends {@link org.apache.juneau.rest.server.servlet.RestMixin.Builder} so the mixin's bespoke worker-config setters chain
+	 * Extends {@link org.apache.juneau.rest.server.servlet.RestMixin.Builder RestMixin.Builder} so the mixin's bespoke worker-config setters chain
 	 * with true covariant returns alongside the inherited {@link RestBuilder}surface (e.g. {@code path},
 	 * {@code roleGuard}). The worker config is forwarded once into {@link VersionProvider.Builder} and the REST
 	 * config is inherited once from {@link AbstractRestBuilder} &mdash; no triplication across the Version flavors.

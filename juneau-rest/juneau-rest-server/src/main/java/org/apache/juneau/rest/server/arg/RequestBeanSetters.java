@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.rest.server.arg;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
+
 import java.lang.reflect.*;
 import java.util.*;
 
@@ -75,7 +77,7 @@ public final class RequestBeanSetters {
 			ctor = beanClass.getConstructor();
 		} catch (NoSuchMethodException e) {
 			throw new IllegalArgumentException(
-				String.format("Request bean %s must have a public no-arg constructor.", beanClass.getName()));
+				f("Request bean %s must have a public no-arg constructor.", beanClass.getName()));
 		}
 		var setters = new LinkedHashMap<String,Method>();
 		for (var pm : meta.getProperties()) {
@@ -85,7 +87,7 @@ public final class RequestBeanSetters {
 				setters.put(getter.getName(), beanClass.getMethod(setterName, getter.getReturnType()));
 			} catch (NoSuchMethodException e) {
 				throw new IllegalArgumentException(
-					String.format("Request bean %s has %s getter %s() with no matching setter %s(%s).",
+					f("Request bean %s has %s getter %s() with no matching setter %s(%s).",
 						beanClass.getName(), ANNOTATION_NAMES.getOrDefault(pm.getPartType(), "@" + pm.getPartType()), getter.getName(), setterName,
 						getter.getReturnType().getSimpleName()));
 			}

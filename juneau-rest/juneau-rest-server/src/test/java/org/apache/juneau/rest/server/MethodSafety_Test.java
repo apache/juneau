@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.server;
 
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
@@ -228,7 +229,7 @@ class MethodSafety_Test extends org.apache.juneau.TestBase {
 
 	@Test void c02_resourceWithMutatingPost_initializes() throws Exception {
 		var ctx = new RestContext(argsOf(Fix_MutatingPost.class, Fix_MutatingPost::new));
-		assertEquals(1, ctx.getRestOperations().getOpContexts().size());
+		assertSize(1, ctx.getRestOperations().getOpContexts());
 	}
 
 	@Test void c03_bareRestOpInferringGet_failsToInitialize() {
@@ -249,7 +250,7 @@ class MethodSafety_Test extends org.apache.juneau.TestBase {
 		// Strictly additive: a resource that never mentions @Mutating behaves exactly as it did before the check
 		// existed, which is what makes turning this on safe for every application already in the wild.
 		var ctx = new RestContext(argsOf(Fix_PlainGet.class, Fix_PlainGet::new));
-		assertEquals(1, ctx.getRestOperations().getOpContexts().size());
+		assertSize(1, ctx.getRestOperations().getOpContexts());
 	}
 
 	//-----------------------------------------------------------------------------------------------------------
@@ -505,7 +506,7 @@ class MethodSafety_Test extends org.apache.juneau.TestBase {
 
 	static RestOpContext onlyOp(Class<?> c, Supplier<?> s) throws Exception {
 		var ops = new RestContext(argsOf(c, s)).getRestOperations().getOpContexts();
-		assertEquals(1, ops.size());
+		assertSize(1, ops);
 		return ops.get(0);
 	}
 

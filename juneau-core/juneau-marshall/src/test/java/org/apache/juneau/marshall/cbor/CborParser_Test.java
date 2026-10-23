@@ -19,6 +19,7 @@ package org.apache.juneau.marshall.cbor;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 
 import java.io.*;
 
@@ -57,7 +58,7 @@ class CborParser_Test extends TestBase {
 			JsonMap.of("s", "b", "i", 2, "b", false));
 		var bytes = CborSerializer.DEFAULT.write(list);
 		var parsed = CborParser.DEFAULT.read(bytes, JsonList.class);
-		assertEquals(2, parsed.size());
+		assertSize(2, parsed);
 		assertEquals("a", parsed.getMap(0).getString("s"));
 		assertEquals("b", parsed.getMap(1).getString("s"));
 	}

@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.server.view.freemarker.console;
 
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
@@ -38,7 +39,7 @@ class PageCapture_PendingNavAdd_Test extends TestBase {
 		var added = new ArrayList<NavNode>();
 		cap.addPendingNavUnder("fleet/instances", added::add);
 		cap.applyPendingNavAdds();
-		assertEquals(1, added.size());
+		assertSize(1, added);
 		assertEquals("instances", added.get(0).id());
 	}
 

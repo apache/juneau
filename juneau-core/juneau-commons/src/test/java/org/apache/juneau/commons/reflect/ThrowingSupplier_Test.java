@@ -227,11 +227,11 @@ class ThrowingSupplier_Test extends TestBase {
 		void d04_successfulComplexOperation() {
 			// Simulate successful complex operation
 			ThrowingSupplier<Map<String,Object>> complexOperation = () -> {
-				var result = new HashMap<String,Object>();
-				result.put("status", "success");
-				result.put("data", l("item1", "item2", "item3"));
-				result.put("timestamp", System.currentTimeMillis());
-				return result;
+				return m(
+					"status", "success",
+					"data", l("item1", "item2", "item3"),
+					"timestamp", System.currentTimeMillis()
+				);
 			};
 
 			var result = safe(complexOperation);

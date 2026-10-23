@@ -34,7 +34,7 @@ import java.lang.annotation.*;
  * <h5 class='section'>Binding order and lifecycle</h5>
  * <p>
  * The whole-object config bind runs <b>after</b> {@code @Value}/{@code @Inject} field-and-method injection and
- * <b>before</b> any {@link org.apache.juneau.commons.inject.PostConstruct @PostConstruct} method — so a
+ * <b>before</b> any {@link PostConstruct @PostConstruct} method — so a
  * {@code @PostConstruct} method observes the fully-bound config fields. Fields that are themselves annotated with
  * {@code @Value} or {@code @Inject} are left to the injection engine and are never overwritten by config binding,
  * even when a matching {@code prefix.fieldName} key exists.
@@ -68,7 +68,7 @@ import java.lang.annotation.*;
  * </p>
  *
  * <p>
- * {@code @ConfigProperties} and {@link org.apache.juneau.commons.inject.Value @Value} coexist: {@code @Value}
+ * {@code @ConfigProperties} and {@link Value @Value} coexist: {@code @Value}
  * resolves a single value; {@code @ConfigProperties} resolves a whole object. A class can use
  * {@code @Value} fields internally and separately be the target of another class's nested
  * {@code @ConfigProperties} bind.

@@ -26,7 +26,7 @@ import org.apache.juneau.rest.server.servlet.*;
 import org.junit.jupiter.api.*;
 
 /**
- * Phase 2 regression matrix &mdash; verifies that {@code @Rest(converters=...)} on a mixin class inherits the host's
+ * Verifies that {@code @Rest(converters=...)} on a mixin class inherits the host's
  * converter chain via the {@link RestContext#getRestAnnotationsForProperty(String) annotation-property walk}
  *.
  *

@@ -17,6 +17,7 @@
 package org.apache.juneau.rest.server.views;
 
 import static java.nio.charset.StandardCharsets.*;
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
@@ -133,6 +134,6 @@ class PendingBadge_BrowserTest extends TestBase {
 	}
 
 	@Test void c02_failureOnLivePageStillLogsError() {
-		assertEquals(1, ((List<?>)report.get("live_e65")).size(), () -> report.toString());
+		assertSize(() -> report.toString(), 1, ((List<?>)report.get("live_e65")));
 	}
 }

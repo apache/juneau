@@ -43,6 +43,13 @@ class SwaggerUI_Test extends TestBase {
 
 	private final MarshallingSession bs = MarshallingContext.DEFAULT_SESSION;
 
+	// Blanks the bundled stylesheet/script bodies so structural assertions don't embed the full resources.
+	private static String stripResources(Object ui) {
+		return ui.toString()
+			.replaceAll("(?s)<style( [^>]*)?>.*?</style>", "<style></style>")
+			.replaceAll("(?s)<script type='text/javascript'( [^>]*)?>.*?</script>", "<script type='text/javascript'><sp/></script>");
+	}
+
 	/**
 	 * Test method for media types.
 	 */
@@ -88,7 +95,7 @@ class SwaggerUI_Test extends TestBase {
 				</div>
 			</div>
 			""".replaceAll("\\n\\s*", ""),
-			new SwaggerUI().swap(bs, swagger)
+			stripResources(new SwaggerUI().swap(bs, swagger))
 		);
 	}
 
@@ -130,7 +137,7 @@ class SwaggerUI_Test extends TestBase {
 				</div>
 			</div>
 			""".replaceAll("\\n\\s*", ""),
-			new SwaggerUI().swap(bs, swagger)
+			stripResources(new SwaggerUI().swap(bs, swagger))
 		);
 	}
 
@@ -154,7 +161,7 @@ class SwaggerUI_Test extends TestBase {
 				</div>
 			</div>
 			""".replaceAll("\\n\\s*", ""),
-			new SwaggerUI().swap(bs, swagger)
+			stripResources(new SwaggerUI().swap(bs, swagger))
 		);
 	}
 
@@ -190,7 +197,7 @@ class SwaggerUI_Test extends TestBase {
 				</div>
 			</div>
 			""".replaceAll("\\n\\s*", ""),
-			new SwaggerUI().swap(bs, swagger)
+			stripResources(new SwaggerUI().swap(bs, swagger))
 		);
 	}
 
@@ -244,7 +251,7 @@ class SwaggerUI_Test extends TestBase {
 				</div>
 			</div>
 			""".replaceAll("\\n\\s*", ""),
-			new SwaggerUI().swap(bs, swagger)
+			stripResources(new SwaggerUI().swap(bs, swagger))
 		);
 	}
 
@@ -393,6 +400,7 @@ class SwaggerUI_Test extends TestBase {
 	}
 
 	// Tests swagger with definitions → covers modelsBlockContents with model with/without description.
+	// The Models block starts open, like the tag blocks, so the first click on its summary collapses it.
 	@Test void a26_swaggerWithDefinitions() throws Exception {
 		var swagger = swagger()
 			.setInfo(info("Test API", "1.0.0"))
@@ -401,8 +409,10 @@ class SwaggerUI_Test extends TestBase {
 				.append("description", "A pet"))
 			.addDefinition("Error", new org.apache.juneau.marshall.collections.JsonMap()
 				.append("type", "object"));
-		var result = new SwaggerUI().swap(bs, swagger);
-		assertNotNull(result);
+		assertContains(
+			"<div class='tag-block tag-block-open'><div class='tag-block-summary' onclick='toggleTagBlock(this)'><span class='name'>Models</span></div>",
+			stripResources(new SwaggerUI().swap(bs, swagger))
+		);
 	}
 
 	// Tests tag with externalDocs having both description and url.
@@ -603,5 +613,16 @@ class SwaggerUI_Test extends TestBase {
 		var swagger = swagger().setInfo(info("Test API", "1.0.0"));
 		var html = new SwaggerUI().swap(session, swagger).toString();
 		assertFalse(html.contains("nonce="), () -> "Did not expect nonce attribute: " + html);
+	}
+
+	// Tests that the bundled stylesheet and script are found and emitted (not an empty <style>/<script>).
+	@Test void a42_bundledResourcesEmitted() throws Exception {
+		var swagger = swagger().setInfo(info("Test API", "1.0.0"));
+		var html = new SwaggerUI().swap(bs, swagger).toString();
+		assertTrue(html.contains(".swagger-ui"), () -> "Stylesheet content missing");
+		assertTrue(html.contains("function toggleOpBlock"), () -> "Script content missing");
+		assertTrue(html.contains("function toggleTagBlock"), () -> "Script content missing");
+		assertTrue(html.contains("function selectExample"), () -> "Script content missing");
+		assertFalse(html.contains("nil"), () -> "Unexpected nil attribute: " + html);
 	}
 }

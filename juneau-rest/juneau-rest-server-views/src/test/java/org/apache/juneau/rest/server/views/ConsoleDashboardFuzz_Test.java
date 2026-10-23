@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.server.views;
 
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assumptions.*;
 
@@ -48,7 +49,7 @@ class ConsoleDashboardFuzz_Test extends TestBase {
 		assertEquals(2400, ((Number)r.get("cases")).intValue());
 		assertEquals(List.of("decoder", "link", "null", "saved"), r.get("sources"));
 		var per = (Map<?,?>)r.get("perCategory");
-		assertEquals(12, per.size());
+		assertSize(12, per);
 		for (var v : per.values())
 			assertEquals(200, ((Number)v).intValue());
 		assertEquals(true, r.get("polluted"));
@@ -62,7 +63,7 @@ class ConsoleDashboardFuzz_Test extends TestBase {
 			assertEquals(true, ((Map<?,?>)o).get("deleteSaved"));
 		}
 		var dec = (List<?>)e.get("decoderBanned");
-		assertEquals(3, dec.size());
+		assertSize(3, dec);
 		for (var o : dec) {
 			assertNull(((Map<?,?>)o).get("source"));
 			assertEquals(List.of(NOT_PLAIN), ((Map<?,?>)o).get("warns"));

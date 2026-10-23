@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.mixin;
 
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
@@ -25,7 +26,7 @@ import org.apache.juneau.rest.server.servlet.*;
 import org.junit.jupiter.api.*;
 
 /**
- * Phase 1 — exercises the per-mixin {@link RestContext} sub-context construction infrastructure introduced for
+ * Exercises the per-mixin {@link RestContext} sub-context construction infrastructure introduced for
  * {@code @Rest(mixins=...)}.
  */
 class MixinContext_Construction_Test extends TestBase {
@@ -62,7 +63,7 @@ class MixinContext_Construction_Test extends TestBase {
 		var ctx = RestContext.getGlobalRegistry().get(HostOne.class);
 		assertNotNull(ctx, "Host RestContext should be registered after MockRestClient build");
 		var mixinContexts = ctx.getMixinContexts();
-		assertEquals(1, mixinContexts.size(), "Expected exactly one mixin sub-context (noInherit cuts off BasicRestServlet's docs mixins)");
+		assertSize(() -> "Expected exactly one mixin sub-context (noInherit cuts off BasicRestServlet's docs mixins)", 1, mixinContexts);
 		var m1Ctx = mixinContexts.get(M1.class);
 		assertNotNull(m1Ctx, "Missing mixin sub-context for M1");
 		assertSame(ctx, m1Ctx.getParentContext(), "Mixin sub-context parent should be the host context");
@@ -78,7 +79,7 @@ class MixinContext_Construction_Test extends TestBase {
 		var ctx = RestContext.getGlobalRegistry().get(HostMulti.class);
 		assertNotNull(ctx);
 		var mixinContexts = ctx.getMixinContexts();
-		assertEquals(2, mixinContexts.size(), "Expected exactly two mixin sub-contexts (noInherit cuts off BasicRestServlet's docs mixins)");
+		assertSize(() -> "Expected exactly two mixin sub-contexts (noInherit cuts off BasicRestServlet's docs mixins)", 2, mixinContexts);
 		assertNotNull(mixinContexts.get(M1.class));
 		assertNotNull(mixinContexts.get(M2.class));
 		assertNotSame(mixinContexts.get(M1.class), mixinContexts.get(M2.class),

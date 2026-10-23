@@ -25,9 +25,8 @@ import org.junit.jupiter.api.*;
  * Tests {@link VarResolver#compile(String)} and {@link VarTemplate} basic resolve semantics.
  *
  * <p>
- * Phase A acceptance: the new API exists and behaves identically to the existing
- * {@link VarResolver#resolve(String)} path. No perf change yet (Phase B installs the cached-segment
- * implementation that backs the perf win).
+ * Acceptance: the compile API exists and behaves identically to the existing
+ * {@link VarResolver#resolve(String)} path.
  */
 class VarResolver_Compile_Test extends TestBase {
 
@@ -88,10 +87,9 @@ class VarResolver_Compile_Test extends TestBase {
 		// Backslash-dollar should escape the $; output is literal "$E{x}".
 		var tpl = vr.compile("\\$E{x}");
 		assertEquals("$E{x}", tpl.resolve(vr.createSession()));
-		// After Phase B's segment-aware compile, the escape is interpreted at compile time and
+		// With the segment-aware compile, the escape is interpreted at compile time and
 		// the template reduces to a single LiteralSegment("$E{x}") — isLiteral() correctly
-		// reflects this. The Phase A naive scan returned false here because backslash was
-		// present in the source; the Phase B segment-aware answer is the more useful one.
+		// reflects this, even though the source contains a backslash.
 		assertTrue(tpl.isLiteral());
 	}
 

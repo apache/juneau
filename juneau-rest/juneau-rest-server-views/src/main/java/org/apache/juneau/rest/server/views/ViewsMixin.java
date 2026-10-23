@@ -317,7 +317,7 @@ public class ViewsMixin {
 	 * rather than quietly opening a popover nothing can dismiss.
 	 *
 	 * @deprecated The calendar runtime now ships in the widget module; compose
-	 * 	{@link org.apache.juneau.rest.server.widgets.WidgetsMixin} and use its constant of the same name.  This one
+	 * 	{@link WidgetsMixin} and use its constant of the same name.  This one
 	 * 	remains only so that an application composing this mixin alone keeps serving the asset at the same URL.
 	 */
 	@Deprecated(since = "10.0.0", forRemoval = false)
@@ -327,7 +327,7 @@ public class ViewsMixin {
 	 * The URL path at which the opt-in reusable-calendar stylesheet is served (relative to the host mount).
 	 *
 	 * @deprecated The calendar stylesheet now ships in the widget module; compose
-	 * 	{@link org.apache.juneau.rest.server.widgets.WidgetsMixin} and use its constant of the same name.  This one
+	 * 	{@link WidgetsMixin} and use its constant of the same name.  This one
 	 * 	remains only so that an application composing this mixin alone keeps serving the asset at the same URL.
 	 */
 	@Deprecated(since = "10.0.0", forRemoval = false)

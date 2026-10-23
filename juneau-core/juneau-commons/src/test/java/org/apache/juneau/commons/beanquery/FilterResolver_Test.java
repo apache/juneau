@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.commons.beanquery;
 
+import static org.apache.juneau.commons.TestAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
@@ -54,7 +55,7 @@ class FilterResolver_Test extends TestBase {
 		var items = SearchParser.parse("a=$eq(\"1\"),b=$eq(\"2\")");
 		var filter = FilterResolver.resolve(items, FilterResolver_Test::fakeLeaf);
 		assertInstanceOf(Filter.And.class, filter);
-		assertEquals(2, ((Filter.And) filter).items().size());
+		assertSize(2, ((Filter.And) filter).items());
 	}
 
 	@Test
@@ -77,7 +78,7 @@ class FilterResolver_Test extends TestBase {
 		var items = SearchParser.parse("$and(a=$eq(\"1\"),b=$eq(\"2\"))");
 		var filter = FilterResolver.resolve(items, FilterResolver_Test::fakeLeaf);
 		assertInstanceOf(Filter.And.class, filter);
-		assertEquals(2, ((Filter.And) filter).items().size());
+		assertSize(2, ((Filter.And) filter).items());
 	}
 
 	@Test
@@ -94,7 +95,7 @@ class FilterResolver_Test extends TestBase {
 		var filter = FilterResolver.resolve(items, FilterResolver_Test::fakeLeaf);
 		assertInstanceOf(Filter.Or.class, filter);
 		var orItems = ((Filter.Or) filter).items();
-		assertEquals(2, orItems.size());
+		assertSize(2, orItems);
 		assertInstanceOf(Filter.And.class, orItems.get(0));
 		assertInstanceOf(Filter.Leaf.class, orItems.get(1));
 	}

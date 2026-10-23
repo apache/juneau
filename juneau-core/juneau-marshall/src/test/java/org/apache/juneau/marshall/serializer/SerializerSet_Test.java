@@ -299,7 +299,7 @@ class SerializerSet_Test extends TestBase {
 
 	@Test void b22_builder_clear_removesAllEntries() {
 		var sb = SerializerSet.create().add(SB1.class, SB2.class);
-		assertEquals(2, sb.inner().size());
+		assertSize(2, sb.inner());
 		sb.clear();
 		assertTrue(sb.inner().isEmpty());
 	}

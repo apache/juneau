@@ -17,6 +17,7 @@
 package org.apache.juneau.marshall.jcs;
 
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.f;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.nio.charset.*;
@@ -125,7 +126,7 @@ class JcsCanonical_Test extends TestBase {
 	private static String bytesToHex(byte[] bytes) {
 		var sb = new StringBuilder();
 		for (var b : bytes)
-			sb.append(String.format("%02x", b));
+			sb.append(f("%02x", b));
 		return sb.toString();
 	}
 }

@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.config.store;
 
+import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
@@ -140,10 +141,11 @@ class ProfileConfigStore_Test extends TestBase {
 
 	@Test void e03_mergeBlankAndNullProfilesSkipped() throws Exception {
 		var d = store();
-		var profiles = new ArrayList<String>();
-		profiles.add("");      // blank — skipped
-		profiles.add(null);    // null — skipped
-		profiles.add("[S]\na = over\n");
+		var profiles = list(
+			"",      // blank — skipped
+			null,    // null — skipped
+			"[S]\na = over\n"
+		);
 		var merged = ProfileMerge.merge(d, "App.cfg", "[S]\na = base\n", profiles, IniConfigFormat.INSTANCE);
 		assertTrue(merged.contains("over"));
 	}

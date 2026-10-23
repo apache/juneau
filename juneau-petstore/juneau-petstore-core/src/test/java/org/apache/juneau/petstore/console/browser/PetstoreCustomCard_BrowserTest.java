@@ -140,7 +140,9 @@ class PetstoreCustomCard_BrowserTest extends TestBase {
 	}
 
 	@Test void b02_eachCardMountsOnce() {
-		@SuppressWarnings("unchecked") // the query returns a JSON array.
+		@SuppressWarnings({
+			"unchecked" // the query returns a JSON array.
+		})
 		var m = (List<String>) query(assertClean(report, "cards"), "mountedBefore");
 		assertList(m.stream().filter(x -> x.startsWith("gauge:")).toList(), "gauge:inventory-gauge");
 		assertList(m.stream().filter(x -> x.startsWith("available:")).toList(), "available:kpi");

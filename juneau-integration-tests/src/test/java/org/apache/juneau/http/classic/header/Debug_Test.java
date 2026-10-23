@@ -15,6 +15,7 @@ package org.apache.juneau.http.classic.header;
 import static org.apache.juneau.BasicTestUtils.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.apache.juneau.http.classic.HttpHeaders.*;
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
@@ -56,7 +57,7 @@ class Debug_Test extends TestBase {
 				throw new RuntimeException(e);
 			}
 		});
-		assertEquals(3, records.size());
+		assertSize(3, records);
 
 		c.get().header(debug((String)null)).run().assertContent().isEmpty();
 		c.get().header(debug((Supplier<Boolean>)null)).run().assertContent().isEmpty();

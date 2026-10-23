@@ -17,6 +17,7 @@
 package org.apache.juneau.rest.server.tracing;
 
 import static org.apache.juneau.commons.utils.Shorts.*;
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
@@ -89,7 +90,7 @@ class TracerHook_Contract_Test extends TestBase {
 	@Test void a01_happyPath_oneSpanOpenedSetStatusClosed() throws Exception {
 		A_HOOK.spans.clear();
 		CA.get("/users/42").run().assertStatus(200);
-		assertEquals(1, A_HOOK.spans.size());
+		assertSize(1, A_HOOK.spans);
 		var s = A_HOOK.last();
 		assertEquals("GET", s.method);
 		assertEquals(200, s.statusCode.get());
@@ -119,7 +120,7 @@ class TracerHook_Contract_Test extends TestBase {
 	@Test void b01_exceptionPath_setErrorThenClose() throws Exception {
 		B_HOOK.spans.clear();
 		CB.get("/boom").run().assertStatus(500);
-		assertEquals(1, B_HOOK.spans.size());
+		assertSize(1, B_HOOK.spans);
 		var s = B_HOOK.last();
 		assertEquals(500, s.statusCode.get());
 		assertNotNull(s.error.get());
@@ -147,7 +148,7 @@ class TracerHook_Contract_Test extends TestBase {
 	@Test void c01_noTracerBean_noSpansFanOut() throws Exception {
 		C_CANARY.spans.clear();
 		CC.get("/ping").run().assertStatus(200);
-		assertEquals(0, C_CANARY.spans.size(), "without a @Bean TracerHook, no spans reach external tracers");
+		assertSize(() -> "without a @Bean TracerHook, no spans reach external tracers", 0, C_CANARY.spans);
 	}
 
 	// -----------------------------------------------------------------------------------------------------------------

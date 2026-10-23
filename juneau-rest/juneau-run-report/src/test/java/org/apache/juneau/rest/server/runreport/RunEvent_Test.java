@@ -163,7 +163,9 @@ class RunEvent_Test extends TestBase {
 
 	@Test void c07_countsAreCopied() {
 		var m = SUITE_EVENT.toContractMap();
-		@SuppressWarnings("unchecked")
+		@SuppressWarnings({
+			"unchecked" // Casts a parsed JSON value to its known Map/List shape.
+		})
 		var counts = (Map<String,Object>)m.get("counts");
 		counts.put("pass", 99);
 		assertBean(SUITE_EVENT.toContractMap(), "counts", "{pass=3,fail=1,skip=0}");

@@ -54,6 +54,42 @@ class SinksTest(unittest.TestCase):
         self.assertRegex(str(default), rf"^{re.escape(str(self.tmp))}/.+-\d{{8}}-\d{{6}}\.log$")
         self.assertEqual(os.environ["JUNEAU_RUN_FULL_LOG"], str(default))
 
+    def test_condensed_defaults_a_condensed_log_beside_the_full_one_and_shares_it(self):
+        os.environ["JUNEAU_RUN_LOG_DIR"] = str(self.tmp)
+        with mock.patch.object(jr.sys, "argv", ["/x/scripts/push.py"]):
+            first = jr.Sinks(console="condensed")
+        self.assertRegex(str(first.condensed_path),
+                         rf"^{re.escape(str(self.tmp))}/push-\d{{8}}-\d{{6}}\.condensed\.log$")
+        self.assertEqual(str(first.condensed_path), str(first.full_path)[:-4] + ".condensed.log")
+        self.assertEqual(os.environ["JUNEAU_RUN_CONDENSED_LOG"], str(first.condensed_path))
+        self.assertEqual(jr.Sinks(console="none").condensed_path, first.condensed_path)    # a nested run's Sinks
+
+    def test_a_given_log_means_no_default_condensed_log(self):
+        os.environ["JUNEAU_RUN_LOG_DIR"] = str(self.tmp)
+        self.assertIsNone(jr.Sinks(console="condensed", full_log=str(self.tmp / "mine.log")).condensed_path)
+        self.assertIsNone(jr.Sinks(console="full").condensed_path)
+        mine = str(self.tmp / "mine.condensed.log")
+        sinks = jr.Sinks(console="condensed", condensed_log=mine)
+        self.assertEqual(sinks.condensed_path, Path(mine))
+        self.assertEqual(os.environ.get("JUNEAU_RUN_CONDENSED_LOG"), None)
+
+    def test_prune_counts_full_and_condensed_logs_separately(self):
+        os.environ["JUNEAU_RUN_LOG_DIR"] = str(self.tmp)
+        for i in range(25):
+            for name in (f"push-{i:02d}.log", f"push-{i:02d}.condensed.log"):
+                (self.tmp / name).write_text("")
+                os.utime(self.tmp / name, (1000 + i, 1000 + i))
+        for i in range(25, 30):     # newer condensed logs must not push full logs out, nor the reverse
+            (self.tmp / f"test-{i}.condensed.log").write_text("")
+            os.utime(self.tmp / f"test-{i}.condensed.log", (1000 + i, 1000 + i))
+        jr.prune_full_logs()
+        names = sorted(p.name for p in self.tmp.glob("*.log"))
+        self.assertEqual([n for n in names if not n.endswith(".condensed.log")],
+                         [f"push-{i:02d}.log" for i in range(5, 25)])
+        self.assertEqual(len([n for n in names if n.endswith(".condensed.log")]), 20)
+        self.assertNotIn("push-04.condensed.log", names)
+        self.assertIn("test-29.condensed.log", names)
+
     def test_safe_name_replaces_whitespace_and_punctuation(self):
         for raw, want in (("python3 -m unittest", "python3-m-unittest"),
                           ("a/b c", "a-b-c"),

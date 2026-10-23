@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.bean.mcp.v20250618;
 
+import static org.apache.juneau.test.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
@@ -42,14 +43,14 @@ class McpBeans_AddXNullInit_Test {
 
 	@Test void a02_callToolResult_addContent_varargs_nullInit() {
 		var x = new CallToolResult().addContent(new TextContent().setText("a")).addContent(new TextContent().setText("b"));
-		assertEquals(2, x.getContent().size());
+		assertSize(2, x.getContent());
 	}
 
 	@Test void a03_callToolResult_addContent_collection_nullInit() {
 		var x = new CallToolResult()
 			.addContent(List.of(new TextContent().setText("a")))
 			.addContent(List.of(new TextContent().setText("b")));
-		assertEquals(2, x.getContent().size());
+		assertSize(2, x.getContent());
 	}
 
 	@Test void a04_clientCapabilities_putSampling_nullInit() {
@@ -71,19 +72,19 @@ class McpBeans_AddXNullInit_Test {
 		var m1 = new PromptMessage().setRole(Role.USER);
 		var m2 = new PromptMessage().setRole(Role.ASSISTANT);
 		var x = new GetPromptResult().addMessages(m1).addMessages(m2);
-		assertEquals(2, x.getMessages().size());
+		assertSize(2, x.getMessages());
 	}
 
 	@Test void a08_getPromptResult_addMessages_collection_nullInit() {
 		var m1 = new PromptMessage().setRole(Role.USER);
 		var m2 = new PromptMessage().setRole(Role.ASSISTANT);
 		var x = new GetPromptResult().addMessages(List.of(m1)).addMessages(List.of(m2));
-		assertEquals(2, x.getMessages().size());
+		assertSize(2, x.getMessages());
 	}
 
 	@Test void a09_jsonSchema_addProperty_nullInit() {
 		var x = new JsonSchema().addProperty("a", new JsonSchema().setType("string")).addProperty("b", new JsonSchema().setType("number"));
-		assertEquals(2, x.getProperties().size());
+		assertSize(2, x.getProperties());
 	}
 
 	@Test void a10_jsonSchema_addRequired_varargs_nullInit() {
@@ -98,65 +99,65 @@ class McpBeans_AddXNullInit_Test {
 
 	@Test void a12_jsonSchema_addDef_nullInit() {
 		var x = new JsonSchema().addDef("a", new JsonSchema().setType("string")).addDef("b", new JsonSchema().setType("number"));
-		assertEquals(2, x.getDefs().size());
+		assertSize(2, x.getDefs());
 	}
 
 	@Test void a13_listPromptsResult_addPrompts_varargs_nullInit() {
 		var x = new ListPromptsResult().addPrompts(new Prompt().setName("a")).addPrompts(new Prompt().setName("b"));
-		assertEquals(2, x.getPrompts().size());
+		assertSize(2, x.getPrompts());
 	}
 
 	@Test void a14_listPromptsResult_addPrompts_collection_nullInit() {
 		var x = new ListPromptsResult().addPrompts(List.of(new Prompt().setName("a"))).addPrompts(List.of(new Prompt().setName("b")));
-		assertEquals(2, x.getPrompts().size());
+		assertSize(2, x.getPrompts());
 	}
 
 	@Test void a15_listResourcesResult_addResources_varargs_nullInit() {
 		var x = new ListResourcesResult().addResources(new Resource().setUri("a")).addResources(new Resource().setUri("b"));
-		assertEquals(2, x.getResources().size());
+		assertSize(2, x.getResources());
 	}
 
 	@Test void a16_listResourcesResult_addResources_collection_nullInit() {
 		var x = new ListResourcesResult()
 			.addResources(List.of(new Resource().setUri("a")))
 			.addResources(List.of(new Resource().setUri("b")));
-		assertEquals(2, x.getResources().size());
+		assertSize(2, x.getResources());
 	}
 
 	@Test void a17_listToolsResult_addTools_varargs_nullInit() {
 		var x = new ListToolsResult().addTools(new Tool().setName("a")).addTools(new Tool().setName("b"));
-		assertEquals(2, x.getTools().size());
+		assertSize(2, x.getTools());
 	}
 
 	@Test void a18_listToolsResult_addTools_collection_nullInit() {
 		var x = new ListToolsResult().addTools(List.of(new Tool().setName("a"))).addTools(List.of(new Tool().setName("b")));
-		assertEquals(2, x.getTools().size());
+		assertSize(2, x.getTools());
 	}
 
 	@Test void a19_prompt_addArguments_varargs_nullInit() {
 		var x = new Prompt().addArguments(new PromptArgument().setName("a")).addArguments(new PromptArgument().setName("b"));
-		assertEquals(2, x.getArguments().size());
+		assertSize(2, x.getArguments());
 	}
 
 	@Test void a20_prompt_addArguments_collection_nullInit() {
 		var x = new Prompt()
 			.addArguments(List.of(new PromptArgument().setName("a")))
 			.addArguments(List.of(new PromptArgument().setName("b")));
-		assertEquals(2, x.getArguments().size());
+		assertSize(2, x.getArguments());
 	}
 
 	@Test void a21_readResourceResult_addContents_varargs_nullInit() {
 		var x = new ReadResourceResult()
 			.addContents(new TextResourceContents().setUri("a"))
 			.addContents(new TextResourceContents().setUri("b"));
-		assertEquals(2, x.getContents().size());
+		assertSize(2, x.getContents());
 	}
 
 	@Test void a22_readResourceResult_addContents_collection_nullInit() {
 		var x = new ReadResourceResult()
 			.addContents(List.of(new TextResourceContents().setUri("a")))
 			.addContents(List.of(new TextResourceContents().setUri("b")));
-		assertEquals(2, x.getContents().size());
+		assertSize(2, x.getContents());
 	}
 
 	@Test void a23_serverCapabilities_putExperimental_nullInit() {
@@ -168,14 +169,14 @@ class McpBeans_AddXNullInit_Test {
 		var x = new ListResourceTemplatesResult()
 			.addResourceTemplates(new ResourceTemplate().setUriTemplate("a"))
 			.addResourceTemplates(new ResourceTemplate().setUriTemplate("b"));
-		assertEquals(2, x.getResourceTemplates().size());
+		assertSize(2, x.getResourceTemplates());
 	}
 
 	@Test void a25_listResourceTemplatesResult_addResourceTemplates_collection_nullInit() {
 		var x = new ListResourceTemplatesResult()
 			.addResourceTemplates(List.of(new ResourceTemplate().setUriTemplate("a")))
 			.addResourceTemplates(List.of(new ResourceTemplate().setUriTemplate("b")));
-		assertEquals(2, x.getResourceTemplates().size());
+		assertSize(2, x.getResourceTemplates());
 	}
 
 	@Test void a26_listResourceTemplatesResult_getResourceTemplates_isUnmodifiableView() {

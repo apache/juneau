@@ -26,7 +26,7 @@ import org.apache.juneau.utest.utils.*;
 import org.junit.jupiter.api.*;
 
 /**
- * Phase 2 — exercises the {@code getRestAnnotationsForProperty(...)} parent-context walk that drives
+ * Exercises the {@code getRestAnnotationsForProperty(...)} parent-context walk that drives
  * inheritance of {@code @Rest(serializers=...)} from a mixin's host context.
  *
  * <p>

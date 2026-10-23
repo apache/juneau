@@ -191,7 +191,7 @@ public class MethodSafety {
 
 	/** The claimed method upper-cased when it is unsafe, else <jk>null</jk> (absent, blank or safe). */
 	private static String unsafeClaim(String claim) {
-		if (claim == null || claim.isBlank())
+		if (ib(claim))
 			return null;
 		var c = claim.trim().toUpperCase(Locale.ROOT);
 		return isSafe(c) ? null : c;

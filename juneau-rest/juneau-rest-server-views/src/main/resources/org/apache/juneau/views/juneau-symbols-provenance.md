@@ -68,7 +68,7 @@ live `<use>` composition):
   Juneau `<symbol>` (two triangles, each painted `var(--jc-sort-asc-fill|--jc-sort-desc-fill, currentColor)` so
   header CSS can tint the active direction), kept.
 - **No reference glyph draws the role.** `more` (row-action overflow, author alias `more_vert`) — the reference
-  `action` glyph is a lightning-bolt, a different role. Three filled circles on the `1.5k` lattice, `currentColor`.
+  `action` glyph is a bolt glyph, a different role. Three filled circles on the `1.5k` lattice, `currentColor`.
 - **Truly absent Foundry stems** (the reference chrome has no such control): `forceStop`, `openPr`.
 - **Dormant ids from an unrelated sheet** — present in a stock icon sheet the source console never loads (its
   console symbol sprite is the live one), so they are *not* the live reference set and must not be copied: `print`,

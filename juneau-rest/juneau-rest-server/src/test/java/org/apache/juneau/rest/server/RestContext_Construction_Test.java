@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.server;
 
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -241,7 +242,7 @@ class RestContext_Construction_Test extends org.apache.juneau.TestBase {
 	@Test void g01_asyncTimeoutMillis_invalidValue_fallsBackToDefault() throws Exception {
 		var ctx = new RestContext(argsOf(Fix_AsyncTimeoutInvalid.class, Fix_AsyncTimeoutInvalid::new));
 		var records = LogRecordCapture.quietly(RestContext.class, () -> assertEquals(-1L, ctx.getAsyncTimeoutMillis()));
-		assertEquals(1, records.size(), records::toString);
+		assertSize(records::toString, 1, records);
 		assertTrue(records.get(0).getMessage().contains("'not-a-number'"), records.get(0).getMessage());
 	}
 

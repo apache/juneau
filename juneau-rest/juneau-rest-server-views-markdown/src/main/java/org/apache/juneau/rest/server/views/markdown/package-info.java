@@ -22,8 +22,8 @@
  * The framework itself renders data tables ({@code juneau-rest-server-views}) and chrome
  * ({@code juneau-rest-server-console-ui}); neither has any concept of a rendered <i>document</i>. This optional
  * module fills that gap with a single, library-neutral extension point &mdash;
- * {@link org.apache.juneau.rest.server.views.markdown.MarkdownRenderer} &mdash; plus a shipped default
- * ({@link org.apache.juneau.rest.server.views.markdown.CommonmarkMarkdownRenderer}) that wraps commonmark-java with
+ * {@link org.apache.juneau.rest.server.views.markdown.MarkdownRenderer MarkdownRenderer} &mdash; plus a shipped default
+ * ({@link org.apache.juneau.rest.server.views.markdown.CommonmarkMarkdownRenderer CommonmarkMarkdownRenderer}) that wraps commonmark-java with
  * the GFM tables extension enabled.  Because it is a separate module, consumers that do not need markdown pay
  * nothing for it.
  *
@@ -34,8 +34,8 @@
  *
  * <h5 class='section'>See Also:</h5>
  * <ul>
- * 	<li class='jc'>{@link org.apache.juneau.rest.server.views.markdown.MarkdownRenderer}
- * 	<li class='jc'>{@link org.apache.juneau.rest.server.views.markdown.CommonmarkMarkdownRenderer}
+ * 	<li class='jc'>{@link org.apache.juneau.rest.server.views.markdown.MarkdownRenderer MarkdownRenderer}
+ * 	<li class='jc'>{@link org.apache.juneau.rest.server.views.markdown.CommonmarkMarkdownRenderer CommonmarkMarkdownRenderer}
  * 	<li class='link'><a class="doclink" href="https://github.com/commonmark/commonmark-java">commonmark-java</a>
  * </ul>
  *

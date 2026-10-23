@@ -30,24 +30,24 @@
  *
  * <h5 class='topic'>Bean Classes</h5>
  * <ul class='spaced-list'>
- *   <li>{@link org.apache.juneau.bean.jsonapi.JsonApiDocument} - Top-level container with
+ *   <li>{@link org.apache.juneau.bean.jsonapi.JsonApiDocument JsonApiDocument} - Top-level container with
  *     {@code data}/{@code errors}/{@code meta}/{@code jsonapi}/{@code links}/{@code included}.
- *   <li>{@link org.apache.juneau.bean.jsonapi.JsonApiResource} - Resource object with
+ *   <li>{@link org.apache.juneau.bean.jsonapi.JsonApiResource JsonApiResource} - Resource object with
  *     {@code type}/{@code id}/{@code attributes}/{@code relationships}/{@code links}/{@code meta}.
- *   <li>{@link org.apache.juneau.bean.jsonapi.JsonApiResourceIdentifier} - Slim form used inside relationship linkage.
- *   <li>{@link org.apache.juneau.bean.jsonapi.JsonApiRelationship} - Relationship object
+ *   <li>{@link org.apache.juneau.bean.jsonapi.JsonApiResourceIdentifier JsonApiResourceIdentifier} - Slim form used inside relationship linkage.
+ *   <li>{@link org.apache.juneau.bean.jsonapi.JsonApiRelationship JsonApiRelationship} - Relationship object
  *     ({@code data} linkage, {@code links}, {@code meta}).
- *   <li>{@link org.apache.juneau.bean.jsonapi.JsonApiError} - Error object with
+ *   <li>{@link org.apache.juneau.bean.jsonapi.JsonApiError JsonApiError} - Error object with
  *     {@code id}/{@code links}/{@code status}/{@code code}/{@code title}/{@code detail}/{@code source}/{@code meta}.
- *   <li>{@link org.apache.juneau.bean.jsonapi.JsonApiErrorSource} - The {@code source} sub-object
+ *   <li>{@link org.apache.juneau.bean.jsonapi.JsonApiErrorSource JsonApiErrorSource} - The {@code source} sub-object
  *     ({@code pointer}/{@code parameter}/{@code header}).
- *   <li>{@link org.apache.juneau.bean.jsonapi.JsonApiLink} - Link object with
+ *   <li>{@link org.apache.juneau.bean.jsonapi.JsonApiLink JsonApiLink} - Link object with
  *     {@code href}/{@code rel}/{@code describedby}/{@code title}/{@code type}/{@code hreflang}/{@code meta}.
- *   <li>{@link org.apache.juneau.bean.jsonapi.JsonApiVersion} - The {@code jsonapi} member
+ *   <li>{@link org.apache.juneau.bean.jsonapi.JsonApiVersion JsonApiVersion} - The {@code jsonapi} member
  *     ({@code version}/{@code meta}).
- *   <li>{@link org.apache.juneau.bean.jsonapi.JsonApiLinkOrStringSwap} -
+ *   <li>{@link org.apache.juneau.bean.jsonapi.JsonApiLinkOrStringSwap JsonApiLinkOrStringSwap} -
  *     {@link org.apache.juneau.marshall.swap.spi.ObjectSwap} for {@code links} map values; each value can be either a JSON
- *     string URL or a {@link org.apache.juneau.bean.jsonapi.JsonApiLink} object per the spec.
+ *     string URL or a {@link org.apache.juneau.bean.jsonapi.JsonApiLink JsonApiLink} object per the spec.
  * </ul>
  *
  * <h5 class='topic'>Important: {@code JsonApiResource.type} is a plain String</h5>
@@ -64,7 +64,7 @@
  *
  * <p>
  * Per the JSON:API spec, a document MUST contain at least one of {@code data}, {@code errors}, or {@code meta};
- * {@code data} and {@code errors} MUST NOT coexist. {@link org.apache.juneau.bean.jsonapi.JsonApiDocument}
+ * {@code data} and {@code errors} MUST NOT coexist. {@link org.apache.juneau.bean.jsonapi.JsonApiDocument JsonApiDocument}
  * documents this constraint and offers an optional {@code validate()} helper.
  *
  * <h5 class='topic'>Example</h5>

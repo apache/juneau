@@ -17,13 +17,13 @@
 
 /**
  * Tracing SPI for {@code juneau-rest-server} &mdash; per-request span hook backed by a
- * caller-supplied {@link org.apache.juneau.rest.server.tracing.TracerHook} bean.
+ * caller-supplied {@link org.apache.juneau.rest.server.tracing.TracerHook TracerHook} bean.
  *
  * <h5 class='topic'>Opt-in</h5>
  *
  * <p>
  * The SPI is off by default. A fresh {@code RestContext} built without any
- * {@code @Bean TracerHook} entry uses {@link org.apache.juneau.rest.server.tracing.NoOpTracerHook}
+ * {@code @Bean TracerHook} entry uses {@link org.apache.juneau.rest.server.tracing.NoOpTracerHook NoOpTracerHook}
  * &mdash; no tracer is reached for, no trace-context headers are parsed, no spans are opened. Consumers
  * opt in by supplying a bridge implementation:
  *
@@ -33,18 +33,18 @@
  * 		creation, OTel HTTP semantic-convention attributes, and W3C {@code traceparent} /
  * 		{@code tracestate} context propagation.
  * 	<li>Custom tracers (Brave, application-specific span beans, etc.) can implement
- * 		{@link org.apache.juneau.rest.server.tracing.TracerHook} directly &mdash; the SPI intentionally has no
+ * 		{@link org.apache.juneau.rest.server.tracing.TracerHook TracerHook} directly &mdash; the SPI intentionally has no
  * 		OpenTelemetry dependency on the core surface.
  * </ul>
  *
  * <h5 class='topic'>Lifecycle</h5>
  *
  * <p>
- * For every {@code @RestOp} invocation, the framework opens a {@link org.apache.juneau.rest.server.tracing.Scope}
- * via {@link org.apache.juneau.rest.server.tracing.TracerHook#startSpan startSpan(...)} immediately before
+ * For every {@code @RestOp} invocation, the framework opens a {@link org.apache.juneau.rest.server.tracing.Scope Scope}
+ * via {@link TracerHook#startSpan startSpan(...)} immediately before
  * parameter resolution and closes it in a {@code finally} block after the handler returns or throws.
- * Status code and exception are reported via {@link org.apache.juneau.rest.server.tracing.Scope#setStatusCode}
- * and {@link org.apache.juneau.rest.server.tracing.Scope#setError} before {@link org.apache.juneau.rest.server.tracing.Scope#close}.
+ * Status code and exception are reported via {@link Scope#setStatusCode}
+ * and {@link Scope#setError} before {@link Scope#close}.
  *
  * <p>
  * {@link org.apache.juneau.http.tracing.TraceContextCarrier} moved to {@code juneau-rest-common}
@@ -54,9 +54,9 @@
  *
  * <h5 class='section'>See Also:</h5>
  * <ul>
- * 	<li class='jc'>{@link org.apache.juneau.rest.server.tracing.TracerHook}
- * 	<li class='jc'>{@link org.apache.juneau.rest.server.tracing.Scope}
- * 	<li class='jc'>{@link org.apache.juneau.rest.server.tracing.NoOpTracerHook}
+ * 	<li class='jc'>{@link org.apache.juneau.rest.server.tracing.TracerHook TracerHook}
+ * 	<li class='jc'>{@link org.apache.juneau.rest.server.tracing.Scope Scope}
+ * 	<li class='jc'>{@link org.apache.juneau.rest.server.tracing.NoOpTracerHook NoOpTracerHook}
  * 	<li class='jp'>{@link org.apache.juneau.rest.server.metrics}
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerObservability">REST Server &mdash; Observability (Micrometer + OpenTelemetry)</a>
  * </ul>

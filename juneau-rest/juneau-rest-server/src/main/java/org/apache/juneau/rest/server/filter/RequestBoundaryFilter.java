@@ -39,7 +39,7 @@ import jakarta.servlet.http.*;
  * 	<li>A {@link org.apache.juneau.rest.server.guard.RestGuard RestGuard} is declared per resource or per operation, so
  * 		an endpoint added later is unprotected until someone remembers to declare it &mdash; and its omission is
  * 		invisible in review, because nothing about the new endpoint looks different.
- * 	<li>A mixin's {@link org.apache.juneau.rest.server.RestStartCall @RestStartCall} hook fires only for requests
+ * 	<li>A mixin's {@link RestStartCall @RestStartCall} hook fires only for requests
  * 		that resolved to one of that mixin's own endpoints, so a boundary packaged that way would not see the host
  * 		resource's operations at all.
  * </ul>
@@ -347,7 +347,7 @@ public class RequestBoundaryFilter implements Filter {
 				case '\t' -> sb.append("\\t");
 				default -> {
 					if (c < 0x20)
-						sb.append(String.format("\\u%04x", (int)c));
+						sb.append(f("\\u%04x", (int)c));
 					else
 						sb.append(c);
 				}

@@ -212,7 +212,7 @@ public class TerminalDef {
 	 * @throws IllegalArgumentException If a rule is broken.
 	 */
 	public TerminalDef validate() {
-		if (id == null || id.isBlank())
+		if (ib(id))
 			throw iaex("TerminalDef id must not be blank.");
 		if (bytesUrl == null)
 			throw iaex("TerminalDef '%s' bytesUrl is required.", id);

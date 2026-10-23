@@ -18,6 +18,7 @@ package org.apache.juneau.marshall.transforms;
 
 import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 
 import java.util.*;
 import java.util.stream.*;
@@ -361,7 +362,7 @@ class BinaryFormat_RoundTrip_Test extends TestBase {
 
 		x = t.roundTrip(x);
 		assertNotNull(x.list, "fmt=" + fmt);
-		assertEquals(3, x.list.size(), "fmt=" + fmt);
+		assertSize(() -> "fmt=" + fmt, 3, x.list);
 		assertBytesEquals(SHORT_MIXED, x.list.get(0), "fmt=" + fmt + " index=0");
 		assertBytesEquals(ALIGNED_3, x.list.get(1), "fmt=" + fmt + " index=1");
 		assertBytesEquals(ALIGNED_1, x.list.get(2), "fmt=" + fmt + " index=2");

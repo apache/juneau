@@ -29,7 +29,9 @@ import org.junit.jupiter.api.*;
 
 class RunViewChecks_Test extends TestBase {
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // The JSON fixture maps each group name to a list of rows.
+	})
 	static List<List<Object>> rows(String group) throws IOException {
 		try (var in = RunViewChecks_Test.class.getResourceAsStream("run-view-vectors.json")) {
 			assertNotNull(in, "run-view-vectors.json missing from the test classpath");

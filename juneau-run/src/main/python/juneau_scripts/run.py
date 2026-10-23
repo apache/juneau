@@ -68,7 +68,12 @@ def routed():
     console, where a child's output goes to the sinks and nothing is drawn.  Public because Foundry's run_tests also
     needs it (Decision Q4, revised in the review triage)."""
     jr = _base.jr()
-    return jr is not None and (jr.enabled() or jr.console_active() or os.environ.get(CONSOLE_ENV) == "none")
+    return jr is not None and (_reporting(jr) or jr.console_active() or os.environ.get(CONSOLE_ENV) == "none")
+
+
+def _reporting(jr):
+    """jr.reporting(): markers on stdout or in a file, or a result file.  jr.enabled() for a juneau_run without it."""
+    return getattr(jr, "reporting", jr.enabled)()
 
 
 def console_requested():
@@ -188,7 +193,7 @@ def _slug(title):
 
 
 def cmd(cmd, *, title, id=None, n=None, tool=None, cwd=None, env=None, capture=False, tty=False,  # NOSONAR python:S5806
-        summarize=None, input=None, parent=None, label=None, reports=True, bar=None):
+        summarize=None, input=None, parent=None, label=None, reports=True, bar=None, grace=None):
     """Run cmd as one step.  parent (a step id) makes it a child row of that step; its n defaults to 1, as step()'s
     does, and a plain run just runs it.  label is the row's short console label.  Under markers or the console it goes through jr.run_tool with the named parser (or a
     jr.Parser instance); otherwise a plain subprocess.run.  A tool that can't start gives Result(False, 127, err).
@@ -201,7 +206,9 @@ def cmd(cmd, *, title, id=None, n=None, tool=None, cwd=None, env=None, capture=F
     reports are announced (with $RUN_ARTIFACTS set, as copies under it, so a later `clean` cannot take them away);
     reports=False announces none.  bar picks the row's bar unit (see jr.run_tool: "tests" for a block per test on a
     pytest or Playwright row); a value the parser doesn't offer raises ValueError before the command runs.  A plain
-    run (no juneau_run loaded) ignores bar, so an invalid one doesn't raise there."""
+    run (no juneau_run loaded) ignores bar, so an invalid one doesn't raise there.  grace is the seconds a cancelled
+    routed child's process group gets between SIGTERM and SIGKILL (jr.run_tool's default when None); it is passed on
+    only when set, so an older juneau_run still works, and a plain run ignores it."""
     if input is not None and tty:
         raise ValueError("input= cannot be combined with tty=True")
     _base.remember(title)
@@ -209,7 +216,7 @@ def cmd(cmd, *, title, id=None, n=None, tool=None, cwd=None, env=None, capture=F
         num = (n if n is not None else 1) if parent is not None else _next_n(n)
         return _routed(cmd, title=title, id=id or _slug(title), n=num, parent=parent, tool=tool, cwd=cwd,
                        env=env, capture=capture, tty=tty, summarize=summarize, input=input, label=label,
-                       reports=reports, bar=bar)
+                       reports=reports, bar=bar, grace=grace)
     if parent is None:
         _next_n(n)
     return _plain(cmd, cwd=cwd, env=env, capture=capture, input=input)
@@ -250,14 +257,15 @@ def _parser_for(jr, cmd, tool):
 
 
 def _routed(cmd, *, title, id, n, parent, tool, cwd, env, capture, tty, statuses=None,  # NOSONAR python:S5806
-            summarize=None, input=None, label=None, reports=True, bar=None):
+            summarize=None, input=None, label=None, reports=True, bar=None, grace=None):
     jr = _base.jr()
     parser = _parser_for(jr, cmd, tool)
     try:
         r = jr.run_tool(cmd, parser, id, title, n=n, parent=parent, cwd=cwd, env=env, capture=capture, tty=tty,
                         statuses=statuses, summarize=summarize, input=input, label=label,
                         **({} if reports else {"reports": False}),   # an older juneau_run has no reports=
-                        **({"bar": bar} if bar else {}))             # nor bar=
+                        **({"bar": bar} if bar else {}),             # nor bar=
+                        **({"grace": grace} if grace is not None else {}))   # nor grace=
     except OSError as e:
         # run_tool has already ended the step with exit 127.  Close it again with no exit field, as Foundry does
         # (scripts/push.py:254-262), whose tests pin that marker.
@@ -301,7 +309,7 @@ def handoff(*, reserve=0):
     if jr is None:
         yield extra
         return
-    if jr.enabled() and reserve > 0:
+    if _reporting(jr) and reserve > 0:
         extra[N_BASE_ENV] = str(_next_n(count=reserve) - 1)
     with jr.handoff() as values:
         yield {**values, **extra}
@@ -491,10 +499,13 @@ def _restore_sigterm(previous):
         signal.signal(signal.SIGTERM, previous if previous is not None else signal.SIG_DFL)
 
 
-def _done(status, commit):
+def _done(status, commit, code):
     jr = _base.jr()
     if jr is not None:
-        jr.done(status, commit=commit)
+        if hasattr(jr, "reporting"):    # the juneau_run that takes exit= for the result file
+            jr.done(status, commit=commit, exit=code)
+        else:
+            jr.done(status, commit=commit)
 
 
 def _n_base():
@@ -506,19 +517,21 @@ def _n_base():
 
 @contextlib.contextmanager
 def session(title, *, header=(), bell=False, sound=False, silence_env=(), mode=None, project=None, repo=".",
-            exit=True, plan=None):
+            exit=True, plan=None, history_key=None):
     """
     One script run: the run marker, the console view when requested, a SIGTERM handler, and on every path the summary,
     exactly one done marker, the bell and the sound.  ok exits 0, s.fail(msg)/s.require() 1, Ctrl-C or SIGTERM 130, any
     other exception 1 (reported as "❌ ERROR: <Type>: <msg>").  With exit=True it raises SystemExit(code) at the end;
     with exit=False the code is left in s.code.  plan is the list of top-level step ids for the Overall figure; the run's
-    history is recorded for repo (JUNEAU_RUN_HISTORY=0 turns it off).
+    history is recorded for repo (JUNEAU_RUN_HISTORY=0 turns it off).  history_key names that history instead of
+    the repo's, so separate clones can share one; JUNEAU_RUN_HISTORY_KEY is the fallback.
     """
     global _session, _n
     if _session is not None:
         raise RuntimeError("a juneau_scripts session is already open in this process")
     import juneau_scripts
     juneau_scripts.check_bootstrap()
+    keyed = {} if history_key is None else {"history_key": history_key}
     started = time.monotonic()
     nested = _nested_env()
     saved = {k: os.environ.get(k) for k in (ACTIVE_ENV, SESSION_ENV)}
@@ -532,12 +545,12 @@ def session(title, *, header=(), bell=False, sound=False, silence_env=(), mode=N
         try:
             jr = _base.jr()
             if jr is not None:
-                jr.history_start(repo)
-            if jr is not None and jr.enabled():
+                jr.history_start(repo, **keyed)
+            if jr is not None and _reporting(jr):
                 jr.run(mode, project, git.current_branch(repo) or "HEAD", git.short_head(repo))
             if console_requested():
                 opened_view = not jr.session_open() if hasattr(jr, "session_open") else False
-                jr.session(title, header, repo=repo)
+                jr.session(title, header, repo=repo, **keyed)
             if plan is not None:
                 s.plan(plan)
             yield s
@@ -558,7 +571,7 @@ def session(title, *, header=(), bell=False, sound=False, silence_env=(), mode=N
         if not nested and not (jr is not None and jr.console_active()):
             word = {"ok": "ok", "cancelled": "cancelled"}.get(status, f"failed, exit code {code}")
             say(f"{'✅' if status == 'ok' else '❌'} {title}: {word} ({time.monotonic() - started:.1f}s)")
-        _done(status, s.commit)
+        _done(status, s.commit, code)
         if opened_view:     # the view this session started ends with it, not at process exit
             jr.end_session()
         if not nested:

@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.rest.server.view.freemarker;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
+
 import java.io.*;
 
 import org.apache.juneau.commons.inject.*;
@@ -216,7 +218,7 @@ public class FreemarkerViewRenderer implements ViewRenderer {
 			if (b == null || b == found)
 				continue;
 			if (found != null)
-				throw new IllegalStateException(String.format(
+				throw new IllegalStateException(f(
 					"Found more than one FreemarkerMixin bean ('%s' and '%s'); declare exactly one.",
 					found.getClass().getSimpleName(), b.getClass().getSimpleName()));
 			found = b;

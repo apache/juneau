@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.marshall.hocon;
 
+import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
@@ -30,10 +31,7 @@ class HoconSerializer_Test {
 
 	@Test
 	void a01_simpleBean() {
-		var m = new LinkedHashMap<String,Object>();
-		m.put("name", "Alice");
-		m.put("age", 30);
-		m.put("active", true);
+		Map<String,Object> m = map("name", "Alice", "age", 30, "active", true);
 		var hocon = HoconSerializer.DEFAULT.write(m);
 		assertNotNull(hocon);
 		assertTrue(hocon.contains("name") && hocon.contains("Alice"));
@@ -191,10 +189,7 @@ class HoconSerializer_Test {
 
 	@Test
 	void a17_stringLikeSpecialValues() {
-		var m = new LinkedHashMap<String,Object>();
-		m.put("asBoolean", "true");
-		m.put("asNumber", "42");
-		m.put("asNull", "null");
+		Map<String,Object> m = map("asBoolean", "true", "asNumber", "42", "asNull", "null");
 		var hocon = HoconSerializer.DEFAULT.write(m);
 		assertTrue(hocon.contains("\"true\"") || hocon.contains("\"42\"") || hocon.contains("\"null\""));
 	}

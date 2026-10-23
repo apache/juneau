@@ -30,12 +30,12 @@ import org.apache.juneau.rest.server.servlet.*;
 import org.junit.jupiter.api.*;
 
 /**
- * Phase 2 regression matrix &mdash; verifies that {@code @Rest(responseProcessors=...)} on a mixin class inherits
+ * Verifies that {@code @Rest(responseProcessors=...)} on a mixin class inherits
  * the host's response-processor chain via the {@link RestContext#getRestAnnotationsForProperty(String)
  * annotation-property walk}.
  *
  * <p>
- * Also pins the opt-in {@link org.apache.juneau.rest.server.Mixin#mergeIntoHost() @Mixin(mergeIntoHost=true)}
+ * Also pins the opt-in {@link Mixin#mergeIntoHost() @Mixin(mergeIntoHost=true)}
  * directive: by default a mixin's {@code responseProcessors} do NOT fold into the host's own
  * chain (a02), but a host that adopts the mixin via {@code mixinDefs=@Mixin(type=X, mergeIntoHost=true)} DOES get
  * the mixin's list-shaped attributes folded into its own chain (a04).

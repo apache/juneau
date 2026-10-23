@@ -215,7 +215,7 @@ public final class Theme {
 		// Pill palette: the CANONICAL status-chip colour family the client `pill` catalog renderer
 		// paints from - the ".tag.<domain>.<value>" palette rules in chrome.css consume these directly.  Declared
 		// before the legacy --jc-tag-* triads so those can be authored as var(--jc-pill-*) references to this single
-		// source of truth.  Values are the exact literals --jc-tag-* shipped, so the served chrome is pixel-identical.
+		// source of truth.  Values are the exact literals the --jc-tag-* tokens use.
 		.token("--jc-pill-green-bg", "#b8e6c4")
 		.token("--jc-pill-green-text", "#155724")
 		.token("--jc-pill-green-border", "#9fd6ad")
@@ -267,9 +267,7 @@ public final class Theme {
 		.token("--jc-probe-neutral-bg", "#e5e7eb")
 		.token("--jc-probe-neutral-text", "#374151")
 		.token("--jc-probe-neutral-dot", "#6b7280")
-		// Additive token gaps.  Appended after the tag palette so --jc-font stays first and the tag
-		// triads stay contiguous (see Theme_TokenOrdering_Test.a02).  All are behaviour-preserving: each default
-		// equals the literal it replaces in chrome.css, so the shipped chrome renders pixel-identically.
+		// --jc-font must stay first and each tag triad contiguous; see Theme_TokenOrdering_Test.
 		.token("--jc-header-height", "56px")               // (a) keeps .jc-header height and .jc-nav sticky offset in sync
 		.token("--jc-nav-indicator-width", "3px")          // (g) .jc-nav floor, .jc-nav-tab top bar, HTML-slot page-nav floor + selected-section top
 		.token("--jc-page-nav-hairline", "2px")            // line between page-nav sections row and children row

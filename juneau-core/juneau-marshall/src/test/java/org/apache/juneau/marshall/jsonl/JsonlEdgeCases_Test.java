@@ -73,7 +73,7 @@ class JsonlEdgeCases_Test extends TestBase {
 		var a = list(inner);
 		var jsonl = Jsonl.of(a);
 		var b = (List<JsonMap>) Jsonl.to(jsonl, List.class, JsonMap.class);
-		assertEquals(1, b.size());
+		assertSize(1, b);
 		var c = b.get(0);
 		for (var i = 1; i <= 10; i++) {
 			assertEquals(i, c.getInt("depth"));
@@ -88,11 +88,11 @@ class JsonlEdgeCases_Test extends TestBase {
 		var a = list(JsonMap.of(), JsonList.of());
 		var jsonl = Jsonl.of(a);
 		var b = (List<Object>) Jsonl.to(jsonl, List.class, Object.class);
-		assertEquals(2, b.size());
+		assertSize(2, b);
 		assertTrue(b.get(0) instanceof JsonMap);
-		assertEquals(0, ((JsonMap) b.get(0)).size());
+		assertSize(0, ((JsonMap) b.get(0)));
 		assertTrue(b.get(1) instanceof JsonList);
-		assertEquals(0, ((JsonList) b.get(1)).size());
+		assertSize(0, ((JsonList) b.get(1)));
 	}
 
 	@Test

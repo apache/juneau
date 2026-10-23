@@ -17,6 +17,7 @@
 package org.apache.juneau.marshall.html;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
@@ -118,7 +119,7 @@ class HtmlDocSerializer_Builder_Test extends TestBase {
 
 	@Test void b01_merge_plainValue_appends() {
 		var b = HtmlDocSerializer.create().aside("a", "b");
-		assertEquals(2, b.aside.size());
+		assertSize(2, b.aside);
 		assertEquals("a", b.aside.get(0));
 		assertEquals("b", b.aside.get(1));
 	}
@@ -126,12 +127,12 @@ class HtmlDocSerializer_Builder_Test extends TestBase {
 	@Test void b02_merge_NONE_clearsExisting() {
 		var b = HtmlDocSerializer.create().aside("a", "b").aside("NONE");
 		// "NONE" clears the old list, no other tokens, so result is empty
-		assertEquals(0, b.aside.size());
+		assertSize(0, b.aside);
 	}
 
 	@Test void b03_merge_INHERIT_includesParent() {
 		var b = HtmlDocSerializer.create().aside("a", "b").aside("INHERIT", "c");
-		assertEquals(3, b.aside.size());
+		assertSize(3, b.aside);
 		assertEquals("a", b.aside.get(0));
 		assertEquals("b", b.aside.get(1));
 		assertEquals("c", b.aside.get(2));
@@ -140,13 +141,13 @@ class HtmlDocSerializer_Builder_Test extends TestBase {
 	@Test void b04_merge_INHERIT_withNullOld_skipsAddAll() {
 		// First call has navlinks==null, INHERIT can't add anything. Then add a value.
 		var b = HtmlDocSerializer.create().head("INHERIT", "x");
-		assertEquals(1, b.head.size());
+		assertSize(1, b.head);
 		assertEquals("x", b.head.get(0));
 	}
 
 	@Test void b05_merge_NONE_withNullOld_noOp() {
 		var b = HtmlDocSerializer.create().style("NONE");
-		assertEquals(0, b.style.size());
+		assertSize(0, b.style);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -155,17 +156,17 @@ class HtmlDocSerializer_Builder_Test extends TestBase {
 
 	@Test void c01_mergeNavLinks_plainEntry() {
 		var b = HtmlDocSerializer.create().navlinks("a:link-a", "b:link-b");
-		assertEquals(2, b.navlinks.size());
+		assertSize(2, b.navlinks);
 	}
 
 	@Test void c02_mergeNavLinks_NONE_clears() {
 		var b = HtmlDocSerializer.create().navlinks("a:link-a").navlinks("NONE");
-		assertEquals(0, b.navlinks.size());
+		assertSize(0, b.navlinks);
 	}
 
 	@Test void c03_mergeNavLinks_INHERIT_appendsParent() {
 		var b = HtmlDocSerializer.create().navlinks("a:link-a").navlinks("INHERIT", "b:link-b");
-		assertEquals(2, b.navlinks.size());
+		assertSize(2, b.navlinks);
 		assertEquals("a:link-a", b.navlinks.get(0));
 		assertEquals("b:link-b", b.navlinks.get(1));
 	}
@@ -174,7 +175,7 @@ class HtmlDocSerializer_Builder_Test extends TestBase {
 		// `key[index]:remainder` — pattern requires a key, an index, then a remainder.
 		var b = HtmlDocSerializer.create().navlinks("foo:link-a", "bar:link-b").navlinks("INHERIT", "baz[1]:link-c");
 		// INHERIT brings in foo:link-a and bar:link-b; baz[1]:link-c inserts at index 1.
-		assertEquals(3, b.navlinks.size());
+		assertSize(3, b.navlinks);
 		assertEquals("foo:link-a", b.navlinks.get(0));
 		assertEquals("baz:link-c", b.navlinks.get(1));
 		assertEquals("bar:link-b", b.navlinks.get(2));
@@ -183,7 +184,7 @@ class HtmlDocSerializer_Builder_Test extends TestBase {
 	@Test void c05_mergeNavLinks_indexedLink_emptyKey() {
 		// "[0]:remainder" — empty key falls into x.add(index, remainder) path.
 		var b = HtmlDocSerializer.create().navlinks("a:link-a").navlinks("INHERIT", "[0]:link-b");
-		assertEquals(2, b.navlinks.size());
+		assertSize(2, b.navlinks);
 		assertEquals("link-b", b.navlinks.get(0));
 		assertEquals("a:link-a", b.navlinks.get(1));
 	}
@@ -191,19 +192,19 @@ class HtmlDocSerializer_Builder_Test extends TestBase {
 	@Test void c06_mergeNavLinks_indexedLink_indexBeyondSize_clamps() {
 		// Index 99 with only 1 entry pre-existing gets clamped to current size.
 		var b = HtmlDocSerializer.create().navlinks("a:link-a").navlinks("INHERIT", "k[99]:r");
-		assertEquals(2, b.navlinks.size());
+		assertSize(2, b.navlinks);
 		// "k:r" appended at the clamped end.
 		assertEquals("k:r", b.navlinks.get(1));
 	}
 
 	@Test void c07_mergeNavLinks_NONE_withNullOld() {
 		var b = HtmlDocSerializer.create().navlinks("NONE");
-		assertEquals(0, b.navlinks.size());
+		assertSize(0, b.navlinks);
 	}
 
 	@Test void c08_mergeNavLinks_INHERIT_withNullOld() {
 		var b = HtmlDocSerializer.create().navlinks("INHERIT", "x:y");
-		assertEquals(1, b.navlinks.size());
+		assertSize(1, b.navlinks);
 		assertEquals("x:y", b.navlinks.get(0));
 	}
 

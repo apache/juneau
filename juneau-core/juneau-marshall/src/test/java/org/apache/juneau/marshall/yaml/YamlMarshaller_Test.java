@@ -17,6 +17,7 @@
 package org.apache.juneau.marshall.yaml;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 
 import java.util.*;
 
@@ -70,6 +71,6 @@ class YamlMarshaller_Test extends TestBase {
 		var original = List.of("a", "b", "c");
 		String yaml = Yaml.of(original);
 		JsonList parsed = Yaml.to(yaml, JsonList.class);
-		assertEquals(3, parsed.size());
+		assertSize(3, parsed);
 	}
 }

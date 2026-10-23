@@ -17,6 +17,7 @@
 package org.apache.juneau.rest.server.views;
 
 import static java.nio.charset.StandardCharsets.*;
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assumptions.*;
 
@@ -135,7 +136,7 @@ class SchemeScript_Test extends TestBase {
 	@Test void a01_matrix() throws Exception {
 		var rows = run(ConsoleChromeMixin.SCHEME_SCRIPT).get("rows");
 		var exp = expected();
-		assertEquals(48, exp.size());
+		assertSize(48, exp);
 		assertEquals(exp.keySet(), rows.keySet());
 		var wrong = new ArrayList<String>();
 		exp.forEach((k, v) -> {

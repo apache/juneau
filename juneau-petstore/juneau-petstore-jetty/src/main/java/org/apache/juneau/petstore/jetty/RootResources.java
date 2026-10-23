@@ -117,11 +117,19 @@ public class RootResources extends BasicRestServletGroup {
 	 * <p>
 	 * Child resources inherit the group's beans, so a plain {@code @Bean} method is all that is needed.
 	 *
+	 * <p>
+	 * The store runs on the system clock unless the {@value PetstoreSeed#FIXED_NOW_ENV} environment variable is set, which pins
+	 * "now" so the store page's day figures render the same on every run (the docs screenshots rely on this).  Its value
+	 * is an ISO-8601 instant such as {@code 2026-10-01T12:00:00Z}, or {@code seed} for the seed data's own clock.
+	 *
 	 * @return The seeded {@link PetStore}.
 	 */
 	@Bean
 	public PetStore petStore() {
-		return PetstoreSeed.create().populate(new PetStore());
+		var clock = PetstoreSeed.fixedNowClock();
+		if (clock == null)
+			return PetstoreSeed.create().populate(new PetStore());
+		return PetstoreSeed.create().clock(clock).populate(new PetStore(clock));
 	}
 
 	/**

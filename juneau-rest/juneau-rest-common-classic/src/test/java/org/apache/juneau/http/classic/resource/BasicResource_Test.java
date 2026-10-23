@@ -18,6 +18,7 @@ package org.apache.juneau.http.classic.resource;
 
 import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.apache.juneau.http.classic.HttpHeaders.*;
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
@@ -92,7 +93,7 @@ class BasicResource_Test extends TestBase {
 			.addHeader("Foo", null)
 			.setHeader(null, "x")
 			.setHeader("X", null);
-		assertEquals(0, x.getHeaders().size());
+		assertSize(0, x.getHeaders());
 	}
 
 	@Test void b03_addHeaders_specialHeaders() {

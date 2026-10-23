@@ -376,7 +376,9 @@ public final class ChartDef {
 		return this;
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Json.to(..., Object.class) of a bean yields a JSON object, i.e. a Map with string keys.
+	})
 	private static Map<String,Object> toMap(RowAction a) {
 		return (Map<String,Object>)Json.to(Json.of(a), Object.class);
 	}
@@ -619,7 +621,7 @@ public final class ChartDef {
 	}
 
 	private void only(String k, String method) {
-		if (! eq(kind, k))
+		if (neq(kind, k))
 			throw iaex("ChartDef '%s' %s(...) is for kind '%s' only.", id, method, k);
 	}
 
@@ -643,7 +645,9 @@ public final class ChartDef {
 	 * Deep merge: objects by key; arrays element-by-element by {@code id} (a match merges, no match
 	 * appends); an array whose elements carry no {@code id} replaces the whole array.  {@code into} is changed in place.
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Narrows a JSON-shaped Map<?,?> to Map<String,Object>; its keys are always strings.
+	})
 	static void merge(Map<String,Object> into, Map<?,?> from) {
 		for (var e : from.entrySet()) {
 			var k = String.valueOf(e.getKey());
@@ -678,7 +682,7 @@ public final class ChartDef {
 
 	private static int indexOfId(List<Object> l, Object id) {
 		for (var i = 0; i < l.size(); i++)
-			if (l.get(i) instanceof Map<?,?> m && Objects.equals(m.get("id"), id))
+			if (l.get(i) instanceof Map<?,?> m && eq(m.get("id"), id))
 				return i;
 		return -1;
 	}

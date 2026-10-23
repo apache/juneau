@@ -44,7 +44,7 @@ import jakarta.servlet.http.*;
 @SuppressWarnings({
 	"resource" // Microservice/Server instances are test fixtures managed by the test lifecycle; explicit close is not needed for these assertions.
 })
-class JettyConfiguration_Test extends TestBase {
+class JettyConfiguration_JettyMicroservice_Test extends TestBase {
 
 	private static Microservice create(Class<?>... configurations) throws Exception {
 		var classes = new Class<?>[configurations.length + 1];

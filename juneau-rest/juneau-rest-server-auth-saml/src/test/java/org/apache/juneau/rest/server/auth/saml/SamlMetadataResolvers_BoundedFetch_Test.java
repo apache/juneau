@@ -158,8 +158,8 @@ class SamlMetadataResolvers_BoundedFetch_Test extends TestBase {
 
 	/** Instantiates the private bounded body subscriber, so no production seam is needed to drive it. */
 	@SuppressWarnings({
-		"unchecked",
-		"java:S3011" // Reflective access to the private nested subscriber is test-only; it avoids a production seam.
+		"java:S3011", // Reflective access to the private nested subscriber is test-only; it avoids a production seam.
+		"unchecked" // The reflectively created subscriber is cast to its known BodySubscriber<byte[]> type.
 	})
 	private static HttpResponse.BodySubscriber<byte[]> boundedSubscriber(long maxBytes) throws Exception {
 		var c = Class.forName(SamlMetadataResolvers.class.getName() + "$BoundedByteArraySubscriber").getDeclaredConstructor(long.class);

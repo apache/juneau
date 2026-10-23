@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.petstore.console.dev.flavors;
 
+import static org.apache.juneau.commons.utils.CollectionUtils.*;
+
 import java.util.*;
 
 import org.apache.juneau.petstore.dto.*;
@@ -56,11 +58,12 @@ public final class FlavorPets {
 	}
 
 	private static Map<String,String> row(Pet p) {
-		var m = new LinkedHashMap<String,String>();
-		m.put("name", p.getName());
-		m.put("species", String.valueOf(p.getSpecies()));
-		m.put("price", String.format(Locale.ROOT, "%.2f", p.getPrice()));
-		m.put("status", String.valueOf(p.getStatus()));
+		Map<String,String> m = map(
+			"name", p.getName(),
+			"species", String.valueOf(p.getSpecies()),
+			"price", String.format(Locale.ROOT, "%.2f", p.getPrice()),
+			"status", String.valueOf(p.getStatus())
+		);
 		return m;
 	}
 }

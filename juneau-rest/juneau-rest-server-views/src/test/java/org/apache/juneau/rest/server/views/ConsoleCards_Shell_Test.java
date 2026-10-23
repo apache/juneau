@@ -17,6 +17,7 @@
 package org.apache.juneau.rest.server.views;
 
 import static java.nio.charset.StandardCharsets.*;
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assumptions.*;
 
@@ -209,7 +210,7 @@ class ConsoleCards_Shell_Test extends TestBase {
 		var c = cards("typesAndEvents");
 		assertEquals(List.of("aah", "html", "mid", "run-view", "zed"), c.get("types"));
 		var events = list(c.get("events"));
-		assertEquals(3, events.size());
+		assertSize(3, events);
 		assertEquals(Map.of("kind", "mounted", "id", "a", "type", "aah", "hasEl", true), events.get(0));
 		assertEquals(Map.of("kind", "failed", "id", "m", "type", "mid", "hasEl", false, "hasError", true), events.get(1));
 		assertEquals(Map.of("kind", "mounted", "id", "z", "type", "zed", "hasEl", true), events.get(2));

@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.server.views;
 
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assumptions.*;
 
@@ -50,7 +51,7 @@ class ViewsJs_SameOriginPath_Test extends TestBase {
 
 	@Test void a01_everyRowRan() {
 		assertEquals(CASE_COUNT, ((Number)report().get("count")).intValue());
-		assertEquals(11, ((List<?>)report().get("guards")).size());
+		assertSize(11, ((List<?>)report().get("guards")));
 	}
 
 	@Test void a02_everyGuardMatchesTheCorpus() {
@@ -94,7 +95,7 @@ class ViewsJs_SameOriginPath_Test extends TestBase {
 
 	@Test void a07_fetchUrlAcceptsOnlyThisOriginAndSameOriginPaths() {
 		var rows = (List<?>)report().get("fetchUrl");
-		assertEquals(14, rows.size());
+		assertSize(14, rows);
 		for (var o : rows) {
 			var row = (Map<?,?>)o;
 			assertEquals(row.get("expected"), row.get("got"), String.valueOf(row.get("name")));

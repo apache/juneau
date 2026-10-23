@@ -17,6 +17,7 @@
 package org.apache.juneau.rest.client;
 
 import static org.apache.juneau.commons.utils.IoUtils.*;
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
@@ -452,7 +453,7 @@ class RemoteProxy_FeatureParity_Test {
 		@Test void b24_returnList_parsed_F16() throws Exception {
 			try (var mrc = MockRestClient.create(A_ParityJsonResource.class)) {
 				var l = parsingProxy(mrc).getList();
-				assertEquals(1, l.size());
+				assertSize(1, l);
 				assertEquals("na44", l.get(0).getName());
 			}
 		}
@@ -689,7 +690,7 @@ class RemoteProxy_FeatureParity_Test {
 			var captured = new ArrayList<TransportRequest>();
 			try (var c = client(captured)) {
 				assertEquals("result", c.remote(A_ParityClient.class).ping());
-				assertEquals(1, captured.size());
+				assertSize(1, captured);
 			}
 		}
 
@@ -831,7 +832,7 @@ class RemoteProxy_FeatureParity_Test {
 				var f = c.remote(A_ParityClient.class).getListAsync();
 				var list = f.get();
 				assertNotNull(list);
-				assertEquals(1, list.size());
+				assertSize(1, list);
 				assertEquals("na44", list.get(0).getName());
 			}
 		}

@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.http.classic;
 
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.lang.reflect.*;
@@ -41,7 +42,7 @@ class HttpResponses_Test extends TestBase {
 
 	@Test void a01_constants_areUnmodifiableSingletonsOfTheirType() throws Exception {
 		var fields = constants();
-		assertEquals(55, fields.size(), "Number of HttpResponses constants; update when one is added or removed.");
+		assertSize(() -> "Number of HttpResponses constants; update when one is added or removed.", 55, fields);
 		for (var f : fields) {
 			var v = f.get(null);
 			assertInstanceOf(HttpResponse.class, v, f::getName);

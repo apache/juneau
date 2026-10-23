@@ -130,7 +130,7 @@ class Json5lTokenStream_Test extends TestBase {
 				while (r.canRead())
 					records.add(r.read(java.util.Map.class));
 			}
-			assertEquals(2, records.size());
+			assertSize(2, records);
 			assertBean(records.get(0), "x", "1");
 			assertBean(records.get(1), "x", "2");
 		}

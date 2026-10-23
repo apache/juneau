@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.client.mcp.auth;
 
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.net.*;
@@ -56,7 +57,7 @@ class McpProtectedResourceMetadata_Test extends TestBase {
 		var servers = new ArrayList<>(List.of(URI.create("https://as1.example.com")));
 		var prm = new McpProtectedResourceMetadata(URI.create("https://mcp.example.com"), servers, Set.of(), Map.of());
 		servers.add(URI.create("https://as2.example.com"));
-		assertEquals(1, prm.authorizationServers().size());
+		assertSize(1, prm.authorizationServers());
 		var authServers = prm.authorizationServers();
 		var extra = URI.create("https://x");
 		assertThrows(UnsupportedOperationException.class, () -> authServers.add(extra));

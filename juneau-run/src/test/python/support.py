@@ -45,6 +45,8 @@ def reset_run_state():
     jr._line_offset = 0
     jr._pause_depth = 0
     jr._history = None
+    jr._markers_file_failed = False
+    jr._result = None
     jr._subscribers.clear()
     jr._toolkit = None
     jr._fallback_noted.clear()
@@ -53,7 +55,7 @@ def reset_run_state():
         jr._console = None
     for key in (jr.ACTIVE_ENV, "JUNEAU_RUN_FULL_LOG", "JUNEAU_RUN_SESSION", "JUNEAU_RUN_DETAIL", "JUNEAU_RUN_LABEL_WIDTH",
                 "JUNEAU_RUN_LIVE", "JUNEAU_RUN_CONSOLE", "RUN_MARKERS", "JUNEAU_RUN_CONDENSED_LOG",
-                "JUNEAU_RUN_PENDING", "JUNEAU_RUN_OVERALL"):
+                "JUNEAU_RUN_PENDING", "JUNEAU_RUN_OVERALL", jr.CANCEL_ENV, jr.MARKERS_FILE_ENV, jr.RESULT_ENV, jr.RESULT_PARTS_ENV):
         os.environ.pop(key, None)
 
 

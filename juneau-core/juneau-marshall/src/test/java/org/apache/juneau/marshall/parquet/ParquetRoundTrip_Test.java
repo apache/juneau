@@ -143,7 +143,7 @@ class ParquetRoundTrip_Test extends TestBase {
 		in.put(3, "c");
 		var bytes = ParquetSerializer.DEFAULT.write(in);
 		var out = (Map<Integer,String>) ParquetParser.DEFAULT.read(bytes, Map.class, Integer.class, String.class);
-		assertEquals(3, out.size());
+		assertSize(3, out);
 		assertEquals("a", out.get(1));
 		assertEquals("b", out.get(2));
 		assertEquals("c", out.get(3));
@@ -180,7 +180,7 @@ class ParquetRoundTrip_Test extends TestBase {
 		var bytes = ParquetSerializer.DEFAULT.write(in);
 		var out = (Map<TestEnum,String>) ParquetParser.DEFAULT.read(bytes,
 			Map.class, TestEnum.class, String.class);
-		assertEquals(2, out.size());
+		assertSize(2, out);
 		assertEquals("x", out.get(TestEnum.FOO));
 		assertEquals("y", out.get(TestEnum.BAR));
 	}
@@ -201,7 +201,7 @@ class ParquetRoundTrip_Test extends TestBase {
 		var parsed = (TreeMap<Integer,String>) ParquetParser.DEFAULT.read(bytes, TreeMap.class, Integer.class, String.class);
 		assertEquals("a", parsed.get(1));
 		assertNull(parsed.get(2));
-		assertEquals(2, parsed.size());
+		assertSize(2, parsed);
 	}
 
 	@Test
@@ -216,7 +216,7 @@ class ParquetRoundTrip_Test extends TestBase {
 		var parsed = (TreeMap<Integer,String>) p.read(bytes, TreeMap.class, Integer.class, String.class);
 		assertEquals("a", parsed.get(1));
 		assertNull(parsed.get(2));
-		assertEquals(2, parsed.size());
+		assertSize(2, parsed);
 	}
 
 	@Test
@@ -233,7 +233,7 @@ class ParquetRoundTrip_Test extends TestBase {
 		var parsed = (TreeMap<Date,String>) p.read(bytes, TreeMap.class, Date.class, String.class);
 		assertEquals("a", parsed.get(xd1));
 		assertNull(parsed.get(xd2));
-		assertEquals(2, parsed.size());
+		assertSize(2, parsed);
 	}
 
 	@Test
@@ -250,7 +250,7 @@ class ParquetRoundTrip_Test extends TestBase {
 		var parsed = (TreeMap<Calendar,String>) p.read(bytes, TreeMap.class, GregorianCalendar.class, String.class);
 		assertEquals("a", parsed.get(xc1));
 		assertNull(parsed.get(xc2));
-		assertEquals(2, parsed.size());
+		assertSize(2, parsed);
 	}
 
 	@Test
@@ -271,10 +271,10 @@ class ParquetRoundTrip_Test extends TestBase {
 
 		var bytesWithEntries = ParquetSerializer.DEFAULT.write(list(withEntries));
 		var parsedWithEntries = (List<BeanWithNestedMap>) ParquetParser.DEFAULT.read(bytesWithEntries, List.class, BeanWithNestedMap.class);
-		assertEquals(1, parsedWithEntries.size());
+		assertSize(1, parsedWithEntries);
 		assertEquals("withEntries", parsedWithEntries.get(0).name);
 		var m = parsedWithEntries.get(0).statusMap;
-		assertEquals(2, m.size());
+		assertSize(2, m);
 		assertEquals(TestEnum.BAR, m.get(TestEnum.FOO));
 		assertEquals(TestEnum.FOO, m.get(TestEnum.BAR));
 	}

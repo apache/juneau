@@ -17,6 +17,7 @@
 package org.apache.juneau.marshall.markdown;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 
 import java.util.*;
 
@@ -304,7 +305,7 @@ class MarkdownDocParserSession_Test {
 		var r = MarkdownDocParser.DEFAULT.read(md, JBean.class);
 		assertEquals("TestJ", r.name);
 		assertNotNull(r.items);
-		assertEquals(2, r.items.size());
+		assertSize(2, r.items);
 		assertEquals("Alice", r.items.get(0).name);
 		assertEquals(30, r.items.get(0).age);
 	}
@@ -425,7 +426,7 @@ class MarkdownDocParserSession_Test {
 			""";
 		var r = (Map<String,Object>) MarkdownDocParser.DEFAULT.read(md, Map.class);
 		assertNotNull(r);
-		assertEquals(2, r.size());
+		assertSize(2, r);
 	}
 
 	//====================================================================================================
@@ -690,7 +691,7 @@ class MarkdownDocParserSession_Test {
 		var session = MarkdownDocParser.DEFAULT.getSession();
 		var lines = List.of("line1", "line2", "line3");
 		var sections = session.segmentBySections(lines, 2);
-		assertEquals(1, sections.size());
+		assertSize(1, sections);
 		assertTrue(sections.containsKey(""));
 		assertEquals(List.of("line1", "line2", "line3"), sections.get(""));
 	}
@@ -699,7 +700,7 @@ class MarkdownDocParserSession_Test {
 		var session = MarkdownDocParser.DEFAULT.getSession();
 		var lines = List.of("intro", "## sec1", "s1line", "## sec2", "s2line");
 		var sections = session.segmentBySections(lines, 2);
-		assertEquals(3, sections.size());
+		assertSize(3, sections);
 		assertTrue(sections.containsKey(""));
 		assertTrue(sections.containsKey("sec1"));
 		assertTrue(sections.containsKey("sec2"));
@@ -774,7 +775,7 @@ class MarkdownDocParserSession_Test {
 		var r = (TreeMap<?,?>) MarkdownDocParser.DEFAULT.read(md, TreeMap.class);
 		assertNotNull(r);
 		assertInstanceOf(TreeMap.class, r);
-		assertEquals(2, r.size());
+		assertSize(2, r);
 	}
 
 	//====================================================================================================

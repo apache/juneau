@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.server.mcp.v20260728;
 
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
@@ -231,7 +232,7 @@ class McpV2BeanIntegration_Test {
 		var completion = new Completion().setValues(values).setTotal(150).setHasMore(true);
 		var result = new CompleteResult().setCompletion(completion);
 		var copy = JsonParser.DEFAULT.read(JsonSerializer.DEFAULT.write(result), CompleteResult.class);
-		assertEquals(100, copy.getCompletion().getValues().size());
+		assertSize(100, copy.getCompletion().getValues());
 		assertEquals(150, copy.getCompletion().getTotal());
 		assertEquals(true, copy.getCompletion().getHasMore());
 	}

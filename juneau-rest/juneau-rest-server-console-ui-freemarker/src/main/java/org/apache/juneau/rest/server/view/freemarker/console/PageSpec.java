@@ -672,7 +672,9 @@ public final class PageSpec {
 		return u(out);
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Narrows a JSON-shaped Map<?,?> to Map<String,Object>; its keys are always strings.
+	})
 	private static Object copyFact(Object v) {
 		if (v instanceof Map<?,?> nested)
 			return copyFacts((Map<String,Object>)nested);

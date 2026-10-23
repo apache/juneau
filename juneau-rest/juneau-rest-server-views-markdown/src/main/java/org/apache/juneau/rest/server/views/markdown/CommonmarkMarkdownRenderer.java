@@ -91,7 +91,7 @@ public class CommonmarkMarkdownRenderer implements MarkdownRenderer {
 	 * @return <jk>true</jk> if the URL may be copied onto an element.
 	 */
 	public static boolean isSafeUrl(String url) {
-		if (url == null || url.isBlank())
+		if (ib(url))
 			return false;
 		var t = url.trim();
 		var lower = t.toLowerCase(Locale.ROOT);

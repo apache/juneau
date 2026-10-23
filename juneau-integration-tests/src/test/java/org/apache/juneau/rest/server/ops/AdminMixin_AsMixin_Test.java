@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.rest.server.ops;
 
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
+
 import java.util.*;
 import java.util.concurrent.atomic.*;
 
@@ -212,7 +214,7 @@ class AdminMixin_AsMixin_Test extends TestBase {
 			.getContent().asString();
 		var parsed = JsonParser.DEFAULT.read(body, Map.class);
 		var guardsMap = (Map<?,?>) parsed.get("guards");
-		Assertions.assertEquals(1, guardsMap.size(), "expected one entry; got: " + guardsMap.keySet());
+		assertSize(() -> "expected one entry; got: " + guardsMap.keySet(), 1, guardsMap);
 		var first = (Map<?,?>) guardsMap.values().iterator().next();
 		Assertions.assertNotNull(first.get("config"));
 	}
@@ -240,7 +242,7 @@ class AdminMixin_AsMixin_Test extends TestBase {
 		hooks.put("a", r1);
 		hooks.put("b", r2);
 		var admin = AdminMixin.create().cacheFlushAll(hooks).build();
-		Assertions.assertEquals(2, admin.getCacheFlushHooks().size());
+		assertSize(2, admin.getCacheFlushHooks());
 		Assertions.assertSame(r1, admin.getCacheFlushHooks().get("a"));
 		Assertions.assertSame(r2, admin.getCacheFlushHooks().get("b"));
 	}

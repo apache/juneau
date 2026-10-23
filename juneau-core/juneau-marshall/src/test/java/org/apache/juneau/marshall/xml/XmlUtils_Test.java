@@ -16,7 +16,9 @@
  */
 package org.apache.juneau.marshall.xml;
 
+import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 
 import java.io.*;
 import java.util.*;
@@ -392,29 +394,21 @@ class XmlUtils_Test extends TestBase {
 		List<Object> list = new ArrayList<>();
 		list.add("foo");
 		var r = XmlUtils.collapseTextNodes(list);
-		assertEquals(1, r.size());
+		assertSize(1, r);
 		assertEquals("foo", r.get(0));
 	}
 
 	@Test void g03_collapseAdjacentStrings() {
-		List<Object> list = new ArrayList<>();
-		list.add("foo");
-		list.add("bar");
-		list.add("baz");
+		List<Object> list = list("foo", "bar", "baz");
 		var r = XmlUtils.collapseTextNodes(list);
-		assertEquals(1, r.size());
+		assertSize(1, r);
 		assertEquals("foobarbaz", r.get(0));
 	}
 
 	@Test void g04_collapseStringsSeparatedByOther() {
-		List<Object> list = new ArrayList<>();
-		list.add("foo");
-		list.add("bar");
-		list.add(42); // breaks consecutive run
-		list.add("baz");
-		list.add("qux");
+		List<Object> list = list("foo", "bar", 42 /* breaks consecutive run */, "baz", "qux");
 		var r = XmlUtils.collapseTextNodes(list);
-		assertEquals(3, r.size());
+		assertSize(3, r);
 		assertEquals("foobar", r.get(0));
 		assertEquals(42, r.get(1));
 		assertEquals("bazqux", r.get(2));

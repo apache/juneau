@@ -16,7 +16,9 @@
  */
 package org.apache.juneau.marshall.bson;
 
+import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 
 import java.nio.charset.*;
 import java.util.*;
@@ -585,7 +587,7 @@ class BsonParserSession_Test extends TestBase {
 		var bytes = doc(0x02, "value", cat(le4(strVal.length), strVal));
 		var result = BsonParser.DEFAULT.read(bytes, Dd3_MapType.class);
 		assertNotNull(result);
-		assertEquals(1, result.size());
+		assertSize(1, result);
 		assertEquals("hi", result.get("value"));
 	}
 
@@ -748,10 +750,7 @@ class BsonParserSession_Test extends TestBase {
 	@Test void h03_resolvedAssignableTypeSwapsBeanInstance() throws Exception {
 		// "_type" resolves to a registered subtype (H03_Sub) that IS assignable from the target (H03_Base) --
 		// the true arm of applyTypeProperty's guard, swapping in a fresh H03_Sub instance via newBean/toBeanMap.
-		var m = new LinkedHashMap<String,Object>();
-		m.put("_type", "H03_Sub");
-		m.put("name", "n");
-		m.put("extra", 5);
+		Map<String,Object> m = map("_type", "H03_Sub", "name", "n", "extra", 5);
 		var bytes = BsonSerializer.create().keepNullProperties().build().write(m);
 		var p = BsonParser.create().beanDictionary(H03_Sub.class).build();
 		var result = p.read(bytes, H03_Base.class);

@@ -17,6 +17,7 @@
 package org.apache.juneau.marshall.jsonschema;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 
 import org.apache.juneau.*;
 import org.apache.juneau.marshall.collections.*;
@@ -37,7 +38,7 @@ class SchemaUtils_Test extends TestBase {
 		assertTrue(m.isEmpty());
 		assertEquals(JsonMap.class, m.getClass());
 		m.put("x", 1);
-		assertEquals(1, m.size());
+		assertSize(1, m);
 	}
 
 	@Test void a02_parseMapObjectEmptyStringReturnsEmptyMutableJsonMap() throws Exception {
@@ -46,7 +47,7 @@ class SchemaUtils_Test extends TestBase {
 		assertTrue(m.isEmpty());
 		assertEquals(JsonMap.class, m.getClass());
 		m.put("x", 1);
-		assertEquals(1, m.size());
+		assertSize(1, m);
 	}
 
 	@Test void a03_parseMapObjectIgnoreSentinelStillReturnsIgnoreMap() throws Exception {
@@ -63,7 +64,7 @@ class SchemaUtils_Test extends TestBase {
 
 	@Test void a05_parseMapObjectPopulatedJson() throws Exception {
 		var m = SchemaUtils.parseMap("{a:1,b:'two'}");
-		assertEquals(2, m.size());
+		assertSize(2, m);
 		assertEquals(1, m.getInt("a"));
 		assertEquals("two", m.getString("b"));
 	}
@@ -74,7 +75,7 @@ class SchemaUtils_Test extends TestBase {
 		assertTrue(m.isEmpty());
 		assertEquals(JsonMap.class, m.getClass());
 		m.put("x", 1);
-		assertEquals(1, m.size());
+		assertSize(1, m);
 	}
 
 	@Test void a07_parseMapStringArrayJoinedEmptyReturnsEmptyMutableJsonMap() throws Exception {
@@ -83,12 +84,12 @@ class SchemaUtils_Test extends TestBase {
 		assertTrue(m.isEmpty());
 		assertEquals(JsonMap.class, m.getClass());
 		m.put("x", 1);
-		assertEquals(1, m.size());
+		assertSize(1, m);
 	}
 
 	@Test void a08_parseMapStringArrayPopulated() throws Exception {
 		var m = SchemaUtils.parseMap(new String[]{"{a:1, b:'two'}"});
-		assertEquals(2, m.size());
+		assertSize(2, m);
 		assertEquals(1, m.getInt("a"));
 		assertEquals("two", m.getString("b"));
 	}
@@ -98,7 +99,7 @@ class SchemaUtils_Test extends TestBase {
 		assertNotNull(s);
 		assertTrue(s.isEmpty());
 		s.add("x");
-		assertEquals(1, s.size());
+		assertSize(1, s);
 	}
 
 	@Test void b02_parseSetJoinedEmptyReturnsEmptyMutableSet() throws Exception {
@@ -106,12 +107,12 @@ class SchemaUtils_Test extends TestBase {
 		assertNotNull(s);
 		assertTrue(s.isEmpty());
 		s.add("x");
-		assertEquals(1, s.size());
+		assertSize(1, s);
 	}
 
 	@Test void b03_parseSetCdlPopulated() throws Exception {
 		var s = SchemaUtils.parseSet(new String[]{"a,b,c"});
-		assertEquals(3, s.size());
+		assertSize(3, s);
 		assertTrue(s.contains("a"));
 		assertTrue(s.contains("b"));
 		assertTrue(s.contains("c"));
@@ -119,7 +120,7 @@ class SchemaUtils_Test extends TestBase {
 
 	@Test void b04_parseSetJsonArrayPopulated() throws Exception {
 		var s = SchemaUtils.parseSet(new String[]{"['a','b','c']"});
-		assertEquals(3, s.size());
+		assertSize(3, s);
 		assertTrue(s.contains("a"));
 		assertTrue(s.contains("b"));
 		assertTrue(s.contains("c"));

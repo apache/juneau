@@ -1510,3 +1510,61 @@ def test_prechecks_opens_a_unit_and_a_child_step_per_check(
     text = jr.row_text(row, jr.PLAIN_GLYPHS, board.clock())[2]
     assert (row.status, row.failed_units, text) == ("fail", [], row.reason)     # the check's text, not a unit's name
     assert "user.email" in text
+
+
+class TestPushContinuesToDocsWhenJuneauIsIdle:
+    """A juneau with nothing to commit or push must not stop the run before juneau-docs is considered."""
+
+    def _run_main(self, push_module, monkeypatch, *, juneau_status, docs_status="ok"):
+        _stub_push_flow(push_module, monkeypatch, tests_pass=True)
+        monkeypatch.setattr(push_module.sys, "argv", ["push.py", "--skip-tests", "msg"])
+        monkeypatch.setattr(push_module, "prechecks", lambda *a, **k: [])
+        monkeypatch.setattr(push_module, "maybe_run_tracker_audit_gate", lambda *a, **k: None)
+        docs_calls = []
+        monkeypatch.setattr(push_module, "commit_and_push", lambda root, msg, step, **k: (juneau_status, step))
+
+        def fake_docs(root, msg, step, **k):
+            docs_calls.append(step)
+            return (docs_status, step)
+
+        monkeypatch.setattr(push_module, "run_docs_followup", fake_docs)
+        return push_module.main(), docs_calls
+
+    def test_docs_followup_runs_when_juneau_has_nothing_to_do(self, push_module, monkeypatch):
+        code, docs_calls = self._run_main(push_module, monkeypatch, juneau_status="nothing_to_do")
+        assert code == 0
+        assert len(docs_calls) == 1
+
+    def test_nothing_active_anywhere_still_exits_zero(self, push_module, monkeypatch):
+        code, docs_calls = self._run_main(push_module, monkeypatch, juneau_status="nothing_to_do",
+                                          docs_status="no_docs_root")
+        assert code == 0
+        assert len(docs_calls) == 1
+
+    def test_juneau_error_skips_docs(self, push_module, monkeypatch):
+        code, docs_calls = self._run_main(push_module, monkeypatch, juneau_status="error")
+        assert code == 1
+        assert docs_calls == []
+
+
+class TestPushPlanTestPyRows:
+    """push_plan() lists every row test.py draws, and handoff() reserves exactly the numbered ones."""
+
+    @staticmethod
+    def _plan_ids(push_module, tmp_path):
+        scripts = tmp_path / "scripts"
+        scripts.mkdir()
+        (scripts / "test.py").write_text("", encoding="utf-8")
+        args = argparse.Namespace(test_only=True, sonarqube=False, tracker_audit=False, skip_tests=False)
+        return [step_id for step_id, _ in push_module.push_plan(args, scripts, tmp_path / "juneau", False)]
+
+    def test_perf_is_a_pending_row_between_java_and_python_tests(self, push_module, tmp_path):
+        ids = self._plan_ids(push_module, tmp_path)
+        assert ids[ids.index("build"):ids.index("js-tests") + 1] == ["build", "tests", "perf", "py-tests", "js-tests"]
+        assert push_module.PLAN_LABELS["perf"] == "Perf"
+
+    def test_reservation_covers_the_numbered_rows_only(self, push_module, tmp_path):
+        ids = self._plan_ids(push_module, tmp_path)
+        numbered = [i for i in ids[ids.index("build"):ids.index("js-tests") + 1] if i != "perf"]
+        assert list(push_module.TEST_PY_NUMBERED_STEPS) == numbered
+        assert "handoff(reserve=len(TEST_PY_NUMBERED_STEPS))" in (SCRIPTS_DIR / "push.py").read_text(encoding="utf-8")

@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.server.views;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assumptions.*;
 
@@ -40,7 +41,9 @@ class ViewsJs_BusCore_Test extends TestBase {
 		report = BusHarness.run("bus-core.cjs", ViewsMixin.BUS_JS_RESOURCE);
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Casts a parsed JSON value to its known Map/List shape.
+	})
 	private static Map<String,Object> section(String name) {
 		assumeTrue(report != null, "node not on PATH");
 		var s = (Map<String,Object>) report.get(name);
@@ -48,7 +51,9 @@ class ViewsJs_BusCore_Test extends TestBase {
 		return s;
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Casts a parsed JSON value to its known Map/List shape.
+	})
 	private static Map<String,Object> map(Map<String,Object> m, String key) {
 		return (Map<String,Object>) m.get(key);
 	}
@@ -167,17 +172,20 @@ class ViewsJs_BusCore_Test extends TestBase {
 	@Test void t07_jsonOnly() {
 		var s = section("t07");
 		var r = map(s, "results");
-		var expected = new LinkedHashMap<String,String>();
-		expected.put("fn", "payload.f is a function");
-		expected.put("undef", "payload.u is undefined");
-		expected.put("dom", "payload.el is a DOM node");
-		expected.put("cycle", "payload.self is a cycle");
-		expected.put("nan", "payload.n is NaN");
-		expected.put("inf", "payload[0] is Infinity");
-		expected.put("symbol", "payload.s is a symbol");
-		expected.put("top", "payload is undefined");
+		Map<String,String> expected = m(
+			"fn", "payload.f is a function",
+			"undef", "payload.u is undefined",
+			"dom", "payload.el is a DOM node",
+			"cycle", "payload.self is a cycle",
+			"nan", "payload.n is NaN",
+			"inf", "payload[0] is Infinity",
+			"symbol", "payload.s is a symbol",
+			"top", "payload is undefined"
+		);
 		expected.forEach((k, why) -> {
-			@SuppressWarnings("unchecked")
+			@SuppressWarnings({
+				"unchecked" // Casts a parsed JSON value to its known Map/List shape.
+			})
 			var e = (Map<String,Object>) r.get(k);
 			assertNotNull(e, k + " must throw");
 			assertEquals("E-JS-42", e.get("code"), k);

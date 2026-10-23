@@ -17,6 +17,7 @@
 package org.apache.juneau.rest.server.views;
 
 import static org.apache.juneau.rest.server.views.ConsoleBrowserFixture.*;
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
@@ -488,7 +489,7 @@ class ChartCard_BrowserTest extends TestBase {
 		assertEquals(Map.of("host", "h6", "health", "ok", "cpu", 60), c.get("meta"));
 		// The group header click really reached ECharts (a non-leaf node), so the unchanged publish count is the card's doing.
 		var raw = (List<?>)p.get("raw");
-		assertEquals(2, raw.size(), String.valueOf(raw));
+		assertSize(() -> String.valueOf(raw), 2, raw);
 		assertEquals(Map.of("name", "h6", "i", ((Map<?,?>)raw.get(0)).get("i"), "group", false), raw.get(0));
 		var g = (Map<?,?>)raw.get(1);
 		assertEquals("c2", g.get("name"));

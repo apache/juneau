@@ -27,7 +27,7 @@ import org.apache.juneau.utest.utils.*;
 import org.junit.jupiter.api.*;
 
 /**
- * Phase 2 regression matrix &mdash; verifies that {@code @Rest(parsers=...)} on a mixin class inherits the host's
+ * Verifies that {@code @Rest(parsers=...)} on a mixin class inherits the host's
  * parser set via the {@link RestContext#getRestAnnotationsForProperty(String) annotation-property walk}.
  *
  * <p>

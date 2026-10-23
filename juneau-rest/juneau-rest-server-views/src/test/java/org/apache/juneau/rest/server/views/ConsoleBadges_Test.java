@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.server.views;
 
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assumptions.*;
 
@@ -145,7 +146,7 @@ class ConsoleBadges_Test extends TestBase {
 	@Test void a12_sameOriginGuard() {
 		var r = report();
 		assertEquals(List.of("/p"), r.get("guard_urls"), "only the badge with a same-origin src fetches");
-		assertEquals(2, ((List<?>)r.get("guard_errors")).size(), "the bad src and the bad href are each logged as E-JS-82");
+		assertSize(() -> "the bad src and the bad href are each logged as E-JS-82", 2, ((List<?>)r.get("guard_errors")));
 		assertEquals(List.of(), r.get("guard_assigned"), "a cross-host href is never navigated to");
 		assertEquals(List.of(List.of("evil", ""), List.of("tab", ""), List.of("ok", "/ok/3")), r.get("guard_rows"),
 			"a poll-body href that is not a same-origin path is not copied onto the row");

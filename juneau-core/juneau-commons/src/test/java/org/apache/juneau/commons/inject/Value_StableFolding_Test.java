@@ -24,7 +24,7 @@ import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.parallel.*;
 
 /**
- * Phase G regression: verifies that stable-folded {@link Var}s inside
+ * Regression test: verifies that stable-folded {@link Var}s inside
  * {@code @Value} expressions fold to a literal at compile time, so subsequent bean
  * constructions read the cached literal text with no runtime dispatch.
  *

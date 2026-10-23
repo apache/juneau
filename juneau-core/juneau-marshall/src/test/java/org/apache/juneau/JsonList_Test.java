@@ -163,7 +163,7 @@ class JsonList_Test extends TestBase {
 		assertTrue(l.isEmpty());
 		assertEquals(JsonList.class, l.getClass());
 		l.add("x");
-		assertEquals(1, l.size());
+		assertSize(1, l);
 	}
 
 	@Test void a09_factoryOfStringNullReader() throws Exception {
@@ -172,7 +172,7 @@ class JsonList_Test extends TestBase {
 		assertTrue(l.isEmpty());
 		assertEquals(JsonList.class, l.getClass());
 		l.add("x");
-		assertEquals(1, l.size());
+		assertSize(1, l);
 	}
 
 	@Test void a10_factoryOfStringNullCharSequenceWithParser() throws Exception {
@@ -181,7 +181,7 @@ class JsonList_Test extends TestBase {
 		assertTrue(l.isEmpty());
 		assertEquals(JsonList.class, l.getClass());
 		l.add("x");
-		assertEquals(1, l.size());
+		assertSize(1, l);
 	}
 
 	@Test void a11_factoryOfStringNullReaderWithParser() throws Exception {
@@ -190,7 +190,7 @@ class JsonList_Test extends TestBase {
 		assertTrue(l.isEmpty());
 		assertEquals(JsonList.class, l.getClass());
 		l.add("x");
-		assertEquals(1, l.size());
+		assertSize(1, l);
 	}
 
 	@Test void a12_factoryOfJsonOrCdlNullInput() throws Exception {
@@ -199,7 +199,7 @@ class JsonList_Test extends TestBase {
 		assertTrue(l.isEmpty());
 		assertEquals(JsonList.class, l.getClass());
 		l.add("x");
-		assertEquals(1, l.size());
+		assertSize(1, l);
 	}
 
 	@Test void a13_factoryOfJsonOrCdlEmptyInput() throws Exception {
@@ -208,6 +208,6 @@ class JsonList_Test extends TestBase {
 		assertTrue(l.isEmpty());
 		assertEquals(JsonList.class, l.getClass());
 		l.add("x");
-		assertEquals(1, l.size());
+		assertSize(1, l);
 	}
 }

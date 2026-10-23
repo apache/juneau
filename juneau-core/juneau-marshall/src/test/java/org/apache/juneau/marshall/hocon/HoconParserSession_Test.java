@@ -17,6 +17,7 @@
 package org.apache.juneau.marshall.hocon;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 
 import java.io.*;
 import java.util.*;
@@ -200,7 +201,7 @@ class HoconParserSession_Test extends TestBase {
 		// HOCON: `[1,2] [3,4]` ≡ `[1,2,3,4]`.
 		var m = (Map<String,Object>) HoconParser.DEFAULT.read("a = [1,2] [3,4]", Map.class, String.class, Object.class);
 		var a = (List<?>) m.get("a");
-		assertEquals(4, a.size());
+		assertSize(4, a);
 		assertEquals(1, ((Number) a.get(0)).intValue());
 		assertEquals(4, ((Number) a.get(3)).intValue());
 	}
@@ -229,7 +230,7 @@ class HoconParserSession_Test extends TestBase {
 		// Covers the "last instanceof HoconArray" break in readValueOrConcat.
 		var m = (Map<String,Object>) HoconParser.DEFAULT.read("a = [1,2]\nnext = ok", Map.class, String.class, Object.class);
 		var a = (List<?>) m.get("a");
-		assertEquals(2, a.size());
+		assertSize(2, a);
 		assertEquals("ok", m.get("next"));
 	}
 
@@ -283,7 +284,7 @@ class HoconParserSession_Test extends TestBase {
 		// `list += a` with no prior `list` — covers existing == null branch (newArr empty case).
 		var m = (Map<String,Object>) HoconParser.DEFAULT.read("list += a", Map.class, String.class, Object.class);
 		var list = (List<?>) m.get("list");
-		assertEquals(1, list.size());
+		assertSize(1, list);
 		assertEquals("a", list.get(0));
 	}
 
@@ -292,7 +293,7 @@ class HoconParserSession_Test extends TestBase {
 		// `list = [a]` then `list += b` — covers existing instanceof HoconArray.
 		var m = (Map<String,Object>) HoconParser.DEFAULT.read("list = [a]\nlist += b", Map.class, String.class, Object.class);
 		var list = (List<?>) m.get("list");
-		assertEquals(2, list.size());
+		assertSize(2, list);
 	}
 
 	@Test
@@ -301,7 +302,7 @@ class HoconParserSession_Test extends TestBase {
 		// Covers the "existing != null" but not array branch in PLUS_EQUALS handler.
 		var m = (Map<String,Object>) HoconParser.DEFAULT.read("list = a\nlist += b", Map.class, String.class, Object.class);
 		var list = (List<?>) m.get("list");
-		assertEquals(2, list.size());
+		assertSize(2, list);
 	}
 
 	@Test
@@ -310,7 +311,7 @@ class HoconParserSession_Test extends TestBase {
 		var m = (Map<String,Object>) HoconParser.DEFAULT.read("a { items += x\nitems += y }", Map.class, String.class, Object.class);
 		var a = (Map<String,Object>) m.get("a");
 		var items = (List<?>) a.get("items");
-		assertEquals(2, items.size());
+		assertSize(2, items);
 	}
 
 	// ============================================================
@@ -377,7 +378,7 @@ class HoconParserSession_Test extends TestBase {
 		var hocon = "data = [ \"" + encoded + "\" ]";
 		var bean = HoconParser.DEFAULT.read(hocon, BeanWithByteList.class);
 		assertNotNull(bean);
-		assertEquals(1, bean.data.size());
+		assertSize(1, bean.data);
 		assertArrayEquals(new byte[] { 1, 2, 3 }, bean.data.get(0));
 	}
 
@@ -460,7 +461,7 @@ class HoconParserSession_Test extends TestBase {
 		var hocon = "items = [ { name=A, age=1 }, { name=B, age=2 } ]";
 		var bean = HoconParser.DEFAULT.read(hocon, BeanWithList.class);
 		assertNotNull(bean);
-		assertEquals(2, bean.items.size());
+		assertSize(2, bean.items);
 		assertEquals("A", bean.items.get(0).name);
 		assertEquals(2, bean.items.get(1).age);
 	}
@@ -490,7 +491,7 @@ class HoconParserSession_Test extends TestBase {
 		// Arrays separated by newlines — covers readArray separator branch (NEWLINE).
 		var m = (Map<String,Object>) HoconParser.DEFAULT.read("a = [\n  1\n  2\n  3\n]", Map.class, String.class, Object.class);
 		var a = (List<?>) m.get("a");
-		assertEquals(3, a.size());
+		assertSize(3, a);
 	}
 
 	@Test
@@ -500,7 +501,7 @@ class HoconParserSession_Test extends TestBase {
 		var hocon = "a = [ 1, 2";
 		var m = (Map<String,Object>) HoconParser.DEFAULT.read(hocon, Map.class, String.class, Object.class);
 		var a = (List<?>) m.get("a");
-		assertEquals(2, a.size());
+		assertSize(2, a);
 	}
 
 	@Test
@@ -567,7 +568,7 @@ class HoconParserSession_Test extends TestBase {
 		var hocon = "list = [{ a.b = 1 }, { a.c = 2 }]";
 		var m = (Map<String,Object>) HoconParser.DEFAULT.read(hocon, Map.class, String.class, Object.class);
 		var list = (List<?>) m.get("list");
-		assertEquals(2, list.size());
+		assertSize(2, list);
 	}
 
 	@Test
@@ -587,9 +588,9 @@ class HoconParserSession_Test extends TestBase {
 		// concat doesn't flatten (separator preserves nesting).
 		var m = (Map<String,Object>) HoconParser.DEFAULT.read("a = [[1,2], [3,4]]", Map.class, String.class, Object.class);
 		var a = (List<?>) m.get("a");
-		assertEquals(2, a.size());
+		assertSize(2, a);
 		assertTrue(a.get(0) instanceof List);
-		assertEquals(2, ((List<?>) a.get(0)).size());
+		assertSize(2, ((List<?>) a.get(0)));
 	}
 
 	// ============================================================

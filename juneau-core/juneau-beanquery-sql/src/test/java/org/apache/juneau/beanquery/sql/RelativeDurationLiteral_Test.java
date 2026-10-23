@@ -82,7 +82,7 @@ class RelativeDurationLiteral_Test {
 
 	@Test void a01_timestampColumn_bindsOffsetDateTime_neverSqlNow() {
 		var f = compile("happenedAt=$gt(-24h)");
-		assertEquals(1, f.binds().size());
+		assertSize(1, f.binds());
 		assertInstanceOf(OffsetDateTime.class, f.binds().get(0));
 		var sql = f.sql().toLowerCase();
 		assertFalse(sql.contains("now") || sql.contains("interval") || sql.contains("24h"), f.sql());
@@ -104,7 +104,7 @@ class RelativeDurationLiteral_Test {
 		// Both operands resolve against the same captured instant, so they are exactly six days apart.
 		var ctx = builder().build();
 		var f = SqlSearchCompiler.create(TestDialect.INSTANCE, ctx).compile(ctx.resolve(new BeanQuery().setSearch("happenedAt=$and($gt(-7d),$lt(-1d))")).filter());
-		assertEquals(2, f.binds().size());
+		assertSize(2, f.binds());
 		var lo = (OffsetDateTime)f.binds().get(0);
 		var hi = (OffsetDateTime)f.binds().get(1);
 		assertEquals(Duration.ofDays(6), Duration.between(lo, hi));
@@ -142,7 +142,7 @@ class RelativeDurationLiteral_Test {
 
 	@Test void a07_isoDuration_timestampColumn_bindsOffsetDateTime_neverSqlNow() {
 		var f = compile("happenedAt=$gt(-PT24H)");
-		assertEquals(1, f.binds().size());
+		assertSize(1, f.binds());
 		assertInstanceOf(OffsetDateTime.class, f.binds().get(0));
 		var sql = f.sql().toLowerCase();
 		assertFalse(sql.contains("now") || sql.contains("interval") || sql.contains("pt24h"), f.sql());
@@ -151,7 +151,7 @@ class RelativeDurationLiteral_Test {
 	@Test void a08_isoDuration_andedBounds_shareOneRequestTimeInstant() {
 		var ctx = builder().build();
 		var f = SqlSearchCompiler.create(TestDialect.INSTANCE, ctx).compile(ctx.resolve(new BeanQuery().setSearch("happenedAt=$and($gt(-P7D),$lt(-P1D))")).filter());
-		assertEquals(2, f.binds().size());
+		assertSize(2, f.binds());
 		assertEquals(Duration.ofDays(6), Duration.between((OffsetDateTime)f.binds().get(0), (OffsetDateTime)f.binds().get(1)));
 	}
 

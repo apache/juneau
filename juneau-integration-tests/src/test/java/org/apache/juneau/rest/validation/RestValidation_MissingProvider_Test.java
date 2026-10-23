@@ -17,7 +17,7 @@
 package org.apache.juneau.rest.validation;
 
 import static org.apache.juneau.commons.utils.Shorts.*;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 
 import org.apache.juneau.*;
 import org.apache.juneau.commons.logging.LogRecordCapture;
@@ -86,7 +86,7 @@ class RestValidation_MissingProvider_Test extends TestBase {
 				throw rex(e);
 			}
 		});
-		assertEquals(1, records.size());
+		assertSize(1, records);
 	}
 
 	@Test
@@ -106,6 +106,6 @@ class RestValidation_MissingProvider_Test extends TestBase {
 				throw rex(e);
 			}
 		});
-		assertEquals(1, records.size());
+		assertSize(1, records);
 	}
 }

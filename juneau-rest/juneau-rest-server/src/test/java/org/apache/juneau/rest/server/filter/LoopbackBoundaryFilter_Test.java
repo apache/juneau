@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.server.filter;
 
+import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
@@ -66,11 +67,12 @@ class LoopbackBoundaryFilter_Test extends TestBase {
 	}
 
 	private static Map<String,String> goodWriteHeaders() {
-		var m = new LinkedHashMap<String,String>();
-		m.put("Host", AUTHORITY);
-		m.put("Origin", "http://" + AUTHORITY);
-		m.put("Sec-Fetch-Site", "same-origin");
-		m.put("X-Csrf-Token", TOKEN.value());
+		Map<String,String> m = map(
+			"Host", AUTHORITY,
+			"Origin", "http://" + AUTHORITY,
+			"Sec-Fetch-Site", "same-origin",
+			"X-Csrf-Token", TOKEN.value()
+		);
 		return m;
 	}
 

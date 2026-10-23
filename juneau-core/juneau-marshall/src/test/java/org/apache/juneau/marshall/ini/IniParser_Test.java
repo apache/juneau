@@ -149,7 +149,7 @@ class IniParser_Test extends TestBase {
 		var ini = "=badline\nkey = value";
 		var m = (Map<String,Object>) IniParser.DEFAULT.read(ini, Map.class, String.class, Object.class);
 		assertBean(m, "key", "value");
-		assertEquals(1, m.size());
+		assertSize(1, m);
 	}
 
 	@Test
@@ -158,7 +158,7 @@ class IniParser_Test extends TestBase {
 		var ini = "justtext\nkey = value";
 		var m = (Map<String,Object>) IniParser.DEFAULT.read(ini, Map.class, String.class, Object.class);
 		assertBean(m, "key", "value");
-		assertEquals(1, m.size());
+		assertSize(1, m);
 	}
 
 	@Test

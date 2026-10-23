@@ -17,6 +17,7 @@
 package org.apache.juneau.rest.client.mcp.v20260728;
 
 import static org.apache.juneau.BasicTestUtils.assertThrowsWithMessage;
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
@@ -34,7 +35,7 @@ class ElicitationResponses_Test extends TestBase {
 	@Test void a01_toInputResponse_singleAnswer_encodesAcceptWithContent() {
 		var result = new ElicitResult().setAction(ElicitAction.ACCEPT).putContent("choice", "red");
 		var encoded = ElicitationResponses.toInputResponse("q1", result);
-		assertEquals(1, encoded.size());
+		assertSize(1, encoded);
 		var q1 = (JsonMap) encoded.get("q1");
 		assertEquals("accept", q1.getString("action"));
 		assertEquals("red", q1.getMap("content").getString("choice"));
@@ -45,7 +46,7 @@ class ElicitationResponses_Test extends TestBase {
 		results.put("q1", new ElicitResult().setAction(ElicitAction.ACCEPT).putContent("choice", "red"));
 		results.put("q2", new ElicitResult().setAction(ElicitAction.DECLINE));
 		var encoded = ElicitationResponses.toInputResponses(results);
-		assertEquals(2, encoded.size());
+		assertSize(2, encoded);
 		var q1 = (JsonMap) encoded.get("q1");
 		assertEquals("accept", q1.getString("action"));
 		assertEquals("red", q1.getMap("content").getString("choice"));

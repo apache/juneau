@@ -302,13 +302,13 @@ class FluentMap_Test extends TestBase {
 	@Test
 	void e07_mapInterface_size() {
 		var map = new FluentMap<>(new LinkedHashMap<String,String>());
-		assertEquals(0, map.size());
+		assertSize(0, map);
 
 		map.a("key1", "value1");
-		assertEquals(1, map.size());
+		assertSize(1, map);
 
 		map.a("key2", "value2");
-		assertEquals(2, map.size());
+		assertSize(2, map);
 	}
 
 	@Test

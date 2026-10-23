@@ -19,6 +19,7 @@ package org.apache.juneau.http.classic.header;
 import static org.apache.juneau.BasicTestUtils.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.apache.juneau.http.classic.HttpHeaders.*;
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
@@ -104,10 +105,10 @@ class BasicCsvHeader_Test extends TestBase {
 		assertTrue(h.asArray().isPresent());
 		assertEquals(2, h.asArray().get().length);
 		assertTrue(h.asList().isPresent());
-		assertEquals(2, h.asList().get().size());
+		assertSize(2, h.asList().get());
 		assertEquals(2, h.orElse((String[])null).length);
 		assertEquals(2, h.toArray().length);
-		assertEquals(2, h.toList().size());
+		assertSize(2, h.toList());
 
 		var h2 = csvHeader("Foo", ()->null);
 		assertFalse(h2.asArray().isPresent());

@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.commons.beanquery;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
+
 import java.util.*;
 import java.util.stream.*;
 
@@ -70,7 +72,7 @@ final class SearchParser {
 	 * 	among the top-level items.
 	 */
 	static List<SearchItem> parse(String search) {
-		if (search == null || search.isBlank())
+		if (ib(search))
 			return List.of();
 		var p = new SearchParser(search);
 		List<SearchItem> items = new ArrayList<>();

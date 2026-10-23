@@ -826,7 +826,9 @@ public class BasicSwaggerProviderSession {
 	// HTT: package-private only so a unit test can check that example/default values are not walked.
 	static <T> T renameWriteOnly(T schema) {
 		if (schema instanceof Map<?,?> m) {
-			@SuppressWarnings("unchecked")
+			@SuppressWarnings({
+				"unchecked" // The instanceof Map<?,?> match is a JSON-model map, whose keys are strings.
+			})
 			var m2 = (Map<String,Object>)m;
 			if (Boolean.TRUE.equals(m2.get("writeOnly"))) {
 				m2.remove("writeOnly");

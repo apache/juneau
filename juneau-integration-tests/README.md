@@ -2,7 +2,7 @@
 
 Apache Juneau cross-module / MockRestClient-driven integration test module.
 
-This module is the reactor-cycle-bound integration residual of the TODO-160 test migration: it
+This module is the reactor-cycle-bound integration residual of the test migration: it
 hosts the `MockRestClient` `rest.*` integration tests, the `a.rttests` cross-module round-trip
 suite, and the shared test infrastructure those depend on. It sits at the end of the reactor and
 depends on the modules it tests, so these tests cannot be co-located into the lower modules
@@ -27,7 +27,7 @@ JMH micro-benchmarks live in `src/test/java/.../microbench/` and are **excluded 
 test run** (Surefire only picks up `**/*Test.class`).  Run them explicitly via the wrapper script
 or Maven directly.
 
-### Observability NoOp benchmark (TODO-116)
+### Observability NoOp benchmark
 
 Asserts the `RestOpInvoker` observability hot path — `MetricsRecorder` + `TracerHook` resolved
 to their NoOp singletons — allocates **zero objects per invocation**.
@@ -59,8 +59,8 @@ mvn -f juneau-integration-tests/pom.xml -Pmicrobench test-compile exec:java \
 ### Performance baseline
 
 The recorded baseline lives in `perf-baseline.txt` (project root) under the `[observability]`
-section.  (The file was relocated from this module's directory to the project root by
-TODO-160, before the module was renamed from juneau-utest, so the per-module test-perf guard can
+section.  (The file was relocated from this module's directory to the project root
+before the module was renamed from juneau-utest, so the per-module test-perf guard can
 track every reactor module.)  To update after an
 intentional regression is accepted:
 

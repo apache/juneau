@@ -216,15 +216,15 @@ class FilteredSet_Test extends TestBase {
 			.filter(v -> v != null)
 			.build();
 
-		assertEquals(0, set.size());
+		assertSize(0, set);
 		set.add("value1");
-		assertEquals(1, set.size());
+		assertSize(1, set);
 		set.add(null);  // Filtered out
-		assertEquals(1, set.size());
+		assertSize(1, set);
 		set.add("value3");
-		assertEquals(2, set.size());
+		assertSize(2, set);
 		set.add("value1");  // Duplicate, not added
-		assertEquals(2, set.size());
+		assertSize(2, set);
 	}
 
 	@Test

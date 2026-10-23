@@ -138,7 +138,7 @@ public final class ThymeleafView implements View {
 	 * 	value.
 	 */
 	public ThymeleafView attrs(Map<String,?> values) {
-		if (values == null || values.isEmpty())
+		if (ie(values))
 			return this;
 		var copy = new LinkedHashMap<>(attributes);
 		values.forEach((k, v) -> {

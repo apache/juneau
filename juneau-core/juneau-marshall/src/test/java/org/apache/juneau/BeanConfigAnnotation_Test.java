@@ -38,7 +38,7 @@ import org.junit.jupiter.api.*;
  * Tests the bean-modeling attributes of the @BeanConfig annotation.
  *
  * <p>
- * These tests were extracted from {@code MarshalledConfigAnnotation_Test} during Phase 3 of the
+ * These tests were extracted from {@code MarshalledConfigAnnotation_Test} during the
  * bean-layer split, when bean-modeling attributes moved off {@code @MarshalledConfig} onto
  * {@code @BeanConfig} in {@code juneau-commons}.
  */

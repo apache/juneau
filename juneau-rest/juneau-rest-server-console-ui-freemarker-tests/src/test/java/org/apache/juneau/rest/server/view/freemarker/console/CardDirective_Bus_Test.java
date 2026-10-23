@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.server.view.freemarker.console;
 
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
@@ -115,7 +116,7 @@ class CardDirective_Bus_Test extends TestBase {
 
 	@Test void a02_json5Body_promotedToBaseKey() throws Exception {
 		var a = PageContractAssert.assertPage(ok("/json5")).subscribes("detail", "ssc.focus", "refresh").hasNoWiringErrors();
-		assertEquals(1, a.card("detail").getList("subscribes").size());
+		assertSize(1, a.card("detail").getList("subscribes"));
 	}
 
 	@Test void b01_bothAttributeAndBody_isE23() throws Exception {
@@ -200,8 +201,8 @@ class CardDirective_Bus_Test extends TestBase {
 
 	@Test void a08_topicAndBridgeInPage_capturedOnce() throws Exception {
 		var c = PageContractAssert.assertPage(ok("/topicbridgeonce")).hasBridge("ops").declaresTopic("ops.jobs").contract();
-		assertEquals(1, c.getList("topics").size());
-		assertEquals(1, c.getList("bridges").size());
+		assertSize(1, c.getList("topics"));
+		assertSize(1, c.getList("bridges"));
 	}
 
 	@Test void a09_badgeRefreshes_cardWiredThroughSubscribes_passesBothChecks() throws Exception {

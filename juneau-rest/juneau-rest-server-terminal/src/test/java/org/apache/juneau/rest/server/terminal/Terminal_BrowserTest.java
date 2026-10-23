@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.server.terminal;
 
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.nio.file.*;
@@ -104,6 +105,6 @@ class Terminal_BrowserTest extends TestBase {
 
 	@Test void z01_everyCaseHasAMethod() {
 		var cases = (Map<?,?>)report.get("cases");
-		assertEquals(24, cases.size(), () -> "case count changed; add a method per new case: " + cases.keySet());
+		assertSize(() -> "case count changed; add a method per new case: " + cases.keySet(), 24, cases);
 	}
 }

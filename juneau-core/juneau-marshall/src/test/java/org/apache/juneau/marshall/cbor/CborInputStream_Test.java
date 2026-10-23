@@ -18,6 +18,7 @@ package org.apache.juneau.marshall.cbor;
 
 import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 
 import org.apache.juneau.*;
 import org.apache.juneau.marshall.collections.*;
@@ -92,7 +93,7 @@ class CborInputStream_Test extends TestBase {
 		assertNotNull(empty);
 		assertTrue(empty.isEmpty());
 		var arr = CborParser.DEFAULT.read(hex("83 01 02 03"), JsonList.class);
-		assertEquals(3, arr.size());
+		assertSize(3, arr);
 		assertEquals(1, arr.getInt(0));
 		assertEquals(2, arr.getInt(1));
 		assertEquals(3, arr.getInt(2));

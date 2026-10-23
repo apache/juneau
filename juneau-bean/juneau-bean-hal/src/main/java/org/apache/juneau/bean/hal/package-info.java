@@ -32,17 +32,17 @@
  *
  * <h5 class='topic'>Bean Classes</h5>
  * <ul class='spaced-list'>
- *   <li>{@link org.apache.juneau.bean.hal.HalResource} - Top-level HAL resource. Carries
+ *   <li>{@link org.apache.juneau.bean.hal.HalResource HalResource} - Top-level HAL resource. Carries
  *     {@code _links}, {@code _embedded}, and arbitrary payload fields.
- *   <li>{@link org.apache.juneau.bean.hal.HalLink} - HAL Link Object with the 8 spec fields.
- *   <li>{@link org.apache.juneau.bean.hal.HalLinkArray} - {@code LinkedList&lt;HalLink&gt;} used as
+ *   <li>{@link org.apache.juneau.bean.hal.HalLink HalLink} - HAL Link Object with the 8 spec fields.
+ *   <li>{@link org.apache.juneau.bean.hal.HalLinkArray HalLinkArray} - {@code LinkedList&lt;HalLink&gt;} used as
  *     the multi-link branch inside an {@code _links} map.
- *   <li>{@link org.apache.juneau.bean.hal.HalResourceArray} - {@code LinkedList&lt;HalResource&gt;}
+ *   <li>{@link org.apache.juneau.bean.hal.HalResourceArray HalResourceArray} - {@code LinkedList&lt;HalResource&gt;}
  *     used as the multi-resource branch inside an {@code _embedded} map.
- *   <li>{@link org.apache.juneau.bean.hal.HalLinkOrArraySwap} - {@link org.apache.juneau.marshall.swap.spi.ObjectSwap}
- *     that materializes each {@code _links} value as either a single {@link org.apache.juneau.bean.hal.HalLink}
- *     (JSON object) or a {@link org.apache.juneau.bean.hal.HalLinkArray} (JSON array) per spec.
- *   <li>{@link org.apache.juneau.bean.hal.HalResourceOrArraySwap} - The {@code _embedded} analogue.
+ *   <li>{@link org.apache.juneau.bean.hal.HalLinkOrArraySwap HalLinkOrArraySwap} - {@link org.apache.juneau.marshall.swap.spi.ObjectSwap}
+ *     that materializes each {@code _links} value as either a single {@link org.apache.juneau.bean.hal.HalLink HalLink}
+ *     (JSON object) or a {@link org.apache.juneau.bean.hal.HalLinkArray HalLinkArray} (JSON array) per spec.
+ *   <li>{@link org.apache.juneau.bean.hal.HalResourceOrArraySwap HalResourceOrArraySwap} - The {@code _embedded} analogue.
  * </ul>
  *
  * <h5 class='topic'>Example</h5>

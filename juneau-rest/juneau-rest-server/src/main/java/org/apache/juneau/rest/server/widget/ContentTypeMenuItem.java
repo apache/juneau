@@ -46,7 +46,6 @@ import org.apache.juneau.rest.server.*;
  * 			<js>"options: ..."</js>,
  * 			<js>"$W{QueryMenuItem}"</js>,
  * 			<js>"$W{ContentTypeMenuItem}"</js>,
- * 			<js>"$W{ThemeMenuItem}"</js>,
  * 			<js>"source: ..."</js>
  * 		}
  * 	)

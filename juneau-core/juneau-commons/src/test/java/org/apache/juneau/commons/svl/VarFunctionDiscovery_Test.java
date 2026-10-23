@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.commons.svl;
 
+import static org.apache.juneau.commons.TestAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
@@ -24,7 +25,7 @@ import org.apache.juneau.commons.*;
 import org.junit.jupiter.api.*;
 
 /**
- * Phase E discovery wiring tests — verify that {@link VarResolver#DEFAULT} auto-registers the
+ * Discovery wiring tests — verify that {@link VarResolver#DEFAULT} auto-registers the
  * built-in catalog and that explicit registrations override built-ins on name collision.
  */
 class VarFunctionDiscovery_Test extends TestBase {
@@ -36,7 +37,7 @@ class VarFunctionDiscovery_Test extends TestBase {
 	}
 
 	@Test void defaultResolverHasBuiltins() {
-		// Sample one function from each Phase D category.
+		// Sample one function from each built-in category.
 		assertEquals("FOO", VarResolver.DEFAULT.resolve("#{upper(foo)}"));    // string
 		assertEquals("3", VarResolver.DEFAULT.resolve("#{toInt(3)}"));        // type-conv
 		assertEquals("5", VarResolver.DEFAULT.resolve("#{add(2, 3)}"));       // arithmetic
@@ -67,7 +68,7 @@ class VarFunctionDiscovery_Test extends TestBase {
 	}
 
 	@Test void defaultFunctionsRegistersAllCategories() {
-		// Spot-check that every Phase D category contributes at least one function.
+		// Spot-check that every built-in category contributes at least one function.
 		var b = VarResolver.create().defaultFunctions();
 		var seen = new HashSet<String>();
 		// Build to inspect the resulting map indirectly via resolve calls.
@@ -88,6 +89,6 @@ class VarFunctionDiscovery_Test extends TestBase {
 			assertNotNull(v, () -> "Template '" + template + "' returned null");
 			seen.add(template);
 		}
-		assertEquals(10, seen.size());
+		assertSize(10, seen);
 	}
 }

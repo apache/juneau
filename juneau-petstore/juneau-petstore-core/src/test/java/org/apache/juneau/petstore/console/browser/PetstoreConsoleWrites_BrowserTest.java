@@ -329,7 +329,9 @@ class PetstoreConsoleWrites_BrowserTest extends TestBase {
 		return new JsonMap(get("/petstore/pets/" + id, "application/json").body());
 	}
 
-	@SuppressWarnings("unchecked") // writes is a JSON array of {url, method, status, body}.
+	@SuppressWarnings({
+		"unchecked" // writes is a JSON array of {url, method, status, body}.
+	})
 	private static Map<String,Object> theWrite(String name, String method, String part) {
 		var c = assertClean(report, name);
 		var w = ((List<Map<String,Object>>) query(c, "writes")).stream()
@@ -350,7 +352,9 @@ class PetstoreConsoleWrites_BrowserTest extends TestBase {
 		assertContains("Staged", (String) query(report.get("reprice"), "toast"));
 	}
 
-	@SuppressWarnings("unchecked") // fetches is a JSON object of {status, body}.
+	@SuppressWarnings({
+		"unchecked" // fetches is a JSON object of {status, body}.
+	})
 	@Test void a03_applyWritesTheStagedChange() throws Exception {
 		assertContains("Applied", theWrite("apply", "POST", "/apply").get("body"));
 		var pet = (Map<String,Object>) ((Map<String,Object>) report.get("apply").get("fetches")).get("pet");

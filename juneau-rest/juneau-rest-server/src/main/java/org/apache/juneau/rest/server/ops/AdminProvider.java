@@ -108,12 +108,13 @@ public class AdminProvider {
 			var t = e.getKey();
 			if (isExcludedThread(t.getName()))
 				continue;
-			var entry = new LinkedHashMap<String,Object>();
-			entry.put("name", t.getName());
-			entry.put("id", t.getId());
-			entry.put("state", t.getState().toString());
-			entry.put("daemon", t.isDaemon());
-			entry.put("priority", t.getPriority());
+			Map<String,Object> entry = m(
+				"name", t.getName(),
+				"id", t.getId(),
+				"state", t.getState().toString(),
+				"daemon", t.isDaemon(),
+				"priority", t.getPriority()
+			);
 			var stack = Arrays.stream(e.getValue()).map(StackTraceElement::toString).collect(Collectors.toCollection(ArrayList::new));
 			entry.put("stack", stack);
 			out.add(entry);
@@ -129,24 +130,23 @@ public class AdminProvider {
 	 */
 	public void serveHeap(RestResponse res) throws IOException {
 		var rt = Runtime.getRuntime();
-		var heap = new LinkedHashMap<String,Object>();
-		heap.put("total", rt.totalMemory());
-		heap.put("free", rt.freeMemory());
-		heap.put("max", rt.maxMemory());
-		heap.put("used", rt.totalMemory() - rt.freeMemory());
+		Map<String,Object> heap = m(
+			"total", rt.totalMemory(),
+			"free", rt.freeMemory(),
+			"max", rt.maxMemory(),
+			"used", rt.totalMemory() - rt.freeMemory()
+		);
 
 		var mx = ManagementFactory.getMemoryMXBean();
 		var nonHeapUsage = mx.getNonHeapMemoryUsage();
-		var nonHeap = new LinkedHashMap<String,Object>();
-		nonHeap.put("init", nonHeapUsage.getInit());
-		nonHeap.put("used", nonHeapUsage.getUsed());
-		nonHeap.put("committed", nonHeapUsage.getCommitted());
-		nonHeap.put("max", nonHeapUsage.getMax());
+		Map<String,Object> nonHeap = m(
+			"init", nonHeapUsage.getInit(),
+			"used", nonHeapUsage.getUsed(),
+			"committed", nonHeapUsage.getCommitted(),
+			"max", nonHeapUsage.getMax()
+		);
 
-		var out = new LinkedHashMap<String,Object>();
-		out.put("heap", heap);
-		out.put("nonHeap", nonHeap);
-		out.put("availableProcessors", rt.availableProcessors());
+		Map<String,Object> out = m("heap", heap, "nonHeap", nonHeap, "availableProcessors", rt.availableProcessors());
 		writeJson(res, out);
 	}
 
@@ -165,7 +165,7 @@ public class AdminProvider {
 	public void serveCacheFlush(RestRequest req, RestResponse res) throws IOException {
 		var namesParam = req.getQueryParams().get("names").asString().orElse(null);
 		Set<String> selected = null;
-		if (namesParam != null && ! namesParam.isBlank()) {
+		if (inb(namesParam)) {
 			selected = new LinkedHashSet<>();
 			for (var n : namesParam.split(","))
 				if (! n.isBlank())
@@ -253,12 +253,13 @@ public class AdminProvider {
 	}
 
 	private static Map<String,Object> describeRateLimitGuard(RateLimitGuard g) {
-		var m = new LinkedHashMap<String,Object>();
-		m.put("class", cn(g));
-		m.put("limit", g.getCapacity());
-		m.put("permitsPerSecond", g.getPermitsPerSecond());
-		m.put("xForwardedForAware", g.isXForwardedForAware());
-		m.put("exemptPaths", g.getExemptPaths().stream().sorted().toList());
+		Map<String,Object> m = m(
+			"class", cn(g),
+			"limit", g.getCapacity(),
+			"permitsPerSecond", g.getPermitsPerSecond(),
+			"xForwardedForAware", g.isXForwardedForAware(),
+			"exemptPaths", g.getExemptPaths().stream().sorted().toList()
+		);
 		return m;
 	}
 

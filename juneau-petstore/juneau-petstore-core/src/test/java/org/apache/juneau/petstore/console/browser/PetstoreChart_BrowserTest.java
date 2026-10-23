@@ -119,7 +119,9 @@ class PetstoreChart_BrowserTest extends TestBase {
 	}
 
 	/** The body of a {@code fetches} entry, after asserting its status is 200. */
-	@SuppressWarnings("unchecked") // fetches are {status, body} objects.
+	@SuppressWarnings({
+		"unchecked" // fetches are {status, body} objects.
+	})
 	private static String fetched(Map<String,Object> c, String key) {
 		var f = (Map<String,Object>)((Map<String,Object>)c.get("fetches")).get(key);
 		assertEquals(200, ((Number)f.get("status")).intValue(), () -> key + ": " + f);
@@ -167,7 +169,9 @@ class PetstoreChart_BrowserTest extends TestBase {
 	}
 
 	@Test void b04_zoomWindowIsPublished() {
-		@SuppressWarnings("unchecked") // the retained value is a JSON object.
+		@SuppressWarnings({
+			"unchecked" // the retained value is a JSON object.
+		})
 		var z = (Map<String,Object>)query(assertClean(report, "cards"), "zoom");
 		assertNotNull(z, "no zoom:prices value");
 		assertEquals(0, ((Number)z.get("start")).intValue());

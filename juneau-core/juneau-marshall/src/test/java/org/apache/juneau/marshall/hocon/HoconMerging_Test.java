@@ -17,6 +17,7 @@
 package org.apache.juneau.marshall.hocon;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 
 import java.util.*;
 
@@ -78,7 +79,7 @@ class HoconMerging_Test {
 		var m = (Map<String,Object>) HoconParser.DEFAULT.read(hocon, Map.class, String.class, Object.class);
 		var list = (List<?>) m.get("list");
 		assertNotNull(list);
-		assertEquals(3, list.size());
+		assertSize(3, list);
 		assertEquals("a", list.get(0));
 		assertEquals("b", list.get(1));
 		assertEquals("c", list.get(2));

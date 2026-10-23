@@ -46,7 +46,7 @@ class Filter_Test extends TestBase {
 		items.add(new Filter.Leaf("b", expr("$eq(\"2\")"), SearchType.TEXT));
 		var and = new Filter.And(items);
 		items.add(new Filter.Leaf("c", expr("$eq(\"3\")"), SearchType.TEXT));
-		assertEquals(2, and.items().size());
+		assertSize(2, and.items());
 		var hoistedTarget1 = and.items();
 		var hoistedArg1 = new Filter.Leaf("d", expr("$eq(\"4\")"), SearchType.TEXT);
 		assertThrows(UnsupportedOperationException.class, () -> hoistedTarget1.add(hoistedArg1));

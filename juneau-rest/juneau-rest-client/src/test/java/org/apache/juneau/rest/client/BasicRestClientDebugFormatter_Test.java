@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.client;
 
+import static org.apache.juneau.commons.utils.Shorts.f;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -65,7 +66,7 @@ class BasicRestClientDebugFormatter_Test extends TestBase {
 		assertFalse(out.contains(Base64.getEncoder().encodeToString(bytes)), () -> "base64 secret present in: " + out);
 		var esc = new StringBuilder();
 		for (var i = 0; i < secret.length(); i++)
-			esc.append(String.format("\\u%04X", (int) secret.charAt(i)));
+			esc.append(f("\\u%04X", (int) secret.charAt(i)));
 		assertFalse(out.contains(esc.toString()), () -> "escaped-code-unit secret present in: " + out);
 	}
 

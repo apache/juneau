@@ -70,7 +70,9 @@ class PetstoreFlavors_BrowserTest extends TestBase {
 					"title", "document.querySelector('#flavor iframe').title"))));
 	}
 
-	@SuppressWarnings("unchecked") // names is a JSON array of strings.
+	@SuppressWarnings({
+		"unchecked" // names is a JSON array of strings.
+	})
 	private static List<String> names(String engine) {
 		return (List<String>) query(assertClean(report, engine), "names");
 	}

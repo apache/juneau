@@ -108,7 +108,7 @@ class CardDirective_Test extends TestBase {
 			.hasCard("jc-card-1", "html").templateContains("jc-card-1", "<h1>Title</h1>")
 			.hasCard("second", "html").templateContains("second", "<p>more</p>");
 		assertFalse(body.contains("&lt;h1"), () -> "double-escaped card body: " + body);
-		assertFalse(body.contains("slds-"), () -> body);
+		DualHatGuard.assertClean(body);
 	}
 
 	@Test void b02_formatAttr_isRejected() throws Exception {

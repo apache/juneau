@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.client;
 
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.net.*;
@@ -227,7 +228,7 @@ class ResponseHeader_Test extends TestBase {
 
 	@Test void f09_asEntityTags_valid() throws Exception {
 		try (var resp = response(TransportResponse.builder().header("If-Match", "\"a\", \"b\""))) {
-			assertEquals(2, resp.header("If-Match").asEntityTags().toList().size());
+			assertSize(2, resp.header("If-Match").asEntityTags().toList());
 		}
 	}
 
@@ -240,7 +241,7 @@ class ResponseHeader_Test extends TestBase {
 	@Test void f11_asStringRanges_valid() throws Exception {
 		try (var resp = response(TransportResponse.builder().header("Accept-Encoding", "gzip;q=1.0, identity;q=0.5"))) {
 			var ranges = resp.header("Accept-Encoding").asStringRanges();
-			assertEquals(2, ranges.toList().size());
+			assertSize(2, ranges.toList());
 		}
 	}
 

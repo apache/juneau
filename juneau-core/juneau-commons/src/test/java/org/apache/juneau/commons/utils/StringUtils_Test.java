@@ -1221,20 +1221,20 @@ class StringUtils_Test extends TestBase {
 	void a047_extractBetween() {
 		// Basic extraction
 		var results1 = extractBetween("<tag>content</tag>", "<", ">");
-		assertEquals(2, results1.size());
+		assertSize(2, results1);
 		assertEquals("tag", results1.get(0));
 		assertEquals("/tag", results1.get(1));
 
 		// Multiple matches
 		var results2 = extractBetween("[one][two][three]", "[", "]");
-		assertEquals(3, results2.size());
+		assertSize(3, results2);
 		assertEquals("one", results2.get(0));
 		assertEquals("two", results2.get(1));
 		assertEquals("three", results2.get(2));
 
 		// Nested markers (non-overlapping)
 		var results3 = extractBetween("(outer (inner) outer)", "(", ")");
-		assertEquals(1, results3.size());
+		assertSize(1, results3);
 		assertTrue(results3.get(0).contains("outer"));
 
 		// No matches
@@ -1265,7 +1265,7 @@ class StringUtils_Test extends TestBase {
 		// First "<" at position 6, ">" at position 13 - extracts "start1"
 		// Second "<" at position 20, ">" at position 27 - extracts "start2"
 		// Third "<" at position 31, but no ">" after it - triggers code path and breaks
-		assertEquals(2, results7.size());
+		assertSize(2, results7);
 		assertEquals("start1", results7.get(0));
 		assertEquals("start2", results7.get(1));
 	}
@@ -1277,19 +1277,19 @@ class StringUtils_Test extends TestBase {
 	void a048_extractEmails() {
 		// Basic extraction
 		var emails1 = extractEmails("Contact: user@example.com or admin@test.org");
-		assertEquals(2, emails1.size());
+		assertSize(2, emails1);
 		assertTrue(emails1.contains("user@example.com"));
 		assertTrue(emails1.contains("admin@test.org"));
 
 		// Multiple emails
 		var emails2 = extractEmails("Email me at john.doe@example.com, or contact jane@test.org");
-		assertEquals(2, emails2.size());
+		assertSize(2, emails2);
 		assertTrue(emails2.contains("john.doe@example.com"));
 		assertTrue(emails2.contains("jane@test.org"));
 
 		// Email with special characters
 		var emails3 = extractEmails("user+tag@example.co.uk is valid");
-		assertEquals(1, emails3.size());
+		assertSize(1, emails3);
 		assertEquals("user+tag@example.co.uk", emails3.get(0));
 
 		// No emails
@@ -1307,26 +1307,26 @@ class StringUtils_Test extends TestBase {
 	void a049_extractNumbers() {
 		// Basic extraction
 		var numbers1 = extractNumbers("Price: $19.99, Quantity: 5");
-		assertEquals(2, numbers1.size());
+		assertSize(2, numbers1);
 		assertEquals("19.99", numbers1.get(0));
 		assertEquals("5", numbers1.get(1));
 
 		// Multiple numbers
 		var numbers2 = extractNumbers("Version 1.2.3 has 42 features");
-		assertEquals(3, numbers2.size());
+		assertSize(3, numbers2);
 		assertEquals("1.2", numbers2.get(0));
 		assertEquals("3", numbers2.get(1));
 		assertEquals("42", numbers2.get(2));
 
 		// Decimal numbers
 		var numbers3 = extractNumbers("3.14 and 2.718 are constants");
-		assertEquals(2, numbers3.size());
+		assertSize(2, numbers3);
 		assertEquals("3.14", numbers3.get(0));
 		assertEquals("2.718", numbers3.get(1));
 
 		// Integers only
 		var numbers4 = extractNumbers("1 2 3 4 5");
-		assertEquals(5, numbers4.size());
+		assertSize(5, numbers4);
 		assertEquals("1", numbers4.get(0));
 		assertEquals("5", numbers4.get(4));
 
@@ -1345,23 +1345,23 @@ class StringUtils_Test extends TestBase {
 	void a050_extractUrls() {
 		// Basic extraction
 		var urls1 = extractUrls("Visit https://example.com or http://test.org");
-		assertEquals(2, urls1.size());
+		assertSize(2, urls1);
 		assertTrue(urls1.contains("https://example.com"));
 		assertTrue(urls1.contains("http://test.org"));
 
 		// URLs with paths
 		var urls2 = extractUrls("Check https://example.com/path/to/page?param=value");
-		assertEquals(1, urls2.size());
+		assertSize(1, urls2);
 		assertTrue(urls2.get(0).startsWith("https://example.com"));
 
 		// FTP URLs
 		var urls3 = extractUrls("Download from ftp://files.example.com/pub/data");
-		assertEquals(1, urls3.size());
+		assertSize(1, urls3);
 		assertTrue(urls3.get(0).startsWith("ftp://"));
 
 		// Multiple URLs
 		var urls4 = extractUrls("Links: http://site1.com and https://site2.org/page");
-		assertEquals(2, urls4.size());
+		assertSize(2, urls4);
 
 		// No URLs
 		assertTrue(extractUrls("No URLs here").isEmpty());
@@ -1378,7 +1378,7 @@ class StringUtils_Test extends TestBase {
 	void a051_extractWords() {
 		// Basic extraction
 		var words1 = extractWords("Hello world! This is a test.");
-		assertEquals(6, words1.size());
+		assertSize(6, words1);
 		assertEquals("Hello", words1.get(0));
 		assertEquals("world", words1.get(1));
 		assertEquals("This", words1.get(2));
@@ -1388,14 +1388,14 @@ class StringUtils_Test extends TestBase {
 
 		// Words with underscores
 		var words2 = extractWords("variable_name and test_123");
-		assertEquals(3, words2.size());
+		assertSize(3, words2);
 		assertTrue(words2.contains("variable_name"));
 		assertTrue(words2.contains("and"));
 		assertTrue(words2.contains("test_123"));
 
 		// Words with numbers
 		var words3 = extractWords("Version 1.2.3 has 42 features");
-		assertEquals(7, words3.size());
+		assertSize(7, words3);
 		assertTrue(words3.contains("Version"));
 		assertTrue(words3.contains("1"));
 		assertTrue(words3.contains("2"));
@@ -1570,10 +1570,7 @@ class StringUtils_Test extends TestBase {
 	//====================================================================================================
 	@Test
 	void a059_formatNamed() {
-		var args = new HashMap<String,Object>();
-		args.put("name", "John");
-		args.put("age", 30);
-		args.put("city", "New York");
+		Map<String,Object> args = map("name", "John", "age", 30, "city", "New York");
 		assertEquals("Hello John, you are 30 years old", formatNamed("Hello {name}, you are {age} years old", args));
 		assertEquals("Welcome to New York", formatNamed("Welcome to {city}", args));
 		assertEquals("Hello {unknown}", formatNamed("Hello {unknown}", args)); // Unknown placeholder kept
@@ -2146,10 +2143,7 @@ class StringUtils_Test extends TestBase {
 	//====================================================================================================
 	@Test
 	void a076_interpolate() {
-		var vars = new HashMap<String,Object>();
-		vars.put("name", "John");
-		vars.put("age", 30);
-		vars.put("city", "New York");
+		Map<String,Object> vars = map("name", "John", "age", 30, "city", "New York");
 
 		assertEquals("Hello John, you are 30 years old", interpolate("Hello ${name}, you are ${age} years old", vars));
 		assertEquals("Welcome to New York", interpolate("Welcome to ${city}", vars));
@@ -3517,10 +3511,7 @@ class StringUtils_Test extends TestBase {
 		assertEquals("a,b", join("a", "b"));
 
 		// join(Collection<?>, char)
-		var collection = new ArrayList<>();
-		collection.add("a");
-		collection.add("b");
-		collection.add("c");
+		var collection = list("a", "b", "c");
 		assertNull(join((Collection<?>)null, ',')); // Code path: null check
 		assertEquals("", join(Collections.emptyList(), ',')); // Empty collection - loop never executes
 		assertEquals("a", join(Collections.singletonList("a"), ',')); // Single element - iter.hasNext() false after first iteration
@@ -4613,26 +4604,26 @@ class StringUtils_Test extends TestBase {
 	void a152_parseMap() {
 		// Basic parsing
 		var map1 = parseMap("key1=value1,key2=value2", '=', ',', false);
-		assertEquals(2, map1.size());
+		assertSize(2, map1);
 		assertEquals("value1", map1.get("key1"));
 		assertEquals("value2", map1.get("key2"));
 
 		// With trimming
 		var map2 = parseMap(" key1 = value1 ; key2 = value2 ", '=', ';', true);
-		assertEquals(2, map2.size());
+		assertSize(2, map2);
 		assertEquals("value1", map2.get("key1"));
 		assertEquals("value2", map2.get("key2"));
 
 		// Different delimiters
 		var map3 = parseMap("a:1|b:2|c:3", ':', '|', false);
-		assertEquals(3, map3.size());
+		assertSize(3, map3);
 		assertEquals("1", map3.get("a"));
 		assertEquals("2", map3.get("b"));
 		assertEquals("3", map3.get("c"));
 
 		// Empty value
 		var map4 = parseMap("key1=,key2=value2", '=', ',', false);
-		assertEquals(2, map4.size());
+		assertSize(2, map4);
 		assertEquals("", map4.get("key1"));
 		assertEquals("value2", map4.get("key2"));
 
@@ -4642,20 +4633,20 @@ class StringUtils_Test extends TestBase {
 
 		// Test empty entries - triggers code path
 		var map5 = parseMap("key1=value1,,key2=value2", '=', ',', false);
-		assertEquals(2, map5.size()); // Empty entry skipped
+		assertSize(2, map5); // Empty entry skipped
 		assertEquals("value1", map5.get("key1"));
 		assertEquals("value2", map5.get("key2"));
 
 		// Test entry without delimiter (no key-value delimiter) - triggers code path
 		var map6 = parseMap("key1=value1,keyonly,key2=value2", '=', ',', false);
-		assertEquals(3, map6.size());
+		assertSize(3, map6);
 		assertEquals("value1", map6.get("key1"));
 		assertEquals("", map6.get("keyonly")); // Key with empty value
 		assertEquals("value2", map6.get("key2"));
 
 		// Test entry without delimiter with trimming
 		var map7 = parseMap(" key1 = value1 , keyonly , key2 = value2 ", '=', ',', true);
-		assertEquals(3, map7.size());
+		assertSize(3, map7);
 		assertEquals("value1", map7.get("key1"));
 		assertEquals("", map7.get("keyonly")); // Key with empty value, trimmed
 		assertEquals("value2", map7.get("key2"));
@@ -5796,20 +5787,20 @@ class StringUtils_Test extends TestBase {
 	void a188_splitNested() {
 		// Basic nested splitting (uses curly braces)
 		var result1 = splitNested("a,b,c");
-		assertEquals(3, result1.size());
+		assertSize(3, result1);
 		assertEquals("a", result1.get(0));
 		assertEquals("b", result1.get(1));
 		assertEquals("c", result1.get(2));
 
 		// With nested curly braces
 		var result2 = splitNested("a{b,c},d");
-		assertEquals(2, result2.size());
+		assertSize(2, result2);
 		assertEquals("a{b,c}", result2.get(0));
 		assertEquals("d", result2.get(1));
 
 		// With deeply nested
 		var result3 = splitNested("a,b{c,d{e,f}}");
-		assertEquals(2, result3.size());
+		assertSize(2, result3);
 		assertEquals("a", result3.get(0));
 		assertEquals("b{c,d{e,f}}", result3.get(1));
 
@@ -5820,7 +5811,7 @@ class StringUtils_Test extends TestBase {
 		// Code path: c == '\\' when inEscape is true (double backslash)
 		// When inEscape is true and we see '\', we set inEscape = false (double backslash = literal backslash)
 		var result4 = splitNested("a\\\\,b");
-		assertEquals(2, result4.size());
+		assertSize(2, result4);
 		assertEquals("a\\", result4.get(0)); // Double backslash becomes single literal backslash
 		assertEquals("b", result4.get(1));
 
@@ -5830,7 +5821,7 @@ class StringUtils_Test extends TestBase {
 		// Actually, when inEscape is true, we only reset it when we see another '\'
 		// So the comma after the backslash is escaped and doesn't split
 		var result5 = splitNested("a\\,b,c");
-		assertEquals(1, result5.size()); // Escaped comma doesn't split, entire string is one token
+		assertSize(1, result5); // Escaped comma doesn't split, entire string is one token
 		assertEquals("a,b,c", result5.get(0));
 
 		// Test escape sequence with nested braces - escaped brace doesn't affect depth
@@ -5838,7 +5829,7 @@ class StringUtils_Test extends TestBase {
 		// For "a\\{b},c": a, \ (inEscape=true), { (escaped, skipped, depth stays 0), b, } (normal, depth becomes -1), , (depth=-1, doesn't split), c
 		// So the entire string becomes one token, and the backslash is preserved in the output
 		var result6 = splitNested("a\\{b},c");
-		assertEquals(1, result6.size()); // Escaped brace causes depth to go negative, comma doesn't split
+		assertSize(1, result6); // Escaped brace causes depth to go negative, comma doesn't split
 		assertEquals("a\\{b},c", result6.get(0)); // Backslash is preserved (not unescaped for braces)
 	}
 
@@ -5849,18 +5840,18 @@ class StringUtils_Test extends TestBase {
 	void a189_splitNestedInner() {
 		// Basic nested inner splitting (extracts inner content)
 		var result1 = splitNestedInner("a{b}");
-		assertEquals(1, result1.size());
+		assertSize(1, result1);
 		assertEquals("b", result1.get(0));
 
 		// With multiple inner elements
 		var result2 = splitNestedInner("a{b,c}");
-		assertEquals(2, result2.size());
+		assertSize(2, result2);
 		assertEquals("b", result2.get(0));
 		assertEquals("c", result2.get(1));
 
 		// With deeply nested
 		var result3 = splitNestedInner("a{b{c,d},e{f,g}}");
-		assertEquals(2, result3.size());
+		assertSize(2, result3);
 		assertEquals("b{c,d}", result3.get(0));
 		assertEquals("e{f,g}", result3.get(1));
 
@@ -5878,7 +5869,7 @@ class StringUtils_Test extends TestBase {
 		// Code path: c == '\\' when inEscape is true (double backslash)
 		// When inEscape is true and we see '\', we set inEscape = false (double backslash = literal backslash)
 		var result4 = splitNestedInner("a{b\\\\,c}");
-		assertEquals(2, result4.size());
+		assertSize(2, result4);
 		assertEquals("b\\", result4.get(0)); // Double backslash becomes single literal backslash
 		assertEquals("c", result4.get(1));
 
@@ -5890,7 +5881,7 @@ class StringUtils_Test extends TestBase {
 		// In splitNested, the backslash before the comma escapes it, and the backslash before the closing brace escapes it
 		// So the result is "b,c\\" (the closing brace is escaped and becomes a backslash)
 		var result5 = splitNestedInner("a{b\\,c\\}");
-		assertEquals(1, result5.size());
+		assertSize(1, result5);
 		assertEquals("b,c\\", result5.get(0)); // Escaped comma and closing brace (brace becomes backslash)
 
 		// Test escape sequence with opening brace - escaped opening brace doesn't affect depth
@@ -6414,10 +6405,7 @@ class StringUtils_Test extends TestBase {
 		assertList(toStringArray(List.of("a", "b", "c")), "a", "b", "c");
 
 		// Set.of() doesn't preserve order, so use LinkedHashSet for order-sensitive test
-		var set = new LinkedHashSet<String>();
-		set.add("x");
-		set.add("y");
-		set.add("z");
+		var set = set("x", "y", "z");
 		assertList(toStringArray(set), "x", "y", "z");
 	}
 

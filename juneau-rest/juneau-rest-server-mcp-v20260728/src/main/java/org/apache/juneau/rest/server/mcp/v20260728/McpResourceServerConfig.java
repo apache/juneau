@@ -169,7 +169,7 @@ public class McpResourceServerConfig {
 	 * @throws IllegalArgumentException If {@code value} is <jk>null</jk> or blank.
 	 */
 	public McpResourceServerConfig setRealm(String value) {
-		if (value == null || value.isBlank())
+		if (ib(value))
 			throw iaex("realm must not be null or blank");
 		realm = value;
 		return this;
@@ -262,7 +262,7 @@ public class McpResourceServerConfig {
 	 * @throws IllegalArgumentException If {@code value} is <jk>null</jk> or blank.
 	 */
 	public McpResourceServerConfig addScopeSupported(String value) {
-		if (value == null || value.isBlank())
+		if (ib(value))
 			throw iaex("scope must not be null or blank");
 		scopesSupported.add(value);
 		return this;
@@ -285,7 +285,7 @@ public class McpResourceServerConfig {
 	 * @throws IllegalArgumentException If {@code value} is <jk>null</jk> or blank.
 	 */
 	public McpResourceServerConfig addRequiredScope(String value) {
-		if (value == null || value.isBlank())
+		if (ib(value))
 			throw iaex("scope must not be null or blank");
 		requiredScopes.add(value);
 		scopesSupported.add(value);
@@ -319,7 +319,7 @@ public class McpResourceServerConfig {
 	 * @throws IllegalArgumentException If {@code method} is <jk>null</jk>/blank or {@code scopes} is invalid.
 	 */
 	public McpResourceServerConfig addOperationScope(String method, String name, String... scopes) {
-		if (method == null || method.isBlank())
+		if (ib(method))
 			throw iaex("method must not be null or blank");
 		if (scopes == null || scopes.length == 0)
 			throw iaex("scopes must not be null or empty");
@@ -327,7 +327,7 @@ public class McpResourceServerConfig {
 		// leaves earlier scopes half-advertised.
 		var set = new LinkedHashSet<String>();
 		for (var s : scopes) {
-			if (s == null || s.isBlank())
+			if (ib(s))
 				throw iaex("scope must not be null or blank");
 			set.add(s);
 		}

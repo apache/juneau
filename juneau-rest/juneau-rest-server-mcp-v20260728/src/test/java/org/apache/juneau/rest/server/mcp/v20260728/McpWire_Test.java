@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.server.mcp.v20260728;
 
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
@@ -192,7 +193,7 @@ class McpWire_Test {
 			.setContent(List.of(McpContentBlock.text("{\"x\":1}")))
 			.setStructuredContent(a));
 		assertSame(a, b.getStructuredContent());
-		assertEquals(1, b.getContent().size());
+		assertSize(1, b.getContent());
 	}
 
 	@Test
@@ -233,13 +234,13 @@ class McpWire_Test {
 		var arg = new McpPromptArgument().setName("a").setDescription("ad").setRequired(true);
 		var prompt = McpWire.toWire(new McpPromptSpec().setName("p").setDescription("pd").setArguments(List.of(arg)));
 		assertEquals("p", prompt.getName());
-		assertEquals(1, prompt.getArguments().size());
+		assertSize(1, prompt.getArguments());
 		assertEquals("a", prompt.getArguments().get(0).getName());
 
 		var message = new McpPromptMessage().setRole(McpRole.USER).setContent(McpContentBlock.text("hey"));
 		var outcome = McpWire.toWire(new McpPromptOutcome().setDescription("od").setMessages(List.of(message)));
 		assertEquals("od", outcome.getDescription());
-		assertEquals(1, outcome.getMessages().size());
+		assertSize(1, outcome.getMessages());
 		assertEquals(Role.USER, outcome.getMessages().get(0).getRole());
 	}
 
@@ -270,7 +271,7 @@ class McpWire_Test {
 		assertEquals("res", resource.getName());
 
 		var outcome = McpWire.toWire(new McpResourceOutcome().setContents(List.of(McpResourceContents.text("file://a", "text/plain", "x"))));
-		assertEquals(1, outcome.getContents().size());
+		assertSize(1, outcome.getContents());
 	}
 
 	@Test

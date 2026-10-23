@@ -17,6 +17,7 @@
 package org.apache.juneau.marshall.collections;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 
 import java.util.*;
 
@@ -54,7 +55,7 @@ class MarshalledList_Test extends TestBase {
 
 	@Test void a03_factoryOf() {
 		var l = MarshalledList.of(1, 2, 3);
-		assertEquals(3, l.size());
+		assertSize(3, l);
 		assertEquals(1, l.getInt(0));
 		assertEquals(2, l.getInt(1));
 		assertEquals(3, l.getInt(2));
@@ -62,14 +63,14 @@ class MarshalledList_Test extends TestBase {
 
 	@Test void a04_factoryCreateAndAppend() {
 		var l = MarshalledList.create().append("a").append("b");
-		assertEquals(2, l.size());
+		assertSize(2, l);
 		assertEquals("a", l.getString(0));
 	}
 
 	@Test void a05_parseViaOfString() throws Exception {
 		var l = MarshalledList.ofString("[1,2,3]", Json5Parser.DEFAULT);
 		assertNotNull(l);
-		assertEquals(3, l.size());
+		assertSize(3, l);
 		assertEquals(2, l.getInt(1));
 	}
 
@@ -79,7 +80,7 @@ class MarshalledList_Test extends TestBase {
 		assertTrue(l.isEmpty());
 		assertEquals(MarshalledList.class, l.getClass());
 		l.add("x");
-		assertEquals(1, l.size());
+		assertSize(1, l);
 	}
 
 	@Test void a06c_parseViaOfStringNullReader() throws Exception {
@@ -88,13 +89,13 @@ class MarshalledList_Test extends TestBase {
 		assertTrue(l.isEmpty());
 		assertEquals(MarshalledList.class, l.getClass());
 		l.add("x");
-		assertEquals(1, l.size());
+		assertSize(1, l);
 	}
 
 	@Test void a06b_ofTextAliasStillWorks() throws Exception {
 		var l = MarshalledList.ofString("[1,2,3]", Json5Parser.DEFAULT);
 		assertNotNull(l);
-		assertEquals(3, l.size());
+		assertSize(3, l);
 	}
 
 	@Test void a07_getMapReturnsNeutralType() {
@@ -112,7 +113,7 @@ class MarshalledList_Test extends TestBase {
 		l.add(inner);
 		var nested = l.getList(0);
 		assertFalse(nested instanceof JsonList, "Stored MarshalledList should not be returned as a JsonList");
-		assertEquals(2, nested.size());
+		assertSize(2, nested);
 	}
 
 	@Test void a09_typedAccessors() {
@@ -167,7 +168,7 @@ class MarshalledList_Test extends TestBase {
 		assertThrows(UnsupportedOperationException.class, lit::remove);
 		assertThrows(UnsupportedOperationException.class, () -> lit.add("x"));
 		assertThrows(UnsupportedOperationException.class, () -> lit.set("x"));
-		assertEquals(3, l.size());
+		assertSize(3, l);
 	}
 
 	@Test void a12_modifiable() {
@@ -176,7 +177,7 @@ class MarshalledList_Test extends TestBase {
 		assertFalse(mod.isUnmodifiable());
 		// modifiable() returns a fresh copy that is itself modifiable.
 		mod.add("b");
-		assertEquals(2, mod.size());
+		assertSize(2, mod);
 	}
 
 	@Test void a13_elementsIterableConvertsTypes() {
@@ -194,20 +195,20 @@ class MarshalledList_Test extends TestBase {
 
 	@Test void a15_ofCollection() {
 		var l = MarshalledList.of(Arrays.asList("a", "b"));
-		assertEquals(2, l.size());
+		assertSize(2, l);
 		assertEquals("b", l.getString(1));
 	}
 
 	@Test void a16_ofArrays() {
 		var l = MarshalledList.ofArrays(new Object[]{1, 2}, new Object[]{3, 4});
-		assertEquals(2, l.size());
+		assertSize(2, l);
 	}
 
 	@Test void a17_appendIf() {
 		var l = MarshalledList.create()
 			.appendIf(true, "kept")
 			.appendIf(false, "skipped");
-		assertEquals(1, l.size());
+		assertSize(1, l);
 		assertEquals("kept", l.getString(0));
 	}
 }

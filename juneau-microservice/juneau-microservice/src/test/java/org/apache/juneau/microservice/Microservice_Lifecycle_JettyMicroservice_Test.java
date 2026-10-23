@@ -41,10 +41,10 @@ import org.junit.jupiter.api.io.*;
  * Phase-3 (Tier H14, second pass) lifecycle tests for {@link Microservice}.
  *
  * <p>
- * Phase 2 already covered most builder/runtime surface area; this class targets the residual
+ * Other tests already cover most builder/runtime surface area; this class targets the residual
  * uncovered branches concentrated around:
  * <ul>
- *   <li>Builder methods left untested in Phase 2 ({@code configStore}, {@code consoleCommands(Class...)} catch path,
+ *   <li>Builder methods not covered elsewhere ({@code configStore}, {@code consoleCommands(Class...)} catch path,
  *       {@code manifest(File|Path|String|Class)}, {@code vars(Class...)}, {@code configurations(List)} null-entry skip).
  *   <li>Constructor manifest-fallback file-system path (workingDir with META-INF/MANIFEST.MF on disk).
  *   <li>Constructor config-resolution branches: {@code Main-Config} from manifest, {@code configFile} cmdline arg,
@@ -71,10 +71,10 @@ import org.junit.jupiter.api.io.*;
 	"resource", // Test-only Microservice/store instances are stopped via ms.stop() in try/finally; JDT's local closeable analysis does not recognize stop() as closing them.
 	"unchecked" // Calls to the generic-varargs Builder.consoleCommands(Class<? extends ConsoleCommand>...) and vars(Class<? extends Var>...) create generic arrays
 })
-class Microservice_Lifecycle_Test extends TestBase {
+class Microservice_Lifecycle_JettyMicroservice_Test extends TestBase {
 
 	// =================================================================================================================
-	// A.  Builder methods that were missed in Phase 2.
+	// A.  Builder methods not covered elsewhere.
 	// =================================================================================================================
 
 	@Test void a01_builder_configStore_setsField() {

@@ -18,10 +18,10 @@
  * Apache Juneau Petstore - Spring Boot deployment.
  *
  * <p>
- * Provides {@link org.apache.juneau.petstore.springboot.App} ({@code @SpringBootApplication} bootstrap) and
- * {@link org.apache.juneau.petstore.springboot.RootResources} ({@code BasicSpringRestServletGroup}-based router
+ * Provides {@link org.apache.juneau.petstore.springboot.App App} ({@code @SpringBootApplication} bootstrap) and
+ * {@link org.apache.juneau.petstore.springboot.RootResources RootResources} ({@code BasicSpringRestServletGroup}-based router
  * mounting {@link org.apache.juneau.petstore.rest.PetStoreResource} from {@code juneau-petstore-core}).  The
- * {@link org.apache.juneau.petstore.springboot.HelloResource} child preserves the legacy {@code @Autowired}
+ * {@link org.apache.juneau.petstore.springboot.HelloResource HelloResource} child preserves the legacy {@code @Autowired}
  * injection demo.
  */
 package org.apache.juneau.petstore.springboot;

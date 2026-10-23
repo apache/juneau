@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.server.views;
 
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.stream.*;
@@ -54,7 +55,7 @@ class IdempotencyKey_Test extends TestBase {
 
 	@Test void a03_mint_valuesAreUnique() {
 		var seen = Stream.generate(() -> IdempotencyKey.mint("ack", "INC-1").value()).limit(50).collect(Collectors.toSet());
-		assertEquals(50, seen.size(), "minted key values must be unique (SecureRandom)");
+		assertSize(() -> "minted key values must be unique (SecureRandom)", 50, seen);
 	}
 
 	@Test void a04_mint_blankArgsThrow() {
@@ -88,7 +89,7 @@ class IdempotencyKey_Test extends TestBase {
 		// distinct creates look like one replayed create.
 		var seen = Stream.generate(() -> IdempotencyKey.mintSelfTargeted("create-project").value()).limit(50)
 			.collect(Collectors.toSet());
-		assertEquals(50, seen.size(), "self-targeted key values must be unique (SecureRandom)");
+		assertSize(() -> "self-targeted key values must be unique (SecureRandom)", 50, seen);
 	}
 
 	@Test void a08_mintSelfTargeted_stillRefusesAForeignTarget() {

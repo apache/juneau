@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.marshall.html;
 
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
@@ -359,7 +360,7 @@ class BasicHtmlDocTemplate_ChromeSvlEncoding_Test extends TestBase {
 			jul.setLevel(oldLevel);
 		}
 		assertTrue(records.stream().allMatch(r -> r.getLevel().equals(Level.FINE)));
-		assertEquals(2, records.size());
+		assertSize(2, records);
 		assertTrue(records.get(0).getMessage().startsWith("Could not serialize to media type [text/ini]: INI format requires"), records.get(0).getMessage());
 		assertTrue(records.get(1).getMessage().startsWith("Could not serialize to media type [text/x-ini]: INI format requires"), records.get(1).getMessage());
 		assertChromeEncoded(html[0]);

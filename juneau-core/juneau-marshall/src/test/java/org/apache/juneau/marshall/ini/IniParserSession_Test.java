@@ -18,6 +18,7 @@ package org.apache.juneau.marshall.ini;
 
 import static org.apache.juneau.BasicTestUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 
 import java.io.*;
 import java.time.*;
@@ -68,7 +69,7 @@ class IniParserSession_Test extends TestBase {
 	@Test void b01_readIniContent_bufferedReaderReused() throws Exception {
 		var session = IniParserSession.create(IniParser.DEFAULT).build();
 		var sections = session.readIniContent(new BufferedReader(new StringReader("a=1\n[sec]\nb=2")));
-		assertEquals(2, sections.size());
+		assertSize(2, sections);
 		assertEquals("1", sections.get("").get("a"));
 		assertEquals("2", sections.get("sec").get("b"));
 	}

@@ -19,7 +19,7 @@
  * {@code HttpTransport} implementation for the next-generation REST client backed by OkHttp.
  *
  * <p>
- * Provides the transport ({@link org.apache.juneau.rest.client.okhttp.OkHttpTransport}),
+ * Provides the transport ({@link org.apache.juneau.rest.client.okhttp.OkHttpTransport OkHttpTransport}),
  * its fluent builder, and an auto-discoverable
  * {@link org.apache.juneau.rest.client.okhttp.OkHttpTransportProvider provider}.
  */

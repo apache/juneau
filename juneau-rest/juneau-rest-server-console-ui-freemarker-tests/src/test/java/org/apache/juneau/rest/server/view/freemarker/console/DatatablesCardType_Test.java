@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.server.view.freemarker.console;
 
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.nio.file.*;
@@ -207,7 +208,7 @@ class DatatablesCardType_Test extends TestBase {
 
 	@Test void ribbonDivider_isAccepted() {
 		var table = (Map<?,?>)h.toFragment(src("t", "{dataUrl:'/x', columns:[{key:'a'}], ribbon:[{type:'refresh'}, {type:'divider'}]}")).get("table");
-		assertEquals(2, ((List<?>)table.get("ribbon")).size());
+		assertSize(2, ((List<?>)table.get("ribbon")));
 	}
 
 	@Test void ribbonDividerWithGroup_isRejected() {
@@ -286,13 +287,13 @@ class DatatablesCardType_Test extends TestBase {
 
 	@Test void inlineRows_only_ok() {
 		var table = (JsonMap) h.toFragment(src("t", "{rows:[{a:1}], columns:[{key:'a'}]}")).get("table");
-		assertEquals(1, table.getList("rows").size());
+		assertSize(1, table.getList("rows"));
 		assertFalse(table.containsKey("dataUrl"));
 	}
 
 	@Test void inlineRows_empty_ok() {
 		var table = (JsonMap) h.toFragment(src("t", "{rows:[], columns:[{key:'a'}]}")).get("table");
-		assertEquals(0, table.getList("rows").size());
+		assertSize(0, table.getList("rows"));
 	}
 
 	@Test void inlineRows_andDataUrl_throwsE27() {
@@ -354,12 +355,12 @@ class DatatablesCardType_Test extends TestBase {
 
 	@Test void dualHat_cardSource_usesJson5ParserOnly() throws Exception {
 		// The card body is parsed with the Juneau Json5Parser, never a third-party Json5 reader, and the file
-		// carries no Salesforce package/SLDS markers.
+		// carries no denied vendor terms.
 		var s = Files.readString(CONSOLE_UI_MAIN.resolve("CardSource.java"));
 		assertTrue(s.contains("Json5Parser"), () -> s);
 		assertFalse(s.contains("Json5l"), () -> s);
 		assertFalse(s.contains("com.sfdc"), () -> s);
-		assertFalse(s.contains("slds-"), () -> s);
+		DualHatGuard.assertClean(s);
 	}
 
 	@Test void a01_detailRegionWithoutDataUrlGetsTheEndpoint() {
@@ -569,7 +570,7 @@ class DatatablesCardType_Test extends TestBase {
 			+ " {id:'m1', type:'meter', label:'L', value:1, max:2, text:'x', tone:'success'}, {id:'g1', type:'segmented', label:'L', segments:[{label:'x', count:1, tone:'info'}]},"
 			+ " {id:'m2', label:'L', value:1, max:2}, {id:'m0', type:'meter', label:'L', value:0, max:2}, {id:'g2', label:'L', segments:[{label:'x', count:0}]}]";
 		var table = (Map<?,?>)h.toFragment(src("t", qs(items))).get("table");
-		assertEquals(11, ((List<?>)((Map<?,?>)table.get("quickStats")).get("items")).size());
+		assertSize(11, ((List<?>)((Map<?,?>)table.get("quickStats")).get("items")));
 	}
 
 	@Test void quickStats_contractVersion_e31Wins() {
@@ -602,9 +603,7 @@ class DatatablesCardType_Test extends TestBase {
 		for (var p : files) {
 			assertTrue(Files.exists(p), () -> "missing source: " + p);
 			var s = Files.readString(p);
-			assertFalse(s.contains("slds-"), () -> p + " contains slds-");
-			assertFalse(s.contains("lightning"), () -> p + " contains lightning");
-			assertFalse(s.contains("Salesforce Sans"), () -> p + " contains Salesforce Sans");
+			DualHatGuard.assertClean(s);
 			assertFalse(s.contains("Json5l"), () -> p + " contains Json5l");
 		}
 	}

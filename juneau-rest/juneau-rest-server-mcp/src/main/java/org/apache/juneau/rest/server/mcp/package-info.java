@@ -23,7 +23,7 @@
  * JSON-RPC dispatch contract, and the two HTTP entry points — without knowing any MCP protocol
  * revision. It has no compile dependency on any revision's wire beans, and that is enforced at
  * build time. A protocol revision is supplied by an implementation of
- * {@link org.apache.juneau.rest.server.mcp.McpRevision} living in its own module (for example
+ * {@link org.apache.juneau.rest.server.mcp.McpRevision McpRevision} living in its own module (for example
  * {@code juneau-rest-server-mcp-v20250618}), and a consumer binds one
  * at compile time by extending that revision's abstract servlet or composing its endpoint mixin.
  *

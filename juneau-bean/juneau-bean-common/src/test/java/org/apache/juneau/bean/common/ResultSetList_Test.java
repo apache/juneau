@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.bean.common;
 
+import static org.apache.juneau.test.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -48,7 +49,7 @@ class ResultSetList_Test extends TestBase {
 
 		var result = new ResultSetList(rs, 0, Integer.MAX_VALUE, false);
 
-		assertEquals(3, result.size());
+		assertSize(3, result);
 		assertEquals(1, result.get(0).get("id"));
 		assertEquals("Alice", result.get(0).get("name"));
 		assertEquals(2, result.get(1).get("id"));
@@ -71,7 +72,7 @@ class ResultSetList_Test extends TestBase {
 
 		var result = new ResultSetList(rs, 0, Integer.MAX_VALUE, true);
 
-		assertEquals(2, result.size());
+		assertSize(2, result);
 		assertEquals(0, result.get(0).get("ROW"));
 		assertEquals("Alice", result.get(0).get("name"));
 		assertEquals(1, result.get(1).get("ROW"));
@@ -93,7 +94,7 @@ class ResultSetList_Test extends TestBase {
 		// pos=2: skip loop runs once (skips 1 rs.next() call), then reads remaining 2 rows
 		var result = new ResultSetList(rs, 2, Integer.MAX_VALUE, false);
 
-		assertEquals(2, result.size());
+		assertSize(2, result);
 		assertEquals("Bob", result.get(0).get("name"));
 		assertEquals("Charlie", result.get(1).get("name"));
 	}
@@ -108,7 +109,7 @@ class ResultSetList_Test extends TestBase {
 		when(rs.next()).thenReturn(true);
 
 		var result = new ResultSetList(rs, 0, 0, false);
-		assertEquals(0, result.size());
+		assertSize(0, result);
 		verify(rs).close();
 	}
 
@@ -126,7 +127,7 @@ class ResultSetList_Test extends TestBase {
 		when(rs.getTimestamp(1)).thenReturn(ts);
 
 		var result = new ResultSetList(rs, 0, Integer.MAX_VALUE, false);
-		assertEquals(1, result.size());
+		assertSize(1, result);
 		assertEquals(ts, result.get(0).get("ts"));
 	}
 
@@ -145,7 +146,7 @@ class ResultSetList_Test extends TestBase {
 		when(rs.getBlob(1)).thenReturn(blob);
 
 		var result = new ResultSetList(rs, 0, Integer.MAX_VALUE, false);
-		assertEquals(1, result.size());
+		assertSize(1, result);
 		assertEquals("blob[42]", result.get(0).get("data"));
 	}
 
@@ -164,7 +165,7 @@ class ResultSetList_Test extends TestBase {
 		when(rs.getClob(1)).thenReturn(clob);
 
 		var result = new ResultSetList(rs, 0, Integer.MAX_VALUE, false);
-		assertEquals(1, result.size());
+		assertSize(1, result);
 		assertEquals("clob[100]", result.get(0).get("data"));
 	}
 
@@ -182,7 +183,7 @@ class ResultSetList_Test extends TestBase {
 		when(rs.getBinaryStream(1)).thenReturn(new ByteArrayInputStream(bytes));
 
 		var result = new ResultSetList(rs, 0, Integer.MAX_VALUE, false);
-		assertEquals(1, result.size());
+		assertSize(1, result);
 		assertEquals("longvarbinary[5]", result.get(0).get("data"));
 	}
 
@@ -200,7 +201,7 @@ class ResultSetList_Test extends TestBase {
 		when(rs.getAsciiStream(1)).thenReturn(new ByteArrayInputStream(bytes));
 
 		var result = new ResultSetList(rs, 0, Integer.MAX_VALUE, false);
-		assertEquals(1, result.size());
+		assertSize(1, result);
 		assertEquals("longvarchar[5]", result.get(0).get("text"));
 	}
 
@@ -217,7 +218,7 @@ class ResultSetList_Test extends TestBase {
 		when(rs.getCharacterStream(1)).thenReturn(new StringReader("hello"));
 
 		var result = new ResultSetList(rs, 0, Integer.MAX_VALUE, false);
-		assertEquals(1, result.size());
+		assertSize(1, result);
 		assertEquals("longnvarchar[5]", result.get(0).get("text"));
 	}
 
@@ -235,7 +236,7 @@ class ResultSetList_Test extends TestBase {
 
 		// pos=3: skip loop runs, rs.next() becomes false before skip is complete → no rows returned
 		var result = new ResultSetList(rs, 3, Integer.MAX_VALUE, false);
-		assertEquals(0, result.size());
+		assertSize(0, result);
 		verify(rs).close();
 	}
 
@@ -252,7 +253,7 @@ class ResultSetList_Test extends TestBase {
 		when(rs.getObject(1)).thenThrow(new SQLException("DB error"));
 
 		var result = new ResultSetList(rs, 0, Integer.MAX_VALUE, false);
-		assertEquals(1, result.size());
+		assertSize(1, result);
 		// Exception is wrapped as a map via lm(e)
 		assertNotNull(result.get(0).get("col1"));
 	}

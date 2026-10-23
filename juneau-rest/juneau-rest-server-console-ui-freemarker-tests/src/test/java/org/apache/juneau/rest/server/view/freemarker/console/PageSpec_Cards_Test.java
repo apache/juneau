@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.server.view.freemarker.console;
 
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
@@ -47,7 +48,7 @@ class PageSpec_Cards_Test extends TestBase {
 
 	@Test void a01_table_addsDatatablesCard() {
 		var spec = PageSpec.create().table(table("slo"));
-		assertEquals(1, spec.cards().size());
+		assertSize(1, spec.cards());
 		assertEquals("datatables", spec.card("slo").orElseThrow().type());
 		assertNull(spec.card("slo").orElseThrow().toMap().get("title"));
 	}
@@ -167,8 +168,8 @@ class PageSpec_Cards_Test extends TestBase {
 		var spec = PageSpec.create().html("a", "<p/>");
 		var snap = spec.cards();
 		spec.html("b", "<p/>");
-		assertEquals(1, snap.size());
-		assertEquals(2, spec.cards().size());
+		assertSize(1, snap);
+		assertSize(2, spec.cards());
 		assertTrue(spec.card("nope").isEmpty());
 	}
 
@@ -298,7 +299,7 @@ class PageSpec_Cards_Test extends TestBase {
 		assertNull(spec.card("slo").orElseThrow().toMap().get("table"));
 		var cap = new PageCapture();
 		spec.applyTo(cap, MODEL);
-		assertEquals(2, cap.unplacedCards().size());
+		assertSize(2, cap.unplacedCards());
 	}
 
 	@Test void a35_applyTo_cardsWithoutCardModel_rejected() {

@@ -17,6 +17,7 @@
 package org.apache.juneau.petstore.console.dev;
 
 import static java.nio.charset.StandardCharsets.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.io.*;
 import java.time.*;
@@ -218,7 +219,7 @@ public class DashboardRest extends PetstoreConsolePage {
 	}
 
 	private static Instant instant(String v, Instant def) {
-		if (v == null || v.isBlank())
+		if (ib(v))
 			return def;
 		try {
 			return Instant.parse(v);

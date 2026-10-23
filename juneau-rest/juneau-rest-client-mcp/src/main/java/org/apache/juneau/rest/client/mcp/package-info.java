@@ -27,15 +27,15 @@
  * <p>
  * Key types:
  * <ul>
- * 	<li>{@link org.apache.juneau.rest.client.mcp.AbstractMcpClient} - neutral base class; per-revision
+ * 	<li>{@link org.apache.juneau.rest.client.mcp.AbstractMcpClient AbstractMcpClient} - neutral base class; per-revision
  * 		{@code McpClient} facades extend it
- * 	<li>{@link org.apache.juneau.rest.client.mcp.McpAuthInterceptor} - the auth-token seam
- * 	<li>{@link org.apache.juneau.rest.client.mcp.McpResponseCache} - the pluggable response-cache SPI
- * 	<li>{@link org.apache.juneau.rest.client.mcp.InMemoryMcpResponseCache} - the built-in in-memory cache default
- * 	<li>{@link org.apache.juneau.rest.client.mcp.McpDuplexDispatcher} - dispatches server-initiated requests
+ * 	<li>{@link org.apache.juneau.rest.client.mcp.McpAuthInterceptor McpAuthInterceptor} - the auth-token seam
+ * 	<li>{@link org.apache.juneau.rest.client.mcp.McpResponseCache McpResponseCache} - the pluggable response-cache SPI
+ * 	<li>{@link org.apache.juneau.rest.client.mcp.InMemoryMcpResponseCache InMemoryMcpResponseCache} - the built-in in-memory cache default
+ * 	<li>{@link org.apache.juneau.rest.client.mcp.McpDuplexDispatcher McpDuplexDispatcher} - dispatches server-initiated requests
  * 		delivered over a client's duplex event-stream channel
- * 	<li>{@link org.apache.juneau.rest.client.mcp.McpServerRequestHandler} - the callback registered with
- * 		{@link org.apache.juneau.rest.client.mcp.McpDuplexDispatcher} to handle those requests
+ * 	<li>{@link org.apache.juneau.rest.client.mcp.McpServerRequestHandler McpServerRequestHandler} - the callback registered with
+ * 		{@link org.apache.juneau.rest.client.mcp.McpDuplexDispatcher McpDuplexDispatcher} to handle those requests
  * </ul>
  */
 package org.apache.juneau.rest.client.mcp;

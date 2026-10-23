@@ -29,7 +29,7 @@ import org.apache.juneau.http.remote.*;
  * <p>
  * The parse/apply logic here is ported from the next-generation engine
  * (<c>org.apache.juneau.rest.client.remote.RemoteClient</c> and <c>RrpcInterfaceMeta</c>) so that the classic
- * engine can honor the same {@link org.apache.juneau.http.remote.Remote @Remote}/{@link org.apache.juneau.http.remote.RemoteOp @RemoteOp}
+ * engine can honor the same {@link Remote @Remote}/{@link RemoteOp @RemoteOp}
  * members without introducing a cross-module dependency on freshly-installed common code.
  *
  * <h5 class='section'>See Also:</h5><ul>
@@ -151,7 +151,7 @@ public class RemoteProxyUtils {
 	 *
 	 * @param url The URL to validate.
 	 * @param allowPrivateUrls When <jk>true</jk>, the deny-private check is skipped.
-	 * @param allowedRanges The client's {@link org.apache.juneau.http.remote.RemoteUrlPolicy.AllowedRanges}, unioned with the {@code RestClient.allowAddressRanges} property.
+	 * @param allowedRanges The client's {@link org.apache.juneau.http.remote.RemoteUrlPolicy.AllowedRanges RemoteUrlPolicy.AllowedRanges}, unioned with the {@code RestClient.allowAddressRanges} property.
 	 * @return The unchanged URL.
 	 * @throws IllegalArgumentException If {@code url} is absolute and violates the policy.
 	 */
@@ -160,7 +160,7 @@ public class RemoteProxyUtils {
 	}
 
 	/**
-	 * Emits a one-time build-time warning that an {@link org.apache.juneau.http.remote.Remote @Remote}/{@link org.apache.juneau.http.remote.RemoteOp @RemoteOp}
+	 * Emits a one-time build-time warning that an {@link Remote @Remote}/{@link RemoteOp @RemoteOp}
 	 * member is set on the classic engine that the classic engine cannot honor.
 	 *
 	 * <p>

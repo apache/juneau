@@ -18,6 +18,7 @@ package org.apache.juneau.marshall.protobuf;
 
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 
 import java.io.*;
 import java.util.*;
@@ -177,7 +178,7 @@ class ProtobufSerializerSession_Test extends TestBase {
 
 	@Test void e01_nullInsidePackedListSkipped() throws Exception {
 		var a = new E01_IntList();
-		a.nums = new ArrayList<>(Arrays.asList(1, null, 2));
+		a.nums = list(1, null, 2);
 		var bytes = ProtobufSerializer.DEFAULT.write(a);
 		var p = ProtobufParser.DEFAULT.read(bytes, E01_IntList.class);
 		assertEquals(list(1, 2), p.nums);
@@ -212,7 +213,7 @@ class ProtobufSerializerSession_Test extends TestBase {
 		a.m.put("b", 2);
 		var bytes = ProtobufSerializer.DEFAULT.write(a);
 		var p = ProtobufParser.DEFAULT.read(bytes, F01_Map.class);
-		assertEquals(1, p.m.size());
+		assertSize(1, p.m);
 		assertEquals(Integer.valueOf(2), p.m.get("b"));
 	}
 
@@ -241,7 +242,7 @@ class ProtobufSerializerSession_Test extends TestBase {
 		a.m.put("b", 2);
 		var bytes = ProtobufSerializer.DEFAULT.write(a);
 		var p = ProtobufParser.DEFAULT.read(bytes, F01_Map.class);
-		assertEquals(1, p.m.size());
+		assertSize(1, p.m);
 		assertEquals(Integer.valueOf(2), p.m.get("b"));
 	}
 

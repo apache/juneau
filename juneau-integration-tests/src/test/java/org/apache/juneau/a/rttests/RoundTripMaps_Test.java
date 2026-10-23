@@ -236,10 +236,7 @@ class RoundTripMaps_Test extends TestBase {
 		assertEquals("a", x.get(1));
 		assertNull(null, x.get(2));
 
-		var x2 = new HashMap<Integer,String>();
-		x2.put(1, "a");
-		x2.put(2, null);
-		x2.put(null, "b");
+		Map<Integer,String> x2 = m(1, "a", 2, null, null, "b");
 		x2 = t.roundTrip(x2, HashMap.class, Integer.class, String.class);
 		assertEquals("a", x2.get(1));
 		assertNull(x2.get(2));
@@ -260,10 +257,7 @@ class RoundTripMaps_Test extends TestBase {
 		assertEquals("a", x.get(true));
 		assertNull(null, x.get(false));
 
-		var x2 = new HashMap<Boolean,String>();
-		x2.put(true, "a");
-		x2.put(false, null);
-		x2.put(null, "b");
+		Map<Boolean,String> x2 = m(true, "a", false, null, null, "b");
 		x2 = t.roundTrip(x2, HashMap.class, Boolean.class, String.class);
 		assertEquals("a", x2.get(true));
 		assertNull(x2.get(false));
@@ -331,10 +325,7 @@ class RoundTripMaps_Test extends TestBase {
 		assertEquals("a", x.get(xd1));
 		assertNull(null, x.get(xd2));
 
-		var x2 = new HashMap<Date,String>();
-		x2.put(xd1, "a");
-		x2.put(xd2, null);
-		x2.put(null, "b");
+		Map<Date,String> x2 = m(xd1, "a", xd2, null, null, "b");
 		x2 = t.roundTrip(x2, HashMap.class, Date.class, String.class);
 		assertEquals("a", x2.get(xd1));
 		assertNull(x2.get(xd2));
@@ -358,10 +349,7 @@ class RoundTripMaps_Test extends TestBase {
 		assertEquals("a", x.get(xc1));
 		assertNull(null, x.get(xc2));
 
-		var x2 = new HashMap<Calendar,String>();
-		x2.put(xc1, "a");
-		x2.put(xc2, null);
-		x2.put(null, "b");
+		Map<Calendar,String> x2 = m(xc1, "a", xc2, null, null, "b");
 		x2 = t.roundTrip(x2, HashMap.class, GregorianCalendar.class, String.class);
 
 		assertEquals("a", x2.get(xc1));
@@ -384,10 +372,7 @@ class RoundTripMaps_Test extends TestBase {
 		assertEquals("a", x.get(TestEnum.FOO));
 		assertNull(null, x.get(TestEnum.BAR));
 
-		var x2 = new HashMap<TestEnum,String>();
-		x2.put(TestEnum.FOO, "a");
-		x2.put(TestEnum.BAR, null);
-		x2.put(null, "b");
+		Map<TestEnum,String> x2 = m(TestEnum.FOO, "a", TestEnum.BAR, null, null, "b");
 		x2 = t.roundTrip(x2, HashMap.class, TestEnum.class, String.class);
 		assertEquals("a", x2.get(TestEnum.FOO));
 		assertNull(x2.get(TestEnum.BAR));

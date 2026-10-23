@@ -23,8 +23,8 @@
  * and bulk data pipelines.
  *
  * <p>
- * This package provides {@link org.apache.juneau.marshall.jsonl.JsonlSerializer} and
- * {@link org.apache.juneau.marshall.jsonl.JsonlParser} which extend the JSON serializer/parser to produce
+ * This package provides {@link org.apache.juneau.marshall.jsonl.JsonlSerializer JsonlSerializer} and
+ * {@link org.apache.juneau.marshall.jsonl.JsonlParser JsonlParser} which extend the JSON serializer/parser to produce
  * and consume newline-delimited JSON.
  *
  * <h5 class='section'>Example:</h5>

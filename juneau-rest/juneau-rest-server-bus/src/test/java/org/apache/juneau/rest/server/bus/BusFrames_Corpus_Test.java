@@ -41,14 +41,18 @@ class BusFrames_Corpus_Test extends TestBase {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Casts a parsed JSON value to its known Map/List shape.
+	})
 	private static List<Map<String,Object>> section(String name) {
 		var list = (List<Map<String,Object>>)(List<?>) corpus.getList(name);
 		assertFalse(list.isEmpty(), name);
 		return list;
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Casts a parsed JSON value to its known Map/List shape.
+	})
 	private static Map<String,Object> frame(Map<String,Object> c) {
 		return (Map<String,Object>) c.get("frame");
 	}

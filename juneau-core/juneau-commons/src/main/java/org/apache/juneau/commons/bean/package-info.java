@@ -40,47 +40,47 @@
  *
  * <h5 class='topic'>Runtime types</h5>
  * <ul>
- *   <li>{@link org.apache.juneau.commons.bean.BeanMeta} — metadata describing a bean class
+ *   <li>{@link org.apache.juneau.commons.bean.BeanMeta BeanMeta} — metadata describing a bean class
  *       (properties, constructor, type info).
- *   <li>{@link org.apache.juneau.commons.bean.BeanPropertyMeta} — metadata describing a single
+ *   <li>{@link org.apache.juneau.commons.bean.BeanPropertyMeta BeanPropertyMeta} — metadata describing a single
  *       bean property.
- *   <li>{@link org.apache.juneau.commons.bean.BeanMap} — {@link java.util.Map} view of a bean
- *       backed by its {@link org.apache.juneau.commons.bean.BeanMeta}.
- *   <li>{@link org.apache.juneau.commons.bean.BeanMapEntry} — {@link java.util.Map.Entry} view of a
+ *   <li>{@link org.apache.juneau.commons.bean.BeanMap BeanMap} — {@link java.util.Map} view of a bean
+ *       backed by its {@link org.apache.juneau.commons.bean.BeanMeta BeanMeta}.
+ *   <li>{@link org.apache.juneau.commons.bean.BeanMapEntry BeanMapEntry} — {@link java.util.Map.Entry} view of a
  *       single bean property.
- *   <li>{@link org.apache.juneau.commons.bean.BeanPropertyValue} — read-side property holder used by
+ *   <li>{@link org.apache.juneau.commons.bean.BeanPropertyValue BeanPropertyValue} — read-side property holder used by
  *       consumers that iterate bean properties.
- *   <li>{@link org.apache.juneau.commons.bean.BeanPropertyConsumer} — callback for iterating bean
- *       properties without materializing a {@link org.apache.juneau.commons.bean.BeanMap}.
- *   <li>{@link org.apache.juneau.commons.bean.BeanProxyInvocationHandler} — {@link java.lang.reflect.InvocationHandler}
+ *   <li>{@link org.apache.juneau.commons.bean.BeanPropertyConsumer BeanPropertyConsumer} — callback for iterating bean
+ *       properties without materializing a {@link org.apache.juneau.commons.bean.BeanMap BeanMap}.
+ *   <li>{@link org.apache.juneau.commons.bean.BeanProxyInvocationHandler BeanProxyInvocationHandler} — {@link java.lang.reflect.InvocationHandler}
  *       that backs interface-only bean proxies.
- *   <li>{@link org.apache.juneau.commons.bean.BeanInterceptor} — pre/post hooks fired around bean
+ *   <li>{@link org.apache.juneau.commons.bean.BeanInterceptor BeanInterceptor} — pre/post hooks fired around bean
  *       property reads / writes.
  * </ul>
  *
  * <h5 class='topic'>SPI seams</h5>
  * <ul>
- *   <li>{@link org.apache.juneau.commons.bean.BeanConfigContext} — immutable POJO carrying all
+ *   <li>{@link org.apache.juneau.commons.bean.BeanConfigContext BeanConfigContext} — immutable POJO carrying all
  *       bean-modeling configuration knobs plus SPI hooks. {@code MarshallingContext} (in
  *       {@code juneau-marshall}) installs the marshalling-side resolver / initializer / post-processor.
- *   <li>{@link org.apache.juneau.commons.bean.BeanInfo} — abstract type-classification surface;
+ *   <li>{@link org.apache.juneau.commons.bean.BeanInfo BeanInfo} — abstract type-classification surface;
  *       {@code ClassMeta} extends it on the marshalling side.
- *   <li>{@link org.apache.juneau.commons.bean.BeanTypeResolver} — resolves {@link java.lang.reflect.Type}
- *       references to {@link org.apache.juneau.commons.bean.BeanInfo} instances.
- *   <li>{@link org.apache.juneau.commons.bean.BeanSession} — per-operation session surface (type
+ *   <li>{@link org.apache.juneau.commons.bean.BeanTypeResolver BeanTypeResolver} — resolves {@link java.lang.reflect.Type}
+ *       references to {@link org.apache.juneau.commons.bean.BeanInfo BeanInfo} instances.
+ *   <li>{@link org.apache.juneau.commons.bean.BeanSession BeanSession} — per-operation session surface (type
  *       conversion, sub-bean construction, CharSequence parsing).
- *   <li>{@link org.apache.juneau.commons.bean.BeanFilter} — per-class filter surface;
+ *   <li>{@link org.apache.juneau.commons.bean.BeanFilter BeanFilter} — per-class filter surface;
  *       {@code MarshalledFilter} implements it.
- *   <li>{@link org.apache.juneau.commons.bean.BeanRegistryLookup} — bean-dictionary lookup surface;
+ *   <li>{@link org.apache.juneau.commons.bean.BeanRegistryLookup BeanRegistryLookup} — bean-dictionary lookup surface;
  *       {@code BeanRegistry} implements it.
- *   <li>{@link org.apache.juneau.commons.bean.BeanMetaInitializer} — hook that lets marshalling-side
- *       code augment {@link org.apache.juneau.commons.bean.BeanMeta} construction (filter discovery,
+ *   <li>{@link org.apache.juneau.commons.bean.BeanMetaInitializer BeanMetaInitializer} — hook that lets marshalling-side
+ *       code augment {@link org.apache.juneau.commons.bean.BeanMeta BeanMeta} construction (filter discovery,
  *       type-name resolution, bean-registry assembly).
- *   <li>{@link org.apache.juneau.commons.bean.BeanPropertyPostProcessor} — hook that lets marshalling-side
- *       code augment {@link org.apache.juneau.commons.bean.BeanPropertyMeta} construction
+ *   <li>{@link org.apache.juneau.commons.bean.BeanPropertyPostProcessor BeanPropertyPostProcessor} — hook that lets marshalling-side
+ *       code augment {@link org.apache.juneau.commons.bean.BeanPropertyMeta BeanPropertyMeta} construction
  *       (swap / surrogate / format annotation processing).
- *   <li>{@link org.apache.juneau.commons.bean.Delegate} — pluggable delegate-bean marker.
- *   <li>{@link org.apache.juneau.commons.bean.PropertyNamer} — pluggable Java-name to bean-property-name
+ *   <li>{@link org.apache.juneau.commons.bean.Delegate Delegate} — pluggable delegate-bean marker.
+ *   <li>{@link org.apache.juneau.commons.bean.PropertyNamer PropertyNamer} — pluggable Java-name to bean-property-name
  *       transformer.
  * </ul>
  *
@@ -90,14 +90,14 @@
  * </p>
  * <ul>
  *   <li><b>Not thread-safe (mutable, no internal synchronization):</b>
- *       {@link org.apache.juneau.commons.bean.BeanMap}, {@link org.apache.juneau.commons.bean.BeanProxyInvocationHandler},
- *       {@link org.apache.juneau.commons.bean.BeanConfigContext.Builder}.
+ *       {@link org.apache.juneau.commons.bean.BeanMap BeanMap}, {@link org.apache.juneau.commons.bean.BeanProxyInvocationHandler BeanProxyInvocationHandler},
+ *       {@link BeanConfigContext.Builder}.
  *   <li><b>Thread-safe after construction (immutable metadata/value holders):</b>
- *       {@link org.apache.juneau.commons.bean.BeanConfigContext}, {@link org.apache.juneau.commons.bean.BeanMeta}, {@link org.apache.juneau.commons.bean.BeanPropertyMeta},
- *       {@link org.apache.juneau.commons.bean.BeanPropertyValue}, {@link org.apache.juneau.commons.bean.BeanMapEntry}.
+ *       {@link org.apache.juneau.commons.bean.BeanConfigContext BeanConfigContext}, {@link org.apache.juneau.commons.bean.BeanMeta BeanMeta}, {@link org.apache.juneau.commons.bean.BeanPropertyMeta BeanPropertyMeta},
+ *       {@link org.apache.juneau.commons.bean.BeanPropertyValue BeanPropertyValue}, {@link org.apache.juneau.commons.bean.BeanMapEntry BeanMapEntry}.
  *   <li><b>Thread safety depends on implementation/state:</b>
- *       {@link org.apache.juneau.commons.bean.BeanSession}, {@link org.apache.juneau.commons.bean.BeanFilter}, {@link org.apache.juneau.commons.bean.BeanRegistryLookup}, {@link org.apache.juneau.commons.bean.BeanMetaInitializer},
- *       {@link org.apache.juneau.commons.bean.BeanPropertyPostProcessor}, {@link org.apache.juneau.commons.bean.BeanPropertyConsumer}, {@link org.apache.juneau.commons.bean.BeanInfo}.
+ *       {@link org.apache.juneau.commons.bean.BeanSession BeanSession}, {@link org.apache.juneau.commons.bean.BeanFilter BeanFilter}, {@link org.apache.juneau.commons.bean.BeanRegistryLookup BeanRegistryLookup}, {@link org.apache.juneau.commons.bean.BeanMetaInitializer BeanMetaInitializer},
+ *       {@link org.apache.juneau.commons.bean.BeanPropertyPostProcessor BeanPropertyPostProcessor}, {@link org.apache.juneau.commons.bean.BeanPropertyConsumer BeanPropertyConsumer}, {@link org.apache.juneau.commons.bean.BeanInfo BeanInfo}.
  * </ul>
  */
 package org.apache.juneau.commons.bean;

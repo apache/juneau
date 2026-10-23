@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.server.mcp.v20260728;
 
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.security.*;
@@ -654,7 +655,7 @@ class McpMrtrDispatch_Test {
 		var params = JsonMap.of("name", "ask", "requestState", token, "inputResponses", JsonMap.of("q1", "answer"));
 		var respHolder = new Object[1];
 		var records = LogRecordCapture.quietly(McpRevision.class, () -> respHolder[0] = send(rev, config, req(1, "tools/call", params, true), hdrs("tools/call", "ask")));
-		assertEquals(1, records.size(), records::toString);
+		assertSize(records::toString, 1, records);
 		assertTrue(records.get(0).getMessage().contains("fail-open"), records.get(0).getMessage());
 		var resp = (JsonRpcResponse) respHolder[0];
 		assertNull(resp.getError());

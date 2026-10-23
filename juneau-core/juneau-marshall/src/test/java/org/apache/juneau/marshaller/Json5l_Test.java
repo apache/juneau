@@ -18,6 +18,7 @@ package org.apache.juneau.marshaller;
 
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 
 import java.io.*;
 import java.util.*;
@@ -62,7 +63,7 @@ class Json5l_Test extends TestBase {
 		m = (Map<String,String>) Json5l.DEFAULT.read(stringReader(b), Map.class, String.class, String.class);
 		assertEquals("bar", m.get("foo"));
 		var list = (List<JsonMap>) Json5l.to(c, List.class, JsonMap.class);
-		assertEquals(2, list.size());
+		assertSize(2, list);
 		assertEquals(1, list.get(0).getInt("a"));
 		assertEquals(2, list.get(1).getInt("b"));
 	}
@@ -71,7 +72,7 @@ class Json5l_Test extends TestBase {
 		var a = list(JsonMap.of("x", 1), JsonMap.of("y", 2));
 		var json5l = Json5l.of(a);
 		var b = (List<JsonMap>) Json5l.to(json5l, List.class, JsonMap.class);
-		assertEquals(2, b.size());
+		assertSize(2, b);
 		assertEquals(1, b.get(0).getInt("x"));
 		assertEquals(2, b.get(1).getInt("y"));
 	}
@@ -81,7 +82,7 @@ class Json5l_Test extends TestBase {
 		var json5l = Json5l.of(a);
 		assertTrue(json5l.contains("\"k\":\"v\""));
 		var b = (List<JsonMap>) Json5l.to(json5l, List.class, JsonMap.class);
-		assertEquals(1, b.size());
+		assertSize(1, b);
 		assertEquals("v", b.get(0).getString("k"));
 	}
 

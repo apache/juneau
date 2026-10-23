@@ -49,7 +49,7 @@ import org.apache.juneau.marshall.*;
  * </p>
  *
  * <p>
- * Surrogate classes are associated with serializers and parsers using the {@link org.apache.juneau.marshall.MarshallingContext.Builder#swaps(Class...)}
+ * Surrogate classes are associated with serializers and parsers using the {@link org.apache.juneau.marshall.MarshallingContext.Builder#swaps(Class...) MarshallingContext.Builder#swaps(Class...)}
  * method.
  * <p class='bjava'>
  * 	JsonSerializer <jv>serializer</jv> = JsonSerializer

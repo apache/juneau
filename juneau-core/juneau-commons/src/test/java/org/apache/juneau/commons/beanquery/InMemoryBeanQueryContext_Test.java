@@ -252,7 +252,7 @@ class InMemoryBeanQueryContext_Test extends TestBase {
 	void d04_blankExpressionIgnored() {
 		try (var s = context().getSession(ROWS)) {
 			var q = new BeanQuery().setSearch("name=");
-			assertEquals(4, s.find(q).rows().size());
+			assertSize(4, s.find(q).rows());
 		}
 	}
 
@@ -265,7 +265,7 @@ class InMemoryBeanQueryContext_Test extends TestBase {
 		var ctx = InMemoryBeanQueryContext.<Map<String,Object>>create().column("k", SearchType.TEXT).build();
 		try (var s = ctx.getSession(rows)) {
 			var q = BeanQuery.create().eq("k", "x").build();
-			assertEquals(1, s.find(q).rows().size());
+			assertSize(1, s.find(q).rows());
 		}
 	}
 
@@ -433,15 +433,15 @@ class InMemoryBeanQueryContext_Test extends TestBase {
 	void g04_limitClamped() {
 		var many = IntStream.range(0, 150).mapToObj(i -> new Rec("n" + i, i, "1.0")).toList();
 		try (var s = context().getSession(many)) {
-			assertEquals(100, s.find(new BeanQuery()).rows().size());          // defaultLimit
-			assertEquals(150, s.find(new BeanQuery().setLimit(-1)).rows().size());  // maxLimit 1000 > 150
+			assertSize(100, s.find(new BeanQuery()).rows());          // defaultLimit
+			assertSize(150, s.find(new BeanQuery().setLimit(-1)).rows());  // maxLimit 1000 > 150
 		}
 		try (var s = builder().maxLimit(120).build().getSession(many)) {
-			assertEquals(120, s.find(new BeanQuery().setLimit(5000)).rows().size());
-			assertEquals(120, s.find(new BeanQuery().setLimit(-1)).rows().size());
+			assertSize(120, s.find(new BeanQuery().setLimit(5000)).rows());
+			assertSize(120, s.find(new BeanQuery().setLimit(-1)).rows());
 		}
 		try (var s = context().createSession().rows(many).defaultLimit(10).build()) {
-			assertEquals(10, s.find(new BeanQuery()).rows().size());
+			assertSize(10, s.find(new BeanQuery()).rows());
 		}
 	}
 
@@ -599,7 +599,7 @@ class InMemoryBeanQueryContext_Test extends TestBase {
 		// Narrowing ONLY maxLimit, below the context's inherited defaultLimit, must not throw: defaultLimit was
 		// never explicitly chosen for this session, so it auto-narrows alongside maxLimit.
 		try (var s = ctx.createSession().rows(many).maxLimit(50).build()) {
-			assertEquals(50, s.find(new BeanQuery()).rows().size());  // defaultLimit auto-narrowed to 50, not left at 100.
+			assertSize(50, s.find(new BeanQuery()).rows());  // defaultLimit auto-narrowed to 50, not left at 100.
 		}
 	}
 
@@ -618,7 +618,7 @@ class InMemoryBeanQueryContext_Test extends TestBase {
 		var ctx = context();
 		// Explicit defaultLimit, already consistent with the later maxLimit narrowing: no auto-narrowing applied.
 		try (var s = ctx.createSession().rows(many).defaultLimit(30).maxLimit(50).build()) {
-			assertEquals(30, s.find(new BeanQuery()).rows().size());
+			assertSize(30, s.find(new BeanQuery()).rows());
 		}
 	}
 
@@ -631,7 +631,7 @@ class InMemoryBeanQueryContext_Test extends TestBase {
 		var many = IntStream.range(0, 150).mapToObj(i -> new Rec("n" + i, i, "1.0")).toList();
 		// defaultLimit was never touched on this builder -- it is still QuerySettings' own baseline default (100).
 		try (var s = builder().maxLimit(50).build().getSession(many)) {
-			assertEquals(50, s.find(new BeanQuery()).rows().size());  // No exception; auto-narrowed, not left at 100.
+			assertSize(50, s.find(new BeanQuery()).rows());  // No exception; auto-narrowed, not left at 100.
 		}
 	}
 
@@ -643,7 +643,7 @@ class InMemoryBeanQueryContext_Test extends TestBase {
 		// copy() is the documented way to derive a variant (see the class Javadoc example); narrowing only maxLimit
 		// on the copy, without repeating defaultLimit, must not throw.
 		try (var s = base.copy().maxLimit(50).build().getSession(many)) {
-			assertEquals(50, s.find(new BeanQuery()).rows().size());
+			assertSize(50, s.find(new BeanQuery()).rows());
 		}
 	}
 
@@ -659,12 +659,12 @@ class InMemoryBeanQueryContext_Test extends TestBase {
 		var many = IntStream.range(0, 150).mapToObj(i -> new Rec("n" + i, i, "1.0")).toList();
 		// Explicit defaultLimit, already consistent with the later maxLimit narrowing: no auto-narrowing applied.
 		try (var s = builder().defaultLimit(30).maxLimit(50).build().getSession(many)) {
-			assertEquals(30, s.find(new BeanQuery()).rows().size());
+			assertSize(30, s.find(new BeanQuery()).rows());
 		}
 	}
 
 	//====================================================================================================
-	// Juneau bean parity (phase 1)
+	// Juneau bean parity
 	//====================================================================================================
 
 	public static class Fielded {

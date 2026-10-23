@@ -26,7 +26,9 @@ import org.junit.jupiter.api.*;
 /**
  * Tests {@code @BeanProp(required)} metadata.
  */
-@SuppressWarnings("unused")
+@SuppressWarnings({
+	"unused" // Fixture members are read reflectively.
+})
 class BeanMeta_Required_Test extends TestBase {
 
 	private static BeanMeta<?> meta(Class<?> c) {
@@ -130,7 +132,9 @@ class BeanMeta_Required_Test extends TestBase {
 		@BeanProp(required=true) public java.util.List<String> tags;
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Cast to BeanMeta<T> is safe because the meta is built from the bean's own class.
+	})
 	private static <T> BeanMap<T> newMap(T bean) {
 		return BeanMap.of(bean, (BeanMeta<T>)BeanMeta.of(bean.getClass(), BeanConfigContext.DEFAULT));
 	}

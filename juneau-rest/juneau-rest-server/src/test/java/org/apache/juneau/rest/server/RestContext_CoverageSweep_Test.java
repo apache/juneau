@@ -17,6 +17,7 @@
 package org.apache.juneau.rest.server;
 
 import static org.apache.juneau.commons.utils.Shorts.*;
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -224,7 +225,7 @@ class RestContext_CoverageSweep_Test extends org.apache.juneau.TestBase {
 		// Verifies addRestOperationsForClass still registers a normal public @RestOp method correctly now that
 		// its dead (always-false) non-public guard has been removed.
 		var ctx = new RestContext(argsOf(Fix_PublicRestOpMethod.class, Fix_PublicRestOpMethod::new));
-		assertEquals(1, ctx.getRestOperations().getOpContexts().size());
+		assertSize(1, ctx.getRestOperations().getOpContexts());
 	}
 
 	//-----------------------------------------------------------------------------------------------------------
@@ -560,7 +561,7 @@ class RestContext_CoverageSweep_Test extends org.apache.juneau.TestBase {
 	@Test void r01_destroy_hookThrows_isCaughtAndLogged_notPropagated() throws Exception {
 		var ctx = new RestContext(argsOf(Fix_RestDestroyThrows.class, Fix_RestDestroyThrows::new));
 		var records = LogRecordCapture.quietly(Fix_RestDestroyThrows.class, () -> assertDoesNotThrow(ctx::destroy));
-		assertEquals(1, records.size(), records::toString);
+		assertSize(records::toString, 1, records);
 		assertTrue(records.get(0).getMessage().contains("servlet-destroy method"), records.get(0).getMessage());
 	}
 }

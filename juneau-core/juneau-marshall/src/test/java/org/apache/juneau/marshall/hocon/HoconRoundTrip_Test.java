@@ -35,10 +35,7 @@ class HoconRoundTrip_Test extends TestBase {
 
 	@Test
 	void c01_simpleBeanRoundTrip() throws Exception {
-		var a = new LinkedHashMap<String,Object>();
-		a.put("name", "Alice");
-		a.put("age", 30);
-		a.put("active", true);
+		Map<String,Object> a = map("name", "Alice", "age", 30, "active", true);
 		var hocon = HoconSerializer.DEFAULT.write(a);
 		var b = (Map<String,Object>) HoconParser.DEFAULT.read(hocon, Map.class, String.class, Object.class);
 		assertBean(b, "name,age,active", "Alice,30,true");
@@ -151,13 +148,7 @@ class HoconRoundTrip_Test extends TestBase {
 	void c12_complexBeanRoundTrip() throws Exception {
 		var nested = new LinkedHashMap<String,Object>();
 		nested.put("city", "NYC");
-		var a = new LinkedHashMap<String,Object>();
-		a.put("name", "Bob");
-		a.put("age", 25);
-		a.put("active", true);
-		a.put("tags", list("x", "y"));
-		a.put("address", nested);
-		a.put("empty", "");
+		Map<String,Object> a = map("name", "Bob", "age", 25, "active", true, "tags", list("x", "y"), "address", nested, "empty", "");
 		var hocon = HoconSerializer.DEFAULT.write(a);
 		var b = (Map<String,Object>) HoconParser.DEFAULT.read(hocon, Map.class, String.class, Object.class);
 		assertBean(b, "name,age,active,tags,address{city},empty", "Bob,25,true,[x,y],{NYC},");
@@ -165,14 +156,7 @@ class HoconRoundTrip_Test extends TestBase {
 
 	@Test
 	void c13_parserForbiddenCharsRoundTrip() throws Exception {
-		var a = new LinkedHashMap<String,Object>();
-		a.put("caret", "a^b");
-		a.put("slash", "a\\b");
-		a.put("question", "a?b");
-		a.put("bang", "a!b");
-		a.put("at", "a@b");
-		a.put("star", "a*b");
-		a.put("amp", "a&b");
+		Map<String,Object> a = map("caret", "a^b", "slash", "a\\b", "question", "a?b", "bang", "a!b", "at", "a@b", "star", "a*b", "amp", "a&b");
 
 		var hocon = HoconSerializer.DEFAULT.write(a);
 		assertTrue(hocon.contains("caret = \"a^b\""));

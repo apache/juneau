@@ -209,7 +209,7 @@ public class ModalDef implements Widget {
 		 * @throws IllegalArgumentException If {@code label} is <jk>null</jk> or blank.
 		 */
 		public static Field of(String label, String value) {
-			if (label == null || label.isBlank())
+			if (ib(label))
 				throw iaex("ModalDef.Field label must not be null or blank.");
 			var f = new Field();
 			f.label = label;
@@ -266,7 +266,7 @@ public class ModalDef implements Widget {
 		 * @throws IllegalArgumentException If {@code id} is <jk>null</jk> or blank.
 		 */
 		public static Step of(String id) {
-			if (id == null || id.isBlank())
+			if (ib(id))
 				throw iaex("ModalDef.Step id must not be null or blank.");
 			var s = new Step();
 			s.id = id;
@@ -381,9 +381,9 @@ public class ModalDef implements Widget {
 		 * @throws IllegalArgumentException If {@code id} or {@code label} is <jk>null</jk> or blank.
 		 */
 		public static ChildAction of(String id, String label) {
-			if (id == null || id.isBlank())
+			if (ib(id))
 				throw iaex("ModalDef.ChildAction id must not be null or blank.");
-			if (label == null || label.isBlank())
+			if (ib(label))
 				throw iaex("ModalDef.ChildAction label must not be null or blank.");
 			var c = new ChildAction();
 			c.id = id;
@@ -546,7 +546,7 @@ public class ModalDef implements Widget {
 	 * @throws IllegalArgumentException If {@code title} is <jk>null</jk> or blank.
 	 */
 	public static ModalDef create(String title) {
-		if (title == null || title.isBlank())
+		if (ib(title))
 			throw iaex("ModalDef title must not be null or blank.");
 		var m = new ModalDef();
 		m.title = title;
@@ -630,9 +630,9 @@ public class ModalDef implements Widget {
 	 *
 	 * <p>
 	 * Passing <jk>false</jk> <b>clears</b> the flag rather than serializing an explicit {@code false}: the wire
-	 * carries this opt-in only when it is on, so an un-opted-in dialog's payload is byte-identical to today's.
+	 * carries this opt-in only when it is on, so an un-opted-in dialog's payload is byte-identical to one that never set it.
 	 *
-	 * @param value <jk>true</jk> to opt in; <jk>false</jk> (or unset) keeps today's close-then-submit behaviour.
+	 * @param value <jk>true</jk> to opt in; <jk>false</jk> (or unset) keeps the default close-then-submit behaviour.
 	 * @return This object.
 	 */
 	public ModalDef keepOpenOnSubmit(boolean value) {
@@ -672,9 +672,9 @@ public class ModalDef implements Widget {
 	 *
 	 * <p>
 	 * Passing <jk>false</jk> <b>clears</b> the flag rather than serializing an explicit {@code false}: the wire
-	 * carries this opt-in only when it is on, so an un-opted-in dialog's payload is byte-identical to today's.
+	 * carries this opt-in only when it is on, so an un-opted-in dialog's payload is byte-identical to one that never set it.
 	 *
-	 * @param value <jk>true</jk> to opt in; <jk>false</jk> (or unset) leaves today's row-id behaviour untouched.
+	 * @param value <jk>true</jk> to opt in; <jk>false</jk> (or unset) keeps the default row-id behaviour.
 	 * @return This object.
 	 */
 	public ModalDef selfTargeted(boolean value) {
@@ -719,7 +719,7 @@ public class ModalDef implements Widget {
 	 */
 	@Override
 	public void validate() {
-		if (title == null || title.isBlank())
+		if (ib(title))
 			throw iaex("ModalDef title must not be null or blank.");
 		if (fields != null)
 			for (var f : fields) {
@@ -809,7 +809,7 @@ public class ModalDef implements Widget {
 	 * 		{@link #validate() validation} they get, and skipping it means a malformed modal/form serializes as
 	 * 		contract-<i>valid</i> with no complaint.
 	 * 	<li><b>REST responses</b> are validated independently:
-	 * 		{@link org.apache.juneau.rest.server.widgets.WidgetsMixin.WidgetValidationProcessor
+	 * 		{@link WidgetsMixin.WidgetValidationProcessor
 	 * 		WidgetsMixin.WidgetValidationProcessor} calls {@link #validate()} on every REST response that is a
 	 * 		{@code Widget}, fail-closed with a 500, whether or not the producing endpoint called this method.
 	 * 		Calling it anyway is safe (validation is idempotent) and remains the only gate for the non-REST case

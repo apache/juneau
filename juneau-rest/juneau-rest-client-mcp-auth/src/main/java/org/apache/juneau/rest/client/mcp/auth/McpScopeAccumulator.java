@@ -143,7 +143,7 @@ public class McpScopeAccumulator {
 	private static void addAll(Set<String> out, Collection<String> in) {
 		if (in != null)
 			for (var s : in)
-				if (s != null && ! s.isBlank())
+				if (inb(s))
 					out.add(s);
 	}
 

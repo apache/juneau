@@ -17,6 +17,7 @@
 package org.apache.juneau.rest.server.view.freemarker.console;
 
 import static org.apache.juneau.rest.server.console.test.PageContractAssert.*;
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
@@ -91,7 +92,7 @@ class PageSpec_Adoption_Test extends TestBase {
 		assertTrue(bodyTag.group().contains("data-juneau-csrf-header=\"X-CSRF\""), bodyTag::group);
 		var contract = page.contract();
 		var badges = contract.getMap("header").getList("badges");
-		assertEquals(1, badges.size());
+		assertSize(1, badges);
 		assertEquals("health", ((Map<?,?>)badges.get(0)).get("id"));
 		assertEquals("1.0", contract.getMap("facts").getMap("build").get("version"));
 	}

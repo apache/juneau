@@ -23,7 +23,7 @@ import org.apache.juneau.rest.server.servlet.*;
 import org.junit.jupiter.api.*;
 
 /**
- * Phase 3 &mdash; proves the additive-security AND-STACK shape for {@code @Child(roleGuard=...)}: a
+ * Proves the additive-security AND-STACK shape for {@code @Child(roleGuard=...)}: a
  * host-seeded {@code roleGuard} and the child's own explicit {@code roleGuard} both apply as independent,
  * ANDed {@code RoleBasedRestGuard} instances &mdash; the child can add restriction but never remove or
  * weaken the host's.

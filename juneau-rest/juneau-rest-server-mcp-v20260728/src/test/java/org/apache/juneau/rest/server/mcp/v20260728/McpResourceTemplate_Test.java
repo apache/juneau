@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.server.mcp.v20260728;
 
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
@@ -235,7 +236,7 @@ class McpResourceTemplate_Test {
 			config, ctx);
 		assertInstanceOf(McpResponseResult.class, listResult);
 		var list = (ListResourceTemplatesResult) ((McpResponseResult) listResult).response().getResult();
-		assertEquals(1, list.getResourceTemplates().size());
+		assertSize(1, list.getResourceTemplates());
 		var resp = readResponse(config, "file:///a,b");
 		assertEquals(McpRevision.CODE_INVALID_PARAMS, resp.getError().getCode());
 	}

@@ -17,6 +17,7 @@
 package org.apache.juneau.bean.jsonpatch;
 
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.test.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.marshall.collections.*;
@@ -175,7 +176,7 @@ class JsonPatch_RoundTrip_Test {
 				.append(new TestOp("/h", true));
 			var j = SER.write(patch);
 			var back = PAR.read(j, JsonPatch.class);
-			assertEquals(6, back.size());
+			assertSize(6, back);
 			assertInstanceOf(AddOp.class, back.get(0));
 			assertInstanceOf(RemoveOp.class, back.get(1));
 			assertInstanceOf(ReplaceOp.class, back.get(2));
@@ -202,9 +203,9 @@ class JsonPatch_RoundTrip_Test {
 		@Test
 		void d01_varargsConstructorAndAppend() {
 			var p = new JsonPatch(new AddOp("/a", 1), new RemoveOp("/b"));
-			assertEquals(2, p.size());
+			assertSize(2, p);
 			p.append(new TestOp("/c", "v"));
-			assertEquals(3, p.size());
+			assertSize(3, p);
 		}
 
 		@Test

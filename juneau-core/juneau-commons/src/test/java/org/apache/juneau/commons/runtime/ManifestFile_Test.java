@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.commons.runtime;
 
+import static org.apache.juneau.commons.TestAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
@@ -69,7 +70,7 @@ class ManifestFile_Test extends TestBase {
 	@Test void a03_asMapHasMainAttrsOnly() {
 		var x = new ManifestFile(manifestWithSections());
 		var map = x.asMap();
-		assertEquals(3, map.size());
+		assertSize(3, map);
 		assertTrue(map.containsKey("Manifest-Version"));
 		assertTrue(map.containsKey("Bundle-Name"));
 		assertTrue(map.containsKey("Bundle-Version"));
@@ -99,14 +100,14 @@ class ManifestFile_Test extends TestBase {
 
 	@Test void b03_sectionsList() {
 		var x = new ManifestFile(manifestWithSections());
-		assertEquals(1, x.sections().size());
+		assertSize(1, x.sections());
 		assertTrue(x.sections().contains("my-section"));
 	}
 
 	@Test void b04_asMapForSection() {
 		var x = new ManifestFile(manifestWithSections());
 		var map = x.asMap("my-section");
-		assertEquals(2, map.size());
+		assertSize(2, map);
 		assertEquals("Section-Value", map.get("Section-Key"));
 	}
 

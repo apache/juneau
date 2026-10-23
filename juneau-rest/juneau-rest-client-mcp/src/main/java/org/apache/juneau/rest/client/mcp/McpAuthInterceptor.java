@@ -39,7 +39,7 @@ import static org.apache.juneau.commons.utils.Shorts.*;
  *
  * <p>
  * <b>Note:</b> when a token is set, enabling {@code FINE}/{@code FINEST}-level logging on the client's debug
- * logger (see {@link org.apache.juneau.rest.client.RestClient.Builder#debugLoggerName(String)}) logs the full
+ * logger (see {@link org.apache.juneau.rest.client.RestClient.Builder#debugLoggerName(String) RestClient.Builder#debugLoggerName(String)}) logs the full
  * outgoing request including all headers, so enabling debug logging on a client using this interceptor will log
  * the {@code Authorization} header (and therefore the bearer token) in plain text.
  *
@@ -72,7 +72,7 @@ public class McpAuthInterceptor implements RestCallInterceptor {
 	@Override /* Overridden from RestCallInterceptor */
 	public void onInit(RestRequest req) throws Exception {
 		var token = tokenSupplier.get();
-		if (token != null && ! token.isBlank())
+		if (inb(token))
 			req.header("Authorization", "Bearer " + token);
 	}
 }

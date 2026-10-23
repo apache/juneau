@@ -17,6 +17,7 @@
 package org.apache.juneau.rest.server.view.freemarker.console;
 
 import static java.nio.charset.StandardCharsets.*;
+import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.nio.file.*;
@@ -89,11 +90,12 @@ class SameOriginPath_Corpus_Test extends TestBase {
 	}
 
 	private static Map<String,Function<String,Boolean>> predicates() {
-		var m = new LinkedHashMap<String,Function<String,Boolean>>();
-		m.put("SafePathTemplate.isSameOriginPath", SafePathTemplate::isSameOriginPath);
-		m.put("SafePathTemplate.isSafeDocumentUrl", SafePathTemplate::isSafeDocumentUrl);
-		m.put("RunViewChecks.isSameOriginPath", RunViewChecks::isSameOriginPath);
-		m.put("RegionDef.isSafeDetailEndpoint", RegionDef::isSafeDetailEndpoint);
+		Map<String,Function<String,Boolean>> m = map(
+			"SafePathTemplate.isSameOriginPath", SafePathTemplate::isSameOriginPath,
+			"SafePathTemplate.isSafeDocumentUrl", SafePathTemplate::isSafeDocumentUrl,
+			"RunViewChecks.isSameOriginPath", RunViewChecks::isSameOriginPath,
+			"RegionDef.isSafeDetailEndpoint", RegionDef::isSafeDetailEndpoint
+		);
 		// Each caller below throws exactly when the shared core rejects, so "accepted" is "did not throw".
 		m.put("ChartDef.onClickHref", s -> ! throwsIae(() -> ChartDef.donut("c").onClickHref(s)));
 		m.put("ChartCardType onClick.href", s -> ! throwsIae(() -> new ChartCardType().toFragment(CardSource.create("chart", "c")
@@ -137,10 +139,11 @@ class SameOriginPath_Corpus_Test extends TestBase {
 		assertTrue(registry.isRegistered("html"));
 		assertTrue(registry.isRegistered("chart"));
 		assertTrue(registry.isRegistered("datatables"));
-		var cards = new LinkedHashMap<String,Function<String,CardSource>>();
-		cards.put("html", s -> CardSource.create("html", "h").src(s).build());
-		cards.put("chart", s -> CardSource.create("chart", "c").src(s).bodyMap(body("kind", "donut", "label", "a", "value", "b")).build());
-		cards.put("datatables", s -> CardSource.create("datatables", "d").src(s).build());
+		Map<String,Function<String,CardSource>> cards = map(
+			"html", s -> CardSource.create("html", "h").src(s).build(),
+			"chart", s -> CardSource.create("chart", "c").src(s).bodyMap(body("kind", "donut", "label", "a", "value", "b")).build(),
+			"datatables", s -> CardSource.create("datatables", "d").src(s).build()
+		);
 		return rows().stream().flatMap(r -> cards.entrySet().stream().map(e -> DynamicTest.dynamicTest(r.name() + " " + e.getKey(), () -> {
 			var threw = throwsIae(() -> registry.toCard(e.getValue().apply(r.input())));
 			if (r.accepted())

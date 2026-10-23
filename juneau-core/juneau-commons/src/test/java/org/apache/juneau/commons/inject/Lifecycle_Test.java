@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.commons.inject;
 
+import static org.apache.juneau.commons.TestAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
@@ -136,7 +137,7 @@ class Lifecycle_Test extends TestBase {
 
 		var ex = assertThrows(BeanCreationException.class, store::close);
 		// All destroyers attempted even though both threw.
-		assertEquals(2, trace.size());
+		assertSize(2, trace);
 		// Both failures are captured as suppressed exceptions.
 		assertTrue(ex.getSuppressed().length >= 2,
 			"Expected at least 2 suppressed exceptions, got " + ex.getSuppressed().length);

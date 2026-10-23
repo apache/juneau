@@ -17,6 +17,7 @@
 package org.apache.juneau.rest.client.mcp.auth;
 
 import static org.apache.juneau.BasicTestUtils.assertThrowsWithMessage;
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
@@ -62,7 +63,7 @@ class McpStepUpAuthorizer_Test extends TestBase {
 		});
 		assertEquals("ok", result);
 		assertEquals(2, calls.get());
-		assertEquals(1, reauthScopes.size());
+		assertSize(1, reauthScopes);
 		assertEquals(List.of("read", "write"), List.copyOf(reauthScopes.get(0)), "reauth union = previously-requested ∪ challenge");
 	}
 

@@ -19,9 +19,9 @@
  * Predefined HTTP headers, parts, entities, resources, and responses built on the classic Apache HttpComponents API.
  *
  * <p>
- * Provides static factory collections ({@link org.apache.juneau.http.classic.HttpHeaders},
- * {@link org.apache.juneau.http.classic.HttpParts}, {@link org.apache.juneau.http.classic.HttpEntities},
- * {@link org.apache.juneau.http.classic.HttpResources}, and {@link org.apache.juneau.http.classic.HttpResponses})
+ * Provides static factory collections ({@link org.apache.juneau.http.classic.HttpHeaders HttpHeaders},
+ * {@link org.apache.juneau.http.classic.HttpParts HttpParts}, {@link org.apache.juneau.http.classic.HttpEntities HttpEntities},
+ * {@link org.apache.juneau.http.classic.HttpResources HttpResources}, and {@link org.apache.juneau.http.classic.HttpResponses HttpResponses})
  * plus supporting types for use with the classic {@code org.apache.http} client and server stack.
  */
 package org.apache.juneau.http.classic;

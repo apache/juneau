@@ -172,7 +172,9 @@ class PetstoreBulkDiscard_BrowserTest extends TestBase {
 		return new JsonMap(res.body());
 	}
 
-	@SuppressWarnings("unchecked") // ids are a JSON array of strings.
+	@SuppressWarnings({
+		"unchecked" // ids are a JSON array of strings.
+	})
 	private static List<String> ids(Map<String,Object> c, String key) {
 		return ((List<Object>) query(c, key)).stream().map(String::valueOf).toList();
 	}
@@ -189,7 +191,9 @@ class PetstoreBulkDiscard_BrowserTest extends TestBase {
 		assertEquals(new TreeSet<>(pending), new TreeSet<>(ids(c, "selected")));
 	}
 
-	@SuppressWarnings("unchecked") // requests is a JSON array of {url, method, postData}.
+	@SuppressWarnings({
+		"unchecked" // requests is a JSON array of {url, method, postData}.
+	})
 	@Test void b01_discardIsOnePostWithTheIdsAndAKey() throws Exception {
 		var c = assertClean(report, "discard");
 		var runs = ((List<Map<String,Object>>) c.get("requests")).stream()

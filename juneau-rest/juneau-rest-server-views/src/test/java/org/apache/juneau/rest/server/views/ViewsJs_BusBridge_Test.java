@@ -41,7 +41,9 @@ class ViewsJs_BusBridge_Test extends TestBase {
 		report = BusHarness.run("bus-bridge.cjs", "/org/apache/juneau/views/juneau-bus.js");
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Casts a parsed JSON value to its known Map/List shape.
+	})
 	private static Map<String,Object> section(String name) {
 		assumeTrue(report != null, "node not on PATH");
 		var m = (Map<String,Object>) report.get(name);

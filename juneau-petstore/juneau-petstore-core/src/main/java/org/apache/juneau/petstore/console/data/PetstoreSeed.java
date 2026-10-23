@@ -53,6 +53,9 @@ public final class PetstoreSeed {
 	/** Default clock: fixed at 2026-10-01T12:00:00Z, UTC. */
 	public static final Clock DEFAULT_CLOCK = Clock.fixed(Instant.parse("2026-10-01T12:00:00Z"), ZoneOffset.UTC);
 
+	/** Environment variable that pins the petstore's "now"; see {@link #fixedNowClock()}. */
+	public static final String FIXED_NOW_ENV = "PETSTORE_FIXED_NOW";
+
 	/** Total pets after {@link #populate(PetStore)}. */
 	public static final int PETS = 500;
 	/** Total orders after {@link #populate(PetStore)}. */
@@ -89,6 +92,34 @@ public final class PetstoreSeed {
 	public PetstoreSeed randomSeed(long value) {
 		seed = value;
 		return this;
+	}
+
+	/**
+	 * The clock the {@value #FIXED_NOW_ENV} environment variable pins "now" to, so screenshots of the day-relative store
+	 * and jobs pages repeat from run to run.
+	 *
+	 * @return The clock, or <jk>null</jk> when the variable is unset, meaning the system clock.
+	 */
+	public static Clock fixedNowClock() {
+		return fixedNowClock(System.getenv(FIXED_NOW_ENV));
+	}
+
+	/** @return The pinned "now" when {@value #FIXED_NOW_ENV} is set, else the current instant. */
+	public static Instant now() {
+		var c = fixedNowClock();
+		return c == null ? Instant.now() : c.instant();
+	}
+
+	/**
+	 * @param value The variable's value: an ISO-8601 instant such as {@code 2026-10-01T12:00:00Z}, {@code seed} for
+	 * 	{@link #DEFAULT_CLOCK}, or <jk>null</jk> or blank for none.
+	 * @return The clock it pins "now" to, or <jk>null</jk> for none.
+	 */
+	static Clock fixedNowClock(String value) {
+		if (ib(value))
+			return null;
+		var v = value.trim();
+		return "seed".equals(v) ? DEFAULT_CLOCK : Clock.fixed(Instant.parse(v), ZoneOffset.UTC);
 	}
 
 	/**

@@ -224,7 +224,9 @@ public class BasicOpenApiProviderSession {
 	private static void restoreWriteOnlySchema(Object schema) {
 		if (! (schema instanceof Map<?,?> m))
 			return;
-		@SuppressWarnings("unchecked")
+		@SuppressWarnings({
+			"unchecked" // The instanceof Map<?,?> match is a JSON-model map, whose keys are strings.
+		})
 		var m2 = (Map<String,Object>)m;
 		if (Boolean.TRUE.equals(m2.get("x-writeOnly"))) {
 			m2.remove("x-writeOnly");

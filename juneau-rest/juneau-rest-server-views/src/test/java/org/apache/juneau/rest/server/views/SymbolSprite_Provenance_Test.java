@@ -165,8 +165,7 @@ class SymbolSprite_Provenance_Test extends TestBase {
 	}
 
 	@Test void a04_documentFamilyMembersRemainShipped() throws Exception {
-		// csv / pdf / spreadsheet previously shared a Juneau-original byte-identical frame.  They now ship
-		// copied artwork, so frame-identity is no longer asserted — only that the three stems still exist
+		// csv / pdf / spreadsheet ship copied artwork, so frame-identity is not asserted — only that the three stems still exist
 		// and keep their original-artwork origin.
 		assertEmpty(() -> "document family drifted. " + MANIFEST_IS_THE_REVIEW,
 			documentFamilyProblems(SymbolProvenanceScanner.symbols(sprite()), SymbolProvenanceScanner.manifestOrigins(manifest())));

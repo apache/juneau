@@ -20,7 +20,7 @@
  *
  * <p>
  * Kept separate from {@code org.apache.juneau.rest.server.datatables}, which holds only the DataTables JSON
- * input/output beans.  {@link org.apache.juneau.rest.server.datatables.adapter.DataTablesQuery} maps a
+ * input/output beans.  {@link org.apache.juneau.rest.server.datatables.adapter.DataTablesQuery DataTablesQuery} maps a
  * {@link org.apache.juneau.rest.server.datatables.DataTablesRequest} onto a {@code BeanQuery}, runs it against a
  * {@link org.apache.juneau.commons.beanquery.BeanQuerySession}, and populates a
  * {@link org.apache.juneau.rest.server.datatables.DataTablesResults} envelope.

@@ -41,7 +41,7 @@ public class ParentPropertyApplyAnnotation {
 	 *
 	 * <p>
 	 * Passes the {@link ParentPropertyApply @ParentPropertyApply} annotation through to the builder's annotation list.
-	 * The {@link org.apache.juneau.commons.reflect.AnnotationProvider.Builder#addRuntimeAnnotations(java.util.List)}
+	 * The {@link org.apache.juneau.commons.reflect.AnnotationProvider.Builder#addRuntimeAnnotations(java.util.List) AnnotationProvider.Builder#addRuntimeAnnotations(java.util.List)}
 	 * method handles unwrapping the nested {@link ParentProperty @ParentProperty} from {@link ParentPropertyApply#value()} and registering it
 	 * under the targets specified by {@link ParentPropertyApply#on()}.
 	 */

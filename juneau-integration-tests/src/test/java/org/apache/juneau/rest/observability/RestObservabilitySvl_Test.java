@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.observability;
 
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.time.*;
@@ -127,7 +128,6 @@ class RestObservabilitySvl_Test extends TestBase {
 	@Test void b01_svlObservability_resolvedAtBuildTime_suppressesMetrics() throws Exception {
 		B_REC.clear();
 		CB.get("/ping").run().assertStatus(200);
-		assertEquals(0, B_REC.events.size(),
-			"$S{} SVL variable resolving to 'false' at context build time must suppress observability block");
+		assertSize(() -> "$S{} SVL variable resolving to 'false' at context build time must suppress observability block", 0, B_REC.events);
 	}
 }

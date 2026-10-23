@@ -186,7 +186,9 @@ class SamlAssertionValidator_Rejections_Test extends TestBase {
 
 	@Test void d01_bearerWithoutConfirmationData_rejected() throws Exception {
 		var cred = cred();
-		@SuppressWarnings("unchecked")
+		@SuppressWarnings({
+			"unchecked" // OpenSAML's builder factory returns a raw builder; the element name fixes it to SubjectConfirmation.
+		})
 		var scb = (org.opensaml.saml.common.SAMLObjectBuilder<SubjectConfirmation>) SamlTestSupport.bf().getBuilder(SubjectConfirmation.DEFAULT_ELEMENT_NAME);
 		var sc = scb.buildObject();
 		sc.setMethod(SubjectConfirmation.METHOD_BEARER);

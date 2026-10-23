@@ -279,7 +279,7 @@ public class BasicRestClientDebugFormatter implements RestClientDebugFormatter {
 	}
 
 	private String contentTypeToken(String contentType) {
-		if (contentType == null || contentType.isBlank())
+		if (ib(contentType))
 			return "unknown";
 		return DebugTextSanitizer.sanitize(contentType);
 	}

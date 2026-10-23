@@ -38,7 +38,7 @@ class Theme_LightRed_Test extends TestBase {
 	}
 
 	@Test void a02_tokenCount_is105_mirroringOpensPin() {
-		assertEquals(105, Theme.LIGHT_RED.getTokens().size());
+		assertSize(105, Theme.LIGHT_RED.getTokens());
 	}
 
 	@Test void a03_name_isLightRed() {

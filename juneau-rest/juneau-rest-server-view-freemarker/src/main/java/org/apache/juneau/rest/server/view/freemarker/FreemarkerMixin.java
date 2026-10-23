@@ -75,7 +75,7 @@ import freemarker.template.*;
  * <p>
  * The {@link org.apache.juneau.rest.server.processor.ResponseProcessorList} partition pass repositions
  * {@link FreemarkerViewRenderer} (a
- * {@link org.apache.juneau.rest.server.view.ViewRenderer ViewRenderer}) ahead of
+ * {@link ViewRenderer ViewRenderer}) ahead of
  * {@code SerializedPojoProcessor} in every case, so the {@link FreemarkerView} bean is dispatched to the
  * FreeMarker engine rather than bean-serialized.
  *

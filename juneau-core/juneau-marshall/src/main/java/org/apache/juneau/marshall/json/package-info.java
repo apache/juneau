@@ -20,8 +20,8 @@
  * <p>
  * Includes support for:
  * <ul>
- * 	<li>{@link org.apache.juneau.marshall.json.JsonSerializer} - Standard JSON serialization
- * 	<li>{@link org.apache.juneau.marshall.json.JsonSchemaSerializer} - JSON Schema serialization
+ * 	<li>{@link org.apache.juneau.marshall.json.JsonSerializer JsonSerializer} - Standard JSON serialization
+ * 	<li>{@link org.apache.juneau.marshall.json.JsonSchemaSerializer JsonSchemaSerializer} - JSON Schema serialization
  * </ul>
  * </p>
  * <p>

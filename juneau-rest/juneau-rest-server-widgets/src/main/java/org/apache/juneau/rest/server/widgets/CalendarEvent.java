@@ -297,9 +297,9 @@ public class CalendarEvent {
 	 * @return A human-readable reason, or <jk>null</jk> when this event is well-formed.
 	 */
 	public String malformedReason() {
-		if (id == null || id.isBlank())
+		if (ib(id))
 			return "id must not be null or blank";
-		if (title == null || title.isBlank())
+		if (ib(title))
 			return "title must not be null or blank";
 		if (civilOrNull(start) == null)
 			return "start is not a valid ISO date or date-time: " + start;
@@ -360,10 +360,10 @@ public class CalendarEvent {
 		if (bad != null)
 			throw iaex("CalendarEvent '%s' is malformed: %s", id, bad);
 		var startDate = civilStart();
-		if (categoryId != null && !categoryId.isBlank()
+		if (inb(categoryId)
 				&& (knownCategoryIds == null || !knownCategoryIds.contains(categoryId)))
 			throw iaex("CalendarEvent '%s' categoryId '%s' is not a declared category.", id, categoryId);
-		if (href != null && !href.isBlank() && !SafePathTemplate.isSafeDocumentUrl(href))
+		if (inb(href) && !SafePathTemplate.isSafeDocumentUrl(href))
 			throw iaex("CalendarEvent '%s' href must be a same-origin document URL: %s", id, href);
 		if (initialYear != null && initialMonth != null) {
 			// Now that end is layout-significant, "in the rendered month" means the occupied range intersects it,
@@ -378,7 +378,7 @@ public class CalendarEvent {
 
 	/** Whether {@code end} carries a value at all (an omitted or blank {@code end} means start-only). */
 	private boolean hasEnd() {
-		return end != null && !end.isBlank();
+		return inb(end);
 	}
 
 	/** Whether an ISO value is date-only ({@code yyyy-MM-dd}) rather than a date-time. */

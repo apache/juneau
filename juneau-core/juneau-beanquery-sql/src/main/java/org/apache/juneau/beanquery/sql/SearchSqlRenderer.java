@@ -27,7 +27,7 @@ import org.apache.juneau.commons.beanquery.*;
  * <p>
  * The renderer receives the target {@link SqlDialect}, the already-quoted column reference, the column's
  * {@link SearchType value type} (so it can bind values as the right JDBC type), and the operator's arguments (typed
- * values when the operator asks for them, otherwise the literal strings; see {@link org.apache.juneau.commons.beanquery.SearchOperator.Builder#typedArgs(boolean)}),
+ * values when the operator asks for them, otherwise the literal strings; see {@link org.apache.juneau.commons.beanquery.SearchOperator.Builder#typedArgs(boolean) SearchOperator.Builder#typedArgs(boolean)}),
  * and returns a {@link SqlFragment} (a boolean SQL expression plus its ordered bind values).  It is the
  * SQL-side analog of {@link SearchPredicate} (the in-memory evaluator): built-in operators do not use it &mdash; their
  * SQL comes from {@link SqlDialect#builtinRenderer(String)}.

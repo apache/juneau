@@ -17,6 +17,7 @@
 package org.apache.juneau.marshall.markdown;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 
 import java.util.*;
 
@@ -134,7 +135,7 @@ class MarkdownDocParser_Test {
 			""";
 		var r = MarkdownDocParser.DEFAULT.read(md, D.class);
 		assertNotNull(r.items);
-		assertEquals(2, r.items.size());
+		assertSize(2, r.items);
 		assertEquals("Alice", r.items.get(0).name);
 		assertEquals(30, r.items.get(0).age);
 		assertEquals("Bob", r.items.get(1).name);

@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.rest.server.auth;
 
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
+
 import java.util.*;
 
 import org.apache.juneau.*;
@@ -35,7 +37,7 @@ class ClaimsPrincipal_Test extends TestBase {
 	@Test void a01_nameAndClaims() {
 		var p = new ClaimsPrincipal("alice", Map.of("scope", "read", "iat", 1700000000L));
 		Assertions.assertEquals("alice", p.getName());
-		Assertions.assertEquals(2, p.getClaims().size());
+		assertSize(2, p.getClaims());
 		Assertions.assertTrue(p.hasClaim("scope"));
 		Assertions.assertFalse(p.hasClaim("missing"));
 	}
@@ -108,7 +110,7 @@ class ClaimsPrincipal_Test extends TestBase {
 	@Test void b07_getClaimListValueDirectReturn() {
 		var p = new ClaimsPrincipal("alice", Map.of("aud", List.of("api", "admin")));
 		var aud = p.getClaim("aud", List.class).orElseThrow();
-		Assertions.assertEquals(2, aud.size());
+		assertSize(2, aud);
 	}
 
 	@Test void b08_getClaimRejectsNullArgs() {

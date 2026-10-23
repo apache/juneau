@@ -83,7 +83,7 @@ class SqlBeanQuerySession_Test {
 	private static BeanQueryExecutionException assertFailsLogged(org.junit.jupiter.api.function.Executable body) {
 		var thrown = new BeanQueryExecutionException[1];
 		var records = LogRecordCapture.quietly(SqlBeanQuerySession.class, () -> thrown[0] = assertThrows(BeanQueryExecutionException.class, body));
-		assertEquals(1, records.size(), records::toString);
+		assertSize(records::toString, 1, records);
 		assertTrue(records.get(0).getMessage().startsWith("Bean query failed: "), records.get(0).getMessage());
 		return thrown[0];
 	}
@@ -142,7 +142,7 @@ class SqlBeanQuerySession_Test {
 		s.close();
 		assertEquals(List.of("conn.close"), r.events("conn.close"));
 		s.close();  // Idempotent.
-		assertEquals(1, r.events("conn.close").size());
+		assertSize(1, r.events("conn.close"));
 	}
 
 	@Test
@@ -189,7 +189,7 @@ class SqlBeanQuerySession_Test {
 			s.find(new BeanQuery());
 		}
 		assertEquals("fetchSize 500", r.events("fetchSize").get(3));  // The default.
-		assertEquals(3, r.events("queryTimeout").size());  // No timeout unless configured.
+		assertSize(3, r.events("queryTimeout"));  // No timeout unless configured.
 	}
 
 	@Test
@@ -220,7 +220,7 @@ class SqlBeanQuerySession_Test {
 			.column("name", TEXT).connectionSupplier(SqlBeanQuerySession_Test::open).build();
 		assertSame(Object.class, c.getType());
 		try (var s = c.getSession()) {
-			assertEquals(4, s.findValues(new BeanQuery()).rows().size());
+			assertSize(4, s.findValues(new BeanQuery()).rows());
 			var hoistedArg4 = new BeanQuery();
 			var e = assertThrows(IllegalStateException.class, () -> s.find(hoistedArg4));
 			assertEquals("SqlBeanQueryContext requires a rowMapper for find and stream.", e.getMessage());
@@ -375,7 +375,7 @@ class SqlBeanQuerySession_Test {
 		// Guards against the appendWhere regression this task must not introduce: an empty top-level Filter.And
 		// (no search) must not render a spurious "WHERE (1=1)".
 		try (var s = builder().build().getSession()) {
-			assertEquals(4, s.find(new BeanQuery()).rows().size());
+			assertSize(4, s.find(new BeanQuery()).rows());
 		}
 	}
 
@@ -528,7 +528,7 @@ class SqlBeanQuerySession_Test {
 	void t03_mapTypeDefaultsToMapMapperInViewOrder() {
 		try (var s = defaultBuilder(Map.class).build().getSession()) {
 			var rows = s.find(new BeanQuery().setSearch("name=$eq(Alice)").setView("age,name")).rows();
-			assertEquals(1, rows.size());
+			assertSize(1, rows);
 			assertList(rows.get(0).keySet(), "age", "name");
 			assertBean(rows.get(0), "age,name", "30,Alice");
 		}
@@ -550,7 +550,7 @@ class SqlBeanQuerySession_Test {
 			var hoistedArg10 = new BeanQuery();
 			var e = assertThrows(IllegalStateException.class, () -> s.find(hoistedArg10));
 			assertEquals("SqlBeanQueryContext requires a rowMapper for find and stream: cannot map rows to 'NotPlannablePerson': no public no-arg constructor.", e.getMessage());
-			assertEquals(4, s.findValues(new BeanQuery()).rows().size());  // Values never need a mapper.
+			assertSize(4, s.findValues(new BeanQuery()).rows());  // Values never need a mapper.
 		}
 	}
 

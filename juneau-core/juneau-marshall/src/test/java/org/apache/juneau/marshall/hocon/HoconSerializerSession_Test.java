@@ -385,10 +385,7 @@ class HoconSerializerSession_Test extends TestBase {
 	@Test void d03_nullValueInCollection() throws Exception {
 		// Null element in collection → writeAnything null branch (lines 236-239).
 		var m = new LinkedHashMap<String,Object>();
-		var list = new ArrayList<String>();
-		list.add("a");
-		list.add(null);
-		list.add("b");
+		List<String> list = l("a", null, "b");
 		m.put("items", list);
 		var s = HoconSerializer.create().keepNullProperties().build();
 		var hocon = s.write(m);

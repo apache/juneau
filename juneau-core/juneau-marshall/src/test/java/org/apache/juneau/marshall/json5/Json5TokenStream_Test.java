@@ -18,6 +18,7 @@ package org.apache.juneau.marshall.json5;
 
 import static org.apache.juneau.marshall.stream.TokenStreamAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 
 import java.io.*;
 
@@ -254,7 +255,7 @@ class Json5TokenStream_Test extends TestBase {
 					seen.add(r.read(Bean.class));
 				assertEquals(TokenType.END_ARRAY, r.next());
 			}
-			assertEquals(2, seen.size());
+			assertSize(2, seen);
 			assertEquals("a", seen.get(0).name);
 			assertEquals("b", seen.get(1).name);
 		}

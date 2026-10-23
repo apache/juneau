@@ -19,7 +19,7 @@
  * {@code HttpTransport} implementation for the next-generation REST client backed by Apache HttpClient 4.5.
  *
  * <p>
- * Provides the transport ({@link org.apache.juneau.rest.client.apachehttpclient45.ApacheHc45Transport}),
+ * Provides the transport ({@link org.apache.juneau.rest.client.apachehttpclient45.ApacheHc45Transport ApacheHc45Transport}),
  * its fluent builder, and an auto-discoverable
  * {@link org.apache.juneau.rest.client.apachehttpclient45.ApacheHc45TransportProvider provider}.
  */

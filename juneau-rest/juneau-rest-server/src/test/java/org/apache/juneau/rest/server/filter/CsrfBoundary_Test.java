@@ -17,6 +17,7 @@
 package org.apache.juneau.rest.server.filter;
 
 import static org.apache.juneau.rest.server.filter.BoundaryReason.*;
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
@@ -737,7 +738,7 @@ class CsrfBoundary_Test extends TestBase {
 		CsrfBoundary.resetWarnings();
 		var log = captureLog(() -> assertRefused(r("POST", "http", "h", "https://h", "Content-Type", JSON).token(), ORIGIN_MISMATCH));
 		var warnings = log.stream().filter(x -> x.getLevel() == Level.WARNING).toList();
-		assertEquals(1, warnings.size(), () -> log.stream().map(CsrfBoundary_Test::text).toList().toString());
+		assertSize(() -> log.stream().map(CsrfBoundary_Test::text).toList().toString(), 1, warnings);
 		assertTrue(text(warnings.get(0)).contains("CONTAINER"), text(warnings.get(0)));
 	}
 
@@ -884,7 +885,7 @@ class CsrfBoundary_Test extends TestBase {
 			.h("Cookie", "JSESSIONID=SENTINEL-COOKIE").h("Authorization", "Basic SENTINEL-AUTH")
 			.h("X-HTTP-Method-Override", "DELETE").build()));
 		var fine = log.stream().filter(x -> x.getLevel() == Level.FINE).toList();
-		assertEquals(1, fine.size(), log::toString);
+		assertSize(log::toString, 1, fine);
 		var m = text(fine.get(0));
 		assertTrue(m.contains("CSRF_TOKEN_MISMATCH"), m);
 		assertTrue(m.contains("PUT"), m);
@@ -1098,7 +1099,7 @@ class CsrfBoundary_Test extends TestBase {
 	@Test void k10_refusalLogMarksASynthesisedHost() {
 		var log = captureLog(() -> B.check(h2("http://evil.example").build()));
 		var finest = log.stream().filter(x -> x.getLevel() == Level.FINEST).map(CsrfBoundary_Test::text).toList();
-		assertEquals(1, finest.size(), finest::toString);
+		assertSize(finest::toString, 1, finest);
 		assertTrue(finest.get(0).contains("Host=(h2 :authority) app.example:80"), finest.get(0));
 		var real = captureLog(() -> B.check(h2("http://evil.example").h("Host", "app.example:80").build()));
 		assertFalse(real.stream().map(CsrfBoundary_Test::text).anyMatch(t -> t.contains("(h2 :authority)")));

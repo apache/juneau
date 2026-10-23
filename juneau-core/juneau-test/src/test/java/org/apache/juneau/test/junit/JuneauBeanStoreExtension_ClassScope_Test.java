@@ -28,7 +28,7 @@ import org.junit.jupiter.api.extension.*;
  * Tests for class-scope overlays produced by {@link JuneauBeanStoreExtension}.
  *
  * <p>
- * Phase 3 covers {@code @TestBean(scope = CLASS)} discovery, shared lifetime across test methods,
+ * Covers {@code @TestBean(scope = CLASS)} discovery, shared lifetime across test methods,
  * method-scope shadowing of class-scope, and mixed-lifecycle coexistence inside a single test class.
  *
  * <p>

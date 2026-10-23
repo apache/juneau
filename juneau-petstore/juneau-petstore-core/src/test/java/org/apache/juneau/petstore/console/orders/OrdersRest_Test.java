@@ -176,7 +176,7 @@ class OrdersRest_Test extends TestBase {
 
 	@Test void a06_aDayWithNoOrdersIsEmptyNotAnError() throws Exception {
 		var r = queryOn("?day=1999-01-01", ALL);
-		Assertions.assertEquals(0, r.getList("data").size());
+		assertSize(0, r.getList("data"));
 		Assertions.assertEquals(0, r.getInt("recordsFiltered"));
 	}
 

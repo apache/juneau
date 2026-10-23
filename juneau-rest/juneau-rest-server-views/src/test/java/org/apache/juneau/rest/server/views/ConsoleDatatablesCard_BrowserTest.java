@@ -107,7 +107,9 @@ class ConsoleDatatablesCard_BrowserTest extends TestBase {
 		assertFailure(report.get("views-missing"), "E-JS-10", "datatables card 't9' needs JuneauViews.regions; load the views toolkit");
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Casts a parsed JSON value to its known Map/List shape.
+	})
 	private static List<String> eventIds(Map<String,Object> r, String kind) {
 		var events = (List<Map<String,Object>>)ConsoleBrowserFixture.probe(r).get("events");
 		return events.stream().filter(e -> kind.equals(e.get("kind"))).map(e -> String.valueOf(e.get("id"))).toList();

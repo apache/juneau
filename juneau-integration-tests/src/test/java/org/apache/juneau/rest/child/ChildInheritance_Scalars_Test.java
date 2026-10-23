@@ -27,7 +27,7 @@ import org.apache.juneau.rest.server.servlet.*;
 import org.junit.jupiter.api.*;
 
 /**
- * Phase 4 &mdash; proves the CHILD-WINS scalar shape for {@code @Child(defaultCharset=...)} and
+ * Proves the CHILD-WINS scalar shape for {@code @Child(defaultCharset=...)} and
  * {@code @Child(maxInput=...)}, both of which resolve through {@code RestContext.mergeReplacedStringAttribute}
  * (last-non-sentinel-wins over the annotation chain), exactly like {@code restDebugFormatter}/{@code partSerializer}/
  * {@code partParser}.

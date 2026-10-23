@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.server.mcp;
 
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
@@ -51,7 +52,7 @@ class McpNeutralModel_Test {
 	@Test
 	void b01_toolOutcome_textFactory() {
 		var a = McpToolOutcome.text("hi");
-		assertEquals(1, a.getContent().size());
+		assertSize(1, a.getContent());
 		assertEquals("hi", a.getContent().get(0).text());
 		assertNull(a.getError());
 	}
@@ -59,7 +60,7 @@ class McpNeutralModel_Test {
 	@Test
 	void b02_toolOutcome_ofFactory() {
 		var a = McpToolOutcome.of(McpContentBlock.text("a"), McpContentBlock.image("AAA=", "image/png"));
-		assertEquals(2, a.getContent().size());
+		assertSize(2, a.getContent());
 	}
 
 	@Test
@@ -88,7 +89,7 @@ class McpNeutralModel_Test {
 		var a = new McpPromptArgument().setName("who").setDescription("d").setRequired(true);
 		var b = new McpPromptSpec().setName("greet").setDescription("pd").setArguments(List.of(a));
 		assertEquals("greet", b.getName());
-		assertEquals(1, b.getArguments().size());
+		assertSize(1, b.getArguments());
 		assertEquals("who", b.getArguments().get(0).getName());
 		assertEquals(Boolean.TRUE, a.getRequired());
 	}
@@ -123,7 +124,7 @@ class McpNeutralModel_Test {
 	@Test
 	void d02_resourceOutcome_fluentSetters() {
 		var a = new McpResourceOutcome().setContents(List.of(McpResourceContents.text("u", null, "x")));
-		assertEquals(1, a.getContents().size());
+		assertSize(1, a.getContents());
 		assertNull(new McpResourceOutcome().getContents());
 	}
 }

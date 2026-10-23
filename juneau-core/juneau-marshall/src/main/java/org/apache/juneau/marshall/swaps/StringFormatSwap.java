@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.marshall.swaps;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
+
 import org.apache.juneau.marshall.*;
 import org.apache.juneau.marshall.swap.spi.*;
 
@@ -41,7 +43,7 @@ public class StringFormatSwap extends StringSwap<Object> {
 
 	@Override /* Overridden from ObjectSwap */
 	public String swap(MarshallingSession session, Object o) throws Exception {
-		return String.format(format, o);
+		return f(format, o);
 	}
 
 	@Override /* Overridden from ObjectSwap */

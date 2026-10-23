@@ -28,7 +28,7 @@ import org.apache.juneau.rest.server.servlet.*;
 import org.junit.jupiter.api.*;
 
 /**
- * Phase 4 — exercises {@code @RestDestroy} dual-firing across host + mixin sub-contexts.
+ * Exercises {@code @RestDestroy} dual-firing across host + mixin sub-contexts.
  *
  * <p>
  * Host's destroy methods fire first; each mixin's destroy methods fire afterwards (in mixin declaration

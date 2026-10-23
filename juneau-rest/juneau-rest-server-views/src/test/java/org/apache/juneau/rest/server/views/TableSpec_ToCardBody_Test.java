@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.server.views;
 
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
@@ -29,7 +30,9 @@ import org.junit.jupiter.api.*;
 
 /** {@link TableSpec#toCardBody()}: key order, omit-when-absent, and the nested wire shapes (rowClassRules' {@code class}
  * key, defaultOrder's {@code key} key, selection/bulk, quickStats' {@code id}/{@code items}). */
-@SuppressWarnings("unchecked")
+@SuppressWarnings({
+	"unchecked" // Assertions cast the card body's nested values to their known Map/List shapes.
+})
 class TableSpec_ToCardBody_Test extends TestBase {
 
 	private static RowDetail detail() {
@@ -96,7 +99,7 @@ class TableSpec_ToCardBody_Test extends TestBase {
 		assertEquals(false, s.get("selectAll"));
 		var b = (Map<String,Object>) body.get("bulk");
 		assertFalse(b.containsKey("contractVersion"));
-		assertEquals(1, ((List<?>) b.get("actions")).size());
+		assertSize(1, ((List<?>) b.get("actions")));
 	}
 
 	@Test void a06_quickStats_shape() {
@@ -104,7 +107,7 @@ class TableSpec_ToCardBody_Test extends TestBase {
 			.quickStats("strip", QuickStat.of("x", "X", 1)).toCardBody();
 		var q = (Map<String,Object>) body.get("quickStats");
 		assertEquals("strip", q.get("id"));
-		assertEquals(1, ((List<?>) q.get("items")).size());
+		assertSize(1, ((List<?>) q.get("items")));
 	}
 
 	@Test void a07_detail_delegatesToRowDetailToMap() {

@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.bean.hal;
 
+import static org.apache.juneau.test.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
@@ -107,7 +108,7 @@ class Hal_RoundTrip_Test {
 				.addLinks("alt", new HalLink("/b"));
 			var raw = r.getLinks().get("alt");
 			assertInstanceOf(HalLinkArray.class, raw);
-			assertEquals(2, ((HalLinkArray) raw).size());
+			assertSize(2, ((HalLinkArray) raw));
 			assertJsonRoundTrip(r, HalResource.class);
 		}
 
@@ -118,7 +119,7 @@ class Hal_RoundTrip_Test {
 				.addLinks("alt", new HalLink("/c"));
 			var raw = r.getLinks().get("alt");
 			assertInstanceOf(HalLinkArray.class, raw);
-			assertEquals(3, ((HalLinkArray) raw).size());
+			assertSize(3, ((HalLinkArray) raw));
 		}
 
 		@Test
@@ -166,7 +167,7 @@ class Hal_RoundTrip_Test {
 				.addEmbedded("item", new HalResource[] { new HalResource().set("k", "v2") });
 			var raw = r.getEmbedded().get("item");
 			assertInstanceOf(HalResourceArray.class, raw);
-			assertEquals(2, ((HalResourceArray) raw).size());
+			assertSize(2, ((HalResourceArray) raw));
 		}
 
 		@Test
@@ -176,7 +177,7 @@ class Hal_RoundTrip_Test {
 				.addEmbedded("items", new HalResource[] { new HalResource().set("k", "b") });
 			var raw = r.getEmbedded().get("items");
 			assertInstanceOf(HalResourceArray.class, raw);
-			assertEquals(2, ((HalResourceArray) raw).size());
+			assertSize(2, ((HalResourceArray) raw));
 		}
 
 		@Test
@@ -185,7 +186,7 @@ class Hal_RoundTrip_Test {
 				.addEmbedded("a", new HalResource().set("k", "va"))
 				.addEmbedded("b", new HalResource().set("k", "vb"));
 			// Deep-path content check (not just count): both relations must retain their own resource/value.
-			assertEquals(2, r.getEmbedded().size());
+			assertSize(2, r.getEmbedded());
 			assertEquals("va", ((HalResource) r.getEmbedded().get("a")).get("k"));
 			assertEquals("vb", ((HalResource) r.getEmbedded().get("b")).get("k"));
 		}
@@ -238,7 +239,7 @@ class Hal_RoundTrip_Test {
 			var arr = new HalLinkArray(new HalLink("/a"));
 			arr.addAll(new HalLink("/b"), new HalLink("/c"));
 			// Deep-path content check (not just count): verify element order/identity survived the addAll.
-			assertEquals(3, arr.size());
+			assertSize(3, arr);
 			assertEquals("/a", arr.get(0).getHref());
 			assertEquals("/b", arr.get(1).getHref());
 			assertEquals("/c", arr.get(2).getHref());
@@ -250,7 +251,7 @@ class Hal_RoundTrip_Test {
 			arr.addAll(new HalResource(), new HalResource());
 			// Count-is-property here: every element is an indistinguishable default-constructed HalResource
 			// (no property is set on any of them), so there is no meaningful deep-path content to assert beyond size.
-			assertEquals(3, arr.size());
+			assertSize(3, arr);
 		}
 
 		@Test

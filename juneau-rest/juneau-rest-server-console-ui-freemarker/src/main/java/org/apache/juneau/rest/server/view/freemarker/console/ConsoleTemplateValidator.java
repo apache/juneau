@@ -26,6 +26,7 @@ import java.util.function.UnaryOperator;
 import java.util.regex.*;
 import java.util.stream.*;
 
+import org.apache.juneau.commons.collections.Maps;
 import org.apache.juneau.rest.server.staticfile.WebJarResolver;
 import org.apache.juneau.rest.server.views.*;
 
@@ -101,22 +102,22 @@ public final class ConsoleTemplateValidator {
 	private static final Map<String,Set<String>> DIRECTIVES = directives();
 
 	private static Map<String,Set<String>> directives() {
-		var m = new LinkedHashMap<String,Set<String>>();
-		m.put(PageDirectiveModel.NAME, PageDirectiveModel.ATTRS);
-		m.put(ConsoleDirectiveModel.NAME, ConsoleDirectiveModel.ATTRS);
-		m.put(MainDirectiveModel.NAME, MainDirectiveModel.ATTRS);
-		m.put(NavigationDirectiveModel.NAME, NavigationDirectiveModel.ATTRS);
-		m.put(NodeDirectiveModel.NAME, NodeDirectiveModel.ATTRS);
-		m.put(ThemeDirectiveModel.NAME, ThemeDirectiveModel.ATTRS);
-		m.put(TokenDirectiveModel.NAME, TokenDirectiveModel.ATTRS);
-		m.put(CardDirectiveModel.NAME, CardDirectiveModel.ATTRS);
-		m.put(TopicDirectiveModel.NAME, TopicDirectiveModel.ATTRS);
-		m.put(BridgeDirectiveModel.NAME, BridgeDirectiveModel.ATTRS);
-		m.put(BadgeDirectiveModel.NAME, BadgeDirectiveModel.ATTRS);
-		m.put(FactsDirectiveModel.NAME, Set.of());
+		Maps<String,Set<String>> m = mb();
+		m.add(PageDirectiveModel.NAME, PageDirectiveModel.ATTRS);
+		m.add(ConsoleDirectiveModel.NAME, ConsoleDirectiveModel.ATTRS);
+		m.add(MainDirectiveModel.NAME, MainDirectiveModel.ATTRS);
+		m.add(NavigationDirectiveModel.NAME, NavigationDirectiveModel.ATTRS);
+		m.add(NodeDirectiveModel.NAME, NodeDirectiveModel.ATTRS);
+		m.add(ThemeDirectiveModel.NAME, ThemeDirectiveModel.ATTRS);
+		m.add(TokenDirectiveModel.NAME, TokenDirectiveModel.ATTRS);
+		m.add(CardDirectiveModel.NAME, CardDirectiveModel.ATTRS);
+		m.add(TopicDirectiveModel.NAME, TopicDirectiveModel.ATTRS);
+		m.add(BridgeDirectiveModel.NAME, BridgeDirectiveModel.ATTRS);
+		m.add(BadgeDirectiveModel.NAME, BadgeDirectiveModel.ATTRS);
+		m.add(FactsDirectiveModel.NAME, Set.of());
 		for (var s : ConsoleSlotDirectiveModel.SLOT_NAMES)
-			m.put(s, new ConsoleSlotDirectiveModel(s).attrs());
-		return u(m);
+			m.add(s, new ConsoleSlotDirectiveModel(s).attrs());
+		return u(m.build());
 	}
 
 	private static final Configuration PARSE_CFG = parseConfig();
@@ -415,7 +416,7 @@ public final class ConsoleTemplateValidator {
 				depth--;
 			else if (depth == 1 && c == 'c') {
 				var v = VIEW_VERSION.matcher(body.substring(i));
-				if (v.find() && ! eq(v.group(1), ViewsMixin.CONTRACT_VERSION)) {
+				if (v.find() && neq(v.group(1), ViewsMixin.CONTRACT_VERSION)) {
 					add(out, name, lines, bodyStart + i, "view-contract-version", f(
 						"<@card id='%s'> view.contractVersion is '%s' but the runtime is '%s'; omit it to track the runtime automatically.",
 						cardId, v.group(1), ViewsMixin.CONTRACT_VERSION));

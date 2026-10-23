@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.server.views;
 
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assumptions.*;
 
@@ -96,7 +97,7 @@ class ConsoleJobLog_Test extends TestBase {
 		assertEquals(false, running.get("submitDisabled"));
 		assertEquals(List.of(true, true, true), running.get("inputsDisabled"));
 		var fetches = (List<?>)r.get("fetches");
-		assertEquals(1, fetches.size());
+		assertSize(1, fetches);
 		var f = (Map<?,?>)fetches.get(0);
 		assertEquals("/jobs/rebuild", f.get("url"));
 		assertEquals("POST", f.get("method"));

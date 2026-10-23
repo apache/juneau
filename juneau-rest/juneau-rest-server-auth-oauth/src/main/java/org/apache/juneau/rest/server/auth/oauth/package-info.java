@@ -29,15 +29,15 @@
  *
  * <h5 class='topic'>Key types</h5>
  * <ul>
- * 	<li class='jc'>{@link org.apache.juneau.rest.server.auth.oauth.OAuthIntrospectionValidator}
+ * 	<li class='jc'>{@link org.apache.juneau.rest.server.auth.oauth.OAuthIntrospectionValidator OAuthIntrospectionValidator}
  * 		&mdash; opaque-token validator wrapping Nimbus's RFC 7662 introspection client.
- * 	<li class='jc'>{@link org.apache.juneau.rest.server.auth.oauth.OAuthFilter}
+ * 	<li class='jc'>{@link org.apache.juneau.rest.server.auth.oauth.OAuthFilter OAuthFilter}
  * 		&mdash; servlet filter that recognizes {@code Authorization: Bearer ...} OAuth tokens.
- * 	<li class='jc'>{@link org.apache.juneau.rest.server.auth.oauth.TokenCache}
+ * 	<li class='jc'>{@link org.apache.juneau.rest.server.auth.oauth.TokenCache TokenCache}
  * 		&mdash; cache SPI used by the validator (and the caching flow decorator); default impl
- * 		{@link org.apache.juneau.rest.server.auth.oauth.BoundedLruTokenCache}.
- * 	<li class='jc'>{@link org.apache.juneau.rest.server.auth.oauth.CachingClientCredentialsFlow}
- * 		&mdash; server-side caching decorator layering a {@link org.apache.juneau.rest.server.auth.oauth.TokenCache}
+ * 		{@link org.apache.juneau.rest.server.auth.oauth.BoundedLruTokenCache BoundedLruTokenCache}.
+ * 	<li class='jc'>{@link org.apache.juneau.rest.server.auth.oauth.CachingClientCredentialsFlow CachingClientCredentialsFlow}
+ * 		&mdash; server-side caching decorator layering a {@link org.apache.juneau.rest.server.auth.oauth.TokenCache TokenCache}
  * 		over the role-neutral {@code OAuthClientCredentialsFlow}.
  * </ul>
  *

@@ -28,7 +28,9 @@ class RowDetail_Test extends TestBase {
 
 	private static final String UNSAFE = " is not a safe detail endpoint (same-origin path with an {id} placeholder).";
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Casts a parsed JSON value to its known Map/List shape.
+	})
 	private static Map<String,Object> region(Map<String,Object> m) {
 		return (Map<String,Object>)m.get("region");
 	}

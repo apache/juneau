@@ -30,16 +30,16 @@
  *
  * <h5 class='topic'>Bean Classes</h5>
  * <ul class='spaced-list'>
- *   <li>{@link org.apache.juneau.bean.jsonpatch.JsonPatchOperation} - Abstract base. Polymorphic dispatch
+ *   <li>{@link org.apache.juneau.bean.jsonpatch.JsonPatchOperation JsonPatchOperation} - Abstract base. Polymorphic dispatch
  *     wired via {@code @Marshalled(typePropertyName="op", dictionary={...})}, so the parser materializes the
  *     correct concrete subclass keyed off the {@code op} member.
- *   <li>{@link org.apache.juneau.bean.jsonpatch.AddOp} - {@code op:"add"} + {@code value}.
- *   <li>{@link org.apache.juneau.bean.jsonpatch.RemoveOp} - {@code op:"remove"}.
- *   <li>{@link org.apache.juneau.bean.jsonpatch.ReplaceOp} - {@code op:"replace"} + {@code value}.
- *   <li>{@link org.apache.juneau.bean.jsonpatch.MoveOp} - {@code op:"move"} + {@code from}.
- *   <li>{@link org.apache.juneau.bean.jsonpatch.CopyOp} - {@code op:"copy"} + {@code from}.
- *   <li>{@link org.apache.juneau.bean.jsonpatch.TestOp} - {@code op:"test"} + {@code value}.
- *   <li>{@link org.apache.juneau.bean.jsonpatch.JsonPatch} - {@code LinkedList&lt;JsonPatchOperation&gt;};
+ *   <li>{@link org.apache.juneau.bean.jsonpatch.AddOp AddOp} - {@code op:"add"} + {@code value}.
+ *   <li>{@link org.apache.juneau.bean.jsonpatch.RemoveOp RemoveOp} - {@code op:"remove"}.
+ *   <li>{@link org.apache.juneau.bean.jsonpatch.ReplaceOp ReplaceOp} - {@code op:"replace"} + {@code value}.
+ *   <li>{@link org.apache.juneau.bean.jsonpatch.MoveOp MoveOp} - {@code op:"move"} + {@code from}.
+ *   <li>{@link org.apache.juneau.bean.jsonpatch.CopyOp CopyOp} - {@code op:"copy"} + {@code from}.
+ *   <li>{@link org.apache.juneau.bean.jsonpatch.TestOp TestOp} - {@code op:"test"} + {@code value}.
+ *   <li>{@link org.apache.juneau.bean.jsonpatch.JsonPatch JsonPatch} - {@code LinkedList&lt;JsonPatchOperation&gt;};
  *     the JSON Patch <i>document</i> serializes as a top-level JSON array (mirrors {@code JsonSchemaArray}).
  * </ul>
  *

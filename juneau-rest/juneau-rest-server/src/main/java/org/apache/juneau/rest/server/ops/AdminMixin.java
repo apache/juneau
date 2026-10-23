@@ -120,7 +120,7 @@ import org.apache.juneau.rest.server.guard.RateLimitGuard.*;
  * 		and {@code snapshot} (a sorted array of {@link BucketState} entries describing every
  * 		per-key bucket the storage backend currently tracks). Returns {@code 404 Not Found} when
  * 		no {@code RateLimitGuard} bean is registered on the importer's bean store. Storage
- * 		backends that don't override {@link org.apache.juneau.rest.server.guard.RateLimitGuard.Storage#snapshot()} (e.g. Redis-backed
+ * 		backends that don't override {@link org.apache.juneau.rest.server.guard.RateLimitGuard.Storage#snapshot() RateLimitGuard.Storage#snapshot()} (e.g. Redis-backed
  * 		impls that can't cheaply enumerate buckets) emit an empty {@code snapshot} array.
  * </ul>
  *

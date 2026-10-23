@@ -135,12 +135,12 @@ public class MenuItem {
 	public void validate() {
 		if (isDivider())
 			return;
-		if (id == null || id.isBlank())
+		if (ib(id))
 			throw iaex("MenuItem id must not be null or blank.");
-		if (label == null || label.isBlank())
+		if (ib(label))
 			throw iaex("MenuItem '%s' label must not be null or blank.", id);
-		var hasHref = href != null && !href.isBlank();
-		var hasSafe = safe != null && !safe.isBlank();
+		var hasHref = inb(href);
+		var hasSafe = inb(safe);
 		if (hasHref == hasSafe)
 			throw iaex("MenuItem '%s' must declare exactly one of link/safe.", id);
 		if (hasHref && !SafePathTemplate.isSameOriginPath(href))

@@ -189,7 +189,9 @@ class PetstoreAsyncJob_BrowserTest extends TestBase {
 		assertContains(id, query(c, "row"));
 	}
 
-	@SuppressWarnings("unchecked") // fetches values are {status, body}.
+	@SuppressWarnings({
+		"unchecked" // fetches values are {status, body}.
+	})
 	@Test void a03_unknownJobIs404() {
 		var f = (Map<String,Object>) ((Map<String,Object>) assertClean(report, "jobs").get("fetches")).get("unknown");
 		assertBean(f, "status", "404");
@@ -200,7 +202,9 @@ class PetstoreAsyncJob_BrowserTest extends TestBase {
 	// b - the restock job-log card
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@SuppressWarnings("unchecked") // lines is a JSON array of strings.
+	@SuppressWarnings({
+		"unchecked" // lines is a JSON array of strings.
+	})
 	private static List<String> lines(Map<String,Object> c) {
 		return (List<String>) query(c, "lines");
 	}
@@ -213,7 +217,9 @@ class PetstoreAsyncJob_BrowserTest extends TestBase {
 		assertContains("job=", query(c, "search"));
 	}
 
-	@SuppressWarnings("unchecked") // fetches values are {status, body}.
+	@SuppressWarnings({
+		"unchecked" // fetches values are {status, body}.
+	})
 	@Test void b02_unknownStreamIs404() {
 		var f = (Map<String,Object>) ((Map<String,Object>) assertClean(report, "card-submit").get("fetches")).get("unknownStream");
 		assertBean(f, "status", "404");

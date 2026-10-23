@@ -64,7 +64,7 @@ public class BinarySwap extends StringSwap<byte[]> {
 		// this swap so the underlying BSON / CBOR / MsgPack writer emits the raw byte sequence and the
 		// corresponding parser consumes it.  Binary serializers without a native byte-array wire type
 		// (Parquet, binary RDF) report hasNativeBytes()==false and still run this swap to produce /
-		// consume the configured text wire form (HEX / BASE64 / etc.) per OQ 10 (b).
+		// consume the configured text wire form (HEX / BASE64 / etc.).
 		if (session instanceof OutputStreamSerializerSession session2 && session2.hasNativeBytes())
 			return 0;
 		if (session instanceof InputStreamParserSession session2 && session2.hasNativeBytes())

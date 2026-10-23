@@ -17,6 +17,7 @@
 package org.apache.juneau.commons.inject;
 
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.lang.reflect.*;
 import java.util.*;
@@ -356,7 +357,7 @@ public final class ValueResolver {
 	private static Object resolveCoerce(String resolved, Class<?> targetType, String expression, String siteDescription) {
 		var effectiveType = box(targetType);
 
-		if (resolved == null || resolved.isEmpty()) {
+		if (ie(resolved)) {
 			if (targetType.isPrimitive())
 				throw new BeanCreationException("Could not resolve required @Value('" + expression + "') for primitive site " + siteDescription);
 			if (resolved == null)

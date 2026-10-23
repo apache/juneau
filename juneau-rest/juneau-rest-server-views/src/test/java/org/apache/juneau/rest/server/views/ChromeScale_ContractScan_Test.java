@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.server.views;
 
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
@@ -59,7 +60,7 @@ class ChromeScale_ContractScan_Test extends TestBase {
 		var css = viewsCss();
 		assertTrue(css.contains("--jc-space-5: 24px;"), "the spacing ladder is declared whole, unused steps included");
 		assertTrue(css.contains("--jc-space-6: 32px;"), "the spacing ladder is declared whole, unused steps included");
-		assertEquals(17, ChromeScaleScanner.scale().size());
+		assertSize(17, ChromeScaleScanner.scale());
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -110,7 +111,7 @@ class ChromeScale_ContractScan_Test extends TestBase {
 	 */
 	@Test void b05_syntheticDuplicateLiteralIsCaught() {
 		var r = ChromeScaleScanner.scan(".synthetic-surface { height: 31px; }");
-		assertEquals(1, r.violations().size(), () -> "expected the synthetic duplicate to be caught: " + r.violations());
+		assertSize(() -> "expected the synthetic duplicate to be caught: " + r.violations(), 1, r.violations());
 		assertTrue(r.violations().get(0).contains("--jc-chrome-control-height"), r.violations().get(0));
 	}
 
@@ -150,7 +151,7 @@ class ChromeScale_ContractScan_Test extends TestBase {
 	/** {@code width} is a scale property on an SVG glyph and a content measure everywhere else. */
 	@Test void b09_widthIsOnlyCheckedOnGlyphs() {
 		assertTrue(ChromeScaleScanner.scan(".synthetic-cell { width: 16px; }").violations().isEmpty());
-		assertEquals(1, ChromeScaleScanner.scan(".synthetic-btn svg { width: 18px; }").violations().size());
+		assertSize(1, ChromeScaleScanner.scan(".synthetic-btn svg { width: 18px; }").violations());
 	}
 
 	/**
@@ -160,8 +161,8 @@ class ChromeScale_ContractScan_Test extends TestBase {
 	 */
 	@Test void b10_controlPaddingXCatchesADuplicatedValue() {
 		var r = ChromeScaleScanner.scan(".synthetic-control { padding-left: 10px; padding-right: 14px; }");
-		assertEquals(2, r.violations().size(), () -> "expected both padding-left and padding-right to be caught: "
-			+ r.violations());
+		assertSize(() -> "expected both padding-left and padding-right to be caught: "
+			+ r.violations(), 2, r.violations());
 		assertTrue(r.violations().get(0).contains("--jc-chrome-control-padding-x (10px)"), r.violations().get(0));
 		assertTrue(r.violations().get(1).contains("--jc-chrome-control-padding-x-wide (14px)"), r.violations().get(1));
 	}
@@ -173,8 +174,8 @@ class ChromeScale_ContractScan_Test extends TestBase {
 	 */
 	@Test void b11_lineHeightCatchesADuplicatedValue() {
 		var r = ChromeScaleScanner.scan(".synthetic-control { line-height: 1.2; }");
-		assertEquals(1, r.violations().size(), () -> "expected the duplicated line-height value to be caught: "
-			+ r.violations());
+		assertSize(() -> "expected the duplicated line-height value to be caught: "
+			+ r.violations(), 1, r.violations());
 		assertTrue(r.violations().get(0).contains("--jc-chrome-line-height (1.2)"), r.violations().get(0));
 	}
 
@@ -187,8 +188,8 @@ class ChromeScale_ContractScan_Test extends TestBase {
 	 */
 	@Test void b12_fontSizeRemCarveOutCatchesADuplicatedValue() {
 		var r = ChromeScaleScanner.scan(".synthetic-label { font-size: 0.875rem; }");
-		assertEquals(1, r.violations().size(), () -> "expected the rem-valued font-size duplicate to be caught: "
-			+ r.violations());
+		assertSize(() -> "expected the rem-valued font-size duplicate to be caught: "
+			+ r.violations(), 1, r.violations());
 		assertTrue(r.violations().get(0).contains("--jc-chrome-font-size-3 (0.875rem)"), r.violations().get(0));
 	}
 

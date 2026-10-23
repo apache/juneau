@@ -106,7 +106,7 @@ class MarshallUtils_Test extends TestBase {
 	@Test void b05_parseParquet() throws Exception {
 		var a = new A04_Bean();
 		List<A04_Bean> parsed = parquet(parquet(a), A04_Bean.class);
-		assertEquals(1, parsed.size());
+		assertSize(1, parsed);
 		assertString("test", parsed.get(0).x);
 	}
 

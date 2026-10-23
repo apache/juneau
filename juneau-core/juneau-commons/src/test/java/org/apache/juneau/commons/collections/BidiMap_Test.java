@@ -704,7 +704,7 @@ class BidiMap_Test extends TestBase {
 			.add("two", 2)
 			.build();
 		assertFalse(map.containsValue(1));
-		assertEquals(1, map.size());
+		assertSize(1, map);
 	}
 
 	@Test
@@ -714,7 +714,7 @@ class BidiMap_Test extends TestBase {
 			.add("two", 2)
 			.build();
 		assertFalse(map.containsKey("one"));
-		assertEquals(1, map.size());
+		assertSize(1, map);
 	}
 
 	@Test
@@ -724,7 +724,7 @@ class BidiMap_Test extends TestBase {
 			.build();
 		// Putting same key-value pair again is not a conflict
 		map.put("one", 1);
-		assertEquals(1, map.size());
+		assertSize(1, map);
 		assertEquals(1, map.get("one"));
 	}
 
@@ -737,7 +737,7 @@ class BidiMap_Test extends TestBase {
 		var sameEntries = new LinkedHashMap<String,Integer>();
 		sameEntries.put("one", 1);
 		map.putAll(sameEntries);
-		assertEquals(1, map.size());
+		assertSize(1, map);
 		assertEquals(1, map.get("one"));
 	}
 }

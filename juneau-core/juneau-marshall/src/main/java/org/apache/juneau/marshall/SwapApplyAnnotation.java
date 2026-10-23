@@ -41,7 +41,7 @@ public class SwapApplyAnnotation {
 	 *
 	 * <p>
 	 * Passes the {@link SwapApply @SwapApply} annotation through to the builder's annotation list.
-	 * The {@link org.apache.juneau.commons.reflect.AnnotationProvider.Builder#addRuntimeAnnotations(java.util.List)}
+	 * The {@link org.apache.juneau.commons.reflect.AnnotationProvider.Builder#addRuntimeAnnotations(java.util.List) AnnotationProvider.Builder#addRuntimeAnnotations(java.util.List)}
 	 * method handles unwrapping the nested {@link Swap @Swap} from {@link SwapApply#value()} and registering it
 	 * under the targets specified by {@link SwapApply#on()} and {@link SwapApply#onClass()}.
 	 */

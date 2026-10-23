@@ -793,7 +793,7 @@ class Lists_Test extends TestBase {
 			.build();
 
 		// Non-empty array passes the filter
-		assertEquals(3, list.size());
+		assertSize(3, list);
 	}
 
 	@Test
@@ -804,7 +804,7 @@ class Lists_Test extends TestBase {
 			.build();
 
 		// Non-empty map passes the filter
-		assertEquals(3, list.size());
+		assertSize(3, list);
 	}
 
 	@Test
@@ -815,7 +815,7 @@ class Lists_Test extends TestBase {
 			.build();
 
 		// Non-empty collection passes the filter
-		assertEquals(3, list.size());
+		assertSize(3, list);
 	}
 
 	@Test

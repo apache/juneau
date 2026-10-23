@@ -252,7 +252,7 @@ public class LoopbackBoundary implements RequestBoundary {
 			return BoundaryResult.ALLOWED;
 
 		var origin2 = req.getHeader("Origin");
-		if (origin2 == null || origin2.isBlank())
+		if (ib(origin2))
 			return reject(BoundaryReason.ORIGIN_MISSING, 403,
 				"A state-changing request must carry an 'Origin' header of '%s'.", origin);
 		if (! origin2.equals(origin))
@@ -271,7 +271,7 @@ public class LoopbackBoundary implements RequestBoundary {
 				"A state-changing request must use content type '%s'.", JSON_CONTENT_TYPE);
 
 		var presented = req.getHeader(csrfHeader);
-		if (presented == null || presented.isBlank())
+		if (ib(presented))
 			return reject(BoundaryReason.CSRF_TOKEN_MISSING, 403,
 				"A state-changing request must carry this server's CSRF token in the '%s' header.", csrfHeader);
 		if (! token.matches(presented))
@@ -325,7 +325,7 @@ public class LoopbackBoundary implements RequestBoundary {
 	 *
 	 * <p>
 	 * Delegates to {@link MethodSafety#isSafe(String)} rather than carrying its own copy of the safe-method set.
-	 * The startup check that refuses a {@link org.apache.juneau.rest.server.Mutating @Mutating} operation bound to
+	 * The startup check that refuses a {@link Mutating @Mutating} operation bound to
 	 * a safe method reads the same definition, and a boundary that disagreed with that check about which methods
 	 * are writes would silently defeat both.
 	 *

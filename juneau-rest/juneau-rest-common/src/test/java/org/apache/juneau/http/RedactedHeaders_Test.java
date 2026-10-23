@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.http;
 
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
@@ -30,7 +31,7 @@ class RedactedHeaders_Test {
 		assertTrue(RedactedHeaders.DEFAULT.contains("Set-Cookie"));
 		assertTrue(RedactedHeaders.DEFAULT.contains("Proxy-Authorization"));
 		assertTrue(RedactedHeaders.DEFAULT.contains("X-API-Key"));
-		assertEquals(5, RedactedHeaders.DEFAULT.size());
+		assertSize(5, RedactedHeaders.DEFAULT);
 	}
 
 	@Test void a02_redactedSentinel() {

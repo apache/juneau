@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.server.springboot;
 
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -87,7 +88,7 @@ class JuneauRestLoggingAutoConfiguration_Test extends TestBase {
 				.filter(LevelChangePropagator.class::isInstance)
 				.map(LevelChangePropagator.class::cast)
 				.toList();
-			assertEquals(1, propagators.size(), "installer must be idempotent via instanceof check");
+			assertSize(() -> "installer must be idempotent via instanceof check", 1, propagators);
 			assertTrue(propagators.get(0).isResetResistant(), "installed listener must survive LoggerContext.reset()");
 
 			context.getLogger("todo368.phase3.d01").setLevel(Level.DEBUG);
@@ -195,7 +196,7 @@ class JuneauRestLoggingAutoConfiguration_Test extends TestBase {
 			cfg.install(context, false);
 
 			assertEquals(1, propagatorCount(context));
-			assertEquals(2, context.getCopyOfListenerList().size());
+			assertSize(2, context.getCopyOfListenerList());
 		} finally {
 			context.stop();
 		}

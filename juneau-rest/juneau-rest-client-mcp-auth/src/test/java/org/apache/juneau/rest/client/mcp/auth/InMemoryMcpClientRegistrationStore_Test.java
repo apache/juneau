@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.client.mcp.auth;
 
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.net.*;
@@ -63,7 +64,7 @@ class InMemoryMcpClientRegistrationStore_Test extends TestBase {
 		s.put(B, reg(B, "cb", "sb"));
 		assertEquals("ca", s.find(A).orElseThrow().clientId());
 		assertEquals("cb", s.find(B).orElseThrow().clientId());
-		assertEquals(2, s.size());
+		assertSize(2, s);
 	}
 
 	@Test void a05_putReplaces() {
@@ -71,7 +72,7 @@ class InMemoryMcpClientRegistrationStore_Test extends TestBase {
 		s.put(A, reg(A, "ca", "sa"));
 		s.put(A, reg(A, "ca2", "sa2"));
 		assertEquals("ca2", s.find(A).orElseThrow().clientId());
-		assertEquals(1, s.size());
+		assertSize(1, s);
 	}
 
 	@Test void b01_toStringDoesNotLeakSecrets() {

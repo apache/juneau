@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.server.httppart;
 
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -126,7 +127,7 @@ class RequestHeaderList_Test {
 		var l = listOf(Map.of());
 		l.add(ETag.of("\"v1\""), null);
 		assertEquals("\"v1\"", l.get("ETag").getValue());
-		assertEquals(1, l.size());
+		assertSize(1, l);
 	}
 
 	@Test void c02_addDefault_blankExisting_isOverridden() {
@@ -254,7 +255,7 @@ class RequestHeaderList_Test {
 		assertEquals("\"v1\"", l.get("ETag").getValue());
 		l.set(HttpStringHeader.of("X-Foo", "new"));
 		assertEquals("new", l.get("X-Foo").getValue());
-		assertEquals(1, l.getAll("X-Foo").size());
+		assertSize(1, l.getAll("X-Foo"));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------

@@ -17,6 +17,7 @@
 package org.apache.juneau.rest.server.view.freemarker.console;
 
 import static org.apache.juneau.rest.server.console.test.PageContractAssert.*;
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
@@ -162,14 +163,14 @@ class PageSpec_BadgesFacts_Test extends TestBase {
 	@Test void a01_badgesAndFacts_flowThroughRealRender() throws Exception {
 		var contract = assertPage(get("/happy", 200)).isValid().contract();
 		var badges = contract.getMap("header").getList("badges");
-		assertEquals(2, badges.size());
+		assertSize(2, badges);
 		assertEquals("health", ((Map<?,?>)badges.get(0)).get("id"));
 		var queue = (Map<?,?>)badges.get(1);
 		assertEquals("queue", queue.get("id"));
 		assertEquals("warning", queue.get("tone"));
 		assertEquals(Map.of("one", "{total} queued"), queue.get("label"));
 		assertEquals(Map.of("q", "1"), queue.get("params"));
-		assertEquals(1, ((List<?>)queue.get("visibleWhen")).size());
+		assertSize(1, ((List<?>)queue.get("visibleWhen")));
 		var facts = contract.getMap("facts");
 		assertEquals("prod", facts.getString("env"));
 		assertEquals("1.0", facts.getString("buildVersion"));
@@ -287,7 +288,9 @@ class PageSpec_BadgesFacts_Test extends TestBase {
 		var spec = PageSpec.create().facts(Map.of("viewer", nested));
 		roles.add("b");
 		nested.put("extra", "x");
-		@SuppressWarnings("unchecked")
+		@SuppressWarnings({
+			"unchecked" // Casts a parsed JSON value to its known Map/List shape.
+		})
 		var viewer = (Map<String,Object>)spec.facts.get("viewer");
 		assertEquals(Map.of("roles", List.of("a")), viewer);
 		assertThrows(UnsupportedOperationException.class, () -> viewer.put("k", "v"));
@@ -300,15 +303,17 @@ class PageSpec_BadgesFacts_Test extends TestBase {
 		assertThrows(IllegalArgumentException.class, () -> target5.visibleWhen((VisibilityRule)null));
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Casts a parsed JSON value to its known Map/List shape.
+	})
 	@Test void e04_wiringFrom_replacesVisibleWhen() {
 		var a = CardSpec.html("c").visibleWhen(VisibilityRule.when("a").present());
 		var b = CardSpec.html("c").visibleWhen(VisibilityRule.when("b").present());
 		a.wiringFrom(b);
 		assertEquals("b", ((List<Map<String,Object>>)a.toMap().get("visibleWhen")).get(0).get("field"));
-		assertEquals(1, ((List<?>)a.toMap().get("visibleWhen")).size());
+		assertSize(1, ((List<?>)a.toMap().get("visibleWhen")));
 		a.wiringFrom(CardSpec.html("c"));
-		assertEquals(1, ((List<?>)a.toMap().get("visibleWhen")).size(), "an empty other leaves the rules alone");
+		assertSize(() -> "an empty other leaves the rules alone", 1, ((List<?>)a.toMap().get("visibleWhen")));
 	}
 
 	@Test void f01_nestedFactsCollision_namesDottedPath() throws Exception {

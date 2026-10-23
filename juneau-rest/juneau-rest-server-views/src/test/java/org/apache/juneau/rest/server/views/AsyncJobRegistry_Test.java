@@ -79,7 +79,7 @@ class AsyncJobRegistry_Test extends TestBase {
 			job.complete(ActionResult.success(null));
 			seen.add(job.id());
 		}
-		assertEquals(50, seen.size(), "minted capability ids must be unique (SecureRandom)");
+		assertSize(() -> "minted capability ids must be unique (SecureRandom)", 50, seen);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -219,7 +219,7 @@ class AsyncJobRegistry_Test extends TestBase {
 		assertSame(first, r.create(key));
 		assertSame(first, r.tryCreate(key).orElseThrow());
 		assertSame(first, r.get(first.id()).orElseThrow());
-		assertEquals(1, r.size());
+		assertSize(1, r);
 	}
 
 	@Test void i02_distinctKeysGiveDistinctJobs() {
@@ -227,7 +227,7 @@ class AsyncJobRegistry_Test extends TestBase {
 		var a = r.create(IdempotencyKey.mintSelfTargeted("create"));
 		var b = r.create(IdempotencyKey.mintSelfTargeted("create"));
 		assertNotSame(a, b);
-		assertEquals(2, r.size());
+		assertSize(2, r);
 	}
 
 	@Test void i03_concurrentDuplicateSubmitsYieldOneJob() throws Exception {
@@ -244,8 +244,8 @@ class AsyncJobRegistry_Test extends TestBase {
 			var ids = new HashSet<String>();
 			for (var f : futures)
 				ids.add(f.get().id());
-			assertEquals(1, ids.size());
-			assertEquals(1, r.size());
+			assertSize(1, ids);
+			assertSize(1, r);
 		} finally {
 			pool.shutdownNow();
 		}
@@ -392,12 +392,12 @@ class AsyncJobRegistry_Test extends TestBase {
 			clock.set(job.deadline().minusNanos(2_400_000));  // fires 2.4 ms early
 			s.tasks.get(0).run();
 			assertFalse(job.isTerminal());
-			assertEquals(2, s.tasks.size(), "a timeout task that fires early must re-arm itself");
+			assertSize(() -> "a timeout task that fires early must re-arm itself", 2, s.tasks);
 			assertEquals(3L, millis(s.delays.get(1)), "2.4 ms to the deadline must round up to 3 ms, not down to 2");
 			clock.set(clock.instant().plusMillis(3));
 			s.tasks.get(1).run();
 			assertEquals("app:hard-timeout-exceeded", job.result().message);
-			assertEquals(2, s.tasks.size());
+			assertSize(2, s.tasks);
 		} finally {
 			s.shutdownNow();
 		}
@@ -410,11 +410,11 @@ class AsyncJobRegistry_Test extends TestBase {
 			var job = registry(clock, s).create();
 			clock.set(job.deadline().minusMillis(1));
 			s.tasks.get(0).run();
-			assertEquals(2, s.tasks.size(), "a timeout task that fires early must re-arm itself");
+			assertSize(() -> "a timeout task that fires early must re-arm itself", 2, s.tasks);
 			job.complete(ActionResult.success(null));
 			clock.set(job.deadline());                     // the re-armed task also fires a tick early
 			s.tasks.get(1).run();
-			assertEquals(2, s.tasks.size(), "a settled job must not keep re-arming its timeout");
+			assertSize(() -> "a settled job must not keep re-arming its timeout", 2, s.tasks);
 			assertEquals("success", job.result().outcome);
 		} finally {
 			s.shutdownNow();

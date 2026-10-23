@@ -17,6 +17,7 @@
 package org.apache.juneau.rest.server.view.freemarker.console;
 
 import static org.apache.juneau.rest.server.view.freemarker.console.DataSourceDef.*;
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
@@ -65,7 +66,7 @@ class DataSourceDef_Test extends TestBase {
 		assertEquals(2_000_000L, ((Number)m.get("maxRows")).longValue());
 		assertEquals("{\"bucket\":\"auto\",\"groupBy\":[\"status\"],\"measures\":[\"count\",\"sum(ms)\"]}",
 			m.get("aggregate").toString());
-		assertEquals(2, ((List<?>)m.get("subscribes")).size());
+		assertSize(2, ((List<?>)m.get("subscribes")));
 	}
 
 	@Test void a03_appParserAndBuilder() {

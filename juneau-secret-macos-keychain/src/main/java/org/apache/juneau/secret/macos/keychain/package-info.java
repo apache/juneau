@@ -21,7 +21,7 @@
  * <p>
  * This is deliberately a separate module rather than part of <c>juneau-commons</c>: it shells out to an external OS
  * process, which the commons zero-runtime-deps / no-OS-integration philosophy keeps out of core.  Add this module to
- * the classpath (or wire {@link org.apache.juneau.secret.macos.keychain.KeychainSecretStore} into a
+ * the classpath (or wire {@link org.apache.juneau.secret.macos.keychain.KeychainSecretStore KeychainSecretStore} into a
  * {@code BeanStore}) to back secret storage with the user's login keychain on macOS.
  *
  * @since 10.0.0

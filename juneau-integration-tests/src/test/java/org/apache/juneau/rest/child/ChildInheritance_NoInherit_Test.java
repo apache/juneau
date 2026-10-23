@@ -27,7 +27,7 @@ import org.apache.juneau.utest.utils.*;
 import org.junit.jupiter.api.*;
 
 /**
- * Phase 5 &mdash; proves that a child's own {@code @Rest(noInherit="&lt;property&gt;")} cuts the corresponding
+ * Proves that a child's own {@code @Rest(noInherit="&lt;property&gt;")} cuts the corresponding
  * {@code @Child} seed too, per spec &sect;4's "{@code noInherit} interaction" subsection: because the seed is
  * injected as an ordinary least-derived entry in the child's own {@code getRestAnnotations()} chain
  * (&sect;6.6), the existing generic {@code noInherit} cutoff scan in {@code getRestAnnotationsForProperty}

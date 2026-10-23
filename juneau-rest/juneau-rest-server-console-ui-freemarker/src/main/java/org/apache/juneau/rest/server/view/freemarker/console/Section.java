@@ -16,6 +16,9 @@
  */
 package org.apache.juneau.rest.server.view.freemarker.console;
 
+import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.f;
+
 import java.util.*;
 
 import org.apache.juneau.marshall.collections.*;
@@ -116,10 +119,7 @@ public abstract class Section {
 
 	/** @return The section JSON. */
 	Map<String,Object> toMap() {
-		var m = new LinkedHashMap<String,Object>();
-		m.put("id", id());
-		m.put("kind", kind());
-		m.put("topic", topic);
+		Map<String,Object> m = map("id", id(), "kind", kind(), "topic", topic);
 		if (label != null)
 			m.put("label", label);
 		body(m);
@@ -134,7 +134,7 @@ public abstract class Section {
 	 * @return The exception, for the caller to throw.
 	 */
 	static IllegalArgumentException e77(String dash, String detail) {
-		return new IllegalArgumentException("E-77: " + String.format(BusWiringValidator.E77, dash, detail));
+		return new IllegalArgumentException("E-77: " + f(BusWiringValidator.E77, dash, detail));
 	}
 
 	/**

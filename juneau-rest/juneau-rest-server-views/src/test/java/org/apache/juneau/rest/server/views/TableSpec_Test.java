@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.server.views;
 
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
@@ -111,7 +112,7 @@ class TableSpec_Test extends TestBase {
 	@Test void a14_quickStats_acceptsMeterAndSegmented() {
 		var t = TableSpec.create("slo").quickStats("s", QuickStat.meter("m", "M", 1, 2), QuickStat.segmented("g", "G").segment("A", 1));
 		var qs = (Map<?,?>)t.toCardBody().get("quickStats");
-		assertEquals(2, ((List<?>)qs.get("items")).size());
+		assertSize(2, ((List<?>)qs.get("items")));
 	}
 
 	@Test void a99_rowClass_collectionOp_rejected() {

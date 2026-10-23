@@ -62,7 +62,9 @@ class RunViewMixin_Test extends TestBase {
 		R.RESOLVED.clear();
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Json.to(..., Map.class) returns a raw Map; JSON object keys are always strings.
+	})
 	private static Map<String,Object> get(String path) throws Exception {
 		var body = c.get(path).header("Accept", "application/json").run().assertStatus(200).getContent().asString();
 		return Json.to(body, Map.class);
@@ -110,7 +112,9 @@ class RunViewMixin_Test extends TestBase {
 		c.get("/juneau-run-view/r2/events").run().assertStatus(200);
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked" // Json.to(..., Map.class) returns a raw Map; JSON object keys are always strings.
+	})
 	@Test void b07_secondRequestUsesNext() throws Exception {
 		var log = RunViewLog.create();
 		log.append(RunEvent.note(Level.INFO, "one"));
@@ -119,7 +123,7 @@ class RunViewMixin_Test extends TestBase {
 		log.append(RunEvent.note(Level.INFO, "two"));
 		var p2 = get("/juneau-run-view/r3/events?after=" + p1.get("next"));
 		var events = (List<Map<String,Object>>)p2.get("events");
-		assertEquals(1, events.size());
+		assertSize(1, events);
 		assertBean(events.get(0), "seq,text", "2,two");
 		assertEquals(false, p2.get("more"));
 	}
@@ -130,10 +134,10 @@ class RunViewMixin_Test extends TestBase {
 			log.append(RunEvent.note(Level.INFO, "n"));
 		R.SOURCES.put("r4", log);
 		var p1 = get("/juneau-run-view/r4/events");
-		assertEquals(2000, ((List<?>)p1.get("events")).size());
+		assertSize(2000, ((List<?>)p1.get("events")));
 		assertEquals(true, p1.get("more"));
 		var p2 = get("/juneau-run-view/r4/events?after=" + p1.get("next"));
-		assertEquals(500, ((List<?>)p2.get("events")).size());
+		assertSize(500, ((List<?>)p2.get("events")));
 		assertEquals(false, p2.get("more"));
 	}
 

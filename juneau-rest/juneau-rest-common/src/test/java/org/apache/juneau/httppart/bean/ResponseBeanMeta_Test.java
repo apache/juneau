@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.httppart.bean;
 
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.commons.reflect.*;
@@ -147,7 +148,7 @@ class ResponseBeanMeta_Test {
 		var p = ParameterInfo.of(ParamFixtures.class.getMethod("annotated", ResponseBody.class).getParameters()[0]);
 		var meta = ResponseBeanMeta.create(p, AnnotationWorkList.create());
 		assertNotNull(meta);
-		assertEquals(1, meta.getProperties().size());
+		assertSize(1, meta.getProperties());
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

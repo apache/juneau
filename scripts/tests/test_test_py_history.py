@@ -143,7 +143,7 @@ def test_the_tests_record_fits_max_record_on_the_real_layout(run_history, tmp_pa
     series = {"surefire_s": per_module, "reactor_s": per_module}
     series.update({f"surefire_s.{bucket}": per_module
                    for bucket in ("core", "container.springboot", "container.jetty", "container.tomcat")})
-    record = {"v": 1, "ts": "2026-10-14T00:00:00Z", "step": "tests", "tool": "maven", "title": "Java tests",
+    record = {"v": 1, "ts": "2026-10-14T00:00:00Z", "step": "tests", "tool": "maven", "title": "Java Tests",
               "sig": "0123456789abcdef", "commit": "abcdef1234", "ok": True, "complete": True, "wall_s": 1234.567,
               "units": {"kind": "modules", "total": len(paths), "done": len(paths)}, "tests": 99999,
               "subs": per_module, "series": series}

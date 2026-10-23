@@ -211,7 +211,7 @@ class Stringifier_Test extends TestBase {
 		void d01_numberStringification() {
 			Stringifier<Number> numberFormatter = (converter, num) -> {
 				if (num instanceof Integer) return "INT:" + num;
-				if (num instanceof Double) return "DOUBLE:" + String.format("%.2f", num);
+				if (num instanceof Double) return "DOUBLE:" + f("%.2f", num);
 				return "NUMBER:" + num;
 			};
 
@@ -248,7 +248,7 @@ class Stringifier_Test extends TestBase {
 
 		@Test
 		void d04_customObjectStringification() {
-			Stringifier<TestPerson> personFormatter = (converter, person) -> String.format("Person{name='%s', age=%d}", person.name, person.age);
+			Stringifier<TestPerson> personFormatter = (converter, person) -> f("Person{name='%s', age=%d}", person.name, person.age);
 
 			var converter = BasicBeanConverter.DEFAULT;
 			var person = new TestPerson("Alice", 30);

@@ -18,6 +18,7 @@ package org.apache.juneau.marshall.toml;
 
 import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 
 import java.time.*;
 import java.util.*;
@@ -76,7 +77,7 @@ class Toml_Test {
 		String toml = Toml.of(m);
 		JsonMap parsed = Toml.to(toml, JsonMap.class);
 		var list = parsed.getList("tags", String.class, List.of());
-		assertEquals(3, list.size());
+		assertSize(3, list);
 		assertEquals("a", list.get(0));
 		assertEquals("b", list.get(1));
 		assertEquals("c", list.get(2));
@@ -118,7 +119,7 @@ class Toml_Test {
 		JsonMap parsed = Toml.to(toml, JsonMap.class);
 		var products = parsed.getList("products");
 		assertNotNull(products);
-		assertEquals(2, products.size());
+		assertSize(2, products);
 		assertEquals("Hammer", ((Map<?,?>)products.get(0)).get("name"));
 		assertEquals(738594937L, ((Map<?,?>)products.get(0)).get("sku"));
 		assertEquals("Nail", ((Map<?,?>)products.get(1)).get("name"));
@@ -143,7 +144,7 @@ class Toml_Test {
 		assertEquals("Store", parsed.getString("title"));
 		var products = parsed.getList("products");
 		assertNotNull(products);
-		assertEquals(2, products.size());
+		assertSize(2, products);
 		assertEquals("Hammer", ((Map<?,?>)products.get(0)).get("name"));
 		assertEquals(738594937L, ((Map<?,?>)products.get(0)).get("sku"));
 		assertEquals("Nail", ((Map<?,?>)products.get(1)).get("name"));
@@ -426,7 +427,7 @@ class Toml_Test {
 		var toml = "";
 		JsonMap parsed = Toml.to(toml, JsonMap.class);
 		// Empty TOML produces null or empty map
-		assertTrue(parsed == null || parsed.isEmpty());
+		assertTrue(ie(parsed));
 	}
 
 	@Test
@@ -442,10 +443,7 @@ class Toml_Test {
 
 	@Test
 	void j01_writeFloatSpecials() {
-		var m = new LinkedHashMap<String,Object>();
-		m.put("pos_inf", Double.POSITIVE_INFINITY);
-		m.put("neg_inf", Double.NEGATIVE_INFINITY);
-		m.put("nan_val", Double.NaN);
+		Map<String,Object> m = m("pos_inf", Double.POSITIVE_INFINITY, "neg_inf", Double.NEGATIVE_INFINITY, "nan_val", Double.NaN);
 		String toml = Toml.of(m);
 		assertTrue(toml.contains("inf"));
 		assertTrue(toml.contains("-inf"));
@@ -488,7 +486,7 @@ class Toml_Test {
 		JsonMap parsed = Toml.to(toml, JsonMap.class);
 		var servers = parsed.getList("servers");
 		assertNotNull(servers);
-		assertEquals(2, servers.size());
+		assertSize(2, servers);
 		assertEquals("alpha", ((Map<?,?>)servers.get(0)).get("host"));
 		assertEquals(8080L, ((Map<?,?>)servers.get(0)).get("port"));
 		assertEquals("beta", ((Map<?,?>)servers.get(1)).get("host"));

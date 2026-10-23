@@ -282,7 +282,7 @@ public class FileUtils {
 	public static Optional<File> resolveSafely(File rootDir, String userPath) {
 		reqnn("rootDir", rootDir);
 		var root = canonicalizeRoot(rootDir.toPath());
-		if (userPath == null || userPath.isEmpty())
+		if (isEmpty(userPath))
 			return optional(root.toFile());
 		Path target;
 		try {
@@ -347,7 +347,7 @@ public class FileUtils {
 			throw iaex("basePath escapes its own root.");
 		if (! bp.endsWith("/"))
 			bp = bp + "/";
-		if (userPath == null || userPath.isEmpty())
+		if (isEmpty(userPath))
 			return bp;
 		var up = userPath.startsWith("/") ? userPath.substring(1) : userPath;
 		var combined = normalizeVirtualPath(bp + up);

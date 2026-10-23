@@ -48,7 +48,9 @@ import org.junit.jupiter.params.provider.*;
 /**
  * Tests {@code @BeanProp(required)} enforcement across parser formats.
  */
-@SuppressWarnings("unused") // Fixture fields are read reflectively.
+@SuppressWarnings({
+	"unused" // Fixture fields are read reflectively.
+})
 class MissingRequiredProperty_Formats_Test extends TestBase {
 
 	public static class A {

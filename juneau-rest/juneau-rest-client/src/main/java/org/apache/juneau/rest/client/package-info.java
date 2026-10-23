@@ -28,12 +28,12 @@
  * <p>
  * Key types:
  * <ul>
- * 	<li>{@link org.apache.juneau.rest.client.HttpTransport} — SPI for pluggable HTTP transports
- * 	<li>{@link org.apache.juneau.rest.client.TransportRequest} — transport-layer request DTO
- * 	<li>{@link org.apache.juneau.rest.client.TransportResponse} — transport-layer response DTO
- * 	<li>{@link org.apache.juneau.rest.client.RestClient} — high-level REST client
- * 	<li>{@link org.apache.juneau.rest.client.RestRequest} — fluent request builder
- * 	<li>{@link org.apache.juneau.rest.client.RestResponse} — response wrapper with deserialization support
+ * 	<li>{@link org.apache.juneau.rest.client.HttpTransport HttpTransport} — SPI for pluggable HTTP transports
+ * 	<li>{@link org.apache.juneau.rest.client.TransportRequest TransportRequest} — transport-layer request DTO
+ * 	<li>{@link org.apache.juneau.rest.client.TransportResponse TransportResponse} — transport-layer response DTO
+ * 	<li>{@link org.apache.juneau.rest.client.RestClient RestClient} — high-level REST client
+ * 	<li>{@link org.apache.juneau.rest.client.RestRequest RestRequest} — fluent request builder
+ * 	<li>{@link org.apache.juneau.rest.client.RestResponse RestResponse} — response wrapper with deserialization support
  * </ul>
  */
 package org.apache.juneau.rest.client;

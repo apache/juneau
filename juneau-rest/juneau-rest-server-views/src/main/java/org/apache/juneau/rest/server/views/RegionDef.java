@@ -409,11 +409,11 @@ public class RegionDef {
 	 * @throws IllegalArgumentException If this definition is not well-formed.
 	 */
 	public void validate() {
-		if (id == null || id.isBlank())
+		if (ib(id))
 			throw iaex("RegionDef id must not be null or blank.");
 		if (allowedPopulators != null)
 			for (var name : allowedPopulators)
-				if (name == null || name.isBlank())
+				if (ib(name))
 					throw iaex("allowPopulators entry must not be blank.");
 		if (populate != null)
 			PopulatorAllowlist.assertAllowed(populate, allowedPopulators);
@@ -437,10 +437,10 @@ public class RegionDef {
 	}
 
 	private void validateDataUrlAndParams() {
-		if (dataUrl != null && !dataUrl.isBlank() && !isSafeDetailEndpoint(dataUrl))
+		if (inb(dataUrl) && !isSafeDetailEndpoint(dataUrl))
 			throw iaex("RegionDef '%s' dataUrl must be a same-origin path (no scheme, no leading '//', no '..' "
 				+ "segment): %s", id, dataUrl);
-		if (params == null || params.isEmpty())
+		if (ie(params))
 			return;
 		for (var e : params.entrySet()) {
 			if (e.getValue() instanceof Map)
@@ -458,7 +458,7 @@ public class RegionDef {
 		if (titleFields == null)
 			return;
 		for (var f : titleFields)
-			if (f == null || f.isBlank())
+			if (ib(f))
 				throw iaex("RegionDef '%s' titleFields entry must not be blank.", id);
 	}
 
@@ -478,7 +478,7 @@ public class RegionDef {
 		}
 		var isDefaultPopulate = populate == null || eq(populate, "default");
 		var isCardOrTab = eqa(type, TYPE_CARD_BODY, TYPE_TAB_BODY);
-		if (isDefaultPopulate && isCardOrTab && eq(renderer, RENDERER_FIELD_GRID) && (fields == null || fields.isEmpty()))
+		if (isDefaultPopulate && isCardOrTab && eq(renderer, RENDERER_FIELD_GRID) && (ie(fields)))
 			throw iaex("RegionDef '%s' declares renderer 'field-grid' under the default populator but no fields; "
 				+ "a field-grid with no catalog would silently paint an unlabeled/empty grid.", id);
 	}
@@ -610,7 +610,7 @@ public class RegionDef {
 		 * @return A new {@link Field}.
 		 */
 		public static Field of(String data) {
-			if (data == null || data.isBlank())
+			if (ib(data))
 				throw iaex("RegionDef.Field data must not be null or blank.");
 			var f = new Field();
 			f.data = data;
@@ -717,7 +717,7 @@ public class RegionDef {
 		 * @param regionId The enclosing region's id, for the error message only.
 		 */
 		void validate(String regionId) {
-			if (data == null || data.isBlank())
+			if (ib(data))
 				throw iaex("RegionDef '%s' field data must not be null or blank.", regionId);
 		}
 

@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.server.view.freemarker.console;
 
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
@@ -48,7 +49,7 @@ class PageSpec_Test extends TestBase {
 	@Test void a03_attrAndHeader_areStored() {
 		var spec = PageSpec.create().attr("caption", "Open alerts").header("X-Foo", "bar");
 		assertEquals("Open alerts", spec.attrs.get("caption"));
-		assertEquals(1, spec.headers.size());
+		assertSize(1, spec.headers);
 		assertEquals("X-Foo", spec.headers.get(0).name());
 		assertEquals("bar", spec.headers.get(0).value());
 	}
@@ -195,7 +196,7 @@ class PageSpec_Test extends TestBase {
 		cap.navRoot().add("fleet", "Fleet", "/fleet");
 		spec.applyTo(cap, null);
 		cap.applyPendingNavAdds();
-		assertEquals(1, seen.size());
+		assertSize(1, seen);
 		assertEquals("fleet", seen.get(0).id());
 	}
 
@@ -213,7 +214,7 @@ class PageSpec_Test extends TestBase {
 			spec.applyTo(cap, null);
 			cap.applyPendingNavAdds();
 			var fleet = cap.navRoot().find(List.of("fleet")).get();
-			assertEquals(1, fleet.children().size());
+			assertSize(1, fleet.children());
 			assertEquals("extra", fleet.children().get(0).id());
 		}
 	}

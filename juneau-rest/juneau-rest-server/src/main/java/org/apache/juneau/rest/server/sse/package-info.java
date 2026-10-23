@@ -19,7 +19,7 @@
  * Server-Sent Events (SSE) support for Juneau REST servers.
  *
  * <p>
- * Provides an in-memory {@link org.apache.juneau.rest.server.sse.SseBroadcaster} with per-subscriber
+ * Provides an in-memory {@link org.apache.juneau.rest.server.sse.SseBroadcaster SseBroadcaster} with per-subscriber
  * {@link org.apache.juneau.rest.server.sse.SseSubscription queues},
  * {@link org.apache.juneau.rest.server.sse.SseHeartbeat scheduled heartbeats}, and a fluent
  * {@link org.apache.juneau.rest.server.sse.SseResponseSupport response helper} for streaming events to clients.

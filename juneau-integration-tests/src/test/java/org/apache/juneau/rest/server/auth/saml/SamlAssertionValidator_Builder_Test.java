@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.server.auth.saml;
 
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 
@@ -74,7 +75,7 @@ class SamlAssertionValidator_Builder_Test extends TestBase {
 		assertEquals("https://sp.example.com", v.getSpEntityId());
 		assertEquals("https://idp.example.com", v.getExpectedIssuer());
 		assertEquals(Duration.ofSeconds(60), v.getClockSkew());
-		assertEquals(2, v.getAlgorithms().size());
+		assertSize(2, v.getAlgorithms());
 		assertTrue(v.getAlgorithms().contains(SignatureConstants.ALGO_ID_SIGNATURE_RSA_SHA256));
 		assertTrue(v.getAlgorithms().contains(SignatureConstants.ALGO_ID_SIGNATURE_ECDSA_SHA256));
 	}
@@ -116,7 +117,7 @@ class SamlAssertionValidator_Builder_Test extends TestBase {
 			.spEntityId("sp").expectedIssuer("idp").signingCredential(dummyCredential())
 			.algorithms(SignatureConstants.ALGO_ID_SIGNATURE_RSA_SHA256)
 			.build();
-		assertEquals(1, v.getAlgorithms().size());
+		assertSize(1, v.getAlgorithms());
 	}
 
 	@Test void d01_credentialAndResolverMutuallyExclusive() throws Exception {

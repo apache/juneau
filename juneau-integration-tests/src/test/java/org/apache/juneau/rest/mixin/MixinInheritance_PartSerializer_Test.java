@@ -26,7 +26,7 @@ import org.apache.juneau.utest.utils.*;
 import org.junit.jupiter.api.*;
 
 /**
- * Phase 2 &mdash; exercises {@code getRestAnnotationsForProperty(...)} parent-walk for the
+ * Exercises {@code getRestAnnotationsForProperty(...)} parent-walk for the
  * {@code @Rest(partSerializer=...)} property.
  *
  * <p>

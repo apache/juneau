@@ -249,7 +249,7 @@ public class McpServerConfig {
 				if (argument == null)
 					continue;
 				var name = argument.getName();
-				if (argument.getCompleter() != null && (name == null || name.isBlank()))
+				if (argument.getCompleter() != null && ib(name))
 					throw iaex(
 						"Invalid prompt registration at index %s (prompt '%s'), argument index %s: a completer must not be attached to a null or blank argument name",
 						i, descriptor.getName(), j);
@@ -452,7 +452,7 @@ public class McpServerConfig {
 			if (descriptor == null)
 				throw iaex("Invalid resource-template registration at index %s: descriptor() must not return null", i);
 			var uriTemplate = descriptor.getUriTemplate();
-			if (uriTemplate == null || uriTemplate.isBlank())
+			if (ib(uriTemplate))
 				throw iaex("Invalid resource-template registration at index %s (template '%s'): uriTemplate must not be null or blank",
 					i, uriTemplate);
 			McpUriTemplateMatcher matcher;

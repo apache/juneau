@@ -19,6 +19,7 @@ package org.apache.juneau.marshall.serializer;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 
 import java.io.*;
 import java.lang.reflect.*;
@@ -387,15 +388,12 @@ class SerializerSession_Test extends TestBase {
 		var collected = new ArrayList<Object>();
 		s.forEachEntry(input, collected::add);
 		// Non-Comparable should not be sorted.
-		assertEquals(2, collected.size());
+		assertSize(2, collected);
 	}
 
 	@Test void d06_forEachEntry_mapSorted() {
 		var s = (SerializerSession) JsonSerializer.create().sortMaps().build().createSession().build();
-		var input = new LinkedHashMap<String,Integer>();
-		input.put("c", 3);
-		input.put("a", 1);
-		input.put("b", 2);
+		Map<String,Integer> input = m("c", 3, "a", 1, "b", 2);
 		var collected = new ArrayList<String>();
 		s.forEachEntry(input, e -> collected.add(e.getKey()));
 		assertEquals(list("a", "b", "c"), collected);
@@ -403,10 +401,7 @@ class SerializerSession_Test extends TestBase {
 
 	@Test void d07_forEachEntry_mapUnsorted() {
 		var s = (SerializerSession) JsonSerializer.DEFAULT.createSession().build();
-		var input = new LinkedHashMap<String,Integer>();
-		input.put("c", 3);
-		input.put("a", 1);
-		input.put("b", 2);
+		Map<String,Integer> input = m("c", 3, "a", 1, "b", 2);
 		var collected = new ArrayList<String>();
 		s.forEachEntry(input, e -> collected.add(e.getKey()));
 		assertEquals(list("c", "a", "b"), collected);
@@ -442,21 +437,21 @@ class SerializerSession_Test extends TestBase {
 
 	@Test void e02_sortList_emptyReturnsSame() {
 		var s = (SerializerSession) JsonSerializer.create().sortCollections().build().createSession().build();
-		List<String> input = list();
+		List<String> input = l();
 		var result = s.sort(input);
 		assertSame(input, result);
 	}
 
 	@Test void e03_sortList_sortDisabledReturnsSame() {
 		var s = (SerializerSession) JsonSerializer.DEFAULT.createSession().build();
-		List<String> input = list("c", "a", "b");
+		List<String> input = l("c", "a", "b");
 		var result = s.sort(input);
 		assertSame(input, result);
 	}
 
 	@Test void e04_sortList_nonSortableReturnsSame() {
 		var s = (SerializerSession) JsonSerializer.create().sortCollections().build().createSession().build();
-		List<Object> input = list(new Object(), new Object());
+		List<Object> input = l(new Object(), new Object());
 		var result = s.sort(input);
 		assertSame(input, result);  // non-Comparable: not sorted.
 	}
@@ -827,7 +822,7 @@ class SerializerSession_Test extends TestBase {
 		var method = SerializerSession.class.getDeclaredMethod("toList", Class.class, Object.class);
 		method.setAccessible(true);
 		var result = (List<?>) method.invoke(null, int[].class, new int[]{1, 2, 3});
-		assertEquals(3, result.size());
+		assertSize(3, result);
 		assertEquals(1, result.get(0));
 	}
 
@@ -835,7 +830,7 @@ class SerializerSession_Test extends TestBase {
 		var method = SerializerSession.class.getDeclaredMethod("toList", Class.class, Object.class);
 		method.setAccessible(true);
 		var result = (List<?>) method.invoke(null, String[].class, new String[]{"a", "b"});
-		assertEquals(2, result.size());
+		assertSize(2, result);
 		assertEquals("a", result.get(0));
 	}
 
@@ -932,7 +927,7 @@ class SerializerSession_Test extends TestBase {
 	@Test void p06_toListFromStreamable() {
 		var s = (SerializerSession) JsonSerializer.DEFAULT.createSession().build();
 		var list = s.toListFromStreamable(list("a", "b"), s.getClassMeta(List.class));
-		assertEquals(2, list.size());
+		assertSize(2, list);
 	}
 
 	//====================================================================================================

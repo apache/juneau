@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.server.widgets;
 
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
@@ -40,7 +41,7 @@ class BarSlot_Test extends TestBase {
 				BarBadge.of("changePending").label("change pending").badge(Badge.count(7).tone(StatusTone.WARNING)))
 			.refreshUrl("/bar/counts");
 		assertEquals("bar-main", b.id);
-		assertEquals(2, b.widgets.size());
+		assertSize(2, b.widgets);
 		b.validate();
 	}
 

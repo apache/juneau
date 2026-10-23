@@ -108,7 +108,7 @@ public class ChangesRest extends PetstoreConsolePage {
 		var items = new JsonList();
 		var mine = 0;
 		for (var c : store().pendingChanges().pending()) {
-			var isMine = Objects.equals(c.getAuthor(), me);
+			var isMine = eq(c.getAuthor(), me);
 			if (isMine)
 				mine++;
 			items.add(JsonMap.of("id", String.valueOf(c.getId()), "label", c.getSummary(), "href", f("/console/pets/%s/summary", c.getPetId()), "mine", isMine, "kind", "Pet"));
@@ -164,7 +164,7 @@ public class ChangesRest extends PetstoreConsolePage {
 		if (body.ids == null)
 			throw new BadRequest("Missing 'ids'");
 		var key = body.idempotencyKey;
-		if (key == null || key.isBlank())
+		if (ib(key))
 			throw new BadRequest("Missing 'idempotencyKey'");
 		if (replays.size() > 1_000)
 			replays.clear();

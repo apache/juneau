@@ -25,25 +25,25 @@
  *
  * <h5 class='section'>Categories:</h5>
  * <ul>
- * 	<li>{@link org.apache.juneau.commons.svl.functions.StringFunctions} — substring, upper,
+ * 	<li>{@link org.apache.juneau.commons.svl.functions.StringFunctions StringFunctions} — substring, upper,
  * 		lower, trim, replace, contains, format, split, join, pathToken, etc.
- * 	<li>{@link org.apache.juneau.commons.svl.functions.TypeConversionFunctions} — toInt, toLong,
+ * 	<li>{@link org.apache.juneau.commons.svl.functions.TypeConversionFunctions TypeConversionFunctions} — toInt, toLong,
  * 		toDouble, toBool.
- * 	<li>{@link org.apache.juneau.commons.svl.functions.ArithmeticFunctions} — add, subtract,
+ * 	<li>{@link org.apache.juneau.commons.svl.functions.ArithmeticFunctions ArithmeticFunctions} — add, subtract,
  * 		multiply, divide, modulo, min, max, abs.
- * 	<li>{@link org.apache.juneau.commons.svl.functions.BooleanFunctions} — and, or, not, xor,
+ * 	<li>{@link org.apache.juneau.commons.svl.functions.BooleanFunctions BooleanFunctions} — and, or, not, xor,
  * 		eq, neq, lt, lte, gt, gte.
- * 	<li>{@link org.apache.juneau.commons.svl.functions.ConditionalFunctions} — if, switch,
+ * 	<li>{@link org.apache.juneau.commons.svl.functions.ConditionalFunctions ConditionalFunctions} — if, switch,
  * 		coalesce, notEmpty.
- * 	<li>{@link org.apache.juneau.commons.svl.functions.RegexFunctions} — match, extract,
+ * 	<li>{@link org.apache.juneau.commons.svl.functions.RegexFunctions RegexFunctions} — match, extract,
  * 		replaceRegex.
- * 	<li>{@link org.apache.juneau.commons.svl.functions.EncodingFunctions} — base64Encode/Decode,
+ * 	<li>{@link org.apache.juneau.commons.svl.functions.EncodingFunctions EncodingFunctions} — base64Encode/Decode,
  * 		urlEncode/Decode, htmlEscape/Unescape.
- * 	<li>{@link org.apache.juneau.commons.svl.functions.DateFunctions} — now, parseDate,
+ * 	<li>{@link org.apache.juneau.commons.svl.functions.DateFunctions DateFunctions} — now, parseDate,
  * 		formatDate.
- * 	<li>{@link org.apache.juneau.commons.svl.functions.RandomFunctions} — rand, randInt,
+ * 	<li>{@link org.apache.juneau.commons.svl.functions.RandomFunctions RandomFunctions} — rand, randInt,
  * 		randLong, randString, randChoice, uuid.
- * 	<li>{@link org.apache.juneau.commons.svl.functions.JsonFunctions} — jsonPath, get, keys,
+ * 	<li>{@link org.apache.juneau.commons.svl.functions.JsonFunctions JsonFunctions} — jsonPath, get, keys,
  * 		values, size.
  * </ul>
  *

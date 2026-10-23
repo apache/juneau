@@ -65,7 +65,7 @@ class JsonPatchMarshaller_Test extends TestBase {
 		var j = JsonPatchMarshaller.of(patch);
 		var back = JsonPatchMarshaller.to(j, JsonPatch.class);
 
-		assertEquals(6, back.size());
+		assertSize(6, back);
 		assertInstanceOf(AddOp.class, back.get(0));
 		assertInstanceOf(RemoveOp.class, back.get(1));
 		assertInstanceOf(ReplaceOp.class, back.get(2));
@@ -139,7 +139,7 @@ class JsonPatchMarshaller_Test extends TestBase {
 	void a08_stringShortcut_typeArgs() {
 		var j = JsonPatchMarshaller.of(new JsonPatch(new AddOp("/x", 1), new RemoveOp("/y")));
 		var back = JsonPatchMarshaller.<JsonPatch>to(j, (Type)JsonPatch.class);
-		assertEquals(2, back.size());
+		assertSize(2, back);
 		assertInstanceOf(AddOp.class, back.get(0));
 		assertBean(back.get(0), "path,value", "/x,1");
 		assertInstanceOf(RemoveOp.class, back.get(1));
@@ -150,7 +150,7 @@ class JsonPatchMarshaller_Test extends TestBase {
 	void a09_readerShortcut_typeArgs() {
 		var j = JsonPatchMarshaller.of(new JsonPatch(new MoveOp("/a", "/b")));
 		var back = JsonPatchMarshaller.<JsonPatch>to(new StringReader(j), (Type)JsonPatch.class);
-		assertEquals(1, back.size());
+		assertSize(1, back);
 		assertInstanceOf(MoveOp.class, back.get(0));
 		assertBean(back.get(0), "path,from", "/a,/b");
 	}

@@ -56,7 +56,7 @@ class JestJsonReportReader_Test extends TestBase {
 
 	@Test void b01_crashedFileIsOneErrorTest() {
 		var r = new JestJsonReportReader().read(resource("jest-crashed.json"));
-		assertEquals(1, r.tests().size());
+		assertSize(1, r.tests());
 		assertBean(r.tests().get(0), "name,status,msg", "(suite failed to run),ERROR,Cannot find module './x'");
 	}
 
@@ -99,7 +99,7 @@ class JestJsonReportReader_Test extends TestBase {
 
 	@Test void b06_maxTests() {
 		var r = new JestJsonReportReader().read(resource("jest-mixed.json"), new ReportLimits(1 << 20, 2, 512, 2000, 8000));
-		assertEquals(2, r.tests().size());
+		assertSize(2, r.tests());
 		assertTrue(r.truncated());
 		assertEquals(List.of("report truncated at 2 tests"), r.warnings());
 	}

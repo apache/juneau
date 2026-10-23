@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.rest.server.mcp;
 
+import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
@@ -93,15 +95,12 @@ class McpCompletionDomain_Test {
 		}
 
 		@Test void b05_contextPreservesInsertionOrderIndependentOfSourceMap() {
-			var source = new LinkedHashMap<String,String>();
-			source.put("z", "1");
-			source.put("a", "2");
-			source.put("m", "3");
+			Map<String,String> source = map("z", "1", "a", "2", "m", "3");
 			var req = new McpCompletionRequest().setContextArguments(source);
 			assertEquals(List.of("z", "a", "m"), List.copyOf(req.getContextArguments().keySet()));
 			// Mutating the caller's source map afterward must not affect the stored copy.
 			source.put("extra", "4");
-			assertEquals(3, req.getContextArguments().size());
+			assertSize(3, req.getContextArguments());
 		}
 	}
 
@@ -117,7 +116,7 @@ class McpCompletionDomain_Test {
 			var abstractMethods = Stream.of(McpCompleter.class.getMethods())
 				.filter(m -> Modifier.isAbstract(m.getModifiers()))
 				.toList();
-			assertEquals(1, abstractMethods.size());
+			assertSize(1, abstractMethods);
 			assertEquals("complete", abstractMethods.get(0).getName());
 		}
 
@@ -160,7 +159,7 @@ class McpCompletionDomain_Test {
 			var values = IntStream.range(0, 100).mapToObj(i -> "v" + i).toList();
 			var raw = new McpCompletionResult().setValues(values).setHasMore(false);
 			var n = McpCompletionResult.normalize(raw);
-			assertEquals(100, n.values().size());
+			assertSize(100, n.values());
 			assertEquals(values, n.values());
 			assertEquals(Boolean.FALSE, n.hasMore());
 		}
@@ -169,7 +168,7 @@ class McpCompletionDomain_Test {
 			var values = IntStream.range(0, 101).mapToObj(i -> "v" + i).toList();
 			var raw = new McpCompletionResult().setValues(values).setHasMore(false);
 			var n = McpCompletionResult.normalize(raw);
-			assertEquals(100, n.values().size());
+			assertSize(100, n.values());
 			assertEquals(values.subList(0, 100), n.values());
 			assertEquals(Boolean.TRUE, n.hasMore());
 		}

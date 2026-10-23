@@ -177,7 +177,7 @@ public class RegionTable {
 		// them when it is placed on its own (a card body), so the contract descriptor travels on the container.
 		if (region.params != null && ! region.params.isEmpty())
 			d.attr(REGION_DECLARED_ATTR, Json.of(region.toContractMap()));
-		if (csrfToken != null && ! csrfToken.isBlank())
+		if (inb(csrfToken))
 			d.attr(REGION_CSRF_ATTR, csrfToken);
 		return d;
 	}
@@ -196,7 +196,7 @@ public class RegionTable {
 	 * @return The {@code <script type='application/json'>} sidecar.
 	 */
 	public static Script sidecar(String hostId, List<RegionDef> regions) {
-		if (hostId == null || hostId.isBlank())
+		if (ib(hostId))
 			throw iaex("hostId must not be null or blank.");
 		var s = sidecar(regions);
 		s.id(SIDECAR_ID_PREFIX + hostId);
@@ -224,7 +224,7 @@ public class RegionTable {
 	}
 
 	private static Script sidecar(List<RegionDef> regions) {
-		if (regions == null || regions.isEmpty())
+		if (ie(regions))
 			throw iaex("regions must not be null or empty.");
 		var json = escapeForScript(Json.of(buildMeta(regions)));
 		return script().type("application/json").text(rawText(json));
@@ -237,7 +237,7 @@ public class RegionTable {
 	 * @return An ordered {@link java.util.Map} ready for {@code Json.of(...)}.
 	 */
 	public static java.util.Map<String,Object> buildMeta(List<RegionDef> regions) {
-		if (regions == null || regions.isEmpty())
+		if (ie(regions))
 			throw iaex("regions must not be null or empty.");
 		var descriptors = new ArrayList<java.util.Map<String,Object>>();
 		for (var r : regions) {

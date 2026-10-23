@@ -17,6 +17,7 @@
 package org.apache.juneau.rest.server.views;
 
 import static org.apache.juneau.rest.server.views.ConsoleBrowserFixture.*;
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
@@ -180,7 +181,7 @@ class ConsoleScheme_BrowserTest extends TestBase {
 
 	private static String checked(Map<String,Object> pr) {
 		var on = buttons(pr).stream().filter(b -> "true".equals(b.get("checked"))).toList();
-		assertEquals(1, on.size(), () -> "exactly one checked: " + pr);
+		assertSize(() -> "exactly one checked: " + pr, 1, on);
 		assertEquals("0", on.get(0).get("tab"));
 		assertEquals(1, buttons(pr).stream().filter(b -> "0".equals(b.get("tab"))).count());
 		return (String)on.get(0).get("scheme");

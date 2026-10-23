@@ -82,7 +82,7 @@ class McpResourceTemplateRegistry_Test {
 			var source = new ArrayList<>(List.of(a));
 			var config = new McpServerConfig().setResourceTemplates(source);
 			source.clear();
-			assertEquals(1, config.getResourceTemplates().size());
+			assertSize(1, config.getResourceTemplates());
 			assertSame(a, config.getResourceTemplates().get(0));
 		}
 
@@ -97,7 +97,7 @@ class McpResourceTemplateRegistry_Test {
 			var source = new ArrayList<>(List.of(spec));
 			var config = new McpServerConfig().setResourceTemplateSpecs(source);
 			source.clear();
-			assertEquals(1, config.getResourceTemplates().size());
+			assertSize(1, config.getResourceTemplates());
 			assertSame(spec, config.getResourceTemplates().get(0).descriptor());
 
 			config.setResourceTemplateSpecs(null);
@@ -282,19 +282,19 @@ class McpResourceTemplateRegistry_Test {
 
 		@Test void e01_explodeVarspecRegistersSuccessfully() {
 			var config = new McpServerConfig().addResourceTemplate(handler("file:///{?tags*}"));
-			assertEquals(1, config.getResourceTemplates().size());
+			assertSize(1, config.getResourceTemplates());
 			assertFalse(McpUriTemplateMatcher.compile("file:///{?tags*}").isReverseMatchable());
 		}
 
 		@Test void e02_multiVariableSimpleExpressionRegistersSuccessfully() {
 			var config = new McpServerConfig().addResourceTemplate(handler("file:///{x,y}"));
-			assertEquals(1, config.getResourceTemplates().size());
+			assertSize(1, config.getResourceTemplates());
 			assertFalse(McpUriTemplateMatcher.compile("file:///{x,y}").isReverseMatchable());
 		}
 
 		@Test void e03_prefixModifierRegistersSuccessfully() {
 			var config = new McpServerConfig().addResourceTemplate(handler("file:///{var:3}"));
-			assertEquals(1, config.getResourceTemplates().size());
+			assertSize(1, config.getResourceTemplates());
 			assertFalse(McpUriTemplateMatcher.compile("file:///{var:3}").isReverseMatchable());
 		}
 	}

@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.microservice.examples;
 
+import static org.apache.juneau.test.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.nio.file.*;
@@ -145,7 +146,7 @@ class LogsResource_Coverage_Test extends TestBase {
 		assertEquals("servlet:/view/plain.log?highlight=true", actions.get("highlighted"));
 		assertEquals("servlet:/parse/plain.log", actions.get("parsed"));
 		assertEquals("servlet:/download/plain.log", actions.get("download"));
-		assertEquals(4, actions.size(), "No delete action, and nothing else");
+		assertSize(() -> "No delete action, and nothing else", 4, actions);
 	}
 
 	@Test void a08_fileResource_actions_neverCarryMethodParam() {

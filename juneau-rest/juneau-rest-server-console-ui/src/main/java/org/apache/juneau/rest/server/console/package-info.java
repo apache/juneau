@@ -16,9 +16,9 @@
  */
 
 /**
- * Engine-agnostic themeable admin-console chrome: {@link org.apache.juneau.rest.server.console.Theme}, the stock
+ * Engine-agnostic themeable admin-console chrome: {@link org.apache.juneau.rest.server.console.Theme Theme}, the stock
  * theme stylesheets, the bundled {@code chrome.css} asset, and
- * {@link org.apache.juneau.rest.server.console.ConsoleChromeMixin}.
+ * {@link org.apache.juneau.rest.server.console.ConsoleChromeMixin ConsoleChromeMixin}.
  *
  * <p>
  * This module is CSS-serving only &mdash; it ships no template files and has no view-engine dependency. It is the

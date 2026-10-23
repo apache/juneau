@@ -92,7 +92,7 @@ public class YamlConfigFormat implements ConfigFormat {
 
 			var value = unquote(rest);
 			var section = section(stack);
-			if (! eq(section, lastSection)) {
+			if (neq(section, lastSection)) {
 				appendPreLines(sb, preLines);
 				if (ine(section))
 					sb.append('[').append(section).append(']').append('\n');

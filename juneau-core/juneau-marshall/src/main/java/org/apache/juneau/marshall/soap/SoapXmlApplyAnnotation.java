@@ -37,7 +37,7 @@ public class SoapXmlApplyAnnotation {
 	private SoapXmlApplyAnnotation() {}
 
 	/**
-	 * Applies targeted {@link SoapXmlApply} annotations to a {@link org.apache.juneau.marshall.Context.Builder}.
+	 * Applies targeted {@link SoapXmlApply} annotations to a {@link org.apache.juneau.marshall.Context.Builder Context.Builder}.
 	 */
 	@SuppressWarnings({
 		"rawtypes" // Raw types required for reflective annotation application.
@@ -67,7 +67,7 @@ public class SoapXmlApplyAnnotation {
 	 * Builder class.
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.marshall.MarshallingContext.Builder#annotations(java.lang.annotation.Annotation...)}
+	 * 	<li class='jm'>{@link org.apache.juneau.marshall.MarshallingContext.Builder#annotations(java.lang.annotation.Annotation...) MarshallingContext.Builder#annotations(java.lang.annotation.Annotation...)}
 	 * </ul>
 	 */
 	public static class Builder extends AppliedAnnotationObject.BuilderTMF {

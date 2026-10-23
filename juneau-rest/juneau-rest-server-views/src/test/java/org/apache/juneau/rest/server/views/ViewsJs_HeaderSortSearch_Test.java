@@ -79,7 +79,7 @@ class ViewsJs_HeaderSortSearch_Test extends TestBase {
 		assertTrue(fn.contains("resolveIcon?.(\"search\")"), fn);
 		assertTrue(fn.contains("juneau-view-col-search-icon"), fn);
 		assertFalse(body.contains("span.col-search-icon"), body);
-		assertFalse(body.contains("slds-"), body);
+		DualHatGuard.assertClean(body);
 	}
 
 	// Design 7.1 order: the magnifying glass is inserted immediately after the sort glyph (its nextSibling slot),

@@ -18,6 +18,7 @@ package org.apache.juneau.marshall.parquet;
 
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.apache.juneau.test.bct.BctAssertions.assertSize;
 
 import java.io.*;
 import java.util.*;
@@ -159,7 +160,7 @@ class ParquetParserSession_Test extends TestBase {
 		try {
 			var bytes = ParquetSerializer.DEFAULT.write(simple("x", 1));
 			var parsed = (List<SimpleBean>) ParquetParser.DEFAULT.read(bytes, List.class, SimpleBean.class);
-			assertEquals(1, parsed.size());
+			assertSize(1, parsed);
 		} finally {
 			ParquetParserSession.setDebugEnabled(false);
 		}
@@ -213,14 +214,14 @@ class ParquetParserSession_Test extends TestBase {
 		var bytes = ParquetSerializer.DEFAULT.write(list(simple("a", 1)));
 		var ll = (LinkedList<SimpleBean>) ParquetParser.DEFAULT.read(bytes, LinkedList.class, SimpleBean.class);
 		assertNotNull(ll);
-		assertEquals(1, ll.size());
+		assertSize(1, ll);
 	}
 
 	@Test void d07_collection_targetParseAsList() throws Exception {
 		// Collection target returns ArrayList (default).
 		var bytes = ParquetSerializer.DEFAULT.write(list(simple("a", 1), simple("b", 2)));
 		var c = (Collection<SimpleBean>) ParquetParser.DEFAULT.read(bytes, Collection.class, SimpleBean.class);
-		assertEquals(2, c.size());
+		assertSize(2, c);
 	}
 
 	// -----------------------------------------------------------------------------------------------------------------
@@ -237,7 +238,7 @@ class ParquetParserSession_Test extends TestBase {
 	@Test void e02_listOfMaps() throws Exception {
 		var bytes = ParquetSerializer.DEFAULT.write(list(simple("a", 1), simple("b", 2)));
 		var l = (List<Map<String,Object>>) ParquetParser.DEFAULT.read(bytes, List.class, Map.class);
-		assertEquals(2, l.size());
+		assertSize(2, l);
 	}
 
 	// -----------------------------------------------------------------------------------------------------------------
@@ -282,7 +283,7 @@ class ParquetParserSession_Test extends TestBase {
 		var bytes = ParquetSerializer.DEFAULT.write(list());
 		var l = (List<SimpleBean>) ParquetParser.DEFAULT.read(bytes, List.class, SimpleBean.class);
 		assertNotNull(l);
-		assertEquals(0, l.size());
+		assertSize(0, l);
 	}
 
 	@Test void g02_emptyList_asArray() throws Exception {
@@ -317,7 +318,7 @@ class ParquetParserSession_Test extends TestBase {
 		var bytes = ParquetSerializer.DEFAULT.write(src);
 		var m = (Map<Integer,String>) ParquetParser.DEFAULT.read(bytes, Map.class, Integer.class, String.class);
 		assertNotNull(m);
-		assertEquals(2, m.size());
+		assertSize(2, m);
 		assertEquals("a", m.get(1));
 		assertEquals("b", m.get(2));
 	}
@@ -340,27 +341,27 @@ class ParquetParserSession_Test extends TestBase {
 	@Test void k01_listOfStrings() throws Exception {
 		var bytes = ParquetSerializer.DEFAULT.write(list("a", "b", "c"));
 		var l = (List<String>) ParquetParser.DEFAULT.read(bytes, List.class, String.class);
-		assertEquals(3, l.size());
+		assertSize(3, l);
 		assertEquals("a", l.get(0));
 	}
 
 	@Test void k02_listOfIntegers() throws Exception {
 		var bytes = ParquetSerializer.DEFAULT.write(list(10, 20, 30));
 		var l = (List<Integer>) ParquetParser.DEFAULT.read(bytes, List.class, Integer.class);
-		assertEquals(3, l.size());
+		assertSize(3, l);
 		assertEquals(10, l.get(0));
 	}
 
 	@Test void k03_listOfDoubles() throws Exception {
 		var bytes = ParquetSerializer.DEFAULT.write(list(1.1, 2.2, 3.3));
 		var l = (List<Double>) ParquetParser.DEFAULT.read(bytes, List.class, Double.class);
-		assertEquals(3, l.size());
+		assertSize(3, l);
 	}
 
 	@Test void k04_listOfBooleans() throws Exception {
 		var bytes = ParquetSerializer.DEFAULT.write(list(true, false, true));
 		var l = (List<Boolean>) ParquetParser.DEFAULT.read(bytes, List.class, Boolean.class);
-		assertEquals(3, l.size());
+		assertSize(3, l);
 	}
 
 	// -----------------------------------------------------------------------------------------------------------------

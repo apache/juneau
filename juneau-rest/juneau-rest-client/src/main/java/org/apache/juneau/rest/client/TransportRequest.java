@@ -190,7 +190,7 @@ public final class TransportRequest {
 	 * {@link RestClient.Builder#allowAddressRanges(String...)}); they are unioned with the
 	 * {@value RemoteUrlPolicy#ALLOW_ADDRESS_RANGES_PROPERTY} system property.
 	 *
-	 * @return The allowed ranges. Never <jk>null</jk>; {@link org.apache.juneau.http.remote.RemoteUrlPolicy.AllowedRanges#NONE} by default.
+	 * @return The allowed ranges. Never <jk>null</jk>; {@link org.apache.juneau.http.remote.RemoteUrlPolicy.AllowedRanges#NONE RemoteUrlPolicy.AllowedRanges#NONE} by default.
 	 */
 	public RemoteUrlPolicy.AllowedRanges getAllowedAddressRanges() {
 		return allowedAddressRanges;

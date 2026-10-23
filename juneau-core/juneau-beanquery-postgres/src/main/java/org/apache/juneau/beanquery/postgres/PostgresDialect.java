@@ -18,6 +18,7 @@ package org.apache.juneau.beanquery.postgres;
 
 import static java.util.regex.Pattern.*;
 import static org.apache.juneau.commons.beanquery.SearchType.*;
+import static org.apache.juneau.commons.utils.Shorts.f;
 
 import java.util.*;
 import java.util.regex.*;
@@ -432,7 +433,7 @@ public final class PostgresDialect implements SqlDialect {
 	private static String text(Object o) {
 		if (o instanceof String s)
 			return s;
-		throw new IllegalStateException(String.format("Expected a String value for a text comparison but got '%s'.", o == null ? null : o.getClass().getName()));  // I believe we have a short for getting class name?
+		throw new IllegalStateException(f("Expected a String value for a text comparison but got '%s'.", o == null ? null : o.getClass().getName()));  // I believe we have a short for getting class name?
 	}
 
 	private static SqlFragment frag(String sql, Object...binds) {

@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.marshall.sse;
 
+import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.test.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -187,10 +188,7 @@ class Sse_Test extends TestBase {
 	}
 
 	@Test void b12_nullElementsInIterableSkipped() throws Exception {
-		var events = new ArrayList<SseEvent>();
-		events.add(new SseEvent("e", "a"));
-		events.add(null);
-		events.add(new SseEvent("e", "b"));
+		List<SseEvent> events = list(new SseEvent("e", "a"), null, new SseEvent("e", "b"));
 		var s = Sse.of(events);
 		assertEquals("event: e\ndata: a\n\nevent: e\ndata: b\n\n", s);
 	}
@@ -247,126 +245,126 @@ class Sse_Test extends TestBase {
 	@Test void c01_canonicalExample() throws Exception {
 		var wire = "event: progress\ndata: step 1\nid: 42\nretry: 1000\n\n";
 		List<SseEvent> events = Sse.to(wire, List.class, SseEvent.class);
-		assertEquals(1, events.size());
+		assertSize(1, events);
 		assertBean(events.get(0), "event,data,id,retry", "progress,step 1,42,1000");
 	}
 
 	@Test void c02_multiLineData() throws Exception {
 		var wire = "data: line one\ndata: line two\ndata: line three\n\n";
 		List<SseEvent> events = Sse.to(wire, List.class, SseEvent.class);
-		assertEquals(1, events.size());
+		assertSize(1, events);
 		assertEquals("line one\nline two\nline three", events.get(0).getData());
 	}
 
 	@Test void c03_crLineTerminator() throws Exception {
 		var wire = "event: e\rdata: d\r\r";
 		List<SseEvent> events = Sse.to(wire, List.class, SseEvent.class);
-		assertEquals(1, events.size());
+		assertSize(1, events);
 		assertBean(events.get(0), "event,data", "e,d");
 	}
 
 	@Test void c04_lfLineTerminator() throws Exception {
 		var wire = "event: e\ndata: d\n\n";
 		List<SseEvent> events = Sse.to(wire, List.class, SseEvent.class);
-		assertEquals(1, events.size());
+		assertSize(1, events);
 		assertBean(events.get(0), "event,data", "e,d");
 	}
 
 	@Test void c05_crLfLineTerminator() throws Exception {
 		var wire = "event: e\r\ndata: d\r\n\r\n";
 		List<SseEvent> events = Sse.to(wire, List.class, SseEvent.class);
-		assertEquals(1, events.size());
+		assertSize(1, events);
 		assertBean(events.get(0), "event,data", "e,d");
 	}
 
 	@Test void c06_mixedLineTerminators() throws Exception {
 		var wire = "event: e\rdata: line1\ndata: line2\r\n\r\n";
 		List<SseEvent> events = Sse.to(wire, List.class, SseEvent.class);
-		assertEquals(1, events.size());
+		assertSize(1, events);
 		assertEquals("line1\nline2", events.get(0).getData());
 	}
 
 	@Test void c07_singleBomStripped() throws Exception {
 		var wire = "\uFEFFevent: e\ndata: d\n\n";
 		List<SseEvent> events = Sse.to(wire, List.class, SseEvent.class);
-		assertEquals(1, events.size());
+		assertSize(1, events);
 		assertEquals("e", events.get(0).getEvent());
 	}
 
 	@Test void c08_secondBomPreserved() throws Exception {
 		var wire = "\uFEFFdata: foo\uFEFF\n\n";
 		List<SseEvent> events = Sse.to(wire, List.class, SseEvent.class);
-		assertEquals(1, events.size());
+		assertSize(1, events);
 		assertEquals("foo\uFEFF", events.get(0).getData());
 	}
 
 	@Test void c09_idWithNullByteIgnored() throws Exception {
 		var wire = "id: ab\u0000cd\ndata: x\n\n";
 		List<SseEvent> events = Sse.to(wire, List.class, SseEvent.class);
-		assertEquals(1, events.size());
+		assertSize(1, events);
 		assertNull(events.get(0).getId());
 	}
 
 	@Test void c10_retryNonDigitIgnored() throws Exception {
 		var wire = "retry: abc\ndata: x\n\n";
 		List<SseEvent> events = Sse.to(wire, List.class, SseEvent.class);
-		assertEquals(1, events.size());
+		assertSize(1, events);
 		assertNull(events.get(0).getRetry());
 	}
 
 	@Test void c11_retryEmptyIgnored() throws Exception {
 		var wire = "retry: \ndata: x\n\n";
 		List<SseEvent> events = Sse.to(wire, List.class, SseEvent.class);
-		assertEquals(1, events.size());
+		assertSize(1, events);
 		assertNull(events.get(0).getRetry());
 	}
 
 	@Test void c12_retryMixedDigitsIgnored() throws Exception {
 		var wire = "retry: 12x4\ndata: x\n\n";
 		List<SseEvent> events = Sse.to(wire, List.class, SseEvent.class);
-		assertEquals(1, events.size());
+		assertSize(1, events);
 		assertNull(events.get(0).getRetry());
 	}
 
 	@Test void c13_commentLinesIgnored() throws Exception {
 		var wire = ": ping\n: heartbeat\nevent: e\ndata: d\n\n";
 		List<SseEvent> events = Sse.to(wire, List.class, SseEvent.class);
-		assertEquals(1, events.size());
+		assertSize(1, events);
 		assertBean(events.get(0), "event,data", "e,d");
 	}
 
 	@Test void c14_noColonLineSpec() throws Exception {
 		var wire = "data\ndata: real\n\n";
 		List<SseEvent> events = Sse.to(wire, List.class, SseEvent.class);
-		assertEquals(1, events.size());
+		assertSize(1, events);
 		assertEquals("\nreal", events.get(0).getData());
 	}
 
 	@Test void c15_colonSpaceHandling() throws Exception {
 		var wire = "data:  value\n\n";
 		List<SseEvent> events = Sse.to(wire, List.class, SseEvent.class);
-		assertEquals(1, events.size());
+		assertSize(1, events);
 		assertEquals(" value", events.get(0).getData());
 	}
 
 	@Test void c16_noSpaceAfterColon() throws Exception {
 		var wire = "data:value\n\n";
 		List<SseEvent> events = Sse.to(wire, List.class, SseEvent.class);
-		assertEquals(1, events.size());
+		assertSize(1, events);
 		assertEquals("value", events.get(0).getData());
 	}
 
 	@Test void c17_unknownFieldIgnored() throws Exception {
 		var wire = "unknown: x\ndata: real\n\n";
 		List<SseEvent> events = Sse.to(wire, List.class, SseEvent.class);
-		assertEquals(1, events.size());
+		assertSize(1, events);
 		assertEquals("real", events.get(0).getData());
 	}
 
 	@Test void c18_multipleEvents() throws Exception {
 		var wire = "data: one\n\ndata: two\n\ndata: three\n\n";
 		List<SseEvent> events = Sse.to(wire, List.class, SseEvent.class);
-		assertEquals(3, events.size());
+		assertSize(3, events);
 		assertEquals("one", events.get(0).getData());
 		assertEquals("two", events.get(1).getData());
 		assertEquals("three", events.get(2).getData());
@@ -375,28 +373,28 @@ class Sse_Test extends TestBase {
 	@Test void c19_emptyEventValueDefaultsToMessage() throws Exception {
 		var wire = "data: d\n\n";
 		List<SseEvent> events = Sse.to(wire, List.class, SseEvent.class);
-		assertEquals(1, events.size());
+		assertSize(1, events);
 		assertNull(events.get(0).getEvent());
 	}
 
 	@Test void c20_emptyEventField() throws Exception {
 		var wire = "event: \ndata: d\n\n";
 		List<SseEvent> events = Sse.to(wire, List.class, SseEvent.class);
-		assertEquals(1, events.size());
+		assertSize(1, events);
 		assertEquals("", events.get(0).getEvent());
 	}
 
 	@Test void c21_emptyIdField() throws Exception {
 		var wire = "id: \ndata: d\n\n";
 		List<SseEvent> events = Sse.to(wire, List.class, SseEvent.class);
-		assertEquals(1, events.size());
+		assertSize(1, events);
 		assertEquals("", events.get(0).getId());
 	}
 
 	@Test void c22_inputWithoutTrailingBlankLine() throws Exception {
 		var wire = "event: e\ndata: d\n";
 		List<SseEvent> events = Sse.to(wire, List.class, SseEvent.class);
-		assertEquals(1, events.size());
+		assertSize(1, events);
 		assertBean(events.get(0), "event,data", "e,d");
 	}
 
@@ -440,7 +438,7 @@ class Sse_Test extends TestBase {
 		// "data:" with no value — exercises processField's fieldValue.isEmpty() branch.
 		var wire = "data:\n\n";
 		List<SseEvent> events = Sse.to(wire, List.class, SseEvent.class);
-		assertEquals(1, events.size());
+		assertSize(1, events);
 		assertEquals("", events.get(0).getData());
 	}
 
@@ -448,7 +446,7 @@ class Sse_Test extends TestBase {
 		// '!' (0x21) is below '0' — exercises parseRetry's c < '0' branch.
 		var wire = "retry: !23\ndata: x\n\n";
 		List<SseEvent> events = Sse.to(wire, List.class, SseEvent.class);
-		assertEquals(1, events.size());
+		assertSize(1, events);
 		assertNull(events.get(0).getRetry());
 	}
 
@@ -456,7 +454,7 @@ class Sse_Test extends TestBase {
 		// Event with metadata fields but no data — exercises dispatch's dataBuf.length() == 0 branch.
 		var wire = "event: e\nid: 1\n\n";
 		List<SseEvent> events = Sse.to(wire, List.class, SseEvent.class);
-		assertEquals(1, events.size());
+		assertSize(1, events);
 		assertBean(events.get(0), "event,data,id,retry", "e,<null>,1,<null>");
 	}
 
@@ -464,7 +462,7 @@ class Sse_Test extends TestBase {
 		// Stream ends without a final \n — exercises readLine's sawAny=true at EOF branch.
 		var wire = "event: e\ndata: d";
 		List<SseEvent> events = Sse.to(wire, List.class, SseEvent.class);
-		assertEquals(1, events.size());
+		assertSize(1, events);
 		assertBean(events.get(0), "event,data", "e,d");
 	}
 
@@ -531,7 +529,7 @@ class Sse_Test extends TestBase {
 		};
 		var r = new SseEventReader(sr);
 		var events = r.toList();
-		assertEquals(2, events.size());
+		assertSize(2, events);
 		assertTrue(closed[0]);
 	}
 
@@ -566,7 +564,7 @@ class Sse_Test extends TestBase {
 		);
 		var wire = Sse.of(events);
 		List<SseEvent> parsed = Sse.to(wire, List.class, SseEvent.class);
-		assertEquals(2, parsed.size());
+		assertSize(2, parsed);
 		assertBean(parsed.get(0), "event,data,id,retry", "progress,step 1,1,<null>");
 		assertBean(parsed.get(1), "event,data,id,retry", "progress,step 2,2,1000");
 	}
@@ -627,7 +625,7 @@ class Sse_Test extends TestBase {
 
 	@Test void f09_splitDataKeepsTrailingEmpties() {
 		var parts = SseSerializerSession.splitData("a\nb\n");
-		assertEquals(3, parts.size());
+		assertSize(3, parts);
 		assertEquals("a", parts.get(0));
 		assertEquals("b", parts.get(1));
 		assertEquals("", parts.get(2));
@@ -697,7 +695,7 @@ class Sse_Test extends TestBase {
 			Object result = session.doRead(pipe, null);
 			assertTrue(result instanceof List);
 			var events = (List<?>) result;
-			assertEquals(1, events.size());
+			assertSize(1, events);
 			assertEquals("x", ((SseEvent) events.get(0)).getData());
 		}
 	}

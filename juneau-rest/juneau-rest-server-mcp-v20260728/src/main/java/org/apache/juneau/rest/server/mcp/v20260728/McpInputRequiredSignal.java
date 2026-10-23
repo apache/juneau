@@ -58,7 +58,7 @@ public class McpInputRequiredSignal extends RuntimeException {
 	 */
 	public McpInputRequiredSignal(Map<String,Object> inputRequests, Object continuation) {
 		super("Handler requested more input");
-		if (inputRequests == null || inputRequests.isEmpty())
+		if (ie(inputRequests))
 			throw iaex("inputRequests must not be null or empty");
 		this.inputRequests = inputRequests;
 		this.continuation = continuation;

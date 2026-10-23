@@ -26,16 +26,16 @@
  * </p>
  *
  * <ul class='javatreec'>
- * 	<li class='jc'>{@link org.apache.juneau.rest.server.convention.FaviconMixin} —
+ * 	<li class='jc'>{@link org.apache.juneau.rest.server.convention.FaviconMixin FaviconMixin} —
  * 		{@code /favicon.ico} with a 30-day {@code Cache-Control} and a default Juneau-branded icon
  * 		on the framework classpath.
- * 	<li class='jc'>{@link org.apache.juneau.rest.server.convention.SeoMixin} —
+ * 	<li class='jc'>{@link org.apache.juneau.rest.server.convention.SeoMixin SeoMixin} —
  * 		{@code /robots.txt} (deny-all by default) and {@code /sitemap.xml} (empty
  * 		{@code <urlset>} by default); both builder-driven.
- * 	<li class='jc'>{@link org.apache.juneau.rest.server.convention.VersionMixin} —
+ * 	<li class='jc'>{@link org.apache.juneau.rest.server.convention.VersionMixin VersionMixin} —
  * 		{@code /version} (SVL-configurable) returning a JSON metadata
  * 		map; defaults read {@code MANIFEST.MF} + {@code git.properties} from the classpath.
- * 	<li class='jc'>{@link org.apache.juneau.rest.server.convention.WellKnownMixin} —
+ * 	<li class='jc'>{@link org.apache.juneau.rest.server.convention.WellKnownMixin WellKnownMixin} —
  * 		{@code /.well-known/security.txt} per RFC 9116; 404 unless explicitly configured.
  * </ul>
  *
