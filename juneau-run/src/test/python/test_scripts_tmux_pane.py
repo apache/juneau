@@ -94,6 +94,7 @@ class TmuxPaneTest(PaneCase):
         self.assertIn("R=[unset] C=[unset] L=[unset]", out)
         self.assertEqual([d for d in Path(self.env["TMPDIR"]).glob("**/result.json")], [])
 
+    @slow_tmux
     def test_launch_output_and_first_pane_line_carry_the_cancel_hint(self):
         proc = self.start("-k", "never", "--", "sleep", "30")
         pid = pane_id(proc)
@@ -133,6 +134,7 @@ class TmuxPaneTest(PaneCase):
 
     # --- layout ---
 
+    @slow_tmux
     def test_leader_and_two_followers_stack_in_order_with_default_sizes(self):
         proc = self.start("-k", "never", "--pane", "sleep 30", "--pane", "sleep 31", "--pane", "sleep 32")
         leader = pane_id(proc)
@@ -156,6 +158,7 @@ class TmuxPaneTest(PaneCase):
         self.sub("cancel", leader)
         proc.communicate(timeout=30)
 
+    @slow_tmux
     def test_size_is_honoured_for_a_follower(self):
         proc = self.start("-k", "never", "--pane", "sleep 30", "--size", "20%", "--pane", "sleep 31")
         leader = pane_id(proc)
@@ -167,6 +170,7 @@ class TmuxPaneTest(PaneCase):
         self.sub("cancel", leader)
         proc.communicate(timeout=30)
 
+    @slow_tmux
     def test_followers_are_tagged_with_their_leader(self):
         proc = self.start("-k", "never", "--pane", "sleep 30", "--pane", "sleep 31")
         leader = pane_id(proc)
@@ -183,6 +187,7 @@ class TmuxPaneTest(PaneCase):
 
     # --- env and exit code ---
 
+    @slow_tmux
     def test_generic_exports_reach_the_leader_and_followers(self):
         tmp_path = self.tmp
         out_l, out_f = tmp_path / "l.txt", tmp_path / "f.txt"
@@ -215,6 +220,7 @@ class TmuxPaneTest(PaneCase):
         self.assertIn("id=%", out)
         self.assertNotIn("bogus", out)
 
+    @slow_tmux
     def test_exit_code_comes_from_the_leader_only(self):
         code = self.start("-k", "never", "--pane", "sleep 1", "--pane", "exit 7")
         out, _ = code.communicate(timeout=30)
@@ -232,6 +238,7 @@ class TmuxPaneTest(PaneCase):
         self.assertIn("leader-text", out)
         self.assertIn("exit=2", out)
 
+    @slow_tmux
     def test_followers_have_no_registry_entry(self):
         proc = self.start("-k", "never", "--pane", "sleep 30", "--pane", "sleep 31")
         leader = pane_id(proc)
@@ -244,6 +251,7 @@ class TmuxPaneTest(PaneCase):
 
     # --- lifecycle ---
 
+    @slow_tmux
     def test_never_keeps_everything_and_close_takes_the_lot(self):
         p = self.start("-k", "never", "--pane", "exit 0", "--pane", "sleep 60")
         out, _ = p.communicate(timeout=30)
@@ -266,6 +274,7 @@ class TmuxPaneTest(PaneCase):
         self.assertEqual(self.sub("close", leader)[0], 0)
         self.assertEqual(self.panes(), 1)
 
+    @slow_tmux
     def test_fail_closes_everything_on_success_and_keeps_on_failure(self):
         p = self.start("-k", "fail", "--pane", "exit 0", "--pane", "sleep 60")
         p.communicate(timeout=30)
@@ -278,6 +287,7 @@ class TmuxPaneTest(PaneCase):
         self.sub("close", "--kept")
         self.assertEqual(self.panes(), 1)
 
+    @slow_tmux
     def test_enter_in_the_kept_leader_closes_its_followers(self):
         p = self.start("-k", "always", "--pane", "exit 1", "--pane", "sleep 60")
         leader = pane_id(p)
@@ -286,6 +296,7 @@ class TmuxPaneTest(PaneCase):
         self.tmux("send-keys", "-t", leader, "Enter")
         self.assertEqual(self.wait_panes(1), 1)
 
+    @slow_tmux
     def test_killing_the_leader_pane_returns_129_and_sweeps_followers(self):
         proc = self.start("-k", "never", "--pane", "sleep 60", "--pane", "sleep 61")
         leader = pane_id(proc)
@@ -297,6 +308,7 @@ class TmuxPaneTest(PaneCase):
         self.assertIn("pane gone", out)
         self.assertEqual(self.wait_panes(1), 1)
 
+    @slow_tmux
     def test_ctrl_c_in_the_pane_still_interrupts_the_command(self):
         proc = self.start("-k", "never", "--", "sleep", "60")
         pid = pane_id(proc)
@@ -306,6 +318,7 @@ class TmuxPaneTest(PaneCase):
         self.assertEqual(proc.returncode, 130)
         self.assertIn("exit=130", out)
 
+    @slow_tmux
     def test_killing_the_pane_mid_run_returns_129_instead_of_hanging(self):
         proc = self.start("-k", "never", "--", "sleep", "60")
         pid = pane_id(proc)
@@ -429,6 +442,7 @@ class TmuxPaneTest(PaneCase):
         self.assertEqual(self.panes(), 1)
         self.assertIn("no tmux-pane.sh panes", self.sub("list")[1])
 
+    @slow_tmux
     def test_close_refuses_a_running_pane_and_closes_a_named_one(self):
         proc = self.start("-k", "never", "--", "sleep", "60")
         pid = pane_id(proc)
@@ -463,15 +477,19 @@ class TmuxPaneTest(PaneCase):
         for p in procs:
             p.communicate(timeout=30)
 
+    @slow_tmux
     def test_agent_and_run_columns_get_equal_widths_1(self):
         self.check_agent_and_run_columns_get_equal_widths(1)
 
+    @slow_tmux
     def test_agent_and_run_columns_get_equal_widths_2(self):
         self.check_agent_and_run_columns_get_equal_widths(2)
 
+    @slow_tmux
     def test_agent_and_run_columns_get_equal_widths_3(self):
         self.check_agent_and_run_columns_get_equal_widths(3)
 
+    @slow_tmux
     def test_columns_are_equalised_again_after_a_run_closes(self):
         procs = [self.start("-k", "never", "--", "sleep", str(60 + i)) for i in range(3)]
         leaders = [pane_id(p) for p in procs]
@@ -489,6 +507,7 @@ class TmuxPaneTest(PaneCase):
             procs[i].communicate(timeout=30)
         self.assertEqual(self.wait_panes(1), 1)
 
+    @slow_tmux
     def test_close_equalises_the_remaining_columns(self):
         self.run_cmd("bash", "-c", "exit 3", flags=["-k", "always", "-t", "kept-one"])
         proc = self.start("-k", "never", "--", "sleep", "60")
@@ -521,6 +540,7 @@ class TmuxPaneTest(PaneCase):
 
     # --- list ---
 
+    @slow_tmux
     def test_list_has_no_stray_empty_line_after_real_panes(self):
         procs = [self.start("-k", "never", "--pane", "sleep %d" % (60 + i), "--pane", "sleep %d" % (70 + i)) for i in range(2)]
         leaders = [pane_id(p) for p in procs]

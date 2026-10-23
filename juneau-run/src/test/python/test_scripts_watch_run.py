@@ -118,6 +118,7 @@ class WatchRunTest(WatchCase):
         self.assertIn("tmux-pane.sh", cancel)
         self.assertIn(" cancel %", cancel)
 
+    @slow_tmux
     def test_result_dir_is_removed_and_concurrent_runs_get_different_paths(self):
         tmp_path = self.tmp
         seen = tmp_path / "res.txt"
@@ -150,6 +151,7 @@ class WatchRunTest(WatchCase):
         self.assertEqual(proc.returncode, 0)
         self.assertEqual(self.wait_panes(1), 1)
 
+    @slow_tmux
     def test_no_tail_creates_no_follower(self):
         probe = script(self.tmp, "nt.sh", "sleep 2\n")
         proc = self.popen("--no-tail", "-k", "never", "--", "bash", probe)

@@ -50,7 +50,8 @@ def skip_reason():
 
 _REASON = skip_reason()
 requires_tmux = unittest.skipIf(_REASON is not None, _REASON or "")
-# The cancel, reap and follower cases wait several seconds each (TMUX_PANE_GRACE, sleeping probes); they run only on request.
+# The cancel, reap, follower, layout, kept-pane and equal-width cases open several panes or wait on timers (TMUX_PANE_GRACE, sleeping probes); they run only on request.
+# The cases left unmarked are the default smoke set: a pane opening and returning its exit code, list/close on kept panes, watch-run.sh end to end.
 slow_tmux = unittest.skipUnless(os.environ.get("JUNEAU_RUN_TMUX_TESTS") == "1",
                                 "slow side-pane test; set JUNEAU_RUN_TMUX_TESTS=1 to run it")
 
