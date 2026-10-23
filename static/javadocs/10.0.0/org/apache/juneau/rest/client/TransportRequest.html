@@ -78,7 +78,7 @@ loadScripts(document, 'script');</script>
 </div>
 <section class="class-description" id="class-description">
 <hr>
-<div class="type-signature"><span class="modifiers">public final class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/TransportRequest.html#line-43">TransportRequest</a></span>
+<div class="type-signature"><span class="modifiers">public final class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/TransportRequest.html#line-44">TransportRequest</a></span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
 <div class="block">A fully-resolved, transport-layer HTTP request.
 
@@ -133,40 +133,67 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Returns a new <a href="TransportRequest.Builder.html" title="class in org.apache.juneau.rest.client"><code>TransportRequest.Builder</code></a>.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="TransportBody.html" title="class in org.apache.juneau.rest.client">TransportBody</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getBody()" class="member-name-link">getBody</a>()</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../../http/remote/RemoteUrlPolicy.AllowedRanges.html" title="class in org.apache.juneau.http.remote">RemoteUrlPolicy.AllowedRanges</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getAllowedAddressRanges()" class="member-name-link">getAllowedAddressRanges</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Returns the per-client special-purpose address ranges that the SSRF guardrail re-permits for this request (see
+ <a href="RestClient.Builder.html#allowAddressRanges(java.lang.String...)"><code>RestClient.Builder.allowAddressRanges(String...)</code></a>); they are unioned with the
+ <a href="../../http/remote/RemoteUrlPolicy.html#ALLOW_ADDRESS_RANGES_PROPERTY">"RestClient.allowAddressRanges"</a> system property.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="TransportBody.html" title="class in org.apache.juneau.rest.client">TransportBody</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getBody()" class="member-name-link">getBody</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns the request body, or <code>null</code> if this is a body-less request (e.g.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="TransportHeader.html" title="class in org.apache.juneau.rest.client">TransportHeader</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getFirstHeader(java.lang.String)" class="member-name-link">getFirstHeader</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="TransportHeader.html" title="class in org.apache.juneau.rest.client">TransportHeader</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getFirstHeader(java.lang.String)" class="member-name-link">getFirstHeader</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns the first header with the given name (case-insensitive), or <code>null</code> if absent.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="TransportHeader.html" title="class in org.apache.juneau.rest.client">TransportHeader</a>&gt;</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getHeaders()" class="member-name-link">getHeaders</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="TransportHeader.html" title="class in org.apache.juneau.rest.client">TransportHeader</a>&gt;</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getHeaders()" class="member-name-link">getHeaders</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns all request headers in the order they should be sent.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getMethod()" class="member-name-link">getMethod</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getMethod()" class="member-name-link">getMethod</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns the HTTP method (e.g.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getTimeout()" class="member-name-link">getTimeout</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getTimeout()" class="member-name-link">getTimeout</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns the per-call response timeout, or <code>null</code> if none was set.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getUri()" class="member-name-link">getUri</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getUri()" class="member-name-link">getUri</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns the fully-resolved request URI, including query string.</div>
 </div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#isAllowPrivateUrls()" class="member-name-link">isAllowPrivateUrls</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Returns <code>true</code> if the <code>allowPrivateUrls</code> opt-in is in effect for this request, disabling the
+ deny-private / pin-on-connect / redirect-revalidation checks (the <code>http</code>/<code>https</code> scheme
+ requirement still applies upstream).</div>
+</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#isSafeToReplay()" class="member-name-link">isSafeToReplay</a>()</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#isPolicyEnforced()" class="member-name-link">isPolicyEnforced</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Returns <code>true</code> if this request originated from a <code>@Remote</code>/<code>@Url</code> call and is subject to
+ the SSRF guardrail (see <code>org.apache.juneau.http.remote.RemoteUrlPolicy</code>).</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#isSafeToReplay()" class="member-name-link">isSafeToReplay</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns <code>true</code> if this request can be transparently re-sent once after a stale-connection failure.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#isSsrfGuardActive()" class="member-name-link">isSsrfGuardActive</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Returns <code>true</code> if the SSRF guardrail's connect-time machinery (pin-on-connect + Juneau-controlled
+ redirect revalidation) must be applied by the transport for this request: <a href="#isPolicyEnforced()"><code>isPolicyEnforced()</code></a> is set
+ and <a href="#isAllowPrivateUrls()"><code>isAllowPrivateUrls()</code></a> is not.</div>
 </div>
 </div>
 </div>
@@ -188,14 +215,14 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="builder()">
 <h3>builder</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="TransportRequest.Builder.html" title="class in org.apache.juneau.rest.client">TransportRequest.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/TransportRequest.html#line-64">builder</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="TransportRequest.Builder.html" title="class in org.apache.juneau.rest.client">TransportRequest.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/TransportRequest.html#line-71">builder</a></span>()</div>
 <div class="block">Returns a new <a href="TransportRequest.Builder.html" title="class in org.apache.juneau.rest.client"><code>TransportRequest.Builder</code></a>.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="getMethod()">
 <h3>getMethod</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/TransportRequest.html#line-73">getMethod</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/TransportRequest.html#line-80">getMethod</a></span>()</div>
 <div class="block">Returns the HTTP method (e.g. <code>"GET"</code>, <code>"POST"</code>).</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -206,7 +233,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getUri()">
 <h3>getUri</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/TransportRequest.html#line-82">getUri</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/TransportRequest.html#line-89">getUri</a></span>()</div>
 <div class="block">Returns the fully-resolved request URI, including query string.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -217,7 +244,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getHeaders()">
 <h3>getHeaders</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="TransportHeader.html" title="class in org.apache.juneau.rest.client">TransportHeader</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/TransportRequest.html#line-91">getHeaders</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="TransportHeader.html" title="class in org.apache.juneau.rest.client">TransportHeader</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/TransportRequest.html#line-98">getHeaders</a></span>()</div>
 <div class="block">Returns all request headers in the order they should be sent.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -228,7 +255,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getFirstHeader(java.lang.String)">
 <h3>getFirstHeader</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="TransportHeader.html" title="class in org.apache.juneau.rest.client">TransportHeader</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/TransportRequest.html#line-101">getFirstHeader</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="TransportHeader.html" title="class in org.apache.juneau.rest.client">TransportHeader</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/TransportRequest.html#line-108">getFirstHeader</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
 <div class="block">Returns the first header with the given name (case-insensitive), or <code>null</code> if absent.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -241,7 +268,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getBody()">
 <h3>getBody</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="TransportBody.html" title="class in org.apache.juneau.rest.client">TransportBody</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/TransportRequest.html#line-113">getBody</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="TransportBody.html" title="class in org.apache.juneau.rest.client">TransportBody</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/TransportRequest.html#line-120">getBody</a></span>()</div>
 <div class="block">Returns the request body, or <code>null</code> if this is a body-less request (e.g. GET, HEAD).</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -252,7 +279,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="isSafeToReplay()">
 <h3>isSafeToReplay</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/TransportRequest.html#line-139">isSafeToReplay</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/TransportRequest.html#line-146">isSafeToReplay</a></span>()</div>
 <div class="block">Returns <code>true</code> if this request can be transparently re-sent once after a stale-connection failure.
 
  <p>
@@ -280,15 +307,70 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getTimeout()">
 <h3>getTimeout</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/TransportRequest.html#line-152">getTimeout</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/TransportRequest.html#line-159">getTimeout</a></span>()</div>
 <div class="block">Returns the per-call response timeout, or <code>null</code> if none was set.
 
  <p>
- Transports apply this as the response/read timeout for the request; a <code>null</code> value means the
- transport's own default applies.  Connect timeouts remain a client-level concern.</div>
+ A <code>null</code> value means the transport's own default applies.  Connect timeouts remain a client-level
+ concern.  All built-in transports honor this value (JDK, Apache HttpClient 4.5/5, OkHttp, Jetty and the mock transport).</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>The response timeout, possibly <jk>null</jk>.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="isPolicyEnforced()">
+<h3>isPolicyEnforced</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/TransportRequest.html#line-173">isPolicyEnforced</a></span>()</div>
+<div class="block">Returns <code>true</code> if this request originated from a <code>@Remote</code>/<code>@Url</code> call and is subject to
+ the SSRF guardrail (see <code>org.apache.juneau.http.remote.RemoteUrlPolicy</code>).
+
+ <p>
+ Ordinary (non-<code>@Remote</code>) requests built directly via <code>RestClient.get(url)</code> etc. are never
+ policy-covered.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd><code>true</code> if the SSRF guardrail applies to this request.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="isAllowPrivateUrls()">
+<h3>isAllowPrivateUrls</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/TransportRequest.html#line-184">isAllowPrivateUrls</a></span>()</div>
+<div class="block">Returns <code>true</code> if the <code>allowPrivateUrls</code> opt-in is in effect for this request, disabling the
+ deny-private / pin-on-connect / redirect-revalidation checks (the <code>http</code>/<code>https</code> scheme
+ requirement still applies upstream).</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd><code>true</code> if private/loopback/link-local/metadata targets are allowed for this request.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="getAllowedAddressRanges()">
+<h3>getAllowedAddressRanges</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../http/remote/RemoteUrlPolicy.AllowedRanges.html" title="class in org.apache.juneau.http.remote">RemoteUrlPolicy.AllowedRanges</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/TransportRequest.html#line-195">getAllowedAddressRanges</a></span>()</div>
+<div class="block">Returns the per-client special-purpose address ranges that the SSRF guardrail re-permits for this request (see
+ <a href="RestClient.Builder.html#allowAddressRanges(java.lang.String...)"><code>RestClient.Builder.allowAddressRanges(String...)</code></a>); they are unioned with the
+ <a href="../../http/remote/RemoteUrlPolicy.html#ALLOW_ADDRESS_RANGES_PROPERTY">"RestClient.allowAddressRanges"</a> system property.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>The allowed ranges. Never <jk>null</jk>; <a href="../../http/remote/RemoteUrlPolicy.AllowedRanges.html#NONE"><code>RemoteUrlPolicy.AllowedRanges.NONE</code></a> by default.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="isSsrfGuardActive()">
+<h3>isSsrfGuardActive</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/TransportRequest.html#line-206">isSsrfGuardActive</a></span>()</div>
+<div class="block">Returns <code>true</code> if the SSRF guardrail's connect-time machinery (pin-on-connect + Juneau-controlled
+ redirect revalidation) must be applied by the transport for this request: <a href="#isPolicyEnforced()"><code>isPolicyEnforced()</code></a> is set
+ and <a href="#isAllowPrivateUrls()"><code>isAllowPrivateUrls()</code></a> is not.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd><code>true</code> if the transport must pin-on-connect and manually revalidate redirects for this request.</dd>
 </dl>
 </section>
 </li>

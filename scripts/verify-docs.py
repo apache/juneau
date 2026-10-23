@@ -12,60 +12,9 @@
 # * specific language governing permissions and limitations under the License.                                              *
 # ***************************************************************************************************************************
 """
-Documentation-integrity checker for the Apache Juneau Docusaurus site.
+Check the integrity of the pages/topics/*.md files, their frontmatter and the rest of the docs site.
 
-This verifies the invariants that keep pages/topics/*.md, their YAML frontmatter,
-sidebars.ts, and the cross-page links mutually consistent. It is pure Python 3
-standard library (no third-party dependencies) and does NOT invoke Docusaurus.
-
-Conventions enforced (see the individual check_* functions for details):
-
-Topic pages live in pages/topics/*.md. Each has YAML frontmatter with:
-  - id    (optional; the EFFECTIVE id is this when present, else the filename stem)
-  - title (required)
-  - slug  (required; must equal the PascalCase name part of the filename)
-
-Filenames look like  NN(.NN)*.PascalName.md  -- one or more 2-digit zero-padded
-numeric segments, then a PascalCase name, then '.md'. LANDING pages (the target of
-a sidebar category's link.id) carry a trailing '.00' numeric segment so they sort
-before their children in a directory listing; leaf pages must NOT carry a spurious
-trailing '.00'.
-
-sidebars.ts references pages by id ('topics/<ID>'); category link.id targets are
-landing pages. Body links between pages use /docs/topics/<slug> (or a bare relative
-<slug> within topic pages). MDX imports use @site/pages/topics/<file>.
-
-Checks (ERRORS: 1-9, 11, 12; WARNINGS: 10, 13, 14, 15):
-   1 frontmatter        Required frontmatter (title, slug) present and non-empty.
-   2 slug-filename      slug == PascalCase name part of filename.
-   3 filename-format    Filename matches ^\\d\\d(\\.\\d\\d)*\\.[A-Z][A-Za-z0-9]*\\.md$
-   4 unique-ids         Slugs and effective ids are unique across topic files.
-   5 landing-00         Category-link targets end in '.00'; leaves don't.
-   6 dangling           Every sidebar topics/<ID> resolves to a file.
-   7 orphans            Every topic file is referenced in sidebars.ts (see allowlist).
-   8 counts             File count vs distinct sidebar doc-ref count (+ extras each side).
-   9 order              Sidebar depth-first order == directory (filename) order.
-  10 labels             Sidebar dotted-number label matches target file prefix. (warn)
-  11 links              /docs/topics/<slug> (and bare relative) links resolve.
-  12 imports            @site/pages/topics/<file> imports resolve.
-  13 javadoc            /site/apidocs/... link count + format sanity. (warn)
-  14 anchors            /docs/topics/<slug>#<frag> heading targets exist. (--anchors, warn)
-  15 hygiene            Duplicate titles, near-empty pages, stray files. (warn)
-
-Usage:
-    python3 scripts/verify-docs.py [--strict] [--anchors] [--json]
-                                   [--only IDS] [--skip IDS] [--docs-dir DIR]
-
-Options:
-    --strict       Treat warnings as errors for the exit code.
-    --anchors      Enable check 14 (anchor-target resolution).
-    --json         Emit machine-readable JSON instead of the text report.
-    --only IDS     Run only the given checks (comma-separated numbers or names).
-    --skip IDS     Skip the given checks (comma-separated numbers or names).
-    --docs-dir DIR Docs root (defaults to the parent of this script's directory).
-
-Exit code: 0 when there are no errors; non-zero when errors exist (and, under
---strict, when warnings exist).
+Full docs: verify-docs.md
 """
 
 import argparse

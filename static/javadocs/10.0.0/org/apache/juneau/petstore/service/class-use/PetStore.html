@@ -52,7 +52,148 @@ loadScripts(document, 'script');</script>
 <div class="header">
 <h1 title="Uses of Class org.apache.juneau.petstore.service.PetStore" class="title">Uses of Class<br>org.apache.juneau.petstore.service.PetStore</h1>
 </div>
-No usage of org.apache.juneau.petstore.service.PetStore</main>
+<div class="caption"><span>Packages that use <a href="../PetStore.html" title="class in org.apache.juneau.petstore.service">PetStore</a></span></div>
+<div class="summary-table two-column-summary">
+<div class="table-header col-first">Package</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><a href="#org.apache.juneau.petstore.console">org.apache.juneau.petstore.console</a></div>
+<div class="col-last even-row-color">
+<div class="block">Petstore admin console: the <code>/console</code> page tree.</div>
+</div>
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.petstore.console.data">org.apache.juneau.petstore.console.data</a></div>
+<div class="col-last odd-row-color">
+<div class="block">Deterministic demo data for the petstore console.</div>
+</div>
+<div class="col-first even-row-color"><a href="#org.apache.juneau.petstore.console.dev.flavors">org.apache.juneau.petstore.console.dev.flavors</a></div>
+<div class="col-last even-row-color">
+<div class="block">Petstore console Rendering flavors: one console page per petstore view technology.</div>
+</div>
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.petstore.console.pages">org.apache.juneau.petstore.console.pages</a></div>
+<div class="col-last odd-row-color">
+<div class="block">Builder twins of the petstore console pages: each page's <code>.ftlh</code> file rebuilt with <code>PageSpec</code>, served
+ when the page is requested with <code>?builder</code>.</div>
+</div>
+<div class="col-first even-row-color"><a href="#org.apache.juneau.petstore.jetty">org.apache.juneau.petstore.jetty</a></div>
+<div class="col-last even-row-color">
+<div class="block">Apache Juneau Petstore - Jetty/Microservice deployment.</div>
+</div>
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.petstore.springboot">org.apache.juneau.petstore.springboot</a></div>
+<div class="col-last odd-row-color">
+<div class="block">Apache Juneau Petstore - Spring Boot deployment.</div>
+</div>
+</div>
+<section class="class-uses">
+<ul class="block-list">
+<li>
+<section class="detail" id="org.apache.juneau.petstore.console">
+<h2>Uses of <a href="../PetStore.html" title="class in org.apache.juneau.petstore.service">PetStore</a> in <a href="../../console/package-summary.html">org.apache.juneau.petstore.console</a></h2>
+<div class="caption"><span>Methods in <a href="../../console/package-summary.html">org.apache.juneau.petstore.console</a> that return <a href="../PetStore.html" title="class in org.apache.juneau.petstore.service">PetStore</a></span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier and Type</div>
+<div class="table-header col-second">Method</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code>protected <a href="../PetStore.html" title="class in org.apache.juneau.petstore.service">PetStore</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">PetstoreConsolePage.</span><code><a href="../../console/PetstoreConsolePage.html#store()" class="member-name-link">store</a>()</code></div>
+<div class="col-last even-row-color">&nbsp;</div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="org.apache.juneau.petstore.console.data">
+<h2>Uses of <a href="../PetStore.html" title="class in org.apache.juneau.petstore.service">PetStore</a> in <a href="../../console/data/package-summary.html">org.apache.juneau.petstore.console.data</a></h2>
+<div class="caption"><span>Methods in <a href="../../console/data/package-summary.html">org.apache.juneau.petstore.console.data</a> that return <a href="../PetStore.html" title="class in org.apache.juneau.petstore.service">PetStore</a></span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier and Type</div>
+<div class="table-header col-second">Method</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code><a href="../PetStore.html" title="class in org.apache.juneau.petstore.service">PetStore</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">PetstoreSeed.</span><code><a href="../../console/data/PetstoreSeed.html#populate(org.apache.juneau.petstore.service.PetStore)" class="member-name-link">populate</a><wbr>(<a href="../PetStore.html" title="class in org.apache.juneau.petstore.service">PetStore</a>&nbsp;store)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Adds the generated rows to a store that holds only the classic rows.</div>
+</div>
+</div>
+<div class="caption"><span>Methods in <a href="../../console/data/package-summary.html">org.apache.juneau.petstore.console.data</a> with parameters of type <a href="../PetStore.html" title="class in org.apache.juneau.petstore.service">PetStore</a></span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier and Type</div>
+<div class="table-header col-second">Method</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code><a href="../PetStore.html" title="class in org.apache.juneau.petstore.service">PetStore</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">PetstoreSeed.</span><code><a href="../../console/data/PetstoreSeed.html#populate(org.apache.juneau.petstore.service.PetStore)" class="member-name-link">populate</a><wbr>(<a href="../PetStore.html" title="class in org.apache.juneau.petstore.service">PetStore</a>&nbsp;store)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Adds the generated rows to a store that holds only the classic rows.</div>
+</div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="org.apache.juneau.petstore.console.dev.flavors">
+<h2>Uses of <a href="../PetStore.html" title="class in org.apache.juneau.petstore.service">PetStore</a> in <a href="../../console/dev/flavors/package-summary.html">org.apache.juneau.petstore.console.dev.flavors</a></h2>
+<div class="caption"><span>Methods in <a href="../../console/dev/flavors/package-summary.html">org.apache.juneau.petstore.console.dev.flavors</a> with parameters of type <a href="../PetStore.html" title="class in org.apache.juneau.petstore.service">PetStore</a></span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier and Type</div>
+<div class="table-header col-second">Method</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code>static <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&gt;</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">FlavorPets.</span><code><a href="../../console/dev/flavors/FlavorPets.html#rows(org.apache.juneau.petstore.service.PetStore)" class="member-name-link">rows</a><wbr>(<a href="../PetStore.html" title="class in org.apache.juneau.petstore.service">PetStore</a>&nbsp;store)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Returns the display rows.</div>
+</div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="org.apache.juneau.petstore.console.pages">
+<h2>Uses of <a href="../PetStore.html" title="class in org.apache.juneau.petstore.service">PetStore</a> in <a href="../../console/pages/package-summary.html">org.apache.juneau.petstore.console.pages</a></h2>
+<div class="caption"><span>Methods in <a href="../../console/pages/package-summary.html">org.apache.juneau.petstore.console.pages</a> with parameters of type <a href="../PetStore.html" title="class in org.apache.juneau.petstore.service">PetStore</a></span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier and Type</div>
+<div class="table-header col-second">Method</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code>static <a href="../../console/pages/StorePageBuilders.QuickStats.html" title="class in org.apache.juneau.petstore.console.pages">StorePageBuilders.QuickStats</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">StorePageBuilders.QuickStats.</span><code><a href="../../console/pages/StorePageBuilders.QuickStats.html#of(org.apache.juneau.petstore.service.PetStore)" class="member-name-link">of</a><wbr>(<a href="../PetStore.html" title="class in org.apache.juneau.petstore.service">PetStore</a>&nbsp;store)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Counts the tiles from the store.</div>
+</div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="org.apache.juneau.petstore.jetty">
+<h2>Uses of <a href="../PetStore.html" title="class in org.apache.juneau.petstore.service">PetStore</a> in <a href="../../jetty/package-summary.html">org.apache.juneau.petstore.jetty</a></h2>
+<div class="caption"><span>Methods in <a href="../../jetty/package-summary.html">org.apache.juneau.petstore.jetty</a> that return <a href="../PetStore.html" title="class in org.apache.juneau.petstore.service">PetStore</a></span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier and Type</div>
+<div class="table-header col-second">Method</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code><a href="../PetStore.html" title="class in org.apache.juneau.petstore.service">PetStore</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">RootResources.</span><code><a href="../../jetty/RootResources.html#petStore()" class="member-name-link">petStore</a>()</code></div>
+<div class="col-last even-row-color">
+<div class="block">Registers the one <a href="../PetStore.html" title="class in org.apache.juneau.petstore.service"><code>PetStore</code></a> shared by the <code>/petstore</code> API and the console tree, seeded with the
+ deterministic demo data set.</div>
+</div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="org.apache.juneau.petstore.springboot">
+<h2>Uses of <a href="../PetStore.html" title="class in org.apache.juneau.petstore.service">PetStore</a> in <a href="../../springboot/package-summary.html">org.apache.juneau.petstore.springboot</a></h2>
+<div class="caption"><span>Methods in <a href="../../springboot/package-summary.html">org.apache.juneau.petstore.springboot</a> that return <a href="../PetStore.html" title="class in org.apache.juneau.petstore.service">PetStore</a></span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier and Type</div>
+<div class="table-header col-second">Method</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code><a href="../PetStore.html" title="class in org.apache.juneau.petstore.service">PetStore</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">RootResources.</span><code><a href="../../springboot/RootResources.html#petStore()" class="member-name-link">petStore</a>()</code></div>
+<div class="col-last even-row-color">
+<div class="block">Registers the one <a href="../PetStore.html" title="class in org.apache.juneau.petstore.service"><code>PetStore</code></a> shared by the <code>/petstore</code> API and the console tree, seeded with the
+ deterministic demo data set.</div>
+</div>
+</div>
+</section>
+</li>
+</ul>
+</section>
+</main>
 <footer role="contentinfo">
 <hr>
 <p class="legal-copy"><small>Copyright &#169; 2016&#x2013;2026 <a href="https://www.apache.org/">The Apache Software Foundation</a>. All rights reserved.</small></p>

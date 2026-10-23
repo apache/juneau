@@ -41,53 +41,63 @@
 <span class="source-line-no">028</span><span id="line-28"> * Mounts the management endpoints by composing their {@code *Mixin} flavors via</span>
 <span class="source-line-no">029</span><span id="line-29"> * {@link Rest#mixins() @Rest(mixins=...)} on top of {@link BasicRestServletGroup}:</span>
 <span class="source-line-no">030</span><span id="line-30"> * &lt;ul&gt;</span>
-<span class="source-line-no">031</span><span id="line-31"> *    &lt;li&gt;{@code /info} &amp;mdash; {@link InfoMixin} (manifest/build/version/git metadata)</span>
-<span class="source-line-no">032</span><span id="line-32"> *    &lt;li&gt;{@code /loggers}, {@code /loggers/{name}} &amp;mdash; {@link LoggersMixin} (runtime JUL level get/set)</span>
-<span class="source-line-no">033</span><span id="line-33"> *    &lt;li&gt;{@code /healthz}, {@code /readyz}, {@code /livez} &amp;mdash; {@link HealthMixin} (read-through health view)</span>
-<span class="source-line-no">034</span><span id="line-34"> *    &lt;li&gt;{@code /threaddump}, {@code /heapdump} &amp;mdash; {@link DumpsMixin} (deny-by-default diagnostics)</span>
-<span class="source-line-no">035</span><span id="line-35"> * &lt;/ul&gt;</span>
-<span class="source-line-no">036</span><span id="line-36"> *</span>
-<span class="source-line-no">037</span><span id="line-37"> * &lt;p&gt;</span>
-<span class="source-line-no">038</span><span id="line-38"> * &lt;b&gt;Path prefix:&lt;/b&gt; defaults to {@code /actuator} and is configurable via the {@code juneau.actuator.path}</span>
-<span class="source-line-no">039</span><span id="line-39"> * system property (resolved through the standard {@code $S{...}} SVL var).  Mount the group at a custom prefix</span>
-<span class="source-line-no">040</span><span id="line-40"> * either by setting that property or by subclassing with your own {@link Rest#path() @Rest(path=...)}.</span>
-<span class="source-line-no">041</span><span id="line-41"> *</span>
-<span class="source-line-no">042</span><span id="line-42"> * &lt;p&gt;</span>
-<span class="source-line-no">043</span><span id="line-43"> * &lt;b&gt;Composition is convenience, not the only way in:&lt;/b&gt; every endpoint remains independently mountable</span>
-<span class="source-line-no">044</span><span id="line-44"> * a-la-carte via its standalone {@code *Mixin}/{@code *Resource} flavor.  The {@code /metrics} endpoint is</span>
-<span class="source-line-no">045</span><span id="line-45"> * &lt;b&gt;not&lt;/b&gt; assembled here &amp;mdash; it lives in the {@code juneau-rest-server-metrics-micrometer} module</span>
-<span class="source-line-no">046</span><span id="line-46"> * (which this module does not depend on), so add {@code MetricsMixin} a-la-carte when that module is present.</span>
-<span class="source-line-no">047</span><span id="line-47"> *</span>
-<span class="source-line-no">048</span><span id="line-48"> * &lt;p&gt;</span>
-<span class="source-line-no">049</span><span id="line-49"> * &lt;b&gt;Exposure policy:&lt;/b&gt; the read endpoints ({@code /info}, {@code /loggers} read, health) are on; the</span>
-<span class="source-line-no">050</span><span id="line-50"> * mutating/sensitive ones ({@code /loggers} write, {@code /threaddump}, {@code /heapdump}) are deny-by-default</span>
-<span class="source-line-no">051</span><span id="line-51"> * &amp;mdash; the dumps via {@link DumpsSettings}, and logger-writes should be guarded by the consumer.  No auth</span>
-<span class="source-line-no">052</span><span id="line-52"> * provider is auto-wired (explicit-over-magic).</span>
-<span class="source-line-no">053</span><span id="line-53"> *</span>
-<span class="source-line-no">054</span><span id="line-54"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
-<span class="source-line-no">055</span><span id="line-55"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/ManagementSurface"&gt;Management Surface&lt;/a&gt;</span>
-<span class="source-line-no">056</span><span id="line-56"> * &lt;/ul&gt;</span>
-<span class="source-line-no">057</span><span id="line-57"> *</span>
-<span class="source-line-no">058</span><span id="line-58"> * @serial exclude</span>
-<span class="source-line-no">059</span><span id="line-59"> * @since 10.0.0</span>
-<span class="source-line-no">060</span><span id="line-60"> */</span>
-<span class="source-line-no">061</span><span id="line-61">@Rest(</span>
-<span class="source-line-no">062</span><span id="line-62">   path="$S{juneau.actuator.path,/actuator}",</span>
-<span class="source-line-no">063</span><span id="line-63">   title="Management",</span>
-<span class="source-line-no">064</span><span id="line-64">   description="Actuator-style management surface.",</span>
-<span class="source-line-no">065</span><span id="line-65">   mixins={</span>
-<span class="source-line-no">066</span><span id="line-66">      InfoMixin.class,</span>
-<span class="source-line-no">067</span><span id="line-67">      LoggersMixin.class,</span>
-<span class="source-line-no">068</span><span id="line-68">      HealthMixin.class,</span>
-<span class="source-line-no">069</span><span id="line-69">      DumpsMixin.class</span>
-<span class="source-line-no">070</span><span id="line-70">   }</span>
-<span class="source-line-no">071</span><span id="line-71">)</span>
-<span class="source-line-no">072</span><span id="line-72">@SuppressWarnings({</span>
-<span class="source-line-no">073</span><span id="line-73">   "java:S110" // Inheritance depth acceptable for microservice hierarchy.</span>
-<span class="source-line-no">074</span><span id="line-74">})</span>
-<span class="source-line-no">075</span><span id="line-75">public class BasicActuatorGroup extends BasicRestServletGroup {</span>
-<span class="source-line-no">076</span><span id="line-76">   private static final long serialVersionUID = 1L;</span>
-<span class="source-line-no">077</span><span id="line-77">}</span>
+<span class="source-line-no">031</span><span id="line-31"> *    &lt;li&gt;{@code /healthz}, {@code /readyz}, {@code /livez} &amp;mdash; {@link HealthMixin} (read-through health view)</span>
+<span class="source-line-no">032</span><span id="line-32"> *    &lt;li&gt;{@code /threaddump}, {@code /heapdump} &amp;mdash; {@link DumpsMixin} (deny-by-default diagnostics)</span>
+<span class="source-line-no">033</span><span id="line-33"> * &lt;/ul&gt;</span>
+<span class="source-line-no">034</span><span id="line-34"> *</span>
+<span class="source-line-no">035</span><span id="line-35"> * &lt;p&gt;</span>
+<span class="source-line-no">036</span><span id="line-36"> * &lt;b&gt;{@code /info} and {@code /loggers} are off by default&lt;/b&gt; &amp;mdash; unlike health, they are not mounted</span>
+<span class="source-line-no">037</span><span id="line-37"> * on the bare group, since {@link InfoMixin} discloses the full manifest and {@link LoggersMixin}'s read side</span>
+<span class="source-line-no">038</span><span id="line-38"> * discloses logger topology, neither behind any auth. Turn either back on (either approach suffices):</span>
+<span class="source-line-no">039</span><span id="line-39"> * &lt;ul&gt;</span>
+<span class="source-line-no">040</span><span id="line-40"> *    &lt;li&gt;&lt;b&gt;A-la-carte (recommended):&lt;/b&gt; mount {@link InfoMixin} / {@link LoggersMixin} on a resource you</span>
+<span class="source-line-no">041</span><span id="line-41"> *       control, e.g. a {@code BasicActuatorGroup} subclass with</span>
+<span class="source-line-no">042</span><span id="line-42"> *       {@code @Rest(mixins={InfoMixin.class, LoggersMixin.class})} &amp;mdash; mixins declared on a subclass are</span>
+<span class="source-line-no">043</span><span id="line-43"> *       additive to the mixins inherited from this class, so {@code HealthMixin}/{@code DumpsMixin} stay mounted</span>
+<span class="source-line-no">044</span><span id="line-44"> *       too.</span>
+<span class="source-line-no">045</span><span id="line-45"> *    &lt;li&gt;&lt;b&gt;Zero-code:&lt;/b&gt; not currently supported &amp;mdash; {@code @Rest(mixins=...)} is a compile-time class</span>
+<span class="source-line-no">046</span><span id="line-46"> *       list, and the {@code RestContext.Builder} injection point that would have let a system property add a</span>
+<span class="source-line-no">047</span><span id="line-47"> *       mixin at init time was removed prior to 10.0.0 (see {@link RestInit}).  Use the a-la-carte subclass above.</span>
+<span class="source-line-no">048</span><span id="line-48"> * &lt;/ul&gt;</span>
+<span class="source-line-no">049</span><span id="line-49"> *</span>
+<span class="source-line-no">050</span><span id="line-50"> * &lt;p&gt;</span>
+<span class="source-line-no">051</span><span id="line-51"> * &lt;b&gt;Path prefix:&lt;/b&gt; defaults to {@code /actuator} and is configurable via the {@code juneau.actuator.path}</span>
+<span class="source-line-no">052</span><span id="line-52"> * system property (resolved through the standard {@code $S{...}} SVL var).  Mount the group at a custom prefix</span>
+<span class="source-line-no">053</span><span id="line-53"> * either by setting that property or by subclassing with your own {@link Rest#path() @Rest(path=...)}.</span>
+<span class="source-line-no">054</span><span id="line-54"> *</span>
+<span class="source-line-no">055</span><span id="line-55"> * &lt;p&gt;</span>
+<span class="source-line-no">056</span><span id="line-56"> * &lt;b&gt;Composition is convenience, not the only way in:&lt;/b&gt; every endpoint remains independently mountable</span>
+<span class="source-line-no">057</span><span id="line-57"> * a-la-carte via its standalone {@code *Mixin}/{@code *Resource} flavor.  The {@code /metrics} endpoint is</span>
+<span class="source-line-no">058</span><span id="line-58"> * &lt;b&gt;not&lt;/b&gt; assembled here &amp;mdash; it lives in the {@code juneau-rest-server-metrics-micrometer} module</span>
+<span class="source-line-no">059</span><span id="line-59"> * (which this module does not depend on), so add {@code MetricsMixin} a-la-carte when that module is present.</span>
+<span class="source-line-no">060</span><span id="line-60"> *</span>
+<span class="source-line-no">061</span><span id="line-61"> * &lt;p&gt;</span>
+<span class="source-line-no">062</span><span id="line-62"> * &lt;b&gt;Exposure policy:&lt;/b&gt; of the mounted endpoints, health is on; the mutating/sensitive ones</span>
+<span class="source-line-no">063</span><span id="line-63"> * ({@code /threaddump}, {@code /heapdump}) are deny-by-default via {@link DumpsSettings}.  No auth provider is</span>
+<span class="source-line-no">064</span><span id="line-64"> * auto-wired (explicit-over-magic).</span>
+<span class="source-line-no">065</span><span id="line-65"> *</span>
+<span class="source-line-no">066</span><span id="line-66"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">067</span><span id="line-67"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/ManagementSurface"&gt;Management Surface&lt;/a&gt;</span>
+<span class="source-line-no">068</span><span id="line-68"> * &lt;/ul&gt;</span>
+<span class="source-line-no">069</span><span id="line-69"> *</span>
+<span class="source-line-no">070</span><span id="line-70"> * @serial exclude</span>
+<span class="source-line-no">071</span><span id="line-71"> * @since 10.0.0</span>
+<span class="source-line-no">072</span><span id="line-72"> */</span>
+<span class="source-line-no">073</span><span id="line-73">@Rest(</span>
+<span class="source-line-no">074</span><span id="line-74">   path="$S{juneau.actuator.path,/actuator}",</span>
+<span class="source-line-no">075</span><span id="line-75">   title="Management",</span>
+<span class="source-line-no">076</span><span id="line-76">   description="Actuator-style management surface.",</span>
+<span class="source-line-no">077</span><span id="line-77">   mixins={</span>
+<span class="source-line-no">078</span><span id="line-78">      HealthMixin.class,</span>
+<span class="source-line-no">079</span><span id="line-79">      DumpsMixin.class</span>
+<span class="source-line-no">080</span><span id="line-80">   }</span>
+<span class="source-line-no">081</span><span id="line-81">)</span>
+<span class="source-line-no">082</span><span id="line-82">@SuppressWarnings({</span>
+<span class="source-line-no">083</span><span id="line-83">   "java:S110" // Inheritance depth acceptable for microservice hierarchy.</span>
+<span class="source-line-no">084</span><span id="line-84">})</span>
+<span class="source-line-no">085</span><span id="line-85">public class BasicActuatorGroup extends BasicRestServletGroup {</span>
+<span class="source-line-no">086</span><span id="line-86">   private static final long serialVersionUID = 1L;</span>
+<span class="source-line-no">087</span><span id="line-87">}</span>
 
 
 

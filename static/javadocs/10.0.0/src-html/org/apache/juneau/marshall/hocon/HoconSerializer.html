@@ -29,7 +29,7 @@
 <span class="source-line-no">016</span><span id="line-16"> */</span>
 <span class="source-line-no">017</span><span id="line-17">package org.apache.juneau.marshall.hocon;</span>
 <span class="source-line-no">018</span><span id="line-18"></span>
-<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.AssertionUtils.*;</span>
+<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.Shorts.*;</span>
 <span class="source-line-no">020</span><span id="line-20"></span>
 <span class="source-line-no">021</span><span id="line-21">import java.io.*;</span>
 <span class="source-line-no">022</span><span id="line-22">import java.net.*;</span>
@@ -40,7 +40,7 @@
 <span class="source-line-no">027</span><span id="line-27">import org.apache.juneau.marshall.*;</span>
 <span class="source-line-no">028</span><span id="line-28">import org.apache.juneau.marshall.serializer.*;</span>
 <span class="source-line-no">029</span><span id="line-29">import org.apache.juneau.marshall.stream.*;</span>
-<span class="source-line-no">030</span><span id="line-30">import org.apache.juneau.marshall.swap.*;</span>
+<span class="source-line-no">030</span><span id="line-30">import org.apache.juneau.marshall.swap.spi.*;</span>
 <span class="source-line-no">031</span><span id="line-31"></span>
 <span class="source-line-no">032</span><span id="line-32">/**</span>
 <span class="source-line-no">033</span><span id="line-33"> * Serializes POJO models to HOCON (Human-Optimized Config Object Notation).</span>
@@ -137,12 +137,12 @@
 <span class="source-line-no">124</span><span id="line-124"> * &lt;/ul&gt;</span>
 <span class="source-line-no">125</span><span id="line-125"> */</span>
 <span class="source-line-no">126</span><span id="line-126">@SuppressWarnings({</span>
-<span class="source-line-no">127</span><span id="line-127">   "java:S110", "java:S115",</span>
-<span class="source-line-no">128</span><span id="line-128">   "resource" // Closeable resources are owned by the caller's serializer session; Eclipse JDT @Owning warning is by design.</span>
-<span class="source-line-no">129</span><span id="line-129">})</span>
-<span class="source-line-no">130</span><span id="line-130">public class HoconSerializer extends WriterSerializer implements HoconMetaProvider, RecordWritable {</span>
-<span class="source-line-no">131</span><span id="line-131"></span>
-<span class="source-line-no">132</span><span id="line-132">   private static final String ARG_copyFrom = "copyFrom";</span>
+<span class="source-line-no">127</span><span id="line-127">   "java:S110", // HoconSerializer extends WriterSerializer, which sits on the shared Serializer base-class chain; the depth comes from that format-family design.</span>
+<span class="source-line-no">128</span><span id="line-128">   "java:S1192", // Duplicated literals (argument/property names) read more clearly inline than as constants</span>
+<span class="source-line-no">129</span><span id="line-129">   "java:S9149", // Per-format static factories intentionally shadow the parent's.</span>
+<span class="source-line-no">130</span><span id="line-130">   "resource" // Closeable resources are owned by the caller's serializer session; Eclipse JDT @Owning warning is by design.</span>
+<span class="source-line-no">131</span><span id="line-131">})</span>
+<span class="source-line-no">132</span><span id="line-132">public class HoconSerializer extends WriterSerializer implements HoconMetaProvider, RecordWritable {</span>
 <span class="source-line-no">133</span><span id="line-133"></span>
 <span class="source-line-no">134</span><span id="line-134">   private final java.util.concurrent.ConcurrentHashMap&lt;ClassMeta&lt;?&gt;,HoconClassMeta&gt; hoconClassMetas = new java.util.concurrent.ConcurrentHashMap&lt;&gt;();</span>
 <span class="source-line-no">135</span><span id="line-135">   private final java.util.concurrent.ConcurrentHashMap&lt;BeanPropertyMeta,HoconBeanPropertyMeta&gt; hoconBeanPropertyMetas = new java.util.concurrent.ConcurrentHashMap&lt;&gt;();</span>
@@ -185,7 +185,7 @@
 <span class="source-line-no">172</span><span id="line-172">      }</span>
 <span class="source-line-no">173</span><span id="line-173"></span>
 <span class="source-line-no">174</span><span id="line-174">      protected Builder(Builder copyFrom) {</span>
-<span class="source-line-no">175</span><span id="line-175">         super(assertArgNotNull(ARG_copyFrom, copyFrom));</span>
+<span class="source-line-no">175</span><span id="line-175">         super(reqnn("copyFrom", copyFrom));</span>
 <span class="source-line-no">176</span><span id="line-176">         useEqualsSign = copyFrom.useEqualsSign;</span>
 <span class="source-line-no">177</span><span id="line-177">         useUnquotedStrings = copyFrom.useUnquotedStrings;</span>
 <span class="source-line-no">178</span><span id="line-178">         useUnquotedKeys = copyFrom.useUnquotedKeys;</span>
@@ -195,7 +195,7 @@
 <span class="source-line-no">182</span><span id="line-182">      }</span>
 <span class="source-line-no">183</span><span id="line-183"></span>
 <span class="source-line-no">184</span><span id="line-184">      protected Builder(HoconSerializer copyFrom) {</span>
-<span class="source-line-no">185</span><span id="line-185">         super(assertArgNotNull(ARG_copyFrom, copyFrom));</span>
+<span class="source-line-no">185</span><span id="line-185">         super(reqnn("copyFrom", copyFrom));</span>
 <span class="source-line-no">186</span><span id="line-186">         useEqualsSign = copyFrom.useEqualsSign;</span>
 <span class="source-line-no">187</span><span id="line-187">         useUnquotedStrings = copyFrom.useUnquotedStrings;</span>
 <span class="source-line-no">188</span><span id="line-188">         useUnquotedKeys = copyFrom.useUnquotedKeys;</span>

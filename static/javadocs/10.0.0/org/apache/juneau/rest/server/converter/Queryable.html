@@ -82,63 +82,90 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="RestConverter.html" title="interface in org.apache.juneau.rest.server.converter">RestConverter</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/converter/Queryable.html#line-81">Queryable</a></span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/converter/Queryable.html#line-110">Queryable</a></span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>
 implements <a href="RestConverter.html" title="interface in org.apache.juneau.rest.server.converter">RestConverter</a></span></div>
-<div class="block">Converter for enabling of search/view/sort/page support on response objects returned by a <c>@RestOp</c>-annotated method.
+<div class="block">Converter for enabling search/view/sort/paging support on response objects returned by a
+ <c>@RestOp</c>-annotated method, backed by the BeanQuery engine.
 
  <p>
- When enabled, objects in a POJO tree can be filtered using the functionality described in the <a href="../../../marshall/objecttools/ObjectSearcher.html" title="class in org.apache.juneau.marshall.objecttools"><code>ObjectSearcher</code></a>,
- <a href="../../../marshall/objecttools/ObjectViewer.html" title="class in org.apache.juneau.marshall.objecttools"><code>ObjectViewer</code></a>, <a href="../../../marshall/objecttools/ObjectSorter.html" title="class in org.apache.juneau.marshall.objecttools"><code>ObjectSorter</code></a>, and <a href="../../../marshall/objecttools/ObjectPaginator.html" title="class in org.apache.juneau.marshall.objecttools"><code>ObjectPaginator</code></a> classes.
-
- <p>
- The following HTTP request parameters are available for tabular data (e.g. <code>Collections</code> of <code>Maps</code>,
- arrays of beans, etc...):
+ When enabled, a response that's a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link"><code>Collection</code></a> or object array of beans, or of <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link"><code>Maps</code></a>, can be
+ filtered with the BeanQuery search language via the following request parameters (see <a href="../../../http/BeanQueryRequest.html" title="class in org.apache.juneau.http"><code>BeanQueryRequest</code></a>
+ for the per-parameter Swagger docs):
  <ul class='spaced-list'>
-   <li>
-      <c>&amp;s=</c> Search arguments.
-      <br>Comma-delimited list of key/value pairs representing column names and search tokens.
-      <br>Example:
-      <p class='burlenc'>
-   &amp;s=name=Bill*,birthDate&gt;2000
-      </p>
-   <li>
-      <c>&amp;v=</c> Visible columns.
-      <br>Comma-delimited list of column names to display.
-      <br>Example:
-      <p class='burlenc'>
-   &amp;v=name,birthDate
-      </p>
-   <li>
-      <c>&amp;o=</c> Sort commands.
-      <br>Comma-delimited list of columns to sort by.
-      <br>Column names can be suffixed with <js>'+'</js> or <js>'-'</js> to indicate ascending or descending order.
-      <br>The default is ascending order.
-      <br>Example:
-      <p class='burlenc'>
-   &amp;o=name,birthDate-
-      </p>
-   <li>
-      <c>&amp;i=</c> Case-insensitive parameter.
-      <br>Boolean flag for case-insensitive matching on the search parameters.
-   <li>
-      <c>&amp;p=</c> - Position parameter.
-      <br>Only return rows starting at the specified index position (zero-indexed).
-      <br>Default is <code>0</code>.
-   <li>
-      <c>&amp;l=</c> Limit parameter.
-      <br>Only return the specified number of rows.
-      <br>Default is <code>0</code> (meaning return all rows).
+   <li><c>&amp;search=</c> Comma-separated <c>column=expression</c> clauses.
+   <li><c>&amp;view=</c> Comma-separated columns to return, in order.
+   <li><c>&amp;sort=</c> Comma-separated sort columns; append <js>":desc"</js> (or <js>"-"</js>) for descending.
+   <li><c>&amp;position=</c> 0-based index of the first row.
+   <li><c>&amp;limit=</c> Maximum rows to return.
+   <li><c>&amp;opts=</c> Options as <c>key=value</c> clauses (e.g. <c>counts=true</c>).
  </ul>
 
+ <p>
+ A response that isn't tabular &mdash; not a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link"><code>Collection</code></a> or object array, or one whose first non-null element
+ is a plain string, number, date or other scalar &mdash; is returned <b>unchanged</b>; the query parameters are
+ ignored, exactly as they were for non-tabular results before 10.0.  An empty or all-null collection is likewise
+ returned unchanged (there's no element to derive columns from).
+
+ <p>
+ <b>Bean rows</b> get one <a href="../../../commons/beanquery/InMemoryBeanQueryContext.html" title="class in org.apache.juneau.commons.beanquery"><code>InMemoryBeanQueryContext</code></a> per element class, built once (with any
+ <a href="QueryableSettings.html" title="class in org.apache.juneau.rest.server.converter"><code>QueryableSettings</code></a> bean applied) and cached for the lifetime of this converter instance, so
+ <a href="QueryableSettings.html" title="class in org.apache.juneau.rest.server.converter"><code>QueryableSettings</code></a> is read once per element class, not on every request.  <b><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link"><code>Map</code></a> rows</b> get one
+ column per key of the first non-null row (type inferred from that row's value by the same rule as bean
+ properties, see <a href="../../../commons/beanquery/QueryProperty.html#searchTypeOf(java.lang.Class)"><code>QueryProperty.searchTypeOf(Class)</code></a>: a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Number.html" title="class or interface in java.lang" class="external-link"><code>Number</code></a> &rarr; <a href="../../../commons/beanquery/SearchType.html#NUMERIC"><code>SearchType.NUMERIC</code></a>, a
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Boolean.html" title="class or interface in java.lang" class="external-link"><code>Boolean</code></a> &rarr; <a href="../../../commons/beanquery/SearchType.html#BOOLEAN"><code>SearchType.BOOLEAN</code></a>, an enum &rarr; <a href="../../../commons/beanquery/SearchType.html#ENUM"><code>SearchType.ENUM</code></a>, a
+ date/calendar/temporal &rarr; <a href="../../../commons/beanquery/SearchType.html#TIMESTAMP"><code>SearchType.TIMESTAMP</code></a>, anything else (or a <jk>null</jk>) &rarr;
+ <a href="../../../commons/beanquery/SearchType.html#TEXT"><code>SearchType.TEXT</code></a>); this context is built on every
+ request, since the key set can differ per response.  Keys that appear only in later rows are not queryable.
+
+ <p>
+ <c>&amp;opts=counts=true</c> adds <a href="#TOTAL_HEADER"><code>TOTAL_HEADER</code></a> / <a href="#MATCHED_HEADER"><code>MATCHED_HEADER</code></a> response headers carrying the
+ session's <c>total</c>/<c>matched</c> row counts &mdash; each header is set only when the corresponding count
+ is present.  Without it, neither header is set.  The response body itself stays a bare list either way.
+
+ <h5 class='section'>Example:</h5>
+ <p class='bjava'>
+   <ja>@Rest</ja>(converters=Queryable.<jk>class</jk>)
+   <jk>public class</jk> PeopleResource <jk>extends</jk> BasicRestServlet {
+
+      <ja>@Bean</ja>
+      <jk>public</jk> QueryableSettings queryableSettings() {
+         <jk>return</jk> QueryableSettings.<jsm>create</jsm>().maxLimit(500).build();
+      }
+
+      <ja>@RestGet</ja>(<js>"/people"</js>)
+      <jk>public</jk> List&lt;Person&gt; getPeople() {
+         <jk>return</jk> <jf>people</jf>;
+      }
+   }
+ </p>
+ <p>
+   <c>GET /people?search=age=$gte(18)&amp;sort=name,age:desc&amp;view=name,age&amp;position=20&amp;limit=10</c>
+ </p>
+ <p>
+   A bad column or option (e.g. <c>?sort=noSuchColumn</c>) throws <a href="../../../commons/beanquery/BeanQuerySyntaxException.html" title="class in org.apache.juneau.commons.beanquery"><code>BeanQuerySyntaxException</code></a>, which
+   <code>RestContext.convertThrowable</code> maps to an HTTP&nbsp;400 carrying an <c>X-BeanQuery-Error</c> header and,
+   with problem details on, a <js>"code"</js> member.
+ </p>
+ <p>
+   <c>GET /people?search=age=$gte(18)&amp;opts=counts=true</c> adds count headers to the (still bare-list) body:
+ </p>
+ <p class='bcode'>
+   X-BeanQuery-Total: 42
+   X-BeanQuery-Matched: 7
+ </p>
+
  <h5 class='section'>See Also:</h5><ul>
-   <li class='jc'><a href="../../../marshall/objecttools/ObjectSearcher.html" title="class in org.apache.juneau.marshall.objecttools"><code>ObjectSearcher</code></a> - Additional information on searching POJO models.
-   <li class='jc'><a href="../../../marshall/objecttools/ObjectViewer.html" title="class in org.apache.juneau.marshall.objecttools"><code>ObjectViewer</code></a> - Additional information on filtering POJO models.
-   <li class='jc'><a href="../../../marshall/objecttools/ObjectSorter.html" title="class in org.apache.juneau.marshall.objecttools"><code>ObjectSorter</code></a> - Additional information on sorting POJO models.
-   <li class='jc'><a href="../../../marshall/objecttools/ObjectPaginator.html" title="class in org.apache.juneau.marshall.objecttools"><code>ObjectPaginator</code></a> - Additional information on paginating POJO models.
+   <li class='jc'><a href="QueryableSettings.html" title="class in org.apache.juneau.rest.server.converter"><code>QueryableSettings</code></a> - Per-resource limits and defaults for this converter.
+   <li class='jc'><a href="../../../http/BeanQueryRequest.html" title="class in org.apache.juneau.http"><code>BeanQueryRequest</code></a> - The request parameters this converter binds.
+   <li class='jc'><a href="../../../commons/beanquery/InMemoryBeanQueryContext.html" title="class in org.apache.juneau.commons.beanquery"><code>InMemoryBeanQueryContext</code></a> - The engine this converter drives.
    <li class='ja'><a href="../RestOp.html#converters()"><code>RestOp.converters()</code></a> - Registering converters with REST resources.
    <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Converters">Converters</a>
  </ul></div>
+<dl class="notes">
+<dt>Since:</dt>
+<dd>10.0.0</dd>
+</dl>
 </section>
 <section class="summary">
 <ul class="summary-list">
@@ -152,9 +179,19 @@ implements <a href="RestConverter.html" title="interface in org.apache.juneau.re
 <div class="table-header col-second">Field</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color"><code>static final <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second even-row-color"><code><a href="#SWAGGER_PARAMS" class="member-name-link">SWAGGER_PARAMS</a></code></div>
+<div class="col-second even-row-color"><code><a href="#MATCHED_HEADER" class="member-name-link">MATCHED_HEADER</a></code></div>
 <div class="col-last even-row-color">
+<div class="block">Response header carrying the filtered (matched) row count.</div>
+</div>
+<div class="col-first odd-row-color"><code>static final <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second odd-row-color"><code><a href="#SWAGGER_PARAMS" class="member-name-link">SWAGGER_PARAMS</a></code></div>
+<div class="col-last odd-row-color">
 <div class="block">Swagger parameters for this converter.</div>
+</div>
+<div class="col-first even-row-color"><code>static final <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second even-row-color"><code><a href="#TOTAL_HEADER" class="member-name-link">TOTAL_HEADER</a></code></div>
+<div class="col-last even-row-color">
+<div class="block">Response header carrying the total (unfiltered) row count.</div>
 </div>
 </div>
 </section>
@@ -207,9 +244,45 @@ implements <a href="RestConverter.html" title="interface in org.apache.juneau.re
 <h2>Field Details</h2>
 <ul class="member-list">
 <li>
+<section class="detail" id="TOTAL_HEADER">
+<h3>TOTAL_HEADER</h3>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/converter/Queryable.html#line-121">TOTAL_HEADER</a></span></div>
+<div class="block">Response header carrying the total (unfiltered) row count.
+
+ <p>
+ Set only when <code>&amp;opts=counts=true</code> is requested and the session reports a <code>total()</code> count.</div>
+<dl class="notes">
+<dt>See Also:</dt>
+<dd>
+<ul class="see-list">
+<li><a href="../../../../../../constant-values.html#org.apache.juneau.rest.server.converter.Queryable.TOTAL_HEADER">Constant Field Values</a></li>
+</ul>
+</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="MATCHED_HEADER">
+<h3>MATCHED_HEADER</h3>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/converter/Queryable.html#line-129">MATCHED_HEADER</a></span></div>
+<div class="block">Response header carrying the filtered (matched) row count.
+
+ <p>
+ Set only when <code>&amp;opts=counts=true</code> is requested and the session reports a <code>matched()</code> count.</div>
+<dl class="notes">
+<dt>See Also:</dt>
+<dd>
+<ul class="see-list">
+<li><a href="../../../../../../constant-values.html#org.apache.juneau.rest.server.converter.Queryable.MATCHED_HEADER">Constant Field Values</a></li>
+</ul>
+</dd>
+</dl>
+</section>
+</li>
+<li>
 <section class="detail" id="SWAGGER_PARAMS">
 <h3>SWAGGER_PARAMS</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/converter/Queryable.html#line-86">SWAGGER_PARAMS</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/converter/Queryable.html#line-134">SWAGGER_PARAMS</a></span></div>
 <div class="block">Swagger parameters for this converter.</div>
 <dl class="notes">
 <dt>See Also:</dt>
@@ -232,7 +305,7 @@ implements <a href="RestConverter.html" title="interface in org.apache.juneau.re
 <li>
 <section class="detail" id="&lt;init&gt;()">
 <h3>Queryable</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/converter/Queryable.html#line-81">Queryable</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/converter/Queryable.html#line-113">Queryable</a></span>()</div>
 </section>
 </li>
 </ul>
@@ -246,7 +319,7 @@ implements <a href="RestConverter.html" title="interface in org.apache.juneau.re
 <li>
 <section class="detail" id="convert(org.apache.juneau.rest.server.RestRequest,java.lang.Object)">
 <h3>convert</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/converter/Queryable.html#line-134">convert</a></span><wbr><span class="parameters">(<a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/converter/Queryable.html#line-186">convert</a></span><wbr><span class="parameters">(<a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="RestConverter.html#convert(org.apache.juneau.rest.server.RestRequest,java.lang.Object)">RestConverter</a></code></span></div>
 <div class="block">Performs post-call conversion on the specified response object.</div>

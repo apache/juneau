@@ -65,37 +65,37 @@
 <span class="source-line-no">052</span><span id="line-52"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/RestAnnotatedClasses"&gt;@Rest-Annotated Class Basics&lt;/a&gt;</span>
 <span class="source-line-no">053</span><span id="line-53"> * &lt;/ul&gt;</span>
 <span class="source-line-no">054</span><span id="line-54"> */</span>
-<span class="source-line-no">055</span><span id="line-55">public class RestChildren {</span>
-<span class="source-line-no">056</span><span id="line-56"></span>
-<span class="source-line-no">057</span><span id="line-57">   private static final Logger LOGGER = Logger.getLogger(RestChildren.class.getName());</span>
-<span class="source-line-no">058</span><span id="line-58"></span>
-<span class="source-line-no">059</span><span id="line-59">   /**</span>
-<span class="source-line-no">060</span><span id="line-60">    * Holder for a lazy-init child resource entry.</span>
-<span class="source-line-no">061</span><span id="line-61">    *</span>
-<span class="source-line-no">062</span><span id="line-62">    * &lt;p&gt;</span>
-<span class="source-line-no">063</span><span id="line-63">    * At parent startup, only the path prefix and {@link UrlPathMatcher} are populated.  The full</span>
-<span class="source-line-no">064</span><span id="line-64">    * {@link RestContext} is built on the first request that matches the path prefix; subsequent requests</span>
-<span class="source-line-no">065</span><span id="line-65">    * reuse the cached context.  Two concurrent first-requests serialize on {@link #lock} so that exactly</span>
-<span class="source-line-no">066</span><span id="line-66">    * one materialization runs.</span>
-<span class="source-line-no">067</span><span id="line-67">    *</span>
-<span class="source-line-no">068</span><span id="line-68">    * &lt;p&gt;</span>
-<span class="source-line-no">069</span><span id="line-69">    * If materialization throws, the exception propagates to the caller as a {@link jakarta.servlet.ServletException};</span>
-<span class="source-line-no">070</span><span id="line-70">    * the {@link #materialized} field is left {@code null}, so the next request will retry.</span>
-<span class="source-line-no">071</span><span id="line-71">    */</span>
-<span class="source-line-no">072</span><span id="line-72">   static class LazyChildEntry {</span>
-<span class="source-line-no">073</span><span id="line-73"></span>
-<span class="source-line-no">074</span><span id="line-74">      final RestContext.ResolvedChild resolvedChild;</span>
-<span class="source-line-no">075</span><span id="line-75">      final Class&lt;?&gt; resourceClass;</span>
-<span class="source-line-no">076</span><span id="line-76">      final String path;</span>
-<span class="source-line-no">077</span><span id="line-77">      final UrlPathMatcher pathMatcher;</span>
-<span class="source-line-no">078</span><span id="line-78">      final RestContext parent;</span>
-<span class="source-line-no">079</span><span id="line-79">      final BeanStore beanStore;</span>
-<span class="source-line-no">080</span><span id="line-80">      final ServletConfig servletConfig;</span>
-<span class="source-line-no">081</span><span id="line-81"></span>
-<span class="source-line-no">082</span><span id="line-82">      /** Written once under {@link #lock}; volatile for lock-free reads. */</span>
-<span class="source-line-no">083</span><span id="line-83">      @SuppressWarnings({</span>
-<span class="source-line-no">084</span><span id="line-84">         "java:S3077" // Publish-once reference: assigned once under double-checked locking in materialize(); the RestContext is fully built before assignment, so volatile safe-publication is sufficient.</span>
-<span class="source-line-no">085</span><span id="line-85">      })</span>
+<span class="source-line-no">055</span><span id="line-55">@SuppressWarnings({</span>
+<span class="source-line-no">056</span><span id="line-56">   "java:S3077" // The volatile Map snapshot and volatile RestContext are published immutable/fully built (copy-on-write).</span>
+<span class="source-line-no">057</span><span id="line-57">})</span>
+<span class="source-line-no">058</span><span id="line-58">public class RestChildren {</span>
+<span class="source-line-no">059</span><span id="line-59"></span>
+<span class="source-line-no">060</span><span id="line-60">   private static final Logger LOGGER = Logger.getLogger(RestChildren.class.getName());</span>
+<span class="source-line-no">061</span><span id="line-61"></span>
+<span class="source-line-no">062</span><span id="line-62">   /**</span>
+<span class="source-line-no">063</span><span id="line-63">    * Holder for a lazy-init child resource entry.</span>
+<span class="source-line-no">064</span><span id="line-64">    *</span>
+<span class="source-line-no">065</span><span id="line-65">    * &lt;p&gt;</span>
+<span class="source-line-no">066</span><span id="line-66">    * At parent startup, only the path prefix and {@link UrlPathMatcher} are populated.  The full</span>
+<span class="source-line-no">067</span><span id="line-67">    * {@link RestContext} is built on the first request that matches the path prefix; subsequent requests</span>
+<span class="source-line-no">068</span><span id="line-68">    * reuse the cached context.  Two concurrent first-requests serialize on {@link #lock} so that exactly</span>
+<span class="source-line-no">069</span><span id="line-69">    * one materialization runs.</span>
+<span class="source-line-no">070</span><span id="line-70">    *</span>
+<span class="source-line-no">071</span><span id="line-71">    * &lt;p&gt;</span>
+<span class="source-line-no">072</span><span id="line-72">    * If materialization throws, the exception propagates to the caller as a {@link jakarta.servlet.ServletException};</span>
+<span class="source-line-no">073</span><span id="line-73">    * the {@link #materialized} field is left {@code null}, so the next request will retry.</span>
+<span class="source-line-no">074</span><span id="line-74">    */</span>
+<span class="source-line-no">075</span><span id="line-75">   static class LazyChildEntry {</span>
+<span class="source-line-no">076</span><span id="line-76"></span>
+<span class="source-line-no">077</span><span id="line-77">      final RestContext.ResolvedChild resolvedChild;</span>
+<span class="source-line-no">078</span><span id="line-78">      final Class&lt;?&gt; resourceClass;</span>
+<span class="source-line-no">079</span><span id="line-79">      final String path;</span>
+<span class="source-line-no">080</span><span id="line-80">      final UrlPathMatcher pathMatcher;</span>
+<span class="source-line-no">081</span><span id="line-81">      final RestContext parent;</span>
+<span class="source-line-no">082</span><span id="line-82">      final BeanStore beanStore;</span>
+<span class="source-line-no">083</span><span id="line-83">      final ServletConfig servletConfig;</span>
+<span class="source-line-no">084</span><span id="line-84"></span>
+<span class="source-line-no">085</span><span id="line-85">      /** Written once under {@link #lock}; volatile for lock-free reads. */</span>
 <span class="source-line-no">086</span><span id="line-86">      volatile RestContext materialized;</span>
 <span class="source-line-no">087</span><span id="line-87"></span>
 <span class="source-line-no">088</span><span id="line-88">      private final Object lock = new Object();</span>
@@ -297,401 +297,398 @@
 <span class="source-line-no">284</span><span id="line-284">   private final Object writeLock = new Object();</span>
 <span class="source-line-no">285</span><span id="line-285"></span>
 <span class="source-line-no">286</span><span id="line-286">   /** Eager-init children keyed by composed path. Copy-on-write; volatile for lock-free reads. */</span>
-<span class="source-line-no">287</span><span id="line-287">   @SuppressWarnings({</span>
-<span class="source-line-no">288</span><span id="line-288">      "java:S3077" // Copy-on-write snapshot: the map reference is replaced wholesale under writeLock and never compound-mutated, so volatile safe-publication is sufficient for lock-free reads.</span>
-<span class="source-line-no">289</span><span id="line-289">   })</span>
-<span class="source-line-no">290</span><span id="line-290">   private volatile Map&lt;String,RestContext&gt; children;</span>
-<span class="source-line-no">291</span><span id="line-291"></span>
-<span class="source-line-no">292</span><span id="line-292">   /**</span>
-<span class="source-line-no">293</span><span id="line-293">    * Lazy-init children keyed by path prefix.</span>
-<span class="source-line-no">294</span><span id="line-294">    *</span>
-<span class="source-line-no">295</span><span id="line-295">    * &lt;p&gt;</span>
-<span class="source-line-no">296</span><span id="line-296">    * These entries are registered at parent startup for routing purposes; their {@link RestContext} bodies</span>
-<span class="source-line-no">297</span><span id="line-297">    * are built on first use.  Once materialized, the entry's {@link LazyChildEntry#materialized} field is set</span>
-<span class="source-line-no">298</span><span id="line-298">    * but the entry remains in this map so subsequent reads are lock-free (volatile field read on the entry).</span>
-<span class="source-line-no">299</span><span id="line-299">    * This map itself is never mutated after construction, so no copy-on-write is needed.</span>
-<span class="source-line-no">300</span><span id="line-300">    */</span>
-<span class="source-line-no">301</span><span id="line-301">   private final Map&lt;String,LazyChildEntry&gt; lazyEntries;</span>
-<span class="source-line-no">302</span><span id="line-302"></span>
-<span class="source-line-no">303</span><span id="line-303">   /**</span>
-<span class="source-line-no">304</span><span id="line-304">    * Constructor.</span>
-<span class="source-line-no">305</span><span id="line-305">    *</span>
-<span class="source-line-no">306</span><span id="line-306">    * @param builder The builder containing the settings for this object. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">307</span><span id="line-307">    */</span>
-<span class="source-line-no">308</span><span id="line-308">   public RestChildren(Builder builder) {</span>
-<span class="source-line-no">309</span><span id="line-309">      this.parent = builder.parent;</span>
-<span class="source-line-no">310</span><span id="line-310">      this.beanStore = builder.beanStore;</span>
-<span class="source-line-no">311</span><span id="line-311">      this.servletConfig = builder.servletConfig;</span>
-<span class="source-line-no">312</span><span id="line-312">      var initial = new LinkedHashMap&lt;String,RestContext&gt;();</span>
-<span class="source-line-no">313</span><span id="line-313">      for (var rc : builder.list)</span>
-<span class="source-line-no">314</span><span id="line-314">         initial.put(rc.getPath(), rc);</span>
-<span class="source-line-no">315</span><span id="line-315">      this.children = u(initial);</span>
-<span class="source-line-no">316</span><span id="line-316">      var lazyMap = new LinkedHashMap&lt;String,LazyChildEntry&gt;();</span>
-<span class="source-line-no">317</span><span id="line-317">      for (var e : builder.lazyList)</span>
-<span class="source-line-no">318</span><span id="line-318">         lazyMap.put(e.path, e);</span>
-<span class="source-line-no">319</span><span id="line-319">      this.lazyEntries = u(lazyMap);</span>
-<span class="source-line-no">320</span><span id="line-320">   }</span>
-<span class="source-line-no">321</span><span id="line-321"></span>
-<span class="source-line-no">322</span><span id="line-322">   /**</span>
-<span class="source-line-no">323</span><span id="line-323">    * Returns the children in this object as a map.</span>
-<span class="source-line-no">324</span><span id="line-324">    *</span>
-<span class="source-line-no">325</span><span id="line-325">    * &lt;p&gt;</span>
-<span class="source-line-no">326</span><span id="line-326">    * The keys are the {@link RestContext#getPath() paths} of the child contexts. The returned map is an</span>
-<span class="source-line-no">327</span><span id="line-327">    * unmodifiable snapshot taken at the time of the call; subsequent {@link #addChild(Class) addChild} /</span>
-<span class="source-line-no">328</span><span id="line-328">    * {@link #removeChild(String) removeChild} calls do not affect this view.</span>
-<span class="source-line-no">329</span><span id="line-329">    *</span>
-<span class="source-line-no">330</span><span id="line-330">    * @return The children as an unmodifiable map.</span>
-<span class="source-line-no">331</span><span id="line-331">    */</span>
-<span class="source-line-no">332</span><span id="line-332">   public Map&lt;String,RestContext&gt; asMap() {</span>
-<span class="source-line-no">333</span><span id="line-333">      return children;</span>
-<span class="source-line-no">334</span><span id="line-334">   }</span>
-<span class="source-line-no">335</span><span id="line-335"></span>
-<span class="source-line-no">336</span><span id="line-336">   /**</span>
-<span class="source-line-no">337</span><span id="line-337">    * Called during servlet destruction on all children to invoke all {@link RestDestroy} and {@link Servlet#destroy()} methods.</span>
-<span class="source-line-no">338</span><span id="line-338">    *</span>
-<span class="source-line-no">339</span><span id="line-339">    * &lt;p&gt;</span>
-<span class="source-line-no">340</span><span id="line-340">    * Lazy children that were never materialized are silently skipped (no context was ever built for them).</span>
-<span class="source-line-no">341</span><span id="line-341">    */</span>
-<span class="source-line-no">342</span><span id="line-342">   public void destroy() {</span>
-<span class="source-line-no">343</span><span id="line-343">      for (var r : children.values())</span>
-<span class="source-line-no">344</span><span id="line-344">         destroyChild(r);</span>
-<span class="source-line-no">345</span><span id="line-345">      for (var e : lazyEntries.values()) {</span>
-<span class="source-line-no">346</span><span id="line-346">         var rc = e.materialized;  // volatile read — safe without lock</span>
-<span class="source-line-no">347</span><span id="line-347">         if (rc != null)</span>
-<span class="source-line-no">348</span><span id="line-348">            destroyChild(rc);</span>
-<span class="source-line-no">349</span><span id="line-349">      }</span>
-<span class="source-line-no">350</span><span id="line-350">   }</span>
-<span class="source-line-no">351</span><span id="line-351"></span>
-<span class="source-line-no">352</span><span id="line-352">   /**</span>
-<span class="source-line-no">353</span><span id="line-353">    * Looks through the registered children of this object and returns the best match.</span>
-<span class="source-line-no">354</span><span id="line-354">    *</span>
-<span class="source-line-no">355</span><span id="line-355">    * &lt;p&gt;</span>
-<span class="source-line-no">356</span><span id="line-356">    * Eager children are checked first (lock-free volatile read), then lazy entries.  A matching lazy entry</span>
-<span class="source-line-no">357</span><span id="line-357">    * triggers {@link LazyChildEntry#materialize()} which builds the full {@link RestContext} on first call</span>
-<span class="source-line-no">358</span><span id="line-358">    * (blocking concurrent first-requests until construction completes) and caches the result.</span>
-<span class="source-line-no">359</span><span id="line-359">    *</span>
-<span class="source-line-no">360</span><span id="line-360">    * @param builder The HTTP call builder. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">361</span><span id="line-361">    * @return The child that best matches the call, or an empty {@link Optional} if a match could not be made.</span>
-<span class="source-line-no">362</span><span id="line-362">    * @throws ServletException If a lazy child fails to materialize.</span>
-<span class="source-line-no">363</span><span id="line-363">    */</span>
-<span class="source-line-no">364</span><span id="line-364">   public Optional&lt;RestChildMatch&gt; findMatch(RestSession.Builder builder) throws ServletException {</span>
-<span class="source-line-no">365</span><span id="line-365">      var pi = builder.getPathInfoUndecoded();</span>
-<span class="source-line-no">366</span><span id="line-366">      if (nn(pi) &amp;&amp; ! pi.equals("/")) {</span>
-<span class="source-line-no">367</span><span id="line-367">         // Check eager children first.</span>
-<span class="source-line-no">368</span><span id="line-368">         var snapshot = children;  // single volatile read</span>
-<span class="source-line-no">369</span><span id="line-369">         for (var rc : snapshot.values()) {</span>
-<span class="source-line-no">370</span><span id="line-370">            var pm = rc.getPathMatcher();  // Treated as nullable per RestContext's own usage (see RestContext.getPathMatcher() null-guards).</span>
-<span class="source-line-no">371</span><span id="line-371">            UrlPathMatch uppm = pm == null ? null : pm.match(builder.getUrlPath());</span>
-<span class="source-line-no">372</span><span id="line-372">            if (nn(uppm))</span>
-<span class="source-line-no">373</span><span id="line-373">               return o(RestChildMatch.create(uppm, rc));</span>
-<span class="source-line-no">374</span><span id="line-374">         }</span>
-<span class="source-line-no">375</span><span id="line-375">         // Check lazy entries.</span>
-<span class="source-line-no">376</span><span id="line-376">         for (var e : lazyEntries.values()) {</span>
-<span class="source-line-no">377</span><span id="line-377">            UrlPathMatch uppm = e.pathMatcher.match(builder.getUrlPath());</span>
-<span class="source-line-no">378</span><span id="line-378">            if (nn(uppm)) {</span>
-<span class="source-line-no">379</span><span id="line-379">               var rc = e.materialize();</span>
-<span class="source-line-no">380</span><span id="line-380">               return o(RestChildMatch.create(uppm, rc));</span>
-<span class="source-line-no">381</span><span id="line-381">            }</span>
-<span class="source-line-no">382</span><span id="line-382">         }</span>
-<span class="source-line-no">383</span><span id="line-383">      }</span>
-<span class="source-line-no">384</span><span id="line-384">      return oe();</span>
-<span class="source-line-no">385</span><span id="line-385">   }</span>
-<span class="source-line-no">386</span><span id="line-386"></span>
-<span class="source-line-no">387</span><span id="line-387">   /**</span>
-<span class="source-line-no">388</span><span id="line-388">    * Called during servlet initialization on all eager children to invoke all {@link RestPostInit} child-last methods.</span>
+<span class="source-line-no">287</span><span id="line-287">   private volatile Map&lt;String,RestContext&gt; children;</span>
+<span class="source-line-no">288</span><span id="line-288"></span>
+<span class="source-line-no">289</span><span id="line-289">   /**</span>
+<span class="source-line-no">290</span><span id="line-290">    * Lazy-init children keyed by path prefix.</span>
+<span class="source-line-no">291</span><span id="line-291">    *</span>
+<span class="source-line-no">292</span><span id="line-292">    * &lt;p&gt;</span>
+<span class="source-line-no">293</span><span id="line-293">    * These entries are registered at parent startup for routing purposes; their {@link RestContext} bodies</span>
+<span class="source-line-no">294</span><span id="line-294">    * are built on first use.  Once materialized, the entry's {@link LazyChildEntry#materialized} field is set</span>
+<span class="source-line-no">295</span><span id="line-295">    * but the entry remains in this map so subsequent reads are lock-free (volatile field read on the entry).</span>
+<span class="source-line-no">296</span><span id="line-296">    * This map itself is never mutated after construction, so no copy-on-write is needed.</span>
+<span class="source-line-no">297</span><span id="line-297">    */</span>
+<span class="source-line-no">298</span><span id="line-298">   private final Map&lt;String,LazyChildEntry&gt; lazyEntries;</span>
+<span class="source-line-no">299</span><span id="line-299"></span>
+<span class="source-line-no">300</span><span id="line-300">   /**</span>
+<span class="source-line-no">301</span><span id="line-301">    * Constructor.</span>
+<span class="source-line-no">302</span><span id="line-302">    *</span>
+<span class="source-line-no">303</span><span id="line-303">    * @param builder The builder containing the settings for this object. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">304</span><span id="line-304">    */</span>
+<span class="source-line-no">305</span><span id="line-305">   public RestChildren(Builder builder) {</span>
+<span class="source-line-no">306</span><span id="line-306">      this.parent = builder.parent;</span>
+<span class="source-line-no">307</span><span id="line-307">      this.beanStore = builder.beanStore;</span>
+<span class="source-line-no">308</span><span id="line-308">      this.servletConfig = builder.servletConfig;</span>
+<span class="source-line-no">309</span><span id="line-309">      var initial = new LinkedHashMap&lt;String,RestContext&gt;();</span>
+<span class="source-line-no">310</span><span id="line-310">      for (var rc : builder.list)</span>
+<span class="source-line-no">311</span><span id="line-311">         initial.put(rc.getPath(), rc);</span>
+<span class="source-line-no">312</span><span id="line-312">      this.children = u(initial);</span>
+<span class="source-line-no">313</span><span id="line-313">      var lazyMap = new LinkedHashMap&lt;String,LazyChildEntry&gt;();</span>
+<span class="source-line-no">314</span><span id="line-314">      for (var e : builder.lazyList)</span>
+<span class="source-line-no">315</span><span id="line-315">         lazyMap.put(e.path, e);</span>
+<span class="source-line-no">316</span><span id="line-316">      this.lazyEntries = u(lazyMap);</span>
+<span class="source-line-no">317</span><span id="line-317">   }</span>
+<span class="source-line-no">318</span><span id="line-318"></span>
+<span class="source-line-no">319</span><span id="line-319">   /**</span>
+<span class="source-line-no">320</span><span id="line-320">    * Returns the children in this object as a map.</span>
+<span class="source-line-no">321</span><span id="line-321">    *</span>
+<span class="source-line-no">322</span><span id="line-322">    * &lt;p&gt;</span>
+<span class="source-line-no">323</span><span id="line-323">    * The keys are the {@link RestContext#getPath() paths} of the child contexts. The returned map is an</span>
+<span class="source-line-no">324</span><span id="line-324">    * unmodifiable snapshot taken at the time of the call; subsequent {@link #addChild(Class) addChild} /</span>
+<span class="source-line-no">325</span><span id="line-325">    * {@link #removeChild(String) removeChild} calls do not affect this view.</span>
+<span class="source-line-no">326</span><span id="line-326">    *</span>
+<span class="source-line-no">327</span><span id="line-327">    * @return The children as an unmodifiable map.</span>
+<span class="source-line-no">328</span><span id="line-328">    */</span>
+<span class="source-line-no">329</span><span id="line-329">   public Map&lt;String,RestContext&gt; asMap() {</span>
+<span class="source-line-no">330</span><span id="line-330">      return children;</span>
+<span class="source-line-no">331</span><span id="line-331">   }</span>
+<span class="source-line-no">332</span><span id="line-332"></span>
+<span class="source-line-no">333</span><span id="line-333">   /**</span>
+<span class="source-line-no">334</span><span id="line-334">    * Called during servlet destruction on all children to invoke all {@link RestDestroy} and {@link Servlet#destroy()} methods.</span>
+<span class="source-line-no">335</span><span id="line-335">    *</span>
+<span class="source-line-no">336</span><span id="line-336">    * &lt;p&gt;</span>
+<span class="source-line-no">337</span><span id="line-337">    * Lazy children that were never materialized are silently skipped (no context was ever built for them).</span>
+<span class="source-line-no">338</span><span id="line-338">    */</span>
+<span class="source-line-no">339</span><span id="line-339">   public void destroy() {</span>
+<span class="source-line-no">340</span><span id="line-340">      for (var r : children.values())</span>
+<span class="source-line-no">341</span><span id="line-341">         destroyChild(r);</span>
+<span class="source-line-no">342</span><span id="line-342">      for (var e : lazyEntries.values()) {</span>
+<span class="source-line-no">343</span><span id="line-343">         var rc = e.materialized;  // volatile read — safe without lock</span>
+<span class="source-line-no">344</span><span id="line-344">         if (rc != null)</span>
+<span class="source-line-no">345</span><span id="line-345">            destroyChild(rc);</span>
+<span class="source-line-no">346</span><span id="line-346">      }</span>
+<span class="source-line-no">347</span><span id="line-347">   }</span>
+<span class="source-line-no">348</span><span id="line-348"></span>
+<span class="source-line-no">349</span><span id="line-349">   /**</span>
+<span class="source-line-no">350</span><span id="line-350">    * Looks through the registered children of this object and returns the best match.</span>
+<span class="source-line-no">351</span><span id="line-351">    *</span>
+<span class="source-line-no">352</span><span id="line-352">    * &lt;p&gt;</span>
+<span class="source-line-no">353</span><span id="line-353">    * Eager children are checked first (lock-free volatile read), then lazy entries.  A matching lazy entry</span>
+<span class="source-line-no">354</span><span id="line-354">    * triggers {@link LazyChildEntry#materialize()} which builds the full {@link RestContext} on first call</span>
+<span class="source-line-no">355</span><span id="line-355">    * (blocking concurrent first-requests until construction completes) and caches the result.</span>
+<span class="source-line-no">356</span><span id="line-356">    *</span>
+<span class="source-line-no">357</span><span id="line-357">    * @param builder The HTTP call builder. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">358</span><span id="line-358">    * @return The child that best matches the call, or an empty {@link Optional} if a match could not be made.</span>
+<span class="source-line-no">359</span><span id="line-359">    * @throws ServletException If a lazy child fails to materialize.</span>
+<span class="source-line-no">360</span><span id="line-360">    */</span>
+<span class="source-line-no">361</span><span id="line-361">   public Optional&lt;RestChildMatch&gt; findMatch(RestSession.Builder builder) throws ServletException {</span>
+<span class="source-line-no">362</span><span id="line-362">      var pi = builder.getPathInfoUndecoded();</span>
+<span class="source-line-no">363</span><span id="line-363">      if (nn(pi) &amp;&amp; neq(pi, "/")) {</span>
+<span class="source-line-no">364</span><span id="line-364">         // Check eager children first.</span>
+<span class="source-line-no">365</span><span id="line-365">         var snapshot = children;  // single volatile read</span>
+<span class="source-line-no">366</span><span id="line-366">         for (var rc : snapshot.values()) {</span>
+<span class="source-line-no">367</span><span id="line-367">            var pm = rc.getPathMatcher();  // Treated as nullable per RestContext's own usage (see RestContext.getPathMatcher() null-guards).</span>
+<span class="source-line-no">368</span><span id="line-368">            UrlPathMatch uppm = pm == null ? null : pm.match(builder.getUrlPath());</span>
+<span class="source-line-no">369</span><span id="line-369">            if (nn(uppm))</span>
+<span class="source-line-no">370</span><span id="line-370">               return o(RestChildMatch.create(uppm, rc));</span>
+<span class="source-line-no">371</span><span id="line-371">         }</span>
+<span class="source-line-no">372</span><span id="line-372">         // Check lazy entries.</span>
+<span class="source-line-no">373</span><span id="line-373">         for (var e : lazyEntries.values()) {</span>
+<span class="source-line-no">374</span><span id="line-374">            UrlPathMatch uppm = e.pathMatcher.match(builder.getUrlPath());</span>
+<span class="source-line-no">375</span><span id="line-375">            if (nn(uppm)) {</span>
+<span class="source-line-no">376</span><span id="line-376">               var rc = e.materialize();</span>
+<span class="source-line-no">377</span><span id="line-377">               return o(RestChildMatch.create(uppm, rc));</span>
+<span class="source-line-no">378</span><span id="line-378">            }</span>
+<span class="source-line-no">379</span><span id="line-379">         }</span>
+<span class="source-line-no">380</span><span id="line-380">      }</span>
+<span class="source-line-no">381</span><span id="line-381">      return oe();</span>
+<span class="source-line-no">382</span><span id="line-382">   }</span>
+<span class="source-line-no">383</span><span id="line-383"></span>
+<span class="source-line-no">384</span><span id="line-384">   /**</span>
+<span class="source-line-no">385</span><span id="line-385">    * Called during servlet initialization on all eager children to invoke all {@link RestPostInit} child-last methods.</span>
+<span class="source-line-no">386</span><span id="line-386">    *</span>
+<span class="source-line-no">387</span><span id="line-387">    * &lt;p&gt;</span>
+<span class="source-line-no">388</span><span id="line-388">    * Lazy children are intentionally excluded — they are initialized on first invocation, not at startup.</span>
 <span class="source-line-no">389</span><span id="line-389">    *</span>
-<span class="source-line-no">390</span><span id="line-390">    * &lt;p&gt;</span>
-<span class="source-line-no">391</span><span id="line-391">    * Lazy children are intentionally excluded — they are initialized on first invocation, not at startup.</span>
-<span class="source-line-no">392</span><span id="line-392">    *</span>
-<span class="source-line-no">393</span><span id="line-393">    * @throws ServletException Error occurred.</span>
-<span class="source-line-no">394</span><span id="line-394">    */</span>
-<span class="source-line-no">395</span><span id="line-395">   public void postInit() throws ServletException {</span>
-<span class="source-line-no">396</span><span id="line-396">      for (var childContext : children.values())</span>
-<span class="source-line-no">397</span><span id="line-397">         childContext.postInit();</span>
-<span class="source-line-no">398</span><span id="line-398">   }</span>
-<span class="source-line-no">399</span><span id="line-399"></span>
-<span class="source-line-no">400</span><span id="line-400">   /**</span>
-<span class="source-line-no">401</span><span id="line-401">    * Called during servlet initialization on all eager children to invoke all {@link RestPostInit} child-first methods.</span>
+<span class="source-line-no">390</span><span id="line-390">    * @throws ServletException Error occurred.</span>
+<span class="source-line-no">391</span><span id="line-391">    */</span>
+<span class="source-line-no">392</span><span id="line-392">   public void postInit() throws ServletException {</span>
+<span class="source-line-no">393</span><span id="line-393">      for (var childContext : children.values())</span>
+<span class="source-line-no">394</span><span id="line-394">         childContext.postInit();</span>
+<span class="source-line-no">395</span><span id="line-395">   }</span>
+<span class="source-line-no">396</span><span id="line-396"></span>
+<span class="source-line-no">397</span><span id="line-397">   /**</span>
+<span class="source-line-no">398</span><span id="line-398">    * Called during servlet initialization on all eager children to invoke all {@link RestPostInit} child-first methods.</span>
+<span class="source-line-no">399</span><span id="line-399">    *</span>
+<span class="source-line-no">400</span><span id="line-400">    * &lt;p&gt;</span>
+<span class="source-line-no">401</span><span id="line-401">    * Lazy children are intentionally excluded — they are initialized on first invocation, not at startup.</span>
 <span class="source-line-no">402</span><span id="line-402">    *</span>
-<span class="source-line-no">403</span><span id="line-403">    * &lt;p&gt;</span>
-<span class="source-line-no">404</span><span id="line-404">    * Lazy children are intentionally excluded — they are initialized on first invocation, not at startup.</span>
-<span class="source-line-no">405</span><span id="line-405">    *</span>
-<span class="source-line-no">406</span><span id="line-406">    * @throws ServletException Error occurred.</span>
-<span class="source-line-no">407</span><span id="line-407">    */</span>
-<span class="source-line-no">408</span><span id="line-408">   public void postInitChildFirst() throws ServletException {</span>
-<span class="source-line-no">409</span><span id="line-409">      for (var childContext : children.values())</span>
-<span class="source-line-no">410</span><span id="line-410">         childContext.postInitChildFirst();</span>
-<span class="source-line-no">411</span><span id="line-411">   }</span>
-<span class="source-line-no">412</span><span id="line-412"></span>
-<span class="source-line-no">413</span><span id="line-413">   /**</span>
-<span class="source-line-no">414</span><span id="line-414">    * Returns the lazy child entries registered on this object.</span>
+<span class="source-line-no">403</span><span id="line-403">    * @throws ServletException Error occurred.</span>
+<span class="source-line-no">404</span><span id="line-404">    */</span>
+<span class="source-line-no">405</span><span id="line-405">   public void postInitChildFirst() throws ServletException {</span>
+<span class="source-line-no">406</span><span id="line-406">      for (var childContext : children.values())</span>
+<span class="source-line-no">407</span><span id="line-407">         childContext.postInitChildFirst();</span>
+<span class="source-line-no">408</span><span id="line-408">   }</span>
+<span class="source-line-no">409</span><span id="line-409"></span>
+<span class="source-line-no">410</span><span id="line-410">   /**</span>
+<span class="source-line-no">411</span><span id="line-411">    * Returns the lazy child entries registered on this object.</span>
+<span class="source-line-no">412</span><span id="line-412">    *</span>
+<span class="source-line-no">413</span><span id="line-413">    * &lt;p&gt;</span>
+<span class="source-line-no">414</span><span id="line-414">    * Each entry carries the path prefix and materialization state. Primarily used for testing.</span>
 <span class="source-line-no">415</span><span id="line-415">    *</span>
-<span class="source-line-no">416</span><span id="line-416">    * &lt;p&gt;</span>
-<span class="source-line-no">417</span><span id="line-417">    * Each entry carries the path prefix and materialization state. Primarily used for testing.</span>
-<span class="source-line-no">418</span><span id="line-418">    *</span>
-<span class="source-line-no">419</span><span id="line-419">    * @return An unmodifiable map of path-to-lazy-entry. Never {@code null}.</span>
-<span class="source-line-no">420</span><span id="line-420">    */</span>
-<span class="source-line-no">421</span><span id="line-421">   public Map&lt;String,LazyChildEntry&gt; getLazyEntries() {</span>
-<span class="source-line-no">422</span><span id="line-422">      return lazyEntries;</span>
-<span class="source-line-no">423</span><span id="line-423">   }</span>
-<span class="source-line-no">424</span><span id="line-424"></span>
-<span class="source-line-no">425</span><span id="line-425">   //-------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">426</span><span id="line-426">   // Dynamic add/remove API.</span>
-<span class="source-line-no">427</span><span id="line-427">   //</span>
-<span class="source-line-no">428</span><span id="line-428">   // Routing reads (findMatch / asMap) are lock-free against the volatile `children` snapshot.</span>
-<span class="source-line-no">429</span><span id="line-429">   // Mutations synchronize on writeLock and atomically swap in a new unmodifiable LinkedHashMap.</span>
-<span class="source-line-no">430</span><span id="line-430">   //-------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">431</span><span id="line-431"></span>
-<span class="source-line-no">432</span><span id="line-432">   /**</span>
-<span class="source-line-no">433</span><span id="line-433">    * Dynamically registers a child REST resource by class, instantiating it via the parent's {@link BeanStore}.</span>
-<span class="source-line-no">434</span><span id="line-434">    *</span>
-<span class="source-line-no">435</span><span id="line-435">    * &lt;p&gt;</span>
-<span class="source-line-no">436</span><span id="line-436">    * The path under which the child is registered is determined by the {@link Rest#path() @Rest(path)} annotation</span>
-<span class="source-line-no">437</span><span id="line-437">    * on the resource class composed against the parent's full path.</span>
-<span class="source-line-no">438</span><span id="line-438">    *</span>
-<span class="source-line-no">439</span><span id="line-439">    * &lt;p&gt;</span>
-<span class="source-line-no">440</span><span id="line-440">    * The new child's {@link RestContext#postInit()} and {@link RestContext#postInitChildFirst()} lifecycle hooks</span>
-<span class="source-line-no">441</span><span id="line-441">    * are invoked before this method returns, mirroring the eager-init behavior of {@code @Rest(children = ...)}.</span>
-<span class="source-line-no">442</span><span id="line-442">    *</span>
-<span class="source-line-no">443</span><span id="line-443">    * @param resourceClass The {@code @Rest}-annotated resource class. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">444</span><span id="line-444">    * @return The newly-built child {@link RestContext}.</span>
-<span class="source-line-no">445</span><span id="line-445">    * @throws ServletException If construction or lifecycle initialization of the child fails.</span>
-<span class="source-line-no">446</span><span id="line-446">    * @throws IllegalStateException If a child is already registered at the resolved path.</span>
-<span class="source-line-no">447</span><span id="line-447">    */</span>
-<span class="source-line-no">448</span><span id="line-448">   public RestContext addChild(Class&lt;?&gt; resourceClass) throws ServletException {</span>
-<span class="source-line-no">449</span><span id="line-449">      return addChildInternal(resourceClass, null, "", false);</span>
-<span class="source-line-no">450</span><span id="line-450">   }</span>
-<span class="source-line-no">451</span><span id="line-451"></span>
-<span class="source-line-no">452</span><span id="line-452">   /**</span>
-<span class="source-line-no">453</span><span id="line-453">    * Dynamically registers a pre-instantiated child REST resource.</span>
-<span class="source-line-no">454</span><span id="line-454">    *</span>
-<span class="source-line-no">455</span><span id="line-455">    * &lt;p&gt;</span>
-<span class="source-line-no">456</span><span id="line-456">    * The path under which the child is registered is determined by the {@link Rest#path() @Rest(path)} annotation</span>
-<span class="source-line-no">457</span><span id="line-457">    * on the resource's class composed against the parent's full path.</span>
-<span class="source-line-no">458</span><span id="line-458">    *</span>
-<span class="source-line-no">459</span><span id="line-459">    * @param resource The {@code @Rest}-annotated resource instance. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">460</span><span id="line-460">    * @return The newly-built child {@link RestContext}.</span>
-<span class="source-line-no">461</span><span id="line-461">    * @throws ServletException If construction or lifecycle initialization of the child fails.</span>
-<span class="source-line-no">462</span><span id="line-462">    * @throws IllegalStateException If a child is already registered at the resolved path.</span>
-<span class="source-line-no">463</span><span id="line-463">    */</span>
-<span class="source-line-no">464</span><span id="line-464">   public RestContext addChild(Object resource) throws ServletException {</span>
-<span class="source-line-no">465</span><span id="line-465">      return addChildInternal(resource.getClass(), resource, "", false);</span>
-<span class="source-line-no">466</span><span id="line-466">   }</span>
-<span class="source-line-no">467</span><span id="line-467"></span>
-<span class="source-line-no">468</span><span id="line-468">   /**</span>
-<span class="source-line-no">469</span><span id="line-469">    * Dynamically registers a pre-instantiated child REST resource, optionally replacing any existing child at the</span>
-<span class="source-line-no">470</span><span id="line-470">    * same resolved path.</span>
-<span class="source-line-no">471</span><span id="line-471">    *</span>
-<span class="source-line-no">472</span><span id="line-472">    * @param resource The {@code @Rest}-annotated resource instance. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">473</span><span id="line-473">    * @param replace If {@code true}, an existing child at the same path is destroyed and removed before the new</span>
-<span class="source-line-no">474</span><span id="line-474">    *    child is added. If {@code false}, an existing child causes an {@link IllegalStateException}.</span>
-<span class="source-line-no">475</span><span id="line-475">    * @return The newly-built child {@link RestContext}.</span>
-<span class="source-line-no">476</span><span id="line-476">    * @throws ServletException If construction or lifecycle initialization of the child fails.</span>
-<span class="source-line-no">477</span><span id="line-477">    */</span>
-<span class="source-line-no">478</span><span id="line-478">   public RestContext addChild(Object resource, boolean replace) throws ServletException {</span>
-<span class="source-line-no">479</span><span id="line-479">      return addChildInternal(resource.getClass(), resource, "", replace);</span>
-<span class="source-line-no">480</span><span id="line-480">   }</span>
-<span class="source-line-no">481</span><span id="line-481"></span>
-<span class="source-line-no">482</span><span id="line-482">   /**</span>
-<span class="source-line-no">483</span><span id="line-483">    * Dynamically registers a pre-instantiated child REST resource at an explicit path.</span>
-<span class="source-line-no">484</span><span id="line-484">    *</span>
-<span class="source-line-no">485</span><span id="line-485">    * &lt;p&gt;</span>
-<span class="source-line-no">486</span><span id="line-486">    * The supplied {@code path} overrides whatever {@link Rest#path() @Rest(path)} would normally provide. Useful</span>
-<span class="source-line-no">487</span><span id="line-487">    * for mounting the same servlet class at multiple paths, or for test fixtures that compose paths programmatically.</span>
-<span class="source-line-no">488</span><span id="line-488">    *</span>
-<span class="source-line-no">489</span><span id="line-489">    * @param path The path segment under the parent at which to mount this child. Leading slashes are trimmed.</span>
-<span class="source-line-no">490</span><span id="line-490">    * @param resource The {@code @Rest}-annotated resource instance. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">491</span><span id="line-491">    * @return The newly-built child {@link RestContext}.</span>
-<span class="source-line-no">492</span><span id="line-492">    * @throws ServletException If construction or lifecycle initialization of the child fails.</span>
-<span class="source-line-no">493</span><span id="line-493">    * @throws IllegalStateException If a child is already registered at the resolved path.</span>
-<span class="source-line-no">494</span><span id="line-494">    */</span>
-<span class="source-line-no">495</span><span id="line-495">   public RestContext addChild(String path, Object resource) throws ServletException {</span>
-<span class="source-line-no">496</span><span id="line-496">      return addChildInternal(resource.getClass(), resource, path, false);</span>
-<span class="source-line-no">497</span><span id="line-497">   }</span>
-<span class="source-line-no">498</span><span id="line-498"></span>
-<span class="source-line-no">499</span><span id="line-499">   /**</span>
-<span class="source-line-no">500</span><span id="line-500">    * Dynamically registers a pre-instantiated child REST resource at an explicit path, optionally replacing any</span>
-<span class="source-line-no">501</span><span id="line-501">    * existing child at the same path.</span>
-<span class="source-line-no">502</span><span id="line-502">    *</span>
-<span class="source-line-no">503</span><span id="line-503">    * @param path The path segment under the parent at which to mount this child. Leading slashes are trimmed.</span>
-<span class="source-line-no">504</span><span id="line-504">    * @param resource The {@code @Rest}-annotated resource instance. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">505</span><span id="line-505">    * @param replace If {@code true}, an existing child at the same path is destroyed and removed before the new</span>
-<span class="source-line-no">506</span><span id="line-506">    *    child is added. If {@code false}, an existing child causes an {@link IllegalStateException}.</span>
-<span class="source-line-no">507</span><span id="line-507">    * @return The newly-built child {@link RestContext}.</span>
-<span class="source-line-no">508</span><span id="line-508">    * @throws ServletException If construction or lifecycle initialization of the child fails.</span>
-<span class="source-line-no">509</span><span id="line-509">    */</span>
-<span class="source-line-no">510</span><span id="line-510">   public RestContext addChild(String path, Object resource, boolean replace) throws ServletException {</span>
-<span class="source-line-no">511</span><span id="line-511">      return addChildInternal(resource.getClass(), resource, path, replace);</span>
-<span class="source-line-no">512</span><span id="line-512">   }</span>
-<span class="source-line-no">513</span><span id="line-513"></span>
-<span class="source-line-no">514</span><span id="line-514">   /**</span>
-<span class="source-line-no">515</span><span id="line-515">    * Removes the child registered at the given composed path.</span>
-<span class="source-line-no">516</span><span id="line-516">    *</span>
-<span class="source-line-no">517</span><span id="line-517">    * &lt;p&gt;</span>
-<span class="source-line-no">518</span><span id="line-518">    * The removed child has {@link RestContext#destroy()} invoked (which runs {@code @RestDestroy} hooks and</span>
-<span class="source-line-no">519</span><span id="line-519">    * recursively destroys any grandchildren), followed by {@link Servlet#destroy()} if the underlying resource is</span>
-<span class="source-line-no">520</span><span id="line-520">    * a {@link Servlet}.</span>
-<span class="source-line-no">521</span><span id="line-521">    *</span>
-<span class="source-line-no">522</span><span id="line-522">    * @param path The composed path key (as returned by {@link RestContext#getPath()}) of the child to remove.</span>
-<span class="source-line-no">523</span><span id="line-523">    * @return The removed and destroyed {@link RestContext}, or {@code null} if no child was registered at the</span>
-<span class="source-line-no">524</span><span id="line-524">    *    given path.</span>
-<span class="source-line-no">525</span><span id="line-525">    */</span>
-<span class="source-line-no">526</span><span id="line-526">   public RestContext removeChild(String path) {</span>
-<span class="source-line-no">527</span><span id="line-527">      RestContext removed;</span>
-<span class="source-line-no">528</span><span id="line-528">      synchronized (writeLock) {</span>
-<span class="source-line-no">529</span><span id="line-529">         removed = children.get(path);</span>
-<span class="source-line-no">530</span><span id="line-530">         if (removed == null)</span>
-<span class="source-line-no">531</span><span id="line-531">            return null;</span>
-<span class="source-line-no">532</span><span id="line-532">         var next = new LinkedHashMap&lt;&gt;(children);</span>
-<span class="source-line-no">533</span><span id="line-533">         next.remove(path);</span>
-<span class="source-line-no">534</span><span id="line-534">         children = u(next);</span>
-<span class="source-line-no">535</span><span id="line-535">      }</span>
-<span class="source-line-no">536</span><span id="line-536">      destroyChild(removed);</span>
-<span class="source-line-no">537</span><span id="line-537">      return removed;</span>
-<span class="source-line-no">538</span><span id="line-538">   }</span>
-<span class="source-line-no">539</span><span id="line-539"></span>
-<span class="source-line-no">540</span><span id="line-540">   /**</span>
-<span class="source-line-no">541</span><span id="line-541">    * Removes the first child whose resource class matches the given type.</span>
-<span class="source-line-no">542</span><span id="line-542">    *</span>
-<span class="source-line-no">543</span><span id="line-543">    * @param resourceClass The resource class to match. Matching is performed via {@link RestContext#getResourceClass()}.</span>
-<span class="source-line-no">544</span><span id="line-544">    * @return The removed and destroyed {@link RestContext}, or {@code null} if no matching child was found.</span>
-<span class="source-line-no">545</span><span id="line-545">    */</span>
-<span class="source-line-no">546</span><span id="line-546">   public RestContext removeChild(Class&lt;?&gt; resourceClass) {</span>
-<span class="source-line-no">547</span><span id="line-547">      String key = null;</span>
-<span class="source-line-no">548</span><span id="line-548">      RestContext removed = null;</span>
-<span class="source-line-no">549</span><span id="line-549">      synchronized (writeLock) {</span>
-<span class="source-line-no">550</span><span id="line-550">         for (var e : children.entrySet()) {</span>
-<span class="source-line-no">551</span><span id="line-551">            if (e.getValue().getResourceClass() == resourceClass) {</span>
-<span class="source-line-no">552</span><span id="line-552">               key = e.getKey();</span>
-<span class="source-line-no">553</span><span id="line-553">               removed = e.getValue();</span>
-<span class="source-line-no">554</span><span id="line-554">               break;</span>
-<span class="source-line-no">555</span><span id="line-555">            }</span>
-<span class="source-line-no">556</span><span id="line-556">         }</span>
-<span class="source-line-no">557</span><span id="line-557">         if (removed == null)</span>
-<span class="source-line-no">558</span><span id="line-558">            return null;</span>
-<span class="source-line-no">559</span><span id="line-559">         var next = new LinkedHashMap&lt;&gt;(children);</span>
-<span class="source-line-no">560</span><span id="line-560">         next.remove(key);</span>
-<span class="source-line-no">561</span><span id="line-561">         children = u(next);</span>
-<span class="source-line-no">562</span><span id="line-562">      }</span>
-<span class="source-line-no">563</span><span id="line-563">      destroyChild(removed);</span>
-<span class="source-line-no">564</span><span id="line-564">      return removed;</span>
-<span class="source-line-no">565</span><span id="line-565">   }</span>
-<span class="source-line-no">566</span><span id="line-566"></span>
-<span class="source-line-no">567</span><span id="line-567">   //-------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">568</span><span id="line-568">   // Internal helpers.</span>
-<span class="source-line-no">569</span><span id="line-569">   //-------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">570</span><span id="line-570"></span>
-<span class="source-line-no">571</span><span id="line-571">   /**</span>
-<span class="source-line-no">572</span><span id="line-572">    * Shared child-context construction recipe — used both by the eager init memoizer in {@link RestContext} and by</span>
-<span class="source-line-no">573</span><span id="line-573">    * the runtime {@link #addChild(Class) addChild} family of methods.</span>
-<span class="source-line-no">574</span><span id="line-574">    *</span>
-<span class="source-line-no">575</span><span id="line-575">    * &lt;p&gt;</span>
-<span class="source-line-no">576</span><span id="line-576">    * Resolves a {@link Supplier} for the resource (prefers an existing bean of the same class in the bean store,</span>
-<span class="source-line-no">577</span><span id="line-577">    * otherwise instantiates via {@link BeanInstantiator}), constructs the child {@link RestContext} using the</span>
-<span class="source-line-no">578</span><span id="line-578">    * supplied {@code parent} / {@code servletConfig} / {@code pathOverride}, and invokes any</span>
-<span class="source-line-no">579</span><span id="line-579">    * {@code setContext(RestContext)} method on the resource via reflection (so that {@code RestServlet}-style</span>
-<span class="source-line-no">580</span><span id="line-580">    * resources receive their context handle).</span>
-<span class="source-line-no">581</span><span id="line-581">    *</span>
-<span class="source-line-no">582</span><span id="line-582">    * @param parent The parent {@link RestContext}. Must not be {@code null}.</span>
-<span class="source-line-no">583</span><span id="line-583">    * @param beanStore The bean store to resolve instances and dependencies from. Must not be {@code null}.</span>
-<span class="source-line-no">584</span><span id="line-584">    * @param servletConfig The {@link ServletConfig} to pass through to the child. May be {@code null}.</span>
-<span class="source-line-no">585</span><span id="line-585">    * @param resolvedChild The normalized child declaration (class plus any host-declared {@code @Child} seed).</span>
-<span class="source-line-no">586</span><span id="line-586">    *    Must not be {@code null}.</span>
-<span class="source-line-no">587</span><span id="line-587">    * @param resourceInstance A pre-supplied instance of the resource. If {@code null}, the instance is resolved</span>
-<span class="source-line-no">588</span><span id="line-588">    *    from the bean store or freshly instantiated via {@link BeanInstantiator}.</span>
-<span class="source-line-no">589</span><span id="line-589">    * @param pathOverride An explicit path segment (relative to the parent). Use {@code ""} to read the path from</span>
-<span class="source-line-no">590</span><span id="line-590">    *    {@link Rest#path() @Rest(path)} on the resource class.</span>
-<span class="source-line-no">591</span><span id="line-591">    * @return The newly-built child {@link RestContext}, with its {@code setContext} method (if any) invoked.</span>
-<span class="source-line-no">592</span><span id="line-592">    * @throws Exception If construction or reflective wiring fails.</span>
-<span class="source-line-no">593</span><span id="line-593">    */</span>
-<span class="source-line-no">594</span><span id="line-594">   static RestContext buildChildContext(</span>
-<span class="source-line-no">595</span><span id="line-595">         RestContext parent,</span>
-<span class="source-line-no">596</span><span id="line-596">         BeanStore beanStore,</span>
-<span class="source-line-no">597</span><span id="line-597">         ServletConfig servletConfig,</span>
-<span class="source-line-no">598</span><span id="line-598">         RestContext.ResolvedChild resolvedChild,</span>
-<span class="source-line-no">599</span><span id="line-599">         Object resourceInstance,</span>
-<span class="source-line-no">600</span><span id="line-600">         String pathOverride) throws Exception {</span>
-<span class="source-line-no">601</span><span id="line-601">      var resourceClass = resolvedChild.type();</span>
-<span class="source-line-no">602</span><span id="line-602">      Supplier&lt;?&gt; so;</span>
-<span class="source-line-no">603</span><span id="line-603">      if (resourceInstance != null) {</span>
-<span class="source-line-no">604</span><span id="line-604">         final Object r = resourceInstance;</span>
-<span class="source-line-no">605</span><span id="line-605">         so = () -&gt; r;</span>
-<span class="source-line-no">606</span><span id="line-606">      } else if (beanStore.getBean(resourceClass).isPresent()) {</span>
-<span class="source-line-no">607</span><span id="line-607">         so = () -&gt; beanStore.getBean(resourceClass).get();</span>
-<span class="source-line-no">608</span><span id="line-608">      } else {</span>
-<span class="source-line-no">609</span><span id="line-609">         Object o = BeanInstantiator.of(resourceClass, beanStore).run();</span>
-<span class="source-line-no">610</span><span id="line-610">         so = () -&gt; o;</span>
-<span class="source-line-no">611</span><span id="line-611">      }</span>
-<span class="source-line-no">612</span><span id="line-612">      var cc = new RestContext(new RestContext.Args(resourceClass, parent, servletConfig, so, pathOverride, null, null, null, new RestContext.ContextKind.Child(resolvedChild)));</span>
-<span class="source-line-no">613</span><span id="line-613">      var mi = ClassInfo.of(so.get())</span>
-<span class="source-line-no">614</span><span id="line-614">         .getMethod(x -&gt; x.hasName("setContext") &amp;&amp; x.hasParameterTypes(RestContext.class))</span>
-<span class="source-line-no">615</span><span id="line-615">         .orElse(null);</span>
-<span class="source-line-no">616</span><span id="line-616">      if (nn(mi))</span>
-<span class="source-line-no">617</span><span id="line-617">         mi.accessible().invoke(so.get(), cc);</span>
-<span class="source-line-no">618</span><span id="line-618">      return cc;</span>
-<span class="source-line-no">619</span><span id="line-619">   }</span>
-<span class="source-line-no">620</span><span id="line-620"></span>
-<span class="source-line-no">621</span><span id="line-621">   private RestContext addChildInternal(Class&lt;?&gt; resourceClass, Object resourceInstance, String pathOverride, boolean replace) throws ServletException {</span>
-<span class="source-line-no">622</span><span id="line-622">      if (parent == null || beanStore == null)</span>
-<span class="source-line-no">623</span><span id="line-623">         throw isex("Cannot add a child to a RestChildren that was not initialized with a parent RestContext.");</span>
-<span class="source-line-no">624</span><span id="line-624">      RestContext cc;</span>
-<span class="source-line-no">625</span><span id="line-625">      try {</span>
-<span class="source-line-no">626</span><span id="line-626">         // The dynamic-add API has no seed — a bare ResolvedChild preserves its existing no-override behavior.</span>
-<span class="source-line-no">627</span><span id="line-627">         cc = buildChildContext(parent, beanStore, servletConfig, RestContext.ResolvedChild.ofBare(resourceClass), resourceInstance, pathOverride);</span>
-<span class="source-line-no">628</span><span id="line-628">      } catch (Exception e) {</span>
-<span class="source-line-no">629</span><span id="line-629">         throw new ServletException("Failed to build child REST context for " + resourceClass.getName(), unwrapThrowable(e));</span>
-<span class="source-line-no">630</span><span id="line-630">      }</span>
-<span class="source-line-no">631</span><span id="line-631">      var key = cc.getPath();</span>
-<span class="source-line-no">632</span><span id="line-632">      RestContext replaced = null;</span>
-<span class="source-line-no">633</span><span id="line-633">      synchronized (writeLock) {</span>
-<span class="source-line-no">634</span><span id="line-634">         if (children.containsKey(key)) {</span>
-<span class="source-line-no">635</span><span id="line-635">            if (! replace) {</span>
-<span class="source-line-no">636</span><span id="line-636">               destroyQuietly(cc);</span>
-<span class="source-line-no">637</span><span id="line-637">               throw isex("Child resource already registered at path '%s'.", key);</span>
-<span class="source-line-no">638</span><span id="line-638">            }</span>
-<span class="source-line-no">639</span><span id="line-639">            replaced = children.get(key);</span>
-<span class="source-line-no">640</span><span id="line-640">            var withoutExisting = new LinkedHashMap&lt;&gt;(children);</span>
-<span class="source-line-no">641</span><span id="line-641">            withoutExisting.remove(key);</span>
-<span class="source-line-no">642</span><span id="line-642">            // We don't publish the intermediate "without existing" snapshot — single atomic swap below.</span>
-<span class="source-line-no">643</span><span id="line-643">            withoutExisting.put(key, cc);</span>
-<span class="source-line-no">644</span><span id="line-644">            children = u(withoutExisting);</span>
-<span class="source-line-no">645</span><span id="line-645">         } else {</span>
-<span class="source-line-no">646</span><span id="line-646">            var next = new LinkedHashMap&lt;&gt;(children);</span>
-<span class="source-line-no">647</span><span id="line-647">            next.put(key, cc);</span>
-<span class="source-line-no">648</span><span id="line-648">            children = u(next);</span>
-<span class="source-line-no">649</span><span id="line-649">         }</span>
-<span class="source-line-no">650</span><span id="line-650">      }</span>
-<span class="source-line-no">651</span><span id="line-651">      if (replaced != null)</span>
-<span class="source-line-no">652</span><span id="line-652">         destroyChild(replaced);</span>
-<span class="source-line-no">653</span><span id="line-653">      cc.postInit();</span>
-<span class="source-line-no">654</span><span id="line-654">      cc.postInitChildFirst();</span>
-<span class="source-line-no">655</span><span id="line-655">      return cc;</span>
-<span class="source-line-no">656</span><span id="line-656">   }</span>
-<span class="source-line-no">657</span><span id="line-657"></span>
-<span class="source-line-no">658</span><span id="line-658">   private static void destroyChild(RestContext child) {</span>
-<span class="source-line-no">659</span><span id="line-659">      // Servlet-backed resources delegate Servlet.destroy() through to RestContext.destroy() (see RestServlet.destroy),</span>
-<span class="source-line-no">660</span><span id="line-660">      // so we must avoid double-destruction in that case — call Servlet.destroy() and let it transitively call</span>
-<span class="source-line-no">661</span><span id="line-661">      // RestContext.destroy() exactly once.</span>
-<span class="source-line-no">662</span><span id="line-662">      if (child.getResource() instanceof Servlet s)</span>
-<span class="source-line-no">663</span><span id="line-663">         s.destroy();</span>
-<span class="source-line-no">664</span><span id="line-664">      else</span>
-<span class="source-line-no">665</span><span id="line-665">         child.destroy();</span>
-<span class="source-line-no">666</span><span id="line-666">   }</span>
-<span class="source-line-no">667</span><span id="line-667"></span>
-<span class="source-line-no">668</span><span id="line-668">   private static void destroyQuietly(RestContext child) {</span>
-<span class="source-line-no">669</span><span id="line-669">      try {</span>
-<span class="source-line-no">670</span><span id="line-670">         destroyChild(child);</span>
-<span class="source-line-no">671</span><span id="line-671">      } catch (Exception ignored) {</span>
-<span class="source-line-no">672</span><span id="line-672">         // best-effort cleanup of a child we're about to throw away</span>
-<span class="source-line-no">673</span><span id="line-673">      }</span>
-<span class="source-line-no">674</span><span id="line-674">   }</span>
-<span class="source-line-no">675</span><span id="line-675"></span>
-<span class="source-line-no">676</span><span id="line-676">   private static Throwable unwrapThrowable(Throwable t) {</span>
-<span class="source-line-no">677</span><span id="line-677">      if (t instanceof InvocationTargetException t2)</span>
-<span class="source-line-no">678</span><span id="line-678">         return t2.getTargetException();</span>
-<span class="source-line-no">679</span><span id="line-679">      return t;</span>
-<span class="source-line-no">680</span><span id="line-680">   }</span>
-<span class="source-line-no">681</span><span id="line-681">}</span>
+<span class="source-line-no">416</span><span id="line-416">    * @return An unmodifiable map of path-to-lazy-entry. Never {@code null}.</span>
+<span class="source-line-no">417</span><span id="line-417">    */</span>
+<span class="source-line-no">418</span><span id="line-418">   public Map&lt;String,LazyChildEntry&gt; getLazyEntries() {</span>
+<span class="source-line-no">419</span><span id="line-419">      return lazyEntries;</span>
+<span class="source-line-no">420</span><span id="line-420">   }</span>
+<span class="source-line-no">421</span><span id="line-421"></span>
+<span class="source-line-no">422</span><span id="line-422">   //-------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">423</span><span id="line-423">   // Dynamic add/remove API.</span>
+<span class="source-line-no">424</span><span id="line-424">   //</span>
+<span class="source-line-no">425</span><span id="line-425">   // Routing reads (findMatch / asMap) are lock-free against the volatile `children` snapshot.</span>
+<span class="source-line-no">426</span><span id="line-426">   // Mutations synchronize on writeLock and atomically swap in a new unmodifiable LinkedHashMap.</span>
+<span class="source-line-no">427</span><span id="line-427">   //-------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">428</span><span id="line-428"></span>
+<span class="source-line-no">429</span><span id="line-429">   /**</span>
+<span class="source-line-no">430</span><span id="line-430">    * Dynamically registers a child REST resource by class, instantiating it via the parent's {@link BeanStore}.</span>
+<span class="source-line-no">431</span><span id="line-431">    *</span>
+<span class="source-line-no">432</span><span id="line-432">    * &lt;p&gt;</span>
+<span class="source-line-no">433</span><span id="line-433">    * The path under which the child is registered is determined by the {@link Rest#path() @Rest(path)} annotation</span>
+<span class="source-line-no">434</span><span id="line-434">    * on the resource class composed against the parent's full path.</span>
+<span class="source-line-no">435</span><span id="line-435">    *</span>
+<span class="source-line-no">436</span><span id="line-436">    * &lt;p&gt;</span>
+<span class="source-line-no">437</span><span id="line-437">    * The new child's {@link RestContext#postInit()} and {@link RestContext#postInitChildFirst()} lifecycle hooks</span>
+<span class="source-line-no">438</span><span id="line-438">    * are invoked before this method returns, mirroring the eager-init behavior of {@code @Rest(children = ...)}.</span>
+<span class="source-line-no">439</span><span id="line-439">    *</span>
+<span class="source-line-no">440</span><span id="line-440">    * @param resourceClass The {@code @Rest}-annotated resource class. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">441</span><span id="line-441">    * @return The newly-built child {@link RestContext}.</span>
+<span class="source-line-no">442</span><span id="line-442">    * @throws ServletException If construction or lifecycle initialization of the child fails.</span>
+<span class="source-line-no">443</span><span id="line-443">    * @throws IllegalStateException If a child is already registered at the resolved path.</span>
+<span class="source-line-no">444</span><span id="line-444">    */</span>
+<span class="source-line-no">445</span><span id="line-445">   public RestContext addChild(Class&lt;?&gt; resourceClass) throws ServletException {</span>
+<span class="source-line-no">446</span><span id="line-446">      return addChildInternal(resourceClass, null, "", false);</span>
+<span class="source-line-no">447</span><span id="line-447">   }</span>
+<span class="source-line-no">448</span><span id="line-448"></span>
+<span class="source-line-no">449</span><span id="line-449">   /**</span>
+<span class="source-line-no">450</span><span id="line-450">    * Dynamically registers a pre-instantiated child REST resource.</span>
+<span class="source-line-no">451</span><span id="line-451">    *</span>
+<span class="source-line-no">452</span><span id="line-452">    * &lt;p&gt;</span>
+<span class="source-line-no">453</span><span id="line-453">    * The path under which the child is registered is determined by the {@link Rest#path() @Rest(path)} annotation</span>
+<span class="source-line-no">454</span><span id="line-454">    * on the resource's class composed against the parent's full path.</span>
+<span class="source-line-no">455</span><span id="line-455">    *</span>
+<span class="source-line-no">456</span><span id="line-456">    * @param resource The {@code @Rest}-annotated resource instance. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">457</span><span id="line-457">    * @return The newly-built child {@link RestContext}.</span>
+<span class="source-line-no">458</span><span id="line-458">    * @throws ServletException If construction or lifecycle initialization of the child fails.</span>
+<span class="source-line-no">459</span><span id="line-459">    * @throws IllegalStateException If a child is already registered at the resolved path.</span>
+<span class="source-line-no">460</span><span id="line-460">    */</span>
+<span class="source-line-no">461</span><span id="line-461">   public RestContext addChild(Object resource) throws ServletException {</span>
+<span class="source-line-no">462</span><span id="line-462">      return addChildInternal(resource.getClass(), resource, "", false);</span>
+<span class="source-line-no">463</span><span id="line-463">   }</span>
+<span class="source-line-no">464</span><span id="line-464"></span>
+<span class="source-line-no">465</span><span id="line-465">   /**</span>
+<span class="source-line-no">466</span><span id="line-466">    * Dynamically registers a pre-instantiated child REST resource, optionally replacing any existing child at the</span>
+<span class="source-line-no">467</span><span id="line-467">    * same resolved path.</span>
+<span class="source-line-no">468</span><span id="line-468">    *</span>
+<span class="source-line-no">469</span><span id="line-469">    * @param resource The {@code @Rest}-annotated resource instance. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">470</span><span id="line-470">    * @param replace If {@code true}, an existing child at the same path is destroyed and removed before the new</span>
+<span class="source-line-no">471</span><span id="line-471">    *    child is added. If {@code false}, an existing child causes an {@link IllegalStateException}.</span>
+<span class="source-line-no">472</span><span id="line-472">    * @return The newly-built child {@link RestContext}.</span>
+<span class="source-line-no">473</span><span id="line-473">    * @throws ServletException If construction or lifecycle initialization of the child fails.</span>
+<span class="source-line-no">474</span><span id="line-474">    */</span>
+<span class="source-line-no">475</span><span id="line-475">   public RestContext addChild(Object resource, boolean replace) throws ServletException {</span>
+<span class="source-line-no">476</span><span id="line-476">      return addChildInternal(resource.getClass(), resource, "", replace);</span>
+<span class="source-line-no">477</span><span id="line-477">   }</span>
+<span class="source-line-no">478</span><span id="line-478"></span>
+<span class="source-line-no">479</span><span id="line-479">   /**</span>
+<span class="source-line-no">480</span><span id="line-480">    * Dynamically registers a pre-instantiated child REST resource at an explicit path.</span>
+<span class="source-line-no">481</span><span id="line-481">    *</span>
+<span class="source-line-no">482</span><span id="line-482">    * &lt;p&gt;</span>
+<span class="source-line-no">483</span><span id="line-483">    * The supplied {@code path} overrides whatever {@link Rest#path() @Rest(path)} would normally provide. Useful</span>
+<span class="source-line-no">484</span><span id="line-484">    * for mounting the same servlet class at multiple paths, or for test fixtures that compose paths programmatically.</span>
+<span class="source-line-no">485</span><span id="line-485">    *</span>
+<span class="source-line-no">486</span><span id="line-486">    * @param path The path segment under the parent at which to mount this child. Leading slashes are trimmed.</span>
+<span class="source-line-no">487</span><span id="line-487">    * @param resource The {@code @Rest}-annotated resource instance. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">488</span><span id="line-488">    * @return The newly-built child {@link RestContext}.</span>
+<span class="source-line-no">489</span><span id="line-489">    * @throws ServletException If construction or lifecycle initialization of the child fails.</span>
+<span class="source-line-no">490</span><span id="line-490">    * @throws IllegalStateException If a child is already registered at the resolved path.</span>
+<span class="source-line-no">491</span><span id="line-491">    */</span>
+<span class="source-line-no">492</span><span id="line-492">   public RestContext addChild(String path, Object resource) throws ServletException {</span>
+<span class="source-line-no">493</span><span id="line-493">      return addChildInternal(resource.getClass(), resource, path, false);</span>
+<span class="source-line-no">494</span><span id="line-494">   }</span>
+<span class="source-line-no">495</span><span id="line-495"></span>
+<span class="source-line-no">496</span><span id="line-496">   /**</span>
+<span class="source-line-no">497</span><span id="line-497">    * Dynamically registers a pre-instantiated child REST resource at an explicit path, optionally replacing any</span>
+<span class="source-line-no">498</span><span id="line-498">    * existing child at the same path.</span>
+<span class="source-line-no">499</span><span id="line-499">    *</span>
+<span class="source-line-no">500</span><span id="line-500">    * @param path The path segment under the parent at which to mount this child. Leading slashes are trimmed.</span>
+<span class="source-line-no">501</span><span id="line-501">    * @param resource The {@code @Rest}-annotated resource instance. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">502</span><span id="line-502">    * @param replace If {@code true}, an existing child at the same path is destroyed and removed before the new</span>
+<span class="source-line-no">503</span><span id="line-503">    *    child is added. If {@code false}, an existing child causes an {@link IllegalStateException}.</span>
+<span class="source-line-no">504</span><span id="line-504">    * @return The newly-built child {@link RestContext}.</span>
+<span class="source-line-no">505</span><span id="line-505">    * @throws ServletException If construction or lifecycle initialization of the child fails.</span>
+<span class="source-line-no">506</span><span id="line-506">    */</span>
+<span class="source-line-no">507</span><span id="line-507">   public RestContext addChild(String path, Object resource, boolean replace) throws ServletException {</span>
+<span class="source-line-no">508</span><span id="line-508">      return addChildInternal(resource.getClass(), resource, path, replace);</span>
+<span class="source-line-no">509</span><span id="line-509">   }</span>
+<span class="source-line-no">510</span><span id="line-510"></span>
+<span class="source-line-no">511</span><span id="line-511">   /**</span>
+<span class="source-line-no">512</span><span id="line-512">    * Removes the child registered at the given composed path.</span>
+<span class="source-line-no">513</span><span id="line-513">    *</span>
+<span class="source-line-no">514</span><span id="line-514">    * &lt;p&gt;</span>
+<span class="source-line-no">515</span><span id="line-515">    * The removed child has {@link RestContext#destroy()} invoked (which runs {@code @RestDestroy} hooks and</span>
+<span class="source-line-no">516</span><span id="line-516">    * recursively destroys any grandchildren), followed by {@link Servlet#destroy()} if the underlying resource is</span>
+<span class="source-line-no">517</span><span id="line-517">    * a {@link Servlet}.</span>
+<span class="source-line-no">518</span><span id="line-518">    *</span>
+<span class="source-line-no">519</span><span id="line-519">    * @param path The composed path key (as returned by {@link RestContext#getPath()}) of the child to remove.</span>
+<span class="source-line-no">520</span><span id="line-520">    * @return The removed and destroyed {@link RestContext}, or {@code null} if no child was registered at the</span>
+<span class="source-line-no">521</span><span id="line-521">    *    given path.</span>
+<span class="source-line-no">522</span><span id="line-522">    */</span>
+<span class="source-line-no">523</span><span id="line-523">   public RestContext removeChild(String path) {</span>
+<span class="source-line-no">524</span><span id="line-524">      RestContext removed;</span>
+<span class="source-line-no">525</span><span id="line-525">      synchronized (writeLock) {</span>
+<span class="source-line-no">526</span><span id="line-526">         removed = children.get(path);</span>
+<span class="source-line-no">527</span><span id="line-527">         if (removed == null)</span>
+<span class="source-line-no">528</span><span id="line-528">            return null;</span>
+<span class="source-line-no">529</span><span id="line-529">         var next = new LinkedHashMap&lt;&gt;(children);</span>
+<span class="source-line-no">530</span><span id="line-530">         next.remove(path);</span>
+<span class="source-line-no">531</span><span id="line-531">         children = u(next);</span>
+<span class="source-line-no">532</span><span id="line-532">      }</span>
+<span class="source-line-no">533</span><span id="line-533">      destroyChild(removed);</span>
+<span class="source-line-no">534</span><span id="line-534">      return removed;</span>
+<span class="source-line-no">535</span><span id="line-535">   }</span>
+<span class="source-line-no">536</span><span id="line-536"></span>
+<span class="source-line-no">537</span><span id="line-537">   /**</span>
+<span class="source-line-no">538</span><span id="line-538">    * Removes the first child whose resource class matches the given type.</span>
+<span class="source-line-no">539</span><span id="line-539">    *</span>
+<span class="source-line-no">540</span><span id="line-540">    * @param resourceClass The resource class to match. Matching is performed via {@link RestContext#getResourceClass()}.</span>
+<span class="source-line-no">541</span><span id="line-541">    * @return The removed and destroyed {@link RestContext}, or {@code null} if no matching child was found.</span>
+<span class="source-line-no">542</span><span id="line-542">    */</span>
+<span class="source-line-no">543</span><span id="line-543">   public RestContext removeChild(Class&lt;?&gt; resourceClass) {</span>
+<span class="source-line-no">544</span><span id="line-544">      String key = null;</span>
+<span class="source-line-no">545</span><span id="line-545">      RestContext removed = null;</span>
+<span class="source-line-no">546</span><span id="line-546">      synchronized (writeLock) {</span>
+<span class="source-line-no">547</span><span id="line-547">         for (var e : children.entrySet()) {</span>
+<span class="source-line-no">548</span><span id="line-548">            if (e.getValue().getResourceClass() == resourceClass) {</span>
+<span class="source-line-no">549</span><span id="line-549">               key = e.getKey();</span>
+<span class="source-line-no">550</span><span id="line-550">               removed = e.getValue();</span>
+<span class="source-line-no">551</span><span id="line-551">               break;</span>
+<span class="source-line-no">552</span><span id="line-552">            }</span>
+<span class="source-line-no">553</span><span id="line-553">         }</span>
+<span class="source-line-no">554</span><span id="line-554">         if (removed == null)</span>
+<span class="source-line-no">555</span><span id="line-555">            return null;</span>
+<span class="source-line-no">556</span><span id="line-556">         var next = new LinkedHashMap&lt;&gt;(children);</span>
+<span class="source-line-no">557</span><span id="line-557">         next.remove(key);</span>
+<span class="source-line-no">558</span><span id="line-558">         children = u(next);</span>
+<span class="source-line-no">559</span><span id="line-559">      }</span>
+<span class="source-line-no">560</span><span id="line-560">      destroyChild(removed);</span>
+<span class="source-line-no">561</span><span id="line-561">      return removed;</span>
+<span class="source-line-no">562</span><span id="line-562">   }</span>
+<span class="source-line-no">563</span><span id="line-563"></span>
+<span class="source-line-no">564</span><span id="line-564">   //-------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">565</span><span id="line-565">   // Internal helpers.</span>
+<span class="source-line-no">566</span><span id="line-566">   //-------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">567</span><span id="line-567"></span>
+<span class="source-line-no">568</span><span id="line-568">   /**</span>
+<span class="source-line-no">569</span><span id="line-569">    * Shared child-context construction recipe — used both by the eager init memoizer in {@link RestContext} and by</span>
+<span class="source-line-no">570</span><span id="line-570">    * the runtime {@link #addChild(Class) addChild} family of methods.</span>
+<span class="source-line-no">571</span><span id="line-571">    *</span>
+<span class="source-line-no">572</span><span id="line-572">    * &lt;p&gt;</span>
+<span class="source-line-no">573</span><span id="line-573">    * Resolves a {@link Supplier} for the resource (prefers an existing bean of the same class in the bean store,</span>
+<span class="source-line-no">574</span><span id="line-574">    * otherwise instantiates via {@link BeanInstantiator}), constructs the child {@link RestContext} using the</span>
+<span class="source-line-no">575</span><span id="line-575">    * supplied {@code parent} / {@code servletConfig} / {@code pathOverride}, and invokes any</span>
+<span class="source-line-no">576</span><span id="line-576">    * {@code setContext(RestContext)} method on the resource via reflection (so that {@code RestServlet}-style</span>
+<span class="source-line-no">577</span><span id="line-577">    * resources receive their context handle).</span>
+<span class="source-line-no">578</span><span id="line-578">    *</span>
+<span class="source-line-no">579</span><span id="line-579">    * @param parent The parent {@link RestContext}. Must not be {@code null}.</span>
+<span class="source-line-no">580</span><span id="line-580">    * @param beanStore The bean store to resolve instances and dependencies from. Must not be {@code null}.</span>
+<span class="source-line-no">581</span><span id="line-581">    * @param servletConfig The {@link ServletConfig} to pass through to the child. May be {@code null}.</span>
+<span class="source-line-no">582</span><span id="line-582">    * @param resolvedChild The normalized child declaration (class plus any host-declared {@code @Child} seed).</span>
+<span class="source-line-no">583</span><span id="line-583">    *    Must not be {@code null}.</span>
+<span class="source-line-no">584</span><span id="line-584">    * @param resourceInstance A pre-supplied instance of the resource. If {@code null}, the instance is resolved</span>
+<span class="source-line-no">585</span><span id="line-585">    *    from the bean store or freshly instantiated via {@link BeanInstantiator}.</span>
+<span class="source-line-no">586</span><span id="line-586">    * @param pathOverride An explicit path segment (relative to the parent). Use {@code ""} to read the path from</span>
+<span class="source-line-no">587</span><span id="line-587">    *    {@link Rest#path() @Rest(path)} on the resource class.</span>
+<span class="source-line-no">588</span><span id="line-588">    * @return The newly-built child {@link RestContext}, with its {@code setContext} method (if any) invoked.</span>
+<span class="source-line-no">589</span><span id="line-589">    * @throws Exception If construction or reflective wiring fails.</span>
+<span class="source-line-no">590</span><span id="line-590">    */</span>
+<span class="source-line-no">591</span><span id="line-591">   static RestContext buildChildContext(</span>
+<span class="source-line-no">592</span><span id="line-592">         RestContext parent,</span>
+<span class="source-line-no">593</span><span id="line-593">         BeanStore beanStore,</span>
+<span class="source-line-no">594</span><span id="line-594">         ServletConfig servletConfig,</span>
+<span class="source-line-no">595</span><span id="line-595">         RestContext.ResolvedChild resolvedChild,</span>
+<span class="source-line-no">596</span><span id="line-596">         Object resourceInstance,</span>
+<span class="source-line-no">597</span><span id="line-597">         String pathOverride) throws Exception {</span>
+<span class="source-line-no">598</span><span id="line-598">      var resourceClass = resolvedChild.type();</span>
+<span class="source-line-no">599</span><span id="line-599">      Supplier&lt;?&gt; so;</span>
+<span class="source-line-no">600</span><span id="line-600">      if (resourceInstance != null) {</span>
+<span class="source-line-no">601</span><span id="line-601">         final Object r = resourceInstance;</span>
+<span class="source-line-no">602</span><span id="line-602">         so = () -&gt; r;</span>
+<span class="source-line-no">603</span><span id="line-603">      } else if (beanStore.getBean(resourceClass).isPresent()) {</span>
+<span class="source-line-no">604</span><span id="line-604">         so = () -&gt; beanStore.getBean(resourceClass).get();</span>
+<span class="source-line-no">605</span><span id="line-605">      } else {</span>
+<span class="source-line-no">606</span><span id="line-606">         Object o = BeanInstantiator.of(resourceClass, beanStore).run();</span>
+<span class="source-line-no">607</span><span id="line-607">         so = () -&gt; o;</span>
+<span class="source-line-no">608</span><span id="line-608">      }</span>
+<span class="source-line-no">609</span><span id="line-609">      var cc = new RestContext(new RestContext.Args(resourceClass, parent, servletConfig, so, pathOverride, null, null, null, new RestContext.ContextKind.Child(resolvedChild)));</span>
+<span class="source-line-no">610</span><span id="line-610">      var mi = ClassInfo.of(so.get())</span>
+<span class="source-line-no">611</span><span id="line-611">         .getMethod(x -&gt; x.hasName("setContext") &amp;&amp; x.hasParameterTypes(RestContext.class))</span>
+<span class="source-line-no">612</span><span id="line-612">         .orElse(null);</span>
+<span class="source-line-no">613</span><span id="line-613">      if (nn(mi))</span>
+<span class="source-line-no">614</span><span id="line-614">         mi.accessible().invoke(so.get(), cc);</span>
+<span class="source-line-no">615</span><span id="line-615">      return cc;</span>
+<span class="source-line-no">616</span><span id="line-616">   }</span>
+<span class="source-line-no">617</span><span id="line-617"></span>
+<span class="source-line-no">618</span><span id="line-618">   private RestContext addChildInternal(Class&lt;?&gt; resourceClass, Object resourceInstance, String pathOverride, boolean replace) throws ServletException {</span>
+<span class="source-line-no">619</span><span id="line-619">      if (parent == null || beanStore == null)</span>
+<span class="source-line-no">620</span><span id="line-620">         throw isex("Cannot add a child to a RestChildren that was not initialized with a parent RestContext.");</span>
+<span class="source-line-no">621</span><span id="line-621">      RestContext cc;</span>
+<span class="source-line-no">622</span><span id="line-622">      try {</span>
+<span class="source-line-no">623</span><span id="line-623">         // The dynamic-add API has no seed — a bare ResolvedChild preserves its existing no-override behavior.</span>
+<span class="source-line-no">624</span><span id="line-624">         cc = buildChildContext(parent, beanStore, servletConfig, RestContext.ResolvedChild.ofBare(resourceClass), resourceInstance, pathOverride);</span>
+<span class="source-line-no">625</span><span id="line-625">      } catch (Exception e) {</span>
+<span class="source-line-no">626</span><span id="line-626">         throw new ServletException("Failed to build child REST context for " + resourceClass.getName(), unwrapThrowable(e));</span>
+<span class="source-line-no">627</span><span id="line-627">      }</span>
+<span class="source-line-no">628</span><span id="line-628">      var key = cc.getPath();</span>
+<span class="source-line-no">629</span><span id="line-629">      RestContext replaced = null;</span>
+<span class="source-line-no">630</span><span id="line-630">      synchronized (writeLock) {</span>
+<span class="source-line-no">631</span><span id="line-631">         if (children.containsKey(key)) {</span>
+<span class="source-line-no">632</span><span id="line-632">            if (! replace) {</span>
+<span class="source-line-no">633</span><span id="line-633">               destroyQuietly(cc);</span>
+<span class="source-line-no">634</span><span id="line-634">               throw isex("Child resource already registered at path '%s'.", key);</span>
+<span class="source-line-no">635</span><span id="line-635">            }</span>
+<span class="source-line-no">636</span><span id="line-636">            replaced = children.get(key);</span>
+<span class="source-line-no">637</span><span id="line-637">            var withoutExisting = new LinkedHashMap&lt;&gt;(children);</span>
+<span class="source-line-no">638</span><span id="line-638">            withoutExisting.remove(key);</span>
+<span class="source-line-no">639</span><span id="line-639">            // We don't publish the intermediate "without existing" snapshot — single atomic swap below.</span>
+<span class="source-line-no">640</span><span id="line-640">            withoutExisting.put(key, cc);</span>
+<span class="source-line-no">641</span><span id="line-641">            children = u(withoutExisting);</span>
+<span class="source-line-no">642</span><span id="line-642">         } else {</span>
+<span class="source-line-no">643</span><span id="line-643">            var next = new LinkedHashMap&lt;&gt;(children);</span>
+<span class="source-line-no">644</span><span id="line-644">            next.put(key, cc);</span>
+<span class="source-line-no">645</span><span id="line-645">            children = u(next);</span>
+<span class="source-line-no">646</span><span id="line-646">         }</span>
+<span class="source-line-no">647</span><span id="line-647">      }</span>
+<span class="source-line-no">648</span><span id="line-648">      if (replaced != null)</span>
+<span class="source-line-no">649</span><span id="line-649">         destroyChild(replaced);</span>
+<span class="source-line-no">650</span><span id="line-650">      cc.postInit();</span>
+<span class="source-line-no">651</span><span id="line-651">      cc.postInitChildFirst();</span>
+<span class="source-line-no">652</span><span id="line-652">      return cc;</span>
+<span class="source-line-no">653</span><span id="line-653">   }</span>
+<span class="source-line-no">654</span><span id="line-654"></span>
+<span class="source-line-no">655</span><span id="line-655">   private static void destroyChild(RestContext child) {</span>
+<span class="source-line-no">656</span><span id="line-656">      // Servlet-backed resources delegate Servlet.destroy() through to RestContext.destroy() (see RestServlet.destroy),</span>
+<span class="source-line-no">657</span><span id="line-657">      // so we must avoid double-destruction in that case — call Servlet.destroy() and let it transitively call</span>
+<span class="source-line-no">658</span><span id="line-658">      // RestContext.destroy() exactly once.</span>
+<span class="source-line-no">659</span><span id="line-659">      if (child.getResource() instanceof Servlet s)</span>
+<span class="source-line-no">660</span><span id="line-660">         s.destroy();</span>
+<span class="source-line-no">661</span><span id="line-661">      else</span>
+<span class="source-line-no">662</span><span id="line-662">         child.destroy();</span>
+<span class="source-line-no">663</span><span id="line-663">   }</span>
+<span class="source-line-no">664</span><span id="line-664"></span>
+<span class="source-line-no">665</span><span id="line-665">   private static void destroyQuietly(RestContext child) {</span>
+<span class="source-line-no">666</span><span id="line-666">      try {</span>
+<span class="source-line-no">667</span><span id="line-667">         destroyChild(child);</span>
+<span class="source-line-no">668</span><span id="line-668">      } catch (Exception ignored) {</span>
+<span class="source-line-no">669</span><span id="line-669">         // best-effort cleanup of a child we're about to throw away</span>
+<span class="source-line-no">670</span><span id="line-670">      }</span>
+<span class="source-line-no">671</span><span id="line-671">   }</span>
+<span class="source-line-no">672</span><span id="line-672"></span>
+<span class="source-line-no">673</span><span id="line-673">   private static Throwable unwrapThrowable(Throwable t) {</span>
+<span class="source-line-no">674</span><span id="line-674">      if (t instanceof InvocationTargetException t2)</span>
+<span class="source-line-no">675</span><span id="line-675">         return t2.getTargetException();</span>
+<span class="source-line-no">676</span><span id="line-676">      return t;</span>
+<span class="source-line-no">677</span><span id="line-677">   }</span>
+<span class="source-line-no">678</span><span id="line-678">}</span>
 
 
 

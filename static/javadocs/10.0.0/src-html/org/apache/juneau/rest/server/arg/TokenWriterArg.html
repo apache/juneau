@@ -116,7 +116,7 @@
 <span class="source-line-no">103</span><span id="line-103">         .timeZone(req.getTimeZone().orElse(null))</span>
 <span class="source-line-no">104</span><span id="line-104">         .mediaType(mediaType)</span>
 <span class="source-line-no">105</span><span id="line-105">         .apply(WriterSerializerSession.Builder.class, x -&gt; x.streamCharset(res.getCharset()))</span>
-<span class="source-line-no">106</span><span id="line-106">         .debug(req.isDebug() ? true : null)</span>
+<span class="source-line-no">106</span><span id="line-106">         .debug(req.isDebugMarshalling() ? true : null)</span>
 <span class="source-line-no">107</span><span id="line-107">         .build();</span>
 <span class="source-line-no">108</span><span id="line-108">      Object output = session.isWriterSerializer()</span>
 <span class="source-line-no">109</span><span id="line-109">         ? res.getNegotiatedWriter()</span>

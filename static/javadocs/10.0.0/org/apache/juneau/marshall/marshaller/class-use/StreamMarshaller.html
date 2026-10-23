@@ -102,14 +102,60 @@ loadScripts(document, 'script');</script>
 <div class="block">A pairing of a <a href="../../bson/BsonSerializer.html" title="class in org.apache.juneau.marshall.bson"><code>BsonSerializer</code></a> and <a href="../../bson/BsonParser.html" title="class in org.apache.juneau.marshall.bson"><code>BsonParser</code></a> into a single class with convenience to/of methods.</div>
 </div>
 <div class="col-first odd-row-color"><code>class&nbsp;</code></div>
+<div class="col-second odd-row-color"><code><a href="../BsonBase64.html" class="type-name-link" title="class in org.apache.juneau.marshall.marshaller">BsonBase64</a></code></div>
+<div class="col-last odd-row-color">
+<div class="block">A <a href="../Bson.html" title="class in org.apache.juneau.marshall.marshaller"><code>Bson</code></a> variant that represents binary values as <b>Base64</b> text instead of raw BSON bytes.</div>
+</div>
+<div class="col-first even-row-color"><code>class&nbsp;</code></div>
+<div class="col-second even-row-color"><code><a href="../BsonSpacedHex.html" class="type-name-link" title="class in org.apache.juneau.marshall.marshaller">BsonSpacedHex</a></code></div>
+<div class="col-last even-row-color">
+<div class="block">A <a href="../Bson.html" title="class in org.apache.juneau.marshall.marshaller"><code>Bson</code></a> variant that represents binary values as <b>spaced hexadecimal</b> text instead of
+ raw BSON bytes.</div>
+</div>
+<div class="col-first odd-row-color"><code>class&nbsp;</code></div>
 <div class="col-second odd-row-color"><code><a href="../Cbor.html" class="type-name-link" title="class in org.apache.juneau.marshall.marshaller">Cbor</a></code></div>
 <div class="col-last odd-row-color">
 <div class="block">A pairing of a <a href="../../cbor/CborSerializer.html" title="class in org.apache.juneau.marshall.cbor"><code>CborSerializer</code></a> and <a href="../../cbor/CborParser.html" title="class in org.apache.juneau.marshall.cbor"><code>CborParser</code></a> into a single class with convenience read/write methods.</div>
 </div>
 <div class="col-first even-row-color"><code>class&nbsp;</code></div>
-<div class="col-second even-row-color"><code><a href="../MsgPack.html" class="type-name-link" title="class in org.apache.juneau.marshall.marshaller">MsgPack</a></code></div>
+<div class="col-second even-row-color"><code><a href="../CborBase64.html" class="type-name-link" title="class in org.apache.juneau.marshall.marshaller">CborBase64</a></code></div>
 <div class="col-last even-row-color">
+<div class="block">A <a href="../Cbor.html" title="class in org.apache.juneau.marshall.marshaller"><code>Cbor</code></a> variant that represents binary values as <b>Base64</b> text instead of raw CBOR bytes.</div>
+</div>
+<div class="col-first odd-row-color"><code>class&nbsp;</code></div>
+<div class="col-second odd-row-color"><code><a href="../CborNative.html" class="type-name-link" title="class in org.apache.juneau.marshall.marshaller">CborNative</a></code></div>
+<div class="col-last odd-row-color">
+<div class="block">A <a href="../Cbor.html" title="class in org.apache.juneau.marshall.marshaller"><code>Cbor</code></a> variant whose parser is in <b>native mode</b>, exposing low-level CBOR tag and
+ type information in the token stream instead of normalizing it away.</div>
+</div>
+<div class="col-first even-row-color"><code>class&nbsp;</code></div>
+<div class="col-second even-row-color"><code><a href="../CborSpacedHex.html" class="type-name-link" title="class in org.apache.juneau.marshall.marshaller">CborSpacedHex</a></code></div>
+<div class="col-last even-row-color">
+<div class="block">A <a href="../Cbor.html" title="class in org.apache.juneau.marshall.marshaller"><code>Cbor</code></a> variant that represents binary values as <b>spaced hexadecimal</b> text instead of
+ raw CBOR bytes.</div>
+</div>
+<div class="col-first odd-row-color"><code>class&nbsp;</code></div>
+<div class="col-second odd-row-color"><code><a href="../MsgPack.html" class="type-name-link" title="class in org.apache.juneau.marshall.marshaller">MsgPack</a></code></div>
+<div class="col-last odd-row-color">
 <div class="block">A pairing of a <a href="../../msgpack/MsgPackSerializer.html" title="class in org.apache.juneau.marshall.msgpack"><code>MsgPackSerializer</code></a> and <a href="../../msgpack/MsgPackParser.html" title="class in org.apache.juneau.marshall.msgpack"><code>MsgPackParser</code></a> into a single class with convenience to/of methods.</div>
+</div>
+<div class="col-first even-row-color"><code>class&nbsp;</code></div>
+<div class="col-second even-row-color"><code><a href="../MsgPackBase64.html" class="type-name-link" title="class in org.apache.juneau.marshall.marshaller">MsgPackBase64</a></code></div>
+<div class="col-last even-row-color">
+<div class="block">A <a href="../MsgPack.html" title="class in org.apache.juneau.marshall.marshaller"><code>MsgPack</code></a> variant that represents binary values as <b>Base64</b> text instead of raw
+ MessagePack bytes.</div>
+</div>
+<div class="col-first odd-row-color"><code>class&nbsp;</code></div>
+<div class="col-second odd-row-color"><code><a href="../MsgPackNative.html" class="type-name-link" title="class in org.apache.juneau.marshall.marshaller">MsgPackNative</a></code></div>
+<div class="col-last odd-row-color">
+<div class="block">A <a href="../MsgPack.html" title="class in org.apache.juneau.marshall.marshaller"><code>MsgPack</code></a> variant whose parser is in <b>native mode</b>, exposing low-level MessagePack
+ extension type information in the token stream instead of normalizing it away.</div>
+</div>
+<div class="col-first even-row-color"><code>class&nbsp;</code></div>
+<div class="col-second even-row-color"><code><a href="../MsgPackSpacedHex.html" class="type-name-link" title="class in org.apache.juneau.marshall.marshaller">MsgPackSpacedHex</a></code></div>
+<div class="col-last even-row-color">
+<div class="block">A <a href="../MsgPack.html" title="class in org.apache.juneau.marshall.marshaller"><code>MsgPack</code></a> variant that represents binary values as <b>spaced hexadecimal</b> text instead
+ of raw MessagePack bytes.</div>
 </div>
 <div class="col-first odd-row-color"><code>class&nbsp;</code></div>
 <div class="col-second odd-row-color"><code><a href="../Parquet.html" class="type-name-link" title="class in org.apache.juneau.marshall.marshaller">Parquet</a></code></div>

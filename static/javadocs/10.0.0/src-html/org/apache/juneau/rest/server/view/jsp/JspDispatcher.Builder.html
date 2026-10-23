@@ -43,7 +43,7 @@
 <span class="source-line-no">030</span><span id="line-30"> * {@link JspMixin} mixin, the {@link JspServlet} servlet, and the {@link JspResource} child flavors.</span>
 <span class="source-line-no">031</span><span id="line-31"> *</span>
 <span class="source-line-no">032</span><span id="line-32"> * &lt;p&gt;</span>
-<span class="source-line-no">033</span><span id="line-33"> * This is the §2.3.1 &lt;i&gt;flavor-neutral worker&lt;/i&gt; for the JSP capability: it is &lt;b&gt;not&lt;/b&gt; one of the</span>
+<span class="source-line-no">033</span><span id="line-33"> * This is the &lt;i&gt;flavor-neutral worker&lt;/i&gt; for the JSP capability: it is &lt;b&gt;not&lt;/b&gt; one of the</span>
 <span class="source-line-no">034</span><span id="line-34"> * three {@code @Rest} flavor classes &amp;mdash; it is a plain bean that implements</span>
 <span class="source-line-no">035</span><span id="line-35"> * {@link RawTemplateDispatcher} and holds the capability state ({@code basePath}) plus the raw-serve</span>
 <span class="source-line-no">036</span><span id="line-36"> * logic. Each flavor independently holds an instance of this worker and delegates to it, so no flavor</span>
@@ -121,58 +121,60 @@
 <span class="source-line-no">108</span><span id="line-108">            throw new InternalServerError("Could not resolve RequestDispatcher for '%s'. %s",</span>
 <span class="source-line-no">109</span><span id="line-109">               target, JspViewRenderer.NO_ENGINE_DIAGNOSTIC);</span>
 <span class="source-line-no">110</span><span id="line-110">         rd.forward(req.getHttpServletRequest(), res.getHttpServletResponse());</span>
-<span class="source-line-no">111</span><span id="line-111">      } catch (NoClassDefFoundError ex) {</span>
-<span class="source-line-no">112</span><span id="line-112">         throw new InternalServerError(ex, JspViewRenderer.NO_ENGINE_DIAGNOSTIC);</span>
-<span class="source-line-no">113</span><span id="line-113">      } catch (IOException | NotFound ex) {</span>
+<span class="source-line-no">111</span><span id="line-111">      } catch (InternalServerError | IOException | NotFound ex) {</span>
+<span class="source-line-no">112</span><span id="line-112">         // Re-throw as-is so the specific diagnostic constructed above, or a framework-level IOException</span>
+<span class="source-line-no">113</span><span id="line-113">         // or NotFound, isn't discarded by the generic fallback below.</span>
 <span class="source-line-no">114</span><span id="line-114">         throw ex;</span>
-<span class="source-line-no">115</span><span id="line-115">      } catch (Exception ex) {</span>
-<span class="source-line-no">116</span><span id="line-116">         throw new InternalServerError(ex, "JSP render failed for '%s'", target);</span>
-<span class="source-line-no">117</span><span id="line-117">      }</span>
-<span class="source-line-no">118</span><span id="line-118">   }</span>
-<span class="source-line-no">119</span><span id="line-119"></span>
-<span class="source-line-no">120</span><span id="line-120">   /**</span>
-<span class="source-line-no">121</span><span id="line-121">    * Builder for {@link JspDispatcher}.</span>
-<span class="source-line-no">122</span><span id="line-122">    */</span>
-<span class="source-line-no">123</span><span id="line-123">   public static class Builder {</span>
-<span class="source-line-no">124</span><span id="line-124"></span>
-<span class="source-line-no">125</span><span id="line-125">      String basePath = DEFAULT_BASE_PATH;</span>
+<span class="source-line-no">115</span><span id="line-115">      } catch (NoClassDefFoundError ex) {</span>
+<span class="source-line-no">116</span><span id="line-116">         throw new InternalServerError(ex, JspViewRenderer.NO_ENGINE_DIAGNOSTIC);</span>
+<span class="source-line-no">117</span><span id="line-117">      } catch (Exception ex) {</span>
+<span class="source-line-no">118</span><span id="line-118">         throw new InternalServerError(ex, "JSP render failed for '%s'", target);</span>
+<span class="source-line-no">119</span><span id="line-119">      }</span>
+<span class="source-line-no">120</span><span id="line-120">   }</span>
+<span class="source-line-no">121</span><span id="line-121"></span>
+<span class="source-line-no">122</span><span id="line-122">   /**</span>
+<span class="source-line-no">123</span><span id="line-123">    * Builder for {@link JspDispatcher}.</span>
+<span class="source-line-no">124</span><span id="line-124">    */</span>
+<span class="source-line-no">125</span><span id="line-125">   public static class Builder {</span>
 <span class="source-line-no">126</span><span id="line-126"></span>
-<span class="source-line-no">127</span><span id="line-127">      /** Constructor &amp;mdash; package access for {@link JspDispatcher#create()}. */</span>
-<span class="source-line-no">128</span><span id="line-128">      protected Builder() {}</span>
-<span class="source-line-no">129</span><span id="line-129"></span>
-<span class="source-line-no">130</span><span id="line-130">      /**</span>
-<span class="source-line-no">131</span><span id="line-131">       * Sets the classpath / webapp base path under which {@code .jsp} resources are resolved.</span>
-<span class="source-line-no">132</span><span id="line-132">       *</span>
-<span class="source-line-no">133</span><span id="line-133">       * @param value The base path. {@code null} or blank values reset to the default</span>
-<span class="source-line-no">134</span><span id="line-134">       *    {@link JspDispatcher#DEFAULT_BASE_PATH}.</span>
-<span class="source-line-no">135</span><span id="line-135">       * @return This object.</span>
-<span class="source-line-no">136</span><span id="line-136">       */</span>
-<span class="source-line-no">137</span><span id="line-137">      public Builder basePath(String value) {</span>
-<span class="source-line-no">138</span><span id="line-138">         basePath = isBlank(value) ? DEFAULT_BASE_PATH : value;</span>
-<span class="source-line-no">139</span><span id="line-139">         return this;</span>
-<span class="source-line-no">140</span><span id="line-140">      }</span>
-<span class="source-line-no">141</span><span id="line-141"></span>
-<span class="source-line-no">142</span><span id="line-142">      /**</span>
-<span class="source-line-no">143</span><span id="line-143">       * Reads the current base path setting (test/inspection helper).</span>
-<span class="source-line-no">144</span><span id="line-144">       *</span>
-<span class="source-line-no">145</span><span id="line-145">       * @return The base path. Never {@code null}.</span>
-<span class="source-line-no">146</span><span id="line-146">       */</span>
-<span class="source-line-no">147</span><span id="line-147">      public String getBasePath() {</span>
-<span class="source-line-no">148</span><span id="line-148">         return basePath;</span>
-<span class="source-line-no">149</span><span id="line-149">      }</span>
-<span class="source-line-no">150</span><span id="line-150"></span>
-<span class="source-line-no">151</span><span id="line-151">      /**</span>
-<span class="source-line-no">152</span><span id="line-152">       * Builds the {@link JspDispatcher}.</span>
-<span class="source-line-no">153</span><span id="line-153">       *</span>
-<span class="source-line-no">154</span><span id="line-154">       * @return A new {@link JspDispatcher} instance.</span>
-<span class="source-line-no">155</span><span id="line-155">       */</span>
-<span class="source-line-no">156</span><span id="line-156">      public JspDispatcher build() {</span>
-<span class="source-line-no">157</span><span id="line-157">         if (basePath == null)</span>
-<span class="source-line-no">158</span><span id="line-158">            throw iaex("basePath must not be null");</span>
-<span class="source-line-no">159</span><span id="line-159">         return new JspDispatcher(this);</span>
-<span class="source-line-no">160</span><span id="line-160">      }</span>
-<span class="source-line-no">161</span><span id="line-161">   }</span>
-<span class="source-line-no">162</span><span id="line-162">}</span>
+<span class="source-line-no">127</span><span id="line-127">      String basePath = DEFAULT_BASE_PATH;</span>
+<span class="source-line-no">128</span><span id="line-128"></span>
+<span class="source-line-no">129</span><span id="line-129">      /** Constructor &amp;mdash; package access for {@link JspDispatcher#create()}. */</span>
+<span class="source-line-no">130</span><span id="line-130">      protected Builder() {}</span>
+<span class="source-line-no">131</span><span id="line-131"></span>
+<span class="source-line-no">132</span><span id="line-132">      /**</span>
+<span class="source-line-no">133</span><span id="line-133">       * Sets the classpath / webapp base path under which {@code .jsp} resources are resolved.</span>
+<span class="source-line-no">134</span><span id="line-134">       *</span>
+<span class="source-line-no">135</span><span id="line-135">       * @param value The base path. {@code null} or blank values reset to the default</span>
+<span class="source-line-no">136</span><span id="line-136">       *    {@link JspDispatcher#DEFAULT_BASE_PATH}.</span>
+<span class="source-line-no">137</span><span id="line-137">       * @return This object.</span>
+<span class="source-line-no">138</span><span id="line-138">       */</span>
+<span class="source-line-no">139</span><span id="line-139">      public Builder basePath(String value) {</span>
+<span class="source-line-no">140</span><span id="line-140">         basePath = isBlank(value) ? DEFAULT_BASE_PATH : value;</span>
+<span class="source-line-no">141</span><span id="line-141">         return this;</span>
+<span class="source-line-no">142</span><span id="line-142">      }</span>
+<span class="source-line-no">143</span><span id="line-143"></span>
+<span class="source-line-no">144</span><span id="line-144">      /**</span>
+<span class="source-line-no">145</span><span id="line-145">       * Reads the current base path setting (test/inspection helper).</span>
+<span class="source-line-no">146</span><span id="line-146">       *</span>
+<span class="source-line-no">147</span><span id="line-147">       * @return The base path. Never {@code null}.</span>
+<span class="source-line-no">148</span><span id="line-148">       */</span>
+<span class="source-line-no">149</span><span id="line-149">      public String getBasePath() {</span>
+<span class="source-line-no">150</span><span id="line-150">         return basePath;</span>
+<span class="source-line-no">151</span><span id="line-151">      }</span>
+<span class="source-line-no">152</span><span id="line-152"></span>
+<span class="source-line-no">153</span><span id="line-153">      /**</span>
+<span class="source-line-no">154</span><span id="line-154">       * Builds the {@link JspDispatcher}.</span>
+<span class="source-line-no">155</span><span id="line-155">       *</span>
+<span class="source-line-no">156</span><span id="line-156">       * @return A new {@link JspDispatcher} instance.</span>
+<span class="source-line-no">157</span><span id="line-157">       */</span>
+<span class="source-line-no">158</span><span id="line-158">      public JspDispatcher build() {</span>
+<span class="source-line-no">159</span><span id="line-159">         if (basePath == null)</span>
+<span class="source-line-no">160</span><span id="line-160">            throw iaex("basePath must not be null");</span>
+<span class="source-line-no">161</span><span id="line-161">         return new JspDispatcher(this);</span>
+<span class="source-line-no">162</span><span id="line-162">      }</span>
+<span class="source-line-no">163</span><span id="line-163">   }</span>
+<span class="source-line-no">164</span><span id="line-164">}</span>
 
 
 

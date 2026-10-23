@@ -124,8 +124,14 @@ implements <a href="../../commons/inject/BeanStoreOverridable.html" title="inter
 <div class="block">Sets an explicit default parser used when the response <code>Content-Type</code> matches no registered parser.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="MockRestClient.Builder.html" title="class in org.apache.juneau.rest.mock">MockRestClient.Builder</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#overridingBeanStore(org.apache.juneau.commons.inject.BeanStore)" class="member-name-link">overridingBeanStore</a><wbr>(<a href="../../commons/inject/BeanStore.html" title="interface in org.apache.juneau.commons.inject">BeanStore</a>&nbsp;value)</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#noTrace()" class="member-name-link">noTrace</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Sends a <c>No-Trace: true</c> header with every request, so the server leaves the stack trace of a failed
+ call out of its log record.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="MockRestClient.Builder.html" title="class in org.apache.juneau.rest.mock">MockRestClient.Builder</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#overridingBeanStore(org.apache.juneau.commons.inject.BeanStore)" class="member-name-link">overridingBeanStore</a><wbr>(<a href="../../commons/inject/BeanStore.html" title="interface in org.apache.juneau.commons.inject">BeanStore</a>&nbsp;value)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Installs a <a href="../../commons/inject/BeanStore.html" title="interface in org.apache.juneau.commons.inject"><code>BeanStore</code></a> as the <code>overridingParent</code> of the <a href="../server/RestContext.html" title="class in org.apache.juneau.rest.server"><code>RestContext</code></a>'s
  bean store, so test-time overrides (e.g.</div>
 </div>
@@ -149,7 +155,7 @@ implements <a href="../../commons/inject/BeanStoreOverridable.html" title="inter
 <li>
 <section class="detail" id="contextPath(java.lang.String)">
 <h3>contextPath</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MockRestClient.Builder.html" title="class in org.apache.juneau.rest.mock">MockRestClient.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/mock/MockRestClient.Builder.html#line-210">contextPath</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MockRestClient.Builder.html" title="class in org.apache.juneau.rest.mock">MockRestClient.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/mock/MockRestClient.Builder.html#line-211">contextPath</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block">Sets the servlet context path (e.g. <code>"/myapp"</code>).</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -162,7 +168,7 @@ implements <a href="../../commons/inject/BeanStoreOverridable.html" title="inter
 <li>
 <section class="detail" id="overridingBeanStore(org.apache.juneau.commons.inject.BeanStore)">
 <h3>overridingBeanStore</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MockRestClient.Builder.html" title="class in org.apache.juneau.rest.mock">MockRestClient.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/mock/MockRestClient.Builder.html#line-239">overridingBeanStore</a></span><wbr><span class="parameters">(<a href="../../commons/inject/BeanStore.html" title="interface in org.apache.juneau.commons.inject">BeanStore</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MockRestClient.Builder.html" title="class in org.apache.juneau.rest.mock">MockRestClient.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/mock/MockRestClient.Builder.html#line-240">overridingBeanStore</a></span><wbr><span class="parameters">(<a href="../../commons/inject/BeanStore.html" title="interface in org.apache.juneau.commons.inject">BeanStore</a>&nbsp;value)</span></div>
 <div class="block">Installs a <a href="../../commons/inject/BeanStore.html" title="interface in org.apache.juneau.commons.inject"><code>BeanStore</code></a> as the <code>overridingParent</code> of the <a href="../server/RestContext.html" title="class in org.apache.juneau.rest.server"><code>RestContext</code></a>'s
  bean store, so test-time overrides (e.g. <code>TestBeanStore</code>) resolve at tier 1 of the
  lookup chain &mdash; above the resource's local <code>@Bean</code> factory entries.
@@ -195,7 +201,7 @@ implements <a href="../../commons/inject/BeanStoreOverridable.html" title="inter
 <li>
 <section class="detail" id="defaultParser(org.apache.juneau.marshall.parser.Parser)">
 <h3>defaultParser</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MockRestClient.Builder.html" title="class in org.apache.juneau.rest.mock">MockRestClient.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/mock/MockRestClient.Builder.html#line-266">defaultParser</a></span><wbr><span class="parameters">(<a href="../../marshall/parser/Parser.html" title="class in org.apache.juneau.marshall.parser">Parser</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MockRestClient.Builder.html" title="class in org.apache.juneau.rest.mock">MockRestClient.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/mock/MockRestClient.Builder.html#line-267">defaultParser</a></span><wbr><span class="parameters">(<a href="../../marshall/parser/Parser.html" title="class in org.apache.juneau.marshall.parser">Parser</a>&nbsp;value)</span></div>
 <div class="block">Sets an explicit default parser used when the response <code>Content-Type</code> matches no registered parser.
 
  <p>
@@ -221,9 +227,32 @@ implements <a href="../../commons/inject/BeanStoreOverridable.html" title="inter
 </section>
 </li>
 <li>
+<section class="detail" id="noTrace()">
+<h3>noTrace</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MockRestClient.Builder.html" title="class in org.apache.juneau.rest.mock">MockRestClient.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/mock/MockRestClient.Builder.html#line-289">noTrace</a></span>()</div>
+<div class="block">Sends a <c>No-Trace: true</c> header with every request, so the server leaves the stack trace of a failed
+ call out of its log record.
+
+ <p>
+ Opt-in only; no other builder option turns it on. The one-line access record is still logged.  To do the
+ same for a single call, use <a href="../client/RestRequest.html#noTrace()"><code>RestRequest.noTrace()</code></a>.
+
+ <h5 class='section'>Example:</h5>
+ <p class='bjava'>
+   <jk>try</jk> (<jv>client</jv> = MockRestClient.<jsm>builder</jsm>(MyResource.<jk>class</jk>).noTrace().build()) {
+      <jv>client</jv>.get(<js>"/missing"</js>).run().assertStatus().is(404);
+   }
+ </p></div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>This object.</dd>
+</dl>
+</section>
+</li>
+<li>
 <section class="detail" id="build()">
 <h3>build</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MockRestClient.html" title="class in org.apache.juneau.rest.mock">MockRestClient</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/mock/MockRestClient.Builder.html#line-276">build</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MockRestClient.html" title="class in org.apache.juneau.rest.mock">MockRestClient</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/mock/MockRestClient.Builder.html#line-299">build</a></span>()</div>
 <div class="block">Builds and returns the <a href="MockRestClient.html" title="class in org.apache.juneau.rest.mock"><code>MockRestClient</code></a>.</div>
 <dl class="notes">
 <dt>Returns:</dt>

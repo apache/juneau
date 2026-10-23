@@ -84,7 +84,7 @@ loadScripts(document, 'script');</script>
 <dd><code>jakarta.servlet.Filter</code>, <code><a href="../Authenticator.html" title="interface in org.apache.juneau.rest.server.auth">Authenticator</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/saml/SamlAuthFilter.html#line-84">SamlAuthFilter</a></span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/saml/SamlAuthFilter.html#line-94">SamlAuthFilter</a></span>
 <span class="extends-implements">extends <a href="../AuthFilter.html" title="class in org.apache.juneau.rest.server.auth">AuthFilter</a></span></div>
 <div class="block"><a href="../AuthFilter.html" title="class in org.apache.juneau.rest.server.auth"><code>AuthFilter</code></a> that authenticates requests carrying a SAML 2.0 <code>&lt;samlp:Response&gt;</code> delivered via
  the <a href="SamlBinding.html#POST"><code>SamlBinding.POST</code></a> or <a href="SamlBinding.html#REDIRECT"><code>SamlBinding.REDIRECT</code></a> HTTP binding.
@@ -97,9 +97,13 @@ loadScripts(document, 'script');</script>
    <li>For the <a href="SamlBinding.html#POST"><code>SamlBinding.POST</code></a> binding: reads the <code>SAMLResponse</code> form parameter and
       base64-decodes it.  For <a href="SamlBinding.html#REDIRECT"><code>SamlBinding.REDIRECT</code></a>: reads the <code>SAMLResponse</code> query parameter,
       base64-decodes it, and then DEFLATE-inflates (RFC 1951) per OASIS SAML 2.0 Redirect binding rules.
-   <li>Delegates to <a href="SamlAssertionValidator.html#validate(java.lang.String)"><code>SamlAssertionValidator.validate(String)</code></a>.  On success, builds an <a href="../AuthResult.html" title="class in org.apache.juneau.rest.server.auth"><code>AuthResult</code></a>
-      carrying the resolved <a href="../ClaimsPrincipal.html" title="class in org.apache.juneau.rest.server.auth"><code>ClaimsPrincipal</code></a>.  On failure, re-throws as an
-      <a href="../AuthenticationException.html" title="class in org.apache.juneau.rest.server.auth"><code>AuthenticationException</code></a> with a <code>WWW-Authenticate: SAML ...</code> challenge.
+   <li>Derives the ACS recipient URL (scheme, host, port, and path) from the current request and delegates
+      to <a href="SamlAssertionValidator.html#validate(java.lang.String,java.lang.String)"><code>SamlAssertionValidator.validate(String, String)</code></a> with it, so the assertion's bearer
+      <code>&lt;SubjectConfirmation&gt;</code> is always bound to the actual endpoint this request was delivered to
+      &mdash; regardless of whether the <a href="SamlAssertionValidator.html" title="class in org.apache.juneau.rest.server.auth.saml"><code>SamlAssertionValidator</code></a> was itself built with
+      <a href="SamlAssertionValidator.Builder.html#recipient(java.lang.String)"><code>recipient(...)</code></a> configured.  On success,
+      builds an <a href="../AuthResult.html" title="class in org.apache.juneau.rest.server.auth"><code>AuthResult</code></a> carrying the resolved <a href="../ClaimsPrincipal.html" title="class in org.apache.juneau.rest.server.auth"><code>ClaimsPrincipal</code></a>.  On failure, re-throws as
+      an <a href="../AuthenticationException.html" title="class in org.apache.juneau.rest.server.auth"><code>AuthenticationException</code></a> with a <code>WWW-Authenticate: SAML ...</code> challenge.
  </ol>
 
  <h5 class='topic'>Roles</h5>
@@ -109,6 +113,12 @@ loadScripts(document, 'script');</script>
  names are populated on the <a href="../AuthResult.html" title="class in org.apache.juneau.rest.server.auth"><code>AuthResult</code></a>.  Otherwise the role set is empty.
 
  <h5 class='topic'>Usage</h5>
+
+ <p>
+ Note that <code>validator</code> below is <i>not</i> built with
+ <a href="SamlAssertionValidator.Builder.html#recipient(java.lang.String)"><code>recipient(...)</code></a>.  That is safe here because this
+ filter always derives the ACS recipient from the request and binds it for that call, so bearer
+ subject-confirmation is enforced regardless of the validator's own configuration.
 
  <p class='bjava'>
    <jk>var</jk> validator = SamlAssertionValidator.<jsm>create</jsm>()
@@ -242,7 +252,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="DEFAULT_MAX_INFLATED_BYTES">
 <h3>DEFAULT_MAX_INFLATED_BYTES</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">long</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/saml/SamlAuthFilter.html#line-97">DEFAULT_MAX_INFLATED_BYTES</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">long</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/saml/SamlAuthFilter.html#line-107">DEFAULT_MAX_INFLATED_BYTES</a></span></div>
 <div class="block">Default ceiling on the number of decompressed bytes accepted from a REDIRECT-binding
  <code>SAMLResponse</code> (1 MiB).</div>
 <dl class="notes">
@@ -258,7 +268,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="DEFAULT_MAX_INFLATE_RATIO">
 <h3>DEFAULT_MAX_INFLATE_RATIO</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/saml/SamlAuthFilter.html#line-103">DEFAULT_MAX_INFLATE_RATIO</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/saml/SamlAuthFilter.html#line-113">DEFAULT_MAX_INFLATE_RATIO</a></span></div>
 <div class="block">Default ceiling on the decompressed-to-compressed size ratio accepted from a REDIRECT-binding
  <code>SAMLResponse</code>.</div>
 <dl class="notes">
@@ -282,7 +292,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.rest.server.auth.saml.SamlAuthFilter.Builder)">
 <h3>SamlAuthFilter</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/saml/SamlAuthFilter.html#line-244">SamlAuthFilter</a></span><wbr><span class="parameters">(<a href="SamlAuthFilter.Builder.html" title="class in org.apache.juneau.rest.server.auth.saml">SamlAuthFilter.Builder</a>&nbsp;b)</span></div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/saml/SamlAuthFilter.html#line-254">SamlAuthFilter</a></span><wbr><span class="parameters">(<a href="SamlAuthFilter.Builder.html" title="class in org.apache.juneau.rest.server.auth.saml">SamlAuthFilter.Builder</a>&nbsp;b)</span></div>
 <div class="block">Constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -301,7 +311,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="create()">
 <h3>create</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="SamlAuthFilter.Builder.html" title="class in org.apache.juneau.rest.server.auth.saml">SamlAuthFilter.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/saml/SamlAuthFilter.html#line-110">create</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="SamlAuthFilter.Builder.html" title="class in org.apache.juneau.rest.server.auth.saml">SamlAuthFilter.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/saml/SamlAuthFilter.html#line-120">create</a></span>()</div>
 <div class="block">Static creator.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -312,7 +322,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="authenticate(jakarta.servlet.http.HttpServletRequest)">
 <h3>authenticate</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="../AuthResult.html" title="class in org.apache.juneau.rest.server.auth">AuthResult</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/saml/SamlAuthFilter.html#line-254">authenticate</a></span><wbr><span class="parameters">(jakarta.servlet.http.HttpServletRequest&nbsp;req)</span>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="../AuthResult.html" title="class in org.apache.juneau.rest.server.auth">AuthResult</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/saml/SamlAuthFilter.html#line-264">authenticate</a></span><wbr><span class="parameters">(jakarta.servlet.http.HttpServletRequest&nbsp;req)</span>
                                   throws <span class="exceptions"><a href="../AuthenticationException.html" title="class in org.apache.juneau.rest.server.auth">AuthenticationException</a></span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="../Authenticator.html#authenticate(jakarta.servlet.http.HttpServletRequest)">Authenticator</a></code></span></div>
 <div class="block">Inspects the request and returns the authentication result.</div>

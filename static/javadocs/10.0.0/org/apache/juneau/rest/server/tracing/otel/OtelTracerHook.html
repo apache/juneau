@@ -82,7 +82,7 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="../TracerHook.html" title="interface in org.apache.juneau.rest.server.tracing">TracerHook</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/tracing/otel/OtelTracerHook.html#line-97">OtelTracerHook</a></span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/tracing/otel/OtelTracerHook.html#line-96">OtelTracerHook</a></span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>
 implements <a href="../TracerHook.html" title="interface in org.apache.juneau.rest.server.tracing">TracerHook</a></span></div>
 <div class="block"><a href="../TracerHook.html" title="interface in org.apache.juneau.rest.server.tracing"><code>TracerHook</code></a> bridge that opens an OpenTelemetry <code>Span</code> for every <code>@RestOp</code> call.
@@ -275,7 +275,7 @@ implements <a href="../TracerHook.html" title="interface in org.apache.juneau.re
 <li>
 <section class="detail" id="DEFAULT_INSTRUMENTATION_NAME">
 <h3>DEFAULT_INSTRUMENTATION_NAME</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/tracing/otel/OtelTracerHook.html#line-104">DEFAULT_INSTRUMENTATION_NAME</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/tracing/otel/OtelTracerHook.html#line-103">DEFAULT_INSTRUMENTATION_NAME</a></span></div>
 <div class="block">Default tracer instrumentation scope name.</div>
 <dl class="notes">
 <dt>See Also:</dt>
@@ -290,28 +290,28 @@ implements <a href="../TracerHook.html" title="interface in org.apache.juneau.re
 <li>
 <section class="detail" id="ATTR_HTTP_REQUEST_METHOD">
 <h3>ATTR_HTTP_REQUEST_METHOD</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">io.opentelemetry.api.common.AttributeKey&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/tracing/otel/OtelTracerHook.html#line-107">ATTR_HTTP_REQUEST_METHOD</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">io.opentelemetry.api.common.AttributeKey&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/tracing/otel/OtelTracerHook.html#line-106">ATTR_HTTP_REQUEST_METHOD</a></span></div>
 <div class="block">OTel HTTP semantic-convention attribute key <code>http.request.method</code>.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="ATTR_HTTP_RESPONSE_STATUS_CODE">
 <h3>ATTR_HTTP_RESPONSE_STATUS_CODE</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">io.opentelemetry.api.common.AttributeKey&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/tracing/otel/OtelTracerHook.html#line-110">ATTR_HTTP_RESPONSE_STATUS_CODE</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">io.opentelemetry.api.common.AttributeKey&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/tracing/otel/OtelTracerHook.html#line-109">ATTR_HTTP_RESPONSE_STATUS_CODE</a></span></div>
 <div class="block">OTel HTTP semantic-convention attribute key <code>http.response.status_code</code>.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="ATTR_HTTP_ROUTE">
 <h3>ATTR_HTTP_ROUTE</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">io.opentelemetry.api.common.AttributeKey&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/tracing/otel/OtelTracerHook.html#line-113">ATTR_HTTP_ROUTE</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">io.opentelemetry.api.common.AttributeKey&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/tracing/otel/OtelTracerHook.html#line-112">ATTR_HTTP_ROUTE</a></span></div>
 <div class="block">OTel HTTP semantic-convention attribute key <code>http.route</code>.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="ATTR_EXCEPTION_TYPE">
 <h3>ATTR_EXCEPTION_TYPE</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">io.opentelemetry.api.common.AttributeKey&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/tracing/otel/OtelTracerHook.html#line-116">ATTR_EXCEPTION_TYPE</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">io.opentelemetry.api.common.AttributeKey&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/tracing/otel/OtelTracerHook.html#line-115">ATTR_EXCEPTION_TYPE</a></span></div>
 <div class="block">OTel attribute key <code>exception.type</code> used when recording a thrown exception.</div>
 </section>
 </li>
@@ -326,7 +326,7 @@ implements <a href="../TracerHook.html" title="interface in org.apache.juneau.re
 <li>
 <section class="detail" id="&lt;init&gt;()">
 <h3>OtelTracerHook</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/tracing/otel/OtelTracerHook.html#line-133">OtelTracerHook</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/tracing/otel/OtelTracerHook.html#line-128">OtelTracerHook</a></span>()</div>
 <div class="block">Constructor using <code>GlobalOpenTelemetry.get()</code> as the <code>OpenTelemetry</code> source.
 
  <p>
@@ -338,7 +338,7 @@ implements <a href="../TracerHook.html" title="interface in org.apache.juneau.re
 <li>
 <section class="detail" id="&lt;init&gt;(io.opentelemetry.api.OpenTelemetry)">
 <h3>OtelTracerHook</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/tracing/otel/OtelTracerHook.html#line-147">OtelTracerHook</a></span><wbr><span class="parameters">(io.opentelemetry.api.OpenTelemetry&nbsp;openTelemetry)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/tracing/otel/OtelTracerHook.html#line-142">OtelTracerHook</a></span><wbr><span class="parameters">(io.opentelemetry.api.OpenTelemetry&nbsp;openTelemetry)</span></div>
 <div class="block">Constructor with an explicit <code>OpenTelemetry</code> instance.
 
  <p>
@@ -354,7 +354,7 @@ implements <a href="../TracerHook.html" title="interface in org.apache.juneau.re
 <li>
 <section class="detail" id="&lt;init&gt;(io.opentelemetry.api.trace.Tracer,io.opentelemetry.context.propagation.TextMapPropagator)">
 <h3>OtelTracerHook</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/tracing/otel/OtelTracerHook.html#line-164">OtelTracerHook</a></span><wbr><span class="parameters">(io.opentelemetry.api.trace.Tracer&nbsp;tracer,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/tracing/otel/OtelTracerHook.html#line-159">OtelTracerHook</a></span><wbr><span class="parameters">(io.opentelemetry.api.trace.Tracer&nbsp;tracer,
  io.opentelemetry.context.propagation.TextMapPropagator&nbsp;propagator)</span></div>
 <div class="block">Constructor with an explicit <code>Tracer</code> and <code>TextMapPropagator</code>.
 
@@ -380,7 +380,7 @@ implements <a href="../TracerHook.html" title="interface in org.apache.juneau.re
 <li>
 <section class="detail" id="startSpan(org.apache.juneau.rest.server.RestRequest)">
 <h3>startSpan</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../Scope.html" title="interface in org.apache.juneau.rest.server.tracing">Scope</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/tracing/otel/OtelTracerHook.html#line-169">startSpan</a></span><wbr><span class="parameters">(<a href="../../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;request)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../Scope.html" title="interface in org.apache.juneau.rest.server.tracing">Scope</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/tracing/otel/OtelTracerHook.html#line-164">startSpan</a></span><wbr><span class="parameters">(<a href="../../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;request)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="../TracerHook.html#startSpan(org.apache.juneau.rest.server.RestRequest)">TracerHook</a></code></span></div>
 <div class="block">Opens a new span for the in-flight request.</div>
 <dl class="notes">
@@ -401,7 +401,7 @@ implements <a href="../TracerHook.html" title="interface in org.apache.juneau.re
 <li>
 <section class="detail" id="startSpan(org.apache.juneau.rest.server.RestRequest,org.apache.juneau.http.tracing.TraceContextCarrier,org.apache.juneau.rest.server.tracing.TraceOperation)">
 <h3>startSpan</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../Scope.html" title="interface in org.apache.juneau.rest.server.tracing">Scope</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/tracing/otel/OtelTracerHook.html#line-174">startSpan</a></span><wbr><span class="parameters">(<a href="../../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;request,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../Scope.html" title="interface in org.apache.juneau.rest.server.tracing">Scope</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/tracing/otel/OtelTracerHook.html#line-169">startSpan</a></span><wbr><span class="parameters">(<a href="../../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;request,
  <a href="../../../../http/tracing/TraceContextCarrier.html" title="interface in org.apache.juneau.http.tracing">TraceContextCarrier</a>&nbsp;carrier,
  <a href="../TraceOperation.html" title="class in org.apache.juneau.rest.server.tracing">TraceOperation</a>&nbsp;operation)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="../TracerHook.html#startSpan(org.apache.juneau.rest.server.RestRequest,org.apache.juneau.http.tracing.TraceContextCarrier,org.apache.juneau.rest.server.tracing.TraceOperation)">TracerHook</a></code></span></div>
@@ -435,7 +435,7 @@ implements <a href="../TracerHook.html" title="interface in org.apache.juneau.re
 <li>
 <section class="detail" id="startSpan(java.lang.String)">
 <h3>startSpan</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../Scope.html" title="interface in org.apache.juneau.rest.server.tracing">Scope</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/tracing/otel/OtelTracerHook.html#line-235">startSpan</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;spanName)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../Scope.html" title="interface in org.apache.juneau.rest.server.tracing">Scope</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/tracing/otel/OtelTracerHook.html#line-230">startSpan</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;spanName)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="../TracerHook.html#startSpan(java.lang.String)">TracerHook</a></code></span></div>
 <div class="block">Opens a new span for a custom (non-request) observation.
 
@@ -464,7 +464,7 @@ implements <a href="../TracerHook.html" title="interface in org.apache.juneau.re
 <li>
 <section class="detail" id="inject(org.apache.juneau.http.tracing.TraceContextCarrier)">
 <h3>inject</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/tracing/otel/OtelTracerHook.html#line-267">inject</a></span><wbr><span class="parameters">(<a href="../../../../http/tracing/TraceContextCarrier.html" title="interface in org.apache.juneau.http.tracing">TraceContextCarrier</a>&nbsp;carrier)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/tracing/otel/OtelTracerHook.html#line-261">inject</a></span><wbr><span class="parameters">(<a href="../../../../http/tracing/TraceContextCarrier.html" title="interface in org.apache.juneau.http.tracing">TraceContextCarrier</a>&nbsp;carrier)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="../TracerHook.html#inject(org.apache.juneau.http.tracing.TraceContextCarrier)">TracerHook</a></code></span></div>
 <div class="block">Renders this hook's active trace context (if any) into <c>carrier</c>.
 
@@ -485,7 +485,7 @@ implements <a href="../TracerHook.html" title="interface in org.apache.juneau.re
 <li>
 <section class="detail" id="getTracer()">
 <h3>getTracer</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">io.opentelemetry.api.trace.Tracer</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/tracing/otel/OtelTracerHook.html#line-277">getTracer</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">io.opentelemetry.api.trace.Tracer</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/tracing/otel/OtelTracerHook.html#line-271">getTracer</a></span>()</div>
 <div class="block">Returns the <code>Tracer</code> this hook publishes spans to.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -496,7 +496,7 @@ implements <a href="../TracerHook.html" title="interface in org.apache.juneau.re
 <li>
 <section class="detail" id="getPropagator()">
 <h3>getPropagator</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">io.opentelemetry.context.propagation.TextMapPropagator</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/tracing/otel/OtelTracerHook.html#line-285">getPropagator</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">io.opentelemetry.context.propagation.TextMapPropagator</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/tracing/otel/OtelTracerHook.html#line-279">getPropagator</a></span>()</div>
 <div class="block">Returns the <code>TextMapPropagator</code> used to extract W3C trace-context headers from
  incoming requests.</div>
 <dl class="notes">

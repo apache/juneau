@@ -84,7 +84,7 @@ loadScripts(document, 'script');</script>
 <dd><code>jakarta.servlet.Filter</code>, <code><a href="Authenticator.html" title="interface in org.apache.juneau.rest.server.auth">Authenticator</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/auth/ApiKeyAuthFilter.html#line-64">ApiKeyAuthFilter</a></span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/auth/ApiKeyAuthFilter.html#line-62">ApiKeyAuthFilter</a></span>
 <span class="extends-implements">extends <a href="AuthFilter.html" title="class in org.apache.juneau.rest.server.auth">AuthFilter</a></span></div>
 <div class="block"><a href="AuthFilter.html" title="class in org.apache.juneau.rest.server.auth"><code>AuthFilter</code></a> that authenticates requests via a raw API-key string.
 
@@ -207,7 +207,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.rest.server.auth.ApiKeyAuthFilter.Builder)">
 <h3>ApiKeyAuthFilter</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/auth/ApiKeyAuthFilter.html#line-204">ApiKeyAuthFilter</a></span><wbr><span class="parameters">(<a href="ApiKeyAuthFilter.Builder.html" title="class in org.apache.juneau.rest.server.auth">ApiKeyAuthFilter.Builder</a>&nbsp;builder)</span></div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/auth/ApiKeyAuthFilter.html#line-202">ApiKeyAuthFilter</a></span><wbr><span class="parameters">(<a href="ApiKeyAuthFilter.Builder.html" title="class in org.apache.juneau.rest.server.auth">ApiKeyAuthFilter.Builder</a>&nbsp;builder)</span></div>
 <div class="block">Constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -226,7 +226,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="create()">
 <h3>create</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="ApiKeyAuthFilter.Builder.html" title="class in org.apache.juneau.rest.server.auth">ApiKeyAuthFilter.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/auth/ApiKeyAuthFilter.html#line-86">create</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="ApiKeyAuthFilter.Builder.html" title="class in org.apache.juneau.rest.server.auth">ApiKeyAuthFilter.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/auth/ApiKeyAuthFilter.html#line-84">create</a></span>()</div>
 <div class="block">Static creator.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -237,7 +237,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="authenticate(jakarta.servlet.http.HttpServletRequest)">
 <h3>authenticate</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="AuthResult.html" title="class in org.apache.juneau.rest.server.auth">AuthResult</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/auth/ApiKeyAuthFilter.html#line-212">authenticate</a></span><wbr><span class="parameters">(jakarta.servlet.http.HttpServletRequest&nbsp;req)</span>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="AuthResult.html" title="class in org.apache.juneau.rest.server.auth">AuthResult</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/auth/ApiKeyAuthFilter.html#line-210">authenticate</a></span><wbr><span class="parameters">(jakarta.servlet.http.HttpServletRequest&nbsp;req)</span>
                                   throws <span class="exceptions"><a href="AuthenticationException.html" title="class in org.apache.juneau.rest.server.auth">AuthenticationException</a></span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="Authenticator.html#authenticate(jakarta.servlet.http.HttpServletRequest)">Authenticator</a></code></span></div>
 <div class="block">Inspects the request and returns the authentication result.</div>

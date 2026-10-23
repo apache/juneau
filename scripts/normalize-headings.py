@@ -1,12 +1,8 @@
 #!/usr/bin/env python3
 """
-Heading normalization script for Juneau Docs pages/topics/*.md files.
+Normalize the headings of the pages/topics/*.md files.
 
-Performs 4 passes:
-  2a: Remove body-level H1 lines (# Heading)
-  2b: Shift headings so minimum is H2
-  2c: Demote H5/H6 to H4
-  2d: Verify no skipped levels (promote H4 to H3 when no H3 exists between H2 and H4)
+Full docs: normalize-headings.md
 """
 
 import os

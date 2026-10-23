@@ -91,14 +91,14 @@ loadScripts(document, 'script');</script>
 <section class="class-description" id="class-description">
 <dl class="notes">
 <dt>All Implemented Interfaces:</dt>
-<dd><code>jakarta.servlet.Servlet</code>, <code>jakarta.servlet.ServletConfig</code>, <code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a></code>, <code><a href="../../rest/server/config/BasicUniversalConfig.html" title="interface in org.apache.juneau.rest.server.config">BasicUniversalConfig</a></code>, <code><a href="../../rest/server/config/DefaultConfig.html" title="interface in org.apache.juneau.rest.server.config">DefaultConfig</a></code>, <code><a href="../../rest/server/config/DefaultHtmlConfig.html" title="interface in org.apache.juneau.rest.server.config">DefaultHtmlConfig</a></code></dd>
+<dd><code>jakarta.servlet.Servlet</code>, <code>jakarta.servlet.ServletConfig</code>, <code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a></code>, <code><a href="../../rest/server/config/BasicUniversalConfig.html" title="interface in org.apache.juneau.rest.server.config">BasicUniversalConfig</a></code>, <code><a href="../../rest/server/config/DefaultConfig.html" title="interface in org.apache.juneau.rest.server.config">DefaultConfig</a></code>, <code><a href="../../rest/server/config/DefaultHtmlConfig.html" title="interface in org.apache.juneau.rest.server.config">DefaultHtmlConfig</a></code>, <code><a href="../../rest/server/health/ReadinessStateAware.html" title="interface in org.apache.juneau.rest.server.health">ReadinessStateAware</a></code></dd>
 </dl>
 <dl class="notes">
 <dt>Direct Known Subclasses:</dt>
 <dd><code><a href="secured/SecuredExampleMcpServer.html" title="class in org.apache.juneau.examples.mcp.secured">SecuredExampleMcpServer</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/examples/mcp/ExampleMcpServer.html#line-68">ExampleMcpServer</a></span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/examples/mcp/ExampleMcpServer.html#line-70">ExampleMcpServer</a></span>
 <span class="extends-implements">extends <a href="../../rest/server/mcp/v20260728/McpRestServlet.html" title="class in org.apache.juneau.rest.server.mcp.v20260728">McpRestServlet</a></span></div>
 <div class="block">A complete, runnable MCP <c>2026-07-28</c> server exposing every major surface of the protocol
  over one tiny, coherent scenario: an in-memory <a href="NoteStore.html" title="class in org.apache.juneau.examples.mcp"><code>notes</code></a> service.
@@ -198,7 +198,7 @@ loadScripts(document, 'script');</script>
 <code><a href="../../rest/server/mcp/v20260728/McpRestServlet.html#getMcpOptions()">getMcpOptions</a>, <a href="../../rest/server/mcp/v20260728/McpRestServlet.html#getSubscriptionBroker()">getSubscriptionBroker</a>, <a href="../../rest/server/mcp/v20260728/McpRestServlet.html#mcpProtectedResourceMetadataPathInserted(org.apache.juneau.rest.server.RestRequest)">mcpProtectedResourceMetadataPathInserted</a>, <a href="../../rest/server/mcp/v20260728/McpRestServlet.html#mcpProtectedResourceMetadataRoot(org.apache.juneau.rest.server.RestRequest)">mcpProtectedResourceMetadataRoot</a>, <a href="../../rest/server/mcp/v20260728/McpRestServlet.html#mcpResourceServerAuth(jakarta.servlet.http.HttpServletRequest,jakarta.servlet.http.HttpServletResponse)">mcpResourceServerAuth</a>, <a href="../../rest/server/mcp/v20260728/McpRestServlet.html#mcpTraceContextExtractor()">mcpTraceContextExtractor</a>, <a href="../../rest/server/mcp/v20260728/McpRestServlet.html#revision()">revision</a></code></div>
 <div class="inherited-list">
 <h3 id="methods-inherited-from-class-org.apache.juneau.rest.server.mcp.AbstractMcpRestServlet">Methods inherited from class&nbsp;org.apache.juneau.rest.server.mcp.<a href="../../rest/server/mcp/AbstractMcpRestServlet.html" title="class in org.apache.juneau.rest.server.mcp">AbstractMcpRestServlet</a></h3>
-<code><a href="../../rest/server/mcp/AbstractMcpRestServlet.html#getMcpConfig()">getMcpConfig</a>, <a href="../../rest/server/mcp/AbstractMcpRestServlet.html#handleMcp(org.apache.juneau.bean.jsonrpc.JsonRpcRequest,org.apache.juneau.rest.server.RestRequest)">handleMcp</a></code></div>
+<code><a href="../../rest/server/mcp/AbstractMcpRestServlet.html#acceptReadinessState(org.apache.juneau.rest.server.health.ReadinessState)">acceptReadinessState</a>, <a href="../../rest/server/mcp/AbstractMcpRestServlet.html#getMcpConfig()">getMcpConfig</a>, <a href="../../rest/server/mcp/AbstractMcpRestServlet.html#handleMcp(org.apache.juneau.bean.jsonrpc.JsonRpcRequest,org.apache.juneau.rest.server.RestRequest)">handleMcp</a></code></div>
 <div class="inherited-list">
 <h3 id="methods-inherited-from-class-org.apache.juneau.rest.server.servlet.RestServlet">Methods inherited from class&nbsp;org.apache.juneau.rest.server.servlet.<a href="../../rest/server/servlet/RestServlet.html" title="class in org.apache.juneau.rest.server.servlet">RestServlet</a></h3>
 <code><a href="../../rest/server/servlet/RestServlet.html#builder(java.lang.Class)">builder</a>, <a href="../../rest/server/servlet/RestServlet.html#createAuthenticator(org.apache.juneau.commons.inject.BeanStore)">createAuthenticator</a>, <a href="../../rest/server/servlet/RestServlet.html#destroy()">destroy</a>, <a href="../../rest/server/servlet/RestServlet.html#doLog(java.util.logging.Level,java.lang.Throwable,java.util.function.Supplier)">doLog</a>, <a href="../../rest/server/servlet/RestServlet.html#getContext()">getContext</a>, <a href="../../rest/server/servlet/RestServlet.html#getPath()">getPath</a>, <a href="../../rest/server/servlet/RestServlet.html#getPaths()">getPaths</a>, <a href="../../rest/server/servlet/RestServlet.html#getRequest()">getRequest</a>, <a href="../../rest/server/servlet/RestServlet.html#getResponse()">getResponse</a>, <a href="../../rest/server/servlet/RestServlet.html#getRestBuilder()">getRestBuilder</a>, <a href="../../rest/server/servlet/RestServlet.html#init(jakarta.servlet.ServletConfig)">init</a>, <a href="../../rest/server/servlet/RestServlet.html#log(java.util.logging.Level,java.lang.String,java.lang.Object...)">log</a>, <a href="../../rest/server/servlet/RestServlet.html#log(java.util.logging.Level,java.lang.Throwable,java.lang.String,java.lang.Object...)">log</a>, <a href="../../rest/server/servlet/RestServlet.html#service(jakarta.servlet.http.HttpServletRequest,jakarta.servlet.http.HttpServletResponse)">service</a>, <a href="../../rest/server/servlet/RestServlet.html#setContext(org.apache.juneau.rest.server.RestContext)">setContext</a></code></div>
@@ -225,7 +225,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;()">
 <h3>ExampleMcpServer</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/examples/mcp/ExampleMcpServer.html#line-72">ExampleMcpServer</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/examples/mcp/ExampleMcpServer.html#line-74">ExampleMcpServer</a></span>()</div>
 </section>
 </li>
 </ul>
@@ -239,7 +239,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="createMcpConfig()">
 <h3>createMcpConfig</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="../../rest/server/mcp/McpServerConfig.html" title="class in org.apache.juneau.rest.server.mcp">McpServerConfig</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/examples/mcp/ExampleMcpServer.html#line-92">createMcpConfig</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="../../rest/server/mcp/McpServerConfig.html" title="class in org.apache.juneau.rest.server.mcp">McpServerConfig</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/examples/mcp/ExampleMcpServer.html#line-97">createMcpConfig</a></span>()</div>
 <div class="block">Declares everything this server exposes. This one method is the "table of contents" for the demo.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
@@ -252,7 +252,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="createMcpOptions()">
 <h3>createMcpOptions</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="../../rest/server/mcp/v20260728/McpOptions.html" title="class in org.apache.juneau.rest.server.mcp.v20260728">McpOptions</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/examples/mcp/ExampleMcpServer.html#line-114">createMcpOptions</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="../../rest/server/mcp/v20260728/McpOptions.html" title="class in org.apache.juneau.rest.server.mcp.v20260728">McpOptions</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/examples/mcp/ExampleMcpServer.html#line-119">createMcpOptions</a></span>()</div>
 <div class="block">Advertises capabilities and instructions. Explicit here so the <code>server/discover</code> handshake
  truthfully reports everything this server supports &mdash; notably <code>resources.subscribe</code>,
  which pairs with the <code>subscriptions/listen</code> demo.

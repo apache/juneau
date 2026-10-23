@@ -129,7 +129,7 @@ loadScripts(document, 'script');</script>
 <h2>Field Summary</h2>
 <div class="inherited-list">
 <h3 id="fields-inherited-from-class-org.apache.juneau.marshall.json.JsonTokenReader">Fields inherited from class&nbsp;org.apache.juneau.marshall.json.<a href="../json/JsonTokenReader.html" title="class in org.apache.juneau.marshall.json">JsonTokenReader</a></h3>
-<code><a href="../json/JsonTokenReader.html#currentBoolean">currentBoolean</a>, <a href="../json/JsonTokenReader.html#currentFieldName">currentFieldName</a>, <a href="../json/JsonTokenReader.html#currentNumberLexeme">currentNumberLexeme</a>, <a href="../json/JsonTokenReader.html#currentString">currentString</a>, <a href="../json/JsonTokenReader.html#currentToken">currentToken</a>, <a href="../json/JsonTokenReader.html#depth">depth</a>, <a href="../json/JsonTokenReader.html#MSG_invalidNumber">MSG_invalidNumber</a>, <a href="../json/JsonTokenReader.html#MSG_unexpectedChar">MSG_unexpectedChar</a>, <a href="../json/JsonTokenReader.html#r">r</a>, <a href="../json/JsonTokenReader.html#S00_expectValue">S00_expectValue</a>, <a href="../json/JsonTokenReader.html#S01_expectFieldName">S01_expectFieldName</a>, <a href="../json/JsonTokenReader.html#S02_expectColon">S02_expectColon</a>, <a href="../json/JsonTokenReader.html#S03_expectCommaOrEndObject">S03_expectCommaOrEndObject</a>, <a href="../json/JsonTokenReader.html#S04_expectCommaOrEndArray">S04_expectCommaOrEndArray</a>, <a href="../json/JsonTokenReader.html#S05_end">S05_end</a>, <a href="../json/JsonTokenReader.html#settings">settings</a>, <a href="../json/JsonTokenReader.html#state">state</a></code></div>
+<code><a href="../json/JsonTokenReader.html#currentBoolean">currentBoolean</a>, <a href="../json/JsonTokenReader.html#currentFieldName">currentFieldName</a>, <a href="../json/JsonTokenReader.html#currentNumberLexeme">currentNumberLexeme</a>, <a href="../json/JsonTokenReader.html#currentString">currentString</a>, <a href="../json/JsonTokenReader.html#currentToken">currentToken</a>, <a href="../json/JsonTokenReader.html#depth">depth</a>, <a href="../json/JsonTokenReader.html#r">r</a>, <a href="../json/JsonTokenReader.html#S00_expectValue">S00_expectValue</a>, <a href="../json/JsonTokenReader.html#S01_expectFieldName">S01_expectFieldName</a>, <a href="../json/JsonTokenReader.html#S02_expectColon">S02_expectColon</a>, <a href="../json/JsonTokenReader.html#S03_expectCommaOrEndObject">S03_expectCommaOrEndObject</a>, <a href="../json/JsonTokenReader.html#S04_expectCommaOrEndArray">S04_expectCommaOrEndArray</a>, <a href="../json/JsonTokenReader.html#S05_end">S05_end</a>, <a href="../json/JsonTokenReader.html#settings">settings</a>, <a href="../json/JsonTokenReader.html#state">state</a></code></div>
 <div class="inherited-list">
 <h3 id="fields-inherited-from-class-org.apache.juneau.marshall.stream.TokenReader">Fields inherited from interface&nbsp;org.apache.juneau.marshall.stream.<a href="../stream/TokenReader.html" title="interface in org.apache.juneau.marshall.stream">TokenReader</a></h3>
 <code><a href="../stream/TokenReader.html#MSG_READ_NON_VALUE_STATE">MSG_READ_NON_VALUE_STATE</a></code></div>
@@ -202,7 +202,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.marshall.parser.ParserPipe)">
 <h3>JsonlTokenReader</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/jsonl/JsonlTokenReader.html#line-63">JsonlTokenReader</a></span><wbr><span class="parameters">(<a href="../parser/ParserPipe.html" title="class in org.apache.juneau.marshall.parser">ParserPipe</a>&nbsp;pipe)</span>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/jsonl/JsonlTokenReader.html#line-60">JsonlTokenReader</a></span><wbr><span class="parameters">(<a href="../parser/ParserPipe.html" title="class in org.apache.juneau.marshall.parser">ParserPipe</a>&nbsp;pipe)</span>
                  throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">Constructor with default settings.</div>
 <dl class="notes">
@@ -216,7 +216,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.marshall.parser.ParserPipe,org.apache.juneau.marshall.json.JsonTokenReader.Settings,org.apache.juneau.marshall.jsonl.JsonlParserSession)">
 <h3>JsonlTokenReader</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/jsonl/JsonlTokenReader.html#line-77">JsonlTokenReader</a></span><wbr><span class="parameters">(<a href="../parser/ParserPipe.html" title="class in org.apache.juneau.marshall.parser">ParserPipe</a>&nbsp;pipe,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/jsonl/JsonlTokenReader.html#line-74">JsonlTokenReader</a></span><wbr><span class="parameters">(<a href="../parser/ParserPipe.html" title="class in org.apache.juneau.marshall.parser">ParserPipe</a>&nbsp;pipe,
  <a href="../json/JsonTokenReader.Settings.html" title="class in org.apache.juneau.marshall.json">JsonTokenReader.Settings</a>&nbsp;settings,
  <a href="JsonlParserSession.html" title="class in org.apache.juneau.marshall.jsonl">JsonlParserSession</a>&nbsp;session)</span>
                  throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
@@ -244,7 +244,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="afterValue()">
 <h3>afterValue</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/jsonl/JsonlTokenReader.html#line-81">afterValue</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/jsonl/JsonlTokenReader.html#line-78">afterValue</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../json/JsonTokenReader.html#afterValue()">JsonTokenReader</a></code></span></div>
 <div class="block">Sets the post-value state based on the enclosing container.
 

@@ -29,18 +29,18 @@
 <span class="source-line-no">016</span><span id="line-16"> */</span>
 <span class="source-line-no">017</span><span id="line-17">package org.apache.juneau.bean.rfc7807;</span>
 <span class="source-line-no">018</span><span id="line-18"></span>
-<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.Shorts.*;</span>
-<span class="source-line-no">020</span><span id="line-20"></span>
-<span class="source-line-no">021</span><span id="line-21">import java.util.*;</span>
-<span class="source-line-no">022</span><span id="line-22"></span>
-<span class="source-line-no">023</span><span id="line-23">/**</span>
-<span class="source-line-no">024</span><span id="line-24"> * Aggregator bean for registering multiple {@link ProblemMapper}s with a single bean-store entry.</span>
-<span class="source-line-no">025</span><span id="line-25"> *</span>
-<span class="source-line-no">026</span><span id="line-26"> * &lt;p&gt;</span>
-<span class="source-line-no">027</span><span id="line-27"> * The Juneau {@code @Bean} bean-store walk pairs each {@code @Bean} method with its declared return type</span>
-<span class="source-line-no">028</span><span id="line-28"> * (via the underlying {@code BeanStore.createBeanFromMethod(Class, ...)} lookup), which means multiple</span>
-<span class="source-line-no">029</span><span id="line-29"> * {@code @Bean public ProblemMapper foo()} factory methods on the same resource class collide on the</span>
-<span class="source-line-no">030</span><span id="line-30"> * {@code ProblemMapper.class} key. To register more than one mapper, declare a single</span>
+<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.CollectionUtils.*;</span>
+<span class="source-line-no">020</span><span id="line-20">import static org.apache.juneau.commons.utils.Shorts.*;</span>
+<span class="source-line-no">021</span><span id="line-21"></span>
+<span class="source-line-no">022</span><span id="line-22">import java.util.*;</span>
+<span class="source-line-no">023</span><span id="line-23"></span>
+<span class="source-line-no">024</span><span id="line-24">/**</span>
+<span class="source-line-no">025</span><span id="line-25"> * Aggregator bean for registering multiple {@link ProblemMapper}s with a single bean-store entry.</span>
+<span class="source-line-no">026</span><span id="line-26"> *</span>
+<span class="source-line-no">027</span><span id="line-27"> * &lt;p&gt;</span>
+<span class="source-line-no">028</span><span id="line-28"> * The problem-details processor resolves only the &lt;em&gt;unnamed&lt;/em&gt; {@link ProblemMapper} from the bean store, so a</span>
+<span class="source-line-no">029</span><span id="line-29"> * second {@code @Bean public ProblemMapper foo()} factory method (even a differently named one) would register a</span>
+<span class="source-line-no">030</span><span id="line-30"> * distinct bean that the processor never consults. To register more than one mapper, declare a single</span>
 <span class="source-line-no">031</span><span id="line-31"> * {@code @Bean public ProblemMapperList mappers()} factory and let the list carry the dispatch order:</span>
 <span class="source-line-no">032</span><span id="line-32"> *</span>
 <span class="source-line-no">033</span><span id="line-33"> * &lt;p class='bjava'&gt;</span>
@@ -84,57 +84,51 @@
 <span class="source-line-no">071</span><span id="line-71">    */</span>
 <span class="source-line-no">072</span><span id="line-72">   public static ProblemMapperList of(ProblemMapper&lt;?&gt;... mappers) {</span>
 <span class="source-line-no">073</span><span id="line-73">      var l = new ProblemMapperList();</span>
-<span class="source-line-no">074</span><span id="line-74">      if (mappers != null)</span>
-<span class="source-line-no">075</span><span id="line-75">         for (var m : mappers)</span>
-<span class="source-line-no">076</span><span id="line-76">            if (m != null)</span>
-<span class="source-line-no">077</span><span id="line-77">               l.mappers.add(m);</span>
-<span class="source-line-no">078</span><span id="line-78">      return l;</span>
-<span class="source-line-no">079</span><span id="line-79">   }</span>
-<span class="source-line-no">080</span><span id="line-80"></span>
-<span class="source-line-no">081</span><span id="line-81">   /**</span>
-<span class="source-line-no">082</span><span id="line-82">    * Appends a mapper to the end of the list.</span>
-<span class="source-line-no">083</span><span id="line-83">    *</span>
-<span class="source-line-no">084</span><span id="line-84">    * @param mapper The mapper to add. Can be &lt;jk&gt;null&lt;/jk&gt; (no-op).</span>
-<span class="source-line-no">085</span><span id="line-85">    * @return This object for fluent chaining.</span>
-<span class="source-line-no">086</span><span id="line-86">    */</span>
-<span class="source-line-no">087</span><span id="line-87">   public ProblemMapperList append(ProblemMapper&lt;?&gt; mapper) {</span>
-<span class="source-line-no">088</span><span id="line-88">      if (mapper != null)</span>
-<span class="source-line-no">089</span><span id="line-89">         mappers.add(mapper);</span>
-<span class="source-line-no">090</span><span id="line-90">      return this;</span>
-<span class="source-line-no">091</span><span id="line-91">   }</span>
-<span class="source-line-no">092</span><span id="line-92"></span>
-<span class="source-line-no">093</span><span id="line-93">   /**</span>
-<span class="source-line-no">094</span><span id="line-94">    * Appends a collection of mappers to the end of the list, in iteration order.</span>
-<span class="source-line-no">095</span><span id="line-95">    *</span>
-<span class="source-line-no">096</span><span id="line-96">    * @param values The mappers to add. Can be &lt;jk&gt;null&lt;/jk&gt;, and &lt;jk&gt;null&lt;/jk&gt; entries are skipped.</span>
-<span class="source-line-no">097</span><span id="line-97">    * @return This object for fluent chaining.</span>
-<span class="source-line-no">098</span><span id="line-98">    */</span>
-<span class="source-line-no">099</span><span id="line-99">   public ProblemMapperList append(Collection&lt;? extends ProblemMapper&lt;?&gt;&gt; values) {</span>
-<span class="source-line-no">100</span><span id="line-100">      if (values != null)</span>
-<span class="source-line-no">101</span><span id="line-101">         for (var m : values)</span>
-<span class="source-line-no">102</span><span id="line-102">            if (m != null)</span>
-<span class="source-line-no">103</span><span id="line-103">               mappers.add(m);</span>
-<span class="source-line-no">104</span><span id="line-104">      return this;</span>
-<span class="source-line-no">105</span><span id="line-105">   }</span>
-<span class="source-line-no">106</span><span id="line-106"></span>
-<span class="source-line-no">107</span><span id="line-107">   /**</span>
-<span class="source-line-no">108</span><span id="line-108">    * Returns the registered mappers in their declared order.</span>
-<span class="source-line-no">109</span><span id="line-109">    *</span>
-<span class="source-line-no">110</span><span id="line-110">    * @return An unmodifiable view of the underlying list. Never {@code null}.</span>
-<span class="source-line-no">111</span><span id="line-111">    */</span>
-<span class="source-line-no">112</span><span id="line-112">   public List&lt;ProblemMapper&lt;?&gt;&gt; asList() {</span>
-<span class="source-line-no">113</span><span id="line-113">      return u(mappers);</span>
-<span class="source-line-no">114</span><span id="line-114">   }</span>
-<span class="source-line-no">115</span><span id="line-115"></span>
-<span class="source-line-no">116</span><span id="line-116">   /**</span>
-<span class="source-line-no">117</span><span id="line-117">    * Returns {@code true} when this list contains no mappers.</span>
-<span class="source-line-no">118</span><span id="line-118">    *</span>
-<span class="source-line-no">119</span><span id="line-119">    * @return {@code true} when {@link #asList()} is empty.</span>
-<span class="source-line-no">120</span><span id="line-120">    */</span>
-<span class="source-line-no">121</span><span id="line-121">   public boolean isEmpty() {</span>
-<span class="source-line-no">122</span><span id="line-122">      return mappers.isEmpty();</span>
-<span class="source-line-no">123</span><span id="line-123">   }</span>
-<span class="source-line-no">124</span><span id="line-124">}</span>
+<span class="source-line-no">074</span><span id="line-74">      addAllNn(l.mappers, mappers);</span>
+<span class="source-line-no">075</span><span id="line-75">      return l;</span>
+<span class="source-line-no">076</span><span id="line-76">   }</span>
+<span class="source-line-no">077</span><span id="line-77"></span>
+<span class="source-line-no">078</span><span id="line-78">   /**</span>
+<span class="source-line-no">079</span><span id="line-79">    * Appends a mapper to the end of the list.</span>
+<span class="source-line-no">080</span><span id="line-80">    *</span>
+<span class="source-line-no">081</span><span id="line-81">    * @param mapper The mapper to add. Can be &lt;jk&gt;null&lt;/jk&gt; (no-op).</span>
+<span class="source-line-no">082</span><span id="line-82">    * @return This object for fluent chaining.</span>
+<span class="source-line-no">083</span><span id="line-83">    */</span>
+<span class="source-line-no">084</span><span id="line-84">   public ProblemMapperList append(ProblemMapper&lt;?&gt; mapper) {</span>
+<span class="source-line-no">085</span><span id="line-85">      if (mapper != null)</span>
+<span class="source-line-no">086</span><span id="line-86">         mappers.add(mapper);</span>
+<span class="source-line-no">087</span><span id="line-87">      return this;</span>
+<span class="source-line-no">088</span><span id="line-88">   }</span>
+<span class="source-line-no">089</span><span id="line-89"></span>
+<span class="source-line-no">090</span><span id="line-90">   /**</span>
+<span class="source-line-no">091</span><span id="line-91">    * Appends a collection of mappers to the end of the list, in iteration order.</span>
+<span class="source-line-no">092</span><span id="line-92">    *</span>
+<span class="source-line-no">093</span><span id="line-93">    * @param values The mappers to add. Can be &lt;jk&gt;null&lt;/jk&gt;, and &lt;jk&gt;null&lt;/jk&gt; entries are skipped.</span>
+<span class="source-line-no">094</span><span id="line-94">    * @return This object for fluent chaining.</span>
+<span class="source-line-no">095</span><span id="line-95">    */</span>
+<span class="source-line-no">096</span><span id="line-96">   public ProblemMapperList append(Collection&lt;? extends ProblemMapper&lt;?&gt;&gt; values) {</span>
+<span class="source-line-no">097</span><span id="line-97">      addAllNn(mappers, values);</span>
+<span class="source-line-no">098</span><span id="line-98">      return this;</span>
+<span class="source-line-no">099</span><span id="line-99">   }</span>
+<span class="source-line-no">100</span><span id="line-100"></span>
+<span class="source-line-no">101</span><span id="line-101">   /**</span>
+<span class="source-line-no">102</span><span id="line-102">    * Returns the registered mappers in their declared order.</span>
+<span class="source-line-no">103</span><span id="line-103">    *</span>
+<span class="source-line-no">104</span><span id="line-104">    * @return An unmodifiable view of the underlying list. Never {@code null}.</span>
+<span class="source-line-no">105</span><span id="line-105">    */</span>
+<span class="source-line-no">106</span><span id="line-106">   public List&lt;ProblemMapper&lt;?&gt;&gt; asList() {</span>
+<span class="source-line-no">107</span><span id="line-107">      return u(mappers);</span>
+<span class="source-line-no">108</span><span id="line-108">   }</span>
+<span class="source-line-no">109</span><span id="line-109"></span>
+<span class="source-line-no">110</span><span id="line-110">   /**</span>
+<span class="source-line-no">111</span><span id="line-111">    * Returns {@code true} when this list contains no mappers.</span>
+<span class="source-line-no">112</span><span id="line-112">    *</span>
+<span class="source-line-no">113</span><span id="line-113">    * @return {@code true} when {@link #asList()} is empty.</span>
+<span class="source-line-no">114</span><span id="line-114">    */</span>
+<span class="source-line-no">115</span><span id="line-115">   public boolean isEmpty() {</span>
+<span class="source-line-no">116</span><span id="line-116">      return mappers.isEmpty();</span>
+<span class="source-line-no">117</span><span id="line-117">   }</span>
+<span class="source-line-no">118</span><span id="line-118">}</span>
 
 
 

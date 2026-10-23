@@ -51,8 +51,8 @@
 <span class="source-line-no">038</span><span id="line-38"> * &lt;/ul&gt;</span>
 <span class="source-line-no">039</span><span id="line-39"> */</span>
 <span class="source-line-no">040</span><span id="line-40">@SuppressWarnings({</span>
-<span class="source-line-no">041</span><span id="line-41">   "resource", // Resource management handled externally</span>
-<span class="source-line-no">042</span><span id="line-42">   "java:S4144", // Identical methods intentional for different test scenarios</span>
+<span class="source-line-no">041</span><span id="line-41">   "java:S4144", // Identical methods intentional for different test scenarios</span>
+<span class="source-line-no">042</span><span id="line-42">   "resource" // Resource management handled externally</span>
 <span class="source-line-no">043</span><span id="line-43">})</span>
 <span class="source-line-no">044</span><span id="line-44">public class UonWriter extends SerializerWriter&lt;UonWriter&gt; {</span>
 <span class="source-line-no">045</span><span id="line-45"></span>
@@ -110,7 +110,7 @@
 <span class="source-line-no">097</span><span id="line-97">    */</span>
 <span class="source-line-no">098</span><span id="line-98">   @SuppressWarnings({</span>
 <span class="source-line-no">099</span><span id="line-99">      "java:S127", // Loop counter advances for surrogate pairs</span>
-<span class="source-line-no">100</span><span id="line-100">      "java:S3776", // Cognitive complexity acceptable for this specific logic</span>
+<span class="source-line-no">100</span><span id="line-100">      "java:S3776" // Cognitive complexity acceptable for this specific logic</span>
 <span class="source-line-no">101</span><span id="line-101">   })</span>
 <span class="source-line-no">102</span><span id="line-102">   public UonWriter appendObject(Object o, boolean isTopAttrName) {</span>
 <span class="source-line-no">103</span><span id="line-103"></span>

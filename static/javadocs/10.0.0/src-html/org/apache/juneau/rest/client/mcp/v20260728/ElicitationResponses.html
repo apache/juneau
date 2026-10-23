@@ -29,13 +29,13 @@
 <span class="source-line-no">016</span><span id="line-16"> */</span>
 <span class="source-line-no">017</span><span id="line-17">package org.apache.juneau.rest.client.mcp.v20260728;</span>
 <span class="source-line-no">018</span><span id="line-18"></span>
-<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.AssertionUtils.*;</span>
-<span class="source-line-no">020</span><span id="line-20"></span>
-<span class="source-line-no">021</span><span id="line-21">import java.util.*;</span>
-<span class="source-line-no">022</span><span id="line-22"></span>
-<span class="source-line-no">023</span><span id="line-23">import org.apache.juneau.bean.mcp.v20260728.*;</span>
-<span class="source-line-no">024</span><span id="line-24">import org.apache.juneau.marshall.collections.*;</span>
-<span class="source-line-no">025</span><span id="line-25">import org.apache.juneau.marshall.marshaller.*;</span>
+<span class="source-line-no">019</span><span id="line-19"></span>
+<span class="source-line-no">020</span><span id="line-20">import java.util.*;</span>
+<span class="source-line-no">021</span><span id="line-21"></span>
+<span class="source-line-no">022</span><span id="line-22">import org.apache.juneau.bean.mcp.v20260728.*;</span>
+<span class="source-line-no">023</span><span id="line-23">import org.apache.juneau.marshall.collections.*;</span>
+<span class="source-line-no">024</span><span id="line-24">import org.apache.juneau.marshall.marshaller.*;</span>
+<span class="source-line-no">025</span><span id="line-25">import static org.apache.juneau.commons.utils.Shorts.*;</span>
 <span class="source-line-no">026</span><span id="line-26"></span>
 <span class="source-line-no">027</span><span id="line-27">/**</span>
 <span class="source-line-no">028</span><span id="line-28"> * Static helper for encoding the client's answers to server&amp;rarr;client MCP {@code 2026-07-28} SEP-2322</span>
@@ -64,8 +64,8 @@
 <span class="source-line-no">051</span><span id="line-51">    * @throws IllegalArgumentException If {@code id} or {@code result} is &lt;jk&gt;null&lt;/jk&gt;.</span>
 <span class="source-line-no">052</span><span id="line-52">    */</span>
 <span class="source-line-no">053</span><span id="line-53">   public static Map&lt;String,Object&gt; toInputResponse(String id, ElicitResult result) {</span>
-<span class="source-line-no">054</span><span id="line-54">      assertArgNotNull("id", id);</span>
-<span class="source-line-no">055</span><span id="line-55">      assertArgNotNull("result", result);</span>
+<span class="source-line-no">054</span><span id="line-54">      reqnn("id", id);</span>
+<span class="source-line-no">055</span><span id="line-55">      reqnn("result", result);</span>
 <span class="source-line-no">056</span><span id="line-56">      return toInputResponses(Map.of(id, result));</span>
 <span class="source-line-no">057</span><span id="line-57">   }</span>
 <span class="source-line-no">058</span><span id="line-58"></span>
@@ -86,10 +86,10 @@
 <span class="source-line-no">073</span><span id="line-73">    * @throws IllegalArgumentException If {@code results} is &lt;jk&gt;null&lt;/jk&gt;, or any value in it is &lt;jk&gt;null&lt;/jk&gt;.</span>
 <span class="source-line-no">074</span><span id="line-74">    */</span>
 <span class="source-line-no">075</span><span id="line-75">   public static Map&lt;String,Object&gt; toInputResponses(Map&lt;String,ElicitResult&gt; results) {</span>
-<span class="source-line-no">076</span><span id="line-76">      assertArgNotNull("results", results);</span>
+<span class="source-line-no">076</span><span id="line-76">      reqnn("results", results);</span>
 <span class="source-line-no">077</span><span id="line-77">      Map&lt;String,Object&gt; out = new LinkedHashMap&lt;&gt;();</span>
 <span class="source-line-no">078</span><span id="line-78">      results.forEach((id, result) -&gt; {</span>
-<span class="source-line-no">079</span><span id="line-79">         assertArgNotNull("results[" + id + "]", result);</span>
+<span class="source-line-no">079</span><span id="line-79">         reqnn("results[" + id + "]", result);</span>
 <span class="source-line-no">080</span><span id="line-80">         // Pre-marshalled to JsonMap here (rather than left as the typed ElicitResult for McpClient.call's</span>
 <span class="source-line-no">081</span><span id="line-81">         // own toWireParams flattening) so that (a) a null-check on the encoded shape is meaningful even</span>
 <span class="source-line-no">082</span><span id="line-82">         // when this helper is used standalone, outside McpClient.call's flow, and (b) the returned map is</span>

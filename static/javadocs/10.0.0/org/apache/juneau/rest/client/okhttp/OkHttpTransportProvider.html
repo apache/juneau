@@ -82,7 +82,7 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="../HttpTransportProvider.html" title="interface in org.apache.juneau.rest.client">HttpTransportProvider</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public final class </span><span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/client/okhttp/OkHttpTransportProvider.html#line-40">OkHttpTransportProvider</a></span>
+<div class="type-signature"><span class="modifiers">public final class </span><span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/client/okhttp/OkHttpTransportProvider.html#line-39">OkHttpTransportProvider</a></span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>
 implements <a href="../HttpTransportProvider.html" title="interface in org.apache.juneau.rest.client">HttpTransportProvider</a></span></div>
 <div class="block"><a href="../HttpTransportProvider.html" title="interface in org.apache.juneau.rest.client"><code>HttpTransportProvider</code></a> implementation that supplies an <a href="OkHttpTransport.html" title="class in org.apache.juneau.rest.client.okhttp"><code>OkHttpTransport</code></a>.
@@ -92,8 +92,7 @@ implements <a href="../HttpTransportProvider.html" title="interface in org.apach
  <code>RestClient</code> can auto-discover OkHttp 5.x when this module is on the classpath.
 
  <p>
- <b>Beta — API subject to change:</b> This type is part of the next-generation REST client and HTTP stack
- (<code>org.apache.juneau.marshall.ng.*</code>).
+ <b>Beta — API subject to change:</b> This type is part of the next-generation REST client and HTTP stack.
  It is not API-frozen: binary- and source-incompatible changes may appear in the <b>next major</b> Juneau release
  (and possibly earlier).
 
@@ -166,7 +165,7 @@ implements <a href="../HttpTransportProvider.html" title="interface in org.apach
 <li>
 <section class="detail" id="&lt;init&gt;()">
 <h3>OkHttpTransportProvider</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/client/okhttp/OkHttpTransportProvider.html#line-43">OkHttpTransportProvider</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/client/okhttp/OkHttpTransportProvider.html#line-42">OkHttpTransportProvider</a></span>()</div>
 </section>
 </li>
 </ul>
@@ -180,7 +179,7 @@ implements <a href="../HttpTransportProvider.html" title="interface in org.apach
 <li>
 <section class="detail" id="getPriority()">
 <h3>getPriority</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/client/okhttp/OkHttpTransportProvider.html#line-45">getPriority</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/client/okhttp/OkHttpTransportProvider.html#line-44">getPriority</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="../HttpTransportProvider.html#getPriority()">HttpTransportProvider</a></code></span></div>
 <div class="block">Returns the priority of this provider.
 
@@ -199,7 +198,7 @@ implements <a href="../HttpTransportProvider.html" title="interface in org.apach
 <li>
 <section class="detail" id="isAvailable()">
 <h3>isAvailable</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/client/okhttp/OkHttpTransportProvider.html#line-50">isAvailable</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/client/okhttp/OkHttpTransportProvider.html#line-49">isAvailable</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="../HttpTransportProvider.html#isAvailable()">HttpTransportProvider</a></code></span></div>
 <div class="block">Returns <code>true</code> if the required runtime dependencies of this transport are present on the classpath.
 
@@ -217,7 +216,7 @@ implements <a href="../HttpTransportProvider.html" title="interface in org.apach
 <li>
 <section class="detail" id="create()">
 <h3>create</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../HttpTransport.html" title="interface in org.apache.juneau.rest.client">HttpTransport</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/client/okhttp/OkHttpTransportProvider.html#line-60">create</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../HttpTransport.html" title="interface in org.apache.juneau.rest.client">HttpTransport</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/client/okhttp/OkHttpTransportProvider.html#line-59">create</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="../HttpTransportProvider.html#create()">HttpTransportProvider</a></code></span></div>
 <div class="block">Creates and returns a new <a href="../HttpTransport.html" title="interface in org.apache.juneau.rest.client"><code>HttpTransport</code></a> instance using default configuration.</div>
 <dl class="notes">

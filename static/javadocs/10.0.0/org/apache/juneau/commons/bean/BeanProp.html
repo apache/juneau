@@ -138,29 +138,34 @@ loadScripts(document, 'script');</script>
 <div class="block">For bean properties of maps and collections, this annotation can be used to identify the class types of the
  contents of the bean property object when the generic parameter types are interfaces or abstract classes.</div>
 </div>
-<div class="col-first odd-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second odd-row-color"><code><a href="#ro()" class="member-name-link">ro</a></code></div>
+<div class="col-first odd-row-color"><code>boolean</code></div>
+<div class="col-second odd-row-color"><code><a href="#required()" class="member-name-link">required</a></code></div>
 <div class="col-last odd-row-color">
+<div class="block">Marks this property as required on input.</div>
+</div>
+<div class="col-first even-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second even-row-color"><code><a href="#ro()" class="member-name-link">ro</a></code></div>
+<div class="col-last even-row-color">
 <div class="block">Identifies a property as read-only.</div>
 </div>
-<div class="col-first even-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second even-row-color"><code><a href="#summary()" class="member-name-link">summary</a></code></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second odd-row-color"><code><a href="#summary()" class="member-name-link">summary</a></code></div>
+<div class="col-last odd-row-color">
 <div class="block">Short, concise summary of the exposed API.</div>
 </div>
-<div class="col-first odd-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;</code></div>
-<div class="col-second odd-row-color"><code><a href="#type()" class="member-name-link">type</a></code></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;</code></div>
+<div class="col-second even-row-color"><code><a href="#type()" class="member-name-link">type</a></code></div>
+<div class="col-last even-row-color">
 <div class="block">Identifies a specialized class type for the property.</div>
 </div>
-<div class="col-first even-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second even-row-color"><code><a href="#value()" class="member-name-link">value</a></code></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second odd-row-color"><code><a href="#value()" class="member-name-link">value</a></code></div>
+<div class="col-last odd-row-color">
 <div class="block">A synonym for <a href="#name()"><code>name()</code></a>.</div>
 </div>
-<div class="col-first odd-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second odd-row-color"><code><a href="#wo()" class="member-name-link">wo</a></code></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second even-row-color"><code><a href="#wo()" class="member-name-link">wo</a></code></div>
+<div class="col-last even-row-color">
 <div class="block">Identifies a property as write-only.</div>
 </div>
 </div>
@@ -391,9 +396,66 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
+<section class="detail" id="required()">
+<h3>required</h3>
+<div class="member-signature"><span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanProp.html#line-278">required</a></span></div>
+<div class="block">Marks this property as required on input.
+
+ <p>
+ When <jk>true</jk>, parsers (and <code>Map</code>-to-bean conversion) throw a
+ <code>org.apache.juneau.marshall.parser.MissingRequiredPropertyException</code> if the input does not contain this
+ property.  The check runs once per bean, before the bean is constructed, so records and constructor-argument
+ beans get a clear error instead of a constructor failure.
+
+ <p>
+ "Present" means the key appears in the input.  An explicit <jk>null</jk> value counts as present; use your own
+ validation (or a compact record constructor) to reject null values.
+
+ <p>
+ The flag is OR-merged across the field, getter and setter: annotating any one of them makes the property required.
+ Wrapping an existing object (for example <code>MarshallingSession.toBeanMap(Object)</code>) never checks.
+
+ <p>
+ This attribute is independent of <code>@Schema(required)</code>, which only affects generated schema documentation and
+ HTTP part validation.
+
+ <h5 class='section'>Example:</h5>
+ <p class='bjava'>
+   <jk>public record</jk> Person(<ja>@BeanProp</ja>(required=<jk>true</jk>) String <jv>name</jv>, Integer <jv>age</jv>) {}
+
+   <jc>// Throws MissingRequiredPropertyException:
+   //   Missing required properties on bean class 'Person': [name]</jc>
+   JsonParser.<jsf>DEFAULT</jsf>.read(<js>"{\"age\":30}"</js>, Person.<jk>class</jk>);
+
+   <jc>// OK: explicit null counts as present.</jc>
+   JsonParser.<jsf>DEFAULT</jsf>.read(<js>"{\"name\":null}"</js>, Person.<jk>class</jk>);
+ </p>
+
+ <h5 class='section'>Notes:</h5><ul>
+   <li class='note'>
+      A required property must be writable (a field, setter or constructor argument).  Marking a read-only
+      property required fails when the bean metadata is built.
+   <li class='note'>
+      For builder-based beans, put the annotation on the builder's setter.
+   <li class='note'>
+      On a non-record bean, put the annotation on the field or getter; it is not read from constructor parameters.
+   <li class='note'>
+      In REST methods, a missing required property in an <code>@Content</code> body produces <c>400 Bad Request</c>.
+ </ul></div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd><jk>true</jk> if this property must be present in the input.</dd>
+</dl>
+<dl class="notes">
+<dt>Default:</dt>
+<dd>false</dd>
+</dl>
+</section>
+</li>
+<li>
 <section class="detail" id="ro()">
 <h3>ro</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanProp.html#line-255">ro</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanProp.html#line-304">ro</a></span></div>
 <div class="block">Identifies a property as read-only.
 
  <p>
@@ -427,7 +489,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="type()">
 <h3>type</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanProp.html#line-281">type</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanProp.html#line-330">type</a></span></div>
 <div class="block">Identifies a specialized class type for the property.
 
  <p>
@@ -461,7 +523,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="value()">
 <h3>value</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanProp.html#line-297">value</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanProp.html#line-346">value</a></span></div>
 <div class="block">A synonym for <a href="#name()"><code>name()</code></a>.
 
  <p>
@@ -485,7 +547,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="wo()">
 <h3>wo</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanProp.html#line-315">wo</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/bean/BeanProp.html#line-364">wo</a></span></div>
 <div class="block">Identifies a property as write-only.
 
  <p>

@@ -37,34 +37,34 @@
 <span class="source-line-no">024</span><span id="line-24"> * HTTP utilities.</span>
 <span class="source-line-no">025</span><span id="line-25"> *</span>
 <span class="source-line-no">026</span><span id="line-26"> */</span>
-<span class="source-line-no">027</span><span id="line-27">public class HttpUtils {</span>
-<span class="source-line-no">028</span><span id="line-28"></span>
-<span class="source-line-no">029</span><span id="line-29">   /**</span>
-<span class="source-line-no">030</span><span id="line-30">    * Prevents instantiation.</span>
-<span class="source-line-no">031</span><span id="line-31">    */</span>
-<span class="source-line-no">032</span><span id="line-32">   private HttpUtils() {}</span>
-<span class="source-line-no">033</span><span id="line-33"></span>
-<span class="source-line-no">034</span><span id="line-34">   private static final String[] LC_METHODS = { "get", "put", "post", "delete", "options", "head", "connect", "trace", "patch" };</span>
-<span class="source-line-no">035</span><span id="line-35">   private static final String[] UC_METHODS = { "GET", "PUT", "POST", "DELETE", "OPTIONS", "HEAD", "CONNECT", "TRACE", "PATCH" };</span>
+<span class="source-line-no">027</span><span id="line-27">@SuppressWarnings({</span>
+<span class="source-line-no">028</span><span id="line-28">   "java:S3776" // detectHttpMethod and detectHttpPath branch over the do/get/put/... name-prefix conventions</span>
+<span class="source-line-no">029</span><span id="line-29">})</span>
+<span class="source-line-no">030</span><span id="line-30">public class HttpUtils {</span>
+<span class="source-line-no">031</span><span id="line-31"></span>
+<span class="source-line-no">032</span><span id="line-32">   /**</span>
+<span class="source-line-no">033</span><span id="line-33">    * Prevents instantiation.</span>
+<span class="source-line-no">034</span><span id="line-34">    */</span>
+<span class="source-line-no">035</span><span id="line-35">   private HttpUtils() {}</span>
 <span class="source-line-no">036</span><span id="line-36"></span>
-<span class="source-line-no">037</span><span id="line-37">   /**</span>
-<span class="source-line-no">038</span><span id="line-38">    * Given a method name, infers the REST method name.</span>
-<span class="source-line-no">039</span><span id="line-39">    *</span>
-<span class="source-line-no">040</span><span id="line-40">    * @param m The Java method. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">041</span><span id="line-41">    * @param detectMethod Whether we should auto-detect the HTTP method name from the Java method name.</span>
-<span class="source-line-no">042</span><span id="line-42">    * @param def The default HTTP method if not detected. Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">043</span><span id="line-43">    * @return The REST method name, or &lt;c&gt;def&lt;/c&gt; (which can be &lt;jk&gt;null&lt;/jk&gt;) if not detected.</span>
-<span class="source-line-no">044</span><span id="line-44">    */</span>
-<span class="source-line-no">045</span><span id="line-45">   @SuppressWarnings({</span>
-<span class="source-line-no">046</span><span id="line-46">      "java:S3776" // Cognitive complexity acceptable for HTTP method detection</span>
-<span class="source-line-no">047</span><span id="line-47">   })</span>
+<span class="source-line-no">037</span><span id="line-37">   private static final String[] LC_METHODS = { "get", "put", "post", "delete", "options", "head", "connect", "trace", "patch" };</span>
+<span class="source-line-no">038</span><span id="line-38">   private static final String[] UC_METHODS = { "GET", "PUT", "POST", "DELETE", "OPTIONS", "HEAD", "CONNECT", "TRACE", "PATCH" };</span>
+<span class="source-line-no">039</span><span id="line-39"></span>
+<span class="source-line-no">040</span><span id="line-40">   /**</span>
+<span class="source-line-no">041</span><span id="line-41">    * Given a method name, infers the REST method name.</span>
+<span class="source-line-no">042</span><span id="line-42">    *</span>
+<span class="source-line-no">043</span><span id="line-43">    * @param m The Java method. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">044</span><span id="line-44">    * @param detectMethod Whether we should auto-detect the HTTP method name from the Java method name.</span>
+<span class="source-line-no">045</span><span id="line-45">    * @param def The default HTTP method if not detected. Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">046</span><span id="line-46">    * @return The REST method name, or &lt;c&gt;def&lt;/c&gt; (which can be &lt;jk&gt;null&lt;/jk&gt;) if not detected.</span>
+<span class="source-line-no">047</span><span id="line-47">    */</span>
 <span class="source-line-no">048</span><span id="line-48">   public static String detectHttpMethod(Method m, boolean detectMethod, String def) {</span>
 <span class="source-line-no">049</span><span id="line-49">      String n = m.getName();</span>
 <span class="source-line-no">050</span><span id="line-50">      if (detectMethod) {</span>
 <span class="source-line-no">051</span><span id="line-51">         if (n.startsWith("do") &amp;&amp; n.length() &gt; 2) {</span>
 <span class="source-line-no">052</span><span id="line-52">            String n2 = ucr(n.substring(2));</span>
 <span class="source-line-no">053</span><span id="line-53">            for (var t : UC_METHODS)</span>
-<span class="source-line-no">054</span><span id="line-54">               if (n2.equals(t))</span>
+<span class="source-line-no">054</span><span id="line-54">               if (eq(n2, t))</span>
 <span class="source-line-no">055</span><span id="line-55">                  return n2;</span>
 <span class="source-line-no">056</span><span id="line-56">         }</span>
 <span class="source-line-no">057</span><span id="line-57">         for (var t : LC_METHODS)</span>
@@ -81,33 +81,30 @@
 <span class="source-line-no">068</span><span id="line-68">    * @param method The HTTP method name if it's known. Can be &lt;jk&gt;null&lt;/jk&gt;, in which case the path is inferred from Java method naming conventions.</span>
 <span class="source-line-no">069</span><span id="line-69">    * @return The REST path. Never &lt;jk&gt;null&lt;/jk&gt; (falls back to &lt;c&gt;'/' + methodName&lt;/c&gt; when no convention matches).</span>
 <span class="source-line-no">070</span><span id="line-70">    */</span>
-<span class="source-line-no">071</span><span id="line-71">   @SuppressWarnings({</span>
-<span class="source-line-no">072</span><span id="line-72">      "java:S3776" // Cognitive complexity acceptable for HTTP path detection</span>
-<span class="source-line-no">073</span><span id="line-73">   })</span>
-<span class="source-line-no">074</span><span id="line-74">   public static String detectHttpPath(Method m, String method) {</span>
-<span class="source-line-no">075</span><span id="line-75">      String n = m.getName();</span>
-<span class="source-line-no">076</span><span id="line-76">      if (method == null) {</span>
-<span class="source-line-no">077</span><span id="line-77">         if (n.startsWith("do") &amp;&amp; n.length() &gt; 2) {</span>
-<span class="source-line-no">078</span><span id="line-78">            String n2 = ucr(n.substring(2));</span>
-<span class="source-line-no">079</span><span id="line-79">            for (var t : UC_METHODS)</span>
-<span class="source-line-no">080</span><span id="line-80">               if (n2.equals(t))</span>
-<span class="source-line-no">081</span><span id="line-81">                  return "/";</span>
-<span class="source-line-no">082</span><span id="line-82">         }</span>
-<span class="source-line-no">083</span><span id="line-83">         for (var t : LC_METHODS) {</span>
-<span class="source-line-no">084</span><span id="line-84">            if (n.startsWith(t) &amp;&amp; (n.length() == t.length() || Character.isUpperCase(n.charAt(t.length())))) {</span>
-<span class="source-line-no">085</span><span id="line-85">               return '/' + java.beans.Introspector.decapitalize(n.substring(t.length()));</span>
-<span class="source-line-no">086</span><span id="line-86">            }</span>
-<span class="source-line-no">087</span><span id="line-87">         }</span>
-<span class="source-line-no">088</span><span id="line-88">      } else {</span>
-<span class="source-line-no">089</span><span id="line-89">         if (n.equalsIgnoreCase(method) || n.equals("do") || n.equals("_"))</span>
-<span class="source-line-no">090</span><span id="line-90">            return "/";</span>
-<span class="source-line-no">091</span><span id="line-91">         if (n.startsWith(method) &amp;&amp; (n.length() == method.length() || Character.isUpperCase(n.charAt(method.length())))) {</span>
-<span class="source-line-no">092</span><span id="line-92">            return '/' + java.beans.Introspector.decapitalize(n.substring(method.length()));</span>
-<span class="source-line-no">093</span><span id="line-93">         }</span>
-<span class="source-line-no">094</span><span id="line-94">      }</span>
-<span class="source-line-no">095</span><span id="line-95">      return '/' + n;</span>
-<span class="source-line-no">096</span><span id="line-96">   }</span>
-<span class="source-line-no">097</span><span id="line-97">}</span>
+<span class="source-line-no">071</span><span id="line-71">   public static String detectHttpPath(Method m, String method) {</span>
+<span class="source-line-no">072</span><span id="line-72">      String n = m.getName();</span>
+<span class="source-line-no">073</span><span id="line-73">      if (method == null) {</span>
+<span class="source-line-no">074</span><span id="line-74">         if (n.startsWith("do") &amp;&amp; n.length() &gt; 2) {</span>
+<span class="source-line-no">075</span><span id="line-75">            String n2 = ucr(n.substring(2));</span>
+<span class="source-line-no">076</span><span id="line-76">            for (var t : UC_METHODS)</span>
+<span class="source-line-no">077</span><span id="line-77">               if (eq(n2, t))</span>
+<span class="source-line-no">078</span><span id="line-78">                  return "/";</span>
+<span class="source-line-no">079</span><span id="line-79">         }</span>
+<span class="source-line-no">080</span><span id="line-80">         for (var t : LC_METHODS) {</span>
+<span class="source-line-no">081</span><span id="line-81">            if (n.startsWith(t) &amp;&amp; (n.length() == t.length() || Character.isUpperCase(n.charAt(t.length())))) {</span>
+<span class="source-line-no">082</span><span id="line-82">               return '/' + java.beans.Introspector.decapitalize(n.substring(t.length()));</span>
+<span class="source-line-no">083</span><span id="line-83">            }</span>
+<span class="source-line-no">084</span><span id="line-84">         }</span>
+<span class="source-line-no">085</span><span id="line-85">      } else {</span>
+<span class="source-line-no">086</span><span id="line-86">         if (eqic(n, method) || eqa(n, "do", "_"))</span>
+<span class="source-line-no">087</span><span id="line-87">            return "/";</span>
+<span class="source-line-no">088</span><span id="line-88">         if (n.startsWith(method) &amp;&amp; (n.length() == method.length() || Character.isUpperCase(n.charAt(method.length())))) {</span>
+<span class="source-line-no">089</span><span id="line-89">            return '/' + java.beans.Introspector.decapitalize(n.substring(method.length()));</span>
+<span class="source-line-no">090</span><span id="line-90">         }</span>
+<span class="source-line-no">091</span><span id="line-91">      }</span>
+<span class="source-line-no">092</span><span id="line-92">      return '/' + n;</span>
+<span class="source-line-no">093</span><span id="line-93">   }</span>
+<span class="source-line-no">094</span><span id="line-94">}</span>
 
 
 

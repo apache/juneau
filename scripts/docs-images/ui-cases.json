@@ -1,0 +1,395 @@
+{
+	"defaults": {
+		"viewport": [1280, 900],
+		"deviceScaleFactor": 2,
+		"waitUntil": "load"
+	},
+	"cases": [
+		{
+			"id": "store-hero",
+			"image": "topics/JuneauPetstore.Tour.1.png",
+			"description": "The store page as the console opens, first screen only.",
+			"path": "/console/store",
+			"selector": "body",
+			"actions": [
+				{"waitFor": "document.querySelectorAll('#stats tbody tr').length >= 10"},
+				{"evaluate": "new Promise(r => setTimeout(r, 1500))"}
+			]
+		},
+		{
+			"id": "store-page",
+			"image": "topics/PetstoreStore.Page.1.png",
+			"description": "The whole store page: welcome, recent orders, revenue, the four charts and store hours.",
+			"path": "/console/store",
+			"viewport": [1280, 2300],
+			"actions": [
+				{"waitFor": "document.querySelectorAll('#stats tbody tr').length >= 10 && document.querySelectorAll('.jc-card canvas').length >= 4"},
+				{"evaluate": "new Promise(r => setTimeout(r, 1500))"}
+			]
+		},
+		{
+			"id": "pets-page",
+			"image": "topics/PetstorePets.Page.1.png",
+			"description": "The pets table, first page.",
+			"path": "/console/pets",
+			"viewport": [1280, 1120],
+			"actions": [
+				{"waitFor": "document.querySelectorAll('#pets tbody tr').length >= 25"},
+				{"evaluate": "new Promise(r => setTimeout(r, 500))"}
+			]
+		},
+		{
+			"id": "pet-detail",
+			"image": "topics/PetstorePetDetail.Page.1.png",
+			"description": "The summary subtab of pet 1.",
+			"path": "/console/pets/1/summary",
+			"viewport": [1280, 600],
+			"actions": [
+				{"waitFor": "document.querySelector('#pet tbody tr td')"},
+				{"evaluate": "new Promise(r => setTimeout(r, 500))"}
+			]
+		},
+		{
+			"id": "jobs-page",
+			"image": "topics/PetstoreJobs.Page.1.png",
+			"description": "The jobs page: restock form, job table, species table and the grooming job's output.",
+			"path": "/console/ops/jobs",
+			"viewport": [1280, 2420],
+			"initScript": "(() => { const t = Date.now(); Date.now = () => t; })()",
+			"actions": [
+				{"waitFor": "document.querySelectorAll('#species tbody tr').length >= 7 && document.querySelector('#groom-file .juneau-term')"},
+				{"waitFor": "Array.from(document.querySelectorAll('span, div')).filter(e => !e.children.length && e.textContent.trim() === 'Done').length >= 2", "timeoutMs": 120000},
+				{"evaluate": "new Promise(r => setTimeout(r, 1000))"}
+			]
+		},
+		{
+			"id": "console-page",
+			"image": "topics/BuildingAConsolePage.Result.1.png",
+			"description": "A finished console page: chrome, navigation and one table card backed by a data endpoint.",
+			"path": "/console/pets",
+			"actions": [
+				{"waitFor": "document.querySelectorAll('#pets tbody tr').length >= 25"},
+				{"evaluate": "new Promise(r => setTimeout(r, 500))"}
+			]
+		},
+		{
+			"id": "chart-line",
+			"image": "topics/ChartCards.Kinds.1.png",
+			"description": "A line chart card.",
+			"path": "/console/store",
+			"viewport": [1280, 2300],
+			"selector": "#orders-trend",
+			"actions": [
+				{"waitFor": "document.querySelector('#orders-trend canvas')"},
+				{"evaluate": "new Promise(r => setTimeout(r, 1500))"}
+			]
+		},
+		{
+			"id": "chart-bar",
+			"image": "topics/ChartCards.Kinds.2.png",
+			"description": "A bar chart card.",
+			"path": "/console/store",
+			"viewport": [1280, 2300],
+			"selector": "#by-status",
+			"actions": [
+				{"waitFor": "document.querySelector('#by-status canvas')"},
+				{"evaluate": "new Promise(r => setTimeout(r, 1500))"}
+			]
+		},
+		{
+			"id": "chart-donut",
+			"image": "topics/ChartCards.Kinds.3.png",
+			"description": "A donut chart card.",
+			"path": "/console/store",
+			"viewport": [1280, 2300],
+			"selector": "#by-species",
+			"actions": [
+				{"waitFor": "document.querySelector('#by-species canvas')"},
+				{"evaluate": "new Promise(r => setTimeout(r, 1500))"}
+			]
+		},
+		{
+			"id": "rich-table",
+			"image": "topics/RichTableViews.Table.1.png",
+			"description": "A table card: toolbar with paging and search, sortable column headers with per-column search, rows.",
+			"path": "/console/pets",
+			"viewport": [1280, 1120],
+			"selector": ".jc-card:has(#pets)",
+			"actions": [
+				{"waitFor": "document.querySelectorAll('#pets tbody tr').length >= 25"},
+				{"evaluate": "new Promise(r => setTimeout(r, 500))"}
+			]
+		},
+		{
+			"id": "terminal-region",
+			"image": "topics/TerminalRegion.Petstore.1.png",
+			"description": "The terminal region of the jobs page's grooming log card.",
+			"path": "/console/ops/jobs",
+			"viewport": [1280, 2420],
+			"selector": "#groom-file",
+			"actions": [
+				{"waitFor": "document.querySelector('#groom-file .juneau-term')"},
+				{"evaluate": "new Promise(r => setTimeout(r, 1000))"}
+			]
+		},
+		{
+			"id": "themes-open",
+			"image": "topics/PetstoreThemes.Stock.1.png",
+			"description": "The themes page in the open theme.",
+			"path": "/console/dev/themes?theme=open",
+			"viewport": [1280, 720],
+			"actions": [{"waitFor": "document.querySelector('#swatches')"}, {"evaluate": "new Promise(r => setTimeout(r, 500))"}]
+		},
+		{
+			"id": "themes-light-red",
+			"image": "topics/PetstoreThemes.Stock.2.png",
+			"description": "The themes page in the light-red theme.",
+			"path": "/console/dev/themes?theme=light-red",
+			"viewport": [1280, 720],
+			"actions": [{"waitFor": "document.querySelector('#swatches')"}, {"evaluate": "new Promise(r => setTimeout(r, 500))"}]
+		},
+		{
+			"id": "themes-light-brown",
+			"image": "topics/PetstoreThemes.Stock.3.png",
+			"description": "The themes page in the light-brown theme.",
+			"path": "/console/dev/themes?theme=light-brown",
+			"viewport": [1280, 720],
+			"actions": [{"waitFor": "document.querySelector('#swatches')"}, {"evaluate": "new Promise(r => setTimeout(r, 500))"}]
+		},
+		{
+			"id": "themes-red",
+			"image": "topics/PetstoreThemes.Stock.4.png",
+			"description": "The themes page in the red theme.",
+			"path": "/console/dev/themes?theme=red",
+			"viewport": [1280, 720],
+			"actions": [{"waitFor": "document.querySelector('#swatches')"}, {"evaluate": "new Promise(r => setTimeout(r, 500))"}]
+		},
+		{
+			"id": "themes-gray",
+			"image": "topics/PetstoreThemes.Stock.5.png",
+			"description": "The themes page in the gray theme.",
+			"path": "/console/dev/themes?theme=gray",
+			"viewport": [1280, 720],
+			"actions": [{"waitFor": "document.querySelector('#swatches')"}, {"evaluate": "new Promise(r => setTimeout(r, 500))"}]
+		},
+		{
+			"id": "themes-custom",
+			"image": "topics/PetstoreThemes.Custom.1.png",
+			"description": "The themes page in the custom theme (light-brown plus three token overrides).",
+			"path": "/console/dev/themes?theme=custom",
+			"viewport": [1280, 720],
+			"actions": [{"waitFor": "document.querySelector('#swatches')"}, {"evaluate": "new Promise(r => setTimeout(r, 500))"}]
+		},
+		{
+			"id": "scheme-dark",
+			"image": "topics/AdminConsoleChrome.DarkScheme.1.png",
+			"description": "The store page after choosing Dark in the header's scheme toggle.",
+			"path": "/console/store",
+			"selector": "body",
+			"actions": [
+				{"waitFor": "document.querySelectorAll('#stats tbody tr').length >= 10"},
+				{"click": ".jc-scheme-toggle button[data-scheme=dark]"},
+				{"waitFor": "document.documentElement.getAttribute('data-jc-scheme') === 'dark'"},
+				{"evaluate": "new Promise(r => setTimeout(r, 1500))"}
+			]
+		},
+		{
+			"id": "html-doc-template",
+			"image": "topics/BasicHtmlDocTemplate.Page.1.png",
+			"description": "A page drawn by BasicHtmlDocTemplate: header, navigation links and the serialized bean.",
+			"path": "/console/about/beans/BeanDescription",
+			"viewport": [1280, 440]
+		},
+		{
+			"id": "utility-beans",
+			"image": "topics/UtilityBeans.png",
+			"description": "ResourceDescriptions rendered as HTML.",
+			"path": "/console/about/beans",
+			"viewport": [1280, 260]
+		},
+		{
+			"id": "utility-beans-json",
+			"image": "topics/UtilityBeans.json.png",
+			"description": "ResourceDescriptions rendered as JSON.",
+			"path": "/console/about/beans?Accept=text/json&plainText=true",
+			"selector": "pre",
+			"actions": [{"evaluate": "Object.assign(document.querySelector('pre').style, {display: 'inline-block', padding: '0 16px 0 8px'})"}]
+		},
+		{
+			"id": "bean-description",
+			"image": "topics/UtilityBeans.BeanDescription.png",
+			"description": "BeanDescription of Pet rendered as HTML.",
+			"path": "/console/about/beans/BeanDescription",
+			"viewport": [1280, 440]
+		},
+		{
+			"id": "bean-description-json",
+			"image": "topics/UtilityBeans.BeanDescription.json.png",
+			"description": "BeanDescription of Pet rendered as JSON.",
+			"path": "/console/about/beans/BeanDescription?Accept=text/json&plainText=true",
+			"selector": "pre",
+			"actions": [{"evaluate": "Object.assign(document.querySelector('pre').style, {display: 'inline-block', padding: '0 16px 0 8px'})"}]
+		},
+		{
+			"id": "hyperlink",
+			"image": "topics/UtilityBeans.Hyperlink.png",
+			"description": "Hyperlink rendered as HTML.",
+			"path": "/console/about/beans/Hyperlink",
+			"viewport": [1280, 200]
+		},
+		{
+			"id": "hyperlink-json",
+			"image": "topics/UtilityBeans.Hyperlink.json.png",
+			"description": "Hyperlink rendered as JSON.",
+			"path": "/console/about/beans/Hyperlink?Accept=text/json&plainText=true",
+			"selector": "pre",
+			"actions": [{"evaluate": "Object.assign(document.querySelector('pre').style, {display: 'inline-block', padding: '0 16px 0 8px'})"}]
+		},
+		{
+			"id": "html-beans-table",
+			"image": "topics/HtmlBeans.table.png",
+			"description": "The Table HTML5 bean served by the HTML flavor's fragment endpoint.",
+			"path": "/console/dev/flavors/html/fragment",
+			"selector": "table"
+		},
+		{
+			"id": "stylesheet-devops",
+			"image": "topics/HtmlStylesheets.Stylesheets.0.png",
+			"description": "A BasicRestServlet page in the default devops stylesheet.",
+			"path": "/console/about/beans",
+			"viewport": [1280, 260]
+		},
+		{
+			"id": "stylesheet-light",
+			"image": "topics/HtmlStylesheets.Stylesheets.1.png",
+			"description": "The same page with the light stylesheet in place of devops.",
+			"path": "/console/about/beans",
+			"viewport": [1280, 260],
+			"actions": [
+				{"evaluate": "(s => { s.textContent = s.textContent.replace('themes/devops.css', 'themes/light.css'); })(document.querySelector('head style'))"},
+				{"evaluate": "new Promise(r => setTimeout(r, 1000))"}
+			]
+		},
+		{
+			"id": "stylesheet-dark",
+			"image": "topics/HtmlStylesheets.Stylesheets.2.png",
+			"description": "The same page with the dark stylesheet in place of devops.",
+			"path": "/console/about/beans",
+			"viewport": [1280, 260],
+			"actions": [
+				{"evaluate": "(s => { s.textContent = s.textContent.replace('themes/devops.css', 'themes/dark.css'); })(document.querySelector('head style'))"},
+				{"evaluate": "new Promise(r => setTimeout(r, 1000))"}
+			]
+		},
+		{
+			"id": "stats-table",
+			"image": "topics/ExecutionStatistics.1.png",
+			"description": "The method statistics of the about resource, after one call to each of its bean endpoints.",
+			"freshServerOnly": true,
+			"path": "/console/about/beans",
+			"actions": [
+				{"goto": "/console/about/beans/BeanDescription"},
+				{"goto": "/console/about/beans/Hyperlink"},
+				{"goto": "/console/about/stats"}
+			],
+			"selector": "#data table table"
+		},
+		{
+			"id": "stats-navlinks",
+			"image": "topics/ExecutionStatistics.2.png",
+			"description": "The header and navigation links of a BasicRestServlet page, with the STATS link.",
+			"path": "/console/about/beans",
+			"viewport": [1280, 120],
+			"actions": [
+				{"evaluate": "document.querySelectorAll('section, aside').forEach(e => e.remove())"}
+			]
+		},
+		{
+			"id": "swagger-json",
+			"image": "topics/SwaggerBasics.Swagger.1.png",
+			"description": "The petstore REST API's generated Swagger JSON.",
+			"path": "/petstore/api?Accept=application/json",
+			"viewport": [1280, 700],
+			"selector": "body",
+			"actions": [
+				{"evaluate": "(() => { const p = document.querySelector('pre'); p.textContent = JSON.stringify(JSON.parse(p.textContent), null, 2); document.querySelectorAll('.json-formatter-container, label, input').forEach(e => e.remove()); for (const e of [document.documentElement, document.body]) { e.style.height = '700px'; e.style.overflow = 'hidden'; } })()"}
+			]
+		},
+		{
+			"id": "swagger-ui",
+			"image": "topics/SwaggerBasics.Swagger.2.png",
+			"description": "The same Swagger rendered as a Swagger UI page.",
+			"path": "/petstore/api",
+			"actions": [
+				{"waitFor": "document.querySelector('.swagger-ui .op-block')"}
+			]
+		},
+		{
+			"id": "swagger-basic-info",
+			"image": "topics/BasicSwaggerInfo.Swagger.3.png",
+			"description": "The header table at the top of the Swagger UI page.",
+			"path": "/petstore/api",
+			"selector": ".swagger-ui .header",
+			"actions": [
+				{"waitFor": "document.querySelector('.swagger-ui .op-block')"}
+			]
+		},
+		{
+			"id": "swagger-tags-collapsed",
+			"image": "topics/SwaggerTags.Swagger.4.png",
+			"description": "The petstore Swagger UI with its pet, store and user tag sections and the Models section collapsed.",
+			"path": "/petstore/api",
+			"actions": [
+				{"waitFor": "document.querySelector('.swagger-ui .op-block')"},
+				{"evaluate": "document.querySelectorAll('.swagger-ui > .tag-block > .tag-block-summary').forEach(s => s.click())"}
+			]
+		},
+		{
+			"id": "swagger-untagged-ops",
+			"image": "topics/SwaggerTags.Swagger.5.png",
+			"description": "The untagged operations listed at the top of the Swagger UI.",
+			"path": "/petstore/api",
+			"selector": ".swagger-ui > .tag-block:first-of-type",
+			"actions": [
+				{"waitFor": "document.querySelector('.swagger-ui .op-block')"}
+			]
+		},
+		{
+			"id": "swagger-models",
+			"image": "topics/SwaggerModels.Swagger.Models.1.png",
+			"description": "The Models section at the bottom of the Swagger UI.",
+			"path": "/petstore/api",
+			"selector": ".swagger-ui .tag-block:last-of-type",
+			"actions": [
+				{"waitFor": "document.querySelector('.swagger-ui .op-block')"}
+			]
+		},
+		{
+			"id": "swagger-models-order",
+			"image": "topics/SwaggerModels.Swagger.Models.2.png",
+			"description": "The Models section with the Order bean expanded.",
+			"path": "/petstore/api",
+			"selector": ".swagger-ui .tag-block:last-of-type",
+			"actions": [
+				{"waitFor": "document.querySelector('.swagger-ui .op-block')"},
+				{"evaluate": "[...document.querySelectorAll('.swagger-ui .op-block.model')].find(m => m.querySelector('.method-button').textContent.trim() === 'Order').querySelector('.op-block-summary').click()"}
+			]
+		},
+		{
+			"id": "swagger-models-order-bean",
+			"image": "topics/SwaggerModels.Swagger.Models.3.png",
+			"description": "The Order bean rendered in the Swagger UI.",
+			"path": "/petstore/api",
+			"selector": "[data-shoot]",
+			"actions": [
+				{"waitFor": "document.querySelector('.swagger-ui .op-block')"},
+				{"evaluate": "const o = [...document.querySelectorAll('.swagger-ui .op-block.model')].find(m => m.querySelector('.method-button').textContent.trim() === 'Order'); o.querySelector('.op-block-summary').click(); o.setAttribute('data-shoot', '')"}
+			]
+		}
+	],
+	"unmanaged": [
+		{"glob": "developer-info/how-to/NonCommittersContribute.*", "reason": "screenshots of the GitHub web UI, not of Juneau"},
+		{"glob": "topics/HtmlPredefinedWidgets.*", "reason": "no shipped page shows the menu-item widgets: the petstore-jetty root that declares ContentTypeMenuItem now redirects to the console"},
+		{"glob": "topics/RestRpc.*", "reason": "the petstore samples host no RRPC servlet"}
+	]
+}

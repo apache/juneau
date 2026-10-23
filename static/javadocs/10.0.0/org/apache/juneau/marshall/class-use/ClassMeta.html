@@ -205,7 +205,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Public low-level token-streaming API (pull parser + push generator) shared by every Juneau
  format.</div>
 </div>
-<div class="col-first even-row-color"><a href="#org.apache.juneau.marshall.swap">org.apache.juneau.marshall.swap</a></div>
+<div class="col-first even-row-color"><a href="#org.apache.juneau.marshall.swap.spi">org.apache.juneau.marshall.swap.spi</a></div>
 <div class="col-last even-row-color">
 <div class="block">Swap API</div>
 </div>
@@ -483,18 +483,18 @@ loadScripts(document, 'script');</script>
 <div class="col-first odd-row-color"><code>final &lt;T&gt;&nbsp;<a href="../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;T&gt;</code></div>
 <div class="col-second odd-row-color"><span class="type-name-label">MarshallingContext.</span><code><a href="../MarshallingContext.html#getClassMetaForObject(T)" class="member-name-link">getClassMetaForObject</a><wbr>(T&nbsp;o)</code></div>
 <div class="col-last odd-row-color">
-<div class="block">Shortcut for calling <code>getClassMeta(o.getClass())</code>.</div>
+<div class="block">Returns the <a href="../ClassMeta.html" title="class in org.apache.juneau.marshall"><code>ClassMeta</code></a> for the object's class, unwrapping recognized proxies first.</div>
 </div>
 <div class="col-first even-row-color"><code>protected final <a href="../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;?&gt;</code></div>
 <div class="col-second even-row-color"><span class="type-name-label">MarshallingSession.</span><code><a href="../MarshallingSession.html#getClassMetaForObject(java.lang.Object,org.apache.juneau.marshall.ClassMeta)" class="member-name-link">getClassMetaForObject</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o,
  <a href="../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;?&gt;&nbsp;def)</code></div>
 <div class="col-last even-row-color">
-<div class="block">Shortcut for calling <code>getClassMeta(o.getClass())</code> but returns a default value if object is <jk>null</jk>.</div>
+<div class="block">Returns the <a href="../ClassMeta.html" title="class in org.apache.juneau.marshall"><code>ClassMeta</code></a> for the object's class, unwrapping recognized proxies first.</div>
 </div>
 <div class="col-first odd-row-color"><code>final &lt;T&gt;&nbsp;<a href="../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;T&gt;</code></div>
 <div class="col-second odd-row-color"><span class="type-name-label">MarshallingSession.</span><code><a href="../MarshallingSession.html#getClassMetaForObject(T)" class="member-name-link">getClassMetaForObject</a><wbr>(T&nbsp;o)</code></div>
 <div class="col-last odd-row-color">
-<div class="block">Shortcut for calling <code>getClassMeta(o.getClass())</code>.</div>
+<div class="block">Returns the <a href="../ClassMeta.html" title="class in org.apache.juneau.marshall"><code>ClassMeta</code></a> for the object's class, unwrapping recognized proxies first.</div>
 </div>
 <div class="col-first even-row-color"><code><a href="../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;?&gt;</code></div>
 <div class="col-second even-row-color"><span class="type-name-label">ClassMeta.</span><code><a href="../ClassMeta.html#getElementType()" class="member-name-link">getElementType</a>()</code></div>
@@ -515,7 +515,7 @@ loadScripts(document, 'script');</script>
 <div class="col-first odd-row-color"><code><a href="../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;?&gt;</code></div>
 <div class="col-second odd-row-color"><span class="type-name-label">ClassMeta.</span><code><a href="../ClassMeta.html#getSerializedClassMeta(org.apache.juneau.marshall.MarshallingSession)" class="member-name-link">getSerializedClassMeta</a><wbr>(<a href="../MarshallingSession.html" title="class in org.apache.juneau.marshall">MarshallingSession</a>&nbsp;session)</code></div>
 <div class="col-last odd-row-color">
-<div class="block">Returns the serialized (swapped) form of this class if there is an <a href="../swap/ObjectSwap.html" title="class in org.apache.juneau.marshall.swap"><code>ObjectSwap</code></a> associated with it.</div>
+<div class="block">Returns the serialized (swapped) form of this class if there is an <a href="../swap/spi/ObjectSwap.html" title="class in org.apache.juneau.marshall.swap.spi"><code>ObjectSwap</code></a> associated with it.</div>
 </div>
 <div class="col-first even-row-color"><code><a href="../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;?&gt;</code></div>
 <div class="col-second even-row-color"><span class="type-name-label">ClassMeta.</span><code><a href="../ClassMeta.html#getValueType()" class="member-name-link">getValueType</a>()</code></div>
@@ -601,7 +601,7 @@ loadScripts(document, 'script');</script>
 <div class="col-second odd-row-color"><span class="type-name-label">MarshallingSession.</span><code><a href="../MarshallingSession.html#getClassMetaForObject(java.lang.Object,org.apache.juneau.marshall.ClassMeta)" class="member-name-link">getClassMetaForObject</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o,
  <a href="../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;?&gt;&nbsp;def)</code></div>
 <div class="col-last odd-row-color">
-<div class="block">Shortcut for calling <code>getClassMeta(o.getClass())</code> but returns a default value if object is <jk>null</jk>.</div>
+<div class="block">Returns the <a href="../ClassMeta.html" title="class in org.apache.juneau.marshall"><code>ClassMeta</code></a> for the object's class, unwrapping recognized proxies first.</div>
 </div>
 <div class="col-first even-row-color"><code>protected final <a href="../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;?&gt;</code></div>
 <div class="col-second even-row-color"><span class="type-name-label">MarshallingTraverseSession.</span><code><a href="../MarshallingTraverseSession.html#getOptionalType(org.apache.juneau.marshall.ClassMeta)" class="member-name-link">getOptionalType</a><wbr>(<a href="../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;?&gt;&nbsp;cm)</code></div>
@@ -1689,32 +1689,6 @@ loadScripts(document, 'script');</script>
 <div class="block">Returns the class type of the object at the specified URL.</div>
 </div>
 </div>
-<div class="caption"><span>Methods in <a href="../objecttools/package-summary.html">org.apache.juneau.marshall.objecttools</a> with parameters of type <a href="../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a></span></div>
-<div class="summary-table three-column-summary">
-<div class="table-header col-first">Modifier and Type</div>
-<div class="table-header col-second">Method</div>
-<div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><code>abstract boolean</code></div>
-<div class="col-second even-row-color"><span class="type-name-label">MatcherFactory.</span><code><a href="../objecttools/MatcherFactory.html#canMatch(org.apache.juneau.marshall.ClassMeta)" class="member-name-link">canMatch</a><wbr>(<a href="../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;?&gt;&nbsp;cm)</code></div>
-<div class="col-last even-row-color">
-<div class="block">Returns <jk>true</jk> if this matcher can be used on the specified object.</div>
-</div>
-<div class="col-first odd-row-color"><code>boolean</code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">NumberMatcherFactory.</span><code><a href="../objecttools/NumberMatcherFactory.html#canMatch(org.apache.juneau.marshall.ClassMeta)" class="member-name-link">canMatch</a><wbr>(<a href="../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;?&gt;&nbsp;cm)</code></div>
-<div class="col-last odd-row-color">&nbsp;</div>
-<div class="col-first even-row-color"><code>boolean</code></div>
-<div class="col-second even-row-color"><span class="type-name-label">StringMatcherFactory.</span><code><a href="../objecttools/StringMatcherFactory.html#canMatch(org.apache.juneau.marshall.ClassMeta)" class="member-name-link">canMatch</a><wbr>(<a href="../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;?&gt;&nbsp;cm)</code></div>
-<div class="col-last even-row-color">&nbsp;</div>
-<div class="col-first odd-row-color"><code>boolean</code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">TimeMatcherFactory.</span><code><a href="../objecttools/TimeMatcherFactory.html#canMatch(org.apache.juneau.marshall.ClassMeta)" class="member-name-link">canMatch</a><wbr>(<a href="../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;?&gt;&nbsp;cm)</code></div>
-<div class="col-last odd-row-color">&nbsp;</div>
-<div class="col-first even-row-color"><code>abstract boolean</code></div>
-<div class="col-second even-row-color"><span class="type-name-label">AbstractMatcher.</span><code><a href="../objecttools/AbstractMatcher.html#matches(org.apache.juneau.marshall.ClassMeta,java.lang.Object)" class="member-name-link">matches</a><wbr>(<a href="../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;?&gt;&nbsp;cm,
- <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</code></div>
-<div class="col-last even-row-color">
-<div class="block">Returns <jk>true</jk> if this matcher matches the specified object..</div>
-</div>
-</div>
 </section>
 </li>
 <li>
@@ -1898,7 +1872,7 @@ loadScripts(document, 'script');</script>
  exists.</div>
 </div>
 <div class="col-first even-row-color"><code>protected <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">ParserSession.</span><code><a href="../parser/ParserSession.html#unswap(org.apache.juneau.marshall.swap.ObjectSwap,java.lang.Object,org.apache.juneau.marshall.ClassMeta)" class="member-name-link">unswap</a><wbr>(<a href="../swap/ObjectSwap.html" title="class in org.apache.juneau.marshall.swap">ObjectSwap</a>&nbsp;swap,
+<div class="col-second even-row-color"><span class="type-name-label">ParserSession.</span><code><a href="../parser/ParserSession.html#unswap(org.apache.juneau.marshall.swap.spi.ObjectSwap,java.lang.Object,org.apache.juneau.marshall.ClassMeta)" class="member-name-link">unswap</a><wbr>(<a href="../swap/spi/ObjectSwap.html" title="class in org.apache.juneau.marshall.swap.spi">ObjectSwap</a>&nbsp;swap,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o,
  <a href="../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;?&gt;&nbsp;eType)</code></div>
 <div class="col-last even-row-color">
@@ -2105,101 +2079,101 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
-<section class="detail" id="org.apache.juneau.marshall.swap">
-<h2>Uses of <a href="../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a> in <a href="../swap/package-summary.html">org.apache.juneau.marshall.swap</a></h2>
-<div class="caption"><span>Methods in <a href="../swap/package-summary.html">org.apache.juneau.marshall.swap</a> that return <a href="../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a></span></div>
+<section class="detail" id="org.apache.juneau.marshall.swap.spi">
+<h2>Uses of <a href="../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a> in <a href="../swap/spi/package-summary.html">org.apache.juneau.marshall.swap.spi</a></h2>
+<div class="caption"><span>Methods in <a href="../swap/spi/package-summary.html">org.apache.juneau.marshall.swap.spi</a> that return <a href="../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a></span></div>
 <div class="summary-table three-column-summary">
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color"><code><a href="../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;?&gt;</code></div>
-<div class="col-second even-row-color"><span class="type-name-label">BuilderSwap.</span><code><a href="../swap/BuilderSwap.html#getBuilderClassMeta(org.apache.juneau.marshall.MarshallingSession)" class="member-name-link">getBuilderClassMeta</a><wbr>(<a href="../MarshallingSession.html" title="class in org.apache.juneau.marshall">MarshallingSession</a>&nbsp;session)</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">BuilderSwap.</span><code><a href="../swap/spi/BuilderSwap.html#getBuilderClassMeta(org.apache.juneau.marshall.MarshallingSession)" class="member-name-link">getBuilderClassMeta</a><wbr>(<a href="../MarshallingSession.html" title="class in org.apache.juneau.marshall">MarshallingSession</a>&nbsp;session)</code></div>
 <div class="col-last even-row-color">
 <div class="block">Returns the <a href="../ClassMeta.html" title="class in org.apache.juneau.marshall"><code>ClassMeta</code></a> of the transformed class type.</div>
 </div>
 <div class="col-first odd-row-color"><code><a href="../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;?&gt;</code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">ObjectSwap.</span><code><a href="../swap/ObjectSwap.html#getSwapClassMeta(org.apache.juneau.marshall.MarshallingSession)" class="member-name-link">getSwapClassMeta</a><wbr>(<a href="../MarshallingSession.html" title="class in org.apache.juneau.marshall">MarshallingSession</a>&nbsp;session)</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">ObjectSwap.</span><code><a href="../swap/spi/ObjectSwap.html#getSwapClassMeta(org.apache.juneau.marshall.MarshallingSession)" class="member-name-link">getSwapClassMeta</a><wbr>(<a href="../MarshallingSession.html" title="class in org.apache.juneau.marshall">MarshallingSession</a>&nbsp;session)</code></div>
 <div class="col-last odd-row-color">
 <div class="block">Returns the <a href="../ClassMeta.html" title="class in org.apache.juneau.marshall"><code>ClassMeta</code></a> of the transformed class type.</div>
 </div>
 </div>
-<div class="caption"><span>Methods in <a href="../swap/package-summary.html">org.apache.juneau.marshall.swap</a> with parameters of type <a href="../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a></span></div>
+<div class="caption"><span>Methods in <a href="../swap/spi/package-summary.html">org.apache.juneau.marshall.swap.spi</a> with parameters of type <a href="../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a></span></div>
 <div class="summary-table three-column-summary">
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><code><a href="../swap/BuilderSwap.html" title="type parameter in BuilderSwap">T</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">BuilderSwap.</span><code><a href="../swap/BuilderSwap.html#build(org.apache.juneau.marshall.MarshallingSession,B,org.apache.juneau.marshall.ClassMeta)" class="member-name-link">build</a><wbr>(<a href="../MarshallingSession.html" title="class in org.apache.juneau.marshall">MarshallingSession</a>&nbsp;session,
- <a href="../swap/BuilderSwap.html" title="type parameter in BuilderSwap">B</a>&nbsp;builder,
+<div class="col-first even-row-color"><code><a href="../swap/spi/BuilderSwap.html" title="type parameter in BuilderSwap">T</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">BuilderSwap.</span><code><a href="../swap/spi/BuilderSwap.html#build(org.apache.juneau.marshall.MarshallingSession,B,org.apache.juneau.marshall.ClassMeta)" class="member-name-link">build</a><wbr>(<a href="../MarshallingSession.html" title="class in org.apache.juneau.marshall">MarshallingSession</a>&nbsp;session,
+ <a href="../swap/spi/BuilderSwap.html" title="type parameter in BuilderSwap">B</a>&nbsp;builder,
  <a href="../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;?&gt;&nbsp;hint)</code></div>
 <div class="col-last even-row-color">
 <div class="block">Creates a new object from the specified builder.</div>
 </div>
-<div class="col-first odd-row-color"><code><a href="../swap/BuilderSwap.html" title="type parameter in BuilderSwap">B</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">BuilderSwap.</span><code><a href="../swap/BuilderSwap.html#create(org.apache.juneau.marshall.MarshallingSession,org.apache.juneau.marshall.ClassMeta)" class="member-name-link">create</a><wbr>(<a href="../MarshallingSession.html" title="class in org.apache.juneau.marshall">MarshallingSession</a>&nbsp;session,
+<div class="col-first odd-row-color"><code><a href="../swap/spi/BuilderSwap.html" title="type parameter in BuilderSwap">B</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">BuilderSwap.</span><code><a href="../swap/spi/BuilderSwap.html#create(org.apache.juneau.marshall.MarshallingSession,org.apache.juneau.marshall.ClassMeta)" class="member-name-link">create</a><wbr>(<a href="../MarshallingSession.html" title="class in org.apache.juneau.marshall">MarshallingSession</a>&nbsp;session,
  <a href="../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;?&gt;&nbsp;hint)</code></div>
 <div class="col-last odd-row-color">
 <div class="block">Creates a new builder object.</div>
 </div>
-<div class="col-first even-row-color"><code><a href="../swap/AutoListSwap.html" title="type parameter in AutoListSwap">T</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">AutoListSwap.</span><code><a href="../swap/AutoListSwap.html#unswap(org.apache.juneau.marshall.MarshallingSession,java.util.List,org.apache.juneau.marshall.ClassMeta)" class="member-name-link">unswap</a><wbr>(<a href="../MarshallingSession.html" title="class in org.apache.juneau.marshall">MarshallingSession</a>&nbsp;session,
+<div class="col-first even-row-color"><code><a href="../swap/spi/AutoListSwap.html" title="type parameter in AutoListSwap">T</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">AutoListSwap.</span><code><a href="../swap/spi/AutoListSwap.html#unswap(org.apache.juneau.marshall.MarshallingSession,java.util.List,org.apache.juneau.marshall.ClassMeta)" class="member-name-link">unswap</a><wbr>(<a href="../MarshallingSession.html" title="class in org.apache.juneau.marshall">MarshallingSession</a>&nbsp;session,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;?&gt;&nbsp;o,
  <a href="../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;?&gt;&nbsp;hint)</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
-<div class="col-first odd-row-color"><code><a href="../swap/AutoMapSwap.html" title="type parameter in AutoMapSwap">T</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">AutoMapSwap.</span><code><a href="../swap/AutoMapSwap.html#unswap(org.apache.juneau.marshall.MarshallingSession,java.util.Map,org.apache.juneau.marshall.ClassMeta)" class="member-name-link">unswap</a><wbr>(<a href="../MarshallingSession.html" title="class in org.apache.juneau.marshall">MarshallingSession</a>&nbsp;session,
+<div class="col-first odd-row-color"><code><a href="../swap/spi/AutoMapSwap.html" title="type parameter in AutoMapSwap">T</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">AutoMapSwap.</span><code><a href="../swap/spi/AutoMapSwap.html#unswap(org.apache.juneau.marshall.MarshallingSession,java.util.Map,org.apache.juneau.marshall.ClassMeta)" class="member-name-link">unswap</a><wbr>(<a href="../MarshallingSession.html" title="class in org.apache.juneau.marshall">MarshallingSession</a>&nbsp;session,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;?,<wbr>?&gt;&nbsp;o,
  <a href="../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;?&gt;&nbsp;hint)</code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
-<div class="col-first even-row-color"><code><a href="../swap/AutoNumberSwap.html" title="type parameter in AutoNumberSwap">T</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">AutoNumberSwap.</span><code><a href="../swap/AutoNumberSwap.html#unswap(org.apache.juneau.marshall.MarshallingSession,java.lang.Number,org.apache.juneau.marshall.ClassMeta)" class="member-name-link">unswap</a><wbr>(<a href="../MarshallingSession.html" title="class in org.apache.juneau.marshall">MarshallingSession</a>&nbsp;session,
+<div class="col-first even-row-color"><code><a href="../swap/spi/AutoNumberSwap.html" title="type parameter in AutoNumberSwap">T</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">AutoNumberSwap.</span><code><a href="../swap/spi/AutoNumberSwap.html#unswap(org.apache.juneau.marshall.MarshallingSession,java.lang.Number,org.apache.juneau.marshall.ClassMeta)" class="member-name-link">unswap</a><wbr>(<a href="../MarshallingSession.html" title="class in org.apache.juneau.marshall">MarshallingSession</a>&nbsp;session,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Number.html" title="class or interface in java.lang" class="external-link">Number</a>&nbsp;o,
  <a href="../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;?&gt;&nbsp;hint)</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
-<div class="col-first odd-row-color"><code><a href="../swap/AutoObjectSwap.html" title="type parameter in AutoObjectSwap">T</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">AutoObjectSwap.</span><code><a href="../swap/AutoObjectSwap.html#unswap(org.apache.juneau.marshall.MarshallingSession,java.lang.Object,org.apache.juneau.marshall.ClassMeta)" class="member-name-link">unswap</a><wbr>(<a href="../MarshallingSession.html" title="class in org.apache.juneau.marshall">MarshallingSession</a>&nbsp;session,
+<div class="col-first odd-row-color"><code><a href="../swap/spi/AutoObjectSwap.html" title="type parameter in AutoObjectSwap">T</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">AutoObjectSwap.</span><code><a href="../swap/spi/AutoObjectSwap.html#unswap(org.apache.juneau.marshall.MarshallingSession,java.lang.Object,org.apache.juneau.marshall.ClassMeta)" class="member-name-link">unswap</a><wbr>(<a href="../MarshallingSession.html" title="class in org.apache.juneau.marshall">MarshallingSession</a>&nbsp;session,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;f,
  <a href="../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;?&gt;&nbsp;hint)</code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
-<div class="col-first even-row-color"><code><a href="../swap/AutoStringSwap.html" title="type parameter in AutoStringSwap">T</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">AutoStringSwap.</span><code><a href="../swap/AutoStringSwap.html#unswap(org.apache.juneau.marshall.MarshallingSession,java.lang.String,org.apache.juneau.marshall.ClassMeta)" class="member-name-link">unswap</a><wbr>(<a href="../MarshallingSession.html" title="class in org.apache.juneau.marshall">MarshallingSession</a>&nbsp;session,
+<div class="col-first even-row-color"><code><a href="../swap/spi/AutoStringSwap.html" title="type parameter in AutoStringSwap">T</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">AutoStringSwap.</span><code><a href="../swap/spi/AutoStringSwap.html#unswap(org.apache.juneau.marshall.MarshallingSession,java.lang.String,org.apache.juneau.marshall.ClassMeta)" class="member-name-link">unswap</a><wbr>(<a href="../MarshallingSession.html" title="class in org.apache.juneau.marshall">MarshallingSession</a>&nbsp;session,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;s,
  <a href="../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;?&gt;&nbsp;hint)</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
-<div class="col-first odd-row-color"><code><a href="../swap/FunctionalSwap.html" title="type parameter in FunctionalSwap">T</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">FunctionalSwap.</span><code><a href="../swap/FunctionalSwap.html#unswap(org.apache.juneau.marshall.MarshallingSession,S,org.apache.juneau.marshall.ClassMeta,java.lang.String)" class="member-name-link">unswap</a><wbr>(<a href="../MarshallingSession.html" title="class in org.apache.juneau.marshall">MarshallingSession</a>&nbsp;session,
- <a href="../swap/FunctionalSwap.html" title="type parameter in FunctionalSwap">S</a>&nbsp;f,
+<div class="col-first odd-row-color"><code><a href="../swap/spi/FunctionalSwap.html" title="type parameter in FunctionalSwap">T</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">FunctionalSwap.</span><code><a href="../swap/spi/FunctionalSwap.html#unswap(org.apache.juneau.marshall.MarshallingSession,S,org.apache.juneau.marshall.ClassMeta,java.lang.String)" class="member-name-link">unswap</a><wbr>(<a href="../MarshallingSession.html" title="class in org.apache.juneau.marshall">MarshallingSession</a>&nbsp;session,
+ <a href="../swap/spi/FunctionalSwap.html" title="type parameter in FunctionalSwap">S</a>&nbsp;f,
  <a href="../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;?&gt;&nbsp;hint,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;template)</code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
-<div class="col-first even-row-color"><code><a href="../swap/ObjectSwap.html" title="type parameter in ObjectSwap">T</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">ObjectSwap.</span><code><a href="../swap/ObjectSwap.html#unswap(org.apache.juneau.marshall.MarshallingSession,S,org.apache.juneau.marshall.ClassMeta)" class="member-name-link">unswap</a><wbr>(<a href="../MarshallingSession.html" title="class in org.apache.juneau.marshall">MarshallingSession</a>&nbsp;session,
- <a href="../swap/ObjectSwap.html" title="type parameter in ObjectSwap">S</a>&nbsp;f,
+<div class="col-first even-row-color"><code><a href="../swap/spi/ObjectSwap.html" title="type parameter in ObjectSwap">T</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">ObjectSwap.</span><code><a href="../swap/spi/ObjectSwap.html#unswap(org.apache.juneau.marshall.MarshallingSession,S,org.apache.juneau.marshall.ClassMeta)" class="member-name-link">unswap</a><wbr>(<a href="../MarshallingSession.html" title="class in org.apache.juneau.marshall">MarshallingSession</a>&nbsp;session,
+ <a href="../swap/spi/ObjectSwap.html" title="type parameter in ObjectSwap">S</a>&nbsp;f,
  <a href="../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;?&gt;&nbsp;hint)</code></div>
 <div class="col-last even-row-color">
 <div class="block">If this transform is to be used to reconstitute objects that aren't true Java beans, it must implement this method.</div>
 </div>
-<div class="col-first odd-row-color"><code><a href="../swap/ObjectSwap.html" title="type parameter in ObjectSwap">T</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">ObjectSwap.</span><code><a href="../swap/ObjectSwap.html#unswap(org.apache.juneau.marshall.MarshallingSession,S,org.apache.juneau.marshall.ClassMeta,java.lang.String)" class="member-name-link">unswap</a><wbr>(<a href="../MarshallingSession.html" title="class in org.apache.juneau.marshall">MarshallingSession</a>&nbsp;session,
- <a href="../swap/ObjectSwap.html" title="type parameter in ObjectSwap">S</a>&nbsp;f,
+<div class="col-first odd-row-color"><code><a href="../swap/spi/ObjectSwap.html" title="type parameter in ObjectSwap">T</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">ObjectSwap.</span><code><a href="../swap/spi/ObjectSwap.html#unswap(org.apache.juneau.marshall.MarshallingSession,S,org.apache.juneau.marshall.ClassMeta,java.lang.String)" class="member-name-link">unswap</a><wbr>(<a href="../MarshallingSession.html" title="class in org.apache.juneau.marshall">MarshallingSession</a>&nbsp;session,
+ <a href="../swap/spi/ObjectSwap.html" title="type parameter in ObjectSwap">S</a>&nbsp;f,
  <a href="../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;?&gt;&nbsp;hint,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;template)</code></div>
 <div class="col-last odd-row-color">
-<div class="block">Same as <a href="../swap/ObjectSwap.html#unswap(org.apache.juneau.marshall.MarshallingSession,S,org.apache.juneau.marshall.ClassMeta)"><code>ObjectSwap.unswap(MarshallingSession, Object, ClassMeta)</code></a>, but can be used if your swap has a template associated with it.</div>
+<div class="block">Same as <a href="../swap/spi/ObjectSwap.html#unswap(org.apache.juneau.marshall.MarshallingSession,S,org.apache.juneau.marshall.ClassMeta)"><code>ObjectSwap.unswap(MarshallingSession, Object, ClassMeta)</code></a>, but can be used if your swap has a template associated with it.</div>
 </div>
-<div class="col-first even-row-color"><code><a href="../swap/SurrogateSwap.html" title="type parameter in SurrogateSwap">T</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">SurrogateSwap.</span><code><a href="../swap/SurrogateSwap.html#unswap(org.apache.juneau.marshall.MarshallingSession,F,org.apache.juneau.marshall.ClassMeta)" class="member-name-link">unswap</a><wbr>(<a href="../MarshallingSession.html" title="class in org.apache.juneau.marshall">MarshallingSession</a>&nbsp;session,
- <a href="../swap/SurrogateSwap.html" title="type parameter in SurrogateSwap">F</a>&nbsp;f,
+<div class="col-first even-row-color"><code><a href="../swap/spi/SurrogateSwap.html" title="type parameter in SurrogateSwap">T</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">SurrogateSwap.</span><code><a href="../swap/spi/SurrogateSwap.html#unswap(org.apache.juneau.marshall.MarshallingSession,F,org.apache.juneau.marshall.ClassMeta)" class="member-name-link">unswap</a><wbr>(<a href="../MarshallingSession.html" title="class in org.apache.juneau.marshall">MarshallingSession</a>&nbsp;session,
+ <a href="../swap/spi/SurrogateSwap.html" title="type parameter in SurrogateSwap">F</a>&nbsp;f,
  <a href="../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;?&gt;&nbsp;hint)</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
 </div>
-<div class="caption"><span>Constructors in <a href="../swap/package-summary.html">org.apache.juneau.marshall.swap</a> with parameters of type <a href="../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a></span></div>
+<div class="caption"><span>Constructors in <a href="../swap/spi/package-summary.html">org.apache.juneau.marshall.swap.spi</a> with parameters of type <a href="../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a></span></div>
 <div class="summary-table three-column-summary">
 <div class="table-header col-first">Modifier</div>
 <div class="table-header col-second">Constructor</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color"><code>&nbsp;</code></div>
-<div class="col-second even-row-color"><code><a href="../swap/AutoStringSwap.html#%3Cinit%3E(org.apache.juneau.marshall.ClassMeta)" class="member-name-link">AutoStringSwap</a><wbr>(<a href="../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;<a href="../swap/AutoStringSwap.html" title="type parameter in AutoStringSwap">T</a>&gt;&nbsp;classMeta)</code></div>
+<div class="col-second even-row-color"><code><a href="../swap/spi/AutoStringSwap.html#%3Cinit%3E(org.apache.juneau.marshall.ClassMeta)" class="member-name-link">AutoStringSwap</a><wbr>(<a href="../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;<a href="../swap/spi/AutoStringSwap.html" title="type parameter in AutoStringSwap">T</a>&gt;&nbsp;classMeta)</code></div>
 <div class="col-last even-row-color">
 <div class="block">Constructor.</div>
 </div>
@@ -2281,6 +2255,29 @@ loadScripts(document, 'script');</script>
 <div class="col-second even-row-color"><span class="type-name-label">TomlParserSession.</span><code><a href="../toml/TomlParserSession.html#doRead(org.apache.juneau.marshall.parser.ParserPipe,org.apache.juneau.marshall.ClassMeta)" class="member-name-link">doRead</a><wbr>(<a href="../parser/ParserPipe.html" title="class in org.apache.juneau.marshall.parser">ParserPipe</a>&nbsp;pipe,
  <a href="../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;T&gt;&nbsp;type)</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
+<div class="col-first odd-row-color"><code><a href="../toml/TomlClassMeta.html" title="class in org.apache.juneau.marshall.toml">TomlClassMeta</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">TomlMetaProvider.</span><code><a href="../toml/TomlMetaProvider.html#getTomlClassMeta(org.apache.juneau.marshall.ClassMeta)" class="member-name-link">getTomlClassMeta</a><wbr>(<a href="../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;?&gt;&nbsp;cm)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Returns the TOML-specific metadata on the specified class.</div>
+</div>
+<div class="col-first even-row-color"><code><a href="../toml/TomlClassMeta.html" title="class in org.apache.juneau.marshall.toml">TomlClassMeta</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">TomlParser.</span><code><a href="../toml/TomlParser.html#getTomlClassMeta(org.apache.juneau.marshall.ClassMeta)" class="member-name-link">getTomlClassMeta</a><wbr>(<a href="../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;?&gt;&nbsp;cm)</code></div>
+<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-first odd-row-color"><code><a href="../toml/TomlClassMeta.html" title="class in org.apache.juneau.marshall.toml">TomlClassMeta</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">TomlSerializer.</span><code><a href="../toml/TomlSerializer.html#getTomlClassMeta(org.apache.juneau.marshall.ClassMeta)" class="member-name-link">getTomlClassMeta</a><wbr>(<a href="../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;?&gt;&nbsp;cm)</code></div>
+<div class="col-last odd-row-color">&nbsp;</div>
+</div>
+<div class="caption"><span>Constructors in <a href="../toml/package-summary.html">org.apache.juneau.marshall.toml</a> with parameters of type <a href="../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a></span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier</div>
+<div class="table-header col-second">Constructor</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code>&nbsp;</code></div>
+<div class="col-second even-row-color"><code><a href="../toml/TomlClassMeta.html#%3Cinit%3E(org.apache.juneau.marshall.ClassMeta,org.apache.juneau.marshall.toml.TomlMetaProvider)" class="member-name-link">TomlClassMeta</a><wbr>(<a href="../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;?&gt;&nbsp;cm,
+ <a href="../toml/TomlMetaProvider.html" title="interface in org.apache.juneau.marshall.toml">TomlMetaProvider</a>&nbsp;mp)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Constructor.</div>
+</div>
 </div>
 </section>
 </li>
@@ -2594,15 +2591,38 @@ loadScripts(document, 'script');</script>
 <div class="col-second even-row-color"><span class="type-name-label">YamlParserSession.</span><code><a href="../yaml/YamlParserSession.html#doRead(org.apache.juneau.marshall.parser.ParserPipe,org.apache.juneau.marshall.ClassMeta)" class="member-name-link">doRead</a><wbr>(<a href="../parser/ParserPipe.html" title="class in org.apache.juneau.marshall.parser">ParserPipe</a>&nbsp;pipe,
  <a href="../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;T&gt;&nbsp;type)</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
-<div class="col-first odd-row-color"><code>protected <a href="../yaml/YamlWriter.html" title="class in org.apache.juneau.marshall.yaml">YamlWriter</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">YamlSerializerSession.</span><code><a href="../yaml/YamlSerializerSession.html#writeAnything(org.apache.juneau.marshall.yaml.YamlWriter,java.lang.Object,org.apache.juneau.marshall.ClassMeta,java.lang.String,org.apache.juneau.commons.bean.BeanPropertyMeta,boolean)" class="member-name-link">writeAnything</a><wbr>(<a href="../yaml/YamlWriter.html" title="class in org.apache.juneau.marshall.yaml">YamlWriter</a>&nbsp;out,
+<div class="col-first odd-row-color"><code><a href="../yaml/YamlClassMeta.html" title="class in org.apache.juneau.marshall.yaml">YamlClassMeta</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">YamlMetaProvider.</span><code><a href="../yaml/YamlMetaProvider.html#getYamlClassMeta(org.apache.juneau.marshall.ClassMeta)" class="member-name-link">getYamlClassMeta</a><wbr>(<a href="../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;?&gt;&nbsp;cm)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Returns the YAML-specific metadata on the specified class.</div>
+</div>
+<div class="col-first even-row-color"><code><a href="../yaml/YamlClassMeta.html" title="class in org.apache.juneau.marshall.yaml">YamlClassMeta</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">YamlParser.</span><code><a href="../yaml/YamlParser.html#getYamlClassMeta(org.apache.juneau.marshall.ClassMeta)" class="member-name-link">getYamlClassMeta</a><wbr>(<a href="../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;?&gt;&nbsp;cm)</code></div>
+<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-first odd-row-color"><code><a href="../yaml/YamlClassMeta.html" title="class in org.apache.juneau.marshall.yaml">YamlClassMeta</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">YamlSerializer.</span><code><a href="../yaml/YamlSerializer.html#getYamlClassMeta(org.apache.juneau.marshall.ClassMeta)" class="member-name-link">getYamlClassMeta</a><wbr>(<a href="../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;?&gt;&nbsp;cm)</code></div>
+<div class="col-last odd-row-color">&nbsp;</div>
+<div class="col-first even-row-color"><code>protected <a href="../yaml/YamlWriter.html" title="class in org.apache.juneau.marshall.yaml">YamlWriter</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">YamlSerializerSession.</span><code><a href="../yaml/YamlSerializerSession.html#writeAnything(org.apache.juneau.marshall.yaml.YamlWriter,java.lang.Object,org.apache.juneau.marshall.ClassMeta,java.lang.String,org.apache.juneau.commons.bean.BeanPropertyMeta,boolean)" class="member-name-link">writeAnything</a><wbr>(<a href="../yaml/YamlWriter.html" title="class in org.apache.juneau.marshall.yaml">YamlWriter</a>&nbsp;out,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o,
  <a href="../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;?&gt;&nbsp;eType,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;attrName,
  <a href="../../commons/bean/BeanPropertyMeta.html" title="class in org.apache.juneau.commons.bean">BeanPropertyMeta</a>&nbsp;pMeta,
  boolean&nbsp;asField)</code></div>
-<div class="col-last odd-row-color">
+<div class="col-last even-row-color">
 <div class="block">Workhorse method.</div>
+</div>
+</div>
+<div class="caption"><span>Constructors in <a href="../yaml/package-summary.html">org.apache.juneau.marshall.yaml</a> with parameters of type <a href="../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a></span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier</div>
+<div class="table-header col-second">Constructor</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code>&nbsp;</code></div>
+<div class="col-second even-row-color"><code><a href="../yaml/YamlClassMeta.html#%3Cinit%3E(org.apache.juneau.marshall.ClassMeta,org.apache.juneau.marshall.yaml.YamlMetaProvider)" class="member-name-link">YamlClassMeta</a><wbr>(<a href="../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;?&gt;&nbsp;cm,
+ <a href="../yaml/YamlMetaProvider.html" title="interface in org.apache.juneau.marshall.yaml">YamlMetaProvider</a>&nbsp;mp)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Constructor.</div>
 </div>
 </div>
 </section>

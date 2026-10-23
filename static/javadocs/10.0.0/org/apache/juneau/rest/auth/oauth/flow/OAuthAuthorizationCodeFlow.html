@@ -78,7 +78,7 @@ loadScripts(document, 'script');</script>
 </div>
 <section class="class-description" id="class-description">
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/auth/oauth/flow/OAuthAuthorizationCodeFlow.html#line-70">OAuthAuthorizationCodeFlow</a></span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/auth/oauth/flow/OAuthAuthorizationCodeFlow.html#line-69">OAuthAuthorizationCodeFlow</a></span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
 <div class="block">Authorization-code grant (RFC 6749 &sect;4.1) flow helper with mandatory PKCE per RFC 7636.
 
@@ -232,7 +232,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.rest.auth.oauth.flow.OAuthAuthorizationCodeFlow.Builder)">
 <h3>OAuthAuthorizationCodeFlow</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/auth/oauth/flow/OAuthAuthorizationCodeFlow.html#line-251">OAuthAuthorizationCodeFlow</a></span><wbr><span class="parameters">(<a href="OAuthAuthorizationCodeFlow.Builder.html" title="class in org.apache.juneau.rest.auth.oauth.flow">OAuthAuthorizationCodeFlow.Builder</a>&nbsp;b)</span></div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/auth/oauth/flow/OAuthAuthorizationCodeFlow.html#line-252">OAuthAuthorizationCodeFlow</a></span><wbr><span class="parameters">(<a href="OAuthAuthorizationCodeFlow.Builder.html" title="class in org.apache.juneau.rest.auth.oauth.flow">OAuthAuthorizationCodeFlow.Builder</a>&nbsp;b)</span></div>
 <div class="block">Constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -251,7 +251,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="create()">
 <h3>create</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="OAuthAuthorizationCodeFlow.Builder.html" title="class in org.apache.juneau.rest.auth.oauth.flow">OAuthAuthorizationCodeFlow.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/auth/oauth/flow/OAuthAuthorizationCodeFlow.html#line-80">create</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="OAuthAuthorizationCodeFlow.Builder.html" title="class in org.apache.juneau.rest.auth.oauth.flow">OAuthAuthorizationCodeFlow.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/auth/oauth/flow/OAuthAuthorizationCodeFlow.html#line-81">create</a></span>()</div>
 <div class="block">Static creator.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -262,7 +262,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="buildAuthorizationUrl(java.lang.String,com.nimbusds.oauth2.sdk.pkce.CodeChallenge)">
 <h3>buildAuthorizationUrl</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/auth/oauth/flow/OAuthAuthorizationCodeFlow.html#line-271">buildAuthorizationUrl</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;state,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/auth/oauth/flow/OAuthAuthorizationCodeFlow.html#line-272">buildAuthorizationUrl</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;state,
  com.nimbusds.oauth2.sdk.pkce.CodeChallenge&nbsp;codeChallenge)</span></div>
 <div class="block">Builds the <code>authorize?...</code> URL the user-agent should be redirected to.</div>
 <dl class="notes">
@@ -278,7 +278,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="buildAuthenticationUrl(java.lang.String,com.nimbusds.oauth2.sdk.pkce.CodeChallenge,java.lang.String,java.util.function.Consumer)">
 <h3>buildAuthenticationUrl</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/auth/oauth/flow/OAuthAuthorizationCodeFlow.html#line-313">buildAuthenticationUrl</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;state,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/auth/oauth/flow/OAuthAuthorizationCodeFlow.html#line-311">buildAuthenticationUrl</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;state,
  com.nimbusds.oauth2.sdk.pkce.CodeChallenge&nbsp;codeChallenge,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;nonce,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Consumer.html" title="class or interface in java.util.function" class="external-link">Consumer</a>&lt;com.nimbusds.openid.connect.sdk.AuthenticationRequest.Builder&gt;&nbsp;customizer)</span></div>
@@ -312,7 +312,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="exchange(java.lang.String,com.nimbusds.oauth2.sdk.pkce.CodeVerifier)">
 <h3>exchange</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="OAuthToken.html" title="class in org.apache.juneau.rest.auth.oauth.flow">OAuthToken</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/auth/oauth/flow/OAuthAuthorizationCodeFlow.html#line-340">exchange</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;code,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="OAuthToken.html" title="class in org.apache.juneau.rest.auth.oauth.flow">OAuthToken</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/auth/oauth/flow/OAuthAuthorizationCodeFlow.html#line-335">exchange</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;code,
  com.nimbusds.oauth2.sdk.pkce.CodeVerifier&nbsp;codeVerifier)</span></div>
 <div class="block">Exchanges the authorization code returned by the IdP for an access token.</div>
 <dl class="notes">
@@ -329,7 +329,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getAuthorizationEndpoint()">
 <h3>getAuthorizationEndpoint</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/auth/oauth/flow/OAuthAuthorizationCodeFlow.html#line-361">getAuthorizationEndpoint</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/auth/oauth/flow/OAuthAuthorizationCodeFlow.html#line-356">getAuthorizationEndpoint</a></span>()</div>
 <div class="block">Returns the authorization endpoint URL.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -340,7 +340,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getTokenEndpoint()">
 <h3>getTokenEndpoint</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/auth/oauth/flow/OAuthAuthorizationCodeFlow.html#line-370">getTokenEndpoint</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/auth/oauth/flow/OAuthAuthorizationCodeFlow.html#line-365">getTokenEndpoint</a></span>()</div>
 <div class="block">Returns the token endpoint URL.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -351,7 +351,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getClientId()">
 <h3>getClientId</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/auth/oauth/flow/OAuthAuthorizationCodeFlow.html#line-379">getClientId</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/auth/oauth/flow/OAuthAuthorizationCodeFlow.html#line-374">getClientId</a></span>()</div>
 <div class="block">Returns the client ID.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -362,7 +362,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getRedirectUri()">
 <h3>getRedirectUri</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/auth/oauth/flow/OAuthAuthorizationCodeFlow.html#line-388">getRedirectUri</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/auth/oauth/flow/OAuthAuthorizationCodeFlow.html#line-383">getRedirectUri</a></span>()</div>
 <div class="block">Returns the redirect URI.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -373,7 +373,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getScopes()">
 <h3>getScopes</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/auth/oauth/flow/OAuthAuthorizationCodeFlow.html#line-397">getScopes</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/auth/oauth/flow/OAuthAuthorizationCodeFlow.html#line-392">getScopes</a></span>()</div>
 <div class="block">Returns the requested scopes.</div>
 <dl class="notes">
 <dt>Returns:</dt>

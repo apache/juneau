@@ -71,7 +71,7 @@ loadScripts(document, 'script');</script>
 <hr>
 <div class="type-signature"><span class="annotations"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/annotation/Target.html" title="class or interface in java.lang.annotation" class="external-link">@Target</a>({})
 <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/annotation/Retention.html" title="class or interface in java.lang.annotation" class="external-link">@Retention</a>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/annotation/RetentionPolicy.html#RUNTIME" title="class or interface in java.lang.annotation" class="external-link">RUNTIME</a>)
-</span><span class="modifiers">public @interface </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/Mixin.html#line-84">Mixin</a></span></div>
+</span><span class="modifiers">public @interface </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/Mixin.html#line-91">Mixin</a></span></div>
 <div class="block">Rich mixin definition for the <a href="Rest.html#mixinDefs()"><code>@Rest(mixinDefs=...)</code></a> attribute.
 
  <p>
@@ -101,7 +101,7 @@ loadScripts(document, 'script');</script>
    <li><b>List-shaped</b> (<code>guards</code>, <code>converters</code>, <code>encoders</code>, <code>serializers</code>,
       <code>parsers</code>, <code>responseProcessors</code>, <code>restOpArgs</code>, default headers/attributes,
       <code>produces</code>/<code>consumes</code>) &mdash; appended after the host chain that the mixin inherits.
-   <li><b>Replace-shaped</b> (<code>callLogger</code>, <code>partSerializer</code>, <code>partParser</code>, <code>debug</code>,
+   <li><b>Replace-shaped</b> (<code>partSerializer</code>, <code>partParser</code>,
       <code>defaultAccept</code>/<code>defaultContentType</code>/<code>defaultCharset</code>, <code>maxInput</code>,
       <code>roleGuard</code>/<code>rolesDeclared</code>, <code>messages</code>) &mdash; the host override wins when set.
  </ul>
@@ -115,6 +115,14 @@ loadScripts(document, 'script');</script>
 
  <p>
  <a href="#path()"><code>path()</code></a>/<a href="#paths()"><code>paths()</code></a> re-mount the mixin's endpoints under host-chosen prefix(es).
+
+ <h5 class='section'>Merging a mixin's list attributes into the host</h5>
+ <p>
+ The override slots above apply the <i>host's</i> values to the <i>mixin's</i> endpoints.  The separate opt-in
+ <a href="#mergeIntoHost()"><code>mergeIntoHost()</code></a> directive does the reverse: it appends the <i>mixin's</i> own list-shaped
+ <code>@Rest</code> attributes (e.g. <code>responseProcessors</code>) into the <i>host's</i> own chains, so the host's own
+ <code>@RestOp</code> methods pick them up too.  It defaults to <code>false</code> (host endpoints see only the host's
+ chain, as before) and is only settable on a rich <code>@Mixin</code> &mdash; see <a href="#mergeIntoHost()"><code>mergeIntoHost()</code></a>.
 
  <h5 class='section'>See Also:</h5><ul>
    <li class='ja'><a href="Rest.html#mixinDefs()"><code>Rest.mixinDefs()</code></a>
@@ -153,25 +161,15 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Optional Element</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;? extends <a href="logger/CallLogger.html" title="class in org.apache.juneau.rest.server.logger">CallLogger</a>&gt;</code></div>
-<div class="col-second even-row-color"><code><a href="#callLogger()" class="member-name-link">callLogger</a></code></div>
+<div class="col-first even-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>[]</code></div>
+<div class="col-second even-row-color"><code><a href="#consumes()" class="member-name-link">consumes</a></code></div>
 <div class="col-last even-row-color">
-<div class="block">Host-declared <a href="Rest.html#callLogger()"><code>callLogger</code></a> override for this mixin's endpoints.</div>
-</div>
-<div class="col-first odd-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>[]</code></div>
-<div class="col-second odd-row-color"><code><a href="#consumes()" class="member-name-link">consumes</a></code></div>
-<div class="col-last odd-row-color">
 <div class="block">Host-declared <a href="Rest.html#consumes()"><code>consumes</code></a> override for this mixin's endpoints.</div>
 </div>
-<div class="col-first even-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;? extends <a href="converter/RestConverter.html" title="interface in org.apache.juneau.rest.server.converter">RestConverter</a>&gt;[]</code></div>
-<div class="col-second even-row-color"><code><a href="#converters()" class="member-name-link">converters</a></code></div>
-<div class="col-last even-row-color">
-<div class="block">Host-declared <a href="Rest.html#converters()"><code>converters</code></a> override for this mixin's endpoints.</div>
-</div>
-<div class="col-first odd-row-color"><code><a href="Debug.html" title="annotation interface in org.apache.juneau.rest.server">Debug</a></code></div>
-<div class="col-second odd-row-color"><code><a href="#debug()" class="member-name-link">debug</a></code></div>
+<div class="col-first odd-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;? extends <a href="converter/RestConverter.html" title="interface in org.apache.juneau.rest.server.converter">RestConverter</a>&gt;[]</code></div>
+<div class="col-second odd-row-color"><code><a href="#converters()" class="member-name-link">converters</a></code></div>
 <div class="col-last odd-row-color">
-<div class="block">Host-declared <a href="Rest.html#debug()"><code>debug</code></a> override for this mixin's endpoints.</div>
+<div class="block">Host-declared <a href="Rest.html#converters()"><code>converters</code></a> override for this mixin's endpoints.</div>
 </div>
 <div class="col-first even-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
 <div class="col-second even-row-color"><code><a href="#defaultAccept()" class="member-name-link">defaultAccept</a></code></div>
@@ -218,69 +216,75 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color">
 <div class="block">Host-declared <a href="Rest.html#maxInput()"><code>maxInput</code></a> override for this mixin's endpoints.</div>
 </div>
-<div class="col-first odd-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second odd-row-color"><code><a href="#messages()" class="member-name-link">messages</a></code></div>
+<div class="col-first odd-row-color"><code>boolean</code></div>
+<div class="col-second odd-row-color"><code><a href="#mergeIntoHost()" class="member-name-link">mergeIntoHost</a></code></div>
 <div class="col-last odd-row-color">
+<div class="block">Opt-in directive: fold this mixin's <b>list-shaped</b> <code>@Rest</code> attributes into the <i>host</i>
+ resource's own corresponding chains (not just the mixin's own endpoints).</div>
+</div>
+<div class="col-first even-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second even-row-color"><code><a href="#messages()" class="member-name-link">messages</a></code></div>
+<div class="col-last even-row-color">
 <div class="block">Host-declared <a href="Rest.html#messages()"><code>messages</code></a> override for this mixin's endpoints.</div>
 </div>
-<div class="col-first even-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>[]</code></div>
-<div class="col-second even-row-color"><code><a href="#noInherit()" class="member-name-link">noInherit</a></code></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>[]</code></div>
+<div class="col-second odd-row-color"><code><a href="#noInherit()" class="member-name-link">noInherit</a></code></div>
+<div class="col-last odd-row-color">
 <div class="block">Inheritance-cutoff list for this mixin's sub-context.</div>
 </div>
-<div class="col-first odd-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;[]</code></div>
-<div class="col-second odd-row-color"><code><a href="#parsers()" class="member-name-link">parsers</a></code></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;[]</code></div>
+<div class="col-second even-row-color"><code><a href="#parsers()" class="member-name-link">parsers</a></code></div>
+<div class="col-last even-row-color">
 <div class="block">Host-declared <a href="Rest.html#parsers()"><code>parsers</code></a> override for this mixin's endpoints.</div>
 </div>
-<div class="col-first even-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;? extends <a href="../../marshall/httppart/HttpPartParser.html" title="interface in org.apache.juneau.marshall.httppart">HttpPartParser</a>&gt;</code></div>
-<div class="col-second even-row-color"><code><a href="#partParser()" class="member-name-link">partParser</a></code></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;? extends <a href="../../marshall/httppart/HttpPartParser.html" title="interface in org.apache.juneau.marshall.httppart">HttpPartParser</a>&gt;</code></div>
+<div class="col-second odd-row-color"><code><a href="#partParser()" class="member-name-link">partParser</a></code></div>
+<div class="col-last odd-row-color">
 <div class="block">Host-declared <a href="Rest.html#partParser()"><code>partParser</code></a> override for this mixin's endpoints.</div>
 </div>
-<div class="col-first odd-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;? extends <a href="../../marshall/httppart/HttpPartSerializer.html" title="interface in org.apache.juneau.marshall.httppart">HttpPartSerializer</a>&gt;</code></div>
-<div class="col-second odd-row-color"><code><a href="#partSerializer()" class="member-name-link">partSerializer</a></code></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;? extends <a href="../../marshall/httppart/HttpPartSerializer.html" title="interface in org.apache.juneau.marshall.httppart">HttpPartSerializer</a>&gt;</code></div>
+<div class="col-second even-row-color"><code><a href="#partSerializer()" class="member-name-link">partSerializer</a></code></div>
+<div class="col-last even-row-color">
 <div class="block">Host-declared <a href="Rest.html#partSerializer()"><code>partSerializer</code></a> override for this mixin's endpoints.</div>
 </div>
-<div class="col-first even-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second even-row-color"><code><a href="#path()" class="member-name-link">path</a></code></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second odd-row-color"><code><a href="#path()" class="member-name-link">path</a></code></div>
+<div class="col-last odd-row-color">
 <div class="block">Host-chosen single mount prefix for this mixin's endpoints (re-mount).</div>
 </div>
-<div class="col-first odd-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>[]</code></div>
-<div class="col-second odd-row-color"><code><a href="#paths()" class="member-name-link">paths</a></code></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>[]</code></div>
+<div class="col-second even-row-color"><code><a href="#paths()" class="member-name-link">paths</a></code></div>
+<div class="col-last even-row-color">
 <div class="block">Host-chosen multi-mount prefixes for this mixin's endpoints (re-mount).</div>
 </div>
-<div class="col-first even-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>[]</code></div>
-<div class="col-second even-row-color"><code><a href="#produces()" class="member-name-link">produces</a></code></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>[]</code></div>
+<div class="col-second odd-row-color"><code><a href="#produces()" class="member-name-link">produces</a></code></div>
+<div class="col-last odd-row-color">
 <div class="block">Host-declared <a href="Rest.html#produces()"><code>produces</code></a> override for this mixin's endpoints.</div>
 </div>
-<div class="col-first odd-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;? extends <a href="processor/ResponseProcessor.html" title="interface in org.apache.juneau.rest.server.processor">ResponseProcessor</a>&gt;[]</code></div>
-<div class="col-second odd-row-color"><code><a href="#responseProcessors()" class="member-name-link">responseProcessors</a></code></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;? extends <a href="processor/ResponseProcessor.html" title="interface in org.apache.juneau.rest.server.processor">ResponseProcessor</a>&gt;[]</code></div>
+<div class="col-second even-row-color"><code><a href="#responseProcessors()" class="member-name-link">responseProcessors</a></code></div>
+<div class="col-last even-row-color">
 <div class="block">Host-declared <a href="Rest.html#responseProcessors()"><code>responseProcessors</code></a> override for this mixin's endpoints.</div>
 </div>
-<div class="col-first even-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;? extends <a href="arg/RestOpArg.html" title="interface in org.apache.juneau.rest.server.arg">RestOpArg</a>&gt;[]</code></div>
-<div class="col-second even-row-color"><code><a href="#restOpArgs()" class="member-name-link">restOpArgs</a></code></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;? extends <a href="arg/RestOpArg.html" title="interface in org.apache.juneau.rest.server.arg">RestOpArg</a>&gt;[]</code></div>
+<div class="col-second odd-row-color"><code><a href="#restOpArgs()" class="member-name-link">restOpArgs</a></code></div>
+<div class="col-last odd-row-color">
 <div class="block">Host-declared <a href="Rest.html#restOpArgs()"><code>restOpArgs</code></a> override for this mixin's endpoints.</div>
 </div>
-<div class="col-first odd-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second odd-row-color"><code><a href="#roleGuard()" class="member-name-link">roleGuard</a></code></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second even-row-color"><code><a href="#roleGuard()" class="member-name-link">roleGuard</a></code></div>
+<div class="col-last even-row-color">
 <div class="block">Host-declared <a href="Rest.html#roleGuard()"><code>roleGuard</code></a> override for this mixin's endpoints.</div>
 </div>
-<div class="col-first even-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second even-row-color"><code><a href="#rolesDeclared()" class="member-name-link">rolesDeclared</a></code></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second odd-row-color"><code><a href="#rolesDeclared()" class="member-name-link">rolesDeclared</a></code></div>
+<div class="col-last odd-row-color">
 <div class="block">Host-declared <a href="Rest.html#rolesDeclared()"><code>rolesDeclared</code></a> override for this mixin's endpoints.</div>
 </div>
-<div class="col-first odd-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;? extends <a href="../../marshall/serializer/Serializer.html" title="class in org.apache.juneau.marshall.serializer">Serializer</a>&gt;[]</code></div>
-<div class="col-second odd-row-color"><code><a href="#serializers()" class="member-name-link">serializers</a></code></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;? extends <a href="../../marshall/serializer/Serializer.html" title="class in org.apache.juneau.marshall.serializer">Serializer</a>&gt;[]</code></div>
+<div class="col-second even-row-color"><code><a href="#serializers()" class="member-name-link">serializers</a></code></div>
+<div class="col-last even-row-color">
 <div class="block">Host-declared <a href="Rest.html#serializers()"><code>serializers</code></a> override for this mixin's endpoints.</div>
 </div>
 </div>
@@ -298,7 +302,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="type()">
 <h3>type</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/Mixin.html#line-96">type</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/Mixin.html#line-103">type</a></span></div>
 <div class="block">The mixin class to compose into the host resource.
 
  <p>
@@ -317,9 +321,57 @@ loadScripts(document, 'script');</script>
 <section class="member-details">
 <ul class="member-list">
 <li>
+<section class="detail" id="mergeIntoHost()">
+<h3>mergeIntoHost</h3>
+<div class="member-signature"><span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/Mixin.html#line-142">mergeIntoHost</a></span></div>
+<div class="block">Opt-in directive: fold this mixin's <b>list-shaped</b> <code>@Rest</code> attributes into the <i>host</i>
+ resource's own corresponding chains (not just the mixin's own endpoints).
+
+ <p>
+ By default (<code>false</code>) a mixin's list-shaped <code>@Rest</code> contributions apply only to the mixin's own
+ endpoints &mdash; a host's own <code>@RestOp</code> methods see only the host's chain (the standard
+ <a href="Rest.html#mixins()"><code>mixin</code></a> inheritance rule "host's chain runs first, then the mixin's appended; host
+ endpoints see only the host's chain"), so a mixin's e.g. <code>responseProcessors</code> are effectively dropped
+ for host endpoints.  Setting this to <code>true</code> additionally <b>appends</b> the adopted mixin's own
+ list-shaped <code>@Rest</code> attributes to the end of the host's corresponding chains, so the host's own
+ endpoints pick them up too.
+
+ <p>
+ The folded set is the list-shaped contribution attributes: <code>serializers</code>, <code>parsers</code>,
+ <code>encoders</code>, <code>converters</code>, <code>guards</code>, <code>responseProcessors</code>, <code>restOpArgs</code>,
+ <code>defaultRequestHeaders</code>, <code>defaultResponseHeaders</code>, <code>defaultRequestAttributes</code>,
+ <code>produces</code>, and <code>consumes</code>.  Replace-shaped attributes (e.g. <code>partSerializer</code>,
+ <code>partParser</code>) and host-only attributes (<code>path</code>/<code>paths</code>/<code>children</code>) are never
+ folded.  Same-class de-duplication applies, so a class the host already declares is not added twice.
+
+ <p>
+ This is strictly opt-in: it has no effect on a bare <a href="Rest.html#mixins()"><code>Rest.mixins()</code></a> entry (which cannot set it) or a
+ <code>@Mixin</code> that leaves it <code>false</code>, so existing resources are unaffected.  The mixin still mounts
+ its own endpoints as usual &mdash; this directive is purely additive to the host chain.
+
+ <h5 class='section'>Example:</h5>
+ <p class='bjava'>
+   <jc>// Auto-wire JspMixin's JspViewRenderer into the host so the host's own @RestOp methods can</jc>
+   <jc>// return JspView (no need to also list JspViewRenderer in the host's @Rest(responseProcessors)).</jc>
+   <ja>@Rest</ja>(mixinDefs=<ja>@Mixin</ja>(type=JspMixin.<jk>class</jk>, mergeIntoHost=<jk>true</jk>))
+   <jk>public class</jk> AppResource <jk>extends</jk> RestServlet { ... }
+ </p></div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>The annotation value.</dd>
+<dt>Since:</dt>
+<dd>10.0.0</dd>
+</dl>
+<dl class="notes">
+<dt>Default:</dt>
+<dd>false</dd>
+</dl>
+</section>
+</li>
+<li>
 <section class="detail" id="guards()">
 <h3>guards</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;? extends <a href="guard/RestGuard.html" title="class in org.apache.juneau.rest.server.guard">RestGuard</a>&gt;[]</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/Mixin.html#line-107">guards</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;? extends <a href="guard/RestGuard.html" title="class in org.apache.juneau.rest.server.guard">RestGuard</a>&gt;[]</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/Mixin.html#line-153">guards</a></span></div>
 <div class="block">Host-declared <a href="Rest.html#guards()"><code>guards</code></a> override for this mixin's endpoints (appended after the host chain).</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -334,7 +386,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="roleGuard()">
 <h3>roleGuard</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/Mixin.html#line-114">roleGuard</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/Mixin.html#line-160">roleGuard</a></span></div>
 <div class="block">Host-declared <a href="Rest.html#roleGuard()"><code>roleGuard</code></a> override for this mixin's endpoints.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -349,7 +401,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="rolesDeclared()">
 <h3>rolesDeclared</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/Mixin.html#line-121">rolesDeclared</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/Mixin.html#line-167">rolesDeclared</a></span></div>
 <div class="block">Host-declared <a href="Rest.html#rolesDeclared()"><code>rolesDeclared</code></a> override for this mixin's endpoints.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -364,7 +416,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="converters()">
 <h3>converters</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;? extends <a href="converter/RestConverter.html" title="interface in org.apache.juneau.rest.server.converter">RestConverter</a>&gt;[]</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/Mixin.html#line-128">converters</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;? extends <a href="converter/RestConverter.html" title="interface in org.apache.juneau.rest.server.converter">RestConverter</a>&gt;[]</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/Mixin.html#line-174">converters</a></span></div>
 <div class="block">Host-declared <a href="Rest.html#converters()"><code>converters</code></a> override for this mixin's endpoints.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -379,7 +431,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="encoders()">
 <h3>encoders</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;? extends <a href="../../marshall/encoders/Encoder.html" title="class in org.apache.juneau.marshall.encoders">Encoder</a>&gt;[]</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/Mixin.html#line-135">encoders</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;? extends <a href="../../marshall/encoders/Encoder.html" title="class in org.apache.juneau.marshall.encoders">Encoder</a>&gt;[]</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/Mixin.html#line-181">encoders</a></span></div>
 <div class="block">Host-declared <a href="Rest.html#encoders()"><code>encoders</code></a> override for this mixin's endpoints.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -394,7 +446,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="serializers()">
 <h3>serializers</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;? extends <a href="../../marshall/serializer/Serializer.html" title="class in org.apache.juneau.marshall.serializer">Serializer</a>&gt;[]</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/Mixin.html#line-142">serializers</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;? extends <a href="../../marshall/serializer/Serializer.html" title="class in org.apache.juneau.marshall.serializer">Serializer</a>&gt;[]</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/Mixin.html#line-188">serializers</a></span></div>
 <div class="block">Host-declared <a href="Rest.html#serializers()"><code>serializers</code></a> override for this mixin's endpoints.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -409,7 +461,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="parsers()">
 <h3>parsers</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;[]</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/Mixin.html#line-149">parsers</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;[]</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/Mixin.html#line-195">parsers</a></span></div>
 <div class="block">Host-declared <a href="Rest.html#parsers()"><code>parsers</code></a> override for this mixin's endpoints.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -424,7 +476,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="responseProcessors()">
 <h3>responseProcessors</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;? extends <a href="processor/ResponseProcessor.html" title="interface in org.apache.juneau.rest.server.processor">ResponseProcessor</a>&gt;[]</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/Mixin.html#line-156">responseProcessors</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;? extends <a href="processor/ResponseProcessor.html" title="interface in org.apache.juneau.rest.server.processor">ResponseProcessor</a>&gt;[]</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/Mixin.html#line-202">responseProcessors</a></span></div>
 <div class="block">Host-declared <a href="Rest.html#responseProcessors()"><code>responseProcessors</code></a> override for this mixin's endpoints.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -439,7 +491,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="restOpArgs()">
 <h3>restOpArgs</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;? extends <a href="arg/RestOpArg.html" title="interface in org.apache.juneau.rest.server.arg">RestOpArg</a>&gt;[]</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/Mixin.html#line-163">restOpArgs</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;? extends <a href="arg/RestOpArg.html" title="interface in org.apache.juneau.rest.server.arg">RestOpArg</a>&gt;[]</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/Mixin.html#line-209">restOpArgs</a></span></div>
 <div class="block">Host-declared <a href="Rest.html#restOpArgs()"><code>restOpArgs</code></a> override for this mixin's endpoints.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -452,24 +504,9 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
-<section class="detail" id="callLogger()">
-<h3>callLogger</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;? extends <a href="logger/CallLogger.html" title="class in org.apache.juneau.rest.server.logger">CallLogger</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/Mixin.html#line-170">callLogger</a></span></div>
-<div class="block">Host-declared <a href="Rest.html#callLogger()"><code>callLogger</code></a> override for this mixin's endpoints.</div>
-<dl class="notes">
-<dt>Returns:</dt>
-<dd>The annotation value.</dd>
-</dl>
-<dl class="notes">
-<dt>Default:</dt>
-<dd>org.apache.juneau.rest.server.logger.CallLogger.Void.class</dd>
-</dl>
-</section>
-</li>
-<li>
 <section class="detail" id="partSerializer()">
 <h3>partSerializer</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;? extends <a href="../../marshall/httppart/HttpPartSerializer.html" title="interface in org.apache.juneau.marshall.httppart">HttpPartSerializer</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/Mixin.html#line-177">partSerializer</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;? extends <a href="../../marshall/httppart/HttpPartSerializer.html" title="interface in org.apache.juneau.marshall.httppart">HttpPartSerializer</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/Mixin.html#line-216">partSerializer</a></span></div>
 <div class="block">Host-declared <a href="Rest.html#partSerializer()"><code>partSerializer</code></a> override for this mixin's endpoints.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -484,7 +521,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="partParser()">
 <h3>partParser</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;? extends <a href="../../marshall/httppart/HttpPartParser.html" title="interface in org.apache.juneau.marshall.httppart">HttpPartParser</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/Mixin.html#line-184">partParser</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;? extends <a href="../../marshall/httppart/HttpPartParser.html" title="interface in org.apache.juneau.marshall.httppart">HttpPartParser</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/Mixin.html#line-223">partParser</a></span></div>
 <div class="block">Host-declared <a href="Rest.html#partParser()"><code>partParser</code></a> override for this mixin's endpoints.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -497,24 +534,9 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
-<section class="detail" id="debug()">
-<h3>debug</h3>
-<div class="member-signature"><span class="return-type"><a href="Debug.html" title="annotation interface in org.apache.juneau.rest.server">Debug</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/Mixin.html#line-191">debug</a></span></div>
-<div class="block">Host-declared <a href="Rest.html#debug()"><code>debug</code></a> override for this mixin's endpoints.</div>
-<dl class="notes">
-<dt>Returns:</dt>
-<dd>The annotation value.</dd>
-</dl>
-<dl class="notes">
-<dt>Default:</dt>
-<dd>@org.apache.juneau.rest.server.Debug</dd>
-</dl>
-</section>
-</li>
-<li>
 <section class="detail" id="messages()">
 <h3>messages</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/Mixin.html#line-198">messages</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/Mixin.html#line-230">messages</a></span></div>
 <div class="block">Host-declared <a href="Rest.html#messages()"><code>messages</code></a> override for this mixin's endpoints.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -529,7 +551,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="defaultRequestHeaders()">
 <h3>defaultRequestHeaders</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>[]</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/Mixin.html#line-205">defaultRequestHeaders</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>[]</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/Mixin.html#line-237">defaultRequestHeaders</a></span></div>
 <div class="block">Host-declared <a href="Rest.html#defaultRequestHeaders()"><code>defaultRequestHeaders</code></a> override for this mixin's endpoints.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -544,7 +566,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="defaultResponseHeaders()">
 <h3>defaultResponseHeaders</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>[]</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/Mixin.html#line-212">defaultResponseHeaders</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>[]</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/Mixin.html#line-244">defaultResponseHeaders</a></span></div>
 <div class="block">Host-declared <a href="Rest.html#defaultResponseHeaders()"><code>defaultResponseHeaders</code></a> override for this mixin's endpoints.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -559,7 +581,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="defaultRequestAttributes()">
 <h3>defaultRequestAttributes</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>[]</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/Mixin.html#line-219">defaultRequestAttributes</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>[]</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/Mixin.html#line-251">defaultRequestAttributes</a></span></div>
 <div class="block">Host-declared <a href="Rest.html#defaultRequestAttributes()"><code>defaultRequestAttributes</code></a> override for this mixin's endpoints.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -574,7 +596,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="produces()">
 <h3>produces</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>[]</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/Mixin.html#line-226">produces</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>[]</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/Mixin.html#line-258">produces</a></span></div>
 <div class="block">Host-declared <a href="Rest.html#produces()"><code>produces</code></a> override for this mixin's endpoints.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -589,7 +611,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="consumes()">
 <h3>consumes</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>[]</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/Mixin.html#line-233">consumes</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>[]</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/Mixin.html#line-265">consumes</a></span></div>
 <div class="block">Host-declared <a href="Rest.html#consumes()"><code>consumes</code></a> override for this mixin's endpoints.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -604,7 +626,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="defaultAccept()">
 <h3>defaultAccept</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/Mixin.html#line-240">defaultAccept</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/Mixin.html#line-272">defaultAccept</a></span></div>
 <div class="block">Host-declared <a href="Rest.html#defaultAccept()"><code>defaultAccept</code></a> override for this mixin's endpoints.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -619,7 +641,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="defaultContentType()">
 <h3>defaultContentType</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/Mixin.html#line-247">defaultContentType</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/Mixin.html#line-279">defaultContentType</a></span></div>
 <div class="block">Host-declared <a href="Rest.html#defaultContentType()"><code>defaultContentType</code></a> override for this mixin's endpoints.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -634,7 +656,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="defaultCharset()">
 <h3>defaultCharset</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/Mixin.html#line-254">defaultCharset</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/Mixin.html#line-286">defaultCharset</a></span></div>
 <div class="block">Host-declared <a href="Rest.html#defaultCharset()"><code>defaultCharset</code></a> override for this mixin's endpoints.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -649,7 +671,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="maxInput()">
 <h3>maxInput</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/Mixin.html#line-261">maxInput</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/Mixin.html#line-293">maxInput</a></span></div>
 <div class="block">Host-declared <a href="Rest.html#maxInput()"><code>maxInput</code></a> override for this mixin's endpoints.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -664,7 +686,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="path()">
 <h3>path</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/Mixin.html#line-268">path</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/Mixin.html#line-300">path</a></span></div>
 <div class="block">Host-chosen single mount prefix for this mixin's endpoints (re-mount).</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -679,7 +701,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="paths()">
 <h3>paths</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>[]</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/Mixin.html#line-275">paths</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>[]</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/Mixin.html#line-307">paths</a></span></div>
 <div class="block">Host-chosen multi-mount prefixes for this mixin's endpoints (re-mount).</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -694,7 +716,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="noInherit()">
 <h3>noInherit</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>[]</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/Mixin.html#line-286">noInherit</a></span></div>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>[]</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/server/Mixin.html#line-318">noInherit</a></span></div>
 <div class="block">Inheritance-cutoff list for this mixin's sub-context.
 
  <p>

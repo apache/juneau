@@ -78,18 +78,25 @@ loadScripts(document, 'script');</script>
 </div>
 <section class="class-description" id="class-description">
 <dl class="notes">
+<dt>All Implemented Interfaces:</dt>
+<dd><code><a href="../ViewMixinBuilder.html" title="interface in org.apache.juneau.rest.server.view">ViewMixinBuilder</a>&lt;<a href="MustacheMixin.Builder.html" title="class in org.apache.juneau.rest.server.view.mustache">MustacheMixin.Builder</a>&gt;</code></dd>
+</dl>
+<dl class="notes">
 <dt>Enclosing class:</dt>
 <dd><a href="MustacheMixin.html" title="class in org.apache.juneau.rest.server.view.mustache">MustacheMixin</a></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public static class </span><span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/view/mustache/MustacheMixin.html#line-272">MustacheMixin.Builder</a></span>
-<span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
+<div class="type-signature"><span class="modifiers">public static class </span><span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/view/mustache/MustacheMixin.html#line-293">MustacheMixin.Builder</a></span>
+<span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>
+implements <a href="../ViewMixinBuilder.html" title="interface in org.apache.juneau.rest.server.view">ViewMixinBuilder</a>&lt;<a href="MustacheMixin.Builder.html" title="class in org.apache.juneau.rest.server.view.mustache">MustacheMixin.Builder</a>&gt;</span></div>
 <div class="block">Builder for <a href="MustacheMixin.html" title="class in org.apache.juneau.rest.server.view.mustache"><code>MustacheMixin</code></a>.
 
  <p>
  Mirrors <a href="MustacheDispatcher.Builder.html" title="class in org.apache.juneau.rest.server.view.mustache"><code>MustacheDispatcher.Builder</code></a>'s configuration methods on its own surface and
- forwards each call into a held <a href="MustacheDispatcher.Builder.html" title="class in org.apache.juneau.rest.server.view.mustache"><code>MustacheDispatcher.Builder</code></a> (§2.3.1 worker-bean
- composition).</div>
+ forwards each call into a held <a href="MustacheDispatcher.Builder.html" title="class in org.apache.juneau.rest.server.view.mustache"><code>MustacheDispatcher.Builder</code></a> (worker-bean
+ composition). Implements <a href="../ViewMixinBuilder.html" title="interface in org.apache.juneau.rest.server.view"><code>ViewMixinBuilder</code></a> so <a href="#basePath(java.lang.String)"><code>basePath(String)</code></a> and
+ <a href="#cacheTemplates(boolean)"><code>cacheTemplates(boolean)</code></a> are guaranteed to transfer to the sibling JSP / Thymeleaf /
+ FreeMarker bridge builders.</div>
 </section>
 <section class="summary">
 <ul class="summary-list">
@@ -131,15 +138,25 @@ loadScripts(document, 'script');</script>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Builds the <a href="MustacheMixin.html" title="class in org.apache.juneau.rest.server.view.mustache"><code>MustacheMixin</code></a>.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getBasePath()" class="member-name-link">getBasePath</a>()</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="MustacheMixin.Builder.html" title="class in org.apache.juneau.rest.server.view.mustache">MustacheMixin.Builder</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#cacheTemplates(boolean)" class="member-name-link">cacheTemplates</a><wbr>(boolean&nbsp;value)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Reads the current base path setting (test/inspection helper).</div>
+<div class="block">Sets whether the bridge's default factory caches compiled templates.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getTemplateSuffix()" class="member-name-link">getTemplateSuffix</a>()</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getBasePath()" class="member-name-link">getBasePath</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Reads the current base path setting (test/inspection helper).</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getTemplateSuffix()" class="member-name-link">getTemplateSuffix</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Reads the current template-suffix setting (test/inspection helper).</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#isCacheTemplates()" class="member-name-link">isCacheTemplates</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Reads the current cache-templates setting (test/inspection helper).</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="MustacheMixin.Builder.html" title="class in org.apache.juneau.rest.server.view.mustache">MustacheMixin.Builder</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#templateSuffix(java.lang.String)" class="member-name-link">templateSuffix</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</code></div>
@@ -166,7 +183,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;()">
 <h3>Builder</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/view/mustache/MustacheMixin.Builder.html#line-277">Builder</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/view/mustache/MustacheMixin.Builder.html#line-298">Builder</a></span>()</div>
 <div class="block">Constructor &mdash; package access for <a href="MustacheMixin.html#create()"><code>MustacheMixin.create()</code></a>.</div>
 </section>
 </li>
@@ -181,7 +198,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="basePath(java.lang.String)">
 <h3>basePath</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MustacheMixin.Builder.html" title="class in org.apache.juneau.rest.server.view.mustache">MustacheMixin.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/view/mustache/MustacheMixin.Builder.html#line-291">basePath</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MustacheMixin.Builder.html" title="class in org.apache.juneau.rest.server.view.mustache">MustacheMixin.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/view/mustache/MustacheMixin.Builder.html#line-312">basePath</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block">Sets the classpath base path under which template resources are resolved.
 
  <p>
@@ -189,6 +206,8 @@ loadScripts(document, 'script');</script>
  value is <code>"/templates/"</code> &mdash; the same Spring-Boot-compatible layout
  convention the sibling JSP / Thymeleaf bridges use.</div>
 <dl class="notes">
+<dt>Specified by:</dt>
+<dd><code><a href="../ViewMixinBuilder.html#basePath(java.lang.String)">basePath</a></code>&nbsp;in interface&nbsp;<code><a href="../ViewMixinBuilder.html" title="interface in org.apache.juneau.rest.server.view">ViewMixinBuilder</a>&lt;<a href="MustacheMixin.Builder.html" title="class in org.apache.juneau.rest.server.view.mustache">MustacheMixin.Builder</a>&gt;</code></dd>
 <dt>Parameters:</dt>
 <dd><code>value</code> - The base path. <code>null</code> or blank values reset to the default
    <a href="MustacheMixin.html#DEFAULT_BASE_PATH"><code>MustacheMixin.DEFAULT_BASE_PATH</code></a>.</dd>
@@ -200,7 +219,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="templateSuffix(java.lang.String)">
 <h3>templateSuffix</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MustacheMixin.Builder.html" title="class in org.apache.juneau.rest.server.view.mustache">MustacheMixin.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/view/mustache/MustacheMixin.Builder.html#line-308">templateSuffix</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MustacheMixin.Builder.html" title="class in org.apache.juneau.rest.server.view.mustache">MustacheMixin.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/view/mustache/MustacheMixin.Builder.html#line-330">templateSuffix</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block">Sets the suffix to append to template names that don't already end with it (idempotent).
 
  <p>
@@ -217,9 +236,31 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
+<section class="detail" id="cacheTemplates(boolean)">
+<h3>cacheTemplates</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MustacheMixin.Builder.html" title="class in org.apache.juneau.rest.server.view.mustache">MustacheMixin.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/view/mustache/MustacheMixin.Builder.html#line-348">cacheTemplates</a></span><wbr><span class="parameters">(boolean&nbsp;value)</span></div>
+<div class="block">Sets whether the bridge's default factory caches compiled templates.
+
+ <p>
+ Defaults to <a href="MustacheMixin.html#DEFAULT_CACHE_TEMPLATES"><code>true</code></a> (cache forever
+ &mdash; production-safe). Set <code>false</code> to enable dev hot-reload (the bridge rebuilds
+ the factory from a fresh, empty compile-cache on every render). This setting only
+ applies to the bridge's fallback factory; if a <code>MustacheFactory</code> bean is
+ registered, its own caching behavior is honored.</div>
+<dl class="notes">
+<dt>Specified by:</dt>
+<dd><code><a href="../ViewMixinBuilder.html#cacheTemplates(boolean)">cacheTemplates</a></code>&nbsp;in interface&nbsp;<code><a href="../ViewMixinBuilder.html" title="interface in org.apache.juneau.rest.server.view">ViewMixinBuilder</a>&lt;<a href="MustacheMixin.Builder.html" title="class in org.apache.juneau.rest.server.view.mustache">MustacheMixin.Builder</a>&gt;</code></dd>
+<dt>Parameters:</dt>
+<dd><code>value</code> - The new value.</dd>
+<dt>Returns:</dt>
+<dd>This object.</dd>
+</dl>
+</section>
+</li>
+<li>
 <section class="detail" id="getBasePath()">
 <h3>getBasePath</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/view/mustache/MustacheMixin.Builder.html#line-318">getBasePath</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/view/mustache/MustacheMixin.Builder.html#line-359">getBasePath</a></span>()</div>
 <div class="block">Reads the current base path setting (test/inspection helper).</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -230,7 +271,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getTemplateSuffix()">
 <h3>getTemplateSuffix</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/view/mustache/MustacheMixin.Builder.html#line-327">getTemplateSuffix</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/view/mustache/MustacheMixin.Builder.html#line-368">getTemplateSuffix</a></span>()</div>
 <div class="block">Reads the current template-suffix setting (test/inspection helper).</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -239,9 +280,20 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
+<section class="detail" id="isCacheTemplates()">
+<h3>isCacheTemplates</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/view/mustache/MustacheMixin.Builder.html#line-377">isCacheTemplates</a></span>()</div>
+<div class="block">Reads the current cache-templates setting (test/inspection helper).</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>The cache flag.</dd>
+</dl>
+</section>
+</li>
+<li>
 <section class="detail" id="build()">
 <h3>build</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MustacheMixin.html" title="class in org.apache.juneau.rest.server.view.mustache">MustacheMixin</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/view/mustache/MustacheMixin.Builder.html#line-336">build</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MustacheMixin.html" title="class in org.apache.juneau.rest.server.view.mustache">MustacheMixin</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/view/mustache/MustacheMixin.Builder.html#line-386">build</a></span>()</div>
 <div class="block">Builds the <a href="MustacheMixin.html" title="class in org.apache.juneau.rest.server.view.mustache"><code>MustacheMixin</code></a>.</div>
 <dl class="notes">
 <dt>Returns:</dt>

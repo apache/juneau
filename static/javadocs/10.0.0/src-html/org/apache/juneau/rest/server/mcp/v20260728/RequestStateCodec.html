@@ -75,15 +75,15 @@
 <span class="source-line-no">062</span><span id="line-62"> * any custom codec) agree on exactly what is authenticated.</span>
 <span class="source-line-no">063</span><span id="line-63"> *</span>
 <span class="source-line-no">064</span><span id="line-64"> * &lt;p&gt;</span>
-<span class="source-line-no">065</span><span id="line-65"> * &lt;b&gt;Authenticated principal (READY-312f F4).&lt;/b&gt; Both {@link #seal(McpRequestState, String, Principal)} and</span>
+<span class="source-line-no">065</span><span id="line-65"> * &lt;b&gt;Authenticated principal.&lt;/b&gt; Both {@link #seal(McpRequestState, String, Principal)} and</span>
 <span class="source-line-no">066</span><span id="line-66"> * {@link #unseal(String, String, Principal)} receive the caller's authenticated {@link Principal} &amp;mdash; the same</span>
-<span class="source-line-no">067</span><span id="line-67"> * identity the F2 resource-server layer establishes (see {@code McpResourceServerSupport#principal}). This is the</span>
+<span class="source-line-no">067</span><span id="line-67"> * identity the resource-server layer establishes (see {@code McpResourceServerSupport#principal}). This is the</span>
 <span class="source-line-no">068</span><span id="line-68"> * &lt;i&gt;seam&lt;/i&gt; a hardened codec uses to fold the caller identity into its authenticated data, so a</span>
 <span class="source-line-no">069</span><span id="line-69"> * {@code requestState} minted for principal A cannot be resumed by principal B. The built-in</span>
 <span class="source-line-no">070</span><span id="line-70"> * {@link AeadRequestStateCodec} binds exactly that: it folds a canonical, deterministic {@code iss|sub} identity</span>
 <span class="source-line-no">071</span><span id="line-71"> * (see {@link AeadRequestStateCodec#principalIdentity(Principal)}) into its AEAD authenticated data, so a</span>
-<span class="source-line-no">072</span><span id="line-72"> * mismatched principal fails the GCM tag check and {@link #unseal} returns {@link Optional#empty()}. F4 is what</span>
-<span class="source-line-no">073</span><span id="line-73"> * guarantees the principal is delivered to the codec at both seal and unseal in the first place; a custom codec</span>
+<span class="source-line-no">072</span><span id="line-72"> * mismatched principal fails the GCM tag check and {@link #unseal} returns {@link Optional#empty()}. The</span>
+<span class="source-line-no">073</span><span id="line-73"> * dispatcher guarantees the principal is delivered to the codec at both seal and unseal; a custom codec</span>
 <span class="source-line-no">074</span><span id="line-74"> * remains free to bind a different identity attribute (subject claim, issuer+subject, full claim set) or none at</span>
 <span class="source-line-no">075</span><span id="line-75"> * all. The principal is &lt;b&gt;nullable&lt;/b&gt;: when RS auth is disabled or the caller is anonymous it is &lt;jk&gt;null&lt;/jk&gt;,</span>
 <span class="source-line-no">076</span><span id="line-76"> * and every codec must seal/unseal cleanly (no NPE) in that case. The two-argument</span>

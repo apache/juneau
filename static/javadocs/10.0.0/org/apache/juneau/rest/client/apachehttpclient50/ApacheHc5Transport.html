@@ -82,7 +82,7 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Closeable.html" title="class or interface in java.io" class="external-link">Closeable</a></code>, <code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/AutoCloseable.html" title="class or interface in java.lang" class="external-link">AutoCloseable</a></code>, <code><a href="../HttpTransport.html" title="interface in org.apache.juneau.rest.client">HttpTransport</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public final class </span><span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/client/apachehttpclient50/ApacheHc5Transport.html#line-56">ApacheHc5Transport</a></span>
+<div class="type-signature"><span class="modifiers">public final class </span><span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/client/apachehttpclient50/ApacheHc5Transport.html#line-77">ApacheHc5Transport</a></span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>
 implements <a href="../HttpTransport.html" title="interface in org.apache.juneau.rest.client">HttpTransport</a></span></div>
 <div class="block"><a href="../HttpTransport.html" title="interface in org.apache.juneau.rest.client"><code>HttpTransport</code></a> implementation backed by Apache HttpClient 5.x.
@@ -102,8 +102,15 @@ implements <a href="../HttpTransport.html" title="interface in org.apache.juneau
  </p>
 
  <p>
- <b>Beta — API subject to change:</b> This type is part of the next-generation REST client and HTTP stack
- (<code>org.apache.juneau.marshall.ng.*</code>).
+ The transport passes each ordinary request a per-request context that removes the caller's credential headers
+ (<a href="../RedirectSecurity.html#stripOnCrossOrigin()"><code>RedirectSecurity.stripOnCrossOrigin()</code></a>) from a redirect hop to another origin and from every later hop.  On
+ the client the transport creates itself, a redirect to another origin is therefore followed without those headers.
+ With a caller-supplied client, the client's own redirect settings and <code>RedirectStrategy</code> decide which redirects
+ are followed, and the context guards whatever strategy the client was built with, including
+ <code>LaxRedirectStrategy</code>.
+
+ <p>
+ <b>Beta — API subject to change:</b> This type is part of the next-generation REST client and HTTP stack.
  It is not API-frozen: binary- and source-incompatible changes may appear in the <b>next major</b> Juneau release
  (and possibly earlier).
 
@@ -148,6 +155,14 @@ implements <a href="../HttpTransport.html" title="interface in org.apache.juneau
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Executes the given request and returns the response.</div>
 </div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#supportsUrlPolicy()" class="member-name-link">supportsUrlPolicy</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Returns <code>true</code> if this transport can honor the SSRF guardrail's connect-time contract for a
+ policy-covered request (<a href="../TransportRequest.html#isSsrfGuardActive()"><code>TransportRequest.isSsrfGuardActive()</code></a>): pin-on-connect to a resolved address
+ that has passed the deny-private policy, and Juneau-controlled redirect revalidation (no fallback to the
+ transport's own auto-follow).</div>
+</div>
 </div>
 </div>
 </div>
@@ -168,7 +183,7 @@ implements <a href="../HttpTransport.html" title="interface in org.apache.juneau
 <li>
 <section class="detail" id="builder()">
 <h3>builder</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="ApacheHc5TransportBuilder.html" title="class in org.apache.juneau.rest.client.apachehttpclient50">ApacheHc5TransportBuilder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/client/apachehttpclient50/ApacheHc5Transport.html#line-72">builder</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="ApacheHc5TransportBuilder.html" title="class in org.apache.juneau.rest.client.apachehttpclient50">ApacheHc5TransportBuilder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/client/apachehttpclient50/ApacheHc5Transport.html#line-141">builder</a></span>()</div>
 <div class="block">Returns a new builder for this transport.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -179,7 +194,7 @@ implements <a href="../HttpTransport.html" title="interface in org.apache.juneau
 <li>
 <section class="detail" id="create()">
 <h3>create</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="ApacheHc5Transport.html" title="class in org.apache.juneau.rest.client.apachehttpclient50">ApacheHc5Transport</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/client/apachehttpclient50/ApacheHc5Transport.html#line-81">create</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="ApacheHc5Transport.html" title="class in org.apache.juneau.rest.client.apachehttpclient50">ApacheHc5Transport</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/client/apachehttpclient50/ApacheHc5Transport.html#line-150">create</a></span>()</div>
 <div class="block">Returns a new instance backed by a default <code>CloseableHttpClient</code>.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -190,7 +205,7 @@ implements <a href="../HttpTransport.html" title="interface in org.apache.juneau
 <li>
 <section class="detail" id="execute(org.apache.juneau.rest.client.TransportRequest)">
 <h3>execute</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../TransportResponse.html" title="class in org.apache.juneau.rest.client">TransportResponse</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/client/apachehttpclient50/ApacheHc5Transport.html#line-85">execute</a></span><wbr><span class="parameters">(<a href="../TransportRequest.html" title="class in org.apache.juneau.rest.client">TransportRequest</a>&nbsp;request)</span>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../TransportResponse.html" title="class in org.apache.juneau.rest.client">TransportResponse</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/client/apachehttpclient50/ApacheHc5Transport.html#line-154">execute</a></span><wbr><span class="parameters">(<a href="../TransportRequest.html" title="class in org.apache.juneau.rest.client">TransportRequest</a>&nbsp;request)</span>
                           throws <span class="exceptions"><a href="../TransportException.html" title="class in org.apache.juneau.rest.client">TransportException</a></span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="../HttpTransport.html#execute(org.apache.juneau.rest.client.TransportRequest)">HttpTransport</a></code></span></div>
 <div class="block">Executes the given request and returns the response.
@@ -210,9 +225,33 @@ implements <a href="../HttpTransport.html" title="interface in org.apache.juneau
 </section>
 </li>
 <li>
+<section class="detail" id="supportsUrlPolicy()">
+<h3>supportsUrlPolicy</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/client/apachehttpclient50/ApacheHc5Transport.html#line-161">supportsUrlPolicy</a></span>()</div>
+<div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="../HttpTransport.html#supportsUrlPolicy()">HttpTransport</a></code></span></div>
+<div class="block">Returns <code>true</code> if this transport can honor the SSRF guardrail's connect-time contract for a
+ policy-covered request (<a href="../TransportRequest.html#isSsrfGuardActive()"><code>TransportRequest.isSsrfGuardActive()</code></a>): pin-on-connect to a resolved address
+ that has passed the deny-private policy, and Juneau-controlled redirect revalidation (no fallback to the
+ transport's own auto-follow).
+
+ <p>
+ The default implementation returns <code>false</code> (fail closed): an unknown/caller-supplied transport that
+ has not affirmatively opted in is presumed unable to honor the contract, so
+ <code>RestRequest#run()</code> rejects policy-covered requests against it rather than silently connecting without
+ the guardrail. First-party transports that construct and fully control their own underlying HTTP client
+ override this to return <code>true</code>.</div>
+<dl class="notes">
+<dt>Specified by:</dt>
+<dd><code><a href="../HttpTransport.html#supportsUrlPolicy()">supportsUrlPolicy</a></code>&nbsp;in interface&nbsp;<code><a href="../HttpTransport.html" title="interface in org.apache.juneau.rest.client">HttpTransport</a></code></dd>
+<dt>Returns:</dt>
+<dd><code>true</code> if this transport supports pin-on-connect + redirect revalidation for policy-covered requests.</dd>
+</dl>
+</section>
+</li>
+<li>
 <section class="detail" id="close()">
 <h3>close</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/client/apachehttpclient50/ApacheHc5Transport.html#line-111">close</a></span>()
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/client/apachehttpclient50/ApacheHc5Transport.html#line-224">close</a></span>()
            throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="../HttpTransport.html#close()">HttpTransport</a></code></span></div>
 <div class="block">Releases resources held by this transport (connection pools, threads, etc.).

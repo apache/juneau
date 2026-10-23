@@ -74,8 +74,8 @@
 <span class="source-line-no">061</span><span id="line-61">    */</span>
 <span class="source-line-no">062</span><span id="line-62">   public LogbackLogBackend() {</span>
 <span class="source-line-no">063</span><span id="line-63">      var factory = LoggerFactory.getILoggerFactory();</span>
-<span class="source-line-no">064</span><span id="line-64">      if (! (factory instanceof LoggerContext factory2))</span>
-<span class="source-line-no">065</span><span id="line-65">         throw isex("The bound SLF4J backend is not Logback (ILoggerFactory=%s).  /loggers drives the concrete backend, not the SLF4J facade.", factory.getClass().getName());</span>
+<span class="source-line-no">064</span><span id="line-64">      if (! (factory instanceof LoggerContext factory2))  // HTT: SLF4J binds Logback statically on this module's classpath; a seam (injectable ILoggerFactory) would make this testable</span>
+<span class="source-line-no">065</span><span id="line-65">         throw isex("The bound SLF4J backend is not Logback (ILoggerFactory=%s).  /loggers drives the concrete backend, not the SLF4J facade.", factory.getClass().getName());  // HTT: only reachable when the bound SLF4J backend is not Logback; a seam would make this testable</span>
 <span class="source-line-no">066</span><span id="line-66">      this.context = factory2;</span>
 <span class="source-line-no">067</span><span id="line-67">   }</span>
 <span class="source-line-no">068</span><span id="line-68"></span>
@@ -130,7 +130,7 @@
 <span class="source-line-no">117</span><span id="line-117">   }</span>
 <span class="source-line-no">118</span><span id="line-118"></span>
 <span class="source-line-no">119</span><span id="line-119">   private static String resolveName(String name) {</span>
-<span class="source-line-no">120</span><span id="line-120">      return (name == null || name.equals("ROOT")) ? Logger.ROOT_LOGGER_NAME : name;</span>
+<span class="source-line-no">120</span><span id="line-120">      return (name == null || eq(name, "ROOT")) ? Logger.ROOT_LOGGER_NAME : name;</span>
 <span class="source-line-no">121</span><span id="line-121">   }</span>
 <span class="source-line-no">122</span><span id="line-122">}</span>
 

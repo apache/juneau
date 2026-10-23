@@ -54,9 +54,8 @@ loadScripts(document, 'script');</script>
 <h2 title="Contents">Contents</h2>
 <ul>
 <li><a href="#for-removal">Terminally Deprecated</a></li>
-<li><a href="#class">Classes</a></li>
+<li><a href="#field">Fields</a></li>
 <li><a href="#method">Methods</a></li>
-<li><a href="#constructor">Constructors</a></li>
 </ul>
 </div>
 <ul class="block-list">
@@ -117,18 +116,28 @@ loadScripts(document, 'script');</script>
 </ul>
 <ul class="block-list">
 <li>
-<div id="class">
-<div class="caption"><span>Deprecated Classes</span></div>
+<div id="field">
+<div class="caption"><span>Deprecated Fields</span></div>
 <div class="summary-table two-column-summary">
-<div class="table-header col-first">Class</div>
+<div class="table-header col-first">Field</div>
 <div class="table-header col-last">Description</div>
-<div class="col-summary-item-name even-row-color"><a href="org/apache/juneau/rest/server/auth/oauth/flow/OAuthResourceOwnerFlow.html" title="class in org.apache.juneau.rest.server.auth.oauth.flow">org.apache.juneau.rest.server.auth.oauth.flow.OAuthResourceOwnerFlow</a></div>
+<div class="col-summary-item-name even-row-color"><a href="org/apache/juneau/rest/server/filter/RequestIdFilter.html#DEFAULT_VALIDATOR_PATTERN">org.apache.juneau.rest.server.filter.RequestIdFilter.DEFAULT_VALIDATOR_PATTERN</a></div>
 <div class="col-last even-row-color">
-<div class="deprecation-comment">Use <a href="org/apache/juneau/rest/auth/oauth/flow/OAuthAuthorizationCodeFlow.html" title="class in org.apache.juneau.rest.auth.oauth.flow"><code>OAuthAuthorizationCodeFlow</code></a> (with PKCE) wherever possible.  The
-   resource-owner password-credentials grant was removed from OAuth 2.1.</div>
+<div class="deprecation-comment">The resolver now defaults to sanitize-and-accept (see <a href="org/apache/juneau/rest/server/RequestIdSettings.html" title="class in org.apache.juneau.rest.server"><code>RequestIdSettings</code></a>); this pattern is no
+   longer applied.</div>
 </div>
-<div class="col-summary-item-name odd-row-color"><a href="org/apache/juneau/rest/server/auth/oauth/flow/OAuthResourceOwnerFlow.Builder.html" title="class in org.apache.juneau.rest.server.auth.oauth.flow">org.apache.juneau.rest.server.auth.oauth.flow.OAuthResourceOwnerFlow.Builder</a></div>
-<div class="col-last odd-row-color"></div>
+<div class="col-summary-item-name odd-row-color"><a href="org/apache/juneau/rest/server/views/ViewsMixin.html#CALENDAR_CSS_PATH">org.apache.juneau.rest.server.views.ViewsMixin.CALENDAR_CSS_PATH</a></div>
+<div class="col-last odd-row-color">
+<div class="deprecation-comment">The calendar stylesheet now ships in the widget module; compose
+   <a href="org/apache/juneau/rest/server/widgets/WidgetsMixin.html" title="class in org.apache.juneau.rest.server.widgets"><code>WidgetsMixin</code></a> and use its constant of the same name.  This one
+   remains only so that an application composing this mixin alone keeps serving the asset at the same URL.</div>
+</div>
+<div class="col-summary-item-name even-row-color"><a href="org/apache/juneau/rest/server/views/ViewsMixin.html#CALENDAR_JS_PATH">org.apache.juneau.rest.server.views.ViewsMixin.CALENDAR_JS_PATH</a></div>
+<div class="col-last even-row-color">
+<div class="deprecation-comment">The calendar runtime now ships in the widget module; compose
+   <a href="org/apache/juneau/rest/server/widgets/WidgetsMixin.html" title="class in org.apache.juneau.rest.server.widgets"><code>WidgetsMixin</code></a> and use its constant of the same name.  This one
+   remains only so that an application composing this mixin alone keeps serving the asset at the same URL.</div>
+</div>
 </div>
 </div>
 </li>
@@ -185,45 +194,16 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color">
 <div class="deprecation-comment">Use configuration classes provided <jk>org.apache.http.config</jk> and <jk>org.apache.http.client.config</jk>.</div>
 </div>
-<div class="col-summary-item-name odd-row-color"><a href="org/apache/juneau/rest/server/auth/oauth/flow/OAuthResourceOwnerFlow.html#acquire()">org.apache.juneau.rest.server.auth.oauth.flow.OAuthResourceOwnerFlow.acquire()</a></div>
-<div class="col-last odd-row-color"></div>
-<div class="col-summary-item-name even-row-color"><a href="org/apache/juneau/rest/server/auth/oauth/flow/OAuthResourceOwnerFlow.Builder.html#build()">org.apache.juneau.rest.server.auth.oauth.flow.OAuthResourceOwnerFlow.Builder.build()</a></div>
-<div class="col-last even-row-color"></div>
-<div class="col-summary-item-name odd-row-color"><a href="org/apache/juneau/rest/server/auth/oauth/flow/OAuthResourceOwnerFlow.Builder.html#clientId(java.lang.String)">org.apache.juneau.rest.server.auth.oauth.flow.OAuthResourceOwnerFlow.Builder.clientId<wbr>(String)</a></div>
-<div class="col-last odd-row-color"></div>
-<div class="col-summary-item-name even-row-color"><a href="org/apache/juneau/rest/server/auth/oauth/flow/OAuthResourceOwnerFlow.Builder.html#clientSecret(java.lang.String)">org.apache.juneau.rest.server.auth.oauth.flow.OAuthResourceOwnerFlow.Builder.clientSecret<wbr>(String)</a></div>
-<div class="col-last even-row-color"></div>
-<div class="col-summary-item-name odd-row-color"><a href="org/apache/juneau/rest/server/auth/oauth/flow/OAuthResourceOwnerFlow.Builder.html#clientSecretSupplier(java.util.function.Supplier)">org.apache.juneau.rest.server.auth.oauth.flow.OAuthResourceOwnerFlow.Builder.clientSecretSupplier<wbr>(Supplier&lt;String&gt;)</a></div>
-<div class="col-last odd-row-color"></div>
-<div class="col-summary-item-name even-row-color"><a href="org/apache/juneau/rest/server/auth/oauth/flow/OAuthResourceOwnerFlow.Builder.html#httpRequestConfigurator(java.util.function.Consumer)">org.apache.juneau.rest.server.auth.oauth.flow.OAuthResourceOwnerFlow.Builder.httpRequestConfigurator<wbr>(Consumer&lt;HTTPRequest&gt;)</a></div>
-<div class="col-last even-row-color"></div>
-<div class="col-summary-item-name odd-row-color"><a href="org/apache/juneau/rest/server/auth/oauth/flow/OAuthResourceOwnerFlow.Builder.html#password(java.lang.String)">org.apache.juneau.rest.server.auth.oauth.flow.OAuthResourceOwnerFlow.Builder.password<wbr>(String)</a></div>
-<div class="col-last odd-row-color"></div>
-<div class="col-summary-item-name even-row-color"><a href="org/apache/juneau/rest/server/auth/oauth/flow/OAuthResourceOwnerFlow.Builder.html#passwordSupplier(java.util.function.Supplier)">org.apache.juneau.rest.server.auth.oauth.flow.OAuthResourceOwnerFlow.Builder.passwordSupplier<wbr>(Supplier&lt;String&gt;)</a></div>
-<div class="col-last even-row-color"></div>
-<div class="col-summary-item-name odd-row-color"><a href="org/apache/juneau/rest/server/auth/oauth/flow/OAuthResourceOwnerFlow.Builder.html#scope(java.lang.String...)">org.apache.juneau.rest.server.auth.oauth.flow.OAuthResourceOwnerFlow.Builder.scope<wbr>(String...)</a></div>
-<div class="col-last odd-row-color"></div>
-<div class="col-summary-item-name even-row-color"><a href="org/apache/juneau/rest/server/auth/oauth/flow/OAuthResourceOwnerFlow.Builder.html#tokenEndpoint(java.net.URI)">org.apache.juneau.rest.server.auth.oauth.flow.OAuthResourceOwnerFlow.Builder.tokenEndpoint<wbr>(URI)</a></div>
-<div class="col-last even-row-color"></div>
-<div class="col-summary-item-name odd-row-color"><a href="org/apache/juneau/rest/server/auth/oauth/flow/OAuthResourceOwnerFlow.Builder.html#username(java.lang.String)">org.apache.juneau.rest.server.auth.oauth.flow.OAuthResourceOwnerFlow.Builder.username<wbr>(String)</a></div>
-<div class="col-last odd-row-color"></div>
-<div class="col-summary-item-name even-row-color"><a href="org/apache/juneau/rest/server/auth/oauth/flow/OAuthResourceOwnerFlow.html#create()">org.apache.juneau.rest.server.auth.oauth.flow.OAuthResourceOwnerFlow.create()</a></div>
-<div class="col-last even-row-color"></div>
+<div class="col-summary-item-name odd-row-color"><a href="org/apache/juneau/rest/server/views/ViewsMixin.html#getCalendarScript()">org.apache.juneau.rest.server.views.ViewsMixin.getCalendarScript()</a></div>
+<div class="col-last odd-row-color">
+<div class="deprecation-comment">Compose <a href="org/apache/juneau/rest/server/widgets/WidgetsMixin.html" title="class in org.apache.juneau.rest.server.widgets"><code>WidgetsMixin</code></a> instead, which ships these bytes.  This mount stays so that an
+   application composing only this mixin keeps serving the asset at the same URL with the same body.</div>
 </div>
+<div class="col-summary-item-name even-row-color"><a href="org/apache/juneau/rest/server/views/ViewsMixin.html#getCalendarStylesheet()">org.apache.juneau.rest.server.views.ViewsMixin.getCalendarStylesheet()</a></div>
+<div class="col-last even-row-color">
+<div class="deprecation-comment">Compose <a href="org/apache/juneau/rest/server/widgets/WidgetsMixin.html" title="class in org.apache.juneau.rest.server.widgets"><code>WidgetsMixin</code></a> instead, which ships these bytes.  This mount stays so that an
+   application composing only this mixin keeps serving the asset at the same URL with the same body.</div>
 </div>
-</li>
-</ul>
-<ul class="block-list">
-<li>
-<div id="constructor">
-<div class="caption"><span>Deprecated Constructors</span></div>
-<div class="summary-table two-column-summary">
-<div class="table-header col-first">Constructor</div>
-<div class="table-header col-last">Description</div>
-<div class="col-summary-item-name even-row-color"><a href="org/apache/juneau/rest/server/auth/oauth/flow/OAuthResourceOwnerFlow.html#%3Cinit%3E(org.apache.juneau.rest.server.auth.oauth.flow.OAuthResourceOwnerFlow.Builder)">org.apache.juneau.rest.server.auth.oauth.flow.OAuthResourceOwnerFlow<wbr>(OAuthResourceOwnerFlow.Builder)</a></div>
-<div class="col-last even-row-color"></div>
-<div class="col-summary-item-name odd-row-color"><a href="org/apache/juneau/rest/server/auth/oauth/flow/OAuthResourceOwnerFlow.Builder.html#%3Cinit%3E()">org.apache.juneau.rest.server.auth.oauth.flow.OAuthResourceOwnerFlow.Builder()</a></div>
-<div class="col-last odd-row-color"></div>
 </div>
 </div>
 </li>

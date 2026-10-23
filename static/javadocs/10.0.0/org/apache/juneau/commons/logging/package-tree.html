@@ -61,9 +61,10 @@ loadScripts(document, 'script');</script>
 <ul>
 <li class="circle">java.lang.<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" class="type-name-link external-link" title="class or interface in java.lang">Object</a>
 <ul>
+<li class="circle">org.apache.juneau.commons.logging.<a href="LogContext.html" class="type-name-link" title="class in org.apache.juneau.commons.logging">LogContext</a></li>
 <li class="circle">java.util.logging.<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/Logger.html" class="type-name-link external-link" title="class or interface in java.util.logging">Logger</a>
 <ul>
-<li class="circle">org.apache.juneau.commons.logging.<a href="Logger.html" class="type-name-link" title="class in org.apache.juneau.commons.logging">Logger</a></li>
+<li class="circle">org.apache.juneau.commons.logging.<a href="RichLogger.html" class="type-name-link" title="class in org.apache.juneau.commons.logging">RichLogger</a></li>
 </ul>
 </li>
 <li class="circle">java.util.logging.<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/LogRecord.html" class="type-name-link external-link" title="class or interface in java.util.logging">LogRecord</a> (implements java.io.<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a>)
@@ -72,6 +73,8 @@ loadScripts(document, 'script');</script>
 </ul>
 </li>
 <li class="circle">org.apache.juneau.commons.logging.<a href="LogRecordCapture.html" class="type-name-link" title="class in org.apache.juneau.commons.logging">LogRecordCapture</a> (implements java.io.<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Closeable.html" title="class or interface in java.io" class="external-link">Closeable</a>, org.apache.juneau.commons.logging.<a href="LogRecordListener.html" title="interface in org.apache.juneau.commons.logging">LogRecordListener</a>)</li>
+<li class="circle">org.apache.juneau.commons.logging.<a href="LogRecordContext.html" class="type-name-link" title="class in org.apache.juneau.commons.logging">LogRecordContext</a></li>
+<li class="circle">org.apache.juneau.commons.logging.<a href="RichLogger.Builder.html" class="type-name-link" title="class in org.apache.juneau.commons.logging">RichLogger.Builder</a></li>
 </ul>
 </li>
 </ul>
@@ -79,7 +82,14 @@ loadScripts(document, 'script');</script>
 <section class="hierarchy">
 <h2 title="Interface Hierarchy">Interface Hierarchy</h2>
 <ul>
+<li class="circle">java.lang.<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/AutoCloseable.html" class="type-name-link external-link" title="class or interface in java.lang">AutoCloseable</a>
+<ul>
+<li class="circle">org.apache.juneau.commons.logging.<a href="LogContext.Scope.html" class="type-name-link" title="interface in org.apache.juneau.commons.logging">LogContext.Scope</a></li>
+<li class="circle">org.apache.juneau.commons.logging.<a href="LogRecordCapture.Quiet.html" class="type-name-link" title="interface in org.apache.juneau.commons.logging">LogRecordCapture.Quiet</a></li>
+</ul>
+</li>
 <li class="circle">org.apache.juneau.commons.logging.<a href="LogRecordListener.html" class="type-name-link" title="interface in org.apache.juneau.commons.logging">LogRecordListener</a></li>
+<li class="circle">org.apache.juneau.commons.logging.<a href="MessageGenerator.html" class="type-name-link" title="interface in org.apache.juneau.commons.logging">MessageGenerator</a></li>
 </ul>
 </section>
 </main>

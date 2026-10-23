@@ -116,50 +116,60 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="OAuthIntrospectionValidator.html" title="class in org.apache.juneau.rest.server.auth.oauth">OAuthIntrospectionValidator</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#build()" class="member-name-link">build</a>()</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="OAuthIntrospectionValidator.Builder.html" title="class in org.apache.juneau.rest.server.auth.oauth">OAuthIntrospectionValidator.Builder</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#audience(java.lang.String...)" class="member-name-link">audience</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;values)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Adds expected audience values (RFC 7662 <code>aud</code>) that a token must carry to be accepted.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="OAuthIntrospectionValidator.html" title="class in org.apache.juneau.rest.server.auth.oauth">OAuthIntrospectionValidator</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#build()" class="member-name-link">build</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Builds the validator.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="OAuthIntrospectionValidator.Builder.html" title="class in org.apache.juneau.rest.server.auth.oauth">OAuthIntrospectionValidator.Builder</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#cacheTtl(java.time.Duration)" class="member-name-link">cacheTtl</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a>&nbsp;value)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="OAuthIntrospectionValidator.Builder.html" title="class in org.apache.juneau.rest.server.auth.oauth">OAuthIntrospectionValidator.Builder</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#cacheTtl(java.time.Duration)" class="member-name-link">cacheTtl</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a>&nbsp;value)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Sets the cache TTL.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="OAuthIntrospectionValidator.Builder.html" title="class in org.apache.juneau.rest.server.auth.oauth">OAuthIntrospectionValidator.Builder</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#clientId(java.lang.String)" class="member-name-link">clientId</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="OAuthIntrospectionValidator.Builder.html" title="class in org.apache.juneau.rest.server.auth.oauth">OAuthIntrospectionValidator.Builder</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#clientId(java.lang.String)" class="member-name-link">clientId</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Sets the OAuth client ID used for HTTP Basic auth against the introspection endpoint.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="OAuthIntrospectionValidator.Builder.html" title="class in org.apache.juneau.rest.server.auth.oauth">OAuthIntrospectionValidator.Builder</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#clientSecret(java.lang.String)" class="member-name-link">clientSecret</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="OAuthIntrospectionValidator.Builder.html" title="class in org.apache.juneau.rest.server.auth.oauth">OAuthIntrospectionValidator.Builder</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#clientSecret(java.lang.String)" class="member-name-link">clientSecret</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Sets the OAuth client secret as a literal string.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="OAuthIntrospectionValidator.Builder.html" title="class in org.apache.juneau.rest.server.auth.oauth">OAuthIntrospectionValidator.Builder</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#clientSecretSupplier(java.util.function.Supplier)" class="member-name-link">clientSecretSupplier</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;value)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="OAuthIntrospectionValidator.Builder.html" title="class in org.apache.juneau.rest.server.auth.oauth">OAuthIntrospectionValidator.Builder</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#clientSecretSupplier(java.util.function.Supplier)" class="member-name-link">clientSecretSupplier</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;value)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Sets the OAuth client secret via a supplier (useful for rotating secrets).</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="OAuthIntrospectionValidator.Builder.html" title="class in org.apache.juneau.rest.server.auth.oauth">OAuthIntrospectionValidator.Builder</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#clock(java.time.Clock)" class="member-name-link">clock</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Clock.html" title="class or interface in java.time" class="external-link">Clock</a>&nbsp;value)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="OAuthIntrospectionValidator.Builder.html" title="class in org.apache.juneau.rest.server.auth.oauth">OAuthIntrospectionValidator.Builder</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#clock(java.time.Clock)" class="member-name-link">clock</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Clock.html" title="class or interface in java.time" class="external-link">Clock</a>&nbsp;value)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Overrides the <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Clock.html" title="class or interface in java.time" class="external-link"><code>Clock</code></a> used for cache expiry.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="OAuthIntrospectionValidator.Builder.html" title="class in org.apache.juneau.rest.server.auth.oauth">OAuthIntrospectionValidator.Builder</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#httpRequestConfigurator(java.util.function.Consumer)" class="member-name-link">httpRequestConfigurator</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Consumer.html" title="class or interface in java.util.function" class="external-link">Consumer</a>&lt;com.nimbusds.oauth2.sdk.http.HTTPRequest&gt;&nbsp;value)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="OAuthIntrospectionValidator.Builder.html" title="class in org.apache.juneau.rest.server.auth.oauth">OAuthIntrospectionValidator.Builder</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#httpRequestConfigurator(java.util.function.Consumer)" class="member-name-link">httpRequestConfigurator</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Consumer.html" title="class or interface in java.util.function" class="external-link">Consumer</a>&lt;com.nimbusds.oauth2.sdk.http.HTTPRequest&gt;&nbsp;value)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Sets a callback that customizes the Nimbus <code>HTTPRequest</code> before it is sent.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="OAuthIntrospectionValidator.Builder.html" title="class in org.apache.juneau.rest.server.auth.oauth">OAuthIntrospectionValidator.Builder</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#introspectionEndpoint(java.net.URI)" class="member-name-link">introspectionEndpoint</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a>&nbsp;value)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="OAuthIntrospectionValidator.Builder.html" title="class in org.apache.juneau.rest.server.auth.oauth">OAuthIntrospectionValidator.Builder</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#introspectionEndpoint(java.net.URI)" class="member-name-link">introspectionEndpoint</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a>&nbsp;value)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Sets the introspection endpoint URL.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="OAuthIntrospectionValidator.Builder.html" title="class in org.apache.juneau.rest.server.auth.oauth">OAuthIntrospectionValidator.Builder</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#requiredScopes(java.lang.String...)" class="member-name-link">requiredScopes</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;scopes)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="OAuthIntrospectionValidator.Builder.html" title="class in org.apache.juneau.rest.server.auth.oauth">OAuthIntrospectionValidator.Builder</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#requiredScopes(java.lang.String...)" class="member-name-link">requiredScopes</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;scopes)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Adds required scopes (scope enforcement lives on the validator, not the filter).</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="OAuthIntrospectionValidator.Builder.html" title="class in org.apache.juneau.rest.server.auth.oauth">OAuthIntrospectionValidator.Builder</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#resource(java.lang.String...)" class="member-name-link">resource</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;values)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Adds expected resource-indicator values (RFC 8707).</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="OAuthIntrospectionValidator.Builder.html" title="class in org.apache.juneau.rest.server.auth.oauth">OAuthIntrospectionValidator.Builder</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#tokenCache(org.apache.juneau.rest.server.auth.oauth.TokenCache)" class="member-name-link">tokenCache</a><wbr>(<a href="TokenCache.html" title="interface in org.apache.juneau.rest.server.auth.oauth">TokenCache</a>&nbsp;value)</code></div>
@@ -186,7 +196,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;()">
 <h3>Builder</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/oauth/OAuthIntrospectionValidator.Builder.html#line-109">Builder</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/oauth/OAuthIntrospectionValidator.Builder.html#line-110">Builder</a></span>()</div>
 <div class="block">Constructor.</div>
 </section>
 </li>
@@ -201,7 +211,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="introspectionEndpoint(java.net.URI)">
 <h3>introspectionEndpoint</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="OAuthIntrospectionValidator.Builder.html" title="class in org.apache.juneau.rest.server.auth.oauth">OAuthIntrospectionValidator.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/oauth/OAuthIntrospectionValidator.Builder.html#line-122">introspectionEndpoint</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="OAuthIntrospectionValidator.Builder.html" title="class in org.apache.juneau.rest.server.auth.oauth">OAuthIntrospectionValidator.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/oauth/OAuthIntrospectionValidator.Builder.html#line-123">introspectionEndpoint</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a>&nbsp;value)</span></div>
 <div class="block">Sets the introspection endpoint URL.  Required.
 
  <p>
@@ -219,7 +229,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="clientId(java.lang.String)">
 <h3>clientId</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="OAuthIntrospectionValidator.Builder.html" title="class in org.apache.juneau.rest.server.auth.oauth">OAuthIntrospectionValidator.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/oauth/OAuthIntrospectionValidator.Builder.html#line-133">clientId</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="OAuthIntrospectionValidator.Builder.html" title="class in org.apache.juneau.rest.server.auth.oauth">OAuthIntrospectionValidator.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/oauth/OAuthIntrospectionValidator.Builder.html#line-134">clientId</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block">Sets the OAuth client ID used for HTTP Basic auth against the introspection endpoint.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -232,7 +242,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="clientSecret(java.lang.String)">
 <h3>clientSecret</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="OAuthIntrospectionValidator.Builder.html" title="class in org.apache.juneau.rest.server.auth.oauth">OAuthIntrospectionValidator.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/oauth/OAuthIntrospectionValidator.Builder.html#line-147">clientSecret</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="OAuthIntrospectionValidator.Builder.html" title="class in org.apache.juneau.rest.server.auth.oauth">OAuthIntrospectionValidator.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/oauth/OAuthIntrospectionValidator.Builder.html#line-148">clientSecret</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block">Sets the OAuth client secret as a literal string.
 
  <p>
@@ -248,7 +258,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="clientSecretSupplier(java.util.function.Supplier)">
 <h3>clientSecretSupplier</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="OAuthIntrospectionValidator.Builder.html" title="class in org.apache.juneau.rest.server.auth.oauth">OAuthIntrospectionValidator.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/oauth/OAuthIntrospectionValidator.Builder.html#line-159">clientSecretSupplier</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="OAuthIntrospectionValidator.Builder.html" title="class in org.apache.juneau.rest.server.auth.oauth">OAuthIntrospectionValidator.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/oauth/OAuthIntrospectionValidator.Builder.html#line-160">clientSecretSupplier</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;value)</span></div>
 <div class="block">Sets the OAuth client secret via a supplier (useful for rotating secrets).</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -261,7 +271,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="tokenCache(org.apache.juneau.rest.server.auth.oauth.TokenCache)">
 <h3>tokenCache</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="OAuthIntrospectionValidator.Builder.html" title="class in org.apache.juneau.rest.server.auth.oauth">OAuthIntrospectionValidator.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/oauth/OAuthIntrospectionValidator.Builder.html#line-170">tokenCache</a></span><wbr><span class="parameters">(<a href="TokenCache.html" title="interface in org.apache.juneau.rest.server.auth.oauth">TokenCache</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="OAuthIntrospectionValidator.Builder.html" title="class in org.apache.juneau.rest.server.auth.oauth">OAuthIntrospectionValidator.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/oauth/OAuthIntrospectionValidator.Builder.html#line-171">tokenCache</a></span><wbr><span class="parameters">(<a href="TokenCache.html" title="interface in org.apache.juneau.rest.server.auth.oauth">TokenCache</a>&nbsp;value)</span></div>
 <div class="block">Sets a custom token cache.  Defaults to a <a href="BoundedLruTokenCache.html" title="class in org.apache.juneau.rest.server.auth.oauth"><code>BoundedLruTokenCache</code></a> with 1000 entries.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -274,7 +284,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="cacheTtl(java.time.Duration)">
 <h3>cacheTtl</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="OAuthIntrospectionValidator.Builder.html" title="class in org.apache.juneau.rest.server.auth.oauth">OAuthIntrospectionValidator.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/oauth/OAuthIntrospectionValidator.Builder.html#line-182">cacheTtl</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="OAuthIntrospectionValidator.Builder.html" title="class in org.apache.juneau.rest.server.auth.oauth">OAuthIntrospectionValidator.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/oauth/OAuthIntrospectionValidator.Builder.html#line-183">cacheTtl</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a>&nbsp;value)</span></div>
 <div class="block">Sets the cache TTL.  Defaults to <a href="OAuthIntrospectionValidator.html#DEFAULT_CACHE_TTL"><code>5 minutes</code></a>; capped at
  <a href="OAuthIntrospectionValidator.html#MAX_CACHE_TTL"><code>1 hour</code></a>.  Capped by the token's own <code>exp</code> when shorter.</div>
 <dl class="notes">
@@ -288,7 +298,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="requiredScopes(java.lang.String...)">
 <h3>requiredScopes</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="OAuthIntrospectionValidator.Builder.html" title="class in org.apache.juneau.rest.server.auth.oauth">OAuthIntrospectionValidator.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/oauth/OAuthIntrospectionValidator.Builder.html#line-203">requiredScopes</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;scopes)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="OAuthIntrospectionValidator.Builder.html" title="class in org.apache.juneau.rest.server.auth.oauth">OAuthIntrospectionValidator.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/oauth/OAuthIntrospectionValidator.Builder.html#line-204">requiredScopes</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;scopes)</span></div>
 <div class="block">Adds required scopes (scope enforcement lives on the validator, not the filter).
 
  <p>
@@ -304,9 +314,51 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
+<section class="detail" id="audience(java.lang.String...)">
+<h3>audience</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="OAuthIntrospectionValidator.Builder.html" title="class in org.apache.juneau.rest.server.auth.oauth">OAuthIntrospectionValidator.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/oauth/OAuthIntrospectionValidator.Builder.html#line-230">audience</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;values)</span></div>
+<div class="block">Adds expected audience values (RFC 7662 <code>aud</code>) that a token must carry to be accepted.
+
+ <p>
+ When at least one value is configured here (via this method or <a href="#resource(java.lang.String...)"><code>resource(String...)</code></a>), the
+ introspection response's <code>aud</code> claim must contain <b>at least one</b> matching value, or the
+ token is rejected as <code>invalid_token</code> &mdash; even when <code>active=true</code> and required scopes
+ match.  This binds the token to the resource server it was minted for, so a token issued for a
+ different API cannot be replayed against this one.
+
+ <p>
+ When left unset (the default), no audience/resource check is performed: today's
+ <code>active</code> + optional-required-scopes behavior is preserved unchanged.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>values</code> - The expected audience values.  Must contain at least one non-blank entry.</dd>
+<dt>Returns:</dt>
+<dd>This object.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="resource(java.lang.String...)">
+<h3>resource</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="OAuthIntrospectionValidator.Builder.html" title="class in org.apache.juneau.rest.server.auth.oauth">OAuthIntrospectionValidator.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/oauth/OAuthIntrospectionValidator.Builder.html#line-250">resource</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;values)</span></div>
+<div class="block">Adds expected resource-indicator values (RFC 8707).
+
+ <p>
+ Alias for <a href="#audience(java.lang.String...)"><code>audience(String...)</code></a>: RFC 8707 resource indicators are echoed back by
+ conformant authorization servers in the same introspection <code>aud</code> claim as RFC 7662
+ audiences, so both methods add to the same expected-value set.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>values</code> - The expected resource values.  Must contain at least one non-blank entry.</dd>
+<dt>Returns:</dt>
+<dd>This object.</dd>
+</dl>
+</section>
+</li>
+<li>
 <section class="detail" id="clock(java.time.Clock)">
 <h3>clock</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="OAuthIntrospectionValidator.Builder.html" title="class in org.apache.juneau.rest.server.auth.oauth">OAuthIntrospectionValidator.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/oauth/OAuthIntrospectionValidator.Builder.html#line-218">clock</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Clock.html" title="class or interface in java.time" class="external-link">Clock</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="OAuthIntrospectionValidator.Builder.html" title="class in org.apache.juneau.rest.server.auth.oauth">OAuthIntrospectionValidator.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/oauth/OAuthIntrospectionValidator.Builder.html#line-260">clock</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Clock.html" title="class or interface in java.time" class="external-link">Clock</a>&nbsp;value)</span></div>
 <div class="block">Overrides the <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Clock.html" title="class or interface in java.time" class="external-link"><code>Clock</code></a> used for cache expiry.  Useful in tests.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -319,7 +371,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="httpRequestConfigurator(java.util.function.Consumer)">
 <h3>httpRequestConfigurator</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="OAuthIntrospectionValidator.Builder.html" title="class in org.apache.juneau.rest.server.auth.oauth">OAuthIntrospectionValidator.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/oauth/OAuthIntrospectionValidator.Builder.html#line-233">httpRequestConfigurator</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Consumer.html" title="class or interface in java.util.function" class="external-link">Consumer</a>&lt;com.nimbusds.oauth2.sdk.http.HTTPRequest&gt;&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="OAuthIntrospectionValidator.Builder.html" title="class in org.apache.juneau.rest.server.auth.oauth">OAuthIntrospectionValidator.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/oauth/OAuthIntrospectionValidator.Builder.html#line-275">httpRequestConfigurator</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Consumer.html" title="class or interface in java.util.function" class="external-link">Consumer</a>&lt;com.nimbusds.oauth2.sdk.http.HTTPRequest&gt;&nbsp;value)</span></div>
 <div class="block">Sets a callback that customizes the Nimbus <code>HTTPRequest</code> before it is sent.
 
  <p>
@@ -336,7 +388,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="build()">
 <h3>build</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="OAuthIntrospectionValidator.html" title="class in org.apache.juneau.rest.server.auth.oauth">OAuthIntrospectionValidator</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/oauth/OAuthIntrospectionValidator.Builder.html#line-243">build</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="OAuthIntrospectionValidator.html" title="class in org.apache.juneau.rest.server.auth.oauth">OAuthIntrospectionValidator</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/auth/oauth/OAuthIntrospectionValidator.Builder.html#line-285">build</a></span>()</div>
 <div class="block">Builds the validator.</div>
 <dl class="notes">
 <dt>Returns:</dt>

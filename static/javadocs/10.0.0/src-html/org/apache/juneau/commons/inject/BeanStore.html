@@ -186,7 +186,7 @@
 <span class="source-line-no">173</span><span id="line-173">    * Finds and invokes a factory method that produces a bean of type &lt;c&gt;beanType&lt;/c&gt;.</span>
 <span class="source-line-no">174</span><span id="line-174">    *</span>
 <span class="source-line-no">175</span><span id="line-175">    * &lt;p&gt;</span>
-<span class="source-line-no">176</span><span id="line-176">    * Scans all public methods of the resource class identified by &lt;c&gt;onClassOrObject&lt;/c&gt;:</span>
+<span class="source-line-no">176</span><span id="line-176">    * Scans the methods of the resource class identified by &lt;c&gt;onClassOrObject&lt;/c&gt;:</span>
 <span class="source-line-no">177</span><span id="line-177">    * &lt;ul&gt;</span>
 <span class="source-line-no">178</span><span id="line-178">    *    &lt;li&gt;If &lt;c&gt;onClassOrObject&lt;/c&gt; is a {@link Class}, only &lt;jk&gt;static&lt;/jk&gt; methods are eligible and</span>
 <span class="source-line-no">179</span><span id="line-179">    *       the instance parameter passed to the invoked method is &lt;jk&gt;null&lt;/jk&gt;.</span>
@@ -195,171 +195,234 @@
 <span class="source-line-no">182</span><span id="line-182">    * &lt;/ul&gt;</span>
 <span class="source-line-no">183</span><span id="line-183">    *</span>
 <span class="source-line-no">184</span><span id="line-184">    * &lt;p&gt;</span>
-<span class="source-line-no">185</span><span id="line-185">    * The first method satisfying all of the following is invoked:</span>
-<span class="source-line-no">186</span><span id="line-186">    * &lt;ol&gt;</span>
-<span class="source-line-no">187</span><span id="line-187">    *    &lt;li&gt;Not deprecated.</span>
-<span class="source-line-no">188</span><span id="line-188">    *    &lt;li&gt;Return type is assignment-compatible with &lt;c&gt;beanType&lt;/c&gt;.</span>
-<span class="source-line-no">189</span><span id="line-189">    *    &lt;li&gt;Accepted by &lt;c&gt;filter&lt;/c&gt; (if non-&lt;jk&gt;null&lt;/jk&gt;; otherwise any method qualifies).</span>
-<span class="source-line-no">190</span><span id="line-190">    *    &lt;li&gt;All parameters can be resolved from this store plus any &lt;c&gt;extraBeans&lt;/c&gt;.</span>
-<span class="source-line-no">191</span><span id="line-191">    * &lt;/ol&gt;</span>
-<span class="source-line-no">192</span><span id="line-192">    *</span>
-<span class="source-line-no">193</span><span id="line-193">    * &lt;p&gt;</span>
-<span class="source-line-no">194</span><span id="line-194">    * The default implementation returns {@link Optional#empty()}.</span>
-<span class="source-line-no">195</span><span id="line-195">    * Override in concrete stores (see {@link BasicBeanStore}) to enable factory-method scanning.</span>
-<span class="source-line-no">196</span><span id="line-196">    *</span>
-<span class="source-line-no">197</span><span id="line-197">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
-<span class="source-line-no">198</span><span id="line-198">    * &lt;p class='bjava'&gt;</span>
-<span class="source-line-no">199</span><span id="line-199">    *    &lt;jc&gt;// Filter only&lt;/jc&gt;</span>
-<span class="source-line-no">200</span><span id="line-200">    *    &lt;jv&gt;beanStore&lt;/jv&gt;.createBeanFromMethod(CallLogger.&lt;jk&gt;class&lt;/jk&gt;, &lt;jv&gt;resource&lt;/jv&gt;,</span>
-<span class="source-line-no">201</span><span id="line-201">    *       RestContext::isBeanMethod)</span>
-<span class="source-line-no">202</span><span id="line-202">    *       .ifPresent(&lt;jv&gt;creator&lt;/jv&gt;::impl);</span>
+<span class="source-line-no">185</span><span id="line-185">    * The search has two passes.  The first pass considers public methods only.  If it finds nothing, a second pass</span>
+<span class="source-line-no">186</span><span id="line-186">    * considers &lt;em&gt;non-public&lt;/em&gt; methods (protected, package-private or private) across the class hierarchy,</span>
+<span class="source-line-no">187</span><span id="line-187">    * child class first, but only those that carry {@link Bean @Bean} (declared directly or inherited from a method</span>
+<span class="source-line-no">188</span><span id="line-188">    * they override; see {@link BeanAnnotation#find(MethodInfo)}).  A non-public method without {@link Bean @Bean} is</span>
+<span class="source-line-no">189</span><span id="line-189">    * never invoked, even when &lt;c&gt;filter&lt;/c&gt; is &lt;jk&gt;null&lt;/jk&gt;.  Non-public methods are made accessible before invocation.</span>
+<span class="source-line-no">190</span><span id="line-190">    *</span>
+<span class="source-line-no">191</span><span id="line-191">    * &lt;p&gt;</span>
+<span class="source-line-no">192</span><span id="line-192">    * The first method satisfying all of the following is invoked:</span>
+<span class="source-line-no">193</span><span id="line-193">    * &lt;ol&gt;</span>
+<span class="source-line-no">194</span><span id="line-194">    *    &lt;li&gt;Not deprecated.</span>
+<span class="source-line-no">195</span><span id="line-195">    *    &lt;li&gt;Return type is assignment-compatible with &lt;c&gt;beanType&lt;/c&gt;.</span>
+<span class="source-line-no">196</span><span id="line-196">    *    &lt;li&gt;Accepted by &lt;c&gt;filter&lt;/c&gt; (if non-&lt;jk&gt;null&lt;/jk&gt;; otherwise any method qualifies).</span>
+<span class="source-line-no">197</span><span id="line-197">    *    &lt;li&gt;All parameters can be resolved from this store plus any &lt;c&gt;extraBeans&lt;/c&gt;.</span>
+<span class="source-line-no">198</span><span id="line-198">    * &lt;/ol&gt;</span>
+<span class="source-line-no">199</span><span id="line-199">    *</span>
+<span class="source-line-no">200</span><span id="line-200">    * &lt;p&gt;</span>
+<span class="source-line-no">201</span><span id="line-201">    * The default implementation returns {@link Optional#empty()}.</span>
+<span class="source-line-no">202</span><span id="line-202">    * Override in concrete stores (see {@link BasicBeanStore}) to enable factory-method scanning.</span>
 <span class="source-line-no">203</span><span id="line-203">    *</span>
-<span class="source-line-no">204</span><span id="line-204">    *    &lt;jc&gt;// Filter + extra bean not yet in the store&lt;/jc&gt;</span>
-<span class="source-line-no">205</span><span id="line-205">    *    &lt;jv&gt;beanStore&lt;/jv&gt;.createBeanFromMethod(EncoderSet.&lt;jk&gt;class&lt;/jk&gt;, &lt;jv&gt;resource&lt;/jv&gt;,</span>
-<span class="source-line-no">206</span><span id="line-206">    *       RestContext::isBeanMethod, &lt;jv&gt;builder&lt;/jv&gt;)</span>
-<span class="source-line-no">207</span><span id="line-207">    *       .ifPresent(&lt;jv&gt;x&lt;/jv&gt; -&amp;gt; &lt;jv&gt;builder&lt;/jv&gt;.impl(&lt;jv&gt;x&lt;/jv&gt;));</span>
-<span class="source-line-no">208</span><span id="line-208">    *</span>
-<span class="source-line-no">209</span><span id="line-209">    *    &lt;jc&gt;// No filter, no extra beans&lt;/jc&gt;</span>
-<span class="source-line-no">210</span><span id="line-210">    *    &lt;jv&gt;beanStore&lt;/jv&gt;.createBeanFromMethod(CallLogger.&lt;jk&gt;class&lt;/jk&gt;, &lt;jv&gt;resource&lt;/jv&gt;);</span>
-<span class="source-line-no">211</span><span id="line-211">    * &lt;/p&gt;</span>
-<span class="source-line-no">212</span><span id="line-212">    *</span>
-<span class="source-line-no">213</span><span id="line-213">    * @param &lt;T&gt; The bean type.</span>
-<span class="source-line-no">214</span><span id="line-214">    * @param beanType The type of bean to create.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">215</span><span id="line-215">    * @param onClassOrObject The object instance or {@link Class} whose public methods are searched.</span>
-<span class="source-line-no">216</span><span id="line-216">    *    Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">217</span><span id="line-217">    * @param filter Optional predicate restricting which methods are eligible.  Can be &lt;jk&gt;null&lt;/jk&gt; (any method qualifies).</span>
-<span class="source-line-no">218</span><span id="line-218">    * @param extraBeans Optional bean instances visible to parameter resolution for this call only.</span>
-<span class="source-line-no">219</span><span id="line-219">    *    These are &lt;em&gt;not&lt;/em&gt; registered in the store.</span>
-<span class="source-line-no">220</span><span id="line-220">    * @return The created bean wrapped in an {@link Optional}, or {@link Optional#empty()} if no matching</span>
-<span class="source-line-no">221</span><span id="line-221">    *    factory method was found.</span>
-<span class="source-line-no">222</span><span id="line-222">    * @throws BeanCreationException If a matching method was found but threw an exception during invocation.</span>
-<span class="source-line-no">223</span><span id="line-223">    * @see BeanInstantiator BeanInstantiator — for instantiating a bean from its own constructors, builders, or factory methods</span>
-<span class="source-line-no">224</span><span id="line-224">    */</span>
-<span class="source-line-no">225</span><span id="line-225">   default &lt;T&gt; Optional&lt;T&gt; createBeanFromMethod(Class&lt;T&gt; beanType, Object onClassOrObject, Predicate&lt;MethodInfo&gt; filter, Object... extraBeans) {</span>
-<span class="source-line-no">226</span><span id="line-226">      return oe();</span>
-<span class="source-line-no">227</span><span id="line-227">   }</span>
-<span class="source-line-no">228</span><span id="line-228"></span>
-<span class="source-line-no">229</span><span id="line-229">   /**</span>
-<span class="source-line-no">230</span><span id="line-230">    * Convenience overload of {@link #createBeanFromMethod(Class, Object, Predicate, Object...)} with no filter and no extra beans.</span>
-<span class="source-line-no">231</span><span id="line-231">    *</span>
-<span class="source-line-no">232</span><span id="line-232">    * @param &lt;T&gt; The bean type.</span>
-<span class="source-line-no">233</span><span id="line-233">    * @param beanType The type of bean to create.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">234</span><span id="line-234">    * @param onClassOrObject The object instance or {@link Class} whose public methods are searched.</span>
-<span class="source-line-no">235</span><span id="line-235">    *    Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">236</span><span id="line-236">    * @return The created bean wrapped in an {@link Optional}, or {@link Optional#empty()} if no matching</span>
-<span class="source-line-no">237</span><span id="line-237">    *    factory method was found.</span>
-<span class="source-line-no">238</span><span id="line-238">    * @throws BeanCreationException If a matching method was found but threw an exception during invocation.</span>
-<span class="source-line-no">239</span><span id="line-239">    */</span>
-<span class="source-line-no">240</span><span id="line-240">   default &lt;T&gt; Optional&lt;T&gt; createBeanFromMethod(Class&lt;T&gt; beanType, Object onClassOrObject) {</span>
-<span class="source-line-no">241</span><span id="line-241">      return createBeanFromMethod(beanType, onClassOrObject, null);</span>
-<span class="source-line-no">242</span><span id="line-242">   }</span>
-<span class="source-line-no">243</span><span id="line-243"></span>
-<span class="source-line-no">244</span><span id="line-244">   /**</span>
-<span class="source-line-no">245</span><span id="line-245">    * Returns the implementation class registered for the specified bean type, if any.</span>
-<span class="source-line-no">246</span><span id="line-246">    *</span>
-<span class="source-line-no">247</span><span id="line-247">    * &lt;p&gt;</span>
-<span class="source-line-no">248</span><span id="line-248">    * Type bindings let callers register a default implementation class to be instantiated when an</span>
-<span class="source-line-no">249</span><span id="line-249">    * actual bean of &lt;c&gt;beanType&lt;/c&gt; is needed.  Bindings are inherited through the parent chain.</span>
-<span class="source-line-no">250</span><span id="line-250">    *</span>
-<span class="source-line-no">251</span><span id="line-251">    * &lt;p&gt;</span>
-<span class="source-line-no">252</span><span id="line-252">    * The default implementation returns {@link Optional#empty()} (no binding).  Override in concrete</span>
-<span class="source-line-no">253</span><span id="line-253">    * stores (see {@link BasicBeanStore}) to enable type binding.</span>
-<span class="source-line-no">254</span><span id="line-254">    *</span>
-<span class="source-line-no">255</span><span id="line-255">    * @param &lt;T&gt; The bean type.</span>
-<span class="source-line-no">256</span><span id="line-256">    * @param beanType The bean type whose implementation class is being looked up.</span>
-<span class="source-line-no">257</span><span id="line-257">    * @return The implementation class, or {@link Optional#empty()} if no binding exists.</span>
-<span class="source-line-no">258</span><span id="line-258">    */</span>
-<span class="source-line-no">259</span><span id="line-259">   default &lt;T&gt; Optional&lt;Class&lt;? extends T&gt;&gt; getBeanType(Class&lt;T&gt; beanType) {</span>
-<span class="source-line-no">260</span><span id="line-260">      return oe();</span>
-<span class="source-line-no">261</span><span id="line-261">   }</span>
-<span class="source-line-no">262</span><span id="line-262"></span>
-<span class="source-line-no">263</span><span id="line-263">   /**</span>
-<span class="source-line-no">264</span><span id="line-264">    * Returns &lt;jk&gt;true&lt;/jk&gt; if this store can satisfy every parameter of the specified executable.</span>
-<span class="source-line-no">265</span><span id="line-265">    *</span>
-<span class="source-line-no">266</span><span id="line-266">    * &lt;p&gt;</span>
-<span class="source-line-no">267</span><span id="line-267">    * Skips:</span>
-<span class="source-line-no">268</span><span id="line-268">    * &lt;ul&gt;</span>
-<span class="source-line-no">269</span><span id="line-269">    *    &lt;li&gt;The first parameter when it is an instance of &lt;c&gt;outer&lt;/c&gt; (inner-class outer reference).</span>
-<span class="source-line-no">270</span><span id="line-270">    *    &lt;li&gt;Parameters typed as {@link Optional} (always considered satisfied).</span>
-<span class="source-line-no">271</span><span id="line-271">    * &lt;/ul&gt;</span>
-<span class="source-line-no">272</span><span id="line-272">    *</span>
-<span class="source-line-no">273</span><span id="line-273">    * @param executable The constructor or method to inspect.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">274</span><span id="line-274">    * @param outer The outer object to use for inner-class param resolution.  Can be &lt;jk&gt;null&lt;/jk&gt; (the outer-instance skip rule is then never applied).</span>
-<span class="source-line-no">275</span><span id="line-275">    * @return &lt;jk&gt;true&lt;/jk&gt; if every required parameter can be resolved from this store.</span>
-<span class="source-line-no">276</span><span id="line-276">    */</span>
-<span class="source-line-no">277</span><span id="line-277">   default boolean hasAllParams(ExecutableInfo executable, Object outer) {</span>
-<span class="source-line-no">278</span><span id="line-278">      for (var i = 0; i &lt; executable.getParameterCount(); i++) {</span>
-<span class="source-line-no">279</span><span id="line-279">         var pi = executable.getParameter(i);</span>
-<span class="source-line-no">280</span><span id="line-280">         var pt = pi.getParameterType();</span>
-<span class="source-line-no">281</span><span id="line-281">         if ((i == 0 &amp;&amp; nn(outer) &amp;&amp; pt.isInstance(outer)) || pt.is(Optional.class))</span>
-<span class="source-line-no">282</span><span id="line-282">            continue;</span>
-<span class="source-line-no">283</span><span id="line-283">         var beanQualifier = pi.getResolvedQualifier();</span>
-<span class="source-line-no">284</span><span id="line-284">         var ptc = pt.inner();</span>
-<span class="source-line-no">285</span><span id="line-285">         if ((beanQualifier == null &amp;&amp; ! hasBean(ptc)) || (nn(beanQualifier) &amp;&amp; ! hasBean(ptc, beanQualifier)))</span>
-<span class="source-line-no">286</span><span id="line-286">            return false;</span>
-<span class="source-line-no">287</span><span id="line-287">      }</span>
-<span class="source-line-no">288</span><span id="line-288">      return true;</span>
-<span class="source-line-no">289</span><span id="line-289">   }</span>
-<span class="source-line-no">290</span><span id="line-290"></span>
-<span class="source-line-no">291</span><span id="line-291">   /**</span>
-<span class="source-line-no">292</span><span id="line-292">    * Resolves every parameter of the specified executable from this store.</span>
-<span class="source-line-no">293</span><span id="line-293">    *</span>
-<span class="source-line-no">294</span><span id="line-294">    * &lt;p&gt;</span>
-<span class="source-line-no">295</span><span id="line-295">    * For {@link Optional}-typed parameters the wrapped {@link Optional} is returned directly; for all</span>
-<span class="source-line-no">296</span><span id="line-296">    * others the bean instance (or &lt;jk&gt;null&lt;/jk&gt; when missing) is returned.  See {@link #hasAllParams}</span>
-<span class="source-line-no">297</span><span id="line-297">    * for the full skip rules.</span>
-<span class="source-line-no">298</span><span id="line-298">    *</span>
-<span class="source-line-no">299</span><span id="line-299">    * @param executable The constructor or method to resolve parameters for.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">300</span><span id="line-300">    * @param outer The outer object to use for inner-class param resolution.  Can be &lt;jk&gt;null&lt;/jk&gt; (the outer-instance skip rule is then never applied).</span>
-<span class="source-line-no">301</span><span id="line-301">    * @return An array of resolved parameter values, one per parameter of &lt;c&gt;executable&lt;/c&gt;.</span>
+<span class="source-line-no">204</span><span id="line-204">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">205</span><span id="line-205">    * &lt;p class='bjava'&gt;</span>
+<span class="source-line-no">206</span><span id="line-206">    *    &lt;jc&gt;// Filter only&lt;/jc&gt;</span>
+<span class="source-line-no">207</span><span id="line-207">    *    &lt;jv&gt;beanStore&lt;/jv&gt;.createBeanFromMethod(RichLogger.&lt;jk&gt;class&lt;/jk&gt;, &lt;jv&gt;resource&lt;/jv&gt;,</span>
+<span class="source-line-no">208</span><span id="line-208">    *       &lt;jv&gt;m&lt;/jv&gt; -&amp;gt; &lt;jv&gt;m&lt;/jv&gt;.hasAnnotation(Bean.&lt;jk&gt;class&lt;/jk&gt;))</span>
+<span class="source-line-no">209</span><span id="line-209">    *       .ifPresent(&lt;jv&gt;creator&lt;/jv&gt;::impl);</span>
+<span class="source-line-no">210</span><span id="line-210">    *</span>
+<span class="source-line-no">211</span><span id="line-211">    *    &lt;jc&gt;// Filter + extra bean not yet in the store&lt;/jc&gt;</span>
+<span class="source-line-no">212</span><span id="line-212">    *    &lt;jv&gt;beanStore&lt;/jv&gt;.createBeanFromMethod(EncoderSet.&lt;jk&gt;class&lt;/jk&gt;, &lt;jv&gt;resource&lt;/jv&gt;,</span>
+<span class="source-line-no">213</span><span id="line-213">    *       &lt;jv&gt;m&lt;/jv&gt; -&amp;gt; &lt;jv&gt;m&lt;/jv&gt;.hasAnnotation(Bean.&lt;jk&gt;class&lt;/jk&gt;), &lt;jv&gt;builder&lt;/jv&gt;)</span>
+<span class="source-line-no">214</span><span id="line-214">    *       .ifPresent(&lt;jv&gt;x&lt;/jv&gt; -&amp;gt; &lt;jv&gt;builder&lt;/jv&gt;.impl(&lt;jv&gt;x&lt;/jv&gt;));</span>
+<span class="source-line-no">215</span><span id="line-215">    *</span>
+<span class="source-line-no">216</span><span id="line-216">    *    &lt;jc&gt;// No filter, no extra beans&lt;/jc&gt;</span>
+<span class="source-line-no">217</span><span id="line-217">    *    &lt;jv&gt;beanStore&lt;/jv&gt;.createBeanFromMethod(RichLogger.&lt;jk&gt;class&lt;/jk&gt;, &lt;jv&gt;resource&lt;/jv&gt;);</span>
+<span class="source-line-no">218</span><span id="line-218">    * &lt;/p&gt;</span>
+<span class="source-line-no">219</span><span id="line-219">    *</span>
+<span class="source-line-no">220</span><span id="line-220">    * @param &lt;T&gt; The bean type.</span>
+<span class="source-line-no">221</span><span id="line-221">    * @param beanType The type of bean to create.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">222</span><span id="line-222">    * @param onClassOrObject The object instance or {@link Class} whose methods are searched.</span>
+<span class="source-line-no">223</span><span id="line-223">    *    Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">224</span><span id="line-224">    * @param filter Optional predicate restricting which methods are eligible.  Can be &lt;jk&gt;null&lt;/jk&gt; (any method qualifies).</span>
+<span class="source-line-no">225</span><span id="line-225">    * @param extraBeans Optional bean instances visible to parameter resolution for this call only.</span>
+<span class="source-line-no">226</span><span id="line-226">    *    These are &lt;em&gt;not&lt;/em&gt; registered in the store.</span>
+<span class="source-line-no">227</span><span id="line-227">    * @return The created bean wrapped in an {@link Optional}, or {@link Optional#empty()} if no matching</span>
+<span class="source-line-no">228</span><span id="line-228">    *    factory method was found.</span>
+<span class="source-line-no">229</span><span id="line-229">    * @throws BeanCreationException If a matching method was found but threw an exception during invocation.</span>
+<span class="source-line-no">230</span><span id="line-230">    * @see BeanInstantiator BeanInstantiator — for instantiating a bean from its own constructors, builders, or factory methods</span>
+<span class="source-line-no">231</span><span id="line-231">    */</span>
+<span class="source-line-no">232</span><span id="line-232">   default &lt;T&gt; Optional&lt;T&gt; createBeanFromMethod(Class&lt;T&gt; beanType, Object onClassOrObject, Predicate&lt;MethodInfo&gt; filter, Object... extraBeans) {</span>
+<span class="source-line-no">233</span><span id="line-233">      return oe();</span>
+<span class="source-line-no">234</span><span id="line-234">   }</span>
+<span class="source-line-no">235</span><span id="line-235"></span>
+<span class="source-line-no">236</span><span id="line-236">   /**</span>
+<span class="source-line-no">237</span><span id="line-237">    * Invokes one specific factory method to produce a bean of type &lt;c&gt;beanType&lt;/c&gt;.</span>
+<span class="source-line-no">238</span><span id="line-238">    *</span>
+<span class="source-line-no">239</span><span id="line-239">    * &lt;p&gt;</span>
+<span class="source-line-no">240</span><span id="line-240">    * Unlike {@link #createBeanFromMethod(Class, Object, Predicate, Object...)}, no search is performed:</span>
+<span class="source-line-no">241</span><span id="line-241">    * the caller supplies the {@link MethodInfo} it has already chosen.  Visibility is not a gate:</span>
+<span class="source-line-no">242</span><span id="line-242">    * public, protected, package-private and private methods are all invoked (non-public methods are made accessible first).</span>
+<span class="source-line-no">243</span><span id="line-243">    * Deprecation is not checked.</span>
+<span class="source-line-no">244</span><span id="line-244">    *</span>
+<span class="source-line-no">245</span><span id="line-245">    * &lt;p&gt;</span>
+<span class="source-line-no">246</span><span id="line-246">    * If &lt;c&gt;onClassOrObject&lt;/c&gt; is a {@link Class}, only &lt;jk&gt;static&lt;/jk&gt; methods can be invoked.  Otherwise the object</span>
+<span class="source-line-no">247</span><span id="line-247">    * is used as the receiver for instance methods.</span>
+<span class="source-line-no">248</span><span id="line-248">    *</span>
+<span class="source-line-no">249</span><span id="line-249">    * &lt;p&gt;</span>
+<span class="source-line-no">250</span><span id="line-250">    * Returns {@link Optional#empty()} when the method is not eligible: it returns &lt;jk&gt;void&lt;/jk&gt;, it is a bridge or</span>
+<span class="source-line-no">251</span><span id="line-251">    * synthetic method, it is an instance method and &lt;c&gt;onClassOrObject&lt;/c&gt; is a {@link Class}, or one of its parameters</span>
+<span class="source-line-no">252</span><span id="line-252">    * cannot be resolved from this store plus &lt;c&gt;extraBeans&lt;/c&gt;.</span>
+<span class="source-line-no">253</span><span id="line-253">    *</span>
+<span class="source-line-no">254</span><span id="line-254">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">255</span><span id="line-255">    * &lt;p class='bjava'&gt;</span>
+<span class="source-line-no">256</span><span id="line-256">    *    &lt;jc&gt;// Invoke one specific @Bean factory method, instead of searching by return type.&lt;/jc&gt;</span>
+<span class="source-line-no">257</span><span id="line-257">    *    MethodInfo &lt;jv&gt;m&lt;/jv&gt; = ClassInfo.&lt;jsm&gt;of&lt;/jsm&gt;(MyResource.&lt;jk&gt;class&lt;/jk&gt;).getDeclaredMethod(&lt;jv&gt;x&lt;/jv&gt; -&amp;gt; &lt;jv&gt;x&lt;/jv&gt;.hasName(&lt;js&gt;"cacheIndicator"&lt;/js&gt;)).get();</span>
+<span class="source-line-no">258</span><span id="line-258">    *    Optional&amp;lt;HealthIndicator&amp;gt; &lt;jv&gt;cache&lt;/jv&gt; = &lt;jv&gt;beanStore&lt;/jv&gt;.invokeBeanMethod(HealthIndicator.&lt;jk&gt;class&lt;/jk&gt;, &lt;jv&gt;m&lt;/jv&gt;, &lt;jv&gt;resource&lt;/jv&gt;);</span>
+<span class="source-line-no">259</span><span id="line-259">    * &lt;/p&gt;</span>
+<span class="source-line-no">260</span><span id="line-260">    *</span>
+<span class="source-line-no">261</span><span id="line-261">    * @param &lt;T&gt; The bean type.</span>
+<span class="source-line-no">262</span><span id="line-262">    * @param beanType The expected bean type.  Must be assignable from the method's return type.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">263</span><span id="line-263">    * @param method The factory method to invoke.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">264</span><span id="line-264">    * @param onClassOrObject The receiver object, or the {@link Class} for static methods.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">265</span><span id="line-265">    *    The method's declaring class must be assignable from this object's class (or this class).</span>
+<span class="source-line-no">266</span><span id="line-266">    * @param extraBeans Optional bean instances visible to parameter resolution for this call only.</span>
+<span class="source-line-no">267</span><span id="line-267">    * @return The created bean, or {@link Optional#empty()} if the method is not eligible.</span>
+<span class="source-line-no">268</span><span id="line-268">    * @throws IllegalArgumentException If an argument is &lt;jk&gt;null&lt;/jk&gt;, &lt;c&gt;beanType&lt;/c&gt; is not assignable from the</span>
+<span class="source-line-no">269</span><span id="line-269">    *    method's return type, or the method does not belong to the target's class hierarchy.</span>
+<span class="source-line-no">270</span><span id="line-270">    * @throws BeanCreationException If the method cannot be made accessible or threw an exception during invocation.</span>
+<span class="source-line-no">271</span><span id="line-271">    */</span>
+<span class="source-line-no">272</span><span id="line-272">   default &lt;T&gt; Optional&lt;T&gt; invokeBeanMethod(Class&lt;T&gt; beanType, MethodInfo method, Object onClassOrObject, Object... extraBeans) {</span>
+<span class="source-line-no">273</span><span id="line-273">      reqnn("beanType", beanType);</span>
+<span class="source-line-no">274</span><span id="line-274">      reqnn("method", method);</span>
+<span class="source-line-no">275</span><span id="line-275">      reqnn("onClassOrObject", onClassOrObject);</span>
+<span class="source-line-no">276</span><span id="line-276">      var returnType = method.getReturnType();</span>
+<span class="source-line-no">277</span><span id="line-277">      if (returnType.is(void.class) || method.isBridge() || method.isSynthetic())</span>
+<span class="source-line-no">278</span><span id="line-278">         return Optional.empty();</span>
+<span class="source-line-no">279</span><span id="line-279">      req(ClassInfo.of(beanType).getWrapperIfPrimitive().inner().isAssignableFrom(returnType.getWrapperIfPrimitive().inner()),</span>
+<span class="source-line-no">280</span><span id="line-280">         "Bean type [%s] is not assignable from the return type [%s] of method [%s].", beanType.getSimpleName(), returnType.getNameSimple(), method.getLabel());</span>
+<span class="source-line-no">281</span><span id="line-281">      var isClass = onClassOrObject instanceof Class;</span>
+<span class="source-line-no">282</span><span id="line-282">      Class&lt;?&gt; target = isClass ? (Class&lt;?&gt;)onClassOrObject : onClassOrObject.getClass();</span>
+<span class="source-line-no">283</span><span id="line-283">      req(method.inner().getDeclaringClass().isAssignableFrom(target),</span>
+<span class="source-line-no">284</span><span id="line-284">         "Method [%s] is not declared on the hierarchy of [%s].", method.getLabel(), target.getSimpleName());</span>
+<span class="source-line-no">285</span><span id="line-285">      if (method.isNotStatic() &amp;&amp; isClass)</span>
+<span class="source-line-no">286</span><span id="line-286">         return Optional.empty();</span>
+<span class="source-line-no">287</span><span id="line-287">      if (! method.canResolveAllParameters(this, extraBeans))</span>
+<span class="source-line-no">288</span><span id="line-288">         return Optional.empty();</span>
+<span class="source-line-no">289</span><span id="line-289">      return Optional.ofNullable(BeanMethodInvoker.invoke(this, beanType, method, method.isStatic() ? null : onClassOrObject, extraBeans));</span>
+<span class="source-line-no">290</span><span id="line-290">   }</span>
+<span class="source-line-no">291</span><span id="line-291"></span>
+<span class="source-line-no">292</span><span id="line-292">   /**</span>
+<span class="source-line-no">293</span><span id="line-293">    * Convenience overload of {@link #createBeanFromMethod(Class, Object, Predicate, Object...)} with no filter and no extra beans.</span>
+<span class="source-line-no">294</span><span id="line-294">    *</span>
+<span class="source-line-no">295</span><span id="line-295">    * @param &lt;T&gt; The bean type.</span>
+<span class="source-line-no">296</span><span id="line-296">    * @param beanType The type of bean to create.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">297</span><span id="line-297">    * @param onClassOrObject The object instance or {@link Class} whose methods are searched.</span>
+<span class="source-line-no">298</span><span id="line-298">    *    Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">299</span><span id="line-299">    * @return The created bean wrapped in an {@link Optional}, or {@link Optional#empty()} if no matching</span>
+<span class="source-line-no">300</span><span id="line-300">    *    factory method was found.</span>
+<span class="source-line-no">301</span><span id="line-301">    * @throws BeanCreationException If a matching method was found but threw an exception during invocation.</span>
 <span class="source-line-no">302</span><span id="line-302">    */</span>
-<span class="source-line-no">303</span><span id="line-303">   default Object[] getParams(ExecutableInfo executable, Object outer) {</span>
-<span class="source-line-no">304</span><span id="line-304">      var o = new Object[executable.getParameterCount()];</span>
-<span class="source-line-no">305</span><span id="line-305">      for (var i = 0; i &lt; executable.getParameterCount(); i++) {</span>
-<span class="source-line-no">306</span><span id="line-306">         var pi = executable.getParameter(i);</span>
-<span class="source-line-no">307</span><span id="line-307">         var pt = pi.getParameterType();</span>
-<span class="source-line-no">308</span><span id="line-308">         if (i == 0 &amp;&amp; nn(outer) &amp;&amp; pt.isInstance(outer)) {</span>
-<span class="source-line-no">309</span><span id="line-309">            o[i] = outer;</span>
-<span class="source-line-no">310</span><span id="line-310">         } else {</span>
-<span class="source-line-no">311</span><span id="line-311">            var beanQualifier = pi.getResolvedQualifier();</span>
-<span class="source-line-no">312</span><span id="line-312">            var ptc = pt.unwrap(Optional.class).inner();</span>
-<span class="source-line-no">313</span><span id="line-313">            var o2 = beanQualifier == null ? getBean(ptc) : getBean(ptc, beanQualifier);</span>
-<span class="source-line-no">314</span><span id="line-314">            o[i] = pt.is(Optional.class) ? o2 : o2.orElse(null);</span>
-<span class="source-line-no">315</span><span id="line-315">         }</span>
-<span class="source-line-no">316</span><span id="line-316">      }</span>
-<span class="source-line-no">317</span><span id="line-317">      return o;</span>
-<span class="source-line-no">318</span><span id="line-318">   }</span>
-<span class="source-line-no">319</span><span id="line-319"></span>
-<span class="source-line-no">320</span><span id="line-320">   /**</span>
-<span class="source-line-no">321</span><span id="line-321">    * Returns a comma-delimited list of parameter type names that cannot be resolved from this store.</span>
-<span class="source-line-no">322</span><span id="line-322">    *</span>
-<span class="source-line-no">323</span><span id="line-323">    * &lt;p&gt;</span>
-<span class="source-line-no">324</span><span id="line-324">    * Intended for diagnostic error messages — see {@link #hasAllParams} for the exact match rules.</span>
-<span class="source-line-no">325</span><span id="line-325">    * Skipped parameters (outer-instance match, {@link Optional}) never appear in the result.</span>
-<span class="source-line-no">326</span><span id="line-326">    *</span>
-<span class="source-line-no">327</span><span id="line-327">    * @param executable The constructor or method to inspect.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">328</span><span id="line-328">    * @param outer The outer object to use for inner-class param resolution.  Can be &lt;jk&gt;null&lt;/jk&gt; (the outer-instance skip rule is then never applied).</span>
-<span class="source-line-no">329</span><span id="line-329">    * @return A comma-delimited list of missing parameter type names, or &lt;jk&gt;null&lt;/jk&gt; when none are missing.</span>
-<span class="source-line-no">330</span><span id="line-330">    */</span>
-<span class="source-line-no">331</span><span id="line-331">   default String getMissingParams(ExecutableInfo executable, Object outer) {</span>
-<span class="source-line-no">332</span><span id="line-332">      var params = executable.getParameters();</span>
-<span class="source-line-no">333</span><span id="line-333">      List&lt;String&gt; l = list();</span>
-<span class="source-line-no">334</span><span id="line-334">      for (var i = 0; i &lt; params.size(); i++) {</span>
-<span class="source-line-no">335</span><span id="line-335">         var pi = params.get(i);</span>
-<span class="source-line-no">336</span><span id="line-336">         var pt = pi.getParameterType();</span>
-<span class="source-line-no">337</span><span id="line-337">         if ((i == 0 &amp;&amp; nn(outer) &amp;&amp; pt.isInstance(outer)) || pt.is(Optional.class))</span>
-<span class="source-line-no">338</span><span id="line-338">            continue;</span>
-<span class="source-line-no">339</span><span id="line-339">         var beanName = pi.getResolvedQualifier();</span>
-<span class="source-line-no">340</span><span id="line-340">         var ptc = pt.inner();</span>
-<span class="source-line-no">341</span><span id="line-341">         if (beanName == null &amp;&amp; ! hasBean(ptc))</span>
-<span class="source-line-no">342</span><span id="line-342">            l.add(pt.getNameSimple());</span>
-<span class="source-line-no">343</span><span id="line-343">         if (nn(beanName) &amp;&amp; ! hasBean(ptc, beanName))</span>
-<span class="source-line-no">344</span><span id="line-344">            l.add(pt.getNameSimple() + '@' + beanName);</span>
-<span class="source-line-no">345</span><span id="line-345">      }</span>
-<span class="source-line-no">346</span><span id="line-346">      return l.isEmpty() ? null : l.stream().sorted().collect(joining(","));</span>
-<span class="source-line-no">347</span><span id="line-347">   }</span>
-<span class="source-line-no">348</span><span id="line-348">}</span>
-<span class="source-line-no">349</span><span id="line-349"></span>
+<span class="source-line-no">303</span><span id="line-303">   default &lt;T&gt; Optional&lt;T&gt; createBeanFromMethod(Class&lt;T&gt; beanType, Object onClassOrObject) {</span>
+<span class="source-line-no">304</span><span id="line-304">      return createBeanFromMethod(beanType, onClassOrObject, null);</span>
+<span class="source-line-no">305</span><span id="line-305">   }</span>
+<span class="source-line-no">306</span><span id="line-306"></span>
+<span class="source-line-no">307</span><span id="line-307">   /**</span>
+<span class="source-line-no">308</span><span id="line-308">    * Returns the implementation class registered for the specified bean type, if any.</span>
+<span class="source-line-no">309</span><span id="line-309">    *</span>
+<span class="source-line-no">310</span><span id="line-310">    * &lt;p&gt;</span>
+<span class="source-line-no">311</span><span id="line-311">    * Type bindings let callers register a default implementation class to be instantiated when an</span>
+<span class="source-line-no">312</span><span id="line-312">    * actual bean of &lt;c&gt;beanType&lt;/c&gt; is needed.  Bindings are inherited through the parent chain.</span>
+<span class="source-line-no">313</span><span id="line-313">    *</span>
+<span class="source-line-no">314</span><span id="line-314">    * &lt;p&gt;</span>
+<span class="source-line-no">315</span><span id="line-315">    * The default implementation returns {@link Optional#empty()} (no binding).  Override in concrete</span>
+<span class="source-line-no">316</span><span id="line-316">    * stores (see {@link BasicBeanStore}) to enable type binding.</span>
+<span class="source-line-no">317</span><span id="line-317">    *</span>
+<span class="source-line-no">318</span><span id="line-318">    * @param &lt;T&gt; The bean type.</span>
+<span class="source-line-no">319</span><span id="line-319">    * @param beanType The bean type whose implementation class is being looked up.</span>
+<span class="source-line-no">320</span><span id="line-320">    * @return The implementation class, or {@link Optional#empty()} if no binding exists.</span>
+<span class="source-line-no">321</span><span id="line-321">    */</span>
+<span class="source-line-no">322</span><span id="line-322">   default &lt;T&gt; Optional&lt;Class&lt;? extends T&gt;&gt; getBeanType(Class&lt;T&gt; beanType) {</span>
+<span class="source-line-no">323</span><span id="line-323">      return oe();</span>
+<span class="source-line-no">324</span><span id="line-324">   }</span>
+<span class="source-line-no">325</span><span id="line-325"></span>
+<span class="source-line-no">326</span><span id="line-326">   /**</span>
+<span class="source-line-no">327</span><span id="line-327">    * Returns &lt;jk&gt;true&lt;/jk&gt; if this store can satisfy every parameter of the specified executable.</span>
+<span class="source-line-no">328</span><span id="line-328">    *</span>
+<span class="source-line-no">329</span><span id="line-329">    * &lt;p&gt;</span>
+<span class="source-line-no">330</span><span id="line-330">    * Skips:</span>
+<span class="source-line-no">331</span><span id="line-331">    * &lt;ul&gt;</span>
+<span class="source-line-no">332</span><span id="line-332">    *    &lt;li&gt;The first parameter when it is an instance of &lt;c&gt;outer&lt;/c&gt; (inner-class outer reference).</span>
+<span class="source-line-no">333</span><span id="line-333">    *    &lt;li&gt;Parameters typed as {@link Optional} (always considered satisfied).</span>
+<span class="source-line-no">334</span><span id="line-334">    * &lt;/ul&gt;</span>
+<span class="source-line-no">335</span><span id="line-335">    *</span>
+<span class="source-line-no">336</span><span id="line-336">    * @param executable The constructor or method to inspect.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">337</span><span id="line-337">    * @param outer The outer object to use for inner-class param resolution.  Can be &lt;jk&gt;null&lt;/jk&gt; (the outer-instance skip rule is then never applied).</span>
+<span class="source-line-no">338</span><span id="line-338">    * @return &lt;jk&gt;true&lt;/jk&gt; if every required parameter can be resolved from this store.</span>
+<span class="source-line-no">339</span><span id="line-339">    */</span>
+<span class="source-line-no">340</span><span id="line-340">   default boolean hasAllParams(ExecutableInfo executable, Object outer) {</span>
+<span class="source-line-no">341</span><span id="line-341">      for (var i = 0; i &lt; executable.getParameterCount(); i++) {</span>
+<span class="source-line-no">342</span><span id="line-342">         var pi = executable.getParameter(i);</span>
+<span class="source-line-no">343</span><span id="line-343">         var pt = pi.getParameterType();</span>
+<span class="source-line-no">344</span><span id="line-344">         if ((i == 0 &amp;&amp; nn(outer) &amp;&amp; pt.isInstance(outer)) || pt.is(Optional.class))</span>
+<span class="source-line-no">345</span><span id="line-345">            continue;</span>
+<span class="source-line-no">346</span><span id="line-346">         var beanQualifier = pi.getResolvedQualifier();</span>
+<span class="source-line-no">347</span><span id="line-347">         var ptc = pt.inner();</span>
+<span class="source-line-no">348</span><span id="line-348">         if ((beanQualifier == null &amp;&amp; ! hasBean(ptc)) || (nn(beanQualifier) &amp;&amp; ! hasBean(ptc, beanQualifier)))</span>
+<span class="source-line-no">349</span><span id="line-349">            return false;</span>
+<span class="source-line-no">350</span><span id="line-350">      }</span>
+<span class="source-line-no">351</span><span id="line-351">      return true;</span>
+<span class="source-line-no">352</span><span id="line-352">   }</span>
+<span class="source-line-no">353</span><span id="line-353"></span>
+<span class="source-line-no">354</span><span id="line-354">   /**</span>
+<span class="source-line-no">355</span><span id="line-355">    * Resolves every parameter of the specified executable from this store.</span>
+<span class="source-line-no">356</span><span id="line-356">    *</span>
+<span class="source-line-no">357</span><span id="line-357">    * &lt;p&gt;</span>
+<span class="source-line-no">358</span><span id="line-358">    * For {@link Optional}-typed parameters the wrapped {@link Optional} is returned directly; for all</span>
+<span class="source-line-no">359</span><span id="line-359">    * others the bean instance (or &lt;jk&gt;null&lt;/jk&gt; when missing) is returned.  See {@link #hasAllParams}</span>
+<span class="source-line-no">360</span><span id="line-360">    * for the full skip rules.</span>
+<span class="source-line-no">361</span><span id="line-361">    *</span>
+<span class="source-line-no">362</span><span id="line-362">    * @param executable The constructor or method to resolve parameters for.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">363</span><span id="line-363">    * @param outer The outer object to use for inner-class param resolution.  Can be &lt;jk&gt;null&lt;/jk&gt; (the outer-instance skip rule is then never applied).</span>
+<span class="source-line-no">364</span><span id="line-364">    * @return An array of resolved parameter values, one per parameter of &lt;c&gt;executable&lt;/c&gt;.</span>
+<span class="source-line-no">365</span><span id="line-365">    */</span>
+<span class="source-line-no">366</span><span id="line-366">   default Object[] getParams(ExecutableInfo executable, Object outer) {</span>
+<span class="source-line-no">367</span><span id="line-367">      var o = new Object[executable.getParameterCount()];</span>
+<span class="source-line-no">368</span><span id="line-368">      for (var i = 0; i &lt; executable.getParameterCount(); i++) {</span>
+<span class="source-line-no">369</span><span id="line-369">         var pi = executable.getParameter(i);</span>
+<span class="source-line-no">370</span><span id="line-370">         var pt = pi.getParameterType();</span>
+<span class="source-line-no">371</span><span id="line-371">         if (i == 0 &amp;&amp; nn(outer) &amp;&amp; pt.isInstance(outer)) {</span>
+<span class="source-line-no">372</span><span id="line-372">            o[i] = outer;</span>
+<span class="source-line-no">373</span><span id="line-373">         } else {</span>
+<span class="source-line-no">374</span><span id="line-374">            var beanQualifier = pi.getResolvedQualifier();</span>
+<span class="source-line-no">375</span><span id="line-375">            var ptc = pt.unwrap(Optional.class).inner();</span>
+<span class="source-line-no">376</span><span id="line-376">            var o2 = beanQualifier == null ? getBean(ptc) : getBean(ptc, beanQualifier);</span>
+<span class="source-line-no">377</span><span id="line-377">            o[i] = pt.is(Optional.class) ? o2 : o2.orElse(null);</span>
+<span class="source-line-no">378</span><span id="line-378">         }</span>
+<span class="source-line-no">379</span><span id="line-379">      }</span>
+<span class="source-line-no">380</span><span id="line-380">      return o;</span>
+<span class="source-line-no">381</span><span id="line-381">   }</span>
+<span class="source-line-no">382</span><span id="line-382"></span>
+<span class="source-line-no">383</span><span id="line-383">   /**</span>
+<span class="source-line-no">384</span><span id="line-384">    * Returns a comma-delimited list of parameter type names that cannot be resolved from this store.</span>
+<span class="source-line-no">385</span><span id="line-385">    *</span>
+<span class="source-line-no">386</span><span id="line-386">    * &lt;p&gt;</span>
+<span class="source-line-no">387</span><span id="line-387">    * Intended for diagnostic error messages — see {@link #hasAllParams} for the exact match rules.</span>
+<span class="source-line-no">388</span><span id="line-388">    * Skipped parameters (outer-instance match, {@link Optional}) never appear in the result.</span>
+<span class="source-line-no">389</span><span id="line-389">    *</span>
+<span class="source-line-no">390</span><span id="line-390">    * @param executable The constructor or method to inspect.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">391</span><span id="line-391">    * @param outer The outer object to use for inner-class param resolution.  Can be &lt;jk&gt;null&lt;/jk&gt; (the outer-instance skip rule is then never applied).</span>
+<span class="source-line-no">392</span><span id="line-392">    * @return A comma-delimited list of missing parameter type names, or &lt;jk&gt;null&lt;/jk&gt; when none are missing.</span>
+<span class="source-line-no">393</span><span id="line-393">    */</span>
+<span class="source-line-no">394</span><span id="line-394">   default String getMissingParams(ExecutableInfo executable, Object outer) {</span>
+<span class="source-line-no">395</span><span id="line-395">      var params = executable.getParameters();</span>
+<span class="source-line-no">396</span><span id="line-396">      List&lt;String&gt; l = list();</span>
+<span class="source-line-no">397</span><span id="line-397">      for (var i = 0; i &lt; params.size(); i++) {</span>
+<span class="source-line-no">398</span><span id="line-398">         var pi = params.get(i);</span>
+<span class="source-line-no">399</span><span id="line-399">         var pt = pi.getParameterType();</span>
+<span class="source-line-no">400</span><span id="line-400">         if ((i == 0 &amp;&amp; nn(outer) &amp;&amp; pt.isInstance(outer)) || pt.is(Optional.class))</span>
+<span class="source-line-no">401</span><span id="line-401">            continue;</span>
+<span class="source-line-no">402</span><span id="line-402">         var beanName = pi.getResolvedQualifier();</span>
+<span class="source-line-no">403</span><span id="line-403">         var ptc = pt.inner();</span>
+<span class="source-line-no">404</span><span id="line-404">         if (beanName == null &amp;&amp; ! hasBean(ptc))</span>
+<span class="source-line-no">405</span><span id="line-405">            l.add(pt.getNameSimple());</span>
+<span class="source-line-no">406</span><span id="line-406">         if (nn(beanName) &amp;&amp; ! hasBean(ptc, beanName))</span>
+<span class="source-line-no">407</span><span id="line-407">            l.add(pt.getNameSimple() + '@' + beanName);</span>
+<span class="source-line-no">408</span><span id="line-408">      }</span>
+<span class="source-line-no">409</span><span id="line-409">      return l.isEmpty() ? null : l.stream().sorted().collect(joining(","));</span>
+<span class="source-line-no">410</span><span id="line-410">   }</span>
+<span class="source-line-no">411</span><span id="line-411">}</span>
+<span class="source-line-no">412</span><span id="line-412"></span>
 
 
 

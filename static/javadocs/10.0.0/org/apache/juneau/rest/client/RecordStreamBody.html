@@ -82,7 +82,7 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="../../http/HttpBody.html" title="interface in org.apache.juneau.http">HttpBody</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public final class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RecordStreamBody.html#line-80">RecordStreamBody</a></span>
+<div class="type-signature"><span class="modifiers">public final class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RecordStreamBody.html#line-78">RecordStreamBody</a></span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>
 implements <a href="../../http/HttpBody.html" title="interface in org.apache.juneau.http">HttpBody</a></span></div>
 <div class="block">A streaming HTTP request body that emits its content through a token/record-streaming cursor.
@@ -123,8 +123,7 @@ implements <a href="../../http/HttpBody.html" title="interface in org.apache.jun
  </p>
 
  <p>
- <b>Beta — API subject to change:</b> This type is part of the next-generation REST client and HTTP stack
- (<code>org.apache.juneau.marshall.ng.*</code>).
+ <b>Beta — API subject to change:</b> This type is part of the next-generation REST client and HTTP stack.
  It is not API-frozen: binary- and source-incompatible changes may appear in the <b>next major</b> Juneau release
  (and possibly earlier).
 
@@ -216,7 +215,7 @@ implements <a href="../../http/HttpBody.html" title="interface in org.apache.jun
 <li>
 <section class="detail" id="records(java.util.function.Consumer)">
 <h3>records</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="RecordStreamBody.html" title="class in org.apache.juneau.rest.client">RecordStreamBody</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RecordStreamBody.html#line-88">records</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Consumer.html" title="class or interface in java.util.function" class="external-link">Consumer</a>&lt;<a href="../../marshall/stream/RecordWriter.html" title="interface in org.apache.juneau.marshall.stream">RecordWriter</a>&gt;&nbsp;consumer)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="RecordStreamBody.html" title="class in org.apache.juneau.rest.client">RecordStreamBody</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RecordStreamBody.html#line-86">records</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Consumer.html" title="class or interface in java.util.function" class="external-link">Consumer</a>&lt;<a href="../../marshall/stream/RecordWriter.html" title="interface in org.apache.juneau.marshall.stream">RecordWriter</a>&gt;&nbsp;consumer)</span></div>
 <div class="block">Creates a body that streams via a <a href="../../marshall/stream/RecordWriter.html" title="interface in org.apache.juneau.marshall.stream"><code>RecordWriter</code></a> (whole-value record cursor) using the default JSON serializer.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -229,7 +228,7 @@ implements <a href="../../http/HttpBody.html" title="interface in org.apache.jun
 <li>
 <section class="detail" id="records(org.apache.juneau.marshall.serializer.Serializer,java.util.function.Consumer)">
 <h3>records</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="RecordStreamBody.html" title="class in org.apache.juneau.rest.client">RecordStreamBody</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RecordStreamBody.html#line-101">records</a></span><wbr><span class="parameters">(<a href="../../marshall/serializer/Serializer.html" title="class in org.apache.juneau.marshall.serializer">Serializer</a>&nbsp;serializer,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="RecordStreamBody.html" title="class in org.apache.juneau.rest.client">RecordStreamBody</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RecordStreamBody.html#line-99">records</a></span><wbr><span class="parameters">(<a href="../../marshall/serializer/Serializer.html" title="class in org.apache.juneau.marshall.serializer">Serializer</a>&nbsp;serializer,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Consumer.html" title="class or interface in java.util.function" class="external-link">Consumer</a>&lt;<a href="../../marshall/stream/RecordWriter.html" title="interface in org.apache.juneau.marshall.stream">RecordWriter</a>&gt;&nbsp;consumer)</span></div>
 <div class="block">Creates a body that streams via a <a href="../../marshall/stream/RecordWriter.html" title="interface in org.apache.juneau.marshall.stream"><code>RecordWriter</code></a> (whole-value record cursor) using the given serializer.</div>
 <dl class="notes">
@@ -247,7 +246,7 @@ implements <a href="../../http/HttpBody.html" title="interface in org.apache.jun
 <li>
 <section class="detail" id="token(java.util.function.Consumer)">
 <h3>token</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="RecordStreamBody.html" title="class in org.apache.juneau.rest.client">RecordStreamBody</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RecordStreamBody.html#line-115">token</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Consumer.html" title="class or interface in java.util.function" class="external-link">Consumer</a>&lt;<a href="../../marshall/stream/TokenWriter.html" title="interface in org.apache.juneau.marshall.stream">TokenWriter</a>&gt;&nbsp;consumer)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="RecordStreamBody.html" title="class in org.apache.juneau.rest.client">RecordStreamBody</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RecordStreamBody.html#line-113">token</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Consumer.html" title="class or interface in java.util.function" class="external-link">Consumer</a>&lt;<a href="../../marshall/stream/TokenWriter.html" title="interface in org.apache.juneau.marshall.stream">TokenWriter</a>&gt;&nbsp;consumer)</span></div>
 <div class="block">Creates a body that streams via a <a href="../../marshall/stream/TokenWriter.html" title="interface in org.apache.juneau.marshall.stream"><code>TokenWriter</code></a> (fine-grained structural cursor) using the default JSON serializer.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -260,7 +259,7 @@ implements <a href="../../http/HttpBody.html" title="interface in org.apache.jun
 <li>
 <section class="detail" id="token(org.apache.juneau.marshall.serializer.Serializer,java.util.function.Consumer)">
 <h3>token</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="RecordStreamBody.html" title="class in org.apache.juneau.rest.client">RecordStreamBody</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RecordStreamBody.html#line-128">token</a></span><wbr><span class="parameters">(<a href="../../marshall/serializer/Serializer.html" title="class in org.apache.juneau.marshall.serializer">Serializer</a>&nbsp;serializer,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="RecordStreamBody.html" title="class in org.apache.juneau.rest.client">RecordStreamBody</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RecordStreamBody.html#line-126">token</a></span><wbr><span class="parameters">(<a href="../../marshall/serializer/Serializer.html" title="class in org.apache.juneau.marshall.serializer">Serializer</a>&nbsp;serializer,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Consumer.html" title="class or interface in java.util.function" class="external-link">Consumer</a>&lt;<a href="../../marshall/stream/TokenWriter.html" title="interface in org.apache.juneau.marshall.stream">TokenWriter</a>&gt;&nbsp;consumer)</span></div>
 <div class="block">Creates a body that streams via a <a href="../../marshall/stream/TokenWriter.html" title="interface in org.apache.juneau.marshall.stream"><code>TokenWriter</code></a> (fine-grained structural cursor) using the given serializer.</div>
 <dl class="notes">
@@ -278,7 +277,7 @@ implements <a href="../../http/HttpBody.html" title="interface in org.apache.jun
 <li>
 <section class="detail" id="repeatable()">
 <h3>repeatable</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RecordStreamBody.html" title="class in org.apache.juneau.rest.client">RecordStreamBody</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RecordStreamBody.html#line-157">repeatable</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RecordStreamBody.html" title="class in org.apache.juneau.rest.client">RecordStreamBody</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RecordStreamBody.html#line-155">repeatable</a></span>()</div>
 <div class="block">Returns a copy of this body flagged as repeatable.
 
  <p>
@@ -292,7 +291,7 @@ implements <a href="../../http/HttpBody.html" title="interface in org.apache.jun
 <li>
 <section class="detail" id="getContentType()">
 <h3>getContentType</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RecordStreamBody.html#line-161">getContentType</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RecordStreamBody.html#line-159">getContentType</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="../../http/HttpBody.html#getContentType()">HttpBody</a></code></span></div>
 <div class="block">Returns the MIME content type of this body, e.g. <code>"application/json; charset=UTF-8"</code>.</div>
 <dl class="notes">
@@ -306,7 +305,7 @@ implements <a href="../../http/HttpBody.html" title="interface in org.apache.jun
 <li>
 <section class="detail" id="getContentLength()">
 <h3>getContentLength</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">long</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RecordStreamBody.html#line-167">getContentLength</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">long</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RecordStreamBody.html#line-165">getContentLength</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="../../http/HttpBody.html#getContentLength()">HttpBody</a></code></span></div>
 <div class="block">Returns the content length in bytes, or <code>-1</code> if unknown.
 
@@ -324,7 +323,7 @@ implements <a href="../../http/HttpBody.html" title="interface in org.apache.jun
 <li>
 <section class="detail" id="isRepeatable()">
 <h3>isRepeatable</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RecordStreamBody.html#line-172">isRepeatable</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RecordStreamBody.html#line-170">isRepeatable</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="../../http/HttpBody.html#isRepeatable()">HttpBody</a></code></span></div>
 <div class="block">Returns <code>true</code> if this body can be written more than once.
 
@@ -342,7 +341,7 @@ implements <a href="../../http/HttpBody.html" title="interface in org.apache.jun
 <li>
 <section class="detail" id="writeTo(java.io.OutputStream)">
 <h3>writeTo</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RecordStreamBody.html#line-177">writeTo</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/OutputStream.html" title="class or interface in java.io" class="external-link">OutputStream</a>&nbsp;out)</span>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/RecordStreamBody.html#line-175">writeTo</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/OutputStream.html" title="class or interface in java.io" class="external-link">OutputStream</a>&nbsp;out)</span>
              throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="../../http/HttpBody.html#writeTo(java.io.OutputStream)">HttpBody</a></code></span></div>
 <div class="block">Writes the body content to the given output stream.

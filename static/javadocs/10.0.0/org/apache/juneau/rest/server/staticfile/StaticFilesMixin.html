@@ -78,7 +78,7 @@ loadScripts(document, 'script');</script>
 </div>
 <section class="class-description" id="class-description">
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/staticfile/StaticFilesMixin.html#line-128">StaticFilesMixin</a></span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/staticfile/StaticFilesMixin.html#line-130">StaticFilesMixin</a></span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
 <div class="block">Mixin that serves static files from the active <a href="StaticFiles.html" title="interface in org.apache.juneau.rest.server.staticfile"><code>StaticFiles</code></a> implementation under
  <code>/static/*</code> (configurable).
@@ -138,7 +138,7 @@ loadScripts(document, 'script');</script>
 
  <ul class='spaced-list'>
    <li>GET hits the active <a href="StaticFiles.html" title="interface in org.apache.juneau.rest.server.staticfile"><code>StaticFiles</code></a> bean (resolved via
-      <a href="../RestContext.html#getStaticFiles()"><code>RestContext.getStaticFiles()</code></a>); missing paths surface as
+      <a href="../RestRequest.html#getStaticFiles()"><code>RestRequest.getStaticFiles()</code></a>); missing paths surface as
       <a href="../../../http/response/NotFound.html" title="class in org.apache.juneau.http.response"><code>NotFound</code></a> thrown from the handler.
    <li><code>HEAD</code> requests are accepted via the standard servlet
       <code>HEAD</code>-via-<code>GET</code> contract: the response carries identical headers to the
@@ -175,6 +175,8 @@ loadScripts(document, 'script');</script>
  <h5 class='section'>See Also:</h5><ul>
    <li class='jc'><a href="BasicStaticFiles.html" title="class in org.apache.juneau.rest.server.staticfile"><code>BasicStaticFiles</code></a>
    <li class='jc'><a href="StaticFiles.html" title="interface in org.apache.juneau.rest.server.staticfile"><code>StaticFiles</code></a>
+   <li class='jc'><a href="../ops/HtdocMixin.html" title="class in org.apache.juneau.rest.server.ops"><code>HtdocMixin</code></a> &mdash; legacy fixed <code>/htdocs/*</code> mount;
+      shares this mixin's <a href="#resolveStaticFile(org.apache.juneau.rest.server.RestRequest,java.lang.String,java.util.Locale)"><code>resolveStaticFile(org.apache.juneau.rest.server.RestRequest, java.lang.String, java.util.Locale)</code></a> resolution logic
    <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/StaticFiles">Static files</a>
    <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerComposition">REST Server &mdash; Mixins and Multi-Mount Paths</a>
  </ul></div>
@@ -203,7 +205,7 @@ loadScripts(document, 'script');</script>
 <section class="method-summary" id="method-summary">
 <h2>Method Summary</h2>
 <div id="method-summary-table">
-<div class="table-tabs" role="tablist" aria-orientation="horizontal"><button id="method-summary-table-tab0" role="tab" aria-selected="true" aria-controls="method-summary-table.tabpanel" tabindex="0" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table', 3)" class="active-table-tab">All Methods</button><button id="method-summary-table-tab2" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab2', 3)" class="table-tab">Instance Methods</button><button id="method-summary-table-tab4" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab4', 3)" class="table-tab">Concrete Methods</button></div>
+<div class="table-tabs" role="tablist" aria-orientation="horizontal"><button id="method-summary-table-tab0" role="tab" aria-selected="true" aria-controls="method-summary-table.tabpanel" tabindex="0" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table', 3)" class="active-table-tab">All Methods</button><button id="method-summary-table-tab1" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab1', 3)" class="table-tab">Static Methods</button><button id="method-summary-table-tab2" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab2', 3)" class="table-tab">Instance Methods</button><button id="method-summary-table-tab4" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab4', 3)" class="table-tab">Concrete Methods</button></div>
 <div id="method-summary-table.tabpanel" role="tabpanel" aria-labelledby="method-summary-table-tab0">
 <div class="summary-table three-column-summary">
 <div class="table-header col-first">Modifier and Type</div>
@@ -222,6 +224,14 @@ loadScripts(document, 'script');</script>
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Locale.html" title="class or interface in java.util" class="external-link">Locale</a>&nbsp;locale)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">[HEAD /static/*] &mdash; return GET headers for a static file without the body.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="../../../http/HttpResource.html" title="interface in org.apache.juneau.http">HttpResource</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#resolveStaticFile(org.apache.juneau.rest.server.RestRequest,java.lang.String,java.util.Locale)" class="member-name-link">resolveStaticFile</a><wbr>(<a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;path,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Locale.html" title="class or interface in java.util" class="external-link">Locale</a>&nbsp;locale)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="block">Shared static-file resolution chokepoint &mdash; resolves the requested path against the request's active
+ <a href="StaticFiles.html" title="interface in org.apache.juneau.rest.server.staticfile"><code>StaticFiles</code></a> bean.</div>
 </div>
 </div>
 </div>
@@ -243,7 +253,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;()">
 <h3>StaticFilesMixin</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/staticfile/StaticFilesMixin.html#line-129">StaticFilesMixin</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/staticfile/StaticFilesMixin.html#line-131">StaticFilesMixin</a></span>()</div>
 </section>
 </li>
 </ul>
@@ -257,7 +267,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getStaticFile(org.apache.juneau.rest.server.RestRequest,java.lang.String,java.util.Locale)">
 <h3>getStaticFile</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../../http/HttpResource.html" title="interface in org.apache.juneau.http">HttpResource</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/staticfile/StaticFilesMixin.html#line-147">getStaticFile</a></span><wbr><span class="parameters">(<a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../../http/HttpResource.html" title="interface in org.apache.juneau.http">HttpResource</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/staticfile/StaticFilesMixin.html#line-149">getStaticFile</a></span><wbr><span class="parameters">(<a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req,
  <a href="../../../http/Path.html" title="annotation interface in org.apache.juneau.http">@Path</a>("/*")
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;path,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Locale.html" title="class or interface in java.util" class="external-link">Locale</a>&nbsp;locale)</span></div>
@@ -270,7 +280,7 @@ loadScripts(document, 'script');</script>
  (e.g. <code>styles_fr.css</code>) work out of the box.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>req</code> - The current REST request &mdash; supplies <a href="../RestContext.html#getStaticFiles()"><code>RestContext.getStaticFiles()</code></a>.</dd>
+<dd><code>req</code> - The current REST request &mdash; supplies <a href="../RestRequest.html#getStaticFiles()"><code>RestRequest.getStaticFiles()</code></a>.</dd>
 <dd><code>path</code> - The trailing remainder after the mount prefix (the file path within the
    <code>static/</code> or <code>htdocs/</code> classpath / filesystem search roots).</dd>
 <dd><code>locale</code> - The request locale (used for localized resource lookups).</dd>
@@ -284,7 +294,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="headStaticFile(org.apache.juneau.rest.server.RestRequest,java.lang.String,java.util.Locale)">
 <h3>headStaticFile</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../../http/HttpResource.html" title="interface in org.apache.juneau.http">HttpResource</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/staticfile/StaticFilesMixin.html#line-173">headStaticFile</a></span><wbr><span class="parameters">(<a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../../http/HttpResource.html" title="interface in org.apache.juneau.http">HttpResource</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/staticfile/StaticFilesMixin.html#line-175">headStaticFile</a></span><wbr><span class="parameters">(<a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req,
  <a href="../../../http/Path.html" title="annotation interface in org.apache.juneau.http">@Path</a>("/*")
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;path,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Locale.html" title="class or interface in java.util" class="external-link">Locale</a>&nbsp;locale)</span></div>
@@ -298,11 +308,37 @@ loadScripts(document, 'script');</script>
  delegate to <a href="#getStaticFile(org.apache.juneau.rest.server.RestRequest,java.lang.String,java.util.Locale)"><code>getStaticFile(org.apache.juneau.rest.server.RestRequest, java.lang.String, java.util.Locale)</code></a> verbatim.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>req</code> - The current REST request &mdash; supplies <a href="../RestContext.html#getStaticFiles()"><code>RestContext.getStaticFiles()</code></a>.</dd>
+<dd><code>req</code> - The current REST request &mdash; supplies <a href="../RestRequest.html#getStaticFiles()"><code>RestRequest.getStaticFiles()</code></a>.</dd>
 <dd><code>path</code> - The trailing remainder after the mount prefix.</dd>
 <dd><code>locale</code> - The request locale (used for localized resource lookups).</dd>
 <dt>Returns:</dt>
 <dd>The matching <a href="../../../http/HttpResource.html" title="interface in org.apache.juneau.http"><code>HttpResource</code></a> (with headers; body suppressed by the processor).</dd>
+<dt>Throws:</dt>
+<dd><code><a href="../../../http/response/NotFound.html" title="class in org.apache.juneau.http.response">NotFound</a></code> - If no resource matches the requested path.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="resolveStaticFile(org.apache.juneau.rest.server.RestRequest,java.lang.String,java.util.Locale)">
+<h3>resolveStaticFile</h3>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="../../../http/HttpResource.html" title="interface in org.apache.juneau.http">HttpResource</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/staticfile/StaticFilesMixin.html#line-201">resolveStaticFile</a></span><wbr><span class="parameters">(<a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;path,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Locale.html" title="class or interface in java.util" class="external-link">Locale</a>&nbsp;locale)</span>
+                                      throws <span class="exceptions"><a href="../../../http/response/NotFound.html" title="class in org.apache.juneau.http.response">NotFound</a></span></div>
+<div class="block">Shared static-file resolution chokepoint &mdash; resolves the requested path against the request's active
+ <a href="StaticFiles.html" title="interface in org.apache.juneau.rest.server.staticfile"><code>StaticFiles</code></a> bean.
+
+ <p>
+ Used by both this mixin's <a href="#getStaticFile(org.apache.juneau.rest.server.RestRequest,java.lang.String,java.util.Locale)"><code>getStaticFile(org.apache.juneau.rest.server.RestRequest, java.lang.String, java.util.Locale)</code></a> / <a href="#headStaticFile(org.apache.juneau.rest.server.RestRequest,java.lang.String,java.util.Locale)"><code>headStaticFile(org.apache.juneau.rest.server.RestRequest, java.lang.String, java.util.Locale)</code></a> handlers and by
+ <a href="../ops/HtdocMixin.html" title="class in org.apache.juneau.rest.server.ops"><code>HtdocMixin</code></a>'s legacy <code>/htdocs/*</code> endpoint, so there is a
+ single implementation of the resolution logic even though the two mixins expose different mounts.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>req</code> - The current REST request &mdash; supplies <a href="../RestRequest.html#getStaticFiles()"><code>RestRequest.getStaticFiles()</code></a>.</dd>
+<dd><code>path</code> - The path to resolve (the trailing remainder after whichever mount prefix the caller uses).</dd>
+<dd><code>locale</code> - The request locale (used for localized resource lookups).</dd>
+<dt>Returns:</dt>
+<dd>The matching <a href="../../../http/HttpResource.html" title="interface in org.apache.juneau.http"><code>HttpResource</code></a> (with content type + cache headers).</dd>
 <dt>Throws:</dt>
 <dd><code><a href="../../../http/response/NotFound.html" title="class in org.apache.juneau.http.response">NotFound</a></code> - If no resource matches the requested path.</dd>
 </dl>

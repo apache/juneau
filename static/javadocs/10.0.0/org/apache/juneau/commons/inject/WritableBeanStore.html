@@ -234,7 +234,7 @@ extends <a href="BeanStore.html" title="interface in org.apache.juneau.commons.i
 </div>
 <div class="inherited-list">
 <h3 id="methods-inherited-from-class-org.apache.juneau.commons.inject.BeanStore">Methods inherited from interface&nbsp;org.apache.juneau.commons.inject.<a href="BeanStore.html" title="interface in org.apache.juneau.commons.inject">BeanStore</a></h3>
-<code><a href="BeanStore.html#createBeanFromMethod(java.lang.Class,java.lang.Object)">createBeanFromMethod</a>, <a href="BeanStore.html#createBeanFromMethod(java.lang.Class,java.lang.Object,java.util.function.Predicate,java.lang.Object...)">createBeanFromMethod</a>, <a href="BeanStore.html#getBean(java.lang.Class)">getBean</a>, <a href="BeanStore.html#getBean(java.lang.Class,java.lang.String)">getBean</a>, <a href="BeanStore.html#getBeansOfType(java.lang.Class)">getBeansOfType</a>, <a href="BeanStore.html#getBeanSupplier(java.lang.Class)">getBeanSupplier</a>, <a href="BeanStore.html#getBeanSupplier(java.lang.Class,java.lang.String)">getBeanSupplier</a>, <a href="BeanStore.html#getBeanType(java.lang.Class)">getBeanType</a>, <a href="BeanStore.html#getMissingParams(org.apache.juneau.commons.reflect.ExecutableInfo,java.lang.Object)">getMissingParams</a>, <a href="BeanStore.html#getParams(org.apache.juneau.commons.reflect.ExecutableInfo,java.lang.Object)">getParams</a>, <a href="BeanStore.html#hasAllParams(org.apache.juneau.commons.reflect.ExecutableInfo,java.lang.Object)">hasAllParams</a>, <a href="BeanStore.html#hasBean(java.lang.Class)">hasBean</a>, <a href="BeanStore.html#hasBean(java.lang.Class,java.lang.String)">hasBean</a>, <a href="BeanStore.html#instantiate(java.lang.Class)">instantiate</a></code></div>
+<code><a href="BeanStore.html#createBeanFromMethod(java.lang.Class,java.lang.Object)">createBeanFromMethod</a>, <a href="BeanStore.html#createBeanFromMethod(java.lang.Class,java.lang.Object,java.util.function.Predicate,java.lang.Object...)">createBeanFromMethod</a>, <a href="BeanStore.html#getBean(java.lang.Class)">getBean</a>, <a href="BeanStore.html#getBean(java.lang.Class,java.lang.String)">getBean</a>, <a href="BeanStore.html#getBeansOfType(java.lang.Class)">getBeansOfType</a>, <a href="BeanStore.html#getBeanSupplier(java.lang.Class)">getBeanSupplier</a>, <a href="BeanStore.html#getBeanSupplier(java.lang.Class,java.lang.String)">getBeanSupplier</a>, <a href="BeanStore.html#getBeanType(java.lang.Class)">getBeanType</a>, <a href="BeanStore.html#getMissingParams(org.apache.juneau.commons.reflect.ExecutableInfo,java.lang.Object)">getMissingParams</a>, <a href="BeanStore.html#getParams(org.apache.juneau.commons.reflect.ExecutableInfo,java.lang.Object)">getParams</a>, <a href="BeanStore.html#hasAllParams(org.apache.juneau.commons.reflect.ExecutableInfo,java.lang.Object)">hasAllParams</a>, <a href="BeanStore.html#hasBean(java.lang.Class)">hasBean</a>, <a href="BeanStore.html#hasBean(java.lang.Class,java.lang.String)">hasBean</a>, <a href="BeanStore.html#instantiate(java.lang.Class)">instantiate</a>, <a href="BeanStore.html#invokeBeanMethod(java.lang.Class,org.apache.juneau.commons.reflect.MethodInfo,java.lang.Object,java.lang.Object...)">invokeBeanMethod</a></code></div>
 </section>
 </li>
 </ul>
@@ -249,7 +249,7 @@ extends <a href="BeanStore.html" title="interface in org.apache.juneau.commons.i
 <li>
 <section class="detail" id="add(java.lang.Class,T)">
 <h3 id="add(java.lang.Class,java.lang.Object)">add</h3>
-<div class="member-signature"><span class="modifiers">default</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/inject/WritableBeanStore.html#line-62">add</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;T&gt;&nbsp;beanType,
+<div class="member-signature"><span class="modifiers">default</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/inject/WritableBeanStore.html#line-65">add</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;T&gt;&nbsp;beanType,
  T&nbsp;bean)</span></div>
 <div class="block">Same as <a href="#addBean(java.lang.Class,T)"><code>addBean(Class,Object)</code></a> but returns the bean instead of this object for fluent calls.</div>
 <dl class="notes">
@@ -285,7 +285,7 @@ extends <a href="BeanStore.html" title="interface in org.apache.juneau.commons.i
 <li>
 <section class="detail" id="addBean(java.lang.Class,T)">
 <h3 id="addBean(java.lang.Class,java.lang.Object)">addBean</h3>
-<div class="member-signature"><span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type"><a href="WritableBeanStore.html" title="interface in org.apache.juneau.commons.inject">WritableBeanStore</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/inject/WritableBeanStore.html#line-95">addBean</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;T&gt;&nbsp;beanType,
+<div class="member-signature"><span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type"><a href="WritableBeanStore.html" title="interface in org.apache.juneau.commons.inject">WritableBeanStore</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/inject/WritableBeanStore.html#line-92">addBean</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;T&gt;&nbsp;beanType,
  T&nbsp;bean)</span></div>
 <div class="block">Adds an unnamed bean of the specified type to this store.</div>
 <dl class="notes">
@@ -302,7 +302,7 @@ extends <a href="BeanStore.html" title="interface in org.apache.juneau.commons.i
 <li>
 <section class="detail" id="addBean(java.lang.Class,T,java.lang.String)">
 <h3 id="addBean(java.lang.Class,java.lang.Object,java.lang.String)">addBean</h3>
-<div class="member-signature"><span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type"><a href="WritableBeanStore.html" title="interface in org.apache.juneau.commons.inject">WritableBeanStore</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/inject/WritableBeanStore.html#line-106">addBean</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;T&gt;&nbsp;beanType,
+<div class="member-signature"><span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type"><a href="WritableBeanStore.html" title="interface in org.apache.juneau.commons.inject">WritableBeanStore</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/inject/WritableBeanStore.html#line-103">addBean</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;T&gt;&nbsp;beanType,
  T&nbsp;bean,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
 <div class="block">Adds a named bean of the specified type to this store.</div>
@@ -321,7 +321,7 @@ extends <a href="BeanStore.html" title="interface in org.apache.juneau.commons.i
 <li>
 <section class="detail" id="addSupplier(java.lang.Class,java.util.function.Supplier)">
 <h3>addSupplier</h3>
-<div class="member-signature"><span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type"><a href="WritableBeanStore.html" title="interface in org.apache.juneau.commons.inject">WritableBeanStore</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/inject/WritableBeanStore.html#line-119">addSupplier</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;T&gt;&nbsp;beanType,
+<div class="member-signature"><span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type"><a href="WritableBeanStore.html" title="interface in org.apache.juneau.commons.inject">WritableBeanStore</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/inject/WritableBeanStore.html#line-116">addSupplier</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;T&gt;&nbsp;beanType,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;T&gt;&nbsp;supplier)</span></div>
 <div class="block">Adds a supplier for an unnamed bean of the specified type to this store.
 
@@ -341,7 +341,7 @@ extends <a href="BeanStore.html" title="interface in org.apache.juneau.commons.i
 <li>
 <section class="detail" id="addSupplier(java.lang.Class,java.util.function.Supplier,java.lang.String)">
 <h3>addSupplier</h3>
-<div class="member-signature"><span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type"><a href="WritableBeanStore.html" title="interface in org.apache.juneau.commons.inject">WritableBeanStore</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/inject/WritableBeanStore.html#line-133">addSupplier</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;T&gt;&nbsp;beanType,
+<div class="member-signature"><span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type"><a href="WritableBeanStore.html" title="interface in org.apache.juneau.commons.inject">WritableBeanStore</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/inject/WritableBeanStore.html#line-130">addSupplier</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;T&gt;&nbsp;beanType,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;T&gt;&nbsp;supplier,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
 <div class="block">Adds a supplier for a named bean of the specified type to this store.
@@ -363,7 +363,7 @@ extends <a href="BeanStore.html" title="interface in org.apache.juneau.commons.i
 <li>
 <section class="detail" id="addDefaultSupplier(java.lang.Class,java.util.function.Supplier)">
 <h3>addDefaultSupplier</h3>
-<div class="member-signature"><span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type"><a href="WritableBeanStore.html" title="interface in org.apache.juneau.commons.inject">WritableBeanStore</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/inject/WritableBeanStore.html#line-149">addDefaultSupplier</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;T&gt;&nbsp;beanType,
+<div class="member-signature"><span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type"><a href="WritableBeanStore.html" title="interface in org.apache.juneau.commons.inject">WritableBeanStore</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/inject/WritableBeanStore.html#line-146">addDefaultSupplier</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;T&gt;&nbsp;beanType,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;T&gt;&nbsp;supplier)</span></div>
 <div class="block">Adds a fallback supplier for an unnamed bean of the specified type to this store.
 
@@ -386,7 +386,7 @@ extends <a href="BeanStore.html" title="interface in org.apache.juneau.commons.i
 <li>
 <section class="detail" id="addDefaultSupplier(java.lang.Class,java.util.function.Supplier,java.lang.String)">
 <h3>addDefaultSupplier</h3>
-<div class="member-signature"><span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type"><a href="WritableBeanStore.html" title="interface in org.apache.juneau.commons.inject">WritableBeanStore</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/inject/WritableBeanStore.html#line-164">addDefaultSupplier</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;T&gt;&nbsp;beanType,
+<div class="member-signature"><span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type"><a href="WritableBeanStore.html" title="interface in org.apache.juneau.commons.inject">WritableBeanStore</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/inject/WritableBeanStore.html#line-161">addDefaultSupplier</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;T&gt;&nbsp;beanType,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;T&gt;&nbsp;supplier,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
 <div class="block">Adds a fallback supplier for a named bean of the specified type to this store.
@@ -409,7 +409,7 @@ extends <a href="BeanStore.html" title="interface in org.apache.juneau.commons.i
 <li>
 <section class="detail" id="clear()">
 <h3>clear</h3>
-<div class="member-signature"><span class="return-type"><a href="WritableBeanStore.html" title="interface in org.apache.juneau.commons.inject">WritableBeanStore</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/inject/WritableBeanStore.html#line-175">clear</a></span>()</div>
+<div class="member-signature"><span class="return-type"><a href="WritableBeanStore.html" title="interface in org.apache.juneau.commons.inject">WritableBeanStore</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/inject/WritableBeanStore.html#line-172">clear</a></span>()</div>
 <div class="block">Removes all beans from this store.
 
  <p>
@@ -424,7 +424,7 @@ extends <a href="BeanStore.html" title="interface in org.apache.juneau.commons.i
 <li>
 <section class="detail" id="hasDefaultSupplier(java.lang.Class)">
 <h3>hasDefaultSupplier</h3>
-<div class="member-signature"><span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/inject/WritableBeanStore.html#line-189">hasDefaultSupplier</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;&nbsp;beanType)</span></div>
+<div class="member-signature"><span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/inject/WritableBeanStore.html#line-186">hasDefaultSupplier</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;&nbsp;beanType)</span></div>
 <div class="block">Returns <jk>true</jk> if this store has a <a href="#addDefaultSupplier(java.lang.Class,java.util.function.Supplier)">default supplier</a>
  registered locally for the specified unnamed bean type.
 
@@ -443,7 +443,7 @@ extends <a href="BeanStore.html" title="interface in org.apache.juneau.commons.i
 <li>
 <section class="detail" id="hasDefaultSupplier(java.lang.Class,java.lang.String)">
 <h3>hasDefaultSupplier</h3>
-<div class="member-signature"><span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/inject/WritableBeanStore.html#line-203">hasDefaultSupplier</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;&nbsp;beanType,
+<div class="member-signature"><span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/inject/WritableBeanStore.html#line-200">hasDefaultSupplier</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;&nbsp;beanType,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
 <div class="block">Returns <jk>true</jk> if this store has a <a href="#addDefaultSupplier(java.lang.Class,java.util.function.Supplier,java.lang.String)">default supplier</a>
  registered locally for the specified bean type and name.
@@ -463,7 +463,7 @@ extends <a href="BeanStore.html" title="interface in org.apache.juneau.commons.i
 <li>
 <section class="detail" id="addBeanType(java.lang.Class,java.lang.Class)">
 <h3>addBeanType</h3>
-<div class="member-signature"><span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type"><a href="WritableBeanStore.html" title="interface in org.apache.juneau.commons.inject">WritableBeanStore</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/inject/WritableBeanStore.html#line-220">addBeanType</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;T&gt;&nbsp;beanType,
+<div class="member-signature"><span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type"><a href="WritableBeanStore.html" title="interface in org.apache.juneau.commons.inject">WritableBeanStore</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/inject/WritableBeanStore.html#line-217">addBeanType</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;T&gt;&nbsp;beanType,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;? extends T&gt;&nbsp;implType)</span></div>
 <div class="block">Registers a default implementation class for the specified bean type.
 
@@ -487,7 +487,7 @@ extends <a href="BeanStore.html" title="interface in org.apache.juneau.commons.i
 <li>
 <section class="detail" id="registerConfiguration(java.lang.Class)">
 <h3>registerConfiguration</h3>
-<div class="member-signature"><span class="return-type"><a href="WritableBeanStore.html" title="interface in org.apache.juneau.commons.inject">WritableBeanStore</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/inject/WritableBeanStore.html#line-228">registerConfiguration</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;&nbsp;configType)</span></div>
+<div class="member-signature"><span class="return-type"><a href="WritableBeanStore.html" title="interface in org.apache.juneau.commons.inject">WritableBeanStore</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/inject/WritableBeanStore.html#line-225">registerConfiguration</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;&nbsp;configType)</span></div>
 <div class="block">Registers a configuration class and its <a href="Bean.html" title="annotation interface in org.apache.juneau.commons.inject"><code>Bean</code></a>-annotated members.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -500,7 +500,7 @@ extends <a href="BeanStore.html" title="interface in org.apache.juneau.commons.i
 <li>
 <section class="detail" id="registerConfigurations(java.lang.Class...)">
 <h3>registerConfigurations</h3>
-<div class="member-signature"><span class="modifiers">default</span>&nbsp;<span class="return-type"><a href="WritableBeanStore.html" title="interface in org.apache.juneau.commons.inject">WritableBeanStore</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/inject/WritableBeanStore.html#line-236">registerConfigurations</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;...&nbsp;configTypes)</span></div>
+<div class="member-signature"><span class="modifiers">default</span>&nbsp;<span class="return-type"><a href="WritableBeanStore.html" title="interface in org.apache.juneau.commons.inject">WritableBeanStore</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/inject/WritableBeanStore.html#line-233">registerConfigurations</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;...&nbsp;configTypes)</span></div>
 <div class="block">Registers multiple configuration classes.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -513,7 +513,7 @@ extends <a href="BeanStore.html" title="interface in org.apache.juneau.commons.i
 <li>
 <section class="detail" id="pushOverlay(org.apache.juneau.commons.inject.BeanStore)">
 <h3>pushOverlay</h3>
-<div class="member-signature"><span class="return-type"><a href="Snapshot.html" title="class in org.apache.juneau.commons.inject">Snapshot</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/inject/WritableBeanStore.html#line-271">pushOverlay</a></span><wbr><span class="parameters">(<a href="BeanStore.html" title="interface in org.apache.juneau.commons.inject">BeanStore</a>&nbsp;overlay)</span></div>
+<div class="member-signature"><span class="return-type"><a href="Snapshot.html" title="class in org.apache.juneau.commons.inject">Snapshot</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/inject/WritableBeanStore.html#line-265">pushOverlay</a></span><wbr><span class="parameters">(<a href="BeanStore.html" title="interface in org.apache.juneau.commons.inject">BeanStore</a>&nbsp;overlay)</span></div>
 <div class="block">Pushes the supplied <a href="BeanStore.html" title="interface in org.apache.juneau.commons.inject"><code>BeanStore</code></a> onto this store's overlay stack.
 
  <p>
@@ -547,7 +547,7 @@ extends <a href="BeanStore.html" title="interface in org.apache.juneau.commons.i
 <li>
 <section class="detail" id="popOverlay(org.apache.juneau.commons.inject.Snapshot)">
 <h3>popOverlay</h3>
-<div class="member-signature"><span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/inject/WritableBeanStore.html#line-289">popOverlay</a></span><wbr><span class="parameters">(<a href="Snapshot.html" title="class in org.apache.juneau.commons.inject">Snapshot</a>&nbsp;snapshot)</span></div>
+<div class="member-signature"><span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/inject/WritableBeanStore.html#line-283">popOverlay</a></span><wbr><span class="parameters">(<a href="Snapshot.html" title="class in org.apache.juneau.commons.inject">Snapshot</a>&nbsp;snapshot)</span></div>
 <div class="block">Removes the overlay frame identified by the supplied <a href="Snapshot.html" title="class in org.apache.juneau.commons.inject"><code>Snapshot</code></a>.
 
  <p>
@@ -571,7 +571,7 @@ extends <a href="BeanStore.html" title="interface in org.apache.juneau.commons.i
 <li>
 <section class="detail" id="close()">
 <h3>close</h3>
-<div class="member-signature"><span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/inject/WritableBeanStore.html#line-296">close</a></span>()
+<div class="member-signature"><span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/inject/WritableBeanStore.html#line-290">close</a></span>()
     throws <span class="exceptions"><a href="BeanCreationException.html" title="class in org.apache.juneau.commons.inject">BeanCreationException</a></span></div>
 <div class="block">Closes this bean store, invoking pre-destroy callbacks.</div>
 <dl class="notes">

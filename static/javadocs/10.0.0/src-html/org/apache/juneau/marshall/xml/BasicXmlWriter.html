@@ -45,30 +45,27 @@
 <span class="source-line-no">032</span><span id="line-32"> *       This class is not intended for external use.</span>
 <span class="source-line-no">033</span><span id="line-33"> * &lt;/ul&gt;</span>
 <span class="source-line-no">034</span><span id="line-34"> */</span>
-<span class="source-line-no">035</span><span id="line-35">@SuppressWarnings({</span>
-<span class="source-line-no">036</span><span id="line-36">   "resource" // Writer resource managed by calling code</span>
-<span class="source-line-no">037</span><span id="line-37">})</span>
-<span class="source-line-no">038</span><span id="line-38">public final class BasicXmlWriter extends XmlWriter&lt;BasicXmlWriter&gt; {</span>
-<span class="source-line-no">039</span><span id="line-39"></span>
-<span class="source-line-no">040</span><span id="line-40">   /**</span>
-<span class="source-line-no">041</span><span id="line-41">    * Constructor.</span>
-<span class="source-line-no">042</span><span id="line-42">    *</span>
-<span class="source-line-no">043</span><span id="line-43">    * @param out The wrapped writer.</span>
-<span class="source-line-no">044</span><span id="line-44">    * @param useWhitespace If &lt;jk&gt;true&lt;/jk&gt; XML elements will be indented.</span>
-<span class="source-line-no">045</span><span id="line-45">    * @param maxIndent The maximum indentation level.</span>
-<span class="source-line-no">046</span><span id="line-46">    * @param trimStrings If &lt;jk&gt;true&lt;/jk&gt;, strings should be trimmed before they're serialized.</span>
-<span class="source-line-no">047</span><span id="line-47">    * @param quoteChar The quote character to use for attributes.  Should be &lt;js&gt;'\''&lt;/js&gt; or &lt;js&gt;'"'&lt;/js&gt;.</span>
-<span class="source-line-no">048</span><span id="line-48">    * @param uriResolver The URI resolver for resolving URIs to absolute or root-relative form.</span>
-<span class="source-line-no">049</span><span id="line-49">    * @param enableNs Flag to indicate if XML namespaces are enabled.</span>
-<span class="source-line-no">050</span><span id="line-50">    * @param defaultNamespace The default namespace if XML namespaces are enabled.</span>
-<span class="source-line-no">051</span><span id="line-51">    */</span>
-<span class="source-line-no">052</span><span id="line-52">   @SuppressWarnings({</span>
-<span class="source-line-no">053</span><span id="line-53">      "java:S107" // Constructor requires 8 parameters for XML writer configuration</span>
-<span class="source-line-no">054</span><span id="line-54">   })</span>
-<span class="source-line-no">055</span><span id="line-55">   public BasicXmlWriter(Writer out, boolean useWhitespace, int maxIndent, boolean trimStrings, char quoteChar, UriResolver uriResolver, boolean enableNs, Namespace defaultNamespace) {</span>
-<span class="source-line-no">056</span><span id="line-56">      super(out, useWhitespace, maxIndent, trimStrings, quoteChar, uriResolver, enableNs, defaultNamespace);</span>
-<span class="source-line-no">057</span><span id="line-57">   }</span>
-<span class="source-line-no">058</span><span id="line-58">}</span>
+<span class="source-line-no">035</span><span id="line-35">public final class BasicXmlWriter extends XmlWriter&lt;BasicXmlWriter&gt; {</span>
+<span class="source-line-no">036</span><span id="line-36"></span>
+<span class="source-line-no">037</span><span id="line-37">   /**</span>
+<span class="source-line-no">038</span><span id="line-38">    * Constructor.</span>
+<span class="source-line-no">039</span><span id="line-39">    *</span>
+<span class="source-line-no">040</span><span id="line-40">    * @param out The wrapped writer.</span>
+<span class="source-line-no">041</span><span id="line-41">    * @param useWhitespace If &lt;jk&gt;true&lt;/jk&gt; XML elements will be indented.</span>
+<span class="source-line-no">042</span><span id="line-42">    * @param maxIndent The maximum indentation level.</span>
+<span class="source-line-no">043</span><span id="line-43">    * @param trimStrings If &lt;jk&gt;true&lt;/jk&gt;, strings should be trimmed before they're serialized.</span>
+<span class="source-line-no">044</span><span id="line-44">    * @param quoteChar The quote character to use for attributes.  Should be &lt;js&gt;'\''&lt;/js&gt; or &lt;js&gt;'"'&lt;/js&gt;.</span>
+<span class="source-line-no">045</span><span id="line-45">    * @param uriResolver The URI resolver for resolving URIs to absolute or root-relative form.</span>
+<span class="source-line-no">046</span><span id="line-46">    * @param enableNs Flag to indicate if XML namespaces are enabled.</span>
+<span class="source-line-no">047</span><span id="line-47">    * @param defaultNamespace The default namespace if XML namespaces are enabled.</span>
+<span class="source-line-no">048</span><span id="line-48">    */</span>
+<span class="source-line-no">049</span><span id="line-49">   @SuppressWarnings({</span>
+<span class="source-line-no">050</span><span id="line-50">      "java:S107" // Constructor requires 8 parameters for XML writer configuration</span>
+<span class="source-line-no">051</span><span id="line-51">   })</span>
+<span class="source-line-no">052</span><span id="line-52">   public BasicXmlWriter(Writer out, boolean useWhitespace, int maxIndent, boolean trimStrings, char quoteChar, UriResolver uriResolver, boolean enableNs, Namespace defaultNamespace) {</span>
+<span class="source-line-no">053</span><span id="line-53">      super(out, useWhitespace, maxIndent, trimStrings, quoteChar, uriResolver, enableNs, defaultNamespace);</span>
+<span class="source-line-no">054</span><span id="line-54">   }</span>
+<span class="source-line-no">055</span><span id="line-55">}</span>
 
 
 

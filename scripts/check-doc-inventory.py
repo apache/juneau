@@ -12,49 +12,9 @@
 # * specific language governing permissions and limitations under the License.                                              *
 # ***************************************************************************************************************************
 """
-Documentation-inventory checker for the Apache Juneau Docusaurus site.
+Check that the module list matches what is actually documented on the Docusaurus site.
 
-Guards against the module list drifting away from what's actually documented on the
-public `/about` page (and any other inventory page this script is taught about).
-
-Source of truth for "what modules exist": the keys of `artifact-paths.json`, which is
-already hand-maintained to track essentially every reactor module (both `artifact-paths.json`
-and `artifact-packages.json` are read so that stale/missing `artifact-packages.json`
-entries are also reported). Two kinds of module are expected to be ABSENT from the
-inventory pages:
-
-  1. Pure aggregator/parent POMs — structurally never leaf artifacts, detected here via
-     a hardcoded set (they don't change often; see AGGREGATOR_POMS below) rather than by
-     parsing the Maven reactor, so this script has zero build-tool dependencies.
-  2. Explicitly allow-listed modules — real leaf modules that are deliberately not part
-     of the public ecosystem table (test helpers, example/test scaffolding, petstore
-     submodules folded into one row, etc). See `check-doc-inventory-allowlist.txt`.
-
-Everything else in `artifact-paths.json` is a "publishable module" that MUST appear on
-every inventory page this script checks (currently just `src/pages/about.md`'s
-"Ecosystem" table). A publishable module missing from an inventory page is an ERROR.
-
-This is pure Python 3.9+ standard library (no third-party deps) and does NOT invoke
-Docusaurus or Maven — safe to run at any time, including while other builds are in
-flight against the sibling `juneau` code tree.
-
-Checks:
-  1. inventory   Every publishable module (artifact-paths.json minus aggregators minus
-                 allow-list) appears in every configured inventory page.
-  2. stale-rows  Every module referenced by an inventory page actually exists in
-                 artifact-paths.json (catches rows for renamed/removed coordinates).
-  3. packages    Every artifact-packages.json key is also an artifact-paths.json key
-                 (catches stale/renamed package entries), and vice versa for
-                 publishable modules (warning only — some leaf modules legitimately
-                 ship no Java source, e.g. resource-only or reserved modules).
-  4. allowlist   Every allow-list entry actually exists in artifact-paths.json and is
-                 NOT also present in an inventory page (catches a stale allow-list).
-
-Usage:
-    python3 scripts/check-doc-inventory.py [--strict] [--json] [--docs-dir DIR]
-
-Exit code: 0 when there are no errors; non-zero when errors exist (and, under
---strict, when warnings exist).
+Full docs: check-doc-inventory.md
 """
 from __future__ import annotations
 
@@ -69,7 +29,7 @@ from pathlib import Path
 #
 # These never have their own artifact content to document, so they're excluded
 # unconditionally rather than via the (editable) allow-list.  Keep in sync with
-# TODO-347's "Pure aggregator poms" list if the reactor's aggregator set changes.
+# the reactor's aggregator poms if that set changes.
 # ---------------------------------------------------------------------------
 AGGREGATOR_POMS = {
     'juneau',

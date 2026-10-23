@@ -82,7 +82,7 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Closeable.html" title="class or interface in java.io" class="external-link">Closeable</a></code>, <code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/AutoCloseable.html" title="class or interface in java.lang" class="external-link">AutoCloseable</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public final class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/mock/MockRestClient.html#line-75">MockRestClient</a></span>
+<div class="type-signature"><span class="modifiers">public final class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/mock/MockRestClient.html#line-74">MockRestClient</a></span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>
 implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Closeable.html" title="class or interface in java.io" class="external-link">Closeable</a></span></div>
 <div class="block">Next-generation mock REST client that routes requests in-process to a Juneau <a href="../server/RestContext.html" title="class in org.apache.juneau.rest.server"><code>RestContext</code></a>.
@@ -110,8 +110,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
  </p>
 
  <p>
- <b>Beta — API subject to change:</b> This type is part of the next-generation REST client and HTTP stack
- (<code>org.apache.juneau.marshall.ng.*</code>).
+ <b>Beta — API subject to change:</b> This type is part of the next-generation REST client and HTTP stack.
  It is not API-frozen: binary- and source-incompatible changes may appear in the <b>next major</b> Juneau release
  (and possibly earlier).
 
@@ -231,7 +230,8 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <div class="block">Creates an <a href="MockRestClient.html" title="class in org.apache.juneau.rest.mock"><code>MockRestClient</code></a> backed by the given REST bean or bean class.
 
  <p>
- <a href="../server/RestContext.html" title="class in org.apache.juneau.rest.server"><code>RestContext</code></a> instances are cached per class for performance.</div>
+ <a href="../server/RestContext.html" title="class in org.apache.juneau.rest.server"><code>RestContext</code></a> instances are cached per class for performance when a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link"><code>Class</code></a> is passed;
+ a supplied bean instance always gets its own context.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>impl</code> - The REST bean or bean class annotated with <a href="../server/Rest.html" title="annotation interface in org.apache.juneau.rest.server"><code>@Rest</code></a>.

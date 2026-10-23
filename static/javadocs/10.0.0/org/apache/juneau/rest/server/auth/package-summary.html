@@ -76,7 +76,7 @@ loadScripts(document, 'script');</script>
  <a href="BearerTokenGuard.html" title="class in org.apache.juneau.rest.server.auth"><code>BearerTokenGuard</code></a> and <a href="ApiKeyGuard.html" title="class in org.apache.juneau.rest.server.auth"><code>ApiKeyGuard</code></a> are
  framework-level guard implementations that run inside the Juneau request pipeline (after servlet routing).
  They stash the resolved <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/security/Principal.html" title="class or interface in java.security" class="external-link"><code>Principal</code></a> on the request under
- <a href="../RestServerConstants.html#PRINCIPAL_ATTR"><code>RestServerConstants.PRINCIPAL_ATTR</code></a> so downstream handlers can read it via
+ <code>"juneau.principal"</code> so downstream handlers can read it via
  <a href="AuthArg.html" title="class in org.apache.juneau.rest.server.auth"><code>@Auth Principal</code></a> or
  <code>req.getAttributes().get(PRINCIPAL_ATTR)</code>.
 
@@ -115,7 +115,7 @@ loadScripts(document, 'script');</script>
  <code>HttpServletRequest.isUserInRole(String)</code>,
  <code>HttpServletRequest.getRemoteUser()</code>, and
  <code>ServletRequest.getAttribute(String)</code> for the
- <a href="../RestServerConstants.html#PRINCIPAL_ATTR"><code>RestServerConstants.PRINCIPAL_ATTR</code></a> key.
+ <code>"juneau.principal"</code> key.
  This makes <a href="../guard/RoleBasedRestGuard.html" title="class in org.apache.juneau.rest.server.guard"><code>RoleBasedRestGuard</code></a> and <code>@Auth Principal</code> arg injection work
  with zero changes.
 

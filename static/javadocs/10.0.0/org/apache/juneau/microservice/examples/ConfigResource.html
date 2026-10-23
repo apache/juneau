@@ -90,11 +90,26 @@ loadScripts(document, 'script');</script>
 <dd><code>jakarta.servlet.Servlet</code>, <code>jakarta.servlet.ServletConfig</code>, <code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a></code>, <code><a href="../../rest/server/config/BasicUniversalConfig.html" title="interface in org.apache.juneau.rest.server.config">BasicUniversalConfig</a></code>, <code><a href="../../rest/server/config/DefaultConfig.html" title="interface in org.apache.juneau.rest.server.config">DefaultConfig</a></code>, <code><a href="../../rest/server/config/DefaultHtmlConfig.html" title="interface in org.apache.juneau.rest.server.config">DefaultHtmlConfig</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/microservice/examples/ConfigResource.html#line-42">ConfigResource</a></span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/microservice/examples/ConfigResource.html#line-54">ConfigResource</a></span>
 <span class="extends-implements">extends <a href="../../rest/server/servlet/BasicRestServlet.html" title="class in org.apache.juneau.rest.server.servlet">BasicRestServlet</a></span></div>
-<div class="block">Shows contents of the microservice configuration file.
+<div class="block">Shows contents of the microservice configuration file, and updates it.
+
+ <p>
+ Reads are <code>GET</code>s.  Writes are <code>PUT</code>s only, sent by a REST client or from the command line; there is no
+ HTML edit form, because a browser form cannot carry the header-borne token a CSRF boundary requires.  A <code>PUT</code>
+ cannot be sent cross-site without a CORS preflight, so a boundary in front of this resource (see
+ <a href="AdminBoundary.html" title="class in org.apache.juneau.microservice.examples"><code>AdminBoundary</code></a>) admits it without a token:
+ <p class='bcode'>
+   curl -X PUT -H 'Content-Type: text/plain' --data-binary @my.cfg http://localhost:10000/config
+   curl -X PUT -H 'Content-Type: text/plain' -d 'newValue' http://localhost:10000/config/MySection/myKey
+ </p>
+
+ <p>
+ A <code>GET</code> returns the whole configuration, including any secrets in it, and this resource has no
+ authentication of its own.  Do not expose it on an untrusted network.
 
  <h5 class='section'>See Also:</h5><ul>
+   <li class='jc'><a href="AdminBoundary.html" title="class in org.apache.juneau.microservice.examples"><code>AdminBoundary</code></a>
    <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauMicroservice">juneau-microservice Basics</a>
  </ul></div>
 </section>
@@ -145,21 +160,15 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../../marshall/collections/JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getConfig()" class="member-name-link">getConfig</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../../bean/html5/Form.html" title="class in org.apache.juneau.bean.html5">Form</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getConfigEditForm()" class="member-name-link">getConfigEditForm</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getConfigEntry(java.lang.String,java.lang.String)" class="member-name-link">getConfigEntry</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;section,
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getConfigEntry(java.lang.String,java.lang.String)" class="member-name-link">getConfigEntry</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;section,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../../marshall/collections/JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getConfigSection(java.lang.String)" class="member-name-link">getConfigSection</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;section)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../../marshall/collections/JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setConfigContents(java.io.Reader)" class="member-name-link">setConfigContents</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Reader.html" title="class or interface in java.io" class="external-link">Reader</a>&nbsp;contents)</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getConfigSection(java.lang.String)" class="member-name-link">getConfigSection</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;section)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../../marshall/collections/JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setConfigContentsFormPost(java.lang.String)" class="member-name-link">setConfigContentsFormPost</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;contents)</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setConfigContents(java.io.Reader)" class="member-name-link">setConfigContents</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Reader.html" title="class or interface in java.io" class="external-link">Reader</a>&nbsp;contents)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../../marshall/collections/JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setConfigSection(java.lang.String,java.util.Map)" class="member-name-link">setConfigSection</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;section,
@@ -199,7 +208,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;()">
 <h3>ConfigResource</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/microservice/examples/ConfigResource.html#line-56">ConfigResource</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/microservice/examples/ConfigResource.html#line-70">ConfigResource</a></span>()</div>
 </section>
 </li>
 </ul>
@@ -213,19 +222,13 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getConfig()">
 <h3>getConfig</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../marshall/collections/JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/microservice/examples/ConfigResource.html#line-73">getConfig</a></span>()</div>
-</section>
-</li>
-<li>
-<section class="detail" id="getConfigEditForm()">
-<h3>getConfigEditForm</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../bean/html5/Form.html" title="class in org.apache.juneau.bean.html5">Form</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/microservice/examples/ConfigResource.html#line-92">getConfigEditForm</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../marshall/collections/JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/microservice/examples/ConfigResource.html#line-87">getConfig</a></span>()</div>
 </section>
 </li>
 <li>
 <section class="detail" id="getConfigEntry(java.lang.String,java.lang.String)">
 <h3>getConfigEntry</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/microservice/examples/ConfigResource.html#line-117">getConfigEntry</a></span><wbr><span class="parameters">(<a href="../../http/Path.html" title="annotation interface in org.apache.juneau.http">@Path</a>("section") <a href="../../commons/Schema.html" title="annotation interface in org.apache.juneau.commons">@Schema</a>(<a href="../../commons/Schema.html#d()">d</a>="Section name in config file.")
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/microservice/examples/ConfigResource.html#line-106">getConfigEntry</a></span><wbr><span class="parameters">(<a href="../../http/Path.html" title="annotation interface in org.apache.juneau.http">@Path</a>("section") <a href="../../commons/Schema.html" title="annotation interface in org.apache.juneau.commons">@Schema</a>(<a href="../../commons/Schema.html#d()">d</a>="Section name in config file.")
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;section,
  <a href="../../http/Path.html" title="annotation interface in org.apache.juneau.http">@Path</a>("key") <a href="../../commons/Schema.html" title="annotation interface in org.apache.juneau.commons">@Schema</a>(<a href="../../commons/Schema.html#d()">d</a>="Key name in section.")
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key)</span>
@@ -239,7 +242,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getConfigSection(java.lang.String)">
 <h3>getConfigSection</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../marshall/collections/JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/microservice/examples/ConfigResource.html#line-143">getConfigSection</a></span><wbr><span class="parameters">(<a href="../../http/Path.html" title="annotation interface in org.apache.juneau.http">@Path</a>("section") <a href="../../commons/Schema.html" title="annotation interface in org.apache.juneau.commons">@Schema</a>(<a href="../../commons/Schema.html#d()">d</a>="Section name in config file.")
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../marshall/collections/JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/microservice/examples/ConfigResource.html#line-132">getConfigSection</a></span><wbr><span class="parameters">(<a href="../../http/Path.html" title="annotation interface in org.apache.juneau.http">@Path</a>("section") <a href="../../commons/Schema.html" title="annotation interface in org.apache.juneau.commons">@Schema</a>(<a href="../../commons/Schema.html#d()">d</a>="Section name in config file.")
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;section)</span>
                          throws <span class="exceptions">org.apache.juneau.microservice.examples.ConfigResource.SectionNotFound</span></div>
 <dl class="notes">
@@ -251,7 +254,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="setConfigContents(java.io.Reader)">
 <h3>setConfigContents</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../marshall/collections/JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/microservice/examples/ConfigResource.html#line-167">setConfigContents</a></span><wbr><span class="parameters">(<a href="../../http/Content.html" title="annotation interface in org.apache.juneau.http">@Content</a> <a href="../../commons/Schema.html" title="annotation interface in org.apache.juneau.commons">@Schema</a>(<a href="../../commons/Schema.html#d()">d</a>="New contents in INI file format.")
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../marshall/collections/JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/microservice/examples/ConfigResource.html#line-156">setConfigContents</a></span><wbr><span class="parameters">(<a href="../../http/Content.html" title="annotation interface in org.apache.juneau.http">@Content</a> <a href="../../commons/Schema.html" title="annotation interface in org.apache.juneau.commons">@Schema</a>(<a href="../../commons/Schema.html#d()">d</a>="New contents in INI file format.")
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Reader.html" title="class or interface in java.io" class="external-link">Reader</a>&nbsp;contents)</span>
                           throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Exception.html" title="class or interface in java.lang" class="external-link">Exception</a></span></div>
 <dl class="notes">
@@ -261,21 +264,9 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
-<section class="detail" id="setConfigContentsFormPost(java.lang.String)">
-<h3>setConfigContentsFormPost</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../marshall/collections/JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/microservice/examples/ConfigResource.html#line-194">setConfigContentsFormPost</a></span><wbr><span class="parameters">(<a href="../../http/FormData.html" title="annotation interface in org.apache.juneau.http">@FormData</a>("contents") <a href="../../commons/Schema.html" title="annotation interface in org.apache.juneau.commons">@Schema</a>(<a href="../../commons/Schema.html#d()">d</a>="New contents in INI file format.")
- <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;contents)</span>
-                                  throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Exception.html" title="class or interface in java.lang" class="external-link">Exception</a></span></div>
-<dl class="notes">
-<dt>Throws:</dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Exception.html" title="class or interface in java.lang" class="external-link">Exception</a></code></dd>
-</dl>
-</section>
-</li>
-<li>
 <section class="detail" id="setConfigSection(java.lang.String,java.util.Map)">
 <h3>setConfigSection</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../marshall/collections/JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/microservice/examples/ConfigResource.html#line-221">setConfigSection</a></span><wbr><span class="parameters">(<a href="../../http/Path.html" title="annotation interface in org.apache.juneau.http">@Path</a>("section") <a href="../../commons/Schema.html" title="annotation interface in org.apache.juneau.commons">@Schema</a>(<a href="../../commons/Schema.html#d()">d</a>="Section name in config file.")
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../marshall/collections/JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/microservice/examples/ConfigResource.html#line-181">setConfigSection</a></span><wbr><span class="parameters">(<a href="../../http/Path.html" title="annotation interface in org.apache.juneau.http">@Path</a>("section") <a href="../../commons/Schema.html" title="annotation interface in org.apache.juneau.commons">@Schema</a>(<a href="../../commons/Schema.html#d()">d</a>="Section name in config file.")
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;section,
  <a href="../../http/Content.html" title="annotation interface in org.apache.juneau.http">@Content</a> <a href="../../commons/Schema.html" title="annotation interface in org.apache.juneau.commons">@Schema</a>(<a href="../../commons/Schema.html#d()">d</a>="New contents of config section as a simple map of key/value pairs.")
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;&nbsp;contents)</span>
@@ -289,7 +280,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="setConfigValue(java.lang.String,java.lang.String,java.lang.String)">
 <h3>setConfigValue</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/microservice/examples/ConfigResource.html#line-251">setConfigValue</a></span><wbr><span class="parameters">(<a href="../../http/Path.html" title="annotation interface in org.apache.juneau.http">@Path</a>("section") <a href="../../commons/Schema.html" title="annotation interface in org.apache.juneau.commons">@Schema</a>(<a href="../../commons/Schema.html#d()">d</a>="Section name in config file.")
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/microservice/examples/ConfigResource.html#line-210">setConfigValue</a></span><wbr><span class="parameters">(<a href="../../http/Path.html" title="annotation interface in org.apache.juneau.http">@Path</a>("section") <a href="../../commons/Schema.html" title="annotation interface in org.apache.juneau.commons">@Schema</a>(<a href="../../commons/Schema.html#d()">d</a>="Section name in config file.")
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;section,
  <a href="../../http/Path.html" title="annotation interface in org.apache.juneau.http">@Path</a>("key") <a href="../../commons/Schema.html" title="annotation interface in org.apache.juneau.commons">@Schema</a>(<a href="../../commons/Schema.html#d()">d</a>="Key name in section.")
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key,

@@ -349,9 +349,22 @@ python3 scripts/build-docs.py --verbose             # full per-stage banners
 python3 scripts/build-docs.py --skip-maven          # Docusaurus only (no Java work)
 python3 scripts/build-docs.py --skip-npm            # Maven site only
 python3 scripts/build-docs.py --staging             # set SITE_URL to juneau.staged.apache.org
+python3 scripts/build-docs.py --console full        # live view with every tool's output
 ```
 
+When the Juneau checkout has `juneau-run`, the build and release scripts show a live view, one row per stage (`--console full|condensed|none`, default condensed); otherwise they print plain output.
+
 Output lands in `build/`. On a successful full build the script prints a publish reminder.
+
+**Generated images** (screenshots of the petstore console in the topic pages):
+
+```bash
+python3 scripts/docs-images.py              # regenerate every image (starts petstore-jetty if none is running)
+python3 scripts/docs-images.py --only <id>  # one case from scripts/docs-images/ui-cases.json
+python3 scripts/docs-images.py --check      # no browser; missing, orphaned and dangling images
+```
+
+See [build-docs.py](https://juneau.apache.org/docs/developer-info/ScriptBuildDocs#generated-images) for the cases file and options.
 
 **Local production preview** (no deploy, just `docusaurus serve` over the prod build):
 

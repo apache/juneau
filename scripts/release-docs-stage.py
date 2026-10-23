@@ -12,21 +12,9 @@
 # * specific language governing permissions and limitations under the License.                                              *
 # ***************************************************************************************************************************
 """
-Release Documentation to Staging Branch
+Release the documentation to the asf-staging branch.
 
-This script:
-1. Runs build-docs.py to build the documentation
-2. Checks out the asf-staging branch to a temporary directory
-3. Copies the contents of docs/build to the temp directory
-4. Adds and commits the changes
-5. Pushes to the remote asf-staging branch
-
-Usage:
-    python3 scripts/release-docs-stage.py [--no-push] [--commit-message MESSAGE]
-    
-Options:
-    --no-push          Build and commit but don't push to remote
-    --commit-message   Custom commit message (default: "Deploy documentation staging")
+Full docs: release-docs-stage.md
 """
 
 import argparse
@@ -35,15 +23,48 @@ import platform
 import shutil
 import subprocess
 import sys
+import traceback
 import webbrowser
 from pathlib import Path
 
+import run_view
+from juneau_root import find_juneau_root
+
+_HELP_EPILOG = """
+Release Documentation to Staging Branch
+
+This script:
+1. Checks the git identity (and warns when the docs branch is behind its upstream)
+2. Runs build-docs.py --staging to build the documentation
+3. Checks out the asf-staging branch in the sibling asf-staging directory
+4. Copies the contents of docs/build there, and adds and commits the changes
+5. Pushes to the remote asf-staging branch
+
+Usage:
+    python3 scripts/release-docs-stage.py [--no-push] [--commit-message MESSAGE]
+                                          [--juneau-root DIR] [--console full|condensed|none]
+
+Options:
+    --no-push          Build and commit but don't push to remote
+    --commit-message   Custom commit message (default: "Deploy documentation staging")
+    --juneau-root      Juneau source checkout (default: $JUNEAU_ROOT, then sibling ../master,
+                       then sibling ../juneau); passed on to build-docs.py
+    --console          Console output when the Juneau checkout has juneau-run: full, condensed
+                       (default) or none (also $JUNEAU_RUN_CONSOLE)
+
+With juneau-run available, the run is one live view: Prechecks, build-docs.py's rows, Stage push
+(Fetch, Copy, Commit, Push) and the staged URL.  Without it the output is plain.
+"""
+
+
 # Identity guard — required for any push to ASF.
 REQUIRED_GIT_EMAIL = "jamesbognar@apache.org"
+STAGING_URL = "http://juneau.staged.apache.org"
+BUILD_SCRIPT = Path(__file__).parent / 'build-docs.py'
 
 
-def verify_apache_identity(repo_dir):
-    """Refuse to proceed unless git is configured with the ASF committer identity."""
+def identity_problem(repo_dir):
+    """None when git is configured with the ASF committer identity; otherwise (status, reason, hint lines)."""
     try:
         result = subprocess.run(
             ["git", "config", "--get", "user.email"],
@@ -54,52 +75,30 @@ def verify_apache_identity(repo_dir):
         )
         email = result.stdout.strip()
     except Exception as e:
-        print(f"❌ ERROR: Could not read git user.email: {e}")
-        return False
+        return ('fail', f"could not read git user.email: {e}", ())
 
     if email != REQUIRED_GIT_EMAIL:
-        print("❌ ERROR: Git identity is not the ASF committer identity.")
-        print(f"   Found:    user.email = '{email or '(unset)'}'")
-        print(f"   Required: user.email = '{REQUIRED_GIT_EMAIL}'")
-        print("")
-        print("   Fix (this script cannot mutate git config):")
-        print(f"     git config user.email {REQUIRED_GIT_EMAIL}")
-        print('     git config user.name "James Bognar"')
-        return False
-    return True
+        return ('fail', f"user.email is '{email or '(unset)'}', not the ASF committer identity '{REQUIRED_GIT_EMAIL}'",
+                ("Fix (this script cannot mutate git config):",
+                 f"  git config user.email {REQUIRED_GIT_EMAIL}",
+                 '  git config user.name "James Bognar"'))
+    return None
 
 
-def run_command(cmd, cwd=None, check=True, description=None):
-    """Run a shell command and handle errors."""
-    if description:
-        print(f"\n{description}")
-    print(f"Running: {' '.join(cmd) if isinstance(cmd, list) else cmd}")
-    
-    try:
-        result = subprocess.run(
-            cmd,
-            cwd=cwd,
-            shell=isinstance(cmd, str),
-            check=check,
-            capture_output=False,
-            text=True
-        )
-        # Check return code even if check=False
-        if result.returncode != 0:
-            if description:
-                print(f"❌ {description} - FAILED (exit code: {result.returncode})")
-            return False
-        if description:
-            print(f"✅ {description} - SUCCESS")
-        return True
-    except subprocess.CalledProcessError as e:
-        if description:
-            print(f"❌ {description} - FAILED (exit code: {e.returncode})")
-        return False
-    except Exception as e:
-        if description:
-            print(f"❌ {description} - FAILED: {e}")
-        return False
+def branch_problem(repo_dir):
+    """None when the docs checkout is current; otherwise a warning (it never stops the release)."""
+    warning = run_view.branch_warning(repo_dir)
+    return None if warning is None else ('warn', warning, ())
+
+
+def staging_dir_for(docs_dir):
+    """The persistent asf-staging checkout, a sibling of the docs checkout."""
+    return Path(docs_dir).parent / 'asf-staging'
+
+
+def stage_plan():
+    """The run's top-level rows, in order, as (id, label): Prechecks, build-docs.py's rows, Stage push and URL."""
+    return [('prechecks', 'Prechecks'), *run_view.BUILD_ROWS, ('stage', 'Stage push'), ('url', 'URL')]
 
 
 def get_git_remote_url():
@@ -182,11 +181,171 @@ def play_sound(success=True):
         pass
 
 
+def git_identity():
+    """The user name and email to commit with (the current git config, or defaults)."""
+    def get(key, default):
+        result = subprocess.run(["git", "config", "--get", key], capture_output=True, text=True)
+        return result.stdout.strip() if result.returncode == 0 else default
+    try:
+        return get("user.name", "Documentation Builder"), get("user.email", "docs@juneau.apache.org")
+    except Exception:
+        return "Documentation Builder", "docs@juneau.apache.org"
+
+
+def fail(view, message, *hints):
+    """Report a failure and return the failing exit code."""
+    view.say(f"❌ {message}", 'error')
+    for hint in hints:
+        view.say(f"   {hint}", 'error')
+    return 1
+
+
+def fetch_staging(view, staging_dir, remote_url):
+    """Clone or update the asf-staging checkout and check out the asf-staging branch."""
+    git = dict(parent='stage', tool='generic')
+    if staging_dir.exists() and (staging_dir / '.git').exists():
+        # Directory exists and is a git repo, update it
+        view.say("📁 Staging directory already exists, updating...")
+        view.remote_cmd(["git", "fetch", "origin"], cwd=staging_dir, id='stage-fetch', label='Fetch',
+                        title="Fetching latest changes", **git)
+    else:
+        # Directory doesn't exist or isn't a git repo, clone it
+        if staging_dir.exists():
+            view.say(f"⚠️  Directory exists but is not a git repository. Removing: {staging_dir}", 'warn')
+            shutil.rmtree(staging_dir)
+        view.remote_cmd(["git", "clone", remote_url, str(staging_dir)], id='stage-fetch', label='Fetch',
+                        title="Cloning repository to staging directory", **git)
+
+    # Fetch asf-staging branch; don't fail if the branch doesn't exist yet
+    result = subprocess.run(["git", "fetch", "origin", "asf-staging"], cwd=staging_dir, capture_output=True, text=True)
+    if result.returncode != 0:
+        view.say("⚠ Warning: Could not fetch asf-staging (branch may not exist yet)", 'warn')
+
+    # Checkout or create asf-staging branch
+    result = subprocess.run(
+        ["git", "checkout", "-B", "asf-staging", "origin/asf-staging"],
+        cwd=staging_dir,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.STDOUT,
+        text=True
+    )
+    if result.returncode != 0:
+        # Branch doesn't exist, create it
+        view.cmd(["git", "checkout", "-b", "asf-staging"], cwd=staging_dir, id='stage-branch', label='Branch',
+                 title="Creating new asf-staging branch", **git)
+    else:
+        view.say("✅ Checked out asf-staging branch")
+
+
+def copy_build(view, build_dir, staging_dir):
+    """Replace everything in the staging checkout (except .git) with the build output."""
+    with view.stage('stage-copy', 'Copy', "Copying build directory contents", parent='stage') as step:
+        for item in staging_dir.iterdir():
+            if item.name != '.git':
+                if item.is_dir():
+                    shutil.rmtree(item)
+                else:
+                    item.unlink()
+        view.say("✅ Cleaned staging directory")
+        for item in build_dir.iterdir():
+            dest = staging_dir / item.name
+            if item.is_dir():
+                shutil.copytree(item, dest)
+            else:
+                shutil.copy2(item, dest)
+        view.say(f"✅ Copied contents from {build_dir} to {staging_dir}")
+        step.summary = f"build/ -> {staging_dir.name}"
+
+
+def commit_staging(view, staging_dir, message):
+    """Add everything and commit it when there is a change."""
+    git_user, git_email = git_identity()
+    for key, value in (("user.name", git_user), ("user.email", git_email)):
+        subprocess.run(["git", "config", key, value], cwd=staging_dir, check=False)
+    view.cmd(["git", "add", "-A"], cwd=staging_dir, id='stage-add', label='Add', title="Adding all files",
+             parent='stage', tool='generic')
+
+    # Check if there are changes to commit
+    result = subprocess.run(["git", "diff", "--staged", "--quiet"], cwd=staging_dir)
+    if result.returncode != 0:
+        view.cmd(["git", "commit", "-q", "-m", message], cwd=staging_dir, id='stage-commit', label='Commit',
+                 title=f"Committing changes: {message}", parent='stage', tool='generic')
+    else:
+        view.skip('stage-commit', 'Commit', "commit", "no changes", parent='stage')
+
+
+def release_stage(args, view, docs_dir, juneau_root):
+    """Prechecks, the staging build, then the asf-staging commit and push; returns the exit code."""
+    build_dir = docs_dir / 'build'
+    staging_dir = staging_dir_for(docs_dir)
+
+    # Prechecks — must hold before any work begins.
+    view.banner("Prechecks")
+    if not view.prechecks([("Git identity (apache.org email)", lambda: identity_problem(docs_dir)),
+                           ("Docs branch", lambda: branch_problem(docs_dir))]):
+        return 1
+
+    # Build the documentation for staging; under the view its rows join this run's.
+    view.banner("Building documentation for staging")
+    if not BUILD_SCRIPT.exists():
+        return fail(view, f"ERROR: {BUILD_SCRIPT} not found")
+    build_cmd = [sys.executable, str(BUILD_SCRIPT), '--staging']
+    if args.juneau_root is not None:
+        build_cmd += ['--juneau-root', str(juneau_root)]
+    if args.console is not None:
+        build_cmd += ['--console', args.console]
+    with view.handoff() as extra:
+        code = subprocess.run(build_cmd, cwd=docs_dir, env={**os.environ, **extra}).returncode
+    if code != 0:
+        return fail(view, "Documentation build failed. Aborting.")
+    if not build_dir.exists():
+        return fail(view, f"ERROR: Build directory not found at {build_dir}", "Documentation build may have failed.")
+
+    remote_url = get_git_remote_url()
+    if not remote_url:
+        return fail(view, "ERROR: Could not determine git remote URL")
+    if not staging_dir.parent.exists():
+        return fail(view, f"ERROR: Parent directory not found: {staging_dir.parent}")
+    view.say(f"Staging directory: {staging_dir}")
+
+    with view.stage('stage', 'Stage push', "Staging to asf-staging") as step:
+        fetch_staging(view, staging_dir, remote_url)
+        copy_build(view, build_dir, staging_dir)
+        commit_staging(view, staging_dir, args.commit_message)
+        if args.no_push:
+            view.skip('stage-push', 'Push', "push", "--no-push", parent='stage')
+            step.summary = "push skipped (--no-push)"
+        else:
+            with view.paused():   # a credential or passphrase prompt shows on a cleared screen
+                view.cmd(["git", "push", "origin", "asf-staging", "--force"], cwd=staging_dir, id='stage-push',
+                         label='Push', title="Pushing to remote", parent='stage', tool='generic', tty=True)
+            step.summary = "pushed asf-staging"
+
+    if args.no_push:
+        view.skip('url', 'URL', "staged site", "--no-push")
+        view.say("⏭️  Skipping push (--no-push flag set)", 'warn')
+        view.say(f"   Changes are in: {staging_dir}", 'warn')
+        view.say(f"   You can manually push with: cd {staging_dir} && git push origin asf-staging --force", 'warn')
+    else:
+        with view.stage('url', 'URL', "Staged site") as step:
+            step.summary = STAGING_URL
+            view.say(f"🌐 Opening staging site in browser: {STAGING_URL}")
+            try:
+                webbrowser.open(STAGING_URL)
+            except Exception as e:
+                view.say(f"⚠️  Could not open browser automatically: {e}", 'warn')
+                view.say(f"   Please visit {STAGING_URL} manually", 'warn')
+
+    view.say("✅ Documentation staging deployment complete!")
+    view.say(f"Staging directory: {staging_dir} (persistent, reused for future deployments)")
+    return 0
+
+
 def main():
     parser = argparse.ArgumentParser(
         description="Release documentation to asf-staging branch",
         formatter_class=argparse.RawDescriptionHelpFormatter,
-        epilog=__doc__
+        epilog=_HELP_EPILOG
     )
     parser.add_argument(
         '--no-push',
@@ -199,261 +358,48 @@ def main():
         default='Deploy documentation staging',
         help='Custom commit message (default: "Deploy documentation staging")'
     )
-    
+    parser.add_argument(
+        '--juneau-root',
+        type=Path,
+        default=None,
+        help='Juneau source checkout (default: $JUNEAU_ROOT, then sibling ../master, then ../juneau)'
+    )
+    run_view.add_console_argument(parser)
+
     args = parser.parse_args()
-    
-    script_dir = Path(__file__).parent
+
+    script_dir = Path(__file__).parent.absolute()
     docs_dir = script_dir.parent  # docs/
-    build_dir = docs_dir / 'build'
-    
-    print("=" * 79)
-    print("Release Documentation to Staging Branch")
-    print("=" * 79)
-    print()
+    juneau_root = find_juneau_root(docs_dir, args.juneau_root, allow_missing=True, validate=False)
+    view = run_view.open_view(juneau_root, args.console)
 
-    # Step 0: Identity guard — must hold before any work begins.
-    print("Step 0: Verifying git identity (apache.org email)...")
-    if not verify_apache_identity(docs_dir):
-        play_sound(success=False)
-        sys.exit(1)
-    print("✅ Git identity verified")
-
-    # Step 1: Run build-docs.py with --staging flag
-    print("\nStep 1: Building documentation for staging...")
-    build_script = script_dir / 'build-docs.py'
-    if not build_script.exists():
-        print(f"❌ ERROR: {build_script} not found")
-        play_sound(success=False)
-        sys.exit(1)
-    
-    if not run_command(
-        [sys.executable, str(build_script), '--staging'],
-        cwd=docs_dir,
-        description="Building documentation for staging"
-    ):
-        print("\n❌ Documentation build failed. Aborting.")
-        play_sound(success=False)
-        sys.exit(1)
-    
-    if not build_dir.exists():
-        print(f"❌ ERROR: Build directory not found at {build_dir}")
-        print("   Documentation build may have failed.")
-        play_sound(success=False)
-        sys.exit(1)
-    
-    # Step 2: Setup sibling directory and checkout asf-staging
-    print("\nStep 2: Setting up sibling directory with asf-staging branch...")
-    
-    # Get git remote URL
-    remote_url = get_git_remote_url()
-    if not remote_url:
-        print("❌ ERROR: Could not determine git remote URL")
-        play_sound(success=False)
-        sys.exit(1)
-    
-    # Use sibling directory structure: /git/apache/juneau/asf-staging
-    parent_dir = docs_dir.parent  # /git/apache/juneau/
-    staging_dir = parent_dir / 'asf-staging'
-    print(f"Staging directory: {staging_dir}")
-    
-    # Verify parent directory structure
-    if not parent_dir.exists():
-        print(f"❌ ERROR: Parent directory not found: {parent_dir}")
-        print("Expected structure:")
-        print(f"  {parent_dir}/docs/  (current)")
-        print(f"  {parent_dir}/asf-staging/  (will be created)")
-        play_sound(success=False)
-        sys.exit(1)
-    
-    try:
-        # Check if directory already exists
-        if staging_dir.exists() and (staging_dir / '.git').exists():
-            # Directory exists and is a git repo, update it
-            print("📁 Staging directory already exists, updating...")
-            if not run_command(
-                ["git", "fetch", "origin"],
-                cwd=staging_dir,
-                description="Fetching latest changes"
-            ):
-                print("\n❌ Failed to fetch latest changes")
-                play_sound(success=False)
-                sys.exit(1)
-        else:
-            # Directory doesn't exist or isn't a git repo, clone it
-            if staging_dir.exists():
-                print(f"⚠️  Directory exists but is not a git repository. Removing: {staging_dir}")
-                shutil.rmtree(staging_dir)
-            
-            if not run_command(
-                ["git", "clone", remote_url, str(staging_dir)],
-                description="Cloning repository to staging directory"
-            ):
-                print("\n❌ Failed to clone repository")
-                play_sound(success=False)
-                sys.exit(1)
-        
-        # Fetch asf-staging branch
-        if not run_command(
-            ["git", "fetch", "origin", "asf-staging"],
-            cwd=staging_dir,
-            check=False,  # Don't fail if branch doesn't exist yet
-            description="Fetching asf-staging branch"
-        ):
-            print("⚠ Warning: Could not fetch asf-staging (branch may not exist yet)")
-        
-        # Checkout or create asf-staging branch
-        result = subprocess.run(
-            ["git", "checkout", "-B", "asf-staging", "origin/asf-staging"],
-            cwd=staging_dir,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.STDOUT,
-            text=True
-        )
-        
-        if result.returncode != 0:
-            # Branch doesn't exist, create it
-            if not run_command(
-                ["git", "checkout", "-b", "asf-staging"],
-                cwd=staging_dir,
-                description="Creating new asf-staging branch"
-            ):
-                print("\n❌ Failed to create asf-staging branch")
-                play_sound(success=False)
-                sys.exit(1)
-        else:
-            print("✅ Checked out asf-staging branch")
-        
-        # Step 3: Remove all existing files (except .git)
-        print("\nStep 3: Cleaning staging directory...")
-        for item in staging_dir.iterdir():
-            if item.name != '.git':
-                if item.is_dir():
-                    shutil.rmtree(item)
-                else:
-                    item.unlink()
-        print("✅ Cleaned staging directory")
-        
-        # Step 4: Copy build directory contents
-        print("\nStep 4: Copying build directory contents...")
-        for item in build_dir.iterdir():
-            dest = staging_dir / item.name
-            if item.is_dir():
-                shutil.copytree(item, dest)
-            else:
-                shutil.copy2(item, dest)
-        print(f"✅ Copied contents from {build_dir} to {staging_dir}")
-        
-        # Step 5: Add and commit changes
-        print("\nStep 5: Committing changes...")
-        
-        # Set git user (use current user's git config or defaults)
-        try:
-            result = subprocess.run(
-                ["git", "config", "--get", "user.name"],
-                capture_output=True,
-                text=True
-            )
-            git_user = result.stdout.strip() if result.returncode == 0 else "Documentation Builder"
-            
-            result = subprocess.run(
-                ["git", "config", "--get", "user.email"],
-                capture_output=True,
-                text=True
-            )
-            git_email = result.stdout.strip() if result.returncode == 0 else "docs@juneau.apache.org"
-        except Exception:
-            git_user = "Documentation Builder"
-            git_email = "docs@juneau.apache.org"
-        
-        run_command(
-            ["git", "config", "user.name", git_user],
-            cwd=staging_dir,
-            description="Setting git user name"
-        )
-        run_command(
-            ["git", "config", "user.email", git_email],
-            cwd=staging_dir,
-            description="Setting git user email"
-        )
-        
-        # Add all files
-        if not run_command(
-            ["git", "add", "-A"],
-            cwd=staging_dir,
-            description="Adding all files"
-        ):
-            print("\n❌ Failed to add files")
-            play_sound(success=False)
-            sys.exit(1)
-        
-        # Check if there are changes to commit
-        result = subprocess.run(
-            ["git", "diff", "--staged", "--quiet"],
-            cwd=staging_dir
-        )
-        
-        if result.returncode != 0:
-            # There are changes, commit them
-            if not run_command(
-                ["git", "commit", "-m", args.commit_message],
-                cwd=staging_dir,
-                description=f"Committing changes: {args.commit_message}"
-            ):
-                print("\n❌ Failed to commit changes")
-                play_sound(success=False)
-                sys.exit(1)
-        else:
-            print("ℹ️  No changes to commit")
-        
-        # Step 6: Push to remote (if not --no-push)
-        if not args.no_push:
-            print("\nStep 6: Pushing to remote asf-staging branch...")
-            if not run_command(
-                ["git", "push", "origin", "asf-staging", "--force"],
-                cwd=staging_dir,
-                description="Pushing to remote"
-            ):
-                print("\n❌ Failed to push to remote")
-                play_sound(success=False)
-                sys.exit(1)
-        else:
-            print("\n⏭️  Skipping push (--no-push flag set)")
-            print(f"   Changes are in: {staging_dir}")
-            print("   You can manually push with:")
-            print(f"   cd {staging_dir}")
-            print("   git push origin asf-staging --force")
-        
-        print("\n" + "=" * 79)
-        print("✅ Documentation staging deployment complete!")
+    if view.live:
+        header = ["Juneau Docs"]
+        if args.no_push:
+            header.append("--no-push: nothing is pushed")
+        lines = [f"Docs: {docs_dir}", f"Staging: {staging_dir_for(docs_dir)}"]
+        code = view.session("Stage", lambda: release_stage(args, view, docs_dir, juneau_root),
+                            header=header, lines=lines, plan=stage_plan(), repo=docs_dir, mode='push')
+    else:
         print("=" * 79)
-        print(f"\nStaging directory: {staging_dir}")
-        print("(This directory is persistent and will be reused for future deployments)")
-        
-        # Play success sound
-        play_sound(success=True)
-        
-        # Open staging URL in browser (only if push was successful)
-        if not args.no_push:
-            staging_url = "http://juneau.staged.apache.org"
-            print(f"\n🌐 Opening staging site in browser: {staging_url}")
-            try:
-                webbrowser.open(staging_url)
-            except Exception as e:
-                print(f"⚠️  Could not open browser automatically: {e}")
-                print(f"   Please visit {staging_url} manually")
-        
-    except KeyboardInterrupt:
-        print("\n\n⚠️  Process interrupted by user")
-        play_sound(success=False)
-        sys.exit(1)
-    except Exception as e:
-        print(f"\n❌ ERROR: {e}")
-        import traceback
-        traceback.print_exc()
-        play_sound(success=False)
-        sys.exit(1)
+        print("Release Documentation to Staging Branch")
+        print("=" * 79)
+        try:
+            code = release_stage(args, view, docs_dir, juneau_root)
+        except subprocess.CalledProcessError as e:
+            print(f"\n❌ Command failed (exit code: {e.returncode}): {' '.join(map(str, e.cmd))}")
+            code = 1
+        except KeyboardInterrupt:
+            print("\n\n⚠️  Process interrupted by user")
+            code = 1
+        except Exception as e:
+            print(f"\n❌ ERROR: {e}")
+            traceback.print_exc()
+            code = 1
+
+    play_sound(success=code == 0)
+    sys.exit(code)
 
 
 if __name__ == '__main__':
     main()
-

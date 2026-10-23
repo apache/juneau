@@ -56,22 +56,56 @@ loadScripts(document, 'script');</script>
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Package</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><a href="#org.apache.juneau.commons.settings">org.apache.juneau.commons.settings</a></div>
+<div class="col-first even-row-color"><a href="#org.apache.juneau.commons.secret">org.apache.juneau.commons.secret</a></div>
 <div class="col-last even-row-color">
+<div class="block">A small, JDK-only SPI for storing and retrieving secrets by key &mdash; the secure, mutable sibling of
+ <a href="../PropertySource.html" title="interface in org.apache.juneau.commons.settings"><code>PropertySource</code></a>.</div>
+</div>
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.commons.settings">org.apache.juneau.commons.settings</a></div>
+<div class="col-last odd-row-color">
 <div class="block">Thread-safe system property access with support for global and per-thread overrides,
  making it useful for unit tests and configuration management.</div>
 </div>
-<div class="col-first odd-row-color"><a href="#org.apache.juneau.config">org.apache.juneau.config</a></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><a href="#org.apache.juneau.config">org.apache.juneau.config</a></div>
+<div class="col-last even-row-color">
 <div class="block">Configuration Support</div>
 </div>
-<div class="col-first even-row-color"><a href="#org.apache.juneau.rest.server.springboot">org.apache.juneau.rest.server.springboot</a></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.rest.server.springboot">org.apache.juneau.rest.server.springboot</a></div>
+<div class="col-last odd-row-color">
 <div class="block">Spring Boot Integration</div>
 </div>
 </div>
 <section class="class-uses">
 <ul class="block-list">
+<li>
+<section class="detail" id="org.apache.juneau.commons.secret">
+<h2>Uses of <a href="../PropertySource.html" title="interface in org.apache.juneau.commons.settings">PropertySource</a> in <a href="../../secret/package-summary.html">org.apache.juneau.commons.secret</a></h2>
+<div class="caption"><span>Subinterfaces of <a href="../PropertySource.html" title="interface in org.apache.juneau.commons.settings">PropertySource</a> in <a href="../../secret/package-summary.html">org.apache.juneau.commons.secret</a></span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier and Type</div>
+<div class="table-header col-second">Interface</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code>interface&nbsp;</code></div>
+<div class="col-second even-row-color"><code><a href="../../secret/SensitivePropertySource.html" class="type-name-link" title="interface in org.apache.juneau.commons.secret">SensitivePropertySource</a></code></div>
+<div class="col-last even-row-color">
+<div class="block">Marker specialization of <a href="../PropertySource.html" title="interface in org.apache.juneau.commons.settings"><code>PropertySource</code></a> whose values are sensitive and must be redacted anywhere they
+ would otherwise be surfaced &mdash; a <code>toString()</code>, a settings dump, or a log line.</div>
+</div>
+</div>
+<div class="caption"><span>Classes in <a href="../../secret/package-summary.html">org.apache.juneau.commons.secret</a> that implement <a href="../PropertySource.html" title="interface in org.apache.juneau.commons.settings">PropertySource</a></span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier and Type</div>
+<div class="table-header col-second">Class</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code>class&nbsp;</code></div>
+<div class="col-second even-row-color"><code><a href="../../secret/SecretStorePropertySource.html" class="type-name-link" title="class in org.apache.juneau.commons.secret">SecretStorePropertySource</a></code></div>
+<div class="col-last even-row-color">
+<div class="block">Opt-in bridge that exposes a chosen <a href="../../secret/SecretStore.html" title="interface in org.apache.juneau.commons.secret"><code>SecretStore</code></a> as a <a href="../PropertySource.html" title="interface in org.apache.juneau.commons.settings"><code>PropertySource</code></a>, so a secret can be resolved
+ through the property/<code>$P{...}</code>/<code>@Value</code> machinery <b>only where a consumer deliberately wires it in</b>.</div>
+</div>
+</div>
+</section>
+</li>
 <li>
 <section class="detail" id="org.apache.juneau.commons.settings">
 <h2>Uses of <a href="../PropertySource.html" title="interface in org.apache.juneau.commons.settings">PropertySource</a> in <a href="../package-summary.html">org.apache.juneau.commons.settings</a></h2>

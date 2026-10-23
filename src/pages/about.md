@@ -1,7 +1,11 @@
 # About Apache Juneau™
 
 Apache Juneau™ is a single cohesive Java ecosystem for marshalling Java objects to a wide variety of language types and 
-creating annotation-based REST end-to-end server and client APIs.
+creating annotation-based REST end-to-end server and client APIs. Release 10.0 extends the REST server with server-rendered
+admin consoles and rich table views, adds Model Context Protocol (MCP) server and client support, and ships a runnable
+Petstore demo that shows them together.
+
+[![The Juneau Petstore admin console](/topics/JuneauPetstore.Tour.1.png)](/docs/topics/JuneauPetstore)
 
 ## Common Use Cases
 
@@ -17,12 +21,20 @@ Juneau excels in the following scenarios:
 * **Universal Java marshalling** - The framework handles the full breadth of Java language features automatically during marshalling — beans, generics, collections, enums, records, optionals, and more — and is extensible via swaps and surrogate classes so that virtually any Java artifact can be serialized and deserialized
 * **Bean-Centric Testing and fluent-style assertions** - Write compact, expressive unit tests that are considerably smaller than equivalent JUnit-alone tests; juneau-test provides deep bean-aware assertions and fluent validation chains that eliminate boilerplate while improving readability
 * **Content negotiation and HTTP/2 support** - Handle multiple content types automatically with modern HTTP features
+* **Server-rendered admin consoles** - Build a themeable console on `juneau-rest-server` with the [console chrome](/docs/topics/AdminConsoleChrome): page tabs and subtabs, FreeMarker `<@console>`, `<@page>` and `<@card>` directives, and a CSS theme token allowlist. [Building a Console Page](/docs/topics/BuildingAConsolePage) is the end-to-end tutorial.
+* **Rich table views** - Describe a table with plain beans or a JSON5 catalog and get search, sort, paging, a column chooser, saved View Settings, row actions, bulk mutation, cell popovers, row-detail regions and shareable links from a first-party JavaScript runtime. See [Rich Table Views](/docs/topics/RichTableViews).
+* **Chart cards, run and terminal regions** - Draw line, bar and donut [chart cards](/docs/topics/ChartCards) as inline SVG with no third-party chart library, show multi-step test and build runs in the [Run View Region](/docs/topics/RunViewRegion), and render a command's raw output in the [Terminal Region](/docs/topics/TerminalRegion) with xterm.js.
+* **Async jobs and live updates** - Start long-running work from a [job-log card](/docs/topics/JobLogCard) or a table row ([Row Jobs](/docs/topics/RowJobs)) and stream its progress over Server-Sent Events ([Async Jobs](/docs/topics/RichTableViewsAsyncJobs)). The [console message bus](/docs/topics/ConsoleMessageBus) pushes server state to pages without polling.
+* **Declarative widgets and server-side views** - Describe a dialog, form, calendar, row of stat tiles or badge as data-only beans with [Declarative Widgets](/docs/topics/DeclarativeWidgets), and render Markdown to HTML with [Markdown View Rendering](/docs/topics/MarkdownViewRendering). Template-based views remain available for [JSP](/docs/topics/JspViewSupport), [Thymeleaf](/docs/topics/ThymeleafViewSupport), [Mustache](/docs/topics/MustacheViewSupport) and [FreeMarker](/docs/topics/FreemarkerViewSupport).
+* **Model Context Protocol (MCP) servers and clients** - Expose tools, prompts and resources to AI assistants from a `juneau-rest-server` resource with [juneau-rest-server-mcp](/docs/topics/JuneauRestServerMcp), backed by the [MCP wire beans](/docs/topics/JuneauBeanMcp) for revisions `2025-06-18` and `2026-07-28`. New to MCP in Juneau? Start with the [MCP Quickstart](/docs/topics/JuneauMcpQuickstart).
+* **A worked example you can run** - The [juneau-petstore](/docs/topics/JuneauPetstore) sample deploys on Jetty and Spring Boot with the same REST surface and an admin console that exercises the pieces above, page by page.
+* **Condensed build output** - [juneau-run](/docs/topics/JuneauRun) wraps Maven, pytest, Playwright, Gradle, npm and Bazel runs, parses their output into steps and test counts, and writes the run-view events the console regions read.
 
 ## When to Choose Juneau
 
 Not sure if Juneau is right for your project? Check out our detailed [Why Choose Juneau?](/docs/topics/WhyJuneau) page for a comprehensive comparison with alternatives, or see our [Framework Comparisons](/docs/topics/FrameworkComparisons) page for detailed technical comparisons.
 
-**Quick summary:** Choose Juneau when you need multi-format serialization, REST APIs with automatic content negotiation, or want an integrated solution with minimal dependencies.
+**Quick summary:** Choose Juneau when you need multi-format serialization, REST APIs with automatic content negotiation, or want an integrated solution with minimal dependencies. Also consider it when the same Java service needs a server-rendered admin console ([console chrome](/docs/topics/AdminConsoleChrome) and [rich table views](/docs/topics/RichTableViews)) or an [MCP](/docs/topics/JuneauRestServerMcp) endpoint, without adding a separate front-end stack. Upgrading from 9.x? See the [V10.0 Migration Guide](/docs/topics/V10MigrationGuide).
 
 ## Ecosystem
 
@@ -38,6 +50,8 @@ The Juneau ecosystem consists of the following parts. A few rows are **grouped f
 | [juneau-marshall-rdf](/docs/topics/JuneauMarshallRdf) | Extended marshalling support for 12 RDF variants — RDF/XML, RDF/XML-Abbrev, N3, N-Triple, N-Quads, Turtle, TriG, TriX, JSON-LD, RDF/JSON, RDF/Proto, and RDF/Thrift (requires Apache Jena). |
 | [juneau-config](/docs/topics/JuneauConfig) | Multi-format (INI and YAML) configuration file API with POJO support, variable resolution, and real-time file watching. |
 | [juneau-test](/docs/topics/JuneauTest) | Fluent assertions, Bean-Centric Testing, and JUnit 5 extensions for readable, expressive unit tests. |
+| [juneau-test-utils](https://github.com/apache/juneau/tree/master/juneau-core/juneau-test-utils) | Shared test infrastructure for Juneau modules (commons-level; no juneau-marshall dependency). |
+| [juneau-test-marshall-utils](https://github.com/apache/juneau/tree/master/juneau-core/juneau-test-marshall-utils) | Marshall-level shared test fixtures (bean tester, marshall-annotated POJOs, round-trip harness), used at test scope by downstream modules. |
 | **juneau-bean** | |
 | [juneau-bean-atom](/docs/topics/JuneauBeanAtom) | DTOs for the Atom Syndication Format (RFC 4287). |
 | [juneau-bean-common](/docs/topics/JuneauBeanCommon) | Shared DTO base classes and utilities used across juneau-bean modules. |
@@ -74,11 +88,12 @@ The Juneau ecosystem consists of the following parts. A few rows are **grouped f
 | [juneau-rest-server-widgets](/docs/topics/DeclarativeWidgets) | Reusable widget primitives (`ActionBar` and the shared widget contract) used by the views and console modules. |
 | [juneau-rest-server-console-ui](/docs/topics/AdminConsoleChrome) | Themeable, engine-agnostic admin-console chrome — themes, tags, `chrome.css`, and the console chrome mixin (opt-in). |
 | [juneau-rest-server-console-ui-freemarker](/docs/topics/AdminConsoleChrome#freemarker-directive-reference) | FreeMarker delivery for juneau-rest-server-console-ui above — base template, `<@tag>` macro, and shared page and card directives. |
+| [juneau-rest-server-console-ui-freemarker-tests](https://github.com/apache/juneau/tree/master/juneau-rest/juneau-rest-server-console-ui-freemarker-tests) | Unit tests for juneau-rest-server-console-ui-freemarker above (build-only; not published). |
 | [juneau-run-report](/docs/topics/RunViewRegion) | Run-view events and test-report readers (Surefire and JUnit XML, Jest JSON, Playwright JSON); no dependency on the REST server. |
 | [juneau-rest-server-terminal](/docs/topics/TerminalRegion) | Terminal region: a command's raw output rendered by xterm.js, fed by a byte-offset endpoint (opt-in). |
-| [juneau-rest-server-terminal-bus](/docs/topics/TerminalRegion#input) | Bridge that connects terminal input to the server message bus (opt-in). |
-| [juneau-rest-server-bus](/docs/topics/TerminalRegion#bus-nudges) | Server half of the console message bus — `ServerBus`, `BusPolicy`, and the session POST and SSE stream (opt-in). |
-| [juneau-rest-server-bus-websocket](/docs/topics/TerminalRegion#wiring) | Jakarta WebSocket transport for juneau-rest-server-bus above; the servlet container supplies the WebSocket implementation. |
+| [juneau-rest-server-terminal-bus](/docs/topics/ConsoleMessageBus#terminals-on-the-bus) | Bridge that connects terminal input to the server message bus (opt-in). |
+| [juneau-rest-server-bus](/docs/topics/ConsoleMessageBus) | Server half of the console message bus — `ServerBus`, `BusPolicy`, and the session POST and SSE stream (opt-in). |
+| [juneau-rest-server-bus-websocket](/docs/topics/ConsoleMessageBus#the-websocket-transport) | Jakarta WebSocket transport for juneau-rest-server-bus above; the servlet container supplies the WebSocket implementation. |
 | [juneau-rest-server-rdf](/docs/topics/RestServerRdf) | Predefined REST resource config adding RDF (Jena) marshalling support. |
 | [juneau-rest-server-reactive](/docs/topics/RestServerReactive) | Reactive (Project Reactor / RxJava) endpoint support. |
 | [juneau-rest-server-reactive-reactor](/docs/topics/RestServerReactive) | Project Reactor / RxJava 3 / Reactive-Streams `Publisher` adapters layered on juneau-rest-server-reactive. |
@@ -101,6 +116,8 @@ The Juneau ecosystem consists of the following parts. A few rows are **grouped f
 | [juneau-microservice](/docs/topics/JuneauMicroservice) | Core microservice framework with lifecycle management and REST API wiring. |
 | [juneau-microservice-jetty](/docs/topics/JuneauMicroserviceJetty) | Jetty-embedded microservice launcher. |
 | [juneau-microservice-tomcat](/docs/topics/JuneauMicroserviceTomcat) | Tomcat-embedded microservice launcher. |
+| [juneau-microservice-test](/docs/topics/MicroserviceTesting) | JUnit 5 `@MicroserviceTest` extension that boots a whole microservice on an ephemeral port for integration tests, with `@TestBean` mock injection. |
+| [juneau-microservice-examples](https://github.com/apache/juneau/tree/master/juneau-microservice/juneau-microservice-examples) | Example and demo REST resources for the microservice (not shipped as a framework artifact). |
 | **juneau-sc** | |
 | [juneau-sc-server](/docs/topics/ScServerOverview) | Centralized configuration server exposing juneau-config files over REST. |
 | **juneau-secret-macos-keychain** | |
@@ -114,14 +131,22 @@ The Juneau ecosystem consists of the following parts. A few rows are **grouped f
 | [juneau-shaded-rest-server-springboot](/docs/topics/JuneauShadedRestServerSpringboot) | Shaded uber-jar of juneau-rest-server-springboot and its dependencies. |
 | [juneau-shaded-all](/docs/topics/JuneauShadedAll) | All-in-one shaded uber-jar of the full Juneau ecosystem. |
 | **juneau-bundles** | |
-| [juneau-microservice-jetty-bundle](/docs/topics/JuneauEcosystemOverview) | Ready-to-run Jetty microservice deployment bundle. |
-| [juneau-microservice-tomcat-bundle](/docs/topics/JuneauEcosystemOverview) | Ready-to-run Tomcat microservice deployment bundle. |
-| [juneau-springboot-bundle](/docs/topics/JuneauEcosystemOverview) | Spring Boot application bundle with REST server included. |
-| [juneau-observability-otlp-bundle](/docs/topics/JuneauEcosystemOverview) | Bundle combining OpenTelemetry and Micrometer observability modules. |
-| **Examples** | |
+| [juneau-microservice-jetty-bundle](/docs/topics/DependencyManagement#juneau-microservice-jetty-bundle) | Ready-to-run Jetty microservice deployment bundle. |
+| [juneau-microservice-tomcat-bundle](/docs/topics/DependencyManagement#juneau-microservice-tomcat-bundle) | Ready-to-run Tomcat microservice deployment bundle. |
+| [juneau-springboot-bundle](/docs/topics/DependencyManagement#juneau-springboot-bundle) | Spring Boot application bundle with REST server included. |
+| [juneau-observability-otlp-bundle](/docs/topics/DependencyManagement#juneau-observability-otlp-bundle) | Bundle combining OpenTelemetry and Micrometer observability modules. |
+| **juneau-bom** | |
+| [juneau-bom](/docs/topics/DependencyManagement#the-bom) | Bill of Materials POM: import it and drop explicit versions from your Juneau dependencies. |
+| **juneau-examples** and **juneau-petstore** | |
 | [juneau-examples-core](/docs/topics/JuneauExamples) | Standalone examples demonstrating core marshalling and configuration APIs. |
 | [juneau-examples-mcp](/docs/topics/JuneauMcpRecipes#full-example-juneau-examples-mcp) | Runnable MCP example app pairing a server and client walkthrough, including a fully offline OAuth 2.1–secured variant. |
-| [juneau-petstore](/docs/topics/JuneauPetstore) | Sample Petstore REST application available as Jetty, Tomcat, and Spring Boot variants. |
+| [juneau-petstore](/docs/topics/JuneauPetstore) | Sample Petstore REST application available as Jetty and Spring Boot variants (aggregator for the three rows below). |
+| [juneau-petstore-core](/docs/topics/JuneauPetstore#module-layout) | Petstore shared domain model and REST resources. |
+| [juneau-petstore-jetty](/docs/topics/JuneauPetstore#module-layout) | Petstore Microservice (Jetty) deployment. |
+| [juneau-petstore-springboot](/docs/topics/JuneauPetstore#module-layout) | Petstore Spring Boot deployment. |
+| **Build-only** | |
+| [juneau-integration-tests](https://github.com/apache/juneau/tree/master/juneau-integration-tests) | Cross-module and `MockRestClient`-driven integration test suite. |
+| [juneau-distrib](https://github.com/apache/juneau/tree/master/juneau-distrib) | Distribution artifacts and packaging. |
 
 Questions via email to <a href="mailto:dev@juneau.apache.org?Subject=Apache%20Juneau%20question" target="_blank">dev@juneau.apache.org</a> are always welcome.
 

@@ -29,42 +29,112 @@
 <span class="source-line-no">016</span><span id="line-16"> */</span>
 <span class="source-line-no">017</span><span id="line-17">package org.apache.juneau.microservice.examples;</span>
 <span class="source-line-no">018</span><span id="line-18"></span>
-<span class="source-line-no">019</span><span id="line-19">import org.apache.juneau.rest.server.*;</span>
-<span class="source-line-no">020</span><span id="line-20">import org.apache.juneau.rest.server.servlet.*;</span>
-<span class="source-line-no">021</span><span id="line-21"></span>
-<span class="source-line-no">022</span><span id="line-22">/**</span>
-<span class="source-line-no">023</span><span id="line-23"> * Provides the capability to shut down this REST microservice through a REST call.</span>
-<span class="source-line-no">024</span><span id="line-24"> *</span>
-<span class="source-line-no">025</span><span id="line-25"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
-<span class="source-line-no">026</span><span id="line-26"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauMicroservice"&gt;juneau-microservice Basics&lt;/a&gt;</span>
-<span class="source-line-no">027</span><span id="line-27"> * &lt;/ul&gt;</span>
-<span class="source-line-no">028</span><span id="line-28"> *</span>
-<span class="source-line-no">029</span><span id="line-29"> * @serial exclude</span>
-<span class="source-line-no">030</span><span id="line-30"> */</span>
-<span class="source-line-no">031</span><span id="line-31">@Rest(path = "/shutdown", title = "Shut down this resource")</span>
-<span class="source-line-no">032</span><span id="line-32">public class ShutdownResource extends BasicRestServlet {</span>
-<span class="source-line-no">033</span><span id="line-33"></span>
-<span class="source-line-no">034</span><span id="line-34">   private static final long serialVersionUID = 1L;</span>
-<span class="source-line-no">035</span><span id="line-35"></span>
-<span class="source-line-no">036</span><span id="line-36">   /**</span>
-<span class="source-line-no">037</span><span id="line-37">    * [GET /] - Shutdown this resource.</span>
-<span class="source-line-no">038</span><span id="line-38">    *</span>
-<span class="source-line-no">039</span><span id="line-39">    * @return The string &lt;js&gt;"OK"&lt;/js&gt;.</span>
-<span class="source-line-no">040</span><span id="line-40">    */</span>
-<span class="source-line-no">041</span><span id="line-41">   @RestGet(path = "/", description = "Show contents of config file.")</span>
-<span class="source-line-no">042</span><span id="line-42">   @SuppressWarnings("java:S2654") // Background thread is required so the delayed System.exit() runs off the request thread, letting this method's "OK" response flush to the client before the JVM dies; no managed executor is available in this embedded microservice container.</span>
-<span class="source-line-no">043</span><span id="line-43">   public String shutdown() {</span>
-<span class="source-line-no">044</span><span id="line-44">      new Thread(() -&gt; {</span>
-<span class="source-line-no">045</span><span id="line-45">         try {</span>
-<span class="source-line-no">046</span><span id="line-46">            Thread.sleep(1000);</span>
-<span class="source-line-no">047</span><span id="line-47">            System.exit(0);</span>
-<span class="source-line-no">048</span><span id="line-48">         } catch (@SuppressWarnings("unused") InterruptedException e) {</span>
-<span class="source-line-no">049</span><span id="line-49">            Thread.currentThread().interrupt();</span>
-<span class="source-line-no">050</span><span id="line-50">         }</span>
-<span class="source-line-no">051</span><span id="line-51">      }).start();</span>
-<span class="source-line-no">052</span><span id="line-52">      return "OK";</span>
-<span class="source-line-no">053</span><span id="line-53">   }</span>
-<span class="source-line-no">054</span><span id="line-54">}</span>
+<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.Shorts.*;</span>
+<span class="source-line-no">020</span><span id="line-20"></span>
+<span class="source-line-no">021</span><span id="line-21">import org.apache.juneau.rest.server.*;</span>
+<span class="source-line-no">022</span><span id="line-22">import org.apache.juneau.rest.server.servlet.*;</span>
+<span class="source-line-no">023</span><span id="line-23"></span>
+<span class="source-line-no">024</span><span id="line-24">/**</span>
+<span class="source-line-no">025</span><span id="line-25"> * Provides the capability to shut down this REST microservice through a REST call.</span>
+<span class="source-line-no">026</span><span id="line-26"> *</span>
+<span class="source-line-no">027</span><span id="line-27"> * &lt;p&gt;</span>
+<span class="source-line-no">028</span><span id="line-28"> * {@code POST /shutdown} stops the process: the {@code "OK"} response is sent first, and the exit follows about a</span>
+<span class="source-line-no">029</span><span id="line-29"> * second later on a background thread.  Shutting down is a write, so it is a {@code POST}, never a {@code GET}: a safe</span>
+<span class="source-line-no">030</span><span id="line-30"> * method passes every CSRF check, so a {@code GET} would let any page that embeds {@code &lt;img src=".../shutdown"&gt;}</span>
+<span class="source-line-no">031</span><span id="line-31"> * stop the process.  {@code GET /shutdown} is answered with {@code 405}.</span>
+<span class="source-line-no">032</span><span id="line-32"> *</span>
+<span class="source-line-no">033</span><span id="line-33"> * &lt;p&gt;</span>
+<span class="source-line-no">034</span><span id="line-34"> * From the command line, send a non-form content type so a CSRF boundary in front of this resource (see</span>
+<span class="source-line-no">035</span><span id="line-35"> * {@link AdminBoundary}) admits the request without a token:</span>
+<span class="source-line-no">036</span><span id="line-36"> * &lt;p class='bcode'&gt;</span>
+<span class="source-line-no">037</span><span id="line-37"> *    curl -X POST -H 'Content-Type: application/json' http://localhost:10000/shutdown</span>
+<span class="source-line-no">038</span><span id="line-38"> * &lt;/p&gt;</span>
+<span class="source-line-no">039</span><span id="line-39"> *</span>
+<span class="source-line-no">040</span><span id="line-40"> * &lt;p&gt;</span>
+<span class="source-line-no">041</span><span id="line-41"> * This resource has no authentication of its own.  Do not expose it on an untrusted network.</span>
+<span class="source-line-no">042</span><span id="line-42"> *</span>
+<span class="source-line-no">043</span><span id="line-43"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">044</span><span id="line-44"> *    &lt;li class='jc'&gt;{@link AdminBoundary}</span>
+<span class="source-line-no">045</span><span id="line-45"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauMicroservice"&gt;juneau-microservice Basics&lt;/a&gt;</span>
+<span class="source-line-no">046</span><span id="line-46"> * &lt;/ul&gt;</span>
+<span class="source-line-no">047</span><span id="line-47"> *</span>
+<span class="source-line-no">048</span><span id="line-48"> * @serial exclude</span>
+<span class="source-line-no">049</span><span id="line-49"> */</span>
+<span class="source-line-no">050</span><span id="line-50">@Rest(path = "/shutdown", title = "Shut down this resource")</span>
+<span class="source-line-no">051</span><span id="line-51">public class ShutdownResource extends BasicRestServlet {</span>
+<span class="source-line-no">052</span><span id="line-52"></span>
+<span class="source-line-no">053</span><span id="line-53">   /**</span>
+<span class="source-line-no">054</span><span id="line-54">    * How the process is stopped.</span>
+<span class="source-line-no">055</span><span id="line-55">    *</span>
+<span class="source-line-no">056</span><span id="line-56">    * &lt;p&gt;</span>
+<span class="source-line-no">057</span><span id="line-57">    * The default calls {@link System#exit(int)}.  Pass another to {@link ShutdownResource#ShutdownResource(Exit)}, or</span>
+<span class="source-line-no">058</span><span id="line-58">    * register one as a bean in its parent resource's bean store, to observe a shutdown without stopping the JVM, for</span>
+<span class="source-line-no">059</span><span id="line-59">    * example in a test.</span>
+<span class="source-line-no">060</span><span id="line-60">    */</span>
+<span class="source-line-no">061</span><span id="line-61">   @FunctionalInterface</span>
+<span class="source-line-no">062</span><span id="line-62">   public interface Exit {</span>
+<span class="source-line-no">063</span><span id="line-63"></span>
+<span class="source-line-no">064</span><span id="line-64">      /**</span>
+<span class="source-line-no">065</span><span id="line-65">       * Stops the process.</span>
+<span class="source-line-no">066</span><span id="line-66">       *</span>
+<span class="source-line-no">067</span><span id="line-67">       * @param status The exit status.</span>
+<span class="source-line-no">068</span><span id="line-68">       */</span>
+<span class="source-line-no">069</span><span id="line-69">      void exit(int status);</span>
+<span class="source-line-no">070</span><span id="line-70">   }</span>
+<span class="source-line-no">071</span><span id="line-71"></span>
+<span class="source-line-no">072</span><span id="line-72">   private static final long serialVersionUID = 1L;</span>
+<span class="source-line-no">073</span><span id="line-73"></span>
+<span class="source-line-no">074</span><span id="line-74">   // Not serialized: a servlet is never restored from a stream, and an exit is behaviour, not state.</span>
+<span class="source-line-no">075</span><span id="line-75">   private final transient Exit exit;</span>
+<span class="source-line-no">076</span><span id="line-76"></span>
+<span class="source-line-no">077</span><span id="line-77">   /**</span>
+<span class="source-line-no">078</span><span id="line-78">    * Constructor.</span>
+<span class="source-line-no">079</span><span id="line-79">    *</span>
+<span class="source-line-no">080</span><span id="line-80">    * &lt;p&gt;</span>
+<span class="source-line-no">081</span><span id="line-81">    * A shutdown calls {@link System#exit(int)}.</span>
+<span class="source-line-no">082</span><span id="line-82">    */</span>
+<span class="source-line-no">083</span><span id="line-83">   public ShutdownResource() {</span>
+<span class="source-line-no">084</span><span id="line-84">      this(System::exit);</span>
+<span class="source-line-no">085</span><span id="line-85">   }</span>
+<span class="source-line-no">086</span><span id="line-86"></span>
+<span class="source-line-no">087</span><span id="line-87">   /**</span>
+<span class="source-line-no">088</span><span id="line-88">    * Constructor.</span>
+<span class="source-line-no">089</span><span id="line-89">    *</span>
+<span class="source-line-no">090</span><span id="line-90">    * &lt;p&gt;</span>
+<span class="source-line-no">091</span><span id="line-91">    * When the resource is mounted as a child by class, this constructor is used if the parent resource's bean store</span>
+<span class="source-line-no">092</span><span id="line-92">    * holds an {@link Exit}, for example from a &lt;c&gt;@Bean&lt;/c&gt; method on the parent.  A microservice's own beans are not</span>
+<span class="source-line-no">093</span><span id="line-93">    * in that store.</span>
+<span class="source-line-no">094</span><span id="line-94">    *</span>
+<span class="source-line-no">095</span><span id="line-95">    * @param exit How a shutdown stops the process.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">096</span><span id="line-96">    * @throws IllegalArgumentException If {@code exit} is &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">097</span><span id="line-97">    */</span>
+<span class="source-line-no">098</span><span id="line-98">   public ShutdownResource(Exit exit) {</span>
+<span class="source-line-no">099</span><span id="line-99">      this.exit = reqnn("exit", exit);</span>
+<span class="source-line-no">100</span><span id="line-100">   }</span>
+<span class="source-line-no">101</span><span id="line-101"></span>
+<span class="source-line-no">102</span><span id="line-102">   /**</span>
+<span class="source-line-no">103</span><span id="line-103">    * [POST /] - Shuts down this microservice.</span>
+<span class="source-line-no">104</span><span id="line-104">    *</span>
+<span class="source-line-no">105</span><span id="line-105">    * @return The string &lt;js&gt;"OK"&lt;/js&gt;.</span>
+<span class="source-line-no">106</span><span id="line-106">    */</span>
+<span class="source-line-no">107</span><span id="line-107">   @Mutating("Stops the process")</span>
+<span class="source-line-no">108</span><span id="line-108">   @RestPost(path = "/", summary = "Shut down this microservice", description = "Stops the process about a second after the response is sent.")</span>
+<span class="source-line-no">109</span><span id="line-109">   @SuppressWarnings({</span>
+<span class="source-line-no">110</span><span id="line-110">      "java:S2654" // Background thread is required so the delayed exit runs off the request thread, letting this method's "OK" response flush to the client before the JVM dies; no managed executor is available in this embedded microservice container.</span>
+<span class="source-line-no">111</span><span id="line-111">   })</span>
+<span class="source-line-no">112</span><span id="line-112">   public String shutdown() {</span>
+<span class="source-line-no">113</span><span id="line-113">      var e = exit;</span>
+<span class="source-line-no">114</span><span id="line-114">      new Thread(() -&gt; {</span>
+<span class="source-line-no">115</span><span id="line-115">         try {</span>
+<span class="source-line-no">116</span><span id="line-116">            Thread.sleep(1000);</span>
+<span class="source-line-no">117</span><span id="line-117">            e.exit(0);</span>
+<span class="source-line-no">118</span><span id="line-118">         } catch (@SuppressWarnings("unused") InterruptedException e2) {</span>
+<span class="source-line-no">119</span><span id="line-119">            Thread.currentThread().interrupt();</span>
+<span class="source-line-no">120</span><span id="line-120">         }</span>
+<span class="source-line-no">121</span><span id="line-121">      }).start();</span>
+<span class="source-line-no">122</span><span id="line-122">      return "OK";</span>
+<span class="source-line-no">123</span><span id="line-123">   }</span>
+<span class="source-line-no">124</span><span id="line-124">}</span>
 
 
 

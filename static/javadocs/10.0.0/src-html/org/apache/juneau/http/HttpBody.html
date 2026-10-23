@@ -41,65 +41,64 @@
 <span class="source-line-no">028</span><span id="line-28"> * {@code Content-Length} headers efficiently.</span>
 <span class="source-line-no">029</span><span id="line-29"> *</span>
 <span class="source-line-no">030</span><span id="line-30"> * &lt;p&gt;</span>
-<span class="source-line-no">031</span><span id="line-31"> * &lt;b&gt;Beta — API subject to change:&lt;/b&gt; This type is part of the next-generation REST client and HTTP stack</span>
-<span class="source-line-no">032</span><span id="line-32"> * ({@code org.apache.juneau.marshall.ng.*}).</span>
-<span class="source-line-no">033</span><span id="line-33"> * It is not API-frozen: binary- and source-incompatible changes may appear in the &lt;b&gt;next major&lt;/b&gt; Juneau release</span>
-<span class="source-line-no">034</span><span id="line-34"> * (and possibly earlier).</span>
-<span class="source-line-no">035</span><span id="line-35"> * For production use cases that require long-term binary stability, continue using the existing</span>
-<span class="source-line-no">036</span><span id="line-36"> * {@code juneau-rest-client} and {@code juneau-rest-common} APIs until the {@code ng} stack is declared stable.</span>
-<span class="source-line-no">037</span><span id="line-37"> *</span>
-<span class="source-line-no">038</span><span id="line-38"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
-<span class="source-line-no">039</span><span id="line-39"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/NextGenRestClient"&gt;juneau-ng REST client&lt;/a&gt;</span>
-<span class="source-line-no">040</span><span id="line-40"> * &lt;/ul&gt;</span>
-<span class="source-line-no">041</span><span id="line-41"> *</span>
-<span class="source-line-no">042</span><span id="line-42"> * @since 9.2.1</span>
-<span class="source-line-no">043</span><span id="line-43"> */</span>
-<span class="source-line-no">044</span><span id="line-44">public interface HttpBody {</span>
-<span class="source-line-no">045</span><span id="line-45"></span>
-<span class="source-line-no">046</span><span id="line-46">   /**</span>
-<span class="source-line-no">047</span><span id="line-47">    * Returns the MIME content type of this body, e.g. {@code "application/json; charset=UTF-8"}.</span>
-<span class="source-line-no">048</span><span id="line-48">    *</span>
-<span class="source-line-no">049</span><span id="line-49">    * @return The content type, or &lt;jk&gt;null&lt;/jk&gt; if unknown.</span>
-<span class="source-line-no">050</span><span id="line-50">    */</span>
-<span class="source-line-no">051</span><span id="line-51">   String getContentType();</span>
-<span class="source-line-no">052</span><span id="line-52"></span>
-<span class="source-line-no">053</span><span id="line-53">   /**</span>
-<span class="source-line-no">054</span><span id="line-54">    * Returns the content length in bytes, or {@code -1} if unknown.</span>
-<span class="source-line-no">055</span><span id="line-55">    *</span>
-<span class="source-line-no">056</span><span id="line-56">    * &lt;p&gt;</span>
-<span class="source-line-no">057</span><span id="line-57">    * Implementations that buffer content may return the exact length; streaming implementations should</span>
-<span class="source-line-no">058</span><span id="line-58">    * return {@code -1} to cause the transport to use chunked transfer encoding.</span>
-<span class="source-line-no">059</span><span id="line-59">    *</span>
-<span class="source-line-no">060</span><span id="line-60">    * @return The content length, or {@code -1} if unknown.</span>
-<span class="source-line-no">061</span><span id="line-61">    */</span>
-<span class="source-line-no">062</span><span id="line-62">   default long getContentLength() {</span>
-<span class="source-line-no">063</span><span id="line-63">      return -1;</span>
-<span class="source-line-no">064</span><span id="line-64">   }</span>
-<span class="source-line-no">065</span><span id="line-65"></span>
-<span class="source-line-no">066</span><span id="line-66">   /**</span>
-<span class="source-line-no">067</span><span id="line-67">    * Writes the body content to the given output stream.</span>
-<span class="source-line-no">068</span><span id="line-68">    *</span>
-<span class="source-line-no">069</span><span id="line-69">    * &lt;p&gt;</span>
-<span class="source-line-no">070</span><span id="line-70">    * Implementations &lt;b&gt;must not&lt;/b&gt; close {@code out}.</span>
-<span class="source-line-no">071</span><span id="line-71">    *</span>
-<span class="source-line-no">072</span><span id="line-72">    * @param out The stream to write to. Never &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">073</span><span id="line-73">    * @throws IOException If an I/O error occurs.</span>
-<span class="source-line-no">074</span><span id="line-74">    */</span>
-<span class="source-line-no">075</span><span id="line-75">   void writeTo(OutputStream out) throws IOException;</span>
-<span class="source-line-no">076</span><span id="line-76"></span>
-<span class="source-line-no">077</span><span id="line-77">   /**</span>
-<span class="source-line-no">078</span><span id="line-78">    * Returns {@code true} if this body can be written more than once.</span>
-<span class="source-line-no">079</span><span id="line-79">    *</span>
-<span class="source-line-no">080</span><span id="line-80">    * &lt;p&gt;</span>
-<span class="source-line-no">081</span><span id="line-81">    * Streaming bodies backed by a one-shot {@link InputStream} should return {@code false}.</span>
-<span class="source-line-no">082</span><span id="line-82">    * Buffered bodies (byte arrays, strings, files) should return {@code true}.</span>
-<span class="source-line-no">083</span><span id="line-83">    *</span>
-<span class="source-line-no">084</span><span id="line-84">    * @return {@code true} if repeatable.</span>
-<span class="source-line-no">085</span><span id="line-85">    */</span>
-<span class="source-line-no">086</span><span id="line-86">   default boolean isRepeatable() {</span>
-<span class="source-line-no">087</span><span id="line-87">      return false;</span>
-<span class="source-line-no">088</span><span id="line-88">   }</span>
-<span class="source-line-no">089</span><span id="line-89">}</span>
+<span class="source-line-no">031</span><span id="line-31"> * &lt;b&gt;Beta — API subject to change:&lt;/b&gt; This type is part of the next-generation REST client and HTTP stack.</span>
+<span class="source-line-no">032</span><span id="line-32"> * It is not API-frozen: binary- and source-incompatible changes may appear in the &lt;b&gt;next major&lt;/b&gt; Juneau release</span>
+<span class="source-line-no">033</span><span id="line-33"> * (and possibly earlier).</span>
+<span class="source-line-no">034</span><span id="line-34"> * For production use cases that require long-term binary stability, continue using the existing</span>
+<span class="source-line-no">035</span><span id="line-35"> * {@code juneau-rest-client} and {@code juneau-rest-common} APIs until the {@code ng} stack is declared stable.</span>
+<span class="source-line-no">036</span><span id="line-36"> *</span>
+<span class="source-line-no">037</span><span id="line-37"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">038</span><span id="line-38"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/NextGenRestClient"&gt;juneau-ng REST client&lt;/a&gt;</span>
+<span class="source-line-no">039</span><span id="line-39"> * &lt;/ul&gt;</span>
+<span class="source-line-no">040</span><span id="line-40"> *</span>
+<span class="source-line-no">041</span><span id="line-41"> * @since 9.2.1</span>
+<span class="source-line-no">042</span><span id="line-42"> */</span>
+<span class="source-line-no">043</span><span id="line-43">public interface HttpBody {</span>
+<span class="source-line-no">044</span><span id="line-44"></span>
+<span class="source-line-no">045</span><span id="line-45">   /**</span>
+<span class="source-line-no">046</span><span id="line-46">    * Returns the MIME content type of this body, e.g. {@code "application/json; charset=UTF-8"}.</span>
+<span class="source-line-no">047</span><span id="line-47">    *</span>
+<span class="source-line-no">048</span><span id="line-48">    * @return The content type, or &lt;jk&gt;null&lt;/jk&gt; if unknown.</span>
+<span class="source-line-no">049</span><span id="line-49">    */</span>
+<span class="source-line-no">050</span><span id="line-50">   String getContentType();</span>
+<span class="source-line-no">051</span><span id="line-51"></span>
+<span class="source-line-no">052</span><span id="line-52">   /**</span>
+<span class="source-line-no">053</span><span id="line-53">    * Returns the content length in bytes, or {@code -1} if unknown.</span>
+<span class="source-line-no">054</span><span id="line-54">    *</span>
+<span class="source-line-no">055</span><span id="line-55">    * &lt;p&gt;</span>
+<span class="source-line-no">056</span><span id="line-56">    * Implementations that buffer content may return the exact length; streaming implementations should</span>
+<span class="source-line-no">057</span><span id="line-57">    * return {@code -1} to cause the transport to use chunked transfer encoding.</span>
+<span class="source-line-no">058</span><span id="line-58">    *</span>
+<span class="source-line-no">059</span><span id="line-59">    * @return The content length, or {@code -1} if unknown.</span>
+<span class="source-line-no">060</span><span id="line-60">    */</span>
+<span class="source-line-no">061</span><span id="line-61">   default long getContentLength() {</span>
+<span class="source-line-no">062</span><span id="line-62">      return -1;</span>
+<span class="source-line-no">063</span><span id="line-63">   }</span>
+<span class="source-line-no">064</span><span id="line-64"></span>
+<span class="source-line-no">065</span><span id="line-65">   /**</span>
+<span class="source-line-no">066</span><span id="line-66">    * Writes the body content to the given output stream.</span>
+<span class="source-line-no">067</span><span id="line-67">    *</span>
+<span class="source-line-no">068</span><span id="line-68">    * &lt;p&gt;</span>
+<span class="source-line-no">069</span><span id="line-69">    * Implementations &lt;b&gt;must not&lt;/b&gt; close {@code out}.</span>
+<span class="source-line-no">070</span><span id="line-70">    *</span>
+<span class="source-line-no">071</span><span id="line-71">    * @param out The stream to write to. Never &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">072</span><span id="line-72">    * @throws IOException If an I/O error occurs.</span>
+<span class="source-line-no">073</span><span id="line-73">    */</span>
+<span class="source-line-no">074</span><span id="line-74">   void writeTo(OutputStream out) throws IOException;</span>
+<span class="source-line-no">075</span><span id="line-75"></span>
+<span class="source-line-no">076</span><span id="line-76">   /**</span>
+<span class="source-line-no">077</span><span id="line-77">    * Returns {@code true} if this body can be written more than once.</span>
+<span class="source-line-no">078</span><span id="line-78">    *</span>
+<span class="source-line-no">079</span><span id="line-79">    * &lt;p&gt;</span>
+<span class="source-line-no">080</span><span id="line-80">    * Streaming bodies backed by a one-shot {@link InputStream} should return {@code false}.</span>
+<span class="source-line-no">081</span><span id="line-81">    * Buffered bodies (byte arrays, strings, files) should return {@code true}.</span>
+<span class="source-line-no">082</span><span id="line-82">    *</span>
+<span class="source-line-no">083</span><span id="line-83">    * @return {@code true} if repeatable.</span>
+<span class="source-line-no">084</span><span id="line-84">    */</span>
+<span class="source-line-no">085</span><span id="line-85">   default boolean isRepeatable() {</span>
+<span class="source-line-no">086</span><span id="line-86">      return false;</span>
+<span class="source-line-no">087</span><span id="line-87">   }</span>
+<span class="source-line-no">088</span><span id="line-88">}</span>
 
 
 

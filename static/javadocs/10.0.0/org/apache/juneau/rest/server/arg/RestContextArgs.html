@@ -84,14 +84,13 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="RestOpArg.html" title="interface in org.apache.juneau.rest.server.arg">RestOpArg</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/arg/RestContextArgs.html#line-57">RestContextArgs</a></span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/arg/RestContextArgs.html#line-53">RestContextArgs</a></span>
 <span class="extends-implements">extends <a href="SimpleRestOperationArg.html" title="class in org.apache.juneau.rest.server.arg">SimpleRestOperationArg</a></span></div>
 <div class="block">Resolves method parameters on <a href="../RestOp.html" title="annotation interface in org.apache.juneau.rest.server"><code>RestOp</code></a>-annotated Java methods of types found on the <a href="../RestContext.html" title="class in org.apache.juneau.rest.server"><code>RestContext</code></a> object.
 
  <ul class='javatree'>
    <li class='jc'><a href="../../../marshall/MarshallingContext.html" title="class in org.apache.juneau.marshall"><code>MarshallingContext</code></a>
    <li class='jc'><a href="../../../config/Config.html" title="class in org.apache.juneau.config"><code>Config</code></a>
-   <li class='jc'><a href="../debug/DebugEnablement.html" title="class in org.apache.juneau.rest.server.debug"><code>DebugEnablement</code></a>
    <li class='jc'><a href="../../../marshall/encoders/EncoderSet.html" title="class in org.apache.juneau.marshall.encoders"><code>EncoderSet</code></a>
    <li class='jc'><a href="../../../marshall/cp/FileFinder.html" title="interface in org.apache.juneau.marshall.cp"><code>FileFinder</code></a>
    <li class='jc'><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/Logger.html" title="class or interface in java.util.logging" class="external-link"><code>Logger</code></a>
@@ -99,7 +98,6 @@ loadScripts(document, 'script');</script>
    <li class='jc'><a href="../RestChildren.html" title="class in org.apache.juneau.rest.server"><code>RestChildren</code></a>
    <li class='jc'><a href="../RestContext.html" title="class in org.apache.juneau.rest.server"><code>RestContext</code></a>
    <li class='jc'><a href="../stats/RestContextStats.html" title="class in org.apache.juneau.rest.server.stats"><code>RestContextStats</code></a>
-   <li class='jc'><a href="../logger/CallLogger.html" title="class in org.apache.juneau.rest.server.logger"><code>CallLogger</code></a>
    <li class='jc'><a href="../RestOperations.html" title="class in org.apache.juneau.rest.server"><code>RestOperations</code></a>
    <li class='jc'><a href="../staticfile/StaticFiles.html" title="interface in org.apache.juneau.rest.server.staticfile"><code>StaticFiles</code></a>
    <li class='jc'><a href="../stats/ThrownStore.html" title="class in org.apache.juneau.rest.server.stats"><code>ThrownStore</code></a>
@@ -167,7 +165,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.commons.function.ThrowingFunction)">
 <h3>RestContextArgs</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/arg/RestContextArgs.html#line-101">RestContextArgs</a></span><wbr><span class="parameters">(<a href="../../../commons/function/ThrowingFunction.html" title="interface in org.apache.juneau.commons.function">ThrowingFunction</a>&lt;<a href="../RestContext.html" title="class in org.apache.juneau.rest.server">RestContext</a>,<wbr>T&gt;&nbsp;function)</span></div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/arg/RestContextArgs.html#line-93">RestContextArgs</a></span><wbr><span class="parameters">(<a href="../../../commons/function/ThrowingFunction.html" title="interface in org.apache.juneau.commons.function">ThrowingFunction</a>&lt;<a href="../RestContext.html" title="class in org.apache.juneau.rest.server">RestContext</a>,<wbr>T&gt;&nbsp;function)</span></div>
 <div class="block">Constructor.</div>
 <dl class="notes">
 <dt>Type Parameters:</dt>
@@ -188,7 +186,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="create(org.apache.juneau.commons.reflect.ParameterInfo)">
 <h3>create</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="RestContextArgs.html" title="class in org.apache.juneau.rest.server.arg">RestContextArgs</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/arg/RestContextArgs.html#line-65">create</a></span><wbr><span class="parameters">(<a href="../../../commons/reflect/ParameterInfo.html" title="class in org.apache.juneau.commons.reflect">ParameterInfo</a>&nbsp;paramInfo)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="RestContextArgs.html" title="class in org.apache.juneau.rest.server.arg">RestContextArgs</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/arg/RestContextArgs.html#line-61">create</a></span><wbr><span class="parameters">(<a href="../../../commons/reflect/ParameterInfo.html" title="class in org.apache.juneau.commons.reflect">ParameterInfo</a>&nbsp;paramInfo)</span></div>
 <div class="block">Static creator.</div>
 <dl class="notes">
 <dt>Parameters:</dt>

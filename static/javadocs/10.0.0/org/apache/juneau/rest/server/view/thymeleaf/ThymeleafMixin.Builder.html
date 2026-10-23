@@ -78,18 +78,25 @@ loadScripts(document, 'script');</script>
 </div>
 <section class="class-description" id="class-description">
 <dl class="notes">
+<dt>All Implemented Interfaces:</dt>
+<dd><code><a href="../ViewMixinBuilder.html" title="interface in org.apache.juneau.rest.server.view">ViewMixinBuilder</a>&lt;<a href="ThymeleafMixin.Builder.html" title="class in org.apache.juneau.rest.server.view.thymeleaf">ThymeleafMixin.Builder</a>&gt;</code></dd>
+</dl>
+<dl class="notes">
 <dt>Enclosing class:</dt>
 <dd><a href="ThymeleafMixin.html" title="class in org.apache.juneau.rest.server.view.thymeleaf">ThymeleafMixin</a></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public static class </span><span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/view/thymeleaf/ThymeleafMixin.html#line-263">ThymeleafMixin.Builder</a></span>
-<span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
+<div class="type-signature"><span class="modifiers">public static class </span><span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/view/thymeleaf/ThymeleafMixin.html#line-269">ThymeleafMixin.Builder</a></span>
+<span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>
+implements <a href="../ViewMixinBuilder.html" title="interface in org.apache.juneau.rest.server.view">ViewMixinBuilder</a>&lt;<a href="ThymeleafMixin.Builder.html" title="class in org.apache.juneau.rest.server.view.thymeleaf">ThymeleafMixin.Builder</a>&gt;</span></div>
 <div class="block">Builder for <a href="ThymeleafMixin.html" title="class in org.apache.juneau.rest.server.view.thymeleaf"><code>ThymeleafMixin</code></a>.
 
  <p>
  Mirrors <a href="ThymeleafDispatcher.Builder.html" title="class in org.apache.juneau.rest.server.view.thymeleaf"><code>ThymeleafDispatcher.Builder</code></a>'s configuration methods on its own surface and
- forwards each call into a held <a href="ThymeleafDispatcher.Builder.html" title="class in org.apache.juneau.rest.server.view.thymeleaf"><code>ThymeleafDispatcher.Builder</code></a> (§2.3.1 worker-bean
- composition).</div>
+ forwards each call into a held <a href="ThymeleafDispatcher.Builder.html" title="class in org.apache.juneau.rest.server.view.thymeleaf"><code>ThymeleafDispatcher.Builder</code></a> (worker-bean
+ composition). Implements <a href="../ViewMixinBuilder.html" title="interface in org.apache.juneau.rest.server.view"><code>ViewMixinBuilder</code></a> so <a href="#basePath(java.lang.String)"><code>basePath(String)</code></a> and
+ <a href="#cacheTemplates(boolean)"><code>cacheTemplates(boolean)</code></a> are guaranteed to transfer to the sibling JSP / Mustache /
+ FreeMarker bridge builders.</div>
 </section>
 <section class="summary">
 <ul class="summary-list">
@@ -176,7 +183,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;()">
 <h3>Builder</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/view/thymeleaf/ThymeleafMixin.Builder.html#line-268">Builder</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/view/thymeleaf/ThymeleafMixin.Builder.html#line-274">Builder</a></span>()</div>
 <div class="block">Constructor &mdash; package access for <a href="ThymeleafMixin.html#create()"><code>ThymeleafMixin.create()</code></a>.</div>
 </section>
 </li>
@@ -191,13 +198,15 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="basePath(java.lang.String)">
 <h3>basePath</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ThymeleafMixin.Builder.html" title="class in org.apache.juneau.rest.server.view.thymeleaf">ThymeleafMixin.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/view/thymeleaf/ThymeleafMixin.Builder.html#line-281">basePath</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ThymeleafMixin.Builder.html" title="class in org.apache.juneau.rest.server.view.thymeleaf">ThymeleafMixin.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/view/thymeleaf/ThymeleafMixin.Builder.html#line-287">basePath</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block">Sets the classpath base path under which template resources are resolved.
 
  <p>
  Defaults to <a href="ThymeleafMixin.html#DEFAULT_BASE_PATH"><code>"/"</code></a>. A typical configured
  value is <code>"/templates/"</code> &mdash; the Spring-Boot-compatible layout convention.</div>
 <dl class="notes">
+<dt>Specified by:</dt>
+<dd><code><a href="../ViewMixinBuilder.html#basePath(java.lang.String)">basePath</a></code>&nbsp;in interface&nbsp;<code><a href="../ViewMixinBuilder.html" title="interface in org.apache.juneau.rest.server.view">ViewMixinBuilder</a>&lt;<a href="ThymeleafMixin.Builder.html" title="class in org.apache.juneau.rest.server.view.thymeleaf">ThymeleafMixin.Builder</a>&gt;</code></dd>
 <dt>Parameters:</dt>
 <dd><code>value</code> - The base path. <code>null</code> or blank values reset to the default
    <a href="ThymeleafMixin.html#DEFAULT_BASE_PATH"><code>ThymeleafMixin.DEFAULT_BASE_PATH</code></a>.</dd>
@@ -209,7 +218,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="cacheTemplates(boolean)">
 <h3>cacheTemplates</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ThymeleafMixin.Builder.html" title="class in org.apache.juneau.rest.server.view.thymeleaf">ThymeleafMixin.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/view/thymeleaf/ThymeleafMixin.Builder.html#line-298">cacheTemplates</a></span><wbr><span class="parameters">(boolean&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ThymeleafMixin.Builder.html" title="class in org.apache.juneau.rest.server.view.thymeleaf">ThymeleafMixin.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/view/thymeleaf/ThymeleafMixin.Builder.html#line-305">cacheTemplates</a></span><wbr><span class="parameters">(boolean&nbsp;value)</span></div>
 <div class="block">Sets whether the bridge's default engine caches resolved templates.
 
  <p>
@@ -218,6 +227,8 @@ loadScripts(document, 'script');</script>
  fallback engine; if a <code>TemplateEngine</code> bean is registered, its own caching
  configuration is honored.</div>
 <dl class="notes">
+<dt>Specified by:</dt>
+<dd><code><a href="../ViewMixinBuilder.html#cacheTemplates(boolean)">cacheTemplates</a></code>&nbsp;in interface&nbsp;<code><a href="../ViewMixinBuilder.html" title="interface in org.apache.juneau.rest.server.view">ViewMixinBuilder</a>&lt;<a href="ThymeleafMixin.Builder.html" title="class in org.apache.juneau.rest.server.view.thymeleaf">ThymeleafMixin.Builder</a>&gt;</code></dd>
 <dt>Parameters:</dt>
 <dd><code>value</code> - The new value.</dd>
 <dt>Returns:</dt>
@@ -228,7 +239,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="templateMode(org.thymeleaf.templatemode.TemplateMode)">
 <h3>templateMode</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ThymeleafMixin.Builder.html" title="class in org.apache.juneau.rest.server.view.thymeleaf">ThymeleafMixin.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/view/thymeleaf/ThymeleafMixin.Builder.html#line-315">templateMode</a></span><wbr><span class="parameters">(org.thymeleaf.templatemode.TemplateMode&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ThymeleafMixin.Builder.html" title="class in org.apache.juneau.rest.server.view.thymeleaf">ThymeleafMixin.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/view/thymeleaf/ThymeleafMixin.Builder.html#line-323">templateMode</a></span><wbr><span class="parameters">(org.thymeleaf.templatemode.TemplateMode&nbsp;value)</span></div>
 <div class="block">Sets the template mode used by the bridge's default engine.
 
  <p>
@@ -247,7 +258,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getBasePath()">
 <h3>getBasePath</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/view/thymeleaf/ThymeleafMixin.Builder.html#line-325">getBasePath</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/view/thymeleaf/ThymeleafMixin.Builder.html#line-333">getBasePath</a></span>()</div>
 <div class="block">Reads the current base path setting (test/inspection helper).</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -258,7 +269,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="isCacheTemplates()">
 <h3>isCacheTemplates</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/view/thymeleaf/ThymeleafMixin.Builder.html#line-334">isCacheTemplates</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/view/thymeleaf/ThymeleafMixin.Builder.html#line-342">isCacheTemplates</a></span>()</div>
 <div class="block">Reads the current cache-templates setting (test/inspection helper).</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -269,7 +280,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getTemplateMode()">
 <h3>getTemplateMode</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">org.thymeleaf.templatemode.TemplateMode</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/view/thymeleaf/ThymeleafMixin.Builder.html#line-343">getTemplateMode</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">org.thymeleaf.templatemode.TemplateMode</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/view/thymeleaf/ThymeleafMixin.Builder.html#line-351">getTemplateMode</a></span>()</div>
 <div class="block">Reads the current template-mode setting (test/inspection helper).</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -280,7 +291,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="build()">
 <h3>build</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ThymeleafMixin.html" title="class in org.apache.juneau.rest.server.view.thymeleaf">ThymeleafMixin</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/view/thymeleaf/ThymeleafMixin.Builder.html#line-352">build</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ThymeleafMixin.html" title="class in org.apache.juneau.rest.server.view.thymeleaf">ThymeleafMixin</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/view/thymeleaf/ThymeleafMixin.Builder.html#line-360">build</a></span>()</div>
 <div class="block">Builds the <a href="ThymeleafMixin.html" title="class in org.apache.juneau.rest.server.view.thymeleaf"><code>ThymeleafMixin</code></a>.</div>
 <dl class="notes">
 <dt>Returns:</dt>

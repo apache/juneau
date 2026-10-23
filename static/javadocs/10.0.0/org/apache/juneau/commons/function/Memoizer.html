@@ -47,7 +47,7 @@ loadScripts(document, 'script');</script>
 <ul class="sub-nav-list">
 <li>Summary:&nbsp;</li>
 <li>Nested&nbsp;|&nbsp;</li>
-<li><a href="#field-summary">Field</a>&nbsp;|&nbsp;</li>
+<li>Field&nbsp;|&nbsp;</li>
 <li><a href="#constructor-summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method-summary">Method</a></li>
 </ul>
@@ -90,7 +90,7 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="../settings/Setting.html" title="class in org.apache.juneau.commons.settings">Setting</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/function/Memoizer.html#line-78">Memoizer</a>&lt;T&gt;</span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/function/Memoizer.html#line-77">Memoizer</a>&lt;T&gt;</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>
 implements <a href="NullableSupplier.html" title="interface in org.apache.juneau.commons.function">NullableSupplier</a>&lt;T&gt;</span></div>
 <div class="block">A thread-safe supplier that caches the result of the first call and supports resetting the cache.
@@ -144,15 +144,6 @@ implements <a href="NullableSupplier.html" title="interface in org.apache.juneau
 </section>
 <section class="summary">
 <ul class="summary-list">
-<!-- =========== FIELD SUMMARY =========== -->
-<li>
-<section class="field-summary" id="field-summary">
-<h2>Field Summary</h2>
-<div class="inherited-list">
-<h3 id="fields-inherited-from-class-org.apache.juneau.commons.function.NullableSupplier">Fields inherited from interface&nbsp;org.apache.juneau.commons.function.<a href="NullableSupplier.html" title="interface in org.apache.juneau.commons.function">NullableSupplier</a></h3>
-<code><a href="NullableSupplier.html#ARG_action">ARG_action</a>, <a href="NullableSupplier.html#ARG_emptyAction">ARG_emptyAction</a>, <a href="NullableSupplier.html#ARG_exceptionSupplier">ARG_exceptionSupplier</a>, <a href="NullableSupplier.html#ARG_other">ARG_other</a></code></div>
-</section>
-</li>
 <!-- ======== CONSTRUCTOR SUMMARY ======== -->
 <li>
 <section class="constructor-summary" id="constructor-summary">
@@ -237,7 +228,7 @@ implements <a href="NullableSupplier.html" title="interface in org.apache.juneau
 <li>
 <section class="detail" id="&lt;init&gt;(java.util.function.Supplier)">
 <h3>Memoizer</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/function/Memoizer.html#line-96">Memoizer</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;<a href="Memoizer.html" title="type parameter in Memoizer">T</a>&gt;&nbsp;supplier)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/function/Memoizer.html#line-91">Memoizer</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;<a href="Memoizer.html" title="type parameter in Memoizer">T</a>&gt;&nbsp;supplier)</span></div>
 <div class="block">Constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -256,7 +247,7 @@ implements <a href="NullableSupplier.html" title="interface in org.apache.juneau
 <li>
 <section class="detail" id="get()">
 <h3>get</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Memoizer.html" title="type parameter in Memoizer">T</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/function/Memoizer.html#line-105">get</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Memoizer.html" title="type parameter in Memoizer">T</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/function/Memoizer.html#line-100">get</a></span>()</div>
 <div class="block">Returns the cached value if present, otherwise computes it using the underlying supplier.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
@@ -269,7 +260,7 @@ implements <a href="NullableSupplier.html" title="interface in org.apache.juneau
 <li>
 <section class="detail" id="reset()">
 <h3>reset</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/function/Memoizer.html#line-128">reset</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/function/Memoizer.html#line-120">reset</a></span>()</div>
 <div class="block">Clears the cached value, forcing the next call to <a href="#get()"><code>get()</code></a> to recompute the value.
 
  <p>
@@ -280,7 +271,7 @@ implements <a href="NullableSupplier.html" title="interface in org.apache.juneau
 <li>
 <section class="detail" id="set(T)">
 <h3 id="set(java.lang.Object)">set</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/function/Memoizer.html#line-162">set</a></span><wbr><span class="parameters">(<a href="Memoizer.html" title="type parameter in Memoizer">T</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/function/Memoizer.html#line-154">set</a></span><wbr><span class="parameters">(<a href="Memoizer.html" title="type parameter in Memoizer">T</a>&nbsp;value)</span></div>
 <div class="block">Sets the cached value directly without invoking the underlying supplier.
 
  <p>
@@ -316,7 +307,7 @@ implements <a href="NullableSupplier.html" title="interface in org.apache.juneau
 <li>
 <section class="detail" id="isSupplied()">
 <h3>isSupplied</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/function/Memoizer.html#line-175">isSupplied</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/function/Memoizer.html#line-167">isSupplied</a></span>()</div>
 <div class="block">Returns <jk>true</jk> if the supplier has not yet been called (cache is empty).
 
  <p>
@@ -331,7 +322,7 @@ implements <a href="NullableSupplier.html" title="interface in org.apache.juneau
 <li>
 <section class="detail" id="copy()">
 <h3>copy</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Memoizer.html" title="class in org.apache.juneau.commons.function">Memoizer</a>&lt;<a href="Memoizer.html" title="type parameter in Memoizer">T</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/function/Memoizer.html#line-191">copy</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Memoizer.html" title="class in org.apache.juneau.commons.function">Memoizer</a>&lt;<a href="Memoizer.html" title="type parameter in Memoizer">T</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/function/Memoizer.html#line-180">copy</a></span>()</div>
 <div class="block">Creates a copy of this memoizer.
 
  <p>
@@ -346,7 +337,7 @@ implements <a href="NullableSupplier.html" title="interface in org.apache.juneau
 <li>
 <section class="detail" id="map(java.util.function.Function)">
 <h3>map</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;U&gt;</span>&nbsp;<span class="return-type"><a href="Memoizer.html" title="class in org.apache.juneau.commons.function">Memoizer</a>&lt;U&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/function/Memoizer.html#line-212">map</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Function.html" title="class or interface in java.util.function" class="external-link">Function</a>&lt;? super <a href="Memoizer.html" title="type parameter in Memoizer">T</a>,<wbr>? extends U&gt;&nbsp;mapper)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;U&gt;</span>&nbsp;<span class="return-type"><a href="Memoizer.html" title="class in org.apache.juneau.commons.function">Memoizer</a>&lt;U&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/function/Memoizer.html#line-198">map</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Function.html" title="class or interface in java.util.function" class="external-link">Function</a>&lt;? super <a href="Memoizer.html" title="type parameter in Memoizer">T</a>,<wbr>? extends U&gt;&nbsp;mapper)</span></div>
 <div class="block">If a value is present, applies the provided mapping function to it and returns a Memoizer describing the result.
 
  <p>
@@ -367,7 +358,7 @@ implements <a href="NullableSupplier.html" title="interface in org.apache.juneau
 <li>
 <section class="detail" id="filter(java.util.function.Predicate)">
 <h3>filter</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Memoizer.html" title="class in org.apache.juneau.commons.function">Memoizer</a>&lt;<a href="Memoizer.html" title="type parameter in Memoizer">T</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/function/Memoizer.html#line-231">filter</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Predicate.html" title="class or interface in java.util.function" class="external-link">Predicate</a>&lt;? super <a href="Memoizer.html" title="type parameter in Memoizer">T</a>&gt;&nbsp;predicate)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Memoizer.html" title="class in org.apache.juneau.commons.function">Memoizer</a>&lt;<a href="Memoizer.html" title="type parameter in Memoizer">T</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/function/Memoizer.html#line-217">filter</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Predicate.html" title="class or interface in java.util.function" class="external-link">Predicate</a>&lt;? super <a href="Memoizer.html" title="type parameter in Memoizer">T</a>&gt;&nbsp;predicate)</span></div>
 <div class="block">If a value is present, and the value matches the given predicate, returns a Memoizer describing the value, otherwise returns an empty Memoizer.
 
  <p>

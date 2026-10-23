@@ -92,7 +92,7 @@ implements <a href="RestOpArg.html" title="interface in org.apache.juneau.rest.s
  <p class='bjava'>
    <jv>opSession</jv>
       .<a href="../RestOpSession.html#getRequest()"><code>getRequest</code></a>()
-      .<a href="../RestRequest.html#getRequest(org.apache.juneau.httppart.bean.RequestBeanMeta)"><code>getRequest</code></a>(<jv>meta</jv>);
+      .<a href="../RestRequest.html#getRequest(org.apache.juneau.httppart.bean.RequestBeanMeta,org.apache.juneau.rest.server.arg.RequestBeanSetters)"><code>getRequest</code></a>(<jv>meta</jv>, <jv>setters</jv>);
  </p>
 
  <p>
@@ -164,13 +164,16 @@ implements <a href="RestOpArg.html" title="interface in org.apache.juneau.rest.s
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.commons.reflect.ParameterInfo,org.apache.juneau.marshall.AnnotationWorkList)">
 <h3>RequestBeanArg</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/arg/RequestBeanArg.html#line-75">RequestBeanArg</a></span><wbr><span class="parameters">(<a href="../../../commons/reflect/ParameterInfo.html" title="class in org.apache.juneau.commons.reflect">ParameterInfo</a>&nbsp;paramInfo,
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/arg/RequestBeanArg.html#line-84">RequestBeanArg</a></span><wbr><span class="parameters">(<a href="../../../commons/reflect/ParameterInfo.html" title="class in org.apache.juneau.commons.reflect">ParameterInfo</a>&nbsp;paramInfo,
  <a href="../../../marshall/AnnotationWorkList.html" title="class in org.apache.juneau.marshall">AnnotationWorkList</a>&nbsp;annotations)</span></div>
 <div class="block">Constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>paramInfo</code> - The Java method parameter being resolved. Must not be <jk>null</jk>.</dd>
 <dd><code>annotations</code> - The annotations to apply to any new part parsers.</dd>
+<dt>Throws:</dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/IllegalArgumentException.html" title="class or interface in java.lang" class="external-link">IllegalArgumentException</a></code> - If the bean is a concrete class with no public no-arg constructor, or with an
+   annotated getter that has no matching setter (see <a href="RequestBeanSetters.html#resolve(java.lang.Class,org.apache.juneau.httppart.bean.RequestBeanMeta)"><code>RequestBeanSetters.resolve(java.lang.Class&lt;?&gt;, org.apache.juneau.httppart.bean.RequestBeanMeta)</code></a>).</dd>
 </dl>
 </section>
 </li>
@@ -200,7 +203,7 @@ implements <a href="RestOpArg.html" title="interface in org.apache.juneau.rest.s
 <li>
 <section class="detail" id="resolve(org.apache.juneau.rest.server.RestOpSession)">
 <h3>resolve</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/arg/RequestBeanArg.html#line-80">resolve</a></span><wbr><span class="parameters">(<a href="../RestOpSession.html" title="class in org.apache.juneau.rest.server">RestOpSession</a>&nbsp;opSession)</span>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/arg/RequestBeanArg.html#line-91">resolve</a></span><wbr><span class="parameters">(<a href="../RestOpSession.html" title="class in org.apache.juneau.rest.server">RestOpSession</a>&nbsp;opSession)</span>
                throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Exception.html" title="class or interface in java.lang" class="external-link">Exception</a></span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="RestOpArg.html#resolve(org.apache.juneau.rest.server.RestOpSession)">RestOpArg</a></code></span></div>
 <div class="block">Resolves the parameter object.</div>

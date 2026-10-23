@@ -78,8 +78,13 @@ loadScripts(document, 'script');</script>
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Class</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><a href="class-use/RestOpArg.html#org.apache.juneau.rest.server">RestOpArg</a></div>
+<div class="col-first even-row-color"><a href="class-use/RequestBeanSetters.html#org.apache.juneau.rest.server">RequestBeanSetters</a></div>
 <div class="col-last even-row-color">
+<div class="block">Resolves and caches the public no-arg constructor and per-getter setter <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Method.html" title="class or interface in java.lang.reflect" class="external-link"><code>Method</code></a>s for a concrete
+ (non-interface) <a href="../../../http/Request.html" title="annotation interface in org.apache.juneau.http"><code>@Request</code></a> bean class.</div>
+</div>
+<div class="col-first odd-row-color"><a href="class-use/RestOpArg.html#org.apache.juneau.rest.server">RestOpArg</a></div>
+<div class="col-last odd-row-color">
 <div class="block">REST java method parameter resolver.</div>
 </div>
 </div>
@@ -177,74 +182,79 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color">
 <div class="block">Resolves method parameters annotated with <a href="../../../http/Request.html" title="annotation interface in org.apache.juneau.http"><code>Request</code></a> on <a href="../RestOp.html" title="annotation interface in org.apache.juneau.rest.server"><code>RestOp</code></a>-annotated Java methods.</div>
 </div>
-<div class="col-first odd-row-color"><a href="class-use/ResponseBeanArg.html#org.apache.juneau.rest.server.arg">ResponseBeanArg</a></div>
+<div class="col-first odd-row-color"><a href="class-use/RequestBeanSetters.html#org.apache.juneau.rest.server.arg">RequestBeanSetters</a></div>
 <div class="col-last odd-row-color">
+<div class="block">Resolves and caches the public no-arg constructor and per-getter setter <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Method.html" title="class or interface in java.lang.reflect" class="external-link"><code>Method</code></a>s for a concrete
+ (non-interface) <a href="../../../http/Request.html" title="annotation interface in org.apache.juneau.http"><code>@Request</code></a> bean class.</div>
+</div>
+<div class="col-first even-row-color"><a href="class-use/ResponseBeanArg.html#org.apache.juneau.rest.server.arg">ResponseBeanArg</a></div>
+<div class="col-last even-row-color">
 <div class="block">Resolves method parameters and parameter types annotated with <a href="../../../http/Response.html" title="annotation interface in org.apache.juneau.http"><code>Response</code></a> on <a href="../RestOp.html" title="annotation interface in org.apache.juneau.rest.server"><code>RestOp</code></a>-annotated Java methods.</div>
 </div>
-<div class="col-first even-row-color"><a href="class-use/ResponseCodeArg.html#org.apache.juneau.rest.server.arg">ResponseCodeArg</a></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><a href="class-use/ResponseCodeArg.html#org.apache.juneau.rest.server.arg">ResponseCodeArg</a></div>
+<div class="col-last odd-row-color">
 <div class="block">Resolves method parameters annotated with <a href="../../../http/StatusCode.html" title="annotation interface in org.apache.juneau.http"><code>StatusCode</code></a> on <a href="../RestOp.html" title="annotation interface in org.apache.juneau.rest.server"><code>RestOp</code></a>-annotated Java methods.</div>
 </div>
-<div class="col-first odd-row-color"><a href="class-use/ResponseHeaderArg.html#org.apache.juneau.rest.server.arg">ResponseHeaderArg</a></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><a href="class-use/ResponseHeaderArg.html#org.apache.juneau.rest.server.arg">ResponseHeaderArg</a></div>
+<div class="col-last even-row-color">
 <div class="block">Resolves method parameters annotated with <a href="../../../http/Header.html" title="annotation interface in org.apache.juneau.http"><code>Header</code></a> of type <a href="../../../commons/inject/Value.html" title="annotation interface in org.apache.juneau.commons.inject"><code>Value</code></a> representing response headers
  on <a href="../RestOp.html" title="annotation interface in org.apache.juneau.rest.server"><code>RestOp</code></a>-annotated Java methods.</div>
 </div>
-<div class="col-first even-row-color"><a href="class-use/RestContextArgs.html#org.apache.juneau.rest.server.arg">RestContextArgs</a></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><a href="class-use/RestContextArgs.html#org.apache.juneau.rest.server.arg">RestContextArgs</a></div>
+<div class="col-last odd-row-color">
 <div class="block">Resolves method parameters on <a href="../RestOp.html" title="annotation interface in org.apache.juneau.rest.server"><code>RestOp</code></a>-annotated Java methods of types found on the <a href="../RestContext.html" title="class in org.apache.juneau.rest.server"><code>RestContext</code></a> object.</div>
 </div>
-<div class="col-first odd-row-color"><a href="class-use/RestOpArg.html#org.apache.juneau.rest.server.arg">RestOpArg</a></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><a href="class-use/RestOpArg.html#org.apache.juneau.rest.server.arg">RestOpArg</a></div>
+<div class="col-last even-row-color">
 <div class="block">REST java method parameter resolver.</div>
 </div>
-<div class="col-first even-row-color"><a href="class-use/RestOpArgList.html#org.apache.juneau.rest.server.arg">RestOpArgList</a></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><a href="class-use/RestOpArgList.html#org.apache.juneau.rest.server.arg">RestOpArgList</a></div>
+<div class="col-last odd-row-color">
 <div class="block">A list of <a href="RestOpArg.html" title="interface in org.apache.juneau.rest.server.arg"><code>RestOpArg</code></a> classes.</div>
 </div>
-<div class="col-first odd-row-color"><a href="class-use/RestOpArgList.Builder.html#org.apache.juneau.rest.server.arg">RestOpArgList.Builder</a></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><a href="class-use/RestOpArgList.Builder.html#org.apache.juneau.rest.server.arg">RestOpArgList.Builder</a></div>
+<div class="col-last even-row-color">
 <div class="block">Builder class.</div>
 </div>
-<div class="col-first even-row-color"><a href="class-use/RestOpContextArgs.html#org.apache.juneau.rest.server.arg">RestOpContextArgs</a></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><a href="class-use/RestOpContextArgs.html#org.apache.juneau.rest.server.arg">RestOpContextArgs</a></div>
+<div class="col-last odd-row-color">
 <div class="block">Resolves method parameters on <a href="../RestOp.html" title="annotation interface in org.apache.juneau.rest.server"><code>RestOp</code></a>-annotated Java methods of types found on the <a href="../RestOpContext.html" title="class in org.apache.juneau.rest.server"><code>RestOpContext</code></a> object.</div>
 </div>
-<div class="col-first odd-row-color"><a href="class-use/RestOpSessionArgs.html#org.apache.juneau.rest.server.arg">RestOpSessionArgs</a></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><a href="class-use/RestOpSessionArgs.html#org.apache.juneau.rest.server.arg">RestOpSessionArgs</a></div>
+<div class="col-last even-row-color">
 <div class="block">Resolves method parameters on <a href="../RestOp.html" title="annotation interface in org.apache.juneau.rest.server"><code>RestOp</code></a>-annotated Java methods of types found on the <a href="../RestOpSession.html" title="class in org.apache.juneau.rest.server"><code>RestOpSession</code></a> object.</div>
 </div>
-<div class="col-first even-row-color"><a href="class-use/RestRequestArgs.html#org.apache.juneau.rest.server.arg">RestRequestArgs</a></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><a href="class-use/RestRequestArgs.html#org.apache.juneau.rest.server.arg">RestRequestArgs</a></div>
+<div class="col-last odd-row-color">
 <div class="block">Resolves method parameters on <a href="../RestOp.html" title="annotation interface in org.apache.juneau.rest.server"><code>RestOp</code></a>-annotated Java methods of types found on the <a href="../RestRequest.html" title="class in org.apache.juneau.rest.server"><code>RestRequest</code></a> object.</div>
 </div>
-<div class="col-first odd-row-color"><a href="class-use/RestResponseArgs.html#org.apache.juneau.rest.server.arg">RestResponseArgs</a></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><a href="class-use/RestResponseArgs.html#org.apache.juneau.rest.server.arg">RestResponseArgs</a></div>
+<div class="col-last even-row-color">
 <div class="block">Resolves method parameters on <a href="../RestOp.html" title="annotation interface in org.apache.juneau.rest.server"><code>RestOp</code></a>-annotated Java methods of types found on the <a href="../RestResponse.html" title="class in org.apache.juneau.rest.server"><code>RestResponse</code></a> object.</div>
 </div>
-<div class="col-first even-row-color"><a href="class-use/RestSessionArgs.html#org.apache.juneau.rest.server.arg">RestSessionArgs</a></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><a href="class-use/RestSessionArgs.html#org.apache.juneau.rest.server.arg">RestSessionArgs</a></div>
+<div class="col-last odd-row-color">
 <div class="block">Resolves method parameters on <a href="../RestOp.html" title="annotation interface in org.apache.juneau.rest.server"><code>RestOp</code></a>-annotated Java methods of types found on the <a href="../RestSession.html" title="class in org.apache.juneau.rest.server"><code>RestSession</code></a> object.</div>
 </div>
-<div class="col-first odd-row-color"><a href="class-use/SimpleRestOperationArg.html#org.apache.juneau.rest.server.arg">SimpleRestOperationArg</a></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><a href="class-use/SimpleRestOperationArg.html#org.apache.juneau.rest.server.arg">SimpleRestOperationArg</a></div>
+<div class="col-last even-row-color">
 <div class="block">An implementation of a <a href="RestOpArg.html" title="interface in org.apache.juneau.rest.server.arg"><code>RestOpArg</code></a> that takes in a <a href="../../../commons/function/ThrowingFunction.html" title="interface in org.apache.juneau.commons.function"><code>ThrowingFunction</code></a> for resolving a parameter value.</div>
 </div>
-<div class="col-first even-row-color"><a href="class-use/SseBroadcasterArg.html#org.apache.juneau.rest.server.arg">SseBroadcasterArg</a></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><a href="class-use/SseBroadcasterArg.html#org.apache.juneau.rest.server.arg">SseBroadcasterArg</a></div>
+<div class="col-last odd-row-color">
 <div class="block">Resolves <a href="../sse/SseBroadcaster.html" title="class in org.apache.juneau.rest.server.sse"><code>SseBroadcaster</code></a> method parameters.</div>
 </div>
-<div class="col-first odd-row-color"><a href="class-use/SseSubscriptionArg.html#org.apache.juneau.rest.server.arg">SseSubscriptionArg</a></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><a href="class-use/SseSubscriptionArg.html#org.apache.juneau.rest.server.arg">SseSubscriptionArg</a></div>
+<div class="col-last even-row-color">
 <div class="block">Resolves <a href="../sse/SseSubscription.html" title="class in org.apache.juneau.rest.server.sse"><code>SseSubscription</code></a> method parameters.</div>
 </div>
-<div class="col-first even-row-color"><a href="class-use/TokenReaderArg.html#org.apache.juneau.rest.server.arg">TokenReaderArg</a></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><a href="class-use/TokenReaderArg.html#org.apache.juneau.rest.server.arg">TokenReaderArg</a></div>
+<div class="col-last odd-row-color">
 <div class="block">Resolves method parameters of type <a href="../../../marshall/stream/TokenReader.html" title="interface in org.apache.juneau.marshall.stream"><code>TokenReader</code></a> (or any subtype) on
  <a href="../RestOp.html" title="annotation interface in org.apache.juneau.rest.server"><code>RestOp</code></a>-annotated Java methods.</div>
 </div>
-<div class="col-first odd-row-color"><a href="class-use/TokenWriterArg.html#org.apache.juneau.rest.server.arg">TokenWriterArg</a></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><a href="class-use/TokenWriterArg.html#org.apache.juneau.rest.server.arg">TokenWriterArg</a></div>
+<div class="col-last even-row-color">
 <div class="block">Resolves method parameters of type <a href="../../../marshall/stream/TokenWriter.html" title="interface in org.apache.juneau.marshall.stream"><code>TokenWriter</code></a> (or any subtype) on
  <a href="../RestOp.html" title="annotation interface in org.apache.juneau.rest.server"><code>RestOp</code></a>-annotated Java methods.</div>
 </div>

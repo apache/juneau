@@ -59,30 +59,30 @@
 <span class="source-line-no">046</span><span id="line-46"> *</span>
 <span class="source-line-no">047</span><span id="line-47"> * @param &lt;T&gt; The concrete subclass, for fluent-setter self-typing.</span>
 <span class="source-line-no">048</span><span id="line-48"> */</span>
-<span class="source-line-no">049</span><span id="line-49">public abstract class CacheableResult&lt;T extends CacheableResult&lt;T&gt;&gt; extends Result&lt;T&gt; {</span>
-<span class="source-line-no">050</span><span id="line-50"></span>
-<span class="source-line-no">051</span><span id="line-51">   private Integer ttlMs;</span>
-<span class="source-line-no">052</span><span id="line-52">   private McpCacheScope cacheScope;</span>
+<span class="source-line-no">049</span><span id="line-49">@SuppressWarnings({</span>
+<span class="source-line-no">050</span><span id="line-50">   "unchecked" // CRTP subclasses bind T to their own concrete type.</span>
+<span class="source-line-no">051</span><span id="line-51">})</span>
+<span class="source-line-no">052</span><span id="line-52">public abstract class CacheableResult&lt;T extends CacheableResult&lt;T&gt;&gt; extends Result&lt;T&gt; {</span>
 <span class="source-line-no">053</span><span id="line-53"></span>
-<span class="source-line-no">054</span><span id="line-54">   /**</span>
-<span class="source-line-no">055</span><span id="line-55">    * Cache freshness duration in milliseconds.</span>
-<span class="source-line-no">056</span><span id="line-56">    *</span>
-<span class="source-line-no">057</span><span id="line-57">    * @return The TTL, or {@code null} if not set.</span>
-<span class="source-line-no">058</span><span id="line-58">    */</span>
-<span class="source-line-no">059</span><span id="line-59">   public Integer getTtlMs() {</span>
-<span class="source-line-no">060</span><span id="line-60">      return ttlMs;</span>
-<span class="source-line-no">061</span><span id="line-61">   }</span>
-<span class="source-line-no">062</span><span id="line-62"></span>
-<span class="source-line-no">063</span><span id="line-63">   /**</span>
-<span class="source-line-no">064</span><span id="line-64">    * Sets the cache freshness duration in milliseconds.</span>
-<span class="source-line-no">065</span><span id="line-65">    *</span>
-<span class="source-line-no">066</span><span id="line-66">    * @param value The new value. Can be &lt;jk&gt;null&lt;/jk&gt; to unset the property. {@code 0} is a valid, meaningful</span>
-<span class="source-line-no">067</span><span id="line-67">    *    value meaning immediately stale.</span>
-<span class="source-line-no">068</span><span id="line-68">    * @return This object (for method chaining).</span>
-<span class="source-line-no">069</span><span id="line-69">    */</span>
-<span class="source-line-no">070</span><span id="line-70">   @SuppressWarnings({</span>
-<span class="source-line-no">071</span><span id="line-71">      "unchecked" // CRTP subclasses bind T to their own concrete type.</span>
-<span class="source-line-no">072</span><span id="line-72">   })</span>
+<span class="source-line-no">054</span><span id="line-54">   private Integer ttlMs;</span>
+<span class="source-line-no">055</span><span id="line-55">   private McpCacheScope cacheScope;</span>
+<span class="source-line-no">056</span><span id="line-56"></span>
+<span class="source-line-no">057</span><span id="line-57">   /**</span>
+<span class="source-line-no">058</span><span id="line-58">    * Cache freshness duration in milliseconds.</span>
+<span class="source-line-no">059</span><span id="line-59">    *</span>
+<span class="source-line-no">060</span><span id="line-60">    * @return The TTL, or {@code null} if not set.</span>
+<span class="source-line-no">061</span><span id="line-61">    */</span>
+<span class="source-line-no">062</span><span id="line-62">   public Integer getTtlMs() {</span>
+<span class="source-line-no">063</span><span id="line-63">      return ttlMs;</span>
+<span class="source-line-no">064</span><span id="line-64">   }</span>
+<span class="source-line-no">065</span><span id="line-65"></span>
+<span class="source-line-no">066</span><span id="line-66">   /**</span>
+<span class="source-line-no">067</span><span id="line-67">    * Sets the cache freshness duration in milliseconds.</span>
+<span class="source-line-no">068</span><span id="line-68">    *</span>
+<span class="source-line-no">069</span><span id="line-69">    * @param value The new value. Can be &lt;jk&gt;null&lt;/jk&gt; to unset the property. {@code 0} is a valid, meaningful</span>
+<span class="source-line-no">070</span><span id="line-70">    *    value meaning immediately stale.</span>
+<span class="source-line-no">071</span><span id="line-71">    * @return This object (for method chaining).</span>
+<span class="source-line-no">072</span><span id="line-72">    */</span>
 <span class="source-line-no">073</span><span id="line-73">   public T setTtlMs(Integer value) {</span>
 <span class="source-line-no">074</span><span id="line-74">      ttlMs = value;</span>
 <span class="source-line-no">075</span><span id="line-75">      return (T)this;</span>
@@ -103,14 +103,11 @@
 <span class="source-line-no">090</span><span id="line-90">    * @param value The new value. Can be &lt;jk&gt;null&lt;/jk&gt; to unset the property.</span>
 <span class="source-line-no">091</span><span id="line-91">    * @return This object (for method chaining).</span>
 <span class="source-line-no">092</span><span id="line-92">    */</span>
-<span class="source-line-no">093</span><span id="line-93">   @SuppressWarnings({</span>
-<span class="source-line-no">094</span><span id="line-94">      "unchecked" // CRTP subclasses bind T to their own concrete type.</span>
-<span class="source-line-no">095</span><span id="line-95">   })</span>
-<span class="source-line-no">096</span><span id="line-96">   public T setCacheScope(McpCacheScope value) {</span>
-<span class="source-line-no">097</span><span id="line-97">      cacheScope = value;</span>
-<span class="source-line-no">098</span><span id="line-98">      return (T)this;</span>
-<span class="source-line-no">099</span><span id="line-99">   }</span>
-<span class="source-line-no">100</span><span id="line-100">}</span>
+<span class="source-line-no">093</span><span id="line-93">   public T setCacheScope(McpCacheScope value) {</span>
+<span class="source-line-no">094</span><span id="line-94">      cacheScope = value;</span>
+<span class="source-line-no">095</span><span id="line-95">      return (T)this;</span>
+<span class="source-line-no">096</span><span id="line-96">   }</span>
+<span class="source-line-no">097</span><span id="line-97">}</span>
 
 
 

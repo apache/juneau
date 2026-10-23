@@ -78,9 +78,9 @@ loadScripts(document, 'script');</script>
 </div>
 <section class="class-description" id="class-description">
 <hr>
-<div class="type-signature"><span class="modifiers">public final class </span><span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/mcp/v20260728/McpResourceServerSupport.html#line-54">McpResourceServerSupport</a></span>
+<div class="type-signature"><span class="modifiers">public final class </span><span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/mcp/v20260728/McpResourceServerSupport.html#line-55">McpResourceServerSupport</a></span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
-<div class="block">Request-time glue for the F2 OAuth 2.1 resource-server baseline &mdash; bearer validation, RFC 8707 audience
+<div class="block">Request-time glue for the OAuth 2.1 resource-server baseline &mdash; bearer validation, RFC 8707 audience
  enforcement, <code>401</code>/<code>403</code> challenge emission, and RFC 9728 Protected Resource Metadata construction &mdash;
  driven by an <a href="McpResourceServerConfig.html" title="class in org.apache.juneau.rest.server.mcp.v20260728"><code>McpResourceServerConfig</code></a>.
 
@@ -150,19 +150,19 @@ loadScripts(document, 'script');</script>
  jakarta.servlet.http.HttpServletRequest&nbsp;req,
  jakarta.servlet.http.HttpServletResponse&nbsp;res)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
-<div class="block">Router-identity bearer gate for the <a href="McpEndpoint.html" title="interface in org.apache.juneau.rest.server.mcp.v20260728"><code>McpEndpoint</code></a> mixin's MCP JSON-RPC endpoint (READY-312f F2, B1/H3).</div>
+<div class="block">Router-identity bearer gate for the <a href="McpEndpoint.html" title="interface in org.apache.juneau.rest.server.mcp.v20260728"><code>McpEndpoint</code></a> mixin's MCP JSON-RPC endpoint.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static void</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#gateMcpServlet(org.apache.juneau.rest.server.mcp.v20260728.McpResourceServerConfig,jakarta.servlet.http.HttpServletRequest,jakarta.servlet.http.HttpServletResponse)" class="member-name-link">gateMcpServlet</a><wbr>(<a href="McpResourceServerConfig.html" title="class in org.apache.juneau.rest.server.mcp.v20260728">McpResourceServerConfig</a>&nbsp;cfg,
  jakarta.servlet.http.HttpServletRequest&nbsp;req,
  jakarta.servlet.http.HttpServletResponse&nbsp;res)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
-<div class="block">Router-aligned bearer gate for the <a href="McpRestServlet.html" title="class in org.apache.juneau.rest.server.mcp.v20260728"><code>McpRestServlet</code></a>'s <code>POST /</code> endpoint (READY-312f F2, H3).</div>
+<div class="block">Router-aligned bearer gate for the <a href="McpRestServlet.html" title="class in org.apache.juneau.rest.server.mcp.v20260728"><code>McpRestServlet</code></a>'s <code>POST /</code> endpoint.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#grantedScopes(jakarta.servlet.http.HttpServletRequest)" class="member-name-link">grantedScopes</a><wbr>(jakarta.servlet.http.HttpServletRequest&nbsp;req)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
-<div class="block">Returns the granted scopes stashed by <a href="#authenticate(org.apache.juneau.rest.server.mcp.v20260728.McpResourceServerConfig,jakarta.servlet.http.HttpServletRequest,jakarta.servlet.http.HttpServletResponse)"><code>authenticate(org.apache.juneau.rest.server.mcp.v20260728.McpResourceServerConfig, jakarta.servlet.http.HttpServletRequest, jakarta.servlet.http.HttpServletResponse)</code></a> for this request (SEP-2350).</div>
+<div class="block">Returns the granted scopes stashed by <a href="#authenticate(org.apache.juneau.rest.server.mcp.v20260728.McpResourceServerConfig,jakarta.servlet.http.HttpServletRequest,jakarta.servlet.http.HttpServletResponse)"><code>authenticate(org.apache.juneau.rest.server.mcp.v20260728.McpResourceServerConfig, jakarta.servlet.http.HttpServletRequest, jakarta.servlet.http.HttpServletResponse)</code></a> for this request.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#insufficientScopeChallenge(org.apache.juneau.rest.server.mcp.v20260728.McpResourceServerConfig)" class="member-name-link">insufficientScopeChallenge</a><wbr>(<a href="McpResourceServerConfig.html" title="class in org.apache.juneau.rest.server.mcp.v20260728">McpResourceServerConfig</a>&nbsp;cfg)</code></div>
@@ -181,14 +181,14 @@ loadScripts(document, 'script');</script>
  <a href="../../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Serves this endpoint's PRM from the RFC 9728 path-inserted well-known location, but only when the requested suffix
- matches this resource's expected well-known path (M5); otherwise <code>404</code>.</div>
+ matches this resource's expected well-known path; otherwise <code>404</code>.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="McpProtectedResourceMetadata.html" title="class in org.apache.juneau.rest.server.mcp.v20260728">McpProtectedResourceMetadata</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#metadataForWellKnownRoot(org.apache.juneau.rest.server.mcp.v20260728.McpResourceServerConfig,org.apache.juneau.rest.server.RestRequest)" class="member-name-link">metadataForWellKnownRoot</a><wbr>(<a href="McpResourceServerConfig.html" title="class in org.apache.juneau.rest.server.mcp.v20260728">McpResourceServerConfig</a>&nbsp;cfg,
  <a href="../../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Serves this endpoint's PRM from the SEP-2351 root well-known location (fallback), failing fast on a non-root or
- re-mounted mount (H1); a no-op-throwing <code>404</code> when RS auth is disabled.</div>
+ re-mounted mount; a no-op-throwing <code>404</code> when RS auth is disabled.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#metadataUri(org.apache.juneau.rest.server.mcp.v20260728.McpResourceServerConfig)" class="member-name-link">metadataUri</a><wbr>(<a href="McpResourceServerConfig.html" title="class in org.apache.juneau.rest.server.mcp.v20260728">McpResourceServerConfig</a>&nbsp;cfg)</code></div>
@@ -204,14 +204,13 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/security/Principal.html" title="class or interface in java.security" class="external-link">Principal</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#principal(jakarta.servlet.http.HttpServletRequest)" class="member-name-link">principal</a><wbr>(jakarta.servlet.http.HttpServletRequest&nbsp;req)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
-<div class="block">Returns the authenticated <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/security/Principal.html" title="class or interface in java.security" class="external-link"><code>Principal</code></a> <a href="#authenticate(org.apache.juneau.rest.server.mcp.v20260728.McpResourceServerConfig,jakarta.servlet.http.HttpServletRequest,jakarta.servlet.http.HttpServletResponse)"><code>authenticate(org.apache.juneau.rest.server.mcp.v20260728.McpResourceServerConfig, jakarta.servlet.http.HttpServletRequest, jakarta.servlet.http.HttpServletResponse)</code></a> stashed for this request (READY-312f F4).</div>
+<div class="block">Returns the authenticated <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/security/Principal.html" title="class or interface in java.security" class="external-link"><code>Principal</code></a> <a href="#authenticate(org.apache.juneau.rest.server.mcp.v20260728.McpResourceServerConfig,jakarta.servlet.http.HttpServletRequest,jakarta.servlet.http.HttpServletResponse)"><code>authenticate(org.apache.juneau.rest.server.mcp.v20260728.McpResourceServerConfig, jakarta.servlet.http.HttpServletRequest, jakarta.servlet.http.HttpServletResponse)</code></a> stashed for this request.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static boolean</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#satisfies(java.util.Collection,java.util.Collection)" class="member-name-link">satisfies</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;grantedScopes,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;requiredScopes)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
-<div class="block">Returns whether the granted scopes satisfy every required scope, honoring OAuth scope hierarchies where a broader
- granted scope implies its narrower children.</div>
+<div class="block">Returns whether the granted scopes satisfy every required scope, using exact string equality.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#stepUpChallenge(org.apache.juneau.rest.server.mcp.v20260728.McpResourceServerConfig,java.util.Collection)" class="member-name-link">stepUpChallenge</a><wbr>(<a href="McpResourceServerConfig.html" title="class in org.apache.juneau.rest.server.mcp.v20260728">McpResourceServerConfig</a>&nbsp;cfg,
@@ -240,7 +239,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="GRANTED_SCOPES_ATTR">
 <h3>GRANTED_SCOPES_ATTR</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/mcp/v20260728/McpResourceServerSupport.html#line-65">GRANTED_SCOPES_ATTR</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/mcp/v20260728/McpResourceServerSupport.html#line-66">GRANTED_SCOPES_ATTR</a></span></div>
 <div class="block">Request attribute under which <a href="#authenticate(org.apache.juneau.rest.server.mcp.v20260728.McpResourceServerConfig,jakarta.servlet.http.HttpServletRequest,jakarta.servlet.http.HttpServletResponse)"><code>authenticate(org.apache.juneau.rest.server.mcp.v20260728.McpResourceServerConfig, jakarta.servlet.http.HttpServletRequest, jakarta.servlet.http.HttpServletResponse)</code></a> stashes the caller's granted scopes (the validated token's
  roles) so the POST-parse dispatch point can enforce SEP-2350 per-operation step-up scopes.</div>
 <dl class="notes">
@@ -264,11 +263,11 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="gateMcpEndpoint(org.apache.juneau.rest.server.mcp.v20260728.McpResourceServerConfig,org.apache.juneau.rest.server.RestContext,jakarta.servlet.http.HttpServletRequest,jakarta.servlet.http.HttpServletResponse)">
 <h3>gateMcpEndpoint</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/mcp/v20260728/McpResourceServerSupport.html#line-91">gateMcpEndpoint</a></span><wbr><span class="parameters">(<a href="McpResourceServerConfig.html" title="class in org.apache.juneau.rest.server.mcp.v20260728">McpResourceServerConfig</a>&nbsp;cfg,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/mcp/v20260728/McpResourceServerSupport.html#line-92">gateMcpEndpoint</a></span><wbr><span class="parameters">(<a href="McpResourceServerConfig.html" title="class in org.apache.juneau.rest.server.mcp.v20260728">McpResourceServerConfig</a>&nbsp;cfg,
  <a href="../../RestContext.html" title="class in org.apache.juneau.rest.server">RestContext</a>&nbsp;ctx,
  jakarta.servlet.http.HttpServletRequest&nbsp;req,
  jakarta.servlet.http.HttpServletResponse&nbsp;res)</span></div>
-<div class="block">Router-identity bearer gate for the <a href="McpEndpoint.html" title="interface in org.apache.juneau.rest.server.mcp.v20260728"><code>McpEndpoint</code></a> mixin's MCP JSON-RPC endpoint (READY-312f F2, B1/H3).
+<div class="block">Router-identity bearer gate for the <a href="McpEndpoint.html" title="interface in org.apache.juneau.rest.server.mcp.v20260728"><code>McpEndpoint</code></a> mixin's MCP JSON-RPC endpoint.
 
  <p>
  A no-op unless RS auth is <a href="McpResourceServerConfig.html#isEnabled()"><code>enabled</code></a> and this request resolves to the MCP
@@ -279,8 +278,8 @@ loadScripts(document, 'script');</script>
  <p>
  Fails fast with the same origin-root <code>500</code> diagnostic as the well-known route (see
  <code>assertWellKnownMountReachable(RestRequest)</code>) &mdash; rather than authenticating &mdash; whenever the
- resolved MCP dispatch operation is itself mounted under a <code>@Mixin(path/paths)</code> re-mount prefix (H1
- unification): a <code>401</code> on such a mount would advertise a <code>resource_metadata</code> URL that the re-mount
+ resolved MCP dispatch operation is itself mounted under a <code>@Mixin(path/paths)</code> re-mount prefix:
+ a <code>401</code> on such a mount would advertise a <code>resource_metadata</code> URL that the re-mount
  has already made unreachable, so the two routes must agree rather than leaving a broken half-state.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -295,10 +294,10 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="gateMcpServlet(org.apache.juneau.rest.server.mcp.v20260728.McpResourceServerConfig,jakarta.servlet.http.HttpServletRequest,jakarta.servlet.http.HttpServletResponse)">
 <h3>gateMcpServlet</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/mcp/v20260728/McpResourceServerSupport.html#line-117">gateMcpServlet</a></span><wbr><span class="parameters">(<a href="McpResourceServerConfig.html" title="class in org.apache.juneau.rest.server.mcp.v20260728">McpResourceServerConfig</a>&nbsp;cfg,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/mcp/v20260728/McpResourceServerSupport.html#line-118">gateMcpServlet</a></span><wbr><span class="parameters">(<a href="McpResourceServerConfig.html" title="class in org.apache.juneau.rest.server.mcp.v20260728">McpResourceServerConfig</a>&nbsp;cfg,
  jakarta.servlet.http.HttpServletRequest&nbsp;req,
  jakarta.servlet.http.HttpServletResponse&nbsp;res)</span></div>
-<div class="block">Router-aligned bearer gate for the <a href="McpRestServlet.html" title="class in org.apache.juneau.rest.server.mcp.v20260728"><code>McpRestServlet</code></a>'s <code>POST /</code> endpoint (READY-312f F2, H3).
+<div class="block">Router-aligned bearer gate for the <a href="McpRestServlet.html" title="class in org.apache.juneau.rest.server.mcp.v20260728"><code>McpRestServlet</code></a>'s <code>POST /</code> endpoint.
 
  <p>
  A no-op unless RS auth is <a href="McpResourceServerConfig.html#isEnabled()"><code>enabled</code></a> and this request resolves to a
@@ -316,10 +315,10 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="metadataForWellKnownRoot(org.apache.juneau.rest.server.mcp.v20260728.McpResourceServerConfig,org.apache.juneau.rest.server.RestRequest)">
 <h3>metadataForWellKnownRoot</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="McpProtectedResourceMetadata.html" title="class in org.apache.juneau.rest.server.mcp.v20260728">McpProtectedResourceMetadata</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/mcp/v20260728/McpResourceServerSupport.html#line-314">metadataForWellKnownRoot</a></span><wbr><span class="parameters">(<a href="McpResourceServerConfig.html" title="class in org.apache.juneau.rest.server.mcp.v20260728">McpResourceServerConfig</a>&nbsp;cfg,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="McpProtectedResourceMetadata.html" title="class in org.apache.juneau.rest.server.mcp.v20260728">McpProtectedResourceMetadata</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/mcp/v20260728/McpResourceServerSupport.html#line-330">metadataForWellKnownRoot</a></span><wbr><span class="parameters">(<a href="McpResourceServerConfig.html" title="class in org.apache.juneau.rest.server.mcp.v20260728">McpResourceServerConfig</a>&nbsp;cfg,
  <a href="../../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req)</span></div>
 <div class="block">Serves this endpoint's PRM from the SEP-2351 root well-known location (fallback), failing fast on a non-root or
- re-mounted mount (H1); a no-op-throwing <code>404</code> when RS auth is disabled.</div>
+ re-mounted mount; a no-op-throwing <code>404</code> when RS auth is disabled.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>cfg</code> - The RS config.</dd>
@@ -332,11 +331,11 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="metadataForWellKnownPathInserted(org.apache.juneau.rest.server.mcp.v20260728.McpResourceServerConfig,org.apache.juneau.rest.server.RestRequest)">
 <h3>metadataForWellKnownPathInserted</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="McpProtectedResourceMetadata.html" title="class in org.apache.juneau.rest.server.mcp.v20260728">McpProtectedResourceMetadata</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/mcp/v20260728/McpResourceServerSupport.html#line-330">metadataForWellKnownPathInserted</a></span><wbr><span class="parameters">(<a href="McpResourceServerConfig.html" title="class in org.apache.juneau.rest.server.mcp.v20260728">McpResourceServerConfig</a>&nbsp;cfg,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="McpProtectedResourceMetadata.html" title="class in org.apache.juneau.rest.server.mcp.v20260728">McpProtectedResourceMetadata</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/mcp/v20260728/McpResourceServerSupport.html#line-346">metadataForWellKnownPathInserted</a></span><wbr><span class="parameters">(<a href="McpResourceServerConfig.html" title="class in org.apache.juneau.rest.server.mcp.v20260728">McpResourceServerConfig</a>&nbsp;cfg,
  <a href="../../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req)</span></div>
 <div class="block">Serves this endpoint's PRM from the RFC 9728 path-inserted well-known location, but only when the requested suffix
- matches this resource's expected well-known path (M5); otherwise <code>404</code>.  Fails fast on a non-root or re-mounted
- mount (H1); a <code>404</code> when RS auth is disabled.</div>
+ matches this resource's expected well-known path; otherwise <code>404</code>.  Fails fast on a non-root or re-mounted
+ mount; a <code>404</code> when RS auth is disabled.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>cfg</code> - The RS config.</dd>
@@ -349,7 +348,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="buildMetadata(org.apache.juneau.rest.server.mcp.v20260728.McpResourceServerConfig)">
 <h3>buildMetadata</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="McpProtectedResourceMetadata.html" title="class in org.apache.juneau.rest.server.mcp.v20260728">McpProtectedResourceMetadata</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/mcp/v20260728/McpResourceServerSupport.html#line-354">buildMetadata</a></span><wbr><span class="parameters">(<a href="McpResourceServerConfig.html" title="class in org.apache.juneau.rest.server.mcp.v20260728">McpResourceServerConfig</a>&nbsp;cfg)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="McpProtectedResourceMetadata.html" title="class in org.apache.juneau.rest.server.mcp.v20260728">McpProtectedResourceMetadata</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/mcp/v20260728/McpResourceServerSupport.html#line-370">buildMetadata</a></span><wbr><span class="parameters">(<a href="McpResourceServerConfig.html" title="class in org.apache.juneau.rest.server.mcp.v20260728">McpResourceServerConfig</a>&nbsp;cfg)</span></div>
 <div class="block">Builds the RFC 9728 Protected Resource Metadata document from the config.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -362,7 +361,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="metadataUri(org.apache.juneau.rest.server.mcp.v20260728.McpResourceServerConfig)">
 <h3>metadataUri</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/mcp/v20260728/McpResourceServerSupport.html#line-372">metadataUri</a></span><wbr><span class="parameters">(<a href="McpResourceServerConfig.html" title="class in org.apache.juneau.rest.server.mcp.v20260728">McpResourceServerConfig</a>&nbsp;cfg)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/mcp/v20260728/McpResourceServerSupport.html#line-388">metadataUri</a></span><wbr><span class="parameters">(<a href="McpResourceServerConfig.html" title="class in org.apache.juneau.rest.server.mcp.v20260728">McpResourceServerConfig</a>&nbsp;cfg)</span></div>
 <div class="block">Returns the path-inserted well-known PRM URI advertised in the <code>resource_metadata</code> challenge parameter.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -375,13 +374,13 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="authenticate(org.apache.juneau.rest.server.mcp.v20260728.McpResourceServerConfig,jakarta.servlet.http.HttpServletRequest,jakarta.servlet.http.HttpServletResponse)">
 <h3>authenticate</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/security/Principal.html" title="class or interface in java.security" class="external-link">Principal</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/mcp/v20260728/McpResourceServerSupport.html#line-391">authenticate</a></span><wbr><span class="parameters">(<a href="McpResourceServerConfig.html" title="class in org.apache.juneau.rest.server.mcp.v20260728">McpResourceServerConfig</a>&nbsp;cfg,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/security/Principal.html" title="class or interface in java.security" class="external-link">Principal</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/mcp/v20260728/McpResourceServerSupport.html#line-407">authenticate</a></span><wbr><span class="parameters">(<a href="McpResourceServerConfig.html" title="class in org.apache.juneau.rest.server.mcp.v20260728">McpResourceServerConfig</a>&nbsp;cfg,
  jakarta.servlet.http.HttpServletRequest&nbsp;req,
  jakarta.servlet.http.HttpServletResponse&nbsp;res)</span></div>
 <div class="block">Authenticates the request against the RS config, establishing the authenticated principal.
 
  <p>
- On success the principal is stashed under <a href="../../RestServerConstants.html#PRINCIPAL_ATTR"><code>RestServerConstants.PRINCIPAL_ATTR</code></a> and returned.  On failure the
+ On success the principal is stashed under <code>"juneau.principal"</code> and returned.  On failure the
  <code>WWW-Authenticate: Bearer ...</code> challenge (carrying the <code>resource_metadata</code> pointer) is written directly
  to <code>res</code> &mdash; because an exception thrown from a <code>@RestStartCall</code> hook does not route through the
  response processors that would otherwise copy an <a href="../../auth/AuthenticationException.html" title="class in org.apache.juneau.rest.server.auth"><code>AuthenticationException</code></a>'s headers &mdash; and then a
@@ -399,8 +398,8 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="grantedScopes(jakarta.servlet.http.HttpServletRequest)">
 <h3>grantedScopes</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/mcp/v20260728/McpResourceServerSupport.html#line-428">grantedScopes</a></span><wbr><span class="parameters">(jakarta.servlet.http.HttpServletRequest&nbsp;req)</span></div>
-<div class="block">Returns the granted scopes stashed by <a href="#authenticate(org.apache.juneau.rest.server.mcp.v20260728.McpResourceServerConfig,jakarta.servlet.http.HttpServletRequest,jakarta.servlet.http.HttpServletResponse)"><code>authenticate(org.apache.juneau.rest.server.mcp.v20260728.McpResourceServerConfig, jakarta.servlet.http.HttpServletRequest, jakarta.servlet.http.HttpServletResponse)</code></a> for this request (SEP-2350).</div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/mcp/v20260728/McpResourceServerSupport.html#line-444">grantedScopes</a></span><wbr><span class="parameters">(jakarta.servlet.http.HttpServletRequest&nbsp;req)</span></div>
+<div class="block">Returns the granted scopes stashed by <a href="#authenticate(org.apache.juneau.rest.server.mcp.v20260728.McpResourceServerConfig,jakarta.servlet.http.HttpServletRequest,jakarta.servlet.http.HttpServletResponse)"><code>authenticate(org.apache.juneau.rest.server.mcp.v20260728.McpResourceServerConfig, jakarta.servlet.http.HttpServletRequest, jakarta.servlet.http.HttpServletResponse)</code></a> for this request.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>req</code> - The HTTP request.  May be <jk>null</jk>.</dd>
@@ -412,11 +411,11 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="principal(jakarta.servlet.http.HttpServletRequest)">
 <h3>principal</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/security/Principal.html" title="class or interface in java.security" class="external-link">Principal</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/mcp/v20260728/McpResourceServerSupport.html#line-454">principal</a></span><wbr><span class="parameters">(jakarta.servlet.http.HttpServletRequest&nbsp;req)</span></div>
-<div class="block">Returns the authenticated <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/security/Principal.html" title="class or interface in java.security" class="external-link"><code>Principal</code></a> <a href="#authenticate(org.apache.juneau.rest.server.mcp.v20260728.McpResourceServerConfig,jakarta.servlet.http.HttpServletRequest,jakarta.servlet.http.HttpServletResponse)"><code>authenticate(org.apache.juneau.rest.server.mcp.v20260728.McpResourceServerConfig, jakarta.servlet.http.HttpServletRequest, jakarta.servlet.http.HttpServletResponse)</code></a> stashed for this request (READY-312f F4).
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/security/Principal.html" title="class or interface in java.security" class="external-link">Principal</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/mcp/v20260728/McpResourceServerSupport.html#line-472">principal</a></span><wbr><span class="parameters">(jakarta.servlet.http.HttpServletRequest&nbsp;req)</span></div>
+<div class="block">Returns the authenticated <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/security/Principal.html" title="class or interface in java.security" class="external-link"><code>Principal</code></a> <a href="#authenticate(org.apache.juneau.rest.server.mcp.v20260728.McpResourceServerConfig,jakarta.servlet.http.HttpServletRequest,jakarta.servlet.http.HttpServletResponse)"><code>authenticate(org.apache.juneau.rest.server.mcp.v20260728.McpResourceServerConfig, jakarta.servlet.http.HttpServletRequest, jakarta.servlet.http.HttpServletResponse)</code></a> stashed for this request.
 
  <p>
- Reads the same framework-standard <a href="../../RestServerConstants.html#PRINCIPAL_ATTR"><code>RestServerConstants.PRINCIPAL_ATTR</code></a> attribute <a href="#authenticate(org.apache.juneau.rest.server.mcp.v20260728.McpResourceServerConfig,jakarta.servlet.http.HttpServletRequest,jakarta.servlet.http.HttpServletResponse)"><code>authenticate(org.apache.juneau.rest.server.mcp.v20260728.McpResourceServerConfig, jakarta.servlet.http.HttpServletRequest, jakarta.servlet.http.HttpServletResponse)</code></a>
+ Reads the same framework-standard <code>"juneau.principal"</code> attribute <a href="#authenticate(org.apache.juneau.rest.server.mcp.v20260728.McpResourceServerConfig,jakarta.servlet.http.HttpServletRequest,jakarta.servlet.http.HttpServletResponse)"><code>authenticate(org.apache.juneau.rest.server.mcp.v20260728.McpResourceServerConfig, jakarta.servlet.http.HttpServletRequest, jakarta.servlet.http.HttpServletResponse)</code></a>
  writes on success, so this is the single source of truth for "who is calling this MCP request".  It is the seam
  the <code>2026-07-28</code> dispatcher threads into <a href="RequestStateCodec.html#seal(org.apache.juneau.rest.server.mcp.v20260728.McpRequestState,java.lang.String,java.security.Principal)"><code>RequestStateCodec.seal(org.apache.juneau.rest.server.mcp.v20260728.McpRequestState, java.lang.String, java.security.Principal)</code></a>/<a href="RequestStateCodec.html#unseal(java.lang.String,java.lang.String,java.security.Principal)"><code>RequestStateCodec.unseal(java.lang.String, java.lang.String, java.security.Principal)</code></a>
  for principal-bound <code>requestState</code> AAD.  Mirrors <a href="#grantedScopes(jakarta.servlet.http.HttpServletRequest)"><code>grantedScopes(HttpServletRequest)</code></a>:
@@ -437,7 +436,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="enforceOperationScopes(org.apache.juneau.rest.server.mcp.v20260728.McpResourceServerConfig,java.util.Collection,org.apache.juneau.rest.server.mcp.v20260728.McpOperationContext)">
 <h3>enforceOperationScopes</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/mcp/v20260728/McpResourceServerSupport.html#line-484">enforceOperationScopes</a></span><wbr><span class="parameters">(<a href="McpResourceServerConfig.html" title="class in org.apache.juneau.rest.server.mcp.v20260728">McpResourceServerConfig</a>&nbsp;cfg,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/mcp/v20260728/McpResourceServerSupport.html#line-502">enforceOperationScopes</a></span><wbr><span class="parameters">(<a href="McpResourceServerConfig.html" title="class in org.apache.juneau.rest.server.mcp.v20260728">McpResourceServerConfig</a>&nbsp;cfg,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;grantedScopes,
  <a href="McpOperationContext.html" title="class in org.apache.juneau.rest.server.mcp.v20260728">McpOperationContext</a>&nbsp;ctx)</span></div>
 <div class="block">Enforces SEP-2350 per-operation step-up scopes at the POST-parse dispatch point.
@@ -450,7 +449,7 @@ loadScripts(document, 'script');</script>
  step-up challenge that names exactly the scopes required for this operation.
 
  <p>
- This is the enforcement point the F2 security review mandated: unlike the <code>@RestStartCall</code> bearer gate (which
+ This is the enforcement point the security review mandated: unlike the <code>@RestStartCall</code> bearer gate (which
  fires before the JSON-RPC body is parsed), this runs once the MCP method &mdash; and thus the operation &mdash; is
  known, so the challenge can be scoped to the specific operation.  It layers on top of, and never weakens, the
  baseline gate (op-identity, origin-root fail-fast, audience, and baseline required-scope enforcement all still run
@@ -469,7 +468,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="stepUpChallenge(org.apache.juneau.rest.server.mcp.v20260728.McpResourceServerConfig,java.util.Collection)">
 <h3>stepUpChallenge</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/mcp/v20260728/McpResourceServerSupport.html#line-506">stepUpChallenge</a></span><wbr><span class="parameters">(<a href="McpResourceServerConfig.html" title="class in org.apache.juneau.rest.server.mcp.v20260728">McpResourceServerConfig</a>&nbsp;cfg,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/mcp/v20260728/McpResourceServerSupport.html#line-524">stepUpChallenge</a></span><wbr><span class="parameters">(<a href="McpResourceServerConfig.html" title="class in org.apache.juneau.rest.server.mcp.v20260728">McpResourceServerConfig</a>&nbsp;cfg,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;operationScopes)</span></div>
 <div class="block">Builds the SEP-2350 scoped step-up <code>WWW-Authenticate</code> challenge naming the scopes required to invoke a
  specific operation (<code>error="insufficient_scope"</code>, with the operation's <code>scope</code> set).</div>
@@ -485,16 +484,16 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="satisfies(java.util.Collection,java.util.Collection)">
 <h3>satisfies</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/mcp/v20260728/McpResourceServerSupport.html#line-529">satisfies</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;grantedScopes,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/mcp/v20260728/McpResourceServerSupport.html#line-547">satisfies</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;grantedScopes,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;requiredScopes)</span></div>
-<div class="block">Returns whether the granted scopes satisfy every required scope, honoring OAuth scope hierarchies where a broader
- granted scope implies its narrower children.
+<div class="block">Returns whether the granted scopes satisfy every required scope, using exact string equality.
 
  <p>
- A required scope <code>r</code> is satisfied when some granted scope <code>g</code> either equals <code>r</code> exactly, or is a
- hierarchical <em>ancestor</em> of it &mdash; i.e. <code>r</code> begins with <code>g</code> followed by a <code>:</code> or
- <code>.</code> delimiter (so granted <code>repo</code> implies required <code>repo:read</code> / <code>repo.write</code>, but granted
- <code>repo:read</code> does <b>not</b> imply required <code>repo</code>).</div>
+ A required scope <code>r</code> is satisfied only when some granted scope <code>g</code> is exactly equal to it.  OAuth
+ scopes have no universal hierarchy, so a granted <code>repo</code> does <b>not</b> imply a required <code>repo:write</code>
+ or <code>repo.admin</code> &mdash; a broad-but-low-privilege scope must never authorize a differently named privileged
+ operation. Applications that want scope implication must expand their granted scopes themselves before calling
+ this method; this method does not provide a hierarchical-implication SPI.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>grantedScopes</code> - The caller's granted scopes.  Never <jk>null</jk>.</dd>
@@ -507,12 +506,12 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="missingTokenChallenge(org.apache.juneau.rest.server.mcp.v20260728.McpResourceServerConfig)">
 <h3>missingTokenChallenge</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/mcp/v20260728/McpResourceServerSupport.html#line-556">missingTokenChallenge</a></span><wbr><span class="parameters">(<a href="McpResourceServerConfig.html" title="class in org.apache.juneau.rest.server.mcp.v20260728">McpResourceServerConfig</a>&nbsp;cfg)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/mcp/v20260728/McpResourceServerSupport.html#line-563">missingTokenChallenge</a></span><wbr><span class="parameters">(<a href="McpResourceServerConfig.html" title="class in org.apache.juneau.rest.server.mcp.v20260728">McpResourceServerConfig</a>&nbsp;cfg)</span></div>
 <div class="block">Builds the <code>WWW-Authenticate</code> challenge for a request that presented no bearer credentials (RFC 6750
  &sect;3: no <code>error</code> code).
 
  <p>
- Carries a <code>scope</code> hint listing the endpoint-wide baseline required scopes (SEP-2350) when any are
+ Carries a <code>scope</code> hint listing the endpoint-wide baseline required scopes when any are
  configured, so a client can request them on its first authorization; the hint is omitted (no <code>scope=""</code>)
  when no baseline scope is required.</div>
 <dl class="notes">
@@ -526,7 +525,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="invalidTokenChallenge(org.apache.juneau.rest.server.mcp.v20260728.McpResourceServerConfig)">
 <h3>invalidTokenChallenge</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/mcp/v20260728/McpResourceServerSupport.html#line-571">invalidTokenChallenge</a></span><wbr><span class="parameters">(<a href="McpResourceServerConfig.html" title="class in org.apache.juneau.rest.server.mcp.v20260728">McpResourceServerConfig</a>&nbsp;cfg)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/mcp/v20260728/McpResourceServerSupport.html#line-578">invalidTokenChallenge</a></span><wbr><span class="parameters">(<a href="McpResourceServerConfig.html" title="class in org.apache.juneau.rest.server.mcp.v20260728">McpResourceServerConfig</a>&nbsp;cfg)</span></div>
 <div class="block">Builds the <code>WWW-Authenticate</code> challenge for an invalid/expired token or an audience mismatch
  (<code>error="invalid_token"</code>).</div>
 <dl class="notes">
@@ -540,7 +539,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="insufficientScopeChallenge(org.apache.juneau.rest.server.mcp.v20260728.McpResourceServerConfig)">
 <h3>insufficientScopeChallenge</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/mcp/v20260728/McpResourceServerSupport.html#line-586">insufficientScopeChallenge</a></span><wbr><span class="parameters">(<a href="McpResourceServerConfig.html" title="class in org.apache.juneau.rest.server.mcp.v20260728">McpResourceServerConfig</a>&nbsp;cfg)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/mcp/v20260728/McpResourceServerSupport.html#line-593">insufficientScopeChallenge</a></span><wbr><span class="parameters">(<a href="McpResourceServerConfig.html" title="class in org.apache.juneau.rest.server.mcp.v20260728">McpResourceServerConfig</a>&nbsp;cfg)</span></div>
 <div class="block">Builds the <code>WWW-Authenticate</code> challenge for a token missing a required baseline scope
  (<code>error="insufficient_scope"</code>, with the required <code>scope</code> set).</div>
 <dl class="notes">

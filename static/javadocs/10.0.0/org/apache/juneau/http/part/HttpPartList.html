@@ -92,7 +92,7 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="HttpPartList.Unmodifiable.html" title="class in org.apache.juneau.http.part">HttpPartList.Unmodifiable</a></code>, <code><a href="HttpPartList.Void.html" title="class in org.apache.juneau.http.part">HttpPartList.Void</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/part/HttpPartList.html#line-51">HttpPartList</a></span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/part/HttpPartList.html#line-50">HttpPartList</a></span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/ArrayList.html" title="class or interface in java.util" class="external-link">ArrayList</a>&lt;<a href="../HttpPart.html" title="interface in org.apache.juneau.http">HttpPart</a>&gt;</span></div>
 <div class="block">A mutable, ordered list of <a href="../HttpPart.html" title="interface in org.apache.juneau.http"><code>HttpPart</code></a> instances.
 
@@ -107,8 +107,8 @@ loadScripts(document, 'script');</script>
  builder for default form data / query parameter lists.
 
  <p>
- <b>Beta — API subject to change:</b> This type is part of the next-generation REST client and HTTP stack
- (<code>org.apache.juneau.marshall.ng.*</code>). It is not API-frozen: binary- and source-incompatible changes may appear in
+ <b>Beta — API subject to change:</b> This type is part of the next-generation REST client and HTTP stack.
+ It is not API-frozen: binary- and source-incompatible changes may appear in
  the <b>next major</b> Juneau release (and possibly earlier).
 
  <h5 class='section'>See Also:</h5><ul>
@@ -357,14 +357,14 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;()">
 <h3>HttpPartList</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/part/HttpPartList.html#line-112">HttpPartList</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/part/HttpPartList.html#line-111">HttpPartList</a></span>()</div>
 <div class="block">Constructor.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.http.part.HttpPartList)">
 <h3>HttpPartList</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/part/HttpPartList.html#line-121">HttpPartList</a></span><wbr><span class="parameters">(<a href="HttpPartList.html" title="class in org.apache.juneau.http.part">HttpPartList</a>&nbsp;copyFrom)</span></div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/part/HttpPartList.html#line-120">HttpPartList</a></span><wbr><span class="parameters">(<a href="HttpPartList.html" title="class in org.apache.juneau.http.part">HttpPartList</a>&nbsp;copyFrom)</span></div>
 <div class="block">Copy constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -383,7 +383,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="create()">
 <h3>create</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="HttpPartList.html" title="class in org.apache.juneau.http.part">HttpPartList</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/part/HttpPartList.html#line-70">create</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="HttpPartList.html" title="class in org.apache.juneau.http.part">HttpPartList</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/part/HttpPartList.html#line-69">create</a></span>()</div>
 <div class="block">Creates a new empty <a href="HttpPartList.html" title="class in org.apache.juneau.http.part"><code>HttpPartList</code></a>.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -394,7 +394,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="of(org.apache.juneau.http.HttpPart...)">
 <h3>of</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="HttpPartList.html" title="class in org.apache.juneau.http.part">HttpPartList</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/part/HttpPartList.html#line-80">of</a></span><wbr><span class="parameters">(<a href="../HttpPart.html" title="interface in org.apache.juneau.http">HttpPart</a>...&nbsp;parts)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="HttpPartList.html" title="class in org.apache.juneau.http.part">HttpPartList</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/part/HttpPartList.html#line-79">of</a></span><wbr><span class="parameters">(<a href="../HttpPart.html" title="interface in org.apache.juneau.http">HttpPart</a>...&nbsp;parts)</span></div>
 <div class="block">Creates a new <a href="HttpPartList.html" title="class in org.apache.juneau.http.part"><code>HttpPartList</code></a> initialized with the given parts.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -407,7 +407,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="of(java.util.List)">
 <h3>of</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="HttpPartList.html" title="class in org.apache.juneau.http.part">HttpPartList</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/part/HttpPartList.html#line-90">of</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../HttpPart.html" title="interface in org.apache.juneau.http">HttpPart</a>&gt;&nbsp;parts)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="HttpPartList.html" title="class in org.apache.juneau.http.part">HttpPartList</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/part/HttpPartList.html#line-89">of</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../HttpPart.html" title="interface in org.apache.juneau.http">HttpPart</a>&gt;&nbsp;parts)</span></div>
 <div class="block">Creates a new <a href="HttpPartList.html" title="class in org.apache.juneau.http.part"><code>HttpPartList</code></a> initialized with the given parts.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -420,7 +420,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="ofPairs(java.lang.String...)">
 <h3>ofPairs</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="HttpPartList.html" title="class in org.apache.juneau.http.part">HttpPartList</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/part/HttpPartList.html#line-101">ofPairs</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;pairs)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="HttpPartList.html" title="class in org.apache.juneau.http.part">HttpPartList</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/part/HttpPartList.html#line-100">ofPairs</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;pairs)</span></div>
 <div class="block">Creates a new <a href="HttpPartList.html" title="class in org.apache.juneau.http.part"><code>HttpPartList</code></a> initialized with the given alternating <code>name</code>/<code>value</code> pairs.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -435,7 +435,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="caseInsensitive(boolean)">
 <h3>caseInsensitive</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HttpPartList.html" title="class in org.apache.juneau.http.part">HttpPartList</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/part/HttpPartList.html#line-132">caseInsensitive</a></span><wbr><span class="parameters">(boolean&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HttpPartList.html" title="class in org.apache.juneau.http.part">HttpPartList</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/part/HttpPartList.html#line-131">caseInsensitive</a></span><wbr><span class="parameters">(boolean&nbsp;value)</span></div>
 <div class="block">Sets whether part-name comparisons are case-insensitive. Defaults to <code>false</code> (case-sensitive).</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -448,7 +448,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="append(org.apache.juneau.http.HttpPart)">
 <h3>append</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HttpPartList.html" title="class in org.apache.juneau.http.part">HttpPartList</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/part/HttpPartList.html#line-143">append</a></span><wbr><span class="parameters">(<a href="../HttpPart.html" title="interface in org.apache.juneau.http">HttpPart</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HttpPartList.html" title="class in org.apache.juneau.http.part">HttpPartList</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/part/HttpPartList.html#line-142">append</a></span><wbr><span class="parameters">(<a href="../HttpPart.html" title="interface in org.apache.juneau.http">HttpPart</a>&nbsp;value)</span></div>
 <div class="block">Appends the given part.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -461,7 +461,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="append(org.apache.juneau.http.HttpPart...)">
 <h3>append</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HttpPartList.html" title="class in org.apache.juneau.http.part">HttpPartList</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/part/HttpPartList.html#line-155">append</a></span><wbr><span class="parameters">(<a href="../HttpPart.html" title="interface in org.apache.juneau.http">HttpPart</a>...&nbsp;values)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HttpPartList.html" title="class in org.apache.juneau.http.part">HttpPartList</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/part/HttpPartList.html#line-154">append</a></span><wbr><span class="parameters">(<a href="../HttpPart.html" title="interface in org.apache.juneau.http">HttpPart</a>...&nbsp;values)</span></div>
 <div class="block">Appends the given parts in order.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -474,7 +474,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="append(java.util.List)">
 <h3>append</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HttpPartList.html" title="class in org.apache.juneau.http.part">HttpPartList</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/part/HttpPartList.html#line-168">append</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../HttpPart.html" title="interface in org.apache.juneau.http">HttpPart</a>&gt;&nbsp;values)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HttpPartList.html" title="class in org.apache.juneau.http.part">HttpPartList</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/part/HttpPartList.html#line-167">append</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../HttpPart.html" title="interface in org.apache.juneau.http">HttpPart</a>&gt;&nbsp;values)</span></div>
 <div class="block">Appends the given parts in order.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -487,7 +487,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="append(java.lang.String,java.lang.String)">
 <h3>append</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HttpPartList.html" title="class in org.apache.juneau.http.part">HttpPartList</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/part/HttpPartList.html#line-181">append</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HttpPartList.html" title="class in org.apache.juneau.http.part">HttpPartList</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/part/HttpPartList.html#line-180">append</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block">Appends a part constructed from the given name and string value.</div>
 <dl class="notes">
@@ -502,7 +502,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="setDefault(org.apache.juneau.http.HttpPart)">
 <h3>setDefault</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HttpPartList.html" title="class in org.apache.juneau.http.part">HttpPartList</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/part/HttpPartList.html#line-192">setDefault</a></span><wbr><span class="parameters">(<a href="../HttpPart.html" title="interface in org.apache.juneau.http">HttpPart</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HttpPartList.html" title="class in org.apache.juneau.http.part">HttpPartList</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/part/HttpPartList.html#line-191">setDefault</a></span><wbr><span class="parameters">(<a href="../HttpPart.html" title="interface in org.apache.juneau.http">HttpPart</a>&nbsp;value)</span></div>
 <div class="block">Sets the given part as a default. If a part with the same name already exists, this is a no-op
  (first-in-chain wins per name).</div>
 <dl class="notes">
@@ -516,7 +516,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="setDefault(org.apache.juneau.http.HttpPart...)">
 <h3>setDefault</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HttpPartList.html" title="class in org.apache.juneau.http.part">HttpPartList</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/part/HttpPartList.html#line-205">setDefault</a></span><wbr><span class="parameters">(<a href="../HttpPart.html" title="interface in org.apache.juneau.http">HttpPart</a>...&nbsp;values)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HttpPartList.html" title="class in org.apache.juneau.http.part">HttpPartList</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/part/HttpPartList.html#line-204">setDefault</a></span><wbr><span class="parameters">(<a href="../HttpPart.html" title="interface in org.apache.juneau.http">HttpPart</a>...&nbsp;values)</span></div>
 <div class="block">Sets the given parts as defaults, in order. For each, if a part with the same name already exists,
  the entry is skipped (first-in-chain wins per name).</div>
 <dl class="notes">
@@ -530,7 +530,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="setDefault(java.lang.String,java.lang.String)">
 <h3>setDefault</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HttpPartList.html" title="class in org.apache.juneau.http.part">HttpPartList</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/part/HttpPartList.html#line-219">setDefault</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HttpPartList.html" title="class in org.apache.juneau.http.part">HttpPartList</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/part/HttpPartList.html#line-218">setDefault</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block">Sets a default part with the given name and value (first-in-chain wins per name).</div>
 <dl class="notes">
@@ -545,7 +545,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="set(org.apache.juneau.http.HttpPart)">
 <h3>set</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HttpPartList.html" title="class in org.apache.juneau.http.part">HttpPartList</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/part/HttpPartList.html#line-229">set</a></span><wbr><span class="parameters">(<a href="../HttpPart.html" title="interface in org.apache.juneau.http">HttpPart</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HttpPartList.html" title="class in org.apache.juneau.http.part">HttpPartList</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/part/HttpPartList.html#line-228">set</a></span><wbr><span class="parameters">(<a href="../HttpPart.html" title="interface in org.apache.juneau.http">HttpPart</a>&nbsp;value)</span></div>
 <div class="block">Sets the given part, replacing any prior entry with the same name.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -558,7 +558,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="set(org.apache.juneau.http.HttpPart...)">
 <h3>set</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HttpPartList.html" title="class in org.apache.juneau.http.part">HttpPartList</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/part/HttpPartList.html#line-243">set</a></span><wbr><span class="parameters">(<a href="../HttpPart.html" title="interface in org.apache.juneau.http">HttpPart</a>...&nbsp;values)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HttpPartList.html" title="class in org.apache.juneau.http.part">HttpPartList</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/part/HttpPartList.html#line-242">set</a></span><wbr><span class="parameters">(<a href="../HttpPart.html" title="interface in org.apache.juneau.http">HttpPart</a>...&nbsp;values)</span></div>
 <div class="block">Sets the given parts, each replacing any prior entry with the same name.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -571,7 +571,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="set(java.lang.String,java.lang.String)">
 <h3>set</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HttpPartList.html" title="class in org.apache.juneau.http.part">HttpPartList</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/part/HttpPartList.html#line-257">set</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HttpPartList.html" title="class in org.apache.juneau.http.part">HttpPartList</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/part/HttpPartList.html#line-256">set</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block">Sets a part with the given name and value, replacing any prior entry with the same name.</div>
 <dl class="notes">
@@ -586,7 +586,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="removeAll(java.lang.String)">
 <h3>removeAll</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HttpPartList.html" title="class in org.apache.juneau.http.part">HttpPartList</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/part/HttpPartList.html#line-267">removeAll</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HttpPartList.html" title="class in org.apache.juneau.http.part">HttpPartList</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/part/HttpPartList.html#line-266">removeAll</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
 <div class="block">Removes all parts with the given name.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -599,7 +599,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="contains(java.lang.String)">
 <h3>contains</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/part/HttpPartList.html#line-279">contains</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/part/HttpPartList.html#line-278">contains</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
 <div class="block">Returns <code>true</code> if a part with the given name is present.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -612,7 +612,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getFirst(java.lang.String)">
 <h3>getFirst</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../HttpPart.html" title="interface in org.apache.juneau.http">HttpPart</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/part/HttpPartList.html#line-289">getFirst</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../HttpPart.html" title="interface in org.apache.juneau.http">HttpPart</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/part/HttpPartList.html#line-288">getFirst</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
 <div class="block">Returns the first part with the given name, or <code>null</code> if absent.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -625,7 +625,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getLast(java.lang.String)">
 <h3>getLast</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../HttpPart.html" title="interface in org.apache.juneau.http">HttpPart</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/part/HttpPartList.html#line-299">getLast</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../HttpPart.html" title="interface in org.apache.juneau.http">HttpPart</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/part/HttpPartList.html#line-298">getLast</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
 <div class="block">Returns the last part with the given name, or <code>null</code> if absent.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -638,7 +638,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getAll(java.lang.String)">
 <h3>getAll</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../HttpPart.html" title="interface in org.apache.juneau.http">HttpPart</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/part/HttpPartList.html#line-313">getAll</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../HttpPart.html" title="interface in org.apache.juneau.http">HttpPart</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/part/HttpPartList.html#line-312">getAll</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
 <div class="block">Returns all parts with the given name in insertion order.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -651,7 +651,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getAll()">
 <h3>getAll</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../HttpPart.html" title="interface in org.apache.juneau.http">HttpPart</a>[]</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/part/HttpPartList.html#line-322">getAll</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../HttpPart.html" title="interface in org.apache.juneau.http">HttpPart</a>[]</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/part/HttpPartList.html#line-321">getAll</a></span>()</div>
 <div class="block">Returns all parts in this list as a typed array.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -662,7 +662,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="forEach(java.lang.String,java.util.function.Consumer)">
 <h3>forEach</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HttpPartList.html" title="class in org.apache.juneau.http.part">HttpPartList</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/part/HttpPartList.html#line-333">forEach</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HttpPartList.html" title="class in org.apache.juneau.http.part">HttpPartList</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/part/HttpPartList.html#line-332">forEach</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Consumer.html" title="class or interface in java.util.function" class="external-link">Consumer</a>&lt;<a href="../HttpPart.html" title="interface in org.apache.juneau.http">HttpPart</a>&gt;&nbsp;action)</span></div>
 <div class="block">Performs an action on each part whose name matches.</div>
 <dl class="notes">
@@ -677,7 +677,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="copy()">
 <h3>copy</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HttpPartList.html" title="class in org.apache.juneau.http.part">HttpPartList</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/part/HttpPartList.html#line-345">copy</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HttpPartList.html" title="class in org.apache.juneau.http.part">HttpPartList</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/part/HttpPartList.html#line-344">copy</a></span>()</div>
 <div class="block">Returns a copy of this list.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -688,11 +688,11 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="unmodifiable()">
 <h3>unmodifiable</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HttpPartList.html" title="class in org.apache.juneau.http.part">HttpPartList</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/part/HttpPartList.html#line-357">unmodifiable</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HttpPartList.html" title="class in org.apache.juneau.http.part">HttpPartList</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/part/HttpPartList.html#line-356">unmodifiable</a></span>()</div>
 <div class="block">Returns an unmodifiable snapshot of this list.
 
  <p>
- D1 idempotency: if this list is already an <a href="HttpPartList.Unmodifiable.html" title="class in org.apache.juneau.http.part"><code>HttpPartList.Unmodifiable</code></a> snapshot, it is returned as-is.</div>
+ Idempotency: if this list is already an <a href="HttpPartList.Unmodifiable.html" title="class in org.apache.juneau.http.part"><code>HttpPartList.Unmodifiable</code></a> snapshot, it is returned as-is.</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>An unmodifiable snapshot of this list, or this list if it is already unmodifiable.</dd>
@@ -702,7 +702,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="isUnmodifiable()">
 <h3>isUnmodifiable</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/part/HttpPartList.html#line-366">isUnmodifiable</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/part/HttpPartList.html#line-365">isUnmodifiable</a></span>()</div>
 <div class="block">Returns <jk>true</jk> if this list is an unmodifiable snapshot.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -713,7 +713,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="toPartArray()">
 <h3>toPartArray</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../HttpPart.html" title="interface in org.apache.juneau.http">HttpPart</a>[]</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/part/HttpPartList.html#line-375">toPartArray</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../HttpPart.html" title="interface in org.apache.juneau.http">HttpPart</a>[]</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/part/HttpPartList.html#line-374">toPartArray</a></span>()</div>
 <div class="block">Returns the parts in this list as a typed array.</div>
 <dl class="notes">
 <dt>Returns:</dt>

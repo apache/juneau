@@ -78,7 +78,7 @@ loadScripts(document, 'script');</script>
 </div>
 <section class="class-description" id="class-description">
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/view/thymeleaf/ThymeleafMixin.html#line-135">ThymeleafMixin</a></span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/view/thymeleaf/ThymeleafMixin.html#line-138">ThymeleafMixin</a></span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
 <div class="block">Mixin that wires Thymeleaf view-rendering onto any Juneau REST resource.
 
@@ -91,10 +91,12 @@ loadScripts(document, 'script');</script>
       the importer's classpath by asking the configured
       <code>TemplateEngine</code> to render them with the current
       request's locale and attributes available to the template.
-   <li>Picks up <a href="ThymeleafViewRenderer.html" title="class in org.apache.juneau.rest.server.view.thymeleaf"><code>ThymeleafViewRenderer</code></a> automatically via the mixin's
-      <a href="../../Rest.html#responseProcessors()"><code>@Rest(responseProcessors=...)</code></a> declaration, so
-      <code>@RestOp</code>-method return values of type <a href="ThymeleafView.html" title="class in org.apache.juneau.rest.server.view.thymeleaf"><code>ThymeleafView</code></a> render through the
-      Thymeleaf engine without any additional wiring.
+   <li>Routes the host's own <code>@RestOp</code>-method return values of type <a href="ThymeleafView.html" title="class in org.apache.juneau.rest.server.view.thymeleaf"><code>ThymeleafView</code></a> through the
+      Thymeleaf engine automatically. <code>ThymeleafMixin</code> declares
+      <a href="../../Rest.html#mergeResponseProcessorsIntoHost()"><code>@Rest(mergeResponseProcessorsIntoHost=true)</code></a>, so a plain
+      <code>@Rest(mixins=ThymeleafMixin.class)</code> folds its <a href="ThymeleafViewRenderer.html" title="class in org.apache.juneau.rest.server.view.thymeleaf"><code>ThymeleafViewRenderer</code></a> into the host's own
+      response-processor chain &mdash; no <code>mergeIntoHost</code> or explicit <code>responseProcessors=</code> on the
+      host needed.
  </ol>
 
  <h5 class='figure'>Composition example (microservice):</h5>
@@ -321,7 +323,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="DEFAULT_BASE_PATH">
 <h3>DEFAULT_BASE_PATH</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/view/thymeleaf/ThymeleafMixin.html#line-144">DEFAULT_BASE_PATH</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/view/thymeleaf/ThymeleafMixin.html#line-148">DEFAULT_BASE_PATH</a></span></div>
 <div class="block">Default base path applied when no <a href="ThymeleafMixin.Builder.html#basePath(java.lang.String)"><code>ThymeleafMixin.Builder.basePath(String)</code></a> call has been made.</div>
 <dl class="notes">
 <dt>See Also:</dt>
@@ -336,7 +338,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="DEFAULT_CACHE_TEMPLATES">
 <h3>DEFAULT_CACHE_TEMPLATES</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/view/thymeleaf/ThymeleafMixin.html#line-147">DEFAULT_CACHE_TEMPLATES</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/view/thymeleaf/ThymeleafMixin.html#line-151">DEFAULT_CACHE_TEMPLATES</a></span></div>
 <div class="block">Default template-cache flag &mdash; production-safe; opt out per-builder for dev.</div>
 <dl class="notes">
 <dt>See Also:</dt>
@@ -351,7 +353,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="DEFAULT_TEMPLATE_MODE">
 <h3>DEFAULT_TEMPLATE_MODE</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">org.thymeleaf.templatemode.TemplateMode</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/view/thymeleaf/ThymeleafMixin.html#line-150">DEFAULT_TEMPLATE_MODE</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">org.thymeleaf.templatemode.TemplateMode</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/view/thymeleaf/ThymeleafMixin.html#line-154">DEFAULT_TEMPLATE_MODE</a></span></div>
 <div class="block">Default template mode for the bridge's fallback engine.</div>
 </section>
 </li>
@@ -366,7 +368,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;()">
 <h3>ThymeleafMixin</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/view/thymeleaf/ThymeleafMixin.html#line-172">ThymeleafMixin</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/view/thymeleaf/ThymeleafMixin.html#line-176">ThymeleafMixin</a></span>()</div>
 <div class="block">No-arg constructor &mdash; uses <a href="#DEFAULT_BASE_PATH"><code>DEFAULT_BASE_PATH</code></a> as the base path,
  <a href="#DEFAULT_CACHE_TEMPLATES"><code>DEFAULT_CACHE_TEMPLATES</code></a> for the cache flag, and <a href="#DEFAULT_TEMPLATE_MODE"><code>DEFAULT_TEMPLATE_MODE</code></a> for
  the template mode.
@@ -378,7 +380,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.rest.server.view.thymeleaf.ThymeleafMixin.Builder)">
 <h3>ThymeleafMixin</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/view/thymeleaf/ThymeleafMixin.html#line-181">ThymeleafMixin</a></span><wbr><span class="parameters">(<a href="ThymeleafMixin.Builder.html" title="class in org.apache.juneau.rest.server.view.thymeleaf">ThymeleafMixin.Builder</a>&nbsp;builder)</span></div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/view/thymeleaf/ThymeleafMixin.html#line-185">ThymeleafMixin</a></span><wbr><span class="parameters">(<a href="ThymeleafMixin.Builder.html" title="class in org.apache.juneau.rest.server.view.thymeleaf">ThymeleafMixin.Builder</a>&nbsp;builder)</span></div>
 <div class="block">Builder constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -397,7 +399,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="create()">
 <h3>create</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="ThymeleafMixin.Builder.html" title="class in org.apache.juneau.rest.server.view.thymeleaf">ThymeleafMixin.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/view/thymeleaf/ThymeleafMixin.html#line-159">create</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="ThymeleafMixin.Builder.html" title="class in org.apache.juneau.rest.server.view.thymeleaf">ThymeleafMixin.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/view/thymeleaf/ThymeleafMixin.html#line-163">create</a></span>()</div>
 <div class="block">Creates a new builder.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -408,7 +410,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getBasePath()">
 <h3>getBasePath</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/view/thymeleaf/ThymeleafMixin.html#line-190">getBasePath</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/view/thymeleaf/ThymeleafMixin.html#line-194">getBasePath</a></span>()</div>
 <div class="block">Returns the base path under which template resources are resolved.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -419,7 +421,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="isCacheTemplates()">
 <h3>isCacheTemplates</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/view/thymeleaf/ThymeleafMixin.html#line-199">isCacheTemplates</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/view/thymeleaf/ThymeleafMixin.html#line-203">isCacheTemplates</a></span>()</div>
 <div class="block">Returns whether the bridge's default engine caches resolved templates.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -430,7 +432,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getTemplateMode()">
 <h3>getTemplateMode</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">org.thymeleaf.templatemode.TemplateMode</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/view/thymeleaf/ThymeleafMixin.html#line-208">getTemplateMode</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">org.thymeleaf.templatemode.TemplateMode</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/view/thymeleaf/ThymeleafMixin.html#line-212">getTemplateMode</a></span>()</div>
 <div class="block">Returns the template mode used by the bridge's default engine.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -441,7 +443,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="resolveTemplateEngine(org.apache.juneau.rest.server.RestRequest)">
 <h3>resolveTemplateEngine</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">org.thymeleaf.TemplateEngine</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/view/thymeleaf/ThymeleafMixin.html#line-218">resolveTemplateEngine</a></span><wbr><span class="parameters">(<a href="../../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">org.thymeleaf.TemplateEngine</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/view/thymeleaf/ThymeleafMixin.html#line-222">resolveTemplateEngine</a></span><wbr><span class="parameters">(<a href="../../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req)</span></div>
 <div class="block">Resolves the active <code>TemplateEngine</code> via the shared <a href="ThymeleafDispatcher.html" title="class in org.apache.juneau.rest.server.view.thymeleaf"><code>ThymeleafDispatcher</code></a> worker.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -454,7 +456,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="render(java.lang.String,org.apache.juneau.rest.server.RestRequest,org.apache.juneau.rest.server.RestResponse)">
 <h3>render</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/view/thymeleaf/ThymeleafMixin.html#line-244">render</a></span><wbr><span class="parameters">(<a href="../../../../http/Path.html" title="annotation interface in org.apache.juneau.http">@Path</a>("/*")
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/view/thymeleaf/ThymeleafMixin.html#line-248">render</a></span><wbr><span class="parameters">(<a href="../../../../http/Path.html" title="annotation interface in org.apache.juneau.http">@Path</a>("/*")
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;path,
  <a href="../../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req,
  <a href="../../RestResponse.html" title="class in org.apache.juneau.rest.server">RestResponse</a>&nbsp;res)</span>

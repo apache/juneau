@@ -104,7 +104,7 @@ loadScripts(document, 'script');</script>
 
  <h5 class='topic'>Media types</h5>
  <p>
- Handles <c>Accept</c> types:  <bc>application/jsonl, application/x-ndjson, text/jsonl</bc>
+ Handles <c>Accept</c> types:  <bc>application/jsonl, application/jsonlines, application/x-ndjson, text/jsonl</bc>
  <p>
  Produces <c>Content-Type</c> types:  <bc>application/jsonl</bc>
 
@@ -123,7 +123,7 @@ loadScripts(document, 'script');</script>
  </ul>
  <p>
  Non-JSON-primitive types are transformed through
- <a href="../swap/ObjectSwap.html" title="class in org.apache.juneau.marshall.swap"><code>ObjectSwaps</code></a>.
+ <a href="../swap/spi/ObjectSwap.html" title="class in org.apache.juneau.marshall.swap.spi"><code>ObjectSwaps</code></a>.
 
  <h5 class='section'>Example:</h5>
  <p class='bjava'>
@@ -307,7 +307,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="DEFAULT">
 <h3>DEFAULT</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="JsonlSerializer.html" title="class in org.apache.juneau.marshall.jsonl">JsonlSerializer</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/jsonl/JsonlSerializer.html#line-101">DEFAULT</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="JsonlSerializer.html" title="class in org.apache.juneau.marshall.jsonl">JsonlSerializer</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/jsonl/JsonlSerializer.html#line-102">DEFAULT</a></span></div>
 <div class="block">Default serializer.</div>
 </section>
 </li>
@@ -322,7 +322,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.marshall.json.JsonSerializer.Builder)">
 <h3>JsonlSerializer</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/jsonl/JsonlSerializer.html#line-124">JsonlSerializer</a></span><wbr><span class="parameters">(<a href="../json/JsonSerializer.Builder.html" title="class in org.apache.juneau.marshall.json">JsonSerializer.Builder</a>&lt;?&gt;&nbsp;builder)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/jsonl/JsonlSerializer.html#line-125">JsonlSerializer</a></span><wbr><span class="parameters">(<a href="../json/JsonSerializer.Builder.html" title="class in org.apache.juneau.marshall.json">JsonSerializer.Builder</a>&lt;?&gt;&nbsp;builder)</span></div>
 <div class="block">Constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -341,7 +341,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="create()">
 <h3>create</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="../json/JsonSerializer.Builder.html" title="class in org.apache.juneau.marshall.json">JsonSerializer.Builder</a>&lt;?&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/jsonl/JsonlSerializer.html#line-108">create</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="../json/JsonSerializer.Builder.html" title="class in org.apache.juneau.marshall.json">JsonSerializer.Builder</a>&lt;?&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/jsonl/JsonlSerializer.html#line-109">create</a></span>()</div>
 <div class="block">Creates a new builder for this object.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -352,7 +352,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="createSession()">
 <h3>createSession</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JsonlSerializerSession.Builder.html" title="class in org.apache.juneau.marshall.jsonl">JsonlSerializerSession.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/jsonl/JsonlSerializer.html#line-128">createSession</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JsonlSerializerSession.Builder.html" title="class in org.apache.juneau.marshall.jsonl">JsonlSerializerSession.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/jsonl/JsonlSerializer.html#line-129">createSession</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../Context.html#createSession()">Context</a></code></span></div>
 <div class="block">Create a session builder based on the properties defined on this context.
 

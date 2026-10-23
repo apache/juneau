@@ -155,6 +155,11 @@ loadScripts(document, 'script');</script>
 <div class="col-last odd-row-color class-summary class-summary-tab2">
 <div class="block">Shared, observable readiness flag consumed by <a href="HealthAggregator.html" title="class in org.apache.juneau.rest.server.health"><code>HealthAggregator</code></a> to gate the readiness probe.</div>
 </div>
+<div class="col-first even-row-color class-summary class-summary-tab1"><a href="ReadinessStateAware.html" title="interface in org.apache.juneau.rest.server.health">ReadinessStateAware</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab1">
+<div class="block">Implemented by servlets that want to be told the embedded server's per-service <a href="ReadinessState.html" title="class in org.apache.juneau.rest.server.health"><code>ReadinessState</code></a>, so they
+ can react when shutdown begins (see <a href="ReadinessState.html#onOutOfService(java.lang.Object,java.lang.Runnable)"><code>ReadinessState.onOutOfService(Object, Runnable)</code></a>).</div>
+</div>
 </div>
 </div>
 </div>

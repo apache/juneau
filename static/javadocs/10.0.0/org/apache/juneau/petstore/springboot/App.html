@@ -80,7 +80,7 @@ loadScripts(document, 'script');</script>
 <hr>
 <div class="type-signature"><span class="annotations">@SpringBootApplication
 @Controller
-</span><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/petstore/springboot/App.html#line-42">App</a></span>
+</span><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/petstore/springboot/App.html#line-45">App</a></span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
 <div class="block">Petstore Spring Boot deployment entry point.
 
@@ -122,6 +122,16 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>org.springframework.boot.web.servlet.FilterRegistrationBean&lt;<a href="../console/PetstoreApiBoundary.html" title="class in org.apache.juneau.petstore.console">PetstoreApiBoundary</a>&gt;</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#apiBoundary()" class="member-name-link">apiBoundary</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Registers the API's CSRF boundary on <code>/petstore/*</code>.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>org.springframework.boot.web.servlet.FilterRegistrationBean&lt;<a href="../console/PetstoreConsoleBoundary.html" title="class in org.apache.juneau.petstore.console">PetstoreConsoleBoundary</a>&gt;</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#consoleBoundary()" class="member-name-link">consoleBoundary</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Registers the console's CSRF boundary on <code>/console/*</code>.</div>
+</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="HelloMessageProvider.html" title="class in org.apache.juneau.petstore.springboot">HelloMessageProvider</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#helloMessageProvider()" class="member-name-link">helloMessageProvider</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
@@ -167,7 +177,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;()">
 <h3>App</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/petstore/springboot/App.html#line-47">App</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/petstore/springboot/App.html#line-50">App</a></span>()</div>
 </section>
 </li>
 </ul>
@@ -181,7 +191,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="main(java.lang.String[])">
 <h3>main</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/petstore/springboot/App.html#line-54">main</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>[]&nbsp;args)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/petstore/springboot/App.html#line-57">main</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>[]&nbsp;args)</span></div>
 <div class="block">Entry point.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -193,7 +203,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="helloMessageProvider()">
 <h3>helloMessageProvider</h3>
 <div class="member-signature"><span class="annotations">@Bean
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HelloMessageProvider.html" title="class in org.apache.juneau.petstore.springboot">HelloMessageProvider</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/petstore/springboot/App.html#line-63">helloMessageProvider</a></span>()</div>
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HelloMessageProvider.html" title="class in org.apache.juneau.petstore.springboot">HelloMessageProvider</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/petstore/springboot/App.html#line-66">helloMessageProvider</a></span>()</div>
 <div class="block">Spring-injected message provider consumed by <a href="HelloResource.html" title="class in org.apache.juneau.petstore.springboot"><code>HelloResource</code></a>.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -205,7 +215,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="helloResource(org.apache.juneau.petstore.springboot.HelloMessageProvider)">
 <h3>helloResource</h3>
 <div class="member-signature"><span class="annotations">@Bean
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HelloResource.html" title="class in org.apache.juneau.petstore.springboot">HelloResource</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/petstore/springboot/App.html#line-74">helloResource</a></span><wbr><span class="parameters">(<a href="HelloMessageProvider.html" title="class in org.apache.juneau.petstore.springboot">HelloMessageProvider</a>&nbsp;helloMessageProvider)</span></div>
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="HelloResource.html" title="class in org.apache.juneau.petstore.springboot">HelloResource</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/petstore/springboot/App.html#line-77">helloResource</a></span><wbr><span class="parameters">(<a href="HelloMessageProvider.html" title="class in org.apache.juneau.petstore.springboot">HelloMessageProvider</a>&nbsp;helloMessageProvider)</span></div>
 <div class="block">Returns <a href="HelloResource.html" title="class in org.apache.juneau.petstore.springboot"><code>HelloResource</code></a> as a Spring bean with its dependency injected via constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -219,7 +229,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="rootResources()">
 <h3>rootResources</h3>
 <div class="member-signature"><span class="annotations">@Bean
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RootResources.html" title="class in org.apache.juneau.petstore.springboot">RootResources</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/petstore/springboot/App.html#line-84">rootResources</a></span>()</div>
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RootResources.html" title="class in org.apache.juneau.petstore.springboot">RootResources</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/petstore/springboot/App.html#line-87">rootResources</a></span>()</div>
 <div class="block">Returns the root router as a Spring bean so child resources resolve as Spring beans.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -228,10 +238,48 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
+<section class="detail" id="consoleBoundary()">
+<h3>consoleBoundary</h3>
+<div class="member-signature"><span class="annotations">@Bean
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">org.springframework.boot.web.servlet.FilterRegistrationBean&lt;<a href="../console/PetstoreConsoleBoundary.html" title="class in org.apache.juneau.petstore.console">PetstoreConsoleBoundary</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/petstore/springboot/App.html#line-113">consoleBoundary</a></span>()</div>
+<div class="block">Registers the console's CSRF boundary on <code>/console/*</code>.
+
+ <p>
+ The <code>/petstore</code> API is covered by <a href="#apiBoundary()"><code>apiBoundary()</code></a>; <code>/petstore-ui</code> is
+ outside both.  See <a href="../console/PetstoreConsoleBoundary.html" title="class in org.apache.juneau.petstore.console"><code>PetstoreConsoleBoundary</code></a>.  The console boundary is built over the same
+ <a href="../console/PetstoreApiBoundary.html" title="class in org.apache.juneau.petstore.console"><code>PetstoreApiBoundary</code></a> the API registration mounts, so the API token its pages carry is one the API filter
+ accepts.
+
+ <p>
+ The filter runs on forwarded, async and error dispatches as well as on the original request, so a dispatch that
+ lands on a console path is checked too.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>The filter registration.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="apiBoundary()">
+<h3>apiBoundary</h3>
+<div class="member-signature"><span class="annotations">@Bean
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">org.springframework.boot.web.servlet.FilterRegistrationBean&lt;<a href="../console/PetstoreApiBoundary.html" title="class in org.apache.juneau.petstore.console">PetstoreApiBoundary</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/petstore/springboot/App.html#line-131">apiBoundary</a></span>()</div>
+<div class="block">Registers the API's CSRF boundary on <code>/petstore/*</code>.
+
+ <p>
+ It runs only on the original request: an internal forward or error dispatch to the API is not a new
+ attacker-controlled request.  The order keeps it just behind the console boundary; the two patterns never overlap.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>The filter registration.</dd>
+</dl>
+</section>
+</li>
+<li>
 <section class="detail" id="rootServlet(org.apache.juneau.petstore.springboot.RootResources)">
 <h3>rootServlet</h3>
 <div class="member-signature"><span class="annotations">@Bean
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">org.springframework.boot.web.servlet.ServletRegistrationBean&lt;jakarta.servlet.Servlet&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/petstore/springboot/App.html#line-95">rootServlet</a></span><wbr><span class="parameters">(<a href="RootResources.html" title="class in org.apache.juneau.petstore.springboot">RootResources</a>&nbsp;rootResources)</span></div>
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">org.springframework.boot.web.servlet.ServletRegistrationBean&lt;jakarta.servlet.Servlet&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/petstore/springboot/App.html#line-146">rootServlet</a></span><wbr><span class="parameters">(<a href="RootResources.html" title="class in org.apache.juneau.petstore.springboot">RootResources</a>&nbsp;rootResources)</span></div>
 <div class="block">Mounts the root router servlet at <code>/*</code>.</div>
 <dl class="notes">
 <dt>Parameters:</dt>

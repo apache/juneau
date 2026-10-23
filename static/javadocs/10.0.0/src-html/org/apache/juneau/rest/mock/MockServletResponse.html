@@ -50,8 +50,8 @@
 <span class="source-line-no">037</span><span id="line-37"> * &lt;/ul&gt;</span>
 <span class="source-line-no">038</span><span id="line-38">*/</span>
 <span class="source-line-no">039</span><span id="line-39">@SuppressWarnings({</span>
-<span class="source-line-no">040</span><span id="line-40">   "java:S4144", // Identical methods intentional for different test scenarios</span>
-<span class="source-line-no">041</span><span id="line-41">   "java:S115", // Constants use UPPER_snakeCase convention (e.g., HEADER_ContentType)</span>
+<span class="source-line-no">040</span><span id="line-40">   "java:S115", // Constants use UPPER_snakeCase convention (e.g., HEADER_ContentType)</span>
+<span class="source-line-no">041</span><span id="line-41">   "java:S4144", // Identical methods intentional for different test scenarios</span>
 <span class="source-line-no">042</span><span id="line-42">   "resource" // Streams returned to servlet container; lifecycle managed by the container</span>
 <span class="source-line-no">043</span><span id="line-43">})</span>
 <span class="source-line-no">044</span><span id="line-44">public class MockServletResponse implements HttpServletResponse {</span>
@@ -71,7 +71,7 @@
 <span class="source-line-no">058</span><span id="line-58">   private ByteArrayOutputStream baos = new ByteArrayOutputStream();</span>
 <span class="source-line-no">059</span><span id="line-59">   private int bufferSize;</span>
 <span class="source-line-no">060</span><span id="line-60">   private Locale locale;</span>
-<span class="source-line-no">061</span><span id="line-61">   private int sc;</span>
+<span class="source-line-no">061</span><span id="line-61">   private int sc = 200;</span>
 <span class="source-line-no">062</span><span id="line-62">   private String msg;</span>
 <span class="source-line-no">063</span><span id="line-63"></span>
 <span class="source-line-no">064</span><span id="line-64">   private Map&lt;String,String[]&gt; headerMap = map();</span>
@@ -276,7 +276,7 @@
 <span class="source-line-no">263</span><span id="line-263">      if (nn(contentType) &amp;&amp; nn(charset)) {</span>
 <span class="source-line-no">264</span><span id="line-264">         if (contentType.indexOf("charset=") != -1)</span>
 <span class="source-line-no">265</span><span id="line-265">            contentType = contentType.replaceAll("\\;\\s*charset=.*", "");</span>
-<span class="source-line-no">266</span><span id="line-266">         if (! "UTF-8".equalsIgnoreCase(charset))</span>
+<span class="source-line-no">266</span><span id="line-266">         if (neqic("UTF-8", charset))</span>
 <span class="source-line-no">267</span><span id="line-267">            contentType = contentType + ";charset=" + charset;</span>
 <span class="source-line-no">268</span><span id="line-268">         header(HEADER_ContentType, contentType);</span>
 <span class="source-line-no">269</span><span id="line-269">      }</span>

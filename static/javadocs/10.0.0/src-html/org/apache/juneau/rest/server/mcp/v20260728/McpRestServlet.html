@@ -189,53 +189,54 @@
 <span class="source-line-no">176</span><span id="line-176">   }</span>
 <span class="source-line-no">177</span><span id="line-177"></span>
 <span class="source-line-no">178</span><span id="line-178">   /**</span>
-<span class="source-line-no">179</span><span id="line-179">    * OAuth 2.1 resource-server bearer gate for the MCP {@code POST /} endpoint (READY-312f F2).</span>
+<span class="source-line-no">179</span><span id="line-179">    * OAuth 2.1 resource-server bearer gate for the MCP {@code POST /} endpoint.</span>
 <span class="source-line-no">180</span><span id="line-180">    *</span>
 <span class="source-line-no">181</span><span id="line-181">    * &lt;p&gt;</span>
-<span class="source-line-no">182</span><span id="line-182">    * A no-op unless {@link McpResourceServerConfig#isEnabled() RS auth is enabled}; when enabled, every request the</span>
-<span class="source-line-no">183</span><span id="line-183">    * router resolves to a {@code POST} (the dedicated MCP servlet's only writable surface) must present a valid bearer</span>
+<span class="source-line-no">182</span><span id="line-182">    * A no-op unless {@link McpResourceServerConfig#isEnabled() RS auth is enabled}; when enabled, every request that is</span>
+<span class="source-line-no">183</span><span id="line-183">    * a {@code POST}, or that claims one (the dedicated MCP servlet's only writable surface) must present a valid bearer</span>
 <span class="source-line-no">184</span><span id="line-184">    * token or it is rejected with {@code 401} / {@code 403} and a {@code WWW-Authenticate: Bearer ...} challenge (see</span>
 <span class="source-line-no">185</span><span id="line-185">    * {@link McpResourceServerSupport#gateMcpServlet(McpResourceServerConfig, HttpServletRequest, HttpServletResponse)}).</span>
-<span class="source-line-no">186</span><span id="line-186">    * The gate reads the router-&lt;i&gt;resolved&lt;/i&gt; method (honoring {@code ?method=}/{@code X-Method} overrides) rather than</span>
-<span class="source-line-no">187</span><span id="line-187">    * the raw servlet method, so a method-override cannot slip past it (H3).  The well-known {@code GET} routes below are</span>
-<span class="source-line-no">188</span><span id="line-188">    * intentionally left unauthenticated so a client can discover the PRM document.</span>
-<span class="source-line-no">189</span><span id="line-189">    *</span>
-<span class="source-line-no">190</span><span id="line-190">    * @param req The raw HTTP request.</span>
-<span class="source-line-no">191</span><span id="line-191">    * @param res The raw HTTP response (used to emit the challenge header on rejection).</span>
-<span class="source-line-no">192</span><span id="line-192">    */</span>
-<span class="source-line-no">193</span><span id="line-193">   @RestStartCall</span>
-<span class="source-line-no">194</span><span id="line-194">   public final void mcpResourceServerAuth(HttpServletRequest req, HttpServletResponse res) {</span>
-<span class="source-line-no">195</span><span id="line-195">      McpResourceServerSupport.gateMcpServlet(getMcpOptions().getResourceServer(), req, res);</span>
-<span class="source-line-no">196</span><span id="line-196">   }</span>
-<span class="source-line-no">197</span><span id="line-197"></span>
-<span class="source-line-no">198</span><span id="line-198">   /**</span>
-<span class="source-line-no">199</span><span id="line-199">    * Serves the RFC 9728 Protected Resource Metadata document at the root well-known location (SEP-2351 fallback).</span>
-<span class="source-line-no">200</span><span id="line-200">    *</span>
-<span class="source-line-no">201</span><span id="line-201">    * &lt;p&gt;</span>
-<span class="source-line-no">202</span><span id="line-202">    * This route (and its path-inserted sibling) is registered unconditionally, but returns {@code 404} whenever RS auth</span>
-<span class="source-line-no">203</span><span id="line-203">    * is {@link McpResourceServerConfig#isEnabled() disabled} &amp;mdash; so a non-opted-in servlet claims the well-known</span>
-<span class="source-line-no">204</span><span id="line-204">    * namespace but exposes no observable metadata (READY-312f F2, M7).</span>
-<span class="source-line-no">205</span><span id="line-205">    *</span>
-<span class="source-line-no">206</span><span id="line-206">    * @param req The REST request.</span>
-<span class="source-line-no">207</span><span id="line-207">    * @return The PRM document.</span>
-<span class="source-line-no">208</span><span id="line-208">    */</span>
-<span class="source-line-no">209</span><span id="line-209">   @RestGet(path = "/.well-known/oauth-protected-resource")</span>
-<span class="source-line-no">210</span><span id="line-210">   public McpProtectedResourceMetadata mcpProtectedResourceMetadataRoot(RestRequest req) {</span>
-<span class="source-line-no">211</span><span id="line-211">      return McpResourceServerSupport.metadataForWellKnownRoot(getMcpOptions().getResourceServer(), req);</span>
-<span class="source-line-no">212</span><span id="line-212">   }</span>
-<span class="source-line-no">213</span><span id="line-213"></span>
-<span class="source-line-no">214</span><span id="line-214">   /**</span>
-<span class="source-line-no">215</span><span id="line-215">    * Serves the RFC 9728 Protected Resource Metadata document at the path-inserted well-known location (SEP-2351), but</span>
-<span class="source-line-no">216</span><span id="line-216">    * only when the requested suffix matches this resource's expected well-known path; otherwise {@code 404} (M5).</span>
-<span class="source-line-no">217</span><span id="line-217">    *</span>
-<span class="source-line-no">218</span><span id="line-218">    * @param req The REST request.</span>
-<span class="source-line-no">219</span><span id="line-219">    * @return The PRM document.</span>
-<span class="source-line-no">220</span><span id="line-220">    */</span>
-<span class="source-line-no">221</span><span id="line-221">   @RestGet(path = "/.well-known/oauth-protected-resource/*")</span>
-<span class="source-line-no">222</span><span id="line-222">   public McpProtectedResourceMetadata mcpProtectedResourceMetadataPathInserted(RestRequest req) {</span>
-<span class="source-line-no">223</span><span id="line-223">      return McpResourceServerSupport.metadataForWellKnownPathInserted(getMcpOptions().getResourceServer(), req);</span>
-<span class="source-line-no">224</span><span id="line-224">   }</span>
-<span class="source-line-no">225</span><span id="line-225">}</span>
+<span class="source-line-no">186</span><span id="line-186">    * The gate treats a {@code POST} claim on any override channel ({@code ?method=} or any of the four override</span>
+<span class="source-line-no">187</span><span id="line-187">    * headers, any value) as a {@code POST}, rather than reading only the raw servlet method, so a method-override cannot</span>
+<span class="source-line-no">188</span><span id="line-188">    * slip past it.  The well-known {@code GET} routes below are</span>
+<span class="source-line-no">189</span><span id="line-189">    * intentionally left unauthenticated so a client can discover the PRM document.</span>
+<span class="source-line-no">190</span><span id="line-190">    *</span>
+<span class="source-line-no">191</span><span id="line-191">    * @param req The raw HTTP request.</span>
+<span class="source-line-no">192</span><span id="line-192">    * @param res The raw HTTP response (used to emit the challenge header on rejection).</span>
+<span class="source-line-no">193</span><span id="line-193">    */</span>
+<span class="source-line-no">194</span><span id="line-194">   @RestStartCall</span>
+<span class="source-line-no">195</span><span id="line-195">   public final void mcpResourceServerAuth(HttpServletRequest req, HttpServletResponse res) {</span>
+<span class="source-line-no">196</span><span id="line-196">      McpResourceServerSupport.gateMcpServlet(getMcpOptions().getResourceServer(), req, res);</span>
+<span class="source-line-no">197</span><span id="line-197">   }</span>
+<span class="source-line-no">198</span><span id="line-198"></span>
+<span class="source-line-no">199</span><span id="line-199">   /**</span>
+<span class="source-line-no">200</span><span id="line-200">    * Serves the RFC 9728 Protected Resource Metadata document at the root well-known location (SEP-2351 fallback).</span>
+<span class="source-line-no">201</span><span id="line-201">    *</span>
+<span class="source-line-no">202</span><span id="line-202">    * &lt;p&gt;</span>
+<span class="source-line-no">203</span><span id="line-203">    * This route (and its path-inserted sibling) is registered unconditionally, but returns {@code 404} whenever RS auth</span>
+<span class="source-line-no">204</span><span id="line-204">    * is {@link McpResourceServerConfig#isEnabled() disabled} &amp;mdash; so a non-opted-in servlet claims the well-known</span>
+<span class="source-line-no">205</span><span id="line-205">    * namespace but exposes no observable metadata.</span>
+<span class="source-line-no">206</span><span id="line-206">    *</span>
+<span class="source-line-no">207</span><span id="line-207">    * @param req The REST request.</span>
+<span class="source-line-no">208</span><span id="line-208">    * @return The PRM document.</span>
+<span class="source-line-no">209</span><span id="line-209">    */</span>
+<span class="source-line-no">210</span><span id="line-210">   @RestGet(path = "/.well-known/oauth-protected-resource")</span>
+<span class="source-line-no">211</span><span id="line-211">   public McpProtectedResourceMetadata mcpProtectedResourceMetadataRoot(RestRequest req) {</span>
+<span class="source-line-no">212</span><span id="line-212">      return McpResourceServerSupport.metadataForWellKnownRoot(getMcpOptions().getResourceServer(), req);</span>
+<span class="source-line-no">213</span><span id="line-213">   }</span>
+<span class="source-line-no">214</span><span id="line-214"></span>
+<span class="source-line-no">215</span><span id="line-215">   /**</span>
+<span class="source-line-no">216</span><span id="line-216">    * Serves the RFC 9728 Protected Resource Metadata document at the path-inserted well-known location (SEP-2351), but</span>
+<span class="source-line-no">217</span><span id="line-217">    * only when the requested suffix matches this resource's expected well-known path; otherwise {@code 404}.</span>
+<span class="source-line-no">218</span><span id="line-218">    *</span>
+<span class="source-line-no">219</span><span id="line-219">    * @param req The REST request.</span>
+<span class="source-line-no">220</span><span id="line-220">    * @return The PRM document.</span>
+<span class="source-line-no">221</span><span id="line-221">    */</span>
+<span class="source-line-no">222</span><span id="line-222">   @RestGet(path = "/.well-known/oauth-protected-resource/*")</span>
+<span class="source-line-no">223</span><span id="line-223">   public McpProtectedResourceMetadata mcpProtectedResourceMetadataPathInserted(RestRequest req) {</span>
+<span class="source-line-no">224</span><span id="line-224">      return McpResourceServerSupport.metadataForWellKnownPathInserted(getMcpOptions().getResourceServer(), req);</span>
+<span class="source-line-no">225</span><span id="line-225">   }</span>
+<span class="source-line-no">226</span><span id="line-226">}</span>
 
 
 

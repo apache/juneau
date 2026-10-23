@@ -92,41 +92,32 @@ loadScripts(document, 'script');</script>
 <div class="block">Health probe endpoint.</div>
 </div>
 <div class="col-first odd-row-color"><code><a href="../HealthAggregator.HealthResponse.html" title="class in org.apache.juneau.rest.server.health">HealthAggregator.HealthResponse</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">HealthServlet.</span><code><a href="../HealthServlet.html#healthz(org.apache.juneau.rest.server.RestResponse)" class="member-name-link">healthz</a><wbr>(<a href="../../RestResponse.html" title="class in org.apache.juneau.rest.server">RestResponse</a>&nbsp;res)</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">HealthMixin.</span><code><a href="../HealthMixin.html#livez(org.apache.juneau.rest.server.RestRequest,org.apache.juneau.rest.server.RestResponse)" class="member-name-link">livez</a><wbr>(<a href="../../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req,
+ <a href="../../RestResponse.html" title="class in org.apache.juneau.rest.server">RestResponse</a>&nbsp;res)</code></div>
 <div class="col-last odd-row-color">
-<div class="block">Health probe endpoint.</div>
+<div class="block">Liveness probe endpoint.</div>
 </div>
 <div class="col-first even-row-color"><code><a href="../HealthAggregator.HealthResponse.html" title="class in org.apache.juneau.rest.server.health">HealthAggregator.HealthResponse</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">HealthMixin.</span><code><a href="../HealthMixin.html#livez(org.apache.juneau.rest.server.RestRequest,org.apache.juneau.rest.server.RestResponse)" class="member-name-link">livez</a><wbr>(<a href="../../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req,
+<div class="col-second even-row-color"><span class="type-name-label">HealthResource.</span><code><a href="../HealthResource.html#livez(org.apache.juneau.rest.server.RestRequest,org.apache.juneau.rest.server.RestResponse)" class="member-name-link">livez</a><wbr>(<a href="../../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req,
  <a href="../../RestResponse.html" title="class in org.apache.juneau.rest.server">RestResponse</a>&nbsp;res)</code></div>
 <div class="col-last even-row-color">
 <div class="block">Liveness probe endpoint.</div>
 </div>
 <div class="col-first odd-row-color"><code><a href="../HealthAggregator.HealthResponse.html" title="class in org.apache.juneau.rest.server.health">HealthAggregator.HealthResponse</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">HealthResource.</span><code><a href="../HealthResource.html#livez(org.apache.juneau.rest.server.RestRequest,org.apache.juneau.rest.server.RestResponse)" class="member-name-link">livez</a><wbr>(<a href="../../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req,
+<div class="col-second odd-row-color"><span class="type-name-label">HealthServlet.</span><code><a href="../HealthServlet.html#probe(org.apache.juneau.rest.server.RestRequest,org.apache.juneau.rest.server.RestResponse)" class="member-name-link">probe</a><wbr>(<a href="../../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req,
  <a href="../../RestResponse.html" title="class in org.apache.juneau.rest.server">RestResponse</a>&nbsp;res)</code></div>
 <div class="col-last odd-row-color">
-<div class="block">Liveness probe endpoint.</div>
+<div class="block">Health/readiness/liveness probe endpoint.</div>
 </div>
 <div class="col-first even-row-color"><code><a href="../HealthAggregator.HealthResponse.html" title="class in org.apache.juneau.rest.server.health">HealthAggregator.HealthResponse</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">HealthServlet.</span><code><a href="../HealthServlet.html#livez(org.apache.juneau.rest.server.RestResponse)" class="member-name-link">livez</a><wbr>(<a href="../../RestResponse.html" title="class in org.apache.juneau.rest.server">RestResponse</a>&nbsp;res)</code></div>
-<div class="col-last even-row-color">
-<div class="block">Liveness probe endpoint.</div>
-</div>
-<div class="col-first odd-row-color"><code><a href="../HealthAggregator.HealthResponse.html" title="class in org.apache.juneau.rest.server.health">HealthAggregator.HealthResponse</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">HealthMixin.</span><code><a href="../HealthMixin.html#readyz(org.apache.juneau.rest.server.RestRequest,org.apache.juneau.rest.server.RestResponse)" class="member-name-link">readyz</a><wbr>(<a href="../../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req,
- <a href="../../RestResponse.html" title="class in org.apache.juneau.rest.server">RestResponse</a>&nbsp;res)</code></div>
-<div class="col-last odd-row-color">
-<div class="block">Readiness probe endpoint.</div>
-</div>
-<div class="col-first even-row-color"><code><a href="../HealthAggregator.HealthResponse.html" title="class in org.apache.juneau.rest.server.health">HealthAggregator.HealthResponse</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">HealthResource.</span><code><a href="../HealthResource.html#readyz(org.apache.juneau.rest.server.RestRequest,org.apache.juneau.rest.server.RestResponse)" class="member-name-link">readyz</a><wbr>(<a href="../../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req,
+<div class="col-second even-row-color"><span class="type-name-label">HealthMixin.</span><code><a href="../HealthMixin.html#readyz(org.apache.juneau.rest.server.RestRequest,org.apache.juneau.rest.server.RestResponse)" class="member-name-link">readyz</a><wbr>(<a href="../../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req,
  <a href="../../RestResponse.html" title="class in org.apache.juneau.rest.server">RestResponse</a>&nbsp;res)</code></div>
 <div class="col-last even-row-color">
 <div class="block">Readiness probe endpoint.</div>
 </div>
 <div class="col-first odd-row-color"><code><a href="../HealthAggregator.HealthResponse.html" title="class in org.apache.juneau.rest.server.health">HealthAggregator.HealthResponse</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">HealthServlet.</span><code><a href="../HealthServlet.html#readyz(org.apache.juneau.rest.server.RestResponse)" class="member-name-link">readyz</a><wbr>(<a href="../../RestResponse.html" title="class in org.apache.juneau.rest.server">RestResponse</a>&nbsp;res)</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">HealthResource.</span><code><a href="../HealthResource.html#readyz(org.apache.juneau.rest.server.RestRequest,org.apache.juneau.rest.server.RestResponse)" class="member-name-link">readyz</a><wbr>(<a href="../../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req,
+ <a href="../../RestResponse.html" title="class in org.apache.juneau.rest.server">RestResponse</a>&nbsp;res)</code></div>
 <div class="col-last odd-row-color">
 <div class="block">Readiness probe endpoint.</div>
 </div>

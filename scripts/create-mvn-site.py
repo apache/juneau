@@ -16,20 +16,19 @@
 # limitations under the License.
 
 """
-Create Maven Site Script
+Generate the Maven site with javadocs and copy it to the Docusaurus static directory.
 
-Generates the Maven site with javadocs and copies it to the Docusaurus static directory
-for local testing and broken link validation.
-
-Usage:
-    python3 create-mvn-site.py
+Full docs: create-mvn-site.md
 """
 
+import argparse
 import shutil
 import subprocess
 import sys
 from datetime import datetime
 from pathlib import Path
+
+from juneau_root import find_juneau_root
 
 
 def print_timestamp(message):
@@ -81,43 +80,6 @@ def run_maven_command(command, description, cwd):
         return False
 
 
-def find_master_branch_sibling(script_dir):
-    """
-    Find the master branch sibling folder.
-    
-    The docs branch and master branch should be sibling folders:
-    - /git/apache/juneau/docs/
-    - /git/apache/juneau/master/
-    
-    Args:
-        script_dir: Path to the scripts directory (should be in docs/scripts)
-        
-    Returns:
-        Path to the master branch folder
-        
-    Raises:
-        SystemExit: If the master branch sibling folder doesn't exist
-    """
-    # Get the parent of the docs folder (should be /git/apache/juneau/)
-    docs_dir = script_dir.parent  # docs/
-    parent_dir = docs_dir.parent  # /git/apache/juneau/
-    master_dir = parent_dir / 'master'
-    
-    if not master_dir.exists():
-        print(f"ERROR: Master branch sibling folder not found at {master_dir}")
-        print(f"Expected structure:")
-        print(f"  {parent_dir}/docs/  (current)")
-        print(f"  {parent_dir}/master/  (missing)")
-        print("\nPlease ensure the master branch is cloned as a sibling folder.")
-        sys.exit(1)
-    
-    if not (master_dir / '.git').exists():
-        print(f"ERROR: {master_dir} exists but is not a git repository")
-        sys.exit(1)
-    
-    return master_dir
-
-
 def get_project_version(master_root):
     """Get the project version from Maven POM."""
     try:
@@ -136,9 +98,14 @@ def get_project_version(master_root):
 
 def main():
     # Get directories
-    script_dir = Path(__file__).parent
+    parser = argparse.ArgumentParser(description="Generate the Maven site and copy it into the Docusaurus static directory.")
+    parser.add_argument("--juneau-root", type=Path, default=None,
+                        help="Juneau source checkout to build (default: $JUNEAU_ROOT, then sibling ../master, then ../juneau)")
+    args = parser.parse_args()
+
+    script_dir = Path(__file__).resolve().parent
     docs_dir = script_dir.parent  # docs/
-    master_root = find_master_branch_sibling(script_dir)
+    master_root = find_juneau_root(docs_dir, args.juneau_root)
     site_dir = master_root / "target" / "site"
     static_site_dir = docs_dir / "static" / "site"
     

@@ -162,21 +162,21 @@ loadScripts(document, 'script');</script>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#attr(java.lang.String,java.lang.Object)" class="member-name-link">attr</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Shortcut for <code>attr(<jk>null</jk>, name, value, <jk>false</jk>);</code></div>
+<div class="block">Shortcut for <code>attr(<jk>null</jk>, name, value, <jk>true</jk>);</code></div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="XmlWriter.html" title="type parameter in XmlWriter">SELF</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#attr(java.lang.String,java.lang.Object,boolean)" class="member-name-link">attr</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value,
  boolean&nbsp;valNeedsEncoding)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Shortcut for <code>attr(<jk>null</jk>, name, value, <jk>false</jk>);</code></div>
+<div class="block">Shortcut for <code>attr(<jk>null</jk>, name, value, valNeedsEncoding);</code></div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="XmlWriter.html" title="type parameter in XmlWriter">SELF</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#attr(java.lang.String,java.lang.String,java.lang.Object)" class="member-name-link">attr</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;ns,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Shortcut for <code>attr(ns, name, value, <jk>false</jk>);</code></div>
+<div class="block">Shortcut for <code>attr(ns, name, value, <jk>true</jk>);</code></div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="XmlWriter.html" title="type parameter in XmlWriter">SELF</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#attr(java.lang.String,java.lang.String,java.lang.Object,boolean)" class="member-name-link">attr</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;ns,
@@ -216,7 +216,9 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>protected <a href="XmlWriter.html" title="type parameter in XmlWriter">SELF</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#attrValue(java.lang.Object,boolean)" class="member-name-link">attrValue</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value,
  boolean&nbsp;needsEncoding)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Writes an attribute value to the output, optionally encoding it.</div>
+</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="XmlWriter.html" title="type parameter in XmlWriter">SELF</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#ceTag()" class="member-name-link">ceTag</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
@@ -492,7 +494,7 @@ loadScripts(document, 'script');</script>
 <dt>Parameters:</dt>
 <dd><code>ns</code> - The namespace.  Can be <jk>null</jk> (no namespace prefix is written).</dd>
 <dd><code>name</code> - The attribute name.</dd>
-<dd><code>value</code> - The attribute value.</dd>
+<dd><code>value</code> - The attribute value.  Encoded as described in <a href="#attr(java.lang.String,java.lang.String,java.lang.Object,boolean)"><code>attr(String, String, Object, boolean)</code></a>.</dd>
 <dt>Returns:</dt>
 <dd>This object.</dd>
 </dl>
@@ -503,11 +505,11 @@ loadScripts(document, 'script');</script>
 <h3>attr</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="XmlWriter.html" title="type parameter in XmlWriter">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlWriter.html#line-100">attr</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</span></div>
-<div class="block">Shortcut for <code>attr(<jk>null</jk>, name, value, <jk>false</jk>);</code></div>
+<div class="block">Shortcut for <code>attr(<jk>null</jk>, name, value, <jk>true</jk>);</code></div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>name</code> - The attribute name.</dd>
-<dd><code>value</code> - The attribute value.</dd>
+<dd><code>value</code> - The attribute value.  Encoded as described in <a href="#attr(java.lang.String,java.lang.String,java.lang.Object,boolean)"><code>attr(String, String, Object, boolean)</code></a>.</dd>
 <dt>Returns:</dt>
 <dd>This object.</dd>
 </dl>
@@ -519,12 +521,12 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="XmlWriter.html" title="type parameter in XmlWriter">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlWriter.html#line-112">attr</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value,
  boolean&nbsp;valNeedsEncoding)</span></div>
-<div class="block">Shortcut for <code>attr(<jk>null</jk>, name, value, <jk>false</jk>);</code></div>
+<div class="block">Shortcut for <code>attr(<jk>null</jk>, name, value, valNeedsEncoding);</code></div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>name</code> - The attribute name.</dd>
 <dd><code>value</code> - The attribute value.</dd>
-<dd><code>valNeedsEncoding</code> - If <jk>true</jk>, attribute name will be encoded.</dd>
+<dd><code>valNeedsEncoding</code> - If <jk>true</jk>, the attribute value will be encoded.</dd>
 <dt>Returns:</dt>
 <dd>This object.</dd>
 </dl>
@@ -536,12 +538,12 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="XmlWriter.html" title="type parameter in XmlWriter">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlWriter.html#line-124">attr</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;ns,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</span></div>
-<div class="block">Shortcut for <code>attr(ns, name, value, <jk>false</jk>);</code></div>
+<div class="block">Shortcut for <code>attr(ns, name, value, <jk>true</jk>);</code></div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>ns</code> - The namespace.  Can be <jk>null</jk> (no namespace prefix is written).</dd>
 <dd><code>name</code> - The attribute name.</dd>
-<dd><code>value</code> - The attribute value.</dd>
+<dd><code>value</code> - The attribute value.  Encoded as described in <a href="#attr(java.lang.String,java.lang.String,java.lang.Object,boolean)"><code>attr(String, String, Object, boolean)</code></a>.</dd>
 <dt>Returns:</dt>
 <dd>This object.</dd>
 </dl>
@@ -550,17 +552,22 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="attr(java.lang.String,java.lang.String,java.lang.Object,boolean)">
 <h3>attr</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="XmlWriter.html" title="type parameter in XmlWriter">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlWriter.html#line-137">attr</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;ns,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="XmlWriter.html" title="type parameter in XmlWriter">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlWriter.html#line-142">attr</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;ns,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value,
  boolean&nbsp;valNeedsEncoding)</span></div>
-<div class="block">Writes an attribute to the output:  <code><xa>ns:name</xa>=<xs>'value'</xs></code></div>
+<div class="block">Writes an attribute to the output:  <code><xa>ns:name</xa>=<xs>'value'</xs></code>
+
+ <p>
+ Encoding defends against markup injection: an unencoded value containing a quote character terminates the
+ attribute early and lets the remainder of the value be interpreted as markup.  Pass <jk>false</jk> only for
+ values that are already known to be safe attribute text.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>ns</code> - The namespace.  Can be <jk>null</jk> (no namespace prefix is written).</dd>
 <dd><code>name</code> - The attribute name.</dd>
 <dd><code>value</code> - The attribute value.</dd>
-<dd><code>valNeedsEncoding</code> - If <jk>true</jk>, attribute name will be encoded.</dd>
+<dd><code>valNeedsEncoding</code> - If <jk>true</jk>, the attribute value will be encoded.</dd>
 <dt>Returns:</dt>
 <dd>This object.</dd>
 </dl>
@@ -569,7 +576,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="attrUri(org.apache.juneau.marshall.xml.Namespace,java.lang.String,java.lang.Object)">
 <h3>attrUri</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="XmlWriter.html" title="type parameter in XmlWriter">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlWriter.html#line-149">attrUri</a></span><wbr><span class="parameters">(<a href="Namespace.html" title="class in org.apache.juneau.marshall.xml">Namespace</a>&nbsp;ns,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="XmlWriter.html" title="type parameter in XmlWriter">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlWriter.html#line-154">attrUri</a></span><wbr><span class="parameters">(<a href="Namespace.html" title="class in org.apache.juneau.marshall.xml">Namespace</a>&nbsp;ns,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</span></div>
 <div class="block">Writes an attribute with a URI value to the output:  <code><xa>ns:name</xa>=<xs>'uri-value'</xs></code></div>
@@ -586,7 +593,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="attrUri(java.lang.String,java.lang.Object)">
 <h3>attrUri</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="XmlWriter.html" title="type parameter in XmlWriter">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlWriter.html#line-160">attrUri</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="XmlWriter.html" title="type parameter in XmlWriter">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlWriter.html#line-165">attrUri</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</span></div>
 <div class="block">Append an attribute with a URI value.</div>
 <dl class="notes">
@@ -601,7 +608,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="attrUri(java.lang.String,java.lang.String,java.lang.Object)">
 <h3>attrUri</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="XmlWriter.html" title="type parameter in XmlWriter">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlWriter.html#line-172">attrUri</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;ns,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="XmlWriter.html" title="type parameter in XmlWriter">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlWriter.html#line-177">attrUri</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;ns,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</span></div>
 <div class="block">Writes an attribute with a URI value to the output:  <code><xa>ns:name</xa>=<xs>'uri-value'</xs></code></div>
@@ -618,7 +625,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="ceTag()">
 <h3>ceTag</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="XmlWriter.html" title="type parameter in XmlWriter">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlWriter.html#line-184">ceTag</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="XmlWriter.html" title="type parameter in XmlWriter">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlWriter.html#line-189">ceTag</a></span>()</div>
 <div class="block">Closes an empty tag.
 
  <p>
@@ -632,7 +639,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="cTag()">
 <h3>cTag</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="XmlWriter.html" title="type parameter in XmlWriter">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlWriter.html#line-197">cTag</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="XmlWriter.html" title="type parameter in XmlWriter">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlWriter.html#line-202">cTag</a></span>()</div>
 <div class="block">Closes a tag.
 
  <p>
@@ -646,7 +653,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="eTag(int,java.lang.String)">
 <h3>eTag</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="XmlWriter.html" title="type parameter in XmlWriter">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlWriter.html#line-209">eTag</a></span><wbr><span class="parameters">(int&nbsp;indent,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="XmlWriter.html" title="type parameter in XmlWriter">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlWriter.html#line-214">eTag</a></span><wbr><span class="parameters">(int&nbsp;indent,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
 <div class="block">Shortcut for <code>i(indent).eTag(<jk>null</jk>, name, <jk>false</jk>);</code></div>
 <dl class="notes">
@@ -661,7 +668,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="eTag(int,java.lang.String,java.lang.String)">
 <h3>eTag</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="XmlWriter.html" title="type parameter in XmlWriter">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlWriter.html#line-221">eTag</a></span><wbr><span class="parameters">(int&nbsp;indent,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="XmlWriter.html" title="type parameter in XmlWriter">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlWriter.html#line-226">eTag</a></span><wbr><span class="parameters">(int&nbsp;indent,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;ns,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
 <div class="block">Shortcut for <code>i(indent).eTag(ns, name, <jk>false</jk>);</code></div>
@@ -678,7 +685,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="eTag(int,java.lang.String,java.lang.String,boolean)">
 <h3>eTag</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="XmlWriter.html" title="type parameter in XmlWriter">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlWriter.html#line-234">eTag</a></span><wbr><span class="parameters">(int&nbsp;indent,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="XmlWriter.html" title="type parameter in XmlWriter">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlWriter.html#line-239">eTag</a></span><wbr><span class="parameters">(int&nbsp;indent,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;ns,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  boolean&nbsp;needsEncoding)</span></div>
@@ -697,7 +704,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="eTag(java.lang.String)">
 <h3>eTag</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="XmlWriter.html" title="type parameter in XmlWriter">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlWriter.html#line-244">eTag</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="XmlWriter.html" title="type parameter in XmlWriter">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlWriter.html#line-249">eTag</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
 <div class="block">Shortcut for <code>eTag(<jk>null</jk>, name, <jk>false</jk>);</code></div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -710,7 +717,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="eTag(java.lang.String,java.lang.String)">
 <h3>eTag</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="XmlWriter.html" title="type parameter in XmlWriter">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlWriter.html#line-255">eTag</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;ns,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="XmlWriter.html" title="type parameter in XmlWriter">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlWriter.html#line-260">eTag</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;ns,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
 <div class="block">Shortcut for <code>eTag(ns, name, <jk>false</jk>);</code></div>
 <dl class="notes">
@@ -725,7 +732,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="eTag(java.lang.String,java.lang.String,boolean)">
 <h3>eTag</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="XmlWriter.html" title="type parameter in XmlWriter">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlWriter.html#line-267">eTag</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;ns,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="XmlWriter.html" title="type parameter in XmlWriter">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlWriter.html#line-272">eTag</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;ns,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  boolean&nbsp;needsEncoding)</span></div>
 <div class="block">Writes an end tag to the output:  <code><xt>&lt;/ns:name&gt;</xt></code></div>
@@ -742,7 +749,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="oAttr(org.apache.juneau.marshall.xml.Namespace,java.lang.String)">
 <h3>oAttr</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="XmlWriter.html" title="type parameter in XmlWriter">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlWriter.html#line-286">oAttr</a></span><wbr><span class="parameters">(<a href="Namespace.html" title="class in org.apache.juneau.marshall.xml">Namespace</a>&nbsp;ns,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="XmlWriter.html" title="type parameter in XmlWriter">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlWriter.html#line-291">oAttr</a></span><wbr><span class="parameters">(<a href="Namespace.html" title="class in org.apache.juneau.marshall.xml">Namespace</a>&nbsp;ns,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
 <div class="block">Writes an open-ended attribute to the output:  <code><xa>ns:name</xa>=</code></div>
 <dl class="notes">
@@ -757,7 +764,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="oAttr(java.lang.String,java.lang.String)">
 <h3>oAttr</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="XmlWriter.html" title="type parameter in XmlWriter">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlWriter.html#line-297">oAttr</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;ns,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="XmlWriter.html" title="type parameter in XmlWriter">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlWriter.html#line-302">oAttr</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;ns,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
 <div class="block">Writes an open-ended attribute to the output:  <code><xa>ns:name</xa>=</code></div>
 <dl class="notes">
@@ -772,7 +779,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="oTag(int,java.lang.String)">
 <h3>oTag</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="XmlWriter.html" title="type parameter in XmlWriter">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlWriter.html#line-312">oTag</a></span><wbr><span class="parameters">(int&nbsp;indent,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="XmlWriter.html" title="type parameter in XmlWriter">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlWriter.html#line-317">oTag</a></span><wbr><span class="parameters">(int&nbsp;indent,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
 <div class="block">Shortcut for <code>i(indent).oTag(<jk>null</jk>, name, <jk>false</jk>);</code></div>
 <dl class="notes">
@@ -787,7 +794,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="oTag(int,java.lang.String,java.lang.String)">
 <h3>oTag</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="XmlWriter.html" title="type parameter in XmlWriter">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlWriter.html#line-324">oTag</a></span><wbr><span class="parameters">(int&nbsp;indent,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="XmlWriter.html" title="type parameter in XmlWriter">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlWriter.html#line-329">oTag</a></span><wbr><span class="parameters">(int&nbsp;indent,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;ns,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
 <div class="block">Shortcut for <code>i(indent).oTag(ns, name, <jk>false</jk>);</code></div>
@@ -804,7 +811,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="oTag(int,java.lang.String,java.lang.String,boolean)">
 <h3>oTag</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="XmlWriter.html" title="type parameter in XmlWriter">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlWriter.html#line-337">oTag</a></span><wbr><span class="parameters">(int&nbsp;indent,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="XmlWriter.html" title="type parameter in XmlWriter">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlWriter.html#line-342">oTag</a></span><wbr><span class="parameters">(int&nbsp;indent,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;ns,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  boolean&nbsp;needsEncoding)</span></div>
@@ -823,7 +830,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="oTag(java.lang.String)">
 <h3>oTag</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="XmlWriter.html" title="type parameter in XmlWriter">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlWriter.html#line-347">oTag</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="XmlWriter.html" title="type parameter in XmlWriter">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlWriter.html#line-352">oTag</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
 <div class="block">Shortcut for <code>oTag(<jk>null</jk>, name, <jk>false</jk>);</code></div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -836,7 +843,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="oTag(java.lang.String,java.lang.String)">
 <h3>oTag</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="XmlWriter.html" title="type parameter in XmlWriter">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlWriter.html#line-358">oTag</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;ns,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="XmlWriter.html" title="type parameter in XmlWriter">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlWriter.html#line-363">oTag</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;ns,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
 <div class="block">Shortcut for <code>oTag(ns, name, <jk>false</jk>);</code></div>
 <dl class="notes">
@@ -851,7 +858,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="oTag(java.lang.String,java.lang.String,boolean)">
 <h3>oTag</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="XmlWriter.html" title="type parameter in XmlWriter">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlWriter.html#line-370">oTag</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;ns,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="XmlWriter.html" title="type parameter in XmlWriter">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlWriter.html#line-375">oTag</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;ns,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  boolean&nbsp;needsEncoding)</span></div>
 <div class="block">Writes an opening tag to the output:  <code><xt>&lt;ns:name</xt></code></div>
@@ -868,7 +875,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="sTag(int,java.lang.String)">
 <h3>sTag</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="XmlWriter.html" title="type parameter in XmlWriter">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlWriter.html#line-388">sTag</a></span><wbr><span class="parameters">(int&nbsp;indent,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="XmlWriter.html" title="type parameter in XmlWriter">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlWriter.html#line-393">sTag</a></span><wbr><span class="parameters">(int&nbsp;indent,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
 <div class="block">Shortcut for <code>i(indent).sTag(<jk>null</jk>, name, <jk>false</jk>);</code></div>
 <dl class="notes">
@@ -883,7 +890,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="sTag(int,java.lang.String,java.lang.String)">
 <h3>sTag</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="XmlWriter.html" title="type parameter in XmlWriter">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlWriter.html#line-400">sTag</a></span><wbr><span class="parameters">(int&nbsp;indent,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="XmlWriter.html" title="type parameter in XmlWriter">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlWriter.html#line-405">sTag</a></span><wbr><span class="parameters">(int&nbsp;indent,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;ns,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
 <div class="block">Shortcut for <code>i(indent).sTag(ns, name, <jk>false</jk>);</code></div>
@@ -900,7 +907,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="sTag(int,java.lang.String,java.lang.String,boolean)">
 <h3>sTag</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="XmlWriter.html" title="type parameter in XmlWriter">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlWriter.html#line-413">sTag</a></span><wbr><span class="parameters">(int&nbsp;indent,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="XmlWriter.html" title="type parameter in XmlWriter">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlWriter.html#line-418">sTag</a></span><wbr><span class="parameters">(int&nbsp;indent,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;ns,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  boolean&nbsp;needsEncoding)</span></div>
@@ -919,7 +926,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="sTag(java.lang.String)">
 <h3>sTag</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="XmlWriter.html" title="type parameter in XmlWriter">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlWriter.html#line-423">sTag</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="XmlWriter.html" title="type parameter in XmlWriter">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlWriter.html#line-428">sTag</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
 <div class="block">Shortcut for <code>sTag(<jk>null</jk>, name, <jk>false</jk>);</code></div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -932,7 +939,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="sTag(java.lang.String,java.lang.String)">
 <h3>sTag</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="XmlWriter.html" title="type parameter in XmlWriter">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlWriter.html#line-434">sTag</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;ns,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="XmlWriter.html" title="type parameter in XmlWriter">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlWriter.html#line-439">sTag</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;ns,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
 <div class="block">Shortcut for <code>sTag(ns, name, <jk>false</jk>);</code></div>
 <dl class="notes">
@@ -947,7 +954,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="sTag(java.lang.String,java.lang.String,boolean)">
 <h3>sTag</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="XmlWriter.html" title="type parameter in XmlWriter">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlWriter.html#line-446">sTag</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;ns,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="XmlWriter.html" title="type parameter in XmlWriter">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlWriter.html#line-451">sTag</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;ns,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  boolean&nbsp;needsEncoding)</span></div>
 <div class="block">Writes a start tag to the output:  <code><xt>&lt;ns:name&gt;</xt></code></div>
@@ -964,7 +971,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="tag(int,java.lang.String)">
 <h3>tag</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="XmlWriter.html" title="type parameter in XmlWriter">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlWriter.html#line-458">tag</a></span><wbr><span class="parameters">(int&nbsp;indent,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="XmlWriter.html" title="type parameter in XmlWriter">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlWriter.html#line-463">tag</a></span><wbr><span class="parameters">(int&nbsp;indent,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
 <div class="block">Shortcut for <code>i(indent).tag(<jk>null</jk>, name, <jk>false</jk>);</code></div>
 <dl class="notes">
@@ -979,7 +986,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="tag(int,java.lang.String,java.lang.String)">
 <h3>tag</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="XmlWriter.html" title="type parameter in XmlWriter">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlWriter.html#line-470">tag</a></span><wbr><span class="parameters">(int&nbsp;indent,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="XmlWriter.html" title="type parameter in XmlWriter">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlWriter.html#line-475">tag</a></span><wbr><span class="parameters">(int&nbsp;indent,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;ns,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
 <div class="block">Shortcut for <code>i(indent).tag(ns, name, <jk>false</jk>);</code></div>
@@ -996,7 +1003,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="tag(int,java.lang.String,java.lang.String,boolean)">
 <h3>tag</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="XmlWriter.html" title="type parameter in XmlWriter">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlWriter.html#line-483">tag</a></span><wbr><span class="parameters">(int&nbsp;indent,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="XmlWriter.html" title="type parameter in XmlWriter">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlWriter.html#line-488">tag</a></span><wbr><span class="parameters">(int&nbsp;indent,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;ns,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  boolean&nbsp;needsEncoding)</span></div>
@@ -1015,7 +1022,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="tag(java.lang.String)">
 <h3>tag</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="XmlWriter.html" title="type parameter in XmlWriter">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlWriter.html#line-493">tag</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="XmlWriter.html" title="type parameter in XmlWriter">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlWriter.html#line-498">tag</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
 <div class="block">Shortcut for <code>tag(<jk>null</jk>, name, <jk>false</jk>);</code></div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -1028,7 +1035,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="tag(java.lang.String,java.lang.String)">
 <h3>tag</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="XmlWriter.html" title="type parameter in XmlWriter">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlWriter.html#line-504">tag</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;ns,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="XmlWriter.html" title="type parameter in XmlWriter">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlWriter.html#line-509">tag</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;ns,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
 <div class="block">Shortcut for <code>tag(ns, name, <jk>false</jk>);</code></div>
 <dl class="notes">
@@ -1043,7 +1050,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="tag(java.lang.String,java.lang.String,boolean)">
 <h3>tag</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="XmlWriter.html" title="type parameter in XmlWriter">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlWriter.html#line-516">tag</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;ns,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="XmlWriter.html" title="type parameter in XmlWriter">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlWriter.html#line-521">tag</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;ns,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  boolean&nbsp;needsEncoding)</span></div>
 <div class="block">Writes a closed tag to the output:  <code><xt>&lt;ns:name/&gt;</xt></code></div>
@@ -1060,7 +1067,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="text(java.lang.Object)">
 <h3>text</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="XmlWriter.html" title="type parameter in XmlWriter">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlWriter.html#line-534">text</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="XmlWriter.html" title="type parameter in XmlWriter">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlWriter.html#line-539">text</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</span></div>
 <div class="block">Shortcut for calling <code>text(o, <jk>false</jk>);</code></div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -1073,7 +1080,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="text(java.lang.Object,boolean)">
 <h3>text</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="XmlWriter.html" title="type parameter in XmlWriter">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlWriter.html#line-547">text</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="XmlWriter.html" title="type parameter in XmlWriter">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlWriter.html#line-552">text</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value,
  boolean&nbsp;preserveWhitespace)</span></div>
 <div class="block">Serializes and encodes the specified object as valid XML text.</div>
 <dl class="notes">
@@ -1088,7 +1095,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="textUri(java.lang.Object)">
 <h3>textUri</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="XmlWriter.html" title="type parameter in XmlWriter">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlWriter.html#line-558">textUri</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="XmlWriter.html" title="type parameter in XmlWriter">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlWriter.html#line-563">textUri</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</span></div>
 <div class="block">Same as <a href="#text(java.lang.Object)"><code>text(Object)</code></a> but treats the value as a URL to resolved then serialized.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -1101,7 +1108,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="toString()">
 <h3>toString</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlWriter.html#line-563">toString</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlWriter.html#line-568">toString</a></span>()</div>
 <dl class="notes">
 <dt>Overrides:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#toString()" title="class or interface in java.lang" class="external-link">toString</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></code></dd>
@@ -1111,8 +1118,16 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="attrValue(java.lang.Object,boolean)">
 <h3>attrValue</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="XmlWriter.html" title="type parameter in XmlWriter">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlWriter.html#line-568">attrValue</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value,
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="XmlWriter.html" title="type parameter in XmlWriter">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/xml/XmlWriter.html#line-580">attrValue</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value,
  boolean&nbsp;needsEncoding)</span></div>
+<div class="block">Writes an attribute value to the output, optionally encoding it.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>value</code> - The attribute value.  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URI.html" title="class or interface in java.net" class="external-link"><code>URI</code></a> and <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URL.html" title="class or interface in java.net" class="external-link"><code>URL</code></a> values are resolved against the URI resolver first.</dd>
+<dd><code>needsEncoding</code> - If <jk>true</jk>, the value is encoded via <a href="XmlUtils.html#encodeAttrValue(java.io.Writer,java.lang.Object,boolean)"><code>XmlUtils.encodeAttrValue(Writer, Object, boolean)</code></a>.</dd>
+<dt>Returns:</dt>
+<dd>This object.</dd>
+</dl>
 </section>
 </li>
 </ul>

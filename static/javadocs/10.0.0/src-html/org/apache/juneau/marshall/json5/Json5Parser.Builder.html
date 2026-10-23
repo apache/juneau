@@ -29,7 +29,7 @@
 <span class="source-line-no">016</span><span id="line-16"> */</span>
 <span class="source-line-no">017</span><span id="line-17">package org.apache.juneau.marshall.json5;</span>
 <span class="source-line-no">018</span><span id="line-18"></span>
-<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.AssertionUtils.*;</span>
+<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.Shorts.*;</span>
 <span class="source-line-no">020</span><span id="line-20"></span>
 <span class="source-line-no">021</span><span id="line-21">import org.apache.juneau.commons.collections.*;</span>
 <span class="source-line-no">022</span><span id="line-22">import org.apache.juneau.marshall.json.*;</span>
@@ -68,103 +68,102 @@
 <span class="source-line-no">055</span><span id="line-55"> */</span>
 <span class="source-line-no">056</span><span id="line-56">@SuppressWarnings({</span>
 <span class="source-line-no">057</span><span id="line-57">   "java:S110", // Inheritance depth acceptable for Json5Parser hierarchy</span>
-<span class="source-line-no">058</span><span id="line-58">   "java:S115"  // Constants use naming conventions that embed type info or config keys (e.g. PROP_escapeSolidus)</span>
-<span class="source-line-no">059</span><span id="line-59">})</span>
-<span class="source-line-no">060</span><span id="line-60">public class Json5Parser extends JsonParser {</span>
-<span class="source-line-no">061</span><span id="line-61"></span>
-<span class="source-line-no">062</span><span id="line-62">   private static final String ARG_copyFrom = "copyFrom";</span>
-<span class="source-line-no">063</span><span id="line-63"></span>
-<span class="source-line-no">064</span><span id="line-64">   /**</span>
-<span class="source-line-no">065</span><span id="line-65">    * Builder class.</span>
-<span class="source-line-no">066</span><span id="line-66">    */</span>
-<span class="source-line-no">067</span><span id="line-67">   public static class Builder extends JsonParser.Builder&lt;Builder&gt; {</span>
-<span class="source-line-no">068</span><span id="line-68"></span>
-<span class="source-line-no">069</span><span id="line-69">      private static final Cache&lt;HashKey,Json5Parser&gt; CACHE = Cache.of(HashKey.class, Json5Parser.class).build();</span>
-<span class="source-line-no">070</span><span id="line-70"></span>
-<span class="source-line-no">071</span><span id="line-71">      /**</span>
-<span class="source-line-no">072</span><span id="line-72">       * Constructor, default settings.</span>
-<span class="source-line-no">073</span><span id="line-73">       */</span>
-<span class="source-line-no">074</span><span id="line-74">      protected Builder() {</span>
-<span class="source-line-no">075</span><span id="line-75">         consumes("application/json5,text/json5,application/json,text/json");</span>
-<span class="source-line-no">076</span><span id="line-76">      }</span>
-<span class="source-line-no">077</span><span id="line-77"></span>
-<span class="source-line-no">078</span><span id="line-78">      /**</span>
-<span class="source-line-no">079</span><span id="line-79">       * Copy constructor.</span>
-<span class="source-line-no">080</span><span id="line-80">       *</span>
-<span class="source-line-no">081</span><span id="line-81">       * @param copyFrom The builder to copy from.</span>
-<span class="source-line-no">082</span><span id="line-82">       *    &lt;br&gt;Cannot be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">083</span><span id="line-83">       */</span>
-<span class="source-line-no">084</span><span id="line-84">      protected Builder(Builder copyFrom) {</span>
-<span class="source-line-no">085</span><span id="line-85">         super(assertArgNotNull(ARG_copyFrom, copyFrom));</span>
-<span class="source-line-no">086</span><span id="line-86">      }</span>
-<span class="source-line-no">087</span><span id="line-87"></span>
-<span class="source-line-no">088</span><span id="line-88">      /**</span>
-<span class="source-line-no">089</span><span id="line-89">       * Copy constructor.</span>
-<span class="source-line-no">090</span><span id="line-90">       *</span>
-<span class="source-line-no">091</span><span id="line-91">       * @param copyFrom The bean to copy from.</span>
-<span class="source-line-no">092</span><span id="line-92">       *    &lt;br&gt;Cannot be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">093</span><span id="line-93">       */</span>
-<span class="source-line-no">094</span><span id="line-94">      protected Builder(Json5Parser copyFrom) {</span>
-<span class="source-line-no">095</span><span id="line-95">         super(assertArgNotNull(ARG_copyFrom, copyFrom));</span>
-<span class="source-line-no">096</span><span id="line-96">      }</span>
-<span class="source-line-no">097</span><span id="line-97"></span>
-<span class="source-line-no">098</span><span id="line-98">      @Override /* Overridden from Context.Builder&lt;?&gt; */</span>
-<span class="source-line-no">099</span><span id="line-99">      public Json5Parser build() {</span>
-<span class="source-line-no">100</span><span id="line-100">         return cache(CACHE).build(Json5Parser.class);</span>
-<span class="source-line-no">101</span><span id="line-101">      }</span>
-<span class="source-line-no">102</span><span id="line-102"></span>
-<span class="source-line-no">103</span><span id="line-103">      @Override /* Overridden from Context.Builder&lt;?&gt; */</span>
-<span class="source-line-no">104</span><span id="line-104">      public Builder copy() {</span>
-<span class="source-line-no">105</span><span id="line-105">         return new Builder(this);</span>
-<span class="source-line-no">106</span><span id="line-106">      }</span>
+<span class="source-line-no">058</span><span id="line-58">   "java:S1192", // Duplicated literals (argument/property names) read more clearly inline than as constants</span>
+<span class="source-line-no">059</span><span id="line-59">   "java:S9149" // Per-format static factories intentionally shadow the parent's.</span>
+<span class="source-line-no">060</span><span id="line-60">})</span>
+<span class="source-line-no">061</span><span id="line-61">public class Json5Parser extends JsonParser {</span>
+<span class="source-line-no">062</span><span id="line-62"></span>
+<span class="source-line-no">063</span><span id="line-63">   /**</span>
+<span class="source-line-no">064</span><span id="line-64">    * Builder class.</span>
+<span class="source-line-no">065</span><span id="line-65">    */</span>
+<span class="source-line-no">066</span><span id="line-66">   public static class Builder extends JsonParser.Builder&lt;Builder&gt; {</span>
+<span class="source-line-no">067</span><span id="line-67"></span>
+<span class="source-line-no">068</span><span id="line-68">      private static final Cache&lt;HashKey,Json5Parser&gt; CACHE = Cache.of(HashKey.class, Json5Parser.class).build();</span>
+<span class="source-line-no">069</span><span id="line-69"></span>
+<span class="source-line-no">070</span><span id="line-70">      /**</span>
+<span class="source-line-no">071</span><span id="line-71">       * Constructor, default settings.</span>
+<span class="source-line-no">072</span><span id="line-72">       */</span>
+<span class="source-line-no">073</span><span id="line-73">      protected Builder() {</span>
+<span class="source-line-no">074</span><span id="line-74">         consumes("application/json5,text/json5,application/json,text/json");</span>
+<span class="source-line-no">075</span><span id="line-75">      }</span>
+<span class="source-line-no">076</span><span id="line-76"></span>
+<span class="source-line-no">077</span><span id="line-77">      /**</span>
+<span class="source-line-no">078</span><span id="line-78">       * Copy constructor.</span>
+<span class="source-line-no">079</span><span id="line-79">       *</span>
+<span class="source-line-no">080</span><span id="line-80">       * @param copyFrom The builder to copy from.</span>
+<span class="source-line-no">081</span><span id="line-81">       *    &lt;br&gt;Cannot be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">082</span><span id="line-82">       */</span>
+<span class="source-line-no">083</span><span id="line-83">      protected Builder(Builder copyFrom) {</span>
+<span class="source-line-no">084</span><span id="line-84">         super(reqnn("copyFrom", copyFrom));</span>
+<span class="source-line-no">085</span><span id="line-85">      }</span>
+<span class="source-line-no">086</span><span id="line-86"></span>
+<span class="source-line-no">087</span><span id="line-87">      /**</span>
+<span class="source-line-no">088</span><span id="line-88">       * Copy constructor.</span>
+<span class="source-line-no">089</span><span id="line-89">       *</span>
+<span class="source-line-no">090</span><span id="line-90">       * @param copyFrom The bean to copy from.</span>
+<span class="source-line-no">091</span><span id="line-91">       *    &lt;br&gt;Cannot be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">092</span><span id="line-92">       */</span>
+<span class="source-line-no">093</span><span id="line-93">      protected Builder(Json5Parser copyFrom) {</span>
+<span class="source-line-no">094</span><span id="line-94">         super(reqnn("copyFrom", copyFrom));</span>
+<span class="source-line-no">095</span><span id="line-95">      }</span>
+<span class="source-line-no">096</span><span id="line-96"></span>
+<span class="source-line-no">097</span><span id="line-97">      @Override /* Overridden from Context.Builder&lt;?&gt; */</span>
+<span class="source-line-no">098</span><span id="line-98">      public Json5Parser build() {</span>
+<span class="source-line-no">099</span><span id="line-99">         return cache(CACHE).build(Json5Parser.class);</span>
+<span class="source-line-no">100</span><span id="line-100">      }</span>
+<span class="source-line-no">101</span><span id="line-101"></span>
+<span class="source-line-no">102</span><span id="line-102">      @Override /* Overridden from Context.Builder&lt;?&gt; */</span>
+<span class="source-line-no">103</span><span id="line-103">      public Builder copy() {</span>
+<span class="source-line-no">104</span><span id="line-104">         return new Builder(this);</span>
+<span class="source-line-no">105</span><span id="line-105">      }</span>
+<span class="source-line-no">106</span><span id="line-106"></span>
 <span class="source-line-no">107</span><span id="line-107"></span>
-<span class="source-line-no">108</span><span id="line-108"></span>
-<span class="source-line-no">109</span><span id="line-109">   }</span>
-<span class="source-line-no">110</span><span id="line-110"></span>
-<span class="source-line-no">111</span><span id="line-111">   /** Default parser, Accept=application/json5. */</span>
-<span class="source-line-no">112</span><span id="line-112">   public static final Json5Parser DEFAULT = new Json5Parser(create());</span>
-<span class="source-line-no">113</span><span id="line-113"></span>
-<span class="source-line-no">114</span><span id="line-114">   /**</span>
-<span class="source-line-no">115</span><span id="line-115">    * Creates a new builder for this object.</span>
-<span class="source-line-no">116</span><span id="line-116">    *</span>
-<span class="source-line-no">117</span><span id="line-117">    * @return A new builder.</span>
-<span class="source-line-no">118</span><span id="line-118">    */</span>
-<span class="source-line-no">119</span><span id="line-119">   public static Builder create() {</span>
-<span class="source-line-no">120</span><span id="line-120">      return new Builder();</span>
-<span class="source-line-no">121</span><span id="line-121">   }</span>
-<span class="source-line-no">122</span><span id="line-122"></span>
-<span class="source-line-no">123</span><span id="line-123">   /**</span>
-<span class="source-line-no">124</span><span id="line-124">    * Constructor.</span>
-<span class="source-line-no">125</span><span id="line-125">    *</span>
-<span class="source-line-no">126</span><span id="line-126">    * @param builder The builder for this object.</span>
-<span class="source-line-no">127</span><span id="line-127">    */</span>
-<span class="source-line-no">128</span><span id="line-128">   public Json5Parser(Builder builder) {</span>
-<span class="source-line-no">129</span><span id="line-129">      super(builder);</span>
-<span class="source-line-no">130</span><span id="line-130">   }</span>
-<span class="source-line-no">131</span><span id="line-131"></span>
-<span class="source-line-no">132</span><span id="line-132">   /**</span>
-<span class="source-line-no">133</span><span id="line-133">    * Constructor.</span>
-<span class="source-line-no">134</span><span id="line-134">    *</span>
-<span class="source-line-no">135</span><span id="line-135">    * @param builder The builder for this object.</span>
-<span class="source-line-no">136</span><span id="line-136">    */</span>
-<span class="source-line-no">137</span><span id="line-137">   public Json5Parser(JsonParser.Builder&lt;?&gt; builder) {</span>
-<span class="source-line-no">138</span><span id="line-138">      super(builder);</span>
-<span class="source-line-no">139</span><span id="line-139">   }</span>
-<span class="source-line-no">140</span><span id="line-140"></span>
-<span class="source-line-no">141</span><span id="line-141">   @Override /* Overridden from Context */</span>
-<span class="source-line-no">142</span><span id="line-142">   public Builder copy() {</span>
-<span class="source-line-no">143</span><span id="line-143">      return new Builder(this);</span>
-<span class="source-line-no">144</span><span id="line-144">   }</span>
-<span class="source-line-no">145</span><span id="line-145"></span>
-<span class="source-line-no">146</span><span id="line-146">   @Override /* Overridden from Context */</span>
-<span class="source-line-no">147</span><span id="line-147">   public Json5ParserSession.Builder createSession() {</span>
-<span class="source-line-no">148</span><span id="line-148">      return Json5ParserSession.create(this);</span>
-<span class="source-line-no">149</span><span id="line-149">   }</span>
-<span class="source-line-no">150</span><span id="line-150"></span>
-<span class="source-line-no">151</span><span id="line-151">   @Override /* Overridden from Context */</span>
-<span class="source-line-no">152</span><span id="line-152">   public Json5ParserSession getSession() { return createSession().build(); }</span>
-<span class="source-line-no">153</span><span id="line-153"></span>
-<span class="source-line-no">154</span><span id="line-154">}</span>
+<span class="source-line-no">108</span><span id="line-108">   }</span>
+<span class="source-line-no">109</span><span id="line-109"></span>
+<span class="source-line-no">110</span><span id="line-110">   /** Default parser, Accept=application/json5. */</span>
+<span class="source-line-no">111</span><span id="line-111">   public static final Json5Parser DEFAULT = new Json5Parser(create());</span>
+<span class="source-line-no">112</span><span id="line-112"></span>
+<span class="source-line-no">113</span><span id="line-113">   /**</span>
+<span class="source-line-no">114</span><span id="line-114">    * Creates a new builder for this object.</span>
+<span class="source-line-no">115</span><span id="line-115">    *</span>
+<span class="source-line-no">116</span><span id="line-116">    * @return A new builder.</span>
+<span class="source-line-no">117</span><span id="line-117">    */</span>
+<span class="source-line-no">118</span><span id="line-118">   public static Builder create() {</span>
+<span class="source-line-no">119</span><span id="line-119">      return new Builder();</span>
+<span class="source-line-no">120</span><span id="line-120">   }</span>
+<span class="source-line-no">121</span><span id="line-121"></span>
+<span class="source-line-no">122</span><span id="line-122">   /**</span>
+<span class="source-line-no">123</span><span id="line-123">    * Constructor.</span>
+<span class="source-line-no">124</span><span id="line-124">    *</span>
+<span class="source-line-no">125</span><span id="line-125">    * @param builder The builder for this object.</span>
+<span class="source-line-no">126</span><span id="line-126">    */</span>
+<span class="source-line-no">127</span><span id="line-127">   public Json5Parser(Builder builder) {</span>
+<span class="source-line-no">128</span><span id="line-128">      super(builder);</span>
+<span class="source-line-no">129</span><span id="line-129">   }</span>
+<span class="source-line-no">130</span><span id="line-130"></span>
+<span class="source-line-no">131</span><span id="line-131">   /**</span>
+<span class="source-line-no">132</span><span id="line-132">    * Constructor.</span>
+<span class="source-line-no">133</span><span id="line-133">    *</span>
+<span class="source-line-no">134</span><span id="line-134">    * @param builder The builder for this object.</span>
+<span class="source-line-no">135</span><span id="line-135">    */</span>
+<span class="source-line-no">136</span><span id="line-136">   public Json5Parser(JsonParser.Builder&lt;?&gt; builder) {</span>
+<span class="source-line-no">137</span><span id="line-137">      super(builder);</span>
+<span class="source-line-no">138</span><span id="line-138">   }</span>
+<span class="source-line-no">139</span><span id="line-139"></span>
+<span class="source-line-no">140</span><span id="line-140">   @Override /* Overridden from Context */</span>
+<span class="source-line-no">141</span><span id="line-141">   public Builder copy() {</span>
+<span class="source-line-no">142</span><span id="line-142">      return new Builder(this);</span>
+<span class="source-line-no">143</span><span id="line-143">   }</span>
+<span class="source-line-no">144</span><span id="line-144"></span>
+<span class="source-line-no">145</span><span id="line-145">   @Override /* Overridden from Context */</span>
+<span class="source-line-no">146</span><span id="line-146">   public Json5ParserSession.Builder createSession() {</span>
+<span class="source-line-no">147</span><span id="line-147">      return Json5ParserSession.create(this);</span>
+<span class="source-line-no">148</span><span id="line-148">   }</span>
+<span class="source-line-no">149</span><span id="line-149"></span>
+<span class="source-line-no">150</span><span id="line-150">   @Override /* Overridden from Context */</span>
+<span class="source-line-no">151</span><span id="line-151">   public Json5ParserSession getSession() { return createSession().build(); }</span>
+<span class="source-line-no">152</span><span id="line-152"></span>
+<span class="source-line-no">153</span><span id="line-153">}</span>
 
 
 

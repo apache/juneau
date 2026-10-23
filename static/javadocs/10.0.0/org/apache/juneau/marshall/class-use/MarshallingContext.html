@@ -69,7 +69,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Public low-level token-streaming API (pull parser + push generator) shared by every Juneau
  format.</div>
 </div>
-<div class="col-first odd-row-color"><a href="#org.apache.juneau.marshall.swap">org.apache.juneau.marshall.swap</a></div>
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.marshall.swap.spi">org.apache.juneau.marshall.swap.spi</a></div>
 <div class="col-last odd-row-color">
 <div class="block">Swap API</div>
 </div>
@@ -80,6 +80,12 @@ loadScripts(document, 'script');</script>
 <div class="col-first odd-row-color"><a href="#org.apache.juneau.rest.server">org.apache.juneau.rest.server</a></div>
 <div class="col-last odd-row-color">
 <div class="block">REST Server API</div>
+</div>
+<div class="col-first even-row-color"><a href="#org.apache.juneau.rest.server.datatables">org.apache.juneau.rest.server.datatables</a></div>
+<div class="col-last even-row-color">
+<div class="block">The DataTables server-side-processing JSON beans implementing the
+ <a class="doclink" href="https://datatables.net/manual/server-side">DataTables server-side processing</a> wire
+ contract.</div>
 </div>
 </div>
 <section class="class-uses">
@@ -233,45 +239,45 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
-<section class="detail" id="org.apache.juneau.marshall.swap">
-<h2>Uses of <a href="../MarshallingContext.html" title="class in org.apache.juneau.marshall">MarshallingContext</a> in <a href="../swap/package-summary.html">org.apache.juneau.marshall.swap</a></h2>
-<div class="caption"><span>Methods in <a href="../swap/package-summary.html">org.apache.juneau.marshall.swap</a> with parameters of type <a href="../MarshallingContext.html" title="class in org.apache.juneau.marshall">MarshallingContext</a></span></div>
+<section class="detail" id="org.apache.juneau.marshall.swap.spi">
+<h2>Uses of <a href="../MarshallingContext.html" title="class in org.apache.juneau.marshall">MarshallingContext</a> in <a href="../swap/spi/package-summary.html">org.apache.juneau.marshall.swap.spi</a></h2>
+<div class="caption"><span>Methods in <a href="../swap/spi/package-summary.html">org.apache.juneau.marshall.swap.spi</a> with parameters of type <a href="../MarshallingContext.html" title="class in org.apache.juneau.marshall">MarshallingContext</a></span></div>
 <div class="summary-table three-column-summary">
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><code>static <a href="../swap/ObjectSwap.html" title="class in org.apache.juneau.marshall.swap">ObjectSwap</a>&lt;?,<wbr>?&gt;</code></div>
-<div class="col-second even-row-color"><span class="type-name-label">AutoListSwap.</span><code><a href="../swap/AutoListSwap.html#find(org.apache.juneau.marshall.MarshallingContext,org.apache.juneau.commons.reflect.ClassInfo)" class="member-name-link">find</a><wbr>(<a href="../MarshallingContext.html" title="class in org.apache.juneau.marshall">MarshallingContext</a>&nbsp;bc,
+<div class="col-first even-row-color"><code>static <a href="../swap/spi/ObjectSwap.html" title="class in org.apache.juneau.marshall.swap.spi">ObjectSwap</a>&lt;?,<wbr>?&gt;</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">AutoListSwap.</span><code><a href="../swap/spi/AutoListSwap.html#find(org.apache.juneau.marshall.MarshallingContext,org.apache.juneau.commons.reflect.ClassInfo)" class="member-name-link">find</a><wbr>(<a href="../MarshallingContext.html" title="class in org.apache.juneau.marshall">MarshallingContext</a>&nbsp;bc,
  <a href="../../commons/reflect/ClassInfo.html" title="class in org.apache.juneau.commons.reflect">ClassInfo</a>&nbsp;ci)</code></div>
 <div class="col-last even-row-color">
 <div class="block">Look for constructors and methods on this class and construct a dynamic swap if it's possible to do so.</div>
 </div>
-<div class="col-first odd-row-color"><code>static <a href="../swap/ObjectSwap.html" title="class in org.apache.juneau.marshall.swap">ObjectSwap</a>&lt;?,<wbr>?&gt;</code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">AutoMapSwap.</span><code><a href="../swap/AutoMapSwap.html#find(org.apache.juneau.marshall.MarshallingContext,org.apache.juneau.commons.reflect.ClassInfo)" class="member-name-link">find</a><wbr>(<a href="../MarshallingContext.html" title="class in org.apache.juneau.marshall">MarshallingContext</a>&nbsp;bc,
+<div class="col-first odd-row-color"><code>static <a href="../swap/spi/ObjectSwap.html" title="class in org.apache.juneau.marshall.swap.spi">ObjectSwap</a>&lt;?,<wbr>?&gt;</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">AutoMapSwap.</span><code><a href="../swap/spi/AutoMapSwap.html#find(org.apache.juneau.marshall.MarshallingContext,org.apache.juneau.commons.reflect.ClassInfo)" class="member-name-link">find</a><wbr>(<a href="../MarshallingContext.html" title="class in org.apache.juneau.marshall">MarshallingContext</a>&nbsp;bc,
  <a href="../../commons/reflect/ClassInfo.html" title="class in org.apache.juneau.commons.reflect">ClassInfo</a>&nbsp;ci)</code></div>
 <div class="col-last odd-row-color">
 <div class="block">Look for constructors and methods on this class and construct a dynamic swap if it's possible to do so.</div>
 </div>
-<div class="col-first even-row-color"><code>static <a href="../swap/ObjectSwap.html" title="class in org.apache.juneau.marshall.swap">ObjectSwap</a>&lt;?,<wbr>?&gt;</code></div>
-<div class="col-second even-row-color"><span class="type-name-label">AutoNumberSwap.</span><code><a href="../swap/AutoNumberSwap.html#find(org.apache.juneau.marshall.MarshallingContext,org.apache.juneau.commons.reflect.ClassInfo)" class="member-name-link">find</a><wbr>(<a href="../MarshallingContext.html" title="class in org.apache.juneau.marshall">MarshallingContext</a>&nbsp;bc,
+<div class="col-first even-row-color"><code>static <a href="../swap/spi/ObjectSwap.html" title="class in org.apache.juneau.marshall.swap.spi">ObjectSwap</a>&lt;?,<wbr>?&gt;</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">AutoNumberSwap.</span><code><a href="../swap/spi/AutoNumberSwap.html#find(org.apache.juneau.marshall.MarshallingContext,org.apache.juneau.commons.reflect.ClassInfo)" class="member-name-link">find</a><wbr>(<a href="../MarshallingContext.html" title="class in org.apache.juneau.marshall">MarshallingContext</a>&nbsp;bc,
  <a href="../../commons/reflect/ClassInfo.html" title="class in org.apache.juneau.commons.reflect">ClassInfo</a>&nbsp;ci)</code></div>
 <div class="col-last even-row-color">
 <div class="block">Look for constructors and methods on this class and construct a dynamic swap if it's possible to do so.</div>
 </div>
-<div class="col-first odd-row-color"><code>static <a href="../swap/ObjectSwap.html" title="class in org.apache.juneau.marshall.swap">ObjectSwap</a>&lt;?,<wbr>?&gt;</code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">AutoObjectSwap.</span><code><a href="../swap/AutoObjectSwap.html#find(org.apache.juneau.marshall.MarshallingContext,org.apache.juneau.commons.reflect.ClassInfo)" class="member-name-link">find</a><wbr>(<a href="../MarshallingContext.html" title="class in org.apache.juneau.marshall">MarshallingContext</a>&nbsp;bc,
+<div class="col-first odd-row-color"><code>static <a href="../swap/spi/ObjectSwap.html" title="class in org.apache.juneau.marshall.swap.spi">ObjectSwap</a>&lt;?,<wbr>?&gt;</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">AutoObjectSwap.</span><code><a href="../swap/spi/AutoObjectSwap.html#find(org.apache.juneau.marshall.MarshallingContext,org.apache.juneau.commons.reflect.ClassInfo)" class="member-name-link">find</a><wbr>(<a href="../MarshallingContext.html" title="class in org.apache.juneau.marshall">MarshallingContext</a>&nbsp;bc,
  <a href="../../commons/reflect/ClassInfo.html" title="class in org.apache.juneau.commons.reflect">ClassInfo</a>&nbsp;ci)</code></div>
 <div class="col-last odd-row-color">
 <div class="block">Inspects the specified class and returns a swap of this type if possible.</div>
 </div>
-<div class="col-first even-row-color"><code>static <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../swap/SurrogateSwap.html" title="class in org.apache.juneau.marshall.swap">SurrogateSwap</a>&lt;?,<wbr>?&gt;&gt;</code></div>
-<div class="col-second even-row-color"><span class="type-name-label">SurrogateSwap.</span><code><a href="../swap/SurrogateSwap.html#findObjectSwaps(java.lang.Class,org.apache.juneau.marshall.MarshallingContext)" class="member-name-link">findObjectSwaps</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;&nbsp;c,
+<div class="col-first even-row-color"><code>static <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../swap/spi/SurrogateSwap.html" title="class in org.apache.juneau.marshall.swap.spi">SurrogateSwap</a>&lt;?,<wbr>?&gt;&gt;</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">SurrogateSwap.</span><code><a href="../swap/spi/SurrogateSwap.html#findObjectSwaps(java.lang.Class,org.apache.juneau.marshall.MarshallingContext)" class="member-name-link">findObjectSwaps</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;&nbsp;c,
  <a href="../MarshallingContext.html" title="class in org.apache.juneau.marshall">MarshallingContext</a>&nbsp;bc)</code></div>
 <div class="col-last even-row-color">
 <div class="block">Given the specified surrogate class, return the list of object swaps.</div>
 </div>
-<div class="col-first odd-row-color"><code>static <a href="../swap/BuilderSwap.html" title="class in org.apache.juneau.marshall.swap">BuilderSwap</a>&lt;?,<wbr>?&gt;</code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">BuilderSwap.</span><code><a href="../swap/BuilderSwap.html#findSwapFromObjectClass(org.apache.juneau.marshall.MarshallingContext,java.lang.Class,org.apache.juneau.commons.reflect.Visibility,org.apache.juneau.commons.reflect.Visibility)" class="member-name-link">findSwapFromObjectClass</a><wbr>(<a href="../MarshallingContext.html" title="class in org.apache.juneau.marshall">MarshallingContext</a>&nbsp;bc,
+<div class="col-first odd-row-color"><code>static <a href="../swap/spi/BuilderSwap.html" title="class in org.apache.juneau.marshall.swap.spi">BuilderSwap</a>&lt;?,<wbr>?&gt;</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">BuilderSwap.</span><code><a href="../swap/spi/BuilderSwap.html#findSwapFromObjectClass(org.apache.juneau.marshall.MarshallingContext,java.lang.Class,org.apache.juneau.commons.reflect.Visibility,org.apache.juneau.commons.reflect.Visibility)" class="member-name-link">findSwapFromObjectClass</a><wbr>(<a href="../MarshallingContext.html" title="class in org.apache.juneau.marshall">MarshallingContext</a>&nbsp;bc,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;&nbsp;objectClass,
  <a href="../../commons/reflect/Visibility.html" title="enum class in org.apache.juneau.commons.reflect">Visibility</a>&nbsp;cVis,
  <a href="../../commons/reflect/Visibility.html" title="enum class in org.apache.juneau.commons.reflect">Visibility</a>&nbsp;mVis)</code></div>
@@ -329,6 +335,43 @@ loadScripts(document, 'script');</script>
 <div class="col-second odd-row-color"><span class="type-name-label">RestOpContext.</span><code><a href="../../rest/server/RestOpContext.html#getMarshallingContext()" class="member-name-link">getMarshallingContext</a>()</code></div>
 <div class="col-last odd-row-color">
 <div class="block">Returns the marshalling context associated with this context.</div>
+</div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="org.apache.juneau.rest.server.datatables">
+<h2>Uses of <a href="../MarshallingContext.html" title="class in org.apache.juneau.marshall">MarshallingContext</a> in <a href="../../rest/server/datatables/package-summary.html">org.apache.juneau.rest.server.datatables</a></h2>
+<div class="caption"><span>Methods in <a href="../../rest/server/datatables/package-summary.html">org.apache.juneau.rest.server.datatables</a> with parameters of type <a href="../MarshallingContext.html" title="class in org.apache.juneau.marshall">MarshallingContext</a></span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier and Type</div>
+<div class="table-header col-second">Method</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code>static <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;&gt;</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">DataTablesColumns.</span><code><a href="../../rest/server/datatables/DataTablesColumns.html#of(org.apache.juneau.marshall.MarshallingContext,java.lang.Class)" class="member-name-link">of</a><wbr>(<a href="../MarshallingContext.html" title="class in org.apache.juneau.marshall">MarshallingContext</a>&nbsp;ctx,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;&nbsp;beanClass)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Generates the DataTables <code>columns</code> array for the specified bean type using the specified marshalling context.</div>
+</div>
+<div class="col-first odd-row-color"><code>static <a href="../../bean/html5/Table.html" title="class in org.apache.juneau.bean.html5">Table</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">DataTablesTable.</span><code><a href="../../rest/server/datatables/DataTablesTable.html#of(org.apache.juneau.marshall.MarshallingContext,java.lang.String,java.util.Collection,java.lang.Class)" class="member-name-link">of</a><wbr>(<a href="../MarshallingContext.html" title="class in org.apache.juneau.marshall">MarshallingContext</a>&nbsp;ctx,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;id,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;?&gt;&nbsp;rows,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;&nbsp;rowType)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Builds a DataTables-ready table using the specified marshalling context, deriving the columns from the specified
+ row bean type via <a href="../../rest/server/datatables/DataTablesColumns.html#of(org.apache.juneau.marshall.MarshallingContext,java.lang.Class)"><code>DataTablesColumns.of(MarshallingContext, Class)</code></a>, additively honoring each bean
+ property's <a href="../html/Html.html" title="annotation interface in org.apache.juneau.marshall.html"><code>@Html(render)</code></a> the same way the ordinary <code>HtmlSerializer</code>/<code>HtmlDocSerializer</code>
+ path already does.</div>
+</div>
+<div class="col-first even-row-color"><code>static <a href="../../bean/html5/Table.html" title="class in org.apache.juneau.bean.html5">Table</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">DataTablesTable.</span><code><a href="../../rest/server/datatables/DataTablesTable.html#of(org.apache.juneau.marshall.MarshallingContext,java.lang.String,java.util.Collection,java.util.List)" class="member-name-link">of</a><wbr>(<a href="../MarshallingContext.html" title="class in org.apache.juneau.marshall">MarshallingContext</a>&nbsp;ctx,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;id,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;?&gt;&nbsp;rows,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;&gt;&nbsp;columns)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Builds a DataTables-ready table from an explicit column list using the specified marshalling context for
+ bean-property cell reads.</div>
 </div>
 </div>
 </section>

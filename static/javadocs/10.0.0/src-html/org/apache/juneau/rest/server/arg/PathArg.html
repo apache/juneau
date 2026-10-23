@@ -114,7 +114,7 @@
 <span class="source-line-no">101</span><span id="line-101">         return null;</span>
 <span class="source-line-no">102</span><span id="line-102">      for (var p : restAnnotation.pathParams()) {</span>
 <span class="source-line-no">103</span><span id="line-103">         var pName = firstNonEmpty(p.name(), p.value());</span>
-<span class="source-line-no">104</span><span id="line-104">         if (paramName.equals(pName))</span>
+<span class="source-line-no">104</span><span id="line-104">         if (eq(paramName, pName))</span>
 <span class="source-line-no">105</span><span id="line-105">            return p;</span>
 <span class="source-line-no">106</span><span id="line-106">      }</span>
 <span class="source-line-no">107</span><span id="line-107">      return null;</span>
@@ -156,7 +156,7 @@
 <span class="source-line-no">143</span><span id="line-143">   @Override /* Overridden from RestOpArg */</span>
 <span class="source-line-no">144</span><span id="line-144">   public Object resolve(RestOpSession opSession) throws Exception {</span>
 <span class="source-line-no">145</span><span id="line-145">      var req = opSession.getRequest();</span>
-<span class="source-line-no">146</span><span id="line-146">      if (name.equals("*")) {</span>
+<span class="source-line-no">146</span><span id="line-146">      if (eq(name, "*")) {</span>
 <span class="source-line-no">147</span><span id="line-147">         var m = new JsonMap();</span>
 <span class="source-line-no">148</span><span id="line-148">         req.getPathParams().forEach(x -&gt; m.put(x.getName(), x.getValue()));</span>
 <span class="source-line-no">149</span><span id="line-149">         return req.getMarshallingSession().convertToType(m, type);</span>

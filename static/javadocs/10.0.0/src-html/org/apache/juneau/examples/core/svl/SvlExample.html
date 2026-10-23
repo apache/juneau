@@ -54,29 +54,29 @@
 <span class="source-line-no">041</span><span id="line-41">      System.out.println(vr.resolve("JAVA_HOME=$E{JAVA_HOME, not defined}"));</span>
 <span class="source-line-no">042</span><span id="line-42"></span>
 <span class="source-line-no">043</span><span id="line-43">      // $S{key[,default]} for getting system properties (uses System.getProperty() )</span>
-<span class="source-line-no">044</span><span id="line-44">      Logger.getLogger(SvlExample.class).info(vr.resolve("os.name=$S{os.name, not defined}"));</span>
+<span class="source-line-no">044</span><span id="line-44">      RichLogger.getLogger(SvlExample.class).info(vr.resolve("os.name=$S{os.name, not defined}"));</span>
 <span class="source-line-no">045</span><span id="line-45"></span>
 <span class="source-line-no">046</span><span id="line-46">      // #{if(cond, then, else)} general if or if-else condition // NOSONAR</span>
 <span class="source-line-no">047</span><span id="line-47">      // #{notEmpty(s)} returns true if not empty</span>
-<span class="source-line-no">048</span><span id="line-48">      Logger.getLogger(SvlExample.class).info(vr.resolve("TEST_VAR is #{if(#{notEmpty($E{TEST_VAR})}, not empty, empty)}"));</span>
+<span class="source-line-no">048</span><span id="line-48">      RichLogger.getLogger(SvlExample.class).info(vr.resolve("TEST_VAR is #{if(#{notEmpty($E{TEST_VAR})}, not empty, empty)}"));</span>
 <span class="source-line-no">049</span><span id="line-49"></span>
 <span class="source-line-no">050</span><span id="line-50">      // #{switch(value, pattern1, val1, ..., default)} glob-pattern switch-case // NOSONAR</span>
 <span class="source-line-no">051</span><span id="line-51">      System.out.println(vr.resolve("#{switch(Carrot, *Ap*, Fruit, *Car*, Veg, *, N/A)}"));</span>
 <span class="source-line-no">052</span><span id="line-52"></span>
 <span class="source-line-no">053</span><span id="line-53">      // #{replaceRegex(s, regex, replacement)} pattern replace</span>
-<span class="source-line-no">054</span><span id="line-54">      Logger.getLogger(SvlExample.class).info(vr.resolve("Java version=#{replaceRegex($S{java.version}, \"(_([0-9]+))\", \" build=$2\")}"));</span>
+<span class="source-line-no">054</span><span id="line-54">      RichLogger.getLogger(SvlExample.class).info(vr.resolve("Java version=#{replaceRegex($S{java.version}, \"(_([0-9]+))\", \" build=$2\")}"));</span>
 <span class="source-line-no">055</span><span id="line-55"></span>
 <span class="source-line-no">056</span><span id="line-56">      // #{upper(s)} / #{lower(s)} case conversion</span>
-<span class="source-line-no">057</span><span id="line-57">      Logger.getLogger(SvlExample.class).info(vr.resolve("#{lower(JAVA_HOME)} #{upper($E{JAVA_HOME})}"));</span>
+<span class="source-line-no">057</span><span id="line-57">      RichLogger.getLogger(SvlExample.class).info(vr.resolve("#{lower(JAVA_HOME)} #{upper($E{JAVA_HOME})}"));</span>
 <span class="source-line-no">058</span><span id="line-58"></span>
 <span class="source-line-no">059</span><span id="line-59">      // #{len(s[,delimiter])} length / part count</span>
-<span class="source-line-no">060</span><span id="line-60">      Logger.getLogger(SvlExample.class).info(vr.resolve("parts = #{len($S{os.version}, \".\")}, charcount = #{len($S{os.version})}"));</span>
+<span class="source-line-no">060</span><span id="line-60">      RichLogger.getLogger(SvlExample.class).info(vr.resolve("parts = #{len($S{os.version}, \".\")}, charcount = #{len($S{os.version})}"));</span>
 <span class="source-line-no">061</span><span id="line-61"></span>
 <span class="source-line-no">062</span><span id="line-62">      // #{substring(s, start[, end])} substring extraction</span>
-<span class="source-line-no">063</span><span id="line-63">      Logger.getLogger(SvlExample.class).info(vr.resolve("version = #{substring($S{java.version}, 0, 3)}"));</span>
+<span class="source-line-no">063</span><span id="line-63">      RichLogger.getLogger(SvlExample.class).info(vr.resolve("version = #{substring($S{java.version}, 0, 3)}"));</span>
 <span class="source-line-no">064</span><span id="line-64"></span>
 <span class="source-line-no">065</span><span id="line-65">      // #{extract(s, regex[, group])} regex group extraction</span>
-<span class="source-line-no">066</span><span id="line-66">      Logger.getLogger(SvlExample.class).info(vr.resolve("update = #{extract($S{java.version}, \"_([0-9]+)\", 1)}"));</span>
+<span class="source-line-no">066</span><span id="line-66">      RichLogger.getLogger(SvlExample.class).info(vr.resolve("update = #{extract($S{java.version}, \"_([0-9]+)\", 1)}"));</span>
 <span class="source-line-no">067</span><span id="line-67"></span>
 <span class="source-line-no">068</span><span id="line-68">      /*</span>
 <span class="source-line-no">069</span><span id="line-69">       *  See all supported variable types at,</span>

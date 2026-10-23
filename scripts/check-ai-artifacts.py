@@ -12,13 +12,9 @@
 # * specific language governing permissions and limitations under the License.                                              *
 # ***************************************************************************************************************************
 """
-Checks AI artifacts freshness (including static/llms.txt) and source drift signals.
+Check that the AI artifacts (including static/llms.txt) are fresh and report source drift signals.
 
-Usage:
-    python3 scripts/check-ai-artifacts.py [--docs-root DIR] [--juneau-root DIR]
-
---juneau-root defaults to the sibling ../juneau checkout next to the docs root.
-Pass it explicitly for worktrees or other layouts.
+Full docs: check-ai-artifacts.md
 """
 
 from __future__ import annotations

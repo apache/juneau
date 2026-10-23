@@ -33,12 +33,12 @@
 <span class="source-line-no">020</span><span id="line-20"> * Interface for listening to log records.</span>
 <span class="source-line-no">021</span><span id="line-21"> *</span>
 <span class="source-line-no">022</span><span id="line-22"> * &lt;p&gt;</span>
-<span class="source-line-no">023</span><span id="line-23"> * Implementations of this interface can be registered with a {@link Logger} to receive</span>
+<span class="source-line-no">023</span><span id="line-23"> * Implementations of this interface can be registered with a {@link RichLogger} to receive</span>
 <span class="source-line-no">024</span><span id="line-24"> * notifications when log records are logged.</span>
 <span class="source-line-no">025</span><span id="line-25"> *</span>
 <span class="source-line-no">026</span><span id="line-26"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
 <span class="source-line-no">027</span><span id="line-27"> *    &lt;li class='jc'&gt;{@link LogRecordCapture}</span>
-<span class="source-line-no">028</span><span id="line-28"> *    &lt;li class='jc'&gt;{@link Logger}</span>
+<span class="source-line-no">028</span><span id="line-28"> *    &lt;li class='jc'&gt;{@link RichLogger}</span>
 <span class="source-line-no">029</span><span id="line-29"> * &lt;/ul&gt;</span>
 <span class="source-line-no">030</span><span id="line-30"> */</span>
 <span class="source-line-no">031</span><span id="line-31">public interface LogRecordListener {</span>
@@ -48,7 +48,7 @@
 <span class="source-line-no">035</span><span id="line-35">    *</span>
 <span class="source-line-no">036</span><span id="line-36">    * @param rec The log record that was logged.</span>
 <span class="source-line-no">037</span><span id="line-37">    */</span>
-<span class="source-line-no">038</span><span id="line-38">   void onLogRecord(LogRecord rec);</span>
+<span class="source-line-no">038</span><span id="line-38">   void onLogRecord(java.util.logging.LogRecord rec);</span>
 <span class="source-line-no">039</span><span id="line-39">}</span>
 
 

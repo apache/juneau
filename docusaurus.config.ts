@@ -194,6 +194,11 @@ const config: Config = {
   tagline: 'Universal toolkit for marshalling POJOs to a wide variety of content types using a common framework',
   favicon: 'img/favicon.ico',
 
+  // Render ```mermaid fenced blocks as diagrams (see themes below).
+  markdown: {
+    mermaid: true,
+  },
+
   // Future flags, see https://docusaurus.io/docs/api/docusaurus-config#future
   future: {
     v4: true, // Improve compatibility with the upcoming Docusaurus v4
@@ -252,6 +257,7 @@ const config: Config = {
   // Replaces the previous Algolia DocSearch integration: no external service,
   // no API key, search index is always in sync with the source.
   themes: [
+    '@docusaurus/theme-mermaid',
     [
       '@easyops-cn/docusaurus-search-local',
       {

@@ -140,20 +140,24 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color">
 <div class="block">SOAP/XML Marshalling Support</div>
 </div>
-<div class="col-first odd-row-color"><a href="#org.apache.juneau.marshall.uon">org.apache.juneau.marshall.uon</a></div>
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.marshall.toml">org.apache.juneau.marshall.toml</a></div>
 <div class="col-last odd-row-color">
+<div class="block">TOML v1.0.0 serializer and parser for Apache Juneau.</div>
+</div>
+<div class="col-first even-row-color"><a href="#org.apache.juneau.marshall.uon">org.apache.juneau.marshall.uon</a></div>
+<div class="col-last even-row-color">
 <div class="block">UON Marshalling Support</div>
 </div>
-<div class="col-first even-row-color"><a href="#org.apache.juneau.marshall.urlencoding">org.apache.juneau.marshall.urlencoding</a></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.marshall.urlencoding">org.apache.juneau.marshall.urlencoding</a></div>
+<div class="col-last odd-row-color">
 <div class="block">URL-Encoding Marshalling Support</div>
 </div>
-<div class="col-first odd-row-color"><a href="#org.apache.juneau.marshall.xml">org.apache.juneau.marshall.xml</a></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><a href="#org.apache.juneau.marshall.xml">org.apache.juneau.marshall.xml</a></div>
+<div class="col-last even-row-color">
 <div class="block">XML Marshalling Support</div>
 </div>
-<div class="col-first even-row-color"><a href="#org.apache.juneau.marshall.yaml">org.apache.juneau.marshall.yaml</a></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.marshall.yaml">org.apache.juneau.marshall.yaml</a></div>
+<div class="col-last odd-row-color">
 <div class="block">YAML Marshalling Support</div>
 </div>
 </div>
@@ -1158,6 +1162,40 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
+<section class="detail" id="org.apache.juneau.marshall.toml">
+<h2>Uses of <a href="../BeanPropertyMeta.html" title="class in org.apache.juneau.commons.bean">BeanPropertyMeta</a> in <a href="../../../marshall/toml/package-summary.html">org.apache.juneau.marshall.toml</a></h2>
+<div class="caption"><span>Methods in <a href="../../../marshall/toml/package-summary.html">org.apache.juneau.marshall.toml</a> with parameters of type <a href="../BeanPropertyMeta.html" title="class in org.apache.juneau.commons.bean">BeanPropertyMeta</a></span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier and Type</div>
+<div class="table-header col-second">Method</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code><a href="../../../marshall/toml/TomlBeanPropertyMeta.html" title="class in org.apache.juneau.marshall.toml">TomlBeanPropertyMeta</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">TomlMetaProvider.</span><code><a href="../../../marshall/toml/TomlMetaProvider.html#getTomlBeanPropertyMeta(org.apache.juneau.commons.bean.BeanPropertyMeta)" class="member-name-link">getTomlBeanPropertyMeta</a><wbr>(<a href="../BeanPropertyMeta.html" title="class in org.apache.juneau.commons.bean">BeanPropertyMeta</a>&nbsp;bpm)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Returns the TOML-specific metadata on the specified bean property.</div>
+</div>
+<div class="col-first odd-row-color"><code><a href="../../../marshall/toml/TomlBeanPropertyMeta.html" title="class in org.apache.juneau.marshall.toml">TomlBeanPropertyMeta</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">TomlParser.</span><code><a href="../../../marshall/toml/TomlParser.html#getTomlBeanPropertyMeta(org.apache.juneau.commons.bean.BeanPropertyMeta)" class="member-name-link">getTomlBeanPropertyMeta</a><wbr>(<a href="../BeanPropertyMeta.html" title="class in org.apache.juneau.commons.bean">BeanPropertyMeta</a>&nbsp;bpm)</code></div>
+<div class="col-last odd-row-color">&nbsp;</div>
+<div class="col-first even-row-color"><code><a href="../../../marshall/toml/TomlBeanPropertyMeta.html" title="class in org.apache.juneau.marshall.toml">TomlBeanPropertyMeta</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">TomlSerializer.</span><code><a href="../../../marshall/toml/TomlSerializer.html#getTomlBeanPropertyMeta(org.apache.juneau.commons.bean.BeanPropertyMeta)" class="member-name-link">getTomlBeanPropertyMeta</a><wbr>(<a href="../BeanPropertyMeta.html" title="class in org.apache.juneau.commons.bean">BeanPropertyMeta</a>&nbsp;bpm)</code></div>
+<div class="col-last even-row-color">&nbsp;</div>
+</div>
+<div class="caption"><span>Constructors in <a href="../../../marshall/toml/package-summary.html">org.apache.juneau.marshall.toml</a> with parameters of type <a href="../BeanPropertyMeta.html" title="class in org.apache.juneau.commons.bean">BeanPropertyMeta</a></span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier</div>
+<div class="table-header col-second">Constructor</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code>&nbsp;</code></div>
+<div class="col-second even-row-color"><code><a href="../../../marshall/toml/TomlBeanPropertyMeta.html#%3Cinit%3E(org.apache.juneau.commons.bean.BeanPropertyMeta,org.apache.juneau.marshall.toml.TomlMetaProvider)" class="member-name-link">TomlBeanPropertyMeta</a><wbr>(<a href="../BeanPropertyMeta.html" title="class in org.apache.juneau.commons.bean">BeanPropertyMeta</a>&nbsp;bpm,
+ <a href="../../../marshall/toml/TomlMetaProvider.html" title="interface in org.apache.juneau.marshall.toml">TomlMetaProvider</a>&nbsp;mp)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Constructor.</div>
+</div>
+</div>
+</section>
+</li>
+<li>
 <section class="detail" id="org.apache.juneau.marshall.uon">
 <h2>Uses of <a href="../BeanPropertyMeta.html" title="class in org.apache.juneau.commons.bean">BeanPropertyMeta</a> in <a href="../../../marshall/uon/package-summary.html">org.apache.juneau.marshall.uon</a></h2>
 <div class="caption"><span>Methods in <a href="../../../marshall/uon/package-summary.html">org.apache.juneau.marshall.uon</a> with parameters of type <a href="../BeanPropertyMeta.html" title="class in org.apache.juneau.commons.bean">BeanPropertyMeta</a></span></div>
@@ -1367,15 +1405,38 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><code>protected <a href="../../../marshall/yaml/YamlWriter.html" title="class in org.apache.juneau.marshall.yaml">YamlWriter</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">YamlSerializerSession.</span><code><a href="../../../marshall/yaml/YamlSerializerSession.html#writeAnything(org.apache.juneau.marshall.yaml.YamlWriter,java.lang.Object,org.apache.juneau.marshall.ClassMeta,java.lang.String,org.apache.juneau.commons.bean.BeanPropertyMeta,boolean)" class="member-name-link">writeAnything</a><wbr>(<a href="../../../marshall/yaml/YamlWriter.html" title="class in org.apache.juneau.marshall.yaml">YamlWriter</a>&nbsp;out,
+<div class="col-first even-row-color"><code><a href="../../../marshall/yaml/YamlBeanPropertyMeta.html" title="class in org.apache.juneau.marshall.yaml">YamlBeanPropertyMeta</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">YamlMetaProvider.</span><code><a href="../../../marshall/yaml/YamlMetaProvider.html#getYamlBeanPropertyMeta(org.apache.juneau.commons.bean.BeanPropertyMeta)" class="member-name-link">getYamlBeanPropertyMeta</a><wbr>(<a href="../BeanPropertyMeta.html" title="class in org.apache.juneau.commons.bean">BeanPropertyMeta</a>&nbsp;bpm)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Returns the YAML-specific metadata on the specified bean property.</div>
+</div>
+<div class="col-first odd-row-color"><code><a href="../../../marshall/yaml/YamlBeanPropertyMeta.html" title="class in org.apache.juneau.marshall.yaml">YamlBeanPropertyMeta</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">YamlParser.</span><code><a href="../../../marshall/yaml/YamlParser.html#getYamlBeanPropertyMeta(org.apache.juneau.commons.bean.BeanPropertyMeta)" class="member-name-link">getYamlBeanPropertyMeta</a><wbr>(<a href="../BeanPropertyMeta.html" title="class in org.apache.juneau.commons.bean">BeanPropertyMeta</a>&nbsp;bpm)</code></div>
+<div class="col-last odd-row-color">&nbsp;</div>
+<div class="col-first even-row-color"><code><a href="../../../marshall/yaml/YamlBeanPropertyMeta.html" title="class in org.apache.juneau.marshall.yaml">YamlBeanPropertyMeta</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">YamlSerializer.</span><code><a href="../../../marshall/yaml/YamlSerializer.html#getYamlBeanPropertyMeta(org.apache.juneau.commons.bean.BeanPropertyMeta)" class="member-name-link">getYamlBeanPropertyMeta</a><wbr>(<a href="../BeanPropertyMeta.html" title="class in org.apache.juneau.commons.bean">BeanPropertyMeta</a>&nbsp;bpm)</code></div>
+<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-first odd-row-color"><code>protected <a href="../../../marshall/yaml/YamlWriter.html" title="class in org.apache.juneau.marshall.yaml">YamlWriter</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">YamlSerializerSession.</span><code><a href="../../../marshall/yaml/YamlSerializerSession.html#writeAnything(org.apache.juneau.marshall.yaml.YamlWriter,java.lang.Object,org.apache.juneau.marshall.ClassMeta,java.lang.String,org.apache.juneau.commons.bean.BeanPropertyMeta,boolean)" class="member-name-link">writeAnything</a><wbr>(<a href="../../../marshall/yaml/YamlWriter.html" title="class in org.apache.juneau.marshall.yaml">YamlWriter</a>&nbsp;out,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o,
  <a href="../../../marshall/ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;?&gt;&nbsp;eType,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;attrName,
  <a href="../BeanPropertyMeta.html" title="class in org.apache.juneau.commons.bean">BeanPropertyMeta</a>&nbsp;pMeta,
  boolean&nbsp;asField)</code></div>
-<div class="col-last even-row-color">
+<div class="col-last odd-row-color">
 <div class="block">Workhorse method.</div>
+</div>
+</div>
+<div class="caption"><span>Constructors in <a href="../../../marshall/yaml/package-summary.html">org.apache.juneau.marshall.yaml</a> with parameters of type <a href="../BeanPropertyMeta.html" title="class in org.apache.juneau.commons.bean">BeanPropertyMeta</a></span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier</div>
+<div class="table-header col-second">Constructor</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code>&nbsp;</code></div>
+<div class="col-second even-row-color"><code><a href="../../../marshall/yaml/YamlBeanPropertyMeta.html#%3Cinit%3E(org.apache.juneau.commons.bean.BeanPropertyMeta,org.apache.juneau.marshall.yaml.YamlMetaProvider)" class="member-name-link">YamlBeanPropertyMeta</a><wbr>(<a href="../BeanPropertyMeta.html" title="class in org.apache.juneau.commons.bean">BeanPropertyMeta</a>&nbsp;bpm,
+ <a href="../../../marshall/yaml/YamlMetaProvider.html" title="interface in org.apache.juneau.marshall.yaml">YamlMetaProvider</a>&nbsp;mp)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Constructor.</div>
 </div>
 </div>
 </section>

@@ -12,15 +12,9 @@
 # * specific language governing permissions and limitations under the License.                                              *
 # ***************************************************************************************************************************
 """
-Generate deterministic AI-consumable knowledge artifacts for Apache Juneau.
+Generate deterministic AI-consumable knowledge artifacts for Apache Juneau under static/ai.
 
-Outputs are written to static/ai:
- - manifest.json
- - juneau-knowledge.jsonl
- - taxonomy.json
-
-and the llmstxt.org-style index static/llms.txt (the parent of the output directory).
-llms-full.txt is deliberately not generated: the concatenated topics are ~3 MB.
+Full docs: generate-ai-artifacts.md
 """
 
 from __future__ import annotations
@@ -56,6 +50,9 @@ REQUIRED_FIELDS = [
     "related_ids",
     "updated_at",
 ]
+# Manifest keys that record where the artifacts were generated from rather than what they contain.
+# --check ignores them, so a new commit in either repo with no content change is not "stale".
+CHECK_IGNORED_MANIFEST_KEYS = ("source_commit",)
 
 
 @dataclass
@@ -437,6 +434,25 @@ def render_json(value: dict[str, Any]) -> str:
     return json.dumps(value, indent=2, sort_keys=True, ensure_ascii=True) + "\n"
 
 
+def is_stale(path: Path, actual: str | None, expected: str) -> bool:
+    """Byte-compare an artifact, except manifest.json keys in CHECK_IGNORED_MANIFEST_KEYS."""
+    if actual is None:
+        return True
+    if path.name != "manifest.json":
+        return actual != expected
+    try:
+        actual_manifest = json.loads(actual)
+    except json.JSONDecodeError:
+        return True
+    if not isinstance(actual_manifest, dict):
+        return True
+    expected_manifest = json.loads(expected)
+    for key in CHECK_IGNORED_MANIFEST_KEYS:
+        if key in actual_manifest:
+            expected_manifest[key] = actual_manifest[key]
+    return actual != render_json(expected_manifest)
+
+
 def write_if_changed(path: Path, content: str) -> bool:
     existing = path.read_text(encoding="utf-8") if path.exists() else None
     if existing == content:
@@ -474,7 +490,7 @@ def main() -> int:
         stale = []
         for path, expected in outputs.items():
             actual = path.read_text(encoding="utf-8") if path.exists() else None
-            if actual != expected:
+            if is_stale(path, actual, expected):
                 stale.append(path)
         if stale:
             print("ERROR: AI artifacts are stale. Regenerate with:")

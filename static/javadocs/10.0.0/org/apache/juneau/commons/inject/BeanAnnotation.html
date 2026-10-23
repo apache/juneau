@@ -78,7 +78,7 @@ loadScripts(document, 'script');</script>
 </div>
 <section class="class-description" id="class-description">
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/inject/BeanAnnotation.html#line-31">BeanAnnotation</a></span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/inject/BeanAnnotation.html#line-33">BeanAnnotation</a></span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
 <div class="block">Utility classes and methods for the <a href="Bean.html" title="annotation interface in org.apache.juneau.commons.inject"><code>@Bean</code></a> annotation.</div>
 </section>
@@ -139,9 +139,14 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Instantiates a new builder for this class.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#name(org.apache.juneau.commons.inject.Bean)" class="member-name-link">name</a><wbr>(<a href="Bean.html" title="annotation interface in org.apache.juneau.commons.inject">Bean</a>&nbsp;a)</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="Bean.html" title="annotation interface in org.apache.juneau.commons.inject">Bean</a>&gt;</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#find(org.apache.juneau.commons.reflect.MethodInfo)" class="member-name-link">find</a><wbr>(<a href="../reflect/MethodInfo.html" title="class in org.apache.juneau.commons.reflect">MethodInfo</a>&nbsp;method)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="block">Finds the <a href="Bean.html" title="annotation interface in org.apache.juneau.commons.inject"><code>@Bean</code></a> annotation that applies to the specified method.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#name(org.apache.juneau.commons.inject.Bean)" class="member-name-link">name</a><wbr>(<a href="Bean.html" title="annotation interface in org.apache.juneau.commons.inject">Bean</a>&nbsp;a)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Pulls the name/value attribute from a <a href="Bean.html" title="annotation interface in org.apache.juneau.commons.inject"><code>Bean</code></a> annotation.</div>
 </div>
 </div>
@@ -164,7 +169,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="DEFAULT">
 <h3>DEFAULT</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="Bean.html" title="annotation interface in org.apache.juneau.commons.inject">Bean</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/inject/BeanAnnotation.html#line-201">DEFAULT</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="Bean.html" title="annotation interface in org.apache.juneau.commons.inject">Bean</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/inject/BeanAnnotation.html#line-203">DEFAULT</a></span></div>
 <div class="block">Default value</div>
 </section>
 </li>
@@ -179,7 +184,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="create()">
 <h3>create</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="BeanAnnotation.Builder.html" title="class in org.apache.juneau.commons.inject">BeanAnnotation.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/inject/BeanAnnotation.html#line-208">create</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="BeanAnnotation.Builder.html" title="class in org.apache.juneau.commons.inject">BeanAnnotation.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/inject/BeanAnnotation.html#line-210">create</a></span>()</div>
 <div class="block">Instantiates a new builder for this class.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -190,13 +195,52 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="name(org.apache.juneau.commons.inject.Bean)">
 <h3>name</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/inject/BeanAnnotation.html#line-218">name</a></span><wbr><span class="parameters">(<a href="Bean.html" title="annotation interface in org.apache.juneau.commons.inject">Bean</a>&nbsp;a)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/inject/BeanAnnotation.html#line-220">name</a></span><wbr><span class="parameters">(<a href="Bean.html" title="annotation interface in org.apache.juneau.commons.inject">Bean</a>&nbsp;a)</span></div>
 <div class="block">Pulls the name/value attribute from a <a href="Bean.html" title="annotation interface in org.apache.juneau.commons.inject"><code>Bean</code></a> annotation.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>a</code> - The annotation to check.  Can be <jk>null</jk> (returns an empty string).</dd>
 <dt>Returns:</dt>
 <dd>The annotation value, or an empty string if the annotation is <jk>null</jk>.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="find(org.apache.juneau.commons.reflect.MethodInfo)">
+<h3>find</h3>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="Bean.html" title="annotation interface in org.apache.juneau.commons.inject">Bean</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/inject/BeanAnnotation.html#line-260">find</a></span><wbr><span class="parameters">(<a href="../reflect/MethodInfo.html" title="class in org.apache.juneau.commons.reflect">MethodInfo</a>&nbsp;method)</span></div>
+<div class="block">Finds the <a href="Bean.html" title="annotation interface in org.apache.juneau.commons.inject"><code>@Bean</code></a> annotation that applies to the specified method.
+
+ <p>
+ The result is the method's <em>own</em> declared <a href="Bean.html" title="annotation interface in org.apache.juneau.commons.inject"><code>@Bean</code></a>, or else the one declared on a method it
+ truly overrides.  A parent method only counts as overridden when it is non-private, non-static, not a
+ bridge/synthetic method, and (when package-private) declared in the same package as the method.
+ This is stricter than <a href="../reflect/MethodInfo.html#getAnnotations()"><code>MethodInfo.getAnnotations()</code></a>, which also merges annotations from same-signature
+ private or static parent methods that are not overrides.
+
+ <p>
+ Bridge and synthetic methods always return <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html#empty()" title="class or interface in java.util" class="external-link"><code>Optional.empty()</code></a>.
+
+ <h5 class='section'>Example:</h5>
+ <p class='bjava'>
+   <jk>public class</jk> Parent {
+      <ja>@Bean</ja>(name=<js>"db"</js>)
+      <jk>public</jk> HealthIndicator dbIndicator() { ... }
+   }
+
+   <jk>public class</jk> Child <jk>extends</jk> Parent {
+      <ja>@Override</ja>
+      <jk>public</jk> HealthIndicator dbIndicator() { ... }  <jc>// Not annotated, but overrides an annotated method.</jc>
+   }
+
+   MethodInfo <jv>mi</jv> = ClassInfo.<jsm>of</jsm>(Child.<jk>class</jk>).getDeclaredMethod(<jv>x</jv> -&gt; <jv>x</jv>.hasName(<js>"dbIndicator"</js>)).get();
+   Optional&lt;Bean&gt; <jv>bean</jv> = BeanAnnotation.<jsm>find</jsm>(<jv>mi</jv>);  <jc>// Present, name="db".</jc>
+ </p></div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>method</code> - The method to inspect.  Must not be <jk>null</jk>.</dd>
+<dt>Returns:</dt>
+<dd>The applicable annotation, or <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html#empty()" title="class or interface in java.util" class="external-link"><code>Optional.empty()</code></a> if none applies.</dd>
 </dl>
 </section>
 </li>

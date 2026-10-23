@@ -180,8 +180,8 @@
 <span class="source-line-no">167</span><span id="line-167">    * @return &lt;jk&gt;false&lt;/jk&gt;.</span>
 <span class="source-line-no">168</span><span id="line-168">    */</span>
 <span class="source-line-no">169</span><span id="line-169">   @SuppressWarnings({</span>
-<span class="source-line-no">170</span><span id="line-170">      "static-method", // Kept as an instance method for polymorphic-by-convention symmetry with the other Format classes (BigNumberFormat, FloatFormat, DurationFormat, etc.) where isNumeric() depends on the enum constant.</span>
-<span class="source-line-no">171</span><span id="line-171">      "java:S3400"     // Same rationale — must remain an instance method, not a constant, to match the cross-Format API contract.</span>
+<span class="source-line-no">170</span><span id="line-170">      "java:S3400", // Same rationale — must remain an instance method, not a constant, to match the cross-Format API contract.</span>
+<span class="source-line-no">171</span><span id="line-171">      "static-method" // Kept as an instance method for polymorphic-by-convention symmetry with the other Format classes (BigNumberFormat, FloatFormat, DurationFormat, etc.) where isNumeric() depends on the enum constant.</span>
 <span class="source-line-no">172</span><span id="line-172">   })</span>
 <span class="source-line-no">173</span><span id="line-173">   public boolean isNumeric() {</span>
 <span class="source-line-no">174</span><span id="line-174">      return false;</span>

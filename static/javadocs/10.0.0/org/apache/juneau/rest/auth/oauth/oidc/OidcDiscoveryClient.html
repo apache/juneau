@@ -78,7 +78,7 @@ loadScripts(document, 'script');</script>
 </div>
 <section class="class-description" id="class-description">
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/auth/oauth/oidc/OidcDiscoveryClient.html#line-55">OidcDiscoveryClient</a></span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/auth/oauth/oidc/OidcDiscoveryClient.html#line-57">OidcDiscoveryClient</a></span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
 <div class="block">Fetches a Juneau-native <a href="OidcMetadata.html" title="class in org.apache.juneau.rest.auth.oauth.oidc"><code>OidcMetadata</code></a> record describing an authorization server, supporting both the RFC 8414
  OAuth Authorization Server Metadata endpoint (<code>/.well-known/oauth-authorization-server</code>) and the OpenID Connect
@@ -185,7 +185,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.rest.auth.oauth.oidc.OidcDiscoveryClient.Builder)">
 <h3>OidcDiscoveryClient</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/auth/oauth/oidc/OidcDiscoveryClient.html#line-142">OidcDiscoveryClient</a></span><wbr><span class="parameters">(<a href="OidcDiscoveryClient.Builder.html" title="class in org.apache.juneau.rest.auth.oauth.oidc">OidcDiscoveryClient.Builder</a>&nbsp;b)</span></div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/auth/oauth/oidc/OidcDiscoveryClient.html#line-143">OidcDiscoveryClient</a></span><wbr><span class="parameters">(<a href="OidcDiscoveryClient.Builder.html" title="class in org.apache.juneau.rest.auth.oauth.oidc">OidcDiscoveryClient.Builder</a>&nbsp;b)</span></div>
 <div class="block">Constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -204,7 +204,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="create()">
 <h3>create</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="OidcDiscoveryClient.Builder.html" title="class in org.apache.juneau.rest.auth.oauth.oidc">OidcDiscoveryClient.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/auth/oauth/oidc/OidcDiscoveryClient.html#line-68">create</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="OidcDiscoveryClient.Builder.html" title="class in org.apache.juneau.rest.auth.oauth.oidc">OidcDiscoveryClient.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/auth/oauth/oidc/OidcDiscoveryClient.html#line-67">create</a></span>()</div>
 <div class="block">Static creator.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -215,7 +215,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getIssuer()">
 <h3>getIssuer</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/auth/oauth/oidc/OidcDiscoveryClient.html#line-153">getIssuer</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/auth/oauth/oidc/OidcDiscoveryClient.html#line-154">getIssuer</a></span>()</div>
 <div class="block">Returns the configured issuer URL.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -226,7 +226,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="discover()">
 <h3>discover</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="OidcMetadata.html" title="class in org.apache.juneau.rest.auth.oauth.oidc">OidcMetadata</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/auth/oauth/oidc/OidcDiscoveryClient.html#line-164">discover</a></span>()
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="OidcMetadata.html" title="class in org.apache.juneau.rest.auth.oauth.oidc">OidcMetadata</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/auth/oauth/oidc/OidcDiscoveryClient.html#line-165">discover</a></span>()
                       throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a>,
 <a href="OidcDiscoveryException.html" title="class in org.apache.juneau.rest.auth.oauth.oidc">OidcDiscoveryException</a></span></div>
 <div class="block">Fetches the authorization server's metadata, trying RFC 8414 first then OIDC Discovery.</div>

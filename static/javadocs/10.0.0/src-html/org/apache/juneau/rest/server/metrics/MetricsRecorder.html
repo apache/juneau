@@ -91,69 +91,68 @@
 <span class="source-line-no">078</span><span id="line-78"> * @since 10.0.0</span>
 <span class="source-line-no">079</span><span id="line-79"> */</span>
 <span class="source-line-no">080</span><span id="line-80">@FunctionalInterface</span>
-<span class="source-line-no">081</span><span id="line-81">public interface MetricsRecorder {</span>
-<span class="source-line-no">082</span><span id="line-82"></span>
-<span class="source-line-no">083</span><span id="line-83">   /**</span>
-<span class="source-line-no">084</span><span id="line-84">    * Records one per-request metric event.</span>
-<span class="source-line-no">085</span><span id="line-85">    *</span>
-<span class="source-line-no">086</span><span id="line-86">    * @param opName The fully-qualified {@code @RestOp} method name (e.g.</span>
-<span class="source-line-no">087</span><span id="line-87">    *    {@code "com.example.OrderResource.create(java.lang.String,com.example.Order)"}).</span>
-<span class="source-line-no">088</span><span id="line-88">    *    Never &lt;jk&gt;null&lt;/jk&gt;; never blank.</span>
-<span class="source-line-no">089</span><span id="line-89">    * @param httpMethod The uppercased HTTP method of the request (e.g. {@code "GET"}, {@code "POST"}).</span>
-<span class="source-line-no">090</span><span id="line-90">    *    Never &lt;jk&gt;null&lt;/jk&gt;; never blank.</span>
-<span class="source-line-no">091</span><span id="line-91">    * @param uriTemplate The {@code @RestOp} path template (e.g. {@code "/users/{id}"}), &lt;b&gt;not&lt;/b&gt; the</span>
-<span class="source-line-no">092</span><span id="line-92">    *    raw concrete URI. Bridges should use this as the {@code uri} tag to keep cardinality bounded.</span>
-<span class="source-line-no">093</span><span id="line-93">    *    May be empty for resource-level operations that match {@code /*}; never &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">094</span><span id="line-94">    * @param statusCode The HTTP response status code (e.g. {@code 200}, {@code 404}, {@code 500}).</span>
-<span class="source-line-no">095</span><span id="line-95">    *    If the handler threw before the status was set, this is the framework's inferred status (typically</span>
-<span class="source-line-no">096</span><span id="line-96">    *    {@code 500} for an unmapped exception, or the exception's status for a {@code BasicHttpException}).</span>
-<span class="source-line-no">097</span><span id="line-97">    * @param elapsed Wall-clock duration of the {@code @RestOp} invocation. Never &lt;jk&gt;null&lt;/jk&gt;; never</span>
-<span class="source-line-no">098</span><span id="line-98">    *    negative.</span>
-<span class="source-line-no">099</span><span id="line-99">    * @param error The exception thrown by the handler, or &lt;jk&gt;null&lt;/jk&gt; if the call completed normally.</span>
-<span class="source-line-no">100</span><span id="line-100">    *    Bridges typically derive an {@code exception} tag from the throwable's simple class name, or</span>
-<span class="source-line-no">101</span><span id="line-101">    *    {@code "None"} when null (mirrors Spring Boot's {@code WebMvcMetricsFilter} convention).</span>
-<span class="source-line-no">102</span><span id="line-102">    * @param metricName Per-op metric name override from {@link org.apache.juneau.rest.server.RestOp#metricName()}.</span>
-<span class="source-line-no">103</span><span id="line-103">    *    Empty string (default) means the implementation should use its own default name derivation.</span>
-<span class="source-line-no">104</span><span id="line-104">    *    Never &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">105</span><span id="line-105">    * @param metricTags Per-op additional metric tags from {@link org.apache.juneau.rest.server.RestOp#metricTags()}.</span>
-<span class="source-line-no">106</span><span id="line-106">    *    Format: comma-separated {@code key=value} pairs (e.g. {@code "team=payments,region=us-east"}).</span>
-<span class="source-line-no">107</span><span id="line-107">    *    Empty string (default) means no additional tags. Never &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">108</span><span id="line-108">    */</span>
-<span class="source-line-no">109</span><span id="line-109">   @SuppressWarnings({</span>
-<span class="source-line-no">110</span><span id="line-110">      "java:S6213", // 'record' is the established SPI method name; renaming would break the public observability API.</span>
-<span class="source-line-no">111</span><span id="line-111">      "java:S107"   // The 8 parameters form the stable per-request metric event contract; a holder object would obscure this SPI signature.</span>
-<span class="source-line-no">112</span><span id="line-112">   })</span>
-<span class="source-line-no">113</span><span id="line-113">   void record(String opName, String httpMethod, String uriTemplate, int statusCode, Duration elapsed, Throwable error, String metricName, String metricTags);</span>
-<span class="source-line-no">114</span><span id="line-114"></span>
-<span class="source-line-no">115</span><span id="line-115">   /**</span>
-<span class="source-line-no">116</span><span id="line-116">    * Records one custom (non-request) observation event.</span>
-<span class="source-line-no">117</span><span id="line-117">    *</span>
-<span class="source-line-no">118</span><span id="line-118">    * &lt;p&gt;</span>
-<span class="source-line-no">119</span><span id="line-119">    * Unlike {@link #record(String, String, String, int, Duration, Throwable, String, String)}, this</span>
-<span class="source-line-no">120</span><span id="line-120">    * entry point is &lt;b&gt;not&lt;/b&gt; tied to an HTTP request &amp;mdash; it is the substrate for the explicit</span>
-<span class="source-line-no">121</span><span id="line-121">    * programmatic observation API ({@link org.apache.juneau.rest.server.observation.Observations}) so</span>
-<span class="source-line-no">122</span><span id="line-122">    * application code can time an arbitrary block of work. Bridge implementations record a timer named</span>
-<span class="source-line-no">123</span><span id="line-123">    * {@code metricName} carrying {@code metricTags} (plus an {@code exception} tag derived from</span>
-<span class="source-line-no">124</span><span id="line-124">    * {@code error}).</span>
-<span class="source-line-no">125</span><span id="line-125">    *</span>
-<span class="source-line-no">126</span><span id="line-126">    * &lt;p&gt;</span>
-<span class="source-line-no">127</span><span id="line-127">    * The default implementation does nothing &amp;mdash; a bridge that does not override it simply does not</span>
-<span class="source-line-no">128</span><span id="line-128">    * record custom observations, and the no-backend path stays zero-allocation. The shipped Micrometer</span>
-<span class="source-line-no">129</span><span id="line-129">    * bridge overrides it.</span>
-<span class="source-line-no">130</span><span id="line-130">    *</span>
-<span class="source-line-no">131</span><span id="line-131">    * @param metricName The timer name (e.g. {@code "order.load"}). Never &lt;jk&gt;null&lt;/jk&gt;; never blank.</span>
-<span class="source-line-no">132</span><span id="line-132">    * @param metricTags Additional tags as comma-separated {@code key=value} pairs (e.g.</span>
-<span class="source-line-no">133</span><span id="line-133">    *    {@code "team=payments,region=us-east"}). Empty string means no additional tags. Never &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">134</span><span id="line-134">    * @param elapsed Wall-clock duration of the observed block. Never &lt;jk&gt;null&lt;/jk&gt;; never negative.</span>
-<span class="source-line-no">135</span><span id="line-135">    * @param error The exception thrown by the observed block, or &lt;jk&gt;null&lt;/jk&gt; if it completed normally.</span>
-<span class="source-line-no">136</span><span id="line-136">    */</span>
-<span class="source-line-no">137</span><span id="line-137">   @SuppressWarnings({</span>
-<span class="source-line-no">138</span><span id="line-138">      "java:S6213" // 'record' is the established SPI method name; renaming would break the public observability API.</span>
-<span class="source-line-no">139</span><span id="line-139">   })</span>
-<span class="source-line-no">140</span><span id="line-140">   default void record(String metricName, String metricTags, Duration elapsed, Throwable error) {</span>
-<span class="source-line-no">141</span><span id="line-141">      // Default no-op: bridges that support custom observations override this.</span>
-<span class="source-line-no">142</span><span id="line-142">   }</span>
-<span class="source-line-no">143</span><span id="line-143">}</span>
+<span class="source-line-no">081</span><span id="line-81">@SuppressWarnings({</span>
+<span class="source-line-no">082</span><span id="line-82">   "java:S6213" // 'record' is the established SPI method name; renaming would break the public observability API.</span>
+<span class="source-line-no">083</span><span id="line-83">})</span>
+<span class="source-line-no">084</span><span id="line-84">public interface MetricsRecorder {</span>
+<span class="source-line-no">085</span><span id="line-85"></span>
+<span class="source-line-no">086</span><span id="line-86">   /**</span>
+<span class="source-line-no">087</span><span id="line-87">    * Records one per-request metric event.</span>
+<span class="source-line-no">088</span><span id="line-88">    *</span>
+<span class="source-line-no">089</span><span id="line-89">    * @param opName The fully-qualified {@code @RestOp} method name (e.g.</span>
+<span class="source-line-no">090</span><span id="line-90">    *    {@code "com.example.OrderResource.create(java.lang.String,com.example.Order)"}).</span>
+<span class="source-line-no">091</span><span id="line-91">    *    Never &lt;jk&gt;null&lt;/jk&gt;; never blank.</span>
+<span class="source-line-no">092</span><span id="line-92">    * @param httpMethod The uppercased HTTP method of the request (e.g. {@code "GET"}, {@code "POST"}).</span>
+<span class="source-line-no">093</span><span id="line-93">    *    Never &lt;jk&gt;null&lt;/jk&gt;; never blank.</span>
+<span class="source-line-no">094</span><span id="line-94">    * @param uriTemplate The {@code @RestOp} path template (e.g. {@code "/users/{id}"}), &lt;b&gt;not&lt;/b&gt; the</span>
+<span class="source-line-no">095</span><span id="line-95">    *    raw concrete URI. Bridges should use this as the {@code uri} tag to keep cardinality bounded.</span>
+<span class="source-line-no">096</span><span id="line-96">    *    May be empty for resource-level operations that match {@code /*}; never &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">097</span><span id="line-97">    * @param statusCode The HTTP response status code (e.g. {@code 200}, {@code 404}, {@code 500}).</span>
+<span class="source-line-no">098</span><span id="line-98">    *    If the handler threw before the status was set, this is the framework's inferred status (typically</span>
+<span class="source-line-no">099</span><span id="line-99">    *    {@code 500} for an unmapped exception, or the exception's status for a {@code BasicHttpException}).</span>
+<span class="source-line-no">100</span><span id="line-100">    * @param elapsed Wall-clock duration of the {@code @RestOp} invocation. Never &lt;jk&gt;null&lt;/jk&gt;; never</span>
+<span class="source-line-no">101</span><span id="line-101">    *    negative.</span>
+<span class="source-line-no">102</span><span id="line-102">    * @param error The exception thrown by the handler, or &lt;jk&gt;null&lt;/jk&gt; if the call completed normally.</span>
+<span class="source-line-no">103</span><span id="line-103">    *    Bridges typically derive an {@code exception} tag from the throwable's simple class name, or</span>
+<span class="source-line-no">104</span><span id="line-104">    *    {@code "None"} when null (mirrors Spring Boot's {@code WebMvcMetricsFilter} convention).</span>
+<span class="source-line-no">105</span><span id="line-105">    * @param metricName Per-op metric name override from {@link org.apache.juneau.rest.server.RestOp#metricName()}.</span>
+<span class="source-line-no">106</span><span id="line-106">    *    Empty string (default) means the implementation should use its own default name derivation.</span>
+<span class="source-line-no">107</span><span id="line-107">    *    Never &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">108</span><span id="line-108">    * @param metricTags Per-op additional metric tags from {@link org.apache.juneau.rest.server.RestOp#metricTags()}.</span>
+<span class="source-line-no">109</span><span id="line-109">    *    Format: comma-separated {@code key=value} pairs (e.g. {@code "team=payments,region=us-east"}).</span>
+<span class="source-line-no">110</span><span id="line-110">    *    Empty string (default) means no additional tags. Never &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">111</span><span id="line-111">    */</span>
+<span class="source-line-no">112</span><span id="line-112">   @SuppressWarnings({</span>
+<span class="source-line-no">113</span><span id="line-113">      "java:S107" // The 8 parameters form the stable per-request metric event contract; a holder object would obscure this SPI signature.</span>
+<span class="source-line-no">114</span><span id="line-114">   })</span>
+<span class="source-line-no">115</span><span id="line-115">   void record(String opName, String httpMethod, String uriTemplate, int statusCode, Duration elapsed, Throwable error, String metricName, String metricTags);</span>
+<span class="source-line-no">116</span><span id="line-116"></span>
+<span class="source-line-no">117</span><span id="line-117">   /**</span>
+<span class="source-line-no">118</span><span id="line-118">    * Records one custom (non-request) observation event.</span>
+<span class="source-line-no">119</span><span id="line-119">    *</span>
+<span class="source-line-no">120</span><span id="line-120">    * &lt;p&gt;</span>
+<span class="source-line-no">121</span><span id="line-121">    * Unlike {@link #record(String, String, String, int, Duration, Throwable, String, String)}, this</span>
+<span class="source-line-no">122</span><span id="line-122">    * entry point is &lt;b&gt;not&lt;/b&gt; tied to an HTTP request &amp;mdash; it is the substrate for the explicit</span>
+<span class="source-line-no">123</span><span id="line-123">    * programmatic observation API ({@link org.apache.juneau.rest.server.observation.Observations}) so</span>
+<span class="source-line-no">124</span><span id="line-124">    * application code can time an arbitrary block of work. Bridge implementations record a timer named</span>
+<span class="source-line-no">125</span><span id="line-125">    * {@code metricName} carrying {@code metricTags} (plus an {@code exception} tag derived from</span>
+<span class="source-line-no">126</span><span id="line-126">    * {@code error}).</span>
+<span class="source-line-no">127</span><span id="line-127">    *</span>
+<span class="source-line-no">128</span><span id="line-128">    * &lt;p&gt;</span>
+<span class="source-line-no">129</span><span id="line-129">    * The default implementation does nothing &amp;mdash; a bridge that does not override it simply does not</span>
+<span class="source-line-no">130</span><span id="line-130">    * record custom observations, and the no-backend path stays zero-allocation. The shipped Micrometer</span>
+<span class="source-line-no">131</span><span id="line-131">    * bridge overrides it.</span>
+<span class="source-line-no">132</span><span id="line-132">    *</span>
+<span class="source-line-no">133</span><span id="line-133">    * @param metricName The timer name (e.g. {@code "order.load"}). Never &lt;jk&gt;null&lt;/jk&gt;; never blank.</span>
+<span class="source-line-no">134</span><span id="line-134">    * @param metricTags Additional tags as comma-separated {@code key=value} pairs (e.g.</span>
+<span class="source-line-no">135</span><span id="line-135">    *    {@code "team=payments,region=us-east"}). Empty string means no additional tags. Never &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">136</span><span id="line-136">    * @param elapsed Wall-clock duration of the observed block. Never &lt;jk&gt;null&lt;/jk&gt;; never negative.</span>
+<span class="source-line-no">137</span><span id="line-137">    * @param error The exception thrown by the observed block, or &lt;jk&gt;null&lt;/jk&gt; if it completed normally.</span>
+<span class="source-line-no">138</span><span id="line-138">    */</span>
+<span class="source-line-no">139</span><span id="line-139">   default void record(String metricName, String metricTags, Duration elapsed, Throwable error) {</span>
+<span class="source-line-no">140</span><span id="line-140">      // Default no-op: bridges that support custom observations override this.</span>
+<span class="source-line-no">141</span><span id="line-141">   }</span>
+<span class="source-line-no">142</span><span id="line-142">}</span>
 
 
 

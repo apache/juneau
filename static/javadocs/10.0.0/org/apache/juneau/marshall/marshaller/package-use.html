@@ -56,21 +56,43 @@ loadScripts(document, 'script');</script>
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Package</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><a href="#org.apache.juneau.marshall.jena.marshaller">org.apache.juneau.marshall.jena.marshaller</a></div>
+<div class="col-first even-row-color"><a href="#org.apache.juneau.bean.jsonpatch">org.apache.juneau.bean.jsonpatch</a></div>
 <div class="col-last even-row-color">
+<div class="block">Juneau <a href="../Marshalled.html" title="annotation interface in org.apache.juneau.marshall"><code>@Marshalled</code></a> types for
+ <a href="https://datatracker.ietf.org/doc/html/rfc6902">JSON Patch (RFC 6902)</a>.</div>
+</div>
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.marshall.jena.marshaller">org.apache.juneau.marshall.jena.marshaller</a></div>
+<div class="col-last odd-row-color">
 <div class="block">Convenience marshallers pairing RDF serializers and parsers into single classes with fluent to/from methods.</div>
 </div>
-<div class="col-first odd-row-color"><a href="#org.apache.juneau.marshall.marshaller">org.apache.juneau.marshall.marshaller</a></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><a href="#org.apache.juneau.marshall.marshaller">org.apache.juneau.marshall.marshaller</a></div>
+<div class="col-last even-row-color">
 <div class="block">Marshallers</div>
 </div>
-<div class="col-first even-row-color"><a href="#org.apache.juneau.rest.client.classic">org.apache.juneau.rest.client.classic</a></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.rest.client.classic">org.apache.juneau.rest.client.classic</a></div>
+<div class="col-last odd-row-color">
 <div class="block">REST Client API</div>
 </div>
 </div>
 <section class="package-uses">
 <ul class="block-list">
+<li>
+<section class="detail" id="org.apache.juneau.bean.jsonpatch">
+<div class="caption"><span>Classes in <a href="package-summary.html">org.apache.juneau.marshall.marshaller</a> used by <a href="../../bean/jsonpatch/package-summary.html">org.apache.juneau.bean.jsonpatch</a></span></div>
+<div class="summary-table two-column-summary">
+<div class="table-header col-first">Class</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><a href="class-use/CharMarshaller.html#org.apache.juneau.bean.jsonpatch">CharMarshaller</a></div>
+<div class="col-last even-row-color">
+<div class="block">A subclass of <a href="Marshaller.html" title="class in org.apache.juneau.marshall.marshaller"><code>Marshaller</code></a> for character-based serializers and parsers.</div>
+</div>
+<div class="col-first odd-row-color"><a href="class-use/Marshaller.html#org.apache.juneau.bean.jsonpatch">Marshaller</a></div>
+<div class="col-last odd-row-color">
+<div class="block">Top-level class for a pairing of a <a href="../serializer/Serializer.html" title="class in org.apache.juneau.marshall.serializer"><code>Serializer</code></a> and <a href="../parser/Parser.html" title="class in org.apache.juneau.marshall.parser"><code>Parser</code></a> into a single class with convenience read/write methods.</div>
+</div>
+</div>
+</section>
+</li>
 <li>
 <section class="detail" id="org.apache.juneau.marshall.jena.marshaller">
 <div class="caption"><span>Classes in <a href="package-summary.html">org.apache.juneau.marshall.marshaller</a> used by <a href="../jena/marshaller/package-summary.html">org.apache.juneau.marshall.jena.marshaller</a></span></div>
@@ -102,33 +124,80 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color">
 <div class="block">A pairing of a <a href="../bson/BsonSerializer.html" title="class in org.apache.juneau.marshall.bson"><code>BsonSerializer</code></a> and <a href="../bson/BsonParser.html" title="class in org.apache.juneau.marshall.bson"><code>BsonParser</code></a> into a single class with convenience to/of methods.</div>
 </div>
+<div class="col-first odd-row-color"><a href="class-use/BsonBase64.html#org.apache.juneau.marshall.marshaller">BsonBase64</a></div>
+<div class="col-last odd-row-color">
+<div class="block">A <a href="Bson.html" title="class in org.apache.juneau.marshall.marshaller"><code>Bson</code></a> variant that represents binary values as <b>Base64</b> text instead of raw BSON bytes.</div>
+</div>
+<div class="col-first even-row-color"><a href="class-use/BsonSpacedHex.html#org.apache.juneau.marshall.marshaller">BsonSpacedHex</a></div>
+<div class="col-last even-row-color">
+<div class="block">A <a href="Bson.html" title="class in org.apache.juneau.marshall.marshaller"><code>Bson</code></a> variant that represents binary values as <b>spaced hexadecimal</b> text instead of
+ raw BSON bytes.</div>
+</div>
 <div class="col-first odd-row-color"><a href="class-use/Cbor.html#org.apache.juneau.marshall.marshaller">Cbor</a></div>
 <div class="col-last odd-row-color">
 <div class="block">A pairing of a <a href="../cbor/CborSerializer.html" title="class in org.apache.juneau.marshall.cbor"><code>CborSerializer</code></a> and <a href="../cbor/CborParser.html" title="class in org.apache.juneau.marshall.cbor"><code>CborParser</code></a> into a single class with convenience read/write methods.</div>
 </div>
-<div class="col-first even-row-color"><a href="class-use/CharMarshaller.html#org.apache.juneau.marshall.marshaller">CharMarshaller</a></div>
+<div class="col-first even-row-color"><a href="class-use/CborBase64.html#org.apache.juneau.marshall.marshaller">CborBase64</a></div>
 <div class="col-last even-row-color">
+<div class="block">A <a href="Cbor.html" title="class in org.apache.juneau.marshall.marshaller"><code>Cbor</code></a> variant that represents binary values as <b>Base64</b> text instead of raw CBOR bytes.</div>
+</div>
+<div class="col-first odd-row-color"><a href="class-use/CborNative.html#org.apache.juneau.marshall.marshaller">CborNative</a></div>
+<div class="col-last odd-row-color">
+<div class="block">A <a href="Cbor.html" title="class in org.apache.juneau.marshall.marshaller"><code>Cbor</code></a> variant whose parser is in <b>native mode</b>, exposing low-level CBOR tag and
+ type information in the token stream instead of normalizing it away.</div>
+</div>
+<div class="col-first even-row-color"><a href="class-use/CborSpacedHex.html#org.apache.juneau.marshall.marshaller">CborSpacedHex</a></div>
+<div class="col-last even-row-color">
+<div class="block">A <a href="Cbor.html" title="class in org.apache.juneau.marshall.marshaller"><code>Cbor</code></a> variant that represents binary values as <b>spaced hexadecimal</b> text instead of
+ raw CBOR bytes.</div>
+</div>
+<div class="col-first odd-row-color"><a href="class-use/CharMarshaller.html#org.apache.juneau.marshall.marshaller">CharMarshaller</a></div>
+<div class="col-last odd-row-color">
 <div class="block">A subclass of <a href="Marshaller.html" title="class in org.apache.juneau.marshall.marshaller"><code>Marshaller</code></a> for character-based serializers and parsers.</div>
 </div>
-<div class="col-first odd-row-color"><a href="class-use/Csv.html#org.apache.juneau.marshall.marshaller">Csv</a></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><a href="class-use/Csv.html#org.apache.juneau.marshall.marshaller">Csv</a></div>
+<div class="col-last even-row-color">
 <div class="block">A pairing of a <a href="../csv/CsvSerializer.html" title="class in org.apache.juneau.marshall.csv"><code>CsvSerializer</code></a> and <a href="../csv/CsvParser.html" title="class in org.apache.juneau.marshall.csv"><code>CsvParser</code></a> into a single class with convenience to/of methods.</div>
 </div>
-<div class="col-first even-row-color"><a href="class-use/Hjson.html#org.apache.juneau.marshall.marshaller">Hjson</a></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><a href="class-use/Hjson.html#org.apache.juneau.marshall.marshaller">Hjson</a></div>
+<div class="col-last odd-row-color">
 <div class="block">A pairing of a <a href="../hjson/HjsonSerializer.html" title="class in org.apache.juneau.marshall.hjson"><code>HjsonSerializer</code></a> and <a href="../hjson/HjsonParser.html" title="class in org.apache.juneau.marshall.hjson"><code>HjsonParser</code></a> into a single class with convenience to/of methods.</div>
 </div>
-<div class="col-first odd-row-color"><a href="class-use/HjsonC.html#org.apache.juneau.marshall.marshaller">HjsonC</a></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><a href="class-use/HjsonC.html#org.apache.juneau.marshall.marshaller">HjsonC</a></div>
+<div class="col-last even-row-color">
 <div class="block">A <a href="Hjson.html" title="class in org.apache.juneau.marshall.marshaller"><code>Hjson</code></a> variant that produces <b>compact</b> (single-line) Hjson output.</div>
 </div>
-<div class="col-first even-row-color"><a href="class-use/Hocon.html#org.apache.juneau.marshall.marshaller">Hocon</a></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><a href="class-use/Hocon.html#org.apache.juneau.marshall.marshaller">Hocon</a></div>
+<div class="col-last odd-row-color">
 <div class="block">A pairing of a <a href="../hocon/HoconSerializer.html" title="class in org.apache.juneau.marshall.hocon"><code>HoconSerializer</code></a> and <a href="../hocon/HoconParser.html" title="class in org.apache.juneau.marshall.hocon"><code>HoconParser</code></a> into a single class with convenience to/of methods.</div>
 </div>
-<div class="col-first odd-row-color"><a href="class-use/Html.html#org.apache.juneau.marshall.marshaller">Html</a></div>
+<div class="col-first even-row-color"><a href="class-use/HoconBraces.html#org.apache.juneau.marshall.marshaller">HoconBraces</a></div>
+<div class="col-last even-row-color">
+<div class="block">A <a href="Hocon.html" title="class in org.apache.juneau.marshall.marshaller"><code>Hocon</code></a> variant that produces readable HOCON output with the <b>root braces</b> retained
+ (the <a href="Hocon.html#DEFAULT"><code>Hocon.DEFAULT</code></a> form omits them).</div>
+</div>
+<div class="col-first odd-row-color"><a href="class-use/HoconC.html#org.apache.juneau.marshall.marshaller">HoconC</a></div>
 <div class="col-last odd-row-color">
+<div class="block">A <a href="Hocon.html" title="class in org.apache.juneau.marshall.marshaller"><code>Hocon</code></a> variant that produces <b>compact</b> (single-line) HOCON output.</div>
+</div>
+<div class="col-first even-row-color"><a href="class-use/Html.html#org.apache.juneau.marshall.marshaller">Html</a></div>
+<div class="col-last even-row-color">
 <div class="block">A pairing of a <a href="../html/HtmlSerializer.html" title="class in org.apache.juneau.marshall.html"><code>HtmlSerializer</code></a> and <a href="../html/HtmlParser.html" title="class in org.apache.juneau.marshall.html"><code>HtmlParser</code></a> into a single class with convenience to/of methods.</div>
+</div>
+<div class="col-first odd-row-color"><a href="class-use/HtmlSimpleSq.html#org.apache.juneau.marshall.marshaller">HtmlSimpleSq</a></div>
+<div class="col-last odd-row-color">
+<div class="block">An <a href="Html.html" title="class in org.apache.juneau.marshall.marshaller"><code>Html</code></a> variant that produces output with single-quoted attributes and JSON type
+ hint tags disabled (a "simple" flavor of the single-quote variant).</div>
+</div>
+<div class="col-first even-row-color"><a href="class-use/HtmlSq.html#org.apache.juneau.marshall.marshaller">HtmlSq</a></div>
+<div class="col-last even-row-color">
+<div class="block">An <a href="Html.html" title="class in org.apache.juneau.marshall.marshaller"><code>Html</code></a> variant that produces output with attributes quoted using <b>single quotes</b>
+ instead of double quotes.</div>
+</div>
+<div class="col-first odd-row-color"><a href="class-use/HtmlSqR.html#org.apache.juneau.marshall.marshaller">HtmlSqR</a></div>
+<div class="col-last odd-row-color">
+<div class="block">An <a href="Html.html" title="class in org.apache.juneau.marshall.marshaller"><code>Html</code></a> variant that produces <b>readable</b> (indented, multi-line) output with attributes
+ quoted using single quotes.</div>
 </div>
 <div class="col-first even-row-color"><a href="class-use/Ini.html#org.apache.juneau.marshall.marshaller">Ini</a></div>
 <div class="col-last even-row-color">
@@ -165,22 +234,41 @@ loadScripts(document, 'script');</script>
 <div class="block">Pairs <a href="../jsonl/JsonlSerializer.html" title="class in org.apache.juneau.marshall.jsonl"><code>JsonlSerializer</code></a> and <a href="../jsonl/JsonlParser.html" title="class in org.apache.juneau.marshall.jsonl"><code>JsonlParser</code></a> into a single class with convenience
  to/of methods.</div>
 </div>
-<div class="col-first even-row-color"><a href="class-use/Markdown.html#org.apache.juneau.marshall.marshaller">Markdown</a></div>
+<div class="col-first even-row-color"><a href="class-use/JsonR.html#org.apache.juneau.marshall.marshaller">JsonR</a></div>
 <div class="col-last even-row-color">
+<div class="block">A <a href="Json.html" title="class in org.apache.juneau.marshall.marshaller"><code>Json</code></a> variant that produces <b>readable</b> (indented, multi-line) JSON output.</div>
+</div>
+<div class="col-first odd-row-color"><a href="class-use/Markdown.html#org.apache.juneau.marshall.marshaller">Markdown</a></div>
+<div class="col-last odd-row-color">
 <div class="block">A pairing of a <a href="../markdown/MarkdownSerializer.html" title="class in org.apache.juneau.marshall.markdown"><code>MarkdownSerializer</code></a> and <a href="../markdown/MarkdownParser.html" title="class in org.apache.juneau.marshall.markdown"><code>MarkdownParser</code></a> into a single class with convenience to/of methods.</div>
 </div>
-<div class="col-first odd-row-color"><a href="class-use/MarkdownDoc.html#org.apache.juneau.marshall.marshaller">MarkdownDoc</a></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><a href="class-use/MarkdownDoc.html#org.apache.juneau.marshall.marshaller">MarkdownDoc</a></div>
+<div class="col-last even-row-color">
 <div class="block">A pairing of a <a href="../markdown/MarkdownDocSerializer.html" title="class in org.apache.juneau.marshall.markdown"><code>MarkdownDocSerializer</code></a> and <a href="../markdown/MarkdownDocParser.html" title="class in org.apache.juneau.marshall.markdown"><code>MarkdownDocParser</code></a> into a single class with
  convenience to/of methods for document-mode Markdown (headings + tables).</div>
 </div>
-<div class="col-first even-row-color"><a href="class-use/Marshaller.html#org.apache.juneau.marshall.marshaller">Marshaller</a></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><a href="class-use/Marshaller.html#org.apache.juneau.marshall.marshaller">Marshaller</a></div>
+<div class="col-last odd-row-color">
 <div class="block">Top-level class for a pairing of a <a href="../serializer/Serializer.html" title="class in org.apache.juneau.marshall.serializer"><code>Serializer</code></a> and <a href="../parser/Parser.html" title="class in org.apache.juneau.marshall.parser"><code>Parser</code></a> into a single class with convenience read/write methods.</div>
 </div>
-<div class="col-first odd-row-color"><a href="class-use/MsgPack.html#org.apache.juneau.marshall.marshaller">MsgPack</a></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><a href="class-use/MsgPack.html#org.apache.juneau.marshall.marshaller">MsgPack</a></div>
+<div class="col-last even-row-color">
 <div class="block">A pairing of a <a href="../msgpack/MsgPackSerializer.html" title="class in org.apache.juneau.marshall.msgpack"><code>MsgPackSerializer</code></a> and <a href="../msgpack/MsgPackParser.html" title="class in org.apache.juneau.marshall.msgpack"><code>MsgPackParser</code></a> into a single class with convenience to/of methods.</div>
+</div>
+<div class="col-first odd-row-color"><a href="class-use/MsgPackBase64.html#org.apache.juneau.marshall.marshaller">MsgPackBase64</a></div>
+<div class="col-last odd-row-color">
+<div class="block">A <a href="MsgPack.html" title="class in org.apache.juneau.marshall.marshaller"><code>MsgPack</code></a> variant that represents binary values as <b>Base64</b> text instead of raw
+ MessagePack bytes.</div>
+</div>
+<div class="col-first even-row-color"><a href="class-use/MsgPackNative.html#org.apache.juneau.marshall.marshaller">MsgPackNative</a></div>
+<div class="col-last even-row-color">
+<div class="block">A <a href="MsgPack.html" title="class in org.apache.juneau.marshall.marshaller"><code>MsgPack</code></a> variant whose parser is in <b>native mode</b>, exposing low-level MessagePack
+ extension type information in the token stream instead of normalizing it away.</div>
+</div>
+<div class="col-first odd-row-color"><a href="class-use/MsgPackSpacedHex.html#org.apache.juneau.marshall.marshaller">MsgPackSpacedHex</a></div>
+<div class="col-last odd-row-color">
+<div class="block">A <a href="MsgPack.html" title="class in org.apache.juneau.marshall.marshaller"><code>MsgPack</code></a> variant that represents binary values as <b>spaced hexadecimal</b> text instead
+ of raw MessagePack bytes.</div>
 </div>
 <div class="col-first even-row-color"><a href="class-use/OpenApi.html#org.apache.juneau.marshall.marshaller">OpenApi</a></div>
 <div class="col-last even-row-color">
@@ -203,34 +291,90 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color">
 <div class="block">A pairing of a <code>PrototextSerializer</code> and <code>PrototextParser</code> into a single class with convenience to/of methods.</div>
 </div>
-<div class="col-first odd-row-color"><a href="class-use/Sse.html#org.apache.juneau.marshall.marshaller">Sse</a></div>
+<div class="col-first odd-row-color"><a href="class-use/PrototextR.html#org.apache.juneau.marshall.marshaller">PrototextR</a></div>
 <div class="col-last odd-row-color">
+<div class="block">A <a href="Prototext.html" title="class in org.apache.juneau.marshall.marshaller"><code>Prototext</code></a> variant that produces <b>readable</b> (whitespace-padded) Protobuf Text Format output.</div>
+</div>
+<div class="col-first even-row-color"><a href="class-use/Sse.html#org.apache.juneau.marshall.marshaller">Sse</a></div>
+<div class="col-last even-row-color">
 <div class="block">Pairs <a href="../sse/SseSerializer.html" title="class in org.apache.juneau.marshall.sse"><code>SseSerializer</code></a> and <a href="../sse/SseParser.html" title="class in org.apache.juneau.marshall.sse"><code>SseParser</code></a> into a single class with convenience
  read/write methods for the <c>text/event-stream</c> wire format.</div>
 </div>
-<div class="col-first even-row-color"><a href="class-use/StreamMarshaller.html#org.apache.juneau.marshall.marshaller">StreamMarshaller</a></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><a href="class-use/StreamMarshaller.html#org.apache.juneau.marshall.marshaller">StreamMarshaller</a></div>
+<div class="col-last odd-row-color">
 <div class="block">A subclass of <a href="Marshaller.html" title="class in org.apache.juneau.marshall.marshaller"><code>Marshaller</code></a> for stream-based serializers and parsers.</div>
 </div>
-<div class="col-first odd-row-color"><a href="class-use/Toml.html#org.apache.juneau.marshall.marshaller">Toml</a></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><a href="class-use/Toml.html#org.apache.juneau.marshall.marshaller">Toml</a></div>
+<div class="col-last even-row-color">
 <div class="block">TOML marshaller combining <a href="../toml/TomlSerializer.html" title="class in org.apache.juneau.marshall.toml"><code>TomlSerializer</code></a> and <a href="../toml/TomlParser.html" title="class in org.apache.juneau.marshall.toml"><code>TomlParser</code></a>.</div>
+</div>
+<div class="col-first odd-row-color"><a href="class-use/TomlR.html#org.apache.juneau.marshall.marshaller">TomlR</a></div>
+<div class="col-last odd-row-color">
+<div class="block">A <a href="Toml.html" title="class in org.apache.juneau.marshall.marshaller"><code>Toml</code></a> variant that produces <b>readable</b> (whitespace-padded) TOML output.</div>
 </div>
 <div class="col-first even-row-color"><a href="class-use/Uon.html#org.apache.juneau.marshall.marshaller">Uon</a></div>
 <div class="col-last even-row-color">
 <div class="block">A pairing of a <a href="../uon/UonSerializer.html" title="class in org.apache.juneau.marshall.uon"><code>UonSerializer</code></a> and <a href="../uon/UonParser.html" title="class in org.apache.juneau.marshall.uon"><code>UonParser</code></a> into a single class with convenience to/of methods.</div>
 </div>
+<div class="col-first odd-row-color"><a href="class-use/UonE.html#org.apache.juneau.marshall.marshaller">UonE</a></div>
+<div class="col-last odd-row-color">
+<div class="block">A <a href="Uon.html" title="class in org.apache.juneau.marshall.marshaller"><code>Uon</code></a> variant that percent-<b>encodes</b> reserved/URL-unsafe characters in its UON output.</div>
+</div>
+<div class="col-first even-row-color"><a href="class-use/UonR.html#org.apache.juneau.marshall.marshaller">UonR</a></div>
+<div class="col-last even-row-color">
+<div class="block">A <a href="Uon.html" title="class in org.apache.juneau.marshall.marshaller"><code>Uon</code></a> variant that produces <b>readable</b> (whitespace-padded) UON output.</div>
+</div>
 <div class="col-first odd-row-color"><a href="class-use/UrlEncoding.html#org.apache.juneau.marshall.marshaller">UrlEncoding</a></div>
 <div class="col-last odd-row-color">
 <div class="block">A pairing of a <a href="../urlencoding/UrlEncodingSerializer.html" title="class in org.apache.juneau.marshall.urlencoding"><code>UrlEncodingSerializer</code></a> and <a href="../urlencoding/UrlEncodingParser.html" title="class in org.apache.juneau.marshall.urlencoding"><code>UrlEncodingParser</code></a> into a single class with convenience to/of methods.</div>
 </div>
-<div class="col-first even-row-color"><a href="class-use/Xml.html#org.apache.juneau.marshall.marshaller">Xml</a></div>
+<div class="col-first even-row-color"><a href="class-use/UrlEncodingExpanded.html#org.apache.juneau.marshall.marshaller">UrlEncodingExpanded</a></div>
 <div class="col-last even-row-color">
+<div class="block">A <a href="UrlEncoding.html" title="class in org.apache.juneau.marshall.marshaller"><code>UrlEncoding</code></a> variant that <b>expands</b> array/collection-valued properties into multiple
+ repeated key/value parameter pairs instead of a single UON-encoded array value.</div>
+</div>
+<div class="col-first odd-row-color"><a href="class-use/UrlEncodingPlain.html#org.apache.juneau.marshall.marshaller">UrlEncodingPlain</a></div>
+<div class="col-last odd-row-color">
+<div class="block">A <a href="UrlEncoding.html" title="class in org.apache.juneau.marshall.marshaller"><code>UrlEncoding</code></a> variant that leaves value parts in <b>plain text</b> (not UON-encoded) in its output.</div>
+</div>
+<div class="col-first even-row-color"><a href="class-use/UrlEncodingR.html#org.apache.juneau.marshall.marshaller">UrlEncodingR</a></div>
+<div class="col-last even-row-color">
+<div class="block">A <a href="UrlEncoding.html" title="class in org.apache.juneau.marshall.marshaller"><code>UrlEncoding</code></a> variant that produces <b>readable</b> (whitespace-padded) URL-encoded output.</div>
+</div>
+<div class="col-first odd-row-color"><a href="class-use/Xml.html#org.apache.juneau.marshall.marshaller">Xml</a></div>
+<div class="col-last odd-row-color">
 <div class="block">A pairing of a <a href="../xml/XmlSerializer.html" title="class in org.apache.juneau.marshall.xml"><code>XmlSerializer</code></a> and <a href="../xml/XmlParser.html" title="class in org.apache.juneau.marshall.xml"><code>XmlParser</code></a> into a single class with convenience to/of methods.</div>
+</div>
+<div class="col-first even-row-color"><a href="class-use/XmlNs.html#org.apache.juneau.marshall.marshaller">XmlNs</a></div>
+<div class="col-last even-row-color">
+<div class="block">An <a href="Xml.html" title="class in org.apache.juneau.marshall.marshaller"><code>Xml</code></a> variant that emits XML <b>namespaces</b> (the <a href="Xml.html#DEFAULT"><code>Xml.DEFAULT</code></a> form omits them).</div>
+</div>
+<div class="col-first odd-row-color"><a href="class-use/XmlNsSq.html#org.apache.juneau.marshall.marshaller">XmlNsSq</a></div>
+<div class="col-last odd-row-color">
+<div class="block">An <a href="Xml.html" title="class in org.apache.juneau.marshall.marshaller"><code>Xml</code></a> variant that emits XML namespaces with attributes quoted using <b>single quotes</b>.</div>
+</div>
+<div class="col-first even-row-color"><a href="class-use/XmlNsSqR.html#org.apache.juneau.marshall.marshaller">XmlNsSqR</a></div>
+<div class="col-last even-row-color">
+<div class="block">An <a href="Xml.html" title="class in org.apache.juneau.marshall.marshaller"><code>Xml</code></a> variant that produces <b>readable</b> (indented, multi-line) output with XML
+ namespaces and attributes quoted using single quotes.</div>
+</div>
+<div class="col-first odd-row-color"><a href="class-use/XmlSq.html#org.apache.juneau.marshall.marshaller">XmlSq</a></div>
+<div class="col-last odd-row-color">
+<div class="block">An <a href="Xml.html" title="class in org.apache.juneau.marshall.marshaller"><code>Xml</code></a> variant that produces output with attributes quoted using <b>single quotes</b>
+ instead of double quotes.</div>
+</div>
+<div class="col-first even-row-color"><a href="class-use/XmlSqR.html#org.apache.juneau.marshall.marshaller">XmlSqR</a></div>
+<div class="col-last even-row-color">
+<div class="block">An <a href="Xml.html" title="class in org.apache.juneau.marshall.marshaller"><code>Xml</code></a> variant that produces <b>readable</b> (indented, multi-line) output with attributes
+ quoted using single quotes.</div>
 </div>
 <div class="col-first odd-row-color"><a href="class-use/Yaml.html#org.apache.juneau.marshall.marshaller">Yaml</a></div>
 <div class="col-last odd-row-color">
 <div class="block">A pairing of a <a href="../yaml/YamlSerializer.html" title="class in org.apache.juneau.marshall.yaml"><code>YamlSerializer</code></a> and <a href="../yaml/YamlParser.html" title="class in org.apache.juneau.marshall.yaml"><code>YamlParser</code></a> into a single class with convenience to/of methods.</div>
+</div>
+<div class="col-first even-row-color"><a href="class-use/YamlR.html#org.apache.juneau.marshall.marshaller">YamlR</a></div>
+<div class="col-last even-row-color">
+<div class="block">A <a href="Yaml.html" title="class in org.apache.juneau.marshall.marshaller"><code>Yaml</code></a> variant that produces <b>readable</b> (indented, multi-line) YAML output.</div>
 </div>
 </div>
 </section>

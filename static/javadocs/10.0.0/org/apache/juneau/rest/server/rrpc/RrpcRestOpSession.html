@@ -82,7 +82,7 @@ loadScripts(document, 'script');</script>
 </div>
 <section class="class-description" id="class-description">
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/rrpc/RrpcRestOpSession.html#line-43">RrpcRestOpSession</a></span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/rrpc/RrpcRestOpSession.html#line-42">RrpcRestOpSession</a></span>
 <span class="extends-implements">extends <a href="../RestOpSession.html" title="class in org.apache.juneau.rest.server">RestOpSession</a></span></div>
 <div class="block">A session for a single HTTP request against an RRPC Java method.
 
@@ -167,7 +167,7 @@ loadScripts(document, 'script');</script>
 </div>
 <div class="inherited-list">
 <h3 id="methods-inherited-from-class-org.apache.juneau.rest.server.RestOpSession">Methods inherited from class&nbsp;org.apache.juneau.rest.server.<a href="../RestOpSession.html" title="class in org.apache.juneau.rest.server">RestOpSession</a></h3>
-<code><a href="../RestOpSession.html#create(org.apache.juneau.rest.server.RestOpContext,org.apache.juneau.rest.server.RestSession)">create</a>, <a href="../RestOpSession.html#getBeanStore()">getBeanStore</a>, <a href="../RestOpSession.html#getContext()">getContext</a>, <a href="../RestOpSession.html#getRequest()">getRequest</a>, <a href="../RestOpSession.html#getResponse()">getResponse</a>, <a href="../RestOpSession.html#getRestContext()">getRestContext</a>, <a href="../RestOpSession.html#getRestSession()">getRestSession</a>, <a href="../RestOpSession.html#properties()">properties</a></code></div>
+<code><a href="../RestOpSession.html#closeRequest()">closeRequest</a>, <a href="../RestOpSession.html#create(org.apache.juneau.rest.server.RestOpContext,org.apache.juneau.rest.server.RestSession)">create</a>, <a href="../RestOpSession.html#getBeanStore()">getBeanStore</a>, <a href="../RestOpSession.html#getContext()">getContext</a>, <a href="../RestOpSession.html#getRequest()">getRequest</a>, <a href="../RestOpSession.html#getResponse()">getResponse</a>, <a href="../RestOpSession.html#getRestContext()">getRestContext</a>, <a href="../RestOpSession.html#getRestSession()">getRestSession</a>, <a href="../RestOpSession.html#properties()">properties</a></code></div>
 <div class="inherited-list">
 <h3 id="methods-inherited-from-class-org.apache.juneau.marshall.ContextSession">Methods inherited from class&nbsp;org.apache.juneau.marshall.<a href="../../../marshall/ContextSession.html" title="class in org.apache.juneau.marshall">ContextSession</a></h3>
 <code><a href="../../../marshall/ContextSession.html#addWarning(java.lang.String,java.lang.Object...)">addWarning</a>, <a href="../../../marshall/ContextSession.html#checkForWarnings()">checkForWarnings</a>, <a href="../../../marshall/ContextSession.html#getSessionProperties()">getSessionProperties</a>, <a href="../../../marshall/ContextSession.html#getWarnings()">getWarnings</a>, <a href="../../../marshall/ContextSession.html#isDebug()">isDebug</a>, <a href="../../../marshall/ContextSession.html#toString()">toString</a></code></div>
@@ -188,7 +188,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.rest.server.rrpc.RrpcRestOpSession.Builder)">
 <h3>RrpcRestOpSession</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/rrpc/RrpcRestOpSession.html#line-102">RrpcRestOpSession</a></span><wbr><span class="parameters">(<a href="RrpcRestOpSession.Builder.html" title="class in org.apache.juneau.rest.server.rrpc">RrpcRestOpSession.Builder</a>&nbsp;builder)</span></div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/rrpc/RrpcRestOpSession.html#line-97">RrpcRestOpSession</a></span><wbr><span class="parameters">(<a href="RrpcRestOpSession.Builder.html" title="class in org.apache.juneau.rest.server.rrpc">RrpcRestOpSession.Builder</a>&nbsp;builder)</span></div>
 <div class="block">Constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -208,7 +208,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="create(org.apache.juneau.rest.server.rrpc.RrpcRestOpContext,org.apache.juneau.rest.server.RestSession)">
 <h3>create</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="RrpcRestOpSession.Builder.html" title="class in org.apache.juneau.rest.server.rrpc">RrpcRestOpSession.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/rrpc/RrpcRestOpSession.html#line-89">create</a></span><wbr><span class="parameters">(<a href="RrpcRestOpContext.html" title="class in org.apache.juneau.rest.server.rrpc">RrpcRestOpContext</a>&nbsp;ctx,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="RrpcRestOpSession.Builder.html" title="class in org.apache.juneau.rest.server.rrpc">RrpcRestOpSession.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/rrpc/RrpcRestOpSession.html#line-84">create</a></span><wbr><span class="parameters">(<a href="RrpcRestOpContext.html" title="class in org.apache.juneau.rest.server.rrpc">RrpcRestOpContext</a>&nbsp;ctx,
  <a href="../RestSession.html" title="class in org.apache.juneau.rest.server">RestSession</a>&nbsp;session)</span></div>
 <div class="block">Static creator.</div>
 <dl class="notes">
@@ -225,7 +225,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="finish()">
 <h3>finish</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RrpcRestOpSession.html" title="class in org.apache.juneau.rest.server.rrpc">RrpcRestOpSession</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/rrpc/RrpcRestOpSession.html#line-107">finish</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RrpcRestOpSession.html" title="class in org.apache.juneau.rest.server.rrpc">RrpcRestOpSession</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/rrpc/RrpcRestOpSession.html#line-102">finish</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../RestOpSession.html#finish()">RestOpSession</a></code></span></div>
 <div class="block">Called at the end of a call to finish any remaining tasks such as flushing buffers and logging the response.</div>
 <dl class="notes">
@@ -239,7 +239,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="run()">
 <h3>run</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/rrpc/RrpcRestOpSession.html#line-113">run</a></span>()
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/rrpc/RrpcRestOpSession.html#line-108">run</a></span>()
          throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Exception.html" title="class or interface in java.lang" class="external-link">Exception</a></span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../RestOpSession.html#run()">RestOpSession</a></code></span></div>
 <div class="block">Runs this session.
@@ -264,7 +264,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="status(org.apache.juneau.http.HttpStatusLine)">
 <h3>status</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RrpcRestOpSession.html" title="class in org.apache.juneau.rest.server.rrpc">RrpcRestOpSession</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/rrpc/RrpcRestOpSession.html#line-168">status</a></span><wbr><span class="parameters">(<a href="../../../http/HttpStatusLine.html" title="interface in org.apache.juneau.http">HttpStatusLine</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RrpcRestOpSession.html" title="class in org.apache.juneau.rest.server.rrpc">RrpcRestOpSession</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/rrpc/RrpcRestOpSession.html#line-163">status</a></span><wbr><span class="parameters">(<a href="../../../http/HttpStatusLine.html" title="interface in org.apache.juneau.http">HttpStatusLine</a>&nbsp;value)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../RestOpSession.html#status(org.apache.juneau.http.HttpStatusLine)">RestOpSession</a></code></span></div>
 <div class="block">Sets the status of the response.</div>
 <dl class="notes">

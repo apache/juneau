@@ -102,6 +102,16 @@ loadScripts(document, 'script');</script>
 <div class="col-last odd-row-color">
 <div class="block">Marshalling API</div>
 </div>
+<div class="col-first even-row-color"><a href="#org.apache.juneau.petstore.dto">org.apache.juneau.petstore.dto</a></div>
+<div class="col-last even-row-color">
+<div class="block">Petstore domain beans (DTOs).</div>
+</div>
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.rest.server.datatables">org.apache.juneau.rest.server.datatables</a></div>
+<div class="col-last odd-row-color">
+<div class="block">The DataTables server-side-processing JSON beans implementing the
+ <a class="doclink" href="https://datatables.net/manual/server-side">DataTables server-side processing</a> wire
+ contract.</div>
+</div>
 </div>
 <section class="class-uses">
 <ul class="block-list">
@@ -705,6 +715,55 @@ loadScripts(document, 'script');</script>
  <a href="../../reflect/ClassInfo.html" title="class in org.apache.juneau.commons.reflect">ClassInfo</a>&nbsp;type,
  <a href="../../reflect/TypeVariables.html" title="class in org.apache.juneau.commons.reflect">TypeVariables</a>&nbsp;typeVarImpls)</code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="org.apache.juneau.petstore.dto">
+<h2>Uses of <a href="../BeanProp.html" title="annotation interface in org.apache.juneau.commons.bean">BeanProp</a> in <a href="../../../petstore/dto/package-summary.html">org.apache.juneau.petstore.dto</a></h2>
+<div class="caption"><span>Methods in <a href="../../../petstore/dto/package-summary.html">org.apache.juneau.petstore.dto</a> with annotations of type <a href="../BeanProp.html" title="annotation interface in org.apache.juneau.commons.bean">BeanProp</a></span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier and Type</div>
+<div class="table-header col-second">Method</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">User.</span><code><a href="../../../petstore/dto/User.html#getPassword()" class="member-name-link">getPassword</a>()</code></div>
+<div class="col-last even-row-color">
+<div class="block">Returns the password.</div>
+</div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="org.apache.juneau.rest.server.datatables">
+<h2>Uses of <a href="../BeanProp.html" title="annotation interface in org.apache.juneau.commons.bean">BeanProp</a> in <a href="../../../rest/server/datatables/package-summary.html">org.apache.juneau.rest.server.datatables</a></h2>
+<div class="caption"><span>Methods in <a href="../../../rest/server/datatables/package-summary.html">org.apache.juneau.rest.server.datatables</a> with annotations of type <a href="../BeanProp.html" title="annotation interface in org.apache.juneau.commons.bean">BeanProp</a></span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier and Type</div>
+<div class="table-header col-second">Method</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">DataTablesRequest.Column.</span><code><a href="../../../rest/server/datatables/DataTablesRequest.Column.html#getDataProperty()" class="member-name-link">getDataProperty</a>()</code></div>
+<div class="col-last even-row-color">
+<div class="block">Bean-property view of <a href="../../../rest/server/datatables/DataTablesRequest.Column.html#getData()"><code>data</code></a> typed as <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link"><code>Object</code></a>, so the property type matches
+ <a href="../../../rest/server/datatables/DataTablesRequest.Column.html#setData(java.lang.Object)"><code>DataTablesRequest.Column.setData(Object)</code></a> and the parser accepts a bare JSON number as well as a string.</div>
+</div>
+<div class="col-first odd-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">DataTablesRequest.</span><code><a href="../../../rest/server/datatables/DataTablesRequest.html#getExtra()" class="member-name-link">getExtra</a>()</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Returns every top-level request property that is not one of the modelled DataTables properties.</div>
+</div>
+<div class="col-first even-row-color"><code><a href="../../../rest/server/datatables/DataTablesRequest.Column.html" title="class in org.apache.juneau.rest.server.datatables">DataTablesRequest.Column</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">DataTablesRequest.Column.</span><code><a href="../../../rest/server/datatables/DataTablesRequest.Column.html#setData(java.lang.Object)" class="member-name-link">setData</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;v)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Sets the column's data source.</div>
+</div>
+<div class="col-first odd-row-color"><code>void</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">DataTablesRequest.</span><code><a href="../../../rest/server/datatables/DataTablesRequest.html#setExtra(java.lang.String,java.lang.Object)" class="member-name-link">setExtra</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Records a top-level request property that is not one of the modelled DataTables properties.</div>
+</div>
 </div>
 </section>
 </li>

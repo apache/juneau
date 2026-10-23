@@ -82,9 +82,14 @@ loadScripts(document, 'script');</script>
 <dd><a href="RequestIdFilter.html" title="class in org.apache.juneau.rest.server.filter">RequestIdFilter</a></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public static class </span><span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/filter/RequestIdFilter.html#line-142">RequestIdFilter.Builder</a></span>
+<div class="type-signature"><span class="modifiers">public static class </span><span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/filter/RequestIdFilter.html#line-122">RequestIdFilter.Builder</a></span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
-<div class="block">Builder for <a href="RequestIdFilter.html" title="class in org.apache.juneau.rest.server.filter"><code>RequestIdFilter</code></a>.</div>
+<div class="block">Builder for <a href="RequestIdFilter.html" title="class in org.apache.juneau.rest.server.filter"><code>RequestIdFilter</code></a>.
+
+ <p>
+ The tuning methods below are <b>documented no-ops</b> retained for source compatibility.  They still reject a
+ <jk>null</jk> argument (so existing null-validation contracts hold) but no longer affect resolution &mdash;
+ configure <a href="../RequestIdSettings.html" title="class in org.apache.juneau.rest.server"><code>RequestIdSettings</code></a> instead.</div>
 </section>
 <section class="summary">
 <ul class="summary-list">
@@ -119,7 +124,7 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="RequestIdFilter.Builder.html" title="class in org.apache.juneau.rest.server.filter">RequestIdFilter.Builder</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#attributeKey(java.lang.String)" class="member-name-link">attributeKey</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Overrides the servlet-request attribute key under which the id is stashed.</div>
+<div class="block"><b>No-op</b> (retained for source compatibility).</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="RequestIdFilter.html" title="class in org.apache.juneau.rest.server.filter">RequestIdFilter</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#build()" class="member-name-link">build</a>()</code></div>
@@ -129,12 +134,12 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="RequestIdFilter.Builder.html" title="class in org.apache.juneau.rest.server.filter">RequestIdFilter.Builder</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#idSupplier(java.util.function.Supplier)" class="member-name-link">idSupplier</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;value)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Sets the supplier used to mint a new id when none is honored from the request.</div>
+<div class="block"><b>No-op</b> (retained for source compatibility).</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="RequestIdFilter.Builder.html" title="class in org.apache.juneau.rest.server.filter">RequestIdFilter.Builder</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#validator(java.util.function.Predicate)" class="member-name-link">validator</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Predicate.html" title="class or interface in java.util.function" class="external-link">Predicate</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;value)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Sets the predicate used to validate an incoming <code>X-Request-Id</code> header.</div>
+<div class="block"><b>No-op</b> (retained for source compatibility).</div>
 </div>
 </div>
 </div>
@@ -156,7 +161,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;()">
 <h3>Builder</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/filter/RequestIdFilter.Builder.html#line-151">Builder</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/filter/RequestIdFilter.Builder.html#line-127">Builder</a></span>()</div>
 <div class="block">Constructor.</div>
 </section>
 </li>
@@ -171,12 +176,8 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="idSupplier(java.util.function.Supplier)">
 <h3>idSupplier</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RequestIdFilter.Builder.html" title="class in org.apache.juneau.rest.server.filter">RequestIdFilter.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/filter/RequestIdFilter.Builder.html#line-163">idSupplier</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;value)</span></div>
-<div class="block">Sets the supplier used to mint a new id when none is honored from the request.
-
- <p>
- Default is <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/UUID.html#randomUUID()" title="class or interface in java.util" class="external-link"><code>UUID.randomUUID()</code></a>.  Swap in a smaller / shorter id scheme (e.g. a 16-byte
- base32 token) when payload size matters.</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RequestIdFilter.Builder.html" title="class in org.apache.juneau.rest.server.filter">RequestIdFilter.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/filter/RequestIdFilter.Builder.html#line-135">idSupplier</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;value)</span></div>
+<div class="block"><b>No-op</b> (retained for source compatibility).  Configure <code>RequestIdSettings.Builder.idSupplier</code> instead.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>value</code> - The supplier.  Must not be <jk>null</jk>.</dd>
@@ -188,13 +189,8 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="validator(java.util.function.Predicate)">
 <h3>validator</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RequestIdFilter.Builder.html" title="class in org.apache.juneau.rest.server.filter">RequestIdFilter.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/filter/RequestIdFilter.Builder.html#line-180">validator</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Predicate.html" title="class or interface in java.util.function" class="external-link">Predicate</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;value)</span></div>
-<div class="block">Sets the predicate used to validate an incoming <code>X-Request-Id</code> header.
-
- <p>
- Default is <code>Pattern.compile("^[A-Za-z0-9-_]{1,128}$").asPredicate()</code> — accepts UUIDs and most
- distributed-tracing id schemes while rejecting whitespace, control characters, and oversize values.
- Values that fail validation are discarded and a fresh id is minted.</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RequestIdFilter.Builder.html" title="class in org.apache.juneau.rest.server.filter">RequestIdFilter.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/filter/RequestIdFilter.Builder.html#line-146">validator</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Predicate.html" title="class or interface in java.util.function" class="external-link">Predicate</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;value)</span></div>
+<div class="block"><b>No-op</b> (retained for source compatibility).  Configure <code>RequestIdSettings.Builder.validator</code> instead.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>value</code> - The predicate.  Must not be <jk>null</jk>.</dd>
@@ -206,12 +202,8 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="attributeKey(java.lang.String)">
 <h3>attributeKey</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RequestIdFilter.Builder.html" title="class in org.apache.juneau.rest.server.filter">RequestIdFilter.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/filter/RequestIdFilter.Builder.html#line-196">attributeKey</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
-<div class="block">Overrides the servlet-request attribute key under which the id is stashed.
-
- <p>
- Defaults to <a href="../RestServerConstants.html#REQUEST_ID"><code>RestServerConstants.REQUEST_ID</code></a>.  Override only when
- coexisting with a third-party filter that publishes the id under a different key.</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RequestIdFilter.Builder.html" title="class in org.apache.juneau.rest.server.filter">RequestIdFilter.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/filter/RequestIdFilter.Builder.html#line-157">attributeKey</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="block"><b>No-op</b> (retained for source compatibility).  Configure <code>RequestIdSettings.Builder.attributeKey</code> instead.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>value</code> - The attribute key.  Must not be <jk>null</jk> or blank.</dd>
@@ -223,7 +215,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="build()">
 <h3>build</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RequestIdFilter.html" title="class in org.apache.juneau.rest.server.filter">RequestIdFilter</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/filter/RequestIdFilter.Builder.html#line-209">build</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RequestIdFilter.html" title="class in org.apache.juneau.rest.server.filter">RequestIdFilter</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/filter/RequestIdFilter.Builder.html#line-169">build</a></span>()</div>
 <div class="block">Builds the filter.</div>
 <dl class="notes">
 <dt>Returns:</dt>

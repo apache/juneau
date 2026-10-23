@@ -484,14 +484,15 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-second">Class</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color"><code>class&nbsp;</code></div>
-<div class="col-second even-row-color"><code><a href="../objecttools/PathTraversalException.html" class="type-name-link" title="class in org.apache.juneau.marshall.objecttools">PathTraversalException</a></code></div>
+<div class="col-second even-row-color"><code><a href="../objecttools/MethodNotAllowlistedException.html" class="type-name-link" title="class in org.apache.juneau.marshall.objecttools">MethodNotAllowlistedException</a></code></div>
 <div class="col-last even-row-color">
-<div class="block">Generic exception thrown from the <a href="../objecttools/PathTraversal.html" title="class in org.apache.juneau.marshall.objecttools"><code>PathTraversal</code></a> class.</div>
+<div class="block">Thrown by <a href="../objecttools/ObjectIntrospector.html" title="class in org.apache.juneau.marshall.objecttools"><code>ObjectIntrospector</code></a> when an attempt is made to invoke a method that has not been
+ explicitly allow-listed.</div>
 </div>
 <div class="col-first odd-row-color"><code>class&nbsp;</code></div>
-<div class="col-second odd-row-color"><code><a href="../objecttools/PatternException.html" class="type-name-link" title="class in org.apache.juneau.marshall.objecttools">PatternException</a></code></div>
+<div class="col-second odd-row-color"><code><a href="../objecttools/PathTraversalException.html" class="type-name-link" title="class in org.apache.juneau.marshall.objecttools">PathTraversalException</a></code></div>
 <div class="col-last odd-row-color">
-<div class="block">Indicates an invalid search pattern was specified.</div>
+<div class="block">Generic exception thrown from the <a href="../objecttools/PathTraversal.html" title="class in org.apache.juneau.marshall.objecttools"><code>PathTraversal</code></a> class.</div>
 </div>
 </div>
 </section>
@@ -505,8 +506,14 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-second">Class</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color"><code>class&nbsp;</code></div>
-<div class="col-second even-row-color"><code><a href="../parser/ParseException.html" class="type-name-link" title="class in org.apache.juneau.marshall.parser">ParseException</a></code></div>
+<div class="col-second even-row-color"><code><a href="../parser/MissingRequiredPropertyException.html" class="type-name-link" title="class in org.apache.juneau.marshall.parser">MissingRequiredPropertyException</a></code></div>
 <div class="col-last even-row-color">
+<div class="block">Thrown when parser input (or the source map of a <code>Map</code>-to-bean conversion) does not contain one or more
+ properties marked <a href="../../commons/bean/BeanProp.html#required()"><code>@BeanProp(required=true)</code></a>.</div>
+</div>
+<div class="col-first odd-row-color"><code>class&nbsp;</code></div>
+<div class="col-second odd-row-color"><code><a href="../parser/ParseException.html" class="type-name-link" title="class in org.apache.juneau.marshall.parser">ParseException</a></code></div>
+<div class="col-last odd-row-color">
 <div class="block">Exception that indicates invalid syntax encountered during parsing.</div>
 </div>
 </div>

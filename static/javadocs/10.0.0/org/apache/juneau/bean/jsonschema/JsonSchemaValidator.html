@@ -82,7 +82,7 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="../../commons/bean/PropertyValidator.html" title="interface in org.apache.juneau.commons.bean">PropertyValidator</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public final class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/jsonschema/JsonSchemaValidator.html#line-110">JsonSchemaValidator</a></span>
+<div class="type-signature"><span class="modifiers">public final class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/jsonschema/JsonSchemaValidator.html#line-120">JsonSchemaValidator</a></span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>
 implements <a href="../../commons/bean/PropertyValidator.html" title="interface in org.apache.juneau.commons.bean">PropertyValidator</a></span></div>
 <div class="block">Validates values against a <a href="JsonSchema.html" title="class in org.apache.juneau.bean.jsonschema"><code>JsonSchema</code></a> bean per the JSON Schema Draft 2020-12 specification.
@@ -153,6 +153,17 @@ implements <a href="../../commons/bean/PropertyValidator.html" title="interface 
  Instances are immutable and safe to share across threads.  The compiled <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/regex/Pattern.html" title="class or interface in java.util.regex" class="external-link"><code>Pattern</code></a> for the <code>pattern</code>
  keyword is cached on construction.
 
+ <h5 class='section'>Interruptible <code>pattern</code> matching:</h5>
+ <p>
+ A <code>pattern</code> keyword can encode a catastrophically-backtracking regular expression that a hostile input can
+ drive into effectively-unbounded work. <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/regex/Matcher.html" title="class or interface in java.util.regex" class="external-link"><code>Matcher</code></a> never checks <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Thread.html#isInterrupted()" title="class or interface in java.lang" class="external-link"><code>Thread.isInterrupted()</code></a>,
+ so such a match cannot be stopped by interrupting the matching thread - it runs to completion, pinning a core even
+ after the caller has given up. To make a runaway match abortable, the string is fed to the matcher through an
+ <code>JsonSchemaValidator.InterruptibleCharSequence</code>: because the matcher reads its input exclusively via <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/CharSequence.html#charAt(int)" title="class or interface in java.lang" class="external-link"><code>CharSequence.charAt(int)</code></a>,
+ every character read periodically samples the thread's interrupt status and, once set, throws to unwind the match
+ promptly. A caller that bounds validation on a worker thread (for example an MCP <code>tools/call</code> DoS guard) can
+ therefore reclaim the thread by interrupting it, rather than leaking a core to a match that ignores cancellation.
+
  <h5 class='section'>See Also:</h5><ul>
    <li class='link'><a href="https://json-schema.org/draft/2020-12/json-schema-validation.html">JSON Schema 2020-12 Validation</a>
  </ul></div>
@@ -221,7 +232,7 @@ implements <a href="../../commons/bean/PropertyValidator.html" title="interface 
 <li>
 <section class="detail" id="of(org.apache.juneau.bean.jsonschema.JsonSchema)">
 <h3>of</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="JsonSchemaValidator.html" title="class in org.apache.juneau.bean.jsonschema">JsonSchemaValidator</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/jsonschema/JsonSchemaValidator.html#line-121">of</a></span><wbr><span class="parameters">(<a href="JsonSchema.html" title="class in org.apache.juneau.bean.jsonschema">JsonSchema</a>&lt;?&gt;&nbsp;schema)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="JsonSchemaValidator.html" title="class in org.apache.juneau.bean.jsonschema">JsonSchemaValidator</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/jsonschema/JsonSchemaValidator.html#line-134">of</a></span><wbr><span class="parameters">(<a href="JsonSchema.html" title="class in org.apache.juneau.bean.jsonschema">JsonSchema</a>&lt;?&gt;&nbsp;schema)</span></div>
 <div class="block">Builds a validator from a <a href="JsonSchema.html" title="class in org.apache.juneau.bean.jsonschema"><code>JsonSchema</code></a> bean.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -234,7 +245,7 @@ implements <a href="../../commons/bean/PropertyValidator.html" title="interface 
 <li>
 <section class="detail" id="of(org.apache.juneau.marshall.collections.JsonMap)">
 <h3>of</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="JsonSchemaValidator.html" title="class in org.apache.juneau.bean.jsonschema">JsonSchemaValidator</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/jsonschema/JsonSchemaValidator.html#line-135">of</a></span><wbr><span class="parameters">(<a href="../../marshall/collections/JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a>&nbsp;schemaMap)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="JsonSchemaValidator.html" title="class in org.apache.juneau.bean.jsonschema">JsonSchemaValidator</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/jsonschema/JsonSchemaValidator.html#line-148">of</a></span><wbr><span class="parameters">(<a href="../../marshall/collections/JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a>&nbsp;schemaMap)</span></div>
 <div class="block">Builds a validator from a JSON-Schema-shaped <a href="../../marshall/collections/JsonMap.html" title="class in org.apache.juneau.marshall.collections"><code>JsonMap</code></a>.
 
  <p>
@@ -250,7 +261,7 @@ implements <a href="../../commons/bean/PropertyValidator.html" title="interface 
 <li>
 <section class="detail" id="getSchema()">
 <h3>getSchema</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JsonSchema.html" title="class in org.apache.juneau.bean.jsonschema">JsonSchema</a>&lt;?&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/jsonschema/JsonSchemaValidator.html#line-151">getSchema</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JsonSchema.html" title="class in org.apache.juneau.bean.jsonschema">JsonSchema</a>&lt;?&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/jsonschema/JsonSchemaValidator.html#line-164">getSchema</a></span>()</div>
 <div class="block">Returns the schema this validator was built from.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -261,7 +272,7 @@ implements <a href="../../commons/bean/PropertyValidator.html" title="interface 
 <li>
 <section class="detail" id="validate(java.lang.Object)">
 <h3>validate</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/jsonschema/JsonSchemaValidator.html#line-158">validate</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</span>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bean/jsonschema/JsonSchemaValidator.html#line-171">validate</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</span>
               throws <span class="exceptions"><a href="../../commons/httppart/SchemaValidationException.html" title="class in org.apache.juneau.commons.httppart">SchemaValidationException</a></span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="../../commons/bean/PropertyValidator.html#validate(java.lang.Object)">PropertyValidator</a></code></span></div>
 <div class="block">Validates the given value against the schema this validator was built from.</div>

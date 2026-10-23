@@ -15,7 +15,11 @@
 <script type="text/javascript" src="../../../../../script-dir/jquery-ui.min.js"></script>
 </head>
 <body class="class-declaration-page">
-<script type="text/javascript">var pathtoroot = "../../../../../";
+<script type="text/javascript">var evenRowColor = "even-row-color";
+var oddRowColor = "odd-row-color";
+var tableTab = "table-tab";
+var activeTableTab = "active-table-tab";
+var pathtoroot = "../../../../../";
 loadScripts(document, 'script');</script>
 <noscript>
 <div>JavaScript is disabled on your browser.</div>
@@ -51,7 +55,7 @@ loadScripts(document, 'script');</script>
 <li>Detail:&nbsp;</li>
 <li>Field&nbsp;|&nbsp;</li>
 <li><a href="#constructor-detail">Constr</a>&nbsp;|&nbsp;</li>
-<li>Method</li>
+<li><a href="#method-detail">Method</a></li>
 </ul>
 </div>
 <div class="nav-list-search"><label for="search-input">SEARCH:</label>
@@ -88,15 +92,16 @@ loadScripts(document, 'script');</script>
 <dd><code>jakarta.servlet.Servlet</code>, <code>jakarta.servlet.ServletConfig</code>, <code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a></code>, <code><a href="../../rest/server/config/BasicUniversalConfig.html" title="interface in org.apache.juneau.rest.server.config">BasicUniversalConfig</a></code>, <code><a href="../../rest/server/config/DefaultConfig.html" title="interface in org.apache.juneau.rest.server.config">DefaultConfig</a></code>, <code><a href="../../rest/server/config/DefaultHtmlConfig.html" title="interface in org.apache.juneau.rest.server.config">DefaultHtmlConfig</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/petstore/jetty/RootResources.html#line-49">RootResources</a></span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/petstore/jetty/RootResources.html#line-65">RootResources</a></span>
 <span class="extends-implements">extends <a href="../../rest/server/servlet/BasicRestServletGroup.html" title="class in org.apache.juneau.rest.server.servlet">BasicRestServletGroup</a></span></div>
 <div class="block">Root router resource for the Jetty deployment.
 
  <p>
- Mounts the deployment-agnostic <a href="../rest/PetStoreResource.html" title="class in org.apache.juneau.petstore.rest"><code>PetStoreResource</code></a> from <code>juneau-petstore-core</code> and the
- Jetty/Microservice-specific admin resources (<a href="../../microservice/examples/ConfigResource.html" title="class in org.apache.juneau.microservice.examples"><code>ConfigResource</code></a>, <a href="../../microservice/examples/LogsResource.html" title="class in org.apache.juneau.microservice.examples"><code>LogsResource</code></a>,
+ Mounts the deployment-agnostic <a href="../rest/PetStoreResource.html" title="class in org.apache.juneau.petstore.rest"><code>PetStoreResource</code></a> and <a href="../console/PetstoreConsoleResource.html" title="class in org.apache.juneau.petstore.console"><code>PetstoreConsoleResource</code></a> (the admin console at
+ <code>/console</code>) from <code>juneau-petstore-core</code>, and the Jetty/Microservice-specific admin resources (<a href="../../microservice/examples/ConfigResource.html" title="class in org.apache.juneau.microservice.examples"><code>ConfigResource</code></a>, <a href="../../microservice/examples/LogsResource.html" title="class in org.apache.juneau.microservice.examples"><code>LogsResource</code></a>,
  <a href="../../microservice/examples/ShutdownResource.html" title="class in org.apache.juneau.microservice.examples"><code>ShutdownResource</code></a>).  The admin trio is a documented Jetty-only non-parity feature — the Spring Boot
- deployment in <code>juneau-petstore-springboot</code> does not mount it.
+ deployment in <code>juneau-petstore-springboot</code> does not mount it.  <a href="App.AppConfig.html#adminBoundary()"><code>App.AppConfig.adminBoundary()</code></a> puts the
+ trio behind its own CSRF boundary.
 
  <p>
  Also showcases the Config API + SVL variable resolver: the root page's header is driven by
@@ -104,6 +109,16 @@ loadScripts(document, 'script');</script>
  <code>juneau-petstore-jetty.cfg</code> (the same <code>$C{...}</code> pattern already used by the <code>source</code> navlink
  below, which resolves <code>$C{Source/gitHub}</code>).  Jetty-only — Spring Boot's embedded container has no
  <code>.cfg</code>/<code>Config</code> equivalent.
+
+ <p>
+ Registers the one seeded <a href="../service/PetStore.html" title="class in org.apache.juneau.petstore.service"><code>PetStore</code></a> shared by every child resource.
+
+ <h5 class='section'>Example:</h5>
+ <p class='bjava'>
+   <jc>// Children declare a field and the group's bean back-fills it.</jc>
+   <ja>@Bean</ja>
+   <jk>private transient</jk> PetStore <jf>store</jf>;
+ </p>
 
  <h5 class='section'>See Also:</h5><ul>
    <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauPetstore">juneau-petstore</a>
@@ -146,6 +161,27 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="method-summary" id="method-summary">
 <h2>Method Summary</h2>
+<div id="method-summary-table">
+<div class="table-tabs" role="tablist" aria-orientation="horizontal"><button id="method-summary-table-tab0" role="tab" aria-selected="true" aria-controls="method-summary-table.tabpanel" tabindex="0" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table', 3)" class="active-table-tab">All Methods</button><button id="method-summary-table-tab2" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab2', 3)" class="table-tab">Instance Methods</button><button id="method-summary-table-tab4" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab4', 3)" class="table-tab">Concrete Methods</button></div>
+<div id="method-summary-table.tabpanel" role="tabpanel" aria-labelledby="method-summary-table-tab0">
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier and Type</div>
+<div class="table-header col-second">Method</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../../http/response/SeeOther.html" title="class in org.apache.juneau.http.response">SeeOther</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#index(org.apache.juneau.rest.server.RestRequest)" class="member-name-link">index</a><wbr>(<a href="../../rest/server/RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block"><code>GET /</code> goes to the console store page.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../service/PetStore.html" title="class in org.apache.juneau.petstore.service">PetStore</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#petStore()" class="member-name-link">petStore</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Registers the one <a href="../service/PetStore.html" title="class in org.apache.juneau.petstore.service"><code>PetStore</code></a> shared by the <code>/petstore</code> API and the console tree, seeded with the
+ deterministic demo data set.</div>
+</div>
+</div>
+</div>
+</div>
 <div class="inherited-list">
 <h3 id="methods-inherited-from-class-org.apache.juneau.rest.server.servlet.BasicRestServletGroup">Methods inherited from class&nbsp;org.apache.juneau.rest.server.servlet.<a href="../../rest/server/servlet/BasicRestServletGroup.html" title="class in org.apache.juneau.rest.server.servlet">BasicRestServletGroup</a></h3>
 <code><a href="../../rest/server/servlet/BasicRestServletGroup.html#addChild(java.lang.Class)">addChild</a>, <a href="../../rest/server/servlet/BasicRestServletGroup.html#addChild(java.lang.Object)">addChild</a>, <a href="../../rest/server/servlet/BasicRestServletGroup.html#addChild(java.lang.String,java.lang.Object)">addChild</a>, <a href="../../rest/server/servlet/BasicRestServletGroup.html#getChildResources()">getChildResources</a>, <a href="../../rest/server/servlet/BasicRestServletGroup.html#removeChild(java.lang.Class)">removeChild</a>, <a href="../../rest/server/servlet/BasicRestServletGroup.html#removeChild(java.lang.String)">removeChild</a></code></div>
@@ -175,7 +211,43 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;()">
 <h3>RootResources</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/petstore/jetty/RootResources.html#line-96">RootResources</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/petstore/jetty/RootResources.html#line-109">RootResources</a></span>()</div>
+</section>
+</li>
+</ul>
+</section>
+</li>
+<!-- ============ METHOD DETAIL ========== -->
+<li>
+<section class="method-details" id="method-detail">
+<h2>Method Details</h2>
+<ul class="member-list">
+<li>
+<section class="detail" id="petStore()">
+<h3>petStore</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../service/PetStore.html" title="class in org.apache.juneau.petstore.service">PetStore</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/petstore/jetty/RootResources.html#line-122">petStore</a></span>()</div>
+<div class="block">Registers the one <a href="../service/PetStore.html" title="class in org.apache.juneau.petstore.service"><code>PetStore</code></a> shared by the <code>/petstore</code> API and the console tree, seeded with the
+ deterministic demo data set.
+
+ <p>
+ Child resources inherit the group's beans, so a plain <code>@Bean</code> method is all that is needed.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>The seeded <a href="../service/PetStore.html" title="class in org.apache.juneau.petstore.service"><code>PetStore</code></a>.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="index(org.apache.juneau.rest.server.RestRequest)">
+<h3>index</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../http/response/SeeOther.html" title="class in org.apache.juneau.http.response">SeeOther</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/petstore/jetty/RootResources.html#line-133">index</a></span><wbr><span class="parameters">(<a href="../../rest/server/RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req)</span></div>
+<div class="block"><code>GET /</code> goes to the console store page.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>req</code> - The request.</dd>
+<dt>Returns:</dt>
+<dd>A 303 to <code>/console/store</code>.</dd>
+</dl>
 </section>
 </li>
 </ul>

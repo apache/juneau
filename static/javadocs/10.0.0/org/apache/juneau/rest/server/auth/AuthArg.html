@@ -97,7 +97,7 @@ implements <a href="../arg/RestOpArg.html" title="interface in org.apache.juneau
  <p>
  Resolution pulls the <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/security/Principal.html" title="class or interface in java.security" class="external-link"><code>Principal</code></a> stashed by an upstream AuthN guard
  (<a href="BearerTokenGuard.html" title="class in org.apache.juneau.rest.server.auth"><code>BearerTokenGuard</code></a> / <a href="ApiKeyGuard.html" title="class in org.apache.juneau.rest.server.auth"><code>ApiKeyGuard</code></a>) on the request attributes under
- <a href="../RestServerConstants.html#PRINCIPAL_ATTR"><code>RestServerConstants.PRINCIPAL_ATTR</code></a>. If the stashed value is missing or not assignable to
+ <code>"juneau.principal"</code>. If the stashed value is missing or not assignable to
  the requested parameter type, <jk>null</jk> is injected &mdash; the guard chain is the contract
  that guarantees a non-null value.
 

@@ -344,8 +344,8 @@
 <span class="source-line-no">331</span><span id="line-331">       * @return A new immutable {@link Args} instance.</span>
 <span class="source-line-no">332</span><span id="line-332">       */</span>
 <span class="source-line-no">333</span><span id="line-333">      @SuppressWarnings({</span>
-<span class="source-line-no">334</span><span id="line-334">         "java:S3776", // Cognitive complexity acceptable for argument prefix resolution and parsing logic</span>
-<span class="source-line-no">335</span><span id="line-335">         "java:S135"   // Argv tokenizer dispatch loop; per-token continue guards are clearer than restructuring the parse flow.</span>
+<span class="source-line-no">334</span><span id="line-334">         "java:S135", // Argv tokenizer dispatch loop; per-token continue guards are clearer than restructuring the parse flow.</span>
+<span class="source-line-no">335</span><span id="line-335">         "java:S3776" // Cognitive complexity acceptable for argument prefix resolution and parsing logic</span>
 <span class="source-line-no">336</span><span id="line-336">      })</span>
 <span class="source-line-no">337</span><span id="line-337">      public Args build(String[] argv) {</span>
 <span class="source-line-no">338</span><span id="line-338">         var prefixes = resolvePrefixes();</span>

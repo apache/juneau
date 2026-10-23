@@ -33,9 +33,9 @@
 <span class="source-line-no">020</span><span id="line-20"></span>
 <span class="source-line-no">021</span><span id="line-21">import java.net.*;</span>
 <span class="source-line-no">022</span><span id="line-22">import java.util.*;</span>
-<span class="source-line-no">023</span><span id="line-23"></span>
-<span class="source-line-no">024</span><span id="line-24">import org.apache.juneau.bean.html5.*;</span>
-<span class="source-line-no">025</span><span id="line-25">import org.apache.juneau.commons.http.*;</span>
+<span class="source-line-no">023</span><span id="line-23">import java.util.stream.*;</span>
+<span class="source-line-no">024</span><span id="line-24"></span>
+<span class="source-line-no">025</span><span id="line-25">import org.apache.juneau.bean.html5.*;</span>
 <span class="source-line-no">026</span><span id="line-26">import org.apache.juneau.commons.utils.*;</span>
 <span class="source-line-no">027</span><span id="line-27">import org.apache.juneau.rest.server.*;</span>
 <span class="source-line-no">028</span><span id="line-28"></span>
@@ -76,9 +76,9 @@
 <span class="source-line-no">063</span><span id="line-63">   @Override /* Overridden from MenuItemWidget */</span>
 <span class="source-line-no">064</span><span id="line-64">   public Div getContent(RestRequest req, RestResponse res) {</span>
 <span class="source-line-no">065</span><span id="line-65">      Div div = div();</span>
-<span class="source-line-no">066</span><span id="line-66">      var l = new TreeSet&lt;MediaType&gt;();</span>
-<span class="source-line-no">067</span><span id="line-67">      for (var s : req.getOpContext().getSerializers().getSerializers())</span>
-<span class="source-line-no">068</span><span id="line-68">         l.add(s.getPrimaryMediaType());</span>
+<span class="source-line-no">066</span><span id="line-66">      var l = req.getOpContext().getSerializers().getSerializers().stream()</span>
+<span class="source-line-no">067</span><span id="line-67">         .map(s -&gt; s.getPrimaryMediaType())</span>
+<span class="source-line-no">068</span><span id="line-68">         .collect(Collectors.toCollection(TreeSet::new));</span>
 <span class="source-line-no">069</span><span id="line-69">      for (var mt : l) {</span>
 <span class="source-line-no">070</span><span id="line-70">         URI uri = req.getUri(true, CollectionUtils.map("plainText", "true", "Accept", mt.toString()));</span>
 <span class="source-line-no">071</span><span id="line-71">         div.children(a(uri, mt), br());</span>

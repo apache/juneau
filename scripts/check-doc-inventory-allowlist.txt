@@ -7,8 +7,6 @@
 # NOTE: pure aggregator/parent POMs (juneau, juneau-core, juneau-rest, etc.) are
 # excluded structurally via the AGGREGATOR_POMS set in check-doc-inventory.py, not
 # via this file — don't duplicate them here.
-#
-# See TODO-347 (apache/juneau .work/todo) for the audit that produced this list.
 
 # --- Test-only / internal helper modules (not part of the public ecosystem) ---
 juneau-test-utils

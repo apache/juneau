@@ -152,16 +152,22 @@ loadScripts(document, 'script');</script>
 <div class="block">Engine-agnostic contract for a server-side-rendered template return value from an
  <a href="../RestOp.html" title="annotation interface in org.apache.juneau.rest.server"><code>@RestOp</code></a>-annotated method.</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab1"><a href="ViewRenderer.html" title="interface in org.apache.juneau.rest.server.view">ViewRenderer</a></div>
+<div class="col-first even-row-color class-summary class-summary-tab1"><a href="ViewMixinBuilder.html" title="interface in org.apache.juneau.rest.server.view">ViewMixinBuilder</a>&lt;B extends <a href="ViewMixinBuilder.html" title="interface in org.apache.juneau.rest.server.view">ViewMixinBuilder</a>&lt;B&gt;&gt;</div>
 <div class="col-last even-row-color class-summary class-summary-tab1">
+<div class="block">Minimal shared contract implemented by the builder of every view-engine mixin
+ (<code>JspMixin.Builder</code>, <code>ThymeleafMixin.Builder</code>, <code>MustacheMixin.Builder</code>,
+ <code>FreemarkerMixin.Builder</code>).</div>
+</div>
+<div class="col-first odd-row-color class-summary class-summary-tab1"><a href="ViewRenderer.html" title="interface in org.apache.juneau.rest.server.view">ViewRenderer</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab1">
 <div class="block">Marker interface for response processors that handle <a href="View.html" title="interface in org.apache.juneau.rest.server.view"><code>View</code></a>-typed return values.</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="ViewResource.html" title="class in org.apache.juneau.rest.server.view">ViewResource</a></div>
-<div class="col-last odd-row-color class-summary class-summary-tab2">
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="ViewResource.html" title="class in org.apache.juneau.rest.server.view">ViewResource</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab2">
 <div class="block">Abstract base for the child-resource flavors of the view mixin resources.</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab2"><a href="ViewServlet.html" title="class in org.apache.juneau.rest.server.view">ViewServlet</a></div>
-<div class="col-last even-row-color class-summary class-summary-tab2">
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="ViewServlet.html" title="class in org.apache.juneau.rest.server.view">ViewServlet</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">
 <div class="block">Abstract base for the standalone view-servlet companions of the view mixin resources.</div>
 </div>
 </div>

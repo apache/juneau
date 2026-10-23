@@ -64,7 +64,7 @@
 <span class="source-line-no">051</span><span id="line-51">       */</span>
 <span class="source-line-no">052</span><span id="line-52">      var withWhitespace = XmlSerializer.create().ws().build().write(aPojo);</span>
 <span class="source-line-no">053</span><span id="line-53">      // the output will be padded with spaces after format characters.</span>
-<span class="source-line-no">054</span><span id="line-54">      Logger.getLogger(XmlConfigurationExample.class).info(withWhitespace);</span>
+<span class="source-line-no">054</span><span id="line-54">      RichLogger.getLogger(XmlConfigurationExample.class).info(withWhitespace);</span>
 <span class="source-line-no">055</span><span id="line-55"></span>
 <span class="source-line-no">056</span><span id="line-56">      Map&lt;String,List&lt;Pojo&gt;&gt; values = m();</span>
 <span class="source-line-no">057</span><span id="line-57">      var pojoc = new PojoComplex("pojo", new Pojo("1.0", "name0"), values);</span>
@@ -73,13 +73,13 @@
 <span class="source-line-no">060</span><span id="line-60">      //&lt;object&gt;&lt;innerPojo&gt;&lt;name&gt;name0&lt;/name&gt;&lt;id&gt;1.0&lt;/id&gt;&lt;/innerPojo&gt;&lt;id&gt;pojo&lt;/id&gt;&lt;/object&gt;</span>
 <span class="source-line-no">061</span><span id="line-61">      var mapescaped = XmlSerializer.create().trimEmptyMaps().build().write(pojoc);</span>
 <span class="source-line-no">062</span><span id="line-62">      // the output will have trimmed Empty maps.</span>
-<span class="source-line-no">063</span><span id="line-63">      Logger.getLogger(XmlConfigurationExample.class).info(mapescaped);</span>
+<span class="source-line-no">063</span><span id="line-63">      RichLogger.getLogger(XmlConfigurationExample.class).info(mapescaped);</span>
 <span class="source-line-no">064</span><span id="line-64"></span>
 <span class="source-line-no">065</span><span id="line-65">      //Produces</span>
 <span class="source-line-no">066</span><span id="line-66">      //&lt;object xmlns="http://www.apache.org/2013/Juneau"&gt;&lt;name&gt;&amp;lt;pojo&amp;gt;&lt;/name&gt;&lt;id&gt;a&lt;/id&gt;&lt;/object&gt;</span>
 <span class="source-line-no">067</span><span id="line-67">      var nspaceToRoot = XmlSerializer.create().ns().addNamespaceUrisToRoot().build().write(aPojo);</span>
 <span class="source-line-no">068</span><span id="line-68">      // the output will add default name space to the xml document root.</span>
-<span class="source-line-no">069</span><span id="line-69">      Logger.getLogger(XmlConfigurationExample.class).info(nspaceToRoot);</span>
+<span class="source-line-no">069</span><span id="line-69">      RichLogger.getLogger(XmlConfigurationExample.class).info(nspaceToRoot);</span>
 <span class="source-line-no">070</span><span id="line-70"></span>
 <span class="source-line-no">071</span><span id="line-71">      var nPojo = new Pojo("a", null);</span>
 <span class="source-line-no">072</span><span id="line-72"></span>
@@ -87,14 +87,14 @@
 <span class="source-line-no">074</span><span id="line-74">      //&lt;object&gt;&lt;id&gt;a&lt;/id&gt;&lt;/object&gt;</span>
 <span class="source-line-no">075</span><span id="line-75">      var nullescaped = XmlSerializer.create().build().write(nPojo);</span>
 <span class="source-line-no">076</span><span id="line-76">      // the output will have trimmed null properties.</span>
-<span class="source-line-no">077</span><span id="line-77">      Logger.getLogger(XmlConfigurationExample.class).info(nullescaped);</span>
+<span class="source-line-no">077</span><span id="line-77">      RichLogger.getLogger(XmlConfigurationExample.class).info(nullescaped);</span>
 <span class="source-line-no">078</span><span id="line-78"></span>
 <span class="source-line-no">079</span><span id="line-79">      //Produces</span>
 <span class="source-line-no">080</span><span id="line-80">      //&lt;object xmlns="http://www.pierobon.org/iis/review1.htm.html#one"&gt;&lt;name&gt;&amp;lt;pojo&amp;gt;&lt;/name&gt;&lt;id&gt;a&lt;/id&gt;&lt;/object&gt;</span>
 <span class="source-line-no">081</span><span id="line-81">      var dNamsSpace = XmlSerializer.create().enableNamespaces().defaultNamespace(Namespace.create("http://www.pierobon.org" + "/iis/review1.htm.html#one")).addNamespaceUrisToRoot().build()</span>
 <span class="source-line-no">082</span><span id="line-82">         .write(aPojo);</span>
 <span class="source-line-no">083</span><span id="line-83">      // the output will have new default namespace added.</span>
-<span class="source-line-no">084</span><span id="line-84">      Logger.getLogger(XmlConfigurationExample.class).info(dNamsSpace);</span>
+<span class="source-line-no">084</span><span id="line-84">      RichLogger.getLogger(XmlConfigurationExample.class).info(dNamsSpace);</span>
 <span class="source-line-no">085</span><span id="line-85"></span>
 <span class="source-line-no">086</span><span id="line-86">   }</span>
 <span class="source-line-no">087</span><span id="line-87">}</span>

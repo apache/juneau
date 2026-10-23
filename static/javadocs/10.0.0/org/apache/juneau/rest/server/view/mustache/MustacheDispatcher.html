@@ -90,7 +90,7 @@ implements <a href="../RawTemplateDispatcher.html" title="interface in org.apach
  child flavors.
 
  <p>
- This is the §2.3.1 <i>flavor-neutral worker</i> for the Mustache capability: it is <b>not</b> one
+ This is the <i>flavor-neutral worker</i> for the Mustache capability: it is <b>not</b> one
  of the three <code>@Rest</code> flavor classes &mdash; it is a plain bean that implements
  <a href="../RawTemplateDispatcher.html" title="interface in org.apache.juneau.rest.server.view"><code>RawTemplateDispatcher</code></a> and holds the capability state (<code>basePath</code> /
  <code>templateSuffix</code> / lazy default factory) plus the raw-serve and factory-resolution logic.
@@ -141,9 +141,14 @@ implements <a href="../RawTemplateDispatcher.html" title="interface in org.apach
 <div class="col-last even-row-color">
 <div class="block">Default base path applied when no <a href="MustacheDispatcher.Builder.html#basePath(java.lang.String)"><code>MustacheDispatcher.Builder.basePath(String)</code></a> call has been made.</div>
 </div>
-<div class="col-first odd-row-color"><code>static final <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second odd-row-color"><code><a href="#DEFAULT_TEMPLATE_SUFFIX" class="member-name-link">DEFAULT_TEMPLATE_SUFFIX</a></code></div>
+<div class="col-first odd-row-color"><code>static final boolean</code></div>
+<div class="col-second odd-row-color"><code><a href="#DEFAULT_CACHE_TEMPLATES" class="member-name-link">DEFAULT_CACHE_TEMPLATES</a></code></div>
 <div class="col-last odd-row-color">
+<div class="block">Default cache-templates setting &mdash; <code>true</code> (cache forever; production-safe).</div>
+</div>
+<div class="col-first even-row-color"><code>static final <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second even-row-color"><code><a href="#DEFAULT_TEMPLATE_SUFFIX" class="member-name-link">DEFAULT_TEMPLATE_SUFFIX</a></code></div>
+<div class="col-last even-row-color">
 <div class="block">Default template suffix &mdash; empty (literal template names, no implicit suffix).</div>
 </div>
 </div>
@@ -202,16 +207,21 @@ implements <a href="../RawTemplateDispatcher.html" title="interface in org.apach
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns the configured template-name suffix.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#render(java.lang.String,org.apache.juneau.rest.server.RestRequest,org.apache.juneau.rest.server.RestResponse)" class="member-name-link">render</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;path,
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#isCacheTemplates()" class="member-name-link">isCacheTemplates</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Returns whether the bridge-default <code>MustacheFactory</code> caches compiled templates.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#render(java.lang.String,org.apache.juneau.rest.server.RestRequest,org.apache.juneau.rest.server.RestResponse)" class="member-name-link">render</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;path,
  <a href="../../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req,
  <a href="../../RestResponse.html" title="class in org.apache.juneau.rest.server">RestResponse</a>&nbsp;res)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Renders a raw template through the Mustache engine onto the response.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>com.github.mustachejava.MustacheFactory</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#resolveMustacheFactory(org.apache.juneau.rest.server.RestRequest)" class="member-name-link">resolveMustacheFactory</a><wbr>(<a href="../../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>com.github.mustachejava.MustacheFactory</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#resolveMustacheFactory(org.apache.juneau.rest.server.RestRequest)" class="member-name-link">resolveMustacheFactory</a><wbr>(<a href="../../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Resolves the active <code>MustacheFactory</code>.</div>
 </div>
 </div>
@@ -261,6 +271,21 @@ implements <a href="../RawTemplateDispatcher.html" title="interface in org.apach
 </dl>
 </section>
 </li>
+<li>
+<section class="detail" id="DEFAULT_CACHE_TEMPLATES">
+<h3>DEFAULT_CACHE_TEMPLATES</h3>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/view/mustache/MustacheDispatcher.html#line-66">DEFAULT_CACHE_TEMPLATES</a></span></div>
+<div class="block">Default cache-templates setting &mdash; <code>true</code> (cache forever; production-safe).</div>
+<dl class="notes">
+<dt>See Also:</dt>
+<dd>
+<ul class="see-list">
+<li><a href="../../../../../../../constant-values.html#org.apache.juneau.rest.server.view.mustache.MustacheDispatcher.DEFAULT_CACHE_TEMPLATES">Constant Field Values</a></li>
+</ul>
+</dd>
+</dl>
+</section>
+</li>
 </ul>
 </section>
 </li>
@@ -272,7 +297,7 @@ implements <a href="../RawTemplateDispatcher.html" title="interface in org.apach
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.rest.server.view.mustache.MustacheDispatcher.Builder)">
 <h3>MustacheDispatcher</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/view/mustache/MustacheDispatcher.html#line-90">MustacheDispatcher</a></span><wbr><span class="parameters">(<a href="MustacheDispatcher.Builder.html" title="class in org.apache.juneau.rest.server.view.mustache">MustacheDispatcher.Builder</a>&nbsp;builder)</span></div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/view/mustache/MustacheDispatcher.html#line-94">MustacheDispatcher</a></span><wbr><span class="parameters">(<a href="MustacheDispatcher.Builder.html" title="class in org.apache.juneau.rest.server.view.mustache">MustacheDispatcher.Builder</a>&nbsp;builder)</span></div>
 <div class="block">Builder constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -291,7 +316,7 @@ implements <a href="../RawTemplateDispatcher.html" title="interface in org.apach
 <li>
 <section class="detail" id="create()">
 <h3>create</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="MustacheDispatcher.Builder.html" title="class in org.apache.juneau.rest.server.view.mustache">MustacheDispatcher.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/view/mustache/MustacheDispatcher.html#line-81">create</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="MustacheDispatcher.Builder.html" title="class in org.apache.juneau.rest.server.view.mustache">MustacheDispatcher.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/view/mustache/MustacheDispatcher.html#line-85">create</a></span>()</div>
 <div class="block">Creates a new builder.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -302,7 +327,7 @@ implements <a href="../RawTemplateDispatcher.html" title="interface in org.apach
 <li>
 <section class="detail" id="getBasePath()">
 <h3>getBasePath</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/view/mustache/MustacheDispatcher.html#line-100">getBasePath</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/view/mustache/MustacheDispatcher.html#line-105">getBasePath</a></span>()</div>
 <div class="block">Returns the base path under which template resources are resolved.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -313,7 +338,7 @@ implements <a href="../RawTemplateDispatcher.html" title="interface in org.apach
 <li>
 <section class="detail" id="getTemplateSuffix()">
 <h3>getTemplateSuffix</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/view/mustache/MustacheDispatcher.html#line-109">getTemplateSuffix</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/view/mustache/MustacheDispatcher.html#line-114">getTemplateSuffix</a></span>()</div>
 <div class="block">Returns the configured template-name suffix.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -322,9 +347,20 @@ implements <a href="../RawTemplateDispatcher.html" title="interface in org.apach
 </section>
 </li>
 <li>
+<section class="detail" id="isCacheTemplates()">
+<h3>isCacheTemplates</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/view/mustache/MustacheDispatcher.html#line-123">isCacheTemplates</a></span>()</div>
+<div class="block">Returns whether the bridge-default <code>MustacheFactory</code> caches compiled templates.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>The cache flag. Defaults to <a href="#DEFAULT_CACHE_TEMPLATES"><code>DEFAULT_CACHE_TEMPLATES</code></a>.</dd>
+</dl>
+</section>
+</li>
+<li>
 <section class="detail" id="applyTemplateSuffix(java.lang.String)">
 <h3>applyTemplateSuffix</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/view/mustache/MustacheDispatcher.html#line-119">applyTemplateSuffix</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/view/mustache/MustacheDispatcher.html#line-133">applyTemplateSuffix</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
 <div class="block">Appends <a href="#getTemplateSuffix()"><code>getTemplateSuffix()</code></a> to <code>name</code> if not already present (idempotent).</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -337,7 +373,7 @@ implements <a href="../RawTemplateDispatcher.html" title="interface in org.apach
 <li>
 <section class="detail" id="resolveMustacheFactory(org.apache.juneau.rest.server.RestRequest)">
 <h3>resolveMustacheFactory</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">com.github.mustachejava.MustacheFactory</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/view/mustache/MustacheDispatcher.html#line-144">resolveMustacheFactory</a></span><wbr><span class="parameters">(<a href="../../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">com.github.mustachejava.MustacheFactory</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/view/mustache/MustacheDispatcher.html#line-163">resolveMustacheFactory</a></span><wbr><span class="parameters">(<a href="../../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req)</span></div>
 <div class="block">Resolves the active <code>MustacheFactory</code>.
 
  <p>
@@ -345,10 +381,15 @@ implements <a href="../RawTemplateDispatcher.html" title="interface in org.apach
  <ol class='spaced-list'>
    <li><code>req.getContext().getBeanStore().getBean(MustacheFactory.class)</code> &mdash; any
       user-supplied bean (Spring <code>@Bean</code>, microservice <code>BasicBeanStore.put</code>,
-      etc.).
-   <li>Lazy bridge default &mdash; constructed on first call when no factory bean is
-      registered. Carries a <code>DefaultMustacheFactory</code> anchored on a resource root
+      etc.). Never cached or rebuilt by this bridge &mdash; <a href="#isCacheTemplates()"><code>isCacheTemplates()</code></a> does
+      not apply to user-supplied factories.
+   <li>Bridge default &mdash; a <code>DefaultMustacheFactory</code> anchored on a resource root
       derived from <a href="#getBasePath()"><code>basePath</code></a> (leading + trailing slashes trimmed).
+      When <a href="#isCacheTemplates()"><code>isCacheTemplates()</code></a> is <code>true</code> (the default), a single instance is
+      lazily built once and reused (mustache.java's own <code>DefaultMustacheFactory</code>
+      compiles-and-caches templates internally, so reuse means "compile once"). When
+      <code>false</code>, a fresh factory with an empty compile-cache is built on every call, so
+      every render recompiles the template from its current classpath contents (hot-reload).
  </ol></div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -361,7 +402,7 @@ implements <a href="../RawTemplateDispatcher.html" title="interface in org.apach
 <li>
 <section class="detail" id="buildDefaultFactory()">
 <h3>buildDefaultFactory</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type">com.github.mustachejava.MustacheFactory</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/view/mustache/MustacheDispatcher.html#line-172">buildDefaultFactory</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type">com.github.mustachejava.MustacheFactory</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/view/mustache/MustacheDispatcher.html#line-193">buildDefaultFactory</a></span>()</div>
 <div class="block">Constructs the bridge-default <code>MustacheFactory</code>.
 
  <p>
@@ -378,7 +419,7 @@ implements <a href="../RawTemplateDispatcher.html" title="interface in org.apach
 <li>
 <section class="detail" id="render(java.lang.String,org.apache.juneau.rest.server.RestRequest,org.apache.juneau.rest.server.RestResponse)">
 <h3>render</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/view/mustache/MustacheDispatcher.html#line-212">render</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;path,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/server/view/mustache/MustacheDispatcher.html#line-233">render</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;path,
  <a href="../../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req,
  <a href="../../RestResponse.html" title="class in org.apache.juneau.rest.server">RestResponse</a>&nbsp;res)</span>
             throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a>,

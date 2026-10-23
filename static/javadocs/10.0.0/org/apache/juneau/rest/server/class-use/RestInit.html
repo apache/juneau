@@ -64,6 +64,10 @@ loadScripts(document, 'script');</script>
 <div class="col-last odd-row-color">
 <div class="block">REST Server API</div>
 </div>
+<div class="col-first even-row-color"><a href="#org.apache.juneau.rest.server.health">org.apache.juneau.rest.server.health</a></div>
+<div class="col-last even-row-color">
+<div class="block">Built-in health, readiness, and liveness probe support for Juneau REST servers.</div>
+</div>
 </div>
 <section class="class-uses">
 <ul class="block-list">
@@ -106,6 +110,24 @@ loadScripts(document, 'script');</script>
 <div class="col-second even-row-color"><span class="type-name-label">RestInitAnnotation.Builder.</span><code><a href="../RestInitAnnotation.Builder.html#build()" class="member-name-link">build</a>()</code></div>
 <div class="col-last even-row-color">
 <div class="block">Instantiates a new <a href="../RestInit.html" title="annotation interface in org.apache.juneau.rest.server"><code>@RestInit</code></a> object initialized with this builder.</div>
+</div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="org.apache.juneau.rest.server.health">
+<h2>Uses of <a href="../RestInit.html" title="annotation interface in org.apache.juneau.rest.server">RestInit</a> in <a href="../health/package-summary.html">org.apache.juneau.rest.server.health</a></h2>
+<div class="caption"><span>Methods in <a href="../health/package-summary.html">org.apache.juneau.rest.server.health</a> with annotations of type <a href="../RestInit.html" title="annotation interface in org.apache.juneau.rest.server">RestInit</a></span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier and Type</div>
+<div class="table-header col-second">Method</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code>void</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">HealthServlet.</span><code><a href="../health/HealthServlet.html#initReadinessState(org.apache.juneau.commons.inject.WritableBeanStore)" class="member-name-link">initReadinessState</a><wbr>(<a href="../../../commons/inject/WritableBeanStore.html" title="interface in org.apache.juneau.commons.inject">WritableBeanStore</a>&nbsp;beanStore)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Registers the <a href="../health/HealthServlet.html#publishReadinessState(org.apache.juneau.rest.server.health.ReadinessState)">published</a> readiness state (if any) into
+ this resource's own bean store, so <a href="../health/HealthAggregator.html#aggregate(org.apache.juneau.rest.server.RestContext,java.util.Map,org.apache.juneau.rest.server.health.HealthProbe,org.apache.juneau.rest.server.RestResponse)"><code>HealthAggregator.aggregate(org.apache.juneau.rest.server.RestContext, java.util.Map&lt;java.lang.String, org.apache.juneau.rest.server.health.HealthIndicator&gt;, org.apache.juneau.rest.server.health.HealthProbe, org.apache.juneau.rest.server.RestResponse)</code></a> resolves the lifecycle-owned
+ instance instead of falling back to <a href="../health/ReadinessState.html#shared()"><code>ReadinessState.shared()</code></a>.</div>
 </div>
 </div>
 </section>

@@ -89,7 +89,7 @@ implements <a href="../RawTemplateDispatcher.html" title="interface in org.apach
  <a href="JspMixin.html" title="class in org.apache.juneau.rest.server.view.jsp"><code>JspMixin</code></a> mixin, the <a href="JspServlet.html" title="class in org.apache.juneau.rest.server.view.jsp"><code>JspServlet</code></a> servlet, and the <a href="JspResource.html" title="class in org.apache.juneau.rest.server.view.jsp"><code>JspResource</code></a> child flavors.
 
  <p>
- This is the §2.3.1 <i>flavor-neutral worker</i> for the JSP capability: it is <b>not</b> one of the
+ This is the <i>flavor-neutral worker</i> for the JSP capability: it is <b>not</b> one of the
  three <code>@Rest</code> flavor classes &mdash; it is a plain bean that implements
  <a href="../RawTemplateDispatcher.html" title="interface in org.apache.juneau.rest.server.view"><code>RawTemplateDispatcher</code></a> and holds the capability state (<code>basePath</code>) plus the raw-serve
  logic. Each flavor independently holds an instance of this worker and delegates to it, so no flavor

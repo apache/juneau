@@ -122,9 +122,9 @@
 <span class="source-line-no">109</span><span id="line-109">   }</span>
 <span class="source-line-no">110</span><span id="line-110"></span>
 <span class="source-line-no">111</span><span id="line-111">   @SuppressWarnings({</span>
-<span class="source-line-no">112</span><span id="line-112">      "java:S2160", // equals() inherited from AnnotationObject compares all annotation interface methods; subclass fields are accessed via those methods</span>
-<span class="source-line-no">113</span><span id="line-113">      "ClassExplicitlyAnnotation", // IntelliJ / SonarLint: Instance implements @Contact (AnnotationObject runtime proxy pattern)</span>
-<span class="source-line-no">114</span><span id="line-114">      "all" // Eclipse JDT: AnnotationTypeUsedAsSuperInterface has no dedicated @SuppressWarnings token (JLS 9.6)</span>
+<span class="source-line-no">112</span><span id="line-112">      "ClassExplicitlyAnnotation", // IntelliJ / SonarLint: Instance implements @Contact (AnnotationObject runtime proxy pattern)</span>
+<span class="source-line-no">113</span><span id="line-113">      "all", // Eclipse JDT: AnnotationTypeUsedAsSuperInterface has no dedicated @SuppressWarnings token (JLS 9.6)</span>
+<span class="source-line-no">114</span><span id="line-114">      "java:S2160" // equals() inherited from AnnotationObject compares all annotation interface methods; subclass fields are accessed via those methods</span>
 <span class="source-line-no">115</span><span id="line-115">   })</span>
 <span class="source-line-no">116</span><span id="line-116">   private static class Instance extends AnnotationObject implements Contact {</span>
 <span class="source-line-no">117</span><span id="line-117"></span>

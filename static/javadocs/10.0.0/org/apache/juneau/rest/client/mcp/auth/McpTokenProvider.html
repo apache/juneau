@@ -82,13 +82,13 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/McpTokenProvider.html#line-63">McpTokenProvider</a></span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/McpTokenProvider.html#line-62">McpTokenProvider</a></span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>
 implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span></div>
 <div class="block">A headless bearer-token provider that feeds the <a href="../McpAuthInterceptor.html" title="class in org.apache.juneau.rest.client.mcp"><code>McpAuthInterceptor</code></a> token seam (<code>Supplier&lt;String&gt;</code>).
 
  <p>
- This is the F1 client-side token-manager: it acquires, caches, and refreshes an access token and returns the current
+ This is the client-side token-manager: it acquires, caches, and refreshes an access token and returns the current
  valid bearer credential from <a href="#get()"><code>get()</code></a>.  Three modes are supported:
  <ul>
    <li><b>Pre-provisioned / static</b> (<a href="#ofStaticToken(java.lang.String)"><code>ofStaticToken(String)</code></a>) &mdash; always returns a fixed token.
@@ -219,7 +219,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.rest.client.mcp.auth.McpTokenProvider.Builder)">
 <h3>McpTokenProvider</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/McpTokenProvider.html#line-301">McpTokenProvider</a></span><wbr><span class="parameters">(<a href="McpTokenProvider.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpTokenProvider.Builder</a>&nbsp;b)</span></div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/McpTokenProvider.html#line-297">McpTokenProvider</a></span><wbr><span class="parameters">(<a href="McpTokenProvider.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpTokenProvider.Builder</a>&nbsp;b)</span></div>
 <div class="block">Constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -238,7 +238,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="ofStaticToken(java.lang.String)">
 <h3>ofStaticToken</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="McpTokenProvider.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpTokenProvider</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/McpTokenProvider.html#line-79">ofStaticToken</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;token)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="McpTokenProvider.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpTokenProvider</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/McpTokenProvider.html#line-75">ofStaticToken</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;token)</span></div>
 <div class="block">Creates a provider that always returns the supplied pre-provisioned bearer token.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -251,7 +251,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="clientCredentials()">
 <h3>clientCredentials</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="McpTokenProvider.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpTokenProvider.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/McpTokenProvider.html#line-89">clientCredentials</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="McpTokenProvider.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpTokenProvider.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/McpTokenProvider.html#line-85">clientCredentials</a></span>()</div>
 <div class="block">Creates a builder for the client-credentials grant.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -262,7 +262,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="refreshToken(java.lang.String)">
 <h3>refreshToken</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="McpTokenProvider.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpTokenProvider.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/McpTokenProvider.html#line-99">refreshToken</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;initialRefreshToken)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="McpTokenProvider.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpTokenProvider.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/McpTokenProvider.html#line-95">refreshToken</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;initialRefreshToken)</span></div>
 <div class="block">Creates a builder for the refresh-token grant, seeded with the initial refresh token.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -275,7 +275,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="get()">
 <h3>get</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/McpTokenProvider.html#line-331">get</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/McpTokenProvider.html#line-327">get</a></span>()</div>
 <div class="block">Returns the current valid bearer token, acquiring or refreshing one on demand.
 
  <p>
@@ -299,7 +299,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="currentRefreshToken()">
 <h3>currentRefreshToken</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/McpTokenProvider.html#line-396">currentRefreshToken</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/McpTokenProvider.html#line-390">currentRefreshToken</a></span>()</div>
 <div class="block">Returns the refresh token currently held (the most recently rotated value in refresh mode).
 
  <p>
@@ -314,7 +314,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="interceptor()">
 <h3>interceptor</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../McpAuthInterceptor.html" title="class in org.apache.juneau.rest.client.mcp">McpAuthInterceptor</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/McpTokenProvider.html#line-407">interceptor</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../McpAuthInterceptor.html" title="class in org.apache.juneau.rest.client.mcp">McpAuthInterceptor</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/McpTokenProvider.html#line-401">interceptor</a></span>()</div>
 <div class="block">Creates an <a href="../McpAuthInterceptor.html" title="class in org.apache.juneau.rest.client.mcp"><code>McpAuthInterceptor</code></a> backed by this provider, ready to attach to an MCP client builder.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -325,7 +325,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="toString()">
 <h3>toString</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/McpTokenProvider.html#line-416">toString</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/McpTokenProvider.html#line-410">toString</a></span>()</div>
 <div class="block">Redacts token/secret material so nothing sensitive reaches logs via this provider's <code>toString()</code>.</div>
 <dl class="notes">
 <dt>Overrides:</dt>

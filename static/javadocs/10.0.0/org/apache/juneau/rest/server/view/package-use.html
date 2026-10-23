@@ -56,9 +56,33 @@ loadScripts(document, 'script');</script>
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Package</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><a href="#org.apache.juneau.petstore.rest">org.apache.juneau.petstore.rest</a></div>
+<div class="col-first even-row-color"><a href="#org.apache.juneau.petstore.console">org.apache.juneau.petstore.console</a></div>
 <div class="col-last even-row-color">
-<div class="block">Petstore REST resources.</div>
+<div class="block">Petstore admin console: the <code>/console</code> page tree.</div>
+</div>
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.petstore.console.dev">org.apache.juneau.petstore.console.dev</a></div>
+<div class="col-last odd-row-color">
+<div class="block">Petstore console Developer pages: custom cards, themes, rendering flavors and the secure API demo.</div>
+</div>
+<div class="col-first even-row-color"><a href="#org.apache.juneau.petstore.console.dev.flavors">org.apache.juneau.petstore.console.dev.flavors</a></div>
+<div class="col-last even-row-color">
+<div class="block">Petstore console Rendering flavors: one console page per petstore view technology.</div>
+</div>
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.petstore.console.ops">org.apache.juneau.petstore.console.ops</a></div>
+<div class="col-last odd-row-color">
+<div class="block">Petstore console operations pages: background jobs and the audit log.</div>
+</div>
+<div class="col-first even-row-color"><a href="#org.apache.juneau.petstore.console.orders">org.apache.juneau.petstore.console.orders</a></div>
+<div class="col-last even-row-color">
+<div class="block">Petstore console orders page and its JSON endpoints.</div>
+</div>
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.petstore.console.pets">org.apache.juneau.petstore.console.pets</a></div>
+<div class="col-last odd-row-color">
+<div class="block">Petstore console pets pages and their JSON endpoints.</div>
+</div>
+<div class="col-first even-row-color"><a href="#org.apache.juneau.petstore.console.users">org.apache.juneau.petstore.console.users</a></div>
+<div class="col-last even-row-color">
+<div class="block">Petstore console users page and its JSON endpoints.</div>
 </div>
 <div class="col-first odd-row-color"><a href="#org.apache.juneau.rest.server.view">org.apache.juneau.rest.server.view</a></div>
 <div class="col-last odd-row-color">
@@ -69,28 +93,119 @@ loadScripts(document, 'script');</script>
 <div class="block">Apache FreeMarker view-rendering bridge &mdash; opt-in <code>juneau-rest-server-view-freemarker</code>
  module.</div>
 </div>
-<div class="col-first odd-row-color"><a href="#org.apache.juneau.rest.server.view.jsp">org.apache.juneau.rest.server.view.jsp</a></div>
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.rest.server.view.freemarker.console">org.apache.juneau.rest.server.view.freemarker.console</a></div>
 <div class="col-last odd-row-color">
+<div class="block">FreeMarker-only delivery of the admin-console chrome: the reserved-classpath <code>base.ftlh</code> template, the
+ <code>&lt;@tag&gt;</code> macro, and <a href="freemarker/console/ConsoleFreemarkerMixin.html" title="class in org.apache.juneau.rest.server.view.freemarker.console"><code>ConsoleFreemarkerMixin</code></a>
+ (registers a reserved-path <code>ClassTemplateLoader</code> on top of the host's own <code>FreemarkerMixin</code>
+ configuration).</div>
+</div>
+<div class="col-first even-row-color"><a href="#org.apache.juneau.rest.server.view.jsp">org.apache.juneau.rest.server.view.jsp</a></div>
+<div class="col-last even-row-color">
 <div class="block">JSP view-rendering bridge &mdash; opt-in <code>juneau-rest-server-view-jsp</code> module.</div>
 </div>
-<div class="col-first even-row-color"><a href="#org.apache.juneau.rest.server.view.mustache">org.apache.juneau.rest.server.view.mustache</a></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.rest.server.view.mustache">org.apache.juneau.rest.server.view.mustache</a></div>
+<div class="col-last odd-row-color">
 <div class="block">Mustache view-rendering bridge &mdash; opt-in <code>juneau-rest-server-view-mustache</code> module.</div>
 </div>
-<div class="col-first odd-row-color"><a href="#org.apache.juneau.rest.server.view.thymeleaf">org.apache.juneau.rest.server.view.thymeleaf</a></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><a href="#org.apache.juneau.rest.server.view.thymeleaf">org.apache.juneau.rest.server.view.thymeleaf</a></div>
+<div class="col-last even-row-color">
 <div class="block">Thymeleaf view-rendering bridge &mdash; opt-in <code>juneau-rest-server-view-thymeleaf</code> module.</div>
 </div>
 </div>
 <section class="package-uses">
 <ul class="block-list">
 <li>
-<section class="detail" id="org.apache.juneau.petstore.rest">
-<div class="caption"><span>Classes in <a href="package-summary.html">org.apache.juneau.rest.server.view</a> used by <a href="../../../petstore/rest/package-summary.html">org.apache.juneau.petstore.rest</a></span></div>
+<section class="detail" id="org.apache.juneau.petstore.console">
+<div class="caption"><span>Classes in <a href="package-summary.html">org.apache.juneau.rest.server.view</a> used by <a href="../../../petstore/console/package-summary.html">org.apache.juneau.petstore.console</a></span></div>
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Class</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><a href="class-use/View.html#org.apache.juneau.petstore.rest">View</a></div>
+<div class="col-first even-row-color"><a href="class-use/View.html#org.apache.juneau.petstore.console">View</a></div>
+<div class="col-last even-row-color">
+<div class="block">Engine-agnostic contract for a server-side-rendered template return value from an
+ <a href="../RestOp.html" title="annotation interface in org.apache.juneau.rest.server"><code>@RestOp</code></a>-annotated method.</div>
+</div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="org.apache.juneau.petstore.console.dev">
+<div class="caption"><span>Classes in <a href="package-summary.html">org.apache.juneau.rest.server.view</a> used by <a href="../../../petstore/console/dev/package-summary.html">org.apache.juneau.petstore.console.dev</a></span></div>
+<div class="summary-table two-column-summary">
+<div class="table-header col-first">Class</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><a href="class-use/View.html#org.apache.juneau.petstore.console.dev">View</a></div>
+<div class="col-last even-row-color">
+<div class="block">Engine-agnostic contract for a server-side-rendered template return value from an
+ <a href="../RestOp.html" title="annotation interface in org.apache.juneau.rest.server"><code>@RestOp</code></a>-annotated method.</div>
+</div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="org.apache.juneau.petstore.console.dev.flavors">
+<div class="caption"><span>Classes in <a href="package-summary.html">org.apache.juneau.rest.server.view</a> used by <a href="../../../petstore/console/dev/flavors/package-summary.html">org.apache.juneau.petstore.console.dev.flavors</a></span></div>
+<div class="summary-table two-column-summary">
+<div class="table-header col-first">Class</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><a href="class-use/View.html#org.apache.juneau.petstore.console.dev.flavors">View</a></div>
+<div class="col-last even-row-color">
+<div class="block">Engine-agnostic contract for a server-side-rendered template return value from an
+ <a href="../RestOp.html" title="annotation interface in org.apache.juneau.rest.server"><code>@RestOp</code></a>-annotated method.</div>
+</div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="org.apache.juneau.petstore.console.ops">
+<div class="caption"><span>Classes in <a href="package-summary.html">org.apache.juneau.rest.server.view</a> used by <a href="../../../petstore/console/ops/package-summary.html">org.apache.juneau.petstore.console.ops</a></span></div>
+<div class="summary-table two-column-summary">
+<div class="table-header col-first">Class</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><a href="class-use/View.html#org.apache.juneau.petstore.console.ops">View</a></div>
+<div class="col-last even-row-color">
+<div class="block">Engine-agnostic contract for a server-side-rendered template return value from an
+ <a href="../RestOp.html" title="annotation interface in org.apache.juneau.rest.server"><code>@RestOp</code></a>-annotated method.</div>
+</div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="org.apache.juneau.petstore.console.orders">
+<div class="caption"><span>Classes in <a href="package-summary.html">org.apache.juneau.rest.server.view</a> used by <a href="../../../petstore/console/orders/package-summary.html">org.apache.juneau.petstore.console.orders</a></span></div>
+<div class="summary-table two-column-summary">
+<div class="table-header col-first">Class</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><a href="class-use/View.html#org.apache.juneau.petstore.console.orders">View</a></div>
+<div class="col-last even-row-color">
+<div class="block">Engine-agnostic contract for a server-side-rendered template return value from an
+ <a href="../RestOp.html" title="annotation interface in org.apache.juneau.rest.server"><code>@RestOp</code></a>-annotated method.</div>
+</div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="org.apache.juneau.petstore.console.pets">
+<div class="caption"><span>Classes in <a href="package-summary.html">org.apache.juneau.rest.server.view</a> used by <a href="../../../petstore/console/pets/package-summary.html">org.apache.juneau.petstore.console.pets</a></span></div>
+<div class="summary-table two-column-summary">
+<div class="table-header col-first">Class</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><a href="class-use/View.html#org.apache.juneau.petstore.console.pets">View</a></div>
+<div class="col-last even-row-color">
+<div class="block">Engine-agnostic contract for a server-side-rendered template return value from an
+ <a href="../RestOp.html" title="annotation interface in org.apache.juneau.rest.server"><code>@RestOp</code></a>-annotated method.</div>
+</div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="org.apache.juneau.petstore.console.users">
+<div class="caption"><span>Classes in <a href="package-summary.html">org.apache.juneau.rest.server.view</a> used by <a href="../../../petstore/console/users/package-summary.html">org.apache.juneau.petstore.console.users</a></span></div>
+<div class="summary-table two-column-summary">
+<div class="table-header col-first">Class</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><a href="class-use/View.html#org.apache.juneau.petstore.console.users">View</a></div>
 <div class="col-last even-row-color">
 <div class="block">Engine-agnostic contract for a server-side-rendered template return value from an
  <a href="../RestOp.html" title="annotation interface in org.apache.juneau.rest.server"><code>@RestOp</code></a>-annotated method.</div>
@@ -108,6 +223,12 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color">
 <div class="block">Engine-agnostic raw-template-dispatch contract shared by the view mixin resources and their
  standalone servlet companions.</div>
+</div>
+<div class="col-first odd-row-color"><a href="class-use/ViewMixinBuilder.html#org.apache.juneau.rest.server.view">ViewMixinBuilder</a></div>
+<div class="col-last odd-row-color">
+<div class="block">Minimal shared contract implemented by the builder of every view-engine mixin
+ (<code>JspMixin.Builder</code>, <code>ThymeleafMixin.Builder</code>, <code>MustacheMixin.Builder</code>,
+ <code>FreemarkerMixin.Builder</code>).</div>
 </div>
 </div>
 </section>
@@ -128,17 +249,38 @@ loadScripts(document, 'script');</script>
 <div class="block">Engine-agnostic contract for a server-side-rendered template return value from an
  <a href="../RestOp.html" title="annotation interface in org.apache.juneau.rest.server"><code>@RestOp</code></a>-annotated method.</div>
 </div>
-<div class="col-first even-row-color"><a href="class-use/ViewRenderer.html#org.apache.juneau.rest.server.view.freemarker">ViewRenderer</a></div>
+<div class="col-first even-row-color"><a href="class-use/ViewMixinBuilder.html#org.apache.juneau.rest.server.view.freemarker">ViewMixinBuilder</a></div>
 <div class="col-last even-row-color">
+<div class="block">Minimal shared contract implemented by the builder of every view-engine mixin
+ (<code>JspMixin.Builder</code>, <code>ThymeleafMixin.Builder</code>, <code>MustacheMixin.Builder</code>,
+ <code>FreemarkerMixin.Builder</code>).</div>
+</div>
+<div class="col-first odd-row-color"><a href="class-use/ViewRenderer.html#org.apache.juneau.rest.server.view.freemarker">ViewRenderer</a></div>
+<div class="col-last odd-row-color">
 <div class="block">Marker interface for response processors that handle <a href="View.html" title="interface in org.apache.juneau.rest.server.view"><code>View</code></a>-typed return values.</div>
 </div>
-<div class="col-first odd-row-color"><a href="class-use/ViewResource.html#org.apache.juneau.rest.server.view.freemarker">ViewResource</a></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><a href="class-use/ViewResource.html#org.apache.juneau.rest.server.view.freemarker">ViewResource</a></div>
+<div class="col-last even-row-color">
 <div class="block">Abstract base for the child-resource flavors of the view mixin resources.</div>
 </div>
-<div class="col-first even-row-color"><a href="class-use/ViewServlet.html#org.apache.juneau.rest.server.view.freemarker">ViewServlet</a></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><a href="class-use/ViewServlet.html#org.apache.juneau.rest.server.view.freemarker">ViewServlet</a></div>
+<div class="col-last odd-row-color">
 <div class="block">Abstract base for the standalone view-servlet companions of the view mixin resources.</div>
+</div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="org.apache.juneau.rest.server.view.freemarker.console">
+<div class="caption"><span>Classes in <a href="package-summary.html">org.apache.juneau.rest.server.view</a> used by <a href="freemarker/console/package-summary.html">org.apache.juneau.rest.server.view.freemarker.console</a></span></div>
+<div class="summary-table two-column-summary">
+<div class="table-header col-first">Class</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><a href="class-use/ViewMixinBuilder.html#org.apache.juneau.rest.server.view.freemarker.console">ViewMixinBuilder</a></div>
+<div class="col-last even-row-color">
+<div class="block">Minimal shared contract implemented by the builder of every view-engine mixin
+ (<code>JspMixin.Builder</code>, <code>ThymeleafMixin.Builder</code>, <code>MustacheMixin.Builder</code>,
+ <code>FreemarkerMixin.Builder</code>).</div>
 </div>
 </div>
 </section>
@@ -159,16 +301,22 @@ loadScripts(document, 'script');</script>
 <div class="block">Engine-agnostic contract for a server-side-rendered template return value from an
  <a href="../RestOp.html" title="annotation interface in org.apache.juneau.rest.server"><code>@RestOp</code></a>-annotated method.</div>
 </div>
-<div class="col-first even-row-color"><a href="class-use/ViewRenderer.html#org.apache.juneau.rest.server.view.jsp">ViewRenderer</a></div>
+<div class="col-first even-row-color"><a href="class-use/ViewMixinBuilder.html#org.apache.juneau.rest.server.view.jsp">ViewMixinBuilder</a></div>
 <div class="col-last even-row-color">
+<div class="block">Minimal shared contract implemented by the builder of every view-engine mixin
+ (<code>JspMixin.Builder</code>, <code>ThymeleafMixin.Builder</code>, <code>MustacheMixin.Builder</code>,
+ <code>FreemarkerMixin.Builder</code>).</div>
+</div>
+<div class="col-first odd-row-color"><a href="class-use/ViewRenderer.html#org.apache.juneau.rest.server.view.jsp">ViewRenderer</a></div>
+<div class="col-last odd-row-color">
 <div class="block">Marker interface for response processors that handle <a href="View.html" title="interface in org.apache.juneau.rest.server.view"><code>View</code></a>-typed return values.</div>
 </div>
-<div class="col-first odd-row-color"><a href="class-use/ViewResource.html#org.apache.juneau.rest.server.view.jsp">ViewResource</a></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><a href="class-use/ViewResource.html#org.apache.juneau.rest.server.view.jsp">ViewResource</a></div>
+<div class="col-last even-row-color">
 <div class="block">Abstract base for the child-resource flavors of the view mixin resources.</div>
 </div>
-<div class="col-first even-row-color"><a href="class-use/ViewServlet.html#org.apache.juneau.rest.server.view.jsp">ViewServlet</a></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><a href="class-use/ViewServlet.html#org.apache.juneau.rest.server.view.jsp">ViewServlet</a></div>
+<div class="col-last odd-row-color">
 <div class="block">Abstract base for the standalone view-servlet companions of the view mixin resources.</div>
 </div>
 </div>
@@ -190,16 +338,22 @@ loadScripts(document, 'script');</script>
 <div class="block">Engine-agnostic contract for a server-side-rendered template return value from an
  <a href="../RestOp.html" title="annotation interface in org.apache.juneau.rest.server"><code>@RestOp</code></a>-annotated method.</div>
 </div>
-<div class="col-first even-row-color"><a href="class-use/ViewRenderer.html#org.apache.juneau.rest.server.view.mustache">ViewRenderer</a></div>
+<div class="col-first even-row-color"><a href="class-use/ViewMixinBuilder.html#org.apache.juneau.rest.server.view.mustache">ViewMixinBuilder</a></div>
 <div class="col-last even-row-color">
+<div class="block">Minimal shared contract implemented by the builder of every view-engine mixin
+ (<code>JspMixin.Builder</code>, <code>ThymeleafMixin.Builder</code>, <code>MustacheMixin.Builder</code>,
+ <code>FreemarkerMixin.Builder</code>).</div>
+</div>
+<div class="col-first odd-row-color"><a href="class-use/ViewRenderer.html#org.apache.juneau.rest.server.view.mustache">ViewRenderer</a></div>
+<div class="col-last odd-row-color">
 <div class="block">Marker interface for response processors that handle <a href="View.html" title="interface in org.apache.juneau.rest.server.view"><code>View</code></a>-typed return values.</div>
 </div>
-<div class="col-first odd-row-color"><a href="class-use/ViewResource.html#org.apache.juneau.rest.server.view.mustache">ViewResource</a></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><a href="class-use/ViewResource.html#org.apache.juneau.rest.server.view.mustache">ViewResource</a></div>
+<div class="col-last even-row-color">
 <div class="block">Abstract base for the child-resource flavors of the view mixin resources.</div>
 </div>
-<div class="col-first even-row-color"><a href="class-use/ViewServlet.html#org.apache.juneau.rest.server.view.mustache">ViewServlet</a></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><a href="class-use/ViewServlet.html#org.apache.juneau.rest.server.view.mustache">ViewServlet</a></div>
+<div class="col-last odd-row-color">
 <div class="block">Abstract base for the standalone view-servlet companions of the view mixin resources.</div>
 </div>
 </div>
@@ -221,16 +375,22 @@ loadScripts(document, 'script');</script>
 <div class="block">Engine-agnostic contract for a server-side-rendered template return value from an
  <a href="../RestOp.html" title="annotation interface in org.apache.juneau.rest.server"><code>@RestOp</code></a>-annotated method.</div>
 </div>
-<div class="col-first even-row-color"><a href="class-use/ViewRenderer.html#org.apache.juneau.rest.server.view.thymeleaf">ViewRenderer</a></div>
+<div class="col-first even-row-color"><a href="class-use/ViewMixinBuilder.html#org.apache.juneau.rest.server.view.thymeleaf">ViewMixinBuilder</a></div>
 <div class="col-last even-row-color">
+<div class="block">Minimal shared contract implemented by the builder of every view-engine mixin
+ (<code>JspMixin.Builder</code>, <code>ThymeleafMixin.Builder</code>, <code>MustacheMixin.Builder</code>,
+ <code>FreemarkerMixin.Builder</code>).</div>
+</div>
+<div class="col-first odd-row-color"><a href="class-use/ViewRenderer.html#org.apache.juneau.rest.server.view.thymeleaf">ViewRenderer</a></div>
+<div class="col-last odd-row-color">
 <div class="block">Marker interface for response processors that handle <a href="View.html" title="interface in org.apache.juneau.rest.server.view"><code>View</code></a>-typed return values.</div>
 </div>
-<div class="col-first odd-row-color"><a href="class-use/ViewResource.html#org.apache.juneau.rest.server.view.thymeleaf">ViewResource</a></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><a href="class-use/ViewResource.html#org.apache.juneau.rest.server.view.thymeleaf">ViewResource</a></div>
+<div class="col-last even-row-color">
 <div class="block">Abstract base for the child-resource flavors of the view mixin resources.</div>
 </div>
-<div class="col-first even-row-color"><a href="class-use/ViewServlet.html#org.apache.juneau.rest.server.view.thymeleaf">ViewServlet</a></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><a href="class-use/ViewServlet.html#org.apache.juneau.rest.server.view.thymeleaf">ViewServlet</a></div>
+<div class="col-last odd-row-color">
 <div class="block">Abstract base for the standalone view-servlet companions of the view mixin resources.</div>
 </div>
 </div>

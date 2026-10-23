@@ -90,7 +90,7 @@ loadScripts(document, 'script');</script>
 <dd><a href="ParserSession.html" title="class in org.apache.juneau.marshall.parser">ParserSession</a></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public abstract static class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parser/ParserSession.html#line-85">ParserSession.Builder</a>&lt;SELF extends ParserSession.Builder&lt;SELF&gt;&gt;</span>
+<div class="type-signature"><span class="modifiers">public abstract static class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parser/ParserSession.html#line-76">ParserSession.Builder</a>&lt;SELF extends ParserSession.Builder&lt;SELF&gt;&gt;</span>
 <span class="extends-implements">extends <a href="../MarshallingSession.Builder.html" title="class in org.apache.juneau.marshall">MarshallingSession.Builder</a>&lt;SELF&gt;</span></div>
 <div class="block">Builder class.</div>
 </section>
@@ -135,34 +135,40 @@ loadScripts(document, 'script');</script>
 <div class="block">The java method that called this serializer, usually the method in a REST servlet.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="ParserSession.Builder.html" title="type parameter in ParserSession.Builder">SELF</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#nulls(org.apache.juneau.marshall.Nulls)" class="member-name-link">nulls</a><wbr>(<a href="../Nulls.html" title="enum class in org.apache.juneau.marshall">Nulls</a>&nbsp;value)</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#maxParseDepth(int)" class="member-name-link">maxParseDepth</a><wbr>(int&nbsp;value)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">The shared recursive-parse-depth budget honored by binary codec sessions (CBOR, Protobuf, MsgPack)
+ at their recursive databind entry points.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="ParserSession.Builder.html" title="type parameter in ParserSession.Builder">SELF</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#nulls(org.apache.juneau.marshall.Nulls)" class="member-name-link">nulls</a><wbr>(<a href="../Nulls.html" title="enum class in org.apache.juneau.marshall">Nulls</a>&nbsp;value)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Per-session override for the parser's null-coercion policy.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="ParserSession.Builder.html" title="type parameter in ParserSession.Builder">SELF</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#outer(java.lang.Object)" class="member-name-link">outer</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="ParserSession.Builder.html" title="type parameter in ParserSession.Builder">SELF</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#outer(java.lang.Object)" class="member-name-link">outer</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">The outer object for instantiating top-level non-static inner classes.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="ParserSession.Builder.html" title="type parameter in ParserSession.Builder">SELF</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#property(java.lang.String,java.lang.Object)" class="member-name-link">property</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key,
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="ParserSession.Builder.html" title="type parameter in ParserSession.Builder">SELF</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#property(java.lang.String,java.lang.Object)" class="member-name-link">property</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Adds a property to this session.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="ParserSession.Builder.html" title="type parameter in ParserSession.Builder">SELF</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#schema(org.apache.juneau.marshall.httppart.HttpPartSchema)" class="member-name-link">schema</a><wbr>(<a href="../httppart/HttpPartSchema.html" title="class in org.apache.juneau.marshall.httppart">HttpPartSchema</a>&nbsp;value)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="ParserSession.Builder.html" title="type parameter in ParserSession.Builder">SELF</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#schema(org.apache.juneau.marshall.httppart.HttpPartSchema)" class="member-name-link">schema</a><wbr>(<a href="../httppart/HttpPartSchema.html" title="class in org.apache.juneau.marshall.httppart">HttpPartSchema</a>&nbsp;value)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">HTTP-part schema.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="ParserSession.Builder.html" title="type parameter in ParserSession.Builder">SELF</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#schemaDefault(org.apache.juneau.marshall.httppart.HttpPartSchema)" class="member-name-link">schemaDefault</a><wbr>(<a href="../httppart/HttpPartSchema.html" title="class in org.apache.juneau.marshall.httppart">HttpPartSchema</a>&nbsp;value)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="ParserSession.Builder.html" title="type parameter in ParserSession.Builder">SELF</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#schemaDefault(org.apache.juneau.marshall.httppart.HttpPartSchema)" class="member-name-link">schemaDefault</a><wbr>(<a href="../httppart/HttpPartSchema.html" title="class in org.apache.juneau.marshall.httppart">HttpPartSchema</a>&nbsp;value)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Same as <a href="#schema(org.apache.juneau.marshall.httppart.HttpPartSchema)"><code>schema(HttpPartSchema)</code></a> but doesn't overwrite the value if it is already set.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="ParserSession.Builder.html" title="type parameter in ParserSession.Builder">SELF</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#trimStrings(boolean)" class="member-name-link">trimStrings</a><wbr>(boolean&nbsp;value)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="ParserSession.Builder.html" title="type parameter in ParserSession.Builder">SELF</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#trimStrings(boolean)" class="member-name-link">trimStrings</a><wbr>(boolean&nbsp;value)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Trim parsed strings.</div>
 </div>
 </div>
@@ -191,7 +197,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.marshall.parser.Parser)">
 <h3>Builder</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parser/ParserSession.Builder.html#line-103">Builder</a></span><wbr><span class="parameters">(<a href="Parser.html" title="class in org.apache.juneau.marshall.parser">Parser</a>&nbsp;ctx)</span></div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parser/ParserSession.Builder.html#line-95">Builder</a></span><wbr><span class="parameters">(<a href="Parser.html" title="class in org.apache.juneau.marshall.parser">Parser</a>&nbsp;ctx)</span></div>
 <div class="block">Constructor</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -211,7 +217,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="build()">
 <h3>build</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ParserSession.html" title="class in org.apache.juneau.marshall.parser">ParserSession</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parser/ParserSession.Builder.html#line-111">build</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ParserSession.html" title="class in org.apache.juneau.marshall.parser">ParserSession</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parser/ParserSession.Builder.html#line-103">build</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../MarshallingSession.Builder.html#build()">MarshallingSession.Builder</a></code></span></div>
 <div class="block">Build the object.</div>
 <dl class="notes">
@@ -225,7 +231,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="javaMethod(java.lang.reflect.Method)">
 <h3>javaMethod</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ParserSession.Builder.html" title="type parameter in ParserSession.Builder">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parser/ParserSession.Builder.html#line-124">javaMethod</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Method.html" title="class or interface in java.lang.reflect" class="external-link">Method</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ParserSession.Builder.html" title="type parameter in ParserSession.Builder">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parser/ParserSession.Builder.html#line-116">javaMethod</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Method.html" title="class or interface in java.lang.reflect" class="external-link">Method</a>&nbsp;value)</span></div>
 <div class="block">The java method that called this serializer, usually the method in a REST servlet.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -239,7 +245,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="outer(java.lang.Object)">
 <h3>outer</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ParserSession.Builder.html" title="type parameter in ParserSession.Builder">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parser/ParserSession.Builder.html#line-138">outer</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ParserSession.Builder.html" title="type parameter in ParserSession.Builder">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parser/ParserSession.Builder.html#line-130">outer</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</span></div>
 <div class="block">The outer object for instantiating top-level non-static inner classes.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -251,9 +257,30 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
+<section class="detail" id="maxParseDepth(int)">
+<h3>maxParseDepth</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ParserSession.Builder.html" title="type parameter in ParserSession.Builder">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parser/ParserSession.Builder.html#line-145">maxParseDepth</a></span><wbr><span class="parameters">(int&nbsp;value)</span></div>
+<div class="block">The shared recursive-parse-depth budget honored by binary codec sessions (CBOR, Protobuf, MsgPack)
+ at their recursive databind entry points.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>value</code> - The new property value.
+   <br>Defaults to <a href="ParserSession.html#DEFAULT_MAX_PARSE_DEPTH">1000</a>.</dd>
+<dt>Returns:</dt>
+<dd>This object.</dd>
+<dt>See Also:</dt>
+<dd>
+<ul class="see-list-long">
+<li><a href="ParserSession.html#enterParseDepth()"><code>ParserSession.enterParseDepth()</code></a></li>
+</ul>
+</dd>
+</dl>
+</section>
+</li>
+<li>
 <section class="detail" id="property(java.lang.String,java.lang.Object)">
 <h3>property</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ParserSession.Builder.html" title="type parameter in ParserSession.Builder">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parser/ParserSession.Builder.html#line-143">property</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ParserSession.Builder.html" title="type parameter in ParserSession.Builder">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parser/ParserSession.Builder.html#line-150">property</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../ContextSession.Builder.html#property(java.lang.String,java.lang.Object)">ContextSession.Builder</a></code></span></div>
 <div class="block">Adds a property to this session.
@@ -278,7 +305,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="trimStrings(boolean)">
 <h3>trimStrings</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ParserSession.Builder.html" title="type parameter in ParserSession.Builder">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parser/ParserSession.Builder.html#line-172">trimStrings</a></span><wbr><span class="parameters">(boolean&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ParserSession.Builder.html" title="type parameter in ParserSession.Builder">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parser/ParserSession.Builder.html#line-181">trimStrings</a></span><wbr><span class="parameters">(boolean&nbsp;value)</span></div>
 <div class="block">Trim parsed strings.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -291,7 +318,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="nulls(org.apache.juneau.marshall.Nulls)">
 <h3>nulls</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ParserSession.Builder.html" title="type parameter in ParserSession.Builder">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parser/ParserSession.Builder.html#line-185">nulls</a></span><wbr><span class="parameters">(<a href="../Nulls.html" title="enum class in org.apache.juneau.marshall">Nulls</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ParserSession.Builder.html" title="type parameter in ParserSession.Builder">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parser/ParserSession.Builder.html#line-194">nulls</a></span><wbr><span class="parameters">(<a href="../Nulls.html" title="enum class in org.apache.juneau.marshall">Nulls</a>&nbsp;value)</span></div>
 <div class="block">Per-session override for the parser's null-coercion policy.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -312,7 +339,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="schema(org.apache.juneau.marshall.httppart.HttpPartSchema)">
 <h3>schema</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ParserSession.Builder.html" title="type parameter in ParserSession.Builder">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parser/ParserSession.Builder.html#line-201">schema</a></span><wbr><span class="parameters">(<a href="../httppart/HttpPartSchema.html" title="class in org.apache.juneau.marshall.httppart">HttpPartSchema</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ParserSession.Builder.html" title="type parameter in ParserSession.Builder">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parser/ParserSession.Builder.html#line-210">schema</a></span><wbr><span class="parameters">(<a href="../httppart/HttpPartSchema.html" title="class in org.apache.juneau.marshall.httppart">HttpPartSchema</a>&nbsp;value)</span></div>
 <div class="block">HTTP-part schema.
 
  <p>
@@ -329,7 +356,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="schemaDefault(org.apache.juneau.marshall.httppart.HttpPartSchema)">
 <h3>schemaDefault</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ParserSession.Builder.html" title="type parameter in ParserSession.Builder">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parser/ParserSession.Builder.html#line-215">schemaDefault</a></span><wbr><span class="parameters">(<a href="../httppart/HttpPartSchema.html" title="class in org.apache.juneau.marshall.httppart">HttpPartSchema</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ParserSession.Builder.html" title="type parameter in ParserSession.Builder">SELF</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/parser/ParserSession.Builder.html#line-224">schemaDefault</a></span><wbr><span class="parameters">(<a href="../httppart/HttpPartSchema.html" title="class in org.apache.juneau.marshall.httppart">HttpPartSchema</a>&nbsp;value)</span></div>
 <div class="block">Same as <a href="#schema(org.apache.juneau.marshall.httppart.HttpPartSchema)"><code>schema(HttpPartSchema)</code></a> but doesn't overwrite the value if it is already set.</div>
 <dl class="notes">
 <dt>Parameters:</dt>

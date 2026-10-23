@@ -83,7 +83,7 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="apachehttpclient45/ApacheHc45Transport.html" title="class in org.apache.juneau.rest.client.apachehttpclient45">ApacheHc45Transport</a></code>, <code><a href="apachehttpclient50/ApacheHc5Transport.html" title="class in org.apache.juneau.rest.client.apachehttpclient50">ApacheHc5Transport</a></code>, <code><a href="JavaHttpTransport.html" title="class in org.apache.juneau.rest.client">JavaHttpTransport</a></code>, <code><a href="jetty/JettyHttpTransport.html" title="class in org.apache.juneau.rest.client.jetty">JettyHttpTransport</a></code>, <code><a href="../mock/MockHttpTransport.html" title="class in org.apache.juneau.rest.mock">MockHttpTransport</a></code>, <code><a href="okhttp/OkHttpTransport.html" title="class in org.apache.juneau.rest.client.okhttp">OkHttpTransport</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public interface </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/HttpTransport.html#line-52">HttpTransport</a></span><span class="extends-implements">
+<div class="type-signature"><span class="modifiers">public interface </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/HttpTransport.html#line-51">HttpTransport</a></span><span class="extends-implements">
 extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Closeable.html" title="class or interface in java.io" class="external-link">Closeable</a></span></div>
 <div class="block">SPI for pluggable HTTP transports.
 
@@ -104,8 +104,7 @@ extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/ja
  or set explicitly via <code>RestClient.Builder#transport(HttpTransport)</code>.
 
  <p>
- <b>Beta — API subject to change:</b> This type is part of the next-generation REST client and HTTP stack
- (<code>org.apache.juneau.marshall.ng.*</code>).
+ <b>Beta — API subject to change:</b> This type is part of the next-generation REST client and HTTP stack.
  It is not API-frozen: binary- and source-incompatible changes may appear in the <b>next major</b> Juneau release
  (and possibly earlier).
 
@@ -140,6 +139,14 @@ extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/ja
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
 <div class="block">Executes the given request and returns the response.</div>
 </div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code>default boolean</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code><a href="#supportsUrlPolicy()" class="member-name-link">supportsUrlPolicy</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5">
+<div class="block">Returns <code>true</code> if this transport can honor the SSRF guardrail's connect-time contract for a
+ policy-covered request (<a href="TransportRequest.html#isSsrfGuardActive()"><code>TransportRequest.isSsrfGuardActive()</code></a>): pin-on-connect to a resolved address
+ that has passed the deny-private policy, and Juneau-controlled redirect revalidation (no fallback to the
+ transport's own auto-follow).</div>
+</div>
 </div>
 </div>
 </div>
@@ -157,7 +164,7 @@ extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/ja
 <li>
 <section class="detail" id="execute(org.apache.juneau.rest.client.TransportRequest)">
 <h3>execute</h3>
-<div class="member-signature"><span class="return-type"><a href="TransportResponse.html" title="class in org.apache.juneau.rest.client">TransportResponse</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/HttpTransport.html#line-64">execute</a></span><wbr><span class="parameters">(<a href="TransportRequest.html" title="class in org.apache.juneau.rest.client">TransportRequest</a>&nbsp;request)</span>
+<div class="member-signature"><span class="return-type"><a href="TransportResponse.html" title="class in org.apache.juneau.rest.client">TransportResponse</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/HttpTransport.html#line-63">execute</a></span><wbr><span class="parameters">(<a href="TransportRequest.html" title="class in org.apache.juneau.rest.client">TransportRequest</a>&nbsp;request)</span>
                    throws <span class="exceptions"><a href="TransportException.html" title="class in org.apache.juneau.rest.client">TransportException</a></span></div>
 <div class="block">Executes the given request and returns the response.
 
@@ -174,9 +181,30 @@ extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/ja
 </section>
 </li>
 <li>
+<section class="detail" id="supportsUrlPolicy()">
+<h3>supportsUrlPolicy</h3>
+<div class="member-signature"><span class="modifiers">default</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/HttpTransport.html#line-80">supportsUrlPolicy</a></span>()</div>
+<div class="block">Returns <code>true</code> if this transport can honor the SSRF guardrail's connect-time contract for a
+ policy-covered request (<a href="TransportRequest.html#isSsrfGuardActive()"><code>TransportRequest.isSsrfGuardActive()</code></a>): pin-on-connect to a resolved address
+ that has passed the deny-private policy, and Juneau-controlled redirect revalidation (no fallback to the
+ transport's own auto-follow).
+
+ <p>
+ The default implementation returns <code>false</code> (fail closed): an unknown/caller-supplied transport that
+ has not affirmatively opted in is presumed unable to honor the contract, so
+ <code>RestRequest#run()</code> rejects policy-covered requests against it rather than silently connecting without
+ the guardrail. First-party transports that construct and fully control their own underlying HTTP client
+ override this to return <code>true</code>.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd><code>true</code> if this transport supports pin-on-connect + redirect revalidation for policy-covered requests.</dd>
+</dl>
+</section>
+</li>
+<li>
 <section class="detail" id="close()">
 <h3>close</h3>
-<div class="member-signature"><span class="modifiers">default</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/HttpTransport.html#line-72">close</a></span>()
+<div class="member-signature"><span class="modifiers">default</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/HttpTransport.html#line-90">close</a></span>()
             throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">Releases resources held by this transport (connection pools, threads, etc.).
 

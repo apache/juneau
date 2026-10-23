@@ -1,18 +1,8 @@
 #!/usr/bin/env python3
 """
-apply-renames.py — Mechanical bulk URL/text substitution pass for juneau-docs.
+Mechanical bulk URL/text substitution pass for the docs pages, driven by renames-table.json.
 
-Reads renames-table.json and applies substitutions to:
-  - juneau-docs/pages/**/*.md  (excluding historical release-notes pre-10.x)
-  - juneau-docs/README.md
-  - juneau-docs/src/pages/downloads.md
-
-Rules:
-  - Skips code-fence regions (``` blocks) to avoid false positives.
-  - Skips inline-code spans (`...`) to avoid false positives.
-  - Skips release-notes files that do NOT start with "10." (9.x and older are historical).
-  - Is idempotent — safe to re-run.
-  - Prints a per-file change count summary at the end.
+Full docs: apply-renames.md
 """
 
 import json

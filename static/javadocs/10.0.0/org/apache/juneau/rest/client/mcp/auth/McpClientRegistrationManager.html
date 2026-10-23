@@ -78,7 +78,7 @@ loadScripts(document, 'script');</script>
 </div>
 <section class="class-description" id="class-description">
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/McpClientRegistrationManager.html#line-54">McpClientRegistrationManager</a></span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/McpClientRegistrationManager.html#line-53">McpClientRegistrationManager</a></span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
 <div class="block">Orchestrates SEP-2352 registration-mechanism selection, issuer-keying, and re-registration on authorization-server
  migration, returning a usable <a href="McpClientRegistration.html" title="class in org.apache.juneau.rest.client.mcp.auth"><code>McpClientRegistration</code></a> for a discovered AS.
@@ -95,7 +95,7 @@ loadScripts(document, 'script');</script>
       re-registers via DCR and stores under the new issuer &mdash; the old AS's entry is never reused (SEP-2352
       "MUST NOT reuse client credentials from a different authorization server").
    <li><b>On-demand mode</b> (no store) performs a fresh DCR on every <a href="#resolve(org.apache.juneau.rest.auth.oauth.oidc.OidcMetadata)"><code>resolve(OidcMetadata)</code></a> call &mdash; fully
-      compliant (READY-312f Q8).
+      compliant (persisting a registration is optional).
    <li>If the AS advertises no <code>registration_endpoint</code> and no matching pre-registered credentials exist, an
       <a href="McpAuthException.html" title="class in org.apache.juneau.rest.client.mcp.auth"><code>McpAuthException</code></a> is thrown (no way to obtain a <code>client_id</code>; CIMD is a tracked fast-follow).
  </ul></div>
@@ -182,7 +182,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.rest.client.mcp.auth.McpClientRegistrationManager.Builder)">
 <h3>McpClientRegistrationManager</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/McpClientRegistrationManager.html#line-267">McpClientRegistrationManager</a></span><wbr><span class="parameters">(<a href="McpClientRegistrationManager.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpClientRegistrationManager.Builder</a>&nbsp;b)</span></div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/McpClientRegistrationManager.html#line-263">McpClientRegistrationManager</a></span><wbr><span class="parameters">(<a href="McpClientRegistrationManager.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpClientRegistrationManager.Builder</a>&nbsp;b)</span></div>
 <div class="block">Constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -201,7 +201,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="create()">
 <h3>create</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="McpClientRegistrationManager.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpClientRegistrationManager.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/McpClientRegistrationManager.html#line-67">create</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="McpClientRegistrationManager.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpClientRegistrationManager.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/McpClientRegistrationManager.html#line-63">create</a></span>()</div>
 <div class="block">Static creator.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -212,7 +212,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="resolve(org.apache.juneau.rest.auth.oauth.oidc.OidcMetadata)">
 <h3>resolve</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="McpClientRegistration.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpClientRegistration</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/McpClientRegistrationManager.html#line-290">resolve</a></span><wbr><span class="parameters">(<a href="../../../auth/oauth/oidc/OidcMetadata.html" title="class in org.apache.juneau.rest.auth.oauth.oidc">OidcMetadata</a>&nbsp;as)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="McpClientRegistration.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpClientRegistration</a></span>&nbsp;<span class="element-name"><a href="../../../../../../../src-html/org/apache/juneau/rest/client/mcp/auth/McpClientRegistrationManager.html#line-286">resolve</a></span><wbr><span class="parameters">(<a href="../../../auth/oauth/oidc/OidcMetadata.html" title="class in org.apache.juneau.rest.auth.oauth.oidc">OidcMetadata</a>&nbsp;as)</span></div>
 <div class="block">Resolves a usable client registration for the discovered authorization server, applying the SEP-2352 selection,
  issuer-keying, and migration rules (see the class javadoc).</div>
 <dl class="notes">

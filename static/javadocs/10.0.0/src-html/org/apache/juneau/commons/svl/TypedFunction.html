@@ -69,7 +69,7 @@
 <span class="source-line-no">056</span><span id="line-56"> * &lt;/p&gt;</span>
 <span class="source-line-no">057</span><span id="line-57"> */</span>
 <span class="source-line-no">058</span><span id="line-58">@SuppressWarnings({</span>
-<span class="source-line-no">059</span><span id="line-59">   "java:S3776", // Cognitive complexity acceptable for the reflection-driven dispatch.</span>
+<span class="source-line-no">059</span><span id="line-59">   "java:S3776" // Cognitive complexity acceptable for the reflection-driven dispatch.</span>
 <span class="source-line-no">060</span><span id="line-60">})</span>
 <span class="source-line-no">061</span><span id="line-61">public abstract class TypedFunction implements VarFunction {</span>
 <span class="source-line-no">062</span><span id="line-62"></span>
@@ -97,7 +97,7 @@
 <span class="source-line-no">084</span><span id="line-84">      @Override /* Content-based: the 'argTypes' array must compare by content, not identity (S6218). */</span>
 <span class="source-line-no">085</span><span id="line-85">      public boolean equals(Object o) {</span>
 <span class="source-line-no">086</span><span id="line-86">         return o instanceof Overload x</span>
-<span class="source-line-no">087</span><span id="line-87">            &amp;&amp; Objects.equals(method, x.method)</span>
+<span class="source-line-no">087</span><span id="line-87">            &amp;&amp; eq(method, x.method)</span>
 <span class="source-line-no">088</span><span id="line-88">            &amp;&amp; Arrays.equals(argTypes, x.argTypes)</span>
 <span class="source-line-no">089</span><span id="line-89">            &amp;&amp; takesSession == x.takesSession</span>
 <span class="source-line-no">090</span><span id="line-90">            &amp;&amp; variadic == x.variadic;</span>
@@ -178,7 +178,7 @@
 <span class="source-line-no">165</span><span id="line-165">   private static Overload[] findInvokeOverloads(Class&lt;? extends TypedFunction&gt; cls) {</span>
 <span class="source-line-no">166</span><span id="line-166">      var found = new ArrayList&lt;Overload&gt;();</span>
 <span class="source-line-no">167</span><span id="line-167">      for (var m : cls.getMethods()) {</span>
-<span class="source-line-no">168</span><span id="line-168">         if (!"invoke".equals(m.getName())</span>
+<span class="source-line-no">168</span><span id="line-168">         if (neq(m.getName(), "invoke")</span>
 <span class="source-line-no">169</span><span id="line-169">            || m.getDeclaringClass() == TypedFunction.class</span>
 <span class="source-line-no">170</span><span id="line-170">            || m.getDeclaringClass() == Object.class</span>
 <span class="source-line-no">171</span><span id="line-171">            || m.getDeclaringClass() == VarFunction.class)</span>

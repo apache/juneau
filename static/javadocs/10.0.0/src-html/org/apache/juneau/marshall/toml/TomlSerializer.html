@@ -29,108 +29,108 @@
 <span class="source-line-no">016</span><span id="line-16"> */</span>
 <span class="source-line-no">017</span><span id="line-17">package org.apache.juneau.marshall.toml;</span>
 <span class="source-line-no">018</span><span id="line-18"></span>
-<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.AssertionUtils.*;</span>
-<span class="source-line-no">020</span><span id="line-20">import static org.apache.juneau.commons.utils.Shorts.*;</span>
-<span class="source-line-no">021</span><span id="line-21"></span>
-<span class="source-line-no">022</span><span id="line-22">import java.io.*;</span>
-<span class="source-line-no">023</span><span id="line-23"></span>
+<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.Shorts.*;</span>
+<span class="source-line-no">020</span><span id="line-20"></span>
+<span class="source-line-no">021</span><span id="line-21">import java.io.*;</span>
+<span class="source-line-no">022</span><span id="line-22"></span>
+<span class="source-line-no">023</span><span id="line-23">import org.apache.juneau.commons.bean.*;</span>
 <span class="source-line-no">024</span><span id="line-24">import org.apache.juneau.commons.collections.*;</span>
-<span class="source-line-no">025</span><span id="line-25">import org.apache.juneau.marshall.json.*;</span>
-<span class="source-line-no">026</span><span id="line-26">import org.apache.juneau.marshall.serializer.*;</span>
-<span class="source-line-no">027</span><span id="line-27">import org.apache.juneau.marshall.stream.*;</span>
-<span class="source-line-no">028</span><span id="line-28"></span>
-<span class="source-line-no">029</span><span id="line-29">/**</span>
-<span class="source-line-no">030</span><span id="line-30"> * Serializes POJOs to TOML v1.0.0 format.</span>
-<span class="source-line-no">031</span><span id="line-31"> *</span>
-<span class="source-line-no">032</span><span id="line-32"> * &lt;p&gt;</span>
-<span class="source-line-no">033</span><span id="line-33"> * TOML (Tom's Obvious Minimal Language) maps unambiguously to hash tables with native typing.</span>
-<span class="source-line-no">034</span><span id="line-34"> * See &lt;a href="https://toml.io/en/v1.0.0"&gt;TOML v1.0.0&lt;/a&gt; specification.</span>
-<span class="source-line-no">035</span><span id="line-35"> *</span>
-<span class="source-line-no">036</span><span id="line-36"> * &lt;h5 class='topic'&gt;Media types&lt;/h5&gt;</span>
-<span class="source-line-no">037</span><span id="line-37"> * &lt;p&gt;</span>
-<span class="source-line-no">038</span><span id="line-38"> * Produces: &lt;bc&gt;application/toml&lt;/bc&gt;</span>
-<span class="source-line-no">039</span><span id="line-39"> * &lt;br&gt;Accepts: &lt;bc&gt;application/toml&lt;/bc&gt;</span>
-<span class="source-line-no">040</span><span id="line-40"> *</span>
-<span class="source-line-no">041</span><span id="line-41"> * &lt;h5 class='topic'&gt;Bean-to-TOML mapping&lt;/h5&gt;</span>
-<span class="source-line-no">042</span><span id="line-42"> * &lt;ul class='spaced-list'&gt;</span>
-<span class="source-line-no">043</span><span id="line-43"> *    &lt;li&gt;Simple properties → key-value pairs</span>
-<span class="source-line-no">044</span><span id="line-44"> *    &lt;li&gt;Nested beans → &lt;c&gt;[tableName]&lt;/c&gt; sections</span>
-<span class="source-line-no">045</span><span id="line-45"> *    &lt;li&gt;Collections of beans → &lt;c&gt;[[tableName]]&lt;/c&gt; array of tables</span>
-<span class="source-line-no">046</span><span id="line-46"> *    &lt;li&gt;Collections of simple values → &lt;c&gt;key = [a, b, c]&lt;/c&gt;</span>
-<span class="source-line-no">047</span><span id="line-47"> *    &lt;li&gt;Maps with string keys → &lt;c&gt;[mapName]&lt;/c&gt; table</span>
-<span class="source-line-no">048</span><span id="line-48"> *    &lt;li&gt;Null properties are omitted (TOML has no null type)</span>
-<span class="source-line-no">049</span><span id="line-49"> * &lt;/ul&gt;</span>
-<span class="source-line-no">050</span><span id="line-50"> *</span>
-<span class="source-line-no">051</span><span id="line-51"> * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
-<span class="source-line-no">052</span><span id="line-52"> * &lt;p class='bjava'&gt;</span>
-<span class="source-line-no">053</span><span id="line-53"> *    &lt;jc&gt;// Serialize a bean to TOML&lt;/jc&gt;</span>
-<span class="source-line-no">054</span><span id="line-54"> *    String &lt;jv&gt;toml&lt;/jv&gt; = TomlSerializer.&lt;jsf&gt;DEFAULT&lt;/jsf&gt;.write(&lt;jv&gt;myBean&lt;/jv&gt;);</span>
-<span class="source-line-no">055</span><span id="line-55"> *</span>
-<span class="source-line-no">056</span><span id="line-56"> *    &lt;jc&gt;// Serialize a map (e.g. config with nested sections)&lt;/jc&gt;</span>
-<span class="source-line-no">057</span><span id="line-57"> *    Map&amp;lt;String, Object&amp;gt; &lt;jv&gt;config&lt;/jv&gt; = Map.of(&lt;js&gt;"name"&lt;/js&gt;, &lt;js&gt;"myapp"&lt;/js&gt;, &lt;js&gt;"port"&lt;/js&gt;, 8080);</span>
-<span class="source-line-no">058</span><span id="line-58"> *    &lt;jv&gt;toml&lt;/jv&gt; = TomlSerializer.&lt;jsf&gt;DEFAULT&lt;/jsf&gt;.write(&lt;jv&gt;config&lt;/jv&gt;);</span>
-<span class="source-line-no">059</span><span id="line-59"> *</span>
-<span class="source-line-no">060</span><span id="line-60"> *    &lt;jc&gt;// Use the marshaller for convenience&lt;/jc&gt;</span>
-<span class="source-line-no">061</span><span id="line-61"> *    &lt;jv&gt;toml&lt;/jv&gt; = Toml.&lt;jsm&gt;of&lt;/jsm&gt;(&lt;jv&gt;config&lt;/jv&gt;);</span>
-<span class="source-line-no">062</span><span id="line-62"> *</span>
-<span class="source-line-no">063</span><span id="line-63"> *    &lt;jc&gt;// Custom serializer with whitespace for readability&lt;/jc&gt;</span>
-<span class="source-line-no">064</span><span id="line-64"> *    TomlSerializer &lt;jv&gt;s&lt;/jv&gt; = TomlSerializer.&lt;jsm&gt;create&lt;/jsm&gt;().ws().build();</span>
-<span class="source-line-no">065</span><span id="line-65"> *    &lt;jv&gt;toml&lt;/jv&gt; = &lt;jv&gt;s&lt;/jv&gt;.write(&lt;jv&gt;config&lt;/jv&gt;);</span>
-<span class="source-line-no">066</span><span id="line-66"> * &lt;/p&gt;</span>
-<span class="source-line-no">067</span><span id="line-67"> *</span>
-<span class="source-line-no">068</span><span id="line-68"> * &lt;h5 class='figure'&gt;Example output (Map of name/age):&lt;/h5&gt;</span>
-<span class="source-line-no">069</span><span id="line-69"> * &lt;p class='bcode'&gt;</span>
-<span class="source-line-no">070</span><span id="line-70"> *    name = "Alice"</span>
-<span class="source-line-no">071</span><span id="line-71"> *    age = 30</span>
-<span class="source-line-no">072</span><span id="line-72"> * &lt;/p&gt;</span>
-<span class="source-line-no">073</span><span id="line-73"> *</span>
-<span class="source-line-no">074</span><span id="line-74"> * &lt;h5 class='figure'&gt;Complex (nested table + array):&lt;/h5&gt;</span>
-<span class="source-line-no">075</span><span id="line-75"> * &lt;p class='bcode'&gt;</span>
-<span class="source-line-no">076</span><span id="line-76"> *    name = "Alice"</span>
-<span class="source-line-no">077</span><span id="line-77"> *    age = 30</span>
-<span class="source-line-no">078</span><span id="line-78"> *    tags = ["a", "b", "c"]</span>
-<span class="source-line-no">079</span><span id="line-79"> *</span>
-<span class="source-line-no">080</span><span id="line-80"> *    [address]</span>
-<span class="source-line-no">081</span><span id="line-81"> *    street = "123 Main St"</span>
-<span class="source-line-no">082</span><span id="line-82"> *    city = "Boston"</span>
-<span class="source-line-no">083</span><span id="line-83"> *    state = "MA"</span>
-<span class="source-line-no">084</span><span id="line-84"> * &lt;/p&gt;</span>
-<span class="source-line-no">085</span><span id="line-85"> *</span>
-<span class="source-line-no">086</span><span id="line-86"> * &lt;h5 class='topic'&gt;Limitations compared to JSON&lt;/h5&gt;</span>
-<span class="source-line-no">087</span><span id="line-87"> * &lt;p&gt;</span>
-<span class="source-line-no">088</span><span id="line-88"> * TOML is a configuration format with a more restricted type system than JSON.</span>
-<span class="source-line-no">089</span><span id="line-89"> * The following features supported by {@link JsonSerializer}</span>
-<span class="source-line-no">090</span><span id="line-90"> * are not available or limited in TOML:</span>
-<span class="source-line-no">091</span><span id="line-91"> * &lt;/p&gt;</span>
-<span class="source-line-no">092</span><span id="line-92"> * &lt;ul class='spaced-list'&gt;</span>
-<span class="source-line-no">093</span><span id="line-93"> *    &lt;li&gt;&lt;b&gt;Null values&lt;/b&gt; — TOML has no null type. By default, null properties are omitted.</span>
-<span class="source-line-no">094</span><span id="line-94"> *       Use &lt;c&gt;keepNullProperties()&lt;/c&gt; to write the configured &lt;c&gt;nullValue&lt;/c&gt; string (e.g. &lt;c&gt;&amp;lt;NULL&amp;gt;&lt;/c&gt;) instead.</span>
-<span class="source-line-no">095</span><span id="line-95"> *    &lt;li&gt;&lt;b&gt;Map keys&lt;/b&gt; — TOML tables only support string keys. Maps with non-string keys</span>
-<span class="source-line-no">096</span><span id="line-96"> *       (e.g. &lt;c&gt;Map&amp;lt;Integer,String&amp;gt;&lt;/c&gt;) have keys converted via &lt;c&gt;toString()&lt;/c&gt;; ensure results are valid TOML keys.</span>
-<span class="source-line-no">097</span><span id="line-97"> *       Null keys are serialized as the string &lt;c&gt;null&lt;/c&gt;.</span>
-<span class="source-line-no">098</span><span id="line-98"> *    &lt;li&gt;&lt;b&gt;Polymorphic types&lt;/b&gt; — &lt;c&gt;addBeanTypes()&lt;/c&gt; and &lt;c&gt;addRootType()&lt;/c&gt; add &lt;c&gt;_type&lt;/c&gt;</span>
-<span class="source-line-no">099</span><span id="line-99"> *       discriminators for polymorphic parsing; use with care as TOML structure differs from JSON.</span>
-<span class="source-line-no">100</span><span id="line-100"> *    &lt;li&gt;&lt;b&gt;Root-level collections&lt;/b&gt; — TOML expects a root table. Root arrays use array-of-tables</span>
-<span class="source-line-no">101</span><span id="line-101"> *       (&lt;c&gt;[[item]]&lt;/c&gt;) for beans/maps, or a &lt;c&gt;_value&lt;/c&gt; wrapper for primitives and simple arrays.</span>
-<span class="source-line-no">102</span><span id="line-102"> *    &lt;li&gt;&lt;b&gt;Duplicate keys&lt;/b&gt; — TOML forbids duplicate keys; structures that would produce duplicate</span>
-<span class="source-line-no">103</span><span id="line-103"> *       keys may yield invalid TOML.</span>
-<span class="source-line-no">104</span><span id="line-104"> * &lt;/ul&gt;</span>
-<span class="source-line-no">105</span><span id="line-105"> *</span>
-<span class="source-line-no">106</span><span id="line-106"> * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</span>
-<span class="source-line-no">107</span><span id="line-107"> *    &lt;li class='note'&gt;This class is thread safe and reusable.</span>
-<span class="source-line-no">108</span><span id="line-108"> * &lt;/ul&gt;</span>
-<span class="source-line-no">109</span><span id="line-109"> */</span>
-<span class="source-line-no">110</span><span id="line-110">@SuppressWarnings({</span>
-<span class="source-line-no">111</span><span id="line-111">   "java:S110", "java:S115",</span>
-<span class="source-line-no">112</span><span id="line-112">   "resource" // Closeable resources are owned by the caller's serializer session; Eclipse JDT @Owning warning is by design.</span>
-<span class="source-line-no">113</span><span id="line-113">})</span>
-<span class="source-line-no">114</span><span id="line-114">public class TomlSerializer extends WriterSerializer implements RecordWritable {</span>
-<span class="source-line-no">115</span><span id="line-115"></span>
-<span class="source-line-no">116</span><span id="line-116">   private static final String PROP_inlineTableThreshold = "inlineTableThreshold";</span>
-<span class="source-line-no">117</span><span id="line-117">   private static final String PROP_useInlineTables = "useInlineTables";</span>
-<span class="source-line-no">118</span><span id="line-118">   private static final String PROP_sortKeys = "sortKeys";</span>
-<span class="source-line-no">119</span><span id="line-119">   private static final String PROP_nullValue = "nullValue";</span>
-<span class="source-line-no">120</span><span id="line-120">   private static final String ARG_copyFrom = "copyFrom";</span>
+<span class="source-line-no">025</span><span id="line-25">import org.apache.juneau.marshall.*;</span>
+<span class="source-line-no">026</span><span id="line-26">import org.apache.juneau.marshall.json.*;</span>
+<span class="source-line-no">027</span><span id="line-27">import org.apache.juneau.marshall.serializer.*;</span>
+<span class="source-line-no">028</span><span id="line-28">import org.apache.juneau.marshall.stream.*;</span>
+<span class="source-line-no">029</span><span id="line-29"></span>
+<span class="source-line-no">030</span><span id="line-30">/**</span>
+<span class="source-line-no">031</span><span id="line-31"> * Serializes POJOs to TOML v1.0.0 format.</span>
+<span class="source-line-no">032</span><span id="line-32"> *</span>
+<span class="source-line-no">033</span><span id="line-33"> * &lt;p&gt;</span>
+<span class="source-line-no">034</span><span id="line-34"> * TOML (Tom's Obvious Minimal Language) maps unambiguously to hash tables with native typing.</span>
+<span class="source-line-no">035</span><span id="line-35"> * See &lt;a href="https://toml.io/en/v1.0.0"&gt;TOML v1.0.0&lt;/a&gt; specification.</span>
+<span class="source-line-no">036</span><span id="line-36"> *</span>
+<span class="source-line-no">037</span><span id="line-37"> * &lt;h5 class='topic'&gt;Media types&lt;/h5&gt;</span>
+<span class="source-line-no">038</span><span id="line-38"> * &lt;p&gt;</span>
+<span class="source-line-no">039</span><span id="line-39"> * Produces: &lt;bc&gt;application/toml&lt;/bc&gt;</span>
+<span class="source-line-no">040</span><span id="line-40"> * &lt;br&gt;Accepts: &lt;bc&gt;application/toml&lt;/bc&gt;</span>
+<span class="source-line-no">041</span><span id="line-41"> *</span>
+<span class="source-line-no">042</span><span id="line-42"> * &lt;h5 class='topic'&gt;Bean-to-TOML mapping&lt;/h5&gt;</span>
+<span class="source-line-no">043</span><span id="line-43"> * &lt;ul class='spaced-list'&gt;</span>
+<span class="source-line-no">044</span><span id="line-44"> *    &lt;li&gt;Simple properties → key-value pairs</span>
+<span class="source-line-no">045</span><span id="line-45"> *    &lt;li&gt;Nested beans → &lt;c&gt;[tableName]&lt;/c&gt; sections</span>
+<span class="source-line-no">046</span><span id="line-46"> *    &lt;li&gt;Collections of beans → &lt;c&gt;[[tableName]]&lt;/c&gt; array of tables</span>
+<span class="source-line-no">047</span><span id="line-47"> *    &lt;li&gt;Collections of simple values → &lt;c&gt;key = [a, b, c]&lt;/c&gt;</span>
+<span class="source-line-no">048</span><span id="line-48"> *    &lt;li&gt;Maps with string keys → &lt;c&gt;[mapName]&lt;/c&gt; table</span>
+<span class="source-line-no">049</span><span id="line-49"> *    &lt;li&gt;Null properties are omitted (TOML has no null type)</span>
+<span class="source-line-no">050</span><span id="line-50"> * &lt;/ul&gt;</span>
+<span class="source-line-no">051</span><span id="line-51"> *</span>
+<span class="source-line-no">052</span><span id="line-52"> * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">053</span><span id="line-53"> * &lt;p class='bjava'&gt;</span>
+<span class="source-line-no">054</span><span id="line-54"> *    &lt;jc&gt;// Serialize a bean to TOML&lt;/jc&gt;</span>
+<span class="source-line-no">055</span><span id="line-55"> *    String &lt;jv&gt;toml&lt;/jv&gt; = TomlSerializer.&lt;jsf&gt;DEFAULT&lt;/jsf&gt;.write(&lt;jv&gt;myBean&lt;/jv&gt;);</span>
+<span class="source-line-no">056</span><span id="line-56"> *</span>
+<span class="source-line-no">057</span><span id="line-57"> *    &lt;jc&gt;// Serialize a map (e.g. config with nested sections)&lt;/jc&gt;</span>
+<span class="source-line-no">058</span><span id="line-58"> *    Map&amp;lt;String, Object&amp;gt; &lt;jv&gt;config&lt;/jv&gt; = Map.of(&lt;js&gt;"name"&lt;/js&gt;, &lt;js&gt;"myapp"&lt;/js&gt;, &lt;js&gt;"port"&lt;/js&gt;, 8080);</span>
+<span class="source-line-no">059</span><span id="line-59"> *    &lt;jv&gt;toml&lt;/jv&gt; = TomlSerializer.&lt;jsf&gt;DEFAULT&lt;/jsf&gt;.write(&lt;jv&gt;config&lt;/jv&gt;);</span>
+<span class="source-line-no">060</span><span id="line-60"> *</span>
+<span class="source-line-no">061</span><span id="line-61"> *    &lt;jc&gt;// Use the marshaller for convenience&lt;/jc&gt;</span>
+<span class="source-line-no">062</span><span id="line-62"> *    &lt;jv&gt;toml&lt;/jv&gt; = Toml.&lt;jsm&gt;of&lt;/jsm&gt;(&lt;jv&gt;config&lt;/jv&gt;);</span>
+<span class="source-line-no">063</span><span id="line-63"> *</span>
+<span class="source-line-no">064</span><span id="line-64"> *    &lt;jc&gt;// Custom serializer with whitespace for readability&lt;/jc&gt;</span>
+<span class="source-line-no">065</span><span id="line-65"> *    TomlSerializer &lt;jv&gt;s&lt;/jv&gt; = TomlSerializer.&lt;jsm&gt;create&lt;/jsm&gt;().ws().build();</span>
+<span class="source-line-no">066</span><span id="line-66"> *    &lt;jv&gt;toml&lt;/jv&gt; = &lt;jv&gt;s&lt;/jv&gt;.write(&lt;jv&gt;config&lt;/jv&gt;);</span>
+<span class="source-line-no">067</span><span id="line-67"> * &lt;/p&gt;</span>
+<span class="source-line-no">068</span><span id="line-68"> *</span>
+<span class="source-line-no">069</span><span id="line-69"> * &lt;h5 class='figure'&gt;Example output (Map of name/age):&lt;/h5&gt;</span>
+<span class="source-line-no">070</span><span id="line-70"> * &lt;p class='bcode'&gt;</span>
+<span class="source-line-no">071</span><span id="line-71"> *    name = "Alice"</span>
+<span class="source-line-no">072</span><span id="line-72"> *    age = 30</span>
+<span class="source-line-no">073</span><span id="line-73"> * &lt;/p&gt;</span>
+<span class="source-line-no">074</span><span id="line-74"> *</span>
+<span class="source-line-no">075</span><span id="line-75"> * &lt;h5 class='figure'&gt;Complex (nested table + array):&lt;/h5&gt;</span>
+<span class="source-line-no">076</span><span id="line-76"> * &lt;p class='bcode'&gt;</span>
+<span class="source-line-no">077</span><span id="line-77"> *    name = "Alice"</span>
+<span class="source-line-no">078</span><span id="line-78"> *    age = 30</span>
+<span class="source-line-no">079</span><span id="line-79"> *    tags = ["a", "b", "c"]</span>
+<span class="source-line-no">080</span><span id="line-80"> *</span>
+<span class="source-line-no">081</span><span id="line-81"> *    [address]</span>
+<span class="source-line-no">082</span><span id="line-82"> *    street = "123 Main St"</span>
+<span class="source-line-no">083</span><span id="line-83"> *    city = "Boston"</span>
+<span class="source-line-no">084</span><span id="line-84"> *    state = "MA"</span>
+<span class="source-line-no">085</span><span id="line-85"> * &lt;/p&gt;</span>
+<span class="source-line-no">086</span><span id="line-86"> *</span>
+<span class="source-line-no">087</span><span id="line-87"> * &lt;h5 class='topic'&gt;Limitations compared to JSON&lt;/h5&gt;</span>
+<span class="source-line-no">088</span><span id="line-88"> * &lt;p&gt;</span>
+<span class="source-line-no">089</span><span id="line-89"> * TOML is a configuration format with a more restricted type system than JSON.</span>
+<span class="source-line-no">090</span><span id="line-90"> * The following features supported by {@link JsonSerializer}</span>
+<span class="source-line-no">091</span><span id="line-91"> * are not available or limited in TOML:</span>
+<span class="source-line-no">092</span><span id="line-92"> * &lt;/p&gt;</span>
+<span class="source-line-no">093</span><span id="line-93"> * &lt;ul class='spaced-list'&gt;</span>
+<span class="source-line-no">094</span><span id="line-94"> *    &lt;li&gt;&lt;b&gt;Null values&lt;/b&gt; — TOML has no null type. By default, null properties are omitted.</span>
+<span class="source-line-no">095</span><span id="line-95"> *       Use &lt;c&gt;keepNullProperties()&lt;/c&gt; to write the configured &lt;c&gt;nullValue&lt;/c&gt; string (e.g. &lt;c&gt;&amp;lt;NULL&amp;gt;&lt;/c&gt;) instead.</span>
+<span class="source-line-no">096</span><span id="line-96"> *    &lt;li&gt;&lt;b&gt;Map keys&lt;/b&gt; — TOML tables only support string keys. Maps with non-string keys</span>
+<span class="source-line-no">097</span><span id="line-97"> *       (e.g. &lt;c&gt;Map&amp;lt;Integer,String&amp;gt;&lt;/c&gt;) have keys converted via &lt;c&gt;toString()&lt;/c&gt;; ensure results are valid TOML keys.</span>
+<span class="source-line-no">098</span><span id="line-98"> *       Null keys are serialized as the string &lt;c&gt;null&lt;/c&gt;.</span>
+<span class="source-line-no">099</span><span id="line-99"> *    &lt;li&gt;&lt;b&gt;Polymorphic types&lt;/b&gt; — &lt;c&gt;addBeanTypes()&lt;/c&gt; and &lt;c&gt;addRootType()&lt;/c&gt; add &lt;c&gt;_type&lt;/c&gt;</span>
+<span class="source-line-no">100</span><span id="line-100"> *       discriminators for polymorphic parsing; use with care as TOML structure differs from JSON.</span>
+<span class="source-line-no">101</span><span id="line-101"> *    &lt;li&gt;&lt;b&gt;Root-level collections&lt;/b&gt; — TOML expects a root table. Root arrays use array-of-tables</span>
+<span class="source-line-no">102</span><span id="line-102"> *       (&lt;c&gt;[[item]]&lt;/c&gt;) for beans/maps, or a &lt;c&gt;_value&lt;/c&gt; wrapper for primitives and simple arrays.</span>
+<span class="source-line-no">103</span><span id="line-103"> *    &lt;li&gt;&lt;b&gt;Duplicate keys&lt;/b&gt; — TOML forbids duplicate keys; structures that would produce duplicate</span>
+<span class="source-line-no">104</span><span id="line-104"> *       keys may yield invalid TOML.</span>
+<span class="source-line-no">105</span><span id="line-105"> * &lt;/ul&gt;</span>
+<span class="source-line-no">106</span><span id="line-106"> *</span>
+<span class="source-line-no">107</span><span id="line-107"> * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">108</span><span id="line-108"> *    &lt;li class='note'&gt;This class is thread safe and reusable.</span>
+<span class="source-line-no">109</span><span id="line-109"> * &lt;/ul&gt;</span>
+<span class="source-line-no">110</span><span id="line-110"> */</span>
+<span class="source-line-no">111</span><span id="line-111">@SuppressWarnings({</span>
+<span class="source-line-no">112</span><span id="line-112">   "java:S110", // Depth comes from the Serializer -&gt; WriterSerializer base chain shared by all text-format serializers</span>
+<span class="source-line-no">113</span><span id="line-113">   "java:S1192", // Duplicated literals (argument/property names) read more clearly inline than as constants</span>
+<span class="source-line-no">114</span><span id="line-114">   "java:S9149", // Per-format static factories intentionally shadow the parent's.</span>
+<span class="source-line-no">115</span><span id="line-115">   "resource" // Closeable resources are owned by the caller's serializer session; Eclipse JDT @Owning warning is by design.</span>
+<span class="source-line-no">116</span><span id="line-116">})</span>
+<span class="source-line-no">117</span><span id="line-117">public class TomlSerializer extends WriterSerializer implements TomlMetaProvider, RecordWritable {</span>
+<span class="source-line-no">118</span><span id="line-118"></span>
+<span class="source-line-no">119</span><span id="line-119">   private final java.util.concurrent.ConcurrentHashMap&lt;ClassMeta&lt;?&gt;,TomlClassMeta&gt; tomlClassMetas = new java.util.concurrent.ConcurrentHashMap&lt;&gt;();</span>
+<span class="source-line-no">120</span><span id="line-120">   private final java.util.concurrent.ConcurrentHashMap&lt;BeanPropertyMeta,TomlBeanPropertyMeta&gt; tomlBeanPropertyMetas = new java.util.concurrent.ConcurrentHashMap&lt;&gt;();</span>
 <span class="source-line-no">121</span><span id="line-121"></span>
 <span class="source-line-no">122</span><span id="line-122">   /**</span>
 <span class="source-line-no">123</span><span id="line-123">    * Builder class.</span>
@@ -150,7 +150,7 @@
 <span class="source-line-no">137</span><span id="line-137">      }</span>
 <span class="source-line-no">138</span><span id="line-138"></span>
 <span class="source-line-no">139</span><span id="line-139">      protected Builder(Builder copyFrom) {</span>
-<span class="source-line-no">140</span><span id="line-140">         super(assertArgNotNull(ARG_copyFrom, copyFrom));</span>
+<span class="source-line-no">140</span><span id="line-140">         super(reqnn("copyFrom", copyFrom));</span>
 <span class="source-line-no">141</span><span id="line-141">         inlineTableThreshold = copyFrom.inlineTableThreshold;</span>
 <span class="source-line-no">142</span><span id="line-142">         useInlineTables = copyFrom.useInlineTables;</span>
 <span class="source-line-no">143</span><span id="line-143">         sortKeys = copyFrom.sortKeys;</span>
@@ -158,7 +158,7 @@
 <span class="source-line-no">145</span><span id="line-145">      }</span>
 <span class="source-line-no">146</span><span id="line-146"></span>
 <span class="source-line-no">147</span><span id="line-147">      protected Builder(TomlSerializer copyFrom) {</span>
-<span class="source-line-no">148</span><span id="line-148">         super(assertArgNotNull(ARG_copyFrom, copyFrom));</span>
+<span class="source-line-no">148</span><span id="line-148">         super(reqnn("copyFrom", copyFrom));</span>
 <span class="source-line-no">149</span><span id="line-149">         inlineTableThreshold = copyFrom.inlineTableThreshold;</span>
 <span class="source-line-no">150</span><span id="line-150">         useInlineTables = copyFrom.useInlineTables;</span>
 <span class="source-line-no">151</span><span id="line-151">         sortKeys = copyFrom.sortKeys;</span>
@@ -288,43 +288,55 @@
 <span class="source-line-no">275</span><span id="line-275">      return TomlSerializerSession.create(this);</span>
 <span class="source-line-no">276</span><span id="line-276">   }</span>
 <span class="source-line-no">277</span><span id="line-277"></span>
-<span class="source-line-no">278</span><span id="line-278">   @Override</span>
-<span class="source-line-no">279</span><span id="line-279">   public Builder copy() {</span>
-<span class="source-line-no">280</span><span id="line-280">      return new Builder(this);</span>
-<span class="source-line-no">281</span><span id="line-281">   }</span>
-<span class="source-line-no">282</span><span id="line-282"></span>
-<span class="source-line-no">283</span><span id="line-283">   @Override</span>
-<span class="source-line-no">284</span><span id="line-284">   protected FluentMap&lt;String,Object&gt; properties() {</span>
-<span class="source-line-no">285</span><span id="line-285">      return super.properties()</span>
-<span class="source-line-no">286</span><span id="line-286">         .a(PROP_inlineTableThreshold, inlineTableThreshold)</span>
-<span class="source-line-no">287</span><span id="line-287">         .a(PROP_useInlineTables, useInlineTables)</span>
-<span class="source-line-no">288</span><span id="line-288">         .a(PROP_sortKeys, sortKeys)</span>
-<span class="source-line-no">289</span><span id="line-289">         .a(PROP_nullValue, nullValue);</span>
-<span class="source-line-no">290</span><span id="line-290">   }</span>
-<span class="source-line-no">291</span><span id="line-291"></span>
-<span class="source-line-no">292</span><span id="line-292">   /**</span>
-<span class="source-line-no">293</span><span id="line-293">    * Convenience delegator that opens a {@link RecordWriter} over the output using</span>
-<span class="source-line-no">294</span><span id="line-294">    * &lt;b&gt;default session arguments&lt;/b&gt; (mirrors {@link #write(Object)}).</span>
-<span class="source-line-no">295</span><span id="line-295">    *</span>
-<span class="source-line-no">296</span><span id="line-296">    * &lt;p&gt;</span>
-<span class="source-line-no">297</span><span id="line-297">    * The real implementation lives on {@link TomlSerializerSession#writeRecords(Object)}.</span>
-<span class="source-line-no">298</span><span id="line-298">    * Callers that need request-derived configuration should call {@link #createSession()} and</span>
-<span class="source-line-no">299</span><span id="line-299">    * invoke {@link TomlSerializerSession#writeRecords(Object)} on the built session instead.</span>
-<span class="source-line-no">300</span><span id="line-300">    *</span>
-<span class="source-line-no">301</span><span id="line-301">    * @param output The output.</span>
-<span class="source-line-no">302</span><span id="line-302">    * @return A new {@link RecordWriter}.</span>
-<span class="source-line-no">303</span><span id="line-303">    * @throws IOException If a problem occurred opening the underlying output.</span>
-<span class="source-line-no">304</span><span id="line-304">    */</span>
-<span class="source-line-no">305</span><span id="line-305">   @Override /* RecordWritable */</span>
-<span class="source-line-no">306</span><span id="line-306">   public RecordWriter writeRecords(Object output) throws IOException {</span>
-<span class="source-line-no">307</span><span id="line-307">      return ((RecordWritable) getSession()).writeRecords(output);</span>
-<span class="source-line-no">308</span><span id="line-308">   }</span>
-<span class="source-line-no">309</span><span id="line-309"></span>
-<span class="source-line-no">310</span><span id="line-310">   @Override /* RecordWritable */</span>
-<span class="source-line-no">311</span><span id="line-311">   public boolean isRecordStreaming() {</span>
-<span class="source-line-no">312</span><span id="line-312">      return false;</span>
-<span class="source-line-no">313</span><span id="line-313">   }</span>
-<span class="source-line-no">314</span><span id="line-314">}</span>
+<span class="source-line-no">278</span><span id="line-278">   @Override /* Overridden from TomlMetaProvider */</span>
+<span class="source-line-no">279</span><span id="line-279">   public TomlBeanPropertyMeta getTomlBeanPropertyMeta(BeanPropertyMeta bpm) {</span>
+<span class="source-line-no">280</span><span id="line-280">      if (bpm == null)</span>
+<span class="source-line-no">281</span><span id="line-281">         return TomlBeanPropertyMeta.DEFAULT;</span>
+<span class="source-line-no">282</span><span id="line-282">      return tomlBeanPropertyMetas.computeIfAbsent(bpm, k -&gt; new TomlBeanPropertyMeta(k, this));</span>
+<span class="source-line-no">283</span><span id="line-283">   }</span>
+<span class="source-line-no">284</span><span id="line-284"></span>
+<span class="source-line-no">285</span><span id="line-285">   @Override /* Overridden from TomlMetaProvider */</span>
+<span class="source-line-no">286</span><span id="line-286">   public TomlClassMeta getTomlClassMeta(ClassMeta&lt;?&gt; cm) {</span>
+<span class="source-line-no">287</span><span id="line-287">      return tomlClassMetas.computeIfAbsent(cm, k -&gt; new TomlClassMeta(k, this));</span>
+<span class="source-line-no">288</span><span id="line-288">   }</span>
+<span class="source-line-no">289</span><span id="line-289"></span>
+<span class="source-line-no">290</span><span id="line-290">   @Override</span>
+<span class="source-line-no">291</span><span id="line-291">   public Builder copy() {</span>
+<span class="source-line-no">292</span><span id="line-292">      return new Builder(this);</span>
+<span class="source-line-no">293</span><span id="line-293">   }</span>
+<span class="source-line-no">294</span><span id="line-294"></span>
+<span class="source-line-no">295</span><span id="line-295">   @Override</span>
+<span class="source-line-no">296</span><span id="line-296">   protected FluentMap&lt;String,Object&gt; properties() {</span>
+<span class="source-line-no">297</span><span id="line-297">      return super.properties()</span>
+<span class="source-line-no">298</span><span id="line-298">         .a("inlineTableThreshold", inlineTableThreshold)</span>
+<span class="source-line-no">299</span><span id="line-299">         .a("useInlineTables", useInlineTables)</span>
+<span class="source-line-no">300</span><span id="line-300">         .a("sortKeys", sortKeys)</span>
+<span class="source-line-no">301</span><span id="line-301">         .a("nullValue", nullValue);</span>
+<span class="source-line-no">302</span><span id="line-302">   }</span>
+<span class="source-line-no">303</span><span id="line-303"></span>
+<span class="source-line-no">304</span><span id="line-304">   /**</span>
+<span class="source-line-no">305</span><span id="line-305">    * Convenience delegator that opens a {@link RecordWriter} over the output using</span>
+<span class="source-line-no">306</span><span id="line-306">    * &lt;b&gt;default session arguments&lt;/b&gt; (mirrors {@link #write(Object)}).</span>
+<span class="source-line-no">307</span><span id="line-307">    *</span>
+<span class="source-line-no">308</span><span id="line-308">    * &lt;p&gt;</span>
+<span class="source-line-no">309</span><span id="line-309">    * The real implementation lives on {@link TomlSerializerSession#writeRecords(Object)}.</span>
+<span class="source-line-no">310</span><span id="line-310">    * Callers that need request-derived configuration should call {@link #createSession()} and</span>
+<span class="source-line-no">311</span><span id="line-311">    * invoke {@link TomlSerializerSession#writeRecords(Object)} on the built session instead.</span>
+<span class="source-line-no">312</span><span id="line-312">    *</span>
+<span class="source-line-no">313</span><span id="line-313">    * @param output The output.</span>
+<span class="source-line-no">314</span><span id="line-314">    * @return A new {@link RecordWriter}.</span>
+<span class="source-line-no">315</span><span id="line-315">    * @throws IOException If a problem occurred opening the underlying output.</span>
+<span class="source-line-no">316</span><span id="line-316">    */</span>
+<span class="source-line-no">317</span><span id="line-317">   @Override /* RecordWritable */</span>
+<span class="source-line-no">318</span><span id="line-318">   public RecordWriter writeRecords(Object output) throws IOException {</span>
+<span class="source-line-no">319</span><span id="line-319">      return ((RecordWritable) getSession()).writeRecords(output);</span>
+<span class="source-line-no">320</span><span id="line-320">   }</span>
+<span class="source-line-no">321</span><span id="line-321"></span>
+<span class="source-line-no">322</span><span id="line-322">   @Override /* RecordWritable */</span>
+<span class="source-line-no">323</span><span id="line-323">   public boolean isRecordStreaming() {</span>
+<span class="source-line-no">324</span><span id="line-324">      return false;</span>
+<span class="source-line-no">325</span><span id="line-325">   }</span>
+<span class="source-line-no">326</span><span id="line-326">}</span>
 
 
 

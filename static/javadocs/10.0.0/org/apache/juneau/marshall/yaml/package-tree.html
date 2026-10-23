@@ -63,8 +63,26 @@ loadScripts(document, 'script');</script>
 <ul>
 <li class="circle">org.apache.juneau.marshall.<a href="../AnnotationApplier.html" class="type-name-link" title="class in org.apache.juneau.marshall">AnnotationApplier</a>&lt;A,<wbr>B&gt;
 <ul>
+<li class="circle">org.apache.juneau.marshall.yaml.<a href="YamlApplyAnnotation.Applier.html" class="type-name-link" title="class in org.apache.juneau.marshall.yaml">YamlApplyAnnotation.Applier</a></li>
 <li class="circle">org.apache.juneau.marshall.yaml.<a href="YamlConfigAnnotation.ParserApply.html" class="type-name-link" title="class in org.apache.juneau.marshall.yaml">YamlConfigAnnotation.ParserApply</a></li>
 <li class="circle">org.apache.juneau.marshall.yaml.<a href="YamlConfigAnnotation.SerializerApply.html" class="type-name-link" title="class in org.apache.juneau.marshall.yaml">YamlConfigAnnotation.SerializerApply</a></li>
+</ul>
+</li>
+<li class="circle">org.apache.juneau.commons.<a href="../../commons/AnnotationObject.Builder.html" class="type-name-link" title="class in org.apache.juneau.commons">AnnotationObject.Builder</a>
+<ul>
+<li class="circle">org.apache.juneau.commons.<a href="../../commons/AppliedAnnotationObject.Builder.html" class="type-name-link" title="class in org.apache.juneau.commons">AppliedAnnotationObject.Builder</a>
+<ul>
+<li class="circle">org.apache.juneau.commons.<a href="../../commons/AppliedAnnotationObject.BuilderT.html" class="type-name-link" title="class in org.apache.juneau.commons">AppliedAnnotationObject.BuilderT</a>
+<ul>
+<li class="circle">org.apache.juneau.commons.<a href="../../commons/AppliedAnnotationObject.BuilderTMF.html" class="type-name-link" title="class in org.apache.juneau.commons">AppliedAnnotationObject.BuilderTMF</a>
+<ul>
+<li class="circle">org.apache.juneau.marshall.yaml.<a href="YamlApplyAnnotation.Builder.html" class="type-name-link" title="class in org.apache.juneau.marshall.yaml">YamlApplyAnnotation.Builder</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="circle">org.apache.juneau.marshall.<a href="../Context.html" class="type-name-link" title="class in org.apache.juneau.marshall">Context</a>
@@ -77,7 +95,7 @@ loadScripts(document, 'script');</script>
 <ul>
 <li class="circle">org.apache.juneau.marshall.serializer.<a href="../serializer/WriterSerializer.html" class="type-name-link" title="class in org.apache.juneau.marshall.serializer">WriterSerializer</a> (implements org.apache.juneau.commons.function.<a href="../../commons/function/ThrowingFunction.html" title="interface in org.apache.juneau.commons.function">ThrowingFunction</a>&lt;T,<wbr>R&gt;)
 <ul>
-<li class="circle">org.apache.juneau.marshall.yaml.<a href="YamlSerializer.html" class="type-name-link" title="class in org.apache.juneau.marshall.yaml">YamlSerializer</a> (implements org.apache.juneau.marshall.stream.<a href="../stream/ArrayRecordWritable.html" title="interface in org.apache.juneau.marshall.stream">ArrayRecordWritable</a>, org.apache.juneau.marshall.stream.<a href="../stream/RecordWritable.html" title="interface in org.apache.juneau.marshall.stream">RecordWritable</a>)
+<li class="circle">org.apache.juneau.marshall.yaml.<a href="YamlSerializer.html" class="type-name-link" title="class in org.apache.juneau.marshall.yaml">YamlSerializer</a> (implements org.apache.juneau.marshall.stream.<a href="../stream/ArrayRecordWritable.html" title="interface in org.apache.juneau.marshall.stream">ArrayRecordWritable</a>, org.apache.juneau.marshall.stream.<a href="../stream/RecordWritable.html" title="interface in org.apache.juneau.marshall.stream">RecordWritable</a>, org.apache.juneau.marshall.yaml.<a href="YamlMetaProvider.html" title="interface in org.apache.juneau.marshall.yaml">YamlMetaProvider</a>)
 <ul>
 <li class="circle">org.apache.juneau.marshall.yaml.<a href="YamlSerializer.Readable.html" class="type-name-link" title="class in org.apache.juneau.marshall.yaml">YamlSerializer.Readable</a></li>
 </ul>
@@ -92,7 +110,7 @@ loadScripts(document, 'script');</script>
 <ul>
 <li class="circle">org.apache.juneau.marshall.parser.<a href="../parser/ReaderParser.html" class="type-name-link" title="class in org.apache.juneau.marshall.parser">ReaderParser</a>
 <ul>
-<li class="circle">org.apache.juneau.marshall.yaml.<a href="YamlParser.html" class="type-name-link" title="class in org.apache.juneau.marshall.yaml">YamlParser</a> (implements org.apache.juneau.marshall.stream.<a href="../stream/ArrayRecordReadable.html" title="interface in org.apache.juneau.marshall.stream">ArrayRecordReadable</a>, org.apache.juneau.marshall.stream.<a href="../stream/RecordReadable.html" title="interface in org.apache.juneau.marshall.stream">RecordReadable</a>)</li>
+<li class="circle">org.apache.juneau.marshall.yaml.<a href="YamlParser.html" class="type-name-link" title="class in org.apache.juneau.marshall.yaml">YamlParser</a> (implements org.apache.juneau.marshall.stream.<a href="../stream/ArrayRecordReadable.html" title="interface in org.apache.juneau.marshall.stream">ArrayRecordReadable</a>, org.apache.juneau.marshall.stream.<a href="../stream/RecordReadable.html" title="interface in org.apache.juneau.marshall.stream">RecordReadable</a>, org.apache.juneau.marshall.yaml.<a href="YamlMetaProvider.html" title="interface in org.apache.juneau.marshall.yaml">YamlMetaProvider</a>)</li>
 </ul>
 </li>
 </ul>
@@ -191,6 +209,20 @@ loadScripts(document, 'script');</script>
 </li>
 </ul>
 </li>
+<li class="circle">org.apache.juneau.marshall.<a href="../ExtendedMeta.html" class="type-name-link" title="class in org.apache.juneau.marshall">ExtendedMeta</a>
+<ul>
+<li class="circle">org.apache.juneau.marshall.<a href="../ExtendedBeanPropertyMeta.html" class="type-name-link" title="class in org.apache.juneau.marshall">ExtendedBeanPropertyMeta</a>
+<ul>
+<li class="circle">org.apache.juneau.marshall.yaml.<a href="YamlBeanPropertyMeta.html" class="type-name-link" title="class in org.apache.juneau.marshall.yaml">YamlBeanPropertyMeta</a></li>
+</ul>
+</li>
+<li class="circle">org.apache.juneau.marshall.<a href="../ExtendedClassMeta.html" class="type-name-link" title="class in org.apache.juneau.marshall">ExtendedClassMeta</a>
+<ul>
+<li class="circle">org.apache.juneau.marshall.yaml.<a href="YamlClassMeta.html" class="type-name-link" title="class in org.apache.juneau.marshall.yaml">YamlClassMeta</a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li class="circle">java.io.<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Writer.html" class="type-name-link external-link" title="class or interface in java.io">Writer</a> (implements java.lang.<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Appendable.html" title="class or interface in java.lang" class="external-link">Appendable</a>, java.io.<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Closeable.html" title="class or interface in java.io" class="external-link">Closeable</a>, java.io.<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Flushable.html" title="class or interface in java.io" class="external-link">Flushable</a>)
 <ul>
 <li class="circle">org.apache.juneau.marshall.serializer.<a href="../serializer/SerializerWriter.html" class="type-name-link" title="class in org.apache.juneau.marshall.serializer">SerializerWriter</a>&lt;SELF&gt;
@@ -200,14 +232,25 @@ loadScripts(document, 'script');</script>
 </li>
 </ul>
 </li>
+<li class="circle">org.apache.juneau.marshall.yaml.<a href="YamlAnnotation.html" class="type-name-link" title="class in org.apache.juneau.marshall.yaml">YamlAnnotation</a></li>
+<li class="circle">org.apache.juneau.marshall.yaml.<a href="YamlApplyAnnotation.html" class="type-name-link" title="class in org.apache.juneau.marshall.yaml">YamlApplyAnnotation</a></li>
 <li class="circle">org.apache.juneau.marshall.yaml.<a href="YamlConfigAnnotation.html" class="type-name-link" title="class in org.apache.juneau.marshall.yaml">YamlConfigAnnotation</a></li>
 </ul>
 </li>
 </ul>
 </section>
 <section class="hierarchy">
+<h2 title="Interface Hierarchy">Interface Hierarchy</h2>
+<ul>
+<li class="circle">org.apache.juneau.marshall.yaml.<a href="YamlMetaProvider.html" class="type-name-link" title="interface in org.apache.juneau.marshall.yaml">YamlMetaProvider</a></li>
+</ul>
+</section>
+<section class="hierarchy">
 <h2 title="Annotation Interface Hierarchy">Annotation Interface Hierarchy</h2>
 <ul>
+<li class="circle">org.apache.juneau.marshall.yaml.<a href="Yaml.html" class="type-name-link" title="annotation interface in org.apache.juneau.marshall.yaml">Yaml</a> (implements java.lang.annotation.<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/annotation/Annotation.html" title="class or interface in java.lang.annotation" class="external-link">Annotation</a>)</li>
+<li class="circle">org.apache.juneau.marshall.yaml.<a href="YamlApply.html" class="type-name-link" title="annotation interface in org.apache.juneau.marshall.yaml">YamlApply</a> (implements java.lang.annotation.<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/annotation/Annotation.html" title="class or interface in java.lang.annotation" class="external-link">Annotation</a>)</li>
+<li class="circle">org.apache.juneau.marshall.yaml.<a href="YamlApply.Array.html" class="type-name-link" title="annotation interface in org.apache.juneau.marshall.yaml">YamlApply.Array</a> (implements java.lang.annotation.<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/annotation/Annotation.html" title="class or interface in java.lang.annotation" class="external-link">Annotation</a>)</li>
 <li class="circle">org.apache.juneau.marshall.yaml.<a href="YamlConfig.html" class="type-name-link" title="annotation interface in org.apache.juneau.marshall.yaml">YamlConfig</a> (implements java.lang.annotation.<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/annotation/Annotation.html" title="class or interface in java.lang.annotation" class="external-link">Annotation</a>)</li>
 </ul>
 </section>

@@ -1886,6 +1886,7 @@ const sidebars: SidebarsConfig = {
 								{ type: 'doc', id: 'topics/10.68.11.RunViewRegion', label: '10.68.11. Run View Region' },
 								{ type: 'doc', id: 'topics/10.68.12.TerminalRegion', label: '10.68.12. Terminal Region' },
 								{ type: 'doc', id: 'topics/10.68.13.RowJobs', label: '10.68.13. Row Jobs' },
+								{ type: 'doc', id: 'topics/10.68.14.ConsoleMessageBus', label: '10.68.14. Console Message Bus' },
 							],
 						},
 						{
@@ -2418,9 +2419,25 @@ const sidebars: SidebarsConfig = {
 							},
 						},
 						{
-							type: 'doc',
-							id: 'topics/22.JuneauRun',
+							type: 'category',
 							label: '22. juneau-run',
+							collapsed: true,
+							items: [
+								{
+									type: 'doc',
+									id: 'topics/22.01.AgentSidePane',
+									label: '22.1. Watching a Run from an AI Agent',
+								},
+								{
+									type: 'doc',
+									id: 'topics/22.02.DrivingARun',
+									label: '22.2. Driving a Run from Another Tool',
+								},
+							],
+							link: {
+								type: 'doc',
+								id: 'topics/22.JuneauRun',
+							},
 						},
 						{
 							type: 'category',

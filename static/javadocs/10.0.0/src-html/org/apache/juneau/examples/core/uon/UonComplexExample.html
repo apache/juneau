@@ -71,7 +71,7 @@
 <span class="source-line-no">058</span><span id="line-58">       */</span>
 <span class="source-line-no">059</span><span id="line-59">      var uonSerializer = UonSerializer.DEFAULT;</span>
 <span class="source-line-no">060</span><span id="line-60">      // This will show the final output from the bean</span>
-<span class="source-line-no">061</span><span id="line-61">      Logger.getLogger(UonComplexExample.class).info(uonSerializer.write(pojoc));</span>
+<span class="source-line-no">061</span><span id="line-61">      RichLogger.getLogger(UonComplexExample.class).info(uonSerializer.write(pojoc));</span>
 <span class="source-line-no">062</span><span id="line-62"></span>
 <span class="source-line-no">063</span><span id="line-63">      var obj = UonParser.DEFAULT.read(uonSerializer.write(pojoc), PojoComplex.class);</span>
 <span class="source-line-no">064</span><span id="line-64"></span>

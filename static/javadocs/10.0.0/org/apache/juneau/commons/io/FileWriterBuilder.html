@@ -78,7 +78,7 @@ loadScripts(document, 'script');</script>
 </div>
 <section class="class-description" id="class-description">
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/io/FileWriterBuilder.html#line-82">FileWriterBuilder</a></span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/io/FileWriterBuilder.html#line-83">FileWriterBuilder</a></span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
 <div class="block">A fluent builder for creating <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Writer.html" title="class or interface in java.io" class="external-link"><code>Writer</code></a> instances for writing to files with configurable options.
 
@@ -169,9 +169,19 @@ loadScripts(document, 'script');</script>
 <div class="block">Enables append mode, which appends to the file instead of overwriting it.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="FileWriterBuilder.html" title="class in org.apache.juneau.commons.io">FileWriterBuilder</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#buffered()" class="member-name-link">buffered</a>()</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#append(boolean)" class="member-name-link">append</a><wbr>(boolean&nbsp;value)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Enables or disables append mode, which appends to the file instead of overwriting it.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="FileWriterBuilder.html" title="class in org.apache.juneau.commons.io">FileWriterBuilder</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#buffered()" class="member-name-link">buffered</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Enables buffering for improved write performance.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="FileWriterBuilder.html" title="class in org.apache.juneau.commons.io">FileWriterBuilder</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#buffered(boolean)" class="member-name-link">buffered</a><wbr>(boolean&nbsp;value)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Enables or disables buffering for improved write performance.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Writer.html" title="class or interface in java.io" class="external-link">Writer</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#build()" class="member-name-link">build</a>()</code></div>
@@ -213,6 +223,11 @@ loadScripts(document, 'script');</script>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Sets the file path to write to.</div>
 </div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="FileWriterBuilder.html" title="class in org.apache.juneau.commons.io">FileWriterBuilder</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#file(java.nio.file.Path)" class="member-name-link">file</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/nio/file/Path.html" title="class or interface in java.nio.file" class="external-link">Path</a>&nbsp;value)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Sets the file to write to.</div>
+</div>
 </div>
 </div>
 </div>
@@ -233,7 +248,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;()">
 <h3>FileWriterBuilder</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/io/FileWriterBuilder.html#line-86">FileWriterBuilder</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/io/FileWriterBuilder.html#line-87">FileWriterBuilder</a></span>()</div>
 </section>
 </li>
 </ul>
@@ -247,7 +262,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="create()">
 <h3>create</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="FileWriterBuilder.html" title="class in org.apache.juneau.commons.io">FileWriterBuilder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/io/FileWriterBuilder.html#line-104">create</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="FileWriterBuilder.html" title="class in org.apache.juneau.commons.io">FileWriterBuilder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/io/FileWriterBuilder.html#line-101">create</a></span>()</div>
 <div class="block">Creates a new builder.
 
  <h5 class='section'>Example:</h5>
@@ -265,7 +280,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="create(java.io.File)">
 <h3>create</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="FileWriterBuilder.html" title="class in org.apache.juneau.commons.io">FileWriterBuilder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/io/FileWriterBuilder.html#line-122">create</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;file)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="FileWriterBuilder.html" title="class in org.apache.juneau.commons.io">FileWriterBuilder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/io/FileWriterBuilder.html#line-119">create</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;file)</span></div>
 <div class="block">Creates a new builder initialized with the specified file.
 
  <h5 class='section'>Example:</h5>
@@ -286,7 +301,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="create(java.lang.String)">
 <h3>create</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="FileWriterBuilder.html" title="class in org.apache.juneau.commons.io">FileWriterBuilder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/io/FileWriterBuilder.html#line-139">create</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;path)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="FileWriterBuilder.html" title="class in org.apache.juneau.commons.io">FileWriterBuilder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/io/FileWriterBuilder.html#line-136">create</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;path)</span></div>
 <div class="block">Creates a new builder initialized with the specified file path.
 
  <h5 class='section'>Example:</h5>
@@ -306,7 +321,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="append()">
 <h3>append</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="FileWriterBuilder.html" title="class in org.apache.juneau.commons.io">FileWriterBuilder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/io/FileWriterBuilder.html#line-170">append</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="FileWriterBuilder.html" title="class in org.apache.juneau.commons.io">FileWriterBuilder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/io/FileWriterBuilder.html#line-167">append</a></span>()</div>
 <div class="block">Enables append mode, which appends to the file instead of overwriting it.
 
  <p>
@@ -330,9 +345,33 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
+<section class="detail" id="append(boolean)">
+<h3>append</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="FileWriterBuilder.html" title="class in org.apache.juneau.commons.io">FileWriterBuilder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/io/FileWriterBuilder.html#line-188">append</a></span><wbr><span class="parameters">(boolean&nbsp;value)</span></div>
+<div class="block">Enables or disables append mode, which appends to the file instead of overwriting it.
+
+ <p>
+ Boolean-arg form of <a href="#append()"><code>append()</code></a>, useful when the setting is conditional.
+
+ <h5 class='section'>Example:</h5>
+ <p class='bjava'>
+   Writer <jv>writer</jv> = FileWriterBuilder.<jsm>create</jsm>()
+      .file(<js>"app.log"</js>)
+      .append(<jv>shouldAppend</jv>)
+      .build();
+ </p></div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>value</code> - <jk>true</jk> to append to the file instead of overwriting it.</dd>
+<dt>Returns:</dt>
+<dd>This object for method chaining.</dd>
+</dl>
+</section>
+</li>
+<li>
 <section class="detail" id="buffered()">
 <h3>buffered</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="FileWriterBuilder.html" title="class in org.apache.juneau.commons.io">FileWriterBuilder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/io/FileWriterBuilder.html#line-194">buffered</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="FileWriterBuilder.html" title="class in org.apache.juneau.commons.io">FileWriterBuilder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/io/FileWriterBuilder.html#line-212">buffered</a></span>()</div>
 <div class="block">Enables buffering for improved write performance.
 
  <p>
@@ -355,9 +394,33 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
+<section class="detail" id="buffered(boolean)">
+<h3>buffered</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="FileWriterBuilder.html" title="class in org.apache.juneau.commons.io">FileWriterBuilder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/io/FileWriterBuilder.html#line-233">buffered</a></span><wbr><span class="parameters">(boolean&nbsp;value)</span></div>
+<div class="block">Enables or disables buffering for improved write performance.
+
+ <p>
+ Boolean-arg form of <a href="#buffered()"><code>buffered()</code></a>, useful when the setting is conditional.
+
+ <h5 class='section'>Example:</h5>
+ <p class='bjava'>
+   Writer <jv>writer</jv> = FileWriterBuilder.<jsm>create</jsm>()
+      .file(<js>"output.txt"</js>)
+      .buffered(<jv>shouldBuffer</jv>)
+      .build();
+ </p></div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>value</code> - <jk>true</jk> to buffer writes for improved performance.</dd>
+<dt>Returns:</dt>
+<dd>This object for method chaining.</dd>
+</dl>
+</section>
+</li>
+<li>
 <section class="detail" id="build()">
 <h3>build</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Writer.html" title="class or interface in java.io" class="external-link">Writer</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/io/FileWriterBuilder.html#line-221">build</a></span>()
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Writer.html" title="class or interface in java.io" class="external-link">Writer</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/io/FileWriterBuilder.html#line-260">build</a></span>()
              throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/FileNotFoundException.html" title="class or interface in java.io" class="external-link">FileNotFoundException</a></span></div>
 <div class="block">Creates a new <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Writer.html" title="class or interface in java.io" class="external-link"><code>Writer</code></a> for writing to the configured file.
 
@@ -387,7 +450,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="charset(java.nio.charset.Charset)">
 <h3>charset</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="FileWriterBuilder.html" title="class in org.apache.juneau.commons.io">FileWriterBuilder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/io/FileWriterBuilder.html#line-248">charset</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/nio/charset/Charset.html" title="class or interface in java.nio.charset" class="external-link">Charset</a>&nbsp;cs)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="FileWriterBuilder.html" title="class in org.apache.juneau.commons.io">FileWriterBuilder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/io/FileWriterBuilder.html#line-287">charset</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/nio/charset/Charset.html" title="class or interface in java.nio.charset" class="external-link">Charset</a>&nbsp;cs)</span></div>
 <div class="block">Sets the character encoding for writing to the file.
 
  <p>
@@ -413,7 +476,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="charset(java.lang.String)">
 <h3>charset</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="FileWriterBuilder.html" title="class in org.apache.juneau.commons.io">FileWriterBuilder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/io/FileWriterBuilder.html#line-273">charset</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;cs)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="FileWriterBuilder.html" title="class in org.apache.juneau.commons.io">FileWriterBuilder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/io/FileWriterBuilder.html#line-312">charset</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;cs)</span></div>
 <div class="block">Sets the character encoding for writing to the file by charset name.
 
  <p>
@@ -440,7 +503,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="file(java.io.File)">
 <h3>file</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="FileWriterBuilder.html" title="class in org.apache.juneau.commons.io">FileWriterBuilder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/io/FileWriterBuilder.html#line-292">file</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="FileWriterBuilder.html" title="class in org.apache.juneau.commons.io">FileWriterBuilder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/io/FileWriterBuilder.html#line-331">file</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;value)</span></div>
 <div class="block">Sets the file to write to.
 
  <h5 class='section'>Example:</h5>
@@ -461,7 +524,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="file(java.lang.String)">
 <h3>file</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="FileWriterBuilder.html" title="class in org.apache.juneau.commons.io">FileWriterBuilder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/io/FileWriterBuilder.html#line-310">file</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;path)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="FileWriterBuilder.html" title="class in org.apache.juneau.commons.io">FileWriterBuilder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/io/FileWriterBuilder.html#line-349">file</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;path)</span></div>
 <div class="block">Sets the file path to write to.
 
  <h5 class='section'>Example:</h5>
@@ -473,6 +536,30 @@ loadScripts(document, 'script');</script>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>path</code> - The file path to write to.  Must not be <jk>null</jk>.</dd>
+<dt>Returns:</dt>
+<dd>This object for method chaining.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="file(java.nio.file.Path)">
+<h3>file</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="FileWriterBuilder.html" title="class in org.apache.juneau.commons.io">FileWriterBuilder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/io/FileWriterBuilder.html#line-371">file</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/nio/file/Path.html" title="class or interface in java.nio.file" class="external-link">Path</a>&nbsp;value)</span></div>
+<div class="block">Sets the file to write to.
+
+ <p>
+ Convenience overload for callers working with the NIO <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/nio/file/Path.html" title="class or interface in java.nio.file" class="external-link"><code>Path</code></a> API, consistent with
+ <a href="PathReaderBuilder.html#path(java.nio.file.Path)"><code>PathReaderBuilder.path(Path)</code></a>.
+
+ <h5 class='section'>Example:</h5>
+ <p class='bjava'>
+   Writer <jv>writer</jv> = FileWriterBuilder.<jsm>create</jsm>()
+      .file(Paths.<jsm>get</jsm>(<js>"/path/to/output.txt"</js>))
+      .build();
+ </p></div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>value</code> - The file path to write to.  Can be <jk>null</jk>.</dd>
 <dt>Returns:</dt>
 <dd>This object for method chaining.</dd>
 </dl>

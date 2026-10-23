@@ -91,9 +91,6 @@ loadScripts(document, 'script');</script>
    <li class='jc'><a href="CachingClientCredentialsFlow.html" title="class in org.apache.juneau.rest.server.auth.oauth"><code>CachingClientCredentialsFlow</code></a>
       &mdash; server-side caching decorator layering a <a href="TokenCache.html" title="interface in org.apache.juneau.rest.server.auth.oauth"><code>TokenCache</code></a>
       over the role-neutral <code>OAuthClientCredentialsFlow</code>.
-   <li class='jp'><a href="flow/package-summary.html"><code>flow</code></a>
-      &mdash; the discouraged resource-owner password-credentials flow (the role-neutral grant flows and the
-      <code>OAuthToken</code> record live in module <code>juneau-rest-auth-oauth-flow</code>).
  </ul>
 
  <h5 class='section'>See Also:</h5><ul>
@@ -119,16 +116,12 @@ loadScripts(document, 'script');</script>
 <div class="block">Authentication (AuthN) guards, servlet-layer filters, SPIs, and request-time helpers for
  <code>juneau-rest-server</code>.</div>
 </div>
-<div class="col-first odd-row-color"><a href="flow/package-summary.html">org.apache.juneau.rest.server.auth.oauth.flow</a></div>
+<div class="col-first odd-row-color"><a href="../jwt/package-summary.html">org.apache.juneau.rest.server.auth.jwt</a></div>
 <div class="col-last odd-row-color">
-<div class="block">Server-only OAuth 2.0 flow helpers.</div>
-</div>
-<div class="col-first even-row-color"><a href="../jwt/package-summary.html">org.apache.juneau.rest.server.auth.jwt</a></div>
-<div class="col-last even-row-color">
 <div class="block">JWT bearer-token validation backed by <code>com.nimbusds:nimbus-jose-jwt</code>.</div>
 </div>
-<div class="col-first odd-row-color"><a href="../saml/package-summary.html">org.apache.juneau.rest.server.auth.saml</a></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><a href="../saml/package-summary.html">org.apache.juneau.rest.server.auth.saml</a></div>
+<div class="col-last even-row-color">
 <div class="block">SAML 2.0 assertion validation for the Juneau REST server, layered on the
  <a href="../AuthFilter.html" title="class in org.apache.juneau.rest.server.auth"><code>AuthFilter</code></a> framework.</div>
 </div>

@@ -89,12 +89,12 @@ loadScripts(document, 'script');</script>
 <section class="class-description" id="class-description">
 <dl class="notes">
 <dt>All Implemented Interfaces:</dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Function.html" title="class or interface in java.util.function" class="external-link">Function</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</code>, <code><a href="../../commons/function/ThrowingFunction.html" title="interface in org.apache.juneau.commons.function">ThrowingFunction</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</code>, <code><a href="../stream/RecordWritable.html" title="interface in org.apache.juneau.marshall.stream">RecordWritable</a></code></dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Function.html" title="class or interface in java.util.function" class="external-link">Function</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</code>, <code><a href="../../commons/function/ThrowingFunction.html" title="interface in org.apache.juneau.commons.function">ThrowingFunction</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</code>, <code><a href="../stream/RecordWritable.html" title="interface in org.apache.juneau.marshall.stream">RecordWritable</a></code>, <code><a href="TomlMetaProvider.html" title="interface in org.apache.juneau.marshall.toml">TomlMetaProvider</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/toml/TomlSerializer.html#line-110">TomlSerializer</a></span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/toml/TomlSerializer.html#line-111">TomlSerializer</a></span>
 <span class="extends-implements">extends <a href="../serializer/WriterSerializer.html" title="class in org.apache.juneau.marshall.serializer">WriterSerializer</a>
-implements <a href="../stream/RecordWritable.html" title="interface in org.apache.juneau.marshall.stream">RecordWritable</a></span></div>
+implements <a href="TomlMetaProvider.html" title="interface in org.apache.juneau.marshall.toml">TomlMetaProvider</a>, <a href="../stream/RecordWritable.html" title="interface in org.apache.juneau.marshall.stream">RecordWritable</a></span></div>
 <div class="block">Serializes POJOs to TOML v1.0.0 format.
 
  <p>
@@ -292,6 +292,16 @@ implements <a href="../stream/RecordWritable.html" title="interface in org.apach
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns the string written for null values.</div>
 </div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="TomlBeanPropertyMeta.html" title="class in org.apache.juneau.marshall.toml">TomlBeanPropertyMeta</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getTomlBeanPropertyMeta(org.apache.juneau.commons.bean.BeanPropertyMeta)" class="member-name-link">getTomlBeanPropertyMeta</a><wbr>(<a href="../../commons/bean/BeanPropertyMeta.html" title="class in org.apache.juneau.commons.bean">BeanPropertyMeta</a>&nbsp;bpm)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Returns the TOML-specific metadata on the specified bean property.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="TomlClassMeta.html" title="class in org.apache.juneau.marshall.toml">TomlClassMeta</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getTomlClassMeta(org.apache.juneau.marshall.ClassMeta)" class="member-name-link">getTomlClassMeta</a><wbr>(<a href="../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;?&gt;&nbsp;cm)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Returns the TOML-specific metadata on the specified class.</div>
+</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#isRecordStreaming()" class="member-name-link">isRecordStreaming</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
@@ -448,9 +458,41 @@ implements <a href="../stream/RecordWritable.html" title="interface in org.apach
 </section>
 </li>
 <li>
+<section class="detail" id="getTomlBeanPropertyMeta(org.apache.juneau.commons.bean.BeanPropertyMeta)">
+<h3>getTomlBeanPropertyMeta</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="TomlBeanPropertyMeta.html" title="class in org.apache.juneau.marshall.toml">TomlBeanPropertyMeta</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/toml/TomlSerializer.html#line-278">getTomlBeanPropertyMeta</a></span><wbr><span class="parameters">(<a href="../../commons/bean/BeanPropertyMeta.html" title="class in org.apache.juneau.commons.bean">BeanPropertyMeta</a>&nbsp;bpm)</span></div>
+<div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="TomlMetaProvider.html#getTomlBeanPropertyMeta(org.apache.juneau.commons.bean.BeanPropertyMeta)">TomlMetaProvider</a></code></span></div>
+<div class="block">Returns the TOML-specific metadata on the specified bean property.</div>
+<dl class="notes">
+<dt>Specified by:</dt>
+<dd><code><a href="TomlMetaProvider.html#getTomlBeanPropertyMeta(org.apache.juneau.commons.bean.BeanPropertyMeta)">getTomlBeanPropertyMeta</a></code>&nbsp;in interface&nbsp;<code><a href="TomlMetaProvider.html" title="interface in org.apache.juneau.marshall.toml">TomlMetaProvider</a></code></dd>
+<dt>Parameters:</dt>
+<dd><code>bpm</code> - The bean property to return the metadata on.</dd>
+<dt>Returns:</dt>
+<dd>The metadata.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="getTomlClassMeta(org.apache.juneau.marshall.ClassMeta)">
+<h3>getTomlClassMeta</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="TomlClassMeta.html" title="class in org.apache.juneau.marshall.toml">TomlClassMeta</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/toml/TomlSerializer.html#line-285">getTomlClassMeta</a></span><wbr><span class="parameters">(<a href="../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;?&gt;&nbsp;cm)</span></div>
+<div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="TomlMetaProvider.html#getTomlClassMeta(org.apache.juneau.marshall.ClassMeta)">TomlMetaProvider</a></code></span></div>
+<div class="block">Returns the TOML-specific metadata on the specified class.</div>
+<dl class="notes">
+<dt>Specified by:</dt>
+<dd><code><a href="TomlMetaProvider.html#getTomlClassMeta(org.apache.juneau.marshall.ClassMeta)">getTomlClassMeta</a></code>&nbsp;in interface&nbsp;<code><a href="TomlMetaProvider.html" title="interface in org.apache.juneau.marshall.toml">TomlMetaProvider</a></code></dd>
+<dt>Parameters:</dt>
+<dd><code>cm</code> - The class to return the metadata on.</dd>
+<dt>Returns:</dt>
+<dd>The metadata.</dd>
+</dl>
+</section>
+</li>
+<li>
 <section class="detail" id="copy()">
 <h3>copy</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="TomlSerializer.Builder.html" title="class in org.apache.juneau.marshall.toml">TomlSerializer.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/toml/TomlSerializer.html#line-278">copy</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="TomlSerializer.Builder.html" title="class in org.apache.juneau.marshall.toml">TomlSerializer.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/toml/TomlSerializer.html#line-290">copy</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../Context.html#copy()">Context</a></code></span></div>
 <div class="block">Creates a builder from this context object.
 
@@ -467,7 +509,7 @@ implements <a href="../stream/RecordWritable.html" title="interface in org.apach
 <li>
 <section class="detail" id="properties()">
 <h3>properties</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="../../commons/collections/FluentMap.html" title="class in org.apache.juneau.commons.collections">FluentMap</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/toml/TomlSerializer.html#line-283">properties</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="../../commons/collections/FluentMap.html" title="class in org.apache.juneau.commons.collections">FluentMap</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/toml/TomlSerializer.html#line-295">properties</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../Context.html#properties()">Context</a></code></span></div>
 <div class="block">Returns the properties on this bean as a map for debugging.</div>
 <dl class="notes">
@@ -481,7 +523,7 @@ implements <a href="../stream/RecordWritable.html" title="interface in org.apach
 <li>
 <section class="detail" id="writeRecords(java.lang.Object)">
 <h3>writeRecords</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../stream/RecordWriter.html" title="interface in org.apache.juneau.marshall.stream">RecordWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/toml/TomlSerializer.html#line-305">writeRecords</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;output)</span>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../stream/RecordWriter.html" title="interface in org.apache.juneau.marshall.stream">RecordWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/toml/TomlSerializer.html#line-317">writeRecords</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;output)</span>
                           throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">Convenience delegator that opens a <a href="../stream/RecordWriter.html" title="interface in org.apache.juneau.marshall.stream"><code>RecordWriter</code></a> over the output using
  <b>default session arguments</b> (mirrors <a href="../serializer/WriterSerializer.html#write(java.lang.Object)"><code>WriterSerializer.write(Object)</code></a>).
@@ -505,7 +547,7 @@ implements <a href="../stream/RecordWritable.html" title="interface in org.apach
 <li>
 <section class="detail" id="isRecordStreaming()">
 <h3>isRecordStreaming</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/toml/TomlSerializer.html#line-310">isRecordStreaming</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/toml/TomlSerializer.html#line-322">isRecordStreaming</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="../stream/RecordWritable.html#isRecordStreaming()">RecordWritable</a></code></span></div>
 <div class="block">Streaming-quality signal queryable <em>before</em> opening a cursor.</div>
 <dl class="notes">

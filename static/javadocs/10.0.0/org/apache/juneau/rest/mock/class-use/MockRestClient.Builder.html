@@ -87,8 +87,14 @@ loadScripts(document, 'script');</script>
 <div class="block">Sets an explicit default parser used when the response <code>Content-Type</code> matches no registered parser.</div>
 </div>
 <div class="col-first odd-row-color"><code><a href="../MockRestClient.Builder.html" title="class in org.apache.juneau.rest.mock">MockRestClient.Builder</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">MockRestClient.Builder.</span><code><a href="../MockRestClient.Builder.html#overridingBeanStore(org.apache.juneau.commons.inject.BeanStore)" class="member-name-link">overridingBeanStore</a><wbr>(<a href="../../../commons/inject/BeanStore.html" title="interface in org.apache.juneau.commons.inject">BeanStore</a>&nbsp;value)</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">MockRestClient.Builder.</span><code><a href="../MockRestClient.Builder.html#noTrace()" class="member-name-link">noTrace</a>()</code></div>
 <div class="col-last odd-row-color">
+<div class="block">Sends a <c>No-Trace: true</c> header with every request, so the server leaves the stack trace of a failed
+ call out of its log record.</div>
+</div>
+<div class="col-first even-row-color"><code><a href="../MockRestClient.Builder.html" title="class in org.apache.juneau.rest.mock">MockRestClient.Builder</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">MockRestClient.Builder.</span><code><a href="../MockRestClient.Builder.html#overridingBeanStore(org.apache.juneau.commons.inject.BeanStore)" class="member-name-link">overridingBeanStore</a><wbr>(<a href="../../../commons/inject/BeanStore.html" title="interface in org.apache.juneau.commons.inject">BeanStore</a>&nbsp;value)</code></div>
+<div class="col-last even-row-color">
 <div class="block">Installs a <a href="../../../commons/inject/BeanStore.html" title="interface in org.apache.juneau.commons.inject"><code>BeanStore</code></a> as the <code>overridingParent</code> of the <a href="../../server/RestContext.html" title="class in org.apache.juneau.rest.server"><code>RestContext</code></a>'s
  bean store, so test-time overrides (e.g.</div>
 </div>

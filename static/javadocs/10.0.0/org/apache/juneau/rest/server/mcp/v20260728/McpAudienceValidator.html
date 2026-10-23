@@ -88,7 +88,7 @@ loadScripts(document, 'script');</script>
  <code>aud</code> or <code>resource</code> claim contains this server's resource identifier, rejecting a token whose audience
  targets a different resource.
 
- <h5 class='section'>Claims requirement (READY-312f F2, H2):</h5>
+ <h5 class='section'>Claims requirement:</h5>
  <p>
  Gate-level enforcement applies to a <a href="../../auth/ClaimsPrincipal.html" title="class in org.apache.juneau.rest.server.auth"><code>ClaimsPrincipal</code></a> (as produced by <code>JwtTokenValidator</code> and OAuth
  introspection).  A validator returning a bare <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/security/Principal.html" title="class or interface in java.security" class="external-link"><code>Principal</code></a> that exposes no claims cannot be checked at the gate;

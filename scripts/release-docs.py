@@ -12,37 +12,59 @@
 # * specific language governing permissions and limitations under the License.                                              *
 # ***************************************************************************************************************************
 """
+Promote the documentation from the asf-staging branch to asf-site.
+
+Full docs: release-docs.md
+"""
+
+import argparse
+import os
+import platform
+import shutil
+import subprocess
+import sys
+import traceback
+from pathlib import Path
+
+import run_view
+from juneau_root import find_juneau_root
+
+_HELP_EPILOG = """
 Promote Documentation from Staging to Production
 
 This script promotes the documentation from the asf-staging branch to the asf-site branch.
 This makes the documentation live on the production website.
 
 The script:
-1. Fetches the asf-staging branch
-2. Switches to a detached HEAD at origin/asf-staging
-3. Force pushes to the asf-site branch
+1. Checks the git identity
+2. Fetches the asf-staging branch into the sibling asf-site directory
+3. Switches to a detached HEAD at origin/asf-staging
+4. Force pushes to the asf-site branch
 
 Usage:
     python3 scripts/release-docs.py [--no-push] [--commit-message MESSAGE]
-    
+                                    [--juneau-root DIR] [--console full|condensed|none]
+
 Options:
     --no-push          Perform all steps except the final git push
     --commit-message   Not used (kept for consistency with release-docs-stage.py)
+    --juneau-root      Juneau source checkout whose juneau-run draws the live view (default:
+                       $JUNEAU_ROOT, then sibling ../master, then sibling ../juneau)
+    --console          Console output when juneau-run is available: full, condensed (default)
+                       or none (also $JUNEAU_RUN_CONSOLE)
+
+With juneau-run available, the run is one live view: Prechecks, then Promote (Fetch, Switch,
+Push).  Without it the output is plain.
 """
 
-import argparse
-import os
-import platform
-import subprocess
-import sys
-from pathlib import Path
 
 # Identity guard — required for any push to ASF.
 REQUIRED_GIT_EMAIL = "jamesbognar@apache.org"
+PLAN = [('prechecks', 'Prechecks'), ('promote', 'Promote')]
 
 
-def verify_apache_identity(repo_dir):
-    """Refuse to proceed unless git is configured with the ASF committer identity."""
+def identity_problem(repo_dir):
+    """None when git is configured with the ASF committer identity; otherwise (status, reason, hint lines)."""
     try:
         result = subprocess.run(
             ["git", "config", "--get", "user.email"],
@@ -53,47 +75,30 @@ def verify_apache_identity(repo_dir):
         )
         email = result.stdout.strip()
     except Exception as e:
-        print(f"❌ ERROR: Could not read git user.email: {e}")
-        return False
+        return ('fail', f"could not read git user.email: {e}", ())
 
     if email != REQUIRED_GIT_EMAIL:
-        print("❌ ERROR: Git identity is not the ASF committer identity.")
-        print(f"   Found:    user.email = '{email or '(unset)'}'")
-        print(f"   Required: user.email = '{REQUIRED_GIT_EMAIL}'")
-        print("")
-        print("   Fix (this script cannot mutate git config):")
-        print(f"     git config user.email {REQUIRED_GIT_EMAIL}")
-        print('     git config user.name "James Bognar"')
-        return False
-    return True
+        return ('fail', f"user.email is '{email or '(unset)'}', not the ASF committer identity '{REQUIRED_GIT_EMAIL}'",
+                ("Fix (this script cannot mutate git config):",
+                 f"  git config user.email {REQUIRED_GIT_EMAIL}",
+                 '  git config user.name "James Bognar"'))
+    return None
 
 
-def run_command(cmd, cwd=None, check=True, description=None):
-    """Run a shell command and handle errors."""
-    if description:
-        print(f"\n{description}")
-    print(f"Running: {' '.join(cmd) if isinstance(cmd, list) else cmd}")
-    
+def site_dir_for(docs_dir):
+    """The persistent asf-site checkout, a sibling of the docs checkout."""
+    return Path(docs_dir).parent / 'asf-site'
+
+
+def git_identity():
+    """The user name and email to record in the asf-site checkout (the current git config, or defaults)."""
+    def get(key, default):
+        result = subprocess.run(["git", "config", "--get", key], capture_output=True, text=True)
+        return result.stdout.strip() if result.returncode == 0 else default
     try:
-        result = subprocess.run(
-            cmd,
-            cwd=cwd,
-            shell=isinstance(cmd, str),
-            check=check,
-            capture_output=False,
-            text=True
-        )
-        if description:
-            print(f"✅ {description} - SUCCESS")
-        return True
-    except subprocess.CalledProcessError as e:
-        if description:
-            print(f"❌ {description} - FAILED (exit code: {e.returncode})")
-        return False
-    except Exception as e:
-        if description:
-            print(f"❌ {description} - FAILED: {e}")
-        return False
+        return get("user.name", "Documentation Promoter"), get("user.email", "docs@juneau.apache.org")
+    except Exception:
+        return "Documentation Promoter", "docs@juneau.apache.org"
 
 
 def get_git_remote_url():
@@ -176,11 +181,70 @@ def play_sound(success=True):
         pass
 
 
+def promote(args, view, docs_dir):
+    """Prechecks, then asf-staging force-pushed to asf-site; returns the exit code."""
+    site_dir = site_dir_for(docs_dir)
+
+    # Prechecks — must hold before any work begins.
+    view.banner("Prechecks")
+    if not view.prechecks([("Git identity (apache.org email)", lambda: identity_problem(docs_dir))]):
+        return 1
+
+    remote_url = get_git_remote_url()
+    if not remote_url:
+        view.say("❌ ERROR: Could not determine git remote URL", 'error')
+        return 1
+    if not site_dir.parent.exists():
+        view.say(f"❌ ERROR: Parent directory not found: {site_dir.parent}", 'error')
+        return 1
+    view.say(f"Site directory: {site_dir}")
+
+    git = dict(parent='promote', tool='generic')
+    with view.stage('promote', 'Promote', "Promoting asf-staging to asf-site") as step:
+        if site_dir.exists() and (site_dir / '.git').exists():
+            # Directory exists and is a git repo, update it
+            view.say("📁 Site directory already exists, updating...")
+            view.remote_cmd(["git", "fetch", "origin"], cwd=site_dir, id='promote-fetch', label='Fetch',
+                            title="Fetching latest changes", **git)
+        else:
+            # Directory doesn't exist or isn't a git repo, clone it
+            if site_dir.exists():
+                view.say(f"⚠️  Directory exists but is not a git repository. Removing: {site_dir}", 'warn')
+                shutil.rmtree(site_dir)
+            view.remote_cmd(["git", "clone", remote_url, str(site_dir)], id='promote-fetch', label='Fetch',
+                            title="Cloning repository to site directory", **git)
+        view.cmd(["git", "fetch", "origin", "asf-staging"], cwd=site_dir, id='promote-staging', label='Staging',
+                 title="Fetching asf-staging branch", **git)
+        view.cmd(["git", "switch", "--detach", "origin/asf-staging"], cwd=site_dir, id='promote-switch',
+                 label='Switch', title="Switching to detached HEAD at origin/asf-staging", **git)
+
+        git_user, git_email = git_identity()
+        for key, value in (("user.name", git_user), ("user.email", git_email)):
+            subprocess.run(["git", "config", key, value], cwd=site_dir, check=False)
+
+        if args.no_push:
+            view.skip('promote-push', 'Push', "push", "--no-push", parent='promote')
+            step.summary = "push skipped (--no-push)"
+        else:
+            with view.paused():   # a credential or passphrase prompt shows on a cleared screen
+                view.cmd(["git", "push", "origin", "HEAD:asf-site", "--force"], cwd=site_dir, id='promote-push',
+                         label='Push', title="Pushing to asf-site branch", tty=True, **git)
+            step.summary = "pushed asf-site"
+
+    if args.no_push:
+        view.say("⏭️  Skipping push (--no-push flag set)", 'warn')
+        view.say(f"   Changes are ready in: {site_dir}", 'warn')
+        view.say(f"   You can manually push with: cd {site_dir} && git push origin HEAD:asf-site --force", 'warn')
+    view.say("✅ Documentation promotion to production complete!")
+    view.say(f"Site directory: {site_dir} (persistent, reused for future deployments)")
+    return 0
+
+
 def main():
     parser = argparse.ArgumentParser(
         description="Promote documentation from asf-staging to asf-site branch",
         formatter_class=argparse.RawDescriptionHelpFormatter,
-        epilog=__doc__
+        epilog=_HELP_EPILOG
     )
     parser.add_argument(
         '--no-push',
@@ -192,159 +256,52 @@ def main():
         type=str,
         help='Not used (kept for consistency with release-docs-stage.py)'
     )
-    
+    parser.add_argument(
+        '--juneau-root',
+        type=Path,
+        default=None,
+        help='Juneau source checkout whose juneau-run draws the live view (default: $JUNEAU_ROOT, then sibling '
+             '../master, then ../juneau)'
+    )
+    run_view.add_console_argument(parser)
+
     args = parser.parse_args()
-    
-    script_dir = Path(__file__).parent
+
+    script_dir = Path(__file__).parent.absolute()
     docs_dir = script_dir.parent  # docs/
-    
-    print("=" * 79)
-    print("Promote Documentation to Production (asf-site branch)")
-    print("=" * 79)
-    print()
-    print("⚠️  WARNING: This will promote documentation from asf-staging to asf-site,")
-    print("   making it live on the production website.")
-    print()
+    juneau_root = find_juneau_root(docs_dir, args.juneau_root, allow_missing=True, validate=False)
+    view = run_view.open_view(juneau_root, args.console)
 
-    # Step 0: Identity guard — must hold before any work begins.
-    print("Step 0: Verifying git identity (apache.org email)...")
-    if not verify_apache_identity(docs_dir):
-        sys.exit(1)
-    print("✅ Git identity verified")
-    print()
-
-    # Get git remote URL
-    remote_url = get_git_remote_url()
-    if not remote_url:
-        print("❌ ERROR: Could not determine git remote URL")
-        sys.exit(1)
-    
-    # Use sibling directory structure: /git/apache/juneau/asf-site
-    parent_dir = docs_dir.parent  # /git/apache/juneau/
-    site_dir = parent_dir / 'asf-site'
-    print(f"Site directory: {site_dir}")
-    
-    # Verify parent directory structure
-    if not parent_dir.exists():
-        print(f"❌ ERROR: Parent directory not found: {parent_dir}")
-        print("Expected structure:")
-        print(f"  {parent_dir}/docs/  (current)")
-        print(f"  {parent_dir}/asf-site/  (will be created)")
-        sys.exit(1)
-    
-    try:
-        # Step 1: Setup sibling directory with asf-site branch
-        print("\nStep 1: Setting up sibling directory with asf-site branch...")
-        
-        # Check if directory already exists
-        if site_dir.exists() and (site_dir / '.git').exists():
-            # Directory exists and is a git repo, update it
-            print("📁 Site directory already exists, updating...")
-            if not run_command(
-                ["git", "fetch", "origin"],
-                cwd=site_dir,
-                description="Fetching latest changes"
-            ):
-                print("\n❌ Failed to fetch latest changes")
-                sys.exit(1)
-        else:
-            # Directory doesn't exist or isn't a git repo, clone it
-            if site_dir.exists():
-                print(f"⚠️  Directory exists but is not a git repository. Removing: {site_dir}")
-                import shutil
-                shutil.rmtree(site_dir)
-            
-            if not run_command(
-                ["git", "clone", remote_url, str(site_dir)],
-                description="Cloning repository to site directory"
-            ):
-                print("\n❌ Failed to clone repository")
-                sys.exit(1)
-        
-        # Step 2: Fetch asf-staging branch
-        if not run_command(
-            ["git", "fetch", "origin", "asf-staging"],
-            cwd=site_dir,
-            description="Fetching asf-staging branch"
-        ):
-            print("\n❌ Failed to fetch asf-staging branch")
-            sys.exit(1)
-        
-        # Step 3: Switch to detached HEAD at origin/asf-staging
-        if not run_command(
-            ["git", "switch", "--detach", "origin/asf-staging"],
-            cwd=site_dir,
-            description="Switching to detached HEAD at origin/asf-staging"
-        ):
-            print("\n❌ Failed to switch to asf-staging branch")
-            sys.exit(1)
-        
-        # Step 4: Set git user (use current user's git config or defaults)
-        try:
-            result = subprocess.run(
-                ["git", "config", "--get", "user.name"],
-                capture_output=True,
-                text=True
-            )
-            git_user = result.stdout.strip() if result.returncode == 0 else "Documentation Promoter"
-            
-            result = subprocess.run(
-                ["git", "config", "--get", "user.email"],
-                capture_output=True,
-                text=True
-            )
-            git_email = result.stdout.strip() if result.returncode == 0 else "docs@juneau.apache.org"
-        except Exception:
-            git_user = "Documentation Promoter"
-            git_email = "docs@juneau.apache.org"
-        
-        run_command(
-            ["git", "config", "user.name", git_user],
-            cwd=site_dir,
-            description="Setting git user name"
-        )
-        run_command(
-            ["git", "config", "user.email", git_email],
-            cwd=site_dir,
-            description="Setting git user email"
-        )
-        
-        # Step 5: Push to asf-site branch (if not --no-push)
-        if not args.no_push:
-            print("\nStep 5: Pushing to remote asf-site branch...")
-            if not run_command(
-                ["git", "push", "origin", "HEAD:asf-site", "--force"],
-                cwd=site_dir,
-                description="Pushing to asf-site branch"
-            ):
-                print("\n❌ Failed to push to asf-site branch")
-                sys.exit(1)
-        else:
-            print("\n⏭️  Skipping push (--no-push flag set)")
-            print(f"   Changes are ready in: {site_dir}")
-            print("   You can manually push with:")
-            print(f"   cd {site_dir}")
-            print("   git push origin HEAD:asf-site --force")
-        
-        print("\n" + "=" * 79)
-        print("✅ Documentation promotion to production complete!")
+    if view.live:
+        header = ["Juneau Docs", "--no-push: nothing is pushed" if args.no_push else "makes asf-staging LIVE on asf-site"]
+        lines = [f"Docs: {docs_dir}", f"Site: {site_dir_for(docs_dir)}"]
+        code = view.session("Promote", lambda: promote(args, view, docs_dir), header=header, lines=lines, plan=PLAN,
+                            repo=docs_dir, mode='push')
+    else:
         print("=" * 79)
-        print(f"\nSite directory: {site_dir}")
-        print("(This directory is persistent and will be reused for future deployments)")
-        
-        # Play success sound
+        print("Promote Documentation to Production (asf-site branch)")
+        print("=" * 79)
+        print()
+        print("⚠️  WARNING: This will promote documentation from asf-staging to asf-site,")
+        print("   making it live on the production website.")
+        print()
+        try:
+            code = promote(args, view, docs_dir)
+        except subprocess.CalledProcessError as e:
+            print(f"\n❌ Command failed (exit code: {e.returncode}): {' '.join(map(str, e.cmd))}")
+            code = 1
+        except KeyboardInterrupt:
+            print("\n\n⚠️  Process interrupted by user")
+            code = 1
+        except Exception as e:
+            print(f"\n❌ ERROR: {e}")
+            traceback.print_exc()
+            code = 1
+
+    if code == 0:
         play_sound(success=True)
-        
-    except KeyboardInterrupt:
-        print("\n\n⚠️  Process interrupted by user")
-        sys.exit(1)
-    except Exception as e:
-        print(f"\n❌ ERROR: {e}")
-        import traceback
-        traceback.print_exc()
-        sys.exit(1)
+    sys.exit(code)
 
 
 if __name__ == '__main__':
     main()
-

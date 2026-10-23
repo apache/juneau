@@ -227,18 +227,23 @@ loadScripts(document, 'script');</script>
 <div class="block">Sets the <a href="../PropertyNamer.html" title="interface in org.apache.juneau.commons.bean"><code>PropertyNamer</code></a> used to derive property names.</div>
 </div>
 <div class="col-first odd-row-color"><code><a href="../BeanConfigContext.Builder.html" title="class in org.apache.juneau.commons.bean">BeanConfigContext.Builder</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">BeanConfigContext.Builder.</span><code><a href="../BeanConfigContext.Builder.html#unsortedProperties(boolean)" class="member-name-link">unsortedProperties</a><wbr>(boolean&nbsp;value)</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">BeanConfigContext.Builder.</span><code><a href="../BeanConfigContext.Builder.html#recordComponentOrder(boolean)" class="member-name-link">recordComponentOrder</a><wbr>(boolean&nbsp;value)</code></div>
 <div class="col-last odd-row-color">
-<div class="block">Toggles whether properties remain in JVM-discovered (non-alphabetical) order.</div>
+<div class="block">Toggles record component (declaration) ordering for <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Record.html" title="class or interface in java.lang" class="external-link"><code>Record</code></a> beans.</div>
 </div>
 <div class="col-first even-row-color"><code><a href="../BeanConfigContext.Builder.html" title="class in org.apache.juneau.commons.bean">BeanConfigContext.Builder</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">BeanConfigContext.Builder.</span><code><a href="../BeanConfigContext.Builder.html#useInterfaceProxies(boolean)" class="member-name-link">useInterfaceProxies</a><wbr>(boolean&nbsp;value)</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">BeanConfigContext.Builder.</span><code><a href="../BeanConfigContext.Builder.html#unsortedProperties(boolean)" class="member-name-link">unsortedProperties</a><wbr>(boolean&nbsp;value)</code></div>
 <div class="col-last even-row-color">
-<div class="block">Toggles automatic creation of interface proxies for bean interfaces.</div>
+<div class="block">Toggles declaration order (instead of alphabetical order) for bean properties.</div>
 </div>
 <div class="col-first odd-row-color"><code><a href="../BeanConfigContext.Builder.html" title="class in org.apache.juneau.commons.bean">BeanConfigContext.Builder</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">BeanConfigContext.Builder.</span><code><a href="../BeanConfigContext.Builder.html#useJavaBeanIntrospector(boolean)" class="member-name-link">useJavaBeanIntrospector</a><wbr>(boolean&nbsp;value)</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">BeanConfigContext.Builder.</span><code><a href="../BeanConfigContext.Builder.html#useInterfaceProxies(boolean)" class="member-name-link">useInterfaceProxies</a><wbr>(boolean&nbsp;value)</code></div>
 <div class="col-last odd-row-color">
+<div class="block">Toggles automatic creation of interface proxies for bean interfaces.</div>
+</div>
+<div class="col-first even-row-color"><code><a href="../BeanConfigContext.Builder.html" title="class in org.apache.juneau.commons.bean">BeanConfigContext.Builder</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">BeanConfigContext.Builder.</span><code><a href="../BeanConfigContext.Builder.html#useJavaBeanIntrospector(boolean)" class="member-name-link">useJavaBeanIntrospector</a><wbr>(boolean&nbsp;value)</code></div>
+<div class="col-last even-row-color">
 <div class="block">Toggles use of <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.desktop/java/beans/Introspector.html" title="class or interface in java.beans" class="external-link"><code>Introspector</code></a> for property discovery.</div>
 </div>
 </div>

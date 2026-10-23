@@ -109,7 +109,7 @@ loadScripts(document, 'script');</script>
 </div>
 <div class="col-first odd-row-color"><a href="assertion/package-summary.html">org.apache.juneau.rest.client.assertion</a></div>
 <div class="col-last odd-row-color">
-<div class="block">Fluent assertion classes for HTTP response validation in the <code>org.apache.juneau.marshall.ng</code> REST client.</div>
+<div class="block">Fluent assertion classes for HTTP response validation in the REST client.</div>
 </div>
 <div class="col-first even-row-color"><a href="classic/package-summary.html">org.apache.juneau.rest.client.classic</a></div>
 <div class="col-last even-row-color">
@@ -142,149 +142,138 @@ loadScripts(document, 'script');</script>
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Class</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color class-summary class-summary-tab2"><a href="BasicRestLogger.html" title="class in org.apache.juneau.rest.client">BasicRestLogger</a></div>
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="BasicRestClientDebugFormatter.html" title="class in org.apache.juneau.rest.client">BasicRestClientDebugFormatter</a></div>
 <div class="col-last even-row-color class-summary class-summary-tab2">
-<div class="block">Convenience <a href="RestLogger.html" title="interface in org.apache.juneau.rest.client"><code>RestLogger</code></a> implementation that routes log entries to a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/System.Logger.html" title="class or interface in java.lang" class="external-link"><code>System.Logger</code></a>.</div>
+<div class="block">Default <a href="RestClientDebugFormatter.html" title="interface in org.apache.juneau.rest.client"><code>RestClientDebugFormatter</code></a> implementation &mdash; secure by default.</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="BasicRestLogger.Builder.html" title="class in org.apache.juneau.rest.client">BasicRestLogger.Builder</a></div>
-<div class="col-last odd-row-color class-summary class-summary-tab2">
-<div class="block">Fluent builder for <a href="BasicRestLogger.html" title="class in org.apache.juneau.rest.client"><code>BasicRestLogger</code></a>.</div>
-</div>
-<div class="col-first even-row-color class-summary class-summary-tab1"><a href="BodyConverter.html" title="interface in org.apache.juneau.rest.client">BodyConverter</a>&lt;T&gt;</div>
-<div class="col-last even-row-color class-summary class-summary-tab1">
+<div class="col-first odd-row-color class-summary class-summary-tab1"><a href="BodyConverter.html" title="interface in org.apache.juneau.rest.client">BodyConverter</a>&lt;T&gt;</div>
+<div class="col-last odd-row-color class-summary class-summary-tab1">
 <div class="block">Converts a Java object passed to <a href="RestRequest.html#body(java.lang.Object)"><code>RestRequest.body(Object)</code></a> into a <a href="TransportBody.html" title="class in org.apache.juneau.rest.client"><code>TransportBody</code></a>.</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab1"><a href="BodyConverter.ThrowingConverter.html" title="interface in org.apache.juneau.rest.client">BodyConverter.ThrowingConverter</a>&lt;T&gt;</div>
-<div class="col-last odd-row-color class-summary class-summary-tab1">
+<div class="col-first even-row-color class-summary class-summary-tab1"><a href="BodyConverter.ThrowingConverter.html" title="interface in org.apache.juneau.rest.client">BodyConverter.ThrowingConverter</a>&lt;T&gt;</div>
+<div class="col-last even-row-color class-summary class-summary-tab1">
 <div class="block">A checked function used by <a href="BodyConverter.html#of(java.lang.Class,org.apache.juneau.rest.client.BodyConverter.ThrowingConverter)"><code>BodyConverter.of(Class, ThrowingConverter)</code></a>.</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab3"><a href="CollectionFormat.html" title="enum class in org.apache.juneau.rest.client">CollectionFormat</a></div>
-<div class="col-last even-row-color class-summary class-summary-tab3">
+<div class="col-first odd-row-color class-summary class-summary-tab3"><a href="CollectionFormat.html" title="enum class in org.apache.juneau.rest.client">CollectionFormat</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab3">
 <div class="block">Specifies how collection-valued query/form parameters are serialized to a single string.</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab1"><a href="HttpTransport.html" title="interface in org.apache.juneau.rest.client">HttpTransport</a></div>
-<div class="col-last odd-row-color class-summary class-summary-tab1">
+<div class="col-first even-row-color class-summary class-summary-tab1"><a href="HttpTransport.html" title="interface in org.apache.juneau.rest.client">HttpTransport</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab1">
 <div class="block">SPI for pluggable HTTP transports.</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab1"><a href="HttpTransportBuilder.html" title="interface in org.apache.juneau.rest.client">HttpTransportBuilder</a></div>
-<div class="col-last even-row-color class-summary class-summary-tab1">
+<div class="col-first odd-row-color class-summary class-summary-tab1"><a href="HttpTransportBuilder.html" title="interface in org.apache.juneau.rest.client">HttpTransportBuilder</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab1">
 <div class="block">A builder interface for configuring and creating <a href="HttpTransport.html" title="interface in org.apache.juneau.rest.client"><code>HttpTransport</code></a> instances.</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab1"><a href="HttpTransportProvider.html" title="interface in org.apache.juneau.rest.client">HttpTransportProvider</a></div>
-<div class="col-last odd-row-color class-summary class-summary-tab1">
+<div class="col-first even-row-color class-summary class-summary-tab1"><a href="HttpTransportProvider.html" title="interface in org.apache.juneau.rest.client">HttpTransportProvider</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab1">
 <div class="block"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/ServiceLoader.html" title="class or interface in java.util" class="external-link"><code>ServiceLoader</code></a> SPI for auto-discovering <a href="HttpTransport.html" title="interface in org.apache.juneau.rest.client"><code>HttpTransport</code></a> implementations on the classpath.</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab2"><a href="JavaHttpTransport.html" title="class in org.apache.juneau.rest.client">JavaHttpTransport</a></div>
-<div class="col-last even-row-color class-summary class-summary-tab2">
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="JavaHttpTransport.html" title="class in org.apache.juneau.rest.client">JavaHttpTransport</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">
 <div class="block"><a href="HttpTransport.html" title="interface in org.apache.juneau.rest.client"><code>HttpTransport</code></a> implementation backed by the JDK's built-in <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.net.http/java/net/http/HttpClient.html" title="class or interface in java.net.http" class="external-link"><code>HttpClient</code></a>.</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="JavaHttpTransportBuilder.html" title="class in org.apache.juneau.rest.client">JavaHttpTransportBuilder</a></div>
-<div class="col-last odd-row-color class-summary class-summary-tab2">
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="JavaHttpTransportBuilder.html" title="class in org.apache.juneau.rest.client">JavaHttpTransportBuilder</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab2">
 <div class="block">Fluent builder for <a href="JavaHttpTransport.html" title="class in org.apache.juneau.rest.client"><code>JavaHttpTransport</code></a>.</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab2"><a href="JavaHttpTransportProvider.html" title="class in org.apache.juneau.rest.client">JavaHttpTransportProvider</a></div>
-<div class="col-last even-row-color class-summary class-summary-tab2">
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="JavaHttpTransportProvider.html" title="class in org.apache.juneau.rest.client">JavaHttpTransportProvider</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">
 <div class="block"><a href="HttpTransportProvider.html" title="interface in org.apache.juneau.rest.client"><code>HttpTransportProvider</code></a> implementation that supplies a <a href="JavaHttpTransport.html" title="class in org.apache.juneau.rest.client"><code>JavaHttpTransport</code></a>.</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="RecordStreamBody.html" title="class in org.apache.juneau.rest.client">RecordStreamBody</a></div>
-<div class="col-last odd-row-color class-summary class-summary-tab2">
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="PolicyEnforcedRedirects.html" title="class in org.apache.juneau.rest.client">PolicyEnforcedRedirects</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab2">
+<div class="block">Shared Juneau-controlled redirect loop for SSRF-guard-active (<a href="TransportRequest.html#isSsrfGuardActive()"><code>TransportRequest.isSsrfGuardActive()</code></a>)
+ <code>@Remote</code> requests.</div>
+</div>
+<div class="col-first odd-row-color class-summary class-summary-tab1"><a href="PolicyEnforcedRedirects.HopExecutor.html" title="interface in org.apache.juneau.rest.client">PolicyEnforcedRedirects.HopExecutor</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab1">
+<div class="block">Performs a single pinned HTTP exchange for one hop of a policy-covered redirect chain.</div>
+</div>
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="RecordStreamBody.html" title="class in org.apache.juneau.rest.client">RecordStreamBody</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab2">
 <div class="block">A streaming HTTP request body that emits its content through a token/record-streaming cursor.</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab2"><a href="RedirectSecurity.html" title="class in org.apache.juneau.rest.client">RedirectSecurity</a></div>
-<div class="col-last even-row-color class-summary class-summary-tab2">
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="RedirectSecurity.html" title="class in org.apache.juneau.rest.client">RedirectSecurity</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">
 <div class="block">Pure decision logic for whether caller-set credential headers (such as <code>Authorization</code>
  or <code>Cookie</code>) should be forwarded or stripped when a REST call is transparently replayed
  against a redirect target (an HTTP <code>3xx</code> response's <code>Location</code>).</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab3"><a href="RedirectSecurity.CredentialDecision.html" title="enum class in org.apache.juneau.rest.client">RedirectSecurity.CredentialDecision</a></div>
-<div class="col-last odd-row-color class-summary class-summary-tab3">
+<div class="col-first even-row-color class-summary class-summary-tab3"><a href="RedirectSecurity.CredentialDecision.html" title="enum class in org.apache.juneau.rest.client">RedirectSecurity.CredentialDecision</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab3">
 <div class="block">The outcome of a credential-forwarding decision for a single redirect hop.</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab2"><a href="ResponseBody.html" title="class in org.apache.juneau.rest.client">ResponseBody</a></div>
-<div class="col-last even-row-color class-summary class-summary-tab2">
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="ResponseBody.html" title="class in org.apache.juneau.rest.client">ResponseBody</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">
 <div class="block">A fluent accessor for an HTTP response body returned by <a href="RestResponse.html" title="class in org.apache.juneau.rest.client"><code>RestResponse</code></a>.</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="ResponseHeader.html" title="class in org.apache.juneau.rest.client">ResponseHeader</a></div>
-<div class="col-last odd-row-color class-summary class-summary-tab2">
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="ResponseHeader.html" title="class in org.apache.juneau.rest.client">ResponseHeader</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab2">
 <div class="block">A fluent accessor for a named HTTP response header.</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab5"><a href="RestCallException.html" title="class in org.apache.juneau.rest.client">RestCallException</a></div>
-<div class="col-last even-row-color class-summary class-summary-tab5">
+<div class="col-first odd-row-color class-summary class-summary-tab5"><a href="RestCallException.html" title="class in org.apache.juneau.rest.client">RestCallException</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab5">
 <div class="block">Exception thrown when an HTTP call fails at the REST client level (e.g. unexpected status code, body
  deserialization failure, or interceptor rejection).</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab1"><a href="RestCallInterceptor.html" title="interface in org.apache.juneau.rest.client">RestCallInterceptor</a></div>
-<div class="col-last odd-row-color class-summary class-summary-tab1">
+<div class="col-first even-row-color class-summary class-summary-tab1"><a href="RestCallInterceptor.html" title="interface in org.apache.juneau.rest.client">RestCallInterceptor</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab1">
 <div class="block">Lifecycle interceptor for REST calls made by <a href="RestClient.html" title="class in org.apache.juneau.rest.client"><code>RestClient</code></a>.</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab2"><a href="RestClient.html" title="class in org.apache.juneau.rest.client">RestClient</a></div>
-<div class="col-last even-row-color class-summary class-summary-tab2">
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="RestClient.html" title="class in org.apache.juneau.rest.client">RestClient</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">
 <div class="block">Next-generation transport-agnostic REST client.</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="RestClient.Builder.html" title="class in org.apache.juneau.rest.client">RestClient.Builder</a></div>
-<div class="col-last odd-row-color class-summary class-summary-tab2">
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="RestClient.Builder.html" title="class in org.apache.juneau.rest.client">RestClient.Builder</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab2">
 <div class="block">Fluent builder for <a href="RestClient.html" title="class in org.apache.juneau.rest.client"><code>RestClient</code></a>.</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab2"><a href="RestLogEntry.html" title="class in org.apache.juneau.rest.client">RestLogEntry</a></div>
-<div class="col-last even-row-color class-summary class-summary-tab2">
-<div class="block">Structured log entry produced after every <a href="RestRequest.html#run()"><code>RestRequest.run()</code></a> invocation.</div>
-</div>
-<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="RestLogEntry.Builder.html" title="class in org.apache.juneau.rest.client">RestLogEntry.Builder</a></div>
-<div class="col-last odd-row-color class-summary class-summary-tab2">
-<div class="block">Builder for <a href="RestLogEntry.html" title="class in org.apache.juneau.rest.client"><code>RestLogEntry</code></a>.</div>
-</div>
-<div class="col-first even-row-color class-summary class-summary-tab1"><a href="RestLogger.html" title="interface in org.apache.juneau.rest.client">RestLogger</a></div>
-<div class="col-last even-row-color class-summary class-summary-tab1">
-<div class="block">Pluggable logging interface for REST calls made by <a href="RestClient.html" title="class in org.apache.juneau.rest.client"><code>RestClient</code></a>.</div>
-</div>
-<div class="col-first odd-row-color class-summary class-summary-tab1"><a href="RestLogLevelResolver.html" title="interface in org.apache.juneau.rest.client">RestLogLevelResolver</a></div>
+<div class="col-first odd-row-color class-summary class-summary-tab1"><a href="RestClientDebugFormatter.html" title="interface in org.apache.juneau.rest.client">RestClientDebugFormatter</a></div>
 <div class="col-last odd-row-color class-summary class-summary-tab1">
-<div class="block">Determines the <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/System.Logger.Level.html" title="class or interface in java.lang" class="external-link"><code>System.Logger.Level</code></a> for a <a href="RestLogEntry.html" title="class in org.apache.juneau.rest.client"><code>RestLogEntry</code></a>.</div>
+<div class="block">Per-tier formatter for JUL-level-driven REST client debug logging.</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab2"><a href="RestLogLevelResolver.RuleBuilder.html" title="class in org.apache.juneau.rest.client">RestLogLevelResolver.RuleBuilder</a></div>
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="RestRequest.html" title="class in org.apache.juneau.rest.client">RestRequest</a></div>
 <div class="col-last even-row-color class-summary class-summary-tab2">
-<div class="block">Fluent builder for ordered predicate-based <a href="RestLogLevelResolver.html" title="interface in org.apache.juneau.rest.client"><code>RestLogLevelResolver</code></a> instances.</div>
-</div>
-<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="RestRequest.html" title="class in org.apache.juneau.rest.client">RestRequest</a></div>
-<div class="col-last odd-row-color class-summary class-summary-tab2">
 <div class="block">Fluent builder for a single HTTP request.</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab2"><a href="RestResponse.html" title="class in org.apache.juneau.rest.client">RestResponse</a></div>
-<div class="col-last even-row-color class-summary class-summary-tab2">
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="RestResponse.html" title="class in org.apache.juneau.rest.client">RestResponse</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">
 <div class="block">An HTTP response returned by <a href="RestRequest.html#run()"><code>RestRequest.run()</code></a>.</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="SerializerBody.html" title="class in org.apache.juneau.rest.client">SerializerBody</a></div>
-<div class="col-last odd-row-color class-summary class-summary-tab2">
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="SerializerBody.html" title="class in org.apache.juneau.rest.client">SerializerBody</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab2">
 <div class="block">A repeatable <a href="../../http/HttpBody.html" title="interface in org.apache.juneau.http"><code>HttpBody</code></a> that serializes a POJO straight to the transport output stream.</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab2"><a href="TransportBody.html" title="class in org.apache.juneau.rest.client">TransportBody</a></div>
-<div class="col-last even-row-color class-summary class-summary-tab2">
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="TransportBody.html" title="class in org.apache.juneau.rest.client">TransportBody</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">
 <div class="block">The body of a transport-layer request — a thin wrapper around <a href="../../http/HttpBody.html" title="interface in org.apache.juneau.http"><code>HttpBody</code></a> that gives transports a
  stable contract without needing to know about higher-level body types.</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab5"><a href="TransportException.html" title="class in org.apache.juneau.rest.client">TransportException</a></div>
-<div class="col-last odd-row-color class-summary class-summary-tab5">
+<div class="col-first even-row-color class-summary class-summary-tab5"><a href="TransportException.html" title="class in org.apache.juneau.rest.client">TransportException</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab5">
 <div class="block">Thrown by <a href="HttpTransport.html#execute(org.apache.juneau.rest.client.TransportRequest)"><code>HttpTransport.execute(TransportRequest)</code></a> when a network-level error occurs (e.g. connection
  refused, timeout, SSL handshake failure).</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab4"><a href="TransportHeader.html" title="class in org.apache.juneau.rest.client">TransportHeader</a></div>
-<div class="col-last even-row-color class-summary class-summary-tab4">
+<div class="col-first odd-row-color class-summary class-summary-tab4"><a href="TransportHeader.html" title="class in org.apache.juneau.rest.client">TransportHeader</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab4">
 <div class="block">An HTTP header name/value pair as seen by the transport layer.</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="TransportRequest.html" title="class in org.apache.juneau.rest.client">TransportRequest</a></div>
-<div class="col-last odd-row-color class-summary class-summary-tab2">
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="TransportRequest.html" title="class in org.apache.juneau.rest.client">TransportRequest</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab2">
 <div class="block">A fully-resolved, transport-layer HTTP request.</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab2"><a href="TransportRequest.Builder.html" title="class in org.apache.juneau.rest.client">TransportRequest.Builder</a></div>
-<div class="col-last even-row-color class-summary class-summary-tab2">
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="TransportRequest.Builder.html" title="class in org.apache.juneau.rest.client">TransportRequest.Builder</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">
 <div class="block">Fluent builder for <a href="TransportRequest.html" title="class in org.apache.juneau.rest.client"><code>TransportRequest</code></a>.</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="TransportResponse.html" title="class in org.apache.juneau.rest.client">TransportResponse</a></div>
-<div class="col-last odd-row-color class-summary class-summary-tab2">
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="TransportResponse.html" title="class in org.apache.juneau.rest.client">TransportResponse</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab2">
 <div class="block">A transport-layer HTTP response.</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab2"><a href="TransportResponse.Builder.html" title="class in org.apache.juneau.rest.client">TransportResponse.Builder</a></div>
-<div class="col-last even-row-color class-summary class-summary-tab2">
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="TransportResponse.Builder.html" title="class in org.apache.juneau.rest.client">TransportResponse.Builder</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">
 <div class="block">Fluent builder for <a href="TransportResponse.html" title="class in org.apache.juneau.rest.client"><code>TransportResponse</code></a>.</div>
 </div>
 </div>

@@ -73,24 +73,36 @@ loadScripts(document, 'script');</script>
 <div class="col-last odd-row-color">
 <div class="block">Embedded Tomcat integration for Juneau microservices.</div>
 </div>
-<div class="col-first even-row-color"><a href="#org.apache.juneau.petstore.jetty">org.apache.juneau.petstore.jetty</a></div>
+<div class="col-first even-row-color"><a href="#org.apache.juneau.petstore.console">org.apache.juneau.petstore.console</a></div>
 <div class="col-last even-row-color">
+<div class="block">Petstore admin console: the <code>/console</code> page tree.</div>
+</div>
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.petstore.console.dev">org.apache.juneau.petstore.console.dev</a></div>
+<div class="col-last odd-row-color">
+<div class="block">Petstore console Developer pages: custom cards, themes, rendering flavors and the secure API demo.</div>
+</div>
+<div class="col-first even-row-color"><a href="#org.apache.juneau.petstore.console.dev.flavors">org.apache.juneau.petstore.console.dev.flavors</a></div>
+<div class="col-last even-row-color">
+<div class="block">Petstore console Rendering flavors: one console page per petstore view technology.</div>
+</div>
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.petstore.jetty">org.apache.juneau.petstore.jetty</a></div>
+<div class="col-last odd-row-color">
 <div class="block">Apache Juneau Petstore - Jetty/Microservice deployment.</div>
 </div>
-<div class="col-first odd-row-color"><a href="#org.apache.juneau.petstore.rest">org.apache.juneau.petstore.rest</a></div>
-<div class="col-last odd-row-color">
-<div class="block">Petstore REST resources.</div>
-</div>
-<div class="col-first even-row-color"><a href="#org.apache.juneau.rest.server.mcp.v20260728">org.apache.juneau.rest.server.mcp.v20260728</a></div>
+<div class="col-first even-row-color"><a href="#org.apache.juneau.petstore.springboot">org.apache.juneau.petstore.springboot</a></div>
 <div class="col-last even-row-color">
+<div class="block">Apache Juneau Petstore - Spring Boot deployment.</div>
+</div>
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.rest.server.mcp.v20260728">org.apache.juneau.rest.server.mcp.v20260728</a></div>
+<div class="col-last odd-row-color">
 <div class="block">MCP <code>2026-07-28</code> binding for <code>juneau-rest-server-mcp</code>.</div>
 </div>
-<div class="col-first odd-row-color"><a href="#org.apache.juneau.rest.server.springboot">org.apache.juneau.rest.server.springboot</a></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><a href="#org.apache.juneau.rest.server.springboot">org.apache.juneau.rest.server.springboot</a></div>
+<div class="col-last even-row-color">
 <div class="block">Spring Boot Integration</div>
 </div>
-<div class="col-first even-row-color"><a href="#org.apache.juneau.server.config">org.apache.juneau.server.config</a></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.server.config">org.apache.juneau.server.config</a></div>
+<div class="col-last odd-row-color">
 <div class="block">Server Configuration Repository</div>
 </div>
 </div>
@@ -119,6 +131,17 @@ loadScripts(document, 'script');</script>
 <div class="col-second even-row-color"><span class="type-name-label">BeanAnnotation.Builder.</span><code><a href="../BeanAnnotation.Builder.html#build()" class="member-name-link">build</a>()</code></div>
 <div class="col-last even-row-color">
 <div class="block">Instantiates a new <a href="../Bean.html" title="annotation interface in org.apache.juneau.commons.inject"><code>@Bean</code></a> object initialized with this builder.</div>
+</div>
+</div>
+<div class="caption"><span>Methods in <a href="../package-summary.html">org.apache.juneau.commons.inject</a> that return types with arguments of type <a href="../Bean.html" title="annotation interface in org.apache.juneau.commons.inject">Bean</a></span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier and Type</div>
+<div class="table-header col-second">Method</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code>static <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="../Bean.html" title="annotation interface in org.apache.juneau.commons.inject">Bean</a>&gt;</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">BeanAnnotation.</span><code><a href="../BeanAnnotation.html#find(org.apache.juneau.commons.reflect.MethodInfo)" class="member-name-link">find</a><wbr>(<a href="../../reflect/MethodInfo.html" title="class in org.apache.juneau.commons.reflect">MethodInfo</a>&nbsp;method)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Finds the <a href="../Bean.html" title="annotation interface in org.apache.juneau.commons.inject"><code>@Bean</code></a> annotation that applies to the specified method.</div>
 </div>
 </div>
 <div class="caption"><span>Methods in <a href="../package-summary.html">org.apache.juneau.commons.inject</a> with parameters of type <a href="../Bean.html" title="annotation interface in org.apache.juneau.commons.inject">Bean</a></span></div>
@@ -247,6 +270,53 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
+<section class="detail" id="org.apache.juneau.petstore.console">
+<h2>Uses of <a href="../Bean.html" title="annotation interface in org.apache.juneau.commons.inject">Bean</a> in <a href="../../../petstore/console/package-summary.html">org.apache.juneau.petstore.console</a></h2>
+<div class="caption"><span>Methods in <a href="../../../petstore/console/package-summary.html">org.apache.juneau.petstore.console</a> with annotations of type <a href="../Bean.html" title="annotation interface in org.apache.juneau.commons.inject">Bean</a></span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier and Type</div>
+<div class="table-header col-second">Method</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code><a href="../../../rest/server/view/freemarker/FreemarkerMixin.html" title="class in org.apache.juneau.rest.server.view.freemarker">FreemarkerMixin</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">PetstoreConsolePage.</span><code><a href="../../../petstore/console/PetstoreConsolePage.html#freemarker()" class="member-name-link">freemarker</a>()</code></div>
+<div class="col-last even-row-color">
+<div class="block">The console FreeMarker mixin: petstore templates, <code>base.ftlh</code> chrome, <code>assetUrl(..)</code> over this
+ package's bundled scripts, and the <a href="../../../petstore/console/dev/InventoryGaugeCardType.html" title="class in org.apache.juneau.petstore.console.dev"><code>InventoryGaugeCardType</code></a> custom card type.</div>
+</div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="org.apache.juneau.petstore.console.dev">
+<h2>Uses of <a href="../Bean.html" title="annotation interface in org.apache.juneau.commons.inject">Bean</a> in <a href="../../../petstore/console/dev/package-summary.html">org.apache.juneau.petstore.console.dev</a></h2>
+<div class="caption"><span>Methods in <a href="../../../petstore/console/dev/package-summary.html">org.apache.juneau.petstore.console.dev</a> with annotations of type <a href="../Bean.html" title="annotation interface in org.apache.juneau.commons.inject">Bean</a></span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier and Type</div>
+<div class="table-header col-second">Method</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code><a href="../../../rest/server/guard/RestGuardList.html" title="class in org.apache.juneau.rest.server.guard">RestGuardList</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">SecureApiRest.</span><code><a href="../../../petstore/console/dev/SecureApiRest.html#guards(org.apache.juneau.commons.inject.BeanStore)" class="member-name-link">guards</a><wbr>(<a href="../BeanStore.html" title="interface in org.apache.juneau.commons.inject">BeanStore</a>&nbsp;bs)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Gates every op on this resource with a bearer-token guard.</div>
+</div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="org.apache.juneau.petstore.console.dev.flavors">
+<h2>Uses of <a href="../Bean.html" title="annotation interface in org.apache.juneau.commons.inject">Bean</a> in <a href="../../../petstore/console/dev/flavors/package-summary.html">org.apache.juneau.petstore.console.dev.flavors</a></h2>
+<div class="caption"><span>Methods in <a href="../../../petstore/console/dev/flavors/package-summary.html">org.apache.juneau.petstore.console.dev.flavors</a> with annotations of type <a href="../Bean.html" title="annotation interface in org.apache.juneau.commons.inject">Bean</a></span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier and Type</div>
+<div class="table-header col-second">Method</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code><a href="../../../rest/server/view/mustache/MustacheMixin.html" title="class in org.apache.juneau.rest.server.view.mustache">MustacheMixin</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">MustacheFlavorRest.</span><code><a href="../../../petstore/console/dev/flavors/MustacheFlavorRest.html#mustache()" class="member-name-link">mustache</a>()</code></div>
+<div class="col-last even-row-color">&nbsp;</div>
+</div>
+</section>
+</li>
+<li>
 <section class="detail" id="org.apache.juneau.petstore.jetty">
 <h2>Uses of <a href="../Bean.html" title="annotation interface in org.apache.juneau.commons.inject">Bean</a> in <a href="../../../petstore/jetty/package-summary.html">org.apache.juneau.petstore.jetty</a></h2>
 <div class="caption"><span>Methods in <a href="../../../petstore/jetty/package-summary.html">org.apache.juneau.petstore.jetty</a> with annotations of type <a href="../Bean.html" title="annotation interface in org.apache.juneau.commons.inject">Bean</a></span></div>
@@ -254,6 +324,27 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code><a href="../../../microservice/ServletFilterRegistration.html" title="class in org.apache.juneau.microservice">ServletFilterRegistration</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">App.AppConfig.</span><code><a href="../../../petstore/jetty/App.AppConfig.html#adminBoundary()" class="member-name-link">adminBoundary</a>()</code></div>
+<div class="col-last even-row-color">
+<div class="block">Provides the admin resources' CSRF boundary, covering <code>/config</code>, <code>/logs</code> and <code>/shutdown</code>.</div>
+</div>
+<div class="col-first odd-row-color"><code><a href="../../../microservice/ServletFilterRegistration.html" title="class in org.apache.juneau.microservice">ServletFilterRegistration</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">App.AppConfig.</span><code><a href="../../../petstore/jetty/App.AppConfig.html#apiBoundary()" class="member-name-link">apiBoundary</a>()</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Provides the API's CSRF boundary, covering <code>/petstore/*</code>.</div>
+</div>
+<div class="col-first even-row-color"><code><a href="../../../microservice/ServletFilterRegistration.html" title="class in org.apache.juneau.microservice">ServletFilterRegistration</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">App.AppConfig.</span><code><a href="../../../petstore/jetty/App.AppConfig.html#consoleBoundary()" class="member-name-link">consoleBoundary</a>()</code></div>
+<div class="col-last even-row-color">
+<div class="block">Provides the console's CSRF boundary, covering <code>/console</code> only.</div>
+</div>
+<div class="col-first odd-row-color"><code><a href="../../../petstore/service/PetStore.html" title="class in org.apache.juneau.petstore.service">PetStore</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">RootResources.</span><code><a href="../../../petstore/jetty/RootResources.html#petStore()" class="member-name-link">petStore</a>()</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Registers the one <a href="../../../petstore/service/PetStore.html" title="class in org.apache.juneau.petstore.service"><code>PetStore</code></a> shared by the <code>/petstore</code> API and the console tree, seeded with the
+ deterministic demo data set.</div>
+</div>
 <div class="col-first even-row-color"><code>jakarta.servlet.Servlet</code></div>
 <div class="col-second even-row-color"><span class="type-name-label">App.AppConfig.</span><code><a href="../../../petstore/jetty/App.AppConfig.html#rootResources()" class="member-name-link">rootResources</a>()</code></div>
 <div class="col-last even-row-color">
@@ -264,30 +355,18 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
-<section class="detail" id="org.apache.juneau.petstore.rest">
-<h2>Uses of <a href="../Bean.html" title="annotation interface in org.apache.juneau.commons.inject">Bean</a> in <a href="../../../petstore/rest/package-summary.html">org.apache.juneau.petstore.rest</a></h2>
-<div class="caption"><span>Methods in <a href="../../../petstore/rest/package-summary.html">org.apache.juneau.petstore.rest</a> with annotations of type <a href="../Bean.html" title="annotation interface in org.apache.juneau.commons.inject">Bean</a></span></div>
+<section class="detail" id="org.apache.juneau.petstore.springboot">
+<h2>Uses of <a href="../Bean.html" title="annotation interface in org.apache.juneau.commons.inject">Bean</a> in <a href="../../../petstore/springboot/package-summary.html">org.apache.juneau.petstore.springboot</a></h2>
+<div class="caption"><span>Methods in <a href="../../../petstore/springboot/package-summary.html">org.apache.juneau.petstore.springboot</a> with annotations of type <a href="../Bean.html" title="annotation interface in org.apache.juneau.commons.inject">Bean</a></span></div>
 <div class="summary-table three-column-summary">
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><code><a href="../../../rest/server/view/freemarker/FreemarkerMixin.html" title="class in org.apache.juneau.rest.server.view.freemarker">FreemarkerMixin</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">PetFreemarkerViewResource.</span><code><a href="../../../petstore/rest/PetFreemarkerViewResource.html#freemarker()" class="member-name-link">freemarker</a>()</code></div>
+<div class="col-first even-row-color"><code><a href="../../../petstore/service/PetStore.html" title="class in org.apache.juneau.petstore.service">PetStore</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">RootResources.</span><code><a href="../../../petstore/springboot/RootResources.html#petStore()" class="member-name-link">petStore</a>()</code></div>
 <div class="col-last even-row-color">
-<div class="block">Provides a <a href="../../../rest/server/view/freemarker/FreemarkerMixin.html" title="class in org.apache.juneau.rest.server.view.freemarker"><code>FreemarkerMixin</code></a> configured to resolve templates under <code>petstore-templates/</code>.</div>
-</div>
-<div class="col-first odd-row-color"><code><a href="../../../rest/server/guard/RestGuardList.html" title="class in org.apache.juneau.rest.server.guard">RestGuardList</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">PetSecureResource.</span><code><a href="../../../petstore/rest/PetSecureResource.html#guards(org.apache.juneau.commons.inject.BeanStore)" class="member-name-link">guards</a><wbr>(<a href="../BeanStore.html" title="interface in org.apache.juneau.commons.inject">BeanStore</a>&nbsp;bs)</code></div>
-<div class="col-last odd-row-color">
-<div class="block">Provides the <a href="../../../rest/server/guard/RestGuardList.html" title="class in org.apache.juneau.rest.server.guard"><code>RestGuardList</code></a> that gates every op on this resource with a
- <a href="../../../rest/server/auth/BearerTokenGuard.html" title="class in org.apache.juneau.rest.server.auth"><code>BearerTokenGuard</code></a> — fail-closed bearer-token enforcement.</div>
-</div>
-<div class="col-first even-row-color"><code><a href="../../../rest/server/view/mustache/MustacheMixin.html" title="class in org.apache.juneau.rest.server.view.mustache">MustacheMixin</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">PetMustacheViewResource.</span><code><a href="../../../petstore/rest/PetMustacheViewResource.html#mustache()" class="member-name-link">mustache</a>()</code></div>
-<div class="col-last even-row-color">
-<div class="block">Provides a <a href="../../../rest/server/view/mustache/MustacheMixin.html" title="class in org.apache.juneau.rest.server.view.mustache"><code>MustacheMixin</code></a> configured to resolve templates under <code>petstore-templates/</code> with
- an implicit <code>.mustache</code> suffix — so <code>MustacheView.of("pet")</code> resolves to the classpath
- resource <code>petstore-templates/pet.mustache</code>.</div>
+<div class="block">Registers the one <a href="../../../petstore/service/PetStore.html" title="class in org.apache.juneau.petstore.service"><code>PetStore</code></a> shared by the <code>/petstore</code> API and the console tree, seeded with the
+ deterministic demo data set.</div>
 </div>
 </div>
 </section>

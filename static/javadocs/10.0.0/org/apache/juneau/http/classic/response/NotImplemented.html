@@ -379,14 +379,14 @@ loadScripts(document, 'script');</script>
 <dt>Parameters:</dt>
 <dd><code>response</code> - The HTTP response to copy from.  Must not be <jk>null</jk>.</dd>
 <dt>Throws:</dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/AssertionError.html" title="class or interface in java.lang" class="external-link">AssertionError</a></code> - If HTTP response status code does not match what was expected.</dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/IllegalArgumentException.html" title="class or interface in java.lang" class="external-link">IllegalArgumentException</a></code> - If HTTP response status code does not match what was expected.</dd>
 </dl>
 </section>
 </li>
 <li>
 <section class="detail" id="&lt;init&gt;(java.lang.String,java.lang.Object...)">
 <h3>NotImplemented</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/response/NotImplemented.html#line-92">NotImplemented</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;msg,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/response/NotImplemented.html#line-91">NotImplemented</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;msg,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>...&nbsp;args)</span></div>
 <div class="block">Constructor.</div>
 <dl class="notes">
@@ -399,7 +399,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;(java.lang.Throwable)">
 <h3>NotImplemented</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/response/NotImplemented.html#line-101">NotImplemented</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html" title="class or interface in java.lang" class="external-link">Throwable</a>&nbsp;cause)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/response/NotImplemented.html#line-100">NotImplemented</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html" title="class or interface in java.lang" class="external-link">Throwable</a>&nbsp;cause)</span></div>
 <div class="block">Constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -410,7 +410,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;(java.lang.Throwable,java.lang.String,java.lang.Object...)">
 <h3>NotImplemented</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/response/NotImplemented.html#line-112">NotImplemented</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html" title="class or interface in java.lang" class="external-link">Throwable</a>&nbsp;cause,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/response/NotImplemented.html#line-111">NotImplemented</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html" title="class or interface in java.lang" class="external-link">Throwable</a>&nbsp;cause,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;msg,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>...&nbsp;args)</span></div>
 <div class="block">Constructor.</div>
@@ -425,7 +425,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.http.classic.response.NotImplemented)">
 <h3>NotImplemented</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/response/NotImplemented.html#line-122">NotImplemented</a></span><wbr><span class="parameters">(<a href="NotImplemented.html" title="class in org.apache.juneau.http.classic.response">NotImplemented</a>&nbsp;copyFrom)</span></div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/response/NotImplemented.html#line-121">NotImplemented</a></span><wbr><span class="parameters">(<a href="NotImplemented.html" title="class in org.apache.juneau.http.classic.response">NotImplemented</a>&nbsp;copyFrom)</span></div>
 <div class="block">Copy constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -444,7 +444,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="copy()">
 <h3>copy</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="NotImplemented.html" title="class in org.apache.juneau.http.classic.response">NotImplemented</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/response/NotImplemented.html#line-131">copy</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="NotImplemented.html" title="class in org.apache.juneau.http.classic.response">NotImplemented</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/response/NotImplemented.html#line-130">copy</a></span>()</div>
 <div class="block">Creates a modifiable copy of this bean.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -455,7 +455,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="setContent(org.apache.http.HttpEntity)">
 <h3>setContent</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="NotImplemented.html" title="class in org.apache.juneau.http.classic.response">NotImplemented</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/response/NotImplemented.html#line-135">setContent</a></span><wbr><span class="parameters">(<a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/HttpEntity.html" title="class or interface in org.apache.http" class="external-link">HttpEntity</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="NotImplemented.html" title="class in org.apache.juneau.http.classic.response">NotImplemented</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/response/NotImplemented.html#line-134">setContent</a></span><wbr><span class="parameters">(<a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/HttpEntity.html" title="class or interface in org.apache.http" class="external-link">HttpEntity</a>&nbsp;value)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="BasicHttpException.html#setContent(org.apache.http.HttpEntity)">BasicHttpException</a></code></span></div>
 <div class="block">Sets the body on this response.</div>
 <dl class="notes">
@@ -471,7 +471,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="setContent(java.lang.String)">
 <h3>setContent</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="NotImplemented.html" title="class in org.apache.juneau.http.classic.response">NotImplemented</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/response/NotImplemented.html#line-141">setContent</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="NotImplemented.html" title="class in org.apache.juneau.http.classic.response">NotImplemented</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/response/NotImplemented.html#line-140">setContent</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="BasicHttpException.html#setContent(java.lang.String)">BasicHttpException</a></code></span></div>
 <div class="block">Sets the body on this response.</div>
 <dl class="notes">
@@ -487,7 +487,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="setHeader2(java.lang.String,java.lang.Object)">
 <h3>setHeader2</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="NotImplemented.html" title="class in org.apache.juneau.http.classic.response">NotImplemented</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/response/NotImplemented.html#line-147">setHeader2</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="NotImplemented.html" title="class in org.apache.juneau.http.classic.response">NotImplemented</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/response/NotImplemented.html#line-146">setHeader2</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="BasicHttpException.html#setHeader2(java.lang.String,java.lang.Object)">BasicHttpException</a></code></span></div>
 <div class="block">Sets a header on this response.</div>
@@ -505,7 +505,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="setHeaders(org.apache.juneau.http.classic.header.HeaderList)">
 <h3>setHeaders</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="NotImplemented.html" title="class in org.apache.juneau.http.classic.response">NotImplemented</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/response/NotImplemented.html#line-153">setHeaders</a></span><wbr><span class="parameters">(<a href="../header/HeaderList.html" title="class in org.apache.juneau.http.classic.header">HeaderList</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="NotImplemented.html" title="class in org.apache.juneau.http.classic.response">NotImplemented</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/response/NotImplemented.html#line-152">setHeaders</a></span><wbr><span class="parameters">(<a href="../header/HeaderList.html" title="class in org.apache.juneau.http.classic.header">HeaderList</a>&nbsp;value)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="BasicHttpException.html#setHeaders(org.apache.juneau.http.classic.header.HeaderList)">BasicHttpException</a></code></span></div>
 <div class="block">Sets the specified headers on this response.</div>
 <dl class="notes">
@@ -521,7 +521,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="setHeaders(java.util.List)">
 <h3>setHeaders</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="NotImplemented.html" title="class in org.apache.juneau.http.classic.response">NotImplemented</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/response/NotImplemented.html#line-159">setHeaders</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/Header.html" title="class or interface in org.apache.http" class="external-link">Header</a>&gt;&nbsp;values)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="NotImplemented.html" title="class in org.apache.juneau.http.classic.response">NotImplemented</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/response/NotImplemented.html#line-158">setHeaders</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/Header.html" title="class or interface in org.apache.http" class="external-link">Header</a>&gt;&nbsp;values)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="BasicHttpException.html#setHeaders(java.util.List)">BasicHttpException</a></code></span></div>
 <div class="block">Sets the specified headers on this response.</div>
 <dl class="notes">
@@ -537,7 +537,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="setHeaders2(org.apache.http.Header...)">
 <h3>setHeaders2</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="NotImplemented.html" title="class in org.apache.juneau.http.classic.response">NotImplemented</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/response/NotImplemented.html#line-165">setHeaders2</a></span><wbr><span class="parameters">(<a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/Header.html" title="class or interface in org.apache.http" class="external-link">Header</a>...&nbsp;values)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="NotImplemented.html" title="class in org.apache.juneau.http.classic.response">NotImplemented</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/response/NotImplemented.html#line-164">setHeaders2</a></span><wbr><span class="parameters">(<a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/Header.html" title="class or interface in org.apache.http" class="external-link">Header</a>...&nbsp;values)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="BasicHttpException.html#setHeaders2(org.apache.http.Header...)">BasicHttpException</a></code></span></div>
 <div class="block">Sets multiple headers on this response.</div>
 <dl class="notes">
@@ -553,7 +553,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="setLocale2(java.util.Locale)">
 <h3>setLocale2</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="NotImplemented.html" title="class in org.apache.juneau.http.classic.response">NotImplemented</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/response/NotImplemented.html#line-171">setLocale2</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Locale.html" title="class or interface in java.util" class="external-link">Locale</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="NotImplemented.html" title="class in org.apache.juneau.http.classic.response">NotImplemented</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/response/NotImplemented.html#line-170">setLocale2</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Locale.html" title="class or interface in java.util" class="external-link">Locale</a>&nbsp;value)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="BasicHttpException.html#setLocale2(java.util.Locale)">BasicHttpException</a></code></span></div>
 <div class="block">Sets the locale used to retrieve reason phrases.
 
@@ -572,7 +572,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="setMessage(java.lang.String,java.lang.Object...)">
 <h3>setMessage</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="NotImplemented.html" title="class in org.apache.juneau.http.classic.response">NotImplemented</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/response/NotImplemented.html#line-177">setMessage</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;message,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="NotImplemented.html" title="class in org.apache.juneau.http.classic.response">NotImplemented</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/response/NotImplemented.html#line-176">setMessage</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;message,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>...&nbsp;args)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../../../commons/BasicRuntimeException.html#setMessage(java.lang.String,java.lang.Object...)">BasicRuntimeException</a></code></span></div>
 <div class="block">Sets the detail message on this exception.</div>
@@ -590,7 +590,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="setProtocolVersion(org.apache.http.ProtocolVersion)">
 <h3>setProtocolVersion</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="NotImplemented.html" title="class in org.apache.juneau.http.classic.response">NotImplemented</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/response/NotImplemented.html#line-183">setProtocolVersion</a></span><wbr><span class="parameters">(<a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/ProtocolVersion.html" title="class or interface in org.apache.http" class="external-link">ProtocolVersion</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="NotImplemented.html" title="class in org.apache.juneau.http.classic.response">NotImplemented</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/response/NotImplemented.html#line-182">setProtocolVersion</a></span><wbr><span class="parameters">(<a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/ProtocolVersion.html" title="class or interface in org.apache.http" class="external-link">ProtocolVersion</a>&nbsp;value)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="BasicHttpException.html#setProtocolVersion(org.apache.http.ProtocolVersion)">BasicHttpException</a></code></span></div>
 <div class="block">Sets the protocol version on the status line.
 
@@ -609,7 +609,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="setReasonPhrase2(java.lang.String)">
 <h3>setReasonPhrase2</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="NotImplemented.html" title="class in org.apache.juneau.http.classic.response">NotImplemented</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/response/NotImplemented.html#line-189">setReasonPhrase2</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="NotImplemented.html" title="class in org.apache.juneau.http.classic.response">NotImplemented</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/response/NotImplemented.html#line-188">setReasonPhrase2</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="BasicHttpException.html#setReasonPhrase2(java.lang.String)">BasicHttpException</a></code></span></div>
 <div class="block">Sets the reason phrase on the status line.
 
@@ -629,7 +629,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="setReasonPhraseCatalog(org.apache.http.ReasonPhraseCatalog)">
 <h3>setReasonPhraseCatalog</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="NotImplemented.html" title="class in org.apache.juneau.http.classic.response">NotImplemented</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/response/NotImplemented.html#line-195">setReasonPhraseCatalog</a></span><wbr><span class="parameters">(<a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/ReasonPhraseCatalog.html" title="class or interface in org.apache.http" class="external-link">ReasonPhraseCatalog</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="NotImplemented.html" title="class in org.apache.juneau.http.classic.response">NotImplemented</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/response/NotImplemented.html#line-194">setReasonPhraseCatalog</a></span><wbr><span class="parameters">(<a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/ReasonPhraseCatalog.html" title="class or interface in org.apache.http" class="external-link">ReasonPhraseCatalog</a>&nbsp;value)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="BasicHttpException.html#setReasonPhraseCatalog(org.apache.http.ReasonPhraseCatalog)">BasicHttpException</a></code></span></div>
 <div class="block">Sets the reason phrase catalog used to retrieve reason phrases.
 
@@ -648,7 +648,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="setStatusCode2(int)">
 <h3>setStatusCode2</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="NotImplemented.html" title="class in org.apache.juneau.http.classic.response">NotImplemented</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/response/NotImplemented.html#line-201">setStatusCode2</a></span><wbr><span class="parameters">(int&nbsp;code)</span>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="NotImplemented.html" title="class in org.apache.juneau.http.classic.response">NotImplemented</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/response/NotImplemented.html#line-200">setStatusCode2</a></span><wbr><span class="parameters">(int&nbsp;code)</span>
                               throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/IllegalStateException.html" title="class or interface in java.lang" class="external-link">IllegalStateException</a></span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="BasicHttpException.html#setStatusCode2(int)">BasicHttpException</a></code></span></div>
 <div class="block">Same as <a href="BasicHttpException.html#setStatusCode(int)"><code>BasicHttpException.setStatusCode(int)</code></a> but returns this object.</div>
@@ -667,7 +667,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="setStatusLine(org.apache.juneau.http.classic.BasicStatusLine)">
 <h3>setStatusLine</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="NotImplemented.html" title="class in org.apache.juneau.http.classic.response">NotImplemented</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/response/NotImplemented.html#line-207">setStatusLine</a></span><wbr><span class="parameters">(<a href="../BasicStatusLine.html" title="class in org.apache.juneau.http.classic">BasicStatusLine</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="NotImplemented.html" title="class in org.apache.juneau.http.classic.response">NotImplemented</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/response/NotImplemented.html#line-206">setStatusLine</a></span><wbr><span class="parameters">(<a href="../BasicStatusLine.html" title="class in org.apache.juneau.http.classic">BasicStatusLine</a>&nbsp;value)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="BasicHttpException.html#setStatusLine(org.apache.juneau.http.classic.BasicStatusLine)">BasicHttpException</a></code></span></div>
 <div class="block">Sets the protocol version on the status line.
 
@@ -686,7 +686,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="unmodifiable()">
 <h3>unmodifiable</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="NotImplemented.html" title="class in org.apache.juneau.http.classic.response">NotImplemented</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/response/NotImplemented.html#line-213">unmodifiable</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="NotImplemented.html" title="class in org.apache.juneau.http.classic.response">NotImplemented</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/response/NotImplemented.html#line-212">unmodifiable</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="BasicHttpException.html#unmodifiable()">BasicHttpException</a></code></span></div>
 <div class="block">Returns an unmodifiable snapshot of this bean.
 

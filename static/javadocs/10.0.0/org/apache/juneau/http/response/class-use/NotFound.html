@@ -78,8 +78,12 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color">
 <div class="block">Remote service API</div>
 </div>
-<div class="col-first odd-row-color"><a href="#org.apache.juneau.rest.server.view.jsp">org.apache.juneau.rest.server.view.jsp</a></div>
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.rest.server.staticfile">org.apache.juneau.rest.server.staticfile</a></div>
 <div class="col-last odd-row-color">
+<div class="block">REST Static Files Support</div>
+</div>
+<div class="col-first even-row-color"><a href="#org.apache.juneau.rest.server.view.jsp">org.apache.juneau.rest.server.view.jsp</a></div>
+<div class="col-last even-row-color">
 <div class="block">JSP view-rendering bridge &mdash; opt-in <code>juneau-rest-server-view-jsp</code> module.</div>
 </div>
 </div>
@@ -156,11 +160,6 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color">
 <div class="block">Finds the method that should handle the specified call.</div>
 </div>
-<div class="col-first odd-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">RestSession.</span><code><a href="../../../rest/server/RestSession.html#getMethod()" class="member-name-link">getMethod</a>()</code></div>
-<div class="col-last odd-row-color">
-<div class="block">Returns the HTTP method name.</div>
-</div>
 </div>
 </section>
 </li>
@@ -201,6 +200,25 @@ loadScripts(document, 'script');</script>
 <div class="col-second odd-row-color"><span class="type-name-label">RrpcServlet.</span><code><a href="../../../rest/server/remote/RrpcServlet.html#showEntryForm(java.lang.String,java.lang.String)" class="member-name-link">showEntryForm</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;javaInterface,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;javaMethod)</code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="org.apache.juneau.rest.server.staticfile">
+<h2>Uses of <a href="../NotFound.html" title="class in org.apache.juneau.http.response">NotFound</a> in <a href="../../../rest/server/staticfile/package-summary.html">org.apache.juneau.rest.server.staticfile</a></h2>
+<div class="caption"><span>Methods in <a href="../../../rest/server/staticfile/package-summary.html">org.apache.juneau.rest.server.staticfile</a> that throw <a href="../NotFound.html" title="class in org.apache.juneau.http.response">NotFound</a></span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier and Type</div>
+<div class="table-header col-second">Method</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code>static <a href="../../HttpResource.html" title="interface in org.apache.juneau.http">HttpResource</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">StaticFilesMixin.</span><code><a href="../../../rest/server/staticfile/StaticFilesMixin.html#resolveStaticFile(org.apache.juneau.rest.server.RestRequest,java.lang.String,java.util.Locale)" class="member-name-link">resolveStaticFile</a><wbr>(<a href="../../../rest/server/RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;path,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Locale.html" title="class or interface in java.util" class="external-link">Locale</a>&nbsp;locale)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Shared static-file resolution chokepoint &mdash; resolves the requested path against the request's active
+ <a href="../../../rest/server/staticfile/StaticFiles.html" title="interface in org.apache.juneau.rest.server.staticfile"><code>StaticFiles</code></a> bean.</div>
+</div>
 </div>
 </section>
 </li>

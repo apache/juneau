@@ -33,187 +33,232 @@
 <span class="source-line-no">020</span><span id="line-20">import static org.apache.juneau.commons.utils.Shorts.*;</span>
 <span class="source-line-no">021</span><span id="line-21"></span>
 <span class="source-line-no">022</span><span id="line-22">import java.util.*;</span>
-<span class="source-line-no">023</span><span id="line-23"></span>
-<span class="source-line-no">024</span><span id="line-24">import org.apache.juneau.commons.inject.*;</span>
-<span class="source-line-no">025</span><span id="line-25">import org.apache.juneau.http.response.*;</span>
-<span class="source-line-no">026</span><span id="line-26"></span>
-<span class="source-line-no">027</span><span id="line-27">/**</span>
-<span class="source-line-no">028</span><span id="line-28"> * Encapsulates the set of {@link RestOp}-annotated methods within a single {@link Rest}-annotated object.</span>
-<span class="source-line-no">029</span><span id="line-29"> */</span>
-<span class="source-line-no">030</span><span id="line-30">public class RestOperations {</span>
-<span class="source-line-no">031</span><span id="line-31"></span>
-<span class="source-line-no">032</span><span id="line-32">   /**</span>
-<span class="source-line-no">033</span><span id="line-33">    * Builder class.</span>
-<span class="source-line-no">034</span><span id="line-34">    */</span>
-<span class="source-line-no">035</span><span id="line-35">   public static class Builder {</span>
-<span class="source-line-no">036</span><span id="line-36"></span>
-<span class="source-line-no">037</span><span id="line-37">      private final BeanStore beanStore;</span>
-<span class="source-line-no">038</span><span id="line-38">      TreeMap&lt;String,TreeSet&lt;RestOpContext&gt;&gt; map;</span>
-<span class="source-line-no">039</span><span id="line-39">      Set&lt;RestOpContext&gt; set;</span>
-<span class="source-line-no">040</span><span id="line-40"></span>
-<span class="source-line-no">041</span><span id="line-41">      /**</span>
-<span class="source-line-no">042</span><span id="line-42">       * Constructor.</span>
-<span class="source-line-no">043</span><span id="line-43">       *</span>
-<span class="source-line-no">044</span><span id="line-44">       * @param beanStore The bean store to use for creating beans.</span>
-<span class="source-line-no">045</span><span id="line-45">       */</span>
-<span class="source-line-no">046</span><span id="line-46">      protected Builder(BeanStore beanStore) {</span>
-<span class="source-line-no">047</span><span id="line-47">         this.beanStore = beanStore;</span>
-<span class="source-line-no">048</span><span id="line-48">         map = new TreeMap&lt;&gt;();</span>
-<span class="source-line-no">049</span><span id="line-49">         set = set();</span>
-<span class="source-line-no">050</span><span id="line-50">      }</span>
-<span class="source-line-no">051</span><span id="line-51"></span>
-<span class="source-line-no">052</span><span id="line-52">      /**</span>
-<span class="source-line-no">053</span><span id="line-53">       * Returns the bean store used by this builder.</span>
-<span class="source-line-no">054</span><span id="line-54">       *</span>
-<span class="source-line-no">055</span><span id="line-55">       * @return The bean store used by this builder.</span>
-<span class="source-line-no">056</span><span id="line-56">       */</span>
-<span class="source-line-no">057</span><span id="line-57">      public BeanStore beanStore() {</span>
-<span class="source-line-no">058</span><span id="line-58">         return beanStore;</span>
-<span class="source-line-no">059</span><span id="line-59">      }</span>
-<span class="source-line-no">060</span><span id="line-60"></span>
-<span class="source-line-no">061</span><span id="line-61">      /**</span>
-<span class="source-line-no">062</span><span id="line-62">       * Adds a method context to this builder.</span>
-<span class="source-line-no">063</span><span id="line-63">       *</span>
-<span class="source-line-no">064</span><span id="line-64">       * @param value The REST method context to add. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">065</span><span id="line-65">       * @return This object.</span>
-<span class="source-line-no">066</span><span id="line-66">       */</span>
-<span class="source-line-no">067</span><span id="line-67">      public Builder add(RestOpContext value) {</span>
-<span class="source-line-no">068</span><span id="line-68">         return add(value.getHttpMethod(), value);</span>
-<span class="source-line-no">069</span><span id="line-69">      }</span>
-<span class="source-line-no">070</span><span id="line-70"></span>
-<span class="source-line-no">071</span><span id="line-71">      /**</span>
-<span class="source-line-no">072</span><span id="line-72">       * Adds a method context to this builder.</span>
-<span class="source-line-no">073</span><span id="line-73">       *</span>
-<span class="source-line-no">074</span><span id="line-74">       * @param httpMethodName The HTTP method name. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">075</span><span id="line-75">       * @param value The REST method context to add. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">076</span><span id="line-76">       * @return This object.</span>
-<span class="source-line-no">077</span><span id="line-77">       */</span>
-<span class="source-line-no">078</span><span id="line-78">      public Builder add(String httpMethodName, RestOpContext value) {</span>
-<span class="source-line-no">079</span><span id="line-79">         httpMethodName = ucr(httpMethodName);</span>
-<span class="source-line-no">080</span><span id="line-80">         map.computeIfAbsent(httpMethodName, k -&gt; new TreeSet&lt;&gt;()).add(value);</span>
-<span class="source-line-no">081</span><span id="line-81">         set.add(value);</span>
-<span class="source-line-no">082</span><span id="line-82">         return this;</span>
-<span class="source-line-no">083</span><span id="line-83">      }</span>
-<span class="source-line-no">084</span><span id="line-84"></span>
-<span class="source-line-no">085</span><span id="line-85">      /**</span>
-<span class="source-line-no">086</span><span id="line-86">       * Builds the operations.</span>
-<span class="source-line-no">087</span><span id="line-87">       *</span>
-<span class="source-line-no">088</span><span id="line-88">       * @return A new {@link RestOperations}.</span>
-<span class="source-line-no">089</span><span id="line-89">       */</span>
-<span class="source-line-no">090</span><span id="line-90">      public RestOperations build() {</span>
-<span class="source-line-no">091</span><span id="line-91">         return new RestOperations(this);</span>
-<span class="source-line-no">092</span><span id="line-92">      }</span>
-<span class="source-line-no">093</span><span id="line-93">   }</span>
-<span class="source-line-no">094</span><span id="line-94"></span>
-<span class="source-line-no">095</span><span id="line-95">   /**</span>
-<span class="source-line-no">096</span><span id="line-96">    * Represents a null value for the RestOperations class.</span>
-<span class="source-line-no">097</span><span id="line-97">    * </span>
-<span class="source-line-no">098</span><span id="line-98">    * &lt;p&gt;</span>
-<span class="source-line-no">099</span><span id="line-99">    * This is used internally when no custom RestOperations implementation is specified.</span>
-<span class="source-line-no">100</span><span id="line-100">    * The {@code Void} class is used as a placeholder when the {@link Rest} annotation</span>
-<span class="source-line-no">101</span><span id="line-101">    * does not specify a custom {@code RestOperations} class.</span>
-<span class="source-line-no">102</span><span id="line-102">    */</span>
-<span class="source-line-no">103</span><span id="line-103">   @SuppressWarnings({</span>
-<span class="source-line-no">104</span><span id="line-104">      "java:S112" // throws Exception intentional - callback/lifecycle method</span>
-<span class="source-line-no">105</span><span id="line-105">   })</span>
-<span class="source-line-no">106</span><span id="line-106">   public final class Void extends RestOperations {</span>
-<span class="source-line-no">107</span><span id="line-107"></span>
-<span class="source-line-no">108</span><span id="line-108">      /**</span>
-<span class="source-line-no">109</span><span id="line-109">       * Constructor.</span>
-<span class="source-line-no">110</span><span id="line-110">       *</span>
-<span class="source-line-no">111</span><span id="line-111">       * @param builder The builder. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">112</span><span id="line-112">       * @throws Exception If initialization fails.</span>
-<span class="source-line-no">113</span><span id="line-113">       */</span>
-<span class="source-line-no">114</span><span id="line-114">      public Void(Builder builder) throws Exception {</span>
-<span class="source-line-no">115</span><span id="line-115">         super(builder);</span>
-<span class="source-line-no">116</span><span id="line-116">      }</span>
-<span class="source-line-no">117</span><span id="line-117">   }</span>
-<span class="source-line-no">118</span><span id="line-118"></span>
-<span class="source-line-no">119</span><span id="line-119">   /**</span>
-<span class="source-line-no">120</span><span id="line-120">    * Static creator.</span>
-<span class="source-line-no">121</span><span id="line-121">    *</span>
-<span class="source-line-no">122</span><span id="line-122">    * @param beanStore The bean store to use for creating beans.</span>
-<span class="source-line-no">123</span><span id="line-123">    * @return A new builder for this object.</span>
-<span class="source-line-no">124</span><span id="line-124">    */</span>
-<span class="source-line-no">125</span><span id="line-125">   public static Builder create(BeanStore beanStore) {</span>
-<span class="source-line-no">126</span><span id="line-126">      return new Builder(beanStore);</span>
-<span class="source-line-no">127</span><span id="line-127">   }</span>
-<span class="source-line-no">128</span><span id="line-128"></span>
-<span class="source-line-no">129</span><span id="line-129">   private final Map&lt;String,List&lt;RestOpContext&gt;&gt; map;</span>
-<span class="source-line-no">130</span><span id="line-130">   private RestOpContext[] list;</span>
-<span class="source-line-no">131</span><span id="line-131"></span>
-<span class="source-line-no">132</span><span id="line-132">   /**</span>
-<span class="source-line-no">133</span><span id="line-133">    * Constructor.</span>
-<span class="source-line-no">134</span><span id="line-134">    *</span>
-<span class="source-line-no">135</span><span id="line-135">    * @param builder The builder containing the settings for this object. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">136</span><span id="line-136">    */</span>
-<span class="source-line-no">137</span><span id="line-137">   public RestOperations(Builder builder) {</span>
-<span class="source-line-no">138</span><span id="line-138">      Map&lt;String,List&lt;RestOpContext&gt;&gt; m = map();</span>
-<span class="source-line-no">139</span><span id="line-139">      for (var e : builder.map.entrySet())</span>
-<span class="source-line-no">140</span><span id="line-140">         m.put(e.getKey(), toList(e.getValue()));</span>
-<span class="source-line-no">141</span><span id="line-141">      this.map = m;</span>
-<span class="source-line-no">142</span><span id="line-142">      this.list = array(builder.set, RestOpContext.class);</span>
-<span class="source-line-no">143</span><span id="line-143">   }</span>
+<span class="source-line-no">023</span><span id="line-23">import java.util.stream.*;</span>
+<span class="source-line-no">024</span><span id="line-24"></span>
+<span class="source-line-no">025</span><span id="line-25">import org.apache.juneau.commons.inject.*;</span>
+<span class="source-line-no">026</span><span id="line-26">import org.apache.juneau.http.response.*;</span>
+<span class="source-line-no">027</span><span id="line-27"></span>
+<span class="source-line-no">028</span><span id="line-28">/**</span>
+<span class="source-line-no">029</span><span id="line-29"> * Encapsulates the set of {@link RestOp}-annotated methods within a single {@link Rest}-annotated object.</span>
+<span class="source-line-no">030</span><span id="line-30"> */</span>
+<span class="source-line-no">031</span><span id="line-31">public class RestOperations {</span>
+<span class="source-line-no">032</span><span id="line-32"></span>
+<span class="source-line-no">033</span><span id="line-33">   /**</span>
+<span class="source-line-no">034</span><span id="line-34">    * Builder class.</span>
+<span class="source-line-no">035</span><span id="line-35">    */</span>
+<span class="source-line-no">036</span><span id="line-36">   public static class Builder {</span>
+<span class="source-line-no">037</span><span id="line-37"></span>
+<span class="source-line-no">038</span><span id="line-38">      private final BeanStore beanStore;</span>
+<span class="source-line-no">039</span><span id="line-39">      TreeMap&lt;String,TreeSet&lt;RestOpContext&gt;&gt; map;</span>
+<span class="source-line-no">040</span><span id="line-40">      Set&lt;RestOpContext&gt; set;</span>
+<span class="source-line-no">041</span><span id="line-41"></span>
+<span class="source-line-no">042</span><span id="line-42">      /**</span>
+<span class="source-line-no">043</span><span id="line-43">       * Constructor.</span>
+<span class="source-line-no">044</span><span id="line-44">       *</span>
+<span class="source-line-no">045</span><span id="line-45">       * @param beanStore The bean store to use for creating beans.</span>
+<span class="source-line-no">046</span><span id="line-46">       */</span>
+<span class="source-line-no">047</span><span id="line-47">      protected Builder(BeanStore beanStore) {</span>
+<span class="source-line-no">048</span><span id="line-48">         this.beanStore = beanStore;</span>
+<span class="source-line-no">049</span><span id="line-49">         map = new TreeMap&lt;&gt;();</span>
+<span class="source-line-no">050</span><span id="line-50">         set = set();</span>
+<span class="source-line-no">051</span><span id="line-51">      }</span>
+<span class="source-line-no">052</span><span id="line-52"></span>
+<span class="source-line-no">053</span><span id="line-53">      /**</span>
+<span class="source-line-no">054</span><span id="line-54">       * Returns the bean store used by this builder.</span>
+<span class="source-line-no">055</span><span id="line-55">       *</span>
+<span class="source-line-no">056</span><span id="line-56">       * @return The bean store used by this builder.</span>
+<span class="source-line-no">057</span><span id="line-57">       */</span>
+<span class="source-line-no">058</span><span id="line-58">      public BeanStore beanStore() {</span>
+<span class="source-line-no">059</span><span id="line-59">         return beanStore;</span>
+<span class="source-line-no">060</span><span id="line-60">      }</span>
+<span class="source-line-no">061</span><span id="line-61"></span>
+<span class="source-line-no">062</span><span id="line-62">      /**</span>
+<span class="source-line-no">063</span><span id="line-63">       * Adds a method context to this builder.</span>
+<span class="source-line-no">064</span><span id="line-64">       *</span>
+<span class="source-line-no">065</span><span id="line-65">       * @param value The REST method context to add. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">066</span><span id="line-66">       * @return This object.</span>
+<span class="source-line-no">067</span><span id="line-67">       */</span>
+<span class="source-line-no">068</span><span id="line-68">      public Builder add(RestOpContext value) {</span>
+<span class="source-line-no">069</span><span id="line-69">         return add(value.getHttpMethod(), value);</span>
+<span class="source-line-no">070</span><span id="line-70">      }</span>
+<span class="source-line-no">071</span><span id="line-71"></span>
+<span class="source-line-no">072</span><span id="line-72">      /**</span>
+<span class="source-line-no">073</span><span id="line-73">       * Adds a method context to this builder.</span>
+<span class="source-line-no">074</span><span id="line-74">       *</span>
+<span class="source-line-no">075</span><span id="line-75">       * @param httpMethodName The HTTP method name. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">076</span><span id="line-76">       * @param value The REST method context to add. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">077</span><span id="line-77">       * @return This object.</span>
+<span class="source-line-no">078</span><span id="line-78">       */</span>
+<span class="source-line-no">079</span><span id="line-79">      public Builder add(String httpMethodName, RestOpContext value) {</span>
+<span class="source-line-no">080</span><span id="line-80">         httpMethodName = ucr(httpMethodName);</span>
+<span class="source-line-no">081</span><span id="line-81">         map.computeIfAbsent(httpMethodName, k -&gt; new TreeSet&lt;&gt;()).add(value);</span>
+<span class="source-line-no">082</span><span id="line-82">         set.add(value);</span>
+<span class="source-line-no">083</span><span id="line-83">         return this;</span>
+<span class="source-line-no">084</span><span id="line-84">      }</span>
+<span class="source-line-no">085</span><span id="line-85"></span>
+<span class="source-line-no">086</span><span id="line-86">      /**</span>
+<span class="source-line-no">087</span><span id="line-87">       * Builds the operations.</span>
+<span class="source-line-no">088</span><span id="line-88">       *</span>
+<span class="source-line-no">089</span><span id="line-89">       * @return A new {@link RestOperations}.</span>
+<span class="source-line-no">090</span><span id="line-90">       */</span>
+<span class="source-line-no">091</span><span id="line-91">      public RestOperations build() {</span>
+<span class="source-line-no">092</span><span id="line-92">         return new RestOperations(this);</span>
+<span class="source-line-no">093</span><span id="line-93">      }</span>
+<span class="source-line-no">094</span><span id="line-94">   }</span>
+<span class="source-line-no">095</span><span id="line-95"></span>
+<span class="source-line-no">096</span><span id="line-96">   /**</span>
+<span class="source-line-no">097</span><span id="line-97">    * Represents a null value for the RestOperations class.</span>
+<span class="source-line-no">098</span><span id="line-98">    * </span>
+<span class="source-line-no">099</span><span id="line-99">    * &lt;p&gt;</span>
+<span class="source-line-no">100</span><span id="line-100">    * This is used internally when no custom RestOperations implementation is specified.</span>
+<span class="source-line-no">101</span><span id="line-101">    * The {@code Void} class is used as a placeholder when the {@link Rest} annotation</span>
+<span class="source-line-no">102</span><span id="line-102">    * does not specify a custom {@code RestOperations} class.</span>
+<span class="source-line-no">103</span><span id="line-103">    */</span>
+<span class="source-line-no">104</span><span id="line-104">   @SuppressWarnings({</span>
+<span class="source-line-no">105</span><span id="line-105">      "java:S112" // throws Exception intentional - callback/lifecycle method</span>
+<span class="source-line-no">106</span><span id="line-106">   })</span>
+<span class="source-line-no">107</span><span id="line-107">   public final class Void extends RestOperations {</span>
+<span class="source-line-no">108</span><span id="line-108"></span>
+<span class="source-line-no">109</span><span id="line-109">      /**</span>
+<span class="source-line-no">110</span><span id="line-110">       * Constructor.</span>
+<span class="source-line-no">111</span><span id="line-111">       *</span>
+<span class="source-line-no">112</span><span id="line-112">       * @param builder The builder. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">113</span><span id="line-113">       * @throws Exception If initialization fails.</span>
+<span class="source-line-no">114</span><span id="line-114">       */</span>
+<span class="source-line-no">115</span><span id="line-115">      public Void(Builder builder) throws Exception {</span>
+<span class="source-line-no">116</span><span id="line-116">         super(builder);</span>
+<span class="source-line-no">117</span><span id="line-117">      }</span>
+<span class="source-line-no">118</span><span id="line-118">   }</span>
+<span class="source-line-no">119</span><span id="line-119"></span>
+<span class="source-line-no">120</span><span id="line-120">   /**</span>
+<span class="source-line-no">121</span><span id="line-121">    * Static creator.</span>
+<span class="source-line-no">122</span><span id="line-122">    *</span>
+<span class="source-line-no">123</span><span id="line-123">    * @param beanStore The bean store to use for creating beans.</span>
+<span class="source-line-no">124</span><span id="line-124">    * @return A new builder for this object.</span>
+<span class="source-line-no">125</span><span id="line-125">    */</span>
+<span class="source-line-no">126</span><span id="line-126">   public static Builder create(BeanStore beanStore) {</span>
+<span class="source-line-no">127</span><span id="line-127">      return new Builder(beanStore);</span>
+<span class="source-line-no">128</span><span id="line-128">   }</span>
+<span class="source-line-no">129</span><span id="line-129"></span>
+<span class="source-line-no">130</span><span id="line-130">   private final Map&lt;String,List&lt;RestOpContext&gt;&gt; map;</span>
+<span class="source-line-no">131</span><span id="line-131">   private RestOpContext[] list;</span>
+<span class="source-line-no">132</span><span id="line-132"></span>
+<span class="source-line-no">133</span><span id="line-133">   /**</span>
+<span class="source-line-no">134</span><span id="line-134">    * Constructor.</span>
+<span class="source-line-no">135</span><span id="line-135">    *</span>
+<span class="source-line-no">136</span><span id="line-136">    * @param builder The builder containing the settings for this object. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">137</span><span id="line-137">    */</span>
+<span class="source-line-no">138</span><span id="line-138">   public RestOperations(Builder builder) {</span>
+<span class="source-line-no">139</span><span id="line-139">      Map&lt;String,List&lt;RestOpContext&gt;&gt; m = map();</span>
+<span class="source-line-no">140</span><span id="line-140">      for (var e : builder.map.entrySet())</span>
+<span class="source-line-no">141</span><span id="line-141">         m.put(e.getKey(), toList(e.getValue()));</span>
+<span class="source-line-no">142</span><span id="line-142">      this.map = m;</span>
+<span class="source-line-no">143</span><span id="line-143">      this.list = array(builder.set, RestOpContext.class);</span>
 <span class="source-line-no">144</span><span id="line-144"></span>
-<span class="source-line-no">145</span><span id="line-145">   /**</span>
-<span class="source-line-no">146</span><span id="line-146">    * Finds the method that should handle the specified call.</span>
-<span class="source-line-no">147</span><span id="line-147">    *</span>
-<span class="source-line-no">148</span><span id="line-148">    * @param session The HTTP call. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">149</span><span id="line-149">    * @return The method that should handle the specified call.</span>
-<span class="source-line-no">150</span><span id="line-150">    * @throws MethodNotAllowed If no methods implement the requested HTTP method.</span>
-<span class="source-line-no">151</span><span id="line-151">    * @throws PreconditionFailed At least one method was found but it didn't match one or more matchers.</span>
-<span class="source-line-no">152</span><span id="line-152">    * @throws NotFound HTTP method match was found but matching path was not.</span>
-<span class="source-line-no">153</span><span id="line-153">    */</span>
-<span class="source-line-no">154</span><span id="line-154">   @SuppressWarnings({</span>
-<span class="source-line-no">155</span><span id="line-155">      "java:S3776" // Cognitive complexity acceptable for REST operation lookup/matching logic</span>
-<span class="source-line-no">156</span><span id="line-156">   })</span>
-<span class="source-line-no">157</span><span id="line-157">   public RestOpContext findOperation(RestSession session) throws MethodNotAllowed, PreconditionFailed, NotFound {</span>
-<span class="source-line-no">158</span><span id="line-158">      String m = session.getMethod();</span>
-<span class="source-line-no">159</span><span id="line-159"></span>
-<span class="source-line-no">160</span><span id="line-160">      int rc = 0;</span>
-<span class="source-line-no">161</span><span id="line-161">      if (map.containsKey(m)) {</span>
-<span class="source-line-no">162</span><span id="line-162">         for (var oc : map.get(m)) {</span>
-<span class="source-line-no">163</span><span id="line-163">            int mrc = oc.match(session);</span>
-<span class="source-line-no">164</span><span id="line-164">            if (mrc == 2)</span>
-<span class="source-line-no">165</span><span id="line-165">               return oc;</span>
-<span class="source-line-no">166</span><span id="line-166">            rc = Math.max(rc, mrc);</span>
-<span class="source-line-no">167</span><span id="line-167">         }</span>
-<span class="source-line-no">168</span><span id="line-168">      }</span>
-<span class="source-line-no">169</span><span id="line-169"></span>
-<span class="source-line-no">170</span><span id="line-170">      if (map.containsKey("*")) {</span>
-<span class="source-line-no">171</span><span id="line-171">         for (var oc : map.get("*")) {</span>
-<span class="source-line-no">172</span><span id="line-172">            int mrc = oc.match(session);</span>
-<span class="source-line-no">173</span><span id="line-173">            if (mrc == 2)</span>
-<span class="source-line-no">174</span><span id="line-174">               return oc;</span>
-<span class="source-line-no">175</span><span id="line-175">            rc = Math.max(rc, mrc);</span>
-<span class="source-line-no">176</span><span id="line-176">         }</span>
-<span class="source-line-no">177</span><span id="line-177">      }</span>
-<span class="source-line-no">178</span><span id="line-178"></span>
-<span class="source-line-no">179</span><span id="line-179">      // If no paths matched, see if the path matches any other methods.</span>
-<span class="source-line-no">180</span><span id="line-180">      // Note that we don't want to match against "/*" patterns such as getOptions().</span>
-<span class="source-line-no">181</span><span id="line-181">      if (rc == 0) {</span>
-<span class="source-line-no">182</span><span id="line-182">         for (var oc : list) {</span>
-<span class="source-line-no">183</span><span id="line-183">            if (! oc.getPathPattern().endsWith("/*")) {</span>
-<span class="source-line-no">184</span><span id="line-184">               int orc = oc.match(session);</span>
-<span class="source-line-no">185</span><span id="line-185">               if (orc == 2)</span>
-<span class="source-line-no">186</span><span id="line-186">                  throw new MethodNotAllowed();</span>
-<span class="source-line-no">187</span><span id="line-187">            }</span>
-<span class="source-line-no">188</span><span id="line-188">         }</span>
-<span class="source-line-no">189</span><span id="line-189">      }</span>
-<span class="source-line-no">190</span><span id="line-190"></span>
-<span class="source-line-no">191</span><span id="line-191">      if (rc == 1)</span>
-<span class="source-line-no">192</span><span id="line-192">         throw new PreconditionFailed("Method '%s' not found on resource on path '%s' with matching matcher.", m, session.getPathInfo());</span>
-<span class="source-line-no">193</span><span id="line-193"></span>
-<span class="source-line-no">194</span><span id="line-194">      throw new NotFound("Java method matching path '%s' not found on resource '%s'.", session.getPathInfo(), cn(session.getResource()));</span>
-<span class="source-line-no">195</span><span id="line-195">   }</span>
-<span class="source-line-no">196</span><span id="line-196"></span>
-<span class="source-line-no">197</span><span id="line-197">   /**</span>
-<span class="source-line-no">198</span><span id="line-198">    * Returns the list of method contexts in this object.</span>
-<span class="source-line-no">199</span><span id="line-199">    *</span>
-<span class="source-line-no">200</span><span id="line-200">    * @return An unmodifiable list of method contexts in this object.</span>
-<span class="source-line-no">201</span><span id="line-201">    */</span>
-<span class="source-line-no">202</span><span id="line-202">   public List&lt;RestOpContext&gt; getOpContexts() { return u(l(list)); }</span>
-<span class="source-line-no">203</span><span id="line-203">}</span>
+<span class="source-line-no">145</span><span id="line-145">      // Fail the resource if an operation declared @Mutating is bound to a method defined as safe. Done here</span>
+<span class="source-line-no">146</span><span id="line-146">      // because this constructor is the one path every operation table passes through, so the check cannot be</span>
+<span class="source-line-no">147</span><span id="line-147">      // skipped by omission -- and it runs before findOperation can dispatch anything. A resource with no</span>
+<span class="source-line-no">148</span><span id="line-148">      // @Mutating anywhere is unaffected.</span>
+<span class="source-line-no">149</span><span id="line-149">      MethodSafety.check(getOpContexts());</span>
+<span class="source-line-no">150</span><span id="line-150">   }</span>
+<span class="source-line-no">151</span><span id="line-151"></span>
+<span class="source-line-no">152</span><span id="line-152">   /**</span>
+<span class="source-line-no">153</span><span id="line-153">    * Finds the method that should handle the specified call.</span>
+<span class="source-line-no">154</span><span id="line-154">    *</span>
+<span class="source-line-no">155</span><span id="line-155">    * @param session The HTTP call. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">156</span><span id="line-156">    * @return The method that should handle the specified call.</span>
+<span class="source-line-no">157</span><span id="line-157">    * @throws MethodNotAllowed If no methods implement the requested HTTP method.</span>
+<span class="source-line-no">158</span><span id="line-158">    * @throws PreconditionFailed At least one method was found but it didn't match one or more matchers.</span>
+<span class="source-line-no">159</span><span id="line-159">    * @throws NotFound HTTP method match was found but matching path was not.</span>
+<span class="source-line-no">160</span><span id="line-160">    */</span>
+<span class="source-line-no">161</span><span id="line-161">   @SuppressWarnings({</span>
+<span class="source-line-no">162</span><span id="line-162">      "java:S3776" // Cognitive complexity acceptable for REST operation lookup/matching logic</span>
+<span class="source-line-no">163</span><span id="line-163">   })</span>
+<span class="source-line-no">164</span><span id="line-164">   public RestOpContext findOperation(RestSession session) throws MethodNotAllowed, PreconditionFailed, NotFound {</span>
+<span class="source-line-no">165</span><span id="line-165">      String m = session.getMethod();</span>
+<span class="source-line-no">166</span><span id="line-166"></span>
+<span class="source-line-no">167</span><span id="line-167">      int rc = 0;</span>
+<span class="source-line-no">168</span><span id="line-168">      if (map.containsKey(m)) {</span>
+<span class="source-line-no">169</span><span id="line-169">         for (var oc : map.get(m)) {</span>
+<span class="source-line-no">170</span><span id="line-170">            int mrc = oc.match(session);</span>
+<span class="source-line-no">171</span><span id="line-171">            if (mrc == 2)</span>
+<span class="source-line-no">172</span><span id="line-172">               return oc;</span>
+<span class="source-line-no">173</span><span id="line-173">            rc = Math.max(rc, mrc);</span>
+<span class="source-line-no">174</span><span id="line-174">         }</span>
+<span class="source-line-no">175</span><span id="line-175">      }</span>
+<span class="source-line-no">176</span><span id="line-176"></span>
+<span class="source-line-no">177</span><span id="line-177">      if (map.containsKey("*")) {</span>
+<span class="source-line-no">178</span><span id="line-178">         for (var oc : map.get("*")) {</span>
+<span class="source-line-no">179</span><span id="line-179">            int mrc = oc.match(session);</span>
+<span class="source-line-no">180</span><span id="line-180">            if (mrc == 2)</span>
+<span class="source-line-no">181</span><span id="line-181">               return oc;</span>
+<span class="source-line-no">182</span><span id="line-182">            rc = Math.max(rc, mrc);</span>
+<span class="source-line-no">183</span><span id="line-183">         }</span>
+<span class="source-line-no">184</span><span id="line-184">      }</span>
+<span class="source-line-no">185</span><span id="line-185"></span>
+<span class="source-line-no">186</span><span id="line-186">      // If no paths matched, see if the path matches any other methods.</span>
+<span class="source-line-no">187</span><span id="line-187">      // Note that we don't want to match against "/*" patterns such as getOptions().</span>
+<span class="source-line-no">188</span><span id="line-188">      if (rc == 0) {</span>
+<span class="source-line-no">189</span><span id="line-189">         for (var oc : list) {</span>
+<span class="source-line-no">190</span><span id="line-190">            if (! oc.getPathPattern().endsWith("/*")) {</span>
+<span class="source-line-no">191</span><span id="line-191">               int orc = oc.match(session);</span>
+<span class="source-line-no">192</span><span id="line-192">               if (orc == 2)</span>
+<span class="source-line-no">193</span><span id="line-193">                  throw methodNotAllowed(session);</span>
+<span class="source-line-no">194</span><span id="line-194">            }</span>
+<span class="source-line-no">195</span><span id="line-195">         }</span>
+<span class="source-line-no">196</span><span id="line-196">      }</span>
+<span class="source-line-no">197</span><span id="line-197"></span>
+<span class="source-line-no">198</span><span id="line-198">      if (rc == 1)</span>
+<span class="source-line-no">199</span><span id="line-199">         throw new PreconditionFailed("Method '%s' not found on resource on path '%s' with matching matcher.", m, session.getPathInfo());</span>
+<span class="source-line-no">200</span><span id="line-200"></span>
+<span class="source-line-no">201</span><span id="line-201">      throw new NotFound("Java method matching path '%s' not found on resource '%s'.", session.getPathInfo(), cn(session.getResource()));</span>
+<span class="source-line-no">202</span><span id="line-202">   }</span>
+<span class="source-line-no">203</span><span id="line-203"></span>
+<span class="source-line-no">204</span><span id="line-204">   /**</span>
+<span class="source-line-no">205</span><span id="line-205">    * Returns the value of the &lt;c&gt;Allow&lt;/c&gt; header for a &lt;c&gt;405 Method Not Allowed&lt;/c&gt; response to the specified call.</span>
+<span class="source-line-no">206</span><span id="line-206">    *</span>
+<span class="source-line-no">207</span><span id="line-207">    * &lt;p&gt;</span>
+<span class="source-line-no">208</span><span id="line-208">    * The methods this resource answers on the call's path: every key of the operation table, other than</span>
+<span class="source-line-no">209</span><span id="line-209">    * &lt;js&gt;"*"&lt;/js&gt;, with at least one operation whose path pattern matches, plus the request-line method when a</span>
+<span class="source-line-no">210</span><span id="line-210">    * &lt;js&gt;"*"&lt;/js&gt; operation's path matches (the un-overridden request is always accepted there).  The keys are what</span>
+<span class="source-line-no">211</span><span id="line-211">    * dispatch looks up, so a remote-proxy operation contributes &lt;c&gt;GET&lt;/c&gt; and &lt;c&gt;POST&lt;/c&gt;, never &lt;c&gt;RRPC&lt;/c&gt;.</span>
+<span class="source-line-no">212</span><span id="line-212">    *</span>
+<span class="source-line-no">213</span><span id="line-213">    * &lt;p&gt;</span>
+<span class="source-line-no">214</span><span id="line-214">    * Only path patterns are tested.  Matchers are not run and the session's cached path match is not touched, so the</span>
+<span class="source-line-no">215</span><span id="line-215">    * call can be made for any request without disturbing the operation that handles it.</span>
+<span class="source-line-no">216</span><span id="line-216">    *</span>
+<span class="source-line-no">217</span><span id="line-217">    * @param session The HTTP call. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">218</span><span id="line-218">    * @return The sorted, comma-separated method names.  Empty when nothing answers on the path.  Never &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">219</span><span id="line-219">    * @since 10.0.0</span>
+<span class="source-line-no">220</span><span id="line-220">    */</span>
+<span class="source-line-no">221</span><span id="line-221">   public String allowedMethods(RestSession session) {</span>
+<span class="source-line-no">222</span><span id="line-222">      var methods = map.entrySet().stream()</span>
+<span class="source-line-no">223</span><span id="line-223">         .filter(e -&gt; e.getValue().stream().anyMatch(x -&gt; x.matchesPath(session)))</span>
+<span class="source-line-no">224</span><span id="line-224">         .map(e -&gt; eq(e.getKey(), "*") ? ucr(session.getRequest().getMethod()) : e.getKey())</span>
+<span class="source-line-no">225</span><span id="line-225">         .collect(Collectors.toCollection(TreeSet::new));</span>
+<span class="source-line-no">226</span><span id="line-226">      return String.join(", ", methods);</span>
+<span class="source-line-no">227</span><span id="line-227">   }</span>
+<span class="source-line-no">228</span><span id="line-228"></span>
+<span class="source-line-no">229</span><span id="line-229">   /**</span>
+<span class="source-line-no">230</span><span id="line-230">    * Creates the &lt;c&gt;405 Method Not Allowed&lt;/c&gt; thrown when the call's path matches only operations under other</span>
+<span class="source-line-no">231</span><span id="line-231">    * methods, carrying the &lt;c&gt;Allow&lt;/c&gt; header.</span>
+<span class="source-line-no">232</span><span id="line-232">    *</span>
+<span class="source-line-no">233</span><span id="line-233">    * @param session The HTTP call. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">234</span><span id="line-234">    * @return A new exception.  Never &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">235</span><span id="line-235">    */</span>
+<span class="source-line-no">236</span><span id="line-236">   private MethodNotAllowed methodNotAllowed(RestSession session) {</span>
+<span class="source-line-no">237</span><span id="line-237">      var e = new MethodNotAllowed();</span>
+<span class="source-line-no">238</span><span id="line-238">      e.setHeader("Allow", allowedMethods(session));</span>
+<span class="source-line-no">239</span><span id="line-239">      return e;</span>
+<span class="source-line-no">240</span><span id="line-240">   }</span>
+<span class="source-line-no">241</span><span id="line-241"></span>
+<span class="source-line-no">242</span><span id="line-242">   /**</span>
+<span class="source-line-no">243</span><span id="line-243">    * Returns the list of method contexts in this object.</span>
+<span class="source-line-no">244</span><span id="line-244">    *</span>
+<span class="source-line-no">245</span><span id="line-245">    * @return An unmodifiable list of method contexts in this object.</span>
+<span class="source-line-no">246</span><span id="line-246">    */</span>
+<span class="source-line-no">247</span><span id="line-247">   public List&lt;RestOpContext&gt; getOpContexts() { return u(l(list)); }</span>
+<span class="source-line-no">248</span><span id="line-248">}</span>
 
 
 
