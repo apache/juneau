@@ -1037,7 +1037,7 @@ class LiveTest(unittest.TestCase):
         self.assertEqual(self.screen.scrollback, [])            # nothing reached scrollback yet
         self.assertEqual(self.live.height, 3)
 
-    def test_the_frame_never_exceeds_rows_minus_two_and_the_title_stays_on_top(self):
+    def test_a_board_taller_than_the_pane_shows_its_last_rows_and_merges_none(self):
         self.dims = (60, 8)
         self.screen = Screen(rows=8, cols=60)
         self.live.write = self.screen.feed
@@ -1047,10 +1047,10 @@ class LiveTest(unittest.TestCase):
                       ("step_end", {"id": n, "status": "ok", "ms": 1, "exit": None, "summary": None, "totals": None}))
         self.push(("step_start", {"id": "z", "n": 1, "title": "Last", "parent": None}))
         shown = [line for line in self.screen.lines if line.strip()]
-        self.assertLessEqual(len(shown), 6)
-        self.assertEqual(shown[0], "▶ Push: Juneau · master")
-        self.assertTrue(any(line.startswith("✔ ") and " done: " in line for line in shown), shown)
-        self.assertTrue(shown[-1].startswith(self.spin() + "Last"), shown)
+        self.assertEqual([line.split()[:2] for line in shown],
+                         [["✔", f"Step {n}".split()[0]] for n in "defgh"] + [[self.spin().strip(), "Last"]])
+        self.assertEqual([line.split()[2] for line in shown[:-1]], list("defgh"))   # the top rows scrolled out of view
+        self.assertEqual(self.screen.scrollback, [])            # out of view, not printed: nothing reached scrollback
         self.assertFalse(self.screen.clamped)
 
     def test_growing_the_pane_does_not_leave_a_line_pulled_back_from_scrollback_above_the_header(self):
@@ -1062,7 +1062,7 @@ class LiveTest(unittest.TestCase):
             self.push(("step_start", {"id": n, "n": 1, "title": f"Step {n}", "parent": None}),
                       ("step_end", {"id": n, "status": "ok", "ms": 1, "exit": None, "summary": "done", "totals": None}))
         self.push(("step_start", {"id": "z", "n": 1, "title": "Last", "parent": None}))
-        for rows in (7, 14):        # the pane shrinks, a redraw folds the frame, the pane grows back, a redraw fits it
+        for rows in (7, 14):        # the pane shrinks, a redraw shows the frame's last rows, it grows back, all fit
             self.dims = (60, rows)
             self.screen.resize_like_tmux(rows)
             self.push()
@@ -1072,6 +1072,118 @@ class LiveTest(unittest.TestCase):
         self.assertTrue(shown[-1].startswith(self.spin() + "Last"), shown)
         self.assertEqual([line for line in shown if line.startswith("✔")],
                          ["✔ Step a      done", "✔ Step b      done"], shown)
+
+    def push_like_session(self, cols, rows, shell=False):
+        """A tmux pane of cols x rows showing a push's frame: a long Commit Message, the log lines, four finished rows
+        with an elapsed time and a running one.  shell puts a prompt line above, where the run starts."""
+        self.dims = (cols, rows)
+        self.screen = Screen(rows=rows, cols=cols)
+        if shell:
+            self.screen.feed("$ push\n")
+        self.live = jr.LiveRenderer(self.screen.feed, size=lambda: os.terminal_size(self.dims), clock=self.clock,
+                                    color=False)
+        self.board = jr.Board(clock=self.clock)
+        self.session(header=("SSC", "future"), lines=(
+            "Commit Message: Add a doc next to every script, with a checker test and argparse help for each one",
+            "Output: tail -f /Users/someone/.cache/juneau-run/push-1.log",
+            "Board: tail -f /Users/someone/.cache/juneau-run/push-1.board.log"))
+        for n, title in (("a", "Prechecks"), ("b", "Validate"), ("c", "Rebase"), ("d", "Compile")):
+            self.push(("step_start", {"id": n, "n": 1, "title": title, "parent": None}),
+                      ("step_end", {"id": n, "status": "ok", "ms": 1500, "exit": None, "summary": None,
+                                    "totals": None}))
+        self.push(("step_start", {"id": "z", "n": 1, "title": "Last", "parent": None}))
+
+    def assert_one_frame_at(self, cols):
+        """The screen holds exactly one frame, laid out at cols: one header on top, every finished row with its elapsed
+        time flush with the frame's right edge (cols - 1) and no ellipsis left over from another width.  A shell line
+        above the frame may still be there."""
+        shown = [line.rstrip() for line in self.screen.lines if line.strip()]
+        shown = shown[1:] if shown[0] == "$ push" else shown
+        self.assertEqual(shown[0], "▶ Push: SSC · future", self.screen.lines)
+        self.assertEqual(sum(line.startswith("▶ Push:") for line in shown), 1, self.screen.lines)
+        self.assertEqual(sum(line.startswith("▶ Commit Message:") for line in shown), 1, self.screen.lines)
+        done = [line for line in shown if line.startswith("✔")]
+        self.assertEqual([line.split()[1] for line in done], ["Prechecks", "Validate", "Rebase", "Compile"], shown)
+        for line in done:
+            self.assertTrue(line.endswith("  0:01") and jr._vlen(line) == cols - 1, (cols, line))
+        self.assertTrue(shown[-1].startswith(self.spin() + "Last"), shown)
+
+    def test_any_resize_like_tmux_leaves_one_frame_laid_out_at_the_new_width(self):
+        # Each step is (cols, rows) for one tmux resize, or a list of them for resizes that land between two redraws.
+        sequences = {
+            "shrink": [(45, 14)],
+            "shrink then grow": [(45, 14), (60, 14)],
+            "shrink then grow part way": [(40, 14), (52, 14)],
+            "grow then shrink": [(80, 14), (45, 14)],
+            "repeated": [(45, 14), (70, 14), (50, 14), (80, 14), (40, 14), (60, 14)],
+            "with the height": [(45, 12), (70, 16), (50, 13), (60, 12)],
+            "two resizes per redraw": [[(45, 14), (70, 14)], [(40, 12), (55, 14)]],
+            "taller and back between redraws": [(45, 14), [(45, 18), (45, 14)]],
+            "wider and shorter": [(45, 14), (60, 12)],
+        }
+        for shell in (False, True):
+            for name, steps in sequences.items():
+                with self.subTest(name, shell=shell):
+                    self.push_like_session(60, 14, shell)
+                    self.assert_one_frame_at(60)
+                    for step in steps:
+                        for cols, rows in (step if isinstance(step, list) else [step]):
+                            self.screen.resize_like_tmux(rows, cols)
+                        self.dims = (cols, rows)
+                        self.push()
+                        self.assert_one_frame_at(cols)
+
+    def test_a_taller_pane_that_shrinks_back_between_two_redraws_leaves_no_stale_lines_above_the_header(self):
+        self.push_like_session(60, 14)
+        self.dims = (45, 14)
+        self.screen.resize_like_tmux(cols=45)       # the frame's rewrapped top goes into scrollback
+        self.push()
+        self.screen.resize_like_tmux(rows=18)       # pulled back above the frame ...
+        self.screen.resize_like_tmux(rows=14)       # ... and kept there: the blank rows go instead; no size change seen
+        self.push()
+        self.assert_one_frame_at(45)
+
+    def test_closing_after_a_resize_prints_the_record_from_the_top_and_keeps_no_frame_in_scrollback(self):
+        self.push_like_session(60, 14)
+        self.push(("step_end", {"id": "z", "status": "ok", "ms": 1500, "exit": None, "summary": None, "totals": None}))
+        self.dims = (45, 14)
+        self.screen.resize_like_tmux(cols=45)
+        self.push()
+        back = list(self.screen.scrollback)         # the rewrapped top of the old frame, out of reach
+        self.live.close()
+        self.assertEqual(self.screen.scrollback, back)
+        self.assertEqual(self.screen.lines[0], "▶ Push: SSC · future")
+        self.assertEqual(sum(line.startswith("✔ Last") for line in self.screen.lines), 1, self.screen.lines)
+
+    def test_closing_a_frame_at_the_top_of_a_tmux_pane_keeps_no_copy_of_it_in_scrollback(self):
+        self.push_like_session(60, 14)
+        self.live.close()
+        self.assertEqual(self.screen.scrollback, [])
+        self.assertEqual(sum(line.startswith("▶ Push:") for line in self.screen.lines), 1, self.screen.lines)
+
+    def test_widening_after_a_narrowing_overwrites_the_frame_top_tmux_pulls_back_above_the_header(self):
+        self.push_like_session(60, 14)
+        self.dims = (45, 14)
+        self.screen.resize_like_tmux(cols=45)       # the reflowed frame top goes into scrollback, out of reach
+        self.push()
+        self.assertIn("▶ Push: SSC · future", self.screen.scrollback)
+        self.dims = (60, 14)
+        self.screen.resize_like_tmux(cols=60)       # ... and comes back onto the screen above the frame
+        self.push()
+        shown = [line for line in self.screen.lines if line.strip()]
+        self.assertEqual(sum(line.startswith("▶ Push:") for line in shown), 1, self.screen.lines)
+        self.assertEqual(shown[0], "▶ Push: SSC · future", self.screen.lines)
+
+    def test_a_finished_row_is_laid_out_again_at_the_new_width(self):
+        self.push_like_session(60, 14)
+        rebase = [line for line in self.screen.lines if line.startswith("✔ Rebase")]
+        self.assertEqual(rebase, ["✔ Rebase".ljust(59 - 4) + "0:01"])
+        for cols in (45, 70):       # narrower: no ellipsis where the elapsed time was; wider: no short alignment
+            self.dims = (cols, 14)
+            self.screen.resize_like_tmux(cols=cols)
+            self.push()
+            rebase = [line.rstrip() for line in self.screen.lines if line.startswith("✔ Rebase")]
+            self.assertEqual(rebase, ["✔ Rebase".ljust(cols - 1 - 4) + "0:01"], cols)
 
     def test_a_transcript_line_wider_than_the_pane_is_cut_with_an_ellipsis(self):
         self.live.render(self.board, [("text", "x" * 200)])
@@ -1112,7 +1224,7 @@ class LiveTest(unittest.TestCase):
         self.dims = (50, 10)
         self.clock.advance(0.1)
         self.live.tick(self.board)
-        self.assertEqual(calls, [])                 # a new width re-cuts the cached lines; it does not re-render
+        self.assertEqual(calls, [])                 # a new width lays out the parts read on arrival; no re-render
 
     def test_last_draw_moves_only_when_a_frame_is_written(self):
         self.push(*start())
@@ -1273,23 +1385,22 @@ class LiveTest(unittest.TestCase):
         live.tick(self.board)
         self.assertEqual(len(writes), drawn + 1)
 
-    def test_a_fold_keeps_the_padding_of_the_unit_lines_that_stay(self):
+    def test_a_short_pane_keeps_the_padding_of_the_unit_lines_it_shows(self):
         self.push(*start(size=3),
                   ("unit_start", {"step": "tests", "id": "tests/a", "title": "Short"}),
                   ("unit_start", {"step": "tests", "id": "tests/b", "title": "A much longer module"}),
                   ("unit_start", {"step": "tests", "id": "tests/c", "title": "Mid length"}))
         full = self.live.region(self.board, 59)
-        folded = self.live.region(self.board, 59, max_lines=3)       # A3 packs b and c, newest first; a stays
-        line = lambda lines: next(x for x in lines if "Short" in x and "," not in x)
-        self.assertEqual(line(folded), line(full))                    # padded to the longest running unit both times
+        short = self.live.region(self.board, 59, max_lines=2)        # the row and "Short" scrolled out of view
+        self.assertEqual(short, full[-2:])                            # padded to the longest running unit both times
+        self.assertTrue(short[-1].startswith("    Mid length" + " " * 12), short)
 
     def test_the_region_never_exceeds_rows_minus_two(self):
         self.dims = (60, 6)
         self.push(*start(size=5), *[mod_start(n) for n in "abcde"], *[cls(n) for n in "abcde"])
         region = self.live.region(self.board, 59, 4)
-        self.assertEqual(len(region), 4)
-        self.assertTrue(region[1].startswith("    Mod A  ") and region[2].startswith("    Mod B  "), region)
-        self.assertEqual(region[3], "    C, D, E")              # the newest fold first, listed oldest first
+        self.assertEqual([line[4:9] for line in region], ["Mod B", "Mod C", "Mod D", "Mod E"])   # the last four
+        self.assertEqual(region, self.live.region(self.board, 59)[-4:])
         self.assertTrue(all(len(line) <= 59 for line in region), region)
         self.assertEqual(len(self.screen.text().splitlines()), 4)
         self.assertTrue(all(len(line) <= 59 for line in self.screen.lines), self.screen.lines)
@@ -1570,7 +1681,7 @@ class LiveTest(unittest.TestCase):
         self.screen.feed("$ push\n")
         self.live.write = self.screen.feed
 
-    def test_a_shrink_folds_to_the_new_height_and_a_grow_unfolds(self):
+    def test_rows_scrolled_out_of_view_come_back_when_the_pane_grows_again(self):
         self.dims = (60, 40)
         self.screen = Screen(rows=40, cols=60)
         self.live.write = self.screen.feed
@@ -1579,19 +1690,36 @@ class LiveTest(unittest.TestCase):
             self.push(("step_start", {"id": n, "n": 1, "title": f"Step {n}", "parent": None}),
                       ("step_end", {"id": n, "status": "ok", "ms": 1, "exit": None, "summary": None, "totals": None}))
         self.push(*start())
-        self.assertTrue(any(line.startswith("✔ Step a") for line in self.screen.lines))
-        self.dims = (60, 10)
-        self.screen.resize(rows=10, cols=60)        # Task 1's viewport: keeps the bottom rows, as a terminal does
+        words = lambda: [line.split()[:3] for line in self.screen.lines if line.strip()]     # not the ticking times
+        full = words()
+        self.assertEqual(full[0], ["▶", "Push:", "Juneau"])
+        self.dims = (60, 6)
+        self.screen.resize(rows=6, cols=60)         # Task 1's viewport: keeps the bottom rows, as a terminal does
         self.clock.advance(1)
         self.live.tick(self.board)
-        shown = [line for line in self.screen.lines if line.strip()]
-        self.assertLessEqual(len(shown), 8)
-        self.assertEqual(shown[0], "▶ Push: Juneau · master")
+        self.assertEqual(words(), full[-4:])
         self.dims = (60, 40)
         self.screen.resize(rows=40, cols=60)
         self.clock.advance(1)
         self.live.tick(self.board)
-        self.assertTrue(any(line.startswith("✔ Step a") for line in self.screen.lines))   # unfolded again
+        self.assertEqual(words(), full)
+
+    def test_rows_scrolled_out_of_view_come_back_when_the_board_shrinks(self):
+        self.dims = (60, 8)
+        self.screen = Screen(rows=8, cols=60)
+        self.live.write = self.screen.feed
+        self.session()
+        self.push(("step_start", {"id": "a", "n": 1, "title": "Alpha", "parent": None}),
+                  ("step_end", {"id": "a", "status": "ok", "ms": 1, "exit": None, "summary": None, "totals": None}))
+        self.push(*start(size=5), *[mod_start(n) for n in "abcde"])
+        shown = [line for line in self.screen.lines if line.strip()]
+        self.assertEqual([line.split()[:2] for line in shown], [[self.spin().strip(), "Tests"]]
+                         + [["Mod", n] for n in "ABCDE"])          # the header and Alpha scrolled out of view
+        self.push(*[cls(n) for n in "abcde"],
+                  *[("unit_end", {"step": "tests", "id": f"tests/{n}", "status": "ok", "ms": 1}) for n in "abcde"])
+        shown = [line for line in self.screen.lines if line.strip()]
+        self.assertEqual(shown[:3], ["▶ Push: Juneau · master", "▶ Commit Message: m", shown[2]])
+        self.assertTrue(shown[2].startswith("✔ Alpha"), shown)
 
     def test_the_spinner_still_turns_when_nothing_else_changes(self):
         self.push(*start())
@@ -1775,7 +1903,7 @@ class LiveTest(unittest.TestCase):
 
 class UnitLinesTest(unittest.TestCase):
     """Every running unit has a line under its row: its title padded to the row's longest, its dots, then its elapsed
-    time at the right edge.  When the region is short the newest fold onto one packed names line per row."""
+    time at the right edge.  When the region is short its top lines scroll out of view; none are packed together."""
 
     def setUp(self):
         reset_run_state()
@@ -1823,25 +1951,9 @@ class UnitLinesTest(unittest.TestCase):
         self.assertEqual([line for line in lines if line.startswith("    ")],
                          ["    Mod A  ".ljust(56) + "0:00", "    Mod B  ".ljust(56) + "0:00"])
 
-    def test_the_newest_fold_onto_one_names_line(self):
+    def test_a_short_pane_shows_the_last_unit_lines_whole_and_the_row_scrolls_out_of_view(self):
         lines = self.region(*start(), mod_start("a"), mod_start("b"), mod_start("c"), rows=3)
-        self.assertEqual(lines[1:], ["    Mod A  ".ljust(56) + "0:00", "    B, C"])
-
-    def test_the_slowest_unit_keeps_its_line(self):
-        clock = Clock()
-        self.board = jr.Board(clock=clock)
-        feed(self.board, *start(), mod_start("a"))
-        clock.advance(5)
-        feed(self.board, mod_start("b"))
-        clock.advance(5)
-        feed(self.board, mod_start("c"))
-        live = jr.LiveRenderer(lambda text: None, size=lambda: os.terminal_size((61, 5)), clock=clock, color=False)
-        self.assertEqual(live.region(self.board, 60, 3)[1:], ["    Mod A  ".ljust(56) + "0:10", "    B, C"])
-
-    def test_the_fold_prefix_uses_every_unit_seen_not_only_those_in_flight(self):
-        lines = self.region(*start(), mod_start("a"), mod_start("b"), mod_start("c"), mod_start("d"),
-                            ("unit_end", {"step": "tests", "id": "tests/b", "status": "ok", "ms": 1}), rows=3)
-        self.assertEqual(lines[2], "    C, D")                    # "Mod " stripped by all four, not only those folded
+        self.assertEqual(lines, [f"    Mod {n}  ".ljust(56) + "0:00" for n in "ABC"])
 
     def test_a_tests_row_with_units_has_no_current_file_line(self):
         lines = self.region(*start(), ("step_progress", {"step": "tests", "text": "test_x.py"}), mod_start("a"))
@@ -2643,46 +2755,27 @@ class PendingTest(PendingCase):
         self.assertEqual(len(self.live().region(b, 79, 18)), 1)
 
 
-class FoldTest(PendingCase):
-    MORE = "○ {} more: {}"
-
-    def more(self, *indexes):
-        return self.MORE.format(len(indexes), ", ".join(f"Pending {i}" for i in indexes))
-
+class OverflowTest(PendingCase):
     def busy(self):
         b = self.planned([("tests", "Tests")] + [(f"p{i}", f"Pending {i}") for i in range(6)])
         feed(b, *start(size=4), *[mod_start(n) for n in "abcd"], *[cls(n) for n in "abcd"])
         return b
 
-    def test_pending_folds_before_module_lines(self):
-        region = self.live().region(self.busy(), 79, 8)
-        self.assertEqual(len(region), 8)
-        self.assertEqual(sum(line.startswith("    Mod ") for line in region), 4)     # every module line kept
-        self.assertEqual(region[-1], self.more(2, 3, 4, 5))
-        self.assertEqual(region[-3:-1], ["○ Pending 0", "○ Pending 1"])
+    def test_a_short_pane_keeps_the_last_rows_of_the_region_and_merges_none(self):
+        full = self.live().region(self.busy(), 79)
+        self.assertEqual(len(full), 11)                     # the row, four module lines, six pending rows
+        for rows in range(1, 12):
+            with self.subTest(rows=rows):
+                self.assertEqual(self.live().region(self.busy(), 79, rows), full[-rows:])
 
-    def test_more_pending_line_always_kept(self):
-        region = self.live().region(self.busy(), 79, 4)
-        self.assertEqual(region[-1], self.more(*range(6)))
-
-    def test_then_module_lines_fold(self):
-        region = self.live().region(self.busy(), 79, 5)
-        self.assertEqual(len(region), 5)
-        self.assertIn("    C, D", region)
-        self.assertEqual(region[-1], self.more(*range(6)))
-
-    def test_folding_across_two_rows_takes_the_newest_first_wherever_it_runs(self):
+    def test_rows_run_on_two_running_rows_stay_under_their_own_row(self):
         b = self.planned([("one", "One"), ("two", "Two")])
         feed(b, *start("one", size=2, title="One"), *start("two", size=2, title="Two"))
         for step, name in (("one", "a"), ("two", "c"), ("one", "b"), ("two", "d")):     # started in this order
             self.clock.advance(1)
             feed(b, mod_start(name, step))
-        self.assertEqual(sum(line.startswith("    Mod ") for line in self.live().region(b, 79, 6)), 4)
-        region = self.live().region(b, 79, 5)
-        # three lines for units: D, B, then C fold (newest first, across both rows), each under its own row
-        self.assertEqual([line.split()[0] for line in region], ["⠋", "Mod", "B", "⠋", "C,"])
-        self.assertTrue(region[1].startswith("    Mod A "), region)
-        self.assertEqual((region[2], region[4]), ("    B", "    C, D"))
+        self.assertEqual([line.split()[:2] for line in self.live().region(b, 79, 5)],     # only One scrolled off
+                         [["Mod", "A"], ["Mod", "B"], ["⠋", "Two"], ["Mod", "C"], ["Mod", "D"]])
 
 
 class ModuleLinesTest(RowCase):
@@ -3060,6 +3153,47 @@ class ScreenTest(unittest.TestCase):
         s.resize(rows=3, cols=4)
         self.assertEqual((s.rows, s.cols, s.lines[0]), (3, 4, "abcdefgh"))     # a non-reflowing terminal
 
+    # The tmux reflow cases below were checked against tmux 3.7c (a detached pane, resize-window, then cursor_y,
+    # history_size and capture-pane).
+
+    def test_narrowing_like_tmux_keeps_the_cursor_row_and_pushes_the_top_into_scrollback(self):
+        s = Screen(rows=10, cols=40)
+        s.feed("A" * 39 + "\n" + "B" * 39 + "\n" + "CCCCC\n")
+        s.resize_like_tmux(cols=20)
+        self.assertEqual((s.row, s.scrollback), (3, ["A" * 20, "A" * 19]))      # blank rows below do not absorb it
+        self.assertEqual(s.lines[:3], ["B" * 20, "B" * 19, "CCCCC"])
+
+    def test_widening_like_tmux_pulls_the_lines_back_from_scrollback(self):
+        s = Screen(rows=10, cols=40)
+        s.feed("A" * 39 + "\n" + "B" * 39 + "\n" + "CCCCC\n")
+        s.resize_like_tmux(cols=20)
+        s.resize_like_tmux(cols=40)
+        self.assertEqual((s.row, s.scrollback, s.lines[:3]), (3, [], ["A" * 39, "B" * 39, "CCCCC"]))
+
+    def test_widening_like_tmux_with_no_scrollback_moves_the_cursor_up(self):
+        s = Screen(rows=10, cols=20)
+        s.feed("A" * 30 + "\nBBBBB\n")
+        s.resize_like_tmux(cols=40)
+        self.assertEqual((s.row, s.lines[:2]), (2, ["A" * 30, "BBBBB"]))
+
+    def test_erasing_below_from_the_top_left_corner_scrolls_the_screen_into_scrollback_first(self):
+        s = Screen(rows=5, cols=10)
+        s.feed("a\nb\n\x1b[H\x1b[J")
+        self.assertEqual((s.scrollback, s.text()), (["a", "b"], ""))
+        s = Screen(rows=5, cols=10)
+        s.feed("a\nb\n\x1b[H\x1b[K\x1b[B\x1b[J\x1b[A")      # the first line on its own, then the rest
+        self.assertEqual((s.scrollback, s.text(), s.row), ([], "", 0))
+
+    def test_written_spaces_reflow_and_a_newline_ended_line_is_never_joined(self):
+        s = Screen(rows=10, cols=40)
+        s.feed("X" + " " * 30 + "\nY\n")
+        s.resize_like_tmux(cols=20)
+        self.assertEqual((s.row, len(s.scrollback)), (2, 1))
+        s = Screen(rows=10, cols=10)
+        s.feed("abc\ndef\n")
+        s.resize_like_tmux(cols=20)
+        self.assertEqual(s.lines[:2], ["abc", "def"])
+
 
 class HeaderTest(unittest.TestCase):
     def setUp(self):
@@ -3115,129 +3249,23 @@ class HeaderTest(unittest.TestCase):
         self.assertEqual(fields["lines"], ["Commit Message: m"])
 
 
-def _g(state, label, body=0):
-    """A transcript group: its row line, then body lines."""
-    return jr._Group(state, label, [f"{'✗' if state == 'fail' else '✔'} {label}"], [f"  note {i}" for i in range(body)])
+class FitViewTest(unittest.TestCase):
+    BOARD = [("▶ Push: Juneau · master", False), ("▶ Commit Message: m", False), ("▶ Output: tail -f /o", True),
+             ("✔ Prechecks", False), ("⠋ Java Tests", False), ("○ Commit", False), ("▶ Overall  38%", False)]
 
+    def test_everything_fits(self):
+        self.assertEqual(jr.fit_view(self.BOARD, 30, 60), [t for t, _ in self.BOARD])
 
-def _run(label, units=0, t0=0.0):
-    return jr._Run([f"⠋ {label}"], [jr._Unit(t0 + i, i, [f"    Mod {i}"], f"Mod {i}") for i in range(units)])
-
-
-class FitTest(unittest.TestCase):
-    TITLE = ("▶ Push: Juneau · master", [("▶ Commit Message: m", False, -1), ("▶ Output: tail -f /o", True, 1),
-                                          ("▶ Board: tail -f /c", True, 0)])
-    OVERALL = "▶ Overall  38%  ~7:40 left  · 4 of 13 steps"
-
-    def fit(self, budget, groups=(), running=(), pending=(), header=None, overall=OVERALL, cols=59):
-        return jr.fit_view(header or self.TITLE, list(groups), list(running), list(pending), overall, budget, cols,
-                           cols + 1)
-
-    def full(self):
-        return dict(groups=[_g("ok", "Prechecks"), _g("ok", "Setup"), _g("ok", "Compile")],
-                    running=[_run("Java Tests", units=4)], pending=["Python Tests", "Browser Tests", "Commit"])
-
-    def test_everything_fits_unfolded(self):
-        lines = self.fit(30, **self.full())
-        self.assertEqual(len(lines), 16)
-        self.assertEqual((lines[0], lines[-1]), (self.TITLE[0], self.OVERALL))
-
-    def test_a1_folds_pending_rows_partially_then_all(self):
-        lines = self.fit(15, **self.full())
-        self.assertIn("○ Python Tests", lines)
-        self.assertIn("○ 2 more: Browser Tests, Commit", lines)
-        lines = self.fit(14, **self.full())
-        self.assertIn("○ 3 more: Python Tests, Browser Tests, Commit", lines)
-        self.assertNotIn("○ Python Tests", lines)
-
-    def test_a2_folds_done_groups_oldest_first_where_the_first_stood(self):
-        lines = self.fit(12, **self.full())
-        self.assertEqual(lines[4], "✔ 3 done: Prechecks, Setup, Compile")
-        self.assertEqual(len(lines), 12)
-
-    def test_a2_a_warn_row_folds_with_the_warn_icon_and_its_notes_fold_with_it(self):
-        lines = self.fit(8, groups=[_g("ok", "A", body=2), _g("warn", "B", body=1)], running=[_run("C")])
-        self.assertIn("⚠ 2 done: A, B", lines)
-        self.assertFalse(any("note" in line for line in lines))
-
-    def test_a3_packs_unit_lines_newest_first(self):
-        lines = self.fit(10, **self.full())
-        self.assertIn("    Mod 0", lines)
-        self.assertIn("    Mod 1, Mod 2, Mod 3", lines)      # folded newest first, listed oldest first
-
-    def test_a4_cuts_failed_bodies_oldest_first_and_keeps_the_failed_row(self):
-        groups = [_g("fail", "A", body=5), _g("fail", "B", body=5)]
-        lines = self.fit(12, groups=groups, header=("▶ T", []), overall=None)     # 13 lines unfolded
-        self.assertEqual(lines[1:3], ["✗ A", "    … 5 more lines (board log)"])
-        self.assertIn("  note 4", lines)                       # B's body is still whole
-
-    def test_the_worked_example_ten_line_pane(self):
-        lines = self.fit(8, **self.full())
-        self.assertEqual(lines, [
-            "▶ Push: Juneau · master", "▶ Commit Message: m", "▶ Output: tail -f /o", "▶ Board: tail -f /c",
-            "✔ 3 done: Prechecks, Setup, Compile", "⠋ Java Tests", "○ 3 more: Python Tests, Browser Tests, Commit",
-            self.OVERALL])
-
-    def test_the_more_line_is_cut_at_a_label_boundary(self):
-        lines = self.fit(4, running=[_run("X")], pending=[f"Step {i}" for i in range(20)], header=("▶ T", []), cols=40)
-        more = [line for line in lines if "more:" in line][0]
-        self.assertTrue(more.endswith(", …") and jr._vlen(more) <= 40, more)
-
-    def test_a_log_line_costs_its_wrapped_height(self):
-        header = ("▶ T", [("▶ Output: tail -f /" + "o" * 30, True, 1)])           # 49 columns: 2 lines at 30
-        self.assertEqual(jr.fit_view(header, [], [_run("X")], [], None, 4, 29, 30), ["▶ T", header[1][0][0], "⠋ X"])
-        self.assertEqual(jr.fit_view(header, [], [_run("X")], [], None, 3, 29, 30), ["▶ T", "⠋ X"])     # B5 drops it
-
-    def test_b1_drops_the_names_lines_then_b2_the_done_line_then_b3_the_more_line(self):
-        full = self.full()
-        self.assertNotIn("    Mod 1, Mod 2, Mod 3", self.fit(8, **full))
-        self.assertNotIn("✔ 3 done: Prechecks, Setup, Compile", self.fit(7, **full))
-        lines = self.fit(6, **full)
-        self.assertFalse(any("more:" in line for line in lines))
-
-    def test_failures_stay_visible_until_b4(self):
-        groups = [_g("fail", "A", body=3), _g("ok", "B"), _g("fail", "C", body=3)]
-        self.assertTrue({"✗ A", "✗ C"} <= set(self.fit(10, groups=groups, running=[_run("X")])))
-        lines = self.fit(7, groups=groups, running=[_run("X")])
-        self.assertIn("✗ 2 failed: A, C", lines)
-
-    def test_b5_drops_the_commit_message_then_board_then_output(self):
-        lines = self.fit(5, groups=[_g("fail", "A")], running=[_run("X")])
-        self.assertNotIn("▶ Commit Message: m", lines)
-        self.assertIn("▶ Output: tail -f /o", lines)
-        self.assertNotIn("▶ Board: tail -f /c", lines)
-
-    def test_a_six_line_pane_keeps_the_title_overall_and_the_newest_running_row(self):
-        lines = self.fit(4, groups=[_g("ok", "A")], running=[_run("Old"), _run("New")], pending=["P"])
-        self.assertEqual(lines, ["▶ Push: Juneau · master", "⠋ Old", "⠋ New", self.OVERALL])    # B5 before B6
-        self.assertEqual(self.fit(3, running=[_run("Old"), _run("New")]), ["▶ Push: Juneau · master", "⠋ New",
-                                                                             self.OVERALL])
-
-    def test_b7_drops_the_failed_line_then_b8_the_newest_row(self):
-        groups = [_g("fail", "A")]
-        self.assertEqual(self.fit(2, groups=groups, running=[_run("X")]), ["▶ Push: Juneau · master", self.OVERALL])
-
-    def test_three_and_two_line_panes(self):
-        self.assertEqual(self.fit(1, **self.full()), ["▶ Push: Juneau · master"])      # B = 1: the title only
-        self.assertEqual(self.fit(0, **self.full()), [])
-
-    def test_no_title_pins_overall_alone(self):
-        self.assertEqual(self.fit(1, running=[_run("X")], header=(None, [])), [self.OVERALL])
-
-    def test_the_counted_height_matches_the_lines_at_every_fold(self):
-        header = ("▶ T", [("▶ Commit Message: m", False, -1), ("▶ Output: tail -f /" + "o" * 70, True, 1)])
-        groups = [_g("ok", "A", body=2), _g("fail", "B", body=3), _g("warn", "C", body=1), _g("fail", "D", body=2)]
-        fold = jr._Fold(header, groups, [_run("X", units=3), _run("Y", units=2)], ["P", "Q", "R"], "▶ Overall", 59,
-                        False)
-        drawn = lambda: sum(max(1, -(-jr._vlen(t) // 60)) if wraps else 1 for t, wraps in fold.lines())
-        self.assertEqual(fold.height(60), drawn())
-        for _ in fold.steps():
-            self.assertEqual(fold.height(60), drawn())
-
-    def test_the_height_is_never_over_budget(self):
-        for budget in range(0, 20):
+    def test_a_short_pane_keeps_the_last_rows(self):
+        for budget in range(0, len(self.BOARD) + 1):
             with self.subTest(budget=budget):
-                self.assertLessEqual(len(self.fit(budget, **self.full())), max(budget, 0))
+                self.assertEqual(jr.fit_view(self.BOARD, budget, 60), [t for t, _ in self.BOARD][len(self.BOARD) - budget:])
+
+    def test_a_log_line_costs_its_wrapped_height_and_is_left_out_whole_when_it_does_not_fit(self):
+        board = [("▶ T", False), ("▶ Output: tail -f /" + "o" * 70, True), ("⠋ X", False)]
+        self.assertEqual(jr.fit_view(board, 5, 30), [t for t, _ in board])
+        self.assertEqual(jr.fit_view(board, 4, 30), [board[1][0], "⠋ X"])     # the log line takes three rows
+        self.assertEqual(jr.fit_view(board, 3, 30), ["⠋ X"])        # 3 + 1 > 3: left out whole, not cut
 
 
 if __name__ == "__main__":

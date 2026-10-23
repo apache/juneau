@@ -77,21 +77,29 @@ def isolate_run_env(case):
     os.environ["JUNEAU_RUN_HISTORY"] = "0"
 
 
+class _Line(list):
+    """A screen line's cells; wrapped is set when the line autowrapped onto the next (a reflow joins them again)."""
+    wrapped = False
+
+
 class Screen:
-    """A minimal VT100 model, enough for what LiveRenderer writes: text, \\r, \\n, ESC[nA, ESC[H, ESC[K and ESC[J.
+    """A minimal VT100 model, enough for what LiveRenderer writes: text, \\r, \\n, ESC[nA, ESC[nB, ESC[H, ESC[K and ESC[J.
     SGR colour is ignored; cursor show/hide sets cursor_visible.  clamped is set if a cursor-up ever went above the first
     line.  With rows (and cols) it is a viewport: a \\n on the last row scrolls the top line into scrollback, a line
     autowraps at cols, and a wide or emoji code point takes two columns (jr._cw), as the renderer assumes.  start_row
-    puts the cursor that far down first, as a run started near the bottom of the window."""
+    puts the cursor that far down first, as a run started near the bottom of the window.  scrollback holds the lines as
+    text; _back holds the same lines' cells, for resize_like_tmux to reflow.  As in tmux (scroll-on-clear, on by
+    default), ESC[J from the top-left corner of a viewport moves the screen's lines into scrollback first."""
 
     _CSI = re.compile(r"\x1b\[(\??)(\d*)([A-Za-z])")
 
     def __init__(self, rows=None, cols=None, start_row=0):
         self.rows, self.cols = rows, cols
-        self.cells = [[] for _ in range(start_row + 1)]     # "" marks a wide character's second column
+        self.cells = [_Line() for _ in range(start_row + 1)]    # "" marks a wide character's second column
         self.row = start_row
         self.col = 0
         self.scrollback = []
+        self._back = []
         self.clamped = False
         self.cursor_visible = True
 
@@ -115,37 +123,88 @@ class Screen:
             else:
                 w = jr._cw(ch) if self.rows else 1
                 if self.cols and self.col + w > self.cols:
-                    self._newline()
+                    self._newline(wrapped=True)
                 line = self.cells[self.row]
                 line.extend([" "] * (self.col - len(line)))
                 line[self.col:self.col + w] = [ch] + [""] * (w - 1)
                 self.col += w
             i += 1
 
-    def resize_like_tmux(self, rows):
-        """Change the viewport height as tmux does: shrinking scrolls the top lines into scrollback until the cursor
-        fits; growing pulls that many lines back from scrollback onto the top and moves the cursor down with them."""
+    def resize_like_tmux(self, rows=None, cols=None):
+        """Change the viewport as tmux does, the height first, then the width.  Height: shrinking scrolls the top lines
+        into scrollback until the cursor fits; growing pulls that many lines back from scrollback onto the top and moves
+        the cursor down with them.  Width (reflow): see _reflow."""
+        rows = self.rows if rows is None else rows
         if rows < self.rows:
             while self.row >= rows:
-                self.scrollback.append("".join(self.cells.pop(0)).rstrip())
+                self._scroll_off()
                 self.row -= 1
             del self.cells[rows:]
         else:
             pulled = min(len(self.scrollback), rows - self.rows)
             for _ in range(pulled):
-                self.cells.insert(0, list(self.scrollback.pop()))
+                self.scrollback.pop()
+                self.cells.insert(0, self._back.pop())
             self.row += pulled
         self.rows = rows
+        if cols is not None and cols != self.cols:
+            self._reflow(cols)
 
-    def _newline(self):
+    def _reflow(self, cols):
+        """Rewrap at cols as tmux 3.x does (checked against tmux 3.7c): every line, scrollback included, is joined
+        with the lines it autowrapped onto (a line ended by \\n is never joined) and wrapped again at cols, written
+        spaces included; the screen is the last rows lines of the result and the rest is scrollback; the cursor keeps
+        its place in the text.  So narrowing pushes the top of the screen into scrollback even with blank rows under
+        the cursor, and widening pulls lines back from scrollback onto the top (or, with none, moves the cursor up)."""
+        grid = self._back + self.cells + [_Line() for _ in range(self.rows - len(self.cells))]
+        at = len(self._back) + self.row
+        logical, cursor = [], None          # each logical line's cells; the cursor's (logical line, offset)
+        joining = False
+        for i, line in enumerate(grid):
+            if not joining:
+                logical.append([])
+            if i == at:
+                cursor = (len(logical) - 1, len(logical[-1]) + self.col)
+            logical[-1] += line
+            joining = line.wrapped
+        out = []
+        for n, cells in enumerate(logical):
+            first = len(out)
+            out.append(_Line())
+            for c in range(len(cells)):
+                if cells[c] == "":
+                    continue                # a wide character's second column moves with its first
+                w = 2 if c + 1 < len(cells) and cells[c + 1] == "" else 1
+                if len(out[-1]) + w > cols:
+                    out[-1].wrapped = True
+                    out.append(_Line())
+                out[-1] += cells[c:c + w]
+            if cursor is not None and cursor[0] == n:
+                at, col = first + cursor[1] // cols, cursor[1] % cols
+                if at >= len(out):
+                    out.append(_Line())
+        while len(out) < self.rows:
+            out.append(_Line())
+        split = len(out) - self.rows
+        self._back = out[:split]
+        self.scrollback = ["".join(line).rstrip() for line in self._back]
+        self.cells, self.row, self.col, self.cols = out[split:], at - split, col, cols
+
+    def _scroll_off(self):
+        line = self.cells.pop(0)
+        self.scrollback.append("".join(line).rstrip())
+        self._back.append(line)
+
+    def _newline(self, wrapped=False):
         self.col = 0
+        self.cells[self.row].wrapped = wrapped      # tmux sets the flag on an autowrap and clears it on a \n
         if self.rows and self.row == self.rows - 1:
-            self.scrollback.append("".join(self.cells.pop(0)).rstrip())
-            self.cells.append([])
+            self._scroll_off()
+            self.cells.append(_Line())
             return
         self.row += 1
         if self.row == len(self.cells):
-            self.cells.append([])
+            self.cells.append(_Line())
 
     def _csi(self, private, n, cmd):
         if private:
@@ -159,18 +218,27 @@ class Screen:
         elif cmd == "A":
             self.clamped = self.clamped or n > self.row
             self.row = max(0, self.row - n)
+        elif cmd == "B":
+            self.row = min(self.row + n, (self.rows or len(self.cells)) - 1)
+            self.cells += [_Line() for _ in range(self.row + 1 - len(self.cells))]
         elif cmd == "K":
             del self.cells[self.row][self.col:]
+            self.cells[self.row].wrapped = False    # the line ends here now, so it no longer runs onto the next
         elif cmd == "J":
+            if self.rows and self.row == 0 and self.col == 0:
+                while any(self.cells):
+                    self._scroll_off()
+                self.cells = [_Line()]
             del self.cells[self.row][self.col:]
             del self.cells[self.row + 1:]
+            self.cells[self.row].wrapped = False
 
     def resize(self, rows=None, cols=None):
         """Change the viewport as a terminal that does not reflow would: lines already written keep their cells, and
         only later writes wrap and scroll at the new size.  Rows that no longer fit go to scrollback."""
         self.rows, self.cols = rows, cols
         while self.rows and len(self.cells) > self.rows:
-            self.scrollback.append("".join(self.cells.pop(0)).rstrip())
+            self._scroll_off()
             self.row -= 1
         self.row = max(0, self.row)
 

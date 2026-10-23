@@ -1905,15 +1905,21 @@ def hint_lines(block):
 def setup_line(board, glyphs, cols=None, now=0.0, color=False):
     """The Setup row as a line: its icon (a spinner until every pom box is set or its owner ends, then ● or, without colour, ✔ or ✗), the
     label column, one box per pom module, and the totals text or, when a pom failed, `N failed: <pom>`."""
+    label, cells, text = setup_parts(board, glyphs, now, color)
+    if cols is None:
+        return label + "  " + "".join(cells) + "  " + text
+    return _fit_row(label, cells, text, "", cols)
+
+
+def setup_parts(board, glyphs, now=0.0, color=False):
+    """The Setup row's label column, boxes and text, as setup_line lays them out."""
     setup = board.setup
     state = "running" if not setup.ended else "fail" if setup.failed else "ok"
     label = f"{icon(state, now, color)} {'Setup'.ljust(board.width())}"
     failed = board.setup_failed()
     text = (f"{len(failed)} failed: {failed[0]}" + (f" +{len(failed) - 1}" if len(failed) > 1 else "")
             if failed else setup_text(setup))
-    if cols is None:
-        return label + "  " + "".join(setup_cells(setup, glyphs)) + "  " + text
-    return _fit_row(label, setup_cells(setup, glyphs), text, "", cols)
+    return label, setup_cells(setup, glyphs), text
 
 
 def _cut_text(text, room, minimum=12):
@@ -2026,223 +2032,19 @@ def _vcut(text, n):
     return "".join(out) + ("\x1b[0m" if "\x1b[" in text else "")
 
 
-def common_prefix(titles):
-    """Longest run of whole leading words shared by every title and proper for all of them (spec 3, step 2).  A word
-    ends at whitespace, or after a ':' or '/'.  Fewer than two distinct titles: no prefix."""
-    titles = sorted(set(titles))
-    if len(titles) < 2:
-        return ""
-    split = [re.findall(r"[^\s:/]+[:/]?\s*|[:/]\s*", t) for t in titles]
-    shared = []
-    for group in zip(*split):
-        if all(g.strip() == group[0].strip() for g in group):     # a final word has no trailing space: compare stripped
-            shared.append(group[0])
-        else:
+def fit_view(lines, budget, columns):
+    """The last budget physical lines of the board: a board taller than the pane has its top rows scrolled out of view,
+    and they come back as it shrinks; nothing is folded or merged to make it fit.  lines are (text, wraps) pairs: a
+    wrapping (log) line costs ceil(width / columns) lines and is left out whole when only part of it would fit; every
+    other line is already cut and costs one."""
+    out, room = [], budget
+    for text, wraps in reversed(lines):
+        cost = max(1, -(-_vlen(text) // columns)) if wraps else 1
+        if cost > room:
             break
-    prefix = "".join(shared)
-    while prefix and any(t.strip() == prefix.strip() for t in titles):
-        shared.pop()
-        prefix = "".join(shared)
-    return prefix
-
-
-def collapse_names(names, cols):
-    """Comma-join `names` into at most `cols - 2` display columns: `cols` is the line width the caller already
-    reduced to leave the last terminal column free (spec 3), less the caller's two-column indent.  When some names do
-    not fit end with `, … and N others`, counted in the fit; a first name too wide is cut with an ellipsis (spec 3,
-    step 3).  The result never exceeds the budget, however narrow."""
-    budget = cols - 2
-    if not names or budget < 1:
-        return ""
-    joined = ", ".join(names)
-    if _vlen(joined) <= budget:
-        return joined
-    for keep in range(len(names) - 1, 0, -1):
-        line = ", ".join(names[:keep]) + f", … and {len(names) - keep} others"
-        if _vlen(line) <= budget:
-            return line
-    suffix = f", … and {len(names) - 1} others" if len(names) > 1 else ""
-    room = budget - _vlen(suffix) - 1
-    if room < 1:        # the suffix alone leaves no room for a name: keep the name, drop the suffix
-        suffix, room = "", budget - 1
-    line = (_vcut(names[0], room) + "…" if room >= 1 else "…") + suffix       # _vcut adds no ellipsis
-    return line if _vlen(line) <= budget else _vcut(line, budget)
-
-
-def label_list(head, labels, cols):
-    """head, then the labels comma-joined, cut at a label boundary with ", …" to fit cols (the folded pending, done
-    and failed lines)."""
-    line = head + ", ".join(labels)
-    if _vlen(line) <= cols:
-        return line
-    for keep in range(len(labels) - 1, 0, -1):
-        line = head + ", ".join(labels[:keep]) + ", …"
-        if _vlen(line) <= cols:
-            return line
-    return _vcut(head, max(0, cols - 1)) + "…"
-
-
-class _Group:
-    """One finished row of the transcript with what belongs to it: state (ok, warn or fail), label (None for text
-    before any row), head (its Setup and row lines) and body (its notes, hints and module lines)."""
-
-    def __init__(self, state, label, head, body):
-        self.state, self.label, self.head, self.body = state, label, head, body
-
-
-_Run = collections.namedtuple("_Run", "head units")             # a running row: its Setup, row and progress lines, then _Units
-_Unit = collections.namedtuple("_Unit", "t0 i lines name")      # a running unit's lines, and its name on a packed names line
-
-
-class _Fold:
-    """The live frame's parts and how far each is folded.  lines() draws them at the current fold; steps() folds one
-    notch at a time, in the spec's order (3, Stage A then Stage B), yielding after each."""
-
-    def __init__(self, header, groups, running, pending, overall, cols, color):
-        self.title, self.head = header
-        self.groups, self.running, self.pending, self.overall = groups, running, pending, overall
-        self.cols, self.color = cols, color
-        self.kept = len(pending)    # pending rows kept whole; the rest fold into one "N more" line
-        self.done = []              # indexes of the folded done groups, oldest first
-        self.units = set()          # (run index, unit index) folded onto a names line
-        self.bodies = set()         # indexes of failed groups whose body is cut to one line
-        self.no_names = set()       # run indexes whose names line is dropped
-        self.drop = set()           # "done", "more", "failed": a folded line that is dropped
-        self.failed = False         # every failed group folded into one "N failed" line
-        self.head_gone = set()      # indexes into head that are dropped
-        self.runs_gone = 0          # running rows dropped, oldest first
-
-    def _summary(self, state, head, labels):
-        text = label_list(head, labels, self.cols - 2)
-        return f"{icon(state, color=self.color)} " + (f"\x1b[2m{text}\x1b[0m" if self.color else text)
-
-    def lines(self):
-        """(text, wraps) pairs: wraps is True for a log line, which is never cut and the terminal wraps."""
-        out = [] if self.title is None else [(self.title, False)]
-        out += [(text, wraps) for i, (text, wraps, _) in enumerate(self.head) if i not in self.head_gone]
-        fails = [i for i, g in enumerate(self.groups) if g.state == "fail"]
-        done = set(self.done)
-        for i, g in enumerate(self.groups):
-            if i in done:
-                if i == self.done[0] and "done" not in self.drop:
-                    folded = [self.groups[j] for j in self.done]
-                    state = "warn" if any(f.state == "warn" for f in folded) else "ok"
-                    labels = [f.label for f in folded if f.label]
-                    out.append((self._summary(state, f"{len(labels)} done: ", labels), False))
-            elif g.state == "fail" and self.failed:
-                if i == fails[0] and "failed" not in self.drop:
-                    labels = [self.groups[j].label for j in fails if self.groups[j].label]
-                    out.append((self._summary("fail", f"{len(labels)} failed: ", labels), False))
-            else:
-                out += [(t, False) for t in g.head]
-                if i in self.bodies:
-                    out.append((f"    … {len(g.body)} more lines (board log)", False))
-                else:
-                    out += [(t, False) for t in g.body]
-        for j, run in enumerate(self.running):
-            if j < self.runs_gone:
-                continue
-            out += [(t, False) for t in run.head]
-            out += [(t, False) for k, u in enumerate(run.units) if (j, k) not in self.units for t in u.lines]
-            folded = sorted((u for k, u in enumerate(run.units) if (j, k) in self.units), key=lambda u: (u.t0, u.i))
-            if folded and j not in self.no_names:
-                out.append(("    " + collapse_names([u.name for u in folded], self.cols - 2), False))
-        out += [(_vcut(pending_line(label, self.color), self.cols), False) for label in self.pending[:self.kept]]
-        rest = self.pending[self.kept:]
-        if rest and "more" not in self.drop:
-            out.append((pending_line(label_list(f"{len(rest)} more: ", rest, self.cols - 2), self.color), False))
-        if self.overall is not None:
-            out.append((self.overall, False))
-        return out
-
-    def height(self, columns):
-        """The physical height of lines() without building them (a tick folds a long transcript a notch at a time):
-        a log line costs ceil(width / columns), every other line one."""
-        n = 0 if self.title is None else 1
-        n += sum(max(1, -(-_vlen(t) // columns)) if wraps else 1
-                 for i, (t, wraps, _) in enumerate(self.head) if i not in self.head_gone)
-        done = set(self.done)
-        n += 1 if done and "done" not in self.drop else 0
-        if self.failed and "failed" not in self.drop and any(g.state == "fail" for g in self.groups):
-            n += 1
-        for i, g in enumerate(self.groups):
-            if i not in done and not (g.state == "fail" and self.failed):
-                n += len(g.head) + (1 if i in self.bodies else len(g.body))
-        for j in range(self.runs_gone, len(self.running)):
-            units = self.running[j].units
-            n += len(self.running[j].head) + sum(len(u.lines) for k, u in enumerate(units) if (j, k) not in self.units)
-            n += 1 if j not in self.no_names and any((j, k) in self.units for k in range(len(units))) else 0
-        n += min(self.kept, len(self.pending)) + (1 if self.kept < len(self.pending) and "more" not in self.drop else 0)
-        return n + (1 if self.overall is not None else 0)
-
-    def steps(self):
-        # A1: pending rows, keeping the first k (never folding just one of several); a lone one folds too, so B3 can drop it
-        n = len(self.pending)
-        for k in range(max(n - 2, 0), -1, -1) if n else ():
-            self.kept = k
-            yield
-        # A2: done groups, oldest first
-        for i, g in enumerate(self.groups):
-            if g.state != "fail":
-                self.done.append(i)
-                yield
-        # A3: unit lines, newest first (of units started at the same instant, the one listed later folds first)
-        units = [(u.t0, u.i, j, k) for j, run in enumerate(self.running) for k, u in enumerate(run.units)]
-        for _, _, j, k in sorted(units, reverse=True):
-            self.units.add((j, k))
-            yield
-        # A4: failed groups' bodies, oldest first
-        for i, g in enumerate(self.groups):
-            if g.state == "fail" and len(g.body) > 1:
-                self.bodies.add(i)
-                yield
-        yield from self._stage_b()
-
-    def _stage_b(self):
-        # B1: the packed names lines, oldest row first
-        for j in range(len(self.running)):
-            if any(jj == j for jj, _ in self.units):
-                self.no_names.add(j)
-                yield
-        # B2, B3: the done line, the more line
-        for name, present in (("done", bool(self.done)), ("more", self.kept < len(self.pending))):
-            if present:
-                self.drop.add(name)
-                yield
-        # B4: the failed groups, into one "N failed" line
-        if any(g.state == "fail" for g in self.groups):
-            self.failed = True
-            yield
-        # B5: the header's lines and log lines (the cut lines in order, then Board, Output, Cancel)
-        for i in sorted(range(len(self.head)), key=lambda i: (self.head[i][2], i)):
-            self.head_gone.add(i)
-            yield
-        # B6: running rows, oldest first, with their Setup and progress lines (the newest stays)
-        while self.runs_gone < len(self.running) - 1:
-            self.runs_gone += 1
-            yield
-        # B7: the failed line; B8: the newest running row
-        if self.failed:
-            self.drop.add("failed")
-            yield
-        if self.runs_gone < len(self.running):
-            self.runs_gone += 1
-            yield
-
-
-def fit_view(header, groups, running, pending, overall, budget, cols, columns, color=False):
-    """The live frame's lines, folded until their physical height is at most budget (spec 3).  header is (title line
-    or None, [(text, wraps, drop rank)]); a wrapping (log) line costs ceil(width / columns) lines, every other line is
-    cut to cols and costs one.  The title and Overall lines are pinned; with budget 1 only the first of them stays."""
-    fold = _Fold(header, groups, running, pending, overall, cols, color)
-    if fold.height(columns) > budget:
-        for _ in fold.steps():
-            if fold.height(columns) <= budget:
-                break
-    lines = [t for t, _ in fold.lines()]
-    if fold.height(columns) > budget:
-        lines = lines[:max(0, budget)]
-    return lines
+        out.append(text)
+        room -= cost
+    return out[::-1]
 
 
 def _fit(left, right, cols):
@@ -2285,16 +2087,16 @@ def terminal_size():
     return os.terminal_size((size.columns or 80, size.lines or 24))
 
 
-# Known limitations: (1) a terminal that does not reflow on resize keeps the old lines' wrapping, so after a narrowing
-# the cursor-up count (which assumes rewrapping at the new width) can overshoot into scrollback or leave a fragment; the
-# next frame repaints from wherever the cursor lands.  (2) Output that bypasses this renderer (a stray print or a child
-# writing to the tty) moves the cursor without updating widths, so the whole frame above it goes stale until close():
-# every frame line is redrawn from a wrong origin, not just the last one.  Child output goes through the event pipe or
-# the pause()/passthrough paths for this reason.
+# Known limitations: (1) the frame's top lines that a narrowing pushes into the terminal's scrollback (see above _up)
+# stay there as a stale, rewrapped copy: no redraw reaches scrollback, and erasing it (ESC[3J) would erase the user's
+# own history with it.  (2) Output that bypasses this renderer (a stray print or a child writing to the tty) moves the
+# cursor without updating widths, so the whole frame above it goes stale until close(): every frame line is redrawn from
+# a wrong origin, not just the last one.  Child output goes through the event pipe or the pause()/passthrough paths for
+# this reason.
 class LiveRenderer:
     """The live view: one frame — the session header, the transcript of finished blocks, then the running rows,
-    pending rows and Overall — redrawn in place at most once per REDRAW_SECONDS and folded by fit_view to the
-    terminal's rows minus 2.  Nothing reaches scrollback while the frame is live; pause() and close() print the header
+    pending rows and Overall — redrawn in place at most once per REDRAW_SECONDS, of which fit_view keeps the last
+    lines that fit the terminal's rows minus 2.  Nothing reaches scrollback while the frame is live; pause() and close() print the header
     and the whole transcript there, uncut."""
 
     REDRAW_SECONDS = 0.1
@@ -2309,7 +2111,7 @@ class LiveRenderer:
         self.header = []            # this session's header blocks
         self.sticky = list(sticky)  # a parent session's header blocks, shown while this one has none (nested)
         self.header_printed = False
-        self.transcript = []        # (kind, block, lines): finished blocks, rendered once when they arrive
+        self.transcript = []        # (kind, block, lay): finished blocks, read once when they arrive (see _entry)
         self.cut = None             # (cols, [lines cut to cols, one list per transcript entry]); None after an insert
         self.widths = []            # display width of each frame line on screen, for the cursor-up count
         self.partial = 0            # display width of a prompt's partial line under the frame
@@ -2320,6 +2122,7 @@ class LiveRenderer:
         self.paused = False
         self.prompting = False      # a watchdog prompt's partial line is on screen
         self.cursor_hidden = False
+        self.homed = False          # the frame is drawn from the top of the screen (see above _up)
         self.closed = False         # after close() blocks print at once, and nothing redraws
         self.board = None
         self.flushed = 0            # blocks of the last render() call already taken (Console._fallback)
@@ -2338,14 +2141,27 @@ class LiveRenderer:
             elif kind == "header":
                 self.header.append(block)
             else:
-                # rendered now, once: setup and module lines read the clock and board.setup, which move on, and a row
-                # keeps the label column it finished with when a longer label starts later
-                self.transcript.append((kind, block, self._block_lines(block, self._cols())))
+                self.transcript.append((kind, block, self._entry(block)))
             self.flushed = i + 1
         self._draw(force=bool(blocks))
 
     def _cols(self):
         return self.size().columns - 1
+
+    def _entry(self, block):
+        """A finished block's lay(cols) -> lines, read now, once: setup and module lines read the clock and board.setup,
+        which move on, and a row keeps the label column it finished with when a longer label starts later.  A row and
+        a Setup line keep their parts, not their lines, so a resize lays them out again at the new width (the elapsed
+        time flush right, a bar that gives way); every other block is the same at any width."""
+        kind = block[0]
+        if kind == "row":
+            parts = self._row_parts(self.board, block[1])
+            return lambda cols: self._lay_row(parts, cols).split("\n")
+        if kind == "setup":
+            label, cells, text = setup_parts(self.board, self.glyphs, self.clock(), self.color)
+            return lambda cols: [_fit_row(label, cells, text, "", cols)]
+        lines = self._block_lines(block, self._cols())
+        return lambda cols: lines
 
     def _block_lines(self, block, cols, live=False):
         """A finished block's lines, as scrollback prints them (live cuts the header's title and cut lines)."""
@@ -2425,117 +2241,97 @@ class LiveRenderer:
         self.prompting = False
         text = self.prompt_text.rstrip("\n")
         if text:
-            self.transcript.insert(self.prompt_at, ("text", ("text", text), text.split("\n")))
+            lines = text.split("\n")
+            self.transcript.insert(self.prompt_at, ("text", ("text", text), lambda cols: lines))
             self.cut = None         # the cut cache is by position; an insert shifts it
         self.prompt_text = ""
 
     def _row(self, board, r, cols, pending=False):
+        return self._lay_row(self._row_parts(board, r, pending), cols)
+
+    def _row_parts(self, board, r, pending=False):
+        """What _lay_row needs of a row, read now: none of it depends on the width."""
         now = self.clock()
         cells, count, text, elapsed, cut = row_text(r, self.glyphs, now, pending)
         label = row_label(r, board.width(), now, self.color)
+        quiet = f" · quiet {r.quiet}s" if pending and r.quiet else ""
+        progress = (r.progress if r.running and r.progress
+                    and (not r.unit_kind or (r.unit_kind == "checks" and not r.units_running)) else None)
+        return label, cells, count, text, elapsed, cut, quiet, progress, bool(r.unit_kind)
+
+    @staticmethod
+    def _lay_row(parts, cols):
+        label, cells, count, text, elapsed, cut, quiet, progress, wrap = parts
         if cut and text:    # a reason gives way (cut with …) before the bar does
             used = _vlen(label) + (2 + len(cells) if cells is not None else 0) + (2 + _vlen(count) if count else 0)
             text = _cut_text(text, cols - (len(elapsed) + 2 if elapsed else 0) - used - 2)
-        rest = "  ".join(p for p in (count, text) if p)
-        if pending and r.quiet:
-            rest += f" · quiet {r.quiet}s"
-        if r.running and r.progress and (not r.unit_kind or (r.unit_kind == "checks" and not r.units_running)):
-            rest = f"{rest} · {r.progress}" if rest else r.progress
-        return _fit_row(label, cells, rest, elapsed, cols, wrap=bool(r.unit_kind))
+        rest = "  ".join(p for p in (count, text) if p) + quiet
+        if progress:
+            rest = f"{rest} · {progress}" if rest else progress
+        return _fit_row(label, cells, rest, elapsed, cols, wrap=wrap)
 
     def frame(self, cols, columns, budget):
         """The frame's lines for a cols-wide pane of budget lines (columns is the terminal width a log line wraps
         at)."""
-        runs, pending, overall = self.region_parts(self.board, cols)
-        return fit_view(self._header_parts(cols), self._groups(cols), runs, pending, overall, budget, cols, columns,
-                        self.color)
+        board = self._header_lines(cols) + [(line, False) for line in self._transcript_lines(cols)]
+        return fit_view(board + [(line, False) for line in self.region(self.board, cols)], budget, columns)
 
-    _LOG_RANK = {"Board": 0, "Output": 1, "Cancel": 2}     # Stage B5 drops the header's log lines in this order
-
-    def _header_parts(self, cols):
-        """(title line or None, [(text, wraps, drop rank)]): a cut line ranks -1, so it drops before any log line."""
-        title, head = None, []
+    def _header_lines(self, cols):
+        """The header as (text, wraps) pairs, its title first: a log line (Board, Output, Cancel) wraps, every other
+        line is cut."""
+        title, head = [], []
         for block in self.header or self.sticky:
             text = header_lines(block, cols, self.color, live=True)[0]
-            if len(block) > 2 and block[2] == HEAD_MARK and title is None:
-                title = text
-            elif len(block) > 3:
-                head.append((text, False, -1))
+            if len(block) > 2 and block[2] == HEAD_MARK and not title:
+                title = [(text, False)]
             else:
-                head.append((text, True, self._LOG_RANK.get(str(block[1]).split(":", 1)[0], 0)))
-        return title, head
+                head.append((text, len(block) <= 3))
+        return title + head
 
-    def _groups(self, cols):
-        """The transcript as _Groups: a Setup line joins the row after it, a row opens a group (fail, warn or ok, by
-        row_state), and text, hints and module lines join the open group (text before any row opens an ok group).
-        The final block is not part of the frame.  Every line is cut to cols with an ellipsis, once per entry and width
-        (self.cut), so a tick costs a pass over cached lists, not a re-render of the transcript."""
+    def _transcript_lines(self, cols):
+        """The transcript's lines but the final block's, each cut to cols with an ellipsis, once per entry and width
+        (self.cut), so a tick costs a pass over cached lists, not a re-render of the transcript; a new width lays each
+        entry out again from what it read on arrival."""
         def cut(line):
             return line if _vlen(line) <= cols else _vcut(line, max(0, cols - 1)) + "…"
 
         if self.cut is None or self.cut[0] != cols:
             self.cut = (cols, [])
         done = self.cut[1]
-        for kind, block, lines in self.transcript[len(done):]:
-            done.append([cut(line) for line in lines])
-        groups, setup = [], []
-        for (kind, block, _), lines in zip(self.transcript, done):
-            if kind == "final":
-                continue
-            if kind == "setup":
-                setup += lines
-            elif kind == "row":
-                state = row_state(block[1])
-                groups.append(_Group(state if state in ("fail", "warn") else "ok", block[1].label, setup + lines, []))
-                setup = []
-            else:
-                if not groups:
-                    groups.append(_Group("ok", None, [], []))
-                groups[-1].body = groups[-1].body + lines      # never extend a cached list in place
-        if setup:
-            groups.append(_Group("ok", None, setup, []))
-        return groups
+        for kind, block, lay in self.transcript[len(done):]:
+            done.append([cut(line) for line in lay(cols)])
+        return [line for (kind, _, _), lines in zip(self.transcript, done) if kind != "final" for line in lines]
 
     def tick(self, board):
         self.board = board
         self._draw()
 
-    def region_parts(self, board, cols):
-        """The region unfolded, as fit_view takes it: a _Run per running row in start order (its Setup row when it
-        owns the running Setup, its row, its current-file line, and a _Unit per running unit), the pending rows'
-        labels in plan order, and the Overall line or None."""
+    def region(self, board, cols, max_lines=None):
+        """The running rows in start order (each with its Setup row when it owns the running Setup, its current-file
+        line and a line per running unit), the pending rows in plan order and the Overall line; with max_lines, only
+        the last max_lines of them, as fit_view keeps them."""
         running = board.running()
         now = self.clock()
         current = {r.id: "    " + _vcut(r.progress, max(1, cols - 4)) for r in running
                    if r.progress and r.unit_kind in ("tests", "files") and not r.units_running}   # no unit line to show
         setup_running = (board.setup is not None and not board.setup.ended
                          and any(r.id == board.setup.row for r in running))
-        runs, i = [], 0
+        out = []
         for r in running:
-            head = [setup_line(board, self.glyphs, cols, now, self.color)] if setup_running and board.setup.row == r.id else []
-            head += self._row(board, r, cols, pending=True).split("\n")    # a wrapped unit bar spans several lines
+            if setup_running and board.setup.row == r.id:
+                out.append(setup_line(board, self.glyphs, cols, now, self.color))
+            out += self._row(board, r, cols, pending=True).split("\n")     # a wrapped unit bar spans several lines
             if r.id in current:
-                head.append(current[r.id])
+                out.append(current[r.id])
             mine = [m for m in r.units.values() if m.in_progress and m.id not in r.unbarred]
             width = max((_vlen(m.title) for m in mine), default=1)        # _sub_lines caps it
-            prefix = common_prefix([m.title for m in r.units.values() if m.id not in r.unbarred])
-            units = []
             for m in mine:
-                units.append(_Unit(m.t0, i, self._sub_lines(m, cols, width, now), m.title[len(prefix):] or m.title))
-                i += 1
-            runs.append(_Run(head, units))
+                out += self._sub_lines(m, cols, width, now)
+        out += [_vcut(pending_line(label, self.color), cols) for _, label in board.pending()]
         overall = board.overall()
-        line = _vcut(f"{head_mark(HEAD_MARK, self.color)} {overall_text(overall)}", cols) if overall else None
-        return runs, [label for _, label in board.pending()], line
-
-    def region(self, board, cols, max_lines=None):
-        """A test-facing shim, not used by the renderer: the running rows, pending rows and Overall, unfolded, or with
-        max_lines folded by fit_view alone (no header, no transcript), as the region tests that size it themselves
-        expect.  The live frame is built by frame()."""
-        runs, pending, overall = self.region_parts(board, cols)
-        if max_lines is None:
-            return [t for t, _ in _Fold((None, []), [], runs, pending, overall, cols, self.color).lines()]
-        return fit_view((None, []), [], runs, pending, overall, max_lines, cols, cols + 1, self.color)
+        if overall:
+            out.append(_vcut(f"{head_mark(HEAD_MARK, self.color)} {overall_text(overall)}", cols))
+        return out if max_lines is None else fit_view([(line, False) for line in out], max_lines, cols + 1)
 
     def _sub_lines(self, m, cols, width=None, now=None):
         """A unit's line: its title padded to width (its row's longest shown title, at most half the line and room for
@@ -2583,9 +2379,9 @@ class LiveRenderer:
             out.append("\x1b[?25l")
             self.cursor_hidden = True
         up = self._up(size)
-        if self.widths and self.last_size is not None and size.lines > self.last_size.lines:
-            # A taller pane: the terminal may have pulled lines back from scrollback above the frame (an earlier shrink
-            # pushed them there), so cursor-up no longer lands on the frame's top.  Draw from the top of the screen.
+        if self.widths and self.last_size is not None and size != self.last_size:
+            self.homed = True
+        if self.homed and self.widths:
             out.append("\x1b[H")
         elif up:
             out.append(f"\r\x1b[{up}A")
@@ -2594,6 +2390,16 @@ class LiveRenderer:
         self.write("".join(out))
         self.widths, self.partial, self.height = [_vlen(line) for line in lines], 0, len(lines)
         self.last_frame, self.last_size, self.last_draw = lines, size, now     # only a written frame moves the throttle
+
+    # Once the pane has been resized with a frame on screen, the frame is drawn from the top of the screen (ESC[H) until
+    # it is cleared, not by cursor-up: after a resize the terminal may hold lines above the frame that cursor-up does
+    # not reach.  tmux (checked against 3.7c) keeps the cursor's row when it rewraps: a narrower pane rewraps the
+    # frame onto more lines and pushes its top ones into scrollback, even with blank rows under the cursor, where no
+    # redraw can reach them; a taller pane, or a wider one (rewrapped lines joining again), pulls them back onto the top
+    # of the screen, above the frame; and a scrollback line that wrapped onto a frame line joins whatever the next
+    # redraw wrote there.  A taller pane that shrinks back between two redraws leaves those lines on screen with no
+    # size change to see, so one resize is enough to stop trusting cursor-up for the rest of the frame's life.  Drawing
+    # from the top overwrites whatever was on screen above the frame (the command line that started the run).
 
     def _up(self, size):
         """Lines from the cursor back to the frame's first line at the terminal's current width (a reflowing terminal
@@ -2608,10 +2414,15 @@ class LiveRenderer:
         return tint(line) if self.color else line
 
     def _clear(self):
+        """Erase the frame (and a prompt's partial line under it), leaving the cursor where its first line was.  It never
+        erases below from the top-left corner, which tmux takes for clearing the screen and scrolls into scrollback
+        first (scroll-on-clear, on by default), so a frame at the top of the pane would stay there as a stale copy: the
+        first line is erased on its own and the rest from the line under it."""
         if self.widths or self.partial:
-            up = self._up(self.size())
-            self.write("\r" + (f"\x1b[{up}A" if up else "") + "\x1b[J")
-        self.widths, self.partial, self.height, self.last_frame = [], 0, 0, None
+            up = 0 if self.homed else self._up(self.size())
+            move = "\x1b[H" if self.homed else "\r" + (f"\x1b[{up}A" if up else "")
+            self.write(move + ("\x1b[K\x1b[B\x1b[J\x1b[A" if self.homed or up else "\x1b[K"))
+        self.widths, self.partial, self.height, self.last_frame, self.homed = [], 0, 0, None, False
 
     def _show_cursor(self):
         if self.cursor_hidden:
@@ -2628,8 +2439,8 @@ class LiveRenderer:
                 out += self._block_lines(block, cols)
             self.header_printed = True
         transcript, self.transcript, self.cut = self.transcript, [], None
-        for kind, block, lines in transcript:
-            out += lines
+        for kind, block, lay in transcript:
+            out += lay(cols)
         return out
 
     def _print_scrollback(self):
