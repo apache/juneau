@@ -43,7 +43,7 @@ class BusTest(unittest.TestCase):
         patcher = mock.patch.dict(os.environ, {})
         patcher.start()
         self.addCleanup(patcher.stop)
-        for key in ("RUN_MARKERS", "JUNEAU_RUN_CONSOLE", "JUNEAU_RUN_FULL_LOG", "JUNEAU_RUN_CONDENSED_LOG"):
+        for key in ("RUN_MARKERS", "JUNEAU_RUN_CONSOLE", "JUNEAU_RUN_FULL_LOG", "JUNEAU_RUN_BOARD_LOG"):
             os.environ.pop(key, None)
         self.rec = jr.subscribe(Recorder())
         self.out = io.StringIO()

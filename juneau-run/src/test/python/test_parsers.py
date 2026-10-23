@@ -816,7 +816,7 @@ class PytestParserTest(unittest.TestCase):
         p.step_id = "py"
         return p
 
-    def test_counts_condensed_lines_and_report(self):
+    def test_counts_board_lines_and_report(self):
         with tempfile.TemporaryDirectory() as tmp:
             xml = Path(tmp) / "py-pytest.xml"
             xml.write_text("<testsuites/>", encoding="utf-8")
@@ -1264,7 +1264,7 @@ class PlaywrightParserTest(unittest.TestCase):
             self.assertNotIn("unit_end", [e[0] for e in p.on_line(line)], line)
         self.assertEqual(p.finish(0), [("unit_end", "b.ts", "ok", "file")])
 
-    def test_marker_lines_stay_out_of_the_condensed_log(self):
+    def test_marker_lines_stay_out_of_the_board_log(self):
         text = PLAYWRIGHT_FAIL.replace("    Error: expect(received).toBe(expected)",
                                        "    Error: expect(received).toBe(expected)\n" + self.marker("start", f="x.ts"))
         cond = [e[1] for e in kinds(feed(self.parser(), text, 1), "cond")]

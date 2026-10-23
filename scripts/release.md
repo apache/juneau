@@ -26,7 +26,7 @@ python3 scripts/release.py --revert
 | `--resume` | none | off | Start after the last step recorded in the checkpoint file. |
 | `--skip-step` | step name | none | Skip this step. May be repeated. |
 | `--revert` | none | off | Revert a release: delete the git tag, reset the Maven versions and remove the RC from SVN. |
-| `--console` | `full`, `condensed`, `none` | `full` | Maven output on the console. Also `JUNEAU_RUN_CONSOLE`; the flag wins. |
+| `--console` | `full`, `board`, `none` | `full` | Maven output on the console. Also `JUNEAU_RUN_CONSOLE`; the flag wins. |
 | `--detail` | `summary`, `actionable`, `modules`, `all` | `actionable` | Console detail. Also `JUNEAU_RUN_DETAIL`. |
 
 ## What it does

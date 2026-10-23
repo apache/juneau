@@ -34,7 +34,7 @@ SESSION_ENV = "JUNEAU_RUN_SESSION"
 PUSH_ACTIVE_ENV = "JUNEAU_PUSH_ACTIVE"
 N_BASE_ENV = "JUNEAU_RUN_N_BASE"
 CONSOLE_ENV = "JUNEAU_RUN_CONSOLE"
-CONSOLE_MODES = ("full", "condensed", "none")
+CONSOLE_MODES = ("full", "board", "none")
 PROTOCOL_ENV = ("RUN_MARKERS", "RUN_ARTIFACTS")
 # The gate-script contract (Juneau scripts/push.py:405-413 at HEAD): 0 pass, 2 fail, 3 skip.  Not pytest's.
 GATE_CODES = MappingProxyType({0: "pass", 2: "fail", 3: "skip"})
@@ -77,13 +77,13 @@ def _reporting(jr):
 
 
 def console_requested():
-    """True when juneau_run is loaded and its sinks aren't the default (JUNEAU_RUN_CONSOLE=condensed and the like), so
+    """True when juneau_run is loaded and its sinks aren't the default (JUNEAU_RUN_CONSOLE=board and the like), so
     session() opens a console view."""
     jr = _base.jr()
     return jr is not None and not jr.Sinks().is_default
 
 
-def export_console(flag=None, *, default="condensed"):
+def export_console(flag=None, *, default="board"):
     """Resolve the console mode and export it as JUNEAU_RUN_CONSOLE, so the session and child scripts use it: flag
     (the --console value, None when not given), else JUNEAU_RUN_CONSOLE, else default.  Call it before session().
     An unknown mode raises ValueError.  Returns the mode."""
@@ -95,9 +95,9 @@ def export_console(flag=None, *, default="condensed"):
 
 
 def add_console_argument(parser):
-    """Add --console {full,condensed,none} (default None, so export_console(args.console) applies the precedence)."""
+    """Add --console {full,board,none} (default None, so export_console(args.console) applies the precedence)."""
     parser.add_argument("--console", choices=CONSOLE_MODES, default=None,
-                        help="console output: full, condensed or none (also JUNEAU_RUN_CONSOLE; the flag wins)")
+                        help="console output: full, board or none (also JUNEAU_RUN_CONSOLE; the flag wins)")
 
 
 def paused():

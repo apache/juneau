@@ -352,7 +352,7 @@ class ConsoleTest(unittest.TestCase):
         patcher = mock.patch.dict(os.environ, {})
         patcher.start()
         self.addCleanup(patcher.stop)
-        for key in ("RUN_MARKERS", "TERM", "JUNEAU_RUN_CONSOLE", "JUNEAU_RUN_FULL_LOG", "JUNEAU_RUN_CONDENSED_LOG"):
+        for key in ("RUN_MARKERS", "TERM", "JUNEAU_RUN_CONSOLE", "JUNEAU_RUN_FULL_LOG", "JUNEAU_RUN_BOARD_LOG"):
             os.environ.pop(key, None)
         self.clock = Clock()
 
@@ -364,21 +364,21 @@ class ConsoleTest(unittest.TestCase):
     def test_screen_mode(self):
         self.assertIsNone(self.console(console="full").mode)
         self.assertIsNone(self.console(console="none").mode)
-        self.assertEqual(self.console(console="condensed").mode, "plain")
-        self.assertEqual(self.console(TTY(), console="condensed").mode, "live")
+        self.assertEqual(self.console(console="board").mode, "plain")
+        self.assertEqual(self.console(TTY(), console="board").mode, "live")
         with mock.patch.dict(os.environ, {"TERM": "dumb"}):
-            self.assertEqual(self.console(TTY(), console="condensed").mode, "plain")
+            self.assertEqual(self.console(TTY(), console="board").mode, "plain")
         with mock.patch.dict(os.environ, {"JUNEAU_RUN_LIVE": "0"}):
-            self.assertEqual(self.console(TTY(), console="condensed").mode, "plain")
+            self.assertEqual(self.console(TTY(), console="board").mode, "plain")
         with mock.patch.dict(os.environ, {"RUN_MARKERS": "1"}):
-            self.assertIsNone(self.console(TTY(), console="condensed").mode)
+            self.assertIsNone(self.console(TTY(), console="board").mode)
 
-    def test_the_condensed_log_gets_the_rows_but_no_heartbeat(self):
+    def test_the_board_log_gets_the_rows_but_no_heartbeat(self):
         import tempfile
         from pathlib import Path
         with tempfile.TemporaryDirectory() as tmp:
             log = Path(tmp) / "c.log"
-            c = self.console(console="none", condensed_log=str(log))
+            c = self.console(console="none", board_log=str(log))
             for kind, fields in maven_events():
                 c(kind, fields)
             self.clock.advance(20)
@@ -392,7 +392,7 @@ class ConsoleTest(unittest.TestCase):
 
     def test_plain_screen_heartbeat_every_15_seconds(self):
         out = io.StringIO()
-        c = self.console(out, console="condensed")
+        c = self.console(out, console="board")
         c("step_start", {"id": "tests", "n": 3, "title": "Tests", "parent": None})
         c("unit_start", {"step": "tests", "id": "tests/a", "title": "Mod A"})
         c("tests", {"step": "tests", "total": 10, "fail": 1, "err": 0, "skip": 0})
@@ -403,20 +403,20 @@ class ConsoleTest(unittest.TestCase):
         c.tick()
         self.assertEqual(out.getvalue(), "… 10 tests, 1 failed · 1 module running  0:15\n")
 
-    def test_close_still_closes_the_condensed_log_when_the_screen_fails_to_close(self):
+    def test_close_still_closes_the_board_log_when_the_screen_fails_to_close(self):
         with tempfile.TemporaryDirectory() as tmp:
-            c = self.console(TTY(), console="condensed", condensed_log=str(Path(tmp) / "c.log"))
+            c = self.console(TTY(), console="board", board_log=str(Path(tmp) / "c.log"))
             log = c._log
             c.screen = mock.Mock(**{"close.side_effect": OSError("screen gone")})
             c.close()
         self.assertTrue(log.closed)
         self.assertIsNone(c._log)
 
-    def test_write_condensed_is_silent_while_a_console_is_active(self):
+    def test_write_board_is_silent_while_a_console_is_active(self):
         out = io.StringIO()
-        jr._console = self.console(console="condensed")
+        jr._console = self.console(console="board")
         with contextlib.redirect_stdout(out):
-            jr.Sinks(console="condensed").write_condensed("✓ old condensed line")
+            jr.Sinks(console="board").write_board("✓ old board line")
         self.assertEqual(out.getvalue(), "")
 
 
@@ -524,7 +524,7 @@ class SessionTest(unittest.TestCase):
         reset_run_state()
         self.addCleanup(reset_run_state)
         self.addCleanup(lambda: jr._end_session())
-        patcher = mock.patch.dict(os.environ, {"JUNEAU_RUN_CONSOLE": "condensed"})
+        patcher = mock.patch.dict(os.environ, {"JUNEAU_RUN_CONSOLE": "board"})
         patcher.start()
         self.addCleanup(patcher.stop)
         os.environ.pop("RUN_MARKERS", None)
@@ -540,12 +540,12 @@ class SessionTest(unittest.TestCase):
         self.assertIs(jr._console, c)
         self.assertEqual(os.environ["JUNEAU_RUN_SESSION"], "1")
         self.assertRegex(out.getvalue(), r'^▶ Test: Juneau · master · a message\n▶ Output: tail -f \S+/test-\d{8}-\d{6}(-\d+)?\.log\n'
-                                         r'▶ Condensed: tail -f \S+\.condensed\.log\n$')
+                                         r'▶ Board: tail -f \S+\.board\.log\n$')
 
     def test_a_console_that_fails_to_start_leaves_the_env_unset(self):
         with tempfile.TemporaryDirectory() as tmp:
             Path(tmp, "file").write_text("")
-            sinks = jr.Sinks(console="condensed", condensed_log=f"{tmp}/file/condensed.log")
+            sinks = jr.Sinks(console="board", board_log=f"{tmp}/file/board.log")
             with contextlib.redirect_stdout(io.StringIO()), self.assertRaises(OSError):
                 jr.session("t", sinks=sinks)
         self.assertNotIn("JUNEAU_RUN_SESSION", os.environ)
@@ -567,13 +567,13 @@ class SessionTest(unittest.TestCase):
             self.assertEqual(out.getvalue(),
                              f'▶ Push: Juneau · master · Fix it\n▶ Output: tail -f {shlex.quote(tmp + "/push-full.log")}\n')
 
-    def test_the_condensed_tail_command_takes_its_own_line_after_the_full_logs(self):
+    def test_the_board_tail_command_takes_its_own_line_after_the_full_logs(self):
         with tempfile.TemporaryDirectory() as tmp:
             out = io.StringIO()
             with contextlib.redirect_stdout(out), mock.patch.object(jr.shutil, "get_terminal_size",
                                                                     return_value=os.terminal_size((300, 24))):
-                jr.session("T", ["b"], sinks=jr.Sinks(full_log=f"{tmp}/a.log", condensed_log=f"{tmp}/a.condensed.log"))
-            self.assertEqual(out.getvalue(), f"▶ T: b\n▶ Output: tail -f {tmp}/a.log\n▶ Condensed: tail -f {tmp}/a.condensed.log\n")
+                jr.session("T", ["b"], sinks=jr.Sinks(full_log=f"{tmp}/a.log", board_log=f"{tmp}/a.board.log"))
+            self.assertEqual(out.getvalue(), f"▶ T: b\n▶ Output: tail -f {tmp}/a.log\n▶ Board: tail -f {tmp}/a.board.log\n")
 
     def test_each_scripts_header_shape(self):
         shapes = [  # push.py, push.py --test-only, test.py, release.py
@@ -587,13 +587,13 @@ class SessionTest(unittest.TestCase):
         for title, header, first in shapes:
             with self.subTest(title=title, header=header), tempfile.TemporaryDirectory() as tmp:
                 reset_run_state()
-                os.environ["JUNEAU_RUN_CONSOLE"] = "condensed"     # reset_run_state drops it
+                os.environ["JUNEAU_RUN_CONSOLE"] = "board"     # reset_run_state drops it
                 out = io.StringIO()
                 with contextlib.redirect_stdout(out):
-                    jr.session(title, header, sinks=jr.Sinks(full_log=f"{tmp}/a.log", condensed_log=f"{tmp}/a.condensed.log"))
+                    jr.session(title, header, sinks=jr.Sinks(full_log=f"{tmp}/a.log", board_log=f"{tmp}/a.board.log"))
                     jr._end_session()
                 self.assertEqual(out.getvalue().splitlines()[:3],
-                                 [first, f"▶ Output: tail -f {tmp}/a.log", f"▶ Condensed: tail -f {tmp}/a.condensed.log"])
+                                 [first, f"▶ Output: tail -f {tmp}/a.log", f"▶ Board: tail -f {tmp}/a.board.log"])
 
     def test_a_long_title_wraps_with_a_hanging_indent_and_the_log_rows_do_not(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -611,10 +611,10 @@ class SessionTest(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             out = io.StringIO()
             with contextlib.redirect_stdout(out):
-                jr.session("T", sinks=jr.Sinks(full_log=f"{tmp}/a.log", condensed_log=f"{tmp}/a.condensed.log"))
+                jr.session("T", sinks=jr.Sinks(full_log=f"{tmp}/a.log", board_log=f"{tmp}/a.board.log"))
                 jr._end_session()
             self.assertEqual(out.getvalue().splitlines()[:4], ["▶ T", f"▶ Output: tail -f {tmp}/a.log",
-                                                               f"▶ Condensed: tail -f {tmp}/a.condensed.log",
+                                                               f"▶ Board: tail -f {tmp}/a.board.log",
                                                                "▶ Cancel: stop-it %3"])
 
     def test_no_cancel_row_without_the_variable(self):
@@ -635,13 +635,13 @@ class SessionTest(unittest.TestCase):
             jr.done("ok")
         self.assertEqual(out.getvalue(), "")
 
-    def test_a_default_condensed_session_prints_both_tails_and_writes_the_condensed_log(self):
+    def test_a_default_board_session_prints_both_tails_and_writes_the_board_log(self):
         out = io.StringIO()
         with contextlib.redirect_stdout(out):
-            jr.session("T", sinks=jr.Sinks("condensed"))
+            jr.session("T", sinks=jr.Sinks("board"))
             jr.end_session()
-        self.assertRegex(out.getvalue(), r"^▶ T\n▶ Output: tail -f \S+\.log\n▶ Condensed: tail -f \S+\.condensed\.log\n")
-        self.assertTrue(Path(os.environ["JUNEAU_RUN_CONDENSED_LOG"]).exists())
+        self.assertRegex(out.getvalue(), r"^▶ T\n▶ Output: tail -f \S+\.log\n▶ Board: tail -f \S+\.board\.log\n")
+        self.assertTrue(Path(os.environ["JUNEAU_RUN_BOARD_LOG"]).exists())
 
     def test_the_tail_command_quotes_a_path_with_spaces(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -658,7 +658,7 @@ class SessionTest(unittest.TestCase):
             os.utime(directory / f"old-{i:02d}.log", (1000 + i, 1000 + i))
         with contextlib.redirect_stdout(io.StringIO()):
             jr.session("t")
-        self.assertEqual(len([p for p in directory.glob("*.log") if not p.name.endswith(".condensed.log")]), 20)
+        self.assertEqual(len([p for p in directory.glob("*.log") if not p.name.endswith(".board.log")]), 20)
 
     def test_say_goes_through_the_console_once_a_session_owns_the_screen(self):
         out = io.StringIO()
@@ -666,7 +666,7 @@ class SessionTest(unittest.TestCase):
             jr.session("t")
             jr.say("Running: mvn")          # info: hidden at actionable
             jr.say("⚠ dirty tree", level="warn")
-        self.assertRegex(out.getvalue(), r"^▶ t\n▶ Output: tail -f \S+\.log\n▶ Condensed: tail -f \S+\.condensed\.log\n⚠ dirty tree\n$")
+        self.assertRegex(out.getvalue(), r"^▶ t\n▶ Output: tail -f \S+\.log\n▶ Board: tail -f \S+\.board\.log\n⚠ dirty tree\n$")
 
     def test_say_inside_a_paused_block_prints_as_is_once(self):
         out = io.StringIO()
@@ -676,7 +676,7 @@ class SessionTest(unittest.TestCase):
                 jr.say("Running: mvn")          # info: hidden at actionable, but the screen is the plain terminal now
                 jr.say("⚠ dirty tree", level="warn")
             jr.say("⚠ after", level="warn")
-        self.assertRegex(out.getvalue(), r"^▶ t\n▶ Output: tail -f \S+\.log\n▶ Condensed: tail -f \S+\.condensed\.log\nRunning: mvn\n⚠ dirty tree\n⚠ after\n$")
+        self.assertRegex(out.getvalue(), r"^▶ t\n▶ Output: tail -f \S+\.log\n▶ Board: tail -f \S+\.board\.log\nRunning: mvn\n⚠ dirty tree\n⚠ after\n$")
 
     def test_with_markers_on_stdout_stays_the_marker_stream(self):
         os.environ["RUN_MARKERS"] = "1"
@@ -1052,6 +1052,26 @@ class LiveTest(unittest.TestCase):
         self.assertTrue(any(line.startswith("✔ ") and " done: " in line for line in shown), shown)
         self.assertTrue(shown[-1].startswith(self.spin() + "Last"), shown)
         self.assertFalse(self.screen.clamped)
+
+    def test_growing_the_pane_does_not_leave_a_line_pulled_back_from_scrollback_above_the_header(self):
+        self.dims = (60, 14)
+        self.screen = Screen(rows=14, cols=60)
+        self.live.write = self.screen.feed
+        self.session(lines=("Commit Message: m", "Output: tail -f /x/log", "Board: tail -f /x/c.log"))
+        for n in "ab":
+            self.push(("step_start", {"id": n, "n": 1, "title": f"Step {n}", "parent": None}),
+                      ("step_end", {"id": n, "status": "ok", "ms": 1, "exit": None, "summary": "done", "totals": None}))
+        self.push(("step_start", {"id": "z", "n": 1, "title": "Last", "parent": None}))
+        for rows in (7, 14):        # the pane shrinks, a redraw folds the frame, the pane grows back, a redraw fits it
+            self.dims = (60, rows)
+            self.screen.resize_like_tmux(rows)
+            self.push()
+        shown = [line for line in self.screen.lines if line.strip()]
+        self.assertEqual(shown[0], "▶ Push: Juneau · master", self.screen.lines)
+        self.assertEqual(sum(line.startswith("▶ Push:") for line in shown), 1, self.screen.lines)
+        self.assertTrue(shown[-1].startswith(self.spin() + "Last"), shown)
+        self.assertEqual([line for line in shown if line.startswith("✔")],
+                         ["✔ Step a      done", "✔ Step b      done"], shown)
 
     def test_a_transcript_line_wider_than_the_pane_is_cut_with_an_ellipsis(self):
         self.live.render(self.board, [("text", "x" * 200)])
@@ -1902,21 +1922,21 @@ class LiveConsoleTest(unittest.TestCase):
             os.environ.pop(key, None)
 
     def test_live_mode_uses_the_live_renderer(self):
-        c = jr.Console(jr.Sinks(console="condensed"), stream=TTY(), size=lambda: os.terminal_size((80, 24)))
+        c = jr.Console(jr.Sinks(console="board"), stream=TTY(), size=lambda: os.terminal_size((80, 24)))
         self.addCleanup(c.close)
         self.assertIsInstance(c.screen, jr.LiveRenderer)
         self.assertTrue(c.screen.color)
 
     def test_no_color_keeps_the_live_renderer_without_colour(self):
         with mock.patch.dict(os.environ, {"NO_COLOR": "1"}):
-            c = jr.Console(jr.Sinks(console="condensed"), stream=TTY(), size=lambda: os.terminal_size((80, 24)))
+            c = jr.Console(jr.Sinks(console="board"), stream=TTY(), size=lambda: os.terminal_size((80, 24)))
         self.addCleanup(c.close)
         self.assertIsInstance(c.screen, jr.LiveRenderer)
         self.assertFalse(c.screen.color)
 
     def test_plain_output_never_has_escapes_or_carriage_returns(self):
         out = io.StringIO()
-        c = jr.Console(jr.Sinks(console="condensed"), stream=out)
+        c = jr.Console(jr.Sinks(console="board"), stream=out)
         self.addCleanup(c.close)
         for kind, fields in maven_events():
             c(kind, fields)
@@ -1927,7 +1947,7 @@ class LiveConsoleTest(unittest.TestCase):
     def test_default_stream_is_bound_once_so_a_later_stdout_swap_cannot_capture_frames(self):
         original, swapped = io.StringIO(), io.StringIO()
         with mock.patch.dict(os.environ, {"RUN_MARKERS": ""}), mock.patch.object(sys, "stdout", original):
-            c = jr.Console(jr.Sinks(console="condensed"), clock=Clock())
+            c = jr.Console(jr.Sinks(console="board"), clock=Clock())
             self.addCleanup(c.close)
             with mock.patch.object(sys, "stdout", swapped):
                 c("step_start", {"id": "build", "n": 1, "title": "Build", "parent": None})
@@ -1944,7 +1964,7 @@ class RobustnessTest(unittest.TestCase):
     def test_a_renderer_exception_switches_to_plain_with_a_warning(self):
         out = TTY()
         with mock.patch.dict(os.environ, {"TERM": "xterm", "RUN_MARKERS": ""}):
-            console = jr.Console(jr.Sinks(console="condensed"), stream=out)
+            console = jr.Console(jr.Sinks(console="board"), stream=out)
         self.assertEqual(console.mode, "live")
         console.screen.render = mock.Mock(side_effect=RuntimeError("boom"))
         console("step_start", {"id": "a", "n": 1, "title": "Alpha", "parent": None})
@@ -1956,14 +1976,14 @@ class RobustnessTest(unittest.TestCase):
     def test_a_tick_exception_also_falls_back(self):
         out = TTY()
         with mock.patch.dict(os.environ, {"TERM": "xterm", "RUN_MARKERS": ""}):
-            console = jr.Console(jr.Sinks(console="condensed"), stream=out)
+            console = jr.Console(jr.Sinks(console="board"), stream=out)
         console.screen.tick = mock.Mock(side_effect=ValueError("bad"))
         console.tick()
         self.assertIsInstance(console.screen, jr.PlainRenderer)
 
     def test_a_log_renderer_exception_stops_the_log_only(self):
         with tempfile.TemporaryDirectory() as tmp:
-            console = jr.Console(jr.Sinks(console="none", condensed_log=str(Path(tmp) / "c.log")))
+            console = jr.Console(jr.Sinks(console="none", board_log=str(Path(tmp) / "c.log")))
             console.log.render = mock.Mock(side_effect=RuntimeError("disk"))
             console("say", {"text": "x", "level": "warn", "step": None})
             self.assertIsNone(console.log)
@@ -1972,7 +1992,7 @@ class RobustnessTest(unittest.TestCase):
 
     def live_console(self, out, **sinks):
         with mock.patch.dict(os.environ, {"TERM": "xterm", "RUN_MARKERS": ""}):
-            console = jr.Console(jr.Sinks(console="condensed", **sinks), stream=out,
+            console = jr.Console(jr.Sinks(console="board", **sinks), stream=out,
                                  size=lambda: os.terminal_size((80, 24)))
         self.addCleanup(console.close)
         self.assertEqual(console.mode, "live")
@@ -1981,12 +2001,12 @@ class RobustnessTest(unittest.TestCase):
     def test_a_log_renderer_exception_says_so_once_on_screen(self):
         out = io.StringIO()
         with tempfile.TemporaryDirectory() as tmp, mock.patch.dict(os.environ, {"RUN_MARKERS": ""}):
-            console = jr.Console(jr.Sinks(console="condensed", condensed_log=str(Path(tmp) / "c.log")), stream=out)
+            console = jr.Console(jr.Sinks(console="board", board_log=str(Path(tmp) / "c.log")), stream=out)
             console.log.render = mock.Mock(side_effect=OSError("disk full"))
             console("say", {"text": "⚠ x", "level": "warn", "step": None})
             console("say", {"text": "⚠ y", "level": "warn", "step": None})
             console.close()
-        self.assertEqual(out.getvalue().count("⚠ condensed log stopped (OSError('disk full'))"), 1)
+        self.assertEqual(out.getvalue().count("⚠ board log stopped (OSError('disk full'))"), 1)
         self.assertIn("⚠ y", out.getvalue())
 
     def test_a_bug_in_code_the_plain_renderer_shares_stops_the_view_without_escaping(self):
@@ -2008,7 +2028,7 @@ class RobustnessTest(unittest.TestCase):
     def test_a_plain_screen_that_fails_stops_instead_of_falling_back_to_plain_again(self):
         out = io.StringIO()
         with mock.patch.dict(os.environ, {"RUN_MARKERS": ""}):
-            console = jr.Console(jr.Sinks(console="condensed"), stream=out)
+            console = jr.Console(jr.Sinks(console="board"), stream=out)
         self.assertEqual(console.mode, "plain")
         console.screen.render = mock.Mock(side_effect=RuntimeError("plain"))
         console("say", {"text": "⚠ x", "level": "warn", "step": None})
@@ -2096,7 +2116,7 @@ class RobustnessTest(unittest.TestCase):
         out = TTY()
         with tempfile.TemporaryDirectory() as tmp:
             log = Path(tmp) / "c.log"
-            console = self.live_console(out, condensed_log=str(log))
+            console = self.live_console(out, board_log=str(log))
             console.board.apply = mock.Mock(side_effect=KeyError("board"))
             console("say", {"text": "x", "level": "warn", "step": None})
             console("say", {"text": "y", "level": "warn", "step": None})
@@ -2105,15 +2125,15 @@ class RobustnessTest(unittest.TestCase):
             self.assertIsNone(console.log)
             self.assertEqual(console.board.apply.call_count, 1)
             console.close()
-            self.assertIn("⚠ console view and condensed log stopped (KeyError('board'))",
+            self.assertIn("⚠ console view and board log stopped (KeyError('board'))",
                           log.read_text(encoding="utf-8"))
-        self.assertEqual(out.getvalue().count("⚠ console view and condensed log stopped (KeyError('board'))"), 1)
+        self.assertEqual(out.getvalue().count("⚠ console view and board log stopped (KeyError('board'))"), 1)
 
-    def test_a_screen_failure_stops_the_view_but_not_the_condensed_log(self):
+    def test_a_screen_failure_stops_the_view_but_not_the_board_log(self):
         out = io.StringIO()
         with tempfile.TemporaryDirectory() as tmp, mock.patch.dict(os.environ, {"RUN_MARKERS": ""}):
             log = Path(tmp) / "c.log"
-            console = jr.Console(jr.Sinks(console="condensed", condensed_log=str(log)), stream=out)
+            console = jr.Console(jr.Sinks(console="board", board_log=str(log)), stream=out)
             console.screen.render = mock.Mock(side_effect=BrokenPipeError("epipe"))
             console("say", {"text": "⚠ first", "level": "warn", "step": None})
             console("say", {"text": "⚠ second", "level": "warn", "step": None})
@@ -2123,12 +2143,12 @@ class RobustnessTest(unittest.TestCase):
         self.assertIn("⚠ console view stopped (BrokenPipeError('epipe'))", logged)
         self.assertIn("⚠ first", logged)
         self.assertIn("⚠ second", logged)
-        self.assertNotIn("condensed log stopped", logged + out.getvalue())
+        self.assertNotIn("board log stopped", logged + out.getvalue())
         self.assertEqual(out.getvalue().count("⚠ console view stopped (BrokenPipeError('epipe'))"), 1)
 
     def session_console(self, out):
         """A plain console as this process's session, drawing on out."""
-        jr._console = jr.subscribe(jr.Console(jr.Sinks(console="condensed"), stream=out))
+        jr._console = jr.subscribe(jr.Console(jr.Sinks(console="board"), stream=out))
         return jr._console
 
     def assert_prints_plainly_after_the_stop(self, out):
@@ -2166,7 +2186,7 @@ class RobustnessTest(unittest.TestCase):
                 mock.patch.object(jr, "_input_fd", return_value=None):
             self.session_console(out).screen.render = mock.Mock(side_effect=RuntimeError("boom"))
             jr.say("x")
-            jr.run_tool([sys.executable, "-c", code], "generic", "t", "T", sinks=jr.Sinks(console="condensed"),
+            jr.run_tool([sys.executable, "-c", code], "generic", "t", "T", sinks=jr.Sinks(console="board"),
                         watchdog=0.2)
         self.assertIn("Passphrase: ok\n", out.getvalue())
 
@@ -2219,7 +2239,7 @@ class RobustnessTest(unittest.TestCase):
     def test_a_plain_stop_during_a_prompt_starts_the_warning_on_its_own_line(self):
         out = io.StringIO()
         with mock.patch.dict(os.environ, {"RUN_MARKERS": ""}):
-            console = jr.Console(jr.Sinks(console="condensed"), stream=out)
+            console = jr.Console(jr.Sinks(console="board"), stream=out)
         console("step_start", {"id": "a", "n": 1, "title": "Alpha", "parent": None})
         console("prompt", {"step": "a", "text": "Passphrase: "})
         console.screen.render = mock.Mock(side_effect=RuntimeError("boom"))
@@ -2544,7 +2564,7 @@ class HintTest(RowCase):
         from juneau_scripts import run
         out = io.StringIO()
         with mock.patch.dict(os.environ, {"RUN_MARKERS": ""}), mock.patch.dict(sys.modules, {"juneau_run": jr}):
-            jr._console = jr.subscribe(jr.Console(jr.Sinks(console="condensed"), stream=out))
+            jr._console = jr.subscribe(jr.Console(jr.Sinks(console="board"), stream=out))
             self.assertEqual(jr._console.board.detail, "actionable")
             with self.assertRaises(run._SessionFailed):
                 run.Session().fail("❌ No.", hint=["   try this"])
@@ -2737,7 +2757,7 @@ class StickyHeaderTest(unittest.TestCase):
         with mock.patch.dict(os.environ, env):
             if color:
                 os.environ.pop("NO_COLOR", None)
-            console = jr.Console(jr.Sinks(console="condensed"), stream=out, size=lambda: os.terminal_size((80, 24)),
+            console = jr.Console(jr.Sinks(console="board"), stream=out, size=lambda: os.terminal_size((80, 24)),
                                  nested=True)
         self.addCleanup(console.close)
         return console
@@ -2917,13 +2937,13 @@ class HandBackTest(unittest.TestCase):
                 console("done", {"status": "fail", "commit": None})
             self.assertEqual(json.loads(path.read_text()), [["build", "ok", "Compile"]])
 
-    def test_a_planless_nested_session_under_a_parent_overall_notes_it_in_the_condensed_log_only(self):
+    def test_a_planless_nested_session_under_a_parent_overall_notes_it_in_the_board_log_only(self):
         overall = json.dumps({"elapsed": 5.0, "done": 1, "pending": [["install", 30.0]]})
         with tempfile.TemporaryDirectory() as tmp:
             log = Path(tmp) / "c.log"
             out = io.StringIO()
             with mock.patch.dict(os.environ, {"JUNEAU_RUN_OVERALL": overall, "RUN_MARKERS": ""}):
-                console = jr.Console(jr.Sinks(console="condensed", condensed_log=str(log)), stream=out, nested=True)
+                console = jr.Console(jr.Sinks(console="board", board_log=str(log)), stream=out, nested=True)
                 self.assertIsNone(console.board.overall())                  # pinned: no plan draws no Overall
                 console("done", {"status": "ok", "commit": None})
                 console.close()
@@ -2935,7 +2955,7 @@ class LogTest(RowCase):
     def run_log(self, *events):
         with tempfile.TemporaryDirectory() as tmp:
             log = Path(tmp) / "c.log"
-            c = jr.Console(jr.Sinks(console="none", condensed_log=str(log)), stream=io.StringIO(), clock=self.clock)
+            c = jr.Console(jr.Sinks(console="none", board_log=str(log)), stream=io.StringIO(), clock=self.clock)
             for kind, fields in events:
                 c(kind, fields)
             c.close()
@@ -3106,7 +3126,7 @@ def _run(label, units=0, t0=0.0):
 
 class FitTest(unittest.TestCase):
     TITLE = ("▶ Push: Juneau · master", [("▶ Commit Message: m", False, -1), ("▶ Output: tail -f /o", True, 1),
-                                          ("▶ Condensed: tail -f /c", True, 0)])
+                                          ("▶ Board: tail -f /c", True, 0)])
     OVERALL = "▶ Overall  38%  ~7:40 left  · 4 of 13 steps"
 
     def fit(self, budget, groups=(), running=(), pending=(), header=None, overall=OVERALL, cols=59):
@@ -3148,13 +3168,13 @@ class FitTest(unittest.TestCase):
     def test_a4_cuts_failed_bodies_oldest_first_and_keeps_the_failed_row(self):
         groups = [_g("fail", "A", body=5), _g("fail", "B", body=5)]
         lines = self.fit(12, groups=groups, header=("▶ T", []), overall=None)     # 13 lines unfolded
-        self.assertEqual(lines[1:3], ["✗ A", "    … 5 more lines (condensed log)"])
+        self.assertEqual(lines[1:3], ["✗ A", "    … 5 more lines (board log)"])
         self.assertIn("  note 4", lines)                       # B's body is still whole
 
     def test_the_worked_example_ten_line_pane(self):
         lines = self.fit(8, **self.full())
         self.assertEqual(lines, [
-            "▶ Push: Juneau · master", "▶ Commit Message: m", "▶ Output: tail -f /o", "▶ Condensed: tail -f /c",
+            "▶ Push: Juneau · master", "▶ Commit Message: m", "▶ Output: tail -f /o", "▶ Board: tail -f /c",
             "✔ 3 done: Prechecks, Setup, Compile", "⠋ Java Tests", "○ 3 more: Python Tests, Browser Tests, Commit",
             self.OVERALL])
 
@@ -3181,11 +3201,11 @@ class FitTest(unittest.TestCase):
         lines = self.fit(7, groups=groups, running=[_run("X")])
         self.assertIn("✗ 2 failed: A, C", lines)
 
-    def test_b5_drops_the_commit_message_then_condensed_then_output(self):
+    def test_b5_drops_the_commit_message_then_board_then_output(self):
         lines = self.fit(5, groups=[_g("fail", "A")], running=[_run("X")])
         self.assertNotIn("▶ Commit Message: m", lines)
         self.assertIn("▶ Output: tail -f /o", lines)
-        self.assertNotIn("▶ Condensed: tail -f /c", lines)
+        self.assertNotIn("▶ Board: tail -f /c", lines)
 
     def test_a_six_line_pane_keeps_the_title_overall_and_the_newest_running_row(self):
         lines = self.fit(4, groups=[_g("ok", "A")], running=[_run("Old"), _run("New")], pending=["P"])

@@ -39,10 +39,10 @@ Options:
     --js-tests               Also run the headless-browser JS harness (mvn -Pjs-tests, *_BrowserTest in
                              juneau-rest-server-views, juneau-petstore-core and juneau-rest-server-terminal).  Fails if Node/npm are missing.
     --no-js-tests            Never run the JS harness (overrides auto-detect)
-    --console <mode>         Maven output on the console: full (default), condensed or none
+    --console <mode>         Maven output on the console: full (default), board or none
     --detail <level>         Console detail: summary, actionable (default), modules or all (JUNEAU_RUN_DETAIL)
     --full-log <path>        Also write every byte Maven prints to this file (appended)
-    --condensed-log <path>   Also write the condensed one-line-per-event stream to this file (appended)
+    --board-log <path>       Also write the board one-line-per-event stream to this file (appended)
     --profile <module>       Run one-shot JFR profile for module tests
     --help, -h               Show this help message
 
@@ -114,6 +114,47 @@ def say(text, level="info"):
 	_juneau.load()[0].say(text, level)
 
 
+_SHELL_OPERATORS = {"&&", "||", ";", "|"}
+
+
+def _join_words(words):
+	"""shlex.join, except that a word that is exactly a shell chaining operator stays an operator."""
+	return " ".join(w if w in _SHELL_OPERATORS else shlex.quote(w) for w in words)
+
+
+def mvn_wrapper_prefix():
+	"""JUNEAU_MVN_WRAPPER as a shell-safe command prefix, or "" when unset.
+
+	The value is a command plus arguments, not a shell fragment: it is split like a shell would split it
+	(shlex.split, so a pre-quoted `'/a b/lock.sh' --x` works) and re-joined with each word quoted (shlex.join),
+	so a path with spaces or `$`/`;` is never interpreted; a word that is exactly `&&`, `||`, `;` or `|` stays an operator.  An unquoted path with spaces is also accepted: the
+	longest leading run of words that names an existing file is taken as the executable.  A value that does not
+	parse (unbalanced quote) is passed through unchanged."""
+	wrapper = os.environ.get("JUNEAU_MVN_WRAPPER", "").strip()
+	if not wrapper:
+		return ""
+	# Candidate executables end at a whitespace boundary (or the end); the longest one that is a file wins.
+	ends = [m.start() for m in re.finditer(r"\s+", wrapper)] + [len(wrapper)]
+	for end in reversed(ends):
+		head = wrapper[:end]
+		if os.path.isfile(head):
+			try:
+				rest = shlex.split(wrapper[end:])
+			except ValueError:
+				rest = wrapper[end:].split()
+			return _join_words([head, *rest])
+	try:
+		return _join_words(shlex.split(wrapper))
+	except ValueError:
+		return wrapper
+
+
+def wrap_mvn_command(cmd):
+	"""cmd prefixed with the quoted JUNEAU_MVN_WRAPPER, when one is set."""
+	prefix = mvn_wrapper_prefix()
+	return f"{prefix} {cmd}" if prefix else cmd
+
+
 def run_command(cmd, step_id=None, title=None, label=None, summarize=None):
 	"""Run a command, streaming its output live, and return exit code and full output.
 
@@ -124,14 +165,13 @@ def run_command(cmd, step_id=None, title=None, label=None, summarize=None):
 	"""
 	project_root = REPO_ROOT
 	# Optional command prefix (e.g. a lock script that serializes concurrent mvn runs on one checkout).
-	wrapper = os.environ.get("JUNEAU_MVN_WRAPPER", "").strip()
-	if wrapper and cmd.startswith("mvn "):
-		cmd = f"{wrapper} {cmd}"
+	if cmd.startswith("mvn "):
+		cmd = wrap_mvn_command(cmd)
 	say(f"Running: {cmd}")
 	say("-" * 80)  # NOSONAR python:S1192 - the same banner rule as the separator in _main; a constant hides it
 	run = _juneau.load()[0]
 	if step_id:
-		# Through a shell, like the default path, so a JUNEAU_MVN_WRAPPER prefix (which may use && or quoting) keeps its meaning.
+		# Through a shell, like the default path, so the quoted JUNEAU_MVN_WRAPPER prefix keeps its meaning.
 		result = run.run_tool(["/bin/sh", "-c", cmd], "maven", step_id, title or step_id, n=next_step_number(),
 			cwd=str(project_root), capture=True, label=label, summarize=summarize)
 		return result.exit, result.output
@@ -759,9 +799,7 @@ def js_tests(installed=False):
 		return run_command(js_tests_command(), "js-tests", "Browser Tests", label="Browser Tests")
 	cmd = f"/bin/bash -c {shlex.quote(js_tests_concurrent_command())}"
 	# Wraps the whole compound: run_command only prefixes commands that start with "mvn ".
-	wrapper = os.environ.get("JUNEAU_MVN_WRAPPER", "").strip()
-	if wrapper:
-		cmd = f"{wrapper} {cmd}"
+	cmd = wrap_mvn_command(cmd)
 	return run_command(cmd, "js-tests", "Browser Tests", label="Browser Tests")
 
 
@@ -845,10 +883,10 @@ def _main():  # NOSONAR python:S3776 -- Cognitive complexity is acceptable for t
 	parser.add_argument("--js-tests", action="store_true", dest="js_tests")
 	parser.add_argument("--no-js-tests", action="store_true", dest="no_js_tests")
 	parser.add_argument("--profile")
-	parser.add_argument("--console", choices=("full", "condensed", "none"))
+	parser.add_argument("--console", choices=("full", "board", "none"))
 	parser.add_argument("--detail")
 	parser.add_argument("--full-log")
-	parser.add_argument("--condensed-log")
+	parser.add_argument("--board-log")
 	parser.add_argument("--help", "-h", action="store_true")
 	args, unknown = parser.parse_known_args()
 	if args.help:
@@ -865,7 +903,7 @@ def _main():  # NOSONAR python:S3776 -- Cognitive complexity is acceptable for t
 		return _rebaseline_from_history(args.window, args.min_runs)
 	# juneau_run reads its output routing from the environment; an argument beats a value already set there.
 	for flag, variable in ((args.console, "JUNEAU_RUN_CONSOLE"), (args.full_log, "JUNEAU_RUN_FULL_LOG"),
-			(args.condensed_log, "JUNEAU_RUN_CONDENSED_LOG")):
+			(args.board_log, "JUNEAU_RUN_BOARD_LOG")):
 		if flag:
 			os.environ[variable] = flag
 	try:
@@ -950,16 +988,16 @@ def owned_by_enclosing_run():
 
 
 def _prepare_output(argv):
-	"""Export --console, --full-log, --condensed-log and --detail before the session opens, so its console view sees
+	"""Export --console, --full-log, --board-log and --detail before the session opens, so its console view sees
 	them (an argument beats a value already in the environment).  _main parses and validates them again; an invalid
 	value is left for it to report."""
 	parser = argparse.ArgumentParser(add_help=False, allow_abbrev=False)
-	for flag in ("--console", "--full-log", "--condensed-log", "--detail"):
+	for flag in ("--console", "--full-log", "--board-log", "--detail"):
 		parser.add_argument(flag)
 	args, _ = parser.parse_known_args(argv)
-	if args.console in ("full", "condensed", "none"):
+	if args.console in ("full", "board", "none"):
 		os.environ["JUNEAU_RUN_CONSOLE"] = args.console
-	for flag, variable in ((args.full_log, "JUNEAU_RUN_FULL_LOG"), (args.condensed_log, "JUNEAU_RUN_CONDENSED_LOG")):
+	for flag, variable in ((args.full_log, "JUNEAU_RUN_FULL_LOG"), (args.board_log, "JUNEAU_RUN_BOARD_LOG")):
 		if flag:
 			os.environ[variable] = flag
 	try:

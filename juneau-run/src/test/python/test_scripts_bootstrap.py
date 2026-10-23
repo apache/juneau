@@ -307,11 +307,11 @@ class ImportTest(BootstrapCase):
 
 
 class RunRequestedTest(unittest.TestCase):
-    def test_true_for_markers_condensed_and_none(self):
+    def test_true_for_markers_board_and_none(self):
         sys.path.insert(0, str(PYTHON_SRC))
         self.addCleanup(sys.path.remove, str(PYTHON_SRC))
         import bootstrap
-        for env, expected in (({}, False), ({"RUN_MARKERS": "1"}, True), ({"JUNEAU_RUN_CONSOLE": "condensed"}, True),
+        for env, expected in (({}, False), ({"RUN_MARKERS": "1"}, True), ({"JUNEAU_RUN_CONSOLE": "board"}, True),
                               ({"JUNEAU_RUN_CONSOLE": "none"}, True), ({"JUNEAU_RUN_CONSOLE": "full"}, False)):
             with self.subTest(env=env), unittest.mock.patch.dict(os.environ, env, clear=True):
                 self.assertEqual(bootstrap.run_requested(), expected)
@@ -324,7 +324,7 @@ class RunDecisionTest(BootstrapCase):
 
     def test_environment_decides_when_run_is_none(self):
         self.assertIsNone(self.load()["jr"])
-        for var, value in (("RUN_MARKERS", "1"), ("JUNEAU_RUN_CONSOLE", "condensed")):
+        for var, value in (("RUN_MARKERS", "1"), ("JUNEAU_RUN_CONSOLE", "board")):
             with self.subTest(var=var):
                 self.env = {var: value}
                 self.assertIsNotNone(self.load()["jr"])

@@ -27,7 +27,7 @@ Where the toolkit comes from, in order:
      otherwise `mvn dependency:copy` of both into cache_dir (a SNAPSHOT once per process, a release when missing).
 
 juneau_run is loaded only when run=True, or when run is None and RUN_MARKERS=1, JUNEAU_RUN_MARKERS_FILE,
-JUNEAU_RUN_RESULT or JUNEAU_RUN_CONSOLE=condensed or none.
+JUNEAU_RUN_RESULT or JUNEAU_RUN_CONSOLE=board or none.
 """
 
 import importlib
@@ -51,11 +51,11 @@ class BootstrapError(Exception):
 
 def run_requested():
     """True when the environment asks for juneau_run: RUN_MARKERS=1, JUNEAU_RUN_MARKERS_FILE, JUNEAU_RUN_RESULT or
-    JUNEAU_RUN_CONSOLE=condensed or none.  Under none juneau_run is loaded so a tool's output goes to the sinks and not
+    JUNEAU_RUN_CONSOLE=board or none.  Under none juneau_run is loaded so a tool's output goes to the sinks and not
     the terminal."""
     env = os.environ
     return (env.get("RUN_MARKERS") == "1" or bool(env.get("JUNEAU_RUN_MARKERS_FILE"))
-            or bool(env.get("JUNEAU_RUN_RESULT")) or env.get("JUNEAU_RUN_CONSOLE") in ("condensed", "none"))
+            or bool(env.get("JUNEAU_RUN_RESULT")) or env.get("JUNEAU_RUN_CONSOLE") in ("board", "none"))
 
 
 def _pom_version(pom):

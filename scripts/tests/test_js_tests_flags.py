@@ -269,3 +269,24 @@ def test_concurrent_form_keeps_the_mvn_wrapper_around_the_whole_compound(test_mo
     monkeypatch.setattr(test_mod, "run_command", lambda cmd, *a, **k: seen.append(cmd) or (0, ""))
     test_mod.js_tests(installed=True)
     assert seen[0] == f"/x/lock.sh /bin/bash -c {shlex.quote(test_mod.js_tests_concurrent_command())}"
+
+
+def test_concurrent_form_quotes_a_wrapper_path_with_a_space(test_mod, monkeypatch, tmp_path):
+    directory = tmp_path / "with space"
+    directory.mkdir()
+    script = directory / "lock.sh"
+    script.write_text("#!/bin/sh\nexit 0\n")
+    script.chmod(0o755)
+    monkeypatch.setenv("JUNEAU_MVN_WRAPPER", str(script))
+    seen = []
+    monkeypatch.setattr(test_mod, "run_command", lambda cmd, *a, **k: seen.append(cmd) or (0, ""))
+    test_mod.js_tests(installed=True)
+    assert shlex.split(seen[0])[:3] == [str(script), "/bin/bash", "-c"]
+
+
+def test_concurrent_form_keeps_a_pre_quoted_wrapper_with_args(test_mod, monkeypatch):
+    monkeypatch.setenv("JUNEAU_MVN_WRAPPER", "'/a b/lock.sh' --x")
+    seen = []
+    monkeypatch.setattr(test_mod, "run_command", lambda cmd, *a, **k: seen.append(cmd) or (0, ""))
+    test_mod.js_tests(installed=True)
+    assert shlex.split(seen[0])[:4] == ["/a b/lock.sh", "--x", "/bin/bash", "-c"]

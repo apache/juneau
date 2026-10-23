@@ -46,7 +46,7 @@ class ConsoleCase(unittest.TestCase):
         self.seen = []
         jr.subscribe(lambda kind, fields: self.seen.append((kind, dict(fields))))
         self.out = io.StringIO()
-        jr._console = jr.subscribe(jr.Console(jr.Sinks(console="condensed"), stream=self.out))
+        jr._console = jr.subscribe(jr.Console(jr.Sinks(console="board"), stream=self.out))
 
     def of(self, kind):
         return [f for k, f in self.seen if k == kind]

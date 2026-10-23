@@ -34,7 +34,7 @@ import pytest
 
 SCRIPTS_DIR = Path(__file__).resolve().parent.parent
 RUN_VARIABLES = ("RUN_MARKERS", "RUN_ARTIFACTS", "JUNEAU_RUN_ACTIVE", "JUNEAU_RUN_N_BASE", "JUNEAU_RUN_CONSOLE",
-                 "JUNEAU_RUN_FULL_LOG", "JUNEAU_RUN_CONDENSED_LOG", "JUNEAU_RUN_SESSION", "JUNEAU_RUN_DETAIL",
+                 "JUNEAU_RUN_FULL_LOG", "JUNEAU_RUN_BOARD_LOG", "JUNEAU_RUN_SESSION", "JUNEAU_RUN_DETAIL",
                  "JUNEAU_RUN_LABEL_WIDTH", "JUNEAU_RUN_LIVE")
 RELEASE_VARIABLES = ("X_VERSION", "X_NEXT_VERSION", "X_RELEASE", "X_STAGING", "X_USERNAME", "X_EMAIL", "X_GIT_BRANCH",
                      "X_JAVA_HOME", "X_CLEANM2", "X_REPO", "GPG_TTY")
@@ -385,7 +385,7 @@ def test_ctrl_d_before_the_session_exits_quietly(release, monkeypatch, capsys):
     assert "Traceback" not in capsys.readouterr().err
 
 
-@pytest.mark.parametrize("console", ["full", "condensed", "none"])
+@pytest.mark.parametrize("console", ["full", "board", "none"])
 def test_the_full_log_is_written_in_every_console_mode(release, monkeypatch, tmp_path, console):
     """The real juneau_run: a command's output lands in the release log."""
     monkeypatch.setenv("X_RELEASE", RELEASE)
@@ -419,7 +419,7 @@ def test_detail_is_exported_and_an_unknown_level_is_a_usage_error(release, monke
 
 def test_console_flag_sets_the_env_var_and_beats_it(release, monkeypatch, capsys):
     install(monkeypatch, FakeRun())
-    monkeypatch.setenv("JUNEAU_RUN_CONSOLE", "condensed")
+    monkeypatch.setenv("JUNEAU_RUN_CONSOLE", "board")
     release.main(["--list-steps", "--console", "none"])
     assert os.environ["JUNEAU_RUN_CONSOLE"] == "none"
     with pytest.raises(SystemExit) as exit_info:

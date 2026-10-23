@@ -45,7 +45,7 @@ def load(name, filename):
 
 
 RUN_VARIABLES = ("RUN_MARKERS", "RUN_ARTIFACTS", "JUNEAU_RUN_ACTIVE", "JUNEAU_RUN_N_BASE", "JUNEAU_RUN_CONSOLE",
-                 "JUNEAU_RUN_FULL_LOG", "JUNEAU_RUN_CONDENSED_LOG", "JUNEAU_MVN_WRAPPER", "JUNEAU_RUN_SESSION",
+                 "JUNEAU_RUN_FULL_LOG", "JUNEAU_RUN_BOARD_LOG", "JUNEAU_MVN_WRAPPER", "JUNEAU_RUN_SESSION",
                  "JUNEAU_RUN_DETAIL", "JUNEAU_RUN_LABEL_WIDTH", "JUNEAU_RUN_LIVE", "JUNEAU_PUSH_ACTIVE")
 
 
@@ -54,7 +54,7 @@ def clean_env(monkeypatch, tmp_path):
     monkeypatch.setenv("JUNEAU_RUN_LOG_DIR", str(tmp_path / "run-logs"))
     for variable in RUN_VARIABLES:
         monkeypatch.delenv(variable, raising=False)
-    # push.py now defaults to the condensed console; these tests assert on the full-console output.  Set (not just
+    # push.py now defaults to the board console; these tests assert on the full-console output.  Set (not just
     # unset) so teardown restores the variable and a main() that exports the default can't leak it to other tests.
     monkeypatch.setenv("JUNEAU_RUN_CONSOLE", "full")
     sigterm = signal.getsignal(signal.SIGTERM)
@@ -473,8 +473,8 @@ class Events:
 
 @pytest.fixture
 def console(push_mod, monkeypatch):
-    """A condensed session; stdout is captured, so it draws in plain mode.  Returns (juneau_run, Events)."""
-    monkeypatch.setenv("JUNEAU_RUN_CONSOLE", "condensed")
+    """A board session; stdout is captured, so it draws in plain mode.  Returns (juneau_run, Events)."""
+    monkeypatch.setenv("JUNEAU_RUN_CONSOLE", "board")
     run = push_mod._juneau.load()[0]
     run.session("Push", ["Juneau", "test"])
     assert run.console_active()
@@ -484,10 +484,10 @@ def console(push_mod, monkeypatch):
 
 @pytest.fixture
 def standalone(push_mod, monkeypatch):
-    """A condensed console that push.main() opens itself, as a push run from the shell does: no session is open
+    """A board console that push.main() opens itself, as a push run from the shell does: no session is open
     first, so the push session is not nested (its own run marker, summary and bell).  Yields (juneau_run, Events,
     nested), nested being each _nested_env() value the session saw; teardown checks push opened exactly one, un-nested."""
-    monkeypatch.setenv("JUNEAU_RUN_CONSOLE", "condensed")
+    monkeypatch.setenv("JUNEAU_RUN_CONSOLE", "board")
     run = push_mod._juneau.load()[0]
     toolkit_run = push_mod.toolkit("run")
     real, nested = toolkit_run._nested_env, []
@@ -638,7 +638,7 @@ def test_push_exports_detail_to_test_py(push_mod, gates, monkeypatch):
 
 
 def test_push_console_flag_sets_the_env_var_and_beats_it(push_mod, gates, monkeypatch):
-    monkeypatch.setenv("JUNEAU_RUN_CONSOLE", "condensed")
+    monkeypatch.setenv("JUNEAU_RUN_CONSOLE", "board")
     monkeypatch.setattr(sys, "argv", ["push.py", "--test-only", "--console", "none"])
     assert push_mod.main() == 0
     assert os.environ["JUNEAU_RUN_CONSOLE"] == "none"
@@ -649,7 +649,7 @@ def test_push_rejects_an_unknown_console_mode(push_mod, gates, monkeypatch, caps
     with pytest.raises(SystemExit) as exc:
         push_mod.main()
     assert exc.value.code == 2
-    assert "condensed" in capsys.readouterr().err
+    assert "board" in capsys.readouterr().err
 
 
 def test_push_rejects_an_unknown_detail_level(push_mod, gates, monkeypatch, capsys):
@@ -661,7 +661,7 @@ def test_push_rejects_an_unknown_detail_level(push_mod, gates, monkeypatch, caps
 
 
 def test_push_identity_is_a_row_not_a_header_mark(push_mod, gates, monkeypatch, capsys):
-    monkeypatch.setenv("JUNEAU_RUN_CONSOLE", "condensed")
+    monkeypatch.setenv("JUNEAU_RUN_CONSOLE", "board")
     events = push_mod._juneau.load()[0].subscribe(Events())
     monkeypatch.setattr(sys, "argv", ["push.py", "Quick fix", "--skip-tests"])
     assert push_mod.main() == 0
@@ -777,7 +777,7 @@ def docs_tree(push_mod, monkeypatch, tmp_path):
 
 
 def test_docs_only_under_a_console_has_one_session_and_one_done(push_mod, docs_tree, monkeypatch):
-    monkeypatch.setenv("JUNEAU_RUN_CONSOLE", "condensed")
+    monkeypatch.setenv("JUNEAU_RUN_CONSOLE", "board")
     events = push_mod._juneau.load()[0].subscribe(Events())
     monkeypatch.setattr(push_mod, "commit_and_push", lambda *a, **k: ("ok", 6))
     monkeypatch.setattr(sys, "argv", ["push.py", "--docs-only", "Docs fix"])
@@ -791,7 +791,7 @@ def test_docs_only_under_a_console_has_one_session_and_one_done(push_mod, docs_t
 
 
 def test_docs_only_with_markers_on_emits_run_and_done_markers(push_mod, docs_tree, monkeypatch, capsys):
-    monkeypatch.setenv("JUNEAU_RUN_CONSOLE", "condensed")
+    monkeypatch.setenv("JUNEAU_RUN_CONSOLE", "board")
     monkeypatch.setenv("RUN_MARKERS", "1")
     monkeypatch.setattr(push_mod, "commit_and_push", lambda *a, **k: ("ok", 6))
     monkeypatch.setattr(sys, "argv", ["push.py", "--docs-only", "Docs fix"])
@@ -803,7 +803,7 @@ def test_docs_only_with_markers_on_emits_run_and_done_markers(push_mod, docs_tre
 
 @pytest.mark.parametrize("flags", [[], ["--docs-only"]])
 def test_a_dry_run_under_a_console_still_says_so(push_mod, docs_tree, monkeypatch, capsys, flags):
-    monkeypatch.setenv("JUNEAU_RUN_CONSOLE", "condensed")
+    monkeypatch.setenv("JUNEAU_RUN_CONSOLE", "board")
     monkeypatch.setattr(sys, "argv", ["push.py", "--dry-run", "a message", *flags])
     assert push_mod.main() == 0
     assert "DRY RUN MODE" in capsys.readouterr().out

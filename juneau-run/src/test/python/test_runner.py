@@ -815,7 +815,7 @@ class RunnerTest(unittest.TestCase):
         patcher.start()
         self.addCleanup(patcher.stop)
         self.addCleanup(reset_run_state)
-        for key in ("JUNEAU_RUN_CONSOLE", "JUNEAU_RUN_FULL_LOG", "JUNEAU_RUN_CONDENSED_LOG", "RUN_ARTIFACTS"):
+        for key in ("JUNEAU_RUN_CONSOLE", "JUNEAU_RUN_FULL_LOG", "JUNEAU_RUN_BOARD_LOG", "RUN_ARTIFACTS"):
             os.environ.pop(key, None)
 
     def go(self, cmd, parser, **kwargs):
@@ -1441,10 +1441,10 @@ class ScriptApiWithoutConsoleTest(unittest.TestCase):
             self.assertEqual(jr.ask("? "), "n")
         self.assertEqual(jr.passthrough(child("pass"), "x", "X").exit, 0)
 
-    def test_ask_is_written_to_the_condensed_log(self):
+    def test_ask_is_written_to_the_board_log(self):
         with tempfile.TemporaryDirectory() as tmp:
             log = Path(tmp) / "c.log"
-            jr._console = jr.subscribe(jr.Console(jr.Sinks(console="none", condensed_log=str(log))))
+            jr._console = jr.subscribe(jr.Console(jr.Sinks(console="none", board_log=str(log))))
             with mock.patch("builtins.input", return_value="y"):
                 jr.ask("Continue? ")
             jr._end_session()

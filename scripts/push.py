@@ -1107,7 +1107,7 @@ def _in_session(title, body, *, header, lines=(), mode, repo, plan):
 
 
 def parse_args(argv=None):
-    """The command line, validated, with --console and --detail exported (JUNEAU_RUN_CONSOLE, default condensed, and
+    """The command line, validated, with --console and --detail exported (JUNEAU_RUN_CONSOLE, default board, and
     JUNEAU_RUN_DETAIL) so the session and test.py use them.  Exits 2 on a bad combination."""
     parser = argparse.ArgumentParser(
         description="Build, test, and push Juneau project to Git repository",
@@ -1123,7 +1123,7 @@ Examples:
   python3 push.py "Tweaked console JS" --js-tests
   python3 push.py "Tweaked console JS" --no-js-tests
   python3 push.py "Fixed bug in RestClient" --detail modules
-  python3 push.py "Fixed bug in RestClient" --console condensed
+  python3 push.py "Fixed bug in RestClient" --console board
         """
     )
     
@@ -1214,8 +1214,8 @@ Examples:
 
     parser.add_argument(
         "--console",
-        choices=("full", "condensed", "none"),
-        help="Maven output on the console: full, condensed (default) or none (also JUNEAU_RUN_CONSOLE; the flag wins)."
+        choices=("full", "board", "none"),
+        help="Maven output on the console: full, board (default) or none (also JUNEAU_RUN_CONSOLE; the flag wins)."
     )
 
     parser.add_argument(
@@ -1228,7 +1228,7 @@ Examples:
         parser.error("--js-tests and --no-js-tests are mutually exclusive")
     if args.test_only and (args.docs_only or args.sonarqube or args.tracker_audit or args.skip_tests):
         parser.error("--test-only cannot be combined with --docs-only, --sonarqube, --tracker-audit or --skip-tests")
-    toolkit("run").export_console(args.console)    # precedence: flag > environment > condensed
+    toolkit("run").export_console(args.console)    # precedence: flag > environment > board
     try:
         _juneau.load()[0].export_detail(args.detail)
     except ValueError as e:

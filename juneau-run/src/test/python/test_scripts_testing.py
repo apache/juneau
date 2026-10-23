@@ -65,7 +65,7 @@ class BareRemoteTest(unittest.TestCase):
 
 class CleanRunEnvTest(unittest.TestCase):
     def test_strips_protocol_variables_but_keeps_the_locator(self):
-        env = {"RUN_MARKERS": "1", "RUN_ARTIFACTS": "/a", "JUNEAU_RUN_CONSOLE": "condensed", "JUNEAU_RUN_PY": "/x.py"}
+        env = {"RUN_MARKERS": "1", "RUN_ARTIFACTS": "/a", "JUNEAU_RUN_CONSOLE": "board", "JUNEAU_RUN_PY": "/x.py"}
         with mock.patch.dict(os.environ, env):
             saved = sys.modules.get("juneau_run")
             with testing.clean_run_env():

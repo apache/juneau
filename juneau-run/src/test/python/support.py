@@ -27,7 +27,7 @@ jr = importlib.util.module_from_spec(_spec)
 sys.modules["juneau_run"] = jr
 _spec.loader.exec_module(jr)
 
-# Condensed sinks default their full log into JUNEAU_RUN_LOG_DIR; keep every test out of ~/.cache/juneau-run.
+# Board sinks default their full log into JUNEAU_RUN_LOG_DIR; keep every test out of ~/.cache/juneau-run.
 import os as _os
 import tempfile as _tempfile
 _os.environ["JUNEAU_RUN_LOG_DIR"] = _tempfile.mkdtemp(prefix="juneau-run-test-logs-")
@@ -54,7 +54,7 @@ def reset_run_state():
         jr._console.close()
         jr._console = None
     for key in (jr.ACTIVE_ENV, "JUNEAU_RUN_FULL_LOG", "JUNEAU_RUN_SESSION", "JUNEAU_RUN_DETAIL", "JUNEAU_RUN_LABEL_WIDTH",
-                "JUNEAU_RUN_LIVE", "JUNEAU_RUN_CONSOLE", "RUN_MARKERS", "JUNEAU_RUN_CONDENSED_LOG",
+                "JUNEAU_RUN_LIVE", "JUNEAU_RUN_CONSOLE", "RUN_MARKERS", "JUNEAU_RUN_BOARD_LOG",
                 "JUNEAU_RUN_PENDING", "JUNEAU_RUN_OVERALL", "JUNEAU_RUN_HEADER", "JUNEAU_RUN_HANDBACK",
                 jr.CANCEL_ENV, jr.MARKERS_FILE_ENV, jr.RESULT_ENV, jr.RESULT_PARTS_ENV):
         os.environ.pop(key, None)
@@ -78,7 +78,7 @@ def isolate_run_env(case):
 
 
 class Screen:
-    """A minimal VT100 model, enough for what LiveRenderer writes: text, \\r, \\n, ESC[nA, ESC[K and ESC[J.
+    """A minimal VT100 model, enough for what LiveRenderer writes: text, \\r, \\n, ESC[nA, ESC[H, ESC[K and ESC[J.
     SGR colour is ignored; cursor show/hide sets cursor_visible.  clamped is set if a cursor-up ever went above the first
     line.  With rows (and cols) it is a viewport: a \\n on the last row scrolls the top line into scrollback, a line
     autowraps at cols, and a wide or emoji code point takes two columns (jr._cw), as the renderer assumes.  start_row
@@ -122,6 +122,21 @@ class Screen:
                 self.col += w
             i += 1
 
+    def resize_like_tmux(self, rows):
+        """Change the viewport height as tmux does: shrinking scrolls the top lines into scrollback until the cursor
+        fits; growing pulls that many lines back from scrollback onto the top and moves the cursor down with them."""
+        if rows < self.rows:
+            while self.row >= rows:
+                self.scrollback.append("".join(self.cells.pop(0)).rstrip())
+                self.row -= 1
+            del self.cells[rows:]
+        else:
+            pulled = min(len(self.scrollback), rows - self.rows)
+            for _ in range(pulled):
+                self.cells.insert(0, list(self.scrollback.pop()))
+            self.row += pulled
+        self.rows = rows
+
     def _newline(self):
         self.col = 0
         if self.rows and self.row == self.rows - 1:
@@ -139,7 +154,9 @@ class Screen:
             return
         if cmd == "m":
             return
-        if cmd == "A":
+        if cmd == "H":
+            self.row, self.col = 0, 0
+        elif cmd == "A":
             self.clamped = self.clamped or n > self.row
             self.row = max(0, self.row - n)
         elif cmd == "K":

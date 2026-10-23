@@ -27,7 +27,7 @@ import pytest
 
 SCRIPTS_DIR = Path(__file__).resolve().parent.parent
 RUN_VARIABLES = ("RUN_MARKERS", "RUN_ARTIFACTS", "JUNEAU_RUN_ACTIVE", "JUNEAU_RUN_N_BASE", "JUNEAU_RUN_CONSOLE",
-                 "JUNEAU_RUN_FULL_LOG", "JUNEAU_RUN_CONDENSED_LOG", "JUNEAU_MVN_WRAPPER", "JUNEAU_RUN_SESSION",
+                 "JUNEAU_RUN_FULL_LOG", "JUNEAU_RUN_BOARD_LOG", "JUNEAU_MVN_WRAPPER", "JUNEAU_RUN_SESSION",
                  "JUNEAU_RUN_DETAIL", "JUNEAU_PUSH_ACTIVE")
 
 # A class line the Maven parser attributes to Module A, so its own surefire_s series has an entry.

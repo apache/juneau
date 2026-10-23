@@ -33,7 +33,7 @@ The commit message is optional on the command line. It is prompted for when omit
 | `--tracker-audit`, `--todo-audit` | none | off | Opt-in gate for maintainers who keep an external work-tracker checkout: blocks the push if its audit flags a file. |
 | `--js-tests` | none | auto | Force the headless-browser JS harness. Fails if Node or npm is missing. Mutually exclusive with `--no-js-tests`. |
 | `--no-js-tests` | none | off | Never run the JS harness, even when JS, CSS or FTL files changed. |
-| `--console` | `full`, `condensed`, `none` | `condensed` | Maven output on the console. Also `JUNEAU_RUN_CONSOLE`; the flag wins. |
+| `--console` | `full`, `board`, `none` | `board` | Maven output on the console. Also `JUNEAU_RUN_CONSOLE`; the flag wins. |
 | `--detail` | `summary`, `actionable`, `modules`, `all` | `actionable` | Console detail. Also `JUNEAU_RUN_DETAIL`. |
 
 ## What it does
@@ -47,7 +47,7 @@ The commit message is optional on the command line. It is prompted for when omit
 
 ## Output and exit codes
 
-Progress is a condensed run view. Full logs go under `~/.cache/juneau-run/`, and the session header prints the `tail -f` line for the log. Test timings are appended to `~/.cache/juneau-run/history/<repo>-<sha8>/test.jsonl`.
+Progress is a board view. Full logs go under `~/.cache/juneau-run/`, and the session header prints the `tail -f` line for the log. Test timings are appended to `~/.cache/juneau-run/history/<repo>-<sha8>/test.jsonl`.
 
 | Code | Meaning |
 |---|---|

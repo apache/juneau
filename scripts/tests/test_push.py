@@ -1465,7 +1465,7 @@ class TestDocsPrechecksWhenIdle:
 
 
 # ---------------------------------------------------------------------------------------
-# Console default: flag > JUNEAU_RUN_CONSOLE > condensed.
+# Console default: flag > JUNEAU_RUN_CONSOLE > board.
 # ---------------------------------------------------------------------------------------
 class TestConsoleDefault:
     @pytest.fixture(autouse=True)
@@ -1473,26 +1473,26 @@ class TestConsoleDefault:
         monkeypatch.setenv("JUNEAU_RUN_CONSOLE", "")    # registers the restore; deleted next so the test starts unset
         monkeypatch.delenv("JUNEAU_RUN_CONSOLE")
 
-    def test_defaults_to_condensed(self, push_module):
+    def test_defaults_to_board(self, push_module):
         push_module.parse_args(["msg"])
-        assert os.environ["JUNEAU_RUN_CONSOLE"] == "condensed"
+        assert os.environ["JUNEAU_RUN_CONSOLE"] == "board"
 
     def test_environment_beats_the_default(self, push_module, monkeypatch):
         monkeypatch.setenv("JUNEAU_RUN_CONSOLE", "full")
         push_module.parse_args(["msg"])
         assert os.environ["JUNEAU_RUN_CONSOLE"] == "full"
 
-    @pytest.mark.parametrize("mode", ["full", "condensed", "none"])
+    @pytest.mark.parametrize("mode", ["full", "board", "none"])
     def test_flag_beats_the_environment(self, push_module, monkeypatch, mode):
         monkeypatch.setenv("JUNEAU_RUN_CONSOLE", "full" if mode != "full" else "none")
         push_module.parse_args(["msg", "--console", mode])
         assert os.environ["JUNEAU_RUN_CONSOLE"] == mode
 
-    def test_help_says_condensed_is_the_default(self, push_module, monkeypatch, capsys):
+    def test_help_says_board_is_the_default(self, push_module, monkeypatch, capsys):
         monkeypatch.setattr(push_module.sys, "argv", ["push.py", "--help"])
         with pytest.raises(SystemExit):
             push_module._main()
-        assert "condensed (default)" in " ".join(capsys.readouterr().out.split())
+        assert "board (default)" in " ".join(capsys.readouterr().out.split())
 
 
 def test_prechecks_opens_a_unit_and_a_child_step_per_check(

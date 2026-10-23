@@ -68,9 +68,9 @@ The owner removes an older file at that path when its `run()` starts. Fields who
 | `ms` | The run's duration, from `run` to `done`. |
 | `project`, `branch`, `head` | As in `run`. |
 | `commit`? | As in `done`. |
-| `rows` | The console view's rows, in the order they started, nested scripts' included: the top-level steps (child steps are not rows) and any rows a script draws without a marker (`row()`, such as Perf or Timing). Each: `id`, `label`, `status` (`ok`\|`fail`\|`skip`; a row with no `end` takes the `done` consumer rule's status), `ms`, `summary` (the row's text in the condensed log: its count and summary, totals or reason, possibly empty) and `tests`? `{total, fail, err, skip}` (the step's last totals). |
+| `rows` | The console view's rows, in the order they started, nested scripts' included: the top-level steps (child steps are not rows) and any rows a script draws without a marker (`row()`, such as Perf or Timing). Each: `id`, `label`, `status` (`ok`\|`fail`\|`skip`; a row with no `end` takes the `done` consumer rule's status), `ms`, `summary` (the row's text in the board log: its count and summary, totals or reason, possibly empty) and `tests`? `{total, fail, err, skip}` (the step's last totals). |
 | `notes` | The run's `note` markers, in order: `level`, `text`, `href`?. |
-| `logs` | `full`? and `condensed`?: absolute paths of the session's logs, when it has them. |
+| `logs` | `full`? and `board`?: absolute paths of the session's logs, when it has them. |
 
 Nested scripts don't write the file. Each one leaves its rows and notes in a directory the owner names in
 `JUNEAU_RUN_RESULT_PARTS` (made by the owner, removed when it has written the result); the owner merges them in.
@@ -146,7 +146,7 @@ for each run.
   `<step> killed by SIG…`. A command that can't start exits 127.
 - **Stdout.** `--console` defaults to `none`; `--console full` also copies the raw bytes to stdout.
 - **Log bytes.**  Under `--pty` the full log is always the tool's own bytes.  Without a terminal, a parser may
-  rewrite what the full log and console show for each line (`rewrites_log`); the condensed log and the markers are
+  rewrite what the full log and console show for each line (`rewrites_log`); the board log and the markers are
   the same either way.
 
 **PTY input.** `--input stdin` (with `--pty`, before `<tool>`; without `--pty` it exits 2) copies the wrapper's stdin to the PTY
@@ -161,7 +161,7 @@ tool's terminal gets no input at all.
 ## Adopting it
 
 See `../README.md`: the bootstrap snippet that loads `juneau_run.py` from the pinned `org.apache.juneau:juneau-run` artifact, the output routing
-options (`JUNEAU_RUN_CONSOLE`, `JUNEAU_RUN_FULL_LOG`, `JUNEAU_RUN_CONDENSED_LOG`) and the parsers (`maven`, `pytest`, `playwright`, `gradle`, `npm`, `bazel`, `generic`; `gradle` adds `--console=plain` unless the command sets `--console`).
+options (`JUNEAU_RUN_CONSOLE`, `JUNEAU_RUN_FULL_LOG`, `JUNEAU_RUN_BOARD_LOG`) and the parsers (`maven`, `pytest`, `playwright`, `gradle`, `npm`, `bazel`, `generic`; `gradle` adds `--console=plain` unless the command sets `--console`).
 Reporters a parser adds when markers are on:
 - pytest: `--junitxml=$RUN_ARTIFACTS/<step>-pytest.xml` (a temp directory when `RUN_ARTIFACTS` isn't set)
 - Playwright: no flag. juneau-run's own reporter (`juneau_run_playwright.cjs`) is named in `PW_TEST_REPORTER`, and
@@ -180,7 +180,7 @@ runs as a plain run would, without the per-file lines or the JSON report, and on
 `--help` or a configuration error) the step notes "Playwright reporter not loaded"; the bar then counts the line
 reporter's `[n/N]` progress, when the config uses it. Under a terminal there is no such note.
 Without markers, the reporter is added only inside a console session that isn't interactive (a script's, or the one
-`juneau_run.py --console condensed` draws on a terminal); a plain run keeps the command and environment as given.
+`juneau_run.py --console board` draws on a terminal); a plain run keeps the command and environment as given.
 Under a terminal it is added only for the JSON report, with `JUNEAU_RUN_PLAYWRIGHT_MARKERS=0`, so it prints nothing;
 outside one an inherited `JUNEAU_RUN_PLAYWRIGHT_MARKERS=0` is dropped. `JUNEAU_RUN_PLAYWRIGHT_REPORTER=0`, in the command's environment or juneau-run's, leaves it out, and so does a
 command that names its own reporter (`--reporter x`, `--reporter=x`, or a `PW_TEST_REPORTER` already set). A report left

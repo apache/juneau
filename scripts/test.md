@@ -36,10 +36,10 @@ python3 scripts/test.py --rebaseline --window 20 --min-runs 5
 | `--min-runs` | N (integer) | 5 | With `--rebaseline`: skip keys with fewer runs. |
 | `--js-tests` | none | auto | Also run the headless-browser tests (`mvn -Pjs-tests`). Fails if Node or npm are missing. |
 | `--no-js-tests` | none | off | Never run the browser tests. Cannot be combined with `--js-tests`. |
-| `--console` | `full`, `condensed` or `none` | `full` | How Maven output appears on the console. |
+| `--console` | `full`, `board` or `none` | `full` | How Maven output appears on the console. |
 | `--detail` | `summary`, `actionable`, `modules` or `all` | `actionable` | Console detail level. |
 | `--full-log` | path | none | Also append everything Maven prints to this file. |
-| `--condensed-log` | path | none | Also append the condensed one-line-per-event stream to this file. |
+| `--board-log` | path | none | Also append the board one-line-per-event stream to this file. |
 | `--profile` | module path | none | Run one module's tests under a one-shot JFR profile, then exit. |
 | `--help`, `-h` | none | off | Print the usage text and exit 0. |
 
@@ -68,7 +68,7 @@ Maven output, a status line per step, and the perf-guard report. The run header 
 ## Gotchas
 
 - The perf guard only warns unless `--enforce-perf` is given. A suite breaches above baseline times `1 + JUNEAU_CI_PERF_THRESHOLD` (default 0.20). A module breaches only when it is over that and more than `JUNEAU_CI_PERF_MIN_SECONDS` (default 3) over its baseline. A module with no baseline entry warns and never fails.
-- `JUNEAU_MVN_WRAPPER` adds a prefix to every `mvn` command, for example a lock script that serializes runs.
+- `JUNEAU_MVN_WRAPPER` adds a prefix to every `mvn` command, for example a lock script that serializes runs. The value is a command plus arguments, not a shell fragment: it is split like a shell would (so `'/a b/lock.sh' --x` works), then re-quoted word by word, so a path with spaces or `$`/`;` is never interpreted. An unquoted path with spaces also works, taken as the longest leading run of words that names an existing file. A word that is exactly `&&`, `||`, `;` or `|` stays a shell operator, so `lock.sh --x &&` still chains.
 - The pytest step is skipped with a notice when neither pytest nor `uv` is available. Nothing is installed.
 - The browser tests download Playwright and Chromium on the first run, so they need network access.
 - `JUNEAU_RUN_HISTORY=0` turns off the run history, which `--rebaseline` and `push-timings.py` depend on.

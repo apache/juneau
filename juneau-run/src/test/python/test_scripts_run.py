@@ -124,7 +124,7 @@ class RoutedTest(MarkerCase):
         self.assertFalse(run.console_requested())
 
     def test_console_requested_follows_the_console_setting(self):
-        with mock.patch.dict(os.environ, {"JUNEAU_RUN_CONSOLE": "condensed"}):
+        with mock.patch.dict(os.environ, {"JUNEAU_RUN_CONSOLE": "board"}):
             self.assertTrue(run.console_requested())
 
 
@@ -132,8 +132,8 @@ class ExportConsoleTest(PlainCase):
     def test_export_console_precedence(self):
         with mock.patch.dict(os.environ, {}):
             os.environ.pop("JUNEAU_RUN_CONSOLE", None)
-            self.assertEqual(run.export_console(), "condensed")                  # the default
-            self.assertEqual(run.export_console(default="full"), "condensed")    # now the env wins over the default
+            self.assertEqual(run.export_console(), "board")                  # the default
+            self.assertEqual(run.export_console(default="full"), "board")    # now the env wins over the default
             os.environ["JUNEAU_RUN_CONSOLE"] = "none"
             self.assertEqual(run.export_console(), "none")
             self.assertEqual(run.export_console("full"), "full")                 # the flag wins over the env
@@ -224,10 +224,10 @@ class CmdConsoleNoneTest(ConsoleNoneCase):
         with redirect_stdout(out):
             run.cmd([PY, "-c", "print('child-line')"], title="Child")
         self.assertEqual(out.getvalue(), "")
-        logs = [p for p in self.log.parent.glob("*.log") if not p.name.endswith(".condensed.log")]
+        logs = [p for p in self.log.parent.glob("*.log") if not p.name.endswith(".board.log")]
         self.assertEqual(len(logs), 1)
         self.assertIn(b"child-line", logs[0].read_bytes())
-        self.assertEqual(len(list(self.log.parent.glob("*.condensed.log"))), 1)
+        self.assertEqual(len(list(self.log.parent.glob("*.board.log"))), 1)
 
     def test_no_markers_under_none(self):
         out = io.StringIO()

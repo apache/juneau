@@ -64,19 +64,19 @@ class CliTest(unittest.TestCase):
         r = cli("generic", "--", sys.executable, "-c", "pass", env={"RUN_MARKERS": "1", jr.ACTIVE_ENV: "1"})
         self.assertEqual(evs(r.stdout), ["step", "end"])
 
-    def test_condensed_console_prints_only_the_parser_lines_unlike_the_full_console(self):
+    def test_board_console_prints_only_the_parser_lines_unlike_the_full_console(self):
         code = "print('noise')"
         full = cli("--console", "full", "generic", "--", sys.executable, "-c", code)
-        condensed = cli("--console", "condensed", "generic", "--", sys.executable, "-c", code)
+        board = cli("--console", "board", "generic", "--", sys.executable, "-c", code)
         self.assertEqual(full.stdout, "noise\n")
-        self.assertEqual(condensed.stdout, "")   # the generic parser condenses a passing run to nothing
+        self.assertEqual(board.stdout, "")   # the generic parser condenses a passing run to nothing
 
-    def test_condensed_console_on_failure_shows_only_the_generic_tail(self):
+    def test_board_console_on_failure_shows_only_the_generic_tail(self):
         code = "[print(i) for i in range(100)]; import sys; sys.exit(1)"
         full = cli("--console", "full", "generic", "--", sys.executable, "-c", code)
-        condensed = cli("--console", "condensed", "generic", "--", sys.executable, "-c", code)
+        board = cli("--console", "board", "generic", "--", sys.executable, "-c", code)
         self.assertEqual(len(full.stdout.splitlines()), 100)
-        self.assertEqual(condensed.stdout.splitlines(), [str(i) for i in range(60, 100)])
+        self.assertEqual(board.stdout.splitlines(), [str(i) for i in range(60, 100)])
 
     def test_no_command_is_a_usage_error(self):
         self.assertEqual(cli("generic").returncode, 2)
@@ -161,8 +161,8 @@ def cli_on_terminal(*args, env=None, window=(40, 120)):
 
 
 @unittest.skipUnless(os.name == "posix", "needs a PTY")
-class CondensedPlaywrightTest(unittest.TestCase):
-    """The CLI's condensed console draws the live view on a terminal, so Playwright gets one line per test file."""
+class BoardPlaywrightTest(unittest.TestCase):
+    """The CLI's board console draws the live view on a terminal, so Playwright gets one line per test file."""
 
     def setUp(self):
         import tempfile
@@ -172,7 +172,7 @@ class CondensedPlaywrightTest(unittest.TestCase):
         self.log_dir = {"JUNEAU_RUN_LOG_DIR": self.tmp.name}
 
     def run_playwright(self, *extra, terminal=True, env=None, window=(40, 120)):
-        args = ("--console", "condensed", "--step", "e2e", "--title", "E2E", "playwright", "--",
+        args = ("--console", "board", "--step", "e2e", "--title", "E2E", "playwright", "--",
                 sys.executable, "-c", FAKE_PLAYWRIGHT, self.seen, *extra)
         if terminal:
             return cli_on_terminal(*args, env={**self.log_dir, **(env or {})}, window=window)
@@ -208,18 +208,18 @@ class CondensedPlaywrightTest(unittest.TestCase):
                 self.assertNotIn("tests/a.spec.ts", screen)
                 self.assertNotIn("##playwright", screen)
 
-    def test_off_a_terminal_condensed_output_is_unchanged(self):
+    def test_off_a_terminal_board_output_is_unchanged(self):
         rc, out = self.run_playwright(terminal=False)
         self.assertEqual((rc, out), (0, "  2 passed (1.0s)\n"))
         self.assertEqual(self.reporter_given(), ["", ""])
 
-    def test_the_view_needs_condensed_a_redrawing_terminal_no_markers_and_no_enclosing_session(self):
+    def test_the_view_needs_board_a_redrawing_terminal_no_markers_and_no_enclosing_session(self):
         class TTY:
             def isatty(self):
                 return True
-        cases = [("condensed", {}, True), ("full", {}, False), ("none", {}, False),
-                 ("condensed", {"RUN_MARKERS": "1"}, False), ("condensed", {"TERM": "dumb"}, False),
-                 ("condensed", {"JUNEAU_RUN_LIVE": "0"}, False), ("condensed", {jr.SESSION_ENV: "1"}, False)]
+        cases = [("board", {}, True), ("full", {}, False), ("none", {}, False),
+                 ("board", {"RUN_MARKERS": "1"}, False), ("board", {"TERM": "dumb"}, False),
+                 ("board", {"JUNEAU_RUN_LIVE": "0"}, False), ("board", {jr.SESSION_ENV: "1"}, False)]
         for console, env, expected in cases:
             with self.subTest(console=console, env=env), mock.patch.dict(os.environ, {**self.log_dir, **env}), \
                     mock.patch.object(jr.sys, "stdout", TTY()):
@@ -227,7 +227,7 @@ class CondensedPlaywrightTest(unittest.TestCase):
                     os.environ.pop(key, None)
                 self.assertEqual(jr._cli_view(jr.Sinks(console, full_log=self.seen)), expected)
         with mock.patch.object(jr.sys, "stdout", io.StringIO()):
-            self.assertFalse(jr._cli_view(jr.Sinks("condensed", full_log=self.seen)))
+            self.assertFalse(jr._cli_view(jr.Sinks("board", full_log=self.seen)))
 
     def test_with_markers_on_a_terminal_no_view_is_drawn(self):
         rc, screen = self.run_playwright(env={"RUN_MARKERS": "1"})

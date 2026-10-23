@@ -2,7 +2,7 @@
 
 Build tooling, not a library dependency. It ships `juneau_run.py`, a stdlib-only Python script that wraps
 Maven, pytest, Playwright, Gradle, npm and Bazel runs: it prints run-protocol v1 markers (`##run`) when `RUN_MARKERS=1`, routes the
-full and condensed output to the console and log files, and parses tool output into sub-steps and test counts.
+full and board output to the console and log files, and parses tool output into sub-steps and test counts.
 The wire format is in [docs/run-protocol-v1.md](docs/run-protocol-v1.md).
 
 The module is `pom` packaging. `mvn install` attaches the script as `org.apache.juneau:juneau-run:<version>:py`
@@ -80,18 +80,18 @@ terminal region in `juneau-rest-server-terminal`. Every option comes before `<to
 
 ## Console view
 
-With `JUNEAU_RUN_CONSOLE=condensed`, a script that calls `session(title, header)` gets a condensed view: one row
+With `JUNEAU_RUN_CONSOLE=board`, a script that calls `session(title, header)` gets a board view: one row
 per step, with its time, its counts and one line of summary. Raw tool output goes to the full log instead of the
 screen. `full` (the default) prints raw output as before; `none` draws nothing. Both still write the logs.
-`juneau_run.py --console condensed <tool> -- <cmd...>` on a terminal draws the same view for its one step, unit
+`juneau_run.py --console board <tool> -- <cmd...>` on a terminal draws the same view for its one step, unit
 lines included (one per running pytest or Playwright test file); with markers on, inside another session, or
-off a terminal (`TERM=dumb` and `JUNEAU_RUN_LIVE=0` count as off) it prints the parser's condensed lines instead.
+off a terminal (`TERM=dumb` and `JUNEAU_RUN_LIVE=0` count as off) it prints the parser's board lines instead.
 
 | Variable | Effect |
 |---|---|
-| `JUNEAU_RUN_CONSOLE=full\|condensed\|none` | Where tool output goes. `condensed` turns the view on. `condensed` and `none` also make `bootstrap.load()` load juneau_run, so a tool's output goes to the logs and not the terminal; `none` draws nothing and emits no markers unless `RUN_MARKERS=1`. |
+| `JUNEAU_RUN_CONSOLE=full\|board\|none` | Where tool output goes. `board` turns the view on. `board` and `none` also make `bootstrap.load()` load juneau_run, so a tool's output goes to the logs and not the terminal; `none` draws nothing and emits no markers unless `RUN_MARKERS=1`. |
 | `JUNEAU_RUN_DETAIL=summary\|actionable\|modules\|all` | How much the view shows (default `actionable`). `--detail` on `push.py`, `test.py` and `release.py` wins. |
-| `JUNEAU_RUN_FULL_LOG`, `JUNEAU_RUN_CONDENSED_LOG` | The raw log, and the view's rows as plain text. The header prints `tail -f` for each on a line of its own, to paste into another terminal: `Output: tail -f <full log>`, then `Condensed: tail -f <condensed log>`. With `condensed` or `none` and no full log, the full log defaults to `~/.cache/juneau-run/<script>-<YYYYMMDD-HHMMSS>.log`, and unless a condensed log is set (by argument or variable) a `.condensed.log` beside it, so another tool can follow the view's rows as plain text; the newest 20 of each kind are kept, and nested scripts share them. |
+| `JUNEAU_RUN_FULL_LOG`, `JUNEAU_RUN_BOARD_LOG` | The raw log, and the view's rows as plain text. The header prints `tail -f` for each on a line of its own, to paste into another terminal: `Output: tail -f <full log>`, then `Board: tail -f <board log>`. With `board` or `none` and no full log, the full log defaults to `~/.cache/juneau-run/<script>-<YYYYMMDD-HHMMSS>.log`, and unless a board log is set (by argument or variable) a `.board.log` beside it, so another tool can follow the view's rows as plain text; the newest 20 of each kind are kept, and nested scripts share them. |
 | `JUNEAU_RUN_CANCEL` | A command that cancels the run (for example a pane launcher's own cancel command); the header shows it as a `Cancel: <command>` row after the log rows. Unset, there is no such row. |
 | `JUNEAU_RUN_LOG_DIR` | Where those default logs go (default `~/.cache/juneau-run`). The tests point it at a temp dir. |
 | `JUNEAU_RUN_TERM_GRACE=<seconds>` | How long a cancelled child's process group gets between SIGTERM and SIGKILL (default 5). A `grace=` argument to `run_tool` or `run.cmd` wins for that child; a value that isn't a non-negative number is ignored. |
@@ -102,12 +102,12 @@ off a terminal (`TERM=dumb` and `JUNEAU_RUN_LIVE=0` count as off) it prints the 
 | `JUNEAU_RUN_HISTORY=0` | Turns off recording and estimating run history (default on). Without history the view shows no percent, time estimates or Overall line. |
 | `JUNEAU_RUN_HISTORY_DIR` | Replaces `~/.cache/juneau-run/history`, where per-repository run history is kept. The tests point it at a temp dir. |
 | `JUNEAU_RUN_HISTORY_KEY` | Replaces the per-repository key under that directory (`<name>-<hash>` of the git common dir, which linked worktrees already share), so separate clones of one repository can share one history. Made file-name safe. A script passes `history_key=` to `session(...)` instead, which wins over the variable and leaves the environment (and child processes) alone. |
-| `JUNEAU_RUN_PLAYWRIGHT_REPORTER=0` | In the command's environment or juneau-run's, leaves out juneau-run's Playwright reporter (`juneau_run_playwright.cjs`, which draws one line per running test file, counts the bar and, under markers with `RUN_ARTIFACTS`, writes `<step>-playwright.json`). It is added through `PW_TEST_REPORTER`, which Playwright appends to the `reporter:` list in `playwright.config`, so the config's reporters still run and the output is a plain run's. Outside a terminal the html reporter is kept from opening its report (`PLAYWRIGHT_HTML_OPEN=never`, unless the command sets it), since it would otherwise serve it and wait. That variable is undocumented in Playwright: a version that ignores it runs as plain, without the per-file lines or the JSON report, and once tests have run the step notes "Playwright reporter not loaded" (never under a terminal). Nothing is added when the command names its own `--reporter` or sets `PW_TEST_REPORTER`, nor without markers outside a non-interactive console session (a script's, or the CLI's condensed view on a terminal); under a terminal it is added only for the JSON report and prints nothing. From the zip the reporter is extracted to a temp directory removed at exit, since node can't load from a zip. |
+| `JUNEAU_RUN_PLAYWRIGHT_REPORTER=0` | In the command's environment or juneau-run's, leaves out juneau-run's Playwright reporter (`juneau_run_playwright.cjs`, which draws one line per running test file, counts the bar and, under markers with `RUN_ARTIFACTS`, writes `<step>-playwright.json`). It is added through `PW_TEST_REPORTER`, which Playwright appends to the `reporter:` list in `playwright.config`, so the config's reporters still run and the output is a plain run's. Outside a terminal the html reporter is kept from opening its report (`PLAYWRIGHT_HTML_OPEN=never`, unless the command sets it), since it would otherwise serve it and wait. That variable is undocumented in Playwright: a version that ignores it runs as plain, without the per-file lines or the JSON report, and once tests have run the step notes "Playwright reporter not loaded" (never under a terminal). Nothing is added when the command names its own `--reporter` or sets `PW_TEST_REPORTER`, nor without markers outside a non-interactive console session (a script's, or the CLI's board view on a terminal); under a terminal it is added only for the JSON report and prints nothing. From the zip the reporter is extracted to a temp directory removed at exit, since node can't load from a zip. |
 | `JUNEAU_RUN_MARKERS_FILE=<path>` | The run-protocol markers go to that file too, one `##run` line each, while the console view draws as usual; with `RUN_MARKERS=1` stdout and the file both get them. The run's owner empties it when its `run()` starts; nested scripts append. Also makes `bootstrap.load()` load juneau_run. See `docs/run-protocol-v1.md`, "Markers file". |
 | `JUNEAU_RUN_RESULT=<path>` | At the end of the run (ok, failed or cancelled) the owner writes the result there as one JSON object, atomically: status, exit code, time, project, branch, head, commit, the rows (with their test totals), the notes and the log paths. Nested scripts' rows are included. Also makes `bootstrap.load()` load juneau_run. See `docs/run-protocol-v1.md`, "Result file". |
 | `JUNEAU_RUN_PYTEST_PLUGIN=0` | Skips injecting `-p juneau_run_pytest` into pytest runs (the plugin that reports test progress). The suite under test gets only the plugin-only `pytest_plugin/` directory (in the zip, `<zip>/pytest_plugin`) on `PYTHONPATH`, never the engine or toolkit. |
 
-With `RUN_MARKERS=1` stdout carries the run-protocol markers, so no view is drawn there; the condensed log still gets
+With `RUN_MARKERS=1` stdout carries the run-protocol markers, so no view is drawn there; the board log still gets
 the rows.
 
 | Level | A finished step | Notes |
@@ -123,7 +123,7 @@ appears only in the full log, and a `run_tool` call with no session still echoes
 interactive runs such as `release.py`.
 
 Script API (all of it works with no session too, printing as before):
-- `session(title, header=())`: the header rows (`▶ title: item, item…`, wrapping with a two-space indent, then a dim `›` on `Output: tail -f <full log>`, `Condensed: tail -f <condensed log>` and, with `JUNEAU_RUN_CANCEL`, `Cancel: <command>`) and the view, whose last line is `▶ Overall …`. Ends with
+- `session(title, header=())`: the header rows (`▶ title: item, item…`, wrapping with a two-space indent, then a dim `›` on `Output: tail -f <full log>`, `Board: tail -f <board log>` and, with `JUNEAU_RUN_CANCEL`, `Cancel: <command>`) and the view, whose last line is `▶ Overall …`. Ends with
   `done(status)`. A process that inherited a session (`JUNEAU_RUN_SESSION`) draws its rows into the parent's view
   and prints no header or final line.
 - `step(id, n, title, *, parent=None, label=None)` and `row(id, title, *, label=None)` yield a `Step`. Set
@@ -153,7 +153,7 @@ Script API (all of it works with no session too, printing as before):
 Ctrl-C and SIGTERM close the view, restore the cursor and end the run as `cancelled` (the scripts exit 130). If the
 live view fails, the run switches to the plain view with a warning. If the plain view fails too, or the screen can't
 be written, the view stops with `⚠ console view stopped (…)`, and script text and the final line print plainly from
-then on; a failure in the view's Board also stops the condensed log. A display bug never fails a build.
+then on; a failure in the view's Board also stops the board log. A display bug never fails a build.
 
 Known limitation: narrowing a reflowing terminal while the live view runs can leave stale fragments above the
 region.
@@ -201,7 +201,7 @@ def main(args):
   can run from elsewhere.
 
 `load()` finds the toolkit in this order, and loads `juneau_run` only for `run=True` or when `RUN_MARKERS=1` or
-`JUNEAU_RUN_CONSOLE=condensed` asks for it:
+`JUNEAU_RUN_CONSOLE=board` asks for it:
 1. `JUNEAU_SCRIPTS_ZIP` (a zip, or a directory holding `juneau_scripts/`) and `JUNEAU_RUN_PY`. With only
    `JUNEAU_RUN_PY`, the toolkit is `<stem>.zip` or a `juneau_scripts/` directory beside it.
 2. In-tree: `juneau-run/src/main/python/` under the pom's directory (this repository). No `.pyc` is written.
@@ -267,8 +267,8 @@ The `load_juneau_run` snippet above still works for a single-file adopter that n
 - With `RUN_MARKERS=1`, `push.py` and `test.py` print run-protocol markers: `push.py` owns the run (`run`, `done`,
   its own steps); `test.py` and anything it runs contribute steps only, because `run()` exports
   `JUNEAU_RUN_ACTIVE=1`. `release.py` emits no markers; it warns and ignores `RUN_MARKERS`.
-- `test.py --console full|condensed|none --full-log PATH --condensed-log PATH` routes Maven output (the same settings
-  can come from `JUNEAU_RUN_CONSOLE`, `JUNEAU_RUN_FULL_LOG`, `JUNEAU_RUN_CONDENSED_LOG`; an argument wins; relative
+- `test.py --console full|board|none --full-log PATH --board-log PATH` routes Maven output (the same settings
+  can come from `JUNEAU_RUN_CONSOLE`, `JUNEAU_RUN_FULL_LOG`, `JUNEAU_RUN_BOARD_LOG`; an argument wins; relative
   paths resolve under `$RUN_ARTIFACTS`). `push.py` and `release.py` take the console settings from the environment.
 - `--detail summary|actionable|modules|all` on all three scripts sets the console detail (see "Console view").
   `push.py` passes it, and its label width, to the `test.py` it runs, and hands that `test.py` the terminal while it

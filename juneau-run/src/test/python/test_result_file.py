@@ -92,11 +92,11 @@ class MarkersFileTest(FileCase):
         super().setUp()
         os.environ[jr.MARKERS_FILE_ENV] = str(self.markers_file)
 
-    def test_condensed_console_draws_and_the_file_gets_the_markers(self):
+    def test_board_console_draws_and_the_file_gets_the_markers(self):
         out = io.StringIO()
         with redirect_stdout(out):
             jr.run("test", "demo", "main", "abc1234")
-            jr.session("Demo", sinks=jr.Sinks("condensed", str(self.tmp / "full.log")))
+            jr.session("Demo", sinks=jr.Sinks("board", str(self.tmp / "full.log")))
             with jr.step("build", 1, "Compile", label="Compile"):
                 jr.tests("build", 3, 0, 0, 0)
             jr.done("ok")
@@ -196,7 +196,7 @@ class ResultFileTest(FileCase):
         os.environ[jr.MARKERS_FILE_ENV] = str(self.markers_file)
         with redirect_stdout(io.StringIO()):
             jr.run("push", "demo", "main", "abc1234")
-            jr.session("Demo", sinks=jr.Sinks("condensed", str(self.tmp / "full.log"), str(self.tmp / "cond.log")))
+            jr.session("Demo", sinks=jr.Sinks("board", str(self.tmp / "full.log"), str(self.tmp / "cond.log")))
             with jr.step("prechecks", 1, "Prechecks", label="Prechecks") as s:
                 s.summary = "3 checks"
             self.child()
@@ -216,7 +216,7 @@ class ResultFileTest(FileCase):
         ])
         self.assertEqual(r["notes"], [{"level": "warn", "text": "slow module"},
                                       {"level": "info", "text": "branch pushed", "href": "https://example.org/pr/1"}])
-        self.assertEqual(r["logs"], {"full": str(self.tmp / "full.log"), "condensed": str(self.tmp / "cond.log")})
+        self.assertEqual(r["logs"], {"full": str(self.tmp / "full.log"), "board": str(self.tmp / "cond.log")})
         self.assertNotIn(jr.RESULT_PARTS_ENV, os.environ)     # the parts directory is gone with it
         self.assertEqual(replay(file_markers(self.markers_file))[1], {r["id"]: r["status"] for r in r["rows"]})
 

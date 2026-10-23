@@ -306,12 +306,12 @@ class RealBellTest(SessionCase):
                 self.assertEqual(self.ring({key: "yes"}), 1)
 
 
-class CondensedTest(SessionCase):
+class BoardTest(SessionCase):
     """[J0689] The console view: opened when the console is requested, nested children stay quiet."""
 
     def test_console_opens_and_closes_with_the_final_line(self):
         sys.modules["juneau_run"] = jr
-        with mock.patch.dict(os.environ, {"JUNEAU_RUN_CONSOLE": "condensed"}), \
+        with mock.patch.dict(os.environ, {"JUNEAU_RUN_CONSOLE": "board"}), \
                 mock.patch.object(jr, "session", wraps=jr.session) as opened:
             s, out = self.go(ok)
         opened.assert_called_once()
@@ -322,7 +322,7 @@ class CondensedTest(SessionCase):
 
     def test_the_view_a_session_started_ends_with_the_session(self):
         sys.modules["juneau_run"] = jr
-        with mock.patch.dict(os.environ, {"JUNEAU_RUN_CONSOLE": "condensed"}):
+        with mock.patch.dict(os.environ, {"JUNEAU_RUN_CONSOLE": "board"}):
             self.go(ok)
             self.assertFalse(jr.session_open())
             self.go(ok)     # a second session in the same process starts clean
@@ -330,7 +330,7 @@ class CondensedTest(SessionCase):
 
     def test_a_view_the_session_did_not_start_is_left_open(self):
         sys.modules["juneau_run"] = jr
-        with mock.patch.dict(os.environ, {"JUNEAU_RUN_CONSOLE": "condensed"}):
+        with mock.patch.dict(os.environ, {"JUNEAU_RUN_CONSOLE": "board"}):
             with redirect_stdout(io.StringIO()):
                 jr.session("outer")
             self.go(ok)

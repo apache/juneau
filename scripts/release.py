@@ -43,7 +43,7 @@ Options:
     --skip-step STEP_NAME     Skip a specific step (can be used multiple times)
     --resume                  Resume from the last checkpoint (if available)
     --revert                  Delete the git tag, revert the Maven versions and remove the RC from SVN
-    --console MODE            Maven output on the console: full (default), condensed or none (JUNEAU_RUN_CONSOLE)
+    --console MODE            Maven output on the console: full (default), board or none (JUNEAU_RUN_CONSOLE)
     --detail LEVEL            Console detail: summary, actionable (default), modules or all (JUNEAU_RUN_DETAIL)
 """
 
@@ -1247,8 +1247,8 @@ def main(argv=None):
     )
     parser.add_argument(
         '--console',
-        choices=('full', 'condensed', 'none'),
-        help='Maven output on the console: full (default), condensed or none (also JUNEAU_RUN_CONSOLE)'
+        choices=('full', 'board', 'none'),
+        help='Maven output on the console: full (default), board or none (also JUNEAU_RUN_CONSOLE)'
     )
     parser.add_argument(
         '--detail',

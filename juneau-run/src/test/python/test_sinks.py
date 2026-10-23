@@ -30,21 +30,21 @@ class SinksTest(unittest.TestCase):
         patcher = mock.patch.dict(os.environ)
         patcher.start()
         self.addCleanup(patcher.stop)
-        for key in ("JUNEAU_RUN_CONSOLE", "JUNEAU_RUN_FULL_LOG", "JUNEAU_RUN_CONDENSED_LOG", "RUN_ARTIFACTS"):
+        for key in ("JUNEAU_RUN_CONSOLE", "JUNEAU_RUN_FULL_LOG", "JUNEAU_RUN_BOARD_LOG", "RUN_ARTIFACTS"):
             os.environ.pop(key, None)
 
-    def test_condensed_defaults_a_full_log_and_shares_it_through_the_env(self):
+    def test_board_defaults_a_full_log_and_shares_it_through_the_env(self):
         os.environ["JUNEAU_RUN_LOG_DIR"] = str(self.tmp)
         with mock.patch.object(jr.sys, "argv", ["/x/scripts/push.py"]):
-            first = jr.Sinks(console="condensed")
+            first = jr.Sinks(console="board")
         self.assertRegex(str(first.full_path), rf"^{re.escape(str(self.tmp))}/push-\d{{8}}-\d{{6}}\.log$")
         self.assertEqual(os.environ["JUNEAU_RUN_FULL_LOG"], str(first.full_path))
-        self.assertEqual(jr.Sinks(console="condensed").full_path, first.full_path)   # a nested run's Sinks
+        self.assertEqual(jr.Sinks(console="board").full_path, first.full_path)   # a nested run's Sinks
 
-    def test_condensed_and_none_get_a_default_and_a_given_log_wins(self):
+    def test_board_and_none_get_a_default_and_a_given_log_wins(self):
         os.environ["JUNEAU_RUN_LOG_DIR"] = str(self.tmp)
         self.assertIsNone(jr.Sinks(console="full").full_path)
-        self.assertEqual(jr.Sinks(console="condensed", full_log=str(self.tmp / "mine.log")).full_path,
+        self.assertEqual(jr.Sinks(console="board", full_log=str(self.tmp / "mine.log")).full_path,
                          self.tmp / "mine.log")
         self.assertNotIn("JUNEAU_RUN_FULL_LOG", os.environ)
         self.assertEqual(jr.Sinks(console="none", full_log=str(self.tmp / "mine.log")).full_path,
@@ -54,41 +54,41 @@ class SinksTest(unittest.TestCase):
         self.assertRegex(str(default), rf"^{re.escape(str(self.tmp))}/.+-\d{{8}}-\d{{6}}\.log$")
         self.assertEqual(os.environ["JUNEAU_RUN_FULL_LOG"], str(default))
 
-    def test_condensed_defaults_a_condensed_log_beside_the_full_one_and_shares_it(self):
+    def test_board_defaults_a_board_log_beside_the_full_one_and_shares_it(self):
         os.environ["JUNEAU_RUN_LOG_DIR"] = str(self.tmp)
         with mock.patch.object(jr.sys, "argv", ["/x/scripts/push.py"]):
-            first = jr.Sinks(console="condensed")
-        self.assertRegex(str(first.condensed_path),
-                         rf"^{re.escape(str(self.tmp))}/push-\d{{8}}-\d{{6}}\.condensed\.log$")
-        self.assertEqual(str(first.condensed_path), str(first.full_path)[:-4] + ".condensed.log")
-        self.assertEqual(os.environ["JUNEAU_RUN_CONDENSED_LOG"], str(first.condensed_path))
-        self.assertEqual(jr.Sinks(console="none").condensed_path, first.condensed_path)    # a nested run's Sinks
+            first = jr.Sinks(console="board")
+        self.assertRegex(str(first.board_path),
+                         rf"^{re.escape(str(self.tmp))}/push-\d{{8}}-\d{{6}}\.board\.log$")
+        self.assertEqual(str(first.board_path), str(first.full_path)[:-4] + ".board.log")
+        self.assertEqual(os.environ["JUNEAU_RUN_BOARD_LOG"], str(first.board_path))
+        self.assertEqual(jr.Sinks(console="none").board_path, first.board_path)    # a nested run's Sinks
 
-    def test_a_given_log_means_no_default_condensed_log(self):
+    def test_a_given_log_means_no_default_board_log(self):
         os.environ["JUNEAU_RUN_LOG_DIR"] = str(self.tmp)
-        self.assertIsNone(jr.Sinks(console="condensed", full_log=str(self.tmp / "mine.log")).condensed_path)
-        self.assertIsNone(jr.Sinks(console="full").condensed_path)
-        mine = str(self.tmp / "mine.condensed.log")
-        sinks = jr.Sinks(console="condensed", condensed_log=mine)
-        self.assertEqual(sinks.condensed_path, Path(mine))
-        self.assertEqual(os.environ.get("JUNEAU_RUN_CONDENSED_LOG"), None)
+        self.assertIsNone(jr.Sinks(console="board", full_log=str(self.tmp / "mine.log")).board_path)
+        self.assertIsNone(jr.Sinks(console="full").board_path)
+        mine = str(self.tmp / "mine.board.log")
+        sinks = jr.Sinks(console="board", board_log=mine)
+        self.assertEqual(sinks.board_path, Path(mine))
+        self.assertEqual(os.environ.get("JUNEAU_RUN_BOARD_LOG"), None)
 
-    def test_prune_counts_full_and_condensed_logs_separately(self):
+    def test_prune_counts_full_and_board_logs_separately(self):
         os.environ["JUNEAU_RUN_LOG_DIR"] = str(self.tmp)
         for i in range(25):
-            for name in (f"push-{i:02d}.log", f"push-{i:02d}.condensed.log"):
+            for name in (f"push-{i:02d}.log", f"push-{i:02d}.board.log"):
                 (self.tmp / name).write_text("")
                 os.utime(self.tmp / name, (1000 + i, 1000 + i))
-        for i in range(25, 30):     # newer condensed logs must not push full logs out, nor the reverse
-            (self.tmp / f"test-{i}.condensed.log").write_text("")
-            os.utime(self.tmp / f"test-{i}.condensed.log", (1000 + i, 1000 + i))
+        for i in range(25, 30):     # newer board logs must not push full logs out, nor the reverse
+            (self.tmp / f"test-{i}.board.log").write_text("")
+            os.utime(self.tmp / f"test-{i}.board.log", (1000 + i, 1000 + i))
         jr.prune_full_logs()
         names = sorted(p.name for p in self.tmp.glob("*.log"))
-        self.assertEqual([n for n in names if not n.endswith(".condensed.log")],
+        self.assertEqual([n for n in names if not n.endswith(".board.log")],
                          [f"push-{i:02d}.log" for i in range(5, 25)])
-        self.assertEqual(len([n for n in names if n.endswith(".condensed.log")]), 20)
-        self.assertNotIn("push-04.condensed.log", names)
-        self.assertIn("test-29.condensed.log", names)
+        self.assertEqual(len([n for n in names if n.endswith(".board.log")]), 20)
+        self.assertNotIn("push-04.board.log", names)
+        self.assertIn("test-29.board.log", names)
 
     def test_safe_name_replaces_whitespace_and_punctuation(self):
         for raw, want in (("python3 -m unittest", "python3-m-unittest"),
@@ -128,16 +128,16 @@ class SinksTest(unittest.TestCase):
         self.assertTrue((self.tmp / "keep.txt").exists())
 
     def drive(self, sinks):
-        """Writes one full chunk and one condensed line; returns the console text."""
+        """Writes one full chunk and one board line; returns the console text."""
         buf = io.StringIO()
         with contextlib.redirect_stdout(buf):
             sinks.open()
             sinks.write_full(b"full-line\n")
-            sinks.write_condensed("condensed-line")
+            sinks.write_board("board-line")
             sinks.close()
         return buf.getvalue()
 
-    def test_condensed_lines_colour_their_marks_on_a_terminal_only(self):
+    def test_board_lines_colour_their_marks_on_a_terminal_only(self):
         class Tty(io.StringIO):
             def isatty(self):
                 return True
@@ -146,19 +146,19 @@ class SinksTest(unittest.TestCase):
             with self.subTest(tty=isinstance(stream, Tty), no_color=no_color):
                 cond = self.tmp / "marks-c.log"
                 cond.unlink(missing_ok=True)
-                sinks = jr.Sinks("condensed", None, cond)
+                sinks = jr.Sinks("board", None, cond)
                 with mock.patch.dict(os.environ, {"NO_COLOR": no_color} if no_color else {}), \
                         contextlib.redirect_stdout(stream):
                     if not no_color:
                         os.environ.pop("NO_COLOR", None)
                     sinks.open()
-                    sinks.write_condensed("✓ Mod  1s")
+                    sinks.write_board("✓ Mod  1s")
                     sinks.close()
                 self.assertEqual(stream.getvalue(), want)
                 self.assertEqual(cond.read_text(encoding="utf-8"), "✓ Mod  1s\n")
 
     def test_routing_matrix(self):
-        for console, want in (("full", "full-line\n"), ("condensed", "condensed-line\n"), ("none", "")):
+        for console, want in (("full", "full-line\n"), ("board", "board-line\n"), ("none", "")):
             for with_logs in (False, True):
                 with self.subTest(console=console, logs=with_logs):
                     full, cond = (self.tmp / f"{console}-f.log", self.tmp / f"{console}-c.log") if with_logs else (None, None)
@@ -166,11 +166,11 @@ class SinksTest(unittest.TestCase):
                     self.assertEqual(self.drive(sinks), want)
                     if with_logs:
                         self.assertEqual(full.read_bytes(), b"full-line\n")
-                        self.assertEqual(cond.read_bytes(), b"condensed-line\n")
+                        self.assertEqual(cond.read_bytes(), b"board-line\n")
 
     def test_default_is_pass_through_equivalent(self):
         self.assertTrue(jr.Sinks().is_default)
-        self.assertFalse(jr.Sinks("condensed").is_default)
+        self.assertFalse(jr.Sinks("board").is_default)
         self.assertFalse(jr.Sinks(full_log=self.tmp / "x.log").is_default)
 
     def test_relative_log_paths_resolve_under_run_artifacts(self):
@@ -190,7 +190,7 @@ class SinksTest(unittest.TestCase):
 
     def test_argument_beats_environment(self):
         os.environ["JUNEAU_RUN_CONSOLE"] = "none"
-        self.assertEqual(jr.Sinks(console="condensed").console, "condensed")
+        self.assertEqual(jr.Sinks(console="board").console, "board")
 
     def test_invalid_console_mode_is_rejected(self):
         with self.assertRaises(ValueError):

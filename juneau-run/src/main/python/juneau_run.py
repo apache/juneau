@@ -19,7 +19,7 @@ unless the environment has RUN_MARKERS=1 (markers on stdout) or JUNEAU_RUN_MARKE
 open-line helpers (open_line, append, dot, set_tail, close_line) always write.  A marker always starts on a fresh line.
 Sections, in order: markers, sinks, parsers, runner, CLI.
 
-CLI:  python3 juneau_run.py [--console full|condensed|none] [--full-log PATH] [--condensed-log PATH]
+CLI:  python3 juneau_run.py [--console full|board|none] [--full-log PATH] [--board-log PATH]
                             [--step ID] [--title T] [--pty --events PATH [--size CxR] [--input stdin]]
                             <maven|pytest|playwright|gradle|npm|generic> -- <cmd...>
 
@@ -157,7 +157,7 @@ def _colour_stdout():
 
 
 def _seen(ends_line):
-    """Record the line state after output written to stdout by other means (the raw tee, condensed lines)."""
+    """Record the line state after output written to stdout by other means (the raw tee, board lines)."""
     global _at_line_start
     _at_line_start = ends_line
 
@@ -524,7 +524,7 @@ def row(id, title, *, label=None):  # NOSONAR python:S5806 - parameter names mir
 # ---------------------------------------------------------------------------------------------------------------------
 # Detail levels
 #
-# They filter only the console and condensed-log views, never markers or the full log.
+# They filter only the console and board-log views, never markers or the full log.
 # ---------------------------------------------------------------------------------------------------------------------
 
 DETAIL_LEVELS = ("summary", "actionable", "modules", "all")
@@ -570,7 +570,7 @@ def shows_module(detail, failed, has_tests):
 #
 # Board holds the run's state and applies the detail filter; apply() turns one bus event into output blocks.  A
 # renderer turns blocks into text.  Console subscribes to the bus and feeds one Board to a screen renderer and to
-# the condensed-log renderer.
+# the board-log renderer.
 # ---------------------------------------------------------------------------------------------------------------------
 
 SESSION_ENV = "JUNEAU_RUN_SESSION"
@@ -954,7 +954,7 @@ class _Row:
         self.units = OrderedDict()
         self.order = []         # module ids, in the order their boxes were granted
         self.notes = []         # (level, text), held until the row ends: info ones for the screen at `all`, warn
-                                # and error ones (full text) for the condensed log
+                                # and error ones (full text) for the board log
         self.paused = False     # a pause note was attributed to it: ⏸ when ok
         self.warned = False     # a warn (or an error on a row that still ends ok) was attributed to it: ⚠ when ok
         self.detail = None      # a detail note's first line: drawn after the result, never in place of it
@@ -1630,7 +1630,7 @@ class Board:
                 blocks += [("text", "\n".join(kept))] if kept else []
             elif level == "info":
                 blocks += [("text", f"    {_NOTE_PREFIX[level]} " + "\n      ".join(kept))] if kept else []
-            else:   # the full warn or error text, for the condensed log only (D6), less what the hints repeat
+            else:   # the full warn or error text, for the board log only (D6), less what the hints repeat
                 kept = kept[:1] + [line for line in kept[1:] if line.strip() not in shown]
                 blocks += [("logonly", f"    {_NOTE_PREFIX[level]} " + "\n      ".join(kept))] if kept else []
         if hints and r.hints:
@@ -1925,7 +1925,7 @@ def _cut_text(text, room, minimum=12):
 
 
 class PlainRenderer:
-    """Prints each block once, when it happens.  The screen form on a non-TTY console, and the condensed log."""
+    """Prints each block once, when it happens.  The screen form on a non-TTY console, and the board log."""
 
     def __init__(self, write, glyphs=None, heartbeat=False, log=False, clock=time.monotonic):
         self.write = write
@@ -2136,7 +2136,7 @@ class _Fold:
             else:
                 out += [(t, False) for t in g.head]
                 if i in self.bodies:
-                    out.append((f"    … {len(g.body)} more lines (condensed log)", False))
+                    out.append((f"    … {len(g.body)} more lines (board log)", False))
                 else:
                     out += [(t, False) for t in g.body]
         for j, run in enumerate(self.running):
@@ -2213,7 +2213,7 @@ class _Fold:
         if any(g.state == "fail" for g in self.groups):
             self.failed = True
             yield
-        # B5: the header's lines and log lines (the cut lines in order, then Condensed, Output, Cancel)
+        # B5: the header's lines and log lines (the cut lines in order, then Board, Output, Cancel)
         for i in sorted(range(len(self.head)), key=lambda i: (self.head[i][2], i)):
             self.head_gone.add(i)
             yield
@@ -2450,7 +2450,7 @@ class LiveRenderer:
         return fit_view(self._header_parts(cols), self._groups(cols), runs, pending, overall, budget, cols, columns,
                         self.color)
 
-    _LOG_RANK = {"Condensed": 0, "Output": 1, "Cancel": 2}     # Stage B5 drops the header's log lines in this order
+    _LOG_RANK = {"Board": 0, "Output": 1, "Cancel": 2}     # Stage B5 drops the header's log lines in this order
 
     def _header_parts(self, cols):
         """(title line or None, [(text, wraps, drop rank)]): a cut line ranks -1, so it drops before any log line."""
@@ -2583,7 +2583,11 @@ class LiveRenderer:
             out.append("\x1b[?25l")
             self.cursor_hidden = True
         up = self._up(size)
-        if up:
+        if self.widths and self.last_size is not None and size.lines > self.last_size.lines:
+            # A taller pane: the terminal may have pulled lines back from scrollback above the frame (an earlier shrink
+            # pushed them there), so cursor-up no longer lands on the frame's top.  Draw from the top of the screen.
+            out.append("\x1b[H")
+        elif up:
             out.append(f"\r\x1b[{up}A")
         out += [self._tint(line) + "\x1b[K\n" for line in lines]
         out.append("\x1b[J")
@@ -2664,7 +2668,7 @@ class LiveRenderer:
 
 
 class Console:
-    """The bus subscriber for a session: one Board, a screen renderer (live, plain or none) and the condensed log."""
+    """The bus subscriber for a session: one Board, a screen renderer (live, plain or none) and the board log."""
 
     def __init__(self, sinks=None, detail=None, stream=None, clock=time.monotonic, size=terminal_size,
                  nested=False, repo=".", history_key=None):
@@ -2684,9 +2688,9 @@ class Console:
         self.log = None
         self.board_failed = False
         self.stopped = False        # the screen view gave up; the terminal is plain again (mode is kept)
-        if self.sinks.condensed_path is not None:
-            self.sinks.condensed_path.parent.mkdir(parents=True, exist_ok=True)
-            self._log = open(self.sinks.condensed_path, "a", encoding="utf-8")
+        if self.sinks.board_path is not None:
+            self.sinks.board_path.parent.mkdir(parents=True, exist_ok=True)
+            self._log = open(self.sinks.board_path, "a", encoding="utf-8")
             self.log = PlainRenderer(self._log_write, log=True, clock=clock)
 
     @property
@@ -2694,11 +2698,11 @@ class Console:
         return self._stream
 
     def screen_mode(self):
-        """live on a capable TTY in condensed mode, plain otherwise in condensed mode, None for full or none.  None
+        """live on a capable TTY in board mode, plain otherwise in board mode, None for full or none.  None
         with markers on, too: stdout is then the v1 marker stream, which the JRM run view reads with stderr merged
-        in (DefaultProcessRunner's redirectErrorStream), so rows on either stream would land in it.  The condensed
+        in (DefaultProcessRunner's redirectErrorStream), so rows on either stream would land in it.  The board
         log still gets the rows."""
-        if self.sinks.console != "condensed" or enabled():
+        if self.sinks.console != "board" or enabled():
             return None
         tty = getattr(self.stream, "isatty", lambda: False)()
         if not tty or os.environ.get("TERM") == "dumb" or os.environ.get(LIVE_ENV) == "0":
@@ -2754,9 +2758,9 @@ class Console:
         if self.log is not None:
             try:
                 self.log.render(self.board, blocks)
-            except Exception as e:  # the condensed log is a convenience; the full log still has everything
+            except Exception as e:  # the board log is a convenience; the full log still has everything
                 self.log = None
-                self._note(f"⚠ condensed log stopped ({e!r})")
+                self._note(f"⚠ board log stopped ({e!r})")
         if kind == "done":
             self._done_nested()
         self._plain(kind, fields, unshown, owned)
@@ -2798,16 +2802,16 @@ class Console:
             self._plain_write(text)
 
     def log_only(self, text):
-        """One line in the condensed log and nowhere else (a note about the view itself), best-effort."""
+        """One line in the board log and nowhere else (a note about the view itself), best-effort."""
         if self.log is not None:
             try:
                 self.log.render(self.board, [("text", text)])
-            except Exception:  # the condensed log is a convenience
+            except Exception:  # the board log is a convenience
                 pass
 
     def _done_nested(self):
         """At a nested session's done: hand its rows' outcomes back to the session that handed off to it
-        (self.handback), and note in the condensed log when it declared no plan under a parent's Overall, which then
+        (self.handback), and note in the board log when it declared no plan under a parent's Overall, which then
         has no row on screen.  Best-effort: the Board may be the thing that failed."""
         if not self.board.nested:
             return
@@ -2851,7 +2855,7 @@ class Console:
     def _fallback(self, error, blocks):
         """Swap the screen renderer for a plain one: take what the live frame held, close it, then print that
         record, the warning and the blocks it had not taken.  A plain screen that fails, or a plain re-render that
-        fails too (the bug is in code both renderers share), stops the view instead; the condensed log goes on."""
+        fails too (the bug is in code both renderers share), stops the view instead; the board log goes on."""
         if self.mode != "live":
             self._stop(error)
             return
@@ -2869,12 +2873,12 @@ class Console:
             self._stop(e)
 
     def _stop(self, error, log=False):
-        """Give up on the screen view for the rest of the run, and with log on the condensed log too, saying so once
+        """Give up on the screen view for the rest of the run, and with log on the board log too, saying so once
         on each, best-effort.  The run goes on, with the terminal plain (stopped); the full log still has
         everything.  mode stays as it was, so console_active() keeps choosing the session's cancel and done paths."""
         screen = self.screen is not None
         log = log and self.log is not None
-        stopped = " and ".join(name for name, on in (("console view", screen), ("condensed log", log)) if on)
+        stopped = " and ".join(name for name, on in (("console view", screen), ("board log", log)) if on)
         if not stopped:
             return
         text = f"⚠ {stopped} stopped ({error!r})" + (f"; full log: {self.sinks.full_path}"
@@ -2921,7 +2925,7 @@ class Console:
         try:
             if self.screen is not None:
                 self.screen.close()
-        except Exception:  # a display bug must never fail the run, nor leave the condensed log open
+        except Exception:  # a display bug must never fail the run, nor leave the board log open
             pass
         finally:
             if self._log is not None:
@@ -2959,8 +2963,8 @@ def session(title, header=(), *, lines=(), detail=None, sinks=None, repo=".", hi
     more = []
     if sinks.full_path is not None:
         more.append(f"Output: tail -f {shlex.quote(str(sinks.full_path))}")
-    if sinks.condensed_path is not None:
-        more.append(f"Condensed: tail -f {shlex.quote(str(sinks.condensed_path))}")
+    if sinks.board_path is not None:
+        more.append(f"Board: tail -f {shlex.quote(str(sinks.board_path))}")
     if os.environ.get(CANCEL_ENV):
         more.append(f"Cancel: {os.environ[CANCEL_ENV]}")
     publish("session", title=title, header=list(header), lines=[str(t) for t in lines], header_more=more, nested=nested)
@@ -3008,7 +3012,7 @@ def _end_session():
 # Result file
 #
 # JUNEAU_RUN_RESULT: the run's outcome as one JSON object, written by the owner when done() ends the run.  Its rows come
-# from a Board, the state the condensed view draws, fed from the bus whatever the console.  A nested process (a script
+# from a Board, the state the board view draws, fed from the bus whatever the console.  A nested process (a script
 # the owner runs) keeps a Board of its own and, at its done(), leaves its rows and notes in JUNEAU_RUN_RESULT_PARTS, a
 # directory the owner made, for the owner to merge in.
 # ---------------------------------------------------------------------------------------------------------------------
@@ -3113,14 +3117,14 @@ def _drop_none(obj):
 
 
 def _result_logs():
-    """The result's logs: the session's full and condensed logs (or, with no session, JUNEAU_RUN_FULL_LOG and
-    JUNEAU_RUN_CONDENSED_LOG), as absolute paths.  Either is left out when there is none."""
+    """The result's logs: the session's full and board logs (or, with no session, JUNEAU_RUN_FULL_LOG and
+    JUNEAU_RUN_BOARD_LOG), as absolute paths.  Either is left out when there is none."""
     if _console is not None:
-        full, condensed = _console.sinks.full_path, _console.sinks.condensed_path
+        full, board = _console.sinks.full_path, _console.sinks.board_path
     else:
         full = Sinks._resolve(os.environ.get("JUNEAU_RUN_FULL_LOG"))
-        condensed = Sinks._resolve(os.environ.get("JUNEAU_RUN_CONDENSED_LOG"))
-    return _drop_none({"full": full and os.path.abspath(full), "condensed": condensed and os.path.abspath(condensed)})
+        board = Sinks._resolve(os.environ.get("JUNEAU_RUN_BOARD_LOG"))
+    return _drop_none({"full": full and os.path.abspath(full), "board": board and os.path.abspath(board)})
 
 
 def _write_atomic(path, text):
@@ -3146,7 +3150,7 @@ def _write_atomic(path, text):
 
 
 def console_active():
-    """True when this process's session draws a condensed view (live or plain) on the terminal."""
+    """True when this process's session draws a board view (live or plain) on the terminal."""
     return _console is not None and _console.mode is not None
 
 
@@ -3171,7 +3175,7 @@ def paused():
 
 
 def ask(prompt):
-    """Read one line from the terminal with the view paused.  The prompt and answer also go to the condensed log."""
+    """Read one line from the terminal with the view paused.  The prompt and answer also go to the board log."""
     with _paused():
         answer = input(prompt)
     publish("ask", prompt=prompt, answer=answer)
@@ -3275,7 +3279,7 @@ def handoff():
 
 
 def _take_handback(handback, note=True):
-    """Record a handoff child's outcomes on this session's Board, or (note) say once in the condensed log that it
+    """Record a handoff child's outcomes on this session's Board, or (note) say once in the board log that it
     sent none (it crashed, or runs an older juneau-run): its steps are then not counted, as before.  The note is
     left out when the handoff ended in an exception, which has its own report."""
     try:
@@ -3292,7 +3296,7 @@ def _take_handback(handback, note=True):
 # Sinks
 # ---------------------------------------------------------------------------------------------------------------------
 
-CONSOLE_MODES = ("full", "condensed", "none")
+CONSOLE_MODES = ("full", "board", "none")
 
 
 def warn(text):
@@ -3304,17 +3308,17 @@ FULL_LOG_KEEP = 20
 
 
 def full_log_dir():
-    """Where condensed mode's default full logs go: $JUNEAU_RUN_LOG_DIR, else ~/.cache/juneau-run."""
+    """Where board mode's default full logs go: $JUNEAU_RUN_LOG_DIR, else ~/.cache/juneau-run."""
     return Path(os.environ.get("JUNEAU_RUN_LOG_DIR") or Path.home() / ".cache" / "juneau-run")
 
 
-CONDENSED_SUFFIX = ".condensed.log"
+BOARD_SUFFIX = ".board.log"
 
 
-def default_condensed_log(full_log):
-    """The condensed log beside a default full log: <tool>-<YYYYMMDD-HHMMSS>[-n].condensed.log."""
+def default_board_log(full_log):
+    """The board log beside a default full log: <tool>-<YYYYMMDD-HHMMSS>[-n].board.log."""
     full = str(full_log)
-    return (full[:-4] if full.endswith(".log") else full) + CONDENSED_SUFFIX
+    return (full[:-4] if full.endswith(".log") else full) + BOARD_SUFFIX
 
 
 def safe_name(text, fallback="run"):
@@ -3654,7 +3658,7 @@ class History:
 
 
 def _skip_note(text):
-    """A skipped history write: an info note, so it is in the full log and the markers but not on the condensed
+    """A skipped history write: an info note, so it is in the full log and the markers but not on the board
     console (which shows info notes only at the `all` detail level)."""
     note("info", text)
 
@@ -3746,16 +3750,16 @@ def make_estimator(repo, script, store=None, history_key=None):
 
 
 def prune_full_logs(keep=FULL_LOG_KEEP):
-    """Delete all but the newest `keep` full logs (*.log) and, separately, the newest `keep` condensed logs
-    (*.condensed.log) in full_log_dir(), best-effort."""
+    """Delete all but the newest `keep` full logs (*.log) and, separately, the newest `keep` board logs
+    (*.board.log) in full_log_dir(), best-effort."""
     try:
         logs = list(full_log_dir().glob("*.log"))
         stats = {p: p.stat().st_mtime for p in logs}
     except OSError:
         return
-    condensed = [p for p in logs if p.name.endswith(CONDENSED_SUFFIX)]
-    full = [p for p in logs if not p.name.endswith(CONDENSED_SUFFIX)]
-    for group in (full, condensed):
+    board = [p for p in logs if p.name.endswith(BOARD_SUFFIX)]
+    full = [p for p in logs if not p.name.endswith(BOARD_SUFFIX)]
+    for group in (full, board):
         for old in sorted(group, key=lambda p: stats[p], reverse=True)[keep:]:
             try:
                 old.unlink()
@@ -3764,26 +3768,26 @@ def prune_full_logs(keep=FULL_LOG_KEEP):
 
 
 class Sinks:
-    """Where the full and condensed streams go.  Arguments beat JUNEAU_RUN_* environment variables.
-    A condensed or none console with no full log gets default_full_log(), and with no condensed log either, the
-    default_condensed_log() beside it.  Both are exported, so child scripts share them."""
+    """Where the full and board streams go.  Arguments beat JUNEAU_RUN_* environment variables.
+    A board or none console with no full log gets default_full_log(), and with no board log either, the
+    default_board_log() beside it.  Both are exported, so child scripts share them."""
 
-    def __init__(self, console=None, full_log=None, condensed_log=None):
+    def __init__(self, console=None, full_log=None, board_log=None):
         self.console = console or os.environ.get("JUNEAU_RUN_CONSOLE") or "full"
         if self.console not in CONSOLE_MODES:
             raise ValueError(f"console must be one of {CONSOLE_MODES}, not {self.console!r}")
         full = full_log or os.environ.get("JUNEAU_RUN_FULL_LOG")
-        if not full and self.console in ("condensed", "none"):
-            # Condensed and none always have a log: to tail, and to recover the output nothing else shows.  Exported, so later Sinks() and child scripts write the same one.
+        if not full and self.console in ("board", "none"):
+            # Board and none always have a log: to tail, and to recover the output nothing else shows.  Exported, so later Sinks() and child scripts write the same one.
             full = str(default_full_log())
             os.environ["JUNEAU_RUN_FULL_LOG"] = full
-            if not (condensed_log or os.environ.get("JUNEAU_RUN_CONDENSED_LOG")):
-                condensed_log = default_condensed_log(full)
-                os.environ["JUNEAU_RUN_CONDENSED_LOG"] = condensed_log
+            if not (board_log or os.environ.get("JUNEAU_RUN_BOARD_LOG")):
+                board_log = default_board_log(full)
+                os.environ["JUNEAU_RUN_BOARD_LOG"] = board_log
         self.full_path = self._resolve(full)
-        self.condensed_path = self._resolve(condensed_log or os.environ.get("JUNEAU_RUN_CONDENSED_LOG"))
+        self.board_path = self._resolve(board_log or os.environ.get("JUNEAU_RUN_BOARD_LOG"))
         self._full = None
-        self._condensed = None
+        self._board = None
 
     @staticmethod
     def _resolve(path):
@@ -3798,22 +3802,22 @@ class Sinks:
     @property
     def is_default(self):
         """True when output is exactly what running the tool directly would show."""
-        return self.console == "full" and self.full_path is None and self.condensed_path is None
+        return self.console == "full" and self.full_path is None and self.board_path is None
 
     def open(self):
         """Open the log files for append, creating parent directories."""
         if self.full_path is not None:
             self.full_path.parent.mkdir(parents=True, exist_ok=True)
             self._full = open(self.full_path, "ab")
-        if self.condensed_path is not None:
-            self.condensed_path.parent.mkdir(parents=True, exist_ok=True)
-            self._condensed = open(self.condensed_path, "ab")
+        if self.board_path is not None:
+            self.board_path.parent.mkdir(parents=True, exist_ok=True)
+            self._board = open(self.board_path, "ab")
 
     def close(self):
-        for f in (self._full, self._condensed):
+        for f in (self._full, self._board):
             if f is not None:
                 f.close()
-        self._full = self._condensed = None
+        self._full = self._board = None
 
     def write_full(self, chunk):
         """chunk is raw bytes exactly as the tool wrote them."""
@@ -3832,14 +3836,14 @@ class Sinks:
             if chunk:
                 _seen(chunk.endswith(b"\n"))
 
-    def write_condensed(self, text):
-        """text is one condensed line without its newline."""
+    def write_board(self, text):
+        """text is one board line without its newline."""
         if _console is not None:
-            return          # the session's Console renders the condensed view instead
-        if self._condensed is not None:
-            self._condensed.write((text + "\n").encode("utf-8"))
-            self._condensed.flush()
-        if self.console == "condensed":
+            return          # the session's Console renders the board view instead
+        if self._board is not None:
+            self._board.write((text + "\n").encode("utf-8"))
+            self._board.flush()
+        if self.console == "board":
             _out((tint(text) if _colour_stdout() else text) + "\n")
 
 
@@ -3950,7 +3954,7 @@ class Parser:
 
 
 class GenericParser(Parser):
-    """Condensed output is the last 40 lines, on a non-zero exit only."""
+    """Board output is the last 40 lines, on a non-zero exit only."""
 
     name = "generic"
     TAIL = 40
@@ -5341,7 +5345,7 @@ class _Isolated:
 
 
 class _Dispatcher:
-    """Turns parser events into markers and condensed lines for one step."""
+    """Turns parser events into markers and board lines for one step."""
 
     def __init__(self, step_id, sinks, *, cwd=None, reports=True):
         self.step_id = step_id
@@ -5411,7 +5415,7 @@ class _Dispatcher:
             elif kind == "series":
                 publish("series", step=ev[1], name=ev[2], sub=ev[3], value=ev[4])
             elif kind == "cond":
-                self.sinks.write_condensed(ev[1])
+                self.sinks.write_board(ev[1])
 
     def flush_tests(self, target):
         totals = self.pending.pop(target, None)
@@ -6521,7 +6525,7 @@ def _main_pty(ap, ns, cmd):
         if not m or not (1 <= int(m.group(1)) <= 9999 and 1 <= int(m.group(2)) <= 9999):
             ap.error(f"--size must be COLSxROWS, e.g. 120x40; got {ns.size!r}")
         cols, rows = int(m.group(1)), int(m.group(2))
-    sinks = Sinks(ns.console or "none", ns.full_log, ns.condensed_log)
+    sinks = Sinks(ns.console or "none", ns.full_log, ns.board_log)
     sinks.full_path.parent.mkdir(parents=True, exist_ok=True)
     Path(str(sinks.full_path) + ".size").write_text(json.dumps({"cols": cols, "rows": rows}), encoding="utf-8")
     _events = _EventsFile(Sinks._resolve(ns.events), ns.tool)
@@ -6565,10 +6569,10 @@ def _parser_names():
 
 
 def _cli_view(sinks):
-    """True when the CLI draws the live console view itself, as a script's session would: condensed, markers off, not
+    """True when the CLI draws the live console view itself, as a script's session would: board, markers off, not
     inside another session, on a terminal that can redraw.  Its row then gets unit lines (pytest and Playwright files),
-    and Playwright the reporter that feeds them.  Elsewhere the condensed console prints the parser's lines as before."""
-    if sinks.console != "condensed" or enabled() or os.environ.get(SESSION_ENV) == "1":
+    and Playwright the reporter that feeds them.  Elsewhere the board console prints the parser's lines as before."""
+    if sinks.console != "board" or enabled() or os.environ.get(SESSION_ENV) == "1":
         return False
     return (getattr(sys.stdout, "isatty", lambda: False)() and os.environ.get("TERM") != "dumb"
             and os.environ.get(LIVE_ENV) != "0")
@@ -6578,7 +6582,7 @@ def main(argv=None):
     ap = argparse.ArgumentParser(prog="juneau_run.py", description="Run one tool as one run-protocol step.")
     ap.add_argument("--console", choices=CONSOLE_MODES)
     ap.add_argument("--full-log")
-    ap.add_argument("--condensed-log")
+    ap.add_argument("--board-log")
     ap.add_argument("--step")
     ap.add_argument("--title")
     ap.add_argument("--pty", action="store_true")
@@ -6596,7 +6600,7 @@ def main(argv=None):
     if ns.pty or ns.events or ns.size or ns.input or ns.prompts:
         return _main_pty(ap, ns, cmd)
     history_start()
-    sinks = Sinks(ns.console, ns.full_log, ns.condensed_log)
+    sinks = Sinks(ns.console, ns.full_log, ns.board_log)
     owner = reporting() and not _nested()
     nested = reporting() and _nested()     # still runs run() and done(): its row joins the owner's result file
     if owner or nested:

@@ -54,7 +54,7 @@ def _no_real_run_history():
 
 @pytest.fixture(autouse=True)
 def _full_console(monkeypatch):
-    """push.main() exports the condensed console default into os.environ; pin the full console for every test (set,
+    """push.main() exports the board console default into os.environ; pin the full console for every test (set,
     not unset, so teardown restores it) so that export cannot leak into later tests.  Tests of the default or of
     the flag/env precedence set JUNEAU_RUN_CONSOLE themselves."""
     monkeypatch.setenv("JUNEAU_RUN_CONSOLE", "full")
@@ -65,7 +65,7 @@ def _full_console(monkeypatch):
 # settings, not pointers, and are handled by their own fixtures.
 LIVE_RUN_ENV = (
     "JUNEAU_RUN_ACTIVE", "JUNEAU_RUN_SESSION", "JUNEAU_RUN_LIVE", "JUNEAU_RUN_N_BASE", "JUNEAU_RUN_LABEL_WIDTH",
-    "JUNEAU_RUN_FULL_LOG", "JUNEAU_RUN_CONDENSED_LOG", "JUNEAU_RUN_CANCEL", "JUNEAU_RUN_HEADER",
+    "JUNEAU_RUN_FULL_LOG", "JUNEAU_RUN_BOARD_LOG", "JUNEAU_RUN_CANCEL", "JUNEAU_RUN_HEADER",
     "JUNEAU_RUN_PENDING", "JUNEAU_RUN_OVERALL", "JUNEAU_RUN_HANDBACK",
     "JUNEAU_RUN_MARKERS_FILE", "JUNEAU_RUN_RESULT", "JUNEAU_RUN_RESULT_PARTS",
 )

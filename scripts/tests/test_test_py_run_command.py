@@ -85,3 +85,48 @@ def test_a_step_id_command_still_streams_in_plain_mode(test_mod, monkeypatch, tm
     assert code == 0
     assert out == "first\nsecond\n"
     assert any("second" in s for s in seen)
+
+
+def _recording_wrapper(directory_name, tmp_path):
+    """A real executable wrapper under a directory with the given name; it logs its argv, then runs its args."""
+    directory = tmp_path / directory_name
+    directory.mkdir()
+    log = tmp_path / "argv.log"
+    script = directory / "lock.sh"
+    script.write_text(f"#!/bin/sh\nprintf '%s\\n' \"$*\" >> '{log}'\n[ \"$1\" = --flag ] && shift\nexec \"$@\"\n")
+    script.chmod(0o755)
+    return script, log
+
+
+def test_wrapper_path_with_a_space_runs_once_before_mvn(test_mod, monkeypatch, tmp_path):
+    script, log = _recording_wrapper("with space", tmp_path)
+    monkeypatch.setenv("JUNEAU_MVN_WRAPPER", str(script))
+    code, _ = test_mod.run_command("mvn -v")
+    lines = log.read_text().splitlines()
+    assert len(lines) == 1 and lines[0].split()[0] == "mvn"
+
+
+@pytest.mark.parametrize("form", ["quoted", "unquoted"])
+def test_wrapper_with_extra_args_still_works(test_mod, monkeypatch, tmp_path, form):
+    script, log = _recording_wrapper("with space", tmp_path)
+    monkeypatch.setenv("JUNEAU_MVN_WRAPPER", (f"'{script}'" if form == "quoted" else str(script)) + " --flag")
+    test_mod.run_command("mvn -v")
+    assert log.read_text().splitlines()[0].split()[:2] == ["--flag", "mvn"]
+
+
+def test_plain_wrapper_value_is_unchanged(test_mod, monkeypatch):
+    monkeypatch.setenv("JUNEAU_MVN_WRAPPER", "/x/lock.sh")
+    assert test_mod.wrap_mvn_command("mvn -v") == "/x/lock.sh mvn -v"
+    monkeypatch.setenv("JUNEAU_MVN_WRAPPER", "/x/lock.sh --timeout 5")
+    assert test_mod.wrap_mvn_command("mvn -v") == "/x/lock.sh --timeout 5 mvn -v"
+    monkeypatch.delenv("JUNEAU_MVN_WRAPPER")
+    assert test_mod.wrap_mvn_command("mvn -v") == "mvn -v"
+
+
+def test_bare_path_with_shell_metacharacters_is_not_interpreted(test_mod, monkeypatch, tmp_path):
+    marker = tmp_path / "injected"
+    script, log = _recording_wrapper(f"a$(touch {marker.name});b $HOME", tmp_path)
+    monkeypatch.setenv("JUNEAU_MVN_WRAPPER", str(script))
+    test_mod.run_command("mvn -v")
+    assert not (tmp_path / "injected").exists()
+    assert len(log.read_text().splitlines()) == 1
