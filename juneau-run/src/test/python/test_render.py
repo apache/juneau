@@ -3249,6 +3249,112 @@ class HeaderTest(unittest.TestCase):
         self.assertEqual(fields["lines"], ["Commit Message: m"])
 
 
+class HandoffViewTest(unittest.TestCase):
+    """A live parent hands off to a nested live child on the same terminal: one board, the header once, every row in
+    order, whether the child draws the parent's rows above its own or (an older child) prints its own."""
+
+    def setUp(self):
+        reset_run_state()
+        self.addCleanup(reset_run_state)
+        patcher = mock.patch.dict(os.environ, {"TERM": "xterm", "NO_COLOR": "1", "RUN_MARKERS": ""})
+        patcher.start()
+        self.addCleanup(patcher.stop)
+        for key in ("JUNEAU_RUN_CONSOLE", "JUNEAU_RUN_FULL_LOG", "JUNEAU_RUN_BOARD_LOG", "JUNEAU_RUN_SESSION"):
+            os.environ.pop(key, None)
+        self.out, self.dims, self.clock = TTY(), [80, 24], Clock()
+
+    def console(self, nested=False):
+        console = jr.Console(jr.Sinks(console="board"), stream=self.out, clock=self.clock, nested=nested,
+                             size=lambda: os.terminal_size(tuple(self.dims)))
+        self.addCleanup(console.close)
+        return console
+
+    @staticmethod
+    def step(console, i, title, ms=2000):
+        console("step_start", {"id": i, "n": 1, "title": title, "parent": None})
+        console("step_end", {"id": i, "status": "ok", "ms": ms, "exit": None, "summary": None, "totals": None})
+
+    def parent(self):
+        jr._console = parent = self.console()
+        parent("session", {"title": "Push", "header": ["Juneau", "master"], "lines": ["Commit Message: m"],
+                           "header_more": [], "nested": False})
+        self.step(parent, "pre", "Prechecks")
+        return parent
+
+    def run_child(self, env, titles=("BOM", "Compile")):
+        """The child's session, closed; returns the terminal as it was just before the close."""
+        with mock.patch.dict(os.environ, env):
+            child = self.console(nested=True)
+        for i, title in enumerate(titles):
+            self.step(child, f"c{i}", title)
+        before = self.screen()
+        child.close()
+        return before
+
+    def screen(self):
+        screen = Screen(rows=self.dims[1], cols=self.dims[0])
+        screen.feed(self.out.getvalue())
+        return screen
+
+    def assert_one_board(self, text, rows):
+        self.assertEqual(text.count("Push: Juneau · master"), 1, text)
+        at = [text.index(row) for row in rows]
+        self.assertEqual(at, sorted(at), text)
+
+    def test_the_child_draws_the_parents_rows_and_hands_its_own_back(self):
+        parent = self.parent()
+        with jr.handoff() as env:
+            during = self.run_child(env)
+            self.assertEqual([kind for kind, _ in json.loads(Path(env["JUNEAU_RUN_RECORD"]).read_text())["rows"]],
+                             ["row", "row"])
+            self.assertEqual(self.screen().history(), "")       # neither printed a row nor the header into scrollback
+        self.assert_one_board(during.history(), ["Push: Juneau", "✔ Prechecks", "✔ BOM", "✔ Compile"])
+        self.step(parent, "com", "Commit")
+        rows = ["Push: Juneau", "✔ Prechecks", "✔ BOM", "✔ Compile", "✔ Commit "]
+        self.assert_one_board(self.screen().text(), rows)
+        parent.close()
+        self.assert_one_board(self.screen().history(), rows)
+        self.assertFalse(Path(env["JUNEAU_RUN_RECORD"]).exists())
+
+    def test_the_handed_back_rows_are_laid_out_again_at_a_new_width(self):
+        parent = self.parent()
+        with jr.handoff() as env:
+            self.run_child(env, ("BOM",))
+        self.dims[0] = 60
+        self.step(parent, "com", "Commit")
+        rows = [line.rstrip() for line in self.screen().lines if line.startswith("✔")]
+        self.assertEqual([jr._vlen(line) for line in rows], [59] * 3, rows)     # every time ends a column short
+
+    def test_an_older_child_that_prints_its_own_rows_still_leaves_one_header(self):
+        parent = self.parent()
+        with jr.handoff() as env:
+            self.run_child({k: v for k, v in env.items() if k != "JUNEAU_RUN_RECORD"})
+        self.step(parent, "com", "Commit")
+        live = self.screen().history()
+        self.assertEqual(live.count("Push: Juneau · master"), 1, live)     # the redrawn view adds no second header
+        parent.close()
+        history = self.screen().history()
+        self.assertEqual(history.count("Push: Juneau · master"), 1, history)
+        for row in ("✔ Prechecks", "✔ BOM", "✔ Compile", "✔ Commit "):
+            self.assertEqual(history.count(row), 1, history)
+
+    def test_a_child_that_cannot_write_the_record_prints_its_own_rows(self):
+        self.parent()
+        with jr.handoff() as env:
+            self.run_child({**env, "JUNEAU_RUN_RECORD": "/nonexistent/record.json"})
+            printed = self.screen().history()
+        self.assertEqual([row for row in ("✔ Prechecks", "✔ BOM", "✔ Compile") if row in printed], ["✔ BOM", "✔ Compile"])
+
+    def test_a_record_file_that_cannot_be_read_draws_no_rows_above(self):
+        for text in ("", "{", '{"above": [[1]]}', '{"above": 3}', "[]"):
+            with self.subTest(text=text), tempfile.NamedTemporaryFile("w", suffix=".json", delete=False) as f:
+                f.write(text)
+            self.addCleanup(os.unlink, f.name)
+            self.assertEqual(jr._record(f.name, "above"), [])
+        self.assertEqual(jr._record(None, "above"), [])
+        self.assertEqual(jr._record("/nonexistent/record.json", "rows"), [])
+
+
 class FitViewTest(unittest.TestCase):
     BOARD = [("▶ Push: Juneau · master", False), ("▶ Commit Message: m", False), ("▶ Output: tail -f /o", True),
              ("✔ Prechecks", False), ("⠋ Java Tests", False), ("○ Commit", False), ("▶ Overall  38%", False)]

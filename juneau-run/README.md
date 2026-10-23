@@ -163,7 +163,9 @@ region.
 `juneau-run` also ships `juneau_scripts`, a stdlib-only toolkit for push and release scripts, as
 `org.apache.juneau:juneau-run:<version>:zip`. It holds the helpers every push.py and release.py rewrites: git
 readers and writers, a session with exit codes, the bell and the done marker, tool runners, a step registry with
-resume, locks and prompts. Policy stays in the script. The toolkit never runs `git add`, and it never decides what
+resume, locks and prompts. The zip also carries `juneau_scripts/bin/tmux-pane.sh` and `watch-run.sh` (mode 0755; see
+[The side-pane scripts](#the-side-pane-scripts)) and a root `__main__.py`, so `python3 juneau-run-<v>.zip --bin NAME`
+works. Policy stays in the script. The toolkit never runs `git add`, and it never decides what
 counts as unreviewed.
 
 Vendor the loader once, from the installed zip:
@@ -294,6 +296,87 @@ The `load_juneau_run` snippet above still works for a single-file adopter that n
   credentials (run `svn info https://dist.apache.org/repos/dist/dev/juneau` once), and a primed gpg-agent (the PGP
   step).
 - With markers off and the default console, `push.py` and `test.py` behave exactly as before.
+
+## The side-pane scripts
+
+The zip ships two bash scripts in `juneau_scripts/bin/`, so a repository gets one maintained copy instead of its own:
+- `tmux-pane.sh` runs a command in a tmux side pane with a real TTY, blocks until it ends, and can `cancel`, `list`,
+  `close` and `equalize` such panes. It knows nothing about juneau-run.
+- `watch-run.sh` wraps it for a juneau-run based script (`push.py`, `release.py`, `deploy*.py`): it picks the log and
+  result paths, opens a follower pane that tails the full log, and prints the result summary when the script ends.
+
+Each script's header comment is its usage text.
+
+### Finding them
+
+`bootstrap.py --bin NAME` prints the path and never runs `mvn`. It looks, in order, at `JUNEAU_SCRIPTS_ZIP` and
+`JUNEAU_RUN_PY`, the zip it was imported from, a `juneau_scripts/` directory beside itself, the in-tree
+`juneau-run/src/main/python/`, the `~/.m2` zip for the pom's `<juneau.version>`, and `target/juneau-run/juneau-run.zip`.
+A directory source runs in place; a zip is extracted. Guard the result before using it:
+
+```bash
+wr=$(python3 scripts/bootstrap.py --bin watch-run.sh) && [ -x "$wr" ] && "$wr" -d . -t push -- python3 scripts/push.py
+```
+
+Without a vendored `bootstrap.py`, run the installed zip itself (its `__main__.py` is the same command line):
+
+```bash
+J=~/.m2/repository/org/apache/juneau/juneau-run/<v>/juneau-run-<v>.zip
+wr=$(python3 "$J" --bin watch-run.sh) && [ -x "$wr" ] && "$wr" -d . -t push -- python3 scripts/push.py
+```
+
+A zip is extracted to `~/.cache/juneau-run/bin/<version>/` (`<version>` comes from `juneau-run-<version>.zip`, or is
+`sha-` plus 12 hex digits of the file's hash for any other name). Each file is written to a temporary name and renamed
+into place, so a script that is running keeps the file it opened, and an unchanged file is left alone. A later extract
+removes files the zip no longer carries and temporary files over an hour old. The location is outside `target/` on
+purpose: `mvn clean` would otherwise delete the cancel path of a run that is still going. A SNAPSHOT keeps one version
+name, so a new build replaces the files under it.
+
+### Requirements
+
+`bash`, `tmux`, `ps` and `pgrep`, plus `perl` for the follower filter. `python3` (for the result summary) and `lsof`
+(for the listening ports in the orphan report) are optional. Tested on macOS.
+
+### Using them
+
+```bash
+"$wr" -d ~/git/some/repo -t "push" -- python3 scripts/push.py "message"
+"$wr" --no-tail -- python3 scripts/release.py
+```
+
+Outside tmux (`$TMUX` unset) both scripts exit 2; run the command directly there and `tail -f` its log.
+
+- `tmux-pane.sh` options: `-d DIR`, `-n LINES`, `-t TITLE`, `-k fail|always|never`, `-K MIN`, `--reap`,
+  `--keep-on-cancel`, and `--pane STRING` (repeatable, with `--size N%`) for several panes. The subcommands are
+  `cancel [PANE|TITLE|--all]`, `list`, `close [--kept|PANE]` and `equalize PANE [--closing]`; a command named like one of
+  them goes after `--`.
+- The leader's exit code is the script's exit code; 129 means the pane was closed under it, and 2 is a usage error or
+  not being inside tmux. `cancel` sends INT, TERM, then KILL, each after `TMUX_PANE_GRACE` seconds (default 10), and
+  reaps stragglers by recorded PID and start time. Without `--keep-on-cancel` a cancelled run closes its panes.
+- When a run ends the script prints the last lines of the pane, a list of processes the command left running (with
+  their listening ports), and `exit=N`. Panes are kept per `-k` until Enter in the leader, `-K` minutes, or `close`.
+  Read the last `exit=` line.
+- `watch-run.sh` closes kept panes from earlier runs before it opens a new one (running panes are untouched), prints
+  `tail -f <log>` and `board: <board log>` first, and ends with a `result:` summary: status, exit, time, one line per
+  row, notes and log paths.
+- Widths: the pane the script was started from (the agent pane) and each run's column share the window equally (50/50,
+  33/33/33, and so on). The columns are equalized when a leader opens and again when a run's panes close, through
+  `equalize`. The agent pane is recorded in the `@tmux_agent` pane option. Other panes and windows are not touched, and
+  a failed resize only warns. `list` prints one line per pane (id, title, state, age) and nothing when there are none.
+- The follower pane shows the log through a filter, so the file is unchanged: U+2028, U+2029 and other format
+  characters become a space (tmux and the outer terminal disagree on their width), control characters other than tab,
+  newline and ESC, and DEL, are dropped, and invalid UTF-8 becomes U+FFFD. `watch-run.sh --print-tail-filter` prints it.
+
+### Environment
+
+Every pane gets `TMUX_PANE_RUN_ID` (the leader's pane id) and `TMUX_PANE_RUN_CANCEL` (the command that cancels the
+run). `watch-run.sh` sets `JUNEAU_RUN_FULL_LOG`, `JUNEAU_RUN_BOARD_LOG`, `JUNEAU_RUN_RESULT` (a file in a temporary
+directory removed at exit) and `JUNEAU_RUN_CANCEL`, and takes `JUNEAU_RUN_LOG_DIR` (default `~/.cache/juneau-run`) for
+where the logs go. These names are a contract with every pinned consumer: a rename keeps exporting the old name until
+each consumer has refreshed its copy.
+
+The tmux tests run on macOS, or anywhere with `JUNEAU_RUN_TMUX_TESTS=1`, and skip themselves when no private tmux server
+can start. A few slow ones run only with `JUNEAU_RUN_TMUX_TESTS=1`.
 
 ## Driving a run from another tool
 

@@ -13,14 +13,17 @@
 """bootstrap.load(), each case in a fresh subprocess: overrides, in-tree mode, ~/.m2 in place, the Maven copy,
 idempotence, the namespace-package guard, the stale-API warning and the juneau_run decision."""
 
+import hashlib
 import json
 import os
 import shutil
 import sys
 import tempfile
 import textwrap
+import time
 import unittest
 import unittest.mock
+import zipfile
 from pathlib import Path
 
 import scripts_support  # noqa: F401  (puts src/main/python on sys.path)
@@ -304,6 +307,250 @@ class ImportTest(BootstrapCase):
         self.m2("10.0.0-SNAPSHOT")
         self.assertEqual(self.load()["api"], 1)
         self.assertNotIn("older than", self.stderr)
+
+
+class BinPathTest(unittest.TestCase):
+    """bootstrap.bin_path and the --bin command line: in place for a directory, extracted once per version from a zip."""
+
+    def setUp(self):
+        import bootstrap
+        self.bs = bootstrap
+        self.tmp = Path(tempfile.mkdtemp()).resolve()
+        self.addCleanup(shutil.rmtree, self.tmp, True)
+        self.root = self.tmp / "bin"
+        self.zip = build_zip(self.tmp / "juneau-run-1.2.3.zip")
+        self.home = self.tmp / "home"
+        self.home.mkdir()
+        self.saved = self.bs._located
+        self.bs._located = None
+        self.addCleanup(setattr, self.bs, "_located", self.saved)
+
+    def cli(self, *args, cwd=None, env=None, script=None):
+        full = base_env(HOME=str(self.home), **(env or {}))
+        return python([str(script or BOOTSTRAP), *args], cwd=cwd or str(self.tmp), env=full)
+
+    def test_directory_source_is_used_in_place(self):
+        got = self.bs.bin_path("watch-run.sh", source=PYTHON_SRC, bin_root=self.root)
+        self.assertEqual(got, PYTHON_SRC / "juneau_scripts" / "bin" / "watch-run.sh")
+        self.assertFalse(self.root.exists())
+
+    def test_non_executable_script_in_a_directory_is_refused_and_left_alone(self):
+        shutil.copytree(PYTHON_SRC / "juneau_scripts", self.tmp / "src" / "juneau_scripts",
+                        ignore=shutil.ignore_patterns("__pycache__"))
+        target = self.tmp / "src" / "juneau_scripts" / "bin" / "watch-run.sh"
+        target.chmod(0o644)
+        with self.assertRaises(self.bs.BootstrapError):
+            self.bs.bin_path("watch-run.sh", source=self.tmp / "src", bin_root=self.root)
+        self.assertEqual(target.stat().st_mode & 0o777, 0o644)
+
+    def test_zip_source_extracts_executable_scripts_under_the_version(self):
+        got = self.bs.bin_path("watch-run.sh", source=self.zip, bin_root=self.root)
+        self.assertEqual(got, self.root / "1.2.3" / "watch-run.sh")
+        for name in ("tmux-pane.sh", "watch-run.sh"):
+            self.assertTrue(os.access(self.root / "1.2.3" / name, os.X_OK), name)
+
+    def test_unknown_name_lists_what_ships(self):
+        for src in (self.zip, PYTHON_SRC):
+            with self.subTest(src=src.name), self.assertRaises(self.bs.BootstrapError) as cm:
+                self.bs.bin_path("nope.sh", source=src, bin_root=self.root)
+            self.assertIn("tmux-pane.sh", str(cm.exception))
+            self.assertIn("watch-run.sh", str(cm.exception))
+
+    def test_zip_without_bin_names_the_remedy(self):
+        old = self.tmp / "old.zip"
+        with zipfile.ZipFile(old, "w") as z:
+            z.writestr("bootstrap.py", "")
+        with self.assertRaises(self.bs.BootstrapError) as cm:
+            self.bs.bin_path("watch-run.sh", source=old, bin_root=self.root)
+        self.assertIn(self.bs._REMEDY, str(cm.exception))
+
+    def test_unchanged_member_is_not_rewritten_and_a_changed_one_gets_a_new_inode(self):
+        self.bs.bin_path("watch-run.sh", source=self.zip, bin_root=self.root)
+        f = self.root / "1.2.3" / "watch-run.sh"
+        before = f.stat()
+        self.bs.bin_path("watch-run.sh", source=self.zip, bin_root=self.root)
+        self.assertEqual(f.stat().st_mtime_ns, before.st_mtime_ns)
+        changed = self.tmp / "juneau-run-1.2.3.zip"
+        with zipfile.ZipFile(self.zip) as z:
+            members = {i.filename: (i, z.read(i)) for i in z.infolist()}
+        info, data = members["juneau_scripts/bin/watch-run.sh"]
+        members["juneau_scripts/bin/watch-run.sh"] = (info, data + b"# changed\n")
+        with zipfile.ZipFile(changed, "w") as z:
+            for i, d in members.values():
+                z.writestr(i, d)
+        self.bs.bin_path("watch-run.sh", source=changed, bin_root=self.root)
+        self.assertNotEqual(f.stat().st_ino, before.st_ino)
+        self.assertTrue(f.read_bytes().endswith(b"# changed\n"))
+
+    def test_member_dropped_from_a_newer_zip_is_removed(self):
+        self.bs.bin_path("watch-run.sh", source=self.zip, bin_root=self.root)
+        newer = self.tmp / "newer" / "juneau-run-1.2.3.zip"
+        newer.parent.mkdir()
+        with zipfile.ZipFile(self.zip) as src, zipfile.ZipFile(newer, "w") as dst:
+            for i in src.infolist():
+                if i.filename != "juneau_scripts/bin/tmux-pane.sh":
+                    dst.writestr(i, src.read(i))
+        self.bs.bin_path("watch-run.sh", source=newer, bin_root=self.root)
+        self.assertFalse((self.root / "1.2.3" / "tmux-pane.sh").exists())
+
+    def test_stale_temp_files_are_swept_and_fresh_ones_kept(self):
+        self.bs.bin_path("watch-run.sh", source=self.zip, bin_root=self.root)
+        d = self.root / "1.2.3"
+        stale, fresh = d / ".watch-run.sh.old", d / ".watch-run.sh.new"
+        stale.write_text("x")
+        fresh.write_text("x")
+        old = time.time() - 2 * 3600
+        os.utime(stale, (old, old))
+        self.bs.bin_path("watch-run.sh", source=self.zip, bin_root=self.root)
+        self.assertFalse(stale.exists())
+        self.assertTrue(fresh.exists())
+
+    def test_version_naming(self):
+        self.assertEqual(self.bs._bin_version(self.zip, None), ("1.2.3", None))
+        renamed = self.tmp / "renamed.zip"
+        shutil.copy(self.zip, renamed)
+        digest = hashlib.sha256(renamed.read_bytes()).hexdigest()
+        self.assertEqual(self.bs._bin_version(renamed, None), ("sha-" + digest[:12], digest))
+        self.assertEqual(self.bs._bin_version(renamed, "9.9"), ("9.9", None))
+        got = self.bs.bin_path("watch-run.sh", source=self.zip, version="7.7", bin_root=self.root)
+        self.assertEqual(got.parent.name, "7.7")
+
+    def test_sha_fallback_prunes_the_earlier_sibling(self):
+        first = self.tmp / "a.zip"
+        shutil.copy(self.zip, first)
+        a = self.bs.bin_path("watch-run.sh", source=first, bin_root=self.root).parent
+        second = self.tmp / "b.zip"
+        with zipfile.ZipFile(self.zip) as src, zipfile.ZipFile(second, "w") as dst:
+            for i in src.infolist():
+                dst.writestr(i, src.read(i))
+            dst.writestr("extra.txt", "x")
+        b = self.bs.bin_path("watch-run.sh", source=second, bin_root=self.root).parent
+        self.assertNotEqual(a, b)
+        self.assertFalse(a.exists())
+        self.assertTrue(b.exists())
+
+    def test_the_toolkit_is_located_once_per_process(self):
+        calls = []
+
+        def fake(pom, version, cache_dir):
+            calls.append(pom)
+            return (self.zip, None)
+
+        with unittest.mock.patch.object(self.bs, "_locate", fake):
+            self.bs.bin_path("watch-run.sh", bin_root=self.root)
+            self.bs.bin_path("tmux-pane.sh", bin_root=self.root)
+        self.assertEqual(len(calls), 1)
+
+    def test_cli_prints_the_path(self):
+        done = self.cli("--bin", "watch-run.sh", "--pom", str(self.tmp / "pom.xml"),
+                        env={"JUNEAU_SCRIPTS_ZIP": str(PYTHON_SRC)})
+        self.assertEqual((done.returncode, done.stdout.strip()),
+                         (0, str(PYTHON_SRC / "juneau_scripts" / "bin" / "watch-run.sh")), done.stderr)
+
+    def test_cli_unknown_name_exits_1_and_no_name_exits_2(self):
+        env = {"JUNEAU_SCRIPTS_ZIP": str(PYTHON_SRC)}
+        bad = self.cli("--bin", "nope.sh", env=env)
+        self.assertEqual(bad.returncode, 1)
+        self.assertIn("watch-run.sh", bad.stderr)
+        self.assertEqual(self.cli(env=env).returncode, 2)
+
+    def test_cli_never_runs_mvn(self):
+        sentinel = self.tmp / "mvn-ran"
+        stub_dir = self.tmp / "stub"
+        stub_dir.mkdir()
+        stub = stub_dir / "mvn"
+        stub.write_text(f"#!/bin/sh\ntouch {sentinel}\nexit 1\n")
+        stub.chmod(0o755)
+        pom = self.tmp / "pom.xml"
+        pom.write_text("<project><properties><juneau.version>0.0.1</juneau.version></properties></project>")
+        done = self.cli("--bin", "watch-run.sh", "--pom", str(pom),
+                        script=self.beside_copy(),
+                        env={"PATH": f"{stub_dir}{os.pathsep}{os.environ['PATH']}"})
+        self.assertEqual(done.returncode, 1, done.stdout)
+        self.assertFalse(sentinel.exists())
+
+    def beside_copy(self):
+        """bootstrap.py without a juneau_scripts directory beside it, so no rule but env and m2 can match."""
+        d = self.tmp / "lonely"
+        d.mkdir(exist_ok=True)
+        shutil.copy(BOOTSTRAP, d / "bootstrap.py")
+        return d / "bootstrap.py"
+
+    def test_cli_source_resolution(self):
+        pom = self.tmp / "pom.xml"
+        pom.write_text("<project><properties><juneau.version>3.4.5</juneau.version></properties></project>")
+        want_dir = str(PYTHON_SRC / "juneau_scripts" / "bin" / "watch-run.sh")
+        lonely = self.beside_copy()
+
+        beside = self.tmp / "beside"
+        beside.mkdir()
+        shutil.copy(self.zip, beside / "juneau-run.zip")
+        (beside / "juneau-run.py").write_text("")
+        under_home = self.home / "toolkit.zip"
+        shutil.copy(self.zip, under_home)
+        m2 = self.home / ".m2/repository/org/apache/juneau/juneau-run/3.4.5"
+        m2.mkdir(parents=True)
+        shutil.copy(self.zip, m2 / "juneau-run-3.4.5.zip")
+        tree = self.tmp / "repo"
+        shutil.copytree(PYTHON_SRC / "juneau_scripts", tree / "juneau-run/src/main/python/juneau_scripts",
+                        ignore=shutil.ignore_patterns("__pycache__"))
+        (tree / "pom.xml").write_text(pom.read_text())
+
+        cases = {
+            "JUNEAU_RUN_PY alone": (dict(JUNEAU_RUN_PY=str(beside / "juneau-run.py")), pom, lonely, "juneau-run"),
+            "zip env": (dict(JUNEAU_SCRIPTS_ZIP=str(self.zip)), pom, lonely, "1.2.3"),
+            "directory env": (dict(JUNEAU_SCRIPTS_ZIP=str(PYTHON_SRC)), pom, lonely, None),
+            "tilde env": (dict(JUNEAU_SCRIPTS_ZIP="~/toolkit.zip"), pom, lonely, "sha-"),
+            "in-tree": ({}, tree / "pom.xml", lonely, None),
+            "m2": ({}, pom, lonely, "3.4.5"),
+        }
+        for label, (env, pom_arg, script, ver) in cases.items():
+            with self.subTest(label):
+                done = self.cli("--bin", "watch-run.sh", "--pom", str(pom_arg), script=script, env=env)
+                self.assertEqual(done.returncode, 0, done.stderr)
+                out = done.stdout.strip()
+                self.assertTrue(out.endswith("/watch-run.sh"), out)
+                if ver is None:
+                    self.assertNotIn(".cache", out)
+                else:
+                    self.assertIn(f"/{ver}" if ver != "sha-" else "/sha-", out)
+        self.assertEqual(want_dir.rsplit("/", 1)[1], "watch-run.sh")
+
+    def test_bootstrap_beside_its_toolkit_wins_over_the_pom(self):
+        d = self.tmp / "beside-toolkit"
+        d.mkdir()
+        shutil.copy(BOOTSTRAP, d / "bootstrap.py")
+        shutil.copytree(PYTHON_SRC / "juneau_scripts", d / "juneau_scripts", ignore=shutil.ignore_patterns("__pycache__"))
+        pom = d / "pom.xml"
+        pom.write_text("<project/>")
+        done = self.cli("--bin", "watch-run.sh", "--pom", str(pom), script=d / "bootstrap.py")
+        self.assertEqual((done.returncode, done.stdout.strip()), (0, str(d / "juneau_scripts/bin/watch-run.sh")),
+                         done.stderr)
+
+    def test_running_the_zip_prints_the_extracted_path_and_ignores_the_cwd(self):
+        cwd = self.tmp / "elsewhere"
+        cwd.mkdir()
+        (cwd / "bootstrap.py").write_text("raise SystemExit(99)\n")
+        done = python([str(self.zip), "--bin", "watch-run.sh"], cwd=str(cwd),
+                      env=base_env(HOME=str(self.home)))
+        self.assertEqual(done.returncode, 0, done.stderr)
+        self.assertEqual(done.stdout.strip(), str(self.home / ".cache/juneau-run/bin/1.2.3/watch-run.sh"))
+
+    def test_cache_dir_tilde_is_expanded(self):
+        cache = self.home / "x"
+        cache.mkdir()
+        shutil.copy(self.zip, cache / "juneau-run.zip")
+        pom = self.tmp / "pom.xml"
+        pom.write_text("<project><properties><juneau.version>8.8.8</juneau.version></properties></project>")
+        done = self.cli("--bin", "watch-run.sh", "--pom", str(pom), "--cache-dir", "~/x", script=self.beside_copy())
+        self.assertEqual(done.returncode, 0, done.stderr)
+
+    def test_cli_works_from_another_cwd(self):
+        other = self.tmp / "other"
+        other.mkdir()
+        done = self.cli("--bin", "watch-run.sh", "--pom", str(self.tmp / "pom.xml"), cwd=str(other),
+                        env={"JUNEAU_SCRIPTS_ZIP": str(PYTHON_SRC)})
+        self.assertEqual(done.returncode, 0, done.stderr)
 
 
 class RunRequestedTest(unittest.TestCase):

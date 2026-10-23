@@ -16,8 +16,9 @@
   limitations under the License.
 -->
 <!--
-	The juneau_scripts toolkit as org.apache.juneau:juneau-run:<version>:zip.  Layout: juneau_scripts/** plus
-	bootstrap.py at the root (a zip on sys.path imports juneau_scripts) and the pytest plugin alone in pytest_plugin/ (the suite under test gets only
+	The juneau_scripts toolkit as org.apache.juneau:juneau-run:<version>:zip.  Layout: juneau_scripts/**/*.py, the shell
+	scripts in juneau_scripts/bin/*.sh (mode 0755), plus bootstrap.py and __main__.py (the zip's entry point, for
+	the zip run as a script) at the root (a zip on sys.path imports juneau_scripts) and the pytest plugin alone in pytest_plugin/ (the suite under test gets only
 	zip/pytest_plugin on PYTHONPATH), the Playwright reporter in playwright_reporter/ (juneau_run.py extracts it, since node can't
 	load from a zip), plus the repository's LICENSE and NOTICE.
 -->
@@ -41,10 +42,21 @@
 				<exclude>**/__pycache__/**</exclude>
 			</excludes>
 		</fileSet>
+		<fileSet>
+			<directory>${project.basedir}/src/main/python</directory>
+			<outputDirectory>.</outputDirectory>
+			<includes>
+				<include>juneau_scripts/bin/*.sh</include>
+			</includes>
+			<fileMode>0755</fileMode>
+		</fileSet>
 	</fileSets>
 	<files>
 		<file>
 			<source>${project.basedir}/src/main/python/bootstrap.py</source>
+		</file>
+		<file>
+			<source>${project.basedir}/src/main/python/__main__.py</source>
 		</file>
 		<file>
 			<source>${project.basedir}/src/main/python/pytest_plugin/juneau_run_pytest.py</source>

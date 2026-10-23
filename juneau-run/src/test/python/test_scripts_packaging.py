@@ -32,6 +32,16 @@ from juneau_scripts.testing import bare_remote, fake_tool, hermetic_git
 ASM = "{http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.3}"
 POM = "{http://maven.apache.org/POM/4.0.0}"
 
+BIN_NAMES = ["juneau_scripts/bin/tmux-pane.sh", "juneau_scripts/bin/watch-run.sh"]
+EXPECTED_NAMES = sorted(package_files() + BIN_NAMES + ["LICENSE", "NOTICE", "bootstrap.py", "__main__.py",
+                                                       "pytest_plugin/juneau_run_pytest.py",
+                                                       "playwright_reporter/juneau_run_playwright.cjs"])
+
+
+def _assert_bin_modes(test, z):
+    for rel in BIN_NAMES:
+        test.assertEqual((z.getinfo(rel).external_attr >> 16) & 0o777, 0o755, rel)
+
 
 def _ant(pattern):
     """An Ant include pattern as a regex: ** spans directories, * stays within one."""
@@ -49,7 +59,7 @@ class DescriptorTest(unittest.TestCase):
 
     def test_every_toolkit_module_is_included(self):
         sets = self.root.findall(f"{ASM}fileSets/{ASM}fileSet")
-        self.assertEqual(len(sets), 1)
+        self.assertEqual(len(sets), 2)
         fs = sets[0]
         self.assertEqual(fs.findtext(f"{ASM}directory"), "${project.basedir}/src/main/python")
         includes = [_ant(i.text) for i in fs.iter(f"{ASM}include")]
@@ -64,10 +74,19 @@ class DescriptorTest(unittest.TestCase):
         for rel in ("juneau_run.py", "bootstrap.py", "juneau_scripts/__pycache__/run.cpython-314.pyc"):
             with self.subTest(rel=rel):
                 self.assertFalse(any(p.match(rel) for p in includes) and not any(p.match(rel) for p in excludes))
+        for rel in BIN_NAMES:
+            with self.subTest(rel=rel):
+                self.assertFalse(any(p.match(rel) for p in includes))
+        bins = sets[1]
+        self.assertEqual(bins.findtext(f"{ASM}directory"), "${project.basedir}/src/main/python")
+        self.assertEqual(bins.findtext(f"{ASM}outputDirectory"), ".")
+        self.assertEqual([i.text for i in bins.iter(f"{ASM}include")], ["juneau_scripts/bin/*.sh"])
+        self.assertEqual(bins.findtext(f"{ASM}fileMode"), "0755")
 
     def test_root_files(self):
         sources = [f.findtext(f"{ASM}source") for f in self.root.findall(f"{ASM}files/{ASM}file")]
         self.assertEqual(sources, ["${project.basedir}/src/main/python/bootstrap.py",
+                                   "${project.basedir}/src/main/python/__main__.py",
                                    "${project.basedir}/src/main/python/pytest_plugin/juneau_run_pytest.py",
                                    "${project.basedir}/src/main/js/playwright_reporter/juneau_run_playwright.cjs",
                                    "${project.basedir}/../LICENSE", "${project.basedir}/../NOTICE"])
@@ -78,8 +97,8 @@ class DescriptorTest(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             with zipfile.ZipFile(build_zip(Path(tmp) / "t.zip")) as z:
                 names = sorted(z.namelist())
-        self.assertEqual(names, sorted(package_files() + ["LICENSE", "NOTICE", "bootstrap.py", "pytest_plugin/juneau_run_pytest.py",
-                                                      "playwright_reporter/juneau_run_playwright.cjs"]))
+                _assert_bin_modes(self, z)
+        self.assertEqual(names, EXPECTED_NAMES)
 
 
 @unittest.skipUnless(os.environ.get("JUNEAU_SCRIPTS_CHECK_ZIP"), "set JUNEAU_SCRIPTS_CHECK_ZIP to a mvn package zip")
@@ -90,8 +109,8 @@ class RealZipTest(unittest.TestCase):
     def test_real_zip_holds_exactly_the_toolkit(self):
         with zipfile.ZipFile(os.environ["JUNEAU_SCRIPTS_CHECK_ZIP"]) as z:
             names = sorted(n for n in z.namelist() if not n.endswith("/"))
-        self.assertEqual(names, sorted(package_files() + ["LICENSE", "NOTICE", "bootstrap.py", "pytest_plugin/juneau_run_pytest.py",
-                                                      "playwright_reporter/juneau_run_playwright.cjs"]))
+            _assert_bin_modes(self, z)
+        self.assertEqual(names, EXPECTED_NAMES)
 
 
 class PomTest(unittest.TestCase):

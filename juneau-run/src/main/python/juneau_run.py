@@ -594,6 +594,8 @@ PENDING_ENV = "JUNEAU_RUN_PENDING"     # a parent session's labelled pending row
 OVERALL_ENV = "JUNEAU_RUN_OVERALL"     # a parent session's {elapsed, done, pending: [[id, hist_wall_s], ...]}, for a nested one
 HEADER_ENV = "JUNEAU_RUN_HEADER"       # a parent session's header, [[head|more, text, cut], ...], drawn atop a nested view
 HANDBACK_ENV = "JUNEAU_RUN_HANDBACK"   # a file a nested session writes its rows' outcomes to, [[id, status], ...]
+RECORD_ENV = "JUNEAU_RUN_RECORD"       # a file: a parent's finished rows for a nested view, {"above": [[kind, spec], ...]},
+                                       # which the nested session replaces with its own, {"rows": [...]}, as it closes
 # A row's icon (spec 5.2): a spinner while it runs, then its outcome: a coloured ● for ok, warn and fail, or ✔ ⚠ ✗
 # when colour is off.  No VS16 after ⚠: it must stay one column.
 SPINNER = "⠋⠙⠹⠸⠼⠴⠦⠧⠇⠏"
@@ -2047,6 +2049,17 @@ def fit_view(lines, budget, columns):
     return out[::-1]
 
 
+def _lay(spec, cols):
+    """A transcript entry's lines at cols, from the spec LiveRenderer._entry read when it arrived."""
+    kind, data = spec
+    if kind == "row":
+        return LiveRenderer._lay_row(data, cols).split("\n")
+    if kind == "setup":
+        label, cells, text = data
+        return [_fit_row(label, cells, text, "", cols)]
+    return data
+
+
 def _fit(left, right, cols):
     """left, then right flush with column cols; left is cut with an ellipsis when both don't fit."""
     room = cols - (len(right) + 2 if right else 0)
@@ -2101,7 +2114,7 @@ class LiveRenderer:
 
     REDRAW_SECONDS = 0.1
 
-    def __init__(self, write, size=terminal_size, clock=time.monotonic, color=True, sticky=()):
+    def __init__(self, write, size=terminal_size, clock=time.monotonic, color=True, sticky=(), above=()):
         self.write = write
         self.size = size
         self.clock = clock
@@ -2111,7 +2124,8 @@ class LiveRenderer:
         self.header = []            # this session's header blocks
         self.sticky = list(sticky)  # a parent session's header blocks, shown while this one has none (nested)
         self.header_printed = False
-        self.transcript = []        # (kind, block, lay): finished blocks, read once when they arrive (see _entry)
+        self.transcript = list(above)   # (kind, spec): finished blocks, read once when they arrive (see _entry)
+        self.above = len(above)     # the first entries are a parent's (a handoff): drawn, never printed nor handed back
         self.cut = None             # (cols, [lines cut to cols, one list per transcript entry]); None after an insert
         self.widths = []            # display width of each frame line on screen, for the cursor-up count
         self.partial = 0            # display width of a prompt's partial line under the frame
@@ -2141,7 +2155,7 @@ class LiveRenderer:
             elif kind == "header":
                 self.header.append(block)
             else:
-                self.transcript.append((kind, block, self._entry(block)))
+                self.transcript.append((kind, self._entry(block)))
             self.flushed = i + 1
         self._draw(force=bool(blocks))
 
@@ -2149,19 +2163,17 @@ class LiveRenderer:
         return self.size().columns - 1
 
     def _entry(self, block):
-        """A finished block's lay(cols) -> lines, read now, once: setup and module lines read the clock and board.setup,
+        """A finished block's spec for _lay, read now, once: setup and module lines read the clock and board.setup,
         which move on, and a row keeps the label column it finished with when a longer label starts later.  A row and
         a Setup line keep their parts, not their lines, so a resize lays them out again at the new width (the elapsed
-        time flush right, a bar that gives way); every other block is the same at any width."""
+        time flush right, a bar that gives way); every other block is the same at any width.  A spec is plain data, so
+        a handoff can pass it to a nested session and back (RECORD_ENV)."""
         kind = block[0]
         if kind == "row":
-            parts = self._row_parts(self.board, block[1])
-            return lambda cols: self._lay_row(parts, cols).split("\n")
+            return ("row", self._row_parts(self.board, block[1]))
         if kind == "setup":
-            label, cells, text = setup_parts(self.board, self.glyphs, self.clock(), self.color)
-            return lambda cols: [_fit_row(label, cells, text, "", cols)]
-        lines = self._block_lines(block, self._cols())
-        return lambda cols: lines
+            return ("setup", setup_parts(self.board, self.glyphs, self.clock(), self.color))
+        return ("lines", self._block_lines(block, self._cols()))
 
     def _block_lines(self, block, cols, live=False):
         """A finished block's lines, as scrollback prints them (live cuts the header's title and cut lines)."""
@@ -2242,7 +2254,7 @@ class LiveRenderer:
         text = self.prompt_text.rstrip("\n")
         if text:
             lines = text.split("\n")
-            self.transcript.insert(self.prompt_at, ("text", ("text", text), lambda cols: lines))
+            self.transcript.insert(self.prompt_at, ("text", ("lines", lines)))
             self.cut = None         # the cut cache is by position; an insert shifts it
         self.prompt_text = ""
 
@@ -2298,9 +2310,9 @@ class LiveRenderer:
         if self.cut is None or self.cut[0] != cols:
             self.cut = (cols, [])
         done = self.cut[1]
-        for kind, block, lay in self.transcript[len(done):]:
-            done.append([cut(line) for line in lay(cols)])
-        return [line for (kind, _, _), lines in zip(self.transcript, done) if kind != "final" for line in lines]
+        for _, spec in self.transcript[len(done):]:
+            done.append([cut(line) for line in _lay(spec, cols)])
+        return [line for (kind, _), lines in zip(self.transcript, done) if kind != "final" for line in lines]
 
     def tick(self, board):
         self.board = board
@@ -2430,18 +2442,31 @@ class LiveRenderer:
             self.cursor_hidden = False
 
     def _scrollback_lines(self):
-        """The header (once per session, wrapped, never the sticky one) and the whole transcript uncut, taken: the
-        transcript is emptied, so the frame goes on with only the live part."""
+        """The header (once per session, wrapped, never the sticky one) and the transcript uncut, taken: the frame goes
+        on with only the live part (and a parent's rows, which are its to print)."""
         cols = self._cols()
         out = []
         if self.header and not self.header_printed:
             for block in self.header:
                 out += self._block_lines(block, cols)
             self.header_printed = True
-        transcript, self.transcript, self.cut = self.transcript, [], None
-        for kind, block, lay in transcript:
-            out += lay(cols)
+        for _, spec in self._take():
+            out += _lay(spec, cols)
         return out
+
+    def _take(self):
+        """The transcript's own entries, taken (a parent's stay)."""
+        taken, self.transcript, self.cut = self.transcript[self.above:], self.transcript[:self.above], None
+        return taken
+
+    def held(self):
+        """The whole transcript as [kind, spec] pairs, for a handoff child to draw above its own rows (RECORD_ENV)."""
+        return [[kind, spec] for kind, spec in self.transcript]
+
+    def hand_back(self, entries):
+        """A handoff child's own finished entries ([kind, spec] pairs it left in RECORD_ENV), added to the transcript
+        as if they had finished here, so the view goes on as one board."""
+        self.transcript += [(str(kind), spec) for kind, spec in entries]
 
     def _print_scrollback(self):
         lines = self._scrollback_lines()
@@ -2455,11 +2480,12 @@ class LiveRenderer:
             self._end_prompt()
         return [_ANSI.sub("", line) for line in self._scrollback_lines()]
 
-    def pause(self):
-        """Clear the frame, print the record into scrollback and give the terminal back (ask, show, passthrough,
-        handoff)."""
+    def pause(self, keep=False):
+        """Clear the frame, print the record into scrollback (unless keep: a handoff child draws it above its own rows
+        instead) and give the terminal back (ask, show, passthrough, handoff)."""
         self._clear()
-        self._print_scrollback()
+        if not keep:
+            self._print_scrollback()
         self._show_cursor()
         self.paused = True
 
@@ -2467,15 +2493,22 @@ class LiveRenderer:
         self.paused = False
         self._draw(force=True)
 
-    def close(self):
+    def close(self, keep=False):
+        """Clear the frame and print the record into scrollback; with keep (a handoff child) print nothing and return
+        its own entries as [kind, spec] pairs instead, for the parent's view to go on with."""
         if self.closed:
-            return
+            return []
         if self.prompting:
             self._end_prompt()      # ends the prompt's line with a newline first if nothing has (Task 10)
         self._clear()
-        self._print_scrollback()
+        kept = []
+        if keep:
+            kept = [[kind, spec] for kind, spec in self._take()]
+        else:
+            self._print_scrollback()
         self._show_cursor()
         self.closed = True
+        return kept
 
 
 class Console:
@@ -2491,6 +2524,8 @@ class Console:
         self.board = Board(resolve_detail(detail), nested=nested, full_log=self.sinks.full_path, clock=clock,
                            estimator=make_estimator(repo, script_name(), history_key=history_key))
         self.handback = os.environ.pop(HANDBACK_ENV, None) if self.board.nested else None   # a grandchild must not write it
+        self.record = os.environ.pop(RECORD_ENV, None) if self.board.nested else None     # nor this one
+        self.above = _record(self.record, "above")
         self.sticky = _parent_header() if nested else []     # drawn by the live screen only, never by the Board
         self.header_blocks = []     # this session's header blocks, for a handoff child (HEADER_ENV)
         self.mode = self.screen_mode()
@@ -2525,7 +2560,7 @@ class Console:
             return None
         if self.mode == "live":
             return LiveRenderer(self._screen_write, size=self.size, clock=self.clock,
-                                color=not os.environ.get("NO_COLOR"), sticky=self.sticky)
+                                color=not os.environ.get("NO_COLOR"), sticky=self.sticky, above=self.above)
         return PlainRenderer(self._screen_write, heartbeat=True, clock=self.clock)
 
     def _screen_write(self, text):
@@ -2718,10 +2753,14 @@ class Console:
             except Exception:  # nothing more can be shown
                 pass
 
-    def pause(self):
+    def pause(self, keep=False):
+        """Pause the screen view; with keep (a handoff whose child draws our rows) a live view prints nothing."""
         if self.screen is not None:
             try:
-                self.screen.pause()
+                if keep and isinstance(self.screen, LiveRenderer):
+                    self.screen.pause(keep=True)
+                else:
+                    self.screen.pause()
             except Exception as e:  # a display bug must never fail the run, nor the ask or handoff that paused
                 self._fallback(e, [])
 
@@ -2734,7 +2773,9 @@ class Console:
 
     def close(self):
         try:
-            if self.screen is not None:
+            if self.record and isinstance(self.screen, LiveRenderer):
+                self._close_into_record()
+            elif self.screen is not None:
                 self.screen.close()
         except Exception:  # a display bug must never fail the run, nor leave the board log open
             pass
@@ -2743,6 +2784,28 @@ class Console:
                 self._log.close()
                 self._log = None
                 self.log = None
+
+    def _close_into_record(self):
+        """A handoff child's close: its own rows go to the parent's view through the record file, not into
+        scrollback, so the parent's view goes on as one board; printed here only when the file can't be written."""
+        entries = self.screen.close(keep=True)
+        try:
+            _write_atomic(Path(self.record), json.dumps({"rows": entries}))
+        except (OSError, TypeError, ValueError):
+            cols = self.screen._cols()
+            self._screen_write("".join(self.screen._tint(line) + "\n" for _, spec in entries for line in _lay(spec, cols)))
+
+
+def _record(path, key):
+    """The [kind, spec] pairs under key in a handoff's record file (RECORD_ENV), or [] when it is unset, missing or
+    malformed."""
+    if not path:
+        return []
+    try:
+        entries = json.loads(Path(path).read_text(encoding="utf-8")).get(key) or []
+        return [(str(kind), list(spec)) for kind, spec in entries]
+    except (OSError, ValueError, TypeError, AttributeError):
+        return []
 
 
 def _sigterm(signum, frame):
@@ -2966,10 +3029,13 @@ def console_active():
 
 
 @contextmanager
-def _paused():
+def _paused(keep=False):
     global _pause_depth
     if _console is not None and _pause_depth == 0:
-        _console.pause()
+        if keep:
+            _console.pause(keep=True)
+        else:
+            _console.pause()
     _pause_depth += 1
     try:
         yield
@@ -3076,17 +3142,52 @@ def handoff():
     fd, handback = tempfile.mkstemp(prefix="juneau-run-handback-", suffix=".json")
     os.close(fd)
     env[HANDBACK_ENV] = handback
+    record = _hand_record()
+    if record:
+        env[RECORD_ENV] = record
     try:
-        with _paused():
+        with _paused(keep=bool(record)):
             try:
                 yield env
             except BaseException:
                 _take_handback(handback, note=False)    # Ctrl-C or a failure: count what came back, but say nothing
+                _take_record(record)
                 raise
             _take_handback(handback)    # before resume, so the redrawn view already counts the child's steps
+            _take_record(record)
     finally:
+        for path in (handback, record):
+            if path:
+                with suppress(OSError):
+                    os.unlink(path)
+
+
+def _hand_record():
+    """A record file holding our live view's finished rows for a handoff child to draw above its own (RECORD_ENV),
+    so neither prints them and the view stays one board: the header on top, every row under it in order.  None
+    without a live view, or when the file can't be written (we then print our rows on pause, as before)."""
+    screen = _console.screen
+    if not isinstance(screen, LiveRenderer) or _pause_depth:
+        return None
+    try:
+        fd, record = tempfile.mkstemp(prefix="juneau-run-record-", suffix=".json")
+        os.close(fd)
+    except OSError:
+        return None
+    try:
+        _write_atomic(Path(record), json.dumps({"above": screen.held()}))
+    except (OSError, TypeError, ValueError):
         with suppress(OSError):
-            os.unlink(handback)
+            os.unlink(record)
+        return None
+    return record
+
+
+def _take_record(record):
+    """Add the rows a handoff child left in the record file to our live view's transcript.  A child that left none
+    (it crashed, or runs an older juneau-run) has printed its own rows instead."""
+    if record and isinstance(_console.screen, LiveRenderer):
+        _console.screen.hand_back(_record(record, "rows"))
 
 
 def _take_handback(handback, note=True):

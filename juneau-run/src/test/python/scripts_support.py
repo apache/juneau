@@ -44,7 +44,7 @@ def package_files():
 
 
 def build_zip(path, *, init=True):
-    """The assembly's layout, built with zipfile: juneau_scripts/** plus bootstrap.py, LICENSE and NOTICE at the root,
+    """The assembly's layout, built with zipfile: juneau_scripts/** plus the bin/*.sh scripts (0755), __main__.py, bootstrap.py, LICENSE and NOTICE at the root,
     pytest_plugin/juneau_run_pytest.py and playwright_reporter/juneau_run_playwright.cjs.  init=False leaves out
     juneau_scripts/__init__.py."""
     with zipfile.ZipFile(path, "w") as z:
@@ -52,7 +52,13 @@ def build_zip(path, *, init=True):
             if not init and rel == "juneau_scripts/__init__.py":
                 continue
             z.write(PYTHON_SRC / rel, rel)
+        for sh in sorted((PACKAGE / "bin").glob("*.sh")):
+            info = zipfile.ZipInfo(f"juneau_scripts/bin/{sh.name}")
+            info.external_attr = 0o755 << 16
+            info.compress_type = zipfile.ZIP_DEFLATED
+            z.writestr(info, sh.read_bytes())
         z.write(BOOTSTRAP, "bootstrap.py")
+        z.write(PYTHON_SRC / "__main__.py", "__main__.py")
         z.write(PYTHON_SRC / "pytest_plugin" / "juneau_run_pytest.py", "pytest_plugin/juneau_run_pytest.py")
         z.write(MODULE_ROOT / "src" / "main" / "js" / "playwright_reporter" / "juneau_run_playwright.cjs",
                 "playwright_reporter/juneau_run_playwright.cjs")
