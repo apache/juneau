@@ -36,14 +36,12 @@ import org.apache.juneau.rest.server.widget.*;
 )
 @HtmlDocConfig(
 	widgets={
-		ContentTypeMenuItem.class,
-		ThemeMenuItem.class
+		ContentTypeMenuItem.class
 	},
 	navlinks={
 		"api: servlet:/api",
 		"stats: servlet:/stats",
-		"$W{ContentTypeMenuItem}",
-		"$W{ThemeMenuItem}"
+		"$W{ContentTypeMenuItem}"
 	},
 	aside={
 		"<div class='text'>",
