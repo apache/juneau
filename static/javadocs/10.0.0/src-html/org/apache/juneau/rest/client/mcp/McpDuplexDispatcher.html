@@ -87,7 +87,7 @@
 <span class="source-line-no">074</span><span id="line-74">      if (h == null) {</span>
 <span class="source-line-no">075</span><span id="line-75">         if (JsonRpcResponse.notification(request.getId()))</span>
 <span class="source-line-no">076</span><span id="line-76">            return null;</span>
-<span class="source-line-no">077</span><span id="line-77">         throw new McpException(-32601, String.format("No server-request handler registered for method '%s'", request.getMethod()));</span>
+<span class="source-line-no">077</span><span id="line-77">         throw new McpException(-32601, f("No server-request handler registered for method '%s'", request.getMethod()));</span>
 <span class="source-line-no">078</span><span id="line-78">      }</span>
 <span class="source-line-no">079</span><span id="line-79">      try {</span>
 <span class="source-line-no">080</span><span id="line-80">         return h.handle(request, ctx == null ? BasicBeanStore.INSTANCE : ctx);</span>

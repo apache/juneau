@@ -372,7 +372,7 @@
 <span class="source-line-no">359</span><span id="line-359">      }</span>
 <span class="source-line-no">360</span><span id="line-360">      var sb = new StringBuilder(24);</span>
 <span class="source-line-no">361</span><span id="line-361">      for (var b : bytes)</span>
-<span class="source-line-no">362</span><span id="line-362">         sb.append(String.format("%02x", b &amp; 0xFF));</span>
+<span class="source-line-no">362</span><span id="line-362">         sb.append(f("%02x", b &amp; 0xFF));</span>
 <span class="source-line-no">363</span><span id="line-363">      return sb.toString();</span>
 <span class="source-line-no">364</span><span id="line-364">   }</span>
 <span class="source-line-no">365</span><span id="line-365"></span>

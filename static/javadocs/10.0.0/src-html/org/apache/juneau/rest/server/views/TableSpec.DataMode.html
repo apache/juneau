@@ -160,7 +160,7 @@
 <span class="source-line-no">147</span><span id="line-147">    * @throws IllegalArgumentException If {@code id} is &lt;jk&gt;null&lt;/jk&gt;, blank, or malformed.</span>
 <span class="source-line-no">148</span><span id="line-148">    */</span>
 <span class="source-line-no">149</span><span id="line-149">   public static TableSpec create(String id) {</span>
-<span class="source-line-no">150</span><span id="line-150">      if (id == null || id.isBlank())</span>
+<span class="source-line-no">150</span><span id="line-150">      if (ib(id))</span>
 <span class="source-line-no">151</span><span id="line-151">         throw iaex("TableSpec id must not be null or blank.");</span>
 <span class="source-line-no">152</span><span id="line-152">      if (! ID_PATTERN.matcher(id).matches())</span>
 <span class="source-line-no">153</span><span id="line-153">         throw iaex("TableSpec id '%s' must match ^[A-Za-z][A-Za-z0-9_-]{0,63}$.", id);</span>
@@ -222,7 +222,7 @@
 <span class="source-line-no">209</span><span id="line-209">    * @throws IllegalArgumentException If {@code column} is &lt;jk&gt;null&lt;/jk&gt;/blank, or {@code dir} is &lt;jk&gt;null&lt;/jk&gt;.</span>
 <span class="source-line-no">210</span><span id="line-210">    */</span>
 <span class="source-line-no">211</span><span id="line-211">   public TableSpec defaultOrder(String column, Sort dir) {</span>
-<span class="source-line-no">212</span><span id="line-212">      if (column == null || column.isBlank())</span>
+<span class="source-line-no">212</span><span id="line-212">      if (ib(column))</span>
 <span class="source-line-no">213</span><span id="line-213">         throw iaex("TableSpec defaultOrder column must not be null or blank.");</span>
 <span class="source-line-no">214</span><span id="line-214">      if (dir == null)</span>
 <span class="source-line-no">215</span><span id="line-215">         throw iaex("TableSpec defaultOrder direction must not be null.");</span>
@@ -326,13 +326,13 @@
 <span class="source-line-no">313</span><span id="line-313">   }</span>
 <span class="source-line-no">314</span><span id="line-314"></span>
 <span class="source-line-no">315</span><span id="line-315">   private void checkRowClassCommon(String field, Op op, String cssClass) {</span>
-<span class="source-line-no">316</span><span id="line-316">      if (field == null || field.isBlank())</span>
+<span class="source-line-no">316</span><span id="line-316">      if (ib(field))</span>
 <span class="source-line-no">317</span><span id="line-317">         throw iaex("TableSpec '%s' rowClass field must not be null or blank.", id);</span>
 <span class="source-line-no">318</span><span id="line-318">      if (op == null)</span>
 <span class="source-line-no">319</span><span id="line-319">         throw iaex("TableSpec '%s' rowClass op must not be null.", id);</span>
 <span class="source-line-no">320</span><span id="line-320">      if (op.isCollectionOp())</span>
 <span class="source-line-no">321</span><span id="line-321">         throw iaex("TableSpec '%s' rowClass on '%s': op '%s' is not supported; use eq, ne, present or absent.", id, field, op.wire());</span>
-<span class="source-line-no">322</span><span id="line-322">      if (cssClass == null || cssClass.isBlank())</span>
+<span class="source-line-no">322</span><span id="line-322">      if (ib(cssClass))</span>
 <span class="source-line-no">323</span><span id="line-323">         throw iaex("TableSpec '%s' rowClass cssClass must not be null or blank.", id);</span>
 <span class="source-line-no">324</span><span id="line-324">   }</span>
 <span class="source-line-no">325</span><span id="line-325"></span>
@@ -414,7 +414,7 @@
 <span class="source-line-no">401</span><span id="line-401">    * @throws IllegalArgumentException If {@code id} is &lt;jk&gt;null&lt;/jk&gt;/blank, or {@code items} is empty.</span>
 <span class="source-line-no">402</span><span id="line-402">    */</span>
 <span class="source-line-no">403</span><span id="line-403">   public TableSpec quickStats(String id, QuickStat...items) {</span>
-<span class="source-line-no">404</span><span id="line-404">      if (id == null || id.isBlank())</span>
+<span class="source-line-no">404</span><span id="line-404">      if (ib(id))</span>
 <span class="source-line-no">405</span><span id="line-405">         throw iaex("TableSpec quickStats id must not be null or blank.");</span>
 <span class="source-line-no">406</span><span id="line-406">      if (items.length == 0)</span>
 <span class="source-line-no">407</span><span id="line-407">         throw iaex("TableSpec quickStats requires at least one item.");</span>
@@ -459,7 +459,7 @@
 <span class="source-line-no">446</span><span id="line-446">    * @throws IllegalArgumentException If {@code param} is null, blank, or malformed.</span>
 <span class="source-line-no">447</span><span id="line-447">    */</span>
 <span class="source-line-no">448</span><span id="line-448">   public TableSpec urlStateDayParam(String param) {</span>
-<span class="source-line-no">449</span><span id="line-449">      if (param == null || param.isBlank())</span>
+<span class="source-line-no">449</span><span id="line-449">      if (ib(param))</span>
 <span class="source-line-no">450</span><span id="line-450">         throw iaex("urlState day param must not be null or blank.");</span>
 <span class="source-line-no">451</span><span id="line-451">      checkUrlStateParam("day param", param);</span>
 <span class="source-line-no">452</span><span id="line-452">      urlState.computeIfAbsent("day", k -&gt; new LinkedHashMap&lt;&gt;()).put("param", param);</span>
@@ -504,311 +504,313 @@
 <span class="source-line-no">491</span><span id="line-491">    *    built-in directive, mistyped, or out of range (a parameter name that is malformed, a {@code max} that is not a</span>
 <span class="source-line-no">492</span><span id="line-492">    *    positive integer, a {@code window.params} key other than {@code start}/{@code end}).</span>
 <span class="source-line-no">493</span><span id="line-493">    */</span>
-<span class="source-line-no">494</span><span id="line-494">   @SuppressWarnings("unchecked") // the only nested values are the Map&lt;String,Object&gt; copies checkUrlStateOption builds for window.params</span>
-<span class="source-line-no">495</span><span id="line-495">   public TableSpec urlState(String name, Map&lt;String,Object&gt; config) {</span>
-<span class="source-line-no">496</span><span id="line-496">      checkUrlStateName(name);</span>
-<span class="source-line-no">497</span><span id="line-497">      if (config == null)</span>
-<span class="source-line-no">498</span><span id="line-498">         throw iaex("urlState '%s' config must not be null.", name);</span>
-<span class="source-line-no">499</span><span id="line-499">      var checked = new LinkedHashMap&lt;String,Object&gt;();</span>
-<span class="source-line-no">500</span><span id="line-500">      for (var e : config.entrySet()) {</span>
-<span class="source-line-no">501</span><span id="line-501">         var key = e.getKey();</span>
-<span class="source-line-no">502</span><span id="line-502">         if (key == null || key.isBlank())</span>
-<span class="source-line-no">503</span><span id="line-503">            throw iaex("urlState '%s' option name must not be blank.", name);</span>
-<span class="source-line-no">504</span><span id="line-504">         checked.put(key, checkUrlStateOption(name, key, e.getValue()));</span>
-<span class="source-line-no">505</span><span id="line-505">      }</span>
-<span class="source-line-no">506</span><span id="line-506">      var target = urlState.computeIfAbsent(name, k -&gt; new LinkedHashMap&lt;&gt;());</span>
-<span class="source-line-no">507</span><span id="line-507">      checked.forEach((k, v) -&gt; {</span>
-<span class="source-line-no">508</span><span id="line-508">         if ("window".equals(name) &amp;&amp; "params".equals(k) &amp;&amp; target.get(k) instanceof Map&lt;?,?&gt; old) {</span>
-<span class="source-line-no">509</span><span id="line-509">            var merged = new LinkedHashMap&lt;String,Object&gt;();</span>
-<span class="source-line-no">510</span><span id="line-510">            old.forEach((ok, ov) -&gt; merged.put((String)ok, ov));</span>
-<span class="source-line-no">511</span><span id="line-511">            merged.putAll((Map&lt;String,Object&gt;)v);</span>
-<span class="source-line-no">512</span><span id="line-512">            target.put(k, merged);</span>
-<span class="source-line-no">513</span><span id="line-513">         } else {</span>
-<span class="source-line-no">514</span><span id="line-514">            target.put(k, v);</span>
-<span class="source-line-no">515</span><span id="line-515">         }</span>
-<span class="source-line-no">516</span><span id="line-516">      });</span>
-<span class="source-line-no">517</span><span id="line-517">      return this;</span>
-<span class="source-line-no">518</span><span id="line-518">   }</span>
-<span class="source-line-no">519</span><span id="line-519"></span>
-<span class="source-line-no">520</span><span id="line-520">   private static void checkUrlStateName(String name) {</span>
-<span class="source-line-no">521</span><span id="line-521">      if (name == null || name.isBlank())</span>
-<span class="source-line-no">522</span><span id="line-522">         throw iaex("urlState name must not be blank.");</span>
-<span class="source-line-no">523</span><span id="line-523">      if (! URL_STATE_BUILTINS.contains(name))</span>
-<span class="source-line-no">524</span><span id="line-524">         throw iaex("urlState '%s' is not a built-in directive; expected day, ids or window.", name);</span>
-<span class="source-line-no">525</span><span id="line-525">   }</span>
-<span class="source-line-no">526</span><span id="line-526"></span>
-<span class="source-line-no">527</span><span id="line-527">   private static JsonMap copyUrlStateConfig(Map&lt;String,Object&gt; cfg) {</span>
-<span class="source-line-no">528</span><span id="line-528">      var out = new JsonMap();</span>
-<span class="source-line-no">529</span><span id="line-529">      cfg.forEach((k, v) -&gt; out.put(k, v instanceof Map&lt;?,?&gt; m ? new JsonMap(m) : v));</span>
-<span class="source-line-no">530</span><span id="line-530">      return out;</span>
-<span class="source-line-no">531</span><span id="line-531">   }</span>
-<span class="source-line-no">532</span><span id="line-532"></span>
-<span class="source-line-no">533</span><span id="line-533">   private static Object checkUrlStateOption(String name, String key, Object value) {</span>
-<span class="source-line-no">534</span><span id="line-534">      switch (name) {</span>
-<span class="source-line-no">535</span><span id="line-535">         case "day":</span>
-<span class="source-line-no">536</span><span id="line-536">            if (! "param".equals(key))</span>
-<span class="source-line-no">537</span><span id="line-537">               throw iaex("urlState day: unknown option '%s'; expected param.", key);</span>
-<span class="source-line-no">538</span><span id="line-538">            return checkUrlStateParam("day param", value);</span>
-<span class="source-line-no">539</span><span id="line-539">         case "ids":</span>
-<span class="source-line-no">540</span><span id="line-540">            if ("param".equals(key))</span>
-<span class="source-line-no">541</span><span id="line-541">               return checkUrlStateParam("ids param", value);</span>
-<span class="source-line-no">542</span><span id="line-542">            if ("max".equals(key)) {</span>
-<span class="source-line-no">543</span><span id="line-543">               if (! (value instanceof Integer || value instanceof Long || value instanceof Short || value instanceof Byte) || ((Number)value).longValue() &lt; 1)</span>
-<span class="source-line-no">544</span><span id="line-544">                  throw iaex("urlState ids max must be a positive integer but was %s.", value);</span>
-<span class="source-line-no">545</span><span id="line-545">               return value;</span>
-<span class="source-line-no">546</span><span id="line-546">            }</span>
-<span class="source-line-no">547</span><span id="line-547">            throw iaex("urlState ids: unknown option '%s'; expected param or max.", key);</span>
-<span class="source-line-no">548</span><span id="line-548">         case "window":</span>
-<span class="source-line-no">549</span><span id="line-549">            if (! "params".equals(key))</span>
-<span class="source-line-no">550</span><span id="line-550">               throw iaex("urlState window: unknown option '%s'; expected params.", key);</span>
-<span class="source-line-no">551</span><span id="line-551">            if (! (value instanceof Map&lt;?,?&gt; m))</span>
-<span class="source-line-no">552</span><span id="line-552">               throw iaex("urlState window params must be a map of start/end parameter names but was %s.", value);</span>
-<span class="source-line-no">553</span><span id="line-553">            var out = new LinkedHashMap&lt;String,Object&gt;();</span>
-<span class="source-line-no">554</span><span id="line-554">            for (var e : m.entrySet()) {</span>
-<span class="source-line-no">555</span><span id="line-555">               var k = e.getKey();</span>
-<span class="source-line-no">556</span><span id="line-556">               if (! "start".equals(k) &amp;&amp; ! "end".equals(k))</span>
-<span class="source-line-no">557</span><span id="line-557">                  throw iaex("urlState window params: unknown key '%s'; expected start or end.", k);</span>
-<span class="source-line-no">558</span><span id="line-558">               out.put((String)k, checkUrlStateParam("window params." + k, e.getValue()));</span>
-<span class="source-line-no">559</span><span id="line-559">            }</span>
-<span class="source-line-no">560</span><span id="line-560">            return out;</span>
-<span class="source-line-no">561</span><span id="line-561">         default:</span>
-<span class="source-line-no">562</span><span id="line-562">            throw iaex("urlState '%s' is not a built-in directive; expected day, ids or window.", name);</span>
-<span class="source-line-no">563</span><span id="line-563">      }</span>
-<span class="source-line-no">564</span><span id="line-564">   }</span>
-<span class="source-line-no">565</span><span id="line-565"></span>
-<span class="source-line-no">566</span><span id="line-566">   private static String checkUrlStateParam(String what, Object param) {</span>
-<span class="source-line-no">567</span><span id="line-567">      if (! (param instanceof String s) || ! ID_PATTERN.matcher(s).matches())</span>
-<span class="source-line-no">568</span><span id="line-568">         throw iaex("urlState %s '%s' must match ^[A-Za-z][A-Za-z0-9_-]{0,63}$.", what, param);</span>
-<span class="source-line-no">569</span><span id="line-569">      return s;</span>
-<span class="source-line-no">570</span><span id="line-570">   }</span>
-<span class="source-line-no">571</span><span id="line-571"></span>
-<span class="source-line-no">572</span><span id="line-572">   /**</span>
-<span class="source-line-no">573</span><span id="line-573">    * Sets whether this table is the page's primary table (affects layout only).</span>
-<span class="source-line-no">574</span><span id="line-574">    *</span>
-<span class="source-line-no">575</span><span id="line-575">    * @param v The new value.</span>
-<span class="source-line-no">576</span><span id="line-576">    * @return This object.</span>
-<span class="source-line-no">577</span><span id="line-577">    */</span>
-<span class="source-line-no">578</span><span id="line-578">   public TableSpec primary(boolean v) {</span>
-<span class="source-line-no">579</span><span id="line-579">      primary = v;</span>
-<span class="source-line-no">580</span><span id="line-580">      return this;</span>
-<span class="source-line-no">581</span><span id="line-581">   }</span>
-<span class="source-line-no">582</span><span id="line-582"></span>
-<span class="source-line-no">583</span><span id="line-583">   /**</span>
-<span class="source-line-no">584</span><span id="line-584">    * Sets whether this table offers the View Settings dialog (column chooser, search and sort settings).</span>
-<span class="source-line-no">585</span><span id="line-585">    *</span>
-<span class="source-line-no">586</span><span id="line-586">    * @param v The new value.</span>
-<span class="source-line-no">587</span><span id="line-587">    * @return This object.</span>
-<span class="source-line-no">588</span><span id="line-588">    */</span>
-<span class="source-line-no">589</span><span id="line-589">   public TableSpec columnConfig(boolean v) {</span>
-<span class="source-line-no">590</span><span id="line-590">      columnConfig = v;</span>
-<span class="source-line-no">591</span><span id="line-591">      return this;</span>
-<span class="source-line-no">592</span><span id="line-592">   }</span>
-<span class="source-line-no">593</span><span id="line-593"></span>
-<span class="source-line-no">594</span><span id="line-594">   /**</span>
-<span class="source-line-no">595</span><span id="line-595">    * Sets the View Settings dialog options, serialized as the {@code columnConfig} object (for example</span>
-<span class="source-line-no">596</span><span id="line-596">    * {@code {"chooser": true}}).</span>
-<span class="source-line-no">597</span><span id="line-597">    *</span>
-<span class="source-line-no">598</span><span id="line-598">    * @param options The options, copied at call time. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">599</span><span id="line-599">    * @return This object.</span>
-<span class="source-line-no">600</span><span id="line-600">    */</span>
-<span class="source-line-no">601</span><span id="line-601">   public TableSpec columnConfig(Map&lt;String,Object&gt; options) {</span>
-<span class="source-line-no">602</span><span id="line-602">      columnConfig = new LinkedHashMap&lt;&gt;(rnn(options));</span>
-<span class="source-line-no">603</span><span id="line-603">      return this;</span>
-<span class="source-line-no">604</span><span id="line-604">   }</span>
-<span class="source-line-no">605</span><span id="line-605"></span>
-<span class="source-line-no">606</span><span id="line-606">   /**</span>
-<span class="source-line-no">607</span><span id="line-607">    * Sets whether the table offers a copy-link control for its current view state.</span>
-<span class="source-line-no">608</span><span id="line-608">    *</span>
-<span class="source-line-no">609</span><span id="line-609">    * @param v The new value.</span>
-<span class="source-line-no">610</span><span id="line-610">    * @return This object.</span>
-<span class="source-line-no">611</span><span id="line-611">    */</span>
-<span class="source-line-no">612</span><span id="line-612">   public TableSpec copyLink(boolean v) {</span>
-<span class="source-line-no">613</span><span id="line-613">      copyLink = v;</span>
-<span class="source-line-no">614</span><span id="line-614">      return this;</span>
-<span class="source-line-no">615</span><span id="line-615">   }</span>
-<span class="source-line-no">616</span><span id="line-616"></span>
-<span class="source-line-no">617</span><span id="line-617">   /**</span>
-<span class="source-line-no">618</span><span id="line-618">    * Sets whether the browser address bar is cleaned of the table's view-state parameters.</span>
-<span class="source-line-no">619</span><span id="line-619">    *</span>
-<span class="source-line-no">620</span><span id="line-620">    * @param v The new value.</span>
-<span class="source-line-no">621</span><span id="line-621">    * @return This object.</span>
-<span class="source-line-no">622</span><span id="line-622">    */</span>
-<span class="source-line-no">623</span><span id="line-623">   public TableSpec cleanAddress(boolean v) {</span>
-<span class="source-line-no">624</span><span id="line-624">      cleanAddress = v;</span>
-<span class="source-line-no">625</span><span id="line-625">      return this;</span>
-<span class="source-line-no">626</span><span id="line-626">   }</span>
-<span class="source-line-no">627</span><span id="line-627"></span>
-<span class="source-line-no">628</span><span id="line-628">   /**</span>
-<span class="source-line-no">629</span><span id="line-629">    * Sets whether polling pauses while an editing surface (an open detail row or action dialog) is bound to this table.</span>
-<span class="source-line-no">630</span><span id="line-630">    *</span>
-<span class="source-line-no">631</span><span id="line-631">    * @param v The new value.</span>
-<span class="source-line-no">632</span><span id="line-632">    * @return This object.</span>
-<span class="source-line-no">633</span><span id="line-633">    */</span>
-<span class="source-line-no">634</span><span id="line-634">   public TableSpec pausePollingWhileEditing(boolean v) {</span>
-<span class="source-line-no">635</span><span id="line-635">      pausePollingWhileEditing = v;</span>
-<span class="source-line-no">636</span><span id="line-636">      return this;</span>
-<span class="source-line-no">637</span><span id="line-637">   }</span>
-<span class="source-line-no">638</span><span id="line-638"></span>
-<span class="source-line-no">639</span><span id="line-639">   /**</span>
-<span class="source-line-no">640</span><span id="line-640">    * Sets the CSS class applied to this table's card.  It is carried on the card placement, not in the card body</span>
-<span class="source-line-no">641</span><span id="line-641">    * returned by {@link #toCardBody()}.</span>
-<span class="source-line-no">642</span><span id="line-642">    *</span>
-<span class="source-line-no">643</span><span id="line-643">    * @param value The class list.  Can be &lt;jk&gt;null&lt;/jk&gt; to unset.</span>
-<span class="source-line-no">644</span><span id="line-644">    * @return This object.</span>
-<span class="source-line-no">645</span><span id="line-645">    */</span>
-<span class="source-line-no">646</span><span id="line-646">   public TableSpec cssClass(String value) {</span>
-<span class="source-line-no">647</span><span id="line-647">      cssClass = value;</span>
-<span class="source-line-no">648</span><span id="line-648">      return this;</span>
-<span class="source-line-no">649</span><span id="line-649">   }</span>
-<span class="source-line-no">650</span><span id="line-650"></span>
-<span class="source-line-no">651</span><span id="line-651">   /** @return This table's id. */</span>
-<span class="source-line-no">652</span><span id="line-652">   public String id() {</span>
-<span class="source-line-no">653</span><span id="line-653">      return id;</span>
-<span class="source-line-no">654</span><span id="line-654">   }</span>
-<span class="source-line-no">655</span><span id="line-655"></span>
-<span class="source-line-no">656</span><span id="line-656">   /** @return The columns, in display order. */</span>
-<span class="source-line-no">657</span><span id="line-657">   public List&lt;Column&gt; columns() {</span>
-<span class="source-line-no">658</span><span id="line-658">      return Collections.unmodifiableList(columns);</span>
-<span class="source-line-no">659</span><span id="line-659">   }</span>
-<span class="source-line-no">660</span><span id="line-660"></span>
-<span class="source-line-no">661</span><span id="line-661">   /** @return The row actions, in menu order. */</span>
-<span class="source-line-no">662</span><span id="line-662">   public List&lt;RowAction&gt; rowActions() {</span>
-<span class="source-line-no">663</span><span id="line-663">      return Collections.unmodifiableList(rowActions);</span>
-<span class="source-line-no">664</span><span id="line-664">   }</span>
-<span class="source-line-no">665</span><span id="line-665"></span>
-<span class="source-line-no">666</span><span id="line-666">   /** @return The card CSS class, or &lt;jk&gt;null&lt;/jk&gt;. */</span>
-<span class="source-line-no">667</span><span id="line-667">   public String cssClass() {</span>
-<span class="source-line-no">668</span><span id="line-668">      return cssClass;</span>
-<span class="source-line-no">669</span><span id="line-669">   }</span>
-<span class="source-line-no">670</span><span id="line-670"></span>
-<span class="source-line-no">671</span><span id="line-671">   /** @return The per-row detail panel, if set. */</span>
-<span class="source-line-no">672</span><span id="line-672">   public Optional&lt;RowDetail&gt; detail() {</span>
-<span class="source-line-no">673</span><span id="line-673">      return Optional.ofNullable(detail);</span>
-<span class="source-line-no">674</span><span id="line-674">   }</span>
-<span class="source-line-no">675</span><span id="line-675"></span>
-<span class="source-line-no">676</span><span id="line-676">   /**</span>
-<span class="source-line-no">677</span><span id="line-677">    * Validates this table.  A duplicate column and a rowClass op/value mismatch are checked eagerly by</span>
-<span class="source-line-no">678</span><span id="line-678">    * {@link #columns(Column...)} and {@link #rowClass(String,Op,Object,String) rowClass}, and an unknown export button</span>
-<span class="source-line-no">679</span><span id="line-679">    * by {@link RibbonItem#export(String...)}, so none of those can be seen here.</span>
-<span class="source-line-no">680</span><span id="line-680">    *</span>
-<span class="source-line-no">681</span><span id="line-681">    * @throws IllegalStateException If any check fails.</span>
-<span class="source-line-no">682</span><span id="line-682">    */</span>
-<span class="source-line-no">683</span><span id="line-683">   public void validate() {</span>
-<span class="source-line-no">684</span><span id="line-684">      if (dataUrl == null || dataUrl.isBlank())</span>
-<span class="source-line-no">685</span><span id="line-685">         throw isex("TableSpec '%s' requires dataUrl.", id);</span>
-<span class="source-line-no">686</span><span id="line-686">      if (columns.isEmpty())</span>
-<span class="source-line-no">687</span><span id="line-687">         throw isex("TableSpec '%s' requires at least one column.", id);</span>
-<span class="source-line-no">688</span><span id="line-688">      var names = columns.stream().map(Column::name).toList();</span>
-<span class="source-line-no">689</span><span id="line-689">      for (var o : defaultOrder)</span>
-<span class="source-line-no">690</span><span id="line-690">         if (! names.contains(o.get("key")))</span>
-<span class="source-line-no">691</span><span id="line-691">            throw isex("TableSpec '%s' defaultOrder column '%s' is not a column; columns: '%s'.",</span>
-<span class="source-line-no">692</span><span id="line-692">               id, o.get("key"), String.join(", ", names));</span>
-<span class="source-line-no">693</span><span id="line-693">      for (var item : ribbon) {</span>
-<span class="source-line-no">694</span><span id="line-694">         var m = item.toMap();</span>
-<span class="source-line-no">695</span><span id="line-695">         if ("dialog".equals(m.get("type")) &amp;&amp; (m.get("form") == null || m.get("endpoint") == null))</span>
-<span class="source-line-no">696</span><span id="line-696">            throw isex("TableSpec '%s' ribbon dialog '%s' requires form and endpoint.", id, m.get("id"));</span>
-<span class="source-line-no">697</span><span id="line-697">      }</span>
-<span class="source-line-no">698</span><span id="line-698">      var actionIds = new HashSet&lt;String&gt;();</span>
-<span class="source-line-no">699</span><span id="line-699">      for (var a : rowActions)</span>
-<span class="source-line-no">700</span><span id="line-700">         if (! actionIds.add(a.id))</span>
-<span class="source-line-no">701</span><span id="line-701">            throw isex("TableSpec '%s' declares row action '%s' twice.", id, a.id);</span>
-<span class="source-line-no">702</span><span id="line-702">      if (bulk != null &amp;&amp; selection == null)</span>
-<span class="source-line-no">703</span><span id="line-703">         throw isex("TableSpec '%s' sets bulk without selection.", id);</span>
-<span class="source-line-no">704</span><span id="line-704">      if (bulk != null &amp;&amp; (bulk.actions == null || bulk.actions.isEmpty()))</span>
-<span class="source-line-no">705</span><span id="line-705">         throw isex("TableSpec '%s' sets bulk with no actions.", id);</span>
-<span class="source-line-no">706</span><span id="line-706">      for (var a : rowActions)</span>
-<span class="source-line-no">707</span><span id="line-707">         if (a.endpoint == null || a.endpoint.isBlank())</span>
-<span class="source-line-no">708</span><span id="line-708">            throw isex("TableSpec '%s' row action '%s' requires an endpoint.", id, a.id);</span>
-<span class="source-line-no">709</span><span id="line-709">      if (bulk != null &amp;&amp; bulk.actions != null)</span>
-<span class="source-line-no">710</span><span id="line-710">         for (var a : bulk.actions)</span>
-<span class="source-line-no">711</span><span id="line-711">            if (a.endpoint == null || a.endpoint.isBlank())</span>
-<span class="source-line-no">712</span><span id="line-712">               throw isex("TableSpec '%s' bulk action '%s' requires an endpoint.", id, a.id);</span>
-<span class="source-line-no">713</span><span id="line-713">      for (var c : columns)</span>
-<span class="source-line-no">714</span><span id="line-714">         if (c.searchable() &amp;&amp; dataMode == DataMode.SERVER &amp;&amp; c.operators() == null &amp;&amp; operators == null)</span>
-<span class="source-line-no">715</span><span id="line-715">            throw isex("TableSpec '%s' column '%s' sets searchType but dataMode is '%s' and the table "</span>
-<span class="source-line-no">716</span><span id="line-716">               + "declares no operators.", id, c.name(), dataMode.wire());</span>
-<span class="source-line-no">717</span><span id="line-717">   }</span>
-<span class="source-line-no">718</span><span id="line-718"></span>
-<span class="source-line-no">719</span><span id="line-719">   /**</span>
-<span class="source-line-no">720</span><span id="line-720">    * Builds this table's catalog-form card body, with no {@code contractVersion} anywhere (the client stamps every</span>
-<span class="source-line-no">721</span><span id="line-721">    * contract version).  This is the only place in this type that knows the datatables wire shape.  The result is</span>
-<span class="source-line-no">722</span><span id="line-722">    * the unwrapped catalog the {@code datatables} card type reads, and is rendered the same single way</span>
-<span class="source-line-no">723</span><span id="line-723">    * {@code &lt;@card&gt;} is, by the page mixin's {@code cardTypes.toCard(CardSource.create("datatables", id())</span>
-<span class="source-line-no">724</span><span id="line-724">    * .bodyMap(toCardBody()).build())}; this type never calls a card-type handler directly.</span>
-<span class="source-line-no">725</span><span id="line-725">    *</span>
-<span class="source-line-no">726</span><span id="line-726">    * &lt;p&gt;</span>
-<span class="source-line-no">727</span><span id="line-727">    * The body holds only plain data (maps, lists, strings, numbers, booleans), the same shape a parsed body has.</span>
-<span class="source-line-no">728</span><span id="line-728">    *</span>
-<span class="source-line-no">729</span><span id="line-729">    * &lt;p&gt;</span>
-<span class="source-line-no">730</span><span id="line-730">    * Each column carries its effective operator set (its own, else {@link #operators(SearchOperatorSet)}).</span>
-<span class="source-line-no">731</span><span id="line-731">    *</span>
-<span class="source-line-no">732</span><span id="line-732">    * @return The catalog, with keys in a fixed order and absent optional values omitted.</span>
-<span class="source-line-no">733</span><span id="line-733">    */</span>
-<span class="source-line-no">734</span><span id="line-734">   public JsonMap toCardBody() {</span>
-<span class="source-line-no">735</span><span id="line-735">      var t = new JsonMap();</span>
-<span class="source-line-no">736</span><span id="line-736">      t.put("dataUrl", dataUrl);</span>
-<span class="source-line-no">737</span><span id="line-737">      t.put("columns", plain(columns.stream().map(c -&gt; c.toCatalogMap(operators)).toList()));</span>
-<span class="source-line-no">738</span><span id="line-738">      if (dataMode != null)</span>
-<span class="source-line-no">739</span><span id="line-739">         t.put("dataMode", dataMode.wire());</span>
-<span class="source-line-no">740</span><span id="line-740">      if (! defaultOrder.isEmpty())</span>
-<span class="source-line-no">741</span><span id="line-741">         t.put("defaultOrder", List.copyOf(defaultOrder));</span>
-<span class="source-line-no">742</span><span id="line-742">      if (! ribbon.isEmpty())</span>
-<span class="source-line-no">743</span><span id="line-743">         t.put("ribbon", ribbon.stream().map(RibbonItem::toMap).toList());</span>
-<span class="source-line-no">744</span><span id="line-744">      if (rowType != null)</span>
-<span class="source-line-no">745</span><span id="line-745">         t.put("rowType", rowType);</span>
-<span class="source-line-no">746</span><span id="line-746">      if (pollIntervalMs != null)</span>
-<span class="source-line-no">747</span><span id="line-747">         t.put("pollIntervalMs", pollIntervalMs);</span>
-<span class="source-line-no">748</span><span id="line-748">      if (primary)</span>
-<span class="source-line-no">749</span><span id="line-749">         t.put("primary", true);</span>
-<span class="source-line-no">750</span><span id="line-750">      if (columnConfig != null)</span>
-<span class="source-line-no">751</span><span id="line-751">         t.put("columnConfig", columnConfig);</span>
-<span class="source-line-no">752</span><span id="line-752">      if (copyLink != null)</span>
-<span class="source-line-no">753</span><span id="line-753">         t.put("copyLink", copyLink);</span>
-<span class="source-line-no">754</span><span id="line-754">      if (cleanAddress != null)</span>
-<span class="source-line-no">755</span><span id="line-755">         t.put("cleanAddress", cleanAddress);</span>
-<span class="source-line-no">756</span><span id="line-756">      if (pausePollingWhileEditing != null)</span>
-<span class="source-line-no">757</span><span id="line-757">         t.put("pausePollingWhileEditing", pausePollingWhileEditing);</span>
-<span class="source-line-no">758</span><span id="line-758">      if (! urlState.isEmpty()) {</span>
-<span class="source-line-no">759</span><span id="line-759">         var u = new JsonMap();</span>
-<span class="source-line-no">760</span><span id="line-760">         urlState.forEach((n, cfg) -&gt; u.put(n, copyUrlStateConfig(cfg)));</span>
-<span class="source-line-no">761</span><span id="line-761">         t.put("urlState", u);</span>
-<span class="source-line-no">762</span><span id="line-762">      }</span>
-<span class="source-line-no">763</span><span id="line-763">      if (! rowClassRules.isEmpty())</span>
-<span class="source-line-no">764</span><span id="line-764">         t.put("rowClassRules", List.copyOf(rowClassRules));</span>
-<span class="source-line-no">765</span><span id="line-765">      if (! rowActions.isEmpty())</span>
-<span class="source-line-no">766</span><span id="line-766">         t.put("rowActions", plain(rowActions));</span>
-<span class="source-line-no">767</span><span id="line-767">      if (selection != null) {</span>
-<span class="source-line-no">768</span><span id="line-768">         var s = new JsonMap();</span>
-<span class="source-line-no">769</span><span id="line-769">         s.put("rowIdField", selection.rowIdField());</span>
-<span class="source-line-no">770</span><span id="line-770">         s.put("selectAll", selection.selectAll());</span>
-<span class="source-line-no">771</span><span id="line-771">         s.put("scope", selection.scope().wire());</span>
-<span class="source-line-no">772</span><span id="line-772">         if (selection.labelField() != null)</span>
-<span class="source-line-no">773</span><span id="line-773">            s.put("labelField", selection.labelField());</span>
-<span class="source-line-no">774</span><span id="line-774">         if (selection.selectableWhen() != null)</span>
-<span class="source-line-no">775</span><span id="line-775">            s.put("selectableWhen", plain(selection.selectableWhen()));</span>
-<span class="source-line-no">776</span><span id="line-776">         t.put("selection", s);</span>
-<span class="source-line-no">777</span><span id="line-777">      }</span>
-<span class="source-line-no">778</span><span id="line-778">      if (bulk != null) {</span>
-<span class="source-line-no">779</span><span id="line-779">         var b = new JsonMap();</span>
-<span class="source-line-no">780</span><span id="line-780">         b.put("actions", plain(bulk.actions));</span>
-<span class="source-line-no">781</span><span id="line-781">         t.put("bulk", b);</span>
-<span class="source-line-no">782</span><span id="line-782">      }</span>
-<span class="source-line-no">783</span><span id="line-783">      if (detail != null)</span>
-<span class="source-line-no">784</span><span id="line-784">         t.put("detail", detail.toMap());</span>
-<span class="source-line-no">785</span><span id="line-785">      if (quickStats != null) {</span>
-<span class="source-line-no">786</span><span id="line-786">         var q = new JsonMap();</span>
-<span class="source-line-no">787</span><span id="line-787">         q.put("id", quickStatsId);</span>
-<span class="source-line-no">788</span><span id="line-788">         q.put("items", quickStats.stream().map(QuickStat::toMap).toList());</span>
-<span class="source-line-no">789</span><span id="line-789">         t.put("quickStats", q);</span>
-<span class="source-line-no">790</span><span id="line-790">      }</span>
-<span class="source-line-no">791</span><span id="line-791">      return t;</span>
-<span class="source-line-no">792</span><span id="line-792">   }</span>
-<span class="source-line-no">793</span><span id="line-793"></span>
-<span class="source-line-no">794</span><span id="line-794">   /** Converts a bean (or list of beans) to the plain maps, lists and scalars a parsed JSON body would hold. */</span>
-<span class="source-line-no">795</span><span id="line-795">   private static Object plain(Object bean) {</span>
-<span class="source-line-no">796</span><span id="line-796">      return Json.to(Json.of(bean), Object.class);</span>
-<span class="source-line-no">797</span><span id="line-797">   }</span>
-<span class="source-line-no">798</span><span id="line-798">}</span>
+<span class="source-line-no">494</span><span id="line-494">   @SuppressWarnings({</span>
+<span class="source-line-no">495</span><span id="line-495">      "unchecked" // the only nested values are the Map&lt;String,Object&gt; copies checkUrlStateOption builds for window.params</span>
+<span class="source-line-no">496</span><span id="line-496">   })</span>
+<span class="source-line-no">497</span><span id="line-497">   public TableSpec urlState(String name, Map&lt;String,Object&gt; config) {</span>
+<span class="source-line-no">498</span><span id="line-498">      checkUrlStateName(name);</span>
+<span class="source-line-no">499</span><span id="line-499">      if (config == null)</span>
+<span class="source-line-no">500</span><span id="line-500">         throw iaex("urlState '%s' config must not be null.", name);</span>
+<span class="source-line-no">501</span><span id="line-501">      var checked = new LinkedHashMap&lt;String,Object&gt;();</span>
+<span class="source-line-no">502</span><span id="line-502">      for (var e : config.entrySet()) {</span>
+<span class="source-line-no">503</span><span id="line-503">         var key = e.getKey();</span>
+<span class="source-line-no">504</span><span id="line-504">         if (ib(key))</span>
+<span class="source-line-no">505</span><span id="line-505">            throw iaex("urlState '%s' option name must not be blank.", name);</span>
+<span class="source-line-no">506</span><span id="line-506">         checked.put(key, checkUrlStateOption(name, key, e.getValue()));</span>
+<span class="source-line-no">507</span><span id="line-507">      }</span>
+<span class="source-line-no">508</span><span id="line-508">      var target = urlState.computeIfAbsent(name, k -&gt; new LinkedHashMap&lt;&gt;());</span>
+<span class="source-line-no">509</span><span id="line-509">      checked.forEach((k, v) -&gt; {</span>
+<span class="source-line-no">510</span><span id="line-510">         if ("window".equals(name) &amp;&amp; "params".equals(k) &amp;&amp; target.get(k) instanceof Map&lt;?,?&gt; old) {</span>
+<span class="source-line-no">511</span><span id="line-511">            var merged = new LinkedHashMap&lt;String,Object&gt;();</span>
+<span class="source-line-no">512</span><span id="line-512">            old.forEach((ok, ov) -&gt; merged.put((String)ok, ov));</span>
+<span class="source-line-no">513</span><span id="line-513">            merged.putAll((Map&lt;String,Object&gt;)v);</span>
+<span class="source-line-no">514</span><span id="line-514">            target.put(k, merged);</span>
+<span class="source-line-no">515</span><span id="line-515">         } else {</span>
+<span class="source-line-no">516</span><span id="line-516">            target.put(k, v);</span>
+<span class="source-line-no">517</span><span id="line-517">         }</span>
+<span class="source-line-no">518</span><span id="line-518">      });</span>
+<span class="source-line-no">519</span><span id="line-519">      return this;</span>
+<span class="source-line-no">520</span><span id="line-520">   }</span>
+<span class="source-line-no">521</span><span id="line-521"></span>
+<span class="source-line-no">522</span><span id="line-522">   private static void checkUrlStateName(String name) {</span>
+<span class="source-line-no">523</span><span id="line-523">      if (ib(name))</span>
+<span class="source-line-no">524</span><span id="line-524">         throw iaex("urlState name must not be blank.");</span>
+<span class="source-line-no">525</span><span id="line-525">      if (! URL_STATE_BUILTINS.contains(name))</span>
+<span class="source-line-no">526</span><span id="line-526">         throw iaex("urlState '%s' is not a built-in directive; expected day, ids or window.", name);</span>
+<span class="source-line-no">527</span><span id="line-527">   }</span>
+<span class="source-line-no">528</span><span id="line-528"></span>
+<span class="source-line-no">529</span><span id="line-529">   private static JsonMap copyUrlStateConfig(Map&lt;String,Object&gt; cfg) {</span>
+<span class="source-line-no">530</span><span id="line-530">      var out = new JsonMap();</span>
+<span class="source-line-no">531</span><span id="line-531">      cfg.forEach((k, v) -&gt; out.put(k, v instanceof Map&lt;?,?&gt; m ? new JsonMap(m) : v));</span>
+<span class="source-line-no">532</span><span id="line-532">      return out;</span>
+<span class="source-line-no">533</span><span id="line-533">   }</span>
+<span class="source-line-no">534</span><span id="line-534"></span>
+<span class="source-line-no">535</span><span id="line-535">   private static Object checkUrlStateOption(String name, String key, Object value) {</span>
+<span class="source-line-no">536</span><span id="line-536">      switch (name) {</span>
+<span class="source-line-no">537</span><span id="line-537">         case "day":</span>
+<span class="source-line-no">538</span><span id="line-538">            if (! "param".equals(key))</span>
+<span class="source-line-no">539</span><span id="line-539">               throw iaex("urlState day: unknown option '%s'; expected param.", key);</span>
+<span class="source-line-no">540</span><span id="line-540">            return checkUrlStateParam("day param", value);</span>
+<span class="source-line-no">541</span><span id="line-541">         case "ids":</span>
+<span class="source-line-no">542</span><span id="line-542">            if ("param".equals(key))</span>
+<span class="source-line-no">543</span><span id="line-543">               return checkUrlStateParam("ids param", value);</span>
+<span class="source-line-no">544</span><span id="line-544">            if ("max".equals(key)) {</span>
+<span class="source-line-no">545</span><span id="line-545">               if (! (value instanceof Integer || value instanceof Long || value instanceof Short || value instanceof Byte) || ((Number)value).longValue() &lt; 1)</span>
+<span class="source-line-no">546</span><span id="line-546">                  throw iaex("urlState ids max must be a positive integer but was %s.", value);</span>
+<span class="source-line-no">547</span><span id="line-547">               return value;</span>
+<span class="source-line-no">548</span><span id="line-548">            }</span>
+<span class="source-line-no">549</span><span id="line-549">            throw iaex("urlState ids: unknown option '%s'; expected param or max.", key);</span>
+<span class="source-line-no">550</span><span id="line-550">         case "window":</span>
+<span class="source-line-no">551</span><span id="line-551">            if (! "params".equals(key))</span>
+<span class="source-line-no">552</span><span id="line-552">               throw iaex("urlState window: unknown option '%s'; expected params.", key);</span>
+<span class="source-line-no">553</span><span id="line-553">            if (! (value instanceof Map&lt;?,?&gt; m))</span>
+<span class="source-line-no">554</span><span id="line-554">               throw iaex("urlState window params must be a map of start/end parameter names but was %s.", value);</span>
+<span class="source-line-no">555</span><span id="line-555">            var out = new LinkedHashMap&lt;String,Object&gt;();</span>
+<span class="source-line-no">556</span><span id="line-556">            for (var e : m.entrySet()) {</span>
+<span class="source-line-no">557</span><span id="line-557">               var k = e.getKey();</span>
+<span class="source-line-no">558</span><span id="line-558">               if (! "start".equals(k) &amp;&amp; ! "end".equals(k))</span>
+<span class="source-line-no">559</span><span id="line-559">                  throw iaex("urlState window params: unknown key '%s'; expected start or end.", k);</span>
+<span class="source-line-no">560</span><span id="line-560">               out.put((String)k, checkUrlStateParam("window params." + k, e.getValue()));</span>
+<span class="source-line-no">561</span><span id="line-561">            }</span>
+<span class="source-line-no">562</span><span id="line-562">            return out;</span>
+<span class="source-line-no">563</span><span id="line-563">         default:</span>
+<span class="source-line-no">564</span><span id="line-564">            throw iaex("urlState '%s' is not a built-in directive; expected day, ids or window.", name);</span>
+<span class="source-line-no">565</span><span id="line-565">      }</span>
+<span class="source-line-no">566</span><span id="line-566">   }</span>
+<span class="source-line-no">567</span><span id="line-567"></span>
+<span class="source-line-no">568</span><span id="line-568">   private static String checkUrlStateParam(String what, Object param) {</span>
+<span class="source-line-no">569</span><span id="line-569">      if (! (param instanceof String s) || ! ID_PATTERN.matcher(s).matches())</span>
+<span class="source-line-no">570</span><span id="line-570">         throw iaex("urlState %s '%s' must match ^[A-Za-z][A-Za-z0-9_-]{0,63}$.", what, param);</span>
+<span class="source-line-no">571</span><span id="line-571">      return s;</span>
+<span class="source-line-no">572</span><span id="line-572">   }</span>
+<span class="source-line-no">573</span><span id="line-573"></span>
+<span class="source-line-no">574</span><span id="line-574">   /**</span>
+<span class="source-line-no">575</span><span id="line-575">    * Sets whether this table is the page's primary table (affects layout only).</span>
+<span class="source-line-no">576</span><span id="line-576">    *</span>
+<span class="source-line-no">577</span><span id="line-577">    * @param v The new value.</span>
+<span class="source-line-no">578</span><span id="line-578">    * @return This object.</span>
+<span class="source-line-no">579</span><span id="line-579">    */</span>
+<span class="source-line-no">580</span><span id="line-580">   public TableSpec primary(boolean v) {</span>
+<span class="source-line-no">581</span><span id="line-581">      primary = v;</span>
+<span class="source-line-no">582</span><span id="line-582">      return this;</span>
+<span class="source-line-no">583</span><span id="line-583">   }</span>
+<span class="source-line-no">584</span><span id="line-584"></span>
+<span class="source-line-no">585</span><span id="line-585">   /**</span>
+<span class="source-line-no">586</span><span id="line-586">    * Sets whether this table offers the View Settings dialog (column chooser, search and sort settings).</span>
+<span class="source-line-no">587</span><span id="line-587">    *</span>
+<span class="source-line-no">588</span><span id="line-588">    * @param v The new value.</span>
+<span class="source-line-no">589</span><span id="line-589">    * @return This object.</span>
+<span class="source-line-no">590</span><span id="line-590">    */</span>
+<span class="source-line-no">591</span><span id="line-591">   public TableSpec columnConfig(boolean v) {</span>
+<span class="source-line-no">592</span><span id="line-592">      columnConfig = v;</span>
+<span class="source-line-no">593</span><span id="line-593">      return this;</span>
+<span class="source-line-no">594</span><span id="line-594">   }</span>
+<span class="source-line-no">595</span><span id="line-595"></span>
+<span class="source-line-no">596</span><span id="line-596">   /**</span>
+<span class="source-line-no">597</span><span id="line-597">    * Sets the View Settings dialog options, serialized as the {@code columnConfig} object (for example</span>
+<span class="source-line-no">598</span><span id="line-598">    * {@code {"chooser": true}}).</span>
+<span class="source-line-no">599</span><span id="line-599">    *</span>
+<span class="source-line-no">600</span><span id="line-600">    * @param options The options, copied at call time. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">601</span><span id="line-601">    * @return This object.</span>
+<span class="source-line-no">602</span><span id="line-602">    */</span>
+<span class="source-line-no">603</span><span id="line-603">   public TableSpec columnConfig(Map&lt;String,Object&gt; options) {</span>
+<span class="source-line-no">604</span><span id="line-604">      columnConfig = new LinkedHashMap&lt;&gt;(rnn(options));</span>
+<span class="source-line-no">605</span><span id="line-605">      return this;</span>
+<span class="source-line-no">606</span><span id="line-606">   }</span>
+<span class="source-line-no">607</span><span id="line-607"></span>
+<span class="source-line-no">608</span><span id="line-608">   /**</span>
+<span class="source-line-no">609</span><span id="line-609">    * Sets whether the table offers a copy-link control for its current view state.</span>
+<span class="source-line-no">610</span><span id="line-610">    *</span>
+<span class="source-line-no">611</span><span id="line-611">    * @param v The new value.</span>
+<span class="source-line-no">612</span><span id="line-612">    * @return This object.</span>
+<span class="source-line-no">613</span><span id="line-613">    */</span>
+<span class="source-line-no">614</span><span id="line-614">   public TableSpec copyLink(boolean v) {</span>
+<span class="source-line-no">615</span><span id="line-615">      copyLink = v;</span>
+<span class="source-line-no">616</span><span id="line-616">      return this;</span>
+<span class="source-line-no">617</span><span id="line-617">   }</span>
+<span class="source-line-no">618</span><span id="line-618"></span>
+<span class="source-line-no">619</span><span id="line-619">   /**</span>
+<span class="source-line-no">620</span><span id="line-620">    * Sets whether the browser address bar is cleaned of the table's view-state parameters.</span>
+<span class="source-line-no">621</span><span id="line-621">    *</span>
+<span class="source-line-no">622</span><span id="line-622">    * @param v The new value.</span>
+<span class="source-line-no">623</span><span id="line-623">    * @return This object.</span>
+<span class="source-line-no">624</span><span id="line-624">    */</span>
+<span class="source-line-no">625</span><span id="line-625">   public TableSpec cleanAddress(boolean v) {</span>
+<span class="source-line-no">626</span><span id="line-626">      cleanAddress = v;</span>
+<span class="source-line-no">627</span><span id="line-627">      return this;</span>
+<span class="source-line-no">628</span><span id="line-628">   }</span>
+<span class="source-line-no">629</span><span id="line-629"></span>
+<span class="source-line-no">630</span><span id="line-630">   /**</span>
+<span class="source-line-no">631</span><span id="line-631">    * Sets whether polling pauses while an editing surface (an open detail row or action dialog) is bound to this table.</span>
+<span class="source-line-no">632</span><span id="line-632">    *</span>
+<span class="source-line-no">633</span><span id="line-633">    * @param v The new value.</span>
+<span class="source-line-no">634</span><span id="line-634">    * @return This object.</span>
+<span class="source-line-no">635</span><span id="line-635">    */</span>
+<span class="source-line-no">636</span><span id="line-636">   public TableSpec pausePollingWhileEditing(boolean v) {</span>
+<span class="source-line-no">637</span><span id="line-637">      pausePollingWhileEditing = v;</span>
+<span class="source-line-no">638</span><span id="line-638">      return this;</span>
+<span class="source-line-no">639</span><span id="line-639">   }</span>
+<span class="source-line-no">640</span><span id="line-640"></span>
+<span class="source-line-no">641</span><span id="line-641">   /**</span>
+<span class="source-line-no">642</span><span id="line-642">    * Sets the CSS class applied to this table's card.  It is carried on the card placement, not in the card body</span>
+<span class="source-line-no">643</span><span id="line-643">    * returned by {@link #toCardBody()}.</span>
+<span class="source-line-no">644</span><span id="line-644">    *</span>
+<span class="source-line-no">645</span><span id="line-645">    * @param value The class list.  Can be &lt;jk&gt;null&lt;/jk&gt; to unset.</span>
+<span class="source-line-no">646</span><span id="line-646">    * @return This object.</span>
+<span class="source-line-no">647</span><span id="line-647">    */</span>
+<span class="source-line-no">648</span><span id="line-648">   public TableSpec cssClass(String value) {</span>
+<span class="source-line-no">649</span><span id="line-649">      cssClass = value;</span>
+<span class="source-line-no">650</span><span id="line-650">      return this;</span>
+<span class="source-line-no">651</span><span id="line-651">   }</span>
+<span class="source-line-no">652</span><span id="line-652"></span>
+<span class="source-line-no">653</span><span id="line-653">   /** @return This table's id. */</span>
+<span class="source-line-no">654</span><span id="line-654">   public String id() {</span>
+<span class="source-line-no">655</span><span id="line-655">      return id;</span>
+<span class="source-line-no">656</span><span id="line-656">   }</span>
+<span class="source-line-no">657</span><span id="line-657"></span>
+<span class="source-line-no">658</span><span id="line-658">   /** @return The columns, in display order. */</span>
+<span class="source-line-no">659</span><span id="line-659">   public List&lt;Column&gt; columns() {</span>
+<span class="source-line-no">660</span><span id="line-660">      return Collections.unmodifiableList(columns);</span>
+<span class="source-line-no">661</span><span id="line-661">   }</span>
+<span class="source-line-no">662</span><span id="line-662"></span>
+<span class="source-line-no">663</span><span id="line-663">   /** @return The row actions, in menu order. */</span>
+<span class="source-line-no">664</span><span id="line-664">   public List&lt;RowAction&gt; rowActions() {</span>
+<span class="source-line-no">665</span><span id="line-665">      return Collections.unmodifiableList(rowActions);</span>
+<span class="source-line-no">666</span><span id="line-666">   }</span>
+<span class="source-line-no">667</span><span id="line-667"></span>
+<span class="source-line-no">668</span><span id="line-668">   /** @return The card CSS class, or &lt;jk&gt;null&lt;/jk&gt;. */</span>
+<span class="source-line-no">669</span><span id="line-669">   public String cssClass() {</span>
+<span class="source-line-no">670</span><span id="line-670">      return cssClass;</span>
+<span class="source-line-no">671</span><span id="line-671">   }</span>
+<span class="source-line-no">672</span><span id="line-672"></span>
+<span class="source-line-no">673</span><span id="line-673">   /** @return The per-row detail panel, if set. */</span>
+<span class="source-line-no">674</span><span id="line-674">   public Optional&lt;RowDetail&gt; detail() {</span>
+<span class="source-line-no">675</span><span id="line-675">      return Optional.ofNullable(detail);</span>
+<span class="source-line-no">676</span><span id="line-676">   }</span>
+<span class="source-line-no">677</span><span id="line-677"></span>
+<span class="source-line-no">678</span><span id="line-678">   /**</span>
+<span class="source-line-no">679</span><span id="line-679">    * Validates this table.  A duplicate column and a rowClass op/value mismatch are checked eagerly by</span>
+<span class="source-line-no">680</span><span id="line-680">    * {@link #columns(Column...)} and {@link #rowClass(String,Op,Object,String) rowClass}, and an unknown export button</span>
+<span class="source-line-no">681</span><span id="line-681">    * by {@link RibbonItem#export(String...)}, so none of those can be seen here.</span>
+<span class="source-line-no">682</span><span id="line-682">    *</span>
+<span class="source-line-no">683</span><span id="line-683">    * @throws IllegalStateException If any check fails.</span>
+<span class="source-line-no">684</span><span id="line-684">    */</span>
+<span class="source-line-no">685</span><span id="line-685">   public void validate() {</span>
+<span class="source-line-no">686</span><span id="line-686">      if (ib(dataUrl))</span>
+<span class="source-line-no">687</span><span id="line-687">         throw isex("TableSpec '%s' requires dataUrl.", id);</span>
+<span class="source-line-no">688</span><span id="line-688">      if (columns.isEmpty())</span>
+<span class="source-line-no">689</span><span id="line-689">         throw isex("TableSpec '%s' requires at least one column.", id);</span>
+<span class="source-line-no">690</span><span id="line-690">      var names = columns.stream().map(Column::name).toList();</span>
+<span class="source-line-no">691</span><span id="line-691">      for (var o : defaultOrder)</span>
+<span class="source-line-no">692</span><span id="line-692">         if (! names.contains(o.get("key")))</span>
+<span class="source-line-no">693</span><span id="line-693">            throw isex("TableSpec '%s' defaultOrder column '%s' is not a column; columns: '%s'.",</span>
+<span class="source-line-no">694</span><span id="line-694">               id, o.get("key"), String.join(", ", names));</span>
+<span class="source-line-no">695</span><span id="line-695">      for (var item : ribbon) {</span>
+<span class="source-line-no">696</span><span id="line-696">         var m = item.toMap();</span>
+<span class="source-line-no">697</span><span id="line-697">         if ("dialog".equals(m.get("type")) &amp;&amp; (m.get("form") == null || m.get("endpoint") == null))</span>
+<span class="source-line-no">698</span><span id="line-698">            throw isex("TableSpec '%s' ribbon dialog '%s' requires form and endpoint.", id, m.get("id"));</span>
+<span class="source-line-no">699</span><span id="line-699">      }</span>
+<span class="source-line-no">700</span><span id="line-700">      var actionIds = new HashSet&lt;String&gt;();</span>
+<span class="source-line-no">701</span><span id="line-701">      for (var a : rowActions)</span>
+<span class="source-line-no">702</span><span id="line-702">         if (! actionIds.add(a.id))</span>
+<span class="source-line-no">703</span><span id="line-703">            throw isex("TableSpec '%s' declares row action '%s' twice.", id, a.id);</span>
+<span class="source-line-no">704</span><span id="line-704">      if (bulk != null &amp;&amp; selection == null)</span>
+<span class="source-line-no">705</span><span id="line-705">         throw isex("TableSpec '%s' sets bulk without selection.", id);</span>
+<span class="source-line-no">706</span><span id="line-706">      if (bulk != null &amp;&amp; (bulk.actions == null || bulk.actions.isEmpty()))</span>
+<span class="source-line-no">707</span><span id="line-707">         throw isex("TableSpec '%s' sets bulk with no actions.", id);</span>
+<span class="source-line-no">708</span><span id="line-708">      for (var a : rowActions)</span>
+<span class="source-line-no">709</span><span id="line-709">         if (a.endpoint == null || a.endpoint.isBlank())</span>
+<span class="source-line-no">710</span><span id="line-710">            throw isex("TableSpec '%s' row action '%s' requires an endpoint.", id, a.id);</span>
+<span class="source-line-no">711</span><span id="line-711">      if (bulk != null &amp;&amp; bulk.actions != null)</span>
+<span class="source-line-no">712</span><span id="line-712">         for (var a : bulk.actions)</span>
+<span class="source-line-no">713</span><span id="line-713">            if (a.endpoint == null || a.endpoint.isBlank())</span>
+<span class="source-line-no">714</span><span id="line-714">               throw isex("TableSpec '%s' bulk action '%s' requires an endpoint.", id, a.id);</span>
+<span class="source-line-no">715</span><span id="line-715">      for (var c : columns)</span>
+<span class="source-line-no">716</span><span id="line-716">         if (c.searchable() &amp;&amp; dataMode == DataMode.SERVER &amp;&amp; c.operators() == null &amp;&amp; operators == null)</span>
+<span class="source-line-no">717</span><span id="line-717">            throw isex("TableSpec '%s' column '%s' sets searchType but dataMode is '%s' and the table "</span>
+<span class="source-line-no">718</span><span id="line-718">               + "declares no operators.", id, c.name(), dataMode.wire());</span>
+<span class="source-line-no">719</span><span id="line-719">   }</span>
+<span class="source-line-no">720</span><span id="line-720"></span>
+<span class="source-line-no">721</span><span id="line-721">   /**</span>
+<span class="source-line-no">722</span><span id="line-722">    * Builds this table's catalog-form card body, with no {@code contractVersion} anywhere (the client stamps every</span>
+<span class="source-line-no">723</span><span id="line-723">    * contract version).  This is the only place in this type that knows the datatables wire shape.  The result is</span>
+<span class="source-line-no">724</span><span id="line-724">    * the unwrapped catalog the {@code datatables} card type reads, and is rendered the same single way</span>
+<span class="source-line-no">725</span><span id="line-725">    * {@code &lt;@card&gt;} is, by the page mixin's {@code cardTypes.toCard(CardSource.create("datatables", id())</span>
+<span class="source-line-no">726</span><span id="line-726">    * .bodyMap(toCardBody()).build())}; this type never calls a card-type handler directly.</span>
+<span class="source-line-no">727</span><span id="line-727">    *</span>
+<span class="source-line-no">728</span><span id="line-728">    * &lt;p&gt;</span>
+<span class="source-line-no">729</span><span id="line-729">    * The body holds only plain data (maps, lists, strings, numbers, booleans), the same shape a parsed body has.</span>
+<span class="source-line-no">730</span><span id="line-730">    *</span>
+<span class="source-line-no">731</span><span id="line-731">    * &lt;p&gt;</span>
+<span class="source-line-no">732</span><span id="line-732">    * Each column carries its effective operator set (its own, else {@link #operators(SearchOperatorSet)}).</span>
+<span class="source-line-no">733</span><span id="line-733">    *</span>
+<span class="source-line-no">734</span><span id="line-734">    * @return The catalog, with keys in a fixed order and absent optional values omitted.</span>
+<span class="source-line-no">735</span><span id="line-735">    */</span>
+<span class="source-line-no">736</span><span id="line-736">   public JsonMap toCardBody() {</span>
+<span class="source-line-no">737</span><span id="line-737">      var t = new JsonMap();</span>
+<span class="source-line-no">738</span><span id="line-738">      t.put("dataUrl", dataUrl);</span>
+<span class="source-line-no">739</span><span id="line-739">      t.put("columns", plain(columns.stream().map(c -&gt; c.toCatalogMap(operators)).toList()));</span>
+<span class="source-line-no">740</span><span id="line-740">      if (dataMode != null)</span>
+<span class="source-line-no">741</span><span id="line-741">         t.put("dataMode", dataMode.wire());</span>
+<span class="source-line-no">742</span><span id="line-742">      if (! defaultOrder.isEmpty())</span>
+<span class="source-line-no">743</span><span id="line-743">         t.put("defaultOrder", List.copyOf(defaultOrder));</span>
+<span class="source-line-no">744</span><span id="line-744">      if (! ribbon.isEmpty())</span>
+<span class="source-line-no">745</span><span id="line-745">         t.put("ribbon", ribbon.stream().map(RibbonItem::toMap).toList());</span>
+<span class="source-line-no">746</span><span id="line-746">      if (rowType != null)</span>
+<span class="source-line-no">747</span><span id="line-747">         t.put("rowType", rowType);</span>
+<span class="source-line-no">748</span><span id="line-748">      if (pollIntervalMs != null)</span>
+<span class="source-line-no">749</span><span id="line-749">         t.put("pollIntervalMs", pollIntervalMs);</span>
+<span class="source-line-no">750</span><span id="line-750">      if (primary)</span>
+<span class="source-line-no">751</span><span id="line-751">         t.put("primary", true);</span>
+<span class="source-line-no">752</span><span id="line-752">      if (columnConfig != null)</span>
+<span class="source-line-no">753</span><span id="line-753">         t.put("columnConfig", columnConfig);</span>
+<span class="source-line-no">754</span><span id="line-754">      if (copyLink != null)</span>
+<span class="source-line-no">755</span><span id="line-755">         t.put("copyLink", copyLink);</span>
+<span class="source-line-no">756</span><span id="line-756">      if (cleanAddress != null)</span>
+<span class="source-line-no">757</span><span id="line-757">         t.put("cleanAddress", cleanAddress);</span>
+<span class="source-line-no">758</span><span id="line-758">      if (pausePollingWhileEditing != null)</span>
+<span class="source-line-no">759</span><span id="line-759">         t.put("pausePollingWhileEditing", pausePollingWhileEditing);</span>
+<span class="source-line-no">760</span><span id="line-760">      if (! urlState.isEmpty()) {</span>
+<span class="source-line-no">761</span><span id="line-761">         var u = new JsonMap();</span>
+<span class="source-line-no">762</span><span id="line-762">         urlState.forEach((n, cfg) -&gt; u.put(n, copyUrlStateConfig(cfg)));</span>
+<span class="source-line-no">763</span><span id="line-763">         t.put("urlState", u);</span>
+<span class="source-line-no">764</span><span id="line-764">      }</span>
+<span class="source-line-no">765</span><span id="line-765">      if (! rowClassRules.isEmpty())</span>
+<span class="source-line-no">766</span><span id="line-766">         t.put("rowClassRules", List.copyOf(rowClassRules));</span>
+<span class="source-line-no">767</span><span id="line-767">      if (! rowActions.isEmpty())</span>
+<span class="source-line-no">768</span><span id="line-768">         t.put("rowActions", plain(rowActions));</span>
+<span class="source-line-no">769</span><span id="line-769">      if (selection != null) {</span>
+<span class="source-line-no">770</span><span id="line-770">         var s = new JsonMap();</span>
+<span class="source-line-no">771</span><span id="line-771">         s.put("rowIdField", selection.rowIdField());</span>
+<span class="source-line-no">772</span><span id="line-772">         s.put("selectAll", selection.selectAll());</span>
+<span class="source-line-no">773</span><span id="line-773">         s.put("scope", selection.scope().wire());</span>
+<span class="source-line-no">774</span><span id="line-774">         if (selection.labelField() != null)</span>
+<span class="source-line-no">775</span><span id="line-775">            s.put("labelField", selection.labelField());</span>
+<span class="source-line-no">776</span><span id="line-776">         if (selection.selectableWhen() != null)</span>
+<span class="source-line-no">777</span><span id="line-777">            s.put("selectableWhen", plain(selection.selectableWhen()));</span>
+<span class="source-line-no">778</span><span id="line-778">         t.put("selection", s);</span>
+<span class="source-line-no">779</span><span id="line-779">      }</span>
+<span class="source-line-no">780</span><span id="line-780">      if (bulk != null) {</span>
+<span class="source-line-no">781</span><span id="line-781">         var b = new JsonMap();</span>
+<span class="source-line-no">782</span><span id="line-782">         b.put("actions", plain(bulk.actions));</span>
+<span class="source-line-no">783</span><span id="line-783">         t.put("bulk", b);</span>
+<span class="source-line-no">784</span><span id="line-784">      }</span>
+<span class="source-line-no">785</span><span id="line-785">      if (detail != null)</span>
+<span class="source-line-no">786</span><span id="line-786">         t.put("detail", detail.toMap());</span>
+<span class="source-line-no">787</span><span id="line-787">      if (quickStats != null) {</span>
+<span class="source-line-no">788</span><span id="line-788">         var q = new JsonMap();</span>
+<span class="source-line-no">789</span><span id="line-789">         q.put("id", quickStatsId);</span>
+<span class="source-line-no">790</span><span id="line-790">         q.put("items", quickStats.stream().map(QuickStat::toMap).toList());</span>
+<span class="source-line-no">791</span><span id="line-791">         t.put("quickStats", q);</span>
+<span class="source-line-no">792</span><span id="line-792">      }</span>
+<span class="source-line-no">793</span><span id="line-793">      return t;</span>
+<span class="source-line-no">794</span><span id="line-794">   }</span>
+<span class="source-line-no">795</span><span id="line-795"></span>
+<span class="source-line-no">796</span><span id="line-796">   /** Converts a bean (or list of beans) to the plain maps, lists and scalars a parsed JSON body would hold. */</span>
+<span class="source-line-no">797</span><span id="line-797">   private static Object plain(Object bean) {</span>
+<span class="source-line-no">798</span><span id="line-798">      return Json.to(Json.of(bean), Object.class);</span>
+<span class="source-line-no">799</span><span id="line-799">   }</span>
+<span class="source-line-no">800</span><span id="line-800">}</span>
 
 
 

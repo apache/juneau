@@ -310,9 +310,9 @@
 <span class="source-line-no">297</span><span id="line-297">    * @return A human-readable reason, or &lt;jk&gt;null&lt;/jk&gt; when this event is well-formed.</span>
 <span class="source-line-no">298</span><span id="line-298">    */</span>
 <span class="source-line-no">299</span><span id="line-299">   public String malformedReason() {</span>
-<span class="source-line-no">300</span><span id="line-300">      if (id == null || id.isBlank())</span>
+<span class="source-line-no">300</span><span id="line-300">      if (ib(id))</span>
 <span class="source-line-no">301</span><span id="line-301">         return "id must not be null or blank";</span>
-<span class="source-line-no">302</span><span id="line-302">      if (title == null || title.isBlank())</span>
+<span class="source-line-no">302</span><span id="line-302">      if (ib(title))</span>
 <span class="source-line-no">303</span><span id="line-303">         return "title must not be null or blank";</span>
 <span class="source-line-no">304</span><span id="line-304">      if (civilOrNull(start) == null)</span>
 <span class="source-line-no">305</span><span id="line-305">         return "start is not a valid ISO date or date-time: " + start;</span>
@@ -373,10 +373,10 @@
 <span class="source-line-no">360</span><span id="line-360">      if (bad != null)</span>
 <span class="source-line-no">361</span><span id="line-361">         throw iaex("CalendarEvent '%s' is malformed: %s", id, bad);</span>
 <span class="source-line-no">362</span><span id="line-362">      var startDate = civilStart();</span>
-<span class="source-line-no">363</span><span id="line-363">      if (categoryId != null &amp;&amp; !categoryId.isBlank()</span>
+<span class="source-line-no">363</span><span id="line-363">      if (inb(categoryId)</span>
 <span class="source-line-no">364</span><span id="line-364">            &amp;&amp; (knownCategoryIds == null || !knownCategoryIds.contains(categoryId)))</span>
 <span class="source-line-no">365</span><span id="line-365">         throw iaex("CalendarEvent '%s' categoryId '%s' is not a declared category.", id, categoryId);</span>
-<span class="source-line-no">366</span><span id="line-366">      if (href != null &amp;&amp; !href.isBlank() &amp;&amp; !SafePathTemplate.isSafeDocumentUrl(href))</span>
+<span class="source-line-no">366</span><span id="line-366">      if (inb(href) &amp;&amp; !SafePathTemplate.isSafeDocumentUrl(href))</span>
 <span class="source-line-no">367</span><span id="line-367">         throw iaex("CalendarEvent '%s' href must be a same-origin document URL: %s", id, href);</span>
 <span class="source-line-no">368</span><span id="line-368">      if (initialYear != null &amp;&amp; initialMonth != null) {</span>
 <span class="source-line-no">369</span><span id="line-369">         // Now that end is layout-significant, "in the rendered month" means the occupied range intersects it,</span>
@@ -391,7 +391,7 @@
 <span class="source-line-no">378</span><span id="line-378"></span>
 <span class="source-line-no">379</span><span id="line-379">   /** Whether {@code end} carries a value at all (an omitted or blank {@code end} means start-only). */</span>
 <span class="source-line-no">380</span><span id="line-380">   private boolean hasEnd() {</span>
-<span class="source-line-no">381</span><span id="line-381">      return end != null &amp;&amp; !end.isBlank();</span>
+<span class="source-line-no">381</span><span id="line-381">      return inb(end);</span>
 <span class="source-line-no">382</span><span id="line-382">   }</span>
 <span class="source-line-no">383</span><span id="line-383"></span>
 <span class="source-line-no">384</span><span id="line-384">   /** Whether an ISO value is date-only ({@code yyyy-MM-dd}) rather than a date-time. */</span>

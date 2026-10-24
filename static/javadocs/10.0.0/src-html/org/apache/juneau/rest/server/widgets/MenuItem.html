@@ -148,12 +148,12 @@
 <span class="source-line-no">135</span><span id="line-135">   public void validate() {</span>
 <span class="source-line-no">136</span><span id="line-136">      if (isDivider())</span>
 <span class="source-line-no">137</span><span id="line-137">         return;</span>
-<span class="source-line-no">138</span><span id="line-138">      if (id == null || id.isBlank())</span>
+<span class="source-line-no">138</span><span id="line-138">      if (ib(id))</span>
 <span class="source-line-no">139</span><span id="line-139">         throw iaex("MenuItem id must not be null or blank.");</span>
-<span class="source-line-no">140</span><span id="line-140">      if (label == null || label.isBlank())</span>
+<span class="source-line-no">140</span><span id="line-140">      if (ib(label))</span>
 <span class="source-line-no">141</span><span id="line-141">         throw iaex("MenuItem '%s' label must not be null or blank.", id);</span>
-<span class="source-line-no">142</span><span id="line-142">      var hasHref = href != null &amp;&amp; !href.isBlank();</span>
-<span class="source-line-no">143</span><span id="line-143">      var hasSafe = safe != null &amp;&amp; !safe.isBlank();</span>
+<span class="source-line-no">142</span><span id="line-142">      var hasHref = inb(href);</span>
+<span class="source-line-no">143</span><span id="line-143">      var hasSafe = inb(safe);</span>
 <span class="source-line-no">144</span><span id="line-144">      if (hasHref == hasSafe)</span>
 <span class="source-line-no">145</span><span id="line-145">         throw iaex("MenuItem '%s' must declare exactly one of link/safe.", id);</span>
 <span class="source-line-no">146</span><span id="line-146">      if (hasHref &amp;&amp; !SafePathTemplate.isSameOriginPath(href))</span>

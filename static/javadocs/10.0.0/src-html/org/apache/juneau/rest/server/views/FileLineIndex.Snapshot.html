@@ -226,7 +226,7 @@
 <span class="source-line-no">213</span><span id="line-213">         var key = attrs.fileKey();</span>
 <span class="source-line-no">214</span><span id="line-214">         var size = attrs.size();</span>
 <span class="source-line-no">215</span><span id="line-215">         try (var ch = FileChannel.open(file, StandardOpenOption.READ)) {</span>
-<span class="source-line-no">216</span><span id="line-216">            if (! Objects.equals(key, fileKey) || size &lt; indexedBytes || headChanged(ch, size))</span>
+<span class="source-line-no">216</span><span id="line-216">            if (neq(key, fileKey) || size &lt; indexedBytes || headChanged(ch, size))</span>
 <span class="source-line-no">217</span><span id="line-217">               reset(key);</span>
 <span class="source-line-no">218</span><span id="line-218">            readHead(ch, size);</span>
 <span class="source-line-no">219</span><span id="line-219">            scan(ch, size);</span>

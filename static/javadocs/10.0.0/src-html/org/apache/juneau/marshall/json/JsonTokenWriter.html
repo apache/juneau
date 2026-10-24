@@ -542,7 +542,7 @@
 <span class="source-line-no">529</span><span id="line-529">               break;</span>
 <span class="source-line-no">530</span><span id="line-530">            default:</span>
 <span class="source-line-no">531</span><span id="line-531">               if (c &lt; 0x20 || c == 0x7f)</span>
-<span class="source-line-no">532</span><span id="line-532">                  out.write(String.format("\\u%04x", (int) c));</span>
+<span class="source-line-no">532</span><span id="line-532">                  out.write(f("\\u%04x", (int) c));</span>
 <span class="source-line-no">533</span><span id="line-533">               else</span>
 <span class="source-line-no">534</span><span id="line-534">                  out.write(c);</span>
 <span class="source-line-no">535</span><span id="line-535">         }</span>

@@ -702,7 +702,7 @@
 <span class="source-line-no">689</span><span id="line-689">      while (c != -1) {</span>
 <span class="source-line-no">690</span><span id="line-690">         c = r.read();</span>
 <span class="source-line-no">691</span><span id="line-691">         if (c &lt;= 0x1F &amp;&amp; c != -1)</span>
-<span class="source-line-no">692</span><span id="line-692">            throw parseException("Unescaped control character encountered: '0x%s'", String.format("%04X", c));</span>
+<span class="source-line-no">692</span><span id="line-692">            throw parseException("Unescaped control character encountered: '0x%s'", f("%04X", c));</span>
 <span class="source-line-no">693</span><span id="line-693">         if (inEscape) {</span>
 <span class="source-line-no">694</span><span id="line-694">            switch (c) {</span>
 <span class="source-line-no">695</span><span id="line-695">               case 'n': r.replace('\n'); break;</span>

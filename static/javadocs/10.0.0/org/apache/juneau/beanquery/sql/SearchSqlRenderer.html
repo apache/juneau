@@ -87,7 +87,7 @@ loadScripts(document, 'script');</script>
  <p>
  The renderer receives the target <a href="SqlDialect.html" title="interface in org.apache.juneau.beanquery.sql"><code>SqlDialect</code></a>, the already-quoted column reference, the column's
  <a href="../../commons/beanquery/SearchType.html" title="enum class in org.apache.juneau.commons.beanquery"><code>value type</code></a> (so it can bind values as the right JDBC type), and the operator's arguments (typed
- values when the operator asks for them, otherwise the literal strings; see <a href="../../commons/beanquery/SearchOperator.Builder.html#typedArgs(boolean)"><code>SearchOperator.Builder.typedArgs(boolean)</code></a>),
+ values when the operator asks for them, otherwise the literal strings; see <a href="../../commons/beanquery/SearchOperator.Builder.html#typedArgs(boolean)"><code>SearchOperator.Builder#typedArgs(boolean)</code></a>),
  and returns a <a href="SqlFragment.html" title="class in org.apache.juneau.beanquery.sql"><code>SqlFragment</code></a> (a boolean SQL expression plus its ordered bind values).  It is the
  SQL-side analog of <a href="../../commons/beanquery/SearchPredicate.html" title="interface in org.apache.juneau.commons.beanquery"><code>SearchPredicate</code></a> (the in-memory evaluator): built-in operators do not use it &mdash; their
  SQL comes from <a href="SqlDialect.html#builtinRenderer(java.lang.String)"><code>SqlDialect.builtinRenderer(String)</code></a>.

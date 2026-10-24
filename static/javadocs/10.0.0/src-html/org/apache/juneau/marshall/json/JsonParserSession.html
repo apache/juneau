@@ -624,7 +624,7 @@
 <span class="source-line-no">611</span><span id="line-611">      while (c != -1) {</span>
 <span class="source-line-no">612</span><span id="line-612">         c = r.read();</span>
 <span class="source-line-no">613</span><span id="line-613">         if (c &lt;= 0x1F)</span>
-<span class="source-line-no">614</span><span id="line-614">            throw new ParseException(this, "Unescaped control character encountered: '0x%s'", String.format("%04X", c));</span>
+<span class="source-line-no">614</span><span id="line-614">            throw new ParseException(this, "Unescaped control character encountered: '0x%s'", f("%04X", c));</span>
 <span class="source-line-no">615</span><span id="line-615">         if (isInEscape) {</span>
 <span class="source-line-no">616</span><span id="line-616">            // @formatter:off</span>
 <span class="source-line-no">617</span><span id="line-617">            switch (c) {</span>

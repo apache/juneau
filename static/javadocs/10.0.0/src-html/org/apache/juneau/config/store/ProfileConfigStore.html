@@ -213,7 +213,7 @@
 <span class="source-line-no">200</span><span id="line-200"></span>
 <span class="source-line-no">201</span><span id="line-201">   @Override /* Overridden from ConfigStore */</span>
 <span class="source-line-no">202</span><span id="line-202">   public String read(String name) throws IOException {</span>
-<span class="source-line-no">203</span><span id="line-203">      if (! eq(name, baseName))</span>
+<span class="source-line-no">203</span><span id="line-203">      if (neq(name, baseName))</span>
 <span class="source-line-no">204</span><span id="line-204">         return delegate.read(name);</span>
 <span class="source-line-no">205</span><span id="line-205">      return mergedContents();</span>
 <span class="source-line-no">206</span><span id="line-206">   }</span>
@@ -225,7 +225,7 @@
 <span class="source-line-no">212</span><span id="line-212"></span>
 <span class="source-line-no">213</span><span id="line-213">   @Override /* Overridden from ConfigStore */</span>
 <span class="source-line-no">214</span><span id="line-214">   public String getNotifiedContents(String name, String written) throws IOException {</span>
-<span class="source-line-no">215</span><span id="line-215">      if (! eq(name, baseName))</span>
+<span class="source-line-no">215</span><span id="line-215">      if (neq(name, baseName))</span>
 <span class="source-line-no">216</span><span id="line-216">         return written;</span>
 <span class="source-line-no">217</span><span id="line-217">      return mergeWithOverlays(written);</span>
 <span class="source-line-no">218</span><span id="line-218">   }</span>

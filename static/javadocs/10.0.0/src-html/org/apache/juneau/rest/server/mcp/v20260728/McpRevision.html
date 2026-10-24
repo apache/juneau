@@ -909,7 +909,7 @@
 <span class="source-line-no">896</span><span id="line-896">         .orElseThrow(() -&gt; new McpException(CODE_INVALID_PARAMS, "Invalid or tampered requestState"));</span>
 <span class="source-line-no">897</span><span id="line-897">      if (! method.equals(sealed.method()))</span>
 <span class="source-line-no">898</span><span id="line-898">         throw new McpException(CODE_INVALID_PARAMS, "requestState method mismatch");</span>
-<span class="source-line-no">899</span><span id="line-899">      if (sealed.expiresAtMs() &lt;= System.currentTimeMillis())</span>
+<span class="source-line-no">899</span><span id="line-899">      if (sealed.expiresAtMs() &lt;= mrtrConfig.getClock().millis())</span>
 <span class="source-line-no">900</span><span id="line-900">         throw new McpException(CODE_REQUEST_STATE_EXPIRED, "requestState has expired");</span>
 <span class="source-line-no">901</span><span id="line-901">      if (sealed.round() &gt;= mrtrConfig.getMaxRounds())</span>
 <span class="source-line-no">902</span><span id="line-902">         // Client-facing message deliberately omits the configured cap value so server config is not leaked.</span>
@@ -971,7 +971,7 @@
 <span class="source-line-no">958</span><span id="line-958">      if (! clientElicitationSupported(params))</span>
 <span class="source-line-no">959</span><span id="line-959">         throw new McpException(CODE_MISSING_REQUIRED_CLIENT_CAPABILITY,</span>
 <span class="source-line-no">960</span><span id="line-960">            "Client does not advertise the elicitation capability required for input_required");</span>
-<span class="source-line-no">961</span><span id="line-961">      var state = new McpRequestState(signal.getContinuation(), method, currentRound + 1, System.currentTimeMillis() + mrtrConfig.getTtlMs(),</span>
+<span class="source-line-no">961</span><span id="line-961">      var state = new McpRequestState(signal.getContinuation(), method, currentRound + 1, mrtrConfig.getClock().millis() + mrtrConfig.getTtlMs(),</span>
 <span class="source-line-no">962</span><span id="line-962">         mintJti(), argumentsHash);</span>
 <span class="source-line-no">963</span><span id="line-963">      var result = new InputRequiredResult().setRequestState(mrtrConfig.getCodec().seal(state, aad(method, target), principal(ctx)));</span>
 <span class="source-line-no">964</span><span id="line-964">      // Each inputRequests value is carried to the wire byte-for-byte as a raw sub-request object (see</span>

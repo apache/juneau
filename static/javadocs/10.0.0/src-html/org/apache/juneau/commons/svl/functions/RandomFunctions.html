@@ -118,7 +118,7 @@
 <span class="source-line-no">105</span><span id="line-105">      public String invoke(int length) { return invoke(length, ALPHA_NUM); }</span>
 <span class="source-line-no">106</span><span id="line-106">      public String invoke(int length, String charset) {</span>
 <span class="source-line-no">107</span><span id="line-107">         if (length &lt; 0) throw iaex("randString: length must be &gt;= 0");</span>
-<span class="source-line-no">108</span><span id="line-108">         if (charset == null || charset.isEmpty()) charset = ALPHA_NUM;</span>
+<span class="source-line-no">108</span><span id="line-108">         if (ie(charset)) charset = ALPHA_NUM;</span>
 <span class="source-line-no">109</span><span id="line-109">         var rnd = ThreadLocalRandom.current();</span>
 <span class="source-line-no">110</span><span id="line-110">         var sb = new StringBuilder(length);</span>
 <span class="source-line-no">111</span><span id="line-111">         for (var i = 0; i &lt; length; i++)</span>

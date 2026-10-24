@@ -37,7 +37,7 @@
 <span class="source-line-no">024</span><span id="line-24">import org.apache.juneau.commons.svl.*;</span>
 <span class="source-line-no">025</span><span id="line-25"></span>
 <span class="source-line-no">026</span><span id="line-26">/**</span>
-<span class="source-line-no">027</span><span id="line-27"> * A {@link org.apache.juneau.rest.server.widgets.Widget}-marked declaration of named server-side scalar values.</span>
+<span class="source-line-no">027</span><span id="line-27"> * A {@link Widget}-marked declaration of named server-side scalar values.</span>
 <span class="source-line-no">028</span><span id="line-28"> *</span>
 <span class="source-line-no">029</span><span id="line-29"> * &lt;p&gt;</span>
 <span class="source-line-no">030</span><span id="line-30"> * This is a thin, typed facade over the existing {@link VarResolver} engine &amp;mdash; &lt;b&gt;not&lt;/b&gt; a second</span>
@@ -101,7 +101,7 @@
 <span class="source-line-no">088</span><span id="line-88">    * @return This object.</span>
 <span class="source-line-no">089</span><span id="line-89">    */</span>
 <span class="source-line-no">090</span><span id="line-90">   public ServerValues value(String name, Function&lt;VarResolverSession,?&gt; provider) {</span>
-<span class="source-line-no">091</span><span id="line-91">      if (name == null || name.isBlank())</span>
+<span class="source-line-no">091</span><span id="line-91">      if (ib(name))</span>
 <span class="source-line-no">092</span><span id="line-92">         throw iaex("ServerValues name must not be null or blank.");</span>
 <span class="source-line-no">093</span><span id="line-93">      if (provider == null)</span>
 <span class="source-line-no">094</span><span id="line-94">         throw iaex("ServerValues provider for ''{0}'' must not be null.", name);</span>
@@ -128,7 +128,7 @@
 <span class="source-line-no">115</span><span id="line-115">         return;</span>
 <span class="source-line-no">116</span><span id="line-116">      for (var e : values.entrySet()) {</span>
 <span class="source-line-no">117</span><span id="line-117">         var name = e.getKey();</span>
-<span class="source-line-no">118</span><span id="line-118">         if (name == null || name.isBlank())</span>
+<span class="source-line-no">118</span><span id="line-118">         if (ib(name))</span>
 <span class="source-line-no">119</span><span id="line-119">            throw iaex("ServerValues name must not be null or blank.");</span>
 <span class="source-line-no">120</span><span id="line-120">         var v = e.getValue();</span>
 <span class="source-line-no">121</span><span id="line-121">         if (v == null)</span>

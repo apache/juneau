@@ -225,12 +225,17 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="petStore()">
 <h3>petStore</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../service/PetStore.html" title="class in org.apache.juneau.petstore.service">PetStore</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/petstore/jetty/RootResources.html#line-122">petStore</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../service/PetStore.html" title="class in org.apache.juneau.petstore.service">PetStore</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/petstore/jetty/RootResources.html#line-127">petStore</a></span>()</div>
 <div class="block">Registers the one <a href="../service/PetStore.html" title="class in org.apache.juneau.petstore.service"><code>PetStore</code></a> shared by the <code>/petstore</code> API and the console tree, seeded with the
  deterministic demo data set.
 
  <p>
- Child resources inherit the group's beans, so a plain <code>@Bean</code> method is all that is needed.</div>
+ Child resources inherit the group's beans, so a plain <code>@Bean</code> method is all that is needed.
+
+ <p>
+ The store runs on the system clock unless the <a href="../console/data/PetstoreSeed.html#FIXED_NOW_ENV">"PETSTORE_FIXED_NOW"</a> environment variable is set, which pins
+ "now" so the store page's day figures render the same on every run (the docs screenshots rely on this).  Its value
+ is an ISO-8601 instant such as <code>2026-10-01T12:00:00Z</code>, or <code>seed</code> for the seed data's own clock.</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>The seeded <a href="../service/PetStore.html" title="class in org.apache.juneau.petstore.service"><code>PetStore</code></a>.</dd>
@@ -240,7 +245,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="index(org.apache.juneau.rest.server.RestRequest)">
 <h3>index</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../http/response/SeeOther.html" title="class in org.apache.juneau.http.response">SeeOther</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/petstore/jetty/RootResources.html#line-133">index</a></span><wbr><span class="parameters">(<a href="../../rest/server/RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../http/response/SeeOther.html" title="class in org.apache.juneau.http.response">SeeOther</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/petstore/jetty/RootResources.html#line-141">index</a></span><wbr><span class="parameters">(<a href="../../rest/server/RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req)</span></div>
 <div class="block"><code>GET /</code> goes to the console store page.</div>
 <dl class="notes">
 <dt>Parameters:</dt>

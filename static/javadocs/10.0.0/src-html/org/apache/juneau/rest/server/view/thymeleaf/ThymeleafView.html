@@ -151,7 +151,7 @@
 <span class="source-line-no">138</span><span id="line-138">    *    value.</span>
 <span class="source-line-no">139</span><span id="line-139">    */</span>
 <span class="source-line-no">140</span><span id="line-140">   public ThymeleafView attrs(Map&lt;String,?&gt; values) {</span>
-<span class="source-line-no">141</span><span id="line-141">      if (values == null || values.isEmpty())</span>
+<span class="source-line-no">141</span><span id="line-141">      if (ie(values))</span>
 <span class="source-line-no">142</span><span id="line-142">         return this;</span>
 <span class="source-line-no">143</span><span id="line-143">      var copy = new LinkedHashMap&lt;&gt;(attributes);</span>
 <span class="source-line-no">144</span><span id="line-144">      values.forEach((k, v) -&gt; {</span>

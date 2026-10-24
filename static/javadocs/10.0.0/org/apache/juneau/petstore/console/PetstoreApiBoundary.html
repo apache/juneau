@@ -82,7 +82,7 @@ loadScripts(document, 'script');</script>
 <dd><code>jakarta.servlet.Filter</code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/petstore/console/PetstoreApiBoundary.html#line-97">PetstoreApiBoundary</a></span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/petstore/console/PetstoreApiBoundary.html#line-99">PetstoreApiBoundary</a></span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>
 implements jakarta.servlet.Filter</span></div>
 <div class="block">The <code>/petstore</code> API's CSRF boundary: a <a href="../../rest/server/filter/RequestBoundaryFilter.html" title="class in org.apache.juneau.rest.server.filter"><code>RequestBoundaryFilter</code></a> over the framework's <a href="../../rest/server/filter/CsrfBoundary.html" title="class in org.apache.juneau.rest.server.filter"><code>CsrfBoundary</code></a>,
@@ -250,7 +250,7 @@ implements jakarta.servlet.Filter</span></div>
 <li>
 <section class="detail" id="PATH">
 <h3>PATH</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/petstore/console/PetstoreApiBoundary.html#line-100">PATH</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/petstore/console/PetstoreApiBoundary.html#line-102">PATH</a></span></div>
 <div class="block">The covered path: the API resource's mount point.</div>
 <dl class="notes">
 <dt>See Also:</dt>
@@ -265,7 +265,7 @@ implements jakarta.servlet.Filter</span></div>
 <li>
 <section class="detail" id="URL_PATTERN">
 <h3>URL_PATTERN</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/petstore/console/PetstoreApiBoundary.html#line-103">URL_PATTERN</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/petstore/console/PetstoreApiBoundary.html#line-105">URL_PATTERN</a></span></div>
 <div class="block">The servlet URL pattern the boundary is registered under.  It matches <a href="#PATH"><code>PATH</code></a> itself and every path under it.</div>
 <dl class="notes">
 <dt>See Also:</dt>
@@ -280,7 +280,7 @@ implements jakarta.servlet.Filter</span></div>
 <li>
 <section class="detail" id="ALLOWED_HOSTS_PROPERTY">
 <h3>ALLOWED_HOSTS_PROPERTY</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/petstore/console/PetstoreApiBoundary.html#line-109">ALLOWED_HOSTS_PROPERTY</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/petstore/console/PetstoreApiBoundary.html#line-111">ALLOWED_HOSTS_PROPERTY</a></span></div>
 <div class="block">Setting (system property, environment, or any registered source) listing the host names the API answers to:
  comma-separated, no ports.  Unset or blank, any host is answered.</div>
 <dl class="notes">
@@ -296,7 +296,7 @@ implements jakarta.servlet.Filter</span></div>
 <li>
 <section class="detail" id="TOKEN_ATTRIBUTE">
 <h3>TOKEN_ATTRIBUTE</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/petstore/console/PetstoreApiBoundary.html#line-115">TOKEN_ATTRIBUTE</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/petstore/console/PetstoreApiBoundary.html#line-117">TOKEN_ATTRIBUTE</a></span></div>
 <div class="block">Request attribute under which an allowed console request carries a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link"><code>String</code></a>: a freshly masked token for
  this boundary, for a console page to stamp on the form that writes to the API.</div>
 <dl class="notes">
@@ -320,7 +320,7 @@ implements jakarta.servlet.Filter</span></div>
 <li>
 <section class="detail" id="&lt;init&gt;()">
 <h3>PetstoreApiBoundary</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/petstore/console/PetstoreApiBoundary.html#line-129">PetstoreApiBoundary</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/petstore/console/PetstoreApiBoundary.html#line-131">PetstoreApiBoundary</a></span>()</div>
 <div class="block">Constructor.
 
  <p>
@@ -343,7 +343,7 @@ implements jakarta.servlet.Filter</span></div>
 <li>
 <section class="detail" id="tokenFor(jakarta.servlet.http.HttpServletRequest)">
 <h3>tokenFor</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/petstore/console/PetstoreApiBoundary.html#line-159">tokenFor</a></span><wbr><span class="parameters">(jakarta.servlet.http.HttpServletRequest&nbsp;req)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/petstore/console/PetstoreApiBoundary.html#line-161">tokenFor</a></span><wbr><span class="parameters">(jakarta.servlet.http.HttpServletRequest&nbsp;req)</span></div>
 <div class="block">A freshly masked token for a page served to this request to embed.
 
  <p>
@@ -359,7 +359,7 @@ implements jakarta.servlet.Filter</span></div>
 <li>
 <section class="detail" id="doFilter(jakarta.servlet.ServletRequest,jakarta.servlet.ServletResponse,jakarta.servlet.FilterChain)">
 <h3>doFilter</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/petstore/console/PetstoreApiBoundary.html#line-166">doFilter</a></span><wbr><span class="parameters">(jakarta.servlet.ServletRequest&nbsp;req,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/petstore/console/PetstoreApiBoundary.html#line-168">doFilter</a></span><wbr><span class="parameters">(jakarta.servlet.ServletRequest&nbsp;req,
  jakarta.servlet.ServletResponse&nbsp;res,
  jakarta.servlet.FilterChain&nbsp;chain)</span>
               throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a>,

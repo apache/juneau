@@ -429,12 +429,12 @@
 <span class="source-line-no">416</span><span id="line-416">         throw new UnsupportedOperationException("TerminalProcess needs a POSIX pseudo-terminal; Windows is not supported.");</span>
 <span class="source-line-no">417</span><span id="line-417">      if (! TOOLS.contains(tool))</span>
 <span class="source-line-no">418</span><span id="line-418">         throw iaex("TerminalProcess tool must be one of %s; got '%s'.", new TreeSet&lt;&gt;(TOOLS), tool);</span>
-<span class="source-line-no">419</span><span id="line-419">      if (cmd == null || cmd.isEmpty())</span>
+<span class="source-line-no">419</span><span id="line-419">      if (ie(cmd))</span>
 <span class="source-line-no">420</span><span id="line-420">         throw iaex("TerminalProcess cmd must have at least one element.");</span>
 <span class="source-line-no">421</span><span id="line-421">      if (cols &lt; 1 || cols &gt; 9999 || rows &lt; 1 || rows &gt; 9999)</span>
 <span class="source-line-no">422</span><span id="line-422">         throw iaex("TerminalProcess size must be 1-9999 x 1-9999; got '%sx%s'.", cols, rows);</span>
 <span class="source-line-no">423</span><span id="line-423">      var script = host.scriptProperty() != null &amp;&amp; ! host.scriptProperty().isBlank() ? host.scriptProperty() : host.scriptEnv();</span>
-<span class="source-line-no">424</span><span id="line-424">      if (script == null || script.isBlank())</span>
+<span class="source-line-no">424</span><span id="line-424">      if (ib(script))</span>
 <span class="source-line-no">425</span><span id="line-425">         throw new IllegalStateException("TerminalProcess cannot find juneau_run.py: set the system property " + SCRIPT_PROPERTY + " or the environment variable " + SCRIPT_ENV + ".");</span>
 <span class="source-line-no">426</span><span id="line-426">      var python = findOnPath("python3", host.path());</span>
 <span class="source-line-no">427</span><span id="line-427">      if (python == null)</span>

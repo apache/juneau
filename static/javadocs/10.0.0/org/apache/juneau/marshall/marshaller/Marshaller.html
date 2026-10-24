@@ -302,9 +302,9 @@ loadScripts(document, 'script');</script>
       <li><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Reader.html" title="class or interface in java.io" class="external-link"><code>Reader</code></a>
       <li><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/CharSequence.html" title="class or interface in java.lang" class="external-link"><code>CharSequence</code></a>
       <li><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/InputStream.html" title="class or interface in java.io" class="external-link"><code>InputStream</code></a> containing UTF-8 encoded text (or charset defined by
-         <a href="../parser/ReaderParser.Builder.html#streamCharset(java.nio.charset.Charset)"><code>ReaderParser.Builder.streamCharset(Charset)</code></a> property value).
+         <a href="../parser/ReaderParser.Builder.html#streamCharset(java.nio.charset.Charset)"><code>ReaderParser.Builder#streamCharset(Charset)</code></a> property value).
       <li><code><jk>byte</jk>[]</code> containing UTF-8 encoded text (or charset defined by
-         <a href="../parser/ReaderParser.Builder.html#streamCharset(java.nio.charset.Charset)"><code>ReaderParser.Builder.streamCharset(Charset)</code></a> property value).
+         <a href="../parser/ReaderParser.Builder.html#streamCharset(java.nio.charset.Charset)"><code>ReaderParser.Builder#streamCharset(Charset)</code></a> property value).
       <li><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/File.html" title="class or interface in java.io" class="external-link"><code>File</code></a> containing system encoded text.
    </ul>
    <br>Stream-based parsers can handle the following input class types:
@@ -313,7 +313,7 @@ loadScripts(document, 'script');</script>
       <li><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/InputStream.html" title="class or interface in java.io" class="external-link"><code>InputStream</code></a>
       <li><code><jk>byte</jk>[]</code>
       <li><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/File.html" title="class or interface in java.io" class="external-link"><code>File</code></a>
-      <li><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/CharSequence.html" title="class or interface in java.lang" class="external-link"><code>CharSequence</code></a> containing encoded bytes according to the <a href="../MarshallingContextable.Builder.html#binaryFormat(org.apache.juneau.marshall.BinaryFormat)"><code>MarshallingContextable.Builder.binaryFormat(BinaryFormat)</code></a> setting.
+      <li><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/CharSequence.html" title="class or interface in java.lang" class="external-link"><code>CharSequence</code></a> containing encoded bytes according to the <a href="../MarshallingContextable.Builder.html#binaryFormat(org.apache.juneau.marshall.BinaryFormat)"><code>InputStreamParser.Builder#binaryFormat(BinaryFormat)</code></a> setting.
    </ul></dd>
 <dd><code>type</code> - The object type to create.</dd>
 <dt>Returns:</dt>
@@ -381,9 +381,9 @@ loadScripts(document, 'script');</script>
       <li><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Reader.html" title="class or interface in java.io" class="external-link"><code>Reader</code></a>
       <li><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/CharSequence.html" title="class or interface in java.lang" class="external-link"><code>CharSequence</code></a>
       <li><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/InputStream.html" title="class or interface in java.io" class="external-link"><code>InputStream</code></a> containing UTF-8 encoded text (or charset defined by
-         <a href="../parser/ReaderParser.Builder.html#streamCharset(java.nio.charset.Charset)"><code>ReaderParser.Builder.streamCharset(Charset)</code></a> property value).
+         <a href="../parser/ReaderParser.Builder.html#streamCharset(java.nio.charset.Charset)"><code>ReaderParser.Builder#streamCharset(Charset)</code></a> property value).
       <li><code><jk>byte</jk>[]</code> containing UTF-8 encoded text (or charset defined by
-         <a href="../parser/ReaderParser.Builder.html#streamCharset(java.nio.charset.Charset)"><code>ReaderParser.Builder.streamCharset(Charset)</code></a> property value).
+         <a href="../parser/ReaderParser.Builder.html#streamCharset(java.nio.charset.Charset)"><code>ReaderParser.Builder#streamCharset(Charset)</code></a> property value).
       <li><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/File.html" title="class or interface in java.io" class="external-link"><code>File</code></a> containing system encoded text.
    </ul>
    <br>Stream-based parsers can handle the following input class types:
@@ -392,7 +392,7 @@ loadScripts(document, 'script');</script>
       <li><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/InputStream.html" title="class or interface in java.io" class="external-link"><code>InputStream</code></a>
       <li><code><jk>byte</jk>[]</code>
       <li><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/File.html" title="class or interface in java.io" class="external-link"><code>File</code></a>
-      <li><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/CharSequence.html" title="class or interface in java.lang" class="external-link"><code>CharSequence</code></a> containing encoded bytes according to the <a href="../MarshallingContextable.Builder.html#binaryFormat(org.apache.juneau.marshall.BinaryFormat)"><code>MarshallingContextable.Builder.binaryFormat(BinaryFormat)</code></a> setting.
+      <li><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/CharSequence.html" title="class or interface in java.lang" class="external-link"><code>CharSequence</code></a> containing encoded bytes according to the <a href="../MarshallingContextable.Builder.html#binaryFormat(org.apache.juneau.marshall.BinaryFormat)"><code>InputStreamParser.Builder#binaryFormat(BinaryFormat)</code></a> setting.
    </ul></dd>
 <dd><code>type</code> - The object type to create.
    <br>Can be any of the following: <a href="../ClassMeta.html" title="class in org.apache.juneau.marshall"><code>ClassMeta</code></a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link"><code>Class</code></a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/ParameterizedType.html" title="class or interface in java.lang.reflect" class="external-link"><code>ParameterizedType</code></a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/GenericArrayType.html" title="class or interface in java.lang.reflect" class="external-link"><code>GenericArrayType</code></a></dd>

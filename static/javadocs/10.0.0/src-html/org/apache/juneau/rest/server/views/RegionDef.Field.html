@@ -422,11 +422,11 @@
 <span class="source-line-no">409</span><span id="line-409">    * @throws IllegalArgumentException If this definition is not well-formed.</span>
 <span class="source-line-no">410</span><span id="line-410">    */</span>
 <span class="source-line-no">411</span><span id="line-411">   public void validate() {</span>
-<span class="source-line-no">412</span><span id="line-412">      if (id == null || id.isBlank())</span>
+<span class="source-line-no">412</span><span id="line-412">      if (ib(id))</span>
 <span class="source-line-no">413</span><span id="line-413">         throw iaex("RegionDef id must not be null or blank.");</span>
 <span class="source-line-no">414</span><span id="line-414">      if (allowedPopulators != null)</span>
 <span class="source-line-no">415</span><span id="line-415">         for (var name : allowedPopulators)</span>
-<span class="source-line-no">416</span><span id="line-416">            if (name == null || name.isBlank())</span>
+<span class="source-line-no">416</span><span id="line-416">            if (ib(name))</span>
 <span class="source-line-no">417</span><span id="line-417">               throw iaex("allowPopulators entry must not be blank.");</span>
 <span class="source-line-no">418</span><span id="line-418">      if (populate != null)</span>
 <span class="source-line-no">419</span><span id="line-419">         PopulatorAllowlist.assertAllowed(populate, allowedPopulators);</span>
@@ -450,10 +450,10 @@
 <span class="source-line-no">437</span><span id="line-437">   }</span>
 <span class="source-line-no">438</span><span id="line-438"></span>
 <span class="source-line-no">439</span><span id="line-439">   private void validateDataUrlAndParams() {</span>
-<span class="source-line-no">440</span><span id="line-440">      if (dataUrl != null &amp;&amp; !dataUrl.isBlank() &amp;&amp; !isSafeDetailEndpoint(dataUrl))</span>
+<span class="source-line-no">440</span><span id="line-440">      if (inb(dataUrl) &amp;&amp; !isSafeDetailEndpoint(dataUrl))</span>
 <span class="source-line-no">441</span><span id="line-441">         throw iaex("RegionDef '%s' dataUrl must be a same-origin path (no scheme, no leading '//', no '..' "</span>
 <span class="source-line-no">442</span><span id="line-442">            + "segment): %s", id, dataUrl);</span>
-<span class="source-line-no">443</span><span id="line-443">      if (params == null || params.isEmpty())</span>
+<span class="source-line-no">443</span><span id="line-443">      if (ie(params))</span>
 <span class="source-line-no">444</span><span id="line-444">         return;</span>
 <span class="source-line-no">445</span><span id="line-445">      for (var e : params.entrySet()) {</span>
 <span class="source-line-no">446</span><span id="line-446">         if (e.getValue() instanceof Map)</span>
@@ -471,7 +471,7 @@
 <span class="source-line-no">458</span><span id="line-458">      if (titleFields == null)</span>
 <span class="source-line-no">459</span><span id="line-459">         return;</span>
 <span class="source-line-no">460</span><span id="line-460">      for (var f : titleFields)</span>
-<span class="source-line-no">461</span><span id="line-461">         if (f == null || f.isBlank())</span>
+<span class="source-line-no">461</span><span id="line-461">         if (ib(f))</span>
 <span class="source-line-no">462</span><span id="line-462">            throw iaex("RegionDef '%s' titleFields entry must not be blank.", id);</span>
 <span class="source-line-no">463</span><span id="line-463">   }</span>
 <span class="source-line-no">464</span><span id="line-464"></span>
@@ -491,7 +491,7 @@
 <span class="source-line-no">478</span><span id="line-478">      }</span>
 <span class="source-line-no">479</span><span id="line-479">      var isDefaultPopulate = populate == null || eq(populate, "default");</span>
 <span class="source-line-no">480</span><span id="line-480">      var isCardOrTab = eqa(type, TYPE_CARD_BODY, TYPE_TAB_BODY);</span>
-<span class="source-line-no">481</span><span id="line-481">      if (isDefaultPopulate &amp;&amp; isCardOrTab &amp;&amp; eq(renderer, RENDERER_FIELD_GRID) &amp;&amp; (fields == null || fields.isEmpty()))</span>
+<span class="source-line-no">481</span><span id="line-481">      if (isDefaultPopulate &amp;&amp; isCardOrTab &amp;&amp; eq(renderer, RENDERER_FIELD_GRID) &amp;&amp; (ie(fields)))</span>
 <span class="source-line-no">482</span><span id="line-482">         throw iaex("RegionDef '%s' declares renderer 'field-grid' under the default populator but no fields; "</span>
 <span class="source-line-no">483</span><span id="line-483">            + "a field-grid with no catalog would silently paint an unlabeled/empty grid.", id);</span>
 <span class="source-line-no">484</span><span id="line-484">   }</span>
@@ -623,7 +623,7 @@
 <span class="source-line-no">610</span><span id="line-610">       * @return A new {@link Field}.</span>
 <span class="source-line-no">611</span><span id="line-611">       */</span>
 <span class="source-line-no">612</span><span id="line-612">      public static Field of(String data) {</span>
-<span class="source-line-no">613</span><span id="line-613">         if (data == null || data.isBlank())</span>
+<span class="source-line-no">613</span><span id="line-613">         if (ib(data))</span>
 <span class="source-line-no">614</span><span id="line-614">            throw iaex("RegionDef.Field data must not be null or blank.");</span>
 <span class="source-line-no">615</span><span id="line-615">         var f = new Field();</span>
 <span class="source-line-no">616</span><span id="line-616">         f.data = data;</span>
@@ -730,7 +730,7 @@
 <span class="source-line-no">717</span><span id="line-717">       * @param regionId The enclosing region's id, for the error message only.</span>
 <span class="source-line-no">718</span><span id="line-718">       */</span>
 <span class="source-line-no">719</span><span id="line-719">      void validate(String regionId) {</span>
-<span class="source-line-no">720</span><span id="line-720">         if (data == null || data.isBlank())</span>
+<span class="source-line-no">720</span><span id="line-720">         if (ib(data))</span>
 <span class="source-line-no">721</span><span id="line-721">            throw iaex("RegionDef '%s' field data must not be null or blank.", regionId);</span>
 <span class="source-line-no">722</span><span id="line-722">      }</span>
 <span class="source-line-no">723</span><span id="line-723"></span>

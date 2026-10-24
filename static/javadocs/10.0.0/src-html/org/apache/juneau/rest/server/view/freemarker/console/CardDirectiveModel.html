@@ -158,7 +158,7 @@
 <span class="source-line-no">145</span><span id="line-145">      var src = FtlAttrLists.scalar(p, "src");</span>
 <span class="source-line-no">146</span><span id="line-146">      var template = FtlAttrLists.scalar(p, "template");</span>
 <span class="source-line-no">147</span><span id="line-147">      var cardType = type.isEmpty() ? "html" : type;</span>
-<span class="source-line-no">148</span><span id="line-148">      if (sanitize &amp;&amp; (! eq(cardType, "html") || src.isEmpty()))</span>
+<span class="source-line-no">148</span><span id="line-148">      if (sanitize &amp;&amp; (neq(cardType, "html") || src.isEmpty()))</span>
 <span class="source-line-no">149</span><span id="line-149">         throw FtlAttrLists.reject(f("&lt;@card id='%s'&gt; sanitize= applies only to an html card with src=.", authoredId));</span>
 <span class="source-line-no">150</span><span id="line-150">      var id = authoredId.isEmpty() &amp;&amp; eq(cardType, "html") ? cap.nextCardId() : authoredId;</span>
 <span class="source-line-no">151</span><span id="line-151">      Map&lt;String,Object&gt; cardBody = Map.of();</span>
@@ -426,7 +426,7 @@
 <span class="source-line-no">413</span><span id="line-413">            throw FtlAttrLists.reject(f(</span>
 <span class="source-line-no">414</span><span id="line-414">               "&lt;@card id='%s'&gt; type='run-view' unknown key '%s'; allowed: contractVersion, runView, subscribes, publishes.", id, k));</span>
 <span class="source-line-no">415</span><span id="line-415">      var version = envelope.get("contractVersion");</span>
-<span class="source-line-no">416</span><span id="line-416">      if (! eq("1", version))</span>
+<span class="source-line-no">416</span><span id="line-416">      if (neq("1", version))</span>
 <span class="source-line-no">417</span><span id="line-417">         throw FtlAttrLists.reject(f(</span>
 <span class="source-line-no">418</span><span id="line-418">            "&lt;@card id='%s'&gt; type='run-view' requires contractVersion: '1'; got '%s'.", id, version));</span>
 <span class="source-line-no">419</span><span id="line-419">      if (! (envelope.get("runView") instanceof Map&lt;?,?&gt; runView))</span>

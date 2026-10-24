@@ -102,7 +102,7 @@
 <span class="source-line-no">089</span><span id="line-89">   }</span>
 <span class="source-line-no">090</span><span id="line-90"></span>
 <span class="source-line-no">091</span><span id="line-91">   private static String checkId(String id) {</span>
-<span class="source-line-no">092</span><span id="line-92">      if (id == null || id.isBlank())</span>
+<span class="source-line-no">092</span><span id="line-92">      if (ib(id))</span>
 <span class="source-line-no">093</span><span id="line-93">         throw iaex("QuickStat id must not be null or blank.");</span>
 <span class="source-line-no">094</span><span id="line-94">      return id;</span>
 <span class="source-line-no">095</span><span id="line-95">   }</span>
@@ -175,7 +175,7 @@
 <span class="source-line-no">162</span><span id="line-162">   }</span>
 <span class="source-line-no">163</span><span id="line-163"></span>
 <span class="source-line-no">164</span><span id="line-164">   private void checkLabel() {</span>
-<span class="source-line-no">165</span><span id="line-165">      if (label == null || label.isBlank())</span>
+<span class="source-line-no">165</span><span id="line-165">      if (ib(label))</span>
 <span class="source-line-no">166</span><span id="line-166">         throw fail("label must not be null or blank.");</span>
 <span class="source-line-no">167</span><span id="line-167">   }</span>
 <span class="source-line-no">168</span><span id="line-168"></span>
@@ -204,7 +204,7 @@
 <span class="source-line-no">191</span><span id="line-191">    */</span>
 <span class="source-line-no">192</span><span id="line-192">   public QuickStat segment(String label, long count, StatusTone tone) {</span>
 <span class="source-line-no">193</span><span id="line-193">      requireKind(Kind.SEGMENTED, "segment");</span>
-<span class="source-line-no">194</span><span id="line-194">      if (label == null || label.isBlank())</span>
+<span class="source-line-no">194</span><span id="line-194">      if (ib(label))</span>
 <span class="source-line-no">195</span><span id="line-195">         throw fail("segment label must not be null or blank.");</span>
 <span class="source-line-no">196</span><span id="line-196">      if (count &lt; 0)</span>
 <span class="source-line-no">197</span><span id="line-197">         throw fail("segment count must be &gt;= 0.");</span>
@@ -283,7 +283,7 @@
 <span class="source-line-no">270</span><span id="line-270">      if (kind == Kind.METER) {</span>
 <span class="source-line-no">271</span><span id="line-271">         m.put("value", value);</span>
 <span class="source-line-no">272</span><span id="line-272">         m.put("max", max);</span>
-<span class="source-line-no">273</span><span id="line-273">         if (text != null &amp;&amp; ! text.isBlank())</span>
+<span class="source-line-no">273</span><span id="line-273">         if (inb(text))</span>
 <span class="source-line-no">274</span><span id="line-274">            m.put("text", text);</span>
 <span class="source-line-no">275</span><span id="line-275">         if (tone != null)</span>
 <span class="source-line-no">276</span><span id="line-276">            m.put("tone", tone);</span>

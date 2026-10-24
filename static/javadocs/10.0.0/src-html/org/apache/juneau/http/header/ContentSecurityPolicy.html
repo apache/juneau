@@ -508,7 +508,7 @@
 <span class="source-line-no">495</span><span id="line-495">         var n = name.trim();</span>
 <span class="source-line-no">496</span><span id="line-496">         if (n.isEmpty())</span>
 <span class="source-line-no">497</span><span id="line-497">            throw iaex("directive name must not be blank");</span>
-<span class="source-line-no">498</span><span id="line-498">         directives.put(n, sources == null ? l() : new ArrayList&lt;&gt;(Arrays.asList(sources)));</span>
+<span class="source-line-no">498</span><span id="line-498">         directives.put(n, sources == null ? l() : l(sources));</span>
 <span class="source-line-no">499</span><span id="line-499">         return this;</span>
 <span class="source-line-no">500</span><span id="line-500">      }</span>
 <span class="source-line-no">501</span><span id="line-501"></span>

@@ -96,7 +96,7 @@
 <span class="source-line-no">083</span><span id="line-83">    * @return A new {@link Render}.</span>
 <span class="source-line-no">084</span><span id="line-84">    */</span>
 <span class="source-line-no">085</span><span id="line-85">   public static Render parse(String s) {</span>
-<span class="source-line-no">086</span><span id="line-86">      if (s == null || s.isBlank())</span>
+<span class="source-line-no">086</span><span id="line-86">      if (ib(s))</span>
 <span class="source-line-no">087</span><span id="line-87">         throw iaex("Render id must not be null or blank.");</span>
 <span class="source-line-no">088</span><span id="line-88">      var i = s.indexOf(':');</span>
 <span class="source-line-no">089</span><span id="line-89">      if (i &lt; 0)</span>
@@ -213,7 +213,7 @@
 <span class="source-line-no">200</span><span id="line-200">    */</span>
 <span class="source-line-no">201</span><span id="line-201">   public static Render pill(String tone) {</span>
 <span class="source-line-no">202</span><span id="line-202">      var r = pill();</span>
-<span class="source-line-no">203</span><span id="line-203">      if (tone != null &amp;&amp; ! tone.isBlank())</span>
+<span class="source-line-no">203</span><span id="line-203">      if (inb(tone))</span>
 <span class="source-line-no">204</span><span id="line-204">         r.meta("tone", tone);</span>
 <span class="source-line-no">205</span><span id="line-205">      return r;</span>
 <span class="source-line-no">206</span><span id="line-206">   }</span>

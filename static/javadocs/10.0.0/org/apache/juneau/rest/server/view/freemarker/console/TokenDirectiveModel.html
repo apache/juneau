@@ -93,10 +93,10 @@ implements freemarker.template.TemplateDirectiveModel</span></div>
  two disjoint <a href="../../../console/Theme.html" title="class in org.apache.juneau.rest.server.console"><code>Theme</code></a> channels:
  <ul class='spaced-list'>
    <li><code>value=</code> is a <b>leaf</b>: a CSS literal, or a <code>var(--jc-name)</code> reference that
-      <a href="../../../console/Theme.Builder.html#token(java.lang.String,java.lang.String)"><code>Theme.Builder.token(String, String)</code></a> <b>resolves to a literal</b>
+      <a href="../../../console/Theme.Builder.html#token(java.lang.String,java.lang.String)"><code>Theme.Builder#token(String, String)</code></a> <b>resolves to a literal</b>
       at build time (the substring <code>var(</code> does not reach the served leaf map).
    <li><code>alias=</code> is a <b>derived reference</b>: a <code>var(--jc-name)</code> that
-      <a href="../../../console/Theme.Builder.html#alias(java.lang.String,java.lang.String)"><code>Theme.Builder.alias(String, String)</code></a> keeps as a reference
+      <a href="../../../console/Theme.Builder.html#alias(java.lang.String,java.lang.String)"><code>Theme.Builder#alias(String, String)</code></a> keeps as a reference
       <b>surviving to the wire</b>. A literal cannot express a live alias &mdash; that is why the attr exists.
  </ul>
 

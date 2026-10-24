@@ -82,7 +82,7 @@ loadScripts(document, 'script');</script>
 <dd><a href="ThrownStats.html" title="class in org.apache.juneau.rest.server.stats">ThrownStats</a></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public static class </span><span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/stats/ThrownStats.html#line-43">ThrownStats.Builder</a></span>
+<div class="type-signature"><span class="modifiers">public static class </span><span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/stats/ThrownStats.html#line-44">ThrownStats.Builder</a></span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
 <div class="block">Builder class.</div>
 </section>
@@ -127,23 +127,28 @@ loadScripts(document, 'script');</script>
 <div class="block">Specifies the caused-by exception.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="ThrownStats.Builder.html" title="class in org.apache.juneau.rest.server.stats">ThrownStats.Builder</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#hash(long)" class="member-name-link">hash</a><wbr>(long&nbsp;value)</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#clock(java.time.Clock)" class="member-name-link">clock</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Clock.html" title="class or interface in java.time" class="external-link">Clock</a>&nbsp;value)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Specifies the clock used to stamp the first and last occurrence times.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="ThrownStats.Builder.html" title="class in org.apache.juneau.rest.server.stats">ThrownStats.Builder</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#hash(long)" class="member-name-link">hash</a><wbr>(long&nbsp;value)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Specifies the calculated hash.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="ThrownStats.Builder.html" title="class in org.apache.juneau.rest.server.stats">ThrownStats.Builder</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#stackTrace(java.util.List)" class="member-name-link">stackTrace</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;value)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="ThrownStats.Builder.html" title="class in org.apache.juneau.rest.server.stats">ThrownStats.Builder</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#stackTrace(java.util.List)" class="member-name-link">stackTrace</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;value)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Specifies the normalized stacktrace.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="ThrownStats.Builder.html" title="class in org.apache.juneau.rest.server.stats">ThrownStats.Builder</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#throwable(java.lang.Throwable)" class="member-name-link">throwable</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html" title="class or interface in java.lang" class="external-link">Throwable</a>&nbsp;value)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="ThrownStats.Builder.html" title="class in org.apache.juneau.rest.server.stats">ThrownStats.Builder</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#throwable(java.lang.Throwable)" class="member-name-link">throwable</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html" title="class or interface in java.lang" class="external-link">Throwable</a>&nbsp;value)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Specifies the thrown exception.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="ThrownStats.Builder.html" title="class in org.apache.juneau.rest.server.stats">ThrownStats.Builder</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#type(java.lang.Class)" class="member-name-link">type</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;? extends <a href="ThrownStats.html" title="class in org.apache.juneau.rest.server.stats">ThrownStats</a>&gt;&nbsp;value)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="ThrownStats.Builder.html" title="class in org.apache.juneau.rest.server.stats">ThrownStats.Builder</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#type(java.lang.Class)" class="member-name-link">type</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;? extends <a href="ThrownStats.html" title="class in org.apache.juneau.rest.server.stats">ThrownStats</a>&gt;&nbsp;value)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Specifies a subclass of <a href="ThrownStats.html" title="class in org.apache.juneau.rest.server.stats"><code>ThrownStats</code></a> to create when the <a href="#build()"><code>build()</code></a> method is called.</div>
 </div>
 </div>
@@ -166,7 +171,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.commons.inject.BeanStore)">
 <h3>Builder</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/stats/ThrownStats.Builder.html#line-58">Builder</a></span><wbr><span class="parameters">(<a href="../../../commons/inject/BeanStore.html" title="interface in org.apache.juneau.commons.inject">BeanStore</a>&nbsp;beanStore)</span></div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/stats/ThrownStats.Builder.html#line-60">Builder</a></span><wbr><span class="parameters">(<a href="../../../commons/inject/BeanStore.html" title="interface in org.apache.juneau.commons.inject">BeanStore</a>&nbsp;beanStore)</span></div>
 <div class="block">Constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -185,7 +190,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="build()">
 <h3>build</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ThrownStats.html" title="class in org.apache.juneau.rest.server.stats">ThrownStats</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/stats/ThrownStats.Builder.html#line-67">build</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ThrownStats.html" title="class in org.apache.juneau.rest.server.stats">ThrownStats</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/stats/ThrownStats.Builder.html#line-69">build</a></span>()</div>
 <div class="block">Create a new <a href="ThrownStats.html" title="class in org.apache.juneau.rest.server.stats"><code>ThrownStats</code></a> using this builder.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -196,7 +201,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="causedBy(org.apache.juneau.rest.server.stats.ThrownStats)">
 <h3>causedBy</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ThrownStats.Builder.html" title="class in org.apache.juneau.rest.server.stats">ThrownStats.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/stats/ThrownStats.Builder.html#line-82">causedBy</a></span><wbr><span class="parameters">(<a href="ThrownStats.html" title="class in org.apache.juneau.rest.server.stats">ThrownStats</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ThrownStats.Builder.html" title="class in org.apache.juneau.rest.server.stats">ThrownStats.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/stats/ThrownStats.Builder.html#line-84">causedBy</a></span><wbr><span class="parameters">(<a href="ThrownStats.html" title="class in org.apache.juneau.rest.server.stats">ThrownStats</a>&nbsp;value)</span></div>
 <div class="block">Specifies the caused-by exception.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -207,9 +212,26 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
+<section class="detail" id="clock(java.time.Clock)">
+<h3>clock</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ThrownStats.Builder.html" title="class in org.apache.juneau.rest.server.stats">ThrownStats.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/stats/ThrownStats.Builder.html#line-99">clock</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Clock.html" title="class or interface in java.time" class="external-link">Clock</a>&nbsp;value)</span></div>
+<div class="block">Specifies the clock used to stamp the first and last occurrence times.
+
+ <p>
+ Defaults to <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Clock.html#systemUTC()" title="class or interface in java.time" class="external-link"><code>Clock.systemUTC()</code></a>.  Tests can pass <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Clock.html#fixed(java.time.Instant,java.time.ZoneId)" title="class or interface in java.time" class="external-link"><code>Clock.fixed(Instant, ZoneId)</code></a> to make the
+ reported occurrence times deterministic.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>value</code> - The new value for this setting.  Must not be <jk>null</jk>.</dd>
+<dt>Returns:</dt>
+<dd>This object.</dd>
+</dl>
+</section>
+</li>
+<li>
 <section class="detail" id="hash(long)">
 <h3>hash</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ThrownStats.Builder.html" title="class in org.apache.juneau.rest.server.stats">ThrownStats.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/stats/ThrownStats.Builder.html#line-93">hash</a></span><wbr><span class="parameters">(long&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ThrownStats.Builder.html" title="class in org.apache.juneau.rest.server.stats">ThrownStats.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/stats/ThrownStats.Builder.html#line-110">hash</a></span><wbr><span class="parameters">(long&nbsp;value)</span></div>
 <div class="block">Specifies the calculated hash.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -222,7 +244,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="stackTrace(java.util.List)">
 <h3>stackTrace</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ThrownStats.Builder.html" title="class in org.apache.juneau.rest.server.stats">ThrownStats.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/stats/ThrownStats.Builder.html#line-104">stackTrace</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ThrownStats.Builder.html" title="class in org.apache.juneau.rest.server.stats">ThrownStats.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/stats/ThrownStats.Builder.html#line-121">stackTrace</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;value)</span></div>
 <div class="block">Specifies the normalized stacktrace.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -235,7 +257,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="throwable(java.lang.Throwable)">
 <h3>throwable</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ThrownStats.Builder.html" title="class in org.apache.juneau.rest.server.stats">ThrownStats.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/stats/ThrownStats.Builder.html#line-115">throwable</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html" title="class or interface in java.lang" class="external-link">Throwable</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ThrownStats.Builder.html" title="class in org.apache.juneau.rest.server.stats">ThrownStats.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/stats/ThrownStats.Builder.html#line-132">throwable</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html" title="class or interface in java.lang" class="external-link">Throwable</a>&nbsp;value)</span></div>
 <div class="block">Specifies the thrown exception.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -248,7 +270,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="type(java.lang.Class)">
 <h3>type</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ThrownStats.Builder.html" title="class in org.apache.juneau.rest.server.stats">ThrownStats.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/stats/ThrownStats.Builder.html#line-126">type</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;? extends <a href="ThrownStats.html" title="class in org.apache.juneau.rest.server.stats">ThrownStats</a>&gt;&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ThrownStats.Builder.html" title="class in org.apache.juneau.rest.server.stats">ThrownStats.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/stats/ThrownStats.Builder.html#line-143">type</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;? extends <a href="ThrownStats.html" title="class in org.apache.juneau.rest.server.stats">ThrownStats</a>&gt;&nbsp;value)</span></div>
 <div class="block">Specifies a subclass of <a href="ThrownStats.html" title="class in org.apache.juneau.rest.server.stats"><code>ThrownStats</code></a> to create when the <a href="#build()"><code>build()</code></a> method is called.</div>
 <dl class="notes">
 <dt>Parameters:</dt>

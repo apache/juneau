@@ -71,7 +71,7 @@
 <span class="source-line-no">058</span><span id="line-58">    * @return A new {@link ActionRef}.</span>
 <span class="source-line-no">059</span><span id="line-59">    */</span>
 <span class="source-line-no">060</span><span id="line-60">   public static ActionRef of(String id) {</span>
-<span class="source-line-no">061</span><span id="line-61">      if (id == null || id.isBlank())</span>
+<span class="source-line-no">061</span><span id="line-61">      if (ib(id))</span>
 <span class="source-line-no">062</span><span id="line-62">         throw iaex("ActionRef id must not be null or blank.");</span>
 <span class="source-line-no">063</span><span id="line-63">      var a = new ActionRef();</span>
 <span class="source-line-no">064</span><span id="line-64">      a.id = id;</span>
@@ -175,9 +175,9 @@
 <span class="source-line-no">162</span><span id="line-162">   }</span>
 <span class="source-line-no">163</span><span id="line-163"></span>
 <span class="source-line-no">164</span><span id="line-164">   private ActionRef addEnabledRule(String field, Op op, Object value, String reason) {</span>
-<span class="source-line-no">165</span><span id="line-165">      if (field == null || field.isBlank())</span>
+<span class="source-line-no">165</span><span id="line-165">      if (ib(field))</span>
 <span class="source-line-no">166</span><span id="line-166">         throw iaex("enabledWhen field must not be null or blank.");</span>
-<span class="source-line-no">167</span><span id="line-167">      if (reason == null || reason.isBlank())</span>
+<span class="source-line-no">167</span><span id="line-167">      if (ib(reason))</span>
 <span class="source-line-no">168</span><span id="line-168">         throw iaex("enabledWhen reason must not be null or blank.");</span>
 <span class="source-line-no">169</span><span id="line-169">      var r = new EnabledRule();</span>
 <span class="source-line-no">170</span><span id="line-170">      r.field = field;</span>

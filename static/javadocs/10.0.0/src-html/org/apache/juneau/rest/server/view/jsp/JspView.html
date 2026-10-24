@@ -136,7 +136,7 @@
 <span class="source-line-no">123</span><span id="line-123">    * @return A new {@code JspView} carrying the additional attributes.</span>
 <span class="source-line-no">124</span><span id="line-124">    */</span>
 <span class="source-line-no">125</span><span id="line-125">   public JspView attrs(Map&lt;String,?&gt; values) {</span>
-<span class="source-line-no">126</span><span id="line-126">      if (values == null || values.isEmpty())</span>
+<span class="source-line-no">126</span><span id="line-126">      if (ie(values))</span>
 <span class="source-line-no">127</span><span id="line-127">         return this;</span>
 <span class="source-line-no">128</span><span id="line-128">      var copy = new LinkedHashMap&lt;&gt;(attributes);</span>
 <span class="source-line-no">129</span><span id="line-129">      values.forEach((k, v) -&gt; {</span>

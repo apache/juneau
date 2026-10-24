@@ -2468,7 +2468,7 @@
 <span class="source-line-no">2455</span><span id="line-2455">         return;</span>
 <span class="source-line-no">2456</span><span id="line-2456">      var prefix = description != null ? (description + " (" + beanType.getName() + ")") : beanType.getName();</span>
 <span class="source-line-no">2457</span><span id="line-2457">      logger.fine(prefix + ": " + message, args);</span>
-<span class="source-line-no">2458</span><span id="line-2458">      debug.ifPresent(x -&gt; x.add(args.length == 0 ? message : String.format(message, args)));</span>
+<span class="source-line-no">2458</span><span id="line-2458">      debug.ifPresent(x -&gt; x.add(args.length == 0 ? message : f(message, args)));</span>
 <span class="source-line-no">2459</span><span id="line-2459">   }</span>
 <span class="source-line-no">2460</span><span id="line-2460"></span>
 <span class="source-line-no">2461</span><span id="line-2461">   T runPostCreateHooks(T bean) {</span>

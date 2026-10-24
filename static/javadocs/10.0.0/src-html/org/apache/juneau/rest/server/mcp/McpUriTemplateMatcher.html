@@ -131,7 +131,7 @@
 <span class="source-line-no">118</span><span id="line-118">    *    invalid UTF-8 percent-escape sequence, or declares the same variable name more than once.</span>
 <span class="source-line-no">119</span><span id="line-119">    */</span>
 <span class="source-line-no">120</span><span id="line-120">   public static McpUriTemplateMatcher compile(String uriTemplate) {</span>
-<span class="source-line-no">121</span><span id="line-121">      if (uriTemplate == null || uriTemplate.isBlank())</span>
+<span class="source-line-no">121</span><span id="line-121">      if (ib(uriTemplate))</span>
 <span class="source-line-no">122</span><span id="line-122">         throw iaex("Malformed URI template ''%s'': template must not be null or blank", uriTemplate);</span>
 <span class="source-line-no">123</span><span id="line-123"></span>
 <span class="source-line-no">124</span><span id="line-124">      var tokens = tokenize(uriTemplate);</span>

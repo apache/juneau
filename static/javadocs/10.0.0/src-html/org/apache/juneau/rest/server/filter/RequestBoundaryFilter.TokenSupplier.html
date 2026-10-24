@@ -52,7 +52,7 @@
 <span class="source-line-no">039</span><span id="line-39"> *    &lt;li&gt;A {@link org.apache.juneau.rest.server.guard.RestGuard RestGuard} is declared per resource or per operation, so</span>
 <span class="source-line-no">040</span><span id="line-40"> *       an endpoint added later is unprotected until someone remembers to declare it &amp;mdash; and its omission is</span>
 <span class="source-line-no">041</span><span id="line-41"> *       invisible in review, because nothing about the new endpoint looks different.</span>
-<span class="source-line-no">042</span><span id="line-42"> *    &lt;li&gt;A mixin's {@link org.apache.juneau.rest.server.RestStartCall @RestStartCall} hook fires only for requests</span>
+<span class="source-line-no">042</span><span id="line-42"> *    &lt;li&gt;A mixin's {@link RestStartCall @RestStartCall} hook fires only for requests</span>
 <span class="source-line-no">043</span><span id="line-43"> *       that resolved to one of that mixin's own endpoints, so a boundary packaged that way would not see the host</span>
 <span class="source-line-no">044</span><span id="line-44"> *       resource's operations at all.</span>
 <span class="source-line-no">045</span><span id="line-45"> * &lt;/ul&gt;</span>
@@ -360,7 +360,7 @@
 <span class="source-line-no">347</span><span id="line-347">            case '\t' -&gt; sb.append("\\t");</span>
 <span class="source-line-no">348</span><span id="line-348">            default -&gt; {</span>
 <span class="source-line-no">349</span><span id="line-349">               if (c &lt; 0x20)</span>
-<span class="source-line-no">350</span><span id="line-350">                  sb.append(String.format("\\u%04x", (int)c));</span>
+<span class="source-line-no">350</span><span id="line-350">                  sb.append(f("\\u%04x", (int)c));</span>
 <span class="source-line-no">351</span><span id="line-351">               else</span>
 <span class="source-line-no">352</span><span id="line-352">                  sb.append(c);</span>
 <span class="source-line-no">353</span><span id="line-353">            }</span>

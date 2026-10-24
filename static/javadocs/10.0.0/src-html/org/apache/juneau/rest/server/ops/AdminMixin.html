@@ -133,7 +133,7 @@
 <span class="source-line-no">120</span><span id="line-120"> *       and {@code snapshot} (a sorted array of {@link BucketState} entries describing every</span>
 <span class="source-line-no">121</span><span id="line-121"> *       per-key bucket the storage backend currently tracks). Returns {@code 404 Not Found} when</span>
 <span class="source-line-no">122</span><span id="line-122"> *       no {@code RateLimitGuard} bean is registered on the importer's bean store. Storage</span>
-<span class="source-line-no">123</span><span id="line-123"> *       backends that don't override {@link org.apache.juneau.rest.server.guard.RateLimitGuard.Storage#snapshot()} (e.g. Redis-backed</span>
+<span class="source-line-no">123</span><span id="line-123"> *       backends that don't override {@link org.apache.juneau.rest.server.guard.RateLimitGuard.Storage#snapshot() RateLimitGuard.Storage#snapshot()} (e.g. Redis-backed</span>
 <span class="source-line-no">124</span><span id="line-124"> *       impls that can't cheaply enumerate buckets) emit an empty {@code snapshot} array.</span>
 <span class="source-line-no">125</span><span id="line-125"> * &lt;/ul&gt;</span>
 <span class="source-line-no">126</span><span id="line-126"> *</span>

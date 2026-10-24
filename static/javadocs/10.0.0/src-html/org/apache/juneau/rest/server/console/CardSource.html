@@ -155,7 +155,7 @@
 <span class="source-line-no">142</span><span id="line-142">    * @throws IllegalArgumentException If the body is absent/blank, or no template sink was registered.</span>
 <span class="source-line-no">143</span><span id="line-143">    */</span>
 <span class="source-line-no">144</span><span id="line-144">   public String captureTemplate() {</span>
-<span class="source-line-no">145</span><span id="line-145">      if (body == null || body.isEmpty())</span>
+<span class="source-line-no">145</span><span id="line-145">      if (ie(body))</span>
 <span class="source-line-no">146</span><span id="line-146">         throw error("type='%s' requires a markup body; got none.", type);</span>
 <span class="source-line-no">147</span><span id="line-147">      if (templateSink == null)</span>
 <span class="source-line-no">148</span><span id="line-148">         throw error("type='%s' requires a markup body, but this CardSource has no template sink.", type);</span>
@@ -195,9 +195,9 @@
 <span class="source-line-no">182</span><span id="line-182">      private BiConsumer&lt;String,String&gt; templateSink;</span>
 <span class="source-line-no">183</span><span id="line-183"></span>
 <span class="source-line-no">184</span><span id="line-184">      private Builder(String type, String id) {</span>
-<span class="source-line-no">185</span><span id="line-185">         if (type == null || type.isBlank())</span>
+<span class="source-line-no">185</span><span id="line-185">         if (ib(type))</span>
 <span class="source-line-no">186</span><span id="line-186">            throw iaex("CardSource type must not be null or blank.");</span>
-<span class="source-line-no">187</span><span id="line-187">         if (id == null || id.isBlank())</span>
+<span class="source-line-no">187</span><span id="line-187">         if (ib(id))</span>
 <span class="source-line-no">188</span><span id="line-188">            throw iaex("CardSource id must not be null or blank.");</span>
 <span class="source-line-no">189</span><span id="line-189">         this.type = type;</span>
 <span class="source-line-no">190</span><span id="line-190">         this.id = id;</span>

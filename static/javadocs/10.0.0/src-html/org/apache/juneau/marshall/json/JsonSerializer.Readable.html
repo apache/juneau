@@ -85,7 +85,7 @@
 <span class="source-line-no">072</span><span id="line-72"> * The types above are considered "JSON-primitive" object types.</span>
 <span class="source-line-no">073</span><span id="line-73"> * Any non-JSON-primitive object types are transformed into JSON-primitive object types through</span>
 <span class="source-line-no">074</span><span id="line-74"> * {@link ObjectSwap ObjectSwaps} associated through the</span>
-<span class="source-line-no">075</span><span id="line-75"> * {@link org.apache.juneau.marshall.MarshallingContext.Builder#swaps(Class...)} method.</span>
+<span class="source-line-no">075</span><span id="line-75"> * {@link org.apache.juneau.marshall.MarshallingContext.Builder#swaps(Class...) MarshallingContext.Builder#swaps(Class...)} method.</span>
 <span class="source-line-no">076</span><span id="line-76"> * Several default transforms are provided for transforming Dates, Enums, Iterators, etc...</span>
 <span class="source-line-no">077</span><span id="line-77"> *</span>
 <span class="source-line-no">078</span><span id="line-78"> * &lt;p&gt;</span>
@@ -100,7 +100,7 @@
 <span class="source-line-no">087</span><span id="line-87"> *    &lt;li&gt;</span>
 <span class="source-line-no">088</span><span id="line-88"> *       {@link Json5Serializer} - Default serializer, single quotes, simple mode.</span>
 <span class="source-line-no">089</span><span id="line-89"> *    &lt;li&gt;</span>
-<span class="source-line-no">090</span><span id="line-90"> *       {@link org.apache.juneau.marshall.json5.Json5Serializer.Readable} - Default serializer, single quotes, simple mode, with whitespace.</span>
+<span class="source-line-no">090</span><span id="line-90"> *       {@link org.apache.juneau.marshall.json5.Json5Serializer.Readable Json5Serializer.Readable} - Default serializer, single quotes, simple mode, with whitespace.</span>
 <span class="source-line-no">091</span><span id="line-91"> * &lt;/ul&gt;</span>
 <span class="source-line-no">092</span><span id="line-92"> *</span>
 <span class="source-line-no">093</span><span id="line-93"> * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
@@ -200,7 +200,7 @@
 <span class="source-line-no">187</span><span id="line-187">       * through reflection.</span>
 <span class="source-line-no">188</span><span id="line-188">       *</span>
 <span class="source-line-no">189</span><span id="line-189">       * &lt;p&gt;</span>
-<span class="source-line-no">190</span><span id="line-190">       * When present, this value overrides the {@link org.apache.juneau.marshall.serializer.Serializer.Builder#addBeanTypes()} setting and is</span>
+<span class="source-line-no">190</span><span id="line-190">       * When present, this value overrides the {@link org.apache.juneau.marshall.serializer.Serializer.Builder#addBeanTypes() Serializer.Builder#addBeanTypes()} setting and is</span>
 <span class="source-line-no">191</span><span id="line-191">       * provided to customize the behavior of specific serializers in a {@link SerializerSet}.</span>
 <span class="source-line-no">192</span><span id="line-192">       *</span>
 <span class="source-line-no">193</span><span id="line-193">       * &lt;p&gt;</span>

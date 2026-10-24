@@ -71,7 +71,7 @@
 <span class="source-line-no">058</span><span id="line-58">    * @throws IllegalArgumentException If the name is neither a built-in nor an opted-in name.</span>
 <span class="source-line-no">059</span><span id="line-59">    */</span>
 <span class="source-line-no">060</span><span id="line-60">   public static void assertAllowed(String populatorName, Collection&lt;String&gt; allowedNames) {</span>
-<span class="source-line-no">061</span><span id="line-61">      if (populatorName == null || populatorName.isBlank())</span>
+<span class="source-line-no">061</span><span id="line-61">      if (ib(populatorName))</span>
 <span class="source-line-no">062</span><span id="line-62">         throw iaex("Populator name must not be null or blank.");</span>
 <span class="source-line-no">063</span><span id="line-63">      if (BUILTIN_IDS.contains(populatorName))</span>
 <span class="source-line-no">064</span><span id="line-64">         return;</span>

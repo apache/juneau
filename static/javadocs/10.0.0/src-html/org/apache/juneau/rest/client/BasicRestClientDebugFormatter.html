@@ -292,7 +292,7 @@
 <span class="source-line-no">279</span><span id="line-279">   }</span>
 <span class="source-line-no">280</span><span id="line-280"></span>
 <span class="source-line-no">281</span><span id="line-281">   private String contentTypeToken(String contentType) {</span>
-<span class="source-line-no">282</span><span id="line-282">      if (contentType == null || contentType.isBlank())</span>
+<span class="source-line-no">282</span><span id="line-282">      if (ib(contentType))</span>
 <span class="source-line-no">283</span><span id="line-283">         return "unknown";</span>
 <span class="source-line-no">284</span><span id="line-284">      return DebugTextSanitizer.sanitize(contentType);</span>
 <span class="source-line-no">285</span><span id="line-285">   }</span>

@@ -715,10 +715,10 @@ implements <a href="Widget.html" title="interface in org.apache.juneau.rest.serv
 
  <p>
  Passing <jk>false</jk> <b>clears</b> the flag rather than serializing an explicit <code>false</code>: the wire
- carries this opt-in only when it is on, so an un-opted-in dialog's payload is byte-identical to today's.</div>
+ carries this opt-in only when it is on, so an un-opted-in dialog's payload is byte-identical to one that never set it.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>value</code> - <jk>true</jk> to opt in; <jk>false</jk> (or unset) keeps today's close-then-submit behaviour.</dd>
+<dd><code>value</code> - <jk>true</jk> to opt in; <jk>false</jk> (or unset) keeps the default close-then-submit behaviour.</dd>
 <dt>Returns:</dt>
 <dd>This object.</dd>
 </dl>
@@ -763,10 +763,10 @@ implements <a href="Widget.html" title="interface in org.apache.juneau.rest.serv
 
  <p>
  Passing <jk>false</jk> <b>clears</b> the flag rather than serializing an explicit <code>false</code>: the wire
- carries this opt-in only when it is on, so an un-opted-in dialog's payload is byte-identical to today's.</div>
+ carries this opt-in only when it is on, so an un-opted-in dialog's payload is byte-identical to one that never set it.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>value</code> - <jk>true</jk> to opt in; <jk>false</jk> (or unset) leaves today's row-id behaviour untouched.</dd>
+<dd><code>value</code> - <jk>true</jk> to opt in; <jk>false</jk> (or unset) keeps the default row-id behaviour.</dd>
 <dt>Returns:</dt>
 <dd>This object.</dd>
 </dl>
